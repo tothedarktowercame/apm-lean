@@ -1431,8 +1431,15 @@ lemma apm_m01J04_globalLocalizedH1_contDiff_convolution
     ContDiff ℝ (↑(⊤ : ℕ∞) : WithTop ℕ∞) (MeasureTheory.convolution κ
       (apm_m01J04_globalLocalizedH1 φ hφ f).val
       (ContinuousLinearMap.lsmul ℝ ℝ) volume) := by
-  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
-  sorry
+  have hloc : LocallyIntegrable
+      (apm_m01J04_globalLocalizedH1 φ hφ f).val volume := by
+    have hp : MemLp (apm_m01J04_globalLocalizedH1 φ hφ f).val 2 volume := by
+      simpa only [MeasureTheory.Measure.restrict_univ] using
+        (apm_m01J04_globalLocalizedH1 φ hφ f).val_memLp
+    exact hp.locallyIntegrable (by norm_num)
+  apply HasCompactSupport.contDiff_convolution_left (n := (⊤ : ℕ∞))
+    (ContinuousLinearMap.lsmul ℝ ℝ) (by assumption) (by assumption)
+  exact hloc
 
 /-- Both fields of the global localization admit independent smooth compactly
 supported `L²` approximants.  The remaining Sobolev-density step is precisely
@@ -1901,18 +1908,1959 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
     (tendsto_one_div_add_atTop_nhds_zero_nat :
       Tendsto (fun n : ℕ ↦ (1 : ℝ) / (n + 1)) atTop (nhds 0))
 
+/-- Collar cutoff for the core approximation: `0` where `|φ| ≤ r`, `1` where
+`|φ| ≥ √2 r`.  The rescaling by `r²` matters: as `r → 0` it tends to `1` on
+`{φ ≠ 0}`, and the collar gradient carries a factor `φ/r²` that the factor `φ`
+inside `globalLocalizedH1` cancels. -/
+noncomputable def apm_m01J04_localization_core_approx_aux_cutoff
+    {d : ℕ} (phi : EuclideanSpace ℝ (Fin d) → ℝ) (r : ℝ) :
+    EuclideanSpace ℝ (Fin d) → ℝ :=
+  fun x ↦ Real.smoothTransition (phi x ^ 2 / r ^ 2 - 1)
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_contDiff
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) phi) (r : ℝ) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) :=
+  Real.smoothTransition.contDiff.comp
+    (((hphi.pow 2).div_const _).sub contDiff_const)
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_support
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ} {r : ℝ}
+    (hr : 0 < r) :
+    Function.support (apm_m01J04_localization_core_approx_aux_cutoff phi r) ⊆
+      {x | r ≤ |phi x|} := by
+  intro x hx
+  have harg : 0 < phi x ^ 2 / r ^ 2 - 1 :=
+    lt_of_not_ge (Real.smoothTransition.zero_iff_nonpos.not.mp hx)
+  have hsquares : r ^ 2 < |phi x| ^ 2 := by
+    have h1 : 1 < phi x ^ 2 / r ^ 2 := by linarith
+    rw [one_lt_div (by positivity)] at h1
+    simpa [sq_abs] using h1
+  change r ≤ |phi x|
+  nlinarith [abs_nonneg (phi x), sq_nonneg (r - |phi x|)]
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_compact
+    {d : ℕ} {Omega : Set (EuclideanSpace ℝ (Fin d))}
+    {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : apm_m01J04_isTestFunction Omega phi) (r : ℝ) :
+    HasCompactSupport
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) := by
+  apply hphi.2.1.mono
+  intro x hx
+  contrapose! hx
+  have hz : phi x = 0 := Function.notMem_support.mp hx
+  simp [apm_m01J04_localization_core_approx_aux_cutoff, hz]
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction
+    {d : ℕ} {Omega : Set (EuclideanSpace ℝ (Fin d))}
+    {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : apm_m01J04_isTestFunction Omega phi) (r : ℝ) :
+    apm_m01J04_isTestFunction Set.univ
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) :=
+  ⟨apm_m01J04_localization_core_approx_aux_cutoff_contDiff hphi.1 r,
+    apm_m01J04_localization_core_approx_aux_cutoff_compact hphi r,
+    Set.subset_univ _⟩
+
+/-- The gradient of the cutoff lives where the cutoff's closed support does. -/
+lemma apm_m01J04_localization_core_approx_aux_cutoff_fderiv_support
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : Continuous phi) {r : ℝ} (hr : 0 < r) :
+    Function.support (fun x ↦
+      fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff phi r) x) ⊆
+      {x | r ≤ |phi x|} := by
+  refine (support_fderiv_subset ℝ).trans ?_
+  exact closure_minimal
+    (apm_m01J04_localization_core_approx_aux_cutoff_support hr)
+    (isClosed_le continuous_const (continuous_abs.comp hphi))
+
+/-- Value part of the core convergence: `χ_{1/(n+1)} · (f φ) → f φ` in `L²`
+(dominated convergence; `χ_r → 1` pointwise on `{φ ≠ 0}`, `|χ_r| ≤ 1`). -/
+lemma apm_m01J04_localization_core_approx_aux_val_tendsto
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul
+          (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)))
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          (apm_m01J04_globalLocalizedH1 φ hφ f)).val x -
+        (apm_m01J04_globalLocalizedH1 φ hφ f).val x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
+  let g := apm_m01J04_globalLocalizedH1 φ hφ f
+  let c : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n x ↦ c n x * g.val x - g.val x
+  have he_mem (n : ℕ) : MemLp (e n) 2 (volume.restrict Set.univ) := by
+    have h := (apm_m01J04_H1mul (c n)
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _) g).val_memLp.sub
+        g.val_memLp
+    simpa [e, c, Pi.sub_apply, apm_m01J04_H1mul_val, mul_comm] using h
+  have hbound (n : ℕ) : ∀ᵐ x ∂(volume.restrict Set.univ),
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖g.val x‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    have hc0 : 0 ≤ c n x := Real.smoothTransition.nonneg _
+    have hc1 : c n x ≤ 1 := Real.smoothTransition.le_one _
+    rw [show e n x = (c n x - 1) * g.val x by
+      simp only [e]
+      ring, enorm_mul]
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    rw [← ofReal_norm_eq_enorm, ← ofReal_norm_eq_enorm]
+    apply mul_le_of_le_one_left (by positivity)
+    simp [Real.norm_eq_abs, abs_of_nonpos (sub_nonpos.mpr hc1), hc0]
+  have hfin : (∫⁻ x, ‖g.val x‖ₑ ^ (2 : ℝ) ∂(volume.restrict Set.univ)) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      g.val_memLp.eLpNorm_lt_top)
+  have hpoint (x : EuclideanSpace ℝ (Fin d)) :
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    by_cases hx : φ x = 0
+    · have hgx : g.val x = 0 := by
+        simp [g, apm_m01J04_globalLocalizedH1, apm_m01J04_H1mul_val, hx]
+      simp [e, hgx]
+    · obtain ⟨N : ℕ, hN⟩ := exists_nat_gt (Real.sqrt 2 / |φ x|)
+      have hev : ∀ᶠ n : ℕ in atTop, e n x = 0 := by
+        filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+        have habs : Real.sqrt 2 < (n + 1 : ℝ) * |φ x| := by
+          have hp : 0 < |φ x| := abs_pos.mpr hx
+          apply (div_lt_iff₀ hp).mp
+          exact lt_of_lt_of_le hN (by exact_mod_cast Nat.le_add_right_of_le hn)
+        have hsqrt : 0 ≤ Real.sqrt 2 := Real.sqrt_nonneg _
+        have hsquares : (2 : ℝ) < (n + 1 : ℝ) ^ 2 * φ x ^ 2 := by
+          have := (sq_lt_sq₀ hsqrt (mul_nonneg (by positivity) (abs_nonneg _))).2 habs
+          rw [Real.sq_sqrt (by norm_num), mul_pow, sq_abs] at this
+          exact this
+        have harg : 1 ≤ φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1 := by
+          have hnpos : 0 < (n + 1 : ℝ) := by positivity
+          field_simp
+          nlinarith
+        have hc : c n x = 1 := Real.smoothTransition.eq_one_iff_one_le.2 harg
+        simp [e, hc]
+      exact (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ≥0∞)) atTop (nhds 0)).congr'
+        (hev.mono fun n hn ↦ by simp [hn])
+  have hlin : Tendsto
+      (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂(volume.restrict Set.univ))
+      atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖g.val x‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin
+      (ae_of_all _ hpoint)
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 (volume.restrict Set.univ))
+      atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2
+    help
+  simpa [e, c, g, apm_m01J04_H1mul_val, mul_comm] using hreal
+
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_zeroSet
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) :
+    ∀ᵐ x ∂volume, φ x = 0 →
+      WithLp.toLp 2 (fun i ↦
+        fderiv ℝ φ x (EuclideanSpace.single i 1)) = 0 := by
+  exact apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet hφ.1
+
+/-- `smoothTransition` has bounded derivative (smooth, constant outside `[0,1]`). -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_deriv_bound :
+    ∃ M : ℝ, ∀ t : ℝ, |deriv Real.smoothTransition t| ≤ M := by
+  have hcont : Continuous (fun t : ℝ ↦ |deriv Real.smoothTransition t|) :=
+    ((@Real.smoothTransition.contDiff 2).continuous_deriv (by norm_num)).abs
+  obtain ⟨M, hM⟩ :=
+    ((isCompact_Icc : IsCompact (Set.Icc (0 : ℝ) 1)).bddAbove_image
+      hcont.continuousOn)
+  have hM0 : 0 ≤ M := by
+    have h := hM ⟨(0 : ℝ), by simp, rfl⟩
+    exact (abs_nonneg _).trans h
+  refine ⟨M, fun t ↦ ?_⟩
+  by_cases ht : t ∈ Set.Icc (0 : ℝ) 1
+  · exact hM ⟨t, ht, rfl⟩
+  · have hout : t < 0 ∨ 1 < t := by
+      by_cases h0 : 0 ≤ t
+      · exact Or.inr (lt_of_not_ge fun h1 ↦ ht ⟨h0, h1⟩)
+      · exact Or.inl (lt_of_not_ge h0)
+    rcases hout with hneg | hpos
+    · have heq : Filter.EventuallyEq (nhds t) Real.smoothTransition (fun _ ↦ 0) := by
+        filter_upwards [eventually_lt_nhds hneg] with x hx
+        exact Real.smoothTransition.zero_of_nonpos hx.le
+      rw [heq.deriv_eq]
+      simpa using hM0
+    · have heq : Filter.EventuallyEq (nhds t) Real.smoothTransition (fun _ ↦ 1) := by
+        filter_upwards [eventually_gt_nhds hpos] with x hx
+        exact Real.smoothTransition.one_of_one_le hx.le
+      rw [heq.deriv_eq]
+      simpa using hM0
+
+/-- Bulk term: `χ_r • ∇(fφ) → ∇(fφ)` in `L²` (dominated convergence, `|χ_r| ≤ 1`,
+`χ_r → 1` on `{φ ≠ 0}`, and `∇(fφ) = 0` a.e. on `{φ = 0}` by the banked
+zero-set lemma). -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_bulk
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)) x • (apm_m01J04_globalLocalizedH1 φ hφ f).grad x -
+          (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2 volume).toReal) atTop (nhds 0) := by
+  let g := apm_m01J04_globalLocalizedH1 φ hφ f
+  let c : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun n x ↦ c n x • g.grad x - g.grad x
+  have hgmem : MemLp g.grad 2 volume := by
+    simpa using g.grad_memLp
+  have he_mem (n : ℕ) : MemLp (e n) 2 volume := by
+    apply hgmem.of_le
+    · have hcmeas : AEStronglyMeasurable (c n) volume :=
+        (apm_m01J04_localization_core_approx_aux_cutoff_contDiff hφ.1 _).continuous.aestronglyMeasurable
+      exact (hcmeas.smul hgmem.1).sub hgmem.1
+    · filter_upwards [] with x
+      rw [show e n x = (c n x - 1) • g.grad x by
+        simp only [e]
+        rw [sub_smul, one_smul], norm_smul]
+      have hc0 : 0 ≤ c n x := Real.smoothTransition.nonneg _
+      have hc1 : c n x ≤ 1 := Real.smoothTransition.le_one _
+      rw [Real.norm_eq_abs, abs_of_nonpos (sub_nonpos.mpr hc1), neg_sub]
+      apply mul_le_of_le_one_left (norm_nonneg _)
+      linarith
+  have hbound (n : ℕ) : ∀ᵐ x ∂volume,
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖g.grad x‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    have hc0 : 0 ≤ c n x := Real.smoothTransition.nonneg _
+    have hc1 : c n x ≤ 1 := Real.smoothTransition.le_one _
+    rw [show e n x = (c n x - 1) • g.grad x by
+      simp only [e]
+      rw [sub_smul, one_smul], enorm_smul]
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    rw [Real.enorm_eq_ofReal_abs]
+    apply mul_le_of_le_one_left (bot_le)
+    rw [ENNReal.ofReal_le_one]
+    simpa [abs_of_nonpos (sub_nonpos.mpr hc1)] using hc0
+  have hfin : (∫⁻ x, ‖g.grad x‖ₑ ^ (2 : ℝ) ∂volume) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      hgmem.eLpNorm_lt_top)
+  have hgzero : ∀ᵐ x ∂volume, φ x = 0 → g.grad x = 0 := by
+    filter_upwards
+      [apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_zeroSet φ hφ]
+      with x hx
+    intro hφx
+    simp [g, apm_m01J04_globalLocalizedH1, hφx, hx hφx]
+  have hpoint : ∀ᵐ x ∂volume,
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    filter_upwards [hgzero] with x hgx
+    by_cases hx : φ x = 0
+    · simp [e, hgx hx]
+    · obtain ⟨N : ℕ, hN⟩ := exists_nat_gt (Real.sqrt 2 / |φ x|)
+      have hev : ∀ᶠ n : ℕ in atTop, e n x = 0 := by
+        filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+        have habs : Real.sqrt 2 < (n + 1 : ℝ) * |φ x| := by
+          have hp : 0 < |φ x| := abs_pos.mpr hx
+          apply (div_lt_iff₀ hp).mp
+          exact lt_of_lt_of_le hN (by exact_mod_cast Nat.le_add_right_of_le hn)
+        have hsqrt : 0 ≤ Real.sqrt 2 := Real.sqrt_nonneg _
+        have hsquares : (2 : ℝ) < (n + 1 : ℝ) ^ 2 * φ x ^ 2 := by
+          have := (sq_lt_sq₀ hsqrt (mul_nonneg (by positivity) (abs_nonneg _))).2 habs
+          rw [Real.sq_sqrt (by norm_num), mul_pow, sq_abs] at this
+          exact this
+        have harg : 1 ≤ φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1 := by
+          have hnpos : 0 < (n + 1 : ℝ) := by positivity
+          field_simp
+          nlinarith
+        have hc : c n x = 1 := Real.smoothTransition.eq_one_iff_one_le.2 harg
+        simp [e, hc]
+      exact (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ≥0∞)) atTop (nhds 0)).congr'
+        (hev.mono fun n hn ↦ by simp [hn])
+  have hlin : Tendsto
+      (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂volume) atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖g.grad x‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin hpoint
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 volume) atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2 help
+  simpa [e, c, g] using hreal
+
+/-- Chain rule for the rescaled cutoff. -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_fderiv
+    {d : ℕ} (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (r : ℝ) (x) :
+    fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ r) x =
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1)) •
+        ((2 * φ x / r ^ 2) • fderiv ℝ φ x) := by
+  have hφx : HasFDerivAt φ (fderiv ℝ φ x) x :=
+    (hφ.differentiable (by simp)).differentiableAt.hasFDerivAt
+  have hi : HasFDerivAt (fun y ↦ φ y ^ 2 / r ^ 2 - 1)
+      ((2 * φ x / r ^ 2) • fderiv ℝ φ x) x := by
+    convert ((hφx.pow 2).const_smul (1 / r ^ 2)).sub_const 1 using 1 <;>
+      ext z <;> simp <;> ring
+  have hs : HasDerivAt Real.smoothTransition
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1))
+      (φ x ^ 2 / r ^ 2 - 1) :=
+    ((@Real.smoothTransition.contDiff 1).differentiable
+      (by norm_num)).differentiableAt.hasDerivAt
+  have hc := (hs.hasFDerivAt.comp x hi).fderiv
+  convert hc using 1 <;>
+    ext z <;>
+    simp [apm_m01J04_localization_core_approx_aux_cutoff, Function.comp_def,
+      smul_smul] <;> ring
+
+/-- Collar term: `(fφ) • ∇χ_r → 0` in `L²`.  Pointwise
+`(fφ) ∇χ_r = f · smoothTransition'(φ²/r² − 1) · 2(φ²/r²) ∇φ`, bounded by
+`4M |f| |∇φ|` (on the collar `φ² ≤ 2r²`) and eventually `0` at each point. -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_aux_fderiv
+    {d : ℕ} (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (r : ℝ) (x) :
+    fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ r) x =
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1)) •
+        ((2 * φ x / r ^ 2) • fderiv ℝ φ x) := by
+  have hφx : HasFDerivAt φ (fderiv ℝ φ x) x :=
+    (hφ.differentiable (by simp)).differentiableAt.hasFDerivAt
+  have hi : HasFDerivAt (fun y ↦ φ y ^ 2 / r ^ 2 - 1)
+      ((2 * φ x / r ^ 2) • fderiv ℝ φ x) x := by
+    convert ((hφx.pow 2).const_smul (1 / r ^ 2)).sub_const 1 using 1 <;>
+      ext z <;> simp <;> ring
+  have hs : HasDerivAt Real.smoothTransition
+      (deriv Real.smoothTransition (φ x ^ 2 / r ^ 2 - 1))
+      (φ x ^ 2 / r ^ 2 - 1) :=
+    ((@Real.smoothTransition.contDiff 1).differentiable
+      (by norm_num)).differentiableAt.hasDerivAt
+  have hc := (hs.hasFDerivAt.comp x hi).fderiv
+  convert hc using 1 <;>
+    ext z <;>
+    simp [apm_m01J04_localization_core_approx_aux_cutoff, Function.comp_def,
+      smul_smul] <;> ring
+
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω)
+    {M : ℝ} (hM : ∀ t : ℝ, |deriv Real.smoothTransition t| ≤ M) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
+          fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0) := by
+  let D : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) := fun x ↦
+    WithLp.toLp 2 (fun i ↦ fderiv ℝ φ x (EuclideanSpace.single i 1))
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) := fun n x ↦
+    (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
+      fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ
+        (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))
+  have hM0 : 0 ≤ M :=
+    (abs_nonneg (deriv Real.smoothTransition 0)).trans (hM 0)
+  have hprod : MemLp (fun x ↦ f.val x • D x) 2 volume := by
+    have hlocal : MemLp (fun x ↦ f.val x • D x) 2 (volume.restrict Ω) := by
+      exact (apm_m01J04_isTestFunction_fderivField_memLp hφ ⊤).smul f.val_memLp
+    apply apm_m01J04_memLp_of_ae_eq_zero_outside
+      hφ.1.continuous.isOpen_support.measurableSet hφ.2.2 hlocal
+    filter_upwards
+      [apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet hφ.1] with x hx
+    intro hxs
+    have hz : φ x = 0 := Function.notMem_support.mp hxs
+    simp [D, hx hz]
+  have he_meas (n : ℕ) : AEStronglyMeasurable (e n) volume := by
+    have hc := (apm_m01J04_localization_core_approx_aux_cutoff_contDiff hφ.1
+      (1 / (n + 1 : ℝ))).continuous
+    have hD := apm_m01J04_isTestFunction_fderivField_memLp
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ
+        (1 / (n + 1 : ℝ))) ⊤
+    simpa [e] using
+      (apm_m01J04_globalLocalizedH1 φ hφ f).val_memLp.1.smul hD.1
+  have hnorm (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      ‖e n x‖ ≤ ‖(4 * M) • (f.val x • D x)‖ := by
+    let r : ℝ := 1 / (n + 1 : ℝ)
+    let a : ℝ := φ x ^ 2 / r ^ 2 - 1
+    have hr : 0 < r := by simp [r]; positivity
+    simp only [e]
+    rw [apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_aux_fderiv
+      φ hφ.1 r x]
+    have hfield : WithLp.toLp 2 (fun i ↦
+        ((deriv Real.smoothTransition a) •
+          ((2 * φ x / r ^ 2) • fderiv ℝ φ x))
+          (EuclideanSpace.single i 1)) =
+        (deriv Real.smoothTransition a * (2 * φ x / r ^ 2)) • D x := by
+      ext i
+      simp [D, smul_smul]
+    rw [hfield]
+    change ‖(f.val x * φ x) •
+      ((deriv Real.smoothTransition a * (2 * φ x / r ^ 2)) • D x)‖ ≤
+        ‖(4 * M) • (f.val x • D x)‖
+    simp only [smul_smul, norm_smul, Real.norm_eq_abs]
+    by_cases ha : a ∈ Set.Icc (0 : ℝ) 1
+    · have hratio : φ x ^ 2 / r ^ 2 ≤ 2 := by
+        dsimp [a] at ha
+        linarith [ha.2]
+      have habsratio : |φ x * (2 * φ x / r ^ 2)| ≤ 4 := by
+        have hr2 : 0 < r ^ 2 := sq_pos_of_pos hr
+        calc
+          |φ x * (2 * φ x / r ^ 2)| = 2 * (φ x ^ 2 / r ^ 2) := by
+            rw [show φ x * (2 * φ x / r ^ 2) = 2 * (φ x ^ 2 / r ^ 2) by ring]
+            exact abs_of_nonneg (by positivity)
+          _ ≤ 4 := by linarith
+      have hcoef :
+          |φ x * (deriv Real.smoothTransition a * (2 * φ x / r ^ 2))| ≤
+            |4 * M| := by
+        rw [abs_of_nonneg (mul_nonneg (by norm_num) hM0)]
+        calc
+          |φ x * (deriv Real.smoothTransition a * (2 * φ x / r ^ 2))| =
+              |φ x * (2 * φ x / r ^ 2)| * |deriv Real.smoothTransition a| := by
+                rw [abs_mul, abs_mul, abs_mul]
+                ring
+          _ ≤ 4 * M := mul_le_mul habsratio (hM a) (abs_nonneg _) (by norm_num)
+      have hh := mul_le_mul_of_nonneg_left hcoef (abs_nonneg (f.val x))
+      have hhh := mul_le_mul_of_nonneg_right hh (norm_nonneg (D x))
+      simpa only [abs_mul, mul_assoc, mul_left_comm, mul_comm] using hhh
+    · have hout : a < 0 ∨ 1 < a := by
+        by_cases h0 : 0 ≤ a
+        · exact Or.inr (lt_of_not_ge fun h1 ↦ ha ⟨h0, h1⟩)
+        · exact Or.inl (lt_of_not_ge h0)
+      have hd : deriv Real.smoothTransition a = 0 := by
+        rcases hout with hneg | hpos
+        · have heq : Filter.EventuallyEq (nhds a) Real.smoothTransition (fun _ ↦ 0) := by
+            filter_upwards [eventually_lt_nhds hneg] with y hy
+            exact Real.smoothTransition.zero_of_nonpos hy.le
+          rw [heq.deriv_eq]
+          simp
+        · have heq : Filter.EventuallyEq (nhds a) Real.smoothTransition (fun _ ↦ 1) := by
+            filter_upwards [eventually_gt_nhds hpos] with y hy
+            exact Real.smoothTransition.one_of_one_le hy.le
+          rw [heq.deriv_eq]
+          simp
+      simp [hd]
+      positivity
+  have he_mem (n : ℕ) : MemLp (e n) 2 volume :=
+    (hprod.const_smul (4 * M)).of_le (he_meas n) (ae_of_all _ (hnorm n))
+  have hbound (n : ℕ) : ∀ᵐ x ∂volume,
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖(4 * M) • (f.val x • D x)‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    rw [← ofReal_norm_eq_enorm, ← ofReal_norm_eq_enorm]
+    exact ENNReal.ofReal_le_ofReal (hnorm n x)
+  have hfin : (∫⁻ x, ‖(4 * M) • (f.val x • D x)‖ₑ ^ (2 : ℝ) ∂volume) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      (hprod.const_smul (4 * M)).eLpNorm_lt_top)
+  have hpoint (x : EuclideanSpace ℝ (Fin d)) :
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    by_cases hx : φ x = 0
+    · simp [e, apm_m01J04_globalLocalizedH1, apm_m01J04_H1mul_val, hx]
+    · obtain ⟨N : ℕ, hN⟩ := exists_nat_gt (Real.sqrt 2 / |φ x|)
+      have hev : ∀ᶠ n : ℕ in atTop, e n x = 0 := by
+        filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+        have habs : Real.sqrt 2 < (n + 1 : ℝ) * |φ x| := by
+          have hp : 0 < |φ x| := abs_pos.mpr hx
+          apply (div_lt_iff₀ hp).mp
+          exact lt_of_lt_of_le hN (by exact_mod_cast Nat.le_add_right_of_le hn)
+        have hsquares : (2 : ℝ) < (n + 1 : ℝ) ^ 2 * φ x ^ 2 := by
+          have := (sq_lt_sq₀ (Real.sqrt_nonneg 2)
+            (mul_nonneg (by positivity) (abs_nonneg _))).2 habs
+          rw [Real.sq_sqrt (by norm_num), mul_pow, sq_abs] at this
+          exact this
+        have harg : 1 < φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1 := by
+          have hnpos : 0 < (n + 1 : ℝ) := by positivity
+          field_simp
+          nlinarith
+        have heq : Filter.EventuallyEq (nhds
+            (φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1))
+            Real.smoothTransition (fun _ ↦ 1) := by
+          filter_upwards [eventually_gt_nhds harg] with y hy
+          exact Real.smoothTransition.one_of_one_le hy.le
+        have hd : deriv Real.smoothTransition
+            (φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1) = 0 := by
+          rw [heq.deriv_eq]
+          simp
+        simp only [e]
+        rw [apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar_aux_fderiv
+          φ hφ.1]
+        apply smul_eq_zero.mpr
+        right
+        rw [hd]
+        rw [WithLp.toLp_eq_zero]
+        funext i
+        simp
+      exact tendsto_const_nhds.congr' (hev.mono fun n hn ↦ by simp [hn])
+  have hlin : Tendsto (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂volume)
+      atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖(4 * M) • (f.val x • D x)‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin (ae_of_all _ hpoint)
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 volume) atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2 help
+  simpa [e] using hreal
+
+/-- Triangle inequality: the product-rule gradient difference is the bulk term
+plus the collar term (`apm_m01J04_H1mul_grad`). -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_split
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω)
+    (hbulk : Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)) x • (apm_m01J04_globalLocalizedH1 φ hφ f).grad x -
+          (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2 volume).toReal) atTop (nhds 0))
+    (hcollar : Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦ (apm_m01J04_globalLocalizedH1 φ hφ f).val x • WithLp.toLp 2 (fun i ↦
+          fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))) x (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0)) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul
+          (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)))
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          (apm_m01J04_globalLocalizedH1 φ hφ f)).grad x -
+        (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
+  let c (n : ℕ) :=
+    apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))
+  let g := apm_m01J04_globalLocalizedH1 φ hφ f
+  let bulk (n : ℕ) := fun x ↦ c n x • g.grad x - g.grad x
+  let collar (n : ℕ) := fun x ↦ g.val x • WithLp.toLp 2 (fun i ↦
+    fderiv ℝ (c n) x (EuclideanSpace.single i 1))
+  have hbulk_mem (n : ℕ) : MemLp (bulk n) 2 volume := by
+    have hc := apm_m01J04_isTestFunction_memLp
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ
+        (1 / (n + 1 : ℝ))) ⊤
+    simpa [bulk, c, g] using
+      ((g.grad_memLp.smul hc).sub g.grad_memLp)
+  have hcollar_mem (n : ℕ) : MemLp (collar n) 2 volume := by
+    have hD := apm_m01J04_isTestFunction_fderivField_memLp
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ
+        (1 / (n + 1 : ℝ))) ⊤
+    simpa [collar, c, g, smul_comm] using hD.smul g.val_memLp
+  have heq (n : ℕ) :
+      (fun x ↦
+        (apm_m01J04_H1mul (c n)
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          g).grad x - g.grad x) =
+        fun x ↦ bulk n x + collar n x := by
+    funext x
+    rw [apm_m01J04_H1mul_grad]
+    dsimp [bulk, collar]
+    abel
+  have hbound (n : ℕ) :
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul (c n)
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          g).grad x - g.grad x) 2 volume).toReal ≤
+        (eLpNorm (bulk n) 2 volume).toReal +
+          (eLpNorm (collar n) 2 volume).toReal := by
+    rw [heq]
+    have hle := eLpNorm_add_le (hbulk_mem n).1 (hcollar_mem n).1
+      (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+    have htop : eLpNorm (bulk n) 2 volume + eLpNorm (collar n) 2 volume ≠ ⊤ :=
+      ENNReal.add_ne_top.2
+        ⟨(hbulk_mem n).eLpNorm_ne_top, (hcollar_mem n).eLpNorm_ne_top⟩
+    calc
+      _ ≤ (eLpNorm (bulk n) 2 volume + eLpNorm (collar n) 2 volume).toReal :=
+        ENNReal.toReal_mono htop hle
+      _ = _ := ENNReal.toReal_add
+        (hbulk_mem n).eLpNorm_ne_top (hcollar_mem n).eLpNorm_ne_top
+  have hresult : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul (c n)
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          g).grad x - g.grad x) 2 volume).toReal) atTop (nhds 0) := by
+    apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hbound
+    simpa [bulk, collar, c, g] using hbulk.add hcollar
+  simpa [c, g] using hresult
+
+/-- Gradient part of the core convergence.  The product gradient is
+`χ_r • ∇(fφ) + (fφ) • ∇χ_r`; the first term converges as in the value case,
+and the collar term `f φ · smoothTransition'(φ²/r² − 1) · 2φ∇φ / r²` is
+bounded by `4 M |f| |∇φ|` (since `φ² ≤ 2r²` on the collar) and tends to `0`
+pointwise, so dominated convergence applies. -/
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) :
+    Tendsto (fun n : ℕ ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul
+          (apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)))
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          (apm_m01J04_globalLocalizedH1 φ hφ f)).grad x -
+        (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
+  obtain ⟨M, hM⟩ :=
+    apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_deriv_bound
+  exact apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_split φ hφ f
+    (apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_bulk φ hφ f)
+    (apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_collar φ hφ f hM)
+
 /-- The remaining local Meyers--Serrin interface.  Unlike
 `apm_m01J04_isH1Zero_mul`, the input is an arbitrary encoded `H¹` function;
 compact localization by `φ` is what must produce the zero-boundary
 approximation. -/
+lemma apm_m01J04_localization_core_approx
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) {eta : ℝ} (heta : 0 < eta) :
+    ∃ (epsilon : ℝ) (u : apm_m01J04_H1 d Set.univ),
+      0 < epsilon ∧
+      Function.support u.val ⊆ {x | epsilon ≤ |φ x|} ∧
+      Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} ∧
+      apm_m01J04_H1dist u (apm_m01J04_globalLocalizedH1 φ hφ f) < eta := by
+  set g := apm_m01J04_globalLocalizedH1 φ hφ f
+  have hT := apm_m01J04_H1dist_tendsto_zero_of_components _ g
+    (apm_m01J04_localization_core_approx_aux_val_tendsto φ hφ f)
+    (apm_m01J04_localization_core_approx_aux_grad_tendsto φ hφ f)
+  obtain ⟨n, hn⟩ := ((hT.eventually (gt_mem_nhds heta))).exists
+  have hr : (0 : ℝ) < 1 / (n + 1 : ℝ) := by positivity
+  refine ⟨1 / (n + 1 : ℝ), _, hr, ?_, ?_, hn⟩
+  · rw [apm_m01J04_H1mul_val]
+    intro x hx
+    exact apm_m01J04_localization_core_approx_aux_cutoff_support hr
+      (Function.support_mul_subset_right _ _ hx)
+  · rw [apm_m01J04_H1mul_grad]
+    intro x hx
+    by_contra hxr
+    have h0 : apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ)) x = 0 :=
+      Function.notMem_support.mp fun h ↦ hxr
+        (apm_m01J04_localization_core_approx_aux_cutoff_support hr h)
+    have h1 : fderiv ℝ (apm_m01J04_localization_core_approx_aux_cutoff φ
+        (1 / (n + 1 : ℝ))) x = 0 :=
+      Function.notMem_support.mp fun h ↦ hxr
+        (apm_m01J04_localization_core_approx_aux_cutoff_fderiv_support
+          hφ.1.continuous hr h)
+    exact hx (by simp only [h0, h1]; simp; right; rfl)
+
+noncomputable def apm_m01J04_mollify_exists_compact_core_aux_bump
+    {d : ℕ} (n : ℕ) : ContDiffBump (0 : EuclideanSpace ℝ (Fin d)) :=
+  ⟨n + 1, 2 * (n + 1), by positivity, by
+    have h : (0 : ℝ) < n + 1 := by positivity
+    linarith⟩
+
+noncomputable def apm_m01J04_mollify_exists_compact_core_aux_cutoff
+    {d : ℕ} (n : ℕ) : EuclideanSpace ℝ (Fin d) → ℝ :=
+  fun x ↦ (apm_m01J04_mollify_exists_compact_core_aux_bump n).toFun x
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_test
+    {d : ℕ} (n : ℕ) :
+    apm_m01J04_isTestFunction (Set.univ : Set (EuclideanSpace ℝ (Fin d)))
+      (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) := by
+  unfold apm_m01J04_mollify_exists_compact_core_aux_cutoff
+  exact ⟨ContDiffBump.contDiff _, ContDiffBump.hasCompactSupport _, Set.subset_univ _⟩
+
+/-- Leaf: multiplication by the expanding bumps (`rIn = n+1`, `rOut = 2(n+1)`,
+so `‖∇b_n‖∞ = O(1/n)` since the ratio is fixed) converges to the identity in
+`H1dist`: value and bulk-gradient terms by dominated convergence, the
+`u.val • ∇b_n` term by the `O(1/n)` bound. -/
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_scale
+    {d : ℕ} (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    apm_m01J04_mollify_exists_compact_core_aux_cutoff n x =
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff 0
+        ((n + 1 : ℝ)⁻¹ • x) := by
+  have hr : 2 * (n + 1 : ℝ) / (n + 1) = 2 := by
+    field_simp
+  unfold apm_m01J04_mollify_exists_compact_core_aux_cutoff
+    apm_m01J04_mollify_exists_compact_core_aux_bump
+  rw [ContDiffBump.apply, ContDiffBump.apply]
+  dsimp only
+  rw [hr]
+  norm_num
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_fderiv
+    {d : ℕ} (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+    fderiv ℝ (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x =
+      (n + 1 : ℝ)⁻¹ • fderiv ℝ
+        (apm_m01J04_mollify_exists_compact_core_aux_cutoff 0)
+        ((n + 1 : ℝ)⁻¹ • x) := by
+  have heq : apm_m01J04_mollify_exists_compact_core_aux_cutoff (d := d) n =
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff 0 ∘
+        fun x ↦ (n + 1 : ℝ)⁻¹ • x := by
+    funext y
+    exact apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_scale n y
+  rw [heq, fderiv_comp]
+  · ext y
+    have hs : fderiv ℝ (fun z : EuclideanSpace ℝ (Fin d) ↦
+        (n + 1 : ℝ)⁻¹ • z) x =
+        (n + 1 : ℝ)⁻¹ • ContinuousLinearMap.id ℝ
+          (EuclideanSpace ℝ (Fin d)) := by
+      simpa using fderiv_const_smul (𝕜 := ℝ)
+        (x := x) differentiableAt_id (n + 1 : ℝ)⁻¹
+    rw [hs]
+    simp
+  · exact (apm_m01J04_mollify_exists_compact_core_aux_test (d := d) 0).1.differentiable
+      (by simp) _
+  · fun_prop
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_eventually_one
+    {d : ℕ} (x : EuclideanSpace ℝ (Fin d)) :
+    ∀ᶠ n : ℕ in atTop,
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff n x = 1 := by
+  obtain ⟨N : ℕ, hN⟩ := exists_nat_gt ‖x‖
+  filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+  apply (apm_m01J04_mollify_exists_compact_core_aux_bump n).one_of_mem_closedBall
+  rw [Metric.mem_closedBall, dist_zero_right]
+  change ‖x‖ ≤ (n + 1 : ℝ)
+  exact hN.le.trans (by exact_mod_cast Nat.le_add_right_of_le hn)
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_mul
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) :
+    Tendsto (fun n ↦ (eLpNorm (fun x ↦
+      apm_m01J04_mollify_exists_compact_core_aux_cutoff n x • f x - f x)
+      2 volume).toReal) atTop (nhds 0) := by
+  let b : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_mollify_exists_compact_core_aux_cutoff n
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → E := fun n x ↦ b n x • f x - f x
+  have he_mem (n : ℕ) : MemLp (e n) 2 volume := by
+    apply hf.of_le
+    · exact ((((apm_m01J04_mollify_exists_compact_core_aux_test n).1.continuous
+          ).aestronglyMeasurable.smul hf.1).sub hf.1)
+    · filter_upwards [] with x
+      rw [show e n x = (b n x - 1) • f x by simp [e, b, sub_smul], norm_smul]
+      have h0 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).nonneg' x
+      have h1 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).le_one (x := x)
+      apply mul_le_of_le_one_left (norm_nonneg _)
+      simpa [b, apm_m01J04_mollify_exists_compact_core_aux_cutoff,
+        Real.norm_eq_abs, abs_of_nonpos (sub_nonpos.mpr h1)] using h0
+  have hbound (n : ℕ) : ∀ᵐ x ∂volume,
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖f x‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    rw [show e n x = (b n x - 1) • f x by simp [e, b, sub_smul], enorm_smul]
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    apply mul_le_of_le_one_left (bot_le)
+    rw [Real.enorm_eq_ofReal_abs, ENNReal.ofReal_le_one]
+    have h0 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).nonneg' x
+    have h1 := (apm_m01J04_mollify_exists_compact_core_aux_bump n).le_one (x := x)
+    simpa [b, apm_m01J04_mollify_exists_compact_core_aux_cutoff,
+      abs_of_nonpos (sub_nonpos.mpr h1)] using h0
+  have hfin : (∫⁻ x, ‖f x‖ₑ ^ (2 : ℝ) ∂volume) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      hf.eLpNorm_lt_top)
+  have hpoint (x : EuclideanSpace ℝ (Fin d)) :
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    apply (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ≥0∞)) atTop (nhds 0)).congr'
+    filter_upwards [apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_eventually_one x]
+      with n hn
+    simp [e, b, hn]
+  have hlin : Tendsto (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂volume)
+      atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖f x‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin (ae_of_all _ hpoint)
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 volume) atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2 help
+  simpa [e, b] using hreal
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_lower
+    {d : ℕ} (f : EuclideanSpace ℝ (Fin d) → ℝ) (hf : MemLp f 2 volume) :
+    Tendsto (fun n ↦ (eLpNorm (fun x ↦ f x • WithLp.toLp 2
+      (fun i ↦ fderiv ℝ
+        (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x
+          (EuclideanSpace.single i 1))) 2 volume).toReal) atTop (nhds 0) := by
+  let D : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) := fun n x ↦
+    WithLp.toLp 2 (fun i ↦ fderiv ℝ
+      (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x
+        (EuclideanSpace.single i 1))
+  have hDcont (n : ℕ) : Continuous (D n) :=
+    (PiLp.continuous_toLp 2 (fun _ : Fin d ↦ ℝ)).comp
+      (continuous_pi fun i ↦
+        ((apm_m01J04_mollify_exists_compact_core_aux_test n).1.continuous_fderiv
+          (by simp)).clm_apply continuous_const)
+  have hD0supp : HasCompactSupport (D 0) := by
+    apply ((apm_m01J04_mollify_exists_compact_core_aux_test (d := d) 0).2.1.fderiv ℝ).mono'
+    intro x hx
+    contrapose! hx
+    simp only [Function.mem_support, ne_eq, not_not] at hx ⊢
+    have hz : fderiv ℝ (apm_m01J04_mollify_exists_compact_core_aux_cutoff 0) x = 0 :=
+      image_eq_zero_of_notMem_tsupport hx
+    ext i
+    simp [D, hz]
+  obtain ⟨C, hC⟩ := hD0supp.exists_bound_of_continuous (hDcont 0)
+  let s : ℕ → ℝ := fun n ↦ (n + 1 : ℝ)⁻¹
+  have hDs (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      D n x = s n • D 0 (s n • x) := by
+    ext i
+    change fderiv ℝ (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) x
+        (EuclideanSpace.single i 1) = _
+    rw [apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_fderiv]
+    simp [D, s]
+  have hDnorm (n : ℕ) (x : EuclideanSpace ℝ (Fin d)) :
+      ‖D n x‖ ≤ s n * |C| := by
+    rw [hDs, norm_smul, Real.norm_eq_abs, abs_of_nonneg (by positivity : 0 ≤ s n)]
+    exact mul_le_mul_of_nonneg_left ((hC _).trans (le_abs_self C)) (by positivity)
+  have hDtop (n : ℕ) : eLpNorm (D n) ⊤ volume ≤ ENNReal.ofReal (s n * |C|) := by
+    have h := eLpNorm_le_of_ae_bound (p := (⊤ : ℝ≥0∞))
+      (μ := volume) (ae_of_all volume (hDnorm n))
+    simpa using h
+  have hle (n : ℕ) : eLpNorm (fun x ↦ f x • D n x) 2 volume ≤
+      eLpNorm f 2 volume * ENNReal.ofReal (s n * |C|) := by
+    exact (eLpNorm_smul_le_mul_eLpNorm (p := 2) (q := ⊤) (r := 2)
+      (hDcont n).aestronglyMeasurable hf.1).trans
+        (mul_le_mul_left' (hDtop n) _)
+  have hreal (n : ℕ) : (eLpNorm (fun x ↦ f x • D n x) 2 volume).toReal ≤
+      (eLpNorm f 2 volume).toReal * (s n * |C|) := by
+    have htop : eLpNorm f 2 volume * ENNReal.ofReal (s n * |C|) ≠ ⊤ :=
+      ENNReal.mul_ne_top hf.eLpNorm_ne_top ENNReal.ofReal_ne_top
+    calc
+      _ ≤ (eLpNorm f 2 volume * ENNReal.ofReal (s n * |C|)).toReal :=
+        ENNReal.toReal_mono htop (hle n)
+      _ = _ := by rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal (by positivity)]
+  apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hreal
+  have hs : Tendsto s atTop (nhds 0) := by
+    exact tendsto_inv_atTop_zero.comp
+      (tendsto_atTop_add_const_right atTop 1
+        (tendsto_natCast_atTop_atTop : Tendsto (fun n : ℕ ↦ (n : ℝ)) atTop atTop))
+  convert
+    ((tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (eLpNorm f 2 volume).toReal)
+      atTop (nhds (eLpNorm f 2 volume).toReal)).mul
+      (hs.mul (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ |C|) atTop (nhds |C|))) : Tendsto
+      (fun n ↦ (eLpNorm f 2 volume).toReal * (s n * |C|))
+        atTop (nhds ((eLpNorm f 2 volume).toReal * (0 * |C|)))) using 1 <;> simp
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto
+    {d : ℕ} (u : apm_m01J04_H1 d Set.univ) :
+    Tendsto (fun n ↦ apm_m01J04_H1dist
+      (apm_m01J04_H1mul
+        (apm_m01J04_mollify_exists_compact_core_aux_cutoff n)
+        (apm_m01J04_mollify_exists_compact_core_aux_test n) u) u)
+      atTop (nhds 0) := by
+  let b : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_mollify_exists_compact_core_aux_cutoff n
+  let hb (n : ℕ) := apm_m01J04_mollify_exists_compact_core_aux_test (d := d) n
+  let a (n : ℕ) := apm_m01J04_H1mul (b n) (hb n) u
+  have hval : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).val x - u.val x) 2 volume).toReal)
+      atTop (nhds 0) := by
+    simpa [a, b, hb, apm_m01J04_H1mul_val, mul_comm] using
+      apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_mul u.val
+        (by simpa using u.val_memLp)
+  let bulk : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun n x ↦ b n x • u.grad x - u.grad x
+  let lower : ℕ → EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) :=
+    fun n x ↦ u.val x • WithLp.toLp 2 (fun i ↦
+      fderiv ℝ (b n) x (EuclideanSpace.single i 1))
+  have hbulk : Tendsto (fun n ↦ (eLpNorm (bulk n) 2 volume).toReal)
+      atTop (nhds 0) := by
+    simpa [bulk, b] using
+      apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_mul u.grad
+        (by simpa using u.grad_memLp)
+  have hlower : Tendsto (fun n ↦ (eLpNorm (lower n) 2 volume).toReal)
+      atTop (nhds 0) := by
+    simpa [lower, b] using
+      apm_m01J04_mollify_exists_compact_core_aux_tendsto_aux_lower u.val
+        (by simpa using u.val_memLp)
+  have heq (n : ℕ) : (fun x ↦ (a n).grad x - u.grad x) =
+      fun x ↦ bulk n x + lower n x := by
+    funext x
+    simp only [a, b, bulk, lower, apm_m01J04_H1mul_grad]
+    abel
+  have hlower_mem (n : ℕ) : MemLp (lower n) 2 volume := by
+    have hD := apm_m01J04_isTestFunction_fderivField_memLp (hb n) ⊤
+    simpa [lower, b, smul_comm] using hD.smul u.val_memLp
+  have hbulk_mem (n : ℕ) : MemLp (bulk n) 2 volume := by
+    have ha : MemLp (a n).grad 2 volume := by simpa using (a n).grad_memLp
+    have hu : MemLp u.grad 2 volume := by simpa using u.grad_memLp
+    have h := (ha.sub hu).sub (hlower_mem n)
+    convert h using 1
+    funext x
+    have hx := congrFun (heq n) x
+    simp only [Pi.sub_apply]
+    rw [hx]
+    abel
+  have hbound (n : ℕ) :
+      (eLpNorm (fun x ↦ (a n).grad x - u.grad x) 2 volume).toReal ≤
+        (eLpNorm (bulk n) 2 volume).toReal +
+          (eLpNorm (lower n) 2 volume).toReal := by
+    rw [heq]
+    have hle := eLpNorm_add_le (hbulk_mem n).1 (hlower_mem n).1
+      (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+    have htop : eLpNorm (bulk n) 2 volume + eLpNorm (lower n) 2 volume ≠ ⊤ :=
+      ENNReal.add_ne_top.2
+        ⟨(hbulk_mem n).eLpNorm_ne_top, (hlower_mem n).eLpNorm_ne_top⟩
+    calc
+      _ ≤ (eLpNorm (bulk n) 2 volume + eLpNorm (lower n) 2 volume).toReal :=
+        ENNReal.toReal_mono htop hle
+      _ = _ := ENNReal.toReal_add (hbulk_mem n).eLpNorm_ne_top
+        (hlower_mem n).eLpNorm_ne_top
+  have hgrad : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).grad x - u.grad x) 2 volume).toReal)
+      atTop (nhds 0) := by
+    apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hbound
+    simpa using hbulk.add hlower
+  have hval' : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).val x - u.val x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by simpa using hval
+  have hgrad' : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦ (a n).grad x - u.grad x) 2
+        (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by simpa using hgrad
+  simpa [a, b, hb] using
+    apm_m01J04_H1dist_tendsto_zero_of_components a u hval' hgrad'
+
+/-- Spatial truncation reduces the general auxiliary statement to a genuinely
+compactly supported global Sobolev pair.  The compact carrier lies in
+`closure K`; closed thickening is unchanged on replacing a set by its closure. -/
+lemma apm_m01J04_mollify_exists_compact_core
+    {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
+    {K : Set (EuclideanSpace ℝ (Fin d))}
+    (huval : Function.support u.val ⊆ K)
+    (hugrad : Function.support u.grad ⊆ K)
+    {eta : ℝ} (heta : 0 < eta) :
+    ∃ (w : apm_m01J04_H1 d Set.univ)
+      (C : Set (EuclideanSpace ℝ (Fin d))),
+      IsCompact C ∧ C ⊆ closure K ∧
+      Function.support w.val ⊆ C ∧ Function.support w.grad ⊆ C ∧
+      apm_m01J04_H1dist w u < eta := by
+  have hlim := apm_m01J04_mollify_exists_compact_core_aux_tendsto u
+  obtain ⟨n, hn⟩ := (hlim.eventually (gt_mem_nhds heta)).exists
+  let b := apm_m01J04_mollify_exists_compact_core_aux_cutoff (d := d) n
+  let hb := apm_m01J04_mollify_exists_compact_core_aux_test (d := d) n
+  let w := apm_m01J04_H1mul b hb u
+  let C := tsupport b ∩ closure K
+  refine ⟨w, C, ?_, inter_subset_right, ?_, ?_, ?_⟩
+  · exact hb.2.1.inter_right isClosed_closure
+  · rw [apm_m01J04_H1mul_val]
+    intro x hx
+    refine ⟨subset_tsupport _ (Function.support_mul_subset_right _ _ hx), ?_⟩
+    exact subset_closure (huval (Function.support_mul_subset_left _ _ hx))
+  · rw [apm_m01J04_H1mul_grad]
+    intro x hx
+    by_contra hxc
+    rcases not_and_or.mp hxc with hxb | hxK
+    · have hb0 : b x = 0 := Function.notMem_support.mp fun h ↦
+        hxb (subset_tsupport b h)
+      have hdb0 : fderiv ℝ b x = 0 := Function.notMem_support.mp fun h ↦
+        hxb (support_fderiv_subset ℝ h)
+      have hvec : WithLp.toLp 2
+          (fun i ↦ fderiv ℝ b x (EuclideanSpace.single i 1)) = 0 := by
+        rw [hdb0]
+        rfl
+      exact hx (by simp [hb0, hvec])
+    · have huv0 : u.val x = 0 := Function.notMem_support.mp fun h ↦
+        hxK (subset_closure (huval h))
+      have hug0 : u.grad x = 0 := Function.notMem_support.mp fun h ↦
+        hxK (subset_closure (hugrad h))
+      exact hx (by simp [huv0, hug0])
+  · simpa [w, b, hb] using hn
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_kernel
+    {d : ℕ} {delta : ℝ} (hdelta : 0 < delta) :
+    ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ ∧
+      HasCompactSupport κ ∧
+      Function.support κ ⊆ Metric.closedBall 0 delta ∧
+      (∀ x, 0 ≤ κ x) ∧ (∫ x, κ x ∂volume) = 1 := by
+  let φ : ContDiffBump (0 : EuclideanSpace ℝ (Fin d)) :=
+    ⟨delta / 2, delta, half_pos hdelta, half_lt_self hdelta⟩
+  refine ⟨φ.normed volume, φ.contDiff_normed, φ.hasCompactSupport_normed,
+    ?_, φ.nonneg_normed, φ.integral_normed⟩
+  rw [φ.support_normed_eq]
+  exact Metric.ball_subset_closedBall
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_integrable
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ : ∀ x, 0 ≤ κ x) (hint : (∫ x, κ x ∂volume) = 1) :
+    Integrable κ volume := by
+  exact integrable_of_integral_eq_one hint
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_L1
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ : ∀ x, 0 ≤ κ x) (hint : (∫ x, κ x ∂volume) = 1) :
+    eLpNorm κ 1 volume = 1 := by
+  have hi : Integrable κ volume :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_integrable κ hκ hint
+  rw [eLpNorm_one_eq_lintegral_enorm,
+    ← ofReal_integral_norm_eq_lintegral_enorm hi]
+  simp_rw [Real.norm_eq_abs, abs_of_nonneg (hκ _), hint, ENNReal.ofReal_one]
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_smooth_dense
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {a : ℝ} (ha : 0 < a) :
+    ∃ g : EuclideanSpace ℝ (Fin d) → E,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g ∧
+      (eLpNorm (f - g) 2 volume).toReal ≤ a := by
+  obtain ⟨g, hgK, hgS, hg⟩ := hf.exist_eLpNorm_sub_le
+    (by norm_num : (2 : ℝ≥0∞) ≠ ⊤) (by norm_num : (1 : ℝ≥0∞) ≤ 2) ha
+  refine ⟨g, hgK, hgS, ?_⟩
+  calc
+    (eLpNorm (f - g) 2 volume).toReal
+        ≤ (ENNReal.ofReal a).toReal :=
+          ENNReal.toReal_mono ENNReal.ofReal_ne_top hg
+    _ = a := ENNReal.toReal_ofReal ha.le
+
+/-- `L²` continuity of translation. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_translate
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ0 →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε := by
+  obtain ⟨g, hgK, hgC, hfg⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_smooth_dense
+      f hf (by positivity : (0 : ℝ) < ε / 4)
+  obtain ⟨r, hr, hKr⟩ := hgK.exists_isCompact_cthickening
+  let A : ℝ := (volume (Metric.cthickening r (tsupport g)) ^ (1 / 2 : ℝ)).toReal
+  have hA : 0 ≤ A := ENNReal.toReal_nonneg
+  have hgU : UniformContinuous g :=
+    hgK.uniformContinuous_of_continuous hgC.continuous
+  obtain ⟨δ, hδ, hgδ⟩ := (Metric.uniformContinuous_iff.1 hgU)
+    (ε / (2 * (A + 1))) (by positivity)
+  refine ⟨min r (δ / 2), lt_min hr (half_pos hδ), fun y hy ↦ ?_⟩
+  have hyr : ‖y‖ ≤ r := hy.trans (min_le_left _ _)
+  have hyδ : ‖y‖ < δ :=
+    (hy.trans (min_le_right _ _)).trans_lt (half_lt_self hδ)
+  let G : EuclideanSpace ℝ (Fin d) → E := fun x ↦ g (x - y) - g x
+  have hGsupp : Function.support G ⊆ Metric.cthickening r (tsupport g) := by
+    intro x hx
+    by_contra hxK
+    have hg0 : g x = 0 := Function.notMem_support.mp fun hxg ↦
+      hxK (Metric.mem_cthickening_of_dist_le x x r _ (subset_tsupport g hxg) (by simp [hr.le]))
+    have hgy0 : g (x - y) = 0 := Function.notMem_support.mp fun hxyg ↦
+      hxK (Metric.mem_cthickening_of_dist_le x (x - y) r _
+        (subset_tsupport g hxyg) (by simpa [dist_eq_norm] using hyr))
+    exact hx (by simp [G, hg0, hgy0])
+  have hGmeas : AEStronglyMeasurable G volume :=
+    ((hgC.continuous.comp (continuous_id.sub continuous_const)).sub hgC.continuous).aestronglyMeasurable
+  have hGtop : eLpNorm G ⊤ volume ≤ ENNReal.ofReal (ε / (2 * (A + 1))) := by
+    apply eLpNormEssSup_le_of_ae_bound
+    filter_upwards [] with x
+    have hxy : dist (x - y) x < δ := by simpa [dist_eq_norm] using hyδ
+    simpa [G, dist_eq_norm] using le_of_lt (hgδ hxy)
+  have hG2 : (eLpNorm G 2 volume).toReal ≤ ε / 2 := by
+    have hres : eLpNorm G 2 volume =
+        eLpNorm G 2 (volume.restrict (Metric.cthickening r (tsupport g))) := by
+      set_option maxHeartbeats 800000 in
+        exact eLpNorm_restrict_eq_of_support_subset
+          (f := G) (s := Metric.cthickening r (tsupport g))
+          (p := (2 : ℝ≥0∞)) (μ := volume) hGsupp |>.symm
+    rw [hres]
+    have hle := eLpNorm_le_eLpNorm_mul_rpow_measure_univ
+      (μ := volume.restrict (Metric.cthickening r (tsupport g)))
+      (show (2 : ℝ≥0∞) ≤ ⊤ by simp)
+      hGmeas.restrict
+    have hpow : (volume.restrict (Metric.cthickening r (tsupport g)) Set.univ) ^
+          (1 / (2 : ℝ≥0∞).toReal - 1 / (⊤ : ℝ≥0∞).toReal) =
+        volume (Metric.cthickening r (tsupport g)) ^ (1 / 2 : ℝ) := by
+      simp [hKr.measurableSet]
+    rw [hpow] at hle
+    have htop' : eLpNorm G ⊤ (volume.restrict (Metric.cthickening r (tsupport g))) ≤
+        ENNReal.ofReal (ε / (2 * (A + 1))) := by
+      exact (eLpNorm_mono_measure (p := (⊤ : ℝ≥0∞)) G
+        Measure.restrict_le_self).trans hGtop
+    set_option maxHeartbeats 1000000 in
+     calc
+      (eLpNorm G 2 (volume.restrict (Metric.cthickening r (tsupport g)))).toReal
+          ≤ (ENNReal.ofReal (ε / (2 * (A + 1))) *
+              volume (Metric.cthickening r (tsupport g)) ^ (1 / 2 : ℝ)).toReal :=
+        ENNReal.toReal_mono (ENNReal.mul_ne_top ENNReal.ofReal_ne_top
+          (ENNReal.rpow_ne_top_of_nonneg (by positivity) hKr.measure_ne_top))
+          (hle.trans (mul_le_mul_right' htop' _))
+      _ = ε / (2 * (A + 1)) * A := by
+        rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal (by positivity)]
+      _ ≤ ε / 2 := by
+        rw [div_mul_eq_mul_div, div_le_iff₀ (by positivity), div_mul_eq_mul_div]
+        nlinarith
+  have htrans : (eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume).toReal =
+      (eLpNorm (f - g) 2 volume).toReal := by
+    have hm := measurePreserving_sub_right volume y
+    simpa [Function.comp_def] using congrArg ENNReal.toReal
+      (eLpNorm_comp_measurePreserving
+        (hf.sub (hgC.continuous.memLp_of_hasCompactSupport hgK
+          (p := (2 : ℝ≥0∞)) (μ := volume))).1 hm)
+  have hfgmem : MemLp (f - g) 2 volume :=
+    hf.sub (hgC.continuous.memLp_of_hasCompactSupport hgK
+      (p := (2 : ℝ≥0∞)) (μ := volume))
+  have hm := measurePreserving_sub_right volume y
+  have htrmeas : AEStronglyMeasurable (fun x ↦ (f - g) (x - y)) volume :=
+    hfgmem.1.comp_quasiMeasurePreserving hm.quasiMeasurePreserving
+  have hgfmeas : AEStronglyMeasurable (fun x ↦ g x - f x) volume :=
+    (hgC.continuous.aestronglyMeasurable.sub hf.1)
+  have htri := eLpNorm_add_le htrmeas (hGmeas.add hgfmeas) (p := (2 : ℝ≥0∞))
+  have htri2 := eLpNorm_add_le hGmeas hgfmeas (p := (2 : ℝ≥0∞))
+  have htrmem : MemLp (fun x ↦ (f - g) (x - y)) 2 volume :=
+    hfgmem.comp_measurePreserving hm
+  have hGc : Continuous G :=
+    (hgC.continuous.comp (continuous_id.sub continuous_const)).sub hgC.continuous
+  have hGmem : MemLp G 2 volume :=
+    hGc.memLp_of_hasCompactSupport
+      (HasCompactSupport.of_support_subset_isCompact hKr hGsupp)
+      (p := (2 : ℝ≥0∞)) (μ := volume)
+  have hgfmem : MemLp (fun x ↦ g x - f x) 2 volume :=
+    (hgC.continuous.memLp_of_hasCompactSupport hgK
+      (p := (2 : ℝ≥0∞)) (μ := volume)).sub hf
+  have hfinite : eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume +
+      (eLpNorm G 2 volume + eLpNorm (fun x ↦ g x - f x) 2 volume) ≠ ⊤ := by
+    exact ENNReal.add_ne_top.2 ⟨htrmem.eLpNorm_ne_top,
+      ENNReal.add_ne_top.2 ⟨hGmem.eLpNorm_ne_top, hgfmem.eLpNorm_ne_top⟩⟩
+  have hmain : eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤
+      eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume +
+        (eLpNorm G 2 volume + eLpNorm (fun x ↦ g x - f x) 2 volume) := by
+    have heq : (fun x ↦ f (x - y) - f x) =
+        (fun x ↦ (f - g) (x - y)) + (fun x ↦ G x + (g x - f x)) := by
+      funext x
+      simp [G]
+    rw [heq]
+    exact (htri (by norm_num)).trans
+      (add_le_add_right (htri2 (by norm_num)) _)
+  calc
+    (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal
+        ≤ (eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume +
+          (eLpNorm G 2 volume + eLpNorm (fun x ↦ g x - f x) 2 volume)).toReal :=
+      ENNReal.toReal_mono hfinite hmain
+    _ = (eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume).toReal +
+          ((eLpNorm G 2 volume).toReal + (eLpNorm (fun x ↦ g x - f x) 2 volume).toReal) := by
+      rw [ENNReal.toReal_add, ENNReal.toReal_add]
+      · exact hGmem.eLpNorm_ne_top
+      · exact hgfmem.eLpNorm_ne_top
+      · exact htrmem.eLpNorm_ne_top
+      · exact ENNReal.add_ne_top.2 ⟨hGmem.eLpNorm_ne_top, hgfmem.eLpNorm_ne_top⟩
+    _ ≤ ε := by
+      rw [htrans]
+      have hgf : (eLpNorm (fun x ↦ g x - f x) 2 volume).toReal =
+          (eLpNorm (f - g) 2 volume).toReal := by
+        have he : (fun x ↦ g x - f x) = -(f - g) := by
+          funext x
+          simp
+        rw [he, eLpNorm_neg]
+      rw [hgf]
+      linarith
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_integrable
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ0 : ∀ x, 0 ≤ κ x) (hκ1 : (∫ x, κ x ∂volume) = 1) :
+    Integrable κ volume := by
+  exact integrable_of_integral_eq_one hκ1
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    (y : EuclideanSpace ℝ (Fin d)) :
+    MemLp (fun x ↦ f (x - y)) 2 volume ∧
+      eLpNorm (fun x ↦ f (x - y)) 2 volume = eLpNorm f 2 volume := by
+  have hmp := measurePreserving_sub_right volume y
+  have hc : (fun x ↦ f (x - y)) = f ∘ (fun x ↦ x - y) := rfl
+  rw [hc]
+  exact ⟨hf.comp_measurePreserving hmp,
+    eLpNorm_comp_measurePreserving hf.1 hmp⟩
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support
+    {d : ℕ} {ρ : ℝ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    ∀ y, κ y ≠ 0 → ‖y‖ ≤ ρ := by
+  intro y hy
+  simpa [Metric.mem_closedBall, dist_zero_right] using hκs hy
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ρ ε : ℝ} (hε : 0 ≤ ε)
+    (htr : ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε) :
+    ∀ y, ‖y‖ ≤ ρ →
+      eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤ ENNReal.ofReal ε := by
+  intro y hy
+  have htrans :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      f hf y
+  have hmem : MemLp (fun x ↦ f (x - y) - f x) 2 volume := htrans.1.sub hf
+  rw [← ENNReal.toReal_le_toReal hmem.eLpNorm_ne_top ENNReal.ofReal_ne_top,
+    ENNReal.toReal_ofReal hε]
+  exact htr y hy
+
+/-- The mollification error is the kernel average of translation errors
+(pointwise; all integrands are integrable since `κ` is continuous with compact
+support and `f` is locally integrable). -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_identify
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) {ρ : ℝ}
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ : Continuous κ)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    (MeasureTheory.convolution κ f (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) =
+      fun x ↦ ∫ y, κ y • (f (x - y) - f x) ∂volume := by
+  have hκK : HasCompactSupport κ :=
+    HasCompactSupport.of_support_subset_isCompact
+      (isCompact_closedBall (0 : EuclideanSpace ℝ (Fin d)) ρ) hκs
+  have hκLp : MemLp κ 2 volume :=
+    hκ.memLp_of_hasCompactSupport hκK
+      (p := (2 : ℝ≥0∞)) (μ := volume)
+  funext x
+  have hfx : MemLp (fun y ↦ f (x - y)) 2 volume := by
+    have hmp := volume.measurePreserving_sub_left x
+    exact hf.comp_measurePreserving hmp
+  have hprod : Integrable (fun y ↦ κ y • f (x - y)) volume := by
+    exact memLp_one_iff_integrable.mp
+      (hfx.smul hκLp : MemLp (fun y ↦ κ y • f (x - y)) 1 volume)
+  have hconst : Integrable (fun y ↦ κ y • f x) volume :=
+    (hκ.integrable_of_hasCompactSupport hκK).smul_const (f x)
+  simp only [Pi.sub_apply]
+  rw [MeasureTheory.convolution_def]
+  simp only [ContinuousLinearMap.lsmul_apply]
+  have hfxavg : (∫ y, κ y • f x ∂volume) = f x := by
+    rw [integral_smul_const, hκ1, one_smul]
+  calc
+    (∫ y, κ y • f (x - y) ∂volume) - f x =
+        (∫ y, κ y • f (x - y) ∂volume) -
+          (∫ y, κ y • f x ∂volume) := congrArg
+            (fun z ↦ (∫ y, κ y • f (x - y) ∂volume) - z) hfxavg.symm
+    _ = ∫ y, (κ y • f (x - y) - κ y • f x) ∂volume :=
+      (integral_sub hprod hconst).symm
+    _ = ∫ y, κ y • (f (x - y) - f x) ∂volume := by
+      apply integral_congr_ae
+      exact Filter.Eventually.of_forall fun y ↦
+        (smul_sub (κ y) (f (x - y)) (f x)).symm
+
+/-- Joint measurability of the translation-error family. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_joint_meas
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) :
+    AEStronglyMeasurable
+      (Function.uncurry fun (y x : EuclideanSpace ℝ (Fin d)) ↦ f (x - y) - f x)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
+  let μ : Measure (EuclideanSpace ℝ (Fin d)) := volume
+  have hshear : MeasurePreserving
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        (z.1, z.2 - z.1)) (μ.prod μ) (μ.prod μ) :=
+    measurePreserving_prod_sub μ μ
+  have hsub : Measure.QuasiMeasurePreserving
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        z.2 - z.1) (μ.prod μ) μ := by
+    simpa [Function.comp_def] using
+      (Measure.quasiMeasurePreserving_snd.comp hshear.quasiMeasurePreserving)
+  have h₁ : AEStronglyMeasurable
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        f (z.2 - z.1)) (μ.prod μ) :=
+    hf.1.comp_quasiMeasurePreserving hsub
+  have h₂ : AEStronglyMeasurable
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        f z.2) (μ.prod μ) :=
+    hf.1.comp_quasiMeasurePreserving Measure.quasiMeasurePreserving_snd
+  simpa [μ, Function.uncurry] using h₁.sub h₂
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_weighted
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∀ y, eLpNorm (fun x ↦ κ y • G y x) 2 volume ≤ ENNReal.ofReal (κ y) * C := by
+  intro y
+  by_cases hy : κ y = 0
+  · simp [hy]
+  · rw [show (fun x ↦ κ y • G y x) = κ y • G y by rfl,
+      eLpNorm_const_smul]
+    simpa [← ofReal_norm_eq_enorm, Real.norm_eq_abs, abs_of_nonneg (hκ0 y)] using
+      mul_le_mul_left' (hC y hy) (ENNReal.ofReal (κ y))
+
+/-- Jensen for the probability kernel `κ` (pointwise in `x`). -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_pointwise
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E) (x : EuclideanSpace ℝ (Fin d)) :
+    ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ≤
+      ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume := by
+  let w : EuclideanSpace ℝ (Fin d) → NNReal := fun y ↦ Real.toNNReal (κ y)
+  have hw0 : AEMeasurable w volume := hκint.1.aemeasurable.real_toNNReal
+  let wm : EuclideanSpace ℝ (Fin d) → NNReal := hw0.mk w
+  have hwm : Measurable wm := hw0.measurable_mk
+  have hw_eq : ∀ᵐ y ∂volume, (wm y : ℝ) = κ y := by
+    filter_upwards [hw0.ae_eq_mk] with y hy
+    simp only [wm]
+    rw [← hy]
+    simp [w, hκ0 y]
+  have hwmint : Integrable (fun y ↦ (wm y : ℝ)) volume := hκint.congr (by
+    filter_upwards [hw_eq] with y hy
+    exact hy.symm)
+  let ν : Measure (EuclideanSpace ℝ (Fin d)) := volume.withDensity fun y ↦ (wm y : ℝ≥0∞)
+  letI : IsProbabilityMeasure ν := by
+    rw [isProbabilityMeasure_iff]
+    simp only [ν, withDensity_apply _ MeasurableSet.univ, Measure.restrict_univ]
+    rw [lintegral_coe_eq_integral wm hwmint]
+    rw [integral_congr_ae hw_eq]
+    simp [hκ1]
+  have hint : (∫ y, G y x ∂ν) = ∫ y, κ y • G y x ∂volume := by
+    rw [show ν = volume.withDensity (fun y ↦ (wm y : ℝ≥0∞)) from rfl,
+      integral_withDensity_eq_integral_smul hwm]
+    apply integral_congr_ae
+    filter_upwards [hw_eq] with y hy
+    simp [NNReal.smul_def, hy]
+  rw [← hint]
+  by_cases hG : AEStronglyMeasurable (fun y ↦ G y x) ν
+  · have h12 : eLpNorm (fun y ↦ G y x) 1 ν ≤
+        eLpNorm (fun y ↦ G y x) 2 ν :=
+      eLpNorm_le_eLpNorm_of_exponent_le (by norm_num) hG
+    have hi : ‖∫ y, G y x ∂ν‖ₑ ≤ eLpNorm (fun y ↦ G y x) 2 ν := by
+      refine (enorm_integral_le_lintegral_enorm _).trans ?_
+      simpa [eLpNorm_one_eq_lintegral_enorm] using h12
+    refine (pow_le_pow_left' hi 2).trans_eq ?_
+    have hep := eLpNorm_nnreal_pow_eq_lintegral
+      (f := fun y ↦ G y x) (p := (2 : NNReal)) (μ := ν) (by norm_num)
+    rw [show eLpNorm (fun y ↦ G y x) 2 ν ^ 2 =
+        ∫⁻ y, ‖G y x‖ₑ ^ 2 ∂ν by simpa [ENNReal.rpow_two] using hep]
+    simp only [ν]
+    rw [lintegral_withDensity_eq_lintegral_mul₀' hwm.coe_nnreal_ennreal.aemeasurable
+      (hG.enorm.pow_const 2)]
+    apply lintegral_congr_ae
+    filter_upwards [hw_eq] with y hy
+    rw [← hy, ENNReal.ofReal_coe_nnreal]
+    simp [ENNReal.rpow_two, pow_two]
+  · have hni : ¬ Integrable (fun y ↦ G y x) ν := fun h ↦ hG h.1
+    rw [integral_undef hni]
+    simp
+
+/-- Tonelli: integrate the Jensen bound in `x` and use the section bound. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    (hG : AEStronglyMeasurable (Function.uncurry G)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume ≤ C ^ 2 := by
+  have hκm : AEMeasurable κ volume := hκint.aestronglyMeasurable.aemeasurable
+  have hm : AEMeasurable
+      (Function.uncurry fun (x y : EuclideanSpace ℝ (Fin d)) ↦
+        ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
+    exact (hκm.ennreal_ofReal.comp_snd).mul
+      (hG.prod_swap.enorm.pow_const 2)
+  rw [lintegral_lintegral_swap hm]
+  calc
+    (∫⁻ y, ∫⁻ x, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume)
+        = ∫⁻ y, ENNReal.ofReal (κ y) * eLpNorm (G y) 2 volume ^ 2 ∂volume := by
+          apply lintegral_congr
+          intro y
+          rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+          congr 1
+          simpa using
+            (eLpNorm_nnreal_pow_eq_lintegral (μ := volume) (f := G y)
+              (p := (2 : NNReal)) (by norm_num : (2 : NNReal) ≠ 0)).symm
+    _ ≤ ∫⁻ y, ENNReal.ofReal (κ y) * C ^ 2 ∂volume := by
+      apply lintegral_mono
+      intro y
+      by_cases hy : κ y = 0
+      · simp [hy]
+      · exact mul_le_mul_left' (pow_le_pow_left' (hC y hy) 2) _
+    _ = (∫⁻ y, ENNReal.ofReal (κ y) ∂volume) * C ^ 2 := by
+      rw [lintegral_mul_const'' _ hκm.ennreal_ofReal]
+    _ = C ^ 2 := by
+      rw [← ofReal_integral_eq_lintegral_ofReal hκint
+        (Filter.Eventually.of_forall hκ0), hκ1]
+      simp
+
+/-- An `L²` bound from a bound on the integral of the squared norm. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E]
+    (F : EuclideanSpace ℝ (Fin d) → E) {C : ℝ≥0∞}
+    (h : ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume ≤ C ^ 2) :
+    eLpNorm F 2 volume ≤ C := by
+  apply (ENNReal.pow_le_pow_left_iff (by norm_num : (2 : ℕ) ≠ 0)).mp
+  have heq : eLpNorm F 2 volume ^ (2 : ℕ) =
+      ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume := by
+    simpa [ENNReal.rpow_two] using
+      (MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
+        (f := F) (p := (2 : NNReal)) (by norm_num))
+  rwa [heq]
+
+/-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
+a kernel average is at most the worst `L²` norm on the kernel's support. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    (hG : AEStronglyMeasurable (Function.uncurry G)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    eLpNorm (fun x ↦ ∫ y, κ y • G y x ∂volume) 2 volume ≤ C := by
+  apply apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+  calc ∫⁻ x, ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ∂volume
+      ≤ ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume :=
+        lintegral_mono fun x => apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_pointwise κ hκ0 hκint hκ1 G x
+    _ ≤ C ^ 2 := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli κ hκ0 hκint hκ1 G hG hC
+
+/-- Minkowski's integral inequality for a probability kernel supported in the
+`ρ`-ball: the mollification error is at most the worst translation error. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ρ ε : ℝ} (hε : 0 ≤ ε)
+    (htr : ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ : Continuous κ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    (eLpNorm (MeasureTheory.convolution κ f
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
+  have htsupp : tsupport κ ⊆ Metric.closedBall 0 ρ :=
+    closure_minimal hκs Metric.isClosed_closedBall
+  have hκc : HasCompactSupport κ :=
+    (isCompact_closedBall 0 ρ).of_isClosed_subset (isClosed_tsupport _) htsupp
+  have hκint : Integrable κ volume := hκ.integrable_of_hasCompactSupport hκc
+  rw [apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_identify f hf κ hκ hκ1 hκs]
+  have hle := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound κ hκ0 hκint hκ1
+    (fun y x ↦ f (x - y) - f x) (apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_joint_meas f hf)
+    (C := ENNReal.ofReal ε) (fun y hy ↦
+      apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound f hf hε htr y
+        (apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support κ hκs y hy))
+  exact ENNReal.toReal_le_of_le_ofReal hε hle
+
+/-- Approximate identity in `L²`, uniformly over normalised nonnegative
+kernels supported in small balls: `‖κ ⋆ f - f‖₂ ≤ sup_{|y| ≤ ρ} ‖τ_y f - f‖₂`
+(Minkowski's integral inequality) and translation is continuous in `L²`. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ ρ : ℝ, 0 < ρ → ρ ≤ ρ0 →
+      ∀ κ : EuclideanSpace ℝ (Fin d) → ℝ, Continuous κ → (∀ x, 0 ≤ κ x) →
+        (∫ x, κ x ∂volume) = 1 → Function.support κ ⊆ Metric.closedBall 0 ρ →
+        (eLpNorm (MeasureTheory.convolution κ f
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
+  obtain ⟨ρ0, hρ0, htr⟩ := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_translate f hf hε
+  refine ⟨ρ0, hρ0, fun ρ hρ hρρ0 κ hκ hκ0 hκ1 hκs => ?_⟩
+  exact apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski f hf hε.le
+    (fun y hy => htr y (hy.trans hρρ0)) κ hκ hκ0 hκ1 hκs
+
+/-- Simultaneous `L²` approximate-identity estimate for the value and weak
+gradient fields.  This leaf contains no differentiation or `H¹` packaging. -/
+lemma apm_m01J04_mollify_exists_L2_kernel
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {delta eta : ℝ} (hdelta : 0 < delta) (heta : 0 < eta) :
+    ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ ∧
+      HasCompactSupport κ ∧
+      Function.support κ ⊆ Metric.closedBall 0 delta ∧
+      (eLpNorm (MeasureTheory.convolution κ w.val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.val) 2 volume).toReal +
+        (eLpNorm (MeasureTheory.convolution κ w.grad
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta := by
+  have hval : MemLp w.val 2 volume := by simpa using w.val_memLp
+  have hgrad : MemLp w.grad 2 volume := by simpa using w.grad_memLp
+  obtain ⟨ρ1, hρ1, h1⟩ := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
+    w.val hval (by positivity : (0 : ℝ) < eta / 3)
+  obtain ⟨ρ2, hρ2, h2⟩ := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
+    w.grad hgrad (by positivity : (0 : ℝ) < eta / 3)
+  set ρ := min (min ρ1 ρ2) delta with hρdef
+  have hρ : 0 < ρ := lt_min (lt_min hρ1 hρ2) hdelta
+  obtain ⟨κ, hs, hc, hsupp, hnn, hint⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_kernel (d := d) hρ
+  refine ⟨κ, hs, hc, hsupp.trans
+    (Metric.closedBall_subset_closedBall (min_le_right _ _)), ?_⟩
+  have a := h1 ρ hρ ((min_le_left _ _).trans (min_le_left _ _)) κ hs.continuous
+    hnn hint hsupp
+  have b := h2 ρ hρ ((min_le_left _ _).trans (min_le_right _ _)) κ hs.continuous
+    hnn hint hsupp
+  linarith
+
+/-- Convolution commutes with the encoded weak gradient.  This is the
+integration-by-parts leaf and is independent of approximate-identity
+convergence. -/
+lemma apm_m01J04_mollify_convolution_weakGradient_aux_pointwise
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) (x : EuclideanSpace ℝ (Fin d))
+    (i : Fin d) :
+    MeasureTheory.convolution (fderiv ℝ κ) w.val
+        ((ContinuousLinearMap.lsmul ℝ ℝ).precompL
+          (EuclideanSpace ℝ (Fin d))) volume x (EuclideanSpace.single i 1) =
+      MeasureTheory.convolution κ w.grad
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume x i := by
+  let e : EuclideanSpace ℝ (Fin d) := EuclideanSpace.single i 1
+  let φ : EuclideanSpace ℝ (Fin d) → ℝ := fun y ↦ κ (x - y)
+  have hφsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ := by
+    exact hκsmooth.comp (contDiff_const.sub contDiff_id)
+  have hφcompact : HasCompactSupport φ := by
+    exact hκcompact.comp_homeomorph (Homeomorph.subLeft x)
+  have hweak := w.weakGradient φ hφsmooth hφcompact (Set.subset_univ _) i
+  have hfderiv (y : EuclideanSpace ℝ (Fin d)) :
+      fderiv ℝ φ y e = -(fderiv ℝ κ (x - y) e) := by
+    have h := (hκsmooth.differentiable (by simp)).differentiableAt.hasFDerivAt.comp y
+      ((hasFDerivAt_const x y).sub (hasFDerivAt_id y))
+    change (fderiv ℝ (κ ∘ fun z ↦ x - z) y) e = _
+    rw [show fderiv ℝ (κ ∘ fun z ↦ x - z) y =
+        (fderiv ℝ κ (x - y)).comp
+          (0 - ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin d))) by
+      convert h.fderiv using 1 <;> simp]
+    simp [e]
+  have hwloc : LocallyIntegrable w.val volume := by
+    simpa only [Measure.restrict_univ] using w.val_memLp.locallyIntegrable (by norm_num)
+  have hwgloc : LocallyIntegrable w.grad volume := by
+    simpa only [Measure.restrict_univ] using w.grad_memLp.locallyIntegrable (by norm_num)
+  have hleft := (hκcompact.fderiv ℝ).convolutionExists_left
+    ((ContinuousLinearMap.lsmul ℝ ℝ).precompL (EuclideanSpace ℝ (Fin d)))
+    (hκsmooth.continuous_fderiv (by simp)) hwloc x
+  have hright := hκcompact.convolutionExists_left
+    (ContinuousLinearMap.lsmul ℝ ℝ) hκsmooth.continuous hwgloc x
+  simp only [MeasureTheory.convolution]
+  rw [ContinuousLinearMap.integral_apply hleft e]
+  change _ = (PiLp.proj (𝕜 := ℝ) 2 (fun _ : Fin d ↦ ℝ) i)
+    (∫ t, (ContinuousLinearMap.lsmul ℝ ℝ) (κ t) (w.grad (x - t)))
+  rw [← ContinuousLinearMap.integral_comp_comm
+    (PiLp.proj (𝕜 := ℝ) 2 (fun _ : Fin d ↦ ℝ) i) hright]
+  simp only [ContinuousLinearMap.lsmul_apply, PiLp.proj_apply,
+    PiLp.smul_apply, smul_eq_mul]
+  change (∫ t, fderiv ℝ κ t e * w.val (x - t)) =
+    ∫ t, κ t * w.grad (x - t) i
+  rw [← integral_sub_left_eq_self
+    (fun y ↦ fderiv ℝ κ y e * w.val (x - y)) volume x]
+  rw [← integral_sub_left_eq_self
+    (fun y ↦ κ y * w.grad (x - y) i) volume x]
+  simp only [sub_sub_cancel]
+  dsimp [e] at hfderiv
+  simp_rw [hfderiv] at hweak
+  simpa [φ, e, mul_neg, integral_neg, mul_comm] using hweak
+
+set_option maxHeartbeats 800000 in
+lemma apm_m01J04_mollify_convolution_weakGradient
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) :
+    ∀ (ψ : EuclideanSpace ℝ (Fin d) → ℝ),
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ → HasCompactSupport ψ →
+      ∀ i : Fin d,
+        (∫ x, MeasureTheory.convolution κ w.val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x *
+            fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
+          -(∫ x, MeasureTheory.convolution κ w.grad
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x i * ψ x) := by
+  intro ψ hψsmooth hψcompact i
+  let e : EuclideanSpace ℝ (Fin d) := EuclideanSpace.single i 1
+  let f := MeasureTheory.convolution κ w.val
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  let g := MeasureTheory.convolution κ w.grad
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  have hwloc : LocallyIntegrable w.val volume := by
+    simpa only [Measure.restrict_univ] using w.val_memLp.locallyIntegrable (by norm_num)
+  have hwgloc : LocallyIntegrable w.grad volume := by
+    simpa only [Measure.restrict_univ] using w.grad_memLp.locallyIntegrable (by norm_num)
+  have hfsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f :=
+    hκcompact.contDiff_convolution_left _ hκsmooth hwloc
+  have hgsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g :=
+    hκcompact.contDiff_convolution_left _ hκsmooth hwgloc
+  have hfderiv (x : EuclideanSpace ℝ (Fin d)) :
+      fderiv ℝ f x e = g x i := by
+    have hd := hκcompact.hasFDerivAt_convolution_left
+      (ContinuousLinearMap.lsmul ℝ ℝ) (hκsmooth.of_le (by simp)) hwloc x
+    rw [hd.fderiv]
+    exact apm_m01J04_mollify_convolution_weakGradient_aux_pointwise
+      w κ hκsmooth hκcompact x i
+  have hψderivcompact : HasCompactSupport (fun x ↦ fderiv ℝ ψ x e) := by
+    simpa only [Function.comp_apply] using
+      (hψcompact.fderiv ℝ).comp_left (g := fun L ↦ L e) (by simp)
+  have hψderivcont : Continuous (fun x ↦ fderiv ℝ ψ x e) :=
+    (ContinuousLinearMap.apply ℝ ℝ e).continuous.comp
+      (hψsmooth.continuous_fderiv (by simp))
+  have hfderivcont : Continuous (fun x ↦ fderiv ℝ f x e) :=
+    (ContinuousLinearMap.apply ℝ ℝ e).continuous.comp
+      (hfsmooth.continuous_fderiv (by simp))
+  have hI1 : Integrable (fun x ↦ f x * fderiv ℝ ψ x e) volume := by
+    have h :=
+      (hfsmooth.continuous.locallyIntegrable (μ := volume)).integrable_smul_left_of_hasCompactSupport
+        hψderivcont hψderivcompact
+    exact h.congr (Filter.Eventually.of_forall (fun x ↦ by simp [mul_comm]))
+  have hI2 : Integrable (fun x ↦ fderiv ℝ f x e * ψ x) volume := by
+    simpa [smul_eq_mul, mul_comm] using
+      (hfderivcont.locallyIntegrable (μ := volume))
+        |>.integrable_smul_left_of_hasCompactSupport hψsmooth.continuous hψcompact
+  have hI0 : Integrable (fun x ↦ f x * ψ x) volume := by
+    simpa [smul_eq_mul, mul_comm] using
+      (hfsmooth.continuous.locallyIntegrable (μ := volume)).integrable_smul_left_of_hasCompactSupport
+        hψsmooth.continuous hψcompact
+  rw [integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable hI2 hI1 hI0]
+  · apply congrArg Neg.neg
+    apply integral_congr_ae
+    filter_upwards with x
+    rw [hfderiv x]
+  · exact fun _ _ ↦ hfsmooth.differentiable (by simp) |>.differentiableAt
+  · exact fun _ _ ↦ hψsmooth.differentiable (by simp) |>.differentiableAt
+
+lemma apm_m01J04_mollify_package_aux_val_contDiff
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (MeasureTheory.convolution κ w.val
+        (ContinuousLinearMap.lsmul ℝ ℝ) volume) := by
+  have hwloc : LocallyIntegrable w.val volume := by
+    have hw : MemLp w.val 2 volume := by
+      simpa only [Measure.restrict_univ] using w.val_memLp
+    exact hw.locallyIntegrable (by norm_num)
+  exact hκcompact.contDiff_convolution_left
+    (ContinuousLinearMap.lsmul ℝ ℝ) hκsmooth hwloc
+
+lemma apm_m01J04_mollify_package_aux_val_compact
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
+    (hwval : Function.support w.val ⊆ C)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκcompact : HasCompactSupport κ) :
+    HasCompactSupport (MeasureTheory.convolution κ w.val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) := by
+  have hwcompact : HasCompactSupport w.val :=
+    hC.of_isClosed_subset isClosed_closure
+      (closure_minimal hwval hC.isClosed)
+  exact hκcompact.convolution (ContinuousLinearMap.lsmul ℝ ℝ) hwcompact
+
+lemma apm_m01J04_mollify_package_aux_val_memLp
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
+    (hwval : Function.support w.val ⊆ C)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ) :
+    MemLp (MeasureTheory.convolution κ w.val
+      (ContinuousLinearMap.lsmul ℝ ℝ) volume) 2 volume := by
+  exact (apm_m01J04_mollify_package_aux_val_contDiff w κ hκsmooth hκcompact).continuous.memLp_of_hasCompactSupport
+    (apm_m01J04_mollify_package_aux_val_compact w hC hwval κ hκcompact)
+
+/-- Package two convolution fields into the encoded global `H¹` record.  All
+analytic conclusions needed from the other leaves are explicit hypotheses, so
+this assembly can be proved independently. -/
+lemma apm_m01J04_mollify_package
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {C : Set (EuclideanSpace ℝ (Fin d))} (hC : IsCompact C)
+    (hwval : Function.support w.val ⊆ C)
+    (hwgrad : Function.support w.grad ⊆ C)
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκsmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ)
+    (hκcompact : HasCompactSupport κ)
+    {delta eta : ℝ}
+    (hκsupport : Function.support κ ⊆ Metric.closedBall 0 delta)
+    (herror :
+      (eLpNorm (MeasureTheory.convolution κ w.val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.val) 2 volume).toReal +
+        (eLpNorm (MeasureTheory.convolution κ w.grad
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta)
+    (hweak : ∀ (ψ : EuclideanSpace ℝ (Fin d) → ℝ),
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) ψ → HasCompactSupport ψ →
+      ∀ i : Fin d,
+        (∫ x, MeasureTheory.convolution κ w.val
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x *
+            fderiv ℝ ψ x (EuclideanSpace.single i 1)) =
+          -(∫ x, MeasureTheory.convolution κ w.grad
+              (ContinuousLinearMap.lsmul ℝ ℝ) volume x i * ψ x)) :
+    ∃ a : apm_m01J04_H1 d Set.univ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+      HasCompactSupport a.val ∧
+      Function.support a.val ⊆ Metric.cthickening delta C ∧
+      apm_m01J04_H1dist a w < eta := by
+  let v := MeasureTheory.convolution κ w.val
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  let g := MeasureTheory.convolution κ w.grad
+    (ContinuousLinearMap.lsmul ℝ ℝ) volume
+  have hvLp : MemLp v 2 volume := by
+    exact apm_m01J04_mollify_package_aux_val_memLp
+      w hC hwval κ hκsmooth hκcompact
+  have hwgradCompact : HasCompactSupport w.grad :=
+    hC.of_isClosed_subset isClosed_closure
+      (closure_minimal hwgrad hC.isClosed)
+  have hgCompact : HasCompactSupport g := by
+    exact hκcompact.convolution (ContinuousLinearMap.lsmul ℝ ℝ) hwgradCompact
+  have hwgradLoc : LocallyIntegrable w.grad volume := by
+    have hm : MemLp w.grad 2 volume := by
+      simpa only [Measure.restrict_univ] using w.grad_memLp
+    exact hm.locallyIntegrable (by norm_num)
+  have hgSmooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g := by
+    exact hκcompact.contDiff_convolution_left
+      (ContinuousLinearMap.lsmul ℝ ℝ) hκsmooth hwgradLoc
+  have hgLp : MemLp g 2 volume :=
+    hgSmooth.continuous.memLp_of_hasCompactSupport hgCompact
+  let a : apm_m01J04_H1 d Set.univ :=
+    { val := v
+      grad := g
+      val_memLp := by simpa only [Measure.restrict_univ] using hvLp
+      grad_memLp := by simpa only [Measure.restrict_univ] using hgLp
+      weakGradient := by
+        intro ψ hψsmooth hψcompact _ i
+        simpa only [Measure.restrict_univ, v, g] using
+          hweak ψ hψsmooth hψcompact i }
+  refine ⟨a, ?_, ?_, ?_, ?_⟩
+  · exact apm_m01J04_mollify_package_aux_val_contDiff
+      w κ hκsmooth hκcompact
+  · exact apm_m01J04_mollify_package_aux_val_compact
+      w hC hwval κ hκcompact
+  · exact apm_m01J04_support_convolution_subset_cthickening
+      hκsupport hwval
+  · simpa only [apm_m01J04_H1dist, a, v, g,
+      Measure.restrict_univ] using herror
+
+/-- Triangle transfer for the two-stage compact-core/mollification error. -/
+lemma apm_m01J04_mollify_error_transfer_aux_triangle
+    {d : ℕ} (a w u : apm_m01J04_H1 d Set.univ) :
+    apm_m01J04_H1dist a u ≤
+      apm_m01J04_H1dist a w + apm_m01J04_H1dist w u := by
+  have hv := eLpNorm_add_le
+    (a.val_memLp.sub w.val_memLp).1
+    (w.val_memLp.sub u.val_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hg := eLpNorm_add_le
+    (a.grad_memLp.sub w.grad_memLp).1
+    (w.grad_memLp.sub u.grad_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hvtop : eLpNorm (fun x ↦ a.val x - w.val x) 2 (volume.restrict Set.univ) +
+      eLpNorm (fun x ↦ w.val x - u.val x) 2 (volume.restrict Set.univ) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.val_memLp.sub w.val_memLp).eLpNorm_ne_top,
+      (w.val_memLp.sub u.val_memLp).eLpNorm_ne_top⟩
+  have hgtop : eLpNorm (fun x ↦ a.grad x - w.grad x) 2 (volume.restrict Set.univ) +
+      eLpNorm (fun x ↦ w.grad x - u.grad x) 2 (volume.restrict Set.univ) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.grad_memLp.sub w.grad_memLp).eLpNorm_ne_top,
+      (w.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top⟩
+  have hv' : (eLpNorm (fun x ↦ a.val x - u.val x) 2 (volume.restrict Set.univ)).toReal ≤
+      (eLpNorm (fun x ↦ a.val x - w.val x) 2 (volume.restrict Set.univ)).toReal +
+      (eLpNorm (fun x ↦ w.val x - u.val x) 2 (volume.restrict Set.univ)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.val x - w.val x) 2 (volume.restrict Set.univ) +
+          eLpNorm (fun x ↦ w.val x - u.val x) 2 (volume.restrict Set.univ)).toReal := by
+        apply ENNReal.toReal_mono hvtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hv
+      _ = _ := ENNReal.toReal_add
+        (a.val_memLp.sub w.val_memLp).eLpNorm_ne_top
+        (w.val_memLp.sub u.val_memLp).eLpNorm_ne_top
+  have hg' : (eLpNorm (fun x ↦ a.grad x - u.grad x) 2 (volume.restrict Set.univ)).toReal ≤
+      (eLpNorm (fun x ↦ a.grad x - w.grad x) 2 (volume.restrict Set.univ)).toReal +
+      (eLpNorm (fun x ↦ w.grad x - u.grad x) 2 (volume.restrict Set.univ)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.grad x - w.grad x) 2 (volume.restrict Set.univ) +
+          eLpNorm (fun x ↦ w.grad x - u.grad x) 2 (volume.restrict Set.univ)).toReal := by
+        apply ENNReal.toReal_mono hgtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hg
+      _ = _ := ENNReal.toReal_add
+        (a.grad_memLp.sub w.grad_memLp).eLpNorm_ne_top
+        (w.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top
+  dsimp [apm_m01J04_H1dist]
+  linarith
+
+lemma apm_m01J04_mollify_error_transfer
+    {d : ℕ} (a w u : apm_m01J04_H1 d Set.univ)
+    {eta : ℝ}
+    (haw : apm_m01J04_H1dist a w < eta / 2)
+    (hwu : apm_m01J04_H1dist w u < eta / 2) :
+    apm_m01J04_H1dist a u < eta := by
+  have htri := apm_m01J04_mollify_error_transfer_aux_triangle a w u
+  linarith
+
+lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
+    {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
+    {K : Set (EuclideanSpace ℝ (Fin d))}
+    (huval : Function.support u.val ⊆ K)
+    (hugrad : Function.support u.grad ⊆ K)
+    {delta eta : ℝ} (hdelta : 0 < delta) (heta : 0 < eta) :
+    ∃ a : apm_m01J04_H1 d Set.univ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+      HasCompactSupport a.val ∧
+      Function.support a.val ⊆ Metric.cthickening delta K ∧
+      apm_m01J04_H1dist a u < eta := by
+  obtain ⟨w, C, hCcompact, hCK, hwval, hwgrad, hwu⟩ :=
+    apm_m01J04_mollify_exists_compact_core u huval hugrad (half_pos heta)
+  obtain ⟨κ, hκsmooth, hκcompact, hκsupport, hκerror⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel w hdelta (half_pos heta)
+  have hweak := apm_m01J04_mollify_convolution_weakGradient w κ hκsmooth hκcompact
+  obtain ⟨a, hasmooth, hacompact, hasupport, haw⟩ :=
+    apm_m01J04_mollify_package w hCcompact hwval hwgrad κ hκsmooth hκcompact hκsupport hκerror hweak
+  refine ⟨a, hasmooth, hacompact, ?_,
+    apm_m01J04_mollify_error_transfer a w u haw hwu⟩
+  rw [← Metric.cthickening_closure]
+  exact hasupport.trans (Metric.cthickening_subset_of_subset delta hCK)
+
+lemma apm_m01J04_core_exists_smooth_global_approx
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    {epsilon : ℝ} (hepsilon : 0 < epsilon)
+    (u : apm_m01J04_H1 d Set.univ)
+    (huval : Function.support u.val ⊆ {x | epsilon ≤ |φ x|})
+    (hugrad : Function.support u.grad ⊆ {x | epsilon ≤ |φ x|})
+    {eta : ℝ} (heta : 0 < eta) :
+    ∃ a : apm_m01J04_H1 d Set.univ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+      HasCompactSupport a.val ∧ Function.support a.val ⊆ Ω ∧
+      apm_m01J04_H1dist a u < eta := by
+  obtain ⟨delta, hdelta, hsupport, hsupportOmega⟩ :=
+    apm_m01J04_test_levelSet_exists_cthickening φ hφ hepsilon
+  obtain ⟨a, hasmooth, hacompact, hasupport, hadist⟩ :=
+    apm_m01J04_core_exists_smooth_global_approx_aux_mollify u huval hugrad
+      hdelta heta
+  refine ⟨a, hasmooth, hacompact, ?_, hadist⟩
+  exact hasupport.trans hsupportOmega
+
+/-- Diagonal assembly of core truncation and support-safe smoothing.  Both
+analytic inputs are hypotheses so this lemma can be proved independently of
+the two construction lemmas above. -/
+lemma apm_m01J04_localization_isH1Zero_of_core_approximations_aux_triangle
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (a u v : apm_m01J04_H1 d Ω) :
+    apm_m01J04_H1dist a v ≤
+      apm_m01J04_H1dist a u + apm_m01J04_H1dist u v := by
+  have hv := eLpNorm_add_le
+    (a.val_memLp.sub u.val_memLp).1
+    (u.val_memLp.sub v.val_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hg := eLpNorm_add_le
+    (a.grad_memLp.sub u.grad_memLp).1
+    (u.grad_memLp.sub v.grad_memLp).1 (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+  have hvtop : eLpNorm (fun x ↦ a.val x - u.val x) 2
+        (volume.restrict Ω) +
+      eLpNorm (fun x ↦ u.val x - v.val x) 2
+        (volume.restrict Ω) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.val_memLp.sub u.val_memLp).eLpNorm_ne_top,
+      (u.val_memLp.sub v.val_memLp).eLpNorm_ne_top⟩
+  have hgtop : eLpNorm (fun x ↦ a.grad x - u.grad x) 2
+        (volume.restrict Ω) +
+      eLpNorm (fun x ↦ u.grad x - v.grad x) 2
+        (volume.restrict Ω) ≠ ⊤ :=
+    ENNReal.add_ne_top.2 ⟨(a.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top,
+      (u.grad_memLp.sub v.grad_memLp).eLpNorm_ne_top⟩
+  have hv' : (eLpNorm (fun x ↦ a.val x - v.val x) 2
+        (volume.restrict Ω)).toReal ≤
+      (eLpNorm (fun x ↦ a.val x - u.val x) 2
+        (volume.restrict Ω)).toReal +
+      (eLpNorm (fun x ↦ u.val x - v.val x) 2
+        (volume.restrict Ω)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.val x - u.val x) 2
+          (volume.restrict Ω) + eLpNorm (fun x ↦ u.val x - v.val x) 2
+          (volume.restrict Ω)).toReal := by
+        apply ENNReal.toReal_mono hvtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hv
+      _ = _ := ENNReal.toReal_add
+        (a.val_memLp.sub u.val_memLp).eLpNorm_ne_top
+        (u.val_memLp.sub v.val_memLp).eLpNorm_ne_top
+  have hg' : (eLpNorm (fun x ↦ a.grad x - v.grad x) 2
+        (volume.restrict Ω)).toReal ≤
+      (eLpNorm (fun x ↦ a.grad x - u.grad x) 2
+        (volume.restrict Ω)).toReal +
+      (eLpNorm (fun x ↦ u.grad x - v.grad x) 2
+        (volume.restrict Ω)).toReal := by
+    calc
+      _ ≤ (eLpNorm (fun x ↦ a.grad x - u.grad x) 2
+          (volume.restrict Ω) + eLpNorm (fun x ↦ u.grad x - v.grad x) 2
+          (volume.restrict Ω)).toReal := by
+        apply ENNReal.toReal_mono hgtop
+        simpa only [Pi.add_apply, sub_add_sub_cancel] using hg
+      _ = _ := ENNReal.toReal_add
+        (a.grad_memLp.sub u.grad_memLp).eLpNorm_ne_top
+        (u.grad_memLp.sub v.grad_memLp).eLpNorm_ne_top
+  dsimp [apm_m01J04_H1dist]
+  linarith
+
+lemma apm_m01J04_localization_isH1Zero_of_core_approximations
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω)
+    (hcore : ∀ eta : ℝ, 0 < eta →
+      ∃ (epsilon : ℝ) (u : apm_m01J04_H1 d Set.univ),
+        0 < epsilon ∧
+        Function.support u.val ⊆ {x | epsilon ≤ |φ x|} ∧
+        Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} ∧
+        apm_m01J04_H1dist u (apm_m01J04_globalLocalizedH1 φ hφ f) < eta)
+    (hsmooth : ∀ (epsilon : ℝ), 0 < epsilon →
+      ∀ (u : apm_m01J04_H1 d Set.univ),
+        Function.support u.val ⊆ {x | epsilon ≤ |φ x|} →
+        Function.support u.grad ⊆ {x | epsilon ≤ |φ x|} →
+        ∀ eta : ℝ, 0 < eta →
+          ∃ a : apm_m01J04_H1 d Set.univ,
+            ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+            HasCompactSupport a.val ∧ Function.support a.val ⊆ Ω ∧
+            apm_m01J04_H1dist a u < eta) :
+    apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
+  let eta : ℕ → ℝ := fun n ↦ 1 / (2 * (n + 1 : ℝ))
+  have heta (n : ℕ) : 0 < eta n := by
+    dsimp [eta]
+    positivity
+  let core (n : ℕ) := Classical.choose (hcore (eta n) (heta n))
+  let u (n : ℕ) := Classical.choose (Classical.choose_spec
+    (hcore (eta n) (heta n)))
+  have hcore_spec (n : ℕ) := Classical.choose_spec (Classical.choose_spec
+    (hcore (eta n) (heta n)))
+  let a (n : ℕ) := Classical.choose
+    (hsmooth (core n) (hcore_spec n).1 (u n) (hcore_spec n).2.1
+      (hcore_spec n).2.2.1 (eta n) (heta n))
+  have ha_spec (n : ℕ) := Classical.choose_spec
+    (hsmooth (core n) (hcore_spec n).1 (u n) (hcore_spec n).2.1
+      (hcore_spec n).2.2.1 (eta n) (heta n))
+  apply apm_m01J04_localization_isH1Zero_of_globalApprox φ hφ f a
+  · intro n
+    exact ⟨(ha_spec n).1, (ha_spec n).2.1, (ha_spec n).2.2.1⟩
+  · apply squeeze_zero
+      (fun n ↦ add_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg)
+      (fun n ↦ le_trans
+        (apm_m01J04_localization_isH1Zero_of_core_approximations_aux_triangle
+          (a n) (u n) (apm_m01J04_globalLocalizedH1 φ hφ f))
+        (add_le_add (ha_spec n).2.2.2.le (hcore_spec n).2.2.2.le))
+    have hlim : Tendsto (fun n : ℕ ↦ (1 : ℝ) / (n + 1)) atTop (nhds 0) :=
+      tendsto_one_div_add_atTop_nhds_zero_nat
+    convert hlim using 1
+    funext n
+    dsimp [eta]
+    have hn : (n + 1 : ℝ) ≠ 0 := by positivity
+    field_simp
+    norm_num
+
+lemma apm_m01J04_localization_isH1Zero_aux_zero_fields
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (h : apm_m01J04_H1 d Ω) (hv : h.val = 0) (hg : h.grad = 0) :
+    apm_m01J04_isH1Zero h := by
+  refine ⟨fun _ ↦ h, ?_, ?_⟩
+  · intro n
+    rw [hv]
+    exact ⟨contDiff_const, HasCompactSupport.zero, by simp⟩
+  · simp [apm_m01J04_H1dist, hv, hg]
+
+lemma apm_m01J04_localization_isH1Zero_aux_zero_multiplier
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) (hzero : φ = 0) :
+    apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
+  apply apm_m01J04_localization_isH1Zero_aux_zero_fields
+  · rw [apm_m01J04_H1mul_val, hzero]
+    funext x
+    simp
+  · rw [apm_m01J04_H1mul_grad, hzero]
+    funext x
+    ext i
+    simp
+
 lemma apm_m01J04_localization_isH1Zero
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
-  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
-  sorry
+  by_cases hzero : φ = 0
+  · exact apm_m01J04_localization_isH1Zero_aux_zero_multiplier φ hφ f hzero
+  · apply apm_m01J04_localization_isH1Zero_of_core_approximations φ hφ f
+    · intro eta heta
+      exact apm_m01J04_localization_core_approx φ hφ f heta
+    · intro epsilon hepsilon u huval hugrad eta heta
+      exact apm_m01J04_core_exists_smooth_global_approx
+        φ hφ hepsilon u huval hugrad heta
 
 /-- Why this unblocks `apm_m01j04`: this is the missing bounded multiplier
 and weak Leibniz theorem for the custom `H¹` record. It constructs the
