@@ -36163,6 +36163,16 @@
     [{:cmd "initial builds",
       :exit 1,
       :correction "rewrote infix equality; length bound; passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792005613831-12237-53293228",
+     :commands
+     ["git show/check/diff 6e424b22; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 6e424b22 adds compiled, sorry-free progress after 9a19183f. Each contiguous run gains bounded start/length coordinates, then its original subdivision pieces are reindexed as a dependent Path family with exact successive endpoints and pointwise equality. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists inner-run replacement/reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "6e424b225407c469abb1967d43e31277e41dcd2c",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36173,7 +36183,7 @@
      "9f996281562a587a85695aeffd0055738d7ec319ec4aca224c67e72cd85e8f8f"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36191,7 +36201,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36437,7 +36447,11 @@
     {:job 7,
      :commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68",
      :reason
-     "Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains."}]}
+     "Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains."}
+    {:job 8,
+     :commit "6e424b225407c469abb1967d43e31277e41dcd2c",
+     :reason
+     "Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39303,7 +39317,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "boolSideRunPartition_exists_slice",
@@ -39313,14 +39327,16 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "bounded start/length slice",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "6e424b225407c469abb1967d43e31277e41dcd2c"},
    :id :lemma-boolsiderunpartition-exists-slice,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-isinfix-finrange],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionBlockPiece",
@@ -39330,7 +39346,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "run reindexed as dependent piece paths",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "6e424b225407c469abb1967d43e31277e41dcd2c"},
    :id :lemma-pathtwoopensubdivisionblockpiece,
    :kind :lemma,
    :depends-on [:lemma-boolsiderunpartition-exists-slice],
