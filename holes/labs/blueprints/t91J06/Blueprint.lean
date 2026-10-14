@@ -122,30 +122,6 @@ lemma apm_t91J06_extend_ramp_mono_anti
       ∀ x, F (t x) = (q x : ℝ) := by
   sorry
 
-def apm_t91J06_extend_ramp_anti_mono_aux_reflect
-    (x : apm_t91J06_I) : apm_t91J06_I :=
-  ⟨1 - x, by constructor <;> linarith [x.2.1, x.2.2]⟩
-
-lemma apm_t91J06_extend_ramp_anti_mono_aux_reflect_facts :
-    Continuous apm_t91J06_extend_ramp_anti_mono_aux_reflect ∧
-    StrictAnti apm_t91J06_extend_ramp_anti_mono_aux_reflect ∧
-    Function.Involutive apm_t91J06_extend_ramp_anti_mono_aux_reflect ∧
-    Set.MapsTo apm_t91J06_extend_ramp_anti_mono_aux_reflect
-      apm_t91J06_Iinterior apm_t91J06_Iinterior := by
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · exact (continuous_const.sub continuous_subtype_val).subtype_mk _
-  · intro x y hxy
-    apply Subtype.coe_lt_coe.2
-    have hxy' : (x : ℝ) < y := Subtype.coe_lt_coe.1 hxy
-    dsimp [apm_t91J06_extend_ramp_anti_mono_aux_reflect]
-    linarith
-  · intro x
-    apply Subtype.ext
-    simp [apm_t91J06_extend_ramp_anti_mono_aux_reflect]
-  · intro x hx
-    change 1 - (x : ℝ) ∈ Set.Ioo (0 : ℝ) 1
-    constructor <;> linarith [hx.1, hx.2]
-
 /-- The explicit three-piece affine construction when `t` reverses and `q`
 preserves orientation. -/
 lemma apm_t91J06_extend_ramp_anti_mono
