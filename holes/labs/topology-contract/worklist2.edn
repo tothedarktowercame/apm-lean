@@ -87947,6 +87947,18 @@
     [{:cmd "alias draft",
       :exit 1,
       :correction "used categorical equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792010247355-12366-368829df",
+     :commands
+     ["git show/diff 9331c2324; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: 9331c2324 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 2ce6a0b5d7337b3268b05c1715affe0ffbfdcd0041e942951459f1220aebfcc8 matches. Exact blob builds; 0 placeholders; new milestones use standard axioms; registry 166/0. Production MV intersection arrow has outer component -inclusion; snd projection and generator evaluation preserve that sign. Thus the signed boundary goal is faithfully reduced to unsigned inclusion(generator) = -attachingOuterClass. New compiled progress; remaining: prove that raw equality, finish B7, then B8-B10."},
     :commit "9331c2324",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87955,7 +87967,7 @@
      "2ce6a0b5d7337b3268b05c1715affe0ffbfdcd0041e942951459f1220aebfcc8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87975,7 +87987,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced B7 to raw H1 equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked MV outer-projection sign and raw-equality reduction.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88184,7 +88196,11 @@
      :reason "Reduced B7 to its generator image."}
     {:job 4,
      :commit "6a558df58",
-     :reason "Reduced B7 to raw H1 equality."}]}
+     :reason "Reduced B7 to raw H1 equality."}
+    {:job 5,
+     :commit "9331c2324",
+     :reason
+     "Banked MV outer-projection sign and raw-equality reduction."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91388,7 +91404,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialIntersectionArrow_snd",
@@ -91398,7 +91414,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "MV outer projection is negative inclusion",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "9331c2324"},
    :id :lemma-radialintersectionarrow-snd,
    :kind :lemma,
    :depends-on [],
