@@ -36158,6 +36158,16 @@
       :exit 1,
       :correction
       "rebuilt concurrent dependency; corrected length lemma"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792013393233-12448-5f526810",
+     :commands
+     ["git show --check/stat 8c4eb4f"
+      "fixture SHA-256 assertion; lake env lean frozen fixture"
+      "parent/commit placeholder recount; registry previously reproduced 166/166"],
+     :finding
+     "PASS: 8c4eb4f adds compiled, sorry-free progress after 263f5d47. The exact exported type is Fin(runs+1) -> V, and its theorem correctly forgets the subtype to the matching ambient boundary-list entry. This closes the stated subtype-family milestone without pretending to prove van Kampen. Fixture hash matches; axioms are propext, Classical.choice, Quot.sound; Main stays 1->1 placeholder. Remaining fold, reverse kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "361990ea759cea43612fdba81954457fc9d1b3f2c52bf701a03a0ffd1556dbc9"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36484,7 +36494,11 @@
     {:job 2,
      :commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75",
      :reason
-     "Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains."}]}
+     "Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains."}
+    {:job 3,
+     :commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19",
+     :reason
+     "Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39848,7 +39862,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunFamily_piece_mem_chart",
@@ -39858,7 +39872,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "canonical run slice; every piece stays in head chart",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19"},
    :id :lemma-pathtwoopensubdivisionrunfamily-piece-mem-chart,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunfamily-exists-slice],
