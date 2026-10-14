@@ -234,6 +234,11 @@ supplies a chosen path from its deformed image to `kleinSkeletonPoint`, and
 the resulting based equivalence lands at the exact basepoint used by the
 fixed `FreeGroup Bool` coordinates.  The remaining comparison is therefore
 the winding-one image in those coordinates.
+`kleinPolygonOverlapToSkeletonFreeGroup` composes the complete based route,
+and `kleinPolygonOverlapWindingHom` rewrites its source in integer winding
+coordinates.  The factorization theorem verifies that no loop information is
+lost; the remaining geometric equality is exactly
+`kleinPolygonOverlapWindingOneImage = kleinAabbWord`.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

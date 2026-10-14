@@ -899,6 +899,38 @@ noncomputable def kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint :
     (FundamentalGroup.fundamentalGroupMulEquivOfPath
       kleinPolygonOverlapImageToSkeletonPointPath)
 
+/-- The overlap inclusion expressed directly in the fixed free-group
+coordinates on the actual polygon skeleton. -/
+noncomputable def kleinPolygonOverlapToSkeletonFreeGroup :
+    FundamentalGroup (overlapOpen kleinPairingData.Rel)
+        kleinPolygonOverlapPoint →* FreeGroup Bool :=
+  kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom.comp
+    (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.toMonoidHom.comp
+      kleinPolygonOverlapToOuterPiOne)
+
+/-- The same map with the annular source written in integer winding
+coordinates.  Its value at `ofAdd 1` is the sole remaining geometric word
+calculation in the attaching-cell argument. -/
+noncomputable def kleinPolygonOverlapWindingHom :
+    Multiplicative ℤ →* FreeGroup Bool :=
+  kleinPolygonOverlapToSkeletonFreeGroup.comp
+    kleinPolygonOverlapFundamentalGroupEquivInt.symm.toMonoidHom
+
+/-- The winding-coordinate map recovers the literal overlap map on every
+based loop. -/
+theorem kleinPolygonOverlapWindingHom_factor
+    (g : FundamentalGroup (overlapOpen kleinPairingData.Rel)
+      kleinPolygonOverlapPoint) :
+    kleinPolygonOverlapWindingHom
+        (kleinPolygonOverlapFundamentalGroupEquivInt g) =
+      kleinPolygonOverlapToSkeletonFreeGroup g := by
+  simp [kleinPolygonOverlapWindingHom]
+
+/-- The exact free-group word traced by one positive turn around the radial
+overlap. -/
+noncomputable def kleinPolygonOverlapWindingOneImage : FreeGroup Bool :=
+  kleinPolygonOverlapWindingHom (Multiplicative.ofAdd (1 : ℤ))
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -1043,6 +1075,10 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinSkeletonPathConnectedSpace
 #print axioms kleinPolygonOverlapImageToSkeletonPointPath
 #print axioms kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint
+#print axioms kleinPolygonOverlapToSkeletonFreeGroup
+#print axioms kleinPolygonOverlapWindingHom
+#print axioms kleinPolygonOverlapWindingHom_factor
+#print axioms kleinPolygonOverlapWindingOneImage
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
