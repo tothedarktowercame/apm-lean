@@ -156,6 +156,23 @@ supplies the finite literal equality fiber required by the signed count. -/
   regularFiberFintype_of_isDiscrete f y
     (isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber f y hlocal)
 
+/-- The finite regular-fiber datum consumed by the component signed-count
+construction, retaining the fact that the chosen value lies on the circle. -/
+structure FiniteRegularFiberChoice
+    {S : Type} [TopologicalSpace S] (f : C(S, S)) (c : C(Circle, S)) where
+  value : S
+  mem_circle : value ∈ Set.range c
+  fiberFintype : Fintype {x : S // f x = value}
+
+/-- A circle value with pointwise local injectivity packages canonically as
+the finite literal fiber representation used downstream. -/
+noncomputable def finiteRegularFiberChoice_of_locallyInjective
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    (f : C(S, S)) (c : C(Circle, S)) (y : S) (hy : y ∈ Set.range c)
+    (hlocal : LocallyInjectiveAlongFiber f y) :
+    FiniteRegularFiberChoice f c :=
+  ⟨y, hy, regularFiberFintype_of_locallyInjectiveAlongFiber f y hlocal⟩
+
 /-- The range-sum formulation used by the frozen surface problem gives the
 operational coproduct-surjectivity witness at every incidence point. -/
 theorem transverse_coprodDerivative_surjective
@@ -551,6 +568,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
+#print axioms ConstructionTargets.T00J02Closure.finiteRegularFiberChoice_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
