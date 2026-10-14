@@ -2133,6 +2133,34 @@ lemma apm_m01J04_mollify_exists_compact_core
       apm_m01J04_H1dist w u < eta := by
   sorry
 
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_kernel
+    {d : ℕ} {delta : ℝ} (hdelta : 0 < delta) :
+    ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ ∧
+      HasCompactSupport κ ∧
+      Function.support κ ⊆ Metric.closedBall 0 delta ∧
+      (∀ x, 0 ≤ κ x) ∧ (∫ x, κ x ∂volume) = 1 := by
+  let φ : ContDiffBump (0 : EuclideanSpace ℝ (Fin d)) :=
+    ⟨delta / 2, delta, half_pos hdelta, half_lt_self hdelta⟩
+  refine ⟨φ.normed volume, φ.contDiff_normed, φ.hasCompactSupport_normed,
+    ?_, φ.nonneg_normed, φ.integral_normed⟩
+  rw [φ.support_normed_eq]
+  exact Metric.ball_subset_closedBall
+
+/-- Approximate identity in `L²`, uniformly over normalised nonnegative
+kernels supported in small balls: `‖κ ⋆ f - f‖₂ ≤ sup_{|y| ≤ ρ} ‖τ_y f - f‖₂`
+(Minkowski's integral inequality) and translation is continuous in `L²`. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ ρ : ℝ, 0 < ρ → ρ ≤ ρ0 →
+      ∀ κ : EuclideanSpace ℝ (Fin d) → ℝ, Continuous κ → (∀ x, 0 ≤ κ x) →
+        (∫ x, κ x ∂volume) = 1 → Function.support κ ⊆ Metric.closedBall 0 ρ →
+        (eLpNorm (MeasureTheory.convolution κ f
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
+  sorry
+
 /-- Simultaneous `L²` approximate-identity estimate for the value and weak
 gradient fields.  This leaf contains no differentiation or `H¹` packaging. -/
 lemma apm_m01J04_mollify_exists_L2_kernel
@@ -2146,7 +2174,23 @@ lemma apm_m01J04_mollify_exists_L2_kernel
           (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.val) 2 volume).toReal +
         (eLpNorm (MeasureTheory.convolution κ w.grad
           (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta := by
-  sorry
+  have hval : MemLp w.val 2 volume := by simpa using w.val_memLp
+  have hgrad : MemLp w.grad 2 volume := by simpa using w.grad_memLp
+  obtain ⟨ρ1, hρ1, h1⟩ := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
+    w.val hval (by positivity : (0 : ℝ) < eta / 3)
+  obtain ⟨ρ2, hρ2, h2⟩ := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
+    w.grad hgrad (by positivity : (0 : ℝ) < eta / 3)
+  set ρ := min (min ρ1 ρ2) delta with hρdef
+  have hρ : 0 < ρ := lt_min (lt_min hρ1 hρ2) hdelta
+  obtain ⟨κ, hs, hc, hsupp, hnn, hint⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_kernel (d := d) hρ
+  refine ⟨κ, hs, hc, hsupp.trans
+    (Metric.closedBall_subset_closedBall (min_le_right _ _)), ?_⟩
+  have a := h1 ρ hρ ((min_le_left _ _).trans (min_le_left _ _)) κ hs.continuous
+    hnn hint hsupp
+  have b := h2 ρ hρ ((min_le_left _ _).trans (min_le_right _ _)) κ hs.continuous
+    hnn hint hsupp
+  linarith
 
 /-- Convolution commutes with the encoded weak gradient.  This is the
 integration-by-parts leaf and is independent of approximate-identity
