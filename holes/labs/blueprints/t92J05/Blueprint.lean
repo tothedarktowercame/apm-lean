@@ -146,7 +146,25 @@ instance : ContinuousConstSMul apm_t92J05_antipodalGroup apm_t92J05_S2 where
 lemma apm_t92J05_antipodalAction_free :
     ∀ g : apm_t92J05_antipodalGroup, ∀ x : apm_t92J05_S2,
       g • x = x → g = 1 := by
-  sorry
+  intro g x hx
+  fin_cases g
+  · rfl
+  · exfalso
+    have hneg : -(x : EuclideanSpace ℝ (Fin 3)) = x := by
+      exact congrArg Subtype.val hx
+    have hx0 : (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+        calc
+          (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = x + x := by
+            exact two_smul ℝ (x : EuclideanSpace ℝ (Fin 3))
+          _ = -(x : EuclideanSpace ℝ (Fin 3)) + x :=
+            congrArg (fun y => y + (x : EuclideanSpace ℝ (Fin 3))) hneg.symm
+          _ = 0 := neg_add_cancel (x : EuclideanSpace ℝ (Fin 3))
+      exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+    have hnorm : ‖(x : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+      simpa only [Metric.mem_sphere, dist_zero_right] using x.property
+    rw [hx0, norm_zero] at hnorm
+    norm_num at hnorm
 
 /-- **LIBRARY.** The finite antipodal action is properly discontinuous. -/
 lemma apm_t92J05_antipodalAction_properlyDiscontinuous :
