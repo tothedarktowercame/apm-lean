@@ -3582,6 +3582,53 @@ noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
       (overlapHomotopyEquivCircle P) 1 ≪≫
     circleGroupH1IsoInt
 
+theorem singularHomologyIsoOfHomotopyEquiv_inv_h1
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) :
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      e 1).inv = singularH1Map e.invFun := by
+  apply (cancel_mono
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      e 1).hom).1
+  rw [Iso.inv_hom_id]
+  rw [ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv_hom]
+  change 𝟙 (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of Y)) =
+    singularH1Map e.invFun ≫ singularH1Map e.toFun
+  rw [← singularH1Map_comp]
+  change 𝟙 (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of Y)) =
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (e.toFun.comp e.invFun))
+  rw [ConstructionTargets.SingularHomologyConcrete.singularHomology_map_eq_of_topCatHomotopy
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder
+      (Classical.choice e.right_inv))
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero
+      (Classical.choice e.right_inv))
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one
+      (Classical.choice e.right_inv))]
+  have h : TopCat.ofHom (ContinuousMap.id Y) = 𝟙 (TopCat.of Y) := by rfl
+  rw [h]
+  exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+    (AddCommGrpCat.of ℤ)).map_id (TopCat.of Y) |>.symm
+
+/-- The element selected by the intersection coordinate is precisely the
+positive circle class mapped through the explicit intersection circle. -/
+theorem radialIntersectionPositiveGenerator_eq (P : PairingData) :
+    (radialIntersectionH1GroupIsoInt P).inv 1 =
+      singularH1Map (radialIntersectionPositiveCircle P)
+        (circleGroupH1IsoInt.inv 1) := by
+  change ((ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (overlapHomotopyEquivCircle P) 1 ≪≫ circleGroupH1IsoInt).inv) 1 = _
+  rw [Iso.trans_inv, Iso.trans_inv,
+    singularHomologyIsoOfHomotopyEquiv_inv_h1,
+    singularHomologyIsoOfHomotopyEquiv_inv_h1]
+  rw [Category.assoc, ← singularH1Map_comp]
+  rfl
+
 /-- Fixed orbit coordinates on the outer term of the production sequence. -/
 noncomputable def radialOuterH1GroupIsoCoordinates (P : PairingData) :
     ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
@@ -3892,6 +3939,27 @@ noncomputable def radialIntersectionToOuterH1 (P : PairingData) :
       (TopCat.toSSet.map
         (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
           (Set.inter_subset_right)))) 1
+
+/-- The chosen intersection generator is carried by the unsigned outer
+inclusion to the explicit positive overlap circle class. -/
+theorem radialIntersectionToOuterH1_positiveGenerator_eq (P : PairingData) :
+    radialIntersectionToOuterH1 P
+        ((radialIntersectionH1GroupIsoInt P).inv 1) =
+      singularH1Map (radialOverlapCircleInOuter P)
+        (circleGroupH1IsoInt.inv 1) := by
+  rw [radialIntersectionPositiveGenerator_eq]
+  change singularH1Map
+      (⟨fun q => ⟨q.1, q.2.2⟩, by fun_prop⟩ :
+        C({q // q ∈ (openCover P).inner ∩ (openCover P).outer}, OuterPiece P))
+      (singularH1Map (radialIntersectionPositiveCircle P)
+        (circleGroupH1IsoInt.inv 1)) = _
+  change (singularH1Map (radialIntersectionPositiveCircle P) ≫
+      singularH1Map
+        (⟨fun q => ⟨q.1, q.2.2⟩, by fun_prop⟩ :
+          C({q // q ∈ (openCover P).inner ∩ (openCover P).outer}, OuterPiece P)))
+      (circleGroupH1IsoInt.inv 1) = _
+  rw [← singularH1Map_comp]
+  rfl
 
 /-- The outer projection of the production intersection arrow is literally
 the negative outer inclusion, fixing the MV sign before the geometric loop
