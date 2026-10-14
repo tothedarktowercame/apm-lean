@@ -119066,61 +119066,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Find a discrete circle fiber and prove its canonical calculations from smooth transversality; assemble Main.",
+    "Derive local injectivity and canonical calculations from transversality; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated edit preserved"],
     :missing-theorems
-    [{:name "canonicalRegularFiberWitness_of_isDiscrete",
-      :type
-      "discrete circle fiber plus canonical calculations gives witness",
+    [{:name "canonicalRegularFiberWitness_of_locallyInjective",
+      :type "local injectivity plus calculations gives witness",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberFintype_of_isDiscrete"],
+      :depends-on
+      ["canonicalRegularFiberWitness_of_isDiscrete"
+       "isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalRegularFiberWitness_of_isDiscrete"
+      ["canonicalRegularFiberWitness_of_locallyInjective"
        "topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "37dff094660ed52b85ebcc4b208dff2fc9503d6105275fe87590621667d70534",
+     "13ed7a9a08b3a1eabc4a4c005749162cfafef32db7251624ad342ee092b3a7e5",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked discrete-fiber witness constructor.",
+    :reason "Banked local-injective witness.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792020161047-12663-e3e79f72",
-     :commands
-     ["git diff-tree/show 1dd53482"
-      "archive 1dd53482; lake env lean closure and Main"
-      "sha256sum/placeholders at 1dd53482"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor from a discrete singleton fiber and canonical calculations. The witness stores the same y and circle-membership proof, and its Fintype is definitionally the exact regularFiberFintype_of_isDiscrete instance used by the calculation, avoiding a dependent-instance mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Finding the discrete fiber and proving its calculations from transversality, then Main assembly, remain listed."},
-    :commit "1dd5348253adc83eb15080b120507a4c4090bbbb",
+    :commit "4246f61ddcff3616b51f3bd8deb0a75e0bc3b3c7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119128,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119494,7 +119484,8 @@
     :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero-withoutlifts
     :lemma-canonicalregularfiberwitness-tophomologymap-eq-zero
     :lemma-tophomologymap-eq-zero-of-exists-canonicalregularfiberwitness
-    :lemma-canonicalregularfiberwitness-of-isdiscrete],
+    :lemma-canonicalregularfiberwitness-of-isdiscrete
+    :lemma-canonicalregularfiberwitness-of-locallyinjective],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120638,6 +120629,25 @@
    :id :lemma-canonicalregularfiberwitness-of-isdiscrete,
    :kind :lemma,
    :depends-on [:lemma-regularfiberfintype-of-isdiscrete],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalRegularFiberWitness_of_locallyInjective",
+    :type "local injectivity plus calculations gives witness"},
+   :lemma
+   {:name "canonicalRegularFiberWitness_of_locallyInjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "local injectivity plus calculations gives witness",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-canonicalregularfiberwitness-of-locallyinjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-isdiscrete
+    :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
