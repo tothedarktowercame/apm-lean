@@ -72,3 +72,65 @@ All assembly lemmas are proved and contain no `sorry`:
 The only open declarations are the five geometric word moves and the four
 consumer bridge leaves.  `homeomorph_trans` and all three assemblies are
 closed proofs.
+
+## Seat split: cancellation and cut-and-paste
+
+The two formerly monolithic boundaries are now sorry-free assemblies.  Their
+leaves do not call one another: any information shared between leaves is an
+explicit hypothesis.
+
+### Cancellation
+
+- `inversePairCancellation_aux_zip_map` is the **LIBRARY** PL leaf (130--180
+  lines after a prescribed-boundary fan triangulation tool exists): it constructs the honest
+  slit-sector PL zip and proves `CancellationZipSpec`: continuity,
+  surjectivity, preservation of boundary/interior, and injectivity on the
+  interior, together with the boundary relation calculation.  These cannot
+  soundly be separated until the explicit affine chart is a named definition:
+  continuity/interior injectivity alone do not determine its boundary action.
+  Do **not** use a radial extension of a folding circle map; that
+  identifies whole radii.  Suggested Mathlib route: triangulate convex fans,
+  use `Continuous.piecewise` (or `Continuous.if_le`) on closed half-planes,
+  `continuous_const`, `continuous_subtype_val`, and affine-map continuity.
+- `inversePairCancellation_aux_zip_interior` (45--70 lines, independent given
+  `hc`) uses `wordRel_eqvGen_interior`, `hc.interior_iff`, and
+  `hc.interior_injective`.  This also handles mixed boundary/interior pairs:
+  such a relation is impossible unless both points coincide, contradicting
+  the norm split.
+- `inversePairCancellation_aux_zip_relation` (30--45 lines, independent given
+  the two comparisons) splits on norm `< 1`; every disk point has norm `≤ 1`,
+  so `¬ norm < 1` gives `norm = 1` by `le_antisymm`.
+
+Degenerate checks: the target word cannot be empty because `hrest.1`; hence
+the target fan has positive length.  The source has two extra edges.  At slit
+endpoints the two affine formulas agree, and the endpoint equivalences are
+already included by `EqvGen`; interior points have singleton classes.
+
+### Cut-and-paste
+
+- `cutAndPaste_aux_triangle_charts` is currently the single **LIBRARY** leaf
+  (100--150 lines once a polygon/triangle PL toolkit is available).  It
+  constructs both maps from `Fin 2 × Disk`, proves continuity and coverage,
+  and performs the two directed boundary-fibre checks.  The natural reusable
+  missing foundation is a theorem that a closed Euclidean triangle (and a
+  finite convex polygon triangulated from a diagonal) is a quotient image of
+  `Disk`, with prescribed oriented boundary arcs.  Mathlib tools to try are
+  `Convex`, `AffineMap`, `ContinuousMap.piecewise`,
+  `IsClosed.isClosedEmbedding_subtypeVal`, and
+  `IsQuotientMap.of_surjective_continuous`; no SphereCap/LinearGraphMeasure
+  import is permitted.
+- `cutAndPaste_aux_relation_iff` (25--40 lines, independent) combines the two
+  directed fibre statements.  `cutAndPasteParameterRel` names the old-picture
+  pullback relation so the two direction proofs can be developed separately
+  inside the library leaf without depending on each other.
+
+The two copies of `Disk` are essential even when one of `u,v,t` is empty: a
+zero-width boundary block merely collapses a run of polygon vertices and does
+not remove either closed triangle.  Along the cutting diagonal the two chart
+orientations are opposite.  On the new picture this accounts exactly for
+`inverseWord v`; at diagonal endpoints all incident edge relations must be
+taken in `EqvGen`, not just `WordRel`.  `hw.1` rules out an empty old polygon,
+and `cutAndPaste_aux_span_aux_target_polygon` supplies the corresponding
+nonempty/even target check.
+
+Review (claude-14, 2026-10-14): `CancellationZipSpec.interior_iff` was unsatisfiable (zipped arcs map to an interior slit, so boundary ↛ boundary); replaced by `interior_maps` (interior → interior) and a one-sided `interior_injective` (p interior, c p = c q → p = q), which is what zip_interior needs.
