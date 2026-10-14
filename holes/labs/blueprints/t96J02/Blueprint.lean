@@ -755,7 +755,68 @@ lemma t96J02_cut_square_corners (p q : T96J02ClosedSquare)
 lemma t96J02_cut_continuous (hchart : Continuous t96J02_cut_chart) :
     Continuous (fun z : Disk =>
       (Quotient.mk _ (t96J02_cut_raw z) : T96J02SquarePolygonQuotient)) := by
-  sorry
+  unfold t96J02_cut_raw
+  simp only [apply_ite]
+  change Continuous (fun z : Disk =>
+    if (t96J02_cut_chart z).re ≤ 0 then
+      (Quotient.mk _ (t96J02_cut_clampSquare
+        (t96J02_cut_L (t96J02_cut_chart z))) : T96J02SquarePolygonQuotient)
+    else Quotient.mk _ (t96J02_cut_clampSquare
+      (t96J02_cut_R (t96J02_cut_chart z))))
+  apply Continuous.if_le
+  · exact (continuous_coinduced_rng : Continuous
+      (fun p : T96J02ClosedSquare =>
+        (Quotient.mk _ p : T96J02SquarePolygonQuotient))).comp (by
+      apply Continuous.subtype_mk
+      simp only [t96J02_cut_clampSquare, t96J02_cut_L]
+      fun_prop)
+  · exact (continuous_coinduced_rng : Continuous
+      (fun p : T96J02ClosedSquare =>
+        (Quotient.mk _ p : T96J02SquarePolygonQuotient))).comp (by
+      apply Continuous.subtype_mk
+      simp only [t96J02_cut_clampSquare, t96J02_cut_R]
+      fun_prop)
+  · exact (Complex.continuous_re.comp (hchart.comp continuous_subtype_val))
+  · exact continuous_const
+  · intro z hz
+    have hl1 := t96J02_cut_l1_chart (z : ℂ)
+    have hnorm : ‖(z : ℂ)‖ ≤ 1 := by
+      have hzmem := z.property
+      simpa only [Metric.mem_closedBall, dist_zero_right] using hzmem
+    have him : |(t96J02_cut_chart (z : ℂ)).im| ≤ 1 := by
+      calc
+        |(t96J02_cut_chart (z : ℂ)).im| ≤
+            t96J02_cut_l1 (t96J02_cut_chart (z : ℂ)) := by
+          simp only [t96J02_cut_l1]
+          linarith [abs_nonneg (t96J02_cut_chart (z : ℂ)).re]
+        _ = ‖(z : ℂ)‖ := hl1
+        _ ≤ 1 := hnorm
+    let t : Set.Icc (0 : ℝ) 1 :=
+      ⟨1 / 2 + (t96J02_cut_chart (z : ℂ)).im / 2, by
+        constructor <;> rw [abs_le] at him <;> linarith⟩
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    right
+    refine ⟨t, ?_, ?_⟩
+    · rw [KleinSquareEdgeOrientation.squareEdge_two]
+      simp only [t96J02_cut_clampSquare, t96J02_cut_L, hz, zero_div,
+        sub_zero, neg_zero]
+      change (max 0 (min 1 t.1), max 0 (min 1 0)) = (t.1, 0)
+      rw [min_eq_right t.2.2, max_eq_right t.2.1]
+      norm_num
+    · rw [KleinSquareEdgeOrientation.squareEdge_three]
+      simp only [t96J02_cut_clampSquare, t96J02_cut_R, hz, zero_div,
+        sub_zero]
+      rw [min_self, max_eq_right zero_le_one]
+      change (max 0 (min 1 (1 / 2 -
+        (t96J02_cut_chart (z : ℂ)).im / 2)), 1) = (1 - t.1, 1)
+      have hx0 : 0 ≤ 1 / 2 - (t96J02_cut_chart (z : ℂ)).im / 2 := by
+        linarith [(abs_le.mp him).2]
+      have hx1 : 1 / 2 - (t96J02_cut_chart (z : ℂ)).im / 2 ≤ 1 := by
+        linarith [(abs_le.mp him).1]
+      rw [min_eq_right hx1, max_eq_right hx0]
+      dsimp only [t]
+      ring
 
 lemma t96J02_paste_continuous_aux_clamp :
     Continuous t96J02_cut_clampDisk := by
