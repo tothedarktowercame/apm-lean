@@ -36158,6 +36158,16 @@
       :exit 1,
       :correction
       "dirty PointWedge line 5330 failed and removed olean; scoped source passed first"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791983472002-11818-76ca396b",
+     :commands
+     ["git show/check/diff a99d1a8d; scope/math; fixture sha256"
+      "lean source; lake build closure; lean fixture and Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit a99d1a8d adds compiled, sorry-free progress: for any groupoid equivalence it proves that the fully-faithful preimage, conjugated by the unit and inverse-mapped connector, equals the inverse-functor map. The orientation matches the pending Klein source-coordinate comparison. Scope/hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Concrete connector identification, reverse kernel inclusion, surjectivity, and winding remain listed."},
     :commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36179,7 @@
      :mode :blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36197,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36365,7 +36375,11 @@
     {:job 8,
      :commit "1f843184e63c1069706c11cc8498750d603ddc22",
      :reason
-     "Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain."}]}
+     "Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain."}
+    {:job 9,
+     :commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8",
+     :reason
+     "Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38739,7 +38753,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "equivalence_unit_mapIso_conj_preimage",
@@ -38751,7 +38765,9 @@
     :type
     "unit and inverse-mapped connector conjugation of preimage equals inverse-functor map",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8"},
    :id :lemma-equivalence-unit-mapiso-conj-preimage,
    :kind :lemma,
    :depends-on [],
