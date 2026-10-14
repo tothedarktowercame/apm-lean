@@ -119112,6 +119112,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792003869973-12200-8a724426",
+     :commands
+     ["git diff-tree/show d46cfd9"
+      "git archive d46cfd9; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at d46cfd9"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit represents genuine preimage components by connectedComponentIn subsets and maps each literal fiber point to its actual component, repairing the prior point/component boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Per-component local-degree sum identity and final assembly remain listed."},
     :commit "d46cfd969b54f992c84a36c1416a8333521e6196",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119131,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119149,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repair: removed false pointwise degree bridge; banked grouping by genuine component.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked genuine component indexing for literal fiber points.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119185,7 +119196,11 @@
     {:job 3,
      :commit "72e2be5a3866e5158e73a16c8b94d545a7dfb91d",
      :reason
-     "Repair: removed false pointwise degree bridge; banked grouping by genuine component."}]}
+     "Repair: removed false pointwise degree bridge; banked grouping by genuine component."}
+    {:job 4,
+     :commit "d46cfd969b54f992c84a36c1416a8333521e6196",
+     :reason
+     "Banked genuine component indexing for literal fiber points."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119639,7 +119654,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberComponentIndex",
@@ -119649,7 +119664,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "fiber points map to genuine connected preimage components",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d46cfd969b54f992c84a36c1416a8333521e6196"},
    :id :lemma-regularfibercomponentindex,
    :kind :lemma,
    :depends-on [],
