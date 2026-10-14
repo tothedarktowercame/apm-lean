@@ -1108,6 +1108,33 @@ noncomputable def pathTwoOpenSubdivisionOuterRunBoundaryPoints
       pathTwoOpenSubdivisionRunBoundaryPoints S := by
   simp [pathTwoOpenSubdivisionOuterRunBoundaryPoints]
 
+/-- The outer run boundaries as an exact finite family.  Its domain has one
+more element than the maximal-run list, so run `i` has endpoints `i` and
+`i.succ` without any list-bound side conditions. -/
+noncomputable def pathTwoOpenSubdivisionOuterRunBoundaryFamily
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    Fin ((boolSideRunPartition S.side).length + 1) → V :=
+  fun i => (pathTwoOpenSubdivisionOuterRunBoundaryPoints S hx hy).get
+    (Fin.cast
+      (pathTwoOpenSubdivisionOuterRunBoundaryPoints_length S hx hy).symm i)
+
+/-- Forgetting the subtype proof recovers the corresponding canonical
+ambient boundary entry exactly. -/
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (i : Fin ((boolSideRunPartition S.side).length + 1)) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i : X) =
+      (pathTwoOpenSubdivisionRunBoundaryPoints S).get
+        (Fin.cast (pathTwoOpenSubdivisionRunBoundaryPoints_length S).symm i) := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryFamily,
+    pathTwoOpenSubdivisionOuterRunBoundaryPoints]
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2629,6 +2656,7 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
 #print axioms pathTwoOpenSubdivisionOuterRunBoundaryPoints_length
 #print axioms pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val
+#print axioms pathTwoOpenSubdivisionOuterRunBoundaryFamily_val
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice

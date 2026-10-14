@@ -465,8 +465,11 @@ adjacent overlap certificate; consequently
 outer when the two exterior endpoints are outer.
 `pathTwoOpenSubdivisionOuterRunBoundaryPoints` now lifts the complete list to
 the outer subtype, preserves its run-count-plus-one length, and maps back
-exactly to the ambient boundary list.  It remains to reindex this list by
-`Fin`, package the run representatives against it, and instantiate the fold
+exactly to the ambient boundary list.
+`pathTwoOpenSubdivisionOuterRunBoundaryFamily` reindexes that list by
+`Fin (runs.length + 1)` and its value theorem recovers the corresponding
+ambient canonical boundary exactly.  It remains to package the run
+representatives against this family and instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
