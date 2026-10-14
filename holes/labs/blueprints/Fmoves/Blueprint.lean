@@ -63,11 +63,160 @@ vertex plus the complementary polygon.  Merge uses the block quadrilateral
 plus its complement.  Cut-and-paste uses the two triangles separated by the
 new diagonal. -/
 
+def rotation_aux_scalar (n k : ℕ) : ℂ :=
+  Complex.exp (Complex.I * (2 * Real.pi * (k : ℝ) / n))
+
+lemma rotation_aux_scalar_norm (n k : ℕ) :
+    ‖rotation_aux_scalar n k‖ = 1 := by
+  rw [rotation_aux_scalar, Complex.norm_exp]
+  simp
+
+def rotation_aux_disk (n k : ℕ) : Disk → Disk := fun z =>
+  ⟨rotation_aux_scalar n k * z.1, by
+    have hz : ‖(z.1 : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp z.2)
+    rw [Metric.mem_closedBall, dist_zero_right, norm_mul,
+      rotation_aux_scalar_norm, one_mul]
+    exact hz⟩
+
+lemma rotation_aux_scalar_mul_neg (n k : ℕ) :
+    rotation_aux_scalar n k *
+        Complex.exp (-Complex.I * (2 * Real.pi * (k : ℝ) / n)) = 1 := by
+  rw [rotation_aux_scalar, ← Complex.exp_add]
+  convert Complex.exp_zero using 1
+  ring
+
+def rotation_aux_disk_inv (n k : ℕ) : Disk → Disk := fun z =>
+  ⟨Complex.exp (-Complex.I * (2 * Real.pi * (k : ℝ) / n)) * z.1, by
+    have hz : ‖(z.1 : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp z.2)
+    rw [Metric.mem_closedBall, dist_zero_right, norm_mul, Complex.norm_exp]
+    simpa using hz⟩
+
+lemma rotation_aux_disk_left_inv (n k : ℕ) :
+    Function.LeftInverse (rotation_aux_disk_inv n k) (rotation_aux_disk n k) := by
+  intro z
+  apply Subtype.ext
+  change Complex.exp (-Complex.I * (2 * Real.pi * (k : ℝ) / n)) *
+      (rotation_aux_scalar n k * z.1) = z.1
+  rw [← mul_assoc]
+  have h := rotation_aux_scalar_mul_neg n k
+  rw [mul_comm] at h
+  rw [h, one_mul]
+
+lemma rotation_aux_disk_right_inv (n k : ℕ) :
+    Function.RightInverse (rotation_aux_disk_inv n k) (rotation_aux_disk n k) := by
+  intro z
+  apply Subtype.ext
+  change rotation_aux_scalar n k *
+      (Complex.exp (-Complex.I * (2 * Real.pi * (k : ℝ) / n)) * z.1) = z.1
+  rw [← mul_assoc, rotation_aux_scalar_mul_neg, one_mul]
+
+def rotation_aux_disk_equiv (n k : ℕ) : Disk ≃ Disk where
+  toFun := rotation_aux_disk n k
+  invFun := rotation_aux_disk_inv n k
+  left_inv := rotation_aux_disk_left_inv n k
+  right_inv := rotation_aux_disk_right_inv n k
+
+lemma rotation_aux_disk_continuous (n k : ℕ) :
+    Continuous (rotation_aux_disk n k) := by
+  apply Continuous.subtype_mk
+  exact continuous_const.mul continuous_subtype_val
+
+lemma rotation_aux_disk_inv_continuous (n k : ℕ) :
+    Continuous (rotation_aux_disk_inv n k) := by
+  apply Continuous.subtype_mk
+  exact continuous_const.mul continuous_subtype_val
+
+def rotation_aux_disk_homeomorph (n k : ℕ) : Disk ≃ₜ Disk where
+  toEquiv := rotation_aux_disk_equiv n k
+  continuous_toFun := rotation_aux_disk_continuous n k
+  continuous_invFun := rotation_aux_disk_inv_continuous n k
+
+lemma rotation_aux_edgePoint_add (n k e : ℕ) (t : Icc (0 : ℝ) 1) :
+    rotation_aux_disk n k (edgePoint n e t) = edgePoint n (k + e) t := by
+  apply Subtype.ext
+  change rotation_aux_scalar n k *
+      Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / n)) =
+    Complex.exp (Complex.I *
+      (2 * Real.pi * (((k + e : ℕ) : ℝ) + t.1) / n))
+  rw [rotation_aux_scalar, ← Complex.exp_add]
+  congr 1
+  push_cast
+  ring
+
+lemma rotation_aux_edgePoint_period (n e : ℕ) (hn : n ≠ 0)
+    (t : Icc (0 : ℝ) 1) :
+    edgePoint n (n + e) t = edgePoint n e t := by
+  apply Subtype.ext
+  change Complex.exp (Complex.I *
+      (2 * Real.pi * (((n + e : ℕ) : ℝ) + t.1) / n)) =
+    Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / n))
+  have hn' : (n : ℂ) ≠ 0 := by exact_mod_cast hn
+  rw [show Complex.I *
+        (2 * Real.pi * (((n + e : ℕ) : ℝ) + t.1) / n) =
+      2 * Real.pi * Complex.I +
+        Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / n) by
+      push_cast
+      field_simp
+      ring]
+  rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]
+
+/-- Leaf: rotating by `v.length` arcs sends arc `i` of `u ++ v` to arc
+`i + v.length (mod n)` of `v ++ u`, which carries the same signed label
+(`rotation_aux_edgePoint_add`, `rotation_aux_edgePoint_period`); so each
+generating `WordRel` pair maps to a generating pair. -/
+lemma rotation_aux_relation_forward {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hw : IsPolygonWord (u ++ v))
+    {p q : Disk} (hpq : Relation.EqvGen (WordRel (u ++ v)) p q) :
+    Relation.EqvGen (WordRel (v ++ u))
+      (rotation_aux_disk (u ++ v).length v.length p)
+      (rotation_aux_disk (u ++ v).length v.length q) := by
+  sorry
+
+/-- Leaf: the inverse rotation, symmetrically. -/
+lemma rotation_aux_relation_reverse {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hw : IsPolygonWord (u ++ v))
+    {p q : Disk} (hpq : Relation.EqvGen (WordRel (v ++ u)) p q) :
+    Relation.EqvGen (WordRel (u ++ v))
+      (rotation_aux_disk_inv (u ++ v).length v.length p)
+      (rotation_aux_disk_inv (u ++ v).length v.length q) := by
+  sorry
+
 /-- Radial extension of boundary rotation through the first `u.length` arcs. -/
 theorem rotation {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (hw : IsPolygonWord (u ++ v)) :
     Nonempty (PolygonSurface (u ++ v) ≃ₜ PolygonSurface (v ++ u)) := by
-  sorry
+  let f : PolygonSurface (u ++ v) → PolygonSurface (v ++ u) :=
+    Quotient.map (rotation_aux_disk (u ++ v).length v.length)
+      (fun _ _ h ↦ rotation_aux_relation_forward u v hw h)
+  let g : PolygonSurface (v ++ u) → PolygonSurface (u ++ v) :=
+    Quotient.map (rotation_aux_disk_inv (u ++ v).length v.length)
+      (fun _ _ h ↦ rotation_aux_relation_reverse u v hw h)
+  have hgf : Function.LeftInverse g f := by
+    intro x
+    induction x using Quotient.inductionOn
+    apply Quotient.sound
+    rw [rotation_aux_disk_left_inv (u ++ v).length v.length]
+  have hfg : Function.RightInverse g f := by
+    intro x
+    induction x using Quotient.inductionOn
+    apply Quotient.sound
+    rw [rotation_aux_disk_right_inv (u ++ v).length v.length]
+  refine ⟨{
+    toEquiv := { toFun := f, invFun := g, left_inv := hgf, right_inv := hfg }
+    continuous_toFun := ?_
+    continuous_invFun := ?_ }⟩
+  · rw [continuous_coinduced_dom]
+    change Continuous (polygonQuotient (v ++ u) ∘
+      rotation_aux_disk (u ++ v).length v.length)
+    exact (continuous_polygonQuotient (v ++ u)).comp
+      (rotation_aux_disk_continuous _ _)
+  · rw [continuous_coinduced_dom]
+    change Continuous (polygonQuotient (u ++ v) ∘
+      rotation_aux_disk_inv (u ++ v).length v.length)
+    exact (continuous_polygonQuotient (u ++ v)).comp
+      (rotation_aux_disk_inv_continuous _ _)
 
 /-- Rename labels and optionally invert both occurrences of each label.  The
 carrier map is the identity on each radial sector. -/
