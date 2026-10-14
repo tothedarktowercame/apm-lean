@@ -614,6 +614,84 @@ theorem apm_t01A04_canonical_parity_characters
 hypothesis is explicit, so this leaf can be proved before the local covering
 construction lands.  The presentation hypotheses identify the supplied
 character uniquely from its values on the three generators. -/
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff
+    (hcov : IsCoveringMap apm_t01a04_circleCoverMap)
+    (g : apm_t01a04_piOne) :
+    g ∈ MonoidHom.range
+        (apm_t01a04_circleCoverMap_base ▸
+          FundamentalGroup.map apm_t01a04_circleCoverMap
+            apm_t01a04_circleCoverBase) ↔
+      hcov.monodromy (FundamentalGroup.toPath g)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ =
+        ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact hcov.monodromy_map (FundamentalGroup.toPath a)
+  · intro hg
+    obtain ⟨γ⟩ := g
+    let lift := hcov.liftPath γ apm_t01a04_circleCoverBase (by simp)
+    have hend : lift 1 = apm_t01a04_circleCoverBase := by
+      simpa [IsCoveringMap.monodromy, lift] using congrArg Subtype.val hg
+    let δ : Path apm_t01a04_circleCoverBase apm_t01a04_circleCoverBase :=
+      ⟨lift, hcov.liftPath_zero _ _ _, hend⟩
+    refine ⟨Path.Homotopic.Quotient.mk δ, ?_⟩
+    change (Path.Homotopic.Quotient.mk δ).map apm_t01a04_circleCoverMap =
+      Path.Homotopic.Quotient.mk γ
+    rw [← Path.Homotopic.Quotient.mk_map]
+    congr 1
+    ext t
+    exact congrFun (hcov.liftPath_lifts γ apm_t01a04_circleCoverBase (by simp)) t
+
+/-- The base fiber of the circle-doubled cover has two points, so monodromy
+on it is a parity character. -/
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character
+    (hcov : IsCoveringMap apm_t01a04_circleCoverMap) :
+    ∃ ψ : apm_t01a04_piOne →* apm_t01a04_Parity, ∀ g : apm_t01a04_piOne,
+      ψ g = 1 ↔ hcov.monodromy (FundamentalGroup.toPath g)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
+  sorry
+
+/-- Explicit lifts: `loopA`, `loopB` lift to closed loops in torus sheet `0`;
+`loopC` lifts through squaring to the half-turn from `1` to `-1`, i.e. from
+sheet point `0` to sheet point `1`, so it moves the base point. -/
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts
+    (hcov : IsCoveringMap apm_t01a04_circleCoverMap) :
+    hcov.monodromy (FundamentalGroup.toPath apm_t01A04_loopA)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ∧
+    hcov.monodromy (FundamentalGroup.toPath apm_t01A04_loopB)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ∧
+    hcov.monodromy (FundamentalGroup.toPath apm_t01A04_loopC)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ≠ ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
+  sorry
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_monodromy_iff
+    (phic : apm_t01a04_piOne →* apm_t01a04_Parity)
+    (hgen : Subgroup.closure
+      {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤)
+    (hca : phic apm_t01A04_loopA = Multiplicative.ofAdd 0)
+    (hcb : phic apm_t01A04_loopB = Multiplicative.ofAdd 0)
+    (hcc : phic apm_t01A04_loopC = Multiplicative.ofAdd 1)
+    (hcov : IsCoveringMap apm_t01a04_circleCoverMap)
+    (g : apm_t01a04_piOne) :
+    hcov.monodromy (FundamentalGroup.toPath g)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ↔ phic g = 1 := by
+  obtain ⟨ψ, hψ⟩ :=
+    apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character hcov
+  obtain ⟨hA, hB, hC⟩ :=
+    apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts hcov
+  have hpar : ∀ x : apm_t01a04_Parity, x ≠ 1 → x = Multiplicative.ofAdd 1 := by
+    decide
+  have hψ1 : ψ = phic := by
+    apply MonoidHom.eq_of_eqOn_dense hgen
+    intro x hx
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx
+    rcases hx with rfl | rfl | rfl
+    · rw [hca]; exact (hψ _).2 hA
+    · rw [hcb]; exact (hψ _).2 hB
+    · rw [hcc]; exact hpar _ (fun h ↦ hC ((hψ _).1 h))
+  subst hψ1
+  exact (hψ g).symm
+
 theorem apm_t01A04_circleCoverMap_range_eq_parity_kernel
     (phic : apm_t01a04_piOne →* apm_t01a04_Parity)
     (hgen : Subgroup.closure
@@ -626,7 +704,11 @@ theorem apm_t01A04_circleCoverMap_range_eq_parity_kernel
       (apm_t01a04_circleCoverMap_base ▸
         FundamentalGroup.map apm_t01a04_circleCoverMap
           apm_t01a04_circleCoverBase) = phic.ker := by
-  sorry
+  ext g
+  rw [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff hcov]
+  rw [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_monodromy_iff
+    phic hgen hca hcb hcc hcov]
+  exact MonoidHom.mem_ker
 
 lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_ext
     {G : Type*} [Group G]
@@ -645,8 +727,10 @@ lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_ext
   · exact hb
   · exact hc
 
-/-- Range of the induced map = stabilizer of the base point under monodromy
-(the `hstab` argument inside `ConstructionTargets.coveringFiberEquivCosets`). -/
+/-- Range of the induced map = stabilizer of the base point under monodromy.
+Copy `apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff`; note
+`apm_t01a04_torusCoverMap_base` is proved by `simp`, not `rfl`, so the `▸` cast
+must be eliminated explicitly (the circle version's `rfl` steps fail here). -/
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff
     (hcov : IsCoveringMap apm_t01a04_torusCoverMap) (γ : apm_t01a04_piOne) :
     γ ∈ MonoidHom.range
