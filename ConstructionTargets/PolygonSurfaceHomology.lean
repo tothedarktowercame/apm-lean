@@ -1190,6 +1190,58 @@ theorem polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign
   rw [polygonBoundaryWedgeLoop_edgePoint,
     P.signedWedgeArc_of_not_sign i t h, circleArc_eq_integerLoop_one]
 
+/-- One signed polygon edge packaged as a based path in its wedge leg.  This
+is the finite family of path pieces whose concatenation remains to be
+identified with the complete geometric boundary loop. -/
+noncomputable def polygonBoundarySignedEdgePath (P : PairingData)
+    (i : Fin P.edgeCount) :
+    Path
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1) where
+  toFun := P.signedWedgeArc i
+  continuous_toFun := by
+    have hpair : Continuous (fun t : Set.Icc (0 : ℝ) 1 => (i, t)) := by
+      fun_prop
+    simpa [PairingData.signedWedgeArcMap, Function.comp_def] using
+      P.continuous_signedWedgeArcMap.comp hpair
+  source' := by
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+      (if P.sign i then PolygonSurfacePiOne.circleArc ⟨0, by norm_num⟩
+        else PolygonSurfacePiOne.circleArc
+          (PolygonSurfacePiOne.reverseIcc ⟨0, by norm_num⟩)) = _
+    congr 1
+    cases hs : P.sign i
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      right
+      apply Subtype.ext
+      simp [PolygonSurfacePiOne.reverseIcc]
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      left
+      rfl
+  target' := by
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+      (if P.sign i then PolygonSurfacePiOne.circleArc ⟨1, by norm_num⟩
+        else PolygonSurfacePiOne.circleArc
+          (PolygonSurfacePiOne.reverseIcc ⟨1, by norm_num⟩)) = _
+    congr 1
+    cases hs : P.sign i
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      left
+      apply Subtype.ext
+      simp [PolygonSurfacePiOne.reverseIcc]
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      right
+      rfl
+
+/-- Restricting the geometric boundary loop to the `i`th standard polygon
+interval is pointwise exactly the packaged signed edge path. -/
+theorem polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath
+    (P : PairingData) (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      polygonBoundarySignedEdgePath P i t := by
+  exact polygonBoundaryWedgeLoop_edgePoint P i t
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
