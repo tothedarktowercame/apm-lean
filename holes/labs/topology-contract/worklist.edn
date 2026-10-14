@@ -113864,58 +113864,55 @@
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Build B11 restricted TwoCircles neighborhood, then B12 final equivalence.",
-    :outcome :stop,
+    :residual "Program complete; final equivalence compiles.",
+    :outcome :done-unreviewed,
     :warnings ["existing linters"],
     :missing-theorems
-    [{:name
-      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
-      :type "Leg equivalence",
+    [{:name "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
+      :type
+      "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
       :status :proved,
-      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+      :consumers [:t99J01],
       :depends-on
-      ["PointWedgeVanKampen.genericPointWedgeSourceEquivalence"],
+      ["PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
      "9015735d1111638d415245efc42d52b6af07ff9066439d8ce8d0f79a657275a8",
      :documentation
-     "db0f99d304a5508cca92347d03a33051048c2c25bbf71cfbe00c8992b05565e2",
+     "e0454da1192575b2aee903f449c43f1208467d350b10dfd340cd9c5a3bd74f31",
+     :implementation
+     "77e6a7e24387c482ac010e59e4733e58f40ae26893a27e156d87a912df6e7f53",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "B6 banked; B11 and B12 remain.",
     :commands
     [{:cmd
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
+      "lake env lean ConstructionTargets/ThreeCirclesFundamentalGroup.lean",
       :exit 0}
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "rightBase factorization drafts",
-      :exit 1,
-      :finding "fixed multiplication order and unfolded lets"}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
-      :exit 1,
-      :finding "B12 module absent"}],
-    :commit "64a4242e04051bc5bb0eb213b76c4e82183087ca",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "hash/diff/placeholders", :exit 0}],
+    :commit "138677800d75266909157be691407b56795dcdef",
+    :commits
+    ["64a4242e04051bc5bb0eb213b76c4e82183087ca"
+     "138677800d75266909157be691407b56795dcdef"],
     :changed-paths
-    ["ConstructionTargets/PointWedgeVanKampen.lean"
-     "ConstructionTargets/PointWedgeVanKampen.md"],
+    ["ConstructionTargets/PointWedgeVanKampen.md"
+     "ConstructionTargets/ThreeCirclesFundamentalGroup.lean"],
     :fixture
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114988,7 +114985,8 @@
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type
     "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen},
    :id :lemma-pointwedgevankampen-threecirclesfundamentalgroupequiv,
    :kind :lemma,
    :depends-on
