@@ -122,7 +122,10 @@ theorem apm_t02a01_deck_commutator_apply
     (hdeck_zero : deck 0 = Homeomorph.refl Stilde)
     (u v : ZMod n) (x : Stilde) :
     deck (u + v - u - v) x = x := by
-  sorry
+  have hcomm : u + v - u - v = 0 := by
+    abel
+  rw [hcomm, hdeck_zero]
+  rfl
 
 /-- LIBRARY (boundary commutator + abelian deck group): monodromy of every
 loop in the restricted boundary cover is trivial. -/
