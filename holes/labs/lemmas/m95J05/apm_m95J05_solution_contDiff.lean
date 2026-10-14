@@ -86,7 +86,55 @@ theorem apm_m95J05_solution_contDiff (lam : ℝ) (φ : ℝ → ℝ)
     (hφ : apm_m95J05_isTestFunction φ) :
     ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
       (apm_m95J05_solution lam φ) := by
-  sorry
+  let w : ℝ → ℝ := fun s ↦ Real.exp (lam * s) * φ s
+  let F : ℝ → ℝ := fun t ↦ ∫ s in Iic t, w s
+  have hw_smooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) w := by
+    dsimp [w]
+    have he : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        (fun s : ℝ ↦ Real.exp (lam * s)) := by fun_prop
+    exact he.mul hφ.1
+  have hw_compact : HasCompactSupport w := hφ.2.mul_left
+  have hw_int : Integrable w :=
+    hw_smooth.continuous.integrable_of_hasCompactSupport hw_compact
+  have hF_eq : F = fun t ↦ F 0 + ∫ s in (0 : ℝ)..t, w s := by
+    funext t
+    dsimp [F]
+    rw [← intervalIntegral.integral_Iic_sub_Iic
+      (hw_int.integrableOn) (hw_int.integrableOn)]
+    ring
+  have hprim_deriv (t : ℝ) :
+      HasDerivAt (fun u ↦ ∫ s in (0 : ℝ)..u, w s) (w t) t := by
+    exact intervalIntegral.integral_hasDerivAt_right
+      (hw_int.intervalIntegrable)
+      (hw_smooth.continuous.stronglyMeasurableAtFilter (μ := volume) (l := nhds t))
+      hw_smooth.continuous.continuousAt
+  have hF_diff : Differentiable ℝ F := by
+    rw [hF_eq]
+    intro t
+    exact (hasDerivAt_const t (F 0)).add (hprim_deriv t) |>.differentiableAt
+  have hF_deriv : deriv F = w := by
+    funext t
+    rw [hF_eq]
+    simpa only [Pi.add_apply, zero_add] using
+      ((hasDerivAt_const t (F 0)).add (hprim_deriv t)).deriv
+  have hF_smooth : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) F := by
+    rw [contDiff_infty_iff_deriv]
+    exact ⟨hF_diff, hF_deriv ▸ hw_smooth⟩
+  have hsolution : apm_m95J05_solution lam φ =
+      fun t ↦ Real.exp (-lam * t) * F t := by
+    funext t
+    rw [apm_m95J05_solution]
+    dsimp [F, w]
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [] with s
+    rw [← mul_assoc, ← Real.exp_add]
+    congr 2
+    ring
+  rw [hsolution]
+  have he : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (fun t : ℝ ↦ Real.exp (-lam * t)) := by fun_prop
+  exact he.mul hF_smooth
 -- END SEAT AREA
 
 theorem apm_m95j05 :
