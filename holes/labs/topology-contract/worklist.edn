@@ -119108,6 +119108,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792017176211-12568-244723be",
+     :commands
+     ["git diff-tree/show f28fac18"
+      "archive f28fac18; lake env lean closure and Main"
+      "sha256sum/placeholders at f28fac18"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free H2 endpoint from canonical component zero sums and the global signed-count formula. It uses canonical local-degree coefficients throughout; the component equality is correctly oriented via sum=0 and the symmetric exact-lift-degree=0 theorem, with occupied-component indexing preserved. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. The two geometric identities and Main assembly remain listed."},
     :commit "f28fac1855457bbe2754c4d2a3e31b64ac507894",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119116,7 +119127,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119134,7 +119145,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced component comparison to canonical zero sums.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical zero-sum H2 endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119262,7 +119273,10 @@
      :reason "Banked canonical chart-calculation constructor."}
     {:job 3,
      :commit "0849f2f553851b3d9b067f1a3ab2c16121762120",
-     :reason "Reduced component comparison to canonical zero sums."}]}
+     :reason "Reduced component comparison to canonical zero sums."}
+    {:job 4,
+     :commit "f28fac1855457bbe2754c4d2a3e31b64ac507894",
+     :reason "Banked canonical zero-sum H2 endpoint."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120454,7 +120468,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_canonicalComponentSums",
@@ -120466,7 +120480,9 @@
     :type
     "canonical component zero sums and top signed-count formula imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "f28fac1855457bbe2754c4d2a3e31b64ac507894"},
    :id :lemma-tophomologymap-eq-zero-of-canonicalcomponentsums,
    :kind :lemma,
    :depends-on
