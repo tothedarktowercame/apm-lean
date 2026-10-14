@@ -113856,14 +113856,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Carry endpoint transport through the right leg; install connector square; then B6/B12.",
+    "Use transported equality in the right-piece connector square; install it; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linter"],
     :missing-theorems
@@ -113877,17 +113877,16 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "924db39b9bb2f0fd13dd4c0c70f2bb5dec076a9549bed4af698a6ad48c634450",
+     "7a20400cc18f2ae585ac722b7b25eab0ce864a5b2e9781ea9b1e788fdaa23fd3",
      :documentation
-     "5aa515a09506c40afdc80760212be1f97e6db1172105a487f2aa8329f5d357cd",
+     "6ffdee318685cb4941b19a7ce6b276252d24370d413541a34efbc8dd608cd461",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Banked the forward overlap component as named endpoint transport.",
+    :reason "Banked endpoint transport through the right overlap leg.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113901,18 +113900,7 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 file absent"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791957899172-11651-ce52c47a",
-     :commands
-     ["git show/diff-tree b0d880546"
-      "git archive b0d880546; lake env lean archived PointWedgeVanKampen.lean"
-      "lake build ConstructionTargets.PointWedgeVanKampen"
-      "sha256sum; placeholders; statement-registry.py check"],
-     :finding
-     "Independent review of topo-2 commit b0d880546: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes 924db39b/5aa515a0/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. The mapped unitInv and named equality transport share the correctly oriented hom-set in the one-object coordinate groupoid, so subsingleton elimination is sound; axioms are standard. Valid program STOP; right-leg transport/square/B6/B12 remain listed."},
-    :commit "b0d880546b5a8cc9b7053a3bd09cb8198be06296",
+    :commit "25f376324f4dcdcc92ecde368247bf61182c47aa",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113922,7 +113910,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
