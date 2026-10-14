@@ -85,4 +85,63 @@ structure Covering (n : ℕ) where
   covering : @IsCoveringMap E X topology _ p
   fiberCard : ∀ x : X, Nat.card {e : E // p e = x} = n
 
+/-! ## Combinatorial graph-cover data -/
+
+/-- A labeled directed graph over the two-loop rose.  Invertibility of each
+transition is the combinatorial local-covering condition. -/
+structure TwoLoopGraphCoverData (V : Type*) where
+  step : Fin 2 → Equiv.Perm V
+
+namespace TwoLoopGraphCoverData
+
+variable {V : Type*} (D : TwoLoopGraphCoverData V)
+
+abbrev Edge (V : Type*) := Fin 2 × V
+
+def source (e : Edge V) : V := e.2
+
+def target (e : Edge V) : V := D.step e.1 e.2
+
+/-- The outgoing labeled star at every vertex is exactly the two labels. -/
+def outgoingStarEquiv (v : V) : {e : Edge V // source e = v} ≃ Fin 2 where
+  toFun e := e.1.1
+  invFun i := ⟨(i, v), rfl⟩
+  left_inv e := by
+    rcases e with ⟨⟨i, w⟩, hw⟩
+    simp only [source] at hw
+    subst w
+    rfl
+  right_inv _ := rfl
+
+/-- Invertibility of the transitions makes the incoming labeled star exactly
+the two labels as well. -/
+def incomingStarEquiv (v : V) : {e : Edge V // D.target e = v} ≃ Fin 2 where
+  toFun e := e.1.1
+  invFun i := ⟨(i, (D.step i).symm v), (D.step i).apply_symm_apply v⟩
+  left_inv e := by
+    rcases e with ⟨⟨i, w⟩, hw⟩
+    simp only [target] at hw
+    apply Subtype.ext
+    apply Prod.ext
+    · rfl
+    · exact (D.step i).injective ((D.step i).apply_symm_apply _ |>.trans hw.symm)
+  right_inv _ := rfl
+
+/-- The Cayley graph transition datum for the free group on two generators. -/
+def cayleyData : TwoLoopGraphCoverData (FreeGroup (Fin 2)) where
+  step i := Equiv.mulRight (FreeGroup.of i)
+
+private def finThreeSwap : Equiv.Perm (Fin 3) := Equiv.swap 0 1
+
+private def finThreeCycle : Equiv.Perm (Fin 3) := Equiv.addRight 1
+
+/-- The four permutation pairs from the reviewed blueprint. -/
+def threeSheetData : Fin 4 → TwoLoopGraphCoverData (Fin 3) := ![
+  ⟨fun _ ↦ Equiv.refl (Fin 3)⟩,
+  ⟨fun _ ↦ finThreeSwap⟩,
+  ⟨fun i ↦ if i = 0 then finThreeCycle else Equiv.refl (Fin 3)⟩,
+  ⟨fun _ ↦ finThreeCycle⟩]
+
+end TwoLoopGraphCoverData
+
 end ConstructionTargets.t92J06Closure
