@@ -87901,24 +87901,23 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove counit identity; then transport, right-base inl, surjectivity, B6-B10.",
+    "Prove shifted counit identity; then installed transport, right-base inl, surjectivity, B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints; unrelated edits preserved"],
+    :warnings ["preexisting lints"],
     :missing-theorems
     [{:name
-      "finiteWedgeCoherentRightSourceUnitSquare_of_counitNormalFormTrivial",
-      :type "identity implies source square",
+      "finiteWedgeCoherentRightSourceUnitSquare_at_of_counitNormalForm",
+      :type "endpoint counit identity implies source square",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeRightBaseCounitNormalFormTrivial_holds",
-      :type "counit normal form identity",
+     {:name "finiteWedgeShiftedCounitNormalFormTrivial_holds",
+      :type "shifted overlap counit normal form identity",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
@@ -87927,47 +87926,31 @@
       :type "installed transport",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeRightBaseCounitNormalFormTrivial_holds"],
+      :depends-on ["finiteWedgeShiftedCounitNormalFormTrivial_holds"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked normal-form step.",
+    :reason "Banked arbitrary-endpoint finite counit reduction.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 250866b5e", :exit 0}
+     {:cmd "git show --check 8f670b08e", :exit 0}
      {:cmd "exact blob | lake env lean /dev/stdin", :exit 0}
      {:cmd
-      "#print axioms finiteWedgeCoherentRightSourceUnitSquare_of_counitNormalFormTrivial",
+      "#print axioms finiteWedgeCoherentRightSourceUnitSquare_at_of_counitNormalForm",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial build",
-      :exit 1,
-      :correction "dependency stabilized; rerun passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791987769785-11877-2f71fefa",
-     :commands
-     ["git show/diff 250866b5e; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit 250866b5e by topo-6 changes only the scoped Lean file; exact blob SHA-256 c9239a043df1ab05131688f294647a591847a7b22f53f6e3beced0a462187c31. Exact snapshot builds; 0 placeholders; theorem uses propext/Classical.choice/Quot.sound; registry 166/0. From normalForm=𝟙 it applies the prior iff in the correct .mpr direction to obtain the counit connector square, then the established counit-to-coherent-source implication. No representation boundary is crossed. Real compiled program progress; remaining milestones prove counit normal-form identity, then installed transport."},
-    :commit "250866b5e",
+    :commit "8f670b08e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "c9239a043df1ab05131688f294647a591847a7b22f53f6e3beced0a462187c31"},
+     "c2df5cf692d6a854736fe0c05a05e89067beac8b93d5d2253fd8de26cd2f53a2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90090,7 +90073,8 @@
    [:lemma-finitewedgerightbaseinoldfactor-iff-connectortransport
     :lemma-finitewedgerightbasetargetunitsquare
     :lemma-finitewedgerightbasecounitsquare-holds
-    :lemma-finitewedgerightbasecounitnormalformtrivial-holds],
+    :lemma-finitewedgerightbasecounitnormalformtrivial-holds
+    :lemma-finitewedgeshiftedcounitnormalformtrivial-holds],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90231,4 +90215,40 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgerightbasecounitsquare-iff-normalformtrivial],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "finiteWedgeCoherentRightSourceUnitSquare_at_of_counitNormalForm",
+    :type "endpoint counit identity implies source square"},
+   :lemma
+   {:name
+    "finiteWedgeCoherentRightSourceUnitSquare_at_of_counitNormalForm",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "endpoint counit identity implies source square",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id
+   :lemma-finitewedgecoherentrightsourceunitsquare-at-of-counitnormalform,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeShiftedCounitNormalFormTrivial_holds",
+    :type "shifted overlap counit normal form identity"},
+   :lemma
+   {:name "finiteWedgeShiftedCounitNormalFormTrivial_holds",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "shifted overlap counit normal form identity",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgeshiftedcounitnormalformtrivial-holds,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
