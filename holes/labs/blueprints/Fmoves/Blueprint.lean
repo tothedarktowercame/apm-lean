@@ -1350,7 +1350,20 @@ apply `_aux_local_formulas`). -/
 lemma mergeRepeatedBlock_aux_boundary_lift_aux_assemble (uLen vLen tLen : ℕ)
     (F : EquivariantCircleLift (uLen + 2 + vLen + 2 + tLen : ℝ) (uLen + 1 + vLen + 1 + tLen : ℝ))
     (hF : ∀ x ∈ Set.Icc (0 : ℝ) (uLen + 2 + vLen + 2 + tLen),
-      F.toFun x = mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) :
+      F.toFun x = mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x)
+    (hform :
+    (∀ (i : ℕ), i < uLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (i + s.1) = i + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + s.1) = uLen + s.1 / 2) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 1 + s.1) = uLen + (1 + s.1) / 2) ∧
+    (∀ (i : ℕ), i < vLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + i + s.1) = uLen + 1 + i + s.1) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + vLen + s.1) = uLen + 1 + vLen + s.1 / 2) ∧
+    (∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 3 + vLen + s.1) = uLen + 1 + vLen + (1 + s.1) / 2) ∧
+    (∀ (i : ℕ), i < tLen → ∀ s : Set.Icc (0 : ℝ) 1,
+      mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 4 + vLen + i + s.1) = uLen + 2 + vLen + i + s.1)) :
     Nonempty (MergeRepeatedBlockLiftSpec uLen vLen tLen) := by
   sorry
 
@@ -1375,6 +1388,7 @@ lemma mergeRepeatedBlock_aux_boundary_lift (uLen vLen tLen : ℕ) :
     (fun y hy => ⟨hi0 ▸ hstrictInv.monotone hy.1, hiQ ▸ hstrictInv.monotone hy.2⟩)
     (fun x _ => hl x) (fun y _ => hr y)
   exact mergeRepeatedBlock_aux_boundary_lift_aux_assemble uLen vLen tLen F hF
+    (mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas uLen vLen tLen)
 
 /-- A circle map has the required merge behavior on every source edge. -/
 lemma norm_edgePoint (n e : ℕ)
