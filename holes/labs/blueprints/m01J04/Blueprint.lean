@@ -3182,7 +3182,54 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_
     (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E) (x : EuclideanSpace ℝ (Fin d)) :
     ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ≤
       ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume := by
-  sorry
+  let w : EuclideanSpace ℝ (Fin d) → NNReal := fun y ↦ Real.toNNReal (κ y)
+  have hw0 : AEMeasurable w volume := hκint.1.aemeasurable.real_toNNReal
+  let wm : EuclideanSpace ℝ (Fin d) → NNReal := hw0.mk w
+  have hwm : Measurable wm := hw0.measurable_mk
+  have hw_eq : ∀ᵐ y ∂volume, (wm y : ℝ) = κ y := by
+    filter_upwards [hw0.ae_eq_mk] with y hy
+    simp only [wm]
+    rw [← hy]
+    simp [w, hκ0 y]
+  have hwmint : Integrable (fun y ↦ (wm y : ℝ)) volume := hκint.congr (by
+    filter_upwards [hw_eq] with y hy
+    exact hy.symm)
+  let ν : Measure (EuclideanSpace ℝ (Fin d)) := volume.withDensity fun y ↦ (wm y : ℝ≥0∞)
+  letI : IsProbabilityMeasure ν := by
+    rw [isProbabilityMeasure_iff]
+    simp only [ν, withDensity_apply _ MeasurableSet.univ, Measure.restrict_univ]
+    rw [lintegral_coe_eq_integral wm hwmint]
+    rw [integral_congr_ae hw_eq]
+    simp [hκ1]
+  have hint : (∫ y, G y x ∂ν) = ∫ y, κ y • G y x ∂volume := by
+    rw [show ν = volume.withDensity (fun y ↦ (wm y : ℝ≥0∞)) from rfl,
+      integral_withDensity_eq_integral_smul hwm]
+    apply integral_congr_ae
+    filter_upwards [hw_eq] with y hy
+    simp [NNReal.smul_def, hy]
+  rw [← hint]
+  by_cases hG : AEStronglyMeasurable (fun y ↦ G y x) ν
+  · have h12 : eLpNorm (fun y ↦ G y x) 1 ν ≤
+        eLpNorm (fun y ↦ G y x) 2 ν :=
+      eLpNorm_le_eLpNorm_of_exponent_le (by norm_num) hG
+    have hi : ‖∫ y, G y x ∂ν‖ₑ ≤ eLpNorm (fun y ↦ G y x) 2 ν := by
+      refine (enorm_integral_le_lintegral_enorm _).trans ?_
+      simpa [eLpNorm_one_eq_lintegral_enorm] using h12
+    refine (pow_le_pow_left' hi 2).trans_eq ?_
+    have hep := eLpNorm_nnreal_pow_eq_lintegral
+      (f := fun y ↦ G y x) (p := (2 : NNReal)) (μ := ν) (by norm_num)
+    rw [show eLpNorm (fun y ↦ G y x) 2 ν ^ 2 =
+        ∫⁻ y, ‖G y x‖ₑ ^ 2 ∂ν by simpa [ENNReal.rpow_two] using hep]
+    simp only [ν]
+    rw [lintegral_withDensity_eq_lintegral_mul₀' hwm.coe_nnreal_ennreal.aemeasurable
+      (hG.enorm.pow_const 2)]
+    apply lintegral_congr_ae
+    filter_upwards [hw_eq] with y hy
+    rw [← hy, ENNReal.ofReal_coe_nnreal]
+    simp [ENNReal.rpow_two, pow_two]
+  · have hni : ¬ Integrable (fun y ↦ G y x) ν := fun h ↦ hG h.1
+    rw [integral_undef hni]
+    simp
 
 /-- Tonelli: integrate the Jensen bound in `x` and use the section bound. -/
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli
