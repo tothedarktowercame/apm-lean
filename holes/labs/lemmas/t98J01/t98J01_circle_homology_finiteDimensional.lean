@@ -284,10 +284,88 @@ theorem t98J01_rotation_lefschetz :
 /-- Seat: rational homology of the printed circle is finite-dimensional in
 every degree. -/
 -- BEGIN SEAT AREA
+private def t98J01_circle_homology_finiteDimensional_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show ∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+        EuclideanSpace ℝ (Fin 2)) i‖ ^ 2 = 1 by
+      rw [show (∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+          EuclideanSpace ℝ (Fin 2)) i‖ ^ 2) = ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 by
+        norm_num [Fin.sum_univ_succ]]
+      simpa [Real.norm_eq_abs, sq_abs] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_succ] at hx
+    simp only [Fin.sum_univ_succ, Fin.val_zero, Fin.sum_univ_zero,
+      WithLp.ofLp_toLp, add_zero] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+    have hh := congrArg (fun r : ℝ => r ^ 2) hx
+    change (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 ^ 2 at hh
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv x := rfl
+  right_inv x := by
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+private noncomputable def t98J01_circle_homology_finiteDimensional_aux_iso (k : ℕ) :
+    ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k ≅
+      ConstructionTargets.CoefficientContractiblePair.H ℚ k
+        (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+    (TopCat.isoOfHomeo t98J01_circle_homology_finiteDimensional_aux_homeomorph)
+
+private theorem t98J01_circle_homology_finiteDimensional_aux_of_iso
+    {M N : ModuleCat ℚ} (e : M ≅ N) [FiniteDimensional ℚ N] :
+    FiniteDimensional ℚ M := by
+  apply FiniteDimensional.of_injective e.hom.hom
+  intro x y hxy
+  have := congrArg e.inv.hom hxy
+  simpa using this
+
+private theorem t98J01_circle_homology_finiteDimensional_aux_of_isZero
+    {M : ModuleCat ℚ} (h : CategoryTheory.Limits.IsZero M) :
+    FiniteDimensional ℚ M := by
+  letI : Subsingleton M := ModuleCat.subsingleton_of_isZero h
+  exact FiniteDimensional.of_injective
+    (0 : M →ₗ[ℚ] (Fin 0 → ℚ)) (fun _ _ _ => Subsingleton.elim _ _)
+
 theorem t98J01_circle_homology_finiteDimensional :
     ∀ k, FiniteDimensional ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k) := by
-  sorry
+  intro k
+  rcases k with (_ | _ | k)
+  · letI := t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (ConstructionTargets.CoefficientH0.sphereH0 ℚ 1)
+    exact t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (t98J01_circle_homology_finiteDimensional_aux_iso 0)
+  · letI := t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (ConstructionTargets.CoefficientSphereEndpoints.circleH1 ℚ)
+    exact t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (t98J01_circle_homology_finiteDimensional_aux_iso 1)
+  · let hz : CategoryTheory.Limits.IsZero
+        (ConstructionTargets.CoefficientContractiblePair.H ℚ (k + 2)
+          (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1))) := by
+      let e := ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k + 1) (by omega)
+      exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ (k + 1) (by omega)).of_iso e
+    letI := t98J01_circle_homology_finiteDimensional_aux_of_isZero hz
+    exact t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (t98J01_circle_homology_finiteDimensional_aux_iso (k + 2))
 -- END SEAT AREA
 
 /-- Seat: rational homology of the printed circle vanishes above degree 1. -/
