@@ -119066,61 +119066,52 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove canonical component-sum and global signed-count identities; assemble Main.",
+    "Prove canonical component sums vanish and the global signed-count formula; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorryAx"],
     :missing-theorems
-    [{:name "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
+    [{:name
+      "RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero",
       :type
-      "canonical local degrees plus component/top formulas give chart calculations",
+      "zero canonical component sums plus top formula give chart calculations",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["regularFiberLocalDegree_localization_eq"],
+      :depends-on
+      ["RegularFiberChartCalculations.ofCanonicalLocalDegrees"
+       "exactLiftComponentDegree_eq_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["RegularFiberChartCalculations.ofCanonicalLocalDegrees"
-       "RegularFiberChartCalculations.topHomologyMap_eq_zero"],
+      ["RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "38f4eabf170c45765bff7d1e82cd611d02334497d2ef0a34c5a62ec6fbb236a3",
+     "ed31688409882dc62aa0ea679224c1432e66e0f415f96ad5a2083cace8a6aacf",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked canonical chart-calculation constructor.",
+    :reason "Reduced component comparison to canonical zero sums.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792015916343-12539-3284dd05",
-     :commands
-     ["git diff-tree/show c9547173"
-      "archive c9547173; lake env lean closure and Main"
-      "sha256sum/placeholders at c9547173"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor choosing canonical regular-fiber local degrees. Its localization field is discharged by the existing theorem in the exact required orientation; component and global formulas retain the same coefficients and occupied-component indexing, with no representation mismatch. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Canonical component/top identities and Main assembly remain listed."},
-    :commit "c95471737d57a6c3d34ecdf85371ce435127078d",
+    :commit "0849f2f553851b3d9b067f1a3ab2c16121762120",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119128,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119466,7 +119457,8 @@
     :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
     :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations
     :lemma-regularfiberchartcalculations-tophomologymap-eq-zero
-    :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees],
+    :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees
+    :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120418,6 +120410,40 @@
    :id :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero",
+    :type
+    "zero canonical component sums plus top formula give chart calculations"},
+   :lemma
+   {:name
+    "RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "zero canonical component sums plus top formula give chart calculations",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberchartcalculations-ofcanonicallocaldegrees
+    :lemma-exactliftcomponentdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "exactLiftComponentDegree_eq_zero"},
+   :lemma {:name "exactLiftComponentDegree_eq_zero", :reported-by []},
+   :id :lemma-exactliftcomponentdegree-eq-zero,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
