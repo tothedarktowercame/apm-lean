@@ -5302,7 +5302,33 @@ def CutChartSpec (K : Set ℂ) (β : Circle → ℂ) (φ : ℂ → ℂ) : Prop :
 
 theorem cutPiece_convex_compact (P Q : ℂ) :
     Convex ℝ (cutPiece P Q) ∧ IsCompact (cutPiece P Q) := by
-  sorry
+  let f : ℂ → ℝ := fun z => cutCross (Q - P) z
+  have hf : IsLinearMap ℝ f := .mk
+    (by intro x y; simp [f, cutCross, mul_add]; ring)
+    (by
+      intro c x
+      change cutCross (Q - P) (c • x) = c * cutCross (Q - P) x
+      rw [Complex.real_smul]
+      simp [cutCross]
+      ring)
+  have hpiece : cutPiece P Q = Metric.closedBall 0 1 ∩ {z | f z ≤ f P} := by
+    ext z
+    simp only [cutPiece, Set.mem_setOf_eq, Set.mem_inter_iff, Metric.mem_closedBall,
+      dist_zero_right]
+    change (‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) ≤ 0) ↔
+      ‖z‖ ≤ 1 ∧ cutCross (Q - P) z ≤ cutCross (Q - P) P
+    rw [show cutCross (Q - P) (z - P) =
+      cutCross (Q - P) z - cutCross (Q - P) P by
+        simp [cutCross, mul_sub]]
+    constructor <;> rintro ⟨hz, h⟩ <;> exact ⟨hz, by linarith⟩
+  constructor
+  · rw [hpiece]
+    exact (convex_closedBall 0 1).inter (convex_halfSpace_le hf (f P))
+  · rw [hpiece]
+    have hfc : Continuous f := by
+      exact Complex.continuous_im.comp (continuous_const.mul continuous_id)
+    exact (ProperSpace.isCompact_closedBall (0 : ℂ) 1).inter_right
+      (isClosed_le hfc continuous_const)
 
 theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     (interior (cutPiece P Q)).Nonempty := by
