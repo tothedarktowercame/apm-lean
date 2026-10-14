@@ -9,6 +9,7 @@ import ConstructionTargets.PolygonSurfacePiOne
 import ConstructionTargets.PointWedgeVanKampen
 import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
+import ConstructionTargets.PolygonSurfaceHomology
 
 /-! # Generic closing lemmas for t93J03
 
@@ -37,6 +38,7 @@ open ConstructionTargets.PointWedgeVanKampen
 open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
 open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
+open ConstructionTargets.PolygonSurfaceHomology
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -798,6 +800,30 @@ noncomputable def kleinPolygonOverlapFundamentalGroupEquivInt :
         (MulEquiv.uniqueProd.trans
           ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt))
 
+/-- The exact outer cover piece deformation retracts onto the actual polygon
+skeleton, before any choice of free-group coordinates. -/
+noncomputable def kleinPolygonOuterHomotopyEquivSkeleton :
+    ContinuousMap.HomotopyEquiv
+      (OuterPiece kleinPairingData) kleinPairingData.skeleton :=
+  (outerHomotopyEquivBoundary kleinPairingData).trans
+    (outerBoundaryHomeomorphSkeleton kleinPairingData).toHomotopyEquiv
+
+/-- On an actual skeleton point the preceding equivalence is literally the
+identity after forgetting the redundant outer-membership proof. -/
+theorem kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
+    (z : kleinPairingData.skeleton) :
+    kleinPolygonOuterHomotopyEquivSkeleton
+      (skeletonToOuter kleinPairingData z) = z := by
+  change (outerBoundaryHomeomorphSkeleton kleinPairingData)
+    ((outerHomotopyEquivBoundary kleinPairingData)
+      (skeletonToOuter kleinPairingData z)) = z
+  apply Subtype.ext
+  exact congrArg (fun w : OuterPiece kleinPairingData ↦ w.1)
+    ((punctureDeformationRetract kleinPairingData).fixed 1
+      (skeletonToOuter kleinPairingData z)
+      ((mem_outerBoundarySkeleton_iff kleinPairingData
+        (skeletonToOuter kleinPairingData z)).mpr z.2))
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -936,6 +962,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
+#print axioms kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

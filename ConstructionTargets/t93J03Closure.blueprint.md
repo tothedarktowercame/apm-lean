@@ -77,6 +77,9 @@ basepoint and induced fundamental-group map to the outer piece.  The remaining
 step identifies its range with `aabb` and extracts the based quotient.
 Its fundamental group is now explicitly identified with `Multiplicative ℤ`
 by discarding the contractible radial interval and taking circle winding number.
+The outer cover piece is also now equipped with the exact homotopy equivalence
+to the actual polygon skeleton, proved to restrict to the identity on skeleton
+points.  The remaining comparison transports the winding generator through it.
 
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.
