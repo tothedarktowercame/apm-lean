@@ -950,7 +950,21 @@ lemma apm_m03J01_weakHessian_unique_ae {n : ℕ}
     (hH : apm_m03J01_weakHessian g H)
     (hK : apm_m03J01_weakHessian g K) :
     H =ᵐ[volume] K := by
-  sorry
+  have hcoord (i j : Fin n) :
+      (fun x => H x i j) =ᵐ[volume] (fun x => K x i j) := by
+    apply ae_eq_of_integral_contDiff_smul_eq
+    · exact ((hH.1.eval i).eval j).locallyIntegrable (by norm_num)
+    · exact ((hK.1.eval i).eval j).locallyIntegrable (by norm_num)
+    · intro φ hφ hφc
+      have heq := (hH.2 i j φ hφ hφc).symm.trans (hK.2 i j φ hφ hφc)
+      have : (∫ x, H x i j * φ x ∂volume) = ∫ x, K x i j * φ x ∂volume := by
+        linarith
+      simpa [smul_eq_mul, mul_comm] using this
+  have hall : ∀ᶠ x in ae volume, ∀ i j, H x i j = K x i j :=
+    eventually_all.mpr fun i => eventually_all.mpr fun j => hcoord i j
+  filter_upwards [hall] with x hx
+  funext i j
+  exact hx i j
 
 /-- Qualitative `H²` regularity upgrades to a uniform estimate by applying
 the closed graph theorem to the solution/weak-Hessian graph. -/
