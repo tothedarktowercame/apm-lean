@@ -36160,6 +36160,16 @@
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792010590374-12374-5c8b4127",
+     :commands
+     ["git show/check/diff 263f5d47; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 263f5d47 adds compiled, sorry-free progress after fde20b59. It proves each nonfinal run target outer via the adjacent overlap boundary and the final run target via the supplied final outer endpoint; hence every canonical boundary is outer, including the supplied initial endpoint. Blueprint is faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists subtype lifting, fold instantiation, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "263f5d4719c9f6b3f23824426c3e31e770badff0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36180,7 @@
      "84c7025147572c3f7de635a560e42089a64dfa05777c6b5bc50aac07cd7c8740"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved the run-boundary list ends at the final subdivision vertex; intermediate outer-membership remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved all canonical run boundaries are outer from outer endpoints; subtype lift remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36474,7 +36484,11 @@
     {:job 8,
      :commit "fde20b59294e670ee4f473d71714c9ac0198fa8d",
      :reason
-     "Proved the run-boundary list ends at the final subdivision vertex; intermediate outer-membership remains."}]}
+     "Proved the run-boundary list ends at the final subdivision vertex; intermediate outer-membership remains."}
+    {:job 9,
+     :commit "263f5d4719c9f6b3f23824426c3e31e770badff0",
+     :reason
+     "Proved all canonical run boundaries are outer from outer endpoints; subtype lift remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39654,7 +39668,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer",
@@ -39664,7 +39678,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "all run-boundary points lie in outer from outer endpoints",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "263f5d4719c9f6b3f23824426c3e31e770badff0"},
    :id :lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer,
    :kind :lemma,
    :depends-on
