@@ -807,6 +807,74 @@ noncomputable def kleinPolygonOverlapToOuterPiOne :
         (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) :=
   FundamentalGroup.map kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
 
+/-- The same overlap inclusion, regarded as a map into the contractible inner
+piece of the radial cover. -/
+noncomputable def kleinPolygonOverlapToInner :
+    C(overlapOpen kleinPairingData.Rel,
+      {q // q ∈ (openCover kleinPairingData).inner}) :=
+  ⟨fun z ↦ ⟨z.1, (by
+      have hz : z.1 ∈ (openCover kleinPairingData).inner ∩
+          (openCover kleinPairingData).outer := by
+        rw [← (openCover kleinPairingData).overlap_eq]
+        exact z.2
+      exact hz.1)⟩,
+    Continuous.subtype_mk continuous_subtype_val (fun z ↦ by
+      have hz : z.1 ∈ (openCover kleinPairingData).inner ∩
+          (openCover kleinPairingData).outer := by
+        rw [← (openCover kleinPairingData).overlap_eq]
+        exact z.2
+      exact hz.1)⟩
+
+/-- Inclusion of the inner radial piece into the polygon quotient. -/
+noncomputable def kleinPolygonInnerToSpace :
+    C({q // q ∈ (openCover kleinPairingData).inner}, kleinPairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- Inclusion of the outer radial piece into the polygon quotient. -/
+noncomputable def kleinPolygonOuterToSpace :
+    C({q // q ∈ (openCover kleinPairingData).outer}, kleinPairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- Every overlap loop maps trivially in the polygon quotient.  This is the
+kernel inclusion in based van Kampen: the overlap inclusion factors through
+the contractible inner radial piece. -/
+theorem kleinPolygonOverlapToSpacePiOne_eq_one
+    (g : FundamentalGroup (overlapOpen kleinPairingData.Rel)
+      kleinPolygonOverlapPoint) :
+    FundamentalGroup.map
+        (kleinPolygonOuterToSpace.comp kleinPolygonOverlapToOuter)
+        kleinPolygonOverlapPoint g = 1 := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  letI : Subsingleton (FundamentalGroup
+      {q // q ∈ (openCover kleinPairingData).inner}
+      (kleinPolygonOverlapToInner kleinPolygonOverlapPoint)) := by
+    change Subsingleton (Path.Homotopic.Quotient _ _)
+    infer_instance
+  have hinner : FundamentalGroup.map kleinPolygonOverlapToInner
+      kleinPolygonOverlapPoint g = 1 := by
+    apply Subsingleton.elim
+  have hnat :
+      FundamentalGroup.map
+          (kleinPolygonInnerToSpace.comp kleinPolygonOverlapToInner)
+          kleinPolygonOverlapPoint g =
+        FundamentalGroup.map kleinPolygonInnerToSpace
+          (kleinPolygonOverlapToInner kleinPolygonOverlapPoint)
+          (FundamentalGroup.map kleinPolygonOverlapToInner
+            kleinPolygonOverlapPoint g) := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  rw [show (kleinPolygonOuterToSpace.comp kleinPolygonOverlapToOuter) =
+      (kleinPolygonInnerToSpace.comp kleinPolygonOverlapToInner) by rfl]
+  rw [hnat, hinner, map_one]
+  rfl
+
 /-- Winding number coordinates for the exact annular overlap.  The interval
 factor is contractible, so only the circle coordinate contributes. -/
 noncomputable def kleinPolygonOverlapFundamentalGroupEquivInt :
