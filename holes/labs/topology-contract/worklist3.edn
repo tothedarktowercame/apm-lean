@@ -36121,65 +36121,54 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Run-fold quotient induction; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Quotient run-fold induction; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionRunLast_end",
-      :type "run slices start at zero and finish at S.n+1",
+    [{:name "pathTwoOpenSubdivisionRunStart_eq_prefixLength",
+      :type "run start equals preceding flattened-run length",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunStart_eq_previous_end"],
+      :depends-on ["pathTwoOpenSubdivisionRunLast_end"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunLast_end"],
+      :depends-on ["pathTwoOpenSubdivisionRunStart_eq_prefixLength"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved first/last run-slice coverage; quotient-class fold induction remains.",
+    "Identified each run start with the flattened preceding-run length; quotient fold induction remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t93j03_run_coverage_check.lean",
-      :exit 0}
+     {:cmd "lake env lean /tmp/t93j03_run_prefix_check.lean", :exit 0}
      {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792020086250-12656-c76ac11a",
-     :commands
-     ["git show --check 8c4eb4f; committed forbidden-token audit"
-      "fixture SHA-256 assertion; recorded snapshot Lean compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: recorded commit 8c4eb4f compiles sorry-free with standard axioms and adds progress after 263f5d47. Its Fin(runs+1) family inhabits outer subtype V, and the equality is correctly oriented to recover each ambient canonical boundary after coercion. This supplies the run-fold representation bridge without assuming van Kampen. Exact scope/hash verified; registry 166/166; Main placeholders 1->1; remaining fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
-    :commit "04869b05c2fca01f44f7ddac411a81f39399d36f",
+    :commit "bd5ebdee7d40582e385b90e9070b60791e06ac10",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_run_coverage_check.lean",
+    {:path "/tmp/t93j03_run_prefix_check.lean",
      :sha256
-     "cc6b50eaacfbe3be993502b9018ed261860a6e11155860055524dc6d1d7f4152"},
+     "d9a19dc2426e0a8401e9cf3784471154228f0212fcaf163a324e260aa9b51b24"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38877,7 +38866,8 @@
     :lemma-pathtwoopensubdivisionrunfold-exists-outerpath
     :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints
     :lemma-pathtwoopensubdivisionrunstart-eq-previous-end
-    :lemma-pathtwoopensubdivisionrunlast-end],
+    :lemma-pathtwoopensubdivisionrunlast-end
+    :lemma-pathtwoopensubdivisionrunstart-eq-prefixlength],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40239,6 +40229,23 @@
    :id :lemma-pathtwoopensubdivisionrunlast-end,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunstart-eq-previous-end],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunStart_eq_prefixLength",
+    :type "run start equals preceding flattened-run length"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunStart_eq_prefixLength",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run start equals preceding flattened-run length",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunstart-eq-prefixlength,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunlast-end],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
