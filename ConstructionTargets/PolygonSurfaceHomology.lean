@@ -1850,6 +1850,37 @@ def finiteWedgeRightConnectorSquare (n : ℕ) : Prop := by
       ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
         ((r ⋙ eR.functor).obj z)).hom
 
+/-- The same remaining obstruction in endpoint-transport form: the overlap
+counit component must be exactly the transport determined by the two
+installed right connectors. -/
+def finiteWedgeRightConnectorTransport (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+    x₀ y₀ P.2.carrier P.1.carrier
+  let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase
+    x₀ y₀ P.2.carrier P.1.carrier
+  exact
+    (eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        ((eK.functor ⋙ eK.inverse ⋙ r ⋙ eR.functor).obj z)).inv ≫
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom
+
+/-- Endpoint transport and connector-square formulations are exactly
+equivalent, with the direction fixed by left cancellation. -/
+theorem finiteWedgeRightConnectorTransport_iff_connectorSquare (n : ℕ) :
+    finiteWedgeRightConnectorTransport n ↔ finiteWedgeRightConnectorSquare n := by
+  exact ConstructionTargets.PointWedgeVanKampen.eq_connectorTransport_iff_connectorSquare
+    _ _
+
 /-- For the successor finite wedge, triviality of the reconstruction
 conjugator's right projection is exactly the named connector square above. -/
 theorem finiteWedgeRightProjection_eq_one_iff_connectorSquare (n : ℕ) : by
@@ -1911,6 +1942,13 @@ theorem finiteWedgeRightBaseInOldFactor_iff_connectorSquare (n : ℕ) :
     finiteWedgeRightBaseInOldFactor n ↔ finiteWedgeRightConnectorSquare n :=
   ⟨finiteWedgeRightConnectorSquare_of_inOldFactor n,
     finiteWedgeRightBaseInOldFactor_of_connectorSquare n⟩
+
+/-- Exact endpoint-transport criterion for the old-factor membership needed
+by partial normalization. -/
+theorem finiteWedgeRightBaseInOldFactor_iff_connectorTransport (n : ℕ) :
+    finiteWedgeRightBaseInOldFactor n ↔ finiteWedgeRightConnectorTransport n :=
+  (finiteWedgeRightBaseInOldFactor_iff_connectorSquare n).trans
+    (finiteWedgeRightConnectorTransport_iff_connectorSquare n).symm
 
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
