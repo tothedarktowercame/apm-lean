@@ -87945,6 +87945,16 @@
     [{:cmd "membership draft",
       :exit 1,
       :correction "unfolded finite right-base wrapper"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791976829861-11774-53302570",
+     :commands
+     ["git show/diff-tree/commit trailers; sha256sum"
+      "exact commit snapshot: lake -Kjobs=1 build PolygonSurfaceHomology"
+      "#print axioms; placeholder scan; statement-registry.py check"],
+     :finding
+     "PASS: independent review of topo-6 commit 4b0d0491e; direct scope is only PolygonSurfaceHomology.lean, exact blob SHA256 12642b9a9e0e1701a6dc3b29769f0afc7f5d2d06c0b81392ea7e6b0db426db01. Exact recorded snapshot and updated van Kampen dependency build serially; new theorems use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after efaec6039 proves the left outer comparison is literally inl(a), factors rightBase as outerRight*inl(a), and shows outerRight=inl(b) suffices for rightBase=inl(b*a). Single-object composition-to-multiplication order and map_mul orientation are correct. This respects the free-product boundary and does not infer factor membership from a projection kernel. Remaining milestone: prove finiteWedgeSuccessorOuterRightElement lies in the old factor, then apply leg-word extraction."},
     :commit "a720d9d62",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87963,7 @@
      "5051fc93b42590bf23890b59c1c1897beee4b42b1f6693a6b06868b523e4469b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked structural right-base factorization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact equivalence of right-base membership and connector square.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88090,7 +88100,11 @@
      "Banked the valid right-base-to-connector direction; corrected the dependency order."}
     {:job 3,
      :commit "4b0d0491e",
-     :reason "Banked structural right-base factorization."}]}
+     :reason "Banked structural right-base factorization."}
+    {:job 4,
+     :commit "a720d9d62",
+     :reason
+     "Banked exact equivalence of right-base membership and connector square."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89980,7 +89994,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "genericPointWedgeOuterRightComparison_mem_inr",
@@ -89990,14 +90004,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "outer-right comparison is an inr image",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "a720d9d62"},
    :id :lemma-genericpointwedgeouterrightcomparison-mem-inr,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightBaseInOldFactor_iff_connectorSquare",
@@ -90007,7 +90023,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "right-base inl membership iff connector square",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "a720d9d62"},
    :id :lemma-finitewedgerightbaseinoldfactor-iff-connectorsquare,
    :kind :lemma,
    :depends-on
