@@ -87944,6 +87944,16 @@
     [{:cmd "adapter draft",
       :exit 1,
       :correction "qualified constants"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791960192549-11670-fe01d18d",
+     :commands
+     ["git show/diff-tree; sha256sum"
+      "exact blob | lake env lean /dev/stdin; #print axioms"
+      "placeholder scan; statement-registry.py check"],
+     :finding
+     "PASS: 5ccf3e302 changes only PolygonSurfaceHomology.lean; exact blob SHA256 21e30470029fff2a47614b1e08a5e312af9501b26f2f68363f665bb133ec994b. Exact blob compiles; both new theorems use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. This is new progress after 45f611d32: normalized circle Hurewicz injectivity and generation by integer powers of the positive class. Orientations align: the chosen class maps to 1, zpow maps to integer scalar multiplication, and the H1 equivalence recovers the exponent. The proof crosses fundamental group, abelianization, multiplicative H1, additive singular H1, and comparison equivalence without reversing a map. Remaining milestones are the finite-wedge point-wedge leg-coordinate/right-base results."},
     :commit "6d1319c77",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87952,7 +87962,7 @@
      "43cfceead157ef371b66621b1768a02d25c78d841cad16c19743c1c0275b795b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87972,7 +87982,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generation by the normalized positive circle class.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Reduced wedge words to a right-base equality.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88067,7 +88077,10 @@
     {:job 5,
      :commit "5ccf3e302",
      :reason
-     "Banked generation by the normalized positive circle class."}]}
+     "Banked generation by the normalized positive circle class."}
+    {:job 6,
+     :commit "6d1319c77",
+     :reason "Reduced wedge words to a right-base equality."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89650,7 +89663,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "genericPointWedge_exists_legWord_of_rightBase_inl",
@@ -89660,7 +89673,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "left-factor equality yields literal leg words",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "6d1319c77"},
    :id :lemma-genericpointwedge-exists-legword-of-rightbase-inl,
    :kind :lemma,
    :depends-on [:lemma-exists-coprodlegword-of-mulequiv],
