@@ -7,6 +7,8 @@ import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
 import ConstructionTargets.KleinSquareEqvGenCasesIff
 import ConstructionTargets.PolygonSurfacePiOne
 import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.FundamentalGroupProduct
+import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
 
 /-! # Generic closing lemmas for t93J03
 
@@ -766,6 +768,36 @@ noncomputable def kleinPolygonOverlapToOuterPiOne :
         (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) :=
   FundamentalGroup.map kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
 
+/-- Winding number coordinates for the exact annular overlap.  The interval
+factor is contractible, so only the circle coordinate contributes. -/
+noncomputable def kleinPolygonOverlapFundamentalGroupEquivInt :
+    FundamentalGroup (overlapOpen kleinPairingData.Rel) kleinPolygonOverlapPoint ≃*
+      Multiplicative ℤ := by
+  let I := Set.Ioo (0 : ℝ) 1
+  let i : I := ⟨1 / 2, by change (0 : ℝ) < 1 / 2 ∧ 1 / 2 < 1; norm_num⟩
+  letI : ContractibleSpace I := (convex_Ioo 0 1).contractibleSpace
+    ⟨1 / 2, by change (0 : ℝ) < 1 / 2 ∧ 1 / 2 < 1; norm_num⟩
+  letI : SimplyConnectedSpace I := SimplyConnectedSpace.ofContractible _
+  letI : Subsingleton (FundamentalGroup I i) := by
+    change Subsingleton (Path.Homotopic.Quotient i i)
+    infer_instance
+  letI : Unique (FundamentalGroup I i) :=
+    { default := 1, uniq := fun x ↦ Subsingleton.elim x 1 }
+  let e :=
+    ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+        (openCover kleinPairingData).overlap_homeomorph kleinPolygonOverlapPoint
+  have hp : (openCover kleinPairingData).overlap_homeomorph
+      kleinPolygonOverlapPoint = (i, (1 : Circle)) := by
+    simpa [i, kleinPolygonOverlapPoint] using
+      (openCover kleinPairingData).overlap_homeomorph.apply_symm_apply
+        (⟨(1 / 2 : ℝ), by norm_num⟩, (1 : Circle))
+  rw [hp] at e
+  exact e.trans
+    ((ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv
+      i (1 : Circle)).trans
+        (MulEquiv.uniqueProd.trans
+          ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt))
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -903,6 +935,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
+#print axioms kleinPolygonOverlapFundamentalGroupEquivInt
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure

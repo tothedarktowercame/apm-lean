@@ -75,6 +75,8 @@ the frozen statement.
 The exact radial overlap is now compiled as path connected, with a concrete
 basepoint and induced fundamental-group map to the outer piece.  The remaining
 step identifies its range with `aabb` and extracts the based quotient.
+Its fundamental group is now explicitly identified with `Multiplicative ℤ`
+by discarding the contractible radial interval and taking circle winding number.
 
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.
