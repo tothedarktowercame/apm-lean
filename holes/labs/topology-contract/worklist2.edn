@@ -87901,43 +87901,44 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compute the overlap generator through the outer equivalence; then B8-B10.",
+    "Prove raw equality by boundary-loop naturality; then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["lint"],
     :missing-theorems
-    [{:name "addCommGrpHom_int_ext",
-      :type "Z-maps agree when equal on 1",
+    [{:name "radialMVBoundaryGroup_one_formula",
+      :type "coordinates of raw generator",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "radialMV_boundary_eq_iff_one",
-      :type "B7 iff generator equality",
+     {:name "radialMVBoundaryGroup_one_iff_outerClass",
+      :type "generator iff raw-class equality",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVSegment"],
+      :depends-on ["radialMVBoundaryGroup_one_formula"],
       :area "polygon-quotient-homology"}
-     {:name "radialMVBoundaryGroup_one",
-      :type "boundary sends 1 to attachingDegree",
+     {:name "radialOuterBoundaryGenerator_eq_attachingOuterClass",
+      :type "raw overlap class equals raw attaching class",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMV_boundary_eq_iff_one"],
+      :depends-on ["radialMVBoundaryGroup_one_iff_outerClass"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq",
       :type "B7 boundary equality",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVBoundaryGroup_one"],
+      :depends-on
+      ["radialOuterBoundaryGenerator_eq_attachingOuterClass"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Reduced B7 to its generator image.",
+    :reason "Reduced B7 to raw H1 equality.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87945,32 +87946,18 @@
      {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 289c2bd64", :exit 0}],
+     {:cmd "git show --check 6a558df58", :exit 0}],
     :diagnostic-history
-    [{:cmd "group-map draft",
-      :exit 1,
-      :correction "used additive hom; fixed orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792009358118-12338-0afc80d9",
-     :commands
-     ["git show/diff 289c2bd64; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: 289c2bd64 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 dc9f4927058030be17646e6ef0884362235635651cec97614335d6e7aaa35153 matches. Exact blob builds; 0 placeholders; new declarations use standard axioms; registry 166/0. attachingBoundaryGroup is n |-> n*attachingDegree. Additive maps from Z are determined by 1, so the iff correctly reduces full B7 equality to the signed positive-generator image without changing coordinates. New compiled progress; remaining: compute radial boundary at 1, finish B7, then B8-B10."},
-    :commit "289c2bd64",
+    [{:cmd "raw draft", :exit 1, :correction "explicit evaluation"}],
+    :commit "6a558df58",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "dc9f4927058030be17646e6ef0884362235635651cec97614335d6e7aaa35153"},
+     "edb75aa10a6fbbe2cec31f45e4d35a4c855760148a7881b28565400bea442c00"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91285,7 +91272,9 @@
    :id :lemma-radialmv-boundary-eq,
    :kind :lemma,
    :depends-on
-   [:lemma-radialmvsegment :lemma-radialmvboundarygroup-one],
+   [:lemma-radialmvsegment
+    :lemma-radialmvboundarygroup-one
+    :lemma-radialouterboundarygenerator-eq-attachingouterclass],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -91340,4 +91329,54 @@
    :id :lemma-radialmvboundarygroup-one,
    :kind :lemma,
    :depends-on [:lemma-radialmv-boundary-eq-iff-one],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundaryGroup_one_formula",
+    :type "coordinates of raw generator"},
+   :lemma
+   {:name "radialMVBoundaryGroup_one_formula",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "coordinates of raw generator",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundarygroup-one-formula,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundaryGroup_one_iff_outerClass",
+    :type "generator iff raw-class equality"},
+   :lemma
+   {:name "radialMVBoundaryGroup_one_iff_outerClass",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "generator iff raw-class equality",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundarygroup-one-iff-outerclass,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvboundarygroup-one-formula],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialOuterBoundaryGenerator_eq_attachingOuterClass",
+    :type "raw overlap class equals raw attaching class"},
+   :lemma
+   {:name "radialOuterBoundaryGenerator_eq_attachingOuterClass",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "raw overlap class equals raw attaching class",
+    :area "polygon-quotient-homology"},
+   :id :lemma-radialouterboundarygenerator-eq-attachingouterclass,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvboundarygroup-one-iff-outerclass],
    :other-consumers [:t94J09]}]}
