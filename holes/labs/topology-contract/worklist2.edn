@@ -87940,6 +87940,17 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check 616a1939b", :exit 0}
      {:cmd "axioms check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791999624121-11987-64ce0d6d",
+     :commands
+     ["git show/diff 616a1939b; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit 616a1939b by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 fe023293642b3fd82c010aa9157908a6317fe8a902472cacd2107b548afb3c25. Exact snapshot builds; 0 placeholders; new maps/lemmas use propext/Classical.choice/Quot.sound; registry 166/0. Old inclusion maps leg i to i.castSucc; final inclusion maps Unit leg to Fin.last. Both based group maps use mapOfEq with proved common-basepoint equations, so the based-group boundary is explicit and correctly oriented. Real compiled progress; remaining milestones compare these maps with transported legs, expand factors, then prove surjectivity/B6-B10."},
     :commit "616a1939b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87948,7 +87959,7 @@
      "fe023293642b3fd82c010aa9157908a6317fe8a902472cacd2107b548afb3c25"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87968,7 +87979,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor homeomorphism transport and split-factor word theorem.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor-wedge inclusions and based group maps.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88115,7 +88126,11 @@
     {:job 3,
      :commit "57fe1358b",
      :reason
-     "Banked successor homeomorphism transport and split-factor word theorem."}]}
+     "Banked successor homeomorphism transport and split-factor word theorem."}
+    {:job 4,
+     :commit "616a1939b",
+     :reason
+     "Banked successor-wedge inclusions and based group maps."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90363,7 +90378,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccOldInclusion_wedgeCircle",
@@ -90373,14 +90388,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "old leg is castSucc",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "616a1939b"},
    :id :lemma-finitewedgefinsuccoldinclusion-wedgecircle,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeFinSuccLastInclusion_wedgeCircle",
@@ -90390,7 +90407,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "final leg is Fin.last",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "616a1939b"},
    :id :lemma-finitewedgefinsucclastinclusion-wedgecircle,
    :kind :lemma,
    :depends-on [],
