@@ -1097,6 +1097,20 @@ theorem moduleHurewicz_inv {X : Type} [TopologicalSpace X] (x : X)
     moduleHurewicz x g⁻¹ = -moduleHurewicz x g := by
   exact congrArg Multiplicative.toAdd (map_inv (moduleHurewiczHom x) g)
 
+@[simp]
+theorem moduleHurewicz_one {X : Type} [TopologicalSpace X] (x : X) :
+    moduleHurewicz x 1 = 0 := by
+  exact congrArg Multiplicative.toAdd (map_one (moduleHurewiczHom x))
+
+/-- Hurewicz sends an ordered finite product of based loop classes to the
+corresponding ordered finite sum. -/
+theorem moduleHurewicz_list_prod {X : Type} [TopologicalSpace X] (x : X)
+    (w : List (FundamentalGroup X x)) :
+    moduleHurewicz x w.prod = (w.map (moduleHurewicz x)).sum := by
+  induction w with
+  | nil => simp
+  | cons g w ih => simp [ih]
+
 /-- Every circle fundamental-group class is an integer power of the positive
 class fixed by the homology orientation. -/
 theorem circlePositiveFundamentalClass_generates
@@ -1329,6 +1343,33 @@ theorem polygonBoundaryExplicitEdgeClass_hurewicz (P : PairingData)
   cases hs : P.sign i <;>
     simp [polygonBoundaryExplicitEdgeClass, hs,
       finiteWedgeExplicitLegClassAtBase_hurewicz]
+
+/-- The ordered product of the explicit signed edge factors.  The remaining
+geometric subdivision theorem identifies the actual boundary class with this
+already-normalized product. -/
+noncomputable def polygonBoundaryExplicitEdgeProduct (P : PairingData) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  (List.ofFn fun i : Fin P.edgeCount =>
+    polygonBoundaryExplicitEdgeClass P i).prod
+
+/-- Hurewicz evaluates the ordered explicit boundary product as the finite
+sum of its signed, orientation-normalized edge coordinates. -/
+theorem polygonBoundaryExplicitEdgeProduct_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeProduct P) =
+      (List.ofFn fun i : Fin P.edgeCount =>
+        (if P.sign i then (1 : ℤ) else -1) •
+          (circleIntegerLoopOneCoordinate •
+            finiteWedgeH1CoordinateMap P
+              (orbitBasis P (P.orbit i) 1))).sum := by
+  rw [polygonBoundaryExplicitEdgeProduct, moduleHurewicz_list_prod,
+    List.map_ofFn]
+  change (List.ofFn fun i : Fin P.edgeCount =>
+      moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeClass P i)).sum = _
+  simp_rw [polygonBoundaryExplicitEdgeClass_hurewicz]
 
 /-- The boundary map computed in the existing H₁ coordinates.  Its extra
 factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
