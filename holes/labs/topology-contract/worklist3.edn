@@ -36158,6 +36158,17 @@
     [{:cmd "lake build closure",
       :exit 1,
       :correction "fixed homeomorphism pi1 equivalence orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791940714905-11150-93e9223b",
+     :commands
+     ["git show/diff/show --check 33cccc3ae"
+      "sha256sum actual-skeleton fixture; placeholders 1->1; scope diff"
+      "lake env lean recorded t93J03Closure; lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom progress. The homeomorphism-induced pi1 equivalence has the required actual-skeleton-to-standard orientation and is composed with the coproduct computation at an explicitly transported basepoint. The aabb quotient remains listed. Scope/hash verified; registry 166/166. SLSC unused, mandated by problem.md."},
     :commit "33cccc3aedf6134515aba4835d383ee934c7b7ca",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact orbit-indexed skeleton transport to standard TwoCircles; attaching-cell quotient remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed pi1 coproduct at the actual polygon skeleton basepoint; attaching-cell quotient remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36261,7 +36272,11 @@
     {:job 8,
      :commit "12d2dbcccd4882bd3a769a6b01710e6a76ccdf5d",
      :reason
-     "Committed exact orbit-indexed skeleton transport to standard TwoCircles; attaching-cell quotient remains."}]}
+     "Committed exact orbit-indexed skeleton transport to standard TwoCircles; attaching-cell quotient remains."}
+    {:job 9,
+     :commit "33cccc3aedf6134515aba4835d383ee934c7b7ca",
+     :reason
+     "Committed pi1 coproduct at the actual polygon skeleton basepoint; attaching-cell quotient remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37864,7 +37879,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinActualSkeletonFundamentalGroupEquivCoprod",
@@ -37876,7 +37891,9 @@
     :type
     "actual polygon skeleton pi1 equiv coproduct of circle pi1 groups",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "33cccc3aedf6134515aba4835d383ee934c7b7ca"},
    :id :lemma-kleinactualskeletonfundamentalgroupequivcoprod,
    :kind :lemma,
    :depends-on
