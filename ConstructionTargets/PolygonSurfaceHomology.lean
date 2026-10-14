@@ -3481,6 +3481,103 @@ noncomputable def radialMVBoundaryGroup (P : PairingData) :
         (TopCat.of (OuterPiece P))) ≫
     (radialOuterH1GroupIsoCoordinates P).hom
 
+/-- Projection away from a zero first summand is an isomorphism. -/
+noncomputable def biprodSndIsoOfIsZero {A B : AddCommGrpCat}
+    (hA : IsZero A) : A ⊞ B ≅ B where
+  hom := biprod.snd
+  inv := biprod.inr
+  hom_inv_id := by
+    apply biprod.hom_ext
+    · exact hA.eq_of_tgt _ _
+    · simp
+  inv_hom_id := by simp
+
+theorem radialMVPieces_comp_zero (P : PairingData) :
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (openCover P).inner (openCover P).outer 1 ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1 = 0 := by
+  rw [← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionArrow_eq_production,
+    ← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanReassemblyArrow_eq_production
+      (openCover P).inner (openCover P).outer
+      (openCover P).inner_open (openCover P).outer_open (openCover P).cover]
+  simp only [Category.assoc, Iso.hom_inv_id_assoc]
+  have hz :
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+            (openCover P).inner (openCover P).outer).f 1 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+            (openCover P).inner (openCover P).outer).g 1 = 0 := by
+    rw [← HomologicalComplex.homologyMap_comp,
+      (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+        (openCover P).inner (openCover P).outer).zero,
+      HomologicalComplex.homologyMap_zero]
+  simpa only [Category.assoc, zero_comp, comp_zero] using
+    congrArg (fun k ↦
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso
+        (openCover P).inner (openCover P).outer 1).inv ≫ k ≫
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
+        (openCover P).inner (openCover P).outer
+        (openCover P).inner_open (openCover P).outer_open
+        (openCover P).cover 1).hom) hz
+
+/-- The degree-one radial pieces segment after deleting the zero inner
+summand and applying the fixed overlap and outer coordinates. -/
+noncomputable def radialMVReducedPieces (P : PairingData) :
+    ShortComplex AddCommGrpCat :=
+  ShortComplex.mk (radialMVBoundaryGroup P)
+    ((radialOuterH1GroupIsoCoordinates P).inv ≫ biprod.inr ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1)
+    (by
+      simp only [radialMVBoundaryGroup, Category.assoc,
+        Iso.hom_inv_id_assoc]
+      calc
+        _ = (radialIntersectionH1GroupIsoInt P).inv ≫
+              ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+                (openCover P).inner (openCover P).outer 1 ≫
+              ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+                (openCover P).inner (openCover P).outer 1 := by
+            simpa only [biprodSndIsoOfIsZero] using
+              congrArg (fun k ↦
+                (radialIntersectionH1GroupIsoInt P).inv ≫
+                  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+                    (openCover P).inner (openCover P).outer 1 ≫ k)
+                ((biprodSndIsoOfIsZero
+                  (radialInnerH1GroupIsZero P)).hom_inv_id_assoc
+                    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+                      (openCover P).inner (openCover P).outer 1))
+        _ = 0 := by
+          simpa only [Category.assoc, comp_zero] using
+            congrArg (fun k ↦ (radialIntersectionH1GroupIsoInt P).inv ≫ k)
+              (radialMVPieces_comp_zero P))
+
+/-- B6 at the middle term, transported through the zero inner summand and
+the fixed degree-one coordinates. -/
+theorem radialMVReducedPiecesExact (P : PairingData) :
+    (radialMVReducedPieces P).Exact := by
+  apply ShortComplex.exact_of_iso ?_ (radialMVPiecesExact P 1)
+  exact ShortComplex.isoMk
+    (radialIntersectionH1GroupIsoInt P)
+    ((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+      radialOuterH1GroupIsoCoordinates P)
+    (Iso.refl _)
+    (by
+      simpa only [radialMVReducedPieces, radialMVBoundaryGroup,
+        Iso.trans_hom, Category.comp_id] using
+        (radialIntersectionH1GroupIsoInt P).hom_inv_id_assoc
+          (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+            (openCover P).inner (openCover P).outer 1 ≫
+            ((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+              radialOuterH1GroupIsoCoordinates P).hom))
+    (by
+      simpa only [radialMVReducedPieces, Category.comp_id] using
+        (((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+          radialOuterH1GroupIsoCoordinates P).hom_inv_id_assoc
+            (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+              (openCover P).inner (openCover P).outer 1)))
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
