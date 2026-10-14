@@ -87901,23 +87901,17 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Recurse through Fin successors; prove right-base equality, free-group surjectivity, B6-B10.",
+    "Prove successor right-base equality; then free-group surjectivity, coordinate epi, B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lints; unrelated edits preserved"],
     :missing-theorems
-    [{:name "pointWedgePointedContractibleNeighborhood",
-      :type "combine pointed neighborhoods",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinPointedContractibleNeighborhood",
+    [{:name "finiteWedgeFinPointedContractibleNeighborhood",
       :type "Fin wedges have base neighborhoods",
-      :status :not-started,
+      :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on ["pointWedgePointedContractibleNeighborhood"],
       :area "polygon-quotient-homology"}
@@ -87926,42 +87920,36 @@
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeFinPointedContractibleNeighborhood"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeLegFreeGroupMap_surjective",
+      :type "canonical free-group map is onto",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgePointWedge_rightBase_inl"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked generic point-wedge base neighborhoods.",
+    :reason "Banked Fin-successor base-neighborhood recursion.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check d86d0888f", :exit 0}
+     {:cmd "git show --check 5b403e34b", :exit 0}
      {:cmd "exact commit blob | lake env lean /dev/stdin", :exit 0}
-     {:cmd "#print axioms pointWedgePointedContractibleNeighborhood",
+     {:cmd
+      "#print axioms finiteWedgeFinPointedContractibleNeighborhood",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "qualified draft", :exit 1, :correction "fixed namespace"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791963481826-11697-9fa8d8e2",
-     :commands
-     ["git show/diff-tree; sha256sum"
-      "exact blob | lake env lean /dev/stdin; #print axioms"
-      "placeholder scan; statement-registry.py check"
-      "inspect homeomorphSymm at recorded commit"],
-     :finding
-     "PASS: 52485b99d changes only PolygonSurfaceHomology.lean; exact blob SHA256 1ae365027c301431c4f8199ad7080c23051b37f9fbb9ad2148aa2be86d68117f. Exact blob compiles; new declarations use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after 6d1319c77 packages open pointed contractible neighborhoods and supplies the Fin 1 wedge base case. The preimage carrier, openness, basepoint membership, subtype homeomorphism, and contraction all have the correct backward-transport direction. The wedge-circle homeomorphism sends the chosen wedge basepoint to circle basepoint 1, so the specialization is faithful. Remaining milestones: extend neighborhood data through successor wedges and prove the successor right-base element lies in the old factor."},
-    :commit "d86d0888f",
+    :commit "5b403e34b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "553f92245166d009a26681fccc333bba0c26d3a5761d44db00aac7c1486cc6f5"},
+     "a97bc1d63f619a8d1f80de09749e9301d9bc0f19e046e8d8b6cf9f94c2d359ec"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89385,7 +89373,8 @@
    :depends-on
    [:lemma-finitewedgefinsucchomeomorphpointwedge
     :lemma-finitewedgepointwedge-legcoordinates
-    :lemma-exists-coprodlegword-of-mulequiv],
+    :lemma-exists-coprodlegword-of-mulequiv
+    :lemma-finitewedgepointwedge-rightbase-inl],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -89787,7 +89776,8 @@
    {:name "finiteWedgeFinPointedContractibleNeighborhood",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "Fin wedges have base neighborhoods",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitewedgefinpointedcontractibleneighborhood,
    :kind :lemma,
    :depends-on [:lemma-pointwedgepointedcontractibleneighborhood],
