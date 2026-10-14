@@ -87941,6 +87941,16 @@
       :exit 1,
       :correction
       "used LinearMap.pi, reassociated coproduct maps, and evaluated basis functions"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791942727195-11269-f1a93bed",
+     :commands
+     ["git show 263a0516c blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 263a0516c changes only PolygonSurfaceHomology.lean; exact blob SHA256 91eeb7d0d347fba714e542621e54559b4bcfe799b2bfd969075e6614bf7ad650. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond f68f6c6e6 proves an off-diagonal leg-collapse composite is zero via the constant-map positive-degree homology theorem, then establishes the correctly oriented Kronecker matrix: circleH1IsoInt.inv followed by leg k and collapse l is the generator map for k=l and zero otherwise."},
     :commit "3a371cac1",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87959,7 @@
      "a2dca60ca3b4e80282106e46c4df8dc12076c4498b19577c39fff3157ff3bb52"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87979,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the finite-wedge H1 inclusion-collapse Kronecker matrix.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked a collapse-coordinate left inverse and monicity of the normalized H1 map.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88009,7 +88019,11 @@
     {:job 8,
      :commit "263a0516c",
      :reason
-     "Banked the finite-wedge H1 inclusion-collapse Kronecker matrix."}]}
+     "Banked the finite-wedge H1 inclusion-collapse Kronecker matrix."}
+    {:job 9,
+     :commit "3a371cac1",
+     :reason
+     "Banked a collapse-coordinate left inverse and monicity of the normalized H1 map."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -88919,7 +88933,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeH1CoordinateMap_mono",
@@ -88929,7 +88943,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized coordinate map is monic",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "3a371cac1"},
    :id :lemma-finitewedgeh1coordinatemap-mono,
    :kind :lemma,
    :depends-on
