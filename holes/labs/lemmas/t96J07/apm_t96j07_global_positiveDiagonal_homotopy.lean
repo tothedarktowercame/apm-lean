@@ -1613,7 +1613,81 @@ theorem apm_t96j07_global_positiveDiagonal_homotopy
       f (Projectivization.mk ℝ x hx) =
         Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
     ContinuousMap.Homotopic (ContinuousMap.id apm_t96j07_RP3) f := by
-  sorry
+  let B : apm_t96j07_V × Set.Icc (0 : ℝ) 1 → apm_t96j07_V := fun z i =>
+    ((1 - z.2.1) + z.2.1 * (i.val + 1 : ℝ)) * z.1 i
+  have hB (x : {x : apm_t96j07_V // x ≠ 0}) (t : Set.Icc (0 : ℝ) 1) :
+      B (x.1, t) ≠ 0 := by
+    intro hz
+    apply x.2
+    funext i
+    have hi := congrFun hz i
+    have hc : 0 < (1 - t.1) + t.1 * (i.val + 1 : ℝ) := by
+      have ht0 : 0 ≤ t.1 := t.2.1
+      have ht1 : t.1 ≤ 1 := t.2.2
+      have hi0 : 0 ≤ (i.val : ℝ) := by positivity
+      nlinarith
+    exact (mul_eq_zero.mp hi).resolve_left (ne_of_gt hc)
+  let lift : {x : apm_t96j07_V // x ≠ 0} × Set.Icc (0 : ℝ) 1 →
+      apm_t96j07_RP3 := fun z => Projectivization.mk ℝ (B (z.1.1, z.2)) (hB z.1 z.2)
+  have hlift : Continuous lift := by
+    change Continuous
+      (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 ∘
+        fun z : {x : apm_t96j07_V // x ≠ 0} × Set.Icc (0 : ℝ) 1 =>
+          ⟨B (z.1.1, z.2), hB z.1 z.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro i
+    have ht : Continuous (fun z : {x : apm_t96j07_V // x ≠ 0} ×
+        Set.Icc (0 : ℝ) 1 => (z.2.1 : ℝ)) :=
+      continuous_subtype_val.comp continuous_snd
+    have hx : Continuous (fun z : {x : apm_t96j07_V // x ≠ 0} ×
+        Set.Icc (0 : ℝ) 1 => z.1.1 i) :=
+      (continuous_apply i).comp (continuous_subtype_val.comp continuous_fst)
+    exact ((continuous_const.sub ht).add (ht.mul continuous_const)).mul hx
+  obtain ⟨G, hG⟩ :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousHomotopyDescent
+      ℝ lift hlift (by
+        intro a b s c hab
+        apply (Projectivization.mk_eq_mk_iff ℝ _ _ (hB a s) (hB b s)).mpr
+        by_cases hc : c = 0
+        · subst c
+          exfalso
+          apply a.2
+          simpa using hab
+        · refine ⟨Units.mk0 c hc, ?_⟩
+          rw [hab]
+          funext i
+          simp [B]
+          ring)
+  refine ⟨{
+    toContinuousMap := G.comp
+      ⟨fun z : Set.Icc (0 : ℝ) 1 × apm_t96j07_RP3 => (z.2, z.1),
+        continuous_snd.prodMk continuous_fst⟩
+    map_zero_left := ?_
+    map_one_left := ?_ }⟩
+  · intro q
+    obtain ⟨x, rfl⟩ :=
+      ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 3 q
+    change G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 x,
+      (0 : Set.Icc (0 : ℝ) 1)) = _
+    rw [hG (x, 0)]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ (hB x ⟨0, by norm_num⟩) x.2).mpr
+    refine ⟨1, ?_⟩
+    simp [B]
+  · intro q
+    obtain ⟨x, rfl⟩ :=
+      ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 3 q
+    change G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 x,
+      (1 : Set.Icc (0 : ℝ) 1)) = _
+    rw [hG (x, 1)]
+    change lift (x, 1) = f (Projectivization.mk ℝ x.1 x.2)
+    rw [hformula]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _
+      (hB x ⟨1, by norm_num⟩) (apm_t96j07_A_ne_zero x.2)).mpr
+    refine ⟨1, ?_⟩
+    simp [B]
+    rfl
 -- END SEAT AREA
 
 /-- Seat: homotopic maps induce equal maps on rational singular homology.
