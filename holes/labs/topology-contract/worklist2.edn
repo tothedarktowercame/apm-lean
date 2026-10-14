@@ -87945,6 +87945,16 @@
     [{:cmd "homeomorphism draft",
       :exit 1,
       :correction "fixed universe and quotient inverse"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791957515245-11646-1704fdfa",
+     :commands
+     ["git show 993db480e blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 993db480e changes only PolygonSurfaceHomology.lean; exact blob SHA256 380d45b46b96fa6b586acc568a9883c8b4318aa0bddd2f3fc5768890be4bcd67. It compiles with standard axioms propext/Quot.sound; placeholders 0; registry 166/0. New progress beyond e39d313f1 defines evaluation of finite words with letters from two group factors and proves that a normalized multiplicative equivalence G ≃* Monoid.Coprod A B yields such a word for every element of G. The inl/inr normalization hypotheses are exactly what the successor wedge induction will need; concatenation order and multiplication direction are preserved. The topological normalized coproduct equivalence remains to be supplied."},
     :commit "45f611d32",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87963,7 @@
      "f47761e76b30a906bf2e17300f80dee9a92ac0d4ec80129873ad9e071bf00798"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coproduct word extraction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the one-circle wedge homeomorphism.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88061,7 +88071,10 @@
      "Banked the Fin-successor wedge split and its leg formulas."}
     {:job 3,
      :commit "993db480e",
-     :reason "Banked coproduct word extraction."}]}
+     :reason "Banked coproduct word extraction."}
+    {:job 4,
+     :commit "45f611d32",
+     :reason "Banked the one-circle wedge homeomorphism."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89586,7 +89599,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeSubsingletonHomeomorphCircle",
@@ -89596,7 +89609,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "a uniquely indexed wedge is its circle",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "45f611d32"},
    :id :lemma-finitewedgesubsingletonhomeomorphcircle,
    :kind :lemma,
    :depends-on [],
