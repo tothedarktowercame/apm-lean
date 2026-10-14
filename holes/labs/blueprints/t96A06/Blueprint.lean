@@ -89,11 +89,64 @@ lemma T96A06_identity_trace_three :
       (induced (ContinuousMap.id T96A06.RP3) 3).hom = 1 := by
   sorry
 
+open CategoryTheory CategoryTheory.MonoidalCategory
+
+noncomputable def T96A06_homotopic_induced_eq_aux_cylinder
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.of X ⊗ TopCat.I ⟶ TopCat.of Y :=
+  TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+    H.continuous.comp
+      ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+
+lemma T96A06_homotopic_induced_eq_aux_zero
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.ι₀ ≫ T96A06_homotopic_induced_eq_aux_cylinder H = TopCat.ofHom f := by
+  ext x
+  change H (0, x) = f x
+  simp
+
+lemma T96A06_homotopic_induced_eq_aux_one
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.ι₁ ≫ T96A06_homotopic_induced_eq_aux_cylinder H = TopCat.ofHom g := by
+  ext x
+  change H (1, x) = g x
+  simp
+
+noncomputable def T96A06_homotopic_induced_eq_aux_sset
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    SSet.Homotopy (TopCat.toSSet.map (TopCat.ofHom f))
+      (TopCat.toSSet.map (TopCat.ofHom g)) where
+  h := (TopCat.toSSet.obj (TopCat.of X) ◁ SSet.stdSimplex.toSSetObjI) ≫
+    CategoryTheory.Functor.LaxMonoidal.μ TopCat.toSSet (TopCat.of X) TopCat.I ≫
+    TopCat.toSSet.map (T96A06_homotopic_induced_eq_aux_cylinder H)
+  h₀ := by
+    change _ = TopCat.toSSet.map (TopCat.ofHom f)
+    simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, T96A06_homotopic_induced_eq_aux_zero H]
+  h₁ := by
+    change _ = TopCat.toSSet.map (TopCat.ofHom g)
+    simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, T96A06_homotopic_induced_eq_aux_one H]
+  rel := by
+    ext n x
+    exact x.1.property.elim
+
 lemma T96A06_homotopic_induced_eq
     (f g : ContinuousMap T96A06.RP3 T96A06.RP3)
     (h : ContinuousMap.Homotopic f g) (k : ℕ) :
     induced f k = induced g k := by
-  sorry
+  rcases h with ⟨H⟩
+  simpa [induced, AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℚ) (R := ModuleCat.of ℚ ℚ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (H := (T96A06_homotopic_induced_eq_aux_sset H).toSimplicialObjectHomotopy) k
 
 /-- **LIBRARY: RP³ rational homology and degree of complex squaring.**
 
