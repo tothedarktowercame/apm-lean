@@ -472,7 +472,10 @@ ambient canonical boundary exactly.
 `pathTwoOpenSubdivisionRunFamily` now reindexes the maximal runs by the
 matching `Fin runs.length`; every indexed run is nonempty, has exact
 contiguous slice coordinates in the original subdivision, and has constant
-side equal to its head.  It remains to choose the inner-replaced or literal
+side equal to its head. `pathTwoOpenSubdivisionRunStart` canonically selects
+those slice coordinates, with bounds and exact-list recovery, while
+`pathTwoOpenSubdivisionRunFamily_piece_mem_chart` packages the uniform chart
+range of every piece in the run. It remains to choose the inner-replaced or literal
 outer representative for each indexed run against the boundary family and
 instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.

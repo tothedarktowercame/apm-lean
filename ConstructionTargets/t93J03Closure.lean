@@ -1232,6 +1232,57 @@ theorem pathTwoOpenSubdivisionRunFamily_mem_side_eq_head
     (pathTwoOpenSubdivisionRunFamily_mem S i)
     (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
 
+/-- The canonical start coordinate selected from the exact slice certificate
+of an indexed maximal run. -/
+noncomputable def pathTwoOpenSubdivisionRunStart
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) : ℕ :=
+  Classical.choose (pathTwoOpenSubdivisionRunFamily_exists_slice S i)
+
+theorem pathTwoOpenSubdivisionRunStart_add_length_le
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length ≤ S.n + 1 :=
+  (Classical.choose_spec
+    (pathTwoOpenSubdivisionRunFamily_exists_slice S i)).1
+
+theorem pathTwoOpenSubdivisionRunFamily_eq_slice
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunFamily S i =
+      ((List.finRange (S.n + 1)).drop
+        (pathTwoOpenSubdivisionRunStart S i)).take
+          (pathTwoOpenSubdivisionRunFamily S i).length :=
+  (Classical.choose_spec
+    (pathTwoOpenSubdivisionRunFamily_exists_slice S i)).2
+
+theorem pathTwoOpenSubdivisionRunFamily_length_pos
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+  List.length_pos_iff_ne_nil.mpr
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+
+/-- Every original piece in an indexed run stays in the chart selected by
+the run head.  This is the uniform range input used to choose either the
+literal outer representative or the contractible-inner replacement. -/
+theorem pathTwoOpenSubdivisionRunFamily_piece_mem_chart
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∀ k ∈ pathTwoOpenSubdivisionRunFamily S i, ∀ t,
+      S.piece k t ∈ twoChart U V
+        (S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+          (pathTwoOpenSubdivisionRunFamily_ne_nil S i))) := by
+  intro k hk t
+  have hside := pathTwoOpenSubdivisionRunFamily_mem_side_eq_head S i k hk
+  simpa [hside] using S.piece_mem k t
+
 /-- The endpoint family of a contiguous subdivision block. -/
 def pathTwoOpenSubdivisionBlockPoint
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
