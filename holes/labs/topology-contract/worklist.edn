@@ -113903,6 +113903,19 @@
      {:cmd "endpoint-reduction drafts",
       :exit 1,
       :finding "fixed binders and let reduction"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791972669440-11751-8c9fc866",
+     :commands
+     ["git show/diff-tree 05dee7b05b9b22fe9508d70fdbb673cccbc984d4"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms endpoint-conditional square"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. Endpoint hypotheses are oriented installed-connector = rebased mapped connector, so rewriting reduces exactly to the prior square while preserving the source/Y representation boundary; standard axioms only. New compiled milestone recorded; two endpoint identifications and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "05dee7b05b9b22fe9508d70fdbb673cccbc984d4",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113913,7 +113926,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113934,7 +113947,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-base rebasing of the mapped coherent connector square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked installed-square reduction to two endpoint identifications.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114870,7 +114883,11 @@
     {:job 9,
      :commit "8193ba58a31f1d11bc8f616087bd356e01180263",
      :reason
-     "Banked literal-base rebasing of the mapped coherent connector square."}]}
+     "Banked literal-base rebasing of the mapped coherent connector square."}
+    {:job 1,
+     :commit "05dee7b05b9b22fe9508d70fdbb673cccbc984d4",
+     :reason
+     "Banked installed-square reduction to two endpoint identifications."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
