@@ -841,6 +841,20 @@ theorem pathTwoOpenSubdivision_transition_mem_overlap
       by simpa [twoChart, hs₁] using h₁⟩
   · exact False.elim (hside (by simp [hs₀, hs₁]))
 
+/-- Equality of the homotopy class of every factor propagates through the
+dependent finite concatenation used by a subordinate subdivision.  This is
+the finite-fold assembly step for replacing all maximal inner runs. -/
+theorem pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 1) → X)
+    (F G : (k : Fin n) → Path (point k.castSucc) (point k.succ))
+    (h : ∀ k, (⟦F k⟧ : Path.Homotopic.Quotient _ _) = ⟦G k⟧) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat point G⟧ := by
+  apply Quotient.sound
+  exact Path.Homotopic.concat_hcomp point F G
+    (fun k => Quotient.eq.mp (h k))
+
 /-- The inner vertex of the exact radial cover is contractible, using the
 pointed contraction carried by the polygon cover package. -/
 theorem kleinPolygonInnerContractibleSpace :
@@ -1966,6 +1980,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
+#print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
