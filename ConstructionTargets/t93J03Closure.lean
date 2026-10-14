@@ -512,6 +512,23 @@ theorem fundamentalGroup_map_pathTransport_natural
           (((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧).conj ⟦q⟧)
     exact ((FundamentalGroupoid.map f).map_conj _ _).symm
 
+/-- The fully-faithful preimage supplied by an equivalence agrees with its
+inverse functor after rebasing along the equivalence unit and a mapped target
+connector.  This isolates the categorical identity used when comparing a
+homotopy-equivalence coordinate with a concrete inverse map. -/
+theorem equivalence_unit_mapIso_conj_preimage
+    {C D : Type*} [Groupoid C] [Groupoid D]
+    (E : C ≌ D) (A : C) (B : D) (q : E.functor.obj A ≅ B) (f : End B) :
+    ((E.unitIso.app A) ≪≫ E.inverse.mapIso q).conj
+        (E.fullyFaithfulFunctor.preimage (q.symm.conj f)) =
+      E.inverse.map f := by
+  simp [Iso.conj_apply, Equivalence.fullyFaithfulFunctor]
+  change ((E.unitIso.app A ≪≫ E.inverse.mapIso q).inv ≫
+      (E.unitIso.hom.app A ≫ E.inverse.map q.hom ≫ E.inverse.map f ≫
+        E.inverse.map q.inv ≫ E.unitIso.inv.app A) ≫
+      (E.unitIso.app A ≪≫ E.inverse.mapIso q).hom) = _
+  simp
+
 /-- The frozen Klein bottle is path connected because it is the continuous
 surjective image of the convex closed disk under its defining quotient map. -/
 noncomputable instance kleinBottlePathConnectedSpace :

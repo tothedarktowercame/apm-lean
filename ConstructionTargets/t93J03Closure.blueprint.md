@@ -330,6 +330,14 @@ target-transported map as outer inclusion after the two competing source
 coordinates.  The remaining equality is therefore exactly between those
 source maps into the outer-piece fundamental group; no target transport
 remains in the comparison.
+`equivalence_unit_mapIso_conj_preimage` proves the categorical half of that
+source equality for an arbitrary groupoid equivalence: the fully-faithful
+preimage, conjugated along the unit and an inverse-mapped target connector,
+is exactly the inverse functor's map.  The remaining Klein-specific seam is
+to identify the quotient class of
+`kleinPolygonOuterImageToDirectSkeletonPointPath` with that unit--mapped
+connector composite; the source-coordinate equality then follows from this
+general theorem.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
