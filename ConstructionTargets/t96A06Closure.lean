@@ -6,6 +6,7 @@ import ConstructionTargets.CoefficientH0
 import ConstructionTargets.RealProjectiveSmoothTarget
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoefficientCoveringTransfer
+import ConstructionTargets.CoefficientConnectedH0Map
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -14,6 +15,7 @@ open ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.RealProjectiveSmoothTarget
 open ConstructionTargets.CoveringDegree
+open CategoryTheory CategoryTheory.Limits
 
 noncomputable section
 namespace ConstructionTargets.t96A06Closure
@@ -334,6 +336,63 @@ theorem t96A06_rp3_rational_homologyMap_surjective (n : ℕ) :
   rw [h']
   simp
 
+/-- Rational first homology of the concrete three-sphere vanishes.  This is
+the degree-one endpoint of the coefficient sphere shift, with connectedness
+of the disk boundary supplying the zero kernel. -/
+theorem t96A06_sphere3_rational_H1_isZero :
+    IsZero (CoefficientH0.SingularHomology ℚ 1 (TopCat.of (Sphere 3))) := by
+  letI : ContractibleSpace
+      (T02A06.euclideanClosedDisk 3) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : PathConnectedSpace
+      (T02A06.euclideanUnitSphere 3) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by
+        rw [← Module.finrank_eq_rank']
+        norm_num) 0 (by norm_num))
+  letI : PathConnectedSpace
+      (T02A06DiskRadialComparison.closedDiskBoundarySet 3) :=
+    (T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 3).symm.surjective.pathConnectedSpace
+      (T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 3).symm.continuous
+  apply (CoefficientSphereShift.sphereH1KernelIso ℚ 3).isZero_iff.mpr
+  exact CoefficientConnectedH0Map.inclusion_kernel_zero ℚ _
+
+/-- Rational second homology of the concrete three-sphere vanishes by the
+coefficient suspension shift to first homology of the two-sphere. -/
+theorem t96A06_sphere3_rational_H2_isZero :
+    IsZero (CoefficientH0.SingularHomology ℚ 2 (TopCat.of (Sphere 3))) := by
+  exact (CoefficientConnectedH0Map.sphereTwo_H1_zero ℚ).of_iso
+    (CoefficientSphereShift.sphereShift ℚ 3 1 (by decide))
+
+/-- A surjection from a zero sphere-homology group forces the corresponding
+homology group of the projective quotient to be zero. -/
+theorem t96A06_rp3_rational_homology_isZero_of_sphere
+    (n : ℕ)
+    (hzero : IsZero
+      (CoefficientH0.SingularHomology ℚ n (TopCat.of (Sphere 3)))) :
+    IsZero (CoefficientH0.SingularHomology ℚ n (TopCat.of RP3)) := by
+  rw [ModuleCat.isZero_iff_subsingleton]
+  constructor
+  intro x y
+  obtain ⟨a, ha⟩ := t96A06_rp3_rational_homologyMap_surjective n x
+  obtain ⟨b, hb⟩ := t96A06_rp3_rational_homologyMap_surjective n y
+  have hab : a = b :=
+    (ModuleCat.isZero_iff_subsingleton.mp hzero).elim a b
+  exact ha.symm.trans ((congrArg
+    (HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, t96A06_rp3_sphere_covering.continuous⟩) n) hab).trans hb)
+
+theorem t96A06_rp3_rational_H1_isZero :
+    IsZero (CoefficientH0.SingularHomology ℚ 1 (TopCat.of RP3)) :=
+  t96A06_rp3_rational_homology_isZero_of_sphere 1
+    t96A06_sphere3_rational_H1_isZero
+
+theorem t96A06_rp3_rational_H2_isZero :
+    IsZero (CoefficientH0.SingularHomology ℚ 2 (TopCat.of RP3)) :=
+  t96A06_rp3_rational_homology_isZero_of_sphere 2
+    t96A06_sphere3_rational_H2_isZero
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
@@ -354,5 +413,10 @@ theorem t96A06_rp3_rational_homologyMap_surjective (n : ℕ) :
 #print axioms rp3SphereAntipodal_ne
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
+#print axioms t96A06_sphere3_rational_H1_isZero
+#print axioms t96A06_sphere3_rational_H2_isZero
+#print axioms t96A06_rp3_rational_homology_isZero_of_sphere
+#print axioms t96A06_rp3_rational_H1_isZero
+#print axioms t96A06_rp3_rational_H2_isZero
 
 end ConstructionTargets.t96A06Closure

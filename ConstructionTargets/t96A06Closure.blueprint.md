@@ -69,8 +69,11 @@ transfer through this covering now has its exact sheet-count input:
 transfer is now specialized at this exact cover:
 `t96A06_rp3_rational_homologyMap_surjective` proves that the sphere-to-RP3
 map is onto in rational homology in every degree, using the transfer/projection
-identity and invertibility of two.  Applying the sphere homology calculations
-to identify the four RP3 groups remains.
+identity and invertibility of two.  The coefficient sphere shift and connected
+boundary calculation now prove rational `H₁(S³)` and `H₂(S³)` vanish; the
+surjection consequently gives `t96A06_rp3_rational_H1_isZero` and
+`t96A06_rp3_rational_H2_isZero`.  The top group `H₃(RP³; ℚ)` and vanishing
+above degree three remain.
 
 ## C3. Degree four of the quadratic map — library
 
