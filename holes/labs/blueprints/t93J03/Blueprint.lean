@@ -316,6 +316,180 @@ theorem t93J03_kleinBottle_pi1_every_basepoint :
     (t93J03_kleinPlaneQuotient_pi1_every_basepoint
       t93J03_kleinPlaneQuotient_pi1_origin)
 
+/-! ## Cyclic cover for `⟨a⟩` (design 2026-10-14)
+
+The cover is the punctured plane `C = ℝ² \ {0}`, embedded by its inclusion.  The map
+`E (x, y) = eʸ (cos 2πx, sin 2πx)` is the quotient of the plane by `⟨a⟩` (translation
+`x ↦ x + 1`).  The projection `pQ : C → ℝ²/G` is `mk ∘ L`, where `L` is the log-polar
+inverse of `E`.  It is the quotient by the `ℤ`-action `n • (x, y) = eⁿ (x, (-1)ⁿ y)`,
+the image of `b`, and so a covering by Mathlib's quotient-covering criterion.  The
+deck-group monodromy of `ℝ² → ℝ²/G` sends the image of `π₁(C)` exactly onto `⟨a⟩`.
+`⟨a⟩` is characteristic: it is the set of elements conjugate to their own inverse.  So
+the computation holds for every identification `e`. -/
+
+section T93J03CyclicCover
+
+abbrev T93J03Punctured := {z : ℝ × ℝ // z ≠ 0}
+
+noncomputable def t93J03_cyc_E (v : ℝ × ℝ) : T93J03Punctured :=
+  ⟨(Real.exp v.2 * Real.cos (2 * Real.pi * v.1),
+      Real.exp v.2 * Real.sin (2 * Real.pi * v.1)), by
+    intro h
+    have h1 := congrArg Prod.fst h
+    have h2 := congrArg Prod.snd h
+    simp only [Prod.fst_zero, Prod.snd_zero, mul_eq_zero, (Real.exp_pos _).ne', false_or] at h1 h2
+    have := Real.sin_sq_add_cos_sq (2 * Real.pi * v.1)
+    rw [h1, h2] at this
+    norm_num at this⟩
+
+noncomputable def t93J03_cyc_L (z : T93J03Punctured) : ℝ × ℝ :=
+  (Complex.arg (⟨z.1.1, z.1.2⟩ : ℂ) / (2 * Real.pi),
+    Real.log (Real.sqrt (z.1.1 ^ 2 + z.1.2 ^ 2)))
+
+noncomputable def t93J03_cyc_pQ (z : T93J03Punctured) : T93J03KleinPlaneQuotient :=
+  Quotient.mk _ (t93J03_cyc_L z)
+
+/-- The image of `b`: `n • (x, y) = eⁿ (x, (-1)ⁿ y)`. -/
+noncomputable def t93J03_cyc_act (n : ℤ) (z : T93J03Punctured) : T93J03Punctured :=
+  ⟨(Real.exp n * z.1.1, Real.exp n * ((-1 : ℝ) ^ n * z.1.2)), by
+    intro h
+    apply z.2
+    have h1 := congrArg Prod.fst h
+    have h2 := congrArg Prod.snd h
+    simp only [Prod.fst_zero, Prod.snd_zero, mul_eq_zero, (Real.exp_pos _).ne', false_or] at h1 h2
+    exact Prod.ext h1 (h2.resolve_left (zpow_ne_zero _ (by norm_num)))⟩
+
+noncomputable instance t93J03_cyc_mulAction : MulAction (Multiplicative ℤ) T93J03Punctured where
+  smul n z := t93J03_cyc_act (Multiplicative.toAdd n) z
+  one_smul z := by
+    apply Subtype.ext
+    change (Real.exp ((0 : ℤ) : ℝ) * z.1.1, Real.exp ((0 : ℤ) : ℝ) * ((-1 : ℝ) ^ (0 : ℤ) * z.1.2)) = z.1
+    simp
+  mul_smul m n z := by
+    apply Subtype.ext
+    change (Real.exp ((Multiplicative.toAdd m + Multiplicative.toAdd n : ℤ) : ℝ) * z.1.1,
+        Real.exp ((Multiplicative.toAdd m + Multiplicative.toAdd n : ℤ) : ℝ) *
+          ((-1 : ℝ) ^ (Multiplicative.toAdd m + Multiplicative.toAdd n) * z.1.2)) =
+      (Real.exp ((Multiplicative.toAdd m : ℤ) : ℝ) * (Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * z.1.1),
+        Real.exp ((Multiplicative.toAdd m : ℤ) : ℝ) * ((-1 : ℝ) ^ (Multiplicative.toAdd m) *
+          (Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * ((-1 : ℝ) ^ (Multiplicative.toAdd n) * z.1.2))))
+    rw [zpow_add₀ (by norm_num : (-1 : ℝ) ≠ 0)]
+    push_cast
+    rw [Real.exp_add]
+    ext <;> simp only <;> ring
+
+instance t93J03_cyc_locallyCompact : LocallyCompactSpace T93J03Punctured :=
+  (isOpen_ne : IsOpen {z : ℝ × ℝ | z ≠ 0}).locallyCompactSpace
+
+noncomputable instance t93J03_cyc_continuousConstSMul :
+    ContinuousConstSMul (Multiplicative ℤ) T93J03Punctured where
+  continuous_const_smul n := by
+    apply Continuous.subtype_mk
+    change Continuous fun z : T93J03Punctured =>
+      (Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * z.1.1,
+        Real.exp ((Multiplicative.toAdd n : ℤ) : ℝ) * ((-1 : ℝ) ^ (Multiplicative.toAdd n) * z.1.2))
+    fun_prop
+
+noncomputable instance t93J03_cyc_kleinContinuousConstSMul :
+    ContinuousConstSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup (ℝ × ℝ) :=
+  ⟨t93J03_kleinPlaneQuotient_pi1_origin_aux_continuous⟩
+
+noncomputable instance t93J03_cyc_kleinProperlyDiscontinuousSMul :
+    ProperlyDiscontinuousSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup (ℝ × ℝ) :=
+  ⟨fun hK hL => t93J03_kleinPlaneQuotient_pi1_origin_aux_finite_actors hK hL⟩
+
+/-- `⟨a⟩` is characteristic in the Klein group. -/
+theorem t93J03_cyclicCover_aux_characteristic
+    (φ : PresentedKleinGroup ≃* PresentedKleinGroup) (g : PresentedKleinGroup) :
+    φ g ∈ Subgroup.zpowers generatorA ↔ g ∈ Subgroup.zpowers generatorA := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_E_covering : IsCoveringMap t93J03_cyc_E := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_E_eq_iff (v w : ℝ × ℝ) :
+    t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2) := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_L_E (v : ℝ × ℝ) :
+    ∃ n : ℤ, t93J03_cyc_L (t93J03_cyc_E v) = (v.1 + n, v.2) := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_E_L (z : T93J03Punctured) :
+    t93J03_cyc_E (t93J03_cyc_L z) = z := by
+  sorry
+
+/-- Orbits of the affine Klein action in coordinates. -/
+theorem t93J03_cyclicCover_aux_orbit_iff (v w : ℝ × ℝ) :
+    (∃ g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup, g • v = w) ↔
+      ∃ m n : ℤ, w = (m + (-1 : ℝ) ^ n * v.1, n + v.2) := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_generatorA_zpow (n : ℤ) (v : ℝ × ℝ) :
+    (KleinPresentedGroupCoordinateModel.generatorA ^ n) • v = (v.1 + n, v.2) := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_pQ_quotient
+    (hEcov : IsCoveringMap t93J03_cyc_E) (hEs : Function.Surjective t93J03_cyc_E)
+    (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v) :
+    Topology.IsQuotientMap t93J03_cyc_pQ := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_pQ_fiber
+    (hEs : Function.Surjective t93J03_cyc_E)
+    (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)
+    (hEeq : ∀ v w : ℝ × ℝ, t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2))
+    (horbit : ∀ v w : ℝ × ℝ,
+      (∃ g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup, g • v = w) ↔
+        ∃ m n : ℤ, w = (m + (-1 : ℝ) ^ n * v.1, n + v.2))
+    (z w : T93J03Punctured) :
+    t93J03_cyc_pQ z = t93J03_cyc_pQ w ↔ z ∈ MulAction.orbit (Multiplicative ℤ) w := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_properlyDiscontinuous :
+    ProperlyDiscontinuousSMul (Multiplicative ℤ) T93J03Punctured := by
+  sorry
+
+theorem t93J03_cyclicCover_aux_free (n : Multiplicative ℤ) (z : T93J03Punctured)
+    (h : n • z = z) : n = 1 := by
+  sorry
+
+/-- The image of `π₁(C)` is exactly the preimage of `⟨a⟩` under the deck-group
+monodromy of the plane over the orbit quotient. -/
+theorem t93J03_cyclicCover_aux_range
+    (hpc : Continuous t93J03_cyc_pQ)
+    (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)
+    (hEcov : IsCoveringMap t93J03_cyc_E)
+    (hEeq : ∀ v w : ℝ × ℝ, t93J03_cyc_E v = t93J03_cyc_E w ↔ ∃ n : ℤ, w = (v.1 + n, v.2))
+    (hA : ∀ (n : ℤ) (v : ℝ × ℝ),
+      (KleinPresentedGroupCoordinateModel.generatorA ^ n) • v = (v.1 + n, v.2))
+    (v : ℝ × ℝ) (γ : FundamentalGroup T93J03KleinPlaneQuotient (Quotient.mk _ v)) :
+    γ ∈ (FundamentalGroup.mapOfEq ⟨t93J03_cyc_pQ, hpc⟩ (hpE v)).range ↔
+      ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy
+          t93J03_kleinPlaneQuotient_pi1_origin_aux_free v γ ∈
+        Subgroup.zpowers KleinPresentedGroupCoordinateModel.generatorA := by
+  sorry
+
+/-- Transport the range computation across the homeomorphism to the Klein bottle and
+across any identification of its fundamental group. -/
+theorem t93J03_cyclicCover_aux_transport
+    {C : Type} [TopologicalSpace C] (pQ : C → T93J03KleinPlaneQuotient)
+    (hpQ : Continuous pQ) (Φ : T93J03KleinPlaneQuotient ≃ₜ KleinBottle)
+    (q : T93J03KleinPlaneQuotient) (c : C) (hc : pQ c = q)
+    (M : FundamentalGroup T93J03KleinPlaneQuotient q ≃* PresentedKleinGroup)
+    (hrange : ∀ γ, γ ∈ (FundamentalGroup.mapOfEq ⟨pQ, hpQ⟩ hc).range ↔
+      M γ ∈ Subgroup.zpowers generatorA)
+    (hchar : ∀ (φ : PresentedKleinGroup ≃* PresentedKleinGroup) (g : PresentedKleinGroup),
+      φ g ∈ Subgroup.zpowers generatorA ↔ g ∈ Subgroup.zpowers generatorA)
+    (k : KleinBottle) (hk : Φ q = k)
+    (e : FundamentalGroup KleinBottle k ≃* PresentedKleinGroup) :
+    (FundamentalGroup.mapOfEq ⟨Φ ∘ pQ, Φ.continuous.comp hpQ⟩
+        (show Φ (pQ c) = k by rw [hc, hk])).range =
+      Subgroup.comap e.toMonoidHom (Subgroup.zpowers generatorA) := by
+  sorry
+
+end T93J03CyclicCover
+
 /-- **LIBRARY.** The subgroup generated by `a` is realized by a planar
 covering.  The last equality is deliberately stated at the transported
 basepoint, exactly in the form used by the lifting criterion. -/
@@ -329,7 +503,37 @@ theorem t93J03_cyclicCover_zpowers_generatorA
       (FundamentalGroup.mapOfEq
           ⟨p, hp.continuous⟩ hpc).range =
         Subgroup.comap e.toMonoidHom (Subgroup.zpowers generatorA) := by
-  sorry
+  obtain ⟨Φ⟩ := t93J03_kleinPlaneQuotient_homeomorph
+  obtain ⟨q, hq⟩ := Φ.surjective k
+  obtain ⟨v, rfl⟩ := Quotient.exists_rep q
+  have hEs : Function.Surjective t93J03_cyc_E := fun z => ⟨_, t93J03_cyclicCover_aux_E_L z⟩
+  have hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v := by
+    intro v
+    obtain ⟨n, hn⟩ := t93J03_cyclicCover_aux_L_E v
+    exact Quotient.sound ⟨KleinPresentedGroupCoordinateModel.generatorA ^ n, by
+      show _ • v = _
+      rw [t93J03_cyclicCover_aux_generatorA_zpow, hn]⟩
+  have hQ := t93J03_cyclicCover_aux_pQ_quotient
+    t93J03_cyclicCover_aux_E_covering hEs hpE
+  letI := t93J03_cyclicCover_aux_properlyDiscontinuous
+  letI : IsCancelSMul (Multiplicative ℤ) T93J03Punctured :=
+    isCancelSMul_iff_eq_one_of_smul_eq.mpr t93J03_cyclicCover_aux_free
+  have hcov : IsCoveringMap t93J03_cyc_pQ :=
+    (hQ.isQuotientCoveringMap_of_properlyDiscontinuousSMul
+      (G := Multiplicative ℤ) (fun {z w} => t93J03_cyclicCover_aux_pQ_fiber hEs hpE
+        t93J03_cyclicCover_aux_E_eq_iff t93J03_cyclicCover_aux_orbit_iff z w)).isCoveringMap
+  let M := MulEquiv.ofBijective
+    (ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy
+      t93J03_kleinPlaneQuotient_pi1_origin_aux_free v)
+    ⟨ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_injective _ v,
+      ConstructionTargets.DeckGroupQuotientFundamentalGroup.orbitEndpointMonodromy_surjective _ v⟩
+  refine ⟨T93J03Punctured, inferInstance, Φ ∘ t93J03_cyc_pQ,
+    ⟨Subtype.val, continuous_subtype_val⟩, t93J03_cyc_E v,
+    hcov.homeomorph_comp Φ, (show Φ (t93J03_cyc_pQ (t93J03_cyc_E v)) = k by rw [hpE v, hq]), Topology.IsEmbedding.subtypeVal, ?_⟩
+  exact t93J03_cyclicCover_aux_transport t93J03_cyc_pQ hcov.continuous Φ _ _ (hpE v) M
+    (fun γ => t93J03_cyclicCover_aux_range hcov.continuous hpE t93J03_cyclicCover_aux_E_covering
+      t93J03_cyclicCover_aux_E_eq_iff t93J03_cyclicCover_aux_generatorA_zpow v γ)
+    t93J03_cyclicCover_aux_characteristic k hq e
 
 /-- Apply the standard covering-space lifting criterion after rewriting its
 subgroup condition with the cyclic cover's computed range. -/
