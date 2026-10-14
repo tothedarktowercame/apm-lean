@@ -5060,7 +5060,46 @@ theorem cutCross_exp (α γ φ : ℝ) :
     cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
         (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
       4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2) := by
-  sorry
+  rw [cutCross]
+  have hcross :
+      (starRingEnd ℂ
+          (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) *
+        (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))).im =
+        Real.sin (φ - γ) + Real.sin (γ - α) - Real.sin (φ - α) := by
+    rw [Complex.exp_mul_I, Complex.exp_mul_I, Complex.exp_mul_I]
+    rw [← Complex.ofReal_cos, ← Complex.ofReal_sin,
+      ← Complex.ofReal_cos, ← Complex.ofReal_sin,
+      ← Complex.ofReal_cos, ← Complex.ofReal_sin]
+    simp only [map_sub, Complex.mul_im, Complex.conj_re, Complex.conj_im,
+      Complex.add_re, Complex.add_im, Complex.sub_re, Complex.sub_im,
+      Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+      Complex.I_re, Complex.I_im]
+    rw [Real.sin_sub, Real.sin_sub, Real.sin_sub]
+    ring
+  rw [hcross]
+  let a := (φ - γ) / 2
+  let b := (γ - α) / 2
+  have hA : φ - γ = 2 * a := by
+    simp only [a]
+    ring
+  have hB : γ - α = 2 * b := by
+    simp only [b]
+    ring
+  have hAB : φ - α = 2 * a + 2 * b := by
+    simp only [a, b]
+    ring
+  have hhalf : (φ - α) / 2 = a + b := by
+    simp only [a, b]
+    ring
+  rw [hhalf, hA, hB, hAB, Real.sin_two_mul, Real.sin_two_mul,
+    Real.sin_add, Real.sin_two_mul, Real.sin_two_mul,
+    Real.cos_two_mul, Real.cos_two_mul, Real.sin_add]
+  ring_nf
+  have ha := Real.sin_sq_add_cos_sq a
+  have hb := Real.sin_sq_add_cos_sq b
+  rw [show Real.cos a ^ 2 = 1 - Real.sin a ^ 2 by linarith,
+    show Real.cos b ^ 2 = 1 - Real.sin b ^ 2 by linarith]
+  ring
 -- END SEAT AREA
 
 /-- A convex body with a prescribed boundary parametrisation: cone `β` from an
