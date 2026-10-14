@@ -119108,6 +119108,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792012422558-12423-55d98b06",
+     :commands
+     ["git diff-tree/show d9b53e27"
+      "archive d9b53e27; lake env lean closure and Main"
+      "sha256sum/placeholders at d9b53e27"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and separates the componentwise localization obligation into an exact interface whose conversion preserves point-indexed local coefficients, component-indexed signs, and component sums equal to exact lift degrees. It does not claim the component formula or global top-degree equality is proved; both remain listed. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166."},
     :commit "d9b53e27fd1b748a76d2241581da652f5532e6b4",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119116,7 +119127,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119134,7 +119145,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked localized H2 assembly.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked component-localization interface.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119232,7 +119243,10 @@
      :reason "Banked localized formula constructor."}
     {:job 2,
      :commit "f0390823547747d6e59ad3dd68ef0d0e3e5eb612",
-     :reason "Banked localized H2 assembly."}]}
+     :reason "Banked localized H2 assembly."}
+    {:job 3,
+     :commit "d9b53e27fd1b748a76d2241581da652f5532e6b4",
+     :reason "Banked component-localization interface."}]}
   {:consumer :t98A06,
    :stop-count 3,
    :evidence
@@ -120127,7 +120141,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "RegularFiberLocalizedComponentFormula.toComparison",
@@ -120137,7 +120151,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "component localization supplies signed-count comparison",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d9b53e27fd1b748a76d2241581da652f5532e6b4"},
    :id :lemma-regularfiberlocalizedcomponentformula-tocomparison,
    :kind :lemma,
    :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
