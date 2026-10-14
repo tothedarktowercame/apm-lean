@@ -2027,6 +2027,46 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_not_mem
   have hm : x ∉ (u ++ v ++ t).map Prod.fst := List.count_eq_zero.mp h
   simpa using hm
 
+/-- Forward generators for an ordinary label (both indices in the `u`, `v`, `t` blocks): push forward with `hg.on_u/on_v/on_t`. -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i j : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length) (hij : i ≠ j) (s : Set.Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 = ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1) (hne : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ y.1 ∧ ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 ≠ z.1)
+    (c₁ c₂ : Circle)
+    (h₁ : circleToDisk c₁ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i s)
+    (h₂ : circleToDisk c₂ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length j
+      (if ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).2 = ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).2 then s else reverseParameter s)) :
+    Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
+      (g c₁) (g c₂) := by
+  sorry
+
+/-- Forward generators for the `y` / `y⁻¹` and `z` / `z⁻¹` pairs: they land on the halves of `a` / `a⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z a : Signed Label)
+    (hyz : y.1 ≠ z.1)
+    (ha : a.1 ∉ (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).map Prod.fst)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t))
+    (g : Circle ≃ₜ Circle) (hg : MergeRepeatedBlockEdgeSpec g u.length v.length t.length)
+    (i j : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length) (hij : i ≠ j) (s : Set.Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 = ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).1) (hyz' : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 = y.1 ∨ ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 = z.1)
+    (c₁ c₂ : Circle)
+    (h₁ : circleToDisk c₁ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length i s)
+    (h₂ : circleToDisk c₂ = edgePoint (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length j
+      (if ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).2 = ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get j).2 then s else reverseParameter s)) :
+    Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
+      (g c₁) (g c₂) := by
+  sorry
+
 /-- Forward generators: each identified source pair maps under `g` to a pair
 related in the target (classify the index among the seven append blocks). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
@@ -2041,7 +2081,12 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
     ∀ c₁ c₂ : Circle, WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk c₁) (circleToDisk c₂) →
       Relation.EqvGen (fun p q : Circle => WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk p) (circleToDisk q))
         (g c₁) (g c₂) := by
-  sorry
+  intro c₁ c₂ h
+  obtain ⟨i, j, hij, s, hlab, h₁, h₂⟩ := h
+  by_cases hY : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 = y.1 ∨ ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get i).1 = z.1
+  · exact mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz u v t y z a hyz ha hy hz hw g hg i j hij s hlab hY c₁ c₂ h₁ h₂
+  · push_neg at hY
+    exact mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common u v t y z a hyz ha hy hz hw g hg i j hij s hlab hY c₁ c₂ h₁ h₂
 
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition
     {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label)
