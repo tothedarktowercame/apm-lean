@@ -119110,6 +119110,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792004140942-12210-0b0a7836",
+     :commands
+     ["git diff-tree/show 711b203"
+      "git archive 711b203; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 711b203"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit gives the correctly oriented comparison interface—componentwise local-degree sums equal component lift degrees—and derives zero weighted total from zero component degrees without a false pointwise claim. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Constructing local degrees, proving the geometric comparison, and final assembly remain listed."},
     :commit "711b2032df1c48210a7984d09b9c19d057b72ead",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked genuine component indexing for literal fiber points.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked component-degree aggregation.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119187,7 +119198,10 @@
     {:job 4,
      :commit "d46cfd969b54f992c84a36c1416a8333521e6196",
      :reason
-     "Banked genuine component indexing for literal fiber points."}]}
+     "Banked genuine component indexing for literal fiber points."}
+    {:job 5,
+     :commit "711b2032df1c48210a7984d09b9c19d057b72ead",
+     :reason "Banked component-degree aggregation."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119661,7 +119675,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "groupedComponentSignedCount_eq_zero_of_comparison",
@@ -119673,7 +119687,9 @@
     :type
     "component sums equal zero lift degrees imply weighted total zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "711b2032df1c48210a7984d09b9c19d057b72ead"},
    :id :lemma-groupedcomponentsignedcount-eq-zero-of-comparison,
    :kind :lemma,
    :depends-on [:lemma-groupedcomponentsignedcount-eq-zero],
