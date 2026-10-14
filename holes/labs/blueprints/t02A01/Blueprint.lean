@@ -1020,7 +1020,20 @@ with the bottom, reversed), left side (identified with the right, reversed). -/
 theorem apm_t02a01_outer_quarter_one (hr : Continuous apm_t02a01_radialPt)
     (t : unitInterval) (ht : (t : ℝ) ≤ 1 / 4) :
     apm_t02a01_outerLoop hr t = apm_t02a01_edgeA (4 * t) := by
-  sorry
+  unfold apm_t02a01_outerLoop apm_t02a01_radialPt apm_t02a01_edgeA
+  apply congrArg (Quotient.mk _)
+  apply Subtype.ext
+  unfold apm_t02a01_radial apm_t02a01_perimeter apm_t02a01_clamp01
+  norm_num
+  have ht0 : (0 : ℝ) ≤ (t : ℝ) := t.2.1
+  have ht4 : (4 : ℝ) * (t : ℝ) ≤ 1 := by linarith
+  rw [min_eq_right ht4, max_eq_right (by positivity : (0 : ℝ) ≤ 4 * (t : ℝ))]
+  have hneg (k : ℝ) (hk : 1 ≤ k) : max 0 (min 1 (4 * (t : ℝ) - k)) = 0 := by
+    rw [max_eq_left]
+    linarith [min_le_right 1 (4 * (t : ℝ) - k)]
+  rw [hneg 1 (by norm_num), hneg 2 (by norm_num), hneg 3 (by norm_num)]
+  ring_nf
+  trivial
 
 theorem apm_t02a01_outer_quarter_two (hr : Continuous apm_t02a01_radialPt)
     (t : unitInterval) (ht0 : 1 / 4 ≤ (t : ℝ)) (ht1 : (t : ℝ) ≤ 1 / 2) :
