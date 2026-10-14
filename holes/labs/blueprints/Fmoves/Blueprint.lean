@@ -1452,6 +1452,39 @@ lemma wordRel_eqvGen_circle {L : Type*} [DecidableEq L]
     exact mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map circleToDisk
       (fun hxy => Relation.EqvGen.rel _ _ hxy) h
 
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_partition
+    {Label : Type*} (u v t : List (Signed Label)) (y z : Signed Label)
+    (i : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length) :
+    i.1 < u.length ∨ i.1 = u.length ∨ i.1 = u.length + 1 ∨
+      (∃ k, k < v.length ∧ i.1 = u.length + 2 + k) ∨
+      i.1 = u.length + 2 + v.length ∨
+      i.1 = u.length + 3 + v.length ∨
+      (∃ k, k < t.length ∧ i.1 = u.length + 4 + v.length + k) := by
+  have hi := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hi
+  by_cases h₀ : i.1 < u.length
+  · exact Or.inl h₀
+  by_cases h₁ : i.1 = u.length
+  · exact Or.inr (Or.inl h₁)
+  by_cases h₂ : i.1 = u.length + 1
+  · exact Or.inr (Or.inr (Or.inl h₂))
+  by_cases h₃ : i.1 < u.length + 2 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inl ⟨i.1 - (u.length + 2), by omega, by omega⟩)))
+  by_cases h₄ : i.1 = u.length + 2 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl h₄))))
+  by_cases h₅ : i.1 = u.length + 3 + v.length
+  · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl h₅)))))
+  · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr
+      ⟨i.1 - (u.length + 4 + v.length), by omega, by omega⟩)))))
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_not_mem
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Label)
+    (h : ((u ++ v ++ t).map Prod.fst).count x = 0) :
+    x ∉ u.map Prod.fst ∧ x ∉ v.map Prod.fst ∧ x ∉ t.map Prod.fst := by
+  have hm : x ∉ (u ++ v ++ t).map Prod.fst := List.count_eq_zero.mp h
+  simpa using hm
+
 /-- Forward generators: each identified source pair maps under `g` to a pair
 related in the target (classify the index among the seven append blocks). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward
