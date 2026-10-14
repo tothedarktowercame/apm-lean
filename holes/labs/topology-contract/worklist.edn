@@ -119066,64 +119066,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct component and top-degree localization formulas; assemble Main.",
+    "Use coefficient uniqueness to prove component/top-degree formulas; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated t93J03 edits"],
+    :warnings ["Main sorryAx" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "regularFiberTopDegreeFormula_of_localizedFormulas",
-      :type "component and top-degree formulas combine",
+    [{:name "regularFiberLocalDegree_eq_of_localization_eq",
+      :type "localized chart coefficient equals point local degree",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["RegularFiberLocalizedComponentFormula.toComparison"],
+      ["regularFiberLocalDegree_localization_eq"
+       "ambientLocalGenerator_zsmul_injective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberTopDegreeFormula_of_localizedFormulas"],
+      ["regularFiberLocalDegree_eq_of_localization_eq"
+       "regularFiberTopDegreeFormula_of_localizedFormulas"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "9c99a30aeab5f1df3ebc772bd08e624b61c94b0837141751c073b87f73a1aa5e",
+     "1f1fa4e2f0ec390a34a72a8e972c159fef9722e3651ea6e4c8e298a2cb436eb5",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked top-degree localization interface.",
+    :reason "Banked local-degree coefficient uniqueness.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "shared-sign draft",
-      :exit 1,
-      :finding "made sign an index"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792012871355-12433-d4e80b18",
-     :commands
-     ["git diff-tree/show a7feb28a"
-      "archive a7feb28a; lake env lean closure and Main"
-      "sha256sum/placeholders at a7feb28a"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and introduces the global localized top-degree interface with signs indexed by genuine occupied components, then combines it with the component formula only when both use exactly the same sign function. This repairs the noted representation boundary; neither geometric formula is claimed proved. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Both geometric formulas and Main assembly remain listed."},
-    :commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d",
+    :commit "636cca0780ffd4ea44101fbedb0538af96f40a40",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119131,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119436,7 +119423,8 @@
     :lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons
     :lemma-tophomologymap-eq-zero-of-localfundamentalclasscomparisons
     :lemma-regularfiberlocalizedcomponentformula-tocomparison
-    :lemma-regularfibertopdegreeformula-of-localizedformulas],
+    :lemma-regularfibertopdegreeformula-of-localizedformulas
+    :lemma-regularfiberlocaldegree-eq-of-localization-eq],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120185,6 +120173,36 @@
    :kind :lemma,
    :depends-on
    [:lemma-regularfiberlocalizedcomponentformula-tocomparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberLocalDegree_eq_of_localization_eq",
+    :type "localized chart coefficient equals point local degree"},
+   :lemma
+   {:name "regularFiberLocalDegree_eq_of_localization_eq",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "localized chart coefficient equals point local degree",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularfiberlocaldegree-eq-of-localization-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberlocaldegree-localization-eq
+    :lemma-ambientlocalgenerator-zsmul-injective],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "ambientLocalGenerator_zsmul_injective"},
+   :lemma
+   {:name "ambientLocalGenerator_zsmul_injective", :reported-by []},
+   :id :lemma-ambientlocalgenerator-zsmul-injective,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
