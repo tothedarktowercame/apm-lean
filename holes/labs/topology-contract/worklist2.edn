@@ -87901,27 +87901,30 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove wedge-group word generation; then H1 generation, coordinate epi, higher vanishing, and B6-B10.",
+    "Prove finite-wedge free-group surjectivity via van Kampen; then H1 generation, coordinate epi, higher vanishing, and B6-B10.",
     :outcome :stop,
-    :warnings
-    ["preexisting dependency lints"
-     "unrelated closure edits preserved"],
+    :warnings ["preexisting lints" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeLegWord_hurewicz",
-      :type "finite leg words map to their summed H1 coordinates",
+    [{:name "finiteWedgeLegFreeGroupMap_exists_word",
+      :type "each free-group element evaluates as a leg word",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["moduleHurewiczHom"
-       "finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFundamentalGroup_generated_by_legs",
+     {:name
+      "finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective",
+      :type "free-group surjectivity implies leg-word generation",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeLegFreeGroupMap_exists_word"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type
-      "every common-basepoint wedge-group element is a finite integer-exponent leg word",
+      "canonical free-group map onto finite-wedge fundamental group is surjective",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
@@ -87930,40 +87933,26 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked Hurewicz evaluation of finite integer-exponent leg words.",
+    :reason "Reduced word generation to free-group surjectivity.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check d06aefa52", :exit 0}
-     {:cmd
-      "exact commit blob + #print axioms | lake env lean /dev/stdin",
-      :exit 0}],
+     {:cmd "git show --check 0e953f171", :exit 0}
+     {:cmd "commit blob axioms | lake env lean /dev/stdin", :exit 0}],
     :diagnostic-history
-    [{:cmd "leg-word draft",
+    [{:cmd "induction draft",
       :exit 1,
-      :correction
-      "derived identity value additively; used map_zsmul"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791950198100-11550-1cc945d0",
-     :commands
-     ["git show 83bf9106a blob + #print axioms | lake env lean /dev/stdin"
-      "diff-tree/readlink/sha256 assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: 83bf9106a changes only PolygonSurfaceHomology.lean; exact blob SHA256 45da19a2e9ffb614e227cbee50807ed3ecfdd62bbcf0d49aaded6e2c536941c2. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 602411b84 packages the comparison-normalized Hurewicz map as a homomorphism into the multiplicative wrapper of module H1 and derives the required product-to-sum and integer-power-to-scalar-multiple formulas. The Multiplicative.ofAdd/toAdd boundary is explicit and the zpower orientation n • H(g) is correct for converting leg words into coordinate sums."},
-    :commit "d06aefa52",
+      :correction "fixed cases and abbreviations"}],
+    :commit "0e953f171",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "604ce710faf830f9df099a2861cdfa095ea8e831f6eeaf0fa8c5c0334b405265"},
+     "6ee3bca9446bec9ce4841f86ab081e27164706ca004858f635dcc653aec7515d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89271,4 +89260,59 @@
    :depends-on
    [:lemma-modulehurewiczhom
     :lemma-finitewedgelegfundamentalclassatbase-hurewicz-eq-coordinate],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeLegFreeGroupMap_exists_word",
+    :type "each free-group element evaluates as a leg word"},
+   :lemma
+   {:name "finiteWedgeLegFreeGroupMap_exists_word",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "each free-group element evaluates as a leg word",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgelegfreegroupmap-exists-word,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective",
+    :type "free-group surjectivity implies leg-word generation"},
+   :lemma
+   {:name
+    "finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "free-group surjectivity implies leg-word generation",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id
+   :lemma-finitewedgefundamentalgroup-generated-by-legs-of-freegroup-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgelegfreegroupmap-exists-word],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeLegFreeGroupMap_surjective",
+    :type
+    "canonical free-group map onto finite-wedge fundamental group is surjective"},
+   :lemma
+   {:name "finiteWedgeLegFreeGroupMap_surjective",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "canonical free-group map onto finite-wedge fundamental group is surjective",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgelegfreegroupmap-surjective,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers [:t94J09]}]}
