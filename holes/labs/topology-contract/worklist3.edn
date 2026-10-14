@@ -36159,6 +36159,17 @@
       :exit 1,
       :correction
       "fixed theorem placement and subgroup-image witnesses; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791961663953-11677-9fcf6327",
+     :commands
+     ["git show/diff/show --check cb58e058"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. Reparameterization by integer winding is proved image-preserving, and under the explicitly retained winding-one conjugacy hypothesis the actual based overlap-image normal closure is correctly transported back from FreeGroup coordinates to the skeleton group. Geometric conjugacy and van Kampen kernel identification remain listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "cb58e058246984b895a459e89324c923288a9b51",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36169,7 +36180,7 @@
      "7d76ee8a6af92bdb4042b0f9a6d9d979999f2f0516f19c3a612a9753203162ea"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed skeleton aabb quotient equivalence; topological kernel identification remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36329,7 +36340,11 @@
     {:job 7,
      :commit "e40aea65bdeaf4a7c03b693c382fade2502196de",
      :reason
-     "Committed skeleton aabb quotient equivalence; topological kernel identification remains."}]}
+     "Committed skeleton aabb quotient equivalence; topological kernel identification remains."}
+    {:job 8,
+     :commit "cb58e058246984b895a459e89324c923288a9b51",
+     :reason
+     "Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38383,7 +38398,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
@@ -38395,7 +38410,9 @@
     :type
     "winding conjugacy implies overlap normal closure equals pulled-back aabb",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "cb58e058246984b895a459e89324c923288a9b51"},
    :id :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb,
    :kind :lemma,
    :depends-on
