@@ -3170,6 +3170,44 @@ theorem finiteWedgeLegFreeGroupMap_surjective (P : PairingData) :
   refine ⟨x, (finiteWedgeOrbitFundamentalGroupEquivFinExplicit P).injective ?_⟩
   rw [finiteWedgeOrbitFreeGroupMapComparison, hy]
 
+/-- Every based-loop Hurewicz class is in the normalized finite-wedge
+coordinate image. -/
+theorem finiteWedgeHurewicz_generated_by_coordinates (P : PairingData)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P)) :
+    ∃ v : PairingOrbit P.pair → ℤ,
+      finiteWedgeH1CoordinateMap P v = finiteWedgeModuleHurewicz P g := by
+  obtain ⟨w, hw⟩ :=
+    finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective P
+      (finiteWedgeLegFreeGroupMap_surjective P) g
+  refine ⟨finiteWedgeLegWordCoordinatesList P w, ?_⟩
+  rw [← hw]
+  simpa [finiteWedgeModuleHurewicz, moduleHurewicz] using
+    (finiteWedgeLegWord_hurewicz P w).symm
+
+/-- The normalized finite-wedge first-homology coordinate map is onto. -/
+theorem finiteWedgeH1CoordinateMap_surjective (P : PairingData) :
+    Function.Surjective (finiteWedgeH1CoordinateMap P) :=
+  finiteWedgeH1CoordinateMap_surjective_of_hurewicz_generation P
+    (finiteWedgeHurewicz_generated_by_coordinates P)
+
+noncomputable instance finiteWedgeH1CoordinateMap_epi (P : PairingData) :
+    Epi (finiteWedgeH1CoordinateMap P) :=
+  (ModuleCat.epi_iff_surjective (finiteWedgeH1CoordinateMap P)).mpr
+    (finiteWedgeH1CoordinateMap_surjective P)
+
+/-- The normalized coordinates give the required finite-wedge H₁
+isomorphism, with the positive leg basis fixed. -/
+noncomputable def finiteWedgeH1CoordinateIso (P : PairingData) :
+    ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) ≅
+      SpaceH
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair)) 1 := by
+  letI : IsIso (finiteWedgeH1CoordinateMap P) :=
+    isIso_of_mono_of_epi (finiteWedgeH1CoordinateMap P)
+  exact asIso (finiteWedgeH1CoordinateMap P)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
