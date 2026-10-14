@@ -87901,27 +87901,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify affine subpaths with edges; instantiate B7, then B8-B10.",
+    "Lift affine equality to subpaths/product; instantiate B7, then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["preexisting lint; unrelated worklist temp preserved"],
     :missing-theorems
-    [{:name "polygonBoundaryIntegerLoop_concatSubpath",
+    [{:name "integerLoop_convexCombo_subdivisionVertex",
       :type
-      "equal subdivision subpaths concatenate to the explicit boundary path",
+      "affine subdivision parameter maps to matching polygon edge point",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundarySignedEdgePath_mk"],
+      :depends-on ["polygonBoundaryIntegerLoop_concatSubpath"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
-      :type
-      "identify each affine subpath with its signed edge and product",
+      :type "boundary equals ordered signed-edge product",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundaryIntegerLoop_concatSubpath"],
+      :depends-on ["integerLoop_convexCombo_subdivisionVertex"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
@@ -87933,7 +87932,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked equal-edge subdivision and finite subpath fold.",
+    :reason "Banked affine subdivision-to-edge parameter identity.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,32 +87940,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 86d1671ba", :exit 0}],
+     {:cmd "git show --check c5d2ef65c", :exit 0}],
     :diagnostic-history
-    [{:cmd "concat draft",
+    [{:cmd "affine draft", :exit 1, :correction "normalized Fin casts"}
+     {:cmd "cleanup draft",
       :exit 1,
-      :correction "retained exact subpath endpoint types"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792021677098-12735-4e870f4f",
-     :commands
-     ["git show/diff 86d1671ba; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 86d1671ba (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 a42f5baf446bfc58f67f3e6d0a321d58b96c5e329df2360b0b46ce31a1f978a4 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Subdivision vertices are k/edgeCount in increasing Fin order, with endpoints 0 and 1. Mathlib concat_subpath folds successive castSucc/succ subpaths in that order to the endpoint subpath, with exact dependent endpoint types. The affine-piece identification remains accurately partial. New compiled progress; remaining identify each subpath with its signed edge/product, instantiate B7, then B8-B10."},
-    :commit "86d1671ba",
+      :correction "restored congruence"}],
+    :commit "c5d2ef65c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "a42f5baf446bfc58f67f3e6d0a321d58b96c5e329df2360b0b46ce31a1f978a4"},
+     "7d558f95a390c60597732f460a0eb054b0ce52164053aca7d177d1f8df4a014e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92122,7 +92110,8 @@
     :lemma-polygonboundaryexplicitedgeclass-hurewicz
     :lemma-polygonboundarywedgeloop-edgepoint-eq-signededgepath
     :lemma-polygonboundarysignededgepath-mk
-    :lemma-polygonboundaryintegerloop-concatsubpath],
+    :lemma-polygonboundaryintegerloop-concatsubpath
+    :lemma-integerloop-convexcombo-subdivisionvertex],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92312,4 +92301,23 @@
    :id :lemma-polygonboundaryintegerloop-concatsubpath,
    :kind :lemma,
    :depends-on [:lemma-polygonboundarysignededgepath-mk],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "integerLoop_convexCombo_subdivisionVertex",
+    :type
+    "affine subdivision parameter maps to matching polygon edge point"},
+   :lemma
+   {:name "integerLoop_convexCombo_subdivisionVertex",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "affine subdivision parameter maps to matching polygon edge point",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-integerloop-convexcombo-subdivisionvertex,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundaryintegerloop-concatsubpath],
    :other-consumers [:t94J09]}]}
