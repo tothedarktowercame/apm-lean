@@ -11,6 +11,51 @@ open scoped Manifold ContDiff
 open ConstructionTargets.ManifoldFormTargets ConstructionTargets.TorusFormTargets
 noncomputable section
 
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_fibers (x y : Plane) :
+    projection x = projection y ↔
+      ∃ k : Fin 2 → ℤ, ∀ i, y i = x i + (k i : ℝ) := by
+  constructor
+  · intro h
+    have hcoord (i : Fin 2) : (x i : AddCircle (1 : ℝ)) =
+        (y i : AddCircle (1 : ℝ)) := congrFun h i
+    choose n hn using fun i =>
+      (AddCircle.coe_eq_zero_iff (p := (1 : ℝ)) (x := x i - y i)).mp (by
+        rw [AddCircle.coe_sub, hcoord i, sub_self])
+    refine ⟨fun i => -n i, fun i => ?_⟩
+    have hd : (n i : ℝ) = x i - y i := by simpa using hn i
+    rw [Int.cast_neg]
+    linarith
+  · rintro ⟨k, hk⟩
+    funext i
+    change (x i : AddCircle (1 : ℝ)) = (y i : AddCircle (1 : ℝ))
+    rw [hk i, AddCircle.coe_add]
+    simp
+
+lemma t93A06_torusAtlas_aux_quotient_charts_aux_box_inj (a : Plane) :
+    Set.InjOn projection
+      (Set.pi Set.univ (fun i : Fin 2 => Set.Ioo (a i - (1 / 4 : ℝ))
+        (a i + 1 / 4))) := by
+  intro x hx y hy hxy
+  obtain ⟨k, hk⟩ :=
+    (t93A06_torusAtlas_aux_quotient_charts_aux_fibers x y).mp hxy
+  funext i
+  have hxi := hx i (Set.mem_univ i)
+  have hyi := hy i (Set.mem_univ i)
+  change a i - 1 / 4 < x i ∧ x i < a i + 1 / 4 at hxi
+  change a i - 1 / 4 < y i ∧ y i < a i + 1 / 4 at hyi
+  have hlt : ((k i : ℤ) : ℝ) < 1 := by
+    rw [hk i] at hyi
+    linarith
+  have hgt : (-1 : ℝ) < ((k i : ℤ) : ℝ) := by
+    rw [hk i] at hyi
+    linarith
+  have hk0 : k i = 0 := by
+    have hlo : (-1 : ℤ) < k i := by exact_mod_cast hgt
+    have hhi : k i < 1 := by exact_mod_cast hlt
+    omega
+  symm
+  simpa [hk0] using hk i
+
 /-- LIBRARY (chart construction): construct quotient charts for which the
 actual coordinate projection is locally a diffeomorphism.  This is separated
 from the manifold-coverage argument below. -/
@@ -18,6 +63,7 @@ theorem t93A06_torusAtlas_aux_quotient_charts :
     ∃ charts : ChartedSpace Plane Torus,
       letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x) ∧
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ)) ∧
       IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
   sorry
 
@@ -30,8 +76,8 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
     (charts : ChartedSpace Plane Torus)
     (hatlas : letI := charts
       (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x))
-    (hlocal : letI := charts
-      IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection) :
+    (htrans : letI := charts
+      (∀ x y : Torus, ∀ z ∈ ((chartAt Plane x).symm.trans (chartAt Plane y)).source, ∃ k : Fin 2 → ℤ, ∀ i, ((chartAt Plane x).symm.trans (chartAt Plane y)) z i = z i + (k i : ℝ))) :
     letI := charts
     IsManifold 𝓘(ℝ,Plane) ∞ Torus := by
   sorry
@@ -40,10 +86,10 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
 /-- The two independent quotient-chart conclusions assemble into the target
 atlas structure. -/
 theorem t93A06_torusAtlas : Nonempty SmoothAtlas := by
-  obtain ⟨charts, hatlas, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
+  obtain ⟨charts, hatlas, htrans, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
   letI := charts
   exact ⟨⟨charts,
-    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas hlocal,
+    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas htrans,
     hlocal⟩⟩
 
 /-- The fibres of the printed quotient projection are precisely integer
