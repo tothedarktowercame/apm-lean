@@ -36119,30 +36119,29 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Compare direct skeleton-to-outer map with inverse homotopy-equivalence/basepoint transport; reverse kernel inclusion/surjectivity; winding; C1/C2/Main.",
+    "Compare transported inverse equivalence with direct skeleton-to-outer map; reverse kernel inclusion/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
-      :type
-      "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map",
+    [{:name "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
+      :type "outer connector maps exactly to target polygon connector",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on [],
+      :depends-on
+      ["kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct"
-       "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel"
+      ["kleinPolygonOuterImageToDirectSkeletonPointPath_map"
        "kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
@@ -36150,32 +36149,23 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain.",
+    "Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lean fixture; Main; registry; diff; show", :exit 0}
-     {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791977590652-11786-0ec5a1eb",
-     :commands
-     ["git show/check/diff 44f5d424; scope/math review; fixture sha256"
-      "lean closure/fixture attempted: blocked by unrelated dirty PointWedge missing olean"
-      "statement registry; placeholder recount"],
-     :finding
-     "PASS. Commit 44f5d424 adds sorry-free progress: the literal skeleton-to-polygon pi1 map is proved equal to outer inclusion composed with the direct skeleton-to-outer map, with correct source, target, and orientation. Scope and fixture hash match; support placeholders 0->0; registry 166/166; no new axioms. Fresh compilation is blocked upstream by an unrelated dirty PointWedgeVanKampen file/missing olean; no workaround used. Coordinate comparison, reverse inclusion, surjectivity, and winding remain listed."},
-    :commit "44f5d424e3ef2ac634898fb671808a5e07c04bef",
+     {:cmd "lean closure; fixture; Main; registry", :exit 0}
+     {:cmd "placeholder; diff; show --check", :exit 0}
+     {:cmd "rg forbidden additions", :exit 1, :expected-exit 1}],
+    :commit "f869be3704ca9938a77d7108060a03e2ea600652",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_direct_skeleton_factor_check.lean",
+    {:path "/tmp/t93j03_outer_connector_check.lean",
      :sha256
-     "34022561a00f378ef13ea1f1cbb600a68cac44825de11af8e69aa544b5410f4e"},
+     "8af1904fb72d77b91380336de88d07bdb92545f284cf4292a36fd932f9c0da72"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38566,7 +38556,8 @@
     :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker
     :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel
     :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel
-    :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct],
+    :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct
+    :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38689,6 +38680,24 @@
    :id :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
+    :type "outer connector maps exactly to target polygon connector"},
+   :lemma
+   {:name "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "outer connector maps exactly to target polygon connector",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
