@@ -637,7 +637,83 @@ lemma t96J02_cut_disk_vertices (x y : Disk)
     (hx : (x : ℂ) = 1 ∨ (x : ℂ) = Complex.I ∨ (x : ℂ) = -1 ∨ (x : ℂ) = -Complex.I)
     (hy : (y : ℂ) = 1 ∨ (y : ℂ) = Complex.I ∨ (y : ℂ) = -1 ∨ (y : ℂ) = -Complex.I) :
     surfaceQuotient false 2 x = surfaceQuotient false 2 y := by
-  sorry
+  let t0 : Set.Icc (0 : ℝ) 1 := ⟨0, by norm_num⟩
+  let t1 : Set.Icc (0 : ℝ) 1 := ⟨1, by norm_num⟩
+  have hxv : ∃ i : Fin 4, x = edgePoint 4 i t0 := by
+    rcases hx with hx | hx | hx | hx
+    · refine ⟨0, Subtype.ext ?_⟩
+      simpa [t0, edgePoint] using hx
+    · refine ⟨1, Subtype.ext ?_⟩
+      rw [hx]
+      simp only [t0, edgePoint]
+      norm_num
+      rw [show Complex.I * (2 * (Real.pi : ℂ) / 4) =
+        (Real.pi / 2 : ℂ) * Complex.I by push_cast; ring]
+      exact Complex.exp_pi_div_two_mul_I.symm
+    · refine ⟨2, Subtype.ext ?_⟩
+      rw [hx]
+      simp only [t0, edgePoint]
+      norm_num
+      rw [show Complex.I * (2 * (Real.pi : ℂ) * 2 / 4) =
+        (Real.pi : ℂ) * Complex.I by push_cast; ring]
+      exact Complex.exp_pi_mul_I.symm
+    · refine ⟨3, Subtype.ext ?_⟩
+      rw [hx]
+      simp only [t0, edgePoint]
+      norm_num
+      rw [show Complex.I * (2 * (Real.pi : ℂ) * 3 / 4) =
+        (Real.pi : ℂ) * Complex.I + (Real.pi / 2 : ℂ) * Complex.I by push_cast; ring,
+        Complex.exp_add, Complex.exp_pi_mul_I, Complex.exp_pi_div_two_mul_I]
+      ring
+  have hyv : ∃ i : Fin 4, y = edgePoint 4 i t0 := by
+    rcases hy with hy | hy | hy | hy
+    · refine ⟨0, Subtype.ext ?_⟩
+      simpa [t0, edgePoint] using hy
+    · refine ⟨1, Subtype.ext ?_⟩
+      rw [hy]
+      simp only [t0, edgePoint]
+      norm_num
+      rw [show Complex.I * (2 * (Real.pi : ℂ) / 4) =
+        (Real.pi / 2 : ℂ) * Complex.I by push_cast; ring]
+      exact Complex.exp_pi_div_two_mul_I.symm
+    · refine ⟨2, Subtype.ext ?_⟩
+      rw [hy]
+      simp only [t0, edgePoint]
+      norm_num
+      rw [show Complex.I * (2 * (Real.pi : ℂ) * 2 / 4) =
+        (Real.pi : ℂ) * Complex.I by push_cast; ring]
+      exact Complex.exp_pi_mul_I.symm
+    · refine ⟨3, Subtype.ext ?_⟩
+      rw [hy]
+      simp only [t0, edgePoint]
+      norm_num
+      rw [show Complex.I * (2 * (Real.pi : ℂ) * 3 / 4) =
+        (Real.pi : ℂ) * Complex.I + (Real.pi / 2 : ℂ) * Complex.I by push_cast; ring,
+        Complex.exp_add, Complex.exp_pi_mul_I, Complex.exp_pi_div_two_mul_I]
+      ring
+  obtain ⟨i, rfl⟩ := hxv
+  obtain ⟨j, rfl⟩ := hyv
+  have h01 : surfaceQuotient false 2 (edgePoint 4 0 t0) =
+      surfaceQuotient false 2 (edgePoint 4 1 t0) := by
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    exact ⟨0, by omega, t0, rfl, rfl⟩
+  have h12 : surfaceQuotient false 2 (edgePoint 4 1 t0) =
+      surfaceQuotient false 2 (edgePoint 4 2 t0) := by
+    have h : surfaceQuotient false 2 (edgePoint 4 0 t1) =
+        surfaceQuotient false 2 (edgePoint 4 1 t1) := by
+      apply Quotient.sound
+      apply Relation.EqvGen.rel
+      exact ⟨0, by omega, t1, rfl, rfl⟩
+    convert h using 1 <;> apply congrArg (surfaceQuotient false 2) <;>
+      apply Subtype.ext <;> simp only [t0, t1, edgePoint] <;> congr 1 <;>
+      push_cast <;> ring
+  have h23 : surfaceQuotient false 2 (edgePoint 4 2 t0) =
+      surfaceQuotient false 2 (edgePoint 4 3 t0) := by
+    apply Quotient.sound
+    apply Relation.EqvGen.rel
+    exact ⟨1, by omega, t0, rfl, rfl⟩
+  fin_cases i <;> fin_cases j <;> simp_all
 
 /-- The four corners of the square are one class. -/
 lemma t96J02_cut_square_corners_aux_base (p : T96J02ClosedSquare)
