@@ -355,6 +355,11 @@ be definitionally the deformation path used in the concrete connector.
 actual packaged unit, and `kleinPolygonPackagedUnitPath_mk` proves its exact
 fundamental-groupoid class.  The next comparison can therefore use this path
 without unfolding or equating proof-dependent casts.
+`kleinPolygonPackagedUnitConnector` composes that representative with the
+inverse-mapped skeleton connector, and
+`kleinPolygonPackagedUnitConnector_mk` proves that its class is exactly the
+packaged unit followed by the inverse functor map.  Comparing this connector
+with the earlier concrete deformation connector is the remaining cast seam.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.

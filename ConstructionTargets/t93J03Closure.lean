@@ -1402,6 +1402,53 @@ theorem kleinPolygonPackagedUnitPath_mk :
           (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
   Classical.choose_spec exists_kleinPolygonPackagedUnitPath
 
+/-- A concrete representative of the connector used by the packaged
+outer-piece equivalence: first its actual unit component, then the inverse
+image of the chosen skeleton connector. -/
+noncomputable def kleinPolygonPackagedUnitConnector : Path
+    (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+    (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  kleinPolygonPackagedUnitPath.trans
+    (kleinPolygonOverlapImageToSkeletonPointPath.map
+      kleinPolygonOuterHomotopyEquivSkeleton.invFun.continuous)
+
+/-- The packaged connector represents exactly the unit followed by the
+inverse functor's image of the chosen skeleton connector. -/
+theorem kleinPolygonPackagedUnitConnector_mk :
+    (⟦kleinPolygonPackagedUnitConnector⟧ :
+      FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonSkeletonToOuter kleinSkeletonPoint)) =
+      kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app _ ≫
+        kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.map
+          ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧ := by
+  change ⟦kleinPolygonPackagedUnitPath.trans
+    (kleinPolygonOverlapImageToSkeletonPointPath.map
+      kleinPolygonOuterHomotopyEquivSkeleton.invFun.continuous)⟧ = _
+  let q :
+      FundamentalGroupoid.mk
+          (kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.obj
+            (kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+              (FundamentalGroupoid.mk
+                (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)))).as ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+    ⟦kleinPolygonOverlapImageToSkeletonPointPath.map
+      kleinPolygonOuterHomotopyEquivSkeleton.invFun.continuous⟧
+  change (⟦kleinPolygonPackagedUnitPath⟧ :
+      FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.obj
+            (kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+              (FundamentalGroupoid.mk
+                (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)))).as) ≫ q = _
+  calc
+    _ = kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app _ ≫ q :=
+      congrArg (fun f => f ≫ q) kleinPolygonPackagedUnitPath_mk
+    _ = _ := by congr 1
+
 /-- On the preferred skeleton basepoint, the direct skeleton-to-outer map is
 literally the inverse functor of the groupoid equivalence.  This removes the
 target-side cast from the remaining source-coordinate comparison. -/
@@ -1714,6 +1761,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
 #print axioms kleinPolygonPackagedUnitPath_mk
+#print axioms kleinPolygonPackagedUnitConnector_mk
 #print axioms kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
 #print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
 #print axioms kleinPolygonFundamentalGroupEquivPresented
