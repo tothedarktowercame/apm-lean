@@ -931,6 +931,39 @@ def regularFiberTopDegreeFormula_of_localizedFormulas
     { comparison := componentFormula.toComparison
       topDegree_eq := topFormula.topDegree_eq }
 
+/-- Final chart-level assembly: the local homology equations, component
+boundary calculation, and global signed-count calculation imply H₂ vanishing. -/
+theorem topHomologyMap_eq_zero_of_chartCoefficientCalculations
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)} {y : S}
+    (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (orientationSign : OccupiedRegularFiberComponent f c y hy → ℤ)
+    (coefficient : {x : S // f x = y} → ℤ)
+    (hcoefficient : ∀ x, coefficient x •
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 0) (x : S) =
+      localizationMap (x : S) 2
+        (groupGlobalGenerator (TopCat.of S) 2 e))
+    (hcomponent : ∀ k, componentLocalDegreeSum
+      (occupiedRegularFiberComponentIndex f c y hy) coefficient k =
+        exactLiftComponentDegree lifts k)
+    (htop : surfaceTopDegree e f = ∑ x,
+      orientationSign (occupiedRegularFiberComponentIndex f c y hy x) *
+        coefficient x) : homologyMap 2 f = 0 := by
+  let componentFormula :=
+    regularFiberLocalizedComponentFormula_of_chartCoefficients hy e lifts
+      orientationSign coefficient hcoefficient hcomponent
+  let topFormula :=
+    regularFiberLocalizedTopDegreeFormula_of_chartCoefficients hy e
+      orientationSign coefficient hcoefficient htop
+  exact topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula e lifts
+    (regularFiberTopDegreeFormula_of_localizedFormulas hy e lifts
+      componentFormula topFormula)
+
 end ConstructionTargets.T00J02Closure
 
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomology_localFundamentalClassIso
@@ -944,6 +977,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalizedComponentFormula_of_chartCoefficients
 #print axioms ConstructionTargets.T00J02Closure.regularFiberTopDegreeFormula_of_localizedFormulas
 #print axioms ConstructionTargets.T00J02Closure.regularFiberLocalizedTopDegreeFormula_of_chartCoefficients
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_chartCoefficientCalculations
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
