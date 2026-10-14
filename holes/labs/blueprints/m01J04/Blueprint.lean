@@ -2920,6 +2920,24 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_translate
       (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε := by
   sorry
 
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_integrable
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ0 : ∀ x, 0 ≤ κ x) (hκ1 : (∫ x, κ x ∂volume) = 1) :
+    Integrable κ volume := by
+  exact integrable_of_integral_eq_one hκ1
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    (y : EuclideanSpace ℝ (Fin d)) :
+    MemLp (fun x ↦ f (x - y)) 2 volume ∧
+      eLpNorm (fun x ↦ f (x - y)) 2 volume = eLpNorm f 2 volume := by
+  have hmp := measurePreserving_sub_right volume y
+  have hc : (fun x ↦ f (x - y)) = f ∘ (fun x ↦ x - y) := rfl
+  rw [hc]
+  exact ⟨hf.comp_measurePreserving hmp,
+    eLpNorm_comp_measurePreserving hf.1 hmp⟩
+
 /-- Minkowski's integral inequality for a probability kernel supported in the
 `ρ`-ball: the mollification error is at most the worst translation error. -/
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
