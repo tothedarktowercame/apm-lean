@@ -2073,7 +2073,32 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_zeroSet
 -- BEGIN SEAT AREA
 lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_deriv_bound :
     ∃ M : ℝ, ∀ t : ℝ, |deriv Real.smoothTransition t| ≤ M := by
-  sorry
+  have hcont : Continuous (fun t : ℝ ↦ |deriv Real.smoothTransition t|) :=
+    ((@Real.smoothTransition.contDiff 2).continuous_deriv (by norm_num)).abs
+  obtain ⟨M, hM⟩ :=
+    ((isCompact_Icc : IsCompact (Set.Icc (0 : ℝ) 1)).bddAbove_image
+      hcont.continuousOn)
+  have hM0 : 0 ≤ M := by
+    have h := hM ⟨(0 : ℝ), by simp, rfl⟩
+    exact (abs_nonneg _).trans h
+  refine ⟨M, fun t ↦ ?_⟩
+  by_cases ht : t ∈ Set.Icc (0 : ℝ) 1
+  · exact hM ⟨t, ht, rfl⟩
+  · have hout : t < 0 ∨ 1 < t := by
+      by_cases h0 : 0 ≤ t
+      · exact Or.inr (lt_of_not_ge fun h1 ↦ ht ⟨h0, h1⟩)
+      · exact Or.inl (lt_of_not_ge h0)
+    rcases hout with hneg | hpos
+    · have heq : Filter.EventuallyEq (nhds t) Real.smoothTransition (fun _ ↦ 0) := by
+        filter_upwards [eventually_lt_nhds hneg] with x hx
+        exact Real.smoothTransition.zero_of_nonpos hx.le
+      rw [heq.deriv_eq]
+      simpa using hM0
+    · have heq : Filter.EventuallyEq (nhds t) Real.smoothTransition (fun _ ↦ 1) := by
+        filter_upwards [eventually_gt_nhds hpos] with x hx
+        exact Real.smoothTransition.one_of_one_le hx.le
+      rw [heq.deriv_eq]
+      simpa using hM0
 -- END SEAT AREA
 
 /-- Bulk term: `χ_r • ∇(fφ) → ∇(fφ)` in `L²` (dominated convergence, `|χ_r| ≤ 1`,
