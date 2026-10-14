@@ -36161,6 +36161,16 @@
       :exit 1,
       :correction
       "canonical master checkout, not frame; Lake build passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792001926737-12090-a053f02d",
+     :commands
+     ["git show/check/diff 52b6d5e5; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 52b6d5e5 adds compiled, sorry-free progress beyond the prior program milestone. The theorem correctly combines the subdivision reconstruction with the dependent finite-fold replacement: the endpoint-cast original path equals the concatenation of any family whose piece classes agree pointwise. Endpoint casts remain explicit. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists choosing normalized outer factors, surjectivity/reverse kernel, winding, C1/C2/Main."},
     :commit "52b6d5e5a66da6c1c5b00e71e16b58967f3ae4bc",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      "7a63bd4992e5496b0ace13c4c08c00a2dcd7793aaeae4230080f3681ef4b5ccd"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Bound the generic finite fold to the actual subdivision reconstruction and endpoint casts; the concrete normalized outer factor family remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36407,7 +36417,11 @@
     {:job 9,
      :commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7",
      :reason
-     "Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains."}]}
+     "Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains."}
+    {:job 1,
+     :commit "52b6d5e5a66da6c1c5b00e71e16b58967f3ae4bc",
+     :reason
+     "Bound the generic finite fold to the actual subdivision reconstruction and endpoint casts; the concrete normalized outer factor family remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39098,7 +39112,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -39111,7 +39125,9 @@
     :type
     "subdivision path class equals concat of any pointwise-equal replacement family",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "52b6d5e5a66da6c1c5b00e71e16b58967f3ae4bc"},
    :id
    :lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq,
    :kind :lemma,
