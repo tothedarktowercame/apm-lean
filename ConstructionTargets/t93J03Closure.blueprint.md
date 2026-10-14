@@ -253,6 +253,10 @@ word may be conjugated.  The quotient needs only its normal closure.
 fact: transporting the same loop along any two connectors with common
 endpoints produces conjugate target loops.  The geometric calculation may
 therefore choose a convenient connector without changing the quotient.
+`kleinPolygonUntransportedWindingOne` exposes the exact loop before that
+connector, and `kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq` reduces
+the required conjugacy to computing its image along any convenient explicit
+path as `kleinAabbWord`.
 `kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj` proves that conjugacy of
 the winding-one image with `kleinAabbWord` gives exactly the required normal
 closure equality.  The remaining geometric comparison should therefore be
