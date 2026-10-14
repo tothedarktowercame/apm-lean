@@ -108,17 +108,40 @@ already included by `EqvGen`; interior points have singleton classes.
 
 ### Cut-and-paste
 
-- `cutAndPaste_aux_triangle_charts` is currently the single **LIBRARY** leaf
-  (100--150 lines once a polygon/triangle PL toolkit is available).  It
-  constructs both maps from `Fin 2 × Disk`, proves continuity and coverage,
-  and performs the two directed boundary-fibre checks.  The natural reusable
-  missing foundation is a theorem that a closed Euclidean triangle (and a
-  finite convex polygon triangulated from a diagonal) is a quotient image of
-  `Disk`, with prescribed oriented boundary arcs.  Mathlib tools to try are
-  `Convex`, `AffineMap`, `ContinuousMap.piecewise`,
-  `IsClosed.isClosedEmbedding_subtypeVal`, and
-  `IsQuotientMap.of_surjective_continuous`; no SphereCap/LinearGraphMeasure
-  import is permitted.
+- `cutAndPaste_aux_convex_radial_chart` (70--110 lines, independent) is the
+  reusable convex-body leaf.  Translate by `-p`, apply
+  `gaugeRescaleHomeomorph` between the translated body and the open unit ball,
+  restrict its inverse to closures, then translate back.  Use
+  `image_gaugeRescaleHomeomorph_interior`,
+  `image_gaugeRescaleHomeomorph_closure`, and the defining gauge formula for
+  the positive-ray clause.  Alternatively
+  `exists_homeomorph_image_interior_closure_frontier_eq_unitBall` supplies the
+  three image equalities, but its arbitrary homeomorphism does *not* by itself
+  prove the ray formula.
+- `cutAndPaste_aux_triangle_chart_generators` (120--150 lines, independent
+  given `hradial`) defines the two half-disks cut by the chord between the two
+  `x` vertices.  Each is an intersection of the closed disk with a closed
+  half-plane, hence compact and convex; choose its midpoint shifted slightly
+  toward its arc as the interior basepoint.  Apply `hradial` four times (old
+  and new placements), with a conjugating rotation/reflection for the new
+  placement.  Prove continuity and coverage with `Continuous.fin_cases` and
+  `Set.range_comp`; then check only raw `WordRel` generators.  The frontier is
+  the relevant circle arc union the chord (`frontier_inter_subset` plus the
+  elementary half-plane inequalities).  Old chord directions are opposite;
+  the new chord joins the two old `x` sides.  On the reversed block use
+  `edgePoint` with `reverseParameter` and `inverseWord`; close endpoint chains
+  with `EqvGen.trans`, not a raw generator.
+- `cutAndPaste_aux_triangle_charts_forward` (30--55 lines, independent given
+  `has` and `hgen`) lifts an old `EqvGen` chain.  At every intermediate disk
+  point use `has` to choose a preimage in `Fin 2 × Disk`; apply `hgen` to each
+  generator, and preserve `refl`, `symm`, and `trans`.
+- `cutAndPaste_aux_triangle_charts_reverse` (30--55 lines, independent given
+  `hbs` and `hgen`) is the symmetric lift for the target relation.  It uses
+  `hbs` for intermediate preimages and otherwise the same `EqvGen` induction.
+- `cutAndPaste_aux_triangle_charts` is now a sorry-free assembly of those four
+  leaves.  The two lift leaves deliberately receive the generator calculation
+  and surjectivity as explicit hypotheses, so seats do not acquire one
+  another's `sorryAx`.
 - `cutAndPaste_aux_relation_iff` (25--40 lines, independent) combines the two
   directed fibre statements.  `cutAndPasteParameterRel` names the old-picture
   pullback relation so the two direction proofs can be developed separately
@@ -132,6 +155,13 @@ orientations are opposite.  On the new picture this accounts exactly for
 taken in `EqvGen`, not just `WordRel`.  `hw.1` rules out an empty old polygon,
 and `cutAndPaste_aux_span_aux_target_polygon` supplies the corresponding
 nonempty/even target check.
+
+Radial-chart degeneracies: compactness plus `p ∈ interior K` excludes an empty
+or lower-dimensional body and gives positive gauge on every unit ray.  Chord
+endpoints belong to both the arc and chord pieces; all formulas must agree
+there.  A zero-length word block changes only which polygon vertices coincide,
+not the nondegenerate chord or either half-disk.  Dimension zero is irrelevant
+because this lemma is specialized to `ℂ`.
 
 Review (claude-14, 2026-10-14): `CancellationZipSpec.interior_iff` was unsatisfiable (zipped arcs map to an interior slit, so boundary ↛ boundary); replaced by `interior_maps` (interior → interior) and a one-sided `interior_injective` (p interior, c p = c q → p = q), which is what zip_interior needs.
 

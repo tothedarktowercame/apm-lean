@@ -1834,13 +1834,19 @@ lemma cutAndPaste_aux_triangle_chart_generators {Label : Type*}
           (b y) (b y')) ∧
       (∀ y y', WordRel (u ++ [x, x] ++ inverseWord v ++ t) (b y) (b y') →
         Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
-          (a y) (a y')) := by
+          (a y) (a y')) ∧
+      (∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y')) ∧
+      (∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')) := by
   sorry
 
+/-- Review 2026-10-14: `hfib` added — `a` is not injective (diagonal points
+have a preimage in each triangle), so generator facts alone do not lift an
+`EqvGen` chain; without it the lemma is false. -/
 lemma cutAndPaste_aux_triangle_charts_forward {Label : Type*}
     [DecidableEq Label] (u v t : List (Signed Label)) (x : Signed Label)
     (a b : Fin 2 × Disk → Disk)
     (has : Function.Surjective a)
+    (hfib : ∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y'))
     (hgen : ∀ y y', WordRel (u ++ [x] ++ v ++ [x] ++ t) (a y) (a y') →
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
         (b y) (b y')) :
@@ -1853,6 +1859,7 @@ lemma cutAndPaste_aux_triangle_charts_reverse {Label : Type*}
     [DecidableEq Label] (u v t : List (Signed Label)) (x : Signed Label)
     (a b : Fin 2 × Disk → Disk)
     (hbs : Function.Surjective b)
+    (hfib : ∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y'))
     (hgen : ∀ y y', WordRel (u ++ [x, x] ++ inverseWord v ++ t) (b y) (b y') →
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
         (a y) (a y')) :
@@ -1875,13 +1882,13 @@ lemma cutAndPaste_aux_triangle_charts {Label : Type*} [DecidableEq Label]
       (∀ y y', Relation.EqvGen
           (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y') →
         cutAndPasteParameterRel u v t x a y y') := by
-  obtain ⟨a, b, ha, hb, has, hbs, hf, hr⟩ :=
+  obtain ⟨a, b, ha, hb, has, hbs, hf, hr, hfa, hfb⟩ :=
     cutAndPaste_aux_triangle_chart_generators u v t x hx hw
       (fun K p hKc hKcompact hp =>
         cutAndPaste_aux_convex_radial_chart K p hKc hKcompact hp)
   exact ⟨a, b, ha, hb, has, hbs,
-    cutAndPaste_aux_triangle_charts_forward u v t x a b has hf,
-    cutAndPaste_aux_triangle_charts_reverse u v t x a b hbs hr⟩
+    cutAndPaste_aux_triangle_charts_forward u v t x a b has hfa hf,
+    cutAndPaste_aux_triangle_charts_reverse u v t x a b hbs hfb hr⟩
 
 /-- Leaf (relation assembly, 25--40 lines): combine the independently usable
 forward and reverse fibre calculations. -/
