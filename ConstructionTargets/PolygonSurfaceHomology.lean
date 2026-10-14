@@ -479,6 +479,86 @@ theorem finiteWedgeH1CoordinateMap_single (P : PairingData)
         finiteWedgeH1Presentation (PairingOrbit P.pair))) n) = _
   rw [Iso.hom_inv_id_assoc, sigma_ι_finiteWedgeH1Presentation]
 
+/-! ### Circle-leg collapse maps -/
+
+/-- Collapse every circle leg except `l` to the basepoint.  These maps
+separate the degree-one coordinates and are the geometric input for proving
+the normalized presentation monic. -/
+noncomputable def finiteWedgeCollapse {L : Type} [DecidableEq L] (l : L) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L → Circle :=
+  Quotient.lift (fun p : L × Circle => if p.1 = l then p.2 else 1) (by
+    intro a b hab
+    change Relation.EqvGen
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) a b at hab
+    rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at hab
+    rcases hab with rfl | ⟨ha, hb⟩
+    · rfl
+    · have ha' : a.2 = (1 : Circle) := by
+        apply Circle.coe_injective
+        simpa using ha
+      have hb' : b.2 = (1 : Circle) := by
+        apply Circle.coe_injective
+        simpa using hb
+      simp [ha', hb'])
+
+@[simp]
+theorem finiteWedgeCollapse_wedgeCircle_self {L : Type} [DecidableEq L]
+    (l : L) (z : Circle) :
+    finiteWedgeCollapse l
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) = z := by
+  simp [finiteWedgeCollapse, PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle]
+
+@[simp]
+theorem finiteWedgeCollapse_wedgeCircle_of_ne {L : Type} [DecidableEq L]
+    {l k : L} (h : k ≠ l) (z : Circle) :
+    finiteWedgeCollapse l
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k z) = 1 := by
+  simp [finiteWedgeCollapse, PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle, h]
+
+/-- The collapse to one circle leg is continuous for the quotient topology
+used by `FiniteWedge`. -/
+theorem continuous_finiteWedgeCollapse {L : Type} [DecidableEq L] (l : L) :
+    Continuous (finiteWedgeCollapse l) := by
+  apply continuous_coinduced_dom.mpr
+  letI : TopologicalSpace L := ⊥
+  letI : DiscreteTopology L := ⟨rfl⟩
+  rw [continuous_prod_of_discrete_left]
+  intro k
+  by_cases h : k = l
+  · subst k
+    simpa [finiteWedgeCollapse,
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle] using
+        (continuous_id : Continuous (fun z : Circle => z))
+  · simpa [finiteWedgeCollapse,
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle, h] using
+        (continuous_const : Continuous (fun _ : Circle => (1 : Circle)))
+
+/-- The induced map on first homology from the wedge to one selected circle
+coordinate. -/
+noncomputable def finiteWedgeCollapseH1 {L : Type} [DecidableEq L] (l : L) :
+    SpaceH (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) 1 ⟶
+      SpaceH Circle 1 :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).map
+      (TopCat.ofHom ⟨finiteWedgeCollapse l, continuous_finiteWedgeCollapse l⟩)
+
+/-- Collapsing after inclusion of the selected leg induces the identity on
+first homology. -/
+theorem finiteWedgeLegH1_collapse_self {L : Type} [DecidableEq L] (l : L) :
+    finiteWedgeLegH1 l ≫ finiteWedgeCollapseH1 l = 𝟙 (SpaceH Circle 1) := by
+  rw [finiteWedgeLegH1, finiteWedgeCollapseH1]
+  rw [← Functor.map_comp]
+  have hc :
+    TopCat.ofHom ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+        PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩ ≫
+      TopCat.ofHom ⟨finiteWedgeCollapse l, continuous_finiteWedgeCollapse l⟩ =
+        𝟙 (TopCat.of Circle) := by
+    ext z
+    exact congrArg ((↑) : Circle → ℂ)
+      (finiteWedgeCollapse_wedgeCircle_self l z)
+  rw [hc]
+  exact CategoryTheory.Functor.map_id _ _
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
