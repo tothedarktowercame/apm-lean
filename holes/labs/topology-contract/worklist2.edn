@@ -87946,6 +87946,18 @@
     [{:cmd "first formula build",
       :exit 1,
       :correction "used local-base Hurewicz"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792017672448-12587-83911870",
+     :commands
+     ["git show/diff 487d67321; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; 487d67321 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 eb26089987415931014eff7888012198de52351bd9ab5040fac3b43e51f08569 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The explicit winding loop is mapped into each wedge leg, compared with the normalized leg by the carried unit exponent, then cast from the leg basepoint to the common word basepoint. Hurewicz respects both the cast and exponent, yielding the orientation unit times the correct orbit-basis class. New compiled progress; remaining finite boundary subdivision/product, B7, then B8-B10."},
     :commit "487d67321",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87966,7 @@
      "eb26089987415931014eff7888012198de52351bd9ab5040fac3b43e51f08569"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87986,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit winding-one formulas for forward and reversed boundary edges.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-base explicit-leg H1 formula.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88236,7 +88248,10 @@
     {:job 9,
      :commit "34e4a3658",
      :reason
-     "Banked explicit winding-one formulas for forward and reversed boundary edges."}]}
+     "Banked explicit winding-one formulas for forward and reversed boundary edges."}
+    {:job 1,
+     :commit "487d67321",
+     :reason "Banked common-base explicit-leg H1 formula."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92103,7 +92118,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeExplicitLegClassAtBase_hurewicz",
@@ -92113,7 +92128,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "explicit leg has orientation-unit basis H1 class",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "487d67321"},
    :id :lemma-finitewedgeexplicitlegclassatbase-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-finitewedgeexplicitlegclass-eq-positive-zpow],
