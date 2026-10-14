@@ -93,6 +93,15 @@ theorem transverseCircle_preimage_component_signedCount
   exact ⟨γ, ℓ, hxγ, hγsub, hlift,
     circleDegree_eq_zero_of_homologyMap_eq_zero ℓ hℓzero⟩
 
+/-- A discrete point fiber of a continuous self-map of a compact Hausdorff
+space is finite.  Transversality supplies discreteness in the remaining
+regular-value argument; compactness is discharged here once and for all. -/
+theorem finite_regularFiber_of_isDiscrete
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    (f : C(S, S)) (y : S) (hdiscrete : IsDiscrete (f ⁻¹' {y})) :
+    (f ⁻¹' {y}).Finite := by
+  exact (isClosed_singleton.preimage f.continuous).isCompact.finite hdiscrete
+
 /-- The signed contribution of finitely many transverse preimage components.
 The orientation sign and the winding degree are kept as separate factors so
 the geometric component theorem can discharge the latter pointwise. -/
@@ -221,6 +230,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
+#print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.regularValue_topDegree_eq_zero_of_signedCount
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopDegree_eq_homologyMap
