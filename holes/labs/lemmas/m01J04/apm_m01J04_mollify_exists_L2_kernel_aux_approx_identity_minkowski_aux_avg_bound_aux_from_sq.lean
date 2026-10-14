@@ -3203,7 +3203,13 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_
     (F : EuclideanSpace ℝ (Fin d) → E) {C : ℝ≥0∞}
     (h : ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume ≤ C ^ 2) :
     eLpNorm F 2 volume ≤ C := by
-  sorry
+  apply (ENNReal.pow_le_pow_left_iff (by norm_num : (2 : ℕ) ≠ 0)).mp
+  have heq : eLpNorm F 2 volume ^ (2 : ℕ) =
+      ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume := by
+    simpa [ENNReal.rpow_two] using
+      (MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
+        (f := F) (p := (2 : NNReal)) (by norm_num))
+  rwa [heq]
 -- END SEAT AREA
 
 /-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
