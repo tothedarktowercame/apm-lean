@@ -36160,6 +36160,16 @@
       :exit 1,
       :correction
       "rebuilt missing PolygonSurfaceHomology olean; passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791976925566-11777-0e984fac",
+     :commands
+     ["git show/check/diff d7297e3e; scope and orientation review"
+      "sha256sum fixture; lean closure, fixture, Main"
+      "statement registry; placeholder and axiom recount"],
+     :finding
+     "PASS. Commit d7297e3e adds compiled, sorry-free progress: it constructs the correctly oriented path from the old polygon basepoint to the skeleton-image basepoint, postcomposes the transported outer map with the induced group equivalence, and preserves the forward kernel inclusion. Scope and fixture hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Map equality, reverse inclusion, surjectivity, and winding remain listed."},
     :commit "d7297e3e75e94a762e551350420cfd1c40478a33",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36180,7 @@
      "7bd20059df1ca855d52c0fc3187e43be76221e4047202a1fa3027ac301ee3d5f"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36350,7 +36360,11 @@
     {:job 4,
      :commit "761b8821a80e774da35733af17705fbf7f177221",
      :reason
-     "Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain."}]}
+     "Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain."}
+    {:job 5,
+     :commit "d7297e3e75e94a762e551350420cfd1c40478a33",
+     :reason
+     "Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38634,7 +38648,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -38646,7 +38660,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "forward kernel inclusion after target transport",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d7297e3e75e94a762e551350420cfd1c40478a33"},
    :id
    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel,
    :kind :lemma,
