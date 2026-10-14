@@ -36115,64 +36115,54 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual "Prove polygon van Kampen; apply C1, then C2/Main.",
+    :residual
+    "Impose the aabb attaching relation; apply C1, then C2/Main.",
     :outcome :stop,
-    :warnings
-    ["unused SLSC owner-approved"
-     "unrelated PolygonSurfaceHomology edit preserved"],
+    :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPairingSpacePathConnectedSpace",
-      :type "PathConnectedSpace polygon quotient",
+    [{:name "kleinSkeletonFundamentalGroupEquivCoprod",
+      :type "pi1(TwoCircles) equiv coproduct of two circle pi1 groups",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPairingSpaceHomeomorph"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 equals PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygon_attaching_arcs"],
+      :depends-on
+      ["kleinPolygon_attaching_arcs"
+       "kleinSkeletonFundamentalGroupEquivCoprod"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed polygon-source path-connectedness; van Kampen remains.",
+    "Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean polygon-path fixture", :exit 0}
+     {:cmd "lake env lean skeleton-pi1 fixture", :exit 0}
      {:cmd "statement-registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791937400330-11031-75bd6eab",
-     :commands
-     ["git show/diff 6c95a6d8; scope/orientation review"
-      "sha256sum fixture; show --check; placeholder recount"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture"
-      "statement-registry check"],
-     :finding
-     "PASS. Commit 6c95a6d8 adds compiled, sorry-free standard-axiom progress after cb0fb3be: it transports PathConnectedSpace from the exact frozen KleinBottle back through the inverse of the established polygon homeomorphism, yielding path-connectedness for the precise polygon quotient used by van Kampen. Fixture hash matches; registry 166/166; Main placeholder 1->1. Polygon van Kampen, then C1/C2/Main, remain listed. SemilocallySimplyConnected X is unused, mandated by problem.md."},
-    :commit "6c95a6d8e0a68fe6c98a2ea53637b5c2cd8c9ae7",
+    :commit "8da45fbae8f9a7f426a863fe55042dff748063c0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_polygon_path_connected_check.lean",
+    {:path "/tmp/t93j03_skeleton_pi1_check.lean",
      :sha256
-     "3acb7bfef7aef45569d2fe57eab172448419caa2c021389f50f913ea8713b012",
+     "861c40ff0288697fc4c900ec9192b09f3d782d1a83e8b124b05450d4bd6521a5",
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37594,7 +37584,8 @@
    [:lemma-kleinskeletonhomeomorphtwocircles
     :lemma-t93j03-polygon-attaching-word
     :lemma-kleinpolygon-attaching-arcs
-    :lemma-kleinrelator-generatorchange-eq-one-iff],
+    :lemma-kleinrelator-generatorchange-eq-one-iff
+    :lemma-kleinskeletonfundamentalgroupequivcoprod],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37813,6 +37804,23 @@
    :id :lemma-kleinpairingspacepathconnectedspace,
    :kind :lemma,
    :depends-on [:lemma-kleinpairingspacehomeomorph],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSkeletonFundamentalGroupEquivCoprod",
+    :type "pi1(TwoCircles) equiv coproduct of two circle pi1 groups"},
+   :lemma
+   {:name "kleinSkeletonFundamentalGroupEquivCoprod",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "pi1(TwoCircles) equiv coproduct of two circle pi1 groups",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinskeletonfundamentalgroupequivcoprod,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
