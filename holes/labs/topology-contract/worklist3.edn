@@ -36121,67 +36121,55 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Normalize reconstructed arrows using inner contractibility and overlap connectivity; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Collapse maximal inner runs between overlap vertices; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings
     ["unused SLSC owner-approved"
      "dirty PolygonSurfaceHomology preserved"],
     :missing-theorems
-    [{:name "kleinPolygonPseudopushout_arrow_eq_reconstructed",
-      :type
-      "ambient arrow equals unit-conjugated pseudopushout reconstruction",
+    [{:name "pathTwoOpenSubdivision_transition_mem_overlap",
+      :type "adjacent side-change vertex belongs to overlap",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonFundamentalGroupoidPseudopushout"],
+      :depends-on ["kleinPolygonPseudopushout_arrow_eq_reconstructed"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonPseudopushout_arrow_eq_reconstructed"],
+      :depends-on ["pathTwoOpenSubdivision_transition_mem_overlap"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains.",
+    "Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains.",
     :commands
-    [{:cmd "lean closure; Main; registry; checks", :exit 0}
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lean fixture; Main; registry; checks", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lake build ConstructionTargets.t93J03Closure",
+    [{:cmd "lean closure",
       :exit 1,
-      :correction
-      "dirty PolygonSurfaceHomology failed; scoped source passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791999202439-11975-5a993be2",
-     :commands
-     ["git show/check/diff d72cefa5; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: d72cefa5 adds compiled, sorry-free progress beyond a6f0c4b6. Applying the proved pseudopushout equivalence to the identity functor produces a reconstruction, and unit naturality correctly expresses every ambient groupoid arrow as the reconstructed arrow conjugated by unit components. This is an extraction step, not an assumed based van Kampen conclusion. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists reconstruction normalization, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0",
+      :correction "opened subdivision namespace; rerun passed"}],
+    :commit "962be8771e84a7039a9cffd581eb22c778f1d587",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_pseudopushout_reconstruction_check.lean",
+    {:path "/tmp/t93j03_transition_overlap_check.lean",
      :sha256
-     "f4e9a2e95ee7f50ba7d3c65411712a11bd87d898bf37b628b2fdbe1228d9eac5",
-     :mode :blocked-by-unrelated-dependency},
+     "255f26197269c91f7e9163061e7239b4f923080b3e462ff61cc9952d74205953"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38612,7 +38600,8 @@
     :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map
     :lemma-kleinpolygonpackagedunitpath-mk
     :lemma-kleinpolygonpackagedunitconnector-mk
-    :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed],
+    :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed
+    :lemma-pathtwoopensubdivision-transition-mem-overlap],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38947,6 +38936,24 @@
    :id :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_transition_mem_overlap",
+    :type "adjacent side-change vertex belongs to overlap"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_transition_mem_overlap",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "adjacent side-change vertex belongs to overlap",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivision-transition-mem-overlap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
