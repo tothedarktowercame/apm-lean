@@ -2912,6 +2912,70 @@ theorem finiteWedgeFinLegFreeGroupMap_surjective (n : ℕ) :
   rcases finiteWedgeFinGeneratorWord_in_freeGroupImage n w with ⟨x, hx⟩
   exact ⟨x, hx.trans hw⟩
 
+/-- A finite coordinate labelling chosen so that the polygon's distinguished
+orbit is sent to coordinate zero. -/
+theorem pairingOrbitCard_pos (P : PairingData) :
+    0 < Fintype.card (PairingOrbit P.pair) :=
+  Fintype.card_pos_iff.mpr ⟨P.orbit ⟨0, P.edgeCount_pos⟩⟩
+
+def pairingOrbitFinZero (P : PairingData) :
+    Fin (Fintype.card (PairingOrbit P.pair)) :=
+  ⟨0, pairingOrbitCard_pos P⟩
+
+noncomputable def pairingOrbitEquivFinZero (P : PairingData) :
+    PairingOrbit P.pair ≃ Fin (Fintype.card (PairingOrbit P.pair)) :=
+  (Fintype.equivFin (PairingOrbit P.pair)).trans
+    (Equiv.swap
+      (Fintype.equivFin (PairingOrbit P.pair)
+        (P.orbit ⟨0, P.edgeCount_pos⟩)) (pairingOrbitFinZero P))
+
+@[simp]
+theorem pairingOrbitEquivFinZero_base (P : PairingData) :
+    pairingOrbitEquivFinZero P (P.orbit ⟨0, P.edgeCount_pos⟩) =
+      pairingOrbitFinZero P := by
+  simp [pairingOrbitEquivFinZero]
+
+/-- Relabel the orbit-indexed wedge while preserving the selected based
+fundamental-group point exactly. -/
+noncomputable def finiteWedgeOrbitHomeomorphFinZero (P : PairingData) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) ≃ₜ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (Fin (Fintype.card (PairingOrbit P.pair))) :=
+  finiteWedgeHomeomorphOfEquiv (pairingOrbitEquivFinZero P)
+
+@[simp]
+theorem finiteWedgeOrbitHomeomorphFinZero_wedgeCircle (P : PairingData)
+    (l : PairingOrbit P.pair) (z : Circle) :
+    finiteWedgeOrbitHomeomorphFinZero P
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (pairingOrbitEquivFinZero P l) z := rfl
+
+theorem finiteWedgeOrbitHomeomorphFinZero_base (P : PairingData) :
+    finiteWedgeOrbitHomeomorphFinZero P (orbitWedgeBase P) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (pairingOrbitFinZero P) 1 := by
+  simp [orbitWedgeBase]
+
+/-- The based fundamental group of the orbit-indexed wedge transported to
+finite coordinates with the distinguished orbit at zero. -/
+noncomputable def finiteWedgeOrbitFundamentalGroupEquivFin (P : PairingData) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+        (orbitWedgeBase P) ≃*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin (Fintype.card (PairingOrbit P.pair))))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (pairingOrbitFinZero P) 1) := by
+  let e := finiteWedgeOrbitHomeomorphFinZero P
+  have he : e (orbitWedgeBase P) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (pairingOrbitFinZero P) 1 :=
+    finiteWedgeOrbitHomeomorphFinZero_base P
+  rw [← he]
+  exact fundamentalGroupEquivOfHomeomorph e (orbitWedgeBase P)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
