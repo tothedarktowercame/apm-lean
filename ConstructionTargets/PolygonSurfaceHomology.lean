@@ -1974,6 +1974,14 @@ theorem finiteWedgeCoherentRightSourceUnitSquare_of_counit (n : ℕ)
   exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
     _ _ _ _ _ _ _ _ _ _ h
 
+/-- Triviality of the based counit normal form supplies the coherent source
+inverse-unit square needed by the installed connector comparison. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_of_counitNormalFormTrivial
+    (n : ℕ) (h : finiteWedgeRightBaseCounitNormalFormTrivial n) :
+    finiteWedgeCoherentRightSourceUnitSquare n :=
+  finiteWedgeCoherentRightSourceUnitSquare_of_counit n
+    ((finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial n).mpr h)
+
 /-- Endpoint transport and connector-square formulations are exactly
 equivalent, with the direction fixed by left cancellation. -/
 theorem finiteWedgeRightConnectorTransport_iff_connectorSquare (n : ℕ) :
