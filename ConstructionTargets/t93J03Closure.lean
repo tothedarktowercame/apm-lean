@@ -1376,6 +1376,15 @@ theorem kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector :
             ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧ := by
   rfl
 
+/-- On the preferred skeleton basepoint, the direct skeleton-to-outer map is
+literally the inverse functor of the groupoid equivalence.  This removes the
+target-side cast from the remaining source-coordinate comparison. -/
+theorem kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
+    (g : FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint) :
+    kleinPolygonSkeletonToOuterPiOne g =
+      kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.map g := by
+  rfl
+
 /-- The target-basepoint path matching the two stages already used on the
 domain side.  First the inverse homotopy-equivalence unit runs from the
 overlap image to its radial deformation; then the chosen skeleton connector
@@ -1678,6 +1687,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
 #print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
 #print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
+#print axioms kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
 #print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
 #print axioms kleinPolygonFundamentalGroupEquivPresented
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen

@@ -345,6 +345,10 @@ by the inverse-map image of the skeleton connector.  What remains at this
 seam is only reconciling Mathlib's casts in the packaged equivalence unit
 with this explicit quotient arrow, then applying the preceding categorical
 identity.
+`kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map` separately closes the
+target side of that cast comparison: at the preferred skeleton point, the
+literal direct skeleton-to-outer homomorphism is definitionally the inverse
+functor map.  Thus only the packaged unit/connector conjugation remains.
 `kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
