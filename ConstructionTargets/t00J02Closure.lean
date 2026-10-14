@@ -147,6 +147,15 @@ theorem isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
     subst z
     exact ⟨hxV, hx⟩
 
+/-- On a compact Hausdorff source, pointwise local injectivity along a fiber
+supplies the finite literal equality fiber required by the signed count. -/
+@[reducible] noncomputable def regularFiberFintype_of_locallyInjectiveAlongFiber
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    (f : C(S, S)) (y : S) (hlocal : LocallyInjectiveAlongFiber f y) :
+    Fintype {x : S // f x = y} :=
+  regularFiberFintype_of_isDiscrete f y
+    (isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber f y hlocal)
+
 /-- The range-sum formulation used by the frozen surface problem gives the
 operational coproduct-surjectivity witness at every incidence point. -/
 theorem transverse_coprodDerivative_surjective
@@ -541,6 +550,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
+#print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
