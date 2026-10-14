@@ -1982,6 +1982,32 @@ theorem finiteWedgeCoherentRightSourceUnitSquare_of_counitNormalFormTrivial
   finiteWedgeCoherentRightSourceUnitSquare_of_counit n
     ((finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial n).mpr h)
 
+/-- The same reduction at an arbitrary right-piece endpoint, in particular
+the shifted overlap endpoint used by the installed connector transport. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_at_of_counitNormalForm
+    (n : ℕ) :
+    let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+    let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+    let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+    let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+        P.2.mem P.1.mem P.2.contraction P.1.contraction
+    let source := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+        P.2.mem P.1.mem P.2.contraction P.1.contraction
+    ∀ A : FundamentalGroupoid
+        (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightPiece
+          x₀ y₀ P.1.carrier),
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).normalForm
+          (eR.counitIso.hom.app (eR.functor.obj A)) =
+        𝟙 (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).base →
+      (source.connector (eR.inverse.obj (eR.functor.obj A))).hom ≫
+          eR.unitIso.inv.app A = (source.connector A).hom := by
+  dsimp only
+  intro A h
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
+    _ _ _ _ _ _ _ _ _ _ A h
+
 /-- Endpoint transport and connector-square formulations are exactly
 equivalent, with the direction fixed by left cancellation. -/
 theorem finiteWedgeRightConnectorTransport_iff_connectorSquare (n : ℕ) :
