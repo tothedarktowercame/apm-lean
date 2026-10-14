@@ -4,6 +4,7 @@ import ConstructionTargets.PolygonOverlapHomotopyEquivCircle
 import ConstructionTargets.SingularHomologyConcrete
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.CircleHomology
+import ConstructionTargets.T02A06SphereH0
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -311,6 +312,82 @@ theorem outerHomotopyEquivWedge_skeleton (P : PairingData) (z : P.skeleton) :
   exact congrArg (fun w : OuterPiece P => w.1)
     ((punctureDeformationRetract P).fixed 1 (skeletonToOuter P z)
       ((mem_outerBoundarySkeleton_iff P (skeletonToOuter P z)).mpr z.2))
+
+/-! ### Degree zero of a finite circle wedge -/
+
+/-- Every nonempty indexed wedge of circles is path connected.  The proof
+joins each representative to the common wedge point inside its own circle
+leg, so it does not choose an ordering of the index type. -/
+noncomputable instance finiteWedgePathConnectedSpace
+    (L : Type) [Nonempty L] :
+    PathConnectedSpace
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) := by
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+          |>.isPathConnected_preimage.mpr isPathConnected_univ
+      simpa using h)
+  rw [pathConnectedSpace_iff_univ]
+  let l₀ : L := Classical.choice (inferInstance : Nonempty L)
+  refine ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1,
+    Set.mem_univ _, ?_⟩
+  intro y _
+  refine Quotient.inductionOn y ?_
+  rintro ⟨k, w⟩
+  have hy : Joined
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k w)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k (1 : Circle)) :=
+    ⟨(PathConnectedSpace.joined w 1).somePath.map
+      (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle k)⟩
+  rw [PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq k l₀] at hy
+  exact joinedIn_univ.mpr hy.symm
+
+/-- A canonical wedge point for the orbit-indexed wedge of a pairing datum,
+using the positive edge-count witness rather than a chosen orbit
+representative. -/
+def orbitWedgeBase (P : PairingData) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
+  PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+    (P.orbit ⟨0, P.edgeCount_pos⟩) 1
+
+/-- Additive-group degree-zero homology of the orbit-indexed wedge. -/
+noncomputable def finiteWedgeGroupH0IsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+      (TopCat.of
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair))) ≅ AddCommGrpCat.of ℤ := by
+  letI : Nonempty (PairingOrbit P.pair) := ⟨P.orbit ⟨0, P.edgeCount_pos⟩⟩
+  letI : Epi (ConstructionTargets.T02A06SphereH0.singularVertexH0Class
+      (orbitWedgeBase P)) :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi _
+  letI : Mono (ConstructionTargets.T02A06SphereH0.singularVertexH0Class
+      (orbitWedgeBase P)) :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_mono _
+  letI : IsIso (ConstructionTargets.T02A06SphereH0.singularVertexH0Class
+      (orbitWedgeBase P)) := isIso_of_mono_of_epi _
+  exact (asIso (ConstructionTargets.T02A06SphereH0.singularVertexH0Class
+    (orbitWedgeBase P))).symm
+
+/-- Module-category degree-zero homology of the orbit-indexed wedge. -/
+noncomputable def finiteWedgeH0IsoInt (P : PairingData) :
+    SpaceH
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) 0
+        ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)))
+    0 (ModuleCat.of ℤ ℤ) (finiteWedgeGroupH0IsoInt P)
+
+/-- The radial outer piece has integral zeroth homology `ℤ`. -/
+noncomputable def outerH0IsoInt (P : PairingData) :
+    SpaceH (OuterPiece P) 0 ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of (OuterPiece P)) 0 (ModuleCat.of ℤ ℤ)
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        (outerHomotopyEquivWedge P) 0 ≪≫ finiteWedgeGroupH0IsoInt P)
 
 end
 
