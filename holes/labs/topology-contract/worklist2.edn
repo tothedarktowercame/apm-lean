@@ -87901,81 +87901,66 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual "Finish adjacent B6 coordinate exactness; then B7-B10.",
+    :residual "Prove B7 boundary coordinates, then B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "biprodSndIsoOfIsZero",
-      :type "A=0 gives A⊞B≅B",
+    [{:name "HasExactArrows",
+      :type "exact complex exposing arrows",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "radialMVPieces_comp_zero",
-      :type "intersection-reassembly composite is zero",
+     {:name "hasExactArrows_of_exact",
+      :type "package an exact complex",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVPiecesExact"],
-      :area "polygon-quotient-homology"}
-     {:name "radialMVReducedPiecesExact",
-      :type "B6 exact at outer coordinates",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVBoundaryGroup"],
+      :depends-on ["HasExactArrows"],
       :area "polygon-quotient-homology"}
      {:name "radialMVSegment",
-      :type "full B6 coordinate segment",
-      :status :partial,
+      :type "B6 exact coordinate fragment",
+      :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["radialMVReducedPiecesExact"
        "radialMVUnionExact"
        "radialMVIntersectionExact"],
+      :area "polygon-quotient-homology"}
+     {:name "radialMV_boundary_eq",
+      :type "B7 boundary equals attachingBoundary",
+      :status :not-started,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["radialMVSegment"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked reduced B6 middle exactness.",
+    :reason "Banked B6 exact segment.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
-     {:cmd "statement-registry.py check", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 7b09f5ac4", :exit 0}],
+     {:cmd "git show --check 4e4ae3741", :exit 0}],
     :diagnostic-history
-    [{:cmd "reduction draft",
+    [{:cmd "exact-arrow draft",
       :exit 1,
-      :correction "fixed iso orientation/associativity"}
-     {:cmd "early axioms query",
-      :exit 1,
-      :correction "reran post-build"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792008372812-12308-6198c7c6",
-     :commands
-     ["git show/diff 7b09f5ac4; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: 7b09f5ac4 (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 1325c3a07fdd687bb233c9c6f3505e60b69e6ca18151010fa50108f60779cfca matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. For zero inner H1, snd:A+B->B and inr are inverse. The reduced arrows retain intersection->pieces->union orientation, and the short-complex iso correctly transports prior exactness to fixed outer coordinates. New compiled progress; remaining: adjacent B6 exactness, then B7-B10."},
-    :commit "7b09f5ac4",
+      :correction "indexed by zero proof"}],
+    :commit "4e4ae3741",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "1325c3a07fdd687bb233c9c6f3505e60b69e6ca18151010fa50108f60779cfca"},
+     "702a1975b8dce3234342c68034d8a1f2b3abd7bbd16eb9e1e01a0e2451376957"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91053,7 +91038,8 @@
    {:name "radialMVSegment",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B6 coordinate exact segment",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-radialmvsegment,
    :kind :lemma,
    :depends-on
@@ -91230,4 +91216,53 @@
    :id :lemma-radialmvreducedpiecesexact,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "HasExactArrows", :type "exact complex exposing arrows"},
+   :lemma
+   {:name "HasExactArrows",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "exact complex exposing arrows",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-hasexactarrows,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "hasExactArrows_of_exact",
+    :type "package an exact complex"},
+   :lemma
+   {:name "hasExactArrows_of_exact",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "package an exact complex",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-hasexactarrows-of-exact,
+   :kind :lemma,
+   :depends-on [:lemma-hasexactarrows],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMV_boundary_eq",
+    :type "B7 boundary equals attachingBoundary"},
+   :lemma
+   {:name "radialMV_boundary_eq",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "B7 boundary equals attachingBoundary",
+    :area "polygon-quotient-homology"},
+   :id :lemma-radialmv-boundary-eq,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvsegment],
    :other-consumers [:t94J09]}]}
