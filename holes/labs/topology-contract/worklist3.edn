@@ -36121,70 +36121,56 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Run-block regrouping; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "First/last slice coverage; run-fold regrouping; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name
-      "pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints",
-      :type "outer run fold at subdivision endpoints",
+    [{:name "pathTwoOpenSubdivisionRunStart_eq_previous_end",
+      :type "adjacent maximal-run slices have contiguous coordinates",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunFold_exists_outerPath"],
+      :depends-on
+      ["pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints"],
+      :depends-on ["pathTwoOpenSubdivisionRunStart_eq_previous_end"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Rebased the outer run fold at literal subdivision endpoints; regrouping remains.",
+    "Proved consecutive maximal-run slices are contiguous; first/last coverage and fold induction remain.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t93j03_run_fold_endpoints_check.lean",
+     {:cmd "lake env lean /tmp/t93j03_run_start_contiguous_check.lean",
       :exit 0}
      {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "prototype",
-      :exit 1,
-      :correction "built missing olean; passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792018614420-12608-9069bdd8",
-     :commands
-     ["git archive 8c4eb4f snapshot; theorem and forbidden-token audit"
-      "fixture SHA-256 assertion; lean t93J03 Main"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS: recorded snapshot 8c4eb4f was compiled sorry-free with standard axioms and freshly audits clean; divergent later working-tree closure was excluded. It adds real progress after 263f5d47: Fin(runs+1) boundaries in outer subtype V with correctly oriented coercion equality to the ambient list. This enables the run fold without assuming van Kampen. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining milestones listed."},
-    :commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991",
+    :diagnostic-history [],
+    :commit "d300e0a26ae3af85cfd4c89f220fc09d804bd495",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_run_fold_endpoints_check.lean",
+    {:path "/tmp/t93j03_run_start_contiguous_check.lean",
      :sha256
-     "23ed0f758f360508c3a7e8af2f8ca65753a812d9a7f6066516c99e47e7c3ba54"},
+     "9df2b5c855c61fda4b1524f906e8ab78d28a448744c74d60af975c14a7c47104"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38872,7 +38858,8 @@
     :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative
     :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath
     :lemma-pathtwoopensubdivisionrunfold-exists-outerpath
-    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints],
+    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints
+    :lemma-pathtwoopensubdivisionrunstart-eq-previous-end],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40195,6 +40182,24 @@
    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunfold-exists-outerpath],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunStart_eq_previous_end",
+    :type "adjacent maximal-run slices have contiguous coordinates"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunStart_eq_previous_end",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "adjacent maximal-run slices have contiguous coordinates",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunstart-eq-previous-end,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
