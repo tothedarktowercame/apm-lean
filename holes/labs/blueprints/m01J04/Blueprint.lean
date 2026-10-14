@@ -3194,7 +3194,36 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_
       ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
     {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
     ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume ≤ C ^ 2 := by
-  sorry
+  have hκm : AEMeasurable κ volume := hκint.aestronglyMeasurable.aemeasurable
+  have hm : AEMeasurable
+      (Function.uncurry fun (x y : EuclideanSpace ℝ (Fin d)) ↦
+        ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
+    exact (hκm.ennreal_ofReal.comp_snd).mul
+      (hG.prod_swap.enorm.pow_const 2)
+  rw [lintegral_lintegral_swap hm]
+  calc
+    (∫⁻ y, ∫⁻ x, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume)
+        = ∫⁻ y, ENNReal.ofReal (κ y) * eLpNorm (G y) 2 volume ^ 2 ∂volume := by
+          apply lintegral_congr
+          intro y
+          rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+          congr 1
+          simpa using
+            (eLpNorm_nnreal_pow_eq_lintegral (μ := volume) (f := G y)
+              (p := (2 : NNReal)) (by norm_num : (2 : NNReal) ≠ 0)).symm
+    _ ≤ ∫⁻ y, ENNReal.ofReal (κ y) * C ^ 2 ∂volume := by
+      apply lintegral_mono
+      intro y
+      by_cases hy : κ y = 0
+      · simp [hy]
+      · exact mul_le_mul_left' (pow_le_pow_left' (hC y hy) 2) _
+    _ = (∫⁻ y, ENNReal.ofReal (κ y) ∂volume) * C ^ 2 := by
+      rw [lintegral_mul_const'' _ hκm.ennreal_ofReal]
+    _ = C ^ 2 := by
+      rw [← ofReal_integral_eq_lintegral_ofReal hκint
+        (Filter.Eventually.of_forall hκ0), hκ1]
+      simp
 
 /-- An `L²` bound from a bound on the integral of the squared norm. -/
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
