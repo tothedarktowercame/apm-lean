@@ -2296,6 +2296,74 @@ theorem pathTwoOpenSubdivisionRunFold_exists_outerPath
       (pathTwoOpenSubdivisionOuterRunPath S hx hy)
       (pathTwoOpenSubdivisionOuterRunPath_class S hx hy))
 
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_zero
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0 :
+      kleinPairingData.Space) = S.point 0 := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryFamily,
+    pathTwoOpenSubdivisionOuterRunBoundaryPoints,
+    pathTwoOpenSubdivisionRunBoundaryPoints]
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_last
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+      (Fin.last (boolSideRunPartition S.side).length) :
+      kleinPairingData.Space) = S.point (Fin.last (S.n + 1)) := by
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  rw [← pathTwoOpenSubdivisionRunBoundaryPoints_getLast S]
+  rw [List.getLast_eq_getElem]
+  congr 1
+
+/-- The folded outer representative can be rebased at the literal source and
+target vertices of the original subdivision, preserving its cast class. -/
+theorem pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    ∃ q : Path (⟨S.point 0, hx⟩ : {z // z ∈ (openCover kleinPairingData).outer})
+        (⟨S.point (Fin.last (S.n + 1)), hy⟩ :
+          {z // z ∈ (openCover kleinPairingData).outer}),
+      Path.Homotopic.Quotient.cast
+          (⟦Path.concat
+            (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+              kleinPairingData.Space))
+            (fun i => (Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+              (pathTwoOpenSubdivisionRunBlockPiece S i)).cast
+                (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+                  S hx hy i)
+                (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+                  S hx hy i))⟧)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_last S hx hy).symm =
+        ⟦q.map kleinPolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨q, hq⟩ := pathTwoOpenSubdivisionRunFold_exists_outerPath S hx hy
+  have hs : (⟨S.point 0, hx⟩ :
+      {z // z ∈ (openCover kleinPairingData).outer}) =
+      pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0 := by
+    apply Subtype.ext
+    exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+  have ht : (⟨S.point (Fin.last (S.n + 1)), hy⟩ :
+      {z // z ∈ (openCover kleinPairingData).outer}) =
+      pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+        (Fin.last (boolSideRunPartition S.side).length) := by
+    apply Subtype.ext
+    exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily_last S hx hy).symm
+  refine ⟨q.cast hs ht, ?_⟩
+  rw [hq, ← Path.Homotopic.Quotient.mk_cast]
+  apply congrArg Path.Homotopic.Quotient.mk
+  ext t
+  exact congrFun (Path.cast_coe q hs ht) t
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/

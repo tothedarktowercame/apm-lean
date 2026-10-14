@@ -506,7 +506,10 @@ entries of the canonical outer boundary family is now packaged by
 cast ambient groupoid class. `pathTwoOpenSubdivisionOuterRunPath` chooses the
 dependent family, and `pathTwoOpenSubdivisionRunFold_exists_outerPath` folds
 it to one outer path with the ordered endpoint-cast block class. Comparing
-that block fold with the original subdivision reconstruction remains.
+that block fold with the original subdivision reconstruction remains. The
+`_BoundaryFamily_zero`/`_last` lemmas and
+`pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints` already rebase
+the folded representative at the literal subdivision endpoints.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
