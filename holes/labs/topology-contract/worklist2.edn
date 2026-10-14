@@ -87946,6 +87946,17 @@
      {:cmd
       "#print axioms finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791985745855-11857-47f6fb7a",
+     :commands
+     ["git show/diff be50b6265; sha256sum"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan; statement-registry check; git show --check"],
+     :finding
+     "PASS: commit be50b6265 by topo-6 changes only the scoped Lean file; exact blob SHA-256 d9271e4ad7700d097cf2090826a715f522e8c33fdba2da5e2dd182655d4ccec4. Exact snapshot builds; 0 placeholders; new theorem uses propext/Classical.choice/Quot.sound; registry 166/0. Connector-square orientation connector(A).hom≫counit.hom=connector(B).hom is exactly equivalent to normalForm(counit.hom)=𝟙 at the common base; both directions follow by connector cancellation, with no group-representation crossing. Real compiled program progress; remaining milestones prove normal-form triviality, then installed overlap transport."},
     :commit "be50b6265",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87965,7 @@
      "d9271e4ad7700d097cf2090826a715f522e8c33fdba2da5e2dd182655d4ccec4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite successor specialization of the fixed-endpoint counit implication.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the exact finite counit normal-form obstruction.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88107,7 +88118,11 @@
     {:job 7,
      :commit "7ab20a080",
      :reason
-     "Banked finite successor specialization of the fixed-endpoint counit implication."}]}
+     "Banked finite successor specialization of the fixed-endpoint counit implication."}
+    {:job 8,
+     :commit "be50b6265",
+     :reason
+     "Banked the exact finite counit normal-form obstruction."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90156,7 +90171,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial",
@@ -90168,7 +90183,9 @@
     :type
     "literal counit square iff its connector normal form is identity",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "be50b6265"},
    :id :lemma-finitewedgerightbasecounitsquare-iff-normalformtrivial,
    :kind :lemma,
    :depends-on [],
