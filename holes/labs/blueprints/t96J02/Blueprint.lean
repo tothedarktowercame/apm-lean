@@ -516,7 +516,34 @@ lemma t96J02_cut_chart_continuous : Continuous t96J02_cut_chart := by
   sorry
 
 lemma t96J02_cut_chartInv_continuous : Continuous t96J02_cut_chartInv := by
-  sorry
+  rw [continuous_iff_continuousAt]
+  intro w
+  by_cases hw : w = 0
+  · subst w
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    refine ⟨ε / 2, by positivity, ?_⟩
+    intro y hy
+    rw [dist_zero_right] at hy
+    simp only [t96J02_cut_chartInv, if_pos, norm_zero, dist_zero_right]
+    change ‖t96J02_cut_chartInv y‖ < ε
+    rw [t96J02_cut_norm_chartInv]
+    unfold t96J02_cut_l1
+    calc
+      |y.re| + |y.im| ≤ ‖y‖ + ‖y‖ :=
+        add_le_add (Complex.abs_re_le_norm y) (Complex.abs_im_le_norm y)
+      _ = 2 * ‖y‖ := by ring
+      _ < ε := by linarith
+  · have hl1 : Continuous t96J02_cut_l1 := by
+      unfold t96J02_cut_l1
+      fun_prop
+    have hc : ContinuousAt
+        (fun y : ℂ => ((t96J02_cut_l1 y / ‖y‖ : ℝ) : ℂ) * y) w :=
+      ((hl1.continuousAt.div continuous_norm.continuousAt
+        (norm_ne_zero_iff.mpr hw)).ofReal.mul continuousAt_id)
+    apply hc.congr_of_eventuallyEq
+    filter_upwards [eventually_ne_nhds hw] with y hy
+    simp [t96J02_cut_chartInv, hy]
 
 /-- The four polygon vertices `1, I, -1, -I` of the `aabb` disk are one class. -/
 lemma t96J02_cut_disk_vertices (x y : Disk)
