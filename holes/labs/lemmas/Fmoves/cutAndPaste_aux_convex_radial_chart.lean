@@ -2176,7 +2176,103 @@ lemma cutAndPaste_aux_convex_radial_chart
       (∀ z : Disk, ‖(z : ℂ)‖ = 1 ↔ (e z : ℂ) ∈ frontier K) ∧
       ∀ z : Disk, ‖(z : ℂ)‖ = 1 →
         ∃ r : ℝ, 0 < r ∧ (e z : ℂ) = p + r • (z : ℂ) := by
-  sorry
+  let S : Set ℂ := (fun x : ℂ => -p + x) '' K
+  have hSc : Convex ℝ S := hKc.translate (-p)
+  have hScompact : IsCompact S := by
+    simpa [S] using
+      hKcompact.image (Homeomorph.addLeft (-p : ℂ)).continuous
+  have hS₀ : S ∈ nhds (0 : ℂ) := by
+    rw [← mem_interior_iff_mem_nhds]
+    change 0 ∈ interior ((Homeomorph.addLeft (-p : ℂ)) '' K)
+    rw [← (Homeomorph.addLeft (-p : ℂ)).image_interior]
+    exact ⟨p, hp, by simp⟩
+  have hSb : Bornology.IsVonNBounded ℝ S :=
+    NormedSpace.isVonNBounded_of_isBounded ℝ hScompact.isBounded
+  have hBc : Convex ℝ (Metric.ball (0 : ℂ) 1) := convex_ball _ _
+  have hB₀ : Metric.ball (0 : ℂ) 1 ∈ nhds (0 : ℂ) := by
+    simpa using Metric.ball_mem_nhds (0 : ℂ) (by norm_num : (0 : ℝ) < 1)
+  have hBb : Bornology.IsVonNBounded ℝ (Metric.ball (0 : ℂ) 1) :=
+    NormedSpace.isVonNBounded_ball ℝ ℂ 1
+  let H : ℂ ≃ₜ ℂ :=
+    gaugeRescaleHomeomorph S (Metric.ball 0 1) hSc hS₀ hSb hBc hB₀ hBb
+  have hHcl : H '' closure S = Metric.closedBall (0 : ℂ) 1 := by
+    simpa [H, closure_ball] using
+      (image_gaugeRescaleHomeomorph_closure hSc hS₀ hSb hBc hB₀ hBb)
+  have hHint : H '' interior S = Metric.ball (0 : ℂ) 1 := by
+    simpa [H, Metric.isOpen_ball.interior_eq] using
+      (image_gaugeRescaleHomeomorph_interior hSc hS₀ hSb hBc hB₀ hBb)
+  have hHfront : H '' frontier S = Metric.sphere (0 : ℂ) 1 := by
+    rw [← closure_diff_interior, image_diff H.injective, hHcl, hHint]
+    ext z
+    simp [Metric.mem_closedBall, Metric.mem_ball, Metric.mem_sphere,
+      dist_zero_right]
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have htrans : (Homeomorph.addLeft p) '' S = K := by
+    ext z
+    constructor
+    · rintro ⟨y, ⟨x, hx, rfl⟩, rfl⟩
+      simpa using hx
+    · intro hz
+      exact ⟨-p + z, ⟨z, hz, rfl⟩, by simp⟩
+  have hTfront : (Homeomorph.addLeft p) '' frontier S = frontier K := by
+    rw [(Homeomorph.addLeft p).image_frontier, htrans]
+  let G : ℂ ≃ₜ ℂ := H.symm.trans (Homeomorph.addLeft p)
+  have hpre : Metric.closedBall (0 : ℂ) 1 = G ⁻¹' K := by
+    ext z
+    constructor
+    · intro hz
+      rw [← hHcl] at hz
+      rcases hz with ⟨y, hy, rfl⟩
+      have hyS : y ∈ S := hSclosed.closure_eq ▸ hy
+      rcases hyS with ⟨x, hx, rfl⟩
+      simpa [G] using hx
+    · intro hz
+      have hzS : H.symm z ∈ S := by
+        exact ⟨p + H.symm z, by simpa [G] using hz, by ring⟩
+      rw [← hHcl]
+      exact ⟨H.symm z, subset_closure hzS, by simp⟩
+  let e : Disk ≃ₜ K := G.sets hpre
+  refine ⟨e, ?_, ?_⟩
+  · intro z
+    constructor
+    · intro hz
+      have hzsp : (z : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := by
+        simpa [Metric.mem_sphere, dist_zero_right] using hz
+      rw [← hHfront] at hzsp
+      have hzfr : H.symm (z : ℂ) ∈ frontier S := by
+        rcases hzsp with ⟨y, hy, ey⟩
+        simpa [← ey] using hy
+      change G (z : ℂ) ∈ frontier K
+      rw [← hTfront]
+      exact ⟨H.symm (z : ℂ), hzfr, rfl⟩
+    · intro hz
+      change G (z : ℂ) ∈ frontier K at hz
+      rw [← hTfront] at hz
+      have hzfr : H.symm (z : ℂ) ∈ frontier S := by
+        rcases hz with ⟨y, hy, ey⟩
+        have : y = H.symm (z : ℂ) := by
+          apply (Homeomorph.addLeft p).injective
+          simpa [G] using ey
+        simpa [← this] using hy
+      have hzsp : (z : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := by
+        rw [← hHfront]
+        exact ⟨H.symm (z : ℂ), hzfr, by simp⟩
+      simpa [Metric.mem_sphere, dist_zero_right] using hzsp
+  · intro z hz
+    let r : ℝ := gauge (Metric.ball (0 : ℂ) 1) (z : ℂ) / gauge S (z : ℂ)
+    have hz0 : (z : ℂ) ≠ 0 := by
+      intro h
+      simpa [h] using hz
+    have hden : 0 < gauge S (z : ℂ) :=
+      (gauge_pos (absorbent_nhds_zero hS₀) hSb).2 hz0
+    have hr : 0 < r := by
+      dsimp [r]
+      rw [gauge_unit_ball, hz]
+      exact div_pos zero_lt_one hden
+    refine ⟨r, hr, ?_⟩
+    change p + H.symm (z : ℂ) = p + r • (z : ℂ)
+    dsimp [H, r]
+    rfl
 -- END SEAT AREA
 
 lemma cutAndPaste_aux_triangle_chart_generators_aux_source_pos {Label : Type*}
