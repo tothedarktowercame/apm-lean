@@ -1132,6 +1132,17 @@ theorem CanonicalRegularFiberWitness.topHomologyMap_eq_zero
   letI := witness.choice.fiberFintype
   exact witness.calculations.topHomologyMap_eq_zero_withoutLifts
 
+/-- Existential form consumed by the final transverse adapter: the chosen
+regular value and its finite fiber remain internal to the witness. -/
+theorem topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)}
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (hexists : Nonempty (CanonicalRegularFiberWitness f c e)) :
+    homologyMap 2 f = 0 :=
+  Classical.choice hexists |>.topHomologyMap_eq_zero
+
 /-- The canonical geometric calculations, together with the exact
 disk-bounded lifts, imply vanishing of the top-homology map. -/
 theorem CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero
@@ -1186,6 +1197,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_homologyMap
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
