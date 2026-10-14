@@ -949,8 +949,60 @@ lemma apm_t01A04_cbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_cbp_V i) := by
       (isOpen_lt continuous_const
         (Complex.continuous_re.comp (continuous_subtype_val.pow 2)))
 
+def apm_t01A04_cbp_V_disjoint_aux_labelRaw :
+    Sum (Fin 2 × apm_t01a04_Torus) Circle → Fin 2 :=
+  fun r => Sum.elim (fun p => p.1)
+    (fun z => if 0 < (z : ℂ).re then 0 else 1) r
+
+lemma apm_t01A04_cbp_V_disjoint_aux_labelRaw_respects {u v}
+    (h : Relation.EqvGen apm_t01a04_circleCoverRel u v) :
+    apm_t01A04_cbp_V_disjoint_aux_labelRaw u =
+      apm_t01A04_cbp_V_disjoint_aux_labelRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue i =>
+        fin_cases i
+        · change (0 : Fin 2) = if 0 < ((1 : Circle) : ℂ).re then 0 else 1
+          simp
+        · change (1 : Fin 2) = if 0 <
+              ((apm_t01a04_sheetPoint 1 : Circle) : ℂ).re then 0 else 1
+          simp [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I]
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_cbp_V_disjoint_aux_label :
+    apm_t01a04_CircleCover → Fin 2 :=
+  Quotient.lift apm_t01A04_cbp_V_disjoint_aux_labelRaw
+    (fun _ _ h => apm_t01A04_cbp_V_disjoint_aux_labelRaw_respects h)
+
+lemma apm_t01A04_cbp_V_disjoint_aux_mem_label (i : Fin 2) {x}
+    (hx : x ∈ apm_t01A04_cbp_V i) :
+    apm_t01A04_cbp_V_disjoint_aux_label x = i := by
+  rcases hx with ⟨r, hr, rfl⟩
+  rcases r with p | z
+  · change p.1 = i ∧ _ at hr
+    exact hr.1
+  · fin_cases i
+    · change (if 0 < (z : ℂ).re then 0 else 1) = (0 : Fin 2)
+      rw [if_pos]
+      simpa [apm_t01a04_sheetPoint] using hr.1
+    · change (if 0 < (z : ℂ).re then 0 else 1) = (1 : Fin 2)
+      rw [if_neg]
+      intro hz
+      have hneg : (0 : ℝ) < -((z : ℂ).re) := by
+        simpa [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I] using hr.1
+      linarith
+
 lemma apm_t01A04_cbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_cbp_V) := by
-  sorry
+  intro i j hij
+  change Disjoint (apm_t01A04_cbp_V i) (apm_t01A04_cbp_V j)
+  rw [Set.disjoint_left]
+  intro x hxi hxj
+  have hi := apm_t01A04_cbp_V_disjoint_aux_mem_label i hxi
+  have hj := apm_t01A04_cbp_V_disjoint_aux_mem_label j hxj
+  exact hij (hi.symm.trans hj)
 
 lemma apm_t01A04_cbp_preimage :
     apm_t01a04_circleCoverMap ⁻¹' apm_t01A04_cbp_U = ⋃ i, apm_t01A04_cbp_V i := by
