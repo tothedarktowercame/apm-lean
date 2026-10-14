@@ -113904,6 +113904,19 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 module absent"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791994610876-11946-97e1877c",
+     :commands
+     ["git show/diff-tree 73ca2d97834e7ee98776825ce0a1220b132e7444"
+      "archive commit; lake env lean PointWedgeVanKampen.lean"
+      "sha256sum source/doc/blueprint; count sorry/admit"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms outer-right theorems"
+      "lake build ConstructionTargets.PointWedgeVanKampen"],
+     :finding
+     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. The false general projection-kernel shortcut is rejected; the actual outer-right comparison is proved to be inr of its coordinate, whose established trivial projection makes it the unit. Representation steps and factor order are explicit; standard axioms only. New milestone recorded; outer-left representation, rightBase factorization, and genericPointWedgeLegCoordinates_vanKampen remain listed."},
     :commit "73ca2d97834e7ee98776825ce0a1220b132e7444",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113914,7 +113927,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113935,7 +113948,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the literal overlap connector square and trivial right-factor projection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked right-factor representation and eliminated the outer-right comparison.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114900,7 +114913,11 @@
     {:job 8,
      :commit "940f6fd89d940ebab6bc2c77cb38bdb808a44c3c",
      :reason
-     "Banked the literal overlap connector square and trivial right-factor projection."}]}
+     "Banked the literal overlap connector square and trivial right-factor projection."}
+    {:job 9,
+     :commit "73ca2d97834e7ee98776825ce0a1220b132e7444",
+     :reason
+     "Banked right-factor representation and eliminated the outer-right comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
