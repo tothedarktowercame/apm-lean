@@ -36153,6 +36153,17 @@
      {:cmd "registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "commit; show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791948628433-11498-24c8c99c",
+     :commands
+     ["git show/diff/show --check 12f3f888"
+      "sha256sum fixture; scope; placeholders"
+      "lean exact dependency, recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The induced fundamental-groupoid equivalence is correctly directed from the exact outer piece to the actual skeleton, and its object action is literal on embedded skeleton points. It does not assume the remaining based restriction, winding-one image=aabb, or quotient extraction. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36164,7 +36175,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36182,7 +36193,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36284,7 +36295,11 @@
     {:job 6,
      :commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29",
      :reason
-     "Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains."}]}
+     "Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains."}
+    {:job 7,
+     :commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab",
+     :reason
+     "Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38077,7 +38092,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOuterFundamentalGroupoidEquivalence",
@@ -38089,7 +38104,9 @@
     :type
     "outer-to-skeleton groupoid equivalence with literal object action",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab"},
    :id :lemma-kleinpolygonouterfundamentalgroupoidequivalence,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonouterhomotopyequivskeleton],
