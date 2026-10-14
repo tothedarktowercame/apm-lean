@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
@@ -119102,30 +119102,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked signed-count reindexing.",
+    :reason
+    "Corrected fixture provenance; signed-count reindexing remains banked.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
+    [{:cmd "sha256sum fixture/closure/Main", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "reindex draft", :exit 1, :finding "needed subtype sum"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1792008610008-12316-d2fa45c6",
-     :finding
-     "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166."},
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
     :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
      :sha256
-     "afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
+     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
