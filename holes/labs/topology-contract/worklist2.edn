@@ -87901,31 +87901,31 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Split the Fin-successor wedge; iterate van Kampen; then coordinate epi and B6-B10.",
+    "Prove the inverse and round trips; iterate van Kampen; then coordinate epi and B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints"],
+    :warnings ["preexisting lints" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeHomeomorphOfEquiv",
-      :type "relabels finite wedges",
+    [{:name "finiteWedgeSumLeftRight",
+      :type "continuous sum-wedge inclusions agreeing at basepoints",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeOrbitHomeomorphFin",
-      :type "orbit wedge relabelled by Fin",
+     {:name "pointWedgeToFiniteWedgeSum",
+      :type "continuous point-wedge descent to the sum wedge",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeHomeomorphOfEquiv"],
+      :depends-on ["finiteWedgeSumLeftRight"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeFinSuccHomeomorphPointWedge",
-      :type "Fin successor wedge splits as a point wedge",
-      :status :not-started,
+      :type "Fin successor wedge is a point wedge",
+      :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on [],
+      :depends-on ["pointWedgeToFiniteWedgeSum"],
       :area "polygon-quotient-homology"}
      {:name "finiteWedgeLegFreeGroupMap_surjective",
       :type "canonical free-group map is onto",
@@ -87937,36 +87937,22 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked finite-wedge relabelling.",
+    :reason "Banked sum-wedge inclusions and point-wedge descent.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 1798bb36e", :exit 0}
+     {:cmd "git show --check c1a5cd9ec", :exit 0}
      {:cmd "blob axioms | lake env lean /dev/stdin", :exit 0}],
-    :diagnostic-history
-    [{:cmd "relabel draft",
-      :exit 1,
-      :correction "used quotient representatives"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791952111387-11585-db8f6758",
-     :commands
-     ["git show 0e953f171 blob + #print axioms | lake env lean /dev/stdin"
-      "diff-tree/readlink/sha256 assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: 0e953f171 changes only PolygonSurfaceHomology.lean; exact blob SHA256 6ee3bca9446bec9ce4841f86ab081e27164706ca004858f635dcc653aec7515d. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond d06aefa52 defines the canonical free-group map from orbit labels to common-basepoint leg classes, proves by FreeGroup induction that every source element evaluates to an integer-exponent leg word, and correctly reduces fundamental-group leg-word generation to surjectivity of that map. Identity, generator, inverse, multiplication, word concatenation, and map direction are handled explicitly; free-group surjectivity remains listed."},
-    :commit "1798bb36e",
+    :commit "c1a5cd9ec",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "459f6679314523eabf2ff7a4c773dc92c3b42e2eefcb87129f6d45bd746e4000"},
+     "c3524a65fb8aa1b6c108ae8c8cf901d4d216b2f3358d1f35de6a7f0a6e2d85c5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89392,5 +89378,39 @@
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgefinsucchomeomorphpointwedge,
    :kind :lemma,
+   :depends-on [:lemma-pointwedgetofinitewedgesum],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeSumLeftRight",
+    :type "continuous sum-wedge inclusions agreeing at basepoints"},
+   :lemma
+   {:name "finiteWedgeSumLeftRight",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "continuous sum-wedge inclusions agreeing at basepoints",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgesumleftright,
+   :kind :lemma,
    :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pointWedgeToFiniteWedgeSum",
+    :type "continuous point-wedge descent to the sum wedge"},
+   :lemma
+   {:name "pointWedgeToFiniteWedgeSum",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "continuous point-wedge descent to the sum wedge",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-pointwedgetofinitewedgesum,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgesumleftright],
    :other-consumers [:t94J09]}]}
