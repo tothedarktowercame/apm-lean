@@ -2123,7 +2123,59 @@ lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_split
           (apm_m01J04_globalLocalizedH1 φ hφ f)).grad x -
         (apm_m01J04_globalLocalizedH1 φ hφ f).grad x) 2
         (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
-  sorry
+  let c (n : ℕ) :=
+    apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))
+  let g := apm_m01J04_globalLocalizedH1 φ hφ f
+  let bulk (n : ℕ) := fun x ↦ c n x • g.grad x - g.grad x
+  let collar (n : ℕ) := fun x ↦ g.val x • WithLp.toLp 2 (fun i ↦
+    fderiv ℝ (c n) x (EuclideanSpace.single i 1))
+  have hbulk_mem (n : ℕ) : MemLp (bulk n) 2 volume := by
+    have hc := apm_m01J04_isTestFunction_memLp
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ
+        (1 / (n + 1 : ℝ))) ⊤
+    simpa [bulk, c, g] using
+      ((g.grad_memLp.smul hc).sub g.grad_memLp)
+  have hcollar_mem (n : ℕ) : MemLp (collar n) 2 volume := by
+    have hD := apm_m01J04_isTestFunction_fderivField_memLp
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ
+        (1 / (n + 1 : ℝ))) ⊤
+    simpa [collar, c, g, smul_comm] using hD.smul g.val_memLp
+  have heq (n : ℕ) :
+      (fun x ↦
+        (apm_m01J04_H1mul (c n)
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          g).grad x - g.grad x) =
+        fun x ↦ bulk n x + collar n x := by
+    funext x
+    rw [apm_m01J04_H1mul_grad]
+    dsimp [bulk, collar]
+    abel
+  have hbound (n : ℕ) :
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul (c n)
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          g).grad x - g.grad x) 2 volume).toReal ≤
+        (eLpNorm (bulk n) 2 volume).toReal +
+          (eLpNorm (collar n) 2 volume).toReal := by
+    rw [heq]
+    have hle := eLpNorm_add_le (hbulk_mem n).1 (hcollar_mem n).1
+      (by norm_num : (1 : ℝ≥0∞) ≤ 2)
+    have htop : eLpNorm (bulk n) 2 volume + eLpNorm (collar n) 2 volume ≠ ⊤ :=
+      ENNReal.add_ne_top.2
+        ⟨(hbulk_mem n).eLpNorm_ne_top, (hcollar_mem n).eLpNorm_ne_top⟩
+    calc
+      _ ≤ (eLpNorm (bulk n) 2 volume + eLpNorm (collar n) 2 volume).toReal :=
+        ENNReal.toReal_mono htop hle
+      _ = _ := ENNReal.toReal_add
+        (hbulk_mem n).eLpNorm_ne_top (hcollar_mem n).eLpNorm_ne_top
+  have hresult : Tendsto (fun n ↦
+      (eLpNorm (fun x ↦
+        (apm_m01J04_H1mul (c n)
+          (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _)
+          g).grad x - g.grad x) 2 volume).toReal) atTop (nhds 0) := by
+    apply squeeze_zero (fun n ↦ ENNReal.toReal_nonneg) hbound
+    simpa [bulk, collar, c, g] using hbulk.add hcollar
+  simpa [c, g] using hresult
 -- END SEAT AREA
 
 /-- Gradient part of the core convergence.  The product gradient is
