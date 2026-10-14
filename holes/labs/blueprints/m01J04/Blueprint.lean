@@ -1989,7 +1989,76 @@ lemma apm_m01J04_localization_core_approx_aux_val_tendsto
           (apm_m01J04_globalLocalizedH1 φ hφ f)).val x -
         (apm_m01J04_globalLocalizedH1 φ hφ f).val x) 2
         (volume.restrict Set.univ)).toReal) atTop (nhds 0) := by
-  sorry
+  let g := apm_m01J04_globalLocalizedH1 φ hφ f
+  let c : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n ↦
+    apm_m01J04_localization_core_approx_aux_cutoff φ (1 / (n + 1 : ℝ))
+  let e : ℕ → EuclideanSpace ℝ (Fin d) → ℝ := fun n x ↦ c n x * g.val x - g.val x
+  have he_mem (n : ℕ) : MemLp (e n) 2 (volume.restrict Set.univ) := by
+    have h := (apm_m01J04_H1mul (c n)
+      (apm_m01J04_localization_core_approx_aux_cutoff_isTestFunction hφ _) g).val_memLp.sub
+        g.val_memLp
+    simpa [e, c, Pi.sub_apply, apm_m01J04_H1mul_val, mul_comm] using h
+  have hbound (n : ℕ) : ∀ᵐ x ∂(volume.restrict Set.univ),
+      ‖e n x‖ₑ ^ (2 : ℝ) ≤ ‖g.val x‖ₑ ^ (2 : ℝ) := by
+    filter_upwards [] with x
+    have hc0 : 0 ≤ c n x := Real.smoothTransition.nonneg _
+    have hc1 : c n x ≤ 1 := Real.smoothTransition.le_one _
+    rw [show e n x = (c n x - 1) * g.val x by
+      simp only [e]
+      ring, enorm_mul]
+    apply ENNReal.rpow_le_rpow _ (by norm_num)
+    rw [← ofReal_norm_eq_enorm, ← ofReal_norm_eq_enorm]
+    apply mul_le_of_le_one_left (by positivity)
+    simp [Real.norm_eq_abs, abs_of_nonpos (sub_nonpos.mpr hc1), hc0]
+  have hfin : (∫⁻ x, ‖g.val x‖ₑ ^ (2 : ℝ) ∂(volume.restrict Set.univ)) ≠ ∞ :=
+    ne_of_lt (lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top
+      (by norm_num : (2 : ℝ≥0∞) ≠ 0) (by norm_num : (2 : ℝ≥0∞) ≠ ∞)
+      g.val_memLp.eLpNorm_lt_top)
+  have hpoint (x : EuclideanSpace ℝ (Fin d)) :
+      Tendsto (fun n ↦ ‖e n x‖ₑ ^ (2 : ℝ)) atTop (nhds 0) := by
+    by_cases hx : φ x = 0
+    · have hgx : g.val x = 0 := by
+        simp [g, apm_m01J04_globalLocalizedH1, apm_m01J04_H1mul_val, hx]
+      simp [e, hgx]
+    · obtain ⟨N : ℕ, hN⟩ := exists_nat_gt (Real.sqrt 2 / |φ x|)
+      have hev : ∀ᶠ n : ℕ in atTop, e n x = 0 := by
+        filter_upwards [eventually_atTop.2 ⟨N, fun _ hn ↦ hn⟩] with n hn
+        have habs : Real.sqrt 2 < (n + 1 : ℝ) * |φ x| := by
+          have hp : 0 < |φ x| := abs_pos.mpr hx
+          apply (div_lt_iff₀ hp).mp
+          exact lt_of_lt_of_le hN (by exact_mod_cast Nat.le_add_right_of_le hn)
+        have hsqrt : 0 ≤ Real.sqrt 2 := Real.sqrt_nonneg _
+        have hsquares : (2 : ℝ) < (n + 1 : ℝ) ^ 2 * φ x ^ 2 := by
+          have := (sq_lt_sq₀ hsqrt (mul_nonneg (by positivity) (abs_nonneg _))).2 habs
+          rw [Real.sq_sqrt (by norm_num), mul_pow, sq_abs] at this
+          exact this
+        have harg : 1 ≤ φ x ^ 2 / (1 / (n + 1 : ℝ)) ^ 2 - 1 := by
+          have hnpos : 0 < (n + 1 : ℝ) := by positivity
+          field_simp
+          nlinarith
+        have hc : c n x = 1 := Real.smoothTransition.eq_one_iff_one_le.2 harg
+        simp [e, hc]
+      exact (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ≥0∞)) atTop (nhds 0)).congr'
+        (hev.mono fun n hn ↦ by simp [hn])
+  have hlin : Tendsto
+      (fun n ↦ ∫⁻ x, ‖e n x‖ₑ ^ (2 : ℝ) ∂(volume.restrict Set.univ))
+      atTop (nhds 0) := by
+    simpa using tendsto_lintegral_of_dominated_convergence'
+      (fun x ↦ ‖g.val x‖ₑ ^ (2 : ℝ))
+      (fun n ↦ (he_mem n).1.enorm.pow_const _) hbound hfin
+      (ae_of_all _ hpoint)
+  have help : Tendsto (fun n ↦ eLpNorm (e n) 2 (volume.restrict Set.univ))
+      atTop (nhds 0) := by
+    simp_rw [eLpNorm_eq_lintegral_rpow_enorm (by norm_num : (2 : ℝ≥0∞) ≠ 0)
+      (by norm_num : (2 : ℝ≥0∞) ≠ ∞)]
+    norm_num
+    have hc : Continuous (fun z : ℝ≥0∞ ↦ z ^ (1 / 2 : ℝ)) :=
+      ENNReal.continuous_rpow_const
+    simpa [Function.comp_def] using hc.continuousAt.tendsto.comp hlin
+  have hreal := (ENNReal.tendsto_toReal_iff
+    (fun n ↦ (he_mem n).eLpNorm_ne_top) ENNReal.zero_ne_top).2
+    help
+  simpa [e, c, g, apm_m01J04_H1mul_val, mul_comm] using hreal
 
 lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_zeroSet
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
