@@ -1043,6 +1043,58 @@ theorem path_concat_exists_subtype_path
       target' := Subtype.ext (Path.concat point F).target }
   exact ⟨q, rfl⟩
 
+/-- Mapping a dependent finite concatenation out of a subspace commutes
+literally with its ordered fold.  This is the finite reassembly operation
+used after each maximal cover-side run has been replaced by one outer path. -/
+theorem path_concat_map_subtype
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 1) → U)
+    (F : (k : Fin n) → Path (point k.castSucc) (point k.succ)) :
+    (Path.concat point F).map continuous_subtype_val =
+      Path.concat (fun k => (point k : X))
+        (fun k => (F k).map continuous_subtype_val) := by
+  induction n with
+  | zero =>
+      simp only [Path.concat_zero]
+      rfl
+  | succ n ih =>
+      rw [Path.concat_succ, Path.concat_succ]
+      calc
+        _ = ((Path.concat (point ∘ Fin.castSucc)
+              (fun k => F k.castSucc)).map continuous_subtype_val).trans
+              ((F (Fin.last n)).map continuous_subtype_val) :=
+          Path.map_trans _ _ _
+        _ = _ := congrArg
+          (fun q => q.trans ((F (Fin.last n)).map continuous_subtype_val))
+          (ih (point := point ∘ Fin.castSucc)
+            (F := fun k => F k.castSucc))
+
+/-- If every factor of a dependent ambient concatenation is represented by
+an outer-piece path, their ordered concatenation is represented by one
+outer-piece path.  This constructs the exact path and identifies its ambient
+homotopy class. -/
+theorem path_concat_class_eq_outer_of_pieceClass_eq
+    {n : ℕ}
+    (point : Fin (n + 1) →
+      {z // z ∈ (openCover kleinPairingData).outer})
+    (F : (k : Fin n) → Path
+      (point k.castSucc : kleinPairingData.Space)
+      (point k.succ : kleinPairingData.Space))
+    (Q : (k : Fin n) → Path (point k.castSucc) (point k.succ))
+    (h : ∀ k,
+      (⟦F k⟧ : Path.Homotopic.Quotient _ _) =
+        ⟦(Q k).map continuous_subtype_val⟧) :
+    ∃ q : Path (point 0) (point (Fin.last n)),
+      (⟦Path.concat (fun k => (point k : kleinPairingData.Space)) F⟧ :
+          FundamentalGroupoid.mk (point 0 : kleinPairingData.Space) ⟶
+            FundamentalGroupoid.mk (point (Fin.last n) : kleinPairingData.Space)) =
+        ⟦q.map continuous_subtype_val⟧ := by
+  refine ⟨Path.concat point Q, ?_⟩
+  rw [path_concat_map_subtype]
+  exact pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+    (fun k => (point k : kleinPairingData.Space)) F
+      (fun k => (Q k).map continuous_subtype_val) h
+
 /-- A pointwise replacement of the pieces of a subordinate subdivision
 reconstructs the class of its original path.  This combines the subdivision's
 endpoint casts with the generic dependent finite-fold lemma. -/
@@ -2322,6 +2374,8 @@ theorem lift_isEmbedding_assembly
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms path_concat_mem_of_piece_mem
 #print axioms path_concat_exists_subtype_path
+#print axioms path_concat_map_subtype
+#print axioms path_concat_class_eq_outer_of_pieceClass_eq
 #print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton

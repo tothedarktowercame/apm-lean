@@ -435,6 +435,15 @@ inclusion and surjectivity remain in the based van Kampen extraction.
 topological contract and the independent winding conjugacy are now the only
 C1 inputs.
 
+For the remaining finite normalization,
+`path_concat_map_subtype` proves that mapping an ordered dependent path fold
+out of a subspace commutes with the fold, and
+`path_concat_class_eq_outer_of_pieceClass_eq` constructs one outer path from
+any ordered family whose ambient factors are represented by outer paths.
+The next step is to instantiate this fold with the alternating maximal runs
+of a subordinate polygon path, then extract based surjectivity and the reverse
+kernel inclusion.
+
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.
 - Layer 3: C5, already complete modulo C1 and C2.
