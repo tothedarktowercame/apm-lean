@@ -166,7 +166,20 @@ lemma apm_t91J06_anti_endpoint_surjective
     {a b : ℝ} (F : apm_t91J06_I → ℝ) (hF : Continuous F)
     (h0 : F ⟨0, by norm_num⟩ = b) (h1 : F ⟨1, by norm_num⟩ = a) :
     ∀ y : Set.Icc a b, ∃ x, F x = y := by
-  sorry
+  intro y
+  let x0 : apm_t91J06_I := ⟨0, by norm_num⟩
+  let x1 : apm_t91J06_I := ⟨1, by norm_num⟩
+  have hx01 : x0 ≤ x1 := by
+    change (0 : ℝ) ≤ 1
+    norm_num
+  have hy : (y : ℝ) ∈ Set.Icc (F x1) (F x0) := by
+    change F ⟨1, by norm_num⟩ ≤ (y : ℝ) ∧
+      (y : ℝ) ≤ F ⟨0, by norm_num⟩
+    rw [h0, h1]
+    exact y.property
+  rcases intermediate_value_Icc' hx01 hF.continuousOn hy with
+    ⟨x, _hx, hxy⟩
+  exact ⟨x, hxy⟩
 -- END SEAT AREA
 
 /-- Package a continuous bijective real coordinate as a homeomorphism. -/
