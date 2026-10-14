@@ -87901,68 +87901,62 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove finite-wedge free-group surjectivity via van Kampen; then H1 generation, coordinate epi, higher vanishing, and B6-B10.",
+    "Split the Fin-successor wedge; iterate van Kampen; then coordinate epi and B6-B10.",
     :outcome :stop,
-    :warnings ["preexisting lints" "unrelated edits preserved"],
+    :warnings ["preexisting lints"],
     :missing-theorems
-    [{:name "finiteWedgeLegFreeGroupMap_exists_word",
-      :type "each free-group element evaluates as a leg word",
+    [{:name "finiteWedgeHomeomorphOfEquiv",
+      :type "relabels finite wedges",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name
-      "finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective",
-      :type "free-group surjectivity implies leg-word generation",
+     {:name "finiteWedgeOrbitHomeomorphFin",
+      :type "orbit wedge relabelled by Fin",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeLegFreeGroupMap_exists_word"],
+      :depends-on ["finiteWedgeHomeomorphOfEquiv"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeLegFreeGroupMap_surjective",
-      :type
-      "canonical free-group map onto finite-wedge fundamental group is surjective",
+     {:name "finiteWedgeFinSuccHomeomorphPointWedge",
+      :type "Fin successor wedge splits as a point wedge",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeLegFreeGroupMap_surjective",
+      :type "canonical free-group map is onto",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeFinSuccHomeomorphPointWedge"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Reduced word generation to free-group surjectivity.",
+    :reason "Banked finite-wedge relabelling.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 0e953f171", :exit 0}
-     {:cmd "commit blob axioms | lake env lean /dev/stdin", :exit 0}],
+     {:cmd "git show --check 1798bb36e", :exit 0}
+     {:cmd "blob axioms | lake env lean /dev/stdin", :exit 0}],
     :diagnostic-history
-    [{:cmd "induction draft",
+    [{:cmd "relabel draft",
       :exit 1,
-      :correction "fixed cases and abbreviations"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1791951466296-11567-3ce29e6e",
-     :commands
-     ["git show d06aefa52 blob + #print axioms | lake env lean /dev/stdin"
-      "diff-tree/readlink/sha256 assertions"
-      "statement-registry check; comment-stripped placeholder scan"],
-     :finding
-     "PASS: d06aefa52 changes only PolygonSurfaceHomology.lean; exact blob SHA256 604ce710faf830f9df099a2861cdfa095ea8e831f6eeaf0fa8c5c0334b405265. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 83bf9106a defines finite words of common-basepoint leg classes with integer exponents and proves their Hurewicz image is the coordinate map applied to the matching sum of scaled basis vectors. Product order, zpower-to-zsmul orientation, the empty word, repeated legs, and the fundamental-group/function-coordinate representation boundary are handled correctly."},
-    :commit "0e953f171",
+      :correction "used quotient representatives"}],
+    :commit "1798bb36e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "6ee3bca9446bec9ce4841f86ab081e27164706ca004858f635dcc653aec7515d"},
+     "459f6679314523eabf2ff7a4c773dc92c3b42e2eefcb87129f6d45bd746e4000"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89330,6 +89324,56 @@
     "canonical free-group map onto finite-wedge fundamental group is surjective",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgelegfreegroupmap-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinsucchomeomorphpointwedge],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeHomeomorphOfEquiv",
+    :type "relabels finite wedges"},
+   :lemma
+   {:name "finiteWedgeHomeomorphOfEquiv",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "relabels finite wedges",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgehomeomorphofequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeOrbitHomeomorphFin",
+    :type "orbit wedge relabelled by Fin"},
+   :lemma
+   {:name "finiteWedgeOrbitHomeomorphFin",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "orbit wedge relabelled by Fin",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeorbithomeomorphfin,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgehomeomorphofequiv],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSuccHomeomorphPointWedge",
+    :type "Fin successor wedge splits as a point wedge"},
+   :lemma
+   {:name "finiteWedgeFinSuccHomeomorphPointWedge",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "Fin successor wedge splits as a point wedge",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgefinsucchomeomorphpointwedge,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}]}
