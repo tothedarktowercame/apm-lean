@@ -17,6 +17,7 @@ from the manifold-coverage argument below. -/
 theorem t93A06_torusAtlas_aux_quotient_charts :
     ∃ charts : ChartedSpace Plane Torus,
       letI := charts
+      (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x) ∧
       IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection := by
   sorry
 
@@ -26,6 +27,8 @@ smooth two-manifold.  Its input is explicit, so this seat does not depend on
 the sorry proving `t93A06_torusAtlas_aux_quotient_charts`. -/
 theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
     (charts : ChartedSpace Plane Torus)
+    (hatlas : letI := charts
+      (∀ e ∈ atlas Plane Torus, ∃ x : Torus, e = chartAt Plane x))
     (hlocal : letI := charts
       IsLocalDiffeomorph 𝓘(ℝ,Plane) 𝓘(ℝ,Plane) ∞ projection) :
     letI := charts
@@ -35,10 +38,10 @@ theorem t93A06_torusAtlas_aux_manifold_of_localDiffeomorph
 /-- The two independent quotient-chart conclusions assemble into the target
 atlas structure. -/
 theorem t93A06_torusAtlas : Nonempty SmoothAtlas := by
-  obtain ⟨charts, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
+  obtain ⟨charts, hatlas, hlocal⟩ := t93A06_torusAtlas_aux_quotient_charts
   letI := charts
   exact ⟨⟨charts,
-    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hlocal,
+    t93A06_torusAtlas_aux_manifold_of_localDiffeomorph charts hatlas hlocal,
     hlocal⟩⟩
 
 /-- The fibres of the printed quotient projection are precisely integer
