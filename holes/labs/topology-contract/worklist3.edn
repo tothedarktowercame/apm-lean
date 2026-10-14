@@ -36159,6 +36159,17 @@
       :exit 1,
       :correction
       "unrelated PolygonSurfaceHomology failure; exact source passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791954819170-11616-fe940fa7",
+     :commands
+     ["git show/diff/show --check b8bce9d8"
+      "sha256sum fixture; scope; placeholders"
+      "lake env lean recorded closure, fixture, Main"
+      "statement-registry.py check"],
+     :finding
+     "PASS: new compiled sorry-free standard-axiom milestone. The adapter correctly accounts for arbitrary basepoint-path conjugacy: conjugate winding-one and aabb words generate equal normal closures, proved by normality in both directions. Geometric conjugacy and quotient extraction remain accurately listed. Exact source and fixture pass; scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
     :commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36181,7 @@
      :mode :export-check-blocked-by-unrelated-dependency},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed equality of normal closures for the full overlap image and winding-one generator; word=aabb remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36310,7 +36321,11 @@
     {:job 2,
      :commit "1eb08914473614efd9eba993c45b8b9a1f93df6a",
      :reason
-     "Committed equality of normal closures for the full overlap image and winding-one generator; word=aabb remains."}]}
+     "Committed equality of normal closures for the full overlap image and winding-one generator; word=aabb remains."}
+    {:job 3,
+     :commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb",
+     :reason
+     "Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38262,7 +38277,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
@@ -38272,7 +38287,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "conjugacy to aabb identifies normal closures",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb"},
    :id :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonoverlapwindinghom-normalclosure],
