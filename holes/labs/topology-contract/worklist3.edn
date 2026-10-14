@@ -36164,6 +36164,16 @@
     [{:cmd "family proof compiles",
       :exit 1,
       :correction "unfolded lifted list at indexed value"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792012425560-12424-5a8f68dd",
+     :commands
+     ["git show/check/diff 8c4eb4f; exact scope and fixture sha256"
+      "lake build ConstructionTargets.t93J03Closure; lean frozen fixture and Main"
+      "statement-registry check; parent/commit placeholder and forbidden recount"],
+     :finding
+     "PASS: since history commit 263f5d47, 8c4eb4f adds compiled, sorry-free progress: a Fin(runs+1)-indexed family in outer subtype V and an exactly oriented coercion theorem recovering each ambient canonical boundary. This is the required representation bridge for packaging run representatives, not a facade over the still-missing van Kampen result. Scope and fixture hash match; standard axioms only; registry 166/166; Main placeholders 1->1; remaining fold, reverse kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36174,7 +36184,7 @@
      "f94677c88f20478f56facb6b083e3431c25b11e312d331848f1f68b1ef084b76"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36202,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved all canonical run boundaries are outer from outer endpoints; subtype lift remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36482,7 +36492,11 @@
     {:job 9,
      :commit "263f5d4719c9f6b3f23824426c3e31e770badff0",
      :reason
-     "Proved all canonical run boundaries are outer from outer endpoints; subtype lift remains."}]}
+     "Proved all canonical run boundaries are outer from outer endpoints; subtype lift remains."}
+    {:job 1,
+     :commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6",
+     :reason
+     "Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39735,7 +39749,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val",
@@ -39745,7 +39759,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "outer boundary list with exact map",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6"},
    :id :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val,
    :kind :lemma,
    :depends-on
@@ -39802,7 +39818,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
@@ -39812,7 +39828,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "Fin-indexed outer boundaries recover ambient list",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6"},
    :id :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val,
    :kind :lemma,
    :depends-on
