@@ -118,7 +118,90 @@ theorem t96J02_presented_finiteIndex_generated
     H = Subgroup.closure
       ({t96J02_presented_coordinate p 0,
         t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) := by
-  sorry
+  apply le_antisymm
+  · intro x hx
+    let c : Coordinates :=
+      KleinPresentedGroupCoordinateNormalForm.coordinateEquiv x
+    let n : ℤ := Multiplicative.toAdd c.right
+    have hn_ex : ∃ m : ℤ, t96J02_presented_coordinate m n ∈ H := by
+      exact ⟨Multiplicative.toAdd c.left, by
+        simpa [c, n, t96J02_presented_coordinate] using hx⟩
+    have hn : q ∣ n := (hq n).1 hn_ex
+    obtain ⟨k, hk⟩ := hn
+    let g := t96J02_presented_coordinate r q
+    let y := x * g ^ (-k)
+    have hyH : y ∈ H := H.mul_mem hx (H.zpow_mem hr (-k))
+    have hy_right :
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv y).right = 1 := by
+      change (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+          (x * g ^ (-k))).right = 1
+      change SemidirectProduct.rightHom
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv (x * g ^ (-k))) = 1
+      rw [map_mul, map_zpow, map_mul, map_zpow]
+      simp only [g, t96J02_presented_coordinate, MulEquiv.apply_symm_apply]
+      change c.right * (Multiplicative.ofAdd q) ^ (-k) = 1
+      rw [← Int.ofAdd_mul]
+      change Multiplicative.ofAdd n * Multiplicative.ofAdd (q * (-k)) = 1
+      change Multiplicative.ofAdd (n + q * (-k)) = 1
+      rw [hk]
+      simp
+    let m : ℤ := Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv y).left
+    have hy_coord : t96J02_presented_coordinate m 0 = y := by
+      apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+      apply SemidirectProduct.ext
+      · simp [m, t96J02_presented_coordinate]
+      · simpa [t96J02_presented_coordinate] using hy_right.symm
+    have hm : p ∣ m := (hp m).1 (hy_coord.symm ▸ hyH)
+    obtain ⟨a, ha⟩ := hm
+    have hy_pow : y = (t96J02_presented_coordinate p 0) ^ a := by
+      rw [← hy_coord]
+      apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+      rw [map_zpow]
+      apply SemidirectProduct.ext
+      · simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply]
+        have hi := congrArg (fun z : Coordinates => z.left)
+          (map_zpow (SemidirectProduct.inl (φ := action))
+            (Multiplicative.ofAdd p) a)
+        change Multiplicative.ofAdd m =
+          (SemidirectProduct.inl (φ := action) (Multiplicative.ofAdd p) ^ a).left
+        change (Multiplicative.ofAdd p) ^ a =
+          (SemidirectProduct.inl (φ := action) (Multiplicative.ofAdd p) ^ a).left at hi
+        calc
+          Multiplicative.ofAdd m = (Multiplicative.ofAdd p) ^ a := by simpa [ha]
+          _ = _ := hi
+      · simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply]
+        have hi := congrArg (fun z : Coordinates => z.right)
+          (map_zpow (SemidirectProduct.inl (φ := action))
+            (Multiplicative.ofAdd p) a)
+        change 1 =
+          (SemidirectProduct.inl (φ := action) (Multiplicative.ofAdd p) ^ a).right
+        change 1 =
+          (SemidirectProduct.inl (φ := action) (Multiplicative.ofAdd p) ^ a).right at hi
+        exact hi
+    have hp_cl : t96J02_presented_coordinate p 0 ∈
+        Subgroup.closure ({t96J02_presented_coordinate p 0,
+          t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) :=
+      Subgroup.subset_closure (Set.mem_insert _ _)
+    have hg_cl : g ∈ Subgroup.closure
+        ({t96J02_presented_coordinate p 0,
+          t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) := by
+      exact Subgroup.subset_closure (Set.mem_insert_iff.mpr (Or.inr rfl))
+    have hy_cl : y ∈ Subgroup.closure
+        ({t96J02_presented_coordinate p 0,
+          t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) := by
+      rw [hy_pow]
+      exact Subgroup.zpow_mem _ hp_cl a
+    have hrecover : x = y * g ^ k := by
+      simp [y]
+    rw [hrecover]
+    exact Subgroup.mul_mem _ hy_cl (Subgroup.zpow_mem _ hg_cl k)
+  · rw [Subgroup.closure_le]
+    intro x hx
+    rcases hx with (rfl | hx)
+    · exact (hp p).2 (dvd_refl p)
+    · rw [Set.mem_singleton_iff] at hx
+      simpa [hx] using hr
 -- END SEAT AREA
 
 /-- If the vertical step is even, the two normal-form generators commute and
