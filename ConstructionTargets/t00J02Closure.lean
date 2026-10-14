@@ -142,10 +142,18 @@ theorem isDiscrete_preimage_singleton_of_locallyIsolatedFiber
   rcases hlocal x hxy with ⟨U, hU, hUfiber⟩
   rcases mem_nhds_iff.mp hU with ⟨V, hVU, hVopen, hxV⟩
   refine ⟨V, hVopen, ?_⟩
-  calc
-    V ∩ f ⁻¹' {y} ⊆ U ∩ f ⁻¹' {y} := Set.inter_subset_inter_left _ hVU
-    _ = {x} := hUfiber
-    _ ⊆ V ∩ f ⁻¹' {y} := by simpa using ⟨hxV, hx⟩
+  apply Set.Subset.antisymm
+  · exact (Set.inter_subset_inter_left _ hVU).trans_eq hUfiber
+  · simpa using ⟨hxV, hx⟩
+
+/-- On a compact Hausdorff source, a locally isolated fiber has the canonical
+finite instance used by the regular-fiber calculations. -/
+@[reducible] noncomputable def regularFiberFintype_of_locallyIsolatedFiber
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    (f : C(S, S)) (y : S) (hlocal : LocallyIsolatedFiber f y) :
+    Fintype {x : S // f x = y} :=
+  regularFiberFintype_of_isDiscrete f y
+    (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal)
 
 /-- Local injectivity at every point of a fiber makes the singleton preimage
 a discrete subset. -/
@@ -1169,14 +1177,13 @@ noncomputable def canonicalRegularFiberWitness_of_locallyIsolatedFiber
     (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
     (y : S) (hy : y ∈ Set.range c)
     (hlocal : LocallyIsolatedFiber f y)
-    (calculations : letI := regularFiberFintype_of_isDiscrete f y
-        (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal)
+    (calculations : letI :=
+      regularFiberFintype_of_locallyIsolatedFiber f y hlocal
       CanonicalRegularFiberDegreeCalculations
         (f := f) (c := c) hy e) :
     CanonicalRegularFiberWitness f c e :=
   canonicalRegularFiberWitness_of_isDiscrete f c e y hy
-    (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal)
-    calculations
+    (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal) calculations
 
 /-- Pointwise local injectivity along a circle fiber supplies the discrete
 fiber required by `canonicalRegularFiberWitness_of_isDiscrete`. -/
