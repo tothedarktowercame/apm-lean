@@ -1240,7 +1240,12 @@ lemma apm_m03J01_hessianOperator_norm_bound {n : ℕ}
       (x : apm_m03J01_forcingLp n) (y : apm_m03J01_hessianLp n),
       Tendsto f atTop (nhds x) → Tendsto (T ∘ f) atTop (nhds y) → y = T x) :
     ∃ A : ℝ, 0 ≤ A ∧ ∀ f, ‖T f‖ ≤ A * ‖f‖ := by
-  sorry
+  let Tc : apm_m03J01_forcingLp n →L[ℝ] apm_m03J01_hessianLp n :=
+    ContinuousLinearMap.ofSeqClosedGraph hclosed
+  refine ⟨‖Tc‖, norm_nonneg _, ?_⟩
+  intro f
+  change ‖Tc f‖ ≤ ‖Tc‖ * ‖f‖
+  exact Tc.le_opNorm f
 
 lemma apm_m03J01_H2_bound_of_hessianOperator_bound {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
