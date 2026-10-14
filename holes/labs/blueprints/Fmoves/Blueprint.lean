@@ -3347,7 +3347,112 @@ theorem zipBoundaryMap_injective {n k : ℕ} (hn : 0 < n) :
 
 theorem zipBoundaryMap_surjOn {n k : ℕ} (hn : 0 < n) {p : ℂ}
     (hp : p ∈ zipHalfBoundary) : ∃ b : Circle, zipBoundaryMap n k b = p := by
-  sorry
+  have hdiam : ∀ {q : ℂ}, q.im = 0 → |q.re| ≤ 1 →
+      ∃ b : Circle, zipBoundaryMap n k b = q := by
+    intro q hqim hqabs
+    let φ : ℝ := zipStart n k + (q.re + 1) * 2 * Real.pi / ((n : ℝ) + 2)
+    have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+    have hden : 0 < (n : ℝ) + 2 := by positivity
+    have hrelo : -1 ≤ q.re := (abs_le.mp hqabs).1
+    have hrehi : q.re ≤ 1 := (abs_le.mp hqabs).2
+    have hφ : φ ∈ Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := by
+      constructor
+      · dsimp [φ]
+        have hq : 0 ≤ q.re + 1 := by linarith
+        have : 0 ≤ (q.re + 1) * 2 * Real.pi / ((n : ℝ) + 2) := by positivity
+        linarith
+      · dsimp [φ]
+        rw [add_lt_add_iff_left, div_lt_iff₀ hden]
+        nlinarith [Real.pi_pos]
+    refine ⟨AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)), ?_⟩
+    rw [zipBoundaryMap]
+    simp only [Homeomorph.symm_apply_apply]
+    rw [AddCircle.liftIco_coe_apply hφ]
+    rw [zipProfile, if_pos]
+    · have hs : (φ - zipStart n k) * ((n : ℝ) + 2) /
+          (2 * Real.pi) - 1 = q.re := by
+        dsimp [φ]
+        field_simp
+        ring
+      rw [hs]
+      apply Complex.ext <;> simp [hqim]
+    · dsimp [φ]
+      rw [add_le_add_iff_left]
+      apply div_le_div_of_nonneg_right _ hden.le
+      nlinarith [Real.pi_pos]
+  rcases hp with hp | hp
+  · have hnorm : ‖p‖ = 1 := hp.1
+    have him : 0 ≤ p.im := hp.2
+    by_cases hi : p.im = 0
+    · have hreabs : |p.re| ≤ 1 := by
+        calc |p.re| ≤ ‖p‖ := Complex.abs_re_le_norm p
+          _ = 1 := hnorm
+      exact hdiam hi hreabs
+    · have himpos : 0 < p.im := lt_of_le_of_ne him (Ne.symm hi)
+      let θ : ℝ := Complex.arg p
+      have hp0 : p ≠ 0 := by
+        intro h
+        rw [h] at hnorm
+        simp at hnorm
+      have hθle : θ ≤ Real.pi := (Complex.arg_mem_Ioc p).2
+      have hθpos : 0 < θ := by
+        by_contra h
+        have hsnonpos : Real.sin θ ≤ 0 :=
+          Real.sin_nonpos_of_nonpos_of_neg_pi_le (le_of_not_gt h)
+            (le_of_lt (Complex.arg_mem_Ioc p).1)
+        have hspos : 0 < Real.sin θ := by
+          rw [Complex.sin_arg, hnorm, div_one]
+          exact himpos
+        linarith
+      let φ : ℝ := zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) +
+        2 * θ * n / ((n : ℝ) + 2)
+      have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+      have hden : 0 < (n : ℝ) + 2 := by positivity
+      have hφ : φ ∈ Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := by
+        constructor
+        · dsimp [φ]
+          have hfour : 0 < 4 * Real.pi / ((n : ℝ) + 2) := by positivity
+          have hlast : 0 < 2 * θ * n / ((n : ℝ) + 2) := by positivity
+          linarith
+        · dsimp [φ]
+          have hθlt : θ < Real.pi := by
+            apply lt_of_le_of_ne hθle
+            intro he
+            have hs : Real.sin θ = 0 := by rw [he, Real.sin_pi]
+            rw [Complex.sin_arg, hnorm, div_one] at hs
+            linarith
+          rw [show zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) +
+            2 * θ * n / ((n : ℝ) + 2) = zipStart n k +
+              (4 * Real.pi / ((n : ℝ) + 2) +
+                2 * θ * n / ((n : ℝ) + 2)) by ring]
+          rw [add_lt_add_iff_left]
+          rw [← add_div]
+          rw [div_lt_iff₀ hden]
+          nlinarith [Real.pi_pos]
+      refine ⟨AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)), ?_⟩
+      rw [zipBoundaryMap]
+      simp only [Homeomorph.symm_apply_apply]
+      rw [AddCircle.liftIco_coe_apply hφ]
+      rw [zipProfile, if_neg]
+      · have hexp : Complex.exp ((((((n : ℝ) + 2) / n) *
+            (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 : ℝ) : ℂ) *
+            Complex.I) = Complex.exp ((θ : ℂ) * Complex.I) := by
+          have hreal : ((n : ℝ) + 2) / n *
+              (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 = θ := by
+            dsimp [φ]
+            field_simp
+            ring
+          rw [hreal]
+        rw [hexp]
+        calc
+          Complex.exp ((θ : ℂ) * Complex.I) =
+              (‖p‖ : ℂ) * Complex.exp ((Complex.arg p : ℂ) * Complex.I) := by
+                simp [θ, hnorm]
+          _ = p := Complex.norm_mul_exp_arg_mul_I p
+      · dsimp [φ]
+        have : 0 < 2 * θ * (n : ℝ) / ((n : ℝ) + 2) := by positivity
+        linarith
+  · exact hdiam hp.1 hp.2
 
 /-- The cancelled sides go linearly onto the diameter. -/
 theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 : ℝ) 1) :
