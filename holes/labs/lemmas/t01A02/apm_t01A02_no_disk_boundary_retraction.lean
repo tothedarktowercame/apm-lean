@@ -466,7 +466,26 @@ lemma apm_t01A02_no_disk_boundary_retraction
       ∀ z : apm_t01A02_DiskBoundary,
         r ⟨z.1, Metric.mem_closedBall.mpr (by
           simpa [dist_zero_right] using z.2.le)⟩ = z := by
-  sorry
+  rintro ⟨r, hr⟩
+  let i : C(apm_t01A02_DiskBoundary, apm_t01A02_Disk) :=
+    ⟨fun z ↦ ⟨z.1, Metric.mem_closedBall.mpr (by
+      simpa [dist_zero_right] using z.2.le)⟩,
+      continuous_subtype_val.subtype_mk _⟩
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hi : F.map (TopCat.ofHom i) = 0 := hdisk.eq_of_tgt _ _
+  apply hcircle
+  rw [IsZero.iff_id_eq_zero]
+  have hsplit :
+      F.map (TopCat.ofHom i) ≫ F.map (TopCat.ofHom r) = 𝟙 _ := by
+    rw [← F.map_comp]
+    have hir : TopCat.ofHom i ≫ TopCat.ofHom r =
+        𝟙 (TopCat.of apm_t01A02_DiskBoundary) := by
+      apply ConcreteCategory.hom_ext
+      intro z
+      exact hr z
+    rw [hir, F.map_id]
+  rw [← hsplit, hi, zero_comp]
 -- END SEAT AREA
 
 /-- Two-dimensional Brouwer, assembled from the independent ray and homology
