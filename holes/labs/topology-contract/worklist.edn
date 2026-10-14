@@ -112881,7 +112881,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "genericPointWedgeLegCoordinates_vanKampen",
@@ -112892,7 +112892,9 @@
     :reported-by [:owner],
     :type
     "standard-only point-wedge van Kampen leg-coordinate theorem: pi1 of a point wedge of two path-connected, locally contractible-at-basepoint spaces ≃* Monoid.Coprod of the pieces' pi1 (current coordinate stack stops at interface declarations and an unfinished counit normalization)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id :lemma-genericpointwedgelegcoordinates-vankampen,
    :kind :lemma,
    :depends-on [],
@@ -113856,7 +113858,7 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
@@ -113913,7 +113915,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -114906,7 +114908,7 @@
      "Banked right-factor representation and eliminated the outer-right comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -114920,7 +114922,9 @@
     :type
     "For a point wedge of two path-connected spaces with contractible-to-basepoint open neighbourhoods of the wedge point, FundamentalGroup of the wedge is multiplicatively equivalent to the coproduct of the two piece fundamental groups, with literal leg coordinates.",
     :area "fundamental-group-wedge-of-circles",
-    :proved-in :program-2026-10-11-point-wedge-van-kampen},
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id
    :lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen,
    :kind :lemma,
@@ -119090,6 +119094,18 @@
      {:cmd "hash/diff/placeholders", :exit 0}],
     :diagnostic-history
     [{:cmd "component draft", :exit 1, :finding "made Mono explicit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791999034278-11970-94379645",
+     :commands
+     ["git show/diff-tree 354ae8990f0293fc6f739ded05d6cbf08e5d576a"
+      "archive commit; lean t00J02Closure.lean and Main.lean"
+      "sha256sum Main/implementation/blueprint; count placeholders"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t00J02Closure.lean"],
+     :finding
+     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and implementation is sorry-free; registry 166/166. Nonzero ambient H1 map is correctly converted to monicity, disk-bounded preimage supplies zero-H1 component lifts, and the circle coordinate lemma yields degree zero; all hypotheses are used and standard axioms only. New compiled milestone recorded; regular-value signed count and Main assembly remain listed."},
     :commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119098,7 +119114,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119116,7 +119132,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked circle-degree coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked zero component signed counts.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119133,7 +119149,10 @@
      :reason "Banked local fundamental-class coordinates."}
     {:job 3,
      :commit "9642998740f30f564d076dfef0630b8ba7b407a7",
-     :reason "Banked circle-degree coordinates."}]}
+     :reason "Banked circle-degree coordinates."}
+    {:job 4,
+     :commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a",
+     :reason "Banked zero component signed counts."}]}
   {:consumer :t98A06,
    :stop-count 0,
    :phase :implementation,
@@ -119249,7 +119268,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverseCircle_preimage_component_signedCount",
@@ -119259,7 +119278,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "component degree zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a"},
    :id :lemma-transversecircle-preimage-component-signedcount,
    :kind :lemma,
    :depends-on [:lemma-circledegree-eq-homologymap],
