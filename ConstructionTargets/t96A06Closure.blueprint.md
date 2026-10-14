@@ -57,9 +57,12 @@ The local half of the covering construction is also compiled:
 `rp3SphereProjection_isOpenMap` follows from the quotient authority and the
 antipodal saturation formula, while positive hemispheres give injective open
 restrictions around every sphere point.  Hence
-`rp3SphereProjection_isLocalHomeomorph`.  The remaining covering milestone
-must assemble the two antipodal local branches over one common target
-neighborhood.
+`rp3SphereProjection_isLocalHomeomorph`.  The covering milestone is now
+compiled as well: `rp3SphereProjection_isClosedMap` uses the same antipodal
+saturation formula for closed sets, and
+`t96A06_rp3_sphere_covering` applies the finite-fiber local-homeomorphism
+criterion after bounding each fiber by its explicit antipodal pair.  Rational
+transfer through this two-sheeted covering remains.
 
 ## C3. Degree four of the quadratic map — library
 

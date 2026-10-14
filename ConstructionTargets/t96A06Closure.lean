@@ -229,6 +229,34 @@ theorem rp3SphereProjection_isLocalHomeomorph :
   · exact rp3SphereProjection_isOpenMap.restrict
       (rp3PositiveHemisphere_isOpen p)
 
+/-- The exact sphere projection is closed.  This is proved directly from the
+frozen quotient topology and the antipodal saturation formula. -/
+theorem rp3SphereProjection_isClosedMap :
+    IsClosedMap (sphereProjection 3) := by
+  intro U hU
+  apply rp3SphereProjection_isQuotientMap.isClosed_preimage.mp
+  rw [rp3SphereProjection_preimage_image]
+  exact hU.union (hU.preimage rp3SphereAntipodal_continuous)
+
+/-- The concrete projection from the unit 3-sphere to the frozen real
+projective 3-space is a covering map, with the explicit antipodal fibers. -/
+theorem t96A06_rp3_sphere_covering :
+    IsCoveringMap (sphereProjection 3) := by
+  rw [isCoveringMap_iff_isCoveringMapOn_univ]
+  apply IsClosedMap.isCoveringMapOn_of_openPartialHomeomorph
+    rp3SphereProjection_isClosedMap
+  · intro x hx
+    obtain ⟨p, rfl⟩ := rp3SphereProjection_isQuotientMap.surjective x
+    refine ({p, sphereAntipodalN 3 p} : Set (Sphere 3)).toFinite.subset ?_
+    intro q hq
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at hq
+    rcases (rp3SphereProjection_eq_iff p q).mp hq.symm with h | h
+    · simp [h]
+    · simp [h]
+  · intro e he
+    obtain ⟨φ, heφ, hφ⟩ := rp3SphereProjection_isLocalHomeomorph e
+    exact ⟨φ, heφ, hφ.symm⟩
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
@@ -244,5 +272,7 @@ theorem rp3SphereProjection_isLocalHomeomorph :
 #print axioms rp3SphereProjection_eq_iff
 #print axioms rp3SphereProjection_isOpenMap
 #print axioms rp3SphereProjection_isLocalHomeomorph
+#print axioms rp3SphereProjection_isClosedMap
+#print axioms t96A06_rp3_sphere_covering
 
 end ConstructionTargets.t96A06Closure
