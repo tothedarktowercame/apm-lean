@@ -721,7 +721,83 @@ theorem apm_t02a01_commutator_of_homotopies
           (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
             (apm_t02a01_innerLoop hc h4))) =
         a * b * a⁻¹ * b⁻¹ := by
-  sorry
+  let d := apm_t02a01_delta hr
+  let A := apm_t02a01_loopA hA
+  let B := apm_t02a01_loopB hB
+  let ca : FundamentalGroup apm_t02a01_puncturedTorus apm_t02a01_innerBase.1 :=
+    FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk (d.trans (A.trans d.symm)))
+  let cb : FundamentalGroup apm_t02a01_puncturedTorus apm_t02a01_innerBase.1 :=
+    FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk (d.trans (B.trans d.symm)))
+  refine ⟨cb⁻¹, ca⁻¹, ?_⟩
+  have hi : Path.Homotopic.Quotient.mk
+      ((apm_t02a01_innerLoop hc h4).map (continuous_subtype_val :
+        Continuous ((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus))) =
+      Path.Homotopic.Quotient.mk
+        ((apm_t02a01_delta hr).trans
+          ((apm_t02a01_outerLoop hr).trans (apm_t02a01_delta hr).symm)) :=
+    Path.Homotopic.Quotient.eq.mpr hin
+  have ho : Path.Homotopic.Quotient.mk (apm_t02a01_outerLoop hr) =
+      Path.Homotopic.Quotient.mk
+        ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
+          ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm))) :=
+    Path.Homotopic.Quotient.eq.mpr hout
+  dsimp [d, A, B] at hi ho ⊢
+  rw [FundamentalGroup.map_apply, ← Path.Homotopic.Quotient.mk_map]
+  rw [hi, ho]
+  simp only [ca, cb, d, A, B]
+  simp only [inv_inv]
+  have hmul (x y : FundamentalGroup apm_t02a01_puncturedTorus
+      apm_t02a01_innerBase.1) : x * y = CategoryTheory.CategoryStruct.comp y x :=
+    CategoryTheory.End.mul_def x y
+  rw [hmul, hmul, hmul]
+  have hinv (q : Path.Homotopic.Quotient apm_t02a01_innerBase.1
+      apm_t02a01_innerBase.1) :
+      (FundamentalGroup.fromPath q : FundamentalGroup apm_t02a01_puncturedTorus
+        apm_t02a01_innerBase.1)⁻¹ = FundamentalGroup.fromPath q.symm := rfl
+  rw [hinv, hinv]
+  have hcomp (q r : Path.Homotopic.Quotient apm_t02a01_innerBase.1
+      apm_t02a01_innerBase.1) :
+      CategoryTheory.CategoryStruct.comp
+          (FundamentalGroup.fromPath q : FundamentalGroup apm_t02a01_puncturedTorus
+            apm_t02a01_innerBase.1)
+          (FundamentalGroup.fromPath r) = FundamentalGroup.fromPath (q.trans r) := rfl
+  rw [hcomp, hcomp, hcomp]
+  change _ =
+    (Path.Homotopic.Quotient.mk
+      ((apm_t02a01_delta hr).trans
+        ((apm_t02a01_loopA hA).trans (apm_t02a01_delta hr).symm))).trans
+    ((Path.Homotopic.Quotient.mk
+      ((apm_t02a01_delta hr).trans
+        ((apm_t02a01_loopB hB).trans (apm_t02a01_delta hr).symm))).trans
+      ((Path.Homotopic.Quotient.mk
+        ((apm_t02a01_delta hr).trans
+          ((apm_t02a01_loopA hA).trans (apm_t02a01_delta hr).symm))).symm.trans
+       (Path.Homotopic.Quotient.mk
+        ((apm_t02a01_delta hr).trans
+          ((apm_t02a01_loopB hB).trans (apm_t02a01_delta hr).symm))).symm))
+  have hsymm {x y z : apm_t02a01_puncturedTorus}
+      (q : Path.Homotopic.Quotient x y) (r : Path.Homotopic.Quotient y z) :
+      (q.trans r).symm = r.symm.trans q.symm := by
+    exact Quotient.inductionOn q (fun q ↦
+      Quotient.inductionOn r (fun r ↦ by
+        apply Path.Homotopic.Quotient.eq.mpr
+        simpa using Path.Homotopic.refl (q.trans r).symm))
+  have hcancel {w x y z : apm_t02a01_puncturedTorus}
+      (p : Path.Homotopic.Quotient w x) (q : Path.Homotopic.Quotient y x)
+      (r : Path.Homotopic.Quotient x z) :
+      (p.trans q.symm).trans (q.trans r) = p.trans r := by
+    rw [Path.Homotopic.Quotient.trans_assoc]
+    rw [← Path.Homotopic.Quotient.trans_assoc q.symm q r]
+    simp
+  have hsymmsymm {x y : apm_t02a01_puncturedTorus}
+      (q : Path.Homotopic.Quotient x y) : q.symm.symm = q := by
+    exact Quotient.inductionOn q (fun q ↦ by
+      apply Path.Homotopic.Quotient.eq.mpr
+      simpa using Path.Homotopic.refl q)
+  simp only [Path.Homotopic.Quotient.mk_trans, Path.Homotopic.Quotient.mk_symm,
+    hsymm, hsymmsymm]
+  simp only [← Path.Homotopic.Quotient.trans_assoc]
+  simp [hcancel, Path.Homotopic.Quotient.trans_assoc]
 -- END SEAT AREA
 
 /-- In the punctured torus the inner loop is a commutator: deform it radially onto the
