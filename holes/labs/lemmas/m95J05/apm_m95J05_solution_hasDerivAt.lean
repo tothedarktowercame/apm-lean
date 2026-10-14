@@ -79,7 +79,49 @@ theorem apm_m95J05_solution_hasDerivAt (lam : ℝ) (φ : ℝ → ℝ)
     (hφ : apm_m95J05_isTestFunction φ) (t : ℝ) :
     HasDerivAt (apm_m95J05_solution lam φ)
       (φ t - lam * apm_m95J05_solution lam φ t) t := by
-  sorry
+  let f : ℝ → ℝ := fun s ↦ Real.exp (lam * s) * φ s
+  let F : ℝ → ℝ := fun u ↦ ∫ s in Iic u, f s
+  have hfcont : Continuous f := by
+    dsimp [f]
+    exact (Real.continuous_exp.comp (continuous_const.mul continuous_id)).mul
+      hφ.1.continuous
+  have hfsupp : HasCompactSupport f := hφ.2.mul_left
+  have hfint : Integrable f := hfcont.integrable_of_hasCompactSupport hfsupp
+  have hFderiv : HasDerivAt F (f t) t := by
+    have hi := intervalIntegral.integral_hasDerivAt_right
+      (hfint.intervalIntegrable) (hfcont.stronglyMeasurableAtFilter volume (nhds t))
+      hfcont.continuousAt
+      (a := 0) (b := t)
+    have heq : F = fun u ↦ (∫ s in (Iic (0 : ℝ)), f s) + ∫ s in (0 : ℝ)..u, f s := by
+      funext u
+      dsimp [F]
+      rw [← intervalIntegral.integral_Iic_sub_Iic
+        (hfint.integrableOn) (hfint.integrableOn)]
+      ring
+    rw [heq]
+    exact hi.const_add (∫ s in (Iic (0 : ℝ)), f s)
+  have hrepr (u : ℝ) : apm_m95J05_solution lam φ u = Real.exp (-lam * u) * F u := by
+    rw [apm_m95J05_solution]
+    dsimp [F, f]
+    rw [← MeasureTheory.integral_const_mul]
+    apply MeasureTheory.integral_congr_ae
+    filter_upwards [] with s
+    rw [show -lam * (u - s) = -lam * u + lam * s by ring, Real.exp_add]
+    ring
+  have hexp : HasDerivAt (fun u : ℝ ↦ Real.exp (-lam * u))
+      (-lam * Real.exp (-lam * t)) t := by
+    convert Real.hasDerivAt_exp (-lam * t) |>.comp t
+      ((hasDerivAt_const t (-lam)).mul (hasDerivAt_id t)) using 1 <;> ring
+  rw [funext hrepr]
+  convert hexp.mul hFderiv using 1
+  · dsimp [f]
+    have he : Real.exp (-lam * t) * Real.exp (lam * t) = 1 := by
+      rw [← Real.exp_add]
+      simp
+    have hep : Real.exp (-lam * t) * (Real.exp (lam * t) * φ t) = φ t := by
+      rw [← mul_assoc, he, one_mul]
+    rw [hep]
+    ring
 -- END SEAT AREA
 
 /-- A causal convolution against a smooth compactly supported function is smooth. -/
