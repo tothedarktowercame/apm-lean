@@ -1122,6 +1122,32 @@ theorem kleinPolygonInnerRun_exists_outerOverlapReplacement
   refine ⟨q, ?_⟩
   simpa [pInner, kleinPolygonInnerToSpace, kleinPolygonOuterToSpace] using hq
 
+/-- A whole nonempty inner block, presented as a dependent finite family of
+paths, has one overlap replacement routed through the outer piece.  Thus the
+remaining normalization only has to partition the subdivision side indices. -/
+theorem kleinPolygonInnerBlock_exists_outerOverlapReplacement
+    {n : ℕ}
+    (point : Fin (n + 2) → kleinPairingData.Space)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hx : point 0 ∈ (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (hy : point (Fin.last (n + 1)) ∈
+      (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (hF : ∀ k t, F k t ∈ (openCover kleinPairingData).inner) :
+    ∃ q : Path
+        (⟨point 0, by rw [(openCover kleinPairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen kleinPairingData.Rel)
+        (⟨point (Fin.last (n + 1)), by
+          rw [(openCover kleinPairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen kleinPairingData.Rel),
+      (⟦Path.concat point F⟧ : FundamentalGroupoid.mk (point 0) ⟶
+          FundamentalGroupoid.mk (point (Fin.last (n + 1)))) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  exact kleinPolygonInnerRun_exists_outerOverlapReplacement hx hy
+    (Path.concat point F) (path_concat_mem_of_piece_mem point F hF)
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/
@@ -2091,6 +2117,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInner_pathClass_eq_overlapReplacement
 #print axioms kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms kleinPolygonInnerRun_exists_outerOverlapReplacement
+#print axioms kleinPolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt

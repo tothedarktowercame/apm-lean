@@ -251,6 +251,9 @@ For the required maximal-run partition, `path_concat_mem_of_piece_mem` proves
 that every nonempty concatenated block stays in the inner open when each of
 its subdivision factors does; this supplies the range hypothesis of the raw
 inner-run replacement adapter.
+`kleinPolygonInnerBlock_exists_outerOverlapReplacement` combines these facts:
+a nonempty dependent inner block whose two boundary vertices lie in the
+overlap is equal to a single overlap path routed through the outer piece.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap
