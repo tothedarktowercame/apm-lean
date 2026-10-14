@@ -87901,28 +87901,25 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport the pointwise loop equality through H1 and compute the signed arc sum; then B8-B10.",
+    "Identify the chosen overlap generator with its circle map and compute the signed arc sum; then B8-B10.",
     :outcome :stop,
     :warnings ["lint"],
     :missing-theorems
-    [{:name "outerHomotopyEquivWedge_radialOverlapCircle",
-      :type
-      "outer deformation sends overlap loop to ordered boundary loop",
+    [{:name "radialOverlapCircle_h1_naturality",
+      :type "H1 overlap-to-outer-to-wedge equals boundary-loop H1",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialOverlapCircleInOuter_val"
-       "polygonBoundaryWedgeLoop_edgePoint"],
+      :depends-on ["outerHomotopyEquivWedge_radialOverlapCircle"],
       :area "polygon-quotient-homology"}
      {:name "radialIntersectionToOuterH1_generator_eq_boundaryLoop",
-      :type "overlap generator maps to boundary-loop H1 class",
+      :type "chosen overlap generator maps to boundary-loop H1 class",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["outerHomotopyEquivWedge_radialOverlapCircle"],
+      :depends-on ["radialOverlapCircle_h1_naturality"],
       :area "polygon-quotient-homology"}
      {:name "polygonBoundaryWedgeLoop_hurewicz",
       :type "boundary-loop coordinates equal attachingDegree",
@@ -87935,7 +87932,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked the radial-overlap to ordered-boundary comparison.",
+    "Banked degree-one naturality from overlap circle to boundary loop.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87943,32 +87940,20 @@
      {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 7ce50e825", :exit 0}],
+     {:cmd "git show --check a59abd80d", :exit 0}],
     :diagnostic-history
-    [{:cmd "quotient comparison draft",
+    [{:cmd "H1 composition drafts",
       :exit 1,
-      :correction "used quotient-homeomorphism injectivity"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792011464141-12400-daca4f87",
-     :commands
-     ["git show/diff 7ce50e825; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 7ce50e825 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 279a9e6d9c5af884b9a09560ec94e948c54751f5f1382aed8793ab3d8f71f2b4 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. The proof takes the literal half-radius representative through the restricted quotient deformation to the unit boundary with the same positive circle parameter, then through the skeleton/wedge homeomorphism; direction and representation transitions are correct, with no reversal. New milestone proved; remaining H1 transport, signed arc/Hurewicz computation, then B8-B10."},
-    :commit "7ce50e825",
+      :correction "used exact homologyMap_comp"}],
+    :commit "a59abd80d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "279a9e6d9c5af884b9a09560ec94e948c54751f5f1382aed8793ab3d8f71f2b4"},
+     "cd28f78085efc4b28d14ae940d1533791cafc5a6aec4fe7b72d8d62dd0225a63"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91487,7 +91472,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundarywedgeloop-edgepoint
-    :lemma-outerhomotopyequivwedge-radialoverlapcircle],
+    :lemma-outerhomotopyequivwedge-radialoverlapcircle
+    :lemma-radialoverlapcircle-h1-naturality],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -91548,4 +91534,21 @@
    :depends-on
    [:lemma-radialoverlapcircleinouter-val
     :lemma-polygonboundarywedgeloop-edgepoint],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialOverlapCircle_h1_naturality",
+    :type "H1 overlap-to-outer-to-wedge equals boundary-loop H1"},
+   :lemma
+   {:name "radialOverlapCircle_h1_naturality",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "H1 overlap-to-outer-to-wedge equals boundary-loop H1",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialoverlapcircle-h1-naturality,
+   :kind :lemma,
+   :depends-on [:lemma-outerhomotopyequivwedge-radialoverlapcircle],
    :other-consumers [:t94J09]}]}
