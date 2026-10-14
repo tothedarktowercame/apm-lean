@@ -1262,6 +1262,42 @@ theorem kleinPolygonInnerBlock_exists_outerOverlapReplacement
   exact kleinPolygonInnerRun_exists_outerOverlapReplacement hx hy
     (Path.concat point F) (path_concat_mem_of_piece_mem point F hF)
 
+/-- A packaged nonempty subdivision block with inner range and overlap
+endpoints is replaced by one overlap path routed through the outer piece. -/
+theorem pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (start n : ℕ) (h : start + (n + 1) ≤ S.n + 1)
+    (hx : pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0 ∈
+      (openCover kleinPairingData).inner ∩ (openCover kleinPairingData).outer)
+    (hy : pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+        (Fin.last (n + 1)) ∈
+      (openCover kleinPairingData).inner ∩ (openCover kleinPairingData).outer)
+    (hF : ∀ k t,
+      pathTwoOpenSubdivisionBlockPiece S start (n + 1) h k t ∈
+        (openCover kleinPairingData).inner) :
+    ∃ q : Path
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0,
+          by rw [(openCover kleinPairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen kleinPairingData.Rel)
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+            (Fin.last (n + 1)),
+          by rw [(openCover kleinPairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen kleinPairingData.Rel),
+      (⟦Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+          (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h)⟧ :
+        FundamentalGroupoid.mk
+            (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0) ⟶
+          FundamentalGroupoid.mk
+            (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+              (Fin.last (n + 1)))) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  exact kleinPolygonInnerBlock_exists_outerOverlapReplacement
+    (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+    (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) hx hy hF
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/
@@ -2238,6 +2274,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms kleinPolygonInnerRun_exists_outerOverlapReplacement
 #print axioms kleinPolygonInnerBlock_exists_outerOverlapReplacement
+#print axioms pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt

@@ -267,6 +267,9 @@ package its pieces as one dependent path family.
 `boolSideRunPartition_exists_slice` supplies explicit start/length coordinates;
 `pathTwoOpenSubdivisionBlockPoint` and `pathTwoOpenSubdivisionBlockPiece` use
 them to reindex the original pieces as an exact dependent path family.
+`pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement` sends such a
+nonempty inner block with overlap endpoints to one equal overlap path routed
+through the outer piece.  Only reassembly across the run list remains.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap
