@@ -1523,3 +1523,11 @@ literal counit normal form now supplies the exact inverse-unit square in the
 pulled-back and rebased source system, so the theorem applies directly to the
 shifted overlap endpoint as well as the fixed representative. The two normal
 form triviality proofs remain; no counit-identity assumption is introduced.
+`genericPointWedgeRightLeg_overlap_connectorSquare` avoids those two
+normal-form obligations: the actual transported overlap component is already
+the equality transport between its literal `Y` endpoints, so the ordinary
+connector law proves the required square directly.
+`genericPointWedgeRightBase_rightProjection_eq_one` feeds that square into the
+banked projection criterion and proves that the B3 base-change element has
+trivial right-factor projection. The remaining B6 step is the coproduct
+kernel statement extracting an `inl` factor from this equality.

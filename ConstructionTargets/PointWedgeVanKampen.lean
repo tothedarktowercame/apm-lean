@@ -6798,6 +6798,29 @@ theorem connectorSystem_connectorSquare_eqToHom
   simp
 
 omit [PathConnectedSpace X] in
+/-- The literal right-piece connector system carries the transported overlap
+component, since that component is exactly equality transport between its
+two endpoints. -/
+theorem genericPointWedgeRightLeg_overlap_connectorSquare :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((genericPointWedgeConnectors y₀).connector
+        ((eK.inverse ⋙ r ⋙ eR.functor).obj
+          (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom ≫
+      (eK.inverse ⋙ r ⋙ eR.functor).map
+        (eK.functor.map (eK.unitInv.app z)) =
+    ((genericPointWedgeConnectors y₀).connector
+        ((eK.inverse ⋙ r ⋙ eR.functor).obj
+          (eK.functor.obj z))).hom := by
+  dsimp only
+  rw [genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport]
+  exact connectorSystem_connectorSquare_eqToHom _ _
+
+omit [PathConnectedSpace X] in
 /-- The transported overlap component satisfies the connector square in the
 coherent right-cover connector system before mapping and base change. -/
 theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare :
@@ -7853,6 +7876,17 @@ theorem genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare :
       (eq_connectorTransport_iff_connectorSquare
         (genericPointWedgeConnectors y₀) _)
 
+/-- The canonical right projection of the B3 base-change element is trivial:
+the remaining connector square is the literal endpoint-transport square. -/
+theorem genericPointWedgeRightBase_rightProjection_eq_one :
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN) = 1 := by
+  apply (genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare
+    x₀ y₀ M N hM hN hy hx cM cN).2
+  simpa using genericPointWedgeRightLeg_overlap_connectorSquare
+    x₀ y₀ M N hM hN hy hx cM cN
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -8634,5 +8668,7 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms connectorSystem_connectorSquare_iff_normalForm_eq_id
 #print axioms genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm
 #print axioms genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
+#print axioms genericPointWedgeRightLeg_overlap_connectorSquare
+#print axioms genericPointWedgeRightBase_rightProjection_eq_one
 
 end ConstructionTargets.PointWedgeVanKampen
