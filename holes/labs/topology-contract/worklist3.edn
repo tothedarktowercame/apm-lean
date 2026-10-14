@@ -36119,30 +36119,30 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove transported map equals literal skeleton map; reverse kernel inclusion/surjectivity from pseudopushout; winding; C1/C2/Main.",
+    "Compare direct skeleton-to-outer map with inverse homotopy-equivalence/basepoint transport; reverse kernel inclusion/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name
-      "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel",
-      :type "forward kernel inclusion after target transport",
+    [{:name "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
+      :type
+      "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel"],
+      :depends-on [],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjective skeleton map; overlap-closure kernel",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel"
+      ["kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct"
+       "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel"
        "kleinPolygonFundamentalGroupoidPseudopushout"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
@@ -36150,37 +36150,22 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain.",
+    "Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain.",
     :commands
-    [{:cmd "lake build closure", :exit 0}
-     {:cmd "fixture; Main; registry; diff; show", :exit 0}
+    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
+     {:cmd "lean fixture; Main; registry; diff; show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
-    :diagnostic-history
-    [{:cmd "lean closure",
-      :exit 1,
-      :correction
-      "rebuilt missing PolygonSurfaceHomology olean; passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791976925566-11777-0e984fac",
-     :commands
-     ["git show/check/diff d7297e3e; scope and orientation review"
-      "sha256sum fixture; lean closure, fixture, Main"
-      "statement registry; placeholder and axiom recount"],
-     :finding
-     "PASS. Commit d7297e3e adds compiled, sorry-free progress: it constructs the correctly oriented path from the old polygon basepoint to the skeleton-image basepoint, postcomposes the transported outer map with the induced group equivalence, and preserves the forward kernel inclusion. Scope and fixture hash match; support placeholders 0->0; frozen Main 1->1; standard axioms only; registry 166/166. Map equality, reverse inclusion, surjectivity, and winding remain listed."},
-    :commit "d7297e3e75e94a762e551350420cfd1c40478a33",
+    :commit "44f5d424e3ef2ac634898fb671808a5e07c04bef",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_target_basepoint_kernel_check.lean",
+    {:path "/tmp/t93j03_direct_skeleton_factor_check.lean",
      :sha256
-     "7bd20059df1ca855d52c0fc3187e43be76221e4047202a1fa3027ac301ee3d5f"},
+     "34022561a00f378ef13ea1f1cbb600a68cac44825de11af8e69aa544b5410f4e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38566,7 +38551,8 @@
     :lemma-kleinpolygonoverlaptospacepione-eq-one
     :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker
     :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel
-    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel],
+    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel
+    :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38668,6 +38654,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
+    :type
+    "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map"},
+   :lemma
+   {:name "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
