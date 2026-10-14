@@ -142,13 +142,109 @@ def apm_t01A02_IsEvenLift
 /-- Seat (torus lifting): a map factoring through coordinatewise squaring has
 a planar lift with an even integral winding matrix. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A02_evenLift_of_factorsThroughSquare_aux_lift
+    (h : C(ℝ × ℝ, Circle))
+    (h₁ : ∀ x, h (x + (2 * Real.pi, 0)) = h x)
+    (h₂ : ∀ x, h (x + (0, 2 * Real.pi)) = h x) :
+    ∃ H : C(ℝ × ℝ, ℝ), ∃ m n : ℤ,
+      (∀ x, H (x + (2 * Real.pi, 0)) = H x + 2 * Real.pi * m) ∧
+      (∀ x, H (x + (0, 2 * Real.pi)) = H x + 2 * Real.pi * n) ∧
+      ∀ x, Circle.exp (H x) = h x := by
+  let e₀ : ℝ := Complex.arg (h (0, 0) : ℂ)
+  have he₀ : Circle.exp e₀ = h (0, 0) := Circle.exp_arg _
+  obtain ⟨H, hH₀, hH⟩ :=
+    Circle.isCoveringMap_exp.existsUnique_continuousMap_lifts h (0, 0) e₀ he₀
+  have hHexp : ∀ x, Circle.exp (H x) = h x := by
+    intro x
+    exact congr_fun hH₀.2 x
+  have step (v : ℝ × ℝ) (hv : ∀ x, h (x + v) = h x) :
+      ∃ k : ℤ, ∀ x, H (x + v) = H x + 2 * Real.pi * k := by
+    have hexp0 : Circle.exp (H ((0, 0) + v)) = Circle.exp (H (0, 0)) := by
+      rw [hHexp, hHexp, hv]
+    obtain ⟨k, hk⟩ := Circle.exp_eq_exp.mp hexp0
+    let H₁ : C(ℝ × ℝ, ℝ) :=
+      ⟨fun x ↦ H (x + v), H.continuous.comp (continuous_id.add continuous_const)⟩
+    let H₂ : C(ℝ × ℝ, ℝ) :=
+      ⟨fun x ↦ H x + 2 * Real.pi * k, H.continuous.add continuous_const⟩
+    have h₁lift : Circle.exp ∘ H₁ = h := by
+      funext x
+      exact (hHexp (x + v)).trans (hv x)
+    have h₂lift : Circle.exp ∘ H₂ = h := by
+      funext x
+      change Circle.exp (H x + 2 * Real.pi * (k : ℝ)) = h x
+      rw [show H x + 2 * Real.pi * (k : ℝ) =
+          H x + (k : ℝ) * (2 * Real.pi) by ring]
+      exact (Circle.exp_eq_exp.mpr ⟨k, rfl⟩).trans (hHexp x)
+    have hbase : H₁ (0, 0) = H₂ (0, 0) := by
+      change H ((0, 0) + v) = H (0, 0) + 2 * Real.pi * (k : ℝ)
+      rw [hk]
+      ring
+    have hu₁ := Circle.isCoveringMap_exp.existsUnique_continuousMap_lifts
+      h (0, 0) (H₁ (0, 0)) (by
+        exact congr_fun h₁lift (0, 0))
+    have hu₂ : H₁ = H₂ := by
+      exact hu₁.unique ⟨rfl, h₁lift⟩ ⟨hbase.symm, h₂lift⟩
+    refine ⟨k, fun x ↦ ?_⟩
+    exact DFunLike.congr_fun hu₂ x
+  obtain ⟨m, hm⟩ := step (2 * Real.pi, 0) h₁
+  obtain ⟨n, hn⟩ := step (0, 2 * Real.pi) h₂
+  exact ⟨H, m, n, hm, hn, hHexp⟩
+
 lemma apm_t01A02_evenLift_of_factorsThroughSquare
     (f : C(apm_t01A02_Torus, apm_t01A02_Torus))
     (hlift : ∃ g : C(apm_t01A02_Torus, apm_t01A02_Torus),
       ∀ x, f x = apm_t01A02_cover (g x)) :
     ∃ F : ℝ × ℝ → ℝ × ℝ, ∃ a b c d : ℤ,
       apm_t01A02_IsEvenLift f F a b c d := by
-  sorry
+  obtain ⟨g, hg⟩ := hlift
+  let h₁ : C(ℝ × ℝ, Circle) :=
+    ⟨fun x ↦ (g (apm_t01A02_torusExp x)).1,
+      continuous_fst.comp (g.continuous.comp
+        (Circle.isCoveringMap_exp.continuous.comp continuous_fst |>.prodMk
+          (Circle.isCoveringMap_exp.continuous.comp continuous_snd)))⟩
+  let h₂ : C(ℝ × ℝ, Circle) :=
+    ⟨fun x ↦ (g (apm_t01A02_torusExp x)).2,
+      continuous_snd.comp (g.continuous.comp
+        (Circle.isCoveringMap_exp.continuous.comp continuous_fst |>.prodMk
+          (Circle.isCoveringMap_exp.continuous.comp continuous_snd)))⟩
+  have hperiod (x : ℝ × ℝ) :
+      apm_t01A02_torusExp (x + (2 * Real.pi, 0)) = apm_t01A02_torusExp x := by
+    ext <;> simp [apm_t01A02_torusExp, Circle.periodic_exp]
+  have hperiod' (x : ℝ × ℝ) :
+      apm_t01A02_torusExp (x + (0, 2 * Real.pi)) = apm_t01A02_torusExp x := by
+    ext <;> simp [apm_t01A02_torusExp, Circle.periodic_exp]
+  obtain ⟨H₁, a, b, ha, hb, hH₁⟩ :=
+    apm_t01A02_evenLift_of_factorsThroughSquare_aux_lift h₁
+      (fun x ↦ by simp [h₁, hperiod]) (fun x ↦ by simp [h₁, hperiod'])
+  obtain ⟨H₂, c, d, hc, hd, hH₂⟩ :=
+    apm_t01A02_evenLift_of_factorsThroughSquare_aux_lift h₂
+      (fun x ↦ by simp [h₂, hperiod]) (fun x ↦ by simp [h₂, hperiod'])
+  let F : ℝ × ℝ → ℝ × ℝ := fun x ↦ (2 * H₁ x, 2 * H₂ x)
+  refine ⟨F, a, b, c, d, ?_, ?_, ?_, ?_⟩
+  · exact (H₁.continuous.const_mul 2).prodMk (H₂.continuous.const_mul 2)
+  · intro x
+    rw [hg]
+    apply Prod.ext
+    · simp only [apm_t01A02_cover, apm_t01A02_torusExp, F]
+      rw [show 2 * H₁ x = H₁ x + H₁ x by ring, Circle.exp_add, hH₁]
+      simp [h₁, pow_two, apm_t01A02_torusExp]
+    · simp only [apm_t01A02_cover, apm_t01A02_torusExp, F]
+      rw [show 2 * H₂ x = H₂ x + H₂ x by ring, Circle.exp_add, hH₂]
+      simp [h₂, pow_two, apm_t01A02_torusExp]
+  · intro x
+    rw [Prod.ext_iff]
+    constructor
+    · simp [F, ha]
+      ring
+    · simp [F, hc]
+      ring
+  · intro x
+    rw [Prod.ext_iff]
+    constructor
+    · simp [F, hb]
+      ring
+    · simp [F, hd]
+      ring
 -- END SEAT AREA
 
 /-- Seat (compact fundamental square): the error of an equivariant planar
