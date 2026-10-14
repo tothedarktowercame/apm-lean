@@ -3208,6 +3208,22 @@ noncomputable def finiteWedgeH1CoordinateIso (P : PairingData) :
     isIso_of_mono_of_epi (finiteWedgeH1CoordinateMap P)
   exact asIso (finiteWedgeH1CoordinateMap P)
 
+/-- B4 in degree one: transport the fixed positive-leg coordinates from the
+finite wedge to the radial outer piece. -/
+noncomputable def outerH1IsoCoordinates (P : PairingData) :
+    SpaceH (OuterPiece P) 1 ≅ ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of (OuterPiece P)) 1
+    (ModuleCat.of ℤ (PairingOrbit P.pair → ℤ))
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        (outerHomotopyEquivWedge P) 1 ≪≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (PairingOrbit P.pair))) 1).symm ≪≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (finiteWedgeH1CoordinateIso P).symm)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
