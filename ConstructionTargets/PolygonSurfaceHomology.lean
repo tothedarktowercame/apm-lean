@@ -403,6 +403,29 @@ def orbitWedgeBase (P : PairingData) :
   PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
     (P.orbit ⟨0, P.edgeCount_pos⟩) 1
 
+/-- The ordered boundary loop is based at the fixed common wedge point. -/
+theorem polygonBoundaryWedgeLoop_one (P : PairingData) :
+    polygonBoundaryWedgeLoop P 1 = orbitWedgeBase P := by
+  let t : Set.Icc (0 : ℝ) 1 := ⟨0, by simp⟩
+  let i : Fin P.edgeCount := ⟨0, P.edgeCount_pos⟩
+  have he : PolygonSurfacePiOne.edgePointCircle P.edgeCount i t = (1 : Circle) := by
+    apply Subtype.ext
+    simp [PolygonSurfacePiOne.edgePointCircle,
+      ConstructionTargets.Surfaces.edgePoint, i, t]
+  rw [← he, polygonBoundaryWedgeLoop_edgePoint]
+  have ht : PolygonSurfacePiOne.circleArc t = (1 : Circle) :=
+    (PolygonSurfacePiOne.circleArc_eq_one_iff t).2 (Or.inl (by rfl))
+  have hr : PolygonSurfacePiOne.circleArc
+      (PolygonSurfacePiOne.reverseIcc t) = (1 : Circle) := by
+    apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+    right
+    simp [PolygonSurfacePiOne.reverseIcc, t]
+  change P.signedWedgeArc i t =
+    PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1
+  cases hs : P.sign i
+  · rw [P.signedWedgeArc_of_not_sign i t hs, hr]
+  · rw [P.signedWedgeArc_of_sign i t hs, ht]
+
 /-- Additive-group degree-zero homology of the orbit-indexed wedge. -/
 noncomputable def finiteWedgeGroupH0IsoInt (P : PairingData) :
     ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
@@ -956,6 +979,28 @@ theorem moduleHurewicz_cast {X : Type} [TopologicalSpace X] {x y : X}
         ext t
         rfl
       rw [hp]
+
+/-- The actual ordered polygon boundary, based at the common wedge point and
+applied to the fixed positive circle class. -/
+noncomputable def polygonBoundaryFundamentalClass (P : PairingData) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  Path.Homotopic.Quotient.cast
+    (FundamentalGroup.map (polygonBoundaryWedgeLoop P)
+      1 circlePositiveFundamentalClass)
+    (polygonBoundaryWedgeLoop_one P).symm
+    (polygonBoundaryWedgeLoop_one P).symm
+
+/-- Naturality computes the normalized Hurewicz class of the geometric
+boundary as the map induced by the explicit boundary circle. -/
+theorem polygonBoundaryFundamentalClass_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P) (polygonBoundaryFundamentalClass P) =
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+  rw [polygonBoundaryFundamentalClass, moduleHurewicz_cast,
+    moduleHurewicz_naturality, moduleHurewicz_circlePositiveFundamentalClass]
 
 /-- The positive `l`th leg class transported to the single common basepoint
 used for words in the orbit-indexed finite wedge. -/
