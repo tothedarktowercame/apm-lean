@@ -3158,35 +3158,542 @@ def zipMap (n k : ℕ) (z : Disk) : Disk :=
 
 /-- Boundary points of `D₊` on one ray from the centre coincide: a point strictly
 between the centre and a point of `D₊` lies in the open half-disk. -/
+lemma zip_halfBoundary_ray_aux_mem {q : ℂ} (hq : q ∈ zipHalfBoundary) :
+    ‖q‖ ≤ 1 ∧ 0 ≤ q.im := by
+  rcases hq with hq | hq
+  · exact ⟨hq.1.le, hq.2⟩
+  · refine ⟨?_, hq.1.symm.le⟩
+    rw [Complex.norm_def]
+    simp [Complex.normSq, hq.1, Real.sqrt_sq_eq_abs]
+    rcases (abs_le.mp hq.2) with ⟨hl, hu⟩
+    nlinarith
+
+lemma zip_halfBoundary_ray_aux_interior {q : ℂ} (hq : q ∈ zipHalfBoundary)
+    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s < 1) :
+    zipCentre + (s : ℂ) * (q - zipCentre) ∉ zipHalfBoundary := by
+  have hqm := zip_halfBoundary_ray_aux_mem hq
+  let z := zipCentre + (s : ℂ) * (q - zipCentre)
+  have hzform : z = ((1 - s : ℝ) : ℂ) * zipCentre + (s : ℂ) * q := by
+    dsimp [z]
+    push_cast
+    ring
+  have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by
+    simp [zipCentre, Complex.norm_def]
+  have hznorm : ‖z‖ < 1 := by
+    rw [hzform]
+    calc
+      ‖((1 - s : ℝ) : ℂ) * zipCentre + (s : ℂ) * q‖ ≤
+          ‖((1 - s : ℝ) : ℂ) * zipCentre‖ + ‖(s : ℂ) * q‖ := norm_add_le _ _
+      _ = (1 - s) / 2 + s * ‖q‖ := by
+        have hs_norm : ‖((s : ℝ) : ℂ)‖ = s := by
+          rw [Complex.norm_real]
+          exact Real.norm_of_nonneg hs0
+        have hsub_norm : ‖((1 - s : ℝ) : ℂ)‖ = 1 - s := by
+          rw [Complex.norm_real]
+          exact Real.norm_of_nonneg (sub_nonneg.mpr hs1.le)
+        rw [norm_mul, norm_mul, hc]
+        rw [hs_norm, hsub_norm]
+        ring
+      _ ≤ (1 - s) / 2 + s := by nlinarith
+      _ < 1 := by linarith
+  have hzim : 0 < z.im := by
+    rw [hzform]
+    simp [zipCentre]
+    nlinarith [hqm.2]
+  intro hz
+  rcases hz with hz | hz
+  · exact (ne_of_lt hznorm) (by simpa [z] using hz.1)
+  · exact (ne_of_gt hzim) hz.1
+
 theorem zip_halfBoundary_ray {p p' : ℂ} (hp : p ∈ zipHalfBoundary)
     (hp' : p' ∈ zipHalfBoundary) {r : ℝ} (hr : 0 < r)
     (h : p' - zipCentre = (r : ℂ) * (p - zipCentre)) : p' = p := by
-  sorry
+  rcases lt_trichotomy r 1 with hr1 | hr1 | hr1
+  · have hn := zip_halfBoundary_ray_aux_interior hp (le_of_lt hr) hr1
+    exfalso
+    apply hn
+    rw [← show p' = zipCentre + (r : ℂ) * (p - zipCentre) by
+      rw [show p' = zipCentre + (p' - zipCentre) by ring, h]]
+    exact hp'
+  · subst r
+    simpa using congrArg (fun z : ℂ => z + zipCentre) h
+  · have hs0 : 0 ≤ r⁻¹ := (inv_pos.mpr hr).le
+    have hs1 : r⁻¹ < 1 := inv_lt_one_of_one_lt₀ hr1
+    have hn := zip_halfBoundary_ray_aux_interior hp' hs0 hs1
+    exfalso
+    apply hn
+    rw [← show p = zipCentre + (r⁻¹ : ℝ) * (p' - zipCentre) by
+      calc
+        p = zipCentre + (p - zipCentre) := by ring
+        _ = zipCentre + (r⁻¹ : ℝ) * ((r : ℂ) * (p - zipCentre)) := by
+          push_cast
+          rw [← mul_assoc, inv_mul_cancel₀ (by exact_mod_cast hr.ne')]
+          ring
+        _ = zipCentre + (r⁻¹ : ℝ) * (p' - zipCentre) := by rw [h]]
+    exact hp
 
 /-- Every point of `D₊` is on a segment from the centre to a boundary point
 (take the largest `λ` with `I/2 + λ (y - I/2) ∈ D₊`). -/
 theorem zip_halfDisk_cone {y : ℂ} (hy : y ∈ zipHalfDisk) :
     ∃ p ∈ zipHalfBoundary, ∃ r : ℝ, 0 ≤ r ∧ r ≤ 1 ∧
       y = zipCentre + (r : ℂ) * (p - zipCentre) := by
-  sorry
+  by_cases hd : y = zipCentre
+  · refine ⟨1, ?_, 0, le_rfl, by norm_num, ?_⟩
+    · right
+      simp [zipHalfBoundary]
+    · simp [hd]
+  let d : ℂ := y - zipCentre
+  have hd0 : d ≠ 0 := by
+    intro h
+    apply hd
+    dsimp [d] at h
+    exact sub_eq_zero.mp h
+  let M : ℝ := 2 / ‖d‖
+  let f : ℝ → ℂ := fun a => zipCentre + (a : ℂ) * d
+  have hf : Continuous f := by
+    exact continuous_const.add (Complex.continuous_ofReal.mul continuous_const)
+  let S : Set ℝ := Icc 0 M ∩ f ⁻¹' zipHalfDisk
+  have hclosedD : IsClosed zipHalfDisk := by
+    apply IsClosed.inter
+    · exact isClosed_le continuous_norm continuous_const
+    · exact isClosed_le continuous_const Complex.continuous_im
+  have hcompact : IsCompact S := by
+    exact isCompact_Icc.inter_right (hclosedD.preimage hf)
+  have hd_norm : ‖d‖ ≤ 3 / 2 := by
+    calc
+      ‖d‖ = ‖y - zipCentre‖ := rfl
+      _ ≤ ‖y‖ + ‖zipCentre‖ := norm_sub_le _ _
+      _ ≤ 1 + 1 / 2 := by
+        have hy' : ‖y‖ ≤ 1 := hy.1
+        have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by simp [zipCentre]
+        linarith
+      _ = 3 / 2 := by norm_num
+  have hM1 : 1 ≤ M := by
+    dsimp [M]
+    rw [le_div_iff₀ (norm_pos_iff.mpr hd0)]
+    linarith
+  have h1S : (1 : ℝ) ∈ S := by
+    refine ⟨⟨by norm_num, hM1⟩, ?_⟩
+    simpa [f, d, add_sub_cancel] using hy
+  obtain ⟨L, hLS, hLmax⟩ := hcompact.exists_isGreatest ⟨1, h1S⟩
+  have hL1 : 1 ≤ L := hLmax h1S
+  have hLM : L ≤ M := hLS.1.2
+  have hpD : f L ∈ zipHalfDisk := hLS.2
+  have hLMlt : L < M := by
+    apply lt_of_le_of_ne hLM
+    intro heq
+    have he : ‖f L - zipCentre‖ = 2 := by
+      simp [f, heq, M, norm_mul, hd0, abs_of_nonneg]
+    have hle : ‖f L - zipCentre‖ ≤ 3 / 2 := by
+      have hsub := norm_sub_le (f L) zipCentre
+      have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by simp [zipCentre]
+      rw [hc] at hsub
+      linarith [hpD.1]
+    linarith
+  have hpB : f L ∈ zipHalfBoundary := by
+    by_contra hnot
+    have hnlt : ‖f L‖ < 1 := lt_of_le_of_ne hpD.1 (by
+      intro he
+      apply hnot
+      left
+      exact ⟨he, hpD.2⟩)
+    have him : 0 < (f L).im := lt_of_le_of_ne hpD.2 (by
+      intro he
+      apply hnot
+      right
+      refine ⟨he.symm, ?_⟩
+      have hre : |(f L).re| ≤ ‖f L‖ := Complex.abs_re_le_norm _
+      exact hre.trans hpD.1)
+    let U : Set ℂ := {z | ‖z‖ < 1} ∩ {z | 0 < z.im}
+    have hUopen : IsOpen U :=
+      (isOpen_lt continuous_norm continuous_const).inter
+        (isOpen_lt continuous_const Complex.continuous_im)
+    have hLU : f L ∈ U := ⟨hnlt, him⟩
+    have hpre : f ⁻¹' U ∈ nhds L := hf.continuousAt (hUopen.mem_nhds hLU)
+    obtain ⟨a, b, haLb, hab⟩ := mem_nhds_iff_exists_Ioo_subset.mp hpre
+    let L' : ℝ := L + min ((b - L) / 2) ((M - L) / 2)
+    have hLL' : L < L' := by
+      dsimp [L']
+      have h1 : 0 < (b - L) / 2 := by linarith [haLb.2]
+      have h2 : 0 < (M - L) / 2 := by linarith
+      exact lt_add_of_pos_right _ (lt_min h1 h2)
+    have hL'M : L' ≤ M := by
+      dsimp [L']
+      have := min_le_right ((b - L) / 2) ((M - L) / 2)
+      linarith
+    have hL'b : L' < b := by
+      dsimp [L']
+      have := min_le_left ((b - L) / 2) ((M - L) / 2)
+      linarith [haLb.2]
+    have hL'a : a < L' := lt_trans haLb.1 hLL'
+    have hL'U : f L' ∈ U := hab ⟨hL'a, hL'b⟩
+    have hL'S : L' ∈ S := by
+      refine ⟨⟨by linarith [hL1], hL'M⟩, hL'U.1.le, hL'U.2.le⟩
+    exact (not_lt_of_ge (hLmax hL'S)) hLL'
+  refine ⟨f L, hpB, L⁻¹, inv_nonneg.mpr (by linarith), ?_, ?_⟩
+  · exact inv_le_one_of_one_le₀ hL1
+  · have hL0 : (L : ℂ) ≠ 0 := by exact_mod_cast (ne_of_gt (lt_of_lt_of_le zero_lt_one hL1))
+    rw [show f L - zipCentre = (L : ℂ) * d by simp [f]]
+    simp [f, d, hL0, mul_assoc]
 
 /-! ### The boundary map -/
 
+lemma zipBoundaryMap_continuous_aux_profile {n k : ℕ} (hn : 0 < n) :
+    Continuous (zipProfile n k) := by
+  unfold zipProfile
+  apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+  · intro x hx
+    dsimp at hx ⊢
+    rw [hx]
+    have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+    have hnp2 : (n : ℝ) + 2 ≠ 0 := by positivity
+    have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+    rw [show ((zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) - zipStart n k) *
+          ((n : ℝ) + 2) / (2 * Real.pi) - 1 : ℝ) = 1 by
+      field_simp
+      ring]
+    norm_num
+
 theorem zipBoundaryMap_continuous {n k : ℕ} (hn : 0 < n) :
     Continuous (zipBoundaryMap n k) := by
-  sorry
+  unfold zipBoundaryMap
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (zipStart n k) (zipProfile n k)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold zipProfile
+      have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+      have hnp2 : (n : ℝ) + 2 ≠ 0 := by positivity
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      rw [if_pos (by
+        apply le_add_of_nonneg_right
+        positivity)]
+      have hnot : ¬ (zipStart n k + 2 * Real.pi ≤
+          zipStart n k + 4 * Real.pi / ((n : ℝ) + 2)) := by
+        rw [not_le]
+        have hnreal : 0 < (n : ℝ) := by exact_mod_cast hn
+        apply (add_lt_add_iff_left (zipStart n k)).2
+        apply (div_lt_iff₀' (by positivity : 0 < (n : ℝ) + 2)).2
+        nlinarith [Real.pi_pos]
+      rw [if_neg hnot]
+      have harg : ((n : ℝ) + 2) / n *
+          (zipStart n k + 2 * Real.pi - zipStart n k -
+            4 * Real.pi / ((n : ℝ) + 2)) / 2 = Real.pi := by
+        field_simp
+        ring
+      rw [harg, Complex.exp_pi_mul_I]
+      norm_num [hpi]
+    · exact (zipBoundaryMap_continuous_aux_profile hn).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
 
 theorem zipBoundaryMap_mem {n k : ℕ} (hn : 0 < n) (b : Circle) :
     zipBoundaryMap n k b ∈ zipHalfBoundary := by
-  sorry
+  let x : AddCircle (2 * Real.pi) := AddCircle.homeomorphCircle'.symm b
+  let φ := AddCircle.equivIco (2 * Real.pi) (zipStart n k) x
+  have hφ : (φ : ℝ) ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := φ.2
+  change zipProfile n k (φ : ℝ) ∈ zipHalfBoundary
+  rw [zipProfile]
+  split_ifs with hcut
+  · right
+    constructor
+    · simp [Complex.div_im, Complex.mul_im]
+    · rw [Complex.ofReal_re, abs_le]
+      constructor
+      · have hn2 : 0 < (n : ℝ) + 2 := by positivity
+        have hpi : 0 < 2 * Real.pi := Real.two_pi_pos
+        have hd : 0 ≤ (φ : ℝ) - zipStart n k := by linarith [hφ.1]
+        have : 0 ≤ ((φ : ℝ) - zipStart n k) * ((n : ℝ) + 2) /
+            (2 * Real.pi) := div_nonneg (mul_nonneg hd hn2.le) hpi.le
+        linarith
+      · have hn2 : 0 < (n : ℝ) + 2 := by positivity
+        have hpi : 0 < 2 * Real.pi := Real.two_pi_pos
+        have hbound :
+            ((φ : ℝ) - zipStart n k) * ((n : ℝ) + 2) /
+                (2 * Real.pi) ≤ 2 := by
+          apply (div_le_iff₀ hpi).2
+          have hdle : (φ : ℝ) - zipStart n k ≤
+              4 * Real.pi / ((n : ℝ) + 2) := by linarith
+          have hm := (le_div_iff₀ hn2).mp hdle
+          nlinarith
+        linarith
+  · left
+    let θ : ℝ := ((n : ℝ) + 2) / n *
+      ((φ : ℝ) - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+    have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+    have hn2 : 0 < (n : ℝ) + 2 := by positivity
+    have hθ0 : 0 ≤ θ := by
+      dsimp [θ]
+      have : 0 ≤ (φ : ℝ) - zipStart n k -
+          4 * Real.pi / ((n : ℝ) + 2) := by
+        linarith [not_le.mp hcut]
+      positivity
+    have hθpi : θ ≤ Real.pi := by
+      dsimp [θ]
+      have hu := hφ.2.le
+      field_simp
+      nlinarith [Real.pi_pos]
+    constructor
+    · change ‖Complex.exp ((θ : ℝ) * Complex.I)‖ = 1
+      exact Complex.norm_exp_ofReal_mul_I θ
+    · change 0 ≤ (Complex.exp ((θ : ℝ) * Complex.I)).im
+      rw [Complex.exp_im]
+      simpa using Real.sin_nonneg_of_nonneg_of_le_pi hθ0 hθpi
 
 theorem zipBoundaryMap_injective {n k : ℕ} (hn : 0 < n) :
     Function.Injective (zipBoundaryMap n k) := by
-  sorry
+  intro b₁ b₂ h
+  let x := AddCircle.equivIco (2 * Real.pi) (zipStart n k)
+    (AddCircle.homeomorphCircle'.symm b₁)
+  let y := AddCircle.equivIco (2 * Real.pi) (zipStart n k)
+    (AddCircle.homeomorphCircle'.symm b₂)
+  have hx : x.1 ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := x.2
+  have hy : y.1 ∈ Set.Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := y.2
+  have hxy : zipProfile n k x.1 = zipProfile n k y.1 := by
+    simpa only [zipBoundaryMap, AddCircle.liftIco, Function.comp_apply,
+      Set.restrict_apply] using h
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn
+  have hn2 : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  let c := zipStart n k + 4 * Real.pi / ((n : ℝ) + 2)
+  have hc_lt : c < zipStart n k + 2 * Real.pi := by
+    dsimp [c]
+    have hpi : 0 < Real.pi := Real.pi_pos
+    rw [add_lt_add_iff_left]
+    apply (div_lt_iff₀ hn2).2
+    nlinarith
+  have hval : x.1 = y.1 := by
+    by_cases hxc : x.1 ≤ c
+    · by_cases hyc : y.1 ≤ c
+      · simp only [zipProfile, show x.1 ≤ zipStart n k + 4 * Real.pi /
+            ((n : ℝ) + 2) from hxc,
+          show y.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hyc,
+          if_pos] at hxy
+        have hre : (x.1 - zipStart n k) * ((n : ℝ) + 2) /
+              (2 * Real.pi) - 1 =
+            (y.1 - zipStart n k) * ((n : ℝ) + 2) / (2 * Real.pi) - 1 := by
+          exact_mod_cast hxy
+        have hA : 0 < ((n : ℝ) + 2) / (2 * Real.pi) := by positivity
+        rw [mul_div_assoc, mul_div_assoc] at hre
+        nlinarith
+      · have hyc' : c < y.1 := lt_of_not_ge hyc
+        simp only [zipProfile, show x.1 ≤ zipStart n k + 4 * Real.pi /
+            ((n : ℝ) + 2) from hxc, if_pos,
+          show ¬y.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hyc,
+          if_neg] at hxy
+        let θ := ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        have him : (0 : ℝ) = Real.sin θ := by
+          have hraw := congrArg Complex.im hxy
+          simp [Complex.exp_im, Complex.mul_im, Complex.div_re,
+            Complex.div_im, Complex.normSq_apply, Nat.cast_add,
+            Nat.cast_ofNat] at hraw
+          have heq : (n + 2 : ℝ) * n / (n * n) *
+                (y.1 - zipStart n k - 4 * Real.pi * (n + 2) / ((n + 2) * (n + 2))) / 2 = θ := by
+            dsimp [θ]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          rwa [heq] at hraw
+        have htheta_pos : 0 < ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 := by
+          exact div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num)
+        have htheta_lt : ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 < Real.pi := by
+          have := hy.2
+          field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+          nlinarith [Real.pi_pos]
+        have hs := Real.sin_pos_of_pos_of_lt_pi htheta_pos htheta_lt
+        dsimp [θ] at him
+        linarith
+    · have hxc' : c < x.1 := lt_of_not_ge hxc
+      by_cases hyc : y.1 ≤ c
+      · exfalso
+        have hrev := hxy.symm
+        simp only [zipProfile, show y.1 ≤ zipStart n k + 4 * Real.pi /
+              ((n : ℝ) + 2) from hyc, if_pos,
+            show ¬x.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hxc,
+            if_neg] at hrev
+        let θ := ((n : ℝ) + 2) / n *
+            (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        have him : (0 : ℝ) = Real.sin θ := by
+          have hraw := congrArg Complex.im hrev
+          simp [Complex.exp_im, Complex.mul_im, Complex.div_re,
+            Complex.div_im, Complex.normSq_apply, Nat.cast_add,
+            Nat.cast_ofNat] at hraw
+          have heq : (n + 2 : ℝ) * n / (n * n) *
+                (x.1 - zipStart n k - 4 * Real.pi * (n + 2) / ((n + 2) * (n + 2))) / 2 = θ := by
+            dsimp [θ]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          rwa [heq] at hraw
+        have htpos : 0 < ((n : ℝ) + 2) / n *
+              (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 := by
+          exact div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num)
+        have htlt : ((n : ℝ) + 2) / n *
+              (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 < Real.pi := by
+          have := hx.2
+          field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+          nlinarith [Real.pi_pos]
+        have hs := Real.sin_pos_of_pos_of_lt_pi htpos htlt
+        dsimp [θ] at him
+        linarith
+      · simp only [zipProfile,
+          show ¬x.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hxc,
+          show ¬y.1 ≤ zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) from hyc,
+          if_neg] at hxy
+        let θx := ((n : ℝ) + 2) / n *
+            (x.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        let θy := ((n : ℝ) + 2) / n *
+            (y.1 - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2
+        have hre : Real.cos θx = Real.cos θy := by
+          have hraw := congrArg Complex.re hxy
+          simp [Complex.exp_re, Complex.mul_im, Complex.div_re,
+            Complex.div_im, Complex.normSq_apply, Nat.cast_add,
+            Nat.cast_ofNat] at hraw
+          have hex (z : ℝ) : (n + 2 : ℝ) * n / (n * n) *
+                (z - zipStart n k - 4 * Real.pi * (n + 2) / ((n + 2) * (n + 2))) / 2 =
+                ((n : ℝ) + 2) / n *
+                  (z - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 := by
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+          simpa [θx, θy, hex] using hraw
+        have hθx : θx ∈ Set.Icc 0 Real.pi := by
+          constructor
+          · dsimp [θx]
+            exact le_of_lt (div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num))
+          · dsimp [θx]
+            have := hx.2
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+            nlinarith [Real.pi_pos]
+        have hθy : θy ∈ Set.Icc 0 Real.pi := by
+          constructor
+          · dsimp [θy]
+            exact le_of_lt (div_pos (mul_pos (div_pos hn2 hnR) (by linarith)) (by norm_num))
+          · dsimp [θy]
+            have := hy.2
+            field_simp [ne_of_gt hnR, ne_of_gt hn2]
+            field_simp [ne_of_gt hnR, ne_of_gt hn2] at this
+            nlinarith [Real.pi_pos]
+        have ht := Real.strictAntiOn_cos.injOn hθx hθy hre
+        dsimp [θx, θy] at ht
+        field_simp [ne_of_gt hnR, ne_of_gt hn2] at ht
+        nlinarith [hn2]
+  have hcircle : AddCircle.homeomorphCircle'.symm b₁ =
+      AddCircle.homeomorphCircle'.symm b₂ := by
+    apply (AddCircle.equivIco (2 * Real.pi) (zipStart n k)).injective
+    exact Subtype.ext hval
+  calc
+    b₁ = AddCircle.homeomorphCircle' (AddCircle.homeomorphCircle'.symm b₁) :=
+      (AddCircle.homeomorphCircle'.apply_symm_apply b₁).symm
+    _ = AddCircle.homeomorphCircle' (AddCircle.homeomorphCircle'.symm b₂) :=
+      congrArg AddCircle.homeomorphCircle' hcircle
+    _ = b₂ := AddCircle.homeomorphCircle'.apply_symm_apply b₂
 
 theorem zipBoundaryMap_surjOn {n k : ℕ} (hn : 0 < n) {p : ℂ}
     (hp : p ∈ zipHalfBoundary) : ∃ b : Circle, zipBoundaryMap n k b = p := by
-  sorry
+  have hdiam : ∀ {q : ℂ}, q.im = 0 → |q.re| ≤ 1 →
+      ∃ b : Circle, zipBoundaryMap n k b = q := by
+    intro q hqim hqabs
+    let φ : ℝ := zipStart n k + (q.re + 1) * 2 * Real.pi / ((n : ℝ) + 2)
+    have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+    have hden : 0 < (n : ℝ) + 2 := by positivity
+    have hrelo : -1 ≤ q.re := (abs_le.mp hqabs).1
+    have hrehi : q.re ≤ 1 := (abs_le.mp hqabs).2
+    have hφ : φ ∈ Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := by
+      constructor
+      · dsimp [φ]
+        have hq : 0 ≤ q.re + 1 := by linarith
+        have : 0 ≤ (q.re + 1) * 2 * Real.pi / ((n : ℝ) + 2) := by positivity
+        linarith
+      · dsimp [φ]
+        rw [add_lt_add_iff_left, div_lt_iff₀ hden]
+        nlinarith [Real.pi_pos]
+    refine ⟨AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)), ?_⟩
+    rw [zipBoundaryMap]
+    simp only [Homeomorph.symm_apply_apply]
+    rw [AddCircle.liftIco_coe_apply hφ]
+    rw [zipProfile, if_pos]
+    · have hs : (φ - zipStart n k) * ((n : ℝ) + 2) /
+          (2 * Real.pi) - 1 = q.re := by
+        dsimp [φ]
+        field_simp
+        ring
+      rw [hs]
+      apply Complex.ext <;> simp [hqim]
+    · dsimp [φ]
+      rw [add_le_add_iff_left]
+      apply div_le_div_of_nonneg_right _ hden.le
+      nlinarith [Real.pi_pos]
+  rcases hp with hp | hp
+  · have hnorm : ‖p‖ = 1 := hp.1
+    have him : 0 ≤ p.im := hp.2
+    by_cases hi : p.im = 0
+    · have hreabs : |p.re| ≤ 1 := by
+        calc |p.re| ≤ ‖p‖ := Complex.abs_re_le_norm p
+          _ = 1 := hnorm
+      exact hdiam hi hreabs
+    · have himpos : 0 < p.im := lt_of_le_of_ne him (Ne.symm hi)
+      let θ : ℝ := Complex.arg p
+      have hp0 : p ≠ 0 := by
+        intro h
+        rw [h] at hnorm
+        simp at hnorm
+      have hθle : θ ≤ Real.pi := (Complex.arg_mem_Ioc p).2
+      have hθpos : 0 < θ := by
+        by_contra h
+        have hsnonpos : Real.sin θ ≤ 0 :=
+          Real.sin_nonpos_of_nonpos_of_neg_pi_le (le_of_not_gt h)
+            (le_of_lt (Complex.arg_mem_Ioc p).1)
+        have hspos : 0 < Real.sin θ := by
+          rw [Complex.sin_arg, hnorm, div_one]
+          exact himpos
+        linarith
+      let φ : ℝ := zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) +
+        2 * θ * n / ((n : ℝ) + 2)
+      have hnR : 0 < (n : ℝ) := by exact_mod_cast hn
+      have hden : 0 < (n : ℝ) + 2 := by positivity
+      have hφ : φ ∈ Ico (zipStart n k) (zipStart n k + 2 * Real.pi) := by
+        constructor
+        · dsimp [φ]
+          have hfour : 0 < 4 * Real.pi / ((n : ℝ) + 2) := by positivity
+          have hlast : 0 < 2 * θ * n / ((n : ℝ) + 2) := by positivity
+          linarith
+        · dsimp [φ]
+          have hθlt : θ < Real.pi := by
+            apply lt_of_le_of_ne hθle
+            intro he
+            have hs : Real.sin θ = 0 := by rw [he, Real.sin_pi]
+            rw [Complex.sin_arg, hnorm, div_one] at hs
+            linarith
+          rw [show zipStart n k + 4 * Real.pi / ((n : ℝ) + 2) +
+            2 * θ * n / ((n : ℝ) + 2) = zipStart n k +
+              (4 * Real.pi / ((n : ℝ) + 2) +
+                2 * θ * n / ((n : ℝ) + 2)) by ring]
+          rw [add_lt_add_iff_left]
+          rw [← add_div]
+          rw [div_lt_iff₀ hden]
+          nlinarith [Real.pi_pos]
+      refine ⟨AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)), ?_⟩
+      rw [zipBoundaryMap]
+      simp only [Homeomorph.symm_apply_apply]
+      rw [AddCircle.liftIco_coe_apply hφ]
+      rw [zipProfile, if_neg]
+      · have hexp : Complex.exp ((((((n : ℝ) + 2) / n) *
+            (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 : ℝ) : ℂ) *
+            Complex.I) = Complex.exp ((θ : ℂ) * Complex.I) := by
+          have hreal : ((n : ℝ) + 2) / n *
+              (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 = θ := by
+            dsimp [φ]
+            field_simp
+            ring
+          rw [hreal]
+        rw [hexp]
+        calc
+          Complex.exp ((θ : ℂ) * Complex.I) =
+              (‖p‖ : ℂ) * Complex.exp ((Complex.arg p : ℂ) * Complex.I) := by
+                simp [θ, hnorm]
+          _ = p := Complex.norm_mul_exp_arg_mul_I p
+      · dsimp [φ]
+        have : 0 < 2 * θ * (n : ℝ) / ((n : ℝ) + 2) := by positivity
+        linarith
+  · exact hdiam hp.1 hp.2
 
 /-- The cancelled sides go linearly onto the diameter. -/
 theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 : ℝ) 1) :
@@ -3196,7 +3703,86 @@ theorem zipBoundaryMap_fold {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) (t : Icc (0 
     zipBoundaryMap n k ⟨edgePoint (n + 2) (k + 1) t,
         by simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ =
       ((t : ℝ) : ℂ) := by
-  sorry
+  have hden : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  have hden' : (2 + (n : ℝ)) ≠ 0 := by positivity
+  have hnR : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn
+  let a := zipStart n k
+  let φ0 : ℝ := 2 * Real.pi * ((k : ℝ) + t.1) / ((n : ℝ) + 2)
+  let φ1 : ℝ := 2 * Real.pi * (((k + 1 : ℕ) : ℝ) + t.1) / ((n : ℝ) + 2)
+  have hcircle0 :
+      AddCircle.homeomorphCircle'.symm
+          (⟨edgePoint (n + 2) k t, by
+            simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) k t⟩ : Circle) =
+        (φ0 : AddCircle (2 * Real.pi)) := by
+    apply AddCircle.homeomorphCircle'.injective
+    rw [Homeomorph.apply_symm_apply, AddCircle.homeomorphCircle'_apply_mk]
+    apply Subtype.ext
+    change Complex.exp _ = Complex.exp _
+    congr 1
+    simp only [φ0]
+    push_cast
+    ring
+  have hcircle1 :
+      AddCircle.homeomorphCircle'.symm
+          (⟨edgePoint (n + 2) (k + 1) t, by
+            simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) (k + 1) t⟩ : Circle) =
+        (φ1 : AddCircle (2 * Real.pi)) := by
+    apply AddCircle.homeomorphCircle'.injective
+    rw [Homeomorph.apply_symm_apply, AddCircle.homeomorphCircle'_apply_mk]
+    apply Subtype.ext
+    change Complex.exp _ = Complex.exp _
+    congr 1
+    simp only [φ1]
+    push_cast
+    ring
+  have hφ0 : φ0 ∈ Ico a (a + 2 * Real.pi) := by
+    constructor <;> simp only [φ0, a, zipStart]
+    · apply (div_le_div_iff_of_pos_right hden).2
+      nlinarith [Real.pi_pos, t.2.1]
+    · rw [div_lt_iff₀ hden]
+      field_simp [ne_of_gt hden]
+      have ht := t.2.2
+      have hpi := Real.pi_pos
+      push_cast at hk
+      nlinarith
+  have hφ1 : φ1 ∈ Ico a (a + 2 * Real.pi) := by
+    constructor <;> simp only [φ1, a, zipStart]
+    · apply (div_le_div_iff_of_pos_right hden).2
+      have hpi := Real.pi_pos
+      push_cast
+      nlinarith [t.2.1]
+    · rw [div_lt_iff₀ hden]
+      field_simp [ne_of_gt hden]
+      have ht := t.2.2
+      have hpi := Real.pi_pos
+      push_cast at hk ⊢
+      nlinarith
+  constructor
+  · rw [zipBoundaryMap, hcircle0, AddCircle.liftIco_coe_apply hφ0]
+    rw [zipProfile, if_pos]
+    · simp only [φ0, a, zipStart]
+      norm_cast
+      field_simp [hden']
+      push_cast
+      ring
+    · simp only [φ0, a, zipStart]
+      rw [div_le_iff₀ hden]
+      field_simp [hden']
+      nlinarith [Real.pi_pos, t.2.2]
+  · rw [zipBoundaryMap, hcircle1, AddCircle.liftIco_coe_apply hφ1]
+    rw [zipProfile, if_pos]
+    · simp only [φ1, a, zipStart]
+      norm_cast
+      field_simp [hden']
+      push_cast
+      ring
+    · simp only [φ1, a, zipStart]
+      rw [div_le_iff₀ hden]
+      field_simp [ne_of_gt hden]
+      have ht := t.2.2
+      have hpi := Real.pi_pos
+      push_cast
+      nlinarith
 
 /-! ### The cone -/
 
@@ -3428,7 +4014,33 @@ theorem zipCone_surjOn {n k : ℕ}
       y = zipCentre + (r : ℂ) * (p - zipCentre))
     (hsurj : ∀ {p : ℂ}, p ∈ zipHalfBoundary → ∃ b : Circle, zipBoundaryMap n k b = p)
     {y : ℂ} (hy : y ∈ zipHalfDisk) : ∃ z : ℂ, ‖z‖ ≤ 1 ∧ zipCone n k z = y := by
-  sorry
+  obtain ⟨p, hp, r, hr0, hr1, hy⟩ := hcone hy
+  obtain ⟨b, hb⟩ := hsurj hp
+  by_cases hr : r = 0
+  · refine ⟨0, by simp, ?_⟩
+    simp [zipCone, hy, hr]
+  · let z : ℂ := (r : ℂ) * (b : ℂ)
+    have hbnorm : ‖(b : ℂ)‖ = 1 := by
+      simpa [Circle, Submonoid.unitSphere] using b.property
+    have hznorm : ‖z‖ = r := by
+      simp [z, norm_mul, hbnorm, abs_of_nonneg hr0]
+    have hz0 : z ≠ 0 := by
+      intro hz
+      have : r = 0 := by simpa [hznorm] using congrArg norm hz
+      exact hr this
+    refine ⟨z, hznorm.trans_le hr1, ?_⟩
+    rw [zipCone, dif_neg hz0]
+    let q : Circle :=
+      ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+        simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩
+    change zipCentre + (‖z‖ : ℂ) * (zipBoundaryMap n k q - zipCentre) = y
+    have hq : q = b := by
+      apply Subtype.ext
+      change ((‖z‖⁻¹ : ℝ) : ℂ) * z = (b : ℂ)
+      rw [hznorm]
+      simp [z, hr]
+    rw [hznorm, hq, hb]
+    exact hy.symm
 
 /-! ### The zip -/
 
@@ -3442,7 +4054,88 @@ theorem zipMap_spec {n k : ℕ} (hn : 0 < n)
     (hinj : ∀ {z w : ℂ}, ‖z‖ ≤ 1 → ‖w‖ ≤ 1 → zipCone n k z = zipCone n k w → z = w)
     (hsurj : ∀ {y : ℂ}, y ∈ zipHalfDisk → ∃ z : ℂ, ‖z‖ ≤ 1 ∧ zipCone n k z = y) :
     CancellationZipSpec n k (zipMap n k) := by
-  sorry
+  have hrot : ‖zipRotation n k‖ = 1 := by
+    rw [zipRotation, Complex.norm_exp]
+    simp
+  have hrot0 : zipRotation n k ≠ 0 := by
+    intro h
+    rw [h, norm_zero] at hrot
+    norm_num at hrot
+  have hraw_mem : ∀ z : Disk, ‖zipRaw n k (z : ℂ)‖ ≤ 1 := by
+    intro z
+    have hz : ‖(z : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp z.property)
+    have hc := (hmem hz).1.1
+    rw [zipRaw, norm_mul, norm_pow, hrot, one_mul]
+    nlinarith [norm_nonneg (zipCone n k (z : ℂ))]
+  have hmap_val : ∀ z : Disk, (zipMap n k z : ℂ) = zipRaw n k (z : ℂ) := by
+    intro z
+    rw [zipMap, dif_pos (hraw_mem z)]
+  refine
+    { source_pos := by omega
+      target_pos := hn
+      continuous := ?_
+      surjective := ?_
+      interior_maps := ?_
+      interior_injective := ?_ }
+  · apply Continuous.subtype_mk
+    have hc : Continuous (fun z : Disk => zipRaw n k (z : ℂ)) :=
+      continuous_const.mul ((hcont.comp continuous_subtype_val).pow 2)
+    convert hc using 1
+    funext z
+    exact hmap_val z
+  · intro w
+    have hw : ‖(w : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp w.property)
+    let y : ℂ := (zipRotation n k)⁻¹ * (w : ℂ)
+    have hy_norm : ‖y‖ ≤ 1 := by
+      simp only [y, norm_mul, norm_inv, hrot, inv_one, one_mul]
+      exact hw
+    obtain ⟨x, hx⟩ := IsAlgClosed.exists_pow_nat_eq y (by omega : 0 < 2)
+    let ζ : ℂ := if 0 ≤ x.im then x else -x
+    have hζsq : ζ ^ 2 = y := by
+      simp only [ζ]
+      split <;> simp_all
+    have hζim : 0 ≤ ζ.im := by
+      simp only [ζ]
+      split
+      · assumption
+      · simp
+        linarith
+    have hζnorm : ‖ζ‖ ≤ 1 := by
+      have hs : ‖ζ‖ ^ 2 = ‖y‖ := by
+        rw [← norm_pow, hζsq]
+      nlinarith [norm_nonneg ζ]
+    obtain ⟨z, hz, hcone⟩ := hsurj (show ζ ∈ zipHalfDisk from ⟨hζnorm, hζim⟩)
+    have hzDisk : z ∈ Metric.closedBall (0 : ℂ) 1 := by
+      simpa [Metric.mem_closedBall, dist_zero_right] using hz
+    refine ⟨⟨z, hzDisk⟩, Subtype.ext ?_⟩
+    rw [hmap_val]
+    simp only [zipRaw, hcone, hζsq, y]
+    field_simp
+  · intro p hp
+    have hp_le : ‖(p : ℂ)‖ ≤ 1 := le_of_lt hp
+    have hc := (hmem hp_le).2 hp
+    rw [hmap_val, zipRaw, norm_mul, norm_pow, hrot, one_mul]
+    nlinarith [norm_nonneg (zipCone n k (p : ℂ))]
+  · intro p q hp heq
+    have hp_le : ‖(p : ℂ)‖ ≤ 1 := le_of_lt hp
+    have hq_le : ‖(q : ℂ)‖ ≤ 1 := by
+      simpa [dist_zero_right] using (Metric.mem_closedBall.mp q.property)
+    have hsq : zipCone n k (p : ℂ) ^ 2 = zipCone n k (q : ℂ) ^ 2 := by
+      have hv := congrArg (fun z : Disk => (z : ℂ)) heq
+      change (zipMap n k p : ℂ) = (zipMap n k q : ℂ) at hv
+      rw [hmap_val, hmap_val] at hv
+      simp only [zipRaw] at hv
+      exact mul_left_cancel₀ hrot0 hv
+    rcases (sq_eq_sq_iff_eq_or_eq_neg.mp hsq) with hc | hc
+    · apply Subtype.ext
+      exact hinj hp_le hq_le hc
+    · have hpim := ((hmem hp_le).2 hp).2
+      have hqim := (hmem hq_le).1.2
+      have him := congrArg Complex.im hc
+      simp at him
+      linarith
 
 theorem zipMap_edge_high {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) {j : ℕ} (hj : k + 2 ≤ j)
     (hjn : j < n + 2) (t : Icc (0 : ℝ) 1) :
@@ -3467,7 +4160,42 @@ theorem zipMap_fold_eq {n k : ℕ}
     (t : Icc (0 : ℝ) 1) :
     zipMap n k (edgePoint (n + 2) k t) =
       zipMap n k (edgePoint (n + 2) (k + 1) (reverseParameter t)) := by
-  sorry
+  have hnorm₁ : ‖(edgePoint (n + 2) k t : ℂ)‖ = 1 :=
+    norm_edgePoint (n + 2) k t
+  have hnorm₂ : ‖(edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ)‖ = 1 :=
+    norm_edgePoint (n + 2) (k + 1) (reverseParameter t)
+  have hcone₁ :
+      zipCone n k (edgePoint (n + 2) k t : ℂ) =
+        (((t : ℝ) - 1 : ℝ) : ℂ) := by
+    rw [zipCone_of_norm_one hnorm₁]
+    exact (hfold t).1
+  have hcone₂ :
+      zipCone n k (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) =
+        (((1 : ℝ) - t : ℝ) : ℂ) := by
+    rw [zipCone_of_norm_one hnorm₂]
+    simpa [reverseParameter] using (hfold (reverseParameter t)).2
+  have hraw :
+      zipRaw n k (edgePoint (n + 2) k t : ℂ) =
+        zipRaw n k
+          (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ) := by
+    rw [zipRaw, zipRaw, hcone₁, hcone₂]
+    congr 1
+    push_cast
+    ring
+  unfold zipMap
+  by_cases hle :
+      ‖zipRaw n k (edgePoint (n + 2) k t : ℂ)‖ ≤ 1
+  · have hle' :
+        ‖zipRaw n k
+          (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ)‖ ≤ 1 := by
+      rwa [← hraw]
+    rw [dif_pos hle, dif_pos hle']
+    exact Subtype.ext hraw
+  · have hle' :
+        ¬ ‖zipRaw n k
+          (edgePoint (n + 2) (k + 1) (reverseParameter t) : ℂ)‖ ≤ 1 := by
+      rwa [← hraw]
+    rw [dif_neg hle, dif_neg hle']
 
 /-- Boundary fibres of the zip: a point, or a pair `x(t)`, `x⁻¹(1-t)`. -/
 theorem zipMap_boundary_fibre {n k : ℕ} (hn : 0 < n) (hk : k ≤ n)
