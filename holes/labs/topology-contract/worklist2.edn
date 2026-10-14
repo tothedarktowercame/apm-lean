@@ -87945,6 +87945,18 @@
     [{:cmd "relabel draft",
       :exit 1,
       :correction "carried orbit-card positivity in Fin zero"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792003033859-12155-e15bdc17",
+     :commands
+     ["git show/diff 9ffce356b; blob sha256"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check; git show --check"],
+     :finding
+     "PASS: 9ffce356b (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 bef3083cb40634d0eb159b85df6c431504d2862d72353e582f04799b39ac3cfd matches. Exact blob builds; 0 placeholders; new results use standard axioms; registry 166/0. Enumeration followed by a coordinate swap sends the distinguished orbit exactly to Fin zero; the induced homeomorphism preserves wedge-circle labels and its proven base equality yields the correctly oriented fundamental-group equivalence. New compiled progress; remaining: generator-map comparison, surjectivity transport, coordinate epi, B6-B10. Initial clean dependency rebuild hit thread exhaustion; retry with prior exact dependency artifacts passed."},
     :commit "9ffce356b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87965,7 @@
      "bef3083cb40634d0eb159b85df6c431504d2862d72353e582f04799b39ac3cfd"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked free-group surjectivity for standard finite wedges.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked base-preserving orbit-to-Fin relabeling.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88145,7 +88157,10 @@
     {:job 1,
      :commit "ffbe2f5eb",
      :reason
-     "Banked free-group surjectivity for standard finite wedges."}]}
+     "Banked free-group surjectivity for standard finite wedges."}
+    {:job 2,
+     :commit "9ffce356b",
+     :reason "Banked base-preserving orbit-to-Fin relabeling."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90694,7 +90709,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeOrbitFundamentalGroupEquivFin",
@@ -90706,7 +90721,9 @@
     :type
     "base-preserving orbit-wedge to finite-coordinate group equivalence",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "9ffce356b"},
    :id :lemma-finitewedgeorbitfundamentalgroupequivfin,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegfreegroupmap-surjective],
