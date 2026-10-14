@@ -36161,6 +36161,16 @@
      {:cmd "initial build",
       :exit 1,
       :correction "dirty dependency later completed; rerun passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792000276895-12002-240ed87c",
+     :commands
+     ["git show/check/diff ebda0048; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: ebda0048 adds compiled, sorry-free progress beyond 962be877. Contractibility of the exact inner-piece subtype gives simple connectedness and hence uniqueness of arbitrary-endpoint groupoid arrows; the companion theorem correctly equates path classes with fixed endpoints. This supplies the local inner-run replacement fact without assuming van Kampen. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists inner-run assembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "ebda004808872a29a245f67338ad64f23bb87e52",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36171,7 +36181,7 @@
      "cae820a202c44c144929c1094c106a855886460ec3c300d5d4502bf96baddd9e"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36199,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36395,7 +36405,11 @@
     {:job 6,
      :commit "962be8771e84a7039a9cffd581eb22c778f1d587",
      :reason
-     "Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains."}]}
+     "Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains."}
+    {:job 7,
+     :commit "ebda004808872a29a245f67338ad64f23bb87e52",
+     :reason
+     "Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -38966,7 +38980,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonInnerFundamentalGroupoid_hom_subsingleton",
@@ -38976,7 +38990,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "inner hom sets subsingleton",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "ebda004808872a29a245f67338ad64f23bb87e52"},
    :id :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivision-transition-mem-overlap],
