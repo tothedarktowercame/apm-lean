@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Representation-boundary defect: regularFiber_componentSignedCount_eq_zero indexes literal fiber points but assigns each point the global circleDegree of a chosen whole-component lift. Degree zero does not imply each local degree is zero (a degree-zero circle map may have regular preimages of local degrees +1 and -1), so the listed next step local-degree/component-degree equality is false and this lemma cannot bridge to the regular-value signed count. Repair by grouping fiber points by genuine preimage components and proving that the sum of local degrees on each component equals the lift degree, then sum the zero component totals. Archived files compile; hashes/placeholders/registry reproduce.",
    :evidence
@@ -119076,12 +119076,11 @@
     :outcome :stop,
     :warnings ["Main sorryAx" "unrelated t93J03 edits"],
     :missing-theorems
-    [{:name "regularFiberSignedCount_eq_zero_of_comparison",
-      :type "comparison gives zero signed count",
+    [{:name "pointSignedCount_eq_groupedComponentSignedCount",
+      :type "point sum equals component sum",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["occupiedComponentSignedCount_eq_zero_of_localDegreeComparison"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119089,47 +119088,38 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "finiteRegularFiberChoice_of_locallyInjective"
+       "pointSignedCount_eq_groupedComponentSignedCount"
        "regularFiberSignedCount_eq_zero_of_comparison"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ad088e57579c5685ef26c934ff0bbe50ef5ee4094b042e81bd0a04a1a3b2188c",
+     "dd1901149423c84f268541d171b41ebae02091eb8401421d362a4750352d87a0",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked componentwise degree comparison interface.",
+    :reason "Banked signed-count reindexing.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792008289079-12305-727b56bd",
-     :commands
-     ["git diff-tree/show dcfc744"
-      "git archive dcfc744; lake env lean t00J02Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at dcfc744"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit states the remaining comparison faithfully—local degrees on fiber points, signs on occupied genuine components, and each grouped local sum equal to that component lift degree—then derives zero signed count without pointwise conflation. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Geometric comparison, regular-value identity, and Main assembly remain listed."},
-    :commit "dcfc7440576fc0692eb98db5bf2c6600a61a89d0",
+    :diagnostic-history
+    [{:cmd "reindex draft", :exit 1, :finding "needed subtype sum"}],
+    :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
      :sha256
-     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
+     "afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119390,7 +119380,8 @@
     :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber
     :lemma-regularfiberfintype-of-locallyinjectivealongfiber
     :lemma-finiteregularfiberchoice-of-locallyinjective
-    :lemma-regularfibersignedcount-eq-zero-of-comparison],
+    :lemma-regularfibersignedcount-eq-zero-of-comparison
+    :lemma-pointsignedcount-eq-groupedcomponentsignedcount],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119899,6 +119890,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pointSignedCount_eq_groupedComponentSignedCount",
+    :type "point sum equals component sum"},
+   :lemma
+   {:name "pointSignedCount_eq_groupedComponentSignedCount",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "point sum equals component sum",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-pointsignedcount-eq-groupedcomponentsignedcount,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
