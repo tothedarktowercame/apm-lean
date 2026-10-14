@@ -2093,6 +2093,32 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_common
       (g.symm d₁) (g.symm d₂) := by
   sorry
 
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lower
+    (s : Set.Icc (0 : ℝ) 1) (hs : s.1 ≤ 1 / 2) :
+    2 * s.1 ∈ Set.Icc (0 : ℝ) 1 := by
+  constructor <;> linarith [s.2.1, s.2.2]
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper
+    (s : Set.Icc (0 : ℝ) 1) (hs : 1 / 2 ≤ s.1) :
+    2 * s.1 - 1 ∈ Set.Icc (0 : ℝ) 1 := by
+  constructor <;> linarith [s.2.1, s.2.2]
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lower_reverse
+    (s : Set.Icc (0 : ℝ) 1) (hs : s.1 ≤ 1 / 2) :
+    (1 + (reverseParameter ⟨2 * s.1,
+      mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_lower s
+        hs⟩).1) / 2 = 1 - s.1 := by
+  simp [reverseParameter]
+  ring
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper_reverse
+    (s : Set.Icc (0 : ℝ) 1) (hs : 1 / 2 ≤ s.1) :
+    (reverseParameter ⟨2 * s.1 - 1,
+      mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged_aux_upper s
+        hs⟩).1 / 2 = 1 - s.1 := by
+  simp [reverseParameter]
+  ring
+
 /-- Reverse generators for the `a` / `a⁻¹` pair: split the parameter at `1/2`; the lower half comes from `y` / `y⁻¹`, the upper half from `z` / `z⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_merged
     {Label : Type*} [DecidableEq Label]
