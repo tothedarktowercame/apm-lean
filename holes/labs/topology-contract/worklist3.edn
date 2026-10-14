@@ -36158,6 +36158,16 @@
     [{:cmd "infix probe",
       :exit 1,
       :correction "flattened singleton outer infix; passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792004580400-12226-ee834439",
+     :commands
+     ["git show/check/diff 9a19183f; scope and fixture SHA-256"
+      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
+      "statement-registry check; placeholder/axiom recount"],
+     :finding
+     "PASS: 9a19183f adds compiled, sorry-free progress after 9f16b239. Singleton-run infix membership is flattened to prove each run is a contiguous block of finRange, preserving subdivision order for dependent path packaging. Statement and blueprint are faithful; exact scope/hash match; closure placeholders 0->0; frozen Main remains 1; registry 166/166; standard axioms only. STOP lists dependent path construction, replacement/reassembly, reverse kernel/surjectivity, winding, C1/C2/Main."},
     :commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36168,7 +36178,7 @@
      "8dfcbc612ce987bb79fc6396206a041749722d9d42089b1e7ca5a50466784ac3"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every maximal-run index has the head side, so each true-run piece stays in the inner cover; dependent block packaging remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36428,7 +36438,11 @@
     {:job 6,
      :commit "9f16b2393d73376ac4f97e72ef39c7f17ce5f637",
      :reason
-     "Proved every maximal-run index has the head side, so each true-run piece stays in the inner cover; dependent block packaging remains."}]}
+     "Proved every maximal-run index has the head side, so each true-run piece stays in the inner cover; dependent block packaging remains."}
+    {:job 7,
+     :commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68",
+     :reason
+     "Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -39274,7 +39288,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "boolSideRunPartition_isInfix_finRange",
@@ -39284,7 +39298,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "each side run is a contiguous finRange block",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68"},
    :id :lemma-boolsiderunpartition-isinfix-finrange,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygoninnersiderun-piece-mem],
