@@ -1492,6 +1492,32 @@ theorem pathTwoOpenSubdivisionRunBlockPiece_mem_chart
   have hjmem : j ∈ pathTwoOpenSubdivisionRunFamily S i := hj ▸ hm
   exact hjmem
 
+/-- A run whose head selects the inner chart supplies the inner-block
+replacement constructor's range hypothesis. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_mem_inner_of_side_eq_true
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hs : S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) = true) :
+    ∀ k t, pathTwoOpenSubdivisionRunBlockPiece S i k t ∈ U := by
+  intro k t
+  simpa [twoChart, hs] using
+    pathTwoOpenSubdivisionRunBlockPiece_mem_chart S i k t
+
+/-- A run whose head selects the outer chart supplies the literal outer-block
+constructor's range hypothesis. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_mem_outer_of_side_eq_false
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hs : S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) = false) :
+    ∀ k t, pathTwoOpenSubdivisionRunBlockPiece S i k t ∈ V := by
+  intro k t
+  simpa [twoChart, hs] using
+    pathTwoOpenSubdivisionRunBlockPiece_mem_chart S i k t
+
 /-- The selected block begins at the literal source vertex of its indexed
 maximal run. -/
 theorem pathTwoOpenSubdivisionRunBlockPoint_zero

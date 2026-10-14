@@ -491,8 +491,9 @@ identifies the source with outer boundary `i`. Thus each indexed block now
 has the exact dependent endpoints needed for representative selection.
 `pathTwoOpenSubdivisionRunBlockPiece_mem_chart` additionally transports the
 run's uniform chart certificate to the dependent block family, so the next
-step can apply the existing inner-replacement or literal-outer constructors,
-choosing the corresponding
+step can apply the existing inner-replacement or literal-outer constructors.
+The `_mem_inner_of_side_eq_true` and `_mem_outer_of_side_eq_false` corollaries
+now supply their exact range hypotheses; it remains to choose the corresponding
 outer representative for each indexed run against the boundary family and
 instantiate the fold
 before extracting based surjectivity and the reverse kernel inclusion.
