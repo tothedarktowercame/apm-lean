@@ -475,7 +475,7 @@ theorem t93A06_exact_integral_aux_boundary_cancel
     (hQ : ∀ y, Q 1 y = Q 0 y) (hP : ∀ x, P x 1 = P x 0) :
     (∫ y : ℝ in 0..1, (Q 1 y - Q 0 y)) -
       (∫ x : ℝ in 0..1, (P x 1 - P x 0)) = 0 := by
-  sorry
+  simp_rw [hQ, hP, sub_self]
 
 /-- On this closed quotient torus, a smooth exact top form has zero
 fundamental-square integral.  The proof is now only assembly of naturality,
