@@ -605,6 +605,34 @@ theorem topHomologyMap_eq_zero_of_regularFiberComparison
     comparison.orientationSign hcount comparison.component_sum_eq_lift_degree
     (exactLiftComponentDegree_eq_zero lifts)
 
+/-- The exact remaining geometric output at a chosen regular fiber.  It
+bundles the componentwise boundary-degree comparison with the global
+regular-value formula for the integral top-degree coordinate. -/
+structure RegularFiberTopDegreeFormula
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} (hy : y ∈ Set.range c) [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k) where
+  comparison : RegularFiberLocalDegreeComparison hy lifts
+  topDegree_eq : surfaceTopDegree e f = ∑ x,
+    comparison.orientationSign
+        (occupiedRegularFiberComponentIndex f c y hy x) *
+      comparison.localDegree x
+
+/-- The bundled regular-fiber degree formula is precisely sufficient for
+vanishing of the induced map on top homology. -/
+theorem topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula
+    {S : Type} [TopologicalSpace S] {f : C(S, S)} {c : C(Circle, S)}
+    {y : S} {hy : y ∈ Set.range c} [Fintype {x : S // f x = y}]
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (lifts : ∀ k : OccupiedRegularFiberComponent f c y hy,
+      ExactZeroDegreeComponentLift f c y hy k)
+    (formula : RegularFiberTopDegreeFormula hy e lifts) :
+    homologyMap 2 f = 0 :=
+  topHomologyMap_eq_zero_of_regularFiberComparison e lifts
+    formula.comparison formula.topDegree_eq
+
 /-- Assembly of the signed-count argument after the geometric regular-value
 formula and the component degree calculation have been supplied. -/
 theorem topHomologyMap_eq_zero_of_regularValue_signedCount
@@ -692,4 +720,5 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_pointSignedCountComparison
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularFiberComparison
+#print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_regularValue_signedCount
