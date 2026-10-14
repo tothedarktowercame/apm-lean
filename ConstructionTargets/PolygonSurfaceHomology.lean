@@ -3961,6 +3961,21 @@ theorem radialIntersectionToOuterH1_positiveGenerator_eq (P : PairingData) :
   rw [← singularH1Map_comp]
   rfl
 
+/-- After applying the fixed outer deformation coordinates, the chosen
+intersection generator becomes the H₁ class of the ordered polygon boundary
+loop. -/
+theorem radialIntersectionToOuterH1_generator_eq_boundaryLoop (P : PairingData) :
+    singularH1Map (outerHomotopyEquivWedge P).toFun
+        (radialIntersectionToOuterH1 P
+          ((radialIntersectionH1GroupIsoInt P).inv 1)) =
+      singularH1Map (polygonBoundaryWedgeLoop P)
+        (circleGroupH1IsoInt.inv 1) := by
+  rw [radialIntersectionToOuterH1_positiveGenerator_eq]
+  change (singularH1Map (radialOverlapCircleInOuter P) ≫
+      singularH1Map (outerHomotopyEquivWedge P).toFun)
+      (circleGroupH1IsoInt.inv 1) = _
+  rw [radialOverlapCircle_h1_naturality]
+
 /-- The outer projection of the production intersection arrow is literally
 the negative outer inclusion, fixing the MV sign before the geometric loop
 calculation begins. -/
