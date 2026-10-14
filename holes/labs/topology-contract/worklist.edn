@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
@@ -119118,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119302,6 +119302,17 @@
      {:cmd "hash/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :finding "congruence"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792015276445-12514-07669c9d",
+     :commands
+     ["git diff-tree/show eebf9455"
+      "archive eebf9455; lake env lean closure and Main"
+      "sha256sum/placeholders at eebf9455"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t98A06Closure.lean and proves the correctly oriented correction lemma: from A.comp R = u for a continuous linear equivalence u, composing R with u.symm yields A.comp (...) = id. Domain/codomain and composition order are correct. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Smooth local lifts, compact-flow fiber diffeomorphism, and Main assembly remain listed."},
     :commit "eebf94553a1cef785f5a621f57baf092bc23d1b0",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119310,7 +119321,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119328,7 +119339,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked derivative right inverses.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked correction.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119345,7 +119356,10 @@
      :reason "Banked B1 representations and B3 gluing."}
     {:job 3,
      :commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460",
-     :reason "Banked derivative right inverses."}]}
+     :reason "Banked derivative right inverses."}
+    {:job 4,
+     :commit "eebf94553a1cef785f5a621f57baf092bc23d1b0",
+     :reason "Banked correction."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -120305,7 +120319,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
@@ -120317,7 +120331,9 @@
     :type
     "chart component and signed-count calculations imply H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations,
    :kind :lemma,
    :depends-on
@@ -120326,7 +120342,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rightInverse_of_comp_continuousLinearEquiv",
@@ -120336,7 +120352,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "invertible composite gives right inverse",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "eebf94553a1cef785f5a621f57baf092bc23d1b0"},
    :id :lemma-rightinverse-of-comp-continuouslinearequiv,
    :kind :lemma,
    :depends-on
