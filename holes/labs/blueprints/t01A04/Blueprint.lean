@@ -566,6 +566,58 @@ lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_mem_fiber
     apm_t01a04_basepoint
   rfl
 
+/-- Pure topology: two disjoint open sheets over an open `U`, each mapped
+homeomorphically onto `U` by `f`, each meeting the fiber over `x` once, make
+`x` evenly covered (the fiber is the two-point discrete space). -/
+lemma apm_t01A04_isEvenlyCovered_of_two_sheets {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] (f : E → X) (x : X)
+    (U : Set X) (hxU : x ∈ U) (hU : IsOpen U)
+    (V : Fin 2 → Set E) (hV : ∀ i, IsOpen (V i))
+    (hdisj : Pairwise (Function.onFun Disjoint V))
+    (hcover : f ⁻¹' U = ⋃ i, V i)
+    (hsheet : ∀ i, ∃ h : V i ≃ₜ U, ∀ y, (h y : X) = f y) :
+    IsEvenlyCovered f x (f ⁻¹' {x}) := by
+  sorry
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_fiber_points
+    (e : apm_t01a04_CircleCover)
+    (he : apm_t01a04_circleCoverMap e = apm_t01a04_basepoint) :
+    ∃ i : Fin 2,
+      e = Quotient.mk _ (.inl (i, ((1 : Circle), (1 : Circle)))) := by
+  refine Quotient.inductionOn e ?_ he
+  rintro (q | z) he
+  · have hq := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction he
+    have hq' : q.2 = ((1 : Circle), (1 : Circle)) := by
+      simpa [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+        apm_t01a04_basepoint] using hq
+    refine ⟨q.1, ?_⟩
+    congr
+    exact Prod.ext rfl hq'
+  · have hz := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction he
+    change z ^ 2 = 1 at hz
+    rcases sq_eq_one_iff.mp (congrArg Subtype.val hz) with hz | hz
+    · refine ⟨0, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      exact Subtype.ext hz
+    · refine ⟨1, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      apply Subtype.ext
+      simpa [Circle.exp, Complex.exp_mul_I] using hz
+
+/-- The two sheets over the basepoint (see the plan above). -/
+lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets :
+    ∃ (U : Set apm_t01a04_X) (V : Fin 2 → Set apm_t01a04_CircleCover),
+      apm_t01a04_basepoint ∈ U ∧ IsOpen U ∧ (∀ i, IsOpen (V i)) ∧
+      Pairwise (Function.onFun Disjoint V) ∧
+      apm_t01a04_circleCoverMap ⁻¹' U = ⋃ i, V i ∧
+      ∀ i, ∃ h : V i ≃ₜ U, ∀ y,
+        (h y : apm_t01a04_X) = apm_t01a04_circleCoverMap y := by
+  sorry
+
 /-- Basepoint case.  Plan (from the first attempt): take
 `U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
 open and saturated in `X`.  Its preimage is the disjoint union over `i : Fin 2`
@@ -575,7 +627,9 @@ the glue `aux_glue` attaches `Aᵢ` to torus sheet `i`. -/
 theorem apm_t01A04_circleCoverMap_evenlyCovered_basepoint :
     IsEvenlyCovered apm_t01a04_circleCoverMap apm_t01a04_basepoint
       (apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  obtain ⟨U, V, hxU, hU, hV, hdisj, hcover, hsheet⟩ := apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets
+  exact apm_t01A04_isEvenlyCovered_of_two_sheets apm_t01a04_circleCoverMap apm_t01a04_basepoint
+    U hxU hU V hV hdisj hcover hsheet
 
 lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne
     {q : apm_t01a04_Torus}
@@ -776,6 +830,16 @@ lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheetPoint_injective 
     exact Circle.exp_pi_ne_one hij
   · rfl
 
+/-- The two sheets over the basepoint (see the plan above). -/
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets :
+    ∃ (U : Set apm_t01a04_X) (V : Fin 2 → Set apm_t01a04_TorusCover),
+      apm_t01a04_basepoint ∈ U ∧ IsOpen U ∧ (∀ i, IsOpen (V i)) ∧
+      Pairwise (Function.onFun Disjoint V) ∧
+      apm_t01a04_torusCoverMap ⁻¹' U = ⋃ i, V i ∧
+      ∀ i, ∃ h : V i ≃ₜ U, ∀ y,
+        (h y : apm_t01a04_X) = apm_t01a04_torusCoverMap y := by
+  sorry
+
 /-- Basepoint case.  Plan: take
 `U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
 open and saturated in `X`.  Its preimage is the disjoint union over `i : Fin 2`
@@ -786,7 +850,9 @@ sheet `i` at `(sheetPoint i, 1)`. -/
 theorem apm_t01A04_torusCoverMap_evenlyCovered_basepoint :
     IsEvenlyCovered apm_t01a04_torusCoverMap apm_t01a04_basepoint
       (apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  obtain ⟨U, V, hxU, hU, hV, hdisj, hcover, hsheet⟩ := apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets
+  exact apm_t01A04_isEvenlyCovered_of_two_sheets apm_t01a04_torusCoverMap apm_t01a04_basepoint
+    U hxU hU V hV hdisj hcover hsheet
 
 /-- Why this unblocks `apm_t01a04`: this is the missing local
 evenly-covered-neighborhood construction for the two concrete quotient maps.
