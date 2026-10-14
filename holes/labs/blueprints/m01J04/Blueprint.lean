@@ -1924,9 +1924,19 @@ lemma apm_m01J04_localization_core_approx
       apm_m01J04_H1dist u (apm_m01J04_globalLocalizedH1 φ hφ f) < eta := by
   sorry
 
-/-- A global Sobolev pair whose two fields lie in one positive multiplier
-core has a support-safe smooth approximation.  This is the isolated
-Friedrichs-mollifier step. -/
+lemma apm_m01J04_core_exists_smooth_global_approx_aux_mollify
+    {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
+    {K : Set (EuclideanSpace ℝ (Fin d))}
+    (huval : Function.support u.val ⊆ K)
+    (hugrad : Function.support u.grad ⊆ K)
+    {delta eta : ℝ} (hdelta : 0 < delta) (heta : 0 < eta) :
+    ∃ a : apm_m01J04_H1 d Set.univ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
+      HasCompactSupport a.val ∧
+      Function.support a.val ⊆ Metric.cthickening delta K ∧
+      apm_m01J04_H1dist a u < eta := by
+  sorry
+
 lemma apm_m01J04_core_exists_smooth_global_approx
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)
@@ -1940,7 +1950,13 @@ lemma apm_m01J04_core_exists_smooth_global_approx
       ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) a.val ∧
       HasCompactSupport a.val ∧ Function.support a.val ⊆ Ω ∧
       apm_m01J04_H1dist a u < eta := by
-  sorry
+  obtain ⟨delta, hdelta, hsupport, hsupportOmega⟩ :=
+    apm_m01J04_test_levelSet_exists_cthickening φ hφ hepsilon
+  obtain ⟨a, hasmooth, hacompact, hasupport, hadist⟩ :=
+    apm_m01J04_core_exists_smooth_global_approx_aux_mollify u huval hugrad
+      hdelta heta
+  refine ⟨a, hasmooth, hacompact, ?_, hadist⟩
+  exact hasupport.trans hsupportOmega
 
 /-- Diagonal assembly of core truncation and support-safe smoothing.  Both
 analytic inputs are hypotheses so this lemma can be proved independently of
