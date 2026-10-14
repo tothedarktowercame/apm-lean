@@ -87943,6 +87943,18 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check dad8a4fd9", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792015756279-12531-0bb148ae",
+     :commands
+     ["git show/diff dad8a4fd9; blob sha256; diff --check"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "lake env lean /dev/stdin (#print axioms)"
+      "placeholder scan"
+      "statement-registry.py check"],
+     :finding
+     "PASS: reviewer codex-7; dad8a4fd9 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 8e46405bed667d5635a571b9c0c762082ce61498c14ad6c15aea37c7802d75e8 matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Hurewicz injectivity and the H1 coordinate isomorphism prove the explicit winding class equals the normalized generator raised to the orientation unit. The converse correctly uses that the proved exponent is ±1 and hence self-inverse; no sign is silently selected. New compiled progress; remaining: prove explicit boundary equals signed leg word, derive sign-corrected B7, then B8-B10."},
     :commit "dad8a4fd9",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87963,7 @@
      "8e46405bed667d5635a571b9c0c762082ce61498c14ad6c15aea37c7802d75e8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked sign-corrected attaching map with unchanged kernel and range.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked unit-power comparison of explicit and normalized circle generators.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88225,7 +88237,11 @@
     {:job 7,
      :commit "219012ae3",
      :reason
-     "Banked sign-corrected attaching map with unchanged kernel and range."}]}
+     "Banked sign-corrected attaching map with unchanged kernel and range."}
+    {:job 8,
+     :commit "dad8a4fd9",
+     :reason
+     "Banked unit-power comparison of explicit and normalized circle generators."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -91938,7 +91954,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleIntegerLoopOneClass_eq_positive_zpow_coordinate",
@@ -91948,7 +91964,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "explicit equals normalized generator to unit",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "dad8a4fd9"},
    :id :lemma-circleintegerlooponeclass-eq-positive-zpow-coordinate,
    :kind :lemma,
    :depends-on
@@ -91956,7 +91974,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -91968,7 +91986,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized equals explicit generator to unit",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "dad8a4fd9"},
    :id
    :lemma-circlepositivefundamentalclass-eq-integerloop-zpow-coordinate,
    :kind :lemma,
