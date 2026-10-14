@@ -113856,14 +113856,14 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
     :residual
-    "Prove literal Y connector square at mapped inverse unit and shifted endpoint; then B6/B12.",
+    "Prove literal Y connector-counit square and shifted endpoint; then B6/B12.",
     :outcome :stop,
     :warnings ["existing linters"],
     :missing-theorems
@@ -113877,9 +113877,9 @@
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "2ef35868ae68acb338b2c6407f22ede3d8e389ad8d7b34fea5efbf856e92918d",
+     "ca3b78275bb511b1c3f233e5ca8acaa320b35a1a55ed09149f9cb75855257e51",
      :documentation
-     "2e653e50ffbf34b7f1b8567fffc52754bff02f7571afa62db79d81ca3485fd87",
+     "e85536ea312b658e4f5f44e58de34791e40ef350bb92cf65efa57a2ee3c56ba6",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
@@ -113887,7 +113887,7 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
     :reason
-    "Banked fixed-right-base source-square reduction to the literal Y connector square.",
+    "Banked fixed-base reduction from mapped inverse unit to the literal Y counit square.",
     :commands
     [{:cmd
       "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
@@ -113897,28 +113897,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256/diff/placeholders", :exit 0}],
     :diagnostic-history
-    [{:cmd "fixed-base square drafts",
+    [{:cmd "dependent counit rewrite",
       :exit 1,
-      :finding
-      "dependent rewrite invalid; retained target-square premise"}
+      :finding "fixed by congruence under connector prefix"}
      {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791979948585-11794-c99b72e8",
-     :commands
-     ["git show/diff-tree a59f2c33bb1ce3f3503d916b269f3faa4792f345"
-      "archive commit; lake env lean PointWedgeVanKampen.lean"
-      "sha256sum source/doc/blueprint; count sorry/admit"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms fixed-base reduction"
-      "lake build ConstructionTargets.PointWedgeVanKampen"],
-     :finding
-     "PASS: exact scope and hashes match; archived source compiles; placeholders 0->0; registry 166/166. Literal Y connector square is correctly comapped through the right equivalence and base-changed to the fixed-cover source square, retaining dependent endpoints; standard axioms only. New compiled milestone recorded; literal Y endpoint squares and genericPointWedgeLegCoordinates_vanKampen remain listed."},
-    :commit "a59f2c33bb1ce3f3503d916b269f3faa4792f345",
+    :commit "59133341b92aa3e8db20e25fa2b39479a6a048a5",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
      "ConstructionTargets/PointWedgeVanKampen.md"],
@@ -113928,7 +113914,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
