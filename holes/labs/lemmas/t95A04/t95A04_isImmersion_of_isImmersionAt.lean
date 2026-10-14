@@ -292,7 +292,26 @@ theorem t95A04_isImmersion_of_isImmersionAt
     (h : ∀ x : Space ℝ 2,
       Manifold.IsImmersionAt (𝓡 2) (𝓡 6) ∞ veroneseDescended x) :
     Manifold.IsImmersion (𝓡 2) (𝓡 6) ∞ veroneseDescended := by
-  sorry
+  refine ⟨E 4, inferInstance, inferInstance, ?_⟩
+  intro x
+  let hx := h x
+  let F := hx.complement
+  let hxF : Manifold.IsImmersionAtOfComplement F (𝓡 2) (𝓡 6) ∞
+      veroneseDescended x := hx.isImmersionAtOfComplement_complement
+  let i : F →ₗ[ℝ] E 6 := hxF.equiv.toLinearMap.comp (LinearMap.inr ℝ (E 2) F)
+  letI : FiniteDimensional ℝ F :=
+    FiniteDimensional.of_injective i
+      (hxF.equiv.injective.comp
+        (LinearMap.inr_injective : Function.Injective (LinearMap.inr ℝ (E 2) F)))
+  have hdimF : Module.finrank ℝ F = 4 := by
+    have heq := LinearEquiv.finrank_eq hxF.equiv.toLinearEquiv
+    have hdim2 : Module.finrank ℝ (E 2) = 2 := by simp
+    have hdim6 : Module.finrank ℝ (E 6) = 6 := by simp
+    rw [Module.finrank_prod, hdim2, hdim6] at heq
+    omega
+  let eF : F ≃L[ℝ] E 4 :=
+    (LinearEquiv.ofFinrankEq F (E 4) (by simpa using hdimF)).toContinuousLinearEquiv
+  exact hxF.trans_F eF
 -- END SEAT AREA
 
 /-- LIBRARY: the finite-dimensional constant-rank/inverse-function theorem
