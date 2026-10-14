@@ -1038,6 +1038,42 @@ theorem kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
   simpa [kleinPolygonInnerToSpace, kleinPolygonOverlapToInner,
     kleinPolygonOuterToSpace, kleinPolygonOverlapToOuter] using hmap
 
+/-- An ambient path forming an inner run can be normalized directly from
+membership data: if both endpoints lie in the overlap, its ambient class is
+represented by an actual overlap path routed through the outer piece. -/
+theorem kleinPolygonInnerRun_exists_outerOverlapReplacement
+    {x y : kleinPairingData.Space}
+    (hx : x ∈ (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (hy : y ∈ (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (p : Path x y)
+    (hp : ∀ t, p t ∈ (openCover kleinPairingData).inner) :
+    ∃ q : Path
+        (⟨x, by rw [(openCover kleinPairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen kleinPairingData.Rel)
+        (⟨y, by rw [(openCover kleinPairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen kleinPairingData.Rel),
+      (⟦p⟧ : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  let xo : overlapOpen kleinPairingData.Rel := ⟨x, by
+    rw [(openCover kleinPairingData).overlap_eq]
+    exact hx⟩
+  let yo : overlapOpen kleinPairingData.Rel := ⟨y, by
+    rw [(openCover kleinPairingData).overlap_eq]
+    exact hy⟩
+  let pInner : Path (kleinPolygonOverlapToInner xo)
+      (kleinPolygonOverlapToInner yo) :=
+    { toFun := fun t => ⟨p t, hp t⟩
+      continuous_toFun := p.continuous.subtype_mk _
+      source' := Subtype.ext p.source
+      target' := Subtype.ext p.target }
+  obtain ⟨q, hq⟩ :=
+    kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement xo yo pInner
+  refine ⟨q, ?_⟩
+  simpa [pInner, kleinPolygonInnerToSpace, kleinPolygonOuterToSpace] using hq
+
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
 the contractible inner radial piece. -/
@@ -2005,6 +2041,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInner_pathClass_eq
 #print axioms kleinPolygonInner_pathClass_eq_overlapReplacement
 #print axioms kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
+#print axioms kleinPolygonInnerRun_exists_outerOverlapReplacement
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt

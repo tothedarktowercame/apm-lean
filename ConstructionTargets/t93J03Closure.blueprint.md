@@ -237,6 +237,9 @@ inner run, so the replacement is now available in the exact cover coordinates.
 `kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement` maps this
 equality into the polygon and identifies the same overlap path routed through
 the outer inclusion, providing the factorwise rewrite for the finite-word fold.
+`kleinPolygonInnerRun_exists_outerOverlapReplacement` packages the same rewrite
+for a raw ambient inner run from endpoint-overlap and range-membership proofs,
+so the finite normalization no longer has to manufacture subtype paths.
 `pathHomotopicQuotient_concat_eq_of_pieceClass_eq` performs that dependent
 finite fold: equality of every segment class implies equality of the complete
 `Path.concat` class used by the subdivision reconstruction.
