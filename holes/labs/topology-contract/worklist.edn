@@ -119112,6 +119112,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792005731472-12242-34407037",
+     :commands
+     ["git diff-tree/show 5aeeae2"
+      "git archive 5aeeae2; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 5aeeae2"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit derives zero exact-lift component degrees and, conditional on the explicit per-component local-degree sum comparison, the zero weighted total; it preserves the repaired point/component boundary. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Local degrees, geometric component comparison, regular-value formula, and Main assembly remain listed."},
     :commit "5aeeae275e75b2397c2bc241f214652218fa1525",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119131,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119149,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact component lifts.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked lift-degree aggregation.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119198,7 +119209,10 @@
      :reason "Banked finite occupied components."}
     {:job 7,
      :commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de",
-     :reason "Banked exact component lifts."}]}
+     :reason "Banked exact component lifts."}
+    {:job 8,
+     :commit "5aeeae275e75b2397c2bc241f214652218fa1525",
+     :reason "Banked lift-degree aggregation."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119734,7 +119748,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -119748,7 +119762,9 @@
     :type
     "component comparison and zero lift degrees imply zero signed count",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "5aeeae275e75b2397c2bc241f214652218fa1525"},
    :id
    :lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison,
    :kind :lemma,
