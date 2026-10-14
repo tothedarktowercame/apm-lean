@@ -3238,7 +3238,104 @@ theorem zip_halfBoundary_ray {p p' : ℂ} (hp : p ∈ zipHalfBoundary)
 theorem zip_halfDisk_cone {y : ℂ} (hy : y ∈ zipHalfDisk) :
     ∃ p ∈ zipHalfBoundary, ∃ r : ℝ, 0 ≤ r ∧ r ≤ 1 ∧
       y = zipCentre + (r : ℂ) * (p - zipCentre) := by
-  sorry
+  by_cases hd : y = zipCentre
+  · refine ⟨1, ?_, 0, le_rfl, by norm_num, ?_⟩
+    · right
+      simp [zipHalfBoundary]
+    · simp [hd]
+  let d : ℂ := y - zipCentre
+  have hd0 : d ≠ 0 := by
+    intro h
+    apply hd
+    dsimp [d] at h
+    exact sub_eq_zero.mp h
+  let M : ℝ := 2 / ‖d‖
+  let f : ℝ → ℂ := fun a => zipCentre + (a : ℂ) * d
+  have hf : Continuous f := by
+    exact continuous_const.add (Complex.continuous_ofReal.mul continuous_const)
+  let S : Set ℝ := Icc 0 M ∩ f ⁻¹' zipHalfDisk
+  have hclosedD : IsClosed zipHalfDisk := by
+    apply IsClosed.inter
+    · exact isClosed_le continuous_norm continuous_const
+    · exact isClosed_le continuous_const Complex.continuous_im
+  have hcompact : IsCompact S := by
+    exact isCompact_Icc.inter_right (hclosedD.preimage hf)
+  have hd_norm : ‖d‖ ≤ 3 / 2 := by
+    calc
+      ‖d‖ = ‖y - zipCentre‖ := rfl
+      _ ≤ ‖y‖ + ‖zipCentre‖ := norm_sub_le _ _
+      _ ≤ 1 + 1 / 2 := by
+        have hy' : ‖y‖ ≤ 1 := hy.1
+        have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by simp [zipCentre]
+        linarith
+      _ = 3 / 2 := by norm_num
+  have hM1 : 1 ≤ M := by
+    dsimp [M]
+    rw [le_div_iff₀ (norm_pos_iff.mpr hd0)]
+    linarith
+  have h1S : (1 : ℝ) ∈ S := by
+    refine ⟨⟨by norm_num, hM1⟩, ?_⟩
+    simpa [f, d, add_sub_cancel] using hy
+  obtain ⟨L, hLS, hLmax⟩ := hcompact.exists_isGreatest ⟨1, h1S⟩
+  have hL1 : 1 ≤ L := hLmax h1S
+  have hLM : L ≤ M := hLS.1.2
+  have hpD : f L ∈ zipHalfDisk := hLS.2
+  have hLMlt : L < M := by
+    apply lt_of_le_of_ne hLM
+    intro heq
+    have he : ‖f L - zipCentre‖ = 2 := by
+      simp [f, heq, M, norm_mul, hd0, abs_of_nonneg]
+    have hle : ‖f L - zipCentre‖ ≤ 3 / 2 := by
+      have hsub := norm_sub_le (f L) zipCentre
+      have hc : ‖zipCentre‖ = (1 / 2 : ℝ) := by simp [zipCentre]
+      rw [hc] at hsub
+      linarith [hpD.1]
+    linarith
+  have hpB : f L ∈ zipHalfBoundary := by
+    by_contra hnot
+    have hnlt : ‖f L‖ < 1 := lt_of_le_of_ne hpD.1 (by
+      intro he
+      apply hnot
+      left
+      exact ⟨he, hpD.2⟩)
+    have him : 0 < (f L).im := lt_of_le_of_ne hpD.2 (by
+      intro he
+      apply hnot
+      right
+      refine ⟨he.symm, ?_⟩
+      have hre : |(f L).re| ≤ ‖f L‖ := Complex.abs_re_le_norm _
+      exact hre.trans hpD.1)
+    let U : Set ℂ := {z | ‖z‖ < 1} ∩ {z | 0 < z.im}
+    have hUopen : IsOpen U :=
+      (isOpen_lt continuous_norm continuous_const).inter
+        (isOpen_lt continuous_const Complex.continuous_im)
+    have hLU : f L ∈ U := ⟨hnlt, him⟩
+    have hpre : f ⁻¹' U ∈ nhds L := hf.continuousAt (hUopen.mem_nhds hLU)
+    obtain ⟨a, b, haLb, hab⟩ := mem_nhds_iff_exists_Ioo_subset.mp hpre
+    let L' : ℝ := L + min ((b - L) / 2) ((M - L) / 2)
+    have hLL' : L < L' := by
+      dsimp [L']
+      have h1 : 0 < (b - L) / 2 := by linarith [haLb.2]
+      have h2 : 0 < (M - L) / 2 := by linarith
+      exact lt_add_of_pos_right _ (lt_min h1 h2)
+    have hL'M : L' ≤ M := by
+      dsimp [L']
+      have := min_le_right ((b - L) / 2) ((M - L) / 2)
+      linarith
+    have hL'b : L' < b := by
+      dsimp [L']
+      have := min_le_left ((b - L) / 2) ((M - L) / 2)
+      linarith [haLb.2]
+    have hL'a : a < L' := lt_trans haLb.1 hLL'
+    have hL'U : f L' ∈ U := hab ⟨hL'a, hL'b⟩
+    have hL'S : L' ∈ S := by
+      refine ⟨⟨by linarith [hL1], hL'M⟩, hL'U.1.le, hL'U.2.le⟩
+    exact (not_lt_of_ge (hLmax hL'S)) hLL'
+  refine ⟨f L, hpB, L⁻¹, inv_nonneg.mpr (by linarith), ?_, ?_⟩
+  · exact inv_le_one_of_one_le₀ hL1
+  · have hL0 : (L : ℂ) ≠ 0 := by exact_mod_cast (ne_of_gt (lt_of_lt_of_le zero_lt_one hL1))
+    rw [show f L - zipCentre = (L : ℂ) * d by simp [f]]
+    simp [f, d, hL0, mul_assoc]
 -- END SEAT AREA
 
 /-! ### The boundary map -/
