@@ -199,6 +199,9 @@ steps with the polygon skeleton homeomorphism.
 Finally `kleinActualSkeletonFundamentalGroupEquivCoprod` transports the
 two-circle free-product calculation back to the actual polygon boundary at
 the corresponding common-leg basepoint.
+`kleinActualSkeletonFundamentalGroupEquivFreeGroupBool` then uses winding
+numbers on both circle legs and the left/right `Fin 1 ⊕ Fin 1 ≃ Bool`
+labeling to put this group in the literal coordinates of the `aabb` word.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

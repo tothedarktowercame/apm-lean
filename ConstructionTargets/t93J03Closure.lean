@@ -608,6 +608,34 @@ noncomputable def kleinActualSkeletonFundamentalGroupEquivCoprod :
     exact kleinSkeletonFundamentalGroupEquivCoprod
   (fundamentalGroupEquivOfHomeomorph e kleinSkeletonPoint).trans htarget
 
+/-- The two rank-one generator types, ordered left then right, are the frozen
+Boolean generator type. -/
+def finOneSumEquivBool : Fin 1 ⊕ Fin 1 ≃ Bool :=
+  finSumFinEquiv.trans finTwoEquiv
+
+/-- The circle-group coproduct in the skeleton computation, expressed as the
+literal free group on the frozen Boolean generators. -/
+noncomputable def circleFundamentalGroupCoprodEquivFreeGroupBool :
+    Monoid.Coprod (FundamentalGroup Circle 1) (FundamentalGroup Circle 1) ≃*
+      FreeGroup Bool :=
+  (MulEquiv.coprodCongr
+      (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+        multiplicativeIntEquivFreeGroupFinOne)
+      (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+        multiplicativeIntEquivFreeGroupFinOne)).trans
+    ((coprodFreeGroupEquivFreeGroupSum (Fin 1) (Fin 1)).trans
+      (MulEquiv.ofBijective (FreeGroup.map finOneSumEquivBool)
+        ⟨FreeGroup.map_injective finOneSumEquivBool.injective,
+          FreeGroup.map_surjective finOneSumEquivBool.surjective⟩))
+
+/-- The actual polygon skeleton fundamental group in the exact free-group
+coordinates in which the attaching word is `aabb`. -/
+noncomputable def kleinActualSkeletonFundamentalGroupEquivFreeGroupBool :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint ≃*
+      FreeGroup Bool :=
+  kleinActualSkeletonFundamentalGroupEquivCoprod.trans
+    circleFundamentalGroupCoprodEquivFreeGroupBool
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -735,6 +763,8 @@ theorem lift_isEmbedding_assembly
 #print axioms finiteWedgeCongr
 #print axioms kleinSkeletonHomeomorphStandardTwoCircles
 #print axioms kleinActualSkeletonFundamentalGroupEquivCoprod
+#print axioms circleFundamentalGroupCoprodEquivFreeGroupBool
+#print axioms kleinActualSkeletonFundamentalGroupEquivFreeGroupBool
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
