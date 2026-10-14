@@ -87940,6 +87940,16 @@
     [{:cmd "imported axiom check",
       :exit 1,
       :correction "stale artifact; exact commit blob verified"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791949012522-11512-57e134bc",
+     :commands
+     ["git show 602411b84 blob + #print axioms | lake env lean /dev/stdin"
+      "diff-tree/readlink/sha256 assertions"
+      "statement-registry check; comment-stripped placeholder scan"],
+     :finding
+     "PASS: 602411b84 changes only PolygonSurfaceHomology.lean; exact blob SHA256 ec59756cefb70268a2de0e6db52d14cde5844705dd2be8e37d18ff5e5f2e3742. It compiles with standard axioms propext/Classical.choice/Quot.sound; placeholders 0; registry 166/0. New progress beyond 36bce2fbc identifies the common-basepoint Hurewicz image of each positive leg class with finiteWedgeH1CoordinateMap P (orbitBasis P l 1). The equality orientation is exactly the generator witness needed for loop-class generation, and it bridges the fundamental-group representation to the orbit-indexed function coordinates without changing the existing positive convention."},
     :commit "83bf9106a",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87948,7 +87958,7 @@
      "45da19a2e9ffb614e227cbee50807ed3ecfdd62bbcf0d49aaded6e2c536941c2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87968,7 +87978,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked equality of based leg Hurewicz and coordinate-basis images.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized Hurewicz as a group homomorphism with product and zpower formulas.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88032,7 +88042,11 @@
     {:job 5,
      :commit "602411b84",
      :reason
-     "Banked equality of based leg Hurewicz and coordinate-basis images."}]}
+     "Banked equality of based leg Hurewicz and coordinate-basis images."}
+    {:job 6,
+     :commit "83bf9106a",
+     :reason
+     "Banked normalized Hurewicz as a group homomorphism with product and zpower formulas."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -89209,7 +89223,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "moduleHurewiczHom",
@@ -89221,7 +89235,9 @@
     :type
     "normalized Hurewicz is a group hom; products add and zpowers scale",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "83bf9106a"},
    :id :lemma-modulehurewiczhom,
    :kind :lemma,
    :depends-on [],
