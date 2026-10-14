@@ -87901,63 +87901,55 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove successor leg compatibility and inductive word expansion; then surjectivity, coordinate epi, B6-B10.",
+    "Inductively expand installed split words; then free-group surjectivity, coordinate epi, B6-B10.",
     :outcome :stop,
     :warnings ["lints; unrelated edits preserved"],
     :missing-theorems
-    [{:name "finiteWedgeFinLegMap_apply",
-      :type "labeled circle map equals literal leg plus base cast",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinLoopWordValue",
-      :type "evaluate labeled arbitrary-loop words at common base",
+    [{:name "finiteWedgeFinSuccOldFundamentalGroupMap_leg",
+      :type "old inclusion sends i-loop to castSucc i-loop",
       :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finiteWedgeFinLegMap_apply"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeFinSucc_legMapCompatibility",
-      :type "old/final inclusions preserve labeled leg maps",
+     {:name "finiteWedgeFinSuccLastFundamentalGroupMap_leg",
+      :type "final inclusion sends Unit-loop to Fin.last-loop",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finiteWedgeFinLegMap_apply"],
+      :area "polygon-quotient-homology"}
+     {:name "finiteWedgeFinSucc_exists_legWord",
+      :type "inductively expand factor words into Fin legs",
       :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeFinLegMap_apply"],
+      :depends-on
+      ["finiteWedgeFinSuccOldFundamentalGroupMap_leg"
+       "finiteWedgeFinSuccLastFundamentalGroupMap_leg"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked uniform arbitrary-circle-loop leg words.",
+    :reason
+    "Banked successor compatibility for arbitrary labeled loop legs.",
     :commands
     [{:cmd "lake build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check 2a559c336", :exit 0}
+     {:cmd "git show --check a196e83dc", :exit 0}
      {:cmd "axioms check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792000857404-12024-7131f716",
-     :commands
-     ["git show/diff 2a559c336; sha256sum"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan; statement-registry check; git show --check"],
-     :finding
-     "PASS: commit 2a559c336 by topo-6 changes only scoped PolygonSurfaceHomology.lean; exact blob SHA-256 317576a237d93147783a28e6e90f291146ad3689bcd62a160e73cb81d54f6fde. Exact snapshot builds; 0 placeholders; new definitions/lemmas use propext/Classical.choice/Quot.sound; registry 166/0. Arbitrary circle loops map into labeled legs via mapOfEq to the common zeroth-leg base. The apply theorem exposes the literal FundamentalGroup.map and exact quotient cast, proved definitionally on representatives; word evaluation preserves label/loop pairs. Real compiled progress; remaining milestones prove successor leg compatibility and inductive expansion, then surjectivity/B6-B10."},
-    :commit "2a559c336",
+    :commit "a196e83dc",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "317576a237d93147783a28e6e90f291146ad3689bcd62a160e73cb81d54f6fde"},
+     "636f3f8faeb72798c5c5f5dcdd76b2665da3e00c816d4bb60f573c6d78bc7350"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90363,7 +90355,9 @@
    :depends-on
    [:lemma-finitewedgefinsuccpointwedge-exists-legword
     :lemma-finitewedgefinsucc-exists-splitlegword
-    :lemma-finitewedgefinsucc-exists-installedsplitlegword],
+    :lemma-finitewedgefinsucc-exists-installedsplitlegword
+    :lemma-finitewedgefinsuccoldfundamentalgroupmap-leg
+    :lemma-finitewedgefinsucclastfundamentalgroupmap-leg],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90550,6 +90544,40 @@
     :type "old/final inclusions preserve labeled leg maps",
     :area "polygon-quotient-homology"},
    :id :lemma-finitewedgefinsucc-legmapcompatibility,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinlegmap-apply],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSuccOldFundamentalGroupMap_leg",
+    :type "old inclusion sends i-loop to castSucc i-loop"},
+   :lemma
+   {:name "finiteWedgeFinSuccOldFundamentalGroupMap_leg",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "old inclusion sends i-loop to castSucc i-loop",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinsuccoldfundamentalgroupmap-leg,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgefinlegmap-apply],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeFinSuccLastFundamentalGroupMap_leg",
+    :type "final inclusion sends Unit-loop to Fin.last-loop"},
+   :lemma
+   {:name "finiteWedgeFinSuccLastFundamentalGroupMap_leg",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "final inclusion sends Unit-loop to Fin.last-loop",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgefinsucclastfundamentalgroupmap-leg,
    :kind :lemma,
    :depends-on [:lemma-finitewedgefinlegmap-apply],
    :other-consumers [:t94J09]}]}
