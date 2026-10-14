@@ -2265,7 +2265,14 @@ lemma apm_t01A04_tbp_sheet_homeomorph_aux_left (i : Fin 2) :
 /-- Right inverse on `U`. -/
 lemma apm_t01A04_tbp_sheet_homeomorph_aux_right (i : Fin 2) :
     ∀ x ∈ apm_t01A04_tbp_U, apm_t01a04_torusCoverMap (apm_t01A04_tbp_sheet_homeomorph_aux_inv i x) = x := by
-  sorry
+  intro x _
+  refine Quotient.inductionOn x ?_
+  rintro (q | z)
+  · change Quotient.mk _ (Sum.inl
+        ((apm_t01A04_tbp_sheet_homeomorph_aux_root i q.1) ^ 2, q.2)) =
+      Quotient.mk _ (Sum.inl q)
+    rw [apm_t01A04_tbp_sheet_homeomorph_aux_root_sq]
+  · rfl
 
 /-- On each sheet the cover map is a homeomorphism onto `U` (inverse: square
 root on the arc around `sheetPoint i`, identity on circle sheet `i`). -/
