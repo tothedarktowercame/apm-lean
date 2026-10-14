@@ -211,6 +211,67 @@ theorem t96J02_presented_finiteIndex_even_classify
 /-- If the vertical step is odd, conjugation by its lift inverts the
 horizontal generator, and normal forms give another Klein group. -/
 -- BEGIN SEAT AREA
+theorem t96J02_presented_finiteIndex_odd_classify_aux_action
+    (q : ℤ) (hq : Odd q) (x : ZMul) :
+    action (Multiplicative.ofAdd q) x = x⁻¹ := by
+  obtain ⟨k, rfl⟩ := hq
+  change (inversion ^ (2 * k + 1)) x = x⁻¹
+  rw [zpow_add_one, zpow_mul]
+  have hi : inversion ^ (2 : ℤ) = 1 := by
+    ext y
+    change inversion (inversion y) = y
+    simp [inversion]
+  rw [hi, one_zpow]
+  rfl
+
+theorem t96J02_presented_finiteIndex_odd_classify_aux_action_symm
+    (q : ℤ) (hq : Odd q) (x : ZMul) :
+    (action (Multiplicative.ofAdd q)).symm x = x⁻¹ := by
+  apply (action (Multiplicative.ofAdd q)).injective
+  rw [MulEquiv.apply_symm_apply,
+    t96J02_presented_finiteIndex_odd_classify_aux_action q hq]
+  simp
+
+theorem t96J02_presented_finiteIndex_odd_classify_aux_right_zpow
+    (a b : ZMul) (n : ℤ) :
+    Multiplicative.toAdd ((⟨a, b⟩ : Coordinates) ^ n).right =
+      n * Multiplicative.toAdd b := by
+  have h := congrArg Multiplicative.toAdd
+    (map_zpow (SemidirectProduct.rightHom : Coordinates →* ZMul)
+      (⟨a, b⟩ : Coordinates) n)
+  simpa [mul_comm] using h
+
+theorem t96J02_presented_finiteIndex_odd_classify_aux_inl_zpow
+    (a : ZMul) (n : ℤ) :
+    Multiplicative.toAdd
+        ((SemidirectProduct.inl a : Coordinates) ^ n).left =
+      n * Multiplicative.toAdd a := by
+  calc
+    Multiplicative.toAdd
+        ((SemidirectProduct.inl a : Coordinates) ^ n).left =
+        Multiplicative.toAdd (a ^ n) := by
+          exact congrArg (fun z : Coordinates => Multiplicative.toAdd z.left)
+            (map_zpow (SemidirectProduct.inl : ZMul →* Coordinates) a n).symm
+    _ = n * Multiplicative.toAdd a := by simp
+
+noncomputable def t96J02_presented_finiteIndex_odd_classify_aux_map
+    (p q r : ℤ) (hq : Odd q) :
+    T96J02PresentedGroup →* T96J02PresentedGroup :=
+  PresentedGroup.toGroup (f := fun i => if i then
+      t96J02_presented_coordinate r q else
+      t96J02_presented_coordinate p 0) (by
+    intro w hw
+    change w ∈ ({(FreeGroup.of true)⁻¹ * FreeGroup.of false *
+      FreeGroup.of true * FreeGroup.of false} : Set (FreeGroup Bool)) at hw
+    rw [Set.mem_singleton_iff] at hw
+    subst w
+    simp
+    apply KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.injective
+    apply SemidirectProduct.ext
+    · simp [t96J02_presented_coordinate,
+        t96J02_presented_finiteIndex_odd_classify_aux_action_symm, hq]
+    · simp [t96J02_presented_coordinate])
+
 theorem t96J02_presented_finiteIndex_odd_classify
     (H : Subgroup T96J02PresentedGroup) (p q r : ℤ)
     (hp : 0 < p) (hq : 0 < q) (hodd : Odd q)
@@ -218,7 +279,98 @@ theorem t96J02_presented_finiteIndex_odd_classify
       ({t96J02_presented_coordinate p 0,
         t96J02_presented_coordinate r q} : Set T96J02PresentedGroup)) :
     Nonempty (H ≃* T96J02PresentedGroup) := by
-  sorry
+  let f := t96J02_presented_finiteIndex_odd_classify_aux_map p q r hodd
+  have hfA : f generatorA = t96J02_presented_coordinate p 0 := by
+    exact PresentedGroup.toGroup.of _
+  have hfB : f generatorB = t96J02_presented_coordinate r q := by
+    exact PresentedGroup.toGroup.of _
+  have hf_inj : Function.Injective f := by
+    intro x y hxy
+    obtain ⟨⟨xm, xn⟩, hx, _⟩ :=
+      KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm x
+    obtain ⟨⟨ym, yn⟩, hy, _⟩ :=
+      KleinPresentedGroupCoordinateNormalForm.uniqueNormalForm y
+    rw [hx, hy] at hxy
+    simp only [map_mul, map_zpow] at hxy
+    rw [hfA, hfB] at hxy
+    have hrgt := congrArg (fun z => Multiplicative.toAdd
+      ((SemidirectProduct.rightHom : Coordinates →* ZMul)
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv z))) hxy
+    have hn : Multiplicative.toAdd xn = Multiplicative.toAdd yn := by
+      simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply,
+        map_mul, map_zpow] at hrgt
+      simp [t96J02_presented_finiteIndex_odd_classify_aux_right_zpow] at hrgt
+      rcases hrgt with h | h
+      · exact congrArg Multiplicative.toAdd h
+      · omega
+    have hn' : xn = yn := Multiplicative.toAdd.injective hn
+    subst yn
+    have ha : (t96J02_presented_coordinate p 0) ^ Multiplicative.toAdd xm =
+        (t96J02_presented_coordinate p 0) ^ Multiplicative.toAdd ym := by
+      exact mul_right_cancel hxy
+    have hlft := congrArg (fun z => Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv z).left) ha
+    have hm : Multiplicative.toAdd xm = Multiplicative.toAdd ym := by
+      simp only [t96J02_presented_coordinate, MulEquiv.apply_symm_apply,
+        map_zpow] at hlft
+      change Multiplicative.toAdd
+          ((SemidirectProduct.inl (Multiplicative.ofAdd p) : Coordinates) ^
+            Multiplicative.toAdd xm).left =
+        Multiplicative.toAdd
+          ((SemidirectProduct.inl (Multiplicative.ofAdd p) : Coordinates) ^
+            Multiplicative.toAdd ym).left at hlft
+      rw [t96J02_presented_finiteIndex_odd_classify_aux_inl_zpow,
+        t96J02_presented_finiteIndex_odd_classify_aux_inl_zpow] at hlft
+      exact mul_right_cancel₀ (ne_of_gt hp) hlft
+    have hm' : xm = ym := Multiplicative.toAdd.injective hm
+    subst ym
+    exact hx.trans hy.symm
+  have hrange : MonoidHom.range f = H := by
+    apply le_antisymm
+    · rw [hgen]
+      rintro _ ⟨x, rfl⟩
+      have hpre : (⊤ : Subgroup T96J02PresentedGroup) ≤
+          (Subgroup.closure
+            ({t96J02_presented_coordinate p 0,
+              t96J02_presented_coordinate r q} : Set T96J02PresentedGroup)).comap f := by
+        rw [← PresentedGroup.closure_range_of]
+        apply Subgroup.closure_le _ |>.2
+        rintro _ ⟨i, rfl⟩
+        cases i
+        · exact (show f generatorA ∈ Subgroup.closure
+              ({t96J02_presented_coordinate p 0,
+                t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) by
+            rw [hfA]
+            exact Subgroup.subset_closure (by simp))
+        · exact (show f generatorB ∈ Subgroup.closure
+              ({t96J02_presented_coordinate p 0,
+                t96J02_presented_coordinate r q} : Set T96J02PresentedGroup) by
+            rw [hfB]
+            exact Subgroup.subset_closure (by simp))
+      exact hpre trivial
+    · rw [hgen]
+      apply Subgroup.closure_le _ |>.2
+      intro z hz
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
+      rcases hz with rfl | rfl
+      · rw [← hfA]
+        exact ⟨generatorA, rfl⟩
+      · rw [← hfB]
+        exact ⟨generatorB, rfl⟩
+  let g : T96J02PresentedGroup →* H :=
+    { toFun := fun z => ⟨f z, hrange ▸ ⟨z, rfl⟩⟩
+      map_one' := Subtype.ext f.map_one
+      map_mul' := fun x y => Subtype.ext (f.map_mul x y) }
+  have hg_bij : Function.Bijective g := by
+    constructor
+    · intro x y h
+      apply hf_inj
+      exact congrArg Subtype.val h
+    · intro x
+      have hx : x.1 ∈ MonoidHom.range f := hrange.symm ▸ x.2
+      obtain ⟨z, hz⟩ := hx
+      exact ⟨z, Subtype.ext hz⟩
+  exact ⟨(MulEquiv.ofBijective g hg_bij).symm⟩
 -- END SEAT AREA
 
 /-- Every finite-index subgroup of the coordinate Klein group is either
