@@ -444,9 +444,18 @@ theorem t93A06_exact_integral_aux_ftc_x
       ∫ y : ℝ in 0..1, (Q 1 y - Q 0 y) := by
   sorry
 
+/-- Seat: the pulled-back coefficients are jointly `C¹` in `(x, y)`
+(compose `t93A06_exact_integral_aux_coeff_smooth_aux_global` with the
+continuous linear map `(x, y) ↦ ![x, y]`). -/
+theorem t93A06_exact_integral_aux_joint_C1 (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hη : letI := atlas.charts; IsSmooth η) (i : Fin 2) :
+    ContDiff ℝ 1 (fun p : ℝ × ℝ ↦ t93A06_pulledCoeff atlas η i ![p.1, p.2]) := by
+  sorry
+
 /-- One-variable FTC for the `y` derivative, already integrated in `x`. -/
 theorem t93A06_exact_integral_aux_ftc_y
-    (P : ℝ → ℝ → ℝ) (hP : ∀ x, ContDiff ℝ 1 (fun y ↦ P x y)) :
+    (P : ℝ → ℝ → ℝ) (hP : ContDiff ℝ 1 (fun p : ℝ × ℝ ↦ P p.1 p.2)) :
     (∫ y : ℝ in 0..1, ∫ x : ℝ in 0..1, deriv (fun t ↦ P x t) y) =
       ∫ x : ℝ in 0..1, (P x 1 - P x 0) := by
   sorry
@@ -486,7 +495,8 @@ theorem t93A06_not_exact_of_integral_quarter (atlas : SmoothAtlas)
   let Q : ℝ → ℝ → ℝ := fun x y ↦ t93A06_pulledCoeff atlas η 1 ![x, y]
   obtain ⟨hQy, hPx⟩ := t93A06_exact_integral_aux_coeff_smooth atlas η hη
   have hftcx := t93A06_exact_integral_aux_ftc_x Q hQy
-  have hftcy := t93A06_exact_integral_aux_ftc_y P hPx
+  have hftcy := t93A06_exact_integral_aux_ftc_y P
+    (t93A06_exact_integral_aux_joint_C1 atlas η hη 0)
   obtain ⟨hQper, hPper⟩ := t93A06_exact_integral_aux_periodic atlas η
   have hcancel := t93A06_exact_integral_aux_boundary_cancel P Q hQper hPper
   have hz : torusIntegral (exteriorDerivative η) = 0 := by
