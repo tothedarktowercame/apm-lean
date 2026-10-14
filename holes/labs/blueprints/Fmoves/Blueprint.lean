@@ -1469,6 +1469,111 @@ lemma equivariantLift_of_interval (P Q : ℝ) (hP : 0 < P) (hQ : 0 < Q)
 /-- The local merge map is a homeomorphism of `ℝ` (slopes `1` and `1/2`) with the
 displayed inverse, fixes `0`, and sends the period `u + 2 + v + 2 + t` to
 `u + 1 + v + 1 + t`. -/
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local
+    (u v : ℕ) (x : ℝ) :
+    (True ∧ x ≤ u ∧ mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = x) ∨
+    (u ≤ x ∧ x ≤ u + 2 ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = (x + u) / 2) ∨
+    (u + 2 ≤ x ∧ x ≤ u + 2 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = x - 1) ∨
+    (u + 2 + v ≤ x ∧ x ≤ u + 4 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x =
+        (x + (u + 2 + v) - 2) / 2) ∨
+    (u + 4 + v ≤ x ∧ True ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_local u v x = x - 2) := by
+  have hu : (0 : ℝ) ≤ u := by positivity
+  have hv : (0 : ℝ) ≤ v := by positivity
+  by_cases h₀ : x ≤ u
+  · left
+    refine ⟨trivial, h₀, ?_⟩
+    simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₀]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    · norm_num
+      linarith
+  · by_cases h₁ : x ≤ u + 2
+    · right; left
+      refine ⟨by linarith, h₁, ?_⟩
+      simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) h₁ (by norm_num)]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+      · ring
+      · norm_num
+        linarith
+    · by_cases h₂ : x ≤ u + 2 + v
+      · right; right; left
+        refine ⟨by linarith, h₂, ?_⟩
+        simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₂]
+        ring
+      · by_cases h₃ : x ≤ u + 4 + v
+        · right; right; right; left
+          refine ⟨by linarith, h₃, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) (by linarith) (by norm_num)]
+          ring
+        · right; right; right; right
+          refine ⟨by linarith, trivial, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_local]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          ring
+
+lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_inv
+    (u v : ℕ) (x : ℝ) :
+    (True ∧ x ≤ u ∧ mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = x) ∨
+    (u ≤ x ∧ x ≤ u + 1 ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = 2 * x - u) ∨
+    (u + 1 ≤ x ∧ x ≤ u + 1 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = x + 1) ∨
+    (u + 1 + v ≤ x ∧ x ≤ u + 2 + v ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x =
+        2 * x + 1 - (u + 1 + v)) ∨
+    (u + 2 + v ≤ x ∧ True ∧
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv u v x = x + 2) := by
+  have hv : (0 : ℝ) ≤ v := by positivity
+  by_cases h₀ : x ≤ u
+  · left
+    refine ⟨trivial, h₀, ?_⟩
+    simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₀]
+    rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+    · ring
+    · norm_num
+      linarith
+  · by_cases h₁ : x ≤ u + 1
+    · right; left
+      refine ⟨by linarith, h₁, ?_⟩
+      simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) h₁ (by norm_num)]
+      rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le]
+      · ring
+      · norm_num
+        linarith
+    · by_cases h₂ : x ≤ u + 1 + v
+      · right; right; left
+        refine ⟨by linarith, h₂, ?_⟩
+        simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+        rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_le _ _ _ h₂]
+        ring
+      · by_cases h₃ : x ≤ u + 2 + v
+        · right; right; right; left
+          refine ⟨by linarith, h₃, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_mem _ _ _ (by linarith) (by linarith) (by norm_num)]
+          ring
+        · right; right; right; right
+          refine ⟨by linarith, trivial, ?_⟩
+          simp only [mergeRepeatedBlock_aux_boundary_lift_aux_localInv]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          rw [mergeRepeatedBlock_aux_boundary_lift_aux_clip_of_ge _ _ _ (by linarith) (by norm_num)]
+          ring
+
 lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props (uLen vLen tLen : ℕ) :
     (∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) = x) ∧
     (∀ y, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen y) = y) ∧
@@ -1476,7 +1581,60 @@ lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_props (uLen vLen tLen : ℕ
     mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen (uLen + 2 + vLen + 2 + tLen) = uLen + 1 + vLen + 1 + tLen ∧
     mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen (uLen + 1 + vLen + 1 + tLen) = uLen + 2 + vLen + 2 + tLen ∧
     StrictMono (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen) := by
-  sorry
+  have hl : ∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+      (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen x) = x := by
+    intro x
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen x with
+      h | h | h | h | h <;>
+      rcases h with ⟨hlo, hhi, hx⟩ <;>
+      rw [hx] <;>
+      rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_inv uLen vLen _ with
+        k | k | k | k | k <;>
+      rcases k with ⟨klo, khi, hk⟩ <;>
+      rw [hk] <;> norm_num at * <;> linarith
+  have hr : ∀ x, mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen
+      (mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen x) = x := by
+    intro x
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_inv uLen vLen x with
+      h | h | h | h | h <;>
+      rcases h with ⟨hlo, hhi, hx⟩ <;>
+      rw [hx] <;>
+      rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen _ with
+        k | k | k | k | k <;>
+      rcases k with ⟨klo, khi, hk⟩ <;>
+      rw [hk] <;> norm_num at * <;> linarith
+  have hmono : StrictMono (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen) := by
+    intro x y hxy
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen x with
+      hx | hx | hx | hx | hx <;>
+      rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen y with
+        hy | hy | hy | hy | hy <;>
+      rcases hx with ⟨hxl, hxu, hxe⟩ <;>
+      rcases hy with ⟨hyl, hyu, hye⟩ <;>
+      rw [hxe, hye] <;> norm_num at * <;> linarith
+  have hzero : mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen 0 = 0 := by
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen 0 with
+      h | h | h | h | h <;> rcases h with ⟨a, b, e⟩ <;>
+      rw [e] <;> norm_num at * <;> linarith
+  have hperiod : mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen
+      (uLen + 2 + vLen + 2 + tLen) = uLen + 1 + vLen + 1 + tLen := by
+    rcases mergeRepeatedBlock_aux_boundary_lift_aux_local_props_aux_local uLen vLen
+        (uLen + 2 + vLen + 2 + tLen) with h | h | h | h | h <;>
+      rcases h with ⟨a, b, e⟩ <;> rw [e] <;>
+      norm_num at * <;> linarith
+  refine ⟨hl, hr, hzero, ?_, hperiod, ?_, hmono⟩
+  · calc
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen 0 =
+          mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+            (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen 0) := by rw [hzero]
+      _ = 0 := hl 0
+  · calc
+      mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+          (uLen + 1 + vLen + 1 + tLen) =
+          mergeRepeatedBlock_aux_boundary_lift_aux_localInv uLen vLen
+            (mergeRepeatedBlock_aux_boundary_lift_aux_local uLen vLen
+              (uLen + 2 + vLen + 2 + tLen)) := by rw [hperiod]
+      _ = uLen + 2 + vLen + 2 + tLen := hl _
 
 /-- The seven block formulas for the local map (clip arithmetic). -/
 lemma mergeRepeatedBlock_aux_boundary_lift_aux_local_formulas (uLen vLen tLen : ℕ) :
