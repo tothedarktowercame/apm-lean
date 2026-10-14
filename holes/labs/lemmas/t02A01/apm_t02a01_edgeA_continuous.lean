@@ -644,7 +644,10 @@ noncomputable def apm_t02a01_outerLoop (hc : Continuous apm_t02a01_radialPt) :
 
 -- BEGIN SEAT AREA
 theorem apm_t02a01_edgeA_continuous : Continuous apm_t02a01_edgeA := by
-  sorry
+  exact continuous_coinduced_rng.comp
+    (Continuous.subtype_mk
+      ((continuous_const.max (continuous_const.min continuous_id)).prodMk
+        continuous_const) _)
 -- END SEAT AREA
 
 theorem apm_t02a01_edgeB_continuous : Continuous apm_t02a01_edgeB := by
