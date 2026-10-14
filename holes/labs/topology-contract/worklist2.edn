@@ -87901,38 +87901,39 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport H1 coordinates to outer piece, prove outer higher vanishing, then B6-B10.",
+    "Prove finite-wedge higher homology vanishing and transport it; then B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "finiteWedgeHurewicz_generated_by_coordinates",
-      :type "every loop Hurewicz class has coordinates",
+    [{:name "outerH1IsoCoordinates",
+      :type "outer radial H1 equals fixed orbit coordinates",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeLegFreeGroupMap_surjective"],
+      :depends-on
+      ["finiteWedgeH1CoordinateIso" "outerHomotopyEquivWedge"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeH1CoordinateMap_surjective",
-      :type "normalized coordinate map is onto",
-      :status :proved,
+     {:name "finiteWedgeHigherHomologyIsZero",
+      :type "finite circle-wedge homology vanishes above degree one",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeHurewicz_generated_by_coordinates"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeH1CoordinateIso",
-      :type "fixed positive-basis H1 isomorphism",
-      :status :proved,
+     {:name "outerHigherHomologyIsZero",
+      :type "outer radial homology vanishes above degree one",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeH1CoordinateMap_surjective"],
+      :depends-on
+      ["finiteWedgeHigherHomologyIsZero" "outerHomotopyEquivWedge"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked coordinate surjectivity and fixed-basis H1 isomorphism.",
+    :reason "Banked radial outer-piece H1 coordinates.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,28 +87941,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check c1423123c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792005786510-12244-1df38570",
-     :commands
-     ["git show/diff c1423123c; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: c1423123c (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 ac018385c4b8d51979391e56a590a9e4fc1a0278679dabffc87e4386950209c6 matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. Generated leg words give coordinates with the existing Hurewicz equality in the correct orientation; prior degree-one Hurewicz generation yields coordinate surjectivity, and existing split monicity plus epi yields the normalized positive-basis H1 isomorphism. New compiled progress; remaining: outer-piece transport/higher vanishing, B6-B10."},
-    :commit "c1423123c",
+     {:cmd "git show --check 2a5c82eda", :exit 0}],
+    :diagnostic-history
+    [{:cmd "outer H1 drafts",
+      :exit 1,
+      :correction "inserted concrete/module comparison iso"}],
+    :commit "2a5c82eda",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "ac018385c4b8d51979391e56a590a9e4fc1a0278679dabffc87e4386950209c6"},
+     "df29ab76b6af8128868e847270b56310341ab5f82ccd777901742e8dac3724da"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -90870,4 +90863,56 @@
    :id :lemma-finitewedgeh1coordinatemap-surjective,
    :kind :lemma,
    :depends-on [:lemma-finitewedgehurewicz-generated-by-coordinates],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "outerH1IsoCoordinates",
+    :type "outer radial H1 equals fixed orbit coordinates"},
+   :lemma
+   {:name "outerH1IsoCoordinates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "outer radial H1 equals fixed orbit coordinates",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-outerh1isocoordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgeh1coordinateiso :lemma-outerhomotopyequivwedge],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeHigherHomologyIsZero",
+    :type "finite circle-wedge homology vanishes above degree one"},
+   :lemma
+   {:name "finiteWedgeHigherHomologyIsZero",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "finite circle-wedge homology vanishes above degree one",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitewedgehigherhomologyiszero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "outerHigherHomologyIsZero",
+    :type "outer radial homology vanishes above degree one"},
+   :lemma
+   {:name "outerHigherHomologyIsZero",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "outer radial homology vanishes above degree one",
+    :area "polygon-quotient-homology"},
+   :id :lemma-outerhigherhomologyiszero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-finitewedgehigherhomologyiszero
+    :lemma-outerhomotopyequivwedge],
    :other-consumers [:t94J09]}]}
