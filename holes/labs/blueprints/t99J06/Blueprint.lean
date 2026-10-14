@@ -361,6 +361,56 @@ theorem pullback_coefficients
     left
     linear_combination (1 - p 1) * htrig
 
+lemma rectangle_integrals_aux_cos :
+    (∫ x in (0 : ℝ)..2 * Real.pi, Real.cos x) = 0 := by
+  simp
+
+lemma rectangle_integrals_aux_cos_sq :
+    (∫ x in (0 : ℝ)..2 * Real.pi, (Real.cos x) ^ 2) = Real.pi := by
+  rw [integral_cos_sq]
+  simp
+
+lemma rectangle_integrals_aux_cos_cube :
+    (∫ x in (0 : ℝ)..2 * Real.pi, (Real.cos x) ^ 3) = 0 := by
+  have hderiv : ∀ x : ℝ, HasDerivAt
+      (fun x : ℝ => Real.sin x - Real.sin x ^ 3 / 3)
+      (Real.cos x ^ 3) x := by
+    intro x
+    convert (Real.hasDerivAt_sin x).sub
+      (((Real.hasDerivAt_sin x).pow 3).div_const 3) using 1 <;>
+      ring_nf
+    rw [Real.sin_sq]
+    ring
+  rw [intervalIntegral.integral_eq_sub_of_hasDerivAt (fun x _ => hderiv x)
+    ((Real.continuous_cos.pow 3).intervalIntegrable 0 (2 * Real.pi))]
+  simp
+
+lemma rectangle_integrals_aux_trig (a b c d : ℝ) :
+    (∫ x in (0 : ℝ)..2 * Real.pi,
+      a + b * Real.cos x + c * Real.cos x ^ 2 + d * Real.cos x ^ 3) =
+      2 * Real.pi * a + Real.pi * c := by
+  have hd : ∀ x : ℝ, HasDerivAt
+      (fun x : ℝ => a * x + b * Real.sin x +
+        c * (x / 2 + Real.sin x * Real.cos x / 2) +
+        d * (Real.sin x - Real.sin x ^ 3 / 3))
+      (a + b * Real.cos x + c * Real.cos x ^ 2 + d * Real.cos x ^ 3) x := by
+    intro x
+    have h1 := (hasDerivAt_id x).const_mul a
+    have h2 := (Real.hasDerivAt_sin x).const_mul b
+    have h3 := (((hasDerivAt_id x).div_const 2).add
+      (((Real.hasDerivAt_sin x).mul (Real.hasDerivAt_cos x)).div_const 2)).const_mul c
+    have h4 := ((Real.hasDerivAt_sin x).sub
+      (((Real.hasDerivAt_sin x).pow 3).div_const 3)).const_mul d
+    convert ((h1.add h2).add h3).add h4 using 1 <;> ring_nf
+    rw [Real.sin_sq]
+    ring
+  rw [intervalIntegral.integral_eq_sub_of_hasDerivAt (fun x _ => hd x)
+    ((by fun_prop : Continuous (fun x : ℝ =>
+      a + b * Real.cos x + c * Real.cos x ^ 2 + d * Real.cos x ^ 3)).intervalIntegrable
+      0 (2 * Real.pi))]
+  simp
+  ring
+
 theorem rectangle_integrals
     (hxy : ∀ p, pullbackCoefficient (fun _ => coordinateWedge 0 1) parametrization p =
       1 - p 1)
@@ -368,7 +418,59 @@ theorem rectangle_integrals
     0 < rectangleIntegral (fun _ => coordinateWedge 0 1) parametrization
       0 (2 * Real.pi) 0 1 ∧
     rectangleIntegral alpha parametrization 0 (2 * Real.pi) 0 1 = 9 * Real.pi / 2 := by
-  sorry
+  unfold rectangleIntegral
+  simp_rw [hxy, halpha]
+  constructor
+  · simp only [Matrix.cons_val_one, Matrix.cons_val_zero]
+    have h : (∫ z in (0 : ℝ)..1, ∫ _ in (0 : ℝ)..2 * Real.pi, 1 - z) =
+        Real.pi := by
+      simp only [intervalIntegral.integral_const, sub_zero, smul_eq_mul]
+      rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
+        (fun x _ => by
+          convert (hasDerivAt_const x (2 * Real.pi)).mul
+            ((hasDerivAt_id x).sub (((hasDerivAt_id x).pow 2).div_const 2)) using 1 <;>
+            simp [id] <;> ring)
+        ((by fun_prop : Continuous (fun z : ℝ => 2 * Real.pi * (1 - z))).intervalIntegrable 0 1)]
+      simp [id]
+      ring
+    rw [h]
+    exact Real.pi_pos
+  · simp only [alphaPullbackFormula, Matrix.cons_val_zero, Matrix.cons_val_one]
+    have hexpand : ∀ z θ : ℝ,
+        (z ^ 2 + 2 * ((1 - z) * Real.cos θ) * z + 4) * (1 - z) +
+          (((1 - z) * Real.cos θ) - ((1 - z) * Real.cos θ) ^ 2) *
+            ((1 - z) * Real.cos θ) =
+        (z ^ 2 + 4) * (1 - z) +
+          (2 * z * (1 - z) ^ 2) * Real.cos θ +
+          (1 - z) ^ 2 * Real.cos θ ^ 2 -
+          (1 - z) ^ 3 * Real.cos θ ^ 3 := by
+      intros
+      ring
+    simp_rw [hexpand]
+    have hinner : ∀ z : ℝ,
+        (∫ θ in (0 : ℝ)..2 * Real.pi,
+          (z ^ 2 + 4) * (1 - z) +
+            (2 * z * (1 - z) ^ 2) * Real.cos θ +
+            (1 - z) ^ 2 * Real.cos θ ^ 2 -
+            (1 - z) ^ 3 * Real.cos θ ^ 3) =
+          2 * Real.pi * ((z ^ 2 + 4) * (1 - z)) + Real.pi * (1 - z) ^ 2 := by
+      intro z
+      convert rectangle_integrals_aux_trig ((z ^ 2 + 4) * (1 - z))
+        (2 * z * (1 - z) ^ 2) ((1 - z) ^ 2) (-(1 - z) ^ 3) using 1 <;> ring
+    simp_rw [hinner]
+    ring_nf
+    rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun z _ => by
+        convert (((((hasDerivAt_id z).const_mul (Real.pi * 9)).sub
+          (((hasDerivAt_id z).pow 2).const_mul (Real.pi * 5))).add
+          (((hasDerivAt_id z).pow 3).const_mul Real.pi)).sub
+          (((hasDerivAt_id z).pow 4).const_mul (Real.pi / 2))) using 1 <;>
+          simp [id] <;> ring)
+      ((by fun_prop : Continuous (fun z : ℝ =>
+        Real.pi * 9 - Real.pi * z * 10 + Real.pi * z ^ 2 * 3 -
+          Real.pi * z ^ 3 * 2)).intervalIntegrable 0 1)]
+    norm_num
+    ring
 
 end T99J06
 open T99J06
