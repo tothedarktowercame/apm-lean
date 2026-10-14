@@ -443,15 +443,52 @@ theorem apm_t92J05_bridge_sphere_circle_fundamentalGroups :
             rw [hpt]
             exact ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt))⟩
 
-/-- **LIBRARY.** Seifert--van Kampen for the standard oriented genus-two
-polygon gives the four-generator presentation with the product-of-commutators
-relator. -/
-theorem apm_t92J05_standard_genusTwo_fundamentalGroup
+/-- The distinguished point in the standard genus-two polygon quotient. -/
+def apm_t92J05_genusTwo_center :
+    ConstructionTargets.Surfaces.Surface true 2 :=
+  ConstructionTargets.Surfaces.surfaceQuotient true 2
+    ⟨0, by simp [ConstructionTargets.Surfaces.Disk, Metric.mem_closedBall]⟩
+
+/-- **LIBRARY.** The missing two-open Seifert--van Kampen foundation,
+specialized to the already constructed standard genus-two polygon cover.  Its
+outer member retracts to the four-circle boundary wedge, its inner member is
+contractible, and the overlap circle maps to the product of commutators. -/
+theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
+    Nonempty
+      (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2)
+          apm_t92J05_genusTwo_center ≃*
+        apm_t92J05_genusTwoGroup) := by
+  sorry
+
+/-- The standard genus-two polygon quotient is path connected.  This is
+independent of the van Kampen computation. -/
+lemma apm_t92J05_genusTwo_pathConnected :
+    PathConnectedSpace (ConstructionTargets.Surfaces.Surface true 2) := by
+  sorry
+
+/-- Basepoint transport, with both inputs explicit so this leaf can be proved
+independently of the polygon computation and path-connectedness leaf. -/
+lemma apm_t92J05_genusTwo_all_basepoints
+    (hpc : PathConnectedSpace (ConstructionTargets.Surfaces.Surface true 2))
+    (hcenter : Nonempty
+      (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2)
+          apm_t92J05_genusTwo_center ≃*
+        apm_t92J05_genusTwoGroup))
     (x : ConstructionTargets.Surfaces.Surface true 2) :
     Nonempty
       (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2) x ≃*
         apm_t92J05_genusTwoGroup) := by
   sorry
+
+/-- Sorry-free assembly of the polygon calculation and basepoint transport. -/
+theorem apm_t92J05_standard_genusTwo_fundamentalGroup
+    (x : ConstructionTargets.Surfaces.Surface true 2) :
+    Nonempty
+      (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2) x ≃*
+        apm_t92J05_genusTwoGroup) := by
+  exact apm_t92J05_genusTwo_all_basepoints
+    apm_t92J05_genusTwo_pathConnected
+    apm_t92J05_genusTwo_polygon_vanKampen_at_center x
 
 theorem apm_t92J05_bridge_genusTwo_fundamentalGroup :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
