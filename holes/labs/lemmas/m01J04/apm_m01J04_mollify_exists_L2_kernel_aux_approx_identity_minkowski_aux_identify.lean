@@ -3102,7 +3102,37 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_iden
     (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
     (MeasureTheory.convolution κ f (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) =
       fun x ↦ ∫ y, κ y • (f (x - y) - f x) ∂volume := by
-  sorry
+  have hκK : HasCompactSupport κ :=
+    HasCompactSupport.of_support_subset_isCompact
+      (isCompact_closedBall (0 : EuclideanSpace ℝ (Fin d)) ρ) hκs
+  have hκLp : MemLp κ 2 volume :=
+    hκ.memLp_of_hasCompactSupport hκK
+      (p := (2 : ℝ≥0∞)) (μ := volume)
+  funext x
+  have hfx : MemLp (fun y ↦ f (x - y)) 2 volume := by
+    have hmp := volume.measurePreserving_sub_left x
+    exact hf.comp_measurePreserving hmp
+  have hprod : Integrable (fun y ↦ κ y • f (x - y)) volume := by
+    exact memLp_one_iff_integrable.mp
+      (hfx.smul hκLp : MemLp (fun y ↦ κ y • f (x - y)) 1 volume)
+  have hconst : Integrable (fun y ↦ κ y • f x) volume :=
+    (hκ.integrable_of_hasCompactSupport hκK).smul_const (f x)
+  simp only [Pi.sub_apply]
+  rw [MeasureTheory.convolution_def]
+  simp only [ContinuousLinearMap.lsmul_apply]
+  have hfxavg : (∫ y, κ y • f x ∂volume) = f x := by
+    rw [integral_smul_const, hκ1, one_smul]
+  calc
+    (∫ y, κ y • f (x - y) ∂volume) - f x =
+        (∫ y, κ y • f (x - y) ∂volume) -
+          (∫ y, κ y • f x ∂volume) := congrArg
+            (fun z ↦ (∫ y, κ y • f (x - y) ∂volume) - z) hfxavg.symm
+    _ = ∫ y, (κ y • f (x - y) - κ y • f x) ∂volume :=
+      (integral_sub hprod hconst).symm
+    _ = ∫ y, κ y • (f (x - y) - f x) ∂volume := by
+      apply integral_congr_ae
+      exact Filter.Eventually.of_forall fun y ↦
+        (smul_sub (κ y) (f (x - y)) (f x)).symm
 -- END SEAT AREA
 
 /-- Joint measurability of the translation-error family. -/
