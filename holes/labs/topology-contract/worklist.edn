@@ -119230,24 +119230,25 @@
      :reason
      "Banked exact geometric formula interface and H2 consequence."}]}
   {:consumer :t98A06,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Prove B2/B4; assemble Main.",
+    :residual
+    "Make right inverses smooth locally; prove compact-flow fiber diffeomorphism; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated t96A06 edits preserved"],
+    :warnings ["Main sorryAx" "unrelated edit preserved"],
     :missing-theorems
-    [{:name "t98A06_global_vectorField_lift",
-      :type "local lifts glue globally",
+    [{:name "surjective_continuousLinearMap_has_rightInverse",
+      :type "surjective CLM has CLM right inverse",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["t98A06_local_smooth_submersion_lift"],
+      :depends-on [],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
-      :status :not-started,
+      :status :partial,
       :consumers [:t98A06],
-      :depends-on [],
+      :depends-on ["surjective_continuousLinearMap_has_rightInverse"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_compact_circle_fibers_diffeomorphic",
       :type "fiber diffeomorphism",
@@ -119259,32 +119260,21 @@
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "2fc891f21b15e788e35a5f77ec27cc01aa2f793eadc5b41f5065860e649235d9",
+     "c9ff91f45f851ee40d5cd7d1fc81fc4327c12b242e47118673914830e083a792",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked B1 representations and B3 gluing.",
+    :reason "Banked derivative right inverses.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/diff/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792006778711-12270-02eedf57",
-     :commands
-     ["git diff-tree/show 1f334ef"
-      "git archive 1f334ef; lake env lean t98A06Closure.lean and Main.lean"
-      "sha256sum and placeholder counts at 1f334ef"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new in-scope commit banks B1 representations and B3, correctly gluing B2 local tangent sections through convex affine derivative fibers into the exact global smooth lift and derivative equation. Archived files compile; closure has 0 placeholders and standard axioms only; frozen Main hash 44399e71 retains baseline 1 placeholder; fixture 9838452b matches; registry 166/166. B2 local smooth right inverses, B4 compact-flow fiber diffeomorphism, and Main assembly remain listed."},
-    :commit "1f334efd354c87554eb3f200daefb09084b9b525",
+     {:cmd "hash/placeholders/diff", :exit 0}],
+    :commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119292,7 +119282,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119607,7 +119597,8 @@
     :area "smooth-manifold-submersion"},
    :id :lemma-t98a06-local-smooth-submersion-lift,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-surjective-continuouslinearmap-has-rightinverse],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -120047,6 +120038,23 @@
    :id :lemma-regularfiberlocaldegree-localization-eq,
    :kind :lemma,
    :depends-on [:lemma-surfacetophomology-localfundamentalclassiso],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "surjective_continuousLinearMap_has_rightInverse",
+    :type "surjective CLM has CLM right inverse"},
+   :lemma
+   {:name "surjective_continuousLinearMap_has_rightInverse",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "surjective CLM has CLM right inverse",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-surjective-continuouslinearmap-has-rightinverse,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
