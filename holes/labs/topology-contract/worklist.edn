@@ -119064,19 +119064,19 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove regular-value signed count; combine and assemble Main.",
+    "Prove top-H2 regular-value signed-count identity; assemble Main.",
     :outcome :stop,
     :warnings ["existing Main sorryAx"],
     :missing-theorems
-    [{:name "transverseCircle_preimage_component_signedCount",
-      :type "component degree zero",
+    [{:name "regularValue_topDegree_eq_zero_of_signedCount",
+      :type "signed count of zero component degrees is zero",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["circleDegree_eq_homologyMap"],
+      :depends-on ["transverseCircle_preimage_component_signedCount"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
@@ -119084,8 +119084,7 @@
       :consumers [:t00J02],
       :depends-on
       ["regularValue_topHomologyMap_signedCount"
-       "transverseCircle_preimage_component_signedCount"
-       "circleDegree_eq_homologyMap"],
+       "regularValue_topDegree_eq_zero_of_signedCount"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
@@ -119093,33 +119092,19 @@
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :implementation
-     "7f2cdf179151e8b73d06e516feab8dfb016b7a9e698e1e9f276bbb9957d10d0f",
+     "5187744f256c90bdb173bc1679185d3df16194556f48f1d2e75a8e37598f280f",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Banked zero component signed counts.",
+    :reason "Banked finite signed-count aggregation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd "component draft", :exit 1, :finding "made Mono explicit"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791999034278-11970-94379645",
-     :commands
-     ["git show/diff-tree 354ae8990f0293fc6f739ded05d6cbf08e5d576a"
-      "archive commit; lean t00J02Closure.lean and Main.lean"
-      "sha256sum Main/implementation/blueprint; count placeholders"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t00J02Closure.lean"],
-     :finding
-     "PASS: exact scope and hashes match; both archived files compile; Main placeholder remains 1->1 and implementation is sorry-free; registry 166/166. Nonzero ambient H1 map is correctly converted to monicity, disk-bounded preimage supplies zero-H1 component lifts, and the circle coordinate lemma yields degree zero; all hypotheses are used and standard axioms only. New compiled milestone recorded; regular-value signed count and Main assembly remain listed."},
-    :commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a",
+    :commit "6fb31fac2ba6584bcf268151f80f2b7511f2bd0a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119127,7 +119112,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119247,7 +119232,8 @@
    [:lemma-surfacetophomology-localfundamentalclassiso
     :lemma-regularvalue-tophomologymap-signedcount
     :lemma-transversecircle-preimage-component-signedcount
-    :lemma-circledegree-eq-homologymap],
+    :lemma-circledegree-eq-homologymap
+    :lemma-regularvalue-topdegree-eq-zero-of-signedcount],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -119316,6 +119302,24 @@
    :id :lemma-circledegree-eq-homologymap,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularValue_topDegree_eq_zero_of_signedCount",
+    :type "signed count of zero component degrees is zero"},
+   :lemma
+   {:name "regularValue_topDegree_eq_zero_of_signedCount",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "signed count of zero component degrees is zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-regularvalue-topdegree-eq-zero-of-signedcount,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transversecircle-preimage-component-signedcount],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
