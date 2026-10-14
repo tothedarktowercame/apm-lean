@@ -68,44 +68,84 @@ definitions and imported construction targets.
 `p=(1,0,0)` separately.  The kernel argument uses only `p ≠ 0`, which is forced
 by sphere membership.
 
-### 2. `t95A04_isImmersion_of_injective_mfderiv` — LIBRARY
+### 2. `t95A04_injective_clm_has_four_complement`
 
-**Statement in words.**  If the manifold derivative of this descended map is
-injective everywhere, then the map satisfies Mathlib's `Manifold.IsImmersion`
-local coordinate normal form.
+Extend an injective `L : E 2 →L[ℝ] E 6` to `e : E 2 × E 4 ≃L[ℝ] E 6`, with
+`e (v,0)=L v`.  Estimate: 60–120 lines.  Use `Submodule.exists_isCompl`,
+`Submodule.prodEquivOfIsCompl`, `LinearEquiv.ofInjective`, dimension formulas
+(`finrank_range_eq`, `finrank_prod`, `finrank_euclideanSpace`), and
+`LinearEquiv.toContinuousLinearEquiv` (all spaces are finite-dimensional).
+The zero-dimensional pathology does not occur: the dimensions are fixed at
+2, 4, and 6, and injectivity forces the range to have dimension 2.
 
-**Why true.**  This is the finite-dimensional immersion/constant-rank theorem:
-an injective derivative can be completed by a four-dimensional complement,
-and the inverse function theorem applied to the map consisting of `f` plus
-complement coordinates gives charts in which `f(u)=(u,0)`.  The hypothesis is
-the conclusion of lemma 1, passed explicitly so this lemma can be developed in
-parallel; it is not baked into a definition and does not assume its own result.
+### 3. `t95A04_writtenInExtChart_hasFDerivAt`
 
-**Estimate.** 300–800 lines (LIBRARY/program-sized).
+Identify the derivative of `writtenInExtChartAt` at the charted base point
+with `mfderiv`.  Estimate: 25–50 lines.  Use
+`ContMDiffAt.mdifferentiableAt`, `MDifferentiableAt.mfderiv`,
+`veroneseDescended_contMDiff.contMDiffAt`, and the source/base-point simp lemmas
+for `extChartAt`.  There is no boundary case: an extended chart is defined on
+the whole model space and the base point lies in its genuine chart source.
 
-**Dependencies.** It accepts lemma 1's conclusion as a hypothesis, so its proof
-development is layer-1 parallel with lemma 1.
+### 4. `t95A04_augmented_hasFDerivAt`
 
-**Truth check.**  This is the standard finite-dimensional constant-rank
-theorem.  It is valid here because both model spaces are finite-dimensional
-Euclidean spaces (dimensions 2 and 6) and the map is already smooth.
+Differentiate `G(v,k)=g(v)+e(0,k)` and show its derivative is `e`, assuming
+`e(v,0)=L v`.  Estimate: 30–60 lines.  Use `HasFDerivAt.add`,
+`hasFDerivAt_fst`, `hasFDerivAt_snd`, `ContinuousLinearMap.hasFDerivAt`, and
+extensionality on pairs.  This statement is valid at every `a`, including
+`a=0`; it is affine-linear in the complement coordinate.
 
-**Why this remains LIBRARY.**  I searched every sorry-free
-`ConstructionTargets/*.lean` module for projective, Veronese, embedding, and
-immersion results.  The closest files are the three reused projective modules
-above; none supplies the derivative-to-local-normal-form bridge.  Mathlib's
-`Geometry/Manifold/Immersion.lean` explicitly lists as a TODO the equivalence
-with injectivity of `mfderiv` for finite-dimensional manifolds (its introductory
-comment and TODO near lines 17 and 82).  Thus this is the actual missing
-theorem named by the topology worklist, not an artificial decomposition.
+### 5. `t95A04_augmented_contDiffAt`
+
+Prove smoothness near `(extChartAt ... x x,0)` of the same augmented map.
+Estimate: 35–70 lines.  Use the chart-coordinate smoothness furnished by
+`contMDiff_iff` for `veroneseDescended_contMDiff`, then
+`ContDiffAt.fst`, continuous-linear smoothness, and `ContDiffAt.add`.
+Explicitly shrink to the extended-chart target if the API requires it.
+
+### 6. `t95A04_augmented_local_inverse`
+
+Turn a smooth map with derivative a continuous linear equivalence into a
+`PartialDiffeomorph` agreeing locally with it.  Estimate: 80–140 lines.
+Copy the proved pattern from `t99J04`: principally
+`apm_t99J04_euclid_local_inverse`, whose proof uses
+`ContDiffAt.toOpenPartialHomeomorph`,
+`ContDiffAt.mem_toOpenPartialHomeomorph_source`, and smoothness of the inverse.
+This leaf takes smoothness and the derivative identity as explicit hypotheses,
+so it is independent of leaves 2–5.  No empty-neighbourhood issue occurs since
+the returned source explicitly contains `a`.
+
+### 7. `t95A04_isImmersionAt_of_augmented_local_inverse`
+
+Convert the supplied local inverse of `G` into Mathlib's local normal form for
+`veroneseDescended` at `x`.  Estimate: 100–150 lines.  Unfold only through
+`Manifold.IsImmersionAt`; construct `IsImmersionAtOfComplement (E 4)` via
+`IsImmersionAtOfComplement.mk_of_continuousAt`.  The domain chart is the
+original extended chart restricted by the slice `k=0`; the codomain chart is
+the inverse-function chart composed with `e`.  Use
+`PartialDiffeomorph.toOpenPartialHomeomorph`, maximal-atlas lemmas for
+`extChartAt`, and `q.left_inv`/the hypothesis `hqG` for the written-in-charts
+equation.  The complement and all local-inverse facts are explicit hypotheses,
+so this is parallel with every earlier leaf.  Sign convention is `+e(0,k)`;
+on `k=0` it reduces exactly to the original map.
+
+### 8. `t95A04_isImmersion_of_isImmersionAt`
+
+Package pointwise `IsImmersionAt` into `IsImmersion`.  Estimate: 5–15 lines.
+Use the definition/theorem for `Manifold.IsImmersion` (it is pointwise).  This
+leaf is wholly independent and covers an empty source automatically.
+
+The former library lemma `t95A04_isImmersion_of_injective_mfderiv` is now a
+sorry-free assembly of leaves 2–8.  Each leaf accepts prior conclusions as
+ordinary hypotheses where needed, so proving one leaf never imports another
+leaf's `sorryAx`.
 
 ## Dependency layers
 
 * **Layer 0 (done):** atlas, smooth descent, exact fibers/injectivity,
   compactness, and the compact-to-Hausdorff embedding adapter.
-* **Layer 1 (parallel):** lemma 1; lemma 2 developed with its explicit
-  `hderiv` hypothesis.
-* **Layer 2 (assembly, done):** instantiate lemma 2 with lemma 1 and combine it
+* **Layer 1 (parallel):** lemma 1 and all seven new leaves 2–8.
+* **Layer 2 (assembly, done):** instantiate the split leaves and combine them
   with the imported smoothness/formula results and proved embedding adapter.
 
 ## Compilation and axioms gate

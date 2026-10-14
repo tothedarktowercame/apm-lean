@@ -172,6 +172,71 @@ theorem t95A04_veroneseDescended_mfderiv_injective
   rw [← hchain]
   simpa only [ContinuousLinearMap.comp_apply] using hab
 
+/-- An injective linear map between the model spaces admits the expected
+four-dimensional continuous complement. -/
+theorem t95A04_injective_clm_has_four_complement
+    (L : E 2 →L[ℝ] E 6) (hL : Function.Injective L) :
+    ∃ e : (E 2 × E 4) ≃L[ℝ] E 6, ∀ v, e (v, 0) = L v := by
+  sorry
+
+/-- The derivative of the manifold map, expressed in its extended charts, is
+the manifold derivative. -/
+theorem t95A04_writtenInExtChart_hasFDerivAt
+    (x : Space ℝ 2) :
+    HasFDerivAt (writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended)
+      (mfderiv (𝓡 2) (𝓡 6) veroneseDescended x) (extChartAt (𝓡 2) x x) := by
+  sorry
+
+/-- The augmented coordinate map has derivative equal to a continuous linear
+extension of the derivative of its first component. -/
+theorem t95A04_augmented_hasFDerivAt
+    (g : E 2 → E 6) (a : E 2) (L : E 2 →L[ℝ] E 6)
+    (hg : HasFDerivAt g L a) (e : (E 2 × E 4) ≃L[ℝ] E 6)
+    (he : ∀ v, e (v, 0) = L v) :
+    HasFDerivAt (fun z : E 2 × E 4 ↦ g z.1 + e (0, z.2))
+      (e : (E 2 × E 4) →L[ℝ] E 6) (a, 0) := by
+  sorry
+
+/-- Smoothness near the base point of the augmented coordinate map. -/
+theorem t95A04_augmented_contDiffAt
+    (x : Space ℝ 2) (e : (E 2 × E 4) ≃L[ℝ] E 6) :
+    ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (fun z : E 2 × E 4 ↦
+        writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2))
+      (extChartAt (𝓡 2) x x, 0) := by
+  sorry
+
+/-- Euclidean inverse-function theorem in the exact local form needed by the
+augmented coordinate map. -/
+theorem t95A04_augmented_local_inverse
+    (G : (E 2 × E 4) → E 6) (a : E 2 × E 4)
+    (hG : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G a)
+    (e : (E 2 × E 4) ≃L[ℝ] E 6)
+    (hderiv : HasFDerivAt G (e : (E 2 × E 4) →L[ℝ] E 6) a) :
+    ∃ q : PartialDiffeomorph (𝓘(ℝ, E 2 × E 4)) (𝓘(ℝ, E 6))
+        (E 2 × E 4) (E 6) (⊤ : ℕ∞),
+      a ∈ q.source ∧ ∀ z ∈ q.source, q z = G z := by
+  sorry
+
+/-- A local inverse for the augmented map supplies the two charts and the
+`u ↦ (u, 0)` equation in Mathlib's immersion definition. -/
+theorem t95A04_isImmersionAt_of_augmented_local_inverse
+    (x : Space ℝ 2) (e : (E 2 × E 4) ≃L[ℝ] E 6)
+    (q : PartialDiffeomorph (𝓘(ℝ, E 2 × E 4)) (𝓘(ℝ, E 6))
+      (E 2 × E 4) (E 6) (⊤ : ℕ∞))
+    (hq : (extChartAt (𝓡 2) x x, 0) ∈ q.source)
+    (hqG : ∀ z ∈ q.source,
+      q z = writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2)) :
+    Manifold.IsImmersionAt (𝓡 2) (𝓡 6) ∞ veroneseDescended x := by
+  sorry
+
+/-- Pointwise normal forms are exactly the global immersion predicate. -/
+theorem t95A04_isImmersion_of_isImmersionAt
+    (h : ∀ x : Space ℝ 2,
+      Manifold.IsImmersionAt (𝓡 2) (𝓡 6) ∞ veroneseDescended x) :
+    Manifold.IsImmersion (𝓡 2) (𝓡 6) ∞ veroneseDescended := by
+  sorry
+
 /-- LIBRARY: the finite-dimensional constant-rank/inverse-function theorem
 turning an everywhere-injective manifold derivative into Mathlib's local
 normal-form notion of immersion.  It is specialized only to the dimensions
@@ -181,7 +246,24 @@ theorem t95A04_isImmersion_of_injective_mfderiv
       Function.Injective
         (mfderiv (𝓡 2) (𝓡 6) veroneseDescended x)) :
     Manifold.IsImmersion (𝓡 2) (𝓡 6) ∞ veroneseDescended := by
-  sorry
+  apply t95A04_isImmersion_of_isImmersionAt
+  intro x
+  let L := mfderiv (𝓡 2) (𝓡 6) veroneseDescended x
+  obtain ⟨e, he⟩ := t95A04_injective_clm_has_four_complement L (hderiv x)
+  let g : E 2 → E 6 := writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended
+  let a : E 2 := extChartAt (𝓡 2) x x
+  let G : (E 2 × E 4) → E 6 := fun z ↦ g z.1 + e (0, z.2)
+  have hg : HasFDerivAt g L a := by
+    simpa [g, L, a] using t95A04_writtenInExtChart_hasFDerivAt x
+  have hG : HasFDerivAt G (e : (E 2 × E 4) →L[ℝ] E 6) (a, 0) := by
+    simpa [G] using t95A04_augmented_hasFDerivAt g a L hg e he
+  have hGsmooth : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G (a, 0) := by
+    simpa [G, g, a] using t95A04_augmented_contDiffAt x e
+  obtain ⟨q, hqa, hqG⟩ := t95A04_augmented_local_inverse G (a, 0) hGsmooth e hG
+  exact t95A04_isImmersionAt_of_augmented_local_inverse x e q
+    (by simpa [a] using hqa) (by
+      intro z hz
+      simpa [G, g] using hqG z hz)
 
 theorem apm_t95a04 :
     ∃ atlas : SmoothAtlas 2,
