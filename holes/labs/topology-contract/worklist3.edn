@@ -36160,6 +36160,16 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792019625339-12638-267cb870",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f and committed theorem inspection"
+      "fixture SHA-256 assertion; lean t93J03 Main"
+      "statement-registry check; recorded-snapshot compile and placeholder recount"],
+     :finding
+     "PASS: the recorded 8c4eb4f snapshot compiles sorry-free with standard axioms and is new progress after 263f5d47. Its exact type indexes runs+1 boundaries in outer subtype V; the theorem correctly coerces each to the corresponding ambient canonical boundary. This enables run-family assembly without assuming the partial van Kampen result. Scope/hash match; registry 166/166; Main stays 1->1 placeholder; remaining milestones are explicit."},
     :commit "d300e0a26ae3af85cfd4c89f220fc09d804bd495",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36170,7 +36180,7 @@
      "9df2b5c855c61fda4b1524f906e8ab78d28a448744c74d60af975c14a7c47104"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,7 +36198,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Rebased the outer run fold at literal subdivision endpoints; regrouping remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Proved consecutive maximal-run slices are contiguous; first/last coverage and fold induction remain.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36530,7 +36540,11 @@
     {:job 4,
      :commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991",
      :reason
-     "Rebased the outer run fold at literal subdivision endpoints; regrouping remains."}]}
+     "Rebased the outer run fold at literal subdivision endpoints; regrouping remains."}
+    {:job 5,
+     :commit "d300e0a26ae3af85cfd4c89f220fc09d804bd495",
+     :reason
+     "Proved consecutive maximal-run slices are contiguous; first/last coverage and fold induction remain."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40185,7 +40199,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunStart_eq_previous_end",
@@ -40195,7 +40209,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "adjacent maximal-run slices have contiguous coordinates",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d300e0a26ae3af85cfd4c89f220fc09d804bd495"},
    :id :lemma-pathtwoopensubdivisionrunstart-eq-previous-end,
    :kind :lemma,
    :depends-on
