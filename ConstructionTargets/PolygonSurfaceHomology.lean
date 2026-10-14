@@ -1138,6 +1138,123 @@ theorem finiteWedgeOrbitHomeomorphFin_wedgeCircle (P : PairingData)
       PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
         (Fintype.equivFin (PairingOrbit P.pair) l) z := rfl
 
+/-! ### Sum-indexed wedge inclusions -/
+
+/-- Include the left family of circle legs into the wedge indexed by a sum. -/
+noncomputable def finiteWedgeSumLeft {L K : Type*} :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L →
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) :=
+  Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inl p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel (L ⊕ K))
+          (Sum.inl p.1, p.2) (Sum.inl q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+
+/-- Include the right family of circle legs into the wedge indexed by a sum. -/
+noncomputable def finiteWedgeSumRight {L K : Type*} :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge K →
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) :=
+  Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inr p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel K) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel (L ⊕ K))
+          (Sum.inr p.1, p.2) (Sum.inr q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+
+@[simp]
+theorem finiteWedgeSumLeft_wedgeCircle {L K : Type*} (l : L) (z : Circle) :
+    finiteWedgeSumLeft (K := K)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inl l) z := rfl
+
+@[simp]
+theorem finiteWedgeSumRight_wedgeCircle {L K : Type*} (k : K) (z : Circle) :
+    finiteWedgeSumRight (L := L)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inr k) z := rfl
+
+theorem continuous_finiteWedgeSumLeft {L K : Type*} :
+    Continuous (finiteWedgeSumLeft (L := L) (K := K)) := by
+  letI : TopologicalSpace L := ⊥
+  letI : DiscreteTopology L := ⟨rfl⟩
+  apply Continuous.quotient_lift
+  rw [continuous_prod_of_discrete_left]
+  exact fun l =>
+    PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (Sum.inl l)
+
+theorem continuous_finiteWedgeSumRight {L K : Type*} :
+    Continuous (finiteWedgeSumRight (L := L) (K := K)) := by
+  letI : TopologicalSpace K := ⊥
+  letI : DiscreteTopology K := ⟨rfl⟩
+  apply Continuous.quotient_lift
+  rw [continuous_prod_of_discrete_left]
+  exact fun k =>
+    PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (Sum.inr k)
+
+theorem finiteWedgeSum_base_eq {L K : Type*} (l : L) (k : K) :
+    finiteWedgeSumLeft (K := K)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1) =
+      finiteWedgeSumRight (L := L)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1) := by
+  exact PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+    (Sum.inl l) (Sum.inr k)
+
+/-- Descend the two sum-family inclusions through the point-wedge quotient. -/
+noncomputable def pointWedgeToFiniteWedgeSum {L K : Type*} (l : L) (k : K) :
+    ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1) →
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) :=
+  Quotient.lift (Sum.elim finiteWedgeSumLeft finiteWedgeSumRight) fun a b h => by
+    induction h with
+    | rel a b h =>
+        cases h
+        exact finiteWedgeSum_base_eq l k
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+theorem continuous_pointWedgeToFiniteWedgeSum {L K : Type*} (l : L) (k : K) :
+    Continuous (pointWedgeToFiniteWedgeSum l k) := by
+  apply Continuous.quotient_lift
+  rw [continuous_sum_dom]
+  exact ⟨continuous_finiteWedgeSumLeft, continuous_finiteWedgeSumRight⟩
+
+@[simp]
+theorem pointWedgeToFiniteWedgeSum_left {L K : Type*} (l₀ : L) (k₀ : K)
+    (x : PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) :
+    pointWedgeToFiniteWedgeSum l₀ k₀
+        (ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) (.inl x)) =
+      finiteWedgeSumLeft x := rfl
+
+@[simp]
+theorem pointWedgeToFiniteWedgeSum_right {L K : Type*} (l₀ : L) (k₀ : K)
+    (y : PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge K) :
+    pointWedgeToFiniteWedgeSum l₀ k₀
+        (ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) (.inr y)) =
+      finiteWedgeSumRight y := rfl
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
