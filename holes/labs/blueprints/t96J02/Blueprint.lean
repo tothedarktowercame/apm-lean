@@ -512,8 +512,45 @@ lemma t96J02_cut_edge_two_iff (z : Disk) :
       ‖(z : ℂ)‖ = 1 ∧ (z : ℂ).re ≤ 0 ∧ (z : ℂ).im ≤ 0 := by
   sorry
 
+lemma t96J02_cut_chart_continuous_aux_norm_le (z : ℂ) :
+    ‖t96J02_cut_chart z‖ ≤ ‖z‖ := by
+  by_cases hz : z = 0
+  · simp [hz, t96J02_cut_chart]
+  · rw [t96J02_cut_chart, if_neg hz, norm_mul, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_nonneg
+        (div_nonneg (norm_nonneg _) (t96J02_cut_l1_pos hz).le)]
+    have hratio : ‖z‖ / t96J02_cut_l1 z ≤ 1 :=
+      (div_le_one (t96J02_cut_l1_pos hz)).2 (by
+        simpa [t96J02_cut_l1] using Complex.norm_le_abs_re_add_abs_im z)
+    nlinarith [norm_nonneg z]
+
 lemma t96J02_cut_chart_continuous : Continuous t96J02_cut_chart := by
-  sorry
+  rw [continuous_iff_continuousAt]
+  intro z
+  by_cases hz : z = 0
+  · subst z
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    refine ⟨ε, hε, ?_⟩
+    intro x hx
+    have hx' : ‖x‖ < ε := by simpa only [dist_zero_right] using hx
+    simpa [t96J02_cut_chart, dist_zero_right] using
+      lt_of_le_of_lt (t96J02_cut_chart_continuous_aux_norm_le x) hx'
+  · have hformula : Filter.EventuallyEq (nhds z) t96J02_cut_chart
+        (fun w : ℂ => ((‖w‖ / t96J02_cut_l1 w : ℝ) : ℂ) * w) := by
+      filter_upwards [eventually_ne_nhds hz] with w hw
+      simp [t96J02_cut_chart, hw]
+    have hl : ContinuousAt t96J02_cut_l1 z := by
+      unfold t96J02_cut_l1
+      fun_prop
+    have hln : t96J02_cut_l1 z ≠ 0 := (t96J02_cut_l1_pos hz).ne'
+    have hn : ContinuousAt (fun w : ℂ => ‖w‖) z := continuous_norm.continuousAt
+    have hq : ContinuousAt (fun w : ℂ => ‖w‖ / t96J02_cut_l1 w) z :=
+      hn.div hl hln
+    have hc : ContinuousAt
+        (fun w : ℂ => ((‖w‖ / t96J02_cut_l1 w : ℝ) : ℂ) * w) z :=
+      ((Complex.continuous_ofReal.continuousAt.comp hq).mul continuousAt_id)
+    exact hc.congr_of_eventuallyEq hformula
 
 lemma t96J02_cut_chartInv_continuous : Continuous t96J02_cut_chartInv := by
   rw [continuous_iff_continuousAt]
