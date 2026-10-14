@@ -36117,70 +36117,58 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Prove winding-one conjugacy and based van Kampen surjectivity/kernel; instantiate quotient; apply C1/C2/Main.",
+    "Prove winding-one conjugacy and skeleton-map surjectivity/kernel by based van Kampen; instantiate C1; apply C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
+    [{:name "kleinBottle_pi1_every_basepoint_of_vanKampen_inputs",
       :type
-      "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)",
+      "winding conjugacy plus based van Kampen imply Klein pi1 presentation at every basepoint",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb"
-       "kleinSkeletonAabbQuotientEquiv"],
+      ["kleinPolygonFundamentalGroupEquivPresented_of_vanKampen"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_van_kampen",
       :type "polygon pi1 = PresentedGroup(aabb)",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonFundamentalGroupEquivPresented_of_vanKampen"],
+      ["kleinBottle_pi1_every_basepoint_of_vanKampen_inputs"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses.",
+    "Committed complete C1 every-basepoint assembly conditional on winding conjugacy and based van Kampen.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main", :exit 0}
      {:cmd "registry; placeholder; diff; show --check", :exit 0}
      {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "lean closure",
+    [{:cmd "basepoint geometry probe",
       :exit 1,
       :correction
-      "replaced later local inclusion name with explicit continuous subtype map"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791962372837-11688-124a6eba",
-     :commands
-     ["git show/diff/show --check 922abd5a"
-      "sha256sum fixture; scope; placeholders"
-      "lake env lean recorded closure, fixture, Main"
-      "statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom milestone. Given the explicitly retained winding conjugacy, skeleton-map surjectivity, and van Kampen kernel equality, the equivalence is assembled in the correct direction by inverting the first-isomorphism map, rewriting the quotient subgroup, and applying the skeleton presentation equivalence. Those topological hypotheses remain accurately listed. Scope/hash verified; frozen placeholders 1->1 (support 0); registry 166/166; SLSC unused, mandated by problem.md."},
-    :commit "922abd5ab2afae5570d16d39dffb443a274990d7",
+      "equality is not definitional; retained geometric conjugacy obligation"}],
+    :commit "3cdf3680208f9905327e8b2060a4b248a995830e",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_polygon_quotient_assembly_check.lean",
+    {:path "/tmp/t93j03_c1_vankampen_inputs_check.lean",
      :sha256
-     "99bf556d884aad65acb50e01b211988debca95d422f5a794eef888b7eeb9e681"},
+     "a51785242f9fe34607ae04cdc8c459d9b0cf355380a55a5355be69324756bf8c"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37711,7 +37699,8 @@
     :lemma-kleinpolygonstandardmodelconnector
     :lemma-kleinskeletonaabbquotientequiv
     :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb
-    :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen],
+    :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen
+    :lemma-kleinbottle-pi1-every-basepoint-of-vankampen-inputs],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -38446,6 +38435,26 @@
    :depends-on
    [:lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb
     :lemma-kleinskeletonaabbquotientequiv],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "kleinBottle_pi1_every_basepoint_of_vanKampen_inputs",
+    :type
+    "winding conjugacy plus based van Kampen imply Klein pi1 presentation at every basepoint"},
+   :lemma
+   {:name "kleinBottle_pi1_every_basepoint_of_vanKampen_inputs",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy plus based van Kampen imply Klein pi1 presentation at every basepoint",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-kleinbottle-pi1-every-basepoint-of-vankampen-inputs,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
