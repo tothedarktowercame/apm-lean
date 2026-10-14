@@ -330,7 +330,11 @@ lemma apm_t01A02_evenLift_error_bounded
 two-by-two integer matrix `A`. -/
 lemma apm_t01A02_even_matrix_fixedPoint_det_ne_zero (a b c d : ℤ) :
     ((1 - 2 * a) * (1 - 2 * d) - (-2 * b) * (-2 * c)) ≠ 0 := by
-  sorry
+  intro h
+  have hodd :
+      (1 - 2 * (a + d) + 4 * (a * d - b * c) : ℤ) = 0 := by
+    nlinarith
+  omega
 
 /-- The Euclidean plane used by the two-dimensional Brouwer leaves. -/
 abbrev apm_t01A02_Plane := EuclideanSpace ℝ (Fin 2)
@@ -368,12 +372,163 @@ lemma apm_t01A02_disk_ray_hits_boundary_unique
     (x y : apm_t01A02_Disk) (hxy : x ≠ y) :
     ∃! t : Set.Ici (0 : ℝ),
       ‖(x.1 + t.1 • (x.1 - y.1) : apm_t01A02_Plane)‖ = 1 := by
-  sorry
+  let v : apm_t01A02_Plane := x.1 - y.1
+  let A : ℝ := ‖v‖ ^ 2
+  let B : ℝ := inner ℝ x.1 v
+  let C : ℝ := ‖x.1‖ ^ 2 - 1
+  have hv : v ≠ 0 := by
+    intro hv
+    apply hxy
+    apply Subtype.ext
+    dsimp [v] at hv
+    exact sub_eq_zero.mp hv
+  have hA : 0 < A := by
+    dsimp [A]
+    positivity
+  have hx : ‖x.1‖ ≤ 1 := by
+    simpa only [Metric.mem_closedBall, dist_zero_right] using x.2
+  have hy : ‖y.1‖ ≤ 1 := by
+    simpa only [Metric.mem_closedBall, dist_zero_right] using y.2
+  have hC : C ≤ 0 := by
+    dsimp [C]
+    nlinarith [norm_nonneg x.1]
+  have hquad (t : ℝ) :
+      ‖x.1 + t • v‖ ^ 2 = A * t ^ 2 + 2 * B * t + (C + 1) := by
+    simp only [norm_add_sq_real, real_inner_smul_right,
+      real_inner_self_eq_norm_sq, norm_smul, Real.norm_eq_abs]
+    dsimp [A, B, C]
+    rw [mul_pow, sq_abs]
+    ring
+  have hBbound : A + C ≤ 2 * B := by
+    have hnormy : ‖y.1‖ ^ 2 ≤ 1 := by nlinarith [norm_nonneg y.1]
+    have hvnorm :
+        A = ‖x.1‖ ^ 2 + ‖y.1‖ ^ 2 - 2 * inner ℝ x.1 y.1 := by
+      dsimp [A, v]
+      rw [← real_inner_self_eq_norm_sq]
+      simp only [inner_sub_left, inner_sub_right,
+        real_inner_self_eq_norm_sq, real_inner_comm]
+      ring
+    have hBform : 2 * B =
+        2 * ‖x.1‖ ^ 2 - 2 * inner ℝ x.1 y.1 := by
+      dsimp [B, v]
+      simp only [inner_sub_right, real_inner_self_eq_norm_sq]
+      ring
+    rw [hvnorm, hBform]
+    dsimp [C]
+    linarith
+  let D : ℝ := B ^ 2 - A * C
+  have hD : 0 ≤ D := by
+    dsimp [D]
+    nlinarith [sq_nonneg B]
+  let r : ℝ := (-B + Real.sqrt D) / A
+  have hsqrt : (Real.sqrt D) ^ 2 = D := Real.sq_sqrt hD
+  have hr : 0 ≤ r := by
+    have habs : |B| ≤ Real.sqrt D := by
+      have hDb : B ^ 2 ≤ D := by
+        dsimp [D]
+        nlinarith
+      nlinarith [sq_abs B, abs_nonneg B, Real.sqrt_nonneg D]
+    have : B ≤ Real.sqrt D := le_trans (le_abs_self B) habs
+    apply div_nonneg
+    · linarith
+    · exact hA.le
+  have hrquad : A * r ^ 2 + 2 * B * r + C = 0 := by
+    dsimp [r]
+    field_simp [ne_of_gt hA]
+    dsimp [D] at hsqrt
+    nlinarith [hsqrt]
+  have hrsphere : ‖x.1 + r • v‖ = 1 := by
+    have hs : ‖x.1 + r • v‖ ^ 2 = 1 := by
+      rw [hquad]
+      linarith
+    nlinarith [norm_nonneg (x.1 + r • v)]
+  refine ⟨⟨r, hr⟩, ?_, ?_⟩
+  · simpa [v] using hrsphere
+  · intro s hs
+    apply Subtype.ext
+    have hsquad : A * s.1 ^ 2 + 2 * B * s.1 + C = 0 := by
+      have := hquad s.1
+      rw [show ‖x.1 + s.1 • v‖ = 1 by simpa [v] using hs] at this
+      nlinarith
+    have hfactor : (s.1 - r) * (A * (s.1 + r) + 2 * B) = 0 := by
+      nlinarith [hrquad]
+    rcases mul_eq_zero.mp hfactor with hsr | hsum
+    · linarith
+    · have hprod : C = A * s.1 * r := by
+        nlinarith [hrquad, hsquad]
+      have hCzero : C = 0 := by
+        have hsnonneg : 0 ≤ s.1 := s.2
+        have hp : 0 ≤ A * s.1 * r := mul_nonneg (mul_nonneg hA.le hsnonneg) hr
+        linarith
+      have hBpos : 0 < B := by
+        nlinarith
+      have : 0 < A * (s.1 + r) + 2 * B := by
+        have hsnonneg : 0 ≤ s.1 := s.2
+        positivity
+      exact (this.ne' hsum).elim
 
 /-- Seat (quadratic-formula continuity): for a continuous fixed-point-free
 disk self-map, the boundary point selected by the outward ray varies
 continuously.  Its value is characterized by a nonnegative ray parameter,
 which lets the retraction equation be proved independently. -/
+lemma apm_t01A02_continuous_boundary_hit_of_no_fixedPoint_aux_formula
+    (x y : apm_t01A02_Plane) (hxy : x ≠ y) (hx : ‖x‖ ≤ 1) :
+    let A := ‖x - y‖ ^ 2
+    let B := inner ℝ (x - y) x
+    let C := ‖x‖ ^ 2 - 1
+    let t := (-B + Real.sqrt (B ^ 2 - A * C)) / A
+    0 ≤ t ∧ ‖x + t • (x - y)‖ = 1 := by
+  dsimp
+  have hA : 0 < ‖x - y‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hxy))
+  have hC : ‖x‖ ^ 2 - 1 ≤ 0 := by
+    have := (sq_le_sq₀ (norm_nonneg x) (by norm_num : (0:ℝ) ≤ 1)).mpr hx
+    nlinarith
+  have hdisc : 0 ≤ inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1) := by
+    nlinarith [mul_nonneg hA.le (neg_nonneg.mpr hC)]
+  have hsquare := Real.sq_sqrt hdisc
+  have hsnonneg := Real.sqrt_nonneg
+    (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))
+  have ht : 0 ≤ (-inner ℝ (x - y) x +
+      Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+      ‖x - y‖ ^ 2 := by
+    apply div_nonneg
+    · have habs : |inner ℝ (x - y) x| ≤ Real.sqrt
+          (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1)) := by
+        rw [← sq_le_sq₀ (abs_nonneg _) hsnonneg]
+        rw [sq_abs, hsquare]
+        nlinarith
+      nlinarith [le_trans (neg_le_abs _) habs]
+    · exact hA.le
+  refine ⟨ht, ?_⟩
+  have hquad :
+      ‖x - y‖ ^ 2 * ((-inner ℝ (x - y) x +
+        Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+          ‖x - y‖ ^ 2) ^ 2 +
+      2 * inner ℝ (x - y) x * ((-inner ℝ (x - y) x +
+        Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+          ‖x - y‖ ^ 2) + (‖x‖ ^ 2 - 1) = 0 := by
+    have hmul : ‖x - y‖ ^ 2 *
+        ((-inner ℝ (x - y) x +
+          Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+            ‖x - y‖ ^ 2) =
+        -inner ℝ (x - y) x +
+          Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1)) := by
+      have hn : ‖x - y‖ ≠ 0 := norm_ne_zero_iff.mpr (sub_ne_zero.mpr hxy)
+      field_simp [ne_of_gt hA, hn]
+    nlinarith [hsquare, mul_nonneg hA.le (sq_nonneg
+      ((-inner ℝ (x - y) x +
+        Real.sqrt (inner ℝ (x - y) x ^ 2 - ‖x - y‖ ^ 2 * (‖x‖ ^ 2 - 1))) /
+          ‖x - y‖ ^ 2))]
+  apply (sq_eq_sq₀ (norm_nonneg _) (by norm_num : (0:ℝ) ≤ 1)).mp
+  rw [one_pow]
+  rw [← real_inner_self_eq_norm_sq]
+  simp only [inner_add_left, inner_add_right, real_inner_smul_left,
+    real_inner_smul_right, real_inner_self_eq_norm_sq]
+  simp only [norm_smul, Real.norm_eq_abs]
+  rw [abs_of_nonneg ht]
+  have hi : inner ℝ x (x - y) = inner ℝ (x - y) x := real_inner_comm _ _
+  nlinarith
+
 lemma apm_t01A02_continuous_boundary_hit_of_no_fixedPoint
     (g : C(apm_t01A02_Disk, apm_t01A02_Disk))
     (hfix : ∀ x, g x ≠ x)
@@ -383,7 +538,46 @@ lemma apm_t01A02_continuous_boundary_hit_of_no_fixedPoint
     ∃ r : C(apm_t01A02_Disk, apm_t01A02_DiskBoundary),
       ∀ x, ∃ t : Set.Ici (0 : ℝ),
         (r x).1 = x.1 + t.1 • (x.1 - (g x).1) := by
-  sorry
+  let v : apm_t01A02_Disk → apm_t01A02_Plane := fun x ↦ x.1 - (g x).1
+  let A : apm_t01A02_Disk → ℝ := fun x ↦ ‖v x‖ ^ 2
+  let B : apm_t01A02_Disk → ℝ := fun x ↦ inner ℝ (v x) x.1
+  let C : apm_t01A02_Disk → ℝ := fun x ↦ ‖x.1‖ ^ 2 - 1
+  let t : apm_t01A02_Disk → ℝ := fun x ↦
+    (-B x + Real.sqrt (B x ^ 2 - A x * C x)) / A x
+  have hvcont : Continuous v := continuous_subtype_val.sub
+    (continuous_subtype_val.comp g.continuous)
+  have hAcont : Continuous A := (hvcont.norm.pow 2)
+  have hBcont : Continuous B :=
+    (hvcont.inner continuous_subtype_val)
+  have hCcont : Continuous C := (continuous_subtype_val.norm.pow 2).sub continuous_const
+  have hAne : ∀ x, A x ≠ 0 := by
+    intro x
+    have hvne : v x ≠ 0 := by
+      intro hv
+      apply hfix x
+      apply Subtype.ext
+      dsimp [v] at hv
+      exact sub_eq_zero.mp hv |>.symm
+    exact pow_ne_zero _ (norm_ne_zero_iff.mpr hvne)
+  have htcont : Continuous t := by
+    exact (hBcont.neg.add (((hBcont.pow 2).sub (hAcont.mul hCcont)).sqrt)).div
+      hAcont hAne
+  have htprop : ∀ x, 0 ≤ t x ∧ ‖x.1 + t x • v x‖ = 1 := by
+    intro x
+    apply apm_t01A02_continuous_boundary_hit_of_no_fixedPoint_aux_formula
+    · intro heq
+      exact hfix x (Subtype.ext heq.symm)
+    · rw [← dist_zero_right]
+      exact x.2
+  let r : C(apm_t01A02_Disk, apm_t01A02_DiskBoundary) :=
+    ⟨fun x ↦ ⟨x.1 + t x • v x, by
+        rw [Metric.mem_sphere, dist_zero_right]
+        exact (htprop x).2⟩,
+      by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.add (htcont.smul hvcont)⟩
+  refine ⟨r, fun x ↦ ⟨⟨t x, (htprop x).1⟩, ?_⟩⟩
+  rfl
 
 /-- Seat (boundary sign): an outward ray based at a boundary point of the
 unit disk can return to the unit sphere at a nonnegative time only at time
@@ -395,7 +589,42 @@ lemma apm_t01A02_boundary_ray_parameter_eq_zero
     (t : ℝ) (ht : 0 ≤ t)
     (htsphere : ‖x + t • (x - y)‖ = 1) :
     t = 0 := by
-  sorry
+  have hxy_norm : 0 < ‖x - y‖ ^ 2 := by
+    exact sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hxy))
+  have hinner_xy : inner ℝ x y ≤ 1 := by
+    calc
+      inner ℝ x y ≤ ‖x‖ * ‖y‖ := real_inner_le_norm x y
+      _ ≤ 1 * 1 := mul_le_mul hx.le hy (norm_nonneg y) (by norm_num)
+      _ = 1 := by norm_num
+  have hinner_nonneg : 0 ≤ inner ℝ x (x - y) := by
+    rw [inner_sub_right, real_inner_self_eq_norm_sq, hx]
+    norm_num at *
+    linarith
+  have hsquared :
+      inner ℝ (x + t • (x - y)) (x + t • (x - y)) = inner ℝ x x := by
+    rw [real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq,
+      htsphere, hx]
+  have heq :
+      t * inner ℝ (x - y) x + t * inner ℝ x (x - y) +
+        t ^ 2 * ‖x - y‖ ^ 2 = 0 := by
+    have hnormsmul : ‖t • (x - y)‖ ^ 2 = t ^ 2 * ‖x - y‖ ^ 2 := by
+      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ht]
+      ring
+    simp only [inner_add_left, inner_add_right, real_inner_smul_left,
+      real_inner_smul_right, real_inner_self_eq_norm_sq] at hsquared
+    rw [hnormsmul] at hsquared
+    nlinarith
+  apply le_antisymm ?_ ht
+  by_contra hnot
+  have htpos : 0 < t := lt_of_not_ge hnot
+  have hinner_nonneg' : 0 ≤ inner ℝ (x - y) x := by
+    rwa [real_inner_comm]
+  have hfirst :
+      0 ≤ t * inner ℝ (x - y) x + t * inner ℝ x (x - y) :=
+    add_nonneg (mul_nonneg ht hinner_nonneg') (mul_nonneg ht hinner_nonneg)
+  have hsecond : 0 < t ^ 2 * ‖x - y‖ ^ 2 :=
+    mul_pos (sq_pos_of_pos htpos) hxy_norm
+  linarith
 
 /-- Sorry-free assembly of the ray leaves: a fixed-point-free disk self-map
 would produce a retraction onto the boundary circle. -/
@@ -440,14 +669,25 @@ unit disk is zero. -/
 lemma apm_t01A02_disk_H1_isZero :
     IsZero ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
       (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t01A02_Disk))) := by
-  sorry
+  letI : ContractibleSpace apm_t01A02_Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  exact ConstructionTargets.CoefficientContractiblePair.higher_zero
+    ℤ apm_t01A02_Disk 1 (by norm_num)
 
 /-- Seat (circle homology): integral first singular homology of the boundary
 circle is nonzero. -/
 lemma apm_t01A02_diskBoundary_H1_not_isZero :
     ¬ IsZero ((((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
       (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t01A02_DiskBoundary))) := by
-  sorry
+  intro h
+  have hz : IsZero (ModuleCat.of ℤ ℤ) :=
+    h.of_iso
+      (ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt
+        1 one_pos).symm
+  have hid : 𝟙 (ModuleCat.of ℤ ℤ) = 0 :=
+    (IsZero.iff_id_eq_zero _).mp hz
+  have hone := ConcreteCategory.congr_hom hid (1 : ℤ)
+  norm_num at hone
 
 /-- Seat (homological obstruction): a strict retraction of the disk onto its
 boundary contradicts the two explicit H1 facts.  Both facts are hypotheses,
@@ -463,7 +703,26 @@ lemma apm_t01A02_no_disk_boundary_retraction
       ∀ z : apm_t01A02_DiskBoundary,
         r ⟨z.1, Metric.mem_closedBall.mpr (by
           simpa [dist_zero_right] using z.2.le)⟩ = z := by
-  sorry
+  rintro ⟨r, hr⟩
+  let i : C(apm_t01A02_DiskBoundary, apm_t01A02_Disk) :=
+    ⟨fun z ↦ ⟨z.1, Metric.mem_closedBall.mpr (by
+      simpa [dist_zero_right] using z.2.le)⟩,
+      continuous_subtype_val.subtype_mk _⟩
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  have hi : F.map (TopCat.ofHom i) = 0 := hdisk.eq_of_tgt _ _
+  apply hcircle
+  rw [IsZero.iff_id_eq_zero]
+  have hsplit :
+      F.map (TopCat.ofHom i) ≫ F.map (TopCat.ofHom r) = 𝟙 _ := by
+    rw [← F.map_comp]
+    have hir : TopCat.ofHom i ≫ TopCat.ofHom r =
+        𝟙 (TopCat.of apm_t01A02_DiskBoundary) := by
+      apply ConcreteCategory.hom_ext
+      intro z
+      exact hr z
+    rw [hir, F.map_id]
+  rw [← hsplit, hi, zero_comp]
 
 /-- Two-dimensional Brouwer, assembled from the independent ray and homology
 leaves above. -/
@@ -503,7 +762,9 @@ lemma apm_t01A02_fixedPoint_of_lift_fixedPoint
     (hrep : ∀ x, f (apm_t01A02_torusExp x) = apm_t01A02_torusExp (F x))
     (hfix : ∃ x, F x = x) :
     ∃ x, f x = x := by
-  sorry
+  obtain ⟨x, hx⟩ := hfix
+  refine ⟨apm_t01A02_torusExp x, ?_⟩
+  simpa [hx] using hrep x
 
 /-- The torus fixed-point dichotomy, assembled from the independent lift,
 compactness, parity, planar Brouwer, and descent pieces above. -/
