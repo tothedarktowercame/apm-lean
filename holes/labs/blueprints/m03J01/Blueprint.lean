@@ -1364,7 +1364,28 @@ lemma apm_m03J01_H2_bound_of_hessianOperator_bound {n : ℕ}
         (u : apm_m03J01_H01 n Ω), apm_m03J01_weakSolution F u →
           ∃ H, apm_m03J01_weakHessian u.grad H ∧
             apm_m03J01_H2size u H ≤ C * eLpNorm F 2 volume := by
-  sorry
+  refine ⟨2 + ENNReal.ofReal A, ?_, ?_⟩
+  · exact ENNReal.add_lt_top.mpr ⟨by norm_num, ENNReal.ofReal_lt_top⟩
+  · intro F hF u hu
+    obtain ⟨H, hH, hTH⟩ := hT F hF u hu
+    refine ⟨H, hH, ?_⟩
+    have hnorm : ‖hH.1.toLp H‖ ≤ A * ‖hF.toLp F‖ := by
+      rw [← hTH]
+      exact hbound (hF.toLp F)
+    have hHenorm :
+        eLpNorm H 2 volume ≤ ENNReal.ofReal A * eLpNorm F 2 volume := by
+      rw [← Lp.enorm_toLp hH.1, ← Lp.enorm_toLp hF]
+      have he := ENNReal.ofReal_le_ofReal hnorm
+      rw [ENNReal.ofReal_mul hA] at he
+      simpa only [ofReal_norm_eq_enorm] using he
+    have hH1 := apm_m03J01_weakSolution_H1size_le F hF u hu
+    unfold apm_m03J01_H2size
+    calc
+      eLpNorm u.val 2 volume + eLpNorm u.grad 2 volume + eLpNorm H 2 volume
+          ≤ 2 * eLpNorm F 2 volume +
+              ENNReal.ofReal A * eLpNorm F 2 volume := add_le_add hH1 hHenorm
+      _ = (2 + ENNReal.ofReal A) * eLpNorm F 2 volume := by
+        rw [add_mul]
 
 lemma apm_m03J01_uniform_H2_bound
     (n : ℕ) (Ω : Set (apm_m03J01_E n))
