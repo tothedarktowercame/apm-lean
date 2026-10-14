@@ -36121,65 +36121,61 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Boundary casts/fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Choose dependent path family; fold; reverse kernel/surjectivity; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings [],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionRun_exists_outerRepresentative",
-      :type "equal-class outer path per run",
+    [{:name "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
+      :type
+      "exact consecutive outer-boundary path preserving endpoint-cast run class",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["pathTwoOpenSubdivisionRunBlockPiece_mem_chart_cases"],
+      ["pathTwoOpenSubdivisionRun_exists_outerRepresentative"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
       :depends-on
-      ["pathTwoOpenSubdivisionRun_exists_outerRepresentative"],
+      ["pathTwoOpenSubdivisionRun_exists_outerBoundaryPath"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Chose an outer-range representative for every run; boundary casts/fold remain.",
+    "Packaged every run representative as an exact outer-boundary path; dependent fold remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "fixture; Main; registry; placeholder; diff", :exit 0}
+     {:cmd "lake env lean /tmp/t93j03_outer_boundary_path_check.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder count", :exit 0}
+     {:cmd "git diff --check", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "prototypes",
+    [{:cmd "initial compile",
       :exit 1,
-      :correction "used ambient paths and Fin casts"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792016751914-12556-cb7561f7",
-     :commands
-     ["exact diff-tree scope assertion for 8c4eb4f"
-      "fixture SHA-256 assertion; lake env lean frozen interface"
-      "statement-registry check; placeholder/forbidden recount"],
-     :finding
-     "PASS: 8c4eb4f adds compiled, sorry-free progress after 263f5d47. The frozen type is Fin(runs+1) -> V, and its theorem correctly recovers the matching ambient boundary-list entry after subtype coercion. This is the representation bridge needed to package run representatives; it neither assumes nor claims the remaining based van Kampen result. Scope/hash match; standard axioms only; registry 166/166; Main stays 1->1 placeholder; remaining milestones are listed."},
-    :commit "657c9520bc1295803f113d25d5a087cc5a0a191d",
+      :correction "used literal endpoints and Path record syntax"}],
+    :commit "b87f68fbe2e6b103154e5df3f961105476ac6537",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_run_representative_check.lean",
+    {:path "/tmp/t93j03_outer_boundary_path_check.lean",
      :sha256
-     "61cb3c3db053058b8708fd0c7b9ebbd8def02a9d77c8d1ebe53c6786cf5c1a18"},
+     "aac6a57cab0baa1f9c92578e6c95c0d2e9c7873f970828f5aaad3bf9d16bd2f6"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38852,7 +38848,8 @@
     :lemma-pathtwoopensubdivisionouterrunboundaryfamily-castsucc-eq-runblockpoint-zero
     :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart
     :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases
-    :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative],
+    :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative
+    :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40111,6 +40108,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
+    :type
+    "exact consecutive outer-boundary path preserving endpoint-cast run class"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "exact consecutive outer-boundary path preserving endpoint-cast run class",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrun-exists-outerrepresentative],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
