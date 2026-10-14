@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded fixture hash is malformed/mismatched: ledger has afb497a6df6187f797ce1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196, but the recorded commit blueprint hashes to afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984. Repair fixture provenance. The archived closure otherwise compiles sorry-free with standard axioms; Main retains its one baseline sorry; registry 166/166.",
    :evidence
@@ -119074,54 +119074,43 @@
     :residual
     "Prove chart component-sum and signed-count identities; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated edits preserved"],
     :missing-theorems
-    [{:name
-      "regularFiberLocalizedTopDegreeFormula_of_chartCoefficients",
-      :type "chart localization and signed sum construct top formula",
+    [{:name "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
+      :type
+      "chart component and signed-count calculations imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberSignedSum_eq_of_localizationCoefficients"],
+      ["regularFiberLocalizedTopDegreeFormula_of_chartCoefficients"
+       "regularFiberLocalizedComponentFormula_of_chartCoefficients"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["regularFiberLocalizedTopDegreeFormula_of_chartCoefficients"
-       "regularFiberLocalizedComponentFormula_of_chartCoefficients"],
+      ["topHomologyMap_eq_zero_of_chartCoefficientCalculations"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ff8612ddca1e1fea0ebb4b73cb15da986083b28ebc5c5f1f2cbde05ea4e790b9",
+     "69f7d1d7e6c0838f1378e543e9f4c889263758c7dafcbb62735074a121348a35",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart-coefficient top-degree constructor.",
+    :reason "Banked chart-coefficient H2 assembly.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792014811422-12498-340ec078",
-     :commands
-     ["git diff-tree/show 63c77275"
-      "archive 63c77275; lake env lean closure and Main"
-      "sha256sum/placeholders at 63c77275"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t00J02Closure.lean and correctly constructs the global localized top-degree formula from a chart-coefficient signed count. The transport equality is reversed exactly where needed, yielding topDegree = canonical signed sum, with signs still component-indexed. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; archived files compile with standard axioms; registry 166/166. Chart component-sum/signed-count identities and Main assembly remain listed."},
-    :commit "63c77275209d11d18f575f6d0baf055e57c05a84",
+    :commit "226814c540abd7201eb48331e681fd2d432d273d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119129,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119454,7 +119443,8 @@
     :lemma-componentlocaldegreesum-eq-of-localizationcoefficients
     :lemma-regularfibersignedsum-eq-of-localizationcoefficients
     :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients
-    :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients],
+    :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
+    :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120321,6 +120311,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-regularfibersignedsum-eq-of-localizationcoefficients],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
+    :type
+    "chart component and signed-count calculations imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "chart component and signed-count calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
+    :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
