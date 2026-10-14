@@ -87901,41 +87901,41 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove finite path subdivision/concatenation; derive sign-corrected B7; then B8-B10.",
+    "Prove finite subdivision product, then sign-corrected B7 and B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign",
-      :type "forward edge is explicit winding-one leg",
+    [{:name "finiteWedgeExplicitLegClass_eq_positive_zpow",
+      :type "explicit leg equals normalized leg to orientation unit",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["circleArc_eq_integerLoop_one"],
+      :depends-on
+      ["circleIntegerLoopOneClass_eq_positive_zpow_coordinate"],
       :area "polygon-quotient-homology"}
-     {:name
-      "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign",
-      :type "reverse edge is reversed winding-one leg",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["circleArc_eq_integerLoop_one"],
-      :area "polygon-quotient-homology"}
-     {:name "polygonBoundaryExplicitLoop_eq_signedWord",
-      :type "finite subdivision gives ordered explicit-leg word",
-      :status :partial,
+     {:name "finitePathSubdivision_boundary",
+      :type "boundary circle class is ordered product of edge classes",
+      :status :not-started,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign"
        "polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign"],
+      :area "polygon-quotient-homology"}
+     {:name "radialMV_boundary_eq_orientationSigned",
+      :type "B7 equals sign-corrected attaching map",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["finitePathSubdivision_boundary"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked explicit winding-one formulas for forward and reversed boundary edges.",
+    "Banked explicit wedge-leg class as normalized generator to the orientation unit.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87943,28 +87943,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 34e4a3658", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792015982440-12541-0495d65e",
-     :commands
-     ["git show/diff 34e4a3658; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 34e4a3658 (topo-6) newly changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 25bc9217471c36c1304235bab209a6c02490186dbcd01e34438424470fd3610f matches. Exact blob builds; 0 placeholders; standard axioms; registry 166/0. Pointwise edge formulas preserve the edge-orbit label: positive edges use integerLoop 1 at t, while negative edges use the same loop at reverseIcc t, giving precisely the required path reversal and no extra sign. New compiled progress toward the explicit boundary word; remaining finite subdivision/concatenation, sign-corrected B7, then B8-B10."},
-    :commit "34e4a3658",
+     {:cmd "git show --check 8a9449e5d", :exit 0}],
+    :commit "8a9449e5d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "25bc9217471c36c1304235bab209a6c02490186dbcd01e34438424470fd3610f"},
+     "6bf21b632f5639504ee499ce283ddc1bcf7d79040fa6c894c5898de5f9843004"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -91955,7 +91943,9 @@
     :area "polygon-quotient-homology"},
    :id :lemma-radialmv-boundary-eq-orientationsigned,
    :kind :lemma,
-   :depends-on [:lemma-circlearc-eq-integerloop-one],
+   :depends-on
+   [:lemma-circlearc-eq-integerloop-one
+    :lemma-finitepathsubdivision-boundary],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92058,4 +92048,40 @@
    :lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-not-sign,
    :kind :lemma,
    :depends-on [:lemma-circlearc-eq-integerloop-one],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeExplicitLegClass_eq_positive_zpow",
+    :type "explicit leg equals normalized leg to orientation unit"},
+   :lemma
+   {:name "finiteWedgeExplicitLegClass_eq_positive_zpow",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "explicit leg equals normalized leg to orientation unit",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeexplicitlegclass-eq-positive-zpow,
+   :kind :lemma,
+   :depends-on
+   [:lemma-circleintegerlooponeclass-eq-positive-zpow-coordinate],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finitePathSubdivision_boundary",
+    :type "boundary circle class is ordered product of edge classes"},
+   :lemma
+   {:name "finitePathSubdivision_boundary",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "boundary circle class is ordered product of edge classes",
+    :area "polygon-quotient-homology"},
+   :id :lemma-finitepathsubdivision-boundary,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-sign
+    :lemma-polygonboundarywedgeloop-edgepoint-integerloop-of-not-sign],
    :other-consumers [:t94J09]}]}
