@@ -104,6 +104,20 @@ theorem finite_regularFiber_of_isDiscrete
     (f ⁻¹' {y}).Finite := by
   exact (isClosed_singleton.preimage f.continuous).isCompact.finite hdiscrete
 
+/-- Compact-discrete finiteness transferred from the set-theoretic singleton
+preimage to the literal equality fiber used by the signed-count construction. -/
+@[reducible] noncomputable def regularFiberFintype_of_isDiscrete
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    (f : C(S, S)) (y : S) (hdiscrete : IsDiscrete (f ⁻¹' {y})) :
+    Fintype {x : S // f x = y} := by
+  classical
+  letI : Fintype (f ⁻¹' {y}) :=
+    (finite_regularFiber_of_isDiscrete f y hdiscrete).fintype
+  exact Fintype.ofInjective
+    (fun x : {x : S // f x = y} =>
+      (⟨x, by simp⟩ : f ⁻¹' {y}))
+    (fun _ _ h => Subtype.ext (congrArg Subtype.val h))
+
 /-- The range-sum formulation used by the frozen surface problem gives the
 operational coproduct-surjectivity witness at every incidence point. -/
 theorem transverse_coprodDerivative_surjective
@@ -496,6 +510,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.circleDegree_eq_zero_of_homologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
 #print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
+#print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
