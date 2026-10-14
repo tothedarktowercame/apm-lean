@@ -294,11 +294,24 @@ theorem t95A04_augmented_contDiffAt
     exact e.contDiff.comp (contDiff_const.prodMk contDiff_snd)
   simpa [a] using (hg.fst' (y := (0 : E 4))).add he.contDiffAt
 
+/-- Seat (claude-14): the augmented map is `C^∞` on an open neighbourhood of
+the base point (`veroneseDescended` is smooth everywhere; `writtenInExtChartAt`
+is smooth on the open set `(extChartAt x).target ∩ (extChartAt x).symm ⁻¹'
+(f ⁻¹' (extChartAt (f x)).source)`, boundaryless models). -/
+theorem t95A04_augmented_contDiffOn
+    (x : Space ℝ 2) (e : (E 2 × E 4) ≃L[ℝ] E 6) :
+    ∃ U : Set (E 2 × E 4), IsOpen U ∧ (extChartAt (𝓡 2) x x, 0) ∈ U ∧
+      ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+        (fun z : E 2 × E 4 ↦
+          writtenInExtChartAt (𝓡 2) (𝓡 6) x veroneseDescended z.1 + e (0, z.2)) U := by
+  sorry
+
 /-- Euclidean inverse-function theorem in the exact local form needed by the
 augmented coordinate map. -/
 theorem t95A04_augmented_local_inverse
     (G : (E 2 × E 4) → E 6) (a : E 2 × E 4)
-    (hG : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G a)
+    (U : Set (E 2 × E 4)) (hU : IsOpen U) (haU : a ∈ U)
+    (hG : ContDiffOn ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G U)
     (e : (E 2 × E 4) ≃L[ℝ] E 6)
     (hderiv : HasFDerivAt G (e : (E 2 × E 4) →L[ℝ] E 6) a) :
     ∃ q : PartialDiffeomorph (𝓘(ℝ, E 2 × E 4)) (𝓘(ℝ, E 6))
@@ -345,9 +358,9 @@ theorem t95A04_isImmersion_of_injective_mfderiv
     simpa [g, L, a] using t95A04_writtenInExtChart_hasFDerivAt x
   have hG : HasFDerivAt G (e : (E 2 × E 4) →L[ℝ] E 6) (a, 0) := by
     simpa [G] using t95A04_augmented_hasFDerivAt g a L hg e he
-  have hGsmooth : ContDiffAt ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) G (a, 0) := by
-    simpa [G, g, a] using t95A04_augmented_contDiffAt x e
-  obtain ⟨q, hqa, hqG⟩ := t95A04_augmented_local_inverse G (a, 0) hGsmooth e hG
+  obtain ⟨U, hU, haU, hGsmooth⟩ := t95A04_augmented_contDiffOn x e
+  obtain ⟨q, hqa, hqG⟩ := t95A04_augmented_local_inverse G (a, 0) U hU haU
+    (by simpa [G, g] using hGsmooth) e hG
   exact t95A04_isImmersionAt_of_augmented_local_inverse x e q
     (by simpa [a] using hqa) (by
       intro z hz
