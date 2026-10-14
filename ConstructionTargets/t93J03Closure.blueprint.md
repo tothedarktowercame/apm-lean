@@ -440,9 +440,11 @@ For the remaining finite normalization,
 out of a subspace commutes with the fold, and
 `path_concat_class_eq_outer_of_pieceClass_eq` constructs one outer path from
 any ordered family whose ambient factors are represented by outer paths.
-The next step is to instantiate this fold with the alternating maximal runs
-of a subordinate polygon path, then extract based surjectivity and the reverse
-kernel inclusion.
+`boolSideRunPartition_adjacent_indices` now proves that adjacent maximal runs
+meet at consecutive original piece indices, identifying the exact shared
+subdivision vertex at which the side-change overlap lemma applies.  The next
+step is to package these run-boundary vertices as the endpoint family for the
+outer fold, then extract based surjectivity and the reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

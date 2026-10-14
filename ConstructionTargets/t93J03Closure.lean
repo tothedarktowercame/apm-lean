@@ -857,6 +857,34 @@ theorem boolSideRunPartition_spec {n : ℕ} (side : Fin n → Bool) :
         ∃ ha hb, (side (a.getLast ha) == side (b.head hb)) = false := by
   exact List.splitBy_eq_iff.mp rfl
 
+/-- Adjacent maximal side runs meet at consecutive subdivision-piece
+indices.  This recovers the geometric boundary vertex between two blocks,
+not merely the fact that their Boolean labels differ. -/
+theorem boolSideRunPartition_adjacent_indices {n : ℕ}
+    (side : Fin n → Bool) :
+    (boolSideRunPartition side).IsChain fun a b =>
+      ∀ (ha : a ≠ []) (hb : b ≠ []),
+        (b.head hb).val = (a.getLast ha).val + 1 := by
+  have hfin : (List.finRange n).IsChain fun a b => b.val = a.val + 1 := by
+    rw [List.isChain_iff_getElem]
+    intro i hi
+    simp only [List.length_finRange, List.getElem_finRange]
+    rfl
+  have hflat : (boolSideRunPartition side).flatten.IsChain
+      (fun a b => b.val = a.val + 1) := by
+    rw [← (boolSideRunPartition_spec side).1]
+    exact hfin
+  have hc := (List.isChain_flatten
+    (boolSideRunPartition_spec side).2.1).mp hflat
+  exact hc.2.imp fun a b h ha hb => by
+    have hlast : a.getLast ha ∈ a.getLast? := by
+      rw [List.getLast?_eq_getLast_of_ne_nil ha]
+      simp
+    have hhead : b.head hb ∈ b.head? := by
+      rw [List.head?_eq_some_head hb]
+      simp
+    exact h (a.getLast ha) hlast (b.head hb) hhead
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2366,6 +2394,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms pathTwoOpenSubdivision_transition_mem_overlap
 #print axioms boolSideRunPartition_spec
+#print axioms boolSideRunPartition_adjacent_indices
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice
