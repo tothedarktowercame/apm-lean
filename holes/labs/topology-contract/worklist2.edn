@@ -87943,6 +87943,16 @@
       :exit 1,
       :correction
       "dirty PointWedgeVanKampen line 5041 fails outside scope"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1791979808732-11790-10bef94d",
+     :commands
+     ["git show/diff-tree/commit trailers; sha256sum"
+      "exact commit snapshot: lake -Kjobs=1 build PolygonSurfaceHomology"
+      "#print axioms; placeholder scan; statement-registry.py check"],
+     :finding
+     "PASS: independent review of topo-6 commit a720d9d62; direct scope only PolygonSurfaceHomology.lean, exact blob SHA256 5051fc93b42590bf23890b59c1c1897beee4b42b1f6693a6b06868b523e4469b. Exact recorded snapshot plus updated van Kampen dependency build serially; new theorems use only propext, Classical.choice, Quot.sound; placeholders 0; registry 166/0. New progress after 4b0d0491e proves outerRight=inr(b). Given the connector square, right projection of rightBase=outerRight*inl(a) is 1, hence b=1; thus outerRight=inr(1)=inl(1), yielding rightBase in the old factor. Together with the prior forward implication this gives an exact iff. Factor order and left/right coproduct embeddings are correct; the proof does not use the invalid kernel converse for arbitrary words. Remaining milestone: prove the specialized connector square, then apply leg-word extraction."},
     :commit "73b6e7834",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87961,7 @@
      "99fbfe8dcb25442aa2f8d6690a28e0975236626a0a33368c987ff58e54f9fac5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87981,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact equivalence of right-base membership and connector square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transport reduction; full build blocked by an out-of-scope dirty dependency.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88092,7 +88102,11 @@
     {:job 4,
      :commit "a720d9d62",
      :reason
-     "Banked exact equivalence of right-base membership and connector square."}]}
+     "Banked exact equivalence of right-base membership and connector square."}
+    {:job 5,
+     :commit "73b6e7834",
+     :reason
+     "Banked transport reduction; full build blocked by an out-of-scope dirty dependency."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -90021,7 +90035,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finiteWedgeRightBaseInOldFactor_iff_connectorTransport",
@@ -90032,7 +90046,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "right-base inl membership iff installed endpoint transport",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "73b6e7834"},
    :id :lemma-finitewedgerightbaseinoldfactor-iff-connectortransport,
    :kind :lemma,
    :depends-on
