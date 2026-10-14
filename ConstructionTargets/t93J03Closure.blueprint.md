@@ -270,6 +270,10 @@ them to reindex the original pieces as an exact dependent path family.
 `pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement` sends such a
 nonempty inner block with overlap endpoints to one equal overlap path routed
 through the outer piece.  Only reassembly across the run list remains.
+`path_concat_exists_subtype_path` lifts a set-valued finite concatenation to
+its subtype, and `pathTwoOpenSubdivisionOuterBlock_exists_outerPath` applies
+it to each unchanged packaged outer run.  Thus both run kinds now yield one
+outer-piece path before finite reassembly.
 It remains to transport the overlap image through the outer-piece coordinates
 and take its normal closure.
 The outer-to-skeleton equivalence is now restricted at the literal overlap

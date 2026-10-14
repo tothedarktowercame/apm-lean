@@ -1017,6 +1017,32 @@ theorem path_concat_mem_of_piece_mem
           (fun k u => hF k.castSucc u) s
       · exact hs ▸ hF (Fin.last (n + 1)) s
 
+/-- A finite concatenation whose factors stay in a set is literally the
+ambient image of a path in that subtype. -/
+theorem path_concat_exists_subtype_path
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hF : ∀ k t, F k t ∈ U) :
+    ∃ q : Path
+        (⟨point 0, by
+          rw [← (Path.concat point F).source]
+          exact path_concat_mem_of_piece_mem point F hF 0⟩ : U)
+        (⟨point (Fin.last (n + 1)), by
+          rw [← (Path.concat point F).target]
+          exact path_concat_mem_of_piece_mem point F hF 1⟩ : U),
+      q.map continuous_subtype_val = Path.concat point F := by
+  let hp := path_concat_mem_of_piece_mem point F hF
+  let q : Path
+      (⟨point 0, by rw [← (Path.concat point F).source]; exact hp 0⟩ : U)
+      (⟨point (Fin.last (n + 1)), by
+        rw [← (Path.concat point F).target]; exact hp 1⟩ : U) :=
+    { toFun := fun t => ⟨Path.concat point F t, hp t⟩
+      continuous_toFun := (Path.concat point F).continuous.subtype_mk _
+      source' := Subtype.ext (Path.concat point F).source
+      target' := Subtype.ext (Path.concat point F).target }
+  exact ⟨q, rfl⟩
+
 /-- A pointwise replacement of the pieces of a subordinate subdivision
 reconstructs the class of its original path.  This combines the subdivision's
 endpoint casts with the generic dependent finite-fold lemma. -/
@@ -1297,6 +1323,36 @@ theorem pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
   exact kleinPolygonInnerBlock_exists_outerOverlapReplacement
     (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
     (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) hx hy hF
+
+/-- An unchanged packaged outer block is literally the ambient image of one
+path in the outer radial piece. -/
+theorem pathTwoOpenSubdivisionOuterBlock_exists_outerPath
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (start n : ℕ) (h : start + (n + 1) ≤ S.n + 1)
+    (hF : ∀ k t,
+      pathTwoOpenSubdivisionBlockPiece S start (n + 1) h k t ∈
+        (openCover kleinPairingData).outer) :
+    ∃ q : Path
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0, by
+          rw [← (Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+            (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h)).source]
+          exact path_concat_mem_of_piece_mem _ _ hF 0⟩ :
+          {z // z ∈ (openCover kleinPairingData).outer})
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+            (Fin.last (n + 1)), by
+          rw [← (Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+            (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h)).target]
+          exact path_concat_mem_of_piece_mem _ _ hF 1⟩ :
+          {z // z ∈ (openCover kleinPairingData).outer}),
+      q.map kleinPolygonOuterToSpace.continuous =
+        Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+          (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) := by
+  simpa [kleinPolygonOuterToSpace] using
+    (path_concat_exists_subtype_path
+      (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+      (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) hF)
 
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
@@ -2265,6 +2321,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInnerSideRun_piece_mem
 #print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
 #print axioms path_concat_mem_of_piece_mem
+#print axioms path_concat_exists_subtype_path
 #print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
@@ -2275,6 +2332,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonInnerRun_exists_outerOverlapReplacement
 #print axioms kleinPolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
+#print axioms pathTwoOpenSubdivisionOuterBlock_exists_outerPath
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
