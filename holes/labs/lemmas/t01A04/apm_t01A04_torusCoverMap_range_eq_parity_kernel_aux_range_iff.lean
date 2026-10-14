@@ -756,6 +756,29 @@ Copy `apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff`; note
 `apm_t01a04_torusCoverMap_base` is proved by `simp`, not `rfl`, so the `▸` cast
 must be eliminated explicitly (the circle version's `rfl` steps fail here). -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff_aux
+    {E X : Type*} [TopologicalSpace E] [TopologicalSpace X]
+    (f : C(E, X)) (e : E) (x : X) (p : f e = x)
+    (hcov : IsCoveringMap f) (γ : FundamentalGroup X x) :
+    γ ∈ MonoidHom.range (p ▸ FundamentalGroup.map f e) ↔
+      hcov.monodromy γ (⟨e, p⟩ : f ⁻¹' {x}) = (⟨e, p⟩ : f ⁻¹' {x}) := by
+  subst x
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact hcov.monodromy_map (FundamentalGroup.toPath a)
+  · intro hγ
+    obtain ⟨γ⟩ := γ
+    let lift := hcov.liftPath γ e (by simp)
+    have hend : lift 1 = e := by
+      simpa [IsCoveringMap.monodromy, lift] using congrArg Subtype.val hγ
+    let δ : Path e e := ⟨lift, hcov.liftPath_zero _ _ _, hend⟩
+    refine ⟨Path.Homotopic.Quotient.mk δ, ?_⟩
+    change (Path.Homotopic.Quotient.mk δ).map f = Path.Homotopic.Quotient.mk γ
+    rw [← Path.Homotopic.Quotient.mk_map]
+    congr 1
+    ext t
+    exact congrFun (hcov.liftPath_lifts γ e (by simp)) t
+
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff
     (hcov : IsCoveringMap apm_t01a04_torusCoverMap) (γ : apm_t01a04_piOne) :
     γ ∈ MonoidHom.range
@@ -766,7 +789,9 @@ theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff
         (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff_aux
+    apm_t01a04_torusCoverMap apm_t01a04_torusCoverBase
+      apm_t01a04_basepoint apm_t01a04_torusCoverMap_base hcov γ
 -- END SEAT AREA
 
 /-- The base fiber has two points, so monodromy is a parity character: it is
