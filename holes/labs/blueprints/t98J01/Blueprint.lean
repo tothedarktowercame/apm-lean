@@ -46,10 +46,76 @@ theorem t98J01_sphere_homology_finiteDimensional :
   sorry
 
 /-- Seat: rational homology of the printed two-sphere vanishes above degree 2. -/
+theorem t98J01_sphere_homology_vanishes_above_two_aux_standard
+    (k : ℕ) (hk : 2 < k) :
+    CategoryTheory.Limits.IsZero
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 3) k) := by
+  let e₂ : ConstructionTargets.RationalLefschetz.Homology
+      (T02A06.euclideanUnitSphere 3) k ≅
+      ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) (k - 1) := by
+    simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+      (ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 2 (k - 1) (by omega))
+  let e₁ : ConstructionTargets.RationalLefschetz.Homology
+      (T02A06.euclideanUnitSphere 2) (k - 1) ≅
+      ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 1) (k - 2) := by
+    have hdeg : k - 2 + 1 = k - 1 := by omega
+    simpa only [hdeg] using
+      (ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k - 2) (by omega))
+  have hzero := ConstructionTargets.SphereZeroCoefficients.positive_vanishing
+    ℚ (k - 2) (by omega)
+  exact (hzero.of_iso e₁).of_iso e₂
+
+noncomputable def t98J01_sphere_homology_vanishes_above_two_aux_homeomorph :
+    T98J01.S2 ≃ₜ T02A06.euclideanUnitSphere 3 where
+  toFun p := ⟨WithLp.toLp 2 ![p.1.1, p.1.2.1, p.1.2.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+      Fin.sum_univ_three]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
+      Matrix.tail_cons, WithLp.ofLp_toLp]
+    rw [show ‖p.1.1‖ ^ 2 + ‖p.1.2.1‖ ^ 2 + ‖p.1.2.2‖ ^ 2 = 1 by
+      simpa [Real.norm_eq_abs, sq_abs, add_assoc] using p.2]
+    norm_num⟩
+  invFun p := ⟨(p.1 0, p.1 1, p.1 2), by
+    have hp : ‖p.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using p.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_three] at hp
+    have hs : 0 ≤ ‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2 + ‖p.1 2‖ ^ 2 := by positivity
+    have hh : (Real.sqrt (‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2 + ‖p.1 2‖ ^ 2)) ^ 2 = 1 := by
+      rw [hp]
+      norm_num
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hh⟩
+  left_inv p := by
+    apply Subtype.ext
+    rfl
+  right_inv p := by
+    apply Subtype.ext
+    ext i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
 theorem t98J01_sphere_homology_vanishes_above_two :
     ∀ k, 2 < k → Subsingleton
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k) := by
-  sorry
+  intro k hk
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)
+  let e : TopCat.of T98J01.S2 ≅ TopCat.of (T02A06.euclideanUnitSphere 3) :=
+    TopCat.isoOfHomeo t98J01_sphere_homology_vanishes_above_two_aux_homeomorph
+  exact ModuleCat.isZero_iff_subsingleton.mp
+    ((t98J01_sphere_homology_vanishes_above_two_aux_standard k hk).of_iso
+      (F.mapIso e))
 
 /-- Seat: the half-turn has trace `1` on rational `H₀(S²)`. -/
 theorem t98J01_rotation_trace_zero :
