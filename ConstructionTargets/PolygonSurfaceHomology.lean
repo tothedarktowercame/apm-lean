@@ -1420,6 +1420,46 @@ theorem finiteWedgeFinSuccHomeomorphPointWedge_last (n : ℕ) (z : Circle) :
     finSuccEquivSumUnit_last]
   rfl
 
+/-- A wedge with a unique label is just its single circle.  This is the
+geometric base case for the successor-point-wedge induction. -/
+noncomputable def finiteWedgeSubsingletonHomeomorphCircle
+    {L : Type} [Subsingleton L] (l : L) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L ≃ₜ Circle := by
+  classical
+  exact
+    { toFun := finiteWedgeCollapse l
+      invFun := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l
+      left_inv := by
+        intro x
+        refine Quotient.inductionOn x ?_
+        rintro ⟨k, z⟩
+        have hk : k = l := Subsingleton.elim _ _
+        subst k
+        change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l
+            (finiteWedgeCollapse l
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z)) = _
+        rw [finiteWedgeCollapse_wedgeCircle_self]
+        rfl
+      right_inv := fun z => finiteWedgeCollapse_wedgeCircle_self l z
+      continuous_toFun := continuous_finiteWedgeCollapse l
+      continuous_invFun :=
+        PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l }
+
+@[simp]
+theorem finiteWedgeSubsingletonHomeomorphCircle_wedgeCircle
+    {L : Type} [Subsingleton L] (l k : L) (z : Circle) :
+    finiteWedgeSubsingletonHomeomorphCircle l
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k z) = z := by
+  classical
+  have hk : k = l := Subsingleton.elim _ _
+  subst k
+  exact finiteWedgeCollapse_wedgeCircle_self l z
+
+/-- The one-circle finite wedge in the standard finite-coordinate family. -/
+noncomputable def finiteWedgeFinOneHomeomorphCircle :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1) ≃ₜ Circle :=
+  finiteWedgeSubsingletonHomeomorphCircle 0
+
 /-! ### Algebraic word extraction from a point-wedge computation -/
 
 /-- Evaluate a word whose letters come from the two factors of a coproduct. -/
