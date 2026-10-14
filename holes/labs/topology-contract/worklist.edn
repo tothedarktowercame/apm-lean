@@ -119109,6 +119109,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792018652521-12611-3f3c4244",
+     :commands
+     ["git diff-tree/show eccdf019"
+      "archive eccdf019; lake env lean closure and Main"
+      "sha256sum/placeholders at eccdf019"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free integrated witness carrying one circle value, its literal finite fiber instance, and canonical calculations at that same value. The theorem reinstalls exactly that Fintype and invokes the lift-free H2 endpoint; dependent value/fiber representations align and no equality is reversed. Fixture and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Constructing the witness from smooth transversality and Main assembly remain listed."},
     :commit "eccdf019ab9cae2cf7435c7d56da7cbe0d8ae612",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical finite-regrouping endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked integrated canonical regular-fiber witness.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119272,7 +119283,10 @@
      :reason "Banked canonical geometric payload."}
     {:job 6,
      :commit "317c855c567bed9d1b46e74cd7ca80b273a585dc",
-     :reason "Banked canonical finite-regrouping endpoint."}]}
+     :reason "Banked canonical finite-regrouping endpoint."}
+    {:job 7,
+     :commit "eccdf019ab9cae2cf7435c7d56da7cbe0d8ae612",
+     :reason "Banked integrated canonical regular-fiber witness."}]}
   {:consumer :t98A06,
    :stop-count 4,
    :evidence
@@ -120551,7 +120565,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "CanonicalRegularFiberWitness.topHomologyMap_eq_zero",
@@ -120563,7 +120577,9 @@
     :type
     "finite circle fiber with canonical calculations implies H2 zero",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "eccdf019ab9cae2cf7435c7d56da7cbe0d8ae612"},
    :id :lemma-canonicalregularfiberwitness-tophomologymap-eq-zero,
    :kind :lemma,
    :depends-on
