@@ -118976,65 +118976,57 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Implement local-fundamental-class stage; then signed-count stages and consumer assembly.",
+    "Implement regular-value signed count, component counts, circle degree, assembly.",
     :outcome :stop,
     :warnings
-    ["existing fixture/Main sorryAx"
-     "unrelated dirty t93J03 files preserved"],
+    ["existing Main sorryAx" "unrelated t93J03 edits preserved"],
     :missing-theorems
-    [{:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
-      :type
-      "transverse disk-bounded preimage implies induced H₂ map is zero",
-      :status :not-started,
+    [{:name "surfaceTopHomology_localFundamentalClassIso",
+      :type "H2 coordinate with local coefficients",
+      :status :proved,
+      :consumers [:t00J02 :t98A02],
+      :depends-on [],
+      :area "oriented-surface-degree"}
+     {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+      :type "disk-bounded preimage implies H2 map zero",
+      :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["surfaceTopHomology_localFundamentalClassIso"
-       "regularValue_topHomologyMap_signedCount"
+      ["regularValue_topHomologyMap_signedCount"
        "transverseCircle_preimage_component_signedCount"
        "circleDegree_eq_homologyMap"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
-     :documentation
-     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
+     :implementation
+     "e4eb00561a840321f95c935b0dc3cb9a83929996378e7627ede9e8a6ff489b49",
      :registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason "Blueprint written.",
+    :reason "Banked local fundamental-class coordinates.",
     :commands
-    [{:cmd "diff audited/target blueprint", :exit 0}
-     {:cmd "lake env lean holes/labs/blueprints/t00J02/Blueprint.lean",
+    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256/diff-tree/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791931210822-10748-9c7865c4",
-     :commands
-     ["git show/diff-tree 7d9f683de"
-      "git archive 7d9f683de; lake env lean archived Blueprint.lean and Main.lean"
-      "sha256sum; placeholder delta; statement-registry.py check"],
-     :finding
-     "Recorded commit adds only the blueprint; fixture/Main hashes match afb497a6/0b3b4888, Main placeholders stay 1->1, registry 166/166. Archived Blueprint and Main compile; sole sorryAx is the declared library boundary. Mathematics is sound: transverse preimage components are circles; disk fillings kill their H1 classes; nonzero Circle H1 map is mono into H1(S)=Z^4; signed local degrees therefore vanish, forcing H2(f)=0, and the frozen degree adapter yields degree=0. All final hypotheses feed the library lemma or adapter; Producer is correctly excluded. This is a valid initial blueprint milestone."},
-    :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
-    :changed-paths ["ConstructionTargets/t00J02Closure.blueprint.md"],
+     {:cmd "sha256/diff/placeholders", :exit 0}],
+    :commit "b389f11d593ba185db398a8b0e85d00e8eec18ed",
+    :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
      :sha256
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119147,18 +119139,23 @@
     :lemma-transversecircle-preimage-component-signedcount
     :lemma-circledegree-eq-homologymap],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t00J02,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "surfaceTopHomology_localFundamentalClassIso"},
+   :acceptance
+   {:lemma "surfaceTopHomology_localFundamentalClassIso",
+    :type "H2 coordinate with local coefficients"},
    :lemma
    {:name "surfaceTopHomology_localFundamentalClassIso",
-    :reported-by []},
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "H2 coordinate with local coefficients",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
    :id :lemma-surfacetophomology-localfundamentalclassiso,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}
+   :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
    :state :backlog,
