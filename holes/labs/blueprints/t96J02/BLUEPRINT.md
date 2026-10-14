@@ -82,27 +82,85 @@ whole conclusion as `h₀` and does not refer to that theorem.
 path connected as a continuous quotient of the plane, so there is no empty
 or disconnected-component edge case.
 
-### `t96J02_kleinPlaneQuotient_homeomorph`
+### Klein quotient comparison (split into four leaves)
 
-**Statement.** The affine-action orbit quotient is homeomorphic to the
-repository's frozen `KleinBottle` type.
+The previously suggested carrier-level square-to-disk homeomorphism is
+**impossible** for the frozen model.  In `SurfaceRel false 2` the paired disk
+arcs `(0,1)` and `(2,3)` are adjacent in cyclic order, whereas the square
+action pairs opposite edges.  The sorry-free theorems
+`KleinDiskClosedSquareCompatibleCarrier.no_carrier_with_required_boundary_formulas`
+and
+`KleinDiskClosedSquareRelationCompatibleCarrier.no_cyclic_relation_compatible_component_equiv`
+formalize the obstruction.  The required map must therefore be a polygon
+cut-and-paste map on quotient spaces, not a radial carrier homeomorphism.
 
-**Proof route / library names.** Compose the identity comparison between the
-Mathlib action-orbit quotient and
-`KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient`, the banked closed-square
-orbit homeomorphism (`KleinClosedSquareOrbitInverseContinuity`), the exact
-edge-relation comparison (`KleinSquareEqvGenCasesIff`), and
-`nonorientableStandardSpaceHomeomorph 2`.  The corresponding components are
-spelled out in `ConstructionTargets/t93J03Closure.lean` as
-`planeOrbitRelHomeomorph`, `closedSquareOrbitHomeomorph`,
-`closedSquareEdgeOrbitHomeomorph`, and `kleinPairingSpaceHomeomorph`.
+#### `t96J02_kleinPlaneOrbitQuotient_t2`
 
-**Estimate.** 80–150 lines, mostly quotient adapters. **Independent.** This is
-the sole geometric comparison leaf; it contains no fundamental-group result.
+**Statement.** The explicit plane-orbit quotient is Hausdorff.
 
-**Truth check.** All maps descend the identity on plane/square
-representatives.  Thus boundary vertices and edges are compared using the
-generated relation, including corners, rather than only interior points.
+**Proof route / Mathlib names.** Prove the orbit equivalence relation is
+closed, using the local finiteness/proper discontinuity estimates already
+proved above (or integer-coordinate separation), then use the quotient
+Hausdorff criterion (`isClosed_orbitRel` / `Quotient.t2Space` APIs; search the
+current Mathlib revision for `IsClosed` plus `T2Space (Quotient ...)`).  With
+this instance,
+`KleinClosedSquareOrbitInverseContinuity.closedSquareOrbitQuotientEquiv_continuous_symm_of_t2`
+supplies inverse continuity.
+
+**Estimate.** 50–100 lines. **Independent.** Degenerate boundary and corner
+orbits are included because closedness is proved for the full plane relation.
+
+#### `t96J02_kleinSquare_orbit_iff_eqvGen`
+
+**Statement.** On the closed square, `closedSquareOrbitSetoid.r` is exactly
+`EqvGen T96J02ClosedSquareRel`.
+
+**Proof route / Mathlib names.** Unfold the two relations and combine
+`KleinPlaneActionSquareOrbitClassification.sameOrbit_iff_cases` with
+`KleinSquareEqvGenCasesIff.eqvGen_iff_cases`; the subtype bounds supply both
+`InSquare` hypotheses.
+
+**Estimate.** 15–30 lines. **Independent.** `EqvGen` handles corners and both
+directions of the generating edge relation, avoiding an endpoint exception.
+
+#### `t96J02_kleinClosedSquareOrbit_homeomorph_squarePolygon`
+
+**Statement.** Given the preceding relation equality explicitly, the two
+coinduced quotients of the same closed square are homeomorphic.
+
+**Proof route / Mathlib names.** Define both directions by `Quotient.lift` of
+the identity, discharge well-definedness with `hrel`, prove inverse laws by
+`Quotient.inductionOn`, and prove continuity with
+`Continuous.quotient_lift` and `continuous_coinduced_rng`.
+
+**Estimate.** 35–60 lines. **Independent:** relation equality is a hypothesis.
+The empty-carrier case would also work; here the square is visibly nonempty.
+
+#### `t96J02_kleinSquarePolygonQuotient_homeomorph_diskPolygon` — LIBRARY
+
+**Statement.** The quotient of the square by its opposite-edge Klein pairing
+is homeomorphic to the frozen disk quotient `KleinBottle` (`aabb`).
+
+**Required foundation.** This needs an explicit quotient-level polygon move:
+cut the square quotient along a suitable diagonal/arc and reglue to the disk
+`aabb` presentation, or invoke a proved polygon-word equivalence theorem.
+No such theorem was found in the imported sorry-free modules.  A carrier
+homeomorphism cannot prove it, by the obstruction above.  Useful quotient
+tools after constructing the piecewise map are `Quotient.lift`,
+`Continuous.quotient_lift`, the pasting lemma (`Continuous.if` or
+`IsClosed.continuousOn_iff`), and compact-to-T2 inverse continuity.
+
+**Estimate.** 200–400 lines, or 20–40 lines once a general polygon-move
+library exists. **Independent.** This is the one deliberately retained
+LIBRARY boundary.  Endpoint formulas must be checked in `EqvGen`, since all
+four vertices collapse and raw generator relations are not symmetric.
+
+#### `t96J02_kleinPlaneQuotient_homeomorph` (assembly, proved)
+
+Compose the already-proved action-orbit identity adapter, the banked
+closed-square fundamental-domain equivalence (using the T2 leaf), the
+relation quotient adapter, and the quotient-level polygon move.  This theorem
+itself is sorry-free.
 
 ### `t96J02_pi1_every_basepoint_of_homeomorph`
 
