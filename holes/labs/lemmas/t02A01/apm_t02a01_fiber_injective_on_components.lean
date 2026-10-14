@@ -271,7 +271,37 @@ theorem apm_t02a01_fiber_injective_on_components
       hq.monodromy γ ⟨x, rfl⟩ = ⟨x, rfl⟩) :
     Function.Injective
       (fun x : q ⁻¹' {q e} => (x.1 : ConnectedComponents E)) := by
-  sorry
+  intro x y hxy
+  letI : LocPathConnectedSpace E := by
+    refine ⟨fun z => ?_⟩
+    rw [Filter.hasBasis_self]
+    intro t ht
+    obtain ⟨f, hzf, hf⟩ := hq.isLocalHomeomorph z
+    letI : LocPathConnectedSpace f.target := f.open_target.locPathConnectedSpace
+    letI : LocPathConnectedSpace f.source :=
+      f.toHomeomorphSourceTarget.symm.isQuotientMap.locPathConnectedSpace
+    have ht' : Subtype.val ⁻¹' t ∈ nhds (⟨z, hzf⟩ : f.source) :=
+      continuous_subtype_val.continuousAt ht
+    obtain ⟨v, ⟨hvn, hvpath⟩, hvt⟩ :=
+      (path_connected_basis (⟨z, hzf⟩ : f.source)).mem_iff.mp ht'
+    refine ⟨Subtype.val '' v, ?_, hvpath.image continuous_subtype_val, ?_⟩
+    · exact f.open_source.isOpenEmbedding_subtypeVal.isOpenMap.image_mem_nhds hvn
+    · exact image_subset_iff.mpr hvt
+  have hcomponents : connectedComponent x.1 = connectedComponent y.1 :=
+    ConnectedComponents.coe_eq_coe.mp hxy
+  obtain ⟨δ⟩ := (connectedComponent_eq_iff_joined x.1 y.1).mp hcomponents
+  have hbase : q y.1 = q x.1 := by
+    exact y.2.trans x.2.symm
+  let γ : FundamentalGroup B (q x.1) :=
+    ((Path.Homotopic.Quotient.mk δ).map ⟨q, hq.continuous⟩).cast rfl hbase.symm
+  have hmon := hmono x.1 γ
+  have hmap := hq.monodromy_map (Path.Homotopic.Quotient.mk δ)
+  apply Subtype.ext
+  have hendpoint :
+      (hq.monodromy γ ⟨x.1, rfl⟩).1 = y.1 := by
+    simpa [γ, IsCoveringMap.monodromy, Path.Homotopic.Quotient.cast] using
+      congrArg Subtype.val hmap
+  exact (congrArg Subtype.val hmon).symm.trans hendpoint
 -- END SEAT AREA
 
 /-- LIBRARY (covering monodromy): a path-connected base with trivial
