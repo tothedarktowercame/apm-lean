@@ -330,11 +330,206 @@ theorem apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torus
 the squaring map `Circle → Circle` restricted to an arc avoiding `1`, which is
 evenly covered by arcs around the two square roots of `z`; neither root is
 `±1` (the glued sheet points), so these arcs can be chosen to miss them. -/
+def apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw :
+    Sum (Fin 2 × apm_t01a04_Torus) Circle → Circle
+  | .inl q => apm_t01a04_sheetPoint q.1
+  | .inr w => w
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw_respects
+    {u v : Sum (Fin 2 × apm_t01a04_Torus) Circle}
+    (h : Relation.EqvGen apm_t01a04_circleCoverRel u v) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw u =
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction :
+    apm_t01a04_CircleCover → Circle :=
+  Quotient.lift
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw
+    (fun _ _ h =>
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw_respects h)
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_base_continuous :
+    Continuous apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨continuous_const, continuous_id⟩
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_total_continuous :
+    Continuous
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · exact
+      (continuous_of_discreteTopology : Continuous apm_t01a04_sheetPoint).comp
+        continuous_fst
+  · exact continuous_id
+
+@[simp] lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_total_inr
+    (w : Circle) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction
+      (Quotient.mk _ (Sum.inr w)) = w := rfl
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_square
+    (e : apm_t01a04_CircleCover) :
+    (apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction
+      (apm_t01a04_circleCoverMap e)) =
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction e ^ 2 := by
+  refine Quotient.inductionOn e ?_
+  rintro (q | w)
+  · simp [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction,
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw]
+  · rfl
+
 theorem apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle
     (z : Circle) (hz : z ≠ 1) :
     IsEvenlyCovered apm_t01a04_circleCoverMap (Quotient.mk _ (Sum.inr z))
       (apm_t01a04_circleCoverMap ⁻¹' {Quotient.mk _ (Sum.inr z)}) := by
-  sorry
+  letI : NeZero (2 : ℕ) := ⟨by norm_num⟩
+  have hc := IsQuotientCoveringMap.isCoveringMap _ _
+    (Circle.isQuotientCoveringMap_npow 2) z
+  rcases hc with ⟨hd, U, hzU, hU, hpU, H, hH⟩
+  let V : Set Circle := U \ {1}
+  have hzV : z ∈ V := ⟨hzU, hz⟩
+  have hV : IsOpen V := hU.sdiff isClosed_singleton
+  let UX : Set apm_t01a04_X :=
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction ⁻¹' V
+  have hUX : IsOpen UX := hV.preimage
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_base_continuous
+  have hzUX : (Quotient.mk _ (Sum.inr z) : apm_t01a04_X) ∈ UX := hzV
+  let W : Set Circle := (fun w : Circle ↦ w ^ 2) ⁻¹' V
+  have hW : IsOpen W := hV.preimage (by fun_prop)
+  have hpre : apm_t01a04_circleCoverMap ⁻¹' UX =
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction ⁻¹' W := by
+    ext e
+    change
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction
+          (apm_t01a04_circleCoverMap e) ∈ V ↔
+        apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction e ^ 2 ∈ V
+    rw [apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_square]
+  have hopenpre : IsOpen (apm_t01a04_circleCoverMap ⁻¹' UX) := by
+    rw [hpre]
+    exact hW.preimage
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_total_continuous
+  have himage (e : apm_t01a04_CircleCover)
+      (he : e ∈ apm_t01a04_circleCoverMap ⁻¹' UX) :
+      apm_t01a04_circleCoverMap e = Quotient.mk _ (Sum.inr
+        (apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction e ^ 2)) := by
+    refine Quotient.inductionOn e ?_ he
+    rintro (q | w) he
+    · exfalso
+      change (1 : Circle) ∈ V at he
+      exact he.2 rfl
+    · rfl
+  let I := (fun w : Circle ↦ w ^ 2) ⁻¹' {z}
+  have hWV : W ⊆ (fun w : Circle ↦ w ^ 2) ⁻¹' U := fun w hw => hw.1
+  let HW : W ≃ₜ V × I :=
+    { toFun := fun w =>
+        let y := H ⟨w.1, hWV w.2⟩
+        (⟨y.1.1, ⟨y.1.2, by
+          rw [hH ⟨w.1, hWV w.2⟩]
+          exact w.2.2⟩⟩, y.2)
+      invFun := fun y =>
+        ⟨(H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1, by
+          constructor
+          · have hh := hH (H.symm (⟨y.1.1, y.1.2.1⟩, y.2))
+            have hh' : (H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1 ^ 2 = y.1.1 := by
+              simpa using hh.symm
+            change (H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1 ^ 2 ∈ U
+            rw [hh']
+            exact y.1.2.1
+          · have hh := hH (H.symm (⟨y.1.1, y.1.2.1⟩, y.2))
+            have hh' : (H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1 ^ 2 = y.1.1 := by
+              simpa using hh.symm
+            change (H.symm (⟨y.1.1, y.1.2.1⟩, y.2)).1 ^ 2 ≠ 1
+            rw [hh']
+            exact y.1.2.2⟩
+      left_inv := by intro w; apply Subtype.ext; simp
+      right_inv := by intro y; ext <;> simp
+      continuous_toFun := by
+        apply Continuous.prodMk
+        · apply Continuous.subtype_mk
+          simpa only [Function.comp_apply] using
+            (continuous_subtype_val.comp continuous_fst).comp (H.continuous.comp
+              (Continuous.subtype_mk continuous_subtype_val _))
+        · exact continuous_snd.comp (H.continuous.comp
+            (Continuous.subtype_mk continuous_subtype_val _))
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.comp (H.symm.continuous.comp
+          ((Continuous.subtype_mk (continuous_subtype_val.comp continuous_fst) _).prodMk
+            continuous_snd)) }
+  have hHW (w : W) : (HW w).1.1 = w.1 ^ 2 := by
+    exact hH ⟨w.1, hWV w.2⟩
+  let E : apm_t01a04_circleCoverMap ⁻¹' UX ≃ₜ W :=
+    { toFun := fun e =>
+        ⟨apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction e.1,
+          by
+            change apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction
+                e.1 ^ 2 ∈ V
+            rw [← apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_square]
+            exact e.2⟩
+      invFun := fun w => ⟨Quotient.mk _ (Sum.inr w.1), by exact w.2⟩
+      left_inv := by
+        rintro ⟨e, he⟩
+        apply Subtype.ext
+        refine Quotient.inductionOn e ?_ he
+        rintro (q | w) he
+        · exfalso
+          change (1 : Circle) ∈ V at he
+          exact he.2 rfl
+        · rfl
+      right_inv := by rintro ⟨w, hw⟩; rfl
+      continuous_toFun :=
+        Continuous.subtype_mk
+          (apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_total_continuous.comp
+            continuous_subtype_val) (fun e => by
+              change apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction
+                  e.1 ^ 2 ∈ V
+              rw [← apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_square]
+              exact e.2)
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (continuous_coinduced_rng : Continuous
+          (fun u : Sum (Fin 2 × apm_t01a04_Torus) Circle =>
+            (Quotient.mk _ u : apm_t01a04_CircleCover))).comp
+              (continuous_inr.comp continuous_subtype_val) }
+  let B : UX ≃ₜ V :=
+    { toFun := fun x =>
+        ⟨apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction x.1, x.2⟩
+      invFun := fun v => ⟨Quotient.mk _ (Sum.inr v.1), v.2⟩
+      left_inv := by
+        rintro ⟨x, hx⟩
+        apply Subtype.ext
+        refine Quotient.inductionOn x ?_ hx
+        rintro (q | w) hx
+        · exact (hx.2 rfl).elim
+        · rfl
+      right_inv := by rintro ⟨v, hv⟩; rfl
+      continuous_toFun := Continuous.subtype_mk
+        (apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circle_aux_base_continuous.comp
+          continuous_subtype_val) _
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (continuous_coinduced_rng : Continuous
+          (fun u : Sum apm_t01a04_Torus Circle =>
+            (Quotient.mk _ u : apm_t01a04_X))).comp
+              (continuous_inr.comp continuous_subtype_val) }
+  refine (show IsEvenlyCovered apm_t01a04_circleCoverMap
+      (Quotient.mk _ (Sum.inr z)) I from ?_).to_isEvenlyCovered_preimage
+  refine ⟨hd, UX, hzUX, hUX, hopenpre, ?_, ?_⟩
+  · exact E.trans (HW.trans (.prodCongr B.symm (.refl I)))
+  · intro e
+    change ((E.trans (HW.trans (.prodCongr B.symm (.refl I)))) e).1.1 = _
+    change Quotient.mk _ (Sum.inr (HW (E e)).1.1) = apm_t01a04_circleCoverMap e.1
+    rw [hHW]
+    exact (himage e.1 e.2).symm
 
 /-- Away from the wedge point, the circle-doubled quotient is locally either
 an identity sheet over the torus or the ordinary circle-squaring cover. -/
@@ -371,6 +566,58 @@ lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_mem_fiber
     apm_t01a04_basepoint
   rfl
 
+/-- Pure topology: two disjoint open sheets over an open `U`, each mapped
+homeomorphically onto `U` by `f`, each meeting the fiber over `x` once, make
+`x` evenly covered (the fiber is the two-point discrete space). -/
+lemma apm_t01A04_isEvenlyCovered_of_two_sheets {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] (f : E → X) (x : X)
+    (U : Set X) (hxU : x ∈ U) (hU : IsOpen U)
+    (V : Fin 2 → Set E) (hV : ∀ i, IsOpen (V i))
+    (hdisj : Pairwise (Function.onFun Disjoint V))
+    (hcover : f ⁻¹' U = ⋃ i, V i)
+    (hsheet : ∀ i, ∃ h : V i ≃ₜ U, ∀ y, (h y : X) = f y) :
+    IsEvenlyCovered f x (f ⁻¹' {x}) := by
+  sorry
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_fiber_points
+    (e : apm_t01a04_CircleCover)
+    (he : apm_t01a04_circleCoverMap e = apm_t01a04_basepoint) :
+    ∃ i : Fin 2,
+      e = Quotient.mk _ (.inl (i, ((1 : Circle), (1 : Circle)))) := by
+  refine Quotient.inductionOn e ?_ he
+  rintro (q | z) he
+  · have hq := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction he
+    have hq' : q.2 = ((1 : Circle), (1 : Circle)) := by
+      simpa [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+        apm_t01a04_basepoint] using hq
+    refine ⟨q.1, ?_⟩
+    congr
+    exact Prod.ext rfl hq'
+  · have hz := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction he
+    change z ^ 2 = 1 at hz
+    rcases sq_eq_one_iff.mp (congrArg Subtype.val hz) with hz | hz
+    · refine ⟨0, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      exact Subtype.ext hz
+    · refine ⟨1, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      apply Subtype.ext
+      simpa [Circle.exp, Complex.exp_mul_I] using hz
+
+/-- The two sheets over the basepoint (see the plan above). -/
+lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets :
+    ∃ (U : Set apm_t01a04_X) (V : Fin 2 → Set apm_t01a04_CircleCover),
+      apm_t01a04_basepoint ∈ U ∧ IsOpen U ∧ (∀ i, IsOpen (V i)) ∧
+      Pairwise (Function.onFun Disjoint V) ∧
+      apm_t01a04_circleCoverMap ⁻¹' U = ⋃ i, V i ∧
+      ∀ i, ∃ h : V i ≃ₜ U, ∀ y,
+        (h y : apm_t01a04_X) = apm_t01a04_circleCoverMap y := by
+  sorry
+
 /-- Basepoint case.  Plan (from the first attempt): take
 `U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
 open and saturated in `X`.  Its preimage is the disjoint union over `i : Fin 2`
@@ -380,7 +627,9 @@ the glue `aux_glue` attaches `Aᵢ` to torus sheet `i`. -/
 theorem apm_t01A04_circleCoverMap_evenlyCovered_basepoint :
     IsEvenlyCovered apm_t01a04_circleCoverMap apm_t01a04_basepoint
       (apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  obtain ⟨U, V, hxU, hU, hV, hdisj, hcover, hsheet⟩ := apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_sheets
+  exact apm_t01A04_isEvenlyCovered_of_two_sheets apm_t01a04_circleCoverMap apm_t01a04_basepoint
+    U hxU hU V hV hdisj hcover hsheet
 
 lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne
     {q : apm_t01a04_Torus}
@@ -420,6 +669,59 @@ lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_reduce
   · exact hT q (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne h)
   · exact hC z (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inr_ne h)
 
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → apm_t01a04_Torus
+  | .inl q => q
+  | .inr q => (apm_t01a04_sheetPoint q.1, 1)
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw_respects
+    {u v : Sum apm_t01a04_Torus (Fin 2 × Circle)}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel u v) :
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw u =
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction :
+    apm_t01a04_TorusCover → apm_t01a04_Torus :=
+  Quotient.lift
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw
+    (fun _ _ h =>
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw_respects h)
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_base_continuous :
+    Continuous apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨continuous_id, continuous_const⟩
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_total_continuous :
+    Continuous
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · exact continuous_id
+  · exact
+      ((continuous_of_discreteTopology : Continuous apm_t01a04_sheetPoint).comp
+        continuous_fst).prodMk continuous_const
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_square
+    (e : apm_t01a04_TorusCover) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction
+        (apm_t01a04_torusCoverMap e) =
+      ((apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction e).1 ^ 2,
+        (apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction e).2) := by
+  refine Quotient.inductionOn e ?_
+  rintro (q | q)
+  · rfl
+  · simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRetraction,
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus_aux_totalRaw]
+
 /-- Torus-summand case: near `q ≠ (1,1)` the cover is `(z, w) ↦ (z², w)`
 on the torus summand; the two square-root arcs in the first coordinate give the
 two sheets (the glued points `(±1, 1)` lie over the excluded base point). -/
@@ -428,6 +730,44 @@ theorem apm_t01A04_torusCoverMap_evenlyCovered_away_aux_torus
     IsEvenlyCovered apm_t01a04_torusCoverMap (Quotient.mk _ (Sum.inl q))
       (apm_t01a04_torusCoverMap ⁻¹' {Quotient.mk _ (Sum.inl q)}) := by
   sorry
+
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → Circle
+  | .inl _ => 1
+  | .inr q => q.2
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw_respects
+    {u v : Sum apm_t01a04_Torus (Fin 2 × Circle)}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel u v) :
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw u =
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction :
+    apm_t01a04_TorusCover → Circle :=
+  Quotient.lift
+    apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw
+    (fun _ _ h =>
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRaw_respects h)
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_total_continuous :
+    Continuous
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨continuous_const, continuous_snd⟩
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_compat
+    (e : apm_t01a04_TorusCover) :
+    apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction
+        (apm_t01a04_torusCoverMap e) =
+      apm_t01A04_torusCoverMap_evenlyCovered_away_aux_circle_aux_totalRetraction e := by
+  refine Quotient.inductionOn e ?_
+  rintro (q | q) <;> rfl
 
 /-- Circle-summand case: near `z ≠ 1` the cover is the identity on each of the
 two circle sheets `(i, ·)`, `i : Fin 2`. -/
@@ -466,6 +806,40 @@ lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_mem_fiber
   simp [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
     apm_t01a04_basepoint]
 
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_square_root
+    (z : Circle) (hz : z ^ 2 = 1) :
+    ∃ i : Fin 2, z = apm_t01a04_sheetPoint i := by
+  have hz' : (z : ℂ) ^ 2 = 1 := congrArg Subtype.val hz
+  rcases (sq_eq_one_iff.mp hz') with h | h
+  · refine ⟨0, ?_⟩
+    apply Subtype.ext
+    simpa using h
+  · refine ⟨1, ?_⟩
+    apply Subtype.ext
+    rw [apm_t01a04_sheetPoint_one, Circle.coe_exp, Complex.exp_pi_mul_I]
+    exact h
+
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheetPoint_injective :
+    Function.Injective apm_t01a04_sheetPoint := by
+  intro i j hij
+  fin_cases i <;> fin_cases j
+  · rfl
+  · exfalso
+    exact Circle.exp_pi_ne_one hij.symm
+  · exfalso
+    exact Circle.exp_pi_ne_one hij
+  · rfl
+
+/-- The two sheets over the basepoint (see the plan above). -/
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets :
+    ∃ (U : Set apm_t01a04_X) (V : Fin 2 → Set apm_t01a04_TorusCover),
+      apm_t01a04_basepoint ∈ U ∧ IsOpen U ∧ (∀ i, IsOpen (V i)) ∧
+      Pairwise (Function.onFun Disjoint V) ∧
+      apm_t01a04_torusCoverMap ⁻¹' U = ⋃ i, V i ∧
+      ∀ i, ∃ h : V i ≃ₜ U, ∀ y,
+        (h y : apm_t01a04_X) = apm_t01a04_torusCoverMap y := by
+  sorry
+
 /-- Basepoint case.  Plan: take
 `U = mk '' (inl '' {q | 0 < q.1.re ∧ 0 < q.2.re} ∪ inr '' {z | 0 < z.re})`,
 open and saturated in `X`.  Its preimage is the disjoint union over `i : Fin 2`
@@ -476,7 +850,9 @@ sheet `i` at `(sheetPoint i, 1)`. -/
 theorem apm_t01A04_torusCoverMap_evenlyCovered_basepoint :
     IsEvenlyCovered apm_t01a04_torusCoverMap apm_t01a04_basepoint
       (apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  obtain ⟨U, V, hxU, hU, hV, hdisj, hcover, hsheet⟩ := apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets
+  exact apm_t01A04_isEvenlyCovered_of_two_sheets apm_t01a04_torusCoverMap apm_t01a04_basepoint
+    U hxU hU V hV hdisj hcover hsheet
 
 /-- Why this unblocks `apm_t01a04`: this is the missing local
 evenly-covered-neighborhood construction for the two concrete quotient maps.
@@ -533,6 +909,48 @@ def apm_t01A04_canonical_loops_presentation_aux_homeomorph :
         apm_t01a04_basepoint =
       ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase := rfl
 
+noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom :
+    apm_t01a04_piOne →*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase :=
+  FundamentalGroup.map
+    ⟨apm_t01A04_canonical_loops_presentation_aux_homeomorph,
+      apm_t01A04_canonical_loops_presentation_aux_homeomorph.continuous⟩
+    apm_t01a04_basepoint
+
+lemma apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective :
+    Function.Bijective
+      apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom := by
+  constructor
+  · intro x y hxy
+    obtain ⟨x⟩ := x
+    obtain ⟨y⟩ := y
+    apply Quotient.sound
+    convert (Path.Homotopic.Quotient.exact hxy).map
+      ⟨apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm,
+        apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm.continuous⟩ using 1 <;>
+      ext t <;>
+      exact (apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm_apply_apply _).symm
+  · intro y
+    obtain ⟨y⟩ := y
+    refine ⟨Path.Homotopic.Quotient.mk
+      (y.map apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm.continuous), ?_⟩
+    apply Quotient.sound
+    convert Path.Homotopic.refl y using 1 <;> ext t <;>
+      exact apm_t01A04_canonical_loops_presentation_aux_homeomorph.apply_symm_apply _
+
+noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transport :
+    apm_t01a04_piOne ≃*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase :=
+  MulEquiv.ofBijective
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective
+
 /-- LIBRARY (van Kampen naturality): some identification of the wedge
 fundamental group with `ℤ² * ℤ` sends the three canonical loops to the
 standard generators.  `wedgeFundamentalGroupMulEquiv` (transported along
@@ -564,7 +982,114 @@ theorem apm_t01A04_canonical_loops_presentation_aux_algebra
       ∃! F : apm_t01a04_piOne →* G,
         F apm_t01A04_loopA = ga ∧ F apm_t01A04_loopB = gb ∧
           F apm_t01A04_loopC = gc) := by
-  sorry
+  let a : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP :=
+    Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ))
+  let b : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP :=
+    Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ))
+  let c : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP :=
+    Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ))
+  have hab : a * b = b * a := by
+    dsimp [a, b]
+    rw [← MonoidHom.map_mul, ← MonoidHom.map_mul]
+    congr 1
+  have hcomm : apm_t01A04_loopA * apm_t01A04_loopB =
+      apm_t01A04_loopB * apm_t01A04_loopA := by
+    apply Φ.injective
+    simpa [hA, hB, a, b] using hab
+  have hgen : Subgroup.closure
+      {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤ := by
+    apply top_unique
+    intro x _
+    let K := Subgroup.closure
+      ({apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} :
+        Set apm_t01a04_piOne)
+    have haK : apm_t01A04_loopA ∈ K := Subgroup.subset_closure (by simp)
+    have hbK : apm_t01A04_loopB ∈ K := Subgroup.subset_closure (by simp)
+    have hcK : apm_t01A04_loopC ∈ K := Subgroup.subset_closure (by simp)
+    have hall : ∀ y : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP,
+        Φ.symm y ∈ K := by
+      intro y
+      induction y using Monoid.Coprod.induction_on with
+      | inl z =>
+          change Φ.symm (Monoid.Coprod.inl z) ∈ K
+          let m : ℤ := z.toAdd.1
+          let n : ℤ := z.toAdd.2
+          rw [show z =
+              Multiplicative.ofAdd ((1, 0) : ℤ × ℤ) ^ m *
+                Multiplicative.ofAdd ((0, 1) : ℤ × ℤ) ^ n by
+                apply Multiplicative.toAdd.injective
+                simp [m, n]]
+          have ha : Φ.symm (Monoid.Coprod.inl
+              (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ))) = apm_t01A04_loopA := by
+            apply Φ.injective
+            simpa using hA.symm
+          have hb : Φ.symm (Monoid.Coprod.inl
+              (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ))) = apm_t01A04_loopB := by
+            apply Φ.injective
+            simpa using hB.symm
+          simp only [map_mul, map_zpow, ha, hb]
+          exact K.mul_mem (K.zpow_mem haK m) (K.zpow_mem hbK n)
+      | inr z =>
+          change Φ.symm (Monoid.Coprod.inr z) ∈ K
+          let n : ℤ := z.toAdd
+          rw [show z = Multiplicative.ofAdd (1 : ℤ) ^ n by
+                apply Multiplicative.toAdd.injective
+                simp [n]]
+          have hc : Φ.symm (Monoid.Coprod.inr
+              (Multiplicative.ofAdd (1 : ℤ))) = apm_t01A04_loopC := by
+            apply Φ.injective
+            simpa using hC.symm
+          simp only [map_zpow, hc]
+          exact K.zpow_mem hcK n
+      | mul u v hu hv =>
+          rw [map_mul]
+          exact K.mul_mem hu hv
+    simpa [K] using hall (Φ x)
+  refine ⟨hcomm, hgen, ?_⟩
+  intro G _ ga gb gc hgab
+  let pairHom : Multiplicative (ℤ × ℤ) →* G :=
+    { toFun := fun z => ga ^ z.toAdd.1 * gb ^ z.toAdd.2
+      map_one' := by simp
+      map_mul' := by
+        intro x y
+        change ga ^ (x.toAdd.1 + y.toAdd.1) * gb ^ (x.toAdd.2 + y.toAdd.2) =
+          (ga ^ x.toAdd.1 * gb ^ x.toAdd.2) *
+            (ga ^ y.toAdd.1 * gb ^ y.toAdd.2)
+        rw [zpow_add, zpow_add]
+        have hg : Commute ga gb := hgab
+        have hp := (Commute.zpow_zpow hg.symm x.toAdd.2 y.toAdd.1).eq
+        calc
+          ga ^ x.toAdd.1 * ga ^ y.toAdd.1 *
+                (gb ^ x.toAdd.2 * gb ^ y.toAdd.2) =
+              ga ^ x.toAdd.1 *
+                (ga ^ y.toAdd.1 * gb ^ x.toAdd.2) * gb ^ y.toAdd.2 := by
+                  simp only [mul_assoc]
+          _ = ga ^ x.toAdd.1 *
+                (gb ^ x.toAdd.2 * ga ^ y.toAdd.1) * gb ^ y.toAdd.2 := by
+                  rw [hp.symm]
+          _ = (ga ^ x.toAdd.1 * gb ^ x.toAdd.2) *
+                (ga ^ y.toAdd.1 * gb ^ y.toAdd.2) := by
+                  simp only [mul_assoc] }
+  let intHom : Multiplicative ℤ →* G :=
+    { toFun := fun z => gc ^ z.toAdd
+      map_one' := by simp
+      map_mul' := by intro x y; simp [zpow_add] }
+  let L : ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP →* G :=
+    Monoid.Coprod.lift pairHom intHom
+  let F : apm_t01a04_piOne →* G := L.comp Φ.toMonoidHom
+  have hFa : F apm_t01A04_loopA = ga := by simp [F, L, pairHom, hA]
+  have hFb : F apm_t01A04_loopB = gb := by simp [F, L, pairHom, hB]
+  have hFc : F apm_t01A04_loopC = gc := by simp [F, L, intHom, hC]
+  refine ⟨F, ⟨hFa, hFb, hFc⟩, ?_⟩
+  intro F' hF'
+  rcases hF' with ⟨hF'a, hF'b, hF'c⟩
+  apply MonoidHom.eq_of_eqOn_dense hgen
+  intro z hz
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
+  rcases hz with rfl | rfl | rfl
+  · exact hF'a.trans hFa.symm
+  · exact hF'b.trans hFb.symm
+  · exact hF'c.trans hFc.symm
 
 /-- The Seifert--van Kampen presentation on the three fixed geometric loops. -/
 theorem apm_t01A04_canonical_loops_presentation :
@@ -668,12 +1193,162 @@ lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff
 
 /-- The base fiber of the circle-doubled cover has two points, so monodromy
 on it is a parity character. -/
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_fiber_cases
+    (x : apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) :
+    ∃ i : Fin 2, x.1 = Quotient.mk _ (.inl (i, ((1 : Circle), (1 : Circle)))) := by
+  rcases x with ⟨x, hx⟩
+  refine Quotient.inductionOn x ?_ hx
+  rintro (q | z) hx
+  · have hq := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction hx
+    change q.2 = ((1 : Circle), (1 : Circle)) at hq
+    exact ⟨q.1, congrArg (fun u => Quotient.mk _ (Sum.inl (q.1, u)))
+      (Prod.ext (congrArg Prod.fst hq) (congrArg Prod.snd hq))⟩
+  · have hz := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction hx
+    change z ^ 2 = 1 at hz
+    rcases sq_eq_one_iff.mp (congrArg Subtype.val hz) with hz | hz
+    · refine ⟨0, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      exact congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w)) (Subtype.ext hz)
+    · refine ⟨1, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      apply Subtype.ext
+      simpa [Circle.exp, Complex.exp_mul_I] using hz
+
+noncomputable def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour :
+    Sum (Fin 2 × apm_t01a04_Torus) Circle → Fin 2
+  := by
+    classical
+    exact fun
+      | .inl q => q.1
+      | .inr z => if z = 1 then 0 else 1
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour_eq
+    {a b : Sum (Fin 2 × apm_t01a04_Torus) Circle}
+    (h : Relation.EqvGen apm_t01a04_circleCoverRel a b) :
+    apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour a =
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour b := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue i =>
+        classical
+        fin_cases i
+        · simp [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour]
+        · simp [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour]
+          intro h
+          have hh := congrArg Subtype.val h
+          norm_num [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I] at hh
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character
     (hcov : IsCoveringMap apm_t01a04_circleCoverMap) :
     ∃ ψ : apm_t01a04_piOne →* apm_t01a04_Parity, ∀ g : apm_t01a04_piOne,
       ψ g = 1 ↔ hcov.monodromy (FundamentalGroup.toPath g)
           ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ = ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
-  sorry
+  classical
+  let b : apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint} :=
+    ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩
+  let o : apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint} :=
+    ⟨Quotient.mk _ (.inl (1, ((1 : Circle), (1 : Circle)))),
+      apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_mem_fiber 1⟩
+  have hbo : b ≠ o := by
+    intro h
+    have he := Quotient.exact (congrArg Subtype.val h)
+    have hc :=
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour_eq he
+    norm_num [b, o, apm_t01a04_circleCoverBase,
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_colour] at hc
+  have hcases (x : apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) :
+      x = b ∨ x = o := by
+    obtain ⟨i, hi⟩ :=
+      apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_character_aux_fiber_cases x
+    fin_cases i
+    · left; apply Subtype.ext; simpa [b, apm_t01a04_circleCoverBase] using hi
+    · right; apply Subtype.ext; simpa [o] using hi
+  have hmul (g k : apm_t01a04_piOne) :
+      hcov.monodromy (FundamentalGroup.toPath (g * k)) b = b ↔
+        (hcov.monodromy (FundamentalGroup.toPath g) b = b ↔
+          hcov.monodromy (FundamentalGroup.toPath k) b = b) := by
+    have hinj := (hcov.monodromy_bijective (FundamentalGroup.toPath g)).1
+    have ht : hcov.monodromy (FundamentalGroup.toPath (g * k)) b =
+        hcov.monodromy (FundamentalGroup.toPath g)
+          (hcov.monodromy (FundamentalGroup.toPath k) b) := by
+      change hcov.monodromy ((FundamentalGroup.toPath k).trans
+        (FundamentalGroup.toPath g)) b = _
+      exact hcov.monodromy_trans_apply _ _ _
+    rcases hcases (hcov.monodromy (FundamentalGroup.toPath g) b) with hg | hg <;>
+      rcases hcases (hcov.monodromy (FundamentalGroup.toPath k) b) with hk | hk
+    · simp [ht, hg, hk]
+    · have hgo : hcov.monodromy (FundamentalGroup.toPath g) o ≠ b := by
+        intro h
+        apply hbo
+        exact hinj (hg.trans h.symm)
+      simp [ht, hg, hk, hgo, hbo.symm]
+    · simp [ht, hg, hk, hbo.symm]
+    · have hogo : hcov.monodromy (FundamentalGroup.toPath g) o = b := by
+        rcases hcases (hcov.monodromy (FundamentalGroup.toPath g) o) with h | h
+        · exact h
+        · exfalso
+          apply hbo
+          exact hinj (hg.trans h.symm)
+      simp [ht, hg, hk, hogo, hbo]
+  let ψ : apm_t01a04_piOne → apm_t01a04_Parity := fun g =>
+    if hcov.monodromy (FundamentalGroup.toPath g) b = b then 1
+    else Multiplicative.ofAdd 1
+  have hψmul (g k : apm_t01a04_piOne) : ψ (g * k) = ψ g * ψ k := by
+    by_cases hg : hcov.monodromy (FundamentalGroup.toPath g) b = b <;>
+      by_cases hk : hcov.monodromy (FundamentalGroup.toPath k) b = b <;>
+      simp [ψ, hg, hk, hmul] <;> decide
+  refine ⟨{ toFun := ψ, map_one' := by
+              have hone : hcov.monodromy (FundamentalGroup.toPath (1 : apm_t01a04_piOne)) b = b := by
+                change hcov.monodromy (.refl apm_t01a04_basepoint) b = b
+                exact congrFun hcov.monodromy_refl b
+              simp [ψ, hone]
+            map_mul' := hψmul }, ?_⟩
+  intro g
+  simp [ψ, b]
+
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathA :
+    Path apm_t01a04_circleCoverBase apm_t01a04_circleCoverBase :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inl ((0 : Fin 2), (z, (1 : Circle))))) from
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          (continuous_const.prodMk (continuous_id.prodMk continuous_const))))
+
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathB :
+    Path apm_t01a04_circleCoverBase apm_t01a04_circleCoverBase :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inl ((0 : Fin 2), ((1 : Circle), z)))) from
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          (continuous_const.prodMk (continuous_const.prodMk continuous_id))))
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_exp_ne :
+    Circle.exp Real.pi ≠ (1 : Circle) := Circle.exp_pi_ne_one
+
+def apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_lifts_pathC :
+    Path apm_t01a04_circleCoverBase
+      (Quotient.mk _ (Sum.inr (Circle.exp Real.pi))) where
+  toFun t := Quotient.mk _ (.inr (Circle.exp (Real.pi * (t : ℝ))))
+  continuous_toFun := continuous_coinduced_rng.comp
+    (continuous_inr.comp
+      (ConstructionTargets.CircleUniversalCover.circleCover_isCoveringMap.continuous.comp
+        (continuous_const.mul continuous_subtype_val)))
+  source' := by
+    simp only [Set.Icc.coe_zero, mul_zero, Circle.exp_zero]
+    have h := Quotient.sound (s := Relation.EqvGen.setoid apm_t01a04_circleCoverRel)
+      (Relation.EqvGen.rel _ _ (apm_t01a04_circleCoverRel.glue 0))
+    simp only [apm_t01a04_sheetPoint_zero] at h
+    exact h.symm
+  target' := by simp
 
 /-- Explicit lifts: `loopA`, `loopB` lift to closed loops in torus sheet `0`;
 `loopC` lifts through squaring to the half-turn from `1` to `-1`, i.e. from
@@ -755,6 +1430,29 @@ lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_ext
 Copy `apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff`; note
 `apm_t01a04_torusCoverMap_base` is proved by `simp`, not `rfl`, so the `▸` cast
 must be eliminated explicitly (the circle version's `rfl` steps fail here). -/
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff_aux
+    {E X : Type*} [TopologicalSpace E] [TopologicalSpace X]
+    (f : C(E, X)) (e : E) (x : X) (p : f e = x)
+    (hcov : IsCoveringMap f) (γ : FundamentalGroup X x) :
+    γ ∈ MonoidHom.range (p ▸ FundamentalGroup.map f e) ↔
+      hcov.monodromy γ (⟨e, p⟩ : f ⁻¹' {x}) = (⟨e, p⟩ : f ⁻¹' {x}) := by
+  subst x
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact hcov.monodromy_map (FundamentalGroup.toPath a)
+  · intro hγ
+    obtain ⟨γ⟩ := γ
+    let lift := hcov.liftPath γ e (by simp)
+    have hend : lift 1 = e := by
+      simpa [IsCoveringMap.monodromy, lift] using congrArg Subtype.val hγ
+    let δ : Path e e := ⟨lift, hcov.liftPath_zero _ _ _, hend⟩
+    refine ⟨Path.Homotopic.Quotient.mk δ, ?_⟩
+    change (Path.Homotopic.Quotient.mk δ).map f = Path.Homotopic.Quotient.mk γ
+    rw [← Path.Homotopic.Quotient.mk_map]
+    congr 1
+    ext t
+    exact congrFun (hcov.liftPath_lifts γ e (by simp)) t
+
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff
     (hcov : IsCoveringMap apm_t01a04_torusCoverMap) (γ : apm_t01a04_piOne) :
     γ ∈ MonoidHom.range
@@ -765,10 +1463,132 @@ theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff
         (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_range_iff_aux
+    apm_t01a04_torusCoverMap apm_t01a04_torusCoverBase
+      apm_t01a04_basepoint apm_t01a04_torusCoverMap_base hcov γ
 
 /-- The base fiber has two points, so monodromy is a parity character: it is
 trivial exactly on loops whose lift from the base point closes up. -/
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_sheet_one :
+    (apm_t01a04_sheetPoint 1 : ℂ) = -1 := by
+  apply Complex.ext <;>
+    norm_num [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I]
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_rightCoord :
+    Sum apm_t01a04_Torus Circle → Circle
+  | .inl _ => 1
+  | .inr z => z
+
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_rightCoord_eq
+    {a b : Sum apm_t01a04_Torus Circle}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel a b) :
+    apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_rightCoord a =
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_rightCoord b := by
+  induction h with
+  | rel _ _ h => cases h; rfl
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_leftCoord :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_Torus
+  | .inl q => q
+  | .inr _ => (1, 1)
+
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_leftCoord_eq
+    {a b : Sum apm_t01a04_Torus Circle}
+    (h : Relation.EqvGen apm_t01a04_wedgeRel a b) :
+    apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_leftCoord a =
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_leftCoord b := by
+  induction h with
+  | rel _ _ h => cases h; rfl
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → Fin 2
+  | .inl q => if (q.1 : ℂ) = 1 then 0 else 1
+  | .inr q => q.1
+
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label_eq
+    {a b : Sum apm_t01a04_Torus (Fin 2 × Circle)}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel a b) :
+    apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label a =
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label b := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue i =>
+        fin_cases i
+        · simp [apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label]
+        · simp only [apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label]
+          split
+          · rename_i h
+            change (apm_t01a04_sheetPoint 1 : ℂ) = 1 at h
+            rw [apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_sheet_one] at h
+            norm_num at h
+          · rfl
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_fiber_cases
+    (x : apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) :
+    x = ⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ ∨
+      x = ⟨Quotient.mk _ (.inl (apm_t01a04_sheetPoint 1, (1 : Circle))), by
+        change Quotient.mk _ (.inl ((apm_t01a04_sheetPoint 1 ^ 2), (1 : Circle))) =
+          apm_t01a04_basepoint
+        rw [apm_t01a04_sheetPoint_sq]
+        rfl⟩ := by
+  rcases x with ⟨x, hx⟩
+  suffices x = apm_t01a04_torusCoverBase ∨
+      x = Quotient.mk _ (.inl (apm_t01a04_sheetPoint 1, (1 : Circle))) by
+    rcases this with h | h
+    · left; exact Subtype.ext h
+    · right; exact Subtype.ext h
+  revert hx
+  refine Quotient.inductionOn x ?_
+  rintro (q | q) hx
+  · have heq : (q.1 ^ 2, q.2) = ((1 : Circle), (1 : Circle)) := by
+      change Quotient.mk _ (Sum.inl (q.1 ^ 2, q.2)) =
+        Quotient.mk _ (Sum.inl ((1 : Circle), (1 : Circle))) at hx
+      exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_leftCoord_eq
+        (Quotient.exact hx)
+    have hsq : q.1 ^ 2 = 1 := congrArg Prod.fst heq
+    have hsecond : q.2 = 1 := congrArg Prod.snd heq
+    have hsq' : (q.1 : ℂ) ^ 2 = 1 := congrArg Subtype.val hsq
+    rcases (sq_eq_one_iff.mp hsq') with h | h
+    · left
+      have h' : q.1 = (1 : Circle) := Subtype.ext h
+      have hq : q = ((1 : Circle), (1 : Circle)) := Prod.ext h' hsecond
+      simpa [apm_t01a04_torusCoverBase, hq]
+    · right
+      have h' : q.1 = apm_t01a04_sheetPoint 1 := by
+        apply Subtype.ext
+        rw [apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_sheet_one]
+        exact h
+      have hq : q = (apm_t01a04_sheetPoint 1, (1 : Circle)) := Prod.ext h' hsecond
+      simpa [hq]
+  · have heq : q.2 = (1 : Circle) := by
+      change Quotient.mk _ (Sum.inr q.2) = Quotient.mk _ (Sum.inl (1, 1)) at hx
+      exact apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_rightCoord_eq
+        (Quotient.exact hx)
+    have hi : q.1 = 0 ∨ q.1 = 1 := by
+      omega
+    rcases hi with hi | hi
+    · left
+      have hq : q = (0, (1 : Circle)) := Prod.ext hi heq
+      rw [hq]
+      simpa [apm_t01a04_torusCoverBase] using
+        (Quotient.sound (Relation.EqvGen.rel _ _
+          (apm_t01a04_torusCoverRel.glue 0))).symm
+    · right
+      have hq : q = (1, (1 : Circle)) := Prod.ext hi heq
+      rw [hq]
+      exact (Quotient.sound (Relation.EqvGen.rel _ _
+        (apm_t01a04_torusCoverRel.glue 1))).symm
+
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character
     (hcov : IsCoveringMap apm_t01a04_torusCoverMap) :
     ∃ ψ : apm_t01a04_piOne →* apm_t01a04_Parity, ∀ γ : apm_t01a04_piOne,
@@ -777,12 +1597,111 @@ theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character
           (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) = (⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩ :
           apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
-  sorry
+  classical
+  let b : apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint} :=
+    ⟨apm_t01a04_torusCoverBase, apm_t01a04_torusCoverMap_base⟩
+  let o : apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint} :=
+    ⟨Quotient.mk _ (.inl (apm_t01a04_sheetPoint 1, (1 : Circle))), by
+      change Quotient.mk _ (.inl ((apm_t01a04_sheetPoint 1 ^ 2), (1 : Circle))) =
+        apm_t01a04_basepoint
+      rw [apm_t01a04_sheetPoint_sq]
+      rfl⟩
+  have hbo : b ≠ o := by
+    intro h
+    have hh := Quotient.exact (congrArg Subtype.val h)
+    have hl := apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label_eq hh
+    simp [b, o, apm_t01a04_torusCoverBase,
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_label] at hl
+    norm_num at hl
+  have hcases (x : apm_t01a04_torusCoverMap ⁻¹' {apm_t01a04_basepoint}) :
+      x = b ∨ x = o := by
+    simpa [b, o] using
+      apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_character_fiber_cases x
+  have hmul (g k : apm_t01a04_piOne) :
+      hcov.monodromy (g * k) b = b ↔
+        (hcov.monodromy g b = b ↔ hcov.monodromy k b = b) := by
+    have hinj := (hcov.monodromy_bijective g).1
+    have ht : hcov.monodromy (g * k) b =
+        hcov.monodromy g (hcov.monodromy k b) := by
+      exact hcov.monodromy_trans_apply k g b
+    rcases hcases (hcov.monodromy g b) with hg | hg <;>
+      rcases hcases (hcov.monodromy k b) with hk | hk
+    · simp [ht, hg, hk]
+    · have hgo : hcov.monodromy g o ≠ b := by
+        intro h
+        apply hbo
+        exact hinj (hg.trans h.symm)
+      simp [ht, hg, hk, hgo, hbo, hbo.symm]
+    · simp [ht, hg, hk, hbo]
+    · have hogo : hcov.monodromy g o = b := by
+        rcases hcases (hcov.monodromy g o) with h | h
+        · exact h
+        · exfalso
+          apply hbo
+          exact hinj (hg.trans h.symm)
+      simp [ht, hg, hk, hogo, hbo]
+  let ψ : apm_t01a04_piOne → apm_t01a04_Parity := fun g =>
+    if hcov.monodromy g b = b then 1 else Multiplicative.ofAdd 1
+  have hψmul (g k : apm_t01a04_piOne) : ψ (g * k) = ψ g * ψ k := by
+    by_cases hg : hcov.monodromy g b = b <;>
+      by_cases hk : hcov.monodromy k b = b <;>
+      simp [ψ, hg, hk, hmul] <;> decide
+  have hone : hcov.monodromy (1 : apm_t01a04_piOne) b = b := by
+    change hcov.monodromy (.refl apm_t01a04_basepoint) b = b
+    rw [hcov.monodromy_refl]
+    rfl
+  refine ⟨{
+    toFun := ψ
+    map_one' := by simp [ψ, hone]
+    map_mul' := hψmul }, ?_⟩
+  intro g
+  simp [ψ, b]
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathA :
+    Path apm_t01a04_torusCoverBase
+      (Quotient.mk _ (.inl (Circle.exp Real.pi, (1 : Circle)))) where
+  toFun t := Quotient.mk _ (.inl (Circle.exp (Real.pi * (t : ℝ)), (1 : Circle)))
+  continuous_toFun := continuous_coinduced_rng.comp
+    (continuous_inl.comp ((Circle.exp.continuous.comp
+      (continuous_const.mul continuous_subtype_val)).prodMk continuous_const))
+  source' := by simp [apm_t01a04_torusCoverBase]
+  target' := by simp
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathB :
+    Path apm_t01a04_torusCoverBase apm_t01a04_torusCoverBase :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inl ((1 : Circle), z))) from
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp (continuous_const.prodMk continuous_id)))
+
+def apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts_pathC :
+    Path apm_t01a04_torusCoverBase apm_t01a04_torusCoverBase :=
+  (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (show Continuous (fun z : Circle =>
+        Quotient.mk _ (Sum.inr ((0 : Fin 2), z))) from
+      continuous_coinduced_rng.comp
+        (continuous_inr.comp (continuous_const.prodMk continuous_id)))).cast
+    (by
+      have h : (Quotient.mk _ (.inl ((1 : Circle), (1 : Circle))) :
+          apm_t01a04_TorusCover) = Quotient.mk _ (.inr ((0 : Fin 2), (1 : Circle))) :=
+        Quotient.sound (by simpa using
+          Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 0))
+      exact h)
+    (by
+      have h : (Quotient.mk _ (.inl ((1 : Circle), (1 : Circle))) :
+          apm_t01a04_TorusCover) = Quotient.mk _ (.inr ((0 : Fin 2), (1 : Circle))) :=
+        Quotient.sound (by simpa using
+          Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 0))
+      exact h))
 
 /-- Explicit lifts from the base point: `loopA` lifts to the half-turn
 `(1,1) ↦ (-1,1)` in the torus summand (the cover squares the first
 coordinate), so it moves the base point; `loopB` lifts to the closed second
-coordinate turn and `loopC` to the closed turn of circle `0`. -/
+coordinate turn and `loopC` to the closed turn of circle `0`.  The three
+explicit lifts are banked above (`_pathA/B/C`); conclude with the
+lift-uniqueness API (`IsCoveringMap.liftPath`, `eq_liftPath_iff`), and separate
+`⟦inl (-1, 1)⟧` from the base point with a quotient-respecting invariant. -/
 -- BEGIN SEAT AREA
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_lifts
     (hcov : IsCoveringMap apm_t01a04_torusCoverMap) :
