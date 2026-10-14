@@ -780,6 +780,38 @@ noncomputable def kleinPolygonFundamentalGroupoidPseudopushout
     (openCover kleinPairingData).outer_open
     (openCover kleinPairingData).cover
 
+/-- Reconstruct the identity functor of the polygon fundamental groupoid from
+its two restricted cover-piece functors through the proved pseudopushout. -/
+noncomputable def kleinPolygonPseudopushoutReconstructedIdentity :
+    FundamentalGroupoid kleinPairingData.Space ⥤
+      FundamentalGroupoid kleinPairingData.Space :=
+  (kleinPolygonFundamentalGroupoidPseudopushout
+    (FundamentalGroupoid kleinPairingData.Space)).inverse.obj
+      ((kleinPolygonFundamentalGroupoidPseudopushout
+        (FundamentalGroupoid kleinPairingData.Space)).functor.obj
+          (𝟭 (FundamentalGroupoid kleinPairingData.Space)))
+
+/-- The pseudopushout unit compares the literal identity functor with its
+cover-piece reconstruction. -/
+noncomputable def kleinPolygonPseudopushoutReconstructionUnit :
+    (𝟭 (FundamentalGroupoid kleinPairingData.Space)) ≅
+      kleinPolygonPseudopushoutReconstructedIdentity :=
+  (kleinPolygonFundamentalGroupoidPseudopushout
+    (FundamentalGroupoid kleinPairingData.Space)).unitIso.app _
+
+/-- Every polygon-groupoid arrow is the reconstructed cover-piece arrow,
+conjugated by the pseudopushout unit components.  This is the first direct
+based extraction from the mapping-category pseudopushout. -/
+theorem kleinPolygonPseudopushout_arrow_eq_reconstructed
+    {x y : FundamentalGroupoid kleinPairingData.Space} (g : x ⟶ y) :
+    g = kleinPolygonPseudopushoutReconstructionUnit.hom.app x ≫
+      kleinPolygonPseudopushoutReconstructedIdentity.map g ≫
+      kleinPolygonPseudopushoutReconstructionUnit.inv.app y := by
+  rw [← Category.assoc,
+    ← kleinPolygonPseudopushoutReconstructionUnit.hom.naturality g]
+  rw [Category.assoc, Iso.hom_inv_id_app, Category.comp_id]
+  rfl
+
 /-- The inner vertex of the exact radial cover is contractible, using the
 pointed contraction carried by the polygon cover package. -/
 theorem kleinPolygonInnerContractibleSpace :
@@ -1831,6 +1863,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinSkeletonPresentationMap_attachingClass
 #print axioms kleinSkeletonPresentationMap_ker
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
+#print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
 #print axioms kleinPolygonOverlapPathConnectedSpace

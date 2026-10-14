@@ -290,6 +290,12 @@ Kampen; no further basepoint or presentation adapter remains.
 `KleinPolygonBasedVanKampen` is the exact paired output to extract from the
 banked groupoid pseudopushout: the actual skeleton map is surjective and its
 kernel is the normal closure of the actual overlap image.
+`kleinPolygonPseudopushoutReconstructedIdentity` applies that mapping
+equivalence to the identity polygon-groupoid functor, and
+`kleinPolygonPseudopushout_arrow_eq_reconstructed` proves every ambient arrow
+is its reconstructed cover-piece arrow conjugated by the unit components.
+The remaining based extraction must normalize that reconstructed arrow using
+contractibility of the inner piece and path connectedness of the overlap.
 `kleinPolygonOverlapToSpacePiOne_eq_one` proves the first genuine kernel
 inclusion input: every overlap loop dies after inclusion into the polygon,
 because that inclusion factors through the contractible inner radial piece.
