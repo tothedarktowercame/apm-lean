@@ -445,6 +445,12 @@ noncomputable instance pairingOrbitFinite (P : PairingData) :
     Finite (PairingOrbit P.pair) :=
   Finite.of_surjective P.orbit Quotient.mk_surjective
 
+noncomputable instance pairingOrbitFintype (P : PairingData) :
+    Fintype (PairingOrbit P.pair) := Fintype.ofFinite _
+
+noncomputable instance pairingOrbitDecidableEq (P : PairingData) :
+    DecidableEq (PairingOrbit P.pair) := Classical.decEq _
+
 /-- A standard basis vector in the finite orbit-coordinate module. -/
 noncomputable def orbitBasis (P : PairingData)
     (l : PairingOrbit P.pair) (n : ℤ) : PairingOrbit P.pair → ℤ := by
@@ -582,6 +588,7 @@ theorem finiteWedgeLegH1_collapse_of_ne {L : Type} [DecidableEq L]
 
 /-- The leg inclusions and collapses form the Kronecker-delta matrix on
 degree-one circle generators. -/
+@[reassoc]
 theorem finiteWedgeH1_leg_collapse_matrix {L : Type} [DecidableEq L]
     (k l : L) :
     ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫
@@ -594,6 +601,61 @@ theorem finiteWedgeH1_leg_collapse_matrix {L : Type} [DecidableEq L]
       Category.comp_id]
   · rw [if_neg h, finiteWedgeLegH1_collapse_of_ne h,
       comp_zero]
+
+/-- Read all first-homology coordinates by collapsing to each circle leg. -/
+noncomputable def finiteWedgeH1CollapseCoordinates (P : PairingData) :
+    SpaceH
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair)) 1 ⟶
+      ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) := by
+  exact ModuleCat.ofHom (LinearMap.pi fun l =>
+    (finiteWedgeCollapseH1 l ≫
+      ConstructionTargets.CircleHomology.circleH1IsoInt.hom).hom)
+
+/-- The coproduct presentation followed by all collapse coordinates is the
+standard finite-function coordinate isomorphism. -/
+theorem finiteWedgeH1Presentation_collapseCoordinates (P : PairingData) :
+    finiteWedgeH1Presentation (PairingOrbit P.pair) ≫
+        finiteWedgeH1CollapseCoordinates P =
+      (finiteWedgeH1SourceIso (PairingOrbit P.pair)).hom := by
+  classical
+  letI : Fintype (PairingOrbit P.pair) := Fintype.ofFinite _
+  apply Sigma.hom_ext
+  intro k
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext
+  intro n
+  apply funext
+  intro l
+  rw [sigma_ι_finiteWedgeH1Presentation_assoc]
+  change ((ConstructionTargets.CircleHomology.circleH1IsoInt.inv ≫
+      finiteWedgeLegH1 k ≫ finiteWedgeCollapseH1 l ≫
+        ConstructionTargets.CircleHomology.circleH1IsoInt.hom) n) = _
+  rw [finiteWedgeH1_leg_collapse_matrix_assoc]
+  rw [sigma_ι_finiteWedgeH1SourceIso_hom_apply]
+  by_cases h : k = l
+  · subst l
+    rw [if_pos rfl, Iso.inv_hom_id]
+    simp
+  · rw [if_neg h, zero_comp]
+    simp [h]
+
+/-- The collapse-coordinate morphism is a left inverse of the normalized
+finite-wedge first-homology coordinate map. -/
+theorem finiteWedgeH1CoordinateMap_leftInverse (P : PairingData) :
+    finiteWedgeH1CoordinateMap P ≫ finiteWedgeH1CollapseCoordinates P =
+      𝟙 (ModuleCat.of ℤ (PairingOrbit P.pair → ℤ)) := by
+  classical
+  letI : Fintype (PairingOrbit P.pair) := Fintype.ofFinite _
+  rw [finiteWedgeH1CoordinateMap, Category.assoc,
+    finiteWedgeH1Presentation_collapseCoordinates,
+    Iso.inv_hom_id]
+
+/-- The normalized finite-wedge first-homology coordinate map is monic. -/
+noncomputable instance finiteWedgeH1CoordinateMap_mono (P : PairingData) :
+    Mono (finiteWedgeH1CoordinateMap P) := by
+  exact (SplitMono.mk (finiteWedgeH1CollapseCoordinates P)
+    (finiteWedgeH1CoordinateMap_leftInverse P)).mono
 
 end
 
