@@ -884,8 +884,70 @@ def apm_t01A04_cbp_V (i : Fin 2) : Set apm_t01a04_CircleCover :=
 lemma apm_t01A04_cbp_U_open : apm_t01a04_basepoint ∈ apm_t01A04_cbp_U ∧ IsOpen apm_t01A04_cbp_U := by
   sorry
 
+lemma apm_t01A04_cbp_V_open_aux_invariant (i : Fin 2)
+    {u v : Sum (Fin 2 × apm_t01a04_Torus) Circle}
+    (h : Relation.EqvGen apm_t01a04_circleCoverRel u v) :
+    (Sum.elim (fun p : Fin 2 × apm_t01a04_Torus =>
+        p.1 = i ∧ 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re)
+      (fun z : Circle =>
+        0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+          0 < ((z : ℂ) ^ 2).re) u ↔
+    Sum.elim (fun p : Fin 2 × apm_t01a04_Torus =>
+        p.1 = i ∧ 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re)
+      (fun z : Circle =>
+        0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+          0 < ((z : ℂ) ^ 2).re) v) := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue j =>
+        simp only [Sum.elim_inl, Sum.elim_inr, Prod.fst, Prod.snd,
+          apm_t01a04_sheetPoint_sq]
+        fin_cases i <;> fin_cases j <;>
+          simp [apm_t01a04_sheetPoint, Circle.exp, Complex.exp_mul_I] <;>
+          norm_num
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma apm_t01A04_cbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_cbp_V i) := by
-  sorry
+  change IsOpen ((fun r => (Quotient.mk _ r : apm_t01a04_CircleCover)) '' _)
+  rw [isOpen_coinduced]
+  have heq :
+      (fun r : Sum (Fin 2 × apm_t01a04_Torus) Circle =>
+        (Quotient.mk _ r : apm_t01a04_CircleCover)) ⁻¹'
+        ((fun r => (Quotient.mk _ r : apm_t01a04_CircleCover)) ''
+          {r | Sum.elim (fun p : Fin 2 × apm_t01a04_Torus =>
+              p.1 = i ∧ 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re)
+            (fun z : Circle =>
+              0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+                0 < ((z : ℂ) ^ 2).re) r}) =
+        {r | Sum.elim (fun p : Fin 2 × apm_t01a04_Torus =>
+            p.1 = i ∧ 0 < (p.2.1 : ℂ).re ∧ 0 < (p.2.2 : ℂ).re)
+          (fun z : Circle =>
+            0 < ((z : ℂ) * star (apm_t01a04_sheetPoint i : ℂ)).re ∧
+              0 < ((z : ℂ) ^ 2).re) r} := by
+    ext r
+    constructor
+    · rintro ⟨s, hs, hrs⟩
+      exact (apm_t01A04_cbp_V_open_aux_invariant i (Quotient.exact hrs)).mp hs
+    · intro hr
+      exact ⟨r, hr, rfl⟩
+  rw [heq, isOpen_sum_iff]
+  constructor
+  · exact ((isOpen_discrete ({i} : Set (Fin 2))).preimage
+        continuous_fst).inter
+      ((isOpen_lt continuous_const
+        (Complex.continuous_re.comp
+          (continuous_subtype_val.comp (continuous_fst.comp continuous_snd)))).inter
+        (isOpen_lt continuous_const
+          (Complex.continuous_re.comp
+            (continuous_subtype_val.comp (continuous_snd.comp continuous_snd)))))
+  · exact (isOpen_lt continuous_const
+      (Complex.continuous_re.comp
+        (continuous_subtype_val.mul continuous_const))).inter
+      (isOpen_lt continuous_const
+        (Complex.continuous_re.comp (continuous_subtype_val.pow 2)))
 
 lemma apm_t01A04_cbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_cbp_V) := by
   sorry
