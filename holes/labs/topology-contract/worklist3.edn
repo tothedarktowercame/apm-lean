@@ -36121,67 +36121,56 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Fold factorwise replacements through reconstructed words; reverse kernel/surjectivity; winding; C1/C2/Main.",
+    "Construct normalized outer factor family for each subdivision; derive surjectivity/reverse kernel; winding; C1/C2/Main.",
     :outcome :stop,
     :warnings ["unused SLSC owner-approved"],
     :missing-theorems
-    [{:name
-      "kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement",
+    [{:name "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
       :type
-      "ambient inner run equals overlap replacement through outer piece",
+      "pointwise path-class equality implies finite concatenation equality",
       :status :proved,
       :consumers [:t93J03],
       :depends-on
-      ["kleinPolygonInner_pathClass_eq_overlapReplacement"],
+      ["kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement"],
+      :depends-on ["pathHomotopicQuotient_concat_eq_of_pieceClass_eq"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-10,
     :reason
-    "Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains.",
+    "Proved pointwise segment-class equality folds through the dependent finite Path.concat used by subdivision reconstruction; concrete factor family remains.",
     :commands
     [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
      {:cmd "lean fixture; Main; registry; diff/show", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}],
     :diagnostic-history
-    [{:cmd "ambient replacement probe",
+    [{:cmd "initial build",
       :exit 1,
-      :correction "used induced groupoid functor map"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792000901457-12026-4893a5e8",
-     :commands
-     ["git show/check/diff 5f821fed; scope and fixture SHA-256"
-      "lake build ConstructionTargets.t93J03Closure; lean fixture and Main"
-      "statement-registry check; placeholder/axiom recount"],
-     :finding
-     "PASS: 5f821fed adds compiled, sorry-free progress beyond 0c1e3c72. Mapping inner-run path-class equality through the actual inner inclusion and simplifying the common ambient composite correctly identifies it with the same overlap path routed through the outer subtype. This preserves the cover-piece boundary and supplies the factorwise rewrite. Exact scope/hash match; support placeholders 0->0; frozen Main remains 1; standard axioms only; registry 166/166. STOP lists finite-word folding, reverse kernel/surjectivity, winding, C1/C2/Main."},
-    :commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7",
+      :correction
+      "concurrent dirty dependency; preserved; rerun passed"}],
+    :commit "194bd26dab68af2ed5a3d8622fb72db505537752",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
      "ConstructionTargets/t93J03Closure.blueprint.md"],
     :fixture
-    {:path "/tmp/t93j03_ambient_replacement_check.lean",
+    {:path "/tmp/t93j03_concat_fold_check.lean",
      :sha256
-     "a3c488e9080f7e88ec8e389a74d2449d078af8df3f5616a09ce1c4a8831c8fab"},
+     "dbb431f79c6d0e64be04e2a83ca7639317d7cea61e0852f6a712259376bc0c3d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -38632,7 +38621,8 @@
     :lemma-pathtwoopensubdivision-transition-mem-overlap
     :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton
     :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement
-    :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement],
+    :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement
+    :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -39053,6 +39043,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-kleinpolygoninner-pathclass-eq-overlapreplacement],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
+    :type
+    "pointwise path-class equality implies finite concatenation equality"},
+   :lemma
+   {:name "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "pointwise path-class equality implies finite concatenation equality",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
