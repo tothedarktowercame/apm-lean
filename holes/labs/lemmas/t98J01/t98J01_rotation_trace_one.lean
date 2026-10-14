@@ -265,7 +265,16 @@ theorem t98J01_rotation_trace_one :
     LinearMap.trace ℚ
       (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 1)
       (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 1).hom = 0 := by
-  sorry
+  let e := t98J01_sphere_homology_finiteDimensional_aux_iso 1 ≪≫
+    ConstructionTargets.CoefficientSphereEndpoints.rationalS2H1
+  letI : Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 1) :=
+    ⟨fun x y => e.toLinearEquiv.injective (Subsingleton.elim _ _)⟩
+  have hmap :
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 1).hom = 0 :=
+    Subsingleton.elim _ _
+  rw [hmap]
+  simp
 -- END SEAT AREA
 
 /-- Seat: the orientation-preserving half-turn has trace `1` on `H₂(S²; ℚ)`. -/
