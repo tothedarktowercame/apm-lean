@@ -4687,7 +4687,122 @@ theorem zip_lift_generator {Label : Type*} [DecidableEq Label]
       c (edgePoint ((u ++ v).length + 2) j t) = edgePoint (u ++ v).length j t) :
     ∀ a b, WordRel (u ++ v) a b → ∃ P Q : Disk, ‖(P : ℂ)‖ = 1 ∧ ‖(Q : ℂ)‖ = 1 ∧
       c P = a ∧ c Q = b ∧ WordRel (u ++ [x, inv x] ++ v) P Q := by
-  sorry
+  intro a b hab
+  rcases hab with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+  let i' : Fin (u ++ [x, inv x] ++ v).length :=
+    ⟨if i.1 < u.length then i.1 else i.1 + 2, by
+      have hiLen : i.1 < u.length + v.length := by simpa using i.isLt
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      split_ifs <;> omega⟩
+  let j' : Fin (u ++ [x, inv x] ++ v).length :=
+    ⟨if j.1 < u.length then j.1 else j.1 + 2, by
+      have hjLen : j.1 < u.length + v.length := by simpa using j.isLt
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      split_ifs <;> omega⟩
+  let P := edgePoint ((u ++ v).length + 2) i' t
+  let r := if ((u ++ v).get i).2 = ((u ++ v).get j).2 then t else reverseParameter t
+  let Q := edgePoint ((u ++ v).length + 2) j' r
+  refine ⟨P, Q, ?_, ?_, ?_, ?_, ?_⟩
+  · change ‖(edgePoint ((u ++ v).length + 2) i' t : ℂ)‖ = 1
+    exact norm_edgePoint ((u ++ v).length + 2) i' t
+  · change ‖(edgePoint ((u ++ v).length + 2) j' r : ℂ)‖ = 1
+    exact norm_edgePoint ((u ++ v).length + 2) j' r
+  · dsimp [P, i']
+    split_ifs with hi
+    · exact hlow i.1 hi t
+    · apply hhigh (i.1 + 2) (by omega) (by
+        have hiLen : i.1 < u.length + v.length := by simpa using i.isLt
+        simp only [List.length_append]
+        omega) t
+  · change c Q = edgePoint (u ++ v).length j r
+    dsimp [Q, j']
+    split_ifs with hj
+    · exact hlow j.1 hj r
+    · apply hhigh (j.1 + 2) (by omega) (by
+        have hjLen : j.1 < u.length + v.length := by simpa using j.isLt
+        simp only [List.length_append]
+        omega) r
+  · refine ⟨i', j', ?_, t, ?_, ?_, ?_⟩
+    · intro h
+      apply hij
+      apply Fin.ext
+      dsimp [i', j'] at h
+      simp only [Fin.mk.injEq] at h
+      split_ifs at h <;> omega
+    · change ((u ++ [x, inv x] ++ v).get i').1 =
+        ((u ++ [x, inv x] ++ v).get j').1
+      have hgi : (u ++ [x, inv x] ++ v).get i' = (u ++ v).get i := by
+        rw [List.get_eq_getElem, List.get_eq_getElem]
+        dsimp [i']
+        by_cases hi : i.1 < u.length
+        · simp [hi, List.getElem_append]
+        · have hv : i.1 - u.length < v.length := by
+            have hiLen : i.1 < u.length + v.length := by
+              simpa only [List.length_append] using i.isLt
+            omega
+          simp only [hi, ↓reduceIte, List.getElem_append]
+          split <;> rename_i h
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            omega
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            simp [List.getElem_append, hi, hv]
+      have hgj : (u ++ [x, inv x] ++ v).get j' = (u ++ v).get j := by
+        rw [List.get_eq_getElem, List.get_eq_getElem]
+        dsimp [j']
+        by_cases hj : j.1 < u.length
+        · simp [hj, List.getElem_append]
+        · have hv : j.1 - u.length < v.length := by
+            have hjLen : j.1 < u.length + v.length := by
+              simpa only [List.length_append] using j.isLt
+            omega
+          simp only [hj, ↓reduceIte, List.getElem_append]
+          split <;> rename_i h
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            omega
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            simp [List.getElem_append, hj, hv]
+      rw [hgi, hgj]
+      exact hlab
+    · dsimp [P]
+      apply congrArg (fun n => edgePoint n i' t)
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega
+    · have hgi : (u ++ [x, inv x] ++ v).get i' = (u ++ v).get i := by
+        rw [List.get_eq_getElem, List.get_eq_getElem]
+        dsimp [i']
+        by_cases hi : i.1 < u.length
+        · simp [hi, List.getElem_append]
+        · have hv : i.1 - u.length < v.length := by
+            have hiLen : i.1 < u.length + v.length := by
+              simpa only [List.length_append] using i.isLt
+            omega
+          simp only [hi, ↓reduceIte, List.getElem_append]
+          split <;> rename_i h
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            omega
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            simp [List.getElem_append, hi, hv]
+      have hgj : (u ++ [x, inv x] ++ v).get j' = (u ++ v).get j := by
+        rw [List.get_eq_getElem, List.get_eq_getElem]
+        dsimp [j']
+        by_cases hj : j.1 < u.length
+        · simp [hj, List.getElem_append]
+        · have hv : j.1 - u.length < v.length := by
+            have hjLen : j.1 < u.length + v.length := by
+              simpa only [List.length_append] using j.isLt
+            omega
+          simp only [hj, ↓reduceIte, List.getElem_append]
+          split <;> rename_i h
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            omega
+          · simp only [List.length_append, List.length_cons, List.length_nil] at h
+            simp [List.getElem_append, hj, hv]
+      rw [hgi, hgj]
+      dsimp [Q, r]
+      apply congrArg (fun n => edgePoint n j'
+        (if ((u ++ v).get i).2 = ((u ++ v).get j).2 then t else reverseParameter t))
+      simp only [List.length_append, List.length_cons, List.length_nil]
+      omega
 
 /-- Reverse direction: if `c p` is interior, `EqvGen` forces `c p = c q` and the
 fibre lemma applies; otherwise pass to the circle (`wordRel_eqvGen_circle`) and
