@@ -638,6 +638,30 @@ theorem t93J03_cyclicCover_aux_pQ_quotient
   rw [hcomp]
   exact isQuotientMap_quot_mk
 
+theorem t93J03_cyclicCover_aux_pQ_fiber_aux_smul_E
+    (n : ℤ) (u : ℝ × ℝ) :
+    (Multiplicative.ofAdd n : Multiplicative ℤ) • t93J03_cyc_E u =
+      t93J03_cyc_E (((-1 : ℝ) ^ n) * u.1, u.2 + n) := by
+  apply Subtype.ext
+  change
+    (Real.exp (n : ℝ) * (Real.exp u.2 * Real.cos (2 * Real.pi * u.1)),
+      Real.exp (n : ℝ) * ((-1 : ℝ) ^ n *
+        (Real.exp u.2 * Real.sin (2 * Real.pi * u.1)))) =
+    (Real.exp (u.2 + (n : ℝ)) *
+        Real.cos (2 * Real.pi * (((-1 : ℝ) ^ n) * u.1)),
+      Real.exp (u.2 + (n : ℝ)) *
+        Real.sin (2 * Real.pi * (((-1 : ℝ) ^ n) * u.1)))
+  rw [Real.exp_add]
+  rcases Int.even_or_odd n with hn | hn
+  · rw [hn.neg_one_zpow]
+    simp only [one_mul]
+    ext <;> ring
+  · rw [hn.neg_one_zpow]
+    simp only [neg_one_mul]
+    rw [show 2 * Real.pi * -u.1 = -(2 * Real.pi * u.1) by ring,
+      Real.cos_neg, Real.sin_neg]
+    ext <;> ring
+
 theorem t93J03_cyclicCover_aux_pQ_fiber
     (hEs : Function.Surjective t93J03_cyc_E)
     (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)
@@ -647,7 +671,35 @@ theorem t93J03_cyclicCover_aux_pQ_fiber
         ∃ m n : ℤ, w = (m + (-1 : ℝ) ^ n * v.1, n + v.2))
     (z w : T93J03Punctured) :
     t93J03_cyc_pQ z = t93J03_cyc_pQ w ↔ z ∈ MulAction.orbit (Multiplicative ℤ) w := by
-  sorry
+  obtain ⟨v, rfl⟩ := hEs z
+  obtain ⟨u, rfl⟩ := hEs w
+  rw [hpE, hpE]
+  constructor
+  · intro h
+    have hrel : MulAction.orbitRel
+        KleinPresentedGroupCoordinateModel.PresentedKleinGroup (ℝ × ℝ) v u :=
+      Quotient.eq''.mp h
+    obtain ⟨m, n, hv⟩ := (horbit u v).mp hrel
+    rw [MulAction.mem_orbit_iff]
+    refine ⟨Multiplicative.ofAdd n, ?_⟩
+    rw [t93J03_cyclicCover_aux_pQ_fiber_aux_smul_E]
+    apply (hEeq _ _).mpr
+    refine ⟨m, ?_⟩
+    rw [hv]
+    ext <;> simp <;> ring
+  · intro h
+    obtain ⟨k, hk⟩ := h
+    apply Quotient.sound
+    change ∃ g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup, g • u = v
+    apply (horbit u v).mpr
+    have hk' : t93J03_cyc_E
+        (((-1 : ℝ) ^ Multiplicative.toAdd k) * u.1,
+          u.2 + Multiplicative.toAdd k) = t93J03_cyc_E v := by
+      rw [← t93J03_cyclicCover_aux_pQ_fiber_aux_smul_E]
+      simpa using hk
+    obtain ⟨m, hm⟩ := (hEeq _ _).mp hk'
+    refine ⟨m, Multiplicative.toAdd k, ?_⟩
+    simpa [add_comm] using hm
 
 theorem t93J03_cyclicCover_aux_properlyDiscontinuous :
     ProperlyDiscontinuousSMul (Multiplicative ℤ) T93J03Punctured := by
