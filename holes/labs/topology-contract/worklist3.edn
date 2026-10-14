@@ -36151,6 +36151,17 @@
      {:cmd "statement-registry; placeholder; diff", :exit 0}
      {:cmd "rg forbidden", :exit 1, :expected-exit 1}
      {:cmd "git commit; show --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1791937702926-11048-d259520e",
+     :commands
+     ["git show --check 8da45fbae"
+      "sha256sum fixture; placeholder 1->1; scope diff"
+      "lake env lean recorded PointWedgeVanKampen + t93J03Closure + fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: compiled sorry-free standard-axiom two-circle wedge pi1 coproduct is new program progress. Orbit-indexed finite-wedge transport is not explicit yet but belongs to the listed attaching-cell van Kampen milestone. SLSC unused, mandated by problem.md. Scope, fixture hash, and registry 166/166 verified."},
     :commit "8da45fbae8f9a7f426a863fe55042dff748063c0",
     :changed-paths
     ["ConstructionTargets/t93J03Closure.lean"
@@ -36162,7 +36173,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36180,7 +36191,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed polygon-source path-connectedness; van Kampen remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36246,7 +36257,11 @@
     {:job 6,
      :commit "6c95a6d8e0a68fe6c98a2ea53637b5c2cd8c9ae7",
      :reason
-     "Committed polygon-source path-connectedness; van Kampen remains."}]}
+     "Committed polygon-source path-connectedness; van Kampen remains."}
+    {:job 7,
+     :commit "8da45fbae8f9a7f426a863fe55042dff748063c0",
+     :reason
+     "Committed exact two-circle skeleton pi1 coproduct; attaching-cell van Kampen remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -37807,7 +37822,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinSkeletonFundamentalGroupEquivCoprod",
@@ -37817,7 +37832,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "pi1(TwoCircles) equiv coproduct of two circle pi1 groups",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "8da45fbae8f9a7f426a863fe55042dff748063c0"},
    :id :lemma-kleinskeletonfundamentalgroupequivcoprod,
    :kind :lemma,
    :depends-on [],
