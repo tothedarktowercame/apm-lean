@@ -113901,6 +113901,17 @@
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
       :exit 1,
       :finding "B12 absent."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791945405504-11367-b641cbf0",
+     :commands
+     ["git show/diff-tree 017f8bcbc"
+      "git archive 017f8bcbc; lake env lean archived PointWedgeVanKampen.lean"
+      "lake build ConstructionTargets.PointWedgeVanKampen"
+      "sha256sum; placeholders; statement-registry.py check"],
+     :finding
+     "Independent review of topo-2 commit 017f8bcbc: only scoped Lean/doc files changed. Archived Lean and lake build pass; source/doc/fixture hashes 66b5d617/c65c2c2a/0bca6ce3 match evidence; placeholders 0->0; registry 166/166. Connector-transport equality and connector-square orientations are equivalent by valid cancellation and preserve dependent endpoints; axioms are standard. Valid program STOP; contraction comparison/projection/B6/B12 remain listed."},
     :commit "017f8bcbc2102871addea3509813436ee041038c",
     :changed-paths
     ["ConstructionTargets/PointWedgeVanKampen.lean"
@@ -113911,7 +113922,7 @@
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113943,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Projection reduced to exact unshifted counit connector transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Projection obstruction reduced to a naturality-oriented connector square.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114817,7 +114828,11 @@
     {:job 5,
      :commit "de20c62224a13d7f5cea7f82514ef0dbd3a5fb59",
      :reason
-     "Projection reduced to exact unshifted counit connector transport."}]}
+     "Projection reduced to exact unshifted counit connector transport."}
+    {:job 6,
+     :commit "017f8bcbc2102871addea3509813436ee041038c",
+     :reason
+     "Projection obstruction reduced to a naturality-oriented connector square."}]}
   {:consumer :t99J01,
    :phase :lemma,
    :state :backlog,
