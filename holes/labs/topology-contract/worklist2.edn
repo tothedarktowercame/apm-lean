@@ -87901,39 +87901,38 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove coordinate epi from loop generation; then B6-B10.",
+    "Transport H1 coordinates to outer piece, prove outer higher vanishing, then B6-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap",
-      :type "relabeling preserves arbitrary leg loops",
+    [{:name "finiteWedgeHurewicz_generated_by_coordinates",
+      :type "every loop Hurewicz class has coordinates",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeOrbitFundamentalGroupEquivFinExplicit"],
+      :depends-on ["finiteWedgeLegFreeGroupMap_surjective"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeOrbitFreeGroupMapComparison",
-      :type "relabeling identifies generator maps",
+     {:name "finiteWedgeH1CoordinateMap_surjective",
+      :type "normalized coordinate map is onto",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap"],
+      :depends-on ["finiteWedgeHurewicz_generated_by_coordinates"],
       :area "polygon-quotient-homology"}
-     {:name "finiteWedgeLegFreeGroupMap_surjective",
-      :type "canonical orbit-label map is onto",
+     {:name "finiteWedgeH1CoordinateIso",
+      :type "fixed positive-basis H1 isomorphism",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finiteWedgeOrbitFreeGroupMapComparison"],
+      :depends-on ["finiteWedgeH1CoordinateMap_surjective"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
     :reason
-    "Banked generator comparison and orbit-wedge surjectivity.",
+    "Banked coordinate surjectivity and fixed-basis H1 isomorphism.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,33 +87940,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check c3a9b395c", :exit 0}],
-    :diagnostic-history
-    [{:cmd "transport/comparison drafts",
-      :exit 1,
-      :correction
-      "used casted target path and explicit group induction"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792005528062-12234-1985e068",
-     :commands
-     ["git show/diff c3a9b395c; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scan"
-      "statement-registry.py check"],
-     :finding
-     "PASS: c3a9b395c (topo-6) changes only scoped PolygonSurfaceHomology.lean; fixture SHA-256 a0a890b0f8c1304648861c83a3f34ebdb1fcbd0ff4d224aed5fcbfc58130c31c matches. Exact blob builds; 0 placeholders; three milestones use standard axioms; registry 166/0. The commuting equation maps orbit generators through the based equivalence to relabeled Fin generators. Surjectivity correctly lifts a Fin preimage through the bijective FreeGroup label map and reflects equality via equivalence injectivity. New compiled progress; remaining: coordinate epi and B6-B10."},
-    :commit "c3a9b395c",
+     {:cmd "git show --check c1423123c", :exit 0}],
+    :commit "c1423123c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "a0a890b0f8c1304648861c83a3f34ebdb1fcbd0ff4d224aed5fcbfc58130c31c"},
+     "ac018385c4b8d51979391e56a590a9e4fc1a0278679dabffc87e4386950209c6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -89130,10 +89112,13 @@
    {:name "finiteWedgeH1CoordinateIso",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "(L->Z) isomorphic to H1(FiniteWedge L), preserving basis",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitewedgeh1coordinateiso,
    :kind :lemma,
-   :depends-on [:lemma-finitewedgeh1coordinatemap-single],
+   :depends-on
+   [:lemma-finitewedgeh1coordinatemap-single
+    :lemma-finitewedgeh1coordinatemap-surjective],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -90827,4 +90812,38 @@
    :kind :lemma,
    :depends-on
    [:lemma-finitewedgeorbitfundamentalgroupequivfinexplicit],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeHurewicz_generated_by_coordinates",
+    :type "every loop Hurewicz class has coordinates"},
+   :lemma
+   {:name "finiteWedgeHurewicz_generated_by_coordinates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "every loop Hurewicz class has coordinates",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgehurewicz-generated-by-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgelegfreegroupmap-surjective],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "finiteWedgeH1CoordinateMap_surjective",
+    :type "normalized coordinate map is onto"},
+   :lemma
+   {:name "finiteWedgeH1CoordinateMap_surjective",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "normalized coordinate map is onto",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-finitewedgeh1coordinatemap-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-finitewedgehurewicz-generated-by-coordinates],
    :other-consumers [:t94J09]}]}
