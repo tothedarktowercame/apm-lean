@@ -1315,6 +1315,28 @@ theorem polygonBoundaryIntegerLoop_concatSubpath (P : PairingData) :
     (polygonBoundaryIntegerLoopPath P)
     (polygonBoundarySubdivisionVertex P)
 
+/-- On the `i`th equal subdivision interval, affine interpolation of the
+once-around parameter is exactly the polygon edge parameter `(i+t)/n`. -/
+theorem integerLoop_convexCombo_subdivisionVertex (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    ConstructionTargets.CircleUniversalCover.integerLoop 1
+        (Set.Icc.convexCombo
+          (polygonBoundarySubdivisionVertex P i.castSucc)
+          (polygonBoundarySubdivisionVertex P i.succ) t) =
+      PolygonSurfacePiOne.edgePointCircle P.edgeCount i t := by
+  apply Subtype.ext
+  simp only [ConstructionTargets.CircleUniversalCover.integerLoop,
+    ConstructionTargets.CircleUniversalCover.circleCover,
+    PolygonSurfacePiOne.edgePointCircle,
+    ConstructionTargets.Surfaces.edgePoint,
+    polygonBoundarySubdivisionVertex, Path.coe_mk_mk,
+    Set.Icc.coe_convexCombo]
+  congr 1
+  simp only [Fin.val_castSucc, Fin.val_succ]
+  push_cast
+  field_simp
+  ring
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
