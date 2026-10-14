@@ -457,9 +457,10 @@ specification and the exterior endpoint identities to define the subtype
 endpoint family for the outer fold. The ambient family is now concretely
 `pathTwoOpenSubdivisionRunBoundaryPoints`: subdivision point zero followed by
 the target of each attached maximal run, with length exactly one more than the
-run count and literal initial point.  It remains to prove every such boundary
-is outer and lift this list to the outer subtype before extracting based
-surjectivity and the reverse kernel inclusion.
+run count and literal initial point. Its last entry is now also proved to be
+the final subdivision vertex.  It remains to prove the intermediate entries
+outer from the overlap chain and lift this list to the outer subtype before
+extracting based surjectivity and the reverse kernel inclusion.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

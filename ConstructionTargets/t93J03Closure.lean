@@ -1005,6 +1005,22 @@ noncomputable def pathTwoOpenSubdivisionRunBoundaryPoints
     (pathTwoOpenSubdivisionRunBoundaryPoints S).head? = some (S.point 0) := by
   simp [pathTwoOpenSubdivisionRunBoundaryPoints]
 
+/-- The final entry of the run-boundary list is the final subdivision vertex.
+Thus the two external outer-membership hypotheses attach to the literal head
+and last entries, while all intermediate entries come from overlap changes. -/
+@[simp] theorem pathTwoOpenSubdivisionRunBoundaryPoints_getLast
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (pathTwoOpenSubdivisionRunBoundaryPoints S).getLast (by
+      simp [pathTwoOpenSubdivisionRunBoundaryPoints]) =
+      S.point (Fin.last (S.n + 1)) := by
+  obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
+  simp only [pathTwoOpenSubdivisionRunBoundaryPoints]
+  rw [List.getLast_cons (by simp [hr])]
+  rw [List.getLast_map]
+  simp only [List.getLast_attach]
+  simpa [hlast]
+
 /-- Every member of a maximal Boolean side run has the side recorded at its
 head.  This turns the local chain certificate returned by `splitBy` into the
 pointwise fact needed to package a whole subdivision block. -/
@@ -2521,6 +2537,7 @@ theorem lift_isEmbedding_assembly
 #print axioms pathTwoOpenSubdivision_runPartition_boundary_spec
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_length
 #print axioms pathTwoOpenSubdivisionRunBoundaryPoints_head
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_getLast
 #print axioms boolSideRunPartition_mem_side_eq_head
 #print axioms boolSideRunPartition_isInfix_finRange
 #print axioms boolSideRunPartition_exists_slice
