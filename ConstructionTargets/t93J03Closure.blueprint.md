@@ -247,6 +247,12 @@ that extraction: the normal closure of the full image is already the normal
 closure of the singleton winding-one word.  Only its geometric identification
 with `kleinAabbWord` remains before the based quotient can use the banked
 presentation kernel.
+Because the chosen path to `kleinSkeletonPoint` is not canonical, the exact
+word may be conjugated.  The quotient needs only its normal closure.
+`kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj` proves that conjugacy of
+the winding-one image with `kleinAabbWord` gives exactly the required normal
+closure equality.  The remaining geometric comparison should therefore be
+stated as conjugacy, not literal equality.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

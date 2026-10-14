@@ -959,6 +959,30 @@ theorem kleinPolygonOverlapWindingHom_normalClosure :
   · apply Subgroup.normalClosure_mono
     exact Set.singleton_subset_iff.mpr (Subgroup.mem_zpowers _)
 
+/-- The arbitrary path used to move the overlap basepoint may conjugate its
+word, but conjugation does not change the normal closure used by van Kampen. -/
+theorem kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
+    (h : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord) :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapWindingHom.range : Set (FreeGroup Bool)) =
+      Subgroup.normalClosure kleinPolygonRelations := by
+  rw [kleinPolygonOverlapWindingHom_normalClosure]
+  change Subgroup.normalClosure {kleinPolygonOverlapWindingOneImage} =
+    Subgroup.normalClosure {kleinAabbWord}
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, hc⟩ := isConj_iff.mp h.symm
+    rw [← hc]
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, hc⟩ := isConj_iff.mp h
+    rw [← hc]
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -1109,6 +1133,7 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinPolygonOverlapWindingOneImage
 #print axioms kleinPolygonOverlapWindingHom_range
 #print axioms kleinPolygonOverlapWindingHom_normalClosure
+#print axioms kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
 
 end ConstructionTargets.t93J03Closure
