@@ -2351,6 +2351,68 @@ noncomputable def finiteWedgeFinSuccLastFundamentalGroupMap (n : ℕ) :
   FundamentalGroup.mapOfEq (finiteWedgeFinSuccLastInclusion n)
     (finiteWedgeFinSuccLastInclusion_base n)
 
+/-- An arbitrary circle loop inserted in the `i`th leg of a standard finite
+wedge and transported to its common zeroth-leg basepoint. -/
+noncomputable def finiteWedgeFinLegMap (n : ℕ) (i : Fin (n + 1)) :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  FundamentalGroup.mapOfEq
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle i⟩
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq i 0)
+
+/-- An arbitrary circle loop inserted in the unique leg of the `Unit`-indexed
+wedge, at its literal basepoint. -/
+noncomputable def finiteWedgeUnitLegMap :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  FundamentalGroup.map
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (),
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle ()⟩ 1
+
+/-- The arbitrary-loop leg map is the literal leg map followed by the common
+basepoint cast. -/
+theorem finiteWedgeFinLegMap_apply (n : ℕ) (i : Fin (n + 1))
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinLegMap n i g =
+      Path.Homotopic.Quotient.cast
+        (FundamentalGroup.map
+          ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i,
+            PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle i⟩ 1 g)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i) := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinLegMap, FundamentalGroup.mapOfEq_apply,
+        FundamentalGroup.map_apply]
+      rfl
+
+/-- The arbitrary-loop leg map specializes to the previously fixed positive
+fundamental class. -/
+theorem finiteWedgeFinLegMap_positive (n : ℕ) (i : Fin (n + 1)) :
+    finiteWedgeFinLegMap n i circlePositiveFundamentalClass =
+      Path.Homotopic.Quotient.cast (finiteWedgeLegFundamentalClass i)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i) := by
+  exact finiteWedgeFinLegMap_apply n i circlePositiveFundamentalClass
+
+/-- Words whose letters are arbitrary circle loops assigned to finite-wedge
+labels.  Integer-exponent words arise later by circle generation. -/
+abbrev FiniteWedgeFinLoopWord (n : ℕ) :=
+  List (Fin (n + 1) × FundamentalGroup Circle 1)
+
+/-- Evaluate an arbitrary-loop leg word at the common finite-wedge basepoint. -/
+noncomputable def finiteWedgeFinLoopWordValue (n : ℕ)
+    (w : FiniteWedgeFinLoopWord n) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  (w.map fun q => finiteWedgeFinLegMap n q.1 q.2).prod
+
 /-- Mapping the installed old-factor inclusion across the splitting
 homeomorphism recovers the literal left point-wedge leg map. -/
 theorem finiteWedgeFinSuccOldFundamentalGroupMap_comparison (n : ℕ)
