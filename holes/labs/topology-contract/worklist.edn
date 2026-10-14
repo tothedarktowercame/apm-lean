@@ -119110,6 +119110,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792006081417-12253-4f23551a",
+     :commands
+     ["git diff-tree/show 8b9632e"
+      "git archive 8b9632e; lake env lean t00J02Closure.lean and Main.lean"
+      "sha256sum and placeholder counts at 8b9632e"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new in-scope commit correctly transfers compact-discrete finiteness from the set singleton preimage to the literal equality-fiber subtype via an injective coercion-preserving map, matching the signed-count representation. Archived files compile; closure has 0 placeholders and standard axioms only; Main remains frozen at 0b3b4888 with baseline 1 placeholder; fixture afb497a6 matches; registry 166/166. Fiber discreteness, local degrees, component comparison, regular-value formula, and final assembly remain listed."},
     :commit "8b9632e39322f6ee0d3885c58b2adc21349418c2",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked lift-degree aggregation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal regular-fiber Fintype.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119199,7 +119210,10 @@
      :reason "Banked exact component lifts."}
     {:job 8,
      :commit "5aeeae275e75b2397c2bc241f214652218fa1525",
-     :reason "Banked lift-degree aggregation."}]}
+     :reason "Banked lift-degree aggregation."}
+    {:job 9,
+     :commit "8b9632e39322f6ee0d3885c58b2adc21349418c2",
+     :reason "Banked literal regular-fiber Fintype."}]}
   {:consumer :t98A06,
    :stop-count 1,
    :evidence
@@ -119762,7 +119776,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularFiberFintype_of_isDiscrete",
@@ -119774,7 +119788,9 @@
     :type
     "compact discrete singleton preimage gives Fintype on equality fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8b9632e39322f6ee0d3885c58b2adc21349418c2"},
    :id :lemma-regularfiberfintype-of-isdiscrete,
    :kind :lemma,
    :depends-on [:lemma-finite-regularfiber-of-isdiscrete],
