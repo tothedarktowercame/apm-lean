@@ -3224,6 +3224,155 @@ noncomputable def outerH1IsoCoordinates (P : PairingData) :
       ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
         (finiteWedgeH1CoordinateIso P).symm)
 
+/-! ### Higher homology of finite wedges -/
+
+/-- Mayer--Vietoris preserves higher-homology vanishing when two pointed
+spaces are joined at contractible base neighborhoods.  This is the induction
+step used for finite wedges of circles. -/
+theorem pointWedgeHigherHomologyIsZero
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y)
+    (PX : PointedContractibleNeighborhood X x₀)
+    (PY : PointedContractibleNeighborhood Y y₀)
+    (n : ℕ) (hn : 2 ≤ n)
+    (hX : IsZero (SpaceH X n)) (hY : IsZero (SpaceH Y n)) :
+    IsZero (SpaceH (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀) n) := by
+  let p := ConstructionTargets.GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage
+    x₀ y₀ PY.carrier PX.carrier PY.isOpen PX.isOpen PY.mem PX.mem
+      PY.contraction PX.contraction
+  let U := ConstructionTargets.PointWedgeQuotient.leftOpen
+    x₀ y₀ PY.carrier
+  let V := ConstructionTargets.PointWedgeQuotient.rightOpen
+    x₀ y₀ PX.carrier
+  let GH (k : ℕ) (Z : Type) [TopologicalSpace Z] :=
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of Z)
+  have hI (k : ℕ) (hk : k ≠ 0) : IsZero (GH k (U ∩ V : Set _)) :=
+    (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      Unit k hk).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.intersectionEquiv k)
+  have hIso : IsIso
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) := by
+    have hm : Mono
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) :=
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+        U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ n).mono_g_iff.mpr
+          ((hI n (by omega)).eq_of_src _ _)
+    have heq : n - 1 + 1 = n := by omega
+    have he : Epi
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) := by
+      rw [← heq]
+      exact
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+          U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ (n - 1)).epi_f_iff.mpr
+            ((hI (n - 1) (by omega)).eq_of_tgt _ _)
+    letI := hm
+    letI := he
+    exact isIso_of_mono_of_epi _
+  letI := hIso
+  have underlyingIsZero {A : ModuleCat ℤ} (hA : IsZero A) :
+      IsZero
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj A) := by
+    rw [IsZero.iff_id_eq_zero]
+    rw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id,
+      ← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_zero]
+    exact congrArg
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map)
+      (hA.eq_of_src _ _)
+  have hUG : IsZero (GH n U) :=
+    (underlyingIsZero hX).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) n).symm |>.of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.leftEquiv n)
+  have hVG : IsZero (GH n V) :=
+    (underlyingIsZero hY).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Y) n).symm |>.of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.rightEquiv n)
+  have hW : IsZero (GH n (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)) := by
+    have hp : IsZero (GH n U ⊞ GH n V) :=
+      (biprod_isZero_iff _ _).mpr ⟨hUG, hVG⟩
+    exact hp.of_iso
+      (asIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        U V n)).symm
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      (TopCat.of (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)) n hW
+
+/-- Integral homology transport along a homotopy equivalence, in the module
+presentation used by the polygon calculation. -/
+noncomputable def spaceHHomotopyEquivIso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₕ Y) (n : ℕ) : SpaceH X n ≅ SpaceH Y n :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of X) n (SpaceH Y n)
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e n ≪≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Y) n).symm)
+
+/-- Every nonempty standard finite wedge of circles has zero integral
+homology above degree one. -/
+theorem finiteWedgeFinHigherHomologyIsZero :
+    ∀ (m n : ℕ), 2 ≤ n →
+      IsZero (SpaceH
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (m + 1))) n)
+  | 0, n, hn => by
+      have hc : IsZero (SpaceH Circle n) :=
+        ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+          (TopCat.of Circle) n
+          (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+            n (by omega))
+      exact hc.of_iso
+        (spaceHHomotopyEquivIso finiteWedgeFinOneHomeomorphCircle.toHomotopyEquiv n)
+  | m + 1, n, hn => by
+      let P := finiteWedgeFinSuccPointWedgeNeighborhoods m
+      have hold := finiteWedgeFinHigherHomologyIsZero m n hn
+      have hlast : IsZero
+          (SpaceH
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit) n) := by
+        have hc : IsZero (SpaceH Circle n) :=
+          ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+            (TopCat.of Circle) n
+            (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+              n (by omega))
+        exact hc.of_iso
+          (spaceHHomotopyEquivIso
+            (finiteWedgeSubsingletonHomeomorphCircle ()).toHomotopyEquiv n)
+      have hw := pointWedgeHigherHomologyIsZero
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (m + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        P.1 P.2 n hn hold hlast
+      exact hw.of_iso
+        (spaceHHomotopyEquivIso
+          (finiteWedgeFinSuccHomeomorphPointWedge m).toHomotopyEquiv n)
+
+/-- B4 above degree one for the polygon's orbit-indexed finite wedge. -/
+theorem finiteWedgeHigherHomologyIsZero (P : PairingData) (n : ℕ) (hn : 2 ≤ n) :
+    IsZero (SpaceH
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) n) := by
+  generalize hc :
+    Fintype.card (PairingOrbit P.pair) = c
+  cases c with
+  | zero =>
+      exfalso
+      have := pairingOrbitCard_pos P
+      omega
+  | succ m =>
+      have hfin := finiteWedgeFinHigherHomologyIsZero m n hn
+      let e := finiteWedgeOrbitHomeomorphFin P
+      rw [hc] at e
+      exact hfin.of_iso (spaceHHomotopyEquivIso e.toHomotopyEquiv n)
+
+/-- B4 above degree one, transported from the finite wedge to the radial
+outer piece. -/
+theorem outerHigherHomologyIsZero (P : PairingData) (n : ℕ) (hn : 2 ≤ n) :
+    IsZero (SpaceH (OuterPiece P) n) :=
+  (finiteWedgeHigherHomologyIsZero P n hn).of_iso
+    (spaceHHomotopyEquivIso (outerHomotopyEquivWedge P) n)
+
 end
 
 end ConstructionTargets.PolygonSurfaceHomology
