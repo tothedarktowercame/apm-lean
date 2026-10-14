@@ -467,6 +467,29 @@ def fundamentalGroupEquivOfHomeomorph
       exact e.apply_symm_apply (p t)
   map_mul' := map_mul _
 
+/-- Transporting a based loop along two paths with the same endpoints changes
+its target loop only by conjugacy. -/
+theorem fundamentalGroup_pathTransport_isConj
+    {X : Type*} [TopologicalSpace X] {x y : X}
+    (p q : Path x y) (g : FundamentalGroup X x) :
+    IsConj (FundamentalGroup.fundamentalGroupMulEquivOfPath p g)
+      (FundamentalGroup.fundamentalGroupMulEquivOfPath q g) := by
+  let ep := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦p⟧
+  let eq := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦q⟧
+  refine ⟨toUnits (ep.inv ≫ eq.hom), ?_⟩
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath p g) ≫
+      (ep.inv ≫ eq.hom) =
+    (ep.inv ≫ eq.hom) ≫
+      (FundamentalGroup.fundamentalGroupMulEquivOfPath q g)
+  rw [show FundamentalGroup.fundamentalGroupMulEquivOfPath p g =
+    ep.inv ≫ g ≫ ep.hom from rfl]
+  rw [show FundamentalGroup.fundamentalGroupMulEquivOfPath q g =
+    eq.inv ≫ g ≫ eq.hom from rfl]
+  simp only [CategoryTheory.Category.assoc,
+    CategoryTheory.Iso.hom_inv_id_assoc]
+
 /-- The frozen Klein bottle is path connected because it is the continuous
 surjective image of the convex closed disk under its defining quotient map. -/
 noncomputable instance kleinBottlePathConnectedSpace :
@@ -1084,6 +1107,7 @@ theorem lift_isEmbedding_assembly
 #print axioms coveringLift_of_subgroup_le
 #print axioms lift_isEmbedding_assembly
 #print axioms fundamentalGroupEquiv_every_basepoint
+#print axioms fundamentalGroup_pathTransport_isConj
 #print axioms kleinPlaneContinuousConstSMul
 #print axioms kleinPlaneOrbit_pi1_at_origin
 #print axioms coordinate_equations_of_smul_eq

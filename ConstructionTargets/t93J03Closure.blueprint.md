@@ -249,6 +249,10 @@ with `kleinAabbWord` remains before the based quotient can use the banked
 presentation kernel.
 Because the chosen path to `kleinSkeletonPoint` is not canonical, the exact
 word may be conjugated.  The quotient needs only its normal closure.
+`fundamentalGroup_pathTransport_isConj` proves the general basepoint-change
+fact: transporting the same loop along any two connectors with common
+endpoints produces conjugate target loops.  The geometric calculation may
+therefore choose a convenient connector without changing the quotient.
 `kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj` proves that conjugacy of
 the winding-one image with `kleinAabbWord` gives exactly the required normal
 closure equality.  The remaining geometric comparison should therefore be
