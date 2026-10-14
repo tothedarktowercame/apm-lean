@@ -716,7 +716,28 @@ theorem t93J03_cyclicCover_aux_range_aux_fiber
     (v : ℝ × ℝ) (g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup) :
     t93J03_cyc_E (g • v) = t93J03_cyc_E v ↔
       g ∈ Subgroup.zpowers KleinPresentedGroupCoordinateModel.generatorA := by
-  sorry
+  constructor
+  · intro h
+    obtain ⟨n, hn⟩ := (hEeq (g • v) v).mp h
+    have hfix :
+        (KleinPresentedGroupCoordinateModel.generatorA ^ n * g) • v = v := by
+      rw [mul_smul, hA]
+      exact hn.symm
+    have hone : KleinPresentedGroupCoordinateModel.generatorA ^ n * g = 1 :=
+      t93J03_kleinPlaneQuotient_pi1_origin_aux_free _ _ hfix
+    have hg : g = KleinPresentedGroupCoordinateModel.generatorA ^ (-n) := by
+      calc
+        g = (KleinPresentedGroupCoordinateModel.generatorA ^ n)⁻¹ *
+            (KleinPresentedGroupCoordinateModel.generatorA ^ n * g) := by simp
+        _ = KleinPresentedGroupCoordinateModel.generatorA ^ (-n) := by
+          rw [hone, mul_one]
+          simp
+    exact ⟨-n, hg.symm⟩
+  · rintro ⟨n, rfl⟩
+    apply (hEeq _ _).mpr
+    refine ⟨-n, ?_⟩
+    rw [hA]
+    ext <;> simp
 
 /-- The image of `π₁(C)` is exactly the preimage of `⟨a⟩` under the deck-group
 monodromy of the plane over the orbit quotient.  (Split 2026-10-14: lemma-1 banked
