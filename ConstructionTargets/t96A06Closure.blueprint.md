@@ -46,6 +46,13 @@ The first part now compiles in `t96A06Closure.lean`:
 `nonzeroVectors3PathConnectedSpace` and `rp3PathConnectedSpace` establish
 connectedness of the exact quotient model, and `rp3RationalH0Iso` computes
 its degree-zero rational homology as `ℚ`.
+The normalized projection from the concrete unit three-sphere is now tied to
+the frozen quotient topology: `rp3RadialToSphere` is continuous, its composite
+with `sphereProjection 3` is the original nonzero-vector quotient map, and
+`rp3SphereProjection_isQuotientMap` proves the exact quotient authority needed
+before constructing the two-sheeted covering transfer.  The companion theorem
+`rp3SphereProjection_eq_iff` computes every fiber as exactly a point and its
+antipode.
 
 ## C3. Degree four of the quadratic map — library
 
