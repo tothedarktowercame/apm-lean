@@ -119137,41 +119137,41 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove common-target chart C1; instantiate implicit chart; Sard; calculations; Main.",
+    "Prove each chart expression C1; instantiate implicit chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx; lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "hasStrictFDerivAt_incidenceDifference_commonTarget",
-      :type "C1 common-target incidence map has strict derivative",
+    [{:name "contDiffAt_incidenceDifference_commonTarget",
+      :type "two C1 chart maps give C1 product incidence map",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["hasFDerivAt_incidenceDifference_commonTarget"],
+      :depends-on
+      ["hasStrictFDerivAt_incidenceDifference_commonTarget"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["hasStrictFDerivAt_incidenceDifference_commonTarget"],
+      :depends-on ["contDiffAt_incidenceDifference_commonTarget"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "82154dacefddd5e3c7927e72172b3a55ee2711763a7416df569e37b12b4dca8e",
+     "83f394ab199638043d9207e8babb50b849ecb101e26646e4477f7b475d054551",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked strict common-target derivative.",
+    :reason "Banked product-chart C1 assembly.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
@@ -119179,20 +119179,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "fixed model notation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792046302005-13525-a8425de9",
-     :commands
-     ["git diff/show bb63f8e6 archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds a compiled, sorry-free strict-derivative bridge. It requires explicit ContDiffAt order 1 for the common-target coordinate map, then combines that with the proved A.coprod(-B) derivative; it does not incorrectly upgrade differentiability without C1. Proving the geometric C1 input and instantiating the implicit chart remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "bb63f8e6568a98dd849686b0791caeeeab6caf91",
+    [{:cmd "draft", :exit 1, :finding "fixed snd inference"}],
+    :commit "46bf9b17683018d66e363a12c8651429ee31cc67",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119200,7 +119188,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119700,7 +119688,8 @@
     :lemma-writteninextchartat-eq-commontarget-of-eq
     :lemma-hasfderivat-incidencedifference-commontarget
     :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse
-    :lemma-hasstrictfderivat-incidencedifference-commontarget],
+    :lemma-hasstrictfderivat-incidencedifference-commontarget
+    :lemma-contdiffat-incidencedifference-commontarget],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121666,6 +121655,24 @@
    :id :lemma-hasstrictfderivat-incidencedifference-commontarget,
    :kind :lemma,
    :depends-on [:lemma-hasfderivat-incidencedifference-commontarget],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "contDiffAt_incidenceDifference_commonTarget",
+    :type "two C1 chart maps give C1 product incidence map"},
+   :lemma
+   {:name "contDiffAt_incidenceDifference_commonTarget",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "two C1 chart maps give C1 product incidence map",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-contdiffat-incidencedifference-commontarget,
+   :kind :lemma,
+   :depends-on
+   [:lemma-hasstrictfderivat-incidencedifference-commontarget],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
