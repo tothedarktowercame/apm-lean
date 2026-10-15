@@ -407,9 +407,102 @@ lemma cell_outer_hequiv_aux_descend_incl (gamma : C(Circle, Y)) (y : Y) :
 a quotient map (`IsQuotientMap.restrictPreimage_isOpen`); on that preimage the
 raw map is continuous (`inl`: identity; `inr` on `1/3 < |z|`: `γ ∘ radial`,
 with `z ≠ 0`). -/
+lemma cell_outer_hequiv_aux_continuous_aux_mem
+    (γ : C(Circle, Y)) (x : Y ⊕ apm_t97J04_Disk) :
+    cellMk γ x ∈ cellOuter γ ↔
+      x ∈ (Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+        Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖}) := by
+  let P : Y ⊕ apm_t97J04_Disk → Prop := fun x =>
+    x ∈ (Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+      Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖})
+  have hP : ∀ {a b}, Relation.EqvGen (CellRel γ) a b → (P a ↔ P b) := by
+    intro a b h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | boundary z =>
+            simp [P, circleToDisk, PolygonSurfaceHomology.circleToPolygonDisk,
+              Circle.norm_coe]
+            norm_num
+    | refl => exact Iff.rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  constructor
+  · rintro ⟨y, hy, heq⟩
+    change Quotient.mk _ y = Quotient.mk _ x at heq
+    have hrel : Relation.EqvGen (CellRel γ) y x := Quotient.exact heq
+    exact (hP hrel).mp hy
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+lemma cell_outer_hequiv_aux_continuous_aux_open (γ : C(Circle, Y)) :
+    IsOpen (cellOuter γ) := by
+  have hq : Topology.IsQuotientMap (cellMk γ) := ⟨Quotient.mk_surjective, rfl⟩
+  rw [← hq.isOpen_preimage]
+  rw [show (cellMk γ) ⁻¹' cellOuter γ =
+      (Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+        Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖}) by
+    ext x
+    exact cell_outer_hequiv_aux_continuous_aux_mem γ x]
+  apply IsOpen.union
+  · exact isOpen_range_inl
+  · exact isOpenMap_inr _
+      (isOpen_lt continuous_const (continuous_norm.comp continuous_subtype_val))
+
+lemma cell_outer_hequiv_aux_continuous_aux_radial {z : ℂ} (hz : z ≠ 0) :
+    ContinuousAt cell_outer_hequiv_aux_radial z := by
+  apply (tendsto_subtype_rng).2
+  rw [show ((cell_outer_hequiv_aux_radial z : Circle) : ℂ) =
+      z / (‖z‖ : ℂ) by simp [cell_outer_hequiv_aux_radial, hz]]
+  refine Filter.Tendsto.congr' ?_ ((continuousAt_id.div
+    (Complex.continuous_ofReal.continuousAt.comp continuous_norm.continuousAt)
+    (by
+      change ((‖z‖ : ℝ) : ℂ) ≠ 0
+      exact_mod_cast norm_ne_zero_iff.mpr hz)).tendsto)
+  filter_upwards [eventually_ne_nhds hz] with w hw
+  simp [cell_outer_hequiv_aux_radial, hw]
+
+lemma cell_outer_hequiv_aux_continuous_aux_raw_at (γ : C(Circle, Y))
+    (x : Y ⊕ apm_t97J04_Disk)
+    (hx : x ∈ (Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+      Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖})) :
+    ContinuousAt (cell_outer_hequiv_aux_raw γ) x := by
+  cases x with
+  | inl y =>
+      rw [ContinuousAt, nhds_inl]
+      simpa [cell_outer_hequiv_aux_raw] using continuousAt_id.tendsto
+  | inr z =>
+      have hzpos : (0 : ℝ) < ‖(z : ℂ)‖ := by
+        rcases hx with (⟨y, h⟩ | ⟨w, hw, h⟩)
+        · cases h
+        · injection h with hzw
+          subst w
+          norm_num at hw ⊢
+          intro hz
+          simp [hz] at hw
+          norm_num at hw
+      have hz : (z : ℂ) ≠ 0 := norm_pos_iff.mp hzpos
+      rw [ContinuousAt, nhds_inr]
+      change Filter.Tendsto (fun z : apm_t97J04_Disk =>
+        γ (cell_outer_hequiv_aux_radial (z : ℂ))) (nhds z) _
+      exact
+        (γ.continuous.continuousAt.comp
+          ((cell_outer_hequiv_aux_continuous_aux_radial hz).comp
+            continuousAt_subtype_val)).tendsto
+
 lemma cell_outer_hequiv_aux_continuous (γ : C(Circle, Y)) :
     Continuous (fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1) := by
-  sorry
+  have hq : Topology.IsQuotientMap (cellMk γ) := ⟨Quotient.mk_surjective, rfl⟩
+  have hqr := hq.restrictPreimage_isOpen
+    (cell_outer_hequiv_aux_continuous_aux_open γ)
+  rw [hqr.continuous_iff]
+  rw [continuous_iff_continuousAt]
+  intro x
+  change ContinuousAt
+    (fun x : (cellMk γ) ⁻¹' cellOuter γ => cell_outer_hequiv_aux_raw γ x.1) x
+  apply (cell_outer_hequiv_aux_continuous_aux_raw_at γ x.1
+    ((cell_outer_hequiv_aux_continuous_aux_mem γ x.1).mp x.2)).comp
+    continuousAt_subtype_val
 
 /-- A4b. Radial homotopy from `cellInclOuter γ ∘ retraction` to the identity
 of the outer piece: `H(t, inl y) = inl y`,
