@@ -861,7 +861,45 @@ theorem t99A01_sigma_simplices {r : ℕ} (Y : Fin r → Type) [∀ i, Topologica
         (Opposite.op (SimplexCategory.mk n)) ↦
       (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
         C(Y p.1, Σ j, Y j)))).app (Opposite.op (SimplexCategory.mk n)) p.2) := by
-  sorry
+  let N := Opposite.op (SimplexCategory.mk n)
+  let E (X : Type) [TopologicalSpace X] :=
+    TopCat.toSSetObjEquiv (TopCat.of X) N
+  let F := fun p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj N ↦
+    (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+      C(Y p.1, Σ j, Y j)))).app N p.2
+  have hF (p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj N) :
+      E (Σ j, Y j) (F p) =
+        (⟨Sigma.mk p.1 ∘ (E (Y p.1) p.2),
+          continuous_sigmaMk.comp (E (Y p.1) p.2).continuous⟩ :
+          C(_, Σ j, Y j)) := by
+    rfl
+  change Function.Bijective F
+  constructor
+  · rintro ⟨i, a⟩ ⟨j, b⟩ hab
+    have hc := congrArg (E (Σ j, Y j)) hab
+    rw [hF, hF] at hc
+    have hij : i = j := by
+      have hp := congrArg (fun f => (f (Classical.arbitrary _)).1) hc
+      simpa using hp
+    subst j
+    congr 1
+    apply (E (Y i)).injective
+    apply ContinuousMap.ext
+    intro x
+    have hp := congrArg (fun f => f x) hc
+    change Sigma.mk i ((E (Y i) a) x) = Sigma.mk i ((E (Y i) b) x) at hp
+    exact eq_of_heq (Sigma.mk.inj_iff.mp hp).2
+  · intro q
+    let f := E (Σ j, Y j) q
+    obtain ⟨i, g, hg, hfg⟩ := f.continuous.exists_lift_sigma
+    let a := (E (Y i)).symm ⟨g, hg⟩
+    refine ⟨⟨i, a⟩, ?_⟩
+    apply (E (Σ j, Y j)).injective
+    rw [hF]
+    apply ContinuousMap.ext
+    intro x
+    change Sigma.mk i (g x) = f x
+    exact (congrFun hfg x).symm
 
 /-- **Leaf (chains of a disjoint union, 60--120 lines).** Given the simplex
 bijection, the singular chain complex of `Σ j, Y j` is the biproduct of the summands'
