@@ -2514,6 +2514,44 @@ lemma t99A01_succ_vk_quotient {r : ℕ} (degree : Fin (r + 1) → ℕ) :
           QuotientGroup.mk' _ (eS (FundamentalGroup.mapOfEq (t99A01_succRho degree) h a)) := by
   sorry
 
+lemma t99A01_piOne_attach_succ_aux_vankampen_aux_map_transport
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) {x y : X} (p : Path x y) (a : FundamentalGroup X x) :
+    FundamentalGroup.map f y
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) =
+      FundamentalGroup.fundamentalGroupMulEquivOfPath (p.map f.continuous)
+        (FundamentalGroup.map f x a) := by
+  induction a using Quotient.inductionOn with
+  | h q =>
+    change
+      (FundamentalGroupoid.map f).map
+          (((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧).conj ⟦q⟧) =
+        ((FundamentalGroupoid.map f).mapIso
+          ((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧)).conj
+            ((FundamentalGroupoid.map f).map ⟦q⟧)
+    exact (FundamentalGroupoid.map f).map_conj _ _
+
+lemma t99A01_piOne_attach_succ_aux_vankampen_aux_transport_trans
+    {X : Type*} [TopologicalSpace X] {x y z : X}
+    (p : Path x y) (q : Path y z) (a : FundamentalGroup X x) :
+    FundamentalGroup.fundamentalGroupMulEquivOfPath (p.trans q) a =
+      FundamentalGroup.fundamentalGroupMulEquivOfPath q
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) := by
+  let ep := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦p⟧
+  let eq := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk y) (FundamentalGroupoid.mk z)).symm ⟦q⟧
+  have ht :
+      (CategoryTheory.Groupoid.isoEquivHom
+          (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk z)).symm ⟦p.trans q⟧ =
+        ep ≪≫ eq := by
+    apply CategoryTheory.Iso.ext
+    rfl
+  change ((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p.trans q⟧).conj a =
+    eq.conj (ep.conj a)
+  rw [ht]
+  exact CategoryTheory.Iso.trans_conj ep eq a
+
 lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
     (degree : Fin (r + 1) → ℕ)
     (hP1 : ∀ (eS : FundamentalGroup (APMT99A01.AttachSpace (degree ∘ Fin.castSucc))
@@ -2556,7 +2594,137 @@ lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
                 (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))))),
       e (APMT99A01.baseCircleClass degree) =
         QuotientGroup.mk' _ (Multiplicative.ofAdd 1) := by
-  sorry
+  obtain ⟨eS, heS⟩ := ih
+  obtain ⟨_, h, _, _⟩ := hgen
+  obtain ⟨f, hf⟩ := hP1 eS heS h
+  obtain ⟨eVK, heVK⟩ := hV1
+  obtain ⟨_, _, _, _, _, hUc, _, _⟩ :=
+    t99A01_piOne_attach_succ_cover degree
+  letI : PathConnectedSpace (APMT99A01.succCircleSide degree) :=
+    isPathConnected_iff_pathConnectedSpace.mp hUc
+  let u0 : APMT99A01.succCircleSide degree :=
+    ⟨APMT99A01.basepoint degree,
+      t99A01_piOne_attach_succ_retract_aux_circle_mem degree 1⟩
+  let u1 : APMT99A01.succCircleSide degree :=
+    apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree)
+      (APMT99A01.succDiskSide degree)
+      (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)
+  let qU : Path u0 u1 := (PathConnectedSpace.joined u0 u1).somePath
+  let j := apm_t92J05_twoOpen_leftInclusion
+    (APMT99A01.succCircleSide degree)
+  let qW : Path (APMT99A01.basepoint degree)
+      (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree).1 :=
+    qU.map j.continuous
+  let cU : C(Circle, APMT99A01.succCircleSide degree) :=
+    ⟨fun z => ⟨Quotient.mk _ (Sum.inl z),
+        t99A01_piOne_attach_succ_retract_aux_circle_mem degree z⟩,
+      Continuous.subtype_mk (continuous_coinduced_rng.comp continuous_inl) _⟩
+  let aU : FundamentalGroup (APMT99A01.succCircleSide degree) u0 :=
+    Path.Homotopic.Quotient.mk
+      (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+          cU.continuous).cast
+        (by apply Subtype.ext; rfl) (by apply Subtype.ext; rfl))
+  let E := (FundamentalGroup.fundamentalGroupMulEquivOfPath qW).trans
+    (eVK.trans f)
+  refine ⟨E, ?_⟩
+  change f (eVK (FundamentalGroup.fundamentalGroupMulEquivOfPath qW
+    (APMT99A01.baseCircleClass degree))) = _
+  have hj : FundamentalGroup.map j u0 aU =
+      APMT99A01.baseCircleClass degree := by
+    rfl
+  have hn := t99A01_piOne_attach_succ_aux_vankampen_aux_map_transport
+    j qU aU
+  rw [hj] at hn
+  change (eVK.trans f).toMonoidHom
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath qW
+      (APMT99A01.baseCircleClass degree)) = _
+  rw [hV2 (eVK.trans f).toMonoidHom qW (qU.map j.continuous)
+    (APMT99A01.baseCircleClass degree)]
+  have ht :
+      FundamentalGroup.fundamentalGroupMulEquivOfPath (qU.map j.continuous)
+          (APMT99A01.baseCircleClass degree) =
+        FundamentalGroup.map j u1
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath qU aU) := hn.symm
+  calc
+    _ = (eVK.trans f).toMonoidHom
+        (FundamentalGroup.map j u1
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath qU aU)) :=
+      congrArg (eVK.trans f).toMonoidHom ht
+    _ = QuotientGroup.mk' _
+        (eS (FundamentalGroup.mapOfEq (t99A01_succRho degree) h
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath qU aU))) := by
+      change f (eVK (FundamentalGroup.map j u1
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath qU aU))) = _
+      have hv := heVK (FundamentalGroup.fundamentalGroupMulEquivOfPath qU aU)
+      exact (congrArg f hv).trans
+        (hf (FundamentalGroup.fundamentalGroupMulEquivOfPath qU aU))
+  have hr : FundamentalGroup.map (t99A01_succRho degree) u0 aU =
+      APMT99A01.baseCircleClass (degree ∘ Fin.castSucc) := by
+    rfl
+  have hn2 := t99A01_piOne_attach_succ_aux_vankampen_aux_map_transport
+    (t99A01_succRho degree) qU aU
+  rw [hr] at hn2
+  let qR := qU.map (t99A01_succRho degree).continuous
+  have h' : (t99A01_succRho degree) u1 =
+      APMT99A01.basepoint (degree ∘ Fin.castSucc) := h
+  let qE : Path ((t99A01_succRho degree) u1)
+      (APMT99A01.basepoint (degree ∘ Fin.castSucc)) :=
+    (Path.refl (APMT99A01.basepoint (degree ∘ Fin.castSucc))).cast h' rfl
+  have hme (b : FundamentalGroup (APMT99A01.succCircleSide degree) u1) :
+      FundamentalGroup.mapOfEq (t99A01_succRho degree) h b =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath qE
+          (FundamentalGroup.map (t99A01_succRho degree) u1 b) := by
+    dsimp [FundamentalGroup.mapOfEq,
+      FundamentalGroup.fundamentalGroupMulEquivOfPath]
+    have hi : CategoryTheory.eqToIso (congrArg FundamentalGroupoid.mk h) =
+        (CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦qE⟧ := by
+      apply CategoryTheory.Iso.ext
+      exact FundamentalGroupoid.eqToHom_eq h'
+    change (CategoryTheory.eqToIso (congrArg FundamentalGroupoid.mk h)).conj
+          ((FundamentalGroupoid.map (t99A01_succRho degree)).map b) =
+      ((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦qE⟧).conj
+          ((FundamentalGroupoid.map (t99A01_succRho degree)).map b)
+    rw [hi]
+    rfl
+  rw [hme, hn2]
+  rw [← t99A01_piOne_attach_succ_aux_vankampen_aux_transport_trans qR qE]
+  change ((QuotientGroup.mk' _).comp eS.toMonoidHom)
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath (qR.trans qE)
+      (APMT99A01.baseCircleClass (degree ∘ Fin.castSucc))) = _
+  let N := Subgroup.normalClosure
+    ({Multiplicative.ofAdd
+      (degree (Fin.last r) :
+        ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))} :
+      Set (Multiplicative
+        (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))))
+  let φ := (QuotientGroup.mk' N).comp eS.toMonoidHom
+  have hab := hV2 φ (qR.trans qE) (Path.refl _)
+    (APMT99A01.baseCircleClass (degree ∘ Fin.castSucc))
+  have hrefl (a : FundamentalGroup
+      (APMT99A01.AttachSpace (degree ∘ Fin.castSucc))
+      (APMT99A01.basepoint (degree ∘ Fin.castSucc))) :
+      FundamentalGroup.fundamentalGroupMulEquivOfPath (Path.refl _) a = a := by
+    change ((CategoryTheory.Groupoid.isoEquivHom
+      (FundamentalGroupoid.mk (APMT99A01.basepoint (degree ∘ Fin.castSucc)))
+      (FundamentalGroupoid.mk (APMT99A01.basepoint (degree ∘ Fin.castSucc)))).symm
+      ⟦Path.refl (APMT99A01.basepoint (degree ∘ Fin.castSucc))⟧).conj a = a
+    have hi : (CategoryTheory.Groupoid.isoEquivHom
+        (FundamentalGroupoid.mk (APMT99A01.basepoint (degree ∘ Fin.castSucc)))
+        (FundamentalGroupoid.mk (APMT99A01.basepoint (degree ∘ Fin.castSucc)))).symm
+        ⟦Path.refl (APMT99A01.basepoint (degree ∘ Fin.castSucc))⟧ =
+        CategoryTheory.Iso.refl _ := by
+      apply CategoryTheory.Iso.ext
+      rfl
+    rw [hi]
+    exact CategoryTheory.Iso.refl_conj a
+  calc
+    _ = φ (FundamentalGroup.fundamentalGroupMulEquivOfPath (Path.refl _)
+        (APMT99A01.baseCircleClass (degree ∘ Fin.castSucc))) := hab
+    _ = _ := by
+      rw [hrefl]
+      change QuotientGroup.mk' N
+        (eS (APMT99A01.baseCircleClass (degree ∘ Fin.castSucc))) = _
+      exact congrArg (QuotientGroup.mk' N) heS
 lemma t99A01_piOne_attach_succ {r : ℕ} (degree : Fin (r + 1) → ℕ)
     (_hpos : ∀ i, 0 < degree i)
     (ih : APMT99A01.PiOneCoordinate (degree ∘ Fin.castSucc)) :
