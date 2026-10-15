@@ -1185,6 +1185,43 @@ noncomputable def canonicalRegularFiberWitness_of_locallyIsolatedFiber
   canonicalRegularFiberWitness_of_isDiscrete f c e y hy
     (isDiscrete_preimage_singleton_of_locallyIsolatedFiber f y hlocal) calculations
 
+/-- The complete geometric datum still to be constructed from transversality:
+one circle value with locally isolated fiber and the canonical component and
+top-degree calculations, all using the same derived finite-fiber instance. -/
+structure LocallyIsolatedCanonicalFiberData
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ) where
+  choice : FiniteRegularFiberChoice f c
+  locallyIsolated : LocallyIsolatedFiber f choice.value
+  calculations : letI := choice.fiberFintype
+    CanonicalRegularFiberDegreeCalculations
+      (f := f) (c := c) choice.mem_circle e
+
+/-- A locally isolated canonical fiber datum supplies the integrated witness
+without changing its dependent finite-fiber representation. -/
+noncomputable def LocallyIsolatedCanonicalFiberData.toWitness
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)}
+    {e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ}
+    (data : LocallyIsolatedCanonicalFiberData f c e) :
+    CanonicalRegularFiberWitness f c e :=
+  { choice := data.choice, calculations := data.calculations }
+
+/-- The bundled locally isolated geometric datum is sufficient for vanishing
+of the induced map on top homology. -/
+theorem LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    {f : C(S, S)} {c : C(Circle, S)}
+    {e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ}
+    (data : LocallyIsolatedCanonicalFiberData f c e) :
+    homologyMap 2 f = 0 := by
+  letI := data.choice.fiberFintype
+  exact data.calculations.topHomologyMap_eq_zero_withoutLifts
+
 /-- Pointwise local injectivity along a circle fiber supplies the discrete
 fiber required by `canonicalRegularFiberWitness_of_isDiscrete`. -/
 noncomputable def canonicalRegularFiberWitness_of_locallyInjective
@@ -1282,6 +1319,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyIsolatedFiber
+#print axioms ConstructionTargets.T00J02Closure.LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
 #print axioms ConstructionTargets.T00J02Closure.RegularFiberChartCalculations.topHomologyMap_eq_zero
