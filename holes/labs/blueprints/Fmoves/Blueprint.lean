@@ -11094,7 +11094,98 @@ theorem cut_retransfer_consistency_A_arc_aux_v_prev {Label : Type*} [DecidableEq
     (hτ : τ.1 = 0) (hs : s₀.1 = 0) (hk : e = (u.length + 1 + v.length + u.length + 1 - e₀ + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  let z : Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num⟩
+  have hL : L = u.length + v.length + t.length + 2 := by
+    simp [L]
+    omega
+  have hpq : p < q := by dsimp [p, q]; omega
+  have hqL : q < L := by dsimp [q, L]; simp; omega
+  have he₀L : e₀ < L := by simp [L] at he₀q ⊢; omega
+  have hs' : s₀ = z := Subtype.ext hs
+  have hτ' : τ = z := Subtype.ext hτ
+  subst s₀
+  subst τ
+  have hPedge : (P : ℂ) = (edgePoint L e₀ z : ℂ) := by
+    calc
+      (P : ℂ) = oldA (cutEdgeCircle L e₀ z) := hP
+      _ = (edgePoint L e₀ z : ℂ) := D.oldA_arc e₀ z he₀ he₀q
+  by_cases he₀first : e₀ = p + 1
+  · have hkq : q + p + 1 - e₀ = q := by omega
+    have heq : e = (q + 1) % L := by
+      change e = (q + p + 1 - e₀ + 1) % L at hk
+      rw [hkq] at hk
+      exact hk
+    let S : Disk := edgePoint L q
+      (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+    refine ⟨S, ?_, ?_⟩
+    · change (S : ℂ) = cutRetransfer L p q e z
+      have heCases : e = q + 1 ∨ (e = 0 ∧ q + 1 = L) := by
+        by_cases hlt : q + 1 < L
+        · left
+          rw [Nat.mod_eq_of_lt hlt] at heq
+          exact heq
+        · right
+          have hlast : q + 1 = L := by omega
+          rw [hlast, Nat.mod_self] at heq
+          exact ⟨heq, hlast⟩
+      have hre : cutRetransfer L p q e z = (edgePoint L e z : ℂ) := by
+        rcases heCases with heCases | heCases
+        · have hnep : e ≠ p := by omega
+          have hnep1 : e ≠ p + 1 := by omega
+          have hmid : ¬ (p + 1 < e ∧ e ≤ q) := by omega
+          simp [cutRetransfer, hnep, hnep1, hmid]
+        · rcases heCases with ⟨rfl, hlast⟩
+          by_cases hp0 : p = 0
+          · rw [show cutRetransfer L p q 0 z = cutPoint L 0 by
+                simp [cutRetransfer, hp0, cutChordB, z]]
+            exact (edgePoint_zero_eq_cutPoint L 0).symm
+          · have hnep1 : 0 ≠ p + 1 := by omega
+            have hmid : ¬ (p + 1 < 0 ∧ 0 ≤ q) := by omega
+            have h0p : 0 ≠ p := Ne.symm hp0
+            simp [cutRetransfer, h0p, hnep1, hmid]
+      rw [hre]
+      apply congrArg Subtype.val
+      apply Subtype.ext
+      rw [edgePoint_one_eq_cutPoint, edgePoint_zero_eq_cutPoint]
+      exact (cutPoint_mod (by omega : 0 < L) (q + 1)).symm.trans
+        (by rw [← heq])
+    · have hx := cut_retransfer_consistency_A_arc_aux_x u v t x
+          (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+      have hP' : P = edgePoint L p
+          (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+        apply Subtype.ext
+        rw [hPedge, edgePoint_zero_eq_cutPoint, edgePoint_one_eq_cutPoint]
+        congr 1
+      rw [hP']
+      change Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+        (edgePoint L p (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)) S
+      simpa only [S, L, p, q] using hx.symm
+  · have he₀lower : p + 2 ≤ e₀ := by omega
+    have hklt : q + p + 1 - e₀ < q := by omega
+    have hklo : p + 2 ≤ q + p + 1 - e₀ := by omega
+    have hsuccL : q + p + 1 - e₀ + 1 < L := by omega
+    have heval : e = q + p + 1 - e₀ + 1 := by
+      rw [Nat.mod_eq_of_lt hsuccL] at hk
+      exact hk
+    refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    apply hPedge.trans
+    change (edgePoint L e₀ z : ℂ) = cutRetransfer L p q e z
+    have hnep : e ≠ p := by omega
+    have hnep1 : e ≠ p + 1 := by omega
+    have hmid : p + 1 < e ∧ e ≤ q := by omega
+    rw [show cutRetransfer L p q e z =
+        (edgePoint L (q + p + 1 - e) (reverseParameter z) : ℂ) by
+      simp [cutRetransfer, hnep, hnep1, hmid]]
+    rw [show reverseParameter z =
+        (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) by
+      apply Subtype.ext
+      simp [reverseParameter, z]]
+    rw [edgePoint_zero_eq_cutPoint, edgePoint_one_eq_cutPoint]
+    congr 1
+    omega
 
 /-- A `v` side (`p < e₀ < q`): `newA` is the reflected new side `q + p + 1 - e₀` at the reversed parameter. -/
 theorem cut_retransfer_consistency_A_arc_aux_v {Label : Type*} [DecidableEq Label]
