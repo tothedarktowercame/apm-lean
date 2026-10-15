@@ -119461,63 +119461,50 @@
      :commit "0ae2a206d297fc5cb71205ee0d00a2b99e70db2d",
      :reason "Banked implicit-chart zero slice."}]}
   {:consumer :t98A06,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Build smooth mfderiv coordinate family and local lifts; compact flow; Main.",
+    "Construct smooth coordinate family near each point; compact flow; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "unrelated files preserved"],
     :missing-theorems
-    [{:name "mfderiv_eq_of_trivialization_coordinates",
-      :type "coordinate solver equation implies tangent lift equation",
+    [{:name "hasLocalSmoothLift_of_trivialization_coordinates",
+      :type
+      "neighborhood coordinate solutions give HasLocalSmoothLift",
       :status :proved,
       :consumers [:t98A06],
       :depends-on
       ["contMDiffOn_tangentSection_of_trivialization_coordinates"
-       "contDiff_lift_of_comp_isInvertible"],
+       "mfderiv_eq_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
-      :depends-on ["mfderiv_eq_of_trivialization_coordinates"],
+      :depends-on ["hasLocalSmoothLift_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "ff087a6de87843c33393211e857c5939aa9c922fdbaba4d149c5e8546efc77fe",
+     "2605b987d43d37bad81d18d0a200a5475888fe7770789477706acca0d91a1fd2",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked mfderiv coordinate-solver bridge.",
+    :reason "Banked coordinate-data to local-lift adapter.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "drafts", :exit 1, :finding "corrected model glyph"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792044900976-13464-53aa5a84",
-     :commands
-     ["git diff/show b3e77418 archived sources"
-      "lake env lean archived t98A06Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds a compiled, sorry-free coordinate-solver bridge. Given the explicit coordinate identity for mfderiv and the solver equation, injectivity of the target tangent trivialization yields mfderiv f x (w x)=v(f x); all hypotheses are used. It does not claim construction or smoothness of the coordinate family, which remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "b3e77418954664b338e485426d52f1c5ffde1e2c",
+    :commit "4d563097dbc497cd2d18a08fc83afb3f30f4663e",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119525,7 +119512,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119924,7 +119911,8 @@
     :lemma-contdiff-rightinverse-of-comp-isinvertible
     :lemma-contdiff-lift-of-comp-isinvertible
     :lemma-contmdiffon-tangentsection-of-trivialization-coordinates
-    :lemma-mfderiv-eq-of-trivialization-coordinates],
+    :lemma-mfderiv-eq-of-trivialization-coordinates
+    :lemma-haslocalsmoothlift-of-trivialization-coordinates],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -121820,6 +121808,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "hasLocalSmoothLift_of_trivialization_coordinates",
+    :type "neighborhood coordinate solutions give HasLocalSmoothLift"},
+   :lemma
+   {:name "hasLocalSmoothLift_of_trivialization_coordinates",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "neighborhood coordinate solutions give HasLocalSmoothLift",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-haslocalsmoothlift-of-trivialization-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-contmdiffon-tangentsection-of-trivialization-coordinates
+    :lemma-mfderiv-eq-of-trivialization-coordinates],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
