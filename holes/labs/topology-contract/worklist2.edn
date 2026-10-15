@@ -87948,6 +87948,20 @@
     [{:cmd "kernel draft",
       :exit 1,
       :correction "exposed linear-map application"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792034906376-13109-7798adad",
+     :commands
+     ["git show/diff-tree 21a8e6379"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 21a8e6379 by topo-6 changes only the scoped target; fixture hash 8b48f78c...6a677 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. From MV boundary = -attaching map, the kernel equivalence is immediate. The range equivalence correctly sends each witness n to -n, using additivity to cancel the global minus in both directions. New compiled progress; B8 low-degree kernel/cokernel extraction remains, followed by B9-B10."},
     :commit "21a8e6379",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87956,7 +87970,7 @@
      "8b48f78cc2d89da805bcc843b33b9d74073f4026c38816b52c07be2a92b6a677"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87976,7 +87990,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked MV boundary.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked sign-invariant kernel and range.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88304,7 +88318,10 @@
      :commit "856d109b9",
      :reason
      "Banked inverse comparison naturality; circle generator coherence remains."}
-    {:job 4, :commit "609b06c7c", :reason "Banked MV boundary."}]}
+    {:job 4, :commit "609b06c7c", :reason "Banked MV boundary."}
+    {:job 5,
+     :commit "21a8e6379",
+     :reason "Banked sign-invariant kernel and range."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92920,7 +92937,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryGroup_apply_eq_zero_iff",
@@ -92930,7 +92947,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "production and attaching kernels agree pointwise",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "21a8e6379"},
    :id :lemma-radialmvboundarygroup-apply-eq-zero-iff,
    :kind :lemma,
    :depends-on
@@ -92938,7 +92957,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryGroup_mem_range_iff",
@@ -92948,7 +92967,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "production and attaching ranges agree",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "21a8e6379"},
    :id :lemma-radialmvboundarygroup-mem-range-iff,
    :kind :lemma,
    :depends-on
