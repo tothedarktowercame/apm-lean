@@ -88373,6 +88373,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check 1b5a1f05f", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792059220833-13831-272bf908",
+     :commands
+     ["git show/diff/check 1b5a1f05f"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+dependency+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 1b5a1f05f adds compiled, sorry-free progress beyond c588fed2d: first/last run-boundary values are identified with literal subdivision endpoints, and the folded outer representative is rebased there with its ambient quotient class preserved. Only t97A01Closure.lean changed; fixture SHA 8c4d5207e47783e8eb097784f1aa0f60fbb5e5efea2fc1cb8ea31265c177144b matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Endpoint casts and subtype erasure are pointwise justified in the correct direction. Run-block regrouping against the original subdivision, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "1b5a1f05f",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88381,7 +88394,7 @@
      "8c4d5207e47783e8eb097784f1aa0f60fbb5e5efea2fc1cb8ea31265c177144b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88399,7 +88412,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite outer run fold.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-endpoint outer run fold.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88499,7 +88512,10 @@
      :reason "Banked canonically based run paths."}
     {:job 3,
      :commit "c588fed2d",
-     :reason "Banked finite outer run fold."}]}
+     :reason "Banked finite outer run fold."}
+    {:job 4,
+     :commit "1b5a1f05f",
+     :reason "Banked literal-endpoint outer run fold."}]}
   {:consumer :t94J09,
    :stop-count 3,
    :evidence
@@ -94657,7 +94673,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunFold_exists_outerPath_at_endpoints",
@@ -94669,7 +94685,9 @@
     :type
     "folded runs have an outer representative at literal subdivision endpoints",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "1b5a1f05f"},
    :id
    :lemma-torusrp2-subdivisionrunfold-exists-outerpath-at-endpoints,
    :kind :lemma,
