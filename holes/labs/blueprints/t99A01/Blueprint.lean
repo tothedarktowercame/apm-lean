@@ -1594,6 +1594,75 @@ theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set 
 Under them, `H₁(A∩B) → H₁(A)` is `ρ ∘ halfLoop i = (· ^ degree i)` on summand `i`,
 which `hwinding` turns into `degreeMap`; `H₀(A∩B) → H₀(B)` is the identity on `ℤ^r`
 (injective; record it as `i₀_eq : i₀ x = (∑ i, x i, x)`).  Higher vanishing: `H_k` of circles and balls vanish for `k ≥ 2`. -/
+lemma t99A01_attach_transport_aux_mv {r : ℕ} (degree : Fin r → ℕ)
+    (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
+      APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ)
+    (hmv : ∀ (U V : Set (APMT99A01.AttachSpace degree)), IsOpen U → IsOpen V →
+      U ∪ V = Set.univ →
+      ∃ δ : ∀ n, APMT99A01.H (n + 1) (APMT99A01.AttachSpace degree) ⟶
+          APMT99A01.H n ↥(U ∩ V),
+        (∀ n, LinearMap.range (APMT99A01.zI U V n).hom =
+          LinearMap.ker (APMT99A01.zJ U V n).hom) ∧
+        (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom =
+          LinearMap.ker (δ n).hom) ∧
+        (∀ n, LinearMap.range (δ n).hom =
+          LinearMap.ker (APMT99A01.zI U V n).hom)) :
+    ∃ δ : ∀ n, APMT99A01.H (n + 1) (APMT99A01.AttachSpace degree) ⟶
+        APMT99A01.H n ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+      (∀ n, LinearMap.range
+          (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom =
+        LinearMap.ker
+          (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom) ∧
+      (∀ n, LinearMap.range
+          (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) (n + 1)).hom =
+        LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker
+        (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom) := by
+  exact hmv _ _ hcover.1 hcover.2.1 hcover.2.2
+
+lemma t99A01_attach_transport_aux_coordinates {r : ℕ} (degree : Fin r → ℕ)
+    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
+    (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
+      APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ)
+    (hcircle : ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
+      (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
+      ρ.comp ι = ContinuousMap.id Circle ∧
+      ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) ∧
+      ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree),
+        ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i)
+    (hdisk : ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
+      ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
+        (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
+        e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩)
+    (hoverlap : ∃ e : ContinuousMap.HomotopyEquiv
+        ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
+      ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w)
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+            (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+          (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
+    (hwinding : ∃ e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ,
+      ∀ i : Fin r, e.inv ≫
+        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).map
+            (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e.hom =
+        ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)))
+    (hexact : ∃ δ : ∀ n, APMT99A01.H (n + 1) (APMT99A01.AttachSpace degree) ⟶
+        APMT99A01.H n ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+      (∀ n, LinearMap.range
+          (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom =
+        LinearMap.ker
+          (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom) ∧
+      (∀ n, LinearMap.range
+          (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) (n + 1)).hom =
+        LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker
+        (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom)) :
+    Nonempty (APMT99A01.AttachMVData degree) := by
+  sorry
+
 theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
     (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
@@ -1631,8 +1700,9 @@ theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
         (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
         (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (APMT99A01.zI U V n).hom)) :
     Nonempty (APMT99A01.AttachMVData degree) := by
-  sorry
-
+  apply t99A01_attach_transport_aux_coordinates degree hr hdegree hcover hcircle hdisk
+    hoverlap hsigma hwinding
+  exact t99A01_attach_transport_aux_mv degree hcover hmv
 theorem t99A01_attachSpace_MVData {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
     Nonempty (APMT99A01.AttachMVData degree) :=
