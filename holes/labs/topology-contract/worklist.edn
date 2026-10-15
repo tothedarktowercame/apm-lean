@@ -119110,6 +119110,16 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792026346742-12893-2f4e1d86",
+     :commands
+     ["git show/diff-tree 2dff9ce3"
+      "archive 2dff9ce3; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit 2dff9ce3 changes only t00J02Closure.lean and adds compiled, sorry-free regular-value selection. For a nonzero measure, a zero-measure critical-value image cannot equal the universe; choosing outside it yields regularity at every point of that fiber. The image-membership contradiction and equality orientation are correct, and no measurability assumption is illicitly used. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; the new theorem uses only standard axioms; registry 166/166. Sard nullity, fiber calculations, and Main remain listed."},
     :commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transverse regularity linear step.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked regular-value selection.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119298,7 +119308,10 @@
      :reason "Banked discrete-fiber constructor."}
     {:job 6,
      :commit "68467442f989dc4836cdd26fca100b6df6fc8bdb",
-     :reason "Banked transverse regularity linear step."}]}
+     :reason "Banked transverse regularity linear step."}
+    {:job 7,
+     :commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319",
+     :reason "Banked regular-value selection."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120835,7 +120848,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_regularValue_of_criticalValues_measure_zero",
@@ -120845,7 +120858,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "null critical values yield a value regular on its fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319"},
    :id :lemma-exists-regularvalue-of-criticalvalues-measure-zero,
    :kind :lemma,
    :depends-on [],
