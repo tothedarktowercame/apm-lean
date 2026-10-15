@@ -37209,38 +37209,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Cancel the absolute/native projection composite; prove coordinate one, four classes, Main.",
+    "Apply named composites across concrete coercions; prove coordinate one, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name
-      "t96A06_relativeComparison_cancel_nativeNormalizedLocalization",
+    [{:name "t96A06_absoluteComparison_composite",
       :type
-      "relative comparison inverse/forward cancel on normalized localization",
+      "absolute mapHomology inverse then chain comparison equals integral homology comparison",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_mappedIntegralNormalizedClass_eq_comparisonInv"],
+      ["t96A06_relativeComparison_cancel_nativeNormalizedLocalization"],
       :area "rp-rational-homology"}
      {:name "t96A06_mappedIntegralNormalizedClass_localizes",
       :type "mapped global class localizes to positive local class",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_relativeComparison_cancel_nativeNormalizedLocalization"],
+      :depends-on ["t96A06_absoluteComparison_composite"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed native normalized localization and exact relative-comparison cancellation.",
+    "Committed exact identification of the absolute comparison composite.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37249,19 +37247,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 2762fbda6",
+      "git diff --check && git show --check --stat --oneline 2783254af",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "initial cancellation syntax",
+    [{:cmd "native localization assembly",
       :exit 1,
-      :note "Closed the concrete-map application explicitly."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792098552626-14674-96010114",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "2762fbda6",
+      :note
+      "Concrete/AddCommGrp coercion rewrite remains; retained compiled composite lemma."}],
+    :commit "2783254af",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37269,7 +37262,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44080,7 +44073,8 @@
    :depends-on
    [:lemma-t96a06-mappedintegrallocalgenerator-mapsto-ambient
     :lemma-t96a06-mappedintegralnormalizedclass-eq-comparisoninv
-    :lemma-t96a06-relativecomparison-cancel-nativenormalizedlocalization],
+    :lemma-t96a06-relativecomparison-cancel-nativenormalizedlocalization
+    :lemma-t96a06-absolutecomparison-composite],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -44149,6 +44143,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-mappedintegralnormalizedclass-eq-comparisoninv],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_absoluteComparison_composite",
+    :type
+    "absolute mapHomology inverse then chain comparison equals integral homology comparison"},
+   :lemma
+   {:name "t96A06_absoluteComparison_composite",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "absolute mapHomology inverse then chain comparison equals integral homology comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-absolutecomparison-composite,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-relativecomparison-cancel-nativenormalizedlocalization],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
