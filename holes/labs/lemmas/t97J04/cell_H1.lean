@@ -511,11 +511,269 @@ fixes the boundary circle, so respects `CellRel`).  Continuity on
 `cellOuter γ × I`: product of the restricted quotient map with the locally
 compact `I` is a quotient map (`IsQuotientMap.prodMap` / `quotientMap_prod_unitInterval`
 pattern in `PolygonSurfacePiOne`). -/
+def cell_outer_hequiv_aux_homotopy_aux_raw (γ : C(Circle, Y))
+    (p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ) :
+    Y ⊕ apm_t97J04_Disk :=
+  match hx : p.2.1 with
+  | .inl y => .inl y
+  | .inr z => .inr ⟨
+      (cell_outer_hequiv_aux_scale p.1 (z : ℂ) : ℂ) * z,
+      by
+        rw [Metric.mem_closedBall, dist_zero_right]
+        apply cell_outer_hequiv_aux_scale_norm
+        · have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ p.2.1).mp p.2.2
+          rw [hx] at hm
+          rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+          · cases h
+          · have : w = z := Sum.inr.inj h
+            subst w
+            intro hz
+            change (1 : ℝ) / 3 < ‖(z : ℂ)‖ at hw
+            rw [hz, norm_zero] at hw
+            norm_num at hw
+        · have hz := z.property
+          rw [Metric.mem_closedBall, dist_zero_right] at hz
+          exact hz⟩
+
+lemma cell_outer_hequiv_aux_homotopy_aux_raw_mem (γ : C(Circle, Y))
+    (p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ) :
+    cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ p) ∈ cellOuter γ := by
+  rcases p with ⟨t, ⟨x, hx⟩⟩
+  cases x with
+  | inl y =>
+      exact ⟨.inl y, Or.inl ⟨y, rfl⟩, rfl⟩
+  | inr z =>
+      have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ (.inr z)).mp hx
+      have hz : (1 : ℝ) / 3 < ‖(z : ℂ)‖ := by
+        rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+        · cases h
+        · exact Sum.inr.inj h ▸ hw
+      have hz0 : (z : ℂ) ≠ 0 := by
+        intro h
+        rw [h, norm_zero] at hz
+        norm_num at hz
+      refine ⟨.inr ⟨_, by
+          rw [Metric.mem_closedBall, dist_zero_right]
+          exact cell_outer_hequiv_aux_scale_norm t _ hz0 (by
+            have h := z.property
+            rw [Metric.mem_closedBall, dist_zero_right] at h
+            exact h)⟩,
+        Or.inr ⟨_, ?_, rfl⟩, rfl⟩
+      change (1 : ℝ) / 3 < ‖(cell_outer_hequiv_aux_scale t (z : ℂ) : ℂ) * z‖
+      rw [norm_mul]
+      have hn : 0 < ‖(z : ℂ)‖ := norm_pos_iff.mpr hz0
+      have hs : 0 ≤ cell_outer_hequiv_aux_scale t (z : ℂ) := by
+        dsimp [cell_outer_hequiv_aux_scale]
+        exact add_nonneg t.2.1 (div_nonneg (sub_nonneg.mpr t.2.2) hn.le)
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
+      dsimp [cell_outer_hequiv_aux_scale]
+      rw [add_mul, div_mul_cancel₀ _ hn.ne']
+      have hzle : ‖(z : ℂ)‖ ≤ 1 := by
+        have h := z.property
+        rw [Metric.mem_closedBall, dist_zero_right] at h
+        exact h
+      nlinarith [t.2.1, t.2.2]
+
+lemma cell_outer_hequiv_aux_homotopy_aux_raw_continuous (γ : C(Circle, Y)) :
+    Continuous (cell_outer_hequiv_aux_homotopy_aux_raw γ) := by
+  rw [continuous_iff_continuousAt]
+  rintro ⟨t, ⟨x, hx⟩⟩
+  cases x with
+  | inl y =>
+      let getY : (cellMk γ) ⁻¹' cellOuter γ → Y :=
+        fun u => Sum.elim id (fun _ => y) u.1
+      have hget : Continuous getY :=
+        (continuous_sumElim.2 ⟨continuous_id, continuous_const⟩).comp continuous_subtype_val
+      apply (continuous_inl.comp (hget.comp continuous_snd)).continuousAt.congr_of_eventuallyEq
+      filter_upwards [((isOpen_range_inl.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds ⟨y, rfl⟩)] with p hp
+      rcases p with ⟨s, ⟨u, hu⟩⟩
+      rcases hp with ⟨v, hv⟩
+      dsimp at hv ⊢
+      cases u <;> simp_all [cell_outer_hequiv_aux_homotopy_aux_raw, getY]
+  | inr z =>
+      have hzpos : (0 : ℝ) < ‖(z : ℂ)‖ := by
+        have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ (.inr z)).mp hx
+        rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+        · cases h
+        · injection h with hzw
+          subst w
+          change (1 : ℝ) / 3 < ‖(z : ℂ)‖ at hw
+          nlinarith
+      let getZ : (cellMk γ) ⁻¹' cellOuter γ → apm_t97J04_Disk :=
+        fun u => Sum.elim (fun _ => z) id u.1
+      have hget : Continuous getZ :=
+        (continuous_sumElim.2 ⟨continuous_const, continuous_id⟩).comp continuous_subtype_val
+      let diskMap : unitInterval × (cellMk γ) ⁻¹' cellOuter γ → apm_t97J04_Disk :=
+        fun p => ⟨(cell_outer_hequiv_aux_scale p.1 (getZ p.2 : ℂ) : ℂ) * getZ p.2,
+          by
+            rw [Metric.mem_closedBall, dist_zero_right]
+            apply cell_outer_hequiv_aux_scale_norm
+            · cases hv : p.2.1 with
+              | inl a => simpa [getZ, hv] using norm_pos_iff.mp hzpos
+              | inr w =>
+                  have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ p.2.1).mp p.2.2
+                  rcases hm with (⟨_, h⟩ | ⟨v, hv', h⟩)
+                  · rw [hv] at h; cases h
+                  · have hvw : v = w := Sum.inr.inj (h.trans hv)
+                    subst v
+                    simpa [getZ, hv] using
+                      (show (w : ℂ) ≠ 0 by
+                        intro h; change (1 : ℝ) / 3 < ‖(w : ℂ)‖ at hv'
+                        rw [h, norm_zero] at hv'; norm_num at hv')
+            · have h := (getZ p.2).property
+              rw [Metric.mem_closedBall, dist_zero_right] at h
+              exact h⟩
+      have hdisk : Continuous diskMap := by
+        apply Continuous.subtype_mk
+        dsimp [diskMap, cell_outer_hequiv_aux_scale]
+        have hv : Continuous (fun p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ =>
+            ((getZ p.2 : apm_t97J04_Disk) : ℂ)) :=
+          continuous_subtype_val.comp (hget.comp continuous_snd)
+        have hn0 : ∀ p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ,
+            ‖((getZ p.2 : apm_t97J04_Disk) : ℂ)‖ ≠ 0 := by
+          intro p
+          cases hp : p.2.1 with
+          | inl a => simpa [getZ, hp] using (norm_ne_zero_iff.mpr (norm_pos_iff.mp hzpos))
+          | inr w =>
+              have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ p.2.1).mp p.2.2
+              rcases hm with (⟨_, h⟩ | ⟨v, hv', h⟩)
+              · rw [hp] at h; cases h
+              · have hvw : v = w := Sum.inr.inj (h.trans hp)
+                subst v
+                simpa [getZ, hp] using (show ‖(w : ℂ)‖ ≠ 0 by
+                  intro h; change (1 : ℝ) / 3 < ‖(w : ℂ)‖ at hv'
+                  rw [h] at hv'; norm_num at hv')
+        exact (Complex.continuous_ofReal.comp
+          ((continuous_subtype_val.comp continuous_fst).add
+            ((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).div
+              hv.norm hn0))).mul hv
+      apply (continuous_inr.comp hdisk).continuousAt.congr_of_eventuallyEq
+      filter_upwards [((isOpen_range_inr.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds ⟨z, rfl⟩)] with p hp
+      rcases p with ⟨s, ⟨u, hu⟩⟩
+      rcases hp with ⟨w, hw⟩
+      dsimp at hw ⊢
+      cases u <;> simp_all [cell_outer_hequiv_aux_homotopy_aux_raw, diskMap, getZ]
+
+lemma cell_outer_hequiv_aux_homotopy_aux_respects (γ : C(Circle, Y))
+    (t : unitInterval) (x y : (cellMk γ) ⁻¹' cellOuter γ)
+    (hxy : cellMk γ x.1 = cellMk γ y.1) :
+    cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, x)) =
+      cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, y)) := by
+  have hrel : Relation.EqvGen (CellRel γ) x.1 y.1 := Quotient.exact hxy
+  have hgen : ∀ a b, Relation.EqvGen (CellRel γ) a b →
+      ∀ (ha : cellMk γ a ∈ cellOuter γ) (hb : cellMk γ b ∈ cellOuter γ),
+      cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, ⟨a, ha⟩)) =
+        cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, ⟨b, hb⟩)) := by
+    intro a b hab
+    induction hab with
+    | rel a b h =>
+        intro ha hb
+        cases h with
+        | boundary z =>
+            apply Quotient.sound
+            have hs : cell_outer_hequiv_aux_scale t (circleToDisk z : ℂ) = 1 := by
+              simp [cell_outer_hequiv_aux_scale, circleToDisk,
+                PolygonSurfaceHomology.circleToPolygonDisk, Circle.norm_coe]
+            simpa [cell_outer_hequiv_aux_homotopy_aux_raw, hs] using
+              (Relation.EqvGen.rel _ _ (CellRel.boundary (γ := γ) z))
+    | refl a => intro ha hb; rfl
+    | symm a b h ih => intro ha hb; exact (ih hb ha).symm
+    | trans a b c hab hbc ih₁ ih₂ =>
+        intro ha hc
+        have hb : cellMk γ b ∈ cellOuter γ := by
+          change Quotient.mk _ b ∈ cellOuter γ
+          rw [← Quotient.sound hab]
+          exact ha
+        exact (ih₁ ha hb).trans (ih₂ hb hc)
+  exact hgen x.1 y.1 hrel x.2 y.2
+
 lemma cell_outer_hequiv_aux_homotopy (γ : C(Circle, Y))
     (hc : Continuous (fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1)) :
     ((cellInclOuter γ).comp ⟨fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1, hc⟩).Homotopic
       (ContinuousMap.id (cellOuter γ)) := by
-  sorry
+  let q : (cellMk γ) ⁻¹' cellOuter γ → cellOuter γ :=
+    fun x => ⟨cellMk γ x.1, x.2⟩
+  have hq0 : Topology.IsQuotientMap (cellMk γ) := ⟨Quotient.mk_surjective, rfl⟩
+  have hq : Topology.IsQuotientMap q :=
+    hq0.restrictPreimage_isOpen (cell_outer_hequiv_aux_continuous_aux_open γ)
+  let s : cellOuter γ → (cellMk γ) ⁻¹' cellOuter γ :=
+    fun x => Classical.choose (hq.surjective x)
+  have hs (x : cellOuter γ) : q (s x) = x := Classical.choose_spec (hq.surjective x)
+  let F : unitInterval × cellOuter γ → cellOuter γ := fun p =>
+    ⟨cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (p.1, s p.2)),
+      cell_outer_hequiv_aux_homotopy_aux_raw_mem γ (p.1, s p.2)⟩
+  have hFq (p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ) :
+      F (p.1, q p.2) =
+        ⟨cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ p),
+          cell_outer_hequiv_aux_homotopy_aux_raw_mem γ p⟩ := by
+    apply Subtype.ext
+    exact cell_outer_hequiv_aux_homotopy_aux_respects γ p.1 (s (q p.2)) p.2
+      (congrArg Subtype.val (hs (q p.2)))
+  have hF : Continuous F := by
+    apply hq.continuous_lift_prod_right
+    have hcont : Continuous (fun p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ =>
+        (⟨cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ p),
+          cell_outer_hequiv_aux_homotopy_aux_raw_mem γ p⟩ : cellOuter γ)) :=
+      Continuous.subtype_mk ((continuous_cellMk γ).comp
+        (cell_outer_hequiv_aux_homotopy_aux_raw_continuous γ)) _
+    convert hcont using 1
+    funext p
+    exact hFq p
+  refine ⟨ContinuousMap.Homotopy.mk
+    ⟨F, hF⟩ ?_ ?_⟩
+  · intro x
+    apply Subtype.ext
+    change (F (0, x)).1 = _
+    rw [show F (0, x) = F (0, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (0, s x))]
+    generalize he : s x = u
+    rcases u with ⟨u, hu⟩
+    cases u with
+    | inl y =>
+        change cellMk γ (.inl y) = cellIncl γ (cell_outer_hequiv_aux_descend γ x.1)
+        rw [show x = q (s x) by rw [hs x], he]
+        rfl
+    | inr z =>
+        have hz : (z : ℂ) ≠ 0 := by
+          have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ (.inr z)).mp hu
+          rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+          · cases h
+          · injection h with hzw
+            subst w
+            intro hz
+            change (1 : ℝ) / 3 < ‖(z : ℂ)‖ at hw
+            rw [hz, norm_zero] at hw
+            norm_num at hw
+        let w : Circle := ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+          simp [Submonoid.unitSphere, div_self (norm_ne_zero_iff.mpr hz)]⟩
+        have hb := (Relation.EqvGen.rel _ _ (CellRel.boundary (γ := γ) w)).symm
+        change cellMk γ _ = cellIncl γ (cell_outer_hequiv_aux_descend γ x.1)
+        rw [show x = q (s x) by rw [hs x]]
+        rw [he]
+        change cellMk γ _ = cellMk γ (.inl (γ (cell_outer_hequiv_aux_radial (z : ℂ))))
+        apply Quotient.sound
+        convert hb using 1
+        · apply congrArg Sum.inr
+          apply Subtype.ext
+          simp [cell_outer_hequiv_aux_scale, w, circleToDisk,
+            PolygonSurfaceHomology.circleToPolygonDisk, div_eq_mul_inv, mul_comm]
+        · apply congrArg Sum.inl
+          congr 1
+          apply Subtype.ext
+          simp [cell_outer_hequiv_aux_radial, hz, w]
+  · intro x
+    apply Subtype.ext
+    change (F (1, x)).1 = _
+    rw [show F (1, x) = F (1, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (1, s x))]
+    have hone : cell_outer_hequiv_aux_homotopy_aux_raw γ (1, s x) = (s x).1 := by
+      generalize he : s x = u
+      rcases u with ⟨u, hu⟩
+      cases u <;> simp [cell_outer_hequiv_aux_homotopy_aux_raw,
+        cell_outer_hequiv_aux_scale]
+    exact (congrArg (cellMk γ) hone).trans (congrArg Subtype.val (hs x))
 
 /-- A4. Assembly (sorry-free over A4a, A4b). -/
 theorem cell_outer_hequiv (γ : C(Circle, Y)) :
@@ -547,6 +805,97 @@ lemma cell_pathConnected (γ : C(Circle, Y)) [PathConnectedSpace Y]
       PathConnectedSpace (Cell γ) := by
   sorry
 
+/-- A7a. A homotopy equivalence is bijective on π₁ at every basepoint
+(`FundamentalGroupoidFunctor.equivOfHomotopyEquiv` or directly: both
+composites are homotopic to the identity, and A7b). -/
+lemma cell_piOne_aux_hequiv_bijective {A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] (e : A ≃ₕ B) (b : B) :
+    Function.Bijective (FundamentalGroup.map e.invFun b) := by
+  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv e.symm
+  let ff := E.fullyFaithfulFunctor
+  let m := FundamentalGroup.map e.invFun b
+  let mEquiv : FundamentalGroup B b ≃* FundamentalGroup A (e.invFun b) :=
+    { toFun := m
+      invFun := fun g => ff.preimage g
+      left_inv := fun g => ff.preimage_map g
+      right_inv := fun g => ff.map_preimage g
+      map_mul' := m.map_mul }
+  exact mEquiv.bijective
+
+/-- A7b. Homotopic maps agree on π₁ up to transport along the track of the
+basepoint (`ContinuousMap.Homotopy`; Mathlib's
+`FundamentalGroupoidFunctor.homotopicMapsNatIso`). -/
+lemma cell_piOne_aux_homotopic_conj {A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] (f g : C(A, B)) (hfg : f.Homotopic g) (a : A) :
+    ∃ p : Path (g a) (f a), ∀ x : FundamentalGroup A a,
+      FundamentalGroup.map f a x =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath p (FundamentalGroup.map g a x) := by
+  exact apm_t92J05_homotopic_map_conj hfg.symm a
+
+/-- A7c. The overlap's image in the outer piece is normally generated by the
+radius-`1/2` circle: π₁ of the overlap at `cellOverlapCircle γ 1` is the image
+of `π₁(Circle, 1)` (A3: a homotopy equivalence with inverse
+`cellOverlapCircle γ`, so A7a), which is generated by
+`circleIntegerLoopOneClass` (`PolygonSurfaceHomology.circleIntegerLoopOneClass_generates`). -/
+lemma cell_piOne_aux_overlap_generator (γ : C(Circle, Y))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ) :
+    Subgroup.normalClosure ((FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ))
+        (cellOverlapCircle γ 1)).range :
+          Set (FundamentalGroup (cellOuter γ)
+            (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)
+              (cellOverlapCircle γ 1)))) =
+      Subgroup.normalClosure {FundamentalGroup.map
+        ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+          (cellOverlapCircle γ)) 1 PolygonSurfaceHomology.circleIntegerLoopOneClass} := by
+  obtain ⟨e, he⟩ := hA3
+  have hc : Function.Surjective
+      (FundamentalGroup.map (cellOverlapCircle γ) (1 : Circle)) := by
+    have hb := (cell_piOne_aux_hequiv_bijective e (1 : Circle)).2
+    rw [he] at hb
+    exact hb
+  have hmap (z : FundamentalGroup Circle 1) :
+      FundamentalGroup.map
+          ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+            (cellOverlapCircle γ)) 1 z =
+        FundamentalGroup.map
+          (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ))
+          (cellOverlapCircle γ 1)
+          (FundamentalGroup.map (cellOverlapCircle γ) 1 z) := by
+    induction z using Path.Homotopic.Quotient.ind with
+    | mk p => rfl
+  apply le_antisymm
+  · refine Subgroup.normalClosure_le_normal
+      (N := Subgroup.normalClosure
+        ({FundamentalGroup.map
+          ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+            (cellOverlapCircle γ)) 1
+            PolygonSurfaceHomology.circleIntegerLoopOneClass} : _)) ?_
+    rintro y ⟨x, rfl⟩
+    obtain ⟨z, hz⟩ := hc x
+    obtain ⟨n, hn⟩ :=
+      PolygonSurfaceHomology.circleIntegerLoopOneClass_generates z
+    subst x
+    rw [← hn, map_zpow]
+    rw [map_zpow, ← hmap]
+    exact (Subgroup.normalClosure
+      ({FundamentalGroup.map
+        ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+          (cellOverlapCircle γ)) 1
+          PolygonSurfaceHomology.circleIntegerLoopOneClass} :
+        Set (FundamentalGroup (cellOuter γ)
+          (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)
+            (cellOverlapCircle γ 1))))).zpow_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) n
+  · apply Subgroup.normalClosure_mono
+    intro y hy
+    rw [Set.mem_singleton_iff] at hy
+    subst y
+    rw [hmap]
+    exact ⟨FundamentalGroup.map (cellOverlapCircle γ) 1
+      PolygonSurfaceHomology.circleIntegerLoopOneClass, rfl⟩
+
 /-- A7. **van Kampen for one 2-cell.**  The inclusion `Y → Y ∪_γ D²` is onto
 on π₁ with kernel the normal closure of `[γ]`.  Apply
 `apm_t92J05_twoOpen_simplyConnectedRight_kernel` to the cover (A1, A2, A6) at
@@ -554,6 +903,66 @@ the overlap point `cellOverlapCircle γ 1`; transfer from the outer piece to
 `Y` by A4, identify the overlap image with a conjugate of `[γ]` by A3 + A5
 (a free homotopy conjugates; normal closures absorb conjugation), and move the
 basepoint along any path (again a conjugation). -/
+lemma cell_piOne_aux_normalClosure_isConj
+    {G : Type*} [Group G] {a b : G} (h : IsConj a b) :
+    Subgroup.normalClosure ({a} : Set G) =
+      Subgroup.normalClosure ({b} : Set G) := by
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, rfl⟩ := isConj_iff.mp h.symm
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, rfl⟩ := isConj_iff.mp h
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+
+lemma cell_piOne_aux_transport_kernel
+    {G H K : Type*} [Group G] [Group H] [Group K]
+    (e : G ≃* H) (f : H →* K) (r : H)
+    (hsurj : Function.Surjective f)
+    (hker : MonoidHom.ker f = Subgroup.normalClosure ({r} : Set H)) :
+    Function.Surjective (f.comp e.toMonoidHom) ∧
+      MonoidHom.ker (f.comp e.toMonoidHom) =
+        Subgroup.normalClosure ({e.symm r} : Set G) := by
+  constructor
+  · intro k
+    obtain ⟨x, rfl⟩ := hsurj k
+    exact ⟨e.symm x, by simp⟩
+  · ext x
+    rw [MonoidHom.mem_ker, MonoidHom.coe_comp, Function.comp_apply]
+    change f (e x) = 1 ↔ _
+    rw [show f (e x) = 1 ↔ e x ∈ MonoidHom.ker f by rfl, hker]
+    constructor
+    · intro hx
+      have hx' : e.symm (e x) ∈
+          (Subgroup.normalClosure ({r} : Set H)).map e.symm.toMonoidHom :=
+        ⟨e x, hx, rfl⟩
+      have hm : (Subgroup.normalClosure ({r} : Set H)).map e.symm.toMonoidHom =
+          Subgroup.normalClosure ({e.symm r} : Set G) := by
+        rw [Subgroup.map_normalClosure ({r} : Set H) e.symm.toMonoidHom
+          e.symm.surjective]
+        congr 1
+        ext z
+        simp
+      rw [hm] at hx'
+      simpa using hx'
+    · intro hx
+      have hx' : e (e.symm (e x)) ∈
+          (Subgroup.normalClosure ({e.symm r} : Set G)).map e.toMonoidHom :=
+        ⟨x, hx, by simp⟩
+      have hm : (Subgroup.normalClosure ({e.symm r} : Set G)).map e.toMonoidHom =
+          Subgroup.normalClosure ({r} : Set H) := by
+        rw [Subgroup.map_normalClosure ({e.symm r} : Set G) e.toMonoidHom
+          e.surjective]
+        congr 1
+        ext z
+        simp
+      rw [hm] at hx'
+      simpa using hx'
+
 lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = y)
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
       cellOuter γ ∪ cellInner γ = Set.univ)
@@ -565,17 +974,120 @@ lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = 
         (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
     (hA6 : PathConnectedSpace (cellOuter γ) ∧
       PathConnectedSpace (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ∧
-      PathConnectedSpace (Cell γ)) :
+      PathConnectedSpace (Cell γ))
+    (hbij : ∀ {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (e : A ≃ₕ B) (b : B),
+      Function.Bijective (FundamentalGroup.map e.invFun b))
+    (hconj : ∀ {A B : Type} [TopologicalSpace A] [TopologicalSpace B] (f g : C(A, B)),
+      f.Homotopic g → ∀ a : A, ∃ p : Path (g a) (f a), ∀ x : FundamentalGroup A a,
+        FundamentalGroup.map f a x =
+          FundamentalGroup.fundamentalGroupMulEquivOfPath p (FundamentalGroup.map g a x))
+    (hgen : Subgroup.normalClosure ((FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ))
+        (cellOverlapCircle γ 1)).range :
+          Set (FundamentalGroup (cellOuter γ)
+            (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)
+              (cellOverlapCircle γ 1)))) =
+      Subgroup.normalClosure {FundamentalGroup.map
+        ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+          (cellOverlapCircle γ)) 1 PolygonSurfaceHomology.circleIntegerLoopOneClass}) :
     Function.Surjective (FundamentalGroup.map (cellIncl γ) y) ∧
       (FundamentalGroup.map (cellIncl γ) y).ker =
         Subgroup.normalClosure {loopClassAt γ y h} := by
   sorry
-
 /-- A8. **H₁ of a 2-cell attachment.**  Integral Mayer–Vietoris
 (`IntegralMV.integralMayerVietoris`, transported to the `singularHomologyFunctor`
 form by `IntegralSingularHomologyComparison`) for the cover A1: `H₁(inner) = 0`,
 `H₀(overlap) → H₀(outer) ⊕ H₀(inner)` injective, `H₁(overlap) ≅ H₁(Circle)` by
 A3 and its image is `γ_*` by A5, `H₁(outer) ≅ H₁(Y)` by A4. -/
+lemma cell_H1_aux_exact
+    {A B P D E : ModuleCat ℤ}
+    (f : A ⟶ B) (I : A ⟶ P) (g : B ⟶ D) (J : P ⟶ D)
+    (inB : B ⟶ P) (prB : P ⟶ B) (d : D ⟶ E) (i₀ : E ⟶ A)
+    (hJ : inB ≫ J = g) (hI : I ≫ prB = f)
+    (hsplit : ∀ x, inB.hom (prB.hom x) = x)
+    (hproj : ∀ x, prB.hom (inB.hom x) = x)
+    (hi₀ : Function.Injective i₀.hom)
+    (hex₁ : LinearMap.range I.hom = LinearMap.ker J.hom)
+    (hex₂ : LinearMap.range J.hom = LinearMap.ker d.hom)
+    (hex₃ : LinearMap.range d.hom = LinearMap.ker i₀.hom) :
+    Function.Surjective g.hom ∧ LinearMap.ker g.hom = LinearMap.range f.hom := by
+  have hd_zero : d.hom = 0 := by
+    apply LinearMap.range_eq_bot.mp
+    rw [hex₃, LinearMap.ker_eq_bot.mpr hi₀]
+  have hJ_surj : Function.Surjective J.hom := by
+    rw [← LinearMap.range_eq_top, hex₂, hd_zero, LinearMap.ker_zero]
+  constructor
+  · intro y
+    obtain ⟨x, hx⟩ := hJ_surj y
+    refine ⟨prB.hom x, ?_⟩
+    have hg := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hJ) (prB.hom x)
+    rw [← hg, ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply,
+      hsplit, hx]
+  · apply le_antisymm
+    · intro x hx
+      let q := inB.hom x
+      have hxJ : q ∈ LinearMap.ker J.hom := by
+        change J.hom q = 0
+        have hg := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hJ) x
+        have hg' : J.hom q = g.hom x := by
+          simpa [q, ModuleCat.hom_comp] using hg
+        exact hg'.trans hx
+      rw [← hex₁] at hxJ
+      obtain ⟨a, ha⟩ := hxJ
+      refine ⟨a, ?_⟩
+      have hf := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hI) a
+      rw [← hf, ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply, ha]
+      simpa [q] using hproj x
+    · rintro x ⟨a, rfl⟩
+      let q := inB.hom (f.hom a)
+      have haI : I.hom a = q := by
+        rw [← hsplit (I.hom a)]
+        have hf := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hI) a
+        simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply] at hf
+        rw [hf]
+      have : q ∈ LinearMap.ker J.hom := by
+        rw [← hex₁]
+        exact ⟨a, haI⟩
+      change g.hom (f.hom a) = 0
+      have hg := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hJ) (f.hom a)
+      have hg' : J.hom q = g.hom (f.hom a) := by
+        simpa [q, ModuleCat.hom_comp] using hg
+      exact hg'.symm.trans (show J.hom q = 0 from this)
+
+lemma cell_H1_aux_inner_zero (γ : C(Circle, Y))
+    (hA2 : ContractibleSpace (cellInner γ)) :
+    Subsingleton (IntegralMV.HZ 1 (cellInner γ)) := by
+  letI := hA2
+  apply ModuleCat.subsingleton_of_isZero
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      _ 1
+      (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        _ 1 (by decide))
+
+lemma cell_H1_aux_mv0_injective (γ : C(Circle, Y)) [PathConnectedSpace Y]
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA2 : ContractibleSpace (cellInner γ)) :
+    Function.Injective (IntegralMV.mvI (cellOuter γ) (cellInner γ) 0).hom := by
+  sorry
+
+lemma cell_H1_aux_transport (γ : C(Circle, Y))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ)) :
+    ∃ (eI : IntegralMV.HZ 1 (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≅
+          H 1 Circle)
+      (eO : IntegralMV.HZ 1 (cellOuter γ) ≅ H 1 Y),
+      IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+          eO.hom = eI.hom ≫ Hmap γ 1 ∧
+      eO.inv ≫ IntegralMV.mvToX (cellOuter γ) 1 = Hmap (cellIncl γ) 1 := by
+  sorry
+
 -- BEGIN SEAT AREA
 lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
@@ -585,12 +1097,20 @@ lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
       e.invFun = cellOverlapCircle γ)
     (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
     (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
-        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ)) :
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
+    (hinner : Subsingleton (IntegralMV.HZ 1 (cellInner γ)))
+    (hmv0 : Function.Injective (IntegralMV.mvI (cellOuter γ) (cellInner γ) 0).hom)
+    (htrans : ∃ (eI : IntegralMV.HZ 1 (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≅
+          H 1 Circle)
+      (eO : IntegralMV.HZ 1 (cellOuter γ) ≅ H 1 Y),
+      IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+          eO.hom = eI.hom ≫ Hmap γ 1 ∧
+      eO.inv ≫ IntegralMV.mvToX (cellOuter γ) 1 = Hmap (cellIncl γ) 1) :
     Function.Surjective (Hmap (cellIncl γ) 1).hom ∧
       LinearMap.ker (Hmap (cellIncl γ) 1).hom = LinearMap.range (Hmap γ 1).hom := by
   sorry
 -- END SEAT AREA
-
 /-- A9. If `γ_*` is injective on `H₁`, then `H₂(Y) → H₂(Y ∪_γ D²)` is bijective
 (Mayer–Vietoris at degree 2: `H₂(overlap) = 0`, connecting map lands in
 `ker γ_* = 0`). -/
@@ -1182,9 +1702,11 @@ theorem Xc_piOne : Nonempty (FundamentalGroup Xc xBase ≃* apm_t97J04_piOne) :=
   obtain ⟨hA1c, hA2c, hA3c, hA4c, hA5c⟩ := cell_facts cLoop
   obtain ⟨hfs, hfk⟩ := cell_piOne word wBase
     (PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P) hA1w hA2w hA3w hA4w hA5w
-    (cell_pathConnected word hA3w hA4w)
+    (cell_pathConnected word hA3w hA4w) cell_piOne_aux_hequiv_bijective
+    cell_piOne_aux_homotopic_conj (cell_piOne_aux_overlap_generator word hA3w)
   obtain ⟨hgs, hgk⟩ := cell_piOne cLoop sBase cLoop_one hA1c hA2c hA3c hA4c hA5c
-    (cell_pathConnected cLoop hA3c hA4c)
+    (cell_pathConnected cLoop hA3c hA4c) cell_piOne_aux_hequiv_bijective
+    cell_piOne_aux_homotopic_conj (cell_piOne_aux_overlap_generator cLoop hA3c)
   rw [cLoop_loopClass, cOrbit_label] at hgk
   obtain ⟨e1⟩ := two_step_quotient _ _ hfs hgs _ _ hfk hgk
   let r := wedgeCoords (loopClassAt word wBase
@@ -1210,7 +1732,11 @@ theorem apm_t97j04 :
   obtain ⟨hA1w, hA2w, hA3w, hA4w, hA5w⟩ := cell_facts word
   obtain ⟨hA1c, hA2c, hA3c, hA4c, hA5c⟩ := cell_facts cLoop
   have hA8w := cell_H1 word hA1w hA2w hA3w hA4w hA5w
+    (cell_H1_aux_inner_zero word hA2w) (cell_H1_aux_mv0_injective word hA3w hA4w hA2w)
+    (cell_H1_aux_transport word hA3w hA4w hA5w)
   have hA8c := cell_H1 cLoop hA1c hA2c hA3c hA4c hA5c
+    (cell_H1_aux_inner_zero cLoop hA2c) (cell_H1_aux_mv0_injective cLoop hA3c hA4c hA2c)
+    (cell_H1_aux_transport cLoop hA3c hA4c hA5c)
   have hX : ∀ k, Nonempty (apm_t97J04_H k ≅ H k Xc) := fun k => H_of_homeomorph h k
   refine ⟨?_, ?_, ?_, ?_, ?_⟩
   · obtain ⟨e⟩ := Xc_piOne
