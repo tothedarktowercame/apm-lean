@@ -505,9 +505,62 @@ and `circleIntegerLoopOneCoordinate_eq_one_or_neg_one`).  Hence
 `e ∘ finiteWedgeFinLegFreeGroupMap n = FreeGroup.lift (fun i => of i ^ s)`,
 an involutive endomorphism of the free group, hence injective. -/
 -- BEGIN SEAT AREA
+lemma finiteWedgeFinLegFreeGroupMap_injective_aux_legMap (n : ℕ)
+    (i : Fin (n + 1)) :
+    PolygonSurfaceHomology.finiteWedgeFinLegMap n i =
+      apm_t92J05_finiteWedgeLegMap n i := by
+  rfl
+
+lemma finiteWedgeFinLegFreeGroupMap_injective_aux_oldPositive :
+    apm_t92J05_circlePositiveClass =
+      PolygonSurfaceHomology.circleIntegerLoopOneClass := by
+  apply ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.injective
+  simp [apm_t92J05_circlePositiveClass,
+    PolygonSurfaceHomology.circleIntegerLoopOneClass,
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt,
+    ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
+
 lemma finiteWedgeFinLegFreeGroupMap_injective (n : ℕ) :
     Function.Injective (PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap n) := by
-  sorry
+  let e := Classical.choose (finiteWedge_finSucc_fundamentalGroup_free n)
+  have he := Classical.choose_spec (finiteWedge_finSucc_fundamentalGroup_free n)
+  let s := PolygonSurfaceHomology.circleIntegerLoopOneCoordinate
+  have hleg (i : Fin (n + 1)) :
+      e (PolygonSurfaceHomology.finiteWedgeFinLegMap n i
+          PolygonSurfaceHomology.circlePositiveFundamentalClass) =
+        FreeGroup.of i ^ s := by
+    rw [PolygonSurfaceHomology.circlePositiveFundamentalClass_eq_integerLoop_zpow_coordinate,
+      map_zpow, finiteWedgeFinLegFreeGroupMap_injective_aux_legMap,
+      ← finiteWedgeFinLegFreeGroupMap_injective_aux_oldPositive]
+    rw [map_zpow]
+    exact congrArg (fun z => z ^ s) (he i)
+  let d : FreeGroup (Fin (n + 1)) →* FreeGroup (Fin (n + 1)) :=
+    FreeGroup.lift (fun i => FreeGroup.of i ^ s)
+  have hcomp :
+      e.toMonoidHom.comp
+          (PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap n) = d := by
+    apply FreeGroup.ext_hom
+    intro i
+    simpa [d, PolygonSurfaceHomology.finiteWedgeFinLegFreeGroupMap] using hleg i
+  have hs := PolygonSurfaceHomology.circleIntegerLoopOneCoordinate_eq_one_or_neg_one
+  change s = 1 ∨ s = -1 at hs
+  intro x y hxy
+  have hd : d x = d y := by
+    rw [← hcomp]
+    exact congrArg e hxy
+  rcases hs with hs | hs
+  · have did : d = MonoidHom.id (FreeGroup (Fin (n + 1))) := by
+      apply FreeGroup.ext_hom
+      intro i
+      simp [d, hs]
+    simpa [did] using hd
+  · have dinv (z : FreeGroup (Fin (n + 1))) : d (d z) = z := by
+      induction z using FreeGroup.induction_on with
+      | C1 => simp [d]
+      | of i => simp [d, hs]
+      | inv_of i hi => simp [d, hs]
+      | mul a b ha hb => simp only [map_mul, ha, hb]
+    simpa [dinv x, dinv y] using congrArg d hd
 -- END SEAT AREA
 
 theorem finiteWedgeFinLegFreeGroupMapCard_injective (N : ℕ) (hN : 0 < N) :
