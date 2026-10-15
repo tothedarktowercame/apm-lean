@@ -37111,7 +37111,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37174,7 +37174,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37196,7 +37196,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37482,6 +37482,16 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
      {:cmd "git show --check 88e57cf8e", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792046394361-13529-53cccb7f",
+     :commands
+     ["git show/check/diff-tree e474731bb; fixture sha256"
+      "lake env lean archived committed Main via authority-linked worktree"
+      "statement-registry check; sorry recount 2->1"],
+     :finding
+     "PASS: e474731bb is new compiled, standard-axiom progress. It proves the exact fixed locus equals the coordinate CP1 line union the isolated third-axis point, with both set-inclusion directions and projective representatives handled correctly. Scope is one allowed file; fixture hash matches; registry 166/166; placeholders 2->1. Remaining CP2 rational homology, Euler characteristic, and final theorem are listed."},
     :commit "88e57cf8e",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
@@ -37490,7 +37500,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37508,7 +37518,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the exact CP0 rational homology base; the projective-filtration successor remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37536,7 +37546,11 @@
     {:job 5,
      :commit "7713e5a35",
      :reason
-     "Committed the exact CP0 rational homology base; the projective-filtration successor remains."}]}
+     "Committed the exact CP0 rational homology base; the projective-filtration successor remains."}
+    {:job 6,
+     :commit "88e57cf8e",
+     :reason
+     "Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -41185,7 +41199,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "realPair_eq_or_eq_neg_of_squareCoordinates",
@@ -41197,14 +41211,16 @@
     :type
     "equal complex-square coordinates imply simultaneous sign equality",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-realpair-eq-or-eq-neg-of-squarecoordinates,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp2RationalHomologyData_of_two_steps",
@@ -41214,7 +41230,9 @@
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "CP0 base plus steps 0→1 and 1→2 yields CP2 data",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "88e57cf8e"},
    :id :lemma-t97j07-cp2rationalhomologydata-of-two-steps,
    :kind :lemma,
    :depends-on
