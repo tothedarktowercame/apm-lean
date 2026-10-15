@@ -214,6 +214,14 @@ def frozenSignedQuotientHomeomorphGenerator :
           (boundaryRel 14 frozenPair frozenSign)) x) =
       Quotient.mk (Relation.EqvGen.setoid frozenGeneratorRel) x := rfl
 
+/-- Integral singular homology transports across the frozen quotient
+homeomorphism in every degree. -/
+def frozenSignedQuotientHomologyIsoGenerator (k : ℕ) :
+    SpaceH FrozenSignedQuotient k ≅ SpaceH FrozenGeneratorQuotient k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo frozenSignedQuotientHomeomorphGenerator))
+
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -689,5 +697,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedQuotientEquivGenerator_mk
 #print axioms frozenSignedQuotientHomeomorphGenerator
 #print axioms frozenSignedQuotientHomeomorphGenerator_mk
+#print axioms frozenSignedQuotientHomologyIsoGenerator
 
 end ConstructionTargets.t94J09Closure
