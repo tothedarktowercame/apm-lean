@@ -438,6 +438,186 @@ lemma t99A01_piOne_attach_succ_cover_aux_basic {r : ℕ}
       norm_num [z, c] at hv
     · norm_num [z]
 
+noncomputable def t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall
+    (z : Metric.ball (0 : ℂ) 1) : APMT99A01.Disk :=
+  ⟨z, by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    exact (by simpa only [Metric.mem_ball, dist_zero_right] using z.2 : ‖(z : ℂ)‖ < 1).le⟩
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_eqv {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) {z w : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) (hw : ‖(w : ℂ)‖ < 1)
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree)
+      (Sum.inr (Fin.last r, z)) (Sum.inr (Fin.last r, w))) : z = w := by
+  let P := fun x : Sum Circle (Fin (r + 1) × APMT99A01.Disk) =>
+    x = Sum.inr (Fin.last r, z)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b hab
+    cases hab with
+    | boundary i u =>
+      constructor
+      · intro bad; cases bad
+      · intro bad
+        have hp : (i, APMT99A01.circleInDisk u) = (Fin.last r, z) :=
+          Sum.inr.inj bad
+        have he : APMT99A01.circleInDisk u = z := (Prod.mk.inj hp).2
+        have hn := congrArg (fun v : APMT99A01.Disk => ‖(v : ℂ)‖) he
+        simp [APMT99A01.circleInDisk] at hn
+        linarith
+  have hinv : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+      (P a ↔ P b) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab => exact hrel a b hab
+    | refl => exact Iff.rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  have he := (hinv _ _ h).mp rfl
+  exact (Prod.mk.inj (Sum.inr.inj he)).2.symm
+
+noncomputable def t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (z : Metric.ball (0 : ℂ) 1) :
+    APMT99A01.succDiskSide degree :=
+  ⟨Quotient.mk _ (Sum.inr (Fin.last r,
+      t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall z)),
+    ⟨_, by simpa only [t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall,
+      Metric.mem_ball, dist_zero_right] using z.2, rfl⟩⟩
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_cont_bij {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    Continuous (t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g degree) ∧
+      Function.Bijective
+        (t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g degree) := by
+  constructor
+  · apply Continuous.subtype_mk
+    exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (continuous_const.prodMk
+        (Continuous.subtype_mk continuous_subtype_val _)))
+  constructor
+  · intro z w h
+    have he := Quotient.exact (congrArg Subtype.val h)
+    have hu' := t99A01_piOne_attach_succ_cover_aux_connectivity_aux_eqv degree
+      (by simpa only [t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using z.2)
+      (by simpa only [t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using w.2) he
+    apply Subtype.ext
+    exact congrArg (fun x : APMT99A01.Disk => (x : ℂ)) hu'
+  · rintro ⟨q, z, hz, rfl⟩
+    let w : Metric.ball (0 : ℂ) 1 :=
+      ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩
+    refine ⟨w, Subtype.ext ?_⟩
+    rfl
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_open {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    IsOpenMap (t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g degree) := by
+  intro U hU
+  let d := t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall
+  let F : Metric.ball (0 : ℂ) 1 →
+      Sum Circle (Fin (r + 1) × APMT99A01.Disk) :=
+    fun z => Sum.inr (Fin.last r, d z)
+  have hopenC : IsOpen ((fun z : Metric.ball (0 : ℂ) 1 => (z : ℂ)) '' U) :=
+    Metric.isOpen_ball.isOpenEmbedding_subtypeVal.isOpenMap U hU
+  have hopenD : IsOpen (d '' U) := by
+    have heq : d '' U = Subtype.val ⁻¹'
+        ((fun z : Metric.ball (0 : ℂ) 1 => (z : ℂ)) '' U) := by
+      ext z
+      constructor
+      · rintro ⟨w, hw, rfl⟩; exact ⟨w, hw, rfl⟩
+      · rintro ⟨w, hw, he⟩
+        exact ⟨w, hw, Subtype.ext he⟩
+    rw [heq]
+    exact hopenC.preimage continuous_subtype_val
+  have hopenF : IsOpen (F '' U) := by
+    rw [isOpen_sum_iff]
+    constructor
+    · convert (isOpen_empty : IsOpen (∅ : Set Circle)) using 1
+      ext x
+      simp only [Set.mem_preimage, Set.mem_image, Set.mem_empty_iff_false, iff_false]
+      rintro ⟨z, -, h⟩
+      cases h
+    · rw [isOpen_prod_iff]
+      intro i z hiz
+      rcases hiz with ⟨w, hw, he⟩
+      have hp := Sum.inr.inj he
+      refine ⟨{Fin.last r}, d '' U, isOpen_discrete _, hopenD,
+        (Prod.mk.inj hp).1.symm, ⟨w, hw, (Prod.mk.inj hp).2⟩, ?_⟩
+      rintro ⟨j, v⟩ ⟨hj, hv⟩
+      simp only [Set.mem_singleton_iff] at hj
+      rcases hv with ⟨w, hw, rfl⟩
+      subst j
+      exact ⟨w, hw, rfl⟩
+  have hsat : (Quotient.mk _ :
+      Sum Circle (Fin (r + 1) × APMT99A01.Disk) → APMT99A01.AttachSpace degree) ⁻¹'
+      ((Quotient.mk _) '' (F '' U)) = F '' U := by
+    ext x
+    constructor
+    · rintro ⟨y, ⟨z, hzU, rfl⟩, hxy⟩
+      have hr := Quotient.exact hxy
+      have hx := (t99A01_piOne_attach_succ_cover_aux_interior degree _ _ hr).mp
+        ⟨d z, by simpa only [d,
+          t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall,
+          Metric.mem_ball, dist_zero_right] using z.2, rfl⟩
+      rcases hx with ⟨u, hu, hxu⟩
+      have he : u = d z := t99A01_piOne_attach_succ_cover_aux_connectivity_aux_eqv degree
+        hu (by simpa only [d,
+          t99A01_piOne_attach_succ_cover_aux_connectivity_aux_diskOfBall,
+          Metric.mem_ball, dist_zero_right] using z.2)
+        (by rw [hxu] at hr; simpa only [F] using hr.symm)
+      subst u
+      refine ⟨z, hzU, ?_⟩
+      exact hxu.symm
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨F z, ⟨z, hz, rfl⟩, rfl⟩
+  have hquot : IsOpen ((Quotient.mk _) '' (F '' U) :
+      Set (APMT99A01.AttachSpace degree)) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((Quotient.mk _ :
+      Sum Circle (Fin (r + 1) × APMT99A01.Disk) → APMT99A01.AttachSpace degree) ⁻¹'
+        ((Quotient.mk _) '' (F '' U)))
+    rw [hsat]
+    exact hopenF
+  have heq : t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g degree '' U =
+      Subtype.val ⁻¹' ((Quotient.mk _) '' (F '' U) :
+        Set (APMT99A01.AttachSpace degree)) := by
+    ext q
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨F z, ⟨z, hz, rfl⟩, rfl⟩
+    · rintro ⟨x, ⟨z, hz, hx⟩, hxq⟩
+      refine ⟨z, hz, Subtype.ext ?_⟩
+      exact (congrArg (Quotient.mk _) hx).trans hxq
+  rw [heq]
+  exact hquot.preimage continuous_subtype_val
+
+noncomputable def t99A01_piOne_attach_succ_cover_aux_connectivity_aux_homeomorph
+    {r : ℕ} (degree : Fin (r + 1) → ℕ) :
+    Metric.ball (0 : ℂ) 1 ≃ₜ APMT99A01.succDiskSide degree := by
+  obtain ⟨hc, hb⟩ :=
+    t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_cont_bij degree
+  exact (Equiv.ofBijective _ hb).toHomeomorphOfContinuousOpen hc
+    (t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_open degree)
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_disk_path {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    IsPathConnected (APMT99A01.succDiskSide degree) := by
+  let e := t99A01_piOne_attach_succ_cover_aux_connectivity_aux_homeomorph degree
+  letI : ContractibleSpace (Metric.ball (0 : ℂ) 1) :=
+    Metric.contractibleSpace_ball (by norm_num)
+  apply isPathConnected_iff_pathConnectedSpace.mpr
+  exact e.surjective.pathConnectedSpace e.continuous
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_disk_simple {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    IsSimplyConnected (APMT99A01.succDiskSide degree) := by
+  let e := t99A01_piOne_attach_succ_cover_aux_connectivity_aux_homeomorph degree
+  letI : ContractibleSpace (Metric.ball (0 : ℂ) 1) :=
+    Metric.contractibleSpace_ball (by norm_num)
+  letI : SimplyConnectedSpace (Metric.ball (0 : ℂ) 1) :=
+    SimplyConnectedSpace.ofContractible _
+  exact e.symm.toHomotopyEquiv.simplyConnectedSpace
+
 lemma t99A01_piOne_attach_succ_cover_aux_connectivity {r : ℕ}
     (degree : Fin (r + 1) → ℕ) :
     IsPathConnected (APMT99A01.succCircleSide degree ∩
@@ -446,7 +626,6 @@ lemma t99A01_piOne_attach_succ_cover_aux_connectivity {r : ℕ}
       IsPathConnected (APMT99A01.succDiskSide degree) ∧
       IsSimplyConnected (APMT99A01.succDiskSide degree) := by
   sorry
-
 lemma t99A01_piOne_attach_succ_cover {r : ℕ} (degree : Fin (r + 1) → ℕ) :
     IsOpen (APMT99A01.succCircleSide degree) ∧
       IsOpen (APMT99A01.succDiskSide degree) ∧
