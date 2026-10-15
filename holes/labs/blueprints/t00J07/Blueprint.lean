@@ -1111,7 +1111,137 @@ lemma cell_H2_ker {Y : Type} [TopologicalSpace Y] (γ : C(Circle, Y))
         (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
     (hY2 : Limits.IsZero (H 2 Y)) :
     Nonempty (H 2 (Cell γ) ≅ ModuleCat.of ℤ (LinearMap.ker (Hmap γ 1).hom)) := by
-  sorry
+  obtain ⟨eI, heI⟩ := hA3
+  obtain ⟨eO, heO⟩ := hA4
+  let iI1 := cell_H1_aux_transport_iso eI 1
+  let iO1 := cell_H1_aux_transport_iso eO 1
+  let iO2 := cell_H1_aux_transport_iso eO 2
+  have hleft1 : IntegralMV.mvIncl
+        (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+        iO1.hom = iI1.hom ≫ Hmap γ 1 := by
+    apply (cancel_epi iI1.inv).1
+    simp only [Iso.inv_hom_id_assoc]
+    change Hmap eI.invFun 1 ≫
+        IntegralMV.mvIncl Set.inter_subset_left 1 ≫ Hmap eO.toFun 1 = Hmap γ 1
+    change Hmap eI.invFun 1 ≫
+      Hmap (apm_t92J05_twoOpen_overlapToLeft
+          (cellOuter γ) (cellInner γ)) 1 ≫ Hmap eO.toFun 1 = Hmap γ 1
+    have hsquare :
+        (eO.toFun.comp ((apm_t92J05_twoOpen_overlapToLeft
+          (cellOuter γ) (cellInner γ)).comp eI.invFun)).Homotopic γ := by
+      rw [heI]
+      have h₁ := (ContinuousMap.Homotopic.refl eO.toFun).comp hA5
+      rw [← heO] at h₁
+      exact h₁.trans (by simpa only [ContinuousMap.comp_assoc,
+        ContinuousMap.id_comp] using
+          eO.right_inv.comp (ContinuousMap.Homotopic.refl γ))
+    dsimp only [Hmap]
+    rw [← Category.assoc, ← Functor.map_comp, ← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map
+        (TopCat.ofHom (eO.toFun.comp
+          ((apm_t92J05_twoOpen_overlapToLeft
+            (cellOuter γ) (cellInner γ)).comp eI.invFun))) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hsquare 1]
+  have hzeroN1 : Limits.IsZero (IntegralMV.HZ 1 (cellInner γ)) :=
+    cell_H2_of_zero_aux_inner_zero γ hA2 1 (by decide)
+  have hzeroN2 : Limits.IsZero (IntegralMV.HZ 2 (cellInner γ)) :=
+    cell_H2_of_zero_aux_inner_zero γ hA2 2 (by decide)
+  have hzeroO2 : Limits.IsZero (IntegralMV.HZ 2 (cellOuter γ)) :=
+    hY2.of_iso iO2
+  obtain ⟨δ, hexI, hexJ, hexδ⟩ :=
+    IntegralMV.integralMayerVietoris (cellOuter γ) (cellInner γ)
+      hA1.1 hA1.2.1 hA1.2.2
+  have hd_inj : Function.Injective (δ 1).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hexJ 1]
+    apply LinearMap.range_eq_bot.mpr
+    apply congrArg ModuleCat.Hom.hom
+    apply Limits.biprod.hom_ext'
+    · exact hzeroO2.eq_of_src _ _
+    · exact hzeroN2.eq_of_src _ _
+  let delta : H 2 (Cell γ) →ₗ[ℤ]
+      IntegralMV.HZ 1 (cellOuter γ ∩ cellInner γ : Set (Cell γ)) := by
+    simpa using (δ 1).hom
+  let da : H 2 (Cell γ) →+ LinearMap.ker (Hmap γ 1).hom :=
+    { toFun := fun x =>
+      ⟨iI1.hom.hom (delta x), by
+        have hx : (δ 1).hom x ∈ LinearMap.ker
+            (IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom := by
+          rw [← hexδ 1]
+          exact ⟨x, rfl⟩
+        have hp := congrArg
+          (fun q => (Limits.biprod.fst :
+            IntegralMV.HZ 1 (cellOuter γ) ⊞ IntegralMV.HZ 1 (cellInner γ) ⟶
+              IntegralMV.HZ 1 (cellOuter γ)).hom q) hx
+        have hp' : (IntegralMV.mvIncl Set.inter_subset_left 1).hom
+            ((δ 1).hom x) = 0 := by
+          change ((IntegralMV.mvI (cellOuter γ) (cellInner γ) 1 ≫
+            Limits.biprod.fst).hom ((δ 1).hom x)) = _ at hp
+          simpa [IntegralMV.mvI] using hp
+        have hh := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hleft1) ((δ 1).hom x)
+        simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply] at hh
+        simpa [delta, hp'] using hh.symm⟩
+      map_zero' := by ext; simp
+      map_add' := by intro x y; ext; simp }
+  let d : H 2 (Cell γ) →ₗ[ℤ] LinearMap.ker (Hmap γ 1).hom :=
+    { toFun := da
+      map_add' := da.map_add
+      map_smul' := by
+        intro n x
+        change da ((H 2 (Cell γ)).isModule.smul n x) =
+          (AddCommGroup.toIntModule (LinearMap.ker (Hmap γ 1).hom)).smul n (da x)
+        rw [int_smul_eq_zsmul, int_smul_eq_zsmul]
+        exact da.map_zsmul x n }
+  have hd_bij : Function.Bijective d := by
+    constructor
+    · intro x y hxy
+      apply hd_inj
+      change delta x = delta y
+      apply (ModuleCat.mono_iff_injective iI1.hom).mp inferInstance
+      change (da x).1 = (da y).1
+      exact congrArg Subtype.val hxy
+    · intro z
+      let w := iI1.inv.hom z.1
+      have hw : w ∈ LinearMap.ker
+          (IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom := by
+        change (IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom w = 0
+        let q : ModuleCat.of ℤ ℤ ⟶
+            IntegralMV.HZ 1 (cellOuter γ) ⊞ IntegralMV.HZ 1 (cellInner γ) :=
+          ModuleCat.ofHom (LinearMap.toSpanSingleton ℤ _
+            ((IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom w))
+        have hfirst : (IntegralMV.mvIncl Set.inter_subset_left 1).hom w = 0 := by
+          apply (ModuleCat.mono_iff_injective iO1.hom).mp inferInstance
+          have hh := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hleft1) w
+          simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply] at hh
+          rw [hh]
+          simp [w, z.property]
+        have hq : q = 0 := by
+          apply Limits.biprod.hom_ext
+          ·
+            have hcoord : (Limits.biprod.fst :
+                IntegralMV.HZ 1 (cellOuter γ) ⊞ IntegralMV.HZ 1 (cellInner γ) ⟶
+                  IntegralMV.HZ 1 (cellOuter γ)).hom
+                ((IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom w) = 0 := by
+              change ((IntegralMV.mvI (cellOuter γ) (cellInner γ) 1 ≫
+                Limits.biprod.fst).hom w) = 0
+              simpa [IntegralMV.mvI] using hfirst
+            apply ModuleCat.hom_ext
+            apply LinearMap.ext
+            intro n
+            simpa [q, map_smul, hcoord]
+          · exact hzeroN1.eq_of_tgt _ _
+        have := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hq) (1 : ℤ)
+        simpa [q] using this
+      rw [← hexδ 1] at hw
+      obtain ⟨x, hx⟩ := hw
+      refine ⟨x, Subtype.ext ?_⟩
+      dsimp [d]
+      change iI1.hom.hom (delta x) = z.1
+      have hx' : delta x = w := by simpa [delta] using hx
+      rw [hx']
+      simp [w]
+  exact ⟨LinearEquiv.toModuleIso (LinearEquiv.ofBijective d hd_bij)⟩
 
 /-- The kernel of a map from an infinite cyclic group to a group of
 exponent two is infinite cyclic. -/
