@@ -3,6 +3,7 @@ import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientContractiblePair
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.ProjectiveQuotientDescent
+import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -16,6 +17,7 @@ open ConstructionTargets.ComplexProjectiveChartTargets
 open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.ProjectiveQuotientDescent
 open Set Topology
+open scoped ContinuousMap
 
 noncomputable section
 namespace ConstructionTargets.t99J05Closure
@@ -327,6 +329,49 @@ noncomputable def t99J05_cp_successor_overlap_homeomorph_puncturedAffine
         exact (t99J05_chartInverse_continuous_exact (Fin.last (n + 1))).comp
           continuous_subtype_val }
 
+/-- Rational singular homology of the successor overlap is transported to
+the punctured affine-coordinate model by the literal chart homeomorphism. -/
+noncomputable def t99J05_cp_successor_overlap_homologyIso_puncturedAffine
+    (n k : ℕ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k ≅
+      Homology
+        ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+          Set (AffineCoordinates (Fin.last (n + 1)))) k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ))).mapIso
+    (TopCat.isoOfHomeo
+      (t99J05_cp_successor_overlap_homeomorph_puncturedAffine n))
+
+/-- The successor overlap has the homotopy type of the unit sphere in its
+affine coordinate space: first use the exact chart, then normalize radially. -/
+noncomputable def t99J05_cp_successor_overlap_homotopyEquiv_unitSphere
+    (n : ℕ) :
+    ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) ≃ₕ
+      Metric.sphere
+        (0 : AffineCoordinates (Fin.last (n + 1))) 1 :=
+  (t99J05_cp_successor_overlap_homeomorph_puncturedAffine n).toHomotopyEquiv.trans
+    (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+        (AffineCoordinates (Fin.last (n + 1)))).symm
+
+/-- The corresponding rational-homology isomorphism from the overlap to its
+unit-sphere model. -/
+noncomputable def t99J05_cp_successor_overlap_homologyIso_unitSphere
+    (n k : ℕ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k ≅
+      Homology
+        (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) k :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      (t99J05_cp_successor_overlap_homotopyEquiv_unitSphere n) k
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -375,6 +420,9 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
+#print axioms t99J05_cp_successor_overlap_homologyIso_puncturedAffine
+#print axioms t99J05_cp_successor_overlap_homotopyEquiv_unitSphere
+#print axioms t99J05_cp_successor_overlap_homologyIso_unitSphere
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
