@@ -88376,6 +88376,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check e9b658d02", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792086773695-14396-3806f473",
+     :commands
+     ["git show/diff/check e9b658d02"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit e9b658d02 adds compiled, sorry-free progress beyond history commit 9fff259c0. It records the exact quotient-class representation of the literal-endpoint flat-interval fold as the endpoint cast of the global dependent concatenation. The proof is definitional (rfl), but it exposes the precise cast boundary needed for the remaining reassociation rather than asserting that reassociation. Only t97A01Closure.lean changed; fixture SHA ce8140f87b21cb2d3351a14dac965ecca59021e6045f31157ba98079d043975d matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Reassociation with the single flat concat, van Kampen, and assembly remain listed."},
     :commit "e9b658d02",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "ce8140f87b21cb2d3351a14dac965ecca59021e6045f31157ba98079d043975d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-endpoint flat interval fold.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flat-interval endpoint class.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88619,7 +88632,10 @@
      :reason "Banked global flat-interval outer fold."}
     {:job 6,
      :commit "9fff259c0",
-     :reason "Banked literal-endpoint flat interval fold."}]}
+     :reason "Banked literal-endpoint flat interval fold."}
+    {:job 7,
+     :commit "e9b658d02",
+     :reason "Banked flat-interval endpoint class."}]}
   {:consumer :t94J09,
    :stop-count 7,
    :evidence
@@ -95872,7 +95888,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95886,7 +95902,9 @@
     :type
     "literal flat-interval fold class is the endpoint-cast global fold class",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "e9b658d02"},
    :id
    :lemma-torusrp2-subdivisionglobalflatintervalconcat-at-endpoints-class,
    :kind :lemma,
