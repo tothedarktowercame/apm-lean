@@ -8,6 +8,7 @@ import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
 import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.CoefficientSphereEndpoints
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -407,6 +408,23 @@ theorem t97J07_cp1_twoAffine_openCover :
   · exact h.1
   · exact h.2
 
+abbrev T97J07CP1ZeroPatch : Set
+    (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) :=
+  {p | Projectivization.rep p 0 ≠ 0}
+
+abbrev T97J07CP1OnePatch : Set
+    (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) :=
+  {p | Projectivization.rep p 1 ≠ 0}
+
+/-- The production Mayer--Vietoris sequence for the literal two-chart cover
+is exact at the two affine-patch terms in every degree. -/
+noncomputable def t97J07_cp1_mayerVietoris_exact_pieces (k : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+      T97J07CP1ZeroPatch T97J07CP1OnePatch
+      t97J07_cp1_twoAffine_openCover.1
+      t97J07_cp1_twoAffine_openCover.2.1
+      t97J07_cp1_twoAffine_openCover.2.2 k
+
 /-- The inverse affine-coordinate construction really lands in its named
 patch.  This is the point-set bridge needed before applying coefficient
 homology to the two pieces and their punctured intersection. -/
@@ -651,6 +669,7 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_pathConnected
 #print axioms t97J07_cp1_rationalH0Iso
 #print axioms t97J07_cp1_twoAffine_openCover
+#print axioms t97J07_cp1_mayerVietoris_exact_pieces
 #print axioms t97J07_cp1_chartInverse_rep_ne
 #print axioms t97J07_cp1_affinePatchEquiv
 #print axioms t97J07_cp1_affinePatchHomeomorph
