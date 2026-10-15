@@ -810,11 +810,147 @@ lemma H0_of_pathConnected (S : Type) [TopologicalSpace S] [PathConnectedSpace S]
     (Classical.choice (inferInstance : Nonempty S))⟩
 
 /-- The one-crosscap polygon `aa` has `H₁ = Z/2`, `H₂ = 0`. -/
+abbrev rp2Polygon_homology_aux_P := standardPairingData false 1 Nat.one_pos
+
+def rp2Polygon_homology_aux_coord :
+    (PairingOrbit rp2Polygon_homology_aux_P.pair → ℤ) ≃ₗ[ℤ] ℤ :=
+  { toFun := fun f => f ((nonorientableOrbitEquiv 1).symm 0)
+    invFun := fun n q => n
+    left_inv := by
+      intro f
+      funext q
+      have hq : q = (nonorientableOrbitEquiv 1).symm 0 := by
+        apply (nonorientableOrbitEquiv 1).injective
+        exact Subsingleton.elim _ _
+      simp [hq]
+    right_inv := by intro n; rfl
+    map_add' := by intros; rfl
+    map_smul' := by intros; rfl }
+
+lemma rp2Polygon_homology_aux_degree :
+    PolygonSurfaceHomology.attachingDegree rp2Polygon_homology_aux_P
+      ((nonorientableOrbitEquiv 1).symm 0) = -2 := by
+  rw [PolygonSurfaceHomology.attachingDegree_apply]
+  simp_rw [PolygonSurfaceHomology.edgeOrbitContribution]
+  have horbit (i : Fin 2) :
+      rp2Polygon_homology_aux_P.orbit i = (nonorientableOrbitEquiv 1).symm 0 := by
+    apply (nonorientableOrbitEquiv 1).injective
+    exact Subsingleton.elim _ _
+  simp_rw [horbit]
+  simp [standardPairingData,
+    nonorientableStandardPairingData, standardPairingDataOfOneVertex,
+    standardPair, standardSign, nonorientableOrbitLabel, nonorientableCoord,
+    PolygonSurfaceHomology.edgeAttachingDegree, standardEdgeCount]
+  change (2 : ℤ) = 2
+  rfl
+
+lemma rp2Polygon_homology_aux_coord_boundary (m : ℤ) :
+    rp2Polygon_homology_aux_coord
+        (PolygonSurfaceHomology.attachingBoundary rp2Polygon_homology_aux_P m) =
+      m * (-2) := by
+  change m * PolygonSurfaceHomology.attachingDegree rp2Polygon_homology_aux_P
+      ((nonorientableOrbitEquiv 1).symm 0) = m * (-2)
+  rw [rp2Polygon_homology_aux_degree]
+
+def rp2Polygon_homology_aux_parity : ℤ →ₗ[ℤ] ZMod 2 where
+  toFun n := n
+  map_add' := by intros; simp
+  map_smul' := by intros; simp
+
+lemma rp2Polygon_homology_aux_range_eq_ker :
+    Submodule.map rp2Polygon_homology_aux_coord.toLinearMap
+        (LinearMap.range
+          (PolygonSurfaceHomology.attachingBoundary rp2Polygon_homology_aux_P)) =
+      LinearMap.ker rp2Polygon_homology_aux_parity := by
+  ext n
+  constructor
+  · rintro ⟨_, ⟨m, rfl⟩, rfl⟩
+    rw [LinearMap.mem_ker]
+    change ((rp2Polygon_homology_aux_coord
+      (PolygonSurfaceHomology.attachingBoundary rp2Polygon_homology_aux_P m) : ℤ) :
+        ZMod 2) = 0
+    rw [rp2Polygon_homology_aux_coord_boundary]
+    change ((m * (-2) : ℤ) : ZMod 2) = 0
+    rw [Int.cast_mul]
+    change (m : ZMod 2) * (-2 : ZMod 2) = 0
+    have htwo : (-2 : ZMod 2) = 0 := by decide
+    rw [htwo, mul_zero]
+  · intro hn
+    rw [LinearMap.mem_ker] at hn
+    change ((n : ℤ) : ZMod 2) = 0 at hn
+    have hd : (2 : ℤ) ∣ n := by
+      simpa [ZMod.intCast_zmod_eq_zero_iff_dvd] using hn
+    rcases hd with ⟨m, rfl⟩
+    refine ⟨fun _ => 2 * m, ?_, ?_⟩
+    · refine ⟨-m, ?_⟩
+      funext q
+      have hq : q = (nonorientableOrbitEquiv 1).symm 0 := by
+        apply (nonorientableOrbitEquiv 1).injective
+        exact Subsingleton.elim _ _
+      subst q
+      simp only [PolygonSurfaceHomology.attachingBoundary_apply_apply]
+      rw [rp2Polygon_homology_aux_degree]
+      simp [mul_comm]
+    · simp [rp2Polygon_homology_aux_coord]
+
+lemma rp2Polygon_homology_aux_boundary_injective :
+    Function.Injective
+      (PolygonSurfaceHomology.attachingBoundary rp2Polygon_homology_aux_P) := by
+  intro m n h
+  have h' := congrArg rp2Polygon_homology_aux_coord h
+  rw [rp2Polygon_homology_aux_coord_boundary,
+    rp2Polygon_homology_aux_coord_boundary] at h'
+  omega
+
+noncomputable def rp2Polygon_homology_aux_quotientEquiv
+    {M N : Type*} [AddCommGroup M] [AddCommGroup N]
+    [Module ℤ M] [Module ℤ N]
+    (e : M ≃ₗ[ℤ] N) (p : Submodule ℤ M) (q : Submodule ℤ N)
+    (h : Submodule.map e.toLinearMap p = q) : (M ⧸ p) ≃ₗ[ℤ] (N ⧸ q) := by
+  let f := p.mapQ q e.toLinearMap (by
+    intro x hx; rw [← h]; exact ⟨x, hx, rfl⟩)
+  let g := q.mapQ p e.symm.toLinearMap (by
+    intro y hy
+    rw [← h] at hy
+    rcases hy with ⟨x, hx, rfl⟩
+    simpa using hx)
+  exact LinearEquiv.ofLinear f g
+    (by apply LinearMap.ext; intro x; refine Quotient.inductionOn x ?_; intro x
+        change Quotient.mk _ (e (e.symm x)) = Quotient.mk _ x
+        rw [e.apply_symm_apply])
+    (by apply LinearMap.ext; intro x; refine Quotient.inductionOn x ?_; intro x
+        change Quotient.mk _ (e.symm (e x)) = Quotient.mk _ x
+        rw [e.symm_apply_apply])
+
 lemma rp2Polygon_homology :
     Nonempty (PolygonSurfaceHomology.H (standardPairingData false 1 Nat.one_pos) 1 ≅
         ModuleCat.of ℤ (ZMod 2)) ∧
       Limits.IsZero (PolygonSurfaceHomology.H (standardPairingData false 1 Nat.one_pos) 2) := by
-  sorry
+  obtain ⟨_, ⟨h1⟩, ⟨h2⟩, _⟩ :=
+    PolygonSurfaceHomology.polygonQuotient_homology rp2Polygon_homology_aux_P
+  change PolygonSurfaceHomology.H (standardPairingData false 1 Nat.one_pos) 1 ≅
+    ModuleCat.of ℤ (PolygonSurfaceHomology.BoundaryCokernel
+      (standardPairingData false 1 Nat.one_pos)) at h1
+  change PolygonSurfaceHomology.H (standardPairingData false 1 Nat.one_pos) 2 ≅
+    ModuleCat.of ℤ (PolygonSurfaceHomology.BoundaryKernel
+      (standardPairingData false 1 Nat.one_pos)) at h2
+  have hcok : PolygonSurfaceHomology.BoundaryCokernel rp2Polygon_homology_aux_P
+      ≃ₗ[ℤ] ZMod 2 :=
+    (rp2Polygon_homology_aux_quotientEquiv
+      rp2Polygon_homology_aux_coord _ _
+      rp2Polygon_homology_aux_range_eq_ker).trans
+      (rp2Polygon_homology_aux_parity.quotKerEquivOfSurjective (by
+        intro z
+        refine ⟨z.val, ?_⟩
+        simp [rp2Polygon_homology_aux_parity]))
+  change PolygonSurfaceHomology.BoundaryCokernel
+      (standardPairingData false 1 Nat.one_pos) ≃ₗ[ℤ] ZMod 2 at hcok
+  constructor
+  · exact ⟨Iso.trans h1 hcok.toModuleIso⟩
+  · apply Limits.IsZero.of_iso _ h2
+    rw [show PolygonSurfaceHomology.BoundaryKernel rp2Polygon_homology_aux_P = ⊥ from
+      LinearMap.ker_eq_bot.mpr rp2Polygon_homology_aux_boundary_injective]
+    exact ModuleCat.isZero_of_subsingleton _
 
 def rp2PolyHomeo : apm_t00j07_RP2 ≃ₜ (standardPairingData false 1 Nat.one_pos).Space :=
   rp2Homeo.symm.trans (standardPairingData_space_homeomorph false 1 Nat.one_pos).symm
