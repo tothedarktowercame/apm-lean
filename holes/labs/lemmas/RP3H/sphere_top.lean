@@ -58,7 +58,7 @@ theorem sphere_isZero (k : ℕ) (hk0 : k ≠ 0) (hk3 : k ≠ 3) : IsZero (HQ k S
 /-- `H₃(S³; ℚ) ≅ ℚ` (banked `CoefficientFirstReflection.topIso ℚ 2`). -/
 -- BEGIN SEAT AREA
 theorem sphere_top : Nonempty (HQ 3 S3 ≅ ModuleCat.of ℚ ℚ) := by
-  sorry
+  exact ⟨CoefficientFirstReflection.topIso ℚ 2⟩
 -- END SEAT AREA
 
 /-- Base homology is a retract of total-space homology for a 2-sheeted cover, over `ℚ`
