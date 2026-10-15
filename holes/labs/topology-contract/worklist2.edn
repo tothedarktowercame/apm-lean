@@ -88378,6 +88378,19 @@
     [{:cmd "offset draft",
       :exit 1,
       :correction "separated dependent equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792073381854-14184-92e53077",
+     :commands
+     ["git show/diff/check b13f60bd4"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit b13f60bd4 adds compiled, sorry-free progress beyond history commit 051849305. Given a run change between consecutive flattened coordinates, it proves the earlier local offset is the run pred-length and the later offset is zero, using exact successor-run equality, prefix-boundary arithmetic, and Fin bounds. Only t97A01Closure.lean changed; fixture SHA 200e63e2bfc2f063d626f1c3c0b3a537b8b0209f7107c7b7d8f0f35db841df5e matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Equality directions and dependent run/offset projections are correct. Nested concatenation, van Kampen, and assembly remain listed."},
     :commit "b13f60bd4",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88386,7 +88399,7 @@
      "200e63e2bfc2f063d626f1c3c0b3a537b8b0209f7107c7b7d8f0f35db841df5e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88404,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor no-skipping bound.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cross-run boundary offsets.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88576,7 +88589,10 @@
      :reason "Banked successor run monotonicity."}
     {:job 9,
      :commit "051849305",
-     :reason "Banked successor no-skipping bound."}]}
+     :reason "Banked successor no-skipping bound."}
+    {:job 1,
+     :commit "b13f60bd4",
+     :reason "Banked cross-run boundary offsets."}]}
   {:consumer :t94J09,
    :stop-count 6,
    :evidence
@@ -95425,7 +95441,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets",
@@ -95435,7 +95451,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cross-run last/zero offsets",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "b13f60bd4"},
    :id
    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets,
    :kind :lemma,
