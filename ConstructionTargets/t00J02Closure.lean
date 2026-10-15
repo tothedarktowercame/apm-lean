@@ -399,6 +399,43 @@ theorem exists_nhds_injOn_writtenInExtChartAt
 
 #print axioms exists_nhds_injOn_writtenInExtChartAt
 
+/-- Local injectivity of the preferred chart expression transports back to
+local injectivity of the manifold map. -/
+theorem exists_nhds_injOn_of_writtenInExtChartAt
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S)
+    (h : ∃ V ∈ nhds (extChartAt SurfaceModelWithCorners x x),
+      Set.InjOn
+        (writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f) V) :
+    ∃ U ∈ nhds x, Set.InjOn f U := by
+  obtain ⟨V, hV, hVinj⟩ := h
+  let e := extChartAt SurfaceModelWithCorners x
+  refine ⟨e.source ∩ e ⁻¹' V,
+    Filter.inter_mem (extChartAt_source_mem_nhds x)
+      ((continuousAt_extChartAt x).preimage_mem_nhds hV), ?_⟩
+  intro y hy z hz hyz
+  apply e.injOn hy.1 hz.1
+  apply hVinj hy.2 hz.2
+  simp only [writtenInExtChartAt, Function.comp_apply, e]
+  rw [e.left_inv hy.1, e.left_inv hz.1, hyz]
+
+#print axioms exists_nhds_injOn_of_writtenInExtChartAt
+
+/-- A smooth surface self-map whose manifold derivative is surjective at a
+point is injective on a neighborhood of that point. -/
+theorem exists_nhds_injOn_of_contMDiff_surjective
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hsurj : Function.Surjective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x)) :
+    ∃ U ∈ nhds x, Set.InjOn f U := by
+  obtain ⟨e, he⟩ := exists_hasMFDerivAt_equiv_of_contMDiff_surjective f x hf hsurj
+  apply exists_nhds_injOn_of_writtenInExtChartAt f x
+  exact exists_nhds_injOn_writtenInExtChartAt f x e hf he
+
+#print axioms exists_nhds_injOn_of_contMDiff_surjective
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
