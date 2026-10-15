@@ -88372,6 +88372,19 @@
       :exit 1,
       :correction
       "fixed equivalence direction and normal-closure mapping"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792050103223-13624-a32bdb1a",
+     :commands
+     ["git show/diff/check dbbc6a148"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit dbbc6a148 adds compiled, sorry-free progress beyond 31c603c81: both orientation-specific boundary words map exactly to the geometric skeleton loop, and their normal closures transport through the surjective skeleton homomorphism. Only t97A01Closure.lean changed; fixture SHA a09f4735d883246756099b1be6fffbc956313d03fd0a8e69bab93fd987df2f72 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Directions are correct: map the free-group normal-closure equalities forward, then rewrite the boundary image in skeleton pi1. Attachment-map surjectivity, geometric-boundary kernel, van Kampen presentation, and final assembly remain explicitly listed."},
     :commit "dbbc6a148",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88380,7 +88393,7 @@
      "a09f4735d883246756099b1be6fffbc956313d03fd0a8e69bab93fd987df2f72"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88398,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact Fin-3 generator transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked geometric attaching-word normal closure.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88458,7 +88471,10 @@
      :reason "Banked relator normal closures."}
     {:job 8,
      :commit "31c603c81",
-     :reason "Banked exact Fin-3 generator transport."}]}
+     :reason "Banked exact Fin-3 generator transport."}
+    {:job 9,
+     :commit "dbbc6a148",
+     :reason "Banked geometric attaching-word normal closure."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -94041,7 +94057,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2AttachingWord", :type "boundary word formula"},
@@ -94050,7 +94066,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "boundary word formula",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "dbbc6a148"},
    :id :lemma-torusrp2attachingword,
    :kind :lemma,
    :depends-on
