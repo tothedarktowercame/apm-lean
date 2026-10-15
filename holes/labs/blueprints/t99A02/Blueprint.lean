@@ -2982,17 +2982,65 @@ lemma treeStar_open_saturated (g : G) :
             apply hx
             rw [he, neg_south]
 
-/-- **Leaf.**  Each tree star is simply connected.
+/-- Leaf (split from `treeStar_isSimplyConnected`, lemma-3 PARTIAL 2026-10-15).
+Continuity of the star contraction on `univ ×ˢ treeStar g`.  Per summand and
+per label (`G` discrete; `isOpenMap_inl`/`inr` of `{h} ×ˢ univ`, then
+`ContinuousWithinAt.congr_of_eventuallyEq`): edge `g` uses `towardZero`, edge
+`g a⁻¹` uses `towardOne` (both `fun_prop` after `Continuous.subtype_mk`);
+sphere `g` uses `spherePush_continuousOn north` (star points have `x ≠ south =
+-north`), sphere `g b` uses `spherePush_continuousOn south` (`x ≠ north`).
+`g a⁻¹ ≠ g`, `g b ≠ g` from `G_facts`. -/
+lemma treeContraction_continuousOn (g : G) :
+    ContinuousOn (treeContraction g) (univ ×ˢ treeStar g) := by
+  sorry
 
-Route.  `isSimplyConnected_image_of_contraction` with `H = treeContraction g`,
-`z₀ = inl (g, 0)`.  The branches are separated by the labels (`g a⁻¹ ≠ g`,
-`g b ≠ g` from `G_facts`); continuity is per summand and per label (`G`
-discrete), with `spherePush_continuousOn`.  `hresp`: vertex points are fixed;
-for `pair` use `spherePush_spec` (`spherePush south (s, -x) =
--spherePush north (s, x)`) and `TreeRel.pair`.  About 130 lines. -/
+/-- Leaf (split).  The contraction keeps the star: `towardZero s t < 1` if
+`t < 1`, `0 < towardOne s t` if `0 < t`; `spherePush north (s, x) ≠ south` if
+`x ≠ south` and `spherePush south (s, x) ≠ north` if `x ≠ north`
+(`spherePush_spec`, `neg_north`/`neg_south`). -/
+lemma treeContraction_mapsTo (g : G) :
+    ∀ t, ∀ z ∈ treeStar g, treeContraction g (t, z) ∈ treeStar g := by
+  sorry
+
+/-- Leaf (split).  At time `0` the contraction is the identity
+(`towardZero 0 t = t`, `towardOne 0 t = t` by `Subtype.ext`/`simp`;
+`spherePush p (0, x) = x` from `spherePush_spec`). -/
+lemma treeContraction_zero (g : G) :
+    ∀ z ∈ treeStar g, treeContraction g (0, z) = z := by
+  sorry
+
+/-- Leaf (split).  At time `1` every star point lands in the class of vertex
+`g`: edge `g` goes to `(g, 0)`; edge `g a⁻¹` goes to `(g a⁻¹, 1) ~ (g, 0)`
+(`TreeRel.edge`); sphere `g` to `north ~ (g, 0)` (`TreeRel.vertex`); sphere
+`g b` to `south ~ (g b b, north) = (g, north)` (`TreeRel.pair`, `b * b = 1`,
+`neg_south`).  Uses `spherePush_spec` (`x ≠ -p → spherePush p (1, x) = p`). -/
+lemma treeContraction_one (g : G) :
+    ∀ z ∈ treeStar g,
+      qmk TreeRel (treeContraction g (1, z)) = qmk TreeRel (.inl (g, 0)) := by
+  sorry
+
+/-- Leaf (split).  The contraction respects the gluing on the star.  Cases of
+`TreeRel` with `a` in the star: `edge h` (`a = (h, 1)`, so `h = g a⁻¹`; both
+ends stay at `1` resp. `0`, related by `edge`); `vertex h` (`(h, 0)` with
+`h = g`, fixed, and `north` fixed by `spherePush_spec`; related by
+`vertex`); `pair h x` (`h = g` or `h = g b`: `spherePush south (s, -x) =
+-spherePush north (s, x)` and symmetrically, from `spherePush_spec`; related by
+`pair`). -/
+lemma treeContraction_resp (g : G) :
+    ∀ t, ∀ a b, a ∈ treeStar g → TreeRel a b →
+      qmk TreeRel (treeContraction g (t, a)) = qmk TreeRel (treeContraction g (t, b)) := by
+  sorry
+
+/-- Each tree star is simply connected (assembly; leaves above). -/
 lemma treeStar_isSimplyConnected (g : G) :
     IsSimplyConnected (qmk TreeRel '' treeStar g) := by
-  sorry
+  have hz : (.inl (g, 0) : TreeZ) ∈ treeStar g := by
+    simp [treeStar, treeStarPred]
+  exact isSimplyConnected_image_of_contraction (R := TreeRel) (treeStar g)
+    (treeStar_open_saturated g).1 (treeStar_open_saturated g).2 (treeContraction g)
+    (treeContraction_continuousOn g) (treeContraction_mapsTo g)
+    (treeContraction_zero g) (.inl (g, 0)) hz (treeContraction_one g)
+    (treeContraction_resp g)
 
 /-- **Leaf.**  Stars meet only along Cayley edges, and adjacent stars meet in
 a path-connected set.
