@@ -8532,6 +8532,89 @@ theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
     · exact cut_transfer_consistency_B_chord u v t x oldA oldB newA newB D heq e he τ N
         s₀ (by simpa using hP) (by simpa using hN)
 
+lemma cut_transfer_generator_aux_get_u {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) (e : ℕ)
+    (he : e < u.length) :
+    (u ++ [x] ++ v ++ [x] ++ t)[e]'(by simp; omega) = u[e] := by
+  simp [List.getElem_append, he]
+
+lemma cut_transfer_generator_aux_get_x₁ {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t)[u.length]'(by simp) = x := by
+  simp [List.getElem_append]
+
+lemma cut_transfer_generator_aux_get_x₂ {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t)[u.length + 1 + v.length]'(by simp; omega) = x := by
+  have h : (u ++ [x] ++ v ++ [x] ++ t) = (u ++ [x] ++ v) ++ (x :: t) := by simp
+  have hl : (u ++ [x] ++ v).length = u.length + 1 + v.length := by simp; omega
+  simp only [h]
+  rw [List.getElem_append_right (by omega)]
+  simp only [hl, Nat.sub_self, List.getElem_cons_zero]
+
+/-- The new position of an old non-`x` side: `v` sides are reflected, others stay. -/
+def cutSideMap (p q e : ℕ) : ℕ := if p < e ∧ e < q then q + p + 1 - e else e
+
+theorem cut_transfer_side {L p q e : ℕ} (hep : e ≠ p) (heq : e ≠ q) (τ : Icc (0 : ℝ) 1) :
+    cutTransfer L p q e τ = (edgePoint L (cutSideMap p q e)
+      (if p < e ∧ e < q then reverseParameter τ else τ) : ℂ) := by
+  sorry
+
+/-- An `x`-labelled old side is one of the two `x`'s (freshness). -/
+theorem cut_x_index {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i : Fin (u ++ [x] ++ v ++ [x] ++ t).length) (h : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = x.1) :
+    (i : ℕ) = u.length ∨ (i : ℕ) = u.length + 1 + v.length := by
+  sorry
+
+/-- Old non-`x` sides land in the new word on the side `cutSideMap`, holding the same
+letter (or its inverse, for `v`); `cutSideMap` is injective on them. -/
+theorem cut_word_side {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (∀ e : Fin (u ++ [x] ++ v ++ [x] ++ t).length, (e : ℕ) ≠ u.length → (e : ℕ) ≠ u.length + 1 + v.length →
+      ∃ h : cutSideMap u.length (u.length + 1 + v.length) e < (u ++ [x, x] ++ inverseWord v ++ t).length,
+        (u ++ [x, x] ++ inverseWord v ++ t).get ⟨_, h⟩ =
+          if u.length < (e : ℕ) ∧ (e : ℕ) < u.length + 1 + v.length
+            then inv ((u ++ [x] ++ v ++ [x] ++ t).get e) else (u ++ [x] ++ v ++ [x] ++ t).get e) ∧
+    (∀ e e' : ℕ, e ≠ u.length → e ≠ u.length + 1 + v.length → e' ≠ u.length →
+      e' ≠ u.length + 1 + v.length →
+      cutSideMap u.length (u.length + 1 + v.length) e =
+        cutSideMap u.length (u.length + 1 + v.length) e' → e = e') := by
+  sorry
+
+/-- The non-`x` case of `cut_transfer_generator`, from the side facts. -/
+theorem cut_transfer_generator_aux_sides {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hside : ∀ e : Fin (u ++ [x] ++ v ++ [x] ++ t).length, (e : ℕ) ≠ u.length →
+      (e : ℕ) ≠ u.length + 1 + v.length →
+      ∃ h : cutSideMap u.length (u.length + 1 + v.length) e < (u ++ [x, x] ++ inverseWord v ++ t).length,
+        (u ++ [x, x] ++ inverseWord v ++ t).get ⟨_, h⟩ =
+          if u.length < (e : ℕ) ∧ (e : ℕ) < u.length + 1 + v.length
+            then inv ((u ++ [x] ++ v ++ [x] ++ t).get e) else (u ++ [x] ++ v ++ [x] ++ t).get e)
+    (hinj : ∀ e e' : ℕ, e ≠ u.length → e ≠ u.length + 1 + v.length → e' ≠ u.length →
+      e' ≠ u.length + 1 + v.length →
+      cutSideMap u.length (u.length + 1 + v.length) e =
+        cutSideMap u.length (u.length + 1 + v.length) e' → e = e')
+    (i j : Fin (u ++ [x] ++ v ++ [x] ++ t).length) (hij : i ≠ j) (τ : Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = ((u ++ [x] ++ v ++ [x] ++ t).get j).1)
+    (hi : (i : ℕ) ≠ u.length ∧ (i : ℕ) ≠ u.length + 1 + v.length)
+    (hj : (j : ℕ) ≠ u.length ∧ (j : ℕ) ≠ u.length + 1 + v.length)
+    (T T' : Disk)
+    (hT : (T : ℂ) = (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length
+      (cutSideMap u.length (u.length + 1 + v.length) i)
+      (if u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length
+        then reverseParameter τ else τ) : ℂ))
+    (hT' : (T' : ℂ) = (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length
+      (cutSideMap u.length (u.length + 1 + v.length) j)
+      (if u.length < (j : ℕ) ∧ (j : ℕ) < u.length + 1 + v.length
+        then reverseParameter
+          (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2 then τ else reverseParameter τ)
+        else (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2 then τ
+          else reverseParameter τ)) : ℂ)) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) T T' := by
+  sorry
+
 theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
@@ -8545,7 +8628,37 @@ theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
       (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2
         then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) T T' := by
-  sorry
+  have hgx : ∀ k : Fin (u ++ [x] ++ v ++ [x] ++ t).length,
+      ((k : ℕ) = u.length ∨ (k : ℕ) = u.length + 1 + v.length) →
+      (u ++ [x] ++ v ++ [x] ++ t).get k = x := by
+    rintro ⟨k, hk⟩ (h | h) <;> simp only at h <;> subst h
+    · simpa using cut_transfer_generator_aux_get_x₁ u v t x
+    · simpa using cut_transfer_generator_aux_get_x₂ u v t x
+  by_cases hxi : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = x.1
+  · -- both are `x`: the two transfers are the same seam point
+    have hxj : ((u ++ [x] ++ v ++ [x] ++ t).get j).1 = x.1 := hlab ▸ hxi
+    have hsign : ((u ++ [x] ++ v ++ [x] ++ t).get i).2 =
+        ((u ++ [x] ++ v ++ [x] ++ t).get j).2 := by
+      rw [hgx i (cut_x_index u v t x hx i hxi), hgx j (cut_x_index u v t x hx j hxj)]
+    have hT0 : (T : ℂ) = cutSeam (u ++ [x] ++ v ++ [x] ++ t).length u.length
+        (u.length + 1 + v.length) τ := by
+      rw [hT]; unfold cutTransfer
+      rw [if_pos (cut_x_index u v t x hx i hxi)]
+    have hT1 : (T' : ℂ) = cutSeam (u ++ [x] ++ v ++ [x] ++ t).length u.length
+        (u.length + 1 + v.length) τ := by
+      rw [hT', if_pos hsign]; unfold cutTransfer
+      rw [if_pos (cut_x_index u v t x hx j hxj)]
+    rw [show T = T' from Subtype.ext (hT0.trans hT1.symm)]
+    exact Relation.EqvGen.refl _
+  · have hxj : ¬ ((u ++ [x] ++ v ++ [x] ++ t).get j).1 = x.1 := hlab ▸ hxi
+    have hi : (i : ℕ) ≠ u.length ∧ (i : ℕ) ≠ u.length + 1 + v.length :=
+      ⟨fun h => hxi (by rw [hgx i (Or.inl h)]), fun h => hxi (by rw [hgx i (Or.inr h)])⟩
+    have hj : (j : ℕ) ≠ u.length ∧ (j : ℕ) ≠ u.length + 1 + v.length :=
+      ⟨fun h => hxj (by rw [hgx j (Or.inl h)]), fun h => hxj (by rw [hgx j (Or.inr h)])⟩
+    obtain ⟨hside, hinj⟩ := cut_word_side u v t x
+    exact cut_transfer_generator_aux_sides u v t x hside hinj i j hij τ hlab hi hj T T'
+      (by rw [hT, cut_transfer_side hi.1 hi.2])
+      (by rw [hT', cut_transfer_side hj.1 hj.2])
 
 theorem cut_retransfer_consistency {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
