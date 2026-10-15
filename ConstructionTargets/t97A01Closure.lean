@@ -1309,6 +1309,22 @@ theorem torusRP2_pathHomotopicQuotient_concat_two
   rw [torusRP2_pathHomotopicQuotient_concat_one]
   rfl
 
+/-- Composition of path-homotopy classes is associative with all four
+endpoints visible.  This is the equality used when a flat successor either
+extends the current run or starts the next nested run. -/
+theorem torusRP2_pathHomotopicQuotient_trans_assoc
+    {X : Type*} [TopologicalSpace X] {w x y z : X}
+    (a : Path.Homotopic.Quotient w x)
+    (b : Path.Homotopic.Quotient x y)
+    (c : Path.Homotopic.Quotient y z) :
+    Path.Homotopic.Quotient.trans
+        (Path.Homotopic.Quotient.trans a b) c =
+      Path.Homotopic.Quotient.trans a
+        (Path.Homotopic.Quotient.trans b c) := by
+  refine Quotient.inductionOn₃ a b c ?_
+  intro p q r
+  exact Quotient.sound (Path.Homotopic.trans_assoc p q r)
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3242,6 +3258,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_pathHomotopicQuotient_concat_succ
 #print axioms torusRP2_pathHomotopicQuotient_concat_one
 #print axioms torusRP2_pathHomotopicQuotient_concat_two
+#print axioms torusRP2_pathHomotopicQuotient_trans_assoc
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
