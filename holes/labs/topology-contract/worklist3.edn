@@ -37130,36 +37130,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove differential compatibility; package chain maps; localization naturality, scalar one, four classes, Main.",
+    "Package the chain and relative maps; prove localization naturality, scalar one, four classes, and Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t96A06_integralToRational_singularChainsDegree_generator",
-      :type "coefficient extension on simplex generators",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_integralToRational_singularChainsDegree"],
-      :area "rp-rational-homology"}
-     {:name
+    [{:name
       "t96A06_integralToRational_singularChainsDegree_differential",
       :type "degree maps commute with singular differentials",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_integralToRational_singularChainsDegree_generator"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_integralToRational_singularChainMap",
+      :type
+      "degree maps package as a natural integral-to-rational singular-chain morphism",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_integralToRational_singularChainsDegree_differential"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the simplex-generator equation for rational coefficient extension.",
+    "Committed coefficient-extension compatibility with singular differentials.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37167,20 +37169,14 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --oneline --stat e8c516693",
+      "git diff --check && git show --check --oneline --stat c1c1fc525",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "generator proof compile",
+    [{:cmd "initial differential proof compiles",
       :exit 1,
       :note
-      "Corrected comparison orientation, association, and object elaboration."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792081398616-14295-c259095b",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "e8c516693",
+      "Corrected coproduct/object associations; final rerun passed."}],
+    :commit "c1c1fc525",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37188,7 +37184,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43491,7 +43487,9 @@
     :area "rp-rational-homology"},
    :id :lemma-t96a06-integraltorational-singularchainmap,
    :kind :lemma,
-   :depends-on [:lemma-t96a06-inttoratcoefficient-signedincidence],
+   :depends-on
+   [:lemma-t96a06-inttoratcoefficient-signedincidence
+    :lemma-t96a06-integraltorational-singularchainsdegree-differential],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -43581,7 +43579,8 @@
     "t96A06_integralToRational_singularChainsDegree_differential",
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "degree maps commute with singular differentials",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id
    :lemma-t96a06-integraltorational-singularchainsdegree-differential,
    :kind :lemma,
