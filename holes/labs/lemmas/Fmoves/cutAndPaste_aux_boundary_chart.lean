@@ -5124,11 +5124,240 @@ theorem cutCross_exp (α γ φ : ℝ) :
 interior point `c` (rays from `c` meet the frontier once:
 `Convex.openSegment_interior_closure_subset_interior`). -/
 -- BEGIN SEAT AREA
+def cutAndPaste_aux_boundary_chart_aux_cone (c : ℂ) (β : Circle → ℂ) (z : ℂ) : ℂ :=
+  if hz : z = 0 then c else
+    c + (‖z‖ : ℂ) * (β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+      simp [Circle, Submonoid.unitSphere, norm_mul, hz]⟩ - c)
+
+lemma cutAndPaste_aux_boundary_chart_aux_continuous (c : ℂ) (β : Circle → ℂ)
+    (hβ : Continuous β) : Continuous (cutAndPaste_aux_boundary_chart_aux_cone c β) := by
+  rw [continuous_iff_continuousAt]
+  intro z
+  by_cases hz : z = 0
+  · subst z
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    obtain ⟨M, hM⟩ := (isCompact_range hβ).isBounded.subset_closedBall 0
+    have hM0 : 0 ≤ M := by
+      have h1 := hM ⟨⟨1, by simp [Circle, Submonoid.unitSphere]⟩, rfl⟩
+      rw [Metric.mem_closedBall, dist_zero_right] at h1
+      exact (norm_nonneg _).trans h1
+    have hden : 0 < M + ‖c‖ + 1 := by positivity
+    refine ⟨ε / (M + ‖c‖ + 1), div_pos hε hden, ?_⟩
+    intro w hw
+    simp only [dist_zero_right] at hw
+    by_cases hw0 : w = 0
+    · subst w
+      simpa [cutAndPaste_aux_boundary_chart_aux_cone] using hε
+    · rw [cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hw0,
+        cutAndPaste_aux_boundary_chart_aux_cone, dif_pos rfl]
+      rw [dist_eq_norm, add_sub_cancel_left, norm_mul]
+      have hb : ‖β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩‖ ≤ M := by
+        have hm := hM (show β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩ ∈ Set.range β from ⟨_, rfl⟩)
+        simpa [Metric.mem_closedBall, dist_zero_right] using hm
+      have hsub := norm_sub_le (β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩) c
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+      have hw' : ‖w‖ * (M + ‖c‖ + 1) < ε := by
+        rwa [lt_div_iff₀ hden] at hw
+      nlinarith [norm_nonneg w]
+  · have hopen : IsOpen ({w : ℂ | w ≠ 0}) := isOpen_compl_singleton
+    have hcont : ContinuousOn (cutAndPaste_aux_boundary_chart_aux_cone c β)
+        {w : ℂ | w ≠ 0} := by
+      rw [continuousOn_iff_continuous_restrict]
+      have hN : Continuous (fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          (⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul]
+            exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr w.2)⟩ : Circle)) := by
+        apply Continuous.subtype_mk
+        exact (Complex.continuous_ofReal.comp ((continuous_norm.comp continuous_subtype_val).inv₀
+          (fun w => norm_ne_zero_iff.mpr w.2))).mul continuous_subtype_val
+      have heq : Set.restrict {w : ℂ | w ≠ 0}
+          (cutAndPaste_aux_boundary_chart_aux_cone c β) = fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          c + (‖(w : ℂ)‖ : ℂ) * (β ⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul]
+            exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr w.2)⟩ - c) := by
+        funext w
+        simp only [Set.restrict_apply, cutAndPaste_aux_boundary_chart_aux_cone,
+          dif_neg w.2]
+      rw [heq]
+      exact continuous_const.add ((Complex.continuous_ofReal.comp
+        (continuous_norm.comp continuous_subtype_val)).mul
+          ((hβ.comp hN).sub continuous_const))
+    exact hcont.continuousAt (hopen.mem_nhds hz)
+
 theorem cutAndPaste_aux_boundary_chart (K : Set ℂ) (c : ℂ) (hKc : Convex ℝ K)
     (hKcompact : IsCompact K) (hc : c ∈ interior K) (β : Circle → ℂ)
     (hβc : Continuous β) (hβi : Function.Injective β) (hβr : Set.range β = frontier K) :
     ∃ φ : ℂ → ℂ, CutChartSpec K β φ := by
-  sorry
+  let S : Set ℂ := (fun x : ℂ => -c + x) '' K
+  have hSc : Convex ℝ S := hKc.translate (-c)
+  have hScompact : IsCompact S := hKcompact.image (Homeomorph.addLeft (-c : ℂ)).continuous
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have hS0 : S ∈ nhds (0 : ℂ) := by
+    rw [← mem_interior_iff_mem_nhds]
+    change 0 ∈ interior ((Homeomorph.addLeft (-c : ℂ)) '' K)
+    rw [← (Homeomorph.addLeft (-c : ℂ)).image_interior]
+    exact ⟨c, hc, by simp⟩
+  have hSb : Bornology.IsVonNBounded ℝ S :=
+    NormedSpace.isVonNBounded_of_isBounded ℝ hScompact.isBounded
+  have hgpos : ∀ {x : ℂ}, x ≠ 0 → 0 < gauge S x :=
+    fun hx => (gauge_pos (absorbent_nhds_zero hS0) hSb).2 hx
+  have hfront : ∀ {q : ℂ}, q ∈ frontier K → q - c ∈ frontier S := by
+    intro q hq
+    change q - c ∈ frontier ((Homeomorph.addLeft (-c : ℂ)) '' K)
+    rw [← (Homeomorph.addLeft (-c : ℂ)).image_frontier]
+    refine ⟨q, hq, ?_⟩
+    change -c + q = q - c
+    ring
+  let φ := cutAndPaste_aux_boundary_chart_aux_cone c β
+  refine ⟨φ, ?_, ?_, ?_, ?_, ?_⟩
+  · exact cutAndPaste_aux_boundary_chart_aux_continuous c β hβc
+  · intro z hz w hw heq
+    have gb (x : ℂ) : gauge S (φ x - c) = ‖x‖ := by
+      by_cases hx : x = 0
+      · subst x; simp [φ, cutAndPaste_aux_boundary_chart_aux_cone]
+      · simp only [φ, cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hx,
+          add_sub_cancel_left]
+        change gauge S (‖x‖ • (β ⟨((‖x‖⁻¹ : ℝ) : ℂ) * x, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hx]⟩ - c)) = ‖x‖
+        let d : ℂ := β ⟨((‖x‖⁻¹ : ℝ) : ℂ) * x, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hx]⟩ - c
+        have hb : β ⟨((‖x‖⁻¹ : ℝ) : ℂ) * x, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hx]⟩ ∈ frontier K := by
+          rw [← hβr]; exact ⟨_, rfl⟩
+        have hgd : gauge S d = 1 := by
+          rw [gauge_eq_one_iff_mem_frontier hSc hS0]
+          simpa [d] using hfront hb
+        calc
+          gauge S (‖x‖ • d) = ‖x‖ • gauge S d :=
+            gauge_smul_of_nonneg (E := ℂ) (s := S) (α := ℝ) (norm_nonneg x) d
+          _ = ‖x‖ := by rw [hgd, smul_eq_mul, mul_one]
+    have hn : ‖z‖ = ‖w‖ := by rw [← gb z, heq, gb w]
+    by_cases hz0 : z = 0
+    · subst z
+      exact (norm_eq_zero.mp (by simpa using hn.symm)).symm
+    · have hw0 : w ≠ 0 := by
+        intro h; subst w; simp at hn; exact hz0 hn
+      have hd : β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ =
+          β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩ := by
+        have hh := congrArg (fun q : ℂ => (‖z‖⁻¹ : ℂ) * (q - c)) heq
+        simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone, hz0, hw0, hn,
+          mul_assoc] using hh
+      have hh := congrArg Subtype.val (hβi hd)
+      have hn0 : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
+      apply (mul_left_cancel₀ (show (‖z‖⁻¹ : ℂ) ≠ 0 by exact_mod_cast inv_ne_zero hn0))
+      simpa [hn] using hh
+  · ext y
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      by_cases hz0 : z = 0
+      · subst z; simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone] using interior_subset hc
+      · have hb : β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ ∈ K :=
+          hKcompact.isClosed.frontier_subset (by rw [← hβr]; exact ⟨_, rfl⟩)
+        have hzle : ‖z‖ ≤ 1 := by simpa [Metric.mem_closedBall, dist_zero_right] using hz
+        have hm := hKc.lineMap_mem (interior_subset hc) hb ⟨norm_nonneg z, hzle⟩
+        have hm' : (‖z‖ : ℂ) * (β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - c) + c ∈ K := by
+          simpa only [AffineMap.lineMap_apply_ring'] using hm
+        simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone, hz0, add_comm] using hm'
+    · intro hy
+      let x : ℂ := y - c
+      let r : ℝ := gauge S x
+      have hr0 : 0 ≤ r := gauge_nonneg _
+      have hxS : x ∈ S := ⟨y, hy, by dsimp [x]; ring⟩
+      have hr1 : r ≤ 1 := gauge_le_one_of_mem hxS
+      by_cases hx0 : x = 0
+      · refine ⟨0, by simp, ?_⟩
+        have hyc : y = c := sub_eq_zero.mp hx0
+        simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone, hyc]
+      · have hrp : 0 < r := hgpos hx0
+        let f : ℂ := (r⁻¹ : ℝ) • x
+        have hgf : gauge S f = 1 := by
+          exact (gauge_smul_of_nonneg (E := ℂ) (s := S) (α := ℝ)
+            (inv_nonneg.mpr hr0) x).trans (by
+              dsimp [r]
+              exact inv_mul_cancel₀ hrp.ne')
+        have hff : f ∈ frontier S := (gauge_eq_one_iff_mem_frontier hSc hS0).mp hgf
+        have hfc : c + f ∈ frontier K := by
+          have him : (Homeomorph.addLeft c) '' S = K := by
+            ext a; constructor
+            · intro h
+              rcases h with ⟨u, ⟨v, hv, rfl⟩, rfl⟩
+              simpa using hv
+            · intro h
+              exact ⟨-c + a, ⟨a, h, rfl⟩, by simp⟩
+          rw [← him, ← (Homeomorph.addLeft c).image_frontier]
+          exact ⟨f, hff, rfl⟩
+        rw [← hβr] at hfc
+        rcases hfc with ⟨b, hb⟩
+        refine ⟨(r : ℂ) * (b : ℂ), ?_, ?_⟩
+        · simpa [norm_mul, b.2, abs_of_nonneg hr0] using hr1
+        · have hz0 : (r : ℂ) * (b : ℂ) ≠ 0 := mul_ne_zero (by exact_mod_cast hrp.ne')
+            (by simpa [Circle, Submonoid.unitSphere] using b.2.ne)
+          simp only [φ, cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hz0]
+          have hn : ‖(r : ℂ) * (b : ℂ)‖ = r := by simp [norm_mul, b.2, abs_of_nonneg hr0]
+          have hdir : (⟨((‖(r : ℂ) * (b : ℂ)‖⁻¹ : ℝ) : ℂ) *
+              ((r : ℂ) * (b : ℂ)), by
+                simp [Circle, Submonoid.unitSphere, norm_mul, abs_of_pos hrp]
+                exact inv_mul_cancel₀ hrp.ne'⟩ : Circle) = b := by
+            apply Subtype.ext
+            change ((‖(r : ℂ) * (b : ℂ)‖⁻¹ : ℝ) : ℂ) * ((r : ℂ) * b) = b
+            rw [hn]
+            push_cast
+            field_simp [hrp.ne']
+          rw [hdir, hn, hb]
+          dsimp [f, x]
+          have hir : (r : ℂ) * (r⁻¹ : ℝ) = 1 := by
+            exact_mod_cast (mul_inv_cancel₀ hrp.ne')
+          rw [add_sub_cancel_left]
+          change c + (r : ℂ) * (((r⁻¹ : ℝ) : ℂ) * (y - c)) = y
+          rw [← mul_assoc, hir, one_mul]
+          ring
+  · intro z
+    have hz0 : (z : ℂ) ≠ 0 := by
+      intro h
+      have := z.2
+      simp [Circle, Submonoid.unitSphere, h] at this
+    simp [φ, cutAndPaste_aux_boundary_chart_aux_cone, hz0, z.2,
+      Circle, Submonoid.unitSphere]
+  · intro z hz
+    have hφ : gauge S (φ z - c) = ‖z‖ := by
+      by_cases hz0 : z = 0
+      · subst z; simp [φ, cutAndPaste_aux_boundary_chart_aux_cone]
+      · simp only [φ, cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hz0,
+          add_sub_cancel_left, ← smul_eq_mul]
+        change gauge S (‖z‖ • (β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - c)) = ‖z‖
+        let d : ℂ := β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - c
+        have hb : β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ ∈ frontier K := by
+          rw [← hβr]; exact ⟨_, rfl⟩
+        have hgd : gauge S d = 1 := by
+          rw [gauge_eq_one_iff_mem_frontier hSc hS0]
+          simpa [d] using hfront hb
+        calc
+          gauge S (‖z‖ • d) = ‖z‖ • gauge S d :=
+            gauge_smul_of_nonneg (E := ℂ) (s := S) (α := ℝ) (norm_nonneg z) d
+          _ = ‖z‖ := by rw [hgd, smul_eq_mul, mul_one]
+    have : φ z - c ∈ interior S := by
+      apply (gauge_lt_one_iff_mem_interior hSc hS0).mp
+      simpa [hφ] using hz
+    have him : (Homeomorph.addLeft c) '' interior S = interior K := by
+      rw [(Homeomorph.addLeft c).image_interior]
+      congr 1
+      ext a; constructor
+      · rintro ⟨u, ⟨v, hv, rfl⟩, rfl⟩; simpa using hv
+      · intro h; exact ⟨-c + a, ⟨a, h, rfl⟩, by simp⟩
+    rw [← him]
+    refine ⟨φ z - c, this, ?_⟩
+    simp
 -- END SEAT AREA
 
 /-! ### The four boundary maps -/
