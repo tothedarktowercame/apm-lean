@@ -1443,7 +1443,23 @@ which is open by continuity of `v ↦ dotProduct v r₀.rep`
 Estimated 25–50 lines. -/
 lemma apm_t98a03_rp2Nbhd_isOpen (r₀ : apm_t98a03_RP2) :
     IsOpen (apm_t98a03_rp2Nbhd r₀) := by
-  sorry
+  rw [isOpen_coinduced]
+  have hpreimage :
+      (Projectivization.mk' ℝ) ⁻¹' apm_t98a03_rp2Nbhd r₀ =
+        {v : {v : Fin 3 → ℝ // v ≠ 0} | dotProduct v.1 r₀.rep ≠ 0} := by
+    ext v
+    constructor
+    · intro hrep hv
+      obtain ⟨a, ha⟩ :=
+        Projectivization.exists_smul_eq_mk_rep ℝ v.1 v.2
+      apply hrep
+      change (Projectivization.mk ℝ v.1 v.2).rep ⬝ᵥ r₀.rep = 0
+      rw [← ha, Units.smul_def, smul_dotProduct, smul_eq_mul, hv, mul_zero]
+    · exact apm_t98a03_rep_dot_ne_zero v.2 r₀.rep
+  rw [hpreimage]
+  apply isOpen_ne_fun _ continuous_const
+  exact continuous_finset_sum _ fun i _ =>
+    ((continuous_apply i).comp continuous_subtype_val).mul continuous_const
 
 /-- The homogeneous straight-line formula used to contract the chart. -/
 def apm_t98a03_rp2ContractVec (u v : Fin 3 → ℝ) (t : ℝ) : Fin 3 → ℝ :=
