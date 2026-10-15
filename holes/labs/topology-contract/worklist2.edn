@@ -88375,6 +88375,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check b141f5e81", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792074681044-14215-addbf87a",
+     :commands
+     ["git show/diff/check b141f5e81"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit b141f5e81 adds compiled, sorry-free progress beyond history commit 86f862f31. It packages actual inverse-indexed prefix-block paths after endpoint transport, proves each equals the corresponding original subdivision piece, and therefore identifies their flat concatenations. This is a real representation bridge, though the nested run fold comparison remains. Only t97A01Closure.lean changed; fixture SHA 18daad118668d12eef453177ba527992383f87ab346c25a64bf8fbfcc5a9ca52 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Path endpoints and concat family orientations are correct. Nested-fold identification, van Kampen, and assembly remain listed."},
     :commit "b141f5e81",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88396,7 @@
      "18daad118668d12eef453177ba527992383f87ab346c25a64bf8fbfcc5a9ca52"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88414,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse-indexed path transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flat prefix-factor concatenation.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88579,7 +88592,10 @@
      :reason "Banked cross-run boundary offsets."}
     {:job 2,
      :commit "86f862f31",
-     :reason "Banked inverse-indexed path transport."}]}
+     :reason "Banked inverse-indexed path transport."}
+    {:job 3,
+     :commit "b141f5e81",
+     :reason "Banked flat prefix-factor concatenation."}]}
   {:consumer :t94J09,
    :stop-count 6,
    :evidence
@@ -95474,7 +95490,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq",
@@ -95486,7 +95502,9 @@
     :type
     "flat transported prefix fold equals original subdivision fold",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "b141f5e81"},
    :id :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-eq,
    :kind :lemma,
    :depends-on
