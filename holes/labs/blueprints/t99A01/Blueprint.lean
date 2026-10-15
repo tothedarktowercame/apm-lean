@@ -357,6 +357,83 @@ disk `i` goes to the boundary point `w`, which is identified with `w ^ degree i`
 the circle; circle points are fixed.  The homotopy is `(t, s·w) ↦ ((1-t)s + t)·w`,
 descended through the quotient (as in `CP2RationalHomology`'s
 `cpU_homology_aux_cpU_hequiv_CP1_aux_deformation`). -/
+lemma t99A01_attach_circleSide_aux_circle_mem {r : ℕ} (degree : Fin r → ℕ)
+    (z : Circle) :
+    APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree := by
+  intro i h
+  have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+      (Sum.inr (i, APMT99A01.diskCentre)) (Sum.inl z) :=
+    Quotient.exact h.symm
+  have he := (t99A01_attach_openCover_aux_centre degree i (Sum.inl z)).mp hr
+  cases he
+
+lemma t99A01_attach_circleSide_aux_half_mem {r : ℕ} (degree : Fin r → ℕ)
+    (i : Fin r) (w : Circle) :
+    APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree := by
+  intro j h
+  have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+      (Sum.inr (j, APMT99A01.diskCentre))
+      (Sum.inr (i, APMT99A01.halfPoint w)) := Quotient.exact h.symm
+  have he := (t99A01_attach_openCover_aux_centre degree j
+    (Sum.inr (i, APMT99A01.halfPoint w))).mp hr
+  have hp : (i, APMT99A01.halfPoint w) =
+      (j, APMT99A01.diskCentre) := Sum.inr.inj he
+  have hz := congrArg (fun z : APMT99A01.Disk => (z : ℂ)) (Prod.mk.inj hp).2
+  change (w : ℂ) / 2 = 0 at hz
+  have hw : (w : ℂ) ≠ 0 := by
+    intro hw
+    have hn := Circle.norm_coe w
+    rw [hw, norm_zero] at hn
+    norm_num at hn
+  rcases div_eq_zero_iff.mp hz with hw0 | htwo
+  · exact hw hw0
+  · norm_num at htwo
+
+lemma t99A01_attach_circleSide_aux_ne_zero {r : ℕ} (degree : Fin r → ℕ)
+    (i : Fin r) (z : APMT99A01.Disk)
+    (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideA degree) :
+    (z : ℂ) ≠ 0 := by
+  intro hz
+  apply h i
+  have hzc : z = APMT99A01.diskCentre := by
+    apply Subtype.ext
+    simpa [APMT99A01.diskCentre] using hz
+  rw [hzc]
+
+/-- **Leaf (radial retraction).** `ρ` fixes the base circle and sends a point `z ≠ 0`
+of disk `i` to `(z/‖z‖)^{degree i}`.  Define it on the preimage of `sideA` in
+`Sum Circle (Fin r × Disk)` (`inl z ↦ z`, `inr (i, z) ↦ (z/‖z‖)^{dᵢ}`); it respects
+`AttachRel` (boundary `w ↦ w^{dᵢ}`), and descends because the quotient map restricted
+to the open saturated preimage of `sideA` is a quotient map
+(`Topology.IsQuotientMap.restrictPreimage_isOpen`). -/
+theorem t99A01_attach_circleSide_aux_retraction {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ ρ : C(APMT99A01.sideA degree, Circle),
+      (∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
+        ρ ⟨APMT99A01.circleIncl degree z, h⟩ = z) ∧
+      ∀ (i : Fin r) (z : APMT99A01.Disk)
+        (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideA degree),
+        ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i := by
+  sorry
+
+/-- **Leaf (radial deformation).** For any `ρ` with the two retraction properties,
+`ι ∘ ρ ≃ id` on `sideA`.  Homotopy: `(t, inl z) ↦ inl z`,
+`(t, inr (i, z)) ↦ inr (i, ((1 - t) + t / ‖z‖) • z)` (at `t = 1` the boundary point
+`z/‖z‖`, identified with `(z/‖z‖)^{dᵢ}` on the circle).  Descend through
+`unitInterval × (restricted quotient)`: a product of a quotient map with the identity
+of the locally compact `unitInterval` is a quotient map
+(`Topology.IsQuotientMap.prodMap` / `IsQuotientMap.continuous_lift_prod_right`). -/
+theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle))
+    (hρ₁ : ∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
+      ρ ⟨APMT99A01.circleIncl degree z, h⟩ = z)
+    (hρ₂ : ∀ (i : Fin r) (z : APMT99A01.Disk)
+      (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideA degree),
+      ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i)
+    (ι : C(Circle, APMT99A01.sideA degree))
+    (hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z) :
+    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
+  sorry
+
 theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
       (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
@@ -364,8 +441,26 @@ theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
       ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) ∧
       ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree),
         ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i := by
-  sorry
-
+  obtain ⟨ρ, hρ₁, hρ₂⟩ := t99A01_attach_circleSide_aux_retraction degree
+  let ι : C(Circle, APMT99A01.sideA degree) :=
+    ⟨fun z => ⟨APMT99A01.circleIncl degree z, t99A01_attach_circleSide_aux_circle_mem degree z⟩,
+      (APMT99A01.circleIncl degree).continuous.subtype_mk _⟩
+  have hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z := fun _ => rfl
+  refine ⟨ρ, ι, hι, ?_, t99A01_attach_circleSide_aux_deformation degree ρ hρ₁ hρ₂ ι hι, ?_⟩
+  · ext z
+    simp only [ContinuousMap.comp_apply, ContinuousMap.id_apply]
+    exact congrArg (fun c : Circle => (c : ℂ)) (hρ₁ z _)
+  · intro i w h
+    apply Subtype.ext
+    have h2 := hρ₂ i (APMT99A01.halfPoint w) h
+    have hn : ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ = 1 / 2 := by
+      change ‖(w : ℂ) / 2‖ = 1 / 2
+      rw [norm_div, Circle.norm_coe]; norm_num
+    have hq : ((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ) /
+        (‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ : ℂ) = (w : ℂ) := by
+      rw [hn]; change (w : ℂ) / 2 / ((1 / 2 : ℝ) : ℂ) = w; push_cast; ring
+    change ((ρ ⟨APMT99A01.attachMk degree (Sum.inr (i, APMT99A01.halfPoint w)), h⟩ : Circle) : ℂ) = _
+    rw [h2, hq, Circle.coe_pow]
 /-- **Leaf (disk charts, 60--120 lines).** The disk side is the disjoint union of
 the open disks, by the identity chart on each disk interior.  Interior points
 are identified with nothing else (`EqvGen` induction on `AttachRel`). -/
