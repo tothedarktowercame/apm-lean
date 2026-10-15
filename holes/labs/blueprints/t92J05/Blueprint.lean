@@ -802,7 +802,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       ← Path.Homotopic.Quotient.mk_trans]
   have hd : ∀ (k : Fin (S.n + 1)) t,
       a k.succ t ∈ twoChart U V (S.side k) := by
-    sorry
+    exact sorry
   have hf : ∀ k, f k = 1 ∨ f k ∈
       (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
         (⟨x.1, x.2.1⟩ : U)).range := by
