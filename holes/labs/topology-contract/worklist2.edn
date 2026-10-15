@@ -88376,6 +88376,19 @@
       :exit 1,
       :correction
       "wrapped quotient map as ContinuousMap; used path refl"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792051694803-13664-ceb72549",
+     :commands
+     ["git log/show/diff/check dbbc6a148..8ea6fc5b6"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 snapshot 8ea6fc5b6 adds compiled, sorry-free progress beyond dbbc6a148: the polygon disk boundary loop maps to one in quotient pi1. Only t97A01Closure.lean changed; fixture SHA b8c5e890ba6304f4654a0374a26daae4732493df1d4708bf529e071790e4a7c6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. The proof correctly uses disk contractibility before functorial mapping. Snapshot also contains conditional presentation assembly from 40125480b; it is not counted as van Kampen discharge. The row explicitly retains boundary-class identification, reverse kernel inclusion, map surjectivity, and final assembly."},
     :commit "8ea6fc5b6",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "b8c5e890ba6304f4654a0374a26daae4732493df1d4708bf529e071790e4a7c6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked geometric attaching-word normal closure.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk boundary nullhomotopy in polygon quotient.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88465,7 +88478,11 @@
      :reason "Banked exact Fin-3 generator transport."}
     {:job 9,
      :commit "dbbc6a148",
-     :reason "Banked geometric attaching-word normal closure."}]}
+     :reason "Banked geometric attaching-word normal closure."}
+    {:job 1,
+     :commit "8ea6fc5b6",
+     :reason
+     "Banked disk boundary nullhomotopy in polygon quotient."}]}
   {:consumer :t94J09,
    :stop-count 2,
    :evidence
@@ -94304,7 +94321,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2DiskBoundaryPath_map_quotient_eq_one",
@@ -94314,7 +94331,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "disk boundary dies in quotient pi1",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8ea6fc5b6"},
    :id :lemma-torusrp2diskboundarypath-map-quotient-eq-one,
    :kind :lemma,
    :depends-on [],
