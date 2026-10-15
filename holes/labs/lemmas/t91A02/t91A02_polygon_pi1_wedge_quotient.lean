@@ -485,7 +485,52 @@ lemma t91A02_polygon_pi1_wedge_quotient (P : PairingData) (x : P.Space) :
       FundamentalGroup
           (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) ⧸
         Subgroup.normalClosure ({polygonBoundaryFundamentalClass P} : Set _)) := by
-  sorry
+  let ψ := FundamentalGroup.map
+    (ConstructionTargets.AttachTwoCell.cellIncl
+      (ConstructionTargets.PolygonCellPiOne.bword P))
+    (ConstructionTargets.PolygonCellPiOne.wBase P)
+  obtain ⟨hψs, hψk⟩ :=
+    ConstructionTargets.PolygonCellPiOne.cell_bword_piOne P
+  have hw : ConstructionTargets.PolygonCellPiOne.wordClass P =
+      Path.Homotopic.Quotient.mk
+        (polygonBoundaryIntegerLoopPath P) := by
+    simp only [ConstructionTargets.PolygonCellPiOne.wordClass,
+      ConstructionTargets.AttachTwoCell.loopClassAt,
+      ConstructionTargets.PolygonCellPiOne.bword,
+      polygonBoundaryIntegerLoopPath,
+      circleIntegerLoopOneClass, FundamentalGroup.map_apply]
+    rw [← Path.Homotopic.Quotient.mk_map]
+    rw [Path.Homotopic.Quotient.mk_cast]
+  have hn : Subgroup.normalClosure
+        ({ConstructionTargets.PolygonCellPiOne.wordClass P} : Set _) =
+      Subgroup.normalClosure ({polygonBoundaryFundamentalClass P} : Set _) := by
+    rw [hw, polygonBoundaryIntegerLoopClass_eq_fundamental_zpow_coordinate]
+    rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+    · rw [h]
+      simp
+    · rw [h]
+      simp only [zpow_neg, zpow_one]
+      apply le_antisymm
+      · apply Subgroup.normalClosure_le_normal
+        intro y hy
+        rcases hy with rfl
+        exact Subgroup.inv_mem _
+          (Subgroup.subset_normalClosure (Set.mem_singleton _))
+      · apply Subgroup.normalClosure_le_normal
+        intro y hy
+        rcases hy with rfl
+        have hi := Subgroup.inv_mem
+          (Subgroup.normalClosure
+            ({(polygonBoundaryFundamentalClass P)⁻¹} : Set _))
+          (Subgroup.subset_normalClosure (Set.mem_singleton _))
+        simpa using hi
+  have hk : Subgroup.normalClosure
+        ({polygonBoundaryFundamentalClass P} : Set _) = ψ.ker := by
+    rw [hψk, hn]
+  exact ⟨((QuotientGroup.quotientMulEquivOfEq hk).trans
+    ((QuotientGroup.quotientKerEquivOfSurjective ψ hψs).trans
+      ((ConstructionTargets.PolygonCellPiOne.cellToCenterEquiv P).trans
+        (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected P.center x)))).symm⟩
 -- END SEAT AREA
 
 /-- Leaf (generic, split from `t91A02_polygonBoundary_freeWord`, lemma-2 PARTIAL
