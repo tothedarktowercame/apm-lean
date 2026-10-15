@@ -37111,37 +37111,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compute radial derivative on tangent basis; transport signs; degree four; invariants/Main.",
+    "Apply radial derivative formula; transport signs; degree four; invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "radialNormalizeAmbient_differentiableAt_regularImage",
+    [{:name
+      "polynomialMapAmbient_regularPoint_orthogonal_tangentBasis",
       :type
-      "radial normalization is differentiable at the raw regular image",
+      "raw radial image is orthogonal to all three tangent directions",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["norm_polynomialMapAmbient_regularPoint"],
+      :depends-on ["polynomialMapAmbient_regularPoint"],
       :area "rp-rational-homology"}
      {:name "polynomialSphereLift_regularPoint_tangentDerivative",
       :type "normalized tangent derivative has positive determinant",
       :status :partial,
       :consumers [:t96A06],
       :depends-on
-      ["radialNormalizeAmbient_differentiableAt_regularImage"
-       "polynomialMapAmbient_fderiv_regularTangentBasis"],
+      ["polynomialMapAmbient_regularPoint_orthogonal_tangentBasis"
+       "radialNormalizeAmbient_differentiableAt_regularImage"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed differentiability of ambient radial normalization at the regular image.",
+    "Committed orthogonality of the tangent basis to the raw radial image.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37150,14 +37151,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short --untracked-files=no", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check 27d0ac8c8", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792055309122-13733-0e5bf427",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "27d0ac8c8",
+     {:cmd "git show --check 2cdd57308", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :note "corrected real-inner-product notation"}],
+    :commit "2cdd57308",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37165,7 +37164,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41638,7 +41637,8 @@
     :lemma-polynomialmapambient-fderiv
     :lemma-polynomialmapambient-fderiv-regulartangentbasis
     :lemma-norm-polynomialmapambient-regularpoint
-    :lemma-radialnormalizeambient-differentiableat-regularimage],
+    :lemma-radialnormalizeambient-differentiableat-regularimage
+    :lemma-polynomialmapambient-regularpoint-orthogonal-tangentbasis],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41765,6 +41765,26 @@
    :id :lemma-radialnormalizeambient-differentiableat-regularimage,
    :kind :lemma,
    :depends-on [:lemma-norm-polynomialmapambient-regularpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMapAmbient_regularPoint_orthogonal_tangentBasis",
+    :type
+    "raw radial image is orthogonal to all three tangent directions"},
+   :lemma
+   {:name "polynomialMapAmbient_regularPoint_orthogonal_tangentBasis",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "raw radial image is orthogonal to all three tangent directions",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-polynomialmapambient-regularpoint-orthogonal-tangentbasis,
+   :kind :lemma,
+   :depends-on [:lemma-polynomialmapambient-regularpoint],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
