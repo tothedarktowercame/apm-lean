@@ -1831,6 +1831,20 @@ lemma t99A01_piOne_attach_succ_aux_vankampen_aux_apply {r : ℕ}
     (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree)
     hU hV hcover (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)
 
+lemma t99A01_piOne_attach_succ_aux_vankampen_aux_piOneOfHomotopyEquiv
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (h : ContinuousMap.HomotopyEquiv X Y) (x : X) :
+    Nonempty (FundamentalGroup X x ≃* FundamentalGroup Y (h x)) := by
+  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv h
+  let ff := E.fullyFaithfulFunctor
+  let m := FundamentalGroup.map h.toFun x
+  exact ⟨
+    { toFun := m
+      invFun := fun g ↦ ff.preimage g
+      left_inv := fun g ↦ ff.preimage_map g
+      right_inv := fun g ↦ ff.map_preimage g
+      map_mul' := m.map_mul }⟩
+
 lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
     (degree : Fin (r + 1) → ℕ)
     (ih : APMT99A01.PiOneCoordinate (degree ∘ Fin.castSucc)) :
