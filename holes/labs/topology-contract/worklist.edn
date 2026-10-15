@@ -119112,6 +119112,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/Main/closure; placeholder count",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792029466314-12996-a4dabf37",
+     :commands
+     ["git show/diff-tree 2766d583"
+      "archive 2766d583; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit 2766d583 changes only t00J02Closure.lean and adds compiled, sorry-free progress. In the equal finite-dimensional surface model, surjectivity of the continuous linear endomorphism yields injectivity and hence a continuous linear equivalence with the same underlying map. Smoothness then supplies HasMFDerivAt for that exact equivalence-valued derivative; equality orientation and manifold/model boundaries are correct. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; new results use only standard axioms; registry 166/166. The chart inverse theorem, Sard specialization, calculations, and Main remain listed."},
     :commit "2766d583b68055cb4206e918952cd376a5c78337",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119130,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119148,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local-diffeomorphism fiber isolation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked manifold derivative witness.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119309,7 +119319,10 @@
      :reason "Banked Sard regular-fiber adapter."}
     {:job 9,
      :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
-     :reason "Banked local-diffeomorphism fiber isolation."}]}
+     :reason "Banked local-diffeomorphism fiber isolation."}
+    {:job 1,
+     :commit "2766d583b68055cb4206e918952cd376a5c78337",
+     :reason "Banked manifold derivative witness."}]}
   {:consumer :t98A06,
    :stop-count 6,
    :evidence
@@ -120947,7 +120960,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
@@ -120959,7 +120972,9 @@
     :type
     "surjective surface derivative gives equivalence-valued HasMFDerivAt",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "2766d583b68055cb4206e918952cd376a5c78337"},
    :id :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective,
    :kind :lemma,
    :depends-on [:lemma-exists-mfderivequiv-of-surjective],
