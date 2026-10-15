@@ -2639,6 +2639,39 @@ noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_wo
           sw (hs x)).trans
         ((FundamentalGroup.fundamentalGroupMulEquivOfPath p).trans apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates))
 
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_angle_surjective
+    (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
+      (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel))) :
+    Function.Surjective (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x) := by
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let eann :
+      ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel ∩
+        ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel) ≃ₜ
+        Set.Ioo (0 : ℝ) 1 × Circle :=
+    (Homeomorph.setCongr (by
+      simpa [C] using
+        (inter_comm
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel)).trans
+            C.overlap_eq.symm)).trans C.overlap_homeomorph
+  let y := eann x
+  let E := ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph eann x
+  intro a
+  let q : FundamentalGroup (Set.Ioo (0 : ℝ) 1 × Circle) y :=
+    Path.Homotopic.prod (Path.Homotopic.Quotient.mk (Path.refl y.1)) a
+  refine ⟨E.symm q, ?_⟩
+  have hangle : ∀ z,
+      FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x z =
+        Path.Homotopic.projRight (E z) := by
+    intro z
+    induction z using Path.Homotopic.Quotient.ind with
+    | mk z => rfl
+  rw [hangle, E.apply_symm_apply]
+  exact Path.Homotopic.projRight_prod _ _
+
 -- BEGIN SEAT AREA
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
     (hcoordW : ∀ l, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
