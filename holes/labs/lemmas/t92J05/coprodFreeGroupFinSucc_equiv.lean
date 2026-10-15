@@ -1473,7 +1473,21 @@ lemma coprodFreeGroupFinSucc_equiv (n : ℕ) :
         FreeGroup (Fin ((n + 1) + 1)),
       (∀ i : Fin (n + 1), e (Monoid.Coprod.inl (FreeGroup.of i)) = FreeGroup.of i.castSucc) ∧
       e (Monoid.Coprod.inr (FreeGroup.of 0)) = FreeGroup.of (Fin.last (n + 1)) := by
-  sorry
+  let e : Monoid.Coprod (FreeGroup (Fin (n + 1))) (FreeGroup (Fin 1)) ≃*
+      FreeGroup (Fin ((n + 1) + 1)) :=
+    (ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+      (Fin (n + 1)) (Fin 1)).trans
+      (MulEquiv.ofBijective (FreeGroup.map finSumFinEquiv)
+        ⟨FreeGroup.map_injective finSumFinEquiv.injective,
+          FreeGroup.map_surjective finSumFinEquiv.surjective⟩)
+  refine ⟨e, ?_, ?_⟩
+  · intro i
+    change FreeGroup.map finSumFinEquiv (FreeGroup.of (Sum.inl i)) = _
+    rw [FreeGroup.map.of, finSumFinEquiv_apply_left]
+    congr 1
+  · change FreeGroup.map finSumFinEquiv (FreeGroup.of (Sum.inr 0)) = _
+    rw [FreeGroup.map.of, finSumFinEquiv_apply_right]
+    rfl
 -- END SEAT AREA
 
 /-- All topological inputs needed by point-wedge van Kampen at a successor
