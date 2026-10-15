@@ -135,8 +135,7 @@ theorem t99A01_attachSpace_openCover {r : ℕ} (degree : Fin r → ℕ)
 
 /-- **LIBRARY leaf (radial deformation, 80--150 lines).** For a standard
 circle-side member of the quotient cover, radial push-out descends through
-the attaching relation.  The cover-membership conditions are explicit
-hypotheses so this leaf is independent of construction of the cover. -/
+the attaching relation. -/
 theorem t99A01_attachSpace_circleSide_retract {r : ℕ}
     (degree : Fin r → ℕ) (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
     ∃ A : Set (APMT99A01.AttachSpace degree), IsOpen A ∧
@@ -177,9 +176,38 @@ theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
 transport the integral long exact sequence to the preceding coordinates.
 This is the only leaf which uses the production open-cover MV machinery. -/
 theorem t99A01_attachSpace_integralMVData {r : ℕ} (degree : Fin r → ℕ)
-    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
+    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
+    (hcover : ∃ A B : Set (APMT99A01.AttachSpace degree),
+      IsOpen A ∧ IsOpen B ∧ A ∪ B = Set.univ)
+    (hcircle : ∃ A : Set (APMT99A01.AttachSpace degree), IsOpen A ∧
+      Nonempty (ContinuousMap.HomotopyEquiv A Circle))
+    (hdisk : ∃ A B : Set (APMT99A01.AttachSpace degree), IsOpen A ∧ IsOpen B ∧
+      Nonempty (B ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) ∧
+      Nonempty (ContinuousMap.HomotopyEquiv (↥(A ∩ B)) (Σ _ : Fin r, Circle)))
+    (hsigma : ∀ k : ℕ,
+      (k = 0 → Nonempty (APMT99A01.H k (Σ _ : Fin r, PUnit) ≅
+        ModuleCat.of ℤ (Fin r → ℤ))) ∧
+      (0 < k → Limits.IsZero (APMT99A01.H k (Σ _ : Fin r, PUnit))))
+    (hwinding : ∃ e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ,
+      ∀ i : Fin r, e.inv ≫
+        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).map
+            (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e.hom =
+        ModuleCat.ofHom (APMT99A01.intTimesNat (degree i))) :
     Nonempty (APMT99A01.AttachMVData degree) := by
   sorry
+
+/-- Sorry-free assembly of the five independent geometric inputs and the
+integral MV transport. -/
+theorem t99A01_attachSpace_MVData {r : ℕ} (degree : Fin r → ℕ)
+    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
+    Nonempty (APMT99A01.AttachMVData degree) := by
+  exact t99A01_attachSpace_integralMVData degree hr hdegree
+    (t99A01_attachSpace_openCover degree hr hdegree)
+    (t99A01_attachSpace_circleSide_retract degree hr hdegree)
+    (t99A01_attachSpace_diskSide_coordinates degree hr hdegree)
+    (fun k ↦ t99A01_finiteSigma_integral_coordinates (r := r) (k := k))
+    (t99A01_circlePower_hOne_row degree)
 
 /-! The next four leaves are independent pure algebra/diagram chases.  Their
 only common input is an arbitrary `AttachMVData`; hence they can be proved in
@@ -215,7 +243,7 @@ theorem t99A01_attachSpace_hZero {r : ℕ} (degree : Fin r → ℕ)
     Nonempty (APMT99A01.H 0 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ ℤ) := by
   exact t99A01_attachMVData_hZero degree
-    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree))
+    (Classical.choice (t99A01_attachSpace_MVData degree hr hdegree))
 
 /-- **LIBRARY leaf (MV, degree one).** The first homology is the cokernel of
 the row of attaching degrees. -/
@@ -224,7 +252,7 @@ theorem t99A01_attachSpace_hOne {r : ℕ} (degree : Fin r → ℕ)
     Nonempty (APMT99A01.H 1 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeCokernel degree)) := by
   exact t99A01_attachMVData_hOne degree
-    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree))
+    (Classical.choice (t99A01_attachSpace_MVData degree hr hdegree))
 
 /-- **LIBRARY leaf (MV, degree two).** The second homology is the kernel of
 the row of attaching degrees. -/
@@ -233,7 +261,7 @@ theorem t99A01_attachSpace_hTwo {r : ℕ} (degree : Fin r → ℕ)
     Nonempty (APMT99A01.H 2 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeKernel degree)) := by
   exact t99A01_attachMVData_hTwo degree
-    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree))
+    (Classical.choice (t99A01_attachSpace_MVData degree hr hdegree))
 
 /-- **LIBRARY leaf (MV, high degrees).** The homology vanishes above the
 two-dimensional cover calculation. -/
@@ -241,7 +269,7 @@ theorem t99A01_attachSpace_hHigher {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) (k : ℕ) (hk : 3 ≤ k) :
     Limits.IsZero (APMT99A01.H k (APMT99A01.AttachSpace degree)) := by
   exact t99A01_attachMVData_hHigher degree
-    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree)) k hk
+    (Classical.choice (t99A01_attachSpace_MVData degree hr hdegree)) k hk
 
 /-- Admission-free packaging of the generic positive-degree calculation. -/
 theorem t99A01_attachSpace_homology {r : ℕ} (degree : Fin r → ℕ)
@@ -310,10 +338,40 @@ theorem t99A01_kernel_X : Limits.IsZero
   simp [APMT99A01.degreeMap, APMT99A01.degreeX] at hx hy
   simpa using hx.trans hy.symm
 
+def t99A01_cokernel_Y_aux_mod : ℤ →ₗ[ℤ] ZMod 2 :=
+  (Int.castAddHom (ZMod 2)).toIntLinearMap
+
+lemma t99A01_cokernel_Y_aux_exact : Function.Exact
+    (APMT99A01.degreeMap APMT99A01.degreeY) t99A01_cokernel_Y_aux_mod := by
+  rw [LinearMap.exact_iff]
+  ext x
+  constructor
+  · intro hx
+    change (x : ZMod 2) = 0 at hx
+    have hdvd : (2 : ℤ) ∣ x := by
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd x 2).mp hx
+    obtain ⟨k, hk⟩ := hdvd
+    refine ⟨![k, 0], ?_⟩
+    change (∑ i, (APMT99A01.degreeY i : ℤ) * (![k, 0] i)) = x
+    simpa [APMT99A01.degreeY, Fin.sum_univ_two] using hk.symm
+  · rintro ⟨v, rfl⟩
+    change (((∑ i, (APMT99A01.degreeY i : ℤ) * v i) : ℤ) : ZMod 2) = 0
+    rw [Fin.sum_univ_two]
+    simp only [APMT99A01.degreeY, Matrix.cons_val_zero, Nat.cast_ofNat,
+      Matrix.cons_val_one, Int.cast_add, Int.cast_mul]
+    have h2 : ((2 : ℤ) : ZMod 2) = 0 := by
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd (2 : ℤ) 2).2 (dvd_refl 2)
+    have h4 : ((4 : ℤ) : ZMod 2) = 0 := by
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd (4 : ℤ) 2).2 ⟨2, rfl⟩
+    rw [h2, h4]
+    simp
+
 theorem t99A01_cokernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeY) ≅
       ModuleCat.of ℤ (ZMod 2)) := by
-  sorry
+  refine ⟨LinearEquiv.toModuleIso
+    (t99A01_cokernel_Y_aux_exact.linearEquivOfSurjective ?_)⟩
+  exact ZMod.intCast_surjective
 
 theorem t99A01_kernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeY) ≅

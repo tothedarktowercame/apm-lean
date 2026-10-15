@@ -267,10 +267,40 @@ theorem t99A01_kernel_X : Limits.IsZero
   simpa using hx.trans hy.symm
 
 -- BEGIN SEAT AREA
+def t99A01_cokernel_Y_aux_mod : ℤ →ₗ[ℤ] ZMod 2 :=
+  (Int.castAddHom (ZMod 2)).toIntLinearMap
+
+lemma t99A01_cokernel_Y_aux_exact : Function.Exact
+    (APMT99A01.degreeMap APMT99A01.degreeY) t99A01_cokernel_Y_aux_mod := by
+  rw [LinearMap.exact_iff]
+  ext x
+  constructor
+  · intro hx
+    change (x : ZMod 2) = 0 at hx
+    have hdvd : (2 : ℤ) ∣ x := by
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd x 2).mp hx
+    obtain ⟨k, hk⟩ := hdvd
+    refine ⟨![k, 0], ?_⟩
+    change (∑ i, (APMT99A01.degreeY i : ℤ) * (![k, 0] i)) = x
+    simpa [APMT99A01.degreeY, Fin.sum_univ_two] using hk.symm
+  · rintro ⟨v, rfl⟩
+    change (((∑ i, (APMT99A01.degreeY i : ℤ) * v i) : ℤ) : ZMod 2) = 0
+    rw [Fin.sum_univ_two]
+    simp only [APMT99A01.degreeY, Matrix.cons_val_zero, Nat.cast_ofNat,
+      Matrix.cons_val_one, Int.cast_add, Int.cast_mul]
+    have h2 : ((2 : ℤ) : ZMod 2) = 0 := by
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd (2 : ℤ) 2).2 (dvd_refl 2)
+    have h4 : ((4 : ℤ) : ZMod 2) = 0 := by
+      exact (ZMod.intCast_zmod_eq_zero_iff_dvd (4 : ℤ) 2).2 ⟨2, rfl⟩
+    rw [h2, h4]
+    simp
+
 theorem t99A01_cokernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeY) ≅
       ModuleCat.of ℤ (ZMod 2)) := by
-  sorry
+  refine ⟨LinearEquiv.toModuleIso
+    (t99A01_cokernel_Y_aux_exact.linearEquivOfSurjective ?_)⟩
+  exact ZMod.intCast_surjective
 -- END SEAT AREA
 
 theorem t99A01_kernel_Y : Nonempty
