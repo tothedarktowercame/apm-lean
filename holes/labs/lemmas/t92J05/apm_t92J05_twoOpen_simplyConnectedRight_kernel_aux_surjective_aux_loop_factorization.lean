@@ -557,6 +557,46 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
     (u₀ u₁ : U) : Nonempty (Path u₀ u₁) := by
   exact PathConnectedSpace.joined u₀ u₁
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)]
+    (c : (U ∩ V : Set X)) {z : X} (i j : Bool)
+    (hzi : z ∈ twoChart U V i) (hzj : z ∈ twoChart U V j) :
+    ∃ a : Path z c.1,
+      ∀ t, a t ∈ twoChart U V i ∩ twoChart U V j := by
+  cases i <;> cases j
+  · let zV : V := ⟨z, by simpa [twoChart] using hzi⟩
+    let cV : V := ⟨c.1, c.2.2⟩
+    obtain ⟨a⟩ := PathConnectedSpace.joined zV cV
+    refine ⟨a.map continuous_subtype_val, ?_⟩
+    intro t
+    simpa [twoChart] using
+      (show (a t).1 ∈ V ∩ V from ⟨(a t).2, (a t).2⟩)
+  · let zI : (U ∩ V : Set X) :=
+      ⟨z, ⟨by simpa [twoChart] using hzj,
+        by simpa [twoChart] using hzi⟩⟩
+    obtain ⟨a⟩ := PathConnectedSpace.joined zI c
+    refine ⟨a.map continuous_subtype_val, ?_⟩
+    intro t
+    change (a t).1 ∈ V ∩ U
+    exact ⟨(a t).2.2, (a t).2.1⟩
+  · let zI : (U ∩ V : Set X) :=
+      ⟨z, ⟨by simpa [twoChart] using hzi,
+        by simpa [twoChart] using hzj⟩⟩
+    obtain ⟨a⟩ := PathConnectedSpace.joined zI c
+    refine ⟨a.map continuous_subtype_val, ?_⟩
+    intro t
+    change (a t).1 ∈ U ∩ V
+    exact (a t).2
+  · let zU : U := ⟨z, by simpa [twoChart] using hzi⟩
+    let cU : U := ⟨c.1, c.2.1⟩
+    obtain ⟨a⟩ := PathConnectedSpace.joined zU cU
+    refine ⟨a.map continuous_subtype_val, ?_⟩
+    intro t
+    simpa [twoChart] using
+      (show (a t).1 ∈ U ∩ U from ⟨(a t).2, (a t).2⟩)
+
 -- BEGIN SEAT AREA
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
     {X : Type*} [TopologicalSpace X] (U V : Set X)
