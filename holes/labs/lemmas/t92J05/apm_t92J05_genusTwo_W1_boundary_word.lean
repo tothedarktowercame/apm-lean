@@ -2363,6 +2363,81 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     obtain ⟨c, hc⟩ := hrel
     exact ⟨c, hc.inv_right⟩
 
+/-- The overlap's circle coordinate (annulus `≃ₜ Ioo 0 1 × Circle`, second factor). -/
+noncomputable def apm_t92J05_genusTwo_overlapAngle :
+    C(↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)), Circle) :=
+  ⟨fun x => ((ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph
+      ⟨x.1, by
+        rw [(ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_eq]
+        exact ⟨x.2.2, x.2.1⟩⟩).2,
+    continuous_snd.comp
+      ((ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph.continuous.comp
+        (continuous_subtype_val.subtype_mk (fun x => by
+          rw [(ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_eq]
+          exact ⟨x.2.2, x.2.1⟩)))⟩
+
+/-- **Leaf W2 (geometry).** On the overlap annulus, the map to the orbit wedge through the
+outer piece (`outerSkeletonEquiv`, then `skeletonHomeomorphWedge`) is homotopic to the
+polygon boundary loop of the annulus angle, possibly with reversed orientation: the radial
+deformation retract sends the circle of angle `θ` to the boundary point at angle `θ`. -/
+lemma apm_t92J05_genusTwo_W2_overlap_homotopic :
+    let Φ : C(↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
+        ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair)) :=
+      (⟨apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeletonHomeomorphWedge, apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeletonHomeomorphWedge.continuous⟩ :
+          C(apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton, _)).comp
+        ((apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv.toFun).comp
+          (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)))
+    ContinuousMap.Homotopic Φ
+        ((ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).comp
+          apm_t92J05_genusTwo_overlapAngle) ∨
+      ContinuousMap.Homotopic Φ
+        ((ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).comp
+          ((⟨fun z : Circle => z⁻¹, continuous_inv⟩ : C(Circle, Circle)).comp
+            apm_t92J05_genusTwo_overlapAngle)) := by
+  left
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let D := ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel) ∩
+    (ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel))
+  let k : C(D, ConstructionTargets.PolygonSurfaceHomology.OverlapPiece P) :=
+    ⟨fun x => ⟨x.1, by
+      change x.1 ∈ ConstructionTargets.PolygonRadialOpenCover.overlapOpen P.Rel
+      rw [C.overlap_eq]
+      exact ⟨x.2.2, x.2.1⟩⟩, by fun_prop⟩
+  let j : C(ConstructionTargets.PolygonSurfaceHomology.OverlapPiece P,
+      ConstructionTargets.PolygonSurfaceHomology.OuterPiece P) :=
+    ⟨fun x => ⟨x.1, by
+      change x.1 ∈ ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel
+      have hx := x.2
+      change x.1 ∈ ConstructionTargets.PolygonRadialOpenCover.overlapOpen P.Rel at hx
+      rw [C.overlap_eq] at hx
+      exact hx.2⟩, by fun_prop⟩
+  let E := ConstructionTargets.PolygonSurfaceHomology.overlapHomotopyEquivCircle P
+  let G : C(ConstructionTargets.PolygonSurfaceHomology.OverlapPiece P,
+      ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit P.pair)) :=
+    (ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivWedge P).toFun.comp j
+  have hk : ContinuousMap.Homotopic k (E.invFun.comp (E.toFun.comp k)) := by
+    exact (E.left_inv.comp (ContinuousMap.Homotopic.refl k)).symm
+  have hmain := (ContinuousMap.Homotopic.refl G).comp hk
+  have hright :
+      G.comp (E.invFun.comp (E.toFun.comp k)) =
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop P).comp
+          apm_t92J05_genusTwo_overlapAngle := by
+    apply ContinuousMap.ext
+    intro x
+    exact ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivWedge_radialOverlapCircle
+      P (apm_t92J05_genusTwo_overlapAngle x)
+  rw [hright] at hmain
+  simpa [P, C, D, k, j, G, E,
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv,
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv,
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundarySkeletonHomeomorph,
+    ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivWedge,
+    ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivBoundary,
+    ConstructionTargets.PolygonSurfaceHomology.outerBoundaryHomeomorphSkeleton] using hmain
+
 /-- **Leaf W1 (wedge word, pure algebra on 8 explicit edges).** Under any free
 coordinate of the orbit wedge sending each explicit leg class to its generator
 (re-indexed by `orientableOrbitEquiv 2`), the boundary loop is conjugate to the genus-two
@@ -2391,7 +2466,72 @@ lemma apm_t92J05_genusTwo_W1_boundary_word
   sorry
 -- END SEAT AREA
 
+noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_homotopyFG
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (h : ContinuousMap.HomotopyEquiv X Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (h x) := by
+  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv h
+  let ff := E.fullyFaithfulFunctor
+  let m := FundamentalGroup.map h.toFun x
+  exact
+    { toFun := m
+      invFun := fun g => ff.preimage g
+      left_inv := fun g => ff.preimage_map g
+      right_inv := fun g => ff.map_preimage g
+      map_mul' := m.map_mul }
+
+noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_coordinates
+    (x : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer) :
+    FundamentalGroup apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer x ≃*
+      FreeGroup (Fin 4) := by
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let L := ConstructionTargets.PolygonSurfacePiOne.PairingOrbit P.pair
+  let b := ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase P
+  let oe : L ≃ Fin 4 :=
+    (ConstructionTargets.PolygonSurfacePiOne.orientableOrbitEquiv 2).trans
+      (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+        (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin (2 * 2)))
+  let wh := Classical.choose (finiteWedge_reindex_homeomorph 3 oe)
+  letI : PathConnectedSpace (FiniteWedge (Fin 4)) :=
+    finiteWedge_finSucc_pointWedge_inputs_aux_path 3
+  letI : PathConnectedSpace (FiniteWedge L) :=
+    wh.symm.surjective.pathConnectedSpace wh.symm.continuous
+  let hs := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv
+  let sw := P.skeletonHomeomorphWedge
+  let p : Path (sw (hs x)) b := PathConnectedSpace.somePath _ _
+  let e4 := Classical.choose (finiteWedge_finSucc_fundamentalGroup_free 3)
+  have hb : wh b = wedgeCircle (oe (P.orbit ⟨0, P.edgeCount_pos⟩)) 1 := by
+    exact Classical.choose_spec (finiteWedge_reindex_homeomorph 3 oe) _ _
+  let q : Path (wh b) (wedgeCircle (0 : Fin 4) 1) := by
+    exact Path.cast (Path.refl (wedgeCircle (0 : Fin 4) 1))
+      (hb.trans (wedgeCircle_base_eq _ 0)) rfl
+  exact
+    (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_homotopyFG hs x).trans
+      ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+          sw (hs x)).trans
+        ((FundamentalGroup.fundamentalGroupMulEquivOfPath p).trans
+          ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+              wh b).trans
+            ((FundamentalGroup.fundamentalGroupMulEquivOfPath q).trans e4))))
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
+    (hW1 : ∀ (e : FundamentalGroup
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair))
+        (ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase apm_t92J05_genusTwo_polygon_attach_specialization_aux_P) ≃*
+        FreeGroup (Fin 4))
+    (hcoord : ∀ l,
+      e (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase apm_t92J05_genusTwo_polygon_attach_specialization_aux_P l) =
+        FreeGroup.of
+          (((ConstructionTargets.PolygonSurfacePiOne.orientableOrbitEquiv 2).trans
+            (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+              (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin (2 * 2)))) l)),
+      IsConj (e (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
+        apm_t92J05_genusTwoRelator ∨
+      IsConj (e (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
+        apm_t92J05_genusTwoRelator⁻¹)
     (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
       (ConstructionTargets.PolygonRadialOpenCover.innerOpen
@@ -2433,7 +2573,7 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   intro x
   obtain ⟨g, hg⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range x
-  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv x g hg
+  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv apm_t92J05_genusTwo_W1_boundary_word x g hg
   refine ⟨e, ?_⟩
   rw [hg, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_zpowers, Subgroup.map_normalClosure _ _ e.surjective,
     Set.image_singleton]
