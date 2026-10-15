@@ -487,6 +487,32 @@ theorem t97J07_cp1_chartInverse_other_rep_ne_iff (i j : Fin 2) (hji : j ≠ i)
   change a.1 * v j ≠ 0 ↔ z ⟨j, hji⟩ ≠ 0
   simp [v, hji]
 
+/-- The literal overlap, presented inside the zero affine patch. -/
+abbrev T97J07CP1ZeroPatchOverlap :=
+  {p : {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
+      Projectivization.rep p (0 : Fin 2) ≠ 0} //
+    Projectivization.rep p.1 (1 : Fin 2) ≠ 0}
+
+/-- The coordinate model of the overlap is the nonzero locus in the sole
+affine coordinate. -/
+abbrev T97J07CP1PuncturedAffine :=
+  {z : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates
+      (0 : Fin 2) // z ⟨1, by decide⟩ ≠ 0}
+
+/-- The overlap characterization upgrades to an actual homeomorphism with
+the punctured affine coordinate space. -/
+noncomputable def t97J07_cp1_overlapHomeomorphPuncturedAffine :
+    T97J07CP1ZeroPatchOverlap ≃ₜ T97J07CP1PuncturedAffine :=
+  (t97J07_cp1_affinePatchHomeomorph 0).subtype (fun p => by
+    change Projectivization.rep p.1 1 ≠ 0 ↔
+      ConstructionTargets.ComplexProjectiveChartTargets.coordinates 0 p.1
+        ⟨1, by decide⟩ ≠ 0
+    have h := t97J07_cp1_chartInverse_other_rep_ne_iff 0 1 (by decide)
+      (ConstructionTargets.ComplexProjectiveChartTargets.coordinates 0 p.1)
+    rw [ConstructionTargets.ComplexProjectiveChartTargets.chartInverse_coordinates
+      0 p.1 p.2] at h
+    exact h)
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -552,6 +578,7 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_affinePatch_contractible
 #print axioms t97J07_cp1_affinePatch_higherHomology_isZero
 #print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
+#print axioms t97J07_cp1_overlapHomeomorphPuncturedAffine
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
