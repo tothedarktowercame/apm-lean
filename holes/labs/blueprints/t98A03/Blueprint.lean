@@ -3393,7 +3393,43 @@ lemma apm_t98a03_irregular_paths (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP
     ∃ γ₁ γ₂ : C(unitInterval, apm_t98a03_IrrE t₀ r₀),
       apm_t98a03_irrMap t₀ r₀ ∘ γ₁ = apm_t98a03_irrMap t₀ r₀ ∘ γ₂ ∧
         γ₁ 0 = γ₁ 1 ∧ γ₂ 0 ≠ γ₂ 1 := by
-  sorry
+  let s := apm_t98a03_unitRep r₀
+  let γ : Path s (-s) := PathConnectedSpace.somePath s (-s)
+  let γ₁ : C(unitInterval, apm_t98a03_IrrE t₀ r₀) :=
+    ⟨fun u => apm_t98a03_glueMk (apm_t98a03_sheetPt t₀)
+        (apm_t98a03_irrTau r₀) (.inr (.inr (apm_t98a03_sphereProj (γ u)))),
+      (apm_t98a03_glueMk_continuous _ _).comp
+        (continuous_inr.comp (continuous_inr.comp
+          (apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP_continuous.comp
+            γ.continuous)))⟩
+  let γ₂ : C(unitInterval, apm_t98a03_IrrE t₀ r₀) :=
+    ⟨fun u => apm_t98a03_glueMk (apm_t98a03_sheetPt t₀)
+        (apm_t98a03_irrTau r₀) (.inr (.inl (γ u))),
+      (apm_t98a03_glueMk_continuous _ _).comp
+        (continuous_inr.comp (continuous_inl.comp γ.continuous))⟩
+  refine ⟨γ₁, γ₂, ?_, ?_, ?_⟩
+  · funext u
+    rfl
+  · change apm_t98a03_glueMk _ _ (Sum.inr (α := apm_t98a03_Torus) (Sum.inr
+        (α := apm_t98a03_t92_S2)
+        (apm_t98a03_sphereProj (γ 0)))) =
+      apm_t98a03_glueMk _ _ (Sum.inr (α := apm_t98a03_Torus) (Sum.inr
+        (α := apm_t98a03_t92_S2)
+        (apm_t98a03_sphereProj (γ 1))))
+    rw [γ.source, γ.target, apm_t98a03_sphereProj_neg]
+  · change apm_t98a03_glueMk _ _
+        (Sum.inr (α := apm_t98a03_Torus)
+          (Sum.inl (β := apm_t98a03_RP2) (γ 0))) ≠
+      apm_t98a03_glueMk _ _
+        (Sum.inr (α := apm_t98a03_Torus)
+          (Sum.inl (β := apm_t98a03_RP2) (γ 1)))
+    intro heq
+    have h := (hmkE _ _).mp heq
+    rw [γ.source, γ.target] at h
+    rcases h with h | ⟨j, h | h⟩
+    · exact hne s (Sum.inl.inj (Sum.inr.inj h))
+    · exact Sum.inr_ne_inl h.1
+    · exact Sum.inr_ne_inl h.2
 
 /-- Assembly: the irregular cover. -/
 theorem apm_t98a03_irregular_threeFoldCover
