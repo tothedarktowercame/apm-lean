@@ -406,6 +406,18 @@ theorem t96A06_sphere3_integral_normalizedClass_localizes (p : Sphere 3) :
   exact ConstructionTargets.HigherSphereLocalization.normalizedClass_localizes
     (k := 1) p
 
+/-- At the selected regular-fiber base point, the stereographically
+normalized global integral class is therefore the positive local class. -/
+theorem polynomialSphereLift_base_integralFundamentalClass_positive :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint := by
+  exact t96A06_sphere3_integral_normalizedClass_localizes
+    polynomialSphereRegularPoint
+
 theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
     flipFirstPairSphere (flipSecondPairSphere p) =
       flipSecondPairSphere (flipFirstPairSphere p) := by
@@ -2722,5 +2734,6 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
+#print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 
 end ConstructionTargets.t96A06Closure
