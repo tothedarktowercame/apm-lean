@@ -406,18 +406,6 @@ theorem t96A06_sphere3_integral_normalizedClass_localizes (p : Sphere 3) :
   exact ConstructionTargets.HigherSphereLocalization.normalizedClass_localizes
     (k := 1) p
 
-/-- At the selected regular-fiber base point, the stereographically
-normalized global integral class is therefore the positive local class. -/
-theorem polynomialSphereLift_base_integralFundamentalClass_positive :
-    ConstructionTargets.ManifoldFundamentalClass.localizationMap
-        polynomialSphereRegularPoint 3
-        (ConstructionTargets.HigherSphereLocalization.normalizedClass
-          (k := 1) polynomialSphereRegularPoint) =
-      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
-        (k := 1) polynomialSphereRegularPoint := by
-  exact t96A06_sphere3_integral_normalizedClass_localizes
-    polynomialSphereRegularPoint
-
 theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
     flipFirstPairSphere (flipSecondPairSphere p) =
       flipSecondPairSphere (flipFirstPairSphere p) := by
@@ -1625,6 +1613,53 @@ noncomputable def t96A06_sphere3_rational_fundamentalClass :
     CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) :=
   t96A06_sphere3_rational_H3Iso.inv 1
 
+/-- At the selected regular-fiber base point, the stereographically
+normalized global integral class is the positive local class. -/
+theorem polynomialSphereLift_base_integralFundamentalClass_positive :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint := by
+  exact t96A06_sphere3_integral_normalizedClass_localizes
+    polynomialSphereRegularPoint
+
+/-- Localize the selected rational sphere-shift generator at the chosen
+regular-fiber base point using the coefficient-relative projection. -/
+noncomputable def polynomialSphereLift_baseRationalLocalization :=
+  HomologicalComplex.homologyMap
+      (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint))) 3
+    t96A06_sphere3_rational_fundamentalClass
+
+/-- The comparison scalar between the independently normalized global
+sphere-shift generator and positive local chart generator. -/
+noncomputable def polynomialSphereLift_baseLocalizationScalar : ℚ :=
+  (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+    polynomialSphereRegularPoint).hom.hom
+      polynomialSphereLift_baseRationalLocalization
+
+/-- Positivity of the selected rational class is exactly the assertion that
+the normalization-comparison scalar is one. -/
+theorem polynomialSphereLift_base_localFundamentalClass_positive_iff :
+    polynomialSphereLift_baseRationalLocalization =
+        ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint ↔
+      polynomialSphereLift_baseLocalizationScalar = 1 := by
+  constructor
+  · intro h
+    rw [polynomialSphereLift_baseLocalizationScalar, h]
+    exact ConstructionTargets.CoefficientChartLocal.generator_normalization
+      ℚ 1 polynomialSphereRegularPoint
+  · intro h
+    apply (ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
+    exact h
+
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
 theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
@@ -2735,5 +2770,6 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_H2_isZero
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
+#print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 
 end ConstructionTargets.t96A06Closure
