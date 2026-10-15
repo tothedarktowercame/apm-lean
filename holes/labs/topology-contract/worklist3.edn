@@ -36702,75 +36702,59 @@
      :reason
      "Committed canonical prefix-indexed point/path families; quotient fold induction remains."}]}
   {:consumer :t99J05,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
-    :residual "Construct MV successor; then Lefschetz/Euler and Main.",
+    :residual
+    "Model both patches and overlap; apply MV to construct the successor, then Lefschetz/Euler and Main.",
     :outcome :stop,
-    :warnings
-    ["Main: one placeholder." "Unrelated t97A01 edit untouched."],
+    :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t99J05_subsingleton_rational_homology",
+    [{:name "t99J05_cp_successor_openCover",
       :type
-      "nonempty subsingleton has Q in H0 and zero positive rational homology",
+      "last affine chart and remaining affine charts form an open cover of literal CP(n+1)",
       :status :proved,
-      :consumers [:t99J05],
-      :depends-on [],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_zero_rational_homology",
-      :type "full rational homology data for literal CP0",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on
-      ["cpZeroHomologyDataOfSubsingletonData"
-       "t99J05_subsingleton_rational_homology"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_homology_step",
-      :type "CP n data -> CP(n+1) data",
-      :status :not-started,
       :consumers [:t99J05],
       :depends-on ["t99J05_cp_zero_rational_homology"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_patch_models",
+      :type
+      "identify successor lower patch with CPn and top patch with affine space, including overlap",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on ["t99J05_cp_successor_openCover"],
       :area "rational-homology-lefschetz"}],
-    :statement-hashes {:registry "166/166"},
+    :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed singleton rational homology and literal CP0 data; MV successor remains.",
+    "Committed the general two-affine-region open cover for the CP successor filtration.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
-     {:cmd
-      "lake env lean problems/t99J05/lean/Main.lean; registry; diff; fixture hash; status",
-      :exit 0}
+     {:cmd "lake env lean problems/t99J05/lean/Main.lean", :exit 0}
      {:cmd
       "lake env lean /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
+      :exit 0}
+     {:cmd "git show --check --oneline --stat 7337cdfc2", :exit 0}],
     :diagnostic-history
     [{:cmd "initial closure compile",
       :exit 1,
-      :note "added explicit CP0 inhabitant"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792056771422-13773-db405e08",
-     :commands
-     ["git show/check/diff-tree d040389f5; fixture sha256"
-      "lake env lean archived committed t99J05Closure"
-      "statement-registry check; placeholder/source audit"],
-     :finding
-     "PASS: d040389f5 is new compiled, sorry-free, standard-axiom progress. It derives rational homology of every nonempty subsingleton from established contractibility/H0 interfaces, then faithfully packages literal CP0 as Q in degree 0 and zero above. Exact one-file scope and fixture hash match; registry 166/166; Main remains 1->1. MV successor, Lefschetz/Euler, and Main remain listed."},
-    :commit "d040389f5",
+      :note "Used the derived coordinate-zero equality directly."}],
+    :commit "7337cdfc2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
      :sha256
-     "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d",
-     :mode :post-build-export-check},
+     "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -43121,6 +43105,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-pairsign-localhomology-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_openCover",
+    :type
+    "last affine chart and remaining affine charts form an open cover of literal CP(n+1)"},
+   :lemma
+   {:name "t99J05_cp_successor_openCover",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "last affine chart and remaining affine charts form an open cover of literal CP(n+1)",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-opencover,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-zero-rational-homology],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_patch_models",
+    :type
+    "identify successor lower patch with CPn and top patch with affine space, including overlap"},
+   :lemma
+   {:name "t99J05_cp_successor_patch_models",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "identify successor lower patch with CPn and top patch with affine space, including overlap",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-patch-models,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-successor-opencover],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
