@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36169,7 +36169,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -37038,6 +37038,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792025357550-12871-c0a55d5e",
+     :commands
+     ["git show/check/diff-tree b7a01bad exact scope"
+      "fixture SHA-256; committed H3 construction and forbidden-token audit; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: b7a01bad is compiled, sorry-free progress after f170a303. The committed equivalence is correctly represented and oriented: H3(S3;Q) shifts to H2(S2;Q), then the existing sphere endpoint gives Q. It does not claim unresolved H3(RP3;Q); antipodal/transfer detection, higher vanishing, degree four, invariants/Main remain listed. Scope/hash match; standard axioms; registry 166/166; closure forbidden 0->0; Main 1->1 placeholder."},
     :commit "81a215738",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
@@ -37046,7 +37056,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37064,7 +37074,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: .lake/packages is a real directory, not the canonical APM package-authority symlink; AGENTS.md forbids Lake verification or implementation until lifecycle provisioning repairs it.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the compiled degree-three antipodal action. The remaining boundary is the transfer/deck-sum identity needed to prove injectivity and identify H3(RP3;Q).",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37108,7 +37118,11 @@
     {:job 2,
      :commit nil,
      :reason
-     ".lake/packages is a real directory, not the canonical APM package-authority symlink; AGENTS.md forbids Lake verification or implementation until lifecycle provisioning repairs it."}]}
+     ".lake/packages is a real directory, not the canonical APM package-authority symlink; AGENTS.md forbids Lake verification or implementation until lifecycle provisioning repairs it."}
+    {:job 3,
+     :commit "81a215738",
+     :reason
+     "Committed the compiled degree-three antipodal action. The remaining boundary is the transfer/deck-sum identity needed to prove injectivity and identify H3(RP3;Q)."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -40330,7 +40344,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_sphere3_antipodal_H3",
@@ -40340,7 +40354,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "antipodal acts as identity on H3(S3;Q)",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "81a215738"},
    :id :lemma-t96a06-sphere3-antipodal-h3,
    :kind :lemma,
    :depends-on [:lemma-t96a06-sphere3-rational-h3iso],
