@@ -2098,6 +2098,38 @@ noncomputable def torusRP2_subdivisionRunOffsetEquiv
   Equiv.ofBijective (torusRP2_subdivisionRunOffsetIndex S)
     (torusRP2_subdivisionRunOffsetIndex_bijective S)
 
+@[simp] theorem torusRP2_subdivisionRunOffsetEquiv_apply
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (z : Σ i : Fin (boolSideRunPartition S.side).length,
+      Fin (pathTwoOpenSubdivisionRunFamily S i).length) :
+    torusRP2_subdivisionRunOffsetEquiv S z =
+      ⟨pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val, by
+        have h := ((pathTwoOpenSubdivisionRunFamily S z.1).get z.2).isLt
+        rw [torusRP2_subdivisionRunFamily_get_val_eq_prefix_add S z.1 z.2] at h
+        exact h⟩ := by
+  rfl
+
+/-- Under the run-offset equivalence, every prefix-block factor is literally
+the corresponding original subdivision factor. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (z : Σ i : Fin (boolSideRunPartition S.side).length,
+      Fin (pathTwoOpenSubdivisionRunFamily S i).length)
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunPrefixBlockPiece S z.1
+        (Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S z.1).symm z.2) t =
+      S.piece (torusRP2_subdivisionRunOffsetEquiv S z) t := by
+  rw [torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex]
+  apply congrArg (fun q => S.piece q t)
+  apply Fin.ext
+  rfl
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2196,6 +2228,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffset_run_unique
 #print axioms torusRP2_subdivisionRunOffsetIndex_bijective
 #print axioms torusRP2_subdivisionRunOffsetEquiv
+#print axioms torusRP2_subdivisionRunOffsetEquiv_apply
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
