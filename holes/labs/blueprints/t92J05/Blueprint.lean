@@ -2229,6 +2229,55 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
                 Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   sorry
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_pathConnected_of_homotopyEquiv
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) [PathConnectedSpace Y] :
+    PathConnectedSpace X := by
+  refine ⟨⟨e.symm (Classical.choice (inferInstance : Nonempty Y))⟩, ?_⟩
+  intro x y
+  let middle : Path (e.symm (e x)) (e.symm (e y)) :=
+    (PathConnectedSpace.somePath (e x) (e y)).map e.symm.continuous
+  exact ⟨(e.left_inv.some.evalAt x).symm.trans
+    (middle.trans (e.left_inv.some.evalAt y))⟩
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_pathConnected :
+    PathConnectedSpace
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer := by
+  let orbitEquiv :
+      ConstructionTargets.PolygonSurfacePiOne.PairingOrbit
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair ≃ Fin 4 :=
+    (ConstructionTargets.PolygonSurfacePiOne.orientableOrbitEquiv 2).trans
+      (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+        (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin (2 * 2)))
+  let wedgeEquiv := Classical.choose (finiteWedge_reindex_homeomorph 3 orbitEquiv)
+  letI : PathConnectedSpace (FiniteWedge (Fin 4)) :=
+    finiteWedge_finSucc_pointWedge_inputs_aux_path 3
+  letI : PathConnectedSpace
+      (FiniteWedge
+        (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair)) :=
+    wedgeEquiv.symm.surjective.pathConnectedSpace wedgeEquiv.symm.continuous
+  letI : PathConnectedSpace
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeletonHomeomorphWedge.symm.surjective.pathConnectedSpace
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeletonHomeomorphWedge.symm.continuous
+  exact
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_pathConnected_of_homotopyEquiv
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_surface_pathConnected :
+    PathConnectedSpace (ConstructionTargets.Surfaces.Surface true 2) := by
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      ((convex_closedBall (0 : ℂ) 1).isPathConnected
+        ⟨0, by simp⟩)
+  letI : PathConnectedSpace P.Space :=
+    P.surjective_quotientMap.pathConnectedSpace P.continuous_quotientMap
+  let e := ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph
+    true 2 (by norm_num)
+  exact e.surjective.pathConnectedSpace e.continuous
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
     (houter : ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
@@ -2254,7 +2303,49 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization
       (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2)
           apm_t92J05_genusTwo_center ≃*
         apm_t92J05_genusTwoGroup) := by
-  sorry
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let U := ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel
+  let V := ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel
+  letI outerPC : PathConnectedSpace U :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_pathConnected
+  letI innerPC : PathConnectedSpace V :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_pathConnected
+  letI overlapPC : PathConnectedSpace (U ∩ V : Set P.Space) := by
+    change PathConnectedSpace (C.outer ∩ C.inner : Set P.Space)
+    rw [inter_comm, ← C.overlap_eq]
+    exact apm_t92J05_genusTwo_polygon_attach_specialization_aux_overlap_pathConnected
+  letI innerSimply : SimplyConnectedSpace V :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_simplyConnected
+  letI : PathConnectedSpace P.Space := by
+    letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+      isPathConnected_iff_pathConnectedSpace.mp
+        ((convex_closedBall (0 : ℂ) 1).isPathConnected ⟨0, by simp⟩)
+    exact P.surjective_quotientMap.pathConnectedSpace P.continuous_quotientMap
+  let x : (U ∩ V : Set P.Space) :=
+    Classical.choice (inferInstance : Nonempty (U ∩ V : Set P.Space))
+  rcases @hattach P.Space _ U V C.outer_open C.inner_open (by
+    change ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel ∪
+      ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel = Set.univ
+    rw [union_comm]
+    exact (ConstructionTargets.PolygonSurfacePiOne.openCover P).cover
+    ) outerPC innerPC overlapPC innerSimply x with ⟨a⟩
+  rcases houter x with ⟨e, he⟩
+  let q := QuotientGroup.congr
+    (Subgroup.normalClosure
+      ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range :
+        Set (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x))))
+    (Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))))
+    e he
+  let s := ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph
+    true 2 (by norm_num)
+  letI : PathConnectedSpace (ConstructionTargets.Surfaces.Surface true 2) :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_surface_pathConnected
+  let changeSpace :=
+    ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+      s x.1
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+    apm_t92J05_genusTwo_center (s x.1)).trans (changeSpace.symm.trans (a.trans q))⟩
 /-- Assembly of the generic one-cell van Kampen theorem with the independent
 genus-two polygon specialization. -/
 theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
