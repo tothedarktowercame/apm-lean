@@ -36708,35 +36708,36 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Compute unit-sphere top/off-degree groups; lower-patch retract; MV successor; Main.",
+    "Compare complex affine and Euclidean sphere models; compute off-degrees; lower-patch retract; MV successor; Main.",
     :outcome :stop,
     :warnings
-    ["Main one placeholder; unrelated untracked files untouched."],
+    ["Existing unused-simp lint; Main one placeholder; unrelated untracked files untouched."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_overlap_subsingleton_of_unitSphere",
-      :type "sphere subsingleton homology transports to overlap",
+    [{:name "t99J05_cp_successor_overlap_topIso_of_unitSphere",
+      :type
+      "unit-sphere top homology iso transports to exact successor overlap",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_overlap_homologyIso_unitSphere"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_overlap_rational_homology",
-      :type "explicit overlap groups",
-      :status :partial,
+     {:name "t99J05_affineUnitSphere_topHomologyIso",
+      :type
+      "rational top homology of the complex affine unit sphere is Q",
+      :status :not-started,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_overlap_subsingleton_of_unitSphere"],
+      :depends-on ["t99J05_cp_successor_overlap_topIso_of_unitSphere"],
       :area "rational-homology-lefschetz"}],
-    :statement-hashes {:registry "167/167"},
+    :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed off-degree homology transport from unit spheres to successor overlaps.",
+    "Committed exact top-homology transport from the affine unit-sphere model to the successor overlap.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36748,23 +36749,9 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 2ff030f72",
+      "git diff --check && git show --check --stat --oneline f6d62287e",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792100595275-14725-a39b3f37",
-     :commands
-     ["git show --check --stat 7337cdfc2"
-      "git diff --name-only 7337cdfc2^ 7337cdfc2"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed one."},
-    :commit "2ff030f72",
+    :commit "f6d62287e",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36772,7 +36759,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -44390,6 +44377,45 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-mappedintegrallocalgenerator-coordinate-iff],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_topIso_of_unitSphere",
+    :type
+    "unit-sphere top homology iso transports to exact successor overlap"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_topIso_of_unitSphere",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "unit-sphere top homology iso transports to exact successor overlap",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-overlap-topiso-of-unitsphere,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_affineUnitSphere_topHomologyIso",
+    :type
+    "rational top homology of the complex affine unit sphere is Q"},
+   :lemma
+   {:name "t99J05_affineUnitSphere_topHomologyIso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "rational top homology of the complex affine unit sphere is Q",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-affineunitsphere-tophomologyiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-topiso-of-unitsphere],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
