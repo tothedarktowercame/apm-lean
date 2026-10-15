@@ -3165,7 +3165,51 @@ lemma treeContraction_continuousOn (g : G) :
 (`spherePush_spec`, `neg_north`/`neg_south`). -/
 lemma treeContraction_mapsTo (g : G) :
     ∀ t, ∀ z ∈ treeStar g, treeContraction g (t, z) ∈ treeStar g := by
-  sorry
+  intro t z hz
+  have ha : a ≠ 1 := G_facts.1
+  have hb : b ≠ 1 := G_facts.2.1
+  cases z with
+  | inl z =>
+      rcases z with ⟨h, u⟩
+      change (h = g ∧ (u : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (u : ℝ)) at hz
+      rcases hz with ⟨rfl, hu⟩ | ⟨rfl, hu⟩
+      · left
+        refine ⟨rfl, ?_⟩
+        simp only [treeContraction, if_pos]
+        change (1 - (t : ℝ)) * (u : ℝ) < 1
+        nlinarith [unitInterval.nonneg t, unitInterval.le_one t,
+          unitInterval.nonneg u]
+      · right
+        refine ⟨rfl, ?_⟩
+        have hne : g * a⁻¹ ≠ g := by
+          intro h
+          have : a⁻¹ = 1 := mul_left_cancel
+            (show g * a⁻¹ = g * 1 by simpa using h)
+          exact ha (inv_eq_one.mp this)
+        simp only [treeContraction, if_neg hne]
+        change 0 < (1 - (t : ℝ)) * (u : ℝ) + (t : ℝ)
+        have hp : 0 ≤ (1 - (t : ℝ)) * (u : ℝ) :=
+          mul_nonneg (by linarith [unitInterval.le_one t]) (unitInterval.nonneg u)
+        by_cases ht : (t : ℝ) = 0
+        · rw [ht]
+          simpa using hu
+        · exact add_pos_of_nonneg_of_pos hp
+            (lt_of_le_of_ne (unitInterval.nonneg t) (Ne.symm ht))
+  | inr z =>
+      rcases z with ⟨h, x⟩
+      change (h = g ∧ x ≠ south) ∨ (h = g * b ∧ x ≠ north) at hz
+      rcases hz with ⟨rfl, hx⟩ | ⟨rfl, hx⟩
+      · left
+        refine ⟨rfl, ?_⟩
+        simpa [treeContraction, neg_north] using
+          (spherePush_spec north).2.2.2.1 t x (by simpa [neg_north] using hx)
+      · right
+        refine ⟨rfl, ?_⟩
+        have hne : g * b ≠ g := by
+          intro h
+          exact hb (mul_left_cancel (show g * b = g * 1 by simpa using h))
+        simpa [treeContraction, hne, neg_south] using
+          (spherePush_spec south).2.2.2.1 t x (by simpa [neg_south] using hx)
 
 /-- Leaf (split).  At time `0` the contraction is the identity
 (`towardZero 0 t = t`, `towardOne 0 t = t` by `Subtype.ext`/`simp`;
