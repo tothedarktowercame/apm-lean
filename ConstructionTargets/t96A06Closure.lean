@@ -2097,6 +2097,29 @@ theorem t96A06_absoluteComparison_localization_normalizedClass :
   exact t96A06_sphere3_integral_normalizedClass_localizes
     polynomialSphereRegularPoint
 
+/-- Forgetting the native integral projection preserves its elementwise action
+on the inverse-comparison representative of the normalized class. -/
+theorem t96A06_forget_nativeProjection_normalizedClass :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3)).hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).inv.hom
+          (ConstructionTargets.HigherSphereLocalization.normalizedClass
+            (k := 1) polynomialSphereRegularPoint)) =
+    (HomologicalComplex.homologyMap
+      (cokernel.π
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint))) 3).hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).inv.hom
+          (ConstructionTargets.HigherSphereLocalization.normalizedClass
+            (k := 1) polynomialSphereRegularPoint)) := rfl
+
 /-- Extend the transported integral normalized class to rational coefficients
 inside homology of the forgotten rational chain complex. -/
 noncomputable def t96A06_mappedRationalExtensionClass :
@@ -3548,6 +3571,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_absoluteComparison_composite
 #print axioms t96A06_absoluteComparison_composite_normalizedClass
 #print axioms t96A06_absoluteComparison_localization_normalizedClass
+#print axioms t96A06_forget_nativeProjection_normalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
