@@ -414,6 +414,31 @@ theorem hasFDerivAt_incidenceDifference
 
 #print axioms hasFDerivAt_incidenceDifference
 
+/-- Fréchet derivatives transport through continuous linear source and target
+coordinate equivalences.  The derivative has the chart order
+`eF ∘ A ∘ eE⁻¹`. -/
+theorem hasFDerivAt_conj
+    {E F E' F' : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup F'] [NormedSpace ℝ F']
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasFDerivAt f A x) (eE : E ≃L[ℝ] E') (eF : F ≃L[ℝ] F') :
+    HasFDerivAt (fun y : E' ↦ eF (f (eE.symm y)))
+      (eF.toContinuousLinearMap.comp
+        (A.comp eE.symm.toContinuousLinearMap)) (eE x) := by
+  have hinv : HasFDerivAt (fun y : E' ↦ eE.symm y)
+      eE.symm.toContinuousLinearMap (eE x) :=
+    eE.symm.hasFDerivAt
+  have hf' : HasFDerivAt f A (eE.symm (eE x)) := by
+    simpa only [eE.symm_apply_apply] using hf
+  have hmiddle := hf'.comp (eE x) hinv
+  have hout := eF.hasFDerivAt.comp (eE x) hmiddle
+  simpa [Function.comp_def] using hout
+
+#print axioms hasFDerivAt_conj
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
