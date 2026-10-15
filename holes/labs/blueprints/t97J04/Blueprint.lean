@@ -954,6 +954,89 @@ lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = 
 form by `IntegralSingularHomologyComparison`) for the cover A1: `H₁(inner) = 0`,
 `H₀(overlap) → H₀(outer) ⊕ H₀(inner)` injective, `H₁(overlap) ≅ H₁(Circle)` by
 A3 and its image is `γ_*` by A5, `H₁(outer) ≅ H₁(Y)` by A4. -/
+lemma cell_H1_aux_exact
+    {A B P D E : ModuleCat ℤ}
+    (f : A ⟶ B) (I : A ⟶ P) (g : B ⟶ D) (J : P ⟶ D)
+    (inB : B ⟶ P) (prB : P ⟶ B) (d : D ⟶ E) (i₀ : E ⟶ A)
+    (hJ : inB ≫ J = g) (hI : I ≫ prB = f)
+    (hsplit : ∀ x, inB.hom (prB.hom x) = x)
+    (hproj : ∀ x, prB.hom (inB.hom x) = x)
+    (hi₀ : Function.Injective i₀.hom)
+    (hex₁ : LinearMap.range I.hom = LinearMap.ker J.hom)
+    (hex₂ : LinearMap.range J.hom = LinearMap.ker d.hom)
+    (hex₃ : LinearMap.range d.hom = LinearMap.ker i₀.hom) :
+    Function.Surjective g.hom ∧ LinearMap.ker g.hom = LinearMap.range f.hom := by
+  have hd_zero : d.hom = 0 := by
+    apply LinearMap.range_eq_bot.mp
+    rw [hex₃, LinearMap.ker_eq_bot.mpr hi₀]
+  have hJ_surj : Function.Surjective J.hom := by
+    rw [← LinearMap.range_eq_top, hex₂, hd_zero, LinearMap.ker_zero]
+  constructor
+  · intro y
+    obtain ⟨x, hx⟩ := hJ_surj y
+    refine ⟨prB.hom x, ?_⟩
+    have hg := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hJ) (prB.hom x)
+    rw [← hg, ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply,
+      hsplit, hx]
+  · apply le_antisymm
+    · intro x hx
+      let q := inB.hom x
+      have hxJ : q ∈ LinearMap.ker J.hom := by
+        change J.hom q = 0
+        have hg := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hJ) x
+        have hg' : J.hom q = g.hom x := by
+          simpa [q, ModuleCat.hom_comp] using hg
+        exact hg'.trans hx
+      rw [← hex₁] at hxJ
+      obtain ⟨a, ha⟩ := hxJ
+      refine ⟨a, ?_⟩
+      have hf := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hI) a
+      rw [← hf, ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply, ha]
+      simpa [q] using hproj x
+    · rintro x ⟨a, rfl⟩
+      let q := inB.hom (f.hom a)
+      have haI : I.hom a = q := by
+        rw [← hsplit (I.hom a)]
+        have hf := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hI) a
+        simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply] at hf
+        rw [hf]
+      have : q ∈ LinearMap.ker J.hom := by
+        rw [← hex₁]
+        exact ⟨a, haI⟩
+      change g.hom (f.hom a) = 0
+      have hg := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hJ) (f.hom a)
+      have hg' : J.hom q = g.hom (f.hom a) := by
+        simpa [q, ModuleCat.hom_comp] using hg
+      exact hg'.symm.trans (show J.hom q = 0 from this)
+
+lemma cell_H1_aux_inner_zero (γ : C(Circle, Y))
+    (hA2 : ContractibleSpace (cellInner γ)) :
+    Subsingleton (IntegralMV.HZ 1 (cellInner γ)) := by
+  sorry
+
+lemma cell_H1_aux_mv0_injective (γ : C(Circle, Y)) [PathConnectedSpace Y]
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA2 : ContractibleSpace (cellInner γ)) :
+    Function.Injective (IntegralMV.mvI (cellOuter γ) (cellInner γ) 0).hom := by
+  sorry
+
+lemma cell_H1_aux_transport (γ : C(Circle, Y))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ)) :
+    ∃ (eI : IntegralMV.HZ 1 (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≅
+          H 1 Circle)
+      (eO : IntegralMV.HZ 1 (cellOuter γ) ≅ H 1 Y),
+      IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+          eO.hom = eI.hom ≫ Hmap γ 1 ∧
+      eO.inv ≫ IntegralMV.mvToX (cellOuter γ) 1 = Hmap (cellIncl γ) 1 := by
+  sorry
+
 lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
       cellOuter γ ∪ cellInner γ = Set.univ)
@@ -966,7 +1049,6 @@ lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
     Function.Surjective (Hmap (cellIncl γ) 1).hom ∧
       LinearMap.ker (Hmap (cellIncl γ) 1).hom = LinearMap.range (Hmap γ 1).hom := by
   sorry
-
 /-- A9. If `γ_*` is injective on `H₁`, then `H₂(Y) → H₂(Y ∪_γ D²)` is bijective
 (Mayer–Vietoris at degree 2: `H₂(overlap) = 0`, connecting map lands in
 `ker γ_* = 0`). -/
