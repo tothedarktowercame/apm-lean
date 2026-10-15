@@ -621,6 +621,40 @@ theorem hasFDerivAt_incidenceDifference_commonTarget
 
 #print axioms hasFDerivAt_incidenceDifference_commonTarget
 
+/-- Continuous differentiability upgrades the common-target incidence
+derivative to the strict derivative required by the implicit-function
+theorem.  The geometric chart-smoothness input remains explicit. -/
+theorem hasStrictFDerivAt_incidenceDifference_commonTarget
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B)
+    (hxy : f x = c y)
+    (hsmooth : ContDiffAt ℝ 1
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y)) :
+    HasStrictFDerivAt
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) :=
+  hsmooth.hasStrictFDerivAt'
+    (hasFDerivAt_incidenceDifference_commonTarget hf hc hxy) one_ne_zero
+
+#print axioms hasStrictFDerivAt_incidenceDifference_commonTarget
+
 /-- A strict coordinate derivative with a continuous linear right inverse has
 the complemented-kernel data required by the implicit-function theorem.  The
 finite-dimensional target is exactly the incidence-map situation. -/
