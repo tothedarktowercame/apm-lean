@@ -10335,7 +10335,25 @@ theorem cut_transfer_consistency_B_arc_same {Label : Type*} [DecidableEq Label]
     (he₀e : e = e₀) (hτ : τ = s₀) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  subst e
+  subst τ
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+  by_cases hq : e₀ = q
+  · subst e₀
+    exact (hN.trans (D.newB_x s₀)).trans (by
+      simp [cutTransfer, q])
+  · have he₀' : (q + 1 ≤ e₀ ∧ e₀ < L) ∨ e₀ < p := by
+      rcases he₀ with he₀ | he₀
+      · exact Or.inl ⟨by omega, he₀.2⟩
+      · exact Or.inr he₀
+    apply (hN.trans (D.newB_tu e₀ s₀ he₀')).trans
+    simp only [cutTransfer]
+    rw [if_neg, if_neg]
+    · rcases he₀' with he₀' | he₀' <;> omega
+    · rcases he₀' with he₀' | he₀' <;> omega
 
 /-- Shared vertex: the start of side `e₀` (`s₀ = 0`) written as the end of side `e` (`τ = 1`). -/
 theorem cut_transfer_consistency_B_arc_next {Label : Type*} [DecidableEq Label]
