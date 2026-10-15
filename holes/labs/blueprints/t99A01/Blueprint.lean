@@ -2010,11 +2010,34 @@ lemma t99A01_succ_vk_canonical {r : ℕ} (degree : Fin (r + 1) → ℕ) :
 
 /-- **Leaf V2 (generic).** Basepoint transports differ by conjugation
 (`p.symm.trans q` is a loop), which is trivial in a commutative target. -/
+lemma t99A01_transport_abelian_aux_isConj
+    {X : Type*} [TopologicalSpace X] {x y : X}
+    (p q : Path x y) (g : FundamentalGroup X x) :
+    IsConj (FundamentalGroup.fundamentalGroupMulEquivOfPath p g)
+      (FundamentalGroup.fundamentalGroupMulEquivOfPath q g) := by
+  let ep := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦p⟧
+  let eq := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦q⟧
+  refine ⟨toUnits (ep.inv ≫ eq.hom), ?_⟩
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath p g) ≫
+      (ep.inv ≫ eq.hom) =
+    (ep.inv ≫ eq.hom) ≫
+      (FundamentalGroup.fundamentalGroupMulEquivOfPath q g)
+  rw [show FundamentalGroup.fundamentalGroupMulEquivOfPath p g =
+    ep.inv ≫ g ≫ ep.hom from rfl]
+  rw [show FundamentalGroup.fundamentalGroupMulEquivOfPath q g =
+    eq.inv ≫ g ≫ eq.hom from rfl]
+  simp only [CategoryTheory.Category.assoc,
+    CategoryTheory.Iso.hom_inv_id_assoc]
+
 lemma t99A01_transport_abelian : ∀ {X : Type} [TopologicalSpace X] {x y : X} {A : Type} [CommGroup A]
       (φ : FundamentalGroup X y →* A) (p q : Path x y) (a : FundamentalGroup X x),
       φ (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) =
         φ (FundamentalGroup.fundamentalGroupMulEquivOfPath q a) := by
-  sorry
+  intro X _ x y A _ φ p q a
+  apply isConj_iff_eq.mp
+  exact φ.map_isConj (t99A01_transport_abelian_aux_isConj p q a)
 
 lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
     (degree : Fin (r + 1) → ℕ)
