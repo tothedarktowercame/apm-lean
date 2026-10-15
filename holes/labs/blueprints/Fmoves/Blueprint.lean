@@ -7468,7 +7468,254 @@ theorem cut_charts_package {Label : Type*} [DecidableEq Label]
           (a y) (a y')) ∧
       (∀ y y', a y = a y' → Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) (b y) (b y')) ∧
       (∀ y y', b y = b y' → Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) (a y) (a y')) := by
-  sorry
+  have hKAsub : KA ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov]
+    exact subset_union_left
+  have hKBsub : KB ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov]
+    exact subset_union_right
+  have hKA'sub : KA' ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov']
+    exact subset_union_left
+  have hKB'sub : KB' ⊆ Metric.closedBall (0 : ℂ) 1 := by
+    rw [← hcov']
+    exact subset_union_right
+  let a : Fin 2 × Disk → Disk := fun iz =>
+    ⟨if iz.1 = 0 then φA iz.2 else φB iz.2, by
+      rcases iz with ⟨i, z⟩
+      fin_cases i
+      · simp only [Fin.isValue, Fin.zero_eta, Fin.val_zero, ↓reduceIte]
+        exact hKAsub (by rw [← hA.2.2.1]; exact ⟨z, z.2, rfl⟩)
+      · simp only [Fin.isValue, Fin.val_one, one_ne_zero, ↓reduceIte]
+        exact hKBsub (by rw [← hB.2.2.1]; exact ⟨z, z.2, rfl⟩)⟩
+  let b : Fin 2 × Disk → Disk := fun iz =>
+    ⟨if iz.1 = 0 then ψA iz.2 else ψB iz.2, by
+      rcases iz with ⟨i, z⟩
+      fin_cases i
+      · simp only [Fin.isValue, Fin.zero_eta, Fin.val_zero, ↓reduceIte]
+        exact hKA'sub (by rw [← hA'.2.2.1]; exact ⟨z, z.2, rfl⟩)
+      · simp only [Fin.isValue, Fin.val_one, one_ne_zero, ↓reduceIte]
+        exact hKB'sub (by rw [← hB'.2.2.1]; exact ⟨z, z.2, rfl⟩)⟩
+  have ha_cont : Continuous a := by
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    apply Continuous.subtype_mk
+    fin_cases i
+    · simpa [a] using hA.1.comp continuous_subtype_val
+    · simpa [a] using hB.1.comp continuous_subtype_val
+  have hb_cont : Continuous b := by
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    apply Continuous.subtype_mk
+    fin_cases i
+    · simpa [b] using hA'.1.comp continuous_subtype_val
+    · simpa [b] using hB'.1.comp continuous_subtype_val
+  have ha_surj : Function.Surjective a := by
+    intro p
+    have hp : (p : ℂ) ∈ KA ∪ KB := by rw [hcov]; exact p.2
+    rcases hp with hp | hp
+    · rw [← hA.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(0, ⟨z, hz⟩), by apply Subtype.ext; simpa [a] using he⟩
+    · rw [← hB.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(1, ⟨z, hz⟩), by apply Subtype.ext; simpa [a] using he⟩
+  have hb_surj : Function.Surjective b := by
+    intro p
+    have hp : (p : ℂ) ∈ KA' ∪ KB' := by rw [hcov']; exact p.2
+    rcases hp with hp | hp
+    · rw [← hA'.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(0, ⟨z, hz⟩), by apply Subtype.ext; simpa [b] using he⟩
+    · rw [← hB'.2.2.1] at hp
+      rcases hp with ⟨z, hz, he⟩
+      exact ⟨(1, ⟨z, hz⟩), by apply Subtype.ext; simpa [b] using he⟩
+  have parameter_boundary_old : ∀ y : Fin 2 × Disk, ‖(a y : ℂ)‖ = 1 →
+      ∃ c : Circle,
+        ((a y : ℂ) = if y.1.1 = 0 then oldA c else oldB c) ∧
+        ((b y : ℂ) = if y.1.1 = 0 then newA c else newB c) := by
+    rintro ⟨i, z⟩ hy
+    fin_cases i
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hA.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKAsub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖φA (z : ℂ)‖ = 1 := by simpa [a] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hA.2.2.2.1 c
+      · simpa [b, c] using hA'.2.2.2.1 c
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hB.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKBsub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖φB (z : ℂ)‖ = 1 := by simpa [a] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hB.2.2.2.1 c
+      · simpa [b, c] using hB'.2.2.2.1 c
+  have parameter_boundary_new : ∀ y : Fin 2 × Disk, ‖(b y : ℂ)‖ = 1 →
+      ∃ c : Circle,
+        ((a y : ℂ) = if y.1.1 = 0 then oldA c else oldB c) ∧
+        ((b y : ℂ) = if y.1.1 = 0 then newA c else newB c) := by
+    rintro ⟨i, z⟩ hy
+    fin_cases i
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hA'.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKA'sub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖ψA (z : ℂ)‖ = 1 := by simpa [b] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hA.2.2.2.1 c
+      · simpa [b, c] using hA'.2.2.2.1 c
+    · have hz : ‖(z : ℂ)‖ = 1 := by
+        have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+        apply le_antisymm hle
+        by_contra hn
+        have hlt : ‖(z : ℂ)‖ < 1 := lt_of_not_ge hn
+        have hi := hB'.2.2.2.2 (z : ℂ) hlt
+        have hi' := interior_mono hKB'sub hi
+        rw [interior_closedBall (0 : ℂ) one_ne_zero] at hi'
+        have he : ‖ψB (z : ℂ)‖ = 1 := by simpa [b] using hy
+        simpa [Metric.mem_ball, dist_zero_right, he] using hi'
+      let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+      refine ⟨c, ?_, ?_⟩
+      · simpa [a, c] using hB.2.2.2.1 c
+      · simpa [b, c] using hB'.2.2.2.1 c
+  have word_boundary : ∀ (w : List (Signed Label)) (P P' : Disk),
+      WordRel w P P' → ‖(P : ℂ)‖ = 1 ∧ ‖(P' : ℂ)‖ = 1 := by
+    intro w P P' h
+    rcases h with ⟨i, j, hij, s, hl, hP, hP'⟩
+    constructor
+    · rw [hP]; simp [edgePoint, Complex.norm_exp]
+    · rw [hP']; simp [edgePoint, Complex.norm_exp]
+  have mixed_old : ∀ z z' : Disk, φA z = φB z' →
+      ∃ c c' : Circle, oldA c = oldB c' ∧ ψA z = newA c ∧ ψB z' = newB c' := by
+    intro z z' he
+    have hzA : φA z ∈ KA := by rw [← hA.2.2.1]; exact ⟨z, z.2, rfl⟩
+    have hzB : φB z' ∈ KB := by rw [← hB.2.2.1]; exact ⟨z', z'.2, rfl⟩
+    have hz : ‖(z : ℂ)‖ = 1 := by
+      have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hA.2.2.2.2 (z : ℂ) (lt_of_not_ge hn)
+      have hm : φA z ∈ interior KA ∩ KB := ⟨hi, he ▸ hzB⟩
+      rw [hdisj] at hm
+      exact hm
+    have hz' : ‖(z' : ℂ)‖ = 1 := by
+      have hle : ‖(z' : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z'.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hB.2.2.2.2 (z' : ℂ) (lt_of_not_ge hn)
+      have hm : φB z' ∈ interior KB ∩ KA := ⟨hi, he.symm ▸ hzA⟩
+      rw [hdisjB] at hm
+      exact hm
+    let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+    let c' : Circle := ⟨z', by simpa [Circle, Submonoid.unitSphere] using hz'⟩
+    refine ⟨c, c', ?_, ?_, ?_⟩
+    · rw [← hA.2.2.2.1 c, ← hB.2.2.2.1 c']
+      exact he
+    · exact hA'.2.2.2.1 c
+    · exact hB'.2.2.2.1 c'
+  have mixed_new : ∀ z z' : Disk, ψA z = ψB z' →
+      ∃ c c' : Circle, newA c = newB c' ∧ φA z = oldA c ∧ φB z' = oldB c' := by
+    intro z z' he
+    have hzA : ψA z ∈ KA' := by rw [← hA'.2.2.1]; exact ⟨z, z.2, rfl⟩
+    have hzB : ψB z' ∈ KB' := by rw [← hB'.2.2.1]; exact ⟨z', z'.2, rfl⟩
+    have hz : ‖(z : ℂ)‖ = 1 := by
+      have hle : ‖(z : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hA'.2.2.2.2 (z : ℂ) (lt_of_not_ge hn)
+      have hm : ψA z ∈ interior KA' ∩ KB' := ⟨hi, he ▸ hzB⟩
+      rw [hdisj'] at hm
+      exact hm
+    have hz' : ‖(z' : ℂ)‖ = 1 := by
+      have hle : ‖(z' : ℂ)‖ ≤ 1 := by simpa only [Metric.mem_closedBall, dist_zero_right] using z'.2
+      apply le_antisymm hle
+      by_contra hn
+      have hi := hB'.2.2.2.2 (z' : ℂ) (lt_of_not_ge hn)
+      have hm : ψB z' ∈ interior KB' ∩ KA' := ⟨hi, he.symm ▸ hzA⟩
+      rw [hdisjB'] at hm
+      exact hm
+    let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+    let c' : Circle := ⟨z', by simpa [Circle, Submonoid.unitSphere] using hz'⟩
+    refine ⟨c, c', ?_, ?_, ?_⟩
+    · rw [← hA'.2.2.2.1 c, ← hB'.2.2.2.1 c']
+      exact he
+    · exact hA.2.2.2.1 c
+    · exact hB.2.2.2.1 c'
+  refine ⟨a, b, ha_cont, hb_cont, ha_surj, hb_surj, ?_, ?_, ?_, ?_⟩
+  · intro y y' h
+    rcases word_boundary _ _ _ h with ⟨hy, hy'⟩
+    rcases parameter_boundary_old y hy with ⟨c, hc, hd⟩
+    rcases parameter_boundary_old y' hy' with ⟨c', hc', hd'⟩
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · exact hfwd false false c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+    · exact hfwd false true c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+    · exact hfwd true false c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+    · exact hfwd true true c c' _ _ _ _ (by simpa using hc) (by simpa using hc')
+        (by simpa using hd) (by simpa using hd') h
+  · intro y y' h
+    rcases word_boundary _ _ _ h with ⟨hy, hy'⟩
+    rcases parameter_boundary_new y hy with ⟨c, hd, hc⟩
+    rcases parameter_boundary_new y' hy' with ⟨c', hd', hc'⟩
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · exact hrev false false c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+    · exact hrev false true c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+    · exact hrev true false c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+    · exact hrev true true c c' _ _ _ _ (by simpa using hd) (by simpa using hd')
+        (by simpa using hc) (by simpa using hc') h
+  · intro y y' h
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · have hz : z = z' := Subtype.ext (hA.2.1 (by exact z.2) (by exact z'.2) (congrArg Subtype.val h))
+      subst z'; exact .refl _
+    · have he : φA z = φB z' := by simpa [a] using congrArg Subtype.val h
+      rcases mixed_old z z' he with ⟨c, c', hcc, hz, hz'⟩
+      exact hffib c c' _ _ hcc (by simpa [b] using hz) (by simpa [b] using hz')
+    · have he : φA z' = φB z := by simpa [a] using (congrArg Subtype.val h).symm
+      rcases mixed_old z' z he with ⟨c, c', hcc, hz', hz⟩
+      exact (hffib c c' _ _ hcc (by simpa [b] using hz') (by simpa [b] using hz)).symm
+    · have hz : z = z' := Subtype.ext (hB.2.1 z.2 z'.2 (congrArg Subtype.val h))
+      subst z'; exact .refl _
+  · intro y y' h
+    rcases y with ⟨i, z⟩; rcases y' with ⟨i', z'⟩
+    fin_cases i <;> fin_cases i'
+    · have hz : z = z' := Subtype.ext (hA'.2.1 z.2 z'.2 (congrArg Subtype.val h))
+      subst z'; exact .refl _
+    · have he : ψA z = ψB z' := by simpa [b] using congrArg Subtype.val h
+      rcases mixed_new z z' he with ⟨c, c', hcc, hz, hz'⟩
+      exact hrfib c c' _ _ hcc (by simpa [a] using hz) (by simpa [a] using hz')
+    · have he : ψA z' = ψB z := by simpa [b] using (congrArg Subtype.val h).symm
+      rcases mixed_new z' z he with ⟨c, c', hcc, hz', hz⟩
+      exact (hrfib c c' _ _ hcc (by simpa [a] using hz') (by simpa [a] using hz)).symm
+    · have hz : z = z' := Subtype.ext (hB'.2.1 z.2 z'.2 (congrArg Subtype.val h))
+      subst z'; exact .refl _
 
 lemma cutAndPaste_aux_triangle_chart_generators_aux_source_pos {Label : Type*}
     [DecidableEq Label]
