@@ -9705,7 +9705,22 @@ theorem cut_word_get_v {Label : Type*} (u v t : List (Signed Label)) (x : Signed
     (u ++ [x, x] ++ inverseWord v ++ t)[u.length + 2 + (v.length - 1 - k)]'(by
       simp [inverseWord]; omega) =
       inv ((u ++ [x] ++ v ++ [x] ++ t)[u.length + 1 + k]'(by simp; omega)) := by
-  sorry
+  have hj : v.length - 1 - k < v.length := by omega
+  rw [List.getElem_append_left (by simp [inverseWord]; omega)]
+  rw [List.getElem_append_right (by simp)]
+  simp only [List.length_append, List.length_cons, List.length_nil, zero_add]
+  simp only [Nat.add_sub_cancel_left]
+  simp only [inverseWord, List.getElem_map, List.getElem_reverse]
+  have hrev : v.length - 1 - (v.length - 1 - k) = k := by omega
+  change inv (v.get ⟨v.length - 1 - (v.length - 1 - k), by omega⟩) = _
+  have hfin : (⟨v.length - 1 - (v.length - 1 - k), by omega⟩ : Fin v.length) =
+      ⟨k, hk⟩ := Fin.ext hrev
+  rw [hfin, List.get_eq_getElem]
+  rw [List.getElem_append_left (by simp; omega)]
+  rw [List.getElem_append_left (by simp; omega)]
+  rw [List.getElem_append_right (by simp)]
+  simp only [List.length_append, List.length_cons, List.length_nil, zero_add,
+    Nat.add_sub_cancel_left]
 
 /-- Past the second `x` the two words agree (both continue with `t`). -/
 theorem cut_word_get_t {Label : Type*} (u v t : List (Signed Label)) (x : Signed Label)
