@@ -36160,6 +36160,16 @@
     [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
       :correction "new HEAD tested; baseline errors persist"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792024537437-12842-b879cce6",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f exact scope"
+      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and advances beyond 263f5d47. It defines Fin(runs+1)-indexed outer-subtype boundaries and proves the correctly oriented coercion equality to each ambient canonical boundary, providing the next fold’s representation bridge. The partial based van Kampen theorem is not assumed. Scope/hash match; registry 166/166; Main placeholders 1->1; remaining milestones are listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36168,7 +36178,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36186,7 +36196,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: HEAD changed to 1dea841, so closure was rebuilt; baseline still fails from line 1366 onward. Dependency coherence remains blocked and scoped files are untouched.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36576,7 +36586,11 @@
     {:job 7,
      :commit nil,
      :reason
-     "HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched."}]}
+     "HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched."}
+    {:job 8,
+     :commit nil,
+     :reason
+     "HEAD changed to 1dea841, so closure was rebuilt; baseline still fails from line 1366 onward. Dependency coherence remains blocked and scoped files are untouched."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
