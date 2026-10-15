@@ -501,10 +501,56 @@ theorem t99A01_cokernel_Z : Limits.IsZero
   sorry
 
 -- BEGIN SEAT AREA
+def t99A01_kernel_Z_aux_parametrize :
+    (Fin 2 → ℤ) →ₗ[ℤ] APMT99A01.DegreeKernel APMT99A01.degreeZ where
+  toFun v := ⟨![-2 * v 0 - 5 * v 1, v 0, 2 * v 1], by
+    simp [APMT99A01.degreeMap, APMT99A01.degreeZ, Fin.sum_univ_three]
+    ring⟩
+  map_add' x y := by
+    apply Subtype.ext
+    funext i
+    fin_cases i <;> simp <;> ring
+  map_smul' c x := by
+    apply Subtype.ext
+    funext i
+    fin_cases i <;> simp <;> ring
+
+lemma t99A01_kernel_Z_aux_bijective :
+    Function.Bijective t99A01_kernel_Z_aux_parametrize := by
+  constructor
+  · intro x y hxy
+    have h := congr_arg Subtype.val hxy
+    funext i
+    fin_cases i
+    · exact congr_fun h 1
+    · have h2 := congr_fun h 2
+      change 2 * x 1 = 2 * y 1 at h2
+      simpa using (mul_left_cancel₀ (by norm_num : (2 : ℤ) ≠ 0) h2)
+  · intro x
+    have hx : APMT99A01.degreeMap APMT99A01.degreeZ x.1 = 0 :=
+      LinearMap.mem_ker.mp x.2
+    have hx' : 2 * x.1 0 + 4 * x.1 1 + 5 * x.1 2 = 0 := by
+      simpa [APMT99A01.degreeMap, APMT99A01.degreeZ, Fin.sum_univ_three] using hx
+    have heven : ∃ b : ℤ, x.1 2 = 2 * b := by
+      refine ⟨-x.1 0 - 2 * x.1 1 - 2 * x.1 2, ?_⟩
+      omega
+    obtain ⟨b, hb⟩ := heven
+    refine ⟨![x.1 1, b], ?_⟩
+    apply Subtype.ext
+    funext i
+    fin_cases i
+    · change -2 * x.1 1 - 5 * b = x.1 0
+      omega
+    · rfl
+    · change 2 * b = x.1 2
+      omega
+
 theorem t99A01_kernel_Z : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeZ) ≅
       ModuleCat.of ℤ (Fin 2 → ℤ)) := by
-  sorry
+  exact ⟨LinearEquiv.toModuleIso
+    (LinearEquiv.ofBijective t99A01_kernel_Z_aux_parametrize
+      t99A01_kernel_Z_aux_bijective).symm⟩
 -- END SEAT AREA
 
 /-- **LIBRARY boundary.** The degree-zero integral homology of `X`. -/
