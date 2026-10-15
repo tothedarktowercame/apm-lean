@@ -1641,6 +1641,47 @@ noncomputable def polynomialSphereLift_baseLocalizationScalar : ℚ :=
     polynomialSphereRegularPoint).hom.hom
       polynomialSphereLift_baseRationalLocalization
 
+/-- Puncturing the three-sphere at the chosen regular point leaves a
+contractible space, so rational absolute-to-relative homology in degree three
+is an isomorphism. -/
+instance polynomialSphereLift_baseRationalLocalization_isIso :
+    IsIso (HomologicalComplex.homologyMap
+      (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint))) 3) := by
+  letI : ContractibleSpace
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) :=
+    (ConstructionTargets.HigherSphereLocalization.puncturedSphereEuclidean
+      (k := 1) polynomialSphereRegularPoint).contractibleSpace_iff.mpr inferInstance
+  exact ConstructionTargets.CoefficientContractiblePair.projection_isIso
+    ℚ _ 3 (by decide)
+
+/-- The comparison scalar is nonzero: both the rational localization map and
+the local chart normalization are isomorphisms, and the selected global class
+is the inverse image of `1`. -/
+theorem polynomialSphereLift_baseLocalizationScalar_ne_zero :
+    polynomialSphereLift_baseLocalizationScalar ≠ 0 := by
+  intro hzero
+  have hlocal : polynomialSphereLift_baseRationalLocalization = 0 := by
+    apply (ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom).1
+    exact hzero.trans ((ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom.map_zero).symm
+  have hglobal : t96A06_sphere3_rational_fundamentalClass = 0 := by
+    apply (ConcreteCategory.bijective_of_isIso
+      (HomologicalComplex.homologyMap
+        (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint))) 3)).1
+    exact hlocal.trans ((HomologicalComplex.homologyMap
+      (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint))) 3).hom.map_zero).symm
+  have hone := congrArg t96A06_sphere3_rational_H3Iso.hom.hom hglobal
+  simpa [t96A06_sphere3_rational_fundamentalClass] using hone
+
 /-- Positivity of the selected rational class is exactly the assertion that
 the normalization-comparison scalar is one. -/
 theorem polynomialSphereLift_base_localFundamentalClass_positive_iff :
@@ -2771,5 +2812,6 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
+#print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 
 end ConstructionTargets.t96A06Closure
