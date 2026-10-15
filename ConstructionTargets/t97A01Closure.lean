@@ -2674,6 +2674,45 @@ theorem torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
     simp only [Fin.val_last]
     exact pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
 
+/-- An inverse flattened coordinate belongs to a run exactly when its numeric
+index lies in that run's half-open cumulative-prefix interval. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1))
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1 = i ↔
+      pathTwoOpenSubdivisionRunPrefixLength S i.val ≤ j.val ∧
+        j.val < pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j
+  constructor
+  · intro hrun
+    have hlo := torusRP2_subdivisionRunPrefixLength_le_runOffset S z.1 z.2
+    have hhi := torusRP2_subdivisionRunOffset_lt_nextPrefix S z.1 z.2
+    have hflat := torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j
+    have hrunval := congrArg Fin.val hrun
+    have hpref := congrArg (pathTwoOpenSubdivisionRunPrefixLength S) hrunval
+    have hnext := congrArg
+      (fun r => pathTwoOpenSubdivisionRunPrefixLength S (r + 1)) hrunval
+    dsimp [z] at hlo hhi hrunval hpref hnext
+    omega
+  · rintro ⟨hlo, hhi⟩
+    have hboundary := pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
+    have hlen := pathTwoOpenSubdivisionRunPredLength_add_one S i
+    have hklt : j.val - pathTwoOpenSubdivisionRunPrefixLength S i.val <
+        (pathTwoOpenSubdivisionRunFamily S i).length := by
+      omega
+    let k : Fin (pathTwoOpenSubdivisionRunFamily S i).length :=
+      ⟨j.val - pathTwoOpenSubdivisionRunPrefixLength S i.val, hklt⟩
+    have hik : pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val = j.val := by
+      dsimp [k]
+      omega
+    have hz := torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j
+    exact (torusRP2_subdivisionRunOffset_run_unique S i z.1 k z.2
+      (hik.trans hz.symm)).symm
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2795,6 +2834,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
 #print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
