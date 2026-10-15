@@ -87901,27 +87901,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport concat_subpath with the normalized endpoint family; compare boundary H1, then B7-B10.",
+    "Cast concat_subpath homotopy; identify endpoint subpath with boundary, then B7-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name
-      "polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge",
-      :type "globally cast subpath equals based signed edge",
+    [{:name "polygonBoundaryConcat_cast_eq_canonical",
+      :type "cast subdivision concat equals based concat",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["orbitWedgeBase_eq_boundarySubdivisionVertex"],
+      :depends-on ["path_concat_cast_vertices"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
       :type "boundary H1 is signed-edge sum",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge"
+      ["polygonBoundaryConcat_cast_eq_canonical"
        "polygonBoundarySubdivisionConcat_hurewicz"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
@@ -87934,7 +87933,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked globally normalized subdivision factors.",
+    :reason "Banked concat endpoint transport.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87942,34 +87941,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 337f89a9a", :exit 0}],
+     {:cmd "git show --check ed6ade796", :exit 0}],
     :diagnostic-history
-    [{:cmd "normalization draft",
+    [{:cmd "transport draft",
       :exit 1,
-      :correction "removed a goal already closed by rw"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792027665516-12936-5747f6f5",
-     :commands
-     ["git show/diff-tree 337f89a9a"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 337f89a9a by topo-6 changes only the scoped target; fixture hash 3f4cdf5f...193ba matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Global and edge-derived endpoint normalizations differ only in proof terms supplied to Path.cast; path extensionality correctly identifies them, preserving the forward signed-edge factor. New compiled progress; remaining milestones are transporting concat_subpath with this family and comparing boundary H1, then B7-B10."},
-    :commit "337f89a9a",
+      :correction "made casts explicit"}],
+    :commit "ed6ade796",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "3f4cdf5fb2372dcbb1c37392046a154e76f2e73daa700962b1f198eeb29193ba"},
+     "1f98f0b2614bdbcf1089195e247af938055b526e573ca9b1ff576a078dc473c6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92226,7 +92211,8 @@
     :lemma-polygonboundarysignededgepathatbase-apply
     :lemma-polygonboundarysubdivisionconcat-hurewicz
     :lemma-orbitwedgebase-eq-boundarysubdivisionvertex
-    :lemma-polygonboundarycanonicalsubdivisionpathatbase-eq-signededge],
+    :lemma-polygonboundarycanonicalsubdivisionpathatbase-eq-signededge
+    :lemma-polygonboundaryconcat-cast-eq-canonical],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92694,4 +92680,31 @@
    :lemma-polygonboundarycanonicalsubdivisionpathatbase-eq-signededge,
    :kind :lemma,
    :depends-on [:lemma-orbitwedgebase-eq-boundarysubdivisionvertex],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryConcat_cast_eq_canonical",
+    :type "cast subdivision concat equals based concat"},
+   :lemma
+   {:name "polygonBoundaryConcat_cast_eq_canonical",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "cast subdivision concat equals based concat",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundaryconcat-cast-eq-canonical,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-cast-vertices],
+   :other-consumers [:t94J09]}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "path_concat_cast_vertices"},
+   :lemma {:name "path_concat_cast_vertices", :reported-by []},
+   :id :lemma-path-concat-cast-vertices,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}
