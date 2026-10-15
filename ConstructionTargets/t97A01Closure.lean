@@ -680,6 +680,101 @@ theorem torusRP2SkeletonFinFreeGroupMap_of (j : Fin 3) :
   rw [FreeGroup.lift_apply_of]
   rfl
 
+/-- In the positive circle orientation, the explicit free-group boundary
+word maps to the literal geometric boundary loop in the polygon skeleton. -/
+theorem torusRP2SkeletonFinFreeGroupMap_positiveBoundary
+    (h : circleIntegerLoopOneCoordinate = 1) :
+    torusRP2SkeletonFinFreeGroupMap
+        ((FreeGroup.of 2)⁻¹ * (FreeGroup.of 2)⁻¹ *
+          (FreeGroup.of 1)⁻¹ * (FreeGroup.of 0)⁻¹ *
+            FreeGroup.of 1 * FreeGroup.of 0) =
+      torusRP2SkeletonFundamentalGroupEquivWedge.symm
+        (Path.Homotopic.Quotient.mk
+          (polygonBoundaryIntegerLoopPath torusRP2PairingData)) := by
+  apply torusRP2SkeletonFundamentalGroupEquivWedge.injective
+  rw [torusRP2SkeletonFundamentalGroupEquivWedge.apply_symm_apply]
+  simp only [zpow_one, zpow_neg_one, map_mul, map_inv,
+    torusRP2SkeletonFinFreeGroupMap_of, map_one,
+    torusRP2SkeletonFundamentalGroupEquivWedge.apply_symm_apply]
+  symm
+  calc
+    _ = ((List.ofFn fun i : Fin torusRP2PairingData.edgeCount =>
+          polygonBoundaryExplicitEdgeClass torusRP2PairingData i).reverse.prod) :=
+      torusRP2GeometricBoundary_eq_signedEdgeProduct
+    _ = _ := by
+      rw [torusRP2SignedEdgeProduct_explicit, h]
+      simp only [zpow_one, zpow_neg_one, mul_one]
+      group
+
+/-- The analogous exact boundary transport in the negative circle
+orientation. -/
+theorem torusRP2SkeletonFinFreeGroupMap_negativeBoundary
+    (h : circleIntegerLoopOneCoordinate = -1) :
+    torusRP2SkeletonFinFreeGroupMap
+        (FreeGroup.of 2 * FreeGroup.of 2 * FreeGroup.of 1 * FreeGroup.of 0 *
+          (FreeGroup.of 1)⁻¹ * (FreeGroup.of 0)⁻¹) =
+      torusRP2SkeletonFundamentalGroupEquivWedge.symm
+        (Path.Homotopic.Quotient.mk
+          (polygonBoundaryIntegerLoopPath torusRP2PairingData)) := by
+  apply torusRP2SkeletonFundamentalGroupEquivWedge.injective
+  rw [torusRP2SkeletonFundamentalGroupEquivWedge.apply_symm_apply]
+  simp only [neg_neg, zpow_one, zpow_neg_one, map_mul, map_inv,
+    torusRP2SkeletonFinFreeGroupMap_of, map_one,
+    torusRP2SkeletonFundamentalGroupEquivWedge.apply_symm_apply]
+  symm
+  calc
+    _ = ((List.ofFn fun i : Fin torusRP2PairingData.edgeCount =>
+          polygonBoundaryExplicitEdgeClass torusRP2PairingData i).reverse.prod) :=
+      torusRP2GeometricBoundary_eq_signedEdgeProduct
+    _ = _ := by
+      rw [torusRP2SignedEdgeProduct_explicit, h]
+      simp only [neg_neg, zpow_one, zpow_neg_one, mul_one]
+      group
+
+/-- After transport to the skeleton, either orientation convention normally
+generates the literal geometric attaching loop. -/
+theorem torusRP2AttachingWord :
+    Subgroup.normalClosure ({
+      torusRP2SkeletonFinFreeGroupMap
+        ((if circleIntegerLoopOneCoordinate = 1 then
+            torusRP2PositiveBoundaryBasisHom
+          else torusRP2NegativeBoundaryBasisHom) torusRP2FrozenRelator)} :
+        Set (FundamentalGroup torusRP2PairingData.skeleton
+          torusRP2SkeletonBase)) =
+      Subgroup.normalClosure ({
+        torusRP2SkeletonFundamentalGroupEquivWedge.symm
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundaryIntegerLoopPath torusRP2PairingData))} :
+        Set (FundamentalGroup torusRP2PairingData.skeleton
+          torusRP2SkeletonBase)) := by
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · rw [if_pos h]
+    have hm := congrArg
+      (fun H : Subgroup (FreeGroup (Fin 3)) =>
+        H.map torusRP2SkeletonFinFreeGroupMap)
+      torusRP2PositiveBoundary_normalClosure
+    dsimp only at hm
+    rw [Subgroup.map_normalClosure _ _
+          torusRP2SkeletonFinFreeGroupMap_surjective,
+        Subgroup.map_normalClosure _ _
+          torusRP2SkeletonFinFreeGroupMap_surjective] at hm
+    simp only [Set.image_singleton] at hm
+    rw [← torusRP2SkeletonFinFreeGroupMap_positiveBoundary h]
+    exact hm.symm
+  · rw [if_neg (by omega : circleIntegerLoopOneCoordinate ≠ 1)]
+    have hm := congrArg
+      (fun H : Subgroup (FreeGroup (Fin 3)) =>
+        H.map torusRP2SkeletonFinFreeGroupMap)
+      torusRP2NegativeBoundary_normalClosure
+    dsimp only at hm
+    rw [Subgroup.map_normalClosure _ _
+          torusRP2SkeletonFinFreeGroupMap_surjective,
+        Subgroup.map_normalClosure _ _
+          torusRP2SkeletonFinFreeGroupMap_surjective] at hm
+    simp only [Set.image_singleton] at hm
+    rw [← torusRP2SkeletonFinFreeGroupMap_negativeBoundary h]
+    exact hm.symm
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
@@ -699,5 +794,8 @@ theorem torusRP2SkeletonFinFreeGroupMap_of (j : Fin 3) :
 #print axioms torusRP2PositiveBoundary_normalClosure
 #print axioms torusRP2NegativeBoundary_normalClosure
 #print axioms torusRP2SkeletonFinFreeGroupMap_of
+#print axioms torusRP2SkeletonFinFreeGroupMap_positiveBoundary
+#print axioms torusRP2SkeletonFinFreeGroupMap_negativeBoundary
+#print axioms torusRP2AttachingWord
 
 end ConstructionTargets.t97A01Closure
