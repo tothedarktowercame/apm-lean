@@ -88331,27 +88331,29 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Induct reassociation through within/cross-run successor cases; van Kampen; assemble.",
+    "Upgrade cross-run dependent successor; induct reassociation; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq",
+    [{:name
+      "torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq",
       :type
-      "final inverse coordinate has the last local offset in its run fiber",
+      "within-run successor offset equality after dependent run-length transport",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq"],
+      :depends-on
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88363,7 +88365,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact terminal run offset.",
+    :reason "Banked dependent within-run successor.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88373,28 +88375,16 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check aade24583", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792088801351-14433-5afba489",
-     :commands
-     ["git show/diff/check aade24583"
-      "sha256sum + placeholder recount from aade24583"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit aade24583 adds compiled, sorry-free progress beyond history 8bbb96926. The new theorem upgrades the terminal inverse-coordinate value equality to equality in its dependent Fin fiber via Fin.ext; orientation and the predLength+1 cast are correct. Only t97A01Closure.lean changed; recorded fixture SHA 79dc0af48b6b0bebc7ca25f6de3470d3f72a21455d2aa5591a404f26d38b6b5b matches. Gates pass; target/Main placeholders 0/1; registry 167/0; axioms standard. Reassociation, van Kampen, and assembly remain listed."},
-    :commit "aade24583",
+     {:cmd "git show --check 2fa9b9c4e", :exit 0}],
+    :commit "2fa9b9c4e",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "79dc0af48b6b0bebc7ca25f6de3470d3f72a21455d2aa5591a404f26d38b6b5b"},
+     "8b2742f56faced2ba568fcc066af53ce368fcb107e34b6ed4f4e58f2bd51edf1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94367,7 +94357,8 @@
     :lemma-torusrp2-subdivisionglobalprefixblockconcat-eq-flatintervalconcat
     :lemma-torusrp2-subdivisionglobalflatintervalconcat-at-endpoints-class
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero-eq
-    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last-offset-eq],
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last-offset-eq
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-cast-of-run-eq],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95962,4 +95953,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero-eq],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq",
+    :type
+    "within-run successor offset equality after dependent run-length transport"},
+   :lemma
+   {:name
+    "torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "within-run successor offset equality after dependent run-length transport",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-cast-of-run-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-last-offset-eq],
    :other-consumers []}]}
