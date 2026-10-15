@@ -88331,29 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Induct flattened fold equals subdivision; prove van Kampen; assemble.",
+    "Construct unique run/offset decomposition; induct fold equality; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex",
+    [{:name "torusRP2_subdivisionRunPrefixLength_strictMono",
       :type
-      "prefix-block factors are subdivision factors at flattened indices, bounded by next run boundary",
+      "cumulative run boundaries strictly increase from 0 to n+1",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class"],
+      ["torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex"],
+      :depends-on ["torusRP2_subdivisionRunPrefixLength_strictMono"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88365,36 +88363,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked flattened run-factor indices.",
+    :reason "Banked cumulative run-boundary order.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 866b5689a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792064825324-13979-4a947c00",
-     :commands
-     ["git show/diff/check 866b5689a"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 866b5689a adds compiled, sorry-free progress beyond a25fccb0f. It identifies each prefix-block factor with the original subdivision factor at flattened index prefixLength(i)+k and proves that index is strictly below the next run boundary. Only t97A01Closure.lean changed; fixture SHA 1d2fb744b0a0098343e4c9ac15e8007aa9a565101ea38f53c83adf3d8670b58f matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Index orientation, Fin coercion, and strict bound are correct. Flattened-fold induction, van Kampen, and final assembly remain explicitly listed."},
-    :commit "866b5689adfa0f863971885e76273bf1a12d5106",
+     {:cmd "git show --check 0b1a5be91", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Main before build completed",
+      :exit 1,
+      :correction "waited for build; reran successfully"}],
+    :commit "0b1a5be91e65f149b950a3ad1b53e11a5bbb1a6c",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "1d2fb744b0a0098343e4c9ac15e8007aa9a565101ea38f53c83adf3d8670b58f"},
+     "e441b95cd80023e9877548ce42992cc8d66dd49cebfe3eb07bd323c95f87e4b0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94222,7 +94211,8 @@
     :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class
     :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-class
     :lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class
-    :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-globalindex],
+    :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-globalindex
+    :lemma-torusrp2-subdivisionrunprefixlength-strictmono],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94988,4 +94978,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunPrefixLength_strictMono",
+    :type "cumulative run boundaries strictly increase from 0 to n+1"},
+   :lemma
+   {:name "torusRP2_subdivisionRunPrefixLength_strictMono",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cumulative run boundaries strictly increase from 0 to n+1",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunprefixlength-strictmono,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunprefixblockpiece-apply-globalindex],
    :other-consumers []}]}
