@@ -542,6 +542,25 @@ theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
 
 #print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
 
+/-- For a boundaryless self model, manifold `C¹` regularity is ordinary
+`C¹` regularity of the preferred extended-chart expression at its base
+point. -/
+theorem contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
+    {E F M N : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    (f : M → N) (x : M)
+    (h : ContMDiffAt 𝓘(ℝ, E) 𝓘(ℝ, F) 1 f x) :
+    ContDiffAt ℝ 1 (writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, F) x f)
+      (extChartAt 𝓘(ℝ, E) x x) := by
+  have h' := (contMDiffAt_iff.mp h).2
+  simpa only [writtenInExtChartAt, modelWithCornersSelf_coe, Set.range_id,
+    contDiffWithinAt_univ] using h'
+
+#print axioms contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
+
 /-- In the product of two preferred source charts, the difference of the two
 preferred target-chart expressions has signed-coproduct derivative.  Taking
 the source models to be a surface and a circle gives the analytic incidence
