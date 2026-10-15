@@ -1300,8 +1300,48 @@ lemma apm_t01A04_tbp_V_open (i : Fin 2) : IsOpen (apm_t01A04_tbp_V i) := by
   sorry
 
 -- BEGIN SEAT AREA
+def apm_t01A04_tbp_V_disjoint_aux_raw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → ℝ
+  | .inl q => (q.1 : ℂ).re
+  | .inr p => (apm_t01a04_sheetPoint p.1 : ℂ).re
+
+lemma apm_t01A04_tbp_V_disjoint_aux_raw_respects {u v}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel u v) :
+    apm_t01A04_tbp_V_disjoint_aux_raw u =
+      apm_t01A04_tbp_V_disjoint_aux_raw v := by
+  induction h with
+  | rel _ _ h => cases h <;> rfl
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_tbp_V_disjoint_aux_value : apm_t01a04_TorusCover → ℝ :=
+  Quotient.lift apm_t01A04_tbp_V_disjoint_aux_raw
+    (fun _ _ h => apm_t01A04_tbp_V_disjoint_aux_raw_respects h)
+
+lemma apm_t01A04_tbp_V_disjoint_aux_sign (i : Fin 2)
+    {e : apm_t01a04_TorusCover} (he : e ∈ apm_t01A04_tbp_V i) :
+    if i = 0 then 0 < apm_t01A04_tbp_V_disjoint_aux_value e
+    else apm_t01A04_tbp_V_disjoint_aux_value e < 0 := by
+  rcases he with ⟨r, hr, rfl⟩
+  fin_cases i <;> cases r with
+  | inl q =>
+      simpa [apm_t01A04_tbp_V_disjoint_aux_value,
+        apm_t01A04_tbp_V_disjoint_aux_raw, apm_t01a04_sheetPoint,
+        Circle.exp, Complex.exp_mul_I] using hr.1
+  | inr p =>
+      simp_all [apm_t01A04_tbp_V_disjoint_aux_value,
+        apm_t01A04_tbp_V_disjoint_aux_raw, apm_t01a04_sheetPoint,
+        Circle.exp, Complex.exp_mul_I]
+
 lemma apm_t01A04_tbp_V_disjoint : Pairwise (Function.onFun Disjoint apm_t01A04_tbp_V) := by
-  sorry
+  intro i j hij
+  change Disjoint (apm_t01A04_tbp_V i) (apm_t01A04_tbp_V j)
+  rw [Set.disjoint_left]
+  intro e hei hej
+  have hi := apm_t01A04_tbp_V_disjoint_aux_sign i hei
+  have hj := apm_t01A04_tbp_V_disjoint_aux_sign j hej
+  fin_cases i <;> fin_cases j <;> simp_all <;> linarith
 -- END SEAT AREA
 
 lemma apm_t01A04_tbp_preimage :

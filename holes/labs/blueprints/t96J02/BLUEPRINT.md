@@ -405,3 +405,19 @@ Output of `#print axioms apm_t96j02`:
 The main theorem and both assembly theorems have no `sorry`; `sorryAx` enters
 only through the ten unfinished top-level leaves (four geometric and six
 algebraic).
+
+## Cut-and-paste bridge (2026-10-14)
+
+`t96J02_kleinSquarePolygonQuotient_homeomorph_diskPolygon` is now a sorry-free
+assembly.  The design is in the Lean section `T96J02CutAndPaste`: an `I`-equivariant
+radial chart from the disk to the ℓ¹ diamond, then a cut along the imaginary
+axis with each half mapped affinely onto one triangle of the square.  Raw maps go
+both ways (`t96J02_cut_raw`, `t96J02_paste_raw`).  The leaves are continuity
+(`cut_continuous`, `paste_continuous`), compatibility with the generators
+(`cut_rel`, `paste_rel`) and the two round trips (`paste_cut`, `cut_paste`), plus
+the elementary facts `edge_zero_iff`, `edge_two_iff`, the chart's continuity, and
+the vertex and corner classes.  Each geometric leaf receives the facts it needs as
+explicit hypotheses.  Corner cases: on the disk, the vertex `I` (in the `a` case)
+and `-1` (in the `b` case) map to square corners.  On the square, `t = 0` maps to
+disk vertices.  In `paste_cut`, side `S3` of the diamond comes back as `-I • x`
+(related by `b`).  In `cut_paste`, the top edge `v = 1` comes back as `(1-u, 0)`.

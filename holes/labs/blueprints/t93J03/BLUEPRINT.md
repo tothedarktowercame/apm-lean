@@ -202,3 +202,18 @@ Output of `#print axioms apm_t93j03`:
 The main theorem itself and the original fundamental-group library theorem
 contain no `sorry`; `sorryAx` enters only through the new leaves and the
 pre-existing cyclic-cover lemma.
+
+## Cyclic cover for ⟨a⟩ (2026-10-14)
+
+`t93J03_cyclicCover_zpowers_generatorA` is now a sorry-free assembly; the design is in
+the Lean section `T93J03CyclicCover`.
+- The cover is `C = ℝ² \ {0}`, and its embedding into the plane is the inclusion.
+- `E(x,y) = eʸ(cos 2πx, sin 2πx)` is the quotient of the plane by ⟨a⟩.
+- `pQ = mk ∘ L` (log-polar), and it is the quotient of `C` by the ℤ-action
+  `n • (x,y) = eⁿ(x, (-1)ⁿ y)`, which is the image of `b`.  Mathlib's
+  `isQuotientCoveringMap_of_properlyDiscontinuousSMul` then makes `pQ` a covering.
+- The image of π₁(C) is the preimage of ⟨a⟩ under `orbitEndpointMonodromy`
+  (`aux_range`).
+- ⟨a⟩ is characteristic (`aux_characteristic`): it is exactly the set of elements
+  conjugate to their own inverse, because the projection onto the `b` coordinate is a
+  homomorphism.  So the computation holds for every identification `e` (`aux_transport`).

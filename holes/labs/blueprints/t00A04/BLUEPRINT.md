@@ -28,15 +28,79 @@ compact manifolds.
 
 ## Lemmas
 
-### `t00A04_manifold_identity_not_nullhomotopic` — LIBRARY
+### `t00A04_model_subsingleton_of_finrank_zero`
 
-**Statement in words.** The identity of any nontrivial compact Hausdorff
-finite-dimensional manifold without boundary is not homotopic to a constant.
+**Statement.** A finite-dimensional real normed space of finrank zero is a
+subsingleton.
 
-**Why true.** Split on the model dimension.  In dimension zero, manifold
-charts make the space discrete; a homotopy from the identity to one point
-would give a path between distinct points.  In positive dimension, use the
-mod-2 fundamental class: a nonempty compact boundaryless `n`-manifold has
+**Proof route / Mathlib tools.** Use `Module.finrank_zero_iff` (or
+`FiniteDimensional.finrank_eq_zero`) to get that every vector is zero, then
+`subsingleton_iff`.  If the exact iff is awkward, apply
+`FiniteDimensional.finrank_eq_zero_iff` and the standard `Subsingleton` instance
+for a zero module.
+
+**Expected size.** 10--30 lines.  **Independent:** yes.
+
+**Truth check.** The scalar field is `ℝ`, hence nontrivial; the result would
+need care over the zero ring, but that degeneracy is absent here.
+
+### `t00A04_manifold_discrete_of_model_subsingleton`
+
+**Statement.** A manifold modelled on a subsingleton normed space is discrete.
+
+**Proof route / Mathlib tools.** For each `x`, use
+`isOpen_range_chartAt`/`ChartedSpace.chartAt`, the chart source neighbourhood,
+and injectivity of `chartAt I x` on its source.  Since the target is a
+subsingleton, every point in the source equals `x`; hence `{x}` is a
+neighbourhood and is open.  Finish with `discreteTopology_iff_isOpen_singleton`
+(search nearby declarations if the spelling differs).
+
+**Expected size.** 40--90 lines.  **Independent:** yes; `Subsingleton E` is an
+explicit instance rather than a dependency on the finrank lemma.
+
+**Truth check.** Charts have open source containing their centre, so no
+connectedness or nonemptiness assumption is hidden.  The empty `X` case is
+also discrete.
+
+### `t00A04_discrete_nullhomotopic_identity_subsingleton`
+
+**Statement.** If the identity of a discrete space admits the blueprint's
+real-parameter null-homotopy, the space is a subsingleton.
+
+**Proof route / Mathlib tools.** For fixed `x`, compose the homotopy with
+`Continuous.continuousAt` or use `ContinuousMap`; the map `t ↦ H (x,t)` is
+continuous.  Its image of connected `Set.univ : Set ℝ` is connected via
+`IsConnected.image`, and a connected subset of a discrete space is a
+subsingleton (`IsConnected.subsingleton` / `isPreconnected_iff_subsingleton`
+in a discrete topology).  Compare its values at `0` and `1`, then rewrite with
+the endpoint hypotheses.  Repeat for arbitrary `x` to show all points equal to
+the chosen constant.
+
+**Expected size.** 35--80 lines.  **Independent:** yes.
+
+**Truth check.** The homotopy parameter is all of `ℝ`, not `I`; `ℝ` is
+connected and both endpoints lie in it.  For empty `X`, `Subsingleton X` is
+valid and the existential null-homotopy is in fact impossible if `X` is empty
+and the codomain is also `X`.
+
+### `t00A04_nontrivial_not_subsingleton`
+
+**Statement.** A `Nontrivial` type cannot be a `Subsingleton`.
+
+**Proof route / Mathlib tools.** `not_subsingleton_iff_nontrivial` (or obtain
+`⟨x,y,hxy⟩` from `exists_pair_ne X` and contradict `Subsingleton.elim x y`).
+
+**Expected size.** 5--15 lines.  **Independent:** yes.
+
+**Truth check.** This is exactly the typeclass meaning of `Nontrivial`.
+
+### `t00A04_positive_dimensional_manifold_identity_not_nullhomotopic` — LIBRARY
+
+**Statement in words.** The identity of a positive-dimensional nontrivial
+compact Hausdorff manifold without boundary is not homotopic to a constant.
+
+**Why true.** Use the mod-2 fundamental class: a nonempty compact boundaryless
+positive-dimensional `n`-manifold has
 nonzero `H_n(-; F₂)`, while a null-homotopic identity induces the zero map in
 positive homology and also induces the identity.  This is precisely the global
 fundamental-class/local-to-global theorem absent from the current sorry-free
@@ -46,15 +110,23 @@ Mayer--Vietoris sequence; the worklist explicitly warns not to claim a
 fundamental class from the completed range lemmas.
 
 **Expected size.** LIBRARY, 300+ lines (or short once the compact-manifold
-fundamental-class program lands).
+fundamental-class program lands).  This is a genuine missing foundation and
+should not be split into abstract “invariant” leaves that merely repackage the
+same theorem.
 
 **Dependencies.** Definitions only.  No other blueprint lemma.
 
-**Truth check.** Checked the zero-dimensional endpoints: singleton is excluded
-by `Nontrivial`; two or more discrete points have no path joining distinct
-components.  Checked the standard positive-dimensional cases `S¹` and `Sⁿ`;
-their positive top homology obstructs contraction.  A closed manifold need not
-be orientable, which is why coefficients must be `F₂`, rather than `ℤ`.
+**Truth check.** Checked the standard positive-dimensional cases `S¹` and
+`Sⁿ`; their positive top homology obstructs contraction.  A closed manifold
+need not be orientable, which is why coefficients must be `F₂`, rather than
+`ℤ`.  Compactness and boundarylessness are both essential.
+
+### `t00A04_manifold_identity_not_nullhomotopic` (assembly, proved)
+
+Splits `Module.finrank ℝ E` with `Nat.eq_zero_or_pos`.  The zero branch installs
+the explicit `Subsingleton E` and `DiscreteTopology X` instances and combines
+the three small topology leaves with `Nontrivial X`; the positive branch calls
+the sole remaining LIBRARY leaf.  It contains no `sorry` itself.
 
 ### `t00A04_retract_inclusion_not_nullhomotopic` (already proved)
 
@@ -75,8 +147,10 @@ only continuity of `r` is used when postcomposing the homotopy.
 
 ## Dependency layers
 
-* **Layer 1:** `t00A04_manifold_identity_not_nullhomotopic` (LIBRARY).
-* **Layer 2 (already proved):** the retraction lemma and `apm_t00a04` assembly.
+* **Layer 1, all independent:** the five new leaves above.  Four are small;
+  only the positive-dimensional fundamental-class leaf is LIBRARY.
+* **Layer 2:** `t00A04_manifold_identity_not_nullhomotopic` (sorry-free assembly).
+* **Layer 3 (already proved):** the retraction lemma and `apm_t00a04`.
 
 ## Compilation and axioms
 
@@ -93,5 +167,5 @@ holes/labs/blueprints/t00A04/Blueprint.lean:14:8: warning: declaration uses `sor
 'apm_t00a04' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The single warning is exactly the single LIBRARY lemma.  The retraction lemma
-and main theorem contain no direct `sorry`.
+The warnings are exactly the five independent leaves.  The manifold assembly,
+retraction lemma, and main theorem contain no direct `sorry`.

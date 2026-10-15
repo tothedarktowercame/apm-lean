@@ -32,15 +32,639 @@ def h : C(ProductSpace, ProductSpace) where
 
 end T98J01
 
-/-- LIBRARY: rational Künneth/Mayer–Vietoris and trace computation for the
-explicit product map. -/
-theorem t98J01_productSphereCircle_homology_traces :
-    HasLefschetzNumber T98J01.h 8 := by
-  sorry
+def t98J01_rotationCM : C(T98J01.S2, T98J01.S2) :=
+  ⟨T98J01.rotation, by unfold T98J01.rotation; fun_prop⟩
 
-/-- The circle reflection of `Main.lean` as a bundled continuous map. -/
 def t98J01_reflectionCM : C(T98J01.S1, T98J01.S1) :=
   ⟨T98J01.reflection, by unfold T98J01.reflection; fun_prop⟩
+
+/-- Seat: rational homology of the printed two-sphere is finite-dimensional
+in every degree. -/
+private def t98J01_sphere_homology_finiteDimensional_aux_homeomorph :
+    T98J01.S2 ≃ₜ T02A06.euclideanUnitSphere 3 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2.1, x.1.2.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show ∑ i : Fin 3, ‖(WithLp.toLp 2 ![x.1.1, x.1.2.1, x.1.2.2] :
+        EuclideanSpace ℝ (Fin 3)) i‖ ^ 2 = 1 by
+      rw [show (∑ i : Fin 3, ‖(WithLp.toLp 2 ![x.1.1, x.1.2.1, x.1.2.2] :
+          EuclideanSpace ℝ (Fin 3)) i‖ ^ 2) =
+          ‖x.1.1‖ ^ 2 + ‖x.1.2.1‖ ^ 2 + ‖x.1.2.2‖ ^ 2 by
+        norm_num [Fin.sum_univ_succ, add_assoc]]
+      simpa [Real.norm_eq_abs, sq_abs, add_assoc] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1, x.1 2), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_succ] at hx
+    simp only [Fin.sum_univ_succ, Fin.val_zero, Fin.sum_univ_zero,
+      WithLp.ofLp_toLp, add_zero] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + (‖x.1 1‖ ^ 2 + ‖x.1 2‖ ^ 2) := by positivity
+    have hh0 := congrArg (fun r : ℝ => r ^ 2) hx
+    change (Real.sqrt (‖x.1 0‖ ^ 2 + (‖x.1 1‖ ^ 2 + ‖x.1 2‖ ^ 2))) ^ 2 = 1 ^ 2 at hh0
+    rw [Real.sq_sqrt hs] at hh0
+    simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hh0⟩
+  left_inv x := rfl
+  right_inv x := by
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+private noncomputable def t98J01_sphere_homology_finiteDimensional_aux_iso (k : ℕ) :
+    ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k ≅
+      ConstructionTargets.CoefficientContractiblePair.H ℚ k
+        (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 2)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+    (TopCat.isoOfHomeo t98J01_sphere_homology_finiteDimensional_aux_homeomorph)
+
+private theorem t98J01_sphere_homology_finiteDimensional_aux_of_iso
+    {M N : ModuleCat ℚ} (e : M ≅ N) [FiniteDimensional ℚ N] :
+    FiniteDimensional ℚ M := by
+  apply FiniteDimensional.of_injective e.hom.hom
+  intro x y hxy
+  have := congrArg e.inv.hom hxy
+  simpa using this
+
+private theorem t98J01_sphere_homology_finiteDimensional_aux_of_isZero
+    {M : ModuleCat ℚ} (h : CategoryTheory.Limits.IsZero M) :
+    FiniteDimensional ℚ M := by
+  letI : Subsingleton M := ModuleCat.subsingleton_of_isZero h
+  exact FiniteDimensional.of_injective
+    (0 : M →ₗ[ℚ] (Fin 0 → ℚ)) (fun _ _ _ => Subsingleton.elim _ _)
+
+theorem t98J01_sphere_homology_finiteDimensional :
+    ∀ k, FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k) := by
+  intro k
+  rcases k with (_ | _ | _ | k)
+  · letI := t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H0
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso 0)
+  · letI := t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H1
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso 1)
+  · letI := t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H2
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso 2)
+  · let hz : CategoryTheory.Limits.IsZero
+        (ConstructionTargets.CoefficientContractiblePair.H ℚ (k + 3)
+          (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 2))) := by
+      let e₁ := ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 2 (k + 2) (by omega)
+      let e₀ := ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k + 1) (by omega)
+      exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ (k + 1) (by omega)).of_iso
+        (e₁ ≪≫ e₀)
+    letI := t98J01_sphere_homology_finiteDimensional_aux_of_isZero hz
+    exact t98J01_sphere_homology_finiteDimensional_aux_of_iso
+      (t98J01_sphere_homology_finiteDimensional_aux_iso (k + 3))
+
+/-- Seat: rational homology of the printed two-sphere vanishes above degree 2. -/
+theorem t98J01_sphere_homology_vanishes_above_two_aux_standard
+    (k : ℕ) (hk : 2 < k) :
+    CategoryTheory.Limits.IsZero
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 3) k) := by
+  let e₂ : ConstructionTargets.RationalLefschetz.Homology
+      (T02A06.euclideanUnitSphere 3) k ≅
+      ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) (k - 1) := by
+    simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+      (ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 2 (k - 1) (by omega))
+  let e₁ : ConstructionTargets.RationalLefschetz.Homology
+      (T02A06.euclideanUnitSphere 2) (k - 1) ≅
+      ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 1) (k - 2) := by
+    have hdeg : k - 2 + 1 = k - 1 := by omega
+    simpa only [hdeg] using
+      (ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k - 2) (by omega))
+  have hzero := ConstructionTargets.SphereZeroCoefficients.positive_vanishing
+    ℚ (k - 2) (by omega)
+  exact (hzero.of_iso e₁).of_iso e₂
+
+noncomputable def t98J01_sphere_homology_vanishes_above_two_aux_homeomorph :
+    T98J01.S2 ≃ₜ T02A06.euclideanUnitSphere 3 where
+  toFun p := ⟨WithLp.toLp 2 ![p.1.1, p.1.2.1, p.1.2.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+      Fin.sum_univ_three]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
+      Matrix.tail_cons, WithLp.ofLp_toLp]
+    rw [show ‖p.1.1‖ ^ 2 + ‖p.1.2.1‖ ^ 2 + ‖p.1.2.2‖ ^ 2 = 1 by
+      simpa [Real.norm_eq_abs, sq_abs, add_assoc] using p.2]
+    norm_num⟩
+  invFun p := ⟨(p.1 0, p.1 1, p.1 2), by
+    have hp : ‖p.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using p.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_three] at hp
+    have hs : 0 ≤ ‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2 + ‖p.1 2‖ ^ 2 := by positivity
+    have hh : (Real.sqrt (‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2 + ‖p.1 2‖ ^ 2)) ^ 2 = 1 := by
+      rw [hp]
+      norm_num
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hh⟩
+  left_inv p := by
+    apply Subtype.ext
+    rfl
+  right_inv p := by
+    apply Subtype.ext
+    ext i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+theorem t98J01_sphere_homology_vanishes_above_two :
+    ∀ k, 2 < k → Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 k) := by
+  intro k hk
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)
+  let e : TopCat.of T98J01.S2 ≅ TopCat.of (T02A06.euclideanUnitSphere 3) :=
+    TopCat.isoOfHomeo t98J01_sphere_homology_vanishes_above_two_aux_homeomorph
+  exact ModuleCat.isZero_iff_subsingleton.mp
+    ((t98J01_sphere_homology_vanishes_above_two_aux_standard k hk).of_iso
+      (F.mapIso e))
+
+/-- Seat: the half-turn has trace `1` on rational `H₀(S²)`. -/
+noncomputable def t98J01_rotation_trace_zero_aux_homeomorph :
+    T98J01.S2 ≃ₜ T02A06.euclideanUnitSphere 3 where
+  toFun p := ⟨WithLp.toLp 2 ![p.1.1, p.1.2.1, p.1.2.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show (∑ i : Fin 3, ‖(WithLp.toLp 2 ![p.1.1, p.1.2.1, p.1.2.2] :
+        EuclideanSpace ℝ (Fin 3)) i‖ ^ 2) = 1 by
+      norm_num [Fin.sum_univ_succ, Real.norm_eq_abs, sq_abs]
+      simpa [add_assoc] using p.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1, x.1 2), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq] at hx
+    norm_num [Fin.sum_univ_succ] at hx
+    have hh : (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 + ‖x.1 2‖ ^ 2) = 1 := by
+      simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hx
+    simpa [Real.norm_eq_abs, sq_abs, add_assoc] using hh⟩
+  left_inv p := by ext <;> rfl
+  right_inv x := by ext i; fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+theorem t98J01_rotation_trace_zero :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 0).hom = 1 := by
+  letI : PathConnectedSpace T98J01.S2 :=
+    t98J01_rotation_trace_zero_aux_homeomorph.symm.surjective.pathConnectedSpace
+      t98J01_rotation_trace_zero_aux_homeomorph.symm.continuous
+  let p : T98J01.S2 := ⟨(0, 0, 1), by norm_num⟩
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℚ p
+  have hmap : ConstructionTargets.RationalLefschetz.induced
+      t98J01_rotationCM 0 = CategoryTheory.CategoryStruct.id _ := by
+    apply (CategoryTheory.cancel_mono e.hom).mp
+    simpa [e, ConstructionTargets.RationalLefschetz.induced,
+      ConstructionTargets.CoefficientH0.singularPostcomposition] using
+      (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ
+        t98J01_rotationCM)
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0) :=
+    FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  rw [hmap]
+  change LinearMap.trace ℚ _ LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have he : (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 0) ≃ₗ[ℚ] ℚ :=
+    e.toLinearEquiv
+  rw [he.finrank_eq]
+  simp
+
+/-- Seat: the half-turn has trace `0` on rational `H₁(S²)`. -/
+theorem t98J01_rotation_trace_one :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 1)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 1).hom = 0 := by
+  let e := t98J01_sphere_homology_finiteDimensional_aux_iso 1 ≪≫
+    ConstructionTargets.CoefficientSphereEndpoints.rationalS2H1
+  letI : Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 1) :=
+    ⟨fun x y => e.toLinearEquiv.injective (Subsingleton.elim _ _)⟩
+  have hmap :
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 1).hom = 0 :=
+    Subsingleton.elim _ _
+  rw [hmap]
+  simp
+
+/-- Seat: the orientation-preserving half-turn has trace `1` on `H₂(S²; ℚ)`. -/
+private def t98J01_rotation_trace_two_aux_homotopy :
+    ContinuousMap.Homotopy t98J01_rotationCM (ContinuousMap.id T98J01.S2) := by
+  let F : unitInterval × T98J01.S2 → T98J01.S2 := fun tx =>
+    let a := Real.pi * (1 - tx.1.1)
+    let c := Real.cos a
+    let s := Real.sin a
+    ⟨(c * tx.2.1.1 - s * tx.2.1.2.1,
+      s * tx.2.1.1 + c * tx.2.1.2.1, tx.2.1.2.2), by
+        have htrig := Real.sin_sq_add_cos_sq a
+        have hp := tx.2.2
+        dsimp only [c, s]
+        nlinarith⟩
+  have hF : Continuous F := by
+    apply Continuous.subtype_mk
+    dsimp only [F]
+    fun_prop
+  refine ContinuousMap.Homotopy.mk
+    (f₀ := t98J01_rotationCM) (f₁ := ContinuousMap.id T98J01.S2) ⟨F, hF⟩ ?_ ?_
+  · intro x
+    apply Subtype.ext
+    simp [F, t98J01_rotationCM, T98J01.rotation]
+  · intro x
+    apply Subtype.ext
+    simp [F]
+
+theorem t98J01_rotation_trace_two :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S2 2)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_rotationCM 2).hom = 1 := by
+  let M := ConstructionTargets.RationalLefschetz.Homology T98J01.S2 2
+  let e : M ≅ ModuleCat.of ℚ ℚ :=
+    t98J01_sphere_homology_finiteDimensional_aux_iso 2 ≪≫
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H2
+  letI : FiniteDimensional ℚ M :=
+    FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  have hmap : ConstructionTargets.RationalLefschetz.induced
+      t98J01_rotationCM 2 = CategoryTheory.CategoryStruct.id M := by
+    simpa [ConstructionTargets.RationalLefschetz.induced, M] using
+      (ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+        (ModuleCat ℚ) (ModuleCat.of ℚ ℚ)
+          ⟨t98J01_rotation_trace_two_aux_homotopy⟩ 2)
+  rw [hmap]
+  change LinearMap.trace ℚ M LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have he : M ≃ₗ[ℚ] ℚ := e.toLinearEquiv
+  rw [he.finrank_eq]
+  simp
+
+/-- Sorry-free assembly of the five independent two-sphere leaves. -/
+theorem t98J01_rotation_lefschetz :
+    HasLefschetzNumber t98J01_rotationCM 2 := by
+  refine ⟨t98J01_sphere_homology_finiteDimensional, 2, ?_, ?_⟩
+  · exact t98J01_sphere_homology_vanishes_above_two
+  · norm_num [Finset.sum_range_succ, t98J01_rotation_trace_zero,
+      t98J01_rotation_trace_one, t98J01_rotation_trace_two]
+
+/-- Seat: rational homology of the printed circle is finite-dimensional in
+every degree. -/
+private def t98J01_circle_homology_finiteDimensional_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show ∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+        EuclideanSpace ℝ (Fin 2)) i‖ ^ 2 = 1 by
+      rw [show (∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+          EuclideanSpace ℝ (Fin 2)) i‖ ^ 2) = ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 by
+        norm_num [Fin.sum_univ_succ]]
+      simpa [Real.norm_eq_abs, sq_abs] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_succ] at hx
+    simp only [Fin.sum_univ_succ, Fin.val_zero, Fin.sum_univ_zero,
+      WithLp.ofLp_toLp, add_zero] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+    have hh := congrArg (fun r : ℝ => r ^ 2) hx
+    change (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 ^ 2 at hh
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv x := rfl
+  right_inv x := by
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+private noncomputable def t98J01_circle_homology_finiteDimensional_aux_iso (k : ℕ) :
+    ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k ≅
+      ConstructionTargets.CoefficientContractiblePair.H ℚ k
+        (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+    (TopCat.isoOfHomeo t98J01_circle_homology_finiteDimensional_aux_homeomorph)
+
+private theorem t98J01_circle_homology_finiteDimensional_aux_of_iso
+    {M N : ModuleCat ℚ} (e : M ≅ N) [FiniteDimensional ℚ N] :
+    FiniteDimensional ℚ M := by
+  apply FiniteDimensional.of_injective e.hom.hom
+  intro x y hxy
+  have := congrArg e.inv.hom hxy
+  simpa using this
+
+private theorem t98J01_circle_homology_finiteDimensional_aux_of_isZero
+    {M : ModuleCat ℚ} (h : CategoryTheory.Limits.IsZero M) :
+    FiniteDimensional ℚ M := by
+  letI : Subsingleton M := ModuleCat.subsingleton_of_isZero h
+  exact FiniteDimensional.of_injective
+    (0 : M →ₗ[ℚ] (Fin 0 → ℚ)) (fun _ _ _ => Subsingleton.elim _ _)
+
+theorem t98J01_circle_homology_finiteDimensional :
+    ∀ k, FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k) := by
+  intro k
+  rcases k with (_ | _ | k)
+  · letI := t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (ConstructionTargets.CoefficientH0.sphereH0 ℚ 1)
+    exact t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (t98J01_circle_homology_finiteDimensional_aux_iso 0)
+  · letI := t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (ConstructionTargets.CoefficientSphereEndpoints.circleH1 ℚ)
+    exact t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (t98J01_circle_homology_finiteDimensional_aux_iso 1)
+  · let hz : CategoryTheory.Limits.IsZero
+        (ConstructionTargets.CoefficientContractiblePair.H ℚ (k + 2)
+          (TopCat.of (ConstructionTargets.T02A06HemisphereExcision.ambientSphere 1))) := by
+      let e := ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k + 1) (by omega)
+      exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ (k + 1) (by omega)).of_iso e
+    letI := t98J01_circle_homology_finiteDimensional_aux_of_isZero hz
+    exact t98J01_circle_homology_finiteDimensional_aux_of_iso
+      (t98J01_circle_homology_finiteDimensional_aux_iso (k + 2))
+
+/-- Seat: rational homology of the printed circle vanishes above degree 1. -/
+theorem t98J01_circle_homology_vanishes_above_one_aux_standard
+    (k : ℕ) (hk : 1 < k) :
+    CategoryTheory.Limits.IsZero
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) k) := by
+  let e : ConstructionTargets.RationalLefschetz.Homology
+      (T02A06.euclideanUnitSphere 2) k ≅
+      ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 1) (k - 1) := by
+    simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+      (ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k - 1) (by omega))
+  exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing
+    ℚ (k - 1) (by omega)).of_iso e
+
+noncomputable def t98J01_circle_homology_vanishes_above_one_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq]
+    rw [show ∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+        EuclideanSpace ℝ (Fin 2)) i‖ ^ 2 = 1 by
+      rw [show (∑ i : Fin 2, ‖(WithLp.toLp 2 ![x.1.1, x.1.2] :
+          EuclideanSpace ℝ (Fin 2)) i‖ ^ 2) = ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 by
+        norm_num [Fin.sum_univ_succ]]
+      simpa [Real.norm_eq_abs, sq_abs] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_succ] at hx
+    simp only [Fin.sum_univ_succ, Fin.val_zero, Fin.sum_univ_zero,
+      WithLp.ofLp_toLp, add_zero] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+    have hh := congrArg (fun r : ℝ => r ^ 2) hx
+    change (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 ^ 2 at hh
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv x := rfl
+  right_inv x := by
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+theorem t98J01_circle_homology_vanishes_above_one :
+    ∀ k, 1 < k → Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 k) := by
+  intro k hk
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)
+  let e : TopCat.of T98J01.S1 ≅ TopCat.of (T02A06.euclideanUnitSphere 2) :=
+    TopCat.isoOfHomeo t98J01_circle_homology_vanishes_above_one_aux_homeomorph
+  exact ModuleCat.isZero_iff_subsingleton.mp
+    ((t98J01_circle_homology_vanishes_above_one_aux_standard k hk).of_iso
+      (F.mapIso e))
+
+/-- Seat: reflection has trace `1` on rational `H₀(S¹)`. -/
+private noncomputable def t98J01_reflection_trace_zero_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun p := ⟨WithLp.toLp 2 ![p.1.1, p.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+      Fin.sum_univ_two]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      Matrix.tail_cons, WithLp.ofLp_toLp]
+    rw [show ‖p.1.1‖ ^ 2 + ‖p.1.2‖ ^ 2 = 1 by
+      simpa [Real.norm_eq_abs, sq_abs] using p.2]
+    norm_num⟩
+  invFun p := ⟨(p.1 0, p.1 1), by
+    have hp : ‖p.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using p.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hp
+    have hs : 0 ≤ ‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2 := by positivity
+    have hh : (Real.sqrt (‖p.1 0‖ ^ 2 + ‖p.1 1‖ ^ 2)) ^ 2 = 1 := by
+      rw [hp]
+      norm_num
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv p := by ext <;> rfl
+  right_inv p := by ext i; fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+theorem t98J01_reflection_trace_zero :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 0).hom = 1 := by
+  letI : PathConnectedSpace T98J01.S1 :=
+    t98J01_reflection_trace_zero_aux_homeomorph.symm.surjective.pathConnectedSpace
+      t98J01_reflection_trace_zero_aux_homeomorph.symm.continuous
+  let p : T98J01.S1 := ⟨(0, 1), by norm_num⟩
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℚ p
+  have hmap : ConstructionTargets.RationalLefschetz.induced
+      t98J01_reflectionCM 0 = CategoryTheory.CategoryStruct.id _ := by
+    apply (CategoryTheory.cancel_mono e.hom).mp
+    simpa [e, ConstructionTargets.RationalLefschetz.induced,
+      ConstructionTargets.CoefficientH0.singularPostcomposition] using
+      (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ
+        t98J01_reflectionCM)
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0) :=
+    FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  rw [hmap]
+  change LinearMap.trace ℚ _ LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have he : (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 0) ≃ₗ[ℚ] ℚ :=
+    e.toLinearEquiv
+  rw [he.finrank_eq]
+  simp
+
+/-- Seat: reflection reverses the rational fundamental class of the circle. -/
+noncomputable def t98J01_reflection_trace_one_aux_homeomorph :
+    T98J01.S1 ≃ₜ T02A06.euclideanUnitSphere 2 where
+  toFun x := ⟨WithLp.toLp 2 ![x.1.1, x.1.2], by
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq,
+      Fin.sum_univ_two]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons,
+      Matrix.tail_cons, WithLp.ofLp_toLp]
+    rw [show ‖x.1.1‖ ^ 2 + ‖x.1.2‖ ^ 2 = 1 by
+      simpa [Real.norm_eq_abs, sq_abs] using x.2]
+    norm_num⟩
+  invFun x := ⟨(x.1 0, x.1 1), by
+    have hx : ‖x.1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using x.2
+    rw [EuclideanSpace.norm_eq, Fin.sum_univ_two] at hx
+    have hs : 0 ≤ ‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2 := by positivity
+    have hh : (Real.sqrt (‖x.1 0‖ ^ 2 + ‖x.1 1‖ ^ 2)) ^ 2 = 1 := by
+      rw [hx]
+      norm_num
+    rw [Real.sq_sqrt hs] at hh
+    simpa [Real.norm_eq_abs, sq_abs] using hh⟩
+  left_inv x := by ext <;> rfl
+  right_inv x := by ext i; fin_cases i <;> rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    apply (PiLp.continuous_toLp 2 _).comp
+    apply continuous_pi
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    fun_prop
+
+theorem t98J01_reflection_trace_one :
+    LinearMap.trace ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 1)
+      (ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom = -1 := by
+  open CategoryTheory in
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 1).obj
+    (ModuleCat.of ℚ ℚ)
+  let e : TopCat.of T98J01.S1 ≅ TopCat.of (T02A06.euclideanUnitSphere 2) :=
+    TopCat.isoOfHomeo t98J01_reflection_trace_one_aux_homeomorph
+  let E := F.mapIso e
+  let r := ConstructionTargets.CoefficientCoordinateReflections.reflectionMap
+    (d := 2) 0
+  have hconj : (e.inv ≫ TopCat.ofHom t98J01_reflectionCM ≫ e.hom) =
+      TopCat.ofHom r := by
+    ext x i
+    fin_cases i <;>
+      simp [e, t98J01_reflection_trace_one_aux_homeomorph, r,
+        t98J01_reflectionCM, T98J01.reflection,
+        ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+        ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+        ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+  have hmap : E.inv ≫ ConstructionTargets.RationalLefschetz.induced
+      t98J01_reflectionCM 1 ≫ E.hom = -𝟙 _ := by
+    change F.map e.inv ≫ F.map (TopCat.ofHom t98J01_reflectionCM) ≫
+      F.map e.hom = -𝟙 _
+    rw [← F.map_comp, ← F.map_comp, hconj]
+    exact ConstructionTargets.CoefficientFirstReflection.circle_negative ℚ
+  let u := ConstructionTargets.CoefficientFirstReflection.topIso ℚ 0
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) 1) :=
+    FiniteDimensional.of_injective u.hom.hom u.toLinearEquiv.injective
+  letI : FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T98J01.S1 1) :=
+    FiniteDimensional.of_injective E.hom.hom E.toLinearEquiv.injective
+  have ht := LinearMap.trace_comp_comm' E.hom.hom
+    ((ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom.comp
+      E.inv.hom)
+  have hmaplin : E.hom.hom.comp
+      ((ConstructionTargets.RationalLefschetz.induced t98J01_reflectionCM 1).hom.comp
+        E.inv.hom) = -LinearMap.id := by
+    simpa only [ModuleCat.hom_comp, ModuleCat.hom_neg, ModuleCat.hom_id] using
+      congrArg ModuleCat.Hom.hom hmap
+  rw [hmaplin] at ht
+  have hinvlin : E.inv.hom.comp E.hom.hom = LinearMap.id := by
+    simpa only [ModuleCat.hom_comp, ModuleCat.hom_id] using
+      congrArg ModuleCat.Hom.hom E.hom_inv_id
+  rw [LinearMap.comp_assoc, hinvlin, LinearMap.comp_id] at ht
+  have hdim : Module.finrank ℚ
+      (ConstructionTargets.RationalLefschetz.Homology
+        (T02A06.euclideanUnitSphere 2) 1) = 1 := by
+    rw [u.toLinearEquiv.finrank_eq]
+    simp
+  dsimp [F] at ht
+  simpa [hdim] using ht
+
+/-- Sorry-free assembly of the four independent circle leaves. -/
+theorem t98J01_reflection_lefschetz :
+    HasLefschetzNumber t98J01_reflectionCM 2 := by
+  refine ⟨t98J01_circle_homology_finiteDimensional, 1, ?_, ?_⟩
+  · exact t98J01_circle_homology_vanishes_above_one
+  · norm_num [Finset.sum_range_succ, t98J01_reflection_trace_zero,
+      t98J01_reflection_trace_one]
+
+/-- LIBRARY: multiplicativity of the rational Lefschetz number under products.
+This is the single large missing map-natural Künneth/trace-additivity foundation. -/
+theorem t98J01_lefschetz_product
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, X)) (g : C(Y, Y)) (a b : ℚ)
+    (hf : HasLefschetzNumber f a) (hg : HasLefschetzNumber g b) :
+    HasLefschetzNumber (f.prodMap g) (a * b) := by
+  sorry
+
+/-- The former library boundary, now a sorry-free assembly from factor
+computations and the isolated generic Künneth foundation. -/
+theorem t98J01_productSphereCircle_homology_traces :
+    HasLefschetzNumber T98J01.h 8 := by
+  have hcircles : HasLefschetzNumber
+      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) 4 := by
+    convert t98J01_lefschetz_product t98J01_reflectionCM
+      t98J01_reflectionCM 2 2 t98J01_reflection_lefschetz
+      t98J01_reflection_lefschetz using 1 <;> norm_num
+  have hproduct := t98J01_lefschetz_product t98J01_rotationCM
+      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) 2 4
+      t98J01_rotation_lefschetz hcircles
+  have hmap : t98J01_rotationCM.prodMap
+      (t98J01_reflectionCM.prodMap t98J01_reflectionCM) = T98J01.h := by
+    ext p <;> rfl
+  rw [hmap] at hproduct
+  convert hproduct using 1 <;> norm_num
 
 /-- Seat: a homotopy `h ≃ id` on `S2 × S1 × S1` restricts (include the middle
 circle at a basepoint, project back to it) to a homotopy `reflection ≃ id`. -/

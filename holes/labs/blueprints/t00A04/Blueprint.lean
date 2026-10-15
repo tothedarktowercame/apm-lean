@@ -9,15 +9,99 @@ def apm_t00a04_NullHomotopic {X Y : Type*} [TopologicalSpace X]
   ∃ (y : Y) (H : X × ℝ → Y), Continuous H ∧
     (∀ x, H (x, 0) = f x) ∧ ∀ x, H (x, 1) = y
 
+/-- A zero-dimensional real normed space is a singleton. -/
+theorem t00A04_model_subsingleton_of_finrank_zero
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (hdim : Module.finrank ℝ E = 0) :
+    Subsingleton E := by
+  refine ⟨fun x y ↦ ?_⟩
+  rw [finrank_zero_iff_forall_zero.mp hdim x,
+    finrank_zero_iff_forall_zero.mp hdim y]
+
+/-- A manifold modelled on a singleton has the discrete topology.  The
+`Subsingleton E` conclusion is passed in explicitly so this leaf is independent
+of the preceding linear-algebra leaf. -/
+theorem t00A04_manifold_discrete_of_model_subsingleton
+    (E X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (I : ModelWithCorners ℝ E E) [Subsingleton E]
+    [TopologicalSpace X] [ChartedSpace E X] [IsManifold I ∞ X] :
+    DiscreteTopology X := by
+  rw [discreteTopology_iff_isOpen_singleton]
+  intro x
+  have hsource : (chartAt E x).source = ({x} : Set X) := by
+    ext y
+    constructor
+    · intro hy
+      have hxy : chartAt E x y = chartAt E x x := Subsingleton.elim _ _
+      have hx : x ∈ (chartAt E x).source := mem_chart_source E x
+      have := congrArg (chartAt E x).symm hxy
+      simpa [(chartAt E x).left_inv hy, (chartAt E x).left_inv hx] using this
+    · intro hy
+      have hyx : y = x := Set.mem_singleton_iff.mp hy
+      subst y
+      exact mem_chart_source E x
+  rw [← hsource]
+  exact (chartAt E x).open_source
+
+/-- A continuous real-parameter homotopy cannot move a point in a discrete
+space.  Thus a null-homotopic identity on a discrete space forces the space to
+be a singleton. -/
+theorem t00A04_discrete_nullhomotopic_identity_subsingleton
+    (X : Type*) [TopologicalSpace X] [DiscreteTopology X]
+    (hnull : apm_t00a04_NullHomotopic (fun x : X => x)) :
+    Subsingleton X := by
+  rcases hnull with ⟨y, H, hH, hH0, hH1⟩
+  constructor
+  intro x x'
+  have hx : x = y := by
+    have hpath : Continuous (fun t : ℝ ↦ H (x, t)) :=
+      hH.comp (Continuous.prodMk_right x)
+    have hend : H (x, 0) = H (x, 1) :=
+      TotallyDisconnectedSpace.eq_of_continuous _ hpath 0 1
+    simpa only [hH0 x, hH1 x] using hend
+  have hx' : x' = y := by
+    have hpath : Continuous (fun t : ℝ ↦ H (x', t)) :=
+      hH.comp (Continuous.prodMk_right x')
+    have hend : H (x', 0) = H (x', 1) :=
+      TotallyDisconnectedSpace.eq_of_continuous _ hpath 0 1
+    simpa only [hH0 x', hH1 x'] using hend
+  exact hx.trans hx'.symm
+
+/-- A nontrivial type is not a subsingleton. -/
+theorem t00A04_nontrivial_not_subsingleton
+    (X : Type*) [Nontrivial X] : ¬ Subsingleton X := by
+  exact not_subsingleton_iff_nontrivial.mpr inferInstance
+
+/-- Positive-dimensional compact boundaryless manifolds are not
+null-homotopic.  This is the remaining global fundamental-class input. -/
+theorem t00A04_positive_dimensional_manifold_identity_not_nullhomotopic
+    (E X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
+    [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nontrivial X]
+    [ChartedSpace E X] [IsManifold I ∞ X]
+    (hdim : 0 < Module.finrank ℝ E) :
+    ¬ apm_t00a04_NullHomotopic (fun x : X => x) := by
+  sorry
+
 /-- A nontrivial compact manifold without boundary cannot have its identity
-map homotopic to a constant.  This is the sole global manifold-topology input. -/
+map homotopic to a constant.  This theorem only assembles the independent
+zero- and positive-dimensional leaves above. -/
 theorem t00A04_manifold_identity_not_nullhomotopic
     (E X : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (I : ModelWithCorners ℝ E E)
     [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nontrivial X]
     [ChartedSpace E X] [IsManifold I ∞ X] :
     ¬ apm_t00a04_NullHomotopic (fun x : X => x) := by
-  sorry
+  rcases Nat.eq_zero_or_pos (Module.finrank ℝ E) with hdim | hdim
+  · letI : Subsingleton E :=
+      t00A04_model_subsingleton_of_finrank_zero E hdim
+    letI : DiscreteTopology X :=
+      t00A04_manifold_discrete_of_model_subsingleton E X I
+    intro hnull
+    exact t00A04_nontrivial_not_subsingleton X
+      (t00A04_discrete_nullhomotopic_identity_subsingleton X hnull)
+  · exact t00A04_positive_dimensional_manifold_identity_not_nullhomotopic
+      E X I hdim
 
 /-- Composing a null-homotopy with a retraction would null-homotope the
 identity. -/

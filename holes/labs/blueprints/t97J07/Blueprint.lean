@@ -257,12 +257,88 @@ theorem t97J07_fixed_set :
       funext i
       fin_cases i <;> simp [t97J07Linear, Pi.single_apply]
 
-/-- LIBRARY: the rational singular-homology Euler characteristic of complex
-projective two-space is 3. -/
+/-- The exact rational singular-homology computation needed below.  Keeping
+the isomorphisms as data (rather than merely recording dimensions) lets the
+trace calculation use Mathlib's finite-dimensional linear-algebra API. -/
+structure T97J07CP2RationalHomologyData where
+  finiteDimensional : ∀ k,
+    FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k)
+  vanishesAbove : ∀ k, 4 < k →
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k)
+  zeroEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0 ≃ₗ[ℚ] ℚ
+  oneSubsingleton :
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1)
+  twoEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2 ≃ₗ[ℚ] ℚ
+  threeSubsingleton :
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3)
+  fourEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ
+
+/-- LIBRARY: the cellular/singular comparison for the literal quotient model
+of `CP²`.  This is the one genuinely missing topology foundation: one cell in
+real dimensions `0`, `2`, and `4`, and no other rational homology. -/
+theorem t97J07_cp2RationalHomologyData_exists :
+    Nonempty T97J07CP2RationalHomologyData := by
+  sorry
+
+/-- Given the degree-by-degree homology computation, the remaining step is
+finite-dimensional linear algebra: the identity induces identity maps, their
+traces are `1, 0, 1, 0, 1`, and the alternating sum through degree four is
+`3`.  The hypothesis makes this seat independent of the topology seat. -/
+theorem t97J07_eulerCharacteristic_of_homologyData
+    (h : T97J07CP2RationalHomologyData) :
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+      T97J07CP2 3 := by
+  unfold ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+  unfold ConstructionTargets.RationalLefschetz.HasLefschetzNumber
+  constructor
+  · exact h.finiteDimensional
+  · refine ⟨4, h.vanishesAbove, ?_⟩
+    letI (k : ℕ) : FiniteDimensional ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) :=
+      h.finiteDimensional k
+    have h0 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0) = 1 := by
+      rw [LinearEquiv.finrank_eq h.zeroEquiv]
+      simp
+    have h1 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) :=
+        h.oneSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h2 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2) = 1 := by
+      rw [LinearEquiv.finrank_eq h.twoEquiv]
+      simp
+    have h3 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) :=
+        h.threeSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h4 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4) = 1 := by
+      rw [LinearEquiv.finrank_eq h.fourEquiv]
+      simp
+    simp only [ConstructionTargets.RationalLefschetz.induced,
+      CategoryTheory.Functor.map_id, LinearMap.trace_id]
+    norm_num [Finset.sum_range_succ, h0, h1, h2, h3, h4]
+
+/-- The rational singular-homology Euler characteristic of complex
+projective two-space is 3.  This declaration is only the assembly of the
+topological homology certificate and the independent trace calculation. -/
 theorem t97J07_eulerCharacteristic :
     ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
       T97J07CP2 3 := by
-  sorry
+  exact t97J07_cp2RationalHomologyData_exists.elim
+    t97J07_eulerCharacteristic_of_homologyData
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =

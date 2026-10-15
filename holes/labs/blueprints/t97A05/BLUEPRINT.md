@@ -30,14 +30,14 @@ with a transverse representative of `Z` gives a compact oriented 1-manifold,
 whose signed boundary is precisely the frozen intersection count and sums to
 zero.
 
-## Lemma
+## Lemmas
 
-### `t97A05_separating_intersection_zero` — LIBRARY
+### `t97A05_separating_transverse_sum_zero` — LIBRARY
 
-**Statement in words.** Under the same manifold, orientation, embedding,
-immersion, and intersection-count data as the problem, if the complement of
-`range iW` in `Y` is not connected, then the specified intersection value is
-zero.
+**Statement in words.** Fix an arbitrary smooth map `g' : Z -> X` transverse
+to `iY o iW`, together with an exact finite enumeration of its coincidences.
+If the complement of `range iW` in `Y` is disconnected, the sum of the frozen
+`localSign`s over that enumeration is zero.
 
 **Why true.** The orientations of `Y` and `W` orient the normal line bundle;
 an oriented real line bundle is trivial, so a tubular neighborhood is
@@ -50,17 +50,25 @@ theorem says its endpoint signs sum to zero; compatibility of boundary signs
 with `ManifoldIntersectionTargets.localSign` identifies this sum with `value`.
 
 **Size.** LIBRARY, approximately 3,000–6,000 lines in the present Mathlib
-snapshot.  This is deliberately one honest library theorem rather than several
-30-line wrappers: the topology audit estimates the collar, component-closure,
-relative-transversality, compact-one-manifold, and sign-compatibility
-foundations individually at 200–2,500 lines.  It is the single
-`OrientedHypersurfaceCobordism` program requested by the topology worklist.
+snapshot.  This remains one honest large-foundation leaf rather than several
+wrappers: Mathlib has no object expressing the required oriented bounding side
+whose construction could be passed as an explicit hypothesis to downstream
+30–150 line leaves.  The missing ingredients are a two-sided tubular/collar
+theorem, a manifold-with-boundary structure on a component closure, relative
+transversality, classification or bordism of compact oriented 1-manifolds, and
+compatibility with the concrete `localSign` convention.
 
 **Dependencies.** None among this blueprint's lemmas.  Its eventual library
 implementation naturally contains the internal chain
 `tubularNeighborhood -> componentClosureBoundary -> transversePreimageCobordism
 -> signedBoundaryCountZero`, matching the frozen rows in
 `holes/labs/topology-contract/worklist3.edn`.
+
+**Likely Mathlib tools at the available boundary.** `IsManifold`, `mfderiv`,
+`ContinuousMap.Homotopic`, `IsPreconnected`, `ConnectedComponents`, and the
+orientation-form API in `ConstructionTargets.ManifoldFormTargets`.  Searches
+found no Mathlib theorem providing any of the five geometric arrows above, so
+there are no honest smaller seats at present.
 
 **Truth check.** Besides the degeneracies above, the hand check is the standard
 example of an equator in a sphere: it separates and bounds a hemisphere, and
@@ -79,6 +87,27 @@ transversality, or signed-boundary theorem to import.  The topology audit
 `~/notes/closer/audits/t97A05.edn` and the t97A05 worklist rows report the same
 missing chain.
 
+### `t97A05_separating_intersection_zero` — assembly, already proved
+
+**Statement in words.** The original library-facing statement.
+
+**Proof (about 8 lines).** Unpack `HasIntersectionNumber` to obtain `g'`, its
+smoothness and transversality, the exact enumeration, and the equation saying
+that its signed sum is `value`.  Apply
+`t97A05_separating_transverse_sum_zero` and rewrite by that equation.  The
+homotopy witness is deliberately unused: homotopy is needed to define the
+intersection number, but the vanishing theorem applies to every transverse
+representative.
+
+**Truth/degeneracy check.** For an empty coincidence type the equivalence
+forces `r = 0`, so the empty sum is zero.  For `n = 0`, the separating
+antecedent is impossible for an embedded connected closed 0-manifold in a
+connected closed 1-manifold.  For `k = 0`, the transverse preimage is still a
+compact oriented 1-manifold and endpoint signs cancel.  Boundary points are
+not present in `Y`, `W`, or `Z`; they arise only on the constructed bounding
+side, where the outward-normal-first convention must be checked against the
+left-then-right order in `tangentFrame`.
+
 ## Main theorem
 
 The main proof is sorry-free: negate connectedness, apply
@@ -86,8 +115,9 @@ The main proof is sorry-free: negate connectedness, apply
 
 ## Dependency layers
 
-* Layer 1: `t97A05_separating_intersection_zero` (LIBRARY).
-* Layer 2: `apm_t97a05` (already proved from Layer 1 in `Blueprint.lean`).
+* Layer 1: `t97A05_separating_transverse_sum_zero` (LIBRARY; independent).
+* Layer 2: `t97A05_separating_intersection_zero` (sorry-free assembly).
+* Layer 3: `apm_t97a05` (already proved from Layer 2 in `Blueprint.lean`).
 
 ## Compilation and axioms
 
@@ -100,9 +130,9 @@ systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprin
 Output:
 
 ```text
-holes/labs/blueprints/t97A05/Blueprint.lean:20:8: warning: declaration uses `sorry`
+holes/labs/blueprints/t97A05/Blueprint.lean:22:8: warning: declaration uses `sorry`
 'apm_t97a05' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-Thus `sorryAx` reaches the main theorem only through the one named library
-lemma.
+Thus `sorryAx` reaches the main theorem only through
+`t97A05_separating_transverse_sum_zero`.

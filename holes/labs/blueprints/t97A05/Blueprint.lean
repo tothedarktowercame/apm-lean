@@ -11,7 +11,45 @@ open scoped Manifold ContDiff
 open ConstructionTargets.ManifoldFormTargets ConstructionTargets.ManifoldIntersectionTargets
 noncomputable section
 
-/-- **LIBRARY: oriented hypersurface boundary/intersection theorem.**
+/-- **LIBRARY: transverse oriented hypersurface boundary/intersection theorem.**
+
+This is the geometric kernel: after a transverse representative and an exact
+enumeration of its coincidences have been chosen, separation forces its signed
+count to vanish.  It is stated independently of `HasIntersectionNumber`, so
+the packaging/unpackaging of that definition is not part of the missing
+manifold-with-boundary foundation.
+-/
+theorem t97A05_separating_transverse_sum_zero (n k : ℕ) {X Y W Z : Type*}
+    [TopologicalSpace X] [T2Space X] [SecondCountableTopology X]
+    [TopologicalSpace Y] [T2Space Y] [SecondCountableTopology Y]
+    [TopologicalSpace W] [T2Space W] [SecondCountableTopology W]
+    [TopologicalSpace Z] [T2Space Z] [SecondCountableTopology Z]
+    [ChartedSpace (E (n+k)) X] [IsManifold 𝓘(ℝ,E (n+k)) ∞ X]
+    [ChartedSpace (E (n+1)) Y] [IsManifold 𝓘(ℝ,E (n+1)) ∞ Y]
+    [ChartedSpace (E n) W] [IsManifold 𝓘(ℝ,E n) ∞ W]
+    [ChartedSpace (E k) Z] [IsManifold 𝓘(ℝ,E k) ∞ Z]
+    [CompactSpace Y] [CompactSpace W] [CompactSpace Z]
+    [ConnectedSpace Y] [ConnectedSpace W]
+    (volX : Form (E (n+k)) X (n+k)) (volY : Form (E (n+1)) Y (n+1))
+    (volW : Form (E n) W n) (volZ : Form (E k) Z k)
+    (hvolX : IsVolumeForm volX) (hvolY : IsVolumeForm volY)
+    (hvolW : IsVolumeForm volW) (hvolZ : IsVolumeForm volZ)
+    (iY : ContinuousMap Y X) (iW : ContinuousMap W Y)
+    (smoothY : ContMDiff 𝓘(ℝ,E (n+1)) 𝓘(ℝ,E (n+k)) ∞ iY)
+    (smoothW : ContMDiff 𝓘(ℝ,E n) 𝓘(ℝ,E (n+1)) ∞ iW)
+    (embedY : Topology.IsEmbedding iY) (embedW : Topology.IsEmbedding iW)
+    (immerseY : Manifold.IsImmersion 𝓘(ℝ,E (n+1)) 𝓘(ℝ,E (n+k)) ∞ iY)
+    (immerseW : Manifold.IsImmersion 𝓘(ℝ,E n) 𝓘(ℝ,E (n+1)) ∞ iW)
+    (g' : ContinuousMap Z X)
+    (smoothg' : ContMDiff 𝓘(ℝ,E k) 𝓘(ℝ,E (n+k)) ∞ g')
+    (htransverse : Transverse (a := n) (b := k) (iY.comp iW) g')
+    (r : ℕ) (enumerate : Fin r ≃ Coincidence (iY.comp iW) g')
+    (hseparates : ¬ IsConnected ((Set.range iW)ᶜ : Set Y)) :
+    (∑ i : Fin r, localSign volW volZ volX (iY.comp iW) g' (enumerate i)) = 0 := by
+  sorry
+
+/-- Assemble the geometric transverse theorem with the witness packaged by
+`HasIntersectionNumber`.
 
 If a compact oriented codimension-one submanifold separates its connected
 compact oriented ambient manifold, its signed intersection number with every
@@ -45,7 +83,12 @@ theorem t97A05_separating_intersection_zero (n k : ℕ) {X Y W Z : Type*}
     (hintersection : HasIntersectionNumber volW volZ volX (iY.comp iW) iZ value)
     (hseparates : ¬ IsConnected ((Set.range iW)ᶜ : Set Y)) :
     value = 0 := by
-  sorry
+  rcases hintersection with
+    ⟨g', smoothg', _homotopic, htransverse, r, enumerate, hsum⟩
+  rw [← hsum]
+  exact t97A05_separating_transverse_sum_zero n k volX volY volW volZ
+    hvolX hvolY hvolW hvolZ iY iW smoothY smoothW embedY embedW
+    immerseY immerseW g' smoothg' htransverse r enumerate hseparates
 
 theorem apm_t97a05 (n k : ℕ) {X Y W Z : Type*}
     [TopologicalSpace X] [T2Space X] [SecondCountableTopology X]

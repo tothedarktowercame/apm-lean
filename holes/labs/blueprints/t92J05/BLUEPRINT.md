@@ -107,39 +107,40 @@ the action instance, feeds conclusions into the next adapters, and contains no
 `sorry`. Empty-space vacuity is impossible because the one-point leaf exhibits
 a basepoint; no boundary or dimension-zero case is present.
 
-### `apm_t92J05_standard_genusTwo_fundamentalGroup` — LIBRARY
+### Genus-two leaves
 
-**Statement in words.** At every basepoint of the standard oriented
-genus-two polygon surface, the fundamental group is the presented group on
-four generators with relator `[a₁,b₁][a₂,b₂]`.
+The former single boundary is now a sorry-free assembly of three independent
+leaves. Two are small seats; one is honestly marked as the remaining missing
+foundation rather than disguising it as several vacuous certificates.
 
-**Why true.** Use the polygon radial open cover developed in
-`ConstructionTargets.PolygonSurfacePiOne`. The punctured polygon quotient
-deformation-retracts onto its boundary graph, a wedge of four circles, while
-the inner piece is contractible and their overlap represents the boundary
-word. Seifert--van Kampen gives the quotient of `FreeGroup (Fin 4)` by the
-normal closure of that single word, definitionally the `PresentedGroup` used
-here. Transport from the polygon's distinguished point to an arbitrary `x`
-using path connectedness. This is the same polygon-surface π₁ foundation as
-the shared `ConstructionTargets/PolygonSurfacePiOne.lean` program; the theorem
-is deliberately stated once rather than split into fake small lemmas.
+- `apm_t92J05_genusTwo_polygon_vanKampen_at_center` (**LIBRARY**, estimated
+  600–1200 lines): compute the group at the explicit polygon center. Use
+  `PolygonSurfacePiOne.standardPairingData_space_homeomorph`, `openCover`,
+  `polygonCenterContraction`, `outerOpenDeformationRetract`,
+  `PairingData.skeletonHomeomorphWedge`, and the subdivision/descent machinery
+  in `FundamentalGroupoidOpenCoverSubdivision`. The missing Mathlib-level tool
+  is a two-open Seifert--van Kampen/pushout theorem; the current construction
+  bank explicitly stops before that theorem. The overlap generator must map
+  to `a₁ b₁ a₁⁻¹ b₁⁻¹ a₂ b₂ a₂⁻¹ b₂⁻¹`, so the pushout is
+  `PresentedGroup {apm_t92J05_genusTwoRelator}`. This leaf is independent of
+  both leaves below.
+- `apm_t92J05_genusTwo_pathConnected` (20–40 lines): path connectedness of
+  the concrete quotient. Use the continuous surjective disk quotient map and
+  `IsPathConnected.image`, or the existing surface/path-connected instance if
+  available. The disk is nonempty; genus `2` makes the polygon nondegenerate.
+  Independent of the group calculation.
+- `apm_t92J05_genusTwo_all_basepoints` (10–20 lines): given path-connectedness
+  and the center calculation as explicit hypotheses, use
+  `FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`, then compose with
+  the supplied center equivalence. Independent and compilable before either
+  input leaf lands.
 
-**Expected size.** LIBRARY, about 600–1200 lines from the current banked
-polygon infrastructure. The older topology audit estimated the final
-genus-two specialization alone at 300–600 lines, but the absent general
-van Kampen/open-cover descent can make the complete program larger.
-
-**Dependencies.** Only the definitions block and the imported sorry-free
-`Surfaces` and `PolygonSurfacePiOne` modules. It is independent of the RP²
-computation.
-
-**Truth check.** Cutting the standard surface along its four one-cells leaves
-an octagon whose oriented boundary reads
-`a₁ b₁ a₁⁻¹ b₁⁻¹ a₂ b₂ a₂⁻¹ b₂⁻¹`. Attaching the two-cell kills exactly this
-word. Abelianizing kills both commutators and produces `Z⁴`, matching
-`H₁(Σ₂; Z)`; at genus zero the analogous construction would have no
-generators, and at genus one it reduces to the familiar commuting-pair torus
-presentation. These endpoint checks support the indexing and orientation.
+`apm_t92J05_standard_genusTwo_fundamentalGroup` is now a sorry-free assembly.
+The explicit center is represented by `0` in the closed disk, so it is never a
+boundary-identification ambiguity. Cutting along the four one-cells gives the
+oriented octagon word above. Abelianization is `Z⁴`, checking both the number
+of generators and the commutator signs. Genus zero is intentionally outside
+the concrete leaf; genus two has eight boundary arcs and four paired orbits.
 
 ## Already proved assembly
 
@@ -182,3 +183,12 @@ The final output of `#print axioms apm_t92j05` was:
 
 The only two `sorry` warnings are the two Layer 1 LIBRARY lemmas. The main
 theorem and all transport/assembly declarations are sorry-free.
+
+## Note on the LIBRARY leaf (claude-14, 2026-10-14)
+`genusTwo_polygon_vanKampen_at_center` is not starting from nothing. Already banked, sorry-free:
+- the generic polygon data `PolygonSurfacePiOne.PairingData` (radial open cover, skeleton ≅ wedge)
+- `TwoOpenFundamentalGroupoidPseudopushout`
+- `PointWedgeVanKampen`
+- the Klein instance in `t93J03Closure.lean`: inner contractible, overlap π1 ≅ ℤ, skeleton presentation map surjective, with its kernel computed
+
+The missing step is generic: a pseudopushout with contractible inner open and overlap ≅ ℤ makes π1(space) the quotient of π1(skeleton) by the attaching word. That is the open F3 step, and it is the input `t93J03Closure.kleinBottle_pi1_every_basepoint_of_polygon_van_kampen` still takes as a hypothesis. Build it once for `PairingData`; it closes this leaf and gives the Klein van Kampen route.

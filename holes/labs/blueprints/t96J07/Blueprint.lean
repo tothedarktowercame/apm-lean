@@ -4,6 +4,7 @@ import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.RealProjectiveSmoothTarget
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.RP3RationalHomology
 
 open CategoryTheory
 
@@ -1604,15 +1605,154 @@ theorem apm_t96j07_local_numbers
     apm_t96j07_local_number_axis2 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree,
     apm_t96j07_local_number_axis3 apm_t96j07_affine_chart f hformula apm_t96j07_diagonal_link_degree⟩
 
-/-- Compute the rational-homological Lefschetz number.  The action formula is
-supplied directly so this lemma is parallel to map construction. -/
+/-- Seat: the positive diagonal path `diag(1,1+t,1+2t,1+3t)` descends to a
+homotopy from the identity to `f`. -/
+theorem apm_t96j07_global_positiveDiagonal_homotopy
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+      f (Projectivization.mk ℝ x hx) =
+        Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
+    ContinuousMap.Homotopic (ContinuousMap.id apm_t96j07_RP3) f := by
+  let B : apm_t96j07_V × Set.Icc (0 : ℝ) 1 → apm_t96j07_V := fun z i =>
+    ((1 - z.2.1) + z.2.1 * (i.val + 1 : ℝ)) * z.1 i
+  have hB (x : {x : apm_t96j07_V // x ≠ 0}) (t : Set.Icc (0 : ℝ) 1) :
+      B (x.1, t) ≠ 0 := by
+    intro hz
+    apply x.2
+    funext i
+    have hi := congrFun hz i
+    have hc : 0 < (1 - t.1) + t.1 * (i.val + 1 : ℝ) := by
+      have ht0 : 0 ≤ t.1 := t.2.1
+      have ht1 : t.1 ≤ 1 := t.2.2
+      have hi0 : 0 ≤ (i.val : ℝ) := by positivity
+      nlinarith
+    exact (mul_eq_zero.mp hi).resolve_left (ne_of_gt hc)
+  let lift : {x : apm_t96j07_V // x ≠ 0} × Set.Icc (0 : ℝ) 1 →
+      apm_t96j07_RP3 := fun z => Projectivization.mk ℝ (B (z.1.1, z.2)) (hB z.1 z.2)
+  have hlift : Continuous lift := by
+    change Continuous
+      (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 ∘
+        fun z : {x : apm_t96j07_V // x ≠ 0} × Set.Icc (0 : ℝ) 1 =>
+          ⟨B (z.1.1, z.2), hB z.1 z.2⟩)
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro i
+    have ht : Continuous (fun z : {x : apm_t96j07_V // x ≠ 0} ×
+        Set.Icc (0 : ℝ) 1 => (z.2.1 : ℝ)) :=
+      continuous_subtype_val.comp continuous_snd
+    have hx : Continuous (fun z : {x : apm_t96j07_V // x ≠ 0} ×
+        Set.Icc (0 : ℝ) 1 => z.1.1 i) :=
+      (continuous_apply i).comp (continuous_subtype_val.comp continuous_fst)
+    exact ((continuous_const.sub ht).add (ht.mul continuous_const)).mul hx
+  obtain ⟨G, hG⟩ :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousHomotopyDescent
+      ℝ lift hlift (by
+        intro a b s c hab
+        apply (Projectivization.mk_eq_mk_iff ℝ _ _ (hB a s) (hB b s)).mpr
+        by_cases hc : c = 0
+        · subst c
+          exfalso
+          apply a.2
+          simpa using hab
+        · refine ⟨Units.mk0 c hc, ?_⟩
+          rw [hab]
+          funext i
+          simp [B]
+          ring)
+  refine ⟨{
+    toContinuousMap := G.comp
+      ⟨fun z : Set.Icc (0 : ℝ) 1 × apm_t96j07_RP3 => (z.2, z.1),
+        continuous_snd.prodMk continuous_fst⟩
+    map_zero_left := ?_
+    map_one_left := ?_ }⟩
+  · intro q
+    obtain ⟨x, rfl⟩ :=
+      ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 3 q
+    change G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 x,
+      (0 : Set.Icc (0 : ℝ) 1)) = _
+    rw [hG (x, 0)]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ (hB x ⟨0, by norm_num⟩) x.2).mpr
+    refine ⟨1, ?_⟩
+    simp [B]
+  · intro q
+    obtain ⟨x, rfl⟩ :=
+      ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 3 q
+    change G (ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 3 x,
+      (1 : Set.Icc (0 : ℝ) 1)) = _
+    rw [hG (x, 1)]
+    change lift (x, 1) = f (Projectivization.mk ℝ x.1 x.2)
+    rw [hformula]
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _
+      (hB x ⟨1, by norm_num⟩) (apm_t96j07_A_ne_zero x.2)).mpr
+    refine ⟨1, ?_⟩
+    simp [B]
+    rfl
+
+/-- Seat: homotopic maps induce equal maps on rational singular homology.
+The homotopy is an explicit hypothesis, so this leaf is independent of the
+positive-diagonal construction. -/
+theorem apm_t96j07_global_HQmap_eq_id
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hhom : ContinuousMap.Homotopic (ContinuousMap.id apm_t96j07_RP3) f) :
+    ∀ k : ℕ, apm_t96j07_HQmap k f = 𝟙 (apm_t96j07_HQ k) := by
+  intro k
+  rcases hhom with ⟨H⟩
+  have h :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy ℚ
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero H)
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one H) k
+  rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id] at h
+  exact h.symm
+
+/-- LIBRARY seat: the rational singular homology of `ℝP³` is `ℚ` in
+degrees zero and three and zero in degrees one and two.  Keeping these four
+bases together avoids duplicating the missing cellular-homology foundation. -/
+theorem apm_t96j07_global_rationalHomology_bases :
+    Nonempty (apm_t96j07_HQ 0 ≅ ModuleCat.of ℚ ℚ) ∧
+    Nonempty (apm_t96j07_HQ 1 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)) ∧
+    Nonempty (apm_t96j07_HQ 2 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)) ∧
+    Nonempty (apm_t96j07_HQ 3 ≅ ModuleCat.of ℚ ℚ) := by
+  obtain ⟨h0, hz, h3⟩ := RP3Homology.rp3_rationalHomology
+  have hfin : CategoryTheory.Limits.IsZero (ModuleCat.of ℚ (Fin 0 → ℚ)) :=
+    ModuleCat.isZero_of_subsingleton _
+  refine ⟨h0, ⟨(hz 1 (by decide) (by decide)).iso hfin⟩,
+    ⟨(hz 2 (by decide) (by decide)).iso hfin⟩, h3⟩
+
+/-- Sorry-free algebraic assembly of the homotopy and rational-homology
+inputs.  Every substantial input is explicit, so its seats are parallel. -/
+theorem apm_t96j07_global_number_of_parts
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (hmap : ∀ k : ℕ, apm_t96j07_HQmap k f = 𝟙 (apm_t96j07_HQ k))
+    (h0 : Nonempty (apm_t96j07_HQ 0 ≅ ModuleCat.of ℚ ℚ))
+    (h1 : Nonempty (apm_t96j07_HQ 1 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)))
+    (h2 : Nonempty (apm_t96j07_HQ 2 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)))
+    (h3 : Nonempty (apm_t96j07_HQ 3 ≅ ModuleCat.of ℚ ℚ)) :
+    apm_t96j07_HasLefschetzNumber f 0 := by
+  rcases h0 with ⟨e0⟩
+  rcases h1 with ⟨e1⟩
+  rcases h2 with ⟨e2⟩
+  rcases h3 with ⟨e3⟩
+  refine ⟨e0, e1, e2, e3, ?_⟩
+  rw [hmap 0, hmap 1, hmap 2, hmap 3]
+  simp
+
+/-- Compute the rational-homological Lefschetz number.  This is only the
+sorry-free wiring of the independent geometric and homological leaves. -/
 theorem apm_t96j07_global_number
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (hformula : ∀ (x : apm_t96j07_V) (hx : x ≠ 0),
       f (Projectivization.mk ℝ x hx) =
         Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) :
     apm_t96j07_HasLefschetzNumber f 0 := by
-  sorry
+  apply apm_t96j07_global_number_of_parts f
+  · exact apm_t96j07_global_HQmap_eq_id f
+      (apm_t96j07_global_positiveDiagonal_homotopy f hformula)
+  · exact apm_t96j07_global_rationalHomology_bases.1
+  · exact apm_t96j07_global_rationalHomology_bases.2.1
+  · exact apm_t96j07_global_rationalHomology_bases.2.2.1
+  · exact apm_t96j07_global_rationalHomology_bases.2.2.2
 
 /-- Fixed points, local Lefschetz numbers, and the global homological
 Lefschetz number for the stated diagonal self-map of `ℝP³`. -/

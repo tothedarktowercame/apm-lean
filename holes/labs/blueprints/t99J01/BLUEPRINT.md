@@ -28,32 +28,119 @@ its total space to the path component through `e`.
 
 ## Lemmas
 
-### `t99J01_threeCircles_fundamentalGroup` — LIBRARY
+### Fundamental group split (six parallel leaves)
 
-**Statement.** At every basepoint `x`, the fundamental group of the concrete
-iterated point-wedge `ThreeCircles` is nonempty-equivalent to `FreeGroup (Fin 3)`.
+The banked file `ConstructionTargets/PointWedgeVanKampen.lean` now contains the
+actual sorry-free generic equivalence
+`genericPointWedgeFundamentalGroupEquiv`; the older ledger description of a
+remaining 300--600 line normalization gap is obsolete.  Only concrete
+specialization and elementary free-group algebra remain.  The distinguished
+point used by every leaf is the explicit definition `T99J01ThreeCirclesPoint`.
 
-**Why true.** Apply van Kampen twice to the point-wedge model.  The two-circle
-piece gives `F₂`; adjoining the final circle gives
-`Monoid.Coprod (FreeGroup (Fin 2)) (FreeGroup (Fin 1))`, which is `F₃`.
-Transport from the distinguished wedge point to arbitrary `x` using path
-connectedness.  The closest sorry-free construction is
-`ConstructionTargets/PointWedgeVanKampen.lean`; it already proves the needed
-path/local-path topology and most coordinate normalization.  Its ledger STOP
-records the exact remaining theorem as
-`genericPointWedgeLegCoordinates_vanKampen` (the two middle morphisms after
-endpoint transport), followed by the final specialization.  This is genuinely
-large shared infrastructure, so it is stated once rather than split into fake
-small obligations.
+#### `t99J01_circle_fundamentalGroup`
 
-**Estimate.** LIBRARY program, 300–600 lines beyond the banked construction.
+**Statement.** `π₁(Circle,1) ≃ FreeGroup (Fin 1)`.
 
-**Depends on.** None of the other blueprint lemmas.
+**Proof target.** Compose
+`ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt`
+with
+`ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne`.
 
-**Truth check.** Hand computation by van Kampen gives
-`Z * Z * Z = F₃`; the rank at the wedge point and at any transported basepoint
-is unchanged.  The topology ledger has compiled the component calculations up
-to the explicitly recorded normalization gap.
+**Estimate.** 10--20 lines. **Independent.**
+
+**Truth/degenerate check.** `Fin 1` is inhabited and has exactly one generator;
+the multiplicative integer convention agrees with the imported circle
+winding-number equivalence, so no inverse/sign choice is introduced here.
+
+#### `t99J01_twoCircles_fundamentalGroup_coprod`
+
+**Statement.** At `twoCirclesPoint`, `π₁(TwoCircles)` is the coproduct of the
+two literal circle fundamental groups.
+
+**Proof target.** Specialize
+`ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFundamentalGroupEquiv`
+with `X = Y = Circle`, `x₀ = y₀ = 1`, and both punctured neighbourhoods equal
+to `circleBaseNeighborhood`; discharge the open/member/contraction arguments
+using `circleBaseNeighborhood_isOpen`, `circleBase_mem`, and
+`circleBaseNeighborhood_contraction`.
+
+**Estimate.** 20--45 lines. **Independent.**
+
+**Truth/degenerate check.** The displayed basepoint unfolds definitionally to
+`twoCirclesPoint`; neither wedge leg is empty and both overlap contractions are
+pointed at the identified point.
+
+#### `t99J01_twoCircles_fundamentalGroup_freeGroup`
+
+**Statement.** Given the preceding circle and coproduct equivalences as
+explicit hypotheses, `π₁(TwoCircles,twoCirclesPoint) ≃ FreeGroup (Fin 2)`.
+
+**Proof target.** Use `MulEquiv.coprodCongr`, then
+`PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum`, followed by
+`MulEquiv.ofBijective (FreeGroup.map finSumFinEquiv)` with
+`FreeGroup.map_injective` and `FreeGroup.map_surjective`.  `norm_num` or
+`simpa` resolves `1 + 1 = 2`.
+
+**Estimate.** 25--50 lines. **Independent given its two hypotheses.**
+
+**Truth/degenerate check.** Both input ranks are one; this leaf cannot become
+vacuous because its conclusion is a new equivalence, not one of its hypotheses.
+
+#### `t99J01_threeCircles_fundamentalGroup_coprod`
+
+**Statement.** At `T99J01ThreeCirclesPoint`, `π₁(ThreeCircles)` is the coproduct
+of the literal based groups of `TwoCircles` and `Circle`.
+
+**Proof target.** Specialize `genericPointWedgeFundamentalGroupEquiv` with
+`X = TwoCircles`, `Y = Circle`, `x₀ = twoCirclesPoint`, `y₀ = 1`,
+`M = circleBaseNeighborhood`, and `N = twoCirclesBaseNeighborhood`.  Use
+`circleBaseNeighborhood_isOpen`, `circleBase_mem`,
+`circleBaseNeighborhood_contraction`, `twoCirclesBaseNeighborhood_isOpen`,
+`twoCirclesBase_mem`, and `twoCirclesBaseNeighborhood_contraction`.
+
+**Estimate.** 25--55 lines. **Independent.**
+
+**Truth/degenerate check.** `T99J01ThreeCirclesPoint` is definitionally the
+left-leg wedgepoint expected by the generic theorem.  Both neighbourhoods
+contain their named basepoints.
+
+#### `t99J01_threeCircles_wedgePoint_fundamentalGroup`
+
+**Statement.** Given the circle rank-one, two-circle rank-two, and second
+coproduct equivalences as explicit hypotheses, the distinguished three-circle
+group is `FreeGroup (Fin 3)`.
+
+**Proof target.** Compose the supplied wedge equivalence with
+`MulEquiv.coprodCongr` of the supplied rank-two and rank-one equivalences, then
+with `PointWedgeVanKampen.coprodFreeGroupFinTwoFinOne_equiv`.
+
+**Estimate.** 15--30 lines. **Independent given its three hypotheses.**
+
+**Truth/degenerate check.** The ranks are literally `2` and `1`; the final
+banked equivalence uses `finSumFinEquiv`, hence lands in `Fin 3` with no hidden
+cardinality premise.
+
+#### `t99J01_threeCircles_basepoint_transport`
+
+**Statement.** For arbitrary `x`, the group based at `x` is equivalent to the
+group based at `T99J01ThreeCirclesPoint`.
+
+**Proof target.** Use
+`FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`; the required
+`PathConnectedSpace ThreeCircles` instance is banked as
+`PointWedgeVanKampen.threeCircles_pathConnected`/available by inference.
+
+**Estimate.** 5--15 lines. **Independent.**
+
+**Truth/degenerate check.** `ThreeCircles` is nonempty (the explicit wedgepoint
+witnesses this) and path connected, so transport exists for every boundary or
+wedgepoint choice; no orientation convention affects an abstract equivalence.
+
+#### `t99J01_threeCircles_fundamentalGroup` (assembly, sorry-free)
+
+Obtain the six equivalences above, feed conclusions through the explicit
+hypotheses of the two algebra leaves, and compose basepoint transport with the
+distinguished-point rank-three equivalence.  This theorem contains no `sorry`.
 
 ### `t99J01_exists_connected_cover`
 
@@ -119,12 +206,13 @@ the informal answer.
 
 ## Dependency layers
 
-- Layer 1 (parallel): `t99J01_threeCircles_fundamentalGroup` (LIBRARY),
+- Layer 1 (parallel): the six fundamental-group leaves above,
   `t99J01_exists_connected_cover`,
   `t99J01_connected_cover_fundamentalGroup`, and
   `t99J01_arbitrary_cover_component`.  The latter two receive earlier
   conclusions as hypotheses and therefore do not need their proofs.
-- Layer 2: `apm_t99j01`, a sorry-free three-line assembly.
+- Layer 2: `t99J01_threeCircles_fundamentalGroup`, a sorry-free assembly.
+- Layer 3: `apm_t99j01`, a sorry-free three-line assembly.
 
 ## Axiom gate
 

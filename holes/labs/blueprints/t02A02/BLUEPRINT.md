@@ -47,51 +47,50 @@ This declaration is fully proved.  The source quotient is compact via
 `Quotient.compactSpace`; the main theorem uses that standard Mathlib result
 directly.
 
-## Remaining lemma
+## Remaining leaves
 
-### `apm_t02a02_cutPaste_continuous_bijection` — LIBRARY
+The shared explicit quotient types are `apm_t02a02_octagon`,
+`apm_t02a02_hexagon`, and `apm_t02a02_square`. Their pairing and sign tables
+encode `aabcc⁻¹d⁻¹bd⁻¹`, `aabd⁻¹bd⁻¹`, and `aad⁻¹d⁻¹`. All four leaves are
+independent: none mentions another leaf.
 
-**Statement in words.** There is a continuous bijection from the quotient of
-the given octagon word to the standard two-crosscap polygon surface.
+### `apm_t02a02_source_octagon_homeomorph` — 30–60 lines
 
-**Why true.** Implement the informal sequence of elementary polygon moves
+Identify the handwritten relation with `boundaryRel 8 ...`. Use `funext`,
+`fin_cases`, `Quotient.sound`, `Quotient.inductionOn`, and
+`continuous_coinduced_rng` to build the identity-on-representatives
+homeomorphism. At `t=0,1` both relations literally use the same `edgePoint`,
+so all vertex coincidences agree. This is independent bookkeeping.
 
-```text
-aabcc⁻¹d⁻¹bd⁻¹  →  aabd⁻¹bd⁻¹  →  aad⁻¹d⁻¹  →  aabb,
-```
+### `apm_t02a02_cancel_c_homeomorph` — 80–140 lines
 
-where the first and third arrows are folds/cancellations and the middle arrow
-removes a redundant vertex by cutting and regluing.  Each move should be
-realized on polygon quotients, not merely on words: define its map on the
-closed disk pieces, prove agreement on the glued boundary arcs, descend it by
-`Quotient.lift`, and prove the descended map bijective using the corresponding
-inverse move.  Compose with
-`PolygonSurfacePiOne.nonorientableStandardSpaceHomeomorph 2` (or the packaged
-`standardPairingData_space_homeomorph false 2`).
+Realize `aabcc⁻¹d⁻¹bd⁻¹ → aabd⁻¹bd⁻¹`. Map the two closed radial sectors at
+the adjacent `c,c⁻¹` arcs onto their common seam and angularly reparametrize
+the other six sectors. Build both directions. Useful Mathlib tools:
+`Quotient.lift`, `Quotient.sound`, `Continuous.quotient_lift`,
+`continuous_piecewise`, `Set.EqOn`, and `Homeomorph.mk`; use
+`reverseIcc_reverseIcc` on the reversed pair. The endpoint classes ensure no
+boundary survives at `t=0,1`. This leaf is independent.
 
-This is deliberately one LIBRARY obligation.  The topology loop estimated
-the explicit carrier plus bijectivity at roughly 400–750 lines, and there is
-no honest 30–150-line split without first creating a reusable polygon-move
-API.  Splitting it into “map” and “bijective” seats would be sequential, while
-stating class-normal-form lemmas without the carrier would simply move the
-same geometric construction into their proofs.  The recommended program is
-therefore a reusable cancellation/vertex-removal library whose final exported
-result has exactly the continuous-bijection form stated here.
+### `apm_t02a02_remove_redundant_vertex_homeomorph` — 100–150 lines
 
-**Expected size.** 400–750 lines for a direct one-off construction; larger
-initially if developed as reusable polygon word moves.
+Cut the hexagon from its extra vertex to the centre and reglue the two closed
+pieces, deleting the paired `b` arcs. Define explicit piecewise disk maps in
+both directions, descend with `Quotient.lift` and
+`Continuous.quotient_lift`, and prove inverse laws on representatives using
+`Quotient.inductionOn`. Use `continuous_piecewise`, `Set.EqOn`,
+`edgePoint_one_eq_succ_zero`, and `Homeomorph.mk`. The redundant vertex is in
+both closed pieces and the formulas must agree there. This genuinely geometric
+leaf is independent of the cancellation leaf.
 
-**Dependencies.** Only the definitions block and the imported sorry-free
-polygon infrastructure.  It does not depend on `apm_t02a02_targetT2`.
+### `apm_t02a02_square_standard_homeomorph` — 30–70 lines
 
-**Truth check.** The combinatorial checks above give the same orientability
-and Euler characteristic before and after the moves.  As a second hand check,
-removing the adjacent `cc⁻¹` leaves a hexagon with two vertex classes, three
-edge classes, and one face, again `χ = 0`.  The terminal word `aabb` is exactly
-the two-crosscap standard presentation.  At `t = 0` and `t = 1`, the proposed
-moves must use the already computed vertex identifications; this endpoint
-condition is why the obligation asks for an actual continuous quotient map,
-not just a permutation of edge labels.
+The square pairing is `[1,0,3,2]`, and signs agree within each pair, so
+`pairedParameter` is `t`, exactly as for `standardPairingData false 2`. Prove
+the relations equal using `funext`, `fin_cases`, and
+`simp [apm_t02a02_perm4, apm_t02a02_sign4, pairedParameter]`; transport the
+quotient and compose with `standardPairingData_space_homeomorph false 2
+(by decide)`. Simultaneously reversing both `d` occurrences is harmless.
 
 ## Assembly
 
@@ -103,9 +102,10 @@ inverse and hence the required homeomorphism.  The main theorem contains no
 
 ## Dependency layers
 
-* **Layer 1:** `apm_t02a02_cutPaste_continuous_bijection` (LIBRARY program).
-  The Hausdorff and compactness infrastructure is already proved.
-* **Layer 2:** main-theorem assembly (already compiled; no seat required).
+* **Layer 1 (parallel):** the four homeomorphism leaves above.
+* **Layer 2:** `apm_t02a02_cutPaste_continuous_bijection`, sorry-free
+  composition; no seat required.
+* **Layer 3:** main-theorem assembly (already compiled; no seat required).
 
 ## Compilation and axioms
 
@@ -122,5 +122,5 @@ It compiled successfully.  The final output of
 'apm_t02a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The only declaration containing `sorry` is the single LIBRARY lemma above;
-the main theorem and all infrastructure have no direct `sorry`.
+The four independent leaves are the only declarations containing `sorry`;
+the cut-and-paste assembly and main theorem have no direct `sorry`.

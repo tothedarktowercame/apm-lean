@@ -134,35 +134,77 @@ Applies the generic leaf to each of the four chart leaves and forms the nested
 conjunction.  It contains no `sorry`; its only `sorryAx` paths are the five new
 top-level leaves.
 
-### `apm_t96j07_global_number` — LIBRARY (F2)
+### Global-number leaves
 
-**Statement in words.** Any projective self-map satisfying the diagonal action
-formula has rational-homological Lefschetz number zero, using the actual
-singular homology maps in `apm_t96j07_HasLefschetzNumber`.
+#### `apm_t96j07_global_positiveDiagonal_homotopy`
 
-**Why true.** The positive diagonal path from the identity to
-`diag(1,2,3,4)` descends to a homotopy, so homotopy invariance makes the
-induced maps equal to identity maps.  Rational homology of `RP³` is `Q` in
-degrees 0 and 3 and zero in degrees 1 and 2.  Under corresponding bases the
-two nonzero traces are both 1, hence the alternating trace is `1-1=0`.
+**Statement.** A map with the registered representative formula is homotopic
+from `ContinuousMap.id` via the positive diagonal path
+`diag(1, 1+t, 1+2t, 1+3t)`.
 
-This is the same F2 foundation family as the rational projective-space
-homology and Lefschetz obligations in the t99J05/t96A06/t97J07/t99A03
-blueprints.  The reusable trace definitions live in the sorry-free
-`ConstructionTargets.RationalLefschetz`; what remains is the concrete
-rational homology computation for real projective 3-space plus homotopy
-invariance in the registered custom predicate.
+**Expected size.** 80–140 lines. **Independent:** yes; it uses only
+`hformula`.  Build the cylinder map by the same quotient descent pattern as
+`apm_t96j07_map_fixedPoints`.  Useful tools are
+`ConstructionTargets.ProjectiveQuotientDescent.projectiveHomogeneousMapDescent`,
+`ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap`,
+`ContinuousMap.Homotopic`, `ContinuousMap.Homotopy`, `continuous_pi`, and
+`Projectivization.mk_eq_mk_iff`.  If descent is awkward with the product
+parameter, first define each projective map and prove joint continuity after
+precomposition with the quotient map.
 
-**Expected size.** 700–1800 lines if the common rational `RPⁿ` homology
-foundation is not yet available; 100–250 lines once it is.
+**Truth/degenerate checks.** Every coefficient `1 + i*t` is at least one for
+`t ∈ I`, so the interpolated vector of a nonzero representative is nonzero.
+At `t=0` the descended map is literally the identity; at `t=1` it equals `f`
+by `hformula`.  Scalar compatibility holds even for negative scalars.
 
-**Dependencies.** Definitions and the action-formula hypothesis only.  It does
-not depend on fixed-point or local-index results.
+#### `apm_t96j07_global_HQmap_eq_id`
 
-**Truth check.** The cellular rational chain complex has one generator in
-degrees 0–3, with boundary multiplication alternately by 0 and 2; over
-`Q`, this leaves precisely degrees 0 and 3.  The positive diagonal homotopy
-never meets a singular matrix, and the resulting traces cancel.
+**Statement.** Given an explicit homotopy from the identity to `f`, every
+rational singular-homology map induced by `f` is the identity.
+
+**Expected size.** 20–50 lines. **Independent:** yes; the homotopy is an
+explicit hypothesis.  Follow the already compiled use in
+`apm_t96j07_diagonal_link_degree_of_parts`: use
+`ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder`,
+its `_zero` and `_one` endpoint lemmas, and
+`ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy`.
+Finish the identity endpoint with `Functor.map_id` / `map_id` and unfold
+`apm_t96j07_HQmap` only as needed.
+
+**Truth check.** The conclusion is for every `k`, including degrees above the
+dimension; no finite-dimensional assumption is used by homotopy invariance.
+
+#### `apm_t96j07_global_rationalHomology_bases` — LIBRARY (F2)
+
+**Statement.** Package actual isomorphisms showing rational singular homology
+of `RP³` is `Q` in degrees 0 and 3 and zero in degrees 1 and 2.
+
+**Expected size.** 700–1800 lines until the common rational projective-space
+homology foundation exists; 30–100 lines after importing such a theorem.
+This is the one intentionally retained large LIBRARY piece: splitting it into
+four degree leaves would duplicate the same missing CW/singular comparison.
+It is independent of `f`, the homotopy leaf, and all local-index work.
+
+**Required foundation / tools.** Construct the standard CW chain complex with
+one rational generator in degrees 0–3 and differentials `0, 2, 0`, then use a
+cellular-to-singular homology comparison.  The final algebra uses that `2` is
+a unit in `ℚ`, `LinearMap.ker_eq_bot`, `LinearMap.range_eq_top`, and the
+homology-object API.  No current imported theorem computes singular homology
+of real projective space; do not hide that comparison inside a nominally
+small degree lemma.  This is the same F2 foundation family as the
+t99J05/t96A06/t97J07/t99A03 blueprints.
+
+**Truth/degenerate checks.** The cellular boundary is multiplication by `2`
+in even positive degree and `0` in odd degree.  Thus over `Q`, degrees 1 and 2
+vanish, while degrees 0 and 3 are one-dimensional.  The top class survives
+because `RP³` is orientable (odd projective dimension).
+
+#### `apm_t96j07_global_number_of_parts` and `apm_t96j07_global_number`
+
+Both are sorry-free assembly.  The first receives the induced-map equality
+and all four bases explicitly, rewrites the conjugated maps to identities,
+and lets `simp` compute traces `1,0,0,1`.  The second supplies the three
+independent leaves above.  Neither carries any hidden topology argument.
 
 ## Assembly
 
@@ -175,8 +217,11 @@ then package their conclusions.  The main theorem contains no `sorry`.
 - **Layer 1 (parallel):** `apm_t96j07_map_fixedPoints`,
   `apm_t96j07_diagonal_link_degree`, all four
   `apm_t96j07_local_number_axis*` leaves (each receives the generic result as
-  a hypothesis), and `apm_t96j07_global_number` (LIBRARY/F2).
-- **Layer 2:** the already compiled, sorry-free main-theorem assembly.
+  a hypothesis), `apm_t96j07_global_positiveDiagonal_homotopy`,
+  `apm_t96j07_global_HQmap_eq_id`, and
+  `apm_t96j07_global_rationalHomology_bases` (LIBRARY/F2).
+- **Layer 2:** `apm_t96j07_global_number_of_parts`,
+  `apm_t96j07_global_number`, and the already compiled final assembly.
 
 ## Compilation and axioms
 
@@ -192,6 +237,6 @@ The final output of `#print axioms apm_t96j07` was:
 'apm_t96j07' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
 
-The seven warnings are `map_fixedPoints`, the five new local leaves, and
-`global_number`.  The definitions, copied proved lemmas, `local_numbers`, and
-final assembly contain no direct `sorry`.
+The remaining warnings include the independent global leaves above; both
+global assembly lemmas, the definitions, copied proved lemmas,
+`local_numbers`, and final assembly contain no direct `sorry`.

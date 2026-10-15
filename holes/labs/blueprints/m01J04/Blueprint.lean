@@ -2918,7 +2918,135 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_translate
     {ε : ℝ} (hε : 0 < ε) :
     ∃ ρ0 : ℝ, 0 < ρ0 ∧ ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ0 →
       (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε := by
-  sorry
+  obtain ⟨g, hgK, hgC, hfg⟩ :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_smooth_dense
+      f hf (by positivity : (0 : ℝ) < ε / 4)
+  obtain ⟨r, hr, hKr⟩ := hgK.exists_isCompact_cthickening
+  let A : ℝ := (volume (Metric.cthickening r (tsupport g)) ^ (1 / 2 : ℝ)).toReal
+  have hA : 0 ≤ A := ENNReal.toReal_nonneg
+  have hgU : UniformContinuous g :=
+    hgK.uniformContinuous_of_continuous hgC.continuous
+  obtain ⟨δ, hδ, hgδ⟩ := (Metric.uniformContinuous_iff.1 hgU)
+    (ε / (2 * (A + 1))) (by positivity)
+  refine ⟨min r (δ / 2), lt_min hr (half_pos hδ), fun y hy ↦ ?_⟩
+  have hyr : ‖y‖ ≤ r := hy.trans (min_le_left _ _)
+  have hyδ : ‖y‖ < δ :=
+    (hy.trans (min_le_right _ _)).trans_lt (half_lt_self hδ)
+  let G : EuclideanSpace ℝ (Fin d) → E := fun x ↦ g (x - y) - g x
+  have hGsupp : Function.support G ⊆ Metric.cthickening r (tsupport g) := by
+    intro x hx
+    by_contra hxK
+    have hg0 : g x = 0 := Function.notMem_support.mp fun hxg ↦
+      hxK (Metric.mem_cthickening_of_dist_le x x r _ (subset_tsupport g hxg) (by simp [hr.le]))
+    have hgy0 : g (x - y) = 0 := Function.notMem_support.mp fun hxyg ↦
+      hxK (Metric.mem_cthickening_of_dist_le x (x - y) r _
+        (subset_tsupport g hxyg) (by simpa [dist_eq_norm] using hyr))
+    exact hx (by simp [G, hg0, hgy0])
+  have hGmeas : AEStronglyMeasurable G volume :=
+    ((hgC.continuous.comp (continuous_id.sub continuous_const)).sub hgC.continuous).aestronglyMeasurable
+  have hGtop : eLpNorm G ⊤ volume ≤ ENNReal.ofReal (ε / (2 * (A + 1))) := by
+    apply eLpNormEssSup_le_of_ae_bound
+    filter_upwards [] with x
+    have hxy : dist (x - y) x < δ := by simpa [dist_eq_norm] using hyδ
+    simpa [G, dist_eq_norm] using le_of_lt (hgδ hxy)
+  have hG2 : (eLpNorm G 2 volume).toReal ≤ ε / 2 := by
+    have hres : eLpNorm G 2 volume =
+        eLpNorm G 2 (volume.restrict (Metric.cthickening r (tsupport g))) := by
+      set_option maxHeartbeats 800000 in
+        exact eLpNorm_restrict_eq_of_support_subset
+          (f := G) (s := Metric.cthickening r (tsupport g))
+          (p := (2 : ℝ≥0∞)) (μ := volume) hGsupp |>.symm
+    rw [hres]
+    have hle := eLpNorm_le_eLpNorm_mul_rpow_measure_univ
+      (μ := volume.restrict (Metric.cthickening r (tsupport g)))
+      (show (2 : ℝ≥0∞) ≤ ⊤ by simp)
+      hGmeas.restrict
+    have hpow : (volume.restrict (Metric.cthickening r (tsupport g)) Set.univ) ^
+          (1 / (2 : ℝ≥0∞).toReal - 1 / (⊤ : ℝ≥0∞).toReal) =
+        volume (Metric.cthickening r (tsupport g)) ^ (1 / 2 : ℝ) := by
+      simp [hKr.measurableSet]
+    rw [hpow] at hle
+    have htop' : eLpNorm G ⊤ (volume.restrict (Metric.cthickening r (tsupport g))) ≤
+        ENNReal.ofReal (ε / (2 * (A + 1))) := by
+      exact (eLpNorm_mono_measure (p := (⊤ : ℝ≥0∞)) G
+        Measure.restrict_le_self).trans hGtop
+    set_option maxHeartbeats 1000000 in
+     calc
+      (eLpNorm G 2 (volume.restrict (Metric.cthickening r (tsupport g)))).toReal
+          ≤ (ENNReal.ofReal (ε / (2 * (A + 1))) *
+              volume (Metric.cthickening r (tsupport g)) ^ (1 / 2 : ℝ)).toReal :=
+        ENNReal.toReal_mono (ENNReal.mul_ne_top ENNReal.ofReal_ne_top
+          (ENNReal.rpow_ne_top_of_nonneg (by positivity) hKr.measure_ne_top))
+          (hle.trans (mul_le_mul_right' htop' _))
+      _ = ε / (2 * (A + 1)) * A := by
+        rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal (by positivity)]
+      _ ≤ ε / 2 := by
+        rw [div_mul_eq_mul_div, div_le_iff₀ (by positivity), div_mul_eq_mul_div]
+        nlinarith
+  have htrans : (eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume).toReal =
+      (eLpNorm (f - g) 2 volume).toReal := by
+    have hm := measurePreserving_sub_right volume y
+    simpa [Function.comp_def] using congrArg ENNReal.toReal
+      (eLpNorm_comp_measurePreserving
+        (hf.sub (hgC.continuous.memLp_of_hasCompactSupport hgK
+          (p := (2 : ℝ≥0∞)) (μ := volume))).1 hm)
+  have hfgmem : MemLp (f - g) 2 volume :=
+    hf.sub (hgC.continuous.memLp_of_hasCompactSupport hgK
+      (p := (2 : ℝ≥0∞)) (μ := volume))
+  have hm := measurePreserving_sub_right volume y
+  have htrmeas : AEStronglyMeasurable (fun x ↦ (f - g) (x - y)) volume :=
+    hfgmem.1.comp_quasiMeasurePreserving hm.quasiMeasurePreserving
+  have hgfmeas : AEStronglyMeasurable (fun x ↦ g x - f x) volume :=
+    (hgC.continuous.aestronglyMeasurable.sub hf.1)
+  have htri := eLpNorm_add_le htrmeas (hGmeas.add hgfmeas) (p := (2 : ℝ≥0∞))
+  have htri2 := eLpNorm_add_le hGmeas hgfmeas (p := (2 : ℝ≥0∞))
+  have htrmem : MemLp (fun x ↦ (f - g) (x - y)) 2 volume :=
+    hfgmem.comp_measurePreserving hm
+  have hGc : Continuous G :=
+    (hgC.continuous.comp (continuous_id.sub continuous_const)).sub hgC.continuous
+  have hGmem : MemLp G 2 volume :=
+    hGc.memLp_of_hasCompactSupport
+      (HasCompactSupport.of_support_subset_isCompact hKr hGsupp)
+      (p := (2 : ℝ≥0∞)) (μ := volume)
+  have hgfmem : MemLp (fun x ↦ g x - f x) 2 volume :=
+    (hgC.continuous.memLp_of_hasCompactSupport hgK
+      (p := (2 : ℝ≥0∞)) (μ := volume)).sub hf
+  have hfinite : eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume +
+      (eLpNorm G 2 volume + eLpNorm (fun x ↦ g x - f x) 2 volume) ≠ ⊤ := by
+    exact ENNReal.add_ne_top.2 ⟨htrmem.eLpNorm_ne_top,
+      ENNReal.add_ne_top.2 ⟨hGmem.eLpNorm_ne_top, hgfmem.eLpNorm_ne_top⟩⟩
+  have hmain : eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤
+      eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume +
+        (eLpNorm G 2 volume + eLpNorm (fun x ↦ g x - f x) 2 volume) := by
+    have heq : (fun x ↦ f (x - y) - f x) =
+        (fun x ↦ (f - g) (x - y)) + (fun x ↦ G x + (g x - f x)) := by
+      funext x
+      simp [G]
+    rw [heq]
+    exact (htri (by norm_num)).trans
+      (add_le_add_right (htri2 (by norm_num)) _)
+  calc
+    (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal
+        ≤ (eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume +
+          (eLpNorm G 2 volume + eLpNorm (fun x ↦ g x - f x) 2 volume)).toReal :=
+      ENNReal.toReal_mono hfinite hmain
+    _ = (eLpNorm (fun x ↦ (f - g) (x - y)) 2 volume).toReal +
+          ((eLpNorm G 2 volume).toReal + (eLpNorm (fun x ↦ g x - f x) 2 volume).toReal) := by
+      rw [ENNReal.toReal_add, ENNReal.toReal_add]
+      · exact hGmem.eLpNorm_ne_top
+      · exact hgfmem.eLpNorm_ne_top
+      · exact htrmem.eLpNorm_ne_top
+      · exact ENNReal.add_ne_top.2 ⟨hGmem.eLpNorm_ne_top, hgfmem.eLpNorm_ne_top⟩
+    _ ≤ ε := by
+      rw [htrans]
+      have hgf : (eLpNorm (fun x ↦ g x - f x) 2 volume).toReal =
+          (eLpNorm (f - g) 2 volume).toReal := by
+        have he : (fun x ↦ g x - f x) = -(f - g) := by
+          funext x
+          simp
+        rw [he, eLpNorm_neg]
+      rw [hgf]
+      linarith
 
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_integrable
     {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
@@ -2938,6 +3066,243 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_tran
   exact ⟨hf.comp_measurePreserving hmp,
     eLpNorm_comp_measurePreserving hf.1 hmp⟩
 
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support
+    {d : ℕ} {ρ : ℝ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    ∀ y, κ y ≠ 0 → ‖y‖ ≤ ρ := by
+  intro y hy
+  simpa [Metric.mem_closedBall, dist_zero_right] using hκs hy
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ρ ε : ℝ} (hε : 0 ≤ ε)
+    (htr : ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε) :
+    ∀ y, ‖y‖ ≤ ρ →
+      eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤ ENNReal.ofReal ε := by
+  intro y hy
+  have htrans :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      f hf y
+  have hmem : MemLp (fun x ↦ f (x - y) - f x) 2 volume := htrans.1.sub hf
+  rw [← ENNReal.toReal_le_toReal hmem.eLpNorm_ne_top ENNReal.ofReal_ne_top,
+    ENNReal.toReal_ofReal hε]
+  exact htr y hy
+
+/-- The mollification error is the kernel average of translation errors
+(pointwise; all integrands are integrable since `κ` is continuous with compact
+support and `f` is locally integrable). -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_identify
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) {ρ : ℝ}
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ : Continuous κ)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    (MeasureTheory.convolution κ f (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) =
+      fun x ↦ ∫ y, κ y • (f (x - y) - f x) ∂volume := by
+  have hκK : HasCompactSupport κ :=
+    HasCompactSupport.of_support_subset_isCompact
+      (isCompact_closedBall (0 : EuclideanSpace ℝ (Fin d)) ρ) hκs
+  have hκLp : MemLp κ 2 volume :=
+    hκ.memLp_of_hasCompactSupport hκK
+      (p := (2 : ℝ≥0∞)) (μ := volume)
+  funext x
+  have hfx : MemLp (fun y ↦ f (x - y)) 2 volume := by
+    have hmp := volume.measurePreserving_sub_left x
+    exact hf.comp_measurePreserving hmp
+  have hprod : Integrable (fun y ↦ κ y • f (x - y)) volume := by
+    exact memLp_one_iff_integrable.mp
+      (hfx.smul hκLp : MemLp (fun y ↦ κ y • f (x - y)) 1 volume)
+  have hconst : Integrable (fun y ↦ κ y • f x) volume :=
+    (hκ.integrable_of_hasCompactSupport hκK).smul_const (f x)
+  simp only [Pi.sub_apply]
+  rw [MeasureTheory.convolution_def]
+  simp only [ContinuousLinearMap.lsmul_apply]
+  have hfxavg : (∫ y, κ y • f x ∂volume) = f x := by
+    rw [integral_smul_const, hκ1, one_smul]
+  calc
+    (∫ y, κ y • f (x - y) ∂volume) - f x =
+        (∫ y, κ y • f (x - y) ∂volume) -
+          (∫ y, κ y • f x ∂volume) := congrArg
+            (fun z ↦ (∫ y, κ y • f (x - y) ∂volume) - z) hfxavg.symm
+    _ = ∫ y, (κ y • f (x - y) - κ y • f x) ∂volume :=
+      (integral_sub hprod hconst).symm
+    _ = ∫ y, κ y • (f (x - y) - f x) ∂volume := by
+      apply integral_congr_ae
+      exact Filter.Eventually.of_forall fun y ↦
+        (smul_sub (κ y) (f (x - y)) (f x)).symm
+
+/-- Joint measurability of the translation-error family. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_joint_meas
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume) :
+    AEStronglyMeasurable
+      (Function.uncurry fun (y x : EuclideanSpace ℝ (Fin d)) ↦ f (x - y) - f x)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
+  let μ : Measure (EuclideanSpace ℝ (Fin d)) := volume
+  have hshear : MeasurePreserving
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        (z.1, z.2 - z.1)) (μ.prod μ) (μ.prod μ) :=
+    measurePreserving_prod_sub μ μ
+  have hsub : Measure.QuasiMeasurePreserving
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        z.2 - z.1) (μ.prod μ) μ := by
+    simpa [Function.comp_def] using
+      (Measure.quasiMeasurePreserving_snd.comp hshear.quasiMeasurePreserving)
+  have h₁ : AEStronglyMeasurable
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        f (z.2 - z.1)) (μ.prod μ) :=
+    hf.1.comp_quasiMeasurePreserving hsub
+  have h₂ : AEStronglyMeasurable
+      (fun z : EuclideanSpace ℝ (Fin d) × EuclideanSpace ℝ (Fin d) ↦
+        f z.2) (μ.prod μ) :=
+    hf.1.comp_quasiMeasurePreserving Measure.quasiMeasurePreserving_snd
+  simpa [μ, Function.uncurry] using h₁.sub h₂
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_weighted
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∀ y, eLpNorm (fun x ↦ κ y • G y x) 2 volume ≤ ENNReal.ofReal (κ y) * C := by
+  intro y
+  by_cases hy : κ y = 0
+  · simp [hy]
+  · rw [show (fun x ↦ κ y • G y x) = κ y • G y by rfl,
+      eLpNorm_const_smul]
+    simpa [← ofReal_norm_eq_enorm, Real.norm_eq_abs, abs_of_nonneg (hκ0 y)] using
+      mul_le_mul_left' (hC y hy) (ENNReal.ofReal (κ y))
+
+/-- Jensen for the probability kernel `κ` (pointwise in `x`). -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_pointwise
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E) (x : EuclideanSpace ℝ (Fin d)) :
+    ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ≤
+      ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume := by
+  let w : EuclideanSpace ℝ (Fin d) → NNReal := fun y ↦ Real.toNNReal (κ y)
+  have hw0 : AEMeasurable w volume := hκint.1.aemeasurable.real_toNNReal
+  let wm : EuclideanSpace ℝ (Fin d) → NNReal := hw0.mk w
+  have hwm : Measurable wm := hw0.measurable_mk
+  have hw_eq : ∀ᵐ y ∂volume, (wm y : ℝ) = κ y := by
+    filter_upwards [hw0.ae_eq_mk] with y hy
+    simp only [wm]
+    rw [← hy]
+    simp [w, hκ0 y]
+  have hwmint : Integrable (fun y ↦ (wm y : ℝ)) volume := hκint.congr (by
+    filter_upwards [hw_eq] with y hy
+    exact hy.symm)
+  let ν : Measure (EuclideanSpace ℝ (Fin d)) := volume.withDensity fun y ↦ (wm y : ℝ≥0∞)
+  letI : IsProbabilityMeasure ν := by
+    rw [isProbabilityMeasure_iff]
+    simp only [ν, withDensity_apply _ MeasurableSet.univ, Measure.restrict_univ]
+    rw [lintegral_coe_eq_integral wm hwmint]
+    rw [integral_congr_ae hw_eq]
+    simp [hκ1]
+  have hint : (∫ y, G y x ∂ν) = ∫ y, κ y • G y x ∂volume := by
+    rw [show ν = volume.withDensity (fun y ↦ (wm y : ℝ≥0∞)) from rfl,
+      integral_withDensity_eq_integral_smul hwm]
+    apply integral_congr_ae
+    filter_upwards [hw_eq] with y hy
+    simp [NNReal.smul_def, hy]
+  rw [← hint]
+  by_cases hG : AEStronglyMeasurable (fun y ↦ G y x) ν
+  · have h12 : eLpNorm (fun y ↦ G y x) 1 ν ≤
+        eLpNorm (fun y ↦ G y x) 2 ν :=
+      eLpNorm_le_eLpNorm_of_exponent_le (by norm_num) hG
+    have hi : ‖∫ y, G y x ∂ν‖ₑ ≤ eLpNorm (fun y ↦ G y x) 2 ν := by
+      refine (enorm_integral_le_lintegral_enorm _).trans ?_
+      simpa [eLpNorm_one_eq_lintegral_enorm] using h12
+    refine (pow_le_pow_left' hi 2).trans_eq ?_
+    have hep := eLpNorm_nnreal_pow_eq_lintegral
+      (f := fun y ↦ G y x) (p := (2 : NNReal)) (μ := ν) (by norm_num)
+    rw [show eLpNorm (fun y ↦ G y x) 2 ν ^ 2 =
+        ∫⁻ y, ‖G y x‖ₑ ^ 2 ∂ν by simpa [ENNReal.rpow_two] using hep]
+    simp only [ν]
+    rw [lintegral_withDensity_eq_lintegral_mul₀' hwm.coe_nnreal_ennreal.aemeasurable
+      (hG.enorm.pow_const 2)]
+    apply lintegral_congr_ae
+    filter_upwards [hw_eq] with y hy
+    rw [← hy, ENNReal.ofReal_coe_nnreal]
+    simp [ENNReal.rpow_two, pow_two]
+  · have hni : ¬ Integrable (fun y ↦ G y x) ν := fun h ↦ hG h.1
+    rw [integral_undef hni]
+    simp
+
+/-- Tonelli: integrate the Jensen bound in `x` and use the section bound. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    (hG : AEStronglyMeasurable (Function.uncurry G)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume ≤ C ^ 2 := by
+  have hκm : AEMeasurable κ volume := hκint.aestronglyMeasurable.aemeasurable
+  have hm : AEMeasurable
+      (Function.uncurry fun (x y : EuclideanSpace ℝ (Fin d)) ↦
+        ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume) := by
+    exact (hκm.ennreal_ofReal.comp_snd).mul
+      (hG.prod_swap.enorm.pow_const 2)
+  rw [lintegral_lintegral_swap hm]
+  calc
+    (∫⁻ y, ∫⁻ x, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume)
+        = ∫⁻ y, ENNReal.ofReal (κ y) * eLpNorm (G y) 2 volume ^ 2 ∂volume := by
+          apply lintegral_congr
+          intro y
+          rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top]
+          congr 1
+          simpa using
+            (eLpNorm_nnreal_pow_eq_lintegral (μ := volume) (f := G y)
+              (p := (2 : NNReal)) (by norm_num : (2 : NNReal) ≠ 0)).symm
+    _ ≤ ∫⁻ y, ENNReal.ofReal (κ y) * C ^ 2 ∂volume := by
+      apply lintegral_mono
+      intro y
+      by_cases hy : κ y = 0
+      · simp [hy]
+      · exact mul_le_mul_left' (pow_le_pow_left' (hC y hy) 2) _
+    _ = (∫⁻ y, ENNReal.ofReal (κ y) ∂volume) * C ^ 2 := by
+      rw [lintegral_mul_const'' _ hκm.ennreal_ofReal]
+    _ = C ^ 2 := by
+      rw [← ofReal_integral_eq_lintegral_ofReal hκint
+        (Filter.Eventually.of_forall hκ0), hκ1]
+      simp
+
+/-- An `L²` bound from a bound on the integral of the squared norm. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E]
+    (F : EuclideanSpace ℝ (Fin d) → E) {C : ℝ≥0∞}
+    (h : ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume ≤ C ^ 2) :
+    eLpNorm F 2 volume ≤ C := by
+  apply (ENNReal.pow_le_pow_left_iff (by norm_num : (2 : ℕ) ≠ 0)).mp
+  have heq : eLpNorm F 2 volume ^ (2 : ℕ) =
+      ∫⁻ x, ‖F x‖ₑ ^ 2 ∂volume := by
+    simpa [ENNReal.rpow_two] using
+      (MeasureTheory.eLpNorm_nnreal_pow_eq_lintegral
+        (f := F) (p := (2 : NNReal)) (by norm_num))
+  rwa [heq]
+
+/-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
+a kernel average is at most the worst `L²` norm on the kernel's support. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)
+    (hκ1 : (∫ x, κ x ∂volume) = 1)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    (hG : AEStronglyMeasurable (Function.uncurry G)
+      ((volume : Measure (EuclideanSpace ℝ (Fin d))).prod volume))
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    eLpNorm (fun x ↦ ∫ y, κ y • G y x ∂volume) 2 volume ≤ C := by
+  apply apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_from_sq
+  calc ∫⁻ x, ‖∫ y, κ y • G y x ∂volume‖ₑ ^ 2 ∂volume
+      ≤ ∫⁻ x, ∫⁻ y, ENNReal.ofReal (κ y) * ‖G y x‖ₑ ^ 2 ∂volume ∂volume :=
+        lintegral_mono fun x => apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_pointwise κ hκ0 hκint hκ1 G x
+    _ ≤ C ^ 2 := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_tonelli κ hκ0 hκint hκ1 G hG hC
+
 /-- Minkowski's integral inequality for a probability kernel supported in the
 `ρ`-ball: the mollification error is at most the worst translation error. -/
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
@@ -2951,7 +3316,18 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
     (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
     (eLpNorm (MeasureTheory.convolution κ f
       (ContinuousLinearMap.lsmul ℝ ℝ) volume - f) 2 volume).toReal ≤ ε := by
-  sorry
+  have htsupp : tsupport κ ⊆ Metric.closedBall 0 ρ :=
+    closure_minimal hκs Metric.isClosed_closedBall
+  have hκc : HasCompactSupport κ :=
+    (isCompact_closedBall 0 ρ).of_isClosed_subset (isClosed_tsupport _) htsupp
+  have hκint : Integrable κ volume := hκ.integrable_of_hasCompactSupport hκc
+  rw [apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_identify f hf κ hκ hκ1 hκs]
+  have hle := apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound κ hκ0 hκint hκ1
+    (fun y x ↦ f (x - y) - f x) (apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_joint_meas f hf)
+    (C := ENNReal.ofReal ε) (fun y hy ↦
+      apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound f hf hε htr y
+        (apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support κ hκs y hy))
+  exact ENNReal.toReal_le_of_le_ofReal hε hle
 
 /-- Approximate identity in `L²`, uniformly over normalised nonnegative
 kernels supported in small balls: `‖κ ⋆ f - f‖₂ ≤ sup_{|y| ≤ ρ} ‖τ_y f - f‖₂`

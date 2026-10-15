@@ -79,49 +79,87 @@ point are fixed by direct projective equality.
 vector cannot represent a projective point.  The already proved
 `t97J07IsolatedPoint_not_mem` checks that the two pieces do not collapse.
 
-### `t97J07_eulerCharacteristic` — LIBRARY
+### `t97J07_cp2RationalHomologyData_exists` — LIBRARY
 
-**Statement in words.** The rational singular-homology Euler characteristic
-of quotient-topological complex projective two-space is 3.
+**Statement in words.** For the literal quotient-topological `CP²`, rational
+singular homology is finite-dimensional in every degree, vanishes above degree
+4, is zero in degrees 1 and 3, and is linearly equivalent to `ℚ` in degrees
+0, 2, and 4.
 
-**Why true.** Compute
-\(H_k(\mathbb{CP}^2;\mathbb Q)\): it is one-dimensional in degrees 0, 2,
-and 4 and zero otherwise.  The identity induces the identity in each degree,
-whose trace is the dimension, so the finite alternating sum is
-`1 + 1 + 1 = 3`.  A standard construction can use the CW filtration
-\(\mathbb{CP}^0\subset\mathbb{CP}^1\subset\mathbb{CP}^2\), with one cell
-in each even dimension.
+**Why true.** Use the CW filtration
+\(\mathbb{CP}^0\subset\mathbb{CP}^1\subset\mathbb{CP}^2\), with one cell in
+each real dimension 0, 2, and 4.  For an implementation using present
+repository foundations, construct the filtration by the last homogeneous
+coordinate, identify each relative pair with `(D^(2n), S^(2n-1))`, and apply
+the pair long exact sequence and excision.  Relevant declarations include
+`Projectivization.mk_rep`, `Projectivization.mk_eq_mk_iff'`,
+`ConstructionTargets.SingularHomologyConcrete.singularPairHomology_exact_subspace`,
+`singularPairHomology_exact_absolute`, `singularPairHomology_exact_relative`,
+and the excision comparison in `ConstructionTargets.SingularExcision`.
 
 Mathlib does not currently provide this projective-space homology computation.
-The closest sorry-free repository foundations are
-`ConstructionTargets.ProjectiveSpaceTopology`, which supplies the exact
-quotient-topological space, and
-`ConstructionTargets.RationalLefschetz`, which supplies the honest
-finite-support/finite-dimensional Euler-characteristic predicate.  What is
-missing is the cellular or singular homology computation for complex
-projective space.  This is therefore deliberately one LIBRARY obligation,
-not a collection of fake small lemmas.
+`ProjectiveSpaceTopology` supplies the exact quotient space and
+`RationalLefschetz` supplies the honest Euler-characteristic predicate, but
+the cellular/singular comparison is absent.  This is deliberately the one
+marked LIBRARY obligation rather than several small statements that each hide
+the same missing foundation.
 
-**Expected size.** 300+ lines / topology construction program.
+**Expected size.** 300+ lines / topology construction program.  It is the one
+knowingly over-seat-sized leaf, as required for a genuinely missing large
+foundation.
 
-**Dependencies.** Definitions and the two imported sorry-free construction
-targets only; it does not depend on `t97J07_fixed_set`.
+**Dependencies.** Definitions only at statement level; no other sorry lemma.
+Its eventual proof will likely need imports of the concrete homology and
+excision targets named above.
 
 **Truth check.** The standard CW decomposition has exactly one cell in
-dimensions 0, 2, and 4 and none in odd dimensions, giving alternating sum 3.
-For boundary sanity, the analogous decomposition gives 1 for
-\(\mathbb{CP}^0\) and 2 for \(\mathbb{CP}^1\), agreeing with a point and
-a 2-sphere.
+dimensions 0, 2, and 4 and none in odd dimensions.  For boundary sanity, it
+gives 1 for `CP⁰` and 2 for `CP¹`, agreeing with a point and a 2-sphere.
+
+### `t97J07_eulerCharacteristic_of_homologyData`
+
+**Statement in words.** Any supplied `T97J07CP2RationalHomologyData`
+certificate implies that `CP²` has rational Euler characteristic 3.
+
+**Why true.** Unfold `RationalLefschetz.HasEulerCharacteristic` and
+`HasLefschetzNumber`, choose bound 4, and install
+`h.finiteDimensional k` locally.  Functoriality sends `ContinuousMap.id` to
+the identity; use `CategoryTheory.Functor.map_id` (often `simp` after
+unfolding `RationalLefschetz.induced`).  In degrees 1 and 3 use the trace-zero
+lemma for a subsingleton module.  In degrees 0, 2, and 4 transport trace across
+`h.zeroEquiv`, `h.twoEquiv`, and `h.fourEquiv`, using `LinearMap.trace_id` and
+trace invariance under linear equivalence.  Then `norm_num` evaluates the
+five-term alternating sum.
+
+**Expected size.** 50–120 lines.
+
+**Dependencies.** The homology result is an explicit hypothesis, so this leaf
+is independent of `t97J07_cp2RationalHomologyData_exists` and `t97J07_fixed_set`.
+
+**Truth and degeneracy checks.** The bound is inclusive: `range (4 + 1)`
+contains 0 through 4, while `h.vanishesAbove` handles strictly larger degrees.
+Odd degrees contribute zero; all surviving degrees are even and have sign
+`+1`.  Explicit finite-dimensionality prevents the default trace on an
+infinite-dimensional space from making the claim vacuous.
+
+### `t97J07_eulerCharacteristic` (assembly)
+
+This is sorry-free and applies
+`t97J07_eulerCharacteristic_of_homologyData` to
+`t97J07_cp2RationalHomologyData_exists`.
 
 ## Assembly and dependency layers
 
-- **Layer 1 (parallel):** `t97J07_fixed_set` and the LIBRARY lemma
-  `t97J07_eulerCharacteristic`.
-- **Layer 2 (already proved):** `apm_t97j07` combines those two results with
+- **Layer 1 (parallel):** `t97J07_fixed_set`, the LIBRARY leaf
+  `t97J07_cp2RationalHomologyData_exists`, and the hypothesis-driven algebra leaf
+  `t97J07_eulerCharacteristic_of_homologyData`.
+- **Layer 2 (sorry-free):** `t97J07_eulerCharacteristic` applies the algebra
+  leaf to the homology certificate.
+- **Layer 3 (already proved):** `apm_t97j07` combines those results with
   the copied elementary lemmas.  Its body contains no `sorry`.
 
-The two Layer 1 statements share no unproved dependency, so seats can work on
-them independently.
+All three Layer 1 statements share no unproved dependency.  In particular,
+the algebra leaf receives the LIBRARY conclusion as an explicit hypothesis.
 
 ## Compilation and axioms
 
@@ -140,4 +178,3 @@ The final output of `#print axioms apm_t97j07` was:
 
 The two `sorry` warnings in `Blueprint.lean` are exactly the two Layer 1
 lemmas.  The final theorem has no direct `sorry`.
-

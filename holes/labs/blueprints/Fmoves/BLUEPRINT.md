@@ -108,17 +108,40 @@ already included by `EqvGen`; interior points have singleton classes.
 
 ### Cut-and-paste
 
-- `cutAndPaste_aux_triangle_charts` is currently the single **LIBRARY** leaf
-  (100--150 lines once a polygon/triangle PL toolkit is available).  It
-  constructs both maps from `Fin 2 × Disk`, proves continuity and coverage,
-  and performs the two directed boundary-fibre checks.  The natural reusable
-  missing foundation is a theorem that a closed Euclidean triangle (and a
-  finite convex polygon triangulated from a diagonal) is a quotient image of
-  `Disk`, with prescribed oriented boundary arcs.  Mathlib tools to try are
-  `Convex`, `AffineMap`, `ContinuousMap.piecewise`,
-  `IsClosed.isClosedEmbedding_subtypeVal`, and
-  `IsQuotientMap.of_surjective_continuous`; no SphereCap/LinearGraphMeasure
-  import is permitted.
+- `cutAndPaste_aux_convex_radial_chart` (70--110 lines, independent) is the
+  reusable convex-body leaf.  Translate by `-p`, apply
+  `gaugeRescaleHomeomorph` between the translated body and the open unit ball,
+  restrict its inverse to closures, then translate back.  Use
+  `image_gaugeRescaleHomeomorph_interior`,
+  `image_gaugeRescaleHomeomorph_closure`, and the defining gauge formula for
+  the positive-ray clause.  Alternatively
+  `exists_homeomorph_image_interior_closure_frontier_eq_unitBall` supplies the
+  three image equalities, but its arbitrary homeomorphism does *not* by itself
+  prove the ray formula.
+- `cutAndPaste_aux_triangle_chart_generators` (120--150 lines, independent
+  given `hradial`) defines the two half-disks cut by the chord between the two
+  `x` vertices.  Each is an intersection of the closed disk with a closed
+  half-plane, hence compact and convex; choose its midpoint shifted slightly
+  toward its arc as the interior basepoint.  Apply `hradial` four times (old
+  and new placements), with a conjugating rotation/reflection for the new
+  placement.  Prove continuity and coverage with `Continuous.fin_cases` and
+  `Set.range_comp`; then check only raw `WordRel` generators.  The frontier is
+  the relevant circle arc union the chord (`frontier_inter_subset` plus the
+  elementary half-plane inequalities).  Old chord directions are opposite;
+  the new chord joins the two old `x` sides.  On the reversed block use
+  `edgePoint` with `reverseParameter` and `inverseWord`; close endpoint chains
+  with `EqvGen.trans`, not a raw generator.
+- `cutAndPaste_aux_triangle_charts_forward` (30--55 lines, independent given
+  `has` and `hgen`) lifts an old `EqvGen` chain.  At every intermediate disk
+  point use `has` to choose a preimage in `Fin 2 × Disk`; apply `hgen` to each
+  generator, and preserve `refl`, `symm`, and `trans`.
+- `cutAndPaste_aux_triangle_charts_reverse` (30--55 lines, independent given
+  `hbs` and `hgen`) is the symmetric lift for the target relation.  It uses
+  `hbs` for intermediate preimages and otherwise the same `EqvGen` induction.
+- `cutAndPaste_aux_triangle_charts` is now a sorry-free assembly of those four
+  leaves.  The two lift leaves deliberately receive the generator calculation
+  and surjectivity as explicit hypotheses, so seats do not acquire one
+  another's `sorryAx`.
 - `cutAndPaste_aux_relation_iff` (25--40 lines, independent) combines the two
   directed fibre statements.  `cutAndPasteParameterRel` names the old-picture
   pullback relation so the two direction proofs can be developed separately
@@ -133,4 +156,83 @@ taken in `EqvGen`, not just `WordRel`.  `hw.1` rules out an empty old polygon,
 and `cutAndPaste_aux_span_aux_target_polygon` supplies the corresponding
 nonempty/even target check.
 
+Radial-chart degeneracies: compactness plus `p ∈ interior K` excludes an empty
+or lower-dimensional body and gives positive gauge on every unit ray.  Chord
+endpoints belong to both the arc and chord pieces; all formulas must agree
+there.  A zero-length word block changes only which polygon vertices coincide,
+not the nondegenerate chord or either half-disk.  Dimension zero is irrelevant
+because this lemma is specialized to `ℂ`.
+
 Review (claude-14, 2026-10-14): `CancellationZipSpec.interior_iff` was unsatisfiable (zipped arcs map to an interior slit, so boundary ↛ boundary); replaced by `interior_maps` (interior → interior) and a one-sided `interior_injective` (p interior, c p = c q → p = q), which is what zip_interior needs.
+
+## Seat split: merge boundary
+
+`mergeRepeatedBlock_aux_boundary` is now a sorry-free assembly.  Its four
+leaves are parallel: the formula-transfer and relation leaves receive all
+earlier outputs as explicit hypotheses.
+
+- `equivariantCircleLift_homeomorph` is the **LIBRARY** AddCircle leaf
+  (70--110 lines, independent).  Descend `F.toFun` and `F.invFun` through
+  `QuotientAddGroup`; derive all integer-period identities from
+  `toFun_add_period`/`invFun_add_period`, then use `Continuous.quotient_lift`
+  (or `continuous_quot_lift`) and conjugate by
+  `AddCircle.homeomorphCircle`.  Useful declarations:
+  `AddCircle.continuous_mk'`, `QuotientAddGroup.mk_eq_mk_iff`,
+  `AddCircle.homeomorphCircle_apply`, `Homeomorph.trans`, and
+  `Function.LeftInverse`/`RightInverse`.
+- `mergeRepeatedBlock_aux_boundary_lift` is the explicit PL leaf (80--130
+  lines, independent).  Construct a strictly increasing piecewise-affine
+  function on `[0,N]` through breakpoints
+  `0,u,u+2,u+2+v,u+4+v,N` with images
+  `0,u,u+1,u+1+v,u+2+v,N-2`, extend by period `N ↦ N-2`, and construct the
+  inverse from the swapped breakpoint lists.  The structure forces the seven
+  needed formulas and both inverse/continuity proofs.  Likely tools:
+  `Continuous.piecewise`, `continuousOn_iff_continuous_restrict`,
+  `Int.floor`, `Int.fract`, `Int.fract_lt_one`, `Int.floor_add_int`, and
+  `linarith`.  If the periodic extension dominates the proof, first prove a
+  local lemma for a continuous strictly monotone Icc homeomorphism.
+- `mergeRepeatedBlock_aux_boundary_edge_formulas` (35--60 lines,
+  independent given `F,g,hg`) transfers the seven real-coordinate formulas
+  to `edgePoint`.  Unfold `edgePoint`, rewrite the exponential as
+  `AddCircle.toCircle ((e+t : AddCircle n))` (the proof pattern is
+  `edgePointCircle_eq_toCircle` in
+  `ConstructionTargets/PolygonSurfacePiOne.lean`), then use `hg` and the
+  matching field `F.on_u`, `on_y`, ..., `on_t`.  For half parameters build
+  the `Icc` subtype with `constructor <;> linarith [s.2.1, s.2.2]`.
+- `mergeRepeatedBlock_aux_boundary_relation` (90--140 lines, independent
+  given `hg`) is purely finite/combinatorial.  Expand a `WordRel` generator,
+  split its two indices among the seven append blocks with
+  `List.getElem_append`/`List.get_append`, and use the corresponding edge
+  formula.  The occurrence hypotheses `hy`,`hz`,`ha`, plus `hyz`, show that
+  the only altered label pairs are `y/inv y` and `z/inv z`; the reverse
+  direction splits the `a/inv a` parameter at `1/2`.  Lift generator maps
+  through `Relation.EqvGen.rel`, `.symm`, and `.trans`; do not attempt to prove
+  a raw `WordRel ↔ WordRel`, since the old `y|z` vertex maps to the midpoint
+  of the target edge and is represented only after generated closure.
+
+Degenerate checks: `u`, `v`, and `t` may all be empty, but both periods stay
+positive (source has four displayed edges, target two).  Every half-parameter
+lies in `[0,1]`.  At `s=0,1` adjacent formulas agree; in particular the old
+`y|z` and `inv z|inv y` vertices map to the two midpoints.  Sign reversal is
+unchanged: `s/2` pairs with `1-s/2`, while `(1+s)/2` pairs with
+`(1-s)/2`.  Thus endpoint classes must be handled by `EqvGen`, including
+when an adjacent block is empty.  No SphereCap or LinearGraphMeasure import
+is needed.
+
+## Cancellation zip, explicit (claude-14, 2026-10-14)
+`inversePairCancellation_aux_zip_map` is now a sorry-free assembly over 22 leaves; see the section "Cancellation: the explicit zip".
+- The zip is `zipMap z = ω·(zipCone z)²`. `zipCone` cones a boundary map `∂Disk → ∂D₊` from `I/2`. That boundary map sends the arc x x⁻¹ linearly onto the diameter [-1,1], and the other n sides angle-linearly onto the upper semicircle.
+- Squaring folds the diameter (x(t), x⁻¹(1-t) ↦ ω(1-t)², a slit from ω to 0) and opens the semicircle onto the whole circle, with source side j landing on target side j or j-2 at the same parameter.
+- The geometric leaves are about the concrete defs. The combinatorial leaves (`zip_forward`, `zip_lift_generator`, `zip_boundary_iff`) are stated for any `c` with the zip's edge formulas.
+- The cancellation block now sits after the merge section, because its leaves use `wordRel_eqvGen_circle`, `norm_edgePoint` and `circleToDisk`.
+
+## Cut and paste, explicit (claude-14, 2026-10-14)
+`cutAndPaste_aux_triangle_chart_generators` is now a sorry-free assembly over 26 leaves; see the section "Cut and paste: explicit boundary maps".
+- The disk is cut along the chord from vertex p (start of the first x) to vertex q (start of the second x) into A (sides x v) and B (sides x t u). In the new polygon, A' and B' are cut along the seam from vertex p+1 to vertex q+1.
+- Each piece is the convex set `cutPiece P Q` = disk ∩ half-plane. It gets a boundary map from one parameter circle (`cutOldA`, `cutOldB`, `cutNewA`, `cutNewB`, via `AddCircle.liftIco`) that puts matching boundary pieces at the same parameter:
+  - the old x arcs go to the seam
+  - the old v arcs go to the new v⁻¹ arcs (a reflection)
+  - t and u stay fixed
+  - the old chord goes to new sides p+1 (reversed) and p
+- The general leaf `cutAndPaste_aux_boundary_chart` turns each boundary map into a chart of its piece with exactly that boundary.
+- The combinatorics (`cut_forward_generators`, `cut_reverse_generators`, `cut_forward_fibre`, `cut_reverse_fibre`) is stated for any maps with the edge formulas (`CutBoundaryData`), so it is independent of the geometry. These four will likely need splitting by case.

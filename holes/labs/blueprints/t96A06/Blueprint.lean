@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.ProjectiveSpaceTopology
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
+import ConstructionTargets.RP3RationalHomology
 
 /-! # Blueprint for t96A06
 
@@ -46,6 +47,182 @@ theorem T96A06_polynomialMap_descends :
     T96A06_polynomialMap_eq_consumerPolynomial] using
     t96A06Polynomial_descends
 
+/-! The invariant calculation is split at the singular-homology interface.
+Each lemma below is independent: in particular, none uses another lemma in
+this block.  This lets the RP³ computation, the four trace computations, and
+homotopy invariance be developed in parallel. -/
+
+open CategoryTheory
+
+lemma T96A06_rp3_rationalHomology_finite (k : ℕ) :
+    FiniteDimensional ℚ (Homology T96A06.RP3 k) := by
+  rcases RP3Homology.rp3_rationalHomology with ⟨h0, hvanish, h3⟩
+  by_cases hk0 : k = 0
+  · subst k
+    let e := Classical.choice h0
+    exact e.symm.toLinearEquiv.finiteDimensional
+  by_cases hk3 : k = 3
+  · subst k
+    let e := Classical.choice h3
+    exact e.symm.toLinearEquiv.finiteDimensional
+  · have hz := hvanish k hk0 hk3
+    letI : Subsingleton (Homology T96A06.RP3 k) := ⟨by
+      intro x y
+      have hid : (𝟙 (RP3Homology.HQ k RP3Homology.RP3)) = 0 :=
+        hz.eq_of_src _ _
+      have hx := congrArg (fun f => f.hom x) hid
+      have hy := congrArg (fun f => f.hom y) hid
+      simpa using hx.trans hy.symm⟩
+    exact FiniteDimensional.of_injective
+      (0 : Homology T96A06.RP3 k →ₗ[ℚ] ℚ)
+      (Function.injective_of_subsingleton _)
+
+lemma T96A06_rp3_rationalHomology_vanishes_above_three (k : ℕ)
+    (hk : 3 < k) :
+    Subsingleton (Homology T96A06.RP3 k) := by
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, hvanish, _⟩
+  apply ModuleCat.subsingleton_of_isZero
+  exact hvanish k (by omega) (by omega)
+
+lemma T96A06_polynomialDescent_trace_zero
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 0) (induced f 0).hom = 1 := by
+  letI : PathConnectedSpace T96A06.RP3 :=
+    ConstructionTargets.t96A06Closure.rp3PathConnectedSpace
+  let x : T96A06.RP3 := coordinateLine ℝ 3 0
+  have hmap : induced f 0 = 𝟙 _ := by
+    have h := ConstructionTargets.CoefficientConnectedH0Map.mapIso_hom ℚ f x x
+    have h' :
+        (ConstructionTargets.CoefficientConnectedH0Map.mapIso ℚ x x).hom =
+          induced f 0 := by
+      simpa [induced, ConstructionTargets.CoefficientH0.singularPostcomposition,
+        AlgebraicTopology.singularHomologyFunctor] using h
+    rw [← h']
+    simp [ConstructionTargets.CoefficientConnectedH0Map.mapIso]
+  letI : FiniteDimensional ℚ (Homology T96A06.RP3 0) :=
+    ConstructionTargets.t96A06Closure.rp3RationalH0Iso.symm.toLinearEquiv.finiteDimensional
+  rw [hmap]
+  change LinearMap.trace ℚ (Homology T96A06.RP3 0) LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have hrank := LinearEquiv.finrank_eq
+    (ConstructionTargets.t96A06Closure.rp3RationalH0Iso.toLinearEquiv)
+  simpa using hrank
+
+lemma T96A06_polynomialDescent_trace_one
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 1) (induced f 1).hom = 0 := by
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, hvanish, _⟩
+  have hz := hvanish 1 (by norm_num) (by norm_num)
+  letI : Subsingleton (Homology T96A06.RP3 1) := ⟨by
+    intro x y
+    have hid : (𝟙 (RP3Homology.HQ 1 RP3Homology.RP3)) = 0 :=
+      hz.eq_of_src _ _
+    have hx := congrArg (fun g => g.hom x) hid
+    have hy := congrArg (fun g => g.hom y) hid
+    simpa using hx.trans hy.symm⟩
+  have hinduced : (induced f 1).hom = 0 := Subsingleton.elim _ _
+  rw [hinduced]
+  exact LinearMap.map_zero (LinearMap.trace ℚ (Homology T96A06.RP3 1))
+
+lemma T96A06_polynomialDescent_trace_two
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 2) (induced f 2).hom = 0 := by
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, hvanish, _⟩
+  have hz := hvanish 2 (by norm_num) (by norm_num)
+  letI : Subsingleton (Homology T96A06.RP3 2) := ⟨by
+    intro x y
+    have hid : (𝟙 (RP3Homology.HQ 2 RP3Homology.RP3)) = 0 :=
+      hz.eq_of_src _ _
+    have hx := congrArg (fun g => g.hom x) hid
+    have hy := congrArg (fun g => g.hom y) hid
+    simpa using hx.trans hy.symm⟩
+  have hinduced : (induced f 2).hom = 0 := Subsingleton.elim _ _
+  rw [hinduced]
+  exact LinearMap.map_zero (LinearMap.trace ℚ (Homology T96A06.RP3 2))
+
+lemma T96A06_polynomialDescent_trace_three
+    (f : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (hf : T96A06.IsPolynomialDescent f) :
+    LinearMap.trace ℚ (Homology T96A06.RP3 3) (induced f 3).hom = 4 := by
+  sorry
+
+lemma T96A06_identity_trace_three :
+    LinearMap.trace ℚ (Homology T96A06.RP3 3)
+      (induced (ContinuousMap.id T96A06.RP3) 3).hom = 1 := by
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, _, h3⟩
+  let e := Classical.choice h3
+  letI : FiniteDimensional ℚ (Homology T96A06.RP3 3) :=
+    e.symm.toLinearEquiv.finiteDimensional
+  have hfinrank : Module.finrank ℚ (Homology T96A06.RP3 3) = 1 := by
+    rw [LinearEquiv.finrank_eq e.toLinearEquiv]
+    simp
+  have hinduced : (induced (ContinuousMap.id T96A06.RP3) 3).hom = LinearMap.id := by
+    simp [induced]
+  rw [hinduced, LinearMap.trace_id, hfinrank]
+  norm_num
+
+open CategoryTheory CategoryTheory.MonoidalCategory
+
+noncomputable def T96A06_homotopic_induced_eq_aux_cylinder
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.of X ⊗ TopCat.I ⟶ TopCat.of Y :=
+  TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+    H.continuous.comp
+      ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+
+lemma T96A06_homotopic_induced_eq_aux_zero
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.ι₀ ≫ T96A06_homotopic_induced_eq_aux_cylinder H = TopCat.ofHom f := by
+  ext x
+  change H (0, x) = f x
+  simp
+
+lemma T96A06_homotopic_induced_eq_aux_one
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.ι₁ ≫ T96A06_homotopic_induced_eq_aux_cylinder H = TopCat.ofHom g := by
+  ext x
+  change H (1, x) = g x
+  simp
+
+noncomputable def T96A06_homotopic_induced_eq_aux_sset
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    SSet.Homotopy (TopCat.toSSet.map (TopCat.ofHom f))
+      (TopCat.toSSet.map (TopCat.ofHom g)) where
+  h := (TopCat.toSSet.obj (TopCat.of X) ◁ SSet.stdSimplex.toSSetObjI) ≫
+    CategoryTheory.Functor.LaxMonoidal.μ TopCat.toSSet (TopCat.of X) TopCat.I ≫
+    TopCat.toSSet.map (T96A06_homotopic_induced_eq_aux_cylinder H)
+  h₀ := by
+    change _ = TopCat.toSSet.map (TopCat.ofHom f)
+    simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, T96A06_homotopic_induced_eq_aux_zero H]
+  h₁ := by
+    change _ = TopCat.toSSet.map (TopCat.ofHom g)
+    simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, T96A06_homotopic_induced_eq_aux_one H]
+  rel := by
+    ext n x
+    exact x.1.property.elim
+
+lemma T96A06_homotopic_induced_eq
+    (f g : ContinuousMap T96A06.RP3 T96A06.RP3)
+    (h : ContinuousMap.Homotopic f g) (k : ℕ) :
+    induced f k = induced g k := by
+  rcases h with ⟨H⟩
+  simpa [induced, AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℚ) (R := ModuleCat.of ℚ ℚ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (H := (T96A06_homotopic_induced_eq_aux_sset H).toSimplicialObjectHomotopy) k
+
 /-- **LIBRARY: RP³ rational homology and degree of complex squaring.**
 
 The descended map has degree four.  Since rationally RP³ has homology only
@@ -57,7 +234,25 @@ theorem T96A06_polynomialDescent_invariants
     (hf : T96A06.IsPolynomialDescent f) :
     HasLefschetzNumber f (-3) ∧
       ¬ ContinuousMap.Homotopic f (ContinuousMap.id T96A06.RP3) := by
-  sorry
+  constructor
+  · refine ⟨T96A06_rp3_rationalHomology_finite, 3, ?_, ?_⟩
+    · exact T96A06_rp3_rationalHomology_vanishes_above_three
+    · rw [Finset.sum_range_succ, Finset.sum_range_succ,
+        Finset.sum_range_succ, Finset.sum_range_succ]
+      rw [T96A06_polynomialDescent_trace_zero f hf,
+        T96A06_polynomialDescent_trace_one f hf,
+        T96A06_polynomialDescent_trace_two f hf,
+        T96A06_polynomialDescent_trace_three f hf]
+      norm_num
+  · intro h
+    have heq := T96A06_homotopic_induced_eq f
+      (ContinuousMap.id T96A06.RP3) h 3
+    have htrace := congrArg
+      (fun u => LinearMap.trace ℚ (Homology T96A06.RP3 3) u.hom) heq
+    dsimp only at htrace
+    rw [T96A06_polynomialDescent_trace_three f hf,
+      T96A06_identity_trace_three] at htrace
+    norm_num at htrace
 
 theorem apm_t96a06 :
     ∃ f : ContinuousMap T96A06.RP3 T96A06.RP3,

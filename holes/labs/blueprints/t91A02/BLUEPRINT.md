@@ -2,93 +2,113 @@
 
 ## Triage verdict
 
-**True and faithful; no statement repair.**  The Lean statement is the source
-claim for the concrete polygon-quotient models of the connected sums of
-sixteen and eight projective planes.  It does not assume Euler-characteristic
-multiplicativity: it assumes only an actual covering map, a positive natural
-number of sheets, and the assertion that every fiber has that cardinality.
+The registered statement is true and unchanged. The former single
+`t91A02_eulerCharacteristic_finite_cover` library hole is now a sorry-free
+assembly from four independent leaves. The split exposes a genuine missing
+foundation: `Surface` is presently only a quotient type plus a separately
+defined integer formula. No existing theorem connects that formula to
+singular homology or proves Euler multiplicativity for finite covers.
 
-Attempts to break the statement did not produce a counterexample:
+The import of `ConstructionTargets.RationalLefschetz` supplies the semantic
+predicate `HasEulerCharacteristic`; it imports only `Mathlib` and does not
+import any `SphereCap*` or `LinearGraphMeasure` module.
 
-- An empty total space cannot satisfy the hypotheses: every fiber would be
-  empty, forcing `sheets = 0`, contrary to `0 < sheets`.
-- A zero-sheet cover is excluded explicitly.
-- A one-sheet cover would force equal Euler characteristics, but the two
-  surfaces have Euler characteristics `-14` and `-6`.
-- In general multiplicativity would give `-14 = sheets * (-6)`, equivalently
-  `14 = 6 * sheets`; no natural number satisfies this.
+## Independent leaves
 
-The solve-loop/topology audit agrees that the frozen statement is sound.  It
-also identifies the precise obstruction: `ConstructionTargets.Surfaces`
-defines the relevant numbers but contains no theorem relating them to a
-finite covering map.
+### `t91A02_surface16_hasEulerCharacteristic` — LIBRARY
 
-## Definitions
+The rational singular-homology Euler characteristic of `Surface false 16` is
+`-14`. This is independent of the cover and of all other leaves.
 
-There are no new definitions.  The blueprint uses `Surface` and
-`eulerCharacteristic` from the sorry-free module
-`ConstructionTargets.Surfaces` and the exact fiber-cardinality formulation
-already present in the registered theorem.
+Expected route: construct the finite polygon CW complex for the quotient disk,
+identify its cellular chain groups as dimensions `1, 16, 1`, and use the
+cellular/singular comparison. At the Mathlib layer the relevant API starts at
+`AlgebraicTopology.singularHomologyFunctor`; the value is packaged by
+`ConstructionTargets.RationalLefschetz.HasEulerCharacteristic`, and traces of
+identity maps reduce using `LinearMap.trace_id` and the finite-free dimension
+API.
 
-## Remaining lemma
+Estimate: 300–700 lines after a reusable polygon-CW model exists; substantially
+larger if that model must be built here. This is not honestly a 30–150-line
+seat with the current imports, so it remains marked LIBRARY.
 
-### `t91A02_eulerCharacteristic_finite_cover` — LIBRARY
+Degenerate checks: the quotient disk is nonempty (the disk contains `0`), and
+genus `16` is positive. The one-vertex, sixteen-edge, one-face count is
+`1 - 16 + 1 = -14`; boundary vertices must all be identified, while no
+interior point is identified with a boundary point.
 
-**Statement in words.**  If `p : N₁₆ → N₈` is an
-`IsCoveringMap`, has a positive number `sheets` of sheets, and every fiber has
-cardinality `sheets`, then
-`eulerCharacteristic false 16 = sheets * eulerCharacteristic false 8`.
+### `t91A02_surface8_hasEulerCharacteristic` — LIBRARY
 
-**Why true.**  Lift the finite polygon/CW structure of `N₈` through the
-cover.  Each cell has exactly `sheets` lifts, so the numbers of vertices,
-edges, and faces are each multiplied by `sheets`; taking their alternating
-sum proves the displayed equation.  Equivalently, use singular homology:
-the finite cover gives the usual multiplicativity of the Euler characteristic
-of a finite CW complex, and identify the two concrete polygon surfaces with
-their one-vertex polygon complexes.
+The same computation for `Surface false 8`, yielding `1 - 8 + 1 = -6`.
+Independent of every other leaf. It should use exactly the same polygon-CW
+and singular/cellular comparison lemmas as the sixteen-crosscap leaf, with
+`LinearMap.trace_id` for the final alternating trace.
 
-The closest planned shared foundation is
-`program-2026-10-13-polygon-surface-homology`, documented in
-`ConstructionTargets/PolygonSurfaceHomology.blueprint.md`.  It computes the
-integral singular homology of the same polygon-quotient representation.  The
-topology audit additionally records the missing cover-specific chain as
-`covering_trivial_over_disk`, `polygon_cover_descent`, and
-`eulerCharacteristic_finite_cover_surface`.  The sorry-free searches through
-`ConstructionTargets` found covering-map infrastructure (`CoveringDegree`,
-`RestrictPathComponent`, and `DeckGroupQuotientFundamentalGroup`) and the
-surface number calculation in `Surfaces`, but no finite-cover Euler theorem.
-Thus this is a genuine shared LIBRARY obligation rather than a 30–150-line
-lemma-seat task.  No `SphereCap*` module is needed.
+Estimate: 20–50 lines if the reusable generic polygon-surface homology theorem
+lands first; otherwise 300–700 lines. The intended shared prerequisite is
+`program-2026-10-13-polygon-surface-homology`.
 
-**Estimate.**  LIBRARY program, roughly 700–1500 lines in total: 150–250 for
-triviality over the disk, 250–450 for polygon-cover descent, and the remaining
-Euler/homology comparison and adapter.  The final adapter to the exact lemma
-above should be 20–50 lines after that infrastructure exists.
+Degenerate checks: again the quotient is nonempty and genus `8` is positive;
+the edge relation has the nonorientable (same-direction) sign convention, but
+Euler characteristic depends only on cell counts, not the boundary signs.
 
-**Depends on.**  No other blueprint lemma.  Intended shared foundations:
-`program-2026-10-13-polygon-surface-homology` plus the finite-cover polygon
-descent program identified by the t91A02 topology audit.
+### `t91A02_cover_hasEulerCharacteristic_mul` — LIBRARY
 
-**Truth check.**  Hand cell count: a standard polygon presentation of
-`N_g` has one vertex, `g` edges, and one face, hence characteristic `2-g`.
-An `n`-sheeted lift has `n` times each cell count and therefore characteristic
-`n(2-g)`.  For the identity cover (`g = 8`, `n = 1`) the formula specializes
-to `-6 = -6`.  For the proposed source and base it specializes to
-`-14 = -6 * sheets`, which has no integer solution.  Positivity rules out the
-empty/zero-sheet degeneracy.
+Given the covering map, positive constant fibre cardinality, and the base
+Euler computation explicitly as a hypothesis, prove that the total space has
+Euler characteristic `sheets * (-6)`. It is independent of both surface
+computation leaves, so a cover-transfer seat can work in parallel.
 
-## Assembly and dependency layers
+Expected route: use evenly covered neighborhoods from `IsCoveringMap`, form
+the finite-sheet transfer on singular chains/homology, and prove the usual
+finite-cover Euler formula. Relevant Mathlib entry points are `IsCoveringMap`,
+`IsCoveringMap.isOpenMap`, `AlgebraicTopology.singularHomologyFunctor`,
+`LinearMap.trace`, and finite-sum reindexing via `Fintype.sum_equiv`.
+`ConstructionTargets.CoveringDegree` contains useful fibre-cardinality
+infrastructure, but currently no Euler theorem.
 
-- **Layer 1:** `t91A02_eulerCharacteristic_finite_cover` (LIBRARY).
-- **Layer 2 (already proved):** `apm_t91a02`; apply the Layer 1 equation,
-  unfold the two numerical Euler characteristics, and close by `omega`.
+Estimate: 500–1200 lines for the absent general finite-cover theorem, then
+10–30 lines for this adapter. This is a genuine shared-library foundation and
+is not hidden in an overloaded surface-specific proof.
 
-The main theorem contains no direct `sorry`.
+Degenerate checks: `0 < sheets` excludes the empty zero-sheet case. Constant
+fibre cardinality is assumed at every base point, so disconnected-base degree
+variation is irrelevant. No connectedness assumption is needed when the
+global degree is constant.
 
-## Compilation and axioms
+### `t91A02_hasEulerCharacteristic_unique`
 
-Compilation output and the final `#print axioms` result are recorded below.
+Two `HasEulerCharacteristic X` witnesses have equal values. Independent of
+the surface and cover leaves.
 
-```text
-'apm_t91a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-```
+Expected proof: unfold `HasEulerCharacteristic` and `HasLefschetzNumber`, take
+the maximum of the two vanishing bounds, extend both finite alternating sums
+to that maximum using the `Subsingleton` hypotheses, and compare them. Useful
+Mathlib lemmas are `Finset.sum_subset`, `Finset.sum_eq_zero`,
+`LinearMap.trace_eq_zero_of_subsingleton`, and `Nat.lt_of_lt_of_le`.
+
+Estimate: 40–90 lines. Empty/rank-zero homology groups cause no issue: their
+trace contribution is zero. The conclusion compares two separately supplied
+values, so the lemma does not restate a hypothesis.
+
+## Assembly
+
+`t91A02_eulerCharacteristic_finite_cover` contains no `sorry`. It supplies
+the base computation to the cover-transfer leaf, compares the resulting total
+Euler value with the independent source computation using uniqueness, and
+finishes by normalization of `eulerCharacteristic` and rational/integer casts.
+The registered theorem `apm_t91a02` is byte-identical and remains the final
+integer contradiction.
+
+Dependency layers:
+
+- Layer 1, mutually independent: the four leaves above.
+- Layer 2: `t91A02_eulerCharacteristic_finite_cover` (sorry-free assembly).
+- Layer 3: `apm_t91a02` (already proved and unchanged).
+
+The unavoidable doubt is scope: the two polygon homology leaves and the
+finite-cover transfer leaf cannot currently be reduced to 30–150 lines because
+Mathlib has neither the concrete polygon CW model nor a ready finite-cover
+Euler theorem. Splitting them further in this file would merely introduce
+ad-hoc definitions of those missing foundations rather than independently
+provable seats.
