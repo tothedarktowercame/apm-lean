@@ -1854,6 +1854,23 @@ theorem regularValue_topDegreeCoordinate_eq_signedCount :
         rw [map_smul]
         simp [t96A06_sphere3_rational_fundamentalClass]
 
+/-- Scalar form of the sole remaining geometric boundary: proving that the
+explicit lift has top-degree coordinate four is exactly proving canonical
+global localization. -/
+theorem polynomialSphereLift_globalImage_eq_deckSum_iff_topDegreeCoordinate_four :
+    (HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i) ↔
+      t96A06_sphere3_topDegreeCoordinate polynomialSphereLift = 4 := by
+  constructor
+  · intro hglobal
+    have h := regularValue_topDegreeCoordinate_eq_signedCount.mpr hglobal
+    simpa [polynomialSphereLift_signedRegularFiberCount_eq_four] using h
+  · intro hcoordinate
+    apply regularValue_topDegreeCoordinate_eq_signedCount.mp
+    simpa [polynomialSphereLift_signedRegularFiberCount_eq_four] using hcoordinate
+
 /-- The computed signed regular-fiber count is the scalar on rational top
 homology exactly when the canonical global localization equation holds. -/
 theorem signedRegularFiberCount_homologyScalar_iff_globalLocalization :
@@ -2596,6 +2613,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
 #print axioms polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour
 #print axioms regularValue_topDegreeCoordinate_eq_signedCount
+#print axioms polynomialSphereLift_globalImage_eq_deckSum_iff_topDegreeCoordinate_four
 #print axioms signedRegularFiberCount_homologyScalar_iff_globalLocalization
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
