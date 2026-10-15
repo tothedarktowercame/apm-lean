@@ -88329,31 +88329,28 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Literal quotient homeomorphisms and Smith reductions for B1; then B2.",
+    "Instantiate frozen quotient comparisons; prove Smith reductions; then B2.",
     :outcome :stop,
-    :warnings ["Main placeholder" "unrelated dirt preserved" "lint"],
+    :warnings ["Main placeholder" "lint"],
     :missing-theorems
-    [{:name "aabbccPolygonHomology",
-      :type "foundation specialized to aabbcc pairing",
+    [{:name "quotientHomeomorphOfEqvGenIff",
+      :type "coinduced literal quotient comparison",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["polygonQuotient_homology"],
-      :area "polygon-surface-homology"}
-     {:name "torusRP2PolygonHomology",
-      :type "foundation specialized to torus-crosscap pairing",
-      :status :proved,
-      :consumers [:t97A01],
-      :depends-on ["polygonQuotient_homology"],
+      :depends-on [],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
       :type "literal quotient homology adapter",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on ["aabbccPolygonHomology" "torusRP2PolygonHomology"],
+      :depends-on
+      ["aabbccPolygonHomology"
+       "torusRP2PolygonHomology"
+       "quotientHomeomorphOfEqvGenIff"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal torus-crosscap van Kampen",
@@ -88365,7 +88362,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked homology specializations.",
+    :reason "Banked literal quotient homeomorphism adapter.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88373,27 +88370,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 401abd2a7", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792041223086-13321-c652936c",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms; git show --check; fixture/hash placeholder scans"],
-     :finding
-     "Commit 401abd2a7 by topo-6 adds only t97A01Closure.lean, new progress after blueprint commit 06f6bde3c. Exact snapshot builds; Main compiles with its prior 1 placeholder; target has 0; fixture SHA-256 c8763dce182c9732798989579102387f3896207c6024818a23cd3bf3adc8fe22 matches; registry 166/0; both theorems use only propext, Classical.choice, Quot.sound. aabbccPairingData is the genus-3 nonorientable standard pairing and torusRP2PairingData is the banked literal torus-crosscap relation. Both results faithfully specialize polygonQuotient_homology without claiming the still-missing literal-quotient or Smith-form transports. Those B1 adapters and B2 remain listed."},
-    :commit "401abd2a7",
+     {:cmd "git show --check 5969dfc4a", :exit 0}],
+    :diagnostic-history
+    [{:cmd "quotient adapter draft",
+      :exit 1,
+      :correction "opened Topology namespace"}],
+    :commit "5969dfc4a",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "c8763dce182c9732798989579102387f3896207c6024818a23cd3bf3adc8fe22"},
+     "836c3fd102175e2662e2c4c0fb76e2ea72a698b9d46a98428084182cb7908878"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93433,7 +93423,8 @@
    :depends-on
    [:lemma-polygonquotient-homology
     :lemma-aabbccpolygonhomology
-    :lemma-torusrp2polygonhomology],
+    :lemma-torusrp2polygonhomology
+    :lemma-quotienthomeomorphofeqvgeniff],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93488,4 +93479,21 @@
    :id :lemma-torusrp2polygonhomology,
    :kind :lemma,
    :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "quotientHomeomorphOfEqvGenIff",
+    :type "coinduced literal quotient comparison"},
+   :lemma
+   {:name "quotientHomeomorphOfEqvGenIff",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "coinduced literal quotient comparison",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-quotienthomeomorphofeqvgeniff,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
