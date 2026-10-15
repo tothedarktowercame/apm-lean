@@ -5487,6 +5487,35 @@ def cutAlpha (L m : ℕ) : ℝ := 2 * Real.pi * m / L
 
 def cutPoint (L m : ℕ) : ℂ := Complex.exp ((cutAlpha L m : ℂ) * Complex.I)
 
+theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
+  unfold cutPoint
+  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
+
+theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
+    cutPoint L m ≠ cutPoint L m' := by
+  intro heq
+  have hL : 0 < L := by omega
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
+  have him := congrArg Complex.im hk
+  simp [cutPoint, cutAlpha] at him
+  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
+  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
+    field_simp [ne_of_gt hLreal] at him
+    nlinarith [Real.pi_pos]
+  have hkneg : (k : ℝ) < 0 := by
+    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
+    nlinarith
+  have hk_le : k ≤ -1 := by
+    have hkneg' : k < 0 := by exact_mod_cast hkneg
+    omega
+  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
+    nlinarith
+  have hgap : (m' : ℝ) - m < L := by
+    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
+    linarith
+  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
+  nlinarith
+
 /-- `cutCross w z = Im (conj w · z)`, positive when `z` is to the left of `w`. -/
 def cutCross (w z : ℂ) : ℝ := (starRingEnd ℂ w * z).im
 
@@ -5734,10 +5763,69 @@ theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ
 
 /-- The two pieces cover the disk; for `P ≠ Q` the interior of one misses the other
 (for `P = Q` the piece is the whole disk: blueprint-2, 10-14). -/
+lemma cutPiece_union_disjoint_aux_cross (P Q z : ℂ) :
+    cutCross (P - Q) (z - Q) = -cutCross (Q - P) (z - P) := by
+  simp [cutCross, Complex.mul_im]
+  ring
+
+lemma cutPiece_union_disjoint_aux_interior (P Q z : ℂ) (hPQ : P ≠ Q)
+    (hz : z ∈ interior (cutPiece P Q)) :
+    cutCross (Q - P) (z - P) < 0 := by
+  have hn : 0 < ‖Q - P‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+  rcases Metric.mem_nhds_iff.mp (mem_interior_iff_mem_nhds.mp hz) with
+    ⟨ε, hε, hball⟩
+  let t : ℝ := ε / (2 * ‖Q - P‖)
+  let y : ℂ := z + (t : ℂ) * (Complex.I * (Q - P))
+  have ht : 0 < t := div_pos hε (mul_pos (by norm_num) hn)
+  have hdist : dist y z < ε := by
+    calc
+      dist y z = t * ‖Q - P‖ := by
+        rw [dist_eq_norm,
+          show y - z = (t : ℂ) * (Complex.I * (Q - P)) by simp [y]]
+        simp [norm_mul, abs_of_pos ht]
+      _ = ε / 2 := by
+        dsimp [t]
+        field_simp
+      _ < ε := by linarith
+  have hy := hball (Metric.mem_ball.mpr hdist)
+  have hycross : cutCross (Q - P) (y - P) ≤ 0 := hy.2
+  have hformula : cutCross (Q - P) (y - P) =
+      cutCross (Q - P) (z - P) + t * ‖Q - P‖ ^ 2 := by
+    dsimp [y, cutCross]
+    rw [Complex.sq_norm]
+    simp [Complex.mul_im, Complex.normSq_apply]
+    ring
+  rw [hformula] at hycross
+  have hsquare : 0 < ‖Q - P‖ ^ 2 := sq_pos_of_pos hn
+  nlinarith
+
 theorem cutPiece_union_disjoint (P Q : ℂ) (hPQ : P ≠ Q) :
     cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
       interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
-  sorry
+  constructor
+  · ext z
+    simp only [Set.mem_union, cutPiece, Set.mem_setOf_eq, Metric.mem_closedBall,
+      dist_zero_right]
+    have hc := cutPiece_union_disjoint_aux_cross P Q z
+    constructor
+    · rintro (⟨hz, -⟩ | ⟨hz, -⟩) <;> exact hz
+    · intro hz
+      by_cases h : cutCross (Q - P) (z - P) ≤ 0
+      · exact Or.inl ⟨hz, h⟩
+      · exact Or.inr ⟨hz, by rw [hc]; linarith⟩
+  · ext z
+    rw [Set.mem_empty_iff_false]
+    constructor
+    · intro hz
+      rcases hz with ⟨hz, hpiece⟩
+      have hneg := cutPiece_union_disjoint_aux_interior P Q z hPQ hz
+      rw [cutPiece] at hpiece
+      change ‖z‖ ≤ 1 ∧ cutCross (P - Q) (z - Q) ≤ 0 at hpiece
+      have hc := cutPiece_union_disjoint_aux_cross P Q z
+      rw [hc] at hpiece
+      linarith [hpiece.2]
+    · intro h
+      contradiction
 
 theorem cutCross_exp (α γ φ : ℝ) :
     cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
@@ -5787,17 +5875,293 @@ theorem cutCross_exp (α γ φ : ℝ) :
 /-- A convex body with a prescribed boundary parametrisation: cone `β` from an
 interior point `c` (rays from `c` meet the frontier once:
 `Convex.openSegment_interior_closure_subset_interior`). -/
+def cutAndPaste_aux_boundary_chart_aux_cone (c : ℂ) (β : Circle → ℂ) (z : ℂ) : ℂ :=
+  if hz : z = 0 then c else
+    c + (‖z‖ : ℂ) * (β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+      simp [Circle, Submonoid.unitSphere, norm_mul, hz]⟩ - c)
+
+lemma cutAndPaste_aux_boundary_chart_aux_continuous (c : ℂ) (β : Circle → ℂ)
+    (hβ : Continuous β) : Continuous (cutAndPaste_aux_boundary_chart_aux_cone c β) := by
+  rw [continuous_iff_continuousAt]
+  intro z
+  by_cases hz : z = 0
+  · subst z
+    rw [Metric.continuousAt_iff]
+    intro ε hε
+    obtain ⟨M, hM⟩ := (isCompact_range hβ).isBounded.subset_closedBall 0
+    have hM0 : 0 ≤ M := by
+      have h1 := hM ⟨⟨1, by simp [Circle, Submonoid.unitSphere]⟩, rfl⟩
+      rw [Metric.mem_closedBall, dist_zero_right] at h1
+      exact (norm_nonneg _).trans h1
+    have hden : 0 < M + ‖c‖ + 1 := by positivity
+    refine ⟨ε / (M + ‖c‖ + 1), div_pos hε hden, ?_⟩
+    intro w hw
+    simp only [dist_zero_right] at hw
+    by_cases hw0 : w = 0
+    · subst w
+      simpa [cutAndPaste_aux_boundary_chart_aux_cone] using hε
+    · rw [cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hw0,
+        cutAndPaste_aux_boundary_chart_aux_cone, dif_pos rfl]
+      rw [dist_eq_norm, add_sub_cancel_left, norm_mul]
+      have hb : ‖β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩‖ ≤ M := by
+        have hm := hM (show β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩ ∈ Set.range β from ⟨_, rfl⟩)
+        simpa [Metric.mem_closedBall, dist_zero_right] using hm
+      have hsub := norm_sub_le (β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩) c
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_norm]
+      have hw' : ‖w‖ * (M + ‖c‖ + 1) < ε := by
+        rwa [lt_div_iff₀ hden] at hw
+      nlinarith [norm_nonneg w]
+  · have hopen : IsOpen ({w : ℂ | w ≠ 0}) := isOpen_compl_singleton
+    have hcont : ContinuousOn (cutAndPaste_aux_boundary_chart_aux_cone c β)
+        {w : ℂ | w ≠ 0} := by
+      rw [continuousOn_iff_continuous_restrict]
+      have hN : Continuous (fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          (⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul]
+            exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr w.2)⟩ : Circle)) := by
+        apply Continuous.subtype_mk
+        exact (Complex.continuous_ofReal.comp ((continuous_norm.comp continuous_subtype_val).inv₀
+          (fun w => norm_ne_zero_iff.mpr w.2))).mul continuous_subtype_val
+      have heq : Set.restrict {w : ℂ | w ≠ 0}
+          (cutAndPaste_aux_boundary_chart_aux_cone c β) = fun w : ({w : ℂ | w ≠ 0} : Set ℂ) =>
+          c + (‖(w : ℂ)‖ : ℂ) * (β ⟨((‖(w : ℂ)‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul]
+            exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr w.2)⟩ - c) := by
+        funext w
+        simp only [Set.restrict_apply, cutAndPaste_aux_boundary_chart_aux_cone,
+          dif_neg w.2]
+      rw [heq]
+      exact continuous_const.add ((Complex.continuous_ofReal.comp
+        (continuous_norm.comp continuous_subtype_val)).mul
+          ((hβ.comp hN).sub continuous_const))
+    exact hcont.continuousAt (hopen.mem_nhds hz)
+
 theorem cutAndPaste_aux_boundary_chart (K : Set ℂ) (c : ℂ) (hKc : Convex ℝ K)
     (hKcompact : IsCompact K) (hc : c ∈ interior K) (β : Circle → ℂ)
     (hβc : Continuous β) (hβi : Function.Injective β) (hβr : Set.range β = frontier K) :
     ∃ φ : ℂ → ℂ, CutChartSpec K β φ := by
-  sorry
+  let S : Set ℂ := (fun x : ℂ => -c + x) '' K
+  have hSc : Convex ℝ S := hKc.translate (-c)
+  have hScompact : IsCompact S := hKcompact.image (Homeomorph.addLeft (-c : ℂ)).continuous
+  have hSclosed : IsClosed S := hScompact.isClosed
+  have hS0 : S ∈ nhds (0 : ℂ) := by
+    rw [← mem_interior_iff_mem_nhds]
+    change 0 ∈ interior ((Homeomorph.addLeft (-c : ℂ)) '' K)
+    rw [← (Homeomorph.addLeft (-c : ℂ)).image_interior]
+    exact ⟨c, hc, by simp⟩
+  have hSb : Bornology.IsVonNBounded ℝ S :=
+    NormedSpace.isVonNBounded_of_isBounded ℝ hScompact.isBounded
+  have hgpos : ∀ {x : ℂ}, x ≠ 0 → 0 < gauge S x :=
+    fun hx => (gauge_pos (absorbent_nhds_zero hS0) hSb).2 hx
+  have hfront : ∀ {q : ℂ}, q ∈ frontier K → q - c ∈ frontier S := by
+    intro q hq
+    change q - c ∈ frontier ((Homeomorph.addLeft (-c : ℂ)) '' K)
+    rw [← (Homeomorph.addLeft (-c : ℂ)).image_frontier]
+    refine ⟨q, hq, ?_⟩
+    change -c + q = q - c
+    ring
+  let φ := cutAndPaste_aux_boundary_chart_aux_cone c β
+  refine ⟨φ, ?_, ?_, ?_, ?_, ?_⟩
+  · exact cutAndPaste_aux_boundary_chart_aux_continuous c β hβc
+  · intro z hz w hw heq
+    have gb (x : ℂ) : gauge S (φ x - c) = ‖x‖ := by
+      by_cases hx : x = 0
+      · subst x; simp [φ, cutAndPaste_aux_boundary_chart_aux_cone]
+      · simp only [φ, cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hx,
+          add_sub_cancel_left]
+        change gauge S (‖x‖ • (β ⟨((‖x‖⁻¹ : ℝ) : ℂ) * x, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hx]⟩ - c)) = ‖x‖
+        let d : ℂ := β ⟨((‖x‖⁻¹ : ℝ) : ℂ) * x, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hx]⟩ - c
+        have hb : β ⟨((‖x‖⁻¹ : ℝ) : ℂ) * x, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hx]⟩ ∈ frontier K := by
+          rw [← hβr]; exact ⟨_, rfl⟩
+        have hgd : gauge S d = 1 := by
+          rw [gauge_eq_one_iff_mem_frontier hSc hS0]
+          simpa [d] using hfront hb
+        calc
+          gauge S (‖x‖ • d) = ‖x‖ • gauge S d :=
+            gauge_smul_of_nonneg (E := ℂ) (s := S) (α := ℝ) (norm_nonneg x) d
+          _ = ‖x‖ := by rw [hgd, smul_eq_mul, mul_one]
+    have hn : ‖z‖ = ‖w‖ := by rw [← gb z, heq, gb w]
+    by_cases hz0 : z = 0
+    · subst z
+      exact (norm_eq_zero.mp (by simpa using hn.symm)).symm
+    · have hw0 : w ≠ 0 := by
+        intro h; subst w; simp at hn; exact hz0 hn
+      have hd : β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ =
+          β ⟨((‖w‖⁻¹ : ℝ) : ℂ) * w, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hw0]⟩ := by
+        have hh := congrArg (fun q : ℂ => (‖z‖⁻¹ : ℂ) * (q - c)) heq
+        simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone, hz0, hw0, hn,
+          mul_assoc] using hh
+      have hh := congrArg Subtype.val (hβi hd)
+      have hn0 : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz0
+      apply (mul_left_cancel₀ (show (‖z‖⁻¹ : ℂ) ≠ 0 by exact_mod_cast inv_ne_zero hn0))
+      simpa [hn] using hh
+  · ext y
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      by_cases hz0 : z = 0
+      · subst z; simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone] using interior_subset hc
+      · have hb : β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ ∈ K :=
+          hKcompact.isClosed.frontier_subset (by rw [← hβr]; exact ⟨_, rfl⟩)
+        have hzle : ‖z‖ ≤ 1 := by simpa [Metric.mem_closedBall, dist_zero_right] using hz
+        have hm := hKc.lineMap_mem (interior_subset hc) hb ⟨norm_nonneg z, hzle⟩
+        have hm' : (‖z‖ : ℂ) * (β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - c) + c ∈ K := by
+          simpa only [AffineMap.lineMap_apply_ring'] using hm
+        simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone, hz0, add_comm] using hm'
+    · intro hy
+      let x : ℂ := y - c
+      let r : ℝ := gauge S x
+      have hr0 : 0 ≤ r := gauge_nonneg _
+      have hxS : x ∈ S := ⟨y, hy, by dsimp [x]; ring⟩
+      have hr1 : r ≤ 1 := gauge_le_one_of_mem hxS
+      by_cases hx0 : x = 0
+      · refine ⟨0, by simp, ?_⟩
+        have hyc : y = c := sub_eq_zero.mp hx0
+        simpa [φ, cutAndPaste_aux_boundary_chart_aux_cone, hyc]
+      · have hrp : 0 < r := hgpos hx0
+        let f : ℂ := (r⁻¹ : ℝ) • x
+        have hgf : gauge S f = 1 := by
+          exact (gauge_smul_of_nonneg (E := ℂ) (s := S) (α := ℝ)
+            (inv_nonneg.mpr hr0) x).trans (by
+              dsimp [r]
+              exact inv_mul_cancel₀ hrp.ne')
+        have hff : f ∈ frontier S := (gauge_eq_one_iff_mem_frontier hSc hS0).mp hgf
+        have hfc : c + f ∈ frontier K := by
+          have him : (Homeomorph.addLeft c) '' S = K := by
+            ext a; constructor
+            · intro h
+              rcases h with ⟨u, ⟨v, hv, rfl⟩, rfl⟩
+              simpa using hv
+            · intro h
+              exact ⟨-c + a, ⟨a, h, rfl⟩, by simp⟩
+          rw [← him, ← (Homeomorph.addLeft c).image_frontier]
+          exact ⟨f, hff, rfl⟩
+        rw [← hβr] at hfc
+        rcases hfc with ⟨b, hb⟩
+        refine ⟨(r : ℂ) * (b : ℂ), ?_, ?_⟩
+        · simpa [norm_mul, b.2, abs_of_nonneg hr0] using hr1
+        · have hz0 : (r : ℂ) * (b : ℂ) ≠ 0 := mul_ne_zero (by exact_mod_cast hrp.ne')
+            (by simpa [Circle, Submonoid.unitSphere] using b.2.ne)
+          simp only [φ, cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hz0]
+          have hn : ‖(r : ℂ) * (b : ℂ)‖ = r := by simp [norm_mul, b.2, abs_of_nonneg hr0]
+          have hdir : (⟨((‖(r : ℂ) * (b : ℂ)‖⁻¹ : ℝ) : ℂ) *
+              ((r : ℂ) * (b : ℂ)), by
+                simp [Circle, Submonoid.unitSphere, norm_mul, abs_of_pos hrp]
+                exact inv_mul_cancel₀ hrp.ne'⟩ : Circle) = b := by
+            apply Subtype.ext
+            change ((‖(r : ℂ) * (b : ℂ)‖⁻¹ : ℝ) : ℂ) * ((r : ℂ) * b) = b
+            rw [hn]
+            push_cast
+            field_simp [hrp.ne']
+          rw [hdir, hn, hb]
+          dsimp [f, x]
+          have hir : (r : ℂ) * (r⁻¹ : ℝ) = 1 := by
+            exact_mod_cast (mul_inv_cancel₀ hrp.ne')
+          rw [add_sub_cancel_left]
+          change c + (r : ℂ) * (((r⁻¹ : ℝ) : ℂ) * (y - c)) = y
+          rw [← mul_assoc, hir, one_mul]
+          ring
+  · intro z
+    have hz0 : (z : ℂ) ≠ 0 := by
+      intro h
+      have := z.2
+      simp [Circle, Submonoid.unitSphere, h] at this
+    simp [φ, cutAndPaste_aux_boundary_chart_aux_cone, hz0, z.2,
+      Circle, Submonoid.unitSphere]
+  · intro z hz
+    have hφ : gauge S (φ z - c) = ‖z‖ := by
+      by_cases hz0 : z = 0
+      · subst z; simp [φ, cutAndPaste_aux_boundary_chart_aux_cone]
+      · simp only [φ, cutAndPaste_aux_boundary_chart_aux_cone, dif_neg hz0,
+          add_sub_cancel_left, ← smul_eq_mul]
+        change gauge S (‖z‖ • (β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - c)) = ‖z‖
+        let d : ℂ := β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+          simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ - c
+        have hb : β ⟨((‖z‖⁻¹ : ℝ) : ℂ) * z, by
+            simp [Circle, Submonoid.unitSphere, norm_mul, hz0]⟩ ∈ frontier K := by
+          rw [← hβr]; exact ⟨_, rfl⟩
+        have hgd : gauge S d = 1 := by
+          rw [gauge_eq_one_iff_mem_frontier hSc hS0]
+          simpa [d] using hfront hb
+        calc
+          gauge S (‖z‖ • d) = ‖z‖ • gauge S d :=
+            gauge_smul_of_nonneg (E := ℂ) (s := S) (α := ℝ) (norm_nonneg z) d
+          _ = ‖z‖ := by rw [hgd, smul_eq_mul, mul_one]
+    have : φ z - c ∈ interior S := by
+      apply (gauge_lt_one_iff_mem_interior hSc hS0).mp
+      simpa [hφ] using hz
+    have him : (Homeomorph.addLeft c) '' interior S = interior K := by
+      rw [(Homeomorph.addLeft c).image_interior]
+      congr 1
+      ext a; constructor
+      · rintro ⟨u, ⟨v, hv, rfl⟩, rfl⟩; simpa using hv
+      · intro h; exact ⟨-c + a, ⟨a, h, rfl⟩, by simp⟩
+    rw [← him]
+    refine ⟨φ z - c, this, ?_⟩
+    simp
 
 /-! ### The four boundary maps -/
 
+lemma cutOldA_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileOldA L p q) := by
+  unfold cutProfileOldA
+  apply Continuous.if_le (by fun_prop) (by
+    unfold cutChordA cutSA
+    fun_prop) (by fun_prop) (by fun_prop)
+  intro x hx
+  dsimp at hx ⊢
+  rw [hx]
+  unfold cutChordA cutSA cutPoint
+  rw [sub_self, zero_div]
+  simp
+
 theorem cutOldA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutOldA L p q) := by
-  sorry
+  unfold cutOldA
+  have hL : 0 < L := lt_trans (Nat.zero_lt_of_lt hpq) hqL
+  have hperiod : cutProfileOldA L p q (cutAlpha L p) =
+      cutProfileOldA L p q (cutAlpha L p + 2 * Real.pi) := by
+    unfold cutProfileOldA
+    have halpha : cutAlpha L p ≤ cutAlpha L q := by
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      exact (div_le_div_iff_of_pos_right hLr).2
+        (mul_le_mul_of_nonneg_left (by exact_mod_cast (Nat.le_of_lt hpq))
+          (by positivity))
+    rw [if_pos halpha]
+    have hnot : ¬ cutAlpha L p + 2 * Real.pi ≤ cutAlpha L q := by
+      rw [not_le]
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      rw [show 2 * Real.pi = 2 * Real.pi * L / L by field_simp]
+      rw [← add_div]
+      apply (div_lt_div_iff_of_pos_right hLr).2
+      have hq : (q : ℝ) < p + L := by exact_mod_cast (show q < p + L by omega)
+      simpa [mul_add, hLr.ne'] using
+        (mul_lt_mul_of_pos_left hq (by positivity : 0 < 2 * Real.pi))
+    rw [if_neg hnot]
+    unfold cutChordA cutSA cutPoint
+    have hden : cutAlpha L p + 2 * Real.pi - cutAlpha L q ≠ 0 := by
+      exact ne_of_gt (sub_pos.mpr (lt_of_not_ge hnot))
+    rw [show (cutAlpha L p + 2 * Real.pi - cutAlpha L q) /
+          (cutAlpha L p + 2 * Real.pi - cutAlpha L q) = 1 by field_simp]
+    simp
+  have hc : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileOldA L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · exact hperiod
+    · exact (cutOldA_continuous_aux_profile hpq hqL).continuousOn
+  exact hc.comp AddCircle.homeomorphCircle'.symm.continuous
 
 lemma cutOldB_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutProfileOldB L p q) := by
@@ -5873,17 +6237,355 @@ theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutNewA L p q) := by
   sorry
 
+lemma cutNewB_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileNewB L p q) := by
+  have hL : 0 < L := by omega
+  unfold cutProfileNewB
+  apply Continuous.if_le (by unfold cutSeam; fun_prop) (by
+    unfold cutSB
+    apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+    intro x hx
+    dsimp at hx ⊢
+    rw [hx]
+    have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      apply ne_of_gt
+      exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+        (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+    rw [show (cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+        (cutAlpha L q - cutAlpha L p) = 0 by
+      rw [show cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi = 0 by ring,
+        zero_div]]
+    simp only [zero_mul, add_zero]
+    rw [show (((cutAlpha L p + 2 * Real.pi : ℝ) : ℂ) * Complex.I) =
+        2 * Real.pi * Complex.I + (cutAlpha L p : ℂ) * Complex.I by
+      push_cast; ring]
+    rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]) continuous_id continuous_const
+  · intro x hx
+    dsimp at hx ⊢
+    have hbranch : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+      simp only [cutAlpha]
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      have hq1 : ((q + 1 : ℕ) : ℝ) ≤ p + L := by exact_mod_cast (show q + 1 ≤ p + L by omega)
+      field_simp
+      nlinarith [Real.pi_pos, hq1]
+    rw [hx]
+    rw [if_pos hbranch]
+    have hs : (cutAlpha L (q + 1) - cutAlpha L q) * L / (2 * Real.pi) = 1 := by
+      have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      simp only [cutAlpha]
+      push_cast
+      field_simp
+      ring
+    rw [hs]
+    simp [cutSeam, cutPoint]
 theorem cutNewB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutNewB L p q) := by
-  sorry
+  unfold cutNewB
+  have hL : 0 < L := by omega
+  have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+  have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileNewB L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold cutProfileNewB
+      rw [if_pos (by
+        unfold cutAlpha
+        gcongr
+        omega)]
+      rw [if_neg (by
+        rw [not_le]
+        have heq : cutAlpha L q + 2 * Real.pi = cutAlpha L (q + L) := by
+          unfold cutAlpha
+          push_cast
+          field_simp
+        rw [heq]
+        unfold cutAlpha
+        gcongr
+        omega)]
+      rw [if_neg (by
+        rw [not_le]
+        apply (add_lt_add_iff_right (2 * Real.pi)).2
+        unfold cutAlpha
+        gcongr)]
+      have hs0 : (cutAlpha L q - cutAlpha L q) * L / (2 * Real.pi) = 0 := by ring
+      have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+        unfold cutAlpha
+        have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+        apply ne_of_gt
+        exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+          (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+      have hs1 : (cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+          (cutAlpha L q - cutAlpha L p) = 1 := by
+        rw [show cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi =
+          cutAlpha L q - cutAlpha L p by ring]
+        exact div_self hden
+      have hcut : cutSB L p q (cutAlpha L q + 2 * Real.pi) = 1 := by
+        exact hs1
+      rw [hs0, hcut]
+      simp [cutSeam, cutPoint, cutSB]
+      congr 2
+      push_cast
+      simp only [cutAlpha]
+      field_simp
+      norm_num [Nat.cast_add]
+      ring
+    · exact (cutNewB_continuous_aux_profile hpq hqL).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
+
+lemma cutOldA_injective_aux_exp {a x y : ℝ}
+    (hx : x ∈ Ico a (a + 2 * Real.pi)) (hy : y ∈ Ico a (a + 2 * Real.pi))
+    (h : Complex.exp ((x : ℂ) * Complex.I) = Complex.exp ((y : ℂ) * Complex.I)) :
+    x = y := by
+  rw [Complex.exp_eq_exp_iff_exists_int] at h
+  obtain ⟨n, hn⟩ := h
+  have hn' : x = y + (n : ℝ) * (2 * Real.pi) := by
+    have hi := congrArg Complex.im hn
+    simpa [Complex.mul_im] using hi
+  have hnlo : (-1 : ℝ) < n := by
+    have hpi : 0 < 2 * Real.pi := mul_pos (by norm_num) Real.pi_pos
+    nlinarith [hx.1, hx.2, hy.1, hy.2]
+  have hnhi : (n : ℝ) < 1 := by
+    have hpi : 0 < 2 * Real.pi := mul_pos (by norm_num) Real.pi_pos
+    nlinarith [hx.1, hx.2, hy.1, hy.2]
+  have hnlo' : (-1 : ℤ) < n := by exact_mod_cast hnlo
+  have hnhi' : n < (1 : ℤ) := by exact_mod_cast hnhi
+  have hn0 : n = 0 := by omega
+  simpa [hn0] using hn'
 
 theorem cutOldA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutOldA L p q) := by
-  sorry
+  intro b c hbc
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)
+      (AddCircle.homeomorphCircle'.symm b)
+  let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)
+      (AddCircle.homeomorphCircle'.symm c)
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hpq' : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    exact (div_lt_div_iff_of_pos_right hL).2
+      (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) (mul_pos (by norm_num) Real.pi_pos))
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqp : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+    calc
+      2 * Real.pi * (q : ℝ) / L < 2 * Real.pi * ((p : ℝ) + L) / L :=
+        (div_lt_div_iff_of_pos_right hL).2
+          (mul_lt_mul_of_pos_left hqp (mul_pos (by norm_num) Real.pi_pos))
+      _ = 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi := by field_simp
+  have hxy : cutProfileOldA L p q x = cutProfileOldA L p q y := by
+    simpa [cutOldA, AddCircle.liftIco, x, y] using hbc
+  have hxmem : (x : ℝ) ∈ Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi) := x.property
+  have hymem : (y : ℝ) ∈ Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi) := y.property
+  have hPnorm : ‖cutPoint L p‖ = 1 := by simp [cutPoint]
+  have hQnorm : ‖cutPoint L q‖ = 1 := by simp [cutPoint]
+  have hPQ : cutPoint L p ≠ cutPoint L q := by
+    intro he
+    apply hpq'.ne
+    apply cutOldA_injective_aux_exp
+      (a := cutAlpha L p)
+      (x := cutAlpha L p) (y := cutAlpha L q)
+      ⟨le_rfl, by linarith [Real.pi_pos]⟩ ⟨hpq'.le, hqtop⟩
+    simpa [cutPoint, cutAlpha, mul_comm] using he
+  have chord_norm_lt (z : ℝ) (hz0 : 0 < z) (hz1 : z < 1) :
+      ‖cutChordA L p q z‖ < 1 := by
+    have hc := norm_combo_lt_of_ne (x := cutPoint L q) (y := cutPoint L p)
+      (r := (1 : ℝ)) (a := 1 - z) (b := z)
+      (by simpa [hQnorm]) (by simpa [hPnorm]) hPQ.symm (by linarith) hz0 (by ring)
+    have heq : cutChordA L p q z =
+        (1 - z) • cutPoint L q + z • cutPoint L p := by
+      apply Complex.ext <;> simp [cutChordA, Complex.real_smul] <;> ring
+    rw [heq]
+    exact hc
+  by_cases hxarc : (x : ℝ) ≤ cutAlpha L q <;>
+    by_cases hyarc : (y : ℝ) ≤ cutAlpha L q
+  · have hxy' : (x : ℝ) = y := cutOldA_injective_aux_exp hxmem hymem (by
+      simpa [cutProfileOldA, hxarc, hyarc] using hxy)
+    have hsub : x = y := Subtype.ext hxy'
+    have hadd := congrArg (AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)).symm hsub
+    have hadd' : AddCircle.homeomorphCircle'.symm b =
+        AddCircle.homeomorphCircle'.symm c := by simpa [x, y] using hadd
+    exact AddCircle.homeomorphCircle'.symm.injective hadd'
+  · have hyq : cutAlpha L q < (y : ℝ) := lt_of_not_ge hyarc
+    have hs0 : 0 < cutSA L p q y := by
+      unfold cutSA
+      exact div_pos (sub_pos.mpr hyq) (sub_pos.mpr hqtop)
+    have hs1 : cutSA L p q y < 1 := by
+      unfold cutSA
+      apply (div_lt_one (sub_pos.mpr hqtop)).2
+      linarith [hymem.2]
+    have := chord_norm_lt _ hs0 hs1
+    have he : ‖Complex.exp (((x : ℝ) : ℂ) * Complex.I)‖ = 1 := by simp
+    simp only [cutProfileOldA, if_pos hxarc, if_neg hyarc] at hxy
+    rw [← hxy, he] at this
+    linarith
+  · have hxq : cutAlpha L q < (x : ℝ) := lt_of_not_ge hxarc
+    have hs0 : 0 < cutSA L p q x := div_pos (sub_pos.mpr hxq) (sub_pos.mpr hqtop)
+    have hs1 : cutSA L p q x < 1 := by
+      unfold cutSA
+      exact (div_lt_one (sub_pos.mpr hqtop)).2 (by linarith [hxmem.2])
+    have := chord_norm_lt _ hs0 hs1
+    have he : ‖Complex.exp (((y : ℝ) : ℂ) * Complex.I)‖ = 1 := by simp
+    simp only [cutProfileOldA, if_neg hxarc, if_pos hyarc] at hxy
+    rw [hxy, he] at this
+    linarith
+  · have hxq : cutAlpha L q < (x : ℝ) := lt_of_not_ge hxarc
+    have hyq : cutAlpha L q < (y : ℝ) := lt_of_not_ge hyarc
+    simp only [cutProfileOldA, if_neg hxarc, if_neg hyarc] at hxy
+    have hs : cutSA L p q x = cutSA L p q y := by
+      unfold cutChordA at hxy
+      have hd : cutPoint L p - cutPoint L q ≠ 0 := sub_ne_zero.mpr hPQ
+      apply_fun fun z : ℂ => z - cutPoint L q at hxy
+      simp only [add_sub_cancel_left] at hxy
+      exact_mod_cast (mul_right_cancel₀ hd hxy)
+    have hxy' : (x : ℝ) = y := by
+      unfold cutSA at hs
+      have hd : cutAlpha L p + 2 * Real.pi - cutAlpha L q ≠ 0 := ne_of_gt (sub_pos.mpr hqtop)
+      field_simp [hd] at hs
+      linarith
+    have hsub : x = y := Subtype.ext hxy'
+    have hadd := congrArg (AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)).symm hsub
+    have hadd' : AddCircle.homeomorphCircle'.symm b =
+        AddCircle.homeomorphCircle'.symm c := by simpa [x, y] using hadd
+    exact AddCircle.homeomorphCircle'.symm.injective hadd'
+
+lemma cutOldB_injective_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Set.InjOn (cutProfileOldB L p q)
+      (Set.Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi)) := by
+  have hL : 0 < L := by omega
+  have hLr : (0 : ℝ) < L := by exact_mod_cast hL
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    have hpqr : (p : ℝ) < q := by exact_mod_cast hpq
+    exact (div_lt_div_iff_of_pos_right hLr).2 (by nlinarith)
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqLr : (q : ℝ) < L := by exact_mod_cast hqL
+    have hpr : (0 : ℝ) ≤ p := Nat.cast_nonneg p
+    field_simp [ne_of_gt hLr]
+    nlinarith
+  have hPnorm : ‖cutPoint L p‖ = 1 := by
+    unfold cutPoint
+    exact Complex.norm_exp_ofReal_mul_I _
+  have hQnorm : ‖cutPoint L q‖ = 1 := by
+    unfold cutPoint
+    exact Complex.norm_exp_ofReal_mul_I _
+  have hPQ : cutPoint L p ≠ cutPoint L q := by
+    intro h
+    obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp h
+    have him := congrArg Complex.im hk
+    simp [cutPoint, cutAlpha] at him
+    have hpqr : (p : ℝ) < q := by exact_mod_cast hpq
+    have hgap : (q : ℝ) - (p : ℝ) < (L : ℝ) := by
+      have : (q : ℝ) < p + L := by exact_mod_cast (show q < p + L by omega)
+      linarith
+    field_simp [ne_of_gt hLr] at him
+    have heq : (p : ℝ) = q + (k : ℝ) * L := by nlinarith
+    have hkneg : (k : ℝ) < 0 := by nlinarith
+    have hk_le : (k : ℝ) ≤ -1 := by
+      exact_mod_cast (show k ≤ -1 by exact (Int.lt_add_one_iff.mp (by exact_mod_cast hkneg)))
+    nlinarith
+  have hchord : ∀ s : ℝ, 0 < s → s < 1 → ‖cutChordB L p q s‖ ^ 2 < 1 := by
+    intro s hs0 hs1
+    rw [Complex.sq_norm]
+    have hiden : Complex.normSq (cutChordB L p q s) =
+        1 - s * (1 - s) * Complex.normSq (cutPoint L q - cutPoint L p) := by
+      have hp2 : Complex.normSq (cutPoint L p) = 1 := by
+        rw [← Complex.sq_norm, hPnorm]; norm_num
+      have hq2 : Complex.normSq (cutPoint L q) = 1 := by
+        rw [← Complex.sq_norm, hQnorm]; norm_num
+      rw [Complex.normSq_apply] at hp2 hq2
+      simp [cutChordB, Complex.normSq_apply]
+      nlinarith
+    rw [hiden]
+    have hn : 0 < Complex.normSq (cutPoint L q - cutPoint L p) :=
+      Complex.normSq_pos.mpr (sub_ne_zero.mpr hPQ.symm)
+    have hp : 0 < s * (1 - s) * Complex.normSq (cutPoint L q - cutPoint L p) :=
+      mul_pos (mul_pos hs0 (sub_pos.mpr hs1)) hn
+    linarith
+  intro x hx y hy heq
+  change cutAlpha L q ≤ x ∧ x < cutAlpha L q + 2 * Real.pi at hx
+  change cutAlpha L q ≤ y ∧ y < cutAlpha L q + 2 * Real.pi at hy
+  by_cases hxt : x ≤ cutAlpha L p + 2 * Real.pi
+  · rw [cutProfileOldB, if_pos hxt] at heq
+    by_cases hyt : y ≤ cutAlpha L p + 2 * Real.pi
+    · rw [cutProfileOldB, if_pos hyt] at heq
+      obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
+      have him := congrArg Complex.im hk
+      simp at him
+      have hd : x - y = (k : ℝ) * (2 * Real.pi) := by nlinarith
+      have hb1 : -(2 * Real.pi) < x - y := by linarith
+      have hb2 : x - y < 2 * Real.pi := by linarith
+      have hk0 : k = 0 := by
+        by_contra hn
+        rcases lt_or_gt_of_ne hn with hkneg | hkpos
+        · have : (k : ℝ) ≤ -1 := by exact_mod_cast (show k ≤ -1 by omega)
+          nlinarith
+        · have : (1 : ℝ) ≤ k := by exact_mod_cast (show 1 ≤ k by omega)
+          nlinarith
+      subst k
+      norm_num at hd
+      linarith
+    · rw [cutProfileOldB, if_neg hyt] at heq
+      have hs0 : 0 < cutSB L p q y := by
+        unfold cutSB
+        exact div_pos (by linarith) (sub_pos.mpr hapq)
+      have hs1 : cutSB L p q y < 1 := by
+        unfold cutSB
+        apply (div_lt_one (sub_pos.mpr hapq)).2
+        linarith
+      have hsq := hchord _ hs0 hs1
+      have hnormarc : ‖Complex.exp ((x : ℂ) * Complex.I)‖ ^ 2 = 1 := by
+        rw [Complex.norm_exp]
+        simp
+      rw [heq] at hnormarc
+      linarith
+  · rw [cutProfileOldB, if_neg hxt] at heq
+    by_cases hyt : y ≤ cutAlpha L p + 2 * Real.pi
+    · rw [cutProfileOldB, if_pos hyt] at heq
+      have hs0 : 0 < cutSB L p q x := by
+        unfold cutSB
+        exact div_pos (by linarith) (sub_pos.mpr hapq)
+      have hs1 : cutSB L p q x < 1 := by
+        unfold cutSB
+        apply (div_lt_one (sub_pos.mpr hapq)).2
+        linarith
+      have hsq := hchord _ hs0 hs1
+      have hnormarc : ‖Complex.exp ((y : ℂ) * Complex.I)‖ ^ 2 = 1 := by
+        rw [Complex.norm_exp]
+        simp
+      rw [← heq] at hnormarc
+      exfalso
+      linarith
+    · rw [cutProfileOldB, if_neg hyt] at heq
+      have hd : cutPoint L q - cutPoint L p ≠ 0 := sub_ne_zero.mpr hPQ.symm
+      have hs : cutSB L p q x = cutSB L p q y := by
+        unfold cutChordB at heq
+        have hc : (cutSB L p q x : ℂ) * (cutPoint L q - cutPoint L p) =
+            (cutSB L p q y : ℂ) * (cutPoint L q - cutPoint L p) := by
+          simpa using congrArg (fun z => z - cutPoint L p) heq
+        have := mul_right_cancel₀ hd hc
+        exact_mod_cast this
+      unfold cutSB at hs
+      have hden : cutAlpha L q - cutAlpha L p ≠ 0 := ne_of_gt (sub_pos.mpr hapq)
+      field_simp [hden] at hs
+      linarith
 
 theorem cutOldB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutOldB L p q) := by
-  sorry
+  intro x y hxy
+  unfold cutOldB at hxy
+  have h := cutOldB_injective_aux_profile hpq hqL
+    (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm x)).2
+    (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm y)).2 hxy
+  apply AddCircle.homeomorphCircle'.symm.injective
+  exact (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).injective (Subtype.ext h)
 
 -- BEGIN SEAT AREA
 theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
@@ -6004,35 +6706,6 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
     (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
   sorry
-
-theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
-  unfold cutPoint
-  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
-
-theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
-    cutPoint L m ≠ cutPoint L m' := by
-  intro heq
-  have hL : 0 < L := by omega
-  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
-  have him := congrArg Complex.im hk
-  simp [cutPoint, cutAlpha] at him
-  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
-  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
-    field_simp [ne_of_gt hLreal] at him
-    nlinarith [Real.pi_pos]
-  have hkneg : (k : ℝ) < 0 := by
-    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
-    nlinarith
-  have hk_le : k ≤ -1 := by
-    have hkneg' : k < 0 := by exact_mod_cast hkneg
-    omega
-  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
-    nlinarith
-  have hgap : (m' : ℝ) - m < L := by
-    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
-    linarith
-  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
-  nlinarith
 
 /-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
 `1` = `B`).  A boundary value of a chart comes from the parameter circle, because
