@@ -872,6 +872,29 @@ theorem singularHomologyComparison_inv_map {X Y : TopCat} (f : X ⟶ Y)
     (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
       f k)
 
+/-- The transferred module normalization of the positive one-sphere uses
+exactly the generator selected by the additive-group normalization. -/
+theorem sphereOneGroupGenerator_comparison :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).inv
+        ((ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 1 one_pos).inv 1) =
+      (ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt 1 one_pos).inv 1 := by
+  simp only [ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt,
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso,
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso,
+    CategoryTheory.Functor.preimageIso_inv, Iso.trans_inv]
+  let e := (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 1 one_pos).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).inv
+  have hp := congrArg ConcreteCategory.hom
+    (CategoryTheory.Functor.map_preimage
+      (X := ModuleCat.of ℤ ℤ)
+      (Y := ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).obj
+          (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)))
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules e)
+  simpa [e] using (congrArg (fun q => q (1 : ℤ)) hp).symm
+
 /-- A based circle class whose Hurewicz image is the positive generator fixed
 by `circleH1IsoInt`.  Choosing it through Hurewicz surjectivity avoids adding
 a second, potentially incompatible orientation convention for explicit
@@ -4653,6 +4676,36 @@ theorem singularHomologyIsoOfHomotopyEquiv_inv_h1
   exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
     (AddCommGrpCat.of ℤ)).map_id (TopCat.of Y) |>.symm
 
+/-- The additive-group and module-category normalizations select the same
+positive circle generator under the canonical comparison. -/
+theorem circleGroupH1IsoInt_inv_one_comparison :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).inv (circleGroupH1IsoInt.inv 1) =
+      ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1 := by
+  change (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).inv
+    ((ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv 1).inv
+      ((ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 1 one_pos).inv 1)) = _
+  rw [singularHomologyIsoOfHomotopyEquiv_inv_h1]
+  have hs := congrArg
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).hom
+    sphereOneGroupGenerator_comparison
+  rw [Iso.inv_hom_id_apply] at hs
+  rw [hs]
+  change (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).inv
+    ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom
+          ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv.invFun))
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).hom
+        ((ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt 1 one_pos).inv 1))) = _
+  rw [singularHomologyComparison_inv_map]
+  rfl
+
 /-- The element selected by the intersection coordinate is precisely the
 positive circle class mapped through the explicit intersection circle. -/
 theorem radialIntersectionPositiveGenerator_eq (P : PairingData) :
@@ -5016,6 +5069,55 @@ theorem radialIntersectionToOuterH1_generator_eq_boundaryLoop (P : PairingData) 
       (circleGroupH1IsoInt.inv 1) = _
   rw [radialOverlapCircle_h1_naturality]
 
+/-- In the fixed outer-piece coordinates, the unsigned overlap inclusion
+sends the positive generator to the attaching-degree vector. -/
+theorem radialIntersectionToOuterH1_generator_coordinates (P : PairingData) :
+    (radialOuterH1GroupIsoCoordinates P).hom
+        (radialIntersectionToOuterH1 P
+          ((radialIntersectionH1GroupIsoInt P).inv 1)) =
+      attachingDegree P := by
+  change (((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (OuterPiece P)) 1).inv ≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          (outerH1IsoCoordinates P).hom)
+      (radialIntersectionToOuterH1 P
+        ((radialIntersectionH1GroupIsoInt P).inv 1))) = _
+  simp only [outerH1IsoCoordinates,
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso,
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso,
+    CategoryTheory.Functor.preimageIso_hom,
+    CategoryTheory.Functor.map_preimage,
+    Iso.trans_hom, Iso.inv_hom_id_assoc]
+  change (finiteWedgeH1CoordinateIso P).inv
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (PairingOrbit P.pair))) 1).inv
+        (singularH1Map (outerHomotopyEquivWedge P).toFun
+          (radialIntersectionToOuterH1 P
+            ((radialIntersectionH1GroupIsoInt P).inv 1)))) = _
+  rw [radialIntersectionToOuterH1_generator_eq_boundaryLoop]
+  have hc := congrArg
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).hom
+    circleGroupH1IsoInt_inv_one_comparison
+  rw [Iso.inv_hom_id_apply] at hc
+  rw [hc]
+  change (finiteWedgeH1CoordinateIso P).inv
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (PairingOrbit P.pair))) 1).inv
+        ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+          (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of Circle) 1).hom
+            (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1)))) = _
+  rw [singularHomologyComparison_inv_map,
+    ← polygonBoundaryFundamentalClass_hurewicz,
+    polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree]
+  exact (finiteWedgeH1CoordinateIso P).hom_inv_id_apply _
+
 /-- The outer projection of the production intersection arrow is literally
 the negative outer inclusion, fixing the MV sign before the geometric loop
 calculation begins. -/
@@ -5046,6 +5148,16 @@ theorem radialOuterBoundaryGenerator_eq_neg_inclusion (P : PairingData) :
   have hx := congrArg
     (fun f => f ((radialIntersectionH1GroupIsoInt P).inv 1)) h
   simpa using hx
+
+/-- With the production Mayer--Vietoris convention, the reduced boundary is
+the negative of the geometrically oriented attaching-degree map. -/
+theorem radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup (P : PairingData) :
+    radialMVBoundaryGroup P = -attachingBoundaryGroup P := by
+  apply addCommGrpHom_int_ext
+  rw [radialMVBoundaryGroup_one_formula,
+    radialOuterBoundaryGenerator_eq_neg_inclusion, map_neg,
+    radialIntersectionToOuterH1_generator_coordinates]
+  simpa using (attachingBoundaryGroup_apply P 1).symm
 
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
