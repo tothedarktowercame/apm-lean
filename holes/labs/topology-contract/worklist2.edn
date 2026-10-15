@@ -87950,6 +87950,20 @@
     [{:cmd "quotient-map draft",
       :exit 1,
       :correction "fixed namespace"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792036012069-13140-6927681b",
+     :commands
+     ["git show/diff-tree b98d0fbe4"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms three new declarations"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit b98d0fbe4 by topo-6 changes only the scoped target; fixture hash 02728716...e518f matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The reduced short complex zero equation puts the boundary range in the reassembly kernel, so liftQ correctly descends reassembly. Composing with the inverse production-to-B3 cokernel equivalence gives a map BoundaryCokernel -> surface H1 in the required direction. New compiled progress; proving this map an equivalence via radial exactness remains, then B9-B10."},
     :commit "b98d0fbe4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87958,7 +87972,7 @@
      "027287160ae7c1e5f474c38357a9067d53a0a75032753e58a3999804afbe518f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87978,7 +87992,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B8 kernel/cokernel models.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B8 cokernel-to-H1 map.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88312,7 +88326,10 @@
      :reason "Banked sign-invariant kernel and range."}
     {:job 6,
      :commit "c4dc936df",
-     :reason "Banked B8 kernel/cokernel models."}]}
+     :reason "Banked B8 kernel/cokernel models."}
+    {:job 7,
+     :commit "b98d0fbe4",
+     :reason "Banked B8 cokernel-to-H1 map."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -93027,7 +93044,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundary_range_le_reassembly_ker",
@@ -93037,14 +93054,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "boundary range killed by reassembly",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b98d0fbe4"},
    :id :lemma-radialmvboundary-range-le-reassembly-ker,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarycokernelequiv],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVH1QuotientMap",
@@ -93054,14 +93073,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "reassembly descends through quotient",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b98d0fbe4"},
    :id :lemma-radialmvh1quotientmap,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundary-range-le-reassembly-ker],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "boundaryCokernelToRadialH1",
@@ -93071,7 +93092,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "canonical B3-cokernel to surface H1 map",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b98d0fbe4"},
    :id :lemma-boundarycokerneltoradialh1,
    :kind :lemma,
    :depends-on [:lemma-radialmvh1quotientmap],
