@@ -36700,64 +36700,57 @@
      :reason
      "Committed canonical prefix-indexed point/path families; quotient fold induction remains."}]}
   {:consumer :t99J05,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
-    :residual
-    "Construct singleton chain homology and MV successor; then C4/Main.",
+    :residual "Construct MV successor; then Lefschetz/Euler and Main.",
     :outcome :stop,
-    :warnings [],
+    :warnings
+    ["Main: one placeholder." "Unrelated t97A01 edit untouched."],
     :missing-theorems
-    [{:name "cpZeroHomologyDataOfSubsingletonData",
-      :type "singleton homology data -> CP0 data",
+    [{:name "t99J05_subsingleton_rational_homology",
+      :type
+      "nonempty subsingleton has Q in H0 and zero positive rational homology",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["cp_zero_subsingleton"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_subsingleton_rational_homology",
-      :type "construct singleton rational homology data",
-      :status :not-started,
-      :consumers [:t99J05],
       :depends-on [],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_zero_rational_homology",
+      :type "full rational homology data for literal CP0",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on
+      ["cpZeroHomologyDataOfSubsingletonData"
+       "t99J05_subsingleton_rational_homology"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_homology_step",
       :type "CP n data -> CP(n+1) data",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on [],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_lefschetz_euler",
-      :type "Lefschetz/Euler n+1",
-      :status :partial,
-      :consumers [:t99J05],
-      :depends-on
-      ["t99J05_subsingleton_rational_homology"
-       "t99J05_cp_homology_step"],
+      :depends-on ["t99J05_cp_zero_rational_homology"],
       :area "rational-homology-lefschetz"}],
-    :statement-hashes {:registry "150/150"},
+    :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted.",
+    "Committed singleton rational homology and literal CP0 data; MV successor remains.",
     :commands
-    [{:cmd "build; registry; fixture; diff; commit", :exit 0}
-     {:cmd "rg sorry-or-axiom closure", :exit 1, :expected-exit 1}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791922552251-10370-16bd8253",
-     :commands
-     ["git show/diff 5b4eba45; scope and adapter review"
-      "lake build/lean ConstructionTargets.t99J05Closure"
-      "sha256sum + lake env lean interface fixture"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS. Since program-history 385135c, commit 5b4eba45 adds a compiled, sorry-free singleton rational-homology output interface and a correctly oriented adapter to CP0 data: positive-degree vanishing supplies both above-zero and odd vanishing, while the unique Fin 1 even degree uses H0 equiv Q. It does not claim the chain computation is done; that construction and the MV successor remain listed. Fixture hash matches; standard axioms only; registry 150/150; forbidden count 0->0."},
-    :commit "5b4eba45781d7566fbb438c855ccc079fe911c8f",
-    :changed-paths
-    ["ConstructionTargets/t99J05Closure.lean"
-     "ConstructionTargets/t99J05Closure.blueprint.md"],
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean problems/t99J05/lean/Main.lean; registry; diff; fixture hash; status",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t99j05_cp_homology_interface_check.lean",
+      :exit 0}
+     {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial closure compile",
+      :exit 1,
+      :note "added explicit CP0 inhabitant"}],
+    :commit "d040389f5",
+    :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
      :sha256
@@ -36765,7 +36758,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -37053,7 +37046,7 @@
     :area "rational-homology-lefschetz"},
    :id :lemma-t99j05-cp-homology-step,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-t99j05-cp-zero-rational-homology],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -37084,7 +37077,8 @@
    {:name "t99J05_subsingleton_rational_homology",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "H0(X;Q)=Q; Hk=0 for k>0",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-subsingleton-rational-homology,
    :kind :lemma,
    :depends-on [],
@@ -41846,6 +41840,25 @@
    :id :lemma-t99j05-chartinverse-continuous,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_zero_rational_homology",
+    :type "full rational homology data for literal CP0"},
+   :lemma
+   {:name "t99J05_cp_zero_rational_homology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "full rational homology data for literal CP0",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-zero-rational-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-cpzerohomologydataofsubsingletondata
+    :lemma-t99j05-subsingleton-rational-homology],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
