@@ -2187,7 +2187,46 @@ lemma apm_t98a03_glueMap_locInj_inl {J A B A' B' : Type} [TopologicalSpace A]
     (a' : A') (ha' : a' ∉ Set.range σ) :
     ∃ W : Set (apm_t98a03_Glue σ τ), IsOpen W ∧
       apm_t98a03_glueMk σ τ (.inl a') ∈ W ∧ Set.InjOn (apm_t98a03_glueMap p q hp hq) W := by
-  sorry
+  obtain ⟨φ, haφ, hpφ⟩ := hpl a'
+  let U : Set A' := φ.source \ Set.range σ
+  let W : Set (apm_t98a03_Glue σ τ) :=
+    apm_t98a03_glueMk σ τ '' (Sum.inl '' U)
+  have hrange_closed : IsClosed (Set.range σ) :=
+    Set.Finite.isClosed (Set.finite_range σ)
+  have hUopen : IsOpen U := φ.open_source.sdiff hrange_closed
+  have hpreimage : apm_t98a03_glueMk σ τ ⁻¹' W = Sum.inl '' U := by
+    apply Set.Subset.antisymm
+    · rintro z ⟨w, ⟨u, hu, rfl⟩, hzw⟩
+      have hz := (hmkE z (.inl u)).mp hzw.symm
+      rcases hz with rfl | ⟨j, hz | hz⟩
+      · exact ⟨u, hu, rfl⟩
+      · cases hz.2
+      · have huσ : u = σ j := Sum.inl.inj hz.2
+        exact (hu.2 ⟨j, huσ.symm⟩).elim
+    · rintro z ⟨u, hu, rfl⟩
+      exact ⟨.inl u, ⟨u, hu, rfl⟩, rfl⟩
+  have hWopen : IsOpen W := by
+    rw [isOpen_coinduced]
+    change IsOpen (apm_t98a03_glueMk σ τ ⁻¹' W)
+    rw [hpreimage]
+    exact isOpenMap_inl _ hUopen
+  refine ⟨W, hWopen, ?_, ?_⟩
+  · exact ⟨.inl a', ⟨a', ⟨haφ, ha'⟩, rfl⟩, rfl⟩
+  · rintro x hx y hy hxy
+    rcases hx with ⟨_, ⟨u, hu, rfl⟩, rfl⟩
+    rcases hy with ⟨_, ⟨v, hv, rfl⟩, rfl⟩
+    have hp_eq : p u = p v := by
+      have hm : apm_t98a03_GlueEq
+          (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl (p u)) (.inl (p v)) := by
+        apply (hmkX _ _).mp
+        simpa only [apm_t98a03_glueMap_mk] using hxy
+      rcases hm with hm | ⟨j, hm | hm⟩
+      · exact Sum.inl.inj hm
+      · cases hm.2
+      · cases hm.1
+    apply congrArg (apm_t98a03_glueMk σ τ ∘ Sum.inl)
+    apply φ.injOn hu.1 hv.1
+    simpa [hpφ] using hp_eq
 
 /-- Seat (generic): local injectivity at an unglued point of `B'`; the mirror
 image of `apm_t98a03_glueMap_locInj_inl` (same route with `inr`, `q`, `τ`).
