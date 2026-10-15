@@ -1647,7 +1647,70 @@ negates the sphere point.  About 80 lines. -/
 lemma chain_local_regular (n : ℤ) (x : S2) (hN : x ≠ north) (hS : x ≠ south) :
     ∃ V : Set (ℤ × S2), IsOpen V ∧ (n, x) ∈ V ∧ Saturated ChainRel V ∧
       ∀ g : DihedralGroup 0, (∃ v ∈ V, g • v ∈ V) → g = 1 := by
-  sorry
+  let d : ℝ := min (dist x north) (min (dist x south) (dist x (-x)))
+  let r : ℝ := d / 3
+  have hxneg : x ≠ -x := by
+    intro h
+    have h' := congrArg (fun y : S2 => (y : E3)) h
+    have hxnorm : ‖(x : E3)‖ = 1 := by simpa using x.2
+    change (x : E3) = -(x : E3) at h'
+    have hxzero : (x : E3) = 0 := by
+      rw [eq_neg_iff_add_eq_zero] at h'
+      have htwo : (2 : ℝ) • (x : E3) = 0 := by simpa [two_smul] using h'
+      exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+    rw [hxzero, norm_zero] at hxnorm
+    norm_num at hxnorm
+  have hd : 0 < d := by
+    dsimp [d]
+    exact lt_min (dist_pos.mpr hN) (lt_min (dist_pos.mpr hS) (dist_pos.mpr hxneg))
+  have hr : 0 < r := by dsimp [r]; positivity
+  let V : Set (ℤ × S2) := {n} ×ˢ Metric.ball x r
+  refine ⟨V, ?_, ?_, ?_, ?_⟩
+  · exact (isOpen_discrete ({n} : Set ℤ)).prod Metric.isOpen_ball
+  · simp [V, hr]
+  · intro z w hzw
+    cases hzw with
+    | link k =>
+      simp only [V, Set.mem_prod, Set.mem_singleton_iff, Metric.mem_ball]
+      constructor
+      · rintro ⟨rfl, hk⟩
+        exfalso
+        have hle : d ≤ dist x north := min_le_left _ _
+        have : dist x north < d / 3 := by simpa [dist_comm] using hk
+        linarith
+      · rintro ⟨hk, hs⟩
+        exfalso
+        have hle : d ≤ dist x south := (min_le_right _ _).trans (min_le_left _ _)
+        have : dist x south < d / 3 := by simpa [dist_comm] using hs
+        linarith
+  · intro g hg
+    obtain ⟨⟨k, y⟩, hv, hgv⟩ := hg
+    cases g with
+    | r i =>
+      simp only [V, Set.mem_prod, Set.mem_singleton_iff, Metric.mem_ball] at hv hgv
+      rw [chainSMul_r] at hgv
+      simp only [Prod.fst, Prod.snd] at hgv
+      have hi : zOf i = 0 := by omega
+      rw [DihedralGroup.one_def]
+      congr
+    | sr i =>
+      simp only [V, Set.mem_prod, Set.mem_singleton_iff, Metric.mem_ball] at hv hgv
+      rw [chainSMul_sr] at hgv
+      simp only [Prod.fst, Prod.snd] at hgv
+      have hxy : dist x y < d / 3 := by simpa [r, dist_comm] using hv.2
+      have hxny : dist (-y) x < d / 3 := by simpa [r] using hgv.2
+      have hynx : dist y (-x) < d / 3 := by
+        have heq : dist y (-x) = dist (-y) x := by
+          change ‖(y : E3) - (-(x : S2) : E3)‖ =
+            ‖((-y : S2) : E3) - (x : E3)‖
+          rw [show ((-y : S2) : E3) = -(y : E3) by rfl]
+          rw [sub_neg_eq_add, show -(y : E3) - (x : E3) =
+            -((y : E3) + (x : E3)) by module, norm_neg]
+        rw [heq]
+        exact hxny
+      have htri : dist x (-x) ≤ dist x y + dist y (-x) := dist_triangle _ _ _
+      have hle : d ≤ dist x (-x) := (min_le_right _ _).trans (min_le_right _ _)
+      linarith
 -- END SEAT AREA
 
 lemma chain_local (z : ℤ × S2) :
