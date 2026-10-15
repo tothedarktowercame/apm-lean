@@ -11,6 +11,7 @@ import ConstructionTargets.DegreeOneHurewiczSurjective
 import ConstructionTargets.CircleHurewiczIsomorphism
 import ConstructionTargets.CircleUniversalCover
 import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.T00A01MayerVietorisAdapters
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -4645,6 +4646,25 @@ noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
       (overlapHomotopyEquivCircle P) 1 ≪≫
     circleGroupH1IsoInt
 
+/-- Integral H₀ coordinates on the literal radial intersection. -/
+noncomputable def radialIntersectionH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) ≅
+      AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv 0 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (overlapHomotopyEquivCircle P) 0 ≪≫
+    circleGroupH0IsoInt
+
+/-- Integral H₀ coordinates on the contractible inner radial piece. -/
+noncomputable def radialInnerH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of (InnerPiece P)) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (innerHomotopyEquivPoint P) 0 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.pointH0IsoInt
+
 theorem singularHomologyIsoOfHomotopyEquiv_inv_h1
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (e : ContinuousMap.HomotopyEquiv X Y) :
@@ -5283,6 +5303,83 @@ theorem boundaryCokernelToRadialH1_injective (P : PairingData) :
     Function.Injective (boundaryCokernelToRadialH1 P) :=
   (radialMVH1QuotientMap_injective P).comp
     (radialMVBoundaryCokernelEquiv P).symm.injective
+
+/-- Exactness at surface H₁ and injectivity of the connected H₀ overlap
+arrow make the reduced reassembly map surjective. -/
+theorem radialMVReducedReassembly_surjective (P : PairingData) :
+    Function.Surjective (radialMVReducedPieces P).g := by
+  letI : Nonempty {q // q ∈ (openCover P).inner ∩ (openCover P).outer} :=
+    ⟨(radialIntersectionPositiveCircle P) 1⟩
+  letI : Nonempty (InnerPiece P) := ⟨(openCover P).center⟩
+  letI : Mono
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (openCover P).inner (openCover P).outer 0) :=
+    T00A01MayerVietorisAdapters.productionIntersectionArrow_mono_zero_of_coordinates
+        (openCover P).inner (openCover P).outer
+        (radialIntersectionH0GroupIsoInt P) (radialInnerH0GroupIsoInt P)
+  letI : Epi
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1) :=
+    (radialMVUnionExact P 0).epi_f
+      ((radialMVIntersectionExact P 0).mono_g_iff.mp inferInstance)
+  have hs : Function.Surjective
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1) := by
+    rw [← AddCommGrpCat.epi_iff_surjective]
+    infer_instance
+  intro y
+  obtain ⟨x, hx⟩ := hs y
+  let e :
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+            (TopCat.of (InnerPiece P)) ⊞
+          ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+            (TopCat.of (OuterPiece P)) ≅
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+          (TopCat.of (OuterPiece P)) :=
+    biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)
+  refine ⟨(radialOuterH1GroupIsoCoordinates P).hom (e.hom x), ?_⟩
+  change ((radialOuterH1GroupIsoCoordinates P).inv ≫
+      biprod.inr ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1)
+      ((radialOuterH1GroupIsoCoordinates P).hom (e.hom x)) = y
+  rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply,
+    Iso.hom_inv_id_apply]
+  rw [← hx]
+  exact congrArg
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (openCover P).inner (openCover P).outer 1)
+    (e.hom_inv_id_apply x)
+
+/-- Surjectivity descends through the quotient by the boundary range. -/
+theorem radialMVH1QuotientMap_surjective (P : PairingData) :
+    Function.Surjective (radialMVH1QuotientMap P) := by
+  intro y
+  obtain ⟨x, hx⟩ := radialMVReducedReassembly_surjective P y
+  refine ⟨Submodule.Quotient.mk x, ?_⟩
+  simpa only [radialMVH1QuotientMap, Submodule.liftQ_apply] using hx
+
+/-- The canonical B3-cokernel map is surjective. -/
+theorem boundaryCokernelToRadialH1_surjective (P : PairingData) :
+    Function.Surjective (boundaryCokernelToRadialH1 P) := by
+  intro y
+  obtain ⟨x, hx⟩ := radialMVH1QuotientMap_surjective P y
+  refine ⟨radialMVBoundaryCokernelEquiv P x, ?_⟩
+  change radialMVH1QuotientMap P
+      ((radialMVBoundaryCokernelEquiv P).symm
+        (radialMVBoundaryCokernelEquiv P x)) = y
+  rw [(radialMVBoundaryCokernelEquiv P).symm_apply_apply]
+  exact hx
+
+/-- B8 in degree one: surface H₁ is the attaching-map cokernel. -/
+noncomputable def boundaryCokernelRadialH1Equiv (P : PairingData) :
+    BoundaryCokernel P ≃ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  LinearEquiv.ofBijective (boundaryCokernelToRadialH1 P)
+    ⟨boundaryCokernelToRadialH1_injective P,
+      boundaryCokernelToRadialH1_surjective P⟩
 
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
