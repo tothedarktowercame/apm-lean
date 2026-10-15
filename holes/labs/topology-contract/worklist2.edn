@@ -88375,6 +88375,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check fbccc7248", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792100355320-14718-9a23710e",
+     :commands
+     ["git show/diff/check fbccc7248"
+      "sha256sum + placeholder recount from fbccc7248"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit fbccc7248 adds compiled, sorry-free progress beyond history 3e9caad4c. The theorem transports an actual quotient composite and both factors through the same middle-endpoint equality; ha,hb,hc all point from new endpoints to original endpoints, matching Quotient.cast, and ind2 reduces the claim definitionally. Only t97A01Closure.lean changed; fixture SHA 05857ad8d3b4c78cc8f7ed6c7e6e65b7c81cc381a724b45b42109d896b13b17a matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Transported fold induction, van Kampen, and assembly remain listed."},
     :commit "fbccc7248",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88395,7 @@
      "05857ad8d3b4c78cc8f7ed6c7e6e65b7c81cc381a724b45b42109d896b13b17a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked typed quotient composition congruence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient cast/composition transport.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88648,7 +88660,10 @@
      :reason "Banked typed quotient composition associativity."}
     {:job 7,
      :commit "3e9caad4c",
-     :reason "Banked typed quotient composition congruence."}]}
+     :reason "Banked typed quotient composition congruence."}
+    {:job 8,
+     :commit "fbccc7248",
+     :reason "Banked quotient cast/composition transport."}]}
   {:consumer :t94J09,
    :stop-count 8,
    :evidence
@@ -96193,7 +96208,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_pathHomotopicQuotient_cast_trans",
@@ -96205,7 +96220,9 @@
     :type
     "endpoint cast of a composite equals composition through a shared cast endpoint",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "fbccc7248"},
    :id :lemma-torusrp2-pathhomotopicquotient-cast-trans,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-pathhomotopicquotient-trans-congr],
