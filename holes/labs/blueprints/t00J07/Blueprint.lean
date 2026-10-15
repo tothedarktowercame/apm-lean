@@ -657,7 +657,64 @@ lemma hemi_respects {x y : Surfaces.Disk} (h : SurfaceRel false 1 x y) : hemi x 
 the boundary circle. -/
 lemma hemi_eq_cases {x y : Surfaces.Disk} (h : hemi x = hemi y) :
     x = y ∨ (‖(x : ℂ)‖ = 1 ∧ (y : ℂ) = -(x : ℂ)) := by
-  sorry
+  have hsqrt_sq (z : Surfaces.Disk) :
+      (Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2)) ^ 2 = 1 - ‖(z : ℂ)‖ ^ 2 := by
+    rw [Real.sq_sqrt]
+    have hz : ‖(z : ℂ)‖ ≤ 1 := by
+      have hz' : dist (z : ℂ) 0 ≤ 1 := z.property
+      simpa [dist_zero_right] using hz'
+    nlinarith [norm_nonneg (z : ℂ)]
+  have hunit (z : Surfaces.Disk) :
+      (hemiVec z 0) ^ 2 + (hemiVec z 1) ^ 2 + (hemiVec z 2) ^ 2 = 1 := by
+    change (z : ℂ).re ^ 2 + (z : ℂ).im ^ 2 +
+      (Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2)) ^ 2 = 1
+    rw [hsqrt_sq z, Complex.sq_norm, Complex.normSq_apply]
+    ring
+  obtain ⟨a, ha⟩ :=
+    (Projectivization.mk_eq_mk_iff' ℝ _ _ (hemiVec_ne_zero x)
+      (hemiVec_ne_zero y)).mp h
+  have ha0 := congrFun ha 0
+  have ha1 := congrFun ha 1
+  have ha2 := congrFun ha 2
+  change a * (y : ℂ).re = (x : ℂ).re at ha0
+  change a * (y : ℂ).im = (x : ℂ).im at ha1
+  change a * Real.sqrt (1 - ‖(y : ℂ)‖ ^ 2) =
+    Real.sqrt (1 - ‖(x : ℂ)‖ ^ 2) at ha2
+  have ha_sq : a ^ 2 = 1 := by
+    have hxunit := hunit x
+    have hyunit := hunit y
+    change (x : ℂ).re ^ 2 + (x : ℂ).im ^ 2 +
+      (Real.sqrt (1 - ‖(x : ℂ)‖ ^ 2)) ^ 2 = 1 at hxunit
+    change (y : ℂ).re ^ 2 + (y : ℂ).im ^ 2 +
+      (Real.sqrt (1 - ‖(y : ℂ)‖ ^ 2)) ^ 2 = 1 at hyunit
+    rw [← ha0, ← ha1, ← ha2] at hxunit
+    nlinarith
+  rcases (sq_eq_one_iff.mp ha_sq) with ha_one | ha_neg
+  · left
+    rw [ha_one, one_mul] at ha0 ha1
+    apply Subtype.ext
+    apply Complex.ext
+    · exact ha0.symm
+    · exact ha1.symm
+  · right
+    have hsx : Real.sqrt (1 - ‖(x : ℂ)‖ ^ 2) = 0 := by
+      have hxnonneg := Real.sqrt_nonneg (1 - ‖(x : ℂ)‖ ^ 2)
+      have hynonneg := Real.sqrt_nonneg (1 - ‖(y : ℂ)‖ ^ 2)
+      rw [ha_neg] at ha2
+      nlinarith
+    have hxnorm_sq : ‖(x : ℂ)‖ ^ 2 = 1 := by
+      have := hsqrt_sq x
+      rw [hsx] at this
+      nlinarith
+    constructor
+    · nlinarith [norm_nonneg (x : ℂ)]
+    · apply Complex.ext
+      · simp only [map_neg, Complex.neg_re]
+        rw [ha_neg] at ha0
+        nlinarith
+      · simp only [map_neg, Complex.neg_im]
+        rw [ha_neg] at ha1
+        nlinarith
 
 /-- Antipodal boundary points are identified in `Surface false 1`. -/
 lemma surfaceRel_one_antipodal {x y : Surfaces.Disk} (hx : ‖(x : ℂ)‖ = 1)
