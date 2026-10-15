@@ -100,6 +100,24 @@ def aabbccOrbitCoordinates :
     map_add' := by intro f g; rfl
     map_smul' := by intro n f; rfl }
 
+@[simp] theorem aabbcc_orbit_eq_named (i : Fin 6) (j : Fin 3) :
+    aabbccPairingData.orbit i = (nonorientableOrbitEquiv 3).symm j ↔
+      nonorientableOrbitEquiv 3 (aabbccPairingData.orbit i) = j :=
+  (nonorientableOrbitEquiv 3).eq_symm_apply
+
+@[simp] theorem torusRP2_orbit_eq_named (i : Fin 6) (j : Fin 3) :
+    torusRP2PairingData.orbit i = torusRP2OrbitEquiv.symm j ↔
+      torusRP2OrbitEquiv (torusRP2PairingData.orbit i) = j :=
+  torusRP2OrbitEquiv.eq_symm_apply
+
+@[simp] theorem aabbccOrbitEquiv_orbit (i : Fin 6) :
+    nonorientableOrbitEquiv 3 (aabbccPairingData.orbit i) =
+      nonorientableOrbitLabel 3 i := rfl
+
+@[simp] theorem torusRP2OrbitEquiv_orbit (i : Fin 6) :
+    torusRP2OrbitEquiv (torusRP2PairingData.orbit i) =
+      torusRP2OrbitLabel i := rfl
+
 /-- Evaluation on the named `a`, `b`, and `c` torus-crosscap edge orbits. -/
 def torusRP2OrbitCoordinates :
     (PairingOrbit torusRP2PairingData.pair → ℤ) ≃ₗ[ℤ] Z3 :=
@@ -115,5 +133,42 @@ def torusRP2OrbitCoordinates :
     right_inv := by rintro ⟨x, y, z⟩; rfl
     map_add' := by intro f g; rfl
     map_smul' := by intro n f; rfl }
+
+theorem aabbcc_attachingDegree_named (j : Fin 3) :
+    attachingDegree aabbccPairingData ((nonorientableOrbitEquiv 3).symm j) = -2 := by
+  rw [attachingDegree_apply]
+  simp_rw [edgeOrbitContribution, aabbcc_orbit_eq_named]
+  simp_rw [aabbccOrbitEquiv_orbit]
+  fin_cases j <;>
+    simp [aabbccPairingData, nonorientableStandardPairingData,
+      standardPairingDataOfOneVertex, standardPair, standardSign,
+      nonorientableOrbitLabel, nonorientableCoord, edgeAttachingDegree] <;>
+      decide
+
+theorem aabbccOrbitCoordinates_attachingDegree :
+    aabbccOrbitCoordinates (attachingDegree aabbccPairingData) = (-2, -2, -2) := by
+  apply Prod.ext
+  · exact aabbcc_attachingDegree_named 0
+  · apply Prod.ext
+    · exact aabbcc_attachingDegree_named 1
+    · exact aabbcc_attachingDegree_named 2
+
+theorem torusRP2_attachingDegree_named (j : Fin 3) :
+    attachingDegree torusRP2PairingData (torusRP2OrbitEquiv.symm j) = ![0, 0, -2] j := by
+  rw [attachingDegree_apply]
+  simp_rw [edgeOrbitContribution, torusRP2_orbit_eq_named]
+  simp_rw [torusRP2OrbitEquiv_orbit]
+  fin_cases j <;>
+    simp [torusRP2PairingData, PolygonSurfacePiOne.torusRP2PairingData,
+      torusRP2OrbitLabel, torusRP2Pair, torusRP2Sign, edgeAttachingDegree] <;>
+      decide
+
+theorem torusRP2OrbitCoordinates_attachingDegree :
+    torusRP2OrbitCoordinates (attachingDegree torusRP2PairingData) = (0, 0, -2) := by
+  apply Prod.ext
+  · exact torusRP2_attachingDegree_named 0
+  · apply Prod.ext
+    · exact torusRP2_attachingDegree_named 1
+    · exact torusRP2_attachingDegree_named 2
 
 end ConstructionTargets.t97A01Closure
