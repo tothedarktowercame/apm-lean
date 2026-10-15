@@ -146,6 +146,21 @@ theorem isDiscrete_preimage_singleton_of_locallyIsolatedFiber
   · exact (Set.inter_subset_inter_left _ hVU).trans_eq hUfiber
   · simpa using ⟨hxV, hx⟩
 
+/-- Discreteness of a point fiber gives the corresponding local-isolation
+datum at each of its points. -/
+theorem locallyIsolatedFiber_of_isDiscrete
+    {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y)
+    (hdiscrete : IsDiscrete (f ⁻¹' {y})) : LocallyIsolatedFiber f y := by
+  rw [isDiscrete_iff_forall_exists_isOpen] at hdiscrete
+  intro x hxy
+  have hx : x ∈ f ⁻¹' {y} := by simpa
+  rcases hdiscrete x hx with ⟨U, hUopen, hUfiber⟩
+  have hxpair : x ∈ U ∩ f ⁻¹' {y} := by
+    rw [hUfiber]
+    exact Set.mem_singleton x
+  have hxU : x ∈ U := hxpair.1
+  exact ⟨U, hUopen.mem_nhds hxU, hUfiber⟩
+
 /-- On a compact Hausdorff source, a locally isolated fiber has the canonical
 finite instance used by the regular-fiber calculations. -/
 @[reducible] noncomputable def regularFiberFintype_of_locallyIsolatedFiber
@@ -1221,6 +1236,23 @@ noncomputable def locallyIsolatedCanonicalFiberData_of
       locallyIsolated := hlocal
       calculations := calculations }
 
+/-- Constructor directly from a discrete selected fiber, the form expected
+from the transverse regular-value argument. -/
+noncomputable def locallyIsolatedCanonicalFiberData_of_isDiscrete
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (y : S) (hy : y ∈ Set.range c)
+    (hdiscrete : IsDiscrete (f ⁻¹' {y}))
+    (calculations : letI := regularFiberFintype_of_isDiscrete f y hdiscrete
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    LocallyIsolatedCanonicalFiberData f c e :=
+  { choice := ⟨y, hy, regularFiberFintype_of_isDiscrete f y hdiscrete⟩
+    locallyIsolated := locallyIsolatedFiber_of_isDiscrete f y hdiscrete
+    calculations := calculations }
+
 /-- A locally isolated canonical fiber datum supplies the integrated witness
 without changing its dependent finite-fiber representation. -/
 noncomputable def LocallyIsolatedCanonicalFiberData.toWitness
@@ -1342,6 +1374,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyIsolatedFiber
 #print axioms ConstructionTargets.T00J02Closure.locallyIsolatedCanonicalFiberData_of
+#print axioms ConstructionTargets.T00J02Closure.locallyIsolatedCanonicalFiberData_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
