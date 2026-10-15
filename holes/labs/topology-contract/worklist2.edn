@@ -88376,6 +88376,19 @@
     [{:cmd "overlap draft",
       :exit 1,
       :correction "fixed typed congrArg lambda"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792055085493-13728-2550b497",
+     :commands
+     ["git show/diff/check ad96ebfb8"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit ad96ebfb8 adds compiled, sorry-free progress beyond 7cebf660f: path-connectedness of the radial overlap and replacement of any inner-cover path between overlap points by an overlap path routed through the outer piece, equal in the ambient groupoid. Only t97A01Closure.lean changed; fixture SHA 09daf9912d36720f725215bcde852e7438f6d513feef2d81898a74b559335627 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Boundaries are correct: inner contractibility compares paths before ambient mapping, and inner/outer inclusions agree on the overlap path. Finite-block normalization, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "ad96ebfb8",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "09daf9912d36720f725215bcde852e7438f6d513feef2d81898a74b559335627"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inner-cover contractibility and path-class uniqueness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked annular-overlap based normalization.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88481,7 +88494,10 @@
     {:job 5,
      :commit "7cebf660f",
      :reason
-     "Banked inner-cover contractibility and path-class uniqueness."}]}
+     "Banked inner-cover contractibility and path-class uniqueness."}
+    {:job 6,
+     :commit "ad96ebfb8",
+     :reason "Banked annular-overlap based normalization."}]}
   {:consumer :t94J09,
    :stop-count 2,
    :evidence
@@ -94443,7 +94459,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94455,7 +94471,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "inner path equals outer-routed overlap path",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "ad96ebfb8"},
    :id
    :lemma-torusrp2polygoninner-ambientpathclass-eq-outeroverlapreplacement,
    :kind :lemma,
