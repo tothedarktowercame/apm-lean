@@ -37111,27 +37111,30 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove reverse fiber inclusion, positive local signs, degree, invariants/Main.",
+    "Apply pair classification to reverse fiber inclusion; then local signs, degree, invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t96A06_polynomialSphereLift_orbit_subset_fiber",
-      :type "four sign translates lie in the lift fiber",
+    [{:name "realPair_eq_or_eq_neg_of_squareCoordinates",
+      :type
+      "equal complex-square coordinates imply simultaneous sign equality",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_polynomialSphereLift_four_distinct"],
+      :depends-on [],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_regular_fiber",
-      :type "fiber equals the four sign translates",
+      :type "fiber equals four sign translates",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_polynomialSphereLift_orbit_subset_fiber"],
+      :depends-on
+      ["realPair_eq_or_eq_neg_of_squareCoordinates"
+       "t96A06_polynomialSphereLift_orbit_subset_fiber"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_degree_four",
       :type "lift acts by 4 on H3",
@@ -37144,7 +37147,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the four-point orbit inclusion in each lift fiber; reverse inclusion remains.",
+    "Committed the complex-square sign classification needed for reverse fiber inclusion.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37152,18 +37155,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check b22a8cb0c", :exit 0}],
+     {:cmd "git show --check 321c18fed", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial compile",
+    [{:cmd "initial compiles",
       :exit 1,
-      :note "used continuous-map evaluation congruence"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792045904335-13507-951f1431",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b22a8cb0c",
+      :note "expanded complex square coordinates"}],
+    :commit "321c18fed",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37171,7 +37168,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41080,7 +41077,8 @@
     :lemma-t96a06-polynomialspherelift-pairsign-action
     :lemma-t96a06-polynomialspherelift-pairsign-free
     :lemma-t96a06-polynomialspherelift-four-distinct
-    :lemma-t96a06-polynomialspherelift-orbit-subset-fiber],
+    :lemma-t96a06-polynomialspherelift-orbit-subset-fiber
+    :lemma-realpair-eq-or-eq-neg-of-squarecoordinates],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41191,6 +41189,25 @@
    :id :lemma-t96a06-polynomialspherelift-orbit-subset-fiber,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-four-distinct],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "realPair_eq_or_eq_neg_of_squareCoordinates",
+    :type
+    "equal complex-square coordinates imply simultaneous sign equality"},
+   :lemma
+   {:name "realPair_eq_or_eq_neg_of_squareCoordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "equal complex-square coordinates imply simultaneous sign equality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-realpair-eq-or-eq-neg-of-squarecoordinates,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
