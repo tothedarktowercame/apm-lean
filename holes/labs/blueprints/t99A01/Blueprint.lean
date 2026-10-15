@@ -618,6 +618,99 @@ lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_disk_simple {r : ℕ}
     SimplyConnectedSpace.ofContractible _
   exact e.symm.toHomotopyEquiv.simplyConnectedSpace
 
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_circle_path :
+    IsPathConnected (Set.univ : Set Circle) := by
+  have h : IsPathConnected
+      (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+        (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+    ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+      isPathConnected_univ
+  simpa using h
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_polar_open :
+    IsPathConnected {z : ℂ | 0 < ‖z‖ ∧ ‖z‖ < 1} := by
+  let T := Circle × Set.Ioo (0 : ℝ) 1
+  let f : T → ℂ := fun p => (p.2.1 : ℂ) * (p.1.1 : ℂ)
+  have hT : IsPathConnected (Set.univ : Set T) := by
+    have hI : IsPathConnected (Set.Ioo (0 : ℝ) 1) :=
+      (convex_Ioo (0 : ℝ) 1).isPathConnected (by exact ⟨1 / 2, by norm_num⟩)
+    have hIsub : IsPathConnected (Set.univ : Set (Set.Ioo (0 : ℝ) 1)) := by
+      letI : PathConnectedSpace (Set.Ioo (0 : ℝ) 1) :=
+        isPathConnected_iff_pathConnectedSpace.mp hI
+      exact isPathConnected_univ
+    rcases t99A01_piOne_attach_succ_cover_aux_connectivity_aux_circle_path with
+      ⟨c, -, hc⟩
+    rcases hIsub with ⟨a, -, ha⟩
+    refine ⟨(c, a), Set.mem_univ _, ?_⟩
+    intro y hy
+    exact ⟨(hc (Set.mem_univ y.1)).somePath.prod
+      (ha (Set.mem_univ y.2)).somePath, fun _ => Set.mem_univ _⟩
+  have hf : Continuous f := by
+    exact (Complex.continuous_ofReal.comp
+      (continuous_subtype_val.comp continuous_snd)).mul
+        (continuous_subtype_val.comp continuous_fst)
+  have him : f '' Set.univ = {z : ℂ | 0 < ‖z‖ ∧ ‖z‖ < 1} := by
+    ext z
+    constructor
+    · rintro ⟨⟨w, ρ⟩, -, rfl⟩
+      change 0 < ‖(ρ.1 : ℂ) * (w.1 : ℂ)‖ ∧
+        ‖(ρ.1 : ℂ) * (w.1 : ℂ)‖ < 1
+      rw [norm_mul, Circle.norm_coe, mul_one]
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ρ.2.1]
+      exact ρ.2
+    · intro hz
+      let w : Circle := ⟨z / (‖z‖ : ℂ), by
+        simp [Submonoid.unitSphere, div_self (ne_of_gt hz.1)]⟩
+      let ρ : Set.Ioo (0 : ℝ) 1 := ⟨‖z‖, hz⟩
+      refine ⟨⟨w, ρ⟩, Set.mem_univ _, ?_⟩
+      dsimp [f, w, ρ]
+      push_cast
+      field_simp [show (‖z‖ : ℂ) ≠ 0 by exact_mod_cast ne_of_gt hz.1]
+  rw [← him]
+  exact hT.image hf
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity_aux_overlap {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    IsPathConnected (APMT99A01.succCircleSide degree ∩
+      APMT99A01.succDiskSide degree) := by
+  let S : Set ℂ := {z | 0 < ‖z‖ ∧ ‖z‖ < 1}
+  let g : S → APMT99A01.AttachSpace degree := fun z =>
+    Quotient.mk _ (Sum.inr (Fin.last r,
+      (⟨z.1, by simpa only [Metric.mem_closedBall, dist_zero_right] using z.2.2.le⟩ :
+        APMT99A01.Disk)))
+  have hg : Continuous g := continuous_coinduced_rng.comp
+    (continuous_inr.comp (continuous_const.prodMk
+      (Continuous.subtype_mk continuous_subtype_val _)))
+  have him : g '' Set.univ = APMT99A01.succCircleSide degree ∩
+      APMT99A01.succDiskSide degree := by
+    ext q
+    constructor
+    · rintro ⟨z, -, rfl⟩
+      constructor
+      · intro he
+        have hr := Quotient.exact he.symm
+        have hc := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+        have hz := congrArg (fun x : APMT99A01.Disk => (x : ℂ))
+          (Prod.mk.inj (Sum.inr.inj hc)).2
+        exact (ne_of_gt z.2.1) (by simpa [hz])
+      · exact ⟨_, z.2.2, rfl⟩
+    · rintro ⟨hq, z, hz, rfl⟩
+      have h0 : 0 < ‖(z : ℂ)‖ := by
+        apply lt_of_le_of_ne (norm_nonneg _)
+        intro hn
+        have zz : (z : ℂ) = 0 := norm_eq_zero.mp hn.symm
+        apply hq
+        apply Quotient.sound
+        have zeq : z = (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk) :=
+          Subtype.ext zz
+        rw [zeq]
+      let w : S := ⟨z, h0, hz⟩
+      exact ⟨w, Set.mem_univ _, rfl⟩
+  rw [← him]
+  letI : PathConnectedSpace S := isPathConnected_iff_pathConnectedSpace.mp (by
+    simpa [S] using t99A01_piOne_attach_succ_cover_aux_connectivity_aux_polar_open)
+  exact isPathConnected_univ.image hg
+
 lemma t99A01_piOne_attach_succ_cover_aux_connectivity {r : ℕ}
     (degree : Fin (r + 1) → ℕ) :
     IsPathConnected (APMT99A01.succCircleSide degree ∩
@@ -625,6 +718,9 @@ lemma t99A01_piOne_attach_succ_cover_aux_connectivity {r : ℕ}
       IsPathConnected (APMT99A01.succCircleSide degree) ∧
       IsPathConnected (APMT99A01.succDiskSide degree) ∧
       IsSimplyConnected (APMT99A01.succDiskSide degree) := by
+  refine ⟨t99A01_piOne_attach_succ_cover_aux_connectivity_aux_overlap degree, ?_,
+    t99A01_piOne_attach_succ_cover_aux_connectivity_aux_disk_path degree,
+    t99A01_piOne_attach_succ_cover_aux_connectivity_aux_disk_simple degree⟩
   sorry
 lemma t99A01_piOne_attach_succ_cover {r : ℕ} (degree : Fin (r + 1) → ℕ) :
     IsOpen (APMT99A01.succCircleSide degree) ∧
