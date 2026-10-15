@@ -2335,6 +2335,35 @@ theorem t96A06_integralToRational_localGenerator_iff :
     rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
     exact h
 
+/-- Once coefficient extension is natural for the selected local chart, the
+integral coordinate-one equation transports to the rational chart. -/
+theorem t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
+    (hintegral :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator) = 1)
+    (hnatural :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension =
+        algebraMap ℤ ℚ
+          ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+            polynomialSphereRegularPoint).hom.hom
+              ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+                t96A06_mappedIntegralLocalGenerator))) :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom
+        t96A06_mappedRationalLocalExtension = 1 := by
+  rw [hnatural, hintegral]
+  norm_num
+
 /-- Integral localization together with the single rational local coordinate
 equation makes the rational extension localize to the positive generator. -/
 theorem t96A06_rationalExtension_localizes_of_coordinate_one
@@ -3695,6 +3724,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
 #print axioms t96A06_normalizedClass_projection_preservation_cancel
 #print axioms t96A06_mappedIntegralNormalizedClass_localizes
+#print axioms t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_integralToRational_localGenerator_iff
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
