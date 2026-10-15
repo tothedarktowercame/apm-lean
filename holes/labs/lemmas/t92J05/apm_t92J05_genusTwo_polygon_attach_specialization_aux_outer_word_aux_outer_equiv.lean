@@ -2865,7 +2865,8 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     let t : Path y 1 := PathConnectedSpace.somePath _ _
     have hLB : L 1 = B := by
       exact ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P
-    let q : Path (Φ x) B := Path.cast (p.trans (t.map L.continuous)) (by rfl) hLB.symm
+    let u : Path (L 1) B := Path.cast (Path.refl B) hLB rfl
+    let q : Path (Φ x) B := p.trans ((t.map L.continuous).trans u)
     let e : FundamentalGroup O (j x) ≃* FreeGroup (Fin 4) :=
       (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_homotopyFG hs (j x)).trans
         ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph sw (hs (j x))).trans
