@@ -37121,41 +37121,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove canonical global localization; then degree four, invariants, Main.",
+    "Prove the sole canonical global localization equation; then instantiate Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name
-      "signedRegularFiberCount_homologyScalar_iff_globalLocalization",
+    [{:name "polynomialDescent_invariants_of_globalLocalization",
       :type
-      "signed-count scalar action iff canonical global localization",
+      "canonical global localization implies Lefschetz -3 and non-homotopy to identity",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_signedRegularFiberCount_eq_four"
-       "polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour"],
+      ["signedRegularFiberCount_homologyScalar_iff_globalLocalization"],
       :area "rp-rational-homology"}
      {:name
       "polynomialSphereLift_globalImage_eq_deckLocalContribution_sum",
       :type
-      "global image fundamental class equals the canonical deck-local sum",
+      "global image fundamental class equals canonical deck-local sum",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["signedRegularFiberCount_homologyScalar_iff_globalLocalization"],
+      ["polynomialSphereLift_signedRegularFiberCertificate"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the exact equivalence between signed-count scalar action and global localization.",
+    "Committed the full consumer invariant pair from the sole global localization equation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37164,13 +37162,7 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792067031201-14040-7e4d5193",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "3e19add21",
+    :commit "a76d02be3",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37178,7 +37170,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42637,7 +42629,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-decklocalcontribution-spec
-    :lemma-signedregularfibercount-homologyscalar-iff-globallocalization],
+    :lemma-signedregularfibercount-homologyscalar-iff-globallocalization
+    :lemma-polynomialspherelift-signedregularfibercertificate],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -42854,6 +42847,26 @@
    :depends-on
    [:lemma-t97j07-cp1-puncturedoverlap-homology
     :lemma-t97j07-cp1-affinepatch-higherhomology-iszero],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialDescent_invariants_of_globalLocalization",
+    :type
+    "canonical global localization implies Lefschetz -3 and non-homotopy to identity"},
+   :lemma
+   {:name "polynomialDescent_invariants_of_globalLocalization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "canonical global localization implies Lefschetz -3 and non-homotopy to identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialdescent-invariants-of-globallocalization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-signedregularfibercount-homologyscalar-iff-globallocalization],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
