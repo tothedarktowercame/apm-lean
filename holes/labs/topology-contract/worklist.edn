@@ -119335,64 +119335,56 @@
      :commit "d5630b7e4415a05e94758003a997b2cf6559df40",
      :reason "Banked incidence tangent regularity transport."}]}
   {:consumer :t98A06,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Transport coordinate lifts through tangent charts; compact flow; Main.",
+    "Identify solver with mfderiv; finish local lifts; compact flow; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "unrelated files preserved"],
     :missing-theorems
-    [{:name "contDiff_lift_of_comp_isInvertible",
-      :type "smooth coordinate lift solving A(z)w(z)=b(z)",
+    [{:name "contMDiffOn_tangentSection_of_trivialization_coordinates",
+      :type "fixed tangent coordinates give smooth local section",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["contDiff_rightInverse_of_comp_isInvertible"],
+      :depends-on ["contDiff_lift_of_comp_isInvertible"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
-      :depends-on ["contDiff_lift_of_comp_isInvertible"],
+      :depends-on
+      ["contMDiffOn_tangentSection_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "489f0618192795ee3c018a25b6d624153e8544e32e2eafe9f2e42b823842d26e",
+     "a01a47daa02c4772d13b8270c81d926044c3cd94ec58130f77ce0376e34292a3",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked smooth coordinate lift solution.",
+    :reason "Banked tangent-section chart transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture/Main/closure; placeholder count",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792028729779-12974-aa412822",
-     :commands
-     ["git show/diff-tree 5c0f2e06"
-      "archive 5c0f2e06; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit 5c0f2e06 changes only t98A06Closure.lean and adds compiled, sorry-free progress. It applies the previously proved smooth family of right inverses Q(z) to the smooth target vector b(z); smoothness follows from continuous-linear-map evaluation, and congruence of A(z) composed with Q(z) gives A(z)(w(z))=b(z) in the correct order and coordinate spaces. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Transport through tangent charts, compact flow, and Main remain listed."},
-    :commit "5c0f2e062494ca836b5a554e2f17712718aaacef",
+     {:cmd "hash/count/diff", :exit 0}],
+    :diagnostic-history
+    [{:cmd "drafts", :exit 1, :finding "fixed inference"}],
+    :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
      :sha256
-     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
+     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119762,7 +119754,8 @@
    [:lemma-surjective-continuouslinearmap-has-rightinverse
     :lemma-rightinverse-of-comp-continuouslinearequiv
     :lemma-contdiff-rightinverse-of-comp-isinvertible
-    :lemma-contdiff-lift-of-comp-isinvertible],
+    :lemma-contdiff-lift-of-comp-isinvertible
+    :lemma-contmdiffon-tangentsection-of-trivialization-coordinates],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -121208,6 +121201,23 @@
    :id :lemma-transverse-incidencedifferencederivative-surjective,
    :kind :lemma,
    :depends-on [:lemma-transverse-coprodderivative-surjective],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "contMDiffOn_tangentSection_of_trivialization_coordinates",
+    :type "fixed tangent coordinates give smooth local section"},
+   :lemma
+   {:name "contMDiffOn_tangentSection_of_trivialization_coordinates",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "fixed tangent coordinates give smooth local section",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-contmdiffon-tangentsection-of-trivialization-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-contdiff-lift-of-comp-isinvertible],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
