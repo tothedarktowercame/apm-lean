@@ -981,6 +981,16 @@ theorem moduleHurewicz_cast {X : Type} [TopologicalSpace X] {x y : X}
         rfl
       rw [hp]
 
+/-- Transport of a based homotopy class along one endpoint equality
+commutes with inversion. -/
+theorem homotopicQuotient_cast_symm {X : Type} [TopologicalSpace X] {x y : X}
+    (h : x = y) (g : Path.Homotopic.Quotient y y) :
+    Path.Homotopic.Quotient.cast (Path.Homotopic.Quotient.symm g) h h =
+      Path.Homotopic.Quotient.symm (Path.Homotopic.Quotient.cast g h h) := by
+  subst y
+  induction g using Quotient.ind with
+  | _ p => rfl
+
 /-- The actual ordered polygon boundary, based at the common wedge point and
 applied to the fixed positive circle class. -/
 noncomputable def polygonBoundaryFundamentalClass (P : PairingData) :
@@ -1855,6 +1865,25 @@ theorem polygonBoundaryExplicitEdgeClass_hurewicz (P : PairingData)
     simp [polygonBoundaryExplicitEdgeClass, hs,
       finiteWedgeExplicitLegClassAtBase_hurewicz]
 
+/-- Endpoint transport turns the geometric signed edge into exactly the
+explicit common-basepoint factor used by the attaching-word calculation. -/
+theorem polygonBoundarySignedEdgePathAtBase_mk (P : PairingData)
+    (i : Fin P.edgeCount) :
+    Path.Homotopic.Quotient.mk (polygonBoundarySignedEdgePathAtBase P i) =
+      polygonBoundaryExplicitEdgeClass P i := by
+  rw [polygonBoundarySignedEdgePathAtBase,
+    Path.Homotopic.Quotient.mk_cast,
+    polygonBoundarySignedEdgePath_mk]
+  cases hs : P.sign i
+  · simp only [polygonBoundaryExplicitEdgeClass, hs, Bool.false_eq_true,
+      ↓reduceIte, finiteWedgeExplicitLegClassAtBase]
+    change Path.Homotopic.Quotient.cast
+        (Path.Homotopic.Quotient.symm (finiteWedgeExplicitLegClass (P.orbit i))) _ _ =
+      Path.Homotopic.Quotient.symm
+        (Path.Homotopic.Quotient.cast (finiteWedgeExplicitLegClass (P.orbit i)) _ _)
+    exact homotopicQuotient_cast_symm _ _
+  · simp [polygonBoundaryExplicitEdgeClass, finiteWedgeExplicitLegClassAtBase, hs]
+
 /-- The ordered product of the explicit signed edge factors.  The remaining
 geometric subdivision theorem identifies the actual boundary class with this
 already-normalized product. -/
@@ -1978,6 +2007,21 @@ theorem polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree
   apply Finset.sum_congr rfl
   intro i _
   by_cases hs : P.sign i <;> simp [F, hs]
+
+/-- The explicit once-around boundary path has the complete
+orientation-signed attaching-vector H₁ class. -/
+theorem polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned
+    (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P)) =
+      finiteWedgeH1CoordinateMap P
+        (circleIntegerLoopOneCoordinate • attachingDegree P) := by
+  rw [finitePathSubdivision_boundary]
+  simp_rw [polygonBoundarySignedEdgePathAtBase_mk]
+  have h := polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree P
+  rw [polygonBoundaryExplicitEdgeProduct, moduleHurewicz_list_prod,
+    List.map_ofFn] at h
+  exact h
 
 /-- Once finite subdivision identifies the geometric boundary class with the
 explicit edge product, naturality gives the complete orientation-signed H₁
