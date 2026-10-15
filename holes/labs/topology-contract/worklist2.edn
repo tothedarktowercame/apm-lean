@@ -87943,6 +87943,20 @@
       :exit 1,
       :correction
       "specialized mapped class and rewrote zpow -1 explicitly"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792031592554-13050-438cfc19",
+     :commands
+     ["git show/diff-tree f3c14aef4"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit f3c14aef4 by topo-6 changes only the scoped target; fixture hash 516a7db2...fdf0f matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The circle normalization coordinate is ±1: the +1 branch is direct, while in the -1 branch both the boundary class and attaching vector receive one minus sign, which neg_injective cancels. Cast/inversion orientation is handled explicitly. New compiled progress; remaining milestone is transport through outer coordinates plus the MV outer minus for B7, then B8-B10."},
     :commit "f3c14aef4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87965,7 @@
      "516a7db26b480de1c3a4f26f563aeefc9c81acad110717126c0c7844a18fdf0f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked orientation-signed geometric boundary formula.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized polygon-boundary H1 formula.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88291,7 +88305,10 @@
      :reason "Banked the boundary subdivision homotopy."}
     {:job 1,
      :commit "e99149f35",
-     :reason "Banked orientation-signed geometric boundary formula."}]}
+     :reason "Banked orientation-signed geometric boundary formula."}
+    {:job 2,
+     :commit "f3c14aef4",
+     :reason "Banked normalized polygon-boundary H1 formula."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92804,7 +92821,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -92817,7 +92834,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "normalized boundary H1 equals attaching vector coordinates",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f3c14aef4"},
    :id
    :lemma-polygonboundaryfundamentalclass-hurewicz-eq-attachingdegree,
    :kind :lemma,
