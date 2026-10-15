@@ -2267,6 +2267,26 @@ theorem t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
   exact ConstructionTargets.CoefficientChartLocal.generator_normalization
     (R := ℤ) 1 polynomialSphereRegularPoint
 
+/-- At the selected point, positivity of the corrected coefficient is exactly
+the exclusion of the negation automorphism between the two normalizations. -/
+theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation :
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 ↔
+      (ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism
+        1 polynomialSphereRegularPoint).hom ≠ -𝟙 _ := by
+  constructor
+  · intro hone hneg
+    have hm :=
+      (ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
+        1 polynomialSphereRegularPoint).mp hneg
+    omega
+  · intro hne
+    apply ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
+    intro hm
+    exact hne
+      ((ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
+        1 polynomialSphereRegularPoint).mpr hm)
+
 /-- The preservation isomorphisms commute with the exact deleted-point
 projection used for the normalized class. -/
 theorem t96A06_normalizedClass_projection_preservation_naturality :
@@ -3806,6 +3826,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator_unmap
 #print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
 #print axioms t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+#print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
 #print axioms t96A06_normalizedClass_projection_preservation_cancel
 #print axioms t96A06_mappedIntegralNormalizedClass_localizes
