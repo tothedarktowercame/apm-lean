@@ -64,31 +64,76 @@ leaves remain untouched, as requested.
 Write `degreeGCD degree = Finset.univ.gcd degree`.  The generic theorem now
 states, for `degree : Fin r → ℕ` with every degree positive,
 
-`π₁(AttachSpace degree, basepoint degree) ≃* Multiplicative (ZMod (degreeGCD degree))`.
+`∃ e : π₁(AttachSpace degree, basepoint degree) ≃*
+Multiplicative (ZMod (degreeGCD degree)),
+e baseCircleClass = Multiplicative.ofAdd 1`.
+
+Here `baseCircleClass` is the class of the explicit path obtained by mapping
+`ConstructionTargets.CircleUniversalCover.integerLoop 1` through the circle
+inclusion.  The coordinate clause is essential: without it the induction
+hypothesis permits an automorphism of the cyclic target and does not determine
+the normal subgroup killed by the next attaching map.
 
 It is a sorry-free induction assembled from these independent leaves:
 
-* `t99A01_piOne_attach_empty` (40–80 lines): identify the quotient for
+* `t99A01_piOne_attach_empty` (40–80 lines, independent): identify the quotient for
   `Fin 0` with `Circle`, use Mathlib's circle fundamental-group equivalence,
-  and transport across `ZMod 0 ≃+ ℤ`.  `Finset.gcd ∅ = 0` and `ZMod 0 = ℤ`,
+  and transport across `ZMod 0 ≃+ ℤ`.  Prove explicitly that
+  `circleFundamentalGroupMulEquivInt` sends the mapped `integerLoop 1` to
+  `ofAdd 1` using `circleWindingHom_mk` and `liftBasedLoop_integerLoop`.
+  `Finset.gcd ∅ = 0` and `ZMod 0 = ℤ`,
   so the zero-disk case is substantive rather than exceptional or vacuous.
-* `t99A01_piOne_attach_succ` (100–150 lines): takes the smaller-space result
-  as an explicit hypothesis, so it is independently provable.  For the last
-  disk let `U` be its centre complement and `V` its open interior.  Reuse the
-  quotient-openness proof pattern of `t99A01_attach_openCover`; prove `V`
-  simply connected by the single-disk radial contraction and the overlap path
-  connected by polar coordinates.  Radially push only the last disk boundary
-  to obtain `U ≃ₕ AttachSpace (degree ∘ Fin.castSucc)`.  The inclusion used
-  here is the sorry-free definition `APMT99A01.attachCastSucc`, whose formulas
-  are literally `inl z ↦ inl z` and `inr (i,z) ↦ inr (castSucc i,z)`.
-  Apply
-  `ConstructionTargets.TwoOpenAttachOneCell.apm_t92J05_twoOpen_attach_one_cell`;
-  basepoint transport comes from a path in `U ∩ V` from radius `1/2` to the
-  chosen circle point.  Compute that the radius-`1/2` generator maps to the
-  base circle loop raised to `degree (Fin.last r)`.  Finish with the cyclic
-  quotient identity
-  `ZMod g / normalClosure(g'·1) ≃ ZMod (Nat.gcd g g')` and
-  `Finset.gcd_insert`/`Fin.sum_univ_succ` (or the corresponding gcd lemma).
+* `t99A01_piOne_attach_succ_cover` (70–130 lines, independent): for the
+  concrete definitions `succCircleSide = W \ {lastDiskCentre}` and
+  `succDiskSide =` the last open-disk interior, prove openness, covering,
+  nonempty/path-connected overlap, path connectedness of both pieces, and
+  simple connectedness of the disk piece.  Adapt the quotient preimage/open
+  argument in `t99A01_attach_openCover`, `t99A01_attach_diskSide_aux_homeomorph`,
+  `Metric.isOpen_ball`, `isPathConnected_ball`, and
+  `Convex.isSimplyConnected` (or contractibility of the open ball).  Positivity
+  is not needed.  At the boundary, the point is in `U` and outside `V`; at the
+  centre it is in `V`, so the cover includes both degenerate locations.
+* `t99A01_piOne_attach_succ_retract` (90–150 lines, independent): construct
+  `succCircleSide degree ≃ₕ AttachSpace (degree ∘ Fin.castSucc)` by pushing
+  only the last disk radially to its boundary.  Its inverse is the explicit,
+  sorry-free `attachCastSucc` (`inl z ↦ inl z`,
+  `inr (i,z) ↦ inr (castSucc i,z)`), and the statement records that every
+  circle point is fixed.  Adapt
+  `t99A01_attach_circleSide_aux_retraction`,
+  `t99A01_attach_circleSide_aux_deformation_scale_norm`, and
+  `t99A01_attach_circleSide_aux_deformation_aux_descend`; branch on whether
+  the disk index is `Fin.last r`, leaving all `castSucc` disks untouched.
+* `t99A01_piOne_attach_succ_loop` (60–120 lines, independent given the
+  retraction formula as an explicit hypothesis): use the radius-`1/2` loop in
+  the last disk and a radial path from its basepoint to the boundary point
+  `1`.  Under the retraction and this basepoint transport it becomes
+  `baseCircleClass ^ (degree (Fin.last r) : ℤ)`.  Use
+  `FundamentalGroup.map_apply`, `Path.Homotopic.Quotient.eq.mpr`,
+  `CircleUniversalCover.integerLoop`, `map_zpow`, and the defining
+  `AttachRel.boundary`.  The sign is positive because both paths use
+  `integerLoop 1`; this is where orientation must not be discarded.
+* `t99A01_piOne_attach_succ_algebra` (50–100 lines, independent): prove
+  `Multiplicative (ZMod g) / normalClosure {ofAdd d} ≃*
+  Multiplicative (ZMod (Nat.gcd g d))`, with the quotient class of `ofAdd 1`
+  sent to `ofAdd 1`.  Work additively via `ZMod.quotientSpanEquiv` if
+  available, or use `QuotientGroup.quotientKerEquivOfSurjective` for the
+  reduction map and compute its kernel with `ZMod.intCast_zmod_eq_zero_iff_dvd`;
+  use `Nat.gcd_dvd_left/right` and `Nat.dvd_gcd`.  This includes `g = 0` and
+  `d > 0`; `ZMod 0 = ℤ`, so no finite-cardinality argument is valid here.
+* `t99A01_piOne_attach_succ` is the assembly only.  It takes the strengthened
+  coordinate induction hypothesis, installs the cover's path/simply-connected
+  instances, applies
+  `ConstructionTargets.TwoOpenAttachOneCell.apm_t92J05_twoOpen_attach_one_cell`,
+  transports the basepoint along the overlap path, rewrites its normal closure
+  with `_succ_retract` and `_succ_loop`, applies `_succ_algebra`, and finally
+  rewrites
+  `degreeGCD degree = Nat.gcd (degreeGCD (degree ∘ Fin.castSucc))
+  (degree (Fin.last r))` using `Finset.univ_succ`/`Finset.gcd_insert`.
+
+The four successor leaves are siblings: none uses another leaf's theorem;
+where a coordinate or map formula is needed it is supplied as an explicit
+hypothesis.  Consequently seats can prove them in parallel without acquiring
+another leaf's `sorryAx`.
 
 The generic assembler is `t99A01_piOne_attach`.  The registered leaves
 `t99A01_piOne_X`, `t99A01_piOne_Y`, and `t99A01_piOne_Z` are sorry-free pure
