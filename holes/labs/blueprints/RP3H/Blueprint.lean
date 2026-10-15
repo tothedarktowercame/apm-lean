@@ -75,8 +75,41 @@ def cpU : Set CP2 := {x | x.rep 0 ≠ 0 ∨ x.rep 1 ≠ 0}
 /-- The affine chart `z₂ ≠ 0`. -/
 def cpV : Set CP2 := {x | x.rep 2 ≠ 0}
 
+theorem cp_open_cover_aux_coord (i : Fin 3)
+    (v : NonzeroVectors ℂ 2) :
+    Projectivization.rep (quotientMap ℂ 2 v) i ≠ 0 ↔ v.1 i ≠ 0 := by
+  have hm := Projectivization.mk_rep (quotientMap ℂ 2 v)
+  obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff ℂ _ _
+    (Projectivization.rep_nonzero _) v.2).mp hm
+  have hi := congrFun ha i
+  constructor
+  · intro hrep hv
+    apply hrep
+    simpa only [Pi.smul_apply, Units.smul_def, smul_eq_mul, hv, mul_zero]
+      using hi.symm
+  · intro hv hrep
+    rw [hrep] at hi
+    apply hv
+    exact (mul_eq_zero.mp (by simpa only [Pi.smul_apply, Units.smul_def,
+      smul_eq_mul] using hi)).resolve_left (Units.ne_zero a)
+
 theorem cp_open_cover : IsOpen cpU ∧ IsOpen cpV ∧ cpU ∪ cpV = Set.univ := by
-  sorry
+  have hopen (i : Fin 3) : IsOpen {x : CP2 | x.rep i ≠ 0} := by
+    change IsOpen ((quotientMap ℂ 2) ⁻¹' {x : CP2 | x.rep i ≠ 0})
+    rw [show (quotientMap ℂ 2) ⁻¹' {x : CP2 | x.rep i ≠ 0} =
+        {v : NonzeroVectors ℂ 2 | v.1 i ≠ 0} by
+      ext v
+      exact cp_open_cover_aux_coord i v]
+    exact isOpen_ne.preimage ((continuous_apply i).comp continuous_subtype_val)
+  refine ⟨?_, hopen 2, ?_⟩
+  · simpa only [cpU, Set.setOf_or] using (hopen 0).union (hopen 1)
+  · ext x
+    simp only [cpU, cpV, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    by_contra h
+    push_neg at h
+    apply Projectivization.rep_nonzero x
+    funext i
+    fin_cases i <;> simp_all
 
 /-- `V ≅ ℂ²` is contractible. -/
 theorem cpV_homology : Nonempty (HQ 0 cpV ≅ ModuleCat.of ℚ ℚ) ∧
