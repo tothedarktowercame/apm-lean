@@ -88374,6 +88374,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 4f1202503", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792083677733-14323-5780a768",
+     :commands
+     ["git show/diff/check 4f1202503"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 4f1202503 adds compiled, sorry-free progress beyond history commit 234c47123. It rebases each contiguous flat factor onto the existing run prefix-block endpoint family, proves exact path equality factorwise, and lifts this to equality of the per-run Path.concat values. Only t97A01Closure.lean changed; fixture SHA c5cf2a9bce64d5ae4405e659ac489fe29e17b9241cde811b4b6312e44c4ac1ca matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Start/end casts and concat equality orientation are correct. Folding flat intervals across runs, van Kampen, and assembly remain listed."},
     :commit "4f1202503",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88395,7 @@
      "c5cf2a9bce64d5ae4405e659ac489fe29e17b9241cde811b4b6312e44c4ac1ca"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked fixed-run flat factor family.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked per-run flat interval concatenation.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88608,7 +88621,10 @@
      :reason "Banked interval factor comparison."}
     {:job 3,
      :commit "234c47123",
-     :reason "Banked fixed-run flat factor family."}]}
+     :reason "Banked fixed-run flat factor family."}
+    {:job 4,
+     :commit "4f1202503",
+     :reason "Banked per-run flat interval concatenation."}]}
   {:consumer :t94J09,
    :stop-count 7,
    :evidence
@@ -95785,7 +95801,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95797,7 +95813,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "each run concat equals rebased flat interval concat",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4f1202503"},
    :id
    :lemma-torusrp2-subdivisionrunprefixblockconcat-eq-flatintervalconcat,
    :kind :lemma,
