@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36131,17 +36131,17 @@
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "pathTwoOpenSubdivisionRunPrefixBlock",
-      :type "canonical prefix-indexed dependent point/path families",
+    [{:name "pathTwoOpenSubdivisionRunBlock_eq_prefixBlock",
+      :type "point/factor comparison",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunPrefixBlock_le"],
+      :depends-on ["pathTwoOpenSubdivisionRunPrefixBlock"],
       :area "covering-subgroup-correspondence"}
      {:name "pathTwoOpenSubdivision_quotient_eq_runFold",
       :type "fold equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunPrefixBlock"],
+      :depends-on ["pathTwoOpenSubdivisionRunBlock_eq_prefixBlock"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity/kernel",
@@ -36154,7 +36154,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed canonical prefix-indexed point/path families; quotient fold induction remains.",
+    "Committed pointwise comparison of selected-run and canonical-prefix families; fold induction remains.",
     :commands
     [{:cmd "overlay lean ConstructionTargets/t93J03Closure.lean",
       :exit 0}
@@ -36163,18 +36163,7 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
      {:cmd "git show --check --stat HEAD", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792038854080-13211-84dcbccb",
-     :commands
-     ["git show --check/diff-tree 8c4eb4f; exact scope"
-      "sha256sum fixture; committed source audit"
-      "statement-registry check"
-      "recorded-source snapshot lake env lean"],
-     :finding
-     "PASS: 8c4eb4f is compiled, sorry-free standard-axiom progress after 263f5d47. It adds Fin(runs+1)-indexed outer-subtype boundary representatives and proves their coercions equal matching ambient canonical boundaries, correctly oriented for run-fold assembly. Exact two-file scope and fixture hash match; registry 166/166; frozen Main placeholder remains 1->1; remaining milestones are listed."},
-    :commit "f363a202d2ceb6004df3425363aa37898a91c1d4",
+    :commit "7c70eb2ed90c1c771f4c09df868db7c948465e11",
     :changed-paths ["ConstructionTargets/t93J03Closure.lean"],
     :fixture
     {:path "/tmp/t93j03_quotient_fold_algebra_check.lean",
@@ -36182,7 +36171,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -40533,7 +40522,8 @@
     :lemma-pathtwoopensubdivisionrunblockpoint-apply-prefix
     :lemma-pathtwoopensubdivisionrunprefixlength-add-predlength
     :lemma-pathtwoopensubdivisionrunprefixblock-le
-    :lemma-pathtwoopensubdivisionrunprefixblock],
+    :lemma-pathtwoopensubdivisionrunprefixblock
+    :lemma-pathtwoopensubdivisionrunblock-eq-prefixblock],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40651,6 +40641,23 @@
    :id :lemma-pathtwoopensubdivisionrunprefixblock,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunprefixblock-le],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlock_eq_prefixBlock",
+    :type "point/factor comparison"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlock_eq_prefixBlock",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "point/factor comparison",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunblock-eq-prefixblock,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunprefixblock],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
