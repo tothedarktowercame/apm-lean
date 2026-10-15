@@ -88331,27 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Choose replacements by maximal alternating runs; prove surjectivity and reverse kernel inclusion; assemble.",
+    "Build run replacements; prove surjectivity and reverse kernel inclusion; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq",
-      :type "piecewise equality reassembles subdivision class",
+    [{:name "torusRP2_subdivision_runPartition_boundary_spec",
+      :type "maximal runs meet in overlap",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2PolygonInnerBlock_exists_outerOverlapReplacement"],
+      ["torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
-      :type "surjectivity; reverse kernel inclusion",
+      :type "surjective; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq"
+      ["torusRP2_subdivision_runPartition_boundary_spec"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,36 +88364,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked quotient-level subdivision reassembly.",
+    :reason "Banked maximal-run overlap boundaries.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check d1c2b3d35", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792056416011-13764-f080c20c",
-     :commands
-     ["git show/diff/check d1c2b3d35"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit d1c2b3d35 adds compiled, sorry-free progress beyond fd63ca24d: piecewise equality of dependent path quotient classes reassembles to equality of finite concatenations and hence of a subordinate subdivision with its normalized pieces. Only t97A01Closure.lean changed; fixture SHA 45c376549cf2cec243abc46100409657b4b2809bb67516e5d7f8593d0b739ca6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Orientation is correct: piece-class equalities produce concatenated homotopy, composed after the subdivision quotient-concat equality. Choosing replacements for maximal alternating runs, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "d1c2b3d35",
+     {:cmd "git show --check 20ce7c5cc", :exit 0}],
+    :diagnostic-history
+    [{:cmd "run adapter draft",
+      :exit 1,
+      :correction "qualified names"}],
+    :commit "20ce7c5cc",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "45c376549cf2cec243abc46100409657b4b2809bb67516e5d7f8593d0b739ca6"},
+     "a01edbde25913de91ca090a4032423df19474e99c54ec9d5f315bc1878626365"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94153,7 +94144,8 @@
     :lemma-torusrp2polygoninner-ambientpathclass-eq-outeroverlapreplacement
     :lemma-torusrp2polygoninnerrun-exists-outeroverlapreplacement
     :lemma-torusrp2polygoninnerblock-exists-outeroverlapreplacement
-    :lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq],
+    :lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq
+    :lemma-torusrp2-subdivision-runpartition-boundary-spec],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94546,4 +94538,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2polygoninnerblock-exists-outeroverlapreplacement],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivision_runPartition_boundary_spec",
+    :type "maximal runs meet in overlap"},
+   :lemma
+   {:name "torusRP2_subdivision_runPartition_boundary_spec",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "maximal runs meet in overlap",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivision-runpartition-boundary-spec,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq],
    :other-consumers []}]}
