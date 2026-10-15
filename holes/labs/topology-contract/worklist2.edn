@@ -88331,23 +88331,24 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove attachment-map surjectivity and geometric-boundary kernel; assemble.",
+    "Prove canonical map surjective and kernel=relator closure; instantiate assembly.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder; dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2AttachingWord",
-      :type "geometric normal-closure transport",
+    [{:name
+      "torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen",
+      :type "kernel quotient and centre transport",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2SkeletonFinFreeGroupMap_of"],
+      :depends-on ["torusRP2AttachingWord"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
-      :type "attachment kernel",
-      :status :not-started,
+      :type "canonical map surjective; kernel=relator closure",
+      :status :partial,
       :consumers [:t97A01],
       :depends-on ["torusRP2AttachingWord"],
       :area "polygon-surface-pi1"}
@@ -88361,39 +88362,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked geometric attaching-word normal closure.",
+    :reason "Banked based-van-Kampen interface and assembly.",
     :commands
     [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
-     {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
-     {:cmd "statement-registry check", :exit 0}
-     {:cmd "scans; git check", :exit 0}],
+     {:cmd "lake lean Main", :exit 0}
+     {:cmd "registry; scans; git check", :exit 0}],
     :diagnostic-history
-    [{:cmd "transport drafts",
+    [{:cmd "path-connected draft",
       :exit 1,
-      :correction
-      "fixed equivalence direction and normal-closure mapping"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792050103223-13624-a32bdb1a",
-     :commands
-     ["git show/diff/check dbbc6a148"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit dbbc6a148 adds compiled, sorry-free progress beyond 31c603c81: both orientation-specific boundary words map exactly to the geometric skeleton loop, and their normal closures transport through the surjective skeleton homomorphism. Only t97A01Closure.lean changed; fixture SHA a09f4735d883246756099b1be6fffbc956313d03fd0a8e69bab93fd987df2f72 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Directions are correct: map the free-group normal-closure equalities forward, then rewrite the boundary image in skeleton pi1. Attachment-map surjectivity, geometric-boundary kernel, van Kampen presentation, and final assembly remain explicitly listed."},
-    :commit "dbbc6a148",
+      :correction "used closed-disk instance"}],
+    :commit "40125480b",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "a09f4735d883246756099b1be6fffbc956313d03fd0a8e69bab93fd987df2f72"},
+     "403f957d1118ec8b55ae34785c81054aa9fdc277dcb8c91ac3b7c7bb15d34410"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94228,4 +94214,24 @@
    :id :lemma-torusrp2skeletonfinfreegroupmap-of,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen",
+    :type "kernel quotient and centre transport"},
+   :lemma
+   {:name
+    "torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel quotient and centre transport",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2pairingspace-center-fundamentalgroup-of-basedvankampen,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2attachingword],
    :other-consumers []}]}
