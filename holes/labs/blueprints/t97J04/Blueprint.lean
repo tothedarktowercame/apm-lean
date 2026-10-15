@@ -190,10 +190,120 @@ def Hmap {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
 /-- A1. The two pieces are open and cover. Saturation: `cellMk⁻¹(outer)` is
 `range inl ∪ inr '' {1/3 < |z|}` (boundary points of the disk are related only
 to points of `Y`); same for inner (no boundary points). -/
+lemma cell_cover_aux_circle_norm (z : Circle) :
+    ‖((circleToDisk z : apm_t97J04_Disk) : ℂ)‖ = 1 := by
+  exact Circle.norm_coe z
+
+lemma cell_cover_aux_outer_invariant (gamma : C(Circle, Y))
+    {x y : Y ⊕ apm_t97J04_Disk}
+    (h : Relation.EqvGen (CellRel gamma) x y) :
+    (x ∈ Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+        Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖} ↔
+      y ∈ Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+        Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖}) := by
+  induction h with
+  | rel x y h =>
+      cases h with
+      | boundary z =>
+          simp only [Set.mem_union, Set.mem_range, Set.mem_image]
+          constructor
+          · intro _
+            right
+            refine ⟨circleToDisk z, ?_, rfl⟩
+            change (1 : ℝ) / 3 < ‖((circleToDisk z : apm_t97J04_Disk) : ℂ)‖
+            rw [cell_cover_aux_circle_norm]
+            norm_num
+          · intro _
+            left
+            exact ⟨gamma z, rfl⟩
+  | refl x => exact Iff.rfl
+  | symm x y _ ih => exact ih.symm
+  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma cell_cover_aux_inner_invariant (gamma : C(Circle, Y))
+    {x y : Y ⊕ apm_t97J04_Disk}
+    (h : Relation.EqvGen (CellRel gamma) x y) :
+    (x ∈ Sum.inr '' {z : apm_t97J04_Disk | ‖(z : ℂ)‖ < (2 : ℝ) / 3} ↔
+      y ∈ Sum.inr '' {z : apm_t97J04_Disk | ‖(z : ℂ)‖ < (2 : ℝ) / 3}) := by
+  induction h with
+  | rel x y h =>
+      cases h with
+      | boundary z =>
+          simp only [Set.mem_image]
+          constructor
+          · rintro ⟨w, _, hw⟩
+            cases hw
+          · rintro ⟨w, hw, hzw⟩
+            have : w = circleToDisk z := Sum.inr.inj hzw
+            subst w
+            change ‖((circleToDisk z : apm_t97J04_Disk) : ℂ)‖ < (2 : ℝ) / 3 at hw
+            rw [cell_cover_aux_circle_norm] at hw
+            norm_num at hw
+  | refl x => exact Iff.rfl
+  | symm x y _ ih => exact ih.symm
+  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma cell_cover (γ : C(Circle, Y)) :
     IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
       cellOuter γ ∪ cellInner γ = Set.univ := by
-  sorry
+  let Uo : Set (Y ⊕ apm_t97J04_Disk) :=
+    Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+      Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖}
+  let Ui : Set (Y ⊕ apm_t97J04_Disk) :=
+    Sum.inr '' {z : apm_t97J04_Disk | ‖(z : ℂ)‖ < (2 : ℝ) / 3}
+  have hpre_o : cellMk γ ⁻¹' (cellMk γ '' Uo) = Uo := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hxy⟩
+      exact (cell_cover_aux_outer_invariant γ (Quotient.exact hxy)).mp hy
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hpre_i : cellMk γ ⁻¹' (cellMk γ '' Ui) = Ui := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, hxy⟩
+      exact (cell_cover_aux_inner_invariant γ (Quotient.exact hxy)).mp hy
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  have hopen_o : IsOpen Uo := by
+    exact IsOpen.union isOpen_range_inl
+      (isOpenMap_inr _ (isOpen_lt continuous_const
+        (continuous_norm.comp continuous_subtype_val)))
+  have hopen_i : IsOpen Ui := by
+    exact isOpenMap_inr _ (isOpen_lt
+      (continuous_norm.comp continuous_subtype_val) continuous_const)
+  constructor
+  · change IsOpen (cellMk γ '' Uo)
+    rw [isOpen_coinduced]
+    have hp : (fun x : Y ⊕ apm_t97J04_Disk ↦
+        Quotient.mk (Relation.EqvGen.setoid (CellRel γ)) x) ⁻¹'
+          (cellMk γ '' Uo) = Uo := by
+      simpa only [cellMk] using hpre_o
+    exact hp.symm ▸ hopen_o
+  constructor
+  · change IsOpen (cellMk γ '' Ui)
+    rw [isOpen_coinduced]
+    have hp : (fun x : Y ⊕ apm_t97J04_Disk ↦
+        Quotient.mk (Relation.EqvGen.setoid (CellRel γ)) x) ⁻¹'
+          (cellMk γ '' Ui) = Ui := by
+      simpa only [cellMk] using hpre_i
+    exact hp.symm ▸ hopen_i
+  · apply Set.eq_univ_of_forall
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro x
+    cases x with
+    | inl y =>
+        left
+        exact ⟨Sum.inl y, Or.inl ⟨y, rfl⟩, rfl⟩
+    | inr z =>
+        by_cases hz : (1 : ℝ) / 3 < ‖(z : ℂ)‖
+        · left
+          exact ⟨Sum.inr z, Or.inr ⟨z, hz, rfl⟩, rfl⟩
+        · right
+          refine ⟨Sum.inr z, ⟨z, ?_, rfl⟩, rfl⟩
+          change ‖(z : ℂ)‖ < (2 : ℝ) / 3
+          linarith
 
 /-- A2. The inner piece is homeomorphic to the open ball `|z| < 2/3`. -/
 lemma cell_inner_contractible (γ : C(Circle, Y)) :
