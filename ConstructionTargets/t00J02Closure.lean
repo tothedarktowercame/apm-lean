@@ -522,6 +522,25 @@ theorem exists_hasMFDerivAt_equiv_of_contMDiff_surjective
 
 #print axioms exists_hasMFDerivAt_equiv_of_contMDiff_surjective
 
+/-- For boundaryless source and target models, a manifold derivative is the
+ordinary full-space derivative of the preferred extended-chart expression.
+This version allows the source and target model spaces to have different
+dimensions, as required for the circle-to-surface incidence map. -/
+theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
+    {E E' M M' : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace M'] [ChartedSpace E' M']
+    (f : M → M') (x : M) (A : E →L[ℝ] E')
+    (h : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, E') f x A) :
+    HasFDerivAt (writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, E') x f) A
+      (extChartAt 𝓘(ℝ, E) x x) := by
+  apply HasFDerivWithinAt.hasFDerivAt_of_univ
+  simpa only [HasMFDerivAt, modelWithCornersSelf_coe, Set.range_id] using h.2
+
+#print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
+
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
 theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
@@ -532,8 +551,8 @@ theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
     HasFDerivAt
       (writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f)
       (e : SurfaceModel →L[ℝ] SurfaceModel) (extChartAt SurfaceModelWithCorners x x) := by
-  apply HasFDerivWithinAt.hasFDerivAt_of_univ
-  simpa only [HasMFDerivAt, modelWithCornersSelf_coe, Set.range_id] using h.2
+  exact hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
+    (E := SurfaceModel) (E' := SurfaceModel) f x e h
 
 #print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
 
