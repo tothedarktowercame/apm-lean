@@ -2511,7 +2511,58 @@ lemma apm_t98a03_glueMap_fiber_inl {J A B A' B' : Type} [TopologicalSpace A]
     Nat.card {e // apm_t98a03_glueMap p q hp hq e =
         apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a)} =
       Nat.card {a' // p a' = a} := by
-  sorry
+  let F : {a' // p a' = a} →
+      {e // apm_t98a03_glueMap p q hp hq e =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a)} :=
+    fun x => ⟨apm_t98a03_glueMk σ τ (.inl x.1), by
+      rw [apm_t98a03_glueMap_mk]
+      simpa using congrArg
+        (fun z : A =>
+          apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl z))
+        x.2⟩
+  have hFinj : Function.Injective F := by
+    intro x y hxy
+    apply Subtype.ext
+    have hmk : apm_t98a03_glueMk σ τ (.inl x.1) =
+        apm_t98a03_glueMk σ τ (.inl y.1) := congrArg Subtype.val hxy
+    rcases (hmkE _ _).1 hmk with h | ⟨j, h | h⟩
+    · exact Sum.inl.inj h
+    · exact False.elim (by cases h.2)
+    · exact False.elim (by cases h.1)
+  have hFsurj : Function.Surjective F := by
+    intro e
+    obtain ⟨x, hx⟩ := apm_t98a03_glueMk_surjective σ τ e.1
+    rcases x with a' | b'
+    · have heq : apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀)
+          (.inl (p a')) =
+          apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a) := by
+        calc
+          _ = apm_t98a03_glueMap p q hp hq
+                (apm_t98a03_glueMk σ τ (.inl a')) := rfl
+          _ = apm_t98a03_glueMap p q hp hq e.1 := congrArg _ hx
+          _ = _ := e.2
+      have hpa : p a' = a := by
+        rcases (hmkX _ _).1 heq with h | ⟨j, h | h⟩
+        · exact Sum.inl.inj h
+        · cases h.2
+        · cases h.1
+      refine ⟨⟨a', hpa⟩, ?_⟩
+      apply Subtype.ext
+      exact hx
+    · have heq : apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀)
+          (.inr (q b')) =
+          apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a) := by
+        calc
+          _ = apm_t98a03_glueMap p q hp hq
+                (apm_t98a03_glueMk σ τ (.inr b')) := rfl
+          _ = apm_t98a03_glueMap p q hp hq e.1 := congrArg _ hx
+          _ = _ := e.2
+      rcases (hmkX _ _).1 heq with h | ⟨j, h | h⟩
+      · cases h
+      · cases h.1
+      · have : a = a₀ := Sum.inl.inj h.2
+        exact False.elim (ha this)
+  exact Nat.card_congr (Equiv.ofBijective F ⟨hFinj, hFsurj⟩).symm
 
 /-- Seat (generic): fibre over an unglued point of `B`; mirror image of
 `apm_t98a03_glueMap_fiber_inl`.  Estimated 40–80 lines. -/
