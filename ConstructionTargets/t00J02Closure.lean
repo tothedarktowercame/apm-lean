@@ -303,6 +303,25 @@ theorem exists_mfderivEquiv_of_surjective
         mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x :=
   exists_continuousLinearEquiv_of_surjective_endomorphism _ hsurj
 
+/-- Smoothness identifies the equivalence obtained from a surjective surface
+derivative with the actual manifold derivative datum.  This is the precise
+input from which the chartwise inverse-function construction starts. -/
+theorem exists_hasMFDerivAt_equiv_of_contMDiff_surjective
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hsurj : Function.Surjective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x)) :
+    ∃ e : SurfaceModel ≃L[ℝ] SurfaceModel,
+      HasMFDerivAt SurfaceModelWithCorners SurfaceModelWithCorners f x
+        (e : SurfaceModel →L[ℝ] SurfaceModel) := by
+  obtain ⟨e, he⟩ := exists_mfderivEquiv_of_surjective f x hsurj
+  refine ⟨e, ?_⟩
+  rw [he]
+  exact (hf.mdifferentiableAt (by simp)).hasMFDerivAt
+
+#print axioms exists_hasMFDerivAt_equiv_of_contMDiff_surjective
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
