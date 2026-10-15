@@ -88372,6 +88372,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check a25fccb0f", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792064364343-13969-ff2b0dca",
+     :commands
+     ["git show/diff/check a25fccb0f"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit a25fccb0f adds compiled, sorry-free progress beyond b0a06eb3b. It rebases the global prefix-block fold from the auxiliary boundary family to the subdivision literal endpoints; its class equality is definitionally exact. Only t97A01Closure.lean changed; fixture SHA 2f5f7339f209108736bb1c5558b37735e7a3f038733a953b0e8fa95d6d82a084 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Both endpoint casts correctly use the inverse boundary equalities, and the quotient representation matches the path definition. Flattened-fold/subdivision comparison, van Kampen, and final assembly remain explicitly listed."},
     :commit "a25fccb0f",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88380,7 +88393,7 @@
      "2f5f7339f209108736bb1c5558b37735e7a3f038733a953b0e8fa95d6d82a084"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88398,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global prefix-block concatenation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-endpoint global prefix fold.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88525,7 +88538,10 @@
      :reason "Banked globally rebased prefix blocks."}
     {:job 3,
      :commit "b0a06eb3b",
-     :reason "Banked global prefix-block concatenation."}]}
+     :reason "Banked global prefix-block concatenation."}
+    {:job 4,
+     :commit "a25fccb0f",
+     :reason "Banked literal-endpoint global prefix fold."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -94924,7 +94940,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94936,7 +94952,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "global prefix fold rebased to subdivision endpoints",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "a25fccb0f"},
    :id
    :lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class,
    :kind :lemma,
