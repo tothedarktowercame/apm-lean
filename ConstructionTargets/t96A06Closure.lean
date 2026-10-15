@@ -528,6 +528,37 @@ theorem polynomialMapAmbient_regularPoint_orthogonal_tangentBasis :
     polynomialRegularTangentThree, PiLp.inner_apply, RCLike.inner_apply,
     Fin.sum_univ_four]
 
+/-- At the selected nonzero raw image, the derivative of the norm vanishes
+in every orthogonal direction. -/
+theorem fderiv_norm_regularImage_eq_zero_of_inner_eq_zero
+    (v : EuclideanSpace ℝ (Fin 4))
+    (hv : inner ℝ (polynomialMapAmbient polynomialSphereRegularPoint.1) v = 0) :
+    fderiv ℝ (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖)
+      (polynomialMapAmbient polynomialSphereRegularPoint.1) v = 0 := by
+  let q := polynomialMapAmbient polynomialSphereRegularPoint.1
+  have hq : q ≠ 0 := by
+    apply norm_ne_zero_iff.mp
+    dsimp [q]
+    rw [norm_polynomialMapAmbient_regularPoint]
+    exact div_ne_zero one_ne_zero
+      (Real.sqrt_ne_zero'.mpr (by norm_num))
+  have hd : DifferentiableAt ℝ (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖) q :=
+    differentiableAt_id.norm ℝ hq
+  have hp := (hd.hasFDerivAt.pow 2).fderiv
+  have happ := congrArg (fun L : EuclideanSpace ℝ (Fin 4) →L[ℝ] ℝ => L v) hp
+  rw [fderiv_norm_sq_apply] at happ
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+    smul_eq_mul, one_mul] at happ
+  have hn : ‖q‖ ≠ 0 := norm_ne_zero_iff.mpr hq
+  have hv' : ((innerSL ℝ) q) v = 0 := by
+    change inner ℝ q v = 0
+    exact hv
+  rw [hv'] at happ
+  norm_num at happ
+  rcases happ with hzero | hderiv
+  · exact (hq hzero).elim
+  · simpa [q] using hderiv
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -1590,6 +1621,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms norm_polynomialMapAmbient_regularPoint
 #print axioms radialNormalizeAmbient_differentiableAt_regularImage
 #print axioms polynomialMapAmbient_regularPoint_orthogonal_tangentBasis
+#print axioms fderiv_norm_regularImage_eq_zero_of_inner_eq_zero
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
