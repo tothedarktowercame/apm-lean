@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.t97A04Closure
 import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.IntegralOpenCoverMayerVietoris
 
 /-! # Blueprint for APM t99A01 -/
 
@@ -173,13 +174,15 @@ def halfLoop (i : Fin r) : C(Circle, AttachSpace degree) :=
 /-- Homology map of a subset inclusion. -/
 def zIncl {X : Type} [TopologicalSpace X] {S T : Set X} (h : S ⊆ T) (n : ℕ) :
     H n S ⟶ H n T :=
-  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj (ModuleCat.of ℤ ℤ)).map
-    (TopCat.ofHom ⟨Set.inclusion h, continuous_inclusion h⟩)
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+      ⟨Set.inclusion h, continuous_inclusion h⟩) n
 
 /-- Homology map of a subset into the whole space. -/
 def zToX {X : Type} [TopologicalSpace X] (S : Set X) (n : ℕ) : H n S ⟶ H n X :=
-  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj (ModuleCat.of ℤ ℤ)).map
-    (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+  HomologicalComplex.homologyMap
+    (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+      ⟨Subtype.val, continuous_subtype_val⟩) n
 
 def zI {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
     H n ↥(U ∩ V) ⟶ H n U ⊞ H n V :=
@@ -627,8 +630,7 @@ theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set 
         LinearMap.ker (APMT99A01.zJ U V n).hom) ∧
       (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
       (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (APMT99A01.zI U V n).hom) := by
-  sorry
-
+  exact IntegralMV.integralMayerVietoris U V hU hV hcov
 /-- **Leaf (transport, LIBRARY-sized: expect PARTIAL and bank pieces).** Assemble
 `AttachMVData` from the standard cover.  Coordinates: `H_*(sideA) ≅ H_*(Circle)`
 (by `ρ`), `H_*(sideB) ≅ ⨁ H_*(ball)` (contractible balls), `H_*(A∩B) ≅ ⨁ H_*(Circle)`.
