@@ -1,4 +1,5 @@
 import ConstructionTargets.PolygonSurfaceHomology
+import ConstructionTargets.T97A01SmithQuotients
 
 /-!
 # Closure adapters for t97A01
@@ -17,6 +18,7 @@ namespace ConstructionTargets.t97A01Closure
 
 open ConstructionTargets.PolygonSurfacePiOne
 open ConstructionTargets.PolygonSurfaceHomology
+open ConstructionTargets.T97A01SmithQuotients
 
 /-- Two quotients of the same source by extensionally equal generated
 relations are homeomorphic whenever their canonical projections carry the
@@ -78,5 +80,40 @@ theorem torusRP2PolygonHomology :
         ModuleCat.of ℤ (BoundaryKernel torusRP2PairingData)) ∧
       ∀ k : ℕ, 3 ≤ k → IsZero (H torusRP2PairingData k) :=
   polygonQuotient_homology torusRP2PairingData
+
+/-! ## Attaching maps in the three named edge coordinates -/
+
+/-- Evaluation on the three named `aabbcc` edge orbits. -/
+def aabbccOrbitCoordinates :
+    (PairingOrbit aabbccPairingData.pair → ℤ) ≃ₗ[ℤ] Z3 :=
+  { toFun := fun f => (f ((nonorientableOrbitEquiv 3).symm 0),
+        f ((nonorientableOrbitEquiv 3).symm 1),
+        f ((nonorientableOrbitEquiv 3).symm 2))
+    invFun := fun v q => ![v.1, v.2.1, v.2.2] (nonorientableOrbitEquiv 3 q)
+    left_inv := by
+      intro f
+      funext q
+      generalize hj : nonorientableOrbitEquiv 3 q = j
+      fin_cases j <;>
+        simpa [hj] using congrArg f ((nonorientableOrbitEquiv 3).symm_apply_apply q)
+    right_inv := by rintro ⟨x, y, z⟩; rfl
+    map_add' := by intro f g; rfl
+    map_smul' := by intro n f; rfl }
+
+/-- Evaluation on the named `a`, `b`, and `c` torus-crosscap edge orbits. -/
+def torusRP2OrbitCoordinates :
+    (PairingOrbit torusRP2PairingData.pair → ℤ) ≃ₗ[ℤ] Z3 :=
+  { toFun := fun f => (f (torusRP2OrbitEquiv.symm 0),
+        f (torusRP2OrbitEquiv.symm 1), f (torusRP2OrbitEquiv.symm 2))
+    invFun := fun v q => ![v.1, v.2.1, v.2.2] (torusRP2OrbitEquiv q)
+    left_inv := by
+      intro f
+      funext q
+      generalize hj : torusRP2OrbitEquiv q = j
+      fin_cases j <;>
+        simpa [hj] using congrArg f (torusRP2OrbitEquiv.symm_apply_apply q)
+    right_inv := by rintro ⟨x, y, z⟩; rfl
+    map_add' := by intro f g; rfl
+    map_smul' := by intro n f; rfl }
 
 end ConstructionTargets.t97A01Closure
