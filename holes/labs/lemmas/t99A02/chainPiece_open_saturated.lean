@@ -1818,7 +1818,19 @@ def chainContraction (n : ℤ) (q : unitInterval × (ℤ × S2)) : ℤ × S2 :=
 -- BEGIN SEAT AREA
 lemma chainPiece_open_saturated (n : ℤ) :
     IsOpen (chainPiece n) ∧ Saturated ChainRel (chainPiece n) := by
-  sorry
+  constructor
+  · have hset : chainPiece n =
+        ({n} ×ˢ ({south}ᶜ : Set S2)) ∪
+          ({n + 1} ×ˢ ({north}ᶜ : Set S2)) := by
+      ext z
+      simp [chainPiece]
+    rw [hset]
+    exact (((isOpen_discrete ({n} : Set ℤ)).prod isOpen_compl_singleton).union
+      ((isOpen_discrete ({n + 1} : Set ℤ)).prod isOpen_compl_singleton))
+  · intro a b hab
+    cases hab with
+    | link k =>
+      simp [chainPiece, north_ne_south, north_ne_south.symm]
 -- END SEAT AREA
 
 /-- **Leaf.**  Each chain star is simply connected.
