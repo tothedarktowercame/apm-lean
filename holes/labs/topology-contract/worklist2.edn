@@ -88379,6 +88379,18 @@
     [{:cmd "dependent rewrite draft",
       :exit 1,
       :correction "used congrArg Fin.val"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792096262458-14609-1990ddde",
+     :commands
+     ["git show/diff/check 9e83a8d04"
+      "sha256sum + placeholder recount from 9e83a8d04"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 9e83a8d04 adds compiled, sorry-free progress beyond history 62800fc45. The new eliminator exhausts actual inverse run/offset successors: equal runs carry the dependent offset through the correctly oriented length cast; unequal runs use strict next-run value plus last/zero fiber equalities. The contradiction converting run equality to value equality is sound. Only t97A01Closure.lean changed; fixture SHA 10498213a11c1d7c60071d051dc6cb335b8d4917cadae68ebb1459f7a6d0990a matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Fold reassociation, van Kampen, and assembly remain listed."},
     :commit "9e83a8d04",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88387,7 +88399,7 @@
      "10498213a11c1d7c60071d051dc6cb335b8d4917cadae68ebb1459f7a6d0990a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88405,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked dependent cross-run successor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exhaustive dependent successor alternatives.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88634,7 +88646,10 @@
      :reason "Banked exact terminal run offset."}
     {:job 1,
      :commit "62800fc45",
-     :reason "Banked dependent cross-run successor."}]}
+     :reason "Banked dependent cross-run successor."}
+    {:job 2,
+     :commit "9e83a8d04",
+     :reason "Banked exhaustive dependent successor alternatives."}]}
   {:consumer :t94J09,
    :stop-count 8,
    :evidence
@@ -96049,7 +96064,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases_eq",
@@ -96060,7 +96075,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "complete dependent within/cross-run successor alternatives",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "9e83a8d04"},
    :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-cases-eq,
    :kind :lemma,
    :depends-on
