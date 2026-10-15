@@ -1934,6 +1934,104 @@ lemma t99A01_lowData_of_coordinates_aux_i0_injective {r : ℕ} :
   intro x y h
   exact congrArg Prod.snd h
 
+/-- All inputs of the low-degree algebra, bundled. -/
+structure t99A01_LowInput {r : ℕ} (degree : Fin r → ℕ) where
+  O₀ : ModuleCat ℤ
+  O₁ : ModuleCat ℤ
+  A₀ : ModuleCat ℤ
+  A₁ : ModuleCat ℤ
+  A₂ : ModuleCat ℤ
+  B₀ : ModuleCat ℤ
+  B₁ : ModuleCat ℤ
+  B₂ : ModuleCat ℤ
+  I₀ : O₀ ⟶ A₀ ⊞ B₀
+  I₁ : O₁ ⟶ A₁ ⊞ B₁
+  J₀ : A₀ ⊞ B₀ ⟶ APMT99A01.H 0 (APMT99A01.AttachSpace degree)
+  J₁ : A₁ ⊞ B₁ ⟶ APMT99A01.H 1 (APMT99A01.AttachSpace degree)
+  J₂ : A₂ ⊞ B₂ ⟶ APMT99A01.H 2 (APMT99A01.AttachSpace degree)
+  δ₀ : APMT99A01.H 1 (APMT99A01.AttachSpace degree) ⟶ O₀
+  δ₁ : APMT99A01.H 2 (APMT99A01.AttachSpace degree) ⟶ O₁
+  hI₁J₁ : LinearMap.range I₁.hom = LinearMap.ker J₁.hom
+  hJ₁δ₀ : LinearMap.range J₁.hom = LinearMap.ker δ₀.hom
+  hδ₀I₀ : LinearMap.range δ₀.hom = LinearMap.ker I₀.hom
+  hI₀J₀ : LinearMap.range I₀.hom = LinearMap.ker J₀.hom
+  hJ₂δ₁ : LinearMap.range J₂.hom = LinearMap.ker δ₁.hom
+  hδ₁I₁ : LinearMap.range δ₁.hom = LinearMap.ker I₁.hom
+  hA₂ : Limits.IsZero A₂
+  hB₁ : Limits.IsZero B₁
+  hB₂ : Limits.IsZero B₂
+  hJ₀ : Function.Surjective J₀.hom
+  cO₀ : O₀ ≅ ModuleCat.of ℤ (Fin r → ℤ)
+  cO₁ : O₁ ≅ ModuleCat.of ℤ (Fin r → ℤ)
+  cA₀ : A₀ ≅ ModuleCat.of ℤ ℤ
+  cA₁ : A₁ ≅ ModuleCat.of ℤ ℤ
+  cB₀ : B₀ ≅ ModuleCat.of ℤ (Fin r → ℤ)
+  hdegree : cO₁.inv ≫ I₁ ≫ Limits.biprod.fst ≫ cA₁.hom =
+    ModuleCat.ofHom (APMT99A01.degreeMap degree)
+  hsum : cO₀.inv ≫ I₀ ≫ Limits.biprod.fst ≫ cA₀.hom = ModuleCat.ofHom t99A01_coordinateSum
+  hid : cO₀.inv ≫ I₀ ≫ Limits.biprod.snd ≫ cB₀.hom = 𝟙 _
+
+namespace t99A01_LowInput
+
+variable {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree)
+
+/-- `ℤ → H₁(W)`: the `A`-summand of `J₁` in coordinates. -/
+noncomputable def j₁ : ℤ →ₗ[ℤ] APMT99A01.H 1 (APMT99A01.AttachSpace degree) :=
+  (D.cA₁.inv ≫ Limits.biprod.inl ≫ D.J₁).hom
+
+/-- `H₁(W) → ℤ^r`: the connecting map in coordinates. -/
+noncomputable def δ₁c : APMT99A01.H 1 (APMT99A01.AttachSpace degree) →ₗ[ℤ] (Fin r → ℤ) :=
+  (D.δ₀ ≫ D.cO₀.hom).hom
+
+/-- `ℤ^r → ℤ × ℤ^r`, `x ↦ (∑ xᵢ, x)`. -/
+def i₀ : (Fin r → ℤ) →ₗ[ℤ] (ℤ × (Fin r → ℤ)) :=
+  LinearMap.prod t99A01_coordinateSum LinearMap.id
+
+/-- `ℤ × ℤ^r → H₀(W)`: `J₀` in coordinates. -/
+noncomputable def j₀ : (ℤ × (Fin r → ℤ)) →ₗ[ℤ] APMT99A01.H 0 (APMT99A01.AttachSpace degree) :=
+  (D.cA₀.inv ≫ Limits.biprod.inl ≫ D.J₀).hom.coprod (D.cB₀.inv ≫ Limits.biprod.inr ≫ D.J₀).hom
+
+/-- `H₂(W) → ℤ^r`: the connecting map in coordinates. -/
+noncomputable def δ₂c : APMT99A01.H 2 (APMT99A01.AttachSpace degree) →ₗ[ℤ] (Fin r → ℤ) :=
+  (D.δ₁ ≫ D.cO₁.hom).hom
+
+end t99A01_LowInput
+
+/-- **Leaf.** Exactness at `ℤ` in degree one (`B₁ = 0`, `hdegree`). -/
+lemma t99A01_low_exact_i₁_j₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    LinearMap.range (APMT99A01.degreeMap degree) = LinearMap.ker D.j₁ := by
+  sorry
+
+/-- **Leaf.** Exactness at `H₁(W)` (`B₁ = 0`). -/
+lemma t99A01_low_exact_j₁_δ₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    LinearMap.range D.j₁ = LinearMap.ker D.δ₁c := by
+  sorry
+
+/-- **Leaf.** Exactness at `ℤ^r` in degree zero (`hsum`, `hid`). -/
+lemma t99A01_low_exact_δ₁_i₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    LinearMap.range D.δ₁c = LinearMap.ker t99A01_LowInput.i₀ := by
+  sorry
+
+/-- **Leaf.** Exactness at `ℤ × ℤ^r` (`hsum`, `hid`). -/
+lemma t99A01_low_exact_i₀_j₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    LinearMap.range t99A01_LowInput.i₀ = LinearMap.ker D.j₀ := by
+  sorry
+
+/-- **Leaf.** `j₀` is onto (`hJ₀`, biproduct decomposition). -/
+lemma t99A01_low_j₀_surjective {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    Function.Surjective D.j₀ := by
+  sorry
+
+/-- **Leaf.** `δ₂` is injective (`A₂ = B₂ = 0` kill the range of `J₂`). -/
+lemma t99A01_low_δ₂_injective {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    Function.Injective D.δ₂c := by
+  sorry
+
+/-- **Leaf.** Exactness at `ℤ^r` in degree one (`B₁ = 0`, `hdegree`). -/
+lemma t99A01_low_exact_δ₂_i₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
+    LinearMap.range D.δ₂c = LinearMap.ker (APMT99A01.degreeMap degree) := by
+  sorry
+
 lemma t99A01_lowData_of_coordinates {r : ℕ} (degree : Fin r → ℕ)
     (O₀ O₁ A₀ A₁ A₂ B₀ B₁ B₂ : ModuleCat ℤ)
     (I₀ : O₀ ⟶ A₀ ⊞ B₀) (I₁ : O₁ ⟶ A₁ ⊞ B₁)
@@ -1960,189 +2058,26 @@ lemma t99A01_lowData_of_coordinates {r : ℕ} (degree : Fin r → ℕ)
       ModuleCat.ofHom t99A01_coordinateSum)
     (hid : cO₀.inv ≫ I₀ ≫ Limits.biprod.snd ≫ cB₀.hom = 𝟙 _) :
     Nonempty (APMT99A01.AttachMVLowData degree) := by
-  sorry
-/-
-  let j₁ : (ModuleCat.of ℤ ℤ) →ₗ[ℤ]
-      (APMT99A01.H 1 (APMT99A01.AttachSpace degree)) :=
-    (cA₁.inv ≫ Limits.biprod.inl ≫ J₁).hom
-  let d₁ : (APMT99A01.H 1 (APMT99A01.AttachSpace degree)) →ₗ[ℤ]
-      (Fin r → ℤ) := (δ₀ ≫ cO₀.hom).hom
-  let pairHom : ModuleCat.of ℤ (ℤ × (Fin r → ℤ)) ⟶ A₀ ⊞ B₀ :=
-    Limits.biprod.lift
-      (ModuleCat.ofHom (LinearMap.fst ℤ ℤ (Fin r → ℤ)) ≫ cA₀.inv)
-      (ModuleCat.ofHom (LinearMap.snd ℤ ℤ (Fin r → ℤ)) ≫ cB₀.inv)
-  let pairMap := pairHom.hom
-  let j₀ : (ℤ × (Fin r → ℤ)) →ₗ[ℤ]
-      (APMT99A01.H 0 (APMT99A01.AttachSpace degree)) :=
-    J₀.hom.comp pairMap
-  let δ₂ : (APMT99A01.H 2 (APMT99A01.AttachSpace degree)) →ₗ[ℤ]
-      (Fin r → ℤ) := (δ₁ ≫ cO₁.hom).hom
-  let inl₁ : A₁ ⟶ A₁ ⊞ B₁ := Limits.biprod.inl
-  let fst₁ : A₁ ⊞ B₁ ⟶ A₁ := Limits.biprod.fst
-  let fst₀ : A₀ ⊞ B₀ ⟶ A₀ := Limits.biprod.fst
-  let snd₀ : A₀ ⊞ B₀ ⟶ B₀ := Limits.biprod.snd
-  have hI₁_apply : ∀ x : Fin r → ℤ,
-      I₁.hom (cO₁.inv.hom x) =
-        inl₁.hom (cA₁.inv.hom (APMT99A01.degreeMap degree x)) := by
-    intro x
-    change _ = (cA₁.inv.hom _, 0)
-    apply Prod.ext
-    · have h := congrArg (fun f => f x) (congrArg CategoryTheory.ConcreteCategory.hom hdegree)
-      simpa using congrArg cA₁.inv.hom h
-    · exact hB₁.eq_of_src _ _
-  have hI₀_apply : ∀ x : Fin r → ℤ,
-      I₀.hom (cO₀.inv.hom x) =
-        pairMap (t99A01_coordinateSum x, x) := by
-    intro x
-    change _ = (cA₀.inv.hom (t99A01_coordinateSum x), cB₀.inv.hom x)
-    apply Prod.ext
-    · have h := congrArg (fun f => f x) (congrArg CategoryTheory.ConcreteCategory.hom hsum)
-      simpa using congrArg cA₀.inv.hom h
-    · have h := congrArg (fun f => f x) (congrArg CategoryTheory.ConcreteCategory.hom hid)
-      simpa using congrArg cB₀.inv.hom h
-  have hI₀_inj : Function.Injective
-      (fun x : Fin r → ℤ => (t99A01_coordinateSum x, x)) := by
-    intro x y h
-    exact congrArg Prod.snd h
-  have hpair_inj : Function.Injective pairMap := by
-    intro x y h
-    apply Prod.ext
-    · have hh := congrArg (fun q => q.1) h
-      simpa [pairMap, pairHom] using congrArg cA₀.hom.hom hh
-    · have hh := congrArg (fun q => q.2) h
-      simpa [pairMap, pairHom] using congrArg cB₀.hom.hom hh
-  refine ⟨{
+  let D : t99A01_LowInput degree :=
+    ⟨O₀, O₁, A₀, A₁, A₂, B₀, B₁, B₂, I₀, I₁, J₀, J₁, J₂, δ₀, δ₁, hI₁J₁, hJ₁δ₀, hδ₀I₀, hI₀J₀,
+      hJ₂δ₁, hδ₁I₁, hA₂, hB₁, hB₂, hJ₀, cO₀, cO₁, cA₀, cA₁, cB₀, hdegree, hsum, hid⟩
+  exact ⟨{
     i₁ := APMT99A01.degreeMap degree
-    j₁ := j₁
-    δ₁ := d₁
-    i₀ := {
-      toFun := fun x => (t99A01_coordinateSum x, x)
-      map_add' := by intro x y; ext <;> simp [t99A01_coordinateSum, Finset.sum_add_distrib]
-      map_smul' := by intro c x; ext <;> simp [t99A01_coordinateSum, Finset.mul_sum] }
-    j₀ := j₀
-    δ₂ := δ₂
+    j₁ := D.j₁
+    δ₁ := D.δ₁c
+    i₀ := t99A01_LowInput.i₀
+    j₀ := D.j₀
+    δ₂ := D.δ₂c
     i₁_eq_degreeMap := rfl
-    i₀_injective := hI₀_inj
-    i₀_eq := by intro x; rfl
-    exact_i₁_j₁ := by
-      ext y
-      constructor
-      · rintro ⟨x, rfl⟩
-        rw [LinearMap.mem_ker]
-        change J₁.hom (inl₁.hom (cA₁.inv.hom
-          (APMT99A01.degreeMap degree x))) = 0
-        rw [← hI₁_apply]
-        exact LinearMap.mem_ker.mp (hI₁J₁ ▸ LinearMap.mem_range_self (I₁.hom) (cO₁.inv.hom x))
-      · intro hy
-        have hy' : inl₁.hom (cA₁.inv.hom y) ∈ LinearMap.ker J₁.hom := by
-          exact hy
-        rw [← hI₁J₁] at hy'
-        rcases hy' with ⟨z, hz⟩
-        refine ⟨cO₁.hom.hom z, ?_⟩
-        have hz' := congrArg (fun w => fst₁.hom w) hz
-        simpa using congrArg cA₁.hom.hom hz'
-    exact_j₁_δ₁ := by
-      ext y
-      constructor
-      · rintro ⟨x, rfl⟩
-        rw [LinearMap.mem_ker]
-        have hh := LinearMap.mem_ker.mp
-          (hJ₁δ₀ ▸ LinearMap.mem_range_self J₁.hom
-            (inl₁.hom (cA₁.inv.hom x)))
-        simpa [d₁] using congrArg cO₀.hom.hom hh
-      · intro hy
-        have hy' : y ∈ LinearMap.ker δ₀.hom := by
-          rw [LinearMap.mem_ker] at hy ⊢
-          have hh := congrArg cO₀.inv.hom hy
-          simpa [d₁] using hh
-        rw [← hJ₁δ₀] at hy'
-        rcases hy' with ⟨z, hz⟩
-        refine ⟨cA₁.hom.hom (fst₁.hom z), ?_⟩
-        have hz0 : z = inl₁.hom (cA₁.inv.hom
-            (cA₁.hom.hom (fst₁.hom z))) := by
-          apply Prod.ext
-          · simp
-          · exact hB₁.eq_of_src _ _
-        simpa [j₁, hz0] using hz.symm
-    exact_δ₁_i₀ := by
-      ext x
-      constructor
-      · rintro ⟨y, rfl⟩
-        rw [LinearMap.mem_ker]
-        have hy := LinearMap.mem_ker.mp
-          (hδ₀I₀ ▸ LinearMap.mem_range_self δ₀.hom y)
-        rw [hy, map_zero, hI₀_apply]
-        rfl
-      · intro hx
-        have hx0 : I₀.hom (cO₀.inv.hom x) = 0 := by
-          rw [hI₀_apply]
-          simpa [LinearMap.mem_ker] using hx
-        have : cO₀.inv.hom x ∈ LinearMap.range δ₀.hom := by
-          rw [hδ₀I₀]
-          exact hx0
-        rcases this with ⟨y, hy⟩
-        refine ⟨y, ?_⟩
-        simpa [d₁] using congrArg cO₀.hom.hom hy
-    exact_i₀_j₀ := by
-      ext p
-      constructor
-      · rintro ⟨x, rfl⟩
-        rw [LinearMap.mem_ker]
-        change J₀.hom (pairMap
-          (t99A01_coordinateSum x, x)) = 0
-        rw [← hI₀_apply]
-        exact LinearMap.mem_ker.mp
-          (hI₀J₀ ▸ LinearMap.mem_range_self I₀.hom (cO₀.inv.hom x))
-      · intro hp
-        have hp' : pairMap p ∈
-            LinearMap.ker J₀.hom := hp
-        rw [← hI₀J₀] at hp'
-        rcases hp' with ⟨z, hz⟩
-        refine ⟨cO₀.hom.hom z, ?_⟩
-        apply hpair_inj
-        rw [← hI₀_apply]
-        simpa using hz.symm
-    j₀_surjective := by
-      intro y
-      rcases hJ₀ y with ⟨z, rfl⟩
-      refine ⟨(cA₀.hom.hom (fst₀.hom z), cB₀.hom.hom (snd₀.hom z)), ?_⟩
-      change J₀.hom (pairMap _) = J₀.hom z
-      congr 1
-      apply Prod.ext <;> simp [pairMap, pairHom, fst₀, snd₀]
-    δ₂_injective := by
-      intro x y hxy
-      apply (show Function.Injective δ₁.hom from ?_)
-      · intro a b hab
-        have hk : a - b ∈ LinearMap.ker δ₁.hom := by
-          rw [LinearMap.mem_ker, map_sub, hab, sub_self]
-        rw [← hJ₂δ₁] at hk
-        rcases hk with ⟨z, hz⟩
-        have hz0 : z = 0 := by
-          apply Prod.ext <;> first | exact hA₂.eq_of_src _ _ | exact hB₂.eq_of_src _ _
-        rw [hz0, map_zero] at hz
-        exact sub_eq_zero.mp hz.symm
-      have hh := congrArg cO₁.inv.hom hxy
-      simpa [δ₂] using hh
-    exact_δ₂_i₁ := by
-      ext x
-      constructor
-      · rintro ⟨y, rfl⟩
-        rw [LinearMap.mem_ker]
-        have hy := LinearMap.mem_ker.mp
-          (hδ₁I₁ ▸ LinearMap.mem_range_self δ₁.hom y)
-        rw [hy, map_zero, hI₁_apply]
-        rfl
-      · intro hx
-        have hx0 : I₁.hom (cO₁.inv.hom x) = 0 := by
-          rw [hI₁_apply]
-          simpa [LinearMap.mem_ker] using hx
-        have : cO₁.inv.hom x ∈ LinearMap.range δ₁.hom := by
-          rw [hδ₁I₁]
-          exact hx0
-        rcases this with ⟨y, hy⟩
-        refine ⟨y, ?_⟩
-        simpa [δ₂] using congrArg cO₁.hom.hom hy }⟩
--/
+    i₀_injective := t99A01_lowData_of_coordinates_aux_i0_injective
+    i₀_eq := fun _ => rfl
+    exact_i₁_j₁ := t99A01_low_exact_i₁_j₁ D
+    exact_j₁_δ₁ := t99A01_low_exact_j₁_δ₁ D
+    exact_δ₁_i₀ := t99A01_low_exact_δ₁_i₀ D
+    exact_i₀_j₀ := t99A01_low_exact_i₀_j₀ D
+    j₀_surjective := t99A01_low_j₀_surjective D
+    δ₂_injective := t99A01_low_δ₂_injective D
+    exact_δ₂_i₁ := t99A01_low_exact_δ₂_i₁ D }⟩
 /-- Concrete positive-degree vanishings required by the algebra leaf. -/
 lemma t99A01_low_coordinates_vanishing {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
@@ -2214,6 +2149,104 @@ lemma t99A01_low_coordinates_degree_one_aux_inv
     _ = F.map (𝟙 _) := he
     _ = 𝟙 _ := F.map_id _
 
+lemma t99A01_low_coordinates_degree_one_aux_circle
+    {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle))
+    (eO : ContinuousMap.HomotopyEquiv
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (heO : ∀ (i : Fin r) (w : Circle), (eO.invFun ⟨i, w⟩).1 =
+      APMT99A01.halfLoop degree i w)
+    (hρ : ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈
+      APMT99A01.sideA degree), ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i)
+    (i : Fin r) :
+    ρ.comp
+      ((⟨Set.inclusion Set.inter_subset_left,
+          continuous_inclusion Set.inter_subset_left⟩ :
+        C(↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+          APMT99A01.sideA degree)).comp
+        (eO.invFun.comp
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+              @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+            C(Circle, Σ _ : Fin r, Circle)))) =
+      APMT99A01.circlePower (degree i) := by
+  ext w
+  have hm : APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree := by
+    rw [← heO i w]
+    exact (eO.invFun ⟨i, w⟩).property.1
+  have hin :
+      (⟨Set.inclusion Set.inter_subset_left,
+          continuous_inclusion Set.inter_subset_left⟩ :
+        C(↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+          APMT99A01.sideA degree))
+          (eO.invFun
+            ((⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+                @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+              C(Circle, Σ _ : Fin r, Circle)) w)) =
+        ⟨APMT99A01.halfLoop degree i w, hm⟩ := by
+    apply Subtype.ext
+    exact heO i w
+  simp only [ContinuousMap.comp_apply]
+  rw [hin, hρ]
+  rfl
+
+lemma t99A01_low_coordinates_degree_one_aux_summand
+    {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
+    (hρι : ρ.comp ι = ContinuousMap.id Circle)
+    (hιρ : ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _))
+    (eO : ContinuousMap.HomotopyEquiv
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (heO : ∀ (i : Fin r) (w : Circle), (eO.invFun ⟨i, w⟩).1 =
+      APMT99A01.halfLoop degree i w)
+    (hρ : ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈
+      APMT99A01.sideA degree), ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i)
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
+    (e₁ : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ)
+    (hw : ∀ i : Fin r, e₁.inv ≫
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e₁.hom =
+      ModuleCat.ofHom (APMT99A01.intTimesNat (degree i))) (i : Fin r) :
+    e₁.inv ≫ Limits.biproduct.ι (fun _ : Fin r ↦ APMT99A01.H 1 Circle) i ≫
+      (t99A01_overlap_sigma_coordinate degree eO 1 ≪≫
+        t99A01_sigma_coordinate (fun _ : Fin r ↦ Circle) 1 (hsigma _ 1)).inv ≫
+      APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 1 ≫
+      Limits.biprod.fst ≫ (t99A01_sideA_coordinate degree ρ ι hρι hιρ 1 ≪≫ e₁).hom =
+      ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)) := by
+  rw [Iso.trans_inv, Iso.trans_hom]
+  simp only [Category.assoc, Limits.biproduct.ι_desc_assoc,
+    Limits.biprod.lift_fst_assoc]
+  dsimp [t99A01_sigma_coordinate, t99A01_overlap_sigma_coordinate,
+    t99A01_sideA_coordinate]
+  have hp : (e₁.inv ≫ Limits.biproduct.ι
+      (fun _ : Fin r ↦ APMT99A01.H 1 Circle) i) ≫
+      (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+            @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+              C(Circle, Σ j : Fin r, Circle))) 1) =
+      e₁.inv ≫ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+            @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+              C(Circle, Σ j : Fin r, Circle))) 1 := by
+    rw [Category.assoc, Limits.biproduct.ι_desc]
+  simp only [← Category.assoc]
+  sorry
+/-
+  rw [hp]
+  unfold APMT99A01.zI
+  simp only [← Category.assoc]
+  rw [Limits.biprod.lift_fst]
+  simp only [Category.assoc]
+  rw [t99A01_low_coordinates_degree_one_aux_inv]
+  rw [ConstructionTargets.CoefficientRadialPair.homotopyIso_hom]
+  trace_state
+-/
+
 -- BEGIN SEAT AREA
 lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
@@ -2242,6 +2275,11 @@ lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
     let cA₁ := t99A01_sideA_coordinate degree ρ ι hρι hιρ 1 ≪≫ e₁
     cO₁.inv ≫ APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 1 ≫
       Limits.biprod.fst ≫ cA₁.hom = ModuleCat.ofHom (APMT99A01.degreeMap degree) := by
+  dsimp only
+  apply ModuleCat.hom_ext
+  apply LinearMap.pi_ext
+  intro i x
+  simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply]
   sorry
 -- END SEAT AREA
 instance t99A01_circle_pathConnected : PathConnectedSpace Circle :=
