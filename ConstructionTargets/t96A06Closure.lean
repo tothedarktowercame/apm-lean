@@ -74,6 +74,20 @@ theorem polynomialMapAmbient_hasFDerivAt (p : EuclideanSpace ℝ (Fin 4)) :
       (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 3)) using 1 <;>
       ext <;> simp [mul_assoc, mul_comm, mul_left_comm] <;> ring
 
+/-- Coordinate formula for the ambient derivative, used to evaluate the
+three tangent directions at the selected regular point. -/
+theorem polynomialMapAmbient_fderiv
+    (p v : EuclideanSpace ℝ (Fin 4)) :
+    fderiv ℝ polynomialMapAmbient p v = WithLp.toLp 2 ![
+      2 * p 0 * v 0 - 2 * p 1 * v 1,
+      2 * p 1 * v 0 + 2 * p 0 * v 1,
+      2 * p 2 * v 2 - 2 * p 3 * v 3,
+      2 * p 3 * v 2 + 2 * p 2 * v 3] := by
+  rw [(polynomialMapAmbient_hasFDerivAt p).fderiv]
+  ext i
+  fin_cases i <;>
+    simp [polynomialMapAmbientDerivative, mul_assoc, mul_comm, mul_left_comm]
+
 /-- Change the sign of the first complex coordinate pair. -/
 def flipFirstPair (v : Vectors ℝ 3) : Vectors ℝ 3 :=
   ![-v 0, -v 1, v 2, v 3]
@@ -1428,6 +1442,7 @@ theorem t96A06_rp3_rational_homology :
 
 #print axioms polynomialMap_nonzero
 #print axioms polynomialMapAmbient_hasFDerivAt
+#print axioms polynomialMapAmbient_fderiv
 #print axioms polynomialMap_flipFirstPair
 #print axioms polynomialMap_flipSecondPair
 #print axioms realPair_eq_or_eq_neg_of_squareCoordinates
