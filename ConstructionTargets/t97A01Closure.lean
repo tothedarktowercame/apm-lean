@@ -1073,6 +1073,84 @@ theorem torusRP2PolygonInner_pathClass_eq
     SimplyConnectedSpace.ofContractible _
   exact Quotient.sound (SimplyConnectedSpace.paths_homotopic p q)
 
+theorem torusRP2PolygonOverlapPathConnectedSpace :
+    PathConnectedSpace (overlapOpen torusRP2PairingData.Rel) := by
+  letI : PathConnectedSpace (Set.Ioo (0 : ℝ) 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      ((convex_Ioo 0 1).isPathConnected ⟨1 / 2, by norm_num⟩)
+  letI : PathConnectedSpace (Set.Ioo (0 : ℝ) 1 × Circle) :=
+    ⟨⟨(⟨1 / 2, by norm_num⟩, 1)⟩, fun x y ↦
+      ⟨(PathConnectedSpace.joined x.1 y.1).some.prod
+        (PathConnectedSpace.joined x.2 y.2).some⟩⟩
+  exact (openCover torusRP2PairingData).overlap_homeomorph.symm.surjective.pathConnectedSpace
+    (openCover torusRP2PairingData).overlap_homeomorph.symm.continuous
+
+noncomputable def torusRP2PolygonOverlapToOuter :
+    C(overlapOpen torusRP2PairingData.Rel,
+      {q // q ∈ (openCover torusRP2PairingData).outer}) :=
+  ⟨fun z ↦ ⟨z.1, (by
+      have hz : z.1 ∈ (openCover torusRP2PairingData).inner ∩
+          (openCover torusRP2PairingData).outer := by
+        rw [← (openCover torusRP2PairingData).overlap_eq]
+        exact z.2
+      exact hz.2)⟩,
+    Continuous.subtype_mk continuous_subtype_val (fun z ↦ by
+      have hz : z.1 ∈ (openCover torusRP2PairingData).inner ∩
+          (openCover torusRP2PairingData).outer := by
+        rw [← (openCover torusRP2PairingData).overlap_eq]
+        exact z.2
+      exact hz.2)⟩
+
+noncomputable def torusRP2PolygonOverlapToInner :
+    C(overlapOpen torusRP2PairingData.Rel,
+      {q // q ∈ (openCover torusRP2PairingData).inner}) :=
+  ⟨fun z ↦ ⟨z.1, (by
+      have hz : z.1 ∈ (openCover torusRP2PairingData).inner ∩
+          (openCover torusRP2PairingData).outer := by
+        rw [← (openCover torusRP2PairingData).overlap_eq]
+        exact z.2
+      exact hz.1)⟩,
+    Continuous.subtype_mk continuous_subtype_val (fun z ↦ by
+      have hz : z.1 ∈ (openCover torusRP2PairingData).inner ∩
+          (openCover torusRP2PairingData).outer := by
+        rw [← (openCover torusRP2PairingData).overlap_eq]
+        exact z.2
+      exact hz.1)⟩
+
+noncomputable def torusRP2PolygonInnerToSpace :
+    C({q // q ∈ (openCover torusRP2PairingData).inner},
+      torusRP2PairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+noncomputable def torusRP2PolygonOuterToSpace :
+    C({q // q ∈ (openCover torusRP2PairingData).outer},
+      torusRP2PairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- An inner path between overlap points is equal in the ambient groupoid to
+an overlap path routed through the outer radial piece. -/
+theorem torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
+    (x y : overlapOpen torusRP2PairingData.Rel)
+    (p : Path (torusRP2PolygonOverlapToInner x)
+      (torusRP2PolygonOverlapToInner y)) :
+    ∃ q : Path x y,
+      (⟦p.map torusRP2PolygonInnerToSpace.continuous⟧ :
+          FundamentalGroupoid.mk x.1 ⟶ FundamentalGroupoid.mk y.1) =
+        ⟦(q.map torusRP2PolygonOverlapToOuter.continuous).map
+          torusRP2PolygonOuterToSpace.continuous⟧ := by
+  letI : PathConnectedSpace (overlapOpen torusRP2PairingData.Rel) :=
+    torusRP2PolygonOverlapPathConnectedSpace
+  let q : Path x y := PathConnectedSpace.somePath x y
+  refine ⟨q, ?_⟩
+  have hq := torusRP2PolygonInner_pathClass_eq p
+    (q.map torusRP2PolygonOverlapToInner.continuous)
+  have hmap := congrArg
+    (fun z : FundamentalGroupoid.mk (torusRP2PolygonOverlapToInner x) ⟶
+        FundamentalGroupoid.mk (torusRP2PolygonOverlapToInner y) ↦
+      (FundamentalGroupoid.map torusRP2PolygonInnerToSpace).map z) hq
+  simpa [torusRP2PolygonInnerToSpace, torusRP2PolygonOverlapToInner,
+    torusRP2PolygonOuterToSpace, torusRP2PolygonOverlapToOuter] using hmap
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1141,6 +1219,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2BoundaryFreeGroupMap_surjective
 #print axioms torusRP2PolygonPseudopushout_arrow_eq_reconstructed
 #print axioms torusRP2PolygonInner_pathClass_eq
+#print axioms torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
