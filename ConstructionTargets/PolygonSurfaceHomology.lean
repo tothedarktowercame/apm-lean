@@ -1727,6 +1727,48 @@ theorem polygonBoundaryConcat_cast_eq_canonical (P : PairingData) :
       (polygonBoundarySubdivisionVertex P k.castSucc)
       (polygonBoundarySubdivisionVertex P k.succ))
 
+/-- The endpoint subpath appearing in `concat_subpath`, transported back to
+the common basepoint, is the original boundary path. -/
+theorem polygonBoundaryEndpointSubpath_cast_eq (P : PairingData) :
+    ((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P 0)
+      (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))).cast
+        (orbitWedgeBase_eq_boundarySubdivisionVertex P 0)
+        (orbitWedgeBase_eq_boundarySubdivisionVertex P
+          (Fin.last P.edgeCount)) =
+      polygonBoundaryIntegerLoopPath P := by
+  ext t
+  rw [show ((((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P 0)
+      (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))).cast
+        _ _) t) =
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P 0)
+        (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))) t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  change polygonBoundaryIntegerLoopPath P
+      (Set.Icc.convexCombo (polygonBoundarySubdivisionVertex P 0)
+        (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount)) t) = _
+  rw [polygonBoundarySubdivisionVertex_zero,
+    polygonBoundarySubdivisionVertex_last]
+  congr 1
+  apply Subtype.ext
+  simp [Set.Icc.coe_convexCombo]
+
+/-- The canonical common-base subdivision concatenation is homotopic rel
+endpoints to the original based boundary loop. -/
+theorem polygonBoundaryCanonicalConcat_homotopic (P : PairingData) :
+    Path.Homotopic
+      (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+        (polygonBoundaryCanonicalSubdivisionPathAtBase P))
+      (polygonBoundaryIntegerLoopPath P) := by
+  have h := (polygonBoundaryIntegerLoop_concatSubpath P).pathCast
+    (orbitWedgeBase_eq_boundarySubdivisionVertex P 0)
+    (orbitWedgeBase_eq_boundarySubdivisionVertex P (Fin.last P.edgeCount))
+  rw [polygonBoundaryConcat_cast_eq_canonical] at h
+  convert h using 1
+  exact (polygonBoundaryEndpointSubpath_cast_eq P).symm
+
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
 theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
