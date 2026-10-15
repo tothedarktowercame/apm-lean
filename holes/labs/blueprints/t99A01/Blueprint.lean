@@ -425,6 +425,101 @@ theorem t99A01_attach_circleSide_aux_retraction {r : ℕ} (degree : Fin r → �
 `unitInterval × (restricted quotient)`: a product of a quotient map with the identity
 of the locally compact `unitInterval` is a quotient map
 (`Topology.IsQuotientMap.prodMap` / `IsQuotientMap.continuous_lift_prod_right`). -/
+private abbrev t99A01_attach_circleSide_aux_deformation_Pre {r : ℕ}
+    (degree : Fin r → ℕ) :=
+  ↥((APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree)
+
+private def t99A01_attach_circleSide_aux_deformation_q {r : ℕ}
+    (degree : Fin r → ℕ) :
+    t99A01_attach_circleSide_aux_deformation_Pre degree → APMT99A01.sideA degree :=
+  fun x ↦ ⟨APMT99A01.attachMk degree x.1, x.2⟩
+
+private lemma t99A01_attach_circleSide_aux_deformation_q_quotient {r : ℕ}
+    (degree : Fin r → ℕ) :
+    Topology.IsQuotientMap (t99A01_attach_circleSide_aux_deformation_q degree) := by
+  exact (isQuotientMap_quotient_mk'.restrictPreimage_isOpen
+    (t99A01_attach_openCover degree).1)
+
+private lemma t99A01_attach_circleSide_aux_deformation_disk_ne {r : ℕ}
+    (degree : Fin r → ℕ)
+    (x : t99A01_attach_circleSide_aux_deformation_Pre degree)
+    (i : Fin r) (z : APMT99A01.Disk) (hx : x.1 = Sum.inr (i, z)) :
+    (z : ℂ) ≠ 0 := by
+  apply t99A01_attach_circleSide_aux_ne_zero degree i z
+  simpa [t99A01_attach_circleSide_aux_deformation_q, hx] using x.2
+
+private def t99A01_attach_circleSide_aux_deformation_scale (t : unitInterval) (z : ℂ) : ℝ :=
+  t.1 + (1 - t.1) / ‖z‖
+
+private lemma t99A01_attach_circleSide_aux_deformation_scale_norm
+    (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) (hz1 : ‖z‖ ≤ 1) :
+    ‖(t99A01_attach_circleSide_aux_deformation_scale t z : ℂ) * z‖ ≤ 1 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hs0 : 0 ≤ (t : ℝ) + (1 - t.1) / ‖z‖ :=
+    add_nonneg ht0 (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+  rw [norm_mul]
+  change ‖(((t : ℝ) + (1 - t.1) / ‖z‖ : ℝ) : ℂ)‖ * ‖z‖ ≤ 1
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs0]
+  field_simp
+  nlinarith
+
+private lemma t99A01_attach_circleSide_aux_deformation_scale_ne
+    (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) :
+    (t99A01_attach_circleSide_aux_deformation_scale t z : ℂ) * z ≠ 0 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  apply mul_ne_zero
+  · rw [t99A01_attach_circleSide_aux_deformation_scale]
+    have ht0 : 0 ≤ (t : ℝ) := t.2.1
+    have ht1 : (t : ℝ) ≤ 1 := t.2.2
+    have : 0 < (t : ℝ) + (1 - t.1) / ‖z‖ := by
+      by_cases ht : (t : ℝ) = 0
+      · rw [ht]
+        positivity
+      · exact add_pos_of_pos_of_nonneg (lt_of_le_of_ne ht0 (Ne.symm ht))
+          (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+    exact_mod_cast this.ne'
+  · exact hz0
+
+private def t99A01_attach_circleSide_aux_deformation_raw {r : ℕ}
+    (degree : Fin r → ℕ)
+    (p : unitInterval × t99A01_attach_circleSide_aux_deformation_Pre degree) :
+    Sum Circle (Fin r × APMT99A01.Disk) :=
+  match hx : p.2.1 with
+  | Sum.inl z => Sum.inl z
+  | Sum.inr q => Sum.inr (q.1, ⟨
+      (t99A01_attach_circleSide_aux_deformation_scale p.1 (q.2 : ℂ) : ℂ) * q.2,
+      by
+        rw [Metric.mem_closedBall, dist_zero_right]
+        exact t99A01_attach_circleSide_aux_deformation_scale_norm p.1 _
+          (t99A01_attach_circleSide_aux_deformation_disk_ne degree p.2 q.1 q.2 hx)
+          (by
+            have hq := q.2.property
+            rw [Metric.mem_closedBall, dist_zero_right] at hq
+            exact hq)⟩)
+
+private lemma t99A01_attach_circleSide_aux_deformation_raw_mem {r : ℕ}
+    (degree : Fin r → ℕ)
+    (p : unitInterval × t99A01_attach_circleSide_aux_deformation_Pre degree) :
+    APMT99A01.attachMk degree
+      (t99A01_attach_circleSide_aux_deformation_raw degree p) ∈ APMT99A01.sideA degree := by
+  rcases p with ⟨t, x⟩
+  rcases x with ⟨x, hxmem⟩
+  cases x with
+  | inl z => simpa [t99A01_attach_circleSide_aux_deformation_raw] using
+      t99A01_attach_circleSide_aux_circle_mem degree z
+  | inr q =>
+      intro j h
+      have he := (t99A01_attach_openCover_aux_centre degree j _).mp
+        (Quotient.exact h.symm)
+      simp only [t99A01_attach_circleSide_aux_deformation_raw] at he
+      have hp := Sum.inr.inj he
+      have hz := congrArg (fun w : APMT99A01.Disk ↦ (w : ℂ)) (Prod.mk.inj hp).2
+      change (t99A01_attach_circleSide_aux_deformation_scale t (q.2 : ℂ) : ℂ) * q.2 = 0 at hz
+      exact (t99A01_attach_circleSide_aux_deformation_scale_ne t _
+        (t99A01_attach_circleSide_aux_ne_zero degree q.1 q.2 hxmem)) hz
+
 theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle))
     (hρ₁ : ∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
@@ -436,7 +531,6 @@ theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → �
     (hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z) :
     ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
   sorry
-
 theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
       (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
