@@ -119137,63 +119137,48 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove each chart expression C1; instantiate implicit chart; Sard; calculations; Main.",
+    "Align second common-target chart C1; instantiate implicit chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx; lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "contDiffAt_incidenceDifference_commonTarget",
-      :type "two C1 chart maps give C1 product incidence map",
+    [{:name "contDiffAt_writtenInExtChartAt_of_contMDiffAt_self",
+      :type "manifold C1 gives preferred-chart C1",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["hasStrictFDerivAt_incidenceDifference_commonTarget"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["contDiffAt_incidenceDifference_commonTarget"],
+      :depends-on
+      ["contDiffAt_writtenInExtChartAt_of_contMDiffAt_self"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "83f394ab199638043d9207e8babb50b849ecb101e26646e4477f7b475d054551",
+     "90ed37ade43c25c96cfa612803445f9e0616bf0e73c6c52ed8251264c24eb4f0",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked product-chart C1 assembly.",
+    :reason "Banked manifold chart C1 extraction.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "fixed snd inference"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792046682686-13544-2af3fdbf",
-     :commands
-     ["git diff 46bf^ 46bf -- ConstructionTargets/t00J02Closure.lean"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum archived closure/Main and blueprint"
-      "rg placeholder counts"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit adds a genuine product-coordinate C1 assembly from separate chart-expression C1 inputs (correct fst/snd orientation and common target); it does not assume incidence-map C1. Archived closure and Main compile; hashes match 83f394ab..., 0b3b4888..., afb497a6...; placeholders 0/1; registry 166/166; axioms only propext, Classical.choice, Quot.sound. Milestone is new since prior history; remaining chart C1 inputs, implicit chart, Sard, calculations, Main are listed."},
-    :commit "46bf9b17683018d66e363a12c8651429ee31cc67",
+    :commit "cb13c853f67c0329dfbb134f734b9d94f0d777be",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119201,7 +119186,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119705,7 +119690,8 @@
     :lemma-hasfderivat-incidencedifference-commontarget
     :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse
     :lemma-hasstrictfderivat-incidencedifference-commontarget
-    :lemma-contdiffat-incidencedifference-commontarget],
+    :lemma-contdiffat-incidencedifference-commontarget
+    :lemma-contdiffat-writteninextchartat-of-contmdiffat-self],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121691,6 +121677,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-hasstrictfderivat-incidencedifference-commontarget],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "contDiffAt_writtenInExtChartAt_of_contMDiffAt_self",
+    :type "manifold C1 gives preferred-chart C1"},
+   :lemma
+   {:name "contDiffAt_writtenInExtChartAt_of_contMDiffAt_self",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "manifold C1 gives preferred-chart C1",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-contdiffat-writteninextchartat-of-contmdiffat-self,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
