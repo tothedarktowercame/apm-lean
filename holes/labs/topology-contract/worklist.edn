@@ -119112,6 +119112,18 @@
     [{:cmd "initial compile",
       :exit 1,
       :finding "preserved kernel equality before simp"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792037421166-13178-02677aed",
+     :commands
+     ["git show 97895f... archived closure/Main/blueprint"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholder counts; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds compiled, sorry-free incidence-kernel projection bridge; orientation A u - B v = 0 gives A u = B v and surjective snd yields every direction. Only propext; scope is closure only. Blueprint/Main/closure hashes match; placeholders 0/1; registry 166/166. Residual milestones list tangent-kernel identification, Sard, calculations, Main."},
     :commit "97895f175bed4ad4c5e7d23b174ced99f3acde17",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119132,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119150,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked circle-fiber local injectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence-kernel projection bridge.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119330,7 +119342,10 @@
      :reason "Banked regular-fiber local injectivity."}
     {:job 7,
      :commit "6e517d638f6ec4e1f3ef8372379894f15301b4bd",
-     :reason "Banked circle-fiber local injectivity."}]}
+     :reason "Banked circle-fiber local injectivity."}
+    {:job 8,
+     :commit "97895f175bed4ad4c5e7d23b174ced99f3acde17",
+     :reason "Banked incidence-kernel projection bridge."}]}
   {:consumer :t98A06,
    :stop-count 6,
    :evidence
@@ -121148,7 +121163,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "direction_lifts_of_surjective_incidenceKernel_snd",
@@ -121158,7 +121173,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "regular incidence projection gives direction lifts",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "97895f175bed4ad4c5e7d23b174ced99f3acde17"},
    :id :lemma-direction-lifts-of-surjective-incidencekernel-snd,
    :kind :lemma,
    :depends-on [],
