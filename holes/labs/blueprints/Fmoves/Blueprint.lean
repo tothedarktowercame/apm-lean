@@ -5734,10 +5734,69 @@ theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ
 
 /-- The two pieces cover the disk; for `P ≠ Q` the interior of one misses the other
 (for `P = Q` the piece is the whole disk: blueprint-2, 10-14). -/
+lemma cutPiece_union_disjoint_aux_cross (P Q z : ℂ) :
+    cutCross (P - Q) (z - Q) = -cutCross (Q - P) (z - P) := by
+  simp [cutCross, Complex.mul_im]
+  ring
+
+lemma cutPiece_union_disjoint_aux_interior (P Q z : ℂ) (hPQ : P ≠ Q)
+    (hz : z ∈ interior (cutPiece P Q)) :
+    cutCross (Q - P) (z - P) < 0 := by
+  have hn : 0 < ‖Q - P‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+  rcases Metric.mem_nhds_iff.mp (mem_interior_iff_mem_nhds.mp hz) with
+    ⟨ε, hε, hball⟩
+  let t : ℝ := ε / (2 * ‖Q - P‖)
+  let y : ℂ := z + (t : ℂ) * (Complex.I * (Q - P))
+  have ht : 0 < t := div_pos hε (mul_pos (by norm_num) hn)
+  have hdist : dist y z < ε := by
+    calc
+      dist y z = t * ‖Q - P‖ := by
+        rw [dist_eq_norm,
+          show y - z = (t : ℂ) * (Complex.I * (Q - P)) by simp [y]]
+        simp [norm_mul, abs_of_pos ht]
+      _ = ε / 2 := by
+        dsimp [t]
+        field_simp
+      _ < ε := by linarith
+  have hy := hball (Metric.mem_ball.mpr hdist)
+  have hycross : cutCross (Q - P) (y - P) ≤ 0 := hy.2
+  have hformula : cutCross (Q - P) (y - P) =
+      cutCross (Q - P) (z - P) + t * ‖Q - P‖ ^ 2 := by
+    dsimp [y, cutCross]
+    rw [Complex.sq_norm]
+    simp [Complex.mul_im, Complex.normSq_apply]
+    ring
+  rw [hformula] at hycross
+  have hsquare : 0 < ‖Q - P‖ ^ 2 := sq_pos_of_pos hn
+  nlinarith
+
 theorem cutPiece_union_disjoint (P Q : ℂ) (hPQ : P ≠ Q) :
     cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
       interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
-  sorry
+  constructor
+  · ext z
+    simp only [Set.mem_union, cutPiece, Set.mem_setOf_eq, Metric.mem_closedBall,
+      dist_zero_right]
+    have hc := cutPiece_union_disjoint_aux_cross P Q z
+    constructor
+    · rintro (⟨hz, -⟩ | ⟨hz, -⟩) <;> exact hz
+    · intro hz
+      by_cases h : cutCross (Q - P) (z - P) ≤ 0
+      · exact Or.inl ⟨hz, h⟩
+      · exact Or.inr ⟨hz, by rw [hc]; linarith⟩
+  · ext z
+    rw [Set.mem_empty_iff_false]
+    constructor
+    · intro hz
+      rcases hz with ⟨hz, hpiece⟩
+      have hneg := cutPiece_union_disjoint_aux_interior P Q z hPQ hz
+      rw [cutPiece] at hpiece
+      change ‖z‖ ≤ 1 ∧ cutCross (P - Q) (z - Q) ≤ 0 at hpiece
+      have hc := cutPiece_union_disjoint_aux_cross P Q z
+      rw [hc] at hpiece
+      linarith [hpiece.2]
+    · intro h
+      contradiction
 
 theorem cutCross_exp (α γ φ : ℝ) :
     cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
