@@ -37074,8 +37074,8 @@
    :other-consumers []}
   {:consumer :t96A06,
    :owner-reopen
-   "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (latest completion has :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37152,7 +37152,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: .lake/packages is a real directory, not the required authority symlink; workspace policy forbids Lake verification or transfer/deck-sum implementation pending lifecycle repair.",
+   "Continue this program from its last commit; earlier jobs: :program-history. This is the canonical /home/joe/code/apm-lean checkout: its real .lake/packages directory is the package authority. The symlink requirement applies only to APM frame worktrees. Proceed with the transfer/deck-sum proof of t96A06_rp3_antipodal_H3, then higher-degree vanishing, degree four, invariants, and Main.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
