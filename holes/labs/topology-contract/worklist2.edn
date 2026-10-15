@@ -88372,6 +88372,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 3a9a19270", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792076673133-14236-71c31237",
+     :commands
+     ["git show/diff/check 3a9a19270"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 3a9a19270 adds compiled, sorry-free progress beyond history commit ae3ce56c3. It proves the final flattened index lies in the final run at its final local offset, using the total-prefix endpoint, strict prefix monotonicity/injectivity, and the run boundary length equation. Only t97A01Closure.lean changed; fixture SHA 340a720d610341b9302c8bbd11e8ce3a9742abe79534791d837e480e820ce017 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Terminal-coordinate orientation and Fin.last/run-succ boundary conversion are correct. Nested/flat fold equality, van Kampen, and assembly remain listed."},
     :commit "3a9a19270",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88380,7 +88393,7 @@
      "340a720d610341b9302c8bbd11e8ce3a9742abe79534791d837e480e820ce017"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88398,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse run-offset base coordinate.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse run-offset terminal coordinate.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88582,7 +88595,10 @@
      :reason "Banked flat prefix-factor concatenation."}
     {:job 4,
      :commit "ae3ce56c3",
-     :reason "Banked inverse run-offset base coordinate."}]}
+     :reason "Banked inverse run-offset base coordinate."}
+    {:job 5,
+     :commit "3a9a19270",
+     :reason "Banked inverse run-offset terminal coordinate."}]}
   {:consumer :t94J09,
    :stop-count 6,
    :evidence
@@ -95521,7 +95537,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_last",
@@ -95533,7 +95549,9 @@
     :type
     "final subdivision index maps to final run and final local offset",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "3a9a19270"},
    :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero],
