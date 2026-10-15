@@ -1978,9 +1978,120 @@ constant (`ℤ` discrete), on sphere `n` use `spherePush_continuousOn north`
 `H 0 = id`, endpoint and fixing of the junction from `spherePush_spec`;
 `hresp`: the only nontrivial class in the piece is the junction, fixed for all
 `t`.  About 100 lines. -/
+lemma chainPiece_isSimplyConnected_aux_open_saturated (n : ℤ) :
+    IsOpen (chainPiece n) ∧ Saturated ChainRel (chainPiece n) := by
+  constructor
+  · have hS : IsOpen ({x : S2 | x ≠ south}) := isClosed_singleton.isOpen_compl
+    have hN : IsOpen ({x : S2 | x ≠ north}) := isClosed_singleton.isOpen_compl
+    have hrepr : chainPiece n =
+        ({n} ×ˢ {x : S2 | x ≠ south}) ∪
+          ({n + 1} ×ˢ {x : S2 | x ≠ north}) := by
+      ext z
+      simp [chainPiece]
+    rw [hrepr]
+    exact ((isOpen_discrete ({n} : Set ℤ)).prod hS).union
+      ((isOpen_discrete ({n + 1} : Set ℤ)).prod hN)
+  · intro a b hab
+    cases hab with
+    | link k =>
+      change (((k = n ∧ north ≠ south) ∨
+        (k = n + 1 ∧ north ≠ north)) ↔
+        ((k + 1 = n ∧ south ≠ south) ∨
+          (k + 1 = n + 1 ∧ south ≠ north)))
+      simp [north_ne_south, north_ne_south.symm]
+
 lemma chainPiece_isSimplyConnected (n : ℤ) :
     IsSimplyConnected (qmk ChainRel '' chainPiece n) := by
-  sorry
+  refine isSimplyConnected_image_of_contraction (R := ChainRel) (chainPiece n)
+    (chainPiece_isSimplyConnected_aux_open_saturated n).1
+    (chainPiece_isSimplyConnected_aux_open_saturated n).2 (chainContraction n)
+    ?_ ?_ ?_ (n, north) ?_ ?_ ?_
+  · intro q hq
+    let F : ℤ × (unitInterval × S2) → ℤ × S2 := fun p =>
+      (p.1, if p.1 = n then spherePush north p.2 else spherePush south p.2)
+    let S : Set (ℤ × (unitInterval × S2)) :=
+      {p | (p.1, p.2.2) ∈ chainPiece n}
+    have hF : ContinuousOn F S := by
+      rw [continuousOn_prod_of_discrete_left]
+      intro k
+      by_cases hk : k = n
+      · subst k
+        simp only [F, if_pos rfl]
+        apply ContinuousOn.prodMk continuousOn_const
+        apply (spherePush_continuousOn north).mono
+        intro p hp
+        have hp' : (n, p.2) ∈ chainPiece n := hp
+        change (n = n ∧ p.2 ≠ south) ∨ (n = n + 1 ∧ p.2 ≠ north) at hp'
+        exact ⟨Set.mem_univ _, by
+          rcases hp' with hp' | hp'
+          · simpa [neg_north] using hp'.2
+          · omega⟩
+      · simp only [F, if_neg hk]
+        apply ContinuousOn.prodMk continuousOn_const
+        apply (spherePush_continuousOn south).mono
+        intro p hp
+        have hp' : (k, p.2) ∈ chainPiece n := hp
+        change (k = n ∧ p.2 ≠ south) ∨ (k = n + 1 ∧ p.2 ≠ north) at hp'
+        exact ⟨Set.mem_univ _, by
+          rcases hp' with hp' | hp'
+          · exact (hk hp'.1).elim
+          · simpa [neg_south] using hp'.2⟩
+    have hA : Continuous (fun q : unitInterval × (ℤ × S2) =>
+        (q.2.1, (q.1, q.2.2))) := by fun_prop
+    have hm : MapsTo (fun q : unitInterval × (ℤ × S2) =>
+        (q.2.1, (q.1, q.2.2))) (univ ×ˢ chainPiece n) S := by
+      intro p hp
+      exact hp.2
+    simpa [F, S, chainContraction] using hF.comp hA.continuousOn hm q hq
+  · intro t z hz
+    change (z.1 = n ∧ z.2 ≠ south) ∨ (z.1 = n + 1 ∧ z.2 ≠ north) at hz
+    change ((z.1 = n ∧ (chainContraction n (t, z)).2 ≠ south) ∨
+      (z.1 = n + 1 ∧ (chainContraction n (t, z)).2 ≠ north))
+    rcases hz with (h | h)
+    · rcases h with ⟨hk, hx⟩
+      left
+      refine ⟨hk, ?_⟩
+      simpa [chainContraction, hk, neg_north] using
+        (spherePush_spec north).2.2.2.1 t z.2 (by simpa [neg_north] using hx)
+    · rcases h with ⟨hk, hx⟩
+      right
+      refine ⟨hk, ?_⟩
+      have hkn : z.1 ≠ n := by omega
+      simpa [chainContraction, hkn, neg_south] using
+        (spherePush_spec south).2.2.2.1 t z.2 (by simpa [neg_south] using hx)
+  · intro z hz
+    simp only [chainContraction]
+    split_ifs with h
+    · simp [(spherePush_spec north).1]
+    · simp [(spherePush_spec south).1]
+  · change (n = n ∧ north ≠ south) ∨ (n = n + 1 ∧ north ≠ north)
+    left
+    exact ⟨rfl, north_ne_south⟩
+  · intro z hz
+    change (z.1 = n ∧ z.2 ≠ south) ∨ (z.1 = n + 1 ∧ z.2 ≠ north) at hz
+    rcases hz with (h | h)
+    · rcases h with ⟨rfl, hx⟩
+      simp [chainContraction, (spherePush_spec north).2.1 _ (by simpa [neg_north] using hx)]
+    · rcases h with ⟨hk, hx⟩
+      have hkn : z.1 ≠ n := by omega
+      have hp := (spherePush_spec south).2.1 z.2 (by simpa [neg_south] using hx)
+      simp [chainContraction, hkn, hp]
+      apply Quotient.sound
+      rw [hk]
+      exact Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (ChainRel.link n))
+  · intro t a b ha hab
+    change (a.1 = n ∧ a.2 ≠ south) ∨ (a.1 = n + 1 ∧ a.2 ≠ north) at ha
+    rcases hab with ⟨k⟩
+    have hk : k = n := by
+      rcases ha with h | h
+      · exact h.1
+      · exfalso
+        exact h.2 rfl
+    subst k
+    simp [chainContraction, (spherePush_spec north).2.2.1,
+      (spherePush_spec south).2.2.1]
+    simpa using (Quotient.sound (Relation.EqvGen.rel _ _ (ChainRel.link n)))
 
 /-- **Leaf.**  Chain stars meet only when adjacent, and adjacent stars meet in
 a path-connected set.
