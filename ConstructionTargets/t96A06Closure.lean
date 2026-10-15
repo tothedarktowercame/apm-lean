@@ -2001,6 +2001,17 @@ noncomputable def t96A06_mappedIntegralNormalizedClass :
         (ConstructionTargets.HigherSphereLocalization.normalizedClass
           (k := 1) polynomialSphereRegularPoint))
 
+/-- The transported normalized class is definitionally the inverse absolute
+comparison applied to the native integral generator. -/
+theorem t96A06_mappedIntegralNormalizedClass_eq_comparisonInv :
+    t96A06_mappedIntegralNormalizedClass =
+      (((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).inv.hom
+            (ConstructionTargets.HigherSphereLocalization.normalizedClass
+              (k := 1) polynomialSphereRegularPoint)) := rfl
+
 /-- Extend the transported integral normalized class to rational coefficients
 inside homology of the forgotten rational chain complex. -/
 noncomputable def t96A06_mappedRationalExtensionClass :
@@ -3446,6 +3457,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_localization_naturality
 #print axioms t96A06_integralToRational_localization_naturality_apply
 #print axioms t96A06_mappedIntegralNormalizedClass
+#print axioms t96A06_mappedIntegralNormalizedClass_eq_comparisonInv
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
