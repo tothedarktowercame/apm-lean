@@ -1779,6 +1779,21 @@ theorem pathHomotopicQuotient_concat_eq_of_pieceClass_eq
   exact Path.Homotopic.concat_hcomp point F G
     (fun k => Quotient.eq.mp (h k))
 
+/-- The homotopy class of a nonempty dependent concatenation is the
+composition of its initial concatenation with its final factor.  This is the
+quotient-level recurrence used to regroup subdivision pieces by maximal
+cover-side runs. -/
+theorem pathHomotopicQuotient_concat_succ
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ)) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.trans
+        ⟦Path.concat (point ∘ Fin.castSucc) (fun k ↦ F k.castSucc)⟧
+        ⟦F (Fin.last n)⟧ := by
+  rw [Path.concat_succ]
+  exact Path.Homotopic.Quotient.mk_trans _ _
+
 /-- A nonempty dependent finite concatenation stays in a set whenever each
 of its factors does.  This supplies the range proof for every maximal inner
 block extracted from a subordinate subdivision. -/
