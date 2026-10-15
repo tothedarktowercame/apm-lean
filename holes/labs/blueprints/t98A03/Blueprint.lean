@@ -3195,7 +3195,29 @@ as in the copied `..._aux_toQ0_scale`.  `←` by `apm_t98a03_sphereProj_neg`.
 Estimated 30–60 lines. -/
 lemma apm_t98a03_sphereProj_eq_iff (x y : apm_t98a03_t92_S2) :
     apm_t98a03_sphereProj y = apm_t98a03_sphereProj x ↔ y = x ∨ y = -x := by
-  sorry
+  constructor
+  · intro h
+    obtain ⟨a, ha⟩ := (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).mp h
+    have ha' : (y : EuclideanSpace ℝ (Fin 3)) = a • x := by
+      apply WithLp.ofLp_injective 2
+      simpa using ha.symm
+    have hxnorm : ‖(x : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+      simpa only [Metric.mem_sphere, dist_zero_right] using x.property
+    have hynorm : ‖(y : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+      simpa only [Metric.mem_sphere, dist_zero_right] using y.property
+    have habs : |a| = 1 := by
+      rw [ha', norm_smul, Real.norm_eq_abs, hxnorm, mul_one] at hynorm
+      exact hynorm
+    rcases abs_eq (a := a) (b := 1) (by norm_num) |>.mp habs with ha1 | ha1
+    · left
+      apply Subtype.ext
+      simpa [ha1] using ha'
+    · right
+      apply Subtype.ext
+      simpa [ha1] using ha'
+  · rintro (rfl | rfl)
+    · rfl
+    · exact apm_t98a03_sphereProj_neg x
 
 /-- No point of the sphere is its own antipode. -/
 lemma apm_t98a03_sphere_ne_neg (x : apm_t98a03_t92_S2) : x ≠ -x := by
