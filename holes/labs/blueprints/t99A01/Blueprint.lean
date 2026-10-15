@@ -2005,7 +2005,40 @@ lemma t99A01_low_exact_i₁_j₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_
 /-- **Leaf.** Exactness at `H₁(W)` (`B₁ = 0`). -/
 lemma t99A01_low_exact_j₁_δ₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     LinearMap.range D.j₁ = LinearMap.ker D.δ₁c := by
-  sorry
+  let fst₁ : D.A₁ ⊞ D.B₁ ⟶ D.A₁ := Limits.biprod.fst
+  let snd₁ : D.A₁ ⊞ D.B₁ ⟶ D.B₁ := Limits.biprod.snd
+  let inl₁ : D.A₁ ⟶ D.A₁ ⊞ D.B₁ := Limits.biprod.inl
+  ext y
+  constructor
+  · rintro ⟨x, rfl⟩
+    rw [LinearMap.mem_ker]
+    have hh := LinearMap.mem_ker.mp
+      (D.hJ₁δ₀ ▸ LinearMap.mem_range_self D.J₁.hom
+        (inl₁.hom (D.cA₁.inv.hom x)))
+    simpa [t99A01_LowInput.δ₁c] using congrArg D.cO₀.hom.hom hh
+  · intro hy
+    have hy' : y ∈ LinearMap.ker D.δ₀.hom := by
+      rw [LinearMap.mem_ker] at hy ⊢
+      have hh := congrArg D.cO₀.inv.hom hy
+      simpa [t99A01_LowInput.δ₁c] using hh
+    rw [← D.hJ₁δ₀] at hy'
+    rcases hy' with ⟨z, hz⟩
+    refine ⟨D.cA₁.hom.hom (fst₁.hom z), ?_⟩
+    have hz0 : z = inl₁.hom (D.cA₁.inv.hom
+        (D.cA₁.hom.hom (fst₁.hom z))) := by
+      apply (ModuleCat.biprodIsoProd D.A₁ D.B₁).toLinearEquiv.injective
+      apply Prod.ext
+      · change fst₁.hom z = fst₁.hom (inl₁.hom _)
+        have hcat : inl₁ ≫ fst₁ = 𝟙 D.A₁ := by simp [fst₁, inl₁]
+        have happ := congrArg (fun f => f (fst₁.hom z))
+          (congrArg CategoryTheory.ConcreteCategory.hom hcat)
+        simpa using happ.symm
+      · change snd₁.hom z = snd₁.hom (inl₁.hom _)
+        exact (ModuleCat.subsingleton_of_isZero D.hB₁).elim _ _
+    change D.J₁.hom (inl₁.hom (D.cA₁.inv.hom
+      (D.cA₁.hom.hom (fst₁.hom z)))) = y
+    rw [← hz0]
+    exact hz
 
 /-- **Leaf.** Exactness at `ℤ^r` in degree zero (`hsum`, `hid`). -/
 lemma t99A01_low_exact_δ₁_i₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
