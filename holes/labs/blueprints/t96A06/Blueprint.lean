@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.ProjectiveSpaceTopology
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
+import ConstructionTargets.RP3RationalHomology
 
 /-! # Blueprint for t96A06
 
