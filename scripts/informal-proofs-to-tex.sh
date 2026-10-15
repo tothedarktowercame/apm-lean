@@ -123,6 +123,11 @@ python3 "$REPO_ROOT/scripts/promote-tagged-display.py" --write "$OUT_DIR"/apm-*.
 # in it. Runs after the repair passes so it sees final \texttt spans.
 python3 "$REPO_ROOT/scripts/annotate-lean-links.py" --write "$OUT_DIR"/apm-*.tex
 
+# pdflatex, and any reader that parses the source as LaTeX, needs ASCII: write
+# each remaining Unicode symbol as the command it means (math- or text-mode).
+# Last of the passes over apm-*.tex, so the margin notes above are covered.
+python3 "$REPO_ROOT/scripts/asciify-tex.py" --write "$OUT_DIR"/apm-*.tex
+
 # The Lean proofs, highlighted, into a subdirectory so the repair passes above
 # (which glob apm-*.tex) never see them: a Lean listing is not math prose.
 python3 "$REPO_ROOT/scripts/render-lean-proofs.py" "$ID_LIST" "$OUT_DIR"

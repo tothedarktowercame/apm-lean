@@ -49,7 +49,9 @@ def escape_segment(s: str) -> tuple[str, int]:
             # underscores -- which the mathifier then reads as a subscript with
             # no base. Leave those alone.
             prev = out[-1][-1] if out and out[-1] else ""
-            if prev and (prev.isalnum() or prev in ")]}|"):
+            # Unicode closers count too: "‖f‖_p" was still read as emphasis
+            # (2026-10-15: 77 files) because ‖ is not alphanumeric.
+            if prev and (prev.isalnum() or prev in ")]}|‖⟩⟫′'*"):
                 out.append(r"\_")
                 n += 1
             else:
