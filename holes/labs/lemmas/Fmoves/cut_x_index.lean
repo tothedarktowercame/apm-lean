@@ -8934,7 +8934,44 @@ theorem cut_x_index {Label : Type*} [DecidableEq Label]
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
     (i : Fin (u ++ [x] ++ v ++ [x] ++ t).length) (h : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = x.1) :
     (i : ℕ) = u.length ∨ (i : ℕ) = u.length + 1 + v.length := by
-  sorry
+  by_cases hiu : (i : ℕ) < u.length
+  · have hget : (u ++ [x] ++ v ++ [x] ++ t)[(i : ℕ)] = u[(i : ℕ)] :=
+      cut_transfer_generator_aux_get_u u v t x i hiu
+    have hmem : u[(i : ℕ)] ∈ u := List.getElem_mem _
+    exfalso
+    apply hx
+    simp only [List.map_append, List.mem_append]
+    exact Or.inl (Or.inl (List.mem_map.mpr ⟨_, hmem, by rw [← hget]; exact h⟩))
+  by_cases hip : (i : ℕ) = u.length
+  · exact Or.inl hip
+  by_cases hiv : (i : ℕ) < u.length + 1 + v.length
+  · have hvbound : (i : ℕ) - (u.length + 1) < v.length := by omega
+    have hget : (u ++ [x] ++ v ++ [x] ++ t)[(i : ℕ)] =
+        v[(i : ℕ) - (u.length + 1)] := by
+      rw [List.getElem_append_left (by simp; omega)]
+      rw [List.getElem_append_left (by simp; omega)]
+      rw [List.getElem_append_right (by simp; omega)]
+      congr 1 <;> simp <;> omega
+    have hmem : v[(i : ℕ) - (u.length + 1)] ∈ v := List.getElem_mem _
+    exfalso
+    apply hx
+    simp only [List.map_append, List.mem_append]
+    exact Or.inl (Or.inr (List.mem_map.mpr ⟨_, hmem, by rw [← hget]; exact h⟩))
+  by_cases hiq : (i : ℕ) = u.length + 1 + v.length
+  · exact Or.inr hiq
+  · have htbound : (i : ℕ) - (u.length + 1 + v.length + 1) < t.length := by
+      have hil := i.2
+      simp only [List.length_append, List.length_singleton] at hil
+      omega
+    have hget : (u ++ [x] ++ v ++ [x] ++ t)[(i : ℕ)] =
+        t[(i : ℕ) - (u.length + 1 + v.length + 1)] := by
+      rw [List.getElem_append_right (by simp; omega)]
+      congr 1 <;> simp <;> omega
+    have hmem : t[(i : ℕ) - (u.length + 1 + v.length + 1)] ∈ t := List.getElem_mem _
+    exfalso
+    apply hx
+    simp only [List.map_append, List.mem_append]
+    exact Or.inr (List.mem_map.mpr ⟨_, hmem, by rw [← hget]; exact h⟩)
 -- END SEAT AREA
 
 /-- Old non-`x` sides land in the new word on the side `cutSideMap`, holding the same
