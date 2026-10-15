@@ -3253,7 +3253,38 @@ lemma apm_t98a03_irrQ_eq_iff (r₀ : apm_t98a03_RP2)
       apm_t98a03_sphereProj y = apm_t98a03_sphereProj x ↔ y = x ∨ y = -x)
     (b : apm_t98a03_IrrB) :
     apm_t98a03_irrQ b = r₀ ↔ b ∈ Set.range (apm_t98a03_irrTau r₀) := by
-  sorry
+  rcases b with x | r
+  · change apm_t98a03_sphereProj x = r₀ ↔ _
+    constructor
+    · intro hx
+      have hx' : x = apm_t98a03_unitRep r₀ ∨
+          x = -apm_t98a03_unitRep r₀ :=
+        (hproj (apm_t98a03_unitRep r₀) x).mp
+          (hx.trans (apm_t98a03_sphereProj_unitRep r₀).symm)
+      rcases hx' with hx | hx
+      · refine ⟨1, ?_⟩
+        simpa [apm_t98a03_irrTau, hx]
+      · refine ⟨2, ?_⟩
+        simpa [apm_t98a03_irrTau, hx]
+    · rintro ⟨k, hk⟩
+      fin_cases k
+      · simp [apm_t98a03_irrTau] at hk
+      · simp [apm_t98a03_irrTau] at hk
+        subst x
+        exact apm_t98a03_sphereProj_unitRep r₀
+      · simp [apm_t98a03_irrTau] at hk
+        subst x
+        rw [apm_t98a03_sphereProj_neg,
+          apm_t98a03_sphereProj_unitRep]
+  · change r = r₀ ↔ _
+    constructor
+    · rintro rfl
+      exact ⟨0, by simp [apm_t98a03_irrTau]⟩
+    · rintro ⟨k, hk⟩
+      fin_cases k
+      · simpa [apm_t98a03_irrTau] using hk.symm
+      · simp [apm_t98a03_irrTau] at hk
+      · simp [apm_t98a03_irrTau] at hk
 -- END SEAT AREA
 
 /-- Seat: every fibre of the irregular plane-side map has three points:
