@@ -88331,26 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Extract based surjectivity and reverse kernel inclusion; assemble.",
+    "Normalize subdivided loops; prove surjectivity and reverse kernel inclusion; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2PolygonPseudopushout_arrow_eq_reconstructed",
-      :type "radial reconstruction",
+    [{:name "torusRP2PolygonInner_pathClass_eq",
+      :type "fixed-endpoint inner paths have equal classes",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on
+      ["torusRP2PolygonPseudopushout_arrow_eq_reconstructed"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjectivity; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2PolygonPseudopushout_arrow_eq_reconstructed"
+      ["torusRP2PolygonInner_pathClass_eq"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88363,41 +88364,28 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked radial-cover pseudopushout reconstruction.",
+    :reason
+    "Banked inner-cover contractibility and path-class uniqueness.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 06eff46c1", :exit 0}],
+     {:cmd "git show --check 7cebf660f", :exit 0}],
     :diagnostic-history
-    [{:cmd "pseudopushout draft",
+    [{:cmd "inner-path draft",
       :exit 1,
-      :correction "fixed namespaces/notation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792053961691-13703-f9b8874d",
-     :commands
-     ["git show/diff/check 06eff46c1"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "lake env lean ConstructionTargets/t97A01Closure.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 06eff46c1 adds compiled, sorry-free progress beyond d97eb2896: specialization of the proved two-open fundamental-groupoid pseudopushout to the polygon radial cover and its reconstruction-unit arrow identity. Only t97A01Closure.lean changed; fixture SHA edc3e12712a80a40769337d6fd50e25477251c42638769debe01248bb2354cb6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. The equation has the correct direction by unit naturality and hom-inv cancellation. This is cover-level input, not a facade discharge: based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "06eff46c1",
+      :correction "used simply-connected path homotopy"}],
+    :commit "7cebf660f",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "edc3e12712a80a40769337d6fd50e25477251c42638769debe01248bb2354cb6"},
+     "527b64d7b06c953915cb88686592243a9f95520e44d259220156845f8d5147e3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94136,7 +94124,8 @@
     :lemma-torusrp2diskboundarypath-map-quotient-eq-one
     :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map
     :lemma-torusrp2relator-normalclosure-le-kernel
-    :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed],
+    :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed
+    :lemma-torusrp2polygoninner-pathclass-eq],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94427,4 +94416,22 @@
    :id :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PolygonInner_pathClass_eq",
+    :type "fixed-endpoint inner paths have equal classes"},
+   :lemma
+   {:name "torusRP2PolygonInner_pathClass_eq",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "fixed-endpoint inner paths have equal classes",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2polygoninner-pathclass-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed],
    :other-consumers []}]}
