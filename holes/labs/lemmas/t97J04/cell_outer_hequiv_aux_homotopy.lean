@@ -512,11 +512,269 @@ fixes the boundary circle, so respects `CellRel`).  Continuity on
 compact `I` is a quotient map (`IsQuotientMap.prodMap` / `quotientMap_prod_unitInterval`
 pattern in `PolygonSurfacePiOne`). -/
 -- BEGIN SEAT AREA
+def cell_outer_hequiv_aux_homotopy_aux_raw (γ : C(Circle, Y))
+    (p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ) :
+    Y ⊕ apm_t97J04_Disk :=
+  match hx : p.2.1 with
+  | .inl y => .inl y
+  | .inr z => .inr ⟨
+      (cell_outer_hequiv_aux_scale p.1 (z : ℂ) : ℂ) * z,
+      by
+        rw [Metric.mem_closedBall, dist_zero_right]
+        apply cell_outer_hequiv_aux_scale_norm
+        · have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ p.2.1).mp p.2.2
+          rw [hx] at hm
+          rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+          · cases h
+          · have : w = z := Sum.inr.inj h
+            subst w
+            intro hz
+            change (1 : ℝ) / 3 < ‖(z : ℂ)‖ at hw
+            rw [hz, norm_zero] at hw
+            norm_num at hw
+        · have hz := z.property
+          rw [Metric.mem_closedBall, dist_zero_right] at hz
+          exact hz⟩
+
+lemma cell_outer_hequiv_aux_homotopy_aux_raw_mem (γ : C(Circle, Y))
+    (p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ) :
+    cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ p) ∈ cellOuter γ := by
+  rcases p with ⟨t, ⟨x, hx⟩⟩
+  cases x with
+  | inl y =>
+      exact ⟨.inl y, Or.inl ⟨y, rfl⟩, rfl⟩
+  | inr z =>
+      have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ (.inr z)).mp hx
+      have hz : (1 : ℝ) / 3 < ‖(z : ℂ)‖ := by
+        rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+        · cases h
+        · exact Sum.inr.inj h ▸ hw
+      have hz0 : (z : ℂ) ≠ 0 := by
+        intro h
+        rw [h, norm_zero] at hz
+        norm_num at hz
+      refine ⟨.inr ⟨_, by
+          rw [Metric.mem_closedBall, dist_zero_right]
+          exact cell_outer_hequiv_aux_scale_norm t _ hz0 (by
+            have h := z.property
+            rw [Metric.mem_closedBall, dist_zero_right] at h
+            exact h)⟩,
+        Or.inr ⟨_, ?_, rfl⟩, rfl⟩
+      change (1 : ℝ) / 3 < ‖(cell_outer_hequiv_aux_scale t (z : ℂ) : ℂ) * z‖
+      rw [norm_mul]
+      have hn : 0 < ‖(z : ℂ)‖ := norm_pos_iff.mpr hz0
+      have hs : 0 ≤ cell_outer_hequiv_aux_scale t (z : ℂ) := by
+        dsimp [cell_outer_hequiv_aux_scale]
+        exact add_nonneg t.2.1 (div_nonneg (sub_nonneg.mpr t.2.2) hn.le)
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs]
+      dsimp [cell_outer_hequiv_aux_scale]
+      rw [add_mul, div_mul_cancel₀ _ hn.ne']
+      have hzle : ‖(z : ℂ)‖ ≤ 1 := by
+        have h := z.property
+        rw [Metric.mem_closedBall, dist_zero_right] at h
+        exact h
+      nlinarith [t.2.1, t.2.2]
+
+lemma cell_outer_hequiv_aux_homotopy_aux_raw_continuous (γ : C(Circle, Y)) :
+    Continuous (cell_outer_hequiv_aux_homotopy_aux_raw γ) := by
+  rw [continuous_iff_continuousAt]
+  rintro ⟨t, ⟨x, hx⟩⟩
+  cases x with
+  | inl y =>
+      let getY : (cellMk γ) ⁻¹' cellOuter γ → Y :=
+        fun u => Sum.elim id (fun _ => y) u.1
+      have hget : Continuous getY :=
+        (continuous_sumElim.2 ⟨continuous_id, continuous_const⟩).comp continuous_subtype_val
+      apply (continuous_inl.comp (hget.comp continuous_snd)).continuousAt.congr_of_eventuallyEq
+      filter_upwards [((isOpen_range_inl.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds ⟨y, rfl⟩)] with p hp
+      rcases p with ⟨s, ⟨u, hu⟩⟩
+      rcases hp with ⟨v, hv⟩
+      dsimp at hv ⊢
+      cases u <;> simp_all [cell_outer_hequiv_aux_homotopy_aux_raw, getY]
+  | inr z =>
+      have hzpos : (0 : ℝ) < ‖(z : ℂ)‖ := by
+        have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ (.inr z)).mp hx
+        rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+        · cases h
+        · injection h with hzw
+          subst w
+          change (1 : ℝ) / 3 < ‖(z : ℂ)‖ at hw
+          nlinarith
+      let getZ : (cellMk γ) ⁻¹' cellOuter γ → apm_t97J04_Disk :=
+        fun u => Sum.elim (fun _ => z) id u.1
+      have hget : Continuous getZ :=
+        (continuous_sumElim.2 ⟨continuous_const, continuous_id⟩).comp continuous_subtype_val
+      let diskMap : unitInterval × (cellMk γ) ⁻¹' cellOuter γ → apm_t97J04_Disk :=
+        fun p => ⟨(cell_outer_hequiv_aux_scale p.1 (getZ p.2 : ℂ) : ℂ) * getZ p.2,
+          by
+            rw [Metric.mem_closedBall, dist_zero_right]
+            apply cell_outer_hequiv_aux_scale_norm
+            · cases hv : p.2.1 with
+              | inl a => simpa [getZ, hv] using norm_pos_iff.mp hzpos
+              | inr w =>
+                  have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ p.2.1).mp p.2.2
+                  rcases hm with (⟨_, h⟩ | ⟨v, hv', h⟩)
+                  · rw [hv] at h; cases h
+                  · have hvw : v = w := Sum.inr.inj (h.trans hv)
+                    subst v
+                    simpa [getZ, hv] using
+                      (show (w : ℂ) ≠ 0 by
+                        intro h; change (1 : ℝ) / 3 < ‖(w : ℂ)‖ at hv'
+                        rw [h, norm_zero] at hv'; norm_num at hv')
+            · have h := (getZ p.2).property
+              rw [Metric.mem_closedBall, dist_zero_right] at h
+              exact h⟩
+      have hdisk : Continuous diskMap := by
+        apply Continuous.subtype_mk
+        dsimp [diskMap, cell_outer_hequiv_aux_scale]
+        have hv : Continuous (fun p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ =>
+            ((getZ p.2 : apm_t97J04_Disk) : ℂ)) :=
+          continuous_subtype_val.comp (hget.comp continuous_snd)
+        have hn0 : ∀ p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ,
+            ‖((getZ p.2 : apm_t97J04_Disk) : ℂ)‖ ≠ 0 := by
+          intro p
+          cases hp : p.2.1 with
+          | inl a => simpa [getZ, hp] using (norm_ne_zero_iff.mpr (norm_pos_iff.mp hzpos))
+          | inr w =>
+              have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ p.2.1).mp p.2.2
+              rcases hm with (⟨_, h⟩ | ⟨v, hv', h⟩)
+              · rw [hp] at h; cases h
+              · have hvw : v = w := Sum.inr.inj (h.trans hp)
+                subst v
+                simpa [getZ, hp] using (show ‖(w : ℂ)‖ ≠ 0 by
+                  intro h; change (1 : ℝ) / 3 < ‖(w : ℂ)‖ at hv'
+                  rw [h] at hv'; norm_num at hv')
+        exact (Complex.continuous_ofReal.comp
+          ((continuous_subtype_val.comp continuous_fst).add
+            ((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).div
+              hv.norm hn0))).mul hv
+      apply (continuous_inr.comp hdisk).continuousAt.congr_of_eventuallyEq
+      filter_upwards [((isOpen_range_inr.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds ⟨z, rfl⟩)] with p hp
+      rcases p with ⟨s, ⟨u, hu⟩⟩
+      rcases hp with ⟨w, hw⟩
+      dsimp at hw ⊢
+      cases u <;> simp_all [cell_outer_hequiv_aux_homotopy_aux_raw, diskMap, getZ]
+
+lemma cell_outer_hequiv_aux_homotopy_aux_respects (γ : C(Circle, Y))
+    (t : unitInterval) (x y : (cellMk γ) ⁻¹' cellOuter γ)
+    (hxy : cellMk γ x.1 = cellMk γ y.1) :
+    cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, x)) =
+      cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, y)) := by
+  have hrel : Relation.EqvGen (CellRel γ) x.1 y.1 := Quotient.exact hxy
+  have hgen : ∀ a b, Relation.EqvGen (CellRel γ) a b →
+      ∀ (ha : cellMk γ a ∈ cellOuter γ) (hb : cellMk γ b ∈ cellOuter γ),
+      cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, ⟨a, ha⟩)) =
+        cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (t, ⟨b, hb⟩)) := by
+    intro a b hab
+    induction hab with
+    | rel a b h =>
+        intro ha hb
+        cases h with
+        | boundary z =>
+            apply Quotient.sound
+            have hs : cell_outer_hequiv_aux_scale t (circleToDisk z : ℂ) = 1 := by
+              simp [cell_outer_hequiv_aux_scale, circleToDisk,
+                PolygonSurfaceHomology.circleToPolygonDisk, Circle.norm_coe]
+            simpa [cell_outer_hequiv_aux_homotopy_aux_raw, hs] using
+              (Relation.EqvGen.rel _ _ (CellRel.boundary (γ := γ) z))
+    | refl a => intro ha hb; rfl
+    | symm a b h ih => intro ha hb; exact (ih hb ha).symm
+    | trans a b c hab hbc ih₁ ih₂ =>
+        intro ha hc
+        have hb : cellMk γ b ∈ cellOuter γ := by
+          change Quotient.mk _ b ∈ cellOuter γ
+          rw [← Quotient.sound hab]
+          exact ha
+        exact (ih₁ ha hb).trans (ih₂ hb hc)
+  exact hgen x.1 y.1 hrel x.2 y.2
+
 lemma cell_outer_hequiv_aux_homotopy (γ : C(Circle, Y))
     (hc : Continuous (fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1)) :
     ((cellInclOuter γ).comp ⟨fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1, hc⟩).Homotopic
       (ContinuousMap.id (cellOuter γ)) := by
-  sorry
+  let q : (cellMk γ) ⁻¹' cellOuter γ → cellOuter γ :=
+    fun x => ⟨cellMk γ x.1, x.2⟩
+  have hq0 : Topology.IsQuotientMap (cellMk γ) := ⟨Quotient.mk_surjective, rfl⟩
+  have hq : Topology.IsQuotientMap q :=
+    hq0.restrictPreimage_isOpen (cell_outer_hequiv_aux_continuous_aux_open γ)
+  let s : cellOuter γ → (cellMk γ) ⁻¹' cellOuter γ :=
+    fun x => Classical.choose (hq.surjective x)
+  have hs (x : cellOuter γ) : q (s x) = x := Classical.choose_spec (hq.surjective x)
+  let F : unitInterval × cellOuter γ → cellOuter γ := fun p =>
+    ⟨cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ (p.1, s p.2)),
+      cell_outer_hequiv_aux_homotopy_aux_raw_mem γ (p.1, s p.2)⟩
+  have hFq (p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ) :
+      F (p.1, q p.2) =
+        ⟨cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ p),
+          cell_outer_hequiv_aux_homotopy_aux_raw_mem γ p⟩ := by
+    apply Subtype.ext
+    exact cell_outer_hequiv_aux_homotopy_aux_respects γ p.1 (s (q p.2)) p.2
+      (congrArg Subtype.val (hs (q p.2)))
+  have hF : Continuous F := by
+    apply hq.continuous_lift_prod_right
+    have hcont : Continuous (fun p : unitInterval × (cellMk γ) ⁻¹' cellOuter γ =>
+        (⟨cellMk γ (cell_outer_hequiv_aux_homotopy_aux_raw γ p),
+          cell_outer_hequiv_aux_homotopy_aux_raw_mem γ p⟩ : cellOuter γ)) :=
+      Continuous.subtype_mk ((continuous_cellMk γ).comp
+        (cell_outer_hequiv_aux_homotopy_aux_raw_continuous γ)) _
+    convert hcont using 1
+    funext p
+    exact hFq p
+  refine ⟨ContinuousMap.Homotopy.mk
+    ⟨F, hF⟩ ?_ ?_⟩
+  · intro x
+    apply Subtype.ext
+    change (F (0, x)).1 = _
+    rw [show F (0, x) = F (0, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (0, s x))]
+    generalize he : s x = u
+    rcases u with ⟨u, hu⟩
+    cases u with
+    | inl y =>
+        change cellMk γ (.inl y) = cellIncl γ (cell_outer_hequiv_aux_descend γ x.1)
+        rw [show x = q (s x) by rw [hs x], he]
+        rfl
+    | inr z =>
+        have hz : (z : ℂ) ≠ 0 := by
+          have hm := (cell_outer_hequiv_aux_continuous_aux_mem γ (.inr z)).mp hu
+          rcases hm with (⟨_, h⟩ | ⟨w, hw, h⟩)
+          · cases h
+          · injection h with hzw
+            subst w
+            intro hz
+            change (1 : ℝ) / 3 < ‖(z : ℂ)‖ at hw
+            rw [hz, norm_zero] at hw
+            norm_num at hw
+        let w : Circle := ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+          simp [Submonoid.unitSphere, div_self (norm_ne_zero_iff.mpr hz)]⟩
+        have hb := (Relation.EqvGen.rel _ _ (CellRel.boundary (γ := γ) w)).symm
+        change cellMk γ _ = cellIncl γ (cell_outer_hequiv_aux_descend γ x.1)
+        rw [show x = q (s x) by rw [hs x]]
+        rw [he]
+        change cellMk γ _ = cellMk γ (.inl (γ (cell_outer_hequiv_aux_radial (z : ℂ))))
+        apply Quotient.sound
+        convert hb using 1
+        · apply congrArg Sum.inr
+          apply Subtype.ext
+          simp [cell_outer_hequiv_aux_scale, w, circleToDisk,
+            PolygonSurfaceHomology.circleToPolygonDisk, div_eq_mul_inv, mul_comm]
+        · apply congrArg Sum.inl
+          congr 1
+          apply Subtype.ext
+          simp [cell_outer_hequiv_aux_radial, hz, w]
+  · intro x
+    apply Subtype.ext
+    change (F (1, x)).1 = _
+    rw [show F (1, x) = F (1, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (1, s x))]
+    have hone : cell_outer_hequiv_aux_homotopy_aux_raw γ (1, s x) = (s x).1 := by
+      generalize he : s x = u
+      rcases u with ⟨u, hu⟩
+      cases u <;> simp [cell_outer_hequiv_aux_homotopy_aux_raw,
+        cell_outer_hequiv_aux_scale]
+    exact (congrArg (cellMk γ) hone).trans (congrArg Subtype.val (hs x))
 -- END SEAT AREA
 
 /-- A4. Assembly (sorry-free over A4a, A4b). -/
