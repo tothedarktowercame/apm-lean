@@ -189,4 +189,30 @@ theorem torusRP2OrbitCoordinates_comp_attachingBoundary :
   rw [map_smul, torusRP2OrbitCoordinates_attachingDegree]
   ext <;> simp [torusCrosscapBoundaryLinear, mul_comm]
 
+theorem aabbccAttachingBoundary_injective :
+    Function.Injective (attachingBoundary aabbccPairingData) := by
+  intro x y hxy
+  apply standardN3BoundaryLinear_injective
+  have hc := congrArg aabbccOrbitCoordinates hxy
+  have heq := aabbccOrbitCoordinates_comp_attachingBoundary
+  have hx := LinearMap.congr_fun heq x
+  have hy := LinearMap.congr_fun heq y
+  simpa [LinearMap.comp_apply] using hx.symm.trans (hc.trans hy)
+
+theorem torusRP2AttachingBoundary_injective :
+    Function.Injective (attachingBoundary torusRP2PairingData) := by
+  intro x y hxy
+  apply torusCrosscapBoundaryLinear_injective
+  have hc := congrArg torusRP2OrbitCoordinates hxy
+  have heq := torusRP2OrbitCoordinates_comp_attachingBoundary
+  have hx := LinearMap.congr_fun heq x
+  have hy := LinearMap.congr_fun heq y
+  simpa [LinearMap.comp_apply] using hx.symm.trans (hc.trans hy)
+
+theorem aabbccBoundaryKernel_eq_bot : BoundaryKernel aabbccPairingData = ⊥ :=
+  LinearMap.ker_eq_bot.mpr aabbccAttachingBoundary_injective
+
+theorem torusRP2BoundaryKernel_eq_bot : BoundaryKernel torusRP2PairingData = ⊥ :=
+  LinearMap.ker_eq_bot.mpr torusRP2AttachingBoundary_injective
+
 end ConstructionTargets.t97A01Closure
