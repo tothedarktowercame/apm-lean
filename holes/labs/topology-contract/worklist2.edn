@@ -88374,6 +88374,19 @@
     [{:cmd "decomposition drafts",
       :exit 1,
       :correction "normalized getElem and dependent Fin value"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792065590003-14005-587511a5",
+     :commands
+     ["git show/diff/check 363a4453a"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 363a4453a adds compiled, sorry-free progress beyond 0b1a5be91. From the actual run-partition flattening and slice representation, it proves every subdivision index has a run and local offset with prefixLength(i)+k=j. Only t97A01Closure.lean changed; fixture SHA d2121b42afa43150b943b2fd62c69b0594d0a01690081d7163d98b4e186818e0 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Slice orientation, dependent Fin bounds, and final index equality are correct. Uniqueness, nested-fold equality, van Kampen, and final assembly remain explicitly listed."},
     :commit "363a4453a73efcfc14a73bf0f0d06643daf557c2",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88395,7 @@
      "d2121b42afa43150b943b2fd62c69b0594d0a01690081d7163d98b4e186818e0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cumulative run-boundary order.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked subdivision run-offset decomposition.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88536,7 +88549,10 @@
      :reason "Banked flattened run-factor indices."}
     {:job 6,
      :commit "0b1a5be91e65f149b950a3ad1b53e11a5bbb1a6c",
-     :reason "Banked cumulative run-boundary order."}]}
+     :reason "Banked cumulative run-boundary order."}
+    {:job 7,
+     :commit "363a4453a73efcfc14a73bf0f0d06643daf557c2",
+     :reason "Banked subdivision run-offset decomposition."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -95004,7 +95020,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionIndex_exists_runOffset",
@@ -95016,7 +95032,9 @@
     :type
     "every subdivision index equals a cumulative run prefix plus local offset",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "363a4453a73efcfc14a73bf0f0d06643daf557c2"},
    :id :lemma-torusrp2-subdivisionindex-exists-runoffset,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunprefixlength-strictmono],
