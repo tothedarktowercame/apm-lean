@@ -12,6 +12,7 @@ import ConstructionTargets.CoefficientSphereAntipodal
 import ConstructionTargets.SphereZeroCoefficients
 import ConstructionTargets.CoefficientCoordinateReflections
 import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.ManifoldFundamentalClass
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -350,6 +351,48 @@ def flipSecondPairSphereHomeomorph : Sphere 3 ≃ₜ Sphere 3 where
   right_inv := flipSecondPairSphere_involutive
   continuous_toFun := flipSecondPairSphere.continuous
   continuous_invFun := flipSecondPairSphere.continuous
+
+theorem flipFirstPairSphere_mapsTo_deletedPoint (p : Sphere 3) :
+    Set.MapsTo flipFirstPairSphere
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint p)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+        (flipFirstPairSphere p)) := by
+  intro q hq
+  change q ≠ p at hq
+  change flipFirstPairSphere q ≠ flipFirstPairSphere p
+  intro h
+  apply hq
+  have hh := congrArg flipFirstPairSphere h
+  simpa [flipFirstPairSphere_involutive] using hh
+
+theorem flipSecondPairSphere_mapsTo_deletedPoint (p : Sphere 3) :
+    Set.MapsTo flipSecondPairSphere
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint p)
+      (ConstructionTargets.LocalHomologyNeighborhoodExcision.deletedPoint
+        (flipSecondPairSphere p)) := by
+  intro q hq
+  change q ≠ p at hq
+  change flipSecondPairSphere q ≠ flipSecondPairSphere p
+  intro h
+  apply hq
+  have hh := congrArg flipSecondPairSphere h
+  simpa [flipSecondPairSphere_involutive] using hh
+
+/-- Naturality transporting global and local integral homology along the first
+pair-sign homeomorphism. -/
+noncomputable def polynomialSphereLift_firstPair_localHomology_naturality
+    (p : Sphere 3) :=
+  ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
+    flipFirstPairSphere p (flipFirstPairSphere p)
+    (flipFirstPairSphere_mapsTo_deletedPoint p) 3
+
+/-- Naturality transporting global and local integral homology along the
+second pair-sign homeomorphism. -/
+noncomputable def polynomialSphereLift_secondPair_localHomology_naturality
+    (p : Sphere 3) :=
+  ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
+    flipSecondPairSphere p (flipSecondPairSphere p)
+    (flipSecondPairSphere_mapsTo_deletedPoint p) 3
 
 theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
     flipFirstPairSphere (flipSecondPairSphere p) =
@@ -2572,6 +2615,10 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipSecondPairSphere_involutive
 #print axioms flipFirstPairSphereHomeomorph
 #print axioms flipSecondPairSphereHomeomorph
+#print axioms flipFirstPairSphere_mapsTo_deletedPoint
+#print axioms flipSecondPairSphere_mapsTo_deletedPoint
+#print axioms polynomialSphereLift_firstPair_localHomology_naturality
+#print axioms polynomialSphereLift_secondPair_localHomology_naturality
 #print axioms flipFirstPairSphere_comm_flipSecondPairSphere
 #print axioms flipFirstPairSphere_flipSecondPairSphere
 #print axioms flipFirstPairSphere_rational_H3
