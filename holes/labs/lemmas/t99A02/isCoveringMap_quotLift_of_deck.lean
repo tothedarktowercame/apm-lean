@@ -486,7 +486,69 @@ lemma isCoveringMap_quotLift_of_deck {X Γ : Type*} [TopologicalSpace X] [Group 
     (hloc : ∀ z : Z, ∃ V : Set Z, IsOpen V ∧ z ∈ V ∧ Saturated R V ∧
       ∀ g : Γ, (∃ v ∈ V, g • v ∈ V) → g = 1) :
     IsCoveringMap (quotLift R F hFR) := by
-  sorry
+  let act (g : Γ) : RelationQuotient R → RelationQuotient R :=
+    Quotient.map (g • ·) (by
+      intro z w hzw
+      induction hzw with
+      | rel z w h => exact hRΓ g z w h
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ =>
+          exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+  letI : MulAction Γ (RelationQuotient R) := {
+    smul := act
+    one_smul q := by
+      induction q using Quotient.inductionOn with
+      | _ z =>
+        apply Quotient.sound
+        simp
+    mul_smul g h q := by
+      induction q using Quotient.inductionOn with
+      | _ z =>
+        apply Quotient.sound
+        simp [mul_smul]
+  }
+  have hact (g : Γ) (z : Z) : g • qmk R z = qmk R (g • z) := rfl
+  letI : ContinuousConstSMul Γ (RelationQuotient R) := {
+    continuous_const_smul g := by
+      rw [continuous_coinduced_dom]
+      simpa only [Function.comp_apply, hact] using
+        (continuous_qmk R).comp (continuous_const_smul g)
+  }
+  have hquot : IsQuotientMap (quotLift R F hFR) := by
+    apply IsQuotientMap.of_comp (continuous_qmk R)
+      (continuous_coinduced_dom.mpr (by simpa [Function.comp_def] using hF.continuous))
+    simpa [Function.comp_def] using hF
+  have hqc : IsQuotientCoveringMap (quotLift R F hFR) Γ := {
+    hquot with
+    continuous_const_smul := continuous_const_smul
+    apply_eq_iff_mem_orbit := by
+      intro q₁ q₂
+      induction q₁ using Quotient.inductionOn with
+      | _ z =>
+        induction q₂ using Quotient.inductionOn with
+        | _ w =>
+          constructor
+          · intro heq
+            obtain ⟨g, hg⟩ := hfib z w heq
+            exact ⟨g, Quotient.sound hg⟩
+          · rintro ⟨g, hg⟩
+            have heq : Relation.EqvGen R (g • w) z := Quotient.exact hg
+            change F z = F w
+            rw [← eqvGen_respects F hFR heq, hFΓ]
+    disjoint := by
+      intro q
+      induction q using Quotient.inductionOn with
+      | _ z =>
+        obtain ⟨V, hVo, hzV, hVs, hV⟩ := hloc z
+        refine ⟨qmk R '' V, (hVs.isOpen_image hVo).mem_nhds ⟨z, hzV, rfl⟩, ?_⟩
+        intro g hg
+        obtain ⟨q, ⟨qv, ⟨v, hvV, rfl⟩, hqv⟩, ⟨w, hwV, rfl⟩⟩ := hg
+        apply hV g
+        refine ⟨v, hvV, ?_⟩
+        exact (hVs.mem_iff (Quotient.exact hqv)).mpr hwV
+  }
+  exact hqc.isCoveringMap
 -- END SEAT AREA
 
 /-- **Leaf (generic: images of contractible saturated opens).**  If `V` is
