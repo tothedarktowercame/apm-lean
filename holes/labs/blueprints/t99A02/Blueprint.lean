@@ -1994,7 +1994,42 @@ lemma chainPiece_inter (n m : ℤ) :
     ((qmk ChainRel '' chainPiece n ∩ qmk ChainRel '' chainPiece m).Nonempty →
       n = m ∨ m = n + 1 ∨ n = m + 1) ∧
     IsPathConnected (qmk ChainRel '' chainPiece n ∩ qmk ChainRel '' chainPiece (n + 1)) := by
-  sorry
+  have hinter (i j : ℤ) :
+      qmk ChainRel '' chainPiece i ∩ qmk ChainRel '' chainPiece j =
+        qmk ChainRel '' (chainPiece i ∩ chainPiece j) :=
+    (chainPiece_open_saturated i).2.image_inter
+  constructor
+  · rw [hinter]
+    rintro ⟨q, ⟨⟨k, x⟩, hkx, rfl⟩⟩
+    rcases hkx with ⟨hi, hj⟩
+    simp only [chainPiece] at hi hj
+    rcases hi with ⟨hki, -⟩ | ⟨hki, -⟩ <;>
+      rcases hj with ⟨hkj, -⟩ | ⟨hkj, -⟩
+    · left; omega
+    · right; right; omega
+    · right; left; omega
+    · left; omega
+  · rw [hinter]
+    have hset : chainPiece n ∩ chainPiece (n + 1) =
+        (fun x : S2 => (n + 1, x)) '' {x : S2 | x ≠ north ∧ x ≠ south} := by
+      ext z
+      rcases z with ⟨k, x⟩
+      simp only [chainPiece, Set.mem_inter_iff, Set.mem_setOf_eq, Set.mem_image]
+      constructor
+      · rintro ⟨hn, hm⟩
+        rcases hn with ⟨hkn, hxS⟩ | ⟨hkn, hxN⟩ <;>
+          rcases hm with ⟨hkm, hyS⟩ | ⟨hkm, hyN⟩
+        · omega
+        · omega
+        · subst k
+          exact ⟨x, ⟨hxN, hyS⟩, rfl⟩
+        · omega
+      · rintro ⟨y, ⟨hyN, hyS⟩, h⟩
+        cases h
+        exact ⟨Or.inr ⟨rfl, hyN⟩, Or.inl ⟨rfl, hyS⟩⟩
+    rw [hset, Set.image_image]
+    exact sphere_compl_poles_isPathConnected.image
+      ((continuous_qmk ChainRel).comp (continuous_const.prodMk continuous_id))
 
 lemma chainPiece_cover : ⋃ n, qmk ChainRel '' chainPiece n = univ := by
   apply eq_univ_of_forall
