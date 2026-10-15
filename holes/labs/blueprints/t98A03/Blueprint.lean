@@ -2580,7 +2580,35 @@ lemma apm_t98a03_glueMap_fiber_inr {J A B A' B' : Type} [TopologicalSpace A]
     Nat.card {e // apm_t98a03_glueMap p q hp hq e =
         apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inr b)} =
       Nat.card {b' // q b' = b} := by
-  sorry
+  let f : {b' // q b' = b} →
+      {e // apm_t98a03_glueMap p q hp hq e =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inr b)} :=
+    fun b' => ⟨apm_t98a03_glueMk σ τ (.inr b'), by
+      rw [apm_t98a03_glueMap_mk]
+      exact congrArg
+        (fun z => apm_t98a03_glueMk (fun _ : Unit => a₀)
+          (fun _ : Unit => b₀) (.inr z)) b'.property⟩
+  refine (Nat.card_congr (Equiv.ofBijective f ⟨?_, ?_⟩)).symm
+  · intro x y hxy
+    apply Subtype.ext
+    have h := (hmkE (.inr x.1) (.inr y.1)).mp
+      (congrArg Subtype.val hxy)
+    simpa [apm_t98a03_GlueEq] using h
+  · rintro ⟨e, he⟩
+    obtain ⟨x, rfl⟩ := apm_t98a03_glueMk_surjective σ τ e
+    cases x with
+    | inl a' =>
+        rw [apm_t98a03_glueMap_mk] at he
+        have h := (hmkX (.inl (p a')) (.inr b)).mp he
+        simp [apm_t98a03_GlueEq] at h
+        exact (hb h.2).elim
+    | inr b' =>
+        rw [apm_t98a03_glueMap_mk] at he
+        have h := (hmkX (.inr (q b')) (.inr b)).mp he
+        have hqb : q b' = b := by
+          simpa [apm_t98a03_GlueEq] using h
+        refine ⟨⟨b', hqb⟩, ?_⟩
+        rfl
 
 /-- Seat (generic): the fibre over the wedge point is the set of glued classes.
 
