@@ -642,6 +642,85 @@ private lemma t99A01_attach_circleSide_aux_deformation_raw_mem {r : ℕ}
       exact (t99A01_attach_circleSide_aux_deformation_scale_ne t _
         (t99A01_attach_circleSide_aux_ne_zero degree q.1 q.2 hxmem)) hz
 
+lemma t99A01_attach_circleSide_aux_deformation_aux_continuous {r : ℕ}
+    (degree : Fin r → ℕ) :
+    Continuous (t99A01_attach_circleSide_aux_deformation_raw degree) := by
+  sorry
+
+lemma t99A01_attach_circleSide_aux_deformation_aux_respects {r : ℕ}
+    (degree : Fin r → ℕ) (t : unitInterval)
+    (x y : t99A01_attach_circleSide_aux_deformation_Pre degree)
+    (hxy : t99A01_attach_circleSide_aux_deformation_q degree x =
+      t99A01_attach_circleSide_aux_deformation_q degree y) :
+    APMT99A01.attachMk degree
+        (t99A01_attach_circleSide_aux_deformation_raw degree (t, x)) =
+      APMT99A01.attachMk degree
+        (t99A01_attach_circleSide_aux_deformation_raw degree (t, y)) := by
+  have hxy' : Relation.EqvGen (APMT99A01.AttachRel degree) x.1 y.1 := by
+    have hh := Quotient.exact (congrArg Subtype.val hxy)
+    change Relation.EqvGen (APMT99A01.AttachRel degree) x.1 y.1 at hh
+    exact hh
+  have hgen : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+      ∀ (ha : a ∈ (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree)
+        (hb : b ∈ (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree),
+      APMT99A01.attachMk degree
+          (t99A01_attach_circleSide_aux_deformation_raw degree
+            (t, ⟨a, ha⟩)) =
+        APMT99A01.attachMk degree
+          (t99A01_attach_circleSide_aux_deformation_raw degree
+            (t, ⟨b, hb⟩)) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab =>
+        intro ha hb
+        cases hab with
+        | boundary i z =>
+          have hn : ‖(APMT99A01.circleInDisk z : ℂ)‖ = 1 := Circle.norm_coe z
+          have hs : t99A01_attach_circleSide_aux_deformation_scale t
+              (APMT99A01.circleInDisk z : ℂ) = 1 := by
+            simp [t99A01_attach_circleSide_aux_deformation_scale, hn]
+          apply Quotient.sound
+          simpa [t99A01_attach_circleSide_aux_deformation_raw, hs] using
+            (Relation.EqvGen.rel
+              _ _
+              (APMT99A01.AttachRel.boundary (degree := degree) i z))
+    | refl a => intro ha hb; rfl
+    | symm a b hab ih => intro ha hb; exact (ih hb ha).symm
+    | trans a b c hab hbc ih₁ ih₂ =>
+        intro ha hc
+        have hb : b ∈ (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree := by
+          have heq : APMT99A01.attachMk degree a = APMT99A01.attachMk degree b :=
+            Quotient.sound hab
+          change APMT99A01.attachMk degree b ∈ APMT99A01.sideA degree
+          change APMT99A01.attachMk degree a ∈ APMT99A01.sideA degree at ha
+          rw [← heq]
+          exact ha
+        exact (ih₁ ha hb).trans (ih₂ hb hc)
+  exact hgen x.1 y.1 hxy' x.2 y.2
+
+/-- **Leaf (descent + endpoints).** Descend `raw` through `unitInterval × q`
+(`Topology.IsQuotientMap.continuous_lift_prod_left/right`; `q` is a quotient map:
+banked `_q_quotient`), landing in `sideA` by `_raw_mem`; endpoints: scale `0` is the
+identity, scale `1` sends `s·w` to the boundary point `w`, whose class is that of
+`inl (w ^ dᵢ)` (`AttachRel.boundary`), matching `ι ∘ ρ` by `hρ₁`, `hρ₂`, `hι`. -/
+lemma t99A01_attach_circleSide_aux_deformation_aux_descend {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle))
+    (hρ₁ : ∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
+      ρ ⟨APMT99A01.circleIncl degree z, h⟩ = z)
+    (hρ₂ : ∀ (i : Fin r) (z : APMT99A01.Disk)
+      (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideA degree),
+      ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i)
+    (ι : C(Circle, APMT99A01.sideA degree))
+    (hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z)
+    (hcont : Continuous (t99A01_attach_circleSide_aux_deformation_raw degree))
+    (hresp : ∀ (t : unitInterval) (x y : t99A01_attach_circleSide_aux_deformation_Pre degree),
+      t99A01_attach_circleSide_aux_deformation_q degree x =
+        t99A01_attach_circleSide_aux_deformation_q degree y →
+      APMT99A01.attachMk degree (t99A01_attach_circleSide_aux_deformation_raw degree (t, x)) =
+        APMT99A01.attachMk degree (t99A01_attach_circleSide_aux_deformation_raw degree (t, y))) :
+    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
+  sorry
+
 theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle))
     (hρ₁ : ∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
@@ -651,8 +730,10 @@ theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → �
       ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i)
     (ι : C(Circle, APMT99A01.sideA degree))
     (hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z) :
-    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
-  sorry
+    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) :=
+  t99A01_attach_circleSide_aux_deformation_aux_descend degree ρ hρ₁ hρ₂ ι hι
+    (t99A01_attach_circleSide_aux_deformation_aux_continuous degree)
+    (fun t x y h => t99A01_attach_circleSide_aux_deformation_aux_respects degree t x y h)
 theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
       (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
@@ -1251,7 +1332,91 @@ theorem t99A01_sigma_chains {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSp
     IsIso (Limits.biproduct.desc fun i : Fin r ↦
       ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
         (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) := by
-  sorry
+  classical
+  let m := fun i : Fin r ↦
+    ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+      (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))
+  let f := Limits.biproduct.desc m
+  change IsIso f
+  letI : ∀ n, IsIso (f.f n) := fun n ↦ by
+    let S := fun i : Fin r ↦
+      (TopCat.toSSet.obj (TopCat.of (Y i))).obj
+        (Opposite.op (SimplexCategory.mk n))
+    let T := (TopCat.toSSet.obj (TopCat.of (Σ j, Y j))).obj
+        (Opposite.op (SimplexCategory.mk n))
+    let q : (Σ i, S i) → T := fun p ↦
+      (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+        C(Y p.1, Σ j, Y j)))).app
+          (Opposite.op (SimplexCategory.mk n)) p.2
+    let e : (Σ i, S i) ≃ T := Equiv.ofBijective q (hsimp n)
+    let u : ∀ i : Fin r,
+        (∐ fun _ : S i ↦ ModuleCat.of ℤ ℤ) ⟶
+          ∐ fun _ : T ↦ ModuleCat.of ℤ ℤ := fun i ↦
+      Limits.Sigma.map' (fun x ↦ q ⟨i, x⟩) (fun _ ↦ 𝟙 _)
+    let g :=
+      (Limits.biproduct.isoCoproduct
+        (fun i : Fin r ↦ ∐ fun _ : S i ↦ ModuleCat.of ℤ ℤ)).hom ≫
+      (Limits.sigmaSigmaIso S
+        (fun i (_ : S i) ↦ ModuleCat.of ℤ ℤ)).hom ≫
+      (Limits.Sigma.whiskerEquiv (C := ModuleCat ℤ)
+        (f := fun _ : (Σ i, S i) ↦ ModuleCat.of ℤ ℤ)
+        (g := fun _ : T ↦ ModuleCat.of ℤ ℤ) e
+        (fun _ ↦ Iso.refl (ModuleCat.of ℤ ℤ))).hom
+    have hg : Limits.biproduct.desc u = g := by
+      apply Limits.biproduct.hom_ext'
+      intro i
+      rw [Limits.biproduct.ι_desc]
+      dsimp only [g]
+      rw [← Category.assoc, Limits.biproduct.isoCoproduct_hom]
+      simp only [Category.assoc, Limits.biproduct.ι_desc_assoc]
+      rw [Limits.sigmaSigmaIso_hom]
+      simp only [Category.assoc, Limits.Sigma.ι_desc_assoc]
+      apply Limits.Sigma.hom_ext
+      intro x
+      dsimp only [u, q]
+      rw [Limits.Sigma.ι_desc_assoc]
+      simp [Limits.Sigma.whiskerEquiv]
+      rfl
+    let E := HomologicalComplex.eval (ModuleCat ℤ) (ComplexShape.down ℕ) n
+    have hu : Limits.biproduct.desc (fun i : Fin r ↦ E.map (m i)) =
+        Limits.biproduct.desc u := by
+      apply Limits.biproduct.hom_ext'
+      intro i
+      dsimp [E, m, u, S, T, q,
+        ConstructionTargets.CoefficientH0.singularPostcomposition,
+        ConstructionTargets.CoefficientH0.SingularChains,
+        AlgebraicTopology.singularChainComplexFunctor,
+        AlgebraicTopology.SSet.singularChainComplexFunctor,
+        AlgebraicTopology.alternatingFaceMapComplex,
+        AlgebraicTopology.AlternatingFaceMapComplex.map,
+        ChainComplex.ofHom]
+    have hf : f.f n = (E.mapBiproduct fun i : Fin r ↦
+        (ConstructionTargets.CoefficientH0.SingularChains ℤ
+          (TopCat.of (Y i)))).hom ≫ g := by
+      change E.map f = _
+      rw [← Limits.biproduct.mapBiproduct_hom_desc]
+      exact congrArg (fun z ↦
+        (E.mapBiproduct fun i : Fin r ↦
+          (ConstructionTargets.CoefficientH0.SingularChains ℤ
+            (TopCat.of (Y i)))).hom ≫ z) (hu.trans hg)
+    have hg_iso : IsIso g := by
+      change IsIso
+        ((Limits.biproduct.isoCoproduct
+          (fun i : Fin r ↦ ∐ fun _ : S i ↦ ModuleCat.of ℤ ℤ)).hom ≫
+        (Limits.sigmaSigmaIso S
+          (fun i (_ : S i) ↦ ModuleCat.of ℤ ℤ)).hom ≫
+        (Limits.Sigma.whiskerEquiv (C := ModuleCat ℤ)
+          (f := fun _ : (Σ i, S i) ↦ ModuleCat.of ℤ ℤ)
+          (g := fun _ : T ↦ ModuleCat.of ℤ ℤ) e
+          (fun _ ↦ Iso.refl (ModuleCat.of ℤ ℤ))).hom)
+      exact IsIso.comp_isIso' inferInstance
+        (IsIso.comp_isIso' inferInstance inferInstance)
+    have hE_iso : IsIso (E.mapBiproduct fun i : Fin r ↦
+        (ConstructionTargets.CoefficientH0.SingularChains ℤ
+          (TopCat.of (Y i)))).hom := inferInstance
+    rw [hf]
+    exact IsIso.comp_isIso' hE_iso hg_iso
+  exact HomologicalComplex.Hom.isIso_of_components f
 
 /-- **Leaf (homology is additive, 20--60 lines).** Pure category theory: the
 homology functor is additive, so preserves finite biproducts
