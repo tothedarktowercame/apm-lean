@@ -55,6 +55,53 @@ than the final genus-two van Kampen equivalence.
 
 ## Remaining lemmas
 
+### B8: fundamental group of a positive finite circle wedge
+
+`FiniteWedge (Fin 0)` is empty in the current quotient representation, so B8
+is deliberately stated only for `Fin (n+1)`.  The based point is the point on
+leg `0`, and `apm_t92J05_circlePositiveClass` is winding number `+1`.  The
+predicate `FiniteWedgeFreeCoordinates` says literally that inserting this
+loop into leg `i` is sent to `FreeGroup.of i`.  The theorem
+`finiteWedge_finSucc_fundamentalGroup_free` is a sorry-free induction assembly.
+
+The five independent leaves are:
+
+- `finiteWedge_finSucc_homeomorph_pointWedge` (60–90 lines): split
+  `Fin ((n+1)+1)` using `finSumFinEquiv`/`Fin.last`, lift the two quotient maps,
+  and use `PointWedgeQuotient.quotientMap`.  Check both `Fin.castSucc` and
+  `Fin.last`; nonemptiness of the old factor is why the index is `(n+1)+1`.
+- `coprodFreeGroupFinSucc_equiv` (30–50 lines): compose
+  `PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum` with `FreeGroup.map`
+  along `finSumFinEquiv` (after `Fin 1 ≃ Unit`).  Prove the old generators go
+  to `castSucc` and the new one to `Fin.last`.
+- `finiteWedge_finSucc_pointWedge_inputs` (80–120 lines): inductively construct
+  `PathConnectedSpace`, `LocPathConnectedSpace`, and an open pointed
+  contractible base neighborhood.  Start from
+  `circleBaseNeighborhood_isOpen`, `circleBase_mem`, and
+  `circleBaseNeighborhood_contraction`; combine neighborhoods with
+  `restrictedOpenHomeomorphWedge` and `wedgePointedContraction`.
+- `finiteWedge_finSucc_fundamentalGroup_step` (100–150 lines): the disjunction
+  makes the rank-one circle base case and the predecessor conclusion explicit
+  hypotheses, so it is independent of every sibling proof.  At `n=0`, use a
+  one-leg collapse homeomorphism,
+  `CircleUniversalCover.circleFundamentalGroupMulEquivInt`, and
+  `multiplicativeIntEquivFreeGroupFinOne`.  At `n=k+1`, use the splitting
+  homeomorphism, `genericPointWedgeLegCoordinatesEquiv` plus
+  `genericPointWedgeLegCoordinates_vanKampen`, then
+  `coprodFreeGroupEquivFreeGroupSum`.  Track the `mapOfEq` basepoint casts;
+  `wedgeCircle_base_eq` fixes their direction.
+- `finiteWedge_reindex_homeomorph` (30–45 lines): quotient-lift `e` and
+  `e.symm`, proving continuity with `continuous_prod_of_discrete_left` and
+  `continuous_wedgeCircle`.  Its positive-rank codomain prevents the empty
+  wedge from being presented as a based space.
+
+The existing genus-two consumer is
+`apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_free`: transport
+the skeleton through `PairingData.skeletonHomeomorphWedge`, reindex the two
+pairing orbits by `orientableOrbitEquiv 2` (then `Fin 2 × Bool ≃ Fin 4`),
+and apply B8 at rank four.  This supplies only the outer free group; the B9
+boundary word remains in the separate `_boundary_word` leaf.
+
 ### Projective-plane leaves (all parallel)
 
 The old 300–500 line boundary is now a sorry-free assembly of these seven
