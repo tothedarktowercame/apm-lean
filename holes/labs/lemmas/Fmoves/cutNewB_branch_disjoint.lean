@@ -7056,7 +7056,154 @@ theorem cutNewB_branch_disjoint {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
       (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
       (∀ φ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) := by
-  sorry
+  have hL : 0 < L := by omega
+  have hLr : (0 : ℝ) < L := by exact_mod_cast hL
+  have halpha {a b : ℕ} (hab : a < b) : cutAlpha L a < cutAlpha L b := by
+    unfold cutAlpha
+    exact (div_lt_div_iff_of_pos_right hLr).2
+      (mul_lt_mul_of_pos_left (by exact_mod_cast hab) Real.two_pi_pos)
+  have halpha_le {a b : ℕ} (hab : a ≤ b) : cutAlpha L a ≤ cutAlpha L b := by
+    rcases hab.eq_or_lt with rfl | hab
+    · rfl
+    · exact (halpha hab).le
+  have hperiod (a : ℕ) : cutAlpha L (a + L) = cutAlpha L a + 2 * Real.pi := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+  have hstep (a : ℕ) : cutAlpha L (a + 1) = cutAlpha L a + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+  have hstepmul (a : ℕ) :
+      (cutAlpha L (a + 1) - cutAlpha L a) * L = 2 * Real.pi := by
+    rw [hstep]
+    field_simp
+    ring
+  have hside {ψ : ℝ}
+      (hψ : ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi)) :
+      cutAlpha L p < cutAlpha L p + cutSB L p q ψ * (2 * Real.pi / L) ∧
+        cutAlpha L p + cutSB L p q ψ * (2 * Real.pi / L) < cutAlpha L (p + 1) := by
+    have hd : 0 < cutAlpha L q - cutAlpha L p := sub_pos.mpr (halpha hpq)
+    have hs : 0 < cutSB L p q ψ ∧ cutSB L p q ψ < 1 := by
+      unfold cutSB
+      constructor
+      · exact div_pos (by linarith [hψ.1]) hd
+      · rw [div_lt_one hd]
+        linarith [hψ.2]
+    have hfac : 0 < 2 * Real.pi / (L : ℝ) := div_pos Real.two_pi_pos hLr
+    rw [hstep p]
+    constructor
+    · nlinarith [mul_pos hs.1 hfac]
+    · nlinarith [mul_lt_mul_of_pos_right hs.2 hfac]
+  constructor
+  · intro φ hφ ψ hψ heq
+    rcases hφ with ⟨hφ0, hφ1⟩
+    rcases hψ with ⟨hψ0, hψ1⟩
+    have hq1 : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+      rw [← hperiod p]
+      exact halpha_le (by omega)
+    have hs0 : 0 ≤ (φ - cutAlpha L q) * L / (2 * Real.pi) := by
+      exact div_nonneg (mul_nonneg (sub_nonneg.mpr hφ0) hLr.le) Real.two_pi_pos.le
+    have hs1 : (φ - cutAlpha L q) * L / (2 * Real.pi) ≤ 1 := by
+      have hinc := hstep q
+      rw [div_le_one Real.two_pi_pos]
+      nlinarith [hstepmul q, mul_le_mul_of_nonneg_right hφ1 hLr.le]
+    have heq' : cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi)) =
+        Complex.exp ((ψ : ℂ) * Complex.I) := by
+      simpa [cutProfileNewB, hφ1, not_le.mpr hψ0, hψ1] using heq
+    have hn : ‖cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi))‖ = 1 := by
+      rw [heq', Complex.norm_exp]
+      simp
+    rcases cutNewB_injective_aux_seam_norm hpq hqL hs0 hs1 hn with hs | hs
+    · have hseam : cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi)) =
+          Complex.exp ((cutAlpha L (p + 1) : ℂ) * Complex.I) := by
+        rw [hs]
+        simp [cutSeam, cutPoint]
+      have hang := cutNewB_injective_aux_exp (hseam.symm.trans heq')
+        (by
+          have hψx : ψ < cutAlpha L (p + 1) + 2 * Real.pi :=
+            by linarith [halpha (by omega : p < p + 1)]
+          linarith)
+        (by
+          have hxψ : cutAlpha L (p + 1) < ψ :=
+            lt_trans (halpha (by omega : p + 1 < q + 1)) hψ0
+          linarith [Real.two_pi_pos])
+      linarith [halpha (by omega : p + 1 < q + 1)]
+    · have hseam : cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi)) =
+          Complex.exp ((cutAlpha L (q + 1) : ℂ) * Complex.I) := by
+        rw [hs]
+        simp [cutSeam, cutPoint]
+      have hang := cutNewB_injective_aux_exp (hseam.symm.trans heq')
+        (by
+          have hψx : ψ < cutAlpha L (q + 1) + 2 * Real.pi :=
+            by linarith [halpha (by omega : p < q + 1)]
+          linarith)
+        (by linarith [hψ0, Real.two_pi_pos])
+      linarith
+  · constructor
+    · intro φ hφ ψ hψ heq
+      rcases hφ with ⟨hφ0, hφ1⟩
+      rcases hψ with ⟨hψ0, hψ1⟩
+      have hq1 : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+        rw [← hperiod p]
+        exact halpha_le (by omega)
+      have hs0 : 0 ≤ (φ - cutAlpha L q) * L / (2 * Real.pi) := by
+        exact div_nonneg (mul_nonneg (sub_nonneg.mpr hφ0) hLr.le) Real.two_pi_pos.le
+      have hs1 : (φ - cutAlpha L q) * L / (2 * Real.pi) ≤ 1 := by
+        rw [div_le_one Real.two_pi_pos]
+        nlinarith [hstepmul q, mul_le_mul_of_nonneg_right hφ1 hLr.le]
+      let θ := cutAlpha L p + cutSB L p q ψ * (2 * Real.pi / L)
+      have hθ := hside ⟨hψ0, hψ1⟩
+      have hθ0 : cutAlpha L p < θ := hθ.1
+      have heq' : cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi)) =
+          Complex.exp ((θ : ℂ) * Complex.I) := by
+        simpa [cutProfileNewB, hφ1, not_le.mpr (lt_of_le_of_lt hq1 hψ0),
+          not_le.mpr hψ0, θ] using heq
+      have hn : ‖cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi))‖ = 1 := by
+        rw [heq', Complex.norm_exp]
+        simp
+      rcases cutNewB_injective_aux_seam_norm hpq hqL hs0 hs1 hn with hs | hs
+      · have hseam : cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi)) =
+            Complex.exp ((cutAlpha L (p + 1) : ℂ) * Complex.I) := by
+          rw [hs]
+          simp [cutSeam, cutPoint]
+        have hang := cutNewB_injective_aux_exp (hseam.symm.trans heq')
+          (by linarith [Real.two_pi_pos, hθ.2,
+            halpha (by omega : p + 1 < q + 1)])
+          (by
+            have hp1per : cutAlpha L (p + 1) < cutAlpha L p + 2 * Real.pi := by
+              rw [← hperiod p]
+              exact halpha (by omega)
+            linarith [hθ.1])
+        exact (ne_of_gt hθ.2) hang
+      · have hseam : cutSeam L p q ((φ - cutAlpha L q) * L / (2 * Real.pi)) =
+            Complex.exp ((cutAlpha L (q + 1) : ℂ) * Complex.I) := by
+          rw [hs]
+          simp [cutSeam, cutPoint]
+        have hang := cutNewB_injective_aux_exp (hseam.symm.trans heq')
+          (by linarith [Real.two_pi_pos, hθ.2,
+            halpha (by omega : p + 1 < q + 1)])
+          (lt_of_le_of_lt (sub_le_sub_right hq1 θ) (by linarith [hθ0]))
+        linarith [hθ.2, halpha (by omega : p + 1 < q + 1)]
+    · intro φ hφ ψ hψ heq
+      rcases hφ with ⟨hφ0, hφ1⟩
+      rcases hψ with ⟨hψ0, hψ1⟩
+      let θ := cutAlpha L p + cutSB L p q ψ * (2 * Real.pi / L)
+      have hθ := hside ⟨hψ0, hψ1⟩
+      have heq' : Complex.exp ((φ : ℂ) * Complex.I) =
+          Complex.exp ((θ : ℂ) * Complex.I) := by
+        have hq1 : cutAlpha L (q + 1) < ψ := by
+          have hq1le : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+            rw [← hperiod p]
+            exact halpha_le (by omega)
+          exact lt_of_le_of_lt hq1le hψ0
+        simpa [cutProfileNewB, not_le.mpr hφ0, hφ1, not_le.mpr hq1,
+          not_le.mpr hψ0, θ] using heq
+      have hang := cutNewB_injective_aux_exp heq'
+        (by linarith [Real.two_pi_pos, hφ0, hθ.2,
+          halpha (by omega : p + 1 < q + 1)])
+        (by linarith [hφ1, hθ.1])
+      linarith [hφ0, hθ.2, halpha (by omega : p + 1 < q + 1)]
 -- END SEAT AREA
 
 theorem cutNewB_injective_of_branches {L p q : ℕ} (hpq : p < q) (hqL : q < L)
