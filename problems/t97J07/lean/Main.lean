@@ -513,6 +513,28 @@ noncomputable def t97J07_cp1_overlapHomeomorphPuncturedAffine :
       0 p.1 p.2] at h
     exact h)
 
+/-- The one-coordinate punctured affine model is the ordinary punctured
+complex line. -/
+noncomputable def t97J07_cp1_puncturedAffineHomeomorphComplex :
+    T97J07CP1PuncturedAffine ≃ₜ {z : ℂ // z ≠ 0} where
+  toFun z := ⟨z.1 ⟨1, by decide⟩, z.2⟩
+  invFun w := ⟨fun _ => w.1, w.2⟩
+  left_inv z := by
+    apply Subtype.ext
+    funext j
+    have hj : j = ⟨1, by decide⟩ := by
+      apply Subtype.ext
+      exact Fin.eq_one_of_ne_zero j.1 j.2
+    subst j
+    rfl
+  right_inv w := rfl
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact (continuous_apply
+      (⟨1, by decide⟩ : {j : Fin 2 // j ≠ (0 : Fin 2)})).comp
+        continuous_subtype_val
+  continuous_invFun := by fun_prop
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -579,6 +601,7 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_affinePatch_higherHomology_isZero
 #print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
 #print axioms t97J07_cp1_overlapHomeomorphPuncturedAffine
+#print axioms t97J07_cp1_puncturedAffineHomeomorphComplex
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
