@@ -1843,6 +1843,44 @@ theorem torusRP2_subdivisionRunGlobalPrefixBlockConcat_class
       torusRP2PairingData.Space)) _ _
     (fun i => torusRP2_subdivisionRunGlobalPrefixBlockPath_class S hx hy i)
 
+/-- The global cumulative-prefix fold, rebased at the literal endpoints of
+the original subordinate subdivision. -/
+noncomputable def torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    Path (S.point 0) (S.point (Fin.last (S.n + 1))) :=
+  (Path.concat
+    (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+      torusRP2PairingData.Space))
+    (torusRP2_subdivisionRunGlobalPrefixBlockPath S hx hy)).cast
+      (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+      (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm
+
+/-- The literal-endpoint prefix fold has exactly the quotient cast of the
+global dependent concatenation. -/
+theorem torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    ⟦torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints S hx hy⟧ =
+      Path.Homotopic.Quotient.cast
+        (⟦Path.concat
+          (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+            torusRP2PairingData.Space))
+          (torusRP2_subdivisionRunGlobalPrefixBlockPath S hx hy)⟧)
+        (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+        (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm :=
+  rfl
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1930,6 +1968,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionOuterRunBoundaryFamily_succ_eq_prefixBlockPoint_last
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockPath_class
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockConcat_class
+#print axioms torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
