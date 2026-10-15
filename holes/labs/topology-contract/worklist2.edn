@@ -88378,6 +88378,17 @@
     [{:cmd "axiom import probe",
       :exit 1,
       :correction "used direct Main check"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792042546471-13364-e0eea4e5",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 53223ee93 by topo-6 changes only scoped Main.lean and adds compiled progress after 5969dfc4a. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 9178c678c3864488bfd64a70ba3f6ff96d60629166d8ec6c08a2fcaefc66a71a matches; registry 166/0; new declarations use only propext, Classical.choice, Quot.sound. The aabbcc homeomorphism composes frozen-to-standard with the inverse pairing-to-standard map. The torus-crosscap relation chain correctly gives frozen EqvGen iff pairing EqvGen, then applies the quotient-topology adapter. Smith reductions/B1 transport and B2 remain listed."},
     :commit "53223ee93",
     :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
@@ -88386,7 +88397,7 @@
      "9178c678c3864488bfd64a70ba3f6ff96d60629166d8ec6c08a2fcaefc66a71a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88404,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal quotient homeomorphism adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient homeomorphisms.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88422,7 +88433,10 @@
      :reason "Banked homology specializations."}
     {:job 3,
      :commit "5969dfc4a",
-     :reason "Banked literal quotient homeomorphism adapter."}]}
+     :reason "Banked literal quotient homeomorphism adapter."}
+    {:job 4,
+     :commit "53223ee93",
+     :reason "Banked quotient homeomorphisms."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93509,7 +93523,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97a01_X_homeomorph_pairingSpace",
@@ -93519,14 +93533,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "aabbcc quotient homeomorphism",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "53223ee93"},
    :id :lemma-apm-t97a01-x-homeomorph-pairingspace,
    :kind :lemma,
    :depends-on [:lemma-quotienthomeomorphofeqvgeniff],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97a01_TorusRP2_homeomorph_pairingSpace",
@@ -93536,7 +93552,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "torus-crosscap quotient homeomorphism",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "53223ee93"},
    :id :lemma-apm-t97a01-torusrp2-homeomorph-pairingspace,
    :kind :lemma,
    :depends-on [:lemma-quotienthomeomorphofeqvgeniff],
