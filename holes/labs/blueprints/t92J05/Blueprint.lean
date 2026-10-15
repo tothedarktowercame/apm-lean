@@ -3006,7 +3006,48 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
       rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_castRefl]
       rfl
     refine ⟨e, ?_⟩
-    sorry
+    have hrange : (FundamentalGroup.map j x).range = Subgroup.zpowers r := by
+      ext z
+      constructor
+      · rintro ⟨b, rfl⟩
+        obtain ⟨n, hn⟩ := hC y t (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x b)
+        have hab : b = a ^ n := by
+          apply hA x
+          rw [map_zpow, ha, hn]
+        rw [hab, map_zpow]
+        exact Subgroup.zpow_mem_zpowers r n
+      · intro hz
+        rw [Subgroup.mem_zpowers_iff] at hz
+        obtain ⟨n, rfl⟩ := hz
+        refine ⟨a ^ n, ?_⟩
+        change FundamentalGroup.map j x (a ^ n) = _
+        rw [map_zpow]
+    have hgr : Subgroup.zpowers g = Subgroup.zpowers r := hg.symm.trans hrange
+    have hr : ¬ IsOfFinOrder r := by
+      intro hfin
+      have hefin : IsOfFinOrder (e r) :=
+        ((Function.Injective.isOfFinOrder_iff (f := e.toMonoidHom) e.injective).mpr hfin)
+      rcases hw with hw | hw
+      · apply hB
+        apply hw.isOfFinOrder
+        simpa [her] using hefin
+      · apply hB
+        apply IsOfFinOrder.of_inv
+        apply hw.isOfFinOrder
+        simpa [her] using hefin
+    rcases hw with hw | hw
+    · apply apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_assembly
+        g r e hr hgr
+      simpa [her] using hw
+    · rcases
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_zpowers_generator
+            hr hgr with hgr' | hgr'
+      · right
+        simpa [hgr', her] using hw
+      · left
+        rw [hgr', map_inv, her]
+        obtain ⟨c, hc⟩ := hw
+        exact ⟨c, by simpa using hc.inv_right⟩
   · sorry
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
