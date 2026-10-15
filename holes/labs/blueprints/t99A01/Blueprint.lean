@@ -689,11 +689,52 @@ theorem t99A01_attachSpace_MVData {r : ℕ} (degree : Fin r → ℕ)
 only common input is an arbitrary `AttachMVData`; hence they can be proved in
 parallel and cannot acquire the MV leaf's `sorryAx`. -/
 
+def t99A01_attachMVData_hZero_aux_map {r : ℕ} :
+    (ℤ × (Fin r → ℤ)) →ₗ[ℤ] ℤ where
+  toFun p := p.1 - ∑ i, p.2 i
+  map_add' p q := by
+    simp only [Prod.fst_add, Prod.snd_add, Pi.add_apply, Finset.sum_add_distrib]
+    ring
+  map_smul' c p := by
+    simp only [smul_eq_mul, Prod.smul_fst, Prod.smul_snd, Pi.smul_apply]
+    rw [← Finset.mul_sum]
+    simp only [RingHom.id_apply]
+    ring
+
 theorem t99A01_attachMVData_hZero {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
     Nonempty (APMT99A01.H 0 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ ℤ) := by
-  sorry
+  let f : (ℤ × (Fin r → ℤ)) →ₗ[ℤ] ℤ :=
+    t99A01_attachMVData_hZero_aux_map
+  have hfker : LinearMap.ker f = LinearMap.range D.i₀ := by
+    ext p
+    constructor
+    · intro hp
+      rw [LinearMap.mem_ker] at hp
+      refine ⟨p.2, ?_⟩
+      rw [D.i₀_eq]
+      apply Prod.ext
+      · change (∑ i, p.2 i) = p.1
+        change p.1 - ∑ i, p.2 i = 0 at hp
+        omega
+      · rfl
+    · rintro ⟨x, rfl⟩
+      rw [LinearMap.mem_ker, D.i₀_eq]
+      simp [f, t99A01_attachMVData_hZero_aux_map]
+  have hexact_f : Function.Exact D.i₀ f := by
+    rw [LinearMap.exact_iff]
+    exact hfker
+  have hf_surj : Function.Surjective f := by
+    intro z
+    refine ⟨(z, 0), ?_⟩
+    simp [f, t99A01_attachMVData_hZero_aux_map]
+  have hexact_j : Function.Exact D.i₀ D.j₀ := by
+    rw [LinearMap.exact_iff]
+    exact D.exact_i₀_j₀.symm
+  let ej := hexact_j.linearEquivOfSurjective D.j₀_surjective
+  let ef := hexact_f.linearEquivOfSurjective hf_surj
+  exact ⟨LinearEquiv.toModuleIso (ej.symm.trans ef)⟩
 
 theorem t99A01_attachMVData_hOne {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
