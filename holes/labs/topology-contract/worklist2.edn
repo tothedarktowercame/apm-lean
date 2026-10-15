@@ -88331,7 +88331,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88379,7 +88379,7 @@
      "403f957d1118ec8b55ae34785c81054aa9fdc277dcb8c91ac3b7c7bb15d34410"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88507,6 +88507,20 @@
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "statement-registry check", :exit 0}
      {:cmd "scans; git check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792051237190-13649-8c29b93e",
+     :commands
+     ["git show/diff/check 56607caa5"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 56607caa5 adds compiled, sorry-free progress beyond blueprint commit 2d4b43869: the standard one-vertex N6 homology specialization, six orbit coordinates, boundary degrees -2, and injectivity/zero H2 kernel. Only t94J09Closure.lean changed; fixture SHA 0b8caa792fc2b7423405996133283b39693e5ac30df9b50430c72cac79454226 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; printed axioms are standard. Orientation is correct: coordinates compose with the attaching boundary as the negative of the +2 Smith map, preserving injectivity. Six-coordinate cokernel, N6 homology transport, and normalization from the frozen two-vertex polygon remain explicitly listed."},
     :commit "56607caa5",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88515,7 +88529,7 @@
      "0b8caa792fc2b7423405996133283b39693e5ac30df9b50430c72cac79454226"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88533,7 +88547,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review required before formalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked standard N6 homology specialization and zero top kernel.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88545,7 +88559,11 @@
    [{:job 1,
      :commit "2d4b43869",
      :reason
-     "Blueprint written; independent review required before formalization."}]}
+     "Blueprint written; independent review required before formalization."}
+    {:job 2,
+     :commit "56607caa5",
+     :reason
+     "Banked standard N6 homology specialization and zero top kernel."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -94219,7 +94237,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94231,7 +94249,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "kernel quotient and centre transport",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id
    :lemma-torusrp2pairingspace-center-fundamentalgroup-of-basedvankampen,
    :kind :lemma,
@@ -94239,7 +94259,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "n6PolygonHomology",
@@ -94249,14 +94269,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "standard N6 foundation specialization",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "56607caa5"},
    :id :lemma-n6polygonhomology,
    :kind :lemma,
    :depends-on [:lemma-polygonquotient-homology],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "n6BoundaryKernel_eq_bot",
@@ -94266,7 +94288,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "standard N6 H2 kernel vanishes",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "56607caa5"},
    :id :lemma-n6boundarykernel-eq-bot,
    :kind :lemma,
    :depends-on [:lemma-n6polygonhomology],
