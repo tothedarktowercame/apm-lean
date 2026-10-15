@@ -87947,6 +87947,20 @@
     [{:cmd "concat-Hurewicz drafts",
       :exit 1,
       :correction "normalized List.map_ofFn"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792025195155-12863-dc1372c1",
+     :commands
+     ["git show/diff-tree 350e17e86"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorem"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 350e17e86 by topo-6 changes only the scoped target; fixture hash ef19ea2f...af65 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Orientation is correct: finite concat first yields the reversed End-product; Hurewicz maps it to a reversed additive list, and commutative List.sum_reverse gives the traversal-order sum. New compiled progress; remaining milestones are applying the sum theorem to signed-edge casts and boundary homotopy, then B7 and B8-B10."},
     :commit "350e17e86",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87955,7 +87969,7 @@
      "ef19ea2ff31bd38080aa541825f010e0ba6ea13d56315d69868fdbf6a9baaf65"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87975,7 +87989,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact finite-concat product order.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Hurewicz finite-concat sum in traversal order.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88271,7 +88285,10 @@
      :reason "Banked endpoint-corrected subdivision path equality."}
     {:job 2,
      :commit "1dea841ec",
-     :reason "Banked exact finite-concat product order."}]}
+     :reason "Banked exact finite-concat product order."}
+    {:job 3,
+     :commit "350e17e86",
+     :reason "Banked Hurewicz finite-concat sum in traversal order."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92543,7 +92560,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "moduleHurewicz_mk_concat_eq_list_sum",
@@ -92555,7 +92572,9 @@
     :type
     "Hurewicz of finite concatenation is the traversal-order sum",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "350e17e86"},
    :id :lemma-modulehurewicz-mk-concat-eq-list-sum,
    :kind :lemma,
    :depends-on
