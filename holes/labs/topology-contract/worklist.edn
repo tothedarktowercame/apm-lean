@@ -86011,7 +86011,7 @@
      "8b85b579989bd59f53eff5991aaa36965b937bb9f0e87e5b88be3c93f989e2cf"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates",
@@ -86028,8 +86028,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t97A01 closed by the blueprint/lemma rounds, lemmas commit c565312cd (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-generic-point-wedge-mv-inclusion-coordinates-1,
+   :superseded-by :blueprint-t97A01,
    :kind :reusable-theorem,
    :fail-count 1,
    :depends-on
@@ -86853,7 +86856,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope ["ConstructionTargets/PolygonEdgeGraphOpenCover.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover/radial-quotient-package",
@@ -86884,7 +86887,10 @@
     ["lake env lean ConstructionTargets/PolygonEdgeGraphOpenCover.lean"
      "lake env lean /tmp/polygon-edge-graph-open-cover-probe.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t97A01 closed by the blueprint/lemma rounds, lemmas commit c565312cd (claude-14 2026-10-15)",
    :id :routes-2026-10-10-polygon-edge-graph-radial-package-1,
+   :superseded-by :blueprint-t97A01,
    :kind :reusable-theorem,
    :fail-count 1,
    :depends-on [],
@@ -86988,7 +86994,7 @@
       "8cfb3f1613cb6a590439bdc01c98e033cb70fbfb69ad5002626225583119b233"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/shared/polygon-edge-graph-open-cover",
    :acceptance
@@ -87003,7 +87009,10 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t97A01 closed by the blueprint/lemma rounds, lemmas commit c565312cd (claude-14 2026-10-15)",
    :id :routes-2026-10-10-polygon-edge-graph-open-cover-shared-2,
+   :superseded-by :blueprint-t97A01,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-boundaries-1
@@ -87379,7 +87388,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"],
    :dag-node
@@ -87410,6 +87419,8 @@
     ["lake env lean ConstructionTargets/GenericPointWedgeMayerVietorisPathConnectedCoordinates.lean"
      "lake env lean /tmp/generic-point-wedge-mv-pathconnected-probe.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t97A01 closed by the blueprint/lemma rounds, lemmas commit c565312cd (claude-14 2026-10-15)",
    :representation
    {:source
     "Literal overlap inclusions and production Mayer-Vietoris arrows for point wedges of path-connected factors",
@@ -87418,6 +87429,7 @@
     "Exact conjugacy from each literal inclusion-induced H0 map to the identity of Z, yielding the signed diagonal and then the codiagonal for the production arrows"},
    :id
    :routes-2026-10-10-generic-point-wedge-h0-pathconnected-naturality-2,
+   :superseded-by :blueprint-t97A01,
    :kind :representation-comparison,
    :fail-count 1,
    :depends-on [],
@@ -87533,7 +87545,7 @@
      :residual
      "Exactly one corrected representation prerequisite remains: the two path-connected H0 naturality squares and their ThreeCircles specialization. The false arbitrary-space H0 claim is not retained."}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-mv-inclusion-coordinates/pathconnected-repair",
@@ -87550,6 +87562,8 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t97A01 closed by the blueprint/lemma rounds, lemmas commit c565312cd (claude-14 2026-10-15)",
    :representation
    {:source
     "The literal overlap inclusions and production Mayer-Vietoris arrows for the generic point-wedge cover with path-connected factors",
@@ -87559,6 +87573,7 @@
     "Exact conjugacy from literal inclusion-induced homology maps to identity coordinates, then from the production intersection and reassembly arrows to the signed diagonal and codiagonal"},
    :id
    :routes-2026-10-10-generic-point-wedge-mv-pathconnected-coordinates-2,
+   :superseded-by :blueprint-t97A01,
    :kind :representation-comparison,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-independent-2

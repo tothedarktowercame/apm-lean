@@ -54626,14 +54626,17 @@
      :status :interface-only},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
     "Compile a placeholder-free inhabitant of RP2PositiveHemisphereCoveringProbe.PositiveHemisphereEvenlyCovered from /tmp/rp2_positive_hemisphere_evenly_covered_contract.lean. For each p, use U = sphereProjection 2 '' positiveHemisphere p; use sphereProjection_preimage_image to split its preimage into the positive and negative hemispheres, and construct the homeomorphism to U times Fin 2 from the banked open-embedding restriction and sphereAntipodal. Prove the projection equation required by IsEvenlyCovered."},
+   :superseded-note
+   "t00J07 closed by the blueprint/lemma rounds, lemmas commit 9ffde49cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-rp2-positive-hemisphere-evenly-covered-topo2-r1,
+   :superseded-by :blueprint-t00J07,
    :kind :reusable-theorem,
    :fail-count 2,
    :depends-on
@@ -54684,14 +54687,17 @@
       :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
       :other-consumers [:t98A03]}}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
     "Compile a placeholder-free inhabitant of RP2SphereProjectionCoveringProbe.SphereProjectionTwoSheetedCovering from /tmp/rp2_sphere_projection_covering_contract.lean. Construct evenly covered neighborhoods from the banked positive-hemisphere local homeomorphism and its antipodal copy; prove the two pieces exhaust each preimage using sphereProjection_eq_iff, and prove every fibre has Nat.card 2. Keep the frozen coinduced topology and sphereProjection 2."},
+   :superseded-note
+   "t00J07 closed by the blueprint/lemma rounds, lemmas commit 9ffde49cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-rp2-sphere-projection-two-sheeted-covering-topo2-r1,
+   :superseded-by :blueprint-t00J07,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
@@ -54744,13 +54750,16 @@
       :depends-on [:routes-2026-09-28-rp-smooth-atlas-topo2-r1],
       :other-consumers [:t98A03]}}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
     "Compile a placeholder-free RP2 covering packet at the frozen coinduced topology: identify sphereProjection as a two-sheeted covering, prove FundamentalGroup RP2 is Multiplicative (ZMod 2) by lift endpoints, and expose the pointed basepoint transport needed by both consumers. Supply t00J07 route step 3's pi1 half and t98A03 route steps 3-4; defer RP2 homology and wedge assembly."},
+   :superseded-note
+   "t00J07 closed by the blueprint/lemma rounds, lemmas commit 9ffde49cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-rp2-double-cover-pi1-two-consumers-topo2-r2,
+   :superseded-by :blueprint-t00J07,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-smooth-atlas-topo2-r1
@@ -88385,7 +88394,7 @@
      "dbce7d0feace67a9edec70c79f2e75ded997d66488184a9510e84d4f357b940e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,9 +88411,12 @@
     ["lake env lean problems/t97A01/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
+   :superseded-note
+   "t97A01 closed by the blueprint/lemma rounds, lemmas commit c565312cd (claude-14 2026-10-15)",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transported three-factor reassociation.",
    :id :program-2026-10-13-close-t97a01,
+   :superseded-by :blueprint-t97A01,
    :kind :final-adapter,
    :campaign-priority 32,
    :fail-count 0,
@@ -89029,7 +89041,7 @@
   {:consumer :t00J07,
    :stop-count 0,
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t00J07/lean/Main.lean"
     "problems/t00J07/status.json"
@@ -89046,9 +89058,12 @@
     ["lake env lean problems/t00J07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J07Closure.blueprint.md"},
+   :superseded-note
+   "t00J07 closed by the blueprint/lemma rounds, lemmas commit 9ffde49cc (claude-14 2026-10-15)",
    :continue-from
    "NEXT JOB: copy holes/labs/blueprints/t00J07/BLUEPRINT.md's plan into ConstructionTargets/t00J07Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
    :id :program-2026-10-13-close-t00j07,
+   :superseded-by :blueprint-t00J07,
    :kind :final-adapter,
    :campaign-priority 35,
    :fail-count 0,
