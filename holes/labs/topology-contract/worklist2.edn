@@ -88376,6 +88376,19 @@
     [{:cmd "strictMono draft",
       :exit 1,
       :correction "exposed beta-reduced inequality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792068077591-14068-5b4fac11",
+     :commands
+     ["git show/diff/check 8573065c0"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 8573065c0 adds compiled, sorry-free progress beyond bede4c254. It proves inverse run-offset coordinates flatten to the original subdivision index and therefore strictly preserve the original Fin order. Only t97A01Closure.lean changed; fixture SHA 2e5ab5c61bf0efabfd50a039f44a94437688020cecf7e0b81e7bdc87a121ca45 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Equality and strict-order orientations are correct, and no lexicographic sigma order is assumed. Ordered nested-concat induction, van Kampen, and final assembly remain explicitly listed."},
     :commit "8573065c0",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "2e5ab5c61bf0efabfd50a039f44a94437688020cecf7e0b81e7bdc87a121ca45"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse run-offset factor transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked ordered inverse run-offset coordinates.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88553,7 +88566,10 @@
      :reason "Banked run-offset factor-family transport."}
     {:job 2,
      :commit "bede4c254",
-     :reason "Banked inverse run-offset factor transport."}]}
+     :reason "Banked inverse run-offset factor transport."}
+    {:job 3,
+     :commit "8573065c0",
+     :reason "Banked ordered inverse run-offset coordinates."}]}
   {:consumer :t94J09,
    :stop-count 5,
    :evidence
@@ -95188,7 +95204,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_strictMono",
@@ -95200,7 +95216,9 @@
     :type
     "inverse run-offset flattening strictly preserves subdivision order",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8573065c0"},
    :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-strictmono,
    :kind :lemma,
    :depends-on
