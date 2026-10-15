@@ -2232,6 +2232,24 @@ lemma cell_H2_of_zero (γ : C(Circle, Y))
 
 /-- A11. In degrees `k ≥ 3` the inclusion is an isomorphism on homology
 (`H_k` and `H_{k-1}` of the overlap and `H_k` of the inner piece vanish). -/
+lemma cell_H_high_aux_circle_zero (n : ℕ) (hn : 2 ≤ n) :
+    Limits.IsZero (H n Circle) := by
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      (TopCat.of Circle) n
+      (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+        n (by omega))
+
+lemma cell_H_high_aux_inner_zero (γ : C(Circle, Y))
+    (h : ContractibleSpace (cellInner γ)) (n : ℕ) (hn : 0 < n) :
+    Limits.IsZero (IntegralMV.HZ n (cellInner γ)) := by
+  letI := h
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      _ n
+      (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        _ n (ne_of_gt hn))
+
 lemma cell_H_high (γ : C(Circle, Y))
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
       cellOuter γ ∪ cellInner γ = Set.univ)
@@ -2241,7 +2259,101 @@ lemma cell_H_high (γ : C(Circle, Y))
     (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
     (k : ℕ) (hk : 3 ≤ k) :
     Function.Bijective (Hmap (cellIncl γ) k).hom := by
-  sorry
+  obtain ⟨eI, -⟩ := hA3
+  obtain ⟨eO, heO⟩ := hA4
+  let iIk := cell_H1_aux_transport_iso eI k
+  let iIp := cell_H1_aux_transport_iso eI (k - 1)
+  let iOk := cell_H1_aux_transport_iso eO k
+  have hzeroIk : Limits.IsZero (IntegralMV.HZ k
+      (cellOuter γ ∩ cellInner γ : Set (Cell γ))) :=
+    (cell_H_high_aux_circle_zero k (by omega)).of_iso iIk
+  have hzeroIp : Limits.IsZero (IntegralMV.HZ (k - 1)
+      (cellOuter γ ∩ cellInner γ : Set (Cell γ))) :=
+    (cell_H_high_aux_circle_zero (k - 1) (by omega)).of_iso iIp
+  have hzeroNk : Limits.IsZero (IntegralMV.HZ k (cellInner γ)) :=
+    cell_H_high_aux_inner_zero γ hA2 k (by omega)
+  obtain ⟨δ, hexI, hexJ, hexδ⟩ :=
+    IntegralMV.integralMayerVietoris (cellOuter γ) (cellInner γ)
+      hA1.1 hA1.2.1 hA1.2.2
+  have hJinj : Function.Injective
+      (IntegralMV.mvJ (cellOuter γ) (cellInner γ) k).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hexI k]
+    apply LinearMap.range_eq_bot.mpr
+    exact congrArg ModuleCat.Hom.hom (hzeroIk.eq_of_src _ 0)
+  have hd : (δ (k - 1)).hom = 0 :=
+    congrArg ModuleCat.Hom.hom (hzeroIp.eq_of_tgt (δ (k - 1)) 0)
+  have hJsurj : Function.Surjective
+      (IntegralMV.mvJ (cellOuter γ) (cellInner γ) k).hom := by
+    have hk' : k - 1 + 1 = k := by omega
+    rw [← hk']
+    rw [← LinearMap.range_eq_top, hexJ (k - 1), hd, LinearMap.ker_zero]
+  have hto : Function.Bijective
+      (IntegralMV.mvToX (cellOuter γ) k).hom := by
+    constructor
+    · intro x y hxy
+      have hj := hJinj (a₁ :=
+        (Limits.biprod.inl : IntegralMV.HZ k (cellOuter γ) ⟶
+          IntegralMV.HZ k (cellOuter γ) ⊞ IntegralMV.HZ k (cellInner γ)).hom x)
+        (a₂ := (Limits.biprod.inl : IntegralMV.HZ k (cellOuter γ) ⟶
+          IntegralMV.HZ k (cellOuter γ) ⊞ IntegralMV.HZ k (cellInner γ)).hom y) (by
+          change (IntegralMV.mvJ (cellOuter γ) (cellInner γ) k).hom
+            ((Limits.biprod.inl : IntegralMV.HZ k (cellOuter γ) ⟶ _).hom x) =
+            (IntegralMV.mvJ (cellOuter γ) (cellInner γ) k).hom
+              ((Limits.biprod.inl : IntegralMV.HZ k (cellOuter γ) ⟶ _).hom y)
+          change ((Limits.biprod.inl ≫ IntegralMV.mvJ
+            (cellOuter γ) (cellInner γ) k).hom x) =
+            ((Limits.biprod.inl ≫ IntegralMV.mvJ
+              (cellOuter γ) (cellInner γ) k).hom y)
+          have hm : Limits.biprod.inl ≫ IntegralMV.mvJ
+              (cellOuter γ) (cellInner γ) k =
+              IntegralMV.mvToX (cellOuter γ) k := by simp [IntegralMV.mvJ]
+          rw [hm]
+          exact hxy)
+      have hp := congrArg
+        (fun q => (Limits.biprod.fst : _ ⟶ IntegralMV.HZ k (cellOuter γ)).hom q) hj
+      change ((Limits.biprod.inl ≫ Limits.biprod.fst :
+        IntegralMV.HZ k (cellOuter γ) ⟶ _).hom x) =
+        ((Limits.biprod.inl ≫ Limits.biprod.fst :
+          IntegralMV.HZ k (cellOuter γ) ⟶ _).hom y) at hp
+      rw [Limits.biprod.inl_fst] at hp
+      exact hp
+    · intro z
+      obtain ⟨q, hq⟩ := hJsurj z
+      refine ⟨(Limits.biprod.fst : _ ⟶ IntegralMV.HZ k (cellOuter γ)).hom q, ?_⟩
+      have hproj : (Limits.biprod.fst :
+          IntegralMV.HZ k (cellOuter γ) ⊞ IntegralMV.HZ k (cellInner γ) ⟶ _) ≫
+          Limits.biprod.inl = 𝟙 _ := by
+        rw [← Limits.biprod.total]
+        rw [hzeroNk.eq_of_tgt
+          (Limits.biprod.snd : _ ⟶ IntegralMV.HZ k (cellInner γ)) 0]
+        simp
+      have hsplit : (Limits.biprod.inl : IntegralMV.HZ k (cellOuter γ) ⟶ _).hom
+          ((Limits.biprod.fst : _ ⟶ IntegralMV.HZ k (cellOuter γ)).hom q) = q := by
+        simpa [ModuleCat.hom_comp] using
+          DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hproj) q
+      have hj : (IntegralMV.mvJ (cellOuter γ) (cellInner γ) k).hom
+          ((Limits.biprod.inl : IntegralMV.HZ k (cellOuter γ) ⟶ _).hom
+            ((Limits.biprod.fst : _ ⟶ IntegralMV.HZ k (cellOuter γ)).hom q)) = z := by
+        rw [hsplit, hq]
+      have hm : Limits.biprod.inl ≫ IntegralMV.mvJ
+          (cellOuter γ) (cellInner γ) k = IntegralMV.mvToX (cellOuter γ) k := by
+        simp [IntegralMV.mvJ]
+      change ((Limits.biprod.inl ≫ IntegralMV.mvJ
+        (cellOuter γ) (cellInner γ) k).hom
+          ((Limits.biprod.fst : _ ⟶ IntegralMV.HZ k (cellOuter γ)).hom q)) = z at hj
+      rw [hm] at hj
+      exact hj
+  have htransport : iOk.inv ≫ IntegralMV.mvToX (cellOuter γ) k =
+      Hmap (cellIncl γ) k := by
+    change Hmap eO.invFun k ≫ IntegralMV.mvToX (cellOuter γ) k = _
+    change Hmap eO.invFun k ≫ Hmap ⟨Subtype.val, continuous_subtype_val⟩ k = _
+    dsimp only [Hmap]
+    rw [← Functor.map_comp, heO]
+    rfl
+  rw [← htransport]
+  exact hto.comp
+    ⟨(ModuleCat.mono_iff_injective iOk.inv).mp inferInstance,
+      (ModuleCat.epi_iff_surjective iOk.inv).mp inferInstance⟩
 
 end AttachCell
 
