@@ -1365,6 +1365,48 @@ theorem polygonBoundaryIntegerLoop_subpath_apply (P : PairingData)
   rw [integerLoop_convexCombo_subdivisionVertex,
     polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath]
 
+/-- The common endpoint of a signed edge is the source of its geometric
+subdivision subpath. -/
+theorem polygonBoundarySignedEdge_source_eq_subdivision (P : PairingData)
+    (i : Fin P.edgeCount) :
+    PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1 =
+      polygonBoundaryIntegerLoopPath P
+        (polygonBoundarySubdivisionVertex P i.castSucc) := by
+  have h := polygonBoundaryIntegerLoop_subpath_apply P i
+    (0 : Set.Icc (0 : ℝ) 1)
+  simpa using h.symm
+
+/-- The common endpoint of a signed edge is the target of its geometric
+subdivision subpath. -/
+theorem polygonBoundarySignedEdge_target_eq_subdivision (P : PairingData)
+    (i : Fin P.edgeCount) :
+    PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1 =
+      polygonBoundaryIntegerLoopPath P
+        (polygonBoundarySubdivisionVertex P i.succ) := by
+  have h := polygonBoundaryIntegerLoop_subpath_apply P i
+    (1 : Set.Icc (0 : ℝ) 1)
+  simpa using h.symm
+
+/-- After the endpoint equalities are made explicit, the `i`th geometric
+subpath is exactly the packaged signed edge as a dependent `Path`. -/
+theorem polygonBoundaryIntegerLoop_subpath_cast (P : PairingData)
+    (i : Fin P.edgeCount) :
+    ((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P i.castSucc)
+      (polygonBoundarySubdivisionVertex P i.succ)).cast
+        (polygonBoundarySignedEdge_source_eq_subdivision P i)
+        (polygonBoundarySignedEdge_target_eq_subdivision P i) =
+      polygonBoundarySignedEdgePath P i := by
+  ext t
+  rw [show (((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P i.castSucc)
+      (polygonBoundarySubdivisionVertex P i.succ)).cast _ _) t =
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ)) t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  exact polygonBoundaryIntegerLoop_subpath_apply P i t
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
