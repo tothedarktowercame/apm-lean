@@ -119066,63 +119066,54 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Build chart inverse theorem (Mathlib TODO); Sard; calculations; Main.",
+    :residual "Apply chart inverse theorem; Sard; calculations; Main.",
     :outcome :stop,
-    :warnings
-    ["Main sorryAx" "unnecessarySimpa; review dirs preserved"],
+    :warnings ["Main sorryAx" "unnecessarySimpa; dirs preserved"],
     :missing-theorems
-    [{:name "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
-      :type
-      "surjective surface derivative gives equivalence-valued HasMFDerivAt",
+    [{:name "hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt",
+      :type "manifold derivative gives chart derivative",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["exists_mfderivEquiv_of_surjective"],
+      :depends-on
+      ["exists_hasMFDerivAt_equiv_of_contMDiff_surjective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_hasMFDerivAt_equiv_of_contMDiff_surjective"
+      ["hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt"
        "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "734432345d2697dbbda4215a851fb451ccf383219018b0e6e987cefec3318a49",
+     "15550548674b41c83964f7a09f4365ea6f60b541a506f6724ddcbe23d80f75f4",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked manifold derivative witness.",
+    :reason "Banked chart derivative.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256sum fixture/Main/closure; placeholder count",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792029466314-12996-a4dabf37",
-     :commands
-     ["git show/diff-tree 2766d583"
-      "archive 2766d583; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit 2766d583 changes only t00J02Closure.lean and adds compiled, sorry-free progress. In the equal finite-dimensional surface model, surjectivity of the continuous linear endomorphism yields injectivity and hence a continuous linear equivalence with the same underlying map. Smoothness then supplies HasMFDerivAt for that exact equivalence-valued derivative; equality orientation and manifold/model boundaries are correct. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; new results use only standard axioms; registry 166/166. The chart inverse theorem, Sard specialization, calculations, and Main remain listed."},
-    :commit "2766d583b68055cb4206e918952cd376a5c78337",
+     {:cmd "hash/count", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 130,
+      :finding "needed univ conversion"}],
+    :commit "27e868e0853d114f772ffc6602624333a48ed719",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119130,7 +119121,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119534,7 +119525,8 @@
     :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector
     :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber
     :lemma-exists-mfderivequiv-of-surjective
-    :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective],
+    :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective
+    :lemma-hasfderivat-writteninextchartat-of-hasmfderivat],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120978,6 +120970,24 @@
    :id :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective,
    :kind :lemma,
    :depends-on [:lemma-exists-mfderivequiv-of-surjective],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt",
+    :type "manifold derivative gives chart derivative"},
+   :lemma
+   {:name "hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "manifold derivative gives chart derivative",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-hasfderivat-writteninextchartat-of-hasmfderivat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
