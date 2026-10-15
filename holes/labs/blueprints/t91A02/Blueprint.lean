@@ -177,7 +177,109 @@ lemma t91A02_b1_quotient_normalClosure_bounds {G : Type*} [Group G]
       ((∃ s ∈ S, ∃ φ : Additive G →+ ℚ, φ (Additive.ofMul s) ≠ 0) →
         t91A02_b1 (G ⧸ Subgroup.normalClosure (S : Set G)) + 1 ≤
           t91A02_b1 G) := by
-  sorry
+  let N : Subgroup G := Subgroup.normalClosure (S : Set G)
+  let ev : (Additive G →+ ℚ) →ₗ[ℚ] (s : S) → ℚ :=
+    { toFun := fun φ s => φ (Additive.ofMul (s : G))
+      map_add' := by intros; ext; simp
+      map_smul' := by intros; ext; simp }
+  let E : (Additive (G ⧸ N) →+ ℚ) ≃ₗ[ℚ] LinearMap.ker ev :=
+    { toFun := fun φ => ⟨φ.comp (MonoidHom.toAdditive
+          (QuotientGroup.mk' N)), by
+        ext s
+        change φ (Additive.ofMul ((QuotientGroup.mk' N) (s : G))) = 0
+        have hq : (QuotientGroup.mk' N) (s : G) = 1 :=
+          (QuotientGroup.eq_one_iff (s : G)).mpr
+            (Subgroup.subset_normalClosure
+              (show (s : G) ∈ (S : Set G) from s.property))
+        rw [hq]
+        exact φ.map_zero⟩
+      invFun := fun φ => MonoidHom.toAdditive
+        (QuotientGroup.lift N (AddMonoidHom.toMultiplicative φ.1) (by
+          apply Subgroup.normalClosure_le_normal
+          intro x hx
+          apply MonoidHom.mem_ker.mpr
+          change Multiplicative.ofAdd (φ.1 (Additive.ofMul x)) = 1
+          change φ.1 (Additive.ofMul x) = 0
+          change ev φ.1 (⟨x, hx⟩ : S) = 0
+          exact congrFun φ.2 ⟨x, hx⟩))
+      left_inv := by
+        intro φ
+        change MonoidHom.toAdditive
+          (QuotientGroup.lift N
+            (AddMonoidHom.toMultiplicative
+              (φ.comp (MonoidHom.toAdditive (QuotientGroup.mk' N)))) _) = φ
+        apply AddMonoidHom.ext
+        intro x
+        change Additive.ofMul
+          ((QuotientGroup.lift N
+            (AddMonoidHom.toMultiplicative
+              (φ.comp (MonoidHom.toAdditive (QuotientGroup.mk' N)))) _)
+              (Additive.toMul x)) = φ x
+        obtain ⟨g, hg⟩ := QuotientGroup.mk'_surjective N (Additive.toMul x)
+        rw [← ofMul_toMul x, ← hg]
+        rfl
+      right_inv := by
+        intro φ
+        apply Subtype.ext
+        change (MonoidHom.toAdditive
+          (QuotientGroup.lift N (AddMonoidHom.toMultiplicative φ.1) _)).comp
+            (MonoidHom.toAdditive (QuotientGroup.mk' N)) = φ.1
+        apply AddMonoidHom.ext
+        intro x
+        rw [← ofMul_toMul x]
+        rfl
+      map_add' := by
+        intros
+        apply Subtype.ext
+        ext
+        simp
+      map_smul' := by
+        intros
+        apply Subtype.ext
+        ext
+        simp }
+  letI : FiniteDimensional ℚ (Additive (G ⧸ N) →+ ℚ) := E.symm.finiteDimensional
+  have hdim : Module.finrank ℚ (LinearMap.range ev) +
+      Module.finrank ℚ (LinearMap.ker ev) = Module.finrank ℚ (Additive G →+ ℚ) :=
+    ev.finrank_range_add_finrank_ker
+  have hrange : Module.finrank ℚ (LinearMap.range ev) ≤ S.card := by
+    calc
+      Module.finrank ℚ (LinearMap.range ev) ≤ Module.finrank ℚ ((s : S) → ℚ) :=
+        Submodule.finrank_le _
+      _ = S.card := by simp [Module.finrank_fin_fun]
+  have hquot : t91A02_b1 (G ⧸ N) = Module.finrank ℚ (LinearMap.ker ev) := by
+    exact E.finrank_eq
+  have hlow : t91A02_b1 G ≤ t91A02_b1 (G ⧸ N) + S.card := by
+    unfold t91A02_b1
+    rw [show Module.finrank ℚ (Additive (G ⧸ N) →+ ℚ) =
+      Module.finrank ℚ (LinearMap.ker ev) from hquot, ← hdim]
+    omega
+  have hupp : t91A02_b1 (G ⧸ N) ≤ t91A02_b1 G := by
+    unfold t91A02_b1
+    rw [show Module.finrank ℚ (Additive (G ⧸ N) →+ ℚ) =
+      Module.finrank ℚ (LinearMap.ker ev) from hquot, ← hdim]
+    omega
+  refine ⟨?_, ?_, ?_⟩
+  · simpa [N] using hlow
+  · simpa [N] using hupp
+  · rintro ⟨s, hs, φ, hφ⟩
+    have hevne : ev φ ≠ 0 := by
+      intro h
+      have := congrFun h (⟨s, hs⟩ : S)
+      exact hφ (by simpa [ev] using this)
+    have hrne : LinearMap.range ev ≠ ⊥ := by
+      intro h
+      have : ev φ ∈ (⊥ : Submodule ℚ ((s : S) → ℚ)) := by
+        rw [← h]
+        exact LinearMap.mem_range_self ev φ
+      exact hevne (by simpa using this)
+    have hone : 1 ≤ Module.finrank ℚ (LinearMap.range ev) :=
+      Submodule.one_le_finrank_iff.mpr hrne
+    unfold t91A02_b1
+    rw [show Module.finrank ℚ (Additive (G ⧸ Subgroup.normalClosure (S : Set G)) →+ ℚ) =
+        Module.finrank ℚ (LinearMap.ker ev) by simpa [N] using hquot,
+      ← hdim]
+    omega
 
 /-- **Leaf A3 (generic, Reidemeister–Schreier without rewriting).**  An
 index-`k` subgroup `H` of `G ⧸ ⟪r⟫` is the quotient of its preimage
