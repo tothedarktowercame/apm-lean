@@ -1632,6 +1632,29 @@ theorem t96A06_intToRatCoefficient_signedIncidence (i : ℕ) (z : ℤ) :
   push_cast
   rfl
 
+abbrev t96A06_forgetRatModules : ModuleCat ℚ ⥤ AddCommGrpCat :=
+  forget₂ (ModuleCat ℚ) AddCommGrpCat
+
+/-- Degreewise extension of coefficients on singular chains, constructed from
+the canonical coproduct comparisons and the map `ℤ → ℚ` on every simplex
+summand. -/
+noncomputable def t96A06_integralToRational_singularChainsDegree
+    (X : TopCat) (n : ℕ) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        ((CoefficientH0.SingularChains ℤ X).X n) ⟶
+      t96A06_forgetRatModules.obj
+        ((CoefficientH0.SingularChains ℚ X).X n) :=
+  (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+        ModuleCat.of ℤ ℤ)).hom ≫
+    Limits.Sigma.map
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+      t96A06_intToRatCoefficient) ≫
+    (PreservesCoproduct.iso t96A06_forgetRatModules
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+        ModuleCat.of ℚ ℚ)).inv
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -2898,6 +2921,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
+#print axioms t96A06_integralToRational_singularChainsDegree
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
