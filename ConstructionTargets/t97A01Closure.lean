@@ -215,4 +215,18 @@ theorem aabbccBoundaryKernel_eq_bot : BoundaryKernel aabbccPairingData = ⊥ :=
 theorem torusRP2BoundaryKernel_eq_bot : BoundaryKernel torusRP2PairingData = ⊥ :=
   LinearMap.ker_eq_bot.mpr torusRP2AttachingBoundary_injective
 
+theorem aabbccOrbitCoordinates_map_boundaryRange :
+    Submodule.map aabbccOrbitCoordinates.toLinearMap
+        (LinearMap.range (attachingBoundary aabbccPairingData)) =
+      LinearMap.range standardN3BoundaryLinear := by
+  rw [← LinearMap.range_comp,
+    aabbccOrbitCoordinates_comp_attachingBoundary, LinearMap.range_neg]
+
+theorem torusRP2OrbitCoordinates_map_boundaryRange :
+    Submodule.map torusRP2OrbitCoordinates.toLinearMap
+        (LinearMap.range (attachingBoundary torusRP2PairingData)) =
+      LinearMap.range torusCrosscapBoundaryLinear := by
+  rw [← LinearMap.range_comp,
+    torusRP2OrbitCoordinates_comp_attachingBoundary, LinearMap.range_neg]
+
 end ConstructionTargets.t97A01Closure
