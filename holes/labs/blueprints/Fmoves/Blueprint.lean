@@ -7850,12 +7850,97 @@ def cutRetransfer (L p q e : ℕ) (s : Icc (0 : ℝ) 1) : ℂ :=
   else (edgePoint L e s : ℂ)
 
 /-- When two boundary parametrisations name the same point. -/
+theorem cutEdgePoint_eq_aux_coordinate_cases {L e e' : ℕ} (hL : 2 ≤ L)
+    (he : e < L) (he' : e' < L) {s s' : Icc (0 : ℝ) 1}
+    (h : edgePoint L e s = edgePoint L e' s') :
+    ((e : ℝ) + s.1 = (e' : ℝ) + s'.1) ∨
+      (((e : ℝ) + s.1 = 0) ∧ ((e' : ℝ) + s'.1 = L)) ∨
+      (((e : ℝ) + s.1 = L) ∧ ((e' : ℝ) + s'.1 = 0)) := by
+  have hc := congrArg (fun z : Disk => (z : ℂ)) h
+  change Complex.exp _ = Complex.exp _ at hc
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp hc
+  have him := congrArg Complex.im hk
+  norm_num [Complex.mul_im] at him
+  have hp := Real.pi_pos
+  have hLR : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
+  field_simp at him
+  have heR : (e : ℝ) + 1 ≤ L := by exact_mod_cast (by omega : e + 1 ≤ L)
+  have he'R : (e' : ℝ) + 1 ≤ L := by exact_mod_cast (by omega : e' + 1 ≤ L)
+  have hkloR : (-1 : ℝ) ≤ k := by
+    nlinarith [s.2.1, s.2.2, s'.2.1, s'.2.2]
+  have hkhiR : (k : ℝ) ≤ 1 := by
+    nlinarith [s.2.1, s.2.2, s'.2.1, s'.2.2]
+  have hklo : (-1 : ℤ) ≤ k := by exact_mod_cast hkloR
+  have hkhi : k ≤ (1 : ℤ) := by exact_mod_cast hkhiR
+  rcases (show k = -1 ∨ k = 0 ∨ k = 1 by omega) with rfl | rfl | rfl
+  · right; left
+    norm_num at him
+    constructor <;> nlinarith [s.2.1, s'.2.1, s.2.2, s'.2.2]
+  · left
+    norm_num at him
+    nlinarith
+  · right; right
+    norm_num at him
+    constructor <;> nlinarith [s.2.1, s'.2.1, s.2.2, s'.2.2]
+
 theorem cutEdgePoint_eq {L e e' : ℕ} (hL : 2 ≤ L) (he : e < L) (he' : e' < L)
     {s s' : Icc (0 : ℝ) 1} (h : edgePoint L e s = edgePoint L e' s') :
     (e = e' ∧ s = s') ∨
       (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
       (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L) := by
-  sorry
+  rcases cutEdgePoint_eq_aux_coordinate_cases hL he he' h with hsame | hwrap | hwrap
+  · by_cases heq : e = e'
+    · left
+      refine ⟨heq, Subtype.ext ?_⟩
+      subst e'
+      exact add_left_cancel hsame
+    · by_cases helt : e < e'
+      · right; left
+        have hed : e + 1 ≤ e' := by omega
+        have hedR : (e : ℝ) + 1 ≤ e' := by exact_mod_cast hed
+        have hs : s.1 = 1 := by nlinarith [s.2.2, s'.2.1]
+        have hs' : s'.1 = 0 := by nlinarith [s.2.2, s'.2.1]
+        have headj : e' = e + 1 := by
+          exact_mod_cast (show (e' : ℝ) = e + 1 by nlinarith)
+        refine ⟨hs, hs', ?_⟩
+        rw [headj, Nat.mod_eq_of_lt]
+        omega
+      · right; right
+        have hed : e' + 1 ≤ e := by omega
+        have hedR : (e' : ℝ) + 1 ≤ e := by exact_mod_cast hed
+        have hs' : s'.1 = 1 := by nlinarith [s'.2.2, s.2.1]
+        have hs : s.1 = 0 := by nlinarith [s'.2.2, s.2.1]
+        have headj : e = e' + 1 := by
+          exact_mod_cast (show (e : ℝ) = e' + 1 by nlinarith)
+        refine ⟨hs', hs, ?_⟩
+        rw [headj, Nat.mod_eq_of_lt]
+        omega
+  · right; right
+    rcases hwrap with ⟨hz, hL'⟩
+    have he0 : e = 0 := by
+      have : (e : ℝ) = 0 := by nlinarith [s.2.1]
+      exact_mod_cast this
+    have hs0 : s.1 = 0 := by nlinarith [s.2.1]
+    have hs'1 : s'.1 = 1 := by
+      have he'R : (e' : ℝ) + 1 ≤ L := by exact_mod_cast (by omega : e' + 1 ≤ L)
+      nlinarith [s'.2.2]
+    have he'last : e' + 1 = L := by
+      exact_mod_cast (show (e' : ℝ) + 1 = L by nlinarith)
+    refine ⟨hs'1, hs0, ?_⟩
+    rw [he0, ← he'last, Nat.mod_self]
+  · right; left
+    rcases hwrap with ⟨hL', hz⟩
+    have he'0 : e' = 0 := by
+      have : (e' : ℝ) = 0 := by nlinarith [s'.2.1]
+      exact_mod_cast this
+    have hs'0 : s'.1 = 0 := by nlinarith [s'.2.1]
+    have hs1 : s.1 = 1 := by
+      have heR : (e : ℝ) + 1 ≤ L := by exact_mod_cast (by omega : e + 1 ≤ L)
+      nlinarith [s.2.2]
+    have helast : e + 1 = L := by
+      exact_mod_cast (show (e : ℝ) + 1 = L by nlinarith)
+    refine ⟨hs1, hs'0, ?_⟩
+    rw [he'0, helast, Nat.mod_self]
 
 theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
