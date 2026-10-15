@@ -802,6 +802,15 @@ noncomputable def torusRP2DiskBoundaryPath :
   (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
     continuous_circleToPolygonDisk
 
+theorem torusRP2DiskBoundaryClass_eq_refl :
+    (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath :
+      FundamentalGroup ConstructionTargets.Surfaces.Disk
+        (circleToPolygonDisk (1 : Circle))) =
+      Path.Homotopic.Quotient.refl (circleToPolygonDisk (1 : Circle)) := by
+  letI : ContractibleSpace ConstructionTargets.Surfaces.Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num : (0 : ℝ) ≤ 1)
+  exact Subsingleton.elim _ _
+
 /-- The geometric boundary loop dies after inclusion into the polygon
 quotient.  This is the disk-side input to the forward kernel inclusion in
 based van Kampen. -/
@@ -812,15 +821,7 @@ theorem torusRP2DiskBoundaryPath_map_quotient_eq_one :
           C(ConstructionTargets.Surfaces.Disk, torusRP2PairingData.Space))
         (circleToPolygonDisk (1 : Circle))
         (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath) = 1 := by
-  letI : ContractibleSpace ConstructionTargets.Surfaces.Disk :=
-    Metric.contractibleSpace_closedBall (by norm_num : (0 : ℝ) ≤ 1)
-  have hdisk :
-      (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath :
-        FundamentalGroup ConstructionTargets.Surfaces.Disk
-          (circleToPolygonDisk (1 : Circle))) =
-        Path.Homotopic.Quotient.refl (circleToPolygonDisk (1 : Circle)) :=
-    Subsingleton.elim _ _
-  rw [hdisk]
+  rw [torusRP2DiskBoundaryClass_eq_refl]
   rfl
 
 theorem torusRP2DiskBoundaryBase_eq_skeletonBase :
@@ -832,6 +833,119 @@ theorem torusRP2DiskBoundaryBase_eq_skeletonBase :
     rw [torusRP2SkeletonHomeomorphWedge_base]
     exact polygonBoundaryWedgeLoop_one torusRP2PairingData
   exact congrArg Subtype.val hs
+
+theorem torusRP2PolygonBoundarySkeletonLoop_one :
+    polygonBoundarySkeletonLoop torusRP2PairingData 1 =
+      torusRP2SkeletonBase := by
+  apply torusRP2PairingData.skeletonHomeomorphWedge.injective
+  rw [torusRP2SkeletonHomeomorphWedge_base]
+  exact polygonBoundaryWedgeLoop_one torusRP2PairingData
+
+/-- The literal once-around boundary path in the polygon skeleton, with its
+endpoints transported to the fixed skeleton basepoint. -/
+noncomputable def torusRP2LiteralSkeletonBoundaryPath :
+    Path torusRP2SkeletonBase torusRP2SkeletonBase :=
+  ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (polygonBoundarySkeletonLoop torusRP2PairingData).continuous).cast
+      torusRP2PolygonBoundarySkeletonLoop_one.symm
+      torusRP2PolygonBoundarySkeletonLoop_one.symm
+
+theorem torusRP2LiteralSkeletonBoundaryPath_apply (t : Set.Icc (0 : ℝ) 1) :
+    torusRP2LiteralSkeletonBoundaryPath t =
+      polygonBoundarySkeletonLoop torusRP2PairingData
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1 t) := by
+  exact congrFun (Path.cast_coe _ _ _) t
+
+theorem torusRP2PolygonBoundaryIntegerLoopPath_apply
+    (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundaryIntegerLoopPath torusRP2PairingData t =
+      polygonBoundaryWedgeLoop torusRP2PairingData
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1 t) := by
+  exact congrFun (Path.cast_coe _ _ _) t
+
+/-- Mapping the literal skeleton boundary path to wedge coordinates gives
+the previously normalized boundary path exactly. -/
+theorem torusRP2LiteralSkeletonBoundaryPath_map_wedge :
+    (torusRP2LiteralSkeletonBoundaryPath.map
+      torusRP2PairingData.skeletonHomeomorphWedge.continuous).cast
+        torusRP2SkeletonHomeomorphWedge_base.symm
+        torusRP2SkeletonHomeomorphWedge_base.symm =
+      polygonBoundaryIntegerLoopPath torusRP2PairingData := by
+  ext t
+  rw [congrFun (Path.cast_coe _ _ _) t]
+  change torusRP2PairingData.skeletonHomeomorphWedge
+      (torusRP2LiteralSkeletonBoundaryPath t) = _
+  rw [torusRP2LiteralSkeletonBoundaryPath_apply,
+    torusRP2PolygonBoundaryIntegerLoopPath_apply]
+  rfl
+
+theorem torusRP2SkeletonBoundaryClass_eq_literal :
+    torusRP2SkeletonFundamentalGroupEquivWedge.symm
+        (Path.Homotopic.Quotient.mk
+          (polygonBoundaryIntegerLoopPath torusRP2PairingData)) =
+      Path.Homotopic.Quotient.mk torusRP2LiteralSkeletonBoundaryPath := by
+  apply torusRP2SkeletonFundamentalGroupEquivWedge.injective
+  rw [torusRP2SkeletonFundamentalGroupEquivWedge.apply_symm_apply]
+  change _ = FundamentalGroup.mapOfEq
+      ⟨torusRP2PairingData.skeletonHomeomorphWedge,
+        torusRP2PairingData.skeletonHomeomorphWedge.continuous⟩
+      torusRP2SkeletonHomeomorphWedge_base
+      (Path.Homotopic.Quotient.mk torusRP2LiteralSkeletonBoundaryPath)
+  rw [FundamentalGroup.mapOfEq_apply]
+  exact congrArg Path.Homotopic.Quotient.mk
+    torusRP2LiteralSkeletonBoundaryPath_map_wedge.symm
+
+theorem torusRP2LiteralSkeletonBoundary_map_eq_diskBoundary_map :
+    torusRP2SkeletonToPairingSpacePiOne
+        (Path.Homotopic.Quotient.mk torusRP2LiteralSkeletonBoundaryPath) =
+      FundamentalGroup.mapOfEq
+        (⟨torusRP2PairingData.quotientMap,
+          torusRP2PairingData.continuous_quotientMap⟩ :
+          C(ConstructionTargets.Surfaces.Disk, torusRP2PairingData.Space))
+        torusRP2DiskBoundaryBase_eq_skeletonBase
+        (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath) := by
+  rw [torusRP2SkeletonToPairingSpacePiOne, FundamentalGroup.map_apply,
+    FundamentalGroup.mapOfEq_apply]
+  apply Path.Homotopic.Quotient.eq.mpr
+  convert Path.Homotopic.refl _ using 1
+
+/-- Exact typed identification of the skeleton attaching class with the
+disk boundary class, including all basepoint transports. -/
+theorem torusRP2SkeletonBoundary_map_eq_diskBoundary_map :
+    torusRP2SkeletonToPairingSpacePiOne
+        (torusRP2SkeletonFundamentalGroupEquivWedge.symm
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundaryIntegerLoopPath torusRP2PairingData))) =
+      FundamentalGroup.mapOfEq
+        (⟨torusRP2PairingData.quotientMap,
+          torusRP2PairingData.continuous_quotientMap⟩ :
+          C(ConstructionTargets.Surfaces.Disk, torusRP2PairingData.Space))
+        torusRP2DiskBoundaryBase_eq_skeletonBase
+        (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath) := by
+  rw [torusRP2SkeletonBoundaryClass_eq_literal]
+  exact torusRP2LiteralSkeletonBoundary_map_eq_diskBoundary_map
+
+theorem torusRP2SkeletonBoundary_map_eq_one :
+    torusRP2SkeletonToPairingSpacePiOne
+        (torusRP2SkeletonFundamentalGroupEquivWedge.symm
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundaryIntegerLoopPath torusRP2PairingData))) = 1 := by
+  rw [torusRP2SkeletonBoundary_map_eq_diskBoundary_map,
+    torusRP2DiskBoundaryClass_eq_refl]
+  exact map_one _
+
+theorem torusRP2GeometricBoundary_normalClosure_le_kernel :
+    Subgroup.normalClosure ({
+        torusRP2SkeletonFundamentalGroupEquivWedge.symm
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundaryIntegerLoopPath torusRP2PairingData))} :
+      Set (FundamentalGroup torusRP2PairingData.skeleton
+        torusRP2SkeletonBase)) ≤
+      MonoidHom.ker torusRP2SkeletonToPairingSpacePiOne := by
+  apply Subgroup.normalClosure_le_normal
+  intro g hg
+  rw [Set.mem_singleton_iff.mp hg]
+  exact torusRP2SkeletonBoundary_map_eq_one
 
 /-- Choose the basis change forced by the (globally constant) orientation of
 the normalized circle generator. -/
@@ -850,6 +964,25 @@ noncomputable def torusRP2BoundaryFreeGroupMap :
   torusRP2SkeletonToPairingSpacePiOne.comp
     (torusRP2SkeletonFinFreeGroupMap.comp
       torusRP2BoundaryBasisEquiv.toMonoidHom)
+
+theorem torusRP2Relator_normalClosure_le_kernel :
+    Subgroup.normalClosure ({torusRP2FrozenRelator} :
+      Set (FreeGroup (Fin 3))) ≤
+      MonoidHom.ker torusRP2BoundaryFreeGroupMap := by
+  apply Subgroup.normalClosure_le_normal
+  intro g hg
+  rw [Set.mem_singleton_iff.mp hg]
+  change torusRP2SkeletonToPairingSpacePiOne
+      (torusRP2SkeletonFinFreeGroupMap
+        (torusRP2BoundaryBasisEquiv torusRP2FrozenRelator)) = 1
+  apply torusRP2GeometricBoundary_normalClosure_le_kernel
+  rw [← torusRP2AttachingWord]
+  apply Subgroup.subset_normalClosure
+  by_cases h : circleIntegerLoopOneCoordinate = 1
+  · simp only [torusRP2BoundaryBasisEquiv, h, if_pos]
+    rfl
+  · simp only [torusRP2BoundaryBasisEquiv, h, if_neg]
+    rfl
 
 theorem torusRP2BoundaryFreeGroupMap_surjective
     (h : Function.Surjective torusRP2SkeletonToPairingSpacePiOne) :
@@ -920,6 +1053,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2AttachingWord
 #print axioms torusRP2DiskBoundaryPath_map_quotient_eq_one
 #print axioms torusRP2DiskBoundaryBase_eq_skeletonBase
+#print axioms torusRP2SkeletonBoundary_map_eq_diskBoundary_map
+#print axioms torusRP2Relator_normalClosure_le_kernel
 #print axioms torusRP2BoundaryFreeGroupMap_surjective
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
