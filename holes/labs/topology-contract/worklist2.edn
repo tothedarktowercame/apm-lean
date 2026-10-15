@@ -88331,27 +88331,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Choose/fold boundary paths; prove surjectivity and reverse kernel inclusion; assemble.",
+    "Reassemble folded runs to subdivision; prove surjectivity/reverse kernel; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionRun_exists_outerBoundaryPath",
-      :type "run representative at canonical boundaries",
+    [{:name "torusRP2_subdivisionRunFold_exists_outerPath",
+      :type "folded runs have one outer representative",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on
-      ["torusRP2_subdivisionRun_exists_outerRepresentative"],
+      :depends-on ["torusRP2_subdivisionRun_exists_outerBoundaryPath"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRun_exists_outerBoundaryPath"
+      ["torusRP2_subdivisionRunFold_exists_outerPath"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,36 +88363,28 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked canonically based run paths.",
+    :reason "Banked finite outer run fold.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 8ec378eec", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792058264412-13806-bd4e73c8",
-     :commands
-     ["git show/diff/check 8ec378eec"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+dependency+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 8ec378eec adds compiled, sorry-free progress beyond 5b37f1fd2: every maximal-run outer representative is rebased as a path between consecutive canonical outer-boundary-family entries, with the matching quotient cast. Only t97A01Closure.lean changed; fixture SHA 67d86e335e6e1f6cc78408da8b169381fc6bf5d23609885420c74ae114487291 matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Endpoint casts and subtype erasure are proved pointwise in the correct direction. Choosing and folding all boundary paths, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "8ec378eec",
+     {:cmd "git show --check c588fed2d", :exit 0}],
+    :diagnostic-history
+    [{:cmd "run-fold drafts",
+      :exit 1,
+      :correction
+      "replaced Klein-specific helper; exposed subtype map"}],
+    :commit "c588fed2d",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "67d86e335e6e1f6cc78408da8b169381fc6bf5d23609885420c74ae114487291"},
+     "8d17438790a959259633b93f585c7b2c02cd94b533e3ae75dfc1701702e4221e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94168,7 +94159,8 @@
     :lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq
     :lemma-torusrp2-subdivision-runpartition-boundary-spec
     :lemma-torusrp2-subdivisionrun-exists-outerrepresentative
-    :lemma-torusrp2-subdivisionrun-exists-outerboundarypath],
+    :lemma-torusrp2-subdivisionrun-exists-outerboundarypath
+    :lemma-torusrp2-subdivisionrunfold-exists-outerpath],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94641,4 +94633,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrun-exists-outerrepresentative],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunFold_exists_outerPath",
+    :type "folded runs have one outer representative"},
+   :lemma
+   {:name "torusRP2_subdivisionRunFold_exists_outerPath",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "folded runs have one outer representative",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunfold-exists-outerpath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrun-exists-outerboundarypath],
    :other-consumers []}]}
