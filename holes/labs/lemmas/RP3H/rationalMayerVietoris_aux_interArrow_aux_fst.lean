@@ -168,7 +168,91 @@ lemma rationalMayerVietoris_aux_interArrow_aux_fst
         HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
         (rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.fst =
       mvIncl Set.inter_subset_left n := by
-  sorry
+  rw [show (rationalMayerVietoris_aux_SC U V).f =
+      biprod.lift
+        ((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))
+        (-((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))) by rfl]
+  have htail :
+      ((ConstructionTargets.CoefficientPieceRangeBiproductComparison.pieceHomologyIso
+          ℚ U V n).hom ≫
+          biprod.map (𝟙 _) (rationalMayerVietoris_aux_negIso _).hom) ≫ biprod.fst =
+        biprod.fst ≫
+          (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ U n).hom := by
+    rw [Category.assoc, biprod.map_fst]
+    simp only [Category.comp_id, ← Category.assoc,
+      ConstructionTargets.CoefficientPieceRangeBiproductComparison.pieceHomologyIso_hom_fst]
+  have htail2 := congrArg
+    (fun k => (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ
+      ((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P U : SSet))
+      ((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P V : SSet)) n).hom ≫ k)
+    htail
+  calc
+    _ = (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        (HomologicalComplex.homologyMap
+          (biprod.lift
+            ((rationalMayerVietoris_aux_chains).map
+              (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+                (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))
+            (-((rationalMayerVietoris_aux_chains).map
+              (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+                (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))))) n ≫
+          (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫
+          biprod.fst) ≫
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ U n).hom := by
+      simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_hom,
+        biprod.mapIso_hom, Iso.refl_hom]
+      slice_lhs 3 5 => exact htail2
+      simp only [Category.assoc]
+      rfl
+    _ = (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          ((rationalMayerVietoris_aux_chains).map
+            (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+              (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ U n).hom := by
+      rw [rationalMayerVietoris_aux_lift_fst]
+    _ = _ := by
+      change
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ (U ∩ V) n).inv ≫
+          (ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+            ℚ U V n).hom ≫
+          HomologicalComplex.homologyMap
+            ((rationalMayerVietoris_aux_chains).map
+              (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+                (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+          (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ U n).hom = _
+      rw [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso_hom]
+      have hs :=
+        ConstructionTargets.CoefficientIntersectionRangeNaturality.homology_square_left
+          ℚ U V n
+      slice_lhs 3 4 =>
+        exact hs.symm
+      rw [HomologicalComplex.homologyMap_comp]
+      change
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ (U ∩ V) n).inv ≫
+          (ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+            ℚ U V n).hom ≫
+          ((ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+            ℚ U V n).inv ≫
+            (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+              ℚ (U ∩ V) n).hom) ≫
+          HomologicalComplex.homologyMap
+            ((rationalMayerVietoris_aux_chains).map
+              (TopCat.toSSet.map
+                (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+                  Set.inter_subset_left))) n = _
+      simp [mvIncl, Category.assoc]
+      rfl
 -- END SEAT AREA
 
 lemma rationalMayerVietoris_aux_interArrow_aux_snd
