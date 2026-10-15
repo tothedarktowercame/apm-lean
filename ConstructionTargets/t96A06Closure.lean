@@ -1778,6 +1778,20 @@ theorem polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour :
   rw [polynomialSphereLift_deckLocalContribution_spec.2.2.2.2]
   exact (t96A06_sphere3_endomorphism_eq_smul_id_iff _ 4).symm
 
+/-- The computed signed regular-fiber count is the scalar on rational top
+homology exactly when the canonical global localization equation holds. -/
+theorem signedRegularFiberCount_homologyScalar_iff_globalLocalization :
+    HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+        (polynomialSphereLift_signedRegularFiberCertificate.signedCount : ℚ) • 𝟙 _ ↔
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i := by
+  rw [polynomialSphereLift_signedRegularFiberCount_eq_four]
+  norm_num
+  exact polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour.symm
+
 /-- The exact remaining geometric boundary implies degree four on rational
 top homology, with all bookkeeping discharged. -/
 theorem polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
@@ -2472,6 +2486,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_deckLocalContribution_spec
 #print axioms polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
 #print axioms polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour
+#print axioms signedRegularFiberCount_homologyScalar_iff_globalLocalization
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
