@@ -929,12 +929,24 @@ lemma cpU_homology_aux_CP1_hequiv_S2_aux_compact : CompactSpace cpU_homology_aux
   rw [hsurj.range_eq] at hcompact
   exact ⟨hcompact⟩
 
+lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_injective
+    (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
+    (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
+    Function.Injective g := by
+  sorry
+
+lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_surjective
+    (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
+    (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
+    Function.Surjective g := by
+  sorry
+
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective
     (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
     (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
     Function.Bijective g := by
-  sorry
-
+  exact ⟨cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_injective g hg,
+    cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_surjective g hg⟩
 theorem cpU_homology_aux_CP1_hequiv_S2 :
     Nonempty (ContinuousMap.HomotopyEquiv cpU_homology_aux_CP1 cpU_homology_aux_S2) := by
   obtain ⟨g, hg⟩ :=
