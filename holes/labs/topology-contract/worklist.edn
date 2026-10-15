@@ -119066,62 +119066,50 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Specialize Sard to the circle-valued preimage projection; derive calculations; assemble Main.",
+    "Prove equal-dimensional manifold inverse-function bridge and circle-projection Sard specialization; derive calculations; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx; review dirs preserved"],
+    :warnings
+    ["Main sorryAx" "unnecessarySimpa; review dirs preserved"],
     :missing-theorems
-    [{:name "exists_mfderiv_surjective_fiber_manifold_to_vector",
-      :type "manifold-to-vector regular fiber",
+    [{:name "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
+      :type
+      "local diffeomorphisms along a fiber imply local isolation",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["exists_regularValue_of_criticalValues_measure_zero"],
+      :depends-on [],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_mfderiv_surjective_fiber_manifold_to_vector"],
+      ["locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber"
+       "exists_mfderiv_surjective_fiber_manifold_to_vector"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "6a9e053d5a37f943cda1bc13b2b5321010a935253ee5cd388c85f1f03d44b0c7",
+     "dd0eef1eb07dad487b546cfa5c74cc4d0de32b58cb7ff13b0e97359f2e9b9764",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked Sard regular-fiber adapter.",
+    :reason "Banked local-diffeomorphism fiber isolation.",
     :commands
     [{:cmd "lake env lean -o ... t00J02Closure.lean", :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "source drafts",
-      :exit 1,
-      :finding "opened ContDiff scope"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792027122601-12913-f4907ac1",
-     :commands
-     ["git show/diff-tree da6e039f1"
-      "archive da6e039f1; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit da6e039f1 changes only t00J02Closure.lean and adds compiled, sorry-free progress. It imports the proved Sard producer and specializes its null-critical-image theorem through the prior regular-value selector, yielding a value whose entire fiber has surjective mfderiv. Domain/codomain models, infinite smoothness, Haar measure, and derivative orientation match exactly; the producer is proved, not an interface axiom. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Circle-projection specialization, fiber calculations, and Main remain listed."},
-    :commit "da6e039f1a724ae592d9690cd9e627b14f19c969",
+    :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119129,7 +119117,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119527,7 +119515,8 @@
     :lemma-locallyisolatedcanonicalfiberdata-of-isdiscrete
     :lemma-transverse-mfderiv-surjective-of-circledirection-lifts
     :lemma-exists-regularvalue-of-criticalvalues-measure-zero
-    :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector],
+    :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector
+    :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120889,6 +120878,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-exists-regularvalue-of-criticalvalues-measure-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
+    :type "local diffeomorphisms along a fiber imply local isolation"},
+   :lemma
+   {:name "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "local diffeomorphisms along a fiber imply local isolation",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
