@@ -139,6 +139,31 @@ noncomputable def frozenGraphBoundaryKernelEquiv :
     funext i
     rfl
 
+/-! ## The frozen face boundary in graph-cycle coordinates -/
+
+/-- Signed degree of the fourteen-edge attaching word in orbit order
+`a,b,c,d,e,f,g`. -/
+def frozenAttachingDegree : Fin 7 → ℤ :=
+  ![2, 2, 0, -2, -2, 2, -2]
+
+/-- The attaching degree is a cycle for the two-vertex graph boundary. -/
+theorem frozenGraphBoundary_attachingDegree_zero :
+    frozenGraphBoundary frozenAttachingDegree = 0 := by
+  funext i
+  fin_cases i <;> rfl
+
+/-- The frozen attaching cycle as an element of the graph-cycle module. -/
+def frozenAttachingCycle : LinearMap.ker frozenGraphBoundary :=
+  ⟨frozenAttachingDegree, frozenGraphBoundary_attachingDegree_zero⟩
+
+/-- In the six independent graph-cycle coordinates, the face boundary is
+`(2,2,0,-2,-2,2)`. -/
+theorem frozenGraphBoundaryKernelEquiv_attachingCycle :
+    frozenGraphBoundaryKernelEquiv frozenAttachingCycle =
+      ![2, 2, 0, -2, -2, 2] := by
+  funext i
+  fin_cases i <;> rfl
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -371,5 +396,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPair_ne
 #print axioms frozenOrbitEquiv
 #print axioms frozenGraphBoundaryKernelEquiv
+#print axioms frozenGraphBoundary_attachingDegree_zero
+#print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 
 end ConstructionTargets.t94J09Closure
