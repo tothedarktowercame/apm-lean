@@ -1,5 +1,7 @@
 import ConstructionTargets.ComplexProjectiveChartTargets
 import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.CoefficientContractiblePair
+import ConstructionTargets.CoefficientH0
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -53,6 +55,30 @@ structure NonemptySubsingletonRationalHomologyData (X : Type)
   vanishesPositive : ∀ k, 0 < k → Subsingleton (Homology X k)
   zeroEquiv : Homology X 0 ≃ₗ[ℚ] ℚ
 
+/-- A nonempty subsingleton is contractible, so its rational singular
+homology is `ℚ` in degree zero and vanishes in every positive degree. -/
+noncomputable def t99J05_subsingleton_rational_homology
+    (X : Type) [TopologicalSpace X] [Nonempty X] [Subsingleton X] :
+    NonemptySubsingletonRationalHomologyData X where
+  finiteDimensional k := by
+    by_cases hk : k = 0
+    · subst k
+      exact (ConstructionTargets.CoefficientH0.h0Iso ℚ
+        (Classical.choice inferInstance)).toLinearEquiv.symm.finiteDimensional
+    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
+        ℚ X k hk
+      letI : Subsingleton (Homology X k) :=
+        ModuleCat.isZero_iff_subsingleton.mp hz
+      exact FiniteDimensional.of_injective
+        (0 : Homology X k →ₗ[ℚ] ℚ)
+        (Function.injective_of_subsingleton _)
+  vanishesPositive k hk :=
+    ModuleCat.isZero_iff_subsingleton.mp
+      (ConstructionTargets.CoefficientContractiblePair.higher_zero
+        ℚ X k (Nat.ne_of_gt hk))
+  zeroEquiv := (ConstructionTargets.CoefficientH0.h0Iso ℚ
+    (Classical.choice inferInstance)).toLinearEquiv
+
 /-- The generic one-point homology calculation, once supplied, gives the full
 base datum for the literal `CP 0` quotient. -/
 noncomputable def cpZeroHomologyDataOfSubsingletonData
@@ -65,6 +91,17 @@ noncomputable def cpZeroHomologyDataOfSubsingletonData
     have hi : i = 0 := Fin.ext (by omega)
     subst i
     simpa using h.zeroEquiv
+
+/-- The complete rational homology datum for the literal quotient model
+`CP 0`, obtained from its proved singleton property. -/
+noncomputable def t99J05_cp_zero_rational_homology :
+    ComplexProjectiveRationalHomologyData 0 := by
+  let p : CP 0 := chartInverse (0 : Fin 1)
+    (0 : AffineCoordinates (0 : Fin 1))
+  letI : Nonempty (CP 0) := ⟨p⟩
+  letI : Subsingleton (CP 0) := cp_zero_subsingleton
+  exact cpZeroHomologyDataOfSubsingletonData
+    (t99J05_subsingleton_rational_homology (CP 0))
 
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
@@ -106,6 +143,8 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms ComplexProjectiveRationalHomologyData.finiteDimensionalAt
 #print axioms cp_zero_subsingleton
 #print axioms cpZeroHomologyDataOfSubsingletonData
+#print axioms t99J05_subsingleton_rational_homology
+#print axioms t99J05_cp_zero_rational_homology
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
