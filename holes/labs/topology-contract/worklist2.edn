@@ -87901,30 +87901,34 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify subdivision loops with common-base edges; apply concat-sum, then B7-B10.",
+    "Compare subdivision concat with the boundary loop; then B7-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; review dirs preserved"],
+    :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "polygonBoundarySignedEdgePathAtBase_apply",
-      :type "common-base transport preserves path values",
+    [{:name "polygonBoundarySubdivisionPathAtBase_eq_signedEdge",
+      :type "based subpath equals signed edge",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundaryIntegerLoop_subpath_cast"],
+      :depends-on ["polygonBoundarySignedEdgePathAtBase_apply"],
+      :area "polygon-quotient-homology"}
+     {:name "polygonBoundarySubdivisionConcat_hurewicz",
+      :type "concat H1 is signed-edge sum",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["moduleHurewicz_mk_concat_eq_list_sum"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
-      :type "boundary H1 is the signed-edge sum",
+      :type "boundary H1 is signed-edge sum",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["polygonBoundarySignedEdgePathAtBase_apply"
-       "moduleHurewicz_mk_concat_eq_list_sum"],
+      :depends-on ["polygonBoundarySubdivisionConcat_hurewicz"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
-      :type "B7 sign-corrected map",
+      :type "B7 map",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finitePathSubdivision_boundary"],
@@ -87933,7 +87937,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked common-base signed-edge paths.",
+    :reason "Banked subdivision Hurewicz sum.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,34 +87945,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 2d90f2ee3", :exit 0}],
-    :diagnostic-history
-    [{:cmd "class drafts",
-      :exit 1,
-      :correction "banked endpoint transport first"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792026105528-12885-24a627f1",
-     :commands
-     ["git show/diff-tree 2d90f2ee3"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new definitions/theorem"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 2d90f2ee3 by topo-6 changes only the scoped target; fixture hash f8a4f820...c5d32 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Both endpoints are transported from the signed edge leg point to the chosen polygon-word basepoint by the canonical wedge-point equality; Path.cast_coe verifies the pointwise parametrization is unchanged. New compiled progress; remaining milestones are subdivision-loop identification and concat-sum, then B7-B10."},
-    :commit "2d90f2ee3",
+     {:cmd "git show --check 95be1e92e", :exit 0}],
+    :commit "95be1e92e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "f8a4f82050c72aee245add2653926b1b1096d10aa941ede0be12cd56c24c5d32"},
+     "eccce64ddf0c5b749c45c0d6fb425a565d5101e44b6cbe948d49ba66829b3f34"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92213,7 +92199,8 @@
     :lemma-polygonboundaryintegerloop-subpath-cast
     :lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod
     :lemma-modulehurewicz-mk-concat-eq-list-sum
-    :lemma-polygonboundarysignededgepathatbase-apply],
+    :lemma-polygonboundarysignededgepathatbase-apply
+    :lemma-polygonboundarysubdivisionconcat-hurewicz],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92601,4 +92588,38 @@
    :id :lemma-polygonboundarysignededgepathatbase-apply,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryintegerloop-subpath-cast],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundarySubdivisionPathAtBase_eq_signedEdge",
+    :type "based subpath equals signed edge"},
+   :lemma
+   {:name "polygonBoundarySubdivisionPathAtBase_eq_signedEdge",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "based subpath equals signed edge",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarysubdivisionpathatbase-eq-signededge,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundarysignededgepathatbase-apply],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundarySubdivisionConcat_hurewicz",
+    :type "concat H1 is signed-edge sum"},
+   :lemma
+   {:name "polygonBoundarySubdivisionConcat_hurewicz",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "concat H1 is signed-edge sum",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarysubdivisionconcat-hurewicz,
+   :kind :lemma,
+   :depends-on [:lemma-modulehurewicz-mk-concat-eq-list-sum],
    :other-consumers [:t94J09]}]}
