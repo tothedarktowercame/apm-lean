@@ -88374,6 +88374,17 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 401abd2a7", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792041223086-13321-c652936c",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 401abd2a7 by topo-6 adds only t97A01Closure.lean, new progress after blueprint commit 06f6bde3c. Exact snapshot builds; Main compiles with its prior 1 placeholder; target has 0; fixture SHA-256 c8763dce182c9732798989579102387f3896207c6024818a23cd3bf3adc8fe22 matches; registry 166/0; both theorems use only propext, Classical.choice, Quot.sound. aabbccPairingData is the genus-3 nonorientable standard pairing and torusRP2PairingData is the banked literal torus-crosscap relation. Both results faithfully specialize polygonQuotient_homology without claiming the still-missing literal-quotient or Smith-form transports. Those B1 adapters and B2 remain listed."},
     :commit "401abd2a7",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88393,7 @@
      "c8763dce182c9732798989579102387f3896207c6024818a23cd3bf3adc8fe22"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review required before formalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homology specializations.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88412,7 +88423,10 @@
    [{:job 1,
      :commit "06f6bde3c",
      :reason
-     "Blueprint written; independent review required before formalization."}]}
+     "Blueprint written; independent review required before formalization."}
+    {:job 2,
+     :commit "401abd2a7",
+     :reason "Banked homology specializations."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93439,7 +93453,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccPolygonHomology",
@@ -93449,14 +93463,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "foundation specialized to aabbcc pairing",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "401abd2a7"},
    :id :lemma-aabbccpolygonhomology,
    :kind :lemma,
    :depends-on [:lemma-polygonquotient-homology],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2PolygonHomology",
@@ -93466,7 +93482,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "foundation specialized to torus-crosscap pairing",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "401abd2a7"},
    :id :lemma-torusrp2polygonhomology,
    :kind :lemma,
    :depends-on [:lemma-polygonquotient-homology],
