@@ -2003,6 +2003,26 @@ noncomputable def t96A06_sphere3_rational_fundamentalClass :
     CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) :=
   t96A06_sphere3_rational_H3Iso.inv 1
 
+/-- Equality with the selected rational fundamental class is exactly the
+statement that coefficient extension has normalized coordinate one. -/
+theorem t96A06_integralNormalizedClass_mapsTo_rational_iff :
+    t96A06_integralNormalizedClass_rationalExtension =
+        t96A06_sphere3_rational_fundamentalClass ↔
+      t96A06_sphere3_rational_H3Iso.hom.hom
+          t96A06_integralNormalizedClass_rationalExtension = 1 := by
+  constructor
+  · intro h
+    rw [h]
+    simp [t96A06_sphere3_rational_fundamentalClass]
+  · intro h
+    calc
+      t96A06_integralNormalizedClass_rationalExtension =
+          t96A06_sphere3_rational_H3Iso.inv.hom
+            (t96A06_sphere3_rational_H3Iso.hom.hom
+              t96A06_integralNormalizedClass_rationalExtension) := by simp
+      _ = t96A06_sphere3_rational_H3Iso.inv.hom 1 := congrArg _ h
+      _ = t96A06_sphere3_rational_fundamentalClass := rfl
+
 /-- At the selected regular-fiber base point, the stereographically
 normalized global integral class is the positive local class. -/
 theorem polynomialSphereLift_base_integralFundamentalClass_positive :
@@ -3278,6 +3298,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralNormalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_integralNormalizedClass_rationalExtension
+#print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
