@@ -2513,6 +2513,23 @@ noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_wo
             ((FundamentalGroup.fundamentalGroupMulEquivOfPath q).trans e4))))
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
+    (hW1 : ∀ (e : FundamentalGroup
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair))
+        (ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase apm_t92J05_genusTwo_polygon_attach_specialization_aux_P) ≃*
+        FreeGroup (Fin 4))
+    (hcoord : ∀ l,
+      e (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase apm_t92J05_genusTwo_polygon_attach_specialization_aux_P l) =
+        FreeGroup.of
+          (((ConstructionTargets.PolygonSurfacePiOne.orientableOrbitEquiv 2).trans
+            (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+              (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin (2 * 2)))) l)),
+      IsConj (e (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
+        apm_t92J05_genusTwoRelator ∨
+      IsConj (e (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
+        apm_t92J05_genusTwoRelator⁻¹)
     (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
       (ConstructionTargets.PolygonRadialOpenCover.innerOpen
@@ -2554,7 +2571,7 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   intro x
   obtain ⟨g, hg⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range x
-  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv x g hg
+  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv apm_t92J05_genusTwo_W1_boundary_word x g hg
   refine ⟨e, ?_⟩
   rw [hg, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_zpowers, Subgroup.map_normalClosure _ _ e.surjective,
     Set.image_singleton]
