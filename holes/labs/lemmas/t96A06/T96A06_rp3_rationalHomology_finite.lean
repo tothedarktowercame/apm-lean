@@ -53,9 +53,30 @@ this block.  This lets the RP³ computation, the four trace computations, and
 homotopy invariance be developed in parallel. -/
 
 -- BEGIN SEAT AREA
+open CategoryTheory
+
 lemma T96A06_rp3_rationalHomology_finite (k : ℕ) :
     FiniteDimensional ℚ (Homology T96A06.RP3 k) := by
-  sorry
+  rcases RP3Homology.rp3_rationalHomology with ⟨h0, hvanish, h3⟩
+  by_cases hk0 : k = 0
+  · subst k
+    let e := Classical.choice h0
+    exact e.symm.toLinearEquiv.finiteDimensional
+  by_cases hk3 : k = 3
+  · subst k
+    let e := Classical.choice h3
+    exact e.symm.toLinearEquiv.finiteDimensional
+  · have hz := hvanish k hk0 hk3
+    letI : Subsingleton (Homology T96A06.RP3 k) := ⟨by
+      intro x y
+      have hid : (𝟙 (RP3Homology.HQ k RP3Homology.RP3)) = 0 :=
+        hz.eq_of_src _ _
+      have hx := congrArg (fun f => f.hom x) hid
+      have hy := congrArg (fun f => f.hom y) hid
+      simpa using hx.trans hy.symm⟩
+    exact FiniteDimensional.of_injective
+      (0 : Homology T96A06.RP3 k →ₗ[ℚ] ℚ)
+      (Function.injective_of_subsingleton _)
 -- END SEAT AREA
 
 lemma T96A06_rp3_rationalHomology_vanishes_above_three (k : ℕ)
