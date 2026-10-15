@@ -2424,6 +2424,94 @@ noncomputable def t99A01_eD : APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ Module
 
 /-- The two degree-zero coordinate rows, including the sign convention of
 `zI = lift(incl,incl)`; the minus sign belongs to `zJ`, not this map. -/
+lemma t99A01_low_coordinates_degree_zero_aux_left
+    {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
+    (hρι : ρ.comp ι = ContinuousMap.id Circle)
+    (hιρ : ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _))
+    (eO : ContinuousMap.HomotopyEquiv
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
+    (i : Fin r) :
+    t99A01_eC.inv ≫ Limits.biproduct.ι (fun _ : Fin r ↦ APMT99A01.H 0 Circle) i ≫
+      (t99A01_overlap_sigma_coordinate degree eO 0 ≪≫
+        t99A01_sigma_coordinate (fun _ : Fin r ↦ Circle) 0 (hsigma _ 0)).inv ≫
+      APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 0 ≫
+      Limits.biprod.fst ≫ (t99A01_sideA_coordinate degree ρ ι hρι hιρ 0 ≪≫
+        t99A01_eC).hom = 𝟙 _ := by
+  rw [Iso.trans_inv, Iso.trans_hom]
+  unfold APMT99A01.zI
+  simp only [Category.assoc, Limits.biproduct.ι_desc_assoc,
+    Limits.biprod.lift_fst_assoc]
+  dsimp [t99A01_sigma_coordinate, t99A01_overlap_sigma_coordinate,
+    t99A01_sideA_coordinate]
+  rw [t99A01_low_coordinates_degree_one_aux_inv]
+  rw [ConstructionTargets.CoefficientRadialPair.homotopyIso_hom]
+  have hp : Limits.biproduct.ι (fun _ : Fin r ↦ APMT99A01.H 0 Circle) i ≫
+      (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+            @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+            C(Circle, Σ _ : Fin r, Circle))) 0) =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+            @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+            C(Circle, Σ _ : Fin r, Circle))) 0 := by
+    rw [Limits.biproduct.ι_desc]
+  slice_lhs 2 3 => exact hp
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 0).obj
+    (ModuleCat.of ℤ ℤ)
+  let s : C(Circle, Σ _ : Fin r, Circle) :=
+    ⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+      @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩
+  let inc : C(↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+      APMT99A01.sideA degree) :=
+    ⟨Set.inclusion Set.inter_subset_left, continuous_inclusion Set.inter_subset_left⟩
+  let f : C(Circle, Circle) := ρ.comp (inc.comp (eO.invFun.comp s))
+  change t99A01_eC.inv ≫ F.map (TopCat.ofHom s) ≫
+    F.map (TopCat.ofHom eO.invFun) ≫ F.map (TopCat.ofHom inc) ≫
+    F.map (TopCat.ofHom ρ) ≫ t99A01_eC.hom = 𝟙 _
+  slice_lhs 2 5 => rw [← F.map_comp, ← F.map_comp, ← F.map_comp]
+  change ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ (1 : Circle) ≫
+    (F.map (TopCat.ofHom f) ≫ ConstructionTargets.CoefficientH0.h0Augmentation ℤ) = 𝟙 _
+  exact (congrArg (fun g =>
+    ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ (1 : Circle) ≫ g)
+      (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℤ f)).trans
+    (ConstructionTargets.CoefficientH0.singularVertexH0Class_comp_h0Augmentation ℤ _)
+
+lemma t99A01_low_coordinates_degree_zero_aux_right
+    {r : ℕ} (degree : Fin r → ℕ)
+    (eB : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1))
+    (eO : ContinuousMap.HomotopyEquiv
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (heB : ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
+      (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
+      eB ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩)
+    (heO : ∀ (i : Fin r) (w : Circle), (eO.invFun ⟨i, w⟩).1 =
+      APMT99A01.halfLoop degree i w)
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j))) :
+    let eD : ∀ _ : Fin r, APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ ModuleCat.of ℤ ℤ :=
+      fun _ ↦ t99A01_eD
+    let cO₀ := t99A01_overlap_sigma_coordinate degree eO 0 ≪≫
+      t99A01_sigma_coordinate (fun _ : Fin r ↦ Circle) 0 (hsigma _ 0) ≪≫
+      Limits.biproduct.mapIso (fun _ : Fin r ↦ t99A01_eC) ≪≫
+      t99A01_biproduct_int_coordinate r
+    let cB₀ := t99A01_diskSide_sigma_coordinate degree eB 0 ≪≫
+      t99A01_sigma_coordinate (fun _ : Fin r ↦ Metric.ball (0 : ℂ) 1) 0 (hsigma _ 0) ≪≫
+      Limits.biproduct.mapIso eD ≪≫ t99A01_biproduct_int_coordinate r
+    cO₀.inv ≫ APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 0 ≫
+      Limits.biprod.snd ≫ cB₀.hom = 𝟙 _ := by
+  sorry
+
 lemma t99A01_low_coordinates_degree_zero {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r)
     (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
@@ -2457,7 +2545,6 @@ lemma t99A01_low_coordinates_degree_zero {r : ℕ} (degree : Fin r → ℕ)
     (cO₀.inv ≫ APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 0 ≫
       Limits.biprod.snd ≫ cB₀.hom = 𝟙 _) := by
   sorry
-
 /-- Standard `H₀` coordinates for the circle and the open disk components. -/
 lemma t99A01_low_h0_coordinates {r : ℕ} :
     ∃ (eC : APMT99A01.H 0 Circle ≅ ModuleCat.of ℤ ℤ)
