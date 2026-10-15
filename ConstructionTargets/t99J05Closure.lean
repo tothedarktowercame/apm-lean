@@ -4,6 +4,8 @@ import ConstructionTargets.CoefficientContractiblePair
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.ProjectiveQuotientDescent
 import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
+import ConstructionTargets.CoefficientFirstReflection
+import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -454,6 +456,70 @@ noncomputable def t99J05_cp_successor_overlap_topIso_of_unitSphere
           Set (CP (n + 1))) (2 * n + 1) ≅ ModuleCat.of ℚ ℚ :=
   t99J05_cp_successor_overlap_homologyIso_unitSphere n (2 * n + 1) ≪≫ e
 
+/-- A finite-dimensional real-linear coordinate equivalence from the complex
+affine chart to the Euclidean model used by the sphere-homology computation. -/
+noncomputable def t99J05_affineCoordinatesEuclideanEquiv (n : ℕ) :
+    AffineCoordinates (Fin.last (n + 1)) ≃L[ℝ]
+      EuclideanSpace ℝ (Fin (2 * n + 2)) :=
+  ContinuousLinearEquiv.ofFinrankEq (by
+    simp [AffineCoordinates, Module.finrank_pi_fintype,
+      Fintype.card_subtype_compl]
+    omega)
+
+/-- The coordinate equivalence restricts to the complements of the origins. -/
+noncomputable def t99J05_puncturedAffineCoordinatesEuclideanHomeomorph (n : ℕ) :
+    ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+      Set (AffineCoordinates (Fin.last (n + 1)))) ≃ₜ
+    ({x : EuclideanSpace ℝ (Fin (2 * n + 2)) | x ≠ 0} :
+      Set (EuclideanSpace ℝ (Fin (2 * n + 2)))) where
+  toFun z := ⟨t99J05_affineCoordinatesEuclideanEquiv n z.1, by
+    intro hz
+    apply z.2
+    exact (t99J05_affineCoordinatesEuclideanEquiv n).injective (by simpa using hz)⟩
+  invFun x := ⟨(t99J05_affineCoordinatesEuclideanEquiv n).symm x.1, by
+    intro hz
+    apply x.2
+    exact (t99J05_affineCoordinatesEuclideanEquiv n).symm.injective (by simpa using hz)⟩
+  left_inv z := by ext; simp
+  right_inv x := by ext; simp
+  continuous_toFun :=
+    (t99J05_affineCoordinatesEuclideanEquiv n).continuous.comp
+      continuous_subtype_val |>.subtype_mk _
+  continuous_invFun :=
+    (t99J05_affineCoordinatesEuclideanEquiv n).symm.continuous.comp
+      continuous_subtype_val |>.subtype_mk _
+
+/-- The affine unit sphere is homotopy equivalent to the standard Euclidean
+sphere of real dimension `2n+1`. -/
+noncomputable def t99J05_affineUnitSphereHomotopyEquivEuclidean (n : ℕ) :
+    Metric.sphere (0 : AffineCoordinates (Fin.last (n + 1))) 1 ≃ₕ
+      T02A06.euclideanUnitSphere (2 * n + 2) :=
+  (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+      (AffineCoordinates (Fin.last (n + 1)))).trans
+    ((t99J05_puncturedAffineCoordinatesEuclideanHomeomorph n).toHomotopyEquiv.trans
+      (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+        (EuclideanSpace ℝ (Fin (2 * n + 2)))).symm)
+
+/-- Rational top homology of the exact affine unit-sphere model is `ℚ`. -/
+noncomputable def t99J05_affineUnitSphere_topHomologyIso (n : ℕ) :
+    Homology
+        (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) (2 * n + 1) ≅
+      ModuleCat.of ℚ ℚ :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      (t99J05_affineUnitSphereHomotopyEquivEuclidean n) (2 * n + 1) ≪≫
+    ConstructionTargets.CoefficientFirstReflection.topIso ℚ (2 * n)
+
+/-- Consequently, the successor overlap has one-dimensional rational homology
+in its unique positive top degree. -/
+noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) (2 * n + 1) ≅ ModuleCat.of ℚ ℚ :=
+  t99J05_cp_successor_overlap_topIso_of_unitSphere n
+    (t99J05_affineUnitSphere_topHomologyIso n)
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -510,6 +576,11 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_overlap_finiteDimensional_of_unitSphere
 #print axioms t99J05_cp_successor_overlap_subsingleton_of_unitSphere
 #print axioms t99J05_cp_successor_overlap_topIso_of_unitSphere
+#print axioms t99J05_affineCoordinatesEuclideanEquiv
+#print axioms t99J05_puncturedAffineCoordinatesEuclideanHomeomorph
+#print axioms t99J05_affineUnitSphereHomotopyEquivEuclidean
+#print axioms t99J05_affineUnitSphere_topHomologyIso
+#print axioms t99J05_cp_successor_overlap_rational_topHomology
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
