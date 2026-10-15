@@ -2,6 +2,8 @@ import Mathlib
 import ConstructionTargets.GenericTargetNaturalSourceReconstruction
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.FundamentalGroupProduct
 
 /-!
 # APM t01A04 — the fundamental group and double covers of `T² ∨ S¹`
@@ -2584,18 +2586,202 @@ noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transpo
     apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom
     apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective
 
-/-- LIBRARY (van Kampen naturality): some identification of the wedge
-fundamental group with `ℤ² * ℤ` sends the three canonical loops to the
-standard generators.  `wedgeFundamentalGroupMulEquiv` (transported along
-`apm_t01A04_canonical_loops_presentation_aux_homeomorph`) is the candidate, but
-the import computes no generator images; composing with a free-product
-automorphism is allowed. -/
+open ConstructionTargets.PointWedgeQuotient
+open ConstructionTargets.PointWedgeVanKampen
+open ConstructionTargets.PointedPuncturedCircleContraction
+open ConstructionTargets.PointWedgePointedContractionDescent
+
+instance apm_t01A04_img_torusPathConnected : PathConnectedSpace apm_t01a04_Torus :=
+  Function.Surjective.pathConnectedSpace
+    (f := fun p : ℝ × ℝ => (Circle.exp p.1, Circle.exp p.2))
+    (fun z => ⟨(Complex.arg z.1, Complex.arg z.2), by simp⟩) (by fun_prop)
+
+/-- The open neighbourhood `{z ≠ -1}²` of the torus basepoint. -/
+def apm_t01A04_img_torusNbhd : Set apm_t01a04_Torus :=
+  circleBaseNeighborhood ×ˢ circleBaseNeighborhood
+
+lemma apm_t01A04_img_torusNbhd_isOpen : IsOpen apm_t01A04_img_torusNbhd :=
+  circleBaseNeighborhood_isOpen.prod circleBaseNeighborhood_isOpen
+
+lemma apm_t01A04_img_torusBase_mem :
+    ((1, 1) : apm_t01a04_Torus) ∈ apm_t01A04_img_torusNbhd :=
+  ⟨circleBase_mem, circleBase_mem⟩
+
+def apm_t01A04_img_torusContraction :
+    PointedContraction apm_t01A04_img_torusNbhd
+      ⟨(1, 1), apm_t01A04_img_torusBase_mem⟩ :=
+  PointedContraction.homeomorphSymm
+    (Homeomorph.Set.prod circleBaseNeighborhood circleBaseNeighborhood)
+    (circleBaseNeighborhood_contraction.prod circleBaseNeighborhood_contraction)
+
+noncomputable def apm_t01A04_img_vanKampen :
+    FundamentalGroup
+        (Wedge ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase ≃*
+      Monoid.Coprod (FundamentalGroup apm_t01a04_Torus (1, 1))
+        (FundamentalGroup Circle 1) :=
+  genericPointWedgeLegCoordinatesEquiv ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+    circleBaseNeighborhood apm_t01A04_img_torusNbhd
+    circleBaseNeighborhood_isOpen apm_t01A04_img_torusNbhd_isOpen
+    circleBase_mem apm_t01A04_img_torusBase_mem
+    circleBaseNeighborhood_contraction apm_t01A04_img_torusContraction
+
+lemma apm_t01A04_img_vanKampen_legs :
+    (∀ g : FundamentalGroup apm_t01a04_Torus (1, 1),
+      apm_t01A04_img_vanKampen
+          (genericPointWedgeLeftLegMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) g) =
+        Monoid.Coprod.inl g) ∧
+    (∀ g : FundamentalGroup Circle 1,
+      apm_t01A04_img_vanKampen
+          (genericPointWedgeRightLegMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) g) =
+        Monoid.Coprod.inr g) :=
+  genericPointWedgeLegCoordinates_vanKampen _ _ _ _ _ _ _ _ _ _
+
+open ConstructionTargets.FundamentalGroupProduct ConstructionTargets.CircleUniversalCover in
+noncomputable def apm_t01A04_img_torusCoord :
+    FundamentalGroup apm_t01a04_Torus (1, 1) ≃* Multiplicative (ℤ × ℤ) :=
+  (fundamentalGroupProdMulEquiv (1 : Circle) (1 : Circle)).trans
+    ((circleFundamentalGroupMulEquivInt.prodCongr
+      circleFundamentalGroupMulEquivInt).trans
+        (MulEquiv.prodMultiplicative ℤ ℤ).symm)
+
+
+open ConstructionTargets.CircleUniversalCover in
+/-- First torus coordinate loop. -/
+def apm_t01A04_img_gA : FundamentalGroup apm_t01a04_Torus (1, 1) :=
+  Path.Homotopic.Quotient.mk
+    ((integerLoop 1).map (f := fun z : Circle => (z, (1 : Circle))) (by fun_prop))
+
+open ConstructionTargets.CircleUniversalCover in
+def apm_t01A04_img_gB : FundamentalGroup apm_t01a04_Torus (1, 1) :=
+  Path.Homotopic.Quotient.mk
+    ((integerLoop 1).map (f := fun z : Circle => ((1 : Circle), z)) (by fun_prop))
+
+open ConstructionTargets.CircleUniversalCover in
+def apm_t01A04_img_gC : FundamentalGroup Circle 1 :=
+  Path.Homotopic.Quotient.mk (integerLoop 1)
+
+lemma apm_t01A04_img_transport_loopA :
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transport apm_t01A04_loopA =
+      genericPointWedgeLeftLegMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+        apm_t01A04_img_gA := by
+  unfold genericPointWedgeLeftLegMap apm_t01A04_img_gA
+  rw [show (Path.Homotopic.Quotient.mk _ : FundamentalGroup apm_t01a04_Torus (1, 1)) = FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map (f := fun z : Circle => (z, (1 : Circle))) (by fun_prop))) from rfl]
+  rw [FundamentalGroup.map_apply]
+  rfl
+
+lemma apm_t01A04_img_transport_loopB :
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transport apm_t01A04_loopB =
+      genericPointWedgeLeftLegMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+        apm_t01A04_img_gB := by
+  rfl
+
+lemma apm_t01A04_img_transport_loopC :
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transport apm_t01A04_loopC =
+      genericPointWedgeRightLegMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+        apm_t01A04_img_gC := by
+  unfold genericPointWedgeRightLegMap apm_t01A04_img_gC
+  rw [show (Path.Homotopic.Quotient.mk (ConstructionTargets.CircleUniversalCover.integerLoop 1) : FundamentalGroup Circle 1) = FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk (ConstructionTargets.CircleUniversalCover.integerLoop 1)) from rfl, FundamentalGroup.mapOfEq_apply]
+  rfl
+
+open ConstructionTargets.CircleUniversalCover in
+lemma apm_t01A04_img_circle_gC :
+    circleFundamentalGroupMulEquivInt apm_t01A04_img_gC = Multiplicative.ofAdd 1 := by
+  simp [circleFundamentalGroupMulEquivInt, apm_t01A04_img_gC]
+
+lemma apm_t01A04_img_projLeft_gA :
+    Path.Homotopic.projLeft apm_t01A04_img_gA = apm_t01A04_img_gC := by
+  unfold apm_t01A04_img_gA apm_t01A04_img_gC
+  rw [show Path.Homotopic.projLeft (Path.Homotopic.Quotient.mk
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => (z, (1 : Circle))) (by fun_prop))) =
+      Path.Homotopic.Quotient.mk (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => (z, (1 : Circle))) (by fun_prop)).map continuous_fst) by
+    exact (Path.Homotopic.Quotient.mk_map _ ⟨Prod.fst, continuous_fst⟩).symm]
+  rfl
+
+lemma apm_t01A04_img_projRight_gA :
+    (Path.Homotopic.projRight apm_t01A04_img_gA : FundamentalGroup Circle 1) = (1 : FundamentalGroup Circle 1) := by
+  unfold apm_t01A04_img_gA
+  rw [show Path.Homotopic.projRight (Path.Homotopic.Quotient.mk
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => (z, (1 : Circle))) (by fun_prop))) =
+      Path.Homotopic.Quotient.mk (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => (z, (1 : Circle))) (by fun_prop)).map continuous_snd) by
+    exact (Path.Homotopic.Quotient.mk_map _ ⟨Prod.snd, continuous_snd⟩).symm]
+  rw [show (1 : FundamentalGroup Circle 1) =
+    Path.Homotopic.Quotient.mk (Path.refl (1 : Circle)) from rfl]
+  congr 1
+
+lemma apm_t01A04_img_projLeft_gB :
+    (Path.Homotopic.projLeft apm_t01A04_img_gB : FundamentalGroup Circle 1) = (1 : FundamentalGroup Circle 1) := by
+  unfold apm_t01A04_img_gB
+  rw [show Path.Homotopic.projLeft (Path.Homotopic.Quotient.mk
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => ((1 : Circle), z)) (by fun_prop))) =
+      Path.Homotopic.Quotient.mk (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => ((1 : Circle), z)) (by fun_prop)).map continuous_fst) by
+    exact (Path.Homotopic.Quotient.mk_map _ ⟨Prod.fst, continuous_fst⟩).symm]
+  rw [show (1 : FundamentalGroup Circle 1) =
+    Path.Homotopic.Quotient.mk (Path.refl (1 : Circle)) from rfl]
+  congr 1
+
+lemma apm_t01A04_img_projRight_gB :
+    Path.Homotopic.projRight apm_t01A04_img_gB = apm_t01A04_img_gC := by
+  unfold apm_t01A04_img_gB apm_t01A04_img_gC
+  rw [show Path.Homotopic.projRight (Path.Homotopic.Quotient.mk
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => ((1 : Circle), z)) (by fun_prop))) =
+      Path.Homotopic.Quotient.mk (((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (f := fun z : Circle => ((1 : Circle), z)) (by fun_prop)).map continuous_snd) by
+    exact (Path.Homotopic.Quotient.mk_map _ ⟨Prod.snd, continuous_snd⟩).symm]
+  rfl
+
+lemma apm_t01A04_img_torus_gA :
+    apm_t01A04_img_torusCoord apm_t01A04_img_gA = Multiplicative.ofAdd ((1, 0) : ℤ × ℤ) := by
+  rw [apm_t01A04_img_torusCoord, MulEquiv.trans_apply, MulEquiv.trans_apply,
+    ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv_apply,
+    apm_t01A04_img_projLeft_gA, apm_t01A04_img_projRight_gA]
+  show (MulEquiv.prodMultiplicative ℤ ℤ).symm
+    (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt _,
+      ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt _) = _
+  rw [map_one, apm_t01A04_img_circle_gC]
+  rfl
+
+lemma apm_t01A04_img_torus_gB :
+    apm_t01A04_img_torusCoord apm_t01A04_img_gB = Multiplicative.ofAdd ((0, 1) : ℤ × ℤ) := by
+  rw [apm_t01A04_img_torusCoord, MulEquiv.trans_apply, MulEquiv.trans_apply,
+    ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv_apply,
+    apm_t01A04_img_projLeft_gB, apm_t01A04_img_projRight_gB]
+  show (MulEquiv.prodMultiplicative ℤ ℤ).symm
+    (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt _,
+      ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt _) = _
+  rw [map_one, apm_t01A04_img_circle_gC]
+  rfl
+
+/-- Van Kampen generator images: transport to the library point wedge, apply
+the leg-coordinate van Kampen equivalence
+(`genericPointWedgeLegCoordinates_vanKampen`), then the winding coordinates on
+`π₁(T²)` and `π₁(S¹)`. -/
 theorem apm_t01A04_canonical_loops_presentation_aux_images :
     ∃ Φ : apm_t01a04_piOne ≃* ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP,
       Φ apm_t01A04_loopA = Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ)) ∧
       Φ apm_t01A04_loopB = Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ)) ∧
       Φ apm_t01A04_loopC = Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ)) := by
-  sorry
+  refine ⟨apm_t01A04_canonical_loops_presentation_aux_images_aux_transport.trans
+    (apm_t01A04_img_vanKampen.trans
+      (MulEquiv.coprodCongr apm_t01A04_img_torusCoord
+        ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt)),
+    ?_, ?_, ?_⟩
+  · rw [MulEquiv.trans_apply, MulEquiv.trans_apply, apm_t01A04_img_transport_loopA,
+      apm_t01A04_img_vanKampen_legs.1]
+    simp [MulEquiv.coprodCongr, apm_t01A04_img_torus_gA]
+  · rw [MulEquiv.trans_apply, MulEquiv.trans_apply, apm_t01A04_img_transport_loopB,
+      apm_t01A04_img_vanKampen_legs.1]
+    simp [MulEquiv.coprodCongr, apm_t01A04_img_torus_gB]
+  · rw [MulEquiv.trans_apply, MulEquiv.trans_apply, apm_t01A04_img_transport_loopC,
+      apm_t01A04_img_vanKampen_legs.2]
+    simp [MulEquiv.coprodCongr, apm_t01A04_img_circle_gC]
 
 /-- Pure group theory: a group isomorphic to `ℤ² * ℤ` with the three loops on
 the standard generators has the stated presentation.  Commutation is
@@ -3603,13 +3789,781 @@ theorem apm_t01A04_bridge_piOne_presentation_and_ranges :
   · exact apm_t01A04_torusCoverMap_range_eq_parity_kernel
       phia hgen haa hab0 hac hcova
 
-/-- Why this unblocks `apm_t01a04`: this is the missing singular `H₂`
-distinction. The circle-doubled total space has two independent torus
-fundamental classes whereas the torus-doubled total space has one, so the
-concrete quotient spaces cannot be homeomorphic. -/
+/-! ### Non-homeomorphism of the total spaces
+
+Invariant: the number of homomorphisms `π₁ → ℤ/2` (basepoint-free on a
+path-connected space).  Each total space is homeomorphic to an explicit
+iterated library point wedge: the circle-doubled space to
+`(T² ∨ S¹) ∨ T²` (second torus attached at the circle point `-1`) and the
+torus-doubled space to `(T² ∨ S¹) ∨ S¹` (second circle attached at the torus
+point `(-1,1)`).  Van Kampen (`genericPointWedgeFundamentalGroupEquiv`)
+then gives `4·2·4 = 32` versus `4·2·2 = 16` characters. -/
+
+abbrev apm_t01A04_nh_Z2 := Multiplicative (ZMod 2)
+
+/-- The library wedge `T² ∨ S¹` at the standard basepoints. -/
+abbrev apm_t01A04_nh_W := Wedge ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+
+/-- The circle point `-1` of `T² ∨ S¹`. -/
+def apm_t01A04_nh_circleAntipode : apm_t01A04_nh_W :=
+  quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+    (.inr (apm_t01a04_sheetPoint 1))
+
+/-- The torus point `(-1, 1)` of `T² ∨ S¹`. -/
+def apm_t01A04_nh_torusAntipode : apm_t01A04_nh_W :=
+  quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+    (.inl (apm_t01a04_sheetPoint 1, 1))
+
+/-- Model of the circle-doubled total space: `(T² ∨ S¹) ∨ T²`. -/
+abbrev apm_t01A04_nh_CCModel :=
+  Wedge apm_t01A04_nh_circleAntipode ((1, 1) : apm_t01a04_Torus)
+
+/-- Model of the torus-doubled total space: `(T² ∨ S¹) ∨ S¹`. -/
+abbrev apm_t01A04_nh_TCModel :=
+  Wedge apm_t01A04_nh_torusAntipode (1 : Circle)
+
+/-- LEAF (quotient homeomorphism).  Forward map on representatives:
+`inl (0, q) ↦ inl (inl q)`, `inl (1, q) ↦ inr q`, `inr z ↦ inl (inr z)`;
+backward map descends from the inner wedge (`inl (inl q) ↦ inl (0, q)`,
+`inl (inr z) ↦ inr z`) and `inr q ↦ inl (1, q)`.  Both respect the generating
+relations (`EqvGen` induction; the two glue cases are `sheetPoint 0 = 1` and
+`sheetPoint 1 = -1`) and are continuous by `Continuous.quotient_map'` /
+`continuous_coinduced_dom` with `continuous_sum_dom`.  Pattern: t97J04
+`X_fwd`/`X_bwd`. 100-180 lines. -/
+def apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw :
+    Sum (Fin 2 × apm_t01a04_Torus) Circle → apm_t01A04_nh_CCModel
+  | .inl (i, q) => if i = 0 then
+      quotientMap apm_t01A04_nh_circleAntipode (1, 1)
+        (.inl (quotientMap (1, 1) 1 (.inl q)))
+    else quotientMap apm_t01A04_nh_circleAntipode (1, 1) (.inr q)
+  | .inr z => quotientMap apm_t01A04_nh_circleAntipode (1, 1)
+      (.inl (quotientMap (1, 1) 1 (.inr z)))
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_fwd_respects {u v}
+    (h : Relation.EqvGen apm_t01a04_circleCoverRel u v) :
+    apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw u =
+      apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue i =>
+        fin_cases i
+        · exact congrArg
+            (fun w => quotientMap apm_t01A04_nh_circleAntipode (1, 1) (.inl w))
+            (Quotient.sound (Relation.EqvGen.rel _ _
+              (ConstructionTargets.PointWedgeQuotient.Rel.base)))
+        · change quotientMap apm_t01A04_nh_circleAntipode (1, 1) (.inr (1, 1)) =
+            quotientMap apm_t01A04_nh_circleAntipode (1, 1)
+              (.inl apm_t01A04_nh_circleAntipode)
+          exact Quotient.sound (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+            (ConstructionTargets.PointWedgeQuotient.Rel.base)))
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_fwd :
+    apm_t01a04_CircleCover → apm_t01A04_nh_CCModel :=
+  Quotient.lift apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw
+    (fun _ _ h => apm_t01A04_nh_circleCover_homeomorph_aux_fwd_respects h)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_fwd_continuous :
+    Continuous apm_t01A04_nh_circleCover_homeomorph_aux_fwd := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · apply continuous_prod_of_discrete_left.mpr
+    intro i
+    fin_cases i
+    · exact (continuous_quotientMap _ _).comp
+        (continuous_inl.comp ((continuous_quotientMap _ _).comp continuous_inl))
+    · exact (continuous_quotientMap _ _).comp continuous_inr
+  · exact (continuous_quotientMap _ _).comp
+      (continuous_inl.comp ((continuous_quotientMap _ _).comp continuous_inr))
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_CircleCover
+  | .inl q => Quotient.mk _ (.inl (0, q))
+  | .inr z => Quotient.mk _ (.inr z)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_inner_respects {u v}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel (1, 1) 1) u v) :
+    apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw u =
+      apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h
+      exact Quotient.sound (Relation.EqvGen.rel _ _
+        (apm_t01a04_circleCoverRel.glue 0))
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_inner :
+    apm_t01A04_nh_W → apm_t01a04_CircleCover :=
+  Quotient.lift apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw
+    (fun _ _ h => apm_t01A04_nh_circleCover_homeomorph_aux_inner_respects h)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_inner_continuous :
+    Continuous apm_t01A04_nh_circleCover_homeomorph_aux_inner := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · simpa [apm_t01A04_nh_circleCover_homeomorph_aux_inner,
+      apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw] using
+      (continuous_coinduced_rng.comp (continuous_inl.comp
+        (continuous_const.prodMk continuous_id)) : Continuous
+          (fun q : apm_t01a04_Torus =>
+            (Quotient.mk _ (.inl ((0 : Fin 2), q)) : apm_t01a04_CircleCover)))
+  · simpa [apm_t01A04_nh_circleCover_homeomorph_aux_inner,
+      apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw] using
+      (continuous_coinduced_rng.comp continuous_inr : Continuous
+        (fun z : Circle => (Quotient.mk _ (.inr z) : apm_t01a04_CircleCover)))
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw :
+    Sum apm_t01A04_nh_W apm_t01a04_Torus → apm_t01a04_CircleCover
+  | .inl w => apm_t01A04_nh_circleCover_homeomorph_aux_inner w
+  | .inr q => Quotient.mk _ (.inl (1, q))
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_bwd_respects {u v}
+    (h : Relation.EqvGen (ConstructionTargets.PointWedgeQuotient.Rel
+      apm_t01A04_nh_circleAntipode (1, 1)) u v) :
+    apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw u =
+      apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h
+      exact Quotient.sound (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        (apm_t01a04_circleCoverRel.glue 1)))
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_bwd :
+    apm_t01A04_nh_CCModel → apm_t01a04_CircleCover :=
+  Quotient.lift apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw
+    (fun _ _ h => apm_t01A04_nh_circleCover_homeomorph_aux_bwd_respects h)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_bwd_continuous :
+    Continuous apm_t01A04_nh_circleCover_homeomorph_aux_bwd := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨apm_t01A04_nh_circleCover_homeomorph_aux_inner_continuous,
+    continuous_coinduced_rng.comp (continuous_inl.comp
+      (continuous_const.prodMk continuous_id))⟩
+
+lemma apm_t01A04_nh_circleCover_homeomorph :
+    Nonempty (apm_t01a04_CircleCover ≃ₜ apm_t01A04_nh_CCModel) := by
+  refine ⟨{
+    toFun := apm_t01A04_nh_circleCover_homeomorph_aux_fwd
+    invFun := apm_t01A04_nh_circleCover_homeomorph_aux_bwd
+    left_inv := ?_
+    right_inv := ?_
+    continuous_toFun := apm_t01A04_nh_circleCover_homeomorph_aux_fwd_continuous
+    continuous_invFun := apm_t01A04_nh_circleCover_homeomorph_aux_bwd_continuous }⟩
+  · intro x
+    refine Quotient.inductionOn x ?_
+    rintro (⟨i, q⟩ | z)
+    · fin_cases i <;> rfl
+    · rfl
+  · intro x
+    refine Quotient.inductionOn x ?_
+    rintro (w | q)
+    · refine Quotient.inductionOn w ?_
+      rintro (p | z) <;> rfl
+    · rfl
+
+/-- LEAF (quotient homeomorphism).  Forward on representatives:
+`inl q ↦ inl (inl q)`, `inr (0, z) ↦ inl (inr z)`, `inr (1, z) ↦ inr z`;
+backward: `inl (inl q) ↦ inl q`, `inl (inr z) ↦ inr (0, z)`,
+`inr z ↦ inr (1, z)`.  The glue cases are `(sheetPoint 0, 1) = (1, 1)` with
+`(0, 1)` and `(sheetPoint 1, 1)` with `(1, 1)`.  Same pattern as the circle
+twin. 100-180 lines. -/
+def apm_t01A04_nh_torusCover_homeomorph_aux_fraw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → apm_t01A04_nh_TCModel
+  | .inl q => quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)
+      (.inl (quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) (.inl q)))
+  | .inr (i, z) => if i = 0 then
+      quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)
+        (.inl (quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) (.inr z)))
+    else quotientMap apm_t01A04_nh_torusAntipode (1 : Circle) (.inr z)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_fraw_rel {x y}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel x y) :
+    apm_t01A04_nh_torusCover_homeomorph_aux_fraw x =
+      apm_t01A04_nh_torusCover_homeomorph_aux_fraw y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy with
+      | glue i =>
+        fin_cases i
+        · simp [apm_t01A04_nh_torusCover_homeomorph_aux_fraw,
+            apm_t01A04_nh_torusAntipode]
+          apply congrArg (quotientMap apm_t01A04_nh_torusAntipode (1 : Circle) ∘ Sum.inl)
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            ConstructionTargets.PointWedgeQuotient.Rel.base)
+        · simp [apm_t01A04_nh_torusCover_homeomorph_aux_fraw,
+            apm_t01A04_nh_torusAntipode]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            ConstructionTargets.PointWedgeQuotient.Rel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_f :
+    apm_t01a04_TorusCover → apm_t01A04_nh_TCModel :=
+  Quotient.lift apm_t01A04_nh_torusCover_homeomorph_aux_fraw
+    (fun _ _ h => apm_t01A04_nh_torusCover_homeomorph_aux_fraw_rel h)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_f_continuous :
+    Continuous apm_t01A04_nh_torusCover_homeomorph_aux_f := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  constructor
+  · simpa [apm_t01A04_nh_torusCover_homeomorph_aux_fraw] using
+      (continuous_quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)).comp
+        (continuous_inl.comp
+          ((continuous_quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)).comp
+            continuous_inl))
+  · have hp : IsClopen {p : Fin 2 × Circle | p.1 = 0} := by
+      constructor
+      · exact (isClosed_discrete ({0} : Set (Fin 2))).preimage
+          (continuous_fst : Continuous (fun p : Fin 2 × Circle => p.1))
+      · exact (isOpen_discrete ({0} : Set (Fin 2))).preimage
+          (continuous_fst : Continuous (fun p : Fin 2 × Circle => p.1))
+    apply Continuous.if
+    · intro p hp'
+      rw [hp.frontier_eq] at hp'
+      exact hp'.elim
+    · exact (continuous_quotientMap _ _).comp
+        (continuous_inl.comp ((continuous_quotientMap _ _).comp
+          (continuous_inr.comp continuous_snd)))
+    · exact (continuous_quotientMap _ _).comp (continuous_inr.comp continuous_snd)
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_TorusCover
+  | .inl q => Quotient.mk _ (.inl q)
+  | .inr z => Quotient.mk _ (.inr (0, z))
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw_rel {x y}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle)) x y) :
+    apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw x =
+      apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      apply Quotient.sound
+      simpa using Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 0)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_binner :
+    apm_t01A04_nh_W → apm_t01a04_TorusCover :=
+  Quotient.lift apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw
+    (fun _ _ h => apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw_rel h)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_binner_continuous :
+    Continuous apm_t01A04_nh_torusCover_homeomorph_aux_binner := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  constructor
+  · have hq : Continuous (fun z : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ z : apm_t01a04_TorusCover)) := continuous_coinduced_rng
+    simpa [apm_t01A04_nh_torusCover_homeomorph_aux_binner,
+      apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw] using
+      hq.comp continuous_inl
+  · have hq : Continuous (fun z : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ z : apm_t01a04_TorusCover)) := continuous_coinduced_rng
+    simpa [apm_t01A04_nh_torusCover_homeomorph_aux_binner,
+      apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw] using
+      hq.comp (continuous_inr.comp (continuous_const.prodMk continuous_id))
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_braw :
+    Sum apm_t01A04_nh_W Circle → apm_t01a04_TorusCover
+  | .inl w => apm_t01A04_nh_torusCover_homeomorph_aux_binner w
+  | .inr z => Quotient.mk _ (.inr (1, z))
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_braw_rel {x y}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel
+        apm_t01A04_nh_torusAntipode (1 : Circle)) x y) :
+    apm_t01A04_nh_torusCover_homeomorph_aux_braw x =
+      apm_t01A04_nh_torusCover_homeomorph_aux_braw y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      apply Quotient.sound
+      simpa [apm_t01A04_nh_torusCover_homeomorph_aux_braw,
+        apm_t01A04_nh_torusCover_homeomorph_aux_binner,
+        apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw,
+        apm_t01A04_nh_torusAntipode] using
+          Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 1)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_b :
+    apm_t01A04_nh_TCModel → apm_t01a04_TorusCover :=
+  Quotient.lift apm_t01A04_nh_torusCover_homeomorph_aux_braw
+    (fun _ _ h => apm_t01A04_nh_torusCover_homeomorph_aux_braw_rel h)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_b_continuous :
+    Continuous apm_t01A04_nh_torusCover_homeomorph_aux_b := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  constructor
+  · simpa [apm_t01A04_nh_torusCover_homeomorph_aux_b,
+      apm_t01A04_nh_torusCover_homeomorph_aux_braw] using
+      apm_t01A04_nh_torusCover_homeomorph_aux_binner_continuous
+  · have hq : Continuous (fun z : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ z : apm_t01a04_TorusCover)) := continuous_coinduced_rng
+    simpa [apm_t01A04_nh_torusCover_homeomorph_aux_b,
+      apm_t01A04_nh_torusCover_homeomorph_aux_braw] using
+      hq.comp (continuous_inr.comp (continuous_const.prodMk continuous_id))
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_leftInverse :
+    Function.LeftInverse apm_t01A04_nh_torusCover_homeomorph_aux_b
+      apm_t01A04_nh_torusCover_homeomorph_aux_f := by
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (q | ⟨i, z⟩)
+  · rfl
+  · fin_cases i <;> rfl
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_rightInverse :
+    Function.RightInverse apm_t01A04_nh_torusCover_homeomorph_aux_b
+      apm_t01A04_nh_torusCover_homeomorph_aux_f := by
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (w | z)
+  · refine Quotient.inductionOn w ?_
+    rintro (q | z)
+    · rfl
+    · rfl
+  · rfl
+
+lemma apm_t01A04_nh_torusCover_homeomorph :
+    Nonempty (apm_t01a04_TorusCover ≃ₜ apm_t01A04_nh_TCModel) := by
+  exact ⟨
+    { toEquiv :=
+        { toFun := apm_t01A04_nh_torusCover_homeomorph_aux_f
+          invFun := apm_t01A04_nh_torusCover_homeomorph_aux_b
+          left_inv := apm_t01A04_nh_torusCover_homeomorph_aux_leftInverse
+          right_inv := apm_t01A04_nh_torusCover_homeomorph_aux_rightInverse }
+      continuous_toFun := apm_t01A04_nh_torusCover_homeomorph_aux_f_continuous
+      continuous_invFun := apm_t01A04_nh_torusCover_homeomorph_aux_b_continuous }⟩
+
+/-- LEAF (generic: an open set of the left summand missing the wedge point is
+an open subset of the wedge, homeomorphic to itself).  Openness: the preimage
+under `quotientMap` of the image is `Sum.inl '' U` (no representative of the
+glued class lies in it, `mem_iff_of_eqvGen`-style `EqvGen` induction), open by
+`isOpenMap_inl`.  The homeomorphism is `quotientMap ∘ inl` restricted;
+continuity of the inverse uses that `quotientMap` restricted to the open
+saturated set `inl '' U` is a quotient map onto its image
+(`Topology.IsQuotientMap.restrictPreimage_isOpen`). 60-120 lines. -/
+lemma apm_t01A04_nh_wedge_leftPiece_aux_eqv
+    {X Y : Type} (x₀ : X) (y₀ : Y) (U : Set X) (hx : x₀ ∉ U)
+    {a b : Sum X Y} (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel x₀ y₀) a b) :
+    a ∈ Sum.inl '' U ↔ b ∈ Sum.inl '' U := by
+  induction h with
+  | rel a b hab =>
+      cases hab
+      constructor
+      · rintro ⟨u, hu, h⟩
+        exact (hx (Sum.inl.inj h ▸ hu)).elim
+      · rintro ⟨u, hu, h⟩
+        exact (Sum.inl_ne_inr h).elim
+  | refl => exact Iff.rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_nh_wedge_leftPiece_aux_preimage
+    {X Y : Type} (x₀ : X) (y₀ : Y) (U : Set X) (hx : x₀ ∉ U) :
+    quotientMap x₀ y₀ ⁻¹' (quotientMap x₀ y₀ '' (Sum.inl '' U)) =
+      Sum.inl '' U := by
+  ext a
+  constructor
+  · rintro ⟨b, hb, hba⟩
+    exact (apm_t01A04_nh_wedge_leftPiece_aux_eqv x₀ y₀ U hx
+      (Quotient.exact hba)).mp hb
+  · intro ha
+    exact ⟨a, ha, rfl⟩
+
+lemma apm_t01A04_nh_wedge_leftPiece_aux_open
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) (U : Set X) (hU : IsOpen U) (hx : x₀ ∉ U) :
+    IsOpen (quotientMap x₀ y₀ '' (Sum.inl '' U)) := by
+  rw [← (ConstructionTargets.PointWedgeRestrictedOpenQuotient.quotientMap_isQuotientMap
+    x₀ y₀).isOpen_preimage,
+    apm_t01A04_nh_wedge_leftPiece_aux_preimage x₀ y₀ U hx]
+  exact isOpenMap_inl U hU
+
+lemma apm_t01A04_nh_wedge_leftPiece
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) (U : Set X) (hU : IsOpen U) (hx : x₀ ∉ U) :
+    IsOpen (quotientMap x₀ y₀ '' (Sum.inl '' U)) ∧
+      ∃ e : (quotientMap x₀ y₀ '' (Sum.inl '' U)) ≃ₜ U,
+        ∀ u : U, e ⟨quotientMap x₀ y₀ (.inl u), .inl u, ⟨u, u.2, rfl⟩, rfl⟩ = u := by
+  let S : Set (Wedge x₀ y₀) := quotientMap x₀ y₀ '' (Sum.inl '' U)
+  have hS : IsOpen S := apm_t01A04_nh_wedge_leftPiece_aux_open x₀ y₀ U hU hx
+  let f : U → S := fun u => ⟨quotientMap x₀ y₀ (.inl u),
+    .inl u, ⟨u, u.2, rfl⟩, rfl⟩
+  have hf_cont : Continuous f := by
+    apply Continuous.subtype_mk
+    exact (continuous_quotientMap x₀ y₀).comp
+      (continuous_inl.comp continuous_subtype_val)
+  have hf_inj : Function.Injective f := by
+    intro u v huv
+    have hq : quotientMap x₀ y₀ (.inl (u : X)) =
+        quotientMap x₀ y₀ (.inl (v : X)) := congrArg Subtype.val huv
+    have he := Quotient.exact hq
+    have hm : (Sum.inl (u : X) : Sum X Y) ∈ Sum.inl '' ({u.1} : Set X) :=
+      ⟨u.1, rfl, rfl⟩
+    have hxu : x₀ ∉ ({u.1} : Set X) := by
+      intro h
+      exact hx (h.symm ▸ u.2)
+    have hm' := (apm_t01A04_nh_wedge_leftPiece_aux_eqv x₀ y₀
+      ({u.1} : Set X) hxu he).mp hm
+    rcases hm' with ⟨w, hw, hinj⟩
+    apply Subtype.ext
+    have hw' : w = u.1 := by simpa using hw
+    exact hw'.symm.trans (Sum.inl.inj hinj)
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨z, a, ⟨u, hu, rfl⟩, rfl⟩
+    exact ⟨⟨u, hu⟩, rfl⟩
+  have hf_open : IsOpenMap f := by
+    intro V hV
+    have hVU : IsOpen (Subtype.val '' V : Set X) :=
+      hU.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen.mp hV
+    have hxV : x₀ ∉ Subtype.val '' V := by
+      rintro ⟨u, hu, rfl⟩
+      exact hx u.2
+    rw [hS.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]
+    convert apm_t01A04_nh_wedge_leftPiece_aux_open x₀ y₀
+      (Subtype.val '' V) hVU hxV using 1
+    ext z
+    constructor
+    · rintro ⟨s, ⟨u, hu, rfl⟩, rfl⟩
+      exact ⟨Sum.inl u.1, ⟨u.1, ⟨u, hu, rfl⟩, rfl⟩, rfl⟩
+    · rintro ⟨a, ⟨x, ⟨u, hu, rfl⟩, rfl⟩, hza⟩
+      rw [← hza]
+      exact ⟨f u, ⟨u, hu, rfl⟩, rfl⟩
+  let H : U ≃ₜ S := (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).toHomeomorphOfContinuousOpen
+    hf_cont hf_open
+  refine ⟨hS, ?_⟩
+  refine ⟨H.symm, ?_⟩
+  intro u
+  exact H.symm_apply_apply u
+
+/-- LEAF: the right-summand twin of `apm_t01A04_nh_wedge_leftPiece`
+(same proof with `Sum.inr`). -/
+lemma apm_t01A04_nh_wedge_rightPiece_aux_eqv
+    {X Y : Type} (x₀ : X) (y₀ : Y) (U : Set Y) (hy : y₀ ∉ U)
+    {a b : Sum X Y} (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel x₀ y₀) a b) :
+    a ∈ Sum.inr '' U ↔ b ∈ Sum.inr '' U := by
+  induction h with
+  | rel a b hab =>
+      cases hab
+      constructor
+      · rintro ⟨u, hu, h⟩
+        exact (Sum.inr_ne_inl h).elim
+      · rintro ⟨u, hu, h⟩
+        exact (hy (Sum.inr.inj h ▸ hu)).elim
+  | refl => exact Iff.rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_nh_wedge_rightPiece_aux_preimage
+    {X Y : Type} (x₀ : X) (y₀ : Y) (U : Set Y) (hy : y₀ ∉ U) :
+    quotientMap x₀ y₀ ⁻¹' (quotientMap x₀ y₀ '' (Sum.inr '' U)) =
+      Sum.inr '' U := by
+  ext a
+  constructor
+  · rintro ⟨b, hb, hba⟩
+    exact (apm_t01A04_nh_wedge_rightPiece_aux_eqv x₀ y₀ U hy
+      (Quotient.exact hba)).mp hb
+  · intro ha
+    exact ⟨a, ha, rfl⟩
+
+lemma apm_t01A04_nh_wedge_rightPiece_aux_open
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) (U : Set Y) (hU : IsOpen U) (hy : y₀ ∉ U) :
+    IsOpen (quotientMap x₀ y₀ '' (Sum.inr '' U)) := by
+  rw [← (ConstructionTargets.PointWedgeRestrictedOpenQuotient.quotientMap_isQuotientMap
+    x₀ y₀).isOpen_preimage,
+    apm_t01A04_nh_wedge_rightPiece_aux_preimage x₀ y₀ U hy]
+  exact isOpenMap_inr U hU
+
+lemma apm_t01A04_nh_wedge_rightPiece
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) (U : Set Y) (hU : IsOpen U) (hy : y₀ ∉ U) :
+    IsOpen (quotientMap x₀ y₀ '' (Sum.inr '' U)) ∧
+      ∃ e : (quotientMap x₀ y₀ '' (Sum.inr '' U)) ≃ₜ U,
+        ∀ u : U, e ⟨quotientMap x₀ y₀ (.inr u), .inr u, ⟨u, u.2, rfl⟩, rfl⟩ = u := by
+  let S : Set (Wedge x₀ y₀) := quotientMap x₀ y₀ '' (Sum.inr '' U)
+  have hS : IsOpen S := apm_t01A04_nh_wedge_rightPiece_aux_open x₀ y₀ U hU hy
+  let f : U → S := fun u => ⟨quotientMap x₀ y₀ (.inr u),
+    .inr u, ⟨u, u.2, rfl⟩, rfl⟩
+  have hf_cont : Continuous f := by
+    apply Continuous.subtype_mk
+    exact (continuous_quotientMap x₀ y₀).comp
+      (continuous_inr.comp continuous_subtype_val)
+  have hf_inj : Function.Injective f := by
+    intro u v huv
+    have hq : quotientMap x₀ y₀ (.inr (u : Y)) =
+        quotientMap x₀ y₀ (.inr (v : Y)) := congrArg Subtype.val huv
+    have he := Quotient.exact hq
+    have hm : (Sum.inr (u : Y) : Sum X Y) ∈ Sum.inr '' ({u.1} : Set Y) :=
+      ⟨u.1, rfl, rfl⟩
+    have hyu : y₀ ∉ ({u.1} : Set Y) := by
+      intro h
+      exact hy (h.symm ▸ u.2)
+    have hm' := (apm_t01A04_nh_wedge_rightPiece_aux_eqv x₀ y₀
+      ({u.1} : Set Y) hyu he).mp hm
+    rcases hm' with ⟨w, hw, hinj⟩
+    apply Subtype.ext
+    have hw' : w = u.1 := by simpa using hw
+    exact hw'.symm.trans (Sum.inr.inj hinj)
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨z, a, ⟨u, hu, rfl⟩, rfl⟩
+    exact ⟨⟨u, hu⟩, rfl⟩
+  have hf_open : IsOpenMap f := by
+    intro V hV
+    have hVU : IsOpen (Subtype.val '' V : Set Y) :=
+      hU.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen.mp hV
+    have hyV : y₀ ∉ Subtype.val '' V := by
+      rintro ⟨u, hu, rfl⟩
+      exact hy u.2
+    rw [hS.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]
+    convert apm_t01A04_nh_wedge_rightPiece_aux_open x₀ y₀
+      (Subtype.val '' V) hVU hyV using 1
+    ext z
+    constructor
+    · rintro ⟨s, ⟨u, hu, rfl⟩, rfl⟩
+      exact ⟨Sum.inr u.1, ⟨u.1, ⟨u, hu, rfl⟩, rfl⟩, rfl⟩
+    · rintro ⟨a, ⟨x, ⟨u, hu, rfl⟩, rfl⟩, hza⟩
+      rw [← hza]
+      exact ⟨f u, ⟨u, hu, rfl⟩, rfl⟩
+  let H : U ≃ₜ S := (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).toHomeomorphOfContinuousOpen
+    hf_cont hf_open
+  refine ⟨hS, ?_⟩
+  refine ⟨H.symm, ?_⟩
+  intro u
+  exact H.symm_apply_apply u
+
+/-- The circle with `1` removed. -/
+def apm_t01A04_nh_puncturedAtOne : Set Circle := {z | (z : ℂ) ≠ 1}
+
+lemma apm_t01A04_nh_puncturedAtOne_isOpen : IsOpen apm_t01A04_nh_puncturedAtOne :=
+  isOpen_ne.preimage continuous_subtype_val
+
+lemma apm_t01A04_nh_sheetPoint_one_mem :
+    apm_t01a04_sheetPoint 1 ∈ apm_t01A04_nh_puncturedAtOne := by
+  show ((apm_t01a04_sheetPoint 1 : Circle) : ℂ) ≠ 1
+  rw [apm_t01a04_sheetPoint_one, Circle.coe_exp, Complex.exp_pi_mul_I]
+  norm_num
+
+/-- `S¹ ∖ {1}` contracts to `-1`: multiplication by `-1` carries it onto
+`circleBaseNeighborhood`, whose contraction is pulled back. -/
+lemma apm_t01A04_nh_puncturedAtOne_contraction :
+    Nonempty (PointedContraction apm_t01A04_nh_puncturedAtOne
+      ⟨apm_t01a04_sheetPoint 1, apm_t01A04_nh_sheetPoint_one_mem⟩) := by
+  have hm : ((apm_t01a04_sheetPoint 1 : Circle) : ℂ) = -1 := by
+    rw [apm_t01a04_sheetPoint_one, Circle.coe_exp, Complex.exp_pi_mul_I]
+  let e : apm_t01A04_nh_puncturedAtOne ≃ₜ circleBaseNeighborhood :=
+    (Homeomorph.mulLeft (apm_t01a04_sheetPoint 1)).subtype (fun z => by
+      change (z : ℂ) ≠ 1 ↔ ((apm_t01a04_sheetPoint 1 * z : Circle) : ℂ) ≠ -1
+      rw [Circle.coe_mul, hm]
+      constructor
+      · intro h h'
+        exact h (by linear_combination -h')
+      · intro h h'
+        exact h (by rw [h']; ring))
+  have hb : e ⟨apm_t01a04_sheetPoint 1, apm_t01A04_nh_sheetPoint_one_mem⟩ =
+      ⟨1, circleBase_mem⟩ := by
+    apply Subtype.ext
+    apply Circle.ext
+    change ((apm_t01a04_sheetPoint 1 * apm_t01a04_sheetPoint 1 : Circle) : ℂ) = ((1 : Circle) : ℂ)
+    rw [Circle.coe_mul, hm, Circle.coe_one]
+    norm_num
+  exact ⟨PointedContraction.homeomorphSymm e (hb ▸ circleBaseNeighborhood_contraction)⟩
+
+/-- Homeomorphic path-connected spaces have equally many `π₁`-characters into
+any group, at any basepoints. -/
+lemma apm_t01A04_nh_card_hom_eq_of_homeomorph
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (e : X ≃ₜ Y) (x : X) (y : Y) (G : Type) [Group G] :
+    Nat.card (FundamentalGroup X x →* G) = Nat.card (FundamentalGroup Y y →* G) := by
+  have hbij : Function.Bijective
+      (FundamentalGroup.map ⟨e, e.continuous⟩ x) := by
+    have hx : e.symm (e x) = x := e.symm_apply_apply x
+    have back : ∀ p : Path x x,
+        ((p.map e.continuous).map e.symm.continuous).cast hx.symm hx.symm = p := by
+      intro p; ext t; exact e.symm_apply_apply (p t)
+    constructor
+    · intro p q hpq
+      obtain ⟨p⟩ := p
+      obtain ⟨q⟩ := q
+      have h1 : (Path.Homotopic.Quotient.mk ((p.map e.continuous).map e.symm.continuous)) =
+          Path.Homotopic.Quotient.mk ((q.map e.continuous).map e.symm.continuous) :=
+        Quotient.sound ((Path.Homotopic.Quotient.exact hpq).map ⟨e.symm, e.symm.continuous⟩)
+      have h2 := congrArg (fun γ => Path.Homotopic.Quotient.cast γ hx.symm hx.symm) h1
+      simp only [← Path.Homotopic.Quotient.mk_cast, back] at h2
+      exact h2
+    · intro q
+      obtain ⟨q⟩ := q
+      refine ⟨Path.Homotopic.Quotient.mk
+        ((q.map e.symm.continuous).cast (e.symm_apply_apply x).symm
+          (e.symm_apply_apply x).symm), ?_⟩
+      apply Quotient.sound
+      convert Path.Homotopic.refl q using 1 <;> ext t <;>
+        exact e.apply_symm_apply _
+  let φ : FundamentalGroup X x ≃* FundamentalGroup Y y :=
+    (MulEquiv.ofBijective _ hbij).trans
+      (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected (e x) y)
+  exact Nat.card_congr (MulEquiv.monoidHomCongrLeftEquiv φ)
+
+/-- Characters of a coproduct: `Monoid.Coprod.liftEquiv`. -/
+lemma apm_t01A04_nh_card_hom_coprod (A B G : Type) [Group A] [Group B] [Group G] :
+    Nat.card (Monoid.Coprod A B →* G) = Nat.card (A →* G) * Nat.card (B →* G) := by
+  rw [← Nat.card_prod]
+  exact Nat.card_congr Monoid.Coprod.liftEquiv.symm
+
+/-- `π₁(S¹)` has two characters into `ℤ/2`. -/
+lemma apm_t01A04_nh_card_hom_circle :
+    Nat.card (FundamentalGroup Circle 1 →* apm_t01A04_nh_Z2) = 2 := by
+  rw [Nat.card_congr (MulEquiv.monoidHomCongrLeftEquiv
+      ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt),
+    ← Nat.card_congr (zpowersHom apm_t01A04_nh_Z2)]
+  simp [apm_t01A04_nh_Z2]
+
+/-- `π₁(T²) ≅ π₁(S¹) × π₁(S¹)` has four characters into `ℤ/2`. -/
+lemma apm_t01A04_nh_card_hom_torus
+    (hcirc : Nat.card (FundamentalGroup Circle 1 →* apm_t01A04_nh_Z2) = 2) :
+    Nat.card (FundamentalGroup apm_t01a04_Torus (1, 1) →* apm_t01A04_nh_Z2) = 4 := by
+  let A := FundamentalGroup Circle 1
+  let E : (A × A →* apm_t01A04_nh_Z2) ≃
+      (A →* apm_t01A04_nh_Z2) × (A →* apm_t01A04_nh_Z2) :=
+    { toFun := fun f => (f.comp (MonoidHom.inl A A), f.comp (MonoidHom.inr A A))
+      invFun := fun p => p.1.coprod p.2
+      left_inv := fun f => MonoidHom.coprod_unique f
+      right_inv := fun p => by
+        ext <;> simp }
+  rw [Nat.card_congr (MulEquiv.monoidHomCongrLeftEquiv
+      (ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv
+        (1 : Circle) (1 : Circle))),
+    Nat.card_congr E, Nat.card_prod, hcirc]
+
+/-- Characters of `T² ∨ S¹` at any basepoint: `4 · 2 = 8`. -/
+lemma apm_t01A04_nh_card_W (x : apm_t01A04_nh_W) :
+    Nat.card (FundamentalGroup apm_t01A04_nh_W x →* apm_t01A04_nh_Z2) = 8 := by
+  rw [apm_t01A04_nh_card_hom_eq_of_homeomorph (Homeomorph.refl apm_t01A04_nh_W) x
+      ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase,
+    Nat.card_congr (MulEquiv.monoidHomCongrLeftEquiv apm_t01A04_img_vanKampen),
+    apm_t01A04_nh_card_hom_coprod,
+    apm_t01A04_nh_card_hom_torus apm_t01A04_nh_card_hom_circle,
+    apm_t01A04_nh_card_hom_circle]
+
+/-- The contractible neighbourhood `S¹ ∖ {1}` of the circle point `-1` in
+`T² ∨ S¹`. -/
+def apm_t01A04_nh_NC : Set apm_t01A04_nh_W :=
+  quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) ''
+    (Sum.inr '' apm_t01A04_nh_puncturedAtOne)
+
+lemma apm_t01A04_nh_one_not_mem : (1 : Circle) ∉ apm_t01A04_nh_puncturedAtOne :=
+  fun h => h Circle.coe_one
+
+lemma apm_t01A04_nh_circleAntipode_mem : apm_t01A04_nh_circleAntipode ∈ apm_t01A04_nh_NC :=
+  ⟨.inr (apm_t01a04_sheetPoint 1), ⟨_, apm_t01A04_nh_sheetPoint_one_mem, rfl⟩, rfl⟩
+
+/-- Characters of `(T² ∨ S¹) ∨ T²`: `8 · 4 = 32`. -/
+lemma apm_t01A04_nh_card_CCModel :
+    Nat.card (FundamentalGroup apm_t01A04_nh_CCModel
+      (quotientMap apm_t01A04_nh_circleAntipode ((1, 1) : apm_t01a04_Torus)
+        (.inl apm_t01A04_nh_circleAntipode)) →* apm_t01A04_nh_Z2) = 32 := by
+  obtain ⟨hNo, e, he⟩ := apm_t01A04_nh_wedge_rightPiece ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+    apm_t01A04_nh_puncturedAtOne apm_t01A04_nh_puncturedAtOne_isOpen apm_t01A04_nh_one_not_mem
+  obtain ⟨c0⟩ := apm_t01A04_nh_puncturedAtOne_contraction
+  have hbase : e ⟨apm_t01A04_nh_circleAntipode, apm_t01A04_nh_circleAntipode_mem⟩ =
+      ⟨apm_t01a04_sheetPoint 1, apm_t01A04_nh_sheetPoint_one_mem⟩ :=
+    he ⟨apm_t01a04_sheetPoint 1, apm_t01A04_nh_sheetPoint_one_mem⟩
+  let cN : PointedContraction apm_t01A04_nh_NC
+      ⟨apm_t01A04_nh_circleAntipode, apm_t01A04_nh_circleAntipode_mem⟩ :=
+    PointedContraction.homeomorphSymm e (hbase ▸ c0)
+  rw [Nat.card_congr (MulEquiv.monoidHomCongrLeftEquiv
+      (genericPointWedgeFundamentalGroupEquiv apm_t01A04_nh_circleAntipode
+        ((1, 1) : apm_t01a04_Torus) apm_t01A04_img_torusNbhd apm_t01A04_nh_NC
+        apm_t01A04_img_torusNbhd_isOpen hNo apm_t01A04_img_torusBase_mem
+        apm_t01A04_nh_circleAntipode_mem apm_t01A04_img_torusContraction cN)),
+    apm_t01A04_nh_card_hom_coprod, apm_t01A04_nh_card_W,
+    apm_t01A04_nh_card_hom_torus apm_t01A04_nh_card_hom_circle]
+
+/-- The contractible neighbourhood `(S¹ ∖ {1}) × (S¹ ∖ {-1})` of the torus
+point `(-1, 1)` in `T² ∨ S¹`. -/
+def apm_t01A04_nh_NT : Set apm_t01A04_nh_W :=
+  quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) ''
+    (Sum.inl '' (apm_t01A04_nh_puncturedAtOne ×ˢ circleBaseNeighborhood))
+
+lemma apm_t01A04_nh_torusAntipode_mem : apm_t01A04_nh_torusAntipode ∈ apm_t01A04_nh_NT :=
+  ⟨.inl (apm_t01a04_sheetPoint 1, 1),
+    ⟨_, ⟨apm_t01A04_nh_sheetPoint_one_mem, circleBase_mem⟩, rfl⟩, rfl⟩
+
+/-- Characters of `(T² ∨ S¹) ∨ S¹`: `8 · 2 = 16`. -/
+lemma apm_t01A04_nh_card_TCModel :
+    Nat.card (FundamentalGroup apm_t01A04_nh_TCModel
+      (quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)
+        (.inl apm_t01A04_nh_torusAntipode)) →* apm_t01A04_nh_Z2) = 16 := by
+  have hU : IsOpen (apm_t01A04_nh_puncturedAtOne ×ˢ circleBaseNeighborhood) :=
+    apm_t01A04_nh_puncturedAtOne_isOpen.prod circleBaseNeighborhood_isOpen
+  have hx : ((1, 1) : apm_t01a04_Torus) ∉
+      apm_t01A04_nh_puncturedAtOne ×ˢ circleBaseNeighborhood :=
+    fun h => apm_t01A04_nh_one_not_mem h.1
+  obtain ⟨hNo, e, he⟩ := apm_t01A04_nh_wedge_leftPiece ((1, 1) : apm_t01a04_Torus) (1 : Circle)
+    _ hU hx
+  obtain ⟨c0⟩ := apm_t01A04_nh_puncturedAtOne_contraction
+  let cU : PointedContraction
+      (apm_t01A04_nh_puncturedAtOne ×ˢ circleBaseNeighborhood)
+      ⟨(apm_t01a04_sheetPoint 1, 1),
+        ⟨apm_t01A04_nh_sheetPoint_one_mem, circleBase_mem⟩⟩ :=
+    PointedContraction.homeomorphSymm
+      (Homeomorph.Set.prod apm_t01A04_nh_puncturedAtOne circleBaseNeighborhood)
+      (c0.prod circleBaseNeighborhood_contraction)
+  have hbase : e ⟨apm_t01A04_nh_torusAntipode, apm_t01A04_nh_torusAntipode_mem⟩ =
+      ⟨(apm_t01a04_sheetPoint 1, 1),
+        ⟨apm_t01A04_nh_sheetPoint_one_mem, circleBase_mem⟩⟩ :=
+    he ⟨(apm_t01a04_sheetPoint 1, 1),
+        ⟨apm_t01A04_nh_sheetPoint_one_mem, circleBase_mem⟩⟩
+  let cN : PointedContraction apm_t01A04_nh_NT
+      ⟨apm_t01A04_nh_torusAntipode, apm_t01A04_nh_torusAntipode_mem⟩ :=
+    PointedContraction.homeomorphSymm e (hbase ▸ cU)
+  rw [Nat.card_congr (MulEquiv.monoidHomCongrLeftEquiv
+      (genericPointWedgeFundamentalGroupEquiv apm_t01A04_nh_torusAntipode
+        (1 : Circle) circleBaseNeighborhood apm_t01A04_nh_NT
+        circleBaseNeighborhood_isOpen hNo circleBase_mem
+        apm_t01A04_nh_torusAntipode_mem circleBaseNeighborhood_contraction cN)),
+    apm_t01A04_nh_card_hom_coprod, apm_t01A04_nh_card_W, apm_t01A04_nh_card_hom_circle]
+
+/-- The two concrete total spaces are not homeomorphic: a homeomorphism would
+give a homeomorphism of the wedge models and hence equal numbers of
+`π₁`-characters into `ℤ/2`, but these are `32` and `16`. -/
 theorem apm_t01A04_bridge_total_spaces_not_homeomorphic :
     ¬Nonempty (apm_t01a04_CircleCover ≃ₜ apm_t01a04_TorusCover) := by
-  sorry
+  rintro ⟨h⟩
+  obtain ⟨e₁⟩ := apm_t01A04_nh_circleCover_homeomorph
+  obtain ⟨e₂⟩ := apm_t01A04_nh_torusCover_homeomorph
+  have hcard := apm_t01A04_nh_card_hom_eq_of_homeomorph (e₁.symm.trans (h.trans e₂))
+    (quotientMap apm_t01A04_nh_circleAntipode ((1, 1) : apm_t01a04_Torus)
+      (.inl apm_t01A04_nh_circleAntipode))
+    (quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)
+      (.inl apm_t01A04_nh_torusAntipode)) apm_t01A04_nh_Z2
+  rw [apm_t01A04_nh_card_CCModel, apm_t01A04_nh_card_TCModel] at hcard
+  norm_num at hcard
 
 theorem apm_t01a04 :
     ∃ (a b c : apm_t01a04_piOne)

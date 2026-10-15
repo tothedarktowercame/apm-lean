@@ -19,259 +19,118 @@ by local dimension.  The regular action below is genuinely transitive (a
 or disconnected total space.  The already compiled fiber-cardinality lemma
 also rules out empty fibers directly.
 
-No solve-loop refutation exists.  The topology ledger and
-`~/notes/closer/audits/t98A03.edn` instead record the same four missing
-boundaries exposed below.  Because each is substantially larger than one
-30–150-line lemma, they are marked **LIBRARY**, as required by the batch note;
-splitting their conclusions into fake wrappers would not create independent
-work.
+No solve-loop refutation exists.
 
-## Reused compiled facts and imports
+## Revision 2026-10-15: library contracts split
 
-`apm_t98a03_wedge_base_eq`,
-`apm_t98a03_threeFoldCover_surjective`, and
-`apm_t98a03_threeFoldCover_fiber_equiv_fin_three` are copied with their
-complete proofs from `Main.lean`.
+The three former LIBRARY lemmas (π₁ and both covers) are now sorry-free
+assemblies over 22 seat leaves.  The non-manifold part is fully proved
+(`#print axioms apm_t98a03_wedge_not_manifold`: no `sorryAx`); its seven
+leaves were proved by seats on 10-13..15 and are kept untouched.
 
-I searched every sorry-free `ConstructionTargets/*.lean` whose name contains
-`Wedge`, `Cover`, `Project`, `Fundamental`, `Torus`, `Manifold`, or
-`VanKampen`, and searched their contents for monodromy and free-product APIs.
-The blueprint imports the two directly useful sorry-free modules:
+### Reused proved material
 
-* `ConstructionTargets.PointWedgeVanKampen`, whose
-  `genericPointWedgeNormalizedFundamentalGroupEquiv` supplies the generic
-  wedge free-product computation;
-* `ConstructionTargets.CoveringMonodromyCosets`, whose
-  `coveringFiberEquivCosets`, `coveringFiberCard_eq_index`, and
-  `coveringExistsUniqueLift_of_range_le` supply the existing cover-to-subgroup
-  direction and lifting criterion.
+* Copied verbatim from the closed `problems/t92J05/lean/Main.lean` (prefix
+  `apm_t92J05_` → `apm_t98a03_t92_`): `fundamentalGroup_prod_equiv`, the
+  antipodal `ZMod 2` action on `S²`, the homeomorphism
+  `S²/± ≃ₜ RP²` (`..._aux_toP/toPQ/toQ`), `projectivePlane_pathConnected`, and
+  `bridge_projectivePlane_fundamentalGroup` (π₁(RP², r) ≃* Z/2 at every r).
+  Our RP² instance (`coinduced (mk')`) is definitionally t92J05's and
+  `ProjectiveSpaceTopology.Space ℝ 2`'s (checked by `rfl`).
+* Library: `genericPointWedgeNormalizedFundamentalGroupEquiv`,
+  `PointedContraction.prod/homeomorphSymm`, `circleBaseNeighborhood_contraction`,
+  `quotientHomeomorphOfRelIff`, `circleFundamentalGroupMulEquivInt`,
+  `fundamentalGroupMulEquivOfHomeomorph`.
+* Mathlib: `IsCoveringMapOn.of_openPartialHomeomorph` (compact T2 total space,
+  T2 base, local homeomorphism ⇒ covering), `IsCoveringMap.eq_of_comp_eq`,
+  `Circle.isQuotientCoveringMap_npow`,
+  `isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul`,
+  `t2Space_of_properlyDiscontinuousSMul_of_t2Space`.
 
-Compilation checks the import paths.  Neither module supplies RP²'s concrete
-fundamental group, reconstruction of a cover from a finite action/subgroup, or
-the deck-transitivity equivalence required here.
+## Route
 
-## Remaining lemmas
+**π₁.** `X t₀ r₀ ≃ₜ Wedge t₀ r₀` (relation iff), then point-wedge van Kampen
+with explicit contractible neighbourhoods: torus = product of punctured circles
+`{z ≠ -c}`; RP² = affine chart `{r | r.rep·r₀.rep ≠ 0}` contracted by the
+homogeneous formula `[(1-t)v + t(v·u/u·u)u]` (defined, with all endpoint
+identities proved; only continuity is a leaf).  Torus π₁ = Z² via the copied
+product equiv; RP² π₁ from t92J05.  Arbitrary basepoints throughout.
 
-### `apm_t98a03_wedge_not_manifold` — sorry-free assembly
+**Covers.** Generic glued spaces `Glue σ τ = (A ⊕ B)/(σ j ~ τ j)`, the base
+being `Wedge a₀ b₀ = Glue (fun _ : Unit => a₀) (fun _ => b₀)`.  For local
+homeomorphisms `p, q` whose basepoint fibres are exactly the glued points,
+`glueMap p q` is proved a covering (`apm_t98a03_glueMap_isCoveringMap`) from
+openness + local injectivity + Hausdorff + compactness — no evenly-covered
+bookkeeping.  Fibre counts and connectivity are generic too.  Then:
 
-This former 350–700-line boundary is now seven independent seat-sized leaves.
-The three generic point-set lemmas
-`apm_t98a03_plane_punctured_neighborhood`,
-`apm_t98a03_chart_transport_punctured_neighborhood`, and
-`apm_t98a03_union_closed_punctured_not_preconnected` are copied, with their
-complete proofs, from the proved t94A08 leaves.  The assembly theorem itself
-contains no `sorry`.
+* regular: `T² ⊔ (Fin 3 × RP²)`, sheets `(ζᵏ·∛t₀.1, t₀.2) ~ (k, r₀)`, map
+  `(z,w) ↦ (z³,w)` ⊔ `snd`; deck `h` = `(z,w) ↦ (ζz,w)` ⊔ `(k,r) ↦ (k+1,r)`;
+  regularity = every fibre is `{x, hx, h²x}`.
+* irregular: `T² ⊔ (S² ⊔ RP²)`, sheets glued to `r₀`, `s`, `-s`
+  (`s` = unit representative); map `z³` ⊔ (antipodal ⊔ id).  Not regular: a
+  path `s ⇝ -s` in `S²` and its image loop on the RP² sheet lift the same base
+  loop, one closed, one open; `apm_t98a03_no_deck_of_lift_mismatch` (proved)
+  forbids a deck map between their starts.
+* Both are packaged over `X t₀ r₀` by `apm_t98a03_coverOf` (proved transport
+  of covering / fibre-count / regularity along the base homeomorphism).
 
-#### `apm_t98a03_wedge_branches_closed` — 50–90 lines, independent
+## Leaves (22) — all independent; dependencies passed as hypotheses
 
-Prove the images of both quotient injections closed.  Use compactness of
-`Circle × Circle` and of real projective space, continuity of the quotient
-map, and Hausdorffness of the finite point-wedge quotient; useful APIs are
-`IsCompact.isClosed`, `isCompact_range`, `Quotient.continuous_mk`, and
-`isClosed_eq`.  If deriving the quotient's T2 instance directly is shorter,
-show the equivalence relation is closed and use the quotient closed-map
-criterion.
+Generic (reusable for any finite point-gluing of covers, e.g. t01A04, t00A02):
 
-Truth check: neither branch needs to be open, and the claim includes the
-identified point. Compact-to-closed must not be invoked before establishing a
-T2 target.
+| leaf | statement | size |
+|---|---|---|
+| `glueMk_eq_iff` | classes are glued pairs / singletons (σ, τ injective) | 40–80 |
+| `glue_t2Space` | finite gluing of T2 spaces is T2 | 100–180 |
+| `glue_connectedSpace` | connected if `A` connected and `B` joined to glued points | 40–80 |
+| `glue_homeomorph` | compatible homeos descend | 40–70 |
+| `glueMap_isOpenMap` | glued map is open | 70–120 |
+| `glueMap_locInj_inl` / `_inr` | local injectivity at unglued points | 50–90 each |
+| `glueMap_locInj_glued` | local injectivity at a glued point | 80–140 |
+| `glueMap_fiber_inl` / `_inr` / `_base` | fibre cardinalities | 40–80 each |
+| `isLocalHomeomorph_sumElim` | `Sum.elim` of local homeos | 30–60 |
+| `circleNbhd_contraction` | `{z ≠ -c}` contracts to `c` | 40–80 |
+| `rp2Nbhd_isOpen` | affine chart open | 25–50 |
+| `rp2Contract_continuous` | the explicit chart contraction is continuous | 80–160 |
+| `sphereProj_eq_iff` | `S² → RP²` fibres are `±x` | 30–60 |
 
-#### `apm_t98a03_wedge_branches_intersection` — 30–60 lines, independent
+Problem-specific:
 
-Unfold the two ranges.  If quotient representatives `.inl t` and `.inr r`
-are equal, use `Quotient.eq_iff_equiv` / induction on
-`Relation.EqvGen` to show the only cross-summand equivalence is generated by
-`(t₀,r₀)`; conclude that the common quotient class is the basepoint.
+| leaf | statement | size |
+|---|---|---|
+| `zeta_pow_injective` | `1, ζ, ζ²` distinct | 25–50 |
+| `circle_cube_roots` | `z³ = c³ ↔ z ∈ {c, ζc, ζ²c}` | 50–100 |
+| `regular_fiber_orbit` | regular fibres are `h`-orbits | 80–150 |
+| `irrQ_eq_iff` | irregular plane-side fibre over `r₀` = glued points | 20–40 |
+| `irrQ_fiber_card` | its fibres have 3 points | 30–60 |
+| `irregular_paths` | closed vs open lift of one loop | 40–80 |
 
-Truth check: reflexive/symmetric/transitive closure creates no extra
-cross-pairs, because the generating relation has exactly one edge.
+(All names carry the `apm_t98a03_` prefix.)
 
-#### `apm_t98a03_wedge_branches_accumulate` — 60–110 lines, independent
+## Checks
 
-Pull an open wedge neighborhood back along each summand injection.  It is open
-and contains the chosen basepoint.  In the torus choose a nearby point by
-varying one circle coordinate; in RP² use a projective affine line through a
-nonzero representative.  Apply `Metric.isOpen_iff` after local charts, then
-push the witnesses into the quotient.  Use the intersection lemma's underlying
-representative argument locally if needed, but restate it inside this proof so
-this leaf remains axiom-independent.
+* Truth, by hand: the gluing classes are exactly pairs because σ, τ are
+  injective; `glueMap` is open only because each basepoint fibre is exactly the
+  glued set (hypotheses `hpσ`, `hqτ` are included); the chart contraction keeps
+  `w·u = v·u ≠ 0`, is degree-1 homogeneous, fixes `r₀`, ends at `r₀`;
+  `ζ * ζ² = ζ³ = 1` closes the rotation; regular fibres: over torus points
+  `{ζᵏz}`, over plane points `{(k+m, r)}`, over the base the 3 glued classes,
+  each one `h`-orbit; irregular: `(123)`-type torus sheets with the RP² loop
+  swapping sheets 1,2 and fixing sheet 0, so not normal, matching the S₃
+  monodromy of the queue note.
+* Compile: 0 errors; `declaration uses sorry` exactly on the 22 leaves;
+  `#print axioms` (scratch copy) — `apm_t98a03_wedge_not_manifold`,
+  `torus_fundamentalGroup`, `sphereProj_isCoveringMap`, `coverOf_threeFold`,
+  `no_deck_of_lift_mismatch` are sorryAx-free; `apm_t98a03` has sorryAx only
+  through leaves.  Statement region byte-identical to Main (diff: imports and the
+  module docstring only).
 
-Truth check: both summands are nontrivial and their basepoints are non-isolated,
-including arbitrary projective representatives and boundary points of the
-circle model.
+## Risks
 
-#### `apm_t98a03_euclidean_punctured_neighborhood_of_dim_ne_one` — 50–100 lines, independent
-
-For `n = 0`, take a small ball (its puncture is empty). For `n ≥ 2`, copy
-the polar-coordinate proof of the proved plane leaf, replacing the rank
-calculation by `Module.finrank_fin`; key tools are `Metric.isOpen_iff`,
-`isPathConnected_sphere`, `ordConnected_Ioo.isPreconnected.prod`, and
-`IsPreconnected.image`.
-
-Truth check: dimension zero is deliberately included and dimension one is
-explicitly excluded. Positive ball radius handles empty-open-set degeneracy.
-
-#### `apm_t98a03_manifold_punctured_neighborhood_of_dim_ne_one` — 70–120 lines, independent given its explicit hypothesis
-
-Use `extChartAt` at the requested point, shrink its open target with the
-explicit `heuclid` hypothesis, and transport back.  The pattern is the copied
-`apm_t98a03_chart_transport_punctured_neighborhood`; relevant APIs are
-`isOpen_extChartAt_source`, `isOpen_extChartAt_target`,
-`mem_extChartAt_source`, `mem_extChartAt_target`, and the partial
-homeomorphism's `image_source_eq_target`.
-
-The Euclidean conclusion is an explicit hypothesis, so this seat can land
-before the preceding seat and its axiom set will not include that sorry.
-
-#### `apm_t98a03_wedge_has_plane_point` — 90–150 lines, independent
-
-Choose a torus point different from `t₀`, obtain a product-of-circle local
-chart into an open subset of `EuclideanSpace ℝ (Fin 2)`, and show the quotient
-map restricts to a homeomorphism on a neighborhood avoiding `t₀`.  For every
-ambient neighborhood, intersect this chart source with it and apply the copied
-plane leaf. Useful APIs are `Circle` local charts / `IsManifold` charts,
-`Homeomorph.restr`, `IsOpen.isOpenEmbedding_subtypeVal`, and
-`apm_t98a03_plane_punctured_neighborhood`.
-
-Truth check: the chosen point is away from the glued class, so no RP² point is
-introduced into its local quotient chart. The conclusion is a basis property,
-not merely existence of one accidentally global connected puncture.
-
-#### `apm_t98a03_one_manifold_punctured_obstruction` — 80–140 lines, independent
-
-At any point take a one-dimensional extended chart and shrink its target to an
-open interval around the chart coordinate. Any smaller open neighborhood of
-the center contains points on both sides. These lie in disjoint closed halves
-after deleting the center, so its puncture cannot be preconnected. Use
-`Metric.isOpen_iff`, order intervals, `isPreconnected_iff_subset_of_disjoint_closed`,
-and the same partial-homeomorphism transport APIs as above.
-
-Truth check: arbitrary global one-manifolds (especially a circle, whose whole
-puncture is connected) are why the statement supplies one *small chart
-neighborhood* and rules out the basis property; it does not falsely claim
-every punctured neighborhood is disconnected.
-
-#### Assembly and dimensions
-
-`apm_t98a03_wedge_point_no_connected_punctured_neighborhood` is already
-sorry-free: closedness, intersection, and accumulation feed the copied
-closed-union lemma. The main library theorem cases on `n = 1`. For
-`n ≠ 1` (including `n = 0` and every `n ≥ 2`) chart transport gives a
-connected punctured neighborhood at the wedge point, contradiction. For
-`n = 1`, the plane point's basis property contradicts the one-manifold
-obstruction.
-
-### `apm_t98a03_fundamentalGroup` — LIBRARY
-
-**Statement.** The fundamental group of the literal wedge is nonemptily
-isomorphic to `Multiplicative (ℤ × ℤ) * Multiplicative (ZMod 2)`.
-
-**Why true.** Identify the custom quotient with the generic point wedge, apply
-`genericPointWedgeNormalizedFundamentalGroupEquiv`, then compose the standard
-torus computation with the RP² computation from its sphere double cover.  The
-generic van Kampen half is already present and sorry-free.  The missing shared
-foundation is the concrete theorem
-`FundamentalGroup apm_t98a03_RP2 r₀ ≃* Multiplicative (ZMod 2)` at the frozen
-coinduced topology; topology worklist 2 explicitly stopped at construction of
-the required dependent local trivialization for `sphereProjection`.
-
-**Estimated size.** 600–1200 lines for the RP² packet, then 150–300 lines of
-transport/assembly.  This is the shared `rp2_double_cover_and_pi1` program
-recorded for consumers t98A03 and t96A02, followed by the wedge instance.
-
-**Dependencies.** Definitions and the imported point-wedge module.  It is
-stated independently so its seat can build the shared RP² foundation and
-assembly without waiting for the other three lemmas.
-
-**Truth check.** The presentation is
-`⟨a,b,c | [a,b]=1, c²=1⟩`, exactly the free product `ℤ² * ℤ/2`.
-Basepoint variation causes only a noncanonical isomorphism, matching
-`Nonempty` in the theorem.
-
-### `apm_t98a03_regular_threeFoldCover` — LIBRARY
-
-**Statement.** The wedge admits a connected regular three-sheeted cover in
-the exact native predicates used by the registered theorem.
-
-**Why true.** Use the action on `Fin 3` with torus generators sent to `(123)`
-and the identity, and the RP² generator sent to the identity.  Reconstruct its
-cover (or glue the explicit torus triple cover to three copies of RP²), prove
-the local trivializations, and use cyclic sheet rotation for deck
-transitivity.  `CoveringMonodromyCosets` has the reverse classification facts
-but not cover reconstruction, which is the missing shared finite-monodromy
-library program.
-
-**Estimated size.** 700–1400 lines (audit estimate).
-
-**Dependencies.** Definitions only.  In particular it does not need the
-fundamental-group isomorphism lemma if constructed geometrically.
-
-**Truth check.** The image is the order-three cyclic subgroup generated by a
-3-cycle, whose action on three letters is free and transitive.  The RP²
-involution maps to identity, so its relation is respected.
-
-### `apm_t98a03_irregular_threeFoldCover` — LIBRARY
-
-**Statement.** The wedge admits a connected three-sheeted cover that is not
-regular in the exact deck-homeomorphism predicate.
-
-**Why true.** Send torus generators to `(123)` and identity and send the RP²
-generator to `(12)`.  The image is all of `S₃`, hence transitive.  Reconstruct
-the cover; its stabilizer of a letter has order two and is not normal, so the
-cover is not regular.  Geometrically the RP² part lifts as one sphere double
-cover on two sheets and one RP² copy on the fixed sheet, making the failure of
-deck transitivity visible.
-
-**Estimated size.** 900–1800 lines (audit estimate), dominated by the same
-missing finite-monodromy reconstruction and the RP² double-cover packet.
-
-**Dependencies.** Definitions only at the blueprint interface.  Its
-implementation shares the finite-cover reconstruction program and RP² cover
-packet with the preceding library work, but the theorem statement does not
-artificially assume either conclusion.
-
-**Truth check.** `(123)` and `(12)` generate `S₃`, so the action is transitive.
-The stabilizer `{e,(12)}` is conjugated to a different subgroup by `(123)`, so
-it is nonnormal; this is the standard degree-three irregular cover test.
-
-## Dependency layers
-
-* **Layer 1 (seven parallel non-manifold leaves):**
-  `apm_t98a03_wedge_branches_closed`,
-  `apm_t98a03_wedge_branches_intersection`,
-  `apm_t98a03_wedge_branches_accumulate`,
-  `apm_t98a03_euclidean_punctured_neighborhood_of_dim_ne_one`,
-  `apm_t98a03_manifold_punctured_neighborhood_of_dim_ne_one` (its Euclidean
-  input is explicit), `apm_t98a03_wedge_has_plane_point`, and
-  `apm_t98a03_one_manifold_punctured_obstruction`.
-* **Layer 2 (sorry-free non-manifold assembly):**
-  `apm_t98a03_wedge_point_no_connected_punctured_neighborhood` and
-  `apm_t98a03_wedge_not_manifold`.
-* **Other parallel contracts:**
-  `apm_t98a03_fundamentalGroup`,
-  `apm_t98a03_regular_threeFoldCover`, and
-  `apm_t98a03_irregular_threeFoldCover`.
-* **Final layer (already compiled):** `apm_t98a03` conjoins the four results.
-
-At the implementation-program level, the RP² cover/π₁ packet is shared by the
-fundamental-group and irregular-cover work, while finite-monodromy cover
-reconstruction is shared by both cover lemmas.  Those are library programs,
-not hypotheses smuggled into the consumer statements.
-
-## Compilation and axioms
-
-Compiled with:
-
-```text
-systemd-run --user --scope -q -p MemoryMax=12G lake env lean holes/labs/blueprints/t98A03/Blueprint.lean
-```
-
-The final output of `#print axioms apm_t98a03` was:
-
-```text
-'apm_t98a03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
-```
-
-The warnings are the seven new non-manifold leaves plus the three unchanged
-LIBRARY lemmas. The copied topology leaves and both non-manifold assembly
-lemmas are sorry-free; the main theorem has no direct `sorry`.
+* `glue_t2Space` and `glueMap_locInj_glued` are the largest; seats should
+  extract a shared "open saturated set" helper if it helps.
+* `rp2Contract_continuous` needs open-quotient restriction to a saturated open
+  set times the interval; `ConstructionTargets.ProjectiveQuotientDescent` has the
+  global versions only.
+* Leaves state `IsLocalHomeomorph` / `Nat.card` over quotient types defined by
+  `def`; seats may need `show`/`change` to unfold `apm_t98a03_Glue`.

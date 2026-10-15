@@ -191,3 +191,57 @@ output of `#print axioms apm_t01a04` is:
 
 Thus the main theorem has no direct `sorry`; `sorryAx` reaches it only through
 the eight isolated leaves above.
+
+## Update 2026-10-15: last two LIBRARY leaves split
+
+### `canonical_loops_presentation_aux_images` — PROVED (no leaves left)
+
+Route: transport `π₁(X)` to the library wedge (banked
+`aux_images_aux_transport`), then `genericPointWedgeLegCoordinatesEquiv`
+(`PointWedgeVanKampen`, B6 leg coordinates) with `M = circleBaseNeighborhood`,
+`N = circleBaseNeighborhood ×ˢ circleBaseNeighborhood` (contraction:
+`homeomorphSymm (Homeomorph.Set.prod ..) (c.prod c)`), then
+`MulEquiv.coprodCongr` of the winding coordinates
+(`fundamentalGroupProdMulEquiv` + `circleFundamentalGroupMulEquivInt`).
+Loops A/B are literally `genericPointWedgeLeftLegMap` of the coordinate loops
+(`FundamentalGroup.map_apply`, rfl); loop C is `genericPointWedgeRightLegMap`
+(`FundamentalGroup.mapOfEq_apply`, rfl).  New imports: `PointWedgeVanKampen`,
+`FundamentalGroupProduct`; a `PathConnectedSpace (Circle × Circle)` instance
+was added (Mathlib has no product instance).  Axioms clean.
+
+### `bridge_total_spaces_not_homeomorphic` — sorry-free assembly, 4 leaves
+
+Invariant: `Nat.card (π₁ →* ℤ/2)`.  Models (library point wedges):
+circle-doubled ≃ₜ `(T² ∨ S¹) ∨ T²` (second torus at the circle point `-1`),
+torus-doubled ≃ₜ `(T² ∨ S¹) ∨ S¹` (second circle at the torus point `(-1,1)`).
+`genericPointWedgeFundamentalGroupEquiv` + `Monoid.Coprod.liftEquiv` give
+`8·4 = 32` versus `8·2 = 16` characters.  Proved here: homeomorphism
+invariance of the count (any basepoints), coproduct count, circle count 2,
+torus count 4, `T² ∨ S¹` count 8, the `S¹∖{1}` contraction, both model counts,
+and the final contradiction.
+
+Leaves (all `sorry`, independent):
+
+* `apm_t01A04_nh_circleCover_homeomorph` — `Nonempty (CircleCover ≃ₜ CCModel)`;
+  explicit representative maps in the docstring; t97J04 X_fwd/X_bwd pattern.
+  100–180 lines.
+* `apm_t01A04_nh_torusCover_homeomorph` — `Nonempty (TorusCover ≃ₜ TCModel)`;
+  twin. 100–180 lines.
+* `apm_t01A04_nh_wedge_leftPiece` (GENERIC) — for open `U ⊆ X` with `x₀ ∉ U`,
+  `mk '' (inl '' U)` is open in `Wedge x₀ y₀` and homeomorphic to `U` via
+  `u ↦ mk (inl u)`. 60–120 lines.
+* `apm_t01A04_nh_wedge_rightPiece` (GENERIC) — `inr` twin. 60–120 lines.
+
+Truth checks: the piece leaves need `x₀ ∉ U` (otherwise the image is not
+saturated); with it each class meeting `inl '' U` is a singleton.  The model
+homeomorphisms match glue-by-glue (`sheetPoint 0 = 1`, `sheetPoint 1 = -1`);
+the nested quotient is a quotient of `Sum (Sum T S¹) T` by the composite
+relation since a sum of quotient maps is a quotient map.  Counts: Hom(ℤ,ℤ/2)=2,
+Hom(ℤ²,ℤ/2)=4, so 4·2·4 vs 4·2·2.
+
+Compile: 0 errors; `declaration uses sorry` only on the four leaves above;
+`#print axioms apm_t01a04` shows `sorryAx` only through them.
+
+Risks: the homeomorphism leaves are the largest (nested coinduced
+topologies); if one stalls, split into forward map / backward map /
+two inverse identities.

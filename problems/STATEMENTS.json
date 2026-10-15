@@ -3032,6 +3032,31 @@
    "rev": "f3bc78c57",
    "approved_at": "2026-10-13T20:52:13Z"
   },
+  "t99A02": {
+   "decls": [
+    "apm_t99a02"
+   ],
+   "sha256": "7ca7867446162478aad22d005f3c92079eb99258a0e36f28ce595b35f6d88735",
+   "defs": [
+    "ChainRel",
+    "CircleWedgeProjectivePlane",
+    "G",
+    "LineSphereTree",
+    "S2",
+    "SphereChain",
+    "TreeRel",
+    "a",
+    "b",
+    "north",
+    "south"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 read-only subagent 2026-10-15",
+   "evidence": "holes/labs/statement-registry/t99A02-cover-grade.md",
+   "prelim_defect": null,
+   "rev": "d4eafe905",
+   "approved_at": "2026-10-15T19:19:23Z"
+  },
   "t99A03": {
    "decls": [
     "apm_t99a03"

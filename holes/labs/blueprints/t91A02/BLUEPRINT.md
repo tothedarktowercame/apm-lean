@@ -1,114 +1,138 @@
-# Blueprint for t91A02
+# Blueprint for t91A02 (revision 2026-10-15, stage-1 pilot)
 
-## Triage verdict
+The previous blueprint (2026-10-13: χ(N16) = -14, χ(N8) = -6, χ-transfer,
+all LIBRARY) is archived in `old-2026-10-15/`. Its one proved lemma,
+`t91A02_hasEulerCharacteristic_unique`, is kept in the new file. The new route
+does not use it.
 
-The registered statement is true and unchanged. The former single
-`t91A02_eulerCharacteristic_finite_cover` library hole is now a sorry-free
-assembly from four independent leaves. The split exposes a genuine missing
-foundation: `Surface` is presently only a quotient type plus a separately
-defined integer formula. No existing theorem connects that formula to
-singular homology or proves Euler multiplicativity for finite covers.
+## Verdict
 
-The import of `ConstructionTargets.RationalLefschetz` supplies the semantic
-predicate `HasEulerCharacteristic`; it imports only `Mathlib` and does not
-import any `SphereCap*` or `LinearGraphMeasure` module.
+The statement is true and unchanged; `apm_t91a02` is byte-identical to
+`problems/t91A02/lean/Main.lean`. Mathematically: a 16-crosscap surface does
+not cover an 8-crosscap surface because χ = -14 is not a multiple of -6.
 
-## Independent leaves
+## Route chosen: π₁ and rational b₁ of groups (no Euler characteristic)
 
-### `t91A02_surface16_hasEulerCharacteristic` — LIBRARY
+`b₁(G) := finrank_ℚ (Additive G →+ ℚ)`.
 
-The rational singular-homology Euler characteristic of `Surface false 16` is
-`-14`. This is independent of the cover and of all other leaves.
+1. Banked (`CoveringMonodromyCosets`): a connected cover E → B with fibres
+   of size k makes π₁(E) ≅ an index-k subgroup H of π₁(B).
+2. For any one-vertex `PairingData` P, π₁(P.Space) ≅ F_n ⧸ ⟪r⟫. Here n is
+   the number of edge orbits, and r is rationally nonzero iff
+   `attachingDegree P ≠ 0` (leaves T1 and T2).
+3. Rank-only Reidemeister–Schreier: H ≅ H̃ ⧸ ⟪t₁..t_m⟫, where H̃ ≤ F_n has
+   index k and 1 ≤ m ≤ k, and every tᵢ is a conjugate of r (leaf A3).
+   Banked Schreier gives H̃ ≅ F_{(n-1)k+1}. With A1 and A2:
+   `(n-1)k+1 ≤ b₁(H)+k`, `b₁(H) ≤ (n-1)k+1`, and `b₁(H)+1 ≤ (n-1)k+1` when r is
+   rationally nonzero.
+4. Apply this to N16 → N8: b₁(π₁N16) = 15 by the one-relator case. So
+   7k+1 ≤ 15+k gives k ≤ 2, and 16 ≤ 7k+1 gives k ≥ 3. Contradiction (omega).
 
-Expected route: construct the finite polygon CW complex for the quotient disk,
-identify its cellular chain groups as dimensions `1, 16, 1`, and use the
-cellular/singular comparison. At the Mathlib layer the relevant API starts at
-`AlgebraicTopology.singularHomologyFunctor`; the value is packaged by
-`ConstructionTargets.RationalLefschetz.HasEulerCharacteristic`, and traces of
-identity maps reduce using `LinearMap.trace_id` and the finite-free dimension
-API.
+The H₂ of the cover is never needed. Upper and lower bounds on b₁ already
+contradict each other.
 
-Estimate: 300–700 lines after a reusable polygon-CW model exists; substantially
-larger if that model must be built here. This is not honestly a 30–150-line
-seat with the current imports, so it remains marked LIBRARY.
+## Alternatives considered (honest sizes)
 
-Degenerate checks: the quotient disk is nonempty (the disk contains `0`), and
-genus `16` is positive. The one-vertex, sixteen-edge, one-face count is
-`1 - 16 + 1 = -14`; boundary vertices must all be identified, while no
-interior point is identified with a boundary point.
+| route | what is missing | estimate |
+|---|---|---|
+| (a) lift the cell structure, χ by counting cells | the homology of a multi-vertex, multi-face polygon complex (cellular = singular), plus building the lifted complex inside an abstract cover | 1200–2500 lines |
+| (b) homology transfer | banked `CoefficientCoveringTransfer.rational_homology_projection` gives only p_*∘τ = k, so p_* is onto, which yields inequalities 15 ≥ 7. For an irregular cover, the χ formula needs Mayer–Vietoris additivity of χ, triviality of covers over disks, and χ of graph covers | 900–1500 |
+| (c) π₁ + b₁ inequalities (**chosen**) | T1 (polygon van Kampen) is the only big piece; the rest is small algebra | 600–1100 total |
+| (d) Z/2 counting | H₁(N_g;Z/2) = g; transfer mod 2 only gives inequalities. No exact relation without the work in (a) or (b) | — |
 
-### `t91A02_surface8_hasEulerCharacteristic` — LIBRARY
+Why χ is not used: no banked result relates the χ of an abstract cover to
+the χ of its base. All exact routes need the homology of the lifted cell
+complex. The b₁ inequalities avoid this, and they are enough here.
 
-The same computation for `Surface false 8`, yielding `1 - 8 + 1 = -6`.
-Independent of every other leaf. It should use exactly the same polygon-CW
-and singular/cellular comparison lemmas as the sixteen-crosscap leaf, with
-`LinearMap.trace_id` for the final alternating trace.
+## Leaves (each a top-level `lemma … := by sorry` with route docstring)
 
-Estimate: 20–50 lines if the reusable generic polygon-surface homology theorem
-lands first; otherwise 300–700 lines. The intended shared prerequisite is
-`program-2026-10-13-polygon-surface-homology`.
+Algebra (generic, any group):
 
-Degenerate checks: again the quotient is nonempty and genus `8` is positive;
-the edge relation has the nonorientable (same-direction) sign convention, but
-Euler characteristic depends only on cell counts, not the boundary signs.
+- `t91A02_b1_freeGroup` — Hom(F_n,ℚ) ≅ ℚⁿ, finite-dimensional of dimension n
+  — 40–80 lines.
+- `t91A02_b1_quotient_normalClosure_bounds` — given a finite S:
+  b₁G ≤ b₁(G⧸⟪S⟫)+|S|, b₁(G⧸⟪S⟫) ≤ b₁G, and the bound drops by at least 1 if
+  some φ is nonzero on S (rank–nullity for the evaluation map on S)
+  — 100–180 lines.
+- `t91A02_finiteIndex_relators` — H ≤ G⧸⟪r⟫ of index k>0 is H̃ ⧸ ⟪T⟫, with T
+  nonempty, |T| ≤ k, and T made of conjugates of r (transversal argument)
+  — 120–200 lines.
 
-### `t91A02_cover_hasEulerCharacteristic_mul` — LIBRARY
+Topology (generic, any one-vertex `PairingData`):
 
-Given the covering map, positive constant fibre cardinality, and the base
-Euler computation explicitly as a hypothesis, prove that the total space has
-Euler characteristic `sheets * (-6)`. It is independent of both surface
-computation leaves, so a cover-transfer seat can work in parallel.
+- `t91A02_polygon_pi1_wedge_quotient` — π₁(P.Space,x) ≅ π₁(orbit
+  wedge) ⧸ ⟪`polygonBoundaryFundamentalClass P`⟫ — **LIBRARY-sized**.
+  - 150–300 lines if the t97A01 leaf `P.Space ≃ₜ Cell(polygonBoundaryWedgeLoop P)`
+    lands first (then this is `cell_piOne` + `cell_facts` + a basepoint
+    change).
+  - 400–700 lines if it generalizes the genus-two van Kampen specialization
+    in `GenusTwoSurfacePiOne` over P.
+  - Should be split further when dispatched (see Risks).
+- `t91A02_polygonBoundary_freeWord` — the wedge π₁ is free on
+  Fin (#orbits), and the boundary word is rationally nonzero iff
+  `attachingDegree P ≠ 0`. Uses banked free wedge plus Hurewicz leg
+  coordinates — 120–250 lines.
 
-Expected route: use evenly covered neighborhoods from `IsCoveringMap`, form
-the finite-sheet transfer on singular chains/homology, and prove the usual
-finite-cover Euler formula. Relevant Mathlib entry points are `IsCoveringMap`,
-`IsCoveringMap.isOpenMap`, `AlgebraicTopology.singularHomologyFunctor`,
-`LinearMap.trace`, and finite-sum reindexing via `Fintype.sum_equiv`.
-`ConstructionTargets.CoveringDegree` contains useful fibre-cardinality
-infrastructure, but currently no Euler theorem.
+Specific:
 
-Estimate: 500–1200 lines for the absent general finite-cover theorem, then
-10–30 lines for this adapter. This is a genuine shared-library foundation and
-is not hidden in an overloaded surface-specific proof.
+- `t91A02_standard_nonorientable_data` — standard g-crosscap data has g orbits
+  and attaching degree −2 on each orbit (≠ 0) — 50–120 lines.
 
-Degenerate checks: `0 < sheets` excludes the empty zero-sheet case. Constant
-fibre cardinality is assumed at every base point, so disconnected-base degree
-variation is irrelevant. No connectedness assumption is needed when the
-global degree is constant.
+Sorry-free assemblies written here: `t91A02_b1_congr`, `t91A02_homCongr`,
+`t91A02_b1_oneRelator`, `t91A02_b1_finiteIndex_bounds` (uses banked
+`finiteIndexSubgroupFreeGroupEquiv`), `t91A02_quotientSingletonCongr`,
+`t91A02_fundamentalGroupEquivOfHomeomorph` (copied from t97A01Closure),
+`t91A02_polygon_presentation`, `t91A02_surface_pathConnected`,
+`t91A02_surface_presentation`, `apm_t91a02`.
 
-### `t91A02_hasEulerCharacteristic_unique`
+## Reuse
 
-Two `HasEulerCharacteristic X` witnesses have equal values. Independent of
-the surface and cover leaves.
+- **t98A01** (5-fold regular Σ_g → Σ_h with Σ_g ≅ Σ_h): uses T1, T2, A1–A3,
+  `t91A02_b1_finiteIndex_bounds`, and the same cover → subgroup step.
+  - It also needs an orientable twin of the crosscap data leaf: 2g orbits,
+    attaching degree 0.
+  - Lower bound: 10h−9 ≤ b₁(Σ_g) = b₁(Σ_h) ≤ 2h, so h ≤ 1. The disk case
+    h = 0 has trivial π₁, so an index-5 subgroup is impossible. Hence h = 1.
+  - Then b₁ ∈ [2g−1, 2g] forces g = 1, and χ = 0 = 5·0.
+  - Regularity is not used.
+- **t95J03** (who shares a k-fold cover with the Klein bottle): uses T1, T2,
+  A1–A3, plus the banked path-component restriction for disconnected covers.
+  - On each component, the lower bound against F plus the upper bound
+    b₁ ≤ k_i against K (relator a²b², rationally nonzero), summed over
+    components, gives (n_F−2)k + #components ≤ k. So n_F ≤ 2: F is T² or K,
+    with RP² and S² excluded because their finite π₁ gives b₁ = 0 < 1.
+  - The parity clause ("torus only for even k") needs an orientation
+    character argument that these leaves do not supply.
+- t91J05, t94J04, t96A01 (exact χ = k·χ for classification): these need the
+  exact formula, which b₁ inequalities do not give. Exact χ stays stage-2
+  work, via (a) or (b).
 
-Expected proof: unfold `HasEulerCharacteristic` and `HasLefschetzNumber`, take
-the maximum of the two vanishing bounds, extend both finite alternating sums
-to that maximum using the `Subsingleton` hypotheses, and compare them. Useful
-Mathlib lemmas are `Finset.sum_subset`, `Finset.sum_eq_zero`,
-`LinearMap.trace_eq_zero_of_subsingleton`, and `Nat.lt_of_lt_of_le`.
+## Checks
 
-Estimate: 40–90 lines. Empty/rank-zero homology groups cause no issue: their
-trace contribution is zero. The conclusion compares two separately supplied
-values, so the lemma does not restate a hypothesis.
+- `lake env lean holes/labs/blueprints/t91A02/Blueprint.lean`: 0 errors;
+  `declaration uses sorry` appears on exactly the 6 leaves.
+- In a scratch copy, `#print axioms apm_t91a02` gives
+  [propext, sorryAx, Classical.choice, Quot.sound]. sorryAx comes only through
+  the leaves.
+- The statement block was diffed against Main: identical.
+- Edge cases checked by hand:
+  - k > 0 is from the statement; n = 8 and 16 are > 0 for Schreier.
+  - A3 with r = 1 is fine (T = {1}).
+  - A1 with n = 0 is fine.
+  - The attaching degree for crosscaps is −2 per orbit: all signs are
+    `false` and each orbit is {2j, 2j+1}.
+  - T1 is insensitive to the orientation of the boundary class, because
+    ⟪c⟫ = ⟪c⁻¹⟫.
 
-## Assembly
+## Risks
 
-`t91A02_eulerCharacteristic_finite_cover` contains no `sorry`. It supplies
-the base computation to the cover-transfer leaf, compares the resulting total
-Euler value with the independent source computation using uniqueness, and
-finishes by normalization of `eulerCharacteristic` and rational/integer casts.
-The registered theorem `apm_t91a02` is byte-identical and remains the final
-integer contradiction.
-
-Dependency layers:
-
-- Layer 1, mutually independent: the four leaves above.
-- Layer 2: `t91A02_eulerCharacteristic_finite_cover` (sorry-free assembly).
-- Layer 3: `apm_t91a02` (already proved and unchanged).
-
-The unavoidable doubt is scope: the two polygon homology leaves and the
-finite-cover transfer leaf cannot currently be reduced to 30–150 lines because
-Mathlib has neither the concrete polygon CW model nor a ready finite-cover
-Euler theorem. Splitting them further in this file would merely introduce
-ad-hoc definitions of those missing foundations rather than independently
-provable seats.
+- T1 is still large. Dispatch it after (or merge it with) t97A01's generic
+  polygon ≅ Cell(word) leaf; otherwise split it into: radial-cover van Kampen
+  (generalize genus-two aux lemmas), outer ≃ wedge transport, and matching
+  the overlap generator to `polygonBoundaryFundamentalClass`.
+- T2 has to align `finiteWedge_finSucc_fundamentalGroup_free`'s leg
+  coordinates with `finiteWedgeLegFundamentalClassAtBase` and the Hurewicz
+  coordinates. These live in two different files (GenusTwoSurfacePiOne and
+  PolygonSurfaceHomology).
+- A3's transversal bookkeeping in subtypes of subtypes may be fiddly. The
+  statement is a plain existential, so the seat chooses its own encoding.
