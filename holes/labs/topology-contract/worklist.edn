@@ -119137,7 +119137,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
@@ -119187,7 +119187,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119476,6 +119476,18 @@
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "drafts", :exit 1, :finding "corrected model glyph"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792044900976-13464-53aa5a84",
+     :commands
+     ["git diff/show b3e77418 archived sources"
+      "lake env lean archived t98A06Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds a compiled, sorry-free coordinate-solver bridge. Given the explicit coordinate identity for mfderiv and the solver equation, injectivity of the target tangent trivialization yields mfderiv f x (w x)=v(f x); all hypotheses are used. It does not claim construction or smoothness of the coordinate family, which remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "b3e77418954664b338e485426d52f1c5ffde1e2c",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119484,7 +119496,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119502,7 +119514,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked tangent-section chart transport; fixture hash repaired.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked mfderiv coordinate-solver bridge.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119532,7 +119544,10 @@
     {:job 8,
      :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
      :reason
-     "Banked tangent-section chart transport; fixture hash repaired."}]}
+     "Banked tangent-section chart transport; fixture hash repaired."}
+    {:job 9,
+     :commit "b3e77418954664b338e485426d52f1c5ffde1e2c",
+     :reason "Banked mfderiv coordinate-solver bridge."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -121526,7 +121541,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "writtenInExtChartAt_eq_commonTarget_of_eq",
@@ -121536,7 +121551,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "incidence equality identifies preferred target charts",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-writteninextchartat-eq-commontarget-of-eq,
    :kind :lemma,
    :depends-on
@@ -121544,7 +121561,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "mfderiv_eq_of_trivialization_coordinates",
@@ -121554,7 +121571,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "coordinate solver equation implies tangent lift equation",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "b3e77418954664b338e485426d52f1c5ffde1e2c"},
    :id :lemma-mfderiv-eq-of-trivialization-coordinates,
    :kind :lemma,
    :depends-on
