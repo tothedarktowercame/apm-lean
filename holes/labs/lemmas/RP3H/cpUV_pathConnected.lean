@@ -541,7 +541,56 @@ theorem cp_mvI_zero_injective_aux_h0_map
 /-- `U ∩ V ≅ ℂ² ∖ 0` (affine chart `z₂ ≠ 0`) is path connected. -/
 -- BEGIN SEAT AREA
 theorem cpUV_pathConnected : PathConnectedSpace ↥(cpU ∩ cpV) := by
-  sorry
+  let A := cpUV_homology_aux_Affine
+  let A0 := {z : A // z ≠ 0}
+  have hA0 : PathConnectedSpace A0 := by
+    apply isPathConnected_iff_pathConnectedSpace.mp
+    change IsPathConnected ({0}ᶜ : Set A)
+    apply isPathConnected_compl_singleton_of_one_lt_rank
+    rw [← Module.finrank_eq_rank]
+    norm_num [A, cpUV_homology_aux_Affine, Module.finrank_fin_fun]
+  let f : A0 → ↥(cpU ∩ cpV) := fun z =>
+    ⟨cpUV_homology_aux_inverse z.1, by
+      constructor
+      · change (cpUV_homology_aux_inverse z.1).rep 0 ≠ 0 ∨
+          (cpUV_homology_aux_inverse z.1).rep 1 ≠ 0
+        by_contra h
+        push_neg at h
+        apply z.2
+        have hz := cpUV_homology_aux_coordinates_inverse z.1
+        rw [← hz]
+        funext j
+        rcases j with ⟨j, hj⟩
+        unfold cpUV_homology_aux_coordinates
+        fin_cases j
+        · change (cpUV_homology_aux_inverse z.1).rep 0 /
+              (cpUV_homology_aux_inverse z.1).rep 2 = (0 : ℂ)
+          simp [h.1]
+        · change (cpUV_homology_aux_inverse z.1).rep 1 /
+              (cpUV_homology_aux_inverse z.1).rep 2 = (0 : ℂ)
+          simp [h.2]
+        · exact (hj rfl).elim
+      · exact cpUV_homology_aux_inverse_mem z.1⟩
+  have hf : Continuous f := by
+    apply Continuous.subtype_mk
+    exact cpUV_homology_aux_inverse_continuous.comp continuous_subtype_val
+  have hfsurj : Function.Surjective f := by
+    intro x
+    let z : A := cpUV_homology_aux_coordinates x.1
+    have hz : z ≠ 0 := by
+      intro hz0
+      have h0 := congrFun hz0 (⟨0, by decide⟩ : {j : Fin 3 // j ≠ 2})
+      have h1 := congrFun hz0 (⟨1, by decide⟩ : {j : Fin 3 // j ≠ 2})
+      simp only [z, cpUV_homology_aux_coordinates, Pi.zero_apply] at h0 h1
+      have hv : x.1.rep 2 ≠ 0 := x.2.2
+      have hr0 : x.1.rep 0 = 0 := (div_eq_zero_iff).mp h0 |>.resolve_right hv
+      have hr1 : x.1.rep 1 = 0 := (div_eq_zero_iff).mp h1 |>.resolve_right hv
+      have hu : x.1.rep 0 ≠ 0 ∨ x.1.rep 1 ≠ 0 := x.2.1
+      exact hu.elim (fun h => h hr0) (fun h => h hr1)
+    refine ⟨⟨z, hz⟩, Subtype.ext ?_⟩
+    exact cpUV_homology_aux_inverse_coordinates ⟨x.1, x.2.2⟩
+  letI : PathConnectedSpace A0 := hA0
+  exact hfsurj.pathConnectedSpace hf
 -- END SEAT AREA
 
 /-- `H₀(U ∩ V) → H₀(U) ⊕ H₀(V)` is injective (`U ∩ V` is path connected and nonempty, so
