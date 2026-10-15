@@ -87946,6 +87946,20 @@
     [{:cmd "transport draft",
       :exit 1,
       :correction "made casts explicit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792028219181-12956-1616a232",
+     :commands
+     ["git show/diff-tree ed6ade796"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit ed6ade796 by topo-6 changes only the scoped target; fixture hash 1f98f0b2...473c6 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Path.concat_succ and Path.cast_trans distribute the global endpoint transport over the initial factors followed by the last, preserving traversal order; the n=0 equality is oriented correctly. Specialization therefore equates the dependent subdivision concat with its common-base canonical concat. New compiled progress; remaining milestones are casting the concat_subpath homotopy and comparing boundary H1, then B7-B10."},
     :commit "ed6ade796",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87968,7 @@
      "1f98f0b2614bdbcf1089195e247af938055b526e573ca9b1ff576a078dc473c6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87988,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked globally normalized subdivision factors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked concat endpoint transport.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88285,7 +88299,10 @@
      :reason "Banked the common-base subdivision endpoint family."}
     {:job 7,
      :commit "337f89a9a",
-     :reason "Banked globally normalized subdivision factors."}]}
+     :reason "Banked globally normalized subdivision factors."}
+    {:job 8,
+     :commit "ed6ade796",
+     :reason "Banked concat endpoint transport."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92683,7 +92700,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryConcat_cast_eq_canonical",
@@ -92693,17 +92710,23 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "cast subdivision concat equals based concat",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "ed6ade796"},
    :id :lemma-polygonboundaryconcat-cast-eq-canonical,
    :kind :lemma,
    :depends-on [:lemma-path-concat-cast-vertices],
    :other-consumers [:t94J09]}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "path_concat_cast_vertices"},
-   :lemma {:name "path_concat_cast_vertices", :reported-by []},
+   :lemma
+   {:name "path_concat_cast_vertices",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-path-concat-cast-vertices,
    :kind :lemma,
    :depends-on [],
