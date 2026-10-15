@@ -758,9 +758,51 @@ lemma X_bwd :
 (`W`-points are on the `word` boundary: `polygonBoundaryWedgeLoop` is onto;
 `cellIncl word (word z) = cellDisk word (circleToDisk z)` by `CellRel`). -/
 -- BEGIN SEAT AREA
+lemma Xc_points_aux_word_surjective : Function.Surjective word := by
+  intro w
+  induction w using Quotient.inductionOn with
+  | h q =>
+      rcases q with ⟨o, z⟩
+      induction o using Quotient.inductionOn with
+      | h i =>
+          obtain ⟨t, ht⟩ := PolygonSurfacePiOne.surjective_circleArc z
+          by_cases hs : P.sign i
+          · refine ⟨PolygonSurfacePiOne.edgePointCircle P.edgeCount i t, ?_⟩
+            change PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+              (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+                PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) z
+            rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint,
+              P.signedWedgeArc_of_sign i t hs, ht]
+          · refine ⟨PolygonSurfacePiOne.edgePointCircle P.edgeCount i
+                (PolygonSurfacePiOne.reverseIcc t), ?_⟩
+            have hs0 : P.sign i = false := Bool.eq_false_of_not_eq_true hs
+            change PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+              (PolygonSurfacePiOne.edgePointCircle P.edgeCount i
+                (PolygonSurfacePiOne.reverseIcc t)) =
+                  PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) z
+            rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint,
+              P.signedWedgeArc_of_not_sign i _ hs0,
+              PolygonSurfacePiOne.reverseIcc_reverseIcc, ht]
+
 lemma Xc_points (p : Xc) :
     (∃ z, p = cellIncl cLoop (cellDisk word z)) ∨ ∃ z, p = cellDisk cLoop z := by
-  sorry
+  induction p using Quotient.inductionOn with
+  | h q =>
+      rcases q with s | z
+      · left
+        induction s using Quotient.inductionOn with
+        | h q =>
+            rcases q with w | z
+            · obtain ⟨u, hu⟩ := Xc_points_aux_word_surjective w
+              refine ⟨circleToDisk u, ?_⟩
+              change cellIncl cLoop (cellIncl word w) =
+                cellIncl cLoop (cellDisk word (circleToDisk u))
+              apply congrArg (cellIncl cLoop)
+              rw [← hu]
+              exact (X_fwd_aux_cell_boundary word u).symm
+            · exact ⟨z, rfl⟩
+      · right
+        exact ⟨z, rfl⟩
 -- END SEAT AREA
 
 /-- B1. Assembly (sorry-free over B1a–c). -/
