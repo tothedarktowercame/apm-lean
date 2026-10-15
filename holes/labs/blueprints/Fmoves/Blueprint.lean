@@ -6041,9 +6041,140 @@ theorem cutOldA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
         AddCircle.homeomorphCircle'.symm c := by simpa [x, y] using hadd
     exact AddCircle.homeomorphCircle'.symm.injective hadd'
 
+lemma cutOldB_injective_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Set.InjOn (cutProfileOldB L p q)
+      (Set.Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi)) := by
+  have hL : 0 < L := by omega
+  have hLr : (0 : ℝ) < L := by exact_mod_cast hL
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    have hpqr : (p : ℝ) < q := by exact_mod_cast hpq
+    exact (div_lt_div_iff_of_pos_right hLr).2 (by nlinarith)
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqLr : (q : ℝ) < L := by exact_mod_cast hqL
+    have hpr : (0 : ℝ) ≤ p := Nat.cast_nonneg p
+    field_simp [ne_of_gt hLr]
+    nlinarith
+  have hPnorm : ‖cutPoint L p‖ = 1 := by
+    unfold cutPoint
+    exact Complex.norm_exp_ofReal_mul_I _
+  have hQnorm : ‖cutPoint L q‖ = 1 := by
+    unfold cutPoint
+    exact Complex.norm_exp_ofReal_mul_I _
+  have hPQ : cutPoint L p ≠ cutPoint L q := by
+    intro h
+    obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp h
+    have him := congrArg Complex.im hk
+    simp [cutPoint, cutAlpha] at him
+    have hpqr : (p : ℝ) < q := by exact_mod_cast hpq
+    have hgap : (q : ℝ) - (p : ℝ) < (L : ℝ) := by
+      have : (q : ℝ) < p + L := by exact_mod_cast (show q < p + L by omega)
+      linarith
+    field_simp [ne_of_gt hLr] at him
+    have heq : (p : ℝ) = q + (k : ℝ) * L := by nlinarith
+    have hkneg : (k : ℝ) < 0 := by nlinarith
+    have hk_le : (k : ℝ) ≤ -1 := by
+      exact_mod_cast (show k ≤ -1 by exact (Int.lt_add_one_iff.mp (by exact_mod_cast hkneg)))
+    nlinarith
+  have hchord : ∀ s : ℝ, 0 < s → s < 1 → ‖cutChordB L p q s‖ ^ 2 < 1 := by
+    intro s hs0 hs1
+    rw [Complex.sq_norm]
+    have hiden : Complex.normSq (cutChordB L p q s) =
+        1 - s * (1 - s) * Complex.normSq (cutPoint L q - cutPoint L p) := by
+      have hp2 : Complex.normSq (cutPoint L p) = 1 := by
+        rw [← Complex.sq_norm, hPnorm]; norm_num
+      have hq2 : Complex.normSq (cutPoint L q) = 1 := by
+        rw [← Complex.sq_norm, hQnorm]; norm_num
+      rw [Complex.normSq_apply] at hp2 hq2
+      simp [cutChordB, Complex.normSq_apply]
+      nlinarith
+    rw [hiden]
+    have hn : 0 < Complex.normSq (cutPoint L q - cutPoint L p) :=
+      Complex.normSq_pos.mpr (sub_ne_zero.mpr hPQ.symm)
+    have hp : 0 < s * (1 - s) * Complex.normSq (cutPoint L q - cutPoint L p) :=
+      mul_pos (mul_pos hs0 (sub_pos.mpr hs1)) hn
+    linarith
+  intro x hx y hy heq
+  change cutAlpha L q ≤ x ∧ x < cutAlpha L q + 2 * Real.pi at hx
+  change cutAlpha L q ≤ y ∧ y < cutAlpha L q + 2 * Real.pi at hy
+  by_cases hxt : x ≤ cutAlpha L p + 2 * Real.pi
+  · rw [cutProfileOldB, if_pos hxt] at heq
+    by_cases hyt : y ≤ cutAlpha L p + 2 * Real.pi
+    · rw [cutProfileOldB, if_pos hyt] at heq
+      obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
+      have him := congrArg Complex.im hk
+      simp at him
+      have hd : x - y = (k : ℝ) * (2 * Real.pi) := by nlinarith
+      have hb1 : -(2 * Real.pi) < x - y := by linarith
+      have hb2 : x - y < 2 * Real.pi := by linarith
+      have hk0 : k = 0 := by
+        by_contra hn
+        rcases lt_or_gt_of_ne hn with hkneg | hkpos
+        · have : (k : ℝ) ≤ -1 := by exact_mod_cast (show k ≤ -1 by omega)
+          nlinarith
+        · have : (1 : ℝ) ≤ k := by exact_mod_cast (show 1 ≤ k by omega)
+          nlinarith
+      subst k
+      norm_num at hd
+      linarith
+    · rw [cutProfileOldB, if_neg hyt] at heq
+      have hs0 : 0 < cutSB L p q y := by
+        unfold cutSB
+        exact div_pos (by linarith) (sub_pos.mpr hapq)
+      have hs1 : cutSB L p q y < 1 := by
+        unfold cutSB
+        apply (div_lt_one (sub_pos.mpr hapq)).2
+        linarith
+      have hsq := hchord _ hs0 hs1
+      have hnormarc : ‖Complex.exp ((x : ℂ) * Complex.I)‖ ^ 2 = 1 := by
+        rw [Complex.norm_exp]
+        simp
+      rw [heq] at hnormarc
+      linarith
+  · rw [cutProfileOldB, if_neg hxt] at heq
+    by_cases hyt : y ≤ cutAlpha L p + 2 * Real.pi
+    · rw [cutProfileOldB, if_pos hyt] at heq
+      have hs0 : 0 < cutSB L p q x := by
+        unfold cutSB
+        exact div_pos (by linarith) (sub_pos.mpr hapq)
+      have hs1 : cutSB L p q x < 1 := by
+        unfold cutSB
+        apply (div_lt_one (sub_pos.mpr hapq)).2
+        linarith
+      have hsq := hchord _ hs0 hs1
+      have hnormarc : ‖Complex.exp ((y : ℂ) * Complex.I)‖ ^ 2 = 1 := by
+        rw [Complex.norm_exp]
+        simp
+      rw [← heq] at hnormarc
+      exfalso
+      linarith
+    · rw [cutProfileOldB, if_neg hyt] at heq
+      have hd : cutPoint L q - cutPoint L p ≠ 0 := sub_ne_zero.mpr hPQ.symm
+      have hs : cutSB L p q x = cutSB L p q y := by
+        unfold cutChordB at heq
+        have hc : (cutSB L p q x : ℂ) * (cutPoint L q - cutPoint L p) =
+            (cutSB L p q y : ℂ) * (cutPoint L q - cutPoint L p) := by
+          simpa using congrArg (fun z => z - cutPoint L p) heq
+        have := mul_right_cancel₀ hd hc
+        exact_mod_cast this
+      unfold cutSB at hs
+      have hden : cutAlpha L q - cutAlpha L p ≠ 0 := ne_of_gt (sub_pos.mpr hapq)
+      field_simp [hden] at hs
+      linarith
+
 theorem cutOldB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutOldB L p q) := by
-  sorry
+  intro x y hxy
+  unfold cutOldB at hxy
+  have h := cutOldB_injective_aux_profile hpq hqL
+    (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm x)).2
+    (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm y)).2 hxy
+  apply AddCircle.homeomorphCircle'.symm.injective
+  exact (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).injective (Subtype.ext h)
 
 theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutNewA L p q) := by
