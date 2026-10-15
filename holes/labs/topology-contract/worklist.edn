@@ -119066,60 +119066,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove equal-dimensional manifold inverse-function bridge and circle-projection Sard specialization; derive calculations; assemble Main.",
+    "Construct the chart inverse-function local diffeomorphism; specialize circle-projection Sard; derive calculations; assemble Main.",
     :outcome :stop,
     :warnings
     ["Main sorryAx" "unnecessarySimpa; review dirs preserved"],
     :missing-theorems
-    [{:name "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
+    [{:name "exists_mfderivEquiv_of_surjective",
       :type
-      "local diffeomorphisms along a fiber imply local isolation",
+      "surjective surface mfderiv is a continuous linear equivalence",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["transverse_mfderiv_surjective_of_circleDirection_lifts"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber"
-       "exists_mfderiv_surjective_fiber_manifold_to_vector"],
+      ["exists_mfderivEquiv_of_surjective"
+       "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "dd0eef1eb07dad487b546cfa5c74cc4d0de32b58cb7ff13b0e97359f2e9b9764",
+     "86235653c93fdfc48fd1b6e7440af271ac34a00f06bf8bfeb045d1160486d975",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked local-diffeomorphism fiber isolation.",
+    :reason "Banked equivalence-valued surface derivative.",
     :commands
     [{:cmd "lake env lean -o ... t00J02Closure.lean", :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792027754837-12944-e7a771ee",
-     :commands
-     ["git show/diff-tree 9421e419"
-      "archive 9421e419; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit 9421e419 changes only t00J02Closure.lean and adds compiled, sorry-free progress. A local diffeomorphism along the selected fiber supplies an open source neighborhood; agreement with f there and injectivity of the local equivalence show its intersection with the fiber is exactly the singleton. Both equality directions and the local/global function boundary are correct. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. The equal-dimensional inverse-function bridge, circle-projection Sard specialization, calculations, and Main remain listed."},
-    :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
+    :commit "79e3988636c0f5eed0d2ee08686c120f007ed05f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119127,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119529,7 +119520,8 @@
     :lemma-transverse-mfderiv-surjective-of-circledirection-lifts
     :lemma-exists-regularvalue-of-criticalvalues-measure-zero
     :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector
-    :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber],
+    :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber
+    :lemma-exists-mfderivequiv-of-surjective],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120910,6 +120902,26 @@
    :id :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_mfderivEquiv_of_surjective",
+    :type
+    "surjective surface mfderiv is a continuous linear equivalence"},
+   :lemma
+   {:name "exists_mfderivEquiv_of_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "surjective surface mfderiv is a continuous linear equivalence",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-mfderivequiv-of-surjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transverse-mfderiv-surjective-of-circledirection-lifts],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
