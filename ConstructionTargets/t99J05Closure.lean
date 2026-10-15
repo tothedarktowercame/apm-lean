@@ -2,6 +2,7 @@ import ConstructionTargets.ComplexProjectiveChartTargets
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientContractiblePair
 import ConstructionTargets.CoefficientH0
+import ConstructionTargets.ProjectiveQuotientDescent
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -13,6 +14,8 @@ calculation consumes this data in the next milestone.
 open ConstructionTargets.ProjectiveSpaceTopology
 open ConstructionTargets.ComplexProjectiveChartTargets
 open ConstructionTargets.RationalLefschetz
+open ConstructionTargets.ProjectiveQuotientDescent
+open Set Topology
 
 noncomputable section
 namespace ConstructionTargets.t99J05Closure
@@ -152,6 +155,106 @@ theorem cpSuccessor_openCover (n : ℕ) :
       exact not_ne_iff.mp hlast
     · exact h i hi
 
+theorem t99J05_coordinates_continuousOn_exact {n : ℕ} (i : Fin (n + 1)) :
+    ContinuousOn (coordinates i)
+      {x : CP n | Projectivization.rep x i ≠ 0} := by
+  let s : Set (CP n) := {x | Projectivization.rep x i ≠ 0}
+  let q : NonzeroVectors ℂ n → CP n := quotientMap ℂ n
+  let qr := s.restrictPreimage q
+  have hqr : IsOpenQuotientMap qr := by
+    refine ⟨?_, continuous_quotientMap ℂ n |>.restrictPreimage, ?_⟩
+    · rintro ⟨x, hx⟩
+      obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ n x
+      exact ⟨⟨v, hx⟩, rfl⟩
+    · exact (projectiveQuotientMap_isOpen ℂ n).restrictPreimage s
+  rw [continuousOn_iff_continuous_restrict]
+  apply hqr.isQuotientMap.continuous_iff.mpr
+  apply continuous_pi
+  intro j
+  have hnum : Continuous (fun v : q ⁻¹' s => v.1.1 j.1) :=
+    (continuous_apply j.1).comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hden : Continuous (fun v : q ⁻¹' s => v.1.1 i) :=
+    (continuous_apply i).comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hden0 : ∀ v : q ⁻¹' s, v.1.1 i ≠ 0 := by
+    intro v
+    exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp v.2
+  convert hnum.div hden hden0 using 1
+  funext v
+  change (Projectivization.mk ℂ v.1.1 v.1.2).rep j.1 /
+      (Projectivization.mk ℂ v.1.1 v.1.2).rep i = _
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1.1 v.1.2
+  rw [← ha]
+  change (a.1 * v.1.1 j.1) / (a.1 * v.1.1 i) = _
+  field_simp
+  rfl
+
+theorem t99J05_chartInverse_continuous_exact {n : ℕ} (i : Fin (n + 1)) :
+    Continuous (chartInverse i) := by
+  apply (continuous_quotientMap ℂ n).comp
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro j
+  by_cases h : j = i
+  · subst j
+    simpa only [dif_pos] using
+      (continuous_const : Continuous (fun _ : AffineCoordinates i => (1 : ℂ)))
+  · simpa only [dif_neg h] using
+      (continuous_apply (⟨j, h⟩ : {k : Fin (n + 1) // k ≠ i}) :
+        Continuous (fun z : AffineCoordinates i => z ⟨j, h⟩))
+
+/-- Every literal affine patch of `CP n` is homeomorphic to its full affine
+coordinate space, with the exact coordinate and inverse maps. -/
+theorem t99J05_affineChartConstruction_all (n : ℕ) :
+    AffineChartConstruction n := by
+  intro i
+  have hinvMem (z : AffineCoordinates i) :
+      Projectivization.rep (chartInverse i z) i ≠ 0 := by
+    unfold chartInverse
+    let v : NonzeroVectors ℂ n :=
+      ⟨fun j => if h : j = i then 1 else z ⟨j, h⟩, by
+        intro hz
+        have hi := congrFun hz i
+        simp at hi⟩
+    have hv : v ∈ {w : NonzeroVectors ℂ n | w.1 i ≠ 0} := by simp [v]
+    have hp : v ∈ quotientMap ℂ n ⁻¹'
+        {x : CP n | Projectivization.rep x i ≠ 0} := by
+      rw [affineSource_preimage i]
+      exact hv
+    exact hp
+  have hzero : chartInverse i 0 = coordinateLine ℂ n i := by
+    unfold chartInverse coordinateLine
+    congr 1
+    apply Subtype.ext
+    funext j
+    by_cases h : j = i
+    · subst j; simp
+    · simp [h]
+  have hlineMem : Projectivization.rep (coordinateLine ℂ n i) i ≠ 0 := by
+    rw [← hzero]
+    exact hinvMem 0
+  have hlineCoord : coordinates i (coordinateLine ℂ n i) = 0 := by
+    rw [← hzero]
+    exact coordinates_chartInverse i 0
+  let e : OpenPartialHomeomorph (CP n) (AffineCoordinates i) := {
+    toPartialEquiv := {
+      toFun := coordinates i
+      invFun := chartInverse i
+      source := {x : CP n | Projectivization.rep x i ≠ 0}
+      target := Set.univ
+      map_source' := fun _ _ => Set.mem_univ _
+      map_target' := fun z _ => hinvMem z
+      left_inv' := fun x hx => chartInverse_coordinates i x hx
+      right_inv' := fun z _ => coordinates_chartInverse i z }
+    open_source := affineSource_isOpen i
+    open_target := isOpen_univ
+    continuousOn_toFun := t99J05_coordinates_continuousOn_exact i
+    continuousOn_invFun := (t99J05_chartInverse_continuous_exact i).continuousOn }
+  refine ⟨e, rfl, rfl, ?_, rfl, ?_, ?_, ?_⟩
+  · intro x hx; rfl
+  · exact hlineMem
+  · exact hlineCoord
+  · exact hzero
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -197,6 +300,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorTopPatch_isOpen
 #print axioms cpSuccessorLowerPatch_isOpen
 #print axioms cpSuccessor_openCover
+#print axioms t99J05_affineChartConstruction_all
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
