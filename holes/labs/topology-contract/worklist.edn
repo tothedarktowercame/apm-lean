@@ -119109,6 +119109,16 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792027754837-12944-e7a771ee",
+     :commands
+     ["git show/diff-tree 9421e419"
+      "archive 9421e419; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit 9421e419 changes only t00J02Closure.lean and adds compiled, sorry-free progress. A local diffeomorphism along the selected fiber supplies an open source neighborhood; agreement with f there and injectivity of the local equivalence show its intersection with the fiber is exactly the singleton. Both equality directions and the local/global function boundary are correct. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. The equal-dimensional inverse-function bridge, circle-projection Sard specialization, calculations, and Main remain listed."},
     :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119127,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119145,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Sard regular-fiber adapter.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked local-diffeomorphism fiber isolation.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119303,7 +119313,10 @@
      :reason "Banked regular-value selection."}
     {:job 8,
      :commit "da6e039f1a724ae592d9690cd9e627b14f19c969",
-     :reason "Banked Sard regular-fiber adapter."}]}
+     :reason "Banked Sard regular-fiber adapter."}
+    {:job 9,
+     :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
+     :reason "Banked local-diffeomorphism fiber isolation."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120881,7 +120894,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
@@ -120891,7 +120904,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "local diffeomorphisms along a fiber imply local isolation",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "9421e419a44300b57eb7e2946d62087cbecb94d7"},
    :id :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber,
    :kind :lemma,
    :depends-on [],
