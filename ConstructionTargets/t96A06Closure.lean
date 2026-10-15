@@ -993,6 +993,27 @@ theorem polynomialDescent_degree_four_of_sphere
   rw [hsphere] at h
   simpa [CategoryTheory.comp_apply] using h.symm
 
+/-- Exact remaining regular-value formula for the sphere lift: the induced
+top-homology map is the scalar sum of its four positive local coefficients. -/
+def PolynomialSphereLiftRegularValueFormula : Prop :=
+  HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+    (∑ _ : Fin 4, (1 : ℚ)) • 𝟙 _
+
+/-- The four positive local coefficients sum to four. -/
+theorem polynomialSphereLift_four_positive_local_coefficients :
+    ∑ _ : Fin 4, (1 : ℚ) = 4 := by
+  norm_num [Fin.sum_univ_four]
+
+/-- Once the exact regular-value formula is supplied, its finite signed-count
+arithmetic gives degree four on rational third homology. -/
+theorem polynomialSphereLift_degree_four_of_regularValueFormula
+    (h : PolynomialSphereLiftRegularValueFormula) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+      (4 : ℚ) • 𝟙 _ := by
+  rw [h, polynomialSphereLift_four_positive_local_coefficients]
+
 /-- The concrete unit-sphere projection generates exactly the frozen quotient
 topology on `RP3`.  This is the quotient half of the double-cover input for
 rational transfer. -/
@@ -1822,6 +1843,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_projection
 #print axioms polynomialSphereLift_homology_square
 #print axioms polynomialDescent_degree_four_of_sphere
+#print axioms polynomialSphereLift_degree_four_of_regularValueFormula
 #print axioms rp3SphereProjection_isQuotientMap
 #print axioms rp3SphereProjection_eq_iff
 #print axioms rp3SphereProjection_isOpenMap
