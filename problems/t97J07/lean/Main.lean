@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveSpaceTopology
+import ConstructionTargets.t99J05Closure
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -273,6 +274,32 @@ structure T97J07CP2RationalHomologyData where
       (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3)
   fourEquiv :
     ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ
+
+/-- Specialize the shared finite-complex-projective-space homology interface
+to the exact `CP²` certificate consumed below. -/
+noncomputable def t97J07_cp2RationalHomologyData_of_shared
+    (h : ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 2) :
+    T97J07CP2RationalHomologyData where
+  finiteDimensional := h.finiteDimensional
+  vanishesAbove := h.vanishesAbove
+  zeroEquiv := by
+    simpa using h.evenEquiv (0 : Fin 3)
+  oneSubsingleton := h.vanishesOdd 1 (by exact ⟨0, by omega⟩)
+  twoEquiv := by
+    simpa using h.evenEquiv (1 : Fin 3)
+  threeSubsingleton := h.vanishesOdd 3 (by exact ⟨1, by omega⟩)
+  fourEquiv := by
+    simpa using h.evenEquiv (2 : Fin 3)
+
+/-- The shared `CP⁰` base and one-cell successor theorem produce the exact
+consumer certificate at dimension two. -/
+noncomputable def t97J07_cp2RationalHomologyData_of_zero_of_step
+    (hzero : ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 0)
+    (hstep : ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyStep) :
+    T97J07CP2RationalHomologyData :=
+  t97J07_cp2RationalHomologyData_of_shared
+    (ConstructionTargets.t99J05Closure.complexProjectiveRationalHomologyData_of_zero_of_step
+      hzero hstep 2)
 
 /-- Once the CP² homology table is supplied, finite-dimensional trace
 calculation gives Euler characteristic three. -/
