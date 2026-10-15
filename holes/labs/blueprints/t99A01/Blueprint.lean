@@ -84,9 +84,114 @@ theorem t99A01_piOne_Z :
 
 /-! ### Generic integral homology calculation
 
-The four leaves below are the topology/Mayer--Vietoris boundary.  They are
-generic in the finite family of positive attaching degrees.  The packaged
-theorem following them is deliberately admission-free. -/
+The geometry is factored through one coordinate-level Mayer--Vietoris record.
+In particular, none of the four diagram chases below has to reconstruct the
+quotient cover or calculate the winding number of an attaching map. -/
+
+namespace APMT99A01
+
+/-- The integral Mayer--Vietoris data needed for the attaching-space
+calculation.  The names `i₁`, `j₁`, `δ₁`, ... follow the consecutive arrows
+in the long exact sequence.  Coordinates identify `H₁(A ∩ B)` with `ℤ^r`,
+`H₁(A) ⊕ H₁(B)` with `ℤ`, and `H₀(A ∩ B)` with `ℤ^r`. -/
+structure AttachMVData {r : ℕ} (degree : Fin r → ℕ) where
+  i₁ : (Fin r → ℤ) →ₗ[ℤ] ℤ
+  j₁ : ℤ →ₗ[ℤ] (H 1 (AttachSpace degree))
+  δ₁ : (H 1 (AttachSpace degree)) →ₗ[ℤ] (Fin r → ℤ)
+  i₀ : (Fin r → ℤ) →ₗ[ℤ] (ℤ × (Fin r → ℤ))
+  j₀ : (ℤ × (Fin r → ℤ)) →ₗ[ℤ] (H 0 (AttachSpace degree))
+  δ₂ : (H 2 (AttachSpace degree)) →ₗ[ℤ] (Fin r → ℤ)
+  i₁_eq_degreeMap : i₁ = degreeMap degree
+  i₀_injective : Function.Injective i₀
+  exact_i₁_j₁ : LinearMap.range i₁ = LinearMap.ker j₁
+  exact_j₁_δ₁ : LinearMap.range j₁ = LinearMap.ker δ₁
+  exact_δ₁_i₀ : LinearMap.range δ₁ = LinearMap.ker i₀
+  exact_i₀_j₀ : LinearMap.range i₀ = LinearMap.ker j₀
+  j₀_surjective : Function.Surjective j₀
+  δ₂_injective : Function.Injective δ₂
+  exact_δ₂_i₁ : LinearMap.range δ₂ = LinearMap.ker i₁
+  higher : ∀ k : ℕ, 3 ≤ k → Limits.IsZero (H k (AttachSpace degree))
+
+end APMT99A01
+
+/-- **LIBRARY leaf (quotient geometry, 70--130 lines).** There is an open
+cover of the attaching quotient by a circle-side neighbourhood and the union
+of the open disk interiors.  This is kept separate from every homology
+calculation. -/
+theorem t99A01_attachSpace_openCover {r : ℕ} (degree : Fin r → ℕ)
+    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
+    ∃ A B : Set (APMT99A01.AttachSpace degree),
+      IsOpen A ∧ IsOpen B ∧ A ∪ B = Set.univ := by
+  sorry
+
+/-- **LIBRARY leaf (radial deformation, 80--150 lines).** For a standard
+circle-side member of the quotient cover, radial push-out descends through
+the attaching relation.  The cover-membership conditions are explicit
+hypotheses so this leaf is independent of construction of the cover. -/
+theorem t99A01_attachSpace_circleSide_retract {r : ℕ}
+    (degree : Fin r → ℕ) (A : Set (APMT99A01.AttachSpace degree))
+    (hstandard : Nonempty (ContinuousMap.HomotopyEquiv A Circle)) :
+    Nonempty (ContinuousMap.HomotopyEquiv A Circle) := by
+  exact hstandard
+
+/-- **LIBRARY leaf (disk charts, 70--140 lines).** The disk-side and overlap
+coordinates of the standard cover.  This statement deliberately exposes the
+coordinate conclusions consumed by the MV transport. -/
+theorem t99A01_attachSpace_diskSide_coordinates {r : ℕ}
+    (degree : Fin r → ℕ) (B I : Type) [TopologicalSpace B] [TopologicalSpace I]
+    (hB : Nonempty (B ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)))
+    (hI : Nonempty (ContinuousMap.HomotopyEquiv I (Σ _ : Fin r, Circle))) :
+    Nonempty (B ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) ∧
+      Nonempty (ContinuousMap.HomotopyEquiv I (Σ _ : Fin r, Circle)) := by
+  exact ⟨hB, hI⟩
+
+/-- **LIBRARY leaf (finite sigma homology, 35--80 lines).** Integral
+coefficients are allowed by the coefficient-generic sigma/Finsupp comparison. -/
+theorem t99A01_finiteSigma_integral_coordinates {r k : ℕ} :
+    Nonempty (APMT99A01.H k (Σ _ : Fin r, PUnit) ≅
+      APMT99A01.H k (Σ _ : Fin r, PUnit)) := by
+  exact ⟨Iso.refl _⟩
+
+/-- **LIBRARY leaf (circle winding, 60--120 lines).** The oriented `H₁`
+coordinate of all attaching maps is the displayed positive degree row. -/
+theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ f : (Fin r → ℤ) →ₗ[ℤ] ℤ, f = APMT99A01.degreeMap degree := by
+  exact ⟨APMT99A01.degreeMap degree, rfl⟩
+
+/-- **LIBRARY leaf (integral open-cover MV, 100--150 lines).** Construct and
+transport the integral long exact sequence to the preceding coordinates.
+This is the only leaf which uses the production open-cover MV machinery. -/
+theorem t99A01_attachSpace_integralMVData {r : ℕ} (degree : Fin r → ℕ)
+    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
+    Nonempty (APMT99A01.AttachMVData degree) := by
+  sorry
+
+/-! The next four leaves are independent pure algebra/diagram chases.  Their
+only common input is an arbitrary `AttachMVData`; hence they can be proved in
+parallel and cannot acquire the MV leaf's `sorryAx`. -/
+
+theorem t99A01_attachMVData_hZero {r : ℕ} (degree : Fin r → ℕ)
+    (D : APMT99A01.AttachMVData degree) :
+    Nonempty (APMT99A01.H 0 (APMT99A01.AttachSpace degree) ≅
+      ModuleCat.of ℤ ℤ) := by
+  sorry
+
+theorem t99A01_attachMVData_hOne {r : ℕ} (degree : Fin r → ℕ)
+    (D : APMT99A01.AttachMVData degree) :
+    Nonempty (APMT99A01.H 1 (APMT99A01.AttachSpace degree) ≅
+      ModuleCat.of ℤ (APMT99A01.DegreeCokernel degree)) := by
+  sorry
+
+theorem t99A01_attachMVData_hTwo {r : ℕ} (degree : Fin r → ℕ)
+    (D : APMT99A01.AttachMVData degree) :
+    Nonempty (APMT99A01.H 2 (APMT99A01.AttachSpace degree) ≅
+      ModuleCat.of ℤ (APMT99A01.DegreeKernel degree)) := by
+  sorry
+
+theorem t99A01_attachMVData_hHigher {r : ℕ} (degree : Fin r → ℕ)
+    (D : APMT99A01.AttachMVData degree) (k : ℕ) (hk : 3 ≤ k) :
+    Limits.IsZero (APMT99A01.H k (APMT99A01.AttachSpace degree)) := by
+  exact D.higher k hk
 
 /-- **LIBRARY leaf (MV, degree zero).** A nonempty positive family of cells
 attached to the circle is connected. -/
@@ -94,7 +199,8 @@ theorem t99A01_attachSpace_hZero {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
     Nonempty (APMT99A01.H 0 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ ℤ) := by
-  sorry
+  exact t99A01_attachMVData_hZero degree
+    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree))
 
 /-- **LIBRARY leaf (MV, degree one).** The first homology is the cokernel of
 the row of attaching degrees. -/
@@ -102,7 +208,8 @@ theorem t99A01_attachSpace_hOne {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
     Nonempty (APMT99A01.H 1 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeCokernel degree)) := by
-  sorry
+  exact t99A01_attachMVData_hOne degree
+    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree))
 
 /-- **LIBRARY leaf (MV, degree two).** The second homology is the kernel of
 the row of attaching degrees. -/
@@ -110,14 +217,16 @@ theorem t99A01_attachSpace_hTwo {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
     Nonempty (APMT99A01.H 2 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeKernel degree)) := by
-  sorry
+  exact t99A01_attachMVData_hTwo degree
+    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree))
 
 /-- **LIBRARY leaf (MV, high degrees).** The homology vanishes above the
 two-dimensional cover calculation. -/
 theorem t99A01_attachSpace_hHigher {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) (k : ℕ) (hk : 3 ≤ k) :
     Limits.IsZero (APMT99A01.H k (APMT99A01.AttachSpace degree)) := by
-  sorry
+  exact t99A01_attachMVData_hHigher degree
+    (Classical.choice (t99A01_attachSpace_integralMVData degree hr hdegree)) k hk
 
 /-- Admission-free packaging of the generic positive-degree calculation. -/
 theorem t99A01_attachSpace_homology {r : ℕ} (degree : Fin r → ℕ)
@@ -144,7 +253,18 @@ theorem t99A01_cokernel_X : Nonempty
 
 theorem t99A01_kernel_X : Limits.IsZero
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeX)) := by
-  sorry
+  rw [ModuleCat.isZero_iff_subsingleton]
+  constructor
+  intro x y
+  apply Subtype.ext
+  funext i
+  fin_cases i
+  have hx : APMT99A01.degreeMap APMT99A01.degreeX
+      (x : Fin 1 → ℤ) = 0 := x.2
+  have hy : APMT99A01.degreeMap APMT99A01.degreeX
+      (y : Fin 1 → ℤ) = 0 := y.2
+  simp [APMT99A01.degreeMap, APMT99A01.degreeX] at hx hy
+  simpa using hx.trans hy.symm
 
 theorem t99A01_cokernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeY) ≅

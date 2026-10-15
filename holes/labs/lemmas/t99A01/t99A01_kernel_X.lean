@@ -145,7 +145,18 @@ theorem t99A01_cokernel_X : Nonempty
 -- BEGIN SEAT AREA
 theorem t99A01_kernel_X : Limits.IsZero
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeX)) := by
-  sorry
+  rw [ModuleCat.isZero_iff_subsingleton]
+  constructor
+  intro x y
+  apply Subtype.ext
+  funext i
+  fin_cases i
+  have hx : APMT99A01.degreeMap APMT99A01.degreeX
+      (x : Fin 1 → ℤ) = 0 := x.2
+  have hy : APMT99A01.degreeMap APMT99A01.degreeX
+      (y : Fin 1 → ℤ) = 0 := y.2
+  simp [APMT99A01.degreeMap, APMT99A01.degreeX] at hx hy
+  simpa using hx.trans hy.symm
 -- END SEAT AREA
 
 theorem t99A01_cokernel_Y : Nonempty
