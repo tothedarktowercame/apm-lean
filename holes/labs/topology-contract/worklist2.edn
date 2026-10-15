@@ -88331,26 +88331,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Induct over run blocks; derive surjectivity/reverse kernel; assemble.",
+    "Complete run-block induction; derive surjectivity/reverse kernel; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionRunPrefixBlock_trans",
-      :type "adjacent prefix-block quotient composition",
+    [{:name "torusRP2_subdivisionRunPrefixBlockPoint_last",
+      :type "run endpoint is cumulative subdivision boundary",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_subdivisionRunPrefixBlock_adjacent"],
+      :depends-on ["torusRP2_subdivisionRunPrefixBlock_trans"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlock_trans"
+      ["torusRP2_subdivisionRunPrefixBlockPoint_last"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88363,36 +88363,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked adjacent-block composition.",
+    :reason "Banked cumulative run boundary.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check f08b45d8f", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792060742809-13878-0e7f4a6c",
-     :commands
-     ["git show/diff/check f08b45d8f"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit f08b45d8f adds compiled, sorry-free progress beyond bf8858d42: adjacent cumulative-prefix quotient composition equals the joined-path class after the second block is cast along endpoint adjacency. Only t97A01Closure.lean changed; fixture SHA 7f2975b04b09a321bcbe984bb4a0d10978328f37b29843df99f25757e24d5152 matches. Exact snapshot builds; target/dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms standard. The mk_trans symmetry orientation and representation cast are correct. Induction over run blocks, subdivision reassembly, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain listed."},
-    :commit "f08b45d8f",
+     {:cmd "git show --check f10813fc0", :exit 0}],
+    :diagnostic-history
+    [{:cmd "boundary draft",
+      :exit 1,
+      :correction "converted weak to strict Fin bound"}],
+    :commit "f10813fc0",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "7f2975b04b09a321bcbe984bb4a0d10978328f37b29843df99f25757e24d5152"},
+     "2b876c409cf260ec802acf31e7c9ca37977230f757b6e359ea18f8145580c6bc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94191,7 +94182,8 @@
     :lemma-torusrp2-subdivisionrunblockpiece-cast-eq-prefixblockpiece
     :lemma-torusrp2-subdivisionrunblockconcat-cast-eq-prefixblockconcat
     :lemma-torusrp2-subdivisionrunprefixblock-adjacent
-    :lemma-torusrp2-subdivisionrunprefixblock-trans],
+    :lemma-torusrp2-subdivisionrunprefixblock-trans
+    :lemma-torusrp2-subdivisionrunprefixblockpoint-last],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94790,4 +94782,21 @@
    :id :lemma-torusrp2-subdivisionrunprefixblock-trans,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunprefixblock-adjacent],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunPrefixBlockPoint_last",
+    :type "run endpoint is cumulative subdivision boundary"},
+   :lemma
+   {:name "torusRP2_subdivisionRunPrefixBlockPoint_last",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "run endpoint is cumulative subdivision boundary",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunprefixblockpoint-last,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2-subdivisionrunprefixblock-trans],
    :other-consumers []}]}
