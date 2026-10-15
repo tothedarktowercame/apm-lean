@@ -88378,6 +88378,19 @@
     [{:cmd "dependent zero-coordinate drafts",
       :exit 1,
       :correction "used equivalence injectivity"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792088500895-14421-323826b8",
+     :commands
+     ["git show/diff/check 8bbb96926"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 8bbb96926 adds compiled, sorry-free progress beyond history e9b658d02. It proves equality of the full dependent inverse run/offset coordinate at zero via equivalence injectivity and prefix(0)=0, supplying the exact Sigma induction base. Only t97A01Closure.lean changed; fixture SHA c353b094eba8796e5ded74663a9f436d8c05fd6503bbad7dfcfc88a8e4defa56 matches. Snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Orientation and dependent Fin cast are correct. Successor reassociation, van Kampen, and assembly remain listed."},
     :commit "8bbb96926",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88386,7 +88399,7 @@
      "c353b094eba8796e5ded74663a9f436d8c05fd6503bbad7dfcfc88a8e4defa56"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88404,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flat-interval endpoint class.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact zero run coordinate.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88624,7 +88637,10 @@
      :reason "Banked literal-endpoint flat interval fold."}
     {:job 7,
      :commit "e9b658d02",
-     :reason "Banked flat-interval endpoint class."}]}
+     :reason "Banked flat-interval endpoint class."}
+    {:job 8,
+     :commit "8bbb96926",
+     :reason "Banked exact zero run coordinate."}]}
   {:consumer :t94J09,
    :stop-count 7,
    :evidence
@@ -95906,7 +95922,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq",
@@ -95918,7 +95934,9 @@
     :type
     "full inverse coordinate at zero is first run and local zero",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8bbb96926"},
    :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero-eq,
    :kind :lemma,
    :depends-on
