@@ -486,6 +486,67 @@ theorem torusRP2GeometricBoundary_eq_signedEdgeProduct :
         polygonBoundaryExplicitEdgeClass torusRP2PairingData i).reverse.prod) :=
   polygonBoundaryIntegerLoopClass_eq_reverseExplicitEdgeProduct _
 
+/-- Transport to the common wedge basepoint preserves the global circle
+orientation formula. -/
+theorem finiteWedgeExplicitLegClassAtBase_eq_positive_zpow
+    (P : PairingData) (l : PairingOrbit P.pair) :
+    finiteWedgeExplicitLegClassAtBase P l =
+      finiteWedgeLegFundamentalClassAtBase P l ^
+        circleIntegerLoopOneCoordinate := by
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · rw [h, zpow_one, finiteWedgeExplicitLegClassAtBase,
+      finiteWedgeExplicitLegClass_eq_positive_zpow, h, zpow_one]
+    rfl
+  · rw [h, zpow_neg_one, finiteWedgeExplicitLegClassAtBase,
+      finiteWedgeExplicitLegClass_eq_positive_zpow, h, zpow_neg_one]
+    exact homotopicQuotient_cast_symm _ _
+
+/-- Every geometric edge factor is the corresponding normalized generator,
+with the edge sign multiplied by the single global circle-orientation unit. -/
+theorem polygonBoundaryExplicitEdgeClass_eq_zpow (P : PairingData)
+    (i : Fin P.edgeCount) :
+    polygonBoundaryExplicitEdgeClass P i =
+      finiteWedgeLegFundamentalClassAtBase P (P.orbit i) ^
+        ((if P.sign i then (1 : ℤ) else -1) *
+          circleIntegerLoopOneCoordinate) := by
+  cases hs : P.sign i
+  · simp [polygonBoundaryExplicitEdgeClass, hs,
+      finiteWedgeExplicitLegClassAtBase_eq_positive_zpow, zpow_neg]
+  · simp [polygonBoundaryExplicitEdgeClass, hs,
+      finiteWedgeExplicitLegClassAtBase_eq_positive_zpow]
+
+/-- The three normalized wedge generators in the signed orbit order. -/
+noncomputable def torusRP2WedgeGenerator (j : Fin 3) :=
+  finiteWedgeLegFundamentalClassAtBase torusRP2PairingData
+    (torusRP2OrbitEquiv.symm j)
+
+theorem torusRP2_orbit_eq_label (i : Fin 6) :
+    torusRP2PairingData.orbit i =
+      torusRP2OrbitEquiv.symm (torusRP2OrbitLabel i) := by
+  apply torusRP2OrbitEquiv.injective
+  rw [torusRP2OrbitEquiv_orbit, torusRP2OrbitEquiv.apply_symm_apply]
+
+@[simp] theorem torusRP2PairingData_sign (i : Fin 6) :
+    torusRP2PairingData.sign i = torusRP2Sign i := rfl
+
+/-- Evaluation of the reversed six-edge product forced by the fundamental
+group multiplication convention. -/
+theorem torusRP2SignedEdgeProduct_explicit :
+    ((List.ofFn fun i : Fin torusRP2PairingData.edgeCount =>
+      polygonBoundaryExplicitEdgeClass torusRP2PairingData i).reverse.prod) =
+      torusRP2WedgeGenerator 2 ^ (-circleIntegerLoopOneCoordinate) *
+      (torusRP2WedgeGenerator 2 ^ (-circleIntegerLoopOneCoordinate) *
+      (torusRP2WedgeGenerator 1 ^ (-circleIntegerLoopOneCoordinate) *
+      (torusRP2WedgeGenerator 0 ^ (-circleIntegerLoopOneCoordinate) *
+      (torusRP2WedgeGenerator 1 ^ circleIntegerLoopOneCoordinate *
+      (torusRP2WedgeGenerator 0 ^ circleIntegerLoopOneCoordinate * 1))))) := by
+  simp [polygonBoundaryExplicitEdgeClass_eq_zpow,
+    torusRP2PairingData_edgeCount, torusRP2Sign,
+    torusRP2PairingData_sign,
+    torusRP2WedgeGenerator, torusRP2_orbit_eq_label,
+    torusRP2OrbitLabel]
+  rfl
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
@@ -497,5 +558,7 @@ theorem torusRP2GeometricBoundary_eq_signedEdgeProduct :
 #print axioms torusRP2GeneratorSignHom_frozenRelator
 #print axioms torusRP2PolygonBoundaryLegWord_coordinates
 #print axioms torusRP2GeometricBoundary_eq_signedEdgeProduct
+#print axioms polygonBoundaryExplicitEdgeClass_eq_zpow
+#print axioms torusRP2SignedEdgeProduct_explicit
 
 end ConstructionTargets.t97A01Closure
