@@ -2028,6 +2028,27 @@ lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
       Limits.biprod.fst ≫ cA₁.hom = ModuleCat.ofHom (APMT99A01.degreeMap degree) := by
   sorry
 
+instance t99A01_circle_pathConnected : PathConnectedSpace Circle :=
+  pathConnectedSpace_iff_univ.mpr (by
+    have h : IsPathConnected
+        (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+          (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+        isPathConnected_univ
+    simpa using h)
+
+instance t99A01_ball_pathConnected : PathConnectedSpace (Metric.ball (0 : ℂ) 1) :=
+  isPathConnected_iff_pathConnectedSpace.mp
+    (Metric.isPathConnected_ball (x := (0 : ℂ)) (r := 1) (by norm_num))
+
+/-- Canonical `H₀` coordinate of the circle: every point class ↦ 1. -/
+noncomputable def t99A01_eC : APMT99A01.H 0 Circle ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.CoefficientH0.h0Iso ℤ (1 : Circle)
+
+/-- Canonical `H₀` coordinate of the open unit disk: every point class ↦ 1. -/
+noncomputable def t99A01_eD : APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.CoefficientH0.h0Iso ℤ ⟨0, by simp [Metric.mem_ball]⟩
+
 /-- The two degree-zero coordinate rows, including the sign convention of
 `zI = lift(incl,incl)`; the minus sign belongs to `zJ`, not this map. -/
 lemma t99A01_low_coordinates_degree_zero {r : ℕ} (degree : Fin r → ℕ)
@@ -2038,13 +2059,14 @@ lemma t99A01_low_coordinates_degree_zero {r : ℕ} (degree : Fin r → ℕ)
     (eB : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1))
     (eO : ContinuousMap.HomotopyEquiv
       ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
-    (eC : APMT99A01.H 0 Circle ≅ ModuleCat.of ℤ ℤ)
-    (eD : ∀ _ : Fin r, APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ ModuleCat.of ℤ ℤ)
     (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
       IsIso (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
         (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
           (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
         (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j))) :
+    let eC := t99A01_eC
+    let eD : ∀ _ : Fin r, APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ ModuleCat.of ℤ ℤ :=
+      fun _ ↦ t99A01_eD
     let cO₀ := t99A01_overlap_sigma_coordinate degree eO 0 ≪≫
       t99A01_sigma_coordinate (fun _ : Fin r ↦ Circle) 0 (hsigma _ 0) ≪≫
       Limits.biproduct.mapIso (fun _ : Fin r ↦ eC) ≪≫ t99A01_biproduct_int_coordinate r
@@ -2232,7 +2254,9 @@ lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
   obtain ⟨eB, -⟩ := hdisk
   obtain ⟨eO, heO⟩ := hoverlap
   obtain ⟨e₁, hw⟩ := hwinding
-  obtain ⟨eC, eD, -⟩ := t99A01_low_h0_coordinates (r := r)
+  let eC := t99A01_eC
+  let eD : ∀ _ : Fin r, APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ ModuleCat.of ℤ ℤ :=
+    fun _ ↦ t99A01_eD
   obtain ⟨δ, hIJ, hJδ, hδI⟩ := hexact
   let cO₁ := t99A01_overlap_sigma_coordinate degree eO 1 ≪≫
     t99A01_sigma_coordinate (fun _ : Fin r ↦ Circle) 1 (hsigma _ 1) ≪≫
@@ -2248,7 +2272,7 @@ lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
   obtain ⟨hA₂, hB₁, hB₂⟩ := t99A01_low_coordinates_vanishing degree ρ ι hρι hιρ eB
   have hdeg := t99A01_low_coordinates_degree_one degree ρ ι hρι hιρ eO heO hρ hsigma e₁ hw
   obtain ⟨hsum, hid⟩ := t99A01_low_coordinates_degree_zero degree hr ρ ι hρι hιρ
-    eB eO eC eD hsigma
+    eB eO hsigma
   exact t99A01_lowData_of_coordinates degree _ _ _ _ _ _ _ _
     (APMT99A01.zI _ _ 0) (APMT99A01.zI _ _ 1) (APMT99A01.zJ _ _ 0)
     (APMT99A01.zJ _ _ 1) (APMT99A01.zJ _ _ 2) (δ 0) (δ 1)
