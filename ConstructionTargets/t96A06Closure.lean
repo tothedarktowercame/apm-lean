@@ -642,6 +642,40 @@ theorem t96A06_rational_homology_projection_transfer (n : ℕ) :
   congr 1
   exact CategoryTheory.Functor.map_id _ _
 
+/-- In degree three the sphere-to-projective-space homology map is injective:
+postcomposition with transfer is multiplication by two, because the
+antipodal map acts as the identity. -/
+theorem t96A06_rp3_rational_H3_projection_injective :
+    Function.Injective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3) := by
+  let proj := HomologicalComplex.homologyMap
+    (CoefficientH0.singularPostcomposition ℚ
+      ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3
+  let tr := HomologicalComplex.homologyMap
+    (CoefficientCoveringTransfer.transfer ℚ
+      (sphereProjection 3) t96A06_rp3_sphere_twoSheeted) 3
+  have hcomp : proj ≫ tr = (2 : ℕ) • 𝟙 _ := by
+    rw [show proj ≫ tr = 𝟙 _ +
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ
+            ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩) 3 from
+      t96A06_rational_homology_projection_transfer 3]
+    rw [show HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ
+            ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩) 3 = 𝟙 _ from
+      t96A06_sphere3_antipodal_H3]
+    simp [two_smul]
+  intro x y hxy
+  have htr : tr (proj x) = tr (proj y) := congrArg tr hxy
+  have hx := CategoryTheory.ConcreteCategory.congr_hom hcomp x
+  have hy := CategoryTheory.ConcreteCategory.congr_hom hcomp y
+  have htwo : (2 : ℚ) • x = (2 : ℚ) • y := by
+    simpa [CategoryTheory.comp_apply, two_smul] using hx.symm.trans (htr.trans hy)
+  have hinv := congrArg (fun z => (2 : ℚ)⁻¹ • z) htwo
+  simpa [smul_smul] using hinv
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -702,6 +736,7 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_rational_projection_transferDegree
 #print axioms t96A06_rational_projection_transfer
 #print axioms t96A06_rational_homology_projection_transfer
+#print axioms t96A06_rp3_rational_H3_projection_injective
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
