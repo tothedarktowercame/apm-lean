@@ -88374,6 +88374,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check 55fd500b0", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792062758294-13928-b619027d",
+     :commands
+     ["git show/diff/check 55fd500b0"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 55fd500b0 adds compiled, sorry-free progress beyond f10813fc0: it identifies each prefix block source with global boundary castSucc and target with global boundary succ. Only t97A01Closure.lean changed; fixture SHA 40549a0491d3decd9b1cc1046d07e9f12077209530306b83a33a7501d5974144 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Endpoint orientations and the run-block-to-prefix-block representation transport are correct. Run-block induction, surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "55fd500b0",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88395,7 @@
      "40549a0491d3decd9b1cc1046d07e9f12077209530306b83a33a7501d5974144"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cumulative run boundary.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global prefix-block endpoints.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88518,7 +88531,10 @@
      :reason "Banked adjacent-block composition."}
     {:job 9,
      :commit "f10813fc0",
-     :reason "Banked cumulative run boundary."}]}
+     :reason "Banked cumulative run boundary."}
+    {:job 1,
+     :commit "55fd500b0",
+     :reason "Banked global prefix-block endpoints."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -94850,7 +94866,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94862,7 +94878,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "global run boundaries equal prefix-block endpoints",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "55fd500b0"},
    :id
    :lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints,
    :kind :lemma,
