@@ -37123,37 +37123,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove the explicit lift coordinate is four; then global localization and Main.",
+    "Transport the base local class through these homeomorphisms; sum four local classes; Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name
-      "polynomialSphereLift_globalImage_eq_deckSum_iff_topDegreeCoordinate_four",
+    [{:name "polynomialSphereLift_pairSignDeckHomeomorphisms",
       :type
-      "global localization iff lift top-degree coordinate is four",
+      "both generating pair-sign deck transports are sphere self-homeomorphisms",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["regularValue_topDegreeCoordinate_eq_signedCount"],
+      :depends-on ["polynomialSphereLift_four_positive_regularFiber"],
       :area "rp-rational-homology"}
-     {:name "polynomialSphereLift_topDegreeCoordinate_eq_four",
+     {:name "polynomialSphereLift_pairSign_localHomology_naturality",
       :type
-      "explicit normalized coordinate-squaring lift has top-degree coordinate four",
+      "pair-sign homeomorphisms transport the base local fundamental class to every regular-fiber point",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["polynomialSphereLift_four_positive_regularFiber"],
+      :depends-on ["polynomialSphereLift_pairSignDeckHomeomorphisms"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed global localization iff the explicit lift coordinate is four.",
+    "Committed pair-sign deck maps as genuine sphere homeomorphisms.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37161,15 +37160,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --oneline --stat HEAD", :exit 0}
-     {:cmd "git show --check --oneline --stat 3e5a649c9", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792071252278-14109-bde87c1e",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "3e5a649c9",
+     {:cmd "git show --check --oneline --stat cac0603b1", :exit 0}],
+    :commit "cac0603b1",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37177,7 +37169,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43058,6 +43050,45 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-four-positive-regularfiber],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_pairSignDeckHomeomorphisms",
+    :type
+    "both generating pair-sign deck transports are sphere self-homeomorphisms"},
+   :lemma
+   {:name "polynomialSphereLift_pairSignDeckHomeomorphisms",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "both generating pair-sign deck transports are sphere self-homeomorphisms",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialspherelift-pairsigndeckhomeomorphisms,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-four-positive-regularfiber],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_pairSign_localHomology_naturality",
+    :type
+    "pair-sign homeomorphisms transport the base local fundamental class to every regular-fiber point"},
+   :lemma
+   {:name "polynomialSphereLift_pairSign_localHomology_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "pair-sign homeomorphisms transport the base local fundamental class to every regular-fiber point",
+    :area "rp-rational-homology"},
+   :id :lemma-polynomialspherelift-pairsign-localhomology-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-pairsigndeckhomeomorphisms],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
