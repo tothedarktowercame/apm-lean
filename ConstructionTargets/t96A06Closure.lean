@@ -13,6 +13,7 @@ import ConstructionTargets.SphereZeroCoefficients
 import ConstructionTargets.CoefficientCoordinateReflections
 import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.ManifoldFundamentalClass
+import ConstructionTargets.HigherSphereLocalization
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -393,6 +394,17 @@ noncomputable def polynomialSphereLift_secondPair_localHomology_naturality
   ConstructionTargets.ManifoldFundamentalClass.localizationMap_naturality
     flipSecondPairSphere p (flipSecondPairSphere p)
     (flipSecondPairSphere_mapsTo_deletedPoint p) 3
+
+/-- The integral class normalized by the standard stereographic chart on the
+three-sphere localizes to the positive local generator.  This fixes the sign
+at the base regular-fiber point before extension of coefficients to `ℚ`. -/
+theorem t96A06_sphere3_integral_normalizedClass_localizes (p : Sphere 3) :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap p 3
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass (k := 1) p) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) p := by
+  exact ConstructionTargets.HigherSphereLocalization.normalizedClass_localizes
+    (k := 1) p
 
 theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
     flipFirstPairSphere (flipSecondPairSphere p) =
@@ -2709,5 +2721,6 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
+#print axioms t96A06_sphere3_integral_normalizedClass_localizes
 
 end ConstructionTargets.t96A06Closure
