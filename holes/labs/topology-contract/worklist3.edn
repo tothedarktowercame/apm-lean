@@ -37123,37 +37123,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove regular-value signed-count localization; specialize it to the explicit lift; instantiate Main.",
+    "Identify the explicit lift coordinate with signed count four; then Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialSphereLift_four_positive_regularFiber",
+    [{:name "t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul",
       :type
-      "explicit fiber has four points, positive base Jacobian and orientation-preserving deck transports",
+      "each rational H3 endomorphism is multiplication by its top-degree coordinate",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on
-      ["polynomialSphereLift_signedRegularFiberCertificate"],
+      :depends-on ["t96A06_sphere3_rational_H3Iso"],
       :area "rp-rational-homology"}
-     {:name "regularValue_topHomologyMap_signedCount",
+     {:name "regularValue_topDegreeCoordinate_eq_signedCount",
       :type
-      "finite positive regular fiber computes the induced rational top-homology scalar",
+      "localization equates the top-degree coordinate and signed fiber count",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["polynomialSphereLift_four_positive_regularFiber"],
+      :depends-on
+      ["t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul"
+       "polynomialSphereLift_four_positive_regularFiber"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the explicit four-point positive oriented regular-fiber datum required by localization.",
+    "Committed the rational H3 top-degree coordinate and scalar theorem.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37162,13 +37163,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792068308224-14072-a05e68bc",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "9cd1b8803",
+    :diagnostic-history
+    [{:cmd "initial closure compiles",
+      :exit 1,
+      :note
+      "Replaced invalid injectivity projection with an explicit iso-coordinate calculation."}],
+    :commit "c5dd32804",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37176,7 +37176,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42913,6 +42913,45 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-signedregularfibercertificate],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul",
+    :type
+    "each rational H3 endomorphism is multiplication by its top-degree coordinate"},
+   :lemma
+   {:name "t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "each rational H3 endomorphism is multiplication by its top-degree coordinate",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-sphere3-homologymap-eq-topdegreecoordinate-smul,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-sphere3-rational-h3iso],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "regularValue_topDegreeCoordinate_eq_signedCount",
+    :type
+    "localization equates the top-degree coordinate and signed fiber count"},
+   :lemma
+   {:name "regularValue_topDegreeCoordinate_eq_signedCount",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "localization equates the top-degree coordinate and signed fiber count",
+    :area "rp-rational-homology"},
+   :id :lemma-regularvalue-topdegreecoordinate-eq-signedcount,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphere3-homologymap-eq-topdegreecoordinate-smul
+    :lemma-polynomialspherelift-four-positive-regularfiber],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
