@@ -1719,6 +1719,44 @@ theorem torusRP2_subdivisionRunPrefixBlockPoint_zero
         omega⟩ := by
   rfl
 
+/-- The global outer-boundary family and the cumulative-prefix presentation
+of each run have the same source endpoint. -/
+theorem torusRP2_subdivisionOuterRunBoundaryFamily_castSucc_eq_prefixBlockPoint_zero
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc :
+        torusRP2PairingData.Space) =
+      pathTwoOpenSubdivisionRunPrefixBlockPoint S i 0 :=
+  (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+    S hx hy i).trans
+      (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i 0)
+
+/-- The global outer-boundary family and the cumulative-prefix presentation
+of each run have the same target endpoint. -/
+theorem torusRP2_subdivisionOuterRunBoundaryFamily_succ_eq_prefixBlockPoint_last
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ :
+        torusRP2PairingData.Space) =
+      pathTwoOpenSubdivisionRunPrefixBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) :=
+  (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+    S hx hy i).trans
+      (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)))
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1802,6 +1840,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlock_trans
 #print axioms torusRP2_subdivisionRunPrefixBlockPoint_last
 #print axioms torusRP2_subdivisionRunPrefixBlockPoint_zero
+#print axioms torusRP2_subdivisionOuterRunBoundaryFamily_castSucc_eq_prefixBlockPoint_zero
+#print axioms torusRP2_subdivisionOuterRunBoundaryFamily_succ_eq_prefixBlockPoint_last
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
