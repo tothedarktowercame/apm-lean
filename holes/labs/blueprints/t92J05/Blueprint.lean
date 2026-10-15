@@ -3050,6 +3050,146 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
         exact ⟨c, by simpa using hc.inv_right⟩
   · -- second W2 branch (orientation reversed)
     sorry
+    /-
+    obtain ⟨p, hp⟩ := hG1 h x
+    let y := apm_t92J05_genusTwo_overlapAngle x
+    let invC : C(Circle, Circle) := ⟨fun z => z⁻¹, continuous_inv⟩
+    let yi := invC y
+    let ti : Path yi 1 := PathConnectedSpace.somePath _ _
+    have hLB : L 1 = B := by
+      exact ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P
+    let u : Path (L 1) B := Path.cast (Path.refl B) hLB rfl
+    let q : Path (Φ x) B := p.trans ((ti.map L.continuous).trans u)
+    let e : FundamentalGroup O (j x) ≃* FreeGroup (Fin 4) :=
+      (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_homotopyFG hs (j x)).trans
+        ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph sw (hs (j x))).trans
+          ((FundamentalGroup.fundamentalGroupMulEquivOfPath q).trans
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates))
+    have hw := hW1 apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates hcoordW
+    let ci : FundamentalGroup Circle yi :=
+      FundamentalGroup.fundamentalGroupMulEquivOfPath ti.symm
+        ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass
+    let c : FundamentalGroup Circle y := FundamentalGroup.map invC yi ci
+    obtain ⟨a, ha⟩ :=
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_angle_surjective x c
+    let r := FundamentalGroup.map j x a
+    have hpa : FundamentalGroup.map Φ x a =
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p).symm
+          (FundamentalGroup.map (L.comp (invC.comp apm_t92J05_genusTwo_overlapAngle)) x a) := by
+      exact (FundamentalGroup.fundamentalGroupMulEquivOfPath p).eq_symm_apply.mpr
+        (by simpa [Φ, L, invC] using (hp a).symm)
+    have hΦmap :
+        ((Path.Homotopic.Quotient.map a j).map hs.toFun).map
+            (⟨sw, sw.continuous⟩ : C(P.skeleton, _)) =
+          FundamentalGroup.map Φ x a := by
+      induction a using Path.Homotopic.Quotient.ind with
+      | mk z => rfl
+    have hinvmap : FundamentalGroup.map (invC.comp apm_t92J05_genusTwo_overlapAngle) x a = ci := by
+      have hcomp : FundamentalGroup.map (invC.comp apm_t92J05_genusTwo_overlapAngle) x a =
+          FundamentalGroup.map invC y
+            (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x a) := by
+        induction a using Path.Homotopic.Quotient.ind with
+        | mk z => rfl
+      rw [hcomp, ha]
+      change FundamentalGroup.map invC y (FundamentalGroup.map invC yi ci) = ci
+      induction ci using Path.Homotopic.Quotient.ind with
+      | mk z =>
+        apply Quotient.sound
+        exact ⟨by simpa [invC] using Path.Homotopy.refl z⟩
+    have hLmap : FundamentalGroup.map (L.comp (invC.comp apm_t92J05_genusTwo_overlapAngle)) x a =
+        FundamentalGroup.map L yi ci := by
+      have hcomp : FundamentalGroup.map (L.comp (invC.comp apm_t92J05_genusTwo_overlapAngle)) x a =
+          FundamentalGroup.map L yi
+            (FundamentalGroup.map (invC.comp apm_t92J05_genusTwo_overlapAngle) x a) := by
+        induction a using Path.Homotopic.Quotient.ind with
+        | mk z => rfl
+      exact hcomp.trans (congrArg (FundamentalGroup.map L yi) hinvmap)
+    have her : e r =
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+          (Path.Homotopic.Quotient.mk
+            (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath P)) := by
+      change apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath q
+            (((Path.Homotopic.Quotient.map a j).map hs.toFun).map
+              (⟨sw, sw.continuous⟩ : C(P.skeleton, _)))) = _
+      rw [hΦmap, hpa]
+      rw [show q = p.trans ((ti.map L.continuous).trans u) by rfl]
+      rw [hG2]
+      simp only [MulEquiv.apply_symm_apply]
+      rw [hLmap]
+      rw [hG3]
+      first
+        | rw [← hG2 (ti.symm.map L.continuous) ((ti.map L.continuous).trans u)]
+        | erw [← hG2 (ti.symm.map L.continuous) ((ti.map L.continuous).trans u)]
+      have hpath : (FundamentalGroup.fundamentalGroupMulEquivOfPath
+          ((ti.symm.map L.continuous).trans ((ti.map L.continuous).trans u))) =
+          FundamentalGroup.fundamentalGroupMulEquivOfPath u := by
+        unfold FundamentalGroup.fundamentalGroupMulEquivOfPath
+        congr 2
+        rw [← Path.map_symm]
+        change (FundamentalGroupoid.fromPath _ : _ ⟶ _) = FundamentalGroupoid.fromPath _
+        simp only [FundamentalGroupoid.fromPath, Path.Homotopic.Quotient.mk_trans,
+          Path.Homotopic.Quotient.mk_symm]
+        apply Quotient.sound
+        exact ⟨(Path.Homotopy.transAssoc _ _ _).symm.trans
+          ((Path.Homotopy.hcomp (Path.Homotopy.reflSymmTrans _).symm (Path.Homotopy.refl u)).trans
+            (Path.Homotopy.reflTrans u))⟩
+      rw [hpath]
+      change apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath u
+            (Path.Homotopic.Quotient.mk
+              ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map L.continuous))) = _
+      rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_castRefl]
+      rfl
+    refine ⟨e, ?_⟩
+    have hrange : (FundamentalGroup.map j x).range = Subgroup.zpowers r := by
+      ext z
+      constructor
+      · rintro ⟨b, rfl⟩
+        obtain ⟨n, hn⟩ := hC yi ti
+          (FundamentalGroup.map invC y
+            (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x b))
+        have hk : FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x b = c ^ n := by
+          have hn' := congrArg (FundamentalGroup.map invC yi) hn
+          simpa [c, invC, map_zpow] using hn'
+        have hab : b = a ^ n := by
+          apply hA x
+          rw [map_zpow, ha, hk]
+        rw [hab, map_zpow]
+        exact Subgroup.zpow_mem_zpowers r n
+      · intro hz
+        rw [Subgroup.mem_zpowers_iff] at hz
+        obtain ⟨n, rfl⟩ := hz
+        refine ⟨a ^ n, ?_⟩
+        change FundamentalGroup.map j x (a ^ n) = _
+        rw [map_zpow]
+    have hgr : Subgroup.zpowers g = Subgroup.zpowers r := hg.symm.trans hrange
+    have hr : ¬ IsOfFinOrder r := by
+      intro hfin
+      have hefin : IsOfFinOrder (e r) :=
+        ((Function.Injective.isOfFinOrder_iff (f := e.toMonoidHom) e.injective).mpr hfin)
+      rcases hw with hw | hw
+      · apply hB
+        apply hw.isOfFinOrder
+        simpa [her] using hefin
+      · apply hB
+        apply IsOfFinOrder.of_inv
+        apply hw.isOfFinOrder
+        simpa [her] using hefin
+    rcases hw with hw | hw
+    · apply apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_assembly
+        g r e hr hgr
+      simpa [her] using hw
+    · rcases
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_zpowers_generator
+            hr hgr with hgr' | hgr'
+      · right
+        simpa [hgr', her] using hw
+      · left
+        rw [hgr', map_inv, her]
+        obtain ⟨d, hd⟩ := hw
+        exact ⟨d, by simpa using hd.inv_right⟩
+    -/
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
