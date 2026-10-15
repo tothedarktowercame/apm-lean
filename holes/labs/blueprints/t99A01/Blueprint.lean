@@ -888,7 +888,77 @@ homotopy inverse: `(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖` stays in the pu
 theorem t99A01_pball_circle :
     ∃ e : ContinuousMap.HomotopyEquiv ↥t99A01_pball Circle,
       ∀ w : Circle, ((e.invFun w : ↥t99A01_pball) : ℂ) = (w : ℂ) / 2 := by
-  sorry
+  let radial : C(↥t99A01_pball, Circle) :=
+    ⟨fun z => ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+        simp [Submonoid.unitSphere, div_self (ne_of_gt z.2.1)]⟩, by
+      apply Continuous.subtype_mk
+      exact continuous_subtype_val.div₀
+        (Complex.continuous_ofReal.comp
+          (continuous_norm.comp continuous_subtype_val))
+        (fun z => by exact_mod_cast ne_of_gt z.2.1)⟩
+  let half : C(Circle, ↥t99A01_pball) :=
+    ⟨fun w => ⟨(w : ℂ) / 2, by
+        change 0 < ‖(w : ℂ) / 2‖ ∧ ‖(w : ℂ) / 2‖ < 1
+        rw [norm_div, Circle.norm_coe]
+        norm_num⟩, by
+      exact Continuous.subtype_mk (continuous_subtype_val.div_const 2) _⟩
+  have hradial_half : radial.comp half = ContinuousMap.id Circle := by
+    apply ContinuousMap.ext
+    intro w
+    apply Subtype.ext
+    change ((w : ℂ) / 2) / (‖(w : ℂ) / 2‖ : ℂ) = (w : ℂ)
+    rw [norm_div, Circle.norm_coe]
+    norm_num [div_div]
+  let H : ContinuousMap.Homotopy (half.comp radial) (ContinuousMap.id ↥t99A01_pball) := {
+    toFun := fun (tx : unitInterval × ↥t99A01_pball) => by
+        let t : ℝ := tx.1
+        let x : ℂ := tx.2
+        let a : ℝ := (1 - t) * (1 / (2 * ‖x‖)) + t
+        refine ⟨(a : ℂ) * x, ?_⟩
+        have ht0 : 0 ≤ t := tx.1.2.1
+        have ht1 : t ≤ 1 := tx.1.2.2
+        have hx0 : 0 < ‖x‖ := tx.2.2.1
+        have hx1 : ‖x‖ < 1 := tx.2.2.2
+        have ha0 : 0 ≤ a := by
+          dsimp [a]
+          have hden : 0 ≤ 1 / (2 * ‖x‖) := (one_div_pos.mpr (mul_pos (by norm_num) hx0)).le
+          exact add_nonneg (mul_nonneg (sub_nonneg.mpr ht1) hden) ht0
+        have hamul : a * ‖x‖ = (1 - t) / 2 + t * ‖x‖ := by
+          dsimp [a]
+          field_simp
+        change 0 < ‖(a : ℂ) * x‖ ∧ ‖(a : ℂ) * x‖ < 1
+        rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg ha0,
+          hamul]
+        constructor <;> nlinarith
+    continuous_toFun := by
+      apply Continuous.subtype_mk
+      have hnorm : Continuous (fun tx : unitInterval × ↥t99A01_pball => ‖(tx.2 : ℂ)‖) :=
+        continuous_norm.comp (continuous_subtype_val.comp continuous_snd)
+      have hne : ∀ tx : unitInterval × ↥t99A01_pball, 2 * ‖(tx.2 : ℂ)‖ ≠ 0 := by
+        intro tx
+        exact mul_ne_zero (by norm_num) (ne_of_gt tx.2.2.1)
+      have ht : Continuous (fun tx : unitInterval × ↥t99A01_pball => (tx.1 : ℝ)) :=
+        continuous_subtype_val.comp continuous_fst
+      have hx : Continuous (fun tx : unitInterval × ↥t99A01_pball => (tx.2 : ℂ)) :=
+        continuous_subtype_val.comp continuous_snd
+      exact (Complex.continuous_ofReal.comp
+        (((continuous_const.sub ht).mul
+          (continuous_const.div (continuous_const.mul hnorm) hne)).add ht)).mul hx
+    map_zero_left x := by
+      apply Subtype.ext
+      dsimp [half, radial]
+      simp only [sub_zero, one_mul, add_zero]
+      change (((1 : ℝ) / (2 * ‖(x : ℂ)‖) : ℝ) : ℂ) * (x : ℂ) =
+        (x : ℂ) / (‖(x : ℂ)‖ : ℂ) / 2
+      push_cast
+      field_simp
+    map_one_left x := by
+      apply Subtype.ext
+      simp }
+  refine ⟨⟨radial, half, ⟨H⟩, ?_⟩, ?_⟩
+  · rw [hradial_half]
+  · intro w
+    rfl
 
 /-- **Leaf (generic, 40--80 lines).** A homotopy equivalence induces one between
 constant-fibre sigma types, index-preserving (`Sigma.map`/`continuous_sigma`; the
