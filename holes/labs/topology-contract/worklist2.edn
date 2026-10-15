@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87949,7 +87949,7 @@
      "121fa82c66e43aae1b9fae915145cfb0f9caa57cce2d26ae51920b1895a50e57"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88319,7 +88319,9 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
@@ -88370,7 +88372,7 @@
      "c39f1aace144d0de145a098440c9cfa24a8c94f15a193024b8d163d38970dddf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88392,7 +88394,7 @@
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -88776,6 +88778,19 @@
     [{:cmd "initial blueprint copy check",
       :exit 2,
       :correction "fixed patch header and recreated exact copy"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792023168910-12804-b067c23f",
+     :commands
+     ["git show/diff-tree 35323aaba"
+      "sha256sum committed blueprint"
+      "cmp source and scoped blueprints"
+      "lake env lean committed Main.lean"
+      "statement-registry.py check"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 35323aaba by topo-6 adds only the scoped blueprint; hash matches and it exactly copies the reviewed source blueprint. Main compiles with its one pre-existing placeholder; registry 166/0. Mathematics and orientations are sound: the connected four-RP2 wedge has only H0 over Q, hence Lefschetz number 1; the compact-polyhedron theorem yields a fixed point; the indicated index-two kernel over N3 contains an orientation-reversing generator and has chi=-2, so its total space is N4, whose nontrivial deck involution is fixed-point-free. Three LIBRARY milestones are explicitly listed."},
     :commit "35323aaba",
     :changed-paths ["ConstructionTargets/t99A03Closure.blueprint.md"],
     :fixture
@@ -88784,7 +88799,7 @@
      "ab9417893e3b2bb5f6a74f8d4d6a4f83489bf4e570728538f22a8c4924e41bb3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -88802,14 +88817,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99A03Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t99A03/BLUEPRINT.md's plan into ConstructionTargets/t99A03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review required before formalization.",
    :id :program-2026-10-13-close-t99a03,
    :kind :final-adapter,
    :campaign-priority 39,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "35323aaba",
+     :reason
+     "Blueprint written; independent review required before formalization."}]}
   {:consumer :t95J03,
    :stop-count 0,
    :phase :implementation,
@@ -92372,7 +92392,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryIntegerLoop_subpath_apply",
@@ -92384,7 +92404,9 @@
     :type
     "each affine boundary subpath is pointwise its signed edge path",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-polygonboundaryintegerloop-subpath-apply,
    :kind :lemma,
    :depends-on [:lemma-integerloop-convexcombo-subdivisionvertex],
