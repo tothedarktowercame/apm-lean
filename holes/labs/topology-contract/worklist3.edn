@@ -37209,37 +37209,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Bridge forgotten/native projection; coordinate one, four classes, Main.",
+    "Assemble named element equalities; coordinate one, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_absoluteComparison_localization_normalizedClass",
+    [{:name "t96A06_forget_nativeProjection_normalizedClass",
       :type
-      "comparison/localization sends normalized class to positive generator",
+      "forgotten projection equals native projection on normalized class",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_absoluteComparison_composite_normalizedClass"],
+      ["t96A06_absoluteComparison_localization_normalizedClass"],
       :area "rp-rational-homology"}
      {:name "t96A06_mappedIntegralNormalizedClass_localizes",
       :type "mapped global class localizes positively",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_absoluteComparison_localization_normalizedClass"],
+      :depends-on ["t96A06_forget_nativeProjection_normalizedClass"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed normalized-class cancellation and positive localization composite.",
+    "Committed the elementwise forgotten/native projection bridge.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37248,15 +37247,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline b56eb70fb",
+      "git diff --check && git show --check --stat --oneline 542b2ef53",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792100103243-14708-8a92ca98",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b56eb70fb",
+    :commit "542b2ef53",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37264,7 +37257,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44077,7 +44070,8 @@
     :lemma-t96a06-mappedintegralnormalizedclass-eq-comparisoninv
     :lemma-t96a06-relativecomparison-cancel-nativenormalizedlocalization
     :lemma-t96a06-absolutecomparison-composite
-    :lemma-t96a06-absolutecomparison-localization-normalizedclass],
+    :lemma-t96a06-absolutecomparison-localization-normalizedclass
+    :lemma-t96a06-forget-nativeprojection-normalizedclass],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -44199,6 +44193,26 @@
    :id :lemma-t96a06-absolutecomparison-composite-normalizedclass,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_forget_nativeProjection_normalizedClass",
+    :type
+    "forgotten projection equals native projection on normalized class"},
+   :lemma
+   {:name "t96A06_forget_nativeProjection_normalizedClass",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten projection equals native projection on normalized class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-forget-nativeprojection-normalizedclass,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-absolutecomparison-localization-normalizedclass],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
