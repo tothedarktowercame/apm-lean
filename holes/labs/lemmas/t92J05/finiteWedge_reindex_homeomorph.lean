@@ -1566,7 +1566,52 @@ lemma finiteWedge_reindex_homeomorph
     {L : Type*} (n : ℕ) (e : L ≃ Fin (n + 1)) :
     ∃ h : FiniteWedge L ≃ₜ FiniteWedge (Fin (n + 1)),
       ∀ (l : L) (z : Circle), h (wedgeCircle l z) = wedgeCircle (e l) z := by
-  sorry
+  let h : FiniteWedge L ≃ₜ FiniteWedge (Fin (n + 1)) :=
+    { toFun := Quotient.lift (fun p => wedgeCircle (e p.1) p.2) (by
+        intro p q hpq
+        change Relation.EqvGen (FiniteWedgeRel L) p q at hpq
+        rw [eqvGen_finiteWedgeRel_iff] at hpq
+        rcases hpq with rfl | ⟨hp, hq⟩
+        · rfl
+        · apply Quotient.sound
+          change Relation.EqvGen (FiniteWedgeRel (Fin (n + 1)))
+            (e p.1, p.2) (e q.1, q.2)
+          rw [eqvGen_finiteWedgeRel_iff]
+          exact Or.inr ⟨hp, hq⟩)
+      invFun := Quotient.lift (fun p => wedgeCircle (e.symm p.1) p.2) (by
+        intro p q hpq
+        change Relation.EqvGen (FiniteWedgeRel (Fin (n + 1))) p q at hpq
+        rw [eqvGen_finiteWedgeRel_iff] at hpq
+        rcases hpq with rfl | ⟨hp, hq⟩
+        · rfl
+        · apply Quotient.sound
+          change Relation.EqvGen (FiniteWedgeRel L)
+            (e.symm p.1, p.2) (e.symm q.1, q.2)
+          rw [eqvGen_finiteWedgeRel_iff]
+          exact Or.inr ⟨hp, hq⟩)
+      left_inv := by
+        rintro ⟨⟨l, z⟩⟩
+        change wedgeCircle (e.symm (e l)) z = _
+        rw [e.symm_apply_apply]
+        rfl
+      right_inv := by
+        rintro ⟨⟨i, z⟩⟩
+        change wedgeCircle (e (e.symm i)) z = _
+        rw [e.apply_symm_apply]
+        rfl
+      continuous_toFun := by
+        letI : TopologicalSpace L := ⊥
+        letI : DiscreteTopology L := ⟨rfl⟩
+        apply Continuous.quotient_lift
+        rw [continuous_prod_of_discrete_left]
+        exact fun l => continuous_wedgeCircle (e l)
+      continuous_invFun := by
+        letI : TopologicalSpace (Fin (n + 1)) := ⊥
+        letI : DiscreteTopology (Fin (n + 1)) := ⟨rfl⟩
+        apply Continuous.quotient_lift
+        rw [continuous_prod_of_discrete_left]
+        exact fun i => continuous_wedgeCircle (e.symm i) }
+  exact ⟨h, fun l z => rfl⟩
 -- END SEAT AREA
 
 /-- Positive-rank B8, assembled without further axioms from the rank-one
