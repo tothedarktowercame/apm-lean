@@ -2002,6 +2002,54 @@ theorem torusRP2_subdivisionIndex_exists_runOffset
   rw [← hk]
   exact (torusRP2_subdivisionRunFamily_get_val_eq_prefix_add S i k).symm
 
+/-- A local offset lies in the half-open interval determined by its run's
+two consecutive cumulative boundaries. -/
+theorem torusRP2_subdivisionRunOffset_lt_nextPrefix
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val <
+      pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  rw [← pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i]
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  exact Nat.add_lt_add_left k.isLt _
+
+/-- The run component of a flattened run/offset coordinate is unique. -/
+theorem torusRP2_subdivisionRunOffset_run_unique
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i j : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length)
+    (l : Fin (pathTwoOpenSubdivisionRunFamily S j).length)
+    (hcoord : pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val =
+      pathTwoOpenSubdivisionRunPrefixLength S j.val + l.val) :
+    i = j := by
+  by_contra hne
+  rcases lt_or_gt_of_ne hne with hij | hji
+  · have hfin : i.succ ≤ j.castSucc := by
+      change i.val + 1 ≤ j.val
+      omega
+    have hbetween :=
+      (torusRP2_subdivisionRunPrefixLength_strictMono S).monotone hfin
+    change pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) ≤
+      pathTwoOpenSubdivisionRunPrefixLength S j.val at hbetween
+    have hk := torusRP2_subdivisionRunOffset_lt_nextPrefix S i k
+    omega
+  · have hfin : j.succ ≤ i.castSucc := by
+      change j.val + 1 ≤ i.val
+      omega
+    have hbetween :=
+      (torusRP2_subdivisionRunPrefixLength_strictMono S).monotone hfin
+    change pathTwoOpenSubdivisionRunPrefixLength S (j.val + 1) ≤
+      pathTwoOpenSubdivisionRunPrefixLength S i.val at hbetween
+    have hl := torusRP2_subdivisionRunOffset_lt_nextPrefix S j l
+    omega
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2096,6 +2144,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixLength_endpoints
 #print axioms torusRP2_subdivisionRunFamily_get_val_eq_prefix_add
 #print axioms torusRP2_subdivisionIndex_exists_runOffset
+#print axioms torusRP2_subdivisionRunOffset_lt_nextPrefix
+#print axioms torusRP2_subdivisionRunOffset_run_unique
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
