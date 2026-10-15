@@ -1662,6 +1662,52 @@ structure PolynomialSphereLiftLocalClassDecompositionAndBaseData where
           (flipFirstPairSphere.comp flipSecondPairSphere)) 3
         (localContribution 0)
 
+/-- Canonical four local classes obtained by transporting the normalized
+base class along the three explicit pair-flip deck transformations. -/
+noncomputable def polynomialSphereLift_deckLocalContribution : Fin 4 →
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) :=
+  ![t96A06_sphere3_rational_fundamentalClass,
+    HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3
+      t96A06_sphere3_rational_fundamentalClass,
+    HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3
+      t96A06_sphere3_rational_fundamentalClass,
+    HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ
+        (flipFirstPairSphere.comp flipSecondPairSphere)) 3
+      t96A06_sphere3_rational_fundamentalClass]
+
+/-- The canonical deck family has the required base and naturality fields,
+and its sum is four times the selected fundamental class. -/
+theorem polynomialSphereLift_deckLocalContribution_spec :
+    polynomialSphereLift_deckLocalContribution 0 =
+        t96A06_sphere3_rational_fundamentalClass ∧
+    polynomialSphereLift_deckLocalContribution 1 =
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3
+          (polynomialSphereLift_deckLocalContribution 0) ∧
+    polynomialSphereLift_deckLocalContribution 2 =
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3
+          (polynomialSphereLift_deckLocalContribution 0) ∧
+    polynomialSphereLift_deckLocalContribution 3 =
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ
+            (flipFirstPairSphere.comp flipSecondPairSphere)) 3
+          (polynomialSphereLift_deckLocalContribution 0) ∧
+    (∑ i, polynomialSphereLift_deckLocalContribution i) =
+      (4 : ℚ) • t96A06_sphere3_rational_fundamentalClass := by
+  have hpos : ∀ i, polynomialSphereLift_deckLocalContribution i =
+      t96A06_sphere3_rational_fundamentalClass :=
+    polynomialSphereLift_localClasses_positive_of_pairFlipTransport
+      polynomialSphereLift_deckLocalContribution (by rfl) (by rfl) (by rfl) (by rfl)
+  refine ⟨rfl, rfl, rfl, rfl, ?_⟩
+  simp_rw [hpos]
+  norm_num [Fin.sum_univ_four]
+  exact (Nat.cast_smul_eq_nsmul ℚ 4
+    t96A06_sphere3_rational_fundamentalClass).symm
+
 /-- The exact remaining geometric boundary implies degree four on rational
 top homology, with all bookkeeping discharged. -/
 theorem polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
@@ -2351,6 +2397,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_pairFlips_fix_sphere3_fundamentalClass
 #print axioms polynomialSphereLift_localClasses_positive_of_pairFlipTransport
 #print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
+#print axioms polynomialSphereLift_deckLocalContribution_spec
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
