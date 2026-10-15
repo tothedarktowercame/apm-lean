@@ -3853,13 +3853,100 @@ continuity of the inverse uses that `quotientMap` restricted to the open
 saturated set `inl '' U` is a quotient map onto its image
 (`Topology.IsQuotientMap.restrictPreimage_isOpen`). 60-120 lines. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_nh_wedge_leftPiece_aux_eqv
+    {X Y : Type} (x₀ : X) (y₀ : Y) (U : Set X) (hx : x₀ ∉ U)
+    {a b : Sum X Y} (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel x₀ y₀) a b) :
+    a ∈ Sum.inl '' U ↔ b ∈ Sum.inl '' U := by
+  induction h with
+  | rel a b hab =>
+      cases hab
+      constructor
+      · rintro ⟨u, hu, h⟩
+        exact (hx (Sum.inl.inj h ▸ hu)).elim
+      · rintro ⟨u, hu, h⟩
+        exact (Sum.inl_ne_inr h).elim
+  | refl => exact Iff.rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma apm_t01A04_nh_wedge_leftPiece_aux_preimage
+    {X Y : Type} (x₀ : X) (y₀ : Y) (U : Set X) (hx : x₀ ∉ U) :
+    quotientMap x₀ y₀ ⁻¹' (quotientMap x₀ y₀ '' (Sum.inl '' U)) =
+      Sum.inl '' U := by
+  ext a
+  constructor
+  · rintro ⟨b, hb, hba⟩
+    exact (apm_t01A04_nh_wedge_leftPiece_aux_eqv x₀ y₀ U hx
+      (Quotient.exact hba)).mp hb
+  · intro ha
+    exact ⟨a, ha, rfl⟩
+
+lemma apm_t01A04_nh_wedge_leftPiece_aux_open
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y) (U : Set X) (hU : IsOpen U) (hx : x₀ ∉ U) :
+    IsOpen (quotientMap x₀ y₀ '' (Sum.inl '' U)) := by
+  rw [← (ConstructionTargets.PointWedgeRestrictedOpenQuotient.quotientMap_isQuotientMap
+    x₀ y₀).isOpen_preimage,
+    apm_t01A04_nh_wedge_leftPiece_aux_preimage x₀ y₀ U hx]
+  exact isOpenMap_inl U hU
+
 lemma apm_t01A04_nh_wedge_leftPiece
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (x₀ : X) (y₀ : Y) (U : Set X) (hU : IsOpen U) (hx : x₀ ∉ U) :
     IsOpen (quotientMap x₀ y₀ '' (Sum.inl '' U)) ∧
       ∃ e : (quotientMap x₀ y₀ '' (Sum.inl '' U)) ≃ₜ U,
         ∀ u : U, e ⟨quotientMap x₀ y₀ (.inl u), .inl u, ⟨u, u.2, rfl⟩, rfl⟩ = u := by
-  sorry
+  let S : Set (Wedge x₀ y₀) := quotientMap x₀ y₀ '' (Sum.inl '' U)
+  have hS : IsOpen S := apm_t01A04_nh_wedge_leftPiece_aux_open x₀ y₀ U hU hx
+  let f : U → S := fun u => ⟨quotientMap x₀ y₀ (.inl u),
+    .inl u, ⟨u, u.2, rfl⟩, rfl⟩
+  have hf_cont : Continuous f := by
+    apply Continuous.subtype_mk
+    exact (continuous_quotientMap x₀ y₀).comp
+      (continuous_inl.comp continuous_subtype_val)
+  have hf_inj : Function.Injective f := by
+    intro u v huv
+    have hq : quotientMap x₀ y₀ (.inl (u : X)) =
+        quotientMap x₀ y₀ (.inl (v : X)) := congrArg Subtype.val huv
+    have he := Quotient.exact hq
+    have hm : (Sum.inl (u : X) : Sum X Y) ∈ Sum.inl '' ({u.1} : Set X) :=
+      ⟨u.1, rfl, rfl⟩
+    have hxu : x₀ ∉ ({u.1} : Set X) := by
+      intro h
+      exact hx (h.symm ▸ u.2)
+    have hm' := (apm_t01A04_nh_wedge_leftPiece_aux_eqv x₀ y₀
+      ({u.1} : Set X) hxu he).mp hm
+    rcases hm' with ⟨w, hw, hinj⟩
+    apply Subtype.ext
+    have hw' : w = u.1 := by simpa using hw
+    exact hw'.symm.trans (Sum.inl.inj hinj)
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨z, a, ⟨u, hu, rfl⟩, rfl⟩
+    exact ⟨⟨u, hu⟩, rfl⟩
+  have hf_open : IsOpenMap f := by
+    intro V hV
+    have hVU : IsOpen (Subtype.val '' V : Set X) :=
+      hU.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen.mp hV
+    have hxV : x₀ ∉ Subtype.val '' V := by
+      rintro ⟨u, hu, rfl⟩
+      exact hx u.2
+    rw [hS.isOpenEmbedding_subtypeVal.isOpen_iff_image_isOpen]
+    convert apm_t01A04_nh_wedge_leftPiece_aux_open x₀ y₀
+      (Subtype.val '' V) hVU hxV using 1
+    ext z
+    constructor
+    · rintro ⟨s, ⟨u, hu, rfl⟩, rfl⟩
+      exact ⟨Sum.inl u.1, ⟨u.1, ⟨u, hu, rfl⟩, rfl⟩, rfl⟩
+    · rintro ⟨a, ⟨x, ⟨u, hu, rfl⟩, rfl⟩, hza⟩
+      rw [← hza]
+      exact ⟨f u, ⟨u, hu, rfl⟩, rfl⟩
+  let H : U ≃ₜ S := (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).toHomeomorphOfContinuousOpen
+    hf_cont hf_open
+  refine ⟨hS, ?_⟩
+  refine ⟨H.symm, ?_⟩
+  intro u
+  exact H.symm_apply_apply u
 -- END SEAT AREA
 
 /-- LEAF: the right-summand twin of `apm_t01A04_nh_wedge_leftPiece`
