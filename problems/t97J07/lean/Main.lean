@@ -2,6 +2,8 @@ import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveSpaceTopology
 import ConstructionTargets.t99J05Closure
+import ConstructionTargets.CoefficientH0
+import ConstructionTargets.CoefficientContractiblePair
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -300,6 +302,50 @@ noncomputable def t97J07_cp2RationalHomologyData_of_zero_of_step
   t97J07_cp2RationalHomologyData_of_shared
     (ConstructionTargets.t99J05Closure.complexProjectiveRationalHomologyData_of_zero_of_step
       hzero hstep 2)
+
+/-- The literal one-point quotient `CP⁰` supplies the base case for the shared
+finite complex-projective-space filtration. -/
+noncomputable def t97J07_complexProjectiveRationalHomologyData_zero :
+    ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 0 := by
+  letI : Subsingleton
+      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) :=
+    ConstructionTargets.t99J05Closure.cp_zero_subsingleton
+  let p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0 :=
+    ConstructionTargets.ProjectiveSpaceTopology.coordinateLine ℂ 0 0
+  letI : Nonempty
+      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) := ⟨p⟩
+  letI : ContractibleSpace
+      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) := inferInstance
+  let h0 := ConstructionTargets.CoefficientH0.h0Iso ℚ p
+  refine {
+    finiteDimensional := fun k => ?_
+    vanishesAbove := fun k hk => ?_
+    vanishesOdd := fun k hk => ?_
+    evenEquiv := fun i => ?_ }
+  · by_cases hk : k = 0
+    · subst k
+      exact h0.toLinearEquiv.symm.finiteDimensional
+    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
+          ℚ (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k hk
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology
+            (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k) :=
+        ModuleCat.isZero_iff_subsingleton.mp hz
+      exact FiniteDimensional.of_injective
+        (0 : ConstructionTargets.RationalLefschetz.Homology
+          (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k →ₗ[ℚ] ℚ)
+        (Function.injective_of_subsingleton _)
+  · exact ModuleCat.isZero_iff_subsingleton.mp
+      (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ
+        (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k (by omega))
+  · exact ModuleCat.isZero_iff_subsingleton.mp
+      (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ
+        (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k (by
+          rcases hk with ⟨j, rfl⟩
+          omega))
+  · have hi : i = 0 := Fin.ext (by omega)
+    subst i
+    simpa using h0.toLinearEquiv
 
 /-- Once the CP² homology table is supplied, finite-dimensional trace
 calculation gives Euler characteristic three. -/
