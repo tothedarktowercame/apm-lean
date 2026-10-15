@@ -4,6 +4,13 @@ import ConstructionTargets.CoefficientCoveringTransfer
 import ConstructionTargets.CoefficientSphereAntipodal
 import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.RP3RationalHomology
+import ConstructionTargets.CoefficientSubcomplexMayerVietoris
+import ConstructionTargets.CoefficientSubspaceUnionRangeHomologyEquivalence
+import ConstructionTargets.CoefficientAmbientSubspaceRangeComparison
+import ConstructionTargets.CoefficientIntersectionRangeComparison
+import ConstructionTargets.CoefficientPieceRangeBiproductComparison
+import ConstructionTargets.CoefficientHomologyBiprodIso
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
 
 /-! # Rational homology of ℝP³ (design claude-14, 2026-10-15)
 
