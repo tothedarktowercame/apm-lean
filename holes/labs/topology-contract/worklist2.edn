@@ -88375,6 +88375,19 @@
     [{:cmd "global-block drafts",
       :exit 1,
       :correction "used quotient cast"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792063502170-13947-fb72ea30",
+     :commands
+     ["git show/diff/check 2d80a6696"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 2d80a6696 adds compiled, sorry-free progress beyond 55fd500b0. It defines each cumulative-prefix run path rebased to the shared global boundary family and transports the proved run-factor class equality through the corresponding quotient cast. Only t97A01Closure.lean changed; fixture SHA 84967db573f6aece49f423cf96e7cb35b546bc1c0047a6cb138f8ff752ab904c matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Cast directions, endpoint orientations, and quotient representation boundary are correct. Global block concatenation, subdivision reassembly, van Kampen, and final assembly remain explicitly listed."},
     :commit "2d80a6696",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88396,7 @@
      "84967db573f6aece49f423cf96e7cb35b546bc1c0047a6cb138f8ff752ab904c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88414,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global prefix-block endpoints.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked globally rebased prefix blocks.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88522,7 +88535,10 @@
      :reason "Banked cumulative run boundary."}
     {:job 1,
      :commit "55fd500b0",
-     :reason "Banked global prefix-block endpoints."}]}
+     :reason "Banked global prefix-block endpoints."}
+    {:job 2,
+     :commit "2d80a6696",
+     :reason "Banked globally rebased prefix blocks."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -94879,7 +94895,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunGlobalPrefixBlockPath_class",
@@ -94889,7 +94905,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "rebased run factors equal global prefix block",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "2d80a6696"},
    :id :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class,
    :kind :lemma,
    :depends-on
