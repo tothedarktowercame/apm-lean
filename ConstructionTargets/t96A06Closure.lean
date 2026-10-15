@@ -1437,6 +1437,65 @@ theorem polynomialSphereLift_regularValueFormula_of_localizationData
   exact (Nat.cast_smul_eq_nsmul ℚ 4
     t96A06_sphere3_rational_fundamentalClass).symm
 
+/-- The three nontrivial pair-sign transports fix the concrete rational
+fundamental class.  This is the homological transport half of identifying all
+four regular-fiber local classes with the positive base class. -/
+theorem t96A06_pairFlips_fix_sphere3_fundamentalClass :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3
+        t96A06_sphere3_rational_fundamentalClass =
+      t96A06_sphere3_rational_fundamentalClass ∧
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3
+        t96A06_sphere3_rational_fundamentalClass =
+      t96A06_sphere3_rational_fundamentalClass ∧
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          (flipFirstPairSphere.comp flipSecondPairSphere)) 3
+        t96A06_sphere3_rational_fundamentalClass =
+      t96A06_sphere3_rational_fundamentalClass := by
+  constructor
+  · rw [flipFirstPairSphere_rational_H3]
+    rfl
+  constructor
+  · rw [flipSecondPairSphere_rational_H3]
+    rfl
+  · rw [flipBothPairsSphere_rational_H3]
+    rfl
+
+/-- A positive base local class and the three exact pair-flip transport
+equations force positivity at every point of the four-element fiber. -/
+theorem polynomialSphereLift_localClasses_positive_of_pairFlipTransport
+    (localContribution : Fin 4 →
+      CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)))
+    (h0 : localContribution 0 = t96A06_sphere3_rational_fundamentalClass)
+    (h1 : localContribution 1 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3
+        (localContribution 0))
+    (h2 : localContribution 2 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3
+        (localContribution 0))
+    (h3 : localContribution 3 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          (flipFirstPairSphere.comp flipSecondPairSphere)) 3
+        (localContribution 0)) :
+    ∀ i, localContribution i = t96A06_sphere3_rational_fundamentalClass := by
+  intro i
+  fin_cases i
+  · exact h0
+  · change localContribution 1 = _
+    rw [h1, h0]
+    exact t96A06_pairFlips_fix_sphere3_fundamentalClass.1
+  · change localContribution 2 = _
+    rw [h2, h0]
+    exact t96A06_pairFlips_fix_sphere3_fundamentalClass.2.1
+  · change localContribution 3 = _
+    rw [h3, h0]
+    exact t96A06_pairFlips_fix_sphere3_fundamentalClass.2.2
+
 /-- The antipodal deck transformation acts trivially on rational top
 homology of the concrete three-sphere.  This is the odd-dimensional sign in
 the sphere antipodal formula, specialized to the cover of `RP3`. -/
@@ -1931,6 +1990,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_endomorphism_eq_smul_id_iff
 #print axioms polynomialSphereLift_regularValueFormula_iff_fundamentalClass
 #print axioms polynomialSphereLift_regularValueFormula_of_localizationData
+#print axioms t96A06_pairFlips_fix_sphere3_fundamentalClass
+#print axioms polynomialSphereLift_localClasses_positive_of_pairFlipTransport
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
