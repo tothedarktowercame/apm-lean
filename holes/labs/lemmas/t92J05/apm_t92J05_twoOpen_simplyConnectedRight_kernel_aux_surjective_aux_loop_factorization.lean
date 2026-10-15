@@ -641,6 +641,76 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       refine ⟨gz * gl, ?_⟩
       simp only [map_mul, List.prod_cons, hgz, hgl]
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_piece
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [SimplyConnectedSpace V] (x : (U ∩ V : Set X))
+    {z w : X} (b : Bool) (a : Path z x.1) (r : Path z w) (d : Path w x.1)
+    (ha : ∀ t, a t ∈ twoChart U V b)
+    (hr : ∀ t, r t ∈ twoChart U V b)
+    (hd : ∀ t, d t ∈ twoChart U V b) :
+    let ℓ : Path x.1 x.1 := a.symm.trans (r.trans d)
+    let leftMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)
+    Path.Homotopic.Quotient.mk ℓ = (1 : FundamentalGroup X x.1) ∨
+      Path.Homotopic.Quotient.mk ℓ ∈ leftMap.range := by
+  dsimp only
+  cases b
+  · left
+    let aV : Path (⟨z, by simpa [twoChart] using ha 0⟩ : V)
+        (⟨x.1, x.2.2⟩ : V) :=
+      ConstructionTargets.FundamentalGroupoidTwoOpenDescent.pathInPiece
+        U V false a (by simpa [twoChart] using ha)
+    let rV : Path (⟨z, by simpa [twoChart] using hr 0⟩ : V)
+        (⟨w, by simpa [twoChart] using hr 1⟩ : V) :=
+      ConstructionTargets.FundamentalGroupoidTwoOpenDescent.pathInPiece
+        U V false r (by simpa [twoChart] using hr)
+    let dV : Path (⟨w, by simpa [twoChart] using hd 0⟩ : V)
+        (⟨x.1, x.2.2⟩ : V) :=
+      ConstructionTargets.FundamentalGroupoidTwoOpenDescent.pathInPiece
+        U V false d (by simpa [twoChart] using hd)
+    let ℓV : Path (⟨x.1, x.2.2⟩ : V) (⟨x.1, x.2.2⟩ : V) :=
+      aV.symm.trans (rV.trans dV)
+    have h :=
+      apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_right_loop
+        V (⟨x.1, x.2.2⟩ : V) ℓV
+    rw [← h]
+    apply congrArg Path.Homotopic.Quotient.mk
+    change a.symm.trans (r.trans d) =
+      (aV.symm.trans (rV.trans dV)).map continuous_subtype_val
+    rw [Path.map_trans, Path.map_trans, ← Path.map_symm]
+    have haV : aV.map continuous_subtype_val = a := by
+      apply Path.ext; rfl
+    have hrV : rV.map continuous_subtype_val = r := by
+      apply Path.ext; rfl
+    have hdV : dV.map continuous_subtype_val = d := by
+      apply Path.ext; rfl
+    rw [haV, hrV, hdV]
+  · right
+    let aU : Path (⟨z, by simpa [twoChart] using ha 0⟩ : U)
+        (⟨x.1, x.2.1⟩ : U) :=
+      ConstructionTargets.FundamentalGroupoidTwoOpenDescent.pathInPiece
+        U V true a (by simpa [twoChart] using ha)
+    let rU : Path (⟨z, by simpa [twoChart] using hr 0⟩ : U)
+        (⟨w, by simpa [twoChart] using hr 1⟩ : U) :=
+      ConstructionTargets.FundamentalGroupoidTwoOpenDescent.pathInPiece
+        U V true r (by simpa [twoChart] using hr)
+    let dU : Path (⟨w, by simpa [twoChart] using hd 0⟩ : U)
+        (⟨x.1, x.2.1⟩ : U) :=
+      ConstructionTargets.FundamentalGroupoidTwoOpenDescent.pathInPiece
+        U V true d (by simpa [twoChart] using hd)
+    refine ⟨Path.Homotopic.Quotient.mk (aU.symm.trans (rU.trans dU)), ?_⟩
+    apply congrArg Path.Homotopic.Quotient.mk
+    change (aU.symm.trans (rU.trans dU)).map continuous_subtype_val =
+      a.symm.trans (r.trans d)
+    rw [Path.map_trans, Path.map_trans, ← Path.map_symm]
+    have haU : aU.map continuous_subtype_val = a := by
+      apply Path.ext; rfl
+    have hrU : rU.map continuous_subtype_val = r := by
+      apply Path.ext; rfl
+    have hdU : dU.map continuous_subtype_val = d := by
+      apply Path.ext; rfl
+    rw [haU, hrU, hdU]
+
 -- BEGIN SEAT AREA
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
     {X : Type} [TopologicalSpace X] (U V : Set X)
@@ -702,6 +772,44 @@ def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_rig
           (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
   dsimp only
   exact (Functor.const _).obj (SingleObj.star _)
+
+def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_leftFunctor
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace U] (x : (U ∩ V : Set X)) :
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    FundamentalGroupoid U ⥤
+      SingleObj (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+        Subgroup.normalClosure (overlapMap.range : Set
+          (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
+  dsimp only
+  let c := apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_leftConnector U V x
+  let N := Subgroup.normalClosure
+    ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set
+      (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))
+  exact
+    { obj := fun _ => SingleObj.star _
+      map := fun {a b} p => QuotientGroup.mk' N
+        ((c a).hom ≫ p ≫ (c b).inv)
+      map_id := by
+        intro a
+        change QuotientGroup.mk' N ((c a).hom ≫ 𝟙 a ≫ (c a).inv) = 1
+        rw [show (c a).hom ≫ 𝟙 a ≫ (c a).inv = 𝟙 _ by simp]
+        exact map_one _
+      map_comp := by
+        intro a b d p q
+        let A : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) :=
+          (c a).hom ≫ p ≫ (c b).inv
+        let B : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) :=
+          (c b).hom ≫ q ≫ (c d).inv
+        have h : (c a).hom ≫ (p ≫ q) ≫ (c d).inv = B * A := by
+          change (c a).hom ≫ (p ≫ q) ≫ (c d).inv =
+            ((c a).hom ≫ p ≫ (c b).inv) ≫
+              ((c b).hom ≫ q ≫ (c d).inv)
+          simp [Category.assoc]
+        change QuotientGroup.mk' N ((c a).hom ≫ (p ≫ q) ≫ (c d).inv) =
+          QuotientGroup.mk' N B * QuotientGroup.mk' N A
+        rw [h, map_mul] }
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
     {X : Type} [TopologicalSpace X] (U V : Set X)
