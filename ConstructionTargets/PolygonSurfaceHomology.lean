@@ -5415,6 +5415,68 @@ theorem radialMVConnectingH1_mono (P : PairingData) : Mono
   exact (radialMVUnionExact P 1).mono_g
     ((radialH2PiecesGroupIsZero P).eq_of_src _ _)
 
+/-- The degree-two connecting segment after putting the overlap and the
+degree-one pieces in the coordinates used by the attaching map. -/
+noncomputable def radialMVH2KernelComplex (P : PairingData) :
+    ShortComplex AddCommGrpCat :=
+  ShortComplex.mk
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        (openCover P).inner (openCover P).outer
+        (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1 ≫
+      (radialIntersectionH1GroupIsoInt P).hom)
+    (radialMVBoundaryGroup P)
+    (by
+      rcases (radialMVSegment P).2.2 with ⟨hz, _⟩
+      simp only [radialMVBoundaryGroup, Category.assoc]
+      slice_lhs 2 3 => exact (radialIntersectionH1GroupIsoInt P).hom_inv_id
+      slice_lhs 2 3 => exact Category.id_comp _
+      slice_lhs 1 2 => exact hz
+      simp)
+
+/-- Exactness identifies the image of the surface connecting map, in the
+fixed overlap coordinate, with the kernel of the production boundary. -/
+theorem radialMVH2KernelComplex_exact (P : PairingData) :
+    (radialMVH2KernelComplex P).Exact := by
+  apply ShortComplex.exact_of_iso ?_ (radialMVIntersectionExact P 1)
+  exact ShortComplex.isoMk
+    (Iso.refl _)
+    (radialIntersectionH1GroupIsoInt P)
+    ((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+      radialOuterH1GroupIsoCoordinates P)
+    (by simp [radialMVH2KernelComplex])
+    (by
+      simp only [radialMVH2KernelComplex, radialMVBoundaryGroup,
+        Iso.trans_hom]
+      slice_lhs 1 2 => exact (radialIntersectionH1GroupIsoInt P).hom_inv_id
+      slice_lhs 1 2 => exact Category.id_comp _
+      rfl)
+
+/-- Range/kernel form of the degree-two Mayer--Vietoris extraction. -/
+theorem radialMVConnectingH1Coordinates_range_eq_kernel (P : PairingData) :
+    AddMonoidHom.range (radialMVH2KernelComplex P).f.hom =
+      AddMonoidHom.ker (radialMVBoundaryGroup P).hom :=
+  (radialMVH2KernelComplex_exact P).ab_range_eq_ker
+
+/-- Linear-map form of the connecting morphism in the fixed overlap
+coordinate. -/
+noncomputable def radialMVConnectingH1CoordinatesLinear (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) →ₗ[ℤ] ℤ :=
+  (radialMVH2KernelComplex P).f.hom.toIntLinearMap
+
+/-- The connecting-map range is exactly the B3 attaching-kernel model. -/
+theorem radialMVConnectingH1CoordinatesLinear_range (P : PairingData) :
+    LinearMap.range (radialMVConnectingH1CoordinatesLinear P) =
+      BoundaryKernel P := by
+  calc
+    _ = (AddMonoidHom.range (radialMVH2KernelComplex P).f.hom).toIntSubmodule := rfl
+    _ = (AddMonoidHom.ker (radialMVBoundaryGroup P).hom).toIntSubmodule :=
+      congrArg (fun S : AddSubgroup ℤ => S.toIntSubmodule)
+        (radialMVConnectingH1Coordinates_range_eq_kernel P)
+    _ = LinearMap.ker (radialMVBoundaryLinear P) := rfl
+    _ = BoundaryKernel P := radialMVBoundaryLinear_ker P
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
