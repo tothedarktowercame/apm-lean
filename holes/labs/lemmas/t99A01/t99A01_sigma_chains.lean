@@ -878,7 +878,91 @@ theorem t99A01_sigma_chains {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSp
     IsIso (Limits.biproduct.desc fun i : Fin r ↦
       ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
         (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) := by
-  sorry
+  classical
+  let m := fun i : Fin r ↦
+    ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+      (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))
+  let f := Limits.biproduct.desc m
+  change IsIso f
+  letI : ∀ n, IsIso (f.f n) := fun n ↦ by
+    let S := fun i : Fin r ↦
+      (TopCat.toSSet.obj (TopCat.of (Y i))).obj
+        (Opposite.op (SimplexCategory.mk n))
+    let T := (TopCat.toSSet.obj (TopCat.of (Σ j, Y j))).obj
+        (Opposite.op (SimplexCategory.mk n))
+    let q : (Σ i, S i) → T := fun p ↦
+      (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+        C(Y p.1, Σ j, Y j)))).app
+          (Opposite.op (SimplexCategory.mk n)) p.2
+    let e : (Σ i, S i) ≃ T := Equiv.ofBijective q (hsimp n)
+    let u : ∀ i : Fin r,
+        (∐ fun _ : S i ↦ ModuleCat.of ℤ ℤ) ⟶
+          ∐ fun _ : T ↦ ModuleCat.of ℤ ℤ := fun i ↦
+      Limits.Sigma.map' (fun x ↦ q ⟨i, x⟩) (fun _ ↦ 𝟙 _)
+    let g :=
+      (Limits.biproduct.isoCoproduct
+        (fun i : Fin r ↦ ∐ fun _ : S i ↦ ModuleCat.of ℤ ℤ)).hom ≫
+      (Limits.sigmaSigmaIso S
+        (fun i (_ : S i) ↦ ModuleCat.of ℤ ℤ)).hom ≫
+      (Limits.Sigma.whiskerEquiv (C := ModuleCat ℤ)
+        (f := fun _ : (Σ i, S i) ↦ ModuleCat.of ℤ ℤ)
+        (g := fun _ : T ↦ ModuleCat.of ℤ ℤ) e
+        (fun _ ↦ Iso.refl (ModuleCat.of ℤ ℤ))).hom
+    have hg : Limits.biproduct.desc u = g := by
+      apply Limits.biproduct.hom_ext'
+      intro i
+      rw [Limits.biproduct.ι_desc]
+      dsimp only [g]
+      rw [← Category.assoc, Limits.biproduct.isoCoproduct_hom]
+      simp only [Category.assoc, Limits.biproduct.ι_desc_assoc]
+      rw [Limits.sigmaSigmaIso_hom]
+      simp only [Category.assoc, Limits.Sigma.ι_desc_assoc]
+      apply Limits.Sigma.hom_ext
+      intro x
+      dsimp only [u, q]
+      rw [Limits.Sigma.ι_desc_assoc]
+      simp [Limits.Sigma.whiskerEquiv]
+      rfl
+    let E := HomologicalComplex.eval (ModuleCat ℤ) (ComplexShape.down ℕ) n
+    have hu : Limits.biproduct.desc (fun i : Fin r ↦ E.map (m i)) =
+        Limits.biproduct.desc u := by
+      apply Limits.biproduct.hom_ext'
+      intro i
+      dsimp [E, m, u, S, T, q,
+        ConstructionTargets.CoefficientH0.singularPostcomposition,
+        ConstructionTargets.CoefficientH0.SingularChains,
+        AlgebraicTopology.singularChainComplexFunctor,
+        AlgebraicTopology.SSet.singularChainComplexFunctor,
+        AlgebraicTopology.alternatingFaceMapComplex,
+        AlgebraicTopology.AlternatingFaceMapComplex.map,
+        ChainComplex.ofHom]
+    have hf : f.f n = (E.mapBiproduct fun i : Fin r ↦
+        (ConstructionTargets.CoefficientH0.SingularChains ℤ
+          (TopCat.of (Y i)))).hom ≫ g := by
+      change E.map f = _
+      rw [← Limits.biproduct.mapBiproduct_hom_desc]
+      exact congrArg (fun z ↦
+        (E.mapBiproduct fun i : Fin r ↦
+          (ConstructionTargets.CoefficientH0.SingularChains ℤ
+            (TopCat.of (Y i)))).hom ≫ z) (hu.trans hg)
+    have hg_iso : IsIso g := by
+      change IsIso
+        ((Limits.biproduct.isoCoproduct
+          (fun i : Fin r ↦ ∐ fun _ : S i ↦ ModuleCat.of ℤ ℤ)).hom ≫
+        (Limits.sigmaSigmaIso S
+          (fun i (_ : S i) ↦ ModuleCat.of ℤ ℤ)).hom ≫
+        (Limits.Sigma.whiskerEquiv (C := ModuleCat ℤ)
+          (f := fun _ : (Σ i, S i) ↦ ModuleCat.of ℤ ℤ)
+          (g := fun _ : T ↦ ModuleCat.of ℤ ℤ) e
+          (fun _ ↦ Iso.refl (ModuleCat.of ℤ ℤ))).hom)
+      exact IsIso.comp_isIso' inferInstance
+        (IsIso.comp_isIso' inferInstance inferInstance)
+    have hE_iso : IsIso (E.mapBiproduct fun i : Fin r ↦
+        (ConstructionTargets.CoefficientH0.SingularChains ℤ
+          (TopCat.of (Y i)))).hom := inferInstance
+    rw [hf]
+    exact IsIso.comp_isIso' hE_iso hg_iso
+  exact HomologicalComplex.Hom.isIso_of_components f
 -- END SEAT AREA
 
 /-- **Leaf (homology is additive, 20--60 lines).** Pure category theory: the
