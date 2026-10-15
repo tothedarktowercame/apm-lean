@@ -2795,7 +2795,38 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
 angle map is a homotopy equivalence (contract the interval), hence injective on π₁. -/
 lemma apm_t92J05_genusTwo_angle_injective : ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       Function.Injective (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x) := by
-  sorry
+  intro x p q hpq
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let eann :
+      ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel ∩
+        ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel) ≃ₜ
+        Set.Ioo (0 : ℝ) 1 × Circle :=
+    (Homeomorph.setCongr (by
+      simpa [C] using
+        (inter_comm
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel)).trans
+            C.overlap_eq.symm)).trans C.overlap_homeomorph
+  let y := eann x
+  let E :=
+    ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+      eann x
+  apply E.injective
+  apply (apm_t92J05_fundamentalGroup_prod_equiv y.1 y.2).injective
+  apply Prod.ext
+  · letI : ContractibleSpace (Set.Ioo (0 : ℝ) 1) :=
+      (convex_Ioo 0 1).contractibleSpace ⟨1 / 2, by norm_num⟩
+    change Path.Homotopic.projLeft (E p) = Path.Homotopic.projLeft (E q)
+    exact Subsingleton.elim _ _
+  · change Path.Homotopic.projRight (E p) = Path.Homotopic.projRight (E q)
+    have hangle : ∀ z,
+        FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x z =
+          Path.Homotopic.projRight (E z) := by
+      intro z
+      induction z using Path.Homotopic.Quotient.ind with
+      | mk z => rfl
+    rw [← hangle p, ← hangle q, hpq]
 
 /-- **Leaf (b).** The genus-two relator is not of finite order: free groups are torsion free
 and the relator ≠ 1. -/
