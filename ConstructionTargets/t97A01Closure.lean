@@ -790,6 +790,35 @@ noncomputable def torusRP2SkeletonToPairingSpacePiOne :
         (torusRP2SkeletonToPairingSpace torusRP2SkeletonBase) :=
   FundamentalGroup.map torusRP2SkeletonToPairingSpace torusRP2SkeletonBase
 
+/-- The once-around boundary loop before passing to the polygon quotient,
+regarded as a based loop in the closed polygon disk. -/
+noncomputable def torusRP2DiskBoundaryPath :
+    Path (circleToPolygonDisk (1 : Circle))
+      (circleToPolygonDisk (1 : Circle)) :=
+  (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    continuous_circleToPolygonDisk
+
+/-- The geometric boundary loop dies after inclusion into the polygon
+quotient.  This is the disk-side input to the forward kernel inclusion in
+based van Kampen. -/
+theorem torusRP2DiskBoundaryPath_map_quotient_eq_one :
+    FundamentalGroup.map
+        (⟨torusRP2PairingData.quotientMap,
+          torusRP2PairingData.continuous_quotientMap⟩ :
+          C(ConstructionTargets.Surfaces.Disk, torusRP2PairingData.Space))
+        (circleToPolygonDisk (1 : Circle))
+        (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath) = 1 := by
+  letI : ContractibleSpace ConstructionTargets.Surfaces.Disk :=
+    Metric.contractibleSpace_closedBall (by norm_num : (0 : ℝ) ≤ 1)
+  have hdisk :
+      (Path.Homotopic.Quotient.mk torusRP2DiskBoundaryPath :
+        FundamentalGroup ConstructionTargets.Surfaces.Disk
+          (circleToPolygonDisk (1 : Circle))) =
+        Path.Homotopic.Quotient.refl (circleToPolygonDisk (1 : Circle)) :=
+    Subsingleton.elim _ _
+  rw [hdisk]
+  rfl
+
 /-- Choose the basis change forced by the (globally constant) orientation of
 the normalized circle generator. -/
 noncomputable def torusRP2BoundaryBasisEquiv :
@@ -875,6 +904,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2SkeletonFinFreeGroupMap_positiveBoundary
 #print axioms torusRP2SkeletonFinFreeGroupMap_negativeBoundary
 #print axioms torusRP2AttachingWord
+#print axioms torusRP2DiskBoundaryPath_map_quotient_eq_one
 #print axioms torusRP2BoundaryFreeGroupMap_surjective
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
