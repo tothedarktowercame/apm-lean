@@ -342,6 +342,21 @@ a fixed point.  This is the freeness condition used for a regular fiber. -/
 def PairSignRegular (p : Sphere 3) : Prop :=
   (p.1 0 ≠ 0 ∨ p.1 1 ≠ 0) ∧ (p.1 2 ≠ 0 ∨ p.1 3 ≠ 0)
 
+/-- A concrete regular source point for the four-sheet computation: both
+complex coordinate pairs are nonzero. -/
+noncomputable def polynomialSphereRegularPoint : Sphere 3 :=
+  rp3RadialToSphere
+    ⟨![1, 0, 1, 0], by
+      intro h
+      have h0 := congrFun h (0 : Fin 4)
+      simp at h0⟩
+
+theorem polynomialSphereRegularPoint_isRegular :
+    PairSignRegular polynomialSphereRegularPoint := by
+  constructor <;> left
+  · simp [polynomialSphereRegularPoint, rp3RadialToSphere]
+  · simp [polynomialSphereRegularPoint, rp3RadialToSphere]
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -826,6 +841,14 @@ theorem t96A06_polynomialSphereLift_regular_fiber_ncard
     ⟨hpf, hps, hpfs, hfs, hffs, hsfs⟩
   simp [pairSignOrbit, Set.ncard_insert_of_notMem, hpf, hps, hpfs,
     hfs, hffs, hsfs]
+
+/-- The chosen regular value has exactly the four preimages whose local
+orientation signs enter the degree computation. -/
+theorem polynomialSphereRegularPoint_fiber_ncard :
+    (polynomialSphereLift ⁻¹'
+      {polynomialSphereLift polynomialSphereRegularPoint}).ncard = 4 :=
+  t96A06_polynomialSphereLift_regular_fiber_ncard
+    polynomialSphereRegularPoint_isRegular
 
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
@@ -1367,6 +1390,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipFirstPairSphere_rational_H3
 #print axioms flipSecondPairSphere_rational_H3
 #print axioms flipBothPairsSphere_rational_H3
+#print axioms polynomialSphereRegularPoint_isRegular
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
 #print axioms polynomialSphereLift_flipFirstPairSphere
@@ -1388,6 +1412,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms rp3SphereAntipodal_ne
 #print axioms pairSignOrbit_four_distinct
 #print axioms t96A06_polynomialSphereLift_regular_fiber_ncard
+#print axioms polynomialSphereRegularPoint_fiber_ncard
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
