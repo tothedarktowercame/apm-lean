@@ -2633,7 +2633,56 @@ lemma apm_t98a03_glueMap_fiber_base {J A B A' B' : Type} [TopologicalSpace A]
     Nat.card {e // apm_t98a03_glueMap p q hp hq e =
         apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a₀)} =
       Nat.card J := by
-  sorry
+  apply Nat.card_congr
+  let f : J → {e // apm_t98a03_glueMap p q hp hq e =
+      apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a₀)} :=
+    fun j => ⟨apm_t98a03_glueMk σ τ (.inl (σ j)), by
+      simp only [apm_t98a03_glueMap_mk, Sum.map_inl, hp]⟩
+  have hf_inj : Function.Injective f := by
+    intro j k hjk
+    apply hσ
+    have hm : apm_t98a03_glueMk σ τ (.inl (σ j)) =
+        apm_t98a03_glueMk σ τ (.inl (σ k)) := congrArg Subtype.val hjk
+    rcases (hmkE _ _).mp hm with heq | ⟨i, hi | hi⟩
+    · exact Sum.inl.inj heq
+    · cases hi.2
+    · cases hi.1
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨e, he⟩
+    obtain ⟨x, rfl⟩ := apm_t98a03_glueMk_surjective σ τ e
+    cases x with
+    | inl a' =>
+        have hx : apm_t98a03_GlueEq (fun _ : Unit => a₀)
+            (fun _ : Unit => b₀) (.inl (p a')) (.inl a₀) := by
+          apply (hmkX _ _).mp
+          simpa only [apm_t98a03_glueMap_mk] using he
+        have hpa : p a' = a₀ := by
+          rcases hx with h | ⟨u, h | h⟩
+          · exact Sum.inl.inj h
+          · cases h.2
+          · cases h.1
+        obtain ⟨j, hj⟩ := (hpσ a').mp hpa
+        refine ⟨j, ?_⟩
+        apply Subtype.ext
+        simpa [f] using congrArg (fun z => apm_t98a03_glueMk σ τ (.inl z)) hj
+    | inr b' =>
+        have hx : apm_t98a03_GlueEq (fun _ : Unit => a₀)
+            (fun _ : Unit => b₀) (.inr (q b')) (.inl a₀) := by
+          apply (hmkX _ _).mp
+          simpa only [apm_t98a03_glueMap_mk] using he
+        have hqb : q b' = b₀ := by
+          rcases hx with h | ⟨u, h | h⟩
+          · cases h
+          · cases h.1
+          · exact Sum.inr.inj h.1
+        obtain ⟨j, hj⟩ := (hqτ b').mp hqb
+        refine ⟨j, ?_⟩
+        apply Subtype.ext
+        change apm_t98a03_glueMk σ τ (.inl (σ j)) =
+          apm_t98a03_glueMk σ τ (.inr b')
+        exact (apm_t98a03_glueMk_glue σ τ j).trans
+          (congrArg (fun z => apm_t98a03_glueMk σ τ (.inr z)) hj)
+  exact (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).symm
 
 /-- Assembly: if every fibre of `p`, `q` away from the basepoints and the set of
 glued classes all have `n` elements, every fibre of the glued map does. -/
