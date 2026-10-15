@@ -2258,8 +2258,93 @@ space, hence closed, hence quotient (`IsClosedMap.isQuotientMap`);
 `rp2Proj ∘ snd` is an open surjection.  A sum of quotient maps is a quotient
 map (check `isOpen_sum_iff` on preimages), and compose with
 `isQuotientMap_quotient_mk'`.  About 80 lines. -/
+lemma treeF_isQuotientMap_aux_circle_surjective :
+    Function.Surjective circleOfUnit := by
+  intro z
+  by_cases h : 0 ≤ Complex.arg (z : ℂ)
+  · let t : unitInterval := ⟨Complex.arg (z : ℂ) / (2 * Real.pi), by
+      constructor
+      · positivity
+      · apply (div_le_one (by positivity)).2
+        linarith [Complex.arg_le_pi (z : ℂ)]⟩
+    refine ⟨t, ?_⟩
+    rw [circleOfUnit]
+    convert Circle.exp_arg z using 1
+    dsimp [t]
+    field_simp
+  · have ha : Complex.arg (z : ℂ) < 0 := lt_of_not_ge h
+    let t : unitInterval :=
+      ⟨(Complex.arg (z : ℂ) + 2 * Real.pi) / (2 * Real.pi), by
+        constructor
+        · apply div_nonneg
+          · linarith [Complex.neg_pi_lt_arg (z : ℂ), Real.pi_pos]
+          · positivity
+        · apply (div_le_one (by positivity)).2
+          linarith⟩
+    refine ⟨t, ?_⟩
+    rw [circleOfUnit]
+    have he : 2 * Real.pi * (t : ℝ) = Complex.arg (z : ℂ) + 2 * Real.pi := by
+      dsimp [t]
+      field_simp
+    rw [he, Circle.exp_add, Circle.exp_two_pi, mul_one, Circle.exp_arg]
+
 lemma treeF_isQuotientMap : IsQuotientMap treeF := by
-  sorry
+  let f : G × unitInterval → Circle := fun p => circleOfUnit p.2
+  let r : G × S2 → RealProjectivePlane := fun p => rp2Proj p.2
+  let F : TreeZ → Circle ⊕ RealProjectivePlane := Sum.map f r
+  have hfc : Continuous f := by
+    unfold f circleOfUnit
+    fun_prop
+  have hfs : Function.Surjective f := by
+    intro z
+    obtain ⟨t, ht⟩ := treeF_isQuotientMap_aux_circle_surjective z
+    exact ⟨(1, t), ht⟩
+  have hfq : IsQuotientMap f := by
+    have hclosed : IsClosedMap circleOfUnit :=
+      (Circle.exp.continuous.comp
+        (continuous_subtype_val.const_mul (2 * Real.pi))).isClosedMap
+    have hcq : IsQuotientMap circleOfUnit :=
+      hclosed.isQuotientMap
+        (Circle.exp.continuous.comp
+          (continuous_subtype_val.const_mul (2 * Real.pi)))
+        treeF_isQuotientMap_aux_circle_surjective
+    exact hcq.comp isQuotientMap_snd
+  have hrq : IsQuotientMap r := by
+    apply (rp2Proj_isCoveringMap.isOpenMap.comp isOpenMap_snd).isQuotientMap
+      (by
+        exact rp2Proj_isCoveringMap.continuous.comp
+          (continuous_snd : Continuous (fun p : G × S2 => p.2)))
+      (by
+        intro y
+        obtain ⟨x, hx⟩ := rp2Proj_surjective y
+        exact ⟨(1, x), hx⟩)
+  have hFq : IsQuotientMap F := by
+    rw [isQuotientMap_iff]
+    refine ⟨?_, ?_⟩
+    · intro y
+      cases y with
+      | inl y =>
+          obtain ⟨x, rfl⟩ := hfs y
+          exact ⟨.inl x, rfl⟩
+      | inr y =>
+          obtain ⟨x, rfl⟩ := hrq.surjective y
+          exact ⟨.inr x, rfl⟩
+    · intro U
+      rw [isOpen_sum_iff, isOpen_sum_iff]
+      change IsOpen (Sum.inl ⁻¹' U) ∧ IsOpen (Sum.inr ⁻¹' U) ↔
+        IsOpen (f ⁻¹' (Sum.inl ⁻¹' U)) ∧ IsOpen (r ⁻¹' (Sum.inr ⁻¹' U))
+      exact and_congr ((isQuotientMap_iff.mp hfq).2 _)
+        ((isQuotientMap_iff.mp hrq).2 _)
+  have hq : IsQuotientMap
+      (quotientMap (1 : Circle) (surfacePoint false 1)) :=
+    isQuotientMap_quotient_mk'
+  have := hq.comp hFq
+  have heq : treeF =
+      (quotientMap (1 : Circle) (surfacePoint false 1)) ∘ F := by
+    funext z
+    cases z <;> rfl
+  rw [heq]
+  exact this
 
 /-- **Leaf.**  Fibres of `treeF` are `G`-orbits modulo the tree relation.
 
