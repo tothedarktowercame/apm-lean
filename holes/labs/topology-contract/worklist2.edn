@@ -88331,28 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Join adjacent prefix blocks; derive surjectivity/reverse kernel; assemble.",
+    "Fold adjacent prefix-block classes; derive surjectivity/reverse kernel; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat",
-      :type "cast run concatenation equals prefix block",
+    [{:name "torusRP2_subdivisionRunPrefixBlock_adjacent",
+      :type "consecutive prefix blocks share endpoint",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece"],
+      ["torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat"
+      ["torusRP2_subdivisionRunPrefixBlock_adjacent"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88365,36 +88364,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked prefix run concatenation.",
+    :reason "Banked prefix-block adjacency.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check a66850b70", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792060088193-13857-78c110b4",
-     :commands
-     ["git show/diff/check a66850b70"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+dependency+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit a66850b70 adds compiled, sorry-free progress beyond cce2536b2: the dependent concatenation of all cast factors in a run has the quotient class of the literal cumulative-prefix block. Only t97A01Closure.lean changed; fixture SHA b4e7fffd10dd2905c6f38c1254edd39bcccf6833fc8e8b582283c8640e393801 matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Both concatenations use the same prefix-point family, and prior piece equalities are reassembled in order. Joining adjacent prefix blocks, subdivision reassembly, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "a66850b70",
+     {:cmd "git show --check bf8858d42", :exit 0}],
+    :commit "bf8858d42",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "b4e7fffd10dd2905c6f38c1254edd39bcccf6833fc8e8b582283c8640e393801"},
+     "90764975c365a05a4b3704695313e203bf9ec41f3fa660fe9548613daa26c2e1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94185,7 +94171,8 @@
     :lemma-torusrp2-subdivisionrunfold-exists-outerpath
     :lemma-torusrp2-subdivisionrunfold-exists-outerpath-at-endpoints
     :lemma-torusrp2-subdivisionrunblockpiece-cast-eq-prefixblockpiece
-    :lemma-torusrp2-subdivisionrunblockconcat-cast-eq-prefixblockconcat],
+    :lemma-torusrp2-subdivisionrunblockconcat-cast-eq-prefixblockconcat
+    :lemma-torusrp2-subdivisionrunprefixblock-adjacent],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94745,4 +94732,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunblockpiece-cast-eq-prefixblockpiece],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunPrefixBlock_adjacent",
+    :type "consecutive prefix blocks share endpoint"},
+   :lemma
+   {:name "torusRP2_subdivisionRunPrefixBlock_adjacent",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "consecutive prefix blocks share endpoint",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunprefixblock-adjacent,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunblockconcat-cast-eq-prefixblockconcat],
    :other-consumers []}]}
