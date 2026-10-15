@@ -486,6 +486,29 @@ theorem transverse_mfderiv_surjective_of_circleDirection_lifts
   rcases hlift v with ⟨u, hu⟩
   exact ⟨u, hu⟩
 
+/-- Regularity of the second-coordinate projection on the linearized
+incidence kernel says exactly that every parameter direction has a matching
+source direction. -/
+theorem direction_lifts_of_surjective_incidenceKernel_snd
+    {R E F G : Type} [Ring R]
+    [AddCommGroup E] [Module R E]
+    [AddCommGroup F] [Module R F]
+    [AddCommGroup G] [Module R G]
+    (A : E →ₗ[R] G) (B : F →ₗ[R] G)
+    (hproj : Function.Surjective
+      (fun w : LinearMap.ker (LinearMap.coprod A (-B)) ↦ w.1.2)) :
+    ∀ v, ∃ u, A u = B v := by
+  intro v
+  obtain ⟨w, hw⟩ := hproj v
+  refine ⟨w.1.1, ?_⟩
+  have hk : LinearMap.coprod A (-B) w.1 = 0 := w.2
+  have huv : A w.1.1 = B w.1.2 := by
+    apply sub_eq_zero.mp
+    simpa only [LinearMap.coprod_apply, LinearMap.neg_apply, sub_eq_add_neg] using hk
+  simpa [hw] using huv
+
+#print axioms direction_lifts_of_surjective_incidenceKernel_snd
+
 /-- At a selected circle parameter, transversality and liftability of every
 circle tangent direction make the corresponding point fiber locally
 injective. -/
