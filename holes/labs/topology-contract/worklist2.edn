@@ -88331,27 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Instantiate quotient fold induction in within/cross-run cases; van Kampen; assemble.",
+    "Instantiate transported within/cross-run fold induction; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_pathHomotopicQuotient_trans_congr",
+    [{:name "torusRP2_pathHomotopicQuotient_cast_trans",
       :type
-      "simultaneous typed congruence for quotient path composition",
+      "endpoint cast of a composite equals composition through a shared cast endpoint",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_pathHomotopicQuotient_trans_assoc"],
+      :depends-on ["torusRP2_pathHomotopicQuotient_trans_congr"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_pathHomotopicQuotient_trans_congr"
+      ["torusRP2_pathHomotopicQuotient_cast_trans"
        "torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases_eq"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,7 +88364,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked typed quotient composition congruence.",
+    :reason "Banked quotient cast/composition transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88374,28 +88374,16 @@
       "rg -n 'sorry|admit' ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 3e9caad4c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792100070466-14706-3a776b53",
-     :commands
-     ["git show/diff/check 3e9caad4c"
-      "sha256sum + placeholder recount from 3e9caad4c"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 3e9caad4c adds compiled, sorry-free progress beyond history 659b7c73e. Its simultaneous congruence operates directly on typed path-homotopy quotient composition with the shared middle endpoint explicit; substitution proves the correctly oriented result without crossing representations. Only t97A01Closure.lean changed; fixture SHA 474dfdc7beb9b2ca37674c23038a22197e577292ba6153c0d01764930bf406ab matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Fold instantiation, van Kampen, and assembly remain listed."},
-    :commit "3e9caad4c",
+     {:cmd "git show --check fbccc7248", :exit 0}],
+    :commit "fbccc7248",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "474dfdc7beb9b2ca37674c23038a22197e577292ba6153c0d01764930bf406ab"},
+     "05857ad8d3b4c78cc8f7ed6c7e6e65b7c81cc381a724b45b42109d896b13b17a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94394,7 +94382,8 @@
     :lemma-torusrp2-pathhomotopicquotient-concat-one
     :lemma-torusrp2-pathhomotopicquotient-concat-two
     :lemma-torusrp2-pathhomotopicquotient-trans-assoc
-    :lemma-torusrp2-pathhomotopicquotient-trans-congr],
+    :lemma-torusrp2-pathhomotopicquotient-trans-congr
+    :lemma-torusrp2-pathhomotopicquotient-cast-trans],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96201,4 +96190,23 @@
    :id :lemma-torusrp2-pathhomotopicquotient-trans-congr,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-pathhomotopicquotient-trans-assoc],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_pathHomotopicQuotient_cast_trans",
+    :type
+    "endpoint cast of a composite equals composition through a shared cast endpoint"},
+   :lemma
+   {:name "torusRP2_pathHomotopicQuotient_cast_trans",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "endpoint cast of a composite equals composition through a shared cast endpoint",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-pathhomotopicquotient-cast-trans,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2-pathhomotopicquotient-trans-congr],
    :other-consumers []}]}
