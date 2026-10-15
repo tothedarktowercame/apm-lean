@@ -382,6 +382,38 @@ theorem coordinateDerivative_hasRightInverse_of_eq_conj
 
 #print axioms coordinateDerivative_hasRightInverse_of_eq_conj
 
+/-- In product chart coordinates, the derivative of the incidence difference
+`F(u) - C(v)` is the coproduct of `dF` and `-dC`. -/
+theorem hasFDerivAt_incidenceDifference
+    {E F G : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {Fmap : E → G} {Cmap : F → G} {u : E} {v : F}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hF : HasFDerivAt Fmap A u) (hC : HasFDerivAt Cmap B v) :
+    HasFDerivAt (fun p : E × F ↦ Fmap p.1 - Cmap p.2)
+      (A.coprod (-B)) (u, v) := by
+  have hF' : HasFDerivAt (fun p : E × F ↦ Fmap p.1)
+      (A.comp (ContinuousLinearMap.fst ℝ E F)) (u, v) := by
+    simpa [Function.comp_def] using
+      hF.comp (u, v) (hasFDerivAt_fst (𝕜 := ℝ) (p := (u, v)))
+  have hC' : HasFDerivAt (fun p : E × F ↦ Cmap p.2)
+      (B.comp (ContinuousLinearMap.snd ℝ E F)) (u, v) := by
+    simpa [Function.comp_def] using
+      hC.comp (u, v) (hasFDerivAt_snd (𝕜 := ℝ) (p := (u, v)))
+  have hderiv :
+      A.comp (ContinuousLinearMap.fst ℝ E F) -
+          B.comp (ContinuousLinearMap.snd ℝ E F) = A.coprod (-B) := by
+    apply ContinuousLinearMap.ext
+    rintro ⟨p, q⟩
+    change A p - B q = A p + (-B) q
+    rw [sub_eq_add_neg]
+    rfl
+  rw [← hderiv]
+  simpa only [Pi.sub_apply] using hF'.sub hC'
+
+#print axioms hasFDerivAt_incidenceDifference
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
