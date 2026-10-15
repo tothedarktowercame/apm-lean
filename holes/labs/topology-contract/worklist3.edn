@@ -37130,38 +37130,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove coefficient-extension localization naturality; derive scalar one; transport four local classes and close Main.",
+    "Construct the singular and relative chain maps; prove localization naturality, scalar one, four local classes, and Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name
-      "t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization",
+    [{:name "t96A06_intToRatCoefficient_signedIncidence",
       :type
-      "selected rational H3 coordinate equals canonical coefficient-sphere normalization",
+      "Z-to-Q coefficient morphism preserves every signed singular-boundary coefficient",
       :status :proved,
       :consumers [:t96A06],
       :depends-on [],
       :area "rp-rational-homology"}
-     {:name "t96A06_integralToRational_localization_naturality",
+     {:name "t96A06_integralToRational_singularChainMap",
       :type
-      "coefficient extension commutes with sphere localization and sends integral local generator to rational local generator",
+      "degreewise coefficient extension defines a natural map from integral to rational singular chains",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization"],
+      :depends-on ["t96A06_intToRatCoefficient_signedIncidence"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed definitional identification of the selected rational H3 coordinate with canonical coefficient-sphere normalization.",
+    "Committed the integral-to-rational coefficient morphism and signed-incidence compatibility.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37169,14 +37167,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --oneline --stat 5fbcdfe8b", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792078076243-14258-ef5186c6",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "5fbcdfe8b",
+     {:cmd "git show --check --oneline --stat 97f57bfb6", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial signed-incidence proof",
+      :exit 1,
+      :note "Made casts explicit; rerun passed."}],
+    :commit "97f57bfb6",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37184,7 +37180,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43443,6 +43439,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphere3-rational-h3iso-eq-coefficientnormalization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_intToRatCoefficient_signedIncidence",
+    :type
+    "Z-to-Q coefficient morphism preserves every signed singular-boundary coefficient"},
+   :lemma
+   {:name "t96A06_intToRatCoefficient_signedIncidence",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Z-to-Q coefficient morphism preserves every signed singular-boundary coefficient",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-inttoratcoefficient-signedincidence,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_singularChainMap",
+    :type
+    "degreewise coefficient extension defines a natural map from integral to rational singular chains"},
+   :lemma
+   {:name "t96A06_integralToRational_singularChainMap",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "degreewise coefficient extension defines a natural map from integral to rational singular chains",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-singularchainmap,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-inttoratcoefficient-signedincidence],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
