@@ -119111,6 +119111,16 @@
     [{:cmd "source drafts",
       :exit 1,
       :finding "opened ContDiff scope"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792027122601-12913-f4907ac1",
+     :commands
+     ["git show/diff-tree da6e039f1"
+      "archive da6e039f1; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit da6e039f1 changes only t00J02Closure.lean and adds compiled, sorry-free progress. It imports the proved Sard producer and specializes its null-critical-image theorem through the prior regular-value selector, yielding a value whose entire fiber has surjective mfderiv. Domain/codomain models, infinite smoothness, Haar measure, and derivative orientation match exactly; the producer is proved, not an interface axiom. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Circle-projection specialization, fiber calculations, and Main remain listed."},
     :commit "da6e039f1a724ae592d9690cd9e627b14f19c969",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119119,7 +119129,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119137,7 +119147,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked regular-value selection.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Sard regular-fiber adapter.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119302,7 +119312,10 @@
      :reason "Banked transverse regularity linear step."}
     {:job 7,
      :commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319",
-     :reason "Banked regular-value selection."}]}
+     :reason "Banked regular-value selection."}
+    {:job 8,
+     :commit "da6e039f1a724ae592d9690cd9e627b14f19c969",
+     :reason "Banked Sard regular-fiber adapter."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120859,7 +120872,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_mfderiv_surjective_fiber_manifold_to_vector",
@@ -120869,7 +120882,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "manifold-to-vector regular fiber",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "da6e039f1a724ae592d9690cd9e627b14f19c969"},
    :id :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector,
    :kind :lemma,
    :depends-on
