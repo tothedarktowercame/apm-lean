@@ -1635,7 +1635,45 @@ injectivity of `τ`, and dually with `σ`; `Sum.inl.injEq`, `Sum.inr.injEq`,
 lemma apm_t98a03_glueMk_eq_iff {J A B : Type} {σ : J → A} {τ : J → B}
     (hσ : Function.Injective σ) (hτ : Function.Injective τ) (x y : A ⊕ B) :
     apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔ apm_t98a03_GlueEq σ τ x y := by
-  sorry
+  constructor
+  · intro h
+    have hxy : Relation.EqvGen (apm_t98a03_GlueRel σ τ) x y := Quotient.exact h
+    clear h
+    induction hxy with
+    | rel x y hrel =>
+        cases hrel with
+        | glue j => exact Or.inr ⟨j, Or.inl ⟨rfl, rfl⟩⟩
+    | refl x => exact Or.inl rfl
+    | symm x y _ ih =>
+        rcases ih with hxy | ⟨j, hxy | hxy⟩
+        · exact Or.inl hxy.symm
+        · exact Or.inr ⟨j, Or.inr ⟨hxy.2, hxy.1⟩⟩
+        · exact Or.inr ⟨j, Or.inl ⟨hxy.2, hxy.1⟩⟩
+    | trans x y z _ _ ihxy ihyz =>
+        rcases ihxy with hxy | ⟨j, hxy | hxy⟩
+        · subst y
+          exact ihyz
+        · rcases ihyz with hyz | ⟨k, hyz | hyz⟩
+          · subst z
+            exact Or.inr ⟨j, Or.inl hxy⟩
+          · cases hxy.2.symm.trans hyz.1
+          · have hjk : j = k := hτ (Sum.inr.inj (hxy.2.symm.trans hyz.1))
+            subst k
+            exact Or.inl (hxy.1.trans hyz.2.symm)
+        · rcases ihyz with hyz | ⟨k, hyz | hyz⟩
+          · subst z
+            exact Or.inr ⟨j, Or.inr hxy⟩
+          · have hjk : j = k := hσ (Sum.inl.inj (hxy.2.symm.trans hyz.1))
+            subst k
+            exact Or.inl (hxy.1.trans hyz.2.symm)
+          · cases hxy.2.symm.trans hyz.1
+  · intro h
+    rcases h with rfl | ⟨j, h | h⟩
+    · rfl
+    · rcases h with ⟨rfl, rfl⟩
+      exact apm_t98a03_glueMk_glue σ τ j
+    · rcases h with ⟨rfl, rfl⟩
+      exact (apm_t98a03_glueMk_glue σ τ j).symm
 
 /-- Seat (generic): gluing two Hausdorff spaces along finitely many pairs of
 points (injective gluing maps) gives a Hausdorff space.
