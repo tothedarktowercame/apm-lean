@@ -332,6 +332,25 @@ theorem flipSecondPairSphere_involutive (p : Sphere 3) :
       ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
       ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
 
+/-- The first pair-sign deck map as an actual self-homeomorphism, with its
+involution supplying the inverse. -/
+def flipFirstPairSphereHomeomorph : Sphere 3 ≃ₜ Sphere 3 where
+  toFun := flipFirstPairSphere
+  invFun := flipFirstPairSphere
+  left_inv := flipFirstPairSphere_involutive
+  right_inv := flipFirstPairSphere_involutive
+  continuous_toFun := flipFirstPairSphere.continuous
+  continuous_invFun := flipFirstPairSphere.continuous
+
+/-- The second pair-sign deck map as an actual self-homeomorphism. -/
+def flipSecondPairSphereHomeomorph : Sphere 3 ≃ₜ Sphere 3 where
+  toFun := flipSecondPairSphere
+  invFun := flipSecondPairSphere
+  left_inv := flipSecondPairSphere_involutive
+  right_inv := flipSecondPairSphere_involutive
+  continuous_toFun := flipSecondPairSphere.continuous
+  continuous_invFun := flipSecondPairSphere.continuous
+
 theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
     flipFirstPairSphere (flipSecondPairSphere p) =
       flipSecondPairSphere (flipFirstPairSphere p) := by
@@ -1828,6 +1847,49 @@ theorem polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour :
   rw [polynomialSphereLift_deckLocalContribution_spec.2.2.2.2]
   exact (t96A06_sphere3_endomorphism_eq_smul_id_iff _ 4).symm
 
+/-- The top-degree coordinate is the signed regular-fiber count exactly when
+the canonical global localization equation holds. -/
+theorem regularValue_topDegreeCoordinate_eq_signedCount :
+    t96A06_sphere3_topDegreeCoordinate polynomialSphereLift =
+        (polynomialSphereLift_signedRegularFiberCertificate.signedCount : ℚ) ↔
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i := by
+  rw [polynomialSphereLift_signedRegularFiberCount_eq_four]
+  constructor
+  · intro hcoord
+    apply polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour.2
+    rw [t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul, hcoord]
+    norm_num
+  · intro hglobal
+    have hmap := polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour.1 hglobal
+    have hfund := (t96A06_sphere3_endomorphism_eq_smul_id_iff _ 4).1 hmap
+    unfold t96A06_sphere3_topDegreeCoordinate
+    calc
+      _ = t96A06_sphere3_rational_H3Iso.hom
+          (4 • t96A06_sphere3_rational_fundamentalClass) := congrArg _ hfund
+      _ = 4 := by
+        rw [map_smul]
+        simp [t96A06_sphere3_rational_fundamentalClass]
+
+/-- Scalar form of the sole remaining geometric boundary: proving that the
+explicit lift has top-degree coordinate four is exactly proving canonical
+global localization. -/
+theorem polynomialSphereLift_globalImage_eq_deckSum_iff_topDegreeCoordinate_four :
+    (HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i) ↔
+      t96A06_sphere3_topDegreeCoordinate polynomialSphereLift = 4 := by
+  constructor
+  · intro hglobal
+    have h := regularValue_topDegreeCoordinate_eq_signedCount.mpr hglobal
+    simpa [polynomialSphereLift_signedRegularFiberCount_eq_four] using h
+  · intro hcoordinate
+    apply regularValue_topDegreeCoordinate_eq_signedCount.mp
+    simpa [polynomialSphereLift_signedRegularFiberCount_eq_four] using hcoordinate
+
 /-- The computed signed regular-fiber count is the scalar on rational top
 homology exactly when the canonical global localization equation holds. -/
 theorem signedRegularFiberCount_homologyScalar_iff_globalLocalization :
@@ -2508,6 +2570,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms sphereVector_flipSecondPairSphere
 #print axioms flipFirstPairSphere_involutive
 #print axioms flipSecondPairSphere_involutive
+#print axioms flipFirstPairSphereHomeomorph
+#print axioms flipSecondPairSphereHomeomorph
 #print axioms flipFirstPairSphere_comm_flipSecondPairSphere
 #print axioms flipFirstPairSphere_flipSecondPairSphere
 #print axioms flipFirstPairSphere_rational_H3
@@ -2569,6 +2633,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_deckLocalContribution_spec
 #print axioms polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
 #print axioms polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour
+#print axioms regularValue_topDegreeCoordinate_eq_signedCount
+#print axioms polynomialSphereLift_globalImage_eq_deckSum_iff_topDegreeCoordinate_four
 #print axioms signedRegularFiberCount_homologyScalar_iff_globalLocalization
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase

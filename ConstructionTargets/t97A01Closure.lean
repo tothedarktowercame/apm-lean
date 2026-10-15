@@ -2017,6 +2017,45 @@ theorem torusRP2_subdivisionRunOffset_lt_nextPrefix
   rw [pathTwoOpenSubdivisionRunPredLength_add_one]
   exact Nat.add_lt_add_left k.isLt _
 
+/-- A flattened run/offset coordinate is at or beyond the cumulative boundary
+where its run starts. -/
+theorem torusRP2_subdivisionRunPrefixLength_le_runOffset
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val ≤
+      pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val := by
+  exact Nat.le_add_right _ _
+
+/-- Strict order of flattened coordinates forces the same weak order on their
+run indices. -/
+theorem torusRP2_subdivisionRunOffset_run_le_of_coord_lt
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i j : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length)
+    (l : Fin (pathTwoOpenSubdivisionRunFamily S j).length)
+    (hcoord : pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val <
+      pathTwoOpenSubdivisionRunPrefixLength S j.val + l.val) :
+    i.val ≤ j.val := by
+  by_contra hnot
+  have hji : j.val < i.val := by omega
+  have hfin : j.succ ≤ i.castSucc := by
+    change j.val + 1 ≤ i.val
+    omega
+  have hbetween :=
+    (torusRP2_subdivisionRunPrefixLength_strictMono S).monotone hfin
+  change pathTwoOpenSubdivisionRunPrefixLength S (j.val + 1) ≤
+    pathTwoOpenSubdivisionRunPrefixLength S i.val at hbetween
+  have hj := torusRP2_subdivisionRunOffset_lt_nextPrefix S j l
+  have hi := torusRP2_subdivisionRunPrefixLength_le_runOffset S i k
+  omega
+
 /-- The run component of a flattened run/offset coordinate is unique. -/
 theorem torusRP2_subdivisionRunOffset_run_unique
     {x y : torusRP2PairingData.Space} {p : Path x y}
@@ -2341,6 +2380,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunFamily_get_val_eq_prefix_add
 #print axioms torusRP2_subdivisionIndex_exists_runOffset
 #print axioms torusRP2_subdivisionRunOffset_lt_nextPrefix
+#print axioms torusRP2_subdivisionRunPrefixLength_le_runOffset
+#print axioms torusRP2_subdivisionRunOffset_run_le_of_coord_lt
 #print axioms torusRP2_subdivisionRunOffset_run_unique
 #print axioms torusRP2_subdivisionRunOffsetIndex_bijective
 #print axioms torusRP2_subdivisionRunOffsetEquiv
