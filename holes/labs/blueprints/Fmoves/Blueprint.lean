@@ -5721,7 +5721,57 @@ theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ 
 lemma cutPiece_frontier_aux_line {P Q z : ℂ} (hPQ : P ≠ Q)
     (hz : cutCross (Q - P) (z - P) = 0) :
     ∃ t : ℝ, z = (1 - t) • P + t • Q := by
-  sorry
+  have hw : Q - P ≠ 0 := sub_ne_zero.mpr hPQ.symm
+  have hcross : (Q - P).re * (z - P).im -
+      (Q - P).im * (z - P).re = 0 := by
+    dsimp [cutCross] at hz
+    change (Q.re - P.re) * (z.im - P.im) -
+      (Q.im - P.im) * (z.re - P.re) = 0
+    linarith [hz]
+  by_cases hre : (Q - P).re = 0
+  · have him : (Q - P).im ≠ 0 := by
+      intro h
+      apply hw
+      apply Complex.ext <;> simp [hre, h]
+    have him' : Q.im - P.im ≠ 0 := by simpa using him
+    let t : ℝ := (z - P).im / (Q - P).im
+    have hvre : (z - P).re = 0 := by
+      rw [hre, zero_mul, zero_sub] at hcross
+      exact (mul_eq_zero.mp (neg_eq_zero.mp hcross)).resolve_left him
+    refine ⟨t, ?_⟩
+    apply Complex.ext
+    · simp only [Complex.add_re, Complex.smul_re, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_re]
+      dsimp [t]
+      simp only [Complex.sub_re] at hre hvre
+      have hQP : Q.re = P.re := sub_eq_zero.mp hre
+      have hzP : z.re = P.re := sub_eq_zero.mp hvre
+      rw [hQP, hzP]
+      ring
+    · simp only [Complex.add_im, Complex.smul_im, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_im]
+      dsimp [t]
+      field_simp [him']
+      ring
+  · let t : ℝ := (z - P).re / (Q - P).re
+    have hre' : Q.re - P.re ≠ 0 := by simpa using hre
+    have hvim : (z - P).im = t * (Q - P).im := by
+      dsimp [t]
+      field_simp [hre']
+      change (Q.re - P.re) * (z.im - P.im) -
+        (Q.im - P.im) * (z.re - P.re) = 0 at hcross
+      linear_combination hcross
+    refine ⟨t, ?_⟩
+    apply Complex.ext
+    · simp only [Complex.add_re, Complex.smul_re, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_re]
+      dsimp [t]
+      field_simp [hre']
+      ring
+    · simp only [Complex.add_im, Complex.smul_im, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_im]
+      dsimp [t] at hvim ⊢
+      nlinarith [hvim]
 
 lemma cutPiece_frontier_aux_chord {P Q z : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1)
     (hPQ : P ≠ Q)
