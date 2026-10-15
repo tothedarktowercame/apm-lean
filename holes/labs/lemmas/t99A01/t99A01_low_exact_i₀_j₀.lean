@@ -2096,7 +2096,92 @@ lemma t99A01_low_exact_δ₁_i₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01
 -- BEGIN SEAT AREA
 lemma t99A01_low_exact_i₀_j₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     LinearMap.range t99A01_LowInput.i₀ = LinearMap.ker D.j₀ := by
-  sorry
+  let fst₀ : D.A₀ ⊞ D.B₀ ⟶ D.A₀ := Limits.biprod.fst
+  let snd₀ : D.A₀ ⊞ D.B₀ ⟶ D.B₀ := Limits.biprod.snd
+  let inl₀ : D.A₀ ⟶ D.A₀ ⊞ D.B₀ := Limits.biprod.inl
+  let inr₀ : D.B₀ ⟶ D.A₀ ⊞ D.B₀ := Limits.biprod.inr
+  have hfi : ∀ a : D.A₀, fst₀.hom (inl₀.hom a) = a := by
+    intro a
+    change (inl₀ ≫ fst₀).hom a = ModuleCat.Hom.hom (𝟙 D.A₀) a
+    rw [Limits.biprod.inl_fst]
+  have hfr : ∀ b : D.B₀, fst₀.hom (inr₀.hom b) = 0 := by
+    intro b
+    change (inr₀ ≫ fst₀).hom b = 0
+    rw [Limits.biprod.inr_fst]
+    rfl
+  have hsi : ∀ a : D.A₀, snd₀.hom (inl₀.hom a) = 0 := by
+    intro a
+    change (inl₀ ≫ snd₀).hom a = 0
+    rw [Limits.biprod.inl_snd]
+    rfl
+  have hsr : ∀ b : D.B₀, snd₀.hom (inr₀.hom b) = b := by
+    intro b
+    change (inr₀ ≫ snd₀).hom b = ModuleCat.Hom.hom (𝟙 D.B₀) b
+    rw [Limits.biprod.inr_snd]
+  have hI₀_apply : ∀ x : Fin r → ℤ,
+      D.I₀.hom (D.cO₀.inv.hom x) =
+        inl₀.hom (D.cA₀.inv.hom (t99A01_coordinateSum x)) +
+          inr₀.hom (D.cB₀.inv.hom x) := by
+    intro x
+    apply (ModuleCat.biprodIsoProd D.A₀ D.B₀).toLinearEquiv.injective
+    apply Prod.ext
+    · change fst₀.hom _ = fst₀.hom _
+      have h := congrArg (fun f => f x)
+        (congrArg CategoryTheory.ConcreteCategory.hom D.hsum)
+      simpa only [ModuleCat.hom_comp, LinearMap.comp_apply,
+        D.cA₀.hom_inv_id_apply, map_add, hfi, hfr, add_zero] using
+        congrArg D.cA₀.inv.hom h
+    · change snd₀.hom _ = snd₀.hom _
+      have h := congrArg (fun f => f x)
+        (congrArg CategoryTheory.ConcreteCategory.hom D.hid)
+      simpa only [ModuleCat.hom_comp, LinearMap.comp_apply,
+        D.cB₀.hom_inv_id_apply, map_add, hsi, hsr, zero_add,
+        CategoryTheory.ConcreteCategory.id_apply] using congrArg D.cB₀.inv.hom h
+  ext y
+  constructor
+  · rintro ⟨x, rfl⟩
+    rw [LinearMap.mem_ker]
+    have hj : D.j₀ (t99A01_LowInput.i₀ x) =
+        D.J₀.hom (D.I₀.hom (D.cO₀.inv.hom x)) := by
+      rw [hI₀_apply]
+      simp only [t99A01_LowInput.j₀, LinearMap.coprod_apply,
+        t99A01_LowInput.i₀, LinearMap.prod_apply, LinearMap.id_coe,
+        id_eq, ModuleCat.hom_comp, LinearMap.comp_apply, map_add]
+      dsimp [inl₀, inr₀]
+    rw [hj]
+    exact LinearMap.mem_ker.mp
+      (D.hI₀J₀ ▸ LinearMap.mem_range_self D.I₀.hom (D.cO₀.inv.hom x))
+  · intro hy
+    rcases y with ⟨a, b⟩
+    have hy' :
+        inl₀.hom (D.cA₀.inv.hom a) + inr₀.hom (D.cB₀.inv.hom b) ∈
+          LinearMap.ker D.J₀.hom := by
+      rw [LinearMap.mem_ker] at hy ⊢
+      simpa only [t99A01_LowInput.j₀, LinearMap.coprod_apply,
+        ModuleCat.hom_comp, LinearMap.comp_apply, map_add] using hy
+    rw [← D.hI₀J₀] at hy'
+    rcases hy' with ⟨z, hz⟩
+    refine ⟨D.cO₀.hom.hom z, ?_⟩
+    have hi : D.I₀.hom z =
+        inl₀.hom (D.cA₀.inv.hom
+          (t99A01_coordinateSum (D.cO₀.hom.hom z))) +
+        inr₀.hom (D.cB₀.inv.hom (D.cO₀.hom.hom z)) := by
+      convert hI₀_apply (D.cO₀.hom.hom z) using 1 <;>
+        simp only [D.cO₀.hom_inv_id_apply]
+    have hz' := hi.symm.trans hz
+    apply Prod.ext
+    · have h := congrArg (fun w => fst₀.hom w) hz'
+      change t99A01_coordinateSum (D.cO₀.hom.hom z) = a
+      have h' := congrArg D.cA₀.hom.hom h
+      simp only [map_add, hfi, hfr, add_zero] at h'
+      rw [D.cA₀.inv_hom_id_apply, D.cA₀.inv_hom_id_apply] at h'
+      exact h'
+    · have h := congrArg (fun w => snd₀.hom w) hz'
+      change D.cO₀.hom.hom z = b
+      have h' := congrArg D.cB₀.hom.hom h
+      simp only [map_add, hsi, hsr, zero_add] at h'
+      rw [D.cB₀.inv_hom_id_apply, D.cB₀.inv_hom_id_apply] at h'
+      exact h'
 -- END SEAT AREA
 
 /-- **Leaf.** `j₀` is onto (`hJ₀`, biproduct decomposition). -/
