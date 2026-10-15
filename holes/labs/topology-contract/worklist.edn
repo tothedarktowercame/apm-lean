@@ -119066,46 +119066,40 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Transport injectivity to manifold; Sard; calculations; Main.",
+    "Use local injectivity on Sard fiber; calculations; Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "lint; dirs preserved"],
+    :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "exists_nhds_injOn_of_eventually_leftInverse",
-      :type "local left inverse gives neighborhood injectivity",
+    [{:name "exists_nhds_injOn_of_contMDiff_surjective",
+      :type "surjective derivative gives local injectivity",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
-      :area "oriented-surface-degree"}
-     {:name "exists_nhds_injOn_writtenInExtChartAt",
-      :type "chart expression locally injective",
-      :status :proved,
-      :consumers [:t00J02],
-      :depends-on ["exists_smoothLocalInverse_writtenInExtChartAt"],
+      :depends-on ["exists_nhds_injOn_writtenInExtChartAt"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["exists_nhds_injOn_writtenInExtChartAt"],
+      :depends-on ["exists_nhds_injOn_of_contMDiff_surjective"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "ceb0b438891a3e6e8ea02167ef84534576bfe2f8e6b26e12f15daa9fa0e591a5",
+     "938568147e60642e6eb3fda0177f993238107f37a6e1ec5ed79e62653c6fe8df",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart injectivity.",
+    :reason "Banked manifold local injectivity.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119113,17 +119107,11 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792032751203-13074-9029f3af",
-     :commands
-     ["git show/diff-tree def09043"
-      "archive def09043; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit def09043 changes only t00J02Closure.lean and adds compiled, sorry-free progress. An eventual left inverse defines a neighborhood on which F is injective: applying g to F(x)=F(y) and the two local identities gives x=y. The chart theorem correctly extracts that left-inverse germ from the prior smooth two-sided inverse; no target-neighborhood or right-inverse hypothesis is falsely used. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Transporting injectivity to the manifold, Sard, calculations, and Main remain listed."},
-    :commit "def09043f2a636ce01451704125b833618c51c7f",
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :finding "fixed source-neighborhood lemma"}],
+    :commit "64781283f90e4768965a92200750b5ed1151d074",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119131,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119547,7 +119535,8 @@
     :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective
     :lemma-hasfderivat-writteninextchartat-of-hasmfderivat
     :lemma-exists-smoothlocalinverse-writteninextchartat
-    :lemma-exists-nhds-injon-writteninextchartat],
+    :lemma-exists-nhds-injon-writteninextchartat
+    :lemma-exists-nhds-injon-of-contmdiff-surjective],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121069,6 +121058,23 @@
    :id :lemma-exists-nhds-injon-writteninextchartat,
    :kind :lemma,
    :depends-on [:lemma-exists-smoothlocalinverse-writteninextchartat],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_injOn_of_contMDiff_surjective",
+    :type "surjective derivative gives local injectivity"},
+   :lemma
+   {:name "exists_nhds_injOn_of_contMDiff_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "surjective derivative gives local injectivity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-nhds-injon-of-contmdiff-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-exists-nhds-injon-writteninextchartat],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
