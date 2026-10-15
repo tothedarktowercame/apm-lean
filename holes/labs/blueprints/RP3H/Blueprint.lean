@@ -112,9 +112,165 @@ theorem cp_open_cover : IsOpen cpU ∧ IsOpen cpV ∧ cpU ∪ cpV = Set.univ := 
     fin_cases i <;> simp_all
 
 /-- `V ≅ ℂ²` is contractible. -/
+abbrev cpV_homology_aux_Affine := {j : Fin 3 // j ≠ (2 : Fin 3)} → ℂ
+
+def cpV_homology_aux_coordinates (x : CP2) : cpV_homology_aux_Affine :=
+  fun j => x.rep j.1 / x.rep 2
+
+def cpV_homology_aux_inverse (z : cpV_homology_aux_Affine) : CP2 :=
+  ProjectiveSpaceTopology.quotientMap ℂ 2
+    ⟨fun j => if h : j = 2 then 1 else z ⟨j, h⟩, by
+      intro h
+      have := congrFun h (2 : Fin 3)
+      simp at this⟩
+
+lemma cpV_homology_aux_inverse_mem (z : cpV_homology_aux_Affine) :
+    (cpV_homology_aux_inverse z).rep 2 ≠ 0 := by
+  unfold cpV_homology_aux_inverse ProjectiveSpaceTopology.quotientMap
+  let v : Fin 3 → ℂ := fun j => if h : j = 2 then 1 else z ⟨j, h⟩
+  have hv : v ≠ 0 := by
+    intro h
+    have := congrFun h (2 : Fin 3)
+    simp [v] at this
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+  rw [← ha]
+  change a.1 * v 2 ≠ 0
+  simp [v]
+
+lemma cpV_homology_aux_coordinates_inverse (z : cpV_homology_aux_Affine) :
+    cpV_homology_aux_coordinates (cpV_homology_aux_inverse z) = z := by
+  funext j
+  unfold cpV_homology_aux_coordinates cpV_homology_aux_inverse
+  let v : Fin 3 → ℂ := fun k => if h : k = 2 then 1 else z ⟨k, h⟩
+  have hv : v ≠ 0 := by
+    intro h
+    have := congrFun h (2 : Fin 3)
+    simp [v] at this
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+  change (Projectivization.mk ℂ v hv).rep j.1 /
+      (Projectivization.mk ℂ v hv).rep 2 = z j
+  rw [← ha]
+  change (a.1 * v j.1) / (a.1 * v 2) = z j
+  simp [v, j.2]
+
+lemma cpV_homology_aux_inverse_coordinates (x : cpV) :
+    cpV_homology_aux_inverse (cpV_homology_aux_coordinates x.1) = x.1 := by
+  unfold cpV_homology_aux_inverse cpV_homology_aux_coordinates
+  rw [← Projectivization.mk_rep x.1]
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  refine ⟨(x.1.rep 2)⁻¹, ?_⟩
+  funext j
+  by_cases h : j = 2
+  · subst j
+    exact inv_mul_cancel₀ x.2
+  · simp [h, div_eq_inv_mul]
+
+lemma cpV_homology_aux_coordinates_continuous :
+    Continuous (fun x : cpV => cpV_homology_aux_coordinates x.1) := by
+  let q : ProjectiveSpaceTopology.NonzeroVectors ℂ 2 → CP2 :=
+    ProjectiveSpaceTopology.quotientMap ℂ 2
+  let s : Set CP2 := cpV
+  let qr := s.restrictPreimage q
+  have hqopen : IsOpenMap q :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℂ 2
+  have hsopen : IsOpen s := by
+    change IsOpen {x : CP2 | x.rep 2 ≠ 0}
+    rw [isOpen_coinduced]
+    change IsOpen (q ⁻¹' {x : CP2 | x.rep 2 ≠ 0})
+    have heq : q ⁻¹' {x : CP2 | x.rep 2 ≠ 0} =
+        {v : ProjectiveSpaceTopology.NonzeroVectors ℂ 2 | v.1 2 ≠ 0} := by
+      ext v
+      change (Projectivization.mk ℂ v.1 v.2).rep 2 ≠ 0 ↔ v.1 2 ≠ 0
+      obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1 v.2
+      rw [← ha]
+      change a.1 * v.1 2 ≠ 0 ↔ v.1 2 ≠ 0
+      simp
+    rw [heq]
+    exact isOpen_compl_singleton.preimage
+      ((continuous_apply 2).comp continuous_subtype_val)
+  have hqr : Topology.IsQuotientMap qr := by
+    rw [Topology.isQuotientMap_iff]
+    constructor
+    · rintro ⟨x, hx⟩
+      obtain ⟨v, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 2 x
+      exact ⟨⟨v, hx⟩, rfl⟩
+    · intro t
+      constructor
+      · exact fun ht => ht.preimage ((ProjectiveSpaceTopology.continuous_quotientMap ℂ 2).subtype_map
+          (fun _ hx => hx))
+      · intro ht
+        rw [isOpen_induced_iff] at ht ⊢
+        obtain ⟨u, hu, hut⟩ := ht
+        refine ⟨q '' (q ⁻¹' s ∩ u), hqopen _ (hsopen.preimage
+          (ProjectiveSpaceTopology.continuous_quotientMap ℂ 2) |>.inter hu), ?_⟩
+        ext x
+        constructor
+        · intro hx
+          change x.1 ∈ q '' (q ⁻¹' s ∩ u) at hx
+          obtain ⟨v, ⟨hvs, hvu⟩, hvx⟩ := hx
+          have hvpre : ⟨v, hvs⟩ ∈ Subtype.val ⁻¹' u := hvu
+          have hvt : qr ⟨v, hvs⟩ ∈ t := (Set.ext_iff.mp hut ⟨v, hvs⟩).mp hvpre
+          have heq : qr ⟨v, hvs⟩ = x := Subtype.ext hvx
+          exact heq ▸ hvt
+        · intro hx
+          obtain ⟨v, hv⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 2 x.1
+          have hqv : q v = x.1 := hv
+          have hvs : q v ∈ s := by rw [hqv]; exact x.2
+          have heq : qr ⟨v, hvs⟩ = x := Subtype.ext hv
+          have hvt : qr ⟨v, hvs⟩ ∈ t := heq ▸ hx
+          have hvu : v ∈ u := by
+            have := Set.ext_iff.mp hut ⟨v, hvs⟩
+            exact this.mpr hvt
+          change x.1 ∈ q '' (q ⁻¹' s ∩ u)
+          exact ⟨v, ⟨hvs, hvu⟩, hqv⟩
+  apply hqr.continuous_iff.mpr
+  apply continuous_pi
+  intro j
+  have hnum : Continuous (fun v : q ⁻¹' s => v.1.1 j.1) :=
+    (continuous_apply j.1).comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hden : Continuous (fun v : q ⁻¹' s => v.1.1 2) :=
+    (continuous_apply 2).comp (continuous_subtype_val.comp continuous_subtype_val)
+  have hden0 : ∀ v : q ⁻¹' s, v.1.1 2 ≠ 0 := by
+    intro v
+    have hv := v.2
+    change (Projectivization.mk ℂ v.1.1 v.1.2).rep 2 ≠ 0 at hv
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1.1 v.1.2
+    rw [← ha] at hv
+    exact fun hz => hv (by simp [hz])
+  convert hnum.div hden hden0 using 1
+  funext v
+  change (Projectivization.mk ℂ v.1.1 v.1.2).rep j.1 /
+      (Projectivization.mk ℂ v.1.1 v.1.2).rep 2 = v.1.1 j.1 / v.1.1 2
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v.1.1 v.1.2
+  rw [← ha]
+  change (a.1 * v.1.1 j.1) / (a.1 * v.1.1 2) = _
+  field_simp
+
+lemma cpV_homology_aux_inverse_continuous : Continuous cpV_homology_aux_inverse := by
+  apply (ProjectiveSpaceTopology.continuous_quotientMap ℂ 2).comp
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro j
+  by_cases h : j = (2 : Fin 3)
+  · subst j
+    simpa only [dif_pos] using
+      (continuous_const : Continuous (fun _ : cpV_homology_aux_Affine => (1 : ℂ)))
+  · simpa only [dif_neg h] using
+      (continuous_apply (⟨j, h⟩ : {k : Fin 3 // k ≠ (2 : Fin 3)}))
+
+def cpV_homology_aux_homeomorph : cpV ≃ₜ cpV_homology_aux_Affine where
+  toFun x := cpV_homology_aux_coordinates x.1
+  invFun z := ⟨cpV_homology_aux_inverse z, cpV_homology_aux_inverse_mem z⟩
+  left_inv x := Subtype.ext (cpV_homology_aux_inverse_coordinates x)
+  right_inv := cpV_homology_aux_coordinates_inverse
+  continuous_toFun := cpV_homology_aux_coordinates_continuous
+  continuous_invFun := cpV_homology_aux_inverse_continuous.subtype_mk _
+
 theorem cpV_homology : Nonempty (HQ 0 cpV ≅ ModuleCat.of ℚ ℚ) ∧
     ∀ k, k ≠ 0 → IsZero (HQ k cpV) := by
-  sorry
+  letI : ContractibleSpace cpV := cpV_homology_aux_homeomorph.contractibleSpace
+  exact ⟨⟨CoefficientH0.h0Iso ℚ (Classical.choice inferInstance)⟩,
+    fun k hk => CoefficientContractiblePair.higher_zero ℚ cpV k hk⟩
 
 /-- `U ≃ ℂP¹ ≅ S²` (radial deformation `[z₀:z₁:z₂] ↦ [z₀:z₁:t z₂]`). -/
 theorem cpU_homology : Nonempty (HQ 0 cpU ≅ ModuleCat.of ℚ ℚ) ∧
