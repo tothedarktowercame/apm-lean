@@ -160,6 +160,14 @@ abbrev FrozenSignedQuotient :=
 abbrev FrozenGeneratorQuotient :=
   Quotient (Relation.EqvGen.setoid frozenGeneratorRel)
 
+noncomputable instance : TopologicalSpace FrozenSignedQuotient :=
+  TopologicalSpace.coinduced
+    (fun x : Surfaces.Disk => Quotient.mk _ x) inferInstance
+
+noncomputable instance : TopologicalSpace FrozenGeneratorQuotient :=
+  TopologicalSpace.coinduced
+    (fun x : Surfaces.Disk => Quotient.mk _ x) inferInstance
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -186,6 +194,26 @@ def frozenSignedQuotientEquivGenerator :
         (Quotient.mk (Relation.EqvGen.setoid
           (boundaryRel 14 frozenPair frozenSign)) x) =
       Quotient.mk (Relation.EqvGen.setoid frozenGeneratorRel) x := rfl
+
+/-- The carrier comparison is a homeomorphism for the two coinduced quotient
+topologies. -/
+def frozenSignedQuotientHomeomorphGenerator :
+    FrozenSignedQuotient ≃ₜ FrozenGeneratorQuotient where
+  toEquiv := frozenSignedQuotientEquivGenerator
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+@[simp] theorem frozenSignedQuotientHomeomorphGenerator_mk
+    (x : Surfaces.Disk) :
+    frozenSignedQuotientHomeomorphGenerator
+        (Quotient.mk (Relation.EqvGen.setoid
+          (boundaryRel 14 frozenPair frozenSign)) x) =
+      Quotient.mk (Relation.EqvGen.setoid frozenGeneratorRel) x := rfl
+
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -659,5 +687,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
 #print axioms frozenSignedQuotientEquivGenerator_mk
+#print axioms frozenSignedQuotientHomeomorphGenerator
+#print axioms frozenSignedQuotientHomeomorphGenerator_mk
 
 end ConstructionTargets.t94J09Closure
