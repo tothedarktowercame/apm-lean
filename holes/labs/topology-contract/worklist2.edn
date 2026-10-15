@@ -88329,45 +88329,33 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport cokernels through coordinates and Smith isomorphisms for B1; then B2.",
+    "Lift coordinates to quotient cokernels and compose Smith isomorphisms for B1; then B2.",
     :outcome :stop,
-    :warnings
-    ["Main has 1 prior placeholder; concurrent commits preserved"],
+    :warnings ["Main has 1 prior placeholder; lint preserved"],
     :missing-theorems
-    [{:name "aabbccAttachingBoundary_injective",
-      :type "injective",
+    [{:name "aabbccOrbitCoordinates_map_boundaryRange",
+      :type "range transport",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on ["aabbccOrbitCoordinates_comp_attachingBoundary"],
       :area "polygon-surface-homology"}
-     {:name "torusRP2AttachingBoundary_injective",
-      :type "injective",
+     {:name "torusRP2OrbitCoordinates_map_boundaryRange",
+      :type "range transport",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-homology"}
-     {:name "aabbccBoundaryKernel_eq_bot",
-      :type "kernel=bottom",
-      :status :proved,
-      :consumers [:t97A01],
-      :depends-on ["aabbccAttachingBoundary_injective"],
-      :area "polygon-surface-homology"}
-     {:name "torusRP2BoundaryKernel_eq_bot",
-      :type "kernel=bottom",
-      :status :proved,
-      :consumers [:t97A01],
-      :depends-on ["torusRP2AttachingBoundary_injective"],
+      :depends-on ["torusRP2OrbitCoordinates_comp_attachingBoundary"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
       :type "homology adapter",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["aabbccBoundaryKernel_eq_bot" "torusRP2BoundaryKernel_eq_bot"],
+      ["aabbccOrbitCoordinates_map_boundaryRange"
+       "torusRP2OrbitCoordinates_map_boundaryRange"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "van Kampen",
@@ -88379,7 +88367,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked injectivity and zero kernels.",
+    :reason "Banked attaching-range transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88387,31 +88375,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 5db954851", :exit 0}],
-    :diagnostic-history
-    [{:cmd "IsZero draft",
-      :exit 1,
-      :correction "proved kernel=bottom"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792044027301-13427-6f942e27",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms; git show --check; fixture/hash placeholder scans"],
-     :finding
-     "Commit 5db954851 by topo-6 changes only t97A01Closure.lean and adds compiled progress after 9bc6a459c. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 affbc02d35ebc40e857135f93c8ded8173ef7e988e717e2d11332f6b05640c7c matches; registry 166/0; new theorems use only propext, Classical.choice, Quot.sound. Each proof transports equality through orbit coordinates, rewrites both sides as negative Smith boundaries, cancels the sign, and applies the correct injectivity theorem; ker_eq_bot then has the required orientation. Cokernel/Smith transport for B1 and B2 remain listed."},
-    :commit "5db954851",
+     {:cmd "git show --check 4cacd825f", :exit 0}],
+    :commit "4cacd825f",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "affbc02d35ebc40e857135f93c8ded8173ef7e988e717e2d11332f6b05640c7c"},
+     "f8ece2ca6ea77ccfd1d03028ef5cc388950770fe5542b2ef5292f79f8c39374d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93480,7 +93453,9 @@
     :lemma-aabbccorbitcoordinates-comp-attachingboundary
     :lemma-torusrp2orbitcoordinates-comp-attachingboundary
     :lemma-aabbccboundarykernel-eq-bot
-    :lemma-torusrp2boundarykernel-eq-bot],
+    :lemma-torusrp2boundarykernel-eq-bot
+    :lemma-aabbccorbitcoordinates-map-boundaryrange
+    :lemma-torusrp2orbitcoordinates-map-boundaryrange],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93776,4 +93751,39 @@
    :id :lemma-torusrp2boundarykernel-eq-bot,
    :kind :lemma,
    :depends-on [:lemma-torusrp2attachingboundary-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccOrbitCoordinates_map_boundaryRange",
+    :type "range transport"},
+   :lemma
+   {:name "aabbccOrbitCoordinates_map_boundaryRange",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "range transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-aabbccorbitcoordinates-map-boundaryrange,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates-comp-attachingboundary],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitCoordinates_map_boundaryRange",
+    :type "range transport"},
+   :lemma
+   {:name "torusRP2OrbitCoordinates_map_boundaryRange",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "range transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2orbitcoordinates-map-boundaryrange,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2orbitcoordinates-comp-attachingboundary],
    :other-consumers []}]}
