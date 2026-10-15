@@ -1303,6 +1303,81 @@ theorem torusRP2_subdivision_runPartition_boundary_spec
               (openCover torusRP2PairingData).outer := by
   exact pathTwoOpenSubdivision_runPartition_boundary_spec S
 
+/-- Every maximal run in a torus-crosscap radial subdivision has a single
+ambient representative whose range lies in the outer piece. -/
+theorem torusRP2_subdivisionRun_exists_outerRepresentative
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ q : Path (pathTwoOpenSubdivisionRunBlockPoint S i 0)
+        (pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1))),
+      (∀ t, q t ∈ (openCover torusRP2PairingData).outer) ∧
+      (⟦Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+          (pathTwoOpenSubdivisionRunBlockPiece S i)⟧ :
+        FundamentalGroupoid.mk (pathTwoOpenSubdivisionRunBlockPoint S i 0) ⟶
+          FundamentalGroupoid.mk (pathTwoOpenSubdivisionRunBlockPoint S i
+            (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)))) =
+        ⟦q⟧ := by
+  let side := S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i))
+  have hbound' : pathTwoOpenSubdivisionRunStart S i +
+      (pathTwoOpenSubdivisionRunPredLength S i + 1) ≤ S.n + 1 := by
+    rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+    exact pathTwoOpenSubdivisionRunStart_add_length_le S i
+  by_cases hs : side = true
+  · have hF := pathTwoOpenSubdivisionRunBlockPiece_mem_inner_of_side_eq_true S i hs
+    have hxInner : pathTwoOpenSubdivisionRunBlockPoint S i 0 ∈
+        (openCover torusRP2PairingData).inner := by
+      have hz : (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) =
+          (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)).castSucc := rfl
+      rw [hz]
+      rw [← (pathTwoOpenSubdivisionRunBlockPiece S i 0).source]
+      exact hF 0 0
+    have hyInner : pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) ∈
+        (openCover torusRP2PairingData).inner := by
+      have hi : (Fin.last (pathTwoOpenSubdivisionRunPredLength S i)).succ =
+          Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1) := by
+        apply Fin.ext
+        simp
+      rw [← hi, ← (pathTwoOpenSubdivisionRunBlockPiece S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i))).target]
+      exact hF (Fin.last (pathTwoOpenSubdivisionRunPredLength S i)) 1
+    have hxOuter : pathTwoOpenSubdivisionRunBlockPoint S i 0 ∈
+        (openCover torusRP2PairingData).outer := by
+      rw [← pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+        S hx hy i]
+      exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily _ _ _ _).property
+    have hyOuter : pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) ∈
+        (openCover torusRP2PairingData).outer := by
+      rw [← pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+        S hx hy i]
+      exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily _ _ _ _).property
+    obtain ⟨q, hq⟩ := torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
+      (pathTwoOpenSubdivisionRunBlockPoint S i)
+      (pathTwoOpenSubdivisionRunBlockPiece S i)
+      ⟨hxInner, hxOuter⟩ ⟨hyInner, hyOuter⟩ hF
+    refine ⟨(q.map torusRP2PolygonOverlapToOuter.continuous).map
+      torusRP2PolygonOuterToSpace.continuous, ?_, hq⟩
+    intro t
+    exact ((q.map torusRP2PolygonOverlapToOuter.continuous) t).property
+  · have hs' : side = false := Bool.eq_false_of_not_eq_true hs
+    have hF := pathTwoOpenSubdivisionRunBlockPiece_mem_outer_of_side_eq_false S i hs'
+    obtain ⟨q, hq⟩ := path_concat_exists_subtype_path
+      (pathTwoOpenSubdivisionRunBlockPoint S i)
+      (pathTwoOpenSubdivisionRunBlockPiece S i) hF
+    refine ⟨q.map torusRP2PolygonOuterToSpace.continuous, ?_, ?_⟩
+    · intro t
+      exact (q t).property
+    · exact congrArg Path.Homotopic.Quotient.mk hq.symm
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1376,6 +1451,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
+#print axioms torusRP2_subdivisionRun_exists_outerRepresentative
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
