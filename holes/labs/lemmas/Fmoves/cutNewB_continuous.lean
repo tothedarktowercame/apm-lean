@@ -5411,9 +5411,103 @@ theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
   sorry
 
 -- BEGIN SEAT AREA
+lemma cutNewB_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileNewB L p q) := by
+  have hL : 0 < L := by omega
+  unfold cutProfileNewB
+  apply Continuous.if_le (by unfold cutSeam; fun_prop) (by
+    unfold cutSB
+    apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+    intro x hx
+    dsimp at hx ⊢
+    rw [hx]
+    have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      apply ne_of_gt
+      exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+        (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+    rw [show (cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+        (cutAlpha L q - cutAlpha L p) = 0 by
+      rw [show cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi = 0 by ring,
+        zero_div]]
+    simp only [zero_mul, add_zero]
+    rw [show (((cutAlpha L p + 2 * Real.pi : ℝ) : ℂ) * Complex.I) =
+        2 * Real.pi * Complex.I + (cutAlpha L p : ℂ) * Complex.I by
+      push_cast; ring]
+    rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]) continuous_id continuous_const
+  · intro x hx
+    dsimp at hx ⊢
+    have hbranch : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+      simp only [cutAlpha]
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      have hq1 : ((q + 1 : ℕ) : ℝ) ≤ p + L := by exact_mod_cast (show q + 1 ≤ p + L by omega)
+      field_simp
+      nlinarith [Real.pi_pos, hq1]
+    rw [hx]
+    rw [if_pos hbranch]
+    have hs : (cutAlpha L (q + 1) - cutAlpha L q) * L / (2 * Real.pi) = 1 := by
+      have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      simp only [cutAlpha]
+      push_cast
+      field_simp
+      ring
+    rw [hs]
+    simp [cutSeam, cutPoint]
 theorem cutNewB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutNewB L p q) := by
-  sorry
+  unfold cutNewB
+  have hL : 0 < L := by omega
+  have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+  have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileNewB L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold cutProfileNewB
+      rw [if_pos (by
+        unfold cutAlpha
+        gcongr
+        omega)]
+      rw [if_neg (by
+        rw [not_le]
+        have heq : cutAlpha L q + 2 * Real.pi = cutAlpha L (q + L) := by
+          unfold cutAlpha
+          push_cast
+          field_simp
+        rw [heq]
+        unfold cutAlpha
+        gcongr
+        omega)]
+      rw [if_neg (by
+        rw [not_le]
+        apply (add_lt_add_iff_right (2 * Real.pi)).2
+        unfold cutAlpha
+        gcongr)]
+      have hs0 : (cutAlpha L q - cutAlpha L q) * L / (2 * Real.pi) = 0 := by ring
+      have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+        unfold cutAlpha
+        have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+        apply ne_of_gt
+        exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+          (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+      have hs1 : (cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+          (cutAlpha L q - cutAlpha L p) = 1 := by
+        rw [show cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi =
+          cutAlpha L q - cutAlpha L p by ring]
+        exact div_self hden
+      have hcut : cutSB L p q (cutAlpha L q + 2 * Real.pi) = 1 := by
+        exact hs1
+      rw [hs0, hcut]
+      simp [cutSeam, cutPoint, cutSB]
+      congr 2
+      push_cast
+      simp only [cutAlpha]
+      field_simp
+      norm_num [Nat.cast_add]
+      ring
+    · exact (cutNewB_continuous_aux_profile hpq hqL).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
 -- END SEAT AREA
 
 theorem cutOldA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
