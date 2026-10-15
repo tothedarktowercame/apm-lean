@@ -637,9 +637,42 @@ lemma hemi_eq_cases {x y : Surfaces.Disk} (h : hemi x = hemi y) :
 
 /-- Antipodal boundary points are identified in `Surface false 1`. -/
 -- BEGIN SEAT AREA
+lemma surfaceRel_one_antipodal_aux_edge (t : Set.Icc (0 : ℝ) 1) :
+    ((Surfaces.edgePoint 2 1 t : Surfaces.Disk) : ℂ) =
+      -((Surfaces.edgePoint 2 0 t : Surfaces.Disk) : ℂ) := by
+  simp only [Surfaces.edgePoint, Subtype.coe_mk]
+  norm_num
+  change Complex.exp (Complex.I * (2 * (Real.pi : ℂ) *
+    (1 + (t.1 : ℂ)) / 2)) =
+    -Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * (t.1 : ℂ) / 2))
+  calc
+    _ = Complex.exp (Real.pi * Complex.I) *
+        Complex.exp (Complex.I * (Real.pi * t.1)) := by
+          rw [← Complex.exp_add]
+          congr 1
+          ring
+    _ = _ := by rw [Complex.exp_pi_mul_I]; ring
+
 lemma surfaceRel_one_antipodal {x y : Surfaces.Disk} (hx : ‖(x : ℂ)‖ = 1)
     (hy : (y : ℂ) = -(x : ℂ)) : Relation.EqvGen (SurfaceRel false 1) x y := by
-  sorry
+  obtain ⟨i, t, hi⟩ := edgePoint_surjective_boundary 2 (by omega) x hx
+  fin_cases i
+  · have hy' : y = Surfaces.edgePoint 2 1 t := by
+      apply Subtype.ext
+      rw [hy, ← hi]
+      exact (surfaceRel_one_antipodal_aux_edge t).symm
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, Bool.false_eq_true, if_false]
+    exact ⟨0, by omega, t, hi.symm, hy'⟩
+  · have hy' : y = Surfaces.edgePoint 2 0 t := by
+      apply Subtype.ext
+      rw [hy, ← hi]
+      have h := surfaceRel_one_antipodal_aux_edge t
+      rw [h, neg_neg]
+    apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, Bool.false_eq_true, if_false]
+    exact ⟨0, by omega, t, hy', hi.symm⟩
 -- END SEAT AREA
 
 def surfaceToRP2 : Surface false 1 → apm_t00j07_RP2 :=
