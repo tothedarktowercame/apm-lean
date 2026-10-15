@@ -37121,7 +37121,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37181,7 +37181,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37203,7 +37203,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37489,6 +37489,18 @@
       :exit 1,
       :note
       "enabled homotopy notation; joined qualified identifier to avoid synthetic sorry"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792064303526-13964-3c0bbfd2",
+     :commands
+     ["git show --check --stat b84d78ab6"
+      "git diff --name-only b84d78ab6^ b84d78ab6"
+      "git-show fixture | sha256sum"
+      "lake env lean problems/t97J07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit b84d78ab6 changes only scoped Main.lean and adds the compiled, sorry-free CP1-overlap homeomorphism milestone; fixture hash matches 3fa01c79...76dbe7, registry 166/166, and the new declaration uses standard axioms only. Remaining final theorem is listed unfinished work."},
     :commit "7d986c71f",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
@@ -37497,7 +37509,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37515,7 +37527,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed punctured affine as the punctured complex line.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed radial homotopy equivalence from punctured complex line to unit circle.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37570,7 +37582,11 @@
     {:job 3,
      :commit "4ed622bf4",
      :reason
-     "Committed punctured affine as the punctured complex line."}]}
+     "Committed punctured affine as the punctured complex line."}
+    {:job 4,
+     :commit "7d986c71f",
+     :reason
+     "Committed radial homotopy equivalence from punctured complex line to unit circle."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -42343,7 +42359,7 @@
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp1_puncturedComplex_radialHomotopyEquiv",
@@ -42353,14 +42369,16 @@
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "punctured complex line homotopy equivalent to circle",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "7d986c71f"},
    :id :lemma-t97j07-cp1-puncturedcomplex-radialhomotopyequiv,
    :kind :lemma,
    :depends-on [:lemma-t97j07-cp1-puncturedaffinehomeomorphcomplex],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42372,7 +42390,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "exact local-class boundary implies lift acts by 4 on H3",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialspherelift-degree-four-of-localclassdecompositionandbase,
    :kind :lemma,
@@ -42381,7 +42401,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PolynomialSphereLiftLocalClassDecompositionAndBaseData",
@@ -42392,7 +42412,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "local classes with global sum, positive base, deck naturality",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialsphereliftlocalclassdecompositionandbasedata,
    :kind :lemma,
    :depends-on
@@ -42400,7 +42422,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42414,7 +42436,9 @@
     :type
     "local-class boundary implies descent acts by 4 on rational H3",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialdescent-degree-four-of-localclassdecompositionandbase,
    :kind :lemma,
@@ -42424,7 +42448,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42436,7 +42460,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "local-class boundary gives RP3 degree-three trace 4",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialdescent-trace-three-of-localclassdecompositionandbase,
    :kind :lemma,
@@ -42446,17 +42472,21 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "t96A06_rp3_rational_H3Iso"},
-   :lemma {:name "t96A06_rp3_rational_H3Iso", :reported-by []},
+   :lemma
+   {:name "t96A06_rp3_rational_H3Iso",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-rp3-rational-h3iso,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42468,7 +42498,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "local-class boundary gives Lefschetz number -3",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialdescent-haslefschetznumber-of-localclassdecompositionandbase,
    :kind :lemma,
@@ -42478,11 +42510,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "t96A06_rp3_rational_homology_finite"},
    :lemma
-   {:name "t96A06_rp3_rational_homology_finite", :reported-by []},
+   {:name "t96A06_rp3_rational_homology_finite",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-rp3-rational-homology-finite,
    :kind :lemma,
    :depends-on [],
