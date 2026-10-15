@@ -119135,50 +119135,53 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Build implicit-function incidence charts/tangent equivalence; Sard; calculations; Main.",
+    "Promote splitting in charts; incidence tangent equivalence; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "transverse_incidenceDifferenceDerivative_surjective",
-      :type
-      "transversality makes incidence difference derivative surjective",
+    [{:name
+      "transverse_incidenceDifferenceDerivative_hasLinearRightInverse",
+      :type "linear right inverse",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["transverse_coprodDerivative_surjective"],
+      :depends-on
+      ["transverse_incidenceDifferenceDerivative_surjective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["transverse_incidenceDifferenceDerivative_surjective"],
+      ["transverse_incidenceDifferenceDerivative_hasLinearRightInverse"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "0a4fcf2de4a12bcac3897edff9d765995347577ff977ae37ec284de9182d7249",
+     "b0b378d078222a708c92832e44b87b2be85f7dd899d46c98934a203db8a21fd0",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence derivative sign conversion.",
+    :reason "Banked incidence linear splitting.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/count", :exit 0}],
-    :commit "f1b3c8e74aef660ca90715a2ce86b4abc2dca8f3",
+     {:cmd "hash/count/diff", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :finding "used linear split"}],
+    :commit "7862ae58a1c53319d9fecd2e9129001b61c05735",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119186,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119634,7 +119637,8 @@
     :lemma-exists-circleparameter-direction-lifts-of-sard
     :lemma-direction-lifts-of-surjective-incidencekernel-snd
     :lemma-direction-lifts-of-incidencetangentequiv
-    :lemma-transverse-incidencedifferencederivative-surjective],
+    :lemma-transverse-incidencedifferencederivative-surjective
+    :lemma-transverse-incidencedifferencederivative-haslinearrightinverse],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121310,6 +121314,27 @@
    :id :lemma-contmdiffon-tangentsection-of-trivialization-coordinates,
    :kind :lemma,
    :depends-on [:lemma-contdiff-lift-of-comp-isinvertible],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "transverse_incidenceDifferenceDerivative_hasLinearRightInverse",
+    :type "linear right inverse"},
+   :lemma
+   {:name
+    "transverse_incidenceDifferenceDerivative_hasLinearRightInverse",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "linear right inverse",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-transverse-incidencedifferencederivative-haslinearrightinverse,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transverse-incidencedifferencederivative-surjective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
