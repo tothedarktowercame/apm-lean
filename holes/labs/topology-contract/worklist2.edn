@@ -88375,6 +88375,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 3e9caad4c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792100070466-14706-3a776b53",
+     :commands
+     ["git show/diff/check 3e9caad4c"
+      "sha256sum + placeholder recount from 3e9caad4c"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 3e9caad4c adds compiled, sorry-free progress beyond history 659b7c73e. Its simultaneous congruence operates directly on typed path-homotopy quotient composition with the shared middle endpoint explicit; substitution proves the correctly oriented result without crossing representations. Only t97A01Closure.lean changed; fixture SHA 474dfdc7beb9b2ca37674c23038a22197e577292ba6153c0d01764930bf406ab matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Fold instantiation, van Kampen, and assembly remain listed."},
     :commit "3e9caad4c",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88395,7 @@
      "474dfdc7beb9b2ca37674c23038a22197e577292ba6153c0d01764930bf406ab"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked typed quotient composition associativity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked typed quotient composition congruence.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88645,7 +88657,10 @@
      :reason "Banked two-factor concat orientation."}
     {:job 6,
      :commit "659b7c73e",
-     :reason "Banked typed quotient composition associativity."}]}
+     :reason "Banked typed quotient composition associativity."}
+    {:job 7,
+     :commit "3e9caad4c",
+     :reason "Banked typed quotient composition congruence."}]}
   {:consumer :t94J09,
    :stop-count 8,
    :evidence
@@ -96168,7 +96183,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_pathHomotopicQuotient_trans_congr",
@@ -96180,7 +96195,9 @@
     :type
     "simultaneous typed congruence for quotient path composition",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "3e9caad4c"},
    :id :lemma-torusrp2-pathhomotopicquotient-trans-congr,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-pathhomotopicquotient-trans-assoc],
