@@ -30429,7 +30429,7 @@
    :other-consumers [:t00A02 :t97A03 :t98A03]}
   {:consumer :t92J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t92J05_bridge_projectivePlane_fundamentalGroup",
@@ -30440,7 +30440,9 @@
     :reported-by [:owner],
     :type
     "∀ x, Nonempty (FundamentalGroup RP2 x ≃* Multiplicative (ZMod 2))  (size: 30-60 lines / 4-8 hours)",
-    :area "antipodal-sphere-cover"},
+    :area "antipodal-sphere-cover",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/GenusTwoSurfacePiOne.lean"]},
    :id :lemma-apm-t92j05-bridge-projectiveplane-fundamentalgroup,
    :kind :lemma,
    :depends-on
@@ -30503,7 +30505,7 @@
    :other-consumers []}
   {:consumer :t92J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t92J05_bridge_genusTwo_fundamentalGroup",
@@ -30514,7 +30516,9 @@
     :reported-by [:owner],
     :type
     "The exact arbitrary genus-two manifold bridge  (size: 50-100 lines / 1 day)",
-    :area "surface-classification"},
+    :area "surface-classification",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/GenusTwoSurfacePiOne.lean"]},
    :id :lemma-apm-t92j05-bridge-genustwo-fundamentalgroup,
    :kind :lemma,
    :depends-on
@@ -36748,6 +36752,20 @@
     [{:cmd "initial sphere transport compile",
       :exit 1,
       :note "Opened notation; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792088774052-14431-11975f38",
+     :commands
+     ["git show --check --stat 7337cdfc2"
+      "git diff --name-only 7337cdfc2^ 7337cdfc2"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed one."},
     :commit "ba6af8f7d",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36756,7 +36774,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36774,7 +36792,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the successor overlap as punctured affine coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed overlap homology transport to its unit sphere.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36818,7 +36836,11 @@
     {:job 9,
      :commit "6de2542e1",
      :reason
-     "Committed the successor overlap as punctured affine coordinates."}]}
+     "Committed the successor overlap as punctured affine coordinates."}
+    {:job 1,
+     :commit "ba6af8f7d",
+     :reason
+     "Committed overlap homology transport to its unit sphere."}]}
   {:consumer :t98A02,
    :stop-count 1,
    :evidence
@@ -37177,7 +37199,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37236,7 +37258,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37258,7 +37280,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -43654,7 +43676,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_relativeChainMap",
@@ -43666,7 +43688,9 @@
     :type
     "coefficient extension descends to the relative singular-chain cokernel",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-relativechainmap,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-singularchainmap],
@@ -43727,7 +43751,7 @@
    :other-consumers [:t00A01]}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_relativeProjection_naturality",
@@ -43739,14 +43763,16 @@
     :type
     "relative coefficient map commutes with absolute-relative projections",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-relativeprojection-naturality,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-relativechainmap],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_relativeChains",
@@ -43758,7 +43784,9 @@
     :type
     "coefficient extension between forgotten integral and rational coefficient-relative complexes",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-relativechains,
    :kind :lemma,
    :depends-on
@@ -43766,7 +43794,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_relativeChains_projection",
@@ -43778,14 +43806,16 @@
     :type
     "transported relative map commutes with the original coefficient-relative projections",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-relativechains-projection,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-relativechains],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_overlap_homologyIso_unitSphere",
@@ -43796,7 +43826,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "overlap homology isomorphic to affine unit-sphere homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ba6af8f7d"},
    :id :lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere,
    :kind :lemma,
    :depends-on
