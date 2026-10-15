@@ -3143,8 +3143,217 @@ words by `cons'` (`s :: w`, cancelling a head `s.inv`); `a` acts by an
 `Multiplicative (ZMod 2) →* Perm` (from `b² = 1`), combined by
 `Monoid.Coprod.lift`.  Then `wordEval w • [] = w` for reduced `w`, so
 `wordEval` is injective on reduced words.  About 200 lines. -/
+def G_normalForm_aux_step (s : Letter) : List Letter → List Letter
+  | [] => [s]
+  | t :: w => if t = s.inv then w else s :: t :: w
+
+lemma G_normalForm_aux_inv_inv (s : Letter) : s.inv.inv = s := by
+  cases s <;> rfl
+
+lemma G_normalForm_aux_reduced_step (s : Letter) {w : List Letter}
+    (hw : Reduced w) : Reduced (G_normalForm_aux_step s w) := by
+  cases w with
+  | nil => simp [Reduced, G_normalForm_aux_step]
+  | cons t w =>
+      simp only [G_normalForm_aux_step]
+      split_ifs with h
+      · exact hw.tail
+      · apply hw.cons
+        simpa using h
+
+def G_normalForm_aux_RW := {w : List Letter // Reduced w}
+
+lemma G_normalForm_aux_toG_inv (s : Letter) : s.inv.toG = s.toG⁻¹ := by
+  cases s with
+  | a => rfl
+  | ai => rfl
+  | b =>
+    change b = b⁻¹
+    have h := G_facts.2.2.1
+    exact eq_inv_of_mul_eq_one_left h
+
+lemma G_normalForm_aux_eval_step (s : Letter) {w : List Letter}
+    (hw : Reduced w) :
+    wordEval (G_normalForm_aux_step s w) = s.toG * wordEval w := by
+  cases w with
+  | nil => simp [G_normalForm_aux_step, wordEval]
+  | cons t w =>
+      simp only [G_normalForm_aux_step]
+      by_cases h : t = s.inv
+      · subst t
+        simp [wordEval, G_normalForm_aux_toG_inv]
+      · simp [h, wordEval]
+
+def G_normalForm_aux_reduce : List Letter → List Letter
+  | [] => []
+  | s :: w => G_normalForm_aux_step s (G_normalForm_aux_reduce w)
+
+lemma G_normalForm_aux_reduce_reduced (w : List Letter) :
+    Reduced (G_normalForm_aux_reduce w) := by
+  induction w with
+  | nil => simp [G_normalForm_aux_reduce, Reduced]
+  | cons s w ih =>
+    exact G_normalForm_aux_reduced_step s ih
+
+lemma G_normalForm_aux_reduce_eval (w : List Letter) :
+    wordEval (G_normalForm_aux_reduce w) = wordEval w := by
+  induction w with
+  | nil => rfl
+  | cons s w ih =>
+    rw [G_normalForm_aux_reduce, G_normalForm_aux_eval_step _
+      (G_normalForm_aux_reduce_reduced w), ih]
+    rfl
+
+def G_normalForm_aux_perm (s : Letter) : Equiv.Perm G_normalForm_aux_RW where
+  toFun w := ⟨G_normalForm_aux_step s w.1, G_normalForm_aux_reduced_step s w.property⟩
+  invFun w := ⟨G_normalForm_aux_step s.inv w.1, G_normalForm_aux_reduced_step s.inv w.property⟩
+  left_inv := by
+    rintro ⟨w, hw⟩
+    apply Subtype.ext
+    cases w with
+    | nil => cases s <;> rfl
+    | cons t w =>
+      cases w with
+      | nil => cases s <;> cases t <;> simp [G_normalForm_aux_step, Letter.inv]
+      | cons u w =>
+        have hadj := hw.rel_head
+        cases s <;> cases t <;>
+          simp_all [G_normalForm_aux_step, Letter.inv]
+  right_inv := by
+    rintro ⟨w, hw⟩
+    apply Subtype.ext
+    cases w with
+    | nil => cases s <;> rfl
+    | cons t w =>
+      cases w with
+      | nil => cases s <;> cases t <;> simp [G_normalForm_aux_step, Letter.inv]
+      | cons u w =>
+        have hadj := hw.rel_head
+        cases s <;> cases t <;>
+          simp_all [G_normalForm_aux_step, Letter.inv]
+
+lemma G_normalForm_aux_wordEval_append (u v : List Letter) :
+    wordEval (u ++ v) = wordEval u * wordEval v := by
+  simp [wordEval]
+
+lemma G_normalForm_aux_exists_raw (g : G) : ∃ w : List Letter, wordEval w = g := by
+  induction g using Monoid.Coprod.induction_on with
+  | inl n =>
+      change ℤ at n
+      change ∃ w, wordEval w = Monoid.Coprod.inl (Multiplicative.ofAdd n)
+      induction n using Int.induction_on with
+      | zero => exact ⟨[], by simp [wordEval]⟩
+      | succ n ih =>
+          obtain ⟨w, hw⟩ := ih
+          refine ⟨w ++ [.a], ?_⟩
+          rw [G_normalForm_aux_wordEval_append, hw]
+          simp only [wordEval, List.map_cons, List.map_nil, List.prod_cons,
+            List.prod_nil, mul_one, Letter.toG, a]
+          rw [← map_mul]
+          rfl
+      | pred n ih =>
+          obtain ⟨w, hw⟩ := ih
+          refine ⟨w ++ [.ai], ?_⟩
+          rw [G_normalForm_aux_wordEval_append, hw]
+          simp only [wordEval, List.map_cons, List.map_nil, List.prod_cons,
+            List.prod_nil, mul_one, Letter.toG, a]
+          rw [← map_inv]
+          rw [← map_mul]
+          rfl
+  | inr z =>
+      change ZMod 2 at z
+      fin_cases z
+      · refine ⟨[], ?_⟩
+        change 1 = Monoid.Coprod.inr (Multiplicative.ofAdd 0)
+        exact (map_one (Monoid.Coprod.inr : Multiplicative (ZMod 2) →* G)).symm
+      · exact ⟨[.b], by rfl⟩
+  | mul x y hx hy =>
+      obtain ⟨u, hu⟩ := hx
+      obtain ⟨v, hv⟩ := hy
+      exact ⟨u ++ v, by rw [G_normalForm_aux_wordEval_append, hu, hv]⟩
+
+lemma G_normalForm_aux_exists (g : G) :
+    ∃ w : List Letter, Reduced w ∧ wordEval w = g := by
+  obtain ⟨w, rfl⟩ := G_normalForm_aux_exists_raw g
+  exact ⟨G_normalForm_aux_reduce w, G_normalForm_aux_reduce_reduced w,
+    G_normalForm_aux_reduce_eval w⟩
+
+lemma G_normalForm_aux_perm_b_sq :
+    G_normalForm_aux_perm .b * G_normalForm_aux_perm .b = 1 := by
+  ext ⟨w, hw⟩
+  apply Subtype.ext
+  cases w with
+  | nil => rfl
+  | cons t w =>
+    cases w with
+    | nil => cases t <;> rfl
+    | cons u w =>
+      have hadj := hw.rel_head
+      cases t <;> simp_all [G_normalForm_aux_perm, G_normalForm_aux_step, Letter.inv]
+
+def G_normalForm_aux_bHom : Multiplicative (ZMod 2) →*
+    Equiv.Perm G_normalForm_aux_RW :=
+  AddMonoidHom.toMultiplicativeLeft <| ZMod.lift 2 ⟨
+    zmultiplesHom (Additive (Equiv.Perm G_normalForm_aux_RW))
+      (Additive.ofMul (G_normalForm_aux_perm .b)), by
+        change (G_normalForm_aux_perm .b) ^ (2 : ℤ) = 1
+        norm_num
+        simpa [pow_two] using G_normalForm_aux_perm_b_sq⟩
+
+def G_normalForm_aux_action : G →* Equiv.Perm G_normalForm_aux_RW :=
+  Monoid.Coprod.lift
+    (zpowersHom (Equiv.Perm G_normalForm_aux_RW) (G_normalForm_aux_perm .a))
+    G_normalForm_aux_bHom
+
+lemma G_normalForm_aux_action_letter (s : Letter) :
+    G_normalForm_aux_action s.toG = G_normalForm_aux_perm s := by
+  cases s with
+  | a => simp [G_normalForm_aux_action, Letter.toG, a]
+  | ai =>
+      rw [Letter.toG, map_inv]
+      change (G_normalForm_aux_perm .a)⁻¹ = G_normalForm_aux_perm .ai
+      rfl
+  | b =>
+      simp only [G_normalForm_aux_action, Letter.toG, b,
+        Monoid.Coprod.lift_apply_inr]
+      unfold G_normalForm_aux_bHom
+      change Additive.toMul ((ZMod.lift 2 _) ((1 : ℤ) : ZMod 2)) = _
+      rw [ZMod.lift_coe]
+      rfl
+
+lemma G_normalForm_aux_action_eval {w : List Letter} (hw : Reduced w) :
+    G_normalForm_aux_action (wordEval w) ⟨[], List.isChain_nil⟩ = ⟨w, hw⟩ := by
+  induction w with
+  | nil => rfl
+  | cons s w ih =>
+      have htail : Reduced w := hw.tail
+      rw [show wordEval (s :: w) = s.toG * wordEval w by rfl, map_mul,
+        Equiv.Perm.mul_apply, G_normalForm_aux_action_letter, ih htail]
+      apply Subtype.ext
+      have hhead : ∀ t ∈ w.head?, t ≠ s.inv := by
+        exact List.IsChain.rel_head? hw
+      cases w with
+      | nil => rfl
+      | cons t w =>
+        simp only [G_normalForm_aux_perm, G_normalForm_aux_step, Equiv.coe_fn_mk]
+        simp [hhead t (by simp)]
+
 lemma G_normalForm : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g := by
-  sorry
+  intro g
+  obtain ⟨w, hw, he⟩ := G_normalForm_aux_exists g
+  refine ⟨w, ⟨hw, he⟩, ?_⟩
+  intro v hv
+  have heq : wordEval v = wordEval w := hv.2.trans he.symm
+  have h := congrArg (fun x : G ↦
+    G_normalForm_aux_action x
+      (⟨[], (List.isChain_nil : Reduced [])⟩ : G_normalForm_aux_RW)) heq
+  change G_normalForm_aux_action (wordEval v)
+      (⟨[], (List.isChain_nil : Reduced [])⟩ : G_normalForm_aux_RW) =
+    G_normalForm_aux_action (wordEval w)
+      (⟨[], (List.isChain_nil : Reduced [])⟩ : G_normalForm_aux_RW) at h
+  rw [G_normalForm_aux_action_eval hv.1,
+    G_normalForm_aux_action_eval hw] at h
+  exact congrArg Subtype.val h
 
 /-- **Leaf (Cayley tree of `ℤ * ℤ/2`).**  With `depth g` the length of the
 reduced word of `g` and `parent g = g · (last letter)⁻¹`: depth zero only at
