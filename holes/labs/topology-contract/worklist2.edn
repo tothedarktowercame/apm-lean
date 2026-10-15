@@ -88376,6 +88376,19 @@
     [{:cmd "product draft",
       :exit 1,
       :correction "fixed casts/association"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792048315011-13576-2c4efa07",
+     :commands
+     ["git show/diff/check d643012dc"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit d643012dc adds compiled, sorry-free progress beyond 8deb5ceae: basepoint transport of oriented wedge generators, normalized signed edge powers, and the explicit reversed six-edge product. Only t97A01Closure.lean changed; fixture SHA 19d88103fb3bb0a43bcdd9bb5274490b733160aab22c9dc25daec4fe90741010 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Orientation is correct: for global unit s, reverse multiplication yields c^-s c^-s b^-s a^-s b^s a^s. Normal-closure comparison, van Kampen kernel, and final assembly remain explicitly listed."},
     :commit "d643012dc",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "19d88103fb3bb0a43bcdd9bb5274490b733160aab22c9dc25daec4fe90741010"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact geometric boundary edge product.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized six-edge product.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88453,7 +88466,10 @@
      :reason "Banked relator signs and six-edge coordinates."}
     {:job 5,
      :commit "8deb5ceae",
-     :reason "Banked exact geometric boundary edge product."}]}
+     :reason "Banked exact geometric boundary edge product."}
+    {:job 6,
+     :commit "d643012dc",
+     :reason "Banked normalized six-edge product."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -94128,7 +94144,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2SignedEdgeProduct_explicit",
@@ -94138,7 +94154,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "normalized six-edge product",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d643012dc"},
    :id :lemma-torusrp2signededgeproduct-explicit,
    :kind :lemma,
    :depends-on [],
