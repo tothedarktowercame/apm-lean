@@ -413,6 +413,55 @@ theorem polynomialSphereRegularPoint_isRegular :
   · simp [polynomialSphereRegularPoint, rp3RadialToSphere]
   · simp [polynomialSphereRegularPoint, rp3RadialToSphere]
 
+/-- Three tangent directions at the selected regular point.  The first two
+rotate the complex coordinate pairs and the third changes their relative
+radii. -/
+def polynomialRegularTangentOne : EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 ![0, 1, 0, 0]
+
+def polynomialRegularTangentTwo : EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 ![0, 0, 0, 1]
+
+def polynomialRegularTangentThree : EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 ![1, 0, -1, 0]
+
+/-- On the natural tangent basis at the selected fixed point, the ambient
+quadratic derivative is multiplication by the positive scalar `sqrt 2`. -/
+theorem polynomialMapAmbient_fderiv_regularTangentBasis :
+    (fderiv ℝ polynomialMapAmbient polynomialSphereRegularPoint.1
+        polynomialRegularTangentOne =
+      Real.sqrt 2 • polynomialRegularTangentOne) ∧
+    (fderiv ℝ polynomialMapAmbient polynomialSphereRegularPoint.1
+        polynomialRegularTangentTwo =
+      Real.sqrt 2 • polynomialRegularTangentTwo) ∧
+    (fderiv ℝ polynomialMapAmbient polynomialSphereRegularPoint.1
+        polynomialRegularTangentThree =
+      Real.sqrt 2 • polynomialRegularTangentThree) := by
+  have hs : Real.sqrt (2 : ℝ) ≠ 0 := Real.sqrt_ne_zero'.mpr (by norm_num)
+  have hsq : Real.sqrt (2 : ℝ) * Real.sqrt 2 = 2 :=
+    by nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+  have hnorm : ‖(WithLp.toLp 2 ![1, 0, 1, 0] :
+      EuclideanSpace ℝ (Fin 4))‖ = Real.sqrt 2 := by
+    rw [EuclideanSpace.norm_eq]
+    simp [Fin.sum_univ_four] <;> norm_num
+  constructor
+  · rw [polynomialMapAmbient_fderiv]
+    ext i
+    fin_cases i <;>
+      simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+        polynomialRegularTangentOne, hnorm] <;> field_simp [hs] <;> nlinarith
+  constructor
+  · rw [polynomialMapAmbient_fderiv]
+    ext i
+    fin_cases i <;>
+      simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+        polynomialRegularTangentTwo, hnorm] <;> field_simp [hs] <;> nlinarith
+  · rw [polynomialMapAmbient_fderiv]
+    ext i
+    fin_cases i <;>
+      simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+        polynomialRegularTangentThree, hnorm] <;> field_simp [hs] <;> nlinarith
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -1470,6 +1519,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipSecondPairSphere_rational_H3
 #print axioms flipBothPairsSphere_rational_H3
 #print axioms polynomialSphereRegularPoint_isRegular
+#print axioms polynomialMapAmbient_fderiv_regularTangentBasis
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
