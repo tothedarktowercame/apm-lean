@@ -2387,6 +2387,19 @@ theorem polynomialDescent_invariants_of_localClassDecompositionAndBase
   ⟨polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase h,
     polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase h⟩
 
+/-- The sole canonical global localization equation now implies the complete
+invariant pair required by the consumer. -/
+theorem polynomialDescent_invariants_of_globalLocalization
+    (hglobal :
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i) :
+    HasLefschetzNumber polynomialDescent (-3) ∧
+      ¬ ContinuousMap.Homotopic polynomialDescent (ContinuousMap.id RP3) :=
+  polynomialDescent_invariants_of_localClassDecompositionAndBase
+    (polynomialSphereLift_localClassData_of_globalImage_eq_deckSum hglobal)
+
 /-- The complete rational homology table for the literal projective-space
 model used by the consumer. -/
 theorem t96A06_rp3_rational_homology :
@@ -2493,6 +2506,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_invariants_of_localClassDecompositionAndBase
+#print axioms polynomialDescent_invariants_of_globalLocalization
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
