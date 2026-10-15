@@ -123,6 +123,35 @@ theorem rp3SphereProjection_comp_radial :
     ext i
     simp [rp3RadialToSphere, sphereVector]⟩
 
+/-- The nonzero quadratic image of a sphere point, before radial
+normalization back to the sphere. -/
+def polynomialSphereVector (p : Sphere 3) : NonzeroVectors ℝ 3 :=
+  ⟨polynomialMap (sphereVector 3 p).1,
+    polynomialMap_nonzero (sphereVector 3 p)⟩
+
+theorem polynomialSphereVector_continuous :
+    Continuous polynomialSphereVector := by
+  apply Continuous.subtype_mk
+  change Continuous (fun p : Sphere 3 => polynomialMap (sphereVector 3 p).1)
+  apply continuous_pi
+  intro i
+  fin_cases i <;> simp [polynomialMap, sphereVector] <;> fun_prop
+
+/-- Radially normalized sphere lift of the printed quadratic map. -/
+noncomputable def polynomialSphereLift : C(Sphere 3, Sphere 3) :=
+  ⟨fun p => rp3RadialToSphere (polynomialSphereVector p),
+    rp3RadialToSphere_continuous.comp polynomialSphereVector_continuous⟩
+
+/-- The normalized sphere lift descends through the exact double cover to
+the chosen projective polynomial descent. -/
+theorem polynomialSphereLift_projection (p : Sphere 3) :
+    sphereProjection 3 (polynomialSphereLift p) =
+      polynomialDescent (sphereProjection 3 p) := by
+  rw [show sphereProjection 3 (polynomialSphereLift p) =
+      quotientMap ℝ 3 (polynomialSphereVector p) by
+    exact congrFun rp3SphereProjection_comp_radial (polynomialSphereVector p)]
+  exact (polynomialDescent_quotientMap (sphereVector 3 p)).symm
+
 /-- The concrete unit-sphere projection generates exactly the frozen quotient
 topology on `RP3`.  This is the quotient half of the double-cover input for
 rational transfer. -/
@@ -809,6 +838,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms rp3RadialToSphere_continuous
 #print axioms rp3SphereProjection_continuous
 #print axioms rp3SphereProjection_comp_radial
+#print axioms polynomialSphereVector_continuous
+#print axioms polynomialSphereLift_projection
 #print axioms rp3SphereProjection_isQuotientMap
 #print axioms rp3SphereProjection_eq_iff
 #print axioms rp3SphereProjection_isOpenMap
