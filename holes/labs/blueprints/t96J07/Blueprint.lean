@@ -4,6 +4,7 @@ import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.RealProjectiveSmoothTarget
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.RP3RationalHomology
 
 open CategoryTheory
 
@@ -1713,7 +1714,11 @@ theorem apm_t96j07_global_rationalHomology_bases :
     Nonempty (apm_t96j07_HQ 1 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)) ∧
     Nonempty (apm_t96j07_HQ 2 ≅ ModuleCat.of ℚ (Fin 0 → ℚ)) ∧
     Nonempty (apm_t96j07_HQ 3 ≅ ModuleCat.of ℚ ℚ) := by
-  sorry
+  obtain ⟨h0, hz, h3⟩ := RP3Homology.rp3_rationalHomology
+  have hfin : CategoryTheory.Limits.IsZero (ModuleCat.of ℚ (Fin 0 → ℚ)) :=
+    ModuleCat.isZero_of_subsingleton _
+  refine ⟨h0, ⟨(hz 1 (by decide) (by decide)).iso hfin⟩,
+    ⟨(hz 2 (by decide) (by decide)).iso hfin⟩, h3⟩
 
 /-- Sorry-free algebraic assembly of the homotopy and rational-homology
 inputs.  Every substantial input is explicit, so its seats are parallel. -/
