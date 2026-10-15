@@ -37111,33 +37111,28 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
-    :residual "Regular fiber, local signs, degree, invariants/Main.",
+    :residual
+    "Fiber exhaustion, positive local signs, degree, invariants/Main.",
     :outcome :stop,
-    :warnings ["Main retains one placeholder."],
+    :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialMap_flipFirstPair",
-      :type "first sign flip invariance",
+    [{:name "t96A06_polynomialSphereLift_pairSign_invariant",
+      :type "lift invariant under both pair-sign maps",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on [],
-      :area "rp-rational-homology"}
-     {:name "polynomialMap_flipSecondPair",
-      :type "second sign flip invariance",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on [],
-      :area "rp-rational-homology"}
-     {:name "t96A06_polynomialSphereLift_regular_fiber",
-      :type "regular fiber has four sign translates",
-      :status :partial,
       :consumers [:t96A06],
       :depends-on
       ["polynomialMap_flipFirstPair" "polynomialMap_flipSecondPair"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_polynomialSphereLift_regular_fiber",
+      :type "fiber has four sign translates",
+      :status :partial,
+      :consumers [:t96A06],
+      :depends-on ["t96A06_polynomialSphereLift_pairSign_invariant"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_degree_four",
       :type "lift acts by 4 on H3",
@@ -37150,7 +37145,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed four pair-sign symmetries; fiber classification remains.",
+    "Committed continuous pair-sign sphere actions and lift invariance; fiber exhaustion and local signs remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37158,15 +37153,10 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check 27a435839", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792044155957-13433-41f63edf",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "27a435839473c663586f95b89a8f31aaf8e7ef23",
+     {:cmd "git show --check c14955f3f", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile", :exit 1, :note "fixed subtype targets"}],
+    :commit "c14955f3f",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37174,7 +37164,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41062,6 +41052,26 @@
     :type "regular fiber has four sign translates",
     :area "rp-rational-homology"},
    :id :lemma-t96a06-polynomialspherelift-regular-fiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmap-flipfirstpair
+    :lemma-polynomialmap-flipsecondpair
+    :lemma-t96a06-polynomialspherelift-pairsign-invariant],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_pairSign_invariant",
+    :type "lift invariant under both pair-sign maps"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_pairSign_invariant",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "lift invariant under both pair-sign maps",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-pairsign-invariant,
    :kind :lemma,
    :depends-on
    [:lemma-polynomialmap-flipfirstpair
