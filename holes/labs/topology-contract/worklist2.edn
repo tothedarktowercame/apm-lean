@@ -88378,6 +88378,19 @@
     [{:cmd "transport drafts",
       :exit 1,
       :correction "split paths and casts"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792053422225-13689-4ba5e5dd",
+     :commands
+     ["git show/diff/check d97eb2896"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit d97eb2896 adds compiled, sorry-free progress beyond 9cf7f3444: exact typed transport from the skeleton attaching class to the disk boundary, its trivial image, and the frozen relator normal-closure inclusion into the free-map kernel. Only t97A01Closure.lean changed; fixture SHA f81fe0a0c2f17e8ac9a6b2690bcbe2d63731d6498495d6c284ad490ecc54e293 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Directions are correct: boundary equality and disk nullhomotopy give the singleton kernel fact; normality and attaching-word transport give the forward closure inclusion. Surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "d97eb2896",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88386,7 +88399,7 @@
      "f81fe0a0c2f17e8ac9a6b2690bcbe2d63731d6498495d6c284ad490ecc54e293"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88404,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk/skeleton boundary basepoint alignment.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary transport and forward kernel inclusion.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88473,7 +88486,11 @@
      :reason "Banked disk boundary nullhomotopy in polygon quotient."}
     {:job 2,
      :commit "9cf7f3444",
-     :reason "Banked disk/skeleton boundary basepoint alignment."}]}
+     :reason "Banked disk/skeleton boundary basepoint alignment."}
+    {:job 3,
+     :commit "d97eb2896",
+     :reason
+     "Banked boundary transport and forward kernel inclusion."}]}
   {:consumer :t94J09,
    :stop-count 2,
    :evidence
@@ -94352,7 +94369,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
@@ -94362,7 +94379,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "typed boundary-class transport",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d97eb2896"},
    :id :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map,
    :kind :lemma,
    :depends-on
@@ -94371,7 +94390,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2Relator_normalClosure_le_kernel",
@@ -94381,7 +94400,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "forward kernel inclusion",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d97eb2896"},
    :id :lemma-torusrp2relator-normalclosure-le-kernel,
    :kind :lemma,
    :depends-on
