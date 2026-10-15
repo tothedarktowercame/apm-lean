@@ -2345,6 +2345,24 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
   · exact Or.inl h'.symm
   · exact Or.inr h'.symm
 
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_assembly
+    {G : Type*} [Group G] (g r : G)
+    (e : G ≃* FreeGroup (Fin 4))
+    (hr : ¬ IsOfFinOrder r)
+    (hg : Subgroup.zpowers g = Subgroup.zpowers r)
+    (hrel : IsConj (e r) apm_t92J05_genusTwoRelator) :
+    IsConj (e g) apm_t92J05_genusTwoRelator ∨
+      IsConj (e g) apm_t92J05_genusTwoRelator⁻¹ := by
+  rcases
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_zpowers_generator
+        hr hg with h | h
+  · left
+    simpa [h] using hrel
+  · right
+    rw [h, map_inv]
+    obtain ⟨c, hc⟩ := hrel
+    exact ⟨c, hc.inv_right⟩
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
     (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
