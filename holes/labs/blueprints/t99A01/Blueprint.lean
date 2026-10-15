@@ -1934,7 +1934,6 @@ lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
         (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom)) :
     Nonempty (APMT99A01.AttachMVLowData degree) := by
   sorry
-
 /-- **Leaf (higher degrees, 50--100 lines, independent).** An attaching space made
 from a circle and finitely many two-disks has no integral homology in degrees
 at least three.  Prove this from the same MV cover using circle and contractible
