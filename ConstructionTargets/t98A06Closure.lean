@@ -97,6 +97,23 @@ theorem contDiff_rightInverse_of_comp_isInvertible
 
 #print axioms contDiff_rightInverse_of_comp_isInvertible
 
+/-- Applying the smoothly varying right inverse to a smooth target-coordinate
+vector gives the source-coordinate lift used in a submersion chart. -/
+theorem contDiff_lift_of_comp_isInvertible
+    {Z : Type} [NormedAddCommGroup Z] [NormedSpace ℝ Z]
+    {n m : ℕ} (A : Z → E n →L[ℝ] E m) (b : Z → E m)
+    (R : E m →L[ℝ] E n)
+    (hA : ContDiff ℝ ∞ A) (hb : ContDiff ℝ ∞ b)
+    (hinv : ∀ z, ((A z).comp R).IsInvertible) :
+    ∃ w : Z → E n, ContDiff ℝ ∞ w ∧ ∀ z, A z (w z) = b z := by
+  obtain ⟨Q, hQ, hAQ⟩ :=
+    contDiff_rightInverse_of_comp_isInvertible A R hA hinv
+  refine ⟨fun z ↦ Q z (b z), hQ.clm_apply hb, ?_⟩
+  intro z
+  exact DFunLike.congr_fun (hAQ z) (b z)
+
+#print axioms contDiff_lift_of_comp_isInvertible
+
 theorem t98A06_global_vectorField_lift
     (hlocal : ∀ (n m : ℕ) (X Y : Type) [TopologicalSpace X] [TopologicalSpace Y]
       [T2Space X] [T2Space Y] [SecondCountableTopology X] [SecondCountableTopology Y]
