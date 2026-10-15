@@ -509,10 +509,75 @@ lemma X_homeomorph_aux_oneDisk_boundary (t : Set.Icc (0 : ℝ) 1) :
   norm_num
   ring
 
-lemma X_homeomorph :
+/-- Complex conjugation on the disk (the octagon runs `c` backwards). -/
+def conjDisk (z : apm_t97J04_Disk) : apm_t97J04_Disk :=
+  ⟨(starRingEnd ℂ) (z : ℂ), by
+    have h := z.2
+    rw [Metric.mem_closedBall, dist_zero_right] at h ⊢
+    rwa [Complex.norm_conj]⟩
+
+theorem conjDisk_conjDisk (z : apm_t97J04_Disk) : conjDisk (conjDisk z) = z := by
+  apply Subtype.ext
+  simp [conjDisk]
+
+/-- The quotient map of `X`. -/
+def xMk (x : apm_t97J04_Disk ⊕ apm_t97J04_Disk) : apm_t97J04_X :=
+  Quotient.mk (Relation.EqvGen.setoid apm_t97J04_ComplexRel) x
+
+/-- B1a. Forward map `X → Xc`: octagon `z ↦ cellIncl cLoop (cellDisk word z)`,
+meridian disk `z ↦ cellDisk cLoop (conjDisk z)`.  Respecting `ComplexRel`:
+octagon pairs `a,b,c,d` go to the same point of `W` via
+`polygonBoundaryWedgeLoop_edgePoint` (the `word` relation of `Sigma`);
+`meridian`: `X_homeomorph_aux_word_cEdge` + `X_homeomorph_aux_oneDisk_boundary`
+(conjugation turns `circleArc t` into `circleArc (1 - t)`).  Continuous as a
+lift through the coinduced topology. -/
+lemma X_fwd :
+    ∃ f : C(apm_t97J04_X, Xc),
+      (∀ z, f (xMk (.inl z)) = cellIncl cLoop (cellDisk word z)) ∧
+      (∀ z, f (xMk (.inr z)) = cellDisk cLoop (conjDisk z)) := by
+  sorry
+
+/-- B1b. Backward map `Xc → X`: on `Sigma = Cell word`, `W`-points go through
+`P.skeletonHomeomorphWedge.symm` and the octagon quotient (`P.Rel` generated
+classes are `ComplexRel` classes on `inl`), disk points `z ↦ xMk (.inl z)`; on
+the `cLoop` disk, `z ↦ xMk (.inr (conjDisk z))`.  Two nested quotient lifts;
+both continuous via `continuous_coinduced_dom`. -/
+lemma X_bwd :
+    ∃ g : C(Xc, apm_t97J04_X),
+      (∀ z, g (cellIncl cLoop (cellDisk word z)) = xMk (.inl z)) ∧
+      (∀ z, g (cellDisk cLoop z) = xMk (.inr (conjDisk z))) := by
+  sorry
+
+/-- B1c. Every point of `Xc` lies on one of the two disks
+(`W`-points are on the `word` boundary: `polygonBoundaryWedgeLoop` is onto;
+`cellIncl word (word z) = cellDisk word (circleToDisk z)` by `CellRel`). -/
+lemma Xc_points (p : Xc) :
+    (∃ z, p = cellIncl cLoop (cellDisk word z)) ∨ ∃ z, p = cellDisk cLoop z := by
+  sorry
+
+/-- B1. Assembly (sorry-free over B1a–c). -/
+theorem X_homeomorph :
     ∃ h : apm_t97J04_X ≃ₜ Xc,
       h apm_t97J04_basepoint = cellIncl cLoop (cellDisk word 0) := by
-  sorry
+  obtain ⟨f, hf1, hf2⟩ := X_fwd
+  obtain ⟨g, hg1, hg2⟩ := X_bwd
+  have hgf : ∀ x, g (f x) = x := by
+    intro x
+    induction x using Quotient.inductionOn with
+    | h a =>
+      rcases a with z | z
+      · change g (f (xMk (.inl z))) = xMk (.inl z)
+        rw [hf1, hg1]
+      · change g (f (xMk (.inr z))) = xMk (.inr z)
+        rw [hf2, hg2, conjDisk_conjDisk]
+  have hfg : ∀ p, f (g p) = p := by
+    intro p
+    rcases Xc_points p with ⟨z, rfl⟩ | ⟨z, rfl⟩
+    · rw [hg1, hf1]
+    · rw [hg2, hf2, conjDisk_conjDisk]
+  refine ⟨{ toFun := f, invFun := g, left_inv := hgf, right_inv := hfg,
+            continuous_toFun := f.continuous, continuous_invFun := g.continuous }, ?_⟩
+  exact hf1 0
 /-- B2. The word's loop class in wedge coordinates is a conjugate of the
 genus-two relator or its inverse (W1, banked). -/
 lemma word_loopClass_coords :
