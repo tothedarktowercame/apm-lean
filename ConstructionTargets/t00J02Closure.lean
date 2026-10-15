@@ -745,6 +745,42 @@ noncomputable def implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightI
 
 #print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse
 
+/-- The banked chart-smoothness, strict-derivative, and split-surjection steps
+assemble into an implicit local chart for the incidence equation. -/
+noncomputable def incidenceImplicitToOpenPartialHomeomorph
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] [FiniteDimensional ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B)
+    (hcf : ContMDiffAt 𝓘(ℝ, E) 𝓘(ℝ, G) 1 f x)
+    (hcc : ContMDiffAt 𝓘(ℝ, F) 𝓘(ℝ, G) 1 c y)
+    (hxy : f x = c y) (hRight : (A.coprod (-B)).HasRightInverse) :
+    OpenPartialHomeomorph (E × F) (G × (A.coprod (-B)).ker) := by
+  let Φ : E × F → G := fun p ↦
+    writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+      extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm p.2))
+  have hΦ : HasStrictFDerivAt Φ (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) :=
+    hasStrictFDerivAt_incidenceDifference_commonTarget hf hc hxy <|
+      contDiffAt_incidenceDifference_commonTarget
+        (E := E) (F := F) (G := G) (M := M) (N := N) (P := P) f c x y
+        (contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
+          (E := E) (F := G) f x hcf)
+        (contDiffAt_commonTarget_of_contMDiffAt_self
+          (E := E) (F := F) (G := G) (M := M) (N := N) (P := P)
+          f c x y hxy hcc)
+  exact implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hΦ hRight
+
+#print axioms incidenceImplicitToOpenPartialHomeomorph
+
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
 theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
