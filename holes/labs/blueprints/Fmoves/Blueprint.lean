@@ -7831,6 +7831,71 @@ theorem cutNewB_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
       frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) := by
   sorry
 
+lemma cutNewB_range_supset_aux_segment {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)) ⊆
+      Set.range (cutNewB L p q) := by
+  have hL : 0 < (L : ℝ) := by exact_mod_cast Nat.zero_lt_of_lt hqL
+  have hstep : 0 < 2 * Real.pi / (L : ℝ) := div_pos (by positivity) hL
+  rw [segment]
+  rintro z ⟨a, s, ha, hs, has, rfl⟩
+  have ha' : a = 1 - s := by linarith
+  subst a
+  let φ := cutAlpha L q + (1 - s) * (2 * Real.pi / L)
+  have hφlo : cutAlpha L q ≤ φ := by
+    dsimp [φ]
+    exact le_add_of_nonneg_right (mul_nonneg ha hstep.le)
+  have hφhi : φ < cutAlpha L q + 2 * Real.pi := by
+    dsimp [φ]
+    have hLone : (1 : ℝ) < L := by exact_mod_cast (show 1 < L by omega)
+    have hstep_lt : 2 * Real.pi / (L : ℝ) < 2 * Real.pi :=
+      (div_lt_iff₀ hL).2 (by nlinarith [Real.pi_pos])
+    have hm : (1 - s) * (2 * Real.pi / L) < 2 * Real.pi :=
+      calc
+        _ ≤ 1 * (2 * Real.pi / L) := mul_le_mul_of_nonneg_right (by linarith) hstep.le
+        _ < 2 * Real.pi := by simpa using hstep_lt
+    nlinarith
+  let aa : AddCircle (2 * Real.pi) := (φ : ℝ)
+  let b : Circle := AddCircle.homeomorphCircle' aa
+  refine ⟨b, ?_⟩
+  rw [cutNewB]
+  simp only [b, Homeomorph.symm_apply_apply]
+  change cutProfileNewB L p q
+    (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q) aa) = _
+  rw [AddCircle.equivIco_coe_eq (p := 2 * Real.pi) (a := cutAlpha L q)
+    (x := φ) ⟨hφlo, hφhi⟩]
+  have hφq1 : φ ≤ cutAlpha L (q + 1) := by
+    dsimp [φ]
+    unfold cutAlpha
+    push_cast
+    field_simp
+    nlinarith [Real.pi_pos]
+  simp only [cutProfileNewB, if_pos hφq1]
+  have hsparam : (φ - cutAlpha L q) * L / (2 * Real.pi) = 1 - s := by
+    dsimp [φ]
+    field_simp [ne_of_gt Real.pi_pos, ne_of_gt hL]
+    ring
+  rw [hsparam]
+  simp [cutSeam, smul_eq_mul]
+  push_cast
+  ring
+
+
+/-- Unit-circle frontier points of `B'` (angles in `[α(q+1), α(p+1) + 2π]`, by `hcross`)
+are values of `cutNewB` (fixed arc or side `p`). -/
+theorem cutNewB_range_supset_aux_unit {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    {z : ℂ | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ⊆
+      Set.range (cutNewB L p q) := by
+  sorry
+
 /-- Explicit preimages for frontier points (model: `cutOldB_range`). -/
 theorem cutNewB_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
@@ -7843,7 +7908,9 @@ theorem cutNewB_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) ⊆
       Set.range (cutNewB L p q) := by
-  sorry
+  rw [hfront]
+  exact Set.union_subset (cutNewB_range_supset_aux_unit hpq hqL hfront hcross)
+    (cutNewB_range_supset_aux_segment hpq hqL)
 
 theorem cutNewB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
