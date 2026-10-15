@@ -544,6 +544,24 @@ noncomputable def t97J07_cp1_puncturedComplex_radialHomotopyEquiv :
   (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
     ℂ).symm
 
+/-- The literal two-chart overlap is homotopy equivalent to the unit circle,
+with the direction fixed from overlap coordinates to the circle. -/
+noncomputable def t97J07_cp1_overlapHomotopyEquivCircle :
+    T97J07CP1ZeroPatchOverlap ≃ₕ Metric.sphere (0 : ℂ) 1 :=
+  t97J07_cp1_overlapHomeomorphPuncturedAffine.toHomotopyEquiv |>.trans
+    (t97J07_cp1_puncturedAffineHomeomorphComplex.toHomotopyEquiv |>.trans
+      t97J07_cp1_puncturedComplex_radialHomotopyEquiv)
+
+/-- Rational singular homology transports across the exact overlap-to-circle
+homotopy equivalence in every degree. -/
+noncomputable def t97J07_cp1_overlapHomologyIsoCircle (k : ℕ) :
+    ConstructionTargets.CoefficientH0.SingularHomology ℚ k
+        (TopCat.of T97J07CP1ZeroPatchOverlap) ≅
+      ConstructionTargets.CoefficientH0.SingularHomology ℚ k
+        (TopCat.of (Metric.sphere (0 : ℂ) 1)) :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      t97J07_cp1_overlapHomotopyEquivCircle k
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -612,6 +630,8 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_overlapHomeomorphPuncturedAffine
 #print axioms t97J07_cp1_puncturedAffineHomeomorphComplex
 #print axioms t97J07_cp1_puncturedComplex_radialHomotopyEquiv
+#print axioms t97J07_cp1_overlapHomotopyEquivCircle
+#print axioms t97J07_cp1_overlapHomologyIsoCircle
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
