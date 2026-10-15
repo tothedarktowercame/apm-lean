@@ -1038,6 +1038,41 @@ theorem torusRP2PolygonPseudopushout_arrow_eq_reconstructed
   rw [Category.assoc, Iso.hom_inv_id_app, Category.comp_id]
   rfl
 
+/-- The inner member of the exact radial cover is contractible. -/
+theorem torusRP2PolygonInnerContractibleSpace :
+    ContractibleSpace
+      {q // q ∈ (openCover torusRP2PairingData).inner} := by
+  rw [contractible_iff_id_nullhomotopic]
+  exact ⟨(openCover torusRP2PairingData).center,
+    ⟨(openCover torusRP2PairingData).contraction.homotopy⟩⟩
+
+/-- Any two fixed-endpoint arrows through the contractible inner cover piece
+are equal.  This is the replacement principle used to eliminate inner runs
+from a radial-cover subdivision. -/
+theorem torusRP2PolygonInnerFundamentalGroupoid_hom_subsingleton
+    (x y : {q // q ∈ (openCover torusRP2PairingData).inner}) :
+    Subsingleton (FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover torusRP2PairingData).inner} :=
+    torusRP2PolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover torusRP2PairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  change Subsingleton (Path.Homotopic.Quotient x y)
+  infer_instance
+
+theorem torusRP2PolygonInner_pathClass_eq
+    {x y : {q // q ∈ (openCover torusRP2PairingData).inner}}
+    (p q : Path x y) :
+    (⟦p⟧ : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) = ⟦q⟧ := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover torusRP2PairingData).inner} :=
+    torusRP2PolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover torusRP2PairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  exact Quotient.sound (SimplyConnectedSpace.paths_homotopic p q)
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1105,6 +1140,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2Relator_normalClosure_le_kernel
 #print axioms torusRP2BoundaryFreeGroupMap_surjective
 #print axioms torusRP2PolygonPseudopushout_arrow_eq_reconstructed
+#print axioms torusRP2PolygonInner_pathClass_eq
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
