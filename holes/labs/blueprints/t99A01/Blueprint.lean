@@ -1999,6 +1999,35 @@ lemma t99A01_low_coordinates_vanishing {r : ℕ} (degree : Fin r → ℕ)
       (t99A01_diskSide_sigma_coordinate degree eB 2)
 
 /-- The degree-one row in the fixed sigma, circle, and winding coordinates. -/
+lemma t99A01_low_coordinates_degree_one_aux_inv
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) (n : ℕ) :
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e n).inv =
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom e.invFun) := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)
+  apply (cancel_epi
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e n).hom).1
+  rw [Iso.hom_inv_id]
+  symm
+  rw [ConstructionTargets.CoefficientRadialPair.homotopyIso_hom]
+  change F.map (TopCat.ofHom e.toFun) ≫ F.map (TopCat.ofHom e.invFun) = 𝟙 _
+  have he : F.map (TopCat.ofHom (e.invFun.comp e.toFun)) = F.map (𝟙 _) :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomology_map_eq_of_topCatHomotopy
+    ℤ (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder (Classical.choice e.left_inv))
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero (Classical.choice e.left_inv))
+      (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one (Classical.choice e.left_inv)) n
+  change F.map (TopCat.ofHom e.toFun) ≫ F.map (TopCat.ofHom e.invFun) = 𝟙 _
+  calc
+    _ = F.map (TopCat.ofHom (e.invFun.comp e.toFun)) := by
+      rw [← F.map_comp]
+      rfl
+    _ = F.map (𝟙 _) := he
+    _ = 𝟙 _ := F.map_id _
+
 lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
     (hρι : ρ.comp ι = ContinuousMap.id Circle)
@@ -2027,7 +2056,6 @@ lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
     cO₁.inv ≫ APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 1 ≫
       Limits.biprod.fst ≫ cA₁.hom = ModuleCat.ofHom (APMT99A01.degreeMap degree) := by
   sorry
-
 instance t99A01_circle_pathConnected : PathConnectedSpace Circle :=
   pathConnectedSpace_iff_univ.mpr (by
     have h : IsPathConnected
