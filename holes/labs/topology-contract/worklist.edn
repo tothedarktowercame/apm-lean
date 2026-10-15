@@ -119137,41 +119137,41 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual
-    "Rewrite derivative into common target chart; implicit incidence chart; Sard; calculations; Main.",
+    :residual "Implicit incidence chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "writtenInExtChartAt_eq_commonTarget_of_eq",
-      :type "incidence equality identifies preferred target charts",
+    [{:name "hasFDerivAt_incidenceDifference_commonTarget",
+      :type "derivative in one target chart",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["hasFDerivAt_incidenceDifference_writtenInExtChartAt_self"],
+      ["writtenInExtChartAt_eq_commonTarget_of_eq"
+       "hasFDerivAt_incidenceDifference_writtenInExtChartAt_self"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["writtenInExtChartAt_eq_commonTarget_of_eq"],
+      :depends-on ["hasFDerivAt_incidenceDifference_commonTarget"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "cf26994460f7d712d45a553dfb04826b5e50e6bd0bc083ab4c441a81c5cc12e8",
+     "d29ca4530c0217e4203ebb895876c7aeef68a0cc55237810002e1651398f55f8",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked common incidence target chart.",
+    :reason "Banked common-target derivative.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119179,7 +119179,9 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :commit "2cacdb6f845b362e1159f23de2e73489e05fbe13",
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :finding "supplied model parameters"}],
+    :commit "6560086d56c11abd706fba4af2573957c3028ebc",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119187,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119675,7 +119677,8 @@
     :lemma-hasfderivat-incidencedifference-conj
     :lemma-hasfderivat-writteninextchartat-of-hasmfderivat-self
     :lemma-hasfderivat-incidencedifference-writteninextchartat-self
-    :lemma-writteninextchartat-eq-commontarget-of-eq],
+    :lemma-writteninextchartat-eq-commontarget-of-eq
+    :lemma-hasfderivat-incidencedifference-commontarget],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121579,6 +121582,25 @@
    :depends-on
    [:lemma-contmdiffon-tangentsection-of-trivialization-coordinates
     :lemma-contdiff-lift-of-comp-isinvertible],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "hasFDerivAt_incidenceDifference_commonTarget",
+    :type "derivative in one target chart"},
+   :lemma
+   {:name "hasFDerivAt_incidenceDifference_commonTarget",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "derivative in one target chart",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-hasfderivat-incidencedifference-commontarget,
+   :kind :lemma,
+   :depends-on
+   [:lemma-writteninextchartat-eq-commontarget-of-eq
+    :lemma-hasfderivat-incidencedifference-writteninextchartat-self],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
