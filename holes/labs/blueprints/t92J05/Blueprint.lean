@@ -2366,7 +2366,6 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
       IsConj (e g) apm_t92J05_genusTwoRelator ∨
         IsConj (e g) apm_t92J05_genusTwoRelator⁻¹ := by
   sorry
-
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
