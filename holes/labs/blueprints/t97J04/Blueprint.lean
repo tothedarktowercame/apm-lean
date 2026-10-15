@@ -2650,8 +2650,47 @@ lemma W_homology : PathConnectedSpace W ∧ ∀ k, 2 ≤ k → Limits.IsZero (H 
 /-- B7. `word_* = 0` on `H₁`: Hurewicz naturality
 (`PolygonSurfaceHomology.moduleHurewicz_naturality`) sends the circle class to
 the Hurewicz image of the word's loop class, a product of commutators. -/
+lemma word_H1_zero_aux_degree :
+    PolygonSurfaceHomology.attachingDegree P = 0 := by
+  funext l
+  induction l using Quotient.inductionOn with
+  | h i =>
+      change (∑ x : Fin 8,
+        if P.orbit x = P.orbit i then
+          (if P.sign x = true then (1 : ℤ) else -1) else 0) = 0
+      simp_rw [P.orbit_eq_iff]
+      dsimp [P, apm_t92J05_genusTwo_polygon_attach_specialization_aux_P,
+        PolygonSurfacePiOne.standardPairingData,
+        PolygonSurfacePiOne.orientableStandardPairingData,
+        PolygonSurfacePiOne.standardPairingDataOfOneVertex]
+      fin_cases i <;> decide
+
 lemma word_H1_zero : Hmap word 1 = 0 := by
-  sorry
+  apply CategoryTheory.ConcreteCategory.hom_ext
+  intro x
+  let e := ConstructionTargets.CircleHomology.circleH1IsoInt
+  let n : ℤ := e.hom x
+  have hx : x = n • e.inv 1 := by
+    calc
+      x = e.inv (e.hom x) := (e.hom_inv_id_apply x).symm
+      _ = e.inv n := rfl
+      _ = n • e.inv 1 := by
+        conv_lhs => rw [show n = n • (1 : ℤ) by simp]
+        rw [map_zsmul]
+  rw [hx]
+  change (Hmap word 1).hom (n • e.inv 1) = 0
+  rw [map_zsmul]
+  suffices hgen : (Hmap word 1).hom (e.inv 1) = 0 by
+    rw [hgen]
+    change n • (0 : H 1 W) = 0
+    exact zsmul_zero n
+  change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map
+      (TopCat.ofHom (PolygonSurfaceHomology.polygonBoundaryWedgeLoop P))
+      (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) = 0
+  rw [← PolygonSurfaceHomology.polygonBoundaryFundamentalClass_hurewicz,
+    PolygonSurfaceHomology.polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree,
+    word_H1_zero_aux_degree, map_zero]
 
 /-- B8. `c_*` is injective on `H₁`: `c = incl ∘ leg`, `incl_*` is injective on
 `H₁` (A8 with `word_* = 0`), and `leg_*` has the left inverse
