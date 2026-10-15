@@ -494,9 +494,110 @@ lemma cell_overlap_hequiv_aux_homeomorph (γ : C(Circle, Y))
 /-- A3c. The annulus deformation retracts radially onto the radius-`1/2`
 circle: `Annulus13 ≃ₕ Circle`, `w ↦ w / |w|`, inverse `z ↦ z / 2`. -/
 -- BEGIN SEAT AREA
+def cell_overlap_hequiv_aux_annulus_half : C(Circle, Annulus13) where
+  toFun z := ⟨(z : ℂ) / 2, by
+    rw [norm_div, Circle.norm_coe]
+    constructor <;> norm_num⟩
+  continuous_toFun := by
+    exact (continuous_subtype_val.div_const 2).subtype_mk _
+
+def cell_overlap_hequiv_aux_annulus_radial : C(Annulus13, Circle) where
+  toFun z := ⟨((‖(z : ℂ)‖⁻¹ : ℝ) : ℂ) * (z : ℂ), by
+    show ((‖(z : ℂ)‖⁻¹ : ℝ) : ℂ) * (z : ℂ) ∈ Metric.sphere (0 : ℂ) 1
+    rw [Metric.mem_sphere, dist_zero_right, norm_mul]
+    simp only [Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (inv_nonneg.mpr (norm_nonneg _))]
+    exact inv_mul_cancel₀ (ne_of_gt (lt_trans (by norm_num) z.2.1))⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    have hn : Continuous (fun z : Annulus13 => ‖(z : ℂ)‖) :=
+      continuous_norm.comp continuous_subtype_val
+    have hz : ∀ z : Annulus13, ‖(z : ℂ)‖ ≠ 0 := fun z =>
+      ne_of_gt (lt_trans (by norm_num) z.2.1)
+    exact (Complex.continuous_ofReal.comp (hn.inv₀ hz)).mul continuous_subtype_val
+
+lemma cell_overlap_hequiv_aux_annulus_radial_half (z : Circle) :
+    cell_overlap_hequiv_aux_annulus_radial
+        (cell_overlap_hequiv_aux_annulus_half z) = z := by
+  apply Subtype.ext
+  dsimp [cell_overlap_hequiv_aux_annulus_radial,
+    cell_overlap_hequiv_aux_annulus_half]
+  change ((‖(z : ℂ) / 2‖⁻¹ : ℝ) : ℂ) * ((z : ℂ) / 2) = (z : ℂ)
+  rw [norm_div, Circle.norm_coe]
+  norm_num
+  ring
+
+def cell_overlap_hequiv_aux_annulus_homotopy : ContinuousMap.Homotopy
+    (cell_overlap_hequiv_aux_annulus_half.comp
+      cell_overlap_hequiv_aux_annulus_radial)
+    (ContinuousMap.id Annulus13) where
+  toFun tz := by
+    let t : ℝ := tz.1
+    let z : ℂ := tz.2
+    let a : ℝ := (1 - t) * (1 / (2 * ‖z‖)) + t
+    refine ⟨(a : ℂ) * z, ?_⟩
+    have ht0 : 0 ≤ t := tz.1.2.1
+    have ht1 : t ≤ 1 := tz.1.2.2
+    have hz0 : 0 < ‖z‖ := lt_trans (by norm_num) tz.2.2.1
+    have ha0 : 0 ≤ a := by
+      dsimp [a]
+      exact add_nonneg
+        (mul_nonneg (sub_nonneg.mpr ht1)
+          (one_div_nonneg.mpr (mul_nonneg (by norm_num) hz0.le))) ht0
+    have hamul : a * ‖z‖ = (1 - t) / 2 + t * ‖z‖ := by
+      dsimp [a]
+      field_simp
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg ha0, hamul]
+    constructor
+    · have hzlow := tz.2.2.1
+      by_cases ht : t = 0
+      · norm_num [ht]
+      · have htpos : 0 < t := lt_of_le_of_ne ht0 (Ne.symm ht)
+        nlinarith
+    · have hzhigh := tz.2.2.2
+      by_cases ht : t = 0
+      · norm_num [ht]
+      · have htpos : 0 < t := lt_of_le_of_ne ht0 (Ne.symm ht)
+        nlinarith
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    have hn : Continuous (fun tz : unitInterval × Annulus13 => ‖(tz.2 : ℂ)‖) :=
+      continuous_norm.comp (continuous_subtype_val.comp continuous_snd)
+    have hne : ∀ tz : unitInterval × Annulus13, 2 * ‖(tz.2 : ℂ)‖ ≠ 0 := by
+      intro tz
+      exact mul_ne_zero (by norm_num)
+        (ne_of_gt (lt_trans (by norm_num) tz.2.2.1))
+    have ht : Continuous (fun tz : unitInterval × Annulus13 => (tz.1 : ℝ)) :=
+      continuous_subtype_val.comp continuous_fst
+    have hz : Continuous (fun tz : unitInterval × Annulus13 => (tz.2 : ℂ)) :=
+      continuous_subtype_val.comp continuous_snd
+    exact (Complex.continuous_ofReal.comp
+      (((continuous_const.sub ht).mul
+        (continuous_const.div (continuous_const.mul hn) hne)).add ht)).mul hz
+  map_zero_left z := by
+    apply Subtype.ext
+    dsimp [cell_overlap_hequiv_aux_annulus_half,
+      cell_overlap_hequiv_aux_annulus_radial]
+    change (((1 - (0 : ℝ)) * (1 / (2 * ‖(z : ℂ)‖)) + 0 : ℝ) : ℂ) *
+      (z : ℂ) = ((‖(z : ℂ)‖⁻¹ : ℝ) : ℂ) * (z : ℂ) / 2
+    push_cast
+    ring
+  map_one_left z := by
+    apply Subtype.ext
+    simp
+
 lemma cell_overlap_hequiv_aux_annulus :
     ∃ e : Annulus13 ≃ₕ Circle, ∀ z : Circle, ((e.invFun z : Annulus13) : ℂ) = (z : ℂ) / 2 := by
-  sorry
+  let e : Annulus13 ≃ₕ Circle :=
+    { toFun := cell_overlap_hequiv_aux_annulus_radial
+      invFun := cell_overlap_hequiv_aux_annulus_half
+      left_inv := ⟨cell_overlap_hequiv_aux_annulus_homotopy⟩
+      right_inv := by
+        rw [show cell_overlap_hequiv_aux_annulus_radial.comp
+            cell_overlap_hequiv_aux_annulus_half = ContinuousMap.id Circle by
+          apply ContinuousMap.ext
+          exact cell_overlap_hequiv_aux_annulus_radial_half] }
+  exact ⟨e, fun z => rfl⟩
 -- END SEAT AREA
 
 /-- A3. Assembly (sorry-free over A3a–c). -/
