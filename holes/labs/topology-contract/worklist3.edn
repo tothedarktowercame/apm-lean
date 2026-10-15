@@ -37121,7 +37121,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37175,7 +37175,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37197,7 +37197,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37488,6 +37488,18 @@
     [{:cmd "initial compiles",
       :exit 1,
       :note "proved unique index; typed evaluation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792062005771-13911-0c3ed237",
+     :commands
+     ["git show --check --stat b84d78ab6"
+      "git diff --name-only b84d78ab6^ b84d78ab6"
+      "git-show fixture | sha256sum"
+      "lake env lean problems/t97J07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit b84d78ab6 changes only scoped Main.lean and adds the compiled, sorry-free CP1-overlap homeomorphism milestone; fixture hash matches 3fa01c79...76dbe7, registry 166/166, and the new declaration has standard axioms only. Remaining final theorem is listed unfinished work."},
     :commit "4ed622bf4",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
@@ -37496,7 +37508,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37514,7 +37526,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the CP1 overlap homeomorphism to punctured affine coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed punctured affine as the punctured complex line.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37565,7 +37577,11 @@
     {:job 2,
      :commit "b84d78ab6",
      :reason
-     "Committed the CP1 overlap homeomorphism to punctured affine coordinates."}]}
+     "Committed the CP1 overlap homeomorphism to punctured affine coordinates."}
+    {:job 3,
+     :commit "4ed622bf4",
+     :reason
+     "Committed punctured affine as the punctured complex line."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -42174,7 +42190,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereRegularFiberEquiv",
@@ -42184,7 +42200,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "Fin4 is equivalent to the literal regular fiber",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialsphereregularfiberequiv,
    :kind :lemma,
    :depends-on
@@ -42193,10 +42211,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "pairSignOrbit_four_distinct"},
-   :lemma {:name "pairSignOrbit_four_distinct", :reported-by []},
+   :lemma
+   {:name "pairSignOrbit_four_distinct",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-pairsignorbit-four-distinct,
    :kind :lemma,
    :depends-on [],
@@ -42225,7 +42247,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereRegularFiberEquiv_deckCoordinates",
@@ -42237,14 +42259,16 @@
     :type
     "four indices are base, first flip, second flip, composite flip",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialsphereregularfiberequiv-deckcoordinates,
    :kind :lemma,
    :depends-on [:lemma-polynomialsphereregularfiberequiv],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42256,7 +42280,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "nonbase index has lift-preserving H3-trivial deck map",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialsphereregularfiberequiv-exists-orientationpreservingdeck,
    :kind :lemma,
@@ -42265,7 +42291,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42277,7 +42303,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "sum, base sign, transports imply localization data",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialspherelift-localizationdata-of-base-and-decktransport,
    :kind :lemma,
@@ -42305,7 +42333,7 @@
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp1_puncturedAffineHomeomorphComplex",
@@ -42317,7 +42345,9 @@
     :type
     "punctured affine model homeomorphic to nonzero complex numbers",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "4ed622bf4"},
    :id :lemma-t97j07-cp1-puncturedaffinehomeomorphcomplex,
    :kind :lemma,
    :depends-on [:lemma-t97j07-cp1-overlaphomeomorphpuncturedaffine],
