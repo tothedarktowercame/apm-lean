@@ -1657,6 +1657,52 @@ instance polynomialSphereLift_baseRationalLocalization_isIso :
   exact ConstructionTargets.CoefficientContractiblePair.projection_isIso
     ℚ _ 3 (by decide)
 
+noncomputable def polynomialSphereLift_baseRationalLocalizationIso :
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) ≅
+      (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).homology 3 :=
+  @asIso _ _ _ _ _ polynomialSphereLift_baseRationalLocalization_isIso
+
+theorem polynomialSphereLift_baseRationalLocalizationIso_hom :
+    polynomialSphereLift_baseRationalLocalizationIso.hom =
+      HomologicalComplex.homologyMap
+        (cokernel.π (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint))) 3 := rfl
+
+/-- The exact automorphism comparing the global sphere-shift normalization
+with localization followed by the positive local chart normalization. -/
+noncomputable def polynomialSphereLift_baseNormalizationComparisonIso :
+    ModuleCat.of ℚ ℚ ≅ ModuleCat.of ℚ ℚ :=
+  t96A06_sphere3_rational_H3Iso.symm ≪≫
+    polynomialSphereLift_baseRationalLocalizationIso ≪≫
+    ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint
+
+theorem polynomialSphereLift_baseNormalizationComparisonIso_one :
+    polynomialSphereLift_baseNormalizationComparisonIso.hom.hom 1 =
+      polynomialSphereLift_baseLocalizationScalar := by
+  unfold polynomialSphereLift_baseNormalizationComparisonIso
+  simp only [Iso.trans_hom, ConcreteCategory.comp_apply]
+  rw [polynomialSphereLift_baseRationalLocalizationIso_hom]
+  rfl
+
+/-- The entire comparison automorphism is multiplication by the recorded
+scalar; hence the remaining scalar-one theorem is exactly identity of the
+two normalizations, rather than an arbitrary generator choice. -/
+theorem polynomialSphereLift_baseNormalizationComparisonIso_apply (q : ℚ) :
+    polynomialSphereLift_baseNormalizationComparisonIso.hom.hom q =
+      q * polynomialSphereLift_baseLocalizationScalar := by
+  calc
+    _ = polynomialSphereLift_baseNormalizationComparisonIso.hom.hom (q • 1) := by
+      simp
+    _ = q • polynomialSphereLift_baseNormalizationComparisonIso.hom.hom 1 := by
+      rw [map_smul]
+    _ = q * polynomialSphereLift_baseLocalizationScalar := by
+      rw [polynomialSphereLift_baseNormalizationComparisonIso_one]
+      rfl
+
 /-- The comparison scalar is nonzero: both the rational localization map and
 the local chart normalization are isomorphisms, and the selected global class
 is the inverse image of `1`. -/
@@ -2813,5 +2859,6 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
+#print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
 
 end ConstructionTargets.t96A06Closure
