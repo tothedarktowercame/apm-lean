@@ -525,6 +525,65 @@ radial polygon cover, retract the outer member onto its four-circle skeleton,
 and compute that the annulus generator maps to the oriented word
 `[a₁,b₁][a₂,b₂]`.  The conclusion includes only the coordinate change
 from the generic normal-closure quotient to the registered presentation. -/
+abbrev apm_t92J05_genusTwo_polygon_attach_specialization_aux_P :=
+  ConstructionTargets.PolygonSurfacePiOne.standardPairingData true 2 (by norm_num)
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_contractible :
+    ContractibleSpace
+      {q // q ∈ (ConstructionTargets.PolygonSurfacePiOne.openCover
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).inner} := by
+  rw [contractible_iff_id_nullhomotopic]
+  exact ⟨(ConstructionTargets.PolygonSurfacePiOne.openCover
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).center,
+    ⟨(ConstructionTargets.PolygonSurfacePiOne.openCover
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).contraction.homotopy⟩⟩
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_pathConnected :
+    PathConnectedSpace
+      {q // q ∈ (ConstructionTargets.PolygonSurfacePiOne.openCover
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).inner} := by
+  letI : ContractibleSpace
+      {q // q ∈ (ConstructionTargets.PolygonSurfacePiOne.openCover
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).inner} :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_contractible
+  infer_instance
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_simplyConnected :
+    SimplyConnectedSpace
+      {q // q ∈ (ConstructionTargets.PolygonSurfacePiOne.openCover
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).inner} := by
+  letI : ContractibleSpace
+      {q // q ∈ (ConstructionTargets.PolygonSurfacePiOne.openCover
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).inner} :=
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_inner_contractible
+  exact SimplyConnectedSpace.ofContractible _
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_overlap_pathConnected :
+    PathConnectedSpace
+      (ConstructionTargets.PolygonRadialOpenCover.overlapOpen
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) := by
+  letI : PathConnectedSpace (Set.Ioo (0 : ℝ) 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      ((convex_Ioo 0 1).isPathConnected ⟨1 / 2, by norm_num⟩)
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne
+          |>.isPathConnected_preimage.mpr isPathConnected_univ
+      simpa using h)
+  letI : PathConnectedSpace
+      (Set.Ioo (0 : ℝ) 1 × Circle) :=
+    ⟨⟨(⟨1 / 2, by norm_num⟩, 1)⟩, fun x y ↦
+      ⟨(PathConnectedSpace.joined x.1 y.1).some.prod
+        (PathConnectedSpace.joined x.2 y.2).some⟩⟩
+  exact
+    (ConstructionTargets.PolygonSurfacePiOne.openCover
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph.symm.surjective.pathConnectedSpace
+      (ConstructionTargets.PolygonSurfacePiOne.openCover
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph.symm.continuous
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
     (hattach : ∀ {X : Type} [TopologicalSpace X] (U V : Set X)
       (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -543,7 +602,6 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization
           apm_t92J05_genusTwo_center ≃*
         apm_t92J05_genusTwoGroup) := by
   sorry
-
 /-- Assembly of the generic one-cell van Kampen theorem with the independent
 genus-two polygon specialization. -/
 theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
