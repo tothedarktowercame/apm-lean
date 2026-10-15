@@ -88331,29 +88331,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove cross-run successor boundary, nested concat induction, van Kampen, assembly.",
+    "Combine run-offset interval bounds for cross-run successor; nested concat; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq",
-      :type
-      "within one run, successor subdivision indices have successor offsets",
+    [{:name "torusRP2_subdivisionRunPrefixLength_le_runOffset",
+      :type "flattened run offset lies at or above its run boundary",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq"],
+      :depends-on ["torusRP2_subdivisionRunPrefixLength_le_runOffset"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88365,40 +88362,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked within-run successor offset.",
+    :reason "Banked run-offset lower boundary.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 246bf0ffa", :exit 0}],
-    :diagnostic-history
-    [{:cmd "dependent rewrite drafts",
-      :exit 1,
-      :correction "compared numeric prefixes"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792069753630-14088-a35bf6d6",
-     :commands
-     ["git show/diff/check 246bf0ffa"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 246bf0ffa adds compiled, sorry-free progress beyond 7a2b97699. It proves that consecutive inverse coordinates remaining in one run have consecutive local offsets, by equating their cumulative prefixes and applying the flattened successor recurrence. Only t97A01Closure.lean changed; fixture SHA 2c3368a6a06f8fc4c5c4096761faa8db3f6e0556513d4eb2a250652c0567d208 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Same-run hypothesis, equality transport, and successor orientation are correct. Cross-run boundary, nested-concat induction, van Kampen, and final assembly remain explicitly listed."},
-    :commit "246bf0ffa",
+     {:cmd "git show --check 504d3252d", :exit 0}],
+    :commit "504d3252d",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "2c3368a6a06f8fc4c5c4096761faa8db3f6e0556513d4eb2a250652c0567d208"},
+     "876870838f5ae412dc5d1dbc980dbef9ce3590b59ac5851dbd37f4b2cc8b5673"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94269,7 +94249,8 @@
     :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-runoffsetequiv-symm
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-strictmono
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-flatten-succ
-    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-of-run-eq],
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-of-run-eq
+    :lemma-torusrp2-subdivisionrunprefixlength-le-runoffset],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95282,4 +95263,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-flatten-succ],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunPrefixLength_le_runOffset",
+    :type "flattened run offset lies at or above its run boundary"},
+   :lemma
+   {:name "torusRP2_subdivisionRunPrefixLength_le_runOffset",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "flattened run offset lies at or above its run boundary",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunprefixlength-le-runoffset,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-of-run-eq],
    :other-consumers []}]}
