@@ -88374,6 +88374,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 4ba7153e1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792097755492-14649-f1250ad9",
+     :commands
+     ["git show/diff/check 4ba7153e1"
+      "sha256sum + placeholder recount from 4ba7153e1"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 4ba7153e1 adds compiled, sorry-free progress beyond history bea938fa3. The singleton base is stated on the actual dependent Path.concat quotient; concat_succ followed by concat_zero yields the constant-prefix composition, and Homotopic.refl_trans has the correct direction to the sole factor. Only t97A01Closure.lean changed; fixture SHA a045936ed57e443c8347282103b5ca3c4f4cb2267eef53377cdaf3fbd59ce457 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Fold induction, van Kampen, and assembly remain listed."},
     :commit "4ba7153e1",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88394,7 @@
      "a045936ed57e443c8347282103b5ca3c4f4cb2267eef53377cdaf3fbd59ce457"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88412,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient concat successor recurrence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked singleton concat induction base.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88635,7 +88647,10 @@
      :reason "Banked exhaustive dependent successor alternatives."}
     {:job 3,
      :commit "bea938fa3",
-     :reason "Banked quotient concat successor recurrence."}]}
+     :reason "Banked quotient concat successor recurrence."}
+    {:job 4,
+     :commit "4ba7153e1",
+     :reason "Banked singleton concat induction base."}]}
   {:consumer :t94J09,
    :stop-count 8,
    :evidence
@@ -96094,7 +96109,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_pathHomotopicQuotient_concat_one",
@@ -96104,7 +96119,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "singleton dependent concat has its sole factor class",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4ba7153e1"},
    :id :lemma-torusrp2-pathhomotopicquotient-concat-one,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-pathhomotopicquotient-concat-succ],
