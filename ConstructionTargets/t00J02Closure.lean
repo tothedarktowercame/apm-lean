@@ -436,6 +436,34 @@ theorem exists_nhds_injOn_of_contMDiff_surjective
 
 #print axioms exists_nhds_injOn_of_contMDiff_surjective
 
+/-- Surjectivity of the derivative at every point of one fiber supplies the
+pointwise local-injectivity datum used by the finite-fiber constructors. -/
+theorem locallyInjectiveAlongFiber_of_mfderiv_surjective
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (y : S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hregular : ∀ x, f x = y → Function.Surjective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x)) :
+    LocallyInjectiveAlongFiber f y := by
+  intro x hx
+  exact exists_nhds_injOn_of_contMDiff_surjective f x hf (hregular x hx)
+
+#print axioms locallyInjectiveAlongFiber_of_mfderiv_surjective
+
+/-- A fiberwise regular value of a smooth surface self-map can be selected
+together with the local-injectivity datum needed downstream. -/
+theorem exists_locallyInjectiveAlongFiber_of_exists_regularFiber
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hregular : ∃ y, ∀ x, f x = y → Function.Surjective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x)) :
+    ∃ y, LocallyInjectiveAlongFiber f y := by
+  obtain ⟨y, hy⟩ := hregular
+  exact ⟨y, locallyInjectiveAlongFiber_of_mfderiv_surjective f y hf hy⟩
+
+#print axioms exists_locallyInjectiveAlongFiber_of_exists_regularFiber
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
