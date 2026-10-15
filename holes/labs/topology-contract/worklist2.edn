@@ -88384,6 +88384,17 @@
       :exit 1,
       :correction
       "fixed IsZero iso direction and conjunction nesting"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792045473916-13483-fdcf7c79",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 36c33f454 by topo-6 changes only scoped Main.lean and completes frozen B1 after 4cacd825f. Exact snapshot target builds and Main compiles; Main retains 1 B2 placeholder, target has 0; fixture SHA-256 4655f127525edfd0d8669b58038db8f799f18d9d437bb82689873e6728a809ca matches; registry 166/0; B1 and transports use only propext, Classical.choice, Quot.sound. Homeomorph-induced homology isos point frozen-to-pairing; H2 and higher IsZero.of_iso calls have the correct source/target orientation; H1 composes through each pairing cokernel and Smith equivalence to exactly Z x Z x ZMod 2. B2 van Kampen and final assembly remain listed."},
     :commit "36c33f454",
     :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
@@ -88392,7 +88403,7 @@
      "4655f127525edfd0d8669b58038db8f799f18d9d437bb82689873e6728a809ca"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88410,7 +88421,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked attaching-range transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal polygon homology.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88446,7 +88457,10 @@
      :reason "Banked injectivity and zero kernels."}
     {:job 9,
      :commit "4cacd825f",
-     :reason "Banked attaching-range transport."}]}
+     :reason "Banked attaching-range transport."}
+    {:job 1,
+     :commit "36c33f454",
+     :reason "Banked literal polygon homology."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -93495,7 +93509,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97a01_polygon_singular_homology",
@@ -93505,7 +93519,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "literal quotient homology adapter",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "36c33f454"},
    :id :lemma-apm-t97a01-polygon-singular-homology,
    :kind :lemma,
    :depends-on
@@ -93933,7 +93949,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97a01_X_homologyIsoPairingSpace",
@@ -93943,14 +93959,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "literal X homology transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "36c33f454"},
    :id :lemma-apm-t97a01-x-homologyisopairingspace,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97a01_TorusRP2_homologyIsoPairingSpace",
@@ -93960,7 +93978,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "literal torus-crosscap homology transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "36c33f454"},
    :id :lemma-apm-t97a01-torusrp2-homologyisopairingspace,
    :kind :lemma,
    :depends-on [],
