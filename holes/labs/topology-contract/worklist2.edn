@@ -87945,6 +87945,20 @@
       :exit 1,
       :correction
       "fixed namespaces, concrete composition, and inverse orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792037482311-13182-4d73dd77",
+     :commands
+     ["git show/diff-tree f94cb352b"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms four new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit f94cb352b by topo-6 changes only the scoped target; fixture hash 71e98cd9...0f993 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. H0 intersection injectivity and adjacent exactness make H1 reassembly epic. Inner-piece H1 vanishing identifies every preimage with an outer coordinate; quotient surjectivity plus prior injectivity gives BoundaryCokernel equiv surface H1 in the correct direction. New compiled progress; H2-kernel and H0 extraction remain, then B9-B10."},
     :commit "f94cb352b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87967,7 @@
      "71e98cd916e971b101a1e9f1c46897d10e9c14a82b24e63acc1bf91aec90f993"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87987,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked injectivity of the B8 cokernel-to-H1 map.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B8 surface-H1 cokernel equivalence.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88313,7 +88327,10 @@
      :reason "Banked B8 cokernel-to-H1 map."}
     {:job 8,
      :commit "16d1b45c3",
-     :reason "Banked injectivity of the B8 cokernel-to-H1 map."}]}
+     :reason "Banked injectivity of the B8 cokernel-to-H1 map."}
+    {:job 9,
+     :commit "f94cb352b",
+     :reason "Banked B8 surface-H1 cokernel equivalence."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -93125,7 +93142,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVReducedReassembly_surjective",
@@ -93135,14 +93152,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "reduced reassembly is onto",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f94cb352b"},
    :id :lemma-radialmvreducedreassembly-surjective,
    :kind :lemma,
    :depends-on [:lemma-boundarycokerneltoradialh1-injective],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "boundaryCokernelRadialH1Equiv",
@@ -93152,7 +93171,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "surface H1 equals attaching cokernel",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "f94cb352b"},
    :id :lemma-boundarycokernelradialh1equiv,
    :kind :lemma,
    :depends-on [:lemma-radialmvreducedreassembly-surjective],
