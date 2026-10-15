@@ -5277,9 +5277,56 @@ theorem cutAndPaste_aux_boundary_chart (K : Set ℂ) (c : ℂ) (hKc : Convex ℝ
 /-! ### The four boundary maps -/
 
 -- BEGIN SEAT AREA
+lemma cutOldA_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileOldA L p q) := by
+  unfold cutProfileOldA
+  apply Continuous.if_le (by fun_prop) (by
+    unfold cutChordA cutSA
+    fun_prop) (by fun_prop) (by fun_prop)
+  intro x hx
+  dsimp at hx ⊢
+  rw [hx]
+  unfold cutChordA cutSA cutPoint
+  rw [sub_self, zero_div]
+  simp
+
 theorem cutOldA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutOldA L p q) := by
-  sorry
+  unfold cutOldA
+  have hL : 0 < L := lt_trans (Nat.zero_lt_of_lt hpq) hqL
+  have hperiod : cutProfileOldA L p q (cutAlpha L p) =
+      cutProfileOldA L p q (cutAlpha L p + 2 * Real.pi) := by
+    unfold cutProfileOldA
+    have halpha : cutAlpha L p ≤ cutAlpha L q := by
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      exact (div_le_div_iff_of_pos_right hLr).2
+        (mul_le_mul_of_nonneg_left (by exact_mod_cast (Nat.le_of_lt hpq))
+          (by positivity))
+    rw [if_pos halpha]
+    have hnot : ¬ cutAlpha L p + 2 * Real.pi ≤ cutAlpha L q := by
+      rw [not_le]
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      rw [show 2 * Real.pi = 2 * Real.pi * L / L by field_simp]
+      rw [← add_div]
+      apply (div_lt_div_iff_of_pos_right hLr).2
+      have hq : (q : ℝ) < p + L := by exact_mod_cast (show q < p + L by omega)
+      simpa [mul_add, hLr.ne'] using
+        (mul_lt_mul_of_pos_left hq (by positivity : 0 < 2 * Real.pi))
+    rw [if_neg hnot]
+    unfold cutChordA cutSA cutPoint
+    have hden : cutAlpha L p + 2 * Real.pi - cutAlpha L q ≠ 0 := by
+      exact ne_of_gt (sub_pos.mpr (lt_of_not_ge hnot))
+    rw [show (cutAlpha L p + 2 * Real.pi - cutAlpha L q) /
+          (cutAlpha L p + 2 * Real.pi - cutAlpha L q) = 1 by field_simp]
+    simp
+  have hc : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileOldA L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · exact hperiod
+    · exact (cutOldA_continuous_aux_profile hpq hqL).continuousOn
+  exact hc.comp AddCircle.homeomorphCircle'.symm.continuous
 -- END SEAT AREA
 
 theorem cutOldB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
