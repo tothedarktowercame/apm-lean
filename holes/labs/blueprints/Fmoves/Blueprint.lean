@@ -6960,7 +6960,131 @@ theorem cutNewA_branch_injOn {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Set.InjOn (cutProfileNewA L p q) (Ioc (cutAlpha L (p + 1)) (cutAlpha L q)) ∧
     Set.InjOn (cutProfileNewA L p q)
       (Ioo (cutAlpha L q) (cutAlpha L p + 2 * Real.pi)) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : (0 : ℝ) < L := by exact_mod_cast hLnat
+  have hpi : (0 : ℝ) < 2 * Real.pi := Real.two_pi_pos
+  have hap : cutAlpha L p < cutAlpha L (p + 1) := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    push_cast
+    nlinarith
+  have haq : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_le_div_iff_of_pos_right hL).2
+    push_cast
+    have : (p : ℝ) + 1 ≤ q := by exact_mod_cast (by omega : p + 1 ≤ q)
+    nlinarith
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqr : (q : ℝ) < L := by exact_mod_cast hqL
+    have hpr : 0 ≤ (p : ℝ) := by exact_mod_cast (Nat.zero_le p)
+    field_simp
+    nlinarith
+  constructor
+  · intro x hx y hy hxy
+    have hxp : x ≤ cutAlpha L (p + 1) := hx.2
+    have hyp : y ≤ cutAlpha L (p + 1) := hy.2
+    simp only [cutProfileNewA, if_pos hxp, if_pos hyp] at hxy
+    unfold cutSeam at hxy
+    have hd : cutPoint L (q + 1) - cutPoint L (p + 1) ≠ 0 :=
+      sub_ne_zero.mpr (cutPoint_ne (by omega) (by omega)).symm
+    apply_fun fun z : ℂ => z - cutPoint L (p + 1) at hxy
+    simp only [add_sub_cancel_left] at hxy
+    have hs : (x - cutAlpha L p) * L / (2 * Real.pi) =
+        (y - cutAlpha L p) * L / (2 * Real.pi) := by
+      exact_mod_cast (mul_right_cancel₀ hd hxy)
+    have hL0 : (L : ℝ) ≠ 0 := ne_of_gt hL
+    have hp0 : (2 * Real.pi : ℝ) ≠ 0 := ne_of_gt hpi
+    field_simp [hL0, hp0] at hs
+    linarith
+  constructor
+  · intro x hx y hy hxy
+    have hxp : ¬ x ≤ cutAlpha L (p + 1) := not_le.mpr hx.1
+    have hyp : ¬ y ≤ cutAlpha L (p + 1) := not_le.mpr hy.1
+    have hxq : x ≤ cutAlpha L q := hx.2
+    have hyq : y ≤ cutAlpha L q := hy.2
+    simp only [cutProfileNewA, if_neg hxp, if_pos hxq, if_neg hyp, if_pos hyq] at hxy
+    rw [Complex.exp_eq_exp_iff_exists_int] at hxy
+    obtain ⟨n, hn⟩ := hxy
+    have hn' : x = y - (n : ℝ) * (2 * Real.pi) := by
+      have hi := congrArg Complex.im hn
+      simp [Complex.mul_im] at hi
+      linarith
+    have hnlo : (-1 : ℝ) < n := by
+      nlinarith [hx.1, hx.2, hy.1, hy.2, hqtop, hap]
+    have hnhi : (n : ℝ) < 1 := by
+      nlinarith [hx.1, hx.2, hy.1, hy.2, hqtop, hap]
+    have hnlo' : (-1 : ℤ) < n := by exact_mod_cast hnlo
+    have hnhi' : n < (1 : ℤ) := by exact_mod_cast hnhi
+    have : n = 0 := by omega
+    simpa [this] using hn'
+  · intro x hx y hy hxy
+    have hxp : ¬ x ≤ cutAlpha L (p + 1) := by
+      apply not_le.mpr
+      exact lt_of_le_of_lt haq hx.1
+    have hyp : ¬ y ≤ cutAlpha L (p + 1) := by
+      apply not_le.mpr
+      exact lt_of_le_of_lt haq hy.1
+    have hxq : ¬ x ≤ cutAlpha L q := not_le.mpr hx.1
+    have hyq : ¬ y ≤ cutAlpha L q := not_le.mpr hy.1
+    simp only [cutProfileNewA, if_neg hxp, if_neg hxq, if_neg hyp, if_neg hyq] at hxy
+    let ax : ℝ := cutAlpha L (p + 2) - cutSA L p q x * (2 * Real.pi / L)
+    let ay : ℝ := cutAlpha L (p + 2) - cutSA L p q y * (2 * Real.pi / L)
+    have hsx0 : 0 < cutSA L p q x := by
+      unfold cutSA
+      exact div_pos (sub_pos.mpr hx.1) (sub_pos.mpr hqtop)
+    have hsy0 : 0 < cutSA L p q y := by
+      unfold cutSA
+      exact div_pos (sub_pos.mpr hy.1) (sub_pos.mpr hqtop)
+    have hsx1 : cutSA L p q x < 1 := by
+      unfold cutSA
+      exact (div_lt_one (sub_pos.mpr hqtop)).2 (by linarith [hx.2])
+    have hsy1 : cutSA L p q y < 1 := by
+      unfold cutSA
+      exact (div_lt_one (sub_pos.mpr hqtop)).2 (by linarith [hy.2])
+    have hstep : 2 * Real.pi / L > 0 := div_pos hpi hL
+    have hLtwo : (2 : ℝ) ≤ L := by exact_mod_cast (by omega : 2 ≤ L)
+    have hax : ax ∈ Ico (cutAlpha L (p + 1))
+        (cutAlpha L (p + 1) + 2 * Real.pi) := by
+      constructor
+      · dsimp [ax]
+        unfold cutAlpha
+        push_cast
+        have := mul_lt_mul_of_pos_right hsx1 hstep
+        field_simp at this ⊢
+        nlinarith [hLtwo]
+      · dsimp [ax]
+        have ha : cutAlpha L (p + 2) < cutAlpha L (p + 1) + 2 * Real.pi := by
+          unfold cutAlpha
+          push_cast
+          field_simp
+          nlinarith [hLtwo]
+        nlinarith [mul_pos hsx0 hstep]
+    have hay : ay ∈ Ico (cutAlpha L (p + 1))
+        (cutAlpha L (p + 1) + 2 * Real.pi) := by
+      constructor
+      · dsimp [ay]
+        unfold cutAlpha
+        push_cast
+        have := mul_lt_mul_of_pos_right hsy1 hstep
+        field_simp at this ⊢
+        nlinarith [hLtwo]
+      · dsimp [ay]
+        have ha : cutAlpha L (p + 2) < cutAlpha L (p + 1) + 2 * Real.pi := by
+          unfold cutAlpha
+          push_cast
+          field_simp
+          nlinarith [hLtwo]
+        nlinarith [mul_pos hsy0 hstep]
+    have haeq : ax = ay := cutOldA_injective_aux_exp hax hay (by simpa [ax, ay] using hxy)
+    dsimp [ax, ay] at haeq
+    have hs : cutSA L p q x = cutSA L p q y := by
+      apply (mul_right_cancel₀ (ne_of_gt hstep))
+      linarith
+    unfold cutSA at hs
+    have hd : cutAlpha L p + 2 * Real.pi - cutAlpha L q ≠ 0 := ne_of_gt (sub_pos.mpr hqtop)
+    field_simp [hd] at hs
+    linarith
 
 /-- Values of different branches differ.  Seam values have norm `< 1` except at its
 ends `P'` (angle `α(p+1)`) and `Q'` (angle `α(q+1)`); reflection values are unit points
