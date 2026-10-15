@@ -119178,6 +119178,19 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792048517920-13581-eaa965b6",
+     :commands
+     ["git show/diff f0da1122^..f0da1122"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum archived closure/Main and blueprint"
+      "rg placeholders, sorryAx, theorem axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: f0da1122 adds 22 lines only in the scoped closure file. The incidence equality is used in the correct direction to align the common target chart with c preferred chart, deriving chart C1 from ContMDiffAt rather than assuming it. Archived closure/Main compile; hashes match df80c719..., 0b3b4888..., afb497a6...; placeholders 0/1; no sorryAx; theorem axioms are propext, Classical.choice, Quot.sound; registry 166/166. Residual explicitly lists C1/strict/right-inverse assembly, Sard, calculations, Main."},
     :commit "f0da11221ff6080aa44e7c43c7f44f2c9bf04963",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119186,7 +119199,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119204,7 +119217,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked manifold chart C1 extraction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-target C1 alignment.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119444,7 +119457,10 @@
      :reason "Banked product-chart C1 assembly."}
     {:job 5,
      :commit "cb13c853f67c0329dfbb134f734b9d94f0d777be",
-     :reason "Banked manifold chart C1 extraction."}]}
+     :reason "Banked manifold chart C1 extraction."}
+    {:job 6,
+     :commit "f0da11221ff6080aa44e7c43c7f44f2c9bf04963",
+     :reason "Banked common-target C1 alignment."}]}
   {:consumer :t98A06,
    :stop-count 9,
    :review-finding
@@ -121703,7 +121719,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "contDiffAt_commonTarget_of_contMDiffAt_self",
@@ -121713,7 +121729,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "incidence equality aligns preferred target-chart C1",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "f0da11221ff6080aa44e7c43c7f44f2c9bf04963"},
    :id :lemma-contdiffat-commontarget-of-contmdiffat-self,
    :kind :lemma,
    :depends-on
