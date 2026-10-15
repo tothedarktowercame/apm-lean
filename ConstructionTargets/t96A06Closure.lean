@@ -758,6 +758,46 @@ theorem t96A06_rp3_rational_homology_isZero_of_gt
   t96A06_rp3_rational_homology_isZero_of_sphere k
     (t96A06_sphere3_rational_homology_isZero_of_gt k hk)
 
+/-- Every rational singular homology group of the concrete projective
+three-space is finite-dimensional. -/
+theorem t96A06_rp3_rational_homology_finite (k : ℕ) :
+    FiniteDimensional ℚ
+      (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) := by
+  by_cases hk0 : k = 0
+  · subst k
+    exact rp3RationalH0Iso.toLinearEquiv.symm.finiteDimensional
+  by_cases hk3 : k = 3
+  · subst k
+    exact t96A06_rp3_rational_H3Iso.toLinearEquiv.symm.finiteDimensional
+  have hz : IsZero
+      (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) := by
+    rcases (show k = 1 ∨ k = 2 ∨ 3 < k by omega) with h | h | h
+    · simpa [h] using t96A06_rp3_rational_H1_isZero
+    · simpa [h] using t96A06_rp3_rational_H2_isZero
+    · exact t96A06_rp3_rational_homology_isZero_of_gt k h
+  letI : Subsingleton
+      (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) :=
+    ModuleCat.isZero_iff_subsingleton.mp hz
+  exact FiniteDimensional.of_injective
+    (0 : CoefficientH0.SingularHomology ℚ k (TopCat.of RP3) →ₗ[ℚ] ℚ)
+    (Function.injective_of_subsingleton _)
+
+/-- The complete rational homology table for the literal projective-space
+model used by the consumer. -/
+theorem t96A06_rp3_rational_homology :
+    Nonempty (CoefficientH0.SingularHomology ℚ 0 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ) ∧
+    (∀ k, k ≠ 0 → k ≠ 3 →
+      IsZero (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3))) ∧
+    Nonempty (CoefficientH0.SingularHomology ℚ 3 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ) := by
+  refine ⟨⟨rp3RationalH0Iso⟩, ?_, ⟨t96A06_rp3_rational_H3Iso⟩⟩
+  intro k hk0 hk3
+  rcases (show k = 1 ∨ k = 2 ∨ 3 < k by omega) with h | h | h
+  · simpa [h] using t96A06_rp3_rational_H1_isZero
+  · simpa [h] using t96A06_rp3_rational_H2_isZero
+  · exact t96A06_rp3_rational_homology_isZero_of_gt k h
+
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
@@ -794,6 +834,8 @@ theorem t96A06_rp3_rational_homology_isZero_of_gt
 #print axioms t96A06_rp3_antipodal_H3
 #print axioms t96A06_sphere3_rational_homology_isZero_of_gt
 #print axioms t96A06_rp3_rational_homology_isZero_of_gt
+#print axioms t96A06_rp3_rational_homology_finite
+#print axioms t96A06_rp3_rational_homology
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
