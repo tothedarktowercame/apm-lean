@@ -36702,7 +36702,9 @@
      :reason
      "Committed canonical prefix-indexed point/path families; quotient fold induction remains."}]}
   {:consumer :t99J05,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
@@ -36755,7 +36757,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36855,12 +36857,24 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git show --check --oneline --stat 5dcf403de", :exit 0}
      {:cmd "git diff --name-only 5dcf403de^ 5dcf403de", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792083938315-14341-e8f12f85",
+     :commands
+     ["git show --check --stat 5dcf403de"
+      "git diff --name-only 5dcf403de^ 5dcf403de"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"
+      "rg blueprint nodes/uses/placeholders"],
+     :finding
+     "PASS: commit 5dcf403de changes only the scoped blueprint. B1-B13 are mathematically coherent; each node cites the prior results/external inputs its proof needs, quotient orientations and representation conversions are explicit, and B11 hypotheses are used. Hash 13f3a610...da741a4; registry 167/167; no placeholders. This is valid committed program progress."},
     :commit "5dcf403de",
     :changed-paths
     ["ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -36880,14 +36894,19 @@
     :blueprint
     "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
    :continue-from
-   "NEXT JOB: write ConstructionTargets/CollaredConnectedSumHomology.blueprint.md (BLUEPRINTS.md), stating the final declaration in the exact form the consuming blueprints use, then formalise milestone by milestone.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review.",
    :id :program-2026-10-13-collared-connected-sum-homology,
    :kind :reusable-theorem,
    :campaign-priority 32,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers [:t00A01]}
+   :other-consumers [:t00A01],
+   :program-history
+   [{:job 1,
+     :commit "5dcf403de",
+     :reason
+     "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37159,7 +37178,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37217,7 +37236,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37239,7 +37258,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -43506,7 +43525,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_singularChainMap",
@@ -43518,7 +43537,9 @@
     :type
     "degreewise coefficient extension defines a natural map from integral to rational singular chains",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-singularchainmap,
    :kind :lemma,
    :depends-on
@@ -43546,7 +43567,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_overlap_homeomorph_puncturedAffine",
@@ -43558,14 +43579,16 @@
     :type
     "overlap is homeomorphic to punctured affine space, hence sphere-like",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine,
    :kind :lemma,
    :depends-on [:lemma-cpsuccessor-overlap-topcoordinates-ne-zero],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_singularChainsDegree",
@@ -43577,14 +43600,16 @@
     :type
     "degreewise coefficient extension between forgotten integral and rational singular chains",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-singularchainsdegree,
    :kind :lemma,
    :depends-on [:lemma-t96a06-inttoratcoefficient-signedincidence],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRational_singularChainsDegree_generator",
@@ -43596,14 +43621,16 @@
     :type
     "degree map sends every integral simplex generator to its rational generator with cast coefficient",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorational-singularchainsdegree-generator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-singularchainsdegree],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -43615,7 +43642,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "degree maps commute with singular differentials",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorational-singularchainsdegree-differential,
    :kind :lemma,
