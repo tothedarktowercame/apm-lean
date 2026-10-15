@@ -119137,43 +119137,40 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove incidence chart derivative equality; implicit-function chart; Sard; calculations; Main.",
+    "Identify chart conjugate; implicit incidence chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "coordinateDerivative_hasRightInverse_of_eq_conj",
-      :type
-      "conjugated coordinate derivative has continuous right inverse",
+    [{:name "hasFDerivAt_incidenceDifference",
+      :type "derivative of F(u)-C(v)",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["exists_linearRightInverse_conj"
-       "continuousLinearMap_hasRightInverse_of_linearRightInverse"],
+      :depends-on ["coordinateDerivative_hasRightInverse_of_eq_conj"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["coordinateDerivative_hasRightInverse_of_eq_conj"],
+      :depends-on ["hasFDerivAt_incidenceDifference"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "83a9733da8a8b39ce7cee83042cb6302b177d82718ca075c5aae3b8307cee9f7",
+     "1f257c558a56723fb55d9a983960df48760940388cd42ae7cb88faf98dfdfe4b",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked coordinate derivative split endpoint.",
+    :reason "Banked incidence derivative formula.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119181,19 +119178,10 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792041273064-13323-ec6d73ff",
-     :commands
-     ["git diff/show fbc16270 archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds compiled, sorry-free coordinate-derivative split endpoint. It transports the algebraic inverse through eE/eF, rewrites only under the explicit hypothesis identifying A with the conjugated derivative, then applies finite-dimensional continuity. Thus the pending derivative equality and incidence charts are not assumed away and remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "fbc162707b3ba10f2b83b3e313c8ee129da7a50a",
+    :diagnostic-history
+    [{:cmd "drafts", :exit 1, :finding "fixed ext"}
+     {:cmd "scan", :exit 130, :finding "stopped"}],
+    :commit "5ea5563afd675d581777463b466957363ca76564",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119201,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119665,7 +119653,8 @@
     :lemma-transverse-incidencedifferencederivative-haslinearrightinverse
     :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse
     :lemma-exists-linearrightinverse-conj
-    :lemma-coordinatederivative-hasrightinverse-of-eq-conj],
+    :lemma-coordinatederivative-hasrightinverse-of-eq-conj
+    :lemma-hasfderivat-incidencedifference],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121428,6 +121417,24 @@
    :depends-on
    [:lemma-exists-linearrightinverse-conj
     :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "hasFDerivAt_incidenceDifference",
+    :type "derivative of F(u)-C(v)"},
+   :lemma
+   {:name "hasFDerivAt_incidenceDifference",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "derivative of F(u)-C(v)",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-hasfderivat-incidencedifference,
+   :kind :lemma,
+   :depends-on
+   [:lemma-coordinatederivative-hasrightinverse-of-eq-conj],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
