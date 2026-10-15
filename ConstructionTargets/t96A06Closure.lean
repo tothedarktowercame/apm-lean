@@ -18,6 +18,7 @@ open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.RealProjectiveSmoothTarget
 open ConstructionTargets.CoveringDegree
 open CategoryTheory CategoryTheory.Limits
+open scoped Simplicial
 
 noncomputable section
 namespace ConstructionTargets.t96A06Closure
@@ -582,6 +583,33 @@ theorem t96A06_rational_transferSimplex_projected (n : ℕ)
   unfold CoefficientCoveringTransfer.transferSimplex
   rw [huniv, Finset.sum_insert (by simpa using hab), Finset.sum_singleton]
 
+/-- Degreewise on rational singular chains, projection followed by transfer
+is the sum of the identity and antipodal deck transformation. -/
+theorem t96A06_rational_projection_transferDegree (n : ℕ) :
+    (CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, rp3SphereProjection_continuous⟩).f n ≫
+      CoefficientCoveringTransfer.transferDegree ℚ
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n =
+      𝟙 _ +
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩).f n := by
+  apply Limits.Sigma.hom_ext
+  intro simplex
+  let s := (TopCat.toSSetObjEquiv (TopCat.of (Sphere 3))
+    (Opposite.op ⦋n⦌)) simplex
+  have hs : SingularSubdivision.singularSimplexOfContinuousMap
+      (TopCat.of (Sphere 3)) n s = simplex :=
+    (TopCat.toSSetObjEquiv (TopCat.of (Sphere 3))
+      (Opposite.op ⦋n⦌)).symm_apply_apply simplex
+  change CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n simplex ≫ _ =
+    CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n simplex ≫ _
+  rw [← hs, ← Category.assoc,
+    CoefficientH0.singularGenerator_singularPostcomposition,
+    CoefficientCoveringTransfer.generator_transfer,
+    t96A06_rational_transferSimplex_projected]
+  simp only [Preadditive.comp_add, Category.comp_id,
+    CoefficientH0.singularGenerator_singularPostcomposition]
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -639,6 +667,7 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
 #print axioms t96A06_transferSimplex_projected
 #print axioms t96A06_rational_transferSimplex_projected
+#print axioms t96A06_rational_projection_transferDegree
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
