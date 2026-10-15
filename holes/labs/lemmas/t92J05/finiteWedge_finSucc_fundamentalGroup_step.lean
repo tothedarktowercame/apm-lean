@@ -1744,19 +1744,33 @@ theorem finiteWedge_finSucc_fundamentalGroup_free (n : ℕ) :
         finiteWedge_finSucc_homeomorph_pointWedge coprodFreeGroupFinSucc_equiv
         finiteWedge_finSucc_pointWedge_inputs (Or.inr ⟨n, rfl, old, hold⟩)
 
-lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_free :
-    ∀ x : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer,
-      Nonempty
-        (FundamentalGroup
-            apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer x ≃*
-          FreeGroup (Fin 4)) := by
-  sorry
-
-lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundary_word :
-    True := by
+/-- **Leaf (B8 + B9 for genus two).** π₁ of the outer piece is free on the four
+edge orbits, and under that identification the normal closure of the annulus loop is
+the normal closure of `[a₁,b₁][a₂,b₂]`.  Route: `_aux_outerSkeletonEquiv` (outer ≃ₕ
+skeleton), `_aux_boundarySkeletonHomeomorph` (skeleton ≃ₜ wedge),
+`finiteWedge_finSucc_fundamentalGroup_free 3` with its leg coordinates and
+`finiteWedge_reindex_homeomorph` (orbits ≃ Fin 4), then read the boundary loop
+edge by edge (`PairingData.skeletonHomeomorphWedge_skeletonArc`, `standardSign`). -/
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
+    ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
+      ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x) ≃* FreeGroup (Fin 4),
+        Subgroup.map e.toMonoidHom
+            (Subgroup.normalClosure
+              ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range :
+                Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
+          Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   sorry
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
+    (houter : ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
+      ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x) ≃* FreeGroup (Fin 4),
+        Subgroup.map e.toMonoidHom
+            (Subgroup.normalClosure
+              ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range :
+                Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
+          Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))))
     (hattach : ∀ {X : Type} [TopologicalSpace X] (U V : Set X)
       (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
       [PathConnectedSpace U] [PathConnectedSpace V]
@@ -1782,6 +1796,7 @@ theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
           apm_t92J05_genusTwo_center ≃*
         apm_t92J05_genusTwoGroup) := by
   exact apm_t92J05_genusTwo_polygon_attach_specialization
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word
     apm_t92J05_twoOpen_attach_one_cell
 
 /-- The standard genus-two polygon quotient is path connected.  This is
