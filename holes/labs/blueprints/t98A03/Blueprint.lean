@@ -2760,7 +2760,17 @@ lemma apm_t98a03_isLocalHomeomorph_sumElim {X Y Z : Type*} [TopologicalSpace X]
     [TopologicalSpace Y] [TopologicalSpace Z] {f : X → Z} {g : Y → Z}
     (hf : IsLocalHomeomorph f) (hg : IsLocalHomeomorph g) :
     IsLocalHomeomorph (Sum.elim f g) := by
-  sorry
+  apply apm_t98a03_isLocalHomeomorph_of_isOpenMap
+      (hf.continuous.sumElim hg.continuous) (hf.isOpenMap.sumElim hg.isOpenMap)
+  rintro (x | y)
+  · obtain ⟨U, hU, hxU, hinj⟩ := hf.isLocallyInjective x
+    refine ⟨Sum.inl '' U, isOpenMap_inl U hU, ⟨x, hxU, rfl⟩, ?_⟩
+    rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ hab
+    exact congrArg Sum.inl (hinj ha hb hab)
+  · obtain ⟨U, hU, hyU, hinj⟩ := hg.isLocallyInjective y
+    refine ⟨Sum.inr '' U, isOpenMap_inr U hU, ⟨y, hyU, rfl⟩, ?_⟩
+    rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ hab
+    exact congrArg Sum.inr (hinj ha hb hab)
 
 end Glue
 
