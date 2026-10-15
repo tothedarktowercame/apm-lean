@@ -9712,7 +9712,18 @@ theorem cut_word_get_t {Label : Type*} (u v t : List (Signed Label)) (x : Signed
     (e : ℕ) (h1 : u.length + 1 + v.length < e) (h2 : e < (u ++ [x] ++ v ++ [x] ++ t).length) :
     (u ++ [x, x] ++ inverseWord v ++ t)[e]'(by simp [inverseWord] at h2 ⊢; omega) =
       (u ++ [x] ++ v ++ [x] ++ t)[e]'h2 := by
-  sorry
+  have hlenNew : (u ++ [x, x] ++ inverseWord v).length =
+      u.length + v.length + 2 := by
+    simp only [List.length_append, List.length_cons, List.length_nil,
+      inverseWord, List.length_map, List.length_reverse]
+    omega
+  have hlenOld : (u ++ [x] ++ v ++ [x]).length =
+      u.length + v.length + 2 := by
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  rw [List.getElem_append_right (by simp only [hlenNew]; omega)]
+  rw [List.getElem_append_right (by simp only [hlenOld]; omega)]
+  simp only [hlenNew, hlenOld]
 
 /-- Old non-`x` sides land in the new word on the side `cutSideMap`, holding the same
 letter (or its inverse, for `v`); `cutSideMap` is injective on them. -/
