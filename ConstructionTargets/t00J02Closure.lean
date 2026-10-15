@@ -758,6 +758,20 @@ original function, so its level sets become vertical slices. -/
 
 #print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse_fst
 
+/-- The zero fiber of the original function is exactly the preimage of the
+vertical zero slice under the implicit chart. -/
+theorem implicitToOpenPartialHomeomorph_mem_zeroSlice_iff
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x y : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA y ∈
+        ({0} : Set F) ×ˢ (Set.univ : Set A.ker) ↔
+      f y = 0 := by
+  simp
+
+#print axioms implicitToOpenPartialHomeomorph_mem_zeroSlice_iff
+
 /-- The banked chart-smoothness, strict-derivative, and split-surjection steps
 assemble into an implicit local chart for the incidence equation. -/
 noncomputable def incidenceImplicitToOpenPartialHomeomorph
