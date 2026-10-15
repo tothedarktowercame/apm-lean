@@ -2363,6 +2363,17 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     obtain ⟨c, hc⟩ := hrel
     exact ⟨c, hc.inv_right⟩
 
+/-- **Leaf (generic).** Homotopic maps induce conjugate maps on π₁: along the track of
+the homotopy at `x`, `π₁(g) = (basepoint change) ∘ π₁(f)`.  Mathlib:
+`ContinuousMap.Homotopy`, `FundamentalGroupoidFunctor.homotopicMapsNatIso` /
+`ContinuousMap.Homotopy.evalAt`, `FundamentalGroup.fundamentalGroupMulEquivOfPath`. -/
+lemma apm_t92J05_homotopic_map_conj {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (h : f.Homotopic g) (x : X) :
+    ∃ p : Path (f x) (g x), ∀ a : FundamentalGroup X x,
+      FundamentalGroup.map g x a =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath p (FundamentalGroup.map f x a) := by
+  sorry
+
 /-- The overlap's circle coordinate (annulus `≃ₜ Ioo 0 1 × Circle`, second factor). -/
 noncomputable def apm_t92J05_genusTwo_overlapAngle :
     C(↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)), Circle) :=
