@@ -103,7 +103,28 @@ theorem sphere_top : Nonempty (HQ 3 S3 ≅ ModuleCat.of ℚ ℚ) := by
 (banked `rational_homology_projection`: transfer ≫ p_* = 2 • 𝟙). -/
 theorem retract_isZero (hcov : CoveringDegree.IsKSheetedCover projFun 2) (k : ℕ)
     (hS : IsZero (HQ k S3)) : IsZero (HQ k RP3) := by
-  sorry
+  rw [IsZero.iff_id_eq_zero]
+  have hproj :=
+    CoefficientCoveringTransfer.rational_homology_projection projFun hcov k
+  have hcomp :
+      HomologicalComplex.homologyMap
+          (CoefficientCoveringTransfer.transfer ℚ projFun hcov) k ≫
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ
+            ⟨projFun, hcov.isCoveringMap.continuous⟩) k = 0 :=
+    by
+      rw [hS.eq_of_tgt
+        (HomologicalComplex.homologyMap
+          (CoefficientCoveringTransfer.transfer ℚ projFun hcov) k) 0]
+      exact zero_comp
+  have htwo : 2 • 𝟙 (HQ k RP3) = 0 := by
+    rw [← hproj]
+    exact hcomp
+  calc
+    𝟙 (HQ k RP3) = (1 / 2 : ℚ) • (2 • 𝟙 (HQ k RP3)) := by
+      rw [← Nat.cast_smul_eq_nsmul ℚ, smul_smul]
+      norm_num
+    _ = 0 := by rw [htwo, smul_zero]
 
 /-- Projection then transfer is `𝟙 + a_*`: the lifts of `p ∘ σ` are exactly `σ` and `a ∘ σ`. -/
 theorem proj_transfer (hcov : CoveringDegree.IsKSheetedCover projFun 2) (k : ℕ) :
