@@ -385,11 +385,73 @@ theorem torusRP2SkeletonFinFreeGroupMap_surjective :
   exact torusRP2SkeletonFreeGroupMap_surjective.comp
     torusRP2OrbitFreeGroupEquiv.symm.surjective
 
+/-- Change from the signed polygon orientation to the frozen presentation:
+the third generator is reversed, while the first two are fixed. -/
+def torusRP2GeneratorSignHom : FreeGroup (Fin 3) →* FreeGroup (Fin 3) :=
+  FreeGroup.lift fun i => if i = 2 then (FreeGroup.of i)⁻¹ else FreeGroup.of i
+
+theorem torusRP2GeneratorSignHom_involutive :
+    Function.Involutive torusRP2GeneratorSignHom := by
+  intro x
+  induction x using FreeGroup.induction_on with
+  | C1 => simp
+  | of i =>
+      fin_cases i <;> simp [torusRP2GeneratorSignHom]
+  | inv_of i h => simpa using congrArg Inv.inv h
+  | mul x y hx hy => simp [hx, hy]
+
+/-- The generator-sign change is an automorphism, not a change of the
+presented group. -/
+def torusRP2GeneratorSignEquiv : FreeGroup (Fin 3) ≃* FreeGroup (Fin 3) :=
+  MulEquiv.ofBijective torusRP2GeneratorSignHom
+    ⟨torusRP2GeneratorSignHom_involutive.injective,
+      torusRP2GeneratorSignHom_involutive.surjective⟩
+
+/-- Skeleton generators in the convention of the frozen relator. -/
+noncomputable def torusRP2FrozenSkeletonFreeGroupMap :
+    FreeGroup (Fin 3) →*
+      FundamentalGroup torusRP2PairingData.skeleton torusRP2SkeletonBase :=
+  torusRP2SkeletonFinFreeGroupMap.comp torusRP2GeneratorSignEquiv.toMonoidHom
+
+theorem torusRP2FrozenSkeletonFreeGroupMap_surjective :
+    Function.Surjective torusRP2FrozenSkeletonFreeGroupMap := by
+  exact torusRP2SkeletonFinFreeGroupMap_surjective.comp
+    torusRP2GeneratorSignEquiv.surjective
+
+/-- The literal relator requested by the frozen theorem. -/
+def torusRP2FrozenRelator : FreeGroup (Fin 3) :=
+  FreeGroup.of 0 * FreeGroup.of 1 * (FreeGroup.of 0)⁻¹ *
+    (FreeGroup.of 1)⁻¹ * FreeGroup.of 2 * FreeGroup.of 2
+
+/-- The same boundary word in the signed polygon coordinates. -/
+def torusRP2SignedRelator : FreeGroup (Fin 3) :=
+  FreeGroup.of 0 * FreeGroup.of 1 * (FreeGroup.of 0)⁻¹ *
+    (FreeGroup.of 1)⁻¹ * (FreeGroup.of 2)⁻¹ * (FreeGroup.of 2)⁻¹
+
+theorem torusRP2GeneratorSignHom_frozenRelator :
+    torusRP2GeneratorSignHom torusRP2FrozenRelator =
+      torusRP2SignedRelator := by
+  simp [torusRP2GeneratorSignHom, torusRP2FrozenRelator,
+    torusRP2SignedRelator]
+
+/-- Direct evaluation of the six oriented polygon edges in the signed
+`Fin 3` coordinates. -/
+theorem torusRP2PolygonBoundaryLegWord_coordinates :
+    (polygonBoundaryLegWord torusRP2PairingData).map
+        (fun q => (torusRP2OrbitEquiv q.1, q.2)) =
+      [((0 : Fin 3), 1), ((1 : Fin 3), 1), ((0 : Fin 3), -1),
+        ((1 : Fin 3), -1), ((2 : Fin 3), -1), ((2 : Fin 3), -1)] := by
+  rfl
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
 #print axioms torusRP2BoundaryCokernelSmithEquiv
 #print axioms torusRP2SkeletonFreeGroupMap_surjective
 #print axioms torusRP2SkeletonFinFreeGroupMap_surjective
+#print axioms torusRP2GeneratorSignHom_involutive
+#print axioms torusRP2FrozenSkeletonFreeGroupMap_surjective
+#print axioms torusRP2GeneratorSignHom_frozenRelator
+#print axioms torusRP2PolygonBoundaryLegWord_coordinates
 
 end ConstructionTargets.t97A01Closure
