@@ -324,6 +324,19 @@ theorem flipSecondPairSphere_rational_H3 :
     ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 3]
   simp
 
+/-- The fourth pair-sign translate also preserves the rational fundamental
+class.  This packages the orientation transport needed to compare all four
+points of a regular fiber with one representative. -/
+theorem flipBothPairsSphere_rational_H3 :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          (flipFirstPairSphere.comp flipSecondPairSphere)) 3 = 𝟙 _ := by
+  rw [← ConstructionTargets.CoefficientBarycentricNaturality.singularPostcomposition_comp,
+    HomologicalComplex.homologyMap_comp,
+    flipSecondPairSphere_rational_H3,
+    flipFirstPairSphere_rational_H3]
+  simp
+
 /-- Away from the two coordinate circles, neither independent pair flip has
 a fixed point.  This is the freeness condition used for a regular fiber. -/
 def PairSignRegular (p : Sphere 3) : Prop :=
@@ -1353,6 +1366,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipFirstPairSphere_flipSecondPairSphere
 #print axioms flipFirstPairSphere_rational_H3
 #print axioms flipSecondPairSphere_rational_H3
+#print axioms flipBothPairsSphere_rational_H3
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
 #print axioms polynomialSphereLift_flipFirstPairSphere
