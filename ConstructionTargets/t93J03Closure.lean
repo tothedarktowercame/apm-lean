@@ -2345,10 +2345,12 @@ theorem pathTwoOpenSubdivisionRun_exists_outerBoundaryPath
     exact pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
       S hx hy i
   refine ⟨r'.cast hs ht, ?_⟩
-  rw [← Path.Homotopic.Quotient.mk_cast, hr]
+  rw [hr]
+  change ⟦r.cast _ _⟧ = _
   apply congrArg Path.Homotopic.Quotient.mk
   ext t
-  exact congrFun (Path.cast_coe r' hs ht) t
+  exact (congrFun (Path.cast_coe r _ _) t).trans
+    (congrArg Subtype.val (congrFun (Path.cast_coe r' hs ht) t)).symm
 
 /-- The chosen outer path for each maximal run, with endpoints in the
 canonical dependent boundary family. -/
@@ -2442,6 +2444,8 @@ theorem pathTwoOpenSubdivisionRunFold_exists_outerPath
   rw [← pathTwoOpenSubdivisionRunBoundaryPoints_getLast S]
   rw [List.getLast_eq_getElem]
   congr 1
+  apply Fin.ext
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints_length]
 
 /-- The folded outer representative can be rebased at the literal source and
 target vertices of the original subdivision, preserving its cast class. -/
@@ -2480,10 +2484,13 @@ theorem pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints
     apply Subtype.ext
     exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily_last S hx hy).symm
   refine ⟨q.cast hs ht, ?_⟩
-  rw [hq, ← Path.Homotopic.Quotient.mk_cast]
+  rw [hq]
+  change ⟦(q.map kleinPolygonOuterToSpace.continuous).cast _ _⟧ = _
   apply congrArg Path.Homotopic.Quotient.mk
   ext t
-  exact congrFun (Path.cast_coe q hs ht) t
+  exact (congrFun
+      (Path.cast_coe (q.map kleinPolygonOuterToSpace.continuous) _ _) t).trans
+    (congrArg Subtype.val (congrFun (Path.cast_coe q hs ht) t)).symm
 
 /-- Every overlap loop maps trivially in the polygon quotient.  This is the
 kernel inclusion in based van Kampen: the overlap inclusion factors through
