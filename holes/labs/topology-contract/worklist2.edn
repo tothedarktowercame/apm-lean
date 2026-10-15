@@ -88331,28 +88331,35 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Compare normal closures; prove van Kampen kernel; assemble.",
+    :residual "Transport to skeleton; prove kernel; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder; dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2SignedEdgeProduct_explicit",
-      :type "normalized six-edge product",
+    [{:name "torusRP2PositiveBoundary_normalClosure",
+      :type "+ relator comparison",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "torusRP2NegativeBoundary_normalClosure",
+      :type "- relator comparison",
       :status :proved,
       :consumers [:t97A01],
       :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "torusRP2AttachingWord",
-      :type "normal closure equals frozen relator",
+      :type "skeleton transport",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on ["torusRP2SignedEdgeProduct_explicit"],
+      :depends-on
+      ["torusRP2PositiveBoundary_normalClosure"
+       "torusRP2NegativeBoundary_normalClosure"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
-      :type "kernel normal closure",
+      :type "attachment kernel",
       :status :not-started,
       :consumers [:t97A01],
       :depends-on ["torusRP2AttachingWord"],
@@ -88367,37 +88374,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked normalized six-edge product.",
+    :reason "Banked relator normal closures.",
     :commands
     [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
-     {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
-     {:cmd "registry; scans; git check", :exit 0}],
+     {:cmd "lake lean Main", :exit 0}
+     {:cmd "registry/scans/git", :exit 0}],
     :diagnostic-history
-    [{:cmd "product draft",
+    [{:cmd "conjugacy draft",
       :exit 1,
-      :correction "fixed casts/association"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792048315011-13576-2c4efa07",
-     :commands
-     ["git show/diff/check d643012dc"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit d643012dc adds compiled, sorry-free progress beyond 8deb5ceae: basepoint transport of oriented wedge generators, normalized signed edge powers, and the explicit reversed six-edge product. Only t97A01Closure.lean changed; fixture SHA 19d88103fb3bb0a43bcdd9bb5274490b733160aab22c9dc25daec4fe90741010 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Orientation is correct: for global unit s, reverse multiplication yields c^-s c^-s b^-s a^-s b^s a^s. Normal-closure comparison, van Kampen kernel, and final assembly remain explicitly listed."},
-    :commit "d643012dc",
+      :correction "used cyclic conjugation"}],
+    :commit "e28e5f0f0",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "19d88103fb3bb0a43bcdd9bb5274490b733160aab22c9dc25daec4fe90741010"},
+     "492a7122cae40be69518b25f8a4d4e5a5ffe99e2c1ffcbb90619f58564cd1895"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94068,7 +94062,9 @@
     :lemma-torusrp2generatorsignequiv
     :lemma-torusrp2polygonboundarylegword-coordinates
     :lemma-torusrp2geometricboundary-eq-signededgeproduct
-    :lemma-torusrp2signededgeproduct-explicit],
+    :lemma-torusrp2signededgeproduct-explicit
+    :lemma-torusrp2positiveboundary-normalclosure
+    :lemma-torusrp2negativeboundary-normalclosure],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94158,6 +94154,40 @@
     :banked-by :program-2026-10-13-close-t97a01,
     :banked-commit "d643012dc"},
    :id :lemma-torusrp2signededgeproduct-explicit,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PositiveBoundary_normalClosure",
+    :type "+ relator comparison"},
+   :lemma
+   {:name "torusRP2PositiveBoundary_normalClosure",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "+ relator comparison",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2positiveboundary-normalclosure,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2NegativeBoundary_normalClosure",
+    :type "- relator comparison"},
+   :lemma
+   {:name "torusRP2NegativeBoundary_normalClosure",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "- relator comparison",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2negativeboundary-normalclosure,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
