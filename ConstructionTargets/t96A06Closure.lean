@@ -2057,6 +2057,46 @@ theorem t96A06_absoluteComparison_composite :
     (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
       (TopCat.of (Sphere 3)) 3).hom := rfl
 
+/-- Elementwise form of the absolute comparison identity on the normalized
+class: the chain comparison cancels the selected inverse homology comparison. -/
+theorem t96A06_absoluteComparison_composite_normalizedClass :
+    (((((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+          (TopCat.of (Sphere 3))).hom 3).hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).inv.hom
+          (ConstructionTargets.HigherSphereLocalization.normalizedClass
+            (k := 1) polynomialSphereRegularPoint))) =
+      ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint := by
+  rw [t96A06_absoluteComparison_composite]
+  exact CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv_hom_id _
+
+/-- The full absolute-comparison/localization composite sends the inverse
+normalized class to the positive ambient local generator. -/
+theorem t96A06_absoluteComparison_localization_normalizedClass :
+    ((((((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+          (TopCat.of (Sphere 3))).hom 3) ≫
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3).hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).inv.hom
+          (ConstructionTargets.HigherSphereLocalization.normalizedClass
+            (k := 1) polynomialSphereRegularPoint))) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint := by
+  rw [CategoryTheory.ConcreteCategory.comp_apply,
+    t96A06_absoluteComparison_composite_normalizedClass]
+  exact t96A06_sphere3_integral_normalizedClass_localizes
+    polynomialSphereRegularPoint
+
 /-- Extend the transported integral normalized class to rational coefficients
 inside homology of the forgotten rational chain complex. -/
 noncomputable def t96A06_mappedRationalExtensionClass :
@@ -3506,6 +3546,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_nativeIntegralNormalizedLocalization
 #print axioms t96A06_relativeComparison_cancel_nativeNormalizedLocalization
 #print axioms t96A06_absoluteComparison_composite
+#print axioms t96A06_absoluteComparison_composite_normalizedClass
+#print axioms t96A06_absoluteComparison_localization_normalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
