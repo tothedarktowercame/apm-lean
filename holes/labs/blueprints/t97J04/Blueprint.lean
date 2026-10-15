@@ -553,7 +553,16 @@ composites are homotopic to the identity, and A7b). -/
 lemma cell_piOne_aux_hequiv_bijective {A B : Type} [TopologicalSpace A]
     [TopologicalSpace B] (e : A ≃ₕ B) (b : B) :
     Function.Bijective (FundamentalGroup.map e.invFun b) := by
-  sorry
+  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv e.symm
+  let ff := E.fullyFaithfulFunctor
+  let m := FundamentalGroup.map e.invFun b
+  let mEquiv : FundamentalGroup B b ≃* FundamentalGroup A (e.invFun b) :=
+    { toFun := m
+      invFun := fun g => ff.preimage g
+      left_inv := fun g => ff.preimage_map g
+      right_inv := fun g => ff.map_preimage g
+      map_mul' := m.map_mul }
+  exact mEquiv.bijective
 
 /-- A7b. Homotopic maps agree on π₁ up to transport along the track of the
 basepoint (`ContinuousMap.Homotopy`; Mathlib's
