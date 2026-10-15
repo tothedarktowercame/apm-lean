@@ -88375,6 +88375,19 @@
      {:cmd "git show --check 5b37f1fd2", :exit 0}],
     :diagnostic-history
     [{:cmd "run drafts", :exit 1, :correction "qualified type/cast"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792057932785-13796-c230afef",
+     :commands
+     ["git log/show/diff/check d1c2b3d35..5b37f1fd2"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+dependency+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 snapshot 5b37f1fd2 adds compiled, sorry-free progress beyond d1c2b3d35: alternating-run boundary certificates and an outer representative for every maximal subdivision run. Only t97A01Closure.lean changed; fixture SHA 95e567510bbce02e46268c396358e77e9cc4bccb467c145c7ad4e2392e2c7fad matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Inner runs use overlap endpoints and the proved block replacement; outer runs concatenate directly in the outer subtype. Folding run representatives, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "5b37f1fd2",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88396,7 @@
      "95e567510bbce02e46268c396358e77e9cc4bccb467c145c7ad4e2392e2c7fad"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88414,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient-level subdivision reassembly.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked run representatives.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88492,7 +88505,10 @@
      :reason "Banked finite inner-block normalization."}
     {:job 9,
      :commit "d1c2b3d35",
-     :reason "Banked quotient-level subdivision reassembly."}]}
+     :reason "Banked quotient-level subdivision reassembly."}
+    {:job 1,
+     :commit "5b37f1fd2",
+     :reason "Banked run representatives."}]}
   {:consumer :t94J09,
    :stop-count 3,
    :evidence
@@ -94586,7 +94602,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRun_exists_outerRepresentative",
@@ -94596,7 +94612,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "maximal run has outer representative",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5b37f1fd2"},
    :id :lemma-torusrp2-subdivisionrun-exists-outerrepresentative,
    :kind :lemma,
    :depends-on
