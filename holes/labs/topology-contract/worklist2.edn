@@ -87901,71 +87901,60 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport normalized boundary H1 through outer coordinates and combine with the MV outer minus sign; conclude B7, then B8-B10.",
+    "Prove circle generator coherence; unsigned inclusion has attaching coordinates but production MV adds minus, so reconcile B7 sign before B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; review dirs preserved"],
+    :warnings ["preexisting lint; unrelated dirt preserved"],
     :missing-theorems
-    [{:name
-      "polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree",
-      :type
-      "normalized boundary H1 equals attaching vector coordinates",
+    [{:name "singularHomologyComparison_inv_map",
+      :type "inverse comparison commutes with H maps",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned"],
+      :depends-on [],
+      :area "polygon-quotient-homology"}
+     {:name "circleGroupH1IsoInt_inv_one_comparison",
+      :type "group/module circle generators agree",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["singularHomologyComparison_inv_map"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree"],
+      :depends-on ["circleGroupH1IsoInt_inv_one_comparison"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked normalized polygon-boundary H1 formula.",
+    :reason
+    "Banked inverse comparison naturality; circle generator coherence remains.",
     :commands
-    [{:cmd
+    [{:cmd "verify prior fixture f3c14aef4", :exit 0}
+     {:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check f3c14aef4", :exit 0}],
+     {:cmd "git show --check 856d109b9", :exit 0}],
     :diagnostic-history
-    [{:cmd "normalization drafts",
+    [{:cmd "outer-coordinate drafts",
       :exit 1,
-      :correction
-      "specialized mapped class and rewrote zpow -1 explicitly"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792031592554-13050-438cfc19",
-     :commands
-     ["git show/diff-tree f3c14aef4"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit f3c14aef4 by topo-6 changes only the scoped target; fixture hash 516a7db2...fdf0f matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The circle normalization coordinate is ±1: the +1 branch is direct, while in the -1 branch both the boundary class and attaching vector receive one minus sign, which neg_injective cancels. Cast/inversion orientation is handled explicitly. New compiled progress; remaining milestone is transport through outer coordinates plus the MV outer minus for B7, then B8-B10."},
-    :commit "f3c14aef4",
+      :correction "isolated comparison coherence"}],
+    :commit "856d109b9",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "516a7db26b480de1c3a4f26f563aeefc9c81acad110717126c0c7844a18fdf0f"},
+     "793712dbf59de8d5e88418af4587135f548bf36ea5614f3b395d8dd5c1f0b831"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92098,7 +92087,8 @@
    [:lemma-circlearc-eq-integerloop-one
     :lemma-finitepathsubdivision-boundary
     :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned
-    :lemma-polygonboundaryfundamentalclass-hurewicz-eq-attachingdegree],
+    :lemma-polygonboundaryfundamentalclass-hurewicz-eq-attachingdegree
+    :lemma-circlegrouph1isoint-inv-one-comparison],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92842,4 +92832,37 @@
    :kind :lemma,
    :depends-on
    [:lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "singularHomologyComparison_inv_map",
+    :type "inverse comparison commutes with H maps"},
+   :lemma
+   {:name "singularHomologyComparison_inv_map",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "inverse comparison commutes with H maps",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-singularhomologycomparison-inv-map,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "circleGroupH1IsoInt_inv_one_comparison",
+    :type "group/module circle generators agree"},
+   :lemma
+   {:name "circleGroupH1IsoInt_inv_one_comparison",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "group/module circle generators agree",
+    :area "polygon-quotient-homology"},
+   :id :lemma-circlegrouph1isoint-inv-one-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-singularhomologycomparison-inv-map],
    :other-consumers [:t94J09]}]}
