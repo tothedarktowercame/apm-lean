@@ -2631,7 +2631,21 @@ lemma presentation_algebra (r : FreeGroup (Fin 4))
 /-- B6. Homology of the wedge: path connected, and zero in degrees `≥ 2`
 (`PolygonSurfaceHomology.finiteWedgeHigherHomologyIsZero`). -/
 lemma W_homology : PathConnectedSpace W ∧ ∀ k, 2 ≤ k → Limits.IsZero (H k W) := by
-  sorry
+  constructor
+  · generalize hc : Fintype.card (PairingOrbit P.pair) = c
+    cases c with
+    | zero =>
+        exfalso
+        have hpos := PolygonSurfaceHomology.pairingOrbitCard_pos P
+        omega
+    | succ m =>
+        letI : PathConnectedSpace (FiniteWedge (Fin (m + 1))) :=
+          finiteWedge_finSucc_pointWedge_inputs_aux_path m
+        let e := PolygonSurfaceHomology.finiteWedgeOrbitHomeomorphFin P
+        rw [hc] at e
+        exact e.symm.surjective.pathConnectedSpace e.symm.continuous
+  · intro k hk
+    exact PolygonSurfaceHomology.finiteWedgeHigherHomologyIsZero P k hk
 
 /-- B7. `word_* = 0` on `H₁`: Hurewicz naturality
 (`PolygonSurfaceHomology.moduleHurewicz_naturality`) sends the circle class to
