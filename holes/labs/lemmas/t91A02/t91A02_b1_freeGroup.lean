@@ -116,7 +116,44 @@ both sides are zero-dimensional. -/
 lemma t91A02_b1_freeGroup (n : ℕ) :
     FiniteDimensional ℚ (Additive (FreeGroup (Fin n)) →+ ℚ) ∧
       t91A02_b1 (FreeGroup (Fin n)) = n := by
-  sorry
+  let e : (Additive (FreeGroup (Fin n)) →+ ℚ) ≃ₗ[ℚ] (Fin n → ℚ) :=
+    { toFun := fun f i => f (Additive.ofMul (FreeGroup.of i))
+      invFun := fun v => MonoidHom.toAdditive
+        (FreeGroup.lift (fun i => Multiplicative.ofAdd (v i)))
+      left_inv := by
+        intro f
+        apply AddMonoidHom.ext
+        intro x
+        change (MonoidHom.toAdditive
+          (FreeGroup.lift (fun i => Multiplicative.ofAdd
+            (f (Additive.ofMul (FreeGroup.of i)))))) x = f x
+        have h : FreeGroup.lift (fun i => Multiplicative.ofAdd
+              (f (Additive.ofMul (FreeGroup.of i)))) =
+            AddMonoidHom.toMultiplicative f := by
+          apply FreeGroup.ext_hom
+          intro i
+          rw [FreeGroup.lift_apply_of]
+          rfl
+        exact DFunLike.congr_fun (congrArg MonoidHom.toAdditive h) x
+      right_inv := by
+        intro v
+        funext i
+        change (FreeGroup.lift (fun i => Multiplicative.ofAdd (v i)))
+          (FreeGroup.of i) = Multiplicative.ofAdd (v i)
+        exact FreeGroup.lift_apply_of
+      map_add' := by
+        intro f g
+        funext i
+        simp
+      map_smul' := by
+        intro c f
+        funext i
+        simp }
+  have hfd : FiniteDimensional ℚ (Additive (FreeGroup (Fin n)) →+ ℚ) :=
+    e.symm.finiteDimensional
+  refine ⟨hfd, ?_⟩
+  unfold t91A02_b1
+  rw [e.finrank_eq, Module.finrank_fin_fun]
 -- END SEAT AREA
 
 /-- **Leaf A2 (generic).**  Killing a finite set `S` lowers `b₁` by at most
