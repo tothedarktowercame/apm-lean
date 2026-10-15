@@ -81,7 +81,9 @@ lemma T96A06_rp3_rationalHomology_finite (k : ℕ) :
 lemma T96A06_rp3_rationalHomology_vanishes_above_three (k : ℕ)
     (hk : 3 < k) :
     Subsingleton (Homology T96A06.RP3 k) := by
-  sorry
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, hvanish, _⟩
+  apply ModuleCat.subsingleton_of_isZero
+  exact hvanish k (by omega) (by omega)
 -- END SEAT AREA
 
 lemma T96A06_polynomialDescent_trace_zero
