@@ -3979,9 +3979,182 @@ backward: `inl (inl q) ↦ inl q`, `inl (inr z) ↦ inr (0, z)`,
 `inr z ↦ inr (1, z)`.  The glue cases are `(sheetPoint 0, 1) = (1, 1)` with
 `(0, 1)` and `(sheetPoint 1, 1)` with `(1, 1)`.  Same pattern as the circle
 twin. 100-180 lines. -/
+def apm_t01A04_nh_torusCover_homeomorph_aux_fraw :
+    Sum apm_t01a04_Torus (Fin 2 × Circle) → apm_t01A04_nh_TCModel
+  | .inl q => quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)
+      (.inl (quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) (.inl q)))
+  | .inr (i, z) => if i = 0 then
+      quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)
+        (.inl (quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle) (.inr z)))
+    else quotientMap apm_t01A04_nh_torusAntipode (1 : Circle) (.inr z)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_fraw_rel {x y}
+    (h : Relation.EqvGen apm_t01a04_torusCoverRel x y) :
+    apm_t01A04_nh_torusCover_homeomorph_aux_fraw x =
+      apm_t01A04_nh_torusCover_homeomorph_aux_fraw y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy with
+      | glue i =>
+        fin_cases i
+        · simp [apm_t01A04_nh_torusCover_homeomorph_aux_fraw,
+            apm_t01A04_nh_torusAntipode]
+          apply congrArg (quotientMap apm_t01A04_nh_torusAntipode (1 : Circle) ∘ Sum.inl)
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            ConstructionTargets.PointWedgeQuotient.Rel.base)
+        · simp [apm_t01A04_nh_torusCover_homeomorph_aux_fraw,
+            apm_t01A04_nh_torusAntipode]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            ConstructionTargets.PointWedgeQuotient.Rel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_f :
+    apm_t01a04_TorusCover → apm_t01A04_nh_TCModel :=
+  Quotient.lift apm_t01A04_nh_torusCover_homeomorph_aux_fraw
+    (fun _ _ h => apm_t01A04_nh_torusCover_homeomorph_aux_fraw_rel h)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_f_continuous :
+    Continuous apm_t01A04_nh_torusCover_homeomorph_aux_f := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  constructor
+  · simpa [apm_t01A04_nh_torusCover_homeomorph_aux_fraw] using
+      (continuous_quotientMap apm_t01A04_nh_torusAntipode (1 : Circle)).comp
+        (continuous_inl.comp
+          ((continuous_quotientMap ((1, 1) : apm_t01a04_Torus) (1 : Circle)).comp
+            continuous_inl))
+  · have hp : IsClopen {p : Fin 2 × Circle | p.1 = 0} := by
+      constructor
+      · exact (isClosed_discrete ({0} : Set (Fin 2))).preimage
+          (continuous_fst : Continuous (fun p : Fin 2 × Circle => p.1))
+      · exact (isOpen_discrete ({0} : Set (Fin 2))).preimage
+          (continuous_fst : Continuous (fun p : Fin 2 × Circle => p.1))
+    apply Continuous.if
+    · intro p hp'
+      rw [hp.frontier_eq] at hp'
+      exact hp'.elim
+    · exact (continuous_quotientMap _ _).comp
+        (continuous_inl.comp ((continuous_quotientMap _ _).comp
+          (continuous_inr.comp continuous_snd)))
+    · exact (continuous_quotientMap _ _).comp (continuous_inr.comp continuous_snd)
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_TorusCover
+  | .inl q => Quotient.mk _ (.inl q)
+  | .inr z => Quotient.mk _ (.inr (0, z))
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw_rel {x y}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle)) x y) :
+    apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw x =
+      apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      apply Quotient.sound
+      simpa using Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 0)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_binner :
+    apm_t01A04_nh_W → apm_t01a04_TorusCover :=
+  Quotient.lift apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw
+    (fun _ _ h => apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw_rel h)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_binner_continuous :
+    Continuous apm_t01A04_nh_torusCover_homeomorph_aux_binner := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  constructor
+  · have hq : Continuous (fun z : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ z : apm_t01a04_TorusCover)) := continuous_coinduced_rng
+    simpa [apm_t01A04_nh_torusCover_homeomorph_aux_binner,
+      apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw] using
+      hq.comp continuous_inl
+  · have hq : Continuous (fun z : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ z : apm_t01a04_TorusCover)) := continuous_coinduced_rng
+    simpa [apm_t01A04_nh_torusCover_homeomorph_aux_binner,
+      apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw] using
+      hq.comp (continuous_inr.comp (continuous_const.prodMk continuous_id))
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_braw :
+    Sum apm_t01A04_nh_W Circle → apm_t01a04_TorusCover
+  | .inl w => apm_t01A04_nh_torusCover_homeomorph_aux_binner w
+  | .inr z => Quotient.mk _ (.inr (1, z))
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_braw_rel {x y}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel
+        apm_t01A04_nh_torusAntipode (1 : Circle)) x y) :
+    apm_t01A04_nh_torusCover_homeomorph_aux_braw x =
+      apm_t01A04_nh_torusCover_homeomorph_aux_braw y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      apply Quotient.sound
+      simpa [apm_t01A04_nh_torusCover_homeomorph_aux_braw,
+        apm_t01A04_nh_torusCover_homeomorph_aux_binner,
+        apm_t01A04_nh_torusCover_homeomorph_aux_binnerRaw,
+        apm_t01A04_nh_torusAntipode] using
+          Relation.EqvGen.rel _ _ (apm_t01a04_torusCoverRel.glue 1)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_torusCover_homeomorph_aux_b :
+    apm_t01A04_nh_TCModel → apm_t01a04_TorusCover :=
+  Quotient.lift apm_t01A04_nh_torusCover_homeomorph_aux_braw
+    (fun _ _ h => apm_t01A04_nh_torusCover_homeomorph_aux_braw_rel h)
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_b_continuous :
+    Continuous apm_t01A04_nh_torusCover_homeomorph_aux_b := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  constructor
+  · simpa [apm_t01A04_nh_torusCover_homeomorph_aux_b,
+      apm_t01A04_nh_torusCover_homeomorph_aux_braw] using
+      apm_t01A04_nh_torusCover_homeomorph_aux_binner_continuous
+  · have hq : Continuous (fun z : Sum apm_t01a04_Torus (Fin 2 × Circle) =>
+        (Quotient.mk _ z : apm_t01a04_TorusCover)) := continuous_coinduced_rng
+    simpa [apm_t01A04_nh_torusCover_homeomorph_aux_b,
+      apm_t01A04_nh_torusCover_homeomorph_aux_braw] using
+      hq.comp (continuous_inr.comp (continuous_const.prodMk continuous_id))
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_leftInverse :
+    Function.LeftInverse apm_t01A04_nh_torusCover_homeomorph_aux_b
+      apm_t01A04_nh_torusCover_homeomorph_aux_f := by
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (q | ⟨i, z⟩)
+  · rfl
+  · fin_cases i <;> rfl
+
+lemma apm_t01A04_nh_torusCover_homeomorph_aux_rightInverse :
+    Function.RightInverse apm_t01A04_nh_torusCover_homeomorph_aux_b
+      apm_t01A04_nh_torusCover_homeomorph_aux_f := by
+  intro x
+  refine Quotient.inductionOn x ?_
+  rintro (w | z)
+  · refine Quotient.inductionOn w ?_
+    rintro (q | z)
+    · rfl
+    · rfl
+  · rfl
+
 lemma apm_t01A04_nh_torusCover_homeomorph :
     Nonempty (apm_t01a04_TorusCover ≃ₜ apm_t01A04_nh_TCModel) := by
-  sorry
+  exact ⟨
+    { toEquiv :=
+        { toFun := apm_t01A04_nh_torusCover_homeomorph_aux_f
+          invFun := apm_t01A04_nh_torusCover_homeomorph_aux_b
+          left_inv := apm_t01A04_nh_torusCover_homeomorph_aux_leftInverse
+          right_inv := apm_t01A04_nh_torusCover_homeomorph_aux_rightInverse }
+      continuous_toFun := apm_t01A04_nh_torusCover_homeomorph_aux_f_continuous
+      continuous_invFun := apm_t01A04_nh_torusCover_homeomorph_aux_b_continuous }⟩
 
 /-- LEAF (generic: an open set of the left summand missing the wedge point is
 an open subset of the wedge, homeomorphic to itself).  Openness: the preimage
