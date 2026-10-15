@@ -37111,29 +37111,29 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Combine bridges for fiber equality; then local signs, degree, invariants/Main.",
+    "Prove positive local signs, degree four, invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialMap_sphere_posScalar_eq_one",
-      :type "positive quadratic-image scale on unit inputs is one",
+    [{:name "polynomialSphereLift_fiber_subset_pairSignOrbit",
+      :type "normalized fiber lies in pair-sign orbit",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["rp3RadialToSphere_eq_imp_posScalar"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_polynomialSphereLift_regular_fiber",
-      :type "normalized lift fiber equals four sign translates",
-      :status :partial,
       :consumers [:t96A06],
       :depends-on
       ["polynomialMap_sphere_posScalar_eq_one"
        "polynomialMap_eq_iff_pairSigns"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_polynomialSphereLift_regular_fiber",
+      :type "normalized lift fiber equals four sign translates",
+      :status :proved,
+      :consumers [:t96A06],
+      :depends-on ["polynomialSphereLift_fiber_subset_pairSignOrbit"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_degree_four",
       :type "lift acts by 4 on H3",
@@ -37145,7 +37145,8 @@
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed unit-input quadratic scale uniqueness.",
+    :reason
+    "Committed exact normalized quadratic sphere-fiber classification.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37153,19 +37154,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check ea2f76251", :exit 0}],
+     {:cmd "git show --check 3a0a94566", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial compiles",
+    [{:cmd "initial compile",
       :exit 1,
-      :note
-      "fixed vector reduction and bounded nonlinear elaboration"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792048200158-13571-3b160980",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "ea2f76251",
+      :note "transported raw-vector equalities through WithLp"}],
+    :commit "3a0a94566",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37173,7 +37167,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41073,7 +41067,8 @@
    {:name "t96A06_polynomialSphereLift_regular_fiber",
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "regular fiber has four sign translates",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-polynomialspherelift-regular-fiber,
    :kind :lemma,
    :depends-on
@@ -41087,7 +41082,8 @@
     :lemma-realpair-eq-or-eq-neg-of-squarecoordinates
     :lemma-polynomialmap-eq-iff-pairsigns
     :lemma-rp3radialtosphere-eq-imp-posscalar
-    :lemma-polynomialmap-sphere-posscalar-eq-one],
+    :lemma-polynomialmap-sphere-posscalar-eq-one
+    :lemma-polynomialspherelift-fiber-subset-pairsignorbit],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41326,6 +41322,25 @@
    :id :lemma-polynomialmap-sphere-posscalar-eq-one,
    :kind :lemma,
    :depends-on [:lemma-rp3radialtosphere-eq-imp-posscalar],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_fiber_subset_pairSignOrbit",
+    :type "normalized fiber lies in pair-sign orbit"},
+   :lemma
+   {:name "polynomialSphereLift_fiber_subset_pairSignOrbit",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "normalized fiber lies in pair-sign orbit",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialspherelift-fiber-subset-pairsignorbit,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmap-sphere-posscalar-eq-one
+    :lemma-polynomialmap-eq-iff-pairsigns],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
