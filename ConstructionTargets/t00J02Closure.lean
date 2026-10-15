@@ -337,6 +337,36 @@ theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
 
 #print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
 
+/-- The Banach inverse-function theorem applied to the preferred surface
+chart gives a smooth two-sided local inverse of the chart expression. -/
+theorem exists_smoothLocalInverse_writtenInExtChartAt
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S) (e : SurfaceModel ≃L[ℝ] SurfaceModel)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (he : HasMFDerivAt SurfaceModelWithCorners SurfaceModelWithCorners f x
+      (e : SurfaceModel →L[ℝ] SurfaceModel)) :
+    let F := writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f
+    let a := extChartAt SurfaceModelWithCorners x x
+    ∃ g : SurfaceModel → SurfaceModel,
+      ContDiffAt ℝ ∞ g (F a) ∧
+      (∀ᶠ z in nhds a, g (F z) = z) ∧ (∀ᶠ y in nhds (F a), F (g y) = y) := by
+  dsimp only
+  let F := writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f
+  let a := extChartAt SurfaceModelWithCorners x x
+  have hF : ContDiffAt ℝ ∞ F a := by
+    have hx : ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ f x :=
+      hf.contMDiffAt
+    have h := (contMDiffAt_iff.mp hx).2
+    apply contDiffWithinAt_univ.mp
+    simpa only [modelWithCornersSelf_coe, Set.range_id] using h
+  have hF' : HasFDerivAt F (e : SurfaceModel →L[ℝ] SurfaceModel) a :=
+    hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt f x e he
+  have hs := hF.hasStrictFDerivAt' hF' (by simp)
+  refine ⟨hF.localInverse hF' (by simp), hF.to_localInverse hF' (by simp),
+    hs.eventually_left_inverse, hs.eventually_right_inverse⟩
+
+#print axioms exists_smoothLocalInverse_writtenInExtChartAt
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
