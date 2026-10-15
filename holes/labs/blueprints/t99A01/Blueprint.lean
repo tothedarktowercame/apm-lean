@@ -819,7 +819,121 @@ lemma t99A01_attach_circleSide_aux_deformation_aux_descend {r : ℕ} (degree : F
       APMT99A01.attachMk degree (t99A01_attach_circleSide_aux_deformation_raw degree (t, x)) =
         APMT99A01.attachMk degree (t99A01_attach_circleSide_aux_deformation_raw degree (t, y))) :
     ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
-  sorry
+  let q := t99A01_attach_circleSide_aux_deformation_q degree
+  have hq := t99A01_attach_circleSide_aux_deformation_q_quotient degree
+  let s : APMT99A01.sideA degree →
+      t99A01_attach_circleSide_aux_deformation_Pre degree :=
+    fun x ↦ Classical.choose (hq.surjective x)
+  have hs (x : APMT99A01.sideA degree) : q (s x) = x :=
+    Classical.choose_spec (hq.surjective x)
+  let F : unitInterval × APMT99A01.sideA degree → APMT99A01.sideA degree :=
+    fun p ↦ ⟨APMT99A01.attachMk degree
+      (t99A01_attach_circleSide_aux_deformation_raw degree (p.1, s p.2)),
+      t99A01_attach_circleSide_aux_deformation_raw_mem degree (p.1, s p.2)⟩
+  have hFq (p : unitInterval ×
+      t99A01_attach_circleSide_aux_deformation_Pre degree) :
+      F (p.1, q p.2) =
+        ⟨APMT99A01.attachMk degree
+          (t99A01_attach_circleSide_aux_deformation_raw degree p),
+          t99A01_attach_circleSide_aux_deformation_raw_mem degree p⟩ := by
+    apply Subtype.ext
+    exact hresp p.1 (s (q p.2)) p.2 (hs (q p.2))
+  have hF : Continuous F := by
+    apply hq.continuous_lift_prod_right
+    have hc : Continuous (fun p : unitInterval ×
+        t99A01_attach_circleSide_aux_deformation_Pre degree ↦
+          (⟨APMT99A01.attachMk degree
+              (t99A01_attach_circleSide_aux_deformation_raw degree p),
+            t99A01_attach_circleSide_aux_deformation_raw_mem degree p⟩ :
+            APMT99A01.sideA degree)) :=
+      Continuous.subtype_mk ((APMT99A01.continuous_attachMk degree).comp hcont) _
+    convert hc using 1
+    funext p
+    exact hFq p
+  refine ⟨ContinuousMap.Homotopy.mk (f₀ := ι.comp ρ)
+    (f₁ := ContinuousMap.id _) ⟨F, hF⟩ ?_ ?_⟩
+  · intro x
+    apply Subtype.ext
+    change (F (0, x)).1 = _
+    rw [show F (0, x) = F (0, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (0, s x))]
+    generalize hy : s x = y
+    rcases y with ⟨y, hymem⟩
+    cases y with
+    | inl z =>
+      simp only [t99A01_attach_circleSide_aux_deformation_raw]
+      change APMT99A01.attachMk degree (Sum.inl z) = (ι (ρ x)).1
+      rw [hι]
+      change APMT99A01.attachMk degree (Sum.inl z) =
+        APMT99A01.attachMk degree (Sum.inl (ρ x))
+      congr 2
+      have hx : x = ⟨APMT99A01.circleIncl degree z, hymem⟩ := by
+        exact (hy ▸ hs x).symm
+      rw [hx]
+      exact (hρ₁ z hymem).symm
+    | inr p =>
+      rcases p with ⟨i, z⟩
+      have hval : (s x).1 = Sum.inr (i, z) := congrArg Subtype.val hy
+      have hz := t99A01_attach_circleSide_aux_deformation_disk_ne degree (s x) i z hval
+      have hn : 0 < ‖(z : ℂ)‖ := norm_pos_iff.mpr hz
+      let w : Circle := ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+        simp [Submonoid.unitSphere, div_self hn.ne']⟩
+      simp only [t99A01_attach_circleSide_aux_deformation_raw]
+      have hs0 : t99A01_attach_circleSide_aux_deformation_scale (0 : unitInterval)
+          (z : ℂ) = 1 / ‖(z : ℂ)‖ := by
+        simp [t99A01_attach_circleSide_aux_deformation_scale]
+      change APMT99A01.attachMk degree _ = (ι (ρ x)).1
+      rw [hι]
+      have hx : x = ⟨APMT99A01.attachMk degree (Sum.inr (i, z)), hymem⟩ := by
+        exact (hy ▸ hs x).symm
+      have hrho := hρ₂ i z hymem
+      rw [show ρ x = w ^ degree i by rw [hx]; apply Subtype.ext; exact hrho]
+      apply Quotient.sound
+      have hb0 : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inl (w ^ degree i))
+          (Sum.inr (i, APMT99A01.circleInDisk w)) :=
+        Relation.EqvGen.rel _ _
+          (APMT99A01.AttachRel.boundary (degree := degree) i w)
+      have hb : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, APMT99A01.circleInDisk w))
+          (Sum.inl (w ^ degree i)) := hb0.symm
+      let zd : APMT99A01.Disk :=
+        ⟨(t99A01_attach_circleSide_aux_deformation_scale 0 (z : ℂ) : ℂ) * z,
+          by
+            rw [Metric.mem_closedBall, dist_zero_right]
+            apply t99A01_attach_circleSide_aux_deformation_scale_norm 0 _ hz
+            have hz1 := z.2
+            rw [Metric.mem_closedBall, dist_zero_right] at hz1
+            exact hz1⟩
+      have hd : zd = APMT99A01.circleInDisk w := by
+        apply Subtype.ext
+        simp [zd, APMT99A01.circleInDisk, w, hs0, div_eq_mul_inv, mul_comm]
+      have hzdraw :
+          t99A01_attach_circleSide_aux_deformation_raw degree
+              (0, ⟨Sum.inr (i, z), hymem⟩) = Sum.inr (i, zd) := by
+        simp [t99A01_attach_circleSide_aux_deformation_raw, zd]
+      change Relation.EqvGen (APMT99A01.AttachRel degree)
+        (t99A01_attach_circleSide_aux_deformation_raw degree
+          (0, ⟨Sum.inr (i, z), hymem⟩)) (Sum.inl (w ^ degree i))
+      rw [hzdraw, hd]
+      exact hb
+  · intro x
+    apply Subtype.ext
+    change (F (1, x)).1 = _
+    rw [show F (1, x) = F (1, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (1, s x))]
+    have hone : t99A01_attach_circleSide_aux_deformation_raw degree (1, s x) =
+        (s x).1 := by
+      generalize hy : s x = y
+      rcases y with ⟨y, hm⟩
+      cases y with
+      | inl z => simp [t99A01_attach_circleSide_aux_deformation_raw]
+      | inr p =>
+        rcases p with ⟨i, z⟩
+        simp [t99A01_attach_circleSide_aux_deformation_raw,
+          t99A01_attach_circleSide_aux_deformation_scale]
+    exact (congrArg (APMT99A01.attachMk degree) hone).trans
+      (congrArg Subtype.val (hs x))
 
 theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle))
@@ -1778,6 +1892,57 @@ noncomputable def t99A01_overlap_sigma_coordinate {r : ℕ} (degree : Fin r → 
       APMT99A01.H n (Σ _ : Fin r, Circle) :=
   ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℤ e n
 
+lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
+    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
+    (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
+      APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ)
+    (hcircle : ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
+      (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
+      ρ.comp ι = ContinuousMap.id Circle ∧
+      ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) ∧
+      ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree),
+        ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i)
+    (hdisk : ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
+      ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
+        (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
+        e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩)
+    (hoverlap : ∃ e : ContinuousMap.HomotopyEquiv
+        ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
+      ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w)
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+            (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+          (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
+    (hwinding : ∃ e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ,
+      ∀ i : Fin r, e.inv ≫
+        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).map
+            (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e.hom =
+        ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)))
+    (hexact : ∃ δ : ∀ n, APMT99A01.H (n + 1) (APMT99A01.AttachSpace degree) ⟶
+        APMT99A01.H n ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+      (∀ n, LinearMap.range
+          (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom =
+        LinearMap.ker
+          (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom) ∧
+      (∀ n, LinearMap.range
+          (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) (n + 1)).hom =
+        LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker
+        (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom)) :
+    Nonempty (APMT99A01.AttachMVLowData degree) := by
+  sorry
+
+/-- **Leaf (higher degrees, 50--100 lines, independent).** An attaching space made
+from a circle and finitely many two-disks has no integral homology in degrees
+at least three.  Prove this from the same MV cover using circle and contractible
+ball vanishing; it is deliberately independent of all low-degree coordinates. -/
+lemma t99A01_attach_transport_aux_higher {r : ℕ} (degree : Fin r → ℕ) :
+    ∀ k : ℕ, 3 ≤ k → Limits.IsZero (APMT99A01.H k (APMT99A01.AttachSpace degree)) := by
+  sorry
+
 lemma t99A01_attach_transport_aux_coordinates {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
     (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
@@ -1819,7 +1984,26 @@ lemma t99A01_attach_transport_aux_coordinates {r : ℕ} (degree : Fin r → ℕ)
       (∀ n, LinearMap.range (δ n).hom = LinearMap.ker
         (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom)) :
     Nonempty (APMT99A01.AttachMVData degree) := by
-  sorry
+  obtain ⟨D⟩ := t99A01_attach_transport_aux_low_degree degree hr hdegree hcover hcircle
+    hdisk hoverlap hsigma hwinding hexact
+  refine ⟨{
+    i₁ := D.i₁
+    j₁ := D.j₁
+    δ₁ := D.δ₁
+    i₀ := D.i₀
+    j₀ := D.j₀
+    δ₂ := D.δ₂
+    i₁_eq_degreeMap := D.i₁_eq_degreeMap
+    i₀_injective := D.i₀_injective
+    i₀_eq := D.i₀_eq
+    exact_i₁_j₁ := D.exact_i₁_j₁
+    exact_j₁_δ₁ := D.exact_j₁_δ₁
+    exact_δ₁_i₀ := D.exact_δ₁_i₀
+    exact_i₀_j₀ := D.exact_i₀_j₀
+    j₀_surjective := D.j₀_surjective
+    δ₂_injective := D.δ₂_injective
+    exact_δ₂_i₁ := D.exact_δ₂_i₁
+    higher := t99A01_attach_transport_aux_higher degree }⟩
 
 theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
