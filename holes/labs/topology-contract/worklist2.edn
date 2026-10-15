@@ -88329,31 +88329,35 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Instantiate frozen quotient comparisons; prove Smith reductions; then B2.",
+    :residual "Smith reductions and B1 transport; then B2.",
     :outcome :stop,
-    :warnings ["Main placeholder" "lint"],
+    :warnings ["1 prior placeholder" "lint"],
     :missing-theorems
-    [{:name "quotientHomeomorphOfEqvGenIff",
-      :type "coinduced literal quotient comparison",
+    [{:name "apm_t97a01_X_homeomorph_pairingSpace",
+      :type "aabbcc quotient homeomorphism",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on ["quotientHomeomorphOfEqvGenIff"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t97a01_TorusRP2_homeomorph_pairingSpace",
+      :type "torus-crosscap quotient homeomorphism",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["quotientHomeomorphOfEqvGenIff"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
-      :type "literal quotient homology adapter",
+      :type "literal homology adapter",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["aabbccPolygonHomology"
-       "torusRP2PolygonHomology"
-       "quotientHomeomorphOfEqvGenIff"],
+      ["apm_t97a01_X_homeomorph_pairingSpace"
+       "apm_t97a01_TorusRP2_homeomorph_pairingSpace"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
-      :type "literal torus-crosscap van Kampen",
+      :type "torus-crosscap van Kampen",
       :status :not-started,
       :consumers [:t97A01],
       :depends-on [],
@@ -88362,39 +88366,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked literal quotient homeomorphism adapter.",
+    :reason "Banked quotient homeomorphisms.",
     :commands
-    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
-      :exit 0}
+    [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 5969dfc4a", :exit 0}],
+     {:cmd "git show --check 53223ee93", :exit 0}],
     :diagnostic-history
-    [{:cmd "quotient adapter draft",
+    [{:cmd "axiom import probe",
       :exit 1,
-      :correction "opened Topology namespace"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792042193841-13344-4bf597a7",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms; git show --check; fixture/hash placeholder scans"],
-     :finding
-     "Commit 5969dfc4a by topo-6 changes only t97A01Closure.lean and adds compiled progress after 401abd2a7. Exact snapshot builds; Main has its prior 1 placeholder; target has 0; fixture SHA-256 836c3fd102175e2662e2c4c0fb76e2ea72a698b9d46a98428084182cb7908878 matches; registry 166/0; adapter uses only propext, Classical.choice, Quot.sound. quotientHomeomorphOfEqvGenIff correctly separates relation equality from topology: Quotient.congrRight supplies the equivalence, and each continuity direction descends the opposite canonical projection through the appropriate quotient map. No representation boundary is assumed. Literal relation instantiations, Smith reductions, and B2 remain listed."},
-    :commit "5969dfc4a",
-    :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
+      :correction "used direct Main check"}],
+    :commit "53223ee93",
+    :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
-    {:path "ConstructionTargets/t97A01Closure.lean",
+    {:path "problems/t97A01/lean/Main.lean",
      :sha256
-     "836c3fd102175e2662e2c4c0fb76e2ea72a698b9d46a98428084182cb7908878"},
+     "9178c678c3864488bfd64a70ba3f6ff96d60629166d8ec6c08a2fcaefc66a71a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93438,7 +93430,9 @@
    [:lemma-polygonquotient-homology
     :lemma-aabbccpolygonhomology
     :lemma-torusrp2polygonhomology
-    :lemma-quotienthomeomorphofeqvgeniff],
+    :lemma-quotienthomeomorphofeqvgeniff
+    :lemma-apm-t97a01-x-homeomorph-pairingspace
+    :lemma-apm-t97a01-torusrp2-homeomorph-pairingspace],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93512,4 +93506,38 @@
    :id :lemma-quotienthomeomorphofeqvgeniff,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_X_homeomorph_pairingSpace",
+    :type "aabbcc quotient homeomorphism"},
+   :lemma
+   {:name "apm_t97a01_X_homeomorph_pairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "aabbcc quotient homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-apm-t97a01-x-homeomorph-pairingspace,
+   :kind :lemma,
+   :depends-on [:lemma-quotienthomeomorphofeqvgeniff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_TorusRP2_homeomorph_pairingSpace",
+    :type "torus-crosscap quotient homeomorphism"},
+   :lemma
+   {:name "apm_t97a01_TorusRP2_homeomorph_pairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "torus-crosscap quotient homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-apm-t97a01-torusrp2-homeomorph-pairingspace,
+   :kind :lemma,
+   :depends-on [:lemma-quotienthomeomorphofeqvgeniff],
    :other-consumers []}]}
