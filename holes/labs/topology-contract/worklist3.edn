@@ -37178,53 +37178,52 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove transported projection and localization naturality; scalar one; four classes; Main.",
+    "Localization naturality; scalar one; four local classes; Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main has one placeholder."],
     :missing-theorems
-    [{:name "t96A06_integralToRational_relativeChains",
+    [{:name "t96A06_integralToRational_relativeChains_projection",
       :type
-      "coefficient extension between forgotten integral and rational coefficient-relative complexes",
+      "transported relative map commutes with coefficient-relative projections",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_integralToRational_relativeProjection_naturality"],
+      :depends-on ["t96A06_integralToRational_relativeChains"],
       :area "rp-rational-homology"}
-     {:name "t96A06_integralToRational_relativeChains_projection",
-      :type
-      "transported relative map commutes with the original coefficient-relative projections",
+     {:name "t96A06_integralToRational_localization_naturality",
+      :type "coefficient extension commutes with sphere localization",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_integralToRational_relativeChains"],
+      :depends-on
+      ["t96A06_integralToRational_relativeChains_projection"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed coefficient extension between the actual forgotten integral and rational relative complexes.",
+    "Committed transported relative-projection naturality; localization remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --oneline --stat 817238611",
+      "git diff --check && git show --check --oneline --stat de1602209",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792086819595-14398-f886713c",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "817238611",
+    :diagnostic-history
+    [{:cmd "initial projection proof compiles",
+      :exit 1,
+      :note
+      "Added mapHC colimit preservation and normalized categorical associations."}],
+    :commit "de1602209",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37232,7 +37231,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43496,7 +43495,8 @@
    :id :lemma-t96a06-integraltorational-localization-naturality,
    :kind :lemma,
    :depends-on
-   [:lemma-t96a06-sphere3-rational-h3iso-eq-coefficientnormalization],
+   [:lemma-t96a06-sphere3-rational-h3iso-eq-coefficientnormalization
+    :lemma-t96a06-integraltorational-relativechains-projection],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -43771,7 +43771,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "transported relative map commutes with the original coefficient-relative projections",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-integraltorational-relativechains-projection,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-relativechains],
