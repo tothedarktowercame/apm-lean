@@ -36165,6 +36165,16 @@
     [{:cmd "prior lake build ConstructionTargets.t93J03Closure",
       :exit 1,
       :correction "not rerun: source unchanged"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792027150790-12915-ac621530",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f exact scope"
+      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and is new progress after 263f5d47. It defines Fin(runs+1)-indexed boundaries in outer subtype V and proves their coercions equal corresponding ambient canonical boundaries, correctly oriented for run-fold assembly. The partial based van Kampen theorem remains unassumed. Scope/hash match; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36173,7 +36183,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36191,7 +36201,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Verified boundary: getElem_mem takes a bound proof, length_pos became length_pos_iff, and Fin.last needs a length cast. Central witnesses must flow through dependent run theorems.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Third check: closure remains at bd5ebdee; run-index API mismatch persists. Central Fin witnesses must thread through dependent endpoint/prefix theorems.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36601,7 +36611,11 @@
     {:job 3,
      :commit nil,
      :reason
-     "Verified boundary: getElem_mem takes a bound proof, length_pos became length_pos_iff, and Fin.last needs a length cast. Central witnesses must flow through dependent run theorems."}]}
+     "Verified boundary: getElem_mem takes a bound proof, length_pos became length_pos_iff, and Fin.last needs a length cast. Central witnesses must flow through dependent run theorems."}
+    {:job 4,
+     :commit nil,
+     :reason
+     "Third check: closure remains at bd5ebdee; run-index API mismatch persists. Central Fin witnesses must thread through dependent endpoint/prefix theorems."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
