@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 9794bfe38", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792108611887-14864-1cb33461",
+     :commands
+     ["git show/diff/check 9794bfe38"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 9794bfe38"],
+     :finding
+     "PASS program STOP: topo-6 commit 9794bfe38 adds compiled, sorry-free progress beyond history 258ff314a. frozenSignedHomology_of_generator_comparisons correctly feeds generator-quotient H0/H1/H2/high data into the prior algebraic assembly, then composes the signed-to-generator homology isomorphism in degrees 0 and 1 and transports IsZero in every degree >=2 in the correct orientation. It cleanly separates the proved transport/assembly from the still-missing geometric MV inputs. Only t94J09Closure.lean changed; fixture SHA 9ca40bebb647b7ab6a203f205259b9bd066790e6c0e3af7323aaa1af1de7daff matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Generator-quotient MV comparisons, normalization, and final assembly remain listed."},
     :commit "9794bfe38",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "9ca40bebb647b7ab6a203f205259b9bd066790e6c0e3af7323aaa1af1de7daff"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homology transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transported assembly.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88799,9 +88812,10 @@
     {:job 7,
      :commit "accfce741",
      :reason "Banked quotient homeomorphism."}
-    {:job 8,
-     :commit "258ff314a",
-     :reason "Banked homology transport."}]}
+    {:job 8, :commit "258ff314a", :reason "Banked homology transport."}
+    {:job 9,
+     :commit "9794bfe38",
+     :reason "Banked transported assembly."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96575,7 +96589,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenSignedHomology_of_generator_comparisons",
@@ -96585,7 +96599,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "generator comparisons imply signed homology",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9794bfe38"},
    :id :lemma-frozensignedhomology-of-generator-comparisons,
    :kind :lemma,
    :depends-on
