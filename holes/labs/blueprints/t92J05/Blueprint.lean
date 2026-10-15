@@ -1765,6 +1765,171 @@ lemma coprodFreeGroupFinSucc_equiv (n : ℕ) :
 /-- All topological inputs needed by point-wedge van Kampen at a successor
 split.  The neighborhood packages include openness, the basepoint, and a
 pointed contraction. -/
+structure finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+    (X : Type*) [TopologicalSpace X] (x : X) where
+  carrier : Set X
+  isOpen : IsOpen carrier
+  mem : x ∈ carrier
+  contraction :
+    ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      carrier ⟨x, mem⟩
+
+def finiteWedge_finSucc_pointWedge_inputs_aux_restrict
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (S : Set Y) : e ⁻¹' S ≃ₜ S where
+  toFun x := ⟨e x.1, x.2⟩
+  invFun y := ⟨e.symm y.1, by simpa using y.2⟩
+  left_inv x := by ext; exact e.symm_apply_apply x.1
+  right_inv y := by ext; exact e.apply_symm_apply y.1
+  continuous_toFun := Continuous.subtype_mk
+    (e.continuous.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (e.symm.continuous.comp continuous_subtype_val) _
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_pullback
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x : X}
+    (e : X ≃ₜ Y)
+    (P : finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood Y (e x)) :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood X x where
+  carrier := e ⁻¹' P.carrier
+  isOpen := P.isOpen.preimage e.continuous
+  mem := P.mem
+  contraction :=
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm
+      (finiteWedge_finSucc_pointWedge_inputs_aux_restrict e P.carrier) P.contraction
+
+def finiteWedge_finSucc_pointWedge_inputs_aux_circle :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood Circle 1 where
+  carrier := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+  isOpen := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+  mem := ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+  contraction := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_collapse
+    {L : Type} [Subsingleton L] (l : L) : FiniteWedge L → Circle :=
+  Quotient.lift (fun p : L × Circle => p.2) (by
+    intro a b hab
+    change Relation.EqvGen
+      (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) a b at hab
+    rw [ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+      at hab
+    rcases hab with rfl | ⟨ha, hb⟩
+    · rfl
+    · apply Circle.coe_injective
+      simpa using ha.trans hb.symm)
+
+lemma finiteWedge_finSucc_pointWedge_inputs_aux_collapse_continuous
+    {L : Type} [Subsingleton L] (l : L) :
+    Continuous (finiteWedge_finSucc_pointWedge_inputs_aux_collapse l) := by
+  apply continuous_coinduced_dom.mpr
+  letI : TopologicalSpace L := ⊥
+  simpa [finiteWedge_finSucc_pointWedge_inputs_aux_collapse] using
+    (continuous_snd : Continuous (fun p : L × Circle => p.2))
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph
+    {L : Type} [Subsingleton L] (l : L) : FiniteWedge L ≃ₜ Circle where
+  toFun := finiteWedge_finSucc_pointWedge_inputs_aux_collapse l
+  invFun := wedgeCircle l
+  left_inv x := by
+    refine Quotient.inductionOn x ?_
+    rintro ⟨k, z⟩
+    have hk : k = l := Subsingleton.elim _ _
+    subst k
+    rfl
+  right_inv z := rfl
+  continuous_toFun := finiteWedge_finSucc_pointWedge_inputs_aux_collapse_continuous l
+  continuous_invFun := continuous_wedgeCircle l
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_unit :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+      (FiniteWedge Unit) (wedgeCircle () 1) :=
+  finiteWedge_finSucc_pointWedge_inputs_aux_pullback
+    (finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ())
+    finiteWedge_finSucc_pointWedge_inputs_aux_circle
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_wedge
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x : X} {y : Y}
+    (PX : finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood X x)
+    (PY : finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood Y y) :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+      (ConstructionTargets.PointWedgeQuotient.Wedge x y)
+      (ConstructionTargets.PointWedgeQuotient.quotientMap x y (.inl x)) := by
+  let U := ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen x y
+    PX.carrier PY.carrier
+  have hU : IsOpen U :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen_isOpen
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  have hb : ConstructionTargets.PointWedgeQuotient.quotientMap x y (.inl x) ∈ U :=
+    ⟨.inl x, PX.mem, rfl⟩
+  let e : U ≃ₜ ConstructionTargets.PointWedgeQuotient.Wedge
+      (⟨x, PX.mem⟩ : PX.carrier) (⟨y, PY.mem⟩ : PY.carrier) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  let h := ConstructionTargets.PointWedgeVanKampen.wedgePointedContraction
+    PX.contraction PY.contraction
+  have he : e ⟨_, hb⟩ = ConstructionTargets.PointWedgeQuotient.quotientMap
+      (⟨x, PX.mem⟩ : PX.carrier) (⟨y, PY.mem⟩ : PY.carrier)
+      (.inl ⟨x, PX.mem⟩) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge_left
+      _ _ _ _ _ _
+  rw [← he] at h
+  exact ⟨U, hU, hb,
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h⟩
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_fin :
+    (n : ℕ) → finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+      (FiniteWedge (Fin (n + 1))) (wedgeCircle (0 : Fin (n + 1)) 1)
+  | 0 => finiteWedge_finSucc_pointWedge_inputs_aux_pullback
+      (letI : Subsingleton (Fin 1) := ⟨fun a b => Fin.ext (by omega)⟩
+       finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph 0)
+      finiteWedge_finSucc_pointWedge_inputs_aux_circle
+  | n + 1 => by
+      let old := finiteWedge_finSucc_pointWedge_inputs_aux_fin n
+      let combined := finiteWedge_finSucc_pointWedge_inputs_aux_wedge old
+        finiteWedge_finSucc_pointWedge_inputs_aux_unit
+      let e := Classical.choose (finiteWedge_finSucc_homeomorph_pointWedge n)
+      have he := (Classical.choose_spec (finiteWedge_finSucc_homeomorph_pointWedge n)).1
+      have hbase : e (wedgeCircle (0 : Fin ((n + 1) + 1)) 1) =
+          ConstructionTargets.PointWedgeQuotient.quotientMap
+            (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1)
+            (.inl (wedgeCircle (0 : Fin (n + 1)) 1)) := by
+        simpa using he (0 : Fin (n + 1)) 1
+      rw [← hbase] at combined
+      exact finiteWedge_finSucc_pointWedge_inputs_aux_pullback e combined
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_path :
+    (n : ℕ) → PathConnectedSpace (FiniteWedge (Fin (n + 1)))
+  | 0 => by
+      letI : Subsingleton (Fin 1) := ⟨fun a b => Fin.ext (by omega)⟩
+      let e := finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph (0 : Fin 1)
+      exact e.symm.surjective.pathConnectedSpace e.symm.continuous
+  | n + 1 => by
+      letI := finiteWedge_finSucc_pointWedge_inputs_aux_path n
+      letI : PathConnectedSpace (FiniteWedge Unit) :=
+        let e := finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()
+        e.symm.surjective.pathConnectedSpace e.symm.continuous
+      let e := Classical.choose (finiteWedge_finSucc_homeomorph_pointWedge n)
+      exact e.symm.surjective.pathConnectedSpace e.symm.continuous
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_locPath :
+    (n : ℕ) → LocPathConnectedSpace (FiniteWedge (Fin (n + 1)))
+  | 0 => by
+      letI : Subsingleton (Fin 1) := ⟨fun a b => Fin.ext (by omega)⟩
+      exact (finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph 0).symm.isQuotientMap.locPathConnectedSpace
+  | n + 1 => by
+      letI := finiteWedge_finSucc_pointWedge_inputs_aux_locPath n
+      letI : LocPathConnectedSpace (FiniteWedge Unit) :=
+        (finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()).symm.isQuotientMap.locPathConnectedSpace
+      letI : LocPathConnectedSpace
+          (ConstructionTargets.PointWedgeQuotient.Wedge
+            (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1)) :=
+        (show Topology.IsQuotientMap
+            (ConstructionTargets.PointWedgeQuotient.quotientMap
+              (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1)) from
+          ⟨ConstructionTargets.PointWedgeQuotient.surjective_quotientMap _ _, rfl⟩).locPathConnectedSpace
+      let e := Classical.choose (finiteWedge_finSucc_homeomorph_pointWedge n)
+      exact e.symm.isQuotientMap.locPathConnectedSpace
+
 lemma finiteWedge_finSucc_pointWedge_inputs (n : ℕ) :
     Nonempty (PathConnectedSpace (FiniteWedge (Fin (n + 1)))) ∧
     Nonempty (LocPathConnectedSpace (FiniteWedge (Fin (n + 1)))) ∧
@@ -1780,7 +1945,18 @@ lemma finiteWedge_finSucc_pointWedge_inputs (n : ℕ) :
       Nonempty
         (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
           M ⟨wedgeCircle () 1, hb⟩)) := by
-  sorry
+  let P := finiteWedge_finSucc_pointWedge_inputs_aux_fin n
+  let Q := finiteWedge_finSucc_pointWedge_inputs_aux_unit
+  letI : Subsingleton Unit := inferInstance
+  refine ⟨⟨finiteWedge_finSucc_pointWedge_inputs_aux_path n⟩,
+    ⟨finiteWedge_finSucc_pointWedge_inputs_aux_locPath n⟩,
+    ⟨by
+      let e := finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()
+      exact e.symm.surjective.pathConnectedSpace e.symm.continuous⟩,
+    ⟨(finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()).symm.isQuotientMap.locPathConnectedSpace⟩,
+    ?_, ?_⟩
+  · exact ⟨P.carrier, P.isOpen, P.mem, ⟨P.contraction⟩⟩
+  · exact ⟨Q.carrier, Q.isOpen, Q.mem, ⟨Q.contraction⟩⟩
 
 /-- The positively oriented circle class, normalized by winding number one. -/
 noncomputable def apm_t92J05_circlePositiveClass : FundamentalGroup Circle 1 :=
