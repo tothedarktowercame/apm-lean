@@ -37130,37 +37130,40 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove the nonzero comparison scalar is one; transport four local classes; sum and close Main.",
+    "Prove the explicit normalization automorphism is identity; transport four local classes; sum and close Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialSphereLift_baseLocalizationScalar_ne_zero",
-      :type "rational base-localization comparison scalar is nonzero",
+    [{:name
+      "polynomialSphereLift_baseNormalizationComparisonIso_apply",
+      :type
+      "explicit global-local normalization automorphism acts by the comparison scalar",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_base_localFundamentalClass_positive_iff"],
+      ["polynomialSphereLift_baseLocalizationScalar_ne_zero"],
       :area "rp-rational-homology"}
-     {:name "polynomialSphereLift_baseLocalizationScalar_eq_one",
+     {:name
+      "polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id",
       :type
-      "global sphere-shift and local chart normalization comparison scalar is one",
+      "explicit global sphere-shift/local chart normalization composite is identity",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_baseLocalizationScalar_ne_zero"],
+      ["polynomialSphereLift_baseNormalizationComparisonIso_apply"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed rational base localization isomorphism and nonzero comparison scalar.",
+    "Committed the explicit global-to-local normalization automorphism and scalar action.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37168,18 +37171,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --oneline --stat 108006d6d", :exit 0}],
+     {:cmd "git show --check --oneline --stat 95565825d", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial scalar nonzero proof",
+    [{:cmd "initial comparison compile",
       :exit 1,
-      :note "Used explicit map-zero equalities; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792075513736-14220-8454e49f",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "108006d6d",
+      :note "Exposed the localization iso hom; rerun passed."}],
+    :commit "95565825d",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37187,7 +37184,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43323,6 +43320,49 @@
    :id :lemma-t99j05-cp-successor-lowerpatch-overlap-models,
    :kind :lemma,
    :depends-on [:lemma-t99j05-affinechartconstruction-all],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_baseNormalizationComparisonIso_apply",
+    :type
+    "explicit global-local normalization automorphism acts by the comparison scalar"},
+   :lemma
+   {:name "polynomialSphereLift_baseNormalizationComparisonIso_apply",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "explicit global-local normalization automorphism acts by the comparison scalar",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-polynomialspherelift-basenormalizationcomparisoniso-apply,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-baselocalizationscalar-ne-zero],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id",
+    :type
+    "explicit global sphere-shift/local chart normalization composite is identity"},
+   :lemma
+   {:name
+    "polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "explicit global sphere-shift/local chart normalization composite is identity",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-polynomialspherelift-basenormalizationcomparisoniso-hom-eq-id,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-basenormalizationcomparisoniso-apply],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
