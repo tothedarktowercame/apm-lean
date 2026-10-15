@@ -7552,7 +7552,42 @@ lemma cut_forward_fibre_aux_x {Label : Type*} [DecidableEq Label]
 -- BEGIN SEAT AREA
 theorem cutEdgePoint_surj {L : ℕ} (hL : 0 < L) {z : ℂ} (hz : ‖z‖ = 1) :
     ∃ e, e < L ∧ ∃ s : Icc (0 : ℝ) 1, (edgePoint L e s : ℂ) = z := by
-  sorry
+  letI : Fact (0 < (L : ℝ)) := ⟨by exact_mod_cast hL⟩
+  let z' : Circle :=
+    ⟨z, by simpa [Circle, Submonoid.unitSphere] using hz⟩
+  let a : AddCircle (L : ℝ) :=
+    (AddCircle.homeomorphCircle (T := (L : ℝ))
+      (Nat.cast_ne_zero.mpr (Nat.ne_of_gt hL))).symm z'
+  let r := AddCircle.equivIco (L : ℝ) 0 a
+  have hr0 : 0 ≤ r.1 := r.2.1
+  have hrL : r.1 < L := by simpa using r.2.2
+  let e := ⌊r.1⌋₊
+  have heL : e < L := (Nat.floor_lt hr0).2 hrL
+  let s : Icc (0 : ℝ) 1 :=
+    ⟨r.1 - e, by
+      constructor
+      · exact sub_nonneg.mpr (Nat.floor_le hr0)
+      · linarith [Nat.lt_floor_add_one r.1]⟩
+  have hra : (r.1 : AddCircle (L : ℝ)) = a := by
+    apply (AddCircle.equivIco (L : ℝ) 0).injective
+    rw [AddCircle.equivIco_coe_eq]
+  have haz : AddCircle.toCircle a = z' := by
+    rw [← AddCircle.homeomorphCircle_apply]
+    exact Homeomorph.apply_symm_apply _ z'
+  refine ⟨e, heL, s, ?_⟩
+  have het : (e : ℝ) + s.1 = r.1 := by
+    dsimp [s]
+    ring
+  have heq : (((e : ℝ) + s.1 : ℝ) : AddCircle (L : ℝ)) = a := by
+    rw [het, hra]
+  have hc : AddCircle.toCircle
+      (((e : ℝ) + s.1 : ℝ) : AddCircle (L : ℝ)) = z' := by
+    rw [heq, haz]
+  have hc' := congrArg (fun w : Circle => (w : ℂ)) hc
+  rw [AddCircle.toCircle_apply_mk] at hc'
+  change Complex.exp
+      (Complex.I * (2 * Real.pi * ((e : ℝ) + s.1) / L)) = z
+  convert hc' using 1 <;> simp [Circle.exp, div_eq_mul_inv] <;> ring
 -- END SEAT AREA
 
 /-- Forward fibre, off the circle: a common non-unit point of the old pieces is an
