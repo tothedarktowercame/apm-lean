@@ -88347,37 +88347,37 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove quotient rigidity on edge interiors and exact fibers; then vertex charts, Cayley tree, and finite invariants.",
+    "Classify every interior fiber via the retained vertex coordinate; then construct vertex charts, Cayley tree, and finite invariants.",
     :outcome :stop,
     :warnings
     ["preexisting lint"
      "Main retains 1 prior placeholder"
-     "unrelated review dir preserved"],
+     "review dirs preserved"],
     :missing-theorems
-    [{:name "edgePoint_ne_vertex_of_interior",
+    [{:name "edgePoint_injective_of_interior",
       :type
-      "lifted interior edge point differs from every lifted vertex",
+      "endpoint quotient retains graph vertex on every open edge",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["projection_edgePoint_eq_of_interior"],
+      :depends-on ["edgePoint_ne_vertex_of_interior"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "local charts and exact fibers",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["edgePoint_ne_vertex_of_interior"],
+      :depends-on ["edgePoint_injective_of_interior"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked vertex/interior separation for graph realization.",
+    :reason "Banked open-edge quotient rigidity.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
@@ -88385,20 +88385,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 1cc1b2f6a", :exit 0}],
-    :diagnostic-history
-    [{:cmd "vertex-separation draft",
-      :exit 1,
-      :correction "selected conjunction field"}],
-    :commit "1cc1b2f6a",
+     {:cmd "git show --check 9231737b5", :exit 0}],
+    :commit "9231737b5",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "c39f1aace144d0de145a098440c9cfa24a8c94f15a193024b8d163d38970dddf"},
+     "a17f8c26cf6d853f3c7a01cc597f8310d3b5c5c9354c278cf4d3b6342882dfbf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90178,7 +90174,8 @@
     :lemma-intervalcircle-injective-on-interior
     :lemma-edgeprojection-eq-of-interior
     :lemma-projection-edgepoint-eq-of-interior
-    :lemma-edgepoint-ne-vertex-of-interior],
+    :lemma-edgepoint-ne-vertex-of-interior
+    :lemma-edgepoint-injective-of-interior],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92734,4 +92731,21 @@
    :id :lemma-polygonboundarycanonicalconcat-homotopic,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryconcat-cast-eq-canonical],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "edgePoint_injective_of_interior",
+    :type "endpoint quotient retains graph vertex on every open edge"},
+   :lemma
+   {:name "edgePoint_injective_of_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "endpoint quotient retains graph vertex on every open edge",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-edgepoint-injective-of-interior,
+   :kind :lemma,
+   :depends-on [:lemma-edgepoint-ne-vertex-of-interior],
+   :other-consumers []}]}
