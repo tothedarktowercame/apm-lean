@@ -2540,6 +2540,33 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_last
   · exact hrun
   · omega
 
+/-- Every successor step in flattened order is either the next local offset
+of the same run, or the last-to-zero transition into the next run.  This is
+the complete induction step for comparing the nested and flat folds. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n) :
+    (((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1 =
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1 ∧
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).2.val =
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).2.val + 1) ∨
+      (((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1.val =
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1.val + 1 ∧
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).2.val =
+          pathTwoOpenSubdivisionRunPredLength S
+            ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1 ∧
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).2.val = 0) := by
+  by_cases hrun : ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1 =
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1
+  · exact Or.inl ⟨hrun,
+      torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq S j hrun⟩
+  · exact Or.inr ⟨
+      torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne S j hrun,
+      torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets S j hrun⟩
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2657,6 +2684,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
