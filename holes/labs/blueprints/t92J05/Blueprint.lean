@@ -3,6 +3,9 @@ import Mathlib.GroupTheory.PresentedGroup
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision
+import ConstructionTargets.FundamentalGroupoidTwoOpenDescent
+import ConstructionTargets.TwoOpenDescentReconstruction
 import ConstructionTargets.SimplyConnectedSphereProducts
 import ConstructionTargets.CircleMetricFundamentalGroup
 import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
