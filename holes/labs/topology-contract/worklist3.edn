@@ -37513,7 +37513,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37530,9 +37530,12 @@
     ["lake env lean problems/t97J07/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
+   :superseded-note
+   "t97J07 closed by the blueprint/lemma rounds, lemmas commit 442966781 (claude-14 2026-10-15)",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed production Mayer-Vietoris exactness for the literal CP1 two-chart cover.",
    :id :program-2026-10-13-close-t97j07,
+   :superseded-by :blueprint-t97J07,
    :kind :final-adapter,
    :campaign-priority 31,
    :fail-count 0,
