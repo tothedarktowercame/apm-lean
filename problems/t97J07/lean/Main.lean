@@ -4,6 +4,7 @@ import ConstructionTargets.ProjectiveSpaceTopology
 import ConstructionTargets.t99J05Closure
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.CoefficientContractiblePair
+import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -436,6 +437,20 @@ noncomputable def t97J07_cp1_affinePatchEquiv (i : Fin 2) :
   right_inv z :=
     ConstructionTargets.ComplexProjectiveChartTargets.coordinates_chartInverse i z
 
+/-- The shared arbitrary-affine-chart continuity theorem upgrades the exact
+point-set equivalence to a homeomorphism. -/
+noncomputable def t97J07_cp1_affinePatchHomeomorph (i : Fin 2) :
+    {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
+      Projectivization.rep p i ≠ 0} ≃ₜ
+      ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i where
+  toEquiv := t97J07_cp1_affinePatchEquiv i
+  continuous_toFun := by
+    exact continuousOn_iff_continuous_restrict.mp
+      (ConstructionTargets.T99J05ArbitraryAffineChartContinuity.t99J05_coordinates_continuousOn i)
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    exact ConstructionTargets.T99J05ArbitraryAffineChartContinuity.t99J05_chartInverse_continuous i
+
 /-- In either affine chart, membership in the other chart is precisely the
 nonvanishing of its sole affine coordinate. -/
 theorem t97J07_cp1_chartInverse_other_rep_ne_iff (i j : Fin 2) (hji : j ≠ i)
@@ -515,6 +530,7 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_twoAffine_openCover
 #print axioms t97J07_cp1_chartInverse_rep_ne
 #print axioms t97J07_cp1_affinePatchEquiv
+#print axioms t97J07_cp1_affinePatchHomeomorph
 #print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
 
 theorem apm_t97j07 :
