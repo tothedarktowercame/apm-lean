@@ -88331,25 +88331,25 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport edge product to frozen relator; prove kernel; assemble.",
+    "Compare normal closures; prove van Kampen kernel; assemble.",
     :outcome :stop,
-    :warnings ["Main: 1 prior placeholder; dirt preserved"],
+    :warnings ["Main: 1 placeholder; dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2GeometricBoundary_eq_signedEdgeProduct",
-      :type "boundary class equals six-edge product",
+    [{:name "torusRP2SignedEdgeProduct_explicit",
+      :type "normalized six-edge product",
       :status :proved,
       :consumers [:t97A01],
       :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "torusRP2AttachingWord",
-      :type "edge product in frozen coordinates",
+      :type "normal closure equals frozen relator",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on ["torusRP2GeometricBoundary_eq_signedEdgeProduct"],
+      :depends-on ["torusRP2SignedEdgeProduct_explicit"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "kernel normal closure",
@@ -88367,37 +88367,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact geometric boundary edge product.",
+    :reason "Banked normalized six-edge product.",
     :commands
     [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "registry; scans; git check", :exit 0}],
     :diagnostic-history
-    [{:cmd "boundary-product draft",
+    [{:cmd "product draft",
       :exit 1,
-      :correction "typed quotient factors and both path rewrites"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792047177037-13559-fdb36f0b",
-     :commands
-     ["git show/diff/check 8deb5ceae"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 8deb5ceae adds compiled, sorry-free progress beyond 3e6fbc0b2: the exact geometric polygon-boundary class equals the reversed ordered product of signed edge classes. Only t97A01Closure.lean changed; fixture SHA 9170b892058e4ca062e31b5ab20ef567d28506d830cff640fa4ce956457ae3f7 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Orientation is correct: canonical path concatenation is converted by the existing theorem to reverse-list multiplication, then every subdivision factor is rewritten to its signed explicit edge class. Frozen-coordinate transport, kernel normal closure, van Kampen presentation, and final assembly remain explicitly listed."},
-    :commit "8deb5ceae",
+      :correction "fixed casts/association"}],
+    :commit "d643012dc",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "9170b892058e4ca062e31b5ab20ef567d28506d830cff640fa4ce956457ae3f7"},
+     "19d88103fb3bb0a43bcdd9bb5274490b733160aab22c9dc25daec4fe90741010"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94064,7 +94051,8 @@
    [:lemma-torusrp2skeletonfinfreegroupmap-surjective
     :lemma-torusrp2generatorsignequiv
     :lemma-torusrp2polygonboundarylegword-coordinates
-    :lemma-torusrp2geometricboundary-eq-signededgeproduct],
+    :lemma-torusrp2geometricboundary-eq-signededgeproduct
+    :lemma-torusrp2signededgeproduct-explicit],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94135,6 +94123,23 @@
     :banked-by :program-2026-10-13-close-t97a01,
     :banked-commit "8deb5ceae"},
    :id :lemma-torusrp2geometricboundary-eq-signededgeproduct,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2SignedEdgeProduct_explicit",
+    :type "normalized six-edge product"},
+   :lemma
+   {:name "torusRP2SignedEdgeProduct_explicit",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "normalized six-edge product",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2signededgeproduct-explicit,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}]}
