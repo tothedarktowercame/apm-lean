@@ -5381,6 +5381,40 @@ noncomputable def boundaryCokernelRadialH1Equiv (P : PairingData) :
     ⟨boundaryCokernelToRadialH1_injective P,
       boundaryCokernelToRadialH1_surjective P⟩
 
+/-- Both degree-two radial cover-piece groups vanish in the additive-group
+presentation used by the production Mayer--Vietoris sequence. -/
+theorem radialH2PiecesGroupIsZero (P : PairingData) : IsZero
+    (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+          (TopCat.of (InnerPiece P)) ⊞
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+          (TopCat.of (OuterPiece P))) := by
+  have underlyingIsZero {A : ModuleCat ℤ} (hA : IsZero A) :
+      IsZero
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj A) := by
+    rw [IsZero.iff_id_eq_zero]
+    rw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id,
+      ← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_zero]
+    exact congrArg
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map)
+      (hA.eq_of_src _ _)
+  rw [biprod_isZero_iff]
+  constructor
+  · exact (underlyingIsZero (innerHigherHomology_isZero P 2 (by omega))).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (InnerPiece P)) 2).symm
+  · exact (underlyingIsZero (outerHigherHomologyIsZero P 2 (by omega))).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (OuterPiece P)) 2).symm
+
+/-- The degree-two surface connecting map is injective because its preceding
+cover-piece term vanishes. -/
+theorem radialMVConnectingH1_mono (P : PairingData) : Mono
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+      (openCover P).inner (openCover P).outer
+      (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1) := by
+  exact (radialMVUnionExact P 1).mono_g
+    ((radialH2PiecesGroupIsZero P).eq_of_src _ _)
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
