@@ -554,7 +554,31 @@ lemma hemi_surjective : Function.Surjective hemi := by
 /-- The chart identifies the two edges of the one-crosscap polygon. -/
 -- BEGIN SEAT AREA
 lemma hemi_respects {x y : Surfaces.Disk} (h : SurfaceRel false 1 x y) : hemi x = hemi y := by
-  sorry
+  simp only [SurfaceRel, Bool.false_eq_true, if_false] at h
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  have hj0 : j = 0 := by omega
+  subst j
+  have hedge :
+      ((Surfaces.edgePoint 2 1 t : Surfaces.Disk) : ℂ) =
+        -((Surfaces.edgePoint 2 0 t : Surfaces.Disk) : ℂ) := by
+    simp only [Surfaces.edgePoint, Subtype.coe_mk]
+    norm_num
+    change Complex.exp (Complex.I * (2 * (Real.pi : ℂ) *
+      (1 + (t.1 : ℂ)) / 2)) =
+      -Complex.exp (Complex.I * (2 * (Real.pi : ℂ) * (t.1 : ℂ) / 2))
+    calc
+      _ = Complex.exp (Real.pi * Complex.I) *
+          Complex.exp (Complex.I * (Real.pi * t.1)) := by
+            rw [← Complex.exp_add]
+            congr 1
+            ring
+      _ = _ := by rw [Complex.exp_pi_mul_I]; ring
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _
+    (hemiVec_ne_zero (Surfaces.edgePoint (2 * 1) (2 * 0) t))
+    (hemiVec_ne_zero (Surfaces.edgePoint (2 * 1) (2 * 0 + 1) t))).2
+  refine ⟨-1, ?_⟩
+  funext i
+  fin_cases i <;> simp [hemiVec, hedge, norm_edgePoint]
 -- END SEAT AREA
 
 /-- Fibres of the chart: equal images are equal points or antipodal points of
