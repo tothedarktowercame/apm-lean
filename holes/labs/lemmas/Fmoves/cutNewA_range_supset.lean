@@ -7655,7 +7655,220 @@ theorem cutNewA_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) ⊆
       Set.range (cutNewA L p q) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+    div_pos (mul_pos (by norm_num) hpi) hL
+  have halpha (m : ℕ) : cutAlpha L (m + 1) = cutAlpha L m + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+    done
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqp : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+    calc
+      2 * Real.pi * (q : ℝ) / L < 2 * Real.pi * ((p : ℝ) + L) / L :=
+        (div_lt_div_iff_of_pos_right hL).2
+          (mul_lt_mul_of_pos_left hqp (mul_pos (by norm_num) Real.pi_pos))
+      _ = 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi := by field_simp
+  have hΓtop : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [halpha p, halpha q]
+    linarith
+  have hAΓ : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    rw [halpha p, halpha q]
+    linarith
+  have hp2 : cutAlpha L (p + 2) = cutAlpha L (p + 1) + 2 * Real.pi / L := by
+    convert halpha (p + 1) using 1 <;> omega
+  have hp1q : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_le_div_iff_of_pos_right hL).2
+    exact mul_le_mul_of_nonneg_left (by exact_mod_cast (show p + 1 ≤ q by omega))
+      (mul_nonneg (by norm_num) hpi.le)
+  have hpoint (m : ℕ) : cutPoint L m =
+      Complex.exp ((cutAlpha L m : ℂ) * Complex.I) := rfl
+  rw [hfront]
+  intro z
+  rintro (hz | hz)
+  · rcases hz with ⟨hnorm, hcrossz⟩
+    let b0 : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hnorm⟩
+    let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L (p + 1))
+      (AddCircle.homeomorphCircle'.symm b0)
+    have hymem : (y : ℝ) ∈ Ico (cutAlpha L (p + 1))
+        (cutAlpha L (p + 1) + 2 * Real.pi) := y.2
+    have hexp : Complex.exp (((y : ℝ) : ℂ) * Complex.I) = z := by
+      change Complex.exp (((y : ℝ) : ℂ) * Complex.I) = (b0 : ℂ)
+      have hyangle : ((y : ℝ) : AddCircle (2 * Real.pi)) =
+          AddCircle.homeomorphCircle'.symm b0 :=
+        (AddCircle.equivIco (2 * Real.pi) (cutAlpha L (p + 1))).symm_apply_apply _
+      have hh := congrArg AddCircle.homeomorphCircle' hyangle
+      have hcirc : Real.Angle.toCircle ((y : ℝ) : Real.Angle) = b0 := by
+        simpa only [AddCircle.homeomorphCircle'_apply,
+          AddCircle.homeomorphCircle'.apply_symm_apply] using hh
+      calc
+        Complex.exp (((y : ℝ) : ℂ) * Complex.I) =
+            (Real.Angle.toCircle ((y : ℝ) : Real.Angle) : ℂ) := by
+              simp [Real.Angle.toCircle_coe, Circle.coe_exp]
+        _ = (b0 : ℂ) := congrArg Subtype.val hcirc
+    have hyΓ : (y : ℝ) ≤ cutAlpha L (q + 1) := by
+      by_contra hn
+      have hs1 : 0 < Real.sin (((y : ℝ) - cutAlpha L (q + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hymem.2, hΓtop]
+      have hs2 : 0 < Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hΓtop, hAΓ]
+      have hs3 : 0 < Real.sin (((y : ℝ) - cutAlpha L (p + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hymem.1, hymem.2]
+      rw [← hexp, hpoint, hpoint, hcross] at hcrossz
+      have : 0 < 4 * Real.sin (((y : ℝ) - cutAlpha L (q + 1)) / 2) *
+          Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) *
+          Real.sin (((y : ℝ) - cutAlpha L (p + 1)) / 2) := by positivity
+      linarith
+    by_cases hyp2 : (y : ℝ) < cutAlpha L (p + 2)
+    · by_cases hyP : (y : ℝ) = cutAlpha L (p + 1)
+      · let a : AddCircle (2 * Real.pi) := (cutAlpha L p : ℝ)
+        let b : Circle := AddCircle.homeomorphCircle' a
+        refine ⟨b, ?_⟩
+        unfold cutNewA
+        rw [show AddCircle.homeomorphCircle'.symm b = a from
+          AddCircle.homeomorphCircle'.symm_apply_apply a]
+        rw [AddCircle.liftIco_coe_apply ⟨le_rfl, by linarith [hpi]⟩]
+        have hp_le : cutAlpha L p ≤ cutAlpha L (p + 1) := by
+          rw [halpha p]
+          exact le_add_of_nonneg_right hstep.le
+        simp only [cutProfileNewA, if_pos hp_le]
+        simp [cutSeam]
+        rw [hpoint, ← hexp, hyP]
+      · let φ := cutAlpha L q +
+          (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) *
+            (cutAlpha L p + 2 * Real.pi - cutAlpha L q)
+        have hφlo : cutAlpha L p ≤ φ := by
+          dsimp [φ]
+          have hr0 : 0 ≤ cutAlpha L (p + 2) - (y : ℝ) := by linarith
+          have hgap : 0 < cutAlpha L p + 2 * Real.pi - cutAlpha L q := sub_pos.mpr hqtop
+          have hfac0 : 0 ≤ (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) :=
+            div_nonneg (mul_nonneg hr0 hL.le) (mul_nonneg (by norm_num) hpi.le)
+          nlinarith [mul_nonneg hfac0 hgap.le]
+        have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+          dsimp [φ]
+          rw [hp2] at hyp2
+          have hylo : cutAlpha L (p + 1) < (y : ℝ) :=
+            lt_of_le_of_ne hymem.1 (Ne.symm hyP)
+          have hr : (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) < 1 := by
+            apply (div_lt_one (mul_pos (by norm_num) hpi)).2
+            have hdiff : cutAlpha L (p + 2) - (y : ℝ) < 2 * Real.pi / L := by
+              linarith [hp2]
+            have hm := mul_lt_mul_of_pos_right hdiff hL
+            field_simp [ne_of_gt hL] at hm
+            linarith
+          nlinarith [sub_pos.mpr hqtop]
+        let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+        let b : Circle := AddCircle.homeomorphCircle' a
+        refine ⟨b, ?_⟩
+        unfold cutNewA
+        rw [show AddCircle.homeomorphCircle'.symm b = a from
+          AddCircle.homeomorphCircle'.symm_apply_apply a]
+        rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+        have hqφ : ¬ φ ≤ cutAlpha L q := by
+          dsimp [φ]
+          have hfac : 0 < (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) :=
+            div_pos (mul_pos (sub_pos.mpr hyp2) hL) (mul_pos (by norm_num) hpi)
+          have hgap : 0 < cutAlpha L p + 2 * Real.pi - cutAlpha L q := sub_pos.mpr hqtop
+          nlinarith [mul_pos hfac hgap]
+        have hpφ : ¬ φ ≤ cutAlpha L (p + 1) := fun hh => hqφ (hh.trans hp1q)
+        simp only [cutProfileNewA, if_neg hpφ, if_neg hqφ]
+        have hsa : cutSA L p q φ =
+            (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) := by
+          unfold cutSA φ
+          field_simp [ne_of_gt hL, ne_of_gt hpi, ne_of_gt (sub_pos.mpr hqtop)]
+          ring
+        rw [hsa]
+        rw [show cutAlpha L (p + 2) -
+            ((cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi)) *
+              (2 * Real.pi / L) = (y : ℝ) by field_simp; ring]
+        exact hexp
+    · let φ := cutAlpha L (q + 1) + cutAlpha L (p + 1) - (y : ℝ)
+      have hφlo : cutAlpha L p ≤ φ := by
+        dsimp [φ]
+        linarith [halpha p, halpha q]
+      have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+        dsimp [φ]
+        have hylo := hymem.1
+        nlinarith [halpha p, halpha q, hqtop]
+      let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+      let b : Circle := AddCircle.homeomorphCircle' a
+      refine ⟨b, ?_⟩
+      unfold cutNewA
+      rw [show AddCircle.homeomorphCircle'.symm b = a from
+        AddCircle.homeomorphCircle'.symm_apply_apply a]
+      rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+      by_cases hyEq : (y : ℝ) = cutAlpha L (q + 1)
+      · have hφeq : φ = cutAlpha L (p + 1) := by dsimp [φ]; linarith
+        rw [hφeq]
+        simp only [cutProfileNewA, if_pos le_rfl]
+        have hparam : (cutAlpha L (p + 1) - cutAlpha L p) * L /
+            (2 * Real.pi) = 1 := by
+          rw [halpha p]
+          field_simp [ne_of_gt hL, ne_of_gt hpi]
+          ring
+        rw [hparam]
+        simp [cutSeam]
+        rw [hpoint, ← hexp, hyEq]
+      have hp1φ : ¬ φ ≤ cutAlpha L (p + 1) := by
+        dsimp [φ]
+        have hyltΓ : (y : ℝ) < cutAlpha L (q + 1) := lt_of_le_of_ne hyΓ hyEq
+        linarith
+      have hφq : φ ≤ cutAlpha L q := by
+        dsimp [φ]
+        have hyp2' : cutAlpha L (p + 2) ≤ (y : ℝ) := le_of_not_gt hyp2
+        linarith [hp2, halpha q]
+      simp [cutProfileNewA, hp1φ, hφq, φ, hexp]
+  · unfold segment at hz
+    rcases hz with ⟨a0, s, ha0, hs0, has, hz⟩
+    have hs1 : s ≤ 1 := by linarith
+    have haeq : a0 = 1 - s := by linarith
+    subst a0
+    rw [← hz]
+    let φ := cutAlpha L p + s * (2 * Real.pi / L)
+    have hφlo : cutAlpha L p ≤ φ := by
+      dsimp [φ]
+      exact le_add_of_nonneg_right (mul_nonneg hs0 hstep.le)
+    have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+      dsimp [φ]
+      have hstep_lt : 2 * Real.pi / L ≤ 2 * Real.pi := by
+        apply (div_le_iff₀ hL).2
+        have : (1 : ℝ) ≤ L := by exact_mod_cast hLnat
+        nlinarith [hpi]
+      have hsstep : s * (2 * Real.pi / L) ≤ 2 * Real.pi / L :=
+        mul_le_of_le_one_left hstep.le hs1
+      have hLtwo : (2 : ℝ) ≤ L := by exact_mod_cast (show 2 ≤ L by omega)
+      have hstrict : 2 * Real.pi / L < 2 * Real.pi := by
+        apply (div_lt_iff₀ hL).2
+        nlinarith [hpi]
+      nlinarith
+    let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+    let b : Circle := AddCircle.homeomorphCircle' a
+    refine ⟨b, ?_⟩
+    unfold cutNewA
+    rw [show AddCircle.homeomorphCircle'.symm b = a from
+      AddCircle.homeomorphCircle'.symm_apply_apply a]
+    rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+    have hφ1 : φ ≤ cutAlpha L (p + 1) := by
+      rw [halpha p]
+      dsimp [φ]
+      nlinarith
+    simp only [cutProfileNewA, if_pos hφ1]
+    have hparam : (φ - cutAlpha L p) * L / (2 * Real.pi) = s := by
+      dsimp [φ]
+      field_simp [ne_of_gt hL, ne_of_gt hpi]
+      ring
+    rw [hparam]
+    simp [cutSeam, smul_eq_mul]
+    ring
 -- END SEAT AREA
 
 theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
