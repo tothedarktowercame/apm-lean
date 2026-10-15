@@ -119110,6 +119110,16 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792025321175-12869-c14c31b4",
+     :commands
+     ["git show/diff-tree 68467442"
+      "archive 68467442; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit 68467442 changes only t00J02Closure.lean and adds compiled, sorry-free progress. The linear range lemma correctly derives range A=top from range B<=range A and range A sup range B=top. Its transverse derivative corollary uses lifted circle directions in the correct direction to put range(dc) inside range(df), hence df is surjective; manifold tangent representations and coercions align. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; both new theorems use only standard axioms; registry 166/166. A regular projected value, its discrete fiber/calculations, and Main remain listed."},
     :commit "68467442f989dc4836cdd26fca100b6df6fc8bdb",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119118,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119136,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked discrete-fiber constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transverse regularity linear step.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119295,7 +119305,10 @@
      :reason "Banked locally-isolated fiber-data constructor."}
     {:job 5,
      :commit "1291718c17049d8ed55da8989e99638bd5b2d7c8",
-     :reason "Banked discrete-fiber constructor."}]}
+     :reason "Banked discrete-fiber constructor."}
+    {:job 6,
+     :commit "68467442f989dc4836cdd26fca100b6df6fc8bdb",
+     :reason "Banked transverse regularity linear step."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120810,7 +120823,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverse_mfderiv_surjective_of_circleDirection_lifts",
@@ -120822,7 +120835,9 @@
     :type
     "transversality and lifted circle directions imply surjective derivative",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "68467442f989dc4836cdd26fca100b6df6fc8bdb"},
    :id :lemma-transverse-mfderiv-surjective-of-circledirection-lifts,
    :kind :lemma,
    :depends-on [],
