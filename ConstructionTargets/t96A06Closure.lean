@@ -318,6 +318,36 @@ theorem polynomialSphereLift_flipSecondPairSphere :
   exact congrArg rp3RadialToSphere
     (polynomialSphereVector_flipSecondPairSphere p)
 
+/-- The explicit four-point pair-sign orbit through a sphere point. -/
+def pairSignOrbit (p : Sphere 3) : Set (Sphere 3) :=
+  {p, flipFirstPairSphere p, flipSecondPairSphere p,
+    flipFirstPairSphere (flipSecondPairSphere p)}
+
+/-- All four pair-sign translates are in the same fiber of the normalized
+quadratic lift. -/
+theorem pairSignOrbit_subset_polynomialSphereLift_fiber (p : Sphere 3) :
+    pairSignOrbit p ⊆ polynomialSphereLift ⁻¹' {polynomialSphereLift p} := by
+  have hf (x : Sphere 3) :
+      polynomialSphereLift (flipFirstPairSphere x) = polynomialSphereLift x := by
+    exact congrArg (fun f : C(Sphere 3, Sphere 3) => f x)
+      polynomialSphereLift_flipFirstPairSphere
+  have hs (x : Sphere 3) :
+      polynomialSphereLift (flipSecondPairSphere x) = polynomialSphereLift x := by
+    exact congrArg (fun f : C(Sphere 3, Sphere 3) => f x)
+      polynomialSphereLift_flipSecondPairSphere
+  intro q hq
+  simp only [pairSignOrbit, Set.mem_insert_iff, Set.mem_singleton_iff] at hq ⊢
+  rcases hq with rfl | rfl | rfl | rfl
+  · rfl
+  · exact hf p
+  · exact hs p
+  · calc
+      polynomialSphereLift
+          (flipFirstPairSphere (flipSecondPairSphere p)) =
+          polynomialSphereLift (flipSecondPairSphere p) :=
+        hf (flipSecondPairSphere p)
+      _ = polynomialSphereLift p := hs p
+
 /-- The normalized sphere lift descends through the exact double cover to
 the chosen projective polynomial descent. -/
 theorem polynomialSphereLift_projection (p : Sphere 3) :
@@ -1104,6 +1134,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
 #print axioms polynomialSphereLift_flipFirstPairSphere
 #print axioms polynomialSphereLift_flipSecondPairSphere
+#print axioms pairSignOrbit_subset_polynomialSphereLift_fiber
 #print axioms polynomialSphereLift_projection
 #print axioms polynomialSphereLift_homology_square
 #print axioms polynomialDescent_degree_four_of_sphere
