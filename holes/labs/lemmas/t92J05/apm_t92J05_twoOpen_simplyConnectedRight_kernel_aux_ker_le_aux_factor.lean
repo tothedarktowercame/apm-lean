@@ -784,10 +784,42 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       A B f g e (by intro k; simp [f])
   have hf_piece : ∀ k, f k = Path.Homotopic.Quotient.mk
       ((a k.castSucc).symm.trans ((S.piece k).trans (a k.succ))) := by
-    sorry
+    intro k
+    simp only [f, e, g, A, B, asIso_inv, asIso_hom]
+    have hi : inv (FundamentalGroupoid.fromPath
+        (Path.Homotopic.Quotient.mk (a k.castSucc))) =
+        FundamentalGroupoid.fromPath
+          (Path.Homotopic.Quotient.mk (a k.castSucc).symm) := by
+      rw [← Groupoid.inv_eq_inv]
+      rfl
+    rw [hi]
+    change Path.Homotopic.Quotient.trans
+        (Path.Homotopic.Quotient.mk (a k.castSucc).symm)
+        (Path.Homotopic.Quotient.trans
+          (Path.Homotopic.Quotient.mk (S.piece k))
+          (Path.Homotopic.Quotient.mk (a k.succ))) = _
+    rw [← Path.Homotopic.Quotient.mk_trans,
+      ← Path.Homotopic.Quotient.mk_trans]
   have hd : ∀ (k : Fin (S.n + 1)) t,
       a k.succ t ∈ twoChart U V (S.side k) := by
-    sorry
+    intro k
+    refine Fin.lastCases ?_ (fun i ↦ ?_) k
+    · intro t
+      have hx : x.1 ∈ twoChart U V (S.side (Fin.last S.n)) := by
+        cases h : S.side (Fin.last S.n) <;>
+          simp [twoChart, h, x.2.1, x.2.2]
+      simpa only [a, Fin.cases_succ, Fin.lastCases_last,
+        Path.cast, Path.refl] using hx
+    · intro t
+      have hm := (Classical.choose_spec
+        (apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
+          U V x (z := S.point i.castSucc.succ) (S.side i.castSucc) (S.side i.succ)
+          (by rw [← (S.piece i.castSucc).target]; exact S.piece_mem i.castSucc 1)
+          (by
+            convert S.piece_mem i.succ 0 using 1 <;>
+              try {simp [ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision.point]} <;>
+              convert (S.piece i.succ).source.symm using 1 <;> ext <;> rfl))) t
+      exact (by simpa [a, mid] using hm.1)
   have hf : ∀ k, f k = 1 ∨ f k ∈
       (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
         (⟨x.1, x.2.1⟩ : U)).range := by
@@ -808,7 +840,68 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
           · exact h)
   obtain ⟨q, hq⟩ := hprod
   refine ⟨q, ?_⟩
-  sorry
+  rw [hq]
+  calc
+    ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin A f =
+        (e 0).inv ≫
+          ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin B g ≫
+          (e (Fin.last (S.n + 1))).hom := by rw [htel]; simp
+    _ = Path.Homotopic.Quotient.mk p := by
+      have he0 : (e 0).inv =
+          eqToHom (congrArg FundamentalGroupoid.mk S.point_zero).symm := by
+        have h0 :=
+          ConstructionTargets.TwoOpenDescentReconstruction.fromPath_cast_unbracket
+            (Path.refl x.1) S.point_zero rfl
+        have h0' : eqToHom (congrArg FundamentalGroupoid.mk S.point_zero).symm ≫
+            FundamentalGroupoid.fromPath
+              (Path.Homotopic.Quotient.mk ((Path.refl x.1).cast S.point_zero rfl)) = 𝟙 _ := by
+          simpa using h0
+        simp only [e, a, A, B, Fin.cases_zero, asIso_inv]
+        rw [← cancel_mono (FundamentalGroupoid.fromPath
+          (Path.Homotopic.Quotient.mk ((Path.refl x.1).cast S.point_zero rfl)))]
+        rw [h0']
+        simp
+      have helast : (e (Fin.last (S.n + 1))).hom =
+          eqToHom (congrArg FundamentalGroupoid.mk S.point_last) := by
+        have hl :=
+          ConstructionTargets.TwoOpenDescentReconstruction.fromPath_cast_unbracket
+            (Path.refl x.1) S.point_last rfl
+        have hl' : eqToHom (congrArg FundamentalGroupoid.mk S.point_last).symm ≫
+            FundamentalGroupoid.fromPath
+              (Path.Homotopic.Quotient.mk ((Path.refl x.1).cast S.point_last rfl)) = 𝟙 _ := by
+          simpa using hl
+        have halast : a (Fin.last (S.n + 1)) =
+            (Path.refl x.1).cast S.point_last rfl := by
+          apply Path.ext
+          funext t
+          conv_lhs => rw [← Fin.succ_last]
+          simp only [a, Fin.cases_succ, Fin.lastCases_last]
+          simp [Path.cast, Path.refl]
+          rfl
+        simp only [e, A, B, asIso_hom]
+        rw [halast]
+        rw [← cancel_epi (eqToHom (congrArg FundamentalGroupoid.mk S.point_last).symm)]
+        rw [hl']
+        simp
+      rw [he0, helast]
+      have hev :=
+        ConstructionTargets.TwoOpenDescentReconstruction.canonical_evaluate
+          (U := U) (V := V) (𝟭 (FundamentalGroupoid X)) p S
+      let D := ConstructionTargets.TwoOpenDescentReconstruction.canonicalTwoOpenDescentDatum
+        (U := U) (V := V) (𝟭 (FundamentalGroupoid X))
+      have hfold :
+          ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin B g =
+            ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin
+              (D.obj ∘ S.point) (D.mappedPiece S) := by
+        congr 1
+        funext k
+        rw [ConstructionTargets.TwoOpenDescentReconstruction.canonical_mappedPiece]
+        simp [B, g, D]
+      rw [hfold]
+      simpa [B, g,
+        D,
+        ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.evaluate]
+        using hev
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
