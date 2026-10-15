@@ -2,11 +2,16 @@ import Mathlib
 import Mathlib.Topology.Constructions.SumProd
 import ConstructionTargets.PointWedgeVanKampen
 import ConstructionTargets.CoveringMonodromyCosets
+import ConstructionTargets.SimplyConnectedSphereProducts
+import ConstructionTargets.DeckGroupQuotientFundamentalGroup
+import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
+import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.ProjectiveQuotientDescent
 
 /-! # APM t98A03 — blueprint
 
-The four mathematical conclusions are isolated as library-scale contracts.
-The final theorem is only their conjunction.
+The four mathematical conclusions are assembled sorry-free over seat-sized leaves.
+The final theorem is their conjunction.
 -/
 
 open scoped LinearAlgebra.Projectivization
@@ -951,27 +956,1532 @@ theorem apm_t98a03_wedge_not_manifold
     exact apm_t98a03_wedge_point_no_connected_punctured_neighborhood t₀ r₀
       (hlocal (apm_t98a03_basepoint t₀ r₀))
 
-/-- LIBRARY: van Kampen for this literal quotient, plus the torus and RP² computations. -/
+/-! ## Part B: the fundamental group
+
+Route: the literal quotient is homeomorphic to the library point wedge
+`ConstructionTargets.PointWedgeQuotient.Wedge t₀ r₀`; apply
+`genericPointWedgeNormalizedFundamentalGroupEquiv` with explicit open
+contractible neighbourhoods of both basepoints, then the torus computation
+(product of two circles) and the projective-plane computation (copied from the
+closed problem t92J05).
+
+The following block is copied verbatim (prefix renamed `apm_t92J05_` →
+`apm_t98a03_t92_`) from the sorry-free `problems/t92J05/lean/Main.lean`. -/
+
+abbrev apm_t98a03_t92_S2 := Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1
+
+def apm_t98a03_t92_fundamentalGroup_prod_equiv
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (a : A) (b : B) :
+    FundamentalGroup (A × B) (a, b) ≃*
+      FundamentalGroup A a × FundamentalGroup B b where
+  toFun p := (Path.Homotopic.projLeft p, Path.Homotopic.projRight p)
+  invFun p := Path.Homotopic.prod p.1 p.2
+  left_inv p := Path.Homotopic.prod_projLeft_projRight p
+  right_inv p := by
+    ext
+    · exact Path.Homotopic.projLeft_prod p.1 p.2
+    · exact Path.Homotopic.projRight_prod p.1 p.2
+  map_mul' p q := by
+    apply Prod.ext
+    · simpa only [CategoryTheory.End.mul_def] using
+        (FundamentalGroupoidFunctor.projLeft
+          (TopCat.of A) (TopCat.of B)).map_comp q p
+    · simpa only [CategoryTheory.End.mul_def] using
+        (FundamentalGroupoidFunctor.projRight
+          (TopCat.of A) (TopCat.of B)).map_comp q p
+
+
+abbrev apm_t98a03_t92_antipodalGroup := Multiplicative (ZMod 2)
+
+def apm_t98a03_t92_antipodalSMul
+    (g : apm_t98a03_t92_antipodalGroup) (x : apm_t98a03_t92_S2) : apm_t98a03_t92_S2 :=
+  if g.toAdd = 0 then x else -x
+
+instance : MulAction apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 where
+  smul := apm_t98a03_t92_antipodalSMul
+  one_smul x := by
+    change apm_t98a03_t92_antipodalSMul (.ofAdd 0) x = x
+    simp [apm_t98a03_t92_antipodalSMul]
+  mul_smul g h x := by
+    change apm_t98a03_t92_antipodalSMul (g * h) x =
+      apm_t98a03_t92_antipodalSMul g (apm_t98a03_t92_antipodalSMul h x)
+    fin_cases g <;> fin_cases h
+    · change apm_t98a03_t92_antipodalSMul (.ofAdd 0) x =
+        apm_t98a03_t92_antipodalSMul (.ofAdd 0)
+          (apm_t98a03_t92_antipodalSMul (.ofAdd 0) x)
+      simp [apm_t98a03_t92_antipodalSMul]
+    · change apm_t98a03_t92_antipodalSMul (.ofAdd 1) x =
+        apm_t98a03_t92_antipodalSMul (.ofAdd 0)
+          (apm_t98a03_t92_antipodalSMul (.ofAdd 1) x)
+      simp [apm_t98a03_t92_antipodalSMul, show (1 : ZMod 2) ≠ 0 by decide]
+    · change apm_t98a03_t92_antipodalSMul (.ofAdd 1) x =
+        apm_t98a03_t92_antipodalSMul (.ofAdd 1)
+          (apm_t98a03_t92_antipodalSMul (.ofAdd 0) x)
+      simp [apm_t98a03_t92_antipodalSMul, show (1 : ZMod 2) ≠ 0 by decide]
+    · change apm_t98a03_t92_antipodalSMul (.ofAdd 0) x =
+        apm_t98a03_t92_antipodalSMul (.ofAdd 1)
+          (apm_t98a03_t92_antipodalSMul (.ofAdd 1) x)
+      simp [apm_t98a03_t92_antipodalSMul, show (1 : ZMod 2) ≠ 0 by decide]
+
+instance : ContinuousConstSMul apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 where
+  continuous_const_smul g := by
+    fin_cases g
+    · simpa [apm_t98a03_t92_antipodalSMul] using
+        (continuous_id : Continuous (id : apm_t98a03_t92_S2 → apm_t98a03_t92_S2))
+    · exact (continuous_neg.comp continuous_subtype_val).subtype_mk _
+
+/-- **LIBRARY.** The antipodal `ZMod 2` action on the unit two-sphere is free. -/
+lemma apm_t98a03_t92_antipodalAction_free :
+    ∀ g : apm_t98a03_t92_antipodalGroup, ∀ x : apm_t98a03_t92_S2,
+      g • x = x → g = 1 := by
+  intro g x hx
+  fin_cases g
+  · rfl
+  · exfalso
+    have hneg : -(x : EuclideanSpace ℝ (Fin 3)) = x := by
+      exact congrArg Subtype.val hx
+    have hx0 : (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+        calc
+          (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = x + x := by
+            exact two_smul ℝ (x : EuclideanSpace ℝ (Fin 3))
+          _ = -(x : EuclideanSpace ℝ (Fin 3)) + x :=
+            congrArg (fun y => y + (x : EuclideanSpace ℝ (Fin 3))) hneg.symm
+          _ = 0 := neg_add_cancel (x : EuclideanSpace ℝ (Fin 3))
+      exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+    have hnorm : ‖(x : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+      simpa only [Metric.mem_sphere, dist_zero_right] using x.property
+    rw [hx0, norm_zero] at hnorm
+    norm_num at hnorm
+
+/-- **LIBRARY.** The finite antipodal action is properly discontinuous. -/
+lemma apm_t98a03_t92_antipodalAction_properlyDiscontinuous :
+    ProperlyDiscontinuousSMul apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 := by
+  infer_instance
+
+/-- **LIBRARY.** Real projective two-space is the orbit quotient of the unit
+two-sphere by the antipodal action. -/
+def apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP
+    (x : apm_t98a03_t92_S2) : apm_t98a03_RP2 :=
+  Projectivization.mk ℝ x.1.ofLp (by
+    intro hx
+    have := x.property
+    have hx' : (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      apply WithLp.ofLp_injective 2
+      simpa using hx
+    rw [Metric.mem_sphere, dist_zero_right, hx', norm_zero] at this
+    norm_num at this)
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP_continuous :
+    Continuous apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP := by
+  apply continuous_quotient_mk'.comp
+  exact Continuous.subtype_mk
+    (EuclideanSpace.equiv (Fin 3) ℝ |>.continuous.comp continuous_subtype_val) _
+
+def apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0
+    (v : {v : Fin 3 → ℝ // v ≠ 0}) :
+    MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 :=
+  let w : EuclideanSpace ℝ (Fin 3) := WithLp.toLp 2 (v : Fin 3 → ℝ)
+  Quotient.mk'' ⟨(‖w‖⁻¹ : ℝ) • w, by
+    rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_norm, inv_mul_cancel₀]
+    exact norm_ne_zero_iff.mpr (by
+      change WithLp.toLp 2 (v : Fin 3 → ℝ) ≠ 0
+      exact (WithLp.linearEquiv 2 ℝ (Fin 3 → ℝ)).symm.injective.ne v.property)⟩
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_continuous :
+    Continuous apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0 := by
+  apply continuous_quotient_mk'.comp
+  apply Continuous.subtype_mk
+  · let e : (Fin 3 → ℝ) ≃L[ℝ] EuclideanSpace ℝ (Fin 3) :=
+      (EuclideanSpace.equiv (Fin 3) ℝ).symm
+    exact ((continuous_norm.comp (e.continuous.comp continuous_subtype_val)).inv₀
+      (fun (v : {v : Fin 3 → ℝ // v ≠ 0}) hv => v.property (by
+        have := congrArg WithLp.ofLp (norm_eq_zero.mp hv)
+        simpa using this))).smul
+        (e.continuous.comp continuous_subtype_val)
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_scale
+    (a b : {v : Fin 3 → ℝ // v ≠ 0}) (t : ℝ)
+    (h : (a : Fin 3 → ℝ) = t • b) :
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0 a =
+      apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0 b := by
+  have ht : t ≠ 0 := by
+    intro ht
+    apply a.property
+    simpa [ht] using h
+  apply Quotient.sound
+  by_cases hpos : 0 < t
+  · refine ⟨Multiplicative.ofAdd 0, ?_⟩
+    apply Subtype.ext
+    change (‖WithLp.toLp 2 (b : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (b : Fin 3 → ℝ) =
+      (‖WithLp.toLp 2 (a : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (a : Fin 3 → ℝ)
+    rw [h, WithLp.toLp_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hpos]
+    rw [mul_inv_rev, smul_smul]
+    congr 1
+    field_simp
+  · refine ⟨Multiplicative.ofAdd 1, ?_⟩
+    apply Subtype.ext
+    change -_ = _
+    have htneg : t < 0 := lt_of_le_of_ne (le_of_not_gt hpos) ht
+    change -((‖WithLp.toLp 2 (b : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (b : Fin 3 → ℝ)) =
+      (‖WithLp.toLp 2 (a : Fin 3 → ℝ)‖⁻¹ : ℝ) • WithLp.toLp 2 (a : Fin 3 → ℝ)
+    rw [h, WithLp.toLp_smul, norm_smul, Real.norm_eq_abs, abs_of_neg htneg]
+    rw [mul_inv_rev]
+    simp only [one_div, neg_smul, smul_smul]
+    congr 1
+    field_simp
+    simp
+
+def apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+    (p : apm_t98a03_RP2) :
+    MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 :=
+  Projectivization.lift
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_scale p
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ_continuous :
+    Continuous apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ := by
+  apply isQuotientMap_quot_mk.continuous_iff.mpr
+  exact apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ0_continuous
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP_invariant
+    (x y : apm_t98a03_t92_S2)
+    (h : MulAction.orbitRel apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 x y) :
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP x =
+      apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP y := by
+  rcases h with ⟨g, rfl⟩
+  fin_cases g
+  · rfl
+  · apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+    refine ⟨-1, ?_⟩
+    change (-1 : ℝ) • y.1.ofLp =
+      (apm_t98a03_t92_antipodalSMul (Multiplicative.ofAdd 1) y).1.ofLp
+    ext i
+    simp [apm_t98a03_t92_antipodalSMul]
+
+def apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ :
+    MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 →
+      apm_t98a03_RP2 :=
+  Quotient.lift
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP_invariant
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ_continuous :
+    Continuous apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ := by
+  apply isQuotientMap_quot_mk.continuous_iff.mpr
+  exact apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP_continuous
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_left
+    (q : MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2) :
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+      (apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ q) = q := by
+  induction q using Quotient.inductionOn with
+  | _ x =>
+    apply Quotient.sound
+    refine ⟨Multiplicative.ofAdd 0, ?_⟩
+    apply Subtype.ext
+    change (x : EuclideanSpace ℝ (Fin 3)) =
+      (‖WithLp.toLp 2 x.1.ofLp‖⁻¹ : ℝ) • WithLp.toLp 2 x.1.ofLp
+    have hx : ‖(x : EuclideanSpace ℝ (Fin 3))‖ = 1 := by
+      simpa [Metric.mem_sphere] using x.property
+    simp [hx]
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_right
+    (p : apm_t98a03_RP2) :
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ
+      (apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ p) = p := by
+  induction p using Projectivization.ind with
+  | h v hv =>
+    apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+    refine ⟨‖WithLp.toLp 2 v‖⁻¹, ?_⟩
+    ext i
+    rfl
+
+lemma apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient :
+    Nonempty
+      (MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 ≃ₜ
+        apm_t98a03_RP2) := by
+  exact ⟨{
+    toFun := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ
+    invFun := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+    left_inv := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_left
+    right_inv := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_right
+    continuous_toFun := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ_continuous
+    continuous_invFun := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ_continuous }⟩
+
+/-- **LIBRARY.** Specialization of the deck-group quotient theorem to the
+antipodal action, with the two action obligations supplied explicitly. -/
+lemma apm_t98a03_t92_antipodalQuotient_fundamentalGroup
+    (hfree : ∀ g : apm_t98a03_t92_antipodalGroup, ∀ x : apm_t98a03_t92_S2,
+      g • x = x → g = 1)
+    (hproper : ProperlyDiscontinuousSMul
+      apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2)
+    (x : apm_t98a03_t92_S2) :
+    Nonempty
+      (FundamentalGroup
+          (MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2)
+          (Quotient.mk _ x) ≃*
+        apm_t98a03_t92_antipodalGroup) := by
+  letI : ProperlyDiscontinuousSMul
+      apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 := hproper
+  letI : SimplyConnectedSpace apm_t98a03_t92_S2 :=
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected
+      2 (by norm_num)
+  letI : LocPathConnectedSpace apm_t98a03_t92_S2 :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) apm_t98a03_t92_S2
+  exact
+    ConstructionTargets.DeckGroupQuotientFundamentalGroup.freeProperlyDiscontinuousQuotient_fundamentalGroupEquiv
+      hfree x
+
+/-- **LIBRARY.** A quotient/projectivization homeomorphism transports the deck
+calculation to at least one concrete projective-plane basepoint. -/
+lemma apm_t98a03_t92_projectivePlane_fundamentalGroup_at_one_point
+    (e : MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 ≃ₜ
+      apm_t98a03_RP2)
+    (hdeck : ∀ x : apm_t98a03_t92_S2,
+      Nonempty
+        (FundamentalGroup
+            (MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2)
+            (Quotient.mk _ x) ≃*
+          apm_t98a03_t92_antipodalGroup)) :
+    ∃ x : apm_t98a03_RP2,
+      Nonempty (FundamentalGroup apm_t98a03_RP2 x ≃* Multiplicative (ZMod 2)) := by
+  let x : apm_t98a03_t92_S2 :=
+    ⟨EuclideanSpace.single 0 1, by simp⟩
+  refine ⟨e (Quotient.mk _ x), ?_⟩
+  obtain ⟨d⟩ := hdeck x
+  exact
+    ⟨(ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+        e (Quotient.mk _ x)).symm.trans d⟩
+
+/-- **LIBRARY.** The concrete real projective plane is path connected. -/
+lemma apm_t98a03_t92_projectivePlane_pathConnected :
+    PathConnectedSpace apm_t98a03_RP2 := by
+  let V := Fin 3 → ℝ
+  have hrank : 1 < Module.rank ℝ V := by
+    rw [← Module.finrank_eq_rank]
+    norm_num [V]
+  have hnonzero : IsPathConnected ({0}ᶜ : Set V) :=
+    isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+  letI : PathConnectedSpace {v : V // v ≠ 0} := by
+    change PathConnectedSpace {v : V // v ∈ ({0}ᶜ : Set V)}
+    exact isPathConnected_iff_pathConnectedSpace.mp hnonzero
+  exact (Quotient.mk'_surjective (s := projectivizationSetoid ℝ V)).pathConnectedSpace
+    continuous_quotient_mk'
+
+/-- **LIBRARY.** On a path-connected space, one computed fundamental group
+determines it at every basepoint. -/
+lemma apm_t98a03_t92_fundamentalGroup_all_basepoints
+    {X G : Type} [TopologicalSpace X] [Group G]
+    (hpath : PathConnectedSpace X)
+    (hone : ∃ x₀ : X, Nonempty (FundamentalGroup X x₀ ≃* G)) :
+    ∀ x : X, Nonempty (FundamentalGroup X x ≃* G) := by
+  letI : PathConnectedSpace X := hpath
+  obtain ⟨x₀, e⟩ := hone
+  intro x
+  exact
+    ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected x x₀).trans e.some⟩
+
+/-- The antipodal two-sphere cover computes the fundamental group of the
+concrete real projective plane at every basepoint. -/
+theorem apm_t98a03_t92_bridge_projectivePlane_fundamentalGroup :
+    ∀ x : apm_t98a03_RP2,
+      Nonempty
+        (FundamentalGroup apm_t98a03_RP2 x ≃*
+          Multiplicative (ZMod 2)) := by
+  letI := apm_t98a03_t92_antipodalAction_properlyDiscontinuous
+  have hdeck := apm_t98a03_t92_antipodalQuotient_fundamentalGroup
+    apm_t98a03_t92_antipodalAction_free
+    apm_t98a03_t92_antipodalAction_properlyDiscontinuous
+  obtain ⟨e⟩ := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient
+  exact apm_t98a03_t92_fundamentalGroup_all_basepoints
+    apm_t98a03_t92_projectivePlane_pathConnected
+    (apm_t98a03_t92_projectivePlane_fundamentalGroup_at_one_point e hdeck)
+
+/-! End of the block copied from t92J05. -/
+
+instance apm_t98a03_torus_pathConnected : PathConnectedSpace apm_t98a03_Torus where
+  nonempty := ⟨((1 : Circle), (1 : Circle))⟩
+  joined x y := ⟨(PathConnectedSpace.somePath x.1 y.1).prod (PathConnectedSpace.somePath x.2 y.2)⟩
+
+/-- The torus fundamental group at any basepoint. -/
+def apm_t98a03_torus_fundamentalGroup (t : apm_t98a03_Torus) :
+    FundamentalGroup apm_t98a03_Torus t ≃* Multiplicative (ℤ × ℤ) :=
+  (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected t ((1 : Circle), (1 : Circle))).trans
+    ((apm_t98a03_t92_fundamentalGroup_prod_equiv (1 : Circle) (1 : Circle)).trans
+      ((MulEquiv.prodCongr
+          ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+          ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt).trans
+        (MulEquiv.prodMultiplicative ℤ ℤ).symm))
+
+/-- The literal quotient is the library point wedge (same carrier, same
+topology, pointwise-equivalent generating relations). -/
+def apm_t98a03_X_homeomorph_wedge
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    apm_t98a03_X t₀ r₀ ≃ₜ ConstructionTargets.PointWedgeQuotient.Wedge t₀ r₀ :=
+  ConstructionTargets.PointWedgeQuotient.quotientHomeomorphOfRelIff
+    (apm_t98a03_wedgeRel t₀ r₀) (ConstructionTargets.PointWedgeQuotient.Rel t₀ r₀)
+    (by
+      intro a b
+      constructor
+      · rintro ⟨⟩
+        exact ConstructionTargets.PointWedgeQuotient.Rel.base
+      · rintro ⟨⟩
+        exact apm_t98a03_wedgeRel.base)
+
+/-- The open neighbourhood of `c` in the circle obtained by deleting `-c`. -/
+def apm_t98a03_circleNbhd (c : Circle) : Set Circle :=
+  {z | (z : ℂ) ≠ -(c : ℂ)}
+
+lemma apm_t98a03_circleNbhd_isOpen (c : Circle) : IsOpen (apm_t98a03_circleNbhd c) :=
+  isOpen_ne_fun continuous_subtype_val continuous_const
+
+lemma apm_t98a03_circleNbhd_mem (c : Circle) : c ∈ apm_t98a03_circleNbhd c := by
+  intro h
+  exact Circle.coe_ne_zero c (self_eq_neg.mp h)
+
+/-- Seat (generic): the punctured circle `{z | z ≠ -c}` contracts to `c`,
+relative to `c`.
+
+Route: the rotation `Homeomorph.mulLeft c⁻¹ : Circle ≃ₜ Circle` sends `c` to `1`
+and `apm_t98a03_circleNbhd c` onto
+`ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood` (`{z | z ≠ -1}`);
+restrict it to the subtypes (`Homeomorph.subtype` or `Homeomorph.image`/`Set.image`
+API) and pull back
+`ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction`
+with `ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm`.
+Estimated 40–80 lines. -/
+lemma apm_t98a03_circleNbhd_contraction (c : Circle) :
+    Nonempty
+      (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+        (apm_t98a03_circleNbhd c) ⟨c, apm_t98a03_circleNbhd_mem c⟩) := by
+  sorry
+
+/-- Product neighbourhood of a torus point. -/
+def apm_t98a03_torusNbhd (t₀ : apm_t98a03_Torus) : Set apm_t98a03_Torus :=
+  apm_t98a03_circleNbhd t₀.1 ×ˢ apm_t98a03_circleNbhd t₀.2
+
+lemma apm_t98a03_torusNbhd_isOpen (t₀ : apm_t98a03_Torus) :
+    IsOpen (apm_t98a03_torusNbhd t₀) :=
+  (apm_t98a03_circleNbhd_isOpen _).prod (apm_t98a03_circleNbhd_isOpen _)
+
+lemma apm_t98a03_torusNbhd_mem (t₀ : apm_t98a03_Torus) :
+    t₀ ∈ apm_t98a03_torusNbhd t₀ :=
+  ⟨apm_t98a03_circleNbhd_mem _, apm_t98a03_circleNbhd_mem _⟩
+
+/-- Assembly: product of the two circle contractions. -/
+def apm_t98a03_torusNbhd_contraction (t₀ : apm_t98a03_Torus) :
+    ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      (apm_t98a03_torusNbhd t₀) ⟨t₀, apm_t98a03_torusNbhd_mem t₀⟩ :=
+  ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm
+    (Homeomorph.Set.prod (apm_t98a03_circleNbhd t₀.1) (apm_t98a03_circleNbhd t₀.2))
+    (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction.prod
+      (apm_t98a03_circleNbhd_contraction t₀.1).some
+      (apm_t98a03_circleNbhd_contraction t₀.2).some)
+
+/-- The affine chart of `RP²` around `r₀`: lines not orthogonal to `r₀`. -/
+def apm_t98a03_rp2Nbhd (r₀ : apm_t98a03_RP2) : Set apm_t98a03_RP2 :=
+  {r | dotProduct r.rep r₀.rep ≠ 0}
+
+lemma apm_t98a03_rep_dot_ne_zero {v : Fin 3 → ℝ} (hv : v ≠ 0) (u : Fin 3 → ℝ)
+    (h : dotProduct v u ≠ 0) :
+    dotProduct (Projectivization.mk ℝ v hv).rep u ≠ 0 := by
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v hv
+  rw [← ha, Units.smul_def, smul_dotProduct, smul_eq_mul]
+  exact mul_ne_zero a.ne_zero h
+
+lemma apm_t98a03_rp2Nbhd_mem (r₀ : apm_t98a03_RP2) : r₀ ∈ apm_t98a03_rp2Nbhd r₀ := by
+  intro h
+  exact r₀.rep_nonzero (dotProduct_self_eq_zero.mp h)
+
+/-- Seat (generic): the affine chart is open.
+
+Route: `isOpen_coinduced`; the preimage under `Projectivization.mk' ℝ` is
+`{v | dotProduct v.1 r₀.rep ≠ 0}` (use `Projectivization.exists_smul_eq_mk_rep`
+and `Units.ne_zero`, as in `apm_t98a03_rep_dot_ne_zero`, in both directions),
+which is open by continuity of `v ↦ dotProduct v r₀.rep`
+(`Continuous.dotProduct` / `continuous_finset_sum`) and `isOpen_ne_fun`.
+Estimated 25–50 lines. -/
+lemma apm_t98a03_rp2Nbhd_isOpen (r₀ : apm_t98a03_RP2) :
+    IsOpen (apm_t98a03_rp2Nbhd r₀) := by
+  sorry
+
+/-- The homogeneous straight-line formula used to contract the chart. -/
+def apm_t98a03_rp2ContractVec (u v : Fin 3 → ℝ) (t : ℝ) : Fin 3 → ℝ :=
+  (1 - t) • v + (t * (dotProduct v u / dotProduct u u)) • u
+
+lemma apm_t98a03_rp2ContractVec_dot (u v : Fin 3 → ℝ) (hu : dotProduct u u ≠ 0)
+    (t : ℝ) :
+    dotProduct (apm_t98a03_rp2ContractVec u v t) u = dotProduct v u := by
+  simp only [apm_t98a03_rp2ContractVec, add_dotProduct, smul_dotProduct, smul_eq_mul]
+  field_simp
+  ring
+
+lemma apm_t98a03_rp2ContractVec_ne_zero (u v : Fin 3 → ℝ) (hu : dotProduct u u ≠ 0)
+    (hv : dotProduct v u ≠ 0) (t : ℝ) :
+    apm_t98a03_rp2ContractVec u v t ≠ 0 := by
+  intro h
+  apply hv
+  rw [← apm_t98a03_rp2ContractVec_dot u v hu t, h, zero_dotProduct]
+
+lemma apm_t98a03_rep_self_dot_ne_zero (r : apm_t98a03_RP2) :
+    dotProduct r.rep r.rep ≠ 0 := fun h => r.rep_nonzero (dotProduct_self_eq_zero.mp h)
+
+/-- The contraction of the chart as an explicit map (not yet known continuous). -/
+def apm_t98a03_rp2Contract (r₀ : apm_t98a03_RP2)
+    (p : unitInterval × apm_t98a03_rp2Nbhd r₀) : apm_t98a03_rp2Nbhd r₀ :=
+  ⟨Projectivization.mk ℝ (apm_t98a03_rp2ContractVec r₀.rep p.2.1.rep p.1)
+      (apm_t98a03_rp2ContractVec_ne_zero _ _ (apm_t98a03_rep_self_dot_ne_zero r₀) p.2.2 _),
+    apm_t98a03_rep_dot_ne_zero _ _ (by
+      rw [apm_t98a03_rp2ContractVec_dot _ _ (apm_t98a03_rep_self_dot_ne_zero r₀)]
+      exact p.2.2)⟩
+
+/-- Seat (generic): the explicit chart contraction is continuous.
+
+`apm_t98a03_rp2Contract r₀ (t, r) = [(1-t)·v + t·(v·u/u·u)·u]` with `v = r.rep`,
+`u = r₀.rep`.  The formula is homogeneous of degree one in `v`, so the map is
+`[F(t, v)]` for ANY representative `v` of `r` (`Projectivization.mk_eq_mk_iff'`).
+Route: `Projectivization.mk'` is an open quotient map
+(`ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen`
+with `K := ℝ, n := 2`; the instance on `ProjectiveSpaceTopology.Space ℝ 2` is
+definitionally ours).  Restrict it to the open saturated preimage
+`{v | dotProduct v.1 u ≠ 0}` (`IsOpenQuotientMap.restrictPreimage`), take the
+product with `unitInterval` (`IsOpenQuotientMap.prodMap` with `.id`), and check
+continuity upstairs, where the map is `(t, v) ↦ mk (F t v)` (continuous into the
+subtype by `Continuous.subtype_mk`). Estimated 80–160 lines. -/
+lemma apm_t98a03_rp2Contract_continuous (r₀ : apm_t98a03_RP2) :
+    Continuous (apm_t98a03_rp2Contract r₀) := by
+  sorry
+
+lemma apm_t98a03_rp2Contract_zero (r₀ : apm_t98a03_RP2) (r : apm_t98a03_rp2Nbhd r₀) :
+    apm_t98a03_rp2Contract r₀ (0, r) = r := by
+  apply Subtype.ext
+  simp only [apm_t98a03_rp2Contract, apm_t98a03_rp2ContractVec, Set.Icc.coe_zero,
+    sub_zero, one_smul, zero_mul, zero_smul, add_zero]
+  exact Projectivization.mk_rep _
+
+lemma apm_t98a03_rp2Contract_one (r₀ : apm_t98a03_RP2) (r : apm_t98a03_rp2Nbhd r₀) :
+    apm_t98a03_rp2Contract r₀ (1, r) = ⟨r₀, apm_t98a03_rp2Nbhd_mem r₀⟩ := by
+  apply Subtype.ext
+  change Projectivization.mk ℝ _ _ = r₀
+  conv_rhs => rw [← Projectivization.mk_rep r₀]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨dotProduct r.1.rep r₀.rep / dotProduct r₀.rep r₀.rep, ?_⟩
+  simp [apm_t98a03_rp2ContractVec]
+
+lemma apm_t98a03_rp2Contract_fixed (r₀ : apm_t98a03_RP2) (t : unitInterval) :
+    apm_t98a03_rp2Contract r₀ (t, ⟨r₀, apm_t98a03_rp2Nbhd_mem r₀⟩) =
+      ⟨r₀, apm_t98a03_rp2Nbhd_mem r₀⟩ := by
+  apply Subtype.ext
+  change Projectivization.mk ℝ _ _ = r₀
+  conv_rhs => rw [← Projectivization.mk_rep r₀]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨1, ?_⟩
+  have hu := apm_t98a03_rep_self_dot_ne_zero r₀
+  simp only [apm_t98a03_rp2ContractVec, div_self hu, mul_one, one_smul]
+  rw [← add_smul]
+  simp
+
+/-- Assembly: the chart contraction as a pointed contraction. -/
+def apm_t98a03_rp2Nbhd_contraction (r₀ : apm_t98a03_RP2) :
+    ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      (apm_t98a03_rp2Nbhd r₀) ⟨r₀, apm_t98a03_rp2Nbhd_mem r₀⟩ where
+  homotopy :=
+    { toFun := apm_t98a03_rp2Contract r₀
+      continuous_toFun := apm_t98a03_rp2Contract_continuous r₀
+      map_zero_left := apm_t98a03_rp2Contract_zero r₀
+      map_one_left := apm_t98a03_rp2Contract_one r₀ }
+  fixed := apm_t98a03_rp2Contract_fixed r₀
+
+/-- Assembly: van Kampen for this literal quotient, plus the torus and RP²
+computations. -/
 theorem apm_t98a03_fundamentalGroup
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
     Nonempty
       (FundamentalGroup (apm_t98a03_X t₀ r₀) (apm_t98a03_basepoint t₀ r₀) ≃*
         apm_t98a03_expectedFundamentalGroup) := by
+  letI : PathConnectedSpace apm_t98a03_RP2 := apm_t98a03_t92_projectivePlane_pathConnected
+  obtain ⟨eRP⟩ := apm_t98a03_t92_bridge_projectivePlane_fundamentalGroup r₀
+  exact ⟨(ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+      (apm_t98a03_X_homeomorph_wedge t₀ r₀) (apm_t98a03_basepoint t₀ r₀)).trans
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeNormalizedFundamentalGroupEquiv
+      t₀ r₀ (apm_t98a03_rp2Nbhd r₀) (apm_t98a03_torusNbhd t₀)
+      (apm_t98a03_rp2Nbhd_isOpen r₀) (apm_t98a03_torusNbhd_isOpen t₀)
+      (apm_t98a03_rp2Nbhd_mem r₀) (apm_t98a03_torusNbhd_mem t₀)
+      (apm_t98a03_rp2Nbhd_contraction r₀) (apm_t98a03_torusNbhd_contraction t₀)).trans
+      (MulEquiv.coprodCongr (apm_t98a03_torus_fundamentalGroup t₀) eRP))⟩
+
+/-! ## Part C: the two three-sheeted covers
+
+Both covers are written as explicit glued spaces.  Generic machinery first:
+`apm_t98a03_Glue σ τ` glues `A ⊕ B` along `σ j ~ τ j` (`j : J`); the base wedge
+is the case `J = Unit`.  Given local homeomorphisms `p : A' → A`, `q : B' → B`
+whose basepoint fibres are exactly the glued points, the induced map of glued
+spaces is a covering map (`apm_t98a03_glueMap_isCoveringMap`, assembled from
+Mathlib's `IsCoveringMapOn.of_openPartialHomeomorph`: compact Hausdorff total
+space, Hausdorff base, local homeomorphism).
+
+* regular:   `T² ⊔ (Fin 3 × RP²)`, torus sheets `(ζᵏc, t₀.2)` glued to `(k, r₀)`;
+  base map `(z,w) ↦ (z³,w)` and `snd`; deck group generated by
+  `(z,w) ↦ (ζz,w)`, `(k,r) ↦ (k+1,r)`.
+* irregular: `T² ⊔ (S² ⊔ RP²)`, torus sheets glued to `r₀ ∈ RP²`, `s`, `-s`
+  (`s` the unit representative of `r₀`); base map on `S²` is the antipodal
+  quotient.  The lift of the RP² generator closes up on the RP² sheet but not on
+  the sphere sheet, so no deck transformation exchanges those sheets. -/
+
+section Glue
+
+inductive apm_t98a03_GlueRel {J A B : Type} (σ : J → A) (τ : J → B) :
+    A ⊕ B → A ⊕ B → Prop
+  | glue (j : J) : apm_t98a03_GlueRel σ τ (.inl (σ j)) (.inr (τ j))
+
+/-- `A ⊕ B` with `σ j` identified with `τ j` for every `j`. -/
+def apm_t98a03_Glue {J A B : Type} (σ : J → A) (τ : J → B) : Type :=
+  Quotient (Relation.EqvGen.setoid (apm_t98a03_GlueRel σ τ))
+
+noncomputable instance {J A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (σ : J → A) (τ : J → B) : TopologicalSpace (apm_t98a03_Glue σ τ) :=
+  TopologicalSpace.coinduced
+    (fun z : A ⊕ B =>
+      (Quotient.mk (Relation.EqvGen.setoid (apm_t98a03_GlueRel σ τ)) z :
+        apm_t98a03_Glue σ τ))
+    inferInstance
+
+def apm_t98a03_glueMk {J A B : Type} (σ : J → A) (τ : J → B) :
+    A ⊕ B → apm_t98a03_Glue σ τ :=
+  Quotient.mk _
+
+lemma apm_t98a03_glueMk_continuous {J A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] (σ : J → A) (τ : J → B) :
+    Continuous (apm_t98a03_glueMk σ τ) :=
+  continuous_coinduced_rng
+
+lemma apm_t98a03_glueMk_surjective {J A B : Type} (σ : J → A) (τ : J → B) :
+    Function.Surjective (apm_t98a03_glueMk σ τ) :=
+  Quotient.mk_surjective
+
+lemma apm_t98a03_glueMk_glue {J A B : Type} (σ : J → A) (τ : J → B) (j : J) :
+    apm_t98a03_glueMk σ τ (.inl (σ j)) = apm_t98a03_glueMk σ τ (.inr (τ j)) :=
+  Quotient.sound (Relation.EqvGen.rel _ _ (apm_t98a03_GlueRel.glue j))
+
+/-- The explicit equivalence relation: equal, or a glued pair. -/
+def apm_t98a03_GlueEq {J A B : Type} (σ : J → A) (τ : J → B) (x y : A ⊕ B) : Prop :=
+  x = y ∨ ∃ j, (x = .inl (σ j) ∧ y = .inr (τ j)) ∨ (x = .inr (τ j) ∧ y = .inl (σ j))
+
+/-- Seat (generic): with injective gluing maps the classes are the glued pairs
+and singletons.
+
+Route: `←` is `Quotient.sound` with `EqvGen.rel`/`symm`.  `→`: `Quotient.exact`
+gives `Relation.EqvGen (apm_t98a03_GlueRel σ τ) x y`; induct on it, proving
+that `apm_t98a03_GlueEq σ τ` is reflexive, symmetric and transitive
+(transitivity: `inl (σ j) ~ inr (τ j) ~ inl (σ j')` forces `j = j'` by
+injectivity of `τ`, and dually with `σ`; `Sum.inl.injEq`, `Sum.inr.injEq`,
+`reduceCtorEq` close the mixed cases). Estimated 40–80 lines. -/
+lemma apm_t98a03_glueMk_eq_iff {J A B : Type} {σ : J → A} {τ : J → B}
+    (hσ : Function.Injective σ) (hτ : Function.Injective τ) (x y : A ⊕ B) :
+    apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔ apm_t98a03_GlueEq σ τ x y := by
   sorry
 
-/-- LIBRARY: realize the cyclic transitive action on `Fin 3` as a cover. -/
+/-- Seat (generic): gluing two Hausdorff spaces along finitely many pairs of
+points (injective gluing maps) gives a Hausdorff space.
+
+Route: `t2Space_iff` / `t2_separation` on representatives using `hmk`.  A set
+`W` of the glued space is open iff its preimages under `glueMk ∘ inl` and
+`glueMk ∘ inr` are open (`isOpen_coinduced`, `isOpen_sum_iff`).  Finite sets
+are closed (`Set.Finite.isClosed`, `Set.finite_range`), so: two unglued points
+of `A` are separated inside `A` minus the glued points; an unglued point and a
+glued class `j` are separated by `(U_A ∖ σ(other)) ⊔ (B ∖ τ(other))`-type
+saturated opens; two glued classes `j ≠ j'` by separating `σ j, σ j'` in `A`
+and `τ j, τ j'` in `B`.  Estimated 100–180 lines. -/
+lemma apm_t98a03_glue_t2Space {J A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    [T2Space A] [T2Space B] [Finite J] {σ : J → A} {τ : J → B}
+    (hσ : Function.Injective σ) (hτ : Function.Injective τ)
+    (hmk : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y) :
+    T2Space (apm_t98a03_Glue σ τ) := by
+  sorry
+
+lemma apm_t98a03_glue_compactSpace {J A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [CompactSpace A] [CompactSpace B] (σ : J → A) (τ : J → B) :
+    CompactSpace (apm_t98a03_Glue σ τ) := by
+  refine ⟨?_⟩
+  rw [← (apm_t98a03_glueMk_surjective σ τ).range_eq]
+  exact isCompact_range (apm_t98a03_glueMk_continuous σ τ)
+
+/-- Seat (generic): the glued space of two connected pieces is connected; here
+`B` need not be connected, only each point of `B` must be joined inside `B` by
+a preconnected set to some glued point.
+
+Route: the image of `A` (`isPreconnected_range`) meets each image
+`glueMk '' (inr '' S_b)` in the glued class of `τ j = σ j`
+(`apm_t98a03_glueMk_glue`); use `IsPreconnected.sUnion`/`isPreconnected_of_forall`
+around a point of the image of `A`, plus surjectivity of `glueMk`;
+`connectedSpace_iff_univ`.  Estimated 40–80 lines. -/
+lemma apm_t98a03_glue_connectedSpace {J A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [ConnectedSpace A] [Nonempty J] {σ : J → A} {τ : J → B}
+    (hB : ∀ b : B, ∃ j : J, ∃ S : Set B, IsPreconnected S ∧ b ∈ S ∧ τ j ∈ S) :
+    ConnectedSpace (apm_t98a03_Glue σ τ) := by
+  sorry
+
+/-- Seat (generic): compatible self-homeomorphisms of the pieces descend.
+
+Route: `Quotient.map'` of `Sum.map α β` (relation preserved: `glue j` goes to
+`glue (π j)` by `hα, hβ`), and of `Sum.map α.symm β.symm` for the inverse
+(`α.symm (σ (π j)) = σ j`); continuity by `Continuous.quotient_map'` and
+`Continuous.sumMap`, as in `apm_t98a03_glueMap` below.  Estimated 40–70 lines. -/
+lemma apm_t98a03_glue_homeomorph {J A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] {σ : J → A} {τ : J → B}
+    (α : A ≃ₜ A) (β : B ≃ₜ B) (π : J ≃ J)
+    (hα : ∀ j, α (σ j) = σ (π j)) (hβ : ∀ j, β (τ j) = τ (π j)) :
+    ∃ h : apm_t98a03_Glue σ τ ≃ₜ apm_t98a03_Glue σ τ,
+      ∀ x, h (apm_t98a03_glueMk σ τ x) = apm_t98a03_glueMk σ τ (Sum.map α β x) := by
+  sorry
+
+/-- The point wedge as a glued space. -/
+abbrev apm_t98a03_Wedge {A B : Type} (a₀ : A) (b₀ : B) :=
+  apm_t98a03_Glue (fun _ : Unit => a₀) (fun _ : Unit => b₀)
+
+lemma apm_t98a03_wedge_mk_eq_iff {A B : Type} (a₀ : A) (b₀ : B) (x y : A ⊕ B) :
+    apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y :=
+  apm_t98a03_glueMk_eq_iff (Function.injective_of_subsingleton _)
+    (Function.injective_of_subsingleton _) x y
+
+lemma apm_t98a03_glueMap_respects {J A B A' B' : Type} {σ : J → A'} {τ : J → B'}
+    {a₀ : A} {b₀ : B} (p : A' → A) (q : B' → B)
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀) {x y : A' ⊕ B'}
+    (h : Relation.EqvGen (apm_t98a03_GlueRel σ τ) x y) :
+    Relation.EqvGen (apm_t98a03_GlueRel (fun _ : Unit => a₀) (fun _ : Unit => b₀))
+      (Sum.map p q x) (Sum.map p q y) := by
+  induction h with
+  | rel a b hab =>
+    cases hab with
+    | glue j =>
+      simp only [Sum.map_inl, Sum.map_inr, hp, hq]
+      exact Relation.EqvGen.rel _ _ (apm_t98a03_GlueRel.glue ())
+  | refl a => exact Relation.EqvGen.refl _
+  | symm a b _ ih => exact Relation.EqvGen.symm _ _ ih
+  | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+/-- The map of glued spaces induced by `p ⊔ q`. -/
+def apm_t98a03_glueMap {J A B A' B' : Type} [TopologicalSpace A] [TopologicalSpace B]
+    [TopologicalSpace A'] [TopologicalSpace B'] {σ : J → A'} {τ : J → B'}
+    {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀) :
+    C(apm_t98a03_Glue σ τ, apm_t98a03_Wedge a₀ b₀) where
+  toFun := Quotient.map' (Sum.map p q)
+    (fun _ _ h => apm_t98a03_glueMap_respects p q hp hq h)
+  continuous_toFun := by
+    apply Continuous.quotient_map'
+    exact p.continuous.sumMap q.continuous
+
+lemma apm_t98a03_glueMap_mk {J A B A' B' : Type} [TopologicalSpace A] [TopologicalSpace B]
+    [TopologicalSpace A'] [TopologicalSpace B'] {σ : J → A'} {τ : J → B'}
+    {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀) (x : A' ⊕ B') :
+    apm_t98a03_glueMap p q hp hq (apm_t98a03_glueMk σ τ x) =
+      apm_t98a03_glueMk _ _ (Sum.map p q x) := rfl
+
+/-- Seat (generic): the glued map is open.
+
+Route: for open `O`, show `glueMk⁻¹' (f '' O) = Sum.map p q '' (glueMk⁻¹' O)`
+(then open: `isOpen_coinduced`; `Sum.map` of open maps is open, e.g. via
+`isOpenMap_inl/inr` and `IsOpenMap.comp`, or `isOpen_sum_iff`).  `⊇` is the
+formula `apm_t98a03_glueMap_mk`.  `⊆`: if `glueMk x = f (glueMk e)` with
+`e ∈ glueMk⁻¹' O`, then by `hmkX` either `x = Sum.map p q e`, or `x` is a
+basepoint representative and so is `Sum.map p q e`; then `e` is a glued point
+(`hpσ`/`hqτ`), its glued partner also lies in `glueMk⁻¹' O`
+(`apm_t98a03_glueMk_glue`), and the partner maps to the other basepoint
+representative.  Estimated 70–120 lines. -/
+lemma apm_t98a03_glueMap_isOpenMap {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B']
+    {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hpo : IsOpenMap p) (hqo : IsOpenMap q)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y) :
+    IsOpenMap (apm_t98a03_glueMap p q hp hq) := by
+  sorry
+
+/-- Seat (generic): local injectivity at an unglued point of `A'`.
+
+Route: from `hpl a'` get `φ` with `a' ∈ φ.source`, `p = φ` (injective on
+`φ.source`, `OpenPartialHomeomorph.injOn`).  Let
+`U := φ.source \ Set.range σ` (open: `Set.finite_range σ` is closed in the T2
+space `A'`), `W := glueMk σ τ '' (Sum.inl '' U)`.  `W` is open: its
+`glueMk`-preimage is `Sum.inl '' U` (no glued points; `hmkE`), open by
+`isOpenMap_inl`.  On `W`, `f (glueMk (inl u)) = glueMk (inl (p u))` with
+`p u ≠ a₀` (`hpσ`), so `hmkX` reduces equality of images to `p u = p u'`.
+Estimated 50–90 lines. -/
+lemma apm_t98a03_glueMap_locInj_inl {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B'] [T2Space A']
+    [Finite J] {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B}
+    (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hpl : IsLocalHomeomorph p)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hmkE : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y)
+    (a' : A') (ha' : a' ∉ Set.range σ) :
+    ∃ W : Set (apm_t98a03_Glue σ τ), IsOpen W ∧
+      apm_t98a03_glueMk σ τ (.inl a') ∈ W ∧ Set.InjOn (apm_t98a03_glueMap p q hp hq) W := by
+  sorry
+
+/-- Seat (generic): local injectivity at an unglued point of `B'`; the mirror
+image of `apm_t98a03_glueMap_locInj_inl` (same route with `inr`, `q`, `τ`).
+Estimated 50–90 lines. -/
+lemma apm_t98a03_glueMap_locInj_inr {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B'] [T2Space B']
+    [Finite J] {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B}
+    (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hql : IsLocalHomeomorph q)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ)
+    (hmkE : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y)
+    (b' : B') (hb' : b' ∉ Set.range τ) :
+    ∃ W : Set (apm_t98a03_Glue σ τ), IsOpen W ∧
+      apm_t98a03_glueMk σ τ (.inr b') ∈ W ∧ Set.InjOn (apm_t98a03_glueMap p q hp hq) W := by
+  sorry
+
+/-- Seat (generic): local injectivity at a glued point.
+
+Route: take `φ` for `p` at `σ j` and `ψ` for `q` at `τ j`; let
+`U := φ.source \ σ '' {j}ᶜ`, `V := ψ.source \ τ '' {j}ᶜ` (open: finite sets are
+closed).  `W := glueMk σ τ '' (Sum.inl '' U ∪ Sum.inr '' V)` has exactly that
+preimage (`hmkE`: the only glued pair meeting it is `σ j ~ τ j`, both inside),
+hence is open.  Injectivity: by `hmkX`, `f`-images of two points of `W` agree iff
+they are equal non-basepoint representatives (then `φ`/`ψ` injectivity), or both
+are basepoint representatives — and the only points of `U`, `V` over `a₀`, `b₀`
+are `σ j`, `τ j` (`hpσ`, `hqτ`), which are one class.  Estimated 80–140 lines. -/
+lemma apm_t98a03_glueMap_locInj_glued {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B'] [T2Space A']
+    [T2Space B'] [Finite J] {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B}
+    (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hpl : IsLocalHomeomorph p) (hql : IsLocalHomeomorph q)
+    (hσ : Function.Injective σ) (hτ : Function.Injective τ)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ)
+    (hmkE : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y)
+    (j : J) :
+    ∃ W : Set (apm_t98a03_Glue σ τ), IsOpen W ∧
+      apm_t98a03_glueMk σ τ (.inl (σ j)) ∈ W ∧
+        Set.InjOn (apm_t98a03_glueMap p q hp hq) W := by
+  sorry
+
+/-- A continuous open locally injective map is a local homeomorphism. -/
+lemma apm_t98a03_isLocalHomeomorph_of_isOpenMap {X Y : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] {f : X → Y} (hc : Continuous f) (ho : IsOpenMap f)
+    (hinj : ∀ x, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ Set.InjOn f U) :
+    IsLocalHomeomorph f := by
+  rw [isLocalHomeomorph_iff_isOpenEmbedding_restrict]
+  intro x
+  obtain ⟨U, hU, hxU, hinjU⟩ := hinj x
+  exact ⟨U, hU.mem_nhds hxU,
+    Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+      (hc.comp continuous_subtype_val) hinjU.injective (ho.restrict hU)⟩
+
+/-- Assembly: the glued map is a covering map. -/
+theorem apm_t98a03_glueMap_isCoveringMap {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B']
+    [T2Space A] [T2Space B] [T2Space A'] [T2Space B'] [CompactSpace A']
+    [CompactSpace B'] [Finite J] {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B}
+    (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hpl : IsLocalHomeomorph p) (hql : IsLocalHomeomorph q)
+    (hσ : Function.Injective σ) (hτ : Function.Injective τ)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ) :
+    IsCoveringMap (apm_t98a03_glueMap p q hp hq) := by
+  have hmkE := apm_t98a03_glueMk_eq_iff hσ hτ
+  have hmkX := apm_t98a03_wedge_mk_eq_iff a₀ b₀
+  haveI : T2Space (apm_t98a03_Glue σ τ) := apm_t98a03_glue_t2Space hσ hτ hmkE
+  haveI : T2Space (apm_t98a03_Wedge a₀ b₀) :=
+    apm_t98a03_glue_t2Space (Function.injective_of_subsingleton _)
+      (Function.injective_of_subsingleton _) hmkX
+  haveI : CompactSpace (apm_t98a03_Glue σ τ) := apm_t98a03_glue_compactSpace σ τ
+  have hinj : ∀ e, ∃ W : Set (apm_t98a03_Glue σ τ), IsOpen W ∧ e ∈ W ∧
+      Set.InjOn (apm_t98a03_glueMap p q hp hq) W := by
+    intro e
+    obtain ⟨x, rfl⟩ := apm_t98a03_glueMk_surjective σ τ e
+    rcases x with a' | b'
+    · by_cases ha : a' ∈ Set.range σ
+      · obtain ⟨j, rfl⟩ := ha
+        exact apm_t98a03_glueMap_locInj_glued p q hp hq hpl hql hσ hτ hpσ hqτ hmkE hmkX j
+      · exact apm_t98a03_glueMap_locInj_inl p q hp hq hpl hpσ hmkE hmkX a' ha
+    · by_cases hb : b' ∈ Set.range τ
+      · obtain ⟨j, rfl⟩ := hb
+        rw [← apm_t98a03_glueMk_glue]
+        exact apm_t98a03_glueMap_locInj_glued p q hp hq hpl hql hσ hτ hpσ hqτ hmkE hmkX j
+      · exact apm_t98a03_glueMap_locInj_inr p q hp hq hql hqτ hmkE hmkX b' hb
+  have hloc : IsLocalHomeomorph (apm_t98a03_glueMap p q hp hq) :=
+    apm_t98a03_isLocalHomeomorph_of_isOpenMap (map_continuous _)
+      (apm_t98a03_glueMap_isOpenMap p q hp hq hpl.isOpenMap hql.isOpenMap hpσ hqτ hmkX)
+      hinj
+  rw [isCoveringMap_iff_isCoveringMapOn_univ]
+  exact IsCoveringMapOn.of_openPartialHomeomorph (map_continuous _) (fun e _ => by
+    obtain ⟨φ, h1, h2⟩ := hloc e
+    exact ⟨φ, h1, h2.symm⟩)
+
+/-- Seat (generic): fibre over an unglued point of `A`.
+
+Route: `Nat.card_congr` with the equivalence
+`{a' // p a' = a} ≃ {e // f e = glueMk (inl a)}`, `a' ↦ glueMk (inl a')`.
+Well defined by `apm_t98a03_glueMap_mk`.  Injective: `p a' = a ≠ a₀`, so
+`a' ∉ range σ` (`hpσ`) and `hmkE` forces equality.  Surjective: a representative
+`inr b'` would give `glueMk (inr (q b')) = glueMk (inl a)`, impossible by `hmkX`
+since `a ≠ a₀`; a representative `inl a'` has `p a' = a` by `hmkX`.
+Estimated 40–80 lines. -/
+lemma apm_t98a03_glueMap_fiber_inl {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B']
+    {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hmkE : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y)
+    (a : A) (ha : a ≠ a₀) :
+    Nat.card {e // apm_t98a03_glueMap p q hp hq e =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a)} =
+      Nat.card {a' // p a' = a} := by
+  sorry
+
+/-- Seat (generic): fibre over an unglued point of `B`; mirror image of
+`apm_t98a03_glueMap_fiber_inl`.  Estimated 40–80 lines. -/
+lemma apm_t98a03_glueMap_fiber_inr {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B']
+    {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ)
+    (hmkE : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y)
+    (b : B) (hb : b ≠ b₀) :
+    Nat.card {e // apm_t98a03_glueMap p q hp hq e =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inr b)} =
+      Nat.card {b' // q b' = b} := by
+  sorry
+
+/-- Seat (generic): the fibre over the wedge point is the set of glued classes.
+
+Route: `Nat.card_congr` with `J ≃ {e // f e = basepoint}`,
+`j ↦ glueMk (inl (σ j))` (in the fibre by `hp`).  Injective by `hmkE` and `hσ`.
+Surjective: a representative `inl a'` of a fibre point has `p a' = a₀` (`hmkX`),
+so `a' = σ j` (`hpσ`); a representative `inr b'` has `b' = τ j` (`hqτ`) and
+`glueMk (inr (τ j)) = glueMk (inl (σ j))` (`apm_t98a03_glueMk_glue`).
+Estimated 40–80 lines. -/
+lemma apm_t98a03_glueMap_fiber_base {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B']
+    {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hσ : Function.Injective σ) (hτ : Function.Injective τ)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ)
+    (hmkE : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    (hmkX : ∀ x y, apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) x =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
+      apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y) :
+    Nat.card {e // apm_t98a03_glueMap p q hp hq e =
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) (.inl a₀)} =
+      Nat.card J := by
+  sorry
+
+/-- Assembly: if every fibre of `p`, `q` away from the basepoints and the set of
+glued classes all have `n` elements, every fibre of the glued map does. -/
+theorem apm_t98a03_glueMap_fiber_card {J A B A' B' : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [TopologicalSpace A'] [TopologicalSpace B']
+    {σ : J → A'} {τ : J → B'} {a₀ : A} {b₀ : B} (p : C(A', A)) (q : C(B', B))
+    (hp : ∀ j, p (σ j) = a₀) (hq : ∀ j, q (τ j) = b₀)
+    (hσ : Function.Injective σ) (hτ : Function.Injective τ)
+    (hpσ : ∀ a', p a' = a₀ ↔ a' ∈ Set.range σ)
+    (hqτ : ∀ b', q b' = b₀ ↔ b' ∈ Set.range τ) (n : ℕ)
+    (hA : ∀ a, Nat.card {a' // p a' = a} = n) (hB : ∀ b, Nat.card {b' // q b' = b} = n)
+    (hJ : Nat.card J = n) :
+    ∀ x, Nat.card {e // apm_t98a03_glueMap p q hp hq e = x} = n := by
+  have hmkE := apm_t98a03_glueMk_eq_iff hσ hτ
+  have hmkX := apm_t98a03_wedge_mk_eq_iff a₀ b₀
+  intro x
+  obtain ⟨y, rfl⟩ := apm_t98a03_glueMk_surjective _ _ x
+  rcases y with a | b
+  · by_cases ha : a = a₀
+    · subst ha
+      rw [apm_t98a03_glueMap_fiber_base p q hp hq hσ hτ hpσ hqτ hmkE hmkX, hJ]
+    · rw [apm_t98a03_glueMap_fiber_inl p q hp hq hpσ hmkE hmkX a ha, hA]
+  · by_cases hb : b = b₀
+    · subst hb
+      have hbase : apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b) (.inr b) =
+          apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b) (.inl a₀) :=
+        (apm_t98a03_glueMk_glue (fun _ : Unit => a₀) (fun _ : Unit => b) ()).symm
+      rw [hbase, apm_t98a03_glueMap_fiber_base p q hp hq hσ hτ hpσ hqτ hmkE hmkX, hJ]
+    · rw [apm_t98a03_glueMap_fiber_inr p q hp hq hqτ hmkE hmkX b hb, hB]
+
+/-- No deck transformation carries the start of a closed lift to the start of an
+open lift of the same loop (uniqueness of lifts, `IsCoveringMap.eq_of_comp_eq`). -/
+lemma apm_t98a03_no_deck_of_lift_mismatch {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {f : E → X} (hf : IsCoveringMap f)
+    (γ₁ γ₂ : C(unitInterval, E)) (hγ : f ∘ γ₁ = f ∘ γ₂)
+    (h₁ : γ₁ 0 = γ₁ 1) (h₂ : γ₂ 0 ≠ γ₂ 1) :
+    ¬∃ h : E ≃ₜ E, (∀ z, f (h z) = f z) ∧ h (γ₁ 0) = γ₂ 0 := by
+  rintro ⟨h, hdeck, h0⟩
+  have hcomp : f ∘ (h ∘ γ₁) = f ∘ γ₂ := by
+    funext t
+    simpa [hdeck] using congrFun hγ t
+  have heq := hf.eq_of_comp_eq (h.continuous.comp γ₁.continuous) γ₂.continuous hcomp 0
+    (by simpa using h0)
+  have h1 := congrFun heq 1
+  apply h₂
+  simp only [Function.comp_apply] at h1
+  rw [← h1, ← h₁, h0]
+
+lemma apm_t98a03_isLocalHomeomorph_prodMap {X Y X' Y' : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] [TopologicalSpace X'] [TopologicalSpace Y']
+    {f : X → X'} {g : Y → Y'} (hf : IsLocalHomeomorph f) (hg : IsLocalHomeomorph g) :
+    IsLocalHomeomorph (Prod.map f g) := by
+  intro x
+  obtain ⟨φ, hφ, rfl⟩ := hf x.1
+  obtain ⟨ψ, hψ, rfl⟩ := hg x.2
+  exact ⟨φ.prod ψ, ⟨hφ, hψ⟩, rfl⟩
+
+lemma apm_t98a03_isLocalHomeomorph_snd {F Y : Type*} [TopologicalSpace F]
+    [DiscreteTopology F] [TopologicalSpace Y] :
+    IsLocalHomeomorph (Prod.snd : F × Y → Y) :=
+  apm_t98a03_isLocalHomeomorph_of_isOpenMap continuous_snd isOpenMap_snd
+    (fun x => ⟨{x.1} ×ˢ Set.univ, (isOpen_discrete _).prod isOpen_univ, ⟨rfl, trivial⟩,
+      fun a ha b hb hab => Prod.ext (ha.1.trans hb.1.symm) hab⟩)
+
+/-- Seat (generic): `Sum.elim` of local homeomorphisms into a common space is a
+local homeomorphism.
+
+Route: `apm_t98a03_isLocalHomeomorph_of_isOpenMap`: continuity by
+`continuous_sum_dom`; open map since an open `O ⊆ X ⊕ Y` has image
+`f '' (inl⁻¹' O) ∪ g '' (inr⁻¹' O)` (`isOpen_sum_iff`,
+`IsLocalHomeomorph.isOpenMap`); local injectivity on `inl '' φ.source` /
+`inr '' ψ.source` (open by `isOpenMap_inl`/`isOpenMap_inr`).
+Estimated 30–60 lines. -/
+lemma apm_t98a03_isLocalHomeomorph_sumElim {X Y Z : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] [TopologicalSpace Z] {f : X → Z} {g : Y → Z}
+    (hf : IsLocalHomeomorph f) (hg : IsLocalHomeomorph g) :
+    IsLocalHomeomorph (Sum.elim f g) := by
+  sorry
+
+end Glue
+
+/-! ### Packaging a cover of the glued wedge as a cover of the literal quotient -/
+
+def apm_t98a03_wedge_homeomorph_X (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    apm_t98a03_Wedge t₀ r₀ ≃ₜ apm_t98a03_X t₀ r₀ :=
+  ConstructionTargets.PointWedgeQuotient.quotientHomeomorphOfRelIff
+    (apm_t98a03_GlueRel (fun _ : Unit => t₀) (fun _ : Unit => r₀))
+    (apm_t98a03_wedgeRel t₀ r₀)
+    (by
+      intro a b
+      constructor
+      · rintro ⟨⟩
+        exact apm_t98a03_wedgeRel.base
+      · rintro ⟨⟩
+        exact apm_t98a03_GlueRel.glue ())
+
+def apm_t98a03_coverOf {E : Type} [TopologicalSpace E] (t₀ : apm_t98a03_Torus)
+    (r₀ : apm_t98a03_RP2) (f : E → apm_t98a03_Wedge t₀ r₀) :
+    apm_t98a03_Cover (apm_t98a03_X t₀ r₀) :=
+  ⟨E, inferInstance, apm_t98a03_wedge_homeomorph_X t₀ r₀ ∘ f⟩
+
+lemma apm_t98a03_coverOf_threeFold {E : Type} [TopologicalSpace E]
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) (f : E → apm_t98a03_Wedge t₀ r₀)
+    (hf : IsCoveringMap f) (hconn : ConnectedSpace E)
+    (hcard : ∀ x, Nat.card {e // f e = x} = 3) :
+    apm_t98a03_IsConnectedThreeFoldCover (apm_t98a03_coverOf t₀ r₀ f) := by
+  refine ⟨hf.homeomorph_comp _, ⟨hconn⟩, fun x => ?_⟩
+  change Nat.card {e : E // apm_t98a03_wedge_homeomorph_X t₀ r₀ (f e) = x} = 3
+  rw [← hcard ((apm_t98a03_wedge_homeomorph_X t₀ r₀).symm x)]
+  exact Nat.card_congr (Equiv.subtypeEquivRight fun e =>
+    (apm_t98a03_wedge_homeomorph_X t₀ r₀).apply_eq_iff_eq_symm_apply)
+
+lemma apm_t98a03_coverOf_regular_iff {E : Type} [TopologicalSpace E]
+    (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) (f : E → apm_t98a03_Wedge t₀ r₀) :
+    apm_t98a03_IsRegularCover (apm_t98a03_coverOf t₀ r₀ f) ↔
+      IsCoveringMap f ∧ ∀ x y : E, f x = f y →
+        ∃ h : E ≃ₜ E, (∀ z, f (h z) = f z) ∧ h x = y := by
+  let e := apm_t98a03_wedge_homeomorph_X t₀ r₀
+  change (IsCoveringMap (e ∘ f) ∧ ∀ x y : E, e (f x) = e (f y) →
+      ∃ h : E ≃ₜ E, (∀ z, e (f (h z)) = e (f z)) ∧ h x = y) ↔ _
+  simp only [EmbeddingLike.apply_eq_iff_eq, IsCoveringMap.homeomorph_comp_iff]
+
+/-! ### The torus triple cover `(z, w) ↦ (z³, w)` -/
+
+def apm_t98a03_zeta : Circle := Circle.exp (2 * Real.pi / 3)
+
+lemma apm_t98a03_zeta_pow_three : apm_t98a03_zeta ^ 3 = 1 := by
+  rw [apm_t98a03_zeta, ← Circle.exp_nsmul, nsmul_eq_mul]
+  rw [show ((3 : ℕ) : ℝ) * (2 * Real.pi / 3) = 2 * Real.pi by push_cast; ring]
+  exact Circle.exp_two_pi
+
+/-- Seat: `1, ζ, ζ²` are distinct.
+
+Route: `Circle.exp` is injective on `[0, 2π)` / `Circle.exp_eq_one`
+(`Circle.exp x = 1 ↔ ∃ n : ℤ, x = n * (2π)`, or via `Complex.exp_eq_one_iff`);
+`ζ^k = Circle.exp (k * 2π/3)` by `Circle.exp_nsmul`; compare `ζ^i = ζ^j` as
+`ζ^(j-i) = 1` with `0 < j - i < 3`; `fin_cases`. Estimated 25–50 lines. -/
+lemma apm_t98a03_zeta_pow_injective :
+    Function.Injective (fun k : Fin 3 => apm_t98a03_zeta ^ (k : ℕ)) := by
+  sorry
+
+/-- Seat: the cube roots of `a = c³` in the circle are `c, ζc, ζ²c`.
+
+Route: `←` from `apm_t98a03_zeta_pow_three` (`mul_pow`, `pow_right_comm`).
+`→`: `w := z * c⁻¹` has `w ^ 3 = 1`; the polynomial `X³ - 1` has at most three
+roots in the field `ℂ` (`Polynomial.card_roots'` / `Multiset.card_roots`), and
+`1, ζ, ζ²` are three distinct roots (`apm_t98a03_zeta_pow_injective`, pass it
+in as a hypothesis or reprove), so `w` is one of them; alternatively
+`Complex.mem_rootsOfUnity` gives `w = exp(2πik/3)` directly.
+Estimated 50–100 lines. -/
+lemma apm_t98a03_circle_cube_roots (a c : Circle) (hc : c ^ 3 = a) (z : Circle) :
+    z ^ 3 = a ↔ ∃ k : Fin 3, z = apm_t98a03_zeta ^ (k : ℕ) * c := by
+  sorry
+
+/-- A chosen cube root. -/
+def apm_t98a03_cubeRoot (a : Circle) : Circle :=
+  Classical.choose ((Circle.isQuotientCoveringMap_npow 3).surjective a)
+
+lemma apm_t98a03_cubeRoot_pow (a : Circle) : apm_t98a03_cubeRoot a ^ 3 = a :=
+  Classical.choose_spec ((Circle.isQuotientCoveringMap_npow 3).surjective a)
+
+def apm_t98a03_torusCube : C(apm_t98a03_Torus, apm_t98a03_Torus) :=
+  ⟨Prod.map (fun z : Circle => z ^ 3) id, (continuous_pow 3).prodMap continuous_id⟩
+
+lemma apm_t98a03_torusCube_isLocalHomeomorph :
+    IsLocalHomeomorph apm_t98a03_torusCube :=
+  apm_t98a03_isLocalHomeomorph_prodMap
+    ((Circle.isQuotientCoveringMap_npow 3).isCoveringMap.isLocalHomeomorph)
+    (Homeomorph.refl Circle).isLocalHomeomorph
+
+/-- The three torus points over `t₀`. -/
+def apm_t98a03_sheetPt (t₀ : apm_t98a03_Torus) (k : Fin 3) : apm_t98a03_Torus :=
+  (apm_t98a03_zeta ^ (k : ℕ) * apm_t98a03_cubeRoot t₀.1, t₀.2)
+
+lemma apm_t98a03_torusCube_sheetPt (t₀ : apm_t98a03_Torus) (k : Fin 3) :
+    apm_t98a03_torusCube (apm_t98a03_sheetPt t₀ k) = t₀ := by
+  have h := (apm_t98a03_circle_cube_roots t₀.1 _ (apm_t98a03_cubeRoot_pow t₀.1)
+    (apm_t98a03_zeta ^ (k : ℕ) * apm_t98a03_cubeRoot t₀.1)).2 ⟨k, rfl⟩
+  exact Prod.ext h rfl
+
+lemma apm_t98a03_sheetPt_injective (t₀ : apm_t98a03_Torus) :
+    Function.Injective (apm_t98a03_sheetPt t₀) := by
+  intro i j h
+  have h1 := congrArg Prod.fst h
+  exact apm_t98a03_zeta_pow_injective (mul_right_cancel h1)
+
+lemma apm_t98a03_torusCube_eq_iff (t₀ e : apm_t98a03_Torus) :
+    apm_t98a03_torusCube e = t₀ ↔ e ∈ Set.range (apm_t98a03_sheetPt t₀) := by
+  constructor
+  · intro h
+    have h1 : e.1 ^ 3 = t₀.1 := congrArg Prod.fst h
+    have h2 : e.2 = t₀.2 := by
+      have := congrArg Prod.snd h
+      exact this
+    obtain ⟨k, hk⟩ := (apm_t98a03_circle_cube_roots t₀.1 _
+      (apm_t98a03_cubeRoot_pow t₀.1) e.1).1 h1
+    exact ⟨k, Prod.ext hk.symm h2.symm⟩
+  · rintro ⟨k, rfl⟩
+    exact apm_t98a03_torusCube_sheetPt t₀ k
+
+/-- Every fibre of the torus triple cover has three points. -/
+lemma apm_t98a03_torusCube_fiber_card (t : apm_t98a03_Torus) :
+    Nat.card {e // apm_t98a03_torusCube e = t} = 3 := by
+  have hbij : Function.Bijective (fun k : Fin 3 =>
+      (⟨apm_t98a03_sheetPt t k, apm_t98a03_torusCube_sheetPt t k⟩ :
+        {e // apm_t98a03_torusCube e = t})) := by
+    refine ⟨fun i j h => apm_t98a03_sheetPt_injective t (congrArg Subtype.val h), ?_⟩
+    rintro ⟨e, he⟩
+    obtain ⟨k, hk⟩ := (apm_t98a03_torusCube_eq_iff t e).1 he
+    exact ⟨k, Subtype.ext hk⟩
+  rw [← Nat.card_congr (Equiv.ofBijective _ hbij), Nat.card_eq_fintype_card, Fintype.card_fin]
+
+instance : T2Space apm_t98a03_RP2 :=
+  (apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient).some.t2Space
+
+instance : CompactSpace apm_t98a03_RP2 :=
+  (apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient).some.compactSpace
+
+instance : PathConnectedSpace apm_t98a03_RP2 := apm_t98a03_t92_projectivePlane_pathConnected
+
+/-! ### The regular cover -/
+
+/-- Three projective planes, sheet `k` glued at `(k, r₀)`. -/
+abbrev apm_t98a03_RegB := Fin 3 × apm_t98a03_RP2
+
+def apm_t98a03_regTau (r₀ : apm_t98a03_RP2) (k : Fin 3) : apm_t98a03_RegB := (k, r₀)
+
+def apm_t98a03_regQ : C(apm_t98a03_RegB, apm_t98a03_RP2) := ⟨Prod.snd, continuous_snd⟩
+
+lemma apm_t98a03_regQ_tau (r₀ : apm_t98a03_RP2) (k : Fin 3) :
+    apm_t98a03_regQ (apm_t98a03_regTau r₀ k) = r₀ := rfl
+
+abbrev apm_t98a03_RegE (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :=
+  apm_t98a03_Glue (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀)
+
+def apm_t98a03_regMap (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    C(apm_t98a03_RegE t₀ r₀, apm_t98a03_Wedge t₀ r₀) :=
+  apm_t98a03_glueMap apm_t98a03_torusCube apm_t98a03_regQ
+    (apm_t98a03_torusCube_sheetPt t₀) (apm_t98a03_regQ_tau r₀)
+
+lemma apm_t98a03_regTau_injective (r₀ : apm_t98a03_RP2) :
+    Function.Injective (apm_t98a03_regTau r₀) :=
+  fun _ _ h => congrArg Prod.fst h
+
+lemma apm_t98a03_regQ_eq_iff (r₀ : apm_t98a03_RP2) (b : apm_t98a03_RegB) :
+    apm_t98a03_regQ b = r₀ ↔ b ∈ Set.range (apm_t98a03_regTau r₀) := by
+  constructor
+  · intro h
+    exact ⟨b.1, Prod.ext rfl h.symm⟩
+  · rintro ⟨k, rfl⟩
+    rfl
+
+lemma apm_t98a03_regQ_fiber_card (r : apm_t98a03_RP2) :
+    Nat.card {b // apm_t98a03_regQ b = r} = 3 := by
+  have e : {b // apm_t98a03_regQ b = r} ≃ Fin 3 :=
+    { toFun := fun b => b.1.1
+      invFun := fun k => ⟨(k, r), rfl⟩
+      left_inv := by
+        rintro ⟨⟨k, r'⟩, h⟩
+        change r' = r at h
+        subst h
+        rfl
+      right_inv := fun _ => rfl }
+  rw [Nat.card_congr e, Nat.card_eq_fintype_card, Fintype.card_fin]
+
+lemma apm_t98a03_regMap_isCoveringMap (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    IsCoveringMap (apm_t98a03_regMap t₀ r₀) :=
+  apm_t98a03_glueMap_isCoveringMap _ _ _ _ apm_t98a03_torusCube_isLocalHomeomorph
+    apm_t98a03_isLocalHomeomorph_snd (apm_t98a03_sheetPt_injective t₀)
+    (apm_t98a03_regTau_injective r₀) (apm_t98a03_torusCube_eq_iff t₀)
+    (apm_t98a03_regQ_eq_iff r₀)
+
+lemma apm_t98a03_regE_connected (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    ConnectedSpace (apm_t98a03_RegE t₀ r₀) :=
+  apm_t98a03_glue_connectedSpace (fun b =>
+    ⟨b.1, {b.1} ×ˢ Set.univ, isPreconnected_singleton.prod isPreconnected_univ,
+      ⟨rfl, trivial⟩, ⟨rfl, trivial⟩⟩)
+
+/-- The sheet rotation of the torus: `(z, w) ↦ (ζ z, w)`. -/
+def apm_t98a03_torusRot : apm_t98a03_Torus ≃ₜ apm_t98a03_Torus :=
+  (Homeomorph.mulLeft apm_t98a03_zeta).prodCongr (Homeomorph.refl Circle)
+
+/-- The sheet rotation of the three planes: `(k, r) ↦ (k + 1, r)`. -/
+def apm_t98a03_regRot : apm_t98a03_RegB ≃ₜ apm_t98a03_RegB :=
+  (Homeomorph.mk (Equiv.addRight (1 : Fin 3)) continuous_of_discreteTopology
+    continuous_of_discreteTopology).prodCongr (Homeomorph.refl apm_t98a03_RP2)
+
+lemma apm_t98a03_zeta_mul_pow (k : Fin 3) :
+    apm_t98a03_zeta * apm_t98a03_zeta ^ (k : ℕ) =
+      apm_t98a03_zeta ^ ((k + 1 : Fin 3) : ℕ) := by
+  fin_cases k
+  · simp
+  · simp [pow_succ]
+  · show apm_t98a03_zeta * apm_t98a03_zeta ^ 2 = apm_t98a03_zeta ^ 0
+    rw [pow_zero, ← pow_succ', apm_t98a03_zeta_pow_three]
+
+lemma apm_t98a03_torusRot_sheetPt (t₀ : apm_t98a03_Torus) (k : Fin 3) :
+    apm_t98a03_torusRot (apm_t98a03_sheetPt t₀ k) =
+      apm_t98a03_sheetPt t₀ (Equiv.addRight (1 : Fin 3) k) := by
+  change (apm_t98a03_zeta * (apm_t98a03_zeta ^ (k : ℕ) * apm_t98a03_cubeRoot t₀.1), t₀.2) =
+    (apm_t98a03_zeta ^ ((k + 1 : Fin 3) : ℕ) * apm_t98a03_cubeRoot t₀.1, t₀.2)
+  rw [← mul_assoc, apm_t98a03_zeta_mul_pow]
+
+lemma apm_t98a03_regRot_tau (r₀ : apm_t98a03_RP2) (k : Fin 3) :
+    apm_t98a03_regRot (apm_t98a03_regTau r₀ k) =
+      apm_t98a03_regTau r₀ (Equiv.addRight (1 : Fin 3) k) := rfl
+
+lemma apm_t98a03_regDeck_commutes (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    (h : apm_t98a03_RegE t₀ r₀ ≃ₜ apm_t98a03_RegE t₀ r₀)
+    (hh : ∀ x, h (apm_t98a03_glueMk _ _ x) =
+      apm_t98a03_glueMk _ _ (Sum.map apm_t98a03_torusRot apm_t98a03_regRot x)) :
+    ∀ z, apm_t98a03_regMap t₀ r₀ (h z) = apm_t98a03_regMap t₀ r₀ z := by
+  intro z
+  obtain ⟨x, rfl⟩ := apm_t98a03_glueMk_surjective _ _ z
+  rw [hh x]
+  rcases x with ⟨z1, w⟩ | ⟨k, r⟩
+  · change apm_t98a03_glueMk _ _ (.inl ((apm_t98a03_zeta * z1) ^ 3, w)) =
+      apm_t98a03_glueMk _ _ (.inl (z1 ^ 3, w))
+    rw [mul_pow, apm_t98a03_zeta_pow_three, one_mul]
+  · rfl
+
+/-- Seat: every fibre of the regular cover is an orbit of the sheet rotation
+`h` (`h` acts by `(z,w) ↦ (ζz,w)` on the torus and `(k,r) ↦ (k+1,r)` on the
+planes, formula `hh`).
+
+Route: write `x = glueMk a`, `y = glueMk b` (`apm_t98a03_glueMk_surjective`);
+`hxy` and `apm_t98a03_glueMap_mk` give
+`glueMk (Sum.map torusCube regQ a) = glueMk (Sum.map torusCube regQ b)` in the
+wedge; decide it with `apm_t98a03_wedge_mk_eq_iff`.  Non-basepoint torus case:
+`b.1 = ζ^k a.1` by `apm_t98a03_circle_cube_roots`, then `y = h^[k] x` by `hh`.
+Non-basepoint plane case: `b = (a.1 + m, a.2)`.  Basepoint case: both are
+glued classes `glueMk (inl (sheetPt t₀ k))` (`apm_t98a03_torusCube_eq_iff`,
+`apm_t98a03_regQ_eq_iff`, `apm_t98a03_glueMk_glue`) and
+`h (glueMk (inl (sheetPt t₀ k))) = glueMk (inl (sheetPt t₀ (k+1)))` by `hh` and
+`apm_t98a03_torusRot_sheetPt`.  Finish with `fin_cases` on the differences.
+Estimated 80–150 lines. -/
+lemma apm_t98a03_regular_fiber_orbit (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    (h : apm_t98a03_RegE t₀ r₀ ≃ₜ apm_t98a03_RegE t₀ r₀)
+    (hh : ∀ x, h (apm_t98a03_glueMk _ _ x) =
+      apm_t98a03_glueMk _ _ (Sum.map apm_t98a03_torusRot apm_t98a03_regRot x))
+    (x y : apm_t98a03_RegE t₀ r₀)
+    (hxy : apm_t98a03_regMap t₀ r₀ x = apm_t98a03_regMap t₀ r₀ y) :
+    y = x ∨ y = h x ∨ y = h (h x) := by
+  sorry
+
+/-- Assembly: the regular cover. -/
 theorem apm_t98a03_regular_threeFoldCover
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
     ∃ C : apm_t98a03_Cover (apm_t98a03_X t₀ r₀),
       apm_t98a03_IsConnectedThreeFoldCover C ∧ apm_t98a03_IsRegularCover C := by
+  obtain ⟨h, hh⟩ := apm_t98a03_glue_homeomorph apm_t98a03_torusRot apm_t98a03_regRot
+    (Equiv.addRight (1 : Fin 3)) (apm_t98a03_torusRot_sheetPt t₀) (apm_t98a03_regRot_tau r₀)
+  have hcov := apm_t98a03_regMap_isCoveringMap t₀ r₀
+  have hdeck := apm_t98a03_regDeck_commutes t₀ r₀ h hh
+  refine ⟨apm_t98a03_coverOf t₀ r₀ (apm_t98a03_regMap t₀ r₀), ?_, ?_⟩
+  · exact apm_t98a03_coverOf_threeFold t₀ r₀ _ hcov (apm_t98a03_regE_connected t₀ r₀)
+      (apm_t98a03_glueMap_fiber_card apm_t98a03_torusCube apm_t98a03_regQ
+        (apm_t98a03_torusCube_sheetPt t₀) (apm_t98a03_regQ_tau r₀)
+        (apm_t98a03_sheetPt_injective t₀) (apm_t98a03_regTau_injective r₀)
+        (apm_t98a03_torusCube_eq_iff t₀) (apm_t98a03_regQ_eq_iff r₀) 3
+        apm_t98a03_torusCube_fiber_card apm_t98a03_regQ_fiber_card (by simp))
+  · rw [apm_t98a03_coverOf_regular_iff]
+    refine ⟨hcov, fun x y hxy => ?_⟩
+    rcases apm_t98a03_regular_fiber_orbit t₀ r₀ h hh x y hxy with rfl | rfl | rfl
+    · exact ⟨Homeomorph.refl _, fun _ => rfl, rfl⟩
+    · exact ⟨h, hdeck, rfl⟩
+    · exact ⟨h.trans h, fun z => by simp [hdeck], rfl⟩
+
+/-! ### The irregular cover -/
+
+/-- The sphere-to-plane projection (copied map `..._aux_toP`). -/
+def apm_t98a03_sphereProj : apm_t98a03_t92_S2 → apm_t98a03_RP2 :=
+  apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP
+
+def apm_t98a03_antipodalHomeomorph :
+    MulAction.orbitRel.Quotient apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 ≃ₜ
+      apm_t98a03_RP2 where
+  toFun := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ
+  invFun := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ
+  left_inv := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_left
+  right_inv := apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_right
+  continuous_toFun :=
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toPQ_continuous
+  continuous_invFun :=
+    apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toQ_continuous
+
+lemma apm_t98a03_sphereProj_isCoveringMap : IsCoveringMap apm_t98a03_sphereProj := by
+  haveI : IsCancelSMul apm_t98a03_t92_antipodalGroup apm_t98a03_t92_S2 :=
+    isCancelSMul_iff_eq_one_of_smul_eq.mpr apm_t98a03_t92_antipodalAction_free
+  have h := (isQuotientCoveringMap_quotientMk_of_properlyDiscontinuousSMul
+    (G := apm_t98a03_t92_antipodalGroup) (E := apm_t98a03_t92_S2)).isCoveringMap
+  exact h.homeomorph_comp apm_t98a03_antipodalHomeomorph
+
+instance : SimplyConnectedSpace apm_t98a03_t92_S2 :=
+  ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 2
+    (by norm_num)
+
+/-- The unit representative of a projective point. -/
+def apm_t98a03_unitRep (r : apm_t98a03_RP2) : apm_t98a03_t92_S2 :=
+  ⟨(‖WithLp.toLp 2 r.rep‖⁻¹ : ℝ) • WithLp.toLp 2 r.rep, by
+    rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_norm, inv_mul_cancel₀]
+    exact norm_ne_zero_iff.mpr (by
+      change WithLp.toLp 2 r.rep ≠ 0
+      exact (WithLp.linearEquiv 2 ℝ (Fin 3 → ℝ)).symm.injective.ne r.rep_nonzero)⟩
+
+lemma apm_t98a03_sphereProj_unitRep (r : apm_t98a03_RP2) :
+    apm_t98a03_sphereProj (apm_t98a03_unitRep r) = r := by
+  conv_rhs => rw [← Projectivization.mk_rep r]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨‖WithLp.toLp 2 r.rep‖⁻¹, ?_⟩
+  ext i
+  rfl
+
+lemma apm_t98a03_sphereProj_neg (x : apm_t98a03_t92_S2) :
+    apm_t98a03_sphereProj (-x) = apm_t98a03_sphereProj x := by
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨-1, ?_⟩
+  ext i
+  simp
+
+/-- Seat: the fibres of `S² → RP²` are antipodal pairs.
+
+Route: `apm_t98a03_sphereProj x = mk x` (as vectors); `Projectivization.mk_eq_mk_iff'`
+gives `y = a • x` for a real `a`; taking norms (`norm_smul`, both unit) gives
+`|a| = 1`, so `a = 1` or `a = -1` (`abs_eq`); `Subtype.ext`, `WithLp` coercions
+as in the copied `..._aux_toQ0_scale`.  `←` by `apm_t98a03_sphereProj_neg`.
+Estimated 30–60 lines. -/
+lemma apm_t98a03_sphereProj_eq_iff (x y : apm_t98a03_t92_S2) :
+    apm_t98a03_sphereProj y = apm_t98a03_sphereProj x ↔ y = x ∨ y = -x := by
   sorry
 
-/-- LIBRARY: realize the transitive `S₃` action with nonnormal point stabilizer. -/
+/-- No point of the sphere is its own antipode. -/
+lemma apm_t98a03_sphere_ne_neg (x : apm_t98a03_t92_S2) : x ≠ -x := by
+  intro h
+  have h' : (x : EuclideanSpace ℝ (Fin 3)) = -(x : EuclideanSpace ℝ (Fin 3)) := by
+    simpa using congrArg Subtype.val h
+  have hx : ‖(x : EuclideanSpace ℝ (Fin 3))‖ = 1 := by simp
+  have h2 : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+    rw [two_smul]
+    nth_rewrite 1 [h']
+    exact neg_add_cancel _
+  have h0 := (smul_eq_zero.mp h2).resolve_left (by norm_num)
+  rw [h0, norm_zero] at hx
+  exact zero_ne_one hx
+
+/-- Sphere sheet and one plane sheet. -/
+abbrev apm_t98a03_IrrB := apm_t98a03_t92_S2 ⊕ apm_t98a03_RP2
+
+/-- Glued points: `r₀` on the plane sheet, `±s` on the sphere sheet. -/
+def apm_t98a03_irrTau (r₀ : apm_t98a03_RP2) : Fin 3 → apm_t98a03_IrrB :=
+  ![.inr r₀, .inl (apm_t98a03_unitRep r₀), .inl (-apm_t98a03_unitRep r₀)]
+
+def apm_t98a03_irrQ : C(apm_t98a03_IrrB, apm_t98a03_RP2) :=
+  ⟨Sum.elim apm_t98a03_sphereProj id,
+    continuous_sum_dom.2
+      ⟨apm_t98a03_t92_projectivePlane_homeomorph_antipodalQuotient_aux_toP_continuous,
+        continuous_id⟩⟩
+
+lemma apm_t98a03_irrQ_tau (r₀ : apm_t98a03_RP2) (k : Fin 3) :
+    apm_t98a03_irrQ (apm_t98a03_irrTau r₀ k) = r₀ := by
+  fin_cases k
+  · rfl
+  · exact apm_t98a03_sphereProj_unitRep r₀
+  · change apm_t98a03_sphereProj (-apm_t98a03_unitRep r₀) = r₀
+    rw [apm_t98a03_sphereProj_neg, apm_t98a03_sphereProj_unitRep]
+
+/-- The three glued points of the irregular cover are distinct. -/
+lemma apm_t98a03_irrTau_injective (r₀ : apm_t98a03_RP2)
+    (hne : ∀ x : apm_t98a03_t92_S2, x ≠ -x) :
+    Function.Injective (apm_t98a03_irrTau r₀) := by
+  intro i j h
+  fin_cases i <;> fin_cases j <;> simp [apm_t98a03_irrTau] at h ⊢ <;>
+    first
+    | rfl
+    | exact hne _ h
+    | exact hne _ h.symm
+
+/-- Seat: the fibre of the irregular plane-side map over `r₀` is exactly the
+glued points.  Route: `inr r` maps to `r`; `inl x` maps to `r₀` iff
+`x = ±unitRep r₀` (`hproj` with `apm_t98a03_sphereProj_unitRep`); `fin_cases`
+for `←`. Estimated 20–40 lines. -/
+lemma apm_t98a03_irrQ_eq_iff (r₀ : apm_t98a03_RP2)
+    (hproj : ∀ x y : apm_t98a03_t92_S2,
+      apm_t98a03_sphereProj y = apm_t98a03_sphereProj x ↔ y = x ∨ y = -x)
+    (b : apm_t98a03_IrrB) :
+    apm_t98a03_irrQ b = r₀ ↔ b ∈ Set.range (apm_t98a03_irrTau r₀) := by
+  sorry
+
+/-- Seat: every fibre of the irregular plane-side map has three points:
+`inl (unitRep r)`, `inl (-unitRep r)`, `inr r`.  Route: `Nat.card_congr` with an
+explicit `Fin 3` equivalence, using `hproj`, `hne` and
+`apm_t98a03_sphereProj_unitRep`. Estimated 30–60 lines. -/
+lemma apm_t98a03_irrQ_fiber_card
+    (hproj : ∀ x y : apm_t98a03_t92_S2,
+      apm_t98a03_sphereProj y = apm_t98a03_sphereProj x ↔ y = x ∨ y = -x)
+    (hne : ∀ x : apm_t98a03_t92_S2, x ≠ -x) (r : apm_t98a03_RP2) :
+    Nat.card {b // apm_t98a03_irrQ b = r} = 3 := by
+  sorry
+
+abbrev apm_t98a03_IrrE (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :=
+  apm_t98a03_Glue (apm_t98a03_sheetPt t₀) (apm_t98a03_irrTau r₀)
+
+def apm_t98a03_irrMap (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    C(apm_t98a03_IrrE t₀ r₀, apm_t98a03_Wedge t₀ r₀) :=
+  apm_t98a03_glueMap apm_t98a03_torusCube apm_t98a03_irrQ
+    (apm_t98a03_torusCube_sheetPt t₀) (apm_t98a03_irrQ_tau r₀)
+
+lemma apm_t98a03_irrMap_isCoveringMap (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    IsCoveringMap (apm_t98a03_irrMap t₀ r₀) :=
+  apm_t98a03_glueMap_isCoveringMap _ _ _ _ apm_t98a03_torusCube_isLocalHomeomorph
+    (apm_t98a03_isLocalHomeomorph_sumElim
+      apm_t98a03_sphereProj_isCoveringMap.isLocalHomeomorph
+      (Homeomorph.refl apm_t98a03_RP2).isLocalHomeomorph)
+    (apm_t98a03_sheetPt_injective t₀)
+    (apm_t98a03_irrTau_injective r₀ apm_t98a03_sphere_ne_neg)
+    (apm_t98a03_torusCube_eq_iff t₀)
+    (apm_t98a03_irrQ_eq_iff r₀ apm_t98a03_sphereProj_eq_iff)
+
+lemma apm_t98a03_irrE_connected (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
+    ConnectedSpace (apm_t98a03_IrrE t₀ r₀) := by
+  refine apm_t98a03_glue_connectedSpace (fun b => ?_)
+  rcases b with x | r
+  · exact ⟨1, Set.range Sum.inl, isPreconnected_range continuous_inl, ⟨x, rfl⟩,
+      ⟨apm_t98a03_unitRep r₀, rfl⟩⟩
+  · exact ⟨0, Set.range Sum.inr, isPreconnected_range continuous_inr, ⟨r, rfl⟩,
+      ⟨r₀, rfl⟩⟩
+
+/-- Seat: a loop of the base with a closed lift and an open lift.
+
+Route: let `s := apm_t98a03_unitRep r₀` and `γ : Path s (-s)` in the sphere
+(`PathConnectedSpace.somePath`; the sphere is simply connected, hence path
+connected, by the instance above).  Put
+`γ₂ := glueMk ∘ inr ∘ inl ∘ γ` (sphere sheet, from `s` to `-s`) and
+`γ₁ := glueMk ∘ inr ∘ inr ∘ sphereProj ∘ γ` (plane sheet; closed because
+`sphereProj (-s) = sphereProj s`, `apm_t98a03_sphereProj_neg`).  Both project to
+`glueMk (inr (sphereProj (γ t)))` (`apm_t98a03_glueMap_mk`, definitional).
+`γ₂ 0 ≠ γ₂ 1`: by `hmkE` two `inr` representatives are identified only if equal,
+and `s ≠ -s` (`hne`).  Continuity: `apm_t98a03_glueMk_continuous`,
+`continuous_inr`, `continuous_inl`, the copied `..._aux_toP_continuous`.
+Estimated 40–80 lines. -/
+lemma apm_t98a03_irregular_paths (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2)
+    (hne : ∀ x : apm_t98a03_t92_S2, x ≠ -x)
+    (hmkE : ∀ x y, apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_irrTau r₀) x =
+        apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_irrTau r₀) y ↔
+      apm_t98a03_GlueEq (apm_t98a03_sheetPt t₀) (apm_t98a03_irrTau r₀) x y) :
+    ∃ γ₁ γ₂ : C(unitInterval, apm_t98a03_IrrE t₀ r₀),
+      apm_t98a03_irrMap t₀ r₀ ∘ γ₁ = apm_t98a03_irrMap t₀ r₀ ∘ γ₂ ∧
+        γ₁ 0 = γ₁ 1 ∧ γ₂ 0 ≠ γ₂ 1 := by
+  sorry
+
+/-- Assembly: the irregular cover. -/
 theorem apm_t98a03_irregular_threeFoldCover
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
     ∃ C : apm_t98a03_Cover (apm_t98a03_X t₀ r₀),
       apm_t98a03_IsConnectedThreeFoldCover C ∧ ¬apm_t98a03_IsRegularCover C := by
-  sorry
+  have hcov := apm_t98a03_irrMap_isCoveringMap t₀ r₀
+  have hinj := apm_t98a03_irrTau_injective r₀ apm_t98a03_sphere_ne_neg
+  refine ⟨apm_t98a03_coverOf t₀ r₀ (apm_t98a03_irrMap t₀ r₀), ?_, ?_⟩
+  · exact apm_t98a03_coverOf_threeFold t₀ r₀ _ hcov (apm_t98a03_irrE_connected t₀ r₀)
+      (apm_t98a03_glueMap_fiber_card apm_t98a03_torusCube apm_t98a03_irrQ
+        (apm_t98a03_torusCube_sheetPt t₀) (apm_t98a03_irrQ_tau r₀)
+        (apm_t98a03_sheetPt_injective t₀) hinj
+        (apm_t98a03_torusCube_eq_iff t₀)
+        (apm_t98a03_irrQ_eq_iff r₀ apm_t98a03_sphereProj_eq_iff) 3
+        apm_t98a03_torusCube_fiber_card
+        (apm_t98a03_irrQ_fiber_card apm_t98a03_sphereProj_eq_iff apm_t98a03_sphere_ne_neg)
+        (by simp))
+  · rw [apm_t98a03_coverOf_regular_iff]
+    rintro ⟨_, hreg⟩
+    obtain ⟨γ₁, γ₂, hγ, h₁, h₂⟩ := apm_t98a03_irregular_paths t₀ r₀
+      apm_t98a03_sphere_ne_neg
+      (apm_t98a03_glueMk_eq_iff (apm_t98a03_sheetPt_injective t₀) hinj)
+    exact apm_t98a03_no_deck_of_lift_mismatch hcov γ₁ γ₂ hγ h₁ h₂
+      (hreg _ _ (congrFun hγ 0))
 
 theorem apm_t98a03
     (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :
