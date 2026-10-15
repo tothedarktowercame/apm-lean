@@ -2385,6 +2385,53 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets
     w.2.val = 0
   constructor <;> omega
 
+/-- Reindexing a prefix-block factor by the inverse run-offset equivalence
+also identifies both of its endpoint vertices with those of the original
+subdivision factor. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) :
+    let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j
+    let k := Fin.cast
+      (pathTwoOpenSubdivisionRunPredLength_add_one S z.1).symm z.2
+    pathTwoOpenSubdivisionRunPrefixBlockPoint S z.1 k.castSucc =
+        S.point j.castSucc ∧
+      pathTwoOpenSubdivisionRunPrefixBlockPoint S z.1 k.succ =
+        S.point j.succ := by
+  dsimp only
+  constructor
+  · apply congrArg S.point
+    apply Fin.ext
+    exact torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j
+  · apply congrArg S.point
+    apply Fin.ext
+    have h := torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j
+    simpa only [Fin.val_succ, Nat.succ_eq_add_one, Nat.add_assoc] using
+      congrArg Nat.succ h
+
+/-- After casting along the endpoint identifications, the inverse-indexed
+prefix-block factor is the original dependent subdivision factor as a path. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) :
+    let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j
+    let k := Fin.cast
+      (pathTwoOpenSubdivisionRunPredLength_add_one S z.1).symm z.2
+    let h :=
+      torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm S j
+    (pathTwoOpenSubdivisionRunPrefixBlockPiece S z.1 k).cast h.1.symm h.2.symm =
+      S.piece j := by
+  dsimp only
+  ext t
+  exact (congrFun (Path.cast_coe _ _ _) t).trans
+    (torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm S j t)
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2497,6 +2544,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
