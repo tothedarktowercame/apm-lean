@@ -119432,63 +119432,51 @@
      :commit "c45a18b4f18ec6361e98624aea35ce5e2cd379aa",
      :reason "Banked mixed-model incidence chart derivative."}]}
   {:consumer :t98A06,
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Identify solver with mfderiv; finish local lifts; compact flow; Main.",
+    "Build smooth mfderiv coordinate family and local lifts; compact flow; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "unrelated files preserved"],
     :missing-theorems
-    [{:name "contMDiffOn_tangentSection_of_trivialization_coordinates",
-      :type "fixed tangent coordinates give smooth local section",
+    [{:name "mfderiv_eq_of_trivialization_coordinates",
+      :type "coordinate solver equation implies tangent lift equation",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["contDiff_lift_of_comp_isInvertible"],
+      :depends-on
+      ["contMDiffOn_tangentSection_of_trivialization_coordinates"
+       "contDiff_lift_of_comp_isInvertible"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
-      :depends-on
-      ["contMDiffOn_tangentSection_of_trivialization_coordinates"],
+      :depends-on ["mfderiv_eq_of_trivialization_coordinates"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "a01a47daa02c4772d13b8270c81d926044c3cd94ec58130f77ce0376e34292a3",
+     "ff087a6de87843c33393211e857c5939aa9c922fdbaba4d149c5e8546efc77fe",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason
-    "Banked tangent-section chart transport; fixture hash repaired.",
+    :reason "Banked mfderiv coordinate-solver bridge.",
     :commands
-    [{:cmd "git show commit:fixture | sha256sum", :exit 0}
-     {:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
+    [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
-    [{:cmd "drafts", :exit 1, :finding "fixed inference"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792039406528-13240-d7eb75bb",
-     :commands
-     ["git show 419de7e1 archived closure/Main/blueprint"
-      "lake env lean archived t98A06Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP after fixture repair: commit adds compiled, sorry-free tangent-section chart transport. The theorem faithfully converts smooth fixed trivialization coordinates to a tangent-bundle section on U via the trivialization section equivalence; all hypotheses are used. Standard axioms only. Scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166. Residual milestones identify solver with mfderiv, local lifts, compact flow, Main."},
-    :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
+    [{:cmd "drafts", :exit 1, :finding "corrected model glyph"}],
+    :commit "b3e77418954664b338e485426d52f1c5ffde1e2c",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119496,7 +119484,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119881,7 +119869,8 @@
     :lemma-rightinverse-of-comp-continuouslinearequiv
     :lemma-contdiff-rightinverse-of-comp-isinvertible
     :lemma-contdiff-lift-of-comp-isinvertible
-    :lemma-contmdiffon-tangentsection-of-trivialization-coordinates],
+    :lemma-contmdiffon-tangentsection-of-trivialization-coordinates
+    :lemma-mfderiv-eq-of-trivialization-coordinates],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -121552,6 +121541,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-hasfderivat-incidencedifference-writteninextchartat-self],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "mfderiv_eq_of_trivialization_coordinates",
+    :type "coordinate solver equation implies tangent lift equation"},
+   :lemma
+   {:name "mfderiv_eq_of_trivialization_coordinates",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "coordinate solver equation implies tangent lift equation",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-mfderiv-eq-of-trivialization-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-contmdiffon-tangentsection-of-trivialization-coordinates
+    :lemma-contdiff-lift-of-comp-isinvertible],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
