@@ -2112,9 +2112,89 @@ lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
 from a circle and finitely many two-disks has no integral homology in degrees
 at least three.  Prove this from the same MV cover using circle and contractible
 ball vanishing; it is deliberately independent of all low-degree coordinates. -/
+lemma t99A01_attach_transport_aux_higher_aux_exact_zero
+    {A B C : ModuleCat ℤ} (f : A ⟶ B) (g : B ⟶ C)
+    (hA : Limits.IsZero A) (hC : Limits.IsZero C)
+    (hex : LinearMap.range f.hom = LinearMap.ker g.hom) : Limits.IsZero B := by
+  letI : Subsingleton B := ⟨by
+    intro x y
+    suffices hz : ∀ z : B, z = 0 by exact (hz x).trans (hz y).symm
+    intro z
+    have hg : g.hom z = 0 := by
+      letI := ModuleCat.subsingleton_of_isZero hC
+      exact Subsingleton.elim _ _
+    have hz : z ∈ LinearMap.ker g.hom := hg
+    rw [← hex] at hz
+    obtain ⟨a, ha⟩ := hz
+    letI := ModuleCat.subsingleton_of_isZero hA
+    rw [← ha, Subsingleton.elim a 0, map_zero]⟩
+  exact ModuleCat.isZero_of_subsingleton _
+
+lemma t99A01_attach_transport_aux_higher_aux_sigma_zero {r k : ℕ}
+    (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
+    (hY : ∀ i, Limits.IsZero (APMT99A01.H k (Y i))) :
+    Limits.IsZero (APMT99A01.H k (Σ i, Y i)) := by
+  let f := Limits.biproduct.desc fun i : Fin r ↦
+    HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+        (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k
+  letI : IsIso f := t99A01_sigma_homology Y k
+  have hs : Limits.IsZero (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) := by
+    rw [Limits.IsZero.iff_id_eq_zero]
+    apply Limits.biproduct.hom_ext'
+    intro i
+    exact (hY i).eq_of_src _ _
+  exact hs.of_iso (asIso f).symm
+
 lemma t99A01_attach_transport_aux_higher {r : ℕ} (degree : Fin r → ℕ) :
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (APMT99A01.H k (APMT99A01.AttachSpace degree)) := by
-  sorry
+  intro k hk
+  obtain ⟨n, rfl⟩ : ∃ n, k = n + 3 := by
+    exact ⟨k - 3, by omega⟩
+  obtain ⟨ρ, ι, -, hρι, hιρ, -⟩ := t99A01_attach_circleSide degree
+  obtain ⟨eB, -⟩ := t99A01_attach_diskSide degree
+  obtain ⟨eI, -⟩ := t99A01_attach_overlap degree
+  have hcircle (q : ℕ) (hq : 1 < q) :
+      Limits.IsZero (APMT99A01.H q Circle) :=
+    ConstructionTargets.SolidTorusHomotopyAndHomology.circleModuleHomology_isZero_of_one_lt
+      q hq
+  have hA : Limits.IsZero
+      (APMT99A01.H (n + 3) (APMT99A01.sideA degree)) :=
+    (hcircle (n + 3) (by omega)).of_iso
+      (t99A01_sideA_coordinate degree ρ ι hρι hιρ (n + 3))
+  have hBσ : Limits.IsZero
+      (APMT99A01.H (n + 3) (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) := by
+    apply t99A01_attach_transport_aux_higher_aux_sigma_zero
+    intro i
+    letI : ContractibleSpace (Metric.ball (0 : ℂ) 1) :=
+      Metric.contractibleSpace_ball (by norm_num)
+    exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℤ
+      (Metric.ball (0 : ℂ) 1) (n + 3) (by omega)
+  have hB : Limits.IsZero
+      (APMT99A01.H (n + 3) (APMT99A01.sideB degree)) :=
+    hBσ.of_iso (t99A01_diskSide_sigma_coordinate degree eB (n + 3))
+  have hpieces : Limits.IsZero
+      (APMT99A01.H (n + 3) (APMT99A01.sideA degree) ⊞
+        APMT99A01.H (n + 3) (APMT99A01.sideB degree)) :=
+    (Limits.biprod_isZero_iff _ _).2 ⟨hA, hB⟩
+  have hIσ : Limits.IsZero
+      (APMT99A01.H (n + 2) (Σ _ : Fin r, Circle)) := by
+    apply t99A01_attach_transport_aux_higher_aux_sigma_zero
+    intro i
+    exact hcircle (n + 2) (by omega)
+  have hI : Limits.IsZero
+      (APMT99A01.H (n + 2)
+        ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree)) :=
+    hIσ.of_iso (t99A01_overlap_sigma_coordinate degree eI (n + 2))
+  obtain ⟨δ, -, hex, -⟩ := t99A01_integralMayerVietoris
+    (APMT99A01.sideA degree) (APMT99A01.sideB degree)
+    (t99A01_attach_openCover degree).1
+    (t99A01_attach_openCover degree).2.1
+    (t99A01_attach_openCover degree).2.2
+  apply t99A01_attach_transport_aux_higher_aux_exact_zero
+    (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) (n + 3))
+    (δ (n + 2)) hpieces hI
+  simpa only [Nat.add_assoc, Nat.reduceAdd] using hex (n + 2)
 
 lemma t99A01_attach_transport_aux_coordinates {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
