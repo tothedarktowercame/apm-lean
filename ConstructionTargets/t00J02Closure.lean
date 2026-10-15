@@ -745,6 +745,19 @@ noncomputable def implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightI
 
 #print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse
 
+/-- The first coordinate of the split-derivative implicit chart is the
+original function, so its level sets become vertical slices. -/
+@[simp] theorem implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse_fst
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x y : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    (implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA y).fst =
+      f y := by
+  rfl
+
+#print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse_fst
+
 /-- The banked chart-smoothness, strict-derivative, and split-surjection steps
 assemble into an implicit local chart for the incidence equation. -/
 noncomputable def incidenceImplicitToOpenPartialHomeomorph
