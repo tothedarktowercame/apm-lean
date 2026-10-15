@@ -547,6 +547,115 @@ theorem torusRP2SignedEdgeProduct_explicit :
     torusRP2OrbitLabel]
   rfl
 
+/-- Basis change matching the geometric boundary when the circle orientation
+unit is `+1`. -/
+def torusRP2PositiveBoundaryBasisHom :
+    FreeGroup (Fin 3) →* FreeGroup (Fin 3) :=
+  FreeGroup.lift fun i => ![(FreeGroup.of 1)⁻¹,
+    (FreeGroup.of 0)⁻¹, (FreeGroup.of 2)⁻¹] i
+
+theorem torusRP2PositiveBoundaryBasisHom_involutive :
+    Function.Involutive torusRP2PositiveBoundaryBasisHom := by
+  intro x
+  induction x using FreeGroup.induction_on with
+  | C1 => simp
+  | of i => fin_cases i <;> simp [torusRP2PositiveBoundaryBasisHom]
+  | inv_of i h => simpa using congrArg Inv.inv h
+  | mul x y hx hy => simp [hx, hy]
+
+def torusRP2PositiveBoundaryBasisEquiv :
+    FreeGroup (Fin 3) ≃* FreeGroup (Fin 3) :=
+  MulEquiv.ofBijective torusRP2PositiveBoundaryBasisHom
+    ⟨torusRP2PositiveBoundaryBasisHom_involutive.injective,
+      torusRP2PositiveBoundaryBasisHom_involutive.surjective⟩
+
+/-- Basis change matching the geometric boundary when the circle orientation
+unit is `-1`. -/
+def torusRP2NegativeBoundaryBasisHom :
+    FreeGroup (Fin 3) →* FreeGroup (Fin 3) :=
+  FreeGroup.lift fun i => ![FreeGroup.of 1, FreeGroup.of 0, FreeGroup.of 2] i
+
+theorem torusRP2NegativeBoundaryBasisHom_involutive :
+    Function.Involutive torusRP2NegativeBoundaryBasisHom := by
+  intro x
+  induction x using FreeGroup.induction_on with
+  | C1 => simp
+  | of i => fin_cases i <;> simp [torusRP2NegativeBoundaryBasisHom]
+  | inv_of i h => simpa using congrArg Inv.inv h
+  | mul x y hx hy => simp [hx, hy]
+
+def torusRP2NegativeBoundaryBasisEquiv :
+    FreeGroup (Fin 3) ≃* FreeGroup (Fin 3) :=
+  MulEquiv.ofBijective torusRP2NegativeBoundaryBasisHom
+    ⟨torusRP2NegativeBoundaryBasisHom_involutive.injective,
+      torusRP2NegativeBoundaryBasisHom_involutive.surjective⟩
+
+theorem torusRP2PositiveBoundaryBasisHom_relator :
+    (FreeGroup.of 2)⁻¹ * (FreeGroup.of 2)⁻¹ *
+      torusRP2PositiveBoundaryBasisHom torusRP2FrozenRelator *
+      (FreeGroup.of 2 * FreeGroup.of 2) =
+      (FreeGroup.of 2)⁻¹ * (FreeGroup.of 2)⁻¹ *
+        (FreeGroup.of 1)⁻¹ * (FreeGroup.of 0)⁻¹ *
+          FreeGroup.of 1 * FreeGroup.of 0 := by
+  simp [torusRP2PositiveBoundaryBasisHom, torusRP2FrozenRelator]
+  group
+
+theorem torusRP2NegativeBoundaryBasisHom_relator :
+    FreeGroup.of 2 * FreeGroup.of 2 *
+      torusRP2NegativeBoundaryBasisHom torusRP2FrozenRelator *
+      (FreeGroup.of 2 * FreeGroup.of 2)⁻¹ =
+      FreeGroup.of 2 * FreeGroup.of 2 * FreeGroup.of 1 * FreeGroup.of 0 *
+        (FreeGroup.of 1)⁻¹ * (FreeGroup.of 0)⁻¹ := by
+  simp [torusRP2NegativeBoundaryBasisHom, torusRP2FrozenRelator]
+  group
+
+/-- Conjugating a single relator does not change the normal subgroup it
+normally generates. -/
+theorem normalClosure_singleton_conj {G : Type*} [Group G] (g x : G) :
+    Subgroup.normalClosure ({g * x * g⁻¹} : Set G) =
+      Subgroup.normalClosure ({x} : Set G) := by
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    intro y hy
+    rw [Set.mem_singleton_iff] at hy
+    subst y
+    exact Subgroup.normalClosure_normal.conj_mem x
+      (Subgroup.subset_normalClosure (Set.mem_singleton x)) g
+  · apply Subgroup.normalClosure_le_normal
+    intro y hy
+    rw [Set.mem_singleton_iff] at hy
+    subst y
+    have h := Subgroup.normalClosure_normal.conj_mem (g * x * g⁻¹)
+      (Subgroup.subset_normalClosure (Set.mem_singleton (g * x * g⁻¹))) g⁻¹
+    have heq : g⁻¹ * (g * x * g⁻¹) * (g⁻¹)⁻¹ = x := by group
+    rw [heq] at h
+    exact h
+
+theorem torusRP2PositiveBoundary_normalClosure :
+    Subgroup.normalClosure ({
+      (FreeGroup.of 2)⁻¹ * (FreeGroup.of 2)⁻¹ *
+        (FreeGroup.of 1)⁻¹ * (FreeGroup.of 0)⁻¹ *
+          FreeGroup.of 1 * FreeGroup.of 0} : Set (FreeGroup (Fin 3))) =
+      Subgroup.normalClosure ({
+        torusRP2PositiveBoundaryBasisHom torusRP2FrozenRelator} :
+          Set (FreeGroup (Fin 3))) := by
+  rw [← torusRP2PositiveBoundaryBasisHom_relator]
+  exact normalClosure_singleton_conj
+    ((FreeGroup.of 2)⁻¹ * (FreeGroup.of 2)⁻¹)
+    (torusRP2PositiveBoundaryBasisHom torusRP2FrozenRelator)
+
+theorem torusRP2NegativeBoundary_normalClosure :
+    Subgroup.normalClosure ({
+      FreeGroup.of 2 * FreeGroup.of 2 * FreeGroup.of 1 * FreeGroup.of 0 *
+        (FreeGroup.of 1)⁻¹ * (FreeGroup.of 0)⁻¹} : Set (FreeGroup (Fin 3))) =
+      Subgroup.normalClosure ({
+        torusRP2NegativeBoundaryBasisHom torusRP2FrozenRelator} :
+          Set (FreeGroup (Fin 3))) := by
+  rw [← torusRP2NegativeBoundaryBasisHom_relator]
+  exact normalClosure_singleton_conj
+    (FreeGroup.of 2 * FreeGroup.of 2)
+    (torusRP2NegativeBoundaryBasisHom torusRP2FrozenRelator)
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
@@ -560,5 +669,10 @@ theorem torusRP2SignedEdgeProduct_explicit :
 #print axioms torusRP2GeometricBoundary_eq_signedEdgeProduct
 #print axioms polygonBoundaryExplicitEdgeClass_eq_zpow
 #print axioms torusRP2SignedEdgeProduct_explicit
+#print axioms torusRP2PositiveBoundaryBasisHom_relator
+#print axioms torusRP2NegativeBoundaryBasisHom_relator
+#print axioms normalClosure_singleton_conj
+#print axioms torusRP2PositiveBoundary_normalClosure
+#print axioms torusRP2NegativeBoundary_normalClosure
 
 end ConstructionTargets.t97A01Closure
