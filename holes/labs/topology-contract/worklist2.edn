@@ -87901,74 +87901,64 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove circle generator coherence; unsigned inclusion has attaching coordinates but production MV adds minus, so reconcile B7 sign before B8-B10.",
+    "Use equal kernel/range of the negative map; then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; unrelated dirt preserved"],
+    :warnings ["lint/dirt"],
     :missing-theorems
-    [{:name "singularHomologyComparison_inv_map",
-      :type "inverse comparison commutes with H maps",
+    [{:name "circleGroupH1IsoInt_inv_one_comparison",
+      :type "circle coherence",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on [],
-      :area "polygon-quotient-homology"}
-     {:name "circleGroupH1IsoInt_inv_one_comparison",
-      :type "group/module circle generators agree",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["singularHomologyComparison_inv_map"],
       :area "polygon-quotient-homology"}
-     {:name "radialMV_boundary_eq_orientationSigned",
-      :type "B7 sign-corrected map",
-      :status :partial,
+     {:name "radialIntersectionToOuterH1_generator_coordinates",
+      :type "outer coordinates",
+      :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on ["circleGroupH1IsoInt_inv_one_comparison"],
+      :area "polygon-quotient-homology"}
+     {:name "radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup",
+      :type "negative attaching map",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["radialIntersectionToOuterH1_generator_coordinates"],
+      :area "polygon-quotient-homology"}
+     {:name "radialMV_boundary_eq_orientationSigned",
+      :type "B7 adapter",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked inverse comparison naturality; circle generator coherence remains.",
+    :reason "Banked MV boundary.",
     :commands
-    [{:cmd "verify prior fixture f3c14aef4", :exit 0}
-     {:cmd
+    [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 856d109b9", :exit 0}],
+     {:cmd "git show --check 609b06c7c", :exit 0}],
     :diagnostic-history
-    [{:cmd "outer-coordinate drafts",
-      :exit 1,
-      :correction "isolated comparison coherence"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792032671473-13069-b8d3d02c",
-     :commands
-     ["git show/diff-tree 856d109b9"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorem"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 856d109b9 by topo-6 changes only the scoped target; fixture hash 793712db...0b831 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The theorem correctly bridges Module-valued and AddCommGrp-valued homology: applying the comparison hom cancels its inverse, and existing forward naturality proves the desired inverse-map equation in the symmetric orientation. New compiled progress; remaining circle-generator coherence and MV outer-sign/B7 obligations are explicitly listed, followed by B8-B10."},
-    :commit "856d109b9",
+    [{:cmd "drafts", :exit 1, :correction "fixed coherence"}],
+    :commit "609b06c7c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "793712dbf59de8d5e88418af4587135f548bf36ea5614f3b395d8dd5c1f0b831"},
+     "d40d41a6148a8f343cc9133f26587a3aa7b22ecf63cfb2a4f22752144c5c1b75"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92106,7 +92096,8 @@
     :lemma-finitepathsubdivision-boundary
     :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned
     :lemma-polygonboundaryfundamentalclass-hurewicz-eq-attachingdegree
-    :lemma-circlegrouph1isoint-inv-one-comparison],
+    :lemma-circlegrouph1isoint-inv-one-comparison
+    :lemma-radialmvboundarygroup-eq-neg-attachingboundarygroup],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92881,8 +92872,44 @@
    {:name "circleGroupH1IsoInt_inv_one_comparison",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "group/module circle generators agree",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-circlegrouph1isoint-inv-one-comparison,
    :kind :lemma,
    :depends-on [:lemma-singularhomologycomparison-inv-map],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialIntersectionToOuterH1_generator_coordinates",
+    :type "outer coordinates"},
+   :lemma
+   {:name "radialIntersectionToOuterH1_generator_coordinates",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "outer coordinates",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialintersectiontoouterh1-generator-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-circlegrouph1isoint-inv-one-comparison],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup",
+    :type "negative attaching map"},
+   :lemma
+   {:name "radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "negative attaching map",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundarygroup-eq-neg-attachingboundarygroup,
+   :kind :lemma,
+   :depends-on
+   [:lemma-radialintersectiontoouterh1-generator-coordinates],
    :other-consumers [:t94J09]}]}
