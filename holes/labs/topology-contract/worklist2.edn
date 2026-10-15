@@ -88372,6 +88372,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check d1c2b3d35", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792056416011-13764-f080c20c",
+     :commands
+     ["git show/diff/check d1c2b3d35"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit d1c2b3d35 adds compiled, sorry-free progress beyond fd63ca24d: piecewise equality of dependent path quotient classes reassembles to equality of finite concatenations and hence of a subordinate subdivision with its normalized pieces. Only t97A01Closure.lean changed; fixture SHA 45c376549cf2cec243abc46100409657b4b2809bb67516e5d7f8593d0b739ca6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Orientation is correct: piece-class equalities produce concatenated homotopy, composed after the subdivision quotient-concat equality. Choosing replacements for maximal alternating runs, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "d1c2b3d35",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88380,7 +88393,7 @@
      "45c376549cf2cec243abc46100409657b4b2809bb67516e5d7f8593d0b739ca6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88398,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite inner-block normalization.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient-level subdivision reassembly.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88486,7 +88499,10 @@
      :reason "Banked ambient inner-run normalization."}
     {:job 8,
      :commit "fd63ca24d",
-     :reason "Banked finite inner-block normalization."}]}
+     :reason "Banked finite inner-block normalization."}
+    {:job 9,
+     :commit "d1c2b3d35",
+     :reason "Banked quotient-level subdivision reassembly."}]}
   {:consumer :t94J09,
    :stop-count 2,
    :evidence
@@ -94513,7 +94529,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq",
@@ -94523,7 +94539,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "piecewise equality reassembles subdivision class",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d1c2b3d35"},
    :id :lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq,
    :kind :lemma,
    :depends-on
