@@ -5159,6 +5159,28 @@ theorem radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup (P : PairingData) :
     radialIntersectionToOuterH1_generator_coordinates]
   simpa using (attachingBoundaryGroup_apply P 1).symm
 
+/-- The production boundary and the attaching map have the same kernel,
+expressed pointwise in the coordinates used by the reduced exact sequence. -/
+theorem radialMVBoundaryGroup_apply_eq_zero_iff (P : PairingData) (n : ℤ) :
+    radialMVBoundaryGroup P n = 0 ↔ attachingBoundary P n = 0 := by
+  rw [radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup]
+  change -(attachingBoundary P n) = 0 ↔ attachingBoundary P n = 0
+  simp
+
+/-- Negating the production boundary does not change its range. -/
+theorem radialMVBoundaryGroup_mem_range_iff (P : PairingData)
+    (x : PairingOrbit P.pair → ℤ) :
+    (∃ n : ℤ, radialMVBoundaryGroup P n = x) ↔
+      ∃ n : ℤ, attachingBoundary P n = x := by
+  rw [radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup]
+  constructor
+  · rintro ⟨n, h⟩
+    refine ⟨-n, ?_⟩
+    simpa using h
+  · rintro ⟨n, h⟩
+    refine ⟨-n, ?_⟩
+    simpa using h
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
