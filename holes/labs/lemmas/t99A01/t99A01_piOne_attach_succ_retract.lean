@@ -935,6 +935,86 @@ lemma t99A01_piOne_attach_succ_retract_aux_scale_ne
     exact_mod_cast hp.ne'
   · exact hz0
 
+def t99A01_piOne_attach_succ_retract_aux_radial (z : ℂ) : Circle :=
+  if h : z = 0 then 1 else
+    ⟨z / (‖z‖ : ℂ), by
+      simp [Submonoid.unitSphere, div_self (norm_ne_zero_iff.mpr h)]⟩
+
+def t99A01_piOne_attach_succ_retract_aux_raw {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    Sum Circle (Fin (r + 1) × APMT99A01.Disk) →
+      APMT99A01.AttachSpace (degree ∘ Fin.castSucc)
+  | Sum.inl z => Quotient.mk _ (Sum.inl z)
+  | Sum.inr (i, z) =>
+      if h : i = Fin.last r then
+        Quotient.mk _ (Sum.inl
+          ((t99A01_piOne_attach_succ_retract_aux_radial (z : ℂ)) ^ degree i))
+      else
+        Quotient.mk _ (Sum.inr (i.castPred h, z))
+
+lemma t99A01_piOne_attach_succ_retract_aux_raw_boundary {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (i : Fin (r + 1)) (z : Circle) :
+    t99A01_piOne_attach_succ_retract_aux_raw degree (Sum.inl (z ^ degree i)) =
+      t99A01_piOne_attach_succ_retract_aux_raw degree
+        (Sum.inr (i, APMT99A01.circleInDisk z)) := by
+  by_cases hi : i = Fin.last r
+  · subst i
+    simp only [t99A01_piOne_attach_succ_retract_aux_raw, dif_pos rfl]
+    congr 2
+    have hz : (z : ℂ) ≠ 0 := by
+      intro h
+      have hn := Circle.norm_coe z
+      rw [h, norm_zero] at hn
+      norm_num at hn
+    apply congrArg (fun u : Circle => u ^ degree (Fin.last r))
+    apply Subtype.ext
+    simp [t99A01_piOne_attach_succ_retract_aux_radial,
+      APMT99A01.circleInDisk, hz, Circle.norm_coe]
+  · simp only [t99A01_piOne_attach_succ_retract_aux_raw, dif_neg hi]
+    apply Quotient.sound
+    have hb := Relation.EqvGen.rel _ _
+      (APMT99A01.AttachRel.boundary
+        (degree := degree ∘ Fin.castSucc) (i.castPred hi) z)
+    simpa [Fin.castSucc_castPred i hi] using hb
+
+lemma t99A01_piOne_attach_succ_retract_aux_raw_respects {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    {x y : Sum Circle (Fin (r + 1) × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    t99A01_piOne_attach_succ_retract_aux_raw degree x =
+      t99A01_piOne_attach_succ_retract_aux_raw degree y := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | boundary i z =>
+          exact t99A01_piOne_attach_succ_retract_aux_raw_boundary degree i z
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma t99A01_piOne_attach_succ_retract_aux_raw_half {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (w : Circle) :
+    t99A01_piOne_attach_succ_retract_aux_raw degree
+        (Sum.inr (Fin.last r,
+          (⟨(w : ℂ) / 2, by
+            rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+            norm_num⟩ : APMT99A01.Disk))) =
+      Quotient.mk _ (Sum.inl (w ^ degree (Fin.last r))) := by
+  change (if h : Fin.last r = Fin.last r then
+      Quotient.mk _ (Sum.inl
+        (t99A01_piOne_attach_succ_retract_aux_radial ((w : ℂ) / 2) ^
+          degree (Fin.last r)))
+    else Quotient.mk _ (Sum.inr ((Fin.last r).castPred h,
+      (⟨(w : ℂ) / 2, by
+        rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+        norm_num⟩ : APMT99A01.Disk)))) = _
+  rw [dif_pos rfl]
+  congr 2
+  apply congrArg (fun u : Circle => u ^ degree (Fin.last r))
+  apply Subtype.ext
+  simp [t99A01_piOne_attach_succ_retract_aux_radial, Circle.norm_coe,
+    norm_div]
+
 -- BEGIN SEAT AREA
 lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
     :
