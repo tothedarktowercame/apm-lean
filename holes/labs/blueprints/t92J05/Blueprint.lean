@@ -534,6 +534,17 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le
   apply apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le_ker
   exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed U V x
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+    (x : (U ∩ V : Set X)) (p : Path x.1 x.1) :
+    ∃ q : FundamentalGroup U (⟨x.1, x.2.1⟩ : U),
+      FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
+          (⟨x.1, x.2.1⟩ : U) q = Path.Homotopic.Quotient.mk p := by
+  sorry
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -542,8 +553,13 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
     (x : (U ∩ V : Set X)) :
     Function.Surjective (FundamentalGroup.map
       (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)) := by
-  sorry
-
+  intro g
+  induction g using Quotient.inductionOn with
+  | h p =>
+      obtain ⟨q, hq⟩ :=
+        apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
+          U V hU hV hcover x p
+      exact ⟨q, hq⟩
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
