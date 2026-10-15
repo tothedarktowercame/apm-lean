@@ -278,12 +278,106 @@ theorem retract_isZero (hcov : CoveringDegree.IsKSheetedCover projFun 2) (k : �
     _ = 0 := by rw [htwo, smul_zero]
 
 /-- Projection then transfer is `𝟙 + a_*`: the lifts of `p ∘ σ` are exactly `σ` and `a ∘ σ`. -/
+theorem proj_transfer_aux_proj_antipodal
+    (hcov : CoveringDegree.IsKSheetedCover projFun 2) :
+    (⟨projFun, hcov.isCoveringMap.continuous⟩ : C(S3, RP3)).comp antipodal =
+      ⟨projFun, hcov.isCoveringMap.continuous⟩ := by
+  apply ContinuousMap.coe_injective
+  funext x
+  unfold projFun
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  refine ⟨(-1 : ℝ), ?_⟩
+  ext i
+  simp [ConstructionTargets.CoefficientSphereAntipodal.antipodal]
+
+theorem proj_transfer_aux_antipodal_ne (x : S3) : antipodal x ≠ x := by
+  intro h
+  have hv : -x.1 = x.1 := congrArg Subtype.val h
+  have hx : x.1 = 0 := by
+    apply (WithLp.equiv 2 (Fin 4 → ℝ)).injective
+    change (WithLp.equiv 2 (Fin 4 → ℝ)) x.1 = 0
+    ext i
+    change x.1 i = 0
+    have hi := congrArg (fun z : WithLp 2 (Fin 4 → ℝ) => z i) hv
+    have hi' : -x.1 i = x.1 i := by simpa using hi
+    linarith
+  have := x.2
+  simp [hx] at this
+
 theorem proj_transfer (hcov : CoveringDegree.IsKSheetedCover projFun 2) (k : ℕ) :
     HomologicalComplex.homologyMap
         (CoefficientH0.singularPostcomposition ℚ ⟨projFun, hcov.isCoveringMap.continuous⟩) k ≫
       HomologicalComplex.homologyMap (CoefficientCoveringTransfer.transfer ℚ projFun hcov) k =
     𝟙 _ + HomologicalComplex.homologyMap (CoefficientH0.singularPostcomposition ℚ antipodal) k := by
-  sorry
+  classical
+  have hchain :
+      CoefficientH0.singularPostcomposition ℚ
+          ⟨projFun, hcov.isCoveringMap.continuous⟩ ≫
+        CoefficientCoveringTransfer.transfer ℚ projFun hcov =
+      𝟙 _ + CoefficientH0.singularPostcomposition ℚ antipodal := by
+    ext n : 1
+    apply Limits.Sigma.hom_ext
+    intro s
+    let t := (TopCat.toSSetObjEquiv (TopCat.of S3)
+      (Opposite.op (SimplexCategory.mk n))) s
+    have he : SingularSubdivision.singularSimplexOfContinuousMap (TopCat.of S3) n t = s :=
+      (TopCat.toSSetObjEquiv (TopCat.of S3)
+        (Opposite.op (SimplexCategory.mk n))).symm_apply_apply s
+    let base : C(stdSimplex ℝ (Fin (n+1)), RP3) :=
+      (⟨projFun, hcov.isCoveringMap.continuous⟩ : C(S3, RP3)).comp t
+    let l₁ : CoveringLiftRestriction.Lifts projFun base := ⟨t, rfl⟩
+    let l₂ : CoveringLiftRestriction.Lifts projFun base :=
+      ⟨antipodal.comp t, by
+        change projFun ∘ (antipodal.comp t) = base
+        have ha := congrArg ContinuousMap.toFun (proj_transfer_aux_proj_antipodal hcov)
+        exact congrArg (fun f => f ∘ t) ha⟩
+    have hl : l₁ ≠ l₂ := by
+      intro h
+      have hv := congrArg (fun l : CoveringLiftRestriction.Lifts projFun base =>
+        l.1 (CoveringSimplexTransfer.vertex n)) h
+      exact proj_transfer_aux_antipodal_ne (t (CoveringSimplexTransfer.vertex n)) hv.symm
+    letI : ContractibleSpace (stdSimplex ℝ (Fin (n+1))) :=
+      (convex_stdSimplex ℝ _).contractibleSpace
+        ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n+1))⟩
+    letI : LocPathConnectedSpace (stdSimplex ℝ (Fin (n+1))) :=
+      (convex_stdSimplex ℝ _).locPathConnectedSpace
+    letI := CoveringSimplexTransfer.finiteLifts projFun hcov n base
+    letI := Fintype.ofFinite (CoveringLiftRestriction.Lifts projFun base)
+    have hcard : Fintype.card (CoveringLiftRestriction.Lifts projFun base) = 2 := by
+      rw [← Nat.card_eq_fintype_card,
+        CoveringLiftRestriction.card_lifts hcov.isCoveringMap base
+          (CoveringSimplexTransfer.vertex n), hcov.card_fiber]
+    have huniv : (Finset.univ : Finset (CoveringLiftRestriction.Lifts projFun base)) = {l₁, l₂} := by
+      symm
+      apply Finset.eq_of_subset_of_card_le
+      · simp
+      · simp [hl, hcard]
+    change CoefficientH0.singularGenerator ℚ (TopCat.of S3) n s ≫ _ = _
+    rw [← he]
+    change _ ≫ (CoefficientH0.singularPostcomposition ℚ
+      ⟨projFun, hcov.isCoveringMap.continuous⟩).f n ≫
+      (CoefficientCoveringTransfer.transfer ℚ projFun hcov).f n = _
+    rw [← Category.assoc,
+      CoefficientH0.singularGenerator_singularPostcomposition]
+    change _ ≫ CoefficientCoveringTransfer.transferDegree ℚ projFun hcov n = _
+    rw [CoefficientCoveringTransfer.generator_transfer]
+    unfold CoefficientCoveringTransfer.transferSimplex
+    rw [huniv]
+    simp only [Finset.sum_insert, Finset.sum_singleton, Finset.mem_singleton, hl, not_false_eq_true]
+    change _ = CoefficientH0.singularGenerator ℚ (TopCat.of S3) n s ≫
+      (𝟙 _ + CoefficientH0.singularPostcomposition ℚ antipodal).f n
+    change _ = CoefficientH0.singularGenerator ℚ (TopCat.of S3) n s ≫ 𝟙 _ +
+      CoefficientH0.singularGenerator ℚ (TopCat.of S3) n s ≫
+        (CoefficientH0.singularPostcomposition ℚ antipodal).f n
+    rw [Category.comp_id, ← he,
+      CoefficientH0.singularGenerator_singularPostcomposition]
+  change (HomologicalComplex.homologyFunctor (ModuleCat ℚ) (ComplexShape.down ℕ) k).map _ ≫
+      (HomologicalComplex.homologyFunctor (ModuleCat ℚ) (ComplexShape.down ℕ) k).map _ = _
+  rw [← Functor.map_comp, hchain, Functor.map_add]
+  exact congrArg (fun f => f +
+    HomologicalComplex.homologyMap (CoefficientH0.singularPostcomposition ℚ antipodal) k)
+      ((HomologicalComplex.homologyFunctor
+        (ModuleCat ℚ) (ComplexShape.down ℕ) k).map_id _)
 
 /-- `p_*` is an isomorphism on `H₃`: `τ ≫ p_* = 2 • 𝟙` and `p_* ≫ τ = 𝟙 + a_* = 2 • 𝟙`
 (`antipodal_action ℚ 3`). -/
