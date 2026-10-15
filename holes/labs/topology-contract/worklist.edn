@@ -119181,6 +119181,19 @@
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :finding "fixed model inference"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792049038465-13595-bb6beddc",
+     :commands
+     ["git show/diff 74458494^..74458494"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum archived closure/Main and blueprint"
+      "rg placeholders, sorryAx, theorem axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 74458494 adds 36 lines only in the scoped closure file and genuinely assembles chart C1, strict derivative, and implicit-function results. Models and signed coproduct orientation agree; HasRightInverse remains an explicit transversality input, so the result does not assume the implicit chart. Archived closure/Main compile; hashes d2d27f52..., 0b3b4888..., afb497a6... match; placeholders 0/1; no sorryAx; standard axioms only; registry 166/166. Residual lists transporting the chart to the fiber manifold, Sard, calculations, Main."},
     :commit "7445849463edfa3d06f34b0dcb573f3f0bb4c828",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119202,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119220,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-target C1 alignment.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked assembled incidence implicit chart.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119450,7 +119463,10 @@
      :reason "Banked manifold chart C1 extraction."}
     {:job 6,
      :commit "f0da11221ff6080aa44e7c43c7f44f2c9bf04963",
-     :reason "Banked common-target C1 alignment."}]}
+     :reason "Banked common-target C1 alignment."}
+    {:job 7,
+     :commit "7445849463edfa3d06f34b0dcb573f3f0bb4c828",
+     :reason "Banked assembled incidence implicit chart."}]}
   {:consumer :t98A06,
    :stop-count 9,
    :review-finding
@@ -121730,7 +121746,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "incidenceImplicitToOpenPartialHomeomorph",
@@ -121740,7 +121756,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "C1 transverse incidence data yields implicit local chart",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "7445849463edfa3d06f34b0dcb573f3f0bb4c828"},
    :id :lemma-incidenceimplicittoopenpartialhomeomorph,
    :kind :lemma,
    :depends-on
