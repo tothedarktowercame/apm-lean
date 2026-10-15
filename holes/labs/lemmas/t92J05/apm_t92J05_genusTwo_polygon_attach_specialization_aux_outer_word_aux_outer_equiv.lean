@@ -2335,6 +2335,16 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overl
     apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range_aux_cyclic
       e _
 
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_zpowers_generator
+    {G : Type*} [Group G] {g r : G} (hr : ¬ IsOfFinOrder r)
+    (h : Subgroup.zpowers g = Subgroup.zpowers r) :
+    g = r ∨ g = r⁻¹ := by
+  have h' : r = g ∨ r⁻¹ = g :=
+    (Subgroup.zpowers_eq_zpowers_iff hr).mp h.symm
+  rcases h' with h' | h'
+  · exact Or.inl h'.symm
+  · exact Or.inr h'.symm
+
 -- BEGIN SEAT AREA
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
     (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
