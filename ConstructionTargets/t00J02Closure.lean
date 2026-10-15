@@ -561,6 +561,28 @@ theorem contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
 
 #print axioms contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
 
+/-- At an incidence point, manifold `C¹` regularity of the second map gives
+`C¹` regularity in the common target chart centered at the value of the
+first map. -/
+theorem contDiffAt_commonTarget_of_contMDiffAt_self
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    (f : M → P) (c : N → P) (x : M) (y : N)
+    (hxy : f x = c y) (hc : ContMDiffAt 𝓘(ℝ, F) 𝓘(ℝ, G) 1 c y) :
+    ContDiffAt ℝ 1
+      (fun z : F ↦ extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm z)))
+      (extChartAt 𝓘(ℝ, F) y y) := by
+  rw [hxy]
+  exact contDiffAt_writtenInExtChartAt_of_contMDiffAt_self c y hc
+
+#print axioms contDiffAt_commonTarget_of_contMDiffAt_self
+
 /-- In the product of two preferred source charts, the difference of the two
 preferred target-chart expressions has signed-coproduct derivative.  Taking
 the source models to be a surface and a circle gives the analytic incidence
