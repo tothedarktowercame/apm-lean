@@ -1967,7 +1967,37 @@ lemma t99A01_low_coordinates_vanishing {r : ℕ} (degree : Fin r → ℕ)
     Limits.IsZero (APMT99A01.H 2 (APMT99A01.sideA degree)) ∧
       Limits.IsZero (APMT99A01.H 1 (APMT99A01.sideB degree)) ∧
       Limits.IsZero (APMT99A01.H 2 (APMT99A01.sideB degree)) := by
-  sorry
+  have hA₂ : Limits.IsZero (APMT99A01.H 2 (APMT99A01.sideA degree)) :=
+    (ConstructionTargets.SolidTorusHomotopyAndHomology.circleModuleHomology_isZero_of_one_lt
+      2 (by omega)).of_iso
+        (t99A01_sideA_coordinate degree ρ ι hρι hιρ 2)
+  have hsigma_zero : ∀ k : ℕ, k ≠ 0 →
+      Limits.IsZero (APMT99A01.H k (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) := by
+    intro k hk
+    let Y : Fin r → Type := fun _ ↦ Metric.ball (0 : ℂ) 1
+    let f := Limits.biproduct.desc fun i : Fin r ↦
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k
+    letI : IsIso f := t99A01_sigma_homology Y k
+    have hpiece : ∀ i : Fin r,
+        Limits.IsZero (APMT99A01.H k (Metric.ball (0 : ℂ) 1)) := by
+      intro i
+      letI : ContractibleSpace (Metric.ball (0 : ℂ) 1) :=
+        Metric.contractibleSpace_ball (by norm_num)
+      exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℤ _ k hk
+    have hbip : Limits.IsZero
+        (⨁ fun _ : Fin r ↦ APMT99A01.H k (Metric.ball (0 : ℂ) 1)) := by
+      rw [Limits.IsZero.iff_id_eq_zero]
+      apply Limits.biproduct.hom_ext'
+      intro i
+      exact (hpiece i).eq_of_src _ _
+    exact hbip.of_iso (asIso f).symm
+  refine ⟨hA₂, ?_, ?_⟩
+  · exact (hsigma_zero 1 (by omega)).of_iso
+      (t99A01_diskSide_sigma_coordinate degree eB 1)
+  · exact (hsigma_zero 2 (by omega)).of_iso
+      (t99A01_diskSide_sigma_coordinate degree eB 2)
 -- END SEAT AREA
 
 /-- The degree-one row in the fixed sigma, circle, and winding coordinates. -/
