@@ -7818,6 +7818,13 @@ theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (cutNewA_range_supset hpq hqL hfront hcross)
 
 /-- Each branch of `cutProfileNewB` lands in the frontier (model: `cutOldB_range`). -/
+lemma cutNewB_range_subset_aux_angle_step {L m : ℕ} (hL : 0 < L) :
+    cutAlpha L (m + 1) = cutAlpha L m + 2 * Real.pi / L := by
+  unfold cutAlpha
+  have hL' : (L : ℝ) ≠ 0 := by exact_mod_cast (ne_of_gt hL)
+  push_cast
+  field_simp [hL']
+
 theorem cutNewB_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
       {z | ‖z‖ = 1 ∧
@@ -7829,7 +7836,127 @@ theorem cutNewB_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     Set.range (cutNewB L p q) ⊆
       frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hstep : 0 < 2 * Real.pi / (L : ℝ) := div_pos (by positivity) hL
+  have hstep_le : 2 * Real.pi / (L : ℝ) ≤ 2 * Real.pi := by
+    apply (div_le_iff₀ hL).2
+    have hLone : (1 : ℝ) ≤ L := by exact_mod_cast hLnat
+    nlinarith [Real.pi_pos]
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hpq1 : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    rw [cutNewB_range_subset_aux_angle_step hLnat,
+      cutNewB_range_subset_aux_angle_step hLnat]
+    linarith
+  have hq1top : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [cutNewB_range_subset_aux_angle_step hLnat,
+      cutNewB_range_subset_aux_angle_step hLnat]
+    unfold cutAlpha at hapq ⊢
+    have hqp : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+    have hbase : 2 * Real.pi * (q : ℝ) / L <
+        2 * Real.pi * ((p : ℝ) + L) / L :=
+      (div_lt_div_iff_of_pos_right hL).2
+        (mul_lt_mul_of_pos_left hqp (mul_pos (by norm_num) Real.pi_pos))
+    have heq : 2 * Real.pi * ((p : ℝ) + L) / L =
+        2 * Real.pi * (p : ℝ) / L + 2 * Real.pi := by field_simp
+    nlinarith
+  have hq1_le_ptop : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+    have hn : (q + 1 : ℕ) ≤ p + L := by omega
+    have hr : (q + 1 : ℝ) ≤ p + L := by exact_mod_cast hn
+    calc
+      cutAlpha L (q + 1) ≤ cutAlpha L (p + L) := by
+        unfold cutAlpha
+        apply (div_le_div_iff_of_pos_right hL).2
+        push_cast
+        exact mul_le_mul_of_nonneg_left hr (by positivity)
+      _ = cutAlpha L p + 2 * Real.pi := by
+        unfold cutAlpha
+        push_cast
+        field_simp
+  have hpoint (m : ℕ) : cutPoint L m =
+      Complex.exp ((cutAlpha L m : ℂ) * Complex.I) := rfl
+  rw [hfront]
+  rintro z ⟨b, rfl⟩
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+    (AddCircle.homeomorphCircle'.symm b)
+  have hxmem : (x : ℝ) ∈ Set.Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := x.2
+  have hval : cutNewB L p q b = cutProfileNewB L p q x := by rfl
+  by_cases hxq1 : (x : ℝ) ≤ cutAlpha L (q + 1)
+  · right
+    rw [hval]
+    simp only [cutProfileNewB, if_pos hxq1]
+    rw [segment]
+    let s := ((x : ℝ) - cutAlpha L q) * L / (2 * Real.pi)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      exact div_nonneg (mul_nonneg (sub_nonneg.mpr hxmem.1) hL.le) (by positivity)
+    have hs1 : s ≤ 1 := by
+      rw [cutNewB_range_subset_aux_angle_step hLnat] at hxq1
+      dsimp [s]
+      apply (div_le_one (by positivity : 0 < 2 * Real.pi)).2
+      have hcancel : (2 * Real.pi / (L : ℝ)) * L = 2 * Real.pi := by
+        field_simp
+      nlinarith
+    refine ⟨s, 1 - s, hs0, by linarith, by ring, ?_⟩
+    simp [cutSeam, s, smul_eq_mul]
+    ring
+  · left
+    rw [hval]
+    simp only [cutProfileNewB, if_neg hxq1]
+    by_cases hxp : (x : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+    · simp only [if_pos hxp]
+      constructor
+      · simp
+      · rw [hpoint, hpoint, hcross]
+        have hs1 : 0 ≤ Real.sin (((x : ℝ) - cutAlpha L (p + 1)) / 2) := by
+          apply Real.sin_nonneg_of_nonneg_of_le_pi <;>
+            nlinarith [lt_of_not_ge hxq1, hpq1,
+              cutNewB_range_subset_aux_angle_step (m := p) hLnat, hstep]
+        have hs2 : Real.sin ((cutAlpha L (p + 1) - cutAlpha L (q + 1)) / 2) ≤ 0 := by
+          apply Real.sin_nonpos_of_nonpos_of_neg_pi_le <;> nlinarith [hpq1, hq1top]
+        have hs3 : 0 ≤ Real.sin (((x : ℝ) - cutAlpha L (q + 1)) / 2) := by
+          apply Real.sin_nonneg_of_nonneg_of_le_pi <;>
+            nlinarith [lt_of_not_ge hxq1, hxmem.2,
+              cutNewB_range_subset_aux_angle_step (m := q) hLnat, hstep]
+        exact mul_nonpos_of_nonpos_of_nonneg
+          (mul_nonpos_of_nonneg_of_nonpos (mul_nonneg (by positivity) hs1) hs2) hs3
+    · simp only [if_neg hxp]
+      let psi := cutAlpha L p + cutSB L p q x * (2 * Real.pi / L)
+      have hsb0 : 0 < cutSB L p q x := by
+        unfold cutSB
+        exact div_pos (by linarith) (sub_pos.mpr hapq)
+      have hsb1 : cutSB L p q x < 1 := by
+        unfold cutSB
+        apply (div_lt_one (sub_pos.mpr hapq)).2
+        nlinarith [hxmem.2]
+      have hpsi0 : cutAlpha L p < psi := by
+        dsimp [psi]
+        nlinarith [mul_pos hsb0 hstep]
+      have hpsi1 : psi < cutAlpha L (p + 1) := by
+        rw [cutNewB_range_subset_aux_angle_step hLnat]
+        dsimp [psi]
+        nlinarith
+      constructor
+      · change ‖Complex.exp ((psi : ℂ) * Complex.I)‖ = 1
+        simp
+      · change cutCross (cutPoint L (p + 1) - cutPoint L (q + 1))
+          (Complex.exp ((psi : ℂ) * Complex.I) - cutPoint L (q + 1)) ≤ 0
+        rw [hpoint, hpoint, hcross]
+        have hs1 : Real.sin ((psi - cutAlpha L (p + 1)) / 2) ≤ 0 := by
+          apply Real.sin_nonpos_of_nonpos_of_neg_pi_le <;>
+            nlinarith [hpsi0, hpsi1, hstep, hstep_le,
+              cutNewB_range_subset_aux_angle_step (m := p) hLnat]
+        have hs2 : Real.sin ((cutAlpha L (p + 1) - cutAlpha L (q + 1)) / 2) ≤ 0 := by
+          apply Real.sin_nonpos_of_nonpos_of_neg_pi_le <;> nlinarith [hpq1, hq1top]
+        have hs3 : Real.sin ((psi - cutAlpha L (q + 1)) / 2) ≤ 0 := by
+          apply Real.sin_nonpos_of_nonpos_of_neg_pi_le <;>
+            nlinarith [hpsi0, hpsi1, hpq1, hq1_le_ptop]
+        exact mul_nonpos_of_nonneg_of_nonpos
+          (mul_nonneg_of_nonpos_of_nonpos
+            (mul_nonpos_of_nonneg_of_nonpos (by positivity) hs1) hs2) hs3
 
 lemma cutNewB_range_supset_aux_segment {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)) ⊆
