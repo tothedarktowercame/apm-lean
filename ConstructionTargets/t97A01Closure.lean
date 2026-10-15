@@ -1514,6 +1514,86 @@ theorem torusRP2_subdivisionRunFold_exists_outerPath
       torusRP2PolygonOuterToSpace.continuous)
     (torusRP2_subdivisionOuterRunPath_class S hx hy)
 
+@[simp] theorem torusRP2_subdivisionOuterRunBoundaryFamily_zero
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0 :
+      torusRP2PairingData.Space) = S.point 0 := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryFamily,
+    pathTwoOpenSubdivisionOuterRunBoundaryPoints,
+    pathTwoOpenSubdivisionRunBoundaryPoints]
+
+@[simp] theorem torusRP2_subdivisionOuterRunBoundaryFamily_last
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+      (Fin.last (boolSideRunPartition S.side).length) :
+      torusRP2PairingData.Space) = S.point (Fin.last (S.n + 1)) := by
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  rw [← pathTwoOpenSubdivisionRunBoundaryPoints_getLast S]
+  rw [List.getLast_eq_getElem]
+  congr 1
+  apply Fin.ext
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints_length]
+
+/-- The folded outer representative rebased at the literal endpoints of the
+original subdivision, preserving its ambient path class. -/
+theorem torusRP2_subdivisionRunFold_exists_outerPath_at_endpoints
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    ∃ q : Path
+        (⟨S.point 0, hx⟩ : {z // z ∈ (openCover torusRP2PairingData).outer})
+        (⟨S.point (Fin.last (S.n + 1)), hy⟩ :
+          {z // z ∈ (openCover torusRP2PairingData).outer}),
+      Path.Homotopic.Quotient.cast
+          (⟦Path.concat
+            (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+              torusRP2PairingData.Space))
+            (fun i => (Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+              (pathTwoOpenSubdivisionRunBlockPiece S i)).cast
+                (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+                  S hx hy i)
+                (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+                  S hx hy i))⟧)
+          (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+          (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm =
+        ⟦q.map torusRP2PolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨q, hq⟩ := torusRP2_subdivisionRunFold_exists_outerPath S hx hy
+  have hs : (⟨S.point 0, hx⟩ :
+      {z // z ∈ (openCover torusRP2PairingData).outer}) =
+      pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0 := by
+    apply Subtype.ext
+    exact (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+  have ht : (⟨S.point (Fin.last (S.n + 1)), hy⟩ :
+      {z // z ∈ (openCover torusRP2PairingData).outer}) =
+      pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+        (Fin.last (boolSideRunPartition S.side).length) := by
+    apply Subtype.ext
+    exact (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm
+  refine ⟨q.cast hs ht, ?_⟩
+  rw [hq]
+  change ⟦(q.map torusRP2PolygonOuterToSpace.continuous).cast _ _⟧ = _
+  apply congrArg Path.Homotopic.Quotient.mk
+  ext t
+  exact (congrFun
+      (Path.cast_coe (q.map torusRP2PolygonOuterToSpace.continuous) _ _) t).trans
+    (congrArg Subtype.val (congrFun (Path.cast_coe q hs ht) t)).symm
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1590,6 +1670,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
 #print axioms torusRP2_subdivisionRun_exists_outerBoundaryPath
 #print axioms torusRP2_subdivisionRunFold_exists_outerPath
+#print axioms torusRP2_subdivisionRunFold_exists_outerPath_at_endpoints
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
