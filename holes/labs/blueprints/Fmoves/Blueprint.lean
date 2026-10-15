@@ -5777,7 +5777,110 @@ lemma cutPiece_frontier_aux_chord {P Q z : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖
     (hPQ : P ≠ Q)
     (hline : cutCross (Q - P) (z - P) = 0 → ∃ t : ℝ, z = (1 - t) • P + t • Q) :
     (‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) = 0) ↔ z ∈ segment ℝ P Q := by
-  sorry
+  constructor
+  · rintro ⟨hz, hcross⟩
+    obtain ⟨t, rfl⟩ := hline hcross
+    refine ⟨1 - t, t, ?_, ?_, by ring, rfl⟩
+    · have hPsq : P.re ^ 2 + P.im ^ 2 = 1 := by
+        calc
+          P.re ^ 2 + P.im ^ 2 = Complex.normSq P := by simp [Complex.normSq_apply, pow_two]
+          _ = ‖P‖ ^ 2 := (Complex.sq_norm P).symm
+          _ = 1 := by rw [hP]; norm_num
+      have hQsq : Q.re ^ 2 + Q.im ^ 2 = 1 := by
+        calc
+          Q.re ^ 2 + Q.im ^ 2 = Complex.normSq Q := by simp [Complex.normSq_apply, pow_two]
+          _ = ‖Q‖ ^ 2 := (Complex.sq_norm Q).symm
+          _ = 1 := by rw [hQ]; norm_num
+      have hd : 0 < ‖Q - P‖ ^ 2 :=
+        sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm))
+      have hdsq : (Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2 = ‖Q - P‖ ^ 2 := by
+        rw [Complex.sq_norm, Complex.normSq_apply]
+        simp only [Complex.sub_re, Complex.sub_im]
+        ring
+      have hn : ‖(1 - t : ℝ) • P + t • Q‖ ^ 2 ≤ 1 := by
+        nlinarith [norm_nonneg ((1 - t : ℝ) • P + t • Q)]
+      have hn' :
+          (((1 - t : ℝ) • P + t • Q).re) ^ 2 +
+            (((1 - t : ℝ) • P + t • Q).im) ^ 2 ≤ 1 := by
+        rw [Complex.sq_norm, Complex.normSq_apply] at hn
+        simpa [pow_two] using hn
+      simp only [Complex.add_re, Complex.add_im, Complex.smul_re, Complex.smul_im,
+        Complex.ofReal_re] at hn'
+      simp only [smul_eq_mul] at hn'
+      have hd' : 0 < (Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2 := by
+        rw [hdsq]
+        exact hd
+      have hdist : (Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2 =
+          2 - 2 * (P.re * Q.re + P.im * Q.im) := by
+        nlinarith [hPsq, hQsq]
+      have hformula :
+          ((1 - t) * P.re + t * Q.re) ^ 2 + ((1 - t) * P.im + t * Q.im) ^ 2 =
+            1 - t * (1 - t) * ((Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2) := by
+        calc
+          _ = (1 - t) ^ 2 * (P.re ^ 2 + P.im ^ 2) +
+                t ^ 2 * (Q.re ^ 2 + Q.im ^ 2) +
+                2 * t * (1 - t) * (P.re * Q.re + P.im * Q.im) := by ring
+          _ = _ := by rw [hPsq, hQsq, hdist]; ring
+      rw [hformula] at hn'
+      have hm : 0 ≤ t * (1 - t) * ((Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2) := by
+        linarith
+      have hp : 0 ≤ t * (1 - t) := nonneg_of_mul_nonneg_left hm hd'
+      nlinarith
+    · have hPsq : P.re ^ 2 + P.im ^ 2 = 1 := by
+        calc
+          P.re ^ 2 + P.im ^ 2 = Complex.normSq P := by simp [Complex.normSq_apply, pow_two]
+          _ = ‖P‖ ^ 2 := (Complex.sq_norm P).symm
+          _ = 1 := by rw [hP]; norm_num
+      have hQsq : Q.re ^ 2 + Q.im ^ 2 = 1 := by
+        calc
+          Q.re ^ 2 + Q.im ^ 2 = Complex.normSq Q := by simp [Complex.normSq_apply, pow_two]
+          _ = ‖Q‖ ^ 2 := (Complex.sq_norm Q).symm
+          _ = 1 := by rw [hQ]; norm_num
+      have hd : 0 < ‖Q - P‖ ^ 2 :=
+        sq_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm))
+      have hdsq : (Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2 = ‖Q - P‖ ^ 2 := by
+        rw [Complex.sq_norm, Complex.normSq_apply]
+        simp only [Complex.sub_re, Complex.sub_im]
+        ring
+      have hn : ‖(1 - t : ℝ) • P + t • Q‖ ^ 2 ≤ 1 := by
+        nlinarith [norm_nonneg ((1 - t : ℝ) • P + t • Q)]
+      have hn' :
+          (((1 - t : ℝ) • P + t • Q).re) ^ 2 +
+            (((1 - t : ℝ) • P + t • Q).im) ^ 2 ≤ 1 := by
+        rw [Complex.sq_norm, Complex.normSq_apply] at hn
+        simpa [pow_two] using hn
+      simp only [Complex.add_re, Complex.add_im, Complex.smul_re, Complex.smul_im,
+        Complex.ofReal_re] at hn'
+      simp only [smul_eq_mul] at hn'
+      have hd' : 0 < (Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2 := by
+        rw [hdsq]
+        exact hd
+      have hdist : (Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2 =
+          2 - 2 * (P.re * Q.re + P.im * Q.im) := by
+        nlinarith [hPsq, hQsq]
+      have hformula :
+          ((1 - t) * P.re + t * Q.re) ^ 2 + ((1 - t) * P.im + t * Q.im) ^ 2 =
+            1 - t * (1 - t) * ((Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2) := by
+        calc
+          _ = (1 - t) ^ 2 * (P.re ^ 2 + P.im ^ 2) +
+                t ^ 2 * (Q.re ^ 2 + Q.im ^ 2) +
+                2 * t * (1 - t) * (P.re * Q.re + P.im * Q.im) := by ring
+          _ = _ := by rw [hPsq, hQsq, hdist]; ring
+      rw [hformula] at hn'
+      have hm : 0 ≤ t * (1 - t) * ((Q.re - P.re) ^ 2 + (Q.im - P.im) ^ 2) := by
+        linarith
+      have hp : 0 ≤ t * (1 - t) := nonneg_of_mul_nonneg_left hm hd'
+      nlinarith
+  · intro hz
+    have hzball : z ∈ Metric.closedBall (0 : ℂ) 1 :=
+      (convex_closedBall (0 : ℂ) 1).segment_subset
+        (by simpa [Metric.mem_closedBall, dist_zero_right, hP])
+        (by simpa [Metric.mem_closedBall, dist_zero_right, hQ]) hz
+    refine ⟨by simpa [Metric.mem_closedBall, dist_zero_right] using hzball, ?_⟩
+    rcases hz with ⟨a, b, ha, hb, hab, rfl⟩
+    simp [cutCross, Complex.mul_im]
+    rw [show a = 1 - b by linarith]
+    ring
 
 lemma cutPiece_frontier_aux_closed (P Q : ℂ) : IsClosed (cutPiece P Q) := by
   rw [cutPiece]
