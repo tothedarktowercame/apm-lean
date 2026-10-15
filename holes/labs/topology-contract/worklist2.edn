@@ -88370,6 +88370,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check 47c4bff61", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792071302945-14113-77e49045",
+     :commands
+     ["git show/diff/check 47c4bff61"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 47c4bff61 adds compiled, sorry-free progress beyond history commit 504d3252d. From strict flattened-coordinate order it proves weak run-index order, combining the prior lower run-bound and next-prefix upper bound with monotonic cumulative boundaries. Only t97A01Closure.lean changed; fixture SHA 2628d4e03b4a39093632e5c9a6d013839f1e62254678150476f192bead24e105 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 166/0; axioms standard. Inequality directions and Fin casts are correct. Cross-run successor endpoints, nested concatenation, van Kampen, and assembly remain listed."},
     :commit "47c4bff61",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88378,7 +88391,7 @@
      "2628d4e03b4a39093632e5c9a6d013839f1e62254678150476f192bead24e105"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88396,7 +88409,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked run-offset lower boundary.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flattened-coordinate run order.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88559,7 +88572,10 @@
      :reason "Banked within-run successor offset."}
     {:job 6,
      :commit "504d3252d",
-     :reason "Banked run-offset lower boundary."}]}
+     :reason "Banked run-offset lower boundary."}
+    {:job 7,
+     :commit "47c4bff61",
+     :reason "Banked flattened-coordinate run order."}]}
   {:consumer :t94J09,
    :stop-count 5,
    :evidence
@@ -95290,7 +95306,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffset_run_le_of_coord_lt",
@@ -95302,7 +95318,9 @@
     :type
     "strict flattened-coordinate order implies weak run-index order",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "47c4bff61"},
    :id :lemma-torusrp2-subdivisionrunoffset-run-le-of-coord-lt,
    :kind :lemma,
    :depends-on
