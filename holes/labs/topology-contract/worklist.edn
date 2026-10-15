@@ -119181,6 +119181,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792040499399-13285-96c0ce94",
+     :commands
+     ["git diff/show 38bd6fb5 archived sources"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds compiled, sorry-free promotion of an algebraic right inverse to ContinuousLinearMap.HasRightInverse. Finite-dimensionality is imposed on the domain F of g, exactly what makes g continuous; hg supplies A(g y)=y. It does not claim the pending chart conjugation, which remains listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "38bd6fb59738c4c4d19cba9c7f33c2d6f1e7a00f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence linear splitting.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite-dimensional right-inverse promotion.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119408,7 +119420,10 @@
      :reason "Banked incidence tangent regularity transport."}
     {:job 1,
      :commit "7862ae58a1c53319d9fecd2e9129001b61c05735",
-     :reason "Banked incidence linear splitting."}]}
+     :reason "Banked incidence linear splitting."}
+    {:job 2,
+     :commit "38bd6fb59738c4c4d19cba9c7f33c2d6f1e7a00f",
+     :reason "Banked finite-dimensional right-inverse promotion."}]}
   {:consumer :t98A06,
    :stop-count 8,
    :review-finding
@@ -121344,7 +121359,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "continuousLinearMap_hasRightInverse_of_linearRightInverse",
@@ -121354,7 +121369,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "finite-dimensional linear split is continuous",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "38bd6fb59738c4c4d19cba9c7f33c2d6f1e7a00f"},
    :id
    :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse,
    :kind :lemma,
