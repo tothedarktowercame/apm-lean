@@ -119336,6 +119336,8 @@
      :reason "Banked incidence tangent regularity transport."}]}
   {:consumer :t98A06,
    :stop-count 7,
+   :review-finding
+   "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
@@ -119376,6 +119378,12 @@
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "drafts", :exit 1, :finding "fixed inference"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1792039214666-13224-6e05ff0a",
+     :finding
+     "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash"},
     :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119384,7 +119392,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119406,7 +119414,7 @@
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
