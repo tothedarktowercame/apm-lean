@@ -119137,41 +119137,43 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Instantiate tangent chart equivalences; build incidence charts; Sard; calculations; Main.",
+    "Prove incidence chart derivative equality; implicit-function chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "exists_linearRightInverse_conj",
-      :type "right inverse transports through coordinate equivalences",
+    [{:name "coordinateDerivative_hasRightInverse_of_eq_conj",
+      :type
+      "conjugated coordinate derivative has continuous right inverse",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["continuousLinearMap_hasRightInverse_of_linearRightInverse"],
+      ["exists_linearRightInverse_conj"
+       "continuousLinearMap_hasRightInverse_of_linearRightInverse"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["exists_linearRightInverse_conj"],
+      :depends-on ["coordinateDerivative_hasRightInverse_of_eq_conj"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "3105cd227c48b0635c39d19a5bdee22e517e30c05f2f81297dbfb3e9fd5a9aea",
+     "83a9733da8a8b39ce7cee83042cb6302b177d82718ca075c5aae3b8307cee9f7",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked chart conjugation of linear splitting.",
+    :reason "Banked coordinate derivative split endpoint.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119179,19 +119181,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792040887683-13304-b09d815f",
-     :commands
-     ["git diff/show 19c7c4b9 archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds compiled, sorry-free coordinate transport of a linear right inverse. For chart derivative eF∘A∘eE⁻¹ it constructs eE∘g∘eF⁻¹; cancellation and A∘g=id prove the stated orientation. It does not invent the pending tangent chart equivalences or incidence charts; those remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "19c7c4b9d789db415431533aa768b6784d402f30",
+    :commit "fbc162707b3ba10f2b83b3e313c8ee129da7a50a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119199,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119659,7 +119649,8 @@
     :lemma-transverse-incidencedifferencederivative-surjective
     :lemma-transverse-incidencedifferencederivative-haslinearrightinverse
     :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse
-    :lemma-exists-linearrightinverse-conj],
+    :lemma-exists-linearrightinverse-conj
+    :lemma-coordinatederivative-hasrightinverse-of-eq-conj],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121399,6 +121390,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "coordinateDerivative_hasRightInverse_of_eq_conj",
+    :type
+    "conjugated coordinate derivative has continuous right inverse"},
+   :lemma
+   {:name "coordinateDerivative_hasRightInverse_of_eq_conj",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "conjugated coordinate derivative has continuous right inverse",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-coordinatederivative-hasrightinverse-of-eq-conj,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-linearrightinverse-conj
+    :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
