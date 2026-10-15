@@ -1504,9 +1504,83 @@ definitionally ours).  Restrict it to the open saturated preimage
 product with `unitInterval` (`IsOpenQuotientMap.prodMap` with `.id`), and check
 continuity upstairs, where the map is `(t, v) ↦ mk (F t v)` (continuous into the
 subtype by `Continuous.subtype_mk`). Estimated 80–160 lines. -/
+lemma apm_t98a03_rp2Contract_continuous_aux_iff (r₀ : apm_t98a03_RP2)
+    (v : {v : Fin 3 → ℝ // v ≠ 0}) :
+    Projectivization.mk' ℝ v ∈ apm_t98a03_rp2Nbhd r₀ ↔
+      dotProduct v.1 r₀.rep ≠ 0 := by
+  constructor
+  · intro hrep hv
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ v.1 v.2
+    apply hrep
+    change dotProduct (Projectivization.mk ℝ v.1 v.2).rep r₀.rep = 0
+    rw [← ha, Units.smul_def, smul_dotProduct, smul_eq_mul, hv, mul_zero]
+  · exact apm_t98a03_rep_dot_ne_zero v.2 _
+
+lemma apm_t98a03_rp2Contract_continuous_aux_open (r₀ : apm_t98a03_RP2) :
+    IsOpen (apm_t98a03_rp2Nbhd r₀) := by
+  rw [isOpen_coinduced]
+  have hc : Continuous (fun v : {v : Fin 3 → ℝ // v ≠ 0} ↦
+      dotProduct v.1 r₀.rep) := by
+    fun_prop
+  have hopen : IsOpen {x : ℝ | x ≠ 0} := isClosed_singleton.isOpen_compl
+  convert hopen.preimage hc using 1
+  ext v
+  simp only [Set.mem_preimage, Set.mem_setOf_eq, Set.mem_compl_iff,
+    Set.mem_singleton_iff]
+  exact apm_t98a03_rp2Contract_continuous_aux_iff r₀ v
+
 lemma apm_t98a03_rp2Contract_continuous (r₀ : apm_t98a03_RP2) :
     Continuous (apm_t98a03_rp2Contract r₀) := by
-  sorry
+  let q : {v : Fin 3 → ℝ // v ≠ 0} → apm_t98a03_RP2 :=
+    ConstructionTargets.ProjectiveSpaceTopology.quotientMap ℝ 2
+  let S : Set apm_t98a03_RP2 := apm_t98a03_rp2Nbhd r₀
+  let qS : q ⁻¹' S → S := S.restrictPreimage q
+  have hq : IsOpenQuotientMap q := ⟨
+    ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℝ 2,
+    ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2,
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℝ 2⟩
+  have hqS : IsOpenQuotientMap qS :=
+    IsOpenQuotientMap.of_isOpenMap_isQuotientMap
+      (hq.isOpenMap.restrictPreimage S)
+      (hq.isQuotientMap.restrictPreimage_isOpen
+        (apm_t98a03_rp2Contract_continuous_aux_open r₀))
+  have hprod : IsOpenQuotientMap (Prod.map (id : unitInterval → unitInterval) qS) :=
+    IsOpenQuotientMap.id.prodMap hqS
+  rw [← hprod.continuous_comp_iff]
+  let F (p : unitInterval × (q ⁻¹' S)) : apm_t98a03_rp2Nbhd r₀ :=
+    ⟨q ⟨apm_t98a03_rp2ContractVec r₀.rep p.2.1.1 p.1,
+        apm_t98a03_rp2ContractVec_ne_zero _ _
+          (apm_t98a03_rep_self_dot_ne_zero r₀)
+          ((apm_t98a03_rp2Contract_continuous_aux_iff r₀ p.2.1).mp p.2.2) _⟩,
+      apm_t98a03_rep_dot_ne_zero _ _ (by
+        rw [apm_t98a03_rp2ContractVec_dot _ _
+          (apm_t98a03_rep_self_dot_ne_zero r₀)]
+        exact (apm_t98a03_rp2Contract_continuous_aux_iff r₀ p.2.1).mp p.2.2)⟩
+  have hF : Continuous F := by
+    apply Continuous.subtype_mk
+    apply (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℝ 2).comp
+    apply Continuous.subtype_mk
+    dsimp only [F, apm_t98a03_rp2ContractVec]
+    fun_prop
+  have heq : apm_t98a03_rp2Contract r₀ ∘
+      Prod.map (id : unitInterval → unitInterval) qS = F := by
+    funext p
+    apply Subtype.ext
+    dsimp only [Function.comp_apply, Prod.map_apply, id_eq, qS, S, F,
+      apm_t98a03_rp2Contract]
+    obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℝ p.2.1.1 p.2.1.2
+    apply (Projectivization.mk_eq_mk_iff ℝ _ _ _ _).mpr
+    refine ⟨a, ?_⟩
+    change a • apm_t98a03_rp2ContractVec r₀.rep p.2.1.1 p.1 =
+      apm_t98a03_rp2ContractVec r₀.rep
+        (Projectivization.mk ℝ p.2.1.1 p.2.1.2).rep p.1
+    simp only [apm_t98a03_rp2ContractVec]
+    rw [← ha]
+    simp only [Units.smul_def, smul_add, smul_smul, smul_dotProduct,
+      smul_eq_mul]
+    module
+  rw [heq]
+  exact hF
 
 lemma apm_t98a03_rp2Contract_zero (r₀ : apm_t98a03_RP2) (r : apm_t98a03_rp2Nbhd r₀) :
     apm_t98a03_rp2Contract r₀ (0, r) = r := by
