@@ -9441,6 +9441,22 @@ theorem cut_x_index {Label : Type*} [DecidableEq Label]
     simp only [List.map_append, List.mem_append]
     exact Or.inr (List.mem_map.mpr ⟨_, hmem, by rw [← hget]; exact h⟩)
 
+/-- In the new word, position `p + 2 + (|v| - 1 - k)` holds the inverse of `v[k]`, the letter at
+old position `p + 1 + k`. -/
+theorem cut_word_get_v {Label : Type*} (u v t : List (Signed Label)) (x : Signed Label)
+    (k : ℕ) (hk : k < v.length) :
+    (u ++ [x, x] ++ inverseWord v ++ t)[u.length + 2 + (v.length - 1 - k)]'(by
+      simp [inverseWord]; omega) =
+      inv ((u ++ [x] ++ v ++ [x] ++ t)[u.length + 1 + k]'(by simp; omega)) := by
+  sorry
+
+/-- Past the second `x` the two words agree (both continue with `t`). -/
+theorem cut_word_get_t {Label : Type*} (u v t : List (Signed Label)) (x : Signed Label)
+    (e : ℕ) (h1 : u.length + 1 + v.length < e) (h2 : e < (u ++ [x] ++ v ++ [x] ++ t).length) :
+    (u ++ [x, x] ++ inverseWord v ++ t)[e]'(by simp [inverseWord] at h2 ⊢; omega) =
+      (u ++ [x] ++ v ++ [x] ++ t)[e]'h2 := by
+  sorry
+
 /-- Old non-`x` sides land in the new word on the side `cutSideMap`, holding the same
 letter (or its inverse, for `v`); `cutSideMap` is injective on them. -/
 theorem cut_word_side {Label : Type*} [DecidableEq Label]
@@ -9454,7 +9470,71 @@ theorem cut_word_side {Label : Type*} [DecidableEq Label]
       e' ≠ u.length + 1 + v.length →
       cutSideMap u.length (u.length + 1 + v.length) e =
         cutSideMap u.length (u.length + 1 + v.length) e' → e = e') := by
-  sorry
+  constructor
+  · intro e hep heq
+    by_cases hu : (e : ℕ) < u.length
+    · have hmap : cutSideMap u.length (u.length + 1 + v.length) e = e := by
+        simp [cutSideMap]
+        omega
+      have hnew : (e : ℕ) < (u ++ [x, x] ++ inverseWord v ++ t).length := by
+        simp
+        omega
+      refine ⟨?_, ?_⟩
+      · rw [hmap]
+        exact hnew
+      · rw [if_neg (by omega)]
+        simp [hmap, List.getElem_append, hu]
+    · by_cases hv : (e : ℕ) < u.length + 1 + v.length
+      · have hp : u.length < (e : ℕ) := by omega
+        have hk : (e : ℕ) - (u.length + 1) < v.length := by omega
+        have hmap : cutSideMap u.length (u.length + 1 + v.length) e =
+            u.length + 2 + (v.length - 1 - ((e : ℕ) - (u.length + 1))) := by
+          simp [cutSideMap, hp, hv]
+          omega
+        have hnew : cutSideMap u.length (u.length + 1 + v.length) e <
+            (u ++ [x, x] ++ inverseWord v ++ t).length := by
+          rw [hmap]
+          simp [inverseWord]
+          omega
+        refine ⟨hnew, ?_⟩
+        have hcond : u.length < (e : ℕ) ∧
+            (e : ℕ) < u.length + 1 + v.length := ⟨hp, hv⟩
+        rw [if_pos hcond]
+        have hidx : u.length + 2 + (v.length - 1 - ((e : ℕ) - (u.length + 1))) <
+            (u ++ [x, x] ++ inverseWord v ++ t).length := by
+          rw [← hmap]
+          exact hnew
+        have hfin : (⟨cutSideMap u.length (u.length + 1 + v.length) e, hnew⟩ :
+            Fin (u ++ [x, x] ++ inverseWord v ++ t).length) = ⟨_, hidx⟩ :=
+          Fin.ext hmap
+        rw [hfin]
+        simp only [List.get_eq_getElem, Fin.val_mk]
+        change (u ++ [x, x] ++ inverseWord v ++ t)[u.length + 2 +
+            (v.length - 1 - ((e : ℕ) - (u.length + 1)))]'hidx =
+          inv ((u ++ [x] ++ v ++ [x] ++ t)[(e : ℕ)]'e.isLt)
+        have he : (e : ℕ) = u.length + 1 + ((e : ℕ) - (u.length + 1)) := by omega
+        rw [cut_word_get_v u v t x _ hk]
+        congr 2
+        omega
+      · have hq : u.length + 1 + v.length < (e : ℕ) := by omega
+        have hmap : cutSideMap u.length (u.length + 1 + v.length) e = e := by
+          simp [cutSideMap]
+          omega
+        have hnew : (e : ℕ) < (u ++ [x, x] ++ inverseWord v ++ t).length := by
+          simpa [inverseWord, List.length_append] using e.2
+        refine ⟨by rw [hmap]; exact hnew, ?_⟩
+        rw [if_neg (by omega)]
+        have hfin : (⟨cutSideMap u.length (u.length + 1 + v.length) e,
+            by rw [hmap]; exact hnew⟩ : Fin (u ++ [x, x] ++ inverseWord v ++ t).length) =
+            ⟨e, hnew⟩ := Fin.ext hmap
+        rw [hfin]
+        simp only [List.get_eq_getElem, Fin.val_mk]
+        change (u ++ [x, x] ++ inverseWord v ++ t)[(e : ℕ)]'hnew =
+          (u ++ [x] ++ v ++ [x] ++ t)[(e : ℕ)]'e.isLt
+        exact cut_word_get_t u v t x _ hq e.isLt
+  · intro e e' hep heq hep' heq' h
+    simp only [cutSideMap] at h
+    split at h <;> split at h <;> omega
 
 /-- The non-`x` case of `cut_transfer_generator`, from the side facts. -/
 theorem cut_transfer_generator_aux_sides {Label : Type*} [DecidableEq Label]
