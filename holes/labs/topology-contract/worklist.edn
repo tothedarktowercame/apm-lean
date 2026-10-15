@@ -119066,41 +119066,42 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct incidence manifold/chart tangent equivalence; apply Sard; calculations; Main.",
+    "Build implicit-function incidence charts/tangent equivalence; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "direction_lifts_of_incidenceTangentEquiv",
-      :type "regular tangent projection gives direction lifts",
+    [{:name "transverse_incidenceDifferenceDerivative_surjective",
+      :type
+      "transversality makes incidence difference derivative surjective",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["direction_lifts_of_surjective_incidenceKernel_snd"],
+      :depends-on ["transverse_coprodDerivative_surjective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["direction_lifts_of_incidenceTangentEquiv"],
+      :depends-on
+      ["transverse_incidenceDifferenceDerivative_surjective"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "7fa3bc1f844cd6df4815ef99342be33e962b24dca975bac6434f4a9d919d0aa8",
+     "0a4fcf2de4a12bcac3897edff9d765995347577ff977ae37ec284de9182d7249",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "Quot.sound"],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence tangent regularity transport.",
+    :reason "Banked incidence derivative sign conversion.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119108,19 +119109,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792038062625-13194-827500df",
-     :commands
-     ["git diff/show d5630b7e archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholder counts; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new compiled, sorry-free tangent/kernel transport milestone. Kernel equation is A u-B v=0; reverse equivalence builds (u,v) in the kernel, and tangent equivalence plus surjective P transports snd directions correctly. Only standard propext/Quot.sound. Scope closure-only; blueprint/Main/closure hashes match; placeholders 0/1; registry 166/166. Residual names incidence tangent construction, Sard, calculations, Main."},
-    :commit "d5630b7e4415a05e94758003a997b2cf6559df40",
+    :commit "f1b3c8e74aef660ca90715a2ce86b4abc2dca8f3",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119128,7 +119117,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119564,7 +119553,8 @@
     :lemma-locallyinjectivealongfiber-of-mfderiv-surjective
     :lemma-exists-circleparameter-direction-lifts-of-sard
     :lemma-direction-lifts-of-surjective-incidencekernel-snd
-    :lemma-direction-lifts-of-incidencetangentequiv],
+    :lemma-direction-lifts-of-incidencetangentequiv
+    :lemma-transverse-incidencedifferencederivative-surjective],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121199,6 +121189,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-direction-lifts-of-surjective-incidencekernel-snd],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "transverse_incidenceDifferenceDerivative_surjective",
+    :type
+    "transversality makes incidence difference derivative surjective"},
+   :lemma
+   {:name "transverse_incidenceDifferenceDerivative_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "transversality makes incidence difference derivative surjective",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-transverse-incidencedifferencederivative-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-transverse-coprodderivative-surjective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
