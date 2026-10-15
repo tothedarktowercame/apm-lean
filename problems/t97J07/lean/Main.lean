@@ -6,6 +6,8 @@ import ConstructionTargets.CoefficientH0
 import ConstructionTargets.CoefficientContractiblePair
 import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
 import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
+import ConstructionTargets.CircleHomology
+import ConstructionTargets.CoefficientSphereEndpoints
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -562,6 +564,34 @@ noncomputable def t97J07_cp1_overlapHomologyIsoCircle (k : ℕ) :
   ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
       t97J07_cp1_overlapHomotopyEquivCircle k
 
+/-- Rational homology comparison from the complex unit circle to the
+Euclidean one-sphere used by the coefficient endpoint library. -/
+noncomputable def t97J07_circleHomologyIsoSphereOne (k : ℕ) :
+    ConstructionTargets.CoefficientH0.SingularHomology ℚ k
+        (TopCat.of (Metric.sphere (0 : ℂ) 1)) ≅
+      ConstructionTargets.CoefficientH0.SingularHomology ℚ k
+        (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso
+    (TopCat.isoOfHomeo
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne)
+
+/-- The overlap has one-dimensional rational homology in degree zero. -/
+noncomputable def t97J07_cp1_puncturedOverlap_H0 :
+    ConstructionTargets.CoefficientH0.SingularHomology ℚ 0
+        (TopCat.of T97J07CP1ZeroPatchOverlap) ≅ ModuleCat.of ℚ ℚ :=
+  t97J07_cp1_overlapHomologyIsoCircle 0 ≪≫
+    t97J07_circleHomologyIsoSphereOne 0 ≪≫
+      ConstructionTargets.CoefficientH0.sphereH0 ℚ 1
+
+/-- The overlap has one-dimensional rational homology in degree one. -/
+noncomputable def t97J07_cp1_puncturedOverlap_H1 :
+    ConstructionTargets.CoefficientH0.SingularHomology ℚ 1
+        (TopCat.of T97J07CP1ZeroPatchOverlap) ≅ ModuleCat.of ℚ ℚ :=
+  t97J07_cp1_overlapHomologyIsoCircle 1 ≪≫
+    t97J07_circleHomologyIsoSphereOne 1 ≪≫
+      ConstructionTargets.CoefficientSphereEndpoints.circleH1 ℚ
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -632,6 +662,9 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_puncturedComplex_radialHomotopyEquiv
 #print axioms t97J07_cp1_overlapHomotopyEquivCircle
 #print axioms t97J07_cp1_overlapHomologyIsoCircle
+#print axioms t97J07_circleHomologyIsoSphereOne
+#print axioms t97J07_cp1_puncturedOverlap_H0
+#print axioms t97J07_cp1_puncturedOverlap_H1
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
