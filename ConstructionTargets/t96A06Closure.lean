@@ -1846,9 +1846,15 @@ noncomputable def t96A06_forgetRationalRelativeCokernelComparison
         (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ A) ≅
       cokernel ((t96A06_forgetRatModules.mapHomologicalComplex
         (ComplexShape.down ℕ)).map
-          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) :=
-  PreservesCokernel.iso
-    (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ))
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) := by
+  let F := t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)
+  letI : PreservesColimitsOfShape WalkingParallelPair F :=
+    HomologicalComplex.preservesColimitsOfShape_of_eval F (fun i => by
+      change PreservesColimitsOfShape WalkingParallelPair
+        ((HomologicalComplex.eval (ModuleCat ℚ) (ComplexShape.down ℕ) i) ⋙
+          t96A06_forgetRatModules)
+      infer_instance)
+  exact PreservesCokernel.iso F
     (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)
 
 /-- Coefficient extension between the actual integral and rational
@@ -1863,6 +1869,70 @@ noncomputable def t96A06_integralToRational_relativeChains
   (ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison A).hom ≫
     t96A06_integralToRational_relativeChainMap A ≫
     (t96A06_forgetRationalRelativeCokernelComparison A).inv
+
+/-- The rational preservation isomorphism carries the forgotten coefficient
+projection to the projection of the forgotten subspace map. -/
+theorem t96A06_forgetRationalRelativeCokernelComparison_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) ≫
+      (t96A06_forgetRationalRelativeCokernelComparison A).hom =
+    cokernel.π ((t96A06_forgetRatModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) := by
+  unfold t96A06_forgetRationalRelativeCokernelComparison
+  rw [PreservesCokernel.π_iso_hom]
+
+/-- In the inverse orientation used by coefficient extension, the direct
+cokernel projection followed by transport is the forgotten rational
+coefficient-relative projection. -/
+theorem t96A06_forgetRationalRelativeCokernelComparison_projection_inv
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel.π ((t96A06_forgetRatModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) ≫
+      (t96A06_forgetRationalRelativeCokernelComparison A).inv =
+    (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+      (cokernel.π
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) := by
+  apply (cancel_mono (t96A06_forgetRationalRelativeCokernelComparison A).hom).mp
+  rw [Category.assoc, Iso.inv_hom_id, Category.comp_id]
+  exact (t96A06_forgetRationalRelativeCokernelComparison_projection A).symm
+
+set_option maxHeartbeats 800000 in
+/-- The transported relative coefficient map commutes with the original
+integral and rational absolute-to-relative projections. -/
+theorem t96A06_integralToRational_relativeChains_projection
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      t96A06_integralToRational_relativeChains A =
+    t96A06_integralToRational_singularChainMap (TopCat.of X) ≫
+      (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) := by
+  have h₁ := congrArg
+    (fun k => (k ≫ t96A06_integralToRational_relativeChainMap A) ≫
+      (t96A06_forgetRationalRelativeCokernelComparison A).inv)
+    (ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison_projection A)
+  have h₂ :
+      (cokernel.π ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+          t96A06_integralToRational_relativeChainMap A) ≫
+        (t96A06_forgetRationalRelativeCokernelComparison A).inv =
+      t96A06_integralToRational_singularChainMap (TopCat.of X) ≫
+        (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)).map
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) := by
+    rw [t96A06_integralToRational_relativeProjection_naturality]
+    rw [Category.assoc]
+    rw [t96A06_forgetRationalRelativeCokernelComparison_projection_inv]
+    rfl
+  simpa only [t96A06_integralToRational_relativeChains, Category.assoc] using h₁.trans h₂
 
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
@@ -3139,6 +3209,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_relativeProjection_naturality
 #print axioms t96A06_forgetRationalRelativeCokernelComparison
 #print axioms t96A06_integralToRational_relativeChains
+#print axioms t96A06_forgetRationalRelativeCokernelComparison_projection
+#print axioms t96A06_integralToRational_relativeChains_projection
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
