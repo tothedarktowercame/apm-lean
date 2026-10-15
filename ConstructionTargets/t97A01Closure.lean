@@ -2469,6 +2469,38 @@ theorem torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
   funext j
   exact torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece S j
 
+/-- The first flattened subdivision factor has the first run and first local
+offset.  This supplies the base coordinate for comparing the nested run fold
+with the flat subdivision fold. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_zero
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm 0).1.val = 0 ∧
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm 0).2.val = 0 := by
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm
+    (0 : Fin (S.n + 1))
+  have hflat := torusRP2_subdivisionRunOffsetEquiv_symm_flatten S
+    (0 : Fin (S.n + 1))
+  have hprefix : pathTwoOpenSubdivisionRunPrefixLength S z.1.val = 0 := by
+    change pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val = 0 at hflat
+    omega
+  have hoffset : z.2.val = 0 := by
+    change pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val = 0 at hflat
+    omega
+  have hrun : z.1.val = 0 := by
+    by_contra hne
+    have hlt : (0 : Fin ((boolSideRunPartition S.side).length + 1)) <
+        z.1.castSucc := by
+      exact Fin.mk_lt_mk.mpr (Nat.pos_of_ne_zero hne)
+    have hstrict := (torusRP2_subdivisionRunPrefixLength_strictMono S) hlt
+    change pathTwoOpenSubdivisionRunPrefixLength S 0 <
+      pathTwoOpenSubdivisionRunPrefixLength S z.1.val at hstrict
+    rw [(torusRP2_subdivisionRunPrefixLength_endpoints S).1, hprefix] at hstrict
+    exact (Nat.lt_irrefl 0 hstrict)
+  exact ⟨hrun, hoffset⟩
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2584,6 +2616,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
