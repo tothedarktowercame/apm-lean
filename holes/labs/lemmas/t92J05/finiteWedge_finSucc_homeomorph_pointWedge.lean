@@ -1457,6 +1457,108 @@ open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
 new circle.  The formulas on `castSucc` and `Fin.last` are supplied by
 `finiteWedgeFinSuccHomeomorphPointWedge_castSucc` and `_last`. -/
 -- BEGIN SEAT AREA
+def finiteWedge_finSucc_homeomorph_pointWedge_aux_e (n : ℕ) :
+    Fin ((n + 1) + 1) ≃ Fin (n + 1) ⊕ Unit :=
+  finSumFinEquiv.symm.trans (Equiv.sumCongr (Equiv.refl _) finOneEquiv)
+
+noncomputable def finiteWedge_finSucc_homeomorph_pointWedge_aux_f (n : ℕ) :
+    FiniteWedge (Fin ((n + 1) + 1)) →
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) :=
+  Quotient.lift (fun p =>
+    match finiteWedge_finSucc_homeomorph_pointWedge_aux_e n p.1 with
+    | .inl i => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+        (.inl (wedgeCircle i p.2))
+    | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+        (.inr (wedgeCircle u p.2))) (by
+      intro p q h
+      change Relation.EqvGen (FiniteWedgeRel _) p q at h
+      rw [eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · have hp' : p.2 = (1 : Circle) := Subtype.ext hp
+        have hq' : q.2 = (1 : Circle) := Subtype.ext hq
+        change (match finiteWedge_finSucc_homeomorph_pointWedge_aux_e n p.1 with
+          | .inl i => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inl (wedgeCircle i p.2))
+          | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inr (wedgeCircle u p.2))) =
+          (match finiteWedge_finSucc_homeomorph_pointWedge_aux_e n q.1 with
+          | .inl i => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inl (wedgeCircle i q.2))
+          | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inr (wedgeCircle u q.2)))
+        rw [hp', hq']
+        split <;> split
+        · apply congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl x))
+          exact wedgeCircle_base_eq _ _
+        · calc
+            ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl (wedgeCircle _ 1)) =
+                ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inl (wedgeCircle (0 : Fin (n + 1)) 1)) :=
+              congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl x))
+                (wedgeCircle_base_eq _ _)
+            _ = ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inr (wedgeCircle () 1)) :=
+              Quotient.sound (Relation.EqvGen.rel _ _
+                ConstructionTargets.PointWedgeQuotient.Rel.base)
+            _ = ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inr (wedgeCircle _ 1)) :=
+              congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr x))
+                (wedgeCircle_base_eq _ _)
+        · calc
+            ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr (wedgeCircle _ 1)) =
+                ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inl (wedgeCircle (0 : Fin (n + 1)) 1)) := by
+              rw [wedgeCircle_base_eq _ ()]
+              exact (Quotient.sound (Relation.EqvGen.rel _ _
+                ConstructionTargets.PointWedgeQuotient.Rel.base)).symm
+            _ = ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inl (wedgeCircle _ 1)) :=
+              congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl x))
+                (wedgeCircle_base_eq _ _)
+        · apply congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr x))
+          exact wedgeCircle_base_eq _ _)
+
+noncomputable def finiteWedge_finSucc_homeomorph_pointWedge_aux_g (n : ℕ) :
+    ConstructionTargets.PointWedgeQuotient.Wedge
+        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) →
+      FiniteWedge (Fin ((n + 1) + 1)) :=
+  Quotient.lift (Sum.elim
+    (Quotient.lift (fun p => wedgeCircle
+      ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inl p.1)) p.2)
+      (by intro p q h
+          change Relation.EqvGen (FiniteWedgeRel _) p q at h
+          rw [eqvGen_finiteWedgeRel_iff] at h
+          rcases h with rfl | ⟨hp, hq⟩
+          · rfl
+          · apply Quotient.sound
+            change Relation.EqvGen (FiniteWedgeRel _) _ _
+            rw [eqvGen_finiteWedgeRel_iff]
+            exact Or.inr ⟨hp, hq⟩))
+    (Quotient.lift (fun p => wedgeCircle
+      ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inr p.1)) p.2)
+      (by intro p q h
+          change Relation.EqvGen (FiniteWedgeRel _) p q at h
+          rw [eqvGen_finiteWedgeRel_iff] at h
+          rcases h with rfl | ⟨hp, hq⟩
+          · rfl
+          · apply Quotient.sound
+            change Relation.EqvGen (FiniteWedgeRel _) _ _
+            rw [eqvGen_finiteWedgeRel_iff]
+            exact Or.inr ⟨hp, hq⟩))) (by
+      intro a b h
+      induction h with
+      | rel a b h =>
+          cases h
+          apply Quotient.sound
+          change Relation.EqvGen (FiniteWedgeRel _) _ _
+          rw [eqvGen_finiteWedgeRel_iff]
+          exact Or.inr ⟨rfl, rfl⟩
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
 lemma finiteWedge_finSucc_homeomorph_pointWedge (n : ℕ) :
     ∃ h : FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
       ConstructionTargets.PointWedgeQuotient.Wedge (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1),
@@ -1464,7 +1566,86 @@ lemma finiteWedge_finSucc_homeomorph_pointWedge (n : ℕ) :
         ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inl (wedgeCircle i z))) ∧
       (∀ z : Circle, h (wedgeCircle (Fin.last (n + 1)) z) =
         ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inr (wedgeCircle () z))) := by
-  sorry
+  let e := finiteWedge_finSucc_homeomorph_pointWedge_aux_e n
+  let f := finiteWedge_finSucc_homeomorph_pointWedge_aux_f n
+  let g := finiteWedge_finSucc_homeomorph_pointWedge_aux_g n
+  have hfg : ∀ x, g (f x) = x := by
+    rintro ⟨⟨i, z⟩⟩
+    change g (match e i with
+      | .inl j => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl (wedgeCircle j z))
+      | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr (wedgeCircle u z))) = _
+    cases he : e i with
+    | inl j =>
+      change wedgeCircle (e.symm (.inl j)) z = wedgeCircle i z
+      rw [← he, e.symm_apply_apply]
+    | inr u =>
+      change wedgeCircle (e.symm (.inr u)) z = wedgeCircle i z
+      rw [← he, e.symm_apply_apply]
+  have hgf : ∀ x, f (g x) = x := by
+    rintro ⟨x⟩
+    rcases x with x | x
+    · rcases x with ⟨⟨i, z⟩⟩
+      change f (wedgeCircle (e.symm (.inl i)) z) = _
+      change (match e (e.symm (.inl i)) with | .inl j => _ | .inr u => _) = _
+      rw [e.apply_symm_apply]
+      rfl
+    · rcases x with ⟨⟨u, z⟩⟩
+      change f (wedgeCircle (e.symm (.inr u)) z) = _
+      change (match e (e.symm (.inr u)) with | .inl j => _ | .inr v => _) = _
+      rw [e.apply_symm_apply]
+      rfl
+  have hf : Continuous f := by
+    dsimp [f, finiteWedge_finSucc_homeomorph_pointWedge_aux_f]
+    apply Continuous.quotient_lift
+    letI : TopologicalSpace (Fin ((n + 1) + 1)) := ⊥
+    letI : DiscreteTopology (Fin ((n + 1) + 1)) := ⟨rfl⟩
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    cases he : finiteWedge_finSucc_homeomorph_pointWedge_aux_e n i with
+    | inl j =>
+      simpa only [Prod.fst, Prod.snd, he] using
+        ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+          (continuous_inl.comp (continuous_wedgeCircle j)))
+    | inr u =>
+      simpa only [Prod.fst, Prod.snd, he] using
+        ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+          (continuous_inr.comp (continuous_wedgeCircle u)))
+  have hg : Continuous g := by
+    dsimp [g, finiteWedge_finSucc_homeomorph_pointWedge_aux_g]
+    apply Continuous.quotient_lift
+    rw [continuous_sum_dom]
+    constructor <;> apply Continuous.quotient_lift
+    · letI : TopologicalSpace (Fin (n + 1)) := ⊥
+      letI : DiscreteTopology (Fin (n + 1)) := ⟨rfl⟩
+      rw [continuous_prod_of_discrete_left]
+      intro i
+      simpa only using (continuous_wedgeCircle
+        ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inl i)))
+    · letI : TopologicalSpace Unit := ⊥
+      letI : DiscreteTopology Unit := ⟨rfl⟩
+      rw [continuous_prod_of_discrete_left]
+      intro u
+      simpa only using (continuous_wedgeCircle
+        ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inr u)))
+  let h : FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) :=
+    { toEquiv := ⟨f, g, hfg, hgf⟩
+      continuous_toFun := hf
+      continuous_invFun := hg }
+  refine ⟨h, ?_, ?_⟩
+  · intro i z
+    change f (Quotient.mk _ (i.castSucc, z)) = _
+    dsimp [f, finiteWedge_finSucc_homeomorph_pointWedge_aux_f]
+    have he : finiteWedge_finSucc_homeomorph_pointWedge_aux_e n i.castSucc = Sum.inl i := by
+      simp [finiteWedge_finSucc_homeomorph_pointWedge_aux_e]
+    rw [he]
+  · intro z
+    change f (Quotient.mk _ (Fin.last (n + 1), z)) = _
+    dsimp [f, finiteWedge_finSucc_homeomorph_pointWedge_aux_f]
+    have he : finiteWedge_finSucc_homeomorph_pointWedge_aux_e n (Fin.last (n + 1)) = Sum.inr () := by
+      simp [finiteWedge_finSucc_homeomorph_pointWedge_aux_e]
+    rw [he]
 -- END SEAT AREA
 
 /-- The algebraic successor identity, with the old generators first and the
