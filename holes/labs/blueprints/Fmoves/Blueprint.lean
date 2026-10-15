@@ -9492,7 +9492,146 @@ theorem cutBoundary_newA_v {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
 theorem cutBoundary_newA_chord {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     ∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutChordParamA L p q s) =
       (edgePoint L (p + 1) (reverseParameter s) : ℂ) := by
-  sorry
+  have hL : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
+  have hpi : (0 : ℝ) < Real.pi := Real.pi_pos
+  intro s
+  by_cases hs1 : (s : ℝ) = 1
+  · have hs : s = ⟨1, by constructor <;> norm_num⟩ := Subtype.ext hs1
+    subst s
+    rw [cutChordParamA]
+    have hcirc :
+        ((cutAlpha L q + (1 : ℝ) *
+            (cutAlpha L p + 2 * Real.pi - cutAlpha L q) : ℝ) :
+          AddCircle (2 * Real.pi)) =
+          (cutAlpha L p : AddCircle (2 * Real.pi)) := by
+      apply QuotientAddGroup.eq_iff_sub_mem.mpr
+      refine ⟨1, ?_⟩
+      ring
+    rw [hcirc, cutNewA]
+    rw [cutBoundaryData_concrete_aux_eval _ (cutAlpha L p)
+      ⟨le_rfl, by nlinarith⟩]
+    have hp1 : cutAlpha L p ≤ cutAlpha L (p + 1) := by
+      unfold cutAlpha
+      apply (div_le_div_iff_of_pos_right hL).2
+      push_cast
+      nlinarith [hpi]
+    rw [cutProfileNewA, if_pos hp1]
+    simp only [cutSeam, sub_self, zero_mul, zero_div, cutPoint, edgePoint,
+      Complex.ofReal_zero, add_zero]
+    change Complex.exp (((cutAlpha L (p + 1) : ℝ) : ℂ) * Complex.I) =
+      Complex.exp (Complex.I * (2 * Real.pi * (((p + 1 : ℕ) : ℝ) +
+        (reverseParameter (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)).1) / L))
+    congr 1
+    dsimp [reverseParameter]
+    unfold cutAlpha
+    push_cast
+    ring
+  · let φ : ℝ := cutAlpha L q +
+        s * (cutAlpha L p + 2 * Real.pi - cutAlpha L q)
+    have hden : 0 < cutAlpha L p + 2 * Real.pi - cutAlpha L q := by
+      unfold cutAlpha
+      have : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+      field_simp
+      nlinarith [hpi]
+    have hφlo : cutAlpha L p ≤ φ := by
+      have hpq' : cutAlpha L p ≤ cutAlpha L q := by
+        unfold cutAlpha
+        apply (div_le_div_iff_of_pos_right hL).2
+        exact mul_le_mul_of_nonneg_left (by exact_mod_cast hpq.le) (by positivity)
+      apply hpq'.trans
+      dsimp [φ]
+      exact le_add_of_nonneg_right (mul_nonneg s.2.1 hden.le)
+    have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+      have hslt : (s : ℝ) < 1 := lt_of_le_of_ne s.2.2 hs1
+      dsimp [φ]
+      nlinarith
+    have hqφ : cutAlpha L q ≤ φ := by
+      dsimp [φ]
+      exact le_add_of_nonneg_right (mul_nonneg s.2.1 hden.le)
+    rw [cutChordParamA, cutNewA]
+    rw [cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφhi⟩]
+    by_cases hspecial : q = p + 1 ∧ (s : ℝ) = 0
+    · rcases hspecial with ⟨rfl, hs0⟩
+      have hs : s = ⟨0, by constructor <;> norm_num⟩ := Subtype.ext hs0
+      subst s
+      have hφ : φ = cutAlpha L (p + 1) := by dsimp [φ]; ring
+      rw [hφ, cutProfileNewA, if_pos le_rfl]
+      change cutSeam L p (p + 1)
+          ((cutAlpha L (p + 1) - cutAlpha L p) * (L : ℝ) /
+            (2 * Real.pi)) =
+        (edgePoint L (p + 1)
+          (reverseParameter (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)) : ℂ)
+      have ht : (cutAlpha L (p + 1) - cutAlpha L p) * (L : ℝ) /
+          (2 * Real.pi) = 1 := by
+        unfold cutAlpha
+        push_cast
+        field_simp [ne_of_gt hL, ne_of_gt hpi]
+        ring
+      rw [ht]
+      simp [cutSeam]
+      change Complex.exp (((cutAlpha L (p + 2) : ℝ) : ℂ) * Complex.I) =
+        Complex.exp (Complex.I * (2 * Real.pi * (((p + 1 : ℕ) : ℝ) +
+          (reverseParameter (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)).1) / L))
+      congr 1
+      dsimp [reverseParameter]
+      unfold cutAlpha
+      push_cast
+      ring
+    · have hp1φ : cutAlpha L (p + 1) < φ := by
+        have hp1q : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+          unfold cutAlpha
+          apply (div_le_div_iff_of_pos_right hL).2
+          exact mul_le_mul_of_nonneg_left
+            (by exact_mod_cast (by omega : p + 1 ≤ q)) (by positivity)
+        apply lt_of_le_of_ne (hp1q.trans hqφ)
+        intro heq
+        have hsq : (s : ℝ) = 0 := by
+          dsimp [φ] at heq
+          nlinarith
+        have hqp : q = p + 1 := by
+          dsimp [φ] at heq
+          rw [hsq] at heq
+          unfold cutAlpha at heq
+          field_simp [ne_of_gt hL] at heq
+          have : (p + 1 : ℝ) = q := by simpa using heq
+          exact_mod_cast this.symm
+        exact hspecial ⟨hqp, hsq⟩
+      rw [cutProfileNewA, if_neg (not_le.mpr hp1φ)]
+      have hsa : cutSA L p q φ = (s : ℝ) := by
+        dsimp [φ, cutSA]
+        field_simp
+        ring
+      by_cases hφq : φ ≤ cutAlpha L q
+      · rw [if_pos hφq]
+        have hs0 : (s : ℝ) = 0 := by
+          dsimp [φ] at hφq
+          nlinarith
+        have hs : s = ⟨0, by constructor <;> norm_num⟩ := Subtype.ext hs0
+        subst s
+        have hφzero : φ = cutAlpha L q := by dsimp [φ]; ring
+        rw [hφzero]
+        change Complex.exp (((cutAlpha L (q + 1) + cutAlpha L (p + 1) -
+            cutAlpha L q : ℝ) : ℂ) * Complex.I) =
+          Complex.exp (Complex.I * (2 * Real.pi *
+            (((p + 1 : ℕ) : ℝ) +
+              (reverseParameter (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)).1) / L))
+        congr 1
+        dsimp [reverseParameter]
+        unfold cutAlpha
+        push_cast
+        field_simp
+        ring
+      · rw [if_neg hφq, hsa]
+        change Complex.exp (((cutAlpha L (p + 2) -
+            (s : ℝ) * (2 * Real.pi / L) : ℝ) : ℂ) * Complex.I) =
+          Complex.exp (Complex.I * (2 * Real.pi *
+            (((p + 1 : ℕ) : ℝ) + (reverseParameter s).1) / L))
+        congr 1
+        dsimp [reverseParameter]
+        unfold cutAlpha
+        push_cast
+        field_simp
+        ring
 
 theorem cutBoundary_newA_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutEdgeCircle L p s) = cutSeam L p q s) ∧
