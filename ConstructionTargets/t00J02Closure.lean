@@ -367,6 +367,38 @@ theorem exists_smoothLocalInverse_writtenInExtChartAt
 
 #print axioms exists_smoothLocalInverse_writtenInExtChartAt
 
+/-- An eventual left inverse makes a map injective on a neighborhood of the
+base point.  This is the topological output of the chart inverse theorem that
+is transported through the source and target charts. -/
+theorem exists_nhds_injOn_of_eventually_leftInverse
+    {X Y : Type} [TopologicalSpace X] (F : X → Y) (a : X)
+    (h : ∃ g : Y → X, ∀ᶠ z in nhds a, g (F z) = z) :
+    ∃ U ∈ nhds a, Set.InjOn F U := by
+  obtain ⟨g, hg⟩ := h
+  refine ⟨{x | g (F x) = x}, hg, ?_⟩
+  intro x hx y hy hxy
+  rw [← hx, ← hy, hxy]
+
+#print axioms exists_nhds_injOn_of_eventually_leftInverse
+
+/-- The preferred chart expression of a smooth surface map with invertible
+derivative is injective on a neighborhood of the chart base point. -/
+theorem exists_nhds_injOn_writtenInExtChartAt
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S) (e : SurfaceModel ≃L[ℝ] SurfaceModel)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (he : HasMFDerivAt SurfaceModelWithCorners SurfaceModelWithCorners f x
+      (e : SurfaceModel →L[ℝ] SurfaceModel)) :
+    let F := writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f
+    let a := extChartAt SurfaceModelWithCorners x x
+    ∃ U ∈ nhds a, Set.InjOn F U := by
+  dsimp only
+  obtain ⟨g, _, hleft, _⟩ :=
+    exists_smoothLocalInverse_writtenInExtChartAt f x e hf he
+  exact exists_nhds_injOn_of_eventually_leftInverse _ _ ⟨g, hleft⟩
+
+#print axioms exists_nhds_injOn_writtenInExtChartAt
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
