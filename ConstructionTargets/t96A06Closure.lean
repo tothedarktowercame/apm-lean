@@ -610,6 +610,38 @@ theorem t96A06_rational_projection_transferDegree (n : ℕ) :
   simp only [Preadditive.comp_add, Category.comp_id,
     CoefficientH0.singularGenerator_singularPostcomposition]
 
+/-- Projection followed by rational transfer is the deck sum as a morphism
+of singular chain complexes. -/
+theorem t96A06_rational_projection_transfer :
+    CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, rp3SphereProjection_continuous⟩ ≫
+      CoefficientCoveringTransfer.transfer ℚ
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted =
+      𝟙 _ + CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩ := by
+  ext n : 1
+  exact t96A06_rational_projection_transferDegree n
+
+/-- The deck-sum identity after passage to rational singular homology. -/
+theorem t96A06_rational_homology_projection_transfer (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) n ≫
+      HomologicalComplex.homologyMap
+        (CoefficientCoveringTransfer.transfer ℚ
+          (sphereProjection 3) t96A06_rp3_sphere_twoSheeted) n =
+      𝟙 _ + HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩) n := by
+  change (HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+      (ComplexShape.down ℕ) n).map _ ≫
+    (HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+      (ComplexShape.down ℕ) n).map _ = _
+  rw [← Functor.map_comp, t96A06_rational_projection_transfer,
+    Functor.map_add]
+  congr 1
+  exact CategoryTheory.Functor.map_id _ _
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -668,6 +700,8 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_transferSimplex_projected
 #print axioms t96A06_rational_transferSimplex_projected
 #print axioms t96A06_rational_projection_transferDegree
+#print axioms t96A06_rational_projection_transfer
+#print axioms t96A06_rational_homology_projection_transfer
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
