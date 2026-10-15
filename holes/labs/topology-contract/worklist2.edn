@@ -88375,6 +88375,20 @@
     [{:cmd "pseudopushout draft",
       :exit 1,
       :correction "fixed namespaces/notation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792053961691-13703-f9b8874d",
+     :commands
+     ["git show/diff/check 06eff46c1"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "lake env lean ConstructionTargets/t97A01Closure.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 06eff46c1 adds compiled, sorry-free progress beyond d97eb2896: specialization of the proved two-open fundamental-groupoid pseudopushout to the polygon radial cover and its reconstruction-unit arrow identity. Only t97A01Closure.lean changed; fixture SHA edc3e12712a80a40769337d6fd50e25477251c42638769debe01248bb2354cb6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. The equation has the correct direction by unit naturality and hom-inv cancellation. This is cover-level input, not a facade discharge: based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "06eff46c1",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88397,7 @@
      "edc3e12712a80a40769337d6fd50e25477251c42638769debe01248bb2354cb6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary transport and forward kernel inclusion.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked radial-cover pseudopushout reconstruction.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88473,8 +88487,10 @@
      :reason "Banked disk/skeleton boundary basepoint alignment."}
     {:job 3,
      :commit "d97eb2896",
-     :reason
-     "Banked boundary transport and forward kernel inclusion."}]}
+     :reason "Banked boundary transport and forward kernel inclusion."}
+    {:job 4,
+     :commit "06eff46c1",
+     :reason "Banked radial-cover pseudopushout reconstruction."}]}
   {:consumer :t94J09,
    :stop-count 2,
    :evidence
@@ -94395,7 +94411,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2PolygonPseudopushout_arrow_eq_reconstructed",
@@ -94405,7 +94421,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "radial reconstruction",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "06eff46c1"},
    :id :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed,
    :kind :lemma,
    :depends-on [],
