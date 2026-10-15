@@ -347,6 +347,19 @@ noncomputable def t97J07_complexProjectiveRationalHomologyData_zero :
     subst i
     simpa using h0.toLinearEquiv
 
+/-- Only the first two filtration steps are needed by this consumer.  This
+bounded adapter avoids requiring an all-dimensional successor theorem. -/
+noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
+    (h01 :
+      ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 0 →
+        ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 1)
+    (h12 :
+      ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 1 →
+        ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 2) :
+    T97J07CP2RationalHomologyData :=
+  t97J07_cp2RationalHomologyData_of_shared
+    (h12 (h01 t97J07_complexProjectiveRationalHomologyData_zero))
+
 /-- Once the CP² homology table is supplied, finite-dimensional trace
 calculation gives Euler characteristic three. -/
 theorem t97J07_eulerCharacteristic_of_homologyData
