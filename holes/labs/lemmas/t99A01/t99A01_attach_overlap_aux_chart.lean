@@ -711,12 +711,185 @@ lemma t99A01_attach_diskSide_aux_eqv {r : ℕ} (degree : Fin r → ℕ)
   simp [t99A01_attach_diskSide_aux_decode, hz, hw] at hd
   exact ⟨hd.1, Subtype.ext hd.2⟩
 
+noncomputable def t99A01_attach_diskSide_aux_diskOfBall
+    (z : Metric.ball (0 : ℂ) 1) : APMT99A01.Disk :=
+  ⟨z, by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have hz : ‖(z : ℂ)‖ < 1 := by
+      simpa only [Metric.mem_ball, dist_zero_right] using z.2
+    exact hz.le⟩
+
+lemma t99A01_attach_diskSide_aux_diskOfBall_coe
+    (z : Metric.ball (0 : ℂ) 1) :
+    ((t99A01_attach_diskSide_aux_diskOfBall z : APMT99A01.Disk) : ℂ) = z := rfl
+
+/-- The canonical chart inverse: a point of disk `i`'s interior. -/
+noncomputable def t99A01_attach_diskSide_aux_g {r : ℕ} (degree : Fin r → ℕ)
+    (p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1) : APMT99A01.sideB degree :=
+  ⟨APMT99A01.attachMk degree (Sum.inr (p.1, t99A01_attach_diskSide_aux_diskOfBall p.2)),
+    ⟨p.1, t99A01_attach_diskSide_aux_diskOfBall p.2,
+      by simpa only [t99A01_attach_diskSide_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using p.2.2, rfl⟩⟩
+
+lemma t99A01_attach_diskSide_aux_continuous_bijection {r : ℕ}
+    (degree : Fin r → ℕ) :
+    Continuous (t99A01_attach_diskSide_aux_g degree) ∧
+      Function.Bijective (t99A01_attach_diskSide_aux_g degree) := by
+  let d := t99A01_attach_diskSide_aux_diskOfBall
+  let g := t99A01_attach_diskSide_aux_g degree
+  refine ⟨?_, ?_, ?_⟩
+  · apply continuous_sigma
+    intro i
+    apply Continuous.subtype_mk
+    exact (APMT99A01.continuous_attachMk degree).comp
+      (continuous_inr.comp (continuous_const.prodMk
+        (Continuous.subtype_mk continuous_subtype_val _)))
+  · rintro ⟨i, z⟩ ⟨j, w⟩ h
+    have he : Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (i, d z)) (Sum.inr (j, d w)) :=
+      Quotient.exact (congrArg Subtype.val h)
+    have hij := t99A01_attach_diskSide_aux_eqv degree
+      (by simpa only [d, t99A01_attach_diskSide_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using z.2)
+      (by simpa only [d, t99A01_attach_diskSide_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using w.2) he
+    cases hij.1
+    congr 1
+    apply Subtype.ext
+    simpa only [d, t99A01_attach_diskSide_aux_diskOfBall_coe] using
+      congrArg (fun x : APMT99A01.Disk => (x : ℂ)) hij.2
+  · rintro ⟨q, i, z, hz, rfl⟩
+    let zb : Metric.ball (0 : ℂ) 1 :=
+      ⟨z, by simpa only [Metric.mem_ball, dist_zero_right] using hz⟩
+    refine ⟨⟨i, zb⟩, ?_⟩
+    apply Subtype.ext
+    change APMT99A01.attachMk degree (Sum.inr (i, d zb)) =
+      APMT99A01.attachMk degree (Sum.inr (i, z))
+    congr 3
+
+/-- **Leaf.** The chart inverse is an open map: an open set of disk interiors has
+open, saturated preimage under the quotient map (interior points are singleton classes,
+banked above), so its image is open in the quotient, hence in `sideB`
+(`isOpen_coinduced`, `IsOpen.isOpenMap_subtype_val`/`Topology.IsInducing.isOpen_iff`). -/
+lemma t99A01_attach_diskSide_aux_open_diskOfBall :
+    IsOpenMap t99A01_attach_diskSide_aux_diskOfBall := by
+  intro U hU
+  have hball : IsOpen (Metric.ball (0 : ℂ) 1) := Metric.isOpen_ball
+  have hopen : IsOpen ((fun z : Metric.ball (0 : ℂ) 1 => (z : ℂ)) '' U) :=
+    hball.isOpenEmbedding_subtypeVal.isOpenMap U hU
+  have heq : t99A01_attach_diskSide_aux_diskOfBall '' U =
+      Subtype.val ⁻¹' ((fun z : Metric.ball (0 : ℂ) 1 => (z : ℂ)) '' U) := by
+    ext z
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      exact ⟨w, hw, rfl⟩
+    · rintro ⟨w, hw, he⟩
+      refine ⟨w, hw, Subtype.ext ?_⟩
+      exact he
+  rw [heq]
+  exact hopen.preimage continuous_subtype_val
+
+lemma t99A01_attach_diskSide_aux_open_raw {r : ℕ} :
+    IsOpenMap (fun p : (Σ _ : Fin r, Metric.ball (0 : ℂ) 1) =>
+      (Sum.inr (p.1, t99A01_attach_diskSide_aux_diskOfBall p.2) :
+        Sum Circle (Fin r × APMT99A01.Disk))) := by
+  intro U hU
+  rw [isOpen_sum_iff]
+  constructor
+  · convert (isOpen_empty : IsOpen (∅ : Set Circle)) using 1
+    ext x
+    simp only [Set.mem_preimage, Set.mem_image, Set.mem_empty_iff_false, iff_false]
+    rintro ⟨p, -, h⟩
+    cases h
+  · rw [isOpen_prod_iff]
+    intro i b hb
+    rcases hb with ⟨p, hpU, hp⟩
+    rcases p with ⟨j, z⟩
+    have hp' : (j, t99A01_attach_diskSide_aux_diskOfBall z) = (i, b) :=
+      Sum.inr.inj hp
+    have hji : j = i := (Prod.mk.inj hp').1
+    subst j
+    have hzb : t99A01_attach_diskSide_aux_diskOfBall z = b := (Prod.mk.inj hp').2
+    let Ui : Set (Metric.ball (0 : ℂ) 1) := {z | (⟨i, z⟩ :
+      Σ _ : Fin r, Metric.ball (0 : ℂ) 1) ∈ U}
+    have hUi : IsOpen Ui := by
+      simpa only [Ui, Set.mem_setOf_eq] using (isOpen_sigma_iff.mp hU) i
+    have hdi : IsOpen (t99A01_attach_diskSide_aux_diskOfBall ''
+        Ui) :=
+      t99A01_attach_diskSide_aux_open_diskOfBall _ hUi
+    refine ⟨{i}, t99A01_attach_diskSide_aux_diskOfBall ''
+      Ui, isOpen_discrete _, hdi, rfl, ⟨z, hpU, hzb⟩, ?_⟩
+    rintro ⟨k, c⟩ ⟨hk, hc⟩
+    simp only [Set.mem_singleton_iff] at hk
+    rcases hc with ⟨w, hwU, rfl⟩
+    subst k
+    exact ⟨⟨i, w⟩, hwU, rfl⟩
+
+lemma t99A01_attach_diskSide_aux_open {r : ℕ} (degree : Fin r → ℕ) :
+    IsOpenMap (t99A01_attach_diskSide_aux_g degree) := by
+  intro U hU
+  let F : (Σ _ : Fin r, Metric.ball (0 : ℂ) 1) →
+      Sum Circle (Fin r × APMT99A01.Disk) := fun p =>
+    Sum.inr (p.1, t99A01_attach_diskSide_aux_diskOfBall p.2)
+  have hFU : IsOpen (F '' U) := t99A01_attach_diskSide_aux_open_raw U hU
+  have hsat : (APMT99A01.attachMk degree) ⁻¹'
+      ((APMT99A01.attachMk degree) '' (F '' U)) = F '' U := by
+    ext x
+    constructor
+    · rintro ⟨y, ⟨p, hpU, rfl⟩, hxy⟩
+      rcases p with ⟨i, z⟩
+      have hz : ‖((t99A01_attach_diskSide_aux_diskOfBall z : APMT99A01.Disk) : ℂ)‖ < 1 := by
+        simpa only [t99A01_attach_diskSide_aux_diskOfBall_coe,
+          Metric.mem_ball, dist_zero_right] using z.2
+      have heq := t99A01_attach_diskSide_aux_decode_eqv degree (Quotient.exact hxy)
+      cases x with
+      | inl w =>
+          simp [F, t99A01_attach_diskSide_aux_decode, hz] at heq
+      | inr q =>
+          rcases q with ⟨j, w⟩
+          simp only [F] at hxy ⊢
+          have hw : ‖(w : ℂ)‖ < 1 := by
+            by_contra hn
+            dsimp [F] at heq
+            simp [t99A01_attach_diskSide_aux_decode, hz, hn] at heq
+          have hij := t99A01_attach_diskSide_aux_eqv degree hz hw
+            (Quotient.exact hxy)
+          rcases hij with ⟨rfl, hwz⟩
+          subst w
+          exact ⟨⟨i, z⟩, hpU, rfl⟩
+    · rintro ⟨p, hp, rfl⟩
+      exact ⟨F p, ⟨p, hp, rfl⟩, rfl⟩
+  have hquot : IsOpen ((APMT99A01.attachMk degree) '' (F '' U)) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((APMT99A01.attachMk degree) ⁻¹'
+      ((APMT99A01.attachMk degree) '' (F '' U)))
+    rw [hsat]
+    exact hFU
+  have heq : t99A01_attach_diskSide_aux_g degree '' U =
+      Subtype.val ⁻¹' ((APMT99A01.attachMk degree) '' (F '' U)) := by
+    ext q
+    constructor
+    · rintro ⟨p, hp, rfl⟩
+      exact ⟨F p, ⟨p, hp, rfl⟩, rfl⟩
+    · rintro ⟨x, ⟨p, hp, hxp⟩, hxq⟩
+      refine ⟨p, hp, Subtype.ext ?_⟩
+      exact (congrArg (APMT99A01.attachMk degree) hxp).trans hxq
+  rw [heq]
+  exact hquot.preimage continuous_subtype_val
+
 theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
         (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
         e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩ := by
-  sorry
+  obtain ⟨hc, hb⟩ := t99A01_attach_diskSide_aux_continuous_bijection degree
+  let E := (Equiv.ofBijective _ hb).toHomeomorphOfContinuousOpen hc
+    (t99A01_attach_diskSide_aux_open degree)
+  refine ⟨E.symm, fun i z hz h => ?_⟩
+  apply E.injective
+  rw [Homeomorph.apply_symm_apply]
+  apply Subtype.ext
+  rfl
 /-- **Leaf (punctured disks, 80--140 lines).** The overlap is the disjoint union
 of the punctured open disks, which deformation retracts onto the radius-`1/2`
 circles; the inverse of the equivalence is literally `halfLoop`. -/
@@ -767,6 +940,45 @@ def t99A01_pball : Set ℂ := {z | 0 < ‖z‖ ∧ ‖z‖ < 1}
 disks, by the identity chart on each disk (interior points are singleton classes:
 `t99A01_attach_overlap_aux_eqv_interior`; continuity of the inverse as in
 `t99A01_attach_diskSide`). -/
+private abbrev t99A01_attach_overlap_aux_chart_Pre {r : ℕ}
+    (degree : Fin r → ℕ) :=
+  ↥((APMT99A01.attachMk degree) ⁻¹'
+    (APMT99A01.sideA degree ∩ APMT99A01.sideB degree))
+
+private def t99A01_attach_overlap_aux_chart_q {r : ℕ} (degree : Fin r → ℕ) :
+    t99A01_attach_overlap_aux_chart_Pre degree →
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) :=
+  (APMT99A01.sideA degree ∩ APMT99A01.sideB degree).restrictPreimage
+    (APMT99A01.attachMk degree)
+
+lemma t99A01_attach_overlap_aux_chart_q_quotient {r : ℕ} (degree : Fin r → ℕ) :
+    Topology.IsQuotientMap (t99A01_attach_overlap_aux_chart_q degree) := by
+  exact isQuotientMap_quotient_mk'.restrictPreimage_isOpen
+    ((t99A01_attach_openCover degree).1.inter (t99A01_attach_openCover degree).2.1)
+
+lemma t99A01_attach_overlap_aux_chart_mem {r : ℕ} (degree : Fin r → ℕ)
+    (i : Fin r) (z : APMT99A01.Disk) (h1 : ‖(z : ℂ)‖ < 1) :
+    APMT99A01.attachMk degree (Sum.inr (i, z)) ∈
+        APMT99A01.sideA degree ∩ APMT99A01.sideB degree ↔
+      0 < ‖(z : ℂ)‖ := by
+  constructor
+  · intro h
+    exact norm_pos_iff.mpr (t99A01_attach_circleSide_aux_ne_zero degree i z h.1)
+  · intro h0
+    constructor
+    · intro j he
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, z)) (Sum.inr (j, APMT99A01.diskCentre)) :=
+        Quotient.exact he
+      have hx := t99A01_attach_overlap_aux_eqv_interior h1 hr
+      have hp : (j, APMT99A01.diskCentre) = (i, z) := Sum.inr.inj hx
+      have hz : APMT99A01.diskCentre = z := (Prod.mk.inj hp).2
+      have hv := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) hz
+      change (0 : ℂ) = (z : ℂ) at hv
+      rw [← hv, norm_zero] at h0
+      exact (lt_irrefl 0 h0).elim
+    · exact ⟨i, z, h1, rfl⟩
+
 -- BEGIN SEAT AREA
 theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
     ∃ c : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
@@ -775,16 +987,176 @@ theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
         (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
   sorry
 -- END SEAT AREA
+/-- **Leaf (one punctured disk, 50--100 lines).** `z ↦ z/‖z‖` and `w ↦ w/2` are
+homotopy inverse: `(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖` stays in the punctured disk. -/
+theorem t99A01_pball_circle :
+    ∃ e : ContinuousMap.HomotopyEquiv ↥t99A01_pball Circle,
+      ∀ w : Circle, ((e.invFun w : ↥t99A01_pball) : ℂ) = (w : ℂ) / 2 := by
+  let radial : C(↥t99A01_pball, Circle) :=
+    ⟨fun z => ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+        simp [Submonoid.unitSphere, div_self (ne_of_gt z.2.1)]⟩, by
+      apply Continuous.subtype_mk
+      exact continuous_subtype_val.div₀
+        (Complex.continuous_ofReal.comp
+          (continuous_norm.comp continuous_subtype_val))
+        (fun z => by exact_mod_cast ne_of_gt z.2.1)⟩
+  let half : C(Circle, ↥t99A01_pball) :=
+    ⟨fun w => ⟨(w : ℂ) / 2, by
+        change 0 < ‖(w : ℂ) / 2‖ ∧ ‖(w : ℂ) / 2‖ < 1
+        rw [norm_div, Circle.norm_coe]
+        norm_num⟩, by
+      exact Continuous.subtype_mk (continuous_subtype_val.div_const 2) _⟩
+  have hradial_half : radial.comp half = ContinuousMap.id Circle := by
+    apply ContinuousMap.ext
+    intro w
+    apply Subtype.ext
+    change ((w : ℂ) / 2) / (‖(w : ℂ) / 2‖ : ℂ) = (w : ℂ)
+    rw [norm_div, Circle.norm_coe]
+    norm_num [div_div]
+  let H : ContinuousMap.Homotopy (half.comp radial) (ContinuousMap.id ↥t99A01_pball) := {
+    toFun := fun (tx : unitInterval × ↥t99A01_pball) => by
+        let t : ℝ := tx.1
+        let x : ℂ := tx.2
+        let a : ℝ := (1 - t) * (1 / (2 * ‖x‖)) + t
+        refine ⟨(a : ℂ) * x, ?_⟩
+        have ht0 : 0 ≤ t := tx.1.2.1
+        have ht1 : t ≤ 1 := tx.1.2.2
+        have hx0 : 0 < ‖x‖ := tx.2.2.1
+        have hx1 : ‖x‖ < 1 := tx.2.2.2
+        have ha0 : 0 ≤ a := by
+          dsimp [a]
+          have hden : 0 ≤ 1 / (2 * ‖x‖) := (one_div_pos.mpr (mul_pos (by norm_num) hx0)).le
+          exact add_nonneg (mul_nonneg (sub_nonneg.mpr ht1) hden) ht0
+        have hamul : a * ‖x‖ = (1 - t) / 2 + t * ‖x‖ := by
+          dsimp [a]
+          field_simp
+        change 0 < ‖(a : ℂ) * x‖ ∧ ‖(a : ℂ) * x‖ < 1
+        rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg ha0,
+          hamul]
+        constructor <;> nlinarith
+    continuous_toFun := by
+      apply Continuous.subtype_mk
+      have hnorm : Continuous (fun tx : unitInterval × ↥t99A01_pball => ‖(tx.2 : ℂ)‖) :=
+        continuous_norm.comp (continuous_subtype_val.comp continuous_snd)
+      have hne : ∀ tx : unitInterval × ↥t99A01_pball, 2 * ‖(tx.2 : ℂ)‖ ≠ 0 := by
+        intro tx
+        exact mul_ne_zero (by norm_num) (ne_of_gt tx.2.2.1)
+      have ht : Continuous (fun tx : unitInterval × ↥t99A01_pball => (tx.1 : ℝ)) :=
+        continuous_subtype_val.comp continuous_fst
+      have hx : Continuous (fun tx : unitInterval × ↥t99A01_pball => (tx.2 : ℂ)) :=
+        continuous_subtype_val.comp continuous_snd
+      exact (Complex.continuous_ofReal.comp
+        (((continuous_const.sub ht).mul
+          (continuous_const.div (continuous_const.mul hnorm) hne)).add ht)).mul hx
+    map_zero_left x := by
+      apply Subtype.ext
+      dsimp [half, radial]
+      simp only [sub_zero, one_mul, add_zero]
+      change (((1 : ℝ) / (2 * ‖(x : ℂ)‖) : ℝ) : ℂ) * (x : ℂ) =
+        (x : ℂ) / (‖(x : ℂ)‖ : ℂ) / 2
+      push_cast
+      field_simp
+    map_one_left x := by
+      apply Subtype.ext
+      simp }
+  refine ⟨⟨radial, half, ⟨H⟩, ?_⟩, ?_⟩
+  · rw [hradial_half]
+  · intro w
+    rfl
 
-/-- **Leaf (pure, no quotient).** Punctured disks retract radially onto the
-radius-`1/2` circles: `z ↦ z/‖z‖` one way, `w ↦ w/2` back, homotopy
-`(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖`. -/
+/-- **Leaf (generic, 40--80 lines).** A homotopy equivalence induces one between
+constant-fibre sigma types, index-preserving (`Sigma.map`/`continuous_sigma`; the
+homotopies are `(t, ⟨i, x⟩) ↦ ⟨i, H (t, x)⟩`, continuous on each summand). -/
+theorem t99A01_sigma_hequiv (r : ℕ) {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) :
+    ∃ E : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, X) (Σ _ : Fin r, Y),
+      ∀ (i : Fin r) (y : Y), E.invFun ⟨i, y⟩ = ⟨i, e.invFun y⟩ := by
+  let F : C((Σ _ : Fin r, X), (Σ _ : Fin r, Y)) :=
+    ⟨Sigma.map id (fun _ => e.toFun),
+      Continuous.sigma_map (fun _ => e.toFun.continuous)⟩
+  let G : C((Σ _ : Fin r, Y), (Σ _ : Fin r, X)) :=
+    ⟨Sigma.map id (fun _ => e.invFun),
+      Continuous.sigma_map (fun _ => e.invFun.continuous)⟩
+  obtain ⟨hleft⟩ := e.left_inv
+  obtain ⟨hright⟩ := e.right_inv
+  let Hleft : ContinuousMap.Homotopy (G.comp F) (ContinuousMap.id _) := {
+    toFun := fun tx => ⟨tx.2.1, hleft (tx.1, tx.2.2)⟩
+    continuous_toFun := by
+      rw [continuous_iff_continuousAt]
+      rintro ⟨t, ⟨i, x⟩⟩
+      have hc : Continuous (fun tx : unitInterval × (Σ _ : Fin r, X) =>
+          (⟨i, hleft (tx.1, tx.2.2)⟩ : Σ _ : Fin r, X)) :=
+        continuous_sigmaMk.comp
+          (hleft.continuous.comp (continuous_fst.prodMk (by
+            exact (continuous_sigma fun _ => continuous_id).comp continuous_snd)))
+      apply hc.continuousAt.congr_of_eventuallyEq
+      have hsnd : Continuous (fun p : unitInterval × Sigma (fun _ : Fin r => X) => p.2) :=
+        continuous_snd
+      filter_upwards [((@isOpen_range_sigmaMk (Fin r) (fun _ => X) _ i).preimage
+        hsnd).mem_nhds ⟨x, rfl⟩] with tx htx
+      rcases tx with ⟨t', ⟨j, z⟩⟩
+      have hji : j = i := by
+        obtain ⟨w, hw⟩ := htx
+        exact (congrArg Sigma.fst hw).symm
+      subst j
+      rfl
+    map_zero_left := by
+      rintro ⟨i, x⟩
+      change (Sigma.mk i (hleft (0, x)) : Sigma (fun _ : Fin r => X)) =
+        Sigma.mk i (e.invFun (e.toFun x))
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => X)))
+        (hleft.map_zero_left x)
+    map_one_left := by
+      rintro ⟨i, x⟩
+      change (Sigma.mk i (hleft (1, x)) : Sigma (fun _ : Fin r => X)) = Sigma.mk i x
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => X)))
+        (hleft.map_one_left x) }
+  let Hright : ContinuousMap.Homotopy (F.comp G) (ContinuousMap.id _) := {
+    toFun := fun ty => ⟨ty.2.1, hright (ty.1, ty.2.2)⟩
+    continuous_toFun := by
+      rw [continuous_iff_continuousAt]
+      rintro ⟨t, ⟨i, y⟩⟩
+      have hc : Continuous (fun ty : unitInterval × (Σ _ : Fin r, Y) =>
+          (⟨i, hright (ty.1, ty.2.2)⟩ : Σ _ : Fin r, Y)) :=
+        continuous_sigmaMk.comp
+          (hright.continuous.comp (continuous_fst.prodMk (by
+            exact (continuous_sigma fun _ => continuous_id).comp continuous_snd)))
+      apply hc.continuousAt.congr_of_eventuallyEq
+      have hsnd : Continuous (fun p : unitInterval × Sigma (fun _ : Fin r => Y) => p.2) :=
+        continuous_snd
+      filter_upwards [((@isOpen_range_sigmaMk (Fin r) (fun _ => Y) _ i).preimage
+        hsnd).mem_nhds ⟨y, rfl⟩] with ty hty
+      rcases ty with ⟨t', ⟨j, z⟩⟩
+      have hji : j = i := by
+        obtain ⟨w, hw⟩ := hty
+        exact (congrArg Sigma.fst hw).symm
+      subst j
+      rfl
+    map_zero_left := by
+      rintro ⟨i, y⟩
+      change (Sigma.mk i (hright (0, y)) : Sigma (fun _ : Fin r => Y)) =
+        Sigma.mk i (e.toFun (e.invFun y))
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => Y)))
+        (hright.map_zero_left y)
+    map_one_left := by
+      rintro ⟨i, y⟩
+      change (Sigma.mk i (hright (1, y)) : Sigma (fun _ : Fin r => Y)) = Sigma.mk i y
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => Y)))
+        (hright.map_one_left y) }
+  let E : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, X) (Σ _ : Fin r, Y) :=
+    ⟨F, G, ⟨Hleft⟩, ⟨Hright⟩⟩
+  refine ⟨E, ?_⟩
+  intro i y
+  rfl
+
+/-- Punctured disks retract radially onto the radius-`1/2` circles. -/
 theorem t99A01_attach_overlap_aux_pball (r : ℕ) :
     ∃ e : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, ↥t99A01_pball) (Σ _ : Fin r, Circle),
       ∀ (i : Fin r) (w : Circle),
         (e.invFun ⟨i, w⟩).1 = i ∧ ((e.invFun ⟨i, w⟩).2 : ℂ) = (w : ℂ) / 2 := by
-  sorry
-
+  obtain ⟨e, he⟩ := t99A01_pball_circle
+  obtain ⟨E, hE⟩ := t99A01_sigma_hequiv r e
+  exact ⟨E, fun i w => by rw [hE]; exact ⟨rfl, he w⟩⟩
 theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : ContinuousMap.HomotopyEquiv
         ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
@@ -811,19 +1183,102 @@ theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
   change (c.symm (e2.invFun ⟨i, w⟩)).1 = _
   rw [hp, hc _ _ hpos hlt]
   rfl
-/-- **Leaf (finite additivity, 40--100 lines).** Integral singular homology of a
-finite disjoint union is the biproduct, via the summand inclusions.  Check
-`ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean` first (simplices
-of a sigma type land in one summand: `IsPreconnected` of the simplex). -/
+instance t99A01_chainComplex_hasFiniteBiproducts :
+    Limits.HasFiniteBiproducts (ChainComplex (ModuleCat.{0} ℤ) ℕ) :=
+  Limits.HasFiniteBiproducts.of_hasFiniteProducts
+
+/-- **Leaf (simplices of a disjoint union, 40--90 lines).** Every singular simplex of
+`Σ j, Y j` lies in exactly one summand: the topological simplex is connected
+(`isPreconnected_univ`, `Sigma` components: `continuous_sigma_iff`,
+`IsPreconnected.subset_...`/`Sigma.isConnected_iff`). -/
+theorem t99A01_sigma_simplices {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
+    (n : ℕ) :
+    Function.Bijective (fun p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj
+        (Opposite.op (SimplexCategory.mk n)) ↦
+      (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+        C(Y p.1, Σ j, Y j)))).app (Opposite.op (SimplexCategory.mk n)) p.2) := by
+  let N := Opposite.op (SimplexCategory.mk n)
+  let E (X : Type) [TopologicalSpace X] :=
+    TopCat.toSSetObjEquiv (TopCat.of X) N
+  let F := fun p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj N ↦
+    (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+      C(Y p.1, Σ j, Y j)))).app N p.2
+  have hF (p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj N) :
+      E (Σ j, Y j) (F p) =
+        (⟨Sigma.mk p.1 ∘ (E (Y p.1) p.2),
+          continuous_sigmaMk.comp (E (Y p.1) p.2).continuous⟩ :
+          C(_, Σ j, Y j)) := by
+    rfl
+  change Function.Bijective F
+  constructor
+  · rintro ⟨i, a⟩ ⟨j, b⟩ hab
+    have hc := congrArg (E (Σ j, Y j)) hab
+    rw [hF, hF] at hc
+    have hij : i = j := by
+      have hp := congrArg (fun f => (f (Classical.arbitrary _)).1) hc
+      simpa using hp
+    subst j
+    congr 1
+    apply (E (Y i)).injective
+    apply ContinuousMap.ext
+    intro x
+    have hp := congrArg (fun f => f x) hc
+    change Sigma.mk i ((E (Y i) a) x) = Sigma.mk i ((E (Y i) b) x) at hp
+    exact eq_of_heq (Sigma.mk.inj_iff.mp hp).2
+  · intro q
+    let f := E (Σ j, Y j) q
+    obtain ⟨i, g, hg, hfg⟩ := f.continuous.exists_lift_sigma
+    let a := (E (Y i)).symm ⟨g, hg⟩
+    refine ⟨⟨i, a⟩, ?_⟩
+    apply (E (Σ j, Y j)).injective
+    rw [hF]
+    apply ContinuousMap.ext
+    intro x
+    change Sigma.mk i (g x) = f x
+    exact (congrFun hfg x).symm
+
+/-- **Leaf (chains of a disjoint union, 60--120 lines).** Given the simplex
+bijection, the singular chain complex of `Σ j, Y j` is the biproduct of the summands'
+chain complexes.  Degreewise: free module on a sigma type is the biproduct of free
+modules (`ConstructionTargets.CoefficientSigmaConstFinsuppComparison.sigmaConstFinsuppIso`,
+`ModuleCat` free/`Finsupp`); a chain map that is degreewise iso is iso
+(`HomologicalComplex.Hom.isIso_of_components`). -/
+theorem t99A01_sigma_chains {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
+    (hsimp : ∀ n : ℕ, Function.Bijective (fun p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj
+        (Opposite.op (SimplexCategory.mk n)) ↦
+      (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+        C(Y p.1, Σ j, Y j)))).app (Opposite.op (SimplexCategory.mk n)) p.2)) :
+    IsIso (Limits.biproduct.desc fun i : Fin r ↦
+      ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+        (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) := by
+  sorry
+
+/-- **Leaf (homology is additive, 20--60 lines).** Pure category theory: the
+homology functor is additive, so preserves finite biproducts
+(`Functor.mapBiproduct`, `HomologicalComplex.homologyFunctor`, `Functor.Additive`). -/
+theorem t99A01_homology_biproduct {r : ℕ} (Cs : Fin r → ChainComplex (ModuleCat ℤ) ℕ)
+    (D : ChainComplex (ModuleCat ℤ) ℕ) (f : ∀ i, Cs i ⟶ D)
+    (hf : IsIso (Limits.biproduct.desc f)) (k : ℕ) :
+    IsIso (Limits.biproduct.desc fun i ↦ HomologicalComplex.homologyMap (f i) k) := by
+  let F := HomologicalComplex.homologyFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) k
+  letI : IsIso (Limits.biproduct.desc f) := hf
+  haveI : IsIso (F.map (Limits.biproduct.desc f)) := inferInstance
+  haveI : IsIso (F.mapBiproduct Cs).inv := inferInstance
+  have hcomp : IsIso ((F.mapBiproduct Cs).inv ≫
+      F.map (Limits.biproduct.desc f)) := IsIso.comp_isIso
+  change IsIso (Limits.biproduct.desc fun i => F.map (f i))
+  rw [← Limits.biproduct.mapBiproduct_inv_map_desc F Cs f]
+  exact hcomp
+
 theorem t99A01_sigma_homology {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
     (k : ℕ) :
     IsIso (Limits.biproduct.desc fun i : Fin r ↦
-      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
-        (ModuleCat.of ℤ ℤ)).map
-          (TopCat.ofHom (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) :
-        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)) := by
-  sorry
-
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)) :=
+  t99A01_homology_biproduct _ _ _
+    (t99A01_sigma_chains Y (t99A01_sigma_simplices Y)) k
 /-- **LIBRARY leaf (circle winding, 60--120 lines).** The oriented `H₁`
 coordinate of all attaching maps is the displayed positive degree row. -/
 theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
@@ -834,7 +1289,49 @@ theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
             (ModuleCat.of ℤ ℤ)).map
               (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e.hom =
           ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)) := by
-  sorry
+  open ConstructionTargets.IntegralSingularHomologyComparison in
+    let e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ :=
+      singularHomologyModuleIsoOfGroupIso (TopCat.of Circle) 1
+        (ModuleCat.of ℤ ℤ)
+        ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt
+    refine ⟨e, ?_⟩
+    intro i
+    apply forgetIntModules.map_injective
+    rw [Functor.map_comp, Functor.map_comp]
+    have he_hom : forgetIntModules.map e.hom =
+        (singularHomologyComparison (TopCat.of Circle) 1).hom ≫
+          ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.hom := by
+      dsimp [e, singularHomologyModuleIsoOfGroupIso,
+        moduleIsoOfUnderlyingIso]
+      exact forgetIntModules.map_preimage _
+    have he_inv : forgetIntModules.map e.inv =
+        ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.inv ≫
+          (singularHomologyComparison (TopCat.of Circle) 1).inv := by
+      apply (cancel_mono (forgetIntModules.map e.hom)).1
+      rw [← Functor.map_comp, e.inv_hom_id]
+      rw [he_hom]
+      rw [Category.assoc, Iso.inv_hom_id_assoc, Iso.inv_hom_id]
+      exact forgetIntModules.map_id _
+    rw [he_inv, he_hom]
+    have hpower : APMT99A01.circlePower (degree i) =
+        ConstructionTargets.T97A04Closure.circleZPow (degree i : ℤ) := by
+      ext z
+      exact (zpow_natCast (z : ℂ) (degree i)).symm
+    rw [hpower]
+    simp only [Category.assoc]
+    rw [← Category.assoc _
+          (singularHomologyComparison (TopCat.of Circle) 1).hom,
+      singularHomologyComparison_naturality, Category.assoc,
+      Iso.inv_hom_id_assoc]
+    change
+      ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.inv ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              (ConstructionTargets.T97A04Closure.circleZPow (degree i : ℤ))) 1 ≫
+          ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.hom = _
+    rw [ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate]
+    ext x
+    simp [APMT99A01.intTimesNat, smul_eq_mul]
 
 /-- **Leaf (integral open-cover Mayer–Vietoris).** The ℤ version of
 `RP3Homology.rationalMayerVietoris` (`ConstructionTargets/CP2RationalHomology.lean`).
@@ -874,9 +1371,9 @@ theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
       ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w)
     (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
       IsIso (Limits.biproduct.desc fun i : Fin r ↦
-        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
-          (ModuleCat.of ℤ ℤ)).map
-            (TopCat.ofHom (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) :
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+            (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
           (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
     (hwinding : ∃ e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ,
       ∀ i : Fin r, e.inv ≫
