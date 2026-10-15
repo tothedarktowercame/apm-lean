@@ -119113,6 +119113,16 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792032751203-13074-9029f3af",
+     :commands
+     ["git show/diff-tree def09043"
+      "archive def09043; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit def09043 changes only t00J02Closure.lean and adds compiled, sorry-free progress. An eventual left inverse defines a neighborhood on which F is injective: applying g to F(x)=F(y) and the two local identities gives x=y. The chart theorem correctly extracts that left-inverse germ from the prior smooth two-sided inverse; no target-neighborhood or right-inverse hypothesis is falsely used. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Transporting injectivity to the manifold, Sard, calculations, and Main remain listed."},
     :commit "def09043f2a636ce01451704125b833618c51c7f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119121,7 +119131,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119139,7 +119149,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart local inverse.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart injectivity.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119319,7 +119329,10 @@
      :reason "Banked chart derivative."}
     {:job 3,
      :commit "e451d9d480ec49c82fff9e39f0c346b15c9f3532",
-     :reason "Banked chart local inverse."}]}
+     :reason "Banked chart local inverse."}
+    {:job 4,
+     :commit "def09043f2a636ce01451704125b833618c51c7f",
+     :reason "Banked chart injectivity."}]}
   {:consumer :t98A06,
    :stop-count 6,
    :evidence
@@ -121021,7 +121034,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_injOn_of_eventually_leftInverse",
@@ -121031,14 +121044,16 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "local left inverse gives neighborhood injectivity",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "def09043f2a636ce01451704125b833618c51c7f"},
    :id :lemma-exists-nhds-injon-of-eventually-leftinverse,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_nhds_injOn_writtenInExtChartAt",
@@ -121048,7 +121063,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "chart expression locally injective",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "def09043f2a636ce01451704125b833618c51c7f"},
    :id :lemma-exists-nhds-injon-writteninextchartat,
    :kind :lemma,
    :depends-on [:lemma-exists-smoothlocalinverse-writteninextchartat],
