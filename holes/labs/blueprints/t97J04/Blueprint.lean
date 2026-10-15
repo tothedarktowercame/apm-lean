@@ -2661,7 +2661,37 @@ lemma cLoop_H1_injective
       LinearMap.ker (Hmap (cellIncl word) 1).hom = LinearMap.range (Hmap word 1).hom)
     (hB7 : Hmap word 1 = 0) :
     Function.Injective (Hmap cLoop 1).hom := by
-  sorry
+  have hincl : Function.Injective (Hmap (cellIncl word) 1).hom := by
+    apply LinearMap.ker_eq_bot.mp
+    rw [hA8.2, hB7]
+    exact LinearMap.range_zero
+  have hleg : Function.Injective
+      (PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom := by
+    intro x y hxy
+    have h := congrArg
+      (PolygonSurfaceHomology.finiteWedgeCollapseH1 cOrbit).hom hxy
+    have hid := PolygonSurfaceHomology.finiteWedgeLegH1_collapse_self cOrbit
+    have hidx := LinearMap.congr_fun (congrArg ModuleCat.Hom.hom hid) x
+    have hidy := LinearMap.congr_fun (congrArg ModuleCat.Hom.hom hid) y
+    change (PolygonSurfaceHomology.finiteWedgeCollapseH1 cOrbit).hom
+        ((PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom x) = x at hidx
+    change (PolygonSurfaceHomology.finiteWedgeCollapseH1 cOrbit).hom
+        ((PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom y) = y at hidy
+    exact hidx.symm.trans (h.trans hidy)
+  have hc : Hmap cLoop 1 =
+      PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit ≫
+        Hmap (cellIncl word) 1 := by
+    unfold Hmap PolygonSurfaceHomology.finiteWedgeLegH1
+    rw [← CategoryTheory.Functor.map_comp]
+    congr 1
+  intro x y hxy
+  rw [hc] at hxy
+  change (Hmap (cellIncl word) 1).hom
+      ((PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom x) =
+    (Hmap (cellIncl word) 1).hom
+      ((PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom y) at hxy
+  apply hleg
+  exact hincl hxy
 
 /-- B9. `H₁(Xc) ≅ ℤ³`: `H₁(Xc) ≅ H₁(Sigma)/range c_*` (A8 for `cLoop`),
 `H₁(Sigma) ≅ H₁(W)` (A8 for `word`, B7), and `H₁(W) ≅ (PairingOrbit → ℤ)` by the
