@@ -88375,6 +88375,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check bea938fa3", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792096568218-14621-f9ce4dda",
+     :commands
+     ["git show/diff/check bea938fa3"
+      "sha256sum + placeholder recount from bea938fa3"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit bea938fa3 adds compiled, sorry-free progress beyond history 9e83a8d04. The recurrence is stated on the actual dependent Path.concat and quotient representation; Path.concat_succ has the required initial-fold then final-factor orientation, and mk_trans supplies exactly that quotient composition. Only t97A01Closure.lean changed; fixture SHA a909daaac4e8eb80ef30871b684708b840996f275d2da39e850ceedee4b0d9c2 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Fold reassociation, van Kampen, and assembly remain listed."},
     :commit "bea938fa3",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88395,7 @@
      "a909daaac4e8eb80ef30871b684708b840996f275d2da39e850ceedee4b0d9c2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exhaustive dependent successor alternatives.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient concat successor recurrence.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88633,7 +88645,10 @@
      :reason "Banked dependent cross-run successor."}
     {:job 2,
      :commit "9e83a8d04",
-     :reason "Banked exhaustive dependent successor alternatives."}]}
+     :reason "Banked exhaustive dependent successor alternatives."}
+    {:job 3,
+     :commit "bea938fa3",
+     :reason "Banked quotient concat successor recurrence."}]}
   {:consumer :t94J09,
    :stop-count 8,
    :evidence
@@ -96070,7 +96085,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_pathHomotopicQuotient_concat_succ",
@@ -96082,7 +96097,9 @@
     :type
     "nonempty dependent concat class equals initial-fold class composed with final-factor class",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "bea938fa3"},
    :id :lemma-torusrp2-pathhomotopicquotient-concat-succ,
    :kind :lemma,
    :depends-on [],
