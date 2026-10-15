@@ -1788,7 +1788,36 @@ lemma apm_t98a03_glue_connectedSpace {J A B : Type} [TopologicalSpace A]
     [TopologicalSpace B] [ConnectedSpace A] [Nonempty J] {σ : J → A} {τ : J → B}
     (hB : ∀ b : B, ∃ j : J, ∃ S : Set B, IsPreconnected S ∧ b ∈ S ∧ τ j ∈ S) :
     ConnectedSpace (apm_t98a03_Glue σ τ) := by
-  sorry
+  let fA : A → apm_t98a03_Glue σ τ :=
+    fun a => apm_t98a03_glueMk σ τ (.inl a)
+  let fB : B → apm_t98a03_Glue σ τ :=
+    fun b => apm_t98a03_glueMk σ τ (.inr b)
+  have hfA : Continuous fA :=
+    (apm_t98a03_glueMk_continuous σ τ).comp continuous_inl
+  have hfB : Continuous fB :=
+    (apm_t98a03_glueMk_continuous σ τ).comp continuous_inr
+  let j₀ : J := Classical.choice inferInstance
+  let x₀ : apm_t98a03_Glue σ τ := fA (σ j₀)
+  rw [connectedSpace_iff_univ]
+  refine ⟨⟨x₀, mem_univ x₀⟩, isPreconnected_of_forall x₀ ?_⟩
+  intro y hy
+  obtain ⟨z, rfl⟩ := apm_t98a03_glueMk_surjective σ τ y
+  cases z with
+  | inl a =>
+      refine ⟨Set.range fA, subset_univ _, ?_, ?_, isPreconnected_range hfA⟩
+      · exact ⟨σ j₀, rfl⟩
+      · exact ⟨a, rfl⟩
+  | inr b =>
+      obtain ⟨j, S, hS, hbS, hjS⟩ := hB b
+      let T : Set (apm_t98a03_Glue σ τ) := Set.range fA ∪ fB '' S
+      have hSA : IsPreconnected (Set.range fA) := isPreconnected_range hfA
+      have hSB : IsPreconnected (fB '' S) := hS.image fB hfB.continuousOn
+      have hmeet : (Set.range fA ∩ fB '' S).Nonempty := by
+        refine ⟨fA (σ j), ⟨⟨σ j, rfl⟩, τ j, hjS, ?_⟩⟩
+        exact (apm_t98a03_glueMk_glue σ τ j).symm
+      refine ⟨T, subset_univ _, ?_, ?_, hSA.union' hmeet hSB⟩
+      · exact Or.inl ⟨σ j₀, rfl⟩
+      · exact Or.inr ⟨b, hbS, rfl⟩
 
 /-- Seat (generic): compatible self-homeomorphisms of the pieces descend.
 
