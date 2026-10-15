@@ -150,6 +150,61 @@ theorem cp2_h0 : Nonempty (HQ 0 CP2 ≅ ModuleCat.of ℚ ℚ) := by
   exact ⟨CoefficientH0.h0Iso ℚ (coordinateLine ℂ 2 0)⟩
 
 /-- The dimension count. -/
+lemma cp2_homology_of_mv_aux_elem_zero {M : ModuleCat ℚ} (hM : IsZero M) (x : M) : x = 0 := by
+  have h := congrArg (fun f : M ⟶ M => f.hom x) (hM.eq_of_tgt (𝟙 M) 0)
+  simpa using h
+
+lemma cp2_homology_of_mv_aux_biprod_zero {M N : ModuleCat ℚ}
+    (hM : IsZero M) (hN : IsZero N) : IsZero (M ⊞ N) := by
+  let e := ModuleCat.biprodIsoProd M N
+  letI : Subsingleton ↑(M ⊞ N) := ⟨by
+    intro x y
+    have hi : e.hom.hom x = e.hom.hom y := by
+      ext
+      · exact (cp2_homology_of_mv_aux_elem_zero hM _).trans
+          (cp2_homology_of_mv_aux_elem_zero hM _).symm
+      · exact (cp2_homology_of_mv_aux_elem_zero hN _).trans
+          (cp2_homology_of_mv_aux_elem_zero hN _).symm
+    calc
+      x = e.inv.hom (e.hom.hom x) := by simp [e]
+      _ = e.inv.hom (e.hom.hom y) := congrArg e.inv.hom hi
+      _ = y := by simp [e]⟩
+  exact ModuleCat.isZero_of_subsingleton _
+
+lemma cp2_homology_of_mv_aux_exact_zero {A B C : ModuleCat ℚ}
+    (f : A ⟶ B) (g : B ⟶ C) (hA : IsZero A) (hC : IsZero C)
+    (hex : LinearMap.range f.hom = LinearMap.ker g.hom) : IsZero B := by
+  letI : Subsingleton B := ⟨by
+    intro x y
+    suffices hz : ∀ z : B, z = 0 by exact (hz x).trans (hz y).symm
+    intro z
+    have hgz : g.hom z = 0 := cp2_homology_of_mv_aux_elem_zero hC _
+    have hzker : z ∈ LinearMap.ker g.hom := hgz
+    rw [← hex] at hzker
+    obtain ⟨a, ha⟩ := hzker
+    rw [← ha, cp2_homology_of_mv_aux_elem_zero hA a, map_zero]⟩
+  exact ModuleCat.isZero_of_subsingleton _
+
+lemma cp2_homology_of_mv_aux_fst_bijective {M N : ModuleCat ℚ} (hN : IsZero N) :
+    Function.Bijective (biprod.fst : (M ⊞ N ⟶ M)).hom := by
+  constructor
+  · intro x y hxy
+    let e := ModuleCat.biprodIsoProd M N
+    have hi : e.hom.hom x = e.hom.hom y := by
+      ext
+      · simpa [e] using hxy
+      · exact (cp2_homology_of_mv_aux_elem_zero hN _).trans
+          (cp2_homology_of_mv_aux_elem_zero hN _).symm
+    calc
+      x = e.inv.hom (e.hom.hom x) := by simp [e]
+      _ = e.inv.hom (e.hom.hom y) := congrArg e.inv.hom hi
+      _ = y := by simp [e]
+  · intro x
+    refine ⟨(biprod.inl : M ⟶ M ⊞ N).hom x, ?_⟩
+    change (biprod.inl ≫ biprod.fst : M ⟶ M).hom x = x
+    rw [biprod.inl_fst]
+    rfl
+
 theorem cp2_homology_of_mv
     (δ : ∀ n, HQ (n + 1) CP2 ⟶ HQ n ↥(cpU ∩ cpV))
     (e1 : ∀ n, LinearMap.range (mvI cpU cpV n).hom = LinearMap.ker (mvJ cpU cpV n).hom)
@@ -164,7 +219,76 @@ theorem cp2_homology_of_mv
     (hinj : Function.Injective (mvI cpU cpV 0).hom) :
     Nonempty (HQ 2 CP2 ≅ ModuleCat.of ℚ ℚ) ∧ Nonempty (HQ 4 CP2 ≅ ModuleCat.of ℚ ℚ) ∧
       ∀ k, k ≠ 0 → k ≠ 2 → k ≠ 4 → IsZero (HQ k CP2) := by
-  sorry
+  rcases hU with ⟨hU0, hU2, hUz⟩
+  rcases hV with ⟨hV0, hVz⟩
+  rcases hUV with ⟨hUV0, hUV3, hUVz⟩
+  have hU3 := hUz 3 (by decide) (by decide)
+  have hV3 := hVz 3 (by decide)
+  have hU4 := hUz 4 (by decide) (by decide)
+  have hV4 := hVz 4 (by decide)
+  have hUV2 := hUVz 2 (by decide) (by decide)
+  have hUV1 := hUVz 1 (by decide) (by decide)
+  have hUV4 := hUVz 4 (by decide) (by decide)
+  have hJ4src := cp2_homology_of_mv_aux_biprod_zero hU4 hV4
+  have hI3tgt := cp2_homology_of_mv_aux_biprod_zero hU3 hV3
+  have hδ3inj : Function.Injective (δ 3).hom := by
+    rw [← LinearMap.ker_eq_bot, ← e2 3]
+    rw [LinearMap.range_eq_bot]
+    exact congrArg ModuleCat.Hom.hom (hJ4src.eq_of_src _ 0)
+  have hδ3surj : Function.Surjective (δ 3).hom := by
+    rw [← LinearMap.range_eq_top, e3 3, LinearMap.ker_eq_top]
+    exact congrArg ModuleCat.Hom.hom (hI3tgt.eq_of_tgt _ 0)
+  have h4 : Nonempty (HQ 4 CP2 ≅ ModuleCat.of ℚ ℚ) := by
+    rcases hUV3 with ⟨e⟩
+    exact ⟨(LinearEquiv.ofBijective (δ 3).hom ⟨hδ3inj, hδ3surj⟩).toModuleIso ≪≫ e⟩
+  have hU2V2 : IsZero (HQ 2 cpV) := hVz 2 (by decide)
+  have hI2src : IsZero (HQ 2 ↥(cpU ∩ cpV)) := hUV2
+  have hδ1tgt : IsZero (HQ 1 ↥(cpU ∩ cpV)) := hUV1
+  have hJ2inj : Function.Injective (mvJ cpU cpV 2).hom := by
+    rw [← LinearMap.ker_eq_bot, ← e1 2, LinearMap.range_eq_bot]
+    exact congrArg ModuleCat.Hom.hom (hI2src.eq_of_src _ 0)
+  have hJ2surj : Function.Surjective (mvJ cpU cpV 2).hom := by
+    rw [← LinearMap.range_eq_top, e2 1, LinearMap.ker_eq_top]
+    exact congrArg ModuleCat.Hom.hom (hδ1tgt.eq_of_tgt _ 0)
+  have h2 : Nonempty (HQ 2 CP2 ≅ ModuleCat.of ℚ ℚ) := by
+    rcases hU2 with ⟨e⟩
+    let ej := (LinearEquiv.ofBijective (mvJ cpU cpV 2).hom ⟨hJ2inj, hJ2surj⟩).toModuleIso
+    let ef := (LinearEquiv.ofBijective (biprod.fst :
+      (HQ 2 cpU ⊞ HQ 2 cpV ⟶ HQ 2 cpU)).hom
+        (cp2_homology_of_mv_aux_fst_bijective hU2V2)).toModuleIso
+    exact ⟨ej.symm ≪≫ ef ≪≫ e⟩
+  refine ⟨h2, h4, ?_⟩
+  intro k hk0 hk2 hk4
+  rcases k with _ | k
+  · exact (hk0 rfl).elim
+  rcases k with _ | k
+  · have hrange : LinearMap.range (δ 0).hom = ⊥ := by
+      rw [e3 0, LinearMap.ker_eq_bot]
+      exact hinj
+    have hδ0 : (δ 0).hom = 0 := LinearMap.range_eq_bot.mp hrange
+    have hδ0inj : Function.Injective (δ 0).hom := by
+      rw [← LinearMap.ker_eq_bot, ← e2 0, LinearMap.range_eq_bot]
+      have hs := cp2_homology_of_mv_aux_biprod_zero
+        (hUz 1 (by decide) (by decide)) (hVz 1 (by decide))
+      exact congrArg ModuleCat.Hom.hom (hs.eq_of_src _ 0)
+    letI : Subsingleton (HQ 1 CP2) := ⟨by
+      intro x y
+      apply hδ0inj
+      rw [hδ0]
+      simp⟩
+    exact ModuleCat.isZero_of_subsingleton _
+  · apply cp2_homology_of_mv_aux_exact_zero
+      (mvJ cpU cpV (k + 2)) (δ (k + 1))
+    · apply cp2_homology_of_mv_aux_biprod_zero
+      · apply hUz
+        · omega
+        · omega
+      · apply hVz
+        omega
+    · apply hUVz
+      · omega
+      · omega
+    · simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using e2 (k + 1)
 
 /-- The result for `ℂP²`. -/
 theorem cp2_rationalHomology :
