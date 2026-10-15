@@ -1603,7 +1603,81 @@ lemma chain_local_junction (n : ℤ) :
     ∃ V : Set (ℤ × S2), IsOpen V ∧ (n, north) ∈ V ∧ (n + 1, south) ∈ V ∧
       Saturated ChainRel V ∧
       ∀ g : DihedralGroup 0, (∃ v ∈ V, g • v ∈ V) → g = 1 := by
-  sorry
+  let V : Set (ℤ × S2) :=
+    ({n} ×ˢ cap north) ∪ ({n + 1} ×ˢ cap south)
+  have hopenN : IsOpen (cap north) := by
+    exact isOpen_lt continuous_const
+      ((continuous_subtype_val.inner continuous_const))
+  have hopenS : IsOpen (cap south) := by
+    exact isOpen_lt continuous_const
+      ((continuous_subtype_val.inner continuous_const))
+  have hcapNN : north ∈ cap north := by
+    simp [cap, north]
+  have hcapSS : south ∈ cap south := by
+    simp [cap, south]
+  have hnegN (x : S2) : -x ∈ cap north ↔ x ∈ cap south := by
+    simp only [cap, Set.mem_setOf_eq]
+    rw [← neg_north]
+    simp [inner_neg_left, inner_neg_right]
+  have hnegS (x : S2) : -x ∈ cap south ↔ x ∈ cap north := by
+    rw [← neg_north]
+    simp only [cap, Set.mem_setOf_eq]
+    simp [inner_neg_left, inner_neg_right]
+  have hdis (x : S2) : ¬(x ∈ cap north ∧ x ∈ cap south) := by
+    rintro ⟨hpos, hneg⟩
+    have heq : inner ℝ (x : E3) (south : E3) =
+        -inner ℝ (x : E3) (north : E3) := by
+      rw [← neg_north]
+      simp
+    rw [cap, Set.mem_setOf_eq, heq] at hneg
+    rw [cap, Set.mem_setOf_eq] at hpos
+    linarith
+  refine ⟨V, ?_, ?_, ?_, ?_, ?_⟩
+  · exact (isOpen_discrete {n}).prod hopenN |>.union
+      ((isOpen_discrete {n + 1}).prod hopenS)
+  · exact Or.inl ⟨by simp, hcapNN⟩
+  · exact Or.inr ⟨by simp, hcapSS⟩
+  · intro z w h
+    cases h with
+    | link k =>
+      change ((k, north) ∈ V ↔ (k + 1, south) ∈ V)
+      simp only [V, Set.mem_union, Set.mem_prod, Set.mem_singleton_iff]
+      constructor
+      · rintro (⟨rfl, -⟩ | ⟨hk, hbad⟩)
+        · exact Or.inr ⟨rfl, hcapSS⟩
+        · exact (hdis north ⟨hcapNN, hbad⟩).elim
+      · rintro (⟨hk, hbad⟩ | ⟨hk, -⟩)
+        · exact (hdis south ⟨hbad, hcapSS⟩).elim
+        · have : k = n := by omega
+          exact Or.inl ⟨this, hcapNN⟩
+  · intro g hg
+    obtain ⟨⟨k, x⟩, hv, hgv⟩ := hg
+    change ((k, x) ∈ V) at hv
+    cases g with
+    | r i =>
+      rw [chainSMul_r] at hgv
+      change ((k + 2 * zOf i, x) ∈ V) at hgv
+      simp only [V, Set.mem_union, Set.mem_prod, Set.mem_singleton_iff] at hv hgv
+      rcases hv with ⟨rfl, hx⟩ | ⟨rfl, hx⟩ <;>
+        rcases hgv with ⟨heq, hy⟩ | ⟨heq, hy⟩
+      · have hi : zOf i = 0 := by omega
+        congr 1
+      · exact (hdis x ⟨hx, hy⟩).elim
+      · exact (hdis x ⟨hy, hx⟩).elim
+      · have hi : zOf i = 0 := by omega
+        congr 1
+    | sr i =>
+      rw [chainSMul_sr] at hgv
+      change ((-2 * zOf i - k, -x) ∈ V) at hgv
+      simp only [V, Set.mem_union, Set.mem_prod, Set.mem_singleton_iff] at hv hgv
+      rcases hv with ⟨rfl, hx⟩ | ⟨rfl, hx⟩ <;>
+        rcases hgv with ⟨heq, hy⟩ | ⟨heq, hy⟩
+      · exact (hdis x ⟨hx, (hnegN x).mp hy⟩).elim
+      · have : False := by omega
+        contradiction
+      · have : False := by omega
+        contradiction
+      · exact (hdis x ⟨(hnegS x).mp hy, hx⟩).elim
 -- END SEAT AREA
 
 /-- **Leaf.**  Disjoint-translate neighbourhood of a non-pole point:
