@@ -1,6 +1,7 @@
 import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.DiskBoundedPreimageDuality
+import ConstructionTargets.SardGenuineSmoothManifoldVector
 
 /-!
 # Local fundamental-class coordinates for t00J02
@@ -13,7 +14,7 @@ the integer coefficient records that later signed choice explicitly.
 
 open CategoryTheory
 open Filter
-open scoped Manifold Topology
+open scoped Manifold Topology ContDiff
 noncomputable section
 set_option autoImplicit false
 
@@ -287,6 +288,27 @@ theorem exists_regularValue_of_criticalValues_measure_zero
   refine ⟨y, fun x hx ↦ ?_⟩
   by_contra hcritical
   exact hy ⟨x, hcritical, hx⟩
+
+/-- Sard nullity for a smooth map from a second-countable manifold to a
+finite-dimensional real vector space produces a value regular at every point
+of its fiber. -/
+theorem exists_mfderiv_surjective_fiber_manifold_to_vector
+    {E F M : Type}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    [MeasurableSpace F] [BorelSpace F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ M]
+    [SecondCountableTopology M]
+    (mu : MeasureTheory.Measure F) [mu.IsAddHaarMeasure] (f : M → F)
+    (hf : ContMDiff (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) ∞ f) :
+    ∃ y, ∀ x, f x = y → Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) f x) := by
+  apply exists_regularValue_of_criticalValues_measure_zero f
+    (fun x ↦ Function.Surjective
+      (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ F) f x)) mu
+  exact T93A04ManifoldWork.null_critical mu f hf
 
 /-- One chosen component lift through a point of the inverse image, including
 the zero circle-degree conclusion supplied by disk boundedness. -/
@@ -1445,6 +1467,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.surjective_of_range_sup_eq_top_of_range_le
 #print axioms ConstructionTargets.T00J02Closure.transverse_mfderiv_surjective_of_circleDirection_lifts
 #print axioms ConstructionTargets.T00J02Closure.exists_regularValue_of_criticalValues_measure_zero
+#print axioms ConstructionTargets.T00J02Closure.exists_mfderiv_surjective_fiber_manifold_to_vector
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
