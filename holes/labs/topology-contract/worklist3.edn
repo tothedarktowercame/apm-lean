@@ -36166,6 +36166,17 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792031078786-13043-22b15b2d",
+     :commands
+     ["git show --check/diff-tree 8c4eb4f; exact scope"
+      "sha256sum fixture; committed source audit"
+      "statement-registry check"
+      "recorded-source snapshot lake env lean"],
+     :finding
+     "PASS: 8c4eb4f is compiled, sorry-free standard-axiom progress after 263f5d47. It adds Fin(runs+1)-indexed outer-subtype boundary representatives and proves their coercions equal the matching ambient canonical boundaries, correctly oriented for run-fold assembly. Exact two-file scope and fixture hash match; registry 166/166; frozen Main placeholder remains 1->1; remaining milestones are listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36174,7 +36185,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36203,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Fresh check: .lake/packages remains a real directory, not the authority symlink; workspace policy forbids Lake work.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Authority invariant still fails: .lake/packages is a directory, not the canonical symlink; Lake work is forbidden pending lifecycle repair.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36650,7 +36661,11 @@
     {:job 6,
      :commit nil,
      :reason
-     "Fresh check: .lake/packages remains a real directory, not the authority symlink; workspace policy forbids Lake work."}]}
+     "Fresh check: .lake/packages remains a real directory, not the authority symlink; workspace policy forbids Lake work."}
+    {:job 7,
+     :commit nil,
+     :reason
+     "Authority invariant still fails: .lake/packages is a directory, not the canonical symlink; Lake work is forbidden pending lifecycle repair."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
