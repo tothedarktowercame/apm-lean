@@ -2130,6 +2130,22 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv
   apply Fin.ext
   rfl
 
+/-- The preceding factor identification holds simultaneously over the whole
+dependent run/offset family.  This is the extensional input for transporting
+the nested run concatenation to the original subdivision concatenation. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    (fun (z : Σ i : Fin (boolSideRunPartition S.side).length,
+        Fin (pathTwoOpenSubdivisionRunFamily S i).length) t =>
+      pathTwoOpenSubdivisionRunPrefixBlockPiece S z.1
+        (Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S z.1).symm z.2) t) =
+      fun z t => S.piece (torusRP2_subdivisionRunOffsetEquiv S z) t := by
+  funext z t
+  exact torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv S z t
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2230,6 +2246,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv
 #print axioms torusRP2_subdivisionRunOffsetEquiv_apply
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
