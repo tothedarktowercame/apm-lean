@@ -3316,7 +3316,7 @@ by saturation (`(treeStar_open_saturated h).2`, through `Quotient.exact` and
 lemma treeStar_inter_aux_image_inter (g h : G) :
     qmk TreeRel '' treeStar g ∩ qmk TreeRel '' treeStar h =
       qmk TreeRel '' (treeStar g ∩ treeStar h) := by
-  sorry
+  exact (treeStar_open_saturated g).2.image_inter
 -- END SEAT AREA
 
 /-- Leaf (split).  Label bookkeeping on raw points: an edge point `(k, t)` in
