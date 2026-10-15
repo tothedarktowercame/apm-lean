@@ -10239,7 +10239,139 @@ theorem cut_retransfer_consistency_B_arc_aux_tu {Label : Type*} [DecidableEq Lab
     (hq : e₀ ≠ u.length + 1 + v.length) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hL : 2 ≤ L := by simp [L]; omega
+  have hpq : p < q := by simp [p, q]; omega
+  have hqL : q < L := by simp [q, L]; omega
+  have he₀' : ((q + 1 ≤ e₀ ∧ e₀ < L) ∨ e₀ < p) := by
+    rcases he₀ with he₀ | he₀
+    · left
+      constructor
+      · omega
+      · exact he₀.2
+    · exact Or.inr he₀
+  have hNedge : edgePoint L e τ = edgePoint L e₀ s₀ := by
+    apply Subtype.ext
+    exact hN.trans (D.newB_tu e₀ s₀ he₀')
+  have hPedge : (P : ℂ) = (edgePoint L e₀ s₀ : ℂ) :=
+    hP.trans (D.oldB_arc e₀ s₀ (by
+      rcases he₀' with h | h
+      · exact Or.inl ⟨by omega, h.2⟩
+      · exact Or.inr h))
+  rcases heq hL he (by rcases he₀' with h | h <;> omega) hNedge with
+      hsame | hnext | hprev
+  · rcases hsame with ⟨rfl, rfl⟩
+    refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    apply hPedge.trans
+    change (edgePoint L e τ : ℂ) = cutRetransfer L p q e τ
+    have hnep : e ≠ p := by rcases he₀' with h | h <;> omega
+    have hnep1 : e ≠ p + 1 := by rcases he₀' with h | h <;> omega
+    have hmid : ¬ (p + 1 < e ∧ e ≤ q) := by
+      rcases he₀' with h | h <;> omega
+    simp [cutRetransfer, hnep, hnep1, hmid]
+  · rcases hnext with ⟨hτ, hs₀, hadj⟩
+    have hadj' : e₀ = e + 1 ∨ (e₀ = 0 ∧ e + 1 = L) := by
+      by_cases hlt : e + 1 < L
+      · left
+        rw [Nat.mod_eq_of_lt hlt] at hadj
+        exact hadj
+      · right
+        have heqL : e + 1 = L := by omega
+        rw [heqL, Nat.mod_self] at hadj
+        exact ⟨hadj, heqL⟩
+    by_cases hend : e = q
+    · subst e
+      have hs₀' : s₀ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+        Subtype.ext hs₀
+      subst s₀
+      have hτ' : τ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+        Subtype.ext hτ
+      subst τ
+      let S : Disk := edgePoint L p (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+      refine ⟨S, ?_, ?_⟩
+      · change (S : ℂ) = cutRetransfer L p q q (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hS : (S : ℂ) = cutPoint L (p + 1) := edgePoint_one_eq_cutPoint L p
+        rw [hS]
+        unfold cutRetransfer
+        by_cases hv : v = []
+        · have hqp : q = p + 1 := by simp [q, p, hv]
+          rw [if_pos (Or.inr hqp)]
+          simp only [cutChordB]
+          rw [hqp]
+          push_cast
+          ring
+        · have hvpos : 0 < v.length := List.length_pos_of_ne_nil hv
+          rw [if_neg (by omega), if_pos ⟨by omega, le_rfl⟩]
+          have hr : reverseParameter (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+              ⟨0, by simp⟩ := Subtype.ext (by simp [reverseParameter])
+          rw [hr, edgePoint_zero_eq_cutPoint]
+          congr 1
+          omega
+      · have hx := cut_retransfer_consistency_A_arc_aux_x u v t x
+          (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hPS : P = edgePoint L e₀
+            (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+          Subtype.ext hPedge
+        rw [hPS]
+        have hedge : edgePoint L e₀
+            (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+            edgePoint L q (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+          hNedge.symm
+        rw [hedge]
+        simpa [S, L, p, q, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using hx
+    · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      apply hPedge.trans
+      change (edgePoint L e₀ s₀ : ℂ) = cutRetransfer L p q e τ
+      have hnep : e ≠ p := by
+        rcases he₀' with h | h <;> rcases hadj' with h' | h' <;> omega
+      have hnep1 : e ≠ p + 1 := by
+        rcases he₀' with h | h <;> rcases hadj' with h' | h' <;> omega
+      have hmid : ¬ (p + 1 < e ∧ e ≤ q) := by
+        rcases he₀' with h | h <;> rcases hadj' with h' | h' <;> omega
+      rw [show cutRetransfer L p q e τ = (edgePoint L e τ : ℂ) by
+        simp [cutRetransfer, hnep, hnep1, hmid]]
+      exact congrArg Subtype.val hNedge.symm
+  · rcases hprev with ⟨hs₀, hτ, hadj⟩
+    have hs₀' : s₀ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+      Subtype.ext hs₀
+    subst s₀
+    have hτ' : τ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+      Subtype.ext hτ
+    subst τ
+    have hadj' : e = e₀ + 1 ∨ (e = 0 ∧ e₀ + 1 = L) := by
+      by_cases hlt : e₀ + 1 < L
+      · left
+        rw [Nat.mod_eq_of_lt hlt] at hadj
+        exact hadj
+      · right
+        have heqL : e₀ + 1 = L := by
+          rcases he₀' with h | h <;> omega
+        rw [heqL, Nat.mod_self] at hadj
+        exact ⟨hadj, heqL⟩
+    refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    apply hPedge.trans
+    change (edgePoint L e₀
+      (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+        cutRetransfer L p q e
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+    by_cases hep : e = p
+    · rw [show cutRetransfer L p q e
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+          (edgePoint L e (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) by
+          simp [cutRetransfer, hep, cutChordB, cutPoint, cutAlpha] <;>
+            congr 1 <;> norm_num <;> ring]
+      exact congrArg Subtype.val hNedge.symm
+    · have hnep1 : e ≠ p + 1 := by
+        rcases he₀' with h | h <;> rcases hadj' with h' | h' <;> omega
+      have hmid : ¬ (p + 1 < e ∧ e ≤ q) := by
+        rcases he₀' with h | h <;> rcases hadj' with h' | h' <;> omega
+      rw [show cutRetransfer L p q e
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+          (edgePoint L e (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) by
+        simp [cutRetransfer, hep, hnep1, hmid]]
+      exact congrArg Subtype.val hNedge.symm
 
 /-- Piece `B`, side position `(e₀, s₀)`, `q ≤ e₀ < L` or `e₀ < p`. -/
 theorem cut_retransfer_consistency_B_arc {Label : Type*} [DecidableEq Label]
