@@ -2285,6 +2285,25 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
   rw [hp] at h
   omega
 
+/-- Consecutive inverse run/offset coordinates cannot move backward to an
+earlier run. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_run_le_succ
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1.val ≤
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1.val := by
+  apply torusRP2_subdivisionRunOffset_run_le_of_coord_lt S
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).2
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).2
+  rw [torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j.castSucc,
+    torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j.succ]
+  exact Fin.castSucc_lt_succ
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2393,6 +2412,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_strictMono
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_le_succ
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
