@@ -1567,6 +1567,24 @@ theorem polygonBoundarySignedEdgePath_mk (P : PairingData)
       FundamentalGroup.map_apply,
       ← Path.Homotopic.Quotient.mk_map]
 
+/-- A packaged signed edge, transported from its leg endpoint to the common
+polygon-word basepoint. -/
+noncomputable def polygonBoundarySignedEdgePathAtBase (P : PairingData)
+    (i : Fin P.edgeCount) : Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  (polygonBoundarySignedEdgePath P i).cast
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i))
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i))
+
+/-- Endpoint transport changes only the dependent path endpoints, not the
+pointwise signed-edge parametrization. -/
+theorem polygonBoundarySignedEdgePathAtBase_apply (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundarySignedEdgePathAtBase P i t =
+      polygonBoundarySignedEdgePath P i t := by
+  exact congrFun (Path.cast_coe _ _ _) t
+
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
 theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
