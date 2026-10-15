@@ -7529,6 +7529,55 @@ theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
     (cut_retransfer_generator u v t x hx i₀ j₀ hij τ hlab S S' hS hS')
     (Relation.EqvGen.symm _ _ hPS'))
 
+lemma cut_forward_fibre_aux_x {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1) s)
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length u.length s) := by
+  rw [cutAndPaste_aux_length u v t x]
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length + 1, by simp [inverseWord]⟩
+  let j : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length, by simp [inverseWord]⟩
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp [i, j] at this
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+
+/-- Every unit-circle point is a boundary point of some side. -/
+theorem cutEdgePoint_surj {L : ℕ} (hL : 0 < L) {z : ℂ} (hz : ‖z‖ = 1) :
+    ∃ e, e < L ∧ ∃ s : Icc (0 : ℝ) 1, (edgePoint L e s : ℂ) = z := by
+  sorry
+
+/-- Forward fibre, off the circle: a common non-unit point of the old pieces is an
+interior chord point, at parameters `s` (in `A`) and `1 - s` (in `B`); its new images lie
+on the two new `x` sides at the same parameter (`cut_forward_fibre_aux_x`). -/
+theorem cut_forward_fibre_aux_chord {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (N N' : Disk) (h : oldA y = oldB y') (hne : ‖oldA y‖ ≠ 1)
+    (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
+  sorry
+
+/-- Reverse fibre, off the circle: a common non-unit point of the new pieces is an
+interior seam point, coming from the old `x` sides `p` and `q` at the same parameter. -/
+theorem cut_reverse_fibre_aux_seam {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (P P' : Disk) (h : newA y = newB y') (hne : ‖newA y‖ ≠ 1)
+    (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
+  sorry
+
 /-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
 theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -7538,7 +7587,17 @@ theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
     (y y' : Circle) (N N' : Disk) (h : oldA y = oldB y')
     (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
-  sorry
+  by_cases hu : ‖oldA y‖ = 1
+  · obtain ⟨e, he, τ, hτ⟩ := cutEdgePoint_surj
+      (L := (u ++ [x] ++ v ++ [x] ++ t).length) (by simp) hu
+    obtain ⟨T, hT, hNT⟩ := cut_transfer_consistency u v t x oldA oldB newA newB D
+      (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) false y e he τ N (by simpa using hτ) (by simpa using hN)
+    obtain ⟨T', hT', hNT'⟩ := cut_transfer_consistency u v t x oldA oldB newA newB D
+      (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) true y' e he τ N' (by simpa [h] using hτ) (by simpa using hN')
+    have hTT : T = T' := Subtype.ext (hT.trans hT'.symm)
+    subst hTT
+    exact Relation.EqvGen.trans _ _ _ hNT (Relation.EqvGen.symm _ _ hNT')
+  · exact cut_forward_fibre_aux_chord u v t x oldA oldB newA newB D y y' N N' h hu hN hN'
 
 /-- A point on both new pieces (the seam, or `P'`, `Q'`) has related old images. -/
 theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
@@ -7549,7 +7608,17 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
     (y y' : Circle) (P P' : Disk) (h : newA y = newB y')
     (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
-  sorry
+  by_cases hu : ‖newA y‖ = 1
+  · obtain ⟨e, he, τ, hτ⟩ := cutEdgePoint_surj
+      (L := (u ++ [x] ++ v ++ [x] ++ t).length) (by simp) hu
+    obtain ⟨S, hS, hPS⟩ := cut_retransfer_consistency u v t x oldA oldB newA newB D
+      (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) false y e he τ P (by simpa using hτ) (by simpa using hP)
+    obtain ⟨S', hS', hPS'⟩ := cut_retransfer_consistency u v t x oldA oldB newA newB D
+      (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) true y' e he τ P' (by simpa [h] using hτ) (by simpa using hP')
+    have hSS : S = S' := Subtype.ext (hS.trans hS'.symm)
+    subst hSS
+    exact Relation.EqvGen.trans _ _ _ hPS (Relation.EqvGen.symm _ _ hPS')
+  · exact cut_reverse_fibre_aux_seam u v t x oldA oldB newA newB D y y' P P' h hu hP hP'
 
 /-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
 `1` = `B`).  A boundary value of a chart comes from the parameter circle, because
