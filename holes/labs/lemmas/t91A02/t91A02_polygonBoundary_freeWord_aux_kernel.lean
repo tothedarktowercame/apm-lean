@@ -392,6 +392,39 @@ identifies the abelianization of π₁ with H₁ (Hurewicz utilities in
 `PolygonSurfaceHomology` / `GenusTwoSurfacePiOne`), so a class with zero
 Hurewicz image lies in the commutator subgroup, on which `f` vanishes. -/
 -- BEGIN SEAT AREA
+lemma t91A02_polygonBoundary_freeWord_aux_kernel_aux_word (P : PairingData)
+    (f : Additive (FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P)) →+ ℚ)
+    (w : FiniteWedgeLegWord P) :
+    f (Additive.ofMul (finiteWedgeLegWordGroup P w)) =
+      ∑ l, (finiteWedgeLegWordCoordinatesList P w l : ℚ) *
+        f (Additive.ofMul (finiteWedgeLegFundamentalClassAtBase P l)) := by
+  classical
+  induction w with
+  | nil => simp [finiteWedgeLegWordGroup, finiteWedgeLegWordCoordinatesList]
+  | cons q w ih =>
+      rw [show finiteWedgeLegWordGroup P (q :: w) =
+          finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2 *
+            finiteWedgeLegWordGroup P w by rfl]
+      rw [show finiteWedgeLegWordCoordinatesList P (q :: w) =
+          q.2 • orbitBasis P q.1 1 + finiteWedgeLegWordCoordinatesList P w by rfl]
+      change f (Additive.ofMul (finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2) +
+          Additive.ofMul (finiteWedgeLegWordGroup P w)) = _
+      rw [AddMonoidHom.map_add, ih]
+      simp only [Pi.add_apply, Int.cast_add, add_mul, Finset.sum_add_distrib]
+      congr 1
+      rw [show Additive.ofMul
+          (finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2) =
+            q.2 • Additive.ofMul
+              (finiteWedgeLegFundamentalClassAtBase P q.1) by rfl,
+        map_zsmul]
+      rw [Finset.sum_eq_single q.1]
+      · simp [orbitBasis]
+      · intro b _ hb
+        simp [orbitBasis, Pi.single_apply, hb]
+      · simp
+
 lemma t91A02_polygonBoundary_freeWord_aux_kernel (P : PairingData)
     (f : Additive (FundamentalGroup
       (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
@@ -401,7 +434,18 @@ lemma t91A02_polygonBoundary_freeWord_aux_kernel (P : PairingData)
       (orbitWedgeBase P))
     (hg : moduleHurewicz (orbitWedgeBase P) g = 0) :
     f (Additive.ofMul g) = 0 := by
-  sorry
+  obtain ⟨w, hw⟩ :=
+    finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective P
+      (finiteWedgeLegFreeGroupMap_surjective P) g
+  have hv : finiteWedgeLegWordCoordinatesList P w = 0 := by
+    have hinj := (ModuleCat.mono_iff_injective
+      (finiteWedgeH1CoordinateMap P)).mp inferInstance
+    apply hinj
+    rw [← finiteWedgeLegWord_hurewicz P w, hw, hg]
+    exact (map_zero (finiteWedgeH1CoordinateMap P).hom).symm
+  rw [← hw,
+    t91A02_polygonBoundary_freeWord_aux_kernel_aux_word P f w, hv]
+  simp
 -- END SEAT AREA
 
 /-- **Leaf T2 (generic).**  Free coordinates on the orbit wedge in which the
