@@ -88720,6 +88720,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check e7a1677a4", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792106182694-14811-b5dca373",
+     :commands
+     ["git show/diff/check e7a1677a4"
+      "sha256sum + placeholder recount from e7a1677a4"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit e7a1677a4 adds compiled, sorry-free progress beyond history 8f7c9b6b5. The assembler uses every comparison hypothesis: H0 directly, the actual surjective H1 map and exact kernel via the cokernel equivalence, H2 via the proved zero face kernel, and higher vanishing for k>=3. It does not fabricate the geometric bridge: those comparisons remain explicitly partial. Only t94J09Closure.lean changed; fixture SHA abb47f1346d5753b957fc10d8c19e9c97c5f5aa72ddf32a967a8a96e173c9b88 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Geometric comparisons, normalization, and assembly remain."},
     :commit "e7a1677a4",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88740,7 @@
      "abb47f1346d5753b957fc10d8c19e9c97c5f5aa72ddf32a967a8a96e173c9b88"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88758,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked face injectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homology assembly.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88785,7 +88797,10 @@
     {:job 9,
      :commit "4578e92d7",
      :reason "Banked literal frozen face cokernel Smith form."}
-    {:job 1, :commit "8f7c9b6b5", :reason "Banked face injectivity."}]}
+    {:job 1, :commit "8f7c9b6b5", :reason "Banked face injectivity."}
+    {:job 2,
+     :commit "e7a1677a4",
+     :reason "Banked homology assembly."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96386,7 +96401,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenPolygonHomology_of_comparisons",
@@ -96396,7 +96411,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "comparison data imply full homology",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e7a1677a4"},
    :id :lemma-frozenpolygonhomology-of-comparisons,
    :kind :lemma,
    :depends-on
