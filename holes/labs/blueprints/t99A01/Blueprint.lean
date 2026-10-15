@@ -876,6 +876,65 @@ lemma t99A01_piOne_attach_succ_cover {r : ℕ} (degree : Fin (r + 1) → ℕ) :
   exact ⟨hU, hV, hcover, hne, hUV, hUc, hVc, hVs⟩
 /-- **Leaf (last-disk radial retraction, 90--150 lines).**  The circle is
 fixed, and the inverse is the explicit `attachCastSucc` inclusion. -/
+lemma t99A01_piOne_attach_succ_retract_aux_circle_mem {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (z : Circle) :
+    (Quotient.mk _ (Sum.inl z) : APMT99A01.AttachSpace degree) ∈
+      APMT99A01.succCircleSide degree := by
+  intro h
+  have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+      (Sum.inr (Fin.last r,
+        (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk)))
+      (Sum.inl z) := Quotient.exact h.symm
+  have he := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+  cases he
+
+lemma t99A01_piOne_attach_succ_retract_aux_ne_zero {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (z : APMT99A01.Disk)
+    (h : (Quotient.mk _ (Sum.inr (Fin.last r, z)) :
+      APMT99A01.AttachSpace degree) ∈ APMT99A01.succCircleSide degree) :
+    (z : ℂ) ≠ 0 := by
+  intro hz
+  apply h
+  have he : z = (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk) :=
+    Subtype.ext hz
+  rw [he]
+  rfl
+
+def t99A01_piOne_attach_succ_retract_aux_scale
+    (t : unitInterval) (z : ℂ) : ℝ :=
+  t.1 + (1 - t.1) / ‖z‖
+
+lemma t99A01_piOne_attach_succ_retract_aux_scale_norm
+    (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) (hz1 : ‖z‖ ≤ 1) :
+    ‖(t99A01_piOne_attach_succ_retract_aux_scale t z : ℂ) * z‖ ≤ 1 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hs0 : 0 ≤ (t : ℝ) + (1 - t.1) / ‖z‖ :=
+    add_nonneg ht0 (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+  rw [norm_mul]
+  change ‖(((t : ℝ) + (1 - t.1) / ‖z‖ : ℝ) : ℂ)‖ * ‖z‖ ≤ 1
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs0]
+  field_simp
+  nlinarith
+
+lemma t99A01_piOne_attach_succ_retract_aux_scale_ne
+    (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) :
+    (t99A01_piOne_attach_succ_retract_aux_scale t z : ℂ) * z ≠ 0 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  apply mul_ne_zero
+  · rw [t99A01_piOne_attach_succ_retract_aux_scale]
+    have ht0 : 0 ≤ (t : ℝ) := t.2.1
+    have ht1 : (t : ℝ) ≤ 1 := t.2.2
+    have hp : 0 < (t : ℝ) + (1 - t.1) / ‖z‖ := by
+      by_cases ht : (t : ℝ) = 0
+      · rw [ht]
+        positivity
+      · exact add_pos_of_pos_of_nonneg (lt_of_le_of_ne ht0 (Ne.symm ht))
+          (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+    exact_mod_cast hp.ne'
+  · exact hz0
+
 lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
     :
     ∃ e : ContinuousMap.HomotopyEquiv (APMT99A01.succCircleSide degree)
@@ -887,7 +946,6 @@ lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
         e ⟨(Quotient.mk _ (Sum.inr (Fin.last r, (⟨(w : ℂ) / 2, by rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]; norm_num⟩ : APMT99A01.Disk))) : APMT99A01.AttachSpace degree), h⟩ =
           Quotient.mk _ (Sum.inl (w ^ degree (Fin.last r))) := by
   sorry
-
 /-- **Leaf (overlap winding, 60--120 lines).**  After the preceding radial
 identification, the positive overlap generator is the `degree last` power of
 the fixed base-circle class.  The hypotheses make this leaf independent of
