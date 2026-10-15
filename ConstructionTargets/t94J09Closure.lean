@@ -219,10 +219,32 @@ noncomputable def n6BoundaryCokernelSmithEquiv :
       n6SmithCoordinate.quotKerEquivOfSurjective
         n6SmithCoordinate_surjective)
 
+/-- Integral homology of the standard genus-six nonorientable polygon in the
+explicit groups required by the frozen problem. -/
+theorem n6PolygonHomologyExplicit :
+    Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (H n6PairingData 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (H n6PairingData k) := by
+  rcases n6PolygonHomology with ⟨h0, h1, h2, hhigh⟩
+  refine ⟨h0, ?_, ?_⟩
+  · rcases h1 with ⟨e1⟩
+    exact ⟨e1 ≪≫ n6BoundaryCokernelSmithEquiv.toModuleIso⟩
+  · intro k hk
+    by_cases hk2 : k = 2
+    · subst k
+      rcases h2 with ⟨e2⟩
+      have hz : IsZero (ModuleCat.of ℤ (BoundaryKernel n6PairingData)) := by
+        rw [n6BoundaryKernel_eq_bot]
+        rw [IsZero.iff_id_eq_zero]
+        ext x
+      exact hz.of_iso e2
+    · exact hhigh k (by omega)
+
 #print axioms n6PolygonHomology
 #print axioms n6AttachingBoundary_injective
 #print axioms n6BoundaryKernel_eq_bot
 #print axioms n6SmithCokernelIso
 #print axioms n6BoundaryCokernelSmithEquiv
+#print axioms n6PolygonHomologyExplicit
 
 end ConstructionTargets.t94J09Closure
