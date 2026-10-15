@@ -88495,24 +88495,19 @@
      :commit "d1c2b3d35",
      :reason "Banked quotient-level subdivision reassembly."}]}
   {:consumer :t94J09,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compute six-coordinate Smith cokernel; transport N6 homology; normalize frozen two-vertex polygon.",
+    "Transport N6 homology; normalize the frozen two-vertex polygon; assemble.",
     :outcome :stop,
     :warnings
-    ["Main: 1 placeholder; dirt preserved"
-     "foundation PairingData is one-vertex; frozen source has two vertices"],
+    ["Main: 1 placeholder"
+     "dirt preserved"
+     "frozen source has two vertices"],
     :missing-theorems
-    [{:name "n6PolygonHomology",
-      :type "standard N6 foundation specialization",
-      :status :proved,
-      :consumers [:t94J09],
-      :depends-on ["polygonQuotient_homology"],
-      :area "polygon-surface-homology"}
-     {:name "n6BoundaryKernel_eq_bot",
-      :type "standard N6 H2 kernel vanishes",
+    [{:name "n6SmithCokernelIso",
+      :type "cokernel of constant even vector is Z^5 x ZMod 2",
       :status :proved,
       :consumers [:t94J09],
       :depends-on ["n6PolygonHomology"],
@@ -88521,7 +88516,10 @@
       :type "literal source integral homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["n6PolygonHomology" "n6BoundaryKernel_eq_bot"],
+      :depends-on
+      ["n6PolygonHomology"
+       "n6BoundaryKernel_eq_bot"
+       "n6SmithCokernelIso"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
       :type "source quotient homeomorphic to N6",
@@ -88533,36 +88531,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked standard N6 homology specialization and zero top kernel.",
+    :reason "Banked explicit N6 Smith cokernel.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t94J09Closure", :exit 0}
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
+      :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
-     {:cmd "statement-registry check", :exit 0}
-     {:cmd "scans; git check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792051237190-13649-8c29b93e",
-     :commands
-     ["git show/diff/check 56607caa5"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 56607caa5 adds compiled, sorry-free progress beyond blueprint commit 2d4b43869: the standard one-vertex N6 homology specialization, six orbit coordinates, boundary degrees -2, and injectivity/zero H2 kernel. Only t94J09Closure.lean changed; fixture SHA 0b8caa792fc2b7423405996133283b39693e5ac30df9b50430c72cac79454226 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; printed axioms are standard. Orientation is correct: coordinates compose with the attaching boundary as the negative of the +2 Smith map, preserving injectivity. Six-coordinate cokernel, N6 homology transport, and normalization from the frozen two-vertex polygon remain explicitly listed."},
-    :commit "56607caa5",
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
+     {:cmd "git show --check e88af09f1", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Smith drafts",
+      :exit 1,
+      :correction "normalized additive and ZMod casts"}],
+    :commit "e88af09f1",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "0b8caa792fc2b7423405996133283b39693e5ac30df9b50430c72cac79454226"},
+     "604c85dc9dfb27903eaaa6a6fc06d6b72e1daeaa355730d393aaff266e20f9f6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94000,7 +93989,8 @@
    :depends-on
    [:lemma-polygonquotient-homology
     :lemma-n6polygonhomology
-    :lemma-n6boundarykernel-eq-bot],
+    :lemma-n6boundarykernel-eq-bot
+    :lemma-n6smithcokerneliso],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94556,4 +94546,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "n6SmithCokernelIso",
+    :type "cokernel of constant even vector is Z^5 x ZMod 2"},
+   :lemma
+   {:name "n6SmithCokernelIso",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "cokernel of constant even vector is Z^5 x ZMod 2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-n6smithcokerneliso,
+   :kind :lemma,
+   :depends-on [:lemma-n6polygonhomology],
    :other-consumers []}]}
