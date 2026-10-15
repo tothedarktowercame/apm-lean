@@ -37441,61 +37441,48 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Prove the CPn successor filtration; instantiate twice, apply Euler adapter, finish Main.",
+    "Prove bounded CP0→CP1 and CP1→CP2 filtration maps; apply adapter and finish Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t97J07_complexProjectiveRationalHomologyData_zero",
-      :type "literal CP0 has rational homology Q in degree zero only",
+    [{:name "t97J07_cp2RationalHomologyData_of_two_steps",
+      :type "CP0 base plus steps 0→1 and 1→2 yields CP2 data",
       :status :proved,
-      :consumers [:t97J07],
-      :depends-on [],
-      :area "rational-homology-cpn"}
-     {:name "complexProjectiveRationalHomologyStep",
-      :type "CPn data implies CP(n+1) data",
-      :status :partial,
       :consumers [:t97J07],
       :depends-on
       ["t97J07_complexProjectiveRationalHomologyData_zero"],
       :area "rational-homology-cpn"}
-     {:name "t97J07_cp2RationalHomologyData_exists",
-      :type "CP2 homology Q in degrees 0,2,4",
-      :status :partial,
+     {:name "complexProjectiveRationalHomologyStep_zero_one",
+      :type "CP0 data implies CP1 data",
+      :status :not-started,
       :consumers [:t97J07],
-      :depends-on ["complexProjectiveRationalHomologyStep"],
+      :depends-on
+      ["t97J07_complexProjectiveRationalHomologyData_zero"],
+      :area "rational-homology-cpn"}
+     {:name "complexProjectiveRationalHomologyStep_one_two",
+      :type "CP1 data implies CP2 data",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on ["complexProjectiveRationalHomologyStep_zero_one"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the exact CP0 rational homology base; the projective-filtration successor remains.",
+    "Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2.",
     :commands
     [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check 7713e5a35", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial compile",
-      :exit 1,
-      :note "installed CP0 nonempty instance; derived odd nonzero"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792045269314-13474-c57b2aa5",
-     :commands
-     ["git show/check/diff-tree e474731bb; fixture sha256"
-      "lake env lean archived committed Main via authority-linked worktree"
-      "statement-registry check; sorry recount 2->1"],
-     :finding
-     "PASS: e474731bb is new compiled, standard-axiom progress. It proves the exact fixed locus equals the coordinate CP1 line union the isolated third-axis point, with both set-inclusion directions and projective representatives handled correctly. Scope is one allowed file; fixture hash matches; registry 166/166; placeholders 2->1. Remaining CP2 rational homology, Euler characteristic, and final theorem are listed."},
-    :commit "7713e5a35",
+     {:cmd "git show --check 88e57cf8e", :exit 0}],
+    :commit "88e57cf8e",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
@@ -37503,7 +37490,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -41214,6 +41201,57 @@
    :id :lemma-realpair-eq-or-eq-neg-of-squarecoordinates,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp2RationalHomologyData_of_two_steps",
+    :type "CP0 base plus steps 0→1 and 1→2 yields CP2 data"},
+   :lemma
+   {:name "t97J07_cp2RationalHomologyData_of_two_steps",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP0 base plus steps 0→1 and 1→2 yields CP2 data",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07},
+   :id :lemma-t97j07-cp2rationalhomologydata-of-two-steps,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-complexprojectiverationalhomologydata-zero],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "complexProjectiveRationalHomologyStep_zero_one",
+    :type "CP0 data implies CP1 data"},
+   :lemma
+   {:name "complexProjectiveRationalHomologyStep_zero_one",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP0 data implies CP1 data",
+    :area "rational-homology-cpn"},
+   :id :lemma-complexprojectiverationalhomologystep-zero-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-complexprojectiverationalhomologydata-zero],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "complexProjectiveRationalHomologyStep_one_two",
+    :type "CP1 data implies CP2 data"},
+   :lemma
+   {:name "complexProjectiveRationalHomologyStep_one_two",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP1 data implies CP2 data",
+    :area "rational-homology-cpn"},
+   :id :lemma-complexprojectiverationalhomologystep-one-two,
+   :kind :lemma,
+   :depends-on [:lemma-complexprojectiverationalhomologystep-zero-one],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
