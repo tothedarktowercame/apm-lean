@@ -88331,28 +88331,30 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "Finish B1 topological transport; then B2.",
+    :residual
+    "Prove B2 literal torus-crosscap van Kampen, then copy final assembly.",
     :outcome :stop,
-    :warnings ["Main: 1 prior placeholder" "unrelated dirt preserved"],
+    :warnings
+    ["Main retains 1 placeholder" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "aabbccBoundaryCokernelSmithEquiv",
-      :type "cokernel=Smith",
+    [{:name "apm_t97a01_X_homologyIsoPairingSpace",
+      :type "literal X homology transport",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["aabbccOrbitCoordinates_map_boundaryRange"],
+      :depends-on [],
       :area "polygon-surface-homology"}
-     {:name "torusRP2BoundaryCokernelSmithEquiv",
-      :type "cokernel=Smith",
+     {:name "apm_t97a01_TorusRP2_homologyIsoPairingSpace",
+      :type "literal torus-crosscap homology transport",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2OrbitCoordinates_map_boundaryRange"],
+      :depends-on [],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
-      :type "homology adapter",
-      :status :partial,
+      :type "frozen B1 homology adapter",
+      :status :proved,
       :consumers [:t97A01],
       :depends-on
       ["aabbccBoundaryCokernelSmithEquiv"
@@ -88368,7 +88370,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked quotient-cokernel Smith equivalences.",
+    :reason "Banked literal polygon homology.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88376,20 +88378,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check e6d0579fd", :exit 0}],
+     {:cmd "git show --check 36c33f454", :exit 0}],
     :diagnostic-history
-    [{:cmd "quotient drafts",
+    [{:cmd "B1 draft",
       :exit 1,
-      :correction "fixed notation/induction"}],
-    :commit "e6d0579fd",
-    :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
+      :correction
+      "fixed IsZero iso direction and conjunction nesting"}],
+    :commit "36c33f454",
+    :changed-paths ["problems/t97A01/lean/Main.lean"],
     :fixture
-    {:path "ConstructionTargets/t97A01Closure.lean",
+    {:path "problems/t97A01/lean/Main.lean",
      :sha256
-     "8cdc6f488dabc684bdce63a700f34c42b83f84bf40571331533c9eb25b65ec7d"},
+     "4655f127525edfd0d8669b58038db8f799f18d9d437bb82689873e6728a809ca"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93501,7 +93504,8 @@
    {:name "apm_t97a01_polygon_singular_homology",
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "literal quotient homology adapter",
-    :area "polygon-surface-homology"},
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
    :id :lemma-apm-t97a01-polygon-singular-homology,
    :kind :lemma,
    :depends-on
@@ -93926,4 +93930,38 @@
    :id :lemma-apm-t94j09-polygon-homology,
    :kind :lemma,
    :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_X_homologyIsoPairingSpace",
+    :type "literal X homology transport"},
+   :lemma
+   {:name "apm_t97a01_X_homologyIsoPairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal X homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-apm-t97a01-x-homologyisopairingspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_TorusRP2_homologyIsoPairingSpace",
+    :type "literal torus-crosscap homology transport"},
+   :lemma
+   {:name "apm_t97a01_TorusRP2_homologyIsoPairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal torus-crosscap homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-apm-t97a01-torusrp2-homologyisopairingspace,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
