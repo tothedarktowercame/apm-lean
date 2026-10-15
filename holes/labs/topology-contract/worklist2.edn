@@ -88383,6 +88383,19 @@
     [{:cmd "conjugacy draft",
       :exit 1,
       :correction "used cyclic conjugation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792048971023-13593-abf84f06",
+     :commands
+     ["git show/diff/check e28e5f0f0"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit e28e5f0f0 adds compiled, sorry-free progress beyond d643012dc: involutive basis changes and normal-closure comparisons for both global orientation signs. Only t97A01Closure.lean changed; fixture SHA 492a7122cae40be69518b25f8a4d4e5a5ffe99e2c1ffcbb90619f58564cd1895 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Mathematics checks: transformed frozen relators yield the explicit positive/negative boundary words by conjugation with c^-2/c^2, and singleton normal closure is conjugation-invariant. Skeleton transport, attachment kernel, van Kampen presentation, and final assembly remain explicitly listed."},
     :commit "e28e5f0f0",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88391,7 +88404,7 @@
      "492a7122cae40be69518b25f8a4d4e5a5ffe99e2c1ffcbb90619f58564cd1895"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88409,7 +88422,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized six-edge product.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked relator normal closures.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88463,7 +88476,10 @@
      :reason "Banked exact geometric boundary edge product."}
     {:job 6,
      :commit "d643012dc",
-     :reason "Banked normalized six-edge product."}]}
+     :reason "Banked normalized six-edge product."}
+    {:job 7,
+     :commit "e28e5f0f0",
+     :reason "Banked relator normal closures."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -94159,7 +94175,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2PositiveBoundary_normalClosure",
@@ -94169,14 +94185,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "+ relator comparison",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "e28e5f0f0"},
    :id :lemma-torusrp2positiveboundary-normalclosure,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2NegativeBoundary_normalClosure",
@@ -94186,7 +94204,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "- relator comparison",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "e28e5f0f0"},
    :id :lemma-torusrp2negativeboundary-normalclosure,
    :kind :lemma,
    :depends-on [],
