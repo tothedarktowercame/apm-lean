@@ -2652,6 +2652,28 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
       torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne S j hrun,
       torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets S j hrun⟩
 
+/-- Under flattening, a run begins at its cumulative prefix and its final
+local factor ends immediately before the next cumulative prefix. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (torusRP2_subdivisionRunOffsetEquiv S
+        ⟨i, Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S i)
+          (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))⟩).val =
+        pathTwoOpenSubdivisionRunPrefixLength S i.val ∧
+      (torusRP2_subdivisionRunOffsetEquiv S
+        ⟨i, Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S i)
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i))⟩).val + 1 =
+        pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  constructor
+  · rfl
+  · rw [torusRP2_subdivisionRunOffsetEquiv_apply]
+    simp only [Fin.val_last]
+    exact pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2772,6 +2794,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
+#print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
