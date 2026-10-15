@@ -36159,6 +36159,16 @@
     [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
       :correction "baseline dependency failure; no scoped edit"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792023290184-12810-4ac6a0f0",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f exact scope"
+      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and is real progress after 263f5d47. The interface faithfully gives Fin(runs+1)-indexed boundaries in outer subtype V and a coercion equality to each corresponding ambient canonical boundary, oriented for run-fold assembly. It does not assume based van Kampen. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36167,7 +36177,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36195,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Unchanged closure cannot emit a clean object: baseline rebuild fails before this milestone at lines 1366,1368,1391. Dependency coherence must be restored; scoped experiment remains reverted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36567,7 +36577,11 @@
     {:job 5,
      :commit nil,
      :reason
-     "Unchanged closure cannot emit a clean object: baseline rebuild fails before this milestone at lines 1366,1368,1391. Dependency coherence must be restored; scoped experiment remains reverted."}]}
+     "Unchanged closure cannot emit a clean object: baseline rebuild fails before this milestone at lines 1366,1368,1391. Dependency coherence must be restored; scoped experiment remains reverted."}
+    {:job 6,
+     :commit nil,
+     :reason
+     "Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
