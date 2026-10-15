@@ -83,14 +83,126 @@ lemma rationalMayerVietoris_aux_smallComparison
 `CoefficientSubcomplexMayerVietoris`, `CoefficientSubspaceUnionRangeHomologyEquivalence`,
 `CoefficientAmbientSubspaceRangeComparison`, `CoefficientIntersectionRangeComparison`,
 `CoefficientPieceRangeBiproductComparison`, and `ProductionOpenCoverMayerVietoris.transportShortComplex_exact`. -/
-theorem rationalMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
-    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
+abbrev rationalMayerVietoris_aux_chains :=
+  (AlgebraicTopology.SSet.singularChainComplexFunctor (ModuleCat ℚ)).obj
+    (ModuleCat.of ℚ ℚ)
+
+abbrev rationalMayerVietoris_aux_P {X : Type} [TopologicalSpace X] (U : Set X) :=
+  ConstructionTargets.SingularExcision.ambientSubspaceRange U
+
+noncomputable def rationalMayerVietoris_aux_negIso (M : ModuleCat ℚ) : M ≅ M where
+  hom := -𝟙 M
+  inv := -𝟙 M
+  hom_inv_id := by simp
+  inv_hom_id := by simp
+
+noncomputable def rationalMayerVietoris_aux_interIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    ((rationalMayerVietoris_aux_chains).obj
+      (((rationalMayerVietoris_aux_P U ⊓ rationalMayerVietoris_aux_P V) :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet)).homology n ≅
+      HQ n ↥(U ∩ V) :=
+  CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso ℚ U V n
+
+noncomputable def rationalMayerVietoris_aux_pieceIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P U : SSet)) ⊞
+      ((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P V : SSet))).homology n ≅
+      HQ n U ⊞ HQ n V :=
+  CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n ≪≫
+    CoefficientPieceRangeBiproductComparison.pieceHomologyIso ℚ U V n ≪≫
+    biprod.mapIso (Iso.refl _) (rationalMayerVietoris_aux_negIso _)
+
+lemma rationalMayerVietoris_aux_unionMap_isIso
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      ((rationalMayerVietoris_aux_chains).map
+        (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n) := by
+  have h := rationalMayerVietoris_aux_smallComparison U V hU hV hcov n
+  have heq : ConstructionTargets.SingularSubdivision.coverSmallSSet
+      (fun b : Bool => if b then U else V) =
+      rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V := by
+    rw [ConstructionTargets.SingularExcision.coverSmallSSet_bool_eq_sup]
+    rfl
+  rw [← heq]
+  exact h
+
+noncomputable def rationalMayerVietoris_aux_unionIso
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    ((rationalMayerVietoris_aux_chains).obj
+      (((rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V) :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet)).homology n ≅
+      HQ n X := by
+  let f := HomologicalComplex.homologyMap
+    ((rationalMayerVietoris_aux_chains).map
+      (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n
+  exact @asIso _ _ _ _ f
+    (rationalMayerVietoris_aux_unionMap_isIso U V hU hV hcov n)
+
+abbrev rationalMayerVietoris_aux_SC {X : Type} [TopologicalSpace X] (U V : Set X) :=
+  CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+    (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)
+
+lemma rationalMayerVietoris_aux_lift_fst
+    {W K L : ChainComplex (ModuleCat ℚ) ℕ} (f : W ⟶ K) (g : W ⟶ L) (n : ℕ) :
+    HomologicalComplex.homologyMap (biprod.lift f g) n ≫
+      (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).hom ≫ biprod.fst =
+      HomologicalComplex.homologyMap f n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_hom, biprod.lift_fst,
+    ← HomologicalComplex.homologyMap_comp, biprod.lift_fst]
+
+lemma rationalMayerVietoris_aux_lift_snd
+    {W K L : ChainComplex (ModuleCat ℚ) ℕ} (f : W ⟶ K) (g : W ⟶ L) (n : ℕ) :
+    HomologicalComplex.homologyMap (biprod.lift f g) n ≫
+      (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).hom ≫ biprod.snd =
+      HomologicalComplex.homologyMap g n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_hom, biprod.lift_snd,
+    ← HomologicalComplex.homologyMap_comp, biprod.lift_snd]
+
+lemma rationalMayerVietoris_aux_interArrow
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n := by
+  sorry
+
+lemma rationalMayerVietoris_aux_unionArrow
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n := by
+  sorry
+
+/-- Transport of the subcomplex Mayer–Vietoris sequence (`CoefficientSubcomplexMayerVietoris`:
+exactness at pieces/union/intersection + connecting map) along `interIso`, `pieceIso`,
+`unionIso`, given that the transported arrows are `mvI` and `mvJ`. -/
+lemma rationalMayerVietoris_aux_transport
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hI : ∀ n, (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n)
+    (hJ : ∀ n, (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n) :
     ∃ δ : ∀ n, HQ (n + 1) X ⟶ HQ n ↥(U ∩ V),
       (∀ n, LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom) ∧
       (∀ n, LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
       (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (mvI U V n).hom) := by
   sorry
 
+theorem rationalMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
+    ∃ δ : ∀ n, HQ (n + 1) X ⟶ HQ n ↥(U ∩ V),
+      (∀ n, LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom) ∧
+      (∀ n, LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (mvI U V n).hom) :=
+  rationalMayerVietoris_aux_transport U V hU hV hcov
+    (fun n => rationalMayerVietoris_aux_interArrow U V n)
+    (fun n => rationalMayerVietoris_aux_unionArrow U V hU hV hcov n)
 abbrev CP2 := ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 2
 
 /-- `ℂP²` minus `[0:0:1]`. -/
