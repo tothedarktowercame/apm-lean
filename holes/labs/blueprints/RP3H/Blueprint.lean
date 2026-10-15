@@ -595,6 +595,120 @@ lemma cpU_homology_aux_cpU_hequiv_CP1_aux_retraction
   · simpa only [Pi.smul_apply, Units.smul_def, Matrix.cons_val_zero,
       Matrix.cons_val_one] using congrFun ha 1
 
+lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_nonzero
+    (t : unitInterval) (x : cpU) :
+    (![x.1.rep 0, x.1.rep 1, t.1 * x.1.rep 2] : Fin 3 → ℂ) ≠ 0 := by
+  intro h
+  have h0 := congrFun h 0
+  have h1 := congrFun h 1
+  simp at h0 h1
+  rcases x.2 with hx | hx
+  · exact hx h0
+  · exact hx h1
+
+noncomputable def cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun
+    (p : unitInterval × cpU) : cpU :=
+  ⟨quotientMap ℂ 2
+      ⟨![p.2.1.rep 0, p.2.1.rep 1, p.1.1 * p.2.1.rep 2],
+        cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_nonzero p.1 p.2⟩,
+    by
+      change (quotientMap ℂ 2 _).rep 0 ≠ 0 ∨
+        (quotientMap ℂ 2 _).rep 1 ≠ 0
+      rw [cp_open_cover_aux_coord, cp_open_cover_aux_coord]
+      exact p.2.2⟩
+
+lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_continuous :
+    Continuous cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun := by
+  let q : NonzeroVectors ℂ 2 → CP2 := quotientMap ℂ 2
+  let D : Set (NonzeroVectors ℂ 2) := q ⁻¹' cpU
+  let qr : D → cpU := fun v => ⟨q v.1, v.2⟩
+  have hqo : IsOpenMap q :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℂ 2
+  have hU : IsOpen cpU := cp_open_cover.1
+  have hqr : Topology.IsQuotientMap qr := by
+    rw [Topology.isQuotientMap_iff]
+    constructor
+    · rintro ⟨x, hx⟩
+      obtain ⟨v, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 2 x
+      exact ⟨⟨v, hx⟩, rfl⟩
+    · intro s
+      constructor
+      · exact fun hs => hs.preimage
+          ((ProjectiveSpaceTopology.continuous_quotientMap ℂ 2).subtype_map (fun _ h => h))
+      · intro hs
+        rw [isOpen_induced_iff] at hs ⊢
+        obtain ⟨u, hu, hus⟩ := hs
+        refine ⟨q '' (q ⁻¹' cpU ∩ u), hqo _
+          ((hU.preimage (ProjectiveSpaceTopology.continuous_quotientMap ℂ 2)).inter hu), ?_⟩
+        ext x
+        constructor
+        · rintro ⟨v, ⟨hvU, hvu⟩, hvx⟩
+          have hvt : qr ⟨v, hvU⟩ ∈ s :=
+            (Set.ext_iff.mp hus ⟨v, hvU⟩).mp hvu
+          have he : qr ⟨v, hvU⟩ = x := by
+            apply Subtype.ext
+            exact hvx
+          exact he ▸ hvt
+        · intro hx
+          obtain ⟨v, hv⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 2 x.1
+          have hvU : q v ∈ cpU := by simpa [q] using (hv ▸ x.2)
+          have he : qr ⟨v, hvU⟩ = x := Subtype.ext hv
+          have hmem : qr ⟨v, hvU⟩ ∈ s := by rw [he]; exact hx
+          have hvu : v ∈ u := (Set.ext_iff.mp hus ⟨v, hvU⟩).mpr hmem
+          exact ⟨v, ⟨hvU, hvu⟩, hv⟩
+  apply hqr.continuous_lift_prod_right
+  let lift : unitInterval × D → cpU := fun p =>
+    ⟨quotientMap ℂ 2 ⟨![p.2.1.1 0, p.2.1.1 1, p.1.1 * p.2.1.1 2], by
+      intro h
+      have h0 := congrFun h 0
+      have h1 := congrFun h 1
+      simp at h0 h1
+      have hp := p.2.2
+      change (q p.2.1).rep 0 ≠ 0 ∨ (q p.2.1).rep 1 ≠ 0 at hp
+      rw [cp_open_cover_aux_coord, cp_open_cover_aux_coord] at hp
+      exact hp.elim (fun hn => hn h0) (fun hn => hn h1)⟩, by
+        change (quotientMap ℂ 2 _).rep 0 ≠ 0 ∨
+          (quotientMap ℂ 2 _).rep 1 ≠ 0
+        have hp := p.2.2
+        change (q p.2.1).rep 0 ≠ 0 ∨ (q p.2.1).rep 1 ≠ 0 at hp
+        rw [cp_open_cover_aux_coord, cp_open_cover_aux_coord] at hp
+        rcases hp with hp | hp
+        · left
+          exact (cp_open_cover_aux_coord 0 _).mpr (by simpa using hp)
+        · right
+          exact (cp_open_cover_aux_coord 1 _).mpr (by simpa using hp)⟩
+  have hlift : Continuous lift := by
+    apply Continuous.subtype_mk
+    apply (continuous_quotientMap ℂ 2).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    fin_cases j
+    · exact ((continuous_apply 0).comp
+        (continuous_subtype_val.comp continuous_subtype_val)).comp continuous_snd
+    · exact ((continuous_apply 1).comp
+        (continuous_subtype_val.comp continuous_subtype_val)).comp continuous_snd
+    · exact (Complex.ofRealCLM.continuous.comp
+        (continuous_subtype_val.comp continuous_fst)).mul
+        (((continuous_apply 2).comp
+          (continuous_subtype_val.comp continuous_subtype_val)).comp continuous_snd)
+  convert hlift using 1
+  funext p
+  apply Subtype.ext
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ p.2.1.1 p.2.1.2
+  refine ⟨a, ?_⟩
+  funext j
+  fin_cases j
+  · simpa only [Matrix.cons_val_zero] using congrFun ha 0
+  · simpa only [Matrix.cons_val_zero, Matrix.cons_val_one] using congrFun ha 1
+  · change a.1 * (p.1.1 * p.2.1.1 2) = p.1.1 * (q p.2.1).rep 2
+    calc
+      _ = p.1.1 * (a.1 * p.2.1.1 2) := by ring
+      _ = p.1.1 * (q p.2.1).rep 2 := by
+        rw [show a.1 * p.2.1.1 2 = (q p.2.1).rep 2 by
+          simpa [q, Pi.smul_apply, Units.smul_def] using congrFun ha 2]
+
 lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation
     (i : C(cpU_homology_aux_CP1, cpU))
     (hi : ∀ v : NonzeroVectors ℂ 1,
@@ -609,7 +723,31 @@ lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation
     ContinuousMap.Homotopic
       (i.comp cpU_homology_aux_cpU_hequiv_CP1_aux_r)
       (ContinuousMap.id cpU) := by
-  sorry
+  let H : C(unitInterval × cpU, cpU) :=
+    ⟨cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun,
+      cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_continuous⟩
+  refine ⟨{ toContinuousMap := H, map_zero_left := ?_, map_one_left := ?_ }⟩
+  · intro x
+    apply Subtype.ext
+    let v : NonzeroVectors ℂ 1 :=
+      ⟨![x.1.rep 0, x.1.rep 1],
+        cpU_homology_aux_cpU_hequiv_CP1_aux_pair_nonzero x⟩
+    change (cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun (0, x)).1 =
+      (i (cpU_homology_aux_cpU_hequiv_CP1_aux_r x)).1
+    rw [show cpU_homology_aux_cpU_hequiv_CP1_aux_r x = quotientMap ℂ 1 v by rfl]
+    rw [hi v]
+    simp [cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun, v]
+  · intro x
+    apply Subtype.ext
+    change quotientMap ℂ 2
+      ⟨![x.1.rep 0, x.1.rep 1, ((1 : unitInterval).1) * x.1.rep 2], _⟩ = x.1
+    calc
+      _ = Projectivization.mk ℂ x.1.rep (Projectivization.rep_nonzero x.1) := by
+        apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+        refine ⟨1, ?_⟩
+        funext j
+        fin_cases j <;> simp [Pi.smul_apply]
+      _ = x.1 := Projectivization.mk_rep x.1
 
 theorem cpU_homology_aux_cpU_hequiv_CP1 :
     Nonempty (ContinuousMap.HomotopyEquiv cpU cpU_homology_aux_CP1) := by
