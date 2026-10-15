@@ -5221,6 +5221,46 @@ noncomputable def radialMVBoundaryCokernelEquiv (P : PairingData) :
       BoundaryCokernel P :=
   Submodule.quotEquivOfEq _ _ (radialMVBoundaryLinear_range P)
 
+/-- Linear-map form of the reduced reassembly arrow into surface H₁. -/
+noncomputable def radialMVReassemblyLinear (P : PairingData) :
+    (PairingOrbit P.pair → ℤ) →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  (radialMVReducedPieces P).g.hom.toIntLinearMap
+
+/-- The reduced boundary range is killed by the surface reassembly map, the
+well-definedness input for the B8 cokernel map. -/
+theorem radialMVBoundary_range_le_reassembly_ker (P : PairingData) :
+    LinearMap.range (radialMVBoundaryLinear P) ≤
+      LinearMap.ker (radialMVReassemblyLinear P) := by
+  rw [LinearMap.range_le_ker_iff]
+  apply LinearMap.ext
+  intro n
+  have hz := congrArg ConcreteCategory.hom (radialMVReducedPieces P).zero
+  exact congrArg (fun f => f n) hz
+
+/-- The reduced reassembly arrow descends to the quotient by the production
+boundary range. -/
+noncomputable def radialMVH1QuotientMap (P : PairingData) :
+    ((PairingOrbit P.pair → ℤ) ⧸
+        LinearMap.range (radialMVBoundaryLinear P)) →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  Submodule.liftQ _ (radialMVReassemblyLinear P)
+    (radialMVBoundary_range_le_reassembly_ker P)
+
+/-- B3's concrete cokernel model maps canonically to the production surface
+H₁ term.  Exactness will identify this map as an equivalence. -/
+noncomputable def boundaryCokernelToRadialH1 (P : PairingData) :
+    BoundaryCokernel P →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  (radialMVH1QuotientMap P).comp
+    (radialMVBoundaryCokernelEquiv P).symm.toLinearMap
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
