@@ -119137,61 +119137,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Assemble C1/strict/right-inverse implicit chart; Sard; calculations; Main.",
+    "Use incidence chart for fiber manifold; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx; lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "contDiffAt_commonTarget_of_contMDiffAt_self",
-      :type "incidence equality aligns preferred target-chart C1",
+    [{:name "incidenceImplicitToOpenPartialHomeomorph",
+      :type "C1 transverse incidence data yields implicit local chart",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["contDiffAt_writtenInExtChartAt_of_contMDiffAt_self"],
+      ["contDiffAt_commonTarget_of_contMDiffAt_self"
+       "implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["contDiffAt_commonTarget_of_contMDiffAt_self"],
+      :depends-on ["incidenceImplicitToOpenPartialHomeomorph"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "df80c719e7a4349730454f8fcb35f8ca0dec14218719774846d2d6664e748d17",
+     "d2d27f52b25f6f10cdabf97f8caf1cdf20ce15155d711c76688e9490efc22343",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked common-target C1 alignment.",
+    :reason "Banked assembled incidence implicit chart.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792048517920-13581-eaa965b6",
-     :commands
-     ["git show/diff f0da1122^..f0da1122"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum archived closure/Main and blueprint"
-      "rg placeholders, sorryAx, theorem axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: f0da1122 adds 22 lines only in the scoped closure file. The incidence equality is used in the correct direction to align the common target chart with c preferred chart, deriving chart C1 from ContMDiffAt rather than assuming it. Archived closure/Main compile; hashes match df80c719..., 0b3b4888..., afb497a6...; placeholders 0/1; no sorryAx; theorem axioms are propext, Classical.choice, Quot.sound; registry 166/166. Residual explicitly lists C1/strict/right-inverse assembly, Sard, calculations, Main."},
-    :commit "f0da11221ff6080aa44e7c43c7f44f2c9bf04963",
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :finding "fixed model inference"}],
+    :commit "7445849463edfa3d06f34b0dcb573f3f0bb4c828",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119199,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119711,7 +119701,8 @@
     :lemma-hasstrictfderivat-incidencedifference-commontarget
     :lemma-contdiffat-incidencedifference-commontarget
     :lemma-contdiffat-writteninextchartat-of-contmdiffat-self
-    :lemma-contdiffat-commontarget-of-contmdiffat-self],
+    :lemma-contdiffat-commontarget-of-contmdiffat-self
+    :lemma-incidenceimplicittoopenpartialhomeomorph],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121736,6 +121727,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-contdiffat-writteninextchartat-of-contmdiffat-self],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "incidenceImplicitToOpenPartialHomeomorph",
+    :type "C1 transverse incidence data yields implicit local chart"},
+   :lemma
+   {:name "incidenceImplicitToOpenPartialHomeomorph",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "C1 transverse incidence data yields implicit local chart",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-incidenceimplicittoopenpartialhomeomorph,
+   :kind :lemma,
+   :depends-on
+   [:lemma-contdiffat-commontarget-of-contmdiffat-self
+    :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
