@@ -123,41 +123,126 @@ structure AttachMVData {r : ℕ} (degree : Fin r → ℕ) where
 
 end APMT99A01
 
-/-- **LIBRARY leaf (quotient geometry, 70--130 lines).** There is an open
-cover of the attaching quotient by a circle-side neighbourhood and the union
-of the open disk interiors.  This is kept separate from every homology
-calculation. -/
-theorem t99A01_attachSpace_openCover {r : ℕ} (degree : Fin r → ℕ)
-    (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
-    ∃ A B : Set (APMT99A01.AttachSpace degree),
-      IsOpen A ∧ IsOpen B ∧ A ∪ B = Set.univ := by
+namespace APMT99A01
+
+variable {r : ℕ} (degree : Fin r → ℕ)
+
+/-- The quotient map of the attaching space. -/
+def attachMk (x : Sum Circle (Fin r × Disk)) : AttachSpace degree :=
+  Quotient.mk _ x
+
+lemma continuous_attachMk : Continuous (attachMk degree) :=
+  continuous_coinduced_rng
+
+/-- The centre of the unit disk. -/
+def diskCentre : Disk := ⟨0, by simp⟩
+
+/-- The point `w / 2` of the unit disk. -/
+def halfPoint (w : Circle) : Disk :=
+  ⟨(w : ℂ) / 2, by
+    rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+    norm_num⟩
+
+lemma continuous_halfPoint : Continuous halfPoint :=
+  Continuous.subtype_mk (continuous_subtype_val.div_const 2) _
+
+/-- Circle side of the standard cover: everything except the disk centres. -/
+def sideA : Set (AttachSpace degree) :=
+  {q | ∀ i, q ≠ attachMk degree (Sum.inr (i, diskCentre))}
+
+/-- Disk side of the standard cover: the open disk interiors. -/
+def sideB : Set (AttachSpace degree) :=
+  {q | ∃ (i : Fin r) (z : Disk), ‖(z : ℂ)‖ < 1 ∧ q = attachMk degree (Sum.inr (i, z))}
+
+/-- The base circle in the attaching space. -/
+def circleIncl : C(Circle, AttachSpace degree) :=
+  ⟨fun z ↦ attachMk degree (Sum.inl z), (continuous_attachMk degree).comp continuous_inl⟩
+
+/-- The circle of radius `1/2` in the `i`-th disk. -/
+def halfLoop (i : Fin r) : C(Circle, AttachSpace degree) :=
+  ⟨fun w ↦ attachMk degree (Sum.inr (i, halfPoint w)),
+    (continuous_attachMk degree).comp
+      (continuous_inr.comp (continuous_const.prodMk continuous_halfPoint))⟩
+
+/-! Integral Mayer–Vietoris maps (ℤ analogues of `RP3Homology.mvI`/`mvJ`). -/
+
+/-- Homology map of a subset inclusion. -/
+def zIncl {X : Type} [TopologicalSpace X] {S T : Set X} (h : S ⊆ T) (n : ℕ) :
+    H n S ⟶ H n T :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj (ModuleCat.of ℤ ℤ)).map
+    (TopCat.ofHom ⟨Set.inclusion h, continuous_inclusion h⟩)
+
+/-- Homology map of a subset into the whole space. -/
+def zToX {X : Type} [TopologicalSpace X] (S : Set X) (n : ℕ) : H n S ⟶ H n X :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj (ModuleCat.of ℤ ℤ)).map
+    (TopCat.ofHom ⟨Subtype.val, continuous_subtype_val⟩)
+
+def zI {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    H n ↥(U ∩ V) ⟶ H n U ⊞ H n V :=
+  Limits.biprod.lift (zIncl Set.inter_subset_left n) (zIncl Set.inter_subset_right n)
+
+def zJ {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    H n U ⊞ H n V ⟶ H n X :=
+  Limits.biprod.desc (zToX U n) (-(zToX V n))
+
+end APMT99A01
+
+/-- **Leaf (quotient topology, 60--120 lines).** The standard cover is an open
+cover.  `sideA` is the complement of finitely many closed points (each centre's
+class is a singleton, so its preimage is one point); `sideB`'s preimage is the
+union of the open disk interiors, because only boundary points of a disk are
+identified with circle points.  Use `isOpen_coinduced`, `Relation.EqvGen`
+induction on `AttachRel`. -/
+theorem t99A01_attach_openCover {r : ℕ} (degree : Fin r → ℕ) :
+    IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
+      APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ := by
   sorry
 
-/-- **LIBRARY leaf (radial deformation, 80--150 lines).** For a standard
-circle-side member of the quotient cover, radial push-out descends through
-the attaching relation. -/
-theorem t99A01_attachSpace_circleSide_retract {r : ℕ}
-    (degree : Fin r → ℕ) (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
-    ∃ A : Set (APMT99A01.AttachSpace degree), IsOpen A ∧
-      Nonempty (ContinuousMap.HomotopyEquiv A Circle) := by
+/-- **Leaf (radial deformation, 100--150 lines).** `sideA` deformation retracts
+onto the base circle.  `ρ` is the radial retraction: a point `s·w` (`0 < s ≤ 1`) of
+disk `i` goes to the boundary point `w`, which is identified with `w ^ degree i` on
+the circle; circle points are fixed.  The homotopy is `(t, s·w) ↦ ((1-t)s + t)·w`,
+descended through the quotient (as in `CP2RationalHomology`'s
+`cpU_homology_aux_cpU_hequiv_CP1_aux_deformation`). -/
+theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
+      (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
+      ρ.comp ι = ContinuousMap.id Circle ∧
+      ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) ∧
+      ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree),
+        ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i := by
   sorry
 
-/-- **LIBRARY leaf (disk charts, 70--140 lines).** The disk-side and overlap
-coordinates of the standard cover.  This statement deliberately exposes the
-coordinate conclusions consumed by the MV transport. -/
-theorem t99A01_attachSpace_diskSide_coordinates {r : ℕ}
-    (degree : Fin r → ℕ) (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
-    ∃ A B : Set (APMT99A01.AttachSpace degree), IsOpen A ∧ IsOpen B ∧
-      Nonempty (B ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) ∧
-      Nonempty (ContinuousMap.HomotopyEquiv (↥(A ∩ B)) (Σ _ : Fin r, Circle)) := by
+/-- **Leaf (disk charts, 60--120 lines).** The disk side is the disjoint union of
+the open disks, by the identity chart on each disk interior.  Interior points
+are identified with nothing else (`EqvGen` induction on `AttachRel`). -/
+theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
+      ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
+        (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
+        e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩ := by
   sorry
 
-/-- **LIBRARY leaf (finite sigma homology, 35--80 lines).** Integral
-coefficients are allowed by the coefficient-generic sigma/Finsupp comparison. -/
-theorem t99A01_finiteSigma_integral_coordinates {r k : ℕ} :
-    (k = 0 → Nonempty (APMT99A01.H k (Σ _ : Fin r, PUnit) ≅
-      ModuleCat.of ℤ (Fin r → ℤ))) ∧
-    (0 < k → Limits.IsZero (APMT99A01.H k (Σ _ : Fin r, PUnit))) := by
+/-- **Leaf (punctured disks, 80--140 lines).** The overlap is the disjoint union
+of the punctured open disks, which deformation retracts onto the radius-`1/2`
+circles; the inverse of the equivalence is literally `halfLoop`. -/
+theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ e : ContinuousMap.HomotopyEquiv
+        ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
+      ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w := by
+  sorry
+
+/-- **Leaf (finite additivity, 40--100 lines).** Integral singular homology of a
+finite disjoint union is the biproduct, via the summand inclusions.  Check
+`ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean` first (simplices
+of a sigma type land in one summand: `IsPreconnected` of the simplex). -/
+theorem t99A01_sigma_homology {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
+    (k : ℕ) :
+    IsIso (Limits.biproduct.desc fun i : Fin r ↦
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+        (ModuleCat.of ℤ ℤ)).map
+          (TopCat.ofHom (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)) := by
   sorry
 
 /-- **LIBRARY leaf (circle winding, 60--120 lines).** The oriented `H₁`
@@ -172,43 +257,76 @@ theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
           ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)) := by
   sorry
 
-/-- **LIBRARY leaf (integral open-cover MV, 100--150 lines).** Construct and
-transport the integral long exact sequence to the preceding coordinates.
-This is the only leaf which uses the production open-cover MV machinery. -/
-theorem t99A01_attachSpace_integralMVData {r : ℕ} (degree : Fin r → ℕ)
+/-- **Leaf (integral open-cover Mayer–Vietoris).** The ℤ version of
+`RP3Homology.rationalMayerVietoris` (`ConstructionTargets/CP2RationalHomology.lean`).
+Its proof is coefficient-generic: copy it with `ℚ ↦ ℤ` (the `Coefficient*` modules
+work over any commutative ring; `ProductionOpenCoverMayerVietoris` is already over ℤ).
+Bank the pieces as `_aux` lemmas, as there. -/
+theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
+    ∃ δ : ∀ n, APMT99A01.H (n + 1) X ⟶ APMT99A01.H n ↥(U ∩ V),
+      (∀ n, LinearMap.range (APMT99A01.zI U V n).hom =
+        LinearMap.ker (APMT99A01.zJ U V n).hom) ∧
+      (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (APMT99A01.zI U V n).hom) := by
+  sorry
+
+/-- **Leaf (transport, LIBRARY-sized: expect PARTIAL and bank pieces).** Assemble
+`AttachMVData` from the standard cover.  Coordinates: `H_*(sideA) ≅ H_*(Circle)`
+(by `ρ`), `H_*(sideB) ≅ ⨁ H_*(ball)` (contractible balls), `H_*(A∩B) ≅ ⨁ H_*(Circle)`.
+Under them, `H₁(A∩B) → H₁(A)` is `ρ ∘ halfLoop i = (· ^ degree i)` on summand `i`,
+which `hwinding` turns into `degreeMap`; `H₀(A∩B) → H₀(B)` is the identity on `ℤ^r`
+(injective).  Higher vanishing: `H_k` of circles and balls vanish for `k ≥ 2`. -/
+theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
-    (hcover : ∃ A B : Set (APMT99A01.AttachSpace degree),
-      IsOpen A ∧ IsOpen B ∧ A ∪ B = Set.univ)
-    (hcircle : ∃ A : Set (APMT99A01.AttachSpace degree), IsOpen A ∧
-      Nonempty (ContinuousMap.HomotopyEquiv A Circle))
-    (hdisk : ∃ A B : Set (APMT99A01.AttachSpace degree), IsOpen A ∧ IsOpen B ∧
-      Nonempty (B ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) ∧
-      Nonempty (ContinuousMap.HomotopyEquiv (↥(A ∩ B)) (Σ _ : Fin r, Circle)))
-    (hsigma : ∀ k : ℕ,
-      (k = 0 → Nonempty (APMT99A01.H k (Σ _ : Fin r, PUnit) ≅
-        ModuleCat.of ℤ (Fin r → ℤ))) ∧
-      (0 < k → Limits.IsZero (APMT99A01.H k (Σ _ : Fin r, PUnit))))
+    (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
+      APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ)
+    (hcircle : ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
+      (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
+      ρ.comp ι = ContinuousMap.id Circle ∧
+      ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) ∧
+      ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈ APMT99A01.sideA degree),
+        ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i)
+    (hdisk : ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
+      ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
+        (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
+        e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩)
+    (hoverlap : ∃ e : ContinuousMap.HomotopyEquiv
+        ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
+      ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w)
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦
+        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+          (ModuleCat.of ℤ ℤ)).map
+            (TopCat.ofHom (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) :
+          (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
     (hwinding : ∃ e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ,
       ∀ i : Fin r, e.inv ≫
         ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
           (ModuleCat.of ℤ ℤ)).map
             (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e.hom =
-        ModuleCat.ofHom (APMT99A01.intTimesNat (degree i))) :
+        ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)))
+    (hmv : ∀ (U V : Set (APMT99A01.AttachSpace degree)), IsOpen U → IsOpen V →
+      U ∪ V = Set.univ →
+      ∃ δ : ∀ n, APMT99A01.H (n + 1) (APMT99A01.AttachSpace degree) ⟶ APMT99A01.H n ↥(U ∩ V),
+        (∀ n, LinearMap.range (APMT99A01.zI U V n).hom =
+          LinearMap.ker (APMT99A01.zJ U V n).hom) ∧
+        (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
+        (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (APMT99A01.zI U V n).hom)) :
     Nonempty (APMT99A01.AttachMVData degree) := by
   sorry
 
-/-- Sorry-free assembly of the five independent geometric inputs and the
-integral MV transport. -/
 theorem t99A01_attachSpace_MVData {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i) :
-    Nonempty (APMT99A01.AttachMVData degree) := by
-  exact t99A01_attachSpace_integralMVData degree hr hdegree
-    (t99A01_attachSpace_openCover degree hr hdegree)
-    (t99A01_attachSpace_circleSide_retract degree hr hdegree)
-    (t99A01_attachSpace_diskSide_coordinates degree hr hdegree)
-    (fun k ↦ t99A01_finiteSigma_integral_coordinates (r := r) (k := k))
+    Nonempty (APMT99A01.AttachMVData degree) :=
+  t99A01_attach_transport degree hr hdegree
+    (t99A01_attach_openCover degree)
+    (t99A01_attach_circleSide degree)
+    (t99A01_attach_diskSide degree)
+    (t99A01_attach_overlap degree)
+    (fun Y _ k ↦ t99A01_sigma_homology Y k)
     (t99A01_circlePower_hOne_row degree)
-
+    (fun U V hU hV hc ↦ t99A01_integralMayerVietoris U V hU hV hc)
 /-! The next four leaves are independent pure algebra/diagram chases.  Their
 only common input is an arbitrary `AttachMVData`; hence they can be proved in
 parallel and cannot acquire the MV leaf's `sorryAx`. -/

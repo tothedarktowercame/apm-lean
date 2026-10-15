@@ -165,3 +165,82 @@ The `sorryAx` entries enter only through the thirteen independent leaves (the
 ten homology leaves and three untouched π₁ leaves); the generic package, all
 twelve instance assemblies, `t99A01_attached_cells_computation`, and the main
 theorem have no direct `sorry`.
+
+## Second split: shared integral Mayer--Vietoris data
+
+The four former generic topology leaves are now sorry-free wrappers around
+one shared `APMT99A01.AttachMVData degree`.  This record gives the consecutive
+coordinate maps in degrees two through zero, range-equals-kernel exactness at
+each term, injectivity of the degree-zero intersection arrow, surjectivity at
+the right end, the literal equality `i₁ = degreeMap degree`, and high-degree
+vanishing.  Its coordinates are `H₁(A∩B)=ℤ^r`,
+`H₁(A)⊕H₁(B)=ℤ`, `H₀(A∩B)=ℤ^r`, and
+`H₀(A)⊕H₀(B)=ℤ × ℤ^r`.  This is enough data for the four downstream diagram
+chases without baking their conclusions into the structure.
+
+The new leaves are:
+
+* `t99A01_attachSpace_openCover` (70--130 lines, independent): construct the
+  two saturated subsets upstairs and use the coinduced quotient topology to
+  prove they are open and cover.  Useful names: `isOpen_coinduced`,
+  `Quotient.eq`, `Relation.EqvGen`; check the centre/boundary inequalities with
+  `Metric.mem_ball`, `Metric.mem_closedBall`, and `Circle.norm_coe`.
+* `t99A01_attachSpace_circleSide_retract` (80--150 lines, independent): radial
+  push-out on each punctured disk and descend the compatible homotopy.  Use
+  `ContinuousMap.HomotopyEquiv`, `Continuous.quotient_lift`, and
+  `Quotient.lift_mk`; positivity prevents a constant boundary map.  The
+  statement asserts existence rather than taking its own conclusion as a
+  hypothesis.
+* `t99A01_attachSpace_diskSide_coordinates` (70--140 lines, independent): the
+  disk-side is the finite sigma of open balls and its overlap deformation
+  retracts to the finite sigma of circles.  Use `Homeomorph.sigmaCongrRight`,
+  `Homeomorph.SetCongr`, `Metric.ball`, and `ContinuousMap.HomotopyEquiv`.
+  At radius zero the overlap excludes the centre, so radial normalization has
+  no division-by-zero case.
+* `t99A01_finiteSigma_integral_coordinates` (35--80 lines, independent): in
+  degree zero identify the homology of `Σ i : Fin r, PUnit` with `Fin r → ℤ`,
+  and prove positive-degree vanishing.  Verified repository tools are
+  `CoefficientSigmaConstFinsuppComparison.sigmaConstFinsuppIso` and
+  `CoefficientSigmaConstFinsuppNaturality.sigmaConstFinsuppIso_naturality`;
+  they are coefficient-generic and therefore specialize to `ℤ`.  Convert
+  finite `Finsupp` to functions with `Finsupp.linearEquivFunOnFinite`.
+* `t99A01_circlePower_hOne_row` (60--120 lines, independent): choose one
+  oriented integral `H₁(S¹) ≅ ℤ` coordinate and prove that every
+  `z ↦ z^(degree i)` conjugates to multiplication by the positive integer
+  `degree i`.  Use `CircleHurewiczIsomorphism.circleH1AddEquivInt`,
+  `CircleExponentialPathLift.lift`,
+  `CircleWindingUniqueness.endpointWinding_unique`, and the lifting pattern in
+  `DegreeFourCircleWinding`.  The same `e` is quantified for every `i`, which
+  rules out independently chosen signs.
+* `t99A01_attachSpace_integralMVData` (100--150 lines, depends on the five
+  preceding conclusions but is stated standalone): instantiate
+  `ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces`,
+  `_exact_union`, `_exact_intersection`, and `productionConnecting`, then
+  transport by the chosen coordinates.  The RP3H lemmas
+  `rationalMayerVietoris_aux_transport_aux_pieces`, `_union`, `_intersection`,
+  and `_transport` are the verified template; replace `ℚ` by `ℤ` rather than
+  importing any SphereCap/LinearGraphMeasure module.
+* `t99A01_attachMVData_hZero` (60--100 lines, independent given `D`): use
+  `D.i₀_injective`, `D.exact_i₀_j₀`, and `D.j₀_surjective` to compute the
+  cokernel of the diagonal incidence map as `ℤ`.
+* `t99A01_attachMVData_hOne` (70--120 lines, independent given `D`):
+  injectivity of `i₀` and exactness make `δ₁=0`; then exactness at the two
+  preceding terms identifies `H₁(W)` with `coker degreeMap`.
+* `t99A01_attachMVData_hTwo` (50--90 lines, independent given `D`): use
+  `D.δ₂_injective`, `D.exact_δ₂_i₁`, and `D.i₁_eq_degreeMap` to identify
+  `H₂(W)` with the displayed kernel.
+* `t99A01_attachMVData_hHigher` (under 10 lines, independent given `D`): this
+  is the high-degree projection from the record and is already proved.
+
+The four public lemmas `t99A01_attachSpace_hZero`, `_hOne`, `_hTwo`, and
+`_hHigher` now contain no `sorry`; each obtains the single shared MV record
+and invokes its corresponding algebra leaf.  The six concrete kernel/cokernel
+leaves and all three π₁ leaves were left byte-for-byte untouched.
+
+Degenerate cases: `hr : 0 < r` excludes an empty disk side and empty overlap;
+`hdegree` excludes constant attaching maps.  Open balls contain their centres,
+punctured overlaps do not, and closed-disk boundary points have norm exactly
+one.  The winding leaf fixes one orientation simultaneously for the whole
+family, so its row is the positive row rather than an unspecified row up to
+sign.  Dimension zero is handled only by the explicit degree-zero coordinate
+and injectivity/surjectivity fields, not by a positive-degree vanishing lemma.
