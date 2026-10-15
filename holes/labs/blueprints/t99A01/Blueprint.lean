@@ -149,9 +149,102 @@ def APMT99A01.succDiskSide {r : ℕ} (degree : Fin (r + 1) → ℕ) :
 /-- **Leaf (circle fundamental group, 40--80 lines).** The empty attaching
 family is just the circle.  The target is `ZMod 0`, hence additive `ℤ` written
 multiplicatively. -/
+def t99A01_piOne_attach_empty_aux_projection (degree : Fin 0 → ℕ) :
+    APMT99A01.AttachSpace degree → Circle :=
+  Quotient.lift
+    (Sum.elim id (fun p : Fin 0 × APMT99A01.Disk ↦ Fin.elim0 p.1))
+    (by
+      intro a b hab
+      induction hab with
+      | rel a b hab =>
+          cases hab with
+          | boundary i z => exact Fin.elim0 i
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+def t99A01_piOne_attach_empty_aux_homeomorph (degree : Fin 0 → ℕ) :
+    APMT99A01.AttachSpace degree ≃ₜ Circle where
+  toFun := t99A01_piOne_attach_empty_aux_projection degree
+  invFun := fun z ↦ Quotient.mk _ (Sum.inl z)
+  left_inv q := by
+    induction q using Quotient.ind with
+    | _ x =>
+      cases x with
+      | inl z => rfl
+      | inr p => exact Fin.elim0 p.1
+  right_inv z := rfl
+  continuous_toFun := by
+    apply continuous_coinduced_dom.mpr
+    apply continuous_sum_dom.mpr
+    constructor
+    · exact continuous_id
+    · rw [continuous_iff_continuousAt]
+      intro p
+      exact Fin.elim0 p.1
+  continuous_invFun := continuous_coinduced_rng.comp continuous_inl
+
+noncomputable def t99A01_piOne_attach_empty_aux_piOneEquiv
+    (degree : Fin 0 → ℕ) :
+    FundamentalGroup (APMT99A01.AttachSpace degree) (APMT99A01.basepoint degree) ≃*
+      FundamentalGroup Circle 1 := by
+  let h := t99A01_piOne_attach_empty_aux_homeomorph degree
+  exact
+    { toFun := FundamentalGroup.map ⟨h, h.continuous⟩ _
+      invFun := FundamentalGroup.mapOfEq ⟨h.symm, h.symm.continuous⟩
+        (h.symm_apply_apply (APMT99A01.basepoint degree))
+      left_inv := by
+        intro p
+        induction p using Path.Homotopic.Quotient.ind with
+        | mk p =>
+          rw [FundamentalGroup.map_apply]
+          change (FundamentalGroup.mapOfEq _ _)
+            (Path.Homotopic.Quotient.mk (p.map h.continuous)) = _
+          rw [FundamentalGroup.mapOfEq_apply]
+          apply Path.Homotopic.Quotient.eq.mpr
+          convert Path.Homotopic.refl p using 1
+          ext t
+          exact h.symm_apply_apply (p t)
+      right_inv := by
+        intro p
+        induction p using Path.Homotopic.Quotient.ind with
+        | mk p =>
+          change (FundamentalGroup.map _ _)
+            ((FundamentalGroup.mapOfEq _ _)
+              (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk p))) = _
+          rw [FundamentalGroup.mapOfEq_apply]
+          rw [FundamentalGroup.map_apply]
+          apply Path.Homotopic.Quotient.eq.mpr
+          convert Path.Homotopic.refl p using 1
+      map_mul' := map_mul _ }
+
 lemma t99A01_piOne_attach_empty (degree : Fin 0 → ℕ) :
     APMT99A01.PiOneCoordinate degree := by
-  sorry
+  let e₀ := (t99A01_piOne_attach_empty_aux_piOneEquiv degree).trans
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+  have hgcd : APMT99A01.degreeGCD degree = 0 := by
+    simp [APMT99A01.degreeGCD]
+  unfold APMT99A01.PiOneCoordinate
+  rw [hgcd]
+  refine ⟨e₀, ?_⟩
+  change ConstructionTargets.CircleUniversalCover.circleWindingHom
+      ((t99A01_piOne_attach_empty_aux_piOneEquiv degree)
+        (APMT99A01.baseCircleClass degree)) = Multiplicative.ofAdd 1
+  dsimp [t99A01_piOne_attach_empty_aux_piOneEquiv]
+  rw [FundamentalGroup.map_apply]
+  change ConstructionTargets.CircleUniversalCover.circleWindingHom
+      (Path.Homotopic.Quotient.mk
+        ((APMT99A01.baseCircleLoop degree).map
+          (t99A01_piOne_attach_empty_aux_homeomorph degree).continuous)) =
+        Multiplicative.ofAdd 1
+  have hloop :
+      (APMT99A01.baseCircleLoop degree).map
+          (t99A01_piOne_attach_empty_aux_homeomorph degree).continuous =
+        ConstructionTargets.CircleUniversalCover.integerLoop 1 := by
+    ext t
+    rfl
+  rw [hloop]
+  simp [ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
 
 /-- **Leaf (successor cover, 70--130 lines).**  The centre complement and the
 open last-disk interior form the van Kampen cover.  This formulation records
