@@ -44,6 +44,34 @@ def frozenPair : Equiv.Perm (Fin 14) where
 @[simp] theorem frozenPair_apply (i : Fin 14) :
     frozenPair i = frozenPairIndex i := rfl
 
+/-- Orientations of the fourteen occurrences in the frozen word. -/
+def frozenSign : Fin 14 → Bool :=
+  ![true, true, false, false, true, false, true,
+    false, false, false, false, true, true, true]
+
+/-- Only the `c` pairing reverses its interval parameter; every other frozen
+pairing preserves it. -/
+theorem frozen_pairedParameter (i : Fin 14) (t : Set.Icc (0 : ℝ) 1) :
+    pairedParameter frozenPair frozenSign i t =
+      if i = 1 ∨ i = 7 then reverseIcc t else t := by
+  fin_cases i <;>
+    simp [pairedParameter, frozenPair, frozenPairIndex, frozenSign]
+
+/-- The generic signed-polygon relation specializes literally to the frozen
+fourteen-edge pairing and its sole reversed pair. -/
+theorem frozen_boundaryRel_iff (x y : Surfaces.Disk) :
+    boundaryRel 14 frozenPair frozenSign x y ↔
+      ∃ i : Fin 14, ∃ t : Set.Icc (0 : ℝ) 1,
+        x = Surfaces.edgePoint 14 i t ∧
+          y = Surfaces.edgePoint 14 (frozenPair i)
+            (if i = 1 ∨ i = 7 then reverseIcc t else t) := by
+  simp only [boundaryRel]
+  constructor
+  · rintro ⟨i, t, rfl, rfl⟩
+    exact ⟨i, t, rfl, by rw [frozen_pairedParameter]⟩
+  · rintro ⟨i, t, rfl, rfl⟩
+    exact ⟨i, t, rfl, by rw [frozen_pairedParameter]⟩
+
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -511,5 +539,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenPolygonHomology_of_comparisons
+#print axioms frozen_pairedParameter
+#print axioms frozen_boundaryRel_iff
 
 end ConstructionTargets.t94J09Closure
