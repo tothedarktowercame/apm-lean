@@ -443,6 +443,49 @@ theorem torusRP2PolygonBoundaryLegWord_coordinates :
         ((1 : Fin 3), -1), ((2 : Fin 3), -1), ((2 : Fin 3), -1)] := by
   rfl
 
+/-- The actual geometric boundary class is the ordered signed-edge product.
+The reversal records Mathlib's `End` multiplication convention. -/
+theorem polygonBoundaryIntegerLoopClass_eq_reverseExplicitEdgeProduct
+    (P : PairingData) :
+    (Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) :
+        FundamentalGroup _ _) =
+      ((List.ofFn fun i : Fin P.edgeCount =>
+        polygonBoundaryExplicitEdgeClass P i).reverse.prod) := by
+  calc
+    _ = Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+          (polygonBoundaryCanonicalSubdivisionPathAtBase P)) :=
+      Path.Homotopic.Quotient.eq.mpr
+        (polygonBoundaryCanonicalConcat_homotopic P).symm
+    _ = ((List.ofFn fun i : Fin P.edgeCount =>
+          Path.Homotopic.Quotient.mk
+            (polygonBoundaryCanonicalSubdivisionPathAtBase P i)) :
+            List (FundamentalGroup _ _)).reverse.prod :=
+      fundamentalGroup_mk_concat_eq_reverse_list_prod _ _ _
+    _ = _ := by
+      have hf :
+          (fun i : Fin P.edgeCount =>
+            (Path.Homotopic.Quotient.mk
+              (polygonBoundaryCanonicalSubdivisionPathAtBase P i) :
+                FundamentalGroup _ _)) =
+            fun i => polygonBoundaryExplicitEdgeClass P i := by
+        funext i
+        rw [polygonBoundaryCanonicalSubdivisionPathAtBase_eq,
+          polygonBoundarySubdivisionPathAtBase_eq_signedEdge]
+        exact polygonBoundarySignedEdgePathAtBase_mk P i
+      rw [hf]
+      rfl
+
+/-- Specialization of the exact path-level boundary product to the
+torus-crosscap polygon. -/
+theorem torusRP2GeometricBoundary_eq_signedEdgeProduct :
+    (Path.Homotopic.Quotient.mk
+        (polygonBoundaryIntegerLoopPath torusRP2PairingData) :
+      FundamentalGroup _ _) =
+      ((List.ofFn fun i : Fin torusRP2PairingData.edgeCount =>
+        polygonBoundaryExplicitEdgeClass torusRP2PairingData i).reverse.prod) :=
+  polygonBoundaryIntegerLoopClass_eq_reverseExplicitEdgeProduct _
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
@@ -453,5 +496,6 @@ theorem torusRP2PolygonBoundaryLegWord_coordinates :
 #print axioms torusRP2FrozenSkeletonFreeGroupMap_surjective
 #print axioms torusRP2GeneratorSignHom_frozenRelator
 #print axioms torusRP2PolygonBoundaryLegWord_coordinates
+#print axioms torusRP2GeometricBoundary_eq_signedEdgeProduct
 
 end ConstructionTargets.t97A01Closure
