@@ -2079,10 +2079,114 @@ lemma t99A01_low_h0_coordinates {r : ℕ} :
       ⟨0, by simp [Metric.mem_ball]⟩, trivial⟩
 
 -- BEGIN SEAT AREA
+lemma t99A01_low_j0_surjective_aux_vertex_naturality
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (f : C(X, Y)) (x : X) :
+    ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ x ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ f) 0 =
+      ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ (f x) := by
+  let s := ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+    (TopCat.of X) 0 (ConstructionTargets.T02A06SphereH0.singularVertexAt x)
+  have hpoint : ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint s = x := by
+    change ((TopCat.toSSetObjEquiv (TopCat.of X)
+        (Opposite.op (SimplexCategory.mk 0)))
+      ((TopCat.toSSetObjEquiv (TopCat.of X)
+        (Opposite.op (SimplexCategory.mk 0))).symm
+        (ContinuousMap.const _ x)))
+          (ConstructionTargets.SingularSubdivision.standardSimplexVertices 0 0) = x
+    rw [Equiv.apply_symm_apply]
+    rfl
+  rw [← hpoint, ← ConstructionTargets.CoefficientH0.singularGenerator_zeroChainH0Class
+    ℤ s, Category.assoc,
+    ConstructionTargets.CoefficientH0.zeroChainH0Class_naturality ℤ]
+  let sf := ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+    (TopCat.of Y) 0 (f.comp (ConstructionTargets.T02A06SphereH0.singularVertexAt x))
+  have hm : ConstructionTargets.CoefficientH0.singularGenerator ℤ (TopCat.of X) 0 s ≫
+      (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ f).f 0 =
+      ConstructionTargets.CoefficientH0.singularGenerator ℤ (TopCat.of Y) 0 sf := by
+    exact ConstructionTargets.CoefficientH0.singularGenerator_singularPostcomposition ℤ _
+      (ConstructionTargets.T02A06SphereH0.singularVertexAt x) f
+  calc
+    _ = ConstructionTargets.CoefficientH0.singularGenerator ℤ (TopCat.of Y) 0 sf ≫
+        ConstructionTargets.CoefficientH0.zeroChainH0Class ℤ := by
+          simpa only [Category.assoc] using congrArg
+            (fun q => q ≫ ConstructionTargets.CoefficientH0.zeroChainH0Class ℤ) hm
+    _ = ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ
+        (ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint sf) :=
+      ConstructionTargets.CoefficientH0.singularGenerator_zeroChainH0Class ℤ sf
+    _ = _ := by rfl
+
 lemma t99A01_low_j0_surjective {r : ℕ} (degree : Fin r → ℕ) (hr : 0 < r) :
     Function.Surjective
       (APMT99A01.zJ (APMT99A01.sideA degree) (APMT99A01.sideB degree) 0).hom := by
-  sorry
+  classical
+  let K := ConstructionTargets.CoefficientH0.SingularChains ℤ
+    (TopCat.of (APMT99A01.AttachSpace degree))
+  let point := fun s : ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of (APMT99A01.AttachSpace degree)) 0 =>
+    ConstructionTargets.T02A06SphereH0.singularZeroSimplexPoint s
+  let liftVertex := fun s : ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of (APMT99A01.AttachSpace degree)) 0 =>
+    if hs : point s ∈ APMT99A01.sideA degree then
+      ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ
+          (⟨point s, hs⟩ : APMT99A01.sideA degree) ≫ Limits.biprod.inl
+    else
+      -ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ
+          (⟨point s, by
+            have hc : point s ∈ APMT99A01.sideA degree ∨
+                point s ∈ APMT99A01.sideB degree := by
+              rw [← Set.mem_union, (t99A01_attach_openCover degree).2.2]
+              trivial
+            exact hc.resolve_left hs⟩ : APMT99A01.sideB degree) ≫ Limits.biprod.inr
+  let L : K.X 0 ⟶
+      APMT99A01.H 0 (APMT99A01.sideA degree) ⊞
+        APMT99A01.H 0 (APMT99A01.sideB degree) := by
+    change (∐ fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of (APMT99A01.AttachSpace degree)) 0 ↦ ModuleCat.of ℤ ℤ) ⟶ _
+    exact Limits.Sigma.desc liftVertex
+  have hfactor : L ≫ APMT99A01.zJ (APMT99A01.sideA degree)
+      (APMT99A01.sideB degree) 0 =
+      ConstructionTargets.CoefficientH0.zeroChainH0Class ℤ := by
+    apply Limits.Sigma.hom_ext
+    intro s
+    change (Limits.Sigma.ι (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+        (TopCat.of (APMT99A01.AttachSpace degree)) 0 ↦ ModuleCat.of ℤ ℤ) s ≫
+        L) ≫ APMT99A01.zJ (APMT99A01.sideA degree)
+          (APMT99A01.sideB degree) 0 = _
+    have hL : Limits.Sigma.ι (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+        (TopCat.of (APMT99A01.AttachSpace degree)) 0 ↦ ModuleCat.of ℤ ℤ) s ≫ L =
+        liftVertex s := by
+      dsimp [L]
+      exact Limits.Sigma.ι_desc _ _
+    rw [hL]
+    change liftVertex s ≫ APMT99A01.zJ (APMT99A01.sideA degree)
+      (APMT99A01.sideB degree) 0 =
+        ConstructionTargets.CoefficientH0.singularGenerator ℤ
+          (TopCat.of (APMT99A01.AttachSpace degree)) 0 s ≫
+            ConstructionTargets.CoefficientH0.zeroChainH0Class ℤ
+    rw [ConstructionTargets.CoefficientH0.singularGenerator_zeroChainH0Class ℤ s]
+    change liftVertex s ≫ APMT99A01.zJ (APMT99A01.sideA degree)
+      (APMT99A01.sideB degree) 0 =
+        ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ (point s)
+    dsimp only [liftVertex]
+    split_ifs with hs
+    · rw [APMT99A01.zJ, Category.assoc, Limits.biprod.inl_desc]
+      exact t99A01_low_j0_surjective_aux_vertex_naturality
+        (⟨Subtype.val, continuous_subtype_val⟩ : C(APMT99A01.sideA degree, _)) _
+    · rw [APMT99A01.zJ, Preadditive.neg_comp, Category.assoc,
+        Limits.biprod.inr_desc, Preadditive.comp_neg, neg_neg]
+      exact t99A01_low_j0_surjective_aux_vertex_naturality
+        (⟨Subtype.val, continuous_subtype_val⟩ : C(APMT99A01.sideB degree, _)) _
+  intro y
+  obtain ⟨x, rfl⟩ := (ModuleCat.epi_iff_surjective
+    (ConstructionTargets.CoefficientH0.zeroChainH0Class ℤ
+      (X := APMT99A01.AttachSpace degree))).mp inferInstance y
+  refine ⟨L.hom x, ?_⟩
+  change (L ≫ APMT99A01.zJ (APMT99A01.sideA degree)
+    (APMT99A01.sideB degree) 0).hom x =
+      (ConstructionTargets.CoefficientH0.zeroChainH0Class ℤ).hom x
+  exact DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hfactor) x
 -- END SEAT AREA
 
 lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
