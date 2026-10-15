@@ -3427,7 +3427,69 @@ are related to copy `g` points by `TreeRel.pair`), path connected by
 -- BEGIN SEAT AREA
 lemma treeStar_inter_aux_sphere (g : G) :
     IsPathConnected (qmk TreeRel '' (treeStar g ∩ treeStar (g * b))) := by
-  sorry
+  let U : Set S2 := {x | x ≠ north ∧ x ≠ south}
+  let f : S2 → RelationQuotient TreeRel := fun x => qmk TreeRel (.inr (g, x))
+  have hf : Continuous f := by
+    exact (continuous_qmk TreeRel).comp
+      (continuous_inr.comp (continuous_const.prodMk continuous_id))
+  have hb : b ≠ (1 : G) := G_facts.2.1
+  have hbb : b * b = (1 : G) := G_facts.2.2.1
+  have hab : a ≠ b := G_facts.2.2.2.2.1
+  have hiab : a⁻¹ ≠ b := G_facts.2.2.2.2.2.1
+  have himage : f '' U = qmk TreeRel '' (treeStar g ∩ treeStar (g * b)) := by
+    apply Set.Subset.antisymm
+    · rintro y ⟨x, hx, rfl⟩
+      refine ⟨.inr (g, x), ?_, rfl⟩
+      constructor
+      · exact Or.inl ⟨rfl, hx.2⟩
+      · right
+        exact ⟨by simp [mul_assoc, hbb], hx.1⟩
+    · rintro y ⟨z, ⟨hzg, hzgb⟩, rfl⟩
+      rcases z with ⟨k, t⟩ | ⟨k, x⟩
+      · change treeStarPred g (.inl (k, t)) at hzg
+        change treeStarPred (g * b) (.inl (k, t)) at hzgb
+        rcases hzg with ⟨hkg, -⟩ | ⟨hkg, -⟩
+        · rcases hzgb with ⟨hkb, -⟩ | ⟨hkba, -⟩
+          · exact False.elim (hb (mul_left_cancel (a := g) (by
+              simpa using (hkg.symm.trans hkb).symm)))
+          · apply False.elim
+            apply hab
+            apply mul_left_cancel (a := g)
+            simpa [mul_assoc] using congrArg (fun q : G => q * a) (hkg.symm.trans hkba)
+        · rcases hzgb with ⟨hkb, -⟩ | ⟨hkba, -⟩
+          · exact False.elim (hiab (mul_left_cancel (a := g) (hkg.symm.trans hkb)))
+          · apply False.elim
+            apply hb
+            apply mul_left_cancel (a := g)
+            simpa using (mul_right_cancel (hkg.symm.trans hkba)).symm
+      · change treeStarPred g (.inr (k, x)) at hzg
+        change treeStarPred (g * b) (.inr (k, x)) at hzgb
+        rcases hzg with ⟨hkg, hxS⟩ | ⟨hkgb, hxN⟩
+        · rcases hzgb with ⟨hkgb, -⟩ | ⟨hkgbb, hxN⟩
+          · exact False.elim (hb (mul_left_cancel (a := g) (by
+              simpa using (hkg.symm.trans hkgb).symm)))
+          · subst k
+            exact ⟨x, ⟨hxN, hxS⟩, rfl⟩
+        · rcases hzgb with ⟨hkgb', hxS⟩ | ⟨hkgbb, -⟩
+          · subst k
+            refine ⟨-x, ⟨?_, ?_⟩, ?_⟩
+            · intro he
+              apply hxS
+              have := congrArg Neg.neg he
+              simpa [neg_north] using this
+            · intro he
+              apply hxN
+              have := congrArg Neg.neg he
+              simpa [neg_south] using this
+            apply Quotient.sound
+            exact Relation.EqvGen.rel _ _ (by
+              simpa only [neg_neg] using TreeRel.pair g (-x))
+          · apply False.elim
+            apply hb
+            apply mul_left_cancel (a := g)
+            simpa [mul_assoc, hbb] using hkgb.symm.trans hkgbb
+  rw [← himage]
+  exact sphere_compl_poles_isPathConnected.image' hf.continuousOn
 -- END SEAT AREA
 
 /-- Stars meet only along Cayley edges, and adjacent stars meet in a
