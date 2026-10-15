@@ -2205,6 +2205,25 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_strictMono
     torusRP2_subdivisionRunOffsetEquiv_symm_flatten S k]
   exact hjk
 
+/-- Consecutive original factors correspond to consecutive flattened
+run/offset coordinates.  This is the arithmetic recurrence used when the
+nested run concatenation is unfolded one original factor at a time. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n) :
+    pathTwoOpenSubdivisionRunPrefixLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1.val +
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).2.val =
+      pathTwoOpenSubdivisionRunPrefixLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1.val +
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).2.val + 1 := by
+  rw [torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j.succ,
+    torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j.castSucc]
+  rfl
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2309,6 +2328,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_strictMono
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
