@@ -119309,62 +119309,46 @@
      :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
      :reason "Banked local-diffeomorphism fiber isolation."}]}
   {:consumer :t98A06,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Assemble chartwise smooth local lifts; compact flow; Main.",
+    "Transport coordinate lifts through tangent charts; compact flow; Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx"],
+    :warnings ["Main sorryAx" "unrelated files preserved"],
     :missing-theorems
-    [{:name "contDiff_rightInverse_of_comp_isInvertible",
-      :type "smooth family of corrected right inverses",
+    [{:name "contDiff_lift_of_comp_isInvertible",
+      :type "smooth coordinate lift solving A(z)w(z)=b(z)",
       :status :proved,
       :consumers [:t98A06],
-      :depends-on ["rightInverse_of_comp_continuousLinearEquiv"],
+      :depends-on ["contDiff_rightInverse_of_comp_isInvertible"],
       :area "smooth-manifold-submersion"}
      {:name "t98A06_local_smooth_submersion_lift",
       :type "local smooth lifts",
       :status :partial,
       :consumers [:t98A06],
-      :depends-on ["contDiff_rightInverse_of_comp_isInvertible"],
-      :area "smooth-manifold-submersion"}
-     {:name "t98A06_compact_circle_fibers_diffeomorphic",
-      :type "fiber diffeo",
-      :status :not-started,
-      :consumers [:t98A06],
-      :depends-on ["t98A06_global_vectorField_lift"],
+      :depends-on ["contDiff_lift_of_comp_isInvertible"],
       :area "smooth-manifold-submersion"}],
     :statement-hashes
     {:source
      "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
      :implementation
-     "e51411f4272fc4ab9380f64d3f59a2714ee66fa0df7b1cdb04b90851f7045740",
+     "489f0618192795ee3c018a25b6d624153e8544e32e2eafe9f2e42b823842d26e",
      :blueprint
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked smooth fixed-coordinate right inverses.",
+    :reason "Banked smooth coordinate lift solution.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792021040917-12697-7c2eab2d",
-     :commands
-     ["git diff-tree/show 2914de86"
-      "archive 2914de86; lake env lean closure and Main"
-      "sha256sum/placeholders at 2914de86"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: new commit changes only t98A06Closure.lean and proves a compiled, sorry-free smooth family of corrected right inverses. It sets B(z)=A(z)∘R, uses smooth inversion on the invertible endomorphisms, defines Q(z)=R∘B(z)⁻¹, and reassociates to B(z)∘B(z)⁻¹=id in the correct order; all domains/codomains agree. Fixture, closure, and frozen Main hashes match; closure has 0 placeholders and Main baseline 1; only standard axioms; registry 166/166. Chartwise local lifts, compact flow, and Main remain listed."},
-    :commit "2914de86857a9e7f16e8e708c0dd33988f173917",
+     {:cmd "sha256sum fixture/Main/closure; placeholder count",
+      :exit 0}],
+    :commit "5c0f2e062494ca836b5a554e2f17712718aaacef",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
@@ -119372,7 +119356,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119728,7 +119712,8 @@
    :depends-on
    [:lemma-surjective-continuouslinearmap-has-rightinverse
     :lemma-rightinverse-of-comp-continuouslinearequiv
-    :lemma-contdiff-rightinverse-of-comp-isinvertible],
+    :lemma-contdiff-rightinverse-of-comp-isinvertible
+    :lemma-contdiff-lift-of-comp-isinvertible],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
@@ -120922,6 +120907,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-transverse-mfderiv-surjective-of-circledirection-lifts],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "contDiff_lift_of_comp_isInvertible",
+    :type "smooth coordinate lift solving A(z)w(z)=b(z)"},
+   :lemma
+   {:name "contDiff_lift_of_comp_isInvertible",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth coordinate lift solving A(z)w(z)=b(z)",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06},
+   :id :lemma-contdiff-lift-of-comp-isinvertible,
+   :kind :lemma,
+   :depends-on [:lemma-contdiff-rightinverse-of-comp-isinvertible],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
