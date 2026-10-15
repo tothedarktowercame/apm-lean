@@ -2026,7 +2026,33 @@ lemma t99A01_low_j₀_surjective {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_
 -- BEGIN SEAT AREA
 lemma t99A01_low_δ₂_injective {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     Function.Injective D.δ₂c := by
-  sorry
+  intro x y hxy
+  have hinj : Function.Injective D.δ₁.hom := by
+    intro a b hab
+    have hk : a - b ∈ LinearMap.ker D.δ₁.hom := by
+      rw [LinearMap.mem_ker, map_sub, hab, sub_self]
+    rw [← D.hJ₂δ₁] at hk
+    rcases hk with ⟨z, hz⟩
+    have hzeroA : ∀ u : D.A₂, u = 0 := by
+      intro u
+      have h := congrArg (fun f ↦ f u)
+        (congrArg ModuleCat.Hom.hom (D.hA₂.eq_zero_of_src (𝟙 D.A₂)))
+      simpa using h
+    have hzeroB : ∀ u : D.B₂, u = 0 := by
+      intro u
+      have h := congrArg (fun f ↦ f u)
+        (congrArg ModuleCat.Hom.hom (D.hB₂.eq_zero_of_src (𝟙 D.B₂)))
+      simpa using h
+    have hz0 : z = 0 := by
+      apply (ModuleCat.biprodIsoProd D.A₂ D.B₂).toLinearEquiv.injective
+      apply Prod.ext
+      · exact (hzeroA _).trans (hzeroA _).symm
+      · exact (hzeroB _).trans (hzeroB _).symm
+    rw [hz0, map_zero] at hz
+    exact sub_eq_zero.mp hz.symm
+  have hh := congrArg D.cO₁.inv.hom hxy
+  apply hinj
+  simpa [t99A01_LowInput.δ₂c] using hh
 -- END SEAT AREA
 
 /-- **Leaf.** Exactness at `ℤ^r` in degree one (`B₁ = 0`, `hdegree`). -/
