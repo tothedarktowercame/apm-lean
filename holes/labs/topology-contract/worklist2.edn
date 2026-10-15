@@ -87901,20 +87901,20 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Apply Hurewicz to the reverse product and signed-edge casts; instantiate B7, then B8-B10.",
+    "Apply concat-sum to signed-edge casts and boundary homotopy; instantiate B7, then B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; unrelated review dirs preserved"],
     :missing-theorems
-    [{:name "fundamentalGroup_mk_concat_eq_reverse_list_prod",
+    [{:name "moduleHurewicz_mk_concat_eq_list_sum",
       :type
-      "finite path concat class is reverse factor product under Mathlib End multiplication",
+      "Hurewicz of finite concatenation is the traversal-order sum",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on [],
+      :depends-on ["fundamentalGroup_mk_concat_eq_reverse_list_prod"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
       :type "boundary H1 equals ordered signed-edge sum",
@@ -87922,7 +87922,7 @@
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["polygonBoundaryIntegerLoop_subpath_cast"
-       "fundamentalGroup_mk_concat_eq_reverse_list_prod"],
+       "moduleHurewicz_mk_concat_eq_list_sum"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
@@ -87934,7 +87934,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact finite-concat product order.",
+    :reason "Banked Hurewicz finite-concat sum in traversal order.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87942,35 +87942,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 1dea841ec", :exit 0}],
+     {:cmd "git show --check 350e17e86", :exit 0}],
     :diagnostic-history
-    [{:cmd "concat product drafts",
+    [{:cmd "concat-Hurewicz drafts",
       :exit 1,
-      :correction
-      "used reverse End product and normalized Fin points"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792024537820-12843-5fb518a1",
-     :commands
-     ["git show/diff-tree 1dea841ec"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorem"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 1dea841ec by topo-6 changes only the scoped target; fixture hash 8763e9ef...c3c1 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The reverse product orientation is correct: concat traverses initial paths then the last path, while FundamentalGroup is End, so mk_trans writes the last factor first; the induction proves precisely that order, including n=0. New compiled progress; remaining milestones are Hurewicz on this product plus signed-edge casts, B7, then B8-B10."},
-    :commit "1dea841ec",
+      :correction "normalized List.map_ofFn"}],
+    :commit "350e17e86",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "8763e9ef7588172f174c9eb897da97311358b09f4942f3945ecebc649cf5c3c1"},
+     "ef19ea2ff31bd38080aa541825f010e0ba6ea13d56315d69868fdbf6a9baaf65"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92207,7 +92192,8 @@
     :lemma-integerloop-convexcombo-subdivisionvertex
     :lemma-polygonboundaryintegerloop-subpath-apply
     :lemma-polygonboundaryintegerloop-subpath-cast
-    :lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod],
+    :lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod
+    :lemma-modulehurewicz-mk-concat-eq-list-sum],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92554,4 +92540,24 @@
    :id :lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod,
    :kind :lemma,
    :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "moduleHurewicz_mk_concat_eq_list_sum",
+    :type
+    "Hurewicz of finite concatenation is the traversal-order sum"},
+   :lemma
+   {:name "moduleHurewicz_mk_concat_eq_list_sum",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "Hurewicz of finite concatenation is the traversal-order sum",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-modulehurewicz-mk-concat-eq-list-sum,
+   :kind :lemma,
+   :depends-on
+   [:lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod],
    :other-consumers [:t94J09]}]}
