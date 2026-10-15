@@ -2033,7 +2033,20 @@ lemma t99A01_low_h0_coordinates {r : ℕ} :
     ∃ (eC : APMT99A01.H 0 Circle ≅ ModuleCat.of ℤ ℤ)
       (eD : ∀ _ : Fin r,
         APMT99A01.H 0 (Metric.ball (0 : ℂ) 1) ≅ ModuleCat.of ℤ ℤ), True := by
-  sorry
+  letI : PathConnectedSpace Circle :=
+    pathConnectedSpace_iff_univ.mpr (by
+      have h : IsPathConnected
+          (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
+            (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
+        ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
+          isPathConnected_univ
+      simpa using h)
+  letI : PathConnectedSpace (Metric.ball (0 : ℂ) 1) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_ball (x := (0 : ℂ)) (r := 1) (by norm_num))
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ (1 : Circle),
+    fun _ ↦ ConstructionTargets.CoefficientH0.h0Iso ℤ
+      ⟨0, by simp [Metric.mem_ball]⟩, trivial⟩
 
 lemma t99A01_low_j0_surjective {r : ℕ} (degree : Fin r → ℕ) (hr : 0 < r) :
     Function.Surjective
