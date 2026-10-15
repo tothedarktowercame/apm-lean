@@ -88331,26 +88331,28 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove canonical map surjective and kernel=relator closure; instantiate assembly.",
+    "Identify disk boundary with skeleton attaching class; prove reverse kernel inclusion and surjectivity; assemble.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder; dirt preserved"],
+    :warnings
+    ["Main retains 1 placeholder" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen",
-      :type "kernel quotient and centre transport",
+    [{:name "torusRP2DiskBoundaryPath_map_quotient_eq_one",
+      :type "disk boundary dies in quotient pi1",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2AttachingWord"],
+      :depends-on [],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "canonical map surjective; kernel=relator closure",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on ["torusRP2AttachingWord"],
+      :depends-on
+      ["torusRP2AttachingWord"
+       "torusRP2DiskBoundaryPath_map_quotient_eq_one"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88362,24 +88364,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked based-van-Kampen interface and assembly.",
+    :reason "Banked disk boundary nullhomotopy in polygon quotient.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
-     {:cmd "lake lean Main", :exit 0}
-     {:cmd "registry; scans; git check", :exit 0}],
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
+      :exit 0}
+     {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder/axiom scans; git show --check", :exit 0}],
     :diagnostic-history
-    [{:cmd "path-connected draft",
+    [{:cmd "boundary-nullhomotopy drafts",
       :exit 1,
-      :correction "used closed-disk instance"}],
-    :commit "40125480b",
+      :correction
+      "wrapped quotient map as ContinuousMap; used path refl"}],
+    :commit "8ea6fc5b6",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "403f957d1118ec8b55ae34785c81054aa9fdc277dcb8c91ac3b7c7bb15d34410"},
+     "b8c5e890ba6304f4654a0374a26daae4732493df1d4708bf529e071790e4a7c6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94101,7 +94106,9 @@
     :area "polygon-surface-pi1"},
    :id :lemma-torusrp2pairingspace-basedvankampen,
    :kind :lemma,
-   :depends-on [:lemma-torusrp2attachingword],
+   :depends-on
+   [:lemma-torusrp2attachingword
+    :lemma-torusrp2diskboundarypath-map-quotient-eq-one],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94294,4 +94301,21 @@
    :id :lemma-n6boundarykernel-eq-bot,
    :kind :lemma,
    :depends-on [:lemma-n6polygonhomology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2DiskBoundaryPath_map_quotient_eq_one",
+    :type "disk boundary dies in quotient pi1"},
+   :lemma
+   {:name "torusRP2DiskBoundaryPath_map_quotient_eq_one",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "disk boundary dies in quotient pi1",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2diskboundarypath-map-quotient-eq-one,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
