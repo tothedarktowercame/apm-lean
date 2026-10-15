@@ -36163,6 +36163,17 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
      {:cmd "git show --check --stat HEAD", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792038854080-13211-84dcbccb",
+     :commands
+     ["git show --check/diff-tree 8c4eb4f; exact scope"
+      "sha256sum fixture; committed source audit"
+      "statement-registry check"
+      "recorded-source snapshot lake env lean"],
+     :finding
+     "PASS: 8c4eb4f is compiled, sorry-free standard-axiom progress after 263f5d47. It adds Fin(runs+1)-indexed outer-subtype boundary representatives and proves their coercions equal matching ambient canonical boundaries, correctly oriented for run-fold assembly. Exact two-file scope and fixture hash match; registry 166/166; frozen Main placeholder remains 1->1; remaining milestones are listed."},
     :commit "f363a202d2ceb6004df3425363aa37898a91c1d4",
     :changed-paths ["ConstructionTargets/t93J03Closure.lean"],
     :fixture
@@ -36171,7 +36182,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36189,7 +36200,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed canonical prefix-block bound; quotient fold induction remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed canonical prefix-indexed point/path families; quotient fold induction remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36691,7 +36702,11 @@
     {:job 8,
      :commit "20c3d0fff72404a9c5285cfe82dff77eb0d6d46f",
      :reason
-     "Committed canonical prefix-block bound; quotient fold induction remains."}]}
+     "Committed canonical prefix-block bound; quotient fold induction remains."}
+    {:job 9,
+     :commit "f363a202d2ceb6004df3425363aa37898a91c1d4",
+     :reason
+     "Committed canonical prefix-indexed point/path families; quotient fold induction remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -40620,7 +40635,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "pathTwoOpenSubdivisionRunPrefixBlock",
@@ -40630,7 +40645,9 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "canonical prefix-indexed dependent point/path families",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f363a202d2ceb6004df3425363aa37898a91c1d4"},
    :id :lemma-pathtwoopensubdivisionrunprefixblock,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunprefixblock-le],
