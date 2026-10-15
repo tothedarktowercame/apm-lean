@@ -1780,6 +1780,57 @@ lemma t99A01_piOne_attach_succ_aux_gcd {r : ℕ}
 /-- The remaining geometric bridge: van Kampen, the radial equivalence, and
 basepoint transport identify the newly killed overlap class with `d` times
 the normalized generator supplied by the induction hypothesis. -/
+noncomputable def t99A01_piOne_attach_succ_aux_vankampen_aux_point {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    (APMT99A01.succCircleSide degree ∩ APMT99A01.succDiskSide degree :
+      Set (APMT99A01.AttachSpace degree)) := by
+  let z : APMT99A01.Disk :=
+    ⟨(1 : ℂ) / 2, by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_div]
+      norm_num⟩
+  let q : APMT99A01.AttachSpace degree :=
+    Quotient.mk _ (Sum.inr (Fin.last r, z))
+  refine ⟨q, ?_, ?_⟩
+  · intro hq
+    have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (Fin.last r,
+          (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk)))
+        (Sum.inr (Fin.last r, z)) := Quotient.exact hq.symm
+    have he := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+    have hp := Sum.inr.inj he.symm
+    have hz : (0 : ℂ) = 1 / 2 :=
+      congrArg (fun x : Fin (r + 1) × APMT99A01.Disk ↦ (x.2 : ℂ)) hp
+    norm_num at hz
+  · exact ⟨z, by norm_num [z], rfl⟩
+
+lemma t99A01_piOne_attach_succ_aux_vankampen_aux_apply {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    Nonempty
+      (FundamentalGroup (APMT99A01.AttachSpace degree)
+          (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree).1 ≃*
+        (FundamentalGroup (APMT99A01.succCircleSide degree)
+            (apm_t92J05_twoOpen_overlapToLeft
+              (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree)
+              (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree))) ⧸
+          Subgroup.normalClosure
+            ((FundamentalGroup.map
+              (apm_t92J05_twoOpen_overlapToLeft
+                (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree))
+              (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)).range : Set _)) := by
+  obtain ⟨hU, hV, hcover, _, hUV, hUc, hVc, hVs⟩ :=
+    t99A01_piOne_attach_succ_cover degree
+  letI : PathConnectedSpace (APMT99A01.succCircleSide degree) :=
+    isPathConnected_iff_pathConnectedSpace.mp hUc
+  letI : PathConnectedSpace (APMT99A01.succDiskSide degree) :=
+    isPathConnected_iff_pathConnectedSpace.mp hVc
+  letI : PathConnectedSpace
+      (APMT99A01.succCircleSide degree ∩ APMT99A01.succDiskSide degree : Set _) :=
+    isPathConnected_iff_pathConnectedSpace.mp hUV
+  letI : SimplyConnectedSpace (APMT99A01.succDiskSide degree) := hVs
+  exact apm_t92J05_twoOpen_attach_one_cell
+    (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree)
+    hU hV hcover (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)
+
 -- BEGIN SEAT AREA
 lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
     (degree : Fin (r + 1) → ℕ)
@@ -1798,7 +1849,6 @@ lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
         QuotientGroup.mk' _ (Multiplicative.ofAdd 1) := by
   sorry
 -- END SEAT AREA
-
 lemma t99A01_piOne_attach_succ {r : ℕ} (degree : Fin (r + 1) → ℕ)
     (_hpos : ∀ i, 0 < degree i)
     (ih : APMT99A01.PiOneCoordinate (degree ∘ Fin.castSucc)) :
