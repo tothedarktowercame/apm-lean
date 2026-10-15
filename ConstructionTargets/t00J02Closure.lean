@@ -133,6 +133,33 @@ def LocallyIsolatedFiber
     {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y) : Prop :=
   ∀ x, f x = y → ∃ U ∈ 𝓝 x, U ∩ f ⁻¹' {y} = {x}
 
+/-- A local diffeomorphism at every point of a selected fiber makes that
+fiber locally isolated. -/
+theorem locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (y : S)
+    (hlocal : ∀ x, f x = y →
+      IsLocalDiffeomorphAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ f x) :
+    LocallyIsolatedFiber f y := by
+  intro x hxy
+  rcases hlocal x hxy with ⟨Phi, hx, heq⟩
+  refine ⟨Phi.source, Phi.open_source.mem_nhds hx, ?_⟩
+  ext z
+  constructor
+  · rintro ⟨hz, hzy⟩
+    have hfz : f z = y := by simpa using hzy
+    have hPhi : Phi z = Phi x := by
+      calc
+        Phi z = f z := (heq hz).symm
+        _ = y := hfz
+        _ = f x := hxy.symm
+        _ = Phi x := heq hx
+    exact Set.mem_singleton_iff.mpr (Phi.injOn hz hx hPhi)
+  · intro hzx
+    have : z = x := Set.mem_singleton_iff.mp hzx
+    subst z
+    exact ⟨hx, by simpa [hxy]⟩
+
 /-- A locally isolated point fiber is discrete. -/
 theorem isDiscrete_preimage_singleton_of_locallyIsolatedFiber
     {X Y : Type} [TopologicalSpace X] (f : X → Y) (y : Y)
@@ -1460,6 +1487,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.transverseCircle_preimage_component_signedCount
 #print axioms ConstructionTargets.T00J02Closure.finite_regularFiber_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_isDiscrete
+#print axioms ConstructionTargets.T00J02Closure.locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.finiteRegularFiberChoice_of_locallyInjective
