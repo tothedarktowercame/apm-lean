@@ -617,7 +617,76 @@ lemma isSimplyConnected_image_of_contraction (V : Set Z) (hVo : IsOpen V)
     (z₀ : Z) (hz₀ : z₀ ∈ V) (h1 : ∀ z ∈ V, qmk R (H (1, z)) = qmk R z₀)
     (hresp : ∀ t, ∀ a b, a ∈ V → R a b → qmk R (H (t, a)) = qmk R (H (t, b))) :
     IsSimplyConnected (qmk R '' V) := by
-  sorry
+  classical
+  let W : Set (RelationQuotient R) := qmk R '' V
+  let K0 : unitInterval × Z → RelationQuotient R := fun p =>
+    if p.2 ∈ V then qmk R (H p) else qmk R p.2
+  have hK0resp (t : unitInterval) (a b : Z) (hab : R a b) :
+      K0 (t, a) = K0 (t, b) := by
+    by_cases ha : a ∈ V
+    · have hb : b ∈ V := (hVs a b hab).mp ha
+      simpa only [K0, ha, hb, if_true] using hresp t a b ha hab
+    · have hb : b ∉ V := by
+        intro hb
+        exact ha ((hVs a b hab).mpr hb)
+      simpa only [K0, ha, hb, if_false] using
+        (Quotient.sound (Relation.EqvGen.rel _ _ hab) : qmk R a = qmk R b)
+  let K : unitInterval × W → W := fun p =>
+    ⟨Quotient.lift (fun z => K0 (p.1, z))
+        (fun a b hab => eqvGen_respects (fun z => K0 (p.1, z))
+          (fun a b hab => hK0resp p.1 a b hab) hab) p.2.1,
+      by
+        rcases p.2.2 with ⟨z, hz, hzq⟩
+        refine ⟨H (p.1, z), hmaps p.1 z hz, ?_⟩
+        change qmk R (H (p.1, z)) = Quotient.lift _ _ p.2.1
+        rw [← hzq]
+        simp [K0, hz]⟩
+  have hWo : IsOpen W := hVs.isOpen_image hVo
+  have hq : IsQuotientMap (W.restrictPreimage (qmk R)) :=
+    (isQuotientMap_quot_mk : IsQuotientMap (qmk R)).restrictPreimage_isOpen hWo
+  have hKcont : Continuous K := by
+    apply hq.continuous_lift_prod_right
+    apply Continuous.subtype_mk
+    change Continuous (fun p : unitInterval × (qmk R ⁻¹' W) =>
+      Quotient.lift (fun z => K0 (p.1, z))
+        (fun a b hab => eqvGen_respects (fun z => K0 (p.1, z))
+          (fun a b hab => hK0resp p.1 a b hab) hab) (qmk R p.2.1))
+    simp only [Quotient.lift_mk]
+    have hsub : ∀ z : qmk R ⁻¹' W, z.1 ∈ V := by
+      intro z
+      exact (Set.ext_iff.mp hVs.preimage_image z.1).mp z.2
+    have heq : (fun p : unitInterval × (qmk R ⁻¹' W) => K0 (p.1, p.2.1)) =
+        fun p => qmk R (H (p.1, p.2.1)) := by
+      funext p
+      simp [K0, hsub p.2]
+    rw [heq]
+    exact (continuous_qmk R).comp
+      (hH.comp_continuous
+        (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+        (fun p => ⟨Set.mem_univ _, hsub p.2⟩))
+  have hzero : ∀ w : W, K (0, w) = w := by
+    intro w
+    rcases w.2 with ⟨z, hz, hzw⟩
+    have hw : w = (⟨qmk R z, ⟨z, hz, rfl⟩⟩ : W) := by
+      apply Subtype.ext
+      exact hzw.symm
+    subst w
+    apply Subtype.ext
+    simp [K, K0, hz, h0 z hz]
+  have hone : ∀ w : W, K (1, w) = (⟨qmk R z₀, ⟨z₀, hz₀, rfl⟩⟩ : W) := by
+    intro w
+    rcases w.2 with ⟨z, hz, hzw⟩
+    have hw : w = (⟨qmk R z, ⟨z, hz, rfl⟩⟩ : W) := by
+      apply Subtype.ext
+      exact hzw.symm
+    subst w
+    apply Subtype.ext
+    simpa [K, K0, hz] using h1 z hz
+  have hnull : (ContinuousMap.id W).Nullhomotopic := by
+    refine ⟨⟨qmk R z₀, ⟨z₀, hz₀, rfl⟩⟩, ?_⟩
+    exact ⟨⟨K, hKcont⟩, hzero, hone⟩
+  letI : ContractibleSpace W := (contractible_iff_id_nullhomotopic W).2 hnull
+  exact (inferInstance : SimplyConnectedSpace W)
 
 end QuotientTools
 
