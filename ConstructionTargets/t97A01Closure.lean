@@ -1187,6 +1187,73 @@ theorem torusRP2PolygonInnerRun_exists_outerOverlapReplacement
   simpa [pInner, torusRP2PolygonInnerToSpace,
     torusRP2PolygonOuterToSpace] using hq
 
+theorem torusRP2_path_concat_mem_of_piece_mem
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hF : ∀ k t, F k t ∈ U) :
+    ∀ t, Path.concat point F t ∈ U := by
+  induction n with
+  | zero =>
+      intro t
+      rw [Path.concat_succ, Path.concat_zero]
+      have ht : ((Path.concat (point ∘ Fin.castSucc)
+          (fun k ↦ F k.castSucc)).trans (F (Fin.last 0))) t ∈
+          Set.range ((Path.concat (point ∘ Fin.castSucc)
+            (fun k ↦ F k.castSucc)).trans (F (Fin.last 0))) :=
+        Set.mem_range_self t
+      rw [Path.concat_zero, Path.trans_range] at ht
+      rcases ht with ht | ht
+      · rcases ht with ⟨s, hs⟩
+        have hm : (Path.refl ((point ∘ Fin.castSucc) 0)) s ∈ U := by
+          change point 0 ∈ U
+          convert hF 0 0 using 1
+          rw [(F 0).source]
+          congr 1
+        exact hs ▸ hm
+      · rcases ht with ⟨s, hs⟩
+        exact hs ▸ hF (Fin.last 0) s
+  | succ n ih =>
+      intro t
+      rw [Path.concat_succ]
+      change ((Path.concat (point ∘ Fin.castSucc)
+        (fun k ↦ F k.castSucc)).trans (F (Fin.last (n + 1)))) t ∈ U
+      have ht : ((Path.concat (point ∘ Fin.castSucc)
+          (fun k ↦ F k.castSucc)).trans (F (Fin.last (n + 1)))) t ∈
+          Set.range ((Path.concat (point ∘ Fin.castSucc)
+            (fun k ↦ F k.castSucc)).trans (F (Fin.last (n + 1)))) :=
+        Set.mem_range_self t
+      rw [Path.trans_range] at ht
+      rcases ht with ⟨s, hs⟩ | ⟨s, hs⟩
+      · exact hs ▸ ih (point ∘ Fin.castSucc) (fun k ↦ F k.castSucc)
+          (fun k u ↦ hF k.castSucc u) s
+      · exact hs ▸ hF (Fin.last (n + 1)) s
+
+/-- A whole nonempty dependent inner block has one overlap representative
+routed through the outer radial piece. -/
+theorem torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
+    {n : ℕ}
+    (point : Fin (n + 2) → torusRP2PairingData.Space)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hx : point 0 ∈ (openCover torusRP2PairingData).inner ∩
+      (openCover torusRP2PairingData).outer)
+    (hy : point (Fin.last (n + 1)) ∈
+      (openCover torusRP2PairingData).inner ∩
+      (openCover torusRP2PairingData).outer)
+    (hF : ∀ k t, F k t ∈ (openCover torusRP2PairingData).inner) :
+    ∃ q : Path
+        (⟨point 0, by rw [(openCover torusRP2PairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen torusRP2PairingData.Rel)
+        (⟨point (Fin.last (n + 1)), by
+          rw [(openCover torusRP2PairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen torusRP2PairingData.Rel),
+      (⟦Path.concat point F⟧ : FundamentalGroupoid.mk (point 0) ⟶
+          FundamentalGroupoid.mk (point (Fin.last (n + 1)))) =
+        ⟦(q.map torusRP2PolygonOverlapToOuter.continuous).map
+          torusRP2PolygonOuterToSpace.continuous⟧ := by
+  exact torusRP2PolygonInnerRun_exists_outerOverlapReplacement hx hy
+    (Path.concat point F) (torusRP2_path_concat_mem_of_piece_mem point F hF)
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1257,6 +1324,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInner_pathClass_eq
 #print axioms torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerRun_exists_outerOverlapReplacement
+#print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
