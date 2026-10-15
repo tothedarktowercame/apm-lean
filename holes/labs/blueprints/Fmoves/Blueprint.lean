@@ -7406,6 +7406,34 @@ theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
       frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) := by
   sorry
 
+/-- Each branch of `cutProfileNewB` lands in the frontier (model: `cutOldB_range`). -/
+theorem cutNewB_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    Set.range (cutNewB L p q) ⊆
+      frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) := by
+  sorry
+
+/-- Explicit preimages for frontier points (model: `cutOldB_range`). -/
+theorem cutNewB_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
+      {z | ‖z‖ = 1 ∧
+        cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ∪
+        segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)))
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
+    frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) ⊆
+      Set.range (cutNewB L p q) := by
+  sorry
+
 theorem cutNewB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
       {z | ‖z‖ = 1 ∧
@@ -7417,7 +7445,8 @@ theorem cutNewB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     Set.range (cutNewB L p q) =
       frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) := by
-  sorry
+  exact Set.Subset.antisymm (cutNewB_range_subset hpq hqL hfront hcross)
+    (cutNewB_range_supset hpq hqL hfront hcross)
 
 lemma cutBoundaryData_concrete_aux_edge_circle {L e : ℕ} (s : Icc (0 : ℝ) 1) :
     cutEdgeCircle L e s = AddCircle.homeomorphCircle'
