@@ -192,7 +192,46 @@ theorem apm_t02a02_bridge (w : apm_t02a02_W) (pair : Equiv.Perm (Fin w.length))
     (huniq : ∀ i j, i ≠ j → (w.get j).1 = (w.get i).1 → j = pair i)
     (hsign : ∀ i, (sign i = sign (pair i)) ↔ ((w.get i).2 = (w.get (pair i)).2)) :
     Nonempty (apm_t02a02_polygonSpace w.length pair sign ≃ₜ PolygonMoves.PolygonSurface w) := by
-  sorry
+  have hpar : ∀ (i : Fin w.length) (t : Set.Icc (0 : ℝ) 1),
+      pairedParameter pair sign i t =
+        (if (w.get i).2 = (w.get (pair i)).2 then t else PolygonMoves.reverseParameter t) := by
+    intro i t
+    unfold pairedParameter
+    by_cases h : sign i = sign (pair i)
+    · rw [if_pos h, if_pos ((hsign i).mp h)]
+    · rw [if_neg h, if_neg (fun h' => h ((hsign i).mpr h'))]
+      rfl
+  have hfwd : ∀ x y, boundaryRel w.length pair sign x y → PolygonMoves.WordRel w x y := by
+    rintro x y ⟨i, t, rfl, rfl⟩
+    exact ⟨i, pair i, (hpair i).1.symm, t, (hpair i).2.symm, rfl, by rw [hpar]⟩
+  have hrev : ∀ x y, PolygonMoves.WordRel w x y → boundaryRel w.length pair sign x y := by
+    rintro x y ⟨i, j, hij, t, hlab, rfl, rfl⟩
+    have hj : j = pair i := huniq i j hij hlab.symm
+    subst hj
+    exact ⟨i, t, rfl, by rw [hpar]⟩
+  have heqv : ∀ x y, Relation.EqvGen (boundaryRel w.length pair sign) x y ↔
+      Relation.EqvGen (PolygonMoves.WordRel w) x y := by
+    intro x y
+    constructor
+    · intro h
+      induction h with
+      | rel x y h => exact Relation.EqvGen.rel _ _ (hfwd x y h)
+      | refl x => exact Relation.EqvGen.refl x
+      | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+      | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+    · intro h
+      induction h with
+      | rel x y h => exact Relation.EqvGen.rel _ _ (hrev x y h)
+      | refl x => exact Relation.EqvGen.refl x
+      | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+      | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  let e : apm_t02a02_polygonSpace w.length pair sign ≃ PolygonMoves.PolygonSurface w :=
+    Quotient.congrRight heqv
+  refine ⟨{ toEquiv := e, continuous_toFun := ?_, continuous_invFun := ?_ }⟩
+  · apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    exact PolygonMoves.continuous_polygonQuotient w
+  · apply isQuotientMap_quotient_mk'.continuous_iff.mpr
+    exact continuous_coinduced_rng
 
 theorem apm_t02a02_octagon_word :
     Nonempty (apm_t02a02_octagon ≃ₜ PolygonMoves.PolygonSurface apm_t02a02_w8) :=
