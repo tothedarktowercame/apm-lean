@@ -37121,37 +37121,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Transport the positive sign across four fiber points; degree four; invariants/Main.",
+    "Apply a local-degree transport theorem; sum four signs; invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialSphereLift_regularPoint_tangentDerivative",
-      :type "normalized tangent action is 2I with determinant 8 > 0",
+    [{:name "t96A06_polynomialSphereLift_localSignTransport",
+      :type
+      "base-positive four-point fiber with orientation-preserving pair-flip transport",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialNormalizedAmbient_fderiv_regularTangentBasis"],
+      ["polynomialSphereLift_regularPoint_tangentDerivative"
+       "polynomialSphereRegularPoint_fiber_ncard"
+       "flipBothPairsSphere_rational_H3"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_local_signs",
       :type "all four regular-fiber local signs are positive",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on
-      ["polynomialSphereLift_regularPoint_tangentDerivative"
-       "flipBothPairsSphere_rational_H3"],
+      :depends-on ["t96A06_polynomialSphereLift_localSignTransport"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the tangent derivative package: action by 2I, determinant 8, positive orientation.",
+    "Committed one package containing the four-point fiber, positive base derivative, lift symmetries, and orientation-preserving pair flips.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37161,16 +37162,11 @@
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
     :diagnostic-history
-    [{:cmd "iterative closure compiles",
+    [{:cmd "initial compiles",
       :exit 1,
-      :note "fixed scalar coercions and completed conjunction"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792057962097-13798-e265feca",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "5a1f539ac",
+      :note
+      "fixed preimage notation and closed definitional lift equalities"}],
+    :commit "3084565c5",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37178,7 +37174,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41447,7 +41443,8 @@
     :lemma-flipbothpairssphere-rational-h3
     :lemma-polynomialsphereregularpoint-fiber-ncard
     :lemma-polynomialspherelift-regularpoint
-    :lemma-polynomialspherelift-regularpoint-tangentderivative],
+    :lemma-polynomialspherelift-regularpoint-tangentderivative
+    :lemma-t96a06-polynomialspherelift-localsigntransport],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41921,6 +41918,28 @@
    :depends-on
    [:lemma-fderiv-norm-regularimage-eq-zero-of-inner-eq-zero
     :lemma-polynomialmapambient-fderiv-regulartangentbasis],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_localSignTransport",
+    :type
+    "base-positive four-point fiber with orientation-preserving pair-flip transport"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_localSignTransport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "base-positive four-point fiber with orientation-preserving pair-flip transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-localsigntransport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-regularpoint-tangentderivative
+    :lemma-polynomialsphereregularpoint-fiber-ncard
+    :lemma-flipbothpairssphere-rational-h3],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
