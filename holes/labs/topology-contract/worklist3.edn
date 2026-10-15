@@ -36747,6 +36747,20 @@
       :exit 1,
       :note
       "Closed residual function-division equality; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792075755581-14227-dbc24263",
+     :commands
+     ["git show --check --stat 7337cdfc2"
+      "git diff --name-only 7337cdfc2^ 7337cdfc2"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed one."},
     :commit "9c95e56fa",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36755,7 +36769,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36773,7 +36787,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the general two-affine-region open cover for the CP successor filtration.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed every literal CP affine patch as an exact full-target chart.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36809,7 +36823,11 @@
     {:job 7,
      :commit "7337cdfc2",
      :reason
-     "Committed the general two-affine-region open cover for the CP successor filtration."}]}
+     "Committed the general two-affine-region open cover for the CP successor filtration."}
+    {:job 8,
+     :commit "9c95e56fa",
+     :reason
+     "Committed every literal CP affine patch as an exact full-target chart."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37112,7 +37130,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37169,7 +37187,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37191,7 +37209,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -43157,7 +43175,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_sphere3_integral_normalizedClass_localizes",
@@ -43169,7 +43187,9 @@
     :type
     "normalized integral H3 class localizes to positive generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-sphere3-integral-normalizedclass-localizes,
    :kind :lemma,
    :depends-on
@@ -43177,7 +43197,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -43191,7 +43211,9 @@
     :type
     "normalized integral global class localizes at the exact base regular point to the positive chart generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialspherelift-base-integralfundamentalclass-positive,
    :kind :lemma,
@@ -43200,7 +43222,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -43214,7 +43236,9 @@
     :type
     "selected rational base localization is the positive chart generator iff its comparison scalar is one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialspherelift-base-localfundamentalclass-positive-iff,
    :kind :lemma,
@@ -43243,7 +43267,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereLift_baseLocalizationScalar_ne_zero",
@@ -43253,7 +43277,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "rational base-localization comparison scalar is nonzero",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialspherelift-baselocalizationscalar-ne-zero,
    :kind :lemma,
    :depends-on
@@ -43261,7 +43287,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_affineChartConstruction_all",
@@ -43273,7 +43299,9 @@
     :type
     "every literal CP affine patch has exact coordinates, inverse and full affine target",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9c95e56fa"},
    :id :lemma-t99j05-affinechartconstruction-all,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-opencover],
