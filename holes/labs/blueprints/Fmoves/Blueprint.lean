@@ -4253,7 +4253,185 @@ theorem zipMap_edge_high {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) {j : ℕ} (hj :
 theorem zipMap_edge_low {n k : ℕ} (hn : 0 < n) (hk : k ≤ n) {j : ℕ} (hj : j < k)
     (t : Icc (0 : ℝ) 1) :
     zipMap n k (edgePoint (n + 2) j t) = edgePoint n j t := by
-  sorry
+  have hnR : (0 : ℝ) < n := by exact_mod_cast hn
+  have hden : (0 : ℝ) < (n : ℝ) + 2 := by positivity
+  let α : ℝ := 2 * Real.pi * ((j : ℝ) + t.1) / ((n : ℝ) + 2)
+  let a : ℝ := zipStart n k
+  have hαa : α ≤ a := by
+    dsimp [α, a, zipStart]
+    apply (div_le_div_iff_of_pos_right hden).2
+    apply mul_le_mul_of_nonneg_left _ (by positivity)
+    have hj' : j + 1 ≤ k := by omega
+    have hjR : (j : ℝ) + 1 ≤ k := by exact_mod_cast hj'
+    linarith [t.2.2]
+  have hcircle :
+      AddCircle.homeomorphCircle'.symm
+          (⟨edgePoint (n + 2) j t, by
+            simpa [Circle, Submonoid.unitSphere] using norm_edgePoint (n + 2) j t⟩ : Circle) =
+        (α : AddCircle (2 * Real.pi)) := by
+    apply AddCircle.homeomorphCircle'.injective
+    rw [Homeomorph.apply_symm_apply, AddCircle.homeomorphCircle'_apply_mk]
+    apply Subtype.ext
+    change Complex.exp _ = Complex.exp _
+    congr 1
+    dsimp [α]
+    push_cast
+    ring
+  have hnorm : ‖(edgePoint (n + 2) j t : ℂ)‖ = 1 :=
+    norm_edgePoint (n + 2) j t
+  by_cases hae : α = a
+  · have hjk : j + 1 = k := by
+      have he := hae
+      dsimp [α, a, zipStart] at he
+      field_simp at he
+      push_cast at he
+      have ht1 : (t : ℝ) = 1 := by
+        have hj' : j + 1 ≤ k := by omega
+        have hjR : (j : ℝ) + 1 ≤ k := by exact_mod_cast hj'
+        exact le_antisymm t.2.2 (by linarith)
+      have hjkR : (j : ℝ) + 1 = k := by linarith
+      exact_mod_cast hjkR
+    have ht1 : (t : ℝ) = 1 := by
+      have he := hae
+      dsimp [α, a, zipStart] at he
+      field_simp at he
+      push_cast at he
+      have hj' : j + 1 ≤ k := by omega
+      have hjR : (j : ℝ) + 1 ≤ k := by exact_mod_cast hj'
+      linarith [t.2.2]
+    have hb : zipBoundaryMap n k
+        ⟨edgePoint (n + 2) j t, by
+          simpa [Circle, Submonoid.unitSphere] using hnorm⟩ = -1 := by
+      rw [zipBoundaryMap, hcircle]
+      have haIco : a ∈ Ico a (a + 2 * Real.pi) :=
+        ⟨le_rfl, lt_add_of_pos_right _ Real.two_pi_pos⟩
+      rw [hae, AddCircle.liftIco_coe_apply haIco]
+      rw [zipProfile, if_pos]
+      · simp [a, zipStart]
+      · dsimp [a, zipStart]
+        have : (0 : ℝ) ≤ 4 * Real.pi / ((n : ℝ) + 2) := by positivity
+        linarith
+    have hcone : zipCone n k (edgePoint (n + 2) j t : ℂ) = -1 := by
+      rw [zipCone_of_norm_one hnorm]
+      exact hb
+    have hraw : zipRaw n k (edgePoint (n + 2) j t : ℂ) =
+        (edgePoint n j t : ℂ) := by
+      rw [zipRaw, hcone]
+      simp only [neg_sq, one_pow, mul_one, zipRotation]
+      change Complex.exp (Complex.I * (2 * Real.pi * (k : ℝ) / n)) =
+        Complex.exp (Complex.I * (2 * Real.pi * ((j : ℝ) + (t : ℝ)) / n))
+      congr 1
+      rw [ht1]
+      push_cast
+      have hjkC : (k : ℂ) = (j : ℂ) + 1 := by exact_mod_cast hjk.symm
+      rw [hjkC]
+    unfold zipMap
+    rw [dif_pos]
+    · exact Subtype.ext hraw
+    · rw [hraw, norm_edgePoint]
+  · have hαlt : α < a := lt_of_le_of_ne hαa hae
+    let φ : ℝ := α + 2 * Real.pi
+    have hφIco : φ ∈ Ico a (a + 2 * Real.pi) := by
+      constructor
+      · dsimp [φ]
+        have hα0 : 0 ≤ α := by
+          dsimp [α]
+          exact div_nonneg (mul_nonneg (by positivity)
+            (add_nonneg (by positivity) t.2.1)) hden.le
+        have ha_lt : a < 2 * Real.pi := by
+          dsimp [a, zipStart]
+          have hkR : (k : ℝ) ≤ n := by exact_mod_cast hk
+          rw [div_lt_iff₀ hden]
+          nlinarith [Real.pi_pos]
+        linarith
+      · dsimp [φ]
+        simpa [add_comm] using add_lt_add_right hαlt (2 * Real.pi)
+    have hcircleφ : (α : AddCircle (2 * Real.pi)) = (φ : AddCircle (2 * Real.pi)) := by
+      apply QuotientAddGroup.eq_iff_sub_mem.mpr
+      refine ⟨-1, ?_⟩
+      dsimp [φ]
+      simp
+    have hcut : φ = a + 4 * Real.pi / ((n : ℝ) + 2) ∨
+        a + 4 * Real.pi / ((n : ℝ) + 2) < φ := by
+      have hnotlt : ¬ φ < a + 4 * Real.pi / ((n : ℝ) + 2) := by
+        intro h
+        dsimp [φ, α, a, zipStart] at h
+        field_simp [ne_of_gt hden] at h
+        have hj0 : (0 : ℝ) ≤ j := by positivity
+        have hkR : (k : ℝ) ≤ n := by exact_mod_cast hk
+        nlinarith [Real.pi_pos, t.2.1]
+      rcases (le_of_not_gt hnotlt).eq_or_lt with h | h
+      · exact Or.inl h.symm
+      · exact Or.inr h
+    have hb : zipBoundaryMap n k
+        ⟨edgePoint (n + 2) j t, by
+          simpa [Circle, Submonoid.unitSphere] using hnorm⟩ =
+        Complex.exp (((Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n : ℝ) : ℂ) * Complex.I) := by
+      rw [zipBoundaryMap, hcircle, hcircleφ, AddCircle.liftIco_coe_apply hφIco]
+      rcases hcut with hcut | hcut
+      · rw [zipProfile, if_pos hcut.le]
+        have hval : (((φ - zipStart n k) * ((n : ℝ) + 2) /
+            (2 * Real.pi) - 1 : ℝ) : ℂ) = 1 := by
+          have hvalR : (φ - zipStart n k) * ((n : ℝ) + 2) /
+              (2 * Real.pi) - 1 = (1 : ℝ) := by
+            rw [hcut]
+            dsimp [a]
+            field_simp [ne_of_gt Real.pi_pos]
+            ring
+          exact_mod_cast hvalR
+        rw [hval]
+        rw [show (j : ℝ) + (t : ℝ) + n - k = 0 by
+          dsimp [φ, α, a, zipStart] at hcut
+          field_simp at hcut
+          nlinarith [Real.pi_pos]]
+        simp
+      · rw [zipProfile, if_neg (not_le.mpr hcut)]
+        congr 1
+        have hreal : ((n : ℝ) + 2) / n *
+            (φ - zipStart n k - 4 * Real.pi / ((n : ℝ) + 2)) / 2 =
+              Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n := by
+          dsimp [φ, α, a, zipStart]
+          field_simp [ne_of_gt hnR, ne_of_gt hden]
+          ring
+        rw [hreal]
+    have hcone : zipCone n k (edgePoint (n + 2) j t : ℂ) =
+        Complex.exp (((Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n : ℝ) : ℂ) * Complex.I) := by
+      rw [zipCone_of_norm_one hnorm]
+      exact hb
+    have hraw : zipRaw n k (edgePoint (n + 2) j t : ℂ) =
+        (edgePoint n j t : ℂ) := by
+      rw [zipRaw, hcone, ← Complex.exp_nat_mul]
+      change Complex.exp (Complex.I * (2 * Real.pi * (k : ℝ) / n)) *
+          Complex.exp (2 * (((Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n : ℝ) : ℂ) * Complex.I)) = _
+      rw [← Complex.exp_add]
+      change Complex.exp _ = Complex.exp (Complex.I *
+        (2 * Real.pi * ((j : ℝ) + (t : ℝ)) / n))
+      have hangle : 2 * Real.pi * (k : ℝ) / n +
+          2 * (Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n) =
+          2 * Real.pi + 2 * Real.pi * ((j : ℝ) + (t : ℝ)) / n := by
+        field_simp [ne_of_gt hnR]
+        ring
+      have hangleC := congrArg (fun x : ℝ => (x : ℂ)) hangle
+      rw [show Complex.I * (2 * Real.pi * (k : ℝ) / n) +
+          2 * (((Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n : ℝ) : ℂ) * Complex.I) =
+          2 * Real.pi * Complex.I + Complex.I *
+            (2 * Real.pi * ((j : ℝ) + (t : ℝ)) / n) by
+        calc
+          _ = Complex.I * ((2 * Real.pi * (k : ℝ) / n +
+              2 * (Real.pi * ((j : ℝ) + (t : ℝ) + n - k) / n) : ℝ) : ℂ) := by
+                push_cast
+                ring
+          _ = Complex.I * ((2 * Real.pi +
+              2 * Real.pi * ((j : ℝ) + (t : ℝ)) / n : ℝ) : ℂ) :=
+                congrArg (fun z : ℂ => Complex.I * z) hangleC
+          _ = _ := by
+            push_cast
+            ring]
+      rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]
+    unfold zipMap
+    rw [dif_pos]
+    · exact Subtype.ext hraw
+    · rw [hraw, norm_edgePoint]
 
 theorem zipMap_fold_eq {n k : ℕ}
     (hfold : ∀ t : Icc (0 : ℝ) 1,
