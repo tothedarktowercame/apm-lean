@@ -19,6 +19,9 @@ namespace ConstructionTargets.t97A01Closure
 open ConstructionTargets.PolygonSurfacePiOne
 open ConstructionTargets.PolygonSurfaceHomology
 open ConstructionTargets.T97A01SmithQuotients
+open ConstructionTargets.PolygonRadialOpenCover
+open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
+open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
 
 /-- A homeomorphism transports the based fundamental group. -/
 def fundamentalGroupEquivOfHomeomorph
@@ -990,6 +993,51 @@ theorem torusRP2BoundaryFreeGroupMap_surjective
   exact h.comp (torusRP2SkeletonFinFreeGroupMap_surjective.comp
     torusRP2BoundaryBasisEquiv.surjective)
 
+/-- The proved two-open fundamental-groupoid pseudopushout, specialized to
+the radial cover of the torus-crosscap polygon.  This is the exact cover-level
+input needed to derive surjectivity and the reverse kernel inclusion. -/
+noncomputable def torusRP2PolygonFundamentalGroupoidPseudopushout
+    (C : Type) [CategoryTheory.Category C] :
+    (FundamentalGroupoid torusRP2PairingData.Space ⥤ C) ≌
+      @PseudoFunctorCocone torusRP2PairingData.Space _
+        (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer C _ :=
+  twoOpenFundamentalGroupoidPseudopushoutEquivalence
+    (openCover torusRP2PairingData).inner_open
+    (openCover torusRP2PairingData).outer_open
+    (openCover torusRP2PairingData).cover
+
+/-- Reconstruct the identity fundamental-groupoid functor from its two radial
+cover restrictions. -/
+noncomputable def torusRP2PolygonPseudopushoutReconstructedIdentity :
+    FundamentalGroupoid torusRP2PairingData.Space ⥤
+      FundamentalGroupoid torusRP2PairingData.Space :=
+  (torusRP2PolygonFundamentalGroupoidPseudopushout
+    (FundamentalGroupoid torusRP2PairingData.Space)).inverse.obj
+      ((torusRP2PolygonFundamentalGroupoidPseudopushout
+        (FundamentalGroupoid torusRP2PairingData.Space)).functor.obj
+          (𝟭 (FundamentalGroupoid torusRP2PairingData.Space)))
+
+/-- Unit identifying the literal identity functor with its reconstructed
+radial-cover functor. -/
+noncomputable def torusRP2PolygonPseudopushoutReconstructionUnit :
+    (𝟭 (FundamentalGroupoid torusRP2PairingData.Space)) ≅
+      torusRP2PolygonPseudopushoutReconstructedIdentity :=
+  (torusRP2PolygonFundamentalGroupoidPseudopushout
+    (FundamentalGroupoid torusRP2PairingData.Space)).unitIso.app _
+
+/-- Every polygon fundamental-groupoid arrow is conjugate, through the
+pseudopushout unit, to the arrow reconstructed from the two cover pieces. -/
+theorem torusRP2PolygonPseudopushout_arrow_eq_reconstructed
+    {x y : FundamentalGroupoid torusRP2PairingData.Space} (g : x ⟶ y) :
+    g = torusRP2PolygonPseudopushoutReconstructionUnit.hom.app x ≫
+      torusRP2PolygonPseudopushoutReconstructedIdentity.map g ≫
+      torusRP2PolygonPseudopushoutReconstructionUnit.inv.app y := by
+  rw [← Category.assoc,
+    ← torusRP2PolygonPseudopushoutReconstructionUnit.hom.naturality g]
+  rw [Category.assoc, Iso.hom_inv_id_app, Category.comp_id]
+  rfl
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1056,6 +1104,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2SkeletonBoundary_map_eq_diskBoundary_map
 #print axioms torusRP2Relator_normalClosure_le_kernel
 #print axioms torusRP2BoundaryFreeGroupMap_surjective
+#print axioms torusRP2PolygonPseudopushout_arrow_eq_reconstructed
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
