@@ -128,6 +128,30 @@ theorem frozen_boundaryRel_iff_generator (x y : Surfaces.Disk) :
       · exact ⟨11, t, h.2, h.1⟩
       · exact ⟨9, t, h.2, h.1⟩
 
+/-- Passing to equivalence closure removes the explicit symmetry added by the
+generic signed relation, so both presentations define the same quotient. -/
+theorem frozen_eqvGen_boundaryRel_iff_generator (x y : Surfaces.Disk) :
+    Relation.EqvGen (boundaryRel 14 frozenPair frozenSign) x y ↔
+      Relation.EqvGen frozenGeneratorRel x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b hab =>
+        rcases (frozen_boundaryRel_iff_generator a b).mp hab with hab | hba
+        · exact Relation.EqvGen.rel _ _ hab
+        · exact (Relation.EqvGen.rel _ _ hba).symm
+    | refl a => exact Relation.EqvGen.refl a
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans a b c ih₁ ih₂
+  · intro h
+    induction h with
+    | rel a b hab =>
+        exact Relation.EqvGen.rel _ _
+          ((frozen_boundaryRel_iff_generator a b).mpr (Or.inl hab))
+    | refl a => exact Relation.EqvGen.refl a
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans a b c ih₁ ih₂
+
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -598,5 +622,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
 #print axioms frozen_boundaryRel_iff_generator
+#print axioms frozen_eqvGen_boundaryRel_iff_generator
 
 end ConstructionTargets.t94J09Closure
