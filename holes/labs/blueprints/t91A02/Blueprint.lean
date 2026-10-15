@@ -537,10 +537,54 @@ nonorientablePair g`; `Nat.card_congr (nonorientableOrbitEquiv g)`.  For the
 degree: evaluate at the orbit of edge `0`; `orbit_eq_iff`/
 `nonorientableOrbitLabel_pair` show exactly edges `0, 1` lie in it, so the sum
 in `attachingDegree_apply` is `-1 + -1`. -/
+lemma t91A02_standard_nonorientable_data_aux_orbit (g : ℕ) (hg : 0 < g)
+    (i : Fin (2 * g)) (j : Fin g) :
+    (standardPairingData false g hg).orbit i =
+        (nonorientableOrbitEquiv g).symm j ↔
+      nonorientableOrbitLabel g i = j := by
+  change Quotient.mk _ i = (nonorientableOrbitEquiv g).symm j ↔ _
+  constructor
+  · intro h
+    have := congrArg (nonorientableOrbitEquiv g) h
+    simpa using this
+  · intro h
+    apply (nonorientableOrbitEquiv g).injective
+    simpa using h
+
+lemma t91A02_standard_nonorientable_data_aux_degree (g : ℕ) (hg : 0 < g)
+    (j : Fin g) :
+    attachingDegree (standardPairingData false g hg)
+        ((nonorientableOrbitEquiv g).symm j) = -2 := by
+  rw [attachingDegree_apply]
+  calc
+    _ = ∑ p : Fin g × Fin 2,
+        edgeOrbitContribution (standardPairingData false g hg)
+          ((nonorientableCoord g).symm p) ((nonorientableOrbitEquiv g).symm j) :=
+      ((nonorientableCoord g).symm.sum_comp fun i =>
+        edgeOrbitContribution (standardPairingData false g hg) i
+          ((nonorientableOrbitEquiv g).symm j)).symm
+    _ = -2 := by
+      simp only [edgeOrbitContribution]
+      simp_rw [t91A02_standard_nonorientable_data_aux_orbit]
+      simp [standardPairingData, nonorientableStandardPairingData,
+        standardPairingDataOfOneVertex, standardPair, standardSign,
+        nonorientableOrbitLabel, edgeAttachingDegree, Fintype.sum_prod_type]
+      simp only [Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ,
+        if_pos]
+      norm_num
+
 lemma t91A02_standard_nonorientable_data (g : ℕ) (hg : 0 < g) :
     Nat.card (PairingOrbit (standardPairingData false g hg).pair) = g ∧
       attachingDegree (standardPairingData false g hg) ≠ 0 := by
-  sorry
+  constructor
+  · change Nat.card (PairingOrbit (nonorientablePair g)) = g
+    simpa using Nat.card_congr (nonorientableOrbitEquiv g)
+  · intro hzero
+    have h : attachingDegree (standardPairingData false g hg)
+          ((nonorientableOrbitEquiv g).symm ⟨0, hg⟩) = 0 := by
+      simpa using congrFun hzero ((nonorientableOrbitEquiv g).symm ⟨0, hg⟩)
+    rw [t91A02_standard_nonorientable_data_aux_degree] at h
+    norm_num at h
 
 /-! ## Topology assemblies (sorry-free) -/
 
