@@ -10697,7 +10697,16 @@ theorem cut_retransfer_consistency_A_arc_aux_v_same {Label : Type*} [DecidableEq
     (hk : e = u.length + 1 + v.length + u.length + 1 - e₀) (hτ : τ = reverseParameter s₀) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+  rw [hP, D.oldA_arc e₀ s₀ he₀ he₀q]
+  unfold cutRetransfer
+  rw [if_neg (by omega), if_pos (by omega)]
+  have heq : u.length + 1 + v.length + u.length + 1 - e = e₀ := by
+    omega
+  have hs : reverseParameter (reverseParameter s₀) = s₀ := by
+    apply Subtype.ext
+    simp [reverseParameter]
+  rw [hτ, heq, hs]
 
 /-- `(e, τ)` is the end (`τ = 1`) of the side before the reflected side `k`, which starts there (`reverse s₀ = 0`, i.e. `s₀ = 1`). -/
 theorem cut_retransfer_consistency_A_arc_aux_v_next {Label : Type*} [DecidableEq Label]
