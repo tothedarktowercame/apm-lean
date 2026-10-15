@@ -569,6 +569,26 @@ theorem hasFDerivAt_incidenceDifference_writtenInExtChartAt_self
 
 #print axioms hasFDerivAt_incidenceDifference_writtenInExtChartAt_self
 
+/-- At an incidence point, the preferred target chart of the second map is
+literally the target chart centered at the value of the first map. -/
+theorem writtenInExtChartAt_eq_commonTarget_of_eq
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    (f : M → P) (c : N → P) (x : M) (y : N) (hxy : f x = c y) :
+    writtenInExtChartAt 𝓘(ℝ, F) 𝓘(ℝ, G) y c =
+      fun z : F ↦ extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm z)) := by
+  funext z
+  simp only [writtenInExtChartAt, Function.comp_apply]
+  rw [hxy]
+
+#print axioms writtenInExtChartAt_eq_commonTarget_of_eq
+
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
 theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
