@@ -2566,6 +2566,10 @@ noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_wo
         ((FundamentalGroup.fundamentalGroupMulEquivOfPath p).trans apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates))
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
+    (hcoordW : ∀ l, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+        (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P l) =
+      FreeGroup.of (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv l))
     (hG1 : ∀ {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
       {f g : C(X, Y)} (_ : f.Homotopic g) (x : X),
       ∃ p : Path (f x) (g x), ∀ a : FundamentalGroup X x,
@@ -2629,7 +2633,7 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   intro x
   obtain ⟨g, hg⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range x
-  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv (fun h x => apm_t92J05_homotopic_map_conj h x) apm_t92J05_genusTwo_W1_boundary_word x g hg
+  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord (fun h x => apm_t92J05_homotopic_map_conj h x) apm_t92J05_genusTwo_W1_boundary_word x g hg
   refine ⟨e, ?_⟩
   rw [hg, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_zpowers, Subgroup.map_normalClosure _ _ e.surjective,
     Set.image_singleton]
