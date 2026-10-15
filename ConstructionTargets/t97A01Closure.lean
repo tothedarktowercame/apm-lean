@@ -2944,6 +2944,41 @@ theorem torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
   exact torusRP2_subdivisionRunGlobalPrefixBlockPath_eq_flatIntervalPath
     S hx hy i
 
+/-- The outer fold of the contiguous flat intervals, rebased to the literal
+subdivision endpoints. -/
+noncomputable def torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    Path (S.point 0) (S.point (Fin.last (S.n + 1))) :=
+  (Path.concat
+    (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+      torusRP2PairingData.Space))
+    (torusRP2_subdivisionRunGlobalFlatIntervalPath S hx hy)).cast
+      (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+      (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm
+
+/-- The literal-endpoint global prefix fold is exactly the corresponding
+literal-endpoint fold of contiguous flat intervals. -/
+theorem torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints S hx hy =
+      torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints S hx hy := by
+  unfold torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints
+  unfold torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints
+  rw [torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
+    S hx hy]
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -3073,6 +3108,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_eq_flat_prefix_add
 #print axioms torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
+#print axioms torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
