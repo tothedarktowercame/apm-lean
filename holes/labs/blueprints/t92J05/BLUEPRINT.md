@@ -109,21 +109,57 @@ a basepoint; no boundary or dimension-zero case is present.
 
 ### Genus-two leaves
 
-The former single boundary is now a sorry-free assembly of three independent
-leaves. Two are small seats; one is honestly marked as the remaining missing
-foundation rather than disguising it as several vacuous certificates.
+The former 600–1200 line boundary is now a sorry-free assembly from three
+parallel leaves.  The generic theorem is deliberately useful beyond this
+problem: it says that for path-connected open `U,V` covering `X`, with
+path-connected overlap and simply connected `V`, the inclusion `π₁(U) →
+π₁(X)` is onto and its kernel is the normal closure of the overlap image.
+This is equivalent to the requested "attach one 2-cell" quotient statement;
+it is slightly stronger because the overlap need not first be identified with
+`ℤ`.
 
-- `apm_t92J05_genusTwo_polygon_vanKampen_at_center` (**LIBRARY**, estimated
-  600–1200 lines): compute the group at the explicit polygon center. Use
-  `PolygonSurfacePiOne.standardPairingData_space_homeomorph`, `openCover`,
-  `polygonCenterContraction`, `outerOpenDeformationRetract`,
-  `PairingData.skeletonHomeomorphWedge`, and the subdivision/descent machinery
-  in `FundamentalGroupoidOpenCoverSubdivision`. The missing Mathlib-level tool
-  is a two-open Seifert--van Kampen/pushout theorem; the current construction
-  bank explicitly stops before that theorem. The overlap generator must map
-  to `a₁ b₁ a₁⁻¹ b₁⁻¹ a₂ b₂ a₂⁻¹ b₂⁻¹`, so the pushout is
-  `PresentedGroup {apm_t92J05_genusTwoRelator}`. This leaf is independent of
-  both leaves below.
+- `apm_t92J05_twoOpen_simplyConnectedRight_kernel` (**LIBRARY**, 100–150
+  lines): extract surjectivity and the exact kernel from the two-open groupoid
+  pseudopushout.  Start with
+  `ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout.twoOpenFundamentalGroupoidPseudopushoutEquivalence`
+  and its `pseudopushoutPostcomposeNatIso`; use
+  `ConstructionTargets.TwoOpenLegCompatibleConnectorSystems.leftConnectors`
+  and `rightConnectors` to pass to the chosen overlap basepoint.  Unlike
+  `ConstructionTargets.TwoOpenFreeProductMapping.groupEquivalence`, this leaf
+  must retain the non-simply-connected overlap; that existing theorem cannot
+  be applied here.  Finish the kernel inclusions with
+  `Subgroup.normalClosure_le_normal`, `Subgroup.subset_normalClosure`, and the
+  pseudopushout universal property.  Independent of both leaves below.
+- `apm_t92J05_quotient_normalClosure_equiv_of_kernel` (**LIBRARY, pure
+  algebra**, 15–30 lines): use
+  `QuotientGroup.quotientKerEquivOfSurjective f hsurj`, reverse it, and rewrite
+  the quotient subgroup with `QuotientGroup.quotientMulEquivOfEq hker` (the
+  same exact pattern is already compiled in
+  `t93J03Closure.kleinPolygonFundamentalGroupEquivPresented_of_vanKampen`).
+  Independent of all topology and valid for arbitrary groups, including the
+  trivial group and a trivial overlap map.
+- `apm_t92J05_genusTwo_polygon_attach_specialization` (**LIBRARY, 100–150
+  lines): given the generic quotient theorem explicitly, instantiate it on
+  `PolygonSurfacePiOne.openCover` for
+  `PolygonSurfacePiOne.standardPairingData true 2`; install simple
+  connectedness of the inner member from `openCover.contraction`, identify the
+  annulus using `openCover.overlap_homeomorph`, retract the outer member using
+  `PairingData.punctureDeformationRetract`, and use
+  `PairingData.skeletonHomeomorphWedge`, then iterate
+  `PointWedgeVanKampen.genericPointWedgeFundamentalGroupEquiv` and
+  `PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum` for the free-group
+  coordinates (compare the already compiled two-generator chain
+  `t93J03Closure.kleinActualSkeletonFundamentalGroupEquivCoprod` and
+  `circleFundamentalGroupCoprodEquivFreeGroupBool`).  The signed arc formula
+  `PairingData.signedWedgeArc_pair` gives precisely
+  `a₁ b₁ a₁⁻¹ b₁⁻¹ a₂ b₂ a₂⁻¹ b₂⁻¹`; use
+  `Subgroup.map_normalClosure` and `PresentedGroup`'s quotient equivalence to
+  identify the quotient.  This leaf is independent of the proof of the
+  generic theorem because that conclusion is an explicit hypothesis.
+
+`apm_t92J05_twoOpen_attach_one_cell` is the sorry-free generic assembly of the
+first two leaves.  `apm_t92J05_genusTwo_polygon_vanKampen_at_center` is now the
+sorry-free assembly of that generic theorem and the geometric specialization.
 - `apm_t92J05_genusTwo_pathConnected` (20–40 lines): path connectedness of
   the concrete quotient. Use the continuous surjective disk quotient map and
   `IsPathConnected.image`, or the existing surface/path-connected instance if
@@ -162,8 +198,8 @@ the proved genus-two adapter. It has no direct `sorry`.
 - **Layer 2, already compiled:** the arbitrary-space genus-two transport and
   final conjunction assembly after the two Layer 1 conclusions are supplied.
 
-Lemma count: **8 remaining lemmas**: seven small projective-plane leaves and
-the independent genus-two LIBRARY boundary. There is no mathematical doubt
+Lemma count: **10 remaining lemmas**: seven small projective-plane leaves and
+the three independent genus-two/van-Kampen leaves above. There is no mathematical doubt
 about their statements. The main uncertainty is the exact Mathlib quotient API
 needed by the homeomorphism leaf, and engineering size for genus two.
 
@@ -191,4 +227,4 @@ theorem and all transport/assembly declarations are sorry-free.
 - `PointWedgeVanKampen`
 - the Klein instance in `t93J03Closure.lean`: inner contractible, overlap π1 ≅ ℤ, skeleton presentation map surjective, with its kernel computed
 
-The missing step is generic: a pseudopushout with contractible inner open and overlap ≅ ℤ makes π1(space) the quotient of π1(skeleton) by the attaching word. That is the open F3 step, and it is the input `t93J03Closure.kleinBottle_pi1_every_basepoint_of_polygon_van_kampen` still takes as a hypothesis. Build it once for `PairingData`; it closes this leaf and gives the Klein van Kampen route.
+The missing step is generic: a pseudopushout with contractible inner open and overlap ≅ ℤ makes π1(space) the quotient of π1(skeleton) by the attaching word.  It is now isolated as `apm_t92J05_twoOpen_simplyConnectedRight_kernel` plus the pure-algebra quotient leaf above.  The same generic theorem can supply the `KleinPolygonBasedVanKampen` input in `t93J03Closure` and the degree-`d` disk attachments in `t99A01`.

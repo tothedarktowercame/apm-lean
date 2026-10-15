@@ -449,16 +449,109 @@ def apm_t92J05_genusTwo_center :
   ConstructionTargets.Surfaces.surfaceQuotient true 2
     ⟨0, by simp [ConstructionTargets.Surfaces.Disk, Metric.mem_closedBall]⟩
 
-/-- **LIBRARY.** The missing two-open Seifert--van Kampen foundation,
-specialized to the already constructed standard genus-two polygon cover.  Its
-outer member retracts to the four-circle boundary wedge, its inner member is
-contractible, and the overlap circle maps to the product of commutators. -/
-theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
+/-! ### A generic one-relator van Kampen interface -/
+
+/-- Inclusion of the left member of a two-open cover into the ambient space. -/
+def apm_t92J05_twoOpen_leftInclusion
+    {X : Type*} [TopologicalSpace X] (U : Set X) : ContinuousMap U X :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- Inclusion of the overlap into the left member of a two-open cover. -/
+def apm_t92J05_twoOpen_overlapToLeft
+    {X : Type*} [TopologicalSpace X] (U V : Set X) :
+    ContinuousMap (U ∩ V : Set X) U :=
+  ⟨fun z => ⟨z.1, z.2.1⟩, continuous_subtype_val.subtype_mk _⟩
+
+/-- **LIBRARY (groupoid-to-based van Kampen).**  With the right-hand open
+member simply connected, inclusion of the left member is onto on `π₁`, and
+its kernel is precisely the normal closure of the overlap image.  This is the
+based-group consequence to extract from the banked fundamental-groupoid
+pseudopushout. -/
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+    (x : (U ∩ V : Set X)) :
+    let leftMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    Function.Surjective leftMap ∧
+      MonoidHom.ker leftMap =
+        Subgroup.normalClosure (overlapMap.range : Set
+          (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x))) := by
+  sorry
+
+/-- **LIBRARY (pure group theory).**  A surjective homomorphism is the
+quotient by its kernel; an explicitly supplied kernel computation rewrites
+this as the desired normal-closure quotient. -/
+lemma apm_t92J05_quotient_normalClosure_equiv_of_kernel
+    {G K H : Type*} [Group G] [Group K] [Group H]
+    (f : G →* H) (a : K →* G) (hsurj : Function.Surjective f)
+    (hker : MonoidHom.ker f =
+      Subgroup.normalClosure (a.range : Set G)) :
+    Nonempty
+      (H ≃* G ⧸ Subgroup.normalClosure (a.range : Set G)) := by
+  sorry
+
+/-- Generic "attach one simply-connected piece" van Kampen theorem.  In the
+2-cell application the overlap is an annulus, but cyclicity is not needed in
+the statement: the entire overlap image is normally killed. -/
+theorem apm_t92J05_twoOpen_attach_one_cell
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+    (x : (U ∩ V : Set X)) :
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    Nonempty
+      (FundamentalGroup X x.1 ≃*
+        (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)) ⧸
+          Subgroup.normalClosure (overlapMap.range : Set
+            (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
+  dsimp only
+  let f := FundamentalGroup.map
+    (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)
+  let a := FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x
+  rcases apm_t92J05_twoOpen_simplyConnectedRight_kernel U V hU hV hcover x with
+    ⟨hsurj, hker⟩
+  exact apm_t92J05_quotient_normalClosure_equiv_of_kernel f a hsurj hker
+
+/-- **LIBRARY (genus-two geometry).**  Specialize the generic theorem to the
+radial polygon cover, retract the outer member onto its four-circle skeleton,
+and compute that the annulus generator maps to the oriented word
+`[a₁,b₁][a₂,b₂]`.  The conclusion includes only the coordinate change
+from the generic normal-closure quotient to the registered presentation. -/
+lemma apm_t92J05_genusTwo_polygon_attach_specialization
+    (hattach : ∀ {X : Type} [TopologicalSpace X] (U V : Set X)
+      (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+      [PathConnectedSpace U] [PathConnectedSpace V]
+      [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+      (x : (U ∩ V : Set X)),
+      let overlapMap := FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft U V) x
+      Nonempty
+        (FundamentalGroup X x.1 ≃*
+          (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)) ⧸
+            Subgroup.normalClosure (overlapMap.range : Set
+              (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x))))) :
     Nonempty
       (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2)
           apm_t92J05_genusTwo_center ≃*
         apm_t92J05_genusTwoGroup) := by
   sorry
+
+/-- Assembly of the generic one-cell van Kampen theorem with the independent
+genus-two polygon specialization. -/
+theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
+    Nonempty
+      (FundamentalGroup (ConstructionTargets.Surfaces.Surface true 2)
+          apm_t92J05_genusTwo_center ≃*
+        apm_t92J05_genusTwoGroup) := by
+  exact apm_t92J05_genusTwo_polygon_attach_specialization
+    apm_t92J05_twoOpen_attach_one_cell
 
 /-- The standard genus-two polygon quotient is path connected.  This is
 independent of the van Kampen computation. -/
