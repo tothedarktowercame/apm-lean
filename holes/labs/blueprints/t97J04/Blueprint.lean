@@ -2142,6 +2142,16 @@ lemma cell_H2_of_injective (γ : C(Circle, Y))
 
 /-- A10. If `H₂(Y) = 0` and `γ_* = 0` on `H₁`, then `H₂(Y ∪_γ D²) ≅ ℤ`
 (the connecting map is an iso onto `H₁(overlap) ≅ H₁(Circle) ≅ ℤ`). -/
+lemma cell_H2_of_zero_aux_inner_zero (γ : C(Circle, Y))
+    (h : ContractibleSpace (cellInner γ)) (k : ℕ) (hk : k ≠ 0) :
+    Limits.IsZero (IntegralMV.HZ k (cellInner γ)) := by
+  letI := h
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      _ k
+      (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        _ k hk)
+
 lemma cell_H2_of_zero (γ : C(Circle, Y))
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
       cellOuter γ ∪ cellInner γ = Set.univ)
@@ -2153,7 +2163,72 @@ lemma cell_H2_of_zero (γ : C(Circle, Y))
         (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
     (hY2 : Limits.IsZero (H 2 Y)) (hγ : Hmap γ 1 = 0) :
     Nonempty (H 2 (Cell γ) ≅ ModuleCat.of ℤ ℤ) := by
-  sorry
+  obtain ⟨eI, heI⟩ := hA3
+  obtain ⟨eO, heO⟩ := hA4
+  let iI1 := cell_H1_aux_transport_iso eI 1
+  let iO1 := cell_H1_aux_transport_iso eO 1
+  let iO2 := cell_H1_aux_transport_iso eO 2
+  have hleft1 : IntegralMV.mvIncl
+        (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+        iO1.hom = iI1.hom ≫ Hmap γ 1 := by
+    apply (cancel_epi iI1.inv).1
+    simp only [Iso.inv_hom_id_assoc]
+    change Hmap eI.invFun 1 ≫
+        IntegralMV.mvIncl Set.inter_subset_left 1 ≫ Hmap eO.toFun 1 = Hmap γ 1
+    change Hmap eI.invFun 1 ≫
+      Hmap (apm_t92J05_twoOpen_overlapToLeft
+          (cellOuter γ) (cellInner γ)) 1 ≫ Hmap eO.toFun 1 = Hmap γ 1
+    have hsquare :
+        (eO.toFun.comp ((apm_t92J05_twoOpen_overlapToLeft
+          (cellOuter γ) (cellInner γ)).comp eI.invFun)).Homotopic γ := by
+      rw [heI]
+      have h₁ := (ContinuousMap.Homotopic.refl eO.toFun).comp hA5
+      rw [← heO] at h₁
+      exact h₁.trans (by simpa only [ContinuousMap.comp_assoc,
+        ContinuousMap.id_comp] using
+          eO.right_inv.comp (ContinuousMap.Homotopic.refl γ))
+    dsimp only [Hmap]
+    rw [← Category.assoc, ← Functor.map_comp, ← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map
+        (TopCat.ofHom (eO.toFun.comp
+          ((apm_t92J05_twoOpen_overlapToLeft
+            (cellOuter γ) (cellInner γ)).comp eI.invFun))) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hsquare 1]
+  have hzeroN1 : Limits.IsZero (IntegralMV.HZ 1 (cellInner γ)) :=
+    cell_H2_of_zero_aux_inner_zero γ hA2 1 (by decide)
+  have hzeroN2 : Limits.IsZero (IntegralMV.HZ 2 (cellInner γ)) :=
+    cell_H2_of_zero_aux_inner_zero γ hA2 2 (by decide)
+  have hzeroO2 : Limits.IsZero (IntegralMV.HZ 2 (cellOuter γ)) :=
+    hY2.of_iso iO2
+  obtain ⟨δ, hexI, hexJ, hexδ⟩ :=
+    IntegralMV.integralMayerVietoris (cellOuter γ) (cellInner γ)
+      hA1.1 hA1.2.1 hA1.2.2
+  have hI1 : IntegralMV.mvI (cellOuter γ) (cellInner γ) 1 = 0 := by
+    apply Limits.biprod.hom_ext
+    · have hf : IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 = 0 := by
+        apply (cancel_mono iO1.hom).1
+        rw [hleft1, hγ]
+        simp
+      simpa [IntegralMV.mvI] using hf
+    · exact hzeroN1.eq_of_tgt _ _
+  have hd_inj : Function.Injective (δ 1).hom := by
+    rw [← LinearMap.ker_eq_bot, ← hexJ 1]
+    apply LinearMap.range_eq_bot.mpr
+    apply congrArg ModuleCat.Hom.hom
+    apply Limits.biprod.hom_ext'
+    · exact hzeroO2.eq_of_src _ _
+    · exact hzeroN2.eq_of_src _ _
+  have hd_surj : Function.Surjective (δ 1).hom := by
+    rw [← LinearMap.range_eq_top, hexδ 1, hI1]
+    exact LinearMap.ker_zero
+  let ed : H 2 (Cell γ) ≃ₗ[ℤ]
+      IntegralMV.HZ 1 (cellOuter γ ∩ cellInner γ : Set (Cell γ)) :=
+    LinearEquiv.ofBijective (δ 1).hom ⟨hd_inj, hd_surj⟩
+  exact ⟨LinearEquiv.toModuleIso ed ≪≫ iI1 ≪≫
+    ConstructionTargets.CircleHomology.circleH1IsoInt⟩
 
 /-- A11. In degrees `k ≥ 3` the inclusion is an isomorphism on homology
 (`H_k` and `H_{k-1}` of the overlap and `H_k` of the inner piece vanish). -/
