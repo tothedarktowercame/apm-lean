@@ -2187,13 +2187,104 @@ lemma two_step_quotient {G H K : Type*} [Group G] [Group H] [Group K]
 
 /-- B5. Tietze: kill `c` (generator 2) in the genus-two group; generators
 `a, b, d` ↦ `0, 1, 2`.  The relator may enter up to conjugacy/inversion. -/
+def presentation_algebra_aux_f : Fin 4 → apm_t97J04_piOne
+  := ![PresentedGroup.of 0, PresentedGroup.of 1, 1, PresentedGroup.of 2]
+
+lemma presentation_algebra_aux_genus :
+    FreeGroup.lift presentation_algebra_aux_f apm_t92J05_genusTwoRelator = 1 := by
+  simp only [apm_t92J05_genusTwoRelator, apm_t92J05_commutator, map_mul,
+    map_inv, FreeGroup.lift_apply_of, presentation_algebra_aux_f,
+    Matrix.cons_val_zero, Matrix.cons_val_one, inv_one, mul_one]
+  exact PresentedGroup.one_of_mem (by simp [apm_t97J04_relator])
+
+lemma presentation_algebra_aux_r (r : FreeGroup (Fin 4))
+    (hr : IsConj r apm_t92J05_genusTwoRelator ∨
+      IsConj r apm_t92J05_genusTwoRelator⁻¹) :
+    FreeGroup.lift presentation_algebra_aux_f r = 1 := by
+  rcases hr with hr | hr
+  · have h := (FreeGroup.lift presentation_algebra_aux_f).map_isConj hr
+    rw [presentation_algebra_aux_genus] at h
+    exact isConj_one_left.mp h
+  · have h := (FreeGroup.lift presentation_algebra_aux_f).map_isConj hr
+    simp only [map_inv, presentation_algebra_aux_genus, inv_one] at h
+    exact isConj_one_left.mp h
+
 lemma presentation_algebra (r : FreeGroup (Fin 4))
     (hr : IsConj r apm_t92J05_genusTwoRelator ∨
       IsConj r apm_t92J05_genusTwoRelator⁻¹) :
     Nonempty (FreeGroup (Fin 4) ⧸
         Subgroup.normalClosure ({r, FreeGroup.of 2} : Set (FreeGroup (Fin 4))) ≃*
       apm_t97J04_piOne) := by
-  sorry
+  let N := Subgroup.normalClosure ({r, FreeGroup.of 2} : Set (FreeGroup (Fin 4)))
+  let q : FreeGroup (Fin 4) →* (FreeGroup (Fin 4) ⧸ N) := QuotientGroup.mk' N
+  let F : FreeGroup (Fin 4) →* apm_t97J04_piOne :=
+    FreeGroup.lift presentation_algebra_aux_f
+  have hN : N ≤ F.ker := by
+    apply Subgroup.normalClosure_le_normal
+    intro x hx
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx
+    rcases hx with rfl | rfl
+    · exact MonoidHom.mem_ker.mpr (presentation_algebra_aux_r _ hr)
+    · exact MonoidHom.mem_ker.mpr (by simp [F, presentation_algebra_aux_f])
+  let phi : (FreeGroup (Fin 4) ⧸ N) →* apm_t97J04_piOne :=
+    QuotientGroup.lift N F hN
+  let e : Fin 3 → (FreeGroup (Fin 4) ⧸ N) :=
+    ![q (FreeGroup.of 0), q (FreeGroup.of 1), q (FreeGroup.of 3)]
+  have he : ∀ x ∈ ({apm_t97J04_relator} : Set (FreeGroup (Fin 3))),
+      FreeGroup.lift e x = 1 := by
+    intro x hx
+    simp only [Set.mem_singleton_iff] at hx
+    subst x
+    change q (apm_t92J05_commutator 0 1) = 1
+    apply (QuotientGroup.eq_one_iff _).mpr
+    have hrN : r ∈ N := Subgroup.subset_normalClosure (by simp)
+    have hgen : apm_t92J05_genusTwoRelator ∈ N := by
+      rcases hr with hr | hr
+      · rcases isConj_iff.mp hr with ⟨g, hg⟩
+        rw [← hg]
+        exact Subgroup.normalClosure_normal.conj_mem _ hrN g
+      · rcases isConj_iff.mp hr with ⟨g, hg⟩
+        have hi : apm_t92J05_genusTwoRelator⁻¹ ∈ N := by
+          rw [← hg]
+          exact Subgroup.normalClosure_normal.conj_mem _ hrN g
+        exact N.inv_mem hi
+    have hc : FreeGroup.of (2 : Fin 4) ∈ N :=
+      Subgroup.subset_normalClosure (by simp)
+    have hcmt : apm_t92J05_commutator 2 3 ∈ N := by
+      unfold apm_t92J05_commutator
+      simpa only [mul_assoc] using N.mul_mem hc
+        (Subgroup.normalClosure_normal.conj_mem _ (N.inv_mem hc) (FreeGroup.of 3))
+    have := N.mul_mem hgen (N.inv_mem hcmt)
+    simpa [apm_t92J05_genusTwoRelator] using this
+  let psi : apm_t97J04_piOne →* (FreeGroup (Fin 4) ⧸ N) :=
+    PresentedGroup.toGroup he
+  have hpf : psi.comp phi = MonoidHom.id (FreeGroup (Fin 4) ⧸ N) := by
+    apply QuotientGroup.monoidHom_ext
+    ext i
+    fin_cases i
+    · simp [psi, phi, e, F, presentation_algebra_aux_f, q]
+    · simp [psi, phi, e, F, presentation_algebra_aux_f, q]
+    · simp only [MonoidHom.comp_apply, QuotientGroup.lift_mk', FreeGroup.lift_apply_of,
+        presentation_algebra_aux_f, Matrix.cons_val_one, map_one, MonoidHom.id_apply]
+      exact ((QuotientGroup.eq_one_iff _).mpr
+        (Subgroup.subset_normalClosure (by simp))).symm
+    · simp [psi, phi, e, F, presentation_algebra_aux_f, q]
+  have hfp : phi.comp psi = MonoidHom.id apm_t97J04_piOne := by
+    apply PresentedGroup.ext
+    intro i
+    fin_cases i <;> simp [psi, phi, e, F, presentation_algebra_aux_f, q]
+  refine ⟨MulEquiv.ofBijective phi ?_⟩
+  constructor
+  · intro x y hxy
+    have hleft : psi (phi x) = psi (phi y) := congrArg psi hxy
+    have hx := DFunLike.congr_fun hpf x
+    have hy := DFunLike.congr_fun hpf y
+    change psi (phi x) = x at hx
+    change psi (phi y) = y at hy
+    exact hx.symm.trans (hleft.trans hy)
+  · intro y
+    refine ⟨psi y, ?_⟩
+    exact DFunLike.congr_fun hfp y
 
 /-- B6. Homology of the wedge: path connected, and zero in degrees `≥ 2`
 (`PolygonSurfaceHomology.finiteWedgeHigherHomologyIsZero`). -/
