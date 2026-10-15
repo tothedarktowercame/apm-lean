@@ -3042,23 +3042,58 @@ lemma treeStar_isSimplyConnected (g : G) :
     (treeContraction_zero g) (.inl (g, 0)) hz (treeContraction_one g)
     (treeContraction_resp g)
 
-/-- **Leaf.**  Stars meet only along Cayley edges, and adjacent stars meet in
-a path-connected set.
+/-- Leaf (split from `treeStar_inter`, lemma-1 PARTIAL 2026-10-15).  Images
+of saturated sets intersect as their intersection does: `⊇` is
+`Set.image_inter_subset`; `⊆`: if
+`qmk z = qmk w` with `z ∈ treeStar g`, `w ∈ treeStar h`, then `z ∈ treeStar h`
+by saturation (`(treeStar_open_saturated h).2`, through `Quotient.exact` and
+`Relation.EqvGen` induction). -/
+lemma treeStar_inter_aux_image_inter (g h : G) :
+    qmk TreeRel '' treeStar g ∩ qmk TreeRel '' treeStar h =
+      qmk TreeRel '' (treeStar g ∩ treeStar h) := by
+  sorry
 
-Route.  `Saturated.image_inter`, then label bookkeeping with `G_facts`:
-`treeStar g ∩ treeStar h` contains an edge point only if `h = g a` or
-`h = g a⁻¹`, a sphere point only if `h = g b`.
-`treeStar g ∩ treeStar (g a) = inl ({g} × (0,1))` (path connected:
-image of an interval), `treeStar g ∩ treeStar (g b)` is the copy-`g` sphere
-minus both poles together with its antipodal copy, whose image is the image of
-`sphere_compl_poles_isPathConnected` under `x ↦ qmk (inr (g, x))`.
-About 120 lines. -/
+/-- Leaf (split).  Label bookkeeping on raw points: an edge point `(k, t)` in
+both stars has `k ∈ {g, g a⁻¹} ∩ {h, h a⁻¹}`, so `h ∈ {g, g a, g a⁻¹}`; a
+sphere point `(k, x)` has `k ∈ {g, g b} ∩ {h, h b}`, so `h ∈ {g, g b}`
+(`b * b = 1` from `G_facts`, so `b⁻¹ = b`). -/
+lemma treeStar_inter_aux_labels (g h : G) (z : TreeZ) (hg : z ∈ treeStar g)
+    (hh : z ∈ treeStar h) : h = g ∨ h = g * a ∨ h = g * a⁻¹ ∨ h = g * b := by
+  sorry
+
+/-- Leaf (split).  `treeStar g ∩ treeStar (g a) = {inl (g, t) | 0 < t < 1}`
+(labels: `g a ≠ g`, `g a a⁻¹ = g`, sphere labels `g, g b` vs `g a, g a b`
+disjoint since `a ≠ 1`, `a ≠ b`, from `G_facts`), and its image is the
+continuous image (`qmk ∘ inl ∘ (g, ·)`) of the path-connected open interval. -/
+lemma treeStar_inter_aux_edge (g : G) :
+    IsPathConnected (qmk TreeRel '' (treeStar g ∩ treeStar (g * a))) := by
+  sorry
+
+/-- Leaf (split).  `treeStar g ∩ treeStar (g b)` is sphere copy `g` minus
+both poles together with sphere copy `g b` minus both poles (no edge points:
+`g b ≠ g`, `g b ≠ g a⁻¹`, `g b a⁻¹ ≠ g`); its image equals the image of
+`{x | x ≠ north ∧ x ≠ south}` under `x ↦ qmk (inr (g, x))` (copy `g b` points
+are related to copy `g` points by `TreeRel.pair`), path connected by
+`sphere_compl_poles_isPathConnected` and continuity. -/
+lemma treeStar_inter_aux_sphere (g : G) :
+    IsPathConnected (qmk TreeRel '' (treeStar g ∩ treeStar (g * b))) := by
+  sorry
+
+/-- Stars meet only along Cayley edges, and adjacent stars meet in a
+path-connected set (assembly; leaves above). -/
 lemma treeStar_inter (g h : G) :
     ((qmk TreeRel '' treeStar g ∩ qmk TreeRel '' treeStar h).Nonempty →
       h = g ∨ h = g * a ∨ h = g * a⁻¹ ∨ h = g * b) ∧
     IsPathConnected (qmk TreeRel '' treeStar g ∩ qmk TreeRel '' treeStar (g * a)) ∧
     IsPathConnected (qmk TreeRel '' treeStar g ∩ qmk TreeRel '' treeStar (g * b)) := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩
+  · rw [treeStar_inter_aux_image_inter]
+    rintro ⟨_, ⟨z, ⟨hzg, hzh⟩, rfl⟩⟩
+    exact treeStar_inter_aux_labels g h z hzg hzh
+  · rw [treeStar_inter_aux_image_inter]
+    exact treeStar_inter_aux_edge g
+  · rw [treeStar_inter_aux_image_inter]
+    exact treeStar_inter_aux_sphere g
 
 lemma treeStar_cover : ⋃ g, qmk TreeRel '' treeStar g = univ := by
   apply eq_univ_of_forall
