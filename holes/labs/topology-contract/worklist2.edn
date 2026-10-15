@@ -88517,22 +88517,22 @@
      :commit "f10813fc0",
      :reason "Banked cumulative run boundary."}]}
   {:consumer :t94J09,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport N6 homology; normalize the frozen two-vertex polygon; assemble.",
+    "Transport N6 H1/H2, formalize frozen two-vertex polygon, normalize, assemble.",
     :outcome :stop,
     :warnings
     ["Main: 1 placeholder"
      "dirt preserved"
      "frozen source has two vertices"],
     :missing-theorems
-    [{:name "n6SmithCokernelIso",
-      :type "cokernel of constant even vector is Z^5 x ZMod 2",
+    [{:name "n6BoundaryCokernelSmithEquiv",
+      :type "actual N6 boundary cokernel is Z^5 x ZMod 2",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["n6PolygonHomology"],
+      :depends-on ["n6SmithCokernelIso"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "literal source integral homology",
@@ -88541,7 +88541,7 @@
       :depends-on
       ["n6PolygonHomology"
        "n6BoundaryKernel_eq_bot"
-       "n6SmithCokernelIso"],
+       "n6BoundaryCokernelSmithEquiv"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
       :type "source quotient homeomorphic to N6",
@@ -88553,40 +88553,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked explicit N6 Smith cokernel.",
+    :reason "Banked actual-boundary cokernel transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check e88af09f1", :exit 0}],
+     {:cmd "git show --check bd338eb84", :exit 0}],
     :diagnostic-history
-    [{:cmd "Smith drafts",
+    [{:cmd "initial closure build",
       :exit 1,
-      :correction "normalized additive and ZMod casts"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792057206363-13783-5d5000d2",
-     :commands
-     ["git show/diff/check e88af09f1"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit e88af09f1 adds compiled, sorry-free progress beyond 56607caa5: an explicit Smith map from six integer coordinates to Z^5 x ZMod 2, with surjectivity, kernel equal to the constant-even-vector range, and the resulting cokernel isomorphism. Only t94J09Closure.lean changed; fixture SHA 604c85dc9dfb27903eaaa6a6fc06d6b72e1daeaa355730d393aaff266e20f9f6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. The five differences plus first-coordinate parity have exactly the asserted kernel. Transport from the actual -2 boundary, N6 homology transport, frozen two-vertex normalization, and final assembly remain explicitly listed."},
-    :commit "e88af09f1",
+      :correction "fixed quotient/composition glyphs"}],
+    :commit "bd338eb84",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "604c85dc9dfb27903eaaa6a6fc06d6b72e1daeaa355730d393aaff266e20f9f6"},
+     "635ef5fdff61c191154dc631e4b09684418b48448e8cd58e8affba65e288be91"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94028,7 +94015,8 @@
    [:lemma-polygonquotient-homology
     :lemma-n6polygonhomology
     :lemma-n6boundarykernel-eq-bot
-    :lemma-n6smithcokerneliso],
+    :lemma-n6smithcokerneliso
+    :lemma-n6boundarycokernelsmithequiv],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94818,4 +94806,21 @@
    :id :lemma-torusrp2-subdivisionrunprefixblockpoint-zero,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunprefixblockpoint-last],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "n6BoundaryCokernelSmithEquiv",
+    :type "actual N6 boundary cokernel is Z^5 x ZMod 2"},
+   :lemma
+   {:name "n6BoundaryCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "actual N6 boundary cokernel is Z^5 x ZMod 2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-n6boundarycokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-n6smithcokerneliso],
    :other-consumers []}]}
