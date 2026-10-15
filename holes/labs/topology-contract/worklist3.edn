@@ -37125,37 +37125,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Extend to the rational generator; transport four classes; sum and close Main.",
+    "Compare integral normalization with the rational sphere-shift generator; transport four local classes; sum and close Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t96A06_sphere3_integral_normalizedClass_localizes",
+    [{:name
+      "polynomialSphereLift_base_integralFundamentalClass_positive",
       :type
-      "normalized integral H3 class localizes to positive generator",
+      "normalized integral global class localizes at the exact base regular point to the positive chart generator",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_pairSign_localHomology_naturality"],
+      ["t96A06_sphere3_integral_normalizedClass_localizes"],
       :area "rp-rational-homology"}
      {:name "polynomialSphereLift_base_localFundamentalClass_positive",
       :type
-      "extend integral localization to selected rational base class",
+      "identify the selected rational sphere-shift generator with coefficient extension of the normalized integral class",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphere3_integral_normalizedClass_localizes"],
+      ["polynomialSphereLift_base_integralFundamentalClass_positive"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed positive integral S3 localization.",
+    :reason
+    "Committed positive integral localization at the exact regular-fiber base point.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37163,18 +37165,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --oneline --stat 5c85169d1", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial closure compile",
-      :exit 1,
-      :note "Qualified imported names; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792073303948-14180-8e506b78",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "5c85169d1",
+     {:cmd "git show --check --oneline --stat 0b5164527", :exit 0}],
+    :commit "0b5164527",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37182,7 +37174,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43126,7 +43118,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-pairsign-localhomology-naturality
-    :lemma-t96a06-sphere3-integral-normalizedclass-localizes],
+    :lemma-t96a06-sphere3-integral-normalizedclass-localizes
+    :lemma-polynomialspherelift-base-integralfundamentalclass-positive],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -43186,6 +43179,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-pairsign-localhomology-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polynomialSphereLift_base_integralFundamentalClass_positive",
+    :type
+    "normalized integral global class localizes at the exact base regular point to the positive chart generator"},
+   :lemma
+   {:name
+    "polynomialSphereLift_base_integralFundamentalClass_positive",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "normalized integral global class localizes at the exact base regular point to the positive chart generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-polynomialspherelift-base-integralfundamentalclass-positive,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphere3-integral-normalizedclass-localizes],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
