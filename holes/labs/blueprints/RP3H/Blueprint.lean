@@ -456,7 +456,32 @@ lemma cpU_homology_aux_cpU_hequiv_CP1_aux_retraction
           · simpa using congrFun h 0
           · simpa using congrFun h 1⟩) :
     cpU_homology_aux_cpU_hequiv_CP1_aux_r.comp i = ContinuousMap.id _ := by
-  sorry
+  ext x
+  obtain ⟨v, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 x
+  rw [ContinuousMap.comp_apply]
+  change cpU_homology_aux_cpU_hequiv_CP1_aux_rfun
+      (i (quotientMap ℂ 1 v)) = quotientMap ℂ 1 v
+  unfold cpU_homology_aux_cpU_hequiv_CP1_aux_rfun
+  simp only [hi]
+  change Projectivization.mk ℂ
+      ![(quotientMap ℂ 2 _).rep 0, (quotientMap ℂ 2 _).rep 1] _ =
+    quotientMap ℂ 1 v
+  apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).2
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ
+    (![v.1 0, v.1 1, 0] : Fin 3 → ℂ) (by
+      intro h
+      apply v.2
+      funext j
+      fin_cases j
+      · simpa using congrFun h 0
+      · simpa using congrFun h 1)
+  refine ⟨a, ?_⟩
+  funext j
+  fin_cases j
+  · simpa only [Pi.smul_apply, Units.smul_def, Matrix.cons_val_zero]
+      using congrFun ha 0
+  · simpa only [Pi.smul_apply, Units.smul_def, Matrix.cons_val_zero,
+      Matrix.cons_val_one] using congrFun ha 1
 
 lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation
     (i : C(cpU_homology_aux_CP1, cpU))
