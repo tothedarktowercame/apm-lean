@@ -88373,6 +88373,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check a66850b70", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792060088193-13857-78c110b4",
+     :commands
+     ["git show/diff/check a66850b70"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+dependency+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit a66850b70 adds compiled, sorry-free progress beyond cce2536b2: the dependent concatenation of all cast factors in a run has the quotient class of the literal cumulative-prefix block. Only t97A01Closure.lean changed; fixture SHA b4e7fffd10dd2905c6f38c1254edd39bcccf6833fc8e8b582283c8640e393801 matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Both concatenations use the same prefix-point family, and prior piece equalities are reassembled in order. Joining adjacent prefix blocks, subdivision reassembly, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "a66850b70",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88381,7 +88394,7 @@
      "b4e7fffd10dd2905c6f38c1254edd39bcccf6833fc8e8b582283c8640e393801"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88399,7 +88412,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked prefix run-factor equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked prefix run concatenation.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88505,7 +88518,10 @@
      :reason "Banked literal-endpoint outer run fold."}
     {:job 5,
      :commit "cce2536b2",
-     :reason "Banked prefix run-factor equality."}]}
+     :reason "Banked prefix run-factor equality."}
+    {:job 6,
+     :commit "a66850b70",
+     :reason "Banked prefix run concatenation."}]}
   {:consumer :t94J09,
    :stop-count 3,
    :evidence
@@ -94709,7 +94725,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94721,7 +94737,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cast run concatenation equals prefix block",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "a66850b70"},
    :id
    :lemma-torusrp2-subdivisionrunblockconcat-cast-eq-prefixblockconcat,
    :kind :lemma,
