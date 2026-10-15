@@ -119137,61 +119137,48 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Align second common-target chart C1; instantiate implicit chart; Sard; calculations; Main.",
+    "Assemble C1/strict/right-inverse implicit chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx; lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "contDiffAt_writtenInExtChartAt_of_contMDiffAt_self",
-      :type "manifold C1 gives preferred-chart C1",
+    [{:name "contDiffAt_commonTarget_of_contMDiffAt_self",
+      :type "incidence equality aligns preferred target-chart C1",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["contDiffAt_writtenInExtChartAt_of_contMDiffAt_self"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["contDiffAt_writtenInExtChartAt_of_contMDiffAt_self"],
+      :depends-on ["contDiffAt_commonTarget_of_contMDiffAt_self"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "90ed37ade43c25c96cfa612803445f9e0616bf0e73c6c52ed8251264c24eb4f0",
+     "df80c719e7a4349730454f8fcb35f8ca0dec14218719774846d2d6664e748d17",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked manifold chart C1 extraction.",
+    :reason "Banked common-target C1 alignment.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792047537464-13564-6088405a",
-     :commands
-     ["git show/diff cb13c853^..cb13c853"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum archived closure/Main and blueprint"
-      "rg placeholders and sorryAx"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: cb13c853 adds 19 lines only in the scoped closure file and proves the new milestone from Mathlib contMDiffAt_iff, correctly reducing boundaryless self-model range to univ; no facade or reversed boundary. Archived closure/Main compile; hashes match 90ed37ad..., 0b3b4888..., afb497a6...; placeholders 0/1; no sorryAx; new theorem uses only propext, Classical.choice, Quot.sound; registry 166/166. Residual lists common-target C1 alignment, implicit chart, Sard, calculations, Main."},
-    :commit "cb13c853f67c0329dfbb134f734b9d94f0d777be",
+    :commit "f0da11221ff6080aa44e7c43c7f44f2c9bf04963",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119199,7 +119186,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119707,7 +119694,8 @@
     :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse
     :lemma-hasstrictfderivat-incidencedifference-commontarget
     :lemma-contdiffat-incidencedifference-commontarget
-    :lemma-contdiffat-writteninextchartat-of-contmdiffat-self],
+    :lemma-contdiffat-writteninextchartat-of-contmdiffat-self
+    :lemma-contdiffat-commontarget-of-contmdiffat-self],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121712,6 +121700,24 @@
    :id :lemma-contdiffat-writteninextchartat-of-contmdiffat-self,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "contDiffAt_commonTarget_of_contMDiffAt_self",
+    :type "incidence equality aligns preferred target-chart C1"},
+   :lemma
+   {:name "contDiffAt_commonTarget_of_contMDiffAt_self",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "incidence equality aligns preferred target-chart C1",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-contdiffat-commontarget-of-contmdiffat-self,
+   :kind :lemma,
+   :depends-on
+   [:lemma-contdiffat-writteninextchartat-of-contmdiffat-self],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
