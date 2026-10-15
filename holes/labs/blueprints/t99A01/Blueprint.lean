@@ -767,13 +767,51 @@ def t99A01_pball : Set ℂ := {z | 0 < ‖z‖ ∧ ‖z‖ < 1}
 disks, by the identity chart on each disk (interior points are singleton classes:
 `t99A01_attach_overlap_aux_eqv_interior`; continuity of the inverse as in
 `t99A01_attach_diskSide`). -/
+private abbrev t99A01_attach_overlap_aux_chart_Pre {r : ℕ}
+    (degree : Fin r → ℕ) :=
+  ↥((APMT99A01.attachMk degree) ⁻¹'
+    (APMT99A01.sideA degree ∩ APMT99A01.sideB degree))
+
+private def t99A01_attach_overlap_aux_chart_q {r : ℕ} (degree : Fin r → ℕ) :
+    t99A01_attach_overlap_aux_chart_Pre degree →
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) :=
+  (APMT99A01.sideA degree ∩ APMT99A01.sideB degree).restrictPreimage
+    (APMT99A01.attachMk degree)
+
+lemma t99A01_attach_overlap_aux_chart_q_quotient {r : ℕ} (degree : Fin r → ℕ) :
+    Topology.IsQuotientMap (t99A01_attach_overlap_aux_chart_q degree) := by
+  exact isQuotientMap_quotient_mk'.restrictPreimage_isOpen
+    ((t99A01_attach_openCover degree).1.inter (t99A01_attach_openCover degree).2.1)
+
+lemma t99A01_attach_overlap_aux_chart_mem {r : ℕ} (degree : Fin r → ℕ)
+    (i : Fin r) (z : APMT99A01.Disk) (h1 : ‖(z : ℂ)‖ < 1) :
+    APMT99A01.attachMk degree (Sum.inr (i, z)) ∈
+        APMT99A01.sideA degree ∩ APMT99A01.sideB degree ↔
+      0 < ‖(z : ℂ)‖ := by
+  constructor
+  · intro h
+    exact norm_pos_iff.mpr (t99A01_attach_circleSide_aux_ne_zero degree i z h.1)
+  · intro h0
+    constructor
+    · intro j he
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, z)) (Sum.inr (j, APMT99A01.diskCentre)) :=
+        Quotient.exact he
+      have hx := t99A01_attach_overlap_aux_eqv_interior h1 hr
+      have hp : (j, APMT99A01.diskCentre) = (i, z) := Sum.inr.inj hx
+      have hz : APMT99A01.diskCentre = z := (Prod.mk.inj hp).2
+      have hv := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) hz
+      change (0 : ℂ) = (z : ℂ) at hv
+      rw [← hv, norm_zero] at h0
+      exact (lt_irrefl 0 h0).elim
+    · exact ⟨i, z, h1, rfl⟩
+
 theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
     ∃ c : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
         (Σ _ : Fin r, ↥t99A01_pball),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (h0 : 0 < ‖(z : ℂ)‖) (h1 : ‖(z : ℂ)‖ < 1),
         (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
   sorry
-
 /-- **Leaf (pure, no quotient).** Punctured disks retract radially onto the
 radius-`1/2` circles: `z ↦ z/‖z‖` one way, `w ↦ w/2` back, homotopy
 `(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖`. -/
