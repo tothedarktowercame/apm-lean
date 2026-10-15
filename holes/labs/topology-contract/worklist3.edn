@@ -37111,39 +37111,40 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
-    :residual "Degree four, Lefschetz invariants, Main.",
+    :residual
+    "Sphere degree four, projective comparison, invariants/Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_rp3_rational_homology",
-      :type "finite-dimensional RP3 homology Q,0,0,Q",
+    [{:name "t96A06_polynomialSphereLift_projection",
+      :type "S3 lift projects to polynomialDescent",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_homology_isZero_of_gt"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_polynomialDescent_degree_four",
-      :type "descent acts by 4 on H3",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on ["t96A06_rp3_rational_homology"],
       :area "rp-rational-homology"}
-     {:name "t96A06_polynomialDescent_invariants",
-      :type "Lefschetz values -3 and 0; nonhomotopy",
+     {:name "t96A06_polynomialSphereLift_degree_four",
+      :type "lift acts by 4 on H3(S3;Q)",
+      :status :partial,
+      :consumers [:t96A06],
+      :depends-on ["t96A06_polynomialSphereLift_projection"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_polynomialDescent_degree_four",
+      :type "descent acts by 4 on H3(RP3;Q)",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_polynomialDescent_degree_four"],
+      :depends-on ["t96A06_polynomialSphereLift_degree_four"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed complete finite-dimensional rational homology of RP3; degree-four and Lefschetz stages remain.",
+    "Committed the continuous normalized S3 lift and its projection to the quadratic RP3 descent; degree remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37151,15 +37152,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check --stat fa2597614", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792042932864-13380-a5885347",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "fa2597614d1baeb9d1a782a74e28c0928cdbbca7",
+     {:cmd "git show --check --stat 75013bc02", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :note "proved continuity coordinatewise"}],
+    :commit "75013bc0289ab355e08073e8ce06624c944eb36f",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37167,7 +37165,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -40891,7 +40889,9 @@
     :area "rp-rational-homology"},
    :id :lemma-t96a06-polynomialdescent-degree-four,
    :kind :lemma,
-   :depends-on [:lemma-t96a06-rp3-rational-homology],
+   :depends-on
+   [:lemma-t96a06-rp3-rational-homology
+    :lemma-t96a06-polynomialspherelift-degree-four],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40908,6 +40908,39 @@
    :id :lemma-t96a06-polynomialdescent-invariants-faaa8267baf0,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialdescent-degree-four],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_projection",
+    :type "S3 lift projects to polynomialDescent"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_projection",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "S3 lift projects to polynomialDescent",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-projection,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-homology],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_degree_four",
+    :type "lift acts by 4 on H3(S3;Q)"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_degree_four",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "lift acts by 4 on H3(S3;Q)",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-polynomialspherelift-degree-four,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-projection],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
