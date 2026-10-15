@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.Surfaces
 import ConstructionTargets.PolygonSurfacePiOne
+import ConstructionTargets.PolygonMoves
 
 /-!
 # APM t02A02 — classification of the polygon word `aabcc⁻¹d⁻¹bd⁻¹`
@@ -161,6 +162,53 @@ abbrev apm_t02a02_hexagon :=
 abbrev apm_t02a02_square :=
   apm_t02a02_polygonSpace 4 apm_t02a02_perm4 apm_t02a02_sign4
 
+
+/-! ### Words for the polygon moves (claude-14, 2026-10-15)
+
+The octagon `a a b c c⁻¹ d⁻¹ b d⁻¹` cancels `c c⁻¹` to the hexagon `a a b d⁻¹ b d⁻¹`;
+cut-and-paste along `b` gives `a a b b d d⁻¹`; cancelling `d d⁻¹` gives the square `a a b b`
+(`ConstructionTargets.PolygonMoves`). -/
+
+abbrev apm_t02a02_W := List (PolygonMoves.Signed apm_t02a02_Edge)
+
+def apm_t02a02_w8 : apm_t02a02_W :=
+  [(.a, true), (.a, true), (.b, true), (.c, true), (.c, false), (.d, false), (.b, true),
+    (.d, false)]
+
+def apm_t02a02_w6 : apm_t02a02_W :=
+  [(.a, true), (.a, true), (.b, true), (.d, false), (.b, true), (.d, false)]
+
+def apm_t02a02_w6' : apm_t02a02_W :=
+  [(.a, true), (.a, true), (.b, true), (.b, true), (.d, true), (.d, false)]
+
+def apm_t02a02_w4 : apm_t02a02_W := [(.a, true), (.a, true), (.b, true), (.b, true)]
+
+/-- A pairing polygon is the word polygon of a word whose letters it pairs: `pair` swaps the
+two positions of each label, and `sign` agrees with the exponents up to flipping a whole
+pair (only whether the two signs of a pair agree matters). -/
+theorem apm_t02a02_bridge (w : apm_t02a02_W) (pair : Equiv.Perm (Fin w.length))
+    (sign : Fin w.length → Bool)
+    (hpair : ∀ i, pair i ≠ i ∧ (w.get (pair i)).1 = (w.get i).1)
+    (huniq : ∀ i j, i ≠ j → (w.get j).1 = (w.get i).1 → j = pair i)
+    (hsign : ∀ i, (sign i = sign (pair i)) ↔ ((w.get i).2 = (w.get (pair i)).2)) :
+    Nonempty (apm_t02a02_polygonSpace w.length pair sign ≃ₜ PolygonMoves.PolygonSurface w) := by
+  sorry
+
+theorem apm_t02a02_octagon_word :
+    Nonempty (apm_t02a02_octagon ≃ₜ PolygonMoves.PolygonSurface apm_t02a02_w8) :=
+  apm_t02a02_bridge apm_t02a02_w8 apm_t02a02_perm8 apm_t02a02_sign8
+    (by decide) (by decide) (by decide)
+
+theorem apm_t02a02_hexagon_word :
+    Nonempty (apm_t02a02_hexagon ≃ₜ PolygonMoves.PolygonSurface apm_t02a02_w6) :=
+  apm_t02a02_bridge apm_t02a02_w6 apm_t02a02_perm6 apm_t02a02_sign6
+    (by decide) (by decide) (by decide)
+
+theorem apm_t02a02_square_word :
+    Nonempty (apm_t02a02_square ≃ₜ PolygonMoves.PolygonSurface apm_t02a02_w4) :=
+  apm_t02a02_bridge apm_t02a02_w4 apm_t02a02_perm4 apm_t02a02_sign4
+    (by decide) (by decide) (by decide)
+
 /-- The handwritten relation is exactly the generic signed-octagon relation. -/
 theorem apm_t02a02_source_octagon_homeomorph :
     Nonempty (apm_t02a02_F ≃ₜ apm_t02a02_octagon) := by
@@ -212,12 +260,26 @@ theorem apm_t02a02_source_octagon_homeomorph :
 /-- Cancelling the adjacent `cc⁻¹` pair gives the indicated hexagon. -/
 theorem apm_t02a02_cancel_c_homeomorph :
     Nonempty (apm_t02a02_octagon ≃ₜ apm_t02a02_hexagon) := by
-  sorry
+  obtain ⟨e1⟩ := apm_t02a02_octagon_word
+  obtain ⟨e3⟩ := apm_t02a02_hexagon_word
+  obtain ⟨e2⟩ := PolygonMoves.inversePairCancellation
+    ([(.a, true), (.a, true), (.b, true)] : apm_t02a02_W) [(.d, false), (.b, true), (.d, false)]
+    (.c, true) (by decide)
+    (by refine ⟨by simp, ?_, ?_⟩ <;> decide)
+  exact ⟨e1.trans (e2.trans e3.symm)⟩
 
 /-- Cutting from the redundant vertex and regluing removes the `b` pair. -/
 theorem apm_t02a02_remove_redundant_vertex_homeomorph :
     Nonempty (apm_t02a02_hexagon ≃ₜ apm_t02a02_square) := by
-  sorry
+  obtain ⟨e1⟩ := apm_t02a02_hexagon_word
+  obtain ⟨e4⟩ := apm_t02a02_square_word
+  obtain ⟨e2⟩ := PolygonMoves.cutAndPaste
+    ([(.a, true), (.a, true)] : apm_t02a02_W) [(.d, false)] [(.d, false)] (.b, true)
+    (by decide) (by refine ⟨by simp, ?_, ?_⟩ <;> decide)
+  obtain ⟨e3⟩ := PolygonMoves.inversePairCancellation
+    ([(.a, true), (.a, true), (.b, true), (.b, true)] : apm_t02a02_W) [] (.d, true)
+    (by decide) (by refine ⟨by simp, ?_, ?_⟩ <;> decide)
+  exact ⟨e1.trans (e2.trans (e3.trans e4.symm))⟩
 
 /-- The square word `aad⁻¹d⁻¹` is the standard two-crosscap square: edge
 names and simultaneous reversal of both occurrences do not affect its
