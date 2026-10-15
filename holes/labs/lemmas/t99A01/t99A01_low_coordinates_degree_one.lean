@@ -2248,6 +2248,86 @@ lemma t99A01_low_coordinates_degree_one_aux_summand
 -/
 
 -- BEGIN SEAT AREA
+lemma t99A01_low_coordinates_degree_one_aux_summand_seat
+    {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
+    (hρι : ρ.comp ι = ContinuousMap.id Circle)
+    (hιρ : ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _))
+    (eO : ContinuousMap.HomotopyEquiv
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (heO : ∀ (i : Fin r) (w : Circle), (eO.invFun ⟨i, w⟩).1 =
+      APMT99A01.halfLoop degree i w)
+    (hρ : ∀ (i : Fin r) (w : Circle) (h : APMT99A01.halfLoop degree i w ∈
+      APMT99A01.sideA degree), ρ ⟨APMT99A01.halfLoop degree i w, h⟩ = w ^ degree i)
+    (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
+      IsIso (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
+    (e₁ : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ)
+    (hw : ∀ i : Fin r, e₁.inv ≫
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e₁.hom =
+      ModuleCat.ofHom (APMT99A01.intTimesNat (degree i))) (i : Fin r) :
+    e₁.inv ≫ Limits.biproduct.ι (fun _ : Fin r ↦ APMT99A01.H 1 Circle) i ≫
+      (t99A01_overlap_sigma_coordinate degree eO 1 ≪≫
+        t99A01_sigma_coordinate (fun _ : Fin r ↦ Circle) 1 (hsigma _ 1)).inv ≫
+      APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) 1 ≫
+      Limits.biprod.fst ≫ (t99A01_sideA_coordinate degree ρ ι hρι hιρ 1 ≪≫ e₁).hom =
+      ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)) := by
+  rw [Iso.trans_inv, Iso.trans_hom]
+  simp only [Category.assoc, Limits.biproduct.ι_desc_assoc,
+    Limits.biprod.lift_fst_assoc]
+  dsimp [t99A01_sigma_coordinate, t99A01_overlap_sigma_coordinate,
+    t99A01_sideA_coordinate]
+  unfold APMT99A01.zI
+  simp only [Category.assoc, Limits.biproduct.ι_desc_assoc,
+    Limits.biprod.lift_fst_assoc]
+  rw [t99A01_low_coordinates_degree_one_aux_inv]
+  rw [ConstructionTargets.CoefficientRadialPair.homotopyIso_hom]
+  have hp : Limits.biproduct.ι (fun _ : Fin r ↦ APMT99A01.H 1 Circle) i ≫
+      (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+            @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+              C(Circle, Σ j : Fin r, Circle))) 1) =
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+            @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+              C(Circle, Σ j : Fin r, Circle))) 1 := by
+    rw [Limits.biproduct.ι_desc]
+  slice_lhs 2 3 => exact hp
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  change e₁.inv ≫ F.map (TopCat.ofHom
+      (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+        @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+          C(Circle, Σ j : Fin r, Circle))) ≫
+      F.map (TopCat.ofHom eO.invFun) ≫
+      F.map (TopCat.ofHom
+        (⟨Set.inclusion Set.inter_subset_left,
+          continuous_inclusion Set.inter_subset_left⟩ :
+          C(↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+            APMT99A01.sideA degree))) ≫
+      F.map (TopCat.ofHom ρ) ≫ e₁.hom = _
+  slice_lhs 2 5 => rw [← F.map_comp, ← F.map_comp, ← F.map_comp]
+  rw [show TopCat.ofHom
+        (⟨@Sigma.mk (Fin r) (fun _ ↦ Circle) i,
+          @continuous_sigmaMk (Fin r) (fun _ ↦ Circle) _ i⟩ :
+          C(Circle, Σ j : Fin r, Circle)) ≫
+      TopCat.ofHom eO.invFun ≫
+      (TopCat.ofHom
+        (⟨Set.inclusion Set.inter_subset_left,
+          continuous_inclusion Set.inter_subset_left⟩ :
+          C(↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree),
+            APMT99A01.sideA degree))) ≫
+      TopCat.ofHom ρ =
+      TopCat.ofHom (APMT99A01.circlePower (degree i)) by
+        exact congrArg TopCat.ofHom
+          (t99A01_low_coordinates_degree_one_aux_circle degree ρ eO heO hρ i)]
+  exact hw i
+
 lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree))
     (hρι : ρ.comp ι = ContinuousMap.id Circle)
@@ -2280,7 +2360,48 @@ lemma t99A01_low_coordinates_degree_one {r : ℕ} (degree : Fin r → ℕ)
   apply LinearMap.pi_ext
   intro i x
   simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply]
-  sorry
+  have hsingle : ModuleCat.ofHom
+      (LinearMap.single ℤ (fun _ : Fin r => ℤ) i) ≫
+      (ModuleCat.biproductIsoPi (fun _ : Fin r => ModuleCat.of ℤ ℤ)).inv =
+      Limits.biproduct.ι (fun _ : Fin r => ModuleCat.of ℤ ℤ) i := by
+    apply Limits.biproduct.hom_ext
+    intro j
+    rw [Category.assoc, ModuleCat.biproductIsoPi_inv_comp_π]
+    apply ModuleCat.hom_ext
+    ext y
+    by_cases h : i = j
+    · subst j
+      simp
+    · simp [Pi.single_apply, h]
+  have hsingle_apply := congrArg
+    (fun f : ModuleCat.of ℤ ℤ ⟶ (⨁ fun _ : Fin r => ModuleCat.of ℤ ℤ) => f.hom x)
+    hsingle
+  have hsingle_apply' :
+      (ModuleCat.biproductIsoPi (fun _ : Fin r => ModuleCat.of ℤ ℤ)).inv.hom
+        (Pi.single i x) =
+      (Limits.biproduct.ι (fun _ : Fin r => ModuleCat.of ℤ ℤ) i).hom x := by
+    simpa [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply,
+      LinearMap.single_apply] using hsingle_apply
+  have hmap_apply := congrArg
+    (fun f : ModuleCat.of ℤ ℤ ⟶
+      (⨁ fun _ : Fin r => APMT99A01.H 1 Circle) => f.hom x)
+    (Limits.biproduct.ι_map (fun _ : Fin r => e₁.inv) i)
+  change
+      (Limits.biproduct.map (fun _ : Fin r => e₁.inv)).hom
+        ((Limits.biproduct.ι (fun _ : Fin r => ModuleCat.of ℤ ℤ) i).hom x) =
+      (Limits.biproduct.ι (fun _ : Fin r => APMT99A01.H 1 Circle) i).hom
+        (e₁.inv.hom x) at hmap_apply
+  simp only [Iso.trans_inv, t99A01_biproduct_int_coordinate,
+    ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply]
+  rw [hsingle_apply']
+  dsimp [Limits.biproduct.mapIso]
+  rw [hmap_apply]
+  have hs := congrArg (fun f : ModuleCat.of ℤ ℤ ⟶ ModuleCat.of ℤ ℤ => f.hom x)
+    (t99A01_low_coordinates_degree_one_aux_summand_seat degree ρ ι hρι hιρ
+      eO heO hρ hsigma e₁ hw i)
+  simpa [Iso.trans_inv, t99A01_biproduct_int_coordinate,
+    APMT99A01.degreeMap, APMT99A01.intTimesNat, hsingle_apply,
+    hmap_apply, Pi.single_apply] using hs
 -- END SEAT AREA
 instance t99A01_circle_pathConnected : PathConnectedSpace Circle :=
   pathConnectedSpace_iff_univ.mpr (by
