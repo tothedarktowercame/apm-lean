@@ -87948,6 +87948,20 @@
       :exit 1,
       :correction
       "used reverse End product and normalized Fin points"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792024537820-12843-5fb518a1",
+     :commands
+     ["git show/diff-tree 1dea841ec"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorem"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 1dea841ec by topo-6 changes only the scoped target; fixture hash 8763e9ef...c3c1 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The reverse product orientation is correct: concat traverses initial paths then the last path, while FundamentalGroup is End, so mk_trans writes the last factor first; the induction proves precisely that order, including n=0. New compiled progress; remaining milestones are Hurewicz on this product plus signed-edge casts, B7, then B8-B10."},
     :commit "1dea841ec",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87956,7 +87970,7 @@
      "8763e9ef7588172f174c9eb897da97311358b09f4942f3945ecebc649cf5c3c1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87976,7 +87990,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked endpoint-corrected subdivision path equality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact finite-concat product order.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88269,7 +88283,10 @@
      :reason "Banked affine subdivision-to-edge parameter identity."}
     {:job 1,
      :commit "2e90ce448",
-     :reason "Banked endpoint-corrected subdivision path equality."}]}
+     :reason "Banked endpoint-corrected subdivision path equality."}
+    {:job 2,
+     :commit "1dea841ec",
+     :reason "Banked exact finite-concat product order."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92519,7 +92536,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "fundamentalGroup_mk_concat_eq_reverse_list_prod",
@@ -92531,7 +92548,9 @@
     :type
     "finite path concat class is reverse factor product under Mathlib End multiplication",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "1dea841ec"},
    :id :lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod,
    :kind :lemma,
    :depends-on [],
