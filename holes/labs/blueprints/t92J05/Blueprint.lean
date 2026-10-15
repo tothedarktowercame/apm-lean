@@ -720,6 +720,42 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
     ∃ q : FundamentalGroup U (⟨x.1, x.2.1⟩ : U),
       FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
           (⟨x.1, x.2.1⟩ : U) q = Path.Homotopic.Quotient.mk p := by
+  classical
+  let S := Classical.choice
+    (ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.exists_pathTwoOpenSubdivision
+      p hU hV hcover)
+  let mid : (i : Fin S.n) → Path (S.point i.castSucc.succ) x.1 := fun i ↦
+    Classical.choose
+      (apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
+        U V x (S.side i.castSucc) (S.side i.succ)
+        (by rw [← (S.piece i.castSucc).target]; exact S.piece_mem i.castSucc 1)
+        (by
+          convert S.piece_mem i.succ 0 using 1 <;>
+            try {simp [ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision.point]} <;>
+            convert (S.piece i.succ).source.symm using 1 <;> ext <;> rfl))
+  let a : (i : Fin (S.n + 2)) → Path (S.point i) x.1 :=
+    Fin.cases ((Path.refl x.1).cast S.point_zero rfl)
+      (fun j ↦ Fin.lastCases
+        (by convert (Path.refl x.1).cast S.point_last rfl)
+        (fun i ↦ mid i) j)
+  have ha : ∀ (k : Fin (S.n + 1)) t,
+      a k.castSucc t ∈ twoChart U V (S.side k) := by
+    intro k
+    refine Fin.cases ?_ (fun i ↦ ?_) k
+    · intro t
+      have hx : x.1 ∈ twoChart U V (S.side 0) := by
+        cases h : S.side 0 <;> simp [twoChart, h, x.2.1, x.2.2]
+      simpa [a] using hx
+    · intro t
+      have hm := (Classical.choose_spec
+        (apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
+          U V x (z := S.point i.castSucc.succ) (S.side i.castSucc) (S.side i.succ)
+          (by rw [← (S.piece i.castSucc).target]; exact S.piece_mem i.castSucc 1)
+          (by
+            convert S.piece_mem i.succ 0 using 1 <;>
+              try {simp [ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision.point]} <;>
+              convert (S.piece i.succ).source.symm using 1 <;> ext <;> rfl))) t
+      exact (by simpa [a, mid] using hm.2)
   sorry
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
     {X : Type} [TopologicalSpace X] (U V : Set X)
