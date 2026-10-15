@@ -87901,38 +87901,37 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify the connecting-map range with BoundaryKernel, finish H0, then B9-B10.",
+    "Use connecting injectivity plus its range equality for H2; finish H0, then B9-B10.",
     :outcome :stop,
-    :warnings
-    ["preexisting lint; unrelated dirt/review dirs preserved"],
+    :warnings ["preexisting lint" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "radialH2PiecesGroupIsZero",
-      :type "both radial piece H2 groups vanish",
+    [{:name "radialMVH2KernelComplex_exact",
+      :type "coordinatized H2 segment exact",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on [],
+      :depends-on ["radialMVConnectingH1_mono"],
       :area "polygon-quotient-homology"}
-     {:name "radialMVConnectingH1_mono",
-      :type "surface H2 connecting map is injective",
+     {:name "radialMVConnectingH1CoordinatesLinear_range",
+      :type "connecting range equals BoundaryKernel",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialH2PiecesGroupIsZero"],
+      :depends-on ["radialMVH2KernelComplex_exact"],
       :area "polygon-quotient-homology"}
      {:name "lowDegreeHomology",
       :type "B8 H0/H1/H2 extraction",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVConnectingH1_mono"],
+      :depends-on ["radialMVConnectingH1CoordinatesLinear_range"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked injectivity of the H2 connecting map.",
+    :reason "Banked H2 connecting range as BoundaryKernel.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,20 +87939,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 72efbd20a", :exit 0}],
+     {:cmd "git show --check b94c993d7", :exit 0}],
     :diagnostic-history
-    [{:cmd "connecting-mono draft",
+    [{:cmd "H2 exactness drafts",
       :exit 1,
-      :correction "made the zero-arrow equality argument explicit"}],
-    :commit "72efbd20a",
+      :correction
+      "fixed iso orientation and categorical reassociation"}],
+    :commit "b94c993d7",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "69f66c052ea529fbdf62f14f93d553a3442bc4edade908302171927a58025609"},
+     "d14ae6db3940fd04d2d255523657e3b1bde9bdaae0042929aa2e5eac74aaf643"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -93001,7 +93001,8 @@
     :lemma-boundarycokerneltoradialh1
     :lemma-boundarycokerneltoradialh1-injective
     :lemma-boundarycokernelradialh1equiv
-    :lemma-radialmvconnectingh1-mono],
+    :lemma-radialmvconnectingh1-mono
+    :lemma-radialmvconnectingh1coordinateslinear-range],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93249,4 +93250,38 @@
    :kind :lemma,
    :depends-on
    [:lemma-existsunique-edgepoint-of-projection-eq-interior],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVH2KernelComplex_exact",
+    :type "coordinatized H2 segment exact"},
+   :lemma
+   {:name "radialMVH2KernelComplex_exact",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "coordinatized H2 segment exact",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvh2kernelcomplex-exact,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvconnectingh1-mono],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVConnectingH1CoordinatesLinear_range",
+    :type "connecting range equals BoundaryKernel"},
+   :lemma
+   {:name "radialMVConnectingH1CoordinatesLinear_range",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "connecting range equals BoundaryKernel",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvconnectingh1coordinateslinear-range,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvh2kernelcomplex-exact],
+   :other-consumers [:t94J09]}]}
