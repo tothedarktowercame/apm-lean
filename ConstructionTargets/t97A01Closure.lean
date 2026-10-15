@@ -1339,6 +1339,21 @@ theorem torusRP2_pathHomotopicQuotient_trans_congr
   subst b'
   rfl
 
+/-- Casting the outer endpoints of a composite path class agrees with
+casting both factors through the same transported middle endpoint.  This is
+the endpoint transport used when the flat successor crosses a run boundary. -/
+theorem torusRP2_pathHomotopicQuotient_cast_trans
+    {X : Type*} [TopologicalSpace X]
+    {a₁ a₂ b₁ b₂ c₁ c₂ : X}
+    (p : Path.Homotopic.Quotient a₂ b₂)
+    (q : Path.Homotopic.Quotient b₂ c₂)
+    (ha : a₁ = a₂) (hb : b₁ = b₂) (hc : c₁ = c₂) :
+    (Path.Homotopic.Quotient.trans p q).cast ha hc =
+      Path.Homotopic.Quotient.trans (p.cast ha hb) (q.cast hb hc) := by
+  refine Path.Homotopic.Quotient.ind₂ ?_ p q
+  intro p q
+  rfl
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3274,6 +3289,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_pathHomotopicQuotient_concat_two
 #print axioms torusRP2_pathHomotopicQuotient_trans_assoc
 #print axioms torusRP2_pathHomotopicQuotient_trans_congr
+#print axioms torusRP2_pathHomotopicQuotient_cast_trans
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
