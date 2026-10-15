@@ -1354,6 +1354,25 @@ theorem torusRP2_pathHomotopicQuotient_cast_trans
   intro p q
   rfl
 
+/-- A transported three-factor left fold is the corresponding transported
+right-associated fold.  This combines the cast and associativity equations
+in the form used by the cross-run induction branch. -/
+theorem torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc
+    {X : Type*} [TopologicalSpace X]
+    {w₁ w₂ x₁ x₂ y₁ y₂ z₁ z₂ : X}
+    (a : Path.Homotopic.Quotient w₂ x₂)
+    (b : Path.Homotopic.Quotient x₂ y₂)
+    (c : Path.Homotopic.Quotient y₂ z₂)
+    (hw : w₁ = w₂) (hx : x₁ = x₂) (hy : y₁ = y₂) (hz : z₁ = z₂) :
+    (Path.Homotopic.Quotient.trans
+        (Path.Homotopic.Quotient.trans a b) c).cast hw hz =
+      Path.Homotopic.Quotient.trans (a.cast hw hx)
+        (Path.Homotopic.Quotient.trans (b.cast hx hy) (c.cast hy hz)) := by
+  rw [torusRP2_pathHomotopicQuotient_cast_trans
+    (Path.Homotopic.Quotient.trans a b) c hw hy hz]
+  rw [torusRP2_pathHomotopicQuotient_cast_trans a b hw hx hy]
+  exact torusRP2_pathHomotopicQuotient_trans_assoc _ _ _
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3290,6 +3309,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_pathHomotopicQuotient_trans_assoc
 #print axioms torusRP2_pathHomotopicQuotient_trans_congr
 #print axioms torusRP2_pathHomotopicQuotient_cast_trans
+#print axioms torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
