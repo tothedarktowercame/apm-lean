@@ -472,8 +472,40 @@ uses only `polygonBoundaryWedgeLoop_edgePoint`, `signedWedgeArc_of_sign`,
 `surjective_circleArc`), then `cellIncl γ (γ u) = cellDisk γ (circleToDisk u)`
 (`Quotient.sound` of `CellRel.boundary u`). -/
 -- BEGIN SEAT AREA
+lemma cellDisk_surjective_aux_bword : Function.Surjective (bword P) := by
+  intro w
+  induction w using Quotient.inductionOn with
+  | h q =>
+      rcases q with ⟨o, z⟩
+      induction o using Quotient.inductionOn with
+      | h i =>
+          obtain ⟨t, ht⟩ := surjective_circleArc z
+          by_cases hs : P.sign i
+          · refine ⟨edgePointCircle P.edgeCount i t, ?_⟩
+            change PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+                (edgePointCircle P.edgeCount i t) =
+              PointWedgeQuotient.wedgeCircle (P.orbit i) z
+            rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint,
+              P.signedWedgeArc_of_sign i t hs, ht]
+          · refine ⟨edgePointCircle P.edgeCount i (reverseIcc t), ?_⟩
+            have hs0 : P.sign i = false := Bool.eq_false_of_not_eq_true hs
+            change PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+                (edgePointCircle P.edgeCount i (reverseIcc t)) =
+              PointWedgeQuotient.wedgeCircle (P.orbit i) z
+            rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint,
+              P.signedWedgeArc_of_not_sign i _ hs0,
+              reverseIcc_reverseIcc, ht]
+
 lemma cellDisk_surjective : Function.Surjective (cellDisk (bword P)) := by
-  sorry
+  intro p
+  induction p using Quotient.inductionOn with
+  | h q =>
+      rcases q with w | z
+      · obtain ⟨u, rfl⟩ := cellDisk_surjective_aux_bword P w
+        refine ⟨circleToDisk u, ?_⟩
+        exact (Quotient.sound
+          (Relation.EqvGen.rel _ _ (CellRel.boundary (γ := bword P) u))).symm
+      · exact ⟨z, rfl⟩
 -- END SEAT AREA
 
 theorem polyToCell_cellToPoly (p : Cell (bword P)) :
