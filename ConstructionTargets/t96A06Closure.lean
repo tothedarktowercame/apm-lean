@@ -1607,6 +1607,13 @@ noncomputable def t96A06_sphere3_rational_H3Iso :
   CoefficientSphereShift.sphereShift ℚ 3 2 (by decide) ≪≫
     CoefficientSphereEndpoints.sphereH2 ℚ
 
+/-- The rational `H₃(S³)` coordinate used by this closure is definitionally
+the canonical iterated coefficient-sphere normalization. -/
+theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
+    t96A06_sphere3_rational_H3Iso =
+      ConstructionTargets.CoefficientSphereAntipodal.normalization ℚ 2 := by
+  rfl
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -2871,6 +2878,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
+#print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
