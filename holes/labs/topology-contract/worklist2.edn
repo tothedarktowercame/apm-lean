@@ -88331,29 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Reassociate global flat-interval fold class with single flat concat; van Kampen; assemble.",
+    "Induct reassociation across within/cross-run successors; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints_class",
+    [{:name "torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq",
       :type
-      "literal flat-interval fold class is the endpoint-cast global fold class",
+      "full inverse coordinate at zero is first run and local zero",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat"],
+      ["torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints_class"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on
-      ["torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints_class"],
+      :depends-on ["torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88365,7 +88363,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked flat-interval endpoint class.",
+    :reason "Banked exact zero run coordinate.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88375,29 +88373,20 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check e9b658d02", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792086773695-14396-3806f473",
-     :commands
-     ["git show/diff/check e9b658d02"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit e9b658d02 adds compiled, sorry-free progress beyond history commit 9fff259c0. It records the exact quotient-class representation of the literal-endpoint flat-interval fold as the endpoint cast of the global dependent concatenation. The proof is definitional (rfl), but it exposes the precise cast boundary needed for the remaining reassociation rather than asserting that reassociation. Only t97A01Closure.lean changed; fixture SHA ce8140f87b21cb2d3351a14dac965ecca59021e6045f31157ba98079d043975d matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Reassociation with the single flat concat, van Kampen, and assembly remain listed."},
-    :commit "e9b658d02",
+     {:cmd "git show --check 8bbb96926", :exit 0}],
+    :diagnostic-history
+    [{:cmd "dependent zero-coordinate drafts",
+      :exit 1,
+      :correction "used equivalence injectivity"}],
+    :commit "8bbb96926",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "ce8140f87b21cb2d3351a14dac965ecca59021e6045f31157ba98079d043975d"},
+     "c353b094eba8796e5ded74663a9f436d8c05fd6503bbad7dfcfc88a8e4defa56"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94359,7 +94348,8 @@
     :lemma-torusrp2-subdivisionrunprefixblockconcat-eq-flatintervalconcat
     :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-eq-flatintervalconcat
     :lemma-torusrp2-subdivisionglobalprefixblockconcat-eq-flatintervalconcat
-    :lemma-torusrp2-subdivisionglobalflatintervalconcat-at-endpoints-class],
+    :lemma-torusrp2-subdivisionglobalflatintervalconcat-at-endpoints-class
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero-eq],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95910,4 +95900,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionglobalprefixblockconcat-eq-flatintervalconcat],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq",
+    :type
+    "full inverse coordinate at zero is first run and local zero"},
+   :lemma
+   {:name "torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "full inverse coordinate at zero is first run and local zero",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionglobalflatintervalconcat-at-endpoints-class],
    :other-consumers []}]}
