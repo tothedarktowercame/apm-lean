@@ -37123,38 +37123,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Identify the explicit lift coordinate with signed count four; then Main.",
+    "Prove global localization; then signed count four and Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul",
-      :type
-      "each rational H3 endomorphism is multiplication by its top-degree coordinate",
+    [{:name "regularValue_topDegreeCoordinate_eq_signedCount",
+      :type "coordinate equals signed count iff global localization",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_sphere3_rational_H3Iso"],
-      :area "rp-rational-homology"}
-     {:name "regularValue_topDegreeCoordinate_eq_signedCount",
-      :type
-      "localization equates the top-degree coordinate and signed fiber count",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul"
        "polynomialSphereLift_four_positive_regularFiber"],
+      :area "rp-rational-homology"}
+     {:name
+      "polynomialSphereLift_globalImage_eq_deckLocalContribution_sum",
+      :type "global fundamental class image equals deck-local sum",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on ["regularValue_topDegreeCoordinate_eq_signedCount"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the rational H3 top-degree coordinate and scalar theorem.",
+    "Committed signed-count coordinate iff global localization.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37167,14 +37166,8 @@
     [{:cmd "initial closure compiles",
       :exit 1,
       :note
-      "Replaced invalid injectivity projection with an explicit iso-coordinate calculation."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792069229429-14078-08357de0",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "c5dd32804",
+      "Fixed coercion rewrites via fundamental class; reapplied after HEAD advanced."}],
+    :commit "94da5c899",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37182,7 +37175,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42655,7 +42648,8 @@
    :depends-on
    [:lemma-polynomialspherelift-decklocalcontribution-spec
     :lemma-signedregularfibercount-homologyscalar-iff-globallocalization
-    :lemma-polynomialspherelift-signedregularfibercertificate],
+    :lemma-polynomialspherelift-signedregularfibercertificate
+    :lemma-regularvalue-topdegreecoordinate-eq-signedcount],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -42973,7 +42967,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "localization equates the top-degree coordinate and signed fiber count",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-regularvalue-topdegreecoordinate-eq-signedcount,
    :kind :lemma,
    :depends-on
