@@ -1,4 +1,6 @@
 import Mathlib
+import ConstructionTargets.t97A04Closure
+import ConstructionTargets.IntegralSingularHomologyComparison
 
 /-! # Blueprint for APM t99A01 -/
 
@@ -112,6 +114,8 @@ structure AttachMVData {r : ℕ} (degree : Fin r → ℕ) where
   δ₂ : (H 2 (AttachSpace degree)) →ₗ[ℤ] (Fin r → ℤ)
   i₁_eq_degreeMap : i₁ = degreeMap degree
   i₀_injective : Function.Injective i₀
+  /-- Each overlap component maps to the (connected) circle side and to its own disk. -/
+  i₀_eq : ∀ x, i₀ x = (∑ i, x i, x)
   exact_i₁_j₁ : LinearMap.range i₁ = LinearMap.ker j₁
   exact_j₁_δ₁ : LinearMap.range j₁ = LinearMap.ker δ₁
   exact_δ₁_i₀ : LinearMap.range δ₁ = LinearMap.ker i₀
@@ -193,10 +197,159 @@ class is a singleton, so its preimage is one point); `sideB`'s preimage is the
 union of the open disk interiors, because only boundary points of a disk are
 identified with circle points.  Use `isOpen_coinduced`, `Relation.EqvGen`
 induction on `AttachRel`. -/
+lemma t99A01_attach_openCover_aux_centre {r : ℕ} (degree : Fin r → ℕ)
+    (i : Fin r) (x : Sum Circle (Fin r × APMT99A01.Disk)) :
+    Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (i, APMT99A01.diskCentre)) x ↔
+      x = Sum.inr (i, APMT99A01.diskCentre) := by
+  let P := fun x : Sum Circle (Fin r × APMT99A01.Disk) =>
+    x = Sum.inr (i, APMT99A01.diskCentre)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b h
+    cases h with
+    | boundary j z =>
+      constructor
+      · intro h
+        cases h
+      · intro h
+        have hz : APMT99A01.circleInDisk z ≠ APMT99A01.diskCentre := by
+          intro he
+          have hv := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) he
+          change (z : ℂ) = 0 at hv
+          have := Circle.norm_coe z
+          rw [hv, norm_zero] at this
+          norm_num at this
+        have hp : (j, APMT99A01.circleInDisk z) =
+            (i, APMT99A01.diskCentre) := Sum.inr.inj h
+        exact False.elim (hz (Prod.mk.inj hp).2)
+  constructor
+  · intro h
+    have hinv : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+        (P a ↔ P b) := by
+      intro a b hab
+      induction hab with
+      | rel a b hab => exact hrel a b hab
+      | refl => exact Iff.rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+    exact (hinv _ _ h).mp rfl
+  · rintro rfl
+    exact Relation.EqvGen.refl _
+
+lemma t99A01_attach_openCover_aux_interior {r : ℕ} (degree : Fin r → ℕ)
+    (x y : Sum Circle (Fin r × APMT99A01.Disk))
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    (∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)) ↔
+      ∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ y = Sum.inr (i, z) := by
+  let P := fun x : Sum Circle (Fin r × APMT99A01.Disk) =>
+    ∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b hab
+    cases hab with
+    | boundary i z =>
+      constructor
+      · rintro ⟨j, w, hw, hbad⟩
+        cases hbad
+      · rintro ⟨j, w, hw, he⟩
+        have hp : (i, APMT99A01.circleInDisk z) = (j, w) := Sum.inr.inj he
+        have hij : i = j := (Prod.mk.inj hp).1
+        subst j
+        have hw' : w = APMT99A01.circleInDisk z := (Prod.mk.inj hp).2.symm
+        subst w
+        simp [APMT99A01.circleInDisk, Circle.norm_coe] at hw
+  induction h with
+  | rel a b hab => exact hrel a b hab
+  | refl => exact Iff.rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 theorem t99A01_attach_openCover {r : ℕ} (degree : Fin r → ℕ) :
     IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
       APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ := by
-  sorry
+  have hApre : (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree =
+      {x | ∀ i : Fin r, x ≠ Sum.inr (i, APMT99A01.diskCentre)} := by
+    ext x
+    simp only [Set.mem_preimage, APMT99A01.sideA, Set.mem_setOf_eq]
+    constructor
+    · intro h i he
+      apply h i
+      apply Quotient.sound
+      rw [he]
+    · intro h i he
+      apply h i
+      have heq : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, APMT99A01.diskCentre)) x := (Quotient.exact he.symm)
+      exact (t99A01_attach_openCover_aux_centre degree i x).mp heq
+  have hBpre : (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideB degree =
+      {x | ∃ (i : Fin r) (z : APMT99A01.Disk),
+        ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)} := by
+    ext x
+    simp only [Set.mem_preimage, APMT99A01.sideB, Set.mem_setOf_eq]
+    constructor
+    · rintro ⟨i, z, hz, he⟩
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree) x (Sum.inr (i, z)) :=
+        Quotient.exact he
+      exact (t99A01_attach_openCover_aux_interior degree x _ hr).mpr ⟨i, z, hz, rfl⟩
+    · rintro ⟨i, z, hz, rfl⟩
+      exact ⟨i, z, hz, rfl⟩
+  have hA : IsOpen (APMT99A01.sideA degree) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree)
+    rw [hApre]
+    have heq : {x : Sum Circle (Fin r × APMT99A01.Disk) |
+        ∀ i : Fin r, x ≠ Sum.inr (i, APMT99A01.diskCentre)} =
+        ⋂ i : Fin r, ({Sum.inr (i, APMT99A01.diskCentre)}ᶜ :
+          Set (Sum Circle (Fin r × APMT99A01.Disk))) := by
+      ext x
+      simp
+    rw [heq]
+    exact isOpen_iInter_of_finite fun i => isOpen_compl_singleton
+  have hB : IsOpen (APMT99A01.sideB degree) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideB degree)
+    rw [hBpre, isOpen_sum_iff]
+    constructor
+    · simp
+    · have heq : Sum.inr ⁻¹' {x : Sum Circle (Fin r × APMT99A01.Disk) |
+          ∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)} =
+          {p : Fin r × APMT99A01.Disk | ‖(p.2 : ℂ)‖ < 1} := by
+          ext p
+          constructor
+          · rintro ⟨i, z, hz, he⟩
+            have hp : p = (i, z) := Sum.inr.inj he
+            subst p
+            exact hz
+          · intro hp
+            exact ⟨p.1, p.2, hp, rfl⟩
+      rw [heq]
+      exact isOpen_lt
+        (continuous_norm.comp (continuous_subtype_val.comp continuous_snd)) continuous_const
+  refine ⟨hA, hB, Set.eq_univ_of_forall ?_⟩
+  intro q
+  refine Quotient.inductionOn q ?_
+  intro x
+  cases x with
+  | inl z =>
+      left
+      intro i he
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, APMT99A01.diskCentre)) (Sum.inl z) := Quotient.exact he.symm
+      have := (t99A01_attach_openCover_aux_centre degree i (Sum.inl z)).mp hr
+      cases this
+  | inr p =>
+      rcases p with ⟨i, z⟩
+      by_cases hz : ‖(z : ℂ)‖ < 1
+      · right
+        exact ⟨i, z, hz, rfl⟩
+      · left
+        intro j he
+        have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+            (Sum.inr (j, APMT99A01.diskCentre)) (Sum.inr (i, z)) := Quotient.exact he.symm
+        have hx := (t99A01_attach_openCover_aux_centre degree j (Sum.inr (i, z))).mp hr
+        have hp : (i, z) = (j, APMT99A01.diskCentre) := Sum.inr.inj hx
+        have hz0 : z = APMT99A01.diskCentre := (Prod.mk.inj hp).2
+        subst z
+        simp [APMT99A01.diskCentre] at hz
 
 /-- **Leaf (radial deformation, 100--150 lines).** `sideA` deformation retracts
 onto the base circle.  `ρ` is the radial retraction: a point `s·w` (`0 < s ≤ 1`) of
@@ -216,22 +369,132 @@ theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
 /-- **Leaf (disk charts, 60--120 lines).** The disk side is the disjoint union of
 the open disks, by the identity chart on each disk interior.  Interior points
 are identified with nothing else (`EqvGen` induction on `AttachRel`). -/
+noncomputable def t99A01_attach_diskSide_aux_decode {r : ℕ} :
+    Sum Circle (Fin r × APMT99A01.Disk) → Option (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)
+  | Sum.inl _ => none
+  | Sum.inr (i, z) => if h : ‖(z : ℂ)‖ < 1 then
+      some ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using h⟩⟩ else none
+
+lemma t99A01_attach_diskSide_aux_decode_eqv {r : ℕ} (degree : Fin r → ℕ)
+    {x y : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    t99A01_attach_diskSide_aux_decode x = t99A01_attach_diskSide_aux_decode y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      simp [t99A01_attach_diskSide_aux_decode, APMT99A01.circleInDisk,
+        Circle.norm_coe]
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z h₁ h₂ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma t99A01_attach_diskSide_aux_eqv {r : ℕ} (degree : Fin r → ℕ)
+    {i j : Fin r} {z w : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) (hw : ‖(w : ℂ)‖ < 1)
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree)
+      (Sum.inr (i, z)) (Sum.inr (j, w))) : i = j ∧ z = w := by
+  have hd := t99A01_attach_diskSide_aux_decode_eqv degree h
+  simp [t99A01_attach_diskSide_aux_decode, hz, hw] at hd
+  exact ⟨hd.1, Subtype.ext hd.2⟩
+
 theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
         (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
         e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩ := by
   sorry
-
 /-- **Leaf (punctured disks, 80--140 lines).** The overlap is the disjoint union
 of the punctured open disks, which deformation retracts onto the radius-`1/2`
 circles; the inverse of the equivalence is literally `halfLoop`. -/
+lemma t99A01_attach_overlap_aux_rel_boundary
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : APMT99A01.AttachRel degree (Sum.inr (i, z)) x) : False := by
+  cases h
+
+lemma t99A01_attach_overlap_aux_rel_boundary_rev
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : APMT99A01.AttachRel degree x (Sum.inr (i, z))) : False := by
+  cases h with
+  | boundary j w =>
+      exact (not_lt_of_ge (by
+        simpa [APMT99A01.circleInDisk] using Circle.norm_coe w)) hz
+
+lemma t99A01_attach_overlap_aux_eqv_interior_iff
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x y : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    (x = Sum.inr (i, z) ↔ y = Sum.inr (i, z)) := by
+  induction h with
+  | rel x y hxy =>
+      constructor
+      · intro hx
+        subst x
+        exact (t99A01_attach_overlap_aux_rel_boundary hz hxy).elim
+      · intro hy
+        subst y
+        exact (t99A01_attach_overlap_aux_rel_boundary_rev hz hxy).elim
+  | refl => exact Iff.rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+lemma t99A01_attach_overlap_aux_eqv_interior
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) (Sum.inr (i, z)) x) :
+    x = Sum.inr (i, z) :=
+  (t99A01_attach_overlap_aux_eqv_interior_iff hz h).mp rfl
+
+/-- The open punctured unit disk. -/
+def t99A01_pball : Set ℂ := {z | 0 < ‖z‖ ∧ ‖z‖ < 1}
+
+/-- **Leaf (quotient chart).** The overlap is the disjoint union of punctured open
+disks, by the identity chart on each disk (interior points are singleton classes:
+`t99A01_attach_overlap_aux_eqv_interior`; continuity of the inverse as in
+`t99A01_attach_diskSide`). -/
+theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ c : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
+        (Σ _ : Fin r, ↥t99A01_pball),
+      ∀ (i : Fin r) (z : APMT99A01.Disk) (h0 : 0 < ‖(z : ℂ)‖) (h1 : ‖(z : ℂ)‖ < 1),
+        (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
+  sorry
+
+/-- **Leaf (pure, no quotient).** Punctured disks retract radially onto the
+radius-`1/2` circles: `z ↦ z/‖z‖` one way, `w ↦ w/2` back, homotopy
+`(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖`. -/
+theorem t99A01_attach_overlap_aux_pball (r : ℕ) :
+    ∃ e : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, ↥t99A01_pball) (Σ _ : Fin r, Circle),
+      ∀ (i : Fin r) (w : Circle),
+        (e.invFun ⟨i, w⟩).1 = i ∧ ((e.invFun ⟨i, w⟩).2 : ℂ) = (w : ℂ) / 2 := by
+  sorry
+
 theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : ContinuousMap.HomotopyEquiv
         ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
       ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w := by
-  sorry
-
+  obtain ⟨c, hc⟩ := t99A01_attach_overlap_aux_chart degree
+  obtain ⟨e2, he2⟩ := t99A01_attach_overlap_aux_pball r
+  refine ⟨c.toHomotopyEquiv.trans e2, fun i w => ?_⟩
+  obtain ⟨h1, h2⟩ := he2 i w
+  have hw : ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ = 1 / 2 := by
+    change ‖(w : ℂ) / 2‖ = 1 / 2
+    rw [norm_div, Circle.norm_coe]; norm_num
+  have hpos : 0 < ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ := by
+    rw [hw]; norm_num
+  have hlt : ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ < 1 := by
+    rw [hw]; norm_num
+  have hp : e2.invFun ⟨i, w⟩ =
+      ⟨i, ⟨((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ), hpos, hlt⟩⟩ := by
+    rcases hq : e2.invFun ⟨i, w⟩ with ⟨j, q⟩
+    rw [hq] at h1 h2
+    simp only at h1 h2
+    subst h1
+    congr 1
+    exact Subtype.ext h2
+  change (c.symm (e2.invFun ⟨i, w⟩)).1 = _
+  rw [hp, hc _ _ hpos hlt]
+  rfl
 /-- **Leaf (finite additivity, 40--100 lines).** Integral singular homology of a
 finite disjoint union is the biproduct, via the summand inclusions.  Check
 `ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean` first (simplices
@@ -276,7 +539,7 @@ theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set 
 (by `ρ`), `H_*(sideB) ≅ ⨁ H_*(ball)` (contractible balls), `H_*(A∩B) ≅ ⨁ H_*(Circle)`.
 Under them, `H₁(A∩B) → H₁(A)` is `ρ ∘ halfLoop i = (· ^ degree i)` on summand `i`,
 which `hwinding` turns into `degreeMap`; `H₀(A∩B) → H₀(B)` is the identity on `ℤ^r`
-(injective).  Higher vanishing: `H_k` of circles and balls vanish for `k ≥ 2`. -/
+(injective; record it as `i₀_eq : i₀ x = (∑ i, x i, x)`).  Higher vanishing: `H_k` of circles and balls vanish for `k ≥ 2`. -/
 theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
     (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
@@ -343,13 +606,33 @@ theorem t99A01_attachMVData_hOne {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
     Nonempty (APMT99A01.H 1 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeCokernel degree)) := by
-  sorry
+  have hdelta : D.δ₁ = 0 := by
+    apply LinearMap.ext
+    intro x
+    apply D.i₀_injective
+    have hx : D.δ₁ x ∈ LinearMap.range D.δ₁ := ⟨x, rfl⟩
+    rw [D.exact_δ₁_i₀] at hx
+    simpa using hx
+  have hj : Function.Surjective D.j₁ := by
+    rw [← LinearMap.range_eq_top, D.exact_j₁_δ₁, hdelta,
+      LinearMap.ker_zero]
+  have hexact : Function.Exact (APMT99A01.degreeMap degree) D.j₁ := by
+    rw [LinearMap.exact_iff]
+    rw [← D.i₁_eq_degreeMap]
+    exact D.exact_i₁_j₁.symm
+  exact ⟨LinearEquiv.toModuleIso (hexact.linearEquivOfSurjective hj).symm⟩
 
 theorem t99A01_attachMVData_hTwo {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
     Nonempty (APMT99A01.H 2 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeKernel degree)) := by
-  sorry
+  have hrange : LinearMap.range D.δ₂ =
+      LinearMap.ker (APMT99A01.degreeMap degree) := by
+    rw [← D.i₁_eq_degreeMap]
+    exact D.exact_δ₂_i₁
+  exact ⟨LinearEquiv.toModuleIso
+    ((LinearEquiv.ofInjective D.δ₂ D.δ₂_injective).trans
+      (LinearEquiv.ofEq _ _ hrange))⟩
 
 theorem t99A01_attachMVData_hHigher {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) (k : ℕ) (hk : 3 ≤ k) :
@@ -534,12 +817,76 @@ theorem t99A01_kernel_Y : Nonempty
 
 theorem t99A01_cokernel_Z : Limits.IsZero
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeZ)) := by
-  sorry
+  rw [ModuleCat.isZero_iff_subsingleton]
+  have hsurj : Function.Surjective
+      (APMT99A01.degreeMap APMT99A01.degreeZ) := by
+    intro x
+    refine ⟨![-2 * x, 0, x], ?_⟩
+    simp [APMT99A01.degreeMap, APMT99A01.degreeZ, Fin.sum_univ_three]
+    ring
+  have hrange : LinearMap.range
+      (APMT99A01.degreeMap APMT99A01.degreeZ) = ⊤ :=
+    LinearMap.range_eq_top.mpr hsurj
+  constructor
+  intro a b
+  refine Quotient.inductionOn₂ a b ?_
+  intro x y
+  apply Quotient.sound
+  apply (Submodule.quotientRel_def (p := LinearMap.range
+    (APMT99A01.degreeMap APMT99A01.degreeZ))).2
+  rw [hrange]
+  trivial
+
+def t99A01_kernel_Z_aux_parametrize :
+    (Fin 2 → ℤ) →ₗ[ℤ] APMT99A01.DegreeKernel APMT99A01.degreeZ where
+  toFun v := ⟨![-2 * v 0 - 5 * v 1, v 0, 2 * v 1], by
+    simp [APMT99A01.degreeMap, APMT99A01.degreeZ, Fin.sum_univ_three]
+    ring⟩
+  map_add' x y := by
+    apply Subtype.ext
+    funext i
+    fin_cases i <;> simp <;> ring
+  map_smul' c x := by
+    apply Subtype.ext
+    funext i
+    fin_cases i <;> simp <;> ring
+
+lemma t99A01_kernel_Z_aux_bijective :
+    Function.Bijective t99A01_kernel_Z_aux_parametrize := by
+  constructor
+  · intro x y hxy
+    have h := congr_arg Subtype.val hxy
+    funext i
+    fin_cases i
+    · exact congr_fun h 1
+    · have h2 := congr_fun h 2
+      change 2 * x 1 = 2 * y 1 at h2
+      simpa using (mul_left_cancel₀ (by norm_num : (2 : ℤ) ≠ 0) h2)
+  · intro x
+    have hx : APMT99A01.degreeMap APMT99A01.degreeZ x.1 = 0 :=
+      LinearMap.mem_ker.mp x.2
+    have hx' : 2 * x.1 0 + 4 * x.1 1 + 5 * x.1 2 = 0 := by
+      simpa [APMT99A01.degreeMap, APMT99A01.degreeZ, Fin.sum_univ_three] using hx
+    have heven : ∃ b : ℤ, x.1 2 = 2 * b := by
+      refine ⟨-x.1 0 - 2 * x.1 1 - 2 * x.1 2, ?_⟩
+      omega
+    obtain ⟨b, hb⟩ := heven
+    refine ⟨![x.1 1, b], ?_⟩
+    apply Subtype.ext
+    funext i
+    fin_cases i
+    · change -2 * x.1 1 - 5 * b = x.1 0
+      omega
+    · rfl
+    · change 2 * b = x.1 2
+      omega
 
 theorem t99A01_kernel_Z : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeZ) ≅
       ModuleCat.of ℤ (Fin 2 → ℤ)) := by
-  sorry
+  exact ⟨LinearEquiv.toModuleIso
+    (LinearEquiv.ofBijective t99A01_kernel_Z_aux_parametrize
+      t99A01_kernel_Z_aux_bijective).symm⟩
 
 /-- **LIBRARY boundary.** The degree-zero integral homology of `X`. -/
 theorem t99A01_hZero_X :
