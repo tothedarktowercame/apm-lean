@@ -9514,7 +9514,99 @@ theorem cut_transfer_consistency_A_chord_aux_zero {Label : Type*} [DecidableEq L
     (hs : s₀.1 = 0) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hL : 2 ≤ L := by
+    dsimp [L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have hpq : p < q := by dsimp [p, q]; omega
+  have hqL : q < L := by
+    dsimp [L, q]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have hs' : s₀ = ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hs
+  subst s₀
+  have hedges : edgePoint L e τ =
+      edgePoint L q ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    calc
+      (edgePoint L e τ : ℂ) = oldA (cutChordParamA L p q
+          ⟨0, by constructor <;> norm_num⟩) := hP
+      _ = cutChordA L p q 0 := D.oldA_chord _
+      _ = (edgePoint L q ⟨0, by constructor <;> norm_num⟩ : Disk) := by
+        simpa [cutChordA] using (edgePoint_zero_eq_cutPoint L q).symm
+  have hN' : N = edgePoint L (p + 1)
+      ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    calc
+      (N : ℂ) = newA (cutChordParamA L p q
+          ⟨0, by constructor <;> norm_num⟩) := hN
+      _ = (edgePoint L (p + 1)
+          (reverseParameter ⟨0, by constructor <;> norm_num⟩) : Disk) := D.newA_chord _
+      _ = (edgePoint L (p + 1)
+          ⟨1, by constructor <;> norm_num⟩ : Disk) := by
+        congr 2
+        apply Subtype.ext
+        simp [reverseParameter]
+  rcases heq hL (by change e < L at he; exact he) hqL hedges with hsame | hnext | hprev
+  · rcases hsame with ⟨rfl, hτ⟩
+    subst τ
+    let T : Disk := edgePoint L p ⟨1, by constructor <;> norm_num⟩
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      change (edgePoint L p ⟨1, by constructor <;> norm_num⟩ : Disk) =
+        cutTransfer L p q q ⟨0, by constructor <;> norm_num⟩
+      simp [cutTransfer, cutSeam, edgePoint, cutPoint, cutAlpha]
+      congr 1
+      ring
+    · rw [hN']
+      exact cut_transfer_consistency_aux_x u v t x
+        (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+  · rcases hnext with ⟨hτ, -, hadj⟩
+    have he1L : e + 1 < L := by
+      by_contra hn
+      have heqL : e + 1 = L := by omega
+      rw [heqL, Nat.mod_self] at hadj
+      omega
+    rw [Nat.mod_eq_of_lt he1L] at hadj
+    have heq : e + 1 = q := hadj.symm
+    have hτ' : τ = ⟨1, by constructor <;> norm_num⟩ := by
+      apply Subtype.ext
+      exact hτ
+    subst τ
+    refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hN']
+    change (edgePoint L (p + 1) ⟨1, by constructor <;> norm_num⟩ : ℂ) =
+      cutTransfer L p q e ⟨1, by constructor <;> norm_num⟩
+    by_cases hv : v.length = 0
+    · have hqp : q = p + 1 := by dsimp [p, q]; omega
+      have hep : e = p := by omega
+      subst e
+      simp only [cutTransfer, true_or, if_true, cutSeam, one_mul,
+        add_sub_cancel_left]
+      simpa [hqp] using edgePoint_one_eq_cutPoint L (p + 1)
+    · have hpe : p < e := by dsimp [p, q] at heq; omega
+      have heq' : e < q := by omega
+      have hidx : q + p + 1 - e = p + 2 := by omega
+      rw [cutTransfer, if_neg (show ¬ (e = p ∨ e = q) by omega),
+        if_pos ⟨hpe, heq'⟩, hidx]
+      have hr : reverseParameter (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+          ⟨0, by constructor <;> norm_num⟩ := by
+        apply Subtype.ext
+        simp [reverseParameter]
+      rw [hr]
+      calc
+        (edgePoint L (p + 1) ⟨1, by constructor <;> norm_num⟩ : ℂ) =
+            cutPoint L (p + 1 + 1) := edgePoint_one_eq_cutPoint L (p + 1)
+        _ = cutPoint L (p + 2) := by congr 2 <;> omega
+        _ = (edgePoint L (p + 2) ⟨0, by constructor <;> norm_num⟩ : Disk) :=
+          (edgePoint_zero_eq_cutPoint L (p + 2)).symm
+  · rcases hprev with ⟨hqone, -⟩
+    norm_num at hqone
 
 /-- Chord end `s₀ = 1`: old vertex `p` (`P`); `newA` is new vertex `p + 1` (`P'`). -/
 theorem cut_transfer_consistency_A_chord_aux_one {Label : Type*} [DecidableEq Label]
