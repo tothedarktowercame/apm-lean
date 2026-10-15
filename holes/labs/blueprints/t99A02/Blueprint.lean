@@ -555,7 +555,45 @@ if `0 ≤ x₂` the lift of `planar x` is `x` (third coordinate
 (`antipodalMk_neg`). -/
 lemma rp2Proj_factor_aux_left (x : S2) :
     rp2Proj_factor_aux_inv0 (diskOf x) = antipodalMk x := by
-  sorry
+  have hxnorm : ‖(x : E3)‖ = 1 := by simp
+  have hcoord :
+      1 - ‖planar x‖ ^ 2 = ((x : E3) 2) ^ 2 := by
+    have hnormsq :
+        ‖(x : E3)‖ ^ 2 =
+          (x : E3) 0 ^ 2 + (x : E3) 1 ^ 2 + (x : E3) 2 ^ 2 := by
+      rw [EuclideanSpace.norm_eq, Real.sq_sqrt (by positivity), Fin.sum_univ_three]
+      simp [Real.norm_eq_abs, sq_abs]
+    have hplanar :
+        ‖planar x‖ ^ 2 = (x : E3) 0 ^ 2 + (x : E3) 1 ^ 2 := by
+      rw [Complex.sq_norm, Complex.normSq_apply]
+      simp [planar]
+      ring
+    rw [hxnorm, one_pow] at hnormsq
+    rw [hplanar]
+    linarith
+  by_cases hx : 0 ≤ (x : E3) 2
+  · have hsqrt : Real.sqrt (1 - ‖planar x‖ ^ 2) = (x : E3) 2 := by
+      rw [hcoord, Real.sqrt_sq hx]
+    unfold rp2Proj_factor_aux_inv0
+    congr 1
+    apply Subtype.ext
+    ext i
+    fin_cases i
+    · simp [rp2Proj_factor_aux_sphere, diskOf, hx, planar]
+    · simp [rp2Proj_factor_aux_sphere, diskOf, hx, planar]
+    · simpa [rp2Proj_factor_aux_sphere, diskOf, hx] using hsqrt
+  · have hxneg : (x : E3) 2 ≤ 0 := le_of_not_ge hx
+    have hsqrt : Real.sqrt (1 - ‖planar x‖ ^ 2) = -(x : E3) 2 := by
+      rw [hcoord, Real.sqrt_sq_eq_abs, abs_of_nonpos hxneg]
+    rw [← antipodalMk_neg x]
+    unfold rp2Proj_factor_aux_inv0
+    congr 1
+    apply Subtype.ext
+    ext i
+    fin_cases i
+    · simp [rp2Proj_factor_aux_sphere, diskOf, hx, planar]
+    · simp [rp2Proj_factor_aux_sphere, diskOf, hx, planar]
+    · simpa [rp2Proj_factor_aux_sphere, diskOf, hx] using hsqrt
 
 /-- Leaf (split from `rp2Proj_factor`).  `diskOf` of the upper-hemisphere
 lift of `z` is `z` (third coordinate `√(…) ≥ 0`;
