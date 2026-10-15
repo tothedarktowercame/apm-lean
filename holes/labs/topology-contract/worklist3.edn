@@ -36121,13 +36121,13 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "External lifecycle must install canonical package symlink; then quotient run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
+    "Install canonical package symlink; then quotient run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
     :warnings ["No Lake command run; scoped files unchanged."],
     :missing-theorems
@@ -36148,25 +36148,14 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Third consecutive reopened-sequence check confirms .lake/packages is still a real directory, not the canonical-authority symlink. The row is blocked until external workspace lifecycle repair.",
+    "External repair has not occurred: .lake/packages remains a real directory instead of the canonical-authority symlink, so workspace policy forbids Lake work.",
     :commands
     [{:cmd "stat .lake/packages; test -L .lake/packages",
       :exit 1,
       :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder count", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792022303170-12765-9c515904",
-     :commands
-     ["exact diff-tree scope and fixture SHA-256 assertions"
-      "committed forbidden-token audit; recorded 8c4eb4f snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: recorded 8c4eb4f is compiled, sorry-free progress beyond 263f5d47 using only standard axioms. Its Fin(runs+1) family lands in outer subtype V, and its theorem correctly coerces to the corresponding ambient boundary-list entry, supplying the next fold’s representation boundary. Based van Kampen remains explicitly partial. Scope/hash match; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36175,7 +36164,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
