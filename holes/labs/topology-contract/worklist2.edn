@@ -88377,6 +88377,19 @@
     [{:cmd "block rewrite draft",
       :exit 1,
       :correction "split dependent rewrite by factor"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792059618323-13843-55511c60",
+     :commands
+     ["git show/diff/check cce2536b2"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+dependency+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit cce2536b2 adds compiled, sorry-free progress beyond 1b5a1f05f: every selected run-block factor, cast to cumulative-prefix endpoints, has the class of the corresponding prefix-block factor. Only t97A01Closure.lean changed; fixture SHA 95567281fc25df8f71b431fe090ce46b086e77bd936088f3027255118104b658 matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Cast direction and factor order are pointwise justified. Prefix-block regrouping, subdivision reassembly, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "cce2536b2",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88385,7 +88398,7 @@
      "95567281fc25df8f71b431fe090ce46b086e77bd936088f3027255118104b658"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88403,7 +88416,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal-endpoint outer run fold.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked prefix run-factor equality.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88506,7 +88519,10 @@
      :reason "Banked finite outer run fold."}
     {:job 4,
      :commit "1b5a1f05f",
-     :reason "Banked literal-endpoint outer run fold."}]}
+     :reason "Banked literal-endpoint outer run fold."}
+    {:job 5,
+     :commit "cce2536b2",
+     :reason "Banked prefix run-factor equality."}]}
   {:consumer :t94J09,
    :stop-count 3,
    :evidence
@@ -94687,7 +94703,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -94698,7 +94714,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cast run factor equals prefix factor",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "cce2536b2"},
    :id
    :lemma-torusrp2-subdivisionrunblockpiece-cast-eq-prefixblockpiece,
    :kind :lemma,
