@@ -47,8 +47,159 @@ abbrev antipodal : C(S3, S3) := ConstructionTargets.CoefficientSphereAntipodal.a
 
 /-- `S³ → ℝP³` is a 2-sheeted covering (fibres `{x, -x}`; local sections over the affine
 charts `vᵢ ≠ 0`, or via Mathlib's quotient-covering criterion for the `±1` action). -/
+def proj_cover_aux_antipodal (x : S3) : S3 :=
+  ⟨-x.1, by simpa only [Metric.mem_sphere, dist_zero_right, norm_neg] using x.2⟩
+
+def proj_cover_aux_smul (g : ℤˣ) (x : S3) : S3 :=
+  if g = 1 then x else proj_cover_aux_antipodal x
+
+@[reducible] def proj_cover_aux_action : MulAction ℤˣ S3 where
+  smul := proj_cover_aux_smul
+  one_smul x := rfl
+  mul_smul g h x := by
+    change proj_cover_aux_smul (g * h) x =
+      proj_cover_aux_smul g (proj_cover_aux_smul h x)
+    rcases Int.units_eq_one_or g with rfl | rfl <;>
+      rcases Int.units_eq_one_or h with rfl | rfl <;>
+      simp [proj_cover_aux_smul, proj_cover_aux_antipodal]
+
+def proj_cover_aux_radial (v : NonzeroVectors ℝ 3) : S3 :=
+  ⟨‖WithLp.toLp 2 v.1‖⁻¹ • WithLp.toLp 2 v.1, by
+    rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_norm, inv_mul_cancel₀]
+    exact norm_ne_zero_iff.mpr (by
+      intro h
+      apply v.2
+      have h' := congrArg (WithLp.ofLp) h
+      simpa using h')⟩
+
+lemma proj_cover_aux_continuous_radial : Continuous proj_cover_aux_radial := by
+  apply Continuous.subtype_mk
+  have hc : Continuous (fun v : NonzeroVectors ℝ 3 => WithLp.toLp 2 v.1) :=
+    (PiLp.continuous_toLp 2 _).comp continuous_subtype_val
+  exact ((continuous_norm.comp hc).inv₀ (fun v => norm_ne_zero_iff.mpr (by
+    intro h
+    apply v.2
+    have h' := congrArg (WithLp.ofLp) h
+    simpa using h'))).smul hc
+
+lemma proj_cover_aux_comp_radial :
+    projFun ∘ proj_cover_aux_radial = ProjectiveSpaceTopology.quotientMap ℝ 3 := by
+  funext v
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ _ _).2
+  exact ⟨‖WithLp.toLp 2 v.1‖⁻¹, by
+    ext i
+    simp [projFun, proj_cover_aux_radial]⟩
+
+lemma proj_cover_aux_continuous : Continuous projFun := by
+  change Continuous (ProjectiveSpaceTopology.quotientMap ℝ 3 ∘
+    fun x : S3 => ⟨(WithLp.equiv 2 (Fin 4 → ℝ)) x.1, by
+      intro h
+      have hx : x.1 = 0 := (WithLp.equiv 2 (Fin 4 → ℝ)).injective (by simpa using h)
+      have := x.2
+      simp [hx] at this⟩)
+  apply (ProjectiveSpaceTopology.continuous_quotientMap ℝ 3).comp
+  apply Continuous.subtype_mk
+  exact (PiLp.continuous_ofLp 2 _).comp continuous_subtype_val
+
+lemma proj_cover_aux_quotient : Topology.IsQuotientMap projFun := by
+  apply Topology.IsQuotientMap.of_comp proj_cover_aux_continuous_radial
+    proj_cover_aux_continuous
+  rw [proj_cover_aux_comp_radial]
+  exact ⟨ProjectiveSpaceTopology.surjective_quotientMap ℝ 3, rfl⟩
+
+lemma proj_cover_aux_eq_iff (x y : S3) :
+    projFun x = projFun y ↔ y = x ∨ y = proj_cover_aux_antipodal x := by
+  change Projectivization.mk ℝ ((WithLp.equiv 2 (Fin 4 → ℝ)) x.1) _ =
+      Projectivization.mk ℝ ((WithLp.equiv 2 (Fin 4 → ℝ)) y.1) _ ↔ _
+  rw [Projectivization.mk_eq_mk_iff' ℝ]
+  constructor
+  · rintro ⟨a, ha⟩
+    have ha' := congrArg (WithLp.toLp 2) ha
+    have hnorm := congrArg norm ha'
+    have habs : |a| = 1 := by
+      simpa [norm_smul, x.2, y.2, Metric.mem_sphere, dist_zero_right] using hnorm
+    rcases eq_or_eq_neg_of_abs_eq habs with rfl | rfl
+    · left
+      apply Subtype.ext
+      simpa using ha'
+    · right
+      apply Subtype.ext
+      have hneg := congrArg Neg.neg ha'
+      simpa [proj_cover_aux_antipodal] using hneg
+  · rintro (rfl | rfl)
+    · exact ⟨1, by simp⟩
+    · exact ⟨-1, by simp [proj_cover_aux_antipodal]⟩
+
 theorem proj_cover : CoveringDegree.IsKSheetedCover projFun 2 := by
-  sorry
+  letI : MulAction ℤˣ S3 := proj_cover_aux_action
+  have horbit : ∀ {x y : S3}, projFun x = projFun y ↔ x ∈ MulAction.orbit ℤˣ y := by
+    intro x y
+    rw [proj_cover_aux_eq_iff]
+    constructor
+    · rintro (rfl | h)
+      · refine ⟨1, ?_⟩
+        change proj_cover_aux_smul 1 y = y
+        rfl
+      · refine ⟨-1, ?_⟩
+        change proj_cover_aux_smul (-1) y = x
+        subst y
+        apply Subtype.ext
+        simp [proj_cover_aux_smul, proj_cover_aux_antipodal]
+    · rintro ⟨g, rfl⟩
+      rcases Int.units_eq_one_or g with rfl | rfl
+      · left; rfl
+      · right
+        change y = proj_cover_aux_antipodal (proj_cover_aux_smul (-1) y)
+        apply Subtype.ext
+        simp [proj_cover_aux_smul, proj_cover_aux_antipodal]
+  have hfree : IsCancelSMul ℤˣ S3 :=
+    isCancelSMul_iff_eq_one_of_smul_eq.mpr (by
+      intro g x hg
+      rcases Int.units_eq_one_or g with rfl | rfl
+      · rfl
+      · exfalso
+        have hv := congrArg Subtype.val hg
+        have hz : x.1 = 0 := by
+          change -x.1 = x.1 at hv
+          have htwo : (2 : ℝ) • x.1 = 0 := by
+            rw [two_smul]
+            exact (congrArg (fun z => z + x.1) hv.symm).trans (neg_add_cancel x.1)
+          exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+        have hn : ‖x.1‖ = 1 := by
+          simpa only [Metric.mem_sphere, dist_zero_right] using x.2
+        simp [hz] at hn)
+  letI : IsCancelSMul ℤˣ S3 := hfree
+  letI : ContinuousConstSMul ℤˣ S3 := ⟨fun g => by
+    rcases Int.units_eq_one_or g with rfl | rfl
+    · simpa [proj_cover_aux_action, proj_cover_aux_smul] using
+        (continuous_id : Continuous (id : S3 → S3))
+    · apply Continuous.subtype_mk
+      simpa [proj_cover_aux_action, proj_cover_aux_smul, proj_cover_aux_antipodal] using
+        (continuous_neg.comp continuous_subtype_val)⟩
+  have hq : IsQuotientCoveringMap projFun ℤˣ :=
+    proj_cover_aux_quotient.isQuotientCoveringMap_of_properlyDiscontinuousSMul horbit
+  refine ⟨hq.isCoveringMap, ?_, ?_⟩
+  · intro b
+    obtain ⟨x, rfl⟩ := hq.surjective b
+    let e : ℤˣ ≃ {z : S3 // projFun z = projFun x} := Equiv.ofBijective
+      (fun g => ⟨g • x, horbit.mpr ⟨g, rfl⟩⟩)
+      ⟨fun g h he => hfree.right_cancel g h x (congrArg Subtype.val he),
+       fun z => by
+         obtain ⟨g, hg⟩ := horbit.mp z.2
+         exact ⟨g, Subtype.ext hg⟩⟩
+    exact Finite.of_equiv ℤˣ e
+  · intro b
+    obtain ⟨x, rfl⟩ := hq.surjective b
+    let e : ℤˣ ≃ {z : S3 // projFun z = projFun x} := Equiv.ofBijective
+      (fun g => ⟨g • x, horbit.mpr ⟨g, rfl⟩⟩)
+      ⟨fun g h he => hfree.right_cancel g h x (congrArg Subtype.val he),
+       fun z => by
+         obtain ⟨g, hg⟩ := horbit.mp z.2
+         exact ⟨g, Subtype.ext hg⟩⟩
+    exact (Nat.card_congr e.symm).trans (by
+      rw [Nat.card_eq_fintype_card]
+      exact Fintype.card_units_int)
 
 /-- Rational homology of `S³` vanishes in positive degrees other than `3` (iterate
 `CoefficientSphereShift.sphereShift` down to `S¹`/`S⁰`). -/
