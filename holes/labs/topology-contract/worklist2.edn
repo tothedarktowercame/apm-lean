@@ -87901,45 +87901,41 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Use equal kernel/range of the negative map; then B8-B10.",
+    "Extract B8 from radial exactness using these kernel/range equivalences; then B9-B10.",
     :outcome :stop,
-    :warnings ["lint/dirt"],
+    :warnings ["preexisting lint/dirt"],
     :missing-theorems
-    [{:name "circleGroupH1IsoInt_inv_one_comparison",
-      :type "circle coherence",
+    [{:name "radialMVBoundaryGroup_apply_eq_zero_iff",
+      :type "production and attaching kernels agree pointwise",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["singularHomologyComparison_inv_map"],
-      :area "polygon-quotient-homology"}
-     {:name "radialIntersectionToOuterH1_generator_coordinates",
-      :type "outer coordinates",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["circleGroupH1IsoInt_inv_one_comparison"],
-      :area "polygon-quotient-homology"}
-     {:name "radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup",
-      :type "negative attaching map",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialIntersectionToOuterH1_generator_coordinates"],
-      :area "polygon-quotient-homology"}
-     {:name "radialMV_boundary_eq_orientationSigned",
-      :type "B7 adapter",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup"],
+      :area "polygon-quotient-homology"}
+     {:name "radialMVBoundaryGroup_mem_range_iff",
+      :type "production and attaching ranges agree",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup"],
+      :area "polygon-quotient-homology"}
+     {:name "lowDegreeHomology",
+      :type "B8 H0/H1/H2 kernel-cokernel extraction",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["radialMVBoundaryGroup_apply_eq_zero_iff"
+       "radialMVBoundaryGroup_mem_range_iff"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked MV boundary.",
+    :reason "Banked sign-invariant kernel and range.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87947,32 +87943,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 609b06c7c", :exit 0}],
+     {:cmd "git show --check 21a8e6379", :exit 0}],
     :diagnostic-history
-    [{:cmd "drafts", :exit 1, :correction "fixed coherence"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792034256412-13095-7e4c7839",
-     :commands
-     ["git show/diff-tree 609b06c7c"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms four new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 609b06c7c by topo-6 changes only the scoped target; fixture hash d40d41a6...c1b75 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Canonical comparison aligns group/module circle generators; inverse naturality transports the normalized boundary calculation to outer coordinates. The production MV arrow is the negative outer inclusion, so integer extensionality yields MV boundary = -attaching map with the correct sign. New compiled progress; only the B7 adapter remains before B8-B10."},
-    :commit "609b06c7c",
+    [{:cmd "kernel draft",
+      :exit 1,
+      :correction "exposed linear-map application"}],
+    :commit "21a8e6379",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "d40d41a6148a8f343cc9133f26587a3aa7b22ecf63cfb2a4f22752144c5c1b75"},
+     "8b48f78cc2d89da805bcc843b33b9d74073f4026c38816b52c07be2a92b6a677"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92933,4 +92917,58 @@
    :kind :lemma,
    :depends-on
    [:lemma-radialintersectiontoouterh1-generator-coordinates],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundaryGroup_apply_eq_zero_iff",
+    :type "production and attaching kernels agree pointwise"},
+   :lemma
+   {:name "radialMVBoundaryGroup_apply_eq_zero_iff",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "production and attaching kernels agree pointwise",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundarygroup-apply-eq-zero-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-radialmvboundarygroup-eq-neg-attachingboundarygroup],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundaryGroup_mem_range_iff",
+    :type "production and attaching ranges agree"},
+   :lemma
+   {:name "radialMVBoundaryGroup_mem_range_iff",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "production and attaching ranges agree",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundarygroup-mem-range-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-radialmvboundarygroup-eq-neg-attachingboundarygroup],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "lowDegreeHomology",
+    :type "B8 H0/H1/H2 kernel-cokernel extraction"},
+   :lemma
+   {:name "lowDegreeHomology",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "B8 H0/H1/H2 kernel-cokernel extraction",
+    :area "polygon-quotient-homology"},
+   :id :lemma-lowdegreehomology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-radialmvboundarygroup-apply-eq-zero-iff
+    :lemma-radialmvboundarygroup-mem-range-iff],
    :other-consumers [:t94J09]}]}
