@@ -2,6 +2,7 @@ import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.DiskBoundedPreimageDuality
 import ConstructionTargets.SardGenuineSmoothManifoldVector
+import Mathlib.Analysis.Calculus.Implicit
 
 /-!
 # Local fundamental-class coordinates for t00J02
@@ -619,6 +620,20 @@ theorem hasFDerivAt_incidenceDifference_commonTarget
   exact h
 
 #print axioms hasFDerivAt_incidenceDifference_commonTarget
+
+/-- A strict coordinate derivative with a continuous linear right inverse has
+the complemented-kernel data required by the implicit-function theorem.  The
+finite-dimensional target is exactly the incidence-map situation. -/
+noncomputable def implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    OpenPartialHomeomorph E (F × A.ker) :=
+  hf.implicitToOpenPartialHomeomorph f A
+    (LinearMap.range_eq_top.mpr hA.choose_spec.surjective)
+
+#print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse
 
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
