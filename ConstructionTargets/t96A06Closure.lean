@@ -240,6 +240,51 @@ theorem flipFirstPairSphere_flipSecondPairSphere (p : Sphere 3) :
       ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
       ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
 
+/-- Away from the two coordinate circles, neither independent pair flip has
+a fixed point.  This is the freeness condition used for a regular fiber. -/
+def PairSignRegular (p : Sphere 3) : Prop :=
+  (p.1 0 ≠ 0 ∨ p.1 1 ≠ 0) ∧ (p.1 2 ≠ 0 ∨ p.1 3 ≠ 0)
+
+theorem flipFirstPairSphere_ne_of_pairSignRegular
+    {p : Sphere 3} (hp : PairSignRegular p) :
+    flipFirstPairSphere p ≠ p := by
+  intro h
+  rcases hp.1 with h0 | h1
+  · apply h0
+    have hc := congrArg (fun q : Sphere 3 => q.1 0) h
+    simp [flipFirstPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+  · apply h1
+    have hc := congrArg (fun q : Sphere 3 => q.1 1) h
+    simp [flipFirstPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+
+theorem flipSecondPairSphere_ne_of_pairSignRegular
+    {p : Sphere 3} (hp : PairSignRegular p) :
+    flipSecondPairSphere p ≠ p := by
+  intro h
+  rcases hp.2 with h2 | h3
+  · apply h2
+    have hc := congrArg (fun q : Sphere 3 => q.1 2) h
+    simp [flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+  · apply h3
+    have hc := congrArg (fun q : Sphere 3 => q.1 3) h
+    simp [flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+
 theorem polynomialSphereVector_flipFirstPairSphere (p : Sphere 3) :
     polynomialSphereVector (flipFirstPairSphere p) = polynomialSphereVector p := by
   apply Subtype.ext
@@ -1022,6 +1067,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipSecondPairSphere_involutive
 #print axioms flipFirstPairSphere_comm_flipSecondPairSphere
 #print axioms flipFirstPairSphere_flipSecondPairSphere
+#print axioms flipFirstPairSphere_ne_of_pairSignRegular
+#print axioms flipSecondPairSphere_ne_of_pairSignRegular
 #print axioms polynomialSphereLift_flipFirstPairSphere
 #print axioms polynomialSphereLift_flipSecondPairSphere
 #print axioms polynomialSphereLift_projection
