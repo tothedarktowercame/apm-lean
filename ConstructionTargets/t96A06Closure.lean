@@ -1601,6 +1601,38 @@ theorem polynomialSphereLift_localClasses_positive_of_pairFlipTransport
     rw [h3, h0]
     exact t96A06_pairFlips_fix_sphere3_fundamentalClass.2.2
 
+/-- The remaining geometric inputs can be stated as one global decomposition,
+one positive base computation, and three deck-naturality equations. -/
+theorem polynomialSphereLift_localizationData_of_base_and_deckTransport
+    (localContribution : Fin 4 →
+      CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)))
+    (image_eq_sum :
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, localContribution i)
+    (h0 : localContribution 0 = t96A06_sphere3_rational_fundamentalClass)
+    (h1 : localContribution 1 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3
+        (localContribution 0))
+    (h2 : localContribution 2 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3
+        (localContribution 0))
+    (h3 : localContribution 3 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          (flipFirstPairSphere.comp flipSecondPairSphere)) 3
+        (localContribution 0)) :
+    PolynomialSphereLiftFundamentalClassLocalizationData := by
+  exact
+    { localContribution := localContribution
+      image_eq_sum := image_eq_sum
+      localPositive :=
+        polynomialSphereLift_localClasses_positive_of_pairFlipTransport
+          localContribution h0 h1 h2 h3 }
+
 /-- The antipodal deck transformation acts trivially on rational top
 homology of the concrete three-sphere.  This is the odd-dimensional sign in
 the sphere antipodal formula, specialized to the cover of `RP3`. -/
@@ -2099,6 +2131,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_regularValueFormula_of_localizationData
 #print axioms t96A06_pairFlips_fix_sphere3_fundamentalClass
 #print axioms polynomialSphereLift_localClasses_positive_of_pairFlipTransport
+#print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
