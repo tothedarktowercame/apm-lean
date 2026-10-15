@@ -87946,6 +87946,19 @@
      {:cmd "cleanup draft",
       :exit 1,
       :correction "restored congruence"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792022298881-12764-677d52e2",
+     :commands
+     ["git show/diff-tree c5d2ef65c"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorem"
+      "statement-registry check"
+      "placeholder scan"],
+     :finding
+     "Commit c5d2ef65c adds genuine compiled, sorry-free progress only in scope; fixture hash matches. Convex interpolation of vertices i/n and (i+1)/n is exactly (i+t)/n, matching the forward indexed edge with correct Fin casts and circle representation. Standard axioms only; 0 placeholders; registry 166/0. Remaining milestones are recorded: lift to subpaths/product, instantiate B7, then B8-B10."},
     :commit "c5d2ef65c",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87967,7 @@
      "7d558f95a390c60597732f460a0eb054b0ce52164053aca7d177d1f8df4a014e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87987,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked equal-edge subdivision and finite subpath fold.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked affine subdivision-to-edge parameter identity.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88261,8 +88274,10 @@
      :reason "Banked exact signed-edge homotopy classes."}
     {:job 8,
      :commit "86d1671ba",
-     :reason
-     "Banked equal-edge subdivision and finite subpath fold."}]}
+     :reason "Banked equal-edge subdivision and finite subpath fold."}
+    {:job 9,
+     :commit "c5d2ef65c",
+     :reason "Banked affine subdivision-to-edge parameter identity."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92304,7 +92319,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "integerLoop_convexCombo_subdivisionVertex",
@@ -92316,7 +92331,9 @@
     :type
     "affine subdivision parameter maps to matching polygon edge point",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c5d2ef65c"},
    :id :lemma-integerloop-convexcombo-subdivisionvertex,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryintegerloop-concatsubpath],
