@@ -88604,27 +88604,26 @@
      :commit "0db7a0d2a",
      :reason "Banked flattened run endpoint coordinates."}]}
   {:consumer :t94J09,
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build two-vertex graph/MV boundary from seven orbit coordinates; normalize; assemble.",
+    "Relate graph cycles to MV H1; compute face boundary; normalize; assemble.",
     :outcome :stop,
     :warnings
     ["Main: 1 placeholder" "dirt preserved" "source has two vertices"],
     :missing-theorems
-    [{:name "frozenOrbitEquiv",
-      :type
-      "exact seven pairing orbits of the frozen fourteen-edge involution",
+    [{:name "frozenGraphBoundaryKernelEquiv",
+      :type "kernel of (g-d,d-g) is Z^6",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on [],
+      :depends-on ["frozenOrbitEquiv"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
-      :type "literal two-vertex polygon integral homology",
+      :type "literal two-vertex polygon homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenOrbitEquiv"],
+      :depends-on ["frozenGraphBoundaryKernelEquiv"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
       :type "source quotient homeomorphic to N6",
@@ -88636,8 +88635,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Banked frozen fourteen-edge pairing and seven-orbit coordinates.",
+    :reason "Banked two-vertex graph boundary kernel.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88647,30 +88645,20 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 5c8a7b9cc", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792073021325-14170-5fd2e280",
-     :commands
-     ["git show/diff/check 5c8a7b9cc"
-      "compare frozen word/pairing relations"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 5c8a7b9cc adds compiled, sorry-free progress beyond aca4dd83e. It defines the literal fourteen-edge involution and proves its quotient has exactly seven orbits. The pairs 0/12, 6/13, 1/7, 2/8, 5/10, 4/11, 3/9 exactly match the frozen a,b,c,d,e,f,g relations; orbit labels and representatives are mutually inverse across Quotient. Only t94J09Closure.lean changed; fixture SHA e9f3fe826dcbe1bd740012587b8f5d909623eb57cd332b229bbabea3370a5328 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Two-vertex homology boundary, normalization, and assembly remain listed."},
-    :commit "5c8a7b9cc",
+     {:cmd "git show --check 307ed881c", :exit 0}],
+    :diagnostic-history
+    [{:cmd "kernel drafts",
+      :exit 1,
+      :correction "used explicit seven-coordinate inverse"}],
+    :commit "307ed881c",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "e9f3fe826dcbe1bd740012587b8f5d909623eb57cd332b229bbabea3370a5328"},
+     "35e64e3e5c1764df3a4b00bf54ebc79fda7dbdd3452dd2db1028ea1fe1632ec2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94128,7 +94116,8 @@
     :lemma-n6smithcokerneliso
     :lemma-n6boundarycokernelsmithequiv
     :lemma-n6polygonhomologyexplicit
-    :lemma-frozenorbitequiv],
+    :lemma-frozenorbitequiv
+    :lemma-frozengraphboundarykernelequiv],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95676,4 +95665,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-run-endpoint-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphBoundaryKernelEquiv",
+    :type "kernel of (g-d,d-g) is Z^6"},
+   :lemma
+   {:name "frozenGraphBoundaryKernelEquiv",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "kernel of (g-d,d-g) is Z^6",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengraphboundarykernelequiv,
+   :kind :lemma,
+   :depends-on [:lemma-frozenorbitequiv],
    :other-consumers []}]}
