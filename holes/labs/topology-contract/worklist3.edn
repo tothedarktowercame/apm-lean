@@ -37111,37 +37111,32 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual "One local sign; transport; degree; invariants/Main.",
     :outcome :stop,
-    :warnings ["Main: one placeholder."],
+    :warnings
+    ["Main: one placeholder." "Unrelated t00J02 edit untouched."],
     :missing-theorems
-    [{:name "flipFirstPairSphere_rational_H3",
-      :type "first flip: identity on H3(Q)",
+    [{:name "flipBothPairsSphere_rational_H3",
+      :type "composite pair flip is identity on H3(Q)",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on [],
-      :area "rp-rational-homology"}
-     {:name "flipSecondPairSphere_rational_H3",
-      :type "second flip: identity on H3(Q)",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on [],
-      :area "rp-rational-homology"}
-     {:name "t96A06_polynomialSphereLift_local_signs",
-      :type "positive local signs",
-      :status :partial,
       :consumers [:t96A06],
       :depends-on
       ["flipFirstPairSphere_rational_H3"
        "flipSecondPairSphere_rational_H3"],
       :area "rp-rational-homology"}
+     {:name "t96A06_polynomialSphereLift_local_signs",
+      :type "four local signs are positive",
+      :status :partial,
+      :consumers [:t96A06],
+      :depends-on ["flipBothPairsSphere_rational_H3"],
+      :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_degree_four",
-      :type "degree four",
+      :type "lift degree is four",
       :status :partial,
       :consumers [:t96A06],
       :depends-on ["t96A06_polynomialSphereLift_local_signs"],
@@ -37150,7 +37145,7 @@
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed pair-flip H3 identities.",
+    :reason "Committed fourth pair-flip H3 identity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37159,18 +37154,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git status --short --untracked-files=no", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check a176a0d14", :exit 0}],
+     {:cmd "git show --check 2bff29584", :exit 0}],
     :diagnostic-history
     [{:cmd "initial compile",
       :exit 1,
-      :note "fixed composition rewrite"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792050763991-13632-9ed63095",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "a176a0d14",
+      :note "reversed chain-composition rewrite"}],
+    :commit "2bff29584",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37178,7 +37167,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41446,7 +41435,8 @@
    :depends-on
    [:lemma-t96a06-polynomialspherelift-regular-fiber-ncard
     :lemma-flipfirstpairsphere-rational-h3
-    :lemma-flipsecondpairsphere-rational-h3],
+    :lemma-flipsecondpairsphere-rational-h3
+    :lemma-flipbothpairssphere-rational-h3],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41481,6 +41471,25 @@
    :id :lemma-flipsecondpairsphere-rational-h3,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "flipBothPairsSphere_rational_H3",
+    :type "composite pair flip is identity on H3(Q)"},
+   :lemma
+   {:name "flipBothPairsSphere_rational_H3",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "composite pair flip is identity on H3(Q)",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-flipbothpairssphere-rational-h3,
+   :kind :lemma,
+   :depends-on
+   [:lemma-flipfirstpairsphere-rational-h3
+    :lemma-flipsecondpairsphere-rational-h3],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
