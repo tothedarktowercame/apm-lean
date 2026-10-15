@@ -2100,6 +2100,43 @@ theorem t96A06_integralToRational_localGenerator_iff :
     rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
     exact h
 
+/-- Integral localization together with the single rational local coordinate
+equation makes the rational extension localize to the positive generator. -/
+theorem t96A06_rationalExtension_localizes_of_coordinate_one
+    (hintegral :
+      HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3
+          t96A06_mappedIntegralNormalizedClass =
+        t96A06_mappedIntegralLocalGenerator)
+    (hcoordinate :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension = 1) :
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).hom.hom
+      (HomologicalComplex.homologyMap
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3
+        t96A06_mappedRationalExtensionClass)) =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint := by
+  rw [← (t96A06_integralToRational_localGenerator_iff.mpr hcoordinate)]
+  unfold t96A06_mappedRationalLocalExtension
+  congr 1
+  rw [← t96A06_mappedIntegralNormalizedClass_localization_naturality,
+    hintegral]
+
 /-- The same extended class returned to the native rational singular-homology
 object.  The next normalization lemma identifies it with the selected
 sphere-shift generator. -/
@@ -3415,6 +3452,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_integralToRational_localGenerator_iff
+#print axioms t96A06_rationalExtension_localizes_of_coordinate_one
 #print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
