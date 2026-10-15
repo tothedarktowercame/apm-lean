@@ -369,13 +369,40 @@ theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
 /-- **Leaf (disk charts, 60--120 lines).** The disk side is the disjoint union of
 the open disks, by the identity chart on each disk interior.  Interior points
 are identified with nothing else (`EqvGen` induction on `AttachRel`). -/
+noncomputable def t99A01_attach_diskSide_aux_decode {r : ℕ} :
+    Sum Circle (Fin r × APMT99A01.Disk) → Option (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)
+  | Sum.inl _ => none
+  | Sum.inr (i, z) => if h : ‖(z : ℂ)‖ < 1 then
+      some ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using h⟩⟩ else none
+
+lemma t99A01_attach_diskSide_aux_decode_eqv {r : ℕ} (degree : Fin r → ℕ)
+    {x y : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    t99A01_attach_diskSide_aux_decode x = t99A01_attach_diskSide_aux_decode y := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy
+      simp [t99A01_attach_diskSide_aux_decode, APMT99A01.circleInDisk,
+        Circle.norm_coe]
+  | refl => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z h₁ h₂ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma t99A01_attach_diskSide_aux_eqv {r : ℕ} (degree : Fin r → ℕ)
+    {i j : Fin r} {z w : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) (hw : ‖(w : ℂ)‖ < 1)
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree)
+      (Sum.inr (i, z)) (Sum.inr (j, w))) : i = j ∧ z = w := by
+  have hd := t99A01_attach_diskSide_aux_decode_eqv degree h
+  simp [t99A01_attach_diskSide_aux_decode, hz, hw] at hd
+  exact ⟨hd.1, Subtype.ext hd.2⟩
+
 theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
         (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
         e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩ := by
   sorry
-
 /-- **Leaf (punctured disks, 80--140 lines).** The overlap is the disjoint union
 of the punctured open disks, which deformation retracts onto the radius-`1/2`
 circles; the inverse of the equivalence is literally `halfLoop`. -/
