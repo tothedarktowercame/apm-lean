@@ -467,6 +467,98 @@ member simply connected, inclusion of the left member is onto on `π₁`, and
 its kernel is precisely the normal closure of the overlap image.  This is the
 based-group consequence to extract from the banked fundamental-groupoid
 pseudopushout. -/
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le_ker
+    {G H K : Type*} [Group G] [Group H] [Group K]
+    (f : G →* H) (a : K →* G) (h : ∀ k, f (a k) = 1) :
+    Subgroup.normalClosure (a.range : Set G) ≤ MonoidHom.ker f := by
+  letI : (MonoidHom.ker f).Normal := f.normal_ker
+  apply Subgroup.normalClosure_le_normal
+  rintro _ ⟨k, rfl⟩
+  exact h k
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace V] [SimplyConnectedSpace V] (x : (U ∩ V : Set X))
+    (g : FundamentalGroup (U ∩ V : Set X) x) :
+    FundamentalGroup.map
+      (apm_t92J05_twoOpen_leftInclusion U)
+      (⟨x.1, x.2.1⟩ : U)
+      (FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft U V) x g) = 1 := by
+  let overlapToRight : ContinuousMap (U ∩ V : Set X) V :=
+    ⟨fun z => ⟨z.1, z.2.2⟩, continuous_subtype_val.subtype_mk _⟩
+  let rightInclusion : ContinuousMap V X :=
+    ⟨Subtype.val, continuous_subtype_val⟩
+  letI : Subsingleton (FundamentalGroup V (overlapToRight x)) := by
+    change Subsingleton (Path.Homotopic.Quotient _ _)
+    infer_instance
+  have hright : FundamentalGroup.map overlapToRight x g = 1 := by
+    apply Subsingleton.elim
+  have hleft_comp :
+      FundamentalGroup.map
+          (apm_t92J05_twoOpen_leftInclusion U)
+          (⟨x.1, x.2.1⟩ : U)
+          (FundamentalGroup.map
+            (apm_t92J05_twoOpen_overlapToLeft U V) x g) =
+        FundamentalGroup.map
+          ((apm_t92J05_twoOpen_leftInclusion U).comp
+            (apm_t92J05_twoOpen_overlapToLeft U V)) x g := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  have hright_comp :
+      FundamentalGroup.map rightInclusion (overlapToRight x)
+          (FundamentalGroup.map overlapToRight x g) =
+        FundamentalGroup.map (rightInclusion.comp overlapToRight) x g := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  rw [hleft_comp]
+  change FundamentalGroup.map (rightInclusion.comp overlapToRight) x g = 1
+  rw [← hright_comp, hright, map_one]
+  rfl
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace V] [SimplyConnectedSpace V] (x : (U ∩ V : Set X)) :
+    let leftMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    Subgroup.normalClosure (overlapMap.range : Set
+        (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x))) ≤
+      MonoidHom.ker leftMap := by
+  dsimp only
+  apply apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le_ker
+  exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed U V x
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+    (x : (U ∩ V : Set X)) :
+    Function.Surjective (FundamentalGroup.map
+      (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)) := by
+  sorry
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+    (x : (U ∩ V : Set X)) :
+    MonoidHom.ker (FundamentalGroup.map
+        (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)) ≤
+      Subgroup.normalClosure
+        ((FundamentalGroup.map
+          (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set
+            (FundamentalGroup U
+              (apm_t92J05_twoOpen_overlapToLeft U V x))) := by
+  sorry
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -481,8 +573,13 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel
       MonoidHom.ker leftMap =
         Subgroup.normalClosure (overlapMap.range : Set
           (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x))) := by
-  sorry
-
+  dsimp only
+  refine ⟨apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
+    U V hU hV hcover x, ?_⟩
+  apply le_antisymm
+  · exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
+      U V hU hV hcover x
+  · exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le U V x
 /-- **LIBRARY (pure group theory).**  A surjective homomorphism is the
 quotient by its kernel; an explicitly supplied kernel computation rewrites
 this as the desired normal-closure quotient. -/
