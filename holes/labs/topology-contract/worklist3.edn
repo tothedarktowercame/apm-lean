@@ -37121,7 +37121,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37175,7 +37175,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37197,7 +37197,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37479,6 +37479,18 @@
      {:cmd "sha256sum ConstructionTargets/t97J07Closure.blueprint.md",
       :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792065689112-14010-c18b29ce",
+     :commands
+     ["git show --check --stat b84d78ab6"
+      "git diff --name-only b84d78ab6^ b84d78ab6"
+      "git-show fixture | sha256sum"
+      "lake env lean problems/t97J07/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit b84d78ab6 changes only scoped Main.lean and adds the compiled, sorry-free CP1-overlap homeomorphism milestone; fixture hash matches 3fa01c79...76dbe7, registry 166/166, and the new declaration uses standard axioms only. Remaining final theorem is listed unfinished work."},
     :commit "17818e8a1",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
@@ -37487,7 +37499,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37505,7 +37517,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed radial homotopy equivalence from punctured complex line to unit circle.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the exact overlap-to-circle homotopy equivalence and rational homology isomorphisms.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37564,7 +37576,11 @@
     {:job 4,
      :commit "7d986c71f",
      :reason
-     "Committed radial homotopy equivalence from punctured complex line to unit circle."}]}
+     "Committed radial homotopy equivalence from punctured complex line to unit circle."}
+    {:job 5,
+     :commit "17818e8a1",
+     :reason
+     "Committed the exact overlap-to-circle homotopy equivalence and rational homology isomorphisms."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -42503,7 +42519,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42517,7 +42533,9 @@
     :type
     "local-class boundary implies descent is not homotopic to identity",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialdescent-not-homotopic-id-of-localclassdecompositionandbase,
    :kind :lemma,
@@ -42527,17 +42545,21 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "t96A06_homotopic_induced_eq"},
-   :lemma {:name "t96A06_homotopic_induced_eq", :reported-by []},
+   :lemma
+   {:name "t96A06_homotopic_induced_eq",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-homotopic-induced-eq,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42551,7 +42573,9 @@
     :type
     "local-class boundary gives Lefschetz -3 and non-homotopy to identity",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialdescent-invariants-of-localclassdecompositionandbase,
    :kind :lemma,
@@ -42561,7 +42585,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereLift_deckLocalContribution_spec",
@@ -42573,7 +42597,9 @@
     :type
     "canonical four local classes satisfy base/naturality and sum to four fundamental classes",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialspherelift-decklocalcontribution-spec,
    :kind :lemma,
    :depends-on
@@ -42603,7 +42629,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -42617,7 +42643,9 @@
     :type
     "global localization equation constructs the complete local-class packet",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialspherelift-localclassdata-of-globalimage-eq-decksum,
    :kind :lemma,
@@ -42626,7 +42654,7 @@
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp1_overlapHomologyIsoCircle",
@@ -42638,7 +42666,9 @@
     :type
     "rational homology of the literal overlap is isomorphic to unit-circle homology in every degree",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "17818e8a1"},
    :id :lemma-t97j07-cp1-overlaphomologyisocircle,
    :kind :lemma,
    :depends-on
