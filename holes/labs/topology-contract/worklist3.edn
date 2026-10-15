@@ -37214,38 +37214,40 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove corrected sign positive; chart naturality; four classes and Main.",
+    "Exclude negation for the normalization comparison; chart naturality; four classes and Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; untracked files untouched."],
     :missing-theorems
     [{:name
-      "t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one",
-      :type "coefficient one implies native coordinate one",
+      "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation",
+      :type
+      "corrected coefficient is one iff normalization automorphism is not negation",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_mappedIntegralLocalGenerator_coordinate_iff"],
+      ["t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one"],
       :area "rp-rational-homology"}
-     {:name "t96A06_correctedLocalGeneratorCoefficient_positive",
-      :type "corrected coefficient equals one",
+     {:name "t96A06_correctedLocalNormalizationAutomorphism_ne_neg",
+      :type
+      "selected normalization comparison is not integer negation",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one"],
+      ["t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed native coordinate reduction to the corrected positive sign.",
+    "Committed exact positive-sign criterion via the normalization automorphism.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37254,19 +37256,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 9f061709e",
+      "git diff --check && git show --check --stat --oneline c11c01ef3",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "native-coordinate assembly",
-      :exit 1,
-      :note "Made cancellation elementwise; normalized 1+2."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792106277723-14816-6439fc4e",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "9f061709e",
+    :commit "c11c01ef3",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37274,7 +37266,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44487,6 +44479,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation",
+    :type
+    "corrected coefficient is one iff normalization automorphism is not negation"},
+   :lemma
+   {:name
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "corrected coefficient is one iff normalization automorphism is not negation",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-not-negation,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_correctedLocalNormalizationAutomorphism_ne_neg",
+    :type "selected normalization comparison is not integer negation"},
+   :lemma
+   {:name "t96A06_correctedLocalNormalizationAutomorphism_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "selected normalization comparison is not integer negation",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-correctedlocalnormalizationautomorphism-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-not-negation],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
