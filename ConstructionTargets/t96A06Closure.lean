@@ -9,6 +9,7 @@ import ConstructionTargets.CoefficientCoveringTransfer
 import ConstructionTargets.CoefficientConnectedH0Map
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CoefficientSphereAntipodal
+import ConstructionTargets.SphereZeroCoefficients
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -696,6 +697,30 @@ noncomputable def t96A06_rp3_rational_H3Iso :
 noncomputable def t96A06_rp3_antipodal_H3 :=
   t96A06_rp3_rational_H3Iso
 
+/-- Rational homology of the concrete three-sphere vanishes strictly above
+degree three, by three coefficient sphere shifts and positive-degree
+vanishing for the zero-sphere. -/
+theorem t96A06_sphere3_rational_homology_isZero_of_gt
+    (k : ℕ) (hk : 3 < k) :
+    IsZero (CoefficientH0.SingularHomology ℚ k (TopCat.of (Sphere 3))) := by
+  have hk1 : k - 1 ≠ 0 := by omega
+  have hk2 : k - 2 ≠ 0 := by omega
+  have hk3 : k - 3 ≠ 0 := by omega
+  have e3 : CoefficientH0.SingularHomology ℚ k (TopCat.of (Sphere 3)) ≅
+      CoefficientH0.SingularHomology ℚ (k - 1) (TopCat.of (Sphere 2)) := by
+    simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+      (CoefficientSphereShift.sphereShift ℚ 3 (k - 1) hk1)
+  have e2 : CoefficientH0.SingularHomology ℚ (k - 1) (TopCat.of (Sphere 2)) ≅
+      CoefficientH0.SingularHomology ℚ (k - 2) (TopCat.of (Sphere 1)) := by
+    simpa [show k - 2 + 1 = k - 1 by omega] using
+      (CoefficientSphereShift.sphereShift ℚ 2 (k - 2) hk2)
+  have e1 : CoefficientH0.SingularHomology ℚ (k - 2) (TopCat.of (Sphere 1)) ≅
+      CoefficientH0.SingularHomology ℚ (k - 3) (TopCat.of (Sphere 0)) := by
+    simpa [show k - 3 + 1 = k - 2 by omega] using
+      (CoefficientSphereShift.sphereShift ℚ 1 (k - 3) hk3)
+  exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ
+    (k - 3) (by omega)).of_iso (e3 ≪≫ e2 ≪≫ e1)
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -724,6 +749,14 @@ theorem t96A06_rp3_rational_H2_isZero :
     IsZero (CoefficientH0.SingularHomology ℚ 2 (TopCat.of RP3)) :=
   t96A06_rp3_rational_homology_isZero_of_sphere 2
     t96A06_sphere3_rational_H2_isZero
+
+/-- Rational homology of the projective quotient vanishes above degree
+three, because it is a quotient of the corresponding zero sphere group. -/
+theorem t96A06_rp3_rational_homology_isZero_of_gt
+    (k : ℕ) (hk : 3 < k) :
+    IsZero (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) :=
+  t96A06_rp3_rational_homology_isZero_of_sphere k
+    (t96A06_sphere3_rational_homology_isZero_of_gt k hk)
 
 #print axioms polynomialMap_nonzero
 #print axioms polynomialDescent
@@ -759,6 +792,8 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_rp3_rational_H3_projection_injective
 #print axioms t96A06_rp3_rational_H3Iso
 #print axioms t96A06_rp3_antipodal_H3
+#print axioms t96A06_sphere3_rational_homology_isZero_of_gt
+#print axioms t96A06_rp3_rational_homology_isZero_of_gt
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
