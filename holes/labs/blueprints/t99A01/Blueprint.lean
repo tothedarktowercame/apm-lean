@@ -809,19 +809,56 @@ theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
   change (c.symm (e2.invFun ⟨i, w⟩)).1 = _
   rw [hp, hc _ _ hpos hlt]
   rfl
-/-- **Leaf (finite additivity, 40--100 lines).** Integral singular homology of a
-finite disjoint union is the biproduct, via the summand inclusions.  Check
-`ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean` first (simplices
-of a sigma type land in one summand: `IsPreconnected` of the simplex). -/
+instance t99A01_chainComplex_hasFiniteBiproducts :
+    Limits.HasFiniteBiproducts (ChainComplex (ModuleCat.{0} ℤ) ℕ) :=
+  Limits.HasFiniteBiproducts.of_hasFiniteProducts
+
+/-- **Leaf (simplices of a disjoint union, 40--90 lines).** Every singular simplex of
+`Σ j, Y j` lies in exactly one summand: the topological simplex is connected
+(`isPreconnected_univ`, `Sigma` components: `continuous_sigma_iff`,
+`IsPreconnected.subset_...`/`Sigma.isConnected_iff`). -/
+theorem t99A01_sigma_simplices {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
+    (n : ℕ) :
+    Function.Bijective (fun p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj
+        (Opposite.op (SimplexCategory.mk n)) ↦
+      (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+        C(Y p.1, Σ j, Y j)))).app (Opposite.op (SimplexCategory.mk n)) p.2) := by
+  sorry
+
+/-- **Leaf (chains of a disjoint union, 60--120 lines).** Given the simplex
+bijection, the singular chain complex of `Σ j, Y j` is the biproduct of the summands'
+chain complexes.  Degreewise: free module on a sigma type is the biproduct of free
+modules (`ConstructionTargets.CoefficientSigmaConstFinsuppComparison.sigmaConstFinsuppIso`,
+`ModuleCat` free/`Finsupp`); a chain map that is degreewise iso is iso
+(`HomologicalComplex.Hom.isIso_of_components`). -/
+theorem t99A01_sigma_chains {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
+    (hsimp : ∀ n : ℕ, Function.Bijective (fun p : Σ i, (TopCat.toSSet.obj (TopCat.of (Y i))).obj
+        (Opposite.op (SimplexCategory.mk n)) ↦
+      (TopCat.toSSet.map (TopCat.ofHom (⟨Sigma.mk p.1, continuous_sigmaMk⟩ :
+        C(Y p.1, Σ j, Y j)))).app (Opposite.op (SimplexCategory.mk n)) p.2)) :
+    IsIso (Limits.biproduct.desc fun i : Fin r ↦
+      ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+        (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) := by
+  sorry
+
+/-- **Leaf (homology is additive, 20--60 lines).** Pure category theory: the
+homology functor is additive, so preserves finite biproducts
+(`Functor.mapBiproduct`, `HomologicalComplex.homologyFunctor`, `Functor.Additive`). -/
+theorem t99A01_homology_biproduct {r : ℕ} (Cs : Fin r → ChainComplex (ModuleCat ℤ) ℕ)
+    (D : ChainComplex (ModuleCat ℤ) ℕ) (f : ∀ i, Cs i ⟶ D)
+    (hf : IsIso (Limits.biproduct.desc f)) (k : ℕ) :
+    IsIso (Limits.biproduct.desc fun i ↦ HomologicalComplex.homologyMap (f i) k) := by
+  sorry
+
 theorem t99A01_sigma_homology {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
     (k : ℕ) :
     IsIso (Limits.biproduct.desc fun i : Fin r ↦
-      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
-        (ModuleCat.of ℤ ℤ)).map
-          (TopCat.ofHom (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) :
-        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)) := by
-  sorry
-
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+          (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
+        (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)) :=
+  t99A01_homology_biproduct _ _ _
+    (t99A01_sigma_chains Y (t99A01_sigma_simplices Y)) k
 /-- **LIBRARY leaf (circle winding, 60--120 lines).** The oriented `H₁`
 coordinate of all attaching maps is the displayed positive degree row. -/
 theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
@@ -872,9 +909,9 @@ theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
       ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w)
     (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
       IsIso (Limits.biproduct.desc fun i : Fin r ↦
-        ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
-          (ModuleCat.of ℤ ℤ)).map
-            (TopCat.ofHom (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) :
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
+            (⟨Sigma.mk i, continuous_sigmaMk⟩ : C(Y i, Σ j, Y j))) k :
           (⨁ fun i : Fin r ↦ APMT99A01.H k (Y i)) ⟶ APMT99A01.H k (Σ j, Y j)))
     (hwinding : ∃ e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ,
       ∀ i : Fin r, e.inv ≫
