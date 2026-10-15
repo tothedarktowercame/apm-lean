@@ -486,6 +486,52 @@ theorem transverse_mfderiv_surjective_of_circleDirection_lifts
   rcases hlift v with ⟨u, hu⟩
   exact ⟨u, hu⟩
 
+/-- At a selected circle parameter, transversality and liftability of every
+circle tangent direction make the corresponding point fiber locally
+injective. -/
+theorem locallyInjectiveAlongFiber_of_circleDirection_lifts
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S) (z : Circle)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (htrans : ∀ x, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hlift : ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v) :
+    LocallyInjectiveAlongFiber f (c z) := by
+  apply locallyInjectiveAlongFiber_of_mfderiv_surjective f (c z) hf
+  intro x hx
+  exact transverse_mfderiv_surjective_of_circleDirection_lifts
+    f c x z (htrans x hx) (hlift x hx)
+
+#print axioms locallyInjectiveAlongFiber_of_circleDirection_lifts
+
+/-- Existential form of the selected circle-parameter endpoint: a regular
+projection parameter gives a value in the embedded circle range together
+with the local-injectivity datum consumed by the canonical fiber package. -/
+theorem exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hregular : ∃ z, ∀ x, f x = c z → ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v) :
+    ∃ y ∈ Set.range c, LocallyInjectiveAlongFiber f y := by
+  obtain ⟨z, hz⟩ := hregular
+  exact ⟨c z, ⟨z, rfl⟩,
+    locallyInjectiveAlongFiber_of_circleDirection_lifts
+      f c z hf (fun x hx ↦ htrans x z hx) hz⟩
+
+#print axioms exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts
+
 /-- A null set of critical values in a nonzero measure space cannot exhaust
 the target.  Thus one can choose a value at which every point of the fiber
 satisfies the specified regularity predicate. -/
