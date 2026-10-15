@@ -295,6 +295,48 @@ antipodal equator points).  Both composites are the identity on
 representatives (for `x₂ < 0` use `antipodalMk_neg`).  Do not prove
 Hausdorffness; build the `Homeomorph` from the two lifts.  About 150 lines. -/
 -- BEGIN SEAT AREA
+def rp2Proj_factor_aux_sphere (z : Disk) : S2 :=
+  ⟨WithLp.toLp 2 ![z.1.re, z.1.im, Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2)], by
+    have hz := z.2
+    rw [Metric.mem_closedBall, dist_zero_right] at hz
+    have hnonneg : 0 ≤ 1 - ‖(z : ℂ)‖ ^ 2 := by nlinarith [norm_nonneg (z : ℂ)]
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq, Fin.sum_univ_three]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.cons_val_fin_one, Real.norm_eq_abs, sq_abs]
+    simp only [Matrix.vecHead, Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one,
+      Matrix.cons_val_one, Matrix.cons_val_zero]
+    rw [Real.sq_sqrt hnonneg]
+    have he : z.1.re ^ 2 + z.1.im ^ 2 + (1 - ‖(z : ℂ)‖ ^ 2) = 1 := by
+      rw [Complex.sq_norm, Complex.normSq_apply]
+      ring
+    rw [he, Real.sqrt_one]⟩
+
+lemma rp2Proj_factor_aux_sphere_planar (z : Disk) :
+    planar (rp2Proj_factor_aux_sphere z) = z := by
+  apply Complex.ext <;> simp [rp2Proj_factor_aux_sphere, planar]
+
+lemma rp2Proj_factor_aux_sphere_last (z : Disk) :
+    ((rp2Proj_factor_aux_sphere z : S2) : E3) 2 =
+      Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2) := by
+  simp [rp2Proj_factor_aux_sphere]
+
+lemma rp2Proj_factor_aux_sphere_continuous : Continuous rp2Proj_factor_aux_sphere := by
+  apply Continuous.subtype_mk
+  apply (PiLp.continuous_toLp 2 (fun _ : Fin 3 => ℝ)).comp
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · exact Complex.continuous_re.comp continuous_subtype_val
+  · exact Complex.continuous_im.comp continuous_subtype_val
+  · exact Real.continuous_sqrt.comp
+      (continuous_const.sub ((continuous_norm.comp continuous_subtype_val).pow 2))
+
+def rp2Proj_factor_aux_inv0 (z : Disk) : AntipodalQuotient :=
+  antipodalMk (rp2Proj_factor_aux_sphere z)
+
+lemma rp2Proj_factor_aux_inv0_continuous : Continuous rp2Proj_factor_aux_inv0 := by
+  exact continuous_coinduced_rng.comp rp2Proj_factor_aux_sphere_continuous
+
 lemma rp2Proj_factor :
     ∃ h : AntipodalQuotient ≃ₜ RealProjectivePlane,
       ∀ x, h (antipodalMk x) = rp2Proj x := by

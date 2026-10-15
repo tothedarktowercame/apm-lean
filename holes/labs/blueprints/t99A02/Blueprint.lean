@@ -336,10 +336,117 @@ the equator after `surfaceQuotient`).  Inverse map: lift
 antipodal equator points).  Both composites are the identity on
 representatives (for `x₂ < 0` use `antipodalMk_neg`).  Do not prove
 Hausdorffness; build the `Homeomorph` from the two lifts.  About 150 lines. -/
+def rp2Proj_factor_aux_sphere (z : Disk) : S2 :=
+  ⟨WithLp.toLp 2 ![z.1.re, z.1.im, Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2)], by
+    have hz := z.2
+    rw [Metric.mem_closedBall, dist_zero_right] at hz
+    have hnonneg : 0 ≤ 1 - ‖(z : ℂ)‖ ^ 2 := by nlinarith [norm_nonneg (z : ℂ)]
+    rw [Metric.mem_sphere, dist_zero_right, EuclideanSpace.norm_eq, Fin.sum_univ_three]
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.cons_val_fin_one, Real.norm_eq_abs, sq_abs]
+    simp only [Matrix.vecHead, Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one,
+      Matrix.cons_val_one, Matrix.cons_val_zero]
+    rw [Real.sq_sqrt hnonneg]
+    have he : z.1.re ^ 2 + z.1.im ^ 2 + (1 - ‖(z : ℂ)‖ ^ 2) = 1 := by
+      rw [Complex.sq_norm, Complex.normSq_apply]
+      ring
+    rw [he, Real.sqrt_one]⟩
+
+lemma rp2Proj_factor_aux_sphere_planar (z : Disk) :
+    planar (rp2Proj_factor_aux_sphere z) = z := by
+  apply Complex.ext <;> simp [rp2Proj_factor_aux_sphere, planar]
+
+lemma rp2Proj_factor_aux_sphere_last (z : Disk) :
+    ((rp2Proj_factor_aux_sphere z : S2) : E3) 2 =
+      Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2) := by
+  simp [rp2Proj_factor_aux_sphere]
+
+lemma rp2Proj_factor_aux_sphere_continuous : Continuous rp2Proj_factor_aux_sphere := by
+  apply Continuous.subtype_mk
+  apply (PiLp.continuous_toLp 2 (fun _ : Fin 3 => ℝ)).comp
+  apply continuous_pi
+  intro i
+  fin_cases i
+  · exact Complex.continuous_re.comp continuous_subtype_val
+  · exact Complex.continuous_im.comp continuous_subtype_val
+  · exact Real.continuous_sqrt.comp
+      (continuous_const.sub ((continuous_norm.comp continuous_subtype_val).pow 2))
+
+def rp2Proj_factor_aux_inv0 (z : Disk) : AntipodalQuotient :=
+  antipodalMk (rp2Proj_factor_aux_sphere z)
+
+lemma rp2Proj_factor_aux_inv0_continuous : Continuous rp2Proj_factor_aux_inv0 := by
+  exact continuous_coinduced_rng.comp rp2Proj_factor_aux_sphere_continuous
+
+/-- Leaf (split from `rp2Proj_factor`).  `rp2Proj` is continuous: pasting
+lemma (`Continuous.if_le` / `continuous_if_le` on `0 ≤ x₂`) for `diskOf`,
+the two branches `planar`, `-planar` being continuous and agreeing after
+`surfaceQuotient` on the equator `x₂ = 0` (there `‖planar x‖ = 1` and
+`SurfaceRel false 1 z (-z)`); then `continuous_surfaceQuotient`. -/
+lemma rp2Proj_factor_aux_continuous : Continuous rp2Proj := by
+  sorry
+
+/-- Leaf (split from `rp2Proj_factor`).  `rp2Proj` is antipodally invariant:
+for `x₂ ≠ 0` exactly one of `x, -x` is in the upper hemisphere and `diskOf`
+gives the same disk point; for `x₂ = 0`, `diskOf x = planar x` and
+`diskOf (-x) = -planar x` (as `0 ≤ -x₂`), boundary points identified by
+`SurfaceRel false 1` (`edgePoint 2 0 t = exp(iπt)`, `edgePoint 2 1 t = -exp(iπt)`). -/
+lemma rp2Proj_factor_aux_neg (x : S2) : rp2Proj (-x) = rp2Proj x := by
+  sorry
+
+/-- Leaf (split from `rp2Proj_factor`).  The upper-hemisphere lift respects
+the polygon gluing: generators of `SurfaceRel false 1` relate boundary points
+`z, -z` (`‖z‖ = 1`), whose lifts `(Re z, Im z, 0)` and `(-Re z, -Im z, 0)` are
+antipodal (`antipodalMk_neg`). -/
+lemma rp2Proj_factor_aux_inv0_respects (a b : Disk) (h : SurfaceRel false 1 a b) :
+    rp2Proj_factor_aux_inv0 a = rp2Proj_factor_aux_inv0 b := by
+  sorry
+
+/-- Leaf (split from `rp2Proj_factor`).  `inv0 ∘ diskOf = antipodalMk`:
+if `0 ≤ x₂` the lift of `planar x` is `x` (third coordinate
+`√(1 - x₀² - x₁²) = x₂`); otherwise the lift of `-planar x` is `-x`
+(`antipodalMk_neg`). -/
+lemma rp2Proj_factor_aux_left (x : S2) :
+    rp2Proj_factor_aux_inv0 (diskOf x) = antipodalMk x := by
+  sorry
+
+/-- Leaf (split from `rp2Proj_factor`).  `diskOf` of the upper-hemisphere
+lift of `z` is `z` (third coordinate `√(…) ≥ 0`;
+`rp2Proj_factor_aux_sphere_planar`). -/
+lemma rp2Proj_factor_aux_right (z : Disk) :
+    rp2Proj (rp2Proj_factor_aux_sphere z) = surfaceQuotient false 1 z := by
+  sorry
+
+lemma rp2Proj_factor_aux_eqvGen {α β : Type*} {R : α → α → Prop} (f : α → β)
+    (hf : ∀ a b, R a b → f a = f b) (a b : α) (h : Relation.EqvGen R a b) :
+    f a = f b := by
+  induction h with
+  | rel _ _ h => exact hf _ _ h
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma rp2Proj_factor :
     ∃ h : AntipodalQuotient ≃ₜ RealProjectivePlane,
       ∀ x, h (antipodalMk x) = rp2Proj x := by
-  sorry
+  let F : AntipodalQuotient → RealProjectivePlane :=
+    Quotient.lift rp2Proj (rp2Proj_factor_aux_eqvGen rp2Proj (by
+      rintro a b ⟨⟩; exact (rp2Proj_factor_aux_neg a).symm))
+  let G : RealProjectivePlane → AntipodalQuotient :=
+    Quotient.lift (s := Relation.EqvGen.setoid (SurfaceRel false 1))
+      rp2Proj_factor_aux_inv0
+      (rp2Proj_factor_aux_eqvGen _ rp2Proj_factor_aux_inv0_respects)
+  have hGF : ∀ q, G (F q) = q := by
+    intro q
+    induction q using Quotient.inductionOn with
+    | h x => exact rp2Proj_factor_aux_left x
+  have hFG : ∀ p, F (G p) = p := by
+    intro p
+    induction p using Quotient.inductionOn with
+    | h z => exact rp2Proj_factor_aux_right z
+  have hFc : Continuous F := continuous_coinduced_dom.mpr rp2Proj_factor_aux_continuous
+  have hGc : Continuous G := continuous_coinduced_dom.mpr rp2Proj_factor_aux_inv0_continuous
+  exact ⟨Homeomorph.mk ⟨F, G, hGF, hFG⟩ hFc hGc, fun x => rfl⟩
 
 theorem rp2Proj_isCoveringMap : IsCoveringMap rp2Proj := by
   obtain ⟨h, hh⟩ := rp2Proj_factor
