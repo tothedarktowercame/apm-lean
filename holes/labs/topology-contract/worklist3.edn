@@ -37438,57 +37438,54 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
-   {:placeholder-delta {:t97J07 [2 2]},
+   {:placeholder-delta {:t97J07 [2 1]},
     :residual
-    "Create closure module; copy proved adapters; prove fixed set; build CP2 rational homology/Euler characteristic; assemble Main.",
+    "Build exact CP2 filtration/homology table, Euler adapter, then discharge final Main placeholder.",
     :outcome :stop,
-    :warnings [],
+    :warnings ["Main retains one placeholder."],
     :missing-theorems
     [{:name "t97J07_fixed_set",
-      :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
-      :status :not-started,
+      :type "fixed locus is CP1 plus isolated axis",
+      :status :proved,
       :consumers [:t97J07],
       :depends-on [],
       :area "projective-quotient-fixed-locus"}
+     {:name "t97J07_cp2RationalHomologyData_exists",
+      :type "CP2 rational homology Q in degrees 0,2,4",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on [],
+      :area "rational-homology-cpn"}
      {:name "t97J07_eulerCharacteristic",
       :type "HasEulerCharacteristic CP2 3",
       :status :not-started,
       :consumers [:t97J07],
-      :depends-on [],
+      :depends-on ["t97J07_cp2RationalHomologyData_exists"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Blueprint written; implementation begins next program job.",
+    "Committed exact fixed-locus classification; CP2 rational homology and Euler characteristic remain.",
     :commands
-    [{:cmd "test/rg blueprint nodes", :exit 0}
-     {:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
+    [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder count", :exit 0}
-     {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792011810680-12411-08a69c40",
-     :commands
-     ["git show --check/stat 2725995b; exact path and fixture SHA-256 assertions"
-      "lake env lean problems/t97J07/lean/Main.lean"
-      "statement-registry check; placeholder recount"],
-     :finding
-     "PASS: committed scope is exactly the closure blueprint and its frozen hash matches. Mathematics is sound: diag(1,1,3) fixes CP1 z2=0 plus [0:0:1]; CP2 rational homology is Q in degrees 0,2,4, yielding Euler characteristic 3. Milestones and representation boundaries are coherent; the final theorem has no hypotheses. Main compiles, registry 166/166, placeholders remain 2->2. Singular-placeholder prose is editorial only."},
-    :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
-    :changed-paths ["ConstructionTargets/t97J07Closure.blueprint.md"],
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "scope git status", :exit 0}
+     {:cmd "sha256sum fixture", :exit 0}
+     {:cmd "git show --check e474731bb", :exit 0}],
+    :commit "e474731bbaae6b591a521604ab660cb2e6312830",
+    :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
      :sha256
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -40042,7 +40039,8 @@
    {:name "t97J07_fixed_set",
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
-    :area "projective-quotient-fixed-locus"},
+    :area "projective-quotient-fixed-locus",
+    :proved-in :program-2026-10-13-close-t97j07},
    :id :lemma-t97j07-fixed-set,
    :kind :lemma,
    :depends-on [],
@@ -40061,7 +40059,7 @@
     :area "rational-homology-cpn"},
    :id :lemma-t97j07-eulercharacteristic,
    :kind :lemma,
-   :depends-on [],
+   :depends-on [:lemma-t97j07-cp2rationalhomologydata-exists],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40717,6 +40715,22 @@
    :id :lemma-t96a06-transfersimplex-projected,
    :kind :lemma,
    :depends-on [:lemma-t96a06-projectedsimplex-lifts-exact-pair],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp2RationalHomologyData_exists",
+    :type "CP2 rational homology Q in degrees 0,2,4"},
+   :lemma
+   {:name "t97J07_cp2RationalHomologyData_exists",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP2 rational homology Q in degrees 0,2,4",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-cp2rationalhomologydata-exists,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
