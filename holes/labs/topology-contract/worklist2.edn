@@ -88331,27 +88331,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Apply recurrence with successor cases to prove nested/flat fold class equality; van Kampen; assemble.",
+    "Induct nested/flat fold class equality using singleton base, recurrence, successor cases; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_pathHomotopicQuotient_concat_succ",
-      :type
-      "nonempty dependent concat class equals initial-fold class composed with final-factor class",
+    [{:name "torusRP2_pathHomotopicQuotient_concat_one",
+      :type "singleton dependent concat has its sole factor class",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on ["torusRP2_pathHomotopicQuotient_concat_succ"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_pathHomotopicQuotient_concat_succ"
+      ["torusRP2_pathHomotopicQuotient_concat_one"
        "torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases_eq"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,7 +88363,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked quotient concat successor recurrence.",
+    :reason "Banked singleton concat induction base.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88374,28 +88373,16 @@
       "rg -n 'sorry|admit' ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check bea938fa3", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792096568218-14621-f9ce4dda",
-     :commands
-     ["git show/diff/check bea938fa3"
-      "sha256sum + placeholder recount from bea938fa3"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit bea938fa3 adds compiled, sorry-free progress beyond history 9e83a8d04. The recurrence is stated on the actual dependent Path.concat and quotient representation; Path.concat_succ has the required initial-fold then final-factor orientation, and mk_trans supplies exactly that quotient composition. Only t97A01Closure.lean changed; fixture SHA a909daaac4e8eb80ef30871b684708b840996f275d2da39e850ceedee4b0d9c2 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Fold reassociation, van Kampen, and assembly remain listed."},
-    :commit "bea938fa3",
+     {:cmd "git show --check 4ba7153e1", :exit 0}],
+    :commit "4ba7153e1",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "a909daaac4e8eb80ef30871b684708b840996f275d2da39e850ceedee4b0d9c2"},
+     "a045936ed57e443c8347282103b5ca3c4f4cb2267eef53377cdaf3fbd59ce457"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94378,7 +94365,8 @@
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-cast-of-run-eq
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets-eq
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-cases-eq
-    :lemma-torusrp2-pathhomotopicquotient-concat-succ],
+    :lemma-torusrp2-pathhomotopicquotient-concat-succ
+    :lemma-torusrp2-pathhomotopicquotient-concat-one],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96103,4 +96091,21 @@
    :id :lemma-torusrp2-pathhomotopicquotient-concat-succ,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_pathHomotopicQuotient_concat_one",
+    :type "singleton dependent concat has its sole factor class"},
+   :lemma
+   {:name "torusRP2_pathHomotopicQuotient_concat_one",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "singleton dependent concat has its sole factor class",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-pathhomotopicquotient-concat-one,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2-pathhomotopicquotient-concat-succ],
    :other-consumers []}]}
