@@ -327,9 +327,69 @@ noncomputable def torusRP2BoundaryCokernelSmithEquiv :
   torusRP2BoundaryCokernelCoordinateEquiv ≪≫ₗ
     torusCrosscapRangeQuotientSmithEquiv
 
+/-! ### Fundamental-group coordinates for the torus-crosscap skeleton -/
+
+/-- The point of the polygon skeleton lying over the distinguished common
+point of the orbit-indexed circle wedge. -/
+noncomputable def torusRP2SkeletonBase : torusRP2PairingData.skeleton :=
+  torusRP2PairingData.skeletonHomeomorphWedge.symm
+    (orbitWedgeBase torusRP2PairingData)
+
+@[simp] theorem torusRP2SkeletonHomeomorphWedge_base :
+    torusRP2PairingData.skeletonHomeomorphWedge torusRP2SkeletonBase =
+      orbitWedgeBase torusRP2PairingData := by
+  exact torusRP2PairingData.skeletonHomeomorphWedge.apply_symm_apply _
+
+/-- Based fundamental groups of the literal polygon skeleton and its
+orbit-indexed circle wedge agree. -/
+noncomputable def torusRP2SkeletonFundamentalGroupEquivWedge :
+    FundamentalGroup torusRP2PairingData.skeleton torusRP2SkeletonBase ≃*
+      FundamentalGroup
+        (PointWedgeQuotient.FiniteWedge
+          (PairingOrbit torusRP2PairingData.pair))
+        (orbitWedgeBase torusRP2PairingData) :=
+  ConstructionTargets.PolygonSurfaceHomology.fundamentalGroupEquivOfHomeomorphEq
+    torusRP2PairingData.skeletonHomeomorphWedge torusRP2SkeletonBase
+    (orbitWedgeBase torusRP2PairingData)
+    torusRP2SkeletonHomeomorphWedge_base
+
+/-- The signed orbit generators give a canonical epimorphism from their free
+group onto the based fundamental group of the torus-crosscap skeleton. -/
+noncomputable def torusRP2SkeletonFreeGroupMap :
+    FreeGroup (PairingOrbit torusRP2PairingData.pair) →*
+      FundamentalGroup torusRP2PairingData.skeleton torusRP2SkeletonBase :=
+  torusRP2SkeletonFundamentalGroupEquivWedge.symm.toMonoidHom.comp
+    (finiteWedgeLegFreeGroupMap torusRP2PairingData)
+
+theorem torusRP2SkeletonFreeGroupMap_surjective :
+    Function.Surjective torusRP2SkeletonFreeGroupMap := by
+  exact torusRP2SkeletonFundamentalGroupEquivWedge.symm.surjective.comp
+    (finiteWedgeLegFreeGroupMap_surjective torusRP2PairingData)
+
+/-- Relabel the three signed edge orbits by the frozen generator order. -/
+noncomputable def torusRP2OrbitFreeGroupEquiv :
+    FreeGroup (PairingOrbit torusRP2PairingData.pair) ≃* FreeGroup (Fin 3) :=
+  MulEquiv.ofBijective (FreeGroup.map torusRP2OrbitEquiv)
+    ⟨FreeGroup.map_injective torusRP2OrbitEquiv.injective,
+      FreeGroup.map_surjective torusRP2OrbitEquiv.surjective⟩
+
+/-- The exact `Fin 3`-ordered generator map onto the polygon skeleton. -/
+noncomputable def torusRP2SkeletonFinFreeGroupMap :
+    FreeGroup (Fin 3) →*
+      FundamentalGroup torusRP2PairingData.skeleton torusRP2SkeletonBase :=
+  torusRP2SkeletonFreeGroupMap.comp
+    torusRP2OrbitFreeGroupEquiv.symm.toMonoidHom
+
+theorem torusRP2SkeletonFinFreeGroupMap_surjective :
+    Function.Surjective torusRP2SkeletonFinFreeGroupMap := by
+  exact torusRP2SkeletonFreeGroupMap_surjective.comp
+    torusRP2OrbitFreeGroupEquiv.symm.surjective
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
 #print axioms torusRP2BoundaryCokernelSmithEquiv
+#print axioms torusRP2SkeletonFreeGroupMap_surjective
+#print axioms torusRP2SkeletonFinFreeGroupMap_surjective
 
 end ConstructionTargets.t97A01Closure
