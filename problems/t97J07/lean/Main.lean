@@ -5,6 +5,7 @@ import ConstructionTargets.t99J05Closure
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.CoefficientContractiblePair
 import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
+import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -22,6 +23,7 @@ the linear map `diag(1,1,3)` on `ℂ³` and `t97J07Map` for its projectivization
 -/
 
 open scoped LinearAlgebra.Projectivization Matrix
+open scoped ContinuousMap
 
 abbrev T97J07CP2 := ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 2
 
@@ -535,6 +537,13 @@ noncomputable def t97J07_cp1_puncturedAffineHomeomorphComplex :
         continuous_subtype_val
   continuous_invFun := by fun_prop
 
+/-- Radial normalization exhibits the punctured complex line as homotopy
+equivalent to its unit circle. -/
+noncomputable def t97J07_cp1_puncturedComplex_radialHomotopyEquiv :
+    {z : ℂ // z ≠ 0} ≃ₕ Metric.sphere (0 : ℂ) 1 :=
+  (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+    ℂ).symm
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -602,6 +611,7 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
 #print axioms t97J07_cp1_overlapHomeomorphPuncturedAffine
 #print axioms t97J07_cp1_puncturedAffineHomeomorphComplex
+#print axioms t97J07_cp1_puncturedComplex_radialHomotopyEquiv
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
