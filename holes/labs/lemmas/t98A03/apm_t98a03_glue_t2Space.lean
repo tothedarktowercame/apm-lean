@@ -1649,13 +1649,171 @@ glued class `j` are separated by `(U_A ∖ σ(other)) ⊔ (B ∖ τ(other))`-typ
 saturated opens; two glued classes `j ≠ j'` by separating `σ j, σ j'` in `A`
 and `τ j, τ j'` in `B`.  Estimated 100–180 lines. -/
 -- BEGIN SEAT AREA
+lemma apm_t98a03_glue_t2Space_aux_isClosed_sat
+    {J A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    [T2Space A] [T2Space B] [Finite J] {σ : J → A} {τ : J → B}
+    (hmk : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
+      apm_t98a03_GlueEq σ τ x y)
+    {C : Set (A ⊕ B)} (hC : IsClosed C) :
+    IsClosed {x | ∃ y ∈ C, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y} := by
+  let E : Set (A ⊕ B) :=
+    C ∪ Sum.inl '' Set.range σ ∪ Sum.inr '' Set.range τ
+  have hEfin : (Sum.inl '' Set.range σ ∪ Sum.inr '' Set.range τ : Set (A ⊕ B)).Finite := by
+    exact (Set.finite_range σ).image Sum.inl |>.union
+      ((Set.finite_range τ).image Sum.inr)
+  let S : Set (A ⊕ B) :=
+    {x | ∃ y ∈ C, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y}
+  have hSE : S ⊆ E := by
+    rintro x ⟨y, hyC, hxy⟩
+    have heq := (hmk x y).mp hxy
+    rcases heq with rfl | ⟨j, (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)⟩
+    · exact Or.inl (Or.inl hyC)
+    · exact Or.inl (Or.inr ⟨_, ⟨j, rfl⟩, rfl⟩)
+    · exact Or.inr ⟨_, ⟨j, rfl⟩, rfl⟩
+  have hSCfin : (S \ C).Finite :=
+    hEfin.subset (fun x hx => by
+      rcases hSE hx.1 with (hxC | hxL) | hxR
+      · exact False.elim (hx.2 hxC)
+      · exact Or.inl hxL
+      · exact Or.inr hxR)
+  have hSeq : S = C ∪ (S \ C) := by
+    ext x
+    simp only [Set.mem_union, Set.mem_diff, S, Set.mem_setOf_eq]
+    tauto
+  change IsClosed S
+  rw [hSeq]
+  exact hC.union hSCfin.isClosed
+
 lemma apm_t98a03_glue_t2Space {J A B : Type} [TopologicalSpace A] [TopologicalSpace B]
     [T2Space A] [T2Space B] [Finite J] {σ : J → A} {τ : J → B}
     (hσ : Function.Injective σ) (hτ : Function.Injective τ)
     (hmk : ∀ x y, apm_t98a03_glueMk σ τ x = apm_t98a03_glueMk σ τ y ↔
       apm_t98a03_GlueEq σ τ x y) :
     T2Space (apm_t98a03_Glue σ τ) := by
-  sorry
+  let q := apm_t98a03_glueMk σ τ
+  have hsat_closed : ∀ {C : Set (A ⊕ B)}, IsClosed C →
+      IsClosed {x | ∃ y ∈ C, q x = q y} := by
+    intro C hC
+    exact apm_t98a03_glue_t2Space_aux_isClosed_sat hmk hC
+  rw [t2Space_iff]
+  rintro z w hzw
+  obtain ⟨x, rfl⟩ := (apm_t98a03_glueMk_surjective σ τ) z
+  obtain ⟨y, rfl⟩ := (apm_t98a03_glueMk_surjective σ τ) w
+  let X : Set (A ⊕ B) := {u | q u = q x}
+  let Y : Set (A ⊕ B) := {u | q u = q y}
+  have hXfin : X.Finite := by
+    apply Set.Finite.subset
+      ((Set.finite_singleton x).union
+        ((Set.finite_range σ).image Sum.inl |>.union
+          ((Set.finite_range τ).image Sum.inr)))
+    intro u hu
+    have heq := (hmk u x).mp hu
+    rcases heq with rfl | ⟨j, (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)⟩
+    · exact Or.inl rfl
+    · exact Or.inr (Or.inl ⟨_, ⟨j, rfl⟩, rfl⟩)
+    · exact Or.inr (Or.inr ⟨_, ⟨j, rfl⟩, rfl⟩)
+  have hYfin : Y.Finite := by
+    apply Set.Finite.subset
+      ((Set.finite_singleton y).union
+        ((Set.finite_range σ).image Sum.inl |>.union
+          ((Set.finite_range τ).image Sum.inr)))
+    intro u hu
+    have heq := (hmk u y).mp hu
+    rcases heq with rfl | ⟨j, (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)⟩
+    · exact Or.inl rfl
+    · exact Or.inr (Or.inl ⟨_, ⟨j, rfl⟩, rfl⟩)
+    · exact Or.inr (Or.inr ⟨_, ⟨j, rfl⟩, rfl⟩)
+  have hXY : Disjoint X Y := by
+    rw [Set.disjoint_left]
+    intro u huX huY
+    exact hzw (huX.symm.trans huY)
+  obtain ⟨N, hN, hNdisj⟩ := (hXfin.union hYfin).t2_separation
+  let U : Set (A ⊕ B) := ⋃ x ∈ X, N x
+  let V : Set (A ⊕ B) := ⋃ y ∈ Y, N y
+  have hUo : IsOpen U := isOpen_biUnion fun x _ => (hN x).2
+  have hVo : IsOpen V := isOpen_biUnion fun y _ => (hN y).2
+  have hXU : X ⊆ U := by
+    intro x hx
+    simp only [U, Set.mem_iUnion]
+    exact ⟨x, hx, (hN x).1⟩
+  have hYV : Y ⊆ V := by
+    intro y hy
+    simp only [V, Set.mem_iUnion]
+    exact ⟨y, hy, (hN y).1⟩
+  have hUV : Disjoint U V := by
+    rw [Set.disjoint_left]
+    rintro u hu hv
+    simp only [U, Set.mem_iUnion] at hu
+    simp only [V, Set.mem_iUnion] at hv
+    obtain ⟨x, hx, hux⟩ := hu
+    obtain ⟨y, hy, huy⟩ := hv
+    have hxy : x ≠ y := by
+      intro h
+      subst y
+      exact Set.disjoint_left.mp hXY hx hy
+    exact Set.disjoint_left.mp
+      (hNdisj (Or.inl hx) (Or.inr hy) hxy) hux huy
+  let U' : Set (A ⊕ B) := {u | ¬ ∃ v ∈ Uᶜ, q u = q v}
+  let V' : Set (A ⊕ B) := {u | ¬ ∃ v ∈ Vᶜ, q u = q v}
+  have hU'o : IsOpen U' := by
+    rw [← isClosed_compl_iff]
+    simpa only [U', Set.compl_setOf, not_not] using
+      (hsat_closed hUo.isClosed_compl)
+  have hV'o : IsOpen V' := by
+    rw [← isClosed_compl_iff]
+    simpa only [V', Set.compl_setOf, not_not] using
+      (hsat_closed hVo.isClosed_compl)
+  have hU'sat : ∀ {a b}, q a = q b → (a ∈ U' ↔ b ∈ U') := by
+    intro a b hab
+    simp only [U', Set.mem_setOf_eq]
+    constructor <;> intro h ⟨v, hv, hev⟩ <;> apply h
+    · exact ⟨v, hv, hab.trans hev⟩
+    · exact ⟨v, hv, hab.symm.trans hev⟩
+  have hV'sat : ∀ {a b}, q a = q b → (a ∈ V' ↔ b ∈ V') := by
+    intro a b hab
+    simp only [V', Set.mem_setOf_eq]
+    constructor <;> intro h ⟨v, hv, hev⟩ <;> apply h
+    · exact ⟨v, hv, hab.trans hev⟩
+    · exact ⟨v, hv, hab.symm.trans hev⟩
+  refine ⟨q '' U', q '' V', ?_, ?_, ?_, ?_, ?_⟩
+  · rw [isOpen_coinduced]
+    change IsOpen (q ⁻¹' (q '' U'))
+    have heq : q ⁻¹' (q '' U') = U' := by
+      ext a
+      constructor
+      · rintro ⟨b, hb, hba⟩
+        exact (hU'sat hba.symm).mpr hb
+      · intro ha
+        exact ⟨a, ha, rfl⟩
+    rw [heq]
+    exact hU'o
+  · rw [isOpen_coinduced]
+    change IsOpen (q ⁻¹' (q '' V'))
+    have heq : q ⁻¹' (q '' V') = V' := by
+      ext a
+      constructor
+      · rintro ⟨b, hb, hba⟩
+        exact (hV'sat hba.symm).mpr hb
+      · intro ha
+        exact ⟨a, ha, rfl⟩
+    rw [heq]
+    exact hV'o
+  · refine ⟨x, ?_, rfl⟩
+    intro ⟨v, hv, hxv⟩
+    exact hv (hXU (show v ∈ X from hxv.symm))
+  · refine ⟨y, ?_, rfl⟩
+    intro ⟨v, hv, hyv⟩
+    exact hv (hYV (show v ∈ Y from hyv.symm))
+  · rw [Set.disjoint_left]
+    rintro z ⟨a, ha, rfl⟩ ⟨b, hb, hab⟩
+    have hb' : a ∈ V' := (hV'sat hab.symm).mpr hb
+    have haU : a ∈ U := by
+      by_contra hau
+      exact ha ⟨a, hau, rfl⟩
+    have haV : a ∈ V := by
+      by_contra hav
+      exact hb' ⟨a, hav, rfl⟩
+    exact Set.disjoint_left.mp hUV haU haV
 -- END SEAT AREA
 
 lemma apm_t98a03_glue_compactSpace {J A B : Type} [TopologicalSpace A]
