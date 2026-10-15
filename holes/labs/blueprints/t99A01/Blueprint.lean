@@ -112,6 +112,8 @@ structure AttachMVData {r : ℕ} (degree : Fin r → ℕ) where
   δ₂ : (H 2 (AttachSpace degree)) →ₗ[ℤ] (Fin r → ℤ)
   i₁_eq_degreeMap : i₁ = degreeMap degree
   i₀_injective : Function.Injective i₀
+  /-- Each overlap component maps to the (connected) circle side and to its own disk. -/
+  i₀_eq : ∀ x, i₀ x = (∑ i, x i, x)
   exact_i₁_j₁ : LinearMap.range i₁ = LinearMap.ker j₁
   exact_j₁_δ₁ : LinearMap.range j₁ = LinearMap.ker δ₁
   exact_δ₁_i₀ : LinearMap.range δ₁ = LinearMap.ker i₀
@@ -276,7 +278,7 @@ theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set 
 (by `ρ`), `H_*(sideB) ≅ ⨁ H_*(ball)` (contractible balls), `H_*(A∩B) ≅ ⨁ H_*(Circle)`.
 Under them, `H₁(A∩B) → H₁(A)` is `ρ ∘ halfLoop i = (· ^ degree i)` on summand `i`,
 which `hwinding` turns into `degreeMap`; `H₀(A∩B) → H₀(B)` is the identity on `ℤ^r`
-(injective).  Higher vanishing: `H_k` of circles and balls vanish for `k ≥ 2`. -/
+(injective; record it as `i₀_eq : i₀ x = (∑ i, x i, x)`).  Higher vanishing: `H_k` of circles and balls vanish for `k ≥ 2`. -/
 theorem t99A01_attach_transport {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
     (hcover : IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
