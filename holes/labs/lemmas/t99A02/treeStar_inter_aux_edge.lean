@@ -3392,7 +3392,70 @@ continuous image (`qmk ∘ inl ∘ (g, ·)`) of the path-connected open interval
 -- BEGIN SEAT AREA
 lemma treeStar_inter_aux_edge (g : G) :
     IsPathConnected (qmk TreeRel '' (treeStar g ∩ treeStar (g * a))) := by
-  sorry
+  let I : Set ℝ := Set.Ioo 0 1
+  let f : I → RelationQuotient TreeRel := fun t =>
+    qmk TreeRel (.inl (g, (⟨t.1, ⟨t.2.1.le, t.2.2.le⟩⟩ : unitInterval)))
+  have hf : Continuous f := by
+    apply (continuous_qmk TreeRel).comp
+    apply continuous_inl.comp
+    apply Continuous.prodMk continuous_const
+    apply Continuous.subtype_mk
+    exact continuous_subtype_val
+  have hI : IsPathConnected (Set.univ : Set I) := by
+    letI : PathConnectedSpace I := isPathConnected_iff_pathConnectedSpace.mp
+      ((convex_Ioo (0 : ℝ) 1).isPathConnected ⟨1 / 2, by norm_num⟩)
+    exact isPathConnected_univ
+  have ha : a ≠ (1 : G) := G_facts.1
+  have haa : a * a ≠ (1 : G) := G_facts.2.2.2.1
+  have hab : a ≠ b := G_facts.2.2.2.2.1
+  have hab1 : a * b ≠ (1 : G) := G_facts.2.2.2.2.2.2
+  have himage : f '' Set.univ = qmk TreeRel '' (treeStar g ∩ treeStar (g * a)) := by
+    apply Set.Subset.antisymm
+    · rintro y ⟨t, -, rfl⟩
+      refine ⟨.inl (g, (⟨t.1, ⟨t.2.1.le, t.2.2.le⟩⟩ : unitInterval)), ?_, rfl⟩
+      constructor
+      · exact Or.inl ⟨rfl, t.2.2⟩
+      · right
+        constructor
+        · simp
+        · exact t.2.1
+    · rintro y ⟨z, ⟨hzg, hzga⟩, rfl⟩
+      rcases z with ⟨k, t⟩ | ⟨k, x⟩
+      · change treeStarPred g (.inl (k, t)) at hzg
+        change treeStarPred (g * a) (.inl (k, t)) at hzga
+        rcases hzg with ⟨hk, ht1⟩ | ⟨hk, ht0⟩
+        · subst k
+          rcases hzga with ⟨heq, -⟩ | ⟨-, ht0⟩
+          · exfalso
+            apply ha
+            exact mul_left_cancel (a := g) (by simpa using heq.symm)
+          · let u : I := ⟨t, ht0, ht1⟩
+            exact ⟨u, Set.mem_univ _, rfl⟩
+        · subst k
+          rcases hzga with ⟨heq, -⟩ | ⟨heq, -⟩
+          · exfalso
+            apply haa
+            apply mul_left_cancel (a := g)
+            have := congrArg (fun q : G => q * a) heq
+            simpa [mul_assoc] using this
+          · exfalso
+            apply ha
+            apply inv_injective
+            apply mul_left_cancel (a := g)
+            simpa using heq
+      · change treeStarPred g (.inr (k, x)) at hzg
+        change treeStarPred (g * a) (.inr (k, x)) at hzga
+        rcases hzg with ⟨hk, -⟩ | ⟨hk, -⟩
+        · subst k
+          rcases hzga with ⟨heq, -⟩ | ⟨heq, -⟩
+          · exact False.elim (ha (mul_left_cancel (a := g) (by simpa using heq.symm)))
+          · exact False.elim (hab1 (mul_left_cancel (a := g) (by simpa [mul_assoc] using heq.symm)))
+        · subst k
+          rcases hzga with ⟨heq, -⟩ | ⟨heq, -⟩
+          · exact False.elim (hab (mul_left_cancel (a := g) (by simpa using heq.symm)))
+          · exact False.elim (ha (by simpa [mul_assoc] using heq))
+  rw [← himage]
+  exact hI.image hf
 -- END SEAT AREA
 
 /-- Leaf (split).  `treeStar g ∩ treeStar (g b)` is sphere copy `g` minus
