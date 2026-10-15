@@ -103,6 +103,55 @@ noncomputable def t99J05_cp_zero_rational_homology :
   exact cpZeroHomologyDataOfSubsingletonData
     (t99J05_subsingleton_rational_homology (CP 0))
 
+/-- The last-coordinate affine chart in `CP (n+1)`, which supplies the open
+cell in the projective-filtration Mayer--Vietoris step. -/
+def cpSuccessorTopPatch (n : ℕ) : Set (CP (n + 1)) :=
+  {p | Projectivization.rep p (Fin.last (n + 1)) ≠ 0}
+
+/-- The union of all affine charts except the last-coordinate chart.  This is
+the open neighborhood of the embedded lower projective space used by the
+successor step. -/
+def cpSuccessorLowerPatch (n : ℕ) : Set (CP (n + 1)) :=
+  {p | ∃ i : Fin (n + 2), i ≠ Fin.last (n + 1) ∧
+    Projectivization.rep p i ≠ 0}
+
+theorem cpSuccessorTopPatch_isOpen (n : ℕ) :
+    IsOpen (cpSuccessorTopPatch n) := by
+  simpa [cpSuccessorTopPatch] using
+    (affineSource_isOpen (Fin.last (n + 1)))
+
+theorem cpSuccessorLowerPatch_isOpen (n : ℕ) :
+    IsOpen (cpSuccessorLowerPatch n) := by
+  rw [show cpSuccessorLowerPatch n =
+      ⋃ i : {i : Fin (n + 2) // i ≠ Fin.last (n + 1)},
+        {p : CP (n + 1) | Projectivization.rep p i.1 ≠ 0} by
+    ext p
+    simp [cpSuccessorLowerPatch]]
+  exact isOpen_iUnion (fun i ↦ affineSource_isOpen i.1)
+
+/-- The two filtration patches cover the literal quotient model
+`CP (n+1)`. -/
+theorem cpSuccessor_openCover (n : ℕ) :
+    IsOpen (cpSuccessorLowerPatch n) ∧
+      IsOpen (cpSuccessorTopPatch n) ∧
+      cpSuccessorLowerPatch n ∪ cpSuccessorTopPatch n = Set.univ := by
+  refine ⟨cpSuccessorLowerPatch_isOpen n, cpSuccessorTopPatch_isOpen n, ?_⟩
+  apply Set.eq_univ_of_forall
+  intro p
+  by_cases hlast : Projectivization.rep p (Fin.last (n + 1)) ≠ 0
+  · exact Or.inr hlast
+  · left
+    change ∃ i : Fin (n + 2), i ≠ Fin.last (n + 1) ∧
+      Projectivization.rep p i ≠ 0
+    by_contra h
+    push_neg at h
+    apply Projectivization.rep_nonzero p
+    funext i
+    by_cases hi : i = Fin.last (n + 1)
+    · subst i
+      exact not_ne_iff.mp hlast
+    · exact h i hi
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -145,6 +194,9 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpZeroHomologyDataOfSubsingletonData
 #print axioms t99J05_subsingleton_rational_homology
 #print axioms t99J05_cp_zero_rational_homology
+#print axioms cpSuccessorTopPatch_isOpen
+#print axioms cpSuccessorLowerPatch_isOpen
+#print axioms cpSuccessor_openCover
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
