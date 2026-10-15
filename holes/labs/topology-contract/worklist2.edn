@@ -88670,7 +88670,9 @@
      :commit "7af6e0888",
      :reason "Banked transported three-factor reassociation."}]}
   {:consumer :t94J09,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88725,7 +88727,7 @@
      "6287520617d294e1c43c5819618b605c0b817f7c4b5b1b0d688dc69620fe1a7a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88834,6 +88836,18 @@
     [{:cmd "vertex draft",
       :exit 1,
       :correction "fixed endpoints/orientation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792105175971-14795-559fe161",
+     :commands
+     ["git show/diff/check b0415d1fa"
+      "sha256sum + placeholder recount from b0415d1fa"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit b0415d1fa adds compiled, sorry-free progress beyond history 7cfdde03e, repairing the stale prior no-progress finding. vertexCoordinate is invariant under the actual endpoint EqvGen; projection-to-wedge-point forces interval parameter 0 or 1, and endpoint relations plus vertex injectivity yield a genuine fiber equivalence to V. Only t92J06Closure.lean changed; fixture SHA d5921ab0dbf229478a9ce286d383b1aa93769df0417cd8f740feb4a1bb2f3000 matches. Exact target builds; Main compiles; code placeholders 0/1 (target has only a comment saying sorry-free); registry 168/0; axioms standard. Charts, Cayley tree, and finite invariants remain listed."},
     :commit "b0415d1fa",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88842,7 +88856,7 @@
      "d5921ab0dbf229478a9ce286d383b1aa93769df0417cd8f740feb4a1bb2f3000"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88860,7 +88874,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-edge fiber classification.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked vertex fiber.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88898,7 +88912,8 @@
      :reason "Banked open-edge quotient rigidity."}
     {:job 2,
      :commit "7cfdde03e",
-     :reason "Banked open-edge fiber classification."}]}
+     :reason "Banked open-edge fiber classification."}
+    {:job 3, :commit "b0415d1fa", :reason "Banked vertex fiber."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -96294,7 +96309,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenH1SmithEquivOfSurjectiveKernel",
@@ -96304,7 +96319,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "surjective map with face-range kernel has Smith target",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozenh1smithequivofsurjectivekernel,
    :kind :lemma,
    :depends-on [:lemma-frozenfacecokernelsmithequiv],
@@ -96327,7 +96344,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "vertexFiberEquiv",
@@ -96337,7 +96354,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "wedge fiber equivalent to vertices",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "b0415d1fa"},
    :id :lemma-vertexfiberequiv,
    :kind :lemma,
    :depends-on [:lemma-interiorfiberequiv],
