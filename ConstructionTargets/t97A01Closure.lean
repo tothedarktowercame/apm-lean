@@ -2017,6 +2017,19 @@ theorem torusRP2_subdivisionRunOffset_lt_nextPrefix
   rw [pathTwoOpenSubdivisionRunPredLength_add_one]
   exact Nat.add_lt_add_left k.isLt _
 
+/-- A flattened run/offset coordinate is at or beyond the cumulative boundary
+where its run starts. -/
+theorem torusRP2_subdivisionRunPrefixLength_le_runOffset
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val ≤
+      pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val := by
+  exact Nat.le_add_right _ _
+
 /-- The run component of a flattened run/offset coordinate is unique. -/
 theorem torusRP2_subdivisionRunOffset_run_unique
     {x y : torusRP2PairingData.Space} {p : Path x y}
@@ -2341,6 +2354,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunFamily_get_val_eq_prefix_add
 #print axioms torusRP2_subdivisionIndex_exists_runOffset
 #print axioms torusRP2_subdivisionRunOffset_lt_nextPrefix
+#print axioms torusRP2_subdivisionRunPrefixLength_le_runOffset
 #print axioms torusRP2_subdivisionRunOffset_run_unique
 #print axioms torusRP2_subdivisionRunOffsetIndex_bijective
 #print axioms torusRP2_subdivisionRunOffsetEquiv
