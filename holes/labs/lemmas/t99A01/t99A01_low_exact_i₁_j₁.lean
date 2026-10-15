@@ -2001,7 +2001,54 @@ end t99A01_LowInput
 -- BEGIN SEAT AREA
 lemma t99A01_low_exact_i₁_j₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     LinearMap.range (APMT99A01.degreeMap degree) = LinearMap.ker D.j₁ := by
-  sorry
+  let inl₁ : D.A₁ ⟶ (D.A₁ ⊞ D.B₁) := Limits.biprod.inl
+  let fst₁ : (D.A₁ ⊞ D.B₁) ⟶ D.A₁ := Limits.biprod.fst
+  let snd₁ : (D.A₁ ⊞ D.B₁) ⟶ D.B₁ := Limits.biprod.snd
+  letI := ModuleCat.subsingleton_of_isZero D.hB₁
+  have hfst_inl : ∀ a : D.A₁, fst₁.hom (inl₁.hom a) = a := by
+    intro a
+    change ((inl₁ ≫ fst₁).hom a) = ModuleCat.Hom.hom (𝟙 D.A₁) a
+    rw [show inl₁ ≫ fst₁ = 𝟙 D.A₁ by
+      exact Limits.biprod.inl_fst]
+  have hI₁_apply : ∀ x : Fin r → ℤ,
+      D.I₁.hom (D.cO₁.inv.hom x) =
+        inl₁.hom (D.cA₁.inv.hom (APMT99A01.degreeMap degree x)) := by
+    intro x
+    apply (ModuleCat.biprodIsoProd D.A₁ D.B₁).toLinearEquiv.injective
+    apply Prod.ext
+    · change fst₁.hom _ = fst₁.hom _
+      have h := congrArg (fun f => f x)
+        (congrArg CategoryTheory.ConcreteCategory.hom D.hdegree)
+      calc
+        fst₁.hom (D.I₁.hom (D.cO₁.inv.hom x)) =
+            D.cA₁.inv.hom (APMT99A01.degreeMap degree x) := by
+          simpa [fst₁] using congrArg D.cA₁.inv.hom h
+        _ = fst₁.hom (inl₁.hom (D.cA₁.inv.hom
+            (APMT99A01.degreeMap degree x))) := (hfst_inl _).symm
+    · change snd₁.hom _ = snd₁.hom _
+      exact Subsingleton.elim _ _
+  ext y
+  constructor
+  · rintro ⟨x, rfl⟩
+    rw [LinearMap.mem_ker]
+    change D.J₁.hom (inl₁.hom (D.cA₁.inv.hom
+      (APMT99A01.degreeMap degree x))) = 0
+    rw [← hI₁_apply]
+    exact LinearMap.mem_ker.mp
+      (D.hI₁J₁ ▸ LinearMap.mem_range_self D.I₁.hom (D.cO₁.inv.hom x))
+  · intro hy
+    have hy' : inl₁.hom (D.cA₁.inv.hom y) ∈ LinearMap.ker D.J₁.hom := by
+      exact hy
+    rw [← D.hI₁J₁] at hy'
+    rcases hy' with ⟨z, hz⟩
+    refine ⟨D.cO₁.hom.hom z, ?_⟩
+    have hi := hI₁_apply (D.cO₁.hom.hom z)
+    have hi' : D.I₁.hom z = inl₁.hom (D.cA₁.inv.hom
+        (APMT99A01.degreeMap degree (D.cO₁.hom.hom z))) := by
+      simpa using hi
+    have hz' := congrArg (fun w => fst₁.hom w) (hi'.symm.trans hz)
+    simpa only [hfst_inl, D.cA₁.inv_hom_id_apply] using
+      congrArg D.cA₁.hom.hom hz'
 -- END SEAT AREA
 
 /-- **Leaf.** Exactness at `H₁(W)` (`B₁ = 0`). -/
