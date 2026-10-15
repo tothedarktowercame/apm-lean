@@ -1178,6 +1178,40 @@ lemma t99A01_piOne_attach_succ_retract_aux_retraction {r : ℕ}
   · intro w h
     exact t99A01_piOne_attach_succ_retract_aux_raw_half degree w
 
+/-- The last-disk radial retraction, as a definition (same construction as
+`t99A01_piOne_attach_succ_retract_aux_retraction`). -/
+noncomputable def t99A01_succRho {r : ℕ} (degree : Fin (r + 1) → ℕ) :
+    C(APMT99A01.succCircleSide degree, APMT99A01.AttachSpace (degree ∘ Fin.castSucc)) :=
+  ⟨fun x => Quotient.lift (t99A01_piOne_attach_succ_retract_aux_raw degree)
+      (fun _ _ h => t99A01_piOne_attach_succ_retract_aux_raw_respects degree h) x.1,
+    (t99A01_piOne_attach_succ_retract_aux_q_quotient degree).continuous_iff.mpr
+      (by simpa [t99A01_piOne_attach_succ_retract_aux_q, Function.comp_def] using
+        t99A01_piOne_attach_succ_retract_aux_raw_continuous degree)⟩
+
+/-- **Leaf.** `attachCastSucc` is continuous and lands in `succCircleSide` (the image avoids
+the last disk entirely; continuity through the quotient: `continuous_coinduced_rng`). -/
+lemma t99A01_piOne_attach_succ_iota {r : ℕ} (degree : Fin (r + 1) → ℕ) :
+    ∃ ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc), APMT99A01.succCircleSide degree),
+      ∀ y, (ι y).1 = APMT99A01.attachCastSucc degree y := by
+  sorry
+
+/-- **Leaf.** `ρ ∘ ι = id`: on representatives, `raw (attachCastSuccRaw x) = x`
+(circle and non-last disks are untouched). -/
+lemma t99A01_piOne_attach_succ_rho_iota {r : ℕ} (degree : Fin (r + 1) → ℕ)
+    (ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc), APMT99A01.succCircleSide degree))
+    (hι : ∀ y, (ι y).1 = APMT99A01.attachCastSucc degree y) :
+    (t99A01_succRho degree).comp ι = ContinuousMap.id _ := by
+  sorry
+
+/-- **Leaf.** `ι ∘ ρ ≃ id`: push the last disk radially to its boundary, fixing everything
+else (pattern: `t99A01_attach_circleSide_aux_deformation_aux_continuous` / `_aux_respects` /
+`_aux_descend`, restricted to the last disk; reuse `_aux_scale`, `_aux_q_quotient`). -/
+lemma t99A01_piOne_attach_succ_deform {r : ℕ} (degree : Fin (r + 1) → ℕ)
+    (ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc), APMT99A01.succCircleSide degree))
+    (hι : ∀ y, (ι y).1 = APMT99A01.attachCastSucc degree y) :
+    ContinuousMap.Homotopic (ι.comp (t99A01_succRho degree)) (ContinuousMap.id _) := by
+  sorry
+
 lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
     :
     ∃ e : ContinuousMap.HomotopyEquiv (APMT99A01.succCircleSide degree)
@@ -1188,7 +1222,15 @@ lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
       ∀ (w : Circle) (h : (Quotient.mk _ (Sum.inr (Fin.last r, (⟨(w : ℂ) / 2, by rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]; norm_num⟩ : APMT99A01.Disk))) : APMT99A01.AttachSpace degree) ∈ APMT99A01.succCircleSide degree),
         e ⟨(Quotient.mk _ (Sum.inr (Fin.last r, (⟨(w : ℂ) / 2, by rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]; norm_num⟩ : APMT99A01.Disk))) : APMT99A01.AttachSpace degree), h⟩ =
           Quotient.mk _ (Sum.inl (w ^ degree (Fin.last r))) := by
-  sorry
+  obtain ⟨ι, hι⟩ := t99A01_piOne_attach_succ_iota degree
+  refine ⟨{ toFun := t99A01_succRho degree, invFun := ι,
+            left_inv := t99A01_piOne_attach_succ_deform degree ι hι,
+            right_inv := by
+              rw [t99A01_piOne_attach_succ_rho_iota degree ι hι] }, ?_, ?_⟩
+  · intro z
+    exact hι _
+  · intro w h
+    exact t99A01_piOne_attach_succ_retract_aux_raw_half degree w
 /-- **Leaf (overlap winding, 60--120 lines).**  After the preceding radial
 identification, the positive overlap generator is the `degree last` power of
 the fixed base-circle class.  The hypotheses make this leaf independent of
