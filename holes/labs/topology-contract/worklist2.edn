@@ -88722,6 +88722,19 @@
      {:cmd "git show --check 00fa1a440", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "explicit trans"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792107545562-14838-e3a159cc",
+     :commands
+     ["git show/diff/check 00fa1a440"
+      "verify .lake/packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 00fa1a440"],
+     :finding
+     "PASS program STOP: topo-6 commit 00fa1a440 adds compiled, sorry-free progress beyond history 8adff214b. frozen_eqvGen_boundaryRel_iff_generator correctly proves that equivalence closure removes the explicit symmetric alternative: forward relation steps use the generator or its EqvGen symmetry; reverse steps embed generators through frozen_boundaryRel_iff_generator; refl/symm/trans are preserved. This is a valid setoid representation bridge, while quotient topology/MV transport remains explicitly partial. Only t94J09Closure.lean changed; fixture SHA a5a22327cfc8b425136bd05f6311f8bd0ffe45bae3214dbe8d2c857b4ccf5e12 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard."},
     :commit "00fa1a440",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88730,7 +88743,7 @@
      "a5a22327cfc8b425136bd05f6311f8bd0ffe45bae3214dbe8d2c857b4ccf5e12"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88748,7 +88761,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked relation comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked setoid comparison.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88792,7 +88805,10 @@
     {:job 3, :commit "7374ef2ba", :reason "Banked relation."}
     {:job 4,
      :commit "8adff214b",
-     :reason "Banked relation comparison."}]}
+     :reason "Banked relation comparison."}
+    {:job 5,
+     :commit "00fa1a440",
+     :reason "Banked setoid comparison."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96486,7 +96502,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozen_eqvGen_boundaryRel_iff_generator",
@@ -96496,7 +96512,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "quotient setoids agree",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "00fa1a440"},
    :id :lemma-frozen-eqvgen-boundaryrel-iff-generator,
    :kind :lemma,
    :depends-on [:lemma-frozen-boundaryrel-iff-generator],
