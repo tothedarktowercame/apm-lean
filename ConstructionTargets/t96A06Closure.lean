@@ -774,6 +774,17 @@ theorem pairSignOrbit_four_distinct {p : Sphere 3} (hp : PairSignRegular p) :
       flipSecondPairSphere_involutive] at hc
     exact hpf hc
 
+/-- Every pair-sign-regular fiber of the normalized quadratic sphere map has
+exactly four points. -/
+theorem t96A06_polynomialSphereLift_regular_fiber_ncard
+    {p : Sphere 3} (hp : PairSignRegular p) :
+    (polynomialSphereLift ⁻¹' {polynomialSphereLift p}).ncard = 4 := by
+  rw [t96A06_polynomialSphereLift_regular_fiber]
+  rcases pairSignOrbit_four_distinct hp with
+    ⟨hpf, hps, hpfs, hfs, hffs, hsfs⟩
+  simp [pairSignOrbit, Set.ncard_insert_of_notMem, hpf, hps, hpfs,
+    hfs, hffs, hsfs]
+
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
 theorem t96A06_rp3_sphere_twoSheeted :
@@ -1331,6 +1342,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_sphere_covering
 #print axioms rp3SphereAntipodal_ne
 #print axioms pairSignOrbit_four_distinct
+#print axioms t96A06_polynomialSphereLift_regular_fiber_ncard
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
