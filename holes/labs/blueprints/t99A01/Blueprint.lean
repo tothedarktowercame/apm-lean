@@ -343,7 +343,21 @@ theorem t99A01_attachMVData_hOne {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
     Nonempty (APMT99A01.H 1 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeCokernel degree)) := by
-  sorry
+  have hdelta : D.δ₁ = 0 := by
+    apply LinearMap.ext
+    intro x
+    apply D.i₀_injective
+    have hx : D.δ₁ x ∈ LinearMap.range D.δ₁ := ⟨x, rfl⟩
+    rw [D.exact_δ₁_i₀] at hx
+    simpa using hx
+  have hj : Function.Surjective D.j₁ := by
+    rw [← LinearMap.range_eq_top, D.exact_j₁_δ₁, hdelta,
+      LinearMap.ker_zero]
+  have hexact : Function.Exact (APMT99A01.degreeMap degree) D.j₁ := by
+    rw [LinearMap.exact_iff]
+    rw [← D.i₁_eq_degreeMap]
+    exact D.exact_i₁_j₁.symm
+  exact ⟨LinearEquiv.toModuleIso (hexact.linearEquivOfSurjective hj).symm⟩
 
 theorem t99A01_attachMVData_hTwo {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
