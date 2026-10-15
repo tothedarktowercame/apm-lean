@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 4,
   "boundary": "The two missing invariant computations are now precise Lean contracts, separately for null-homotopic and essential embedded attaching circles. Their proofs and the original main proof remain intentionally open.",
   "imported_at": "2026-07-13T17:26:56.642829Z",
