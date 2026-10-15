@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87953,7 +87953,7 @@
      "69f66c052ea529fbdf62f14f93d553a3442bc4edade908302171927a58025609"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88426,6 +88426,17 @@
     [{:cmd "fiber drafts",
       :exit 1,
       :correction "unfolded quotient projection; fixed substitution"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792038644210-13202-4ec679ea",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "#print axioms for both new declarations"
+      "statement-registry.py check; git show --check; placeholder/hash audits"],
+     :finding
+     "Commit 7cfdde03e by topo-6 changes only ConstructionTargets/t92J06Closure.lean. Frozen fixture hash matches 2dd1d6bc...ecb90. Exact snapshot builds; Main compiles with its prior 1 placeholder; target has 0; registry 166/0; new declarations use only propext, Classical.choice, Quot.sound. Interior-fiber existence/uniqueness and the induced fiber equivalence have correct orientations and stay across the quotient boundary. This is new compiled program progress; vertex charts/covering map, Cayley tree, and finite invariants remain."},
     :commit "7cfdde03e",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88434,7 +88445,7 @@
      "2dd1d6bcbd7cdcc709ee0bf60101c4ee4f8269414a51ac261925efc8c41ecb90"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88452,7 +88463,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-edge quotient rigidity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-edge fiber classification.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88487,7 +88498,10 @@
      :reason "Banked interior fiber label-coordinate separation."}
     {:job 1,
      :commit "9231737b5",
-     :reason "Banked open-edge quotient rigidity."}]}
+     :reason "Banked open-edge quotient rigidity."}
+    {:job 2,
+     :commit "7cfdde03e",
+     :reason "Banked open-edge fiber classification."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -93162,7 +93176,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialH2PiecesGroupIsZero",
@@ -93172,14 +93186,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "both radial piece H2 groups vanish",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialh2piecesgroupiszero,
    :kind :lemma,
    :depends-on [],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVConnectingH1_mono",
@@ -93189,14 +93205,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "surface H2 connecting map is injective",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialmvconnectingh1-mono,
    :kind :lemma,
    :depends-on [:lemma-radialh2piecesgroupiszero],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "existsUnique_edgePoint_of_projection_eq_interior",
@@ -93206,14 +93224,16 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "unique vertex representative",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7cfdde03e"},
    :id :lemma-existsunique-edgepoint-of-projection-eq-interior,
    :kind :lemma,
    :depends-on [:lemma-edgepoint-injective-of-interior],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "interiorFiberEquiv", :type "open-edge fiber equivalence"},
@@ -93222,7 +93242,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "open-edge fiber equivalence",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7cfdde03e"},
    :id :lemma-interiorfiberequiv,
    :kind :lemma,
    :depends-on
