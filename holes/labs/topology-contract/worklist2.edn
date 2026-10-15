@@ -88331,28 +88331,28 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify globally rebased nested fold with flat class; van Kampen; assemble.",
+    "Compare nested ordering with flat fold; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class",
-      :type
-      "flat prefix-block fold reconstructs original path class at literal endpoints",
+    [{:name
+      "torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class",
+      :type "nested run-block class equals global prefix-fold class",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases"],
+      ["torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class"],
+      ["torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88364,7 +88364,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked flat prefix-fold reconstruction.",
+    :reason "Banked nested/global prefix-fold transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88374,29 +88374,20 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check aeb789872", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792077245376-14252-1bf25458",
-     :commands
-     ["git show/diff/check aeb789872"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit aeb789872 adds compiled, sorry-free progress beyond history commit 5c1edd2f5. It proves the flat transported prefix-block fold represents the original path class at literal subdivision endpoints by applying the existing subdivision reconstruction theorem to the proved piece equalities. Only t97A01Closure.lean changed; fixture SHA 1b8e6bdcbb76c935b533b7aed6e911bd57d49686554ce358f57104f4a8ef92ea matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Quotient equality is oriented from the cast original path to the flat fold. The theorem does not yet compare the globally rebased nested fold; that bridge, van Kampen, and assembly remain listed."},
-    :commit "aeb789872",
+     {:cmd "git show --check a29e7911d", :exit 0}],
+    :diagnostic-history
+    [{:cmd "nested transport drafts",
+      :exit 1,
+      :correction "added explicit quotient class"}],
+    :commit "a29e7911d",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "1b8e6bdcbb76c935b533b7aed6e911bd57d49686554ce358f57104f4a8ef92ea"},
+     "cd65a6637f311e06131cbf02134c793d6a14b76ba2a54e7f538ac261217d0c9e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94315,7 +94306,8 @@
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-cases
-    :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-class],
+    :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-class
+    :lemma-torusrp2-subdivisionrunblocknestedconcat-eq-globalprefix-class],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95609,4 +95601,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-cases],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class",
+    :type "nested run-block class equals global prefix-fold class"},
+   :lemma
+   {:name
+    "torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "nested run-block class equals global prefix-fold class",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunblocknestedconcat-eq-globalprefix-class,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-class],
    :other-consumers []}]}
