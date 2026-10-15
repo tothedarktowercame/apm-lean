@@ -119066,63 +119066,52 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Derive local fiber isolation and canonical calculations from transversality; assemble Main.",
+    "Construct bundled isolated-fiber calculations from transversality; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "unrelated edit preserved"],
+    :warnings ["Main sorryAx" "unrelated review dir preserved"],
     :missing-theorems
-    [{:name "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
-      :type "local isolation plus calculations gives witness",
+    [{:name "LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero",
+      :type "bundled isolated fiber calculations imply H2 zero",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["isDiscrete_preimage_singleton_of_locallyIsolatedFiber"],
+      ["canonicalRegularFiberWitness_of_locallyIsolatedFiber"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["canonicalRegularFiberWitness_of_locallyIsolatedFiber"],
+      ["LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d57ca736f4685eabd0f31bcb7166278c0adbc35485c128848338d7767135b07e",
+     "dc4b289f62062e8cbf923dc564598bc15de21ffd8c266a138425ba9fe5889bd8",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Repaired locally-isolated witness; standard axioms only.",
+    :reason "Banked locally-isolated canonical-fiber endpoint.",
     :commands
     [{:cmd "lake env lean -o ... t00J02Closure.lean", :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
     :diagnostic-history
-    [{:cmd "forced source compile",
+    [{:cmd "endpoint drafts",
       :exit 1,
-      :finding "exposed malformed equality; repaired"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792022234967-12758-48e15046",
-     :commands
-     ["git diff-tree/show 163e9b3e"
-      "archive 163e9b3e; forced-source lake env lean -o closure; lean Main"
-      "sha256sum/placeholders at 163e9b3e"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS repaired program STOP: commit changes only t00J02Closure.lean. The malformed subset/equality calc is replaced by antisymmetry, and a reducible locally-isolated-fiber Fintype ensures the calculation and witness constructor use the exact same dependent instance. Forced source compilation now reports only propext, Classical.choice, Quot.sound for the milestone; no sorryAx. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; registry 166/166. Transversality isolation/calculations and Main remain listed."},
-    :commit "163e9b3e435606eb790ee9706686ef5a3a148799",
+      :finding "fixed dependent Fintype packaging"}],
+    :commit "174e4dee1c42140fcd175ed45cc413b39f21ef34",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119130,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119504,7 +119493,8 @@
     :lemma-tophomologymap-eq-zero-of-exists-canonicalregularfiberwitness
     :lemma-canonicalregularfiberwitness-of-isdiscrete
     :lemma-canonicalregularfiberwitness-of-locallyinjective
-    :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber],
+    :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber
+    :lemma-locallyisolatedcanonicalfiberdata-tophomologymap-eq-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120727,6 +120717,24 @@
    :id :lemma-isdiscrete-preimage-singleton-of-locallyisolatedfiber,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero",
+    :type "bundled isolated fiber calculations imply H2 zero"},
+   :lemma
+   {:name "LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "bundled isolated fiber calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-locallyisolatedcanonicalfiberdata-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-locallyisolatedfiber],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
