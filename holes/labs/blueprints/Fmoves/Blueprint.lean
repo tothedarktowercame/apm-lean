@@ -8889,7 +8889,219 @@ theorem cutBoundary_old_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ e s, ((q ≤ e ∧ e < L) ∨ e < p) →
       cutOldB L p q (cutEdgeCircle L e s) = (edgePoint L e s : ℂ)) ∧
     (∀ s : Icc (0 : ℝ) 1, cutOldB L p q (cutChordParamB L p q s) = cutChordB L p q s) := by
-  sorry
+  have hL : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
+  have hpi : (0 : ℝ) < Real.pi := Real.pi_pos
+  constructor
+  · intro s
+    by_cases hs : (s : ℝ) = 1
+    · have hs' : s = ⟨1, by simp⟩ := Subtype.ext hs
+      subst s
+      rw [cutChordParamA]
+      have hcircle :
+          ((cutAlpha L q + (1 : ℝ) * (cutAlpha L p + 2 * Real.pi - cutAlpha L q) : ℝ) :
+              AddCircle (2 * Real.pi)) = (cutAlpha L p : AddCircle (2 * Real.pi)) := by
+        apply QuotientAddGroup.eq_iff_sub_mem.mpr
+        refine ⟨1, ?_⟩
+        ring
+      rw [hcircle]
+      rw [cutOldA, cutBoundaryData_concrete_aux_eval _ (cutAlpha L p)]
+      · rw [cutProfileOldA, if_pos]
+        · simp [cutChordA, cutPoint]
+        · unfold cutAlpha
+          apply (div_le_div_iff_of_pos_right hL).2
+          exact mul_le_mul_of_nonneg_left (by exact_mod_cast hpq.le) Real.two_pi_pos.le
+      · exact ⟨le_rfl, lt_add_of_pos_right _ Real.two_pi_pos⟩
+    · let φ : ℝ := cutAlpha L q + s * (cutAlpha L p + 2 * Real.pi - cutAlpha L q)
+      have hden : 0 < cutAlpha L p + 2 * Real.pi - cutAlpha L q := by
+        unfold cutAlpha
+        rw [show 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi =
+          2 * Real.pi * ((p : ℝ) + L) / L by field_simp]
+        apply sub_pos.mpr
+        apply (div_lt_div_iff_of_pos_right hL).2
+        have : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+        exact mul_lt_mul_of_pos_left this Real.two_pi_pos
+      have hslt : (s : ℝ) < 1 := lt_of_le_of_ne s.2.2 hs
+      have hφlo : cutAlpha L p ≤ φ := by
+        dsimp [φ]
+        have hqp : cutAlpha L p ≤ cutAlpha L q := by
+          unfold cutAlpha
+          apply (div_le_div_iff_of_pos_right hL).2
+          exact mul_le_mul_of_nonneg_left (by exact_mod_cast hpq.le) Real.two_pi_pos.le
+        nlinarith [s.2.1]
+      have hφtop : φ < cutAlpha L p + 2 * Real.pi := by
+        dsimp [φ]
+        nlinarith [s.2.1]
+      rw [cutChordParamA, cutOldA, cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφtop⟩]
+      rw [cutProfileOldA]
+      split_ifs with h
+      · have hs0 : (s : ℝ) = 0 := by
+          dsimp [φ] at h
+          nlinarith [s.2.1, hden]
+        simp [φ, hs0, cutChordA, cutPoint]
+      · unfold cutChordA cutSA
+        have hr : (φ - cutAlpha L q) /
+            (cutAlpha L p + 2 * Real.pi - cutAlpha L q) = (s : ℝ) := by
+          dsimp [φ]
+          field_simp
+          ring
+        rw [hr]
+  · constructor
+    · intro e s he
+      rcases he with he | he
+      · let φ : ℝ := cutAlpha L e + s * (2 * Real.pi / L)
+        have hφlo : cutAlpha L q ≤ φ := by
+          rw [show φ = 2 * Real.pi * ((e : ℝ) + s) / L by
+            dsimp [φ, cutAlpha]; ring]
+          unfold cutAlpha
+          apply (div_le_div_iff_of_pos_right hL).2
+          have : (q : ℝ) ≤ e := by exact_mod_cast he.1
+          nlinarith [s.2.1, Real.pi_pos]
+        have hφtop : φ < cutAlpha L q + 2 * Real.pi := by
+          rw [show φ = 2 * Real.pi * ((e : ℝ) + s) / L by
+            dsimp [φ, cutAlpha]; ring]
+          unfold cutAlpha
+          rw [show 2 * Real.pi * (q : ℝ) / L + 2 * Real.pi =
+            2 * Real.pi * ((q : ℝ) + L) / L by field_simp]
+          apply (div_lt_div_iff_of_pos_right hL).2
+          have : (e : ℝ) + s < q + L := by
+            have heL' : (e : ℝ) + 1 ≤ L := by exact_mod_cast (show e + 1 ≤ L by omega)
+            have hq0 : (0 : ℝ) < q := by exact_mod_cast (by omega : 0 < q)
+            nlinarith [s.2.2]
+          nlinarith [Real.pi_pos]
+        have hbranch : φ ≤ cutAlpha L p + 2 * Real.pi := by
+          rw [show φ = 2 * Real.pi * ((e : ℝ) + s) / L by
+            dsimp [φ, cutAlpha]; ring]
+          unfold cutAlpha
+          rw [show 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi =
+            2 * Real.pi * ((p : ℝ) + L) / L by field_simp]
+          apply (div_le_div_iff_of_pos_right hL).2
+          have : (e : ℝ) + s ≤ p + L := by
+            have : (e : ℝ) + s ≤ L := by
+              have he1 : (e : ℝ) + 1 ≤ L := by exact_mod_cast (show e + 1 ≤ L by omega)
+              linarith [s.2.2]
+            exact this.trans (by exact_mod_cast (Nat.le_add_left L p))
+          nlinarith [Real.pi_pos]
+        rw [cutOldB, cutBoundaryData_concrete_aux_edge_circle]
+        rw [cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφtop⟩]
+        rw [cutProfileOldB, if_pos hbranch]
+        change Complex.exp ((φ : ℂ) * Complex.I) =
+          Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + s.1) / L))
+        congr 1
+        dsimp [φ, cutAlpha]
+        push_cast
+        ring
+      · let φ : ℝ := cutAlpha L e + s * (2 * Real.pi / L) + 2 * Real.pi
+        have hφlo : cutAlpha L q ≤ φ := by
+          dsimp [φ]
+          unfold cutAlpha
+          rw [show 2 * Real.pi * (e : ℝ) / L + s * (2 * Real.pi / L) + 2 * Real.pi =
+            2 * Real.pi * ((e : ℝ) + s + L) / L by field_simp <;> ring]
+          apply (div_le_div_iff_of_pos_right hL).2
+          have hqL' : (q : ℝ) ≤ L := by exact_mod_cast hqL.le
+          have : (q : ℝ) ≤ e + s + L := by nlinarith [s.2.1]
+          exact mul_le_mul_of_nonneg_left this Real.two_pi_pos.le
+        have hφtop : φ < cutAlpha L q + 2 * Real.pi := by
+          dsimp [φ]
+          unfold cutAlpha
+          rw [add_lt_add_iff_right]
+          rw [show 2 * Real.pi * (e : ℝ) / L + s * (2 * Real.pi / L) =
+            2 * Real.pi * ((e : ℝ) + s) / L by
+              ring]
+          apply (div_lt_div_iff_of_pos_right hL).2
+          have : (e : ℝ) + s < q := by
+            have : (e : ℝ) + s ≤ p := by
+              have hep : e + 1 ≤ p := by omega
+              have hep' : (e : ℝ) + 1 ≤ p := by exact_mod_cast hep
+              nlinarith [s.2.2]
+            exact lt_of_le_of_lt this (by exact_mod_cast hpq)
+          nlinarith [Real.pi_pos]
+        have hbranch : φ ≤ cutAlpha L p + 2 * Real.pi := by
+          dsimp [φ]
+          rw [add_le_add_iff_right]
+          unfold cutAlpha
+          rw [show 2 * Real.pi * (e : ℝ) / L + s * (2 * Real.pi / L) =
+            2 * Real.pi * ((e : ℝ) + s) / L by ring]
+          apply (div_le_div_iff_of_pos_right hL).2
+          have : (e : ℝ) + s ≤ p := by
+            have hep : e + 1 ≤ p := by omega
+            have hep' : (e : ℝ) + 1 ≤ p := by exact_mod_cast hep
+            nlinarith [s.2.2]
+          exact mul_le_mul_of_nonneg_left this Real.two_pi_pos.le
+        rw [cutOldB, cutBoundaryData_concrete_aux_edge_circle]
+        have hcirc :
+            (((cutAlpha L e + s * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi))) =
+              (φ : AddCircle (2 * Real.pi)) := by
+          apply QuotientAddGroup.eq_iff_sub_mem.mpr
+          refine ⟨-1, ?_⟩
+          dsimp [φ]
+          ring
+        rw [hcirc, cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφtop⟩]
+        rw [cutProfileOldB, if_pos hbranch]
+        change Complex.exp ((φ : ℂ) * Complex.I) =
+          Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + s.1) / L))
+        rw [show ((φ : ℂ) * Complex.I) =
+            Complex.I * (2 * Real.pi * ((e : ℝ) + s.1) / L) + 2 * Real.pi * Complex.I by
+          dsimp [φ, cutAlpha]; push_cast; ring]
+        rw [Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+    · intro s
+      by_cases hs : (s : ℝ) = 1
+      · have hs' : s = ⟨1, by simp⟩ := Subtype.ext hs
+        subst s
+        rw [cutChordParamB]
+        have hcircle :
+            ((cutAlpha L p + 2 * Real.pi + (1 : ℝ) * (cutAlpha L q - cutAlpha L p) : ℝ) :
+                AddCircle (2 * Real.pi)) = (cutAlpha L q : AddCircle (2 * Real.pi)) := by
+          apply QuotientAddGroup.eq_iff_sub_mem.mpr
+          refine ⟨1, ?_⟩
+          ring
+        rw [hcircle, cutOldB, cutBoundaryData_concrete_aux_eval _ (cutAlpha L q)]
+        · rw [cutProfileOldB, if_pos]
+          · simp [cutChordB, cutPoint]
+          · unfold cutAlpha
+            rw [show 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi =
+              2 * Real.pi * ((p : ℝ) + L) / L by field_simp]
+            apply (div_le_div_iff_of_pos_right hL).2
+            have : (q : ℝ) ≤ p + L := by exact_mod_cast (by omega : q ≤ p + L)
+            exact mul_le_mul_of_nonneg_left this Real.two_pi_pos.le
+        · exact ⟨le_rfl, lt_add_of_pos_right _ Real.two_pi_pos⟩
+      · let φ : ℝ := cutAlpha L p + 2 * Real.pi + s * (cutAlpha L q - cutAlpha L p)
+        have hden : 0 < cutAlpha L q - cutAlpha L p := by
+          unfold cutAlpha
+          apply sub_pos.mpr
+          apply (div_lt_div_iff_of_pos_right hL).2
+          exact mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos
+        have hslt : (s : ℝ) < 1 := lt_of_le_of_ne s.2.2 hs
+        have hφlo : cutAlpha L q ≤ φ := by
+          dsimp [φ]
+          have hqtop : cutAlpha L q ≤ cutAlpha L p + 2 * Real.pi := by
+            unfold cutAlpha
+            rw [show 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi =
+              2 * Real.pi * ((p : ℝ) + L) / L by field_simp]
+            apply (div_le_div_iff_of_pos_right hL).2
+            exact mul_le_mul_of_nonneg_left (by exact_mod_cast (show q ≤ p + L by omega)) Real.two_pi_pos.le
+          nlinarith [s.2.1]
+        have hφtop : φ < cutAlpha L q + 2 * Real.pi := by
+          dsimp [φ]
+          nlinarith [s.2.1]
+        rw [cutChordParamB, cutOldB, cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφtop⟩]
+        rw [cutProfileOldB]
+        split_ifs with h
+        · have hs0 : (s : ℝ) = 0 := by
+            dsimp [φ] at h
+            nlinarith [s.2.1, hden]
+          simp only [φ, hs0, zero_mul, add_zero, cutChordB, Complex.ofReal_zero,
+            zero_mul, zero_add, cutPoint]
+          push_cast
+          rw [show ((cutAlpha L p : ℂ) + 2 * Real.pi) * Complex.I =
+              (cutAlpha L p : ℂ) * Complex.I + 2 * Real.pi * Complex.I by ring]
+          rw [Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+        · unfold cutChordB cutSB
+          have hr : (φ - cutAlpha L p - 2 * Real.pi) /
+              (cutAlpha L q - cutAlpha L p) = (s : ℝ) := by
+            dsimp [φ]
+            field_simp
+            ring
+          rw [hr]
 
 /-- New side `p` (the old first `x`): the seam. -/
 theorem cutBoundary_newA_x {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
