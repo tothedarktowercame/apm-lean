@@ -3098,7 +3098,8 @@ lemma H0_of_pathConnected (S : Type) [TopologicalSpace S] [PathConnectedSpace S]
 /-- B11. A homeomorphism induces isomorphisms on the problem's homology. -/
 lemma H_of_homeomorph {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
     (h : S ≃ₜ T) (k : ℕ) : Nonempty (H k S ≅ H k T) := by
-  sorry
+  exact ⟨((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo h)⟩
 
 
 /-! ## Assembly -/
