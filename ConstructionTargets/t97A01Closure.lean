@@ -1269,6 +1269,21 @@ theorem torusRP2_pathHomotopicQuotient_concat_eq_of_pieceClass_eq
   exact Path.Homotopic.concat_hcomp point F G
     (fun k ↦ Quotient.eq.mp (h k))
 
+/-- The quotient class of a nonempty dependent concatenation is the
+composition of the class of its initial fold with the class of its final
+factor.  This is the recursion equation used by the flat/nested fold
+reassociation induction. -/
+theorem torusRP2_pathHomotopicQuotient_concat_succ
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ)) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.trans
+        ⟦Path.concat (point ∘ Fin.castSucc) (fun k ↦ F k.castSucc)⟧
+        ⟦F (Fin.last n)⟧ := by
+  rw [Path.concat_succ]
+  exact Path.Homotopic.Quotient.mk_trans _ _
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3199,6 +3214,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerRun_exists_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
+#print axioms torusRP2_pathHomotopicQuotient_concat_succ
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
