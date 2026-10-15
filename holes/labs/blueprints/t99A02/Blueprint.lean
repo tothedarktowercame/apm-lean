@@ -1571,7 +1571,41 @@ Route.  `chainF = quotientMap _ _ ∘ G₀` with
 (`isOpen_sum_iff`).  Hence `IsOpenMap.isQuotientMap`; compose with
 `isQuotientMap_quotient_mk'` (`IsQuotientMap.comp`).  About 60 lines. -/
 lemma chainF_isQuotientMap : IsQuotientMap chainF := by
-  sorry
+  let F : ℤ × S2 → RealProjectivePlane ⊕ RealProjectivePlane :=
+    fun z => chainSide z.1 (rp2Proj z.2)
+  have hFc : Continuous F := by
+    rw [continuous_prod_of_discrete_left]
+    intro n
+    unfold F chainSide
+    simp only [Prod.fst, Prod.snd]
+    split_ifs
+    · exact continuous_inl.comp rp2Proj_isCoveringMap.continuous
+    · exact continuous_inr.comp rp2Proj_isCoveringMap.continuous
+  have hFo : IsOpenMap F := by
+    rw [isOpenMap_prod_of_discrete_left]
+    intro n
+    unfold F chainSide
+    simp only [Prod.fst, Prod.snd]
+    split_ifs
+    · exact isOpenMap_inl.comp rp2Proj_isCoveringMap.isOpenMap
+    · exact isOpenMap_inr.comp rp2Proj_isCoveringMap.isOpenMap
+  have hFs : Function.Surjective F := by
+    intro y
+    cases y with
+    | inl y =>
+        obtain ⟨x, rfl⟩ := rp2Proj_surjective y
+        refine ⟨(0, x), ?_⟩
+        simp [F, chainSide]
+    | inr y =>
+        obtain ⟨x, rfl⟩ := rp2Proj_surjective y
+        refine ⟨(1, x), ?_⟩
+        simp [F, chainSide]
+  have hFq : IsQuotientMap F := hFo.isQuotientMap hFc hFs
+  have hq : IsQuotientMap
+      (quotientMap (surfacePoint false 1) (surfacePoint false 1)) :=
+    isQuotientMap_quotient_mk'
+  have hcomp := hq.comp hFq
+  simpa [chainF, F, Function.comp_def] using hcomp
 
 /-- **Leaf.**  Fibres of `chainF` are `D∞`-orbits modulo the chain relation.
 
