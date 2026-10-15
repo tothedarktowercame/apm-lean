@@ -87947,6 +87947,20 @@
     [{:cmd "normalization draft",
       :exit 1,
       :correction "removed a goal already closed by rw"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792027665516-12936-5747f6f5",
+     :commands
+     ["git show/diff-tree 337f89a9a"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 337f89a9a by topo-6 changes only the scoped target; fixture hash 3f4cdf5f...193ba matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Global and edge-derived endpoint normalizations differ only in proof terms supplied to Path.cast; path extensionality correctly identifies them, preserving the forward signed-edge factor. New compiled progress; remaining milestones are transporting concat_subpath with this family and comparing boundary H1, then B7-B10."},
     :commit "337f89a9a",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87955,7 +87969,7 @@
      "3f4cdf5fb2372dcbb1c37392046a154e76f2e73daa700962b1f198eeb29193ba"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87975,7 +87989,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the common-base subdivision endpoint family.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked globally normalized subdivision factors.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88283,7 +88297,10 @@
      :reason "Banked subdivision Hurewicz sum."}
     {:job 6,
      :commit "ffd7c7602",
-     :reason "Banked the common-base subdivision endpoint family."}]}
+     :reason "Banked the common-base subdivision endpoint family."}
+    {:job 7,
+     :commit "337f89a9a",
+     :reason "Banked globally normalized subdivision factors."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92658,7 +92675,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -92670,7 +92687,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "globally cast subpath equals based signed edge",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "337f89a9a"},
    :id
    :lemma-polygonboundarycanonicalsubdivisionpathatbase-eq-signededge,
    :kind :lemma,
