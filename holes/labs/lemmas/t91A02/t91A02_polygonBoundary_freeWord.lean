@@ -518,6 +518,58 @@ so the abelianized image of `e (polygonBoundaryFundamentalClass P)` is
 a nonzero ℚ-hom on a word with zero abelianization is impossible;
 `←`: take `φ` = the exponent-sum on an orbit with nonzero degree. -/
 -- BEGIN SEAT AREA
+lemma t91A02_polygonBoundary_freeWord_aux_word (P : PairingData)
+    (f : Additive (FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P)) →+ ℚ) (w : FiniteWedgeLegWord P) :
+    f (Additive.ofMul (finiteWedgeLegWordGroup P w)) =
+      ∑ l, (finiteWedgeLegWordCoordinatesList P w l : ℚ) *
+        f (Additive.ofMul (finiteWedgeLegFundamentalClassAtBase P l)) := by
+  classical
+  induction w with
+  | nil => simp [finiteWedgeLegWordGroup, finiteWedgeLegWordCoordinatesList]
+  | cons q w ih =>
+      rw [show finiteWedgeLegWordGroup P (q :: w) =
+          finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2 *
+            finiteWedgeLegWordGroup P w by rfl]
+      rw [show finiteWedgeLegWordCoordinatesList P (q :: w) =
+          q.2 • orbitBasis P q.1 1 + finiteWedgeLegWordCoordinatesList P w by rfl]
+      change f (Additive.ofMul (finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2) +
+          Additive.ofMul (finiteWedgeLegWordGroup P w)) = _
+      rw [AddMonoidHom.map_add, ih]
+      simp only [Pi.add_apply, Int.cast_add, add_mul, Finset.sum_add_distrib]
+      congr 1
+      rw [show Additive.ofMul
+          (finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2) =
+            q.2 • Additive.ofMul
+              (finiteWedgeLegFundamentalClassAtBase P q.1) by rfl, map_zsmul]
+      rw [Finset.sum_eq_single q.1]
+      · simp [orbitBasis]
+      · intro b _ hb
+        simp [orbitBasis, Pi.single_apply, hb]
+      · simp
+
+lemma t91A02_polygonBoundary_freeWord_aux_vanish (P : PairingData)
+    (f : Additive (FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P)) →+ ℚ)
+    (g : FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P))
+    (hg : moduleHurewicz (orbitWedgeBase P) g = 0) :
+    f (Additive.ofMul g) = 0 := by
+  obtain ⟨w, hw⟩ :=
+    finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective P
+      (finiteWedgeLegFreeGroupMap_surjective P) g
+  have hv : finiteWedgeLegWordCoordinatesList P w = 0 := by
+    have hinj := (ModuleCat.mono_iff_injective
+      (finiteWedgeH1CoordinateMap P)).mp inferInstance
+    apply hinj
+    rw [← finiteWedgeLegWord_hurewicz P w, hw, hg]
+    exact (map_zero (finiteWedgeH1CoordinateMap P).hom).symm
+  rw [← hw, t91A02_polygonBoundary_freeWord_aux_word P f w, hv]
+  simp
+
 lemma t91A02_polygonBoundary_freeWord (P : PairingData) :
     ∃ e : FundamentalGroup
         (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) ≃*
@@ -525,7 +577,85 @@ lemma t91A02_polygonBoundary_freeWord (P : PairingData) :
       (∃ φ : Additive (FreeGroup (Fin (Nat.card (PairingOrbit P.pair)))) →+ ℚ,
           φ (Additive.ofMul (e (polygonBoundaryFundamentalClass P))) ≠ 0) ↔
         attachingDegree P ≠ 0 := by
-  sorry
+  classical
+  let m := Fintype.card (PairingOrbit P.pair)
+  have hm : 0 < m := pairingOrbitCard_pos P
+  let n := m - 1
+  have hn : n + 1 = m := Nat.sub_add_cancel hm
+  have hcard : Nat.card (PairingOrbit P.pair) = m := Nat.card_eq_fintype_card
+  let e₀ := finiteWedgeOrbitFundamentalGroupEquivFin P
+  let e₁ := Classical.choose (finiteWedge_finSucc_fundamentalGroup_free n)
+  have e₁m : FundamentalGroup (PointWedgeQuotient.FiniteWedge (Fin m))
+        (PointWedgeQuotient.wedgeCircle (⟨0, hm⟩ : Fin m) 1) ≃*
+      FreeGroup (Fin m) := by
+    let q : Fin m ≃ Fin (n + 1) := Equiv.cast (congrArg Fin hn.symm)
+    let h := finiteWedgeHomeomorphOfEquiv q
+    have hbase : h (PointWedgeQuotient.wedgeCircle (⟨0, hm⟩ : Fin m) 1) =
+        PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1 := by
+      change PointWedgeQuotient.wedgeCircle (q ⟨0, hm⟩) 1 = _
+      congr 1
+      apply Fin.ext
+      change (cast (congrArg Fin hn.symm) ⟨0, hm⟩).val = 0
+      have cast_zero {a b : ℕ} (hab : a = b) (ha : 0 < a) :
+          (cast (congrArg Fin hab) (⟨0, ha⟩ : Fin a)).val = 0 := by
+        subst b
+        rfl
+      exact cast_zero hn.symm hm
+    exact (fundamentalGroupEquivOfHomeomorphEq h _ _ hbase).trans
+      (e₁.trans (FreeGroup.freeGroupCongr (Equiv.cast (congrArg Fin hn))))
+  have ebase : FundamentalGroup
+        (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) ≃*
+        FreeGroup (Fin (Nat.card (PairingOrbit P.pair))) := by
+    rw [hcard]
+    exact e₀.trans (by simpa [m, pairingOrbitFinZero] using e₁m)
+  refine ⟨ebase, ?_⟩
+  constructor
+  · rintro ⟨φ, hφ⟩ hdeg
+    have hh : moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryFundamentalClass P) = 0 := by
+      rw [polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree, hdeg]
+      simp
+    let f : Additive (FundamentalGroup
+        (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+        (orbitWedgeBase P)) →+ ℚ :=
+      φ.comp (MulEquiv.toAdditive ebase).toAddMonoidHom
+    exact hφ (t91A02_polygonBoundary_freeWord_aux_vanish P f _ hh)
+  · intro hdeg
+    have hex : ∃ l : PairingOrbit P.pair, attachingDegree P l ≠ 0 := by
+      by_contra h
+      apply hdeg
+      funext l
+      exact not_ne_iff.mp (not_exists.mp h l)
+    obtain ⟨l, hl⟩ := hex
+    let evl : (PairingOrbit P.pair → ℤ) →+ ℤ :=
+      { toFun := fun v => v l
+        map_zero' := rfl
+        map_add' := fun _ _ => rfl }
+    let coord : Additive (FundamentalGroup
+        (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+        (orbitWedgeBase P)) →+ ℚ :=
+      (Int.castAddHom ℚ).comp
+        (evl.comp
+          ((finiteWedgeH1CollapseCoordinates P).hom.toAddMonoidHom.comp
+            (MonoidHom.toAdditive (moduleHurewiczHom (orbitWedgeBase P)))))
+    let φ : Additive (FreeGroup (Fin (Nat.card (PairingOrbit P.pair)))) →+ ℚ :=
+      coord.comp (MulEquiv.toAdditive ebase.symm).toAddMonoidHom
+    refine ⟨φ, ?_⟩
+    change coord (Additive.ofMul
+      (ebase.symm (ebase (polygonBoundaryFundamentalClass P)))) ≠ 0
+    rw [ebase.symm_apply_apply]
+    unfold coord evl
+    change (((finiteWedgeH1CollapseCoordinates P)
+      (moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryFundamentalClass P)) l : ℤ) : ℚ) ≠ 0
+    rw [polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree]
+    have hleft : (finiteWedgeH1CollapseCoordinates P)
+        ((finiteWedgeH1CoordinateMap P) (attachingDegree P)) =
+        attachingDegree P := by
+      simpa using congrArg (fun q => q (attachingDegree P))
+        (finiteWedgeH1CoordinateMap_leftInverse P)
+    rw [hleft]
+    exact_mod_cast hl
 -- END SEAT AREA
 
 /-- **Leaf T3 (standard crosscap data).**  The standard `g`-crosscap polygon
