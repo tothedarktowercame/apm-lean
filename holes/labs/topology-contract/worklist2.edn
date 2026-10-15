@@ -76864,7 +76864,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B8."},
@@ -92989,7 +92989,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "lowDegreeHomology",
@@ -92999,7 +92999,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B8 H0/H1/H2 kernel-cokernel extraction",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-lowdegreehomology,
    :kind :lemma,
    :depends-on
@@ -93301,7 +93303,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialH2BoundaryKernelModuleIso",
@@ -93311,7 +93313,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "surface H2 equals attaching kernel",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialh2boundarykernelmoduleiso,
    :kind :lemma,
    :depends-on [:lemma-radialmvconnectingh1coordinateslinear-range],
