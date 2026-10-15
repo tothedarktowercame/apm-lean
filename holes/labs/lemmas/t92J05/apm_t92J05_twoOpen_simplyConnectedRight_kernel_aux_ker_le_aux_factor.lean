@@ -711,6 +711,21 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       apply Path.ext; rfl
     rw [haU, hrU, hdU]
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_composeFin_range
+    {X : Type*} [TopologicalSpace X] (y : X) {n : ℕ}
+    (f : Fin n → FundamentalGroup X y) (K : Subgroup (FundamentalGroup X y))
+    (hf : ∀ i, f i ∈ K) :
+    ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin
+      (fun _ : Fin (n + 1) ↦ FundamentalGroupoid.mk y) f ∈ K := by
+  induction n with
+  | zero =>
+      rw [ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin_zero]
+      exact K.one_mem
+  | succ n ih =>
+      rw [ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin_succ]
+      exact K.mul_mem (hf (Fin.last n))
+        (ih (fun i ↦ f i.castSucc) (fun i ↦ hf i.castSucc))
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -720,6 +735,79 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
     ∃ q : FundamentalGroup U (⟨x.1, x.2.1⟩ : U),
       FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
           (⟨x.1, x.2.1⟩ : U) q = Path.Homotopic.Quotient.mk p := by
+  classical
+  let S := Classical.choice
+    (ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.exists_pathTwoOpenSubdivision
+      p hU hV hcover)
+  let mid : (i : Fin S.n) → Path (S.point i.castSucc.succ) x.1 := fun i ↦
+    Classical.choose
+      (apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
+        U V x (S.side i.castSucc) (S.side i.succ)
+        (by rw [← (S.piece i.castSucc).target]; exact S.piece_mem i.castSucc 1)
+        (by
+          convert S.piece_mem i.succ 0 using 1 <;>
+            try {simp [ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision.point]} <;>
+            convert (S.piece i.succ).source.symm using 1 <;> ext <;> rfl))
+  let a : (i : Fin (S.n + 2)) → Path (S.point i) x.1 :=
+    Fin.cases ((Path.refl x.1).cast S.point_zero rfl)
+      (fun j ↦ Fin.lastCases
+        (by convert (Path.refl x.1).cast S.point_last rfl)
+        (fun i ↦ mid i) j)
+  have ha : ∀ (k : Fin (S.n + 1)) t,
+      a k.castSucc t ∈ twoChart U V (S.side k) := by
+    intro k
+    refine Fin.cases ?_ (fun i ↦ ?_) k
+    · intro t
+      have hx : x.1 ∈ twoChart U V (S.side 0) := by
+        cases h : S.side 0 <;> simp [twoChart, h, x.2.1, x.2.2]
+      simpa [a] using hx
+    · intro t
+      have hm := (Classical.choose_spec
+        (apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
+          U V x (z := S.point i.castSucc.succ) (S.side i.castSucc) (S.side i.succ)
+          (by rw [← (S.piece i.castSucc).target]; exact S.piece_mem i.castSucc 1)
+          (by
+            convert S.piece_mem i.succ 0 using 1 <;>
+              try {simp [ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision.point]} <;>
+              convert (S.piece i.succ).source.symm using 1 <;> ext <;> rfl))) t
+      exact (by simpa [a, mid] using hm.2)
+  let B : Fin (S.n + 2) → FundamentalGroupoid X := fun k ↦ ⟨S.point k⟩
+  let A : Fin (S.n + 2) → FundamentalGroupoid X := fun _ ↦ ⟨x.1⟩
+  let g : (k : Fin (S.n + 1)) → B k.castSucc ⟶ B k.succ := fun k ↦
+    FundamentalGroupoid.fromPath (Path.Homotopic.Quotient.mk (S.piece k))
+  let e : (k : Fin (S.n + 2)) → B k ≅ A k := fun k ↦
+    asIso (FundamentalGroupoid.fromPath (Path.Homotopic.Quotient.mk (a k)))
+  let f : (k : Fin (S.n + 1)) → A k.castSucc ⟶ A k.succ := fun k ↦
+    (e k.castSucc).inv ≫ g k ≫ (e k.succ).hom
+  have htel :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_telescoping
+      A B f g e (by intro k; simp [f])
+  have hf_piece : ∀ k, f k = Path.Homotopic.Quotient.mk
+      ((a k.castSucc).symm.trans ((S.piece k).trans (a k.succ))) := by
+    sorry
+  have hd : ∀ (k : Fin (S.n + 1)) t,
+      a k.succ t ∈ twoChart U V (S.side k) := by
+    sorry
+  have hf : ∀ k, f k = 1 ∨ f k ∈
+      (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
+        (⟨x.1, x.2.1⟩ : U)).range := by
+    intro k
+    rw [hf_piece]
+    exact
+      apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_piece
+        U V x (S.side k) (a k.castSucc) (S.piece k) (a k.succ)
+        (ha k) (S.piece_mem k) (hd k)
+  have hprod :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_composeFin_range
+      x.1 f
+      (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
+        (⟨x.1, x.2.1⟩ : U)).range (fun k ↦ by
+          rcases hf k with h | h
+          · rw [h]
+            exact Subgroup.one_mem _
+          · exact h)
+  obtain ⟨q, hq⟩ := hprod
+  refine ⟨q, ?_⟩
   sorry
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
     {X : Type} [TopologicalSpace X] (U V : Set X)
@@ -909,6 +997,15 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_o
   dsimp [loop]
   rw [F.map_comp, F.map_comp]
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom
+    {G : Type} [Group G] (a b : SingleObj G) (h : a = b) :
+    (eqToHom h : a ⟶ b) = 𝟙 _ := by
+  cases a
+  cases b
+  cases h
+  rfl
+
+set_option maxHeartbeats 800000 in
 -- BEGIN SEAT AREA
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
     {X : Type} [TopologicalSpace X] (U V : Set X)
