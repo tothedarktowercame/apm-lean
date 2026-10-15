@@ -84,7 +84,52 @@ theorem h3_iso (hcov : CoveringDegree.IsKSheetedCover projFun 2)
         (CoefficientH0.singularPostcomposition ℚ antipodal) 3)
     (htop : Nonempty (HQ 3 S3 ≅ ModuleCat.of ℚ ℚ)) :
     Nonempty (HQ 3 RP3 ≅ ModuleCat.of ℚ ℚ) := by
-  sorry
+  let P := HomologicalComplex.homologyMap
+    (CoefficientH0.singularPostcomposition ℚ
+      ⟨projFun, hcov.isCoveringMap.continuous⟩) 3
+  let T := HomologicalComplex.homologyMap
+    (CoefficientCoveringTransfer.transfer ℚ projFun hcov) 3
+  have ha : HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ antipodal) 3 = 𝟙 _ := by
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) 3).obj
+      (ModuleCat.of ℚ ℚ)).map
+      (TopCat.ofHom antipodal) = 𝟙 _
+    have h := CoefficientSphereAntipodal.antipodal_action ℚ 3
+      (by decide : 3 ≠ 0)
+    norm_num at h
+    exact h
+  have hPT : P ≫ T = (2 : ℚ) • 𝟙 _ := by
+    dsimp [P, T]
+    rw [hpt, ha]
+    ext x
+    change x + x = (2 : ℚ) • x
+    simp [two_smul]
+  have hTP : T ≫ P = (2 : ℚ) • 𝟙 _ := by
+    have h := CoefficientCoveringTransfer.rational_homology_projection
+      (p := projFun) hcov 3
+    rw [h]
+    ext x
+    change (2 : ℕ) • x = (2 : ℚ) • x
+    simp [two_smul]
+  let e : HQ 3 S3 ≅ HQ 3 RP3 :=
+    { hom := P
+      inv := (1 / 2 : ℚ) • T
+      hom_inv_id := by
+        ext x
+        have hx := congrArg (fun f => f.hom x) hPT
+        dsimp at hx ⊢
+        change (1 / 2 : ℚ) • T.hom (P.hom x) = x
+        rw [hx]
+        simp
+      inv_hom_id := by
+        ext x
+        have hx := congrArg (fun f => f.hom x) hTP
+        dsimp at hx ⊢
+        change P.hom ((1 / 2 : ℚ) • T.hom x) = x
+        rw [map_smul]
+        rw [hx]
+        simp }
+  exact htop.map fun eTop => e.symm.trans eTop
 -- END SEAT AREA
 
 /-- The result. -/
