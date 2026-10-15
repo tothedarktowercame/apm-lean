@@ -1337,6 +1337,34 @@ theorem integerLoop_convexCombo_subdivisionVertex (P : PairingData)
   field_simp
   ring
 
+/-- The `i`th affine subpath of the complete boundary path has exactly the
+pointwise parametrization of the packaged signed edge. -/
+theorem polygonBoundaryIntegerLoop_subpath_apply (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ)) t =
+      polygonBoundarySignedEdgePath P i t := by
+  change polygonBoundaryIntegerLoopPath P
+      (Set.Icc.convexCombo
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ) t) = _
+  rw [show polygonBoundaryIntegerLoopPath P
+      (Set.Icc.convexCombo
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ) t) =
+      polygonBoundaryWedgeLoop P
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1
+          (Set.Icc.convexCombo
+            (polygonBoundarySubdivisionVertex P i.castSucc)
+            (polygonBoundarySubdivisionVertex P i.succ) t)) by
+    exact congrFun (Path.cast_coe _ _ _)
+      (Set.Icc.convexCombo
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ) t)]
+  rw [integerLoop_convexCombo_subdivisionVertex,
+    polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath]
+
 /-- The explicit winding-one class associated to the polygon-edge
 parametrization. -/
 noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
