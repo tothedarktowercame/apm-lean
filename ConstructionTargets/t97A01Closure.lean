@@ -2833,6 +2833,57 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_family_eq_flat_prefix_add
   funext k t
   exact torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add S i k t
 
+/-- A flat factor in one run, rebased to the existing prefix-block endpoint
+family so it can be passed directly to `Path.concat`. -/
+noncomputable def torusRP2_subdivisionRunFlatIntervalPiece
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) : Path
+      (pathTwoOpenSubdivisionRunPrefixBlockPoint S i k.castSucc)
+      (pathTwoOpenSubdivisionRunPrefixBlockPoint S i k.succ) :=
+  (torusRP2_subdivisionRunPrefixBlockPieceFlat S
+    ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val, by
+      have h := pathTwoOpenSubdivisionRunPrefixBlock_le S i
+      omega⟩).cast (by rfl) (by
+        apply congrArg S.point
+        apply Fin.ext
+        simp only [Fin.val_succ]
+        omega)
+
+/-- Each prefix-block factor is exactly its endpoint-rebased flat interval
+factor. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_eq_flatIntervalPiece
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) :
+    pathTwoOpenSubdivisionRunPrefixBlockPiece S i k =
+      torusRP2_subdivisionRunFlatIntervalPiece S i k := by
+  ext t
+  rw [torusRP2_subdivisionRunFlatIntervalPiece, Path.cast_coe]
+  exact torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add S i k t
+
+/-- Concatenating one prefix block is literally the concatenation of its
+contiguous endpoint-rebased flat interval. -/
+theorem torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+        (pathTwoOpenSubdivisionRunPrefixBlockPiece S i) =
+      Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+        (torusRP2_subdivisionRunFlatIntervalPiece S i) := by
+  congr 1
+  funext k
+  exact torusRP2_subdivisionRunPrefixBlockPiece_eq_flatIntervalPiece S i k
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2960,6 +3011,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_sub_prefix_eq_flat_of_mem_interval
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_eq_flat_prefix_add
+#print axioms torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
