@@ -36120,8 +36120,8 @@
    :other-consumers []}
   {:consumer :t93J03,
    :owner-reopen
-   "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
+   :stop-count 0,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36174,7 +36174,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36192,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Package authority remains unrepaired: .lake/packages is a directory, not the canonical symlink; policy forbids Lake work.",
+   "Continue this program from its last commit; earlier jobs: :program-history. This is the canonical /home/joe/code/apm-lean checkout: its real .lake/packages directory is the package authority. The symlink requirement applies only to APM frame worktrees. Proceed with pathTwoOpenSubdivisionRunIndexCoherence, then the dependent quotient-concat recurrence and based van Kampen obligations.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
