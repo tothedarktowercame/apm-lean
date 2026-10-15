@@ -2315,7 +2315,124 @@ lemma apm_t98a03_glueMap_locInj_glued {J A B A' B' : Type} [TopologicalSpace A]
     ∃ W : Set (apm_t98a03_Glue σ τ), IsOpen W ∧
       apm_t98a03_glueMk σ τ (.inl (σ j)) ∈ W ∧
         Set.InjOn (apm_t98a03_glueMap p q hp hq) W := by
-  sorry
+  obtain ⟨φ, hjφ, hpφ⟩ := hpl (σ j)
+  obtain ⟨ψ, hjψ, hqψ⟩ := hql (τ j)
+  let I : Set J := {k | k ≠ j}
+  let U : Set A' := φ.source \ (σ '' I)
+  let V : Set B' := ψ.source \ (τ '' I)
+  let S : Set (A' ⊕ B') := Sum.inl '' U ∪ Sum.inr '' V
+  let mkE := apm_t98a03_glueMk σ τ
+  let W : Set (apm_t98a03_Glue σ τ) := mkE '' S
+  have hIfin : I.Finite := Set.toFinite I
+  have hUopen : IsOpen U := by
+    exact φ.open_source.sdiff (hIfin.image σ).isClosed
+  have hVopen : IsOpen V := by
+    exact ψ.open_source.sdiff (hIfin.image τ).isClosed
+  have hjU : σ j ∈ U := by
+    refine ⟨hjφ, ?_⟩
+    rintro ⟨k, hk, hkj⟩
+    exact hk (hσ hkj)
+  have hjV : τ j ∈ V := by
+    refine ⟨hjψ, ?_⟩
+    rintro ⟨k, hk, hkj⟩
+    exact hk (hτ hkj)
+  have hpre : mkE ⁻¹' W = S := by
+    ext x
+    constructor
+    · rintro ⟨y, hyS, hyx⟩
+      have hrel := (hmkE y x).mp hyx
+      rcases hrel with rfl | ⟨k, hcross | hcross⟩
+      · exact hyS
+      · rcases hcross with ⟨rfl, rfl⟩
+        rcases hyS with ⟨_, haU, he⟩ | ⟨_, _, he⟩
+        · cases he
+          by_cases hkj : k = j
+          · subst k
+            exact Or.inr ⟨τ j, hjV, rfl⟩
+          · exact False.elim (haU.2 ⟨k, hkj, rfl⟩)
+        · cases he
+      · rcases hcross with ⟨rfl, rfl⟩
+        rcases hyS with ⟨_, _, he⟩ | ⟨_, hbV, he⟩
+        · cases he
+        · cases he
+          by_cases hkj : k = j
+          · subst k
+            exact Or.inl ⟨σ j, hjU, rfl⟩
+          · exact False.elim (hbV.2 ⟨k, hkj, rfl⟩)
+    · intro hx
+      exact ⟨x, hx, rfl⟩
+  refine ⟨W, ?_, ?_, ?_⟩
+  · change IsOpen (mkE ⁻¹' W)
+    rw [hpre]
+    exact (isOpenMap_inl _ hUopen).union (isOpenMap_inr _ hVopen)
+  · exact ⟨Sum.inl (σ j), Or.inl ⟨σ j, hjU, rfl⟩, rfl⟩
+  · intro x hxW y hyW hxy
+    obtain ⟨ex, hexS, rfl⟩ := hxW
+    obtain ⟨ey, heyS, rfl⟩ := hyW
+    have himg :
+        apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀)
+            (Sum.map p q ex) =
+          apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀)
+            (Sum.map p q ey) := by
+      simpa [apm_t98a03_glueMap_mk] using hxy
+    have htarget := (hmkX _ _).mp himg
+    apply (hmkE ex ey).mpr
+    rcases hexS with ⟨a, haU, rfl⟩ | ⟨b, hbV, rfl⟩ <;>
+      rcases heyS with ⟨a', ha'U, rfl⟩ | ⟨b', hb'V, rfl⟩
+    · simp only [Sum.map_inl] at htarget
+      rcases htarget with hs | ⟨k, hc | hc⟩
+      · left
+        congr 1
+        apply φ.injOn haU.1 ha'U.1
+        simpa [hpφ] using Sum.inl.inj hs
+      · rcases hc with ⟨_, hbad⟩
+        cases hbad
+      · rcases hc with ⟨hbad, _⟩
+        cases hbad
+    · simp only [Sum.map_inl, Sum.map_inr] at htarget
+      rcases htarget with hbad | ⟨_, hc | hc⟩
+      · cases hbad
+      · rcases hc with ⟨ha0, hb0⟩
+        obtain ⟨ka, hka⟩ := (hpσ a).mp (Sum.inl.inj ha0)
+        obtain ⟨kb, hkb⟩ := (hqτ b').mp (Sum.inr.inj hb0)
+        have hkaj : ka = j := by
+          by_contra hne
+          exact haU.2 ⟨ka, hne, hka⟩
+        have hkbj : kb = j := by
+          by_contra hne
+          exact hb'V.2 ⟨kb, hne, hkb⟩
+        subst ka; subst kb
+        right
+        exact ⟨j, Or.inl ⟨congrArg Sum.inl hka.symm, congrArg Sum.inr hkb.symm⟩⟩
+      · rcases hc with ⟨hbad, _⟩
+        cases hbad
+    · simp only [Sum.map_inr, Sum.map_inl] at htarget
+      rcases htarget with hbad | ⟨_, hc | hc⟩
+      · cases hbad
+      · rcases hc with ⟨hbad, _⟩
+        cases hbad
+      · rcases hc with ⟨hb0, ha0⟩
+        obtain ⟨kb, hkb⟩ := (hqτ b).mp (Sum.inr.inj hb0)
+        obtain ⟨ka, hka⟩ := (hpσ a').mp (Sum.inl.inj ha0)
+        have hkbj : kb = j := by
+          by_contra hne
+          exact hbV.2 ⟨kb, hne, hkb⟩
+        have hkaj : ka = j := by
+          by_contra hne
+          exact ha'U.2 ⟨ka, hne, hka⟩
+        subst kb; subst ka
+        right
+        exact ⟨j, Or.inr ⟨congrArg Sum.inr hkb.symm, congrArg Sum.inl hka.symm⟩⟩
+    · simp only [Sum.map_inr] at htarget
+      rcases htarget with hs | ⟨k, hc | hc⟩
+      · left
+        congr 1
+        apply ψ.injOn hbV.1 hb'V.1
+        simpa [hqψ] using Sum.inr.inj hs
+      · rcases hc with ⟨hbad, _⟩
+        cases hbad
+      · rcases hc with ⟨_, hbad⟩
+        cases hbad
 
 /-- A continuous open locally injective map is a local homeomorphism. -/
 lemma apm_t98a03_isLocalHomeomorph_of_isOpenMap {X Y : Type*} [TopologicalSpace X]
