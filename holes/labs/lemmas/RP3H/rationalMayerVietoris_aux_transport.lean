@@ -180,6 +180,116 @@ lemma rationalMayerVietoris_aux_unionArrow
 exactness at pieces/union/intersection + connecting map) along `interIso`, `pieceIso`,
 `unionIso`, given that the transported arrows are `mvI` and `mvJ`. -/
 -- BEGIN SEAT AREA
+lemma rationalMayerVietoris_aux_transport_aux_pieces
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hI : ∀ n, (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n)
+    (hJ : ∀ n, (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n)
+    (n : ℕ) :
+    LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom := by
+  have hex := ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _
+    (rationalMayerVietoris_aux_interIso U V n)
+    (rationalMayerVietoris_aux_pieceIso U V n)
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov n)
+    (CoefficientSubcomplexMayerVietoris.exact_pieces ℚ
+      (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n)
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hex
+  dsimp only [ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex] at hex
+  have hI' := hI n
+  have hJ' := hJ n
+  dsimp only [rationalMayerVietoris_aux_SC] at hI' hJ'
+  have hIhom := congrArg ModuleCat.Hom.hom hI'
+  have hJhom := congrArg ModuleCat.Hom.hom hJ'
+  have hIrange : LinearMap.range (mvI U V n).hom =
+      LinearMap.range ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom).hom := by
+    exact hIhom ▸ rfl
+  have hJker : LinearMap.ker
+      ((rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom).hom =
+      LinearMap.ker (mvJ U V n).hom := by
+    exact hJhom ▸ rfl
+  exact hIrange.trans (hex.trans hJker)
+
+lemma rationalMayerVietoris_aux_transport_aux_union
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hJ : ∀ n, (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n)
+    (n : ℕ) :
+    LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker
+      ((rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).inv ≫
+        CoefficientSubcomplexMayerVietoris.connecting ℚ
+          (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n ≫
+        (rationalMayerVietoris_aux_interIso U V n).hom).hom := by
+  have hex := ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _
+    (rationalMayerVietoris_aux_pieceIso U V (n + 1))
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1))
+    (rationalMayerVietoris_aux_interIso U V n)
+    (CoefficientSubcomplexMayerVietoris.exact_union ℚ
+      (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n)
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hex
+  dsimp only [ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex] at hex
+  have hJ' := hJ (n + 1)
+  dsimp only [rationalMayerVietoris_aux_SC] at hJ'
+  have hJhom := congrArg ModuleCat.Hom.hom hJ'
+  have hJrange : LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.range
+      ((rationalMayerVietoris_aux_pieceIso U V (n + 1)).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).g (n + 1) ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).hom).hom := by
+    exact hJhom ▸ rfl
+  exact hJrange.trans hex
+
+lemma rationalMayerVietoris_aux_transport_aux_intersection
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hI : ∀ n, (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n)
+    (n : ℕ) :
+    LinearMap.range
+      ((rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).inv ≫
+        CoefficientSubcomplexMayerVietoris.connecting ℚ
+          (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n ≫
+        (rationalMayerVietoris_aux_interIso U V n).hom).hom =
+      LinearMap.ker (mvI U V n).hom := by
+  have hex := ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1))
+    (rationalMayerVietoris_aux_interIso U V n)
+    (rationalMayerVietoris_aux_pieceIso U V n)
+    (CoefficientSubcomplexMayerVietoris.exact_intersection ℚ
+      (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n)
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hex
+  dsimp only [ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex] at hex
+  have hI' := hI n
+  dsimp only [rationalMayerVietoris_aux_SC] at hI'
+  have hIhom := congrArg ModuleCat.Hom.hom hI'
+  have hIker : LinearMap.ker
+      ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom).hom =
+      LinearMap.ker (mvI U V n).hom := by
+    exact hIhom ▸ rfl
+  exact hex.trans hIker
+
 lemma rationalMayerVietoris_aux_transport
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
@@ -193,7 +303,17 @@ lemma rationalMayerVietoris_aux_transport
       (∀ n, LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom) ∧
       (∀ n, LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
       (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (mvI U V n).hom) := by
-  sorry
+  let δ : ∀ n, HQ (n + 1) X ⟶ HQ n ↥(U ∩ V) := fun n =>
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).inv ≫
+      CoefficientSubcomplexMayerVietoris.connecting ℚ
+        (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n ≫
+      (rationalMayerVietoris_aux_interIso U V n).hom
+  refine ⟨δ, fun n => rationalMayerVietoris_aux_transport_aux_pieces
+    U V hU hV hcov hI hJ n, ?_, ?_⟩
+  · intro n
+    exact rationalMayerVietoris_aux_transport_aux_union U V hU hV hcov hJ n
+  · intro n
+    exact rationalMayerVietoris_aux_transport_aux_intersection U V hU hV hcov hI n
 -- END SEAT AREA
 
 theorem rationalMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
