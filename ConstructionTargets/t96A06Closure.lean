@@ -30,6 +30,35 @@ def polynomialMap (v : Vectors ℝ 3) : Vectors ℝ 3 :=
   ![v 0 ^ 2 - v 1 ^ 2, 2 * v 0 * v 1,
     v 2 ^ 2 - v 3 ^ 2, 2 * v 2 * v 3]
 
+/-- Change the sign of the first complex coordinate pair. -/
+def flipFirstPair (v : Vectors ℝ 3) : Vectors ℝ 3 :=
+  ![-v 0, -v 1, v 2, v 3]
+
+/-- Change the sign of the second complex coordinate pair. -/
+def flipSecondPair (v : Vectors ℝ 3) : Vectors ℝ 3 :=
+  ![v 0, v 1, -v 2, -v 3]
+
+theorem polynomialMap_flipFirstPair (v : Vectors ℝ 3) :
+    polynomialMap (flipFirstPair v) = polynomialMap v := by
+  ext i
+  fin_cases i <;> simp [polynomialMap, flipFirstPair] <;> ring
+
+theorem polynomialMap_flipSecondPair (v : Vectors ℝ 3) :
+    polynomialMap (flipSecondPair v) = polynomialMap v := by
+  ext i
+  fin_cases i <;> simp [polynomialMap, flipSecondPair] <;> ring
+
+theorem flipFirstPair_comm_flipSecondPair (v : Vectors ℝ 3) :
+    flipFirstPair (flipSecondPair v) =
+      flipSecondPair (flipFirstPair v) := by
+  ext i
+  fin_cases i <;> simp [flipFirstPair, flipSecondPair]
+
+theorem flipFirstPair_flipSecondPair (v : Vectors ℝ 3) :
+    flipFirstPair (flipSecondPair v) = -v := by
+  ext i
+  fin_cases i <;> simp [flipFirstPair, flipSecondPair]
+
 theorem polynomialMap_eq_consumerPolynomial (v : Vectors ℝ 3) :
     polynomialMap v = t96A06Polynomial v := rfl
 
@@ -870,6 +899,10 @@ theorem t96A06_rp3_rational_homology :
   · exact t96A06_rp3_rational_homology_isZero_of_gt k h
 
 #print axioms polynomialMap_nonzero
+#print axioms polynomialMap_flipFirstPair
+#print axioms polynomialMap_flipSecondPair
+#print axioms flipFirstPair_comm_flipSecondPair
+#print axioms flipFirstPair_flipSecondPair
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
 #print axioms exists_polynomialDescent_formula
