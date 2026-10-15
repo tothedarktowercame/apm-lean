@@ -422,6 +422,43 @@ theorem t96A06_projectedSimplex_lift_eq_or_eq_antipodal (n : ℕ)
         C(Sphere 3, Sphere 3)).comp s).continuous)
       hcomp v h
 
+/-- The two canonical lifts form the entire lift type, with no duplication.
+This finite two-element description is the combinatorial input for expanding
+the transfer sum. -/
+theorem t96A06_projectedSimplex_lifts_exact_pair (n : ℕ)
+    (s : C(stdSimplex ℝ (Fin (n + 1)), Sphere 3)) :
+    ∃ a b : ConstructionTargets.CoveringLiftRestriction.Lifts
+        (sphereProjection 3)
+        ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+          C(Sphere 3, RP3)).comp s),
+      a ≠ b ∧ ∀ l, l = a ∨ l = b := by
+  let a : ConstructionTargets.CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨s, rfl⟩
+  let anti : C(Sphere 3, Sphere 3) :=
+    ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩
+  let b : ConstructionTargets.CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨anti.comp s, by
+    funext x
+    exact ((rp3SphereProjection_eq_iff (s x) (sphereAntipodalN 3 (s x))).mpr
+      (Or.inr rfl)).symm⟩
+  refine ⟨a, b, ?_, ?_⟩
+  · intro hab
+    have hv := congrArg (fun l => l.1
+      (ConstructionTargets.CoveringSimplexTransfer.vertex n)) hab
+    simp only [a, b, anti, ContinuousMap.comp_apply] at hv
+    exact rp3SphereAntipodal_ne (s
+      (ConstructionTargets.CoveringSimplexTransfer.vertex n)) hv.symm
+  · intro l
+    rcases t96A06_projectedSimplex_lift_eq_or_eq_antipodal n s l with h | h
+    · left
+      exact Subtype.ext h
+    · right
+      exact Subtype.ext h
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -476,6 +513,7 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_sphere3_rational_H3Iso
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
+#print axioms t96A06_projectedSimplex_lifts_exact_pair
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
