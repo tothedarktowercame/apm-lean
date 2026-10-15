@@ -2335,6 +2335,28 @@ theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_ne
     have h := CategoryTheory.ConcreteCategory.congr_hom hneg (1 : ℤ)
     exact h
 
+/-- Evaluating the four normalization factors on the integer generator
+recovers the corrected local-generator coefficient exactly. -/
+theorem t96A06_concreteNormalizationComposite_one_eq_correctedCoefficient :
+    CategoryTheory.ConcreteCategory.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+              polynomialSphereRegularPoint)).inv ≫
+          (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint) 3).hom ≫
+          (ConstructionTargets.ManifoldFundamentalClass.ambientChartHomologyIso
+            1 polynomialSphereRegularPoint).inv ≫
+          (ConstructionTargets.HigherModelLocalHomology.localIsoInt 1).hom)
+        (show ↑(ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (ModuleCat.of ℤ ℤ)) from (1 : ℤ)) =
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint := by
+  rw [ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one,
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom]
+  rfl
+
 /-- The preservation isomorphisms commute with the exact deleted-point
 projection used for the normalized class. -/
 theorem t96A06_normalizedClass_projection_preservation_naturality :
@@ -3877,6 +3899,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one
+#print axioms t96A06_concreteNormalizationComposite_one_eq_correctedCoefficient
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
 #print axioms t96A06_normalizedClass_projection_preservation_cancel
 #print axioms t96A06_mappedIntegralNormalizedClass_localizes
