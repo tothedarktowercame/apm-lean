@@ -3007,7 +3007,15 @@ lemma treeContraction_mapsTo (g : G) :
 `spherePush p (0, x) = x` from `spherePush_spec`). -/
 lemma treeContraction_zero (g : G) :
     ∀ z ∈ treeStar g, treeContraction g (0, z) = z := by
-  sorry
+  intro z hz
+  rcases z with ⟨h, t⟩ | ⟨h, x⟩
+  · simp only [treeContraction]
+    split <;> congr 2 <;> apply Subtype.ext <;>
+      simp [towardZero, towardOne]
+  · simp only [treeContraction]
+    split <;> congr 2
+    · exact (spherePush_spec north).1 x
+    · exact (spherePush_spec south).1 x
 
 /-- Leaf (split).  At time `1` every star point lands in the class of vertex
 `g`: edge `g` goes to `(g, 0)`; edge `g a⁻¹` goes to `(g a⁻¹, 1) ~ (g, 0)`
