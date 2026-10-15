@@ -88670,29 +88670,34 @@
      :commit "7af6e0888",
      :reason "Banked transported three-factor reassociation."}]}
   {:consumer :t94J09,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Connect MV H1 to face cokernel; prove normalization; assemble.",
+    "Build literal MV H1 kernel; higher vanishing; normalization; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved" "two vertices"],
     :missing-theorems
-    [{:name "frozenFaceCokernelSmithEquiv",
-      :type
-      "literal face-boundary cokernel is Fin 5 to Z times ZMod 2",
+    [{:name "frozenH1SmithEquivOfSurjectiveKernel",
+      :type "surjective map with face-range kernel has Smith target",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundaryKernelEquiv_attachingCycle"],
+      :depends-on ["frozenFaceCokernelSmithEquiv"],
+      :area "polygon-surface-homology"}
+     {:name "frozenPolygonH1_surjective_kernel",
+      :type "MV map onto polygon H1 with face-range kernel",
+      :status :partial,
+      :consumers [:t94J09],
+      :depends-on ["frozenH1SmithEquivOfSurjectiveKernel"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "literal two-vertex polygon homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenFaceCokernelSmithEquiv"],
+      :depends-on ["frozenPolygonH1_surjective_kernel"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
-      :type "polygon quotient homeomorphic to N6",
+      :type "polygon homeomorphic to N6",
       :status :not-started,
       :consumers [:t94J09],
       :depends-on [],
@@ -88701,7 +88706,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked literal frozen face cokernel Smith form.",
+    :reason "Banked MV-to-Smith H1 adapter.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88711,28 +88716,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 4578e92d7", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792104641614-14776-8d85f5b3",
-     :commands
-     ["git show/diff/check 4578e92d7"
-      "sha256sum + placeholder recount from 4578e92d7"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 4578e92d7 adds compiled, sorry-free progress beyond history 9cbf92387. The unimodular coordinate map sends the literal cycle [2,2,0,-2,-2,2] to the standard all-2 vector, with a correct inverse; range transport therefore gives the claimed cokernel equivalence to five free coordinates plus ZMod 2. Only t94J09Closure.lean changed; fixture SHA 058ce1014e763c34a0deffb052cfe41c3505d16c320ca6289f78fa39fc2872f5 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. MV-H1 connection, normalization, and assembly remain listed."},
-    :commit "4578e92d7",
+     {:cmd "git show --check 4119536dc", :exit 0}],
+    :commit "4119536dc",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "058ce1014e763c34a0deffb052cfe41c3505d16c320ca6289f78fa39fc2872f5"},
+     "6287520617d294e1c43c5819618b605c0b817f7c4b5b1b0d688dc69620fe1a7a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94208,7 +94201,8 @@
     :lemma-frozenorbitequiv
     :lemma-frozengraphboundarykernelequiv
     :lemma-frozengraphboundarykernelequiv-attachingcycle
-    :lemma-frozenfacecokernelsmithequiv],
+    :lemma-frozenfacecokernelsmithequiv
+    :lemma-frozenpolygonh1-surjective-kernel],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96306,4 +96300,37 @@
    :id :lemma-frozenfacecokernelsmithequiv,
    :kind :lemma,
    :depends-on [:lemma-frozengraphboundarykernelequiv-attachingcycle],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenH1SmithEquivOfSurjectiveKernel",
+    :type "surjective map with face-range kernel has Smith target"},
+   :lemma
+   {:name "frozenH1SmithEquivOfSurjectiveKernel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "surjective map with face-range kernel has Smith target",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenh1smithequivofsurjectivekernel,
+   :kind :lemma,
+   :depends-on [:lemma-frozenfacecokernelsmithequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenPolygonH1_surjective_kernel",
+    :type "MV map onto polygon H1 with face-range kernel"},
+   :lemma
+   {:name "frozenPolygonH1_surjective_kernel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "MV map onto polygon H1 with face-range kernel",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozenpolygonh1-surjective-kernel,
+   :kind :lemma,
+   :depends-on [:lemma-frozenh1smithequivofsurjectivekernel],
    :other-consumers []}]}
