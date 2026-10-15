@@ -5487,6 +5487,35 @@ def cutAlpha (L m : ℕ) : ℝ := 2 * Real.pi * m / L
 
 def cutPoint (L m : ℕ) : ℂ := Complex.exp ((cutAlpha L m : ℂ) * Complex.I)
 
+theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
+  unfold cutPoint
+  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
+
+theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
+    cutPoint L m ≠ cutPoint L m' := by
+  intro heq
+  have hL : 0 < L := by omega
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
+  have him := congrArg Complex.im hk
+  simp [cutPoint, cutAlpha] at him
+  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
+  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
+    field_simp [ne_of_gt hLreal] at him
+    nlinarith [Real.pi_pos]
+  have hkneg : (k : ℝ) < 0 := by
+    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
+    nlinarith
+  have hk_le : k ≤ -1 := by
+    have hkneg' : k < 0 := by exact_mod_cast hkneg
+    omega
+  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
+    nlinarith
+  have hgap : (m' : ℝ) - m < L := by
+    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
+    linarith
+  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
+  nlinarith
+
 /-- `cutCross w z = Im (conj w · z)`, positive when `z` is to the left of `w`. -/
 def cutCross (w z : ℂ) : ℝ := (starRingEnd ℂ w * z).im
 
@@ -6675,35 +6704,6 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
     (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
   sorry
-
-theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
-  unfold cutPoint
-  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
-
-theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
-    cutPoint L m ≠ cutPoint L m' := by
-  intro heq
-  have hL : 0 < L := by omega
-  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
-  have him := congrArg Complex.im hk
-  simp [cutPoint, cutAlpha] at him
-  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
-  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
-    field_simp [ne_of_gt hLreal] at him
-    nlinarith [Real.pi_pos]
-  have hkneg : (k : ℝ) < 0 := by
-    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
-    nlinarith
-  have hk_le : k ≤ -1 := by
-    have hkneg' : k < 0 := by exact_mod_cast hkneg
-    omega
-  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
-    nlinarith
-  have hgap : (m' : ℝ) - m < L := by
-    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
-    linarith
-  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
-  nlinarith
 
 /-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
 `1` = `B`).  A boundary value of a chart comes from the parameter circle, because
