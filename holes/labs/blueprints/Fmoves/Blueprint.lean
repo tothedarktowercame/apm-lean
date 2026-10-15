@@ -7376,6 +7376,104 @@ theorem cutBoundaryData_concrete {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
 
 /-! ### Boundary combinatorics, for any maps with the edge formulas -/
 
+/-! ### Boundary transfer (design claude-14, 2026-10-15)
+
+`cutTransfer` sends an old boundary point `edgePoint L e s` to its new point: the `x`
+sides go to the seam, the `v` sides to the reversed new `v⁻¹` sides, every other side
+stays.  `cutRetransfer` sends a new boundary point back: both new `x` sides come from the
+chord, the `v⁻¹` sides from the old `v` sides, every other side stays.  The generator
+lemmas are consistency (a chart value at a boundary point is related to the transfer of
+that point) plus an edge-level statement about the transfers. -/
+
+def cutTransfer (L p q e : ℕ) (s : Icc (0 : ℝ) 1) : ℂ :=
+  if e = p ∨ e = q then cutSeam L p q s
+  else if p < e ∧ e < q then (edgePoint L (q + p + 1 - e) (reverseParameter s) : ℂ)
+  else (edgePoint L e s : ℂ)
+
+def cutRetransfer (L p q e : ℕ) (s : Icc (0 : ℝ) 1) : ℂ :=
+  if e = p ∨ e = p + 1 then cutChordB L p q s
+  else if p + 1 < e ∧ e ≤ q then (edgePoint L (q + p + 1 - e) (reverseParameter s) : ℂ)
+  else (edgePoint L e s : ℂ)
+
+/-- When two boundary parametrisations name the same point. -/
+theorem cutEdgePoint_eq {L e e' : ℕ} (hL : 2 ≤ L) (he : e < L) (he' : e' < L)
+    {s s' : Icc (0 : ℝ) 1} (h : edgePoint L e s = edgePoint L e' s') :
+    (e = e' ∧ s = s') ∨
+      (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+      (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L) := by
+  sorry
+
+theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (i : Bool) (y : Circle) (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length)
+    (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) =
+      (if i then oldB y else oldA y))
+    (hN : (N : ℂ) = (if i then newB y else newA y)) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+        (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i j : Fin (u ++ [x] ++ v ++ [x] ++ t).length) (hij : i ≠ j) (τ : Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = ((u ++ [x] ++ v ++ [x] ++ t).get j).1)
+    (T T' : Disk)
+    (hT : (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) i τ)
+    (hT' : (T' : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) j
+      (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2
+        then τ else reverseParameter τ)) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) T T' := by
+  sorry
+
+theorem cut_retransfer_consistency {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (i : Bool) (y : Circle) (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length)
+    (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) =
+      (if i then newB y else newA y))
+    (hP : (P : ℂ) = (if i then oldB y else oldA y)) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+        (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
+  sorry
+
+theorem cut_retransfer_generator {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i j : Fin (u ++ [x, x] ++ inverseWord v ++ t).length) (hij : i ≠ j)
+    (τ : Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 =
+      ((u ++ [x, x] ++ inverseWord v ++ t).get j).1)
+    (S S' : Disk)
+    (hS : (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) i τ)
+    (hS' : (S' : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) j
+      (if ((u ++ [x, x] ++ inverseWord v ++ t).get i).2 =
+          ((u ++ [x, x] ++ inverseWord v ++ t).get j).2
+        then τ else reverseParameter τ)) :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) S S' := by
+  sorry
+
 /-- Old generators between boundary points of the pieces give new `EqvGen`s
 between the corresponding new points (`false` = piece `A`, `true` = `B`). -/
 theorem cut_forward_generators {Label : Type*} [DecidableEq Label]
@@ -7391,7 +7489,19 @@ theorem cut_forward_generators {Label : Type*} [DecidableEq Label]
     (hN' : (N' : ℂ) = (if i' then newB y' else newA y'))
     (h : WordRel (u ++ [x] ++ v ++ [x] ++ t) P P') :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
-  sorry
+  have hlen : (u ++ [x, x] ++ inverseWord v ++ t).length =
+      (u ++ [x] ++ v ++ [x] ++ t).length := (cutAndPaste_aux_length u v t x).symm
+  have hL : 2 ≤ (u ++ [x] ++ v ++ [x] ++ t).length := by simp; omega
+  obtain ⟨i₀, j₀, hij, τ, hlab, hP0, hP0'⟩ := h
+  obtain ⟨T, hT, hNT⟩ := cut_transfer_consistency u v t x oldA oldB newA newB D
+    (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) i y i₀ i₀.2 τ N
+    (by rw [← hP, hP0]) hN
+  obtain ⟨T', hT', hNT'⟩ := cut_transfer_consistency u v t x oldA oldB newA newB D
+    (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) i' y' j₀ j₀.2 _ N'
+    (by rw [← hP', hP0']) hN'
+  exact Relation.EqvGen.trans _ _ _ hNT (Relation.EqvGen.trans _ _ _
+    (cut_transfer_generator u v t x hx i₀ j₀ hij τ hlab T T' hT hT')
+    (Relation.EqvGen.symm _ _ hNT'))
 
 theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -7406,7 +7516,18 @@ theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
     (hN' : (N' : ℂ) = (if i' then newB y' else newA y'))
     (h : WordRel (u ++ [x, x] ++ inverseWord v ++ t) N N') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
-  sorry
+  have hlen : (u ++ [x, x] ++ inverseWord v ++ t).length =
+      (u ++ [x] ++ v ++ [x] ++ t).length := (cutAndPaste_aux_length u v t x).symm
+  obtain ⟨i₀, j₀, hij, τ, hlab, hN0, hN0'⟩ := h
+  obtain ⟨S, hS, hPS⟩ := cut_retransfer_consistency u v t x oldA oldB newA newB D
+    (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) i y i₀ (hlen ▸ i₀.2) τ P
+    (by rw [← hN, hN0]; exact congrArg (fun L => (edgePoint L (i₀ : ℕ) τ : ℂ)) hlen.symm) hP
+  obtain ⟨S', hS', hPS'⟩ := cut_retransfer_consistency u v t x oldA oldB newA newB D
+    (fun hL he he' _ _ h => cutEdgePoint_eq hL he he' h) i' y' j₀ (hlen ▸ j₀.2) _ P'
+    (by rw [← hN', hN0']; exact congrArg (fun L => (edgePoint L (j₀ : ℕ) _ : ℂ)) hlen.symm) hP'
+  exact Relation.EqvGen.trans _ _ _ hPS (Relation.EqvGen.trans _ _ _
+    (cut_retransfer_generator u v t x hx i₀ j₀ hij τ hlab S S' hS hS')
+    (Relation.EqvGen.symm _ _ hPS'))
 
 /-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
 theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
