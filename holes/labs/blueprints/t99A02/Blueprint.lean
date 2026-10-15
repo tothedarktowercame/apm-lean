@@ -3234,7 +3234,54 @@ lemma treeContraction_zero (g : G) :
 lemma treeContraction_one (g : G) :
     ∀ z ∈ treeStar g,
       qmk TreeRel (treeContraction g (1, z)) = qmk TreeRel (.inl (g, 0)) := by
-  sorry
+  intro z hz
+  rcases z with ⟨h, t⟩ | ⟨h, x⟩
+  · change treeStarPred g (.inl (h, t)) at hz
+    rcases hz with ⟨hg, ht⟩ | ⟨hg, ht⟩
+    · subst h
+      simp [treeContraction, towardZero]
+    · subst h
+      have hne : g * a⁻¹ ≠ g := by
+        intro he
+        have : a = 1 := by
+          apply inv_injective
+          apply mul_left_cancel (a := g)
+          simpa using he
+        exact G_facts.1 this
+      simp only [treeContraction, if_neg hne]
+      have hend : towardOne 1 t = 1 := by
+        apply Subtype.ext
+        simp [towardOne]
+      rw [hend]
+      apply Quotient.sound
+      have heq : g * a⁻¹ * a = g := by simp
+      simpa [heq] using
+        (Relation.EqvGen.rel _ _ (TreeRel.edge (g * a⁻¹)))
+  · change treeStarPred g (.inr (h, x)) at hz
+    rcases hz with ⟨hg, hx⟩ | ⟨hg, hx⟩
+    · subst h
+      simp only [treeContraction, if_pos rfl]
+      have hpush : spherePush north (1, x) = north :=
+        (spherePush_spec north).2.1 x (by simpa [neg_north] using hx)
+      rw [hpush]
+      exact Quotient.sound (Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (TreeRel.vertex g)))
+    · subst h
+      have hne : g * b ≠ g := by
+        intro he
+        have : b = 1 := mul_left_cancel (a := g) (by simpa using he)
+        exact G_facts.2.1 this
+      simp only [treeContraction, if_neg hne]
+      have hpush : spherePush south (1, x) = south :=
+        (spherePush_spec south).2.1 x (by simpa [neg_south] using hx)
+      rw [hpush]
+      apply Quotient.sound
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _
+          (by simpa [neg_north] using
+            (Relation.EqvGen.rel _ _ (TreeRel.pair g north))))
+        (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ (TreeRel.vertex g)))
 
 /-- Leaf (split).  The contraction respects the gluing on the star.  Cases of
 `TreeRel` with `a` in the star: `edge h` (`a = (h, 1)`, so `h = g a⁻¹`; both
