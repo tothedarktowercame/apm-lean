@@ -37111,7 +37111,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37173,7 +37173,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37195,7 +37195,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37485,6 +37485,16 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
      {:cmd "git show --check 0c7fbd85d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792049361363-13601-7c0405ae",
+     :commands
+     ["git show/check/diff-tree e474731bb; fixture sha256"
+      "lake env lean archived committed Main via authority-linked worktree"
+      "statement-registry check; sorry recount 2->1"],
+     :finding
+     "PASS: e474731bb is new compiled, standard-axiom progress. It proves the exact fixed locus equals the coordinate CP1 line union the isolated third-axis point, with both set-inclusion directions and projective representatives handled correctly. Scope is one allowed file; fixture hash matches; registry 166/166; placeholders 2->1. Remaining CP2 rational homology, Euler characteristic, and final theorem are listed."},
     :commit "0c7fbd85d",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
@@ -37493,7 +37503,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37511,7 +37521,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-connectedness and rational H0 for literal CP1.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37543,7 +37553,11 @@
     {:job 6,
      :commit "88e57cf8e",
      :reason
-     "Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2."}]}
+     "Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2."}
+    {:job 7,
+     :commit "0c7fbd85d",
+     :reason
+     "Committed path-connectedness and rational H0 for literal CP1."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -41058,7 +41072,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_regular_fiber",
@@ -41068,7 +41082,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "regular fiber has four sign translates",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-polynomialspherelift-regular-fiber,
    :kind :lemma,
    :depends-on
@@ -41272,7 +41288,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialMap_eq_iff_pairSigns",
@@ -41284,14 +41300,16 @@
     :type
     "equal quadratic vectors imply one of four pair-sign relations",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialmap-eq-iff-pairsigns,
    :kind :lemma,
    :depends-on [:lemma-realpair-eq-or-eq-neg-of-squarecoordinates],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rp3RadialToSphere_eq_imp_posScalar",
@@ -41302,14 +41320,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "equal radial normalizations imply positive scalar relation",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-rp3radialtosphere-eq-imp-posscalar,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialMap_sphere_posScalar_eq_one",
@@ -41319,14 +41339,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "positive quadratic-image scale on unit inputs is one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialmap-sphere-posscalar-eq-one,
    :kind :lemma,
    :depends-on [:lemma-rp3radialtosphere-eq-imp-posscalar],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereLift_fiber_subset_pairSignOrbit",
@@ -41336,7 +41358,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "normalized fiber lies in pair-sign orbit",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialspherelift-fiber-subset-pairsignorbit,
    :kind :lemma,
    :depends-on
@@ -41345,7 +41369,7 @@
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp1_nonzeroVectors_pathConnected",
@@ -41355,14 +41379,16 @@
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "nonzero C2 vector model is path connected",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "0c7fbd85d"},
    :id :lemma-t97j07-cp1-nonzerovectors-pathconnected,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp1_rationalH0Iso", :type "H0(CP1;Q) is Q"},
@@ -41371,7 +41397,9 @@
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "H0(CP1;Q) is Q",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "0c7fbd85d"},
    :id :lemma-t97j07-cp1-rationalh0iso,
    :kind :lemma,
    :depends-on [:lemma-t97j07-cp1-nonzerovectors-pathconnected],
