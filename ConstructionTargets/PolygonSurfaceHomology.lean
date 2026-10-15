@@ -850,6 +850,28 @@ theorem moduleHurewicz_naturality {X Y : Type} [TopologicalSpace X]
   rw [hc]
   exact congrArg Multiplicative.toAdd hhurewicz.symm
 
+/-- The inverse comparison commutes with every induced homology map. -/
+theorem singularHomologyComparison_inv_map {X Y : TopCat} (f : X ⟶ Y)
+    (k : ℕ)
+    (a : ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).obj X) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      Y k).inv
+        ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+          (AddCommGrpCat.of ℤ)).map f)
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            X k).hom a)) =
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+        (ModuleCat.of ℤ ℤ)).map f) a := by
+  apply (AddCommGrpCat.mono_iff_injective
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      Y k).hom).mp inferInstance
+  rw [Iso.inv_hom_id_apply]
+  symm
+  simpa using congrArg (fun q => q a)
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      f k)
+
 /-- A based circle class whose Hurewicz image is the positive generator fixed
 by `circleH1IsoInt`.  Choosing it through Hurewicz surjectivity avoids adding
 a second, potentially incompatible orientation convention for explicit
