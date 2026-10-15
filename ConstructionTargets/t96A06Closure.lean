@@ -1821,6 +1821,23 @@ noncomputable def t96A06_integralToRational_relativeChainMap
     (t96A06_integralToRational_singularChainMap (TopCat.of X))
     (t96A06_integralToRational_subspaceMap_naturality A)
 
+/-- The relative coefficient map intertwines the integral and rational
+absolute-to-relative cokernel projections. -/
+theorem t96A06_integralToRational_relativeProjection_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel.π
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A)) ≫
+      t96A06_integralToRational_relativeChainMap A =
+    t96A06_integralToRational_singularChainMap (TopCat.of X) ≫
+      cokernel.π
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) := by
+  unfold t96A06_integralToRational_relativeChainMap cokernel.map
+  rw [cokernel.π_desc]
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -3093,6 +3110,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_singularChainMap
 #print axioms t96A06_integralToRational_subspaceMap_naturality
 #print axioms t96A06_integralToRational_relativeChainMap
+#print axioms t96A06_integralToRational_relativeProjection_naturality
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
