@@ -439,6 +439,29 @@ theorem hasFDerivAt_conj
 
 #print axioms hasFDerivAt_conj
 
+/-- The incidence-difference derivative formula remains exact after replacing
+the product and target tangent spaces by continuous linear chart coordinates. -/
+theorem hasFDerivAt_incidenceDifference_conj
+    {E F G E' G' : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup G'] [NormedSpace ℝ G']
+    {Fmap : E → G} {Cmap : F → G} {u : E} {v : F}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hF : HasFDerivAt Fmap A u) (hC : HasFDerivAt Cmap B v)
+    (eEF : (E × F) ≃L[ℝ] E') (eG : G ≃L[ℝ] G') :
+    HasFDerivAt
+      (fun z : E' ↦
+        eG (Fmap (eEF.symm z).1 - Cmap (eEF.symm z).2))
+      (eG.toContinuousLinearMap.comp
+        ((A.coprod (-B)).comp eEF.symm.toContinuousLinearMap))
+      (eEF (u, v)) :=
+  hasFDerivAt_conj (hasFDerivAt_incidenceDifference hF hC) eEF eG
+
+#print axioms hasFDerivAt_incidenceDifference_conj
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
