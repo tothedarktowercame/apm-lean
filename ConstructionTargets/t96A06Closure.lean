@@ -1233,6 +1233,34 @@ theorem pairSignOrbit_four_distinct {p : Sphere 3} (hp : PairSignRegular p) :
       flipSecondPairSphere_involutive] at hc
     exact hpf hc
 
+/-- The explicit four regular preimages are pairwise distinct. -/
+theorem polynomialSphereRegularFiberPoint_injective :
+    Function.Injective polynomialSphereRegularFiberPoint := by
+  intro i j hij
+  have hd := pairSignOrbit_four_distinct
+    polynomialSphereRegularPoint_isRegular
+  fin_cases i <;> fin_cases j <;>
+    simp_all [polynomialSphereRegularFiberPoint]
+
+/-- The explicit indexing is therefore an equivalence onto the literal
+regular fiber subtype. -/
+noncomputable def polynomialSphereRegularFiberEquiv :
+    Fin 4 ≃ {p : Sphere 3 //
+      p ∈ polynomialSphereLift ⁻¹'
+        {polynomialSphereLift polynomialSphereRegularPoint}} :=
+  Equiv.ofBijective
+    (fun i => ⟨polynomialSphereRegularFiberPoint i, by
+      rw [← polynomialSphereRegularFiberPoint_range]
+      exact Set.mem_range_self i⟩)
+    ⟨fun _ _ h => polynomialSphereRegularFiberPoint_injective
+        (Subtype.ext_iff.mp h),
+      fun p => by
+        have hp : p.1 ∈ Set.range polynomialSphereRegularFiberPoint := by
+          rw [polynomialSphereRegularFiberPoint_range]
+          exact p.2
+        obtain ⟨i, hi⟩ := hp
+        exact ⟨i, Subtype.ext hi⟩⟩
+
 /-- Every pair-sign-regular fiber of the normalized quadratic sphere map has
 exactly four points. -/
 theorem t96A06_polynomialSphereLift_regular_fiber_ncard
