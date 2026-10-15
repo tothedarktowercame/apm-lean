@@ -445,6 +445,34 @@ noncomputable def frozenH1SmithEquivOfSurjectiveKernel
     Submodule.quotEquivOfEq _ _ hker ≪≫ₗ
       frozenFaceCokernelSmithEquiv
 
+/-- Assemble the literal homology calculation once the geometric comparison
+maps identify the Mayer--Vietoris groups with the frozen chain complex. -/
+theorem frozenPolygonHomology_of_comparisons
+    (HF : ℕ → ModuleCat ℤ)
+    (h0 : Nonempty (HF 0 ≅ ModuleCat.of ℤ ℤ))
+    (g : (Fin 6 → ℤ) →ₗ[ℤ] HF 1)
+    (hg : Function.Surjective g)
+    (hker : LinearMap.ker g =
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (h2 : Nonempty (HF 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (HF k)) :
+    Nonempty (HF 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (HF 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (HF k) := by
+  refine ⟨h0, ⟨(frozenH1SmithEquivOfSurjectiveKernel g hg hker).toModuleIso⟩, ?_⟩
+  intro k hk
+  by_cases hk2 : k = 2
+  · subst k
+    rcases h2 with ⟨e2⟩
+    have hz : IsZero (ModuleCat.of ℤ
+        (LinearMap.ker frozenFaceBoundaryCoordinates)) := by
+      rw [frozenFaceBoundaryCoordinates_ker_eq_bot]
+      rw [IsZero.iff_id_eq_zero]
+      ext x
+    exact hz.of_iso e2
+  · exact hhigh k (by omega)
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -482,5 +510,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenH1SmithEquivOfSurjectiveKernel
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
+#print axioms frozenPolygonHomology_of_comparisons
 
 end ConstructionTargets.t94J09Closure
