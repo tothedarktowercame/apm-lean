@@ -2798,6 +2798,41 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_sub_prefix_eq_flat_of_mem_
   rw [torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece S j]
   exact hpiece
 
+/-- Equivalently, a run factor at local offset `k` is the flat factor at
+global index `prefix(i) + k`. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunPrefixBlockPiece S i k t =
+      torusRP2_subdivisionRunPrefixBlockPieceFlat S
+        ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val, by
+          have h := pathTwoOpenSubdivisionRunPrefixBlock_le S i
+          omega⟩ t := by
+  rw [torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex]
+  rw [torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece]
+
+/-- The preceding local/global comparison holds simultaneously for every
+factor of a fixed run. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_family_eq_flat_prefix_add
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (fun (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) t =>
+      pathTwoOpenSubdivisionRunPrefixBlockPiece S i k t) =
+    fun k t => torusRP2_subdivisionRunPrefixBlockPieceFlat S
+      ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val, by
+        have h := pathTwoOpenSubdivisionRunPrefixBlock_le S i
+        omega⟩ t := by
+  funext k t
+  exact torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add S i k t
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2923,6 +2958,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_eq_run_sub_prefix_of_mem_interval
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_sub_prefix_eq_flat_of_mem_interval
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_eq_flat_prefix_add
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
