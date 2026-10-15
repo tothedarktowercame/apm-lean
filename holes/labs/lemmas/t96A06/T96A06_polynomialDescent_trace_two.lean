@@ -101,7 +101,18 @@ lemma T96A06_polynomialDescent_trace_two
     (f : ContinuousMap T96A06.RP3 T96A06.RP3)
     (hf : T96A06.IsPolynomialDescent f) :
     LinearMap.trace ℚ (Homology T96A06.RP3 2) (induced f 2).hom = 0 := by
-  sorry
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, hvanish, _⟩
+  have hz := hvanish 2 (by norm_num) (by norm_num)
+  letI : Subsingleton (Homology T96A06.RP3 2) := ⟨by
+    intro x y
+    have hid : (𝟙 (RP3Homology.HQ 2 RP3Homology.RP3)) = 0 :=
+      hz.eq_of_src _ _
+    have hx := congrArg (fun g => g.hom x) hid
+    have hy := congrArg (fun g => g.hom y) hid
+    simpa using hx.trans hy.symm⟩
+  have hinduced : (induced f 2).hom = 0 := Subsingleton.elim _ _
+  rw [hinduced]
+  exact LinearMap.map_zero (LinearMap.trace ℚ (Homology T96A06.RP3 2))
 -- END SEAT AREA
 
 lemma T96A06_polynomialDescent_trace_three
