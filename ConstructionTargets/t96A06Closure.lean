@@ -1701,6 +1701,51 @@ theorem t96A06_integralToRational_singularChainsDegree_generator
     (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
       ModuleCat.of ℚ ℚ) σ
 
+/-- Degreewise coefficient extension intertwines the integral and rational
+singular differentials. -/
+theorem t96A06_integralToRational_singularChainsDegree_differential
+    (X : TopCat) (n : ℕ) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((CoefficientH0.SingularChains ℤ X).d (n + 1) n) ≫
+      t96A06_integralToRational_singularChainsDegree X n =
+    t96A06_integralToRational_singularChainsDegree X (n + 1) ≫
+      t96A06_forgetRatModules.map
+        ((CoefficientH0.SingularChains ℚ X).d (n + 1) n) := by
+  apply (cancel_epi (PreservesCoproduct.iso
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+    (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X (n + 1) =>
+      ModuleCat.of ℤ ℤ)).inv).mp
+  apply Limits.Sigma.hom_ext
+  intro σ
+  have hgen :
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          (Limits.Sigma.ι
+            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X (n + 1) =>
+              ModuleCat.of ℤ ℤ) σ) ≫
+        t96A06_integralToRational_singularChainsDegree X (n + 1) =
+      t96A06_intToRatCoefficient ≫
+        t96A06_forgetRatModules.map
+          (CoefficientH0.singularGenerator ℚ X (n + 1) σ) := by
+    exact t96A06_integralToRational_singularChainsDegree_generator X (n + 1) σ
+  rw [PreservesCoproduct.inv_hom]
+  slice_lhs 1 2 => erw [Limits.ι_comp_sigmaComparison]
+  slice_rhs 1 2 => erw [Limits.ι_comp_sigmaComparison]
+  erw [← Category.assoc]
+  erw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_comp]
+  erw [CoefficientH0.singularGenerator_boundary]
+  rw [ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_sum,
+    Preadditive.sum_comp]
+  simp_rw [Functor.map_zsmul, Preadditive.zsmul_comp,
+    t96A06_integralToRational_singularChainsDegree_generator]
+  conv_rhs => erw [← Category.assoc]
+  rw [hgen]
+  slice_rhs 2 3 =>
+    rw [← t96A06_forgetRatModules.map_comp,
+      CoefficientH0.singularGenerator_boundary,
+      t96A06_forgetRatModules.map_sum]
+  rw [Preadditive.comp_sum]
+  simp_rw [Functor.map_zsmul, Preadditive.comp_zsmul]
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -2969,6 +3014,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
 #print axioms t96A06_integralToRational_singularChainsDegree_generator
+#print axioms t96A06_integralToRational_singularChainsDegree_differential
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
