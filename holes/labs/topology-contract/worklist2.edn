@@ -87941,6 +87941,20 @@
       :exit 1,
       :correction
       "made cast-symmetry explicit and specialized product equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792030589093-13029-9395e5e6",
+     :commands
+     ["git show/diff-tree e99149f35"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms three new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit e99149f35 by topo-6 changes only the scoped target; fixture hash 0a5bf81d...b1a67 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The false-sign geometric edge is inverted and cast_symm transports that inversion correctly; the true-sign edge remains forward. Substitution into the traversal-order Hurewicz sum agrees with the explicit attaching-degree calculation, with no extra reversal. New compiled progress; remaining milestone is the normalized circle/MV outer-minus comparison for B7, then B8-B10."},
     :commit "e99149f35",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87963,7 @@
      "0a5bf81d9bff4f94685f52bdd0eb529c3c208cee68649cc70980cacab44b1a67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the boundary subdivision homotopy.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked orientation-signed geometric boundary formula.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88286,7 +88300,10 @@
      :reason "Banked concat endpoint transport."}
     {:job 9,
      :commit "8f6afae39",
-     :reason "Banked the boundary subdivision homotopy."}]}
+     :reason "Banked the boundary subdivision homotopy."}
+    {:job 1,
+     :commit "e99149f35",
+     :reason "Banked orientation-signed geometric boundary formula."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92777,7 +92794,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned",
@@ -92789,7 +92806,9 @@
     :type
     "explicit boundary H1 equals orientation-signed attaching vector",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "e99149f35"},
    :id :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned,
    :kind :lemma,
    :depends-on [:lemma-finitepathsubdivision-boundary],
