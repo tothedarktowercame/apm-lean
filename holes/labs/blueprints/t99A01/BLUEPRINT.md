@@ -277,3 +277,35 @@ vanishing remains valid for empty index sets and degree-zero attaching maps.
 The overlap excludes disk centres before radial normalization, while boundary
 points have norm one.  The convention throughout is
 `zI = lift(incl,incl)` and `zJ = desc(toX,-toX)`.
+
+## Fourth split: low-degree transport leaves
+
+`t99A01_attach_transport_aux_low_degree` is now a sorry-free assembly.
+
+* `t99A01_lowData_of_coordinates` (100--150 lines, pure algebra,
+  independent): use `LinearMap.range_comp`, `LinearMap.ker_comp`, zero-object
+  cancellation, and `Iso` inverse laws.  The identity second coordinate makes
+  `i₀` injective; the zero source of `J₂` makes `δ₂` injective.
+* `t99A01_low_coordinates_vanishing` (50--90 lines, independent): use
+  `CoefficientContractiblePair.higher_zero`, the side coordinates,
+  `Limits.biproduct.mapIso`, and finite-biproduct preservation of `IsZero`.
+* `t99A01_low_coordinates_degree_one` (80--140 lines, independent): use
+  `Limits.biproduct.hom_ext`, homology functoriality, `heO`, `hρ`, and `hw`.
+  The row has positive sign because it concerns `zI`, not `zJ`.
+* `t99A01_low_coordinates_degree_zero` (80--140 lines, independent): use
+  naturality of `CoefficientH0.h0Iso`,
+  `ModuleCat.biproductIsoPi_inv_comp_π`, and biproduct extensionality; its two
+  coordinates are summation and identity.
+* `t99A01_low_h0_coordinates` (20--40 lines, independent): use
+  `CoefficientH0.h0Iso`; obtain path-connectedness of the open ball from
+  convexity.
+* `t99A01_low_j0_surjective` (30--60 lines, independent): prove the
+  `H_{-1}=0` endpoint using the degree-zero generator and naturality API.
+
+The new sigma, biproduct, and H₀ coordinate definitions are sorry-free.
+Degenerate checks: `hr` is needed only for the degree-zero endpoint; the
+positive-degree zero statements remain valid for an empty index.  Degree
+positivity is not used by the algebra leaf.  Boundary points are excluded
+from the open balls, while `halfLoop` lies at norm `1/2`.  Both displayed map
+equations concern `zI = lift(incl,incl)`, hence both entries have positive
+sign; the minus sign remains solely in `zJ = desc(toX,-toX)`.
