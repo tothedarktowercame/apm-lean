@@ -1045,7 +1045,16 @@ lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
       e.invFun = cellOverlapCircle γ)
     (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
     (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
-        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ)) :
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
+    (hinner : Subsingleton (IntegralMV.HZ 1 (cellInner γ)))
+    (hmv0 : Function.Injective (IntegralMV.mvI (cellOuter γ) (cellInner γ) 0).hom)
+    (htrans : ∃ (eI : IntegralMV.HZ 1 (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≅
+          H 1 Circle)
+      (eO : IntegralMV.HZ 1 (cellOuter γ) ≅ H 1 Y),
+      IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+          eO.hom = eI.hom ≫ Hmap γ 1 ∧
+      eO.inv ≫ IntegralMV.mvToX (cellOuter γ) 1 = Hmap (cellIncl γ) 1) :
     Function.Surjective (Hmap (cellIncl γ) 1).hom ∧
       LinearMap.ker (Hmap (cellIncl γ) 1).hom = LinearMap.range (Hmap γ 1).hom := by
   sorry
@@ -1670,7 +1679,11 @@ theorem apm_t97j04 :
   obtain ⟨hA1w, hA2w, hA3w, hA4w, hA5w⟩ := cell_facts word
   obtain ⟨hA1c, hA2c, hA3c, hA4c, hA5c⟩ := cell_facts cLoop
   have hA8w := cell_H1 word hA1w hA2w hA3w hA4w hA5w
+    (cell_H1_aux_inner_zero word hA2w) (cell_H1_aux_mv0_injective word hA3w hA4w hA2w)
+    (cell_H1_aux_transport word hA3w hA4w hA5w)
   have hA8c := cell_H1 cLoop hA1c hA2c hA3c hA4c hA5c
+    (cell_H1_aux_inner_zero cLoop hA2c) (cell_H1_aux_mv0_injective cLoop hA3c hA4c hA2c)
+    (cell_H1_aux_transport cLoop hA3c hA4c hA5c)
   have hX : ∀ k, Nonempty (apm_t97J04_H k ≅ H k Xc) := fun k => H_of_homeomorph h k
   refine ⟨?_, ?_, ?_, ?_, ?_⟩
   · obtain ⟨e⟩ := Xc_piOne
