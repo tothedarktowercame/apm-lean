@@ -36751,6 +36751,20 @@
      {:cmd
       "git diff --check && git show --check --stat --oneline f6d62287e",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792105311353-14800-050c5de1",
+     :commands
+     ["git show --check --stat 7337cdfc2"
+      "git diff --name-only 7337cdfc2^ 7337cdfc2"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 168/168; Closure has 0 placeholders and Main retains the listed one."},
     :commit "f6d62287e",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36759,7 +36773,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36777,7 +36791,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed off-degree homology transport from unit spheres to successor overlaps.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact top-homology transport from the affine unit-sphere model to the successor overlap.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36837,7 +36851,11 @@
     {:job 4,
      :commit "2ff030f72",
      :reason
-     "Committed off-degree homology transport from unit spheres to successor overlaps."}]}
+     "Committed off-degree homology transport from unit spheres to successor overlaps."}
+    {:job 5,
+     :commit "f6d62287e",
+     :reason
+     "Committed exact top-homology transport from the affine unit-sphere model to the successor overlap."}]}
   {:consumer :t98A02,
    :stop-count 1,
    :evidence
@@ -37196,7 +37214,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37255,7 +37273,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37277,7 +37295,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -44050,7 +44068,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_mappedIntegralNormalizedClass_localizes",
@@ -44062,7 +44080,9 @@
     :type
     "mapped integral global class localizes to pulled-back positive local class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-mappedintegralnormalizedclass-localizes,
    :kind :lemma,
    :depends-on
@@ -44248,7 +44268,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_normalizedClass_projection_preservation_naturality",
@@ -44260,7 +44280,9 @@
     :type
     "forgotten native projection/relative inverse equals absolute inverse/mapped projection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-normalizedclass-projection-preservation-naturality,
    :kind :lemma,
@@ -44268,7 +44290,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_normalizedClass_projection_preservation_cancel",
@@ -44278,7 +44300,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "preservation inverse/forward cancel",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-normalizedclass-projection-preservation-cancel,
    :kind :lemma,
    :depends-on
@@ -44286,7 +44310,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44300,7 +44324,9 @@
     :type
     "integer coordinate one plus chart naturality imply rational coordinate one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorational-localgenerator-coordinate-of-chart-naturality,
    :kind :lemma,
@@ -44328,7 +44354,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_mappedIntegralLocalGenerator_unmap",
@@ -44338,7 +44364,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "forward preservation recovers native class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-mappedintegrallocalgenerator-unmap,
    :kind :lemma,
    :depends-on
@@ -44346,7 +44374,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_mappedIntegralLocalGenerator_coordinate_iff",
@@ -44356,7 +44384,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "forgotten coordinate one iff native coordinate one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-mappedintegrallocalgenerator-coordinate-iff,
    :kind :lemma,
    :depends-on [:lemma-t96a06-mappedintegrallocalgenerator-unmap],
@@ -44380,7 +44410,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_overlap_topIso_of_unitSphere",
@@ -44392,7 +44422,9 @@
     :type
     "unit-sphere top homology iso transports to exact successor overlap",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "f6d62287e"},
    :id :lemma-t99j05-cp-successor-overlap-topiso-of-unitsphere,
    :kind :lemma,
    :depends-on
