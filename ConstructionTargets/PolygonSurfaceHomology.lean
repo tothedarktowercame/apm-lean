@@ -1315,6 +1315,35 @@ theorem polygonBoundaryIntegerLoop_concatSubpath (P : PairingData) :
     (polygonBoundaryIntegerLoopPath P)
     (polygonBoundarySubdivisionVertex P)
 
+/-- The homotopy class of a finite ordered concatenation of loops is the
+reverse list product of the individual loop classes.  The reversal is forced
+by Mathlib's `End` convention: multiplication reverses categorical
+composition, while `Path.concat` appends paths in traversal order. -/
+theorem fundamentalGroup_mk_concat_eq_reverse_list_prod
+    {Y : Type} [TopologicalSpace Y] (n : ℕ) (y : Y)
+    (F : Fin n → Path y y) :
+    (Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (n + 1) => y) F) : FundamentalGroup Y y) =
+      ((List.ofFn fun i =>
+        Path.Homotopic.Quotient.mk (F i)) :
+          List (FundamentalGroup Y y)).reverse.prod := by
+  induction n with
+  | zero =>
+      rw [Path.concat_zero, List.ofFn_zero]
+      change Path.Homotopic.Quotient.mk (Path.refl y) =
+        (1 : FundamentalGroup Y y)
+      rfl
+  | succ n ih =>
+      rw [Path.concat_succ, List.ofFn_succ_last, List.reverse_append,
+        List.prod_append]
+      simp only [List.reverse_singleton, List.prod_singleton]
+      change Path.Homotopic.Quotient.mk
+          ((Path.concat (fun _ : Fin (n + 1) => y)
+            (fun k => F k.castSucc)).trans (F (Fin.last n))) = _
+      rw [Path.Homotopic.Quotient.mk_trans]
+      rw [ih (fun k => F k.castSucc)]
+      rfl
+
 /-- On the `i`th equal subdivision interval, affine interpolation of the
 once-around parameter is exactly the polygon edge parameter `(i+t)/n`. -/
 theorem integerLoop_convexCombo_subdivisionVertex (P : PairingData)
