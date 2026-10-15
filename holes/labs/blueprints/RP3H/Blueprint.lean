@@ -54,6 +54,21 @@ def mvJ {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
     HQ n U ⊞ HQ n V ⟶ HQ n X :=
   biprod.desc (mvToX U n) (-(mvToX V n))
 
+lemma rationalMayerVietoris_aux_smallComparison
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      (ConstructionTargets.CoefficientSmallPath.coverSmallInclusion ℚ
+        (fun b : Bool => if b then U else V)) n) := by
+  apply ConstructionTargets.CoefficientSmallComparison.inclusion_isIso
+  · intro b
+    cases b <;> simp [hU, hV]
+  · intro x _
+    have hx : x ∈ U ∪ V := by rw [hcov]; trivial
+    rcases hx with hx | hx
+    · exact Set.mem_iUnion.2 ⟨true, by simpa using hx⟩
+    · exact Set.mem_iUnion.2 ⟨false, by simpa using hx⟩
+
 /-- Rational Mayer–Vietoris for an open cover of an arbitrary space.  LIBRARY: port
 `ProductionOpenCoverMayerVietoris` (ℤ) using the coefficient pieces
 `CoefficientSubcomplexMayerVietoris`, `CoefficientSubspaceUnionRangeHomologyEquivalence`,
