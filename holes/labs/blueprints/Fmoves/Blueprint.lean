@@ -8572,7 +8572,122 @@ theorem cutBoundary_coverA {L p q : ℕ} (hpq : p < q) (hqL : q < L) (y : Circle
 theorem cutBoundary_coverB {L p q : ℕ} (hpq : p < q) (hqL : q < L) (y : Circle) :
     (∃ e s, ((q ≤ e ∧ e < L) ∨ e < p) ∧ y = cutEdgeCircle L e s) ∨
       (∃ s : Icc (0 : ℝ) 1, y = cutChordParamB L p q s) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : (0 : ℝ) < L := by exact_mod_cast hLnat
+  have hd : 0 < 2 * Real.pi / (L : ℝ) := div_pos Real.two_pi_pos hL
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+    (AddCircle.homeomorphCircle'.symm y)
+  let φ : ℝ := x.1
+  have hφmem : φ ∈ Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := x.2
+  have hcircle : y = AddCircle.homeomorphCircle'
+      (φ : AddCircle (2 * Real.pi)) := by
+    rw [← AddCircle.homeomorphCircle'.apply_symm_apply y]
+    congr 1
+    apply (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).injective
+    rw [AddCircle.equivIco_coe_eq hφmem]
+  by_cases harc : φ < cutAlpha L p + 2 * Real.pi
+  · left
+    by_cases hturn : φ < 2 * Real.pi
+    · let r : ℝ := φ / (2 * Real.pi / L)
+      let e : ℕ := ⌊r⌋₊
+      let s₀ : ℝ := r - e
+      have hr0 : 0 ≤ r := by
+        apply div_nonneg
+        · exact (by
+            have : 0 ≤ cutAlpha L q := by unfold cutAlpha; positivity
+            exact this.trans hφmem.1)
+        · exact hd.le
+      have he_le_r : (e : ℝ) ≤ r := by
+        dsimp [e]
+        exact Nat.floor_le hr0
+      have hr_lt : r < e + 1 := by
+        dsimp [e]
+        exact Nat.lt_floor_add_one r
+      let s : Icc (0 : ℝ) 1 := ⟨s₀, by dsimp [s₀]; linarith,
+        by dsimp [s₀]; linarith⟩
+      have hφ : φ = cutAlpha L e + s * (2 * Real.pi / L) := by
+        dsimp [s, s₀, r]
+        unfold cutAlpha
+        field_simp
+        ring
+      have hqe : q ≤ e := by
+        apply Nat.le_floor
+        dsimp [r]
+        rw [le_div_iff₀ hd]
+        unfold cutAlpha at hφmem
+        convert hφmem.1 using 1 <;> field_simp <;> ring
+      have heL : e < L := by
+        have hrL : r < (L : ℝ) := by
+          dsimp [r]
+          rw [div_lt_iff₀ hd]
+          convert hturn using 1 <;> field_simp <;> ring
+        exact_mod_cast (lt_of_le_of_lt he_le_r hrL)
+      refine ⟨e, s, Or.inl ⟨hqe, heL⟩, ?_⟩
+      rw [cutBoundaryData_concrete_aux_edge_circle, hcircle, hφ]
+    · have htwo : 2 * Real.pi ≤ φ := le_of_not_gt hturn
+      let ψ : ℝ := φ - 2 * Real.pi
+      let r : ℝ := ψ / (2 * Real.pi / L)
+      let e : ℕ := ⌊r⌋₊
+      let s₀ : ℝ := r - e
+      have hr0 : 0 ≤ r := by
+        dsimp [r, ψ]
+        exact div_nonneg (sub_nonneg.mpr htwo) hd.le
+      have he_le_r : (e : ℝ) ≤ r := by
+        dsimp [e]
+        exact Nat.floor_le hr0
+      have hr_lt : r < e + 1 := by
+        dsimp [e]
+        exact Nat.lt_floor_add_one r
+      let s : Icc (0 : ℝ) 1 := ⟨s₀, by dsimp [s₀]; linarith,
+        by dsimp [s₀]; linarith⟩
+      have hψ : ψ = cutAlpha L e + s * (2 * Real.pi / L) := by
+        dsimp [s, s₀, r]
+        unfold cutAlpha
+        field_simp
+        ring
+      have hep : e < p := by
+        have hrp : r < (p : ℝ) := by
+          dsimp [r, ψ]
+          rw [div_lt_iff₀ hd]
+          calc
+            φ - 2 * Real.pi < cutAlpha L p := sub_lt_iff_lt_add.mpr harc
+            _ = (p : ℝ) * (2 * Real.pi / L) := by
+              unfold cutAlpha
+              ring
+        exact_mod_cast (lt_of_le_of_lt he_le_r hrp)
+      refine ⟨e, s, Or.inr hep, ?_⟩
+      rw [cutBoundaryData_concrete_aux_edge_circle, hcircle]
+      congr 1
+      rw [← hψ]
+      change (φ : AddCircle (2 * Real.pi)) = (ψ : AddCircle (2 * Real.pi))
+      apply QuotientAddGroup.eq_iff_sub_mem.mpr
+      refine ⟨1, ?_⟩
+      dsimp [ψ]
+      ring
+  · right
+    have hstart : cutAlpha L p + 2 * Real.pi ≤ φ := le_of_not_gt harc
+    have hden : 0 < cutAlpha L q - cutAlpha L p := by
+      unfold cutAlpha
+      exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hL).2
+        (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+    let s₀ := cutSB L p q φ
+    have hs0 : 0 ≤ s₀ := by
+      dsimp [s₀, cutSB]
+      exact div_nonneg (by linarith) hden.le
+    have hs1 : s₀ ≤ 1 := by
+      dsimp [s₀, cutSB]
+      rw [div_le_one hden]
+      linarith [hφmem.2.le]
+    let s : Icc (0 : ℝ) 1 := ⟨s₀, hs0, hs1⟩
+    refine ⟨s, ?_⟩
+    rw [hcircle]
+    unfold cutChordParamB
+    apply congrArg AddCircle.homeomorphCircle'
+    apply QuotientAddGroup.eq_iff_sub_mem.mpr
+    refine ⟨0, ?_⟩
+    dsimp [s, s₀, cutSB]
+    field_simp
+    ring
 
 theorem cutBoundary_old_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ s : Icc (0 : ℝ) 1, cutOldA L p q (cutChordParamA L p q s) = cutChordA L p q s) ∧
