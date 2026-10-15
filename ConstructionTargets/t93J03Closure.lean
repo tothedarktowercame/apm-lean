@@ -1543,6 +1543,18 @@ theorem pathTwoOpenSubdivisionRunPrefixLength_add_predLength
   rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
   exact pathTwoOpenSubdivisionRunEnd_eq_prefixLength_succ S i
 
+/-- The cumulative-prefix presentation of an indexed run is a valid block
+inside the complete subdivision. -/
+theorem pathTwoOpenSubdivisionRunPrefixBlock_le
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val +
+        (pathTwoOpenSubdivisionRunPredLength S i + 1) ≤ S.n + 1 := by
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+  exact pathTwoOpenSubdivisionRunStart_add_length_le S i
+
 /-- Every original piece in an indexed run stays in the chart selected by
 the run head.  This is the uniform range input used to choose either the
 literal outer representative or the contractible-inner replacement. -/
