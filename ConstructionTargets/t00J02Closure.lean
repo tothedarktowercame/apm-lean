@@ -339,6 +339,28 @@ theorem continuousLinearMap_hasRightInverse_of_linearRightInverse
 
 #print axioms continuousLinearMap_hasRightInverse_of_linearRightInverse
 
+/-- A linear right inverse transports through source and target coordinate
+equivalences.  The displayed order is the chart-coordinate derivative
+`eF ∘ A ∘ eE⁻¹`, with right inverse `eE ∘ g ∘ eF⁻¹`. -/
+theorem exists_linearRightInverse_conj
+    {E F E' F' : Type}
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    [AddCommGroup E'] [Module ℝ E'] [AddCommGroup F'] [Module ℝ F']
+    (A : E →ₗ[ℝ] F) (hA : ∃ g : F →ₗ[ℝ] E, A.comp g = LinearMap.id)
+    (eE : E ≃ₗ[ℝ] E') (eF : F ≃ₗ[ℝ] F') :
+    ∃ g' : F' →ₗ[ℝ] E',
+      (eF.toLinearMap.comp (A.comp eE.symm.toLinearMap)).comp g' =
+        LinearMap.id := by
+  obtain ⟨g, hg⟩ := hA
+  refine ⟨eE.toLinearMap.comp (g.comp eF.symm.toLinearMap), ?_⟩
+  ext y
+  have hgy : A (g (eF.symm y)) = eF.symm y :=
+    LinearMap.congr_fun hg (eF.symm y)
+  simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearMap.id_apply]
+  rw [eE.symm_apply_apply, hgy, eF.apply_symm_apply]
+
+#print axioms exists_linearRightInverse_conj
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
