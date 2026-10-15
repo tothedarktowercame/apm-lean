@@ -2391,7 +2391,16 @@ lemma apm_t92J05_map_ofPath : ∀ {X Y : Type} [TopologicalSpace X] [Topological
       FundamentalGroup.map f y (FundamentalGroup.fundamentalGroupMulEquivOfPath t a) =
         FundamentalGroup.fundamentalGroupMulEquivOfPath (t.map f.continuous)
           (FundamentalGroup.map f x a) := by
-  sorry
+  intro X Y _ _ f x y t a
+  induction a using Quotient.inductionOn with
+  | h q =>
+    change
+      (FundamentalGroupoid.map f).map
+          (((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦t⟧).conj ⟦q⟧) =
+        ((FundamentalGroupoid.map f).mapIso
+          ((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦t⟧)).conj
+            ((FundamentalGroupoid.map f).map ⟦q⟧)
+    exact (FundamentalGroupoid.map f).map_conj _ _
 
 /-- **Leaf (generic).** Homotopic maps induce conjugate maps on π₁: along the track of
 the homotopy at `x`, `π₁(g) = (basepoint change) ∘ π₁(f)`.  Mathlib:
