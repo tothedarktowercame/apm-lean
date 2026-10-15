@@ -870,7 +870,37 @@ lemma cpU_homology_aux_CP1_hequiv_S2_aux_invariant
   sorry
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_compact : CompactSpace cpU_homology_aux_CP1 := by
-  sorry
+  let S := Metric.sphere (0 : Fin 2 → ℂ) 1
+  let π : S → cpU_homology_aux_CP1 := fun x ↦
+    Projectivization.mk ℂ x.1 (by
+      intro hx
+      have : ‖(x : Fin 2 → ℂ)‖ = 1 := by
+        simpa [S, Metric.mem_sphere] using x.2
+      simpa [hx] using this)
+  have hπ : Continuous π := by
+    let j : S → {v : Fin 2 → ℂ // v ≠ 0} := fun x ↦
+      ⟨x.1, by
+        intro hx
+        have : ‖(x : Fin 2 → ℂ)‖ = 1 := by
+          simpa [S, Metric.mem_sphere] using x.2
+        simpa [hx] using this⟩
+    have hj : Continuous j := Continuous.subtype_mk continuous_subtype_val _
+    exact (ProjectiveSpaceTopology.continuous_quotientMap ℂ 1).comp hj
+  have hsurj : Function.Surjective π := by
+    intro y
+    obtain ⟨v, hv, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 y
+    have hnorm : ‖(v : Fin 2 → ℂ)‖ ≠ 0 := norm_ne_zero_iff.mpr v.2
+    let w : Fin 2 → ℂ := (‖(v : Fin 2 → ℂ)‖ : ℂ)⁻¹ • v.1
+    have hw_norm : ‖w‖ = 1 := by
+      simp [w, norm_smul, hnorm]
+    have hw : w ≠ 0 := norm_ne_zero_iff.mp (by simpa [hw_norm])
+    let x : S := ⟨w, by simpa [S, Metric.mem_sphere, hw_norm]⟩
+    refine ⟨x, ?_⟩
+    apply (Projectivization.mk_eq_mk_iff' ℂ w v.1 hw v.2).mpr
+    exact ⟨(‖(v : Fin 2 → ℂ)‖ : ℂ)⁻¹, rfl⟩
+  have hcompact : IsCompact (Set.range π) := isCompact_range hπ
+  rw [hsurj.range_eq] at hcompact
+  exact ⟨hcompact⟩
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective
     (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
