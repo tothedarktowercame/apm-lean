@@ -2219,6 +2219,54 @@ theorem t96A06_mappedIntegralLocalGenerator_coordinate_iff :
             (k := 1) polynomialSphereRegularPoint)) = 1 := by
   rw [t96A06_mappedIntegralLocalGenerator_unmap]
 
+set_option maxRecDepth 2000 in
+/-- Coefficient one for the corrected comparison gives coordinate one for
+the native positive integral local class. -/
+theorem t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1) :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint)) = 1 := by
+  have hgen :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+            polynomialSphereRegularPoint) =
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint := by
+    simpa only [Nat.reduceAdd] using
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
+        1 polynomialSphereRegularPoint hcoeff
+  rw [← hgen]
+  have hcancel := CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom_inv_id
+    (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+      polynomialSphereRegularPoint)
+  have hcancel' :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).hom.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+            polynomialSphereRegularPoint)) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint := by
+    simpa only [CategoryTheory.ConcreteCategory.comp_apply] using hcancel
+  rw [hcancel']
+  exact ConstructionTargets.CoefficientChartLocal.generator_normalization
+    (R := ℤ) 1 polynomialSphereRegularPoint
+
 /-- The preservation isomorphisms commute with the exact deleted-point
 projection used for the normalized class. -/
 theorem t96A06_normalizedClass_projection_preservation_naturality :
@@ -3757,6 +3805,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
 #print axioms t96A06_mappedIntegralLocalGenerator_unmap
 #print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
+#print axioms t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
 #print axioms t96A06_normalizedClass_projection_preservation_cancel
 #print axioms t96A06_mappedIntegralNormalizedClass_localizes
