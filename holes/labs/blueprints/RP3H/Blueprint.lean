@@ -285,10 +285,38 @@ theorem cpUV_homology (hS0 : ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k S3))
     ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k ↥(cpU ∩ cpV)) := by
   sorry
 
+theorem cp_mvI_zero_injective_aux_h0_map
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] (f : C(X, Y)) :
+    Function.Injective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ f) 0).hom := by
+  intro a b hab
+  apply (ConcreteCategory.bijective_of_isIso
+    (ConstructionTargets.CoefficientH0.h0Iso ℚ
+      (Classical.choice (inferInstance : Nonempty X))).hom).1
+  change (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom a =
+    (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom b
+  apply_fun (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom at hab
+  have hn := ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ f
+  have hna := congrArg (fun g => g.hom a) hn
+  have hnb := congrArg (fun g => g.hom b) hn
+  simp only [CategoryTheory.comp_apply] at hna hnb
+  exact hna.symm.trans (hab.trans hnb)
+
+/-- `U ∩ V ≅ ℂ² ∖ 0` (affine chart `z₂ ≠ 0`) is path connected. -/
+theorem cpUV_pathConnected : PathConnectedSpace ↥(cpU ∩ cpV) := by
+  sorry
+
 /-- `H₀(U ∩ V) → H₀(U) ⊕ H₀(V)` is injective (`U ∩ V` is path connected and nonempty, so
 `H₀(U ∩ V) → H₀(U)` is an isomorphism). -/
 theorem cp_mvI_zero_injective : Function.Injective (mvI cpU cpV 0).hom := by
-  sorry
+  haveI := cpUV_pathConnected
+  intro a b hab
+  have h := congrArg (fun z => (biprod.fst : HQ 0 cpU ⊞ HQ 0 cpV ⟶ HQ 0 cpU).hom z) hab
+  simp only [mvI] at h
+  rw [← ModuleCat.comp_apply, ← ModuleCat.comp_apply, biprod.lift_fst] at h
+  exact cp_mvI_zero_injective_aux_h0_map _ h
 
 theorem cp2_h0_aux_nonzeroVectorsPathConnected :
     PathConnectedSpace (NonzeroVectors ℂ 2) := by
