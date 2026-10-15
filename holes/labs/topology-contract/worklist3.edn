@@ -37111,27 +37111,28 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove fiber exhaustion, positive local signs, degree, invariants/Main.",
+    "Prove converse fiber exhaustion, positive local signs, degree, invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t96A06_polynomialSphereLift_pairSign_free",
-      :type "pair flips have no fixed points off coordinate circles",
+    [{:name "t96A06_polynomialSphereLift_four_distinct",
+      :type
+      "four pair-sign translates are pairwise distinct at regular points",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_polynomialSphereLift_pairSign_action"],
+      :depends-on ["t96A06_polynomialSphereLift_pairSign_free"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_regular_fiber",
-      :type "fiber has four sign translates",
+      :type "fiber equals the four sign translates",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_polynomialSphereLift_pairSign_free"],
+      :depends-on ["t96A06_polynomialSphereLift_four_distinct"],
       :area "rp-rational-homology"}
      {:name "t96A06_polynomialSphereLift_degree_four",
       :type "lift acts by 4 on H3",
@@ -37144,7 +37145,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed pair-flip freeness away from the coordinate circles; fiber exhaustion remains.",
+    "Committed pairwise distinctness of the four regular pair-sign translates; fiber exhaustion remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37152,14 +37153,8 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check 08841949c", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792045493553-13487-69a8b03f",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "08841949c",
+     {:cmd "git show --check 530bff234", :exit 0}],
+    :commit "530bff234",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37167,7 +37162,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41074,7 +41069,8 @@
     :lemma-polynomialmap-flipsecondpair
     :lemma-t96a06-polynomialspherelift-pairsign-invariant
     :lemma-t96a06-polynomialspherelift-pairsign-action
-    :lemma-t96a06-polynomialspherelift-pairsign-free],
+    :lemma-t96a06-polynomialspherelift-pairsign-free
+    :lemma-t96a06-polynomialspherelift-four-distinct],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41149,6 +41145,25 @@
    :id :lemma-t96a06-polynomialspherelift-pairsign-free,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-action],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_four_distinct",
+    :type
+    "four pair-sign translates are pairwise distinct at regular points"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_four_distinct",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "four pair-sign translates are pairwise distinct at regular points",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-four-distinct,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-free],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
