@@ -36749,6 +36749,16 @@
     [{:cmd "initial closure compile",
       :exit 1,
       :note "added explicit CP0 inhabitant"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792056771422-13773-db405e08",
+     :commands
+     ["git show/check/diff-tree d040389f5; fixture sha256"
+      "lake env lean archived committed t99J05Closure"
+      "statement-registry check; placeholder/source audit"],
+     :finding
+     "PASS: d040389f5 is new compiled, sorry-free, standard-axiom progress. It derives rational homology of every nonempty subsingleton from established contractibility/H0 interfaces, then faithfully packages literal CP0 as Q in degree 0 and zero above. Exact one-file scope and fixture hash match; registry 166/166; Main remains 1->1. MV successor, Lefschetz/Euler, and Main remain listed."},
     :commit "d040389f5",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36758,7 +36768,7 @@
      :mode :post-build-export-check},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36776,7 +36786,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed singleton rational homology and literal CP0 data; MV successor remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36804,7 +36814,11 @@
     {:job 5,
      :commit "5b4eba45781d7566fbb438c855ccc079fe911c8f",
      :reason
-     "Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted."}]}
+     "Committed the generic singleton-homology interface and a compiled adapter to full CP0 data. Only the chain computation and MV successor remain before traces; not refuted."}
+    {:job 6,
+     :commit "d040389f5",
+     :reason
+     "Committed singleton rational homology and literal CP0 data; MV successor remains."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37068,7 +37082,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_subsingleton_rational_homology",
@@ -37078,7 +37092,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "H0(X;Q)=Q; Hk=0 for k>0",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d040389f5"},
    :id :lemma-t99j05-subsingleton-rational-homology,
    :kind :lemma,
    :depends-on [],
@@ -37105,7 +37121,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37165,7 +37181,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37187,7 +37203,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37432,7 +37448,9 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
@@ -37480,7 +37498,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -41715,7 +41733,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "norm_polynomialMapAmbient_regularPoint",
@@ -41725,24 +41743,30 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "raw image is on the fixed-point ray and has norm 1/sqrt2",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-norm-polynomialmapambient-regularpoint,
    :kind :lemma,
    :depends-on [:lemma-polynomialmapambient-regularpoint],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "polynomialMapAmbient_regularPoint"},
-   :lemma {:name "polynomialMapAmbient_regularPoint", :reported-by []},
+   :lemma
+   {:name "polynomialMapAmbient_regularPoint",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialmapambient-regularpoint,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialNormalizeAmbient_differentiableAt_regularImage",
@@ -41754,14 +41778,16 @@
     :type
     "radial normalization is differentiable at the raw regular image",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-radialnormalizeambient-differentiableat-regularimage,
    :kind :lemma,
    :depends-on [:lemma-norm-polynomialmapambient-regularpoint],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialMapAmbient_regularPoint_orthogonal_tangentBasis",
@@ -41773,7 +41799,9 @@
     :type
     "raw radial image is orthogonal to all three tangent directions",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialmapambient-regularpoint-orthogonal-tangentbasis,
    :kind :lemma,
@@ -41781,7 +41809,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "fderiv_norm_regularImage_eq_zero_of_inner_eq_zero",
@@ -41793,7 +41821,9 @@
     :type
     "norm derivative vanishes on directions orthogonal to the raw image",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-fderiv-norm-regularimage-eq-zero-of-inner-eq-zero,
    :kind :lemma,
    :depends-on
@@ -41823,27 +41853,37 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "t99J05_coordinates_continuousOn"},
-   :lemma {:name "t99J05_coordinates_continuousOn", :reported-by []},
+   :lemma
+   {:name "t99J05_coordinates_continuousOn",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"]},
    :id :lemma-t99j05-coordinates-continuouson,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "t99J05_chartInverse_continuous"},
-   :lemma {:name "t99J05_chartInverse_continuous", :reported-by []},
+   :lemma
+   {:name "t99J05_chartInverse_continuous",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in
+    ["ConstructionTargets/T99J05ArbitraryAffineChartContinuity.lean"]},
    :id :lemma-t99j05-chartinverse-continuous,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_zero_rational_homology",
@@ -41853,7 +41893,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "full rational homology data for literal CP0",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d040389f5"},
    :id :lemma-t99j05-cp-zero-rational-homology,
    :kind :lemma,
    :depends-on
