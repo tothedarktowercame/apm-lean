@@ -3092,7 +3092,8 @@ lemma Xc_H1
 /-- B10. `H₀` of a path-connected space is `ℤ`. -/
 lemma H0_of_pathConnected (S : Type) [TopologicalSpace S] [PathConnectedSpace S] :
     Nonempty (H 0 S ≅ ModuleCat.of ℤ ℤ) := by
-  sorry
+  exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ
+    (Classical.choice (inferInstance : Nonempty S))⟩
 
 /-- B11. A homeomorphism induces isomorphisms on the problem's homology. -/
 lemma H_of_homeomorph {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
