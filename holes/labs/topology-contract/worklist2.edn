@@ -88372,6 +88372,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check 8ec378eec", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792058264412-13806-bd4e73c8",
+     :commands
+     ["git show/diff/check 8ec378eec"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+dependency+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 8ec378eec adds compiled, sorry-free progress beyond 5b37f1fd2: every maximal-run outer representative is rebased as a path between consecutive canonical outer-boundary-family entries, with the matching quotient cast. Only t97A01Closure.lean changed; fixture SHA 67d86e335e6e1f6cc78408da8b169381fc6bf5d23609885420c74ae114487291 matches. Exact snapshot builds; target/imported dependency/fixture placeholders are 0/0/1; Main compiles; registry 166/0; axioms are standard. Endpoint casts and subtype erasure are proved pointwise in the correct direction. Choosing and folding all boundary paths, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
     :commit "8ec378eec",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88380,7 +88393,7 @@
      "67d86e335e6e1f6cc78408da8b169381fc6bf5d23609885420c74ae114487291"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88398,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked run representatives.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonically based run paths.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88492,7 +88505,10 @@
      :reason "Banked quotient-level subdivision reassembly."}
     {:job 1,
      :commit "5b37f1fd2",
-     :reason "Banked run representatives."}]}
+     :reason "Banked run representatives."}
+    {:job 2,
+     :commit "8ec378eec",
+     :reason "Banked canonically based run paths."}]}
   {:consumer :t94J09,
    :stop-count 3,
    :evidence
@@ -94608,7 +94624,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRun_exists_outerBoundaryPath",
@@ -94618,7 +94634,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "run representative at canonical boundaries",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8ec378eec"},
    :id :lemma-torusrp2-subdivisionrun-exists-outerboundarypath,
    :kind :lemma,
    :depends-on
