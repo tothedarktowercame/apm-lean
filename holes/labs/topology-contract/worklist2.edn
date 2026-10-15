@@ -88630,38 +88630,37 @@
      :commit "aade24583",
      :reason "Banked exact terminal run offset."}]}
   {:consumer :t94J09,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Relate graph cycles to MV H1; compute face boundary; normalize; assemble.",
+    "Compute face cokernel; connect MV H1; normalize; assemble.",
     :outcome :stop,
-    :warnings
-    ["Main: 1 placeholder" "dirt preserved" "source has two vertices"],
+    :warnings ["Main: 1 placeholder" "dirt preserved" "two vertices"],
     :missing-theorems
-    [{:name "frozenGraphBoundaryKernelEquiv",
-      :type "kernel of (g-d,d-g) is Z^6",
+    [{:name "frozenGraphBoundary_attachingDegree_zero",
+      :type "seven-orbit face boundary is a graph cycle",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenOrbitEquiv"],
+      :depends-on ["frozenGraphBoundaryKernelEquiv"],
+      :area "polygon-surface-homology"}
+     {:name "frozenGraphBoundaryKernelEquiv_attachingCycle",
+      :type "cycle coordinates (2,2,0,-2,-2,2)",
+      :status :proved,
+      :consumers [:t94J09],
+      :depends-on ["frozenGraphBoundary_attachingDegree_zero"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "literal two-vertex polygon homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundaryKernelEquiv"],
-      :area "polygon-surface-homology"}
-     {:name "apm_t94J09_polygon_normalization",
-      :type "source quotient homeomorphic to N6",
-      :status :not-started,
-      :consumers [:t94J09],
-      :depends-on [],
-      :area "polygon-cut-and-paste"}],
+      :depends-on ["frozenGraphBoundaryKernelEquiv_attachingCycle"],
+      :area "polygon-surface-homology"}],
     :statement-hashes {:registry "167/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked two-vertex graph boundary kernel.",
+    :reason "Banked frozen face boundary.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88671,34 +88670,16 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 307ed881c", :exit 0}],
-    :diagnostic-history
-    [{:cmd "kernel drafts",
-      :exit 1,
-      :correction "used explicit seven-coordinate inverse"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792079767085-14283-f2e54eeb",
-     :commands
-     ["git show/diff/check 307ed881c"
-      "compare boundary coordinates with frozen pairing"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 307ed881c adds compiled, sorry-free progress beyond history commit 5c8a7b9cc. It models the two-vertex graph boundary in a,b,c,d,e,f,g orbit order: only d and g cross vertices, with opposite chosen orientations, so the kernel condition is g=d; the explicit projection/inverse proves the kernel is Z^6. Only t94J09Closure.lean changed; fixture SHA 35e64e3e5c1764df3a4b00bf54ebc79fda7dbdd3452dd2db1028ea1fe1632ec2 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. The algebra model is not yet connected to the quotient/MV H1; that link, face boundary, normalization, and assembly remain listed."},
-    :commit "307ed881c",
+     {:cmd "git show --check 9cbf92387", :exit 0}],
+    :commit "9cbf92387",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "35e64e3e5c1764df3a4b00bf54ebc79fda7dbdd3452dd2db1028ea1fe1632ec2"},
+     "f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94163,7 +94144,8 @@
     :lemma-n6boundarycokernelsmithequiv
     :lemma-n6polygonhomologyexplicit
     :lemma-frozenorbitequiv
-    :lemma-frozengraphboundarykernelequiv],
+    :lemma-frozengraphboundarykernelequiv
+    :lemma-frozengraphboundarykernelequiv-attachingcycle],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95976,4 +95958,38 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-last-offset-eq],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphBoundary_attachingDegree_zero",
+    :type "seven-orbit face boundary is a graph cycle"},
+   :lemma
+   {:name "frozenGraphBoundary_attachingDegree_zero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "seven-orbit face boundary is a graph cycle",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengraphboundary-attachingdegree-zero,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphboundarykernelequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphBoundaryKernelEquiv_attachingCycle",
+    :type "cycle coordinates (2,2,0,-2,-2,2)"},
+   :lemma
+   {:name "frozenGraphBoundaryKernelEquiv_attachingCycle",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "cycle coordinates (2,2,0,-2,-2,2)",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengraphboundarykernelequiv-attachingcycle,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphboundary-attachingdegree-zero],
    :other-consumers []}]}
