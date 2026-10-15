@@ -2920,7 +2920,67 @@ the docstring of `treeStarPred`; uses `a ≠ 1`, `b * b = 1` from `G_facts`).
 About 60 lines. -/
 lemma treeStar_open_saturated (g : G) :
     IsOpen (treeStar g) ∧ Saturated TreeRel (treeStar g) := by
-  sorry
+  constructor
+  · rw [isOpen_sum_iff]
+    constructor
+    · have hlt : IsOpen {t : unitInterval | (t : ℝ) < 1} :=
+        isOpen_lt continuous_subtype_val continuous_const
+      have hgt : IsOpen {t : unitInterval | 0 < (t : ℝ)} :=
+        isOpen_lt continuous_const continuous_subtype_val
+      simpa [treeStar, treeStarPred] using
+        ((isOpen_discrete ({g} : Set G)).prod hlt).union
+          ((isOpen_discrete ({g * a⁻¹} : Set G)).prod hgt)
+    · have hS : IsOpen ({south}ᶜ : Set S2) := isClosed_singleton.isOpen_compl
+      have hN : IsOpen ({north}ᶜ : Set S2) := isClosed_singleton.isOpen_compl
+      simpa [treeStar, treeStarPred] using
+        ((isOpen_discrete ({g} : Set G)).prod hS).union
+          ((isOpen_discrete ({g * b} : Set G)).prod hN)
+  · have ha : a ≠ 1 := G_facts.1
+    have hbb : b * b = 1 := G_facts.2.2.1
+    intro z w hzw
+    cases hzw with
+    | edge h =>
+        simp only [treeStar, Set.mem_setOf_eq, treeStarPred]
+        norm_num
+        constructor
+        · rintro rfl
+          simp
+        · intro he
+          calc
+            h = (h * a) * a⁻¹ := by simp
+            _ = g * a⁻¹ := by rw [he]
+    | vertex h =>
+        simp [treeStar, treeStarPred, north_ne_south, north_ne_south.symm]
+    | pair h x =>
+        simp only [treeStar, Set.mem_setOf_eq, treeStarPred, Prod.fst, Prod.snd]
+        constructor
+        · rintro (⟨rfl, hx⟩ | ⟨rfl, hx⟩)
+          · right
+            refine ⟨rfl, ?_⟩
+            intro he
+            apply hx
+            have := congrArg Neg.neg he
+            simpa [neg_north] using this
+          · left
+            refine ⟨by simp [mul_assoc, hbb], ?_⟩
+            intro he
+            apply hx
+            have := congrArg Neg.neg he
+            simpa [neg_south] using this
+        · rintro (⟨hh, hx⟩ | ⟨hh, hx⟩)
+          · right
+            refine ⟨?_, ?_⟩
+            · calc
+                h = (h * b) * b := by rw [mul_assoc, hbb, mul_one]
+                _ = g * b := by rw [hh]
+            · intro he
+              apply hx
+              rw [he, neg_north]
+          · left
+            refine ⟨mul_right_cancel hh, ?_⟩
+            intro he
+            apply hx
+            rw [he, neg_south]
 
 /-- **Leaf.**  Each tree star is simply connected.
 
