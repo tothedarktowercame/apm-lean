@@ -775,6 +775,84 @@ theorem torusRP2AttachingWord :
     rw [← torusRP2SkeletonFinFreeGroupMap_negativeBoundary h]
     exact hm.symm
 
+/-! ### The exact based van Kampen interface -/
+
+/-- Literal inclusion of the boundary skeleton into the polygon quotient. -/
+noncomputable def torusRP2SkeletonToPairingSpace :
+    C(torusRP2PairingData.skeleton, torusRP2PairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- The based fundamental-group map induced by the literal skeleton
+inclusion. -/
+noncomputable def torusRP2SkeletonToPairingSpacePiOne :
+    FundamentalGroup torusRP2PairingData.skeleton torusRP2SkeletonBase →*
+      FundamentalGroup torusRP2PairingData.Space
+        (torusRP2SkeletonToPairingSpace torusRP2SkeletonBase) :=
+  FundamentalGroup.map torusRP2SkeletonToPairingSpace torusRP2SkeletonBase
+
+/-- Choose the basis change forced by the (globally constant) orientation of
+the normalized circle generator. -/
+noncomputable def torusRP2BoundaryBasisEquiv :
+    FreeGroup (Fin 3) ≃* FreeGroup (Fin 3) :=
+  if circleIntegerLoopOneCoordinate = 1 then
+    torusRP2PositiveBoundaryBasisEquiv
+  else torusRP2NegativeBoundaryBasisEquiv
+
+/-- The canonical free-group map whose quotient is computed by based van
+Kampen: basis coordinates, then the skeleton, then the polygon quotient. -/
+noncomputable def torusRP2BoundaryFreeGroupMap :
+    FreeGroup (Fin 3) →*
+      FundamentalGroup torusRP2PairingData.Space
+        (torusRP2SkeletonToPairingSpace torusRP2SkeletonBase) :=
+  torusRP2SkeletonToPairingSpacePiOne.comp
+    (torusRP2SkeletonFinFreeGroupMap.comp
+      torusRP2BoundaryBasisEquiv.toMonoidHom)
+
+theorem torusRP2BoundaryFreeGroupMap_surjective
+    (h : Function.Surjective torusRP2SkeletonToPairingSpacePiOne) :
+    Function.Surjective torusRP2BoundaryFreeGroupMap := by
+  exact h.comp (torusRP2SkeletonFinFreeGroupMap_surjective.comp
+    torusRP2BoundaryBasisEquiv.surjective)
+
+/-- Exact two-part output still required from the attaching-cell van Kampen
+argument.  It is stated directly for the canonical free-group map so no
+unproved injectivity of an intermediate coordinate map is hidden. -/
+structure TorusRP2PairingSpaceBasedVanKampen : Prop where
+  surjective : Function.Surjective torusRP2BoundaryFreeGroupMap
+  ker_eq_relator :
+    MonoidHom.ker torusRP2BoundaryFreeGroupMap =
+      Subgroup.normalClosure ({torusRP2FrozenRelator} : Set (FreeGroup (Fin 3)))
+
+/-- Algebraic assembly of the presentation once the exact based van Kampen
+output is available. -/
+noncomputable def torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
+    (hvk : TorusRP2PairingSpaceBasedVanKampen) :
+    FundamentalGroup torusRP2PairingData.Space
+        (torusRP2SkeletonToPairingSpace torusRP2SkeletonBase) ≃*
+      PresentedGroup ({torusRP2FrozenRelator} : Set (FreeGroup (Fin 3))) :=
+  (QuotientGroup.quotientKerEquivOfSurjective
+      torusRP2BoundaryFreeGroupMap hvk.surjective).symm.trans
+    (QuotientGroup.quotientMulEquivOfEq hvk.ker_eq_relator)
+
+noncomputable instance torusRP2PairingSpace_pathConnectedSpace :
+    PathConnectedSpace torusRP2PairingData.Space := by
+  letI : PathConnectedSpace ConstructionTargets.Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  exact torusRP2PairingData.surjective_quotientMap.pathConnectedSpace
+    torusRP2PairingData.continuous_quotientMap
+
+/-- Move the based van Kampen presentation from the skeleton image to the
+distinguished polygon centre used by the frozen theorem. -/
+noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
+    (hvk : TorusRP2PairingSpaceBasedVanKampen) :
+    FundamentalGroup torusRP2PairingData.Space torusRP2PairingData.center ≃*
+      PresentedGroup ({torusRP2FrozenRelator} : Set (FreeGroup (Fin 3))) :=
+  (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
+      torusRP2PairingData.center
+      (torusRP2SkeletonToPairingSpace torusRP2SkeletonBase)).trans
+    (torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen hvk)
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
@@ -797,5 +875,8 @@ theorem torusRP2AttachingWord :
 #print axioms torusRP2SkeletonFinFreeGroupMap_positiveBoundary
 #print axioms torusRP2SkeletonFinFreeGroupMap_negativeBoundary
 #print axioms torusRP2AttachingWord
+#print axioms torusRP2BoundaryFreeGroupMap_surjective
+#print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
+#print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
 end ConstructionTargets.t97A01Closure
