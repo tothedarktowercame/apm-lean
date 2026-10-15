@@ -541,6 +541,34 @@ theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
 
 #print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
 
+/-- In the product of two preferred source charts, the difference of the two
+preferred target-chart expressions has signed-coproduct derivative.  Taking
+the source models to be a surface and a circle gives the analytic incidence
+map used by the preimage construction. -/
+theorem hasFDerivAt_incidenceDifference_writtenInExtChartAt_self
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B) :
+    HasFDerivAt
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          writtenInExtChartAt 𝓘(ℝ, F) 𝓘(ℝ, G) y c p.2)
+      (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) :=
+  hasFDerivAt_incidenceDifference
+    (hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self f x A hf)
+    (hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self c y B hc)
+
+#print axioms hasFDerivAt_incidenceDifference_writtenInExtChartAt_self
+
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
 theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
