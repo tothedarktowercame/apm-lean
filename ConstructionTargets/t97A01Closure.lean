@@ -1913,6 +1913,38 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_globalIndex_lt_next
   rw [← pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i]
   omega
 
+/-- Cumulative run boundaries are strictly ordered.  Thus a flattened
+subdivision factor can belong to at most one half-open run interval. -/
+theorem torusRP2_subdivisionRunPrefixLength_strictMono
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    StrictMono (fun i : Fin ((boolSideRunPartition S.side).length + 1) =>
+      pathTwoOpenSubdivisionRunPrefixLength S i.val) := by
+  rw [Fin.strictMono_iff_lt_succ]
+  intro i
+  change pathTwoOpenSubdivisionRunPrefixLength S i.val <
+    pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1)
+  rw [pathTwoOpenSubdivisionRunPrefixLength_succ S i.val (by omega)]
+  exact Nat.lt_add_of_pos_right
+    (pathTwoOpenSubdivisionRunFamily_length_pos S
+      ⟨i.val, by omega⟩)
+
+/-- The cumulative boundary family starts at zero and ends after every
+subdivision factor. -/
+theorem torusRP2_subdivisionRunPrefixLength_endpoints
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    pathTwoOpenSubdivisionRunPrefixLength S 0 = 0 ∧
+      pathTwoOpenSubdivisionRunPrefixLength S
+        (boolSideRunPartition S.side).length = S.n + 1 := by
+  constructor
+  · rfl
+  · exact pathTwoOpenSubdivisionRunPrefixLength_all S
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2003,6 +2035,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_globalIndex_lt_next
+#print axioms torusRP2_subdivisionRunPrefixLength_strictMono
+#print axioms torusRP2_subdivisionRunPrefixLength_endpoints
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
