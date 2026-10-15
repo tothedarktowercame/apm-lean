@@ -2012,6 +2012,40 @@ theorem t96A06_mappedIntegralNormalizedClass_eq_comparisonInv :
             (ConstructionTargets.HigherSphereLocalization.normalizedClass
               (k := 1) polynomialSphereRegularPoint)) := rfl
 
+/-- The native coefficient-relative projection of the integral normalized
+sphere class, before forgetting its module structure. -/
+noncomputable def t96A06_nativeIntegralNormalizedLocalization :=
+  (HomologicalComplex.homologyMap
+    (cokernel.π
+      (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint))) 3).hom
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv.hom
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint))
+
+/-- The relative comparison cancels exactly on the projected normalized
+class.  Naming this equality avoids relying on simplification across the
+concrete-category coercions in the localization proof. -/
+theorem t96A06_relativeComparison_cancel_nativeNormalizedLocalization :
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+        t96A06_nativeIntegralNormalizedLocalization)) =
+      t96A06_nativeIntegralNormalizedLocalization := by
+  exact CategoryTheory.ConcreteCategory.congr_hom
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv_hom_id)
+    t96A06_nativeIntegralNormalizedLocalization
+
 /-- Extend the transported integral normalized class to rational coefficients
 inside homology of the forgotten rational chain complex. -/
 noncomputable def t96A06_mappedRationalExtensionClass :
@@ -3458,6 +3492,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_localization_naturality_apply
 #print axioms t96A06_mappedIntegralNormalizedClass
 #print axioms t96A06_mappedIntegralNormalizedClass_eq_comparisonInv
+#print axioms t96A06_nativeIntegralNormalizedLocalization
+#print axioms t96A06_relativeComparison_cancel_nativeNormalizedLocalization
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
