@@ -87941,6 +87941,20 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check c4dc936df", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792035513756-13121-a794c4de",
+     :commands
+     ["git show/diff-tree c4dc936df"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms five new declarations"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit c4dc936df by topo-6 changes only the scoped target; fixture hash d85736a8...e9835 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Conversion to an integer-linear map preserves the production boundary pointwise. Negation leaves kernel and range unchanged, so ofEq and quotEquivOfEq faithfully package the existing BoundaryKernel and BoundaryCokernel, with no residual sign. New compiled progress; transporting radial exactness into these B8 models remains, then B9-B10."},
     :commit "c4dc936df",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87949,7 +87963,7 @@
      "d85736a85556ed848379264f093ab694cbd6c2c618a73d85b7656e800bce9835"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87969,7 +87983,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked sign-invariant kernel and range.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B8 kernel/cokernel models.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88300,7 +88314,10 @@
     {:job 4, :commit "609b06c7c", :reason "Banked MV boundary."}
     {:job 5,
      :commit "21a8e6379",
-     :reason "Banked sign-invariant kernel and range."}]}
+     :reason "Banked sign-invariant kernel and range."}
+    {:job 6,
+     :commit "c4dc936df",
+     :reason "Banked B8 kernel/cokernel models."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92976,7 +92993,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryKernelEquiv",
@@ -92986,14 +93003,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "production kernel equivalence",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c4dc936df"},
    :id :lemma-radialmvboundarykernelequiv,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup-apply-eq-zero-iff],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVBoundaryCokernelEquiv",
@@ -93003,7 +93022,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "production cokernel equivalence",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "c4dc936df"},
    :id :lemma-radialmvboundarycokernelequiv,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup-mem-range-iff],
