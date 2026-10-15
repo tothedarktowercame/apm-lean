@@ -1151,6 +1151,42 @@ theorem torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
   simpa [torusRP2PolygonInnerToSpace, torusRP2PolygonOverlapToInner,
     torusRP2PolygonOuterToSpace, torusRP2PolygonOverlapToOuter] using hmap
 
+/-- An ambient path forming an inner subdivision run can be normalized using
+only its endpoint overlap membership and its inner-piece range proof. -/
+theorem torusRP2PolygonInnerRun_exists_outerOverlapReplacement
+    {x y : torusRP2PairingData.Space}
+    (hx : x ∈ (openCover torusRP2PairingData).inner ∩
+      (openCover torusRP2PairingData).outer)
+    (hy : y ∈ (openCover torusRP2PairingData).inner ∩
+      (openCover torusRP2PairingData).outer)
+    (p : Path x y)
+    (hp : ∀ t, p t ∈ (openCover torusRP2PairingData).inner) :
+    ∃ q : Path
+        (⟨x, by rw [(openCover torusRP2PairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen torusRP2PairingData.Rel)
+        (⟨y, by rw [(openCover torusRP2PairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen torusRP2PairingData.Rel),
+      (⟦p⟧ : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) =
+        ⟦(q.map torusRP2PolygonOverlapToOuter.continuous).map
+          torusRP2PolygonOuterToSpace.continuous⟧ := by
+  let xo : overlapOpen torusRP2PairingData.Rel := ⟨x, by
+    rw [(openCover torusRP2PairingData).overlap_eq]
+    exact hx⟩
+  let yo : overlapOpen torusRP2PairingData.Rel := ⟨y, by
+    rw [(openCover torusRP2PairingData).overlap_eq]
+    exact hy⟩
+  let pInner : Path (torusRP2PolygonOverlapToInner xo)
+      (torusRP2PolygonOverlapToInner yo) :=
+    { toFun := fun t ↦ ⟨p t, hp t⟩
+      continuous_toFun := p.continuous.subtype_mk _
+      source' := Subtype.ext p.source
+      target' := Subtype.ext p.target }
+  obtain ⟨q, hq⟩ :=
+    torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement xo yo pInner
+  refine ⟨q, ?_⟩
+  simpa [pInner, torusRP2PolygonInnerToSpace,
+    torusRP2PolygonOuterToSpace] using hq
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1220,6 +1256,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonPseudopushout_arrow_eq_reconstructed
 #print axioms torusRP2PolygonInner_pathClass_eq
 #print axioms torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
+#print axioms torusRP2PolygonInnerRun_exists_outerOverlapReplacement
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
