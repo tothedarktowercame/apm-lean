@@ -87901,26 +87901,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Cast subpath endpoints and pass the finite fold to the product class; instantiate B7, then B8-B10.",
+    "Pass endpoint-corrected subpaths through the finite concat quotient product; instantiate B7, then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; unrelated t00J02 edits preserved"],
+    :warnings ["preexisting lint; unrelated review dirs preserved"],
     :missing-theorems
-    [{:name "polygonBoundaryIntegerLoop_subpath_apply",
+    [{:name "polygonBoundaryIntegerLoop_subpath_cast",
       :type
-      "each affine boundary subpath is pointwise its signed edge path",
+      "each geometric subpath cast to common endpoints equals its signed edge path",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["integerLoop_convexCombo_subdivisionVertex"],
+      :depends-on ["polygonBoundaryIntegerLoop_subpath_apply"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
       :type "boundary equals ordered signed-edge product",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundaryIntegerLoop_subpath_apply"],
+      :depends-on ["polygonBoundaryIntegerLoop_subpath_cast"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
@@ -87932,7 +87932,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked pointwise subdivision-subpath identification.",
+    :reason "Banked endpoint-corrected subdivision path equality.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,16 +87940,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check d109d1a40", :exit 0}],
-    :commit "d109d1a40",
+     {:cmd "git show --check 2e90ce448", :exit 0}],
+    :commit "2e90ce448",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "121fa82c66e43aae1b9fae915145cfb0f9caa57cce2d26ae51920b1895a50e57"},
+     "747d57c6d69d1481a6b22b26f4fc02b14962126fa27ba44adbde421b04d1ffb1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92178,7 +92178,8 @@
     :lemma-polygonboundarysignededgepath-mk
     :lemma-polygonboundaryintegerloop-concatsubpath
     :lemma-integerloop-convexcombo-subdivisionvertex
-    :lemma-polygonboundaryintegerloop-subpath-apply],
+    :lemma-polygonboundaryintegerloop-subpath-apply
+    :lemma-polygonboundaryintegerloop-subpath-cast],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92483,4 +92484,23 @@
    :id :lemma-t99a03-exists-n4-deck-involution,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryIntegerLoop_subpath_cast",
+    :type
+    "each geometric subpath cast to common endpoints equals its signed edge path"},
+   :lemma
+   {:name "polygonBoundaryIntegerLoop_subpath_cast",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "each geometric subpath cast to common endpoints equals its signed edge path",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundaryintegerloop-subpath-cast,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundaryintegerloop-subpath-apply],
+   :other-consumers [:t94J09]}]}
