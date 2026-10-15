@@ -621,6 +621,41 @@ theorem hasFDerivAt_incidenceDifference_commonTarget
 
 #print axioms hasFDerivAt_incidenceDifference_commonTarget
 
+/-- The difference of the two common-target chart expressions is `C¹` in
+product coordinates when the two chart expressions are `C¹` at their base
+points. -/
+theorem contDiffAt_incidenceDifference_commonTarget
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    (f : M → P) (c : N → P) (x : M) (y : N)
+    (hf : ContDiffAt ℝ 1
+      (writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f)
+      (extChartAt 𝓘(ℝ, E) x x))
+    (hc : ContDiffAt ℝ 1
+      (fun z : F ↦ extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm z)))
+      (extChartAt 𝓘(ℝ, F) y y)) :
+    ContDiffAt ℝ 1
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) := by
+  exact
+    (hf.comp
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y)
+      contDiffAt_fst).sub
+    (hc.comp
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y)
+      contDiffAt_snd)
+
+#print axioms contDiffAt_incidenceDifference_commonTarget
+
 /-- Continuous differentiability upgrades the common-target incidence
 derivative to the strict derivative required by the implicit-function
 theorem.  The geometric chart-smoothness input remains explicit. -/
