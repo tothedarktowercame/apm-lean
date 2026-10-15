@@ -152,6 +152,48 @@ theorem polynomialSphereLift_projection (p : Sphere 3) :
     exact congrFun rp3SphereProjection_comp_radial (polynomialSphereVector p)]
   exact (polynomialDescent_quotientMap (sphereVector 3 p)).symm
 
+/-- The exact lift square commutes after passage to rational third homology. -/
+theorem polynomialSphereLift_homology_square :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 ≫
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3 =
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3 ≫
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialDescent) 3 := by
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← HomologicalComplex.homologyMap_comp]
+  congr 1
+  rw [ConstructionTargets.CoefficientBarycentricNaturality.singularPostcomposition_comp,
+    ConstructionTargets.CoefficientBarycentricNaturality.singularPostcomposition_comp]
+  congr 1
+  ext p
+  exact polynomialSphereLift_projection p
+
+/-- Once the concrete sphere lift has degree four, the commuting cover square
+forces the projective descent to have the same action on top homology. -/
+theorem polynomialDescent_degree_four_of_sphere
+    (hsphere :
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+        (4 : ℚ) • 𝟙 _)
+    (hsurj : Function.Surjective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3)) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialDescent) 3 =
+      (4 : ℚ) • 𝟙 _ := by
+  ext y
+  obtain ⟨x, rfl⟩ := hsurj y
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    polynomialSphereLift_homology_square x
+  rw [hsphere] at h
+  simpa [CategoryTheory.comp_apply] using h.symm
+
 /-- The concrete unit-sphere projection generates exactly the frozen quotient
 topology on `RP3`.  This is the quotient half of the double-cover input for
 rational transfer. -/
@@ -840,6 +882,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms rp3SphereProjection_comp_radial
 #print axioms polynomialSphereVector_continuous
 #print axioms polynomialSphereLift_projection
+#print axioms polynomialSphereLift_homology_square
+#print axioms polynomialDescent_degree_four_of_sphere
 #print axioms rp3SphereProjection_isQuotientMap
 #print axioms rp3SphereProjection_eq_iff
 #print axioms rp3SphereProjection_isOpenMap
