@@ -2781,6 +2781,16 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
   rw [hangle, E.apply_symm_apply]
   exact Path.Homotopic.projRight_prod _ _
 
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_castRefl
+    {X : Type} [TopologicalSpace X] {a b : X} (h : a = b) (γ : Path a a) :
+    FundamentalGroup.fundamentalGroupMulEquivOfPath (Path.cast (Path.refl b) h rfl)
+        (Path.Homotopic.Quotient.mk γ) =
+      Path.Homotopic.Quotient.mk (γ.cast h.symm h.symm) := by
+  subst h
+  apply Quotient.sound
+  exact ⟨((Path.Homotopy.hcomp (Path.Homotopy.refl _)
+    (Path.Homotopy.transRefl γ)).trans (Path.Homotopy.reflTrans γ)).cast rfl rfl⟩
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
     (hG2 : ∀ {X : Type} [TopologicalSpace X] {x y z : X} (p : Path x y) (q : Path y z)
       (a : FundamentalGroup X x),
@@ -2899,7 +2909,40 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
         apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
           (Path.Homotopic.Quotient.mk
             (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath P)) := by
-      exact sorry
+      change apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath q
+            (((Path.Homotopic.Quotient.map a j).map hs.toFun).map
+              (⟨sw, sw.continuous⟩ : C(P.skeleton, _)))) = _
+      rw [hΦmap, hpa]
+      rw [show q = p.trans ((t.map L.continuous).trans u) by rfl]
+      rw [hG2]
+      simp only [MulEquiv.apply_symm_apply]
+      rw [hLmap]
+      rw [ha]
+      rw [hG3]
+      first
+        | rw [← hG2 (t.symm.map L.continuous) ((t.map L.continuous).trans u)]
+        | erw [← hG2 (t.symm.map L.continuous) ((t.map L.continuous).trans u)]
+      have hpath : (FundamentalGroup.fundamentalGroupMulEquivOfPath
+          ((t.symm.map L.continuous).trans ((t.map L.continuous).trans u))) =
+          FundamentalGroup.fundamentalGroupMulEquivOfPath u := by
+        unfold FundamentalGroup.fundamentalGroupMulEquivOfPath
+        congr 2
+        rw [← Path.map_symm]
+        change (FundamentalGroupoid.fromPath _ : _ ⟶ _) = FundamentalGroupoid.fromPath _
+        simp only [FundamentalGroupoid.fromPath, Path.Homotopic.Quotient.mk_trans,
+          Path.Homotopic.Quotient.mk_symm]
+        apply Quotient.sound
+        exact ⟨(Path.Homotopy.transAssoc _ _ _).symm.trans
+          ((Path.Homotopy.hcomp (Path.Homotopy.reflSymmTrans _).symm (Path.Homotopy.refl u)).trans
+            (Path.Homotopy.reflTrans u))⟩
+      rw [hpath]
+      change apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath u
+            (Path.Homotopic.Quotient.mk
+              ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map L.continuous))) = _
+      rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_castRefl]
+      rfl
     refine ⟨e, ?_⟩
     sorry
   · sorry
