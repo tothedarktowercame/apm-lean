@@ -2368,7 +2368,23 @@ lemma apm_t92J05_ofPath_trans : ∀ {X : Type} [TopologicalSpace X] {x y z : X} 
       FundamentalGroup.fundamentalGroupMulEquivOfPath (p.trans q) a =
         FundamentalGroup.fundamentalGroupMulEquivOfPath q
           (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) := by
-  sorry
+  intro X _ x y z p q a
+  let ep := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦p⟧
+  let eq := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk y) (FundamentalGroupoid.mk z)).symm ⟦q⟧
+  have htrans :
+      (CategoryTheory.Groupoid.isoEquivHom
+          (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk z)).symm ⟦p.trans q⟧ =
+        ep ≪≫ eq := by
+    apply CategoryTheory.Iso.ext
+    rfl
+  change
+    ((CategoryTheory.Groupoid.isoEquivHom
+      (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk z)).symm ⟦p.trans q⟧).conj a =
+      eq.conj (ep.conj a)
+  rw [htrans]
+  exact CategoryTheory.Iso.trans_conj ep eq a
 
 lemma apm_t92J05_map_ofPath : ∀ {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) {x y : X}
       (t : Path x y) (a : FundamentalGroup X x),
