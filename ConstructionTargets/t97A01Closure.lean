@@ -2501,6 +2501,45 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_zero
     exact (Nat.lt_irrefl 0 hstrict)
   exact ⟨hrun, hoffset⟩
 
+/-- The final flattened subdivision factor has the final run and its final
+local offset.  This is the terminal coordinate for the nested/flat fold
+comparison. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_last
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm (Fin.last S.n)).1.val + 1 =
+        (boolSideRunPartition S.side).length ∧
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm (Fin.last S.n)).2.val =
+        pathTwoOpenSubdivisionRunPredLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm (Fin.last S.n)).1 := by
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm (Fin.last S.n)
+  have hflat := torusRP2_subdivisionRunOffsetEquiv_symm_flatten S (Fin.last S.n)
+  change pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val = S.n at hflat
+  have hnext := torusRP2_subdivisionRunOffset_lt_nextPrefix S z.1 z.2
+  have hnext_le : pathTwoOpenSubdivisionRunPrefixLength S (z.1.val + 1) ≤
+      pathTwoOpenSubdivisionRunPrefixLength S
+        (boolSideRunPartition S.side).length := by
+    exact (torusRP2_subdivisionRunPrefixLength_strictMono S).monotone
+      (Fin.le_last z.1.succ)
+  have htotal := (torusRP2_subdivisionRunPrefixLength_endpoints S).2
+  have hnext_eq : pathTwoOpenSubdivisionRunPrefixLength S (z.1.val + 1) =
+      pathTwoOpenSubdivisionRunPrefixLength S
+        (boolSideRunPartition S.side).length := by
+    omega
+  have hrunFin : z.1.succ =
+      (Fin.last (boolSideRunPartition S.side).length) :=
+    (torusRP2_subdivisionRunPrefixLength_strictMono S).injective hnext_eq
+  have hrun : z.1.val + 1 = (boolSideRunPartition S.side).length := by
+    exact congrArg Fin.val hrunFin
+  have hboundary := pathTwoOpenSubdivisionRunPrefixLength_add_predLength S z.1
+  change z.1.val + 1 = (boolSideRunPartition S.side).length ∧
+    z.2.val = pathTwoOpenSubdivisionRunPredLength S z.1
+  constructor
+  · exact hrun
+  · omega
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2617,6 +2656,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
