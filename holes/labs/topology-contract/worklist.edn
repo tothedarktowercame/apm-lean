@@ -119066,61 +119066,52 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Prove Sard nullity for transverse projection; derive fiber calculations; assemble Main.",
+    "Specialize Sard to the circle-valued preimage projection; derive calculations; assemble Main.",
     :outcome :stop,
     :warnings ["Main sorryAx; review dirs preserved"],
     :missing-theorems
-    [{:name "exists_regularValue_of_criticalValues_measure_zero",
-      :type "null critical values yield a value regular on its fiber",
+    [{:name "exists_mfderiv_surjective_fiber_manifold_to_vector",
+      :type "manifold-to-vector regular fiber",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["exists_regularValue_of_criticalValues_measure_zero"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_regularValue_of_criticalValues_measure_zero"
-       "transverse_mfderiv_surjective_of_circleDirection_lifts"
-       "locallyIsolatedCanonicalFiberData_of_isDiscrete"],
+      ["exists_mfderiv_surjective_fiber_manifold_to_vector"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "0815bce2b23c2f8660c480abb648ba93a96f1c071b2be966d47fea7a40b359d6",
+     "6a9e053d5a37f943cda1bc13b2b5321010a935253ee5cd388c85f1f03d44b0c7",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked regular-value selection.",
+    :reason "Banked Sard regular-fiber adapter.",
     :commands
-    [{:cmd
-      "lake env lean -o closure.olean ConstructionTargets/t00J02Closure.lean",
-      :exit 0}
+    [{:cmd "lake env lean -o ... t00J02Closure.lean", :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792026346742-12893-2f4e1d86",
-     :commands
-     ["git show/diff-tree 2dff9ce3"
-      "archive 2dff9ce3; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit 2dff9ce3 changes only t00J02Closure.lean and adds compiled, sorry-free regular-value selection. For a nonzero measure, a zero-measure critical-value image cannot equal the universe; choosing outside it yields regularity at every point of that fiber. The image-membership contradiction and equality orientation are correct, and no measurability assumption is illicitly used. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; the new theorem uses only standard axioms; registry 166/166. Sard nullity, fiber calculations, and Main remain listed."},
-    :commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319",
+    :diagnostic-history
+    [{:cmd "source drafts",
+      :exit 1,
+      :finding "opened ContDiff scope"}],
+    :commit "da6e039f1a724ae592d9690cd9e627b14f19c969",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119128,7 +119119,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119522,7 +119513,8 @@
     :lemma-locallyisolatedcanonicalfiberdata-of
     :lemma-locallyisolatedcanonicalfiberdata-of-isdiscrete
     :lemma-transverse-mfderiv-surjective-of-circledirection-lifts
-    :lemma-exists-regularvalue-of-criticalvalues-measure-zero],
+    :lemma-exists-regularvalue-of-criticalvalues-measure-zero
+    :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120864,6 +120856,24 @@
    :id :lemma-exists-regularvalue-of-criticalvalues-measure-zero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_mfderiv_surjective_fiber_manifold_to_vector",
+    :type "manifold-to-vector regular fiber"},
+   :lemma
+   {:name "exists_mfderiv_surjective_fiber_manifold_to_vector",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "manifold-to-vector regular fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-regularvalue-of-criticalvalues-measure-zero],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
