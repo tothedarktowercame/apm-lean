@@ -75,6 +75,35 @@ theorem realPair_eq_or_eq_neg_of_squareCoordinates
     have hzw : z = -w := eq_neg_of_add_eq_zero_left h
     exact ⟨congrArg Complex.re hzw, congrArg Complex.im hzw⟩
 
+/-- Equality of the full quadratic vector map has exactly the four independent
+pair-sign possibilities. -/
+theorem polynomialMap_eq_iff_pairSigns {v w : Vectors ℝ 3}
+    (h : polynomialMap v = polynomialMap w) :
+    v = w ∨ v = flipFirstPair w ∨ v = flipSecondPair w ∨
+      v = flipFirstPair (flipSecondPair w) := by
+  have h0 := congrFun h (0 : Fin 4)
+  have h1 := congrFun h (1 : Fin 4)
+  have h2 := congrFun h (2 : Fin 4)
+  have h3 := congrFun h (3 : Fin 4)
+  simp only [polynomialMap, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three] at h0 h1 h2 h3
+  rcases realPair_eq_or_eq_neg_of_squareCoordinates h0 h1 with
+    hfirst | hfirst <;>
+  rcases realPair_eq_or_eq_neg_of_squareCoordinates h2 h3 with
+    hsecond | hsecond
+  · left
+    ext i
+    fin_cases i <;> simp_all
+  · right; right; left
+    ext i
+    fin_cases i <;> simp_all [flipSecondPair]
+  · right; left
+    ext i
+    fin_cases i <;> simp_all [flipFirstPair]
+  · right; right; right
+    ext i
+    fin_cases i <;> simp_all [flipFirstPair, flipSecondPair]
+
 theorem flipFirstPair_comm_flipSecondPair (v : Vectors ℝ 3) :
     flipFirstPair (flipSecondPair v) =
       flipSecondPair (flipFirstPair v) := by
@@ -1138,6 +1167,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialMap_flipFirstPair
 #print axioms polynomialMap_flipSecondPair
 #print axioms realPair_eq_or_eq_neg_of_squareCoordinates
+#print axioms polynomialMap_eq_iff_pairSigns
 #print axioms flipFirstPair_comm_flipSecondPair
 #print axioms flipFirstPair_flipSecondPair
 #print axioms polynomialDescent
