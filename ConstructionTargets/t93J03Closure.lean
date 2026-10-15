@@ -1440,6 +1440,30 @@ def pathTwoOpenSubdivisionRunPrefixLength
     {U V : Set X} (S : PathTwoOpenSubdivision p U V) (k : ℕ) : ℕ :=
   (((boolSideRunPartition S.side).take k).flatten).length
 
+/-- Extending the run prefix by one block adds exactly that block's number
+of original subdivision pieces. -/
+theorem pathTwoOpenSubdivisionRunPrefixLength_succ
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) (k : ℕ)
+    (hk : k < (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S (k + 1) =
+      pathTwoOpenSubdivisionRunPrefixLength S k +
+        (pathTwoOpenSubdivisionRunFamily S ⟨k, hk⟩).length := by
+  unfold pathTwoOpenSubdivisionRunPrefixLength
+  rw [List.take_succ, List.flatten_append, List.length_append]
+  rw [List.getElem?_eq_getElem hk]
+  simp [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem]
+
+/-- The full run prefix contains every original subdivision piece. -/
+@[simp] theorem pathTwoOpenSubdivisionRunPrefixLength_all
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    pathTwoOpenSubdivisionRunPrefixLength S
+        (boolSideRunPartition S.side).length = S.n + 1 := by
+  unfold pathTwoOpenSubdivisionRunPrefixLength
+  rw [List.take_length, ← (boolSideRunPartition_spec S.side).1]
+  simp
+
 /-- The selected slice start of every maximal run is its cumulative prefix
 length in the run partition. -/
 theorem pathTwoOpenSubdivisionRunStart_eq_prefixLength
