@@ -36166,6 +36166,16 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792028958689-12986-50cdef83",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f exact scope"
+      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and advances after 263f5d47. Its exact interface gives Fin(runs+1)-indexed boundaries in outer subtype V and proves their coercions equal matching ambient canonical boundaries, correctly oriented for run-fold assembly. It does not assume the partial based van Kampen theorem. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining milestones are explicit."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36174,7 +36184,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36192,7 +36202,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Fresh check still finds .lake/packages as a real directory, not the required authority symlink. Lake work is forbidden until canonical lifecycle repair.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Fresh check confirms .lake/packages remains a real directory, not the required authority symlink; workspace policy forbids Lake work until lifecycle repair.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36626,7 +36636,11 @@
     {:job 9,
      :commit nil,
      :reason
-     "Fresh check still finds .lake/packages as a real directory, not the required authority symlink. Lake work is forbidden until canonical lifecycle repair."}]}
+     "Fresh check still finds .lake/packages as a real directory, not the required authority symlink. Lake work is forbidden until canonical lifecycle repair."}
+    {:job 1,
+     :commit nil,
+     :reason
+     "Fresh check confirms .lake/packages remains a real directory, not the required authority symlink; workspace policy forbids Lake work until lifecycle repair."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
