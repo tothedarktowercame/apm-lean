@@ -88374,6 +88374,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check aade24583", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792088801351-14433-5afba489",
+     :commands
+     ["git show/diff/check aade24583"
+      "sha256sum + placeholder recount from aade24583"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit aade24583 adds compiled, sorry-free progress beyond history 8bbb96926. The new theorem upgrades the terminal inverse-coordinate value equality to equality in its dependent Fin fiber via Fin.ext; orientation and the predLength+1 cast are correct. Only t97A01Closure.lean changed; recorded fixture SHA 79dc0af48b6b0bebc7ca25f6de3470d3f72a21455d2aa5591a404f26d38b6b5b matches. Gates pass; target/Main placeholders 0/1; registry 167/0; axioms standard. Reassociation, van Kampen, and assembly remain listed."},
     :commit "aade24583",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88394,7 @@
      "79dc0af48b6b0bebc7ca25f6de3470d3f72a21455d2aa5591a404f26d38b6b5b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88412,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact zero run coordinate.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact terminal run offset.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88623,7 +88635,10 @@
      :reason "Banked flat-interval endpoint class."}
     {:job 8,
      :commit "8bbb96926",
-     :reason "Banked exact zero run coordinate."}]}
+     :reason "Banked exact zero run coordinate."}
+    {:job 9,
+     :commit "aade24583",
+     :reason "Banked exact terminal run offset."}]}
   {:consumer :t94J09,
    :stop-count 7,
    :evidence
@@ -95928,7 +95943,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq",
@@ -95940,7 +95955,9 @@
     :type
     "final inverse coordinate has the last local offset in its run fiber",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "aade24583"},
    :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last-offset-eq,
    :kind :lemma,
    :depends-on
