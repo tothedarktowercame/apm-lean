@@ -1964,6 +1964,29 @@ theorem t96A06_integralToRational_localization_naturality
         (cokernel.π
           (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A))) k)
 
+/-- Elementwise form of coefficient-extension naturality for localization. -/
+theorem t96A06_integralToRational_localization_naturality_apply
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ)
+    (z : ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).obj
+        (CoefficientH0.SingularChains ℤ (TopCat.of X))).homology k) :
+    HomologicalComplex.homologyMap
+        (t96A06_integralToRational_relativeChains A) k
+      (HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A))) k z) =
+    HomologicalComplex.homologyMap
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A))) k
+      (HomologicalComplex.homologyMap
+        (t96A06_integralToRational_singularChainMap (TopCat.of X)) k z) := by
+  exact CategoryTheory.ConcreteCategory.congr_hom
+    (t96A06_integralToRational_localization_naturality A k) z
+
 /-- The integral normalized sphere class, transported into homology of the
 forgotten integral coefficient-chain complex on which coefficient extension
 is defined. -/
@@ -1987,6 +2010,28 @@ noncomputable def t96A06_mappedRationalExtensionClass :
   HomologicalComplex.homologyMap
     (t96A06_integralToRational_singularChainMap
       (TopCat.of (Sphere 3))) 3 t96A06_mappedIntegralNormalizedClass
+
+/-- The transported normalized class satisfies the coefficient-change
+localization square at every subset of the three-sphere. -/
+theorem t96A06_mappedIntegralNormalizedClass_localization_naturality
+    (A : Set (Sphere 3)) :
+    HomologicalComplex.homologyMap
+        (t96A06_integralToRational_relativeChains A) 3
+      (HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A))) 3
+        t96A06_mappedIntegralNormalizedClass) =
+    HomologicalComplex.homologyMap
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A))) 3
+      t96A06_mappedRationalExtensionClass := by
+  simpa only [t96A06_mappedRationalExtensionClass] using
+    t96A06_integralToRational_localization_naturality_apply
+      A 3 t96A06_mappedIntegralNormalizedClass
 
 /-- The same extended class returned to the native rational singular-homology
 object.  The next normalization lemma identifies it with the selected
@@ -3295,8 +3340,10 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_forgetRationalRelativeCokernelComparison_projection
 #print axioms t96A06_integralToRational_relativeChains_projection
 #print axioms t96A06_integralToRational_localization_naturality
+#print axioms t96A06_integralToRational_localization_naturality_apply
 #print axioms t96A06_mappedIntegralNormalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
+#print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
