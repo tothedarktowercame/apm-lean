@@ -210,10 +210,91 @@ lemma cell_overlap_hequiv (γ : C(Circle, Y)) :
 /-- A4. Radial retraction of the outer piece onto `Y`:
 `inr w ↦ inl (γ (w / |w|))`, homotopic to the identity through
 `inr w ↦ inr ((1 - t) w + t w / |w|)` (as in t99A01's succ_retract/deform). -/
+def cell_outer_hequiv_aux_scale (t : unitInterval) (z : ℂ) : ℝ :=
+  t.1 + (1 - t.1) / ‖z‖
+
+lemma cell_outer_hequiv_aux_scale_norm (t : unitInterval) (z : ℂ)
+    (hz0 : z ≠ 0) (hz1 : ‖z‖ ≤ 1) :
+    ‖(cell_outer_hequiv_aux_scale t z : ℂ) * z‖ ≤ 1 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hs0 : 0 ≤ (t : ℝ) + (1 - t.1) / ‖z‖ :=
+    add_nonneg ht0 (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+  rw [norm_mul]
+  change ‖(((t : ℝ) + (1 - t.1) / ‖z‖ : ℝ) : ℂ)‖ * ‖z‖ ≤ 1
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs0]
+  field_simp
+  nlinarith
+
+lemma cell_outer_hequiv_aux_scale_ne (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) :
+    (cell_outer_hequiv_aux_scale t z : ℂ) * z ≠ 0 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  apply mul_ne_zero
+  · rw [cell_outer_hequiv_aux_scale]
+    have ht0 : 0 ≤ (t : ℝ) := t.2.1
+    have ht1 : (t : ℝ) ≤ 1 := t.2.2
+    have hp : 0 < (t : ℝ) + (1 - t.1) / ‖z‖ := by
+      by_cases ht : (t : ℝ) = 0
+      · rw [ht]
+        positivity
+      · exact add_pos_of_pos_of_nonneg (lt_of_le_of_ne ht0 (Ne.symm ht))
+          (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+    exact_mod_cast hp.ne'
+  · exact hz0
+
+def cell_outer_hequiv_aux_radial (z : ℂ) : Circle :=
+  if h : z = 0 then 1 else
+    ⟨z / (‖z‖ : ℂ), by
+      simp [Submonoid.unitSphere, div_self (norm_ne_zero_iff.mpr h)]⟩
+
+lemma cell_outer_hequiv_aux_radial_circle (z : Circle) :
+    cell_outer_hequiv_aux_radial (z : ℂ) = z := by
+  apply Subtype.ext
+  have hz : (z : ℂ) ≠ 0 := by
+    intro h
+    have hn := Circle.norm_coe z
+    rw [h, norm_zero] at hn
+    norm_num at hn
+  simp [cell_outer_hequiv_aux_radial, hz, Circle.norm_coe]
+
+def cell_outer_hequiv_aux_raw (gamma : C(Circle, Y)) :
+    Y ⊕ apm_t97J04_Disk → Y
+  | .inl y => y
+  | .inr z => gamma (cell_outer_hequiv_aux_radial (z : ℂ))
+
+lemma cell_outer_hequiv_aux_raw_boundary (gamma : C(Circle, Y)) (z : Circle) :
+    cell_outer_hequiv_aux_raw gamma (.inl (gamma z)) =
+      cell_outer_hequiv_aux_raw gamma (.inr (circleToDisk z)) := by
+  change gamma z = gamma (cell_outer_hequiv_aux_radial ((circleToDisk z : apm_t97J04_Disk) : ℂ))
+  congr 1
+  apply Subtype.ext
+  simp [cell_outer_hequiv_aux_radial, PolygonSurfaceHomology.circleToPolygonDisk,
+    Circle.norm_coe]
+
+lemma cell_outer_hequiv_aux_raw_respects (gamma : C(Circle, Y))
+    {x y : Y ⊕ apm_t97J04_Disk}
+    (h : Relation.EqvGen (CellRel gamma) x y) :
+    cell_outer_hequiv_aux_raw gamma x = cell_outer_hequiv_aux_raw gamma y := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | boundary z => exact cell_outer_hequiv_aux_raw_boundary gamma z
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def cell_outer_hequiv_aux_descend (gamma : C(Circle, Y)) : Cell gamma → Y :=
+  Quotient.lift (cell_outer_hequiv_aux_raw gamma)
+    (fun _ _ h => cell_outer_hequiv_aux_raw_respects gamma h)
+
+lemma cell_outer_hequiv_aux_descend_incl (gamma : C(Circle, Y)) (y : Y) :
+    cell_outer_hequiv_aux_descend gamma (cellIncl gamma y) = y := by
+  rfl
+
 lemma cell_outer_hequiv (γ : C(Circle, Y)) :
     ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ := by
   sorry
-
 /-- A5. The radius-`1/2` circle, pushed into the outer piece, is freely
 homotopic to `γ` (radial push to the boundary circle, where `inr z = inl (γ z)`). -/
 lemma cell_overlap_loop (γ : C(Circle, Y)) :
