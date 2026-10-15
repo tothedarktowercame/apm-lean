@@ -87943,6 +87943,20 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check ffd7c7602", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792027211860-12918-daa0fb72",
+     :commands
+     ["git show/diff-tree ffd7c7602"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorem"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit ffd7c7602 by topo-6 changes only the scoped target; fixture hash d5001e68...a5140 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Fin.lastCases correctly treats the final vertex as the loop target and every earlier vertex as the indexed signed-edge source. Both branches prove common-base = boundary-value, the orientation needed for dependent transport. New compiled progress; remaining milestones are transporting concat_subpath and comparing boundary H1, then B7-B10."},
     :commit "ffd7c7602",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87951,7 +87965,7 @@
      "d5001e686faafef1bcbb0db1fa23c4bf236cfa3ec05dc29420137ea2ccba5140"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87971,7 +87985,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked subdivision Hurewicz sum.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the common-base subdivision endpoint family.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88276,7 +88290,10 @@
      :reason "Banked common-base signed-edge paths."}
     {:job 5,
      :commit "95be1e92e",
-     :reason "Banked subdivision Hurewicz sum."}]}
+     :reason "Banked subdivision Hurewicz sum."}
+    {:job 6,
+     :commit "ffd7c7602",
+     :reason "Banked the common-base subdivision endpoint family."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92630,7 +92647,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "orbitWedgeBase_eq_boundarySubdivisionVertex",
@@ -92640,7 +92657,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "all subdivision vertices equal the word basepoint",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "ffd7c7602"},
    :id :lemma-orbitwedgebase-eq-boundarysubdivisionvertex,
    :kind :lemma,
    :depends-on
