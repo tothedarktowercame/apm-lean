@@ -1370,7 +1370,20 @@ reflections preserve parity (`-2i - n ≡ n`) and `rp2Proj_neg`.  About 25
 lines. -/
 -- BEGIN SEAT AREA
 lemma chainF_smul (g : DihedralGroup 0) (z : ℤ × S2) : chainF (g • z) = chainF z := by
-  sorry
+  cases g with
+  | r i =>
+      rw [chainSMul_r]
+      unfold chainF chainSide
+      dsimp only
+      have hmod : (z.1 + 2 * zOf i) % 2 = z.1 % 2 := by omega
+      rw [hmod]
+  | sr i =>
+      rw [chainSMul_sr]
+      unfold chainF chainSide
+      dsimp only
+      rw [rp2Proj_neg]
+      have hmod : (-2 * zOf i - z.1) % 2 = z.1 % 2 := by omega
+      rw [hmod]
 -- END SEAT AREA
 
 /-- **Leaf.**  `chainF` is a quotient map.
