@@ -2023,6 +2023,44 @@ theorem polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned
     List.map_ofFn] at h
   exact h
 
+/-- Mapping the explicit winding loop around the polygon boundary gives the
+chosen normalized boundary class raised to the global orientation unit. -/
+theorem polygonBoundaryIntegerLoopClass_eq_fundamental_zpow_coordinate
+    (P : PairingData) :
+    Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) =
+      polygonBoundaryFundamentalClass P ^ circleIntegerLoopOneCoordinate := by
+  rw [polygonBoundaryIntegerLoopPath, Path.Homotopic.Quotient.mk_cast,
+    polygonBoundaryFundamentalClass]
+  change Path.Homotopic.Quotient.cast
+      (FundamentalGroup.map (polygonBoundaryWedgeLoop P) 1
+        circleIntegerLoopOneClass) _ _ = _
+  rw [circleIntegerLoopOneClass_eq_positive_zpow_coordinate,
+    map_zpow]
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · simp [h, circleIntegerLoopOneClass, FundamentalGroup.map_apply,
+      Path.Homotopic.Quotient.mk_map]
+  · rw [h]
+    rw [zpow_neg_one, zpow_neg_one]
+    exact homotopicQuotient_cast_symm (polygonBoundaryWedgeLoop_one P).symm
+      (FundamentalGroup.map (polygonBoundaryWedgeLoop P) 1
+        circlePositiveFundamentalClass)
+
+/-- After cancelling the square of the orientation unit, the normalized
+boundary class has exactly the unsigned attaching-degree coordinates. -/
+theorem polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree
+    (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P) (polygonBoundaryFundamentalClass P) =
+      finiteWedgeH1CoordinateMap P (attachingDegree P) := by
+  have hc := congrArg (moduleHurewicz (orbitWedgeBase P))
+    (polygonBoundaryIntegerLoopClass_eq_fundamental_zpow_coordinate P)
+  rw [moduleHurewicz_zpow] at hc
+  have hi := polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned P
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · simpa [h] using hc.symm.trans hi
+  · rw [h] at hc hi
+    apply neg_injective
+    simpa using hc.symm.trans hi
+
 /-- Once finite subdivision identifies the geometric boundary class with the
 explicit edge product, naturality gives the complete orientation-signed H₁
 formula needed by B7. -/
