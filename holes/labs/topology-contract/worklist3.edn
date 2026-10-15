@@ -36708,36 +36708,33 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Compare complex affine and Euclidean sphere models; compute off-degrees; lower-patch retract; MV successor; Main.",
+    "Compute sphere off-degrees; lower-patch retract; MV successor; Main.",
     :outcome :stop,
     :warnings
-    ["Existing unused-simp lint; Main one placeholder; unrelated untracked files untouched."],
+    ["Existing lint; Main one placeholder; untracked untouched."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_overlap_topIso_of_unitSphere",
-      :type
-      "unit-sphere top homology iso transports to exact successor overlap",
+    [{:name "t99J05_affineUnitSphere_topHomologyIso",
+      :type "affine unit-sphere top rational homology is Q",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_overlap_homologyIso_unitSphere"],
+      :depends-on ["t99J05_cp_successor_overlap_topIso_of_unitSphere"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_affineUnitSphere_topHomologyIso",
-      :type
-      "rational top homology of the complex affine unit sphere is Q",
+     {:name "t99J05_euclideanUnitSphere_offDegreeHomology",
+      :type "sphere rational homology vanishes off zero and top",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_overlap_topIso_of_unitSphere"],
+      :depends-on ["t99J05_affineUnitSphere_topHomologyIso"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact top-homology transport from the affine unit-sphere model to the successor overlap.",
+    "Committed affine sphere comparison and overlap top homology.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36749,23 +36746,13 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline f6d62287e",
+      "git diff --check && git show --check --stat --oneline d3394ea47",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792105311353-14800-050c5de1",
-     :commands
-     ["git show --check --stat 7337cdfc2"
-      "git diff --name-only 7337cdfc2^ 7337cdfc2"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 168/168; Closure has 0 placeholders and Main retains the listed one."},
-    :commit "f6d62287e",
+    :diagnostic-history
+    [{:cmd "model comparison",
+      :exit 1,
+      :note "Fixed subtype cardinality and sphere namespace."}],
+    :commit "d3394ea47",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36773,7 +36760,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -44443,7 +44430,8 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type
     "rational top homology of the complex affine unit sphere is Q",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-affineunitsphere-tophomologyiso,
    :kind :lemma,
    :depends-on
@@ -44602,6 +44590,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-composite-one-ne-neg-one],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_euclideanUnitSphere_offDegreeHomology",
+    :type "sphere rational homology vanishes off zero and top"},
+   :lemma
+   {:name "t99J05_euclideanUnitSphere_offDegreeHomology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "sphere rational homology vanishes off zero and top",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-euclideanunitsphere-offdegreehomology,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-affineunitsphere-tophomologyiso],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
