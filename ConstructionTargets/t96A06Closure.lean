@@ -676,6 +676,26 @@ theorem t96A06_rp3_rational_H3_projection_injective :
   have hinv := congrArg (fun z => (2 : ℚ)⁻¹ • z) htwo
   simpa [smul_smul] using hinv
 
+/-- Rational top homology of the concrete projective three-space is
+one-dimensional.  The covering projection is a linear equivalence in degree
+three: transfer gives its surjectivity, while the deck-sum computation gives
+its injectivity. -/
+noncomputable def t96A06_rp3_rational_H3Iso :
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ := by
+  let proj := HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3
+  have hbij : Function.Bijective proj :=
+    ⟨t96A06_rp3_rational_H3_projection_injective, by
+      simpa [proj] using t96A06_rp3_rational_homologyMap_surjective 3⟩
+  exact (LinearEquiv.ofBijective proj.hom hbij).toModuleIso.symm ≪≫
+      t96A06_sphere3_rational_H3Iso
+
+/-- Ledger-facing name for the top-degree transfer/deck-sum milestone. -/
+noncomputable def t96A06_rp3_antipodal_H3 :=
+  t96A06_rp3_rational_H3Iso
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -737,6 +757,8 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_rational_projection_transfer
 #print axioms t96A06_rational_homology_projection_transfer
 #print axioms t96A06_rp3_rational_H3_projection_injective
+#print axioms t96A06_rp3_rational_H3Iso
+#print axioms t96A06_rp3_antipodal_H3
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
