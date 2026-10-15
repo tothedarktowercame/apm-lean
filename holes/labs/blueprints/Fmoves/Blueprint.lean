@@ -9322,6 +9322,176 @@ theorem cut_retransfer_consistency {Label : Type*} [DecidableEq Label]
     · exact cut_retransfer_consistency_B_chord u v t x oldA oldB newA newB D heq e he τ P
         s₀ (by simpa using hN) (by simpa using hP)
 
+lemma cut_retransfer_generator_aux_length {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t).length =
+      (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  simp [inverseWord]
+  omega
+
+lemma cut_retransfer_generator_aux_reverseParameter_involutive
+    (s : Icc (0 : ℝ) 1) : reverseParameter (reverseParameter s) = s := by
+  apply Subtype.ext
+  simp [reverseParameter]
+
+lemma cut_retransfer_generator_aux_parameter (a b c d : Bool)
+    (s : Icc (0 : ℝ) 1) :
+    (if d = b then (if a = b then s else reverseParameter s)
+      else reverseParameter (if a = b then s else reverseParameter s)) =
+    (if c = d then (if c = a then s else reverseParameter s)
+      else reverseParameter (if c = a then s else reverseParameter s)) := by
+  cases a <;> cases b <;> cases c <;> cases d <;>
+    simp [cut_retransfer_generator_aux_reverseParameter_involutive]
+
+lemma cut_retransfer_generator_aux_x_indices {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length)
+    (hi : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 = x.1) :
+    i.1 = u.length ∨ i.1 = u.length + 1 := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil,
+    inverseWord, List.length_map, List.length_reverse] at hib
+  by_cases hlow : i.1 < u.length
+  · have hu : u[i.1] ∈ u := List.getElem_mem hlow
+    have hm : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hm' : u[i.1].1 ∈ (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_left t (List.mem_append_left v hu))
+      simpa [List.get_eq_getElem, hlow] using hm'
+    exact False.elim (hx (hi ▸ hm))
+  by_cases hfirst : i.1 = u.length
+  · exact Or.inl hfirst
+  by_cases hsecond : i.1 = u.length + 1
+  · exact Or.inr hsecond
+  have hafter : u.length + 2 ≤ i.1 := by omega
+  by_cases hmid : i.1 < u.length + 2 + v.length
+  · have hv : i.1 - (u.length + 2) < (inverseWord v).length := by
+      simp [inverseWord]
+      omega
+    have hvm : (inverseWord v)[i.1 - (u.length + 2)] ∈ inverseWord v :=
+      List.getElem_mem hv
+    have hvm' : ((inverseWord v)[i.1 - (u.length + 2)]).1 ∈ v.map Prod.fst := by
+      simpa [inverseWord, inv, Function.comp_def] using
+        List.mem_map_of_mem (f := Prod.fst) hvm
+    have hm : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hall : ((inverseWord v)[i.1 - (u.length + 2)]).1 ∈
+          (u ++ v ++ t).map Prod.fst := by
+        simpa only [List.map_append] using
+          List.mem_append_left (t.map Prod.fst)
+            (List.mem_append_right (u.map Prod.fst) hvm')
+      rw [List.get_eq_getElem]
+      rw [List.getElem_append_left (as := u ++ [x, x] ++ inverseWord v)
+        (bs := t) (by simp [inverseWord]; omega)]
+      rw [List.getElem_append_right (as := u ++ [x, x])
+        (bs := inverseWord v) (by simp; omega)]
+      simpa using hall
+    exact False.elim (hx (hi ▸ hm))
+  · have ht : i.1 - (u.length + 2 + v.length) < t.length := by omega
+    have htm : t[i.1 - (u.length + 2 + v.length)] ∈ t := List.getElem_mem ht
+    have hm : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hall : t[i.1 - (u.length + 2 + v.length)].1 ∈
+          (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_right (u ++ v) htm)
+      rw [List.get_eq_getElem]
+      rw [List.getElem_append_right (as := u ++ [x, x] ++ inverseWord v)
+        (bs := t) (by simp [inverseWord]; omega)]
+      simpa [inverseWord, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hall
+    exact False.elim (hx (hi ▸ hm))
+
+lemma cut_retransfer_generator_aux_transport {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length)
+    (hix : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ≠ x.1) :
+    ∃ k : Fin (u ++ [x] ++ v ++ [x] ++ t).length,
+      k.1 = (if i.1 < u.length then i.1 else if i.1 < u.length + 2 + v.length
+        then u.length + 1 + v.length + u.length + 1 - i.1 else i.1) ∧
+      ((u ++ [x] ++ v ++ [x] ++ t).get k).1 =
+        ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∧
+      ∀ s : Icc (0 : ℝ) 1,
+        cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
+            (u.length + 1 + v.length) i s =
+          edgePoint (u ++ [x] ++ v ++ [x] ++ t).length k
+            (if ((u ++ [x] ++ v ++ [x] ++ t).get k).2 =
+                ((u ++ [x, x] ++ inverseWord v ++ t).get i).2
+              then s else reverseParameter s) := by
+  have hi0 := i.2
+  simp [inverseWord] at hi0
+  have hi : i.1 < u.length + v.length + t.length + 2 := by omega
+  by_cases hu : i.1 < u.length
+  · let k : Fin (u ++ [x] ++ v ++ [x] ++ t).length := ⟨i.1, by simp; omega⟩
+    refine ⟨k, by simp [k, hu], ?_, ?_⟩
+    · simp [k, List.get_eq_getElem, hu]
+    · intro s
+      have h0 : i.1 ≠ u.length := by omega
+      have h1 : i.1 ≠ u.length + 1 := by omega
+      have hm : ¬(u.length + 1 < i.1 ∧ i.1 ≤ u.length + 1 + v.length) := by omega
+      simp [cutRetransfer, k, List.get_eq_getElem, hu, h0, h1, hm]
+  have hne0 : i.1 ≠ u.length := by
+    intro he
+    apply hix
+    simp [List.get_eq_getElem, he]
+  have hne1 : i.1 ≠ u.length + 1 := by
+    intro he
+    apply hix
+    have : i.1 = u.length + 1 := he
+    simp [List.get_eq_getElem, this]
+  have hlo : u.length + 2 ≤ i.1 := by omega
+  by_cases hv : i.1 < u.length + 2 + v.length
+  · let k : Fin (u ++ [x] ++ v ++ [x] ++ t).length :=
+      ⟨u.length + 1 + v.length + u.length + 1 - i.1, by simp; omega⟩
+    have hd : i.1 - u.length = 2 + (i.1 - (u.length + 2)) := by omega
+    have hkoff : u.length + 1 + v.length + u.length + 1 - i.1 - u.length =
+        1 + (v.length - 1 - (i.1 - (u.length + 2))) := by omega
+    have hr : i.1 - (u.length + 2) < v.length := by omega
+    have hrr : v.length - 1 - (i.1 - (u.length + 2)) < v.length := by omega
+    have hku : ¬u.length + 1 + v.length + u.length + 1 - i.1 < u.length := by omega
+    have hcut : u.length + 1 < i.1 ∧ i.1 ≤ u.length + 1 + v.length := by omega
+    refine ⟨k, by simp [k, hu, hv], ?_, ?_⟩
+    · simp [k, List.get_eq_getElem, List.getElem_append, inverseWord, inv,
+        Function.comp_def, List.getElem_reverse, hu, hv, hlo, hd, hkoff, hku]
+      simp [show 1 + (v.length - 1 - (i.1 - (u.length + 2))) =
+          Nat.succ (v.length - 1 - (i.1 - (u.length + 2))) by omega,
+        show 2 + (i.1 - (u.length + 2)) =
+          Nat.succ (Nat.succ (i.1 - (u.length + 2))) by omega]
+      simp [List.getElem_append, hr, hrr, List.getElem_reverse]
+    · intro s
+      simp [cutRetransfer, k, List.get_eq_getElem, List.getElem_append, inverseWord, inv,
+        Function.comp_def, List.getElem_reverse, hu, hv, hlo, hd, hkoff, hku,
+        hne0, hne1, hcut,
+        cut_retransfer_generator_aux_reverseParameter_involutive]
+      simp [show 1 + (v.length - 1 - (i.1 - (u.length + 2))) =
+          Nat.succ (v.length - 1 - (i.1 - (u.length + 2))) by omega,
+        show 2 + (i.1 - (u.length + 2)) =
+          Nat.succ (Nat.succ (i.1 - (u.length + 2))) by omega]
+      simp [List.getElem_append, hr, hrr, List.getElem_reverse,
+        cut_retransfer_generator_aux_reverseParameter_involutive]
+      rw [show (inv v[v.length - 1 - (i.1 - (u.length + 2))]).2 =
+          !v[v.length - 1 - (i.1 - (u.length + 2))].2 by rfl]
+      cases h : v[v.length - 1 - (i.1 - (u.length + 2))].2 <;>
+        simp [h, cut_retransfer_generator_aux_reverseParameter_involutive]
+  · let k : Fin (u ++ [x] ++ v ++ [x] ++ t).length := ⟨i.1, by simp; omega⟩
+    have hd : i.1 - u.length = 2 + v.length +
+        (i.1 - (u.length + 2 + v.length)) := by omega
+    have hr : i.1 - (u.length + 2 + v.length) < t.length := by omega
+    have htOff : v.length + (i.1 - (u.length + 2 + v.length)) + 1 - v.length =
+        Nat.succ (i.1 - (u.length + 2 + v.length)) := by omega
+    have hafterv : ¬v.length + (i.1 - (u.length + 2 + v.length)) + 1 < v.length := by omega
+    have hcut : ¬(u.length + 1 < i.1 ∧ i.1 ≤ u.length + 1 + v.length) := by omega
+    refine ⟨k, by simp [k, hu, hv], ?_, ?_⟩
+    · simp [k, List.get_eq_getElem, List.getElem_append, inverseWord, hu, hv, hlo, hd]
+      simp [show 2 + v.length + (i.1 - (u.length + 2 + v.length)) =
+          Nat.succ (Nat.succ (v.length + (i.1 - (u.length + 2 + v.length)))) by omega]
+      simp [List.getElem_append, hr, htOff, hafterv]
+    · intro s
+      simp [cutRetransfer, k, List.get_eq_getElem, List.getElem_append, inverseWord,
+        hu, hv, hlo, hd, hne0, hne1, hcut]
+      simp [show 2 + v.length + (i.1 - (u.length + 2 + v.length)) =
+          Nat.succ (Nat.succ (v.length + (i.1 - (u.length + 2 + v.length)))) by omega]
+      simp [List.getElem_append, hr, htOff, hafterv]
+
 theorem cut_retransfer_generator {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
@@ -9338,7 +9508,58 @@ theorem cut_retransfer_generator {Label : Type*} [DecidableEq Label]
           ((u ++ [x, x] ++ inverseWord v ++ t).get j).2
         then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) S S' := by
-  sorry
+  by_cases hix : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 = x.1
+  · have hjx : ((u ++ [x, x] ++ inverseWord v ++ t).get j).1 = x.1 := hlab ▸ hix
+    rcases cut_retransfer_generator_aux_x_indices u v t x hx i hix with hi | hi <;>
+      rcases cut_retransfer_generator_aux_x_indices u v t x hx j hjx with hj | hj
+    all_goals
+      have heq : S = S' := by
+        apply Subtype.ext
+        simp [cutRetransfer, hi, hj] at hS hS' ⊢
+        rw [hS, hS']
+      rw [heq]
+      exact Relation.EqvGen.refl _
+  · have hjx : ((u ++ [x, x] ++ inverseWord v ++ t).get j).1 ≠ x.1 := by
+      intro h
+      exact hix (hlab.trans h)
+    obtain ⟨ki, hkiv, hki, hri⟩ := cut_retransfer_generator_aux_transport u v t x i hix
+    obtain ⟨kj, hkjv, hkj, hrj⟩ := cut_retransfer_generator_aux_transport u v t x j hjx
+    let σ : Icc (0 : ℝ) 1 :=
+      if ((u ++ [x] ++ v ++ [x] ++ t).get ki).2 =
+          ((u ++ [x, x] ++ inverseWord v ++ t).get i).2
+        then τ else reverseParameter τ
+    apply Relation.EqvGen.rel
+    refine ⟨ki, kj, ?_, σ, hki.trans (hlab.trans hkj.symm), ?_, ?_⟩
+    · intro h
+      apply hij
+      apply Fin.ext
+      have hk := congrArg Fin.val h
+      rw [hkiv, hkjv] at hk
+      have hi := i.2
+      have hj := j.2
+      simp [inverseWord] at hi hj
+      have hine0 : i.1 ≠ u.length := by
+        intro h; apply hix; simp [List.get_eq_getElem, h]
+      have hine1 : i.1 ≠ u.length + 1 := by
+        intro h; apply hix; simp [List.get_eq_getElem, h]
+      have hjne0 : j.1 ≠ u.length := by
+        intro h; apply hjx; simp [List.get_eq_getElem, h]
+      have hjne1 : j.1 ≠ u.length + 1 := by
+        intro h; apply hjx; simp [List.get_eq_getElem, h]
+      by_cases hi0 : i.1 < u.length <;> by_cases hi1 : i.1 < u.length + 2 + v.length <;>
+        by_cases hj0 : j.1 < u.length <;> by_cases hj1 : j.1 < u.length + 2 + v.length <;>
+        simp [hi0, hi1, hj0, hj1] at hk <;> omega
+    · apply Subtype.ext
+      rw [hS, hri]
+    · apply Subtype.ext
+      rw [hS', hrj]
+      simp only [σ]
+      exact congrArg (fun s => (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length kj s : ℂ))
+        (cut_retransfer_generator_aux_parameter
+          ((u ++ [x, x] ++ inverseWord v ++ t).get i).2
+          ((u ++ [x, x] ++ inverseWord v ++ t).get j).2
+          ((u ++ [x] ++ v ++ [x] ++ t).get ki).2
+          ((u ++ [x] ++ v ++ [x] ++ t).get kj).2 τ)
 
 /-- Old generators between boundary points of the pieces give new `EqvGen`s
 between the corresponding new points (`false` = piece `A`, `true` = `B`). -/
