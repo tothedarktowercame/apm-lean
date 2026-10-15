@@ -1945,6 +1945,63 @@ theorem torusRP2_subdivisionRunPrefixLength_endpoints
   · rfl
   · exact pathTwoOpenSubdivisionRunPrefixLength_all S
 
+/-- The `k`th entry of run `i` has flattened index equal to the cumulative
+length of the earlier runs plus `k`. -/
+theorem torusRP2_subdivisionRunFamily_get_val_eq_prefix_add
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length) :
+    ((pathTwoOpenSubdivisionRunFamily S i).get k).val =
+      pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val := by
+  have heq := congrArg (fun l => l[k.val]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  have hleft : (pathTwoOpenSubdivisionRunFamily S i)[k.val]? =
+      some ((pathTwoOpenSubdivisionRunFamily S i).get k) := by
+    rw [List.getElem?_eq_getElem k.isLt]
+    exact congrArg some rfl
+  have hright : (((List.finRange (S.n + 1)).drop
+      (pathTwoOpenSubdivisionRunStart S i)).take
+        (pathTwoOpenSubdivisionRunFamily S i).length)[k.val]? =
+      some ⟨pathTwoOpenSubdivisionRunStart S i + k.val, by omega⟩ := by
+    rw [List.getElem?_eq_getElem (by simp; omega)]
+    apply congrArg some
+    apply Fin.ext
+    simp
+  dsimp at heq
+  rw [hleft, hright] at heq
+  have hv := congrArg Fin.val (Option.some.inj heq)
+  change ((pathTwoOpenSubdivisionRunFamily S i).get k).val =
+    pathTwoOpenSubdivisionRunStart S i + k.val at hv
+  rw [pathTwoOpenSubdivisionRunStart_eq_prefixLength S i] at hv
+  exact hv
+
+/-- Every original subdivision factor has a run and local offset whose
+flattened cumulative-prefix coordinate is its original index. -/
+theorem torusRP2_subdivisionIndex_exists_runOffset
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) :
+    ∃ (i : Fin (boolSideRunPartition S.side).length)
+      (k : Fin (pathTwoOpenSubdivisionRunFamily S i).length),
+      pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val = j.val := by
+  have hj : j ∈ (boolSideRunPartition S.side).flatten := by
+    rw [← (boolSideRunPartition_spec S.side).1]
+    exact List.mem_finRange j
+  obtain ⟨block, hblock, hjblock⟩ := List.mem_flatten.mp hj
+  obtain ⟨i, hi⟩ := List.mem_iff_get.mp hblock
+  have hfamily : pathTwoOpenSubdivisionRunFamily S i = block := hi
+  rw [← hfamily] at hjblock
+  obtain ⟨k, hk⟩ := List.mem_iff_get.mp hjblock
+  refine ⟨i, k, ?_⟩
+  rw [← hk]
+  exact (torusRP2_subdivisionRunFamily_get_val_eq_prefix_add S i k).symm
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2037,6 +2094,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_globalIndex_lt_next
 #print axioms torusRP2_subdivisionRunPrefixLength_strictMono
 #print axioms torusRP2_subdivisionRunPrefixLength_endpoints
+#print axioms torusRP2_subdivisionRunFamily_get_val_eq_prefix_add
+#print axioms torusRP2_subdivisionIndex_exists_runOffset
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
