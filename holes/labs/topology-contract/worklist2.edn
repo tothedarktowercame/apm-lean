@@ -88331,26 +88331,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove uniqueness and nested-fold equality; van Kampen; assemble.",
+    "Package run-offset equivalence; prove nested-fold equality and van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionIndex_exists_runOffset",
+    [{:name "torusRP2_subdivisionRunOffset_run_unique",
       :type
-      "every subdivision index equals a cumulative run prefix plus local offset",
+      "equal flattened run-offset coordinates have equal run indices",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_subdivisionRunPrefixLength_strictMono"],
+      :depends-on ["torusRP2_subdivisionIndex_exists_runOffset"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_subdivisionIndex_exists_runOffset"],
+      :depends-on ["torusRP2_subdivisionRunOffset_run_unique"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88362,40 +88362,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked subdivision run-offset decomposition.",
+    :reason "Banked uniqueness of subdivision run coordinates.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 363a4453a", :exit 0}],
+     {:cmd "git show --check 948779af7", :exit 0}],
     :diagnostic-history
-    [{:cmd "decomposition drafts",
+    [{:cmd "uniqueness drafts",
       :exit 1,
-      :correction "normalized getElem and dependent Fin value"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792065590003-14005-587511a5",
-     :commands
-     ["git show/diff/check 363a4453a"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 363a4453a adds compiled, sorry-free progress beyond 0b1a5be91. From the actual run-partition flattening and slice representation, it proves every subdivision index has a run and local offset with prefixLength(i)+k=j. Only t97A01Closure.lean changed; fixture SHA d2121b42afa43150b943b2fd62c69b0594d0a01690081d7163d98b4e186818e0 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Slice orientation, dependent Fin bounds, and final index equality are correct. Uniqueness, nested-fold equality, van Kampen, and final assembly remain explicitly listed."},
-    :commit "363a4453a73efcfc14a73bf0f0d06643daf557c2",
+      :correction "normalized dependent boundaries"}],
+    :commit "948779af7e07751ef1979caee954f64f6516ea49",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "d2121b42afa43150b943b2fd62c69b0594d0a01690081d7163d98b4e186818e0"},
+     "472293df459c4228adbaf46d9173d0d2f0aa75b5a35c6374b6fdfe2d2807ea72"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94231,7 +94218,8 @@
     :lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class
     :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-globalindex
     :lemma-torusrp2-subdivisionrunprefixlength-strictmono
-    :lemma-torusrp2-subdivisionindex-exists-runoffset],
+    :lemma-torusrp2-subdivisionindex-exists-runoffset
+    :lemma-torusrp2-subdivisionrunoffset-run-unique],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95038,4 +95026,23 @@
    :id :lemma-torusrp2-subdivisionindex-exists-runoffset,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunprefixlength-strictmono],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunOffset_run_unique",
+    :type
+    "equal flattened run-offset coordinates have equal run indices"},
+   :lemma
+   {:name "torusRP2_subdivisionRunOffset_run_unique",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "equal flattened run-offset coordinates have equal run indices",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunoffset-run-unique,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2-subdivisionindex-exists-runoffset],
    :other-consumers []}]}
