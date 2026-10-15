@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 6328279bd", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792107966824-14844-85059f88",
+     :commands
+     ["git show/diff/check 6328279bd"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 6328279bd"],
+     :finding
+     "PASS program STOP: topo-6 commit 6328279bd adds compiled, sorry-free progress beyond history 00fa1a440. frozenSignedQuotientEquivGenerator is a correct identity-on-representatives equivalence: each Quotient.map uses the proved iff in the required direction, and representative induction makes both inverse laws definitional; the mk lemma has the correct orientation. It crosses the setoid-to-quotient-carrier boundary without claiming topology preservation; upgrading it to a homeomorphism, MV transport, normalization, and assembly remain explicitly listed. Only t94J09Closure.lean changed; fixture SHA 84315af68298754790989e19c8ddffe062dc6db33e31527bf1f2ddb802d60888 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard."},
     :commit "6328279bd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "84315af68298754790989e19c8ddffe062dc6db33e31527bf1f2ddb802d60888"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked setoid comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient equivalence.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88792,9 +88805,10 @@
     {:job 4,
      :commit "8adff214b",
      :reason "Banked relation comparison."}
-    {:job 5,
-     :commit "00fa1a440",
-     :reason "Banked setoid comparison."}]}
+    {:job 5, :commit "00fa1a440", :reason "Banked setoid comparison."}
+    {:job 6,
+     :commit "6328279bd",
+     :reason "Banked quotient equivalence."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96508,7 +96522,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenSignedQuotientEquivGenerator",
@@ -96518,7 +96532,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "identity-on-representatives quotient equivalence",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "6328279bd"},
    :id :lemma-frozensignedquotientequivgenerator,
    :kind :lemma,
    :depends-on [:lemma-frozen-eqvgen-boundaryrel-iff-generator],
