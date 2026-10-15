@@ -2273,6 +2273,11 @@ lemma t99A01_low_coordinates_degree_zero {r : ℕ} (degree : Fin r → ℕ)
     (eB : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1))
     (eO : ContinuousMap.HomotopyEquiv
       ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (heB : ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
+      (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
+      eB ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩)
+    (heO : ∀ (i : Fin r) (w : Circle), (eO.invFun ⟨i, w⟩).1 =
+      APMT99A01.halfLoop degree i w)
     (hsigma : ∀ (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)] (k : ℕ),
       IsIso (Limits.biproduct.desc fun i : Fin r ↦ HomologicalComplex.homologyMap
         (ConstructionTargets.CoefficientH0.singularPostcomposition ℤ
@@ -2465,7 +2470,7 @@ lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
         (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom)) :
     Nonempty (APMT99A01.AttachMVLowData degree) := by
   obtain ⟨ρ, ι, -, hρι, hιρ, hρ⟩ := hcircle
-  obtain ⟨eB, -⟩ := hdisk
+  obtain ⟨eB, heB⟩ := hdisk
   obtain ⟨eO, heO⟩ := hoverlap
   obtain ⟨e₁, hw⟩ := hwinding
   let eC := t99A01_eC
@@ -2486,7 +2491,7 @@ lemma t99A01_attach_transport_aux_low_degree {r : ℕ} (degree : Fin r → ℕ)
   obtain ⟨hA₂, hB₁, hB₂⟩ := t99A01_low_coordinates_vanishing degree ρ ι hρι hιρ eB
   have hdeg := t99A01_low_coordinates_degree_one degree ρ ι hρι hιρ eO heO hρ hsigma e₁ hw
   obtain ⟨hsum, hid⟩ := t99A01_low_coordinates_degree_zero degree hr ρ ι hρι hιρ
-    eB eO hsigma
+    eB eO heB heO hsigma
   exact t99A01_lowData_of_coordinates degree _ _ _ _ _ _ _ _
     (APMT99A01.zI _ _ 0) (APMT99A01.zI _ _ 1) (APMT99A01.zJ _ _ 0)
     (APMT99A01.zJ _ _ 1) (APMT99A01.zJ _ _ 2) (δ 0) (δ 1)
