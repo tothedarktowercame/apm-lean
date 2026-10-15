@@ -1254,6 +1254,36 @@ theorem torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
   exact torusRP2PolygonInnerRun_exists_outerOverlapReplacement hx hy
     (Path.concat point F) (torusRP2_path_concat_mem_of_piece_mem point F hF)
 
+/-- Pointwise equality of the normalized factors propagates through the
+dependent finite concatenation used to reassemble subdivision blocks. -/
+theorem torusRP2_pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 1) → X)
+    (F G : (k : Fin n) → Path (point k.castSucc) (point k.succ))
+    (h : ∀ k, (⟦F k⟧ : Path.Homotopic.Quotient _ _) = ⟦G k⟧) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat point G⟧ := by
+  apply Quotient.sound
+  exact Path.Homotopic.concat_hcomp point F G
+    (fun k ↦ Quotient.eq.mp (h k))
+
+/-- Replacing every piece of a subordinate subdivision by an equal path
+class reconstructs the class of the original path. -/
+theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
+    {X : Type*} [TopologicalSpace X]
+    {x y : X} {p : Path x y} {U V : Set X}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p U V)
+    (G : (k : Fin (S.n + 1)) →
+      Path (S.point k.castSucc) (S.point k.succ))
+    (h : ∀ k, (⟦S.piece k⟧ : Path.Homotopic.Quotient _ _) = ⟦G k⟧) :
+    (⟦p.cast S.point_zero S.point_last⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat S.point G⟧ := by
+  calc
+    _ = ⟦Path.concat S.point S.piece⟧ := S.quotient_concat_eq.symm
+    _ = _ := torusRP2_pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+      S.point S.piece G h
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1325,6 +1355,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerRun_exists_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
+#print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
