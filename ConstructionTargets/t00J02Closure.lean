@@ -509,6 +509,50 @@ theorem direction_lifts_of_surjective_incidenceKernel_snd
 
 #print axioms direction_lifts_of_surjective_incidenceKernel_snd
 
+/-- The second-coordinate projection from the linear incidence kernel is
+surjective exactly when every parameter direction lifts through the source
+derivative. -/
+theorem surjective_incidenceKernel_snd_iff_direction_lifts
+    {R E F G : Type} [Ring R]
+    [AddCommGroup E] [Module R E]
+    [AddCommGroup F] [Module R F]
+    [AddCommGroup G] [Module R G]
+    (A : E →ₗ[R] G) (B : F →ₗ[R] G) :
+    Function.Surjective
+        (fun w : LinearMap.ker (LinearMap.coprod A (-B)) ↦ w.1.2) ↔
+      ∀ v, ∃ u, A u = B v := by
+  constructor
+  · exact direction_lifts_of_surjective_incidenceKernel_snd A B
+  · intro hlift v
+    obtain ⟨u, hu⟩ := hlift v
+    refine ⟨⟨(u, v), ?_⟩, rfl⟩
+    rw [LinearMap.mem_ker]
+    simp only [LinearMap.coprod_apply, LinearMap.neg_apply]
+    simpa [hu]
+
+#print axioms surjective_incidenceKernel_snd_iff_direction_lifts
+
+/-- A linear identification of an incidence tangent space with the kernel of
+the difference derivative transports regularity of the geometric projection
+to the direction-lift condition. -/
+theorem direction_lifts_of_incidenceTangentEquiv
+    {R E F G T : Type} [Ring R]
+    [AddCommGroup E] [Module R E]
+    [AddCommGroup F] [Module R F]
+    [AddCommGroup G] [Module R G]
+    [AddCommGroup T] [Module R T]
+    (A : E →ₗ[R] G) (B : F →ₗ[R] G)
+    (e : T ≃ₗ[R] LinearMap.ker (LinearMap.coprod A (-B)))
+    (P : T →ₗ[R] F) (hP : ∀ t, P t = (e t).1.2)
+    (hregular : Function.Surjective P) :
+    ∀ v, ∃ u, A u = B v := by
+  apply direction_lifts_of_surjective_incidenceKernel_snd A B
+  intro v
+  obtain ⟨t, ht⟩ := hregular v
+  exact ⟨e t, (hP t).symm.trans ht⟩
+
+#print axioms direction_lifts_of_incidenceTangentEquiv
+
 /-- At a selected circle parameter, transversality and liftability of every
 circle tangent direction make the corresponding point fiber locally
 injective. -/
