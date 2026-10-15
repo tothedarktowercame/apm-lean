@@ -37121,23 +37121,25 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Construct the exact local-class boundary; then descent degree, invariants, Main.",
+    "Construct exact local-class boundary; then invariants and Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
     [{:name
-      "polynomialSphereLift_degree_four_of_localClassDecompositionAndBase",
-      :type "exact local-class boundary implies lift acts by 4 on H3",
+      "polynomialDescent_degree_four_of_localClassDecompositionAndBase",
+      :type
+      "local-class boundary implies descent acts by 4 on rational H3",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_localizationData_of_base_and_deckTransport"],
+      ["polynomialSphereLift_degree_four_of_localClassDecompositionAndBase"
+       "t96A06_rp3_rational_homologyMap_surjective"],
       :area "rp-rational-homology"}
      {:name "PolynomialSphereLiftLocalClassDecompositionAndBaseData",
       :type
@@ -37152,7 +37154,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the exact local-class boundary and its degree-four consequence.",
+    "Committed transport from the local-class boundary to degree four on RP3.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37162,16 +37164,10 @@
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
     :diagnostic-history
-    [{:cmd "piped closure compile",
+    [{:cmd "initial closure compile",
       :exit 1,
-      :note "fixed Type-valued theorem to def; reran Lake directly"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792062447560-13921-c2269dcc",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "68a5ab9be",
+      :note "supplied projection H3 surjectivity argument"}],
+    :commit "b997b73eb",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37179,7 +37175,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42411,6 +42407,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialsphereregularfiberequiv-exists-orientationpreservingdeck],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polynomialDescent_degree_four_of_localClassDecompositionAndBase",
+    :type
+    "local-class boundary implies descent acts by 4 on rational H3"},
+   :lemma
+   {:name
+    "polynomialDescent_degree_four_of_localClassDecompositionAndBase",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "local-class boundary implies descent acts by 4 on rational H3",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-polynomialdescent-degree-four-of-localclassdecompositionandbase,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-degree-four-of-localclassdecompositionandbase
+    :lemma-t96a06-rp3-rational-homologymap-surjective],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
