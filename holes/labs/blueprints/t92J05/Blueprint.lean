@@ -2788,6 +2788,22 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_angle_surjective x
         c
     let r := FundamentalGroup.map j x a
+    have hpa : FundamentalGroup.map Φ x a =
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p).symm
+          (FundamentalGroup.map (L.comp apm_t92J05_genusTwo_overlapAngle) x a) := by
+      exact (FundamentalGroup.fundamentalGroupMulEquivOfPath p).eq_symm_apply.mpr
+        (by simpa [Φ, L] using (hp a).symm)
+    have hΦmap :
+        ((Path.Homotopic.Quotient.map a j).map hs.toFun).map
+            (⟨sw, sw.continuous⟩ : C(P.skeleton, _)) =
+          FundamentalGroup.map Φ x a := by
+      induction a using Path.Homotopic.Quotient.ind with
+      | mk z => rfl
+    have hLmap : FundamentalGroup.map (L.comp apm_t92J05_genusTwo_overlapAngle) x a =
+        FundamentalGroup.map L y
+          (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x a) := by
+      induction a using Path.Homotopic.Quotient.ind with
+      | mk z => rfl
     have her : e r =
         apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
           (Path.Homotopic.Quotient.mk
