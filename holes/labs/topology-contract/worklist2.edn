@@ -88443,9 +88443,51 @@
      :commit "4cacd825f",
      :reason "Banked attaching-range transport."}]}
   {:consumer :t94J09,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Implement B2 normalization and B3 homology adapters, then copy B4 assembly.",
+    :outcome :stop,
+    :warnings
+    ["source blueprint has 2 expected sorryAx obligations"
+     "Main retains 1 placeholder"
+     "unrelated dirt preserved"],
+    :missing-theorems
+    [{:name "apm_t94J09_polygon_normalization",
+      :type "literal polygon quotient homeomorphic to N6",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on [],
+      :area "polygon-cut-and-paste"}
+     {:name "apm_t94J09_polygon_homology",
+      :type "literal quotient integral homology",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on ["polygonQuotient_homology"],
+      :area "polygon-surface-homology"}],
+    :statement-hashes {:registry "166/0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason
+    "Blueprint written; independent review required before formalization.",
+    :commands
+    [{:cmd "lake env lean holes/labs/blueprints/t94J09/Blueprint.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check 2d4b43869", :exit 0}],
+    :commit "2d4b43869",
+    :changed-paths ["ConstructionTargets/t94J09Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t94J09Closure.blueprint.md",
+     :sha256
+     "4992777ceee3403c5881180f237900137299161a68f72bd4f50963a8adef6c67"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -93831,4 +93873,36 @@
    :id :lemma-torusrp2boundarycokernelsmithequiv,
    :kind :lemma,
    :depends-on [:lemma-torusrp2orbitcoordinates-map-boundaryrange],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_polygon_normalization",
+    :type "literal polygon quotient homeomorphic to N6"},
+   :lemma
+   {:name "apm_t94J09_polygon_normalization",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "literal polygon quotient homeomorphic to N6",
+    :area "polygon-cut-and-paste"},
+   :id :lemma-apm-t94j09-polygon-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_polygon_homology",
+    :type "literal quotient integral homology"},
+   :lemma
+   {:name "apm_t94J09_polygon_homology",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "literal quotient integral homology",
+    :area "polygon-surface-homology"},
+   :id :lemma-apm-t94j09-polygon-homology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
    :other-consumers []}]}
