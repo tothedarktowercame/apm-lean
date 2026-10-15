@@ -37111,30 +37111,30 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Expand transfer sum to id+antipodal; H3 injectivity, higher vanishing, degree four, invariants/Main.",
+    "Chain/homology deck-sum, H3 injectivity, higher vanishing, degree four, invariants/Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_projectedSimplex_lifts_exact_pair",
-      :type "canonical lifts are distinct and exhaustive",
+    [{:name "t96A06_transferSimplex_projected",
+      :type "projected-simplex transfer deck-sum",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_projectedSimplex_lift_eq_or_eq_antipodal"],
+      :depends-on ["t96A06_projectedSimplex_lifts_exact_pair"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_antipodal_H3",
       :type "deck-sum gives H3(RP3;Q)=Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_projectedSimplex_lifts_exact_pair"],
+      :depends-on ["t96A06_transferSimplex_projected"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
-      :type "RP3 rational homology Q,0,0,Q",
+      :type "RP3 homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
       :depends-on ["t96A06_rp3_antipodal_H3"],
@@ -37144,7 +37144,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the distinct exhaustive pair of canonical projected-simplex lifts; transfer-sum expansion remains.",
+    "Committed simplex deck-sum; chain/homology identity and H3 injectivity remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37152,19 +37152,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check --stat cdeb74fba", :exit 0}],
+     {:cmd "git show --check 32ef70aaa", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial compile",
+    [{:cmd "intermediate compiles",
       :exit 1,
-      :note
-      "corrected projection orientation and antipodal inequality"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792040115802-13259-181410a2",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "cdeb74fbade0dd51d8ac56f3f1074469c1f4e4b5",
+      :note "fixed API qualification and instances"}],
+    :commit "32ef70aaaf963ebdbcb3a80c67c0a5baf617c8b2",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37172,7 +37165,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -40468,7 +40461,8 @@
    [:lemma-t96a06-sphere3-rational-h3iso
     :lemma-t96a06-sphere3-antipodal-h3
     :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal
-    :lemma-t96a06-projectedsimplex-lifts-exact-pair],
+    :lemma-t96a06-projectedsimplex-lifts-exact-pair
+    :lemma-t96a06-transfersimplex-projected],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40700,6 +40694,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_transferSimplex_projected",
+    :type "projected-simplex transfer deck-sum"},
+   :lemma
+   {:name "t96A06_transferSimplex_projected",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "projected-simplex transfer deck-sum",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-transfersimplex-projected,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-projectedsimplex-lifts-exact-pair],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
