@@ -325,6 +325,20 @@ theorem transverse_incidenceDifferenceDerivative_hasLinearRightInverse
 
 #print axioms transverse_incidenceDifferenceDerivative_hasLinearRightInverse
 
+/-- In finite-dimensional target coordinates, an algebraic linear right
+inverse is automatically continuous.  Thus the incidence splitting becomes
+the split-surjection input expected by the Banach-space chart theorem once it
+has been transported from opaque tangent spaces to model coordinates. -/
+theorem continuousLinearMap_hasRightInverse_of_linearRightInverse
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    (A : E →L[ℝ] F) (g : F →ₗ[ℝ] E)
+    (hg : A.toLinearMap.comp g = LinearMap.id) : A.HasRightInverse := by
+  refine ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun y ↦ ?_⟩
+  exact LinearMap.congr_fun hg y
+
+#print axioms continuousLinearMap_hasRightInverse_of_linearRightInverse
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
