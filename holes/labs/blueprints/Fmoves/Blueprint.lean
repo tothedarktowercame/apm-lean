@@ -5741,7 +5741,89 @@ lemma cutPiece_frontier_aux_closed (P Q : ℂ) : IsClosed (cutPiece P Q) := by
 lemma cutPiece_frontier_aux_interior {P Q : ℂ} (hPQ : P ≠ Q) :
     interior (cutPiece P Q) =
       {z | ‖z‖ < 1 ∧ cutCross (Q - P) (z - P) < 0} := by
-  sorry
+  let U : Set ℂ := {z | ‖z‖ < 1 ∧ cutCross (Q - P) (z - P) < 0}
+  have hUopen : IsOpen U := by
+    exact (isOpen_lt continuous_norm continuous_const).inter
+      (isOpen_lt
+        (Complex.continuous_im.comp
+          (continuous_const.mul (continuous_id.sub continuous_const)))
+        continuous_const)
+  apply Set.Subset.antisymm
+  · intro z hz
+    have hzpiece : z ∈ cutPiece P Q := interior_subset hz
+    have hznorm : ‖z‖ ≤ 1 := hzpiece.1
+    have hzcross : cutCross (Q - P) (z - P) ≤ 0 := hzpiece.2
+    have hznhds : cutPiece P Q ∈ nhds z := mem_interior_iff_mem_nhds.mp hz
+    rcases Metric.mem_nhds_iff.mp hznhds with ⟨r, hr, hball⟩
+    have hnormlt : ‖z‖ < 1 := by
+      apply lt_of_le_of_ne hznorm
+      intro he
+      have hnormeq : ‖z‖ = 1 := he
+      let e : ℝ := r / 2
+      let y : ℂ := (1 + e : ℂ) * z
+      have he : 0 < e := div_pos hr (by norm_num)
+      have hyball : y ∈ Metric.ball z r := by
+        rw [Metric.mem_ball, dist_eq_norm]
+        have : y - z = (e : ℂ) * z := by
+          dsimp [y]
+          ring
+        rw [this, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos he,
+          hnormeq, mul_one]
+        dsimp [e]
+        linarith
+      have hynorm := (hball hyball).1
+      have hynorm_eq : ‖y‖ = 1 + e := by
+        dsimp [y]
+        rw [norm_mul, show (1 : ℂ) + (e : ℂ) = ((1 + e : ℝ) : ℂ) by norm_num,
+          Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hnormeq, mul_one]
+      linarith
+    have hcrosslt : cutCross (Q - P) (z - P) < 0 := by
+      apply lt_of_le_of_ne hzcross
+      intro he
+      have hcrosszero : cutCross (Q - P) (z - P) = 0 := he
+      let w : ℂ := Q - P
+      let d : ℝ := ‖w‖
+      have hd : 0 < d := by
+        dsimp [d, w]
+        exact norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+      let e : ℝ := r / (2 * d)
+      let y : ℂ := z + (e : ℂ) * (Complex.I * w)
+      have he : 0 < e := div_pos hr (mul_pos (by norm_num) hd)
+      have hed : e * d = r / 2 := by
+        dsimp [e]
+        field_simp [ne_of_gt hd]
+      have hyball : y ∈ Metric.ball z r := by
+        rw [Metric.mem_ball, dist_eq_norm]
+        have : y - z = (e : ℂ) * (Complex.I * w) := by
+          dsimp [y]
+          ring
+        rw [this, norm_mul, norm_mul, Complex.norm_I, one_mul,
+          Complex.norm_real, Real.norm_eq_abs, abs_of_pos he]
+        rw [show ‖w‖ = d by rfl, hed]
+        linarith
+      have hycross := (hball hyball).2
+      have hcrossdir : cutCross w (Complex.I * w) = d ^ 2 := by
+        dsimp [cutCross, d]
+        rw [Complex.sq_norm]
+        simp [Complex.normSq_apply]
+      have hycross_eq : cutCross (Q - P) (y - P) = e * d ^ 2 := by
+        change cutCross w (y - P) = e * d ^ 2
+        rw [show y - P = (z - P) + (e : ℂ) * (Complex.I * w) by
+          dsimp [y]
+          ring]
+        rw [show cutCross w ((z - P) + (e : ℂ) * (Complex.I * w)) =
+            cutCross w (z - P) + e * cutCross w (Complex.I * w) by
+          simp [cutCross, Complex.mul_im]
+          ring]
+        rw [hcrosszero, hcrossdir, zero_add]
+      rw [hycross_eq] at hycross
+      exact (not_lt_of_ge hycross) (mul_pos he (sq_pos_of_pos hd))
+    exact ⟨hnormlt, hcrosslt⟩
+  · intro z hz
+    apply mem_interior_iff_mem_nhds.mpr
+    apply Filter.mem_of_superset (hUopen.mem_nhds hz)
+    intro y hy
+    exact ⟨le_of_lt hy.1, le_of_lt hy.2⟩
 
 theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     frontier (cutPiece P Q) =
