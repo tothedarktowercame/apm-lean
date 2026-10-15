@@ -2686,6 +2686,35 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
       torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne S j hrun,
       torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets S j hrun⟩
 
+/-- In the within-run successor case, the dependent local coordinate is the
+successor of the preceding coordinate after transport along equality of the
+two run lengths. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n)
+    (hrun : ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1 =
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1) :
+    let z0 := (torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc
+    let z1 := (torusRP2_subdivisionRunOffsetEquiv S).symm j.succ
+    Fin.cast
+        (congrArg (fun i => (pathTwoOpenSubdivisionRunFamily S i).length) hrun)
+        z1.2 =
+      ⟨z0.2.val + 1, by
+        have hoff :=
+          torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
+            S j hrun
+        have hlen := congrArg
+          (fun i => (pathTwoOpenSubdivisionRunFamily S i).length) hrun
+        rw [← hoff, ← hlen]
+        exact z1.2.isLt⟩ := by
+  dsimp only
+  apply Fin.ext
+  exact torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
+    S j hrun
+
 /-- Under flattening, a run begins at its cumulative prefix and its final
 local factor ends immediately before the next cumulative prefix. -/
 theorem torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
@@ -3156,6 +3185,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
