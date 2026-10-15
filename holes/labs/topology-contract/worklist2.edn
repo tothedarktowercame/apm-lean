@@ -88379,6 +88379,19 @@
     [{:cmd "Sigma draft",
       :exit 1,
       :correction "explicit dependent extensionality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792081363798-14293-1f3f6f12",
+     :commands
+     ["git show/diff/check 752a75df6"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 752a75df6 adds compiled, sorry-free progress beyond history commit 0db7a0d2a. On a cumulative-prefix interval it proves inverse flattening has the stated run and offset j-prefix, then establishes equality of the full dependent Sigma coordinate using Sigma.ext and heterogeneous equality across the Fin fiber. Only t97A01Closure.lean changed; fixture SHA 96362437712f4cf28da7e91cc3d9b69c047ca4c6366aa40143a49c953ec5a701 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Subtraction orientation, interval bounds, and dependent cast are correct. Interval nested/flat concatenation, van Kampen, and assembly remain listed."},
     :commit "752a75df6",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88387,7 +88400,7 @@
      "96362437712f4cf28da7e91cc3d9b69c047ca4c6366aa40143a49c953ec5a701"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88405,7 +88418,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flattened run endpoint coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact inverse interval coordinates.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88604,7 +88617,10 @@
      :reason "Banked nested/global prefix-fold transport."}
     {:job 9,
      :commit "0db7a0d2a",
-     :reason "Banked flattened run endpoint coordinates."}]}
+     :reason "Banked flattened run endpoint coordinates."}
+    {:job 1,
+     :commit "752a75df6",
+     :reason "Banked exact inverse interval coordinates."}]}
   {:consumer :t94J09,
    :stop-count 7,
    :evidence
@@ -95709,7 +95725,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95721,7 +95737,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "exact inverse coordinate on run interval",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "752a75df6"},
    :id
    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-eq-run-sub-prefix-of-mem-interval,
    :kind :lemma,
