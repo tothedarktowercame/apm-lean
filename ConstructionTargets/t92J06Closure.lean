@@ -353,6 +353,18 @@ theorem edgeProjection_eq_of_interior (i j : Fin 2) (t u : UnitInterval)
   · refine ⟨rfl, intervalCircle_injective_on_interior ht hu ?_⟩
     exact inr_injective h
 
+/-- An interior point of either labeled base edge is distinct from the wedge
+vertex. -/
+theorem edgeProjection_ne_wedgePoint (i : Fin 2) (t : UnitInterval)
+    (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) :
+    edgeProjection i t ≠ inl circleBase := by
+  fin_cases i
+  · intro h
+    exact intervalCircle_ne_base ht (inl_injective h)
+  · intro h
+    have hb := (inl_eq_inr_iff circleBase (intervalCircle t)).mp h.symm
+    exact intervalCircle_ne_base ht hb.2
+
 /-- The map before imposing the graph endpoint identifications. -/
 def realizationRawProjection (D : TwoLoopGraphCoverData V) : RealizationRaw V → X
   | .inl _ => inl circleBase
@@ -406,6 +418,16 @@ theorem projection_edgePoint_eq_of_interior (i j : Fin 2) (v w : V)
       D.projection (D.edgePoint j w u)) : i = j ∧ t = u := by
   apply edgeProjection_eq_of_interior i j t u ht hu
   simpa only [projection_edgePoint] using h
+
+/-- A lifted interior edge point never coincides with a lifted graph vertex.
+This is the vertex/interior separation needed for the exact local fibers. -/
+theorem edgePoint_ne_vertex_of_interior (i : Fin 2) (v w : V)
+    (t : UnitInterval) (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) :
+    D.edgePoint i v t ≠ D.vertex w := by
+  intro h
+  have hp := congrArg D.projection h
+  exact edgeProjection_ne_wedgePoint i t ht (by
+    simpa only [projection_edgePoint, projection_vertex] using hp)
 
 end TwoLoopGraphCoverData
 
