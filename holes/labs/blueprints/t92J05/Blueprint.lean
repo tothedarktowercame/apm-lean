@@ -997,6 +997,15 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_o
   dsimp [loop]
   rw [F.map_comp, F.map_comp]
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom
+    {G : Type} [Group G] (a b : SingleObj G) (h : a = b) :
+    (eqToHom h : a ⟶ b) = 𝟙 _ := by
+  cases a
+  cases b
+  cases h
+  rfl
+
+set_option maxHeartbeats 800000 in
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
