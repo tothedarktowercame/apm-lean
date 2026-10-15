@@ -7154,7 +7154,49 @@ theorem cutNewA_injective_of_branches {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         ∀ ψ ∈ Ioo (cutAlpha L q) (cutAlpha L p + 2 * Real.pi),
           cutProfileNewA L p q φ ≠ cutProfileNewA L p q ψ)) :
     Function.Injective (cutNewA L p q) := by
-  sorry
+  intro b c hbc
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)
+    (AddCircle.homeomorphCircle'.symm b)
+  let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)
+    (AddCircle.homeomorphCircle'.symm c)
+  have hxmem : (x : ℝ) ∈ Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi) := x.property
+  have hymem : (y : ℝ) ∈ Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi) := y.property
+  have hxy : cutProfileNewA L p q x = cutProfileNewA L p q y := by
+    simpa [cutNewA, AddCircle.liftIco, x, y] using hbc
+  have hxparts :
+      (x : ℝ) ∈ Icc (cutAlpha L p) (cutAlpha L (p + 1)) ∨
+      (x : ℝ) ∈ Ioc (cutAlpha L (p + 1)) (cutAlpha L q) ∨
+      (x : ℝ) ∈ Ioo (cutAlpha L q) (cutAlpha L p + 2 * Real.pi) := by
+    by_cases hp : (x : ℝ) ≤ cutAlpha L (p + 1)
+    · exact Or.inl ⟨hxmem.1, hp⟩
+    · by_cases hq : (x : ℝ) ≤ cutAlpha L q
+      · exact Or.inr (Or.inl ⟨lt_of_not_ge hp, hq⟩)
+      · exact Or.inr (Or.inr ⟨lt_of_not_ge hq, hxmem.2⟩)
+  have hyparts :
+      (y : ℝ) ∈ Icc (cutAlpha L p) (cutAlpha L (p + 1)) ∨
+      (y : ℝ) ∈ Ioc (cutAlpha L (p + 1)) (cutAlpha L q) ∨
+      (y : ℝ) ∈ Ioo (cutAlpha L q) (cutAlpha L p + 2 * Real.pi) := by
+    by_cases hp : (y : ℝ) ≤ cutAlpha L (p + 1)
+    · exact Or.inl ⟨hymem.1, hp⟩
+    · by_cases hq : (y : ℝ) ≤ cutAlpha L q
+      · exact Or.inr (Or.inl ⟨lt_of_not_ge hp, hq⟩)
+      · exact Or.inr (Or.inr ⟨lt_of_not_ge hq, hymem.2⟩)
+  have hsub : x = y := by
+    rcases hxparts with hx | hx | hx <;> rcases hyparts with hy | hy | hy
+    · exact Subtype.ext (hinj.1 hx hy hxy)
+    · exact False.elim (hdisj.1 x hx y hy hxy)
+    · exact False.elim (hdisj.2.1 x hx y hy hxy)
+    · exact False.elim (hdisj.1 y hy x hx hxy.symm)
+    · exact Subtype.ext (hinj.2.1 hx hy hxy)
+    · exact False.elim (hdisj.2.2 x hx y hy hxy)
+    · exact False.elim (hdisj.2.1 y hy x hx hxy.symm)
+    · exact False.elim (hdisj.2.2 y hy x hx hxy.symm)
+    · exact Subtype.ext (hinj.2.2 hx hy hxy)
+  have hadd := congrArg (AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)).symm hsub
+  have hadd' : AddCircle.homeomorphCircle'.symm b =
+      AddCircle.homeomorphCircle'.symm c := by
+    simpa [x, y] using hadd
+  exact AddCircle.homeomorphCircle'.symm.injective hadd'
 -- END SEAT AREA
 
 theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
