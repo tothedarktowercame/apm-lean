@@ -88331,27 +88331,28 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build run replacements; prove surjectivity and reverse kernel inclusion; assemble.",
+    "Fold runs; prove surjectivity and reverse kernel inclusion; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivision_runPartition_boundary_spec",
-      :type "maximal runs meet in overlap",
+    [{:name "torusRP2_subdivisionRun_exists_outerRepresentative",
+      :type "maximal run has outer representative",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq"],
+      ["torusRP2_subdivision_runPartition_boundary_spec"
+       "torusRP2PolygonInnerBlock_exists_outerOverlapReplacement"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivision_runPartition_boundary_spec"
+      ["torusRP2_subdivisionRun_exists_outerRepresentative"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,27 +88365,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked maximal-run overlap boundaries.",
+    :reason "Banked run representatives.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 20ce7c5cc", :exit 0}],
+     {:cmd "git show --check 5b37f1fd2", :exit 0}],
     :diagnostic-history
-    [{:cmd "run adapter draft",
-      :exit 1,
-      :correction "qualified names"}],
-    :commit "20ce7c5cc",
+    [{:cmd "run drafts", :exit 1, :correction "qualified type/cast"}],
+    :commit "5b37f1fd2",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "a01edbde25913de91ca090a4032423df19474e99c54ec9d5f315bc1878626365"},
+     "95e567510bbce02e46268c396358e77e9cc4bccb467c145c7ad4e2392e2c7fad"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94151,7 +94150,8 @@
     :lemma-torusrp2polygoninnerrun-exists-outeroverlapreplacement
     :lemma-torusrp2polygoninnerblock-exists-outeroverlapreplacement
     :lemma-torusrp2-subdivision-quotient-eq-concat-of-piececlass-eq
-    :lemma-torusrp2-subdivision-runpartition-boundary-spec],
+    :lemma-torusrp2-subdivision-runpartition-boundary-spec
+    :lemma-torusrp2-subdivisionrun-exists-outerrepresentative],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94583,4 +94583,23 @@
    :id :lemma-n6smithcokerneliso,
    :kind :lemma,
    :depends-on [:lemma-n6polygonhomology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRun_exists_outerRepresentative",
+    :type "maximal run has outer representative"},
+   :lemma
+   {:name "torusRP2_subdivisionRun_exists_outerRepresentative",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "maximal run has outer representative",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrun-exists-outerrepresentative,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivision-runpartition-boundary-spec
+    :lemma-torusrp2polygoninnerblock-exists-outeroverlapreplacement],
    :other-consumers []}]}
