@@ -36752,6 +36752,19 @@
     [{:cmd "model comparison",
       :exit 1,
       :note "Fixed subtype cardinality and sphere namespace."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792108334234-14856-01633082",
+     :commands
+     ["git show --check --stat d3394ea47; inspect diff"
+      "sha256sum fixture => 4aeb8b6a...beea8d"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean /tmp/t99j05_cp_homology_interface_check.lean"
+      "statement-registry.py check => 168/168"],
+     :finding
+     "PASS: recorded commit d3394ea47 adds compiled, sorry-free progress beyond program history: affine-to-Euclidean sphere equivalence, affine top homology, and successor-overlap top homology. Fixture hash matches; declarations use only propext, Classical.choice, Quot.sound. Main still has its recorded single placeholder; remaining off-degree/MV/Main milestones are listed."},
     :commit "d3394ea47",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36760,7 +36773,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36791,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact top-homology transport from the affine unit-sphere model to the successor overlap.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed affine sphere comparison and overlap top homology.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36842,7 +36855,11 @@
     {:job 5,
      :commit "f6d62287e",
      :reason
-     "Committed exact top-homology transport from the affine unit-sphere model to the successor overlap."}]}
+     "Committed exact top-homology transport from the affine unit-sphere model to the successor overlap."}
+    {:job 6,
+     :commit "d3394ea47",
+     :reason
+     "Committed affine sphere comparison and overlap top homology."}]}
   {:consumer :t98A02,
    :stop-count 1,
    :evidence
@@ -37201,7 +37218,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37260,7 +37277,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37282,7 +37299,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -44419,7 +44436,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_affineUnitSphere_topHomologyIso",
@@ -44431,7 +44448,9 @@
     :type
     "rational top homology of the complex affine unit sphere is Q",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d3394ea47"},
    :id :lemma-t99j05-affineunitsphere-tophomologyiso,
    :kind :lemma,
    :depends-on
@@ -44439,7 +44458,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44451,7 +44470,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coefficient one implies native coordinate one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one,
    :kind :lemma,
@@ -44477,7 +44498,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44491,7 +44512,9 @@
     :type
     "corrected coefficient is one iff normalization automorphism is not negation",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-not-negation,
    :kind :lemma,
@@ -44517,7 +44540,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44529,7 +44552,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coefficient one iff concrete composite is not negation",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-concrete-composite,
    :kind :lemma,
@@ -44555,7 +44580,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44567,7 +44592,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coefficient one iff composite one is not negative one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-composite-one-ne-neg-one,
    :kind :lemma,
