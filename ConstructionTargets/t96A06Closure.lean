@@ -1760,6 +1760,67 @@ noncomputable def t96A06_integralToRational_singularChainMap
     simpa only [Functor.mapHomologicalComplex_obj_d] using
       (t96A06_integralToRational_singularChainsDegree_differential X j).symm
 
+set_option maxHeartbeats 800000 in
+/-- Coefficient extension is natural for the inclusion of a subspace.  This
+is the commuting square whose cokernel is the relative coefficient map. -/
+theorem t96A06_integralToRational_subspaceMap_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A) ≫
+      t96A06_integralToRational_singularChainMap (TopCat.of X) =
+    t96A06_integralToRational_singularChainMap (TopCat.of A) ≫
+      (t96A06_forgetRatModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A) := by
+  apply HomologicalComplex.hom_ext
+  intro n
+  rw [ConstructionTargets.CoefficientRelativeSmall.subspaceMap_eq_postcomposition,
+    ConstructionTargets.CoefficientRelativeSmall.subspaceMap_eq_postcomposition]
+  apply (cancel_epi (PreservesCoproduct.iso
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+    (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex (TopCat.of A) n ↦
+      ModuleCat.of ℤ ℤ)).inv).mp
+  apply Limits.Sigma.hom_ext
+  intro σ
+  let τ := ConstructionTargets.SingularSubdivision.continuousMapOfSingularSimplex n σ
+  have hσ :
+      ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+          (TopCat.of A) n τ = σ :=
+    (TopCat.toSSetObjEquiv (TopCat.of A) (Opposite.op ⦋n⦌)).symm_apply_apply σ
+  rw [← hσ]
+  rw [PreservesCoproduct.inv_hom]
+  slice_lhs 1 2 => erw [Limits.ι_comp_sigmaComparison]
+  slice_rhs 1 2 => erw [Limits.ι_comp_sigmaComparison]
+  simp only [Functor.mapHomologicalComplex_map_f, HomologicalComplex.comp_f,
+    t96A06_integralToRational_singularChainMap]
+  erw [← Category.assoc]
+  erw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_comp]
+  erw [ConstructionTargets.CoefficientH0.singularGenerator_singularPostcomposition,
+    t96A06_integralToRational_singularChainsDegree_generator]
+  erw [← Category.assoc]
+  erw [t96A06_integralToRational_singularChainsDegree_generator]
+  erw [Category.assoc]
+  erw [← t96A06_forgetRatModules.map_comp]
+  rw [ConstructionTargets.CoefficientH0.singularGenerator_singularPostcomposition]
+  rfl
+
+/-- Extension of coefficients descends through the subspace quotient, giving
+the natural map from forgotten integral relative chains to forgotten rational
+relative chains. -/
+noncomputable def t96A06_integralToRational_relativeChainMap
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    cokernel ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A)) ⟶
+    cokernel ((t96A06_forgetRatModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map
+        (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) :=
+  cokernel.map _ _
+    (t96A06_integralToRational_singularChainMap (TopCat.of A))
+    (t96A06_integralToRational_singularChainMap (TopCat.of X))
+    (t96A06_integralToRational_subspaceMap_naturality A)
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -3030,6 +3091,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_singularChainsDegree_generator
 #print axioms t96A06_integralToRational_singularChainsDegree_differential
 #print axioms t96A06_integralToRational_singularChainMap
+#print axioms t96A06_integralToRational_subspaceMap_naturality
+#print axioms t96A06_integralToRational_relativeChainMap
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
