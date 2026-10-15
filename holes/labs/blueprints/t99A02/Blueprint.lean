@@ -2357,9 +2357,172 @@ Edge points: `g = h k⁻¹` (same parameter) or one `edge` step
 step (`g = h b⁻¹ k⁻¹`); wedge-point fibre: the vertex classes
 `{(g,0), (g a⁻¹, 1), (g, north), (g b, south)}` are permuted transitively.
 About 150 lines. -/
+lemma treeF_fiber_aux_circle (t s : unitInterval)
+    (h : circleOfUnit t = circleOfUnit s) :
+    t = s ∨ ((t : ℝ) = 0 ∧ (s : ℝ) = 1) ∨
+      ((t : ℝ) = 1 ∧ (s : ℝ) = 0) := by
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hs0 : 0 ≤ (s : ℝ) := s.2.1
+  have hs1 : (s : ℝ) ≤ 1 := s.2.2
+  change 2 * Real.pi * (t : ℝ) =
+    2 * Real.pi * (s : ℝ) + (m : ℝ) * (2 * Real.pi) at hm
+  have hts : (t : ℝ) = (s : ℝ) + (m : ℝ) := by nlinarith
+  have hmlo : (-1 : ℝ) ≤ (m : ℝ) := by linarith
+  have hmhi : (m : ℝ) ≤ 1 := by linarith
+  have hmlo' : (-1 : ℤ) ≤ m := by exact_mod_cast hmlo
+  have hmhi' : m ≤ (1 : ℤ) := by exact_mod_cast hmhi
+  have hm' : m = -1 ∨ m = 0 ∨ m = 1 := by omega
+  rcases hm' with rfl | rfl | rfl
+  · right; left; norm_num at hts; constructor <;> linarith
+  · left; apply Subtype.ext; norm_num at hts ⊢; exact hts
+  · right; right; norm_num at hts; constructor <;> linarith
+
+lemma treeF_fiber_aux_sphere (gz gw : G) (x y : S2)
+    (h : rp2Proj x = rp2Proj y) :
+    ∃ g : G, Relation.EqvGen TreeRel
+      (g • (Sum.inr (gw, y) : TreeZ)) (.inr (gz, x)) := by
+  rcases (rp2Proj_eq_iff x y).mp h with hy | hy
+  · subst y
+    refine ⟨gz * gw⁻¹, ?_⟩
+    change Relation.EqvGen TreeRel (.inr ((gz * gw⁻¹) * gw, x)) (.inr (gz, x))
+    have he : (gz * gw⁻¹) * gw = gz := by group
+    rw [he]
+    exact Relation.EqvGen.refl _
+  · subst y
+    refine ⟨gz * b⁻¹ * gw⁻¹, ?_⟩
+    change Relation.EqvGen TreeRel
+      (.inr (((gz * b⁻¹ * gw⁻¹) * gw), -x)) (.inr (gz, x))
+    have he : (gz * b⁻¹ * gw⁻¹) * gw = gz * b⁻¹ := by group
+    rw [he]
+    have heb : (gz * b⁻¹) * b = gz := by group
+    simpa only [heb, neg_neg] using
+      (Relation.EqvGen.rel _ _ (TreeRel.pair (gz * b⁻¹) (-x)))
+
 lemma treeF_fiber (z w : TreeZ) (h : treeF z = treeF w) :
     ∃ g : G, Relation.EqvGen TreeRel (g • w) z := by
-  sorry
+  rcases z with ⟨gz, t⟩ | ⟨gz, x⟩ <;> rcases w with ⟨gw, s⟩ | ⟨gw, y⟩
+  · have hc : circleOfUnit t = circleOfUnit s :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective
+        (1 : Circle) (surfacePoint false 1)) h
+    rcases treeF_fiber_aux_circle t s hc with hts | ⟨ht, hs⟩ | ⟨ht, hs⟩
+    · subst s
+      refine ⟨gz * gw⁻¹, ?_⟩
+      simpa using (Relation.EqvGen.refl (Sum.inl (gz, t) : TreeZ))
+    · have ht' : t = 0 := Subtype.ext ht
+      have hs' : s = 1 := Subtype.ext hs
+      subst t; subst s
+      refine ⟨gz * a⁻¹ * gw⁻¹, ?_⟩
+      simpa [mul_assoc] using
+        (Relation.EqvGen.rel _ _ (TreeRel.edge (gz * a⁻¹)))
+    · have ht' : t = 1 := Subtype.ext ht
+      have hs' : s = 0 := Subtype.ext hs
+      subst t; subst s
+      refine ⟨gz * a * gw⁻¹, ?_⟩
+      simpa [mul_assoc] using
+        (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ (TreeRel.edge gz)))
+  · have hb :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+        (1 : Circle) (surfacePoint false 1) (circleOfUnit t) (rp2Proj y)).mp h
+    have htbase : (t : ℝ) = 0 ∨ (t : ℝ) = 1 := by
+      have hc : circleOfUnit t = circleOfUnit 0 := by simpa [circleOfUnit] using hb.1
+      rcases treeF_fiber_aux_circle t 0 hc with ht | ht | ht
+      · exact Or.inl (congrArg Subtype.val ht)
+      · exact Or.inl ht.1
+      · exact Or.inr ht.1
+    rcases (rp2Proj_eq_base_iff y).mp hb.2 with hy | hy
+    · subst y
+      rcases htbase with ht | ht
+      · have ht' : t = 0 := Subtype.ext ht
+        subst t
+        refine ⟨gz * gw⁻¹, ?_⟩
+        simpa using (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ (TreeRel.vertex gz)))
+      · have ht' : t = 1 := Subtype.ext ht
+        subst t
+        refine ⟨gz * a * gw⁻¹, ?_⟩
+        exact Relation.EqvGen.trans _ _ _
+          (by simpa [mul_assoc] using (Relation.EqvGen.symm _ _
+            (Relation.EqvGen.rel _ _ (TreeRel.vertex (gz * a)))))
+          (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.edge gz)))
+    · subst y
+      rcases htbase with ht | ht
+      · have ht' : t = 0 := Subtype.ext ht
+        subst t
+        refine ⟨gz * b⁻¹ * gw⁻¹, ?_⟩
+        exact Relation.EqvGen.trans _ _ _
+          (by simpa [mul_assoc] using
+            (show Relation.EqvGen TreeRel (.inr (gz * b⁻¹, south)) (.inr (gz, north)) by
+              rw [← neg_south]
+              simpa [mul_assoc] using
+                (Relation.EqvGen.rel _ _ (TreeRel.pair (gz * b⁻¹) south))))
+          (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.vertex gz)))
+      · have ht' : t = 1 := Subtype.ext ht
+        subst t
+        refine ⟨gz * a * b⁻¹ * gw⁻¹, ?_⟩
+        exact Relation.EqvGen.trans _ _ _
+          (by simpa [mul_assoc] using
+            (show Relation.EqvGen TreeRel (.inr (gz * a * b⁻¹, south))
+                (.inr (gz * a, north)) by
+              rw [← neg_south]
+              simpa [mul_assoc] using
+                (Relation.EqvGen.rel _ _ (TreeRel.pair (gz * a * b⁻¹) south))))
+          (Relation.EqvGen.trans _ _ _
+            (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.vertex (gz * a))))
+            (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.edge gz))))
+  · have hb :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff
+        (1 : Circle) (surfacePoint false 1) (circleOfUnit s) (rp2Proj x)).mp h.symm
+    have hsbase : (s : ℝ) = 0 ∨ (s : ℝ) = 1 := by
+      have hc : circleOfUnit s = circleOfUnit 0 := by simpa [circleOfUnit] using hb.1
+      rcases treeF_fiber_aux_circle s 0 hc with hs | hs | hs
+      · exact Or.inl (congrArg Subtype.val hs)
+      · exact Or.inl hs.1
+      · exact Or.inr hs.1
+    rcases (rp2Proj_eq_base_iff x).mp hb.2 with hx | hx
+    · subst x
+      rcases hsbase with hs | hs
+      · have hs' : s = 0 := Subtype.ext hs
+        subst s
+        refine ⟨gz * gw⁻¹, ?_⟩
+        simpa using (Relation.EqvGen.rel _ _ (TreeRel.vertex gz))
+      · have hs' : s = 1 := Subtype.ext hs
+        subst s
+        refine ⟨gz * a⁻¹ * gw⁻¹, ?_⟩
+        exact Relation.EqvGen.trans _ _ _
+          (by simpa [mul_assoc] using
+            (Relation.EqvGen.rel _ _ (TreeRel.edge (gz * a⁻¹))))
+          (Relation.EqvGen.rel _ _ (TreeRel.vertex gz))
+    · subst x
+      rcases hsbase with hs | hs
+      · have hs' : s = 0 := Subtype.ext hs
+        subst s
+        refine ⟨gz * b⁻¹ * gw⁻¹, ?_⟩
+        exact Relation.EqvGen.trans _ _ _
+          (by simpa [mul_assoc] using (Relation.EqvGen.rel _ _ (TreeRel.vertex (gz * b⁻¹))))
+          (show Relation.EqvGen TreeRel (.inr (gz * b⁻¹, north)) (.inr (gz, south)) by
+            rw [← neg_north]
+            simpa [mul_assoc] using
+              (Relation.EqvGen.rel _ _ (TreeRel.pair (gz * b⁻¹) north)))
+      · have hs' : s = 1 := Subtype.ext hs
+        subst s
+        refine ⟨gz * b⁻¹ * a⁻¹ * gw⁻¹, ?_⟩
+        exact Relation.EqvGen.trans _ _ _
+          (by simpa [mul_assoc] using
+            (Relation.EqvGen.rel _ _ (TreeRel.edge (gz * b⁻¹ * a⁻¹))))
+          (Relation.EqvGen.trans _ _ _
+            (Relation.EqvGen.rel _ _ (TreeRel.vertex (gz * b⁻¹)))
+            (show Relation.EqvGen TreeRel (.inr (gz * b⁻¹, north)) (.inr (gz, south)) by
+              rw [← neg_north]
+              simpa [mul_assoc] using
+                (Relation.EqvGen.rel _ _ (TreeRel.pair (gz * b⁻¹) north))))
+  · have hp : rp2Proj x = rp2Proj y :=
+      (ConstructionTargets.PointWedgeExactEquality.quotientMap_inr_injective
+        (1 : Circle) (surfacePoint false 1)) h
+    exact treeF_fiber_aux_sphere gz gw x y hp
 
 /-- **Leaf (facts about `G = ℤ * ℤ/2`).**  Route: map to `Multiplicative ℤ`
 by `Monoid.Coprod.fst` (detects every item involving `a`) and to
