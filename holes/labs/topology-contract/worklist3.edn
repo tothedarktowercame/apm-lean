@@ -36121,30 +36121,32 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Run indices; quotient fold; kernel/surjectivity; winding; C1/C2/Main.",
+    "Repair package authority; then run indices, fold, kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
-    :warnings ["Main retains placeholder."],
+    :warnings
+    ["One Lake invocation preceded the explicit test; no edits."
+     "Main retains placeholder."],
     :missing-theorems
     [{:name "pathTwoOpenSubdivisionRunIndexCoherence",
-      :type "central Fin witnesses for endpoints/prefix induction",
+      :type "Fin endpoint/prefix coherence",
       :status :partial,
       :consumers [:t93J03],
       :depends-on ["pathTwoOpenSubdivisionRunStart_eq_prefixLength"],
       :area "covering-subgroup-correspondence"}
      {:name "pathHomotopicQuotient_concat_succ",
-      :type "quotient recurrence for Path.concat",
+      :type "Path.concat quotient recurrence",
       :status :not-started,
       :consumers [:t93J03],
       :depends-on ["pathTwoOpenSubdivisionRunIndexCoherence"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
-      :type "surjectivity and kernel equality",
+      :type "surjectivity/kernel equality",
       :status :partial,
       :consumers [:t93J03],
       :depends-on ["pathHomotopicQuotient_concat_succ"],
@@ -36154,27 +36156,19 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Third check: closure remains at bd5ebdee; run-index API mismatch persists. Central Fin witnesses must thread through dependent endpoint/prefix theorems.",
+    ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids further Lake work pending lifecycle repair.",
     :commands
-    [{:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
+    [{:cmd "stat .lake/packages; test -L .lake/packages",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history
-    [{:cmd "prior lake build ConstructionTargets.t93J03Closure",
-      :exit 1,
-      :correction "not rerun: source unchanged"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792027150790-12915-ac621530",
-     :commands
-     ["git show/check/diff-tree 8c4eb4f exact scope"
-      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and is new progress after 263f5d47. It defines Fin(runs+1)-indexed boundaries in outer subtype V and proves their coercions equal corresponding ambient canonical boundaries, correctly oriented for run-fold assembly. The partial based van Kampen theorem remains unassumed. Scope/hash match; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
+    [{:cmd "combined check accidentally ran Main",
+      :exit 0,
+      :correction "stopped after explicit symlink test"}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36183,7 +36177,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
