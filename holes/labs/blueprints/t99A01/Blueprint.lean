@@ -139,25 +139,31 @@ do not depend on any topology leaf and can therefore be proved in parallel. -/
 
 theorem t99A01_cokernel_X : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeX) ≅
-      ModuleCat.of ℤ (ZMod 2)) := by sorry
+      ModuleCat.of ℤ (ZMod 2)) := by
+  sorry
 
 theorem t99A01_kernel_X : Limits.IsZero
-    (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeX)) := by sorry
+    (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeX)) := by
+  sorry
 
 theorem t99A01_cokernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeY) ≅
-      ModuleCat.of ℤ (ZMod 2)) := by sorry
+      ModuleCat.of ℤ (ZMod 2)) := by
+  sorry
 
 theorem t99A01_kernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeY) ≅
-      ModuleCat.of ℤ ℤ) := by sorry
+      ModuleCat.of ℤ ℤ) := by
+  sorry
 
 theorem t99A01_cokernel_Z : Limits.IsZero
-    (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeZ)) := by sorry
+    (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeZ)) := by
+  sorry
 
 theorem t99A01_kernel_Z : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeZ) ≅
-      ModuleCat.of ℤ (Fin 2 → ℤ)) := by sorry
+      ModuleCat.of ℤ (Fin 2 → ℤ)) := by
+  sorry
 
 /-- **LIBRARY boundary.** The degree-zero integral homology of `X`. -/
 theorem t99A01_hZero_X :
