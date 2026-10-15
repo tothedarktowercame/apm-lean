@@ -1674,6 +1674,17 @@ theorem polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
         h.localContribution h.image_eq_sum h.basePositive h.firstNatural
           h.secondNatural h.bothNatural))
 
+/-- The same local-class boundary therefore computes the descended map on
+rational third homology through the exact double-cover square. -/
+theorem polynomialDescent_degree_four_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialDescent) 3 =
+      (4 : ℚ) • 𝟙 _ :=
+  polynomialDescent_degree_four_of_sphere
+    (polynomialSphereLift_degree_four_of_localClassDecompositionAndBase h)
+    (t96A06_rp3_rational_homologyMap_surjective 3)
+
 /-- The antipodal deck transformation acts trivially on rational top
 homology of the concrete three-sphere.  This is the odd-dimensional sign in
 the sphere antipodal formula, specialized to the cover of `RP3`. -/
@@ -2174,6 +2185,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_localClasses_positive_of_pairFlipTransport
 #print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
+#print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
