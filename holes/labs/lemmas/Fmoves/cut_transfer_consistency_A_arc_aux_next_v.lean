@@ -9135,7 +9135,51 @@ theorem cut_transfer_consistency_A_arc_aux_next_v {Label : Type*} [DecidableEq L
     (hp : u.length < e₀) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hqL : q < L := by
+    dsimp [L, q]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have he₀L : e₀ < L := lt_trans he₀q hqL
+  have he₀pos : 0 < e₀ := lt_of_le_of_lt (Nat.zero_le _) hp
+  have he_next : e + 1 < L := by
+    have hele : e + 1 ≤ L := by omega
+    by_contra hn
+    have heqL : e + 1 = L := by omega
+    have hz : (e + 1) % L = 0 := by rw [heqL, Nat.mod_self]
+    rw [hz] at hadj
+    omega
+  have he₀eq : e₀ = e + 1 := by
+    rw [Nat.mod_eq_of_lt he_next] at hadj
+    exact hadj
+  have hpe : u.length ≤ e := by omega
+  have heq : e < u.length + 1 + v.length := by omega
+  refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+  rw [hN, D.newA_v e₀ s₀ (by omega) he₀q]
+  have hsrev : reverseParameter s₀ =
+      (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+    apply Subtype.ext
+    simp [reverseParameter, hs₀]
+  rw [hsrev, cut_transfer_consistency_A_arc_aux_next_aux_edge]
+  by_cases hep : e = u.length
+  · rw [cutTransfer, if_pos (Or.inl hep)]
+    rw [hτ]
+    rw [cut_transfer_consistency_A_arc_aux_next_aux_seam_one]
+    congr 2
+    omega
+  · have hpev : u.length < e := lt_of_le_of_ne hpe (Ne.symm hep)
+    have heqne : e ≠ u.length + 1 + v.length := by omega
+    rw [cutTransfer, if_neg (by omega : ¬ (e = u.length ∨ e = u.length + 1 + v.length)),
+      if_pos ⟨hpev, heq⟩]
+    have hτrev : reverseParameter τ =
+        (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      simp [reverseParameter, hτ]
+    rw [hτrev]
+    congr 2
+    omega
 -- END SEAT AREA
 
 /-- Shared vertex: the point is the start of side `e₀` (`s₀ = 0`) written as the end of side `e` (`τ = 1`), `e₀ = (e+1) % L`. -/
