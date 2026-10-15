@@ -88672,31 +88672,33 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build literal MV H1 kernel; higher vanishing; normalization; assemble.",
+    "Literal MV map; higher comparison; normalization; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved" "two vertices"],
     :missing-theorems
-    [{:name "frozenH1SmithEquivOfSurjectiveKernel",
-      :type "surjective map with face-range kernel has Smith target",
+    [{:name "frozenFaceBoundaryCoordinates_injective",
+      :type "face map injective; kernel bottom",
       :status :proved,
       :consumers [:t94J09],
       :depends-on ["frozenFaceCokernelSmithEquiv"],
       :area "polygon-surface-homology"}
      {:name "frozenPolygonH1_surjective_kernel",
-      :type "MV map onto polygon H1 with face-range kernel",
+      :type "MV map onto H1; face-range kernel",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenH1SmithEquivOfSurjectiveKernel"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
-      :type "literal two-vertex polygon homology",
+      :type "two-vertex polygon homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenPolygonH1_surjective_kernel"],
+      :depends-on
+      ["frozenPolygonH1_surjective_kernel"
+       "frozenFaceBoundaryCoordinates_injective"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
       :type "polygon homeomorphic to N6",
@@ -88708,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked MV-to-Smith H1 adapter.",
+    :reason "Banked face injectivity.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88718,16 +88720,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 4119536dc", :exit 0}],
-    :commit "4119536dc",
+     {:cmd "git show --check 8f7c9b6b5", :exit 0}],
+    :commit "8f7c9b6b5",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "6287520617d294e1c43c5819618b605c0b817f7c4b5b1b0d688dc69620fe1a7a"},
+     "2ed50fb77c7fda4d7b6c71b4cd22b183fb69ba5694ba02948b039490b75d79a7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94208,7 +94210,8 @@
     :lemma-frozengraphboundarykernelequiv
     :lemma-frozengraphboundarykernelequiv-attachingcycle
     :lemma-frozenfacecokernelsmithequiv
-    :lemma-frozenpolygonh1-surjective-kernel],
+    :lemma-frozenpolygonh1-surjective-kernel
+    :lemma-frozenfaceboundarycoordinates-injective],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96360,4 +96363,21 @@
    :id :lemma-vertexfiberequiv,
    :kind :lemma,
    :depends-on [:lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenFaceBoundaryCoordinates_injective",
+    :type "face map injective; kernel bottom"},
+   :lemma
+   {:name "frozenFaceBoundaryCoordinates_injective",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "face map injective; kernel bottom",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenfaceboundarycoordinates-injective,
+   :kind :lemma,
+   :depends-on [:lemma-frozenfacecokernelsmithequiv],
    :other-consumers []}]}
