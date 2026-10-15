@@ -88331,27 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Concatenate global prefix blocks; reassemble subdivision; prove van Kampen; assemble.",
+    "Identify prefix-block fold with subdivision; prove van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionRunGlobalPrefixBlockPath_class",
-      :type "rebased run factors equal global prefix block",
+    [{:name "torusRP2_subdivisionRunGlobalPrefixBlockConcat_class",
+      :type "global run-factor fold equals prefix-block fold",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionOuterRunBoundaryFamily_eq_prefixBlockEndpoints"],
+      ["torusRP2_subdivisionRunGlobalPrefixBlockPath_class"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunGlobalPrefixBlockPath_class"],
+      ["torusRP2_subdivisionRunGlobalPrefixBlockConcat_class"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88363,40 +88363,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked globally rebased prefix blocks.",
+    :reason "Banked global prefix-block concatenation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 2d80a6696", :exit 0}],
-    :diagnostic-history
-    [{:cmd "global-block drafts",
-      :exit 1,
-      :correction "used quotient cast"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792063502170-13947-fb72ea30",
-     :commands
-     ["git show/diff/check 2d80a6696"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 2d80a6696 adds compiled, sorry-free progress beyond 55fd500b0. It defines each cumulative-prefix run path rebased to the shared global boundary family and transports the proved run-factor class equality through the corresponding quotient cast. Only t97A01Closure.lean changed; fixture SHA 84967db573f6aece49f423cf96e7cb35b546bc1c0047a6cb138f8ff752ab904c matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Cast directions, endpoint orientations, and quotient representation boundary are correct. Global block concatenation, subdivision reassembly, van Kampen, and final assembly remain explicitly listed."},
-    :commit "2d80a6696",
+     {:cmd "git show --check b0a06eb3b", :exit 0}],
+    :commit "b0a06eb3b",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "84967db573f6aece49f423cf96e7cb35b546bc1c0047a6cb138f8ff752ab904c"},
+     "28997e87730811532ad4be3e4e6d97ee9e00ecc2e438184e5eff2a4c14249680"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94212,7 +94195,8 @@
     :lemma-torusrp2-subdivisionrunprefixblockpoint-last
     :lemma-torusrp2-subdivisionrunprefixblockpoint-zero
     :lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints
-    :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class],
+    :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class
+    :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-class],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94912,4 +94896,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunGlobalPrefixBlockConcat_class",
+    :type "global run-factor fold equals prefix-block fold"},
+   :lemma
+   {:name "torusRP2_subdivisionRunGlobalPrefixBlockConcat_class",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "global run-factor fold equals prefix-block fold",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-class,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunglobalprefixblockpath-class],
    :other-consumers []}]}
