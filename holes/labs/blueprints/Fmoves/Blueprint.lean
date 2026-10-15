@@ -9647,6 +9647,63 @@ theorem cut_transfer_consistency_A_chord {Label : Type*} [DecidableEq Label]
   · exact cut_transfer_consistency_A_chord_aux_zero u v t x oldA oldB newA newB D heq e he τ N s₀ hP hN h
   · exact cut_transfer_consistency_A_chord_aux_one u v t x oldA oldB newA newB D heq e he τ N s₀ hP hN h
 
+/-- Equal positions `(e, τ) = (e₀, s₀)`: `N` is `cutTransfer e₀ s₀` (seam for `e₀ = q`, unchanged otherwise). -/
+theorem cut_transfer_consistency_B_arc_same {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : (u.length + 1 + v.length ≤ e₀ ∧ e₀ < (u ++ [x] ++ v ++ [x] ++ t).length) ∨ e₀ < u.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (he₀e : e = e₀) (hτ : τ = s₀) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Shared vertex: the start of side `e₀` (`s₀ = 0`) written as the end of side `e` (`τ = 1`). -/
+theorem cut_transfer_consistency_B_arc_next {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : (u.length + 1 + v.length ≤ e₀ ∧ e₀ < (u ++ [x] ++ v ++ [x] ++ t).length) ∨ e₀ < u.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hτ : τ.1 = 1) (hs : s₀.1 = 0) (hadj : e₀ = (e + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Shared vertex: the end of side `e₀` (`s₀ = 1`) written as the start of side `e` (`τ = 0`). -/
+theorem cut_transfer_consistency_B_arc_prev {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : (u.length + 1 + v.length ≤ e₀ ∧ e₀ < (u ++ [x] ++ v ++ [x] ++ t).length) ∨ e₀ < u.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hs : s₀.1 = 1) (hτ : τ.1 = 0) (hadj : e = (e₀ + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
 /-- Piece `B`, side position `(e₀, s₀)` with `q ≤ e₀ < L` or `e₀ < p`. -/
 theorem cut_transfer_consistency_B_arc {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -9663,7 +9720,15 @@ theorem cut_transfer_consistency_B_arc {Label : Type*} [DecidableEq Label]
     (hN : (N : ℂ) = newB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  have hL : 2 ≤ (u ++ [x] ++ v ++ [x] ++ t).length := by simp; omega
+  have he₀L : e₀ < (u ++ [x] ++ v ++ [x] ++ t).length := by rcases he₀ with h | h <;> simp at h ⊢ <;> omega
+  have hn : edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ = edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀ := by
+    apply Subtype.ext
+    rw [hP, D.oldB_arc e₀ s₀ he₀]
+  rcases heq hL he he₀L hn with ⟨h1, h2⟩ | ⟨h1, h2, h3⟩ | ⟨h1, h2, h3⟩
+  · exact cut_transfer_consistency_B_arc_same u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ hP hN h1 h2
+  · exact cut_transfer_consistency_B_arc_next u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ hP hN h1 h2 h3
+  · exact cut_transfer_consistency_B_arc_prev u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ hP hN h1 h2 h3
 
 /-- Piece `B`, chord position `s₀` (a unit point only at the ends `P`, `Q`). -/
 theorem cut_transfer_consistency_B_chord {Label : Type*} [DecidableEq Label]
