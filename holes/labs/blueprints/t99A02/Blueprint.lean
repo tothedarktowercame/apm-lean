@@ -3293,7 +3293,67 @@ ends stay at `1` resp. `0`, related by `edge`); `vertex h` (`(h, 0)` with
 lemma treeContraction_resp (g : G) :
     ∀ t, ∀ a b, a ∈ treeStar g → TreeRel a b →
       qmk TreeRel (treeContraction g (t, a)) = qmk TreeRel (treeContraction g (t, b)) := by
-  sorry
+  classical
+  intro t x y hx hxy
+  have ha : a ≠ (1 : G) := G_facts.1
+  have hbb : b * b = (1 : G) := G_facts.2.2.1
+  cases hxy with
+  | edge h =>
+      simp only [treeStar, Set.mem_setOf_eq, treeStarPred] at hx
+      have hh : h = g * a⁻¹ := by
+        rcases hx with hx | hx
+        · norm_num at hx
+        · exact hx.1
+      have hha : h * a = g := by simp [hh]
+      have hne : h ≠ g := by
+        intro he
+        apply ha
+        apply mul_left_cancel (a := g)
+        simpa [hh] using he.symm
+      apply Quotient.sound
+      apply Relation.EqvGen.rel
+      simpa [treeContraction, hne, hha, towardOne, towardZero] using TreeRel.edge h
+  | vertex h =>
+      simp only [treeStar, Set.mem_setOf_eq, treeStarPred] at hx
+      have hh : h = g := by
+        rcases hx with hx | hx
+        · exact hx.1
+        · norm_num at hx
+      subst h
+      apply Quotient.sound
+      apply Relation.EqvGen.rel
+      simpa [treeContraction, towardZero, (spherePush_spec north).2.2.1] using
+        TreeRel.vertex g
+  | pair h x =>
+      simp only [treeStar, Set.mem_setOf_eq, treeStarPred] at hx
+      rcases hx with hx | hx
+      · have hh : h = g := hx.1
+        subst h
+        have hgb : g * b ≠ g := by
+          intro he
+          apply treeContraction_continuousOn_aux_b_ne_one
+          apply mul_left_cancel (a := g)
+          simpa only [mul_one] using he
+        have hodd := (spherePush_spec north).2.2.2.2 t x
+        rw [neg_north] at hodd
+        apply Quotient.sound
+        apply Relation.EqvGen.rel
+        simpa [treeContraction, hgb, hodd] using
+          TreeRel.pair g (spherePush north (t, x))
+      · have hh : h = g * b := hx.1
+        subst h
+        have hgb : g * b ≠ g := by
+          intro he
+          apply treeContraction_continuousOn_aux_b_ne_one
+          apply mul_left_cancel (a := g)
+          simpa only [mul_one] using he
+        have hgbb : g * b * b = g := by simp [mul_assoc, hbb]
+        have hodd := (spherePush_spec south).2.2.2.2 t x
+        rw [neg_south] at hodd
+        apply Quotient.sound
+        apply Relation.EqvGen.rel
+        simpa [treeContraction, hgb, hgbb, hodd] using
+          TreeRel.pair (g * b) (spherePush south (t, x))
 
 /-- Each tree star is simply connected (assembly; leaves above). -/
 lemma treeStar_isSimplyConnected (g : G) :
