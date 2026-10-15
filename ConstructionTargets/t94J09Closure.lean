@@ -72,6 +72,62 @@ theorem frozen_boundaryRel_iff (x y : Surfaces.Disk) :
   · rintro ⟨i, t, rfl, rfl⟩
     exact ⟨i, t, rfl, by rw [frozen_pairedParameter]⟩
 
+/-- The seven canonically oriented generators of the frozen polygon relation. -/
+def frozenGeneratorRel (x y : Surfaces.Disk) : Prop :=
+  ∃ t : Set.Icc (0 : ℝ) 1,
+    (x = Surfaces.edgePoint 14 0 t ∧ y = Surfaces.edgePoint 14 12 t) ∨
+    (x = Surfaces.edgePoint 14 6 t ∧ y = Surfaces.edgePoint 14 13 t) ∨
+    (x = Surfaces.edgePoint 14 1 t ∧
+      y = Surfaces.edgePoint 14 7 (reverseIcc t)) ∨
+    (x = Surfaces.edgePoint 14 2 t ∧ y = Surfaces.edgePoint 14 8 t) ∨
+    (x = Surfaces.edgePoint 14 5 t ∧ y = Surfaces.edgePoint 14 10 t) ∨
+    (x = Surfaces.edgePoint 14 4 t ∧ y = Surfaces.edgePoint 14 11 t) ∨
+    (x = Surfaces.edgePoint 14 3 t ∧ y = Surfaces.edgePoint 14 9 t)
+
+/-- The generic signed relation is precisely the symmetric closure of the
+seven frozen generators.  This is the relation-level comparison needed to
+reuse the radial quotient construction for the consumer's inductive relation. -/
+theorem frozen_boundaryRel_iff_generator (x y : Surfaces.Disk) :
+    boundaryRel 14 frozenPair frozenSign x y ↔
+      frozenGeneratorRel x y ∨ frozenGeneratorRel y x := by
+  rw [frozen_boundaryRel_iff]
+  constructor
+  · rintro ⟨i, t, rfl, rfl⟩
+    fin_cases i
+    · left; exact ⟨t, Or.inl ⟨rfl, rfl⟩⟩
+    · left; exact ⟨t, Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩))⟩
+    · left; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩)))⟩
+    · left; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr ⟨rfl, rfl⟩)))))⟩
+    · left; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩)))))⟩
+    · left; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩))))⟩
+    · left; exact ⟨t, Or.inr (Or.inl ⟨rfl, rfl⟩)⟩
+    · right; refine ⟨reverseIcc t, Or.inr (Or.inr (Or.inl ⟨rfl, ?_⟩))⟩
+      simp
+    · right; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩)))⟩
+    · right; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr ⟨rfl, rfl⟩)))))⟩
+    · right; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩))))⟩
+    · right; exact ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩)))))⟩
+    · right; exact ⟨t, Or.inl ⟨rfl, rfl⟩⟩
+    · right; exact ⟨t, Or.inr (Or.inl ⟨rfl, rfl⟩)⟩
+  · rintro (h | h) <;> rcases h with ⟨t, h⟩
+    · rcases h with h | h | h | h | h | h | h
+      · exact ⟨0, t, h.1, h.2⟩
+      · exact ⟨6, t, h.1, h.2⟩
+      · exact ⟨1, t, h.1, h.2⟩
+      · exact ⟨2, t, h.1, h.2⟩
+      · exact ⟨5, t, h.1, h.2⟩
+      · exact ⟨4, t, h.1, h.2⟩
+      · exact ⟨3, t, h.1, h.2⟩
+    · rcases h with h | h | h | h | h | h | h
+      · exact ⟨12, t, h.2, h.1⟩
+      · exact ⟨13, t, h.2, h.1⟩
+      · refine ⟨7, reverseIcc t, h.2, ?_⟩
+        simpa using h.1
+      · exact ⟨8, t, h.2, h.1⟩
+      · exact ⟨10, t, h.2, h.1⟩
+      · exact ⟨11, t, h.2, h.1⟩
+      · exact ⟨9, t, h.2, h.1⟩
+
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -541,5 +597,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
+#print axioms frozen_boundaryRel_iff_generator
 
 end ConstructionTargets.t94J09Closure
