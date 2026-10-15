@@ -401,7 +401,27 @@ antipodal (`antipodalMk_neg`). -/
 -- BEGIN SEAT AREA
 lemma rp2Proj_factor_aux_inv0_respects (a b : Disk) (h : SurfaceRel false 1 a b) :
     rp2Proj_factor_aux_inv0 a = rp2Proj_factor_aux_inv0 b := by
-  sorry
+  simp only [SurfaceRel, Bool.false_eq_true, ↓reduceIte] at h
+  obtain ⟨j, hj, t, rfl, rfl⟩ := h
+  interval_cases j
+  rw [show rp2Proj_factor_aux_inv0 (edgePoint 2 1 t) =
+      rp2Proj_factor_aux_inv0 (edgePoint 2 0 t) by
+    unfold rp2Proj_factor_aux_inv0
+    rw [← antipodalMk_neg]
+    congr 1
+    apply Subtype.ext
+    ext i
+    fin_cases i
+    · simp [rp2Proj_factor_aux_sphere, edgePoint, Complex.exp_re]
+      rw [show 2 * Real.pi * (1 + (t : ℝ)) / 2 =
+        2 * Real.pi * (t : ℝ) / 2 + Real.pi by ring, Real.cos_add_pi]
+      simp
+    · simp [rp2Proj_factor_aux_sphere, edgePoint, Complex.exp_im]
+      rw [show 2 * Real.pi * (1 + (t : ℝ)) / 2 =
+        2 * Real.pi * (t : ℝ) / 2 + Real.pi by ring, Real.sin_add_pi]
+      simp
+    · simp [rp2Proj_factor_aux_sphere, edgePoint, Complex.norm_exp,
+        Complex.mul_re]]
 -- END SEAT AREA
 
 /-- Leaf (split from `rp2Proj_factor`).  `inv0 ∘ diskOf = antipodalMk`:
