@@ -3383,7 +3383,32 @@ sphere point `(k, x)` has `k ∈ {g, g b} ∩ {h, h b}`, so `h ∈ {g, g b}`
 (`b * b = 1` from `G_facts`, so `b⁻¹ = b`). -/
 lemma treeStar_inter_aux_labels (g h : G) (z : TreeZ) (hg : z ∈ treeStar g)
     (hh : z ∈ treeStar h) : h = g ∨ h = g * a ∨ h = g * a⁻¹ ∨ h = g * b := by
-  sorry
+  have hbb : b * b = (1 : G) := G_facts.2.2.1
+  rcases z with ⟨k, t⟩ | ⟨k, x⟩
+  · change (k = g ∧ (t : ℝ) < 1) ∨ (k = g * a⁻¹ ∧ 0 < (t : ℝ)) at hg
+    change (k = h ∧ (t : ℝ) < 1) ∨ (k = h * a⁻¹ ∧ 0 < (t : ℝ)) at hh
+    rcases hg with ⟨hkg, -⟩ | ⟨hkg, -⟩ <;>
+      rcases hh with ⟨hkh, -⟩ | ⟨hkh, -⟩
+    · exact Or.inl (hkh.symm.trans hkg)
+    · right; left
+      calc
+        h = (h * a⁻¹) * a := by simp
+        _ = g * a := by rw [← hkh, hkg]
+    · exact Or.inr (Or.inr (Or.inl (hkh.symm.trans hkg)))
+    · left
+      exact mul_right_cancel (hkh.symm.trans hkg)
+  · change (k = g ∧ x ≠ south) ∨ (k = g * b ∧ x ≠ north) at hg
+    change (k = h ∧ x ≠ south) ∨ (k = h * b ∧ x ≠ north) at hh
+    rcases hg with ⟨hkg, -⟩ | ⟨hkg, -⟩ <;>
+      rcases hh with ⟨hkh, -⟩ | ⟨hkh, -⟩
+    · exact Or.inl (hkh.symm.trans hkg)
+    · right; right; right
+      calc
+        h = (h * b) * b := by rw [mul_assoc, hbb, mul_one]
+        _ = g * b := by rw [← hkh, hkg]
+    · exact Or.inr (Or.inr (Or.inr (hkh.symm.trans hkg)))
+    · left
+      exact mul_right_cancel (hkh.symm.trans hkg)
 
 /-- Leaf (split).  `treeStar g ∩ treeStar (g a) = {inl (g, t) | 0 < t < 1}`
 (labels: `g a ≠ g`, `g a a⁻¹ = g`, sphere labels `g, g b` vs `g a, g a b`
