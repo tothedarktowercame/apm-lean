@@ -221,6 +221,90 @@ abbrev apm_t97a01_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
 
+/-- Homology transport from the frozen `aabbcc` quotient to the pairing-space
+model used by the polygon Mayer--Vietoris calculation. -/
+noncomputable def apm_t97a01_X_homologyIsoPairingSpace (k : ℕ) :
+    apm_t97a01_H k apm_t97a01_X ≅
+      ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.aabbccPairingData k :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo apm_t97a01_X_homeomorph_pairingSpace)
+
+/-- Homology transport from the frozen torus-crosscap quotient to the
+pairing-space model used by the polygon Mayer--Vietoris calculation. -/
+noncomputable def apm_t97a01_TorusRP2_homologyIsoPairingSpace (k : ℕ) :
+    apm_t97a01_H k apm_t97a01_TorusRP2 ≅
+      ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.torusRP2PairingData k :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo apm_t97a01_TorusRP2_homeomorph_pairingSpace)
+
+theorem apm_t97a01_aabbcc_homology_isZero (k : ℕ) (hk : 2 ≤ k) :
+    Limits.IsZero
+      (ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.aabbccPairingData k) := by
+  rcases ConstructionTargets.t97A01Closure.aabbccPolygonHomology with
+    ⟨_, _, ⟨h2⟩, hhi⟩
+  rcases eq_or_lt_of_le hk with rfl | hk'
+  · have hz : Limits.IsZero
+        (ModuleCat.of ℤ
+          (ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel
+            ConstructionTargets.t97A01Closure.aabbccPairingData)) := by
+      rw [ConstructionTargets.t97A01Closure.aabbccBoundaryKernel_eq_bot]
+      exact ModuleCat.isZero_of_subsingleton _
+    exact hz.of_iso h2
+  · exact hhi k (by omega)
+
+theorem apm_t97a01_torusRP2_homology_isZero (k : ℕ) (hk : 2 ≤ k) :
+    Limits.IsZero
+      (ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.torusRP2PairingData k) := by
+  rcases ConstructionTargets.t97A01Closure.torusRP2PolygonHomology with
+    ⟨_, _, ⟨h2⟩, hhi⟩
+  rcases eq_or_lt_of_le hk with rfl | hk'
+  · have hz : Limits.IsZero
+        (ModuleCat.of ℤ
+          (ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel
+            ConstructionTargets.t97A01Closure.torusRP2PairingData)) := by
+      rw [ConstructionTargets.t97A01Closure.torusRP2BoundaryKernel_eq_bot]
+      exact ModuleCat.isZero_of_subsingleton _
+    exact hz.of_iso h2
+  · exact hhi k (by omega)
+
+/-- The integral singular homology of both frozen six-edge quotients. -/
+theorem apm_t97a01_polygon_singular_homology :
+    (Nonempty (apm_t97a01_H 0 apm_t97a01_X ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (apm_t97a01_H 1 apm_t97a01_X ≅
+        ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)) ∧
+      ∀ k : ℕ, 2 ≤ k → Limits.IsZero (apm_t97a01_H k apm_t97a01_X)) ∧
+    (Nonempty (apm_t97a01_H 0 apm_t97a01_TorusRP2 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (apm_t97a01_H 1 apm_t97a01_TorusRP2 ≅
+        ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)) ∧
+      ∀ k : ℕ, 2 ≤ k → Limits.IsZero
+        (apm_t97a01_H k apm_t97a01_TorusRP2)) := by
+  rcases ConstructionTargets.t97A01Closure.aabbccPolygonHomology with
+    ⟨⟨hX0⟩, ⟨hX1⟩, _, _⟩
+  rcases ConstructionTargets.t97A01Closure.torusRP2PolygonHomology with
+    ⟨⟨hT0⟩, ⟨hT1⟩, _, _⟩
+  refine ⟨⟨⟨apm_t97a01_X_homologyIsoPairingSpace 0 ≪≫ hX0⟩,
+    ⟨apm_t97a01_X_homologyIsoPairingSpace 1 ≪≫ hX1 ≪≫
+      ConstructionTargets.t97A01Closure.aabbccBoundaryCokernelSmithEquiv.toModuleIso⟩,
+    ?_⟩,
+    ⟨⟨apm_t97a01_TorusRP2_homologyIsoPairingSpace 0 ≪≫ hT0⟩,
+    ⟨apm_t97a01_TorusRP2_homologyIsoPairingSpace 1 ≪≫ hT1 ≪≫
+      ConstructionTargets.t97A01Closure.torusRP2BoundaryCokernelSmithEquiv.toModuleIso⟩,
+    ?_⟩⟩
+  · intro k hk
+    exact (apm_t97a01_aabbcc_homology_isZero k hk).of_iso
+      (apm_t97a01_X_homologyIsoPairingSpace k)
+  · intro k hk
+    exact (apm_t97a01_torusRP2_homology_isZero k hk).of_iso
+      (apm_t97a01_TorusRP2_homologyIsoPairingSpace k)
+
+#print axioms apm_t97a01_polygon_singular_homology
+
 def apm_t97a01_baseX : apm_t97a01_X := Quotient.mk _ (0 : apm_t97a01_Disk)
 def apm_t97a01_baseTorusRP2 : apm_t97a01_TorusRP2 :=
   Quotient.mk _ (0 : apm_t97a01_Disk)
