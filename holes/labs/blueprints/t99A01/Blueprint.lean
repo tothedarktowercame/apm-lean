@@ -532,7 +532,25 @@ theorem t99A01_kernel_Y : Nonempty
 
 theorem t99A01_cokernel_Z : Limits.IsZero
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeZ)) := by
-  sorry
+  rw [ModuleCat.isZero_iff_subsingleton]
+  have hsurj : Function.Surjective
+      (APMT99A01.degreeMap APMT99A01.degreeZ) := by
+    intro x
+    refine ⟨![-2 * x, 0, x], ?_⟩
+    simp [APMT99A01.degreeMap, APMT99A01.degreeZ, Fin.sum_univ_three]
+    ring
+  have hrange : LinearMap.range
+      (APMT99A01.degreeMap APMT99A01.degreeZ) = ⊤ :=
+    LinearMap.range_eq_top.mpr hsurj
+  constructor
+  intro a b
+  refine Quotient.inductionOn₂ a b ?_
+  intro x y
+  apply Quotient.sound
+  apply (Submodule.quotientRel_def (p := LinearMap.range
+    (APMT99A01.degreeMap APMT99A01.degreeZ))).2
+  rw [hrange]
+  trivial
 
 theorem t99A01_kernel_Z : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeZ) ≅
