@@ -941,6 +941,30 @@ theorem t96A06_polynomialSphereLift_regular_fiber (p : Sphere 3) :
     exact polynomialSphereLift_fiber_subset_pairSignOrbit hq
   · exact pairSignOrbit_subset_polynomialSphereLift_fiber p
 
+/-- The four explicit points used to index localization at the selected
+regular value. -/
+def polynomialSphereRegularFiberPoint : Fin 4 → Sphere 3 :=
+  ![polynomialSphereRegularPoint,
+    flipFirstPairSphere polynomialSphereRegularPoint,
+    flipSecondPairSphere polynomialSphereRegularPoint,
+    flipFirstPairSphere (flipSecondPairSphere polynomialSphereRegularPoint)]
+
+/-- This explicit `Fin 4` family exhausts the literal regular fiber. -/
+theorem polynomialSphereRegularFiberPoint_range :
+    Set.range polynomialSphereRegularFiberPoint =
+      polynomialSphereLift ⁻¹' {polynomialSphereLift polynomialSphereRegularPoint} := by
+  rw [t96A06_polynomialSphereLift_regular_fiber]
+  apply Set.Subset.antisymm
+  · rintro q ⟨i, rfl⟩
+    fin_cases i <;> simp [polynomialSphereRegularFiberPoint, pairSignOrbit]
+  · intro q hq
+    simp only [pairSignOrbit, Set.mem_insert_iff, Set.mem_singleton_iff] at hq
+    rcases hq with rfl | rfl | rfl | rfl
+    · exact ⟨0, by simp [polynomialSphereRegularFiberPoint]⟩
+    · exact ⟨1, by simp [polynomialSphereRegularFiberPoint]⟩
+    · exact ⟨2, by simp [polynomialSphereRegularFiberPoint]⟩
+    · exact ⟨3, by simp [polynomialSphereRegularFiberPoint]⟩
+
 /-- The normalized sphere lift descends through the exact double cover to
 the chosen projective polynomial descent. -/
 theorem polynomialSphereLift_projection (p : Sphere 3) :
