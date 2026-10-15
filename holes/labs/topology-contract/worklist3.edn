@@ -37111,7 +37111,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37176,7 +37176,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37198,7 +37198,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37487,6 +37487,16 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
      {:cmd "git show --check 83c229d1d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792051625302-13660-2c814344",
+     :commands
+     ["git show/check/diff-tree e474731bb; fixture sha256"
+      "lake env lean archived committed Main via authority-linked worktree"
+      "statement-registry check; sorry recount 2->1"],
+     :finding
+     "PASS: e474731bb is new compiled, standard-axiom progress. It proves the exact fixed locus equals the coordinate CP1 line union the isolated third-axis point, with both set-inclusion directions and projective representatives handled correctly. Scope is one allowed file; fixture hash matches; registry 166/166; placeholders 2->1. Remaining CP2 rational homology, Euler characteristic, and final theorem are listed."},
     :commit "83c229d1d",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
@@ -37495,7 +37505,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -37513,7 +37523,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-connectedness and rational H0 for literal CP1.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the literal CP1 two-affine-patch open cover.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37549,7 +37559,11 @@
     {:job 7,
      :commit "0c7fbd85d",
      :reason
-     "Committed path-connectedness and rational H0 for literal CP1."}]}
+     "Committed path-connectedness and rational H0 for literal CP1."}
+    {:job 8,
+     :commit "83c229d1d",
+     :reason
+     "Committed the literal CP1 two-affine-patch open cover."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -41400,7 +41414,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_polynomialSphereLift_regular_fiber_ncard",
@@ -41410,7 +41424,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "every pair-sign-regular lift fiber has cardinality four",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-polynomialspherelift-regular-fiber-ncard,
    :kind :lemma,
    :depends-on
@@ -41440,7 +41456,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "flipFirstPairSphere_rational_H3",
@@ -41450,14 +41466,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "first flip: identity on H3(Q)",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-flipfirstpairsphere-rational-h3,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "flipSecondPairSphere_rational_H3",
@@ -41467,14 +41485,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "second flip: identity on H3(Q)",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-flipsecondpairsphere-rational-h3,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "flipBothPairsSphere_rational_H3",
@@ -41484,7 +41504,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "composite pair flip is identity on H3(Q)",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-flipbothpairssphere-rational-h3,
    :kind :lemma,
    :depends-on
@@ -41493,7 +41515,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereRegularPoint_isRegular",
@@ -41503,14 +41525,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "chosen point is regular",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialsphereregularpoint-isregular,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polynomialSphereRegularPoint_fiber_ncard",
@@ -41520,7 +41544,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "chosen fiber has four points",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-polynomialsphereregularpoint-fiber-ncard,
    :kind :lemma,
    :depends-on
@@ -41529,7 +41555,7 @@
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_cp1_twoAffine_openCover",
@@ -41539,7 +41565,9 @@
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "two affine patches are open and cover CP1",
     :area "rational-homology-cpn",
-    :proved-in :program-2026-10-13-close-t97j07},
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "83c229d1d"},
    :id :lemma-t97j07-cp1-twoaffine-opencover,
    :kind :lemma,
    :depends-on [:lemma-t97j07-cp1-rationalh0iso],
