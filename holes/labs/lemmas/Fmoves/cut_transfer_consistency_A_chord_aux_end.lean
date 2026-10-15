@@ -9012,7 +9012,19 @@ theorem cut_transfer_consistency_A_chord_aux_end {Label : Type*} [DecidableEq La
     (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutChordParamA (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀))
     (hN : (N : ℂ) = newA (cutChordParamA (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀)) :
     s₀.1 = 0 ∨ s₀.1 = 1 := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hpq : p < q := by
+    dsimp [p, q]
+    omega
+  have hqL : q < L := by
+    dsimp [q, L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  apply cut_transfer_consistency_aux_chordA_end hpq hqL s₀
+  rw [← D.oldA_chord s₀, ← hP]
+  exact norm_edgePoint L e τ
 -- END SEAT AREA
 
 /-- Chord start `s₀ = 0`: old vertex `q` (`Q`); `newA` is new vertex `p + 2`. -/
