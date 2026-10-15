@@ -1357,7 +1357,44 @@ lemma apm_t98a03_circleNbhd_contraction (c : Circle) :
     Nonempty
       (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
         (apm_t98a03_circleNbhd c) ⟨c, apm_t98a03_circleNbhd_mem c⟩) := by
-  sorry
+  let e0 : Circle ≃ₜ Circle := Homeomorph.mulLeft c⁻¹
+  have he_mem (z : Circle) :
+      z ∈ apm_t98a03_circleNbhd c ↔
+        e0 z ∈ ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood := by
+    change (z : ℂ) ≠ -(c : ℂ) ↔ ((c⁻¹ * z : Circle) : ℂ) ≠ -1
+    constructor
+    · intro hz h
+      apply hz
+      have := congrArg (fun w : ℂ ↦ (c : ℂ) * w) h
+      simpa using this
+    · intro hz h
+      apply hz
+      change (((c⁻¹ : Circle) : ℂ) * (z : ℂ)) = -1
+      rw [h]
+      simp
+  let e : apm_t98a03_circleNbhd c ≃ₜ
+      ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood := {
+    toFun z := ⟨e0 z.1, (he_mem z.1).1 z.2⟩
+    invFun z := ⟨e0.symm z.1, (he_mem (e0.symm z.1)).2 (by simpa using z.2)⟩
+    left_inv z := by
+      apply Subtype.ext
+      exact e0.symm_apply_apply z.1
+    right_inv z := by
+      apply Subtype.ext
+      exact e0.apply_symm_apply z.1
+    continuous_toFun := Continuous.subtype_mk
+      (e0.continuous.comp continuous_subtype_val) _
+    continuous_invFun := Continuous.subtype_mk
+      (e0.symm.continuous.comp continuous_subtype_val) _ }
+  have he_base : e ⟨c, apm_t98a03_circleNbhd_mem c⟩ =
+      ⟨1, ConstructionTargets.PointWedgeVanKampen.circleBase_mem⟩ := by
+    apply Subtype.ext
+    simp [e, e0]
+  refine ⟨?_⟩
+  exact
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e
+      (he_base.symm ▸
+        ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction)
 
 /-- Product neighbourhood of a torus point. -/
 def apm_t98a03_torusNbhd (t₀ : apm_t98a03_Torus) : Set apm_t98a03_Torus :=
