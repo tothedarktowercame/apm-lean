@@ -36121,26 +36121,27 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
-    :residual "Regrouping, kernel/surjectivity, winding, C1/C2/Main.",
+    :residual
+    "Fold induction, kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "pathHomotopicQuotient_concat_succ",
-      :type "quotient recurrence",
+    [{:name "pathTwoOpenSubdivisionRunPrefixCoverage",
+      :type "run-prefix equations",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunIndexCoherence"],
+      :depends-on ["pathHomotopicQuotient_concat_succ"],
       :area "covering-subgroup-correspondence"}
      {:name "pathTwoOpenSubdivision_quotient_eq_runFold",
       :type "fold equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on ["pathHomotopicQuotient_concat_succ"],
+      :depends-on ["pathTwoOpenSubdivisionRunPrefixCoverage"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity/kernel",
@@ -36153,30 +36154,20 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed quotient successor recurrence; next is the piece-fold/maximal-run-fold induction.",
+    "Committed run-prefix successor/coverage equations; next is quotient-fold induction.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t93J03Closure.lean",
+    [{:cmd "overlay lean ConstructionTargets/t93J03Closure.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial closure compile",
+    [{:cmd "initial compiles",
       :exit 1,
-      :note "rw mismatch; exact mk_trans fixed it"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792035569515-13126-92acb056",
-     :commands
-     ["git show --check/diff-tree 8c4eb4f; exact scope"
-      "sha256sum fixture; committed source audit"
-      "statement-registry check"
-      "recorded-source snapshot lake env lean"],
-     :finding
-     "PASS: 8c4eb4f is compiled, sorry-free standard-axiom progress after 263f5d47. It adds Fin(runs+1)-indexed outer-subtype boundary representatives and proves their coercions equal matching ambient canonical boundaries, correctly oriented for run-fold assembly. Exact two-file scope and fixture hash match; registry 166/166; frozen Main placeholder remains 1->1; remaining milestones are listed."},
-    :commit "c62ac5ee56a1c6fc7870634cd60d6067a38a5a20",
+      :note
+      "concurrent missing olean; overlay used; take_length fixed"}],
+    :commit "658cfac1cef2af4ea3a2b3ac53dae5eee5cdcef5",
     :changed-paths ["ConstructionTargets/t93J03Closure.lean"],
     :fixture
     {:path "/tmp/t93j03_quotient_fold_algebra_check.lean",
@@ -36184,7 +36175,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -40503,6 +40494,25 @@
     :type "fold equality",
     :area "covering-subgroup-correspondence"},
    :id :lemma-pathtwoopensubdivision-quotient-eq-runfold,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathhomotopicquotient-concat-succ
+    :lemma-pathtwoopensubdivisionrunprefixcoverage],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunPrefixCoverage",
+    :type "run-prefix equations"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunPrefixCoverage",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run-prefix equations",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunprefixcoverage,
    :kind :lemma,
    :depends-on [:lemma-pathhomotopicquotient-concat-succ],
    :other-consumers []}],
