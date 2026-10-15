@@ -2168,6 +2168,43 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm
       torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv S _ t
     _ = S.piece j t := by rw [Equiv.apply_symm_apply]
 
+/-- The inverse run/offset coordinate has flattened value equal to the
+original subdivision index. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_flatten
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) :
+    pathTwoOpenSubdivisionRunPrefixLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1.val +
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j).2.val = j.val := by
+  have h := congrArg Fin.val
+    ((torusRP2_subdivisionRunOffsetEquiv S).apply_symm_apply j)
+  exact h
+
+/-- Inverse run/offset coordinates occur in the same strict order as the
+original subdivision factors. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_strictMono
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    StrictMono (fun j : Fin (S.n + 1) =>
+      pathTwoOpenSubdivisionRunPrefixLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1.val +
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j).2.val) := by
+  intro j k hjk
+  change pathTwoOpenSubdivisionRunPrefixLength S
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1.val +
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j).2.val <
+    pathTwoOpenSubdivisionRunPrefixLength S
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm k).1.val +
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm k).2.val
+  rw [torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j,
+    torusRP2_subdivisionRunOffsetEquiv_symm_flatten S k]
+  exact hjk
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2270,6 +2307,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_strictMono
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
