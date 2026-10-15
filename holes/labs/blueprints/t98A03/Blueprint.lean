@@ -3108,7 +3108,92 @@ lemma apm_t98a03_regular_fiber_orbit (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a0
     (x y : apm_t98a03_RegE t₀ r₀)
     (hxy : apm_t98a03_regMap t₀ r₀ x = apm_t98a03_regMap t₀ r₀ y) :
     y = x ∨ y = h x ∨ y = h (h x) := by
-  sorry
+  have hdeck := apm_t98a03_regDeck_commutes t₀ r₀ h hh
+  let F := {z : apm_t98a03_RegE t₀ r₀ //
+    apm_t98a03_regMap t₀ r₀ z = apm_t98a03_regMap t₀ r₀ x}
+  let f : Fin 3 → F := fun k =>
+    match k with
+    | ⟨0, _⟩ => ⟨x, rfl⟩
+    | ⟨1, _⟩ => ⟨h x, hdeck x⟩
+    | ⟨2, _⟩ => ⟨h (h x), (hdeck (h x)).trans (hdeck x)⟩
+  have hsameL (a b : apm_t98a03_Torus) :
+      apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀) (.inl a) =
+        apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀) (.inl b) ↔ a = b := by
+    rw [apm_t98a03_glueMk_eq_iff (apm_t98a03_sheetPt_injective t₀)
+      (apm_t98a03_regTau_injective r₀)]
+    simp [apm_t98a03_GlueEq]
+  have hsameR (a b : apm_t98a03_RegB) :
+      apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀) (.inr a) =
+        apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀) (.inr b) ↔ a = b := by
+    rw [apm_t98a03_glueMk_eq_iff (apm_t98a03_sheetPt_injective t₀)
+      (apm_t98a03_regTau_injective r₀)]
+    simp [apm_t98a03_GlueEq]
+  have hrot_ne (a : apm_t98a03_Torus) : apm_t98a03_torusRot a ≠ a := by
+    intro ha
+    have he : apm_t98a03_zeta * a.1 = 1 * a.1 := by
+      simpa [apm_t98a03_torusRot] using congrArg Prod.fst ha
+    have hz := mul_right_cancel he
+    have hk : (1 : Fin 3) = 0 := apm_t98a03_zeta_pow_injective (by simpa using hz)
+    omega
+  have hrot2_ne (a : apm_t98a03_Torus) :
+      apm_t98a03_torusRot (apm_t98a03_torusRot a) ≠ a := by
+    intro ha
+    have he : (apm_t98a03_zeta ^ 2) * a.1 = 1 * a.1 := by
+      simpa [apm_t98a03_torusRot, pow_two, mul_assoc] using congrArg Prod.fst ha
+    have hz := mul_right_cancel he
+    have hk : (2 : Fin 3) = 0 := apm_t98a03_zeta_pow_injective (by simpa using hz)
+    omega
+  obtain ⟨a, rfl⟩ := apm_t98a03_glueMk_surjective
+    (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀) x
+  have hf_inj : Function.Injective f := by
+    intro i j hij
+    have hij' := congrArg Subtype.val hij
+    fin_cases i <;> fin_cases j <;> try rfl
+    all_goals simp only [f] at hij'
+    all_goals simp_rw [hh] at hij'
+    all_goals rcases a with a | a
+    all_goals try simp only [Sum.map_inl, Sum.map_inr] at hij'
+    all_goals try {
+      have hab := (hsameL _ _).mp hij'
+      have hne12 : apm_t98a03_torusRot a ≠
+          apm_t98a03_torusRot (apm_t98a03_torusRot a) := by
+        intro he
+        exact hrot_ne a (apm_t98a03_torusRot.injective he).symm
+      have hne1 := hrot_ne a
+      have hne2 := hrot2_ne a
+      first
+      | exact (hne1 hab).elim
+      | exact (hne1 hab.symm).elim
+      | exact (hne2 hab).elim
+      | exact (hne2 hab.symm).elim
+      | exact (hne12 hab).elim
+      | exact (hne12 hab.symm).elim }
+    all_goals try {
+      have hab := (hsameR _ _).mp hij'
+      have hab1 := congrArg (fun q => q.1) hab
+      have hv := congrArg Fin.val hab1
+      dsimp [apm_t98a03_regRot] at hv
+      omega }
+  have hcardF : Nat.card F = 3 := by
+    change Nat.card {z // apm_t98a03_regMap t₀ r₀ z =
+      apm_t98a03_regMap t₀ r₀
+        (apm_t98a03_glueMk (apm_t98a03_sheetPt t₀) (apm_t98a03_regTau r₀) a)} = 3
+    exact apm_t98a03_glueMap_fiber_card apm_t98a03_torusCube apm_t98a03_regQ
+      (apm_t98a03_torusCube_sheetPt t₀) (apm_t98a03_regQ_tau r₀)
+      (apm_t98a03_sheetPt_injective t₀) (apm_t98a03_regTau_injective r₀)
+      (apm_t98a03_torusCube_eq_iff t₀) (apm_t98a03_regQ_eq_iff r₀) 3
+      apm_t98a03_torusCube_fiber_card apm_t98a03_regQ_fiber_card (by simp) _
+  letI : Finite F := Nat.finite_of_card_ne_zero (by omega)
+  letI := Fintype.ofFinite F
+  have hf_surj : Function.Surjective f := by
+    have hc : Fintype.card (Fin 3) = Fintype.card F := by
+      simpa [Nat.card_eq_fintype_card] using hcardF.symm
+    exact ((Fintype.bijective_iff_injective_and_card f).mpr ⟨hf_inj, hc⟩).2
+  obtain ⟨k, hk⟩ := hf_surj ⟨y, hxy.symm⟩
+  fin_cases k <;> simp only [f] at hk
+  · exact Or.inl (congrArg Subtype.val hk).symm
+  · exact Or.inr (Or.inl (congrArg Subtype.val hk).symm)
+  · exact Or.inr (Or.inr (congrArg Subtype.val hk).symm)
 
 /-- Assembly: the regular cover. -/
 theorem apm_t98a03_regular_threeFoldCover
