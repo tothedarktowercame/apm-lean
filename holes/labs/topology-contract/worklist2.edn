@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
-    :residual "Quotient/MV comparison; normalize; assemble.",
+    :residual "Transport quotient topology/MV; normalize; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 sorry" "dirt"],
     :missing-theorems
-    [{:name "frozen_boundaryRel_iff_generator",
-      :type "relation iff symmetric generators",
+    [{:name "frozen_eqvGen_boundaryRel_iff_generator",
+      :type "quotient setoids agree",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozen_boundaryRel_iff"],
+      :depends-on ["frozen_boundaryRel_iff_generator"],
       :area "polygon-surface-homology"}
      {:name "frozenPolygonHomology_comparisons",
       :type "two-vertex homology comparisons",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozen_boundaryRel_iff_generator"
+      ["frozen_eqvGen_boundaryRel_iff_generator"
        "frozenPolygonHomology_of_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked relation comparison.",
+    :reason "Banked setoid comparison.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,30 +88719,18 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 8adff214b", :exit 0}],
+     {:cmd "git show --check 00fa1a440", :exit 0}],
     :diagnostic-history
-    [{:cmd "drafts", :exit 1, :correction "explicit reverse case"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792107286259-14829-f411a18b",
-     :commands
-     ["git show/diff/check 8adff214b"
-      "sha256sum and placeholder recount from 8adff214b"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 8adff214b adds compiled, sorry-free progress beyond history 7374ef2ba. frozen_boundaryRel_iff_generator correctly identifies the generic signed boundary relation with the symmetric closure of seven frozen generators; all 14 orientations match, including reversed c at 1/7 via reverseIcc involution. Only t94J09Closure.lean changed; fixture SHA 10700978eb776f97bc3866ae7acdf78768d2c26c6d4339e9a99d5c20dad45300 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Quotient/MV comparison, normalization, and assembly remain listed."},
-    :commit "8adff214b",
+    [{:cmd "draft", :exit 1, :correction "explicit trans"}],
+    :commit "00fa1a440",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "10700978eb776f97bc3866ae7acdf78768d2c26c6d4339e9a99d5c20dad45300"},
+     "a5a22327cfc8b425136bd05f6311f8bd0ffe45bae3214dbe8d2c857b4ccf5e12"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96441,7 +96429,8 @@
    :depends-on
    [:lemma-frozenpolygonhomology-of-comparisons
     :lemma-frozen-boundaryrel-iff
-    :lemma-frozen-boundaryrel-iff-generator],
+    :lemma-frozen-boundaryrel-iff-generator
+    :lemma-frozen-eqvgen-boundaryrel-iff-generator],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96494,4 +96483,21 @@
    :id :lemma-frozen-boundaryrel-iff-generator,
    :kind :lemma,
    :depends-on [:lemma-frozen-boundaryrel-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozen_eqvGen_boundaryRel_iff_generator",
+    :type "quotient setoids agree"},
+   :lemma
+   {:name "frozen_eqvGen_boundaryRel_iff_generator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "quotient setoids agree",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozen-eqvgen-boundaryrel-iff-generator,
+   :kind :lemma,
+   :depends-on [:lemma-frozen-boundaryrel-iff-generator],
    :other-consumers []}]}
