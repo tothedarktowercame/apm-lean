@@ -1619,7 +1619,141 @@ the junction `(k, north) ~ (k+1, south)` is moved to junction `k + 2i` by
 and close with one `ChainRel.link` step.  About 130 lines. -/
 lemma chainF_fiber (z w : ℤ × S2) (h : chainF z = chainF w) :
     ∃ g : DihedralGroup 0, Relation.EqvGen ChainRel (g • w) z := by
-  sorry
+  rcases z with ⟨n, x⟩
+  rcases w with ⟨m, y⟩
+  by_cases hn : n % 2 = 0 <;> by_cases hm : m % 2 = 0
+  · have hxy : rp2Proj x = rp2Proj y := by
+      exact (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_injective (surfacePoint false 1)
+        (surfacePoint false 1)) (by simpa [chainF, chainSide, hn, hm] using h)
+    rcases (rp2Proj_eq_iff x y).mp hxy with hy | hy
+    · let i : ZMod 0 := ((n - m) / 2 : ℤ)
+      refine ⟨DihedralGroup.r i, ?_⟩
+      rw [chainSMul_r]
+      have hi : zOf i = (n - m) / 2 := rfl
+      rw [hi, hy]
+      have : m + 2 * ((n - m) / 2) = n := by omega
+      rw [this]
+      exact Relation.EqvGen.refl _
+    · let i : ZMod 0 := (-(n + m) / 2 : ℤ)
+      refine ⟨DihedralGroup.sr i, ?_⟩
+      rw [chainSMul_sr]
+      have hi : zOf i = -(n + m) / 2 := rfl
+      rw [hi, hy, neg_neg]
+      have : -2 * (-(n + m) / 2) - m = n := by omega
+      rw [this]
+      exact Relation.EqvGen.refl _
+  · have hb := (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff (surfacePoint false 1)
+        (surfacePoint false 1) (rp2Proj x) (rp2Proj y)).mp
+        (by simpa [chainF, chainSide, hn, hm] using h)
+    have hx := (rp2Proj_eq_base_iff x).mp hb.1
+    have hy := (rp2Proj_eq_base_iff y).mp hb.2
+    rcases hx with rfl | rfl <;> rcases hy with rfl | rfl
+    · let i : ZMod 0 := (-(n + 1 + m) / 2 : ℤ)
+      refine ⟨DihedralGroup.sr i, ?_⟩
+      rw [chainSMul_sr, neg_north]
+      have hi : zOf i = -(n + 1 + m) / 2 := rfl
+      rw [hi]
+      have heq : -2 * (-(n + 1 + m) / 2) - m = n + 1 := by omega
+      rw [heq]
+      exact Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (ChainRel.link n))
+    · let i : ZMod 0 := ((n + 1 - m) / 2 : ℤ)
+      refine ⟨DihedralGroup.r i, ?_⟩
+      rw [chainSMul_r]
+      have hi : zOf i = (n + 1 - m) / 2 := rfl
+      rw [hi]
+      have heq : m + 2 * ((n + 1 - m) / 2) = n + 1 := by omega
+      rw [heq]
+      exact Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (ChainRel.link n))
+    · let i : ZMod 0 := ((n - 1 - m) / 2 : ℤ)
+      refine ⟨DihedralGroup.r i, ?_⟩
+      rw [chainSMul_r]
+      have hi : zOf i = (n - 1 - m) / 2 := rfl
+      rw [hi]
+      have heq : m + 2 * ((n - 1 - m) / 2) = n - 1 := by omega
+      rw [heq]
+      have hlink := ChainRel.link (n - 1)
+      have hidx : n - 1 + 1 = n := by omega
+      rw [hidx] at hlink
+      exact Relation.EqvGen.rel _ _ hlink
+    · let i : ZMod 0 := (-(n - 1 + m) / 2 : ℤ)
+      refine ⟨DihedralGroup.sr i, ?_⟩
+      rw [chainSMul_sr, neg_south]
+      have hi : zOf i = -(n - 1 + m) / 2 := rfl
+      rw [hi]
+      have heq : -2 * (-(n - 1 + m) / 2) - m = n - 1 := by omega
+      rw [heq]
+      have hlink := ChainRel.link (n - 1)
+      have hidx : n - 1 + 1 = n := by omega
+      rw [hidx] at hlink
+      exact Relation.EqvGen.rel _ _ hlink
+  · have hb := (ConstructionTargets.PointWedgeExactEquality.quotientMap_inl_eq_inr_iff (surfacePoint false 1)
+        (surfacePoint false 1) (rp2Proj y) (rp2Proj x)).mp
+        (by simpa [chainF, chainSide, hn, hm] using h.symm)
+    have hy := (rp2Proj_eq_base_iff y).mp hb.1
+    have hx := (rp2Proj_eq_base_iff x).mp hb.2
+    rcases hx with rfl | rfl <;> rcases hy with rfl | rfl
+    · let i : ZMod 0 := (-(n + 1 + m) / 2 : ℤ)
+      refine ⟨DihedralGroup.sr i, ?_⟩
+      rw [chainSMul_sr, neg_north]
+      have hi : zOf i = -(n + 1 + m) / 2 := rfl
+      rw [hi]
+      have heq : -2 * (-(n + 1 + m) / 2) - m = n + 1 := by omega
+      rw [heq]
+      exact Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (ChainRel.link n))
+    · let i : ZMod 0 := ((n + 1 - m) / 2 : ℤ)
+      refine ⟨DihedralGroup.r i, ?_⟩
+      rw [chainSMul_r]
+      have hi : zOf i = (n + 1 - m) / 2 := rfl
+      rw [hi]
+      have heq : m + 2 * ((n + 1 - m) / 2) = n + 1 := by omega
+      rw [heq]
+      exact Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (ChainRel.link n))
+    · let i : ZMod 0 := ((n - 1 - m) / 2 : ℤ)
+      refine ⟨DihedralGroup.r i, ?_⟩
+      rw [chainSMul_r]
+      have hi : zOf i = (n - 1 - m) / 2 := rfl
+      rw [hi]
+      have heq : m + 2 * ((n - 1 - m) / 2) = n - 1 := by omega
+      rw [heq]
+      have hlink := ChainRel.link (n - 1)
+      have hidx : n - 1 + 1 = n := by omega
+      rw [hidx] at hlink
+      exact Relation.EqvGen.rel _ _ hlink
+    · let i : ZMod 0 := (-(n - 1 + m) / 2 : ℤ)
+      refine ⟨DihedralGroup.sr i, ?_⟩
+      rw [chainSMul_sr, neg_south]
+      have hi : zOf i = -(n - 1 + m) / 2 := rfl
+      rw [hi]
+      have heq : -2 * (-(n - 1 + m) / 2) - m = n - 1 := by omega
+      rw [heq]
+      have hlink := ChainRel.link (n - 1)
+      have hidx : n - 1 + 1 = n := by omega
+      rw [hidx] at hlink
+      exact Relation.EqvGen.rel _ _ hlink
+  · have hxy : rp2Proj x = rp2Proj y := by
+      exact (ConstructionTargets.PointWedgeExactEquality.quotientMap_inr_injective (surfacePoint false 1)
+        (surfacePoint false 1)) (by simpa [chainF, chainSide, hn, hm] using h)
+    rcases (rp2Proj_eq_iff x y).mp hxy with hy | hy
+    · let i : ZMod 0 := ((n - m) / 2 : ℤ)
+      refine ⟨DihedralGroup.r i, ?_⟩
+      rw [chainSMul_r]
+      have hi : zOf i = (n - m) / 2 := rfl
+      rw [hi, hy]
+      have : m + 2 * ((n - m) / 2) = n := by omega
+      rw [this]
+      exact Relation.EqvGen.refl _
+    · let i : ZMod 0 := (-(n + m) / 2 : ℤ)
+      refine ⟨DihedralGroup.sr i, ?_⟩
+      rw [chainSMul_sr]
+      have hi : zOf i = -(n + m) / 2 := rfl
+      rw [hi, hy, neg_neg]
+      have : -2 * (-(n + m) / 2) - m = n := by omega
+      rw [this]
+      exact Relation.EqvGen.refl _
 
 /-- Open hemisphere around `p`. -/
 def cap (p : S2) : Set S2 := {x | 0 < inner ℝ (x : E3) (p : E3)}
