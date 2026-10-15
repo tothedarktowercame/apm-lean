@@ -2769,6 +2769,35 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_eq_run_sub_prefix_of_mem_interva
   exact torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
     S j _ hmem
 
+/-- On a run's half-open interval, the flat factor is pointwise the
+prefix-block factor at the prefix-subtracted local index. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_sub_prefix_eq_flat_of_mem_interval
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1))
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hmem : pathTwoOpenSubdivisionRunPrefixLength S i.val ≤ j.val ∧
+      j.val < pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunPrefixBlockPiece S i
+        (Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S i).symm
+          ⟨j.val - pathTwoOpenSubdivisionRunPrefixLength S i.val, by
+            have hboundary :=
+              pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
+            have hlen := pathTwoOpenSubdivisionRunPredLength_add_one S i
+            omega⟩) t =
+      torusRP2_subdivisionRunPrefixBlockPieceFlat S j t := by
+  have hcoord :=
+    torusRP2_subdivisionRunOffsetEquiv_symm_eq_run_sub_prefix_of_mem_interval
+      S j i hmem
+  have hpiece :=
+    torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm S j t
+  rw [hcoord] at hpiece
+  rw [torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece S j]
+  exact hpiece
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2893,6 +2922,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_eq_run_sub_prefix_of_mem_interval
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_sub_prefix_eq_flat_of_mem_interval
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
