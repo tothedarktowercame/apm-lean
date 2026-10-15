@@ -234,6 +234,43 @@ theorem transverse_coprodDerivative_surjective
   exact ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
     (htrans x z hxz)
 
+/-- If two linear ranges span the target and the second range is already
+contained in the first, then the first map is surjective. -/
+theorem surjective_of_range_sup_eq_top_of_range_le
+    {R M N P : Type} [Semiring R]
+    [AddCommMonoid M] [Module R M] [AddCommMonoid N] [Module R N]
+    [AddCommMonoid P] [Module R P]
+    (A : M →ₗ[R] P) (B : N →ₗ[R] P)
+    (hspan : LinearMap.range A ⊔ LinearMap.range B = ⊤)
+    (hle : LinearMap.range B ≤ LinearMap.range A) : Function.Surjective A := by
+  rw [← LinearMap.range_eq_top]
+  calc
+    LinearMap.range A = LinearMap.range A ⊔ LinearMap.range B :=
+      (sup_eq_left.mpr hle).symm
+    _ = ⊤ := hspan
+
+/-- At an incidence point, transversality and liftability of every tangent
+direction of the circle force the full derivative of `f` to be surjective.
+This is the linear conclusion supplied by a regular value of the projection
+from the transverse preimage to the circle. -/
+theorem transverse_mfderiv_surjective_of_circleDirection_lifts
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S) (x : S) (z : Circle)
+    (htrans :
+      LinearMap.range (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤)
+    (hlift : ∀ v, ∃ u,
+      mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x u =
+        mfderiv (𝓡 1) SurfaceModelWithCorners c z v) :
+    Function.Surjective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x) := by
+  apply surjective_of_range_sup_eq_top_of_range_le
+    (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+    (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap htrans
+  rintro _ ⟨v, rfl⟩
+  rcases hlift v with ⟨u, hu⟩
+  exact ⟨u, hu⟩
+
 /-- One chosen component lift through a point of the inverse image, including
 the zero circle-degree conclusion supplied by disk boundedness. -/
 structure ZeroDegreeComponentLift
@@ -1388,6 +1425,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.regularFiberFintype_of_locallyInjectiveAlongFiber
 #print axioms ConstructionTargets.T00J02Closure.finiteRegularFiberChoice_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
+#print axioms ConstructionTargets.T00J02Closure.surjective_of_range_sup_eq_top_of_range_le
+#print axioms ConstructionTargets.T00J02Closure.transverse_mfderiv_surjective_of_circleDirection_lifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
