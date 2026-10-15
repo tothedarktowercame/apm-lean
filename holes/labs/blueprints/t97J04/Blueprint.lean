@@ -1289,6 +1289,18 @@ lemma cell_overlap_loop (γ : C(Circle, Y)) :
       PolygonSurfaceHomology.circleToPolygonDisk]
 
 /-- A6. Path-connectedness of the pieces and of the cell space. -/
+lemma cell_pathConnected_aux_of_hequiv {A B : Type} [TopologicalSpace A]
+    [TopologicalSpace B] [PathConnectedSpace B] (e : A ≃ₕ B) :
+    PathConnectedSpace A := by
+  refine ⟨⟨e.invFun (Classical.choice inferInstance)⟩, ?_⟩
+  intro x y
+  obtain ⟨hl⟩ := e.left_inv
+  have hx : Joined (e.invFun (e x)) x := ⟨hl.evalAt x⟩
+  have hy : Joined (e.invFun (e y)) y := ⟨hl.evalAt y⟩
+  have hxy : Joined (e.invFun (e x)) (e.invFun (e y)) :=
+    ⟨(PathConnectedSpace.somePath (e x) (e y)).map e.invFun.continuous⟩
+  exact hx.symm.trans (hxy.trans hy)
+
 lemma cell_pathConnected (γ : C(Circle, Y)) [PathConnectedSpace Y]
     (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
       e.invFun = cellOverlapCircle γ)
@@ -1296,7 +1308,25 @@ lemma cell_pathConnected (γ : C(Circle, Y)) [PathConnectedSpace Y]
     PathConnectedSpace (cellOuter γ) ∧
       PathConnectedSpace (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ∧
       PathConnectedSpace (Cell γ) := by
-  sorry
+  obtain ⟨e3, -⟩ := hA3
+  obtain ⟨e4, -⟩ := hA4
+  letI hOuter : PathConnectedSpace (cellOuter γ) :=
+    cell_pathConnected_aux_of_hequiv e4
+  letI hOverlap : PathConnectedSpace
+      (cellOuter γ ∩ cellInner γ : Set (Cell γ)) :=
+    cell_pathConnected_aux_of_hequiv e3
+  letI hInner : ContractibleSpace (cellInner γ) := cell_inner_contractible γ
+  have hOuterSet : IsPathConnected (cellOuter γ) :=
+    isPathConnected_iff_pathConnectedSpace.mpr hOuter
+  have hInnerSet : IsPathConnected (cellInner γ) :=
+    isPathConnected_iff_pathConnectedSpace.mpr inferInstance
+  have hMeet : (cellOuter γ ∩ cellInner γ).Nonempty := by
+    exact Set.nonempty_def.mpr ⟨(Classical.choice hOverlap.nonempty).1,
+      (Classical.choice hOverlap.nonempty).2⟩
+  have hCellSet : IsPathConnected (Set.univ : Set (Cell γ)) := by
+    rw [← (cell_cover γ).2.2]
+    exact hOuterSet.union hInnerSet hMeet
+  exact ⟨hOuter, hOverlap, pathConnectedSpace_iff_univ.mpr hCellSet⟩
 
 /-- A7a. A homotopy equivalence is bijective on π₁ at every basepoint
 (`FundamentalGroupoidFunctor.equivOfHomotopyEquiv` or directly: both
