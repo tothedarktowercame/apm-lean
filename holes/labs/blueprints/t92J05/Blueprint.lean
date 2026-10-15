@@ -1626,6 +1626,15 @@ def FiniteWedgeFreeCoordinates (n : ℕ)
 /-- The independent induction step.  Its predecessor equivalence and literal
 leg coordinates are hypotheses, so a seat can prove this before the base case
 or final recursion lands. -/
+lemma finiteWedge_finSucc_fundamentalGroup_step_aux_circle_generator :
+    (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+      ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne)
+      apm_t92J05_circlePositiveClass = FreeGroup.of (0 : Fin 1) := by
+  simp [apm_t92J05_circlePositiveClass,
+    ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne]
+  change FreeGroup.of (default : Fin 1) ^ (1 : ℤ) = FreeGroup.of 0
+  simp
+
 lemma finiteWedge_finSucc_fundamentalGroup_step (n : ℕ)
     (hsplit : ∀ k : ℕ, ∃ h : FiniteWedge (Fin ((k + 1) + 1)) ≃ₜ
       ConstructionTargets.PointWedgeQuotient.Wedge (wedgeCircle (0 : Fin (k + 1)) 1) (wedgeCircle () 1),
@@ -1665,7 +1674,6 @@ lemma finiteWedge_finSucc_fundamentalGroup_step (n : ℕ)
         (wedgeCircle (0 : Fin (n + 1)) 1) ≃* FreeGroup (Fin (n + 1)),
       FiniteWedgeFreeCoordinates n next := by
   sorry
-
 /-- Relabel a finite wedge along an equivalence of its leg types. -/
 lemma finiteWedge_reindex_homeomorph
     {L : Type*} (n : ℕ) (e : L ≃ Fin (n + 1)) :
