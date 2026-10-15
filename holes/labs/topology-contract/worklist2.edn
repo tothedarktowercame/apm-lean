@@ -88670,68 +88670,57 @@
      :commit "7af6e0888",
      :reason "Banked transported three-factor reassociation."}]}
   {:consumer :t94J09,
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compute face cokernel; connect MV H1; normalize; assemble.",
+    "Connect MV H1 to face cokernel; prove normalization; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved" "two vertices"],
     :missing-theorems
-    [{:name "frozenGraphBoundary_attachingDegree_zero",
-      :type "seven-orbit face boundary is a graph cycle",
+    [{:name "frozenFaceCokernelSmithEquiv",
+      :type
+      "literal face-boundary cokernel is Fin 5 to Z times ZMod 2",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundaryKernelEquiv"],
-      :area "polygon-surface-homology"}
-     {:name "frozenGraphBoundaryKernelEquiv_attachingCycle",
-      :type "cycle coordinates (2,2,0,-2,-2,2)",
-      :status :proved,
-      :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundary_attachingDegree_zero"],
+      :depends-on ["frozenGraphBoundaryKernelEquiv_attachingCycle"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "literal two-vertex polygon homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundaryKernelEquiv_attachingCycle"],
-      :area "polygon-surface-homology"}],
-    :statement-hashes {:registry "167/0"},
+      :depends-on ["frozenFaceCokernelSmithEquiv"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t94J09_polygon_normalization",
+      :type "polygon quotient homeomorphic to N6",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on [],
+      :area "surface-classification"}],
+    :statement-hashes {:registry "168/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked frozen face boundary.",
+    :reason "Banked literal frozen face cokernel Smith form.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t94J09Closure.lean",
+      "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 9cbf92387", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792093854695-14541-e5a47f60",
-     :commands
-     ["git show/diff/check 9cbf92387"
-      "sha256sum + placeholder recount from 9cbf92387"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 9cbf92387 adds compiled, sorry-free progress beyond history 307ed881c. The signed degrees [2,2,0,-2,-2,2,-2] correctly count the frozen word in orbit order; d and g both have degree -2, so the two-vertex graph boundary vanishes, and the kernel equivalence correctly drops the dependent seventh coordinate to [2,2,0,-2,-2,2]. Only t94J09Closure.lean changed; fixture SHA f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Face cokernel, MV H1, normalization, and assembly remain listed."},
-    :commit "9cbf92387",
+     {:cmd "git show --check 4578e92d7", :exit 0}],
+    :commit "4578e92d7",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367"},
+     "058ce1014e763c34a0deffb052cfe41c3505d16c320ca6289f78fa39fc2872f5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94203,7 +94192,8 @@
     :lemma-n6polygonhomologyexplicit
     :lemma-frozenorbitequiv
     :lemma-frozengraphboundarykernelequiv
-    :lemma-frozengraphboundarykernelequiv-attachingcycle],
+    :lemma-frozengraphboundarykernelequiv-attachingcycle
+    :lemma-frozenfacecokernelsmithequiv],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96280,4 +96270,21 @@
    :depends-on
    [:lemma-torusrp2-pathhomotopicquotient-concat-succ
     :lemma-torusrp2-pathhomotopicquotient-trans-congr],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenFaceCokernelSmithEquiv",
+    :type "literal face-boundary cokernel is Fin 5 to Z times ZMod 2"},
+   :lemma
+   {:name "frozenFaceCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "literal face-boundary cokernel is Fin 5 to Z times ZMod 2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenfacecokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphboundarykernelequiv-attachingcycle],
    :other-consumers []}]}
