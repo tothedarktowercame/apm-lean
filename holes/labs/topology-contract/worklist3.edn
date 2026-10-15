@@ -36156,6 +36156,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792022432733-12770-c020b198",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f exact scope"
+      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and adds progress after 263f5d47. Its exact interface indexes runs+1 boundaries in outer subtype V and proves the correctly oriented coercion equality to each ambient canonical boundary. This enables the next run fold without assuming the partial based van Kampen result. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36164,7 +36174,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36182,7 +36192,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Third consecutive reopened-sequence check confirms .lake/packages is still a real directory, not the canonical-authority symlink. The row is blocked until external workspace lifecycle repair.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: External repair has not occurred: .lake/packages remains a real directory instead of the canonical-authority symlink, so workspace policy forbids Lake work.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36556,7 +36566,11 @@
     {:job 3,
      :commit nil,
      :reason
-     "Third consecutive reopened-sequence check confirms .lake/packages is still a real directory, not the canonical-authority symlink. The row is blocked until external workspace lifecycle repair."}]}
+     "Third consecutive reopened-sequence check confirms .lake/packages is still a real directory, not the canonical-authority symlink. The row is blocked until external workspace lifecycle repair."}
+    {:job 4,
+     :commit nil,
+     :reason
+     "External repair has not occurred: .lake/packages remains a real directory instead of the canonical-authority symlink, so workspace policy forbids Lake work."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
