@@ -2400,6 +2400,24 @@ theorem polynomialDescent_invariants_of_globalLocalization
   polynomialDescent_invariants_of_localClassDecompositionAndBase
     (polynomialSphereLift_localClassData_of_globalImage_eq_deckSum hglobal)
 
+/-- With global localization supplied, the chosen polynomial descent closes
+the exact existential statement used by the registered consumer. -/
+theorem apm_t96a06_of_globalLocalization
+    (hglobal :
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i) :
+    ∃ f : ContinuousMap RP3 RP3,
+      (∀ v : NonzeroVectors ℝ 3, ∃ hv : polynomialMap v.val ≠ 0,
+        f (quotientMap ℝ 3 v) = quotientMap ℝ 3 ⟨polynomialMap v.val, hv⟩) ∧
+      HasLefschetzNumber f (-3) ∧
+      ¬ ContinuousMap.Homotopic f (ContinuousMap.id RP3) := by
+  refine ⟨polynomialDescent, ?_,
+    polynomialDescent_invariants_of_globalLocalization hglobal⟩
+  intro v
+  exact ⟨polynomialMap_nonzero v, polynomialDescent_quotientMap v⟩
+
 /-- The complete rational homology table for the literal projective-space
 model used by the consumer. -/
 theorem t96A06_rp3_rational_homology :
@@ -2507,6 +2525,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_invariants_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_invariants_of_globalLocalization
+#print axioms apm_t96a06_of_globalLocalization
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
