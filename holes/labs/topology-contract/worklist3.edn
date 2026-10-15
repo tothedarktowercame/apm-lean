@@ -37444,33 +37444,34 @@
   {:consumer :t97J07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Transport circle H0/H1 across overlap; then MV, CP2, Main.",
+    "Attach circle H0/H1 endpoints to overlap isomorphisms; then MV, CP2, Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t97J07_cp1_puncturedComplex_radialHomotopyEquiv",
+    [{:name "t97J07_cp1_overlapHomologyIsoCircle",
       :type
-      "punctured complex line homotopy equivalent to its unit circle",
+      "rational homology of the literal overlap is isomorphic to unit-circle homology in every degree",
       :status :proved,
       :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_puncturedAffineHomeomorphComplex"],
+      :depends-on ["t97J07_cp1_puncturedComplex_radialHomotopyEquiv"],
       :area "rational-homology-cpn"}
      {:name "t97J07_cp1_puncturedOverlap_homology",
-      :type "rational H0/H1 of overlap",
+      :type
+      "identify overlap rational H0 and H1 using circle endpoints",
       :status :not-started,
       :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_puncturedComplex_radialHomotopyEquiv"],
+      :depends-on ["t97J07_cp1_overlapHomologyIsoCircle"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed radial homotopy equivalence from punctured complex line to unit circle.",
+    "Committed the exact overlap-to-circle homotopy equivalence and rational homology isomorphisms.",
     :commands
     [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
@@ -37478,24 +37479,7 @@
      {:cmd "sha256sum ConstructionTargets/t97J07Closure.blueprint.md",
       :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial Main compile",
-      :exit 1,
-      :note
-      "enabled homotopy notation; joined qualified identifier to avoid synthetic sorry"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792064303526-13964-3c0bbfd2",
-     :commands
-     ["git show --check --stat b84d78ab6"
-      "git diff --name-only b84d78ab6^ b84d78ab6"
-      "git-show fixture | sha256sum"
-      "lake env lean problems/t97J07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit b84d78ab6 changes only scoped Main.lean and adds the compiled, sorry-free CP1-overlap homeomorphism milestone; fixture hash matches 3fa01c79...76dbe7, registry 166/166, and the new declaration uses standard axioms only. Remaining final theorem is listed unfinished work."},
-    :commit "7d986c71f",
+    :commit "17818e8a1",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
@@ -37503,7 +37487,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -42054,7 +42038,8 @@
    :depends-on
    [:lemma-t97j07-cp1-chartinverse-other-rep-ne-iff
     :lemma-t97j07-cp1-overlaphomeomorphpuncturedaffine
-    :lemma-t97j07-cp1-puncturedcomplex-radialhomotopyequiv],
+    :lemma-t97j07-cp1-puncturedcomplex-radialhomotopyequiv
+    :lemma-t97j07-cp1-overlaphomologyisocircle],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -42638,6 +42623,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-decklocalcontribution-spec],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_overlapHomologyIsoCircle",
+    :type
+    "rational homology of the literal overlap is isomorphic to unit-circle homology in every degree"},
+   :lemma
+   {:name "t97J07_cp1_overlapHomologyIsoCircle",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type
+    "rational homology of the literal overlap is isomorphic to unit-circle homology in every degree",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07},
+   :id :lemma-t97j07-cp1-overlaphomologyisocircle,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-cp1-puncturedcomplex-radialhomotopyequiv],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
