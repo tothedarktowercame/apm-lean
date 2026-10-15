@@ -951,7 +951,110 @@ lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_injective
     (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
     (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
     Function.Injective g := by
-  sorry
+  intro x y hxy
+  obtain ⟨v, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 x
+  obtain ⟨w, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 y
+  rw [hg v, hg w] at hxy
+  have hcoord (i : Fin 3) :
+      cpU_homology_aux_CP1_hequiv_S2_aux_raw v i =
+        cpU_homology_aux_CP1_hequiv_S2_aux_raw w i := by
+    exact congrArg (fun z => z.1 i) hxy
+  have hdv : cpU_homology_aux_CP1_hequiv_S2_aux_den v ≠ 0 :=
+    ne_of_gt (cpU_homology_aux_CP1_hequiv_S2_aux_den_pos v)
+  have hdw : cpU_homology_aux_CP1_hequiv_S2_aux_den w ≠ 0 :=
+    ne_of_gt (cpU_homology_aux_CP1_hequiv_S2_aux_den_pos w)
+  have h0 := hcoord 0
+  have h1 := hcoord 1
+  have h2 := hcoord 2
+  simp [cpU_homology_aux_CP1_hequiv_S2_aux_raw] at h0 h1 h2
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ v.2 w.2).2
+  by_cases hv1 : v.1 1 = 0
+  · have hw1 : w.1 1 = 0 := by
+      have nv0 : Complex.normSq (v.1 0) ≠ 0 := by
+        intro hz
+        apply v.2
+        funext i
+        fin_cases i
+        · exact Complex.normSq_eq_zero.mp hz
+        · exact hv1
+      have hvden : cpU_homology_aux_CP1_hequiv_S2_aux_den v =
+          Complex.normSq (v.1 0) := by
+        simp [cpU_homology_aux_CP1_hequiv_S2_aux_den, hv1]
+      rw [hvden] at h2
+      simp [hv1] at h2
+      have : Complex.normSq (w.1 1) = 0 := by
+        field_simp [nv0, hdw] at h2
+        unfold cpU_homology_aux_CP1_hequiv_S2_aux_den at hdw h2
+        nlinarith [Complex.normSq_nonneg (w.1 0), Complex.normSq_nonneg (w.1 1)]
+      exact Complex.normSq_eq_zero.mp this
+    have hv0 : v.1 0 ≠ 0 := by
+      intro hz
+      apply v.2
+      funext i
+      fin_cases i <;> assumption
+    have hw0 : w.1 0 ≠ 0 := by
+      intro hz
+      apply w.2
+      funext i
+      fin_cases i <;> assumption
+    refine ⟨v.1 0 / w.1 0, ?_⟩
+    funext i
+    fin_cases i
+    · simp [Pi.smul_apply, smul_eq_mul, hw0]
+    · simp [Pi.smul_apply, smul_eq_mul, hv1, hw1]
+  · have hw1 : w.1 1 ≠ 0 := by
+      intro hw1
+      have nw0 : Complex.normSq (w.1 0) ≠ 0 := by
+        intro hz
+        apply w.2
+        funext i
+        fin_cases i
+        · exact Complex.normSq_eq_zero.mp hz
+        · exact hw1
+      have hwden : cpU_homology_aux_CP1_hequiv_S2_aux_den w =
+          Complex.normSq (w.1 0) := by
+        simp [cpU_homology_aux_CP1_hequiv_S2_aux_den, hw1]
+      rw [hwden] at h2
+      simp [hw1] at h2
+      field_simp [nw0, hdv] at h2
+      unfold cpU_homology_aux_CP1_hequiv_S2_aux_den at hdv h2
+      have : Complex.normSq (v.1 1) = 0 := by
+        nlinarith [Complex.normSq_nonneg (v.1 0), Complex.normSq_nonneg (v.1 1)]
+      exact hv1 (Complex.normSq_eq_zero.mp this)
+    refine ⟨v.1 1 / w.1 1, ?_⟩
+    funext i
+    fin_cases i
+    · unfold cpU_homology_aux_CP1_hequiv_S2_aux_den at h0 h1 h2 hdv hdw
+      have hnv : (v.1 1).re ^ 2 + (v.1 1).im ^ 2 ≠ 0 := by
+        simpa [Complex.normSq_apply, pow_two] using
+          (show Complex.normSq (v.1 1) ≠ 0 from (Complex.normSq_eq_zero.not).2 hv1)
+      have hnw : (w.1 1).re ^ 2 + (w.1 1).im ^ 2 ≠ 0 := by
+        simpa [Complex.normSq_apply, pow_two] using
+          (show Complex.normSq (w.1 1) ≠ 0 from (Complex.normSq_eq_zero.not).2 hw1)
+      simp only [Complex.normSq_apply] at h0 h1 h2 hdv hdw
+      field_simp [hdv, hdw] at h0 h1 h2
+      have hn : ((v.1 1).re * (v.1 1).re + (v.1 1).im * (v.1 1).im) *
+          ((w.1 0).re * (w.1 0).re + (w.1 0).im * (w.1 0).im +
+            ((w.1 1).re * (w.1 1).re + (w.1 1).im * (w.1 1).im)) =
+          ((w.1 1).re * (w.1 1).re + (w.1 1).im * (w.1 1).im) *
+          ((v.1 0).re * (v.1 0).re + (v.1 0).im * (v.1 0).im +
+            ((v.1 1).re * (v.1 1).re + (v.1 1).im * (v.1 1).im)) := by
+        nlinarith [h2]
+      have hcconj : (v.1 0 * w.1 1) * conj (w.1 1) =
+          (v.1 1 * w.1 0) * conj (w.1 1) := by
+        apply Complex.ext
+        · simp [Complex.mul_re]
+          apply (mul_left_cancel₀ hdv)
+          linear_combination (v.1 1).re * h0 - (v.1 1).im * h1 - (v.1 0).re * hn
+        · simp [Complex.mul_im]
+          apply (mul_left_cancel₀ hdv)
+          linear_combination (v.1 1).im * h0 + (v.1 1).re * h1 - (v.1 0).im * hn
+      have hc : v.1 0 * w.1 1 = v.1 1 * w.1 0 :=
+        mul_right_cancel₀ ((map_ne_zero conj).2 hw1) hcconj
+      simp only [Pi.smul_apply, smul_eq_mul]
+      rw [div_mul_eq_mul_div]
+      exact (div_eq_iff hw1).2 hc.symm
+    · simp [Pi.smul_apply, smul_eq_mul, hw1]
 -- END SEAT AREA
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_surjective
