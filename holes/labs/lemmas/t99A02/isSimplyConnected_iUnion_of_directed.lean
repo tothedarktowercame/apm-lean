@@ -1037,7 +1037,34 @@ null-homotopy in `U k` stays in the union.  About 80 lines. -/
 lemma isSimplyConnected_iUnion_of_directed {ι : Type*} [Nonempty ι]
     (U : ι → Set X) (hdir : Directed (· ⊆ ·) U) (hU : ∀ i, IsOpen (U i))
     (hUs : ∀ i, IsSimplyConnected (U i)) : IsSimplyConnected (⋃ i, U i) := by
-  sorry
+  rw [isSimplyConnected_iff_exists_homotopy_refl_forall_mem]
+  constructor
+  · rw [isPathConnected_iff]
+    constructor
+    · let i : ι := Classical.choice ‹Nonempty ι›
+      obtain ⟨x, hx⟩ := (hUs i).nonempty
+      exact ⟨x, Set.mem_iUnion.2 ⟨i, hx⟩⟩
+    · intro x hx y hy
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.1 hx
+      obtain ⟨j, hyj⟩ := Set.mem_iUnion.1 hy
+      obtain ⟨k, hik, hjk⟩ := hdir i j
+      obtain ⟨p, hp⟩ := (hUs k).isPathConnected.joinedIn x (hik hxi) y (hjk hyj)
+      exact ⟨p, fun t => Set.mem_iUnion.2 ⟨k, hp t⟩⟩
+  · intro x p hp
+    have hrange : Set.range p ⊆ ⋃ i, U i := by
+      rintro _ ⟨t, rfl⟩
+      exact hp t
+    obtain ⟨s, hs⟩ := (isCompact_range p.continuous).elim_finite_subcover U hU hrange
+    obtain ⟨k, hk⟩ := hdir.finset_le s
+    have hpk : ∀ t, p t ∈ U k := by
+      intro t
+      have hpt : p t ∈ ⋃ i ∈ s, U i := hs ⟨t, rfl⟩
+      simp only [Set.mem_iUnion] at hpt
+      obtain ⟨i, hi, hpti⟩ := hpt
+      exact hk i hi hpti
+    obtain ⟨F, hF⟩ :=
+      (isSimplyConnected_iff_exists_homotopy_refl_forall_mem.mp (hUs k)).2 x p hpk
+    exact ⟨F, fun t => Set.mem_iUnion.2 ⟨k, hF t⟩⟩
 -- END SEAT AREA
 
 /-- **Leaf (generic, attaching a disjoint family).**  Attaching to `U` a
