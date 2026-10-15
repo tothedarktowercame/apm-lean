@@ -277,6 +277,32 @@ theorem surjective_of_range_sup_eq_top_of_range_le
       (sup_eq_left.mpr hle).symm
     _ = ⊤ := hspan
 
+/-- A surjective continuous linear endomorphism of a finite-dimensional real
+Banach space is represented by a continuous linear equivalence. -/
+theorem exists_continuousLinearEquiv_of_surjective_endomorphism
+    {E : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E] [CompleteSpace E]
+    (L : E →L[ℝ] E) (hsurj : Function.Surjective L) :
+    ∃ e : E ≃L[ℝ] E, (e : E →L[ℝ] E) = L := by
+  have hinj : Function.Injective L :=
+    LinearMap.injective_iff_surjective.mpr hsurj
+  let e : E ≃L[ℝ] E := ContinuousLinearEquiv.ofBijective L
+    (LinearMap.ker_eq_bot.mpr hinj) (LinearMap.range_eq_top.mpr hsurj)
+  exact ⟨e, ContinuousLinearEquiv.coe_ofBijective _ _ _⟩
+
+/-- For a surface self-map, surjectivity of the manifold derivative supplies
+the equivalence-valued derivative datum consumed by the inverse function
+theorem in charts. -/
+theorem exists_mfderivEquiv_of_surjective
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S)
+    (hsurj : Function.Surjective
+      (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x)) :
+    ∃ e : SurfaceModel ≃L[ℝ] SurfaceModel,
+      (e : SurfaceModel →L[ℝ] SurfaceModel) =
+        mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x :=
+  exists_continuousLinearEquiv_of_surjective_endomorphism _ hsurj
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
@@ -1493,6 +1519,8 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.finiteRegularFiberChoice_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.surjective_of_range_sup_eq_top_of_range_le
+#print axioms ConstructionTargets.T00J02Closure.exists_continuousLinearEquiv_of_surjective_endomorphism
+#print axioms ConstructionTargets.T00J02Closure.exists_mfderivEquiv_of_surjective
 #print axioms ConstructionTargets.T00J02Closure.transverse_mfderiv_surjective_of_circleDirection_lifts
 #print axioms ConstructionTargets.T00J02Closure.exists_regularValue_of_criticalValues_measure_zero
 #print axioms ConstructionTargets.T00J02Closure.exists_mfderiv_surjective_fiber_manifold_to_vector
