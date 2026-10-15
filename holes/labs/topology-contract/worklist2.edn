@@ -88329,9 +88329,50 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Implement B1 homology adapter, B2 pi1 adapter, then copy final assembly.",
+    :outcome :stop,
+    :warnings
+    ["source blueprint has two expected sorryAx obligations"
+     "unrelated t96A06 dirt appeared after commit"
+     "review dirs preserved"],
+    :missing-theorems
+    [{:name "apm_t97a01_polygon_singular_homology",
+      :type "literal quotient homology adapter",
+      :status :not-started,
+      :consumers [:t97A01],
+      :depends-on ["polygonQuotient_homology"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t97a01_torusRP2_fundamentalGroup",
+      :type "literal torus-crosscap van Kampen",
+      :status :not-started,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes {:registry "166/0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason
+    "Blueprint written; independent review required before formalization.",
+    :commands
+    [{:cmd "lake env lean holes/labs/blueprints/t97A01/Blueprint.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check 06f6bde3c", :exit 0}],
+    :commit "06f6bde3c",
+    :changed-paths ["ConstructionTargets/t97A01Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t97A01Closure.blueprint.md",
+     :sha256
+     "7ac697c3d72300464e0918d095e319df5b6898164f00b7692189f0988578b1fa"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93345,4 +93386,36 @@
    :id :lemma-highdegreehomology,
    :kind :lemma,
    :depends-on [:lemma-lowdegreehomology],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_polygon_singular_homology",
+    :type "literal quotient homology adapter"},
+   :lemma
+   {:name "apm_t97a01_polygon_singular_homology",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal quotient homology adapter",
+    :area "polygon-surface-homology"},
+   :id :lemma-apm-t97a01-polygon-singular-homology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_torusRP2_fundamentalGroup",
+    :type "literal torus-crosscap van Kampen"},
+   :lemma
+   {:name "apm_t97a01_torusRP2_fundamentalGroup",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal torus-crosscap van Kampen",
+    :area "polygon-surface-pi1"},
+   :id :lemma-apm-t97a01-torusrp2-fundamentalgroup,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}
