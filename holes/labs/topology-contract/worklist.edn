@@ -119137,43 +119137,41 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Identify common target chart; implicit incidence chart; Sard; calculations; Main.",
+    "Rewrite derivative into common target chart; implicit incidence chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "hasFDerivAt_incidenceDifference_writtenInExtChartAt_self",
-      :type "signed coproduct derivative in mixed source charts",
+    [{:name "writtenInExtChartAt_eq_commonTarget_of_eq",
+      :type "incidence equality identifies preferred target charts",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self"
-       "hasFDerivAt_incidenceDifference"],
+      ["hasFDerivAt_incidenceDifference_writtenInExtChartAt_self"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["hasFDerivAt_incidenceDifference_writtenInExtChartAt_self"],
+      :depends-on ["writtenInExtChartAt_eq_commonTarget_of_eq"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "329e2084ad2c80753728f6536fdf23f2c937e67d6c3899574c1b9a27cc613ffb",
+     "cf26994460f7d712d45a553dfb04826b5e50e6bd0bc083ab4c441a81c5cc12e8",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked mixed-model incidence chart derivative.",
+    :reason "Banked common incidence target chart.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119181,19 +119179,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792044225225-13436-65cc86c3",
-     :commands
-     ["git diff/show c45a18b4 archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds a compiled, sorry-free signed-coproduct derivative for the difference of the two mixed-model extended-chart expressions. Its A.coprod(-B) orientation and product base point are correct. The two expressions are not yet shown to use one target chart; the row accurately lists common-target identification as residual, so no facade is claimed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "c45a18b4f18ec6361e98624aea35ce5e2cd379aa",
+    :commit "2cacdb6f845b362e1159f23de2e73489e05fbe13",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119201,7 +119187,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119685,7 +119671,8 @@
     :lemma-hasfderivat-conj
     :lemma-hasfderivat-incidencedifference-conj
     :lemma-hasfderivat-writteninextchartat-of-hasmfderivat-self
-    :lemma-hasfderivat-incidencedifference-writteninextchartat-self],
+    :lemma-hasfderivat-incidencedifference-writteninextchartat-self
+    :lemma-writteninextchartat-eq-commontarget-of-eq],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121547,6 +121534,24 @@
    :depends-on
    [:lemma-hasfderivat-writteninextchartat-of-hasmfderivat-self
     :lemma-hasfderivat-incidencedifference],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "writtenInExtChartAt_eq_commonTarget_of_eq",
+    :type "incidence equality identifies preferred target charts"},
+   :lemma
+   {:name "writtenInExtChartAt_eq_commonTarget_of_eq",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "incidence equality identifies preferred target charts",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-writteninextchartat-eq-commontarget-of-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-hasfderivat-incidencedifference-writteninextchartat-self],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
