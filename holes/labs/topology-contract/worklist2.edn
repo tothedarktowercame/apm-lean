@@ -88381,6 +88381,17 @@
     [{:cmd "vector/axiom drafts",
       :exit 1,
       :correction "fixed orbit rewrite/sign; replaced native_decide"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792043440375-13399-5313e3f3",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 1f944e1c3 by topo-6 changes only t97A01Closure.lean and adds compiled progress after 4ce974c33. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 02356a0dfcaf16db89cfb344f2f97dbdbecc33e9cc590834009bf91697df0a42 matches; registry 166/0; new vector theorems use only propext, Classical.choice, Quot.sound. In the foundation orientation the vectors are (-2,-2,-2) and (0,0,-2), a common generator-sign reversal of the blueprint convention; kernels and ranges/cokernels are unchanged. Orbit labels and coordinate order are consistent. Sign-invariant Smith transport/B1 and B2 remain listed."},
     :commit "1f944e1c3",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88389,7 +88400,7 @@
      "02356a0dfcaf16db89cfb344f2f97dbdbecc33e9cc590834009bf91697df0a42"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88407,7 +88418,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked both orbit-coordinate linear equivalences.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed attaching vectors.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88431,7 +88442,10 @@
      :reason "Banked quotient homeomorphisms."}
     {:job 5,
      :commit "4ce974c33",
-     :reason "Banked both orbit-coordinate linear equivalences."}]}
+     :reason "Banked both orbit-coordinate linear equivalences."}
+    {:job 6,
+     :commit "1f944e1c3",
+     :reason "Banked signed attaching vectors."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93596,7 +93610,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccOrbitCoordinates_attachingDegree",
@@ -93606,14 +93620,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "vector=(-2,-2,-2)",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "1f944e1c3"},
    :id :lemma-aabbccorbitcoordinates-attachingdegree,
    :kind :lemma,
    :depends-on [:lemma-aabbccorbitcoordinates],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2OrbitCoordinates_attachingDegree",
@@ -93623,7 +93639,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "vector=(0,0,-2)",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "1f944e1c3"},
    :id :lemma-torusrp2orbitcoordinates-attachingdegree,
    :kind :lemma,
    :depends-on [:lemma-torusrp2orbitcoordinates],
