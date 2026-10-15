@@ -1284,6 +1284,18 @@ theorem torusRP2_pathHomotopicQuotient_concat_succ
   rw [Path.concat_succ]
   exact Path.Homotopic.Quotient.mk_trans _ _
 
+/-- A one-factor dependent concatenation has the quotient class of that
+factor.  This is the base case paired with the successor recurrence in the
+flat/nested fold reassociation induction. -/
+theorem torusRP2_pathHomotopicQuotient_concat_one
+    {X : Type*} [TopologicalSpace X]
+    (point : Fin 2 → X)
+    (F : (k : Fin 1) → Path (point k.castSucc) (point k.succ)) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) = ⟦F 0⟧ := by
+  apply Quotient.sound
+  rw [Path.concat_succ, Path.concat_zero]
+  exact Path.Homotopic.refl_trans _
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3215,6 +3227,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInnerRun_exists_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms torusRP2_pathHomotopicQuotient_concat_succ
+#print axioms torusRP2_pathHomotopicQuotient_concat_one
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
