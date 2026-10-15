@@ -1530,6 +1530,19 @@ def pathTwoOpenSubdivisionRunPredLength
   unfold pathTwoOpenSubdivisionRunPredLength
   exact Nat.sub_add_cancel (pathTwoOpenSubdivisionRunFamily_length_pos S i)
 
+/-- The block length used by `Path.concat`, added to its cumulative-prefix
+start, reaches exactly the next run prefix. -/
+theorem pathTwoOpenSubdivisionRunPrefixLength_add_predLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val +
+        (pathTwoOpenSubdivisionRunPredLength S i + 1) =
+      pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+  exact pathTwoOpenSubdivisionRunEnd_eq_prefixLength_succ S i
+
 /-- Every original piece in an indexed run stays in the chart selected by
 the run head.  This is the uniform range input used to choose either the
 literal outer representative or the contractible-inner replacement. -/
