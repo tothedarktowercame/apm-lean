@@ -493,7 +493,8 @@ lemma apm_t92J05_quotient_normalClosure_equiv_of_kernel
       Subgroup.normalClosure (a.range : Set G)) :
     Nonempty
       (H ≃* G ⧸ Subgroup.normalClosure (a.range : Set G)) := by
-  sorry
+  exact ⟨(QuotientGroup.quotientKerEquivOfSurjective f hsurj).symm.trans
+    (QuotientGroup.quotientMulEquivOfEq hker)⟩
 
 /-- Generic "attach one simply-connected piece" van Kampen theorem.  In the
 2-cell application the overlap is an annulus, but cyclicity is not needed in
