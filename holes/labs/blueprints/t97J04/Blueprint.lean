@@ -2409,7 +2409,11 @@ lemma word_loopClass_coords :
       IsConj (wedgeCoords (loopClassAt word wBase
         (PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P)))
         apm_t92J05_genusTwoRelator⁻¹ := by
-  sorry
+  simpa [loopClassAt, word,
+    PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath,
+    PolygonSurfaceHomology.circleIntegerLoopOneClass] using
+    (apm_t92J05_genusTwo_W1_boundary_word wedgeCoords
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord)
 
 /-- `cLoop 1 = sBase`. -/
 theorem cLoop_one : cLoop 1 = sBase := by
