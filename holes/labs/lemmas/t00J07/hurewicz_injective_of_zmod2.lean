@@ -820,11 +820,41 @@ lemma hurewicz_loopClass_mem_range {Y : Type} [TopologicalSpace Y] (γ : C(Circl
 
 /-- Hurewicz is injective when `π₁ ≅ Z/2 ≅ H₁` (it is always onto). -/
 -- BEGIN SEAT AREA
+lemma hurewicz_injective_of_zmod2_aux_surjective
+    {X : Type} [TopologicalSpace X] [PathConnectedSpace X] (x : X) :
+    Function.Surjective (PolygonSurfaceHomology.moduleHurewicz x) := by
+  intro y
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of X) 1
+  obtain ⟨g, hg⟩ :=
+    ConstructionTargets.DegreeOneHurewiczSurjective.fundamentalGroupH1Hom_surjective
+      x (Multiplicative.ofAdd (e.hom y))
+  refine ⟨g, ?_⟩
+  change e.inv
+      (Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x g)) = y
+  rw [hg]
+  exact e.hom_inv_id_apply y
+
 lemma hurewicz_injective_of_zmod2 {X : Type} [TopologicalSpace X] [PathConnectedSpace X]
     (x : X) (hπ : Nonempty (FundamentalGroup X x ≃* Multiplicative (ZMod 2)))
     (hH : Nonempty (H 1 X ≅ ModuleCat.of ℤ (ZMod 2))) :
     Function.Injective (PolygonSurfaceHomology.moduleHurewicz x) := by
-  sorry
+  let eπ := hπ.some
+  let eH := hH.some.toLinearEquiv
+  letI : Fintype (FundamentalGroup X x) :=
+    Fintype.ofEquiv (Multiplicative (ZMod 2)) eπ.symm.toEquiv
+  letI : Fintype (H 1 X) :=
+    Fintype.ofEquiv (ZMod 2) eH.symm.toEquiv
+  apply ((Fintype.bijective_iff_surjective_and_card
+    (PolygonSurfaceHomology.moduleHurewicz x)).2 ⟨
+      hurewicz_injective_of_zmod2_aux_surjective x, ?_⟩).injective
+  calc
+    Fintype.card (FundamentalGroup X x) = Fintype.card (Multiplicative (ZMod 2)) :=
+      Fintype.card_congr eπ.toEquiv
+    _ = Fintype.card (ZMod 2) := by simp
+    _ = Fintype.card (H 1 X) := (Fintype.card_congr eH.toEquiv).symm
 -- END SEAT AREA
 
 /-- A loop whose based class is trivial is freely null-homotopic. -/
