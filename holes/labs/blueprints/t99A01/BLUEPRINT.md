@@ -59,21 +59,43 @@ MV conclusions and six finite integer-algebra conclusions.  No one of these
 ten calls another, so seats can land in any order.  The three fundamental-group
 leaves remain untouched, as requested.
 
-### Fundamental group leaves
+### Fundamental group induction
 
-* `t99A01_piOne_X` (40–80 lines): apply two-cell van Kampen to the degree-two
-  attaching map, then identify `⟨a | a^2⟩` with `Multiplicative (ZMod 2)`.
-  Useful existing API: `FundamentalGroup.map`, `FundamentalGroup.mapOfEq`,
-  `FundamentalGroup.fundamentalGroupMulEquivOfPathConnected`; missing API:
-  quotient by the normal closure of an attached loop.
-* `t99A01_piOne_Y` (50–100 lines): the same construction for relators
-  `a^2,a^4`; simplify the normal closure using divisibility (`2 ∣ 4`).
-* `t99A01_piOne_Z` (50–100 lines): use relators `a^2,a^4,a^5`; Bézout
-  (`5 - 2*2 = 1`) kills the generator, giving `Subsingleton`.
+Write `degreeGCD degree = Finset.univ.gcd degree`.  The generic theorem now
+states, for `degree : Fin r → ℕ` with every degree positive,
 
-The quotient has a nonempty circle summand in every case and the basepoint is
-the image of `1 : Circle`.  Thus none of these claims is vacuous.  The degrees
-are positive, so no constant attaching map edge case occurs.
+`π₁(AttachSpace degree, basepoint degree) ≃* Multiplicative (ZMod (degreeGCD degree))`.
+
+It is a sorry-free induction assembled from these independent leaves:
+
+* `t99A01_piOne_attach_empty` (40–80 lines): identify the quotient for
+  `Fin 0` with `Circle`, use Mathlib's circle fundamental-group equivalence,
+  and transport across `ZMod 0 ≃+ ℤ`.  `Finset.gcd ∅ = 0` and `ZMod 0 = ℤ`,
+  so the zero-disk case is substantive rather than exceptional or vacuous.
+* `t99A01_piOne_attach_succ` (100–150 lines): takes the smaller-space result
+  as an explicit hypothesis, so it is independently provable.  For the last
+  disk let `U` be its centre complement and `V` its open interior.  Reuse the
+  quotient-openness proof pattern of `t99A01_attach_openCover`; prove `V`
+  simply connected by the single-disk radial contraction and the overlap path
+  connected by polar coordinates.  Radially push only the last disk boundary
+  to obtain `U ≃ₕ AttachSpace (degree ∘ Fin.castSucc)`.  The inclusion used
+  here is the sorry-free definition `APMT99A01.attachCastSucc`, whose formulas
+  are literally `inl z ↦ inl z` and `inr (i,z) ↦ inr (castSucc i,z)`.
+  Apply
+  `ConstructionTargets.TwoOpenAttachOneCell.apm_t92J05_twoOpen_attach_one_cell`;
+  basepoint transport comes from a path in `U ∩ V` from radius `1/2` to the
+  chosen circle point.  Compute that the radius-`1/2` generator maps to the
+  base circle loop raised to `degree (Fin.last r)`.  Finish with the cyclic
+  quotient identity
+  `ZMod g / normalClosure(g'·1) ≃ ZMod (Nat.gcd g g')` and
+  `Finset.gcd_insert`/`Fin.sum_univ_succ` (or the corresponding gcd lemma).
+
+The generic assembler is `t99A01_piOne_attach`.  The registered leaves
+`t99A01_piOne_X`, `t99A01_piOne_Y`, and `t99A01_piOne_Z` are sorry-free pure
+algebra adapters: gcds are respectively `2`, `2`, and `1`; `ZMod 1` is a
+subsingleton.  Boundary points are fixed by the radial deformation, the last
+disk is the only disk removed, and positivity excludes the constant attaching
+map in the successor step.  The base case has no positivity obligation.
 
 ### Generic topology/Mayer--Vietoris leaves
 

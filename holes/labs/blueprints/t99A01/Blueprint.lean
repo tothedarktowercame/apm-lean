@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.t97A04Closure
 import ConstructionTargets.IntegralSingularHomologyComparison
 import ConstructionTargets.IntegralOpenCoverMayerVietoris
+import ConstructionTargets.TwoOpenAttachOneCell
 
 /-! # Blueprint for APM t99A01 -/
 
@@ -72,12 +73,89 @@ def APMT99A01.intTimesNat (d : ℕ) : ℤ →ₗ[ℤ] ℤ where
   map_add' x y := by simp [mul_add]
   map_smul' c x := by simp [mul_assoc, mul_comm]
 
-/-- **LIBRARY boundary.** Van Kampen for the quotient with one degree-two cell. -/
+/-- The gcd of all attaching degrees.  For an empty family this is `0`, so
+`ZMod (degreeGCD degree)` is `ZMod 0 = ℤ`, as required for the bare circle. -/
+def APMT99A01.degreeGCD {r : ℕ} (degree : Fin r → ℕ) : ℕ :=
+  Finset.univ.gcd degree
+
+/-- The formula on representatives for including the first `r` disks in an
+attaching space with `r+1` disks. -/
+def APMT99A01.attachCastSuccRaw {r : ℕ} (degree : Fin (r + 1) → ℕ) :
+    Sum Circle (Fin r × APMT99A01.Disk) →
+      Sum Circle (Fin (r + 1) × APMT99A01.Disk)
+  | Sum.inl z => Sum.inl z
+  | Sum.inr (i, z) => Sum.inr (Fin.castSucc i, z)
+
+/-- The explicit inclusion which is the identity on the base circle and sends
+disk `i` to disk `Fin.castSucc i`. -/
+def APMT99A01.attachCastSucc {r : ℕ} (degree : Fin (r + 1) → ℕ) :
+    APMT99A01.AttachSpace (degree ∘ Fin.castSucc) →
+      APMT99A01.AttachSpace degree :=
+  Quotient.lift
+    (fun x => Quotient.mk _ (APMT99A01.attachCastSuccRaw degree x))
+    (by
+      intro a b hab
+      apply Quotient.sound
+      induction hab with
+      | rel a b hab =>
+          cases hab with
+          | boundary i z =>
+              exact Relation.EqvGen.rel _ _
+                (APMT99A01.AttachRel.boundary (degree := degree) (Fin.castSucc i) z)
+      | refl => exact Relation.EqvGen.refl _
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ =>
+          exact Relation.EqvGen.trans _ _ _ ih₁ ih₂)
+
+/-- **Leaf (circle fundamental group, 40--80 lines).** The empty attaching
+family is just the circle.  The target is `ZMod 0`, hence additive `ℤ` written
+multiplicatively. -/
+lemma t99A01_piOne_attach_empty (degree : Fin 0 → ℕ) :
+    Nonempty (FundamentalGroup (APMT99A01.AttachSpace degree)
+      (APMT99A01.basepoint degree) ≃*
+        Multiplicative (ZMod (APMT99A01.degreeGCD degree))) := by
+  sorry
+
+/-- **Leaf (one-cell van Kampen step, 100--150 lines).** Remove the centre of
+the last disk and apply `apm_t92J05_twoOpen_attach_one_cell`.  Radial
+deformation identifies the left open set with the smaller attaching space via
+`attachCastSucc`; the overlap generator maps to the base-circle generator to
+the power `degree (Fin.last r)`.  The final quotient calculation is
+`gcd (degreeGCD (degree ∘ Fin.castSucc)) (degree (Fin.last r))`. -/
+lemma t99A01_piOne_attach_succ {r : ℕ} (degree : Fin (r + 1) → ℕ)
+    (_hpos : ∀ i, 0 < degree i)
+    (ih : Nonempty (FundamentalGroup
+      (APMT99A01.AttachSpace (degree ∘ Fin.castSucc))
+      (APMT99A01.basepoint (degree ∘ Fin.castSucc)) ≃*
+        Multiplicative (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc))))) :
+    Nonempty (FundamentalGroup (APMT99A01.AttachSpace degree)
+      (APMT99A01.basepoint degree) ≃*
+        Multiplicative (ZMod (APMT99A01.degreeGCD degree))) := by
+  sorry
+
+/-- Fundamental group of a circle with finitely many positive-degree disks
+attached.  This is a sorry-free induction assembling the two geometric leaves
+above; in particular it also covers `r = 0`. -/
+theorem t99A01_piOne_attach {r : ℕ} (degree : Fin r → ℕ)
+    (hpos : ∀ i, 0 < degree i) :
+    Nonempty (FundamentalGroup (APMT99A01.AttachSpace degree)
+      (APMT99A01.basepoint degree) ≃*
+        Multiplicative (ZMod (APMT99A01.degreeGCD degree))) := by
+  induction r with
+  | zero => exact t99A01_piOne_attach_empty degree
+  | succ r ih =>
+      apply t99A01_piOne_attach_succ degree hpos
+      apply ih (degree ∘ Fin.castSucc)
+      intro i
+      exact hpos (Fin.castSucc i)
+
+/-- Algebraic specialization of the generic attaching-space theorem. -/
 theorem t99A01_piOne_X :
     Nonempty (FundamentalGroup APMT99A01.X
       (APMT99A01.basepoint APMT99A01.degreeX) ≃*
         Multiplicative (ZMod 2)) := by
-  sorry
+  simpa [APMT99A01.X, APMT99A01.degreeX, APMT99A01.degreeGCD] using
+    (t99A01_piOne_attach APMT99A01.degreeX (by simp [APMT99A01.degreeX]))
 
 /-- **LIBRARY boundary.** Van Kampen for the quotient with degree-two and
 degree-four cells. -/
@@ -85,14 +163,27 @@ theorem t99A01_piOne_Y :
     Nonempty (FundamentalGroup APMT99A01.Y
       (APMT99A01.basepoint APMT99A01.degreeY) ≃*
         Multiplicative (ZMod 2)) := by
-  sorry
+  simpa [APMT99A01.Y, APMT99A01.degreeY, APMT99A01.degreeGCD] using
+    (t99A01_piOne_attach APMT99A01.degreeY (by simp [APMT99A01.degreeY]))
 
 /-- **LIBRARY boundary.** Van Kampen for the quotient with cells of degrees
 two, four, and five. -/
 theorem t99A01_piOne_Z :
     Subsingleton (FundamentalGroup APMT99A01.Z
       (APMT99A01.basepoint APMT99A01.degreeZ)) := by
-  sorry
+  have h : Nonempty (FundamentalGroup APMT99A01.Z
+      (APMT99A01.basepoint APMT99A01.degreeZ) ≃*
+        Multiplicative (ZMod 1)) := by
+    simpa [APMT99A01.Z, APMT99A01.degreeZ, APMT99A01.degreeGCD] using
+      (t99A01_piOne_attach APMT99A01.degreeZ (by
+        intro i
+        fin_cases i <;> norm_num [APMT99A01.degreeZ]))
+  rcases h with ⟨e⟩
+  constructor
+  intro a b
+  apply e.injective
+  haveI : Subsingleton (Multiplicative (ZMod 1)) := inferInstance
+  exact Subsingleton.elim _ _
 
 /-! ### Generic integral homology calculation
 
