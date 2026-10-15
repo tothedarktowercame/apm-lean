@@ -2538,6 +2538,15 @@ generator, which is exactly `hW1`'s `hcoord`.  Ingredients: `Classical.choose_sp
 (`FiniteWedgeFreeCoordinates`: `finiteWedgeLegMap i circlePositiveClass ↦ of i`); the base
 transport `q` is a cast of `refl`; match `finiteWedgeExplicitLegClassAtBase` with
 `apm_t92J05_finiteWedgeLegMap` (both are the leg loop at the base; see their definitions). -/
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_circle :
+    apm_t92J05_circlePositiveClass =
+      ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass := by
+  apply ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.injective
+  simp [apm_t92J05_circlePositiveClass,
+    ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass,
+    ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt,
+    ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
+
 -- BEGIN SEAT AREA
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord :
     ∀ l, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
@@ -2546,7 +2555,6 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
       FreeGroup.of (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv l) := by
   sorry
 -- END SEAT AREA
-
 noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_coordinates
     (x : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer) :
     FundamentalGroup apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer x ≃*
