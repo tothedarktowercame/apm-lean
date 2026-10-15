@@ -1746,6 +1746,20 @@ theorem t96A06_integralToRational_singularChainsDegree_differential
   rw [Preadditive.comp_sum]
   simp_rw [Functor.map_zsmul, Preadditive.comp_zsmul]
 
+/-- Coefficient extension from integral to rational singular chains, as a
+morphism of chain complexes after forgetting both module structures. -/
+noncomputable def t96A06_integralToRational_singularChainMap
+    (X : TopCat) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).obj (CoefficientH0.SingularChains ℤ X) ⟶
+      (t96A06_forgetRatModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).obj (CoefficientH0.SingularChains ℚ X) where
+  f n := t96A06_integralToRational_singularChainsDegree X n
+  comm' i j hij := by
+    obtain rfl : i = j + 1 := hij.symm
+    simpa only [Functor.mapHomologicalComplex_obj_d] using
+      (t96A06_integralToRational_singularChainsDegree_differential X j).symm
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -3015,6 +3029,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_singularChainsDegree
 #print axioms t96A06_integralToRational_singularChainsDegree_generator
 #print axioms t96A06_integralToRational_singularChainsDegree_differential
+#print axioms t96A06_integralToRational_singularChainMap
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
