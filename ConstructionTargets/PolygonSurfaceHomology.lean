@@ -1769,6 +1769,33 @@ theorem polygonBoundaryCanonicalConcat_homotopic (P : PairingData) :
   convert h using 1
   exact (polygonBoundaryEndpointSubpath_cast_eq P).symm
 
+/-- The geometric boundary loop has the ordered signed-edge Hurewicz sum.
+This is the finite path-subdivision identity needed by the B7 calculation. -/
+theorem finitePathSubdivision_boundary (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P)) =
+      (List.ofFn fun i : Fin P.edgeCount =>
+        moduleHurewicz (orbitWedgeBase P)
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundarySignedEdgePathAtBase P i))).sum := by
+  have hq :
+      (Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+          (polygonBoundaryCanonicalSubdivisionPathAtBase P)) :
+            FundamentalGroup _ _) =
+        Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) :=
+    Quotient.sound (polygonBoundaryCanonicalConcat_homotopic P)
+  calc
+    _ = moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk
+          (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+            (polygonBoundaryCanonicalSubdivisionPathAtBase P))) :=
+      congrArg (moduleHurewicz (orbitWedgeBase P)) hq.symm
+    _ = _ := by
+      simpa only [polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge] using
+        moduleHurewicz_mk_concat_eq_list_sum P.edgeCount (orbitWedgeBase P)
+          (polygonBoundaryCanonicalSubdivisionPathAtBase P)
+
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
 theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
