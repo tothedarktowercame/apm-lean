@@ -1247,11 +1247,392 @@ lemma t99A01_piOne_attach_succ_rho_iota {r : ℕ} (degree : Fin (r + 1) → ℕ)
 /-- **Leaf.** `ι ∘ ρ ≃ id`: push the last disk radially to its boundary, fixing everything
 else (pattern: `t99A01_attach_circleSide_aux_deformation_aux_continuous` / `_aux_respects` /
 `_aux_descend`, restricted to the last disk; reuse `_aux_scale`, `_aux_q_quotient`). -/
+def t99A01_piOne_attach_succ_deform_aux_scale
+    (t : unitInterval) (z : ℂ) : ℝ :=
+  t.1 + (1 - t.1) / ‖z‖
+
+lemma t99A01_piOne_attach_succ_deform_aux_scale_norm
+    (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) (hz1 : ‖z‖ ≤ 1) :
+    ‖(t99A01_piOne_attach_succ_deform_aux_scale t z : ℂ) * z‖ ≤ 1 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  have ht0 : 0 ≤ (t : ℝ) := t.2.1
+  have ht1 : (t : ℝ) ≤ 1 := t.2.2
+  have hs0 : 0 ≤ (t : ℝ) + (1 - t.1) / ‖z‖ :=
+    add_nonneg ht0 (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+  rw [norm_mul]
+  change ‖(((t : ℝ) + (1 - t.1) / ‖z‖ : ℝ) : ℂ)‖ * ‖z‖ ≤ 1
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs0]
+  field_simp
+  nlinarith
+
+lemma t99A01_piOne_attach_succ_deform_aux_scale_ne
+    (t : unitInterval) (z : ℂ) (hz0 : z ≠ 0) :
+    (t99A01_piOne_attach_succ_deform_aux_scale t z : ℂ) * z ≠ 0 := by
+  have hn : 0 < ‖z‖ := norm_pos_iff.mpr hz0
+  apply mul_ne_zero
+  · rw [t99A01_piOne_attach_succ_deform_aux_scale]
+    have ht0 : 0 ≤ (t : ℝ) := t.2.1
+    have ht1 : (t : ℝ) ≤ 1 := t.2.2
+    have hp : 0 < (t : ℝ) + (1 - t.1) / ‖z‖ := by
+      by_cases ht : (t : ℝ) = 0
+      · rw [ht]
+        positivity
+      · exact add_pos_of_pos_of_nonneg (lt_of_le_of_ne ht0 (Ne.symm ht))
+          (div_nonneg (sub_nonneg.mpr ht1) hn.le)
+    exact_mod_cast hp.ne'
+  · exact hz0
+
+lemma t99A01_piOne_attach_succ_deform_aux_last_ne {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    (x : t99A01_piOne_attach_succ_retract_aux_Pre degree)
+    (z : APMT99A01.Disk) (hx : x.1 = Sum.inr (Fin.last r, z)) :
+    (z : ℂ) ≠ 0 := by
+  apply t99A01_piOne_attach_succ_retract_aux_ne_zero degree z
+  simpa [hx] using x.2
+
+def t99A01_piOne_attach_succ_deform_aux_raw {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    (p : unitInterval × t99A01_piOne_attach_succ_retract_aux_Pre degree) :
+    Sum Circle (Fin (r + 1) × APMT99A01.Disk) :=
+  match hx : p.2.1 with
+  | Sum.inl z => Sum.inl z
+  | Sum.inr q =>
+      if h : q.1 = Fin.last r then
+        Sum.inr (q.1, ⟨
+          (t99A01_piOne_attach_succ_deform_aux_scale p.1 (q.2 : ℂ) : ℂ) * q.2,
+          by
+            rw [Metric.mem_closedBall, dist_zero_right]
+            apply t99A01_piOne_attach_succ_deform_aux_scale_norm p.1 _
+              (t99A01_piOne_attach_succ_deform_aux_last_ne degree p.2 q.2
+                (hx.trans (congrArg Sum.inr (Prod.ext h rfl))))
+            have hq := q.2.property
+            rw [Metric.mem_closedBall, dist_zero_right] at hq
+            exact hq⟩)
+      else Sum.inr q
+
+lemma t99A01_piOne_attach_succ_deform_aux_raw_mem {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    (p : unitInterval × t99A01_piOne_attach_succ_retract_aux_Pre degree) :
+    Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree p) ∈
+      APMT99A01.succCircleSide degree := by
+  rcases p with ⟨t, x⟩
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl z => simpa [t99A01_piOne_attach_succ_deform_aux_raw] using
+      t99A01_piOne_attach_succ_retract_aux_circle_mem degree z
+  | inr q =>
+      rcases q with ⟨i, z⟩
+      by_cases hi : i = Fin.last r
+      · subst i
+        intro he
+        have hr := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp
+          (Quotient.exact he.symm)
+        simp only [t99A01_piOne_attach_succ_deform_aux_raw, dif_pos rfl] at hr
+        have hp := Sum.inr.inj hr
+        have hz := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) (Prod.mk.inj hp).2
+        simp only [t99A01_piOne_attach_succ_deform_aux_raw, dif_pos rfl] at hz
+        exact (t99A01_piOne_attach_succ_deform_aux_scale_ne t _
+          (t99A01_piOne_attach_succ_retract_aux_ne_zero degree z hx)) hz
+      · simpa [t99A01_piOne_attach_succ_deform_aux_raw, hi] using hx
+
+lemma t99A01_piOne_attach_succ_deform_aux_continuous {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    Continuous (t99A01_piOne_attach_succ_deform_aux_raw degree) := by
+  rw [continuous_iff_continuousAt]
+  rintro ⟨t, x⟩
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl z =>
+      let getZ : t99A01_piOne_attach_succ_retract_aux_Pre degree → Circle :=
+        fun y => Sum.elim id (fun _ => z) y.1
+      have hgetZ : Continuous getZ :=
+        (continuous_sumElim.2 ⟨continuous_id, continuous_const⟩).comp continuous_subtype_val
+      apply (continuous_inl.comp (hgetZ.comp continuous_snd)).continuousAt.congr_of_eventuallyEq
+      have hopen := (isOpen_range_inl.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds
+          (show (t, ⟨Sum.inl z, hx⟩) ∈
+            (Subtype.val ∘ Prod.snd) ⁻¹' Set.range Sum.inl from ⟨z, rfl⟩)
+      filter_upwards [hopen] with y hy
+      rcases hy with ⟨w, hw⟩
+      rcases y with ⟨s, ⟨u, hu⟩⟩
+      dsimp at hw ⊢
+      cases u <;> simp_all [t99A01_piOne_attach_succ_deform_aux_raw, getZ]
+  | inr q =>
+      rcases q with ⟨i, z⟩
+      by_cases hi : i = Fin.last r
+      · subst i
+        let getZ : t99A01_piOne_attach_succ_retract_aux_Pre degree →
+            APMT99A01.Disk := fun y => Sum.elim (fun _ => z)
+              (fun p => if p.1 = Fin.last r then p.2 else z) y.1
+        have hgetZ : Continuous getZ :=
+          (continuous_sumElim.2 ⟨continuous_const,
+            (continuous_prod_of_discrete_left.mpr (by
+              intro j
+              by_cases hj : j = Fin.last r
+              · simpa [hj] using (continuous_id : Continuous (fun z : APMT99A01.Disk => z))
+              · simpa [hj] using (continuous_const : Continuous (fun _ : APMT99A01.Disk => z))))⟩).comp
+            continuous_subtype_val
+        have hne : ∀ y, ((getZ y : APMT99A01.Disk) : ℂ) ≠ 0 := by
+          intro y
+          cases hy : y.1 with
+          | inl w =>
+              simpa [getZ, hy] using
+                (t99A01_piOne_attach_succ_deform_aux_last_ne degree
+                  ⟨Sum.inr (Fin.last r, z), hx⟩ z rfl)
+          | inr p =>
+              by_cases hp : p.1 = Fin.last r
+              · simpa [getZ, hy, hp] using
+                  (t99A01_piOne_attach_succ_deform_aux_last_ne degree y p.2
+                    (hy.trans (congrArg Sum.inr (Prod.ext hp rfl))))
+              · simpa [getZ, hy, hp] using
+                  (t99A01_piOne_attach_succ_deform_aux_last_ne degree
+                    ⟨Sum.inr (Fin.last r, z), hx⟩ z rfl)
+        let diskMap : unitInterval × t99A01_piOne_attach_succ_retract_aux_Pre degree →
+            APMT99A01.Disk := fun y => ⟨
+          (t99A01_piOne_attach_succ_deform_aux_scale y.1 (getZ y.2 : ℂ) : ℂ) * getZ y.2,
+          by
+            rw [Metric.mem_closedBall, dist_zero_right]
+            apply t99A01_piOne_attach_succ_deform_aux_scale_norm y.1 _ (hne y.2)
+            have hz := (getZ y.2).property
+            rw [Metric.mem_closedBall, dist_zero_right] at hz
+            exact hz⟩
+        have hdisk : Continuous diskMap := by
+          apply Continuous.subtype_mk
+          dsimp [diskMap, t99A01_piOne_attach_succ_deform_aux_scale]
+          have hv : Continuous (fun y : unitInterval ×
+              t99A01_piOne_attach_succ_retract_aux_Pre degree =>
+              ((getZ y.2 : APMT99A01.Disk) : ℂ)) :=
+            continuous_subtype_val.comp (hgetZ.comp continuous_snd)
+          have hn := hv.norm
+          have hn0 : ∀ y : unitInterval ×
+              t99A01_piOne_attach_succ_retract_aux_Pre degree,
+              ‖((getZ y.2 : APMT99A01.Disk) : ℂ)‖ ≠ 0 :=
+            fun y => norm_ne_zero_iff.mpr (hne y.2)
+          exact (Complex.continuous_ofReal.comp
+            ((continuous_subtype_val.comp continuous_fst).add
+              ((continuous_const.sub (continuous_subtype_val.comp continuous_fst)).div
+                hn hn0))).mul hv
+        have hc : Continuous (fun y =>
+            (Sum.inr (Fin.last r, diskMap y) :
+              Sum Circle (Fin (r + 1) × APMT99A01.Disk))) :=
+          continuous_inr.comp (continuous_const.prodMk hdisk)
+        apply hc.continuousAt.congr_of_eventuallyEq
+        have hop : IsOpen (Sum.inr '' (({Fin.last r} : Set (Fin (r + 1))) ×ˢ
+            (Set.univ : Set APMT99A01.Disk))) :=
+          (isOpenMap_inr (X := Circle)) _ ((isOpen_discrete _).prod isOpen_univ)
+        filter_upwards [((hop.preimage
+          (continuous_subtype_val.comp continuous_snd)).mem_nhds (by simp))] with y hy
+        obtain ⟨⟨j, w⟩, hjw, he⟩ := hy
+        have hj : j = Fin.last r := by simpa using hjw.1
+        subst j
+        rcases y with ⟨s, ⟨u, hu⟩⟩
+        dsimp at he ⊢
+        cases u with
+        | inl a => cases he
+        | inr p =>
+          rcases p with ⟨j, v⟩
+          have hp : (Fin.last r, w) = (j, v) := Sum.inr.inj he
+          have hj' : Fin.last r = j := congrArg Prod.fst hp
+          have hv' : w = v := congrArg Prod.snd hp
+          subst j
+          subst v
+          simp [t99A01_piOne_attach_succ_deform_aux_raw, diskMap, getZ]
+      · let getQ : t99A01_piOne_attach_succ_retract_aux_Pre degree →
+            Fin (r + 1) × APMT99A01.Disk :=
+          fun y => Sum.elim (fun _ => (i, z)) id y.1
+        have hgetQ : Continuous getQ :=
+          (continuous_sumElim.2 ⟨continuous_const, continuous_id⟩).comp continuous_subtype_val
+        let g : unitInterval × t99A01_piOne_attach_succ_retract_aux_Pre degree →
+            Sum Circle (Fin (r + 1) × APMT99A01.Disk) :=
+          fun y => Sum.inr (i, (getQ y.2).2)
+        have hg : Continuous g := continuous_inr.comp
+          (continuous_const.prodMk (hgetQ.snd.comp continuous_snd))
+        apply hg.continuousAt.congr_of_eventuallyEq
+        have hop : IsOpen (Sum.inr '' (({i} : Set (Fin (r + 1))) ×ˢ
+            (Set.univ : Set APMT99A01.Disk))) :=
+          (isOpenMap_inr (X := Circle)) _ ((isOpen_discrete _).prod isOpen_univ)
+        filter_upwards [((hop.preimage
+          (continuous_subtype_val.comp continuous_snd)).mem_nhds (by simp))] with y hy
+        obtain ⟨⟨j, w⟩, hjw, he⟩ := hy
+        have hj : j = i := by simpa using hjw.1
+        subst j
+        rcases y with ⟨s, ⟨u, hu⟩⟩
+        dsimp at he ⊢
+        cases u with
+        | inl a => cases he
+        | inr p =>
+          rcases p with ⟨j, v⟩
+          have hp : (i, w) = (j, v) := Sum.inr.inj he
+          have hj' : i = j := congrArg Prod.fst hp
+          have hv' : w = v := congrArg Prod.snd hp
+          subst j
+          subst v
+          simp [t99A01_piOne_attach_succ_deform_aux_raw, g, getQ, hi]
+
+lemma t99A01_piOne_attach_succ_deform_aux_respects {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (t : unitInterval)
+    (x y : t99A01_piOne_attach_succ_retract_aux_Pre degree)
+    (hxy : t99A01_piOne_attach_succ_retract_aux_q degree x =
+      t99A01_piOne_attach_succ_retract_aux_q degree y) :
+    (Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree (t, x)) :
+        APMT99A01.AttachSpace degree) =
+      Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree (t, y)) := by
+  have hxy' : Relation.EqvGen (APMT99A01.AttachRel degree) x.1 y.1 :=
+    Quotient.exact (congrArg Subtype.val hxy)
+  have hgen : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+      ∀ (ha : Quotient.mk _ a ∈ APMT99A01.succCircleSide degree)
+        (hb : Quotient.mk _ b ∈ APMT99A01.succCircleSide degree),
+      (Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree (t, ⟨a, ha⟩)) :
+          APMT99A01.AttachSpace degree) =
+        Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree (t, ⟨b, hb⟩)) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab =>
+        intro ha hb
+        cases hab with
+        | boundary i z =>
+          have hn : ‖(APMT99A01.circleInDisk z : ℂ)‖ = 1 := Circle.norm_coe z
+          by_cases hi : i = Fin.last r
+          · have hs : t99A01_piOne_attach_succ_deform_aux_scale t
+                (APMT99A01.circleInDisk z : ℂ) = 1 := by
+              simp [t99A01_piOne_attach_succ_deform_aux_scale, hn]
+            apply Quotient.sound
+            simpa [t99A01_piOne_attach_succ_deform_aux_raw, hi, hs] using
+              (Relation.EqvGen.rel _ _
+                (APMT99A01.AttachRel.boundary (degree := degree) i z))
+          · apply Quotient.sound
+            simpa [t99A01_piOne_attach_succ_deform_aux_raw, hi] using
+              (Relation.EqvGen.rel _ _
+                (APMT99A01.AttachRel.boundary (degree := degree) i z))
+    | refl a => intro ha hb; rfl
+    | symm a b hab ih => intro ha hb; exact (ih hb ha).symm
+    | trans a b c hab hbc ih₁ ih₂ =>
+        intro ha hc
+        have hb : Quotient.mk _ b ∈ APMT99A01.succCircleSide degree := by
+          rw [← Quotient.sound hab]
+          exact ha
+        exact (ih₁ ha hb).trans (ih₂ hb hc)
+  exact hgen x.1 y.1 hxy' x.2 y.2
+
 lemma t99A01_piOne_attach_succ_deform {r : ℕ} (degree : Fin (r + 1) → ℕ)
     (ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc), APMT99A01.succCircleSide degree))
     (hι : ∀ y, (ι y).1 = APMT99A01.attachCastSucc degree y) :
     ContinuousMap.Homotopic (ι.comp (t99A01_succRho degree)) (ContinuousMap.id _) := by
-  sorry
+  let q := t99A01_piOne_attach_succ_retract_aux_q degree
+  have hq := t99A01_piOne_attach_succ_retract_aux_q_quotient degree
+  let s : APMT99A01.succCircleSide degree →
+      t99A01_piOne_attach_succ_retract_aux_Pre degree :=
+    fun x => Classical.choose (hq.surjective x)
+  have hs (x : APMT99A01.succCircleSide degree) : q (s x) = x :=
+    Classical.choose_spec (hq.surjective x)
+  let F : unitInterval × APMT99A01.succCircleSide degree →
+      APMT99A01.succCircleSide degree := fun p =>
+    ⟨Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree (p.1, s p.2)),
+      t99A01_piOne_attach_succ_deform_aux_raw_mem degree (p.1, s p.2)⟩
+  have hFq (p : unitInterval × t99A01_piOne_attach_succ_retract_aux_Pre degree) :
+      F (p.1, q p.2) =
+        ⟨Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree p),
+          t99A01_piOne_attach_succ_deform_aux_raw_mem degree p⟩ := by
+    apply Subtype.ext
+    exact t99A01_piOne_attach_succ_deform_aux_respects degree p.1
+      (s (q p.2)) p.2 (hs (q p.2))
+  have hF : Continuous F := by
+    apply hq.continuous_lift_prod_right
+    have hc : Continuous (fun p : unitInterval ×
+        t99A01_piOne_attach_succ_retract_aux_Pre degree =>
+        (⟨Quotient.mk _ (t99A01_piOne_attach_succ_deform_aux_raw degree p),
+          t99A01_piOne_attach_succ_deform_aux_raw_mem degree p⟩ :
+          APMT99A01.succCircleSide degree)) :=
+      Continuous.subtype_mk (continuous_coinduced_rng.comp
+        (t99A01_piOne_attach_succ_deform_aux_continuous degree)) _
+    convert hc using 1
+    funext p
+    exact hFq p
+  refine ⟨ContinuousMap.Homotopy.mk (f₀ := ι.comp (t99A01_succRho degree))
+    (f₁ := ContinuousMap.id _) ⟨F, hF⟩ ?_ ?_⟩
+  · intro x
+    apply Subtype.ext
+    change (F (0, x)).1 = _
+    rw [show F (0, x) = F (0, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (0, s x))]
+    generalize hy : s x = y
+    rcases y with ⟨y, hymem⟩
+    cases y with
+    | inl z =>
+      simp only [t99A01_piOne_attach_succ_deform_aux_raw]
+      change Quotient.mk _ (Sum.inl z) = (ι (t99A01_succRho degree x)).1
+      rw [hι]
+      have hx : x = ⟨Quotient.mk _ (Sum.inl z), hymem⟩ := (hy ▸ hs x).symm
+      rw [hx]
+      rfl
+    | inr p =>
+      rcases p with ⟨i, z⟩
+      by_cases hi : i = Fin.last r
+      · subst i
+        have hval : (s x).1 = Sum.inr (Fin.last r, z) := congrArg Subtype.val hy
+        have hz := t99A01_piOne_attach_succ_deform_aux_last_ne degree (s x) z hval
+        have hn : 0 < ‖(z : ℂ)‖ := norm_pos_iff.mpr hz
+        let w : Circle := ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+          simp [Submonoid.unitSphere, div_self hn.ne']⟩
+        have hs0 : t99A01_piOne_attach_succ_deform_aux_scale (0 : unitInterval)
+            (z : ℂ) = 1 / ‖(z : ℂ)‖ := by
+          simp [t99A01_piOne_attach_succ_deform_aux_scale]
+        simp only [t99A01_piOne_attach_succ_deform_aux_raw, dif_pos rfl]
+        have hx : x = ⟨Quotient.mk _ (Sum.inr (Fin.last r, z)), hymem⟩ :=
+          (hy ▸ hs x).symm
+        rw [hx]
+        change Quotient.mk _ _ = (ι _).1
+        rw [hι]
+        dsimp [t99A01_succRho]
+        simp only [Quotient.lift_mk,
+          t99A01_piOne_attach_succ_retract_aux_raw, dif_pos rfl]
+        change Quotient.mk _ _ = APMT99A01.attachCastSucc degree
+          (Quotient.mk _ (Sum.inl
+            (t99A01_piOne_attach_succ_retract_aux_radial (z : ℂ) ^
+              degree (Fin.last r))))
+        change Quotient.mk _ _ = Quotient.mk _ (Sum.inl
+          (t99A01_piOne_attach_succ_retract_aux_radial (z : ℂ) ^
+            degree (Fin.last r)))
+        apply Quotient.sound
+        have hb := (Relation.EqvGen.rel _ _
+          (APMT99A01.AttachRel.boundary (degree := degree) (Fin.last r) w)).symm
+        convert hb using 1
+        apply congrArg (fun u => Sum.inr (Fin.last r, u))
+        apply Subtype.ext
+        simp [APMT99A01.circleInDisk, w, hs0, div_eq_mul_inv, mul_comm]
+        apply congrArg Sum.inl
+        apply congrArg (fun u : Circle => u ^ degree (Fin.last r))
+        apply Subtype.ext
+        simp [w, t99A01_piOne_attach_succ_retract_aux_radial, hz]
+      · simp only [t99A01_piOne_attach_succ_deform_aux_raw, dif_neg hi]
+        have hx : x = ⟨Quotient.mk _ (Sum.inr (i, z)), hymem⟩ := (hy ▸ hs x).symm
+        rw [hx]
+        change Quotient.mk _ (Sum.inr (i, z)) = (ι _).1
+        rw [hι]
+        dsimp [t99A01_succRho]
+        simp only [Quotient.lift_mk,
+          t99A01_piOne_attach_succ_retract_aux_raw, dif_neg hi]
+        change Quotient.mk _ (Sum.inr (i, z)) = APMT99A01.attachCastSucc degree
+          (Quotient.mk _ (Sum.inr (i.castPred hi, z)))
+        simp [APMT99A01.attachCastSucc, APMT99A01.attachCastSuccRaw]
+  · intro x
+    apply Subtype.ext
+    change (F (1, x)).1 = _
+    rw [show F (1, x) = F (1, q (s x)) by rw [hs x]]
+    rw [congrArg Subtype.val (hFq (1, s x))]
+    have hone : t99A01_piOne_attach_succ_deform_aux_raw degree (1, s x) =
+        (s x).1 := by
+      generalize hy : s x = y
+      rcases y with ⟨y, hm⟩
+      cases y with
+      | inl z => simp [t99A01_piOne_attach_succ_deform_aux_raw]
+      | inr p =>
+        rcases p with ⟨i, z⟩
+        by_cases hi : i = Fin.last r
+        · simp [t99A01_piOne_attach_succ_deform_aux_raw, hi,
+            t99A01_piOne_attach_succ_deform_aux_scale]
+        · simp [t99A01_piOne_attach_succ_deform_aux_raw, hi]
+    exact (congrArg (Quotient.mk _) hone).trans (congrArg Subtype.val (hs x))
 
 lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
     :
