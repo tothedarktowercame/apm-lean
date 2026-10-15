@@ -88364,6 +88364,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git show --check 06f6bde3c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792040887803-13305-9e2d7762",
+     :commands
+     ["lake env lean holes/labs/blueprints/t97A01/Blueprint.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show --check 06f6bde3c; fixture SHA-256 and placeholder scans"],
+     :finding
+     "Commit 06f6bde3c by topo-6 changes only t97A01Closure.blueprint.md; fixture SHA-256 7ac697c3d72300464e0918d095e319df5b6898164f00b7692189f0988578b1fa matches. Source blueprint compiles with exactly its 2 declared LIBRARY sorries; closure blueprint has 0 placeholders; registry 166/0. Mathematics is sound: aabbcc and aba^-1b^-1cc are nonorientable genus 3; boundary vectors (2,2,2) and (0,0,2) are injective with cokernel Z^2 plus Z/2; the stated pi1 relator abelianizes consistently. B1/B2 use only frozen definitions and listed foundations; B3 uses every output of B1 and B2, and its Lean type exactly matches the registered conjunction. Proper blueprint milestone; both library adapters remain."},
     :commit "06f6bde3c",
     :changed-paths ["ConstructionTargets/t97A01Closure.blueprint.md"],
     :fixture
@@ -88372,7 +88382,7 @@
      "7ac697c3d72300464e0918d095e319df5b6898164f00b7692189f0988578b1fa"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88390,14 +88400,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t97A01/BLUEPRINT.md's plan into ConstructionTargets/t97A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review required before formalization.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
    :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "06f6bde3c",
+     :reason
+     "Blueprint written; independent review required before formalization."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
