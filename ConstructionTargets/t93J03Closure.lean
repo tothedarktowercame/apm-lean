@@ -1631,6 +1631,32 @@ noncomputable def pathTwoOpenSubdivisionRunBlockPiece
       rw [pathTwoOpenSubdivisionRunPredLength_add_one]
       exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
 
+/-- The same indexed run, presented canonically by its cumulative-prefix
+start rather than by the selected slice start. -/
+noncomputable def pathTwoOpenSubdivisionRunPrefixBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    Fin (pathTwoOpenSubdivisionRunPredLength S i + 2) → X :=
+  pathTwoOpenSubdivisionBlockPoint S
+    (pathTwoOpenSubdivisionRunPrefixLength S i.val)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1)
+    (pathTwoOpenSubdivisionRunPrefixBlock_le S i)
+
+/-- The original factors of a run in its canonical cumulative-prefix
+presentation. -/
+noncomputable def pathTwoOpenSubdivisionRunPrefixBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) → Path
+      (pathTwoOpenSubdivisionRunPrefixBlockPoint S i k.castSucc)
+      (pathTwoOpenSubdivisionRunPrefixBlockPoint S i k.succ) :=
+  pathTwoOpenSubdivisionBlockPiece S
+    (pathTwoOpenSubdivisionRunPrefixLength S i.val)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1)
+    (pathTwoOpenSubdivisionRunPrefixBlock_le S i)
+
 /-- Every point of the reindexed run block is the original subdivision point
 at the corresponding cumulative-prefix offset. -/
 theorem pathTwoOpenSubdivisionRunBlockPoint_apply_prefix
