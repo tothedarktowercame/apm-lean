@@ -2740,6 +2740,46 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets_eq
   · apply Fin.ext
     exact h.2
 
+/-- Exhaustive successor alternatives in the dependent run/offset fibers.
+This is the case eliminator used by the fold-reassociation induction. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases_eq
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n) :
+    let z0 := (torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc
+    let z1 := (torusRP2_subdivisionRunOffsetEquiv S).symm j.succ
+    (∃ hrun : z1.1 = z0.1,
+      Fin.cast
+          (congrArg (fun i => (pathTwoOpenSubdivisionRunFamily S i).length) hrun)
+          z1.2 =
+        ⟨z0.2.val + 1, by
+          have hoff :=
+            torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
+              S j hrun
+          have hlen := congrArg
+            (fun i => (pathTwoOpenSubdivisionRunFamily S i).length) hrun
+          rw [← hoff, ← hlen]
+          exact z1.2.isLt⟩) ∨
+      (z1.1.val = z0.1.val + 1 ∧
+        z0.2 = Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S z0.1)
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S z0.1)) ∧
+        z1.2 = Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S z1.1)
+          (0 : Fin (pathTwoOpenSubdivisionRunPredLength S z1.1 + 1))) := by
+  dsimp only
+  rcases torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases S j with
+    hsame | hcross
+  · exact Or.inl ⟨hsame.1,
+      torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq
+        S j hsame.1⟩
+  · have hexact :=
+      torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets_eq
+        S j (fun h => by
+          have hval := congrArg Fin.val h
+          omega)
+    exact Or.inr ⟨hcross.1, hexact.1, hexact.2⟩
+
 /-- Under flattening, a run begins at its cumulative prefix and its final
 local factor ends immediately before the next cumulative prefix. -/
 theorem torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
@@ -3212,6 +3252,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_cast_of_run_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets_eq
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
