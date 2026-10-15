@@ -88331,7 +88331,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88340,19 +88340,19 @@
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
     [{:name
-      "torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one",
-      :type "successive inverse coordinates cannot skip a run",
+      "torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne",
+      :type "cross-run successor advances exactly one run",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_run_le_succ"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88364,40 +88364,30 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked successor no-skipping bound.",
+    :reason "Banked exact cross-run successor index.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 051849305", :exit 0}],
-    :diagnostic-history
-    [{:cmd "no-skip draft",
+     {:cmd
+      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
-      :correction "normalized negated inequality"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792072497479-14151-161d05b9",
-     :commands
-     ["git show/diff/check 051849305"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 051849305 adds compiled, sorry-free progress beyond history commit 4b0c8199c. It proves consecutive inverse run-offset coordinates cannot skip a run: a hypothetical skipped boundary lies strictly between their run boundaries, contradicting successor flattening plus the prior lower/upper offset bounds. Only t97A01Closure.lean changed; fixture SHA 2633d8b5c2ef99d30c25773285de86bfef0e1bc3731d0213ac4631e826e15cfb matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Inequality directions and Fin/Sigma boundaries are correct. Cross-run endpoint offsets, nested concatenation, van Kampen, and assembly remain listed."},
-    :commit "051849305",
+      :expected-exit 1}
+     {:cmd "git show --check 37fc52bc9", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Main before build completed",
+      :exit 1,
+      :correction "reran after build"}],
+    :commit "37fc52bc9",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "2633d8b5c2ef99d30c25773285de86bfef0e1bc3731d0213ac4631e826e15cfb"},
+     "373ebe10de8a6cfa3972790e03508626bb87230f64f343e1c24db7123cb582f9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94284,7 +94274,8 @@
     :lemma-torusrp2-subdivisionrunprefixlength-le-runoffset
     :lemma-torusrp2-subdivisionrunoffset-run-le-of-coord-lt
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-run-le-succ
-    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-le-add-one],
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-le-add-one
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95384,4 +95375,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-run-le-succ],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne",
+    :type "cross-run successor advances exactly one run"},
+   :lemma
+   {:name
+    "torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cross-run successor advances exactly one run",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-le-add-one],
    :other-consumers []}]}
