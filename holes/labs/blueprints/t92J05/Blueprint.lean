@@ -456,12 +456,12 @@ def apm_t92J05_genusTwo_center :
 
 /-- Inclusion of the left member of a two-open cover into the ambient space. -/
 def apm_t92J05_twoOpen_leftInclusion
-    {X : Type*} [TopologicalSpace X] (U : Set X) : ContinuousMap U X :=
+    {X : Type} [TopologicalSpace X] (U : Set X) : ContinuousMap U X :=
   ⟨Subtype.val, continuous_subtype_val⟩
 
 /-- Inclusion of the overlap into the left member of a two-open cover. -/
 def apm_t92J05_twoOpen_overlapToLeft
-    {X : Type*} [TopologicalSpace X] (U V : Set X) :
+    {X : Type} [TopologicalSpace X] (U V : Set X) :
     ContinuousMap (U ∩ V : Set X) U :=
   ⟨fun z => ⟨z.1, z.2.1⟩, continuous_subtype_val.subtype_mk _⟩
 
@@ -480,7 +480,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le_ker
   exact h k
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     [PathConnectedSpace V] [SimplyConnectedSpace V] (x : (U ∩ V : Set X))
     (g : FundamentalGroup (U ∩ V : Set X) x) :
     FundamentalGroup.map
@@ -524,7 +524,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed
   rfl
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     [PathConnectedSpace V] [SimplyConnectedSpace V] (x : (U ∩ V : Set X)) :
     let leftMap := FundamentalGroup.map
       (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)
@@ -538,7 +538,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le
   exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed U V x
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_right_loop
-    {X : Type*} [TopologicalSpace X] (V : Set X)
+    {X : Type} [TopologicalSpace X] (V : Set X)
     [PathConnectedSpace V] [SimplyConnectedSpace V] (v : V)
     (r : Path v v) :
     FundamentalGroup.map
@@ -553,12 +553,12 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
   simpa [hr]
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_connector
-    {X : Type*} [TopologicalSpace X] (U : Set X) [PathConnectedSpace U]
+    {X : Type} [TopologicalSpace X] (U : Set X) [PathConnectedSpace U]
     (u₀ u₁ : U) : Nonempty (Path u₀ u₁) := by
   exact PathConnectedSpace.joined u₀ u₁
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_chartConnector
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)]
     (c : (U ∩ V : Set X)) {z : X} (i j : Bool)
@@ -598,7 +598,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       (show (a t).1 ∈ U ∩ U from ⟨(a t).2, (a t).2⟩)
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
@@ -608,7 +608,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
           (⟨x.1, x.2.1⟩ : U) q = Path.Homotopic.Quotient.mk p := by
   sorry
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
@@ -637,7 +637,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_of_factor
   exact (QuotientGroup.eq_one_iff g).mp hq
 
 def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_leftConnector
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     [PathConnectedSpace U] (x : (U ∩ V : Set X))
     (Z : FundamentalGroupoid U) :
     FundamentalGroupoid.mk (apm_t92J05_twoOpen_overlapToLeft U V x) ≅ Z :=
@@ -658,7 +658,7 @@ def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_rig
   exact (Functor.const _).obj (SingleObj.star _)
 
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
@@ -678,7 +678,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
             (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
   sorry
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
@@ -696,7 +696,7 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
   exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_of_factor
     _ _ r hr
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
@@ -733,7 +733,7 @@ lemma apm_t92J05_quotient_normalClosure_equiv_of_kernel
 2-cell application the overlap is an annulus, but cyclicity is not needed in
 the statement: the entire overlap image is normally killed. -/
 theorem apm_t92J05_twoOpen_attach_one_cell
-    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
     [PathConnectedSpace U] [PathConnectedSpace V]
     [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
