@@ -1633,6 +1633,21 @@ theorem polygonBoundarySubdivisionConcat_hurewicz (P : PairingData) :
   rw [moduleHurewicz_mk_concat_eq_list_sum]
   simp_rw [polygonBoundarySubdivisionPathAtBase_eq_signedEdge]
 
+/-- Every subdivision vertex of the boundary loop is the common wedge
+basepoint.  This is the endpoint family needed to compare the dependent
+`concat_subpath` path with the constant-base concatenation. -/
+theorem orbitWedgeBase_eq_boundarySubdivisionVertex (P : PairingData)
+    (k : Fin (P.edgeCount + 1)) :
+    orbitWedgeBase P = polygonBoundaryIntegerLoopPath P
+      (polygonBoundarySubdivisionVertex P k) := by
+  refine Fin.lastCases ?_ (fun i => ?_) k
+  · rw [polygonBoundarySubdivisionVertex_last]
+    exact (polygonBoundaryIntegerLoopPath P).target.symm
+  · exact
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
+        (polygonBoundarySignedEdge_source_eq_subdivision P i)
+
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
 theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
