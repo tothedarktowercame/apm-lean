@@ -88376,6 +88376,17 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 4cacd825f", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792044282863-13440-5206723c",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 4cacd825f by topo-6 changes only t97A01Closure.lean and adds compiled progress after 5db954851. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 f8ece2ca6ea77ccfd1d03028ef5cc388950770fe5542b2ef5292f79f8c39374d matches; registry 166/0; new range theorems use only propext, Classical.choice, Quot.sound. range_comp is used in the correct direction to turn coordinate-map image of the abstract boundary range into the composite range; the proved negative conjugation and range_neg then yield the positive Smith range. Quotient-cokernel/Smith isomorphisms for B1 and B2 remain listed."},
     :commit "4cacd825f",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88395,7 @@
      "f8ece2ca6ea77ccfd1d03028ef5cc388950770fe5542b2ef5292f79f8c39374d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked injectivity and zero kernels.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked attaching-range transport.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88435,7 +88446,10 @@
      :reason "Banked boundary conjugations."}
     {:job 8,
      :commit "5db954851",
-     :reason "Banked injectivity and zero kernels."}]}
+     :reason "Banked injectivity and zero kernels."}
+    {:job 9,
+     :commit "4cacd825f",
+     :reason "Banked attaching-range transport."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93754,7 +93768,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccOrbitCoordinates_map_boundaryRange",
@@ -93764,14 +93778,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "range transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4cacd825f"},
    :id :lemma-aabbccorbitcoordinates-map-boundaryrange,
    :kind :lemma,
    :depends-on [:lemma-aabbccorbitcoordinates-comp-attachingboundary],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2OrbitCoordinates_map_boundaryRange",
@@ -93781,7 +93797,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "range transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4cacd825f"},
    :id :lemma-torusrp2orbitcoordinates-map-boundaryrange,
    :kind :lemma,
    :depends-on
