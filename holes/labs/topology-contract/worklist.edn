@@ -119137,63 +119137,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
-    :residual "Implicit incidence chart; Sard; calculations; Main.",
+    :residual
+    "Strict derivative; incidence chart; Sard; calculations; Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
+    :warnings ["Main sorryAx; lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "hasFDerivAt_incidenceDifference_commonTarget",
-      :type "derivative in one target chart",
+    [{:name
+      "implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse",
+      :type "split strict derivative gives implicit chart",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["writtenInExtChartAt_eq_commonTarget_of_eq"
-       "hasFDerivAt_incidenceDifference_writtenInExtChartAt_self"],
+      :depends-on ["hasFDerivAt_incidenceDifference_commonTarget"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["hasFDerivAt_incidenceDifference_commonTarget"],
+      :depends-on
+      ["implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "d29ca4530c0217e4203ebb895876c7aeef68a0cc55237810002e1651398f55f8",
+     "4767417f8e833f8765975f899c01d36d29f9202b596d5047a468663c6a4005ca",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked common-target derivative.",
+    :reason "Banked split-derivative implicit chart.",
     :commands
-    [{:cmd
-      "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
+    [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "supplied model parameters"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792045340068-13478-e1b61463",
-     :commands
-     ["git diff/show 6560086d archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds compiled, sorry-free common-target incidence derivative. The incidence equality f x=c y is used to rewrite the second preferred target chart to center f x; the previously proved A.coprod(-B) derivative then transfers unchanged. The implicit incidence chart and later milestones remain explicit. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "6560086d56c11abd706fba4af2573957c3028ebc",
+    [{:cmd "draft", :exit 1, :finding "corrected API"}],
+    :commit "6e2c01302fb5874fad8a1e44843189f1e88fb468",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119201,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119693,7 +119681,8 @@
     :lemma-hasfderivat-writteninextchartat-of-hasmfderivat-self
     :lemma-hasfderivat-incidencedifference-writteninextchartat-self
     :lemma-writteninextchartat-eq-commontarget-of-eq
-    :lemma-hasfderivat-incidencedifference-commontarget],
+    :lemma-hasfderivat-incidencedifference-commontarget
+    :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121618,6 +121607,26 @@
    :depends-on
    [:lemma-writteninextchartat-eq-commontarget-of-eq
     :lemma-hasfderivat-incidencedifference-writteninextchartat-self],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse",
+    :type "split strict derivative gives implicit chart"},
+   :lemma
+   {:name
+    "implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "split strict derivative gives implicit chart",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse,
+   :kind :lemma,
+   :depends-on [:lemma-hasfderivat-incidencedifference-commontarget],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
