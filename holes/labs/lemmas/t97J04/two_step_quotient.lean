@@ -1718,7 +1718,51 @@ lemma two_step_quotient {G H K : Type*} [Group G] [Group H] [Group K]
     (hkf : f.ker = Subgroup.normalClosure {a})
     (hkg : g.ker = Subgroup.normalClosure {f b}) :
     Nonempty (K ≃* G ⧸ Subgroup.normalClosure ({a, b} : Set G)) := by
-  sorry
+  let F : G →* K := g.comp f
+  have hF : Function.Surjective F := hg.comp hf
+  have hker : F.ker = Subgroup.normalClosure ({a, b} : Set G) := by
+    apply le_antisymm
+    · intro x hx
+      have hfx : f x ∈ Subgroup.normalClosure ({f b} : Set H) := by
+        rw [← hkg]
+        exact (MonoidHom.mem_ker.mpr hx)
+      have himage : Subgroup.map f (Subgroup.normalClosure ({b} : Set G)) =
+          Subgroup.normalClosure ({f b} : Set H) := by
+        rw [Subgroup.map_normalClosure _ _ hf]
+        congr 1
+        ext z
+        simp
+      rw [← himage] at hfx
+      obtain ⟨y, hy, hfy⟩ := Subgroup.mem_map.mp hfx
+      have hxy : x * y⁻¹ ∈ Subgroup.normalClosure ({a} : Set G) := by
+        rw [← hkf, MonoidHom.mem_ker]
+        rw [map_mul, map_inv, hfy]
+        simp
+      have ha : Subgroup.normalClosure ({a} : Set G) ≤
+          Subgroup.normalClosure ({a, b} : Set G) :=
+        Subgroup.normalClosure_mono (by simp)
+      have hb : Subgroup.normalClosure ({b} : Set G) ≤
+          Subgroup.normalClosure ({a, b} : Set G) :=
+        Subgroup.normalClosure_mono (by simp)
+      have := Subgroup.mul_mem _ (ha hxy) (hb hy)
+      simpa [mul_assoc] using this
+    · apply Subgroup.normalClosure_le_normal
+      intro z hz
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
+      rcases hz with ha | hb
+      · apply MonoidHom.mem_ker.mpr
+        subst z
+        change g (f a) = 1
+        have : f a = 1 := MonoidHom.mem_ker.mp (hkf.symm ▸
+          Subgroup.subset_normalClosure (Set.mem_singleton a))
+        simp [this]
+      · apply MonoidHom.mem_ker.mpr
+        subst z
+        change g (f b) = 1
+        exact MonoidHom.mem_ker.mp (hkg.symm ▸
+          Subgroup.subset_normalClosure (Set.mem_singleton (f b)))
+  exact ⟨(QuotientGroup.quotientKerEquivOfSurjective F hF).symm.trans
+    (QuotientGroup.quotientMulEquivOfEq hker)⟩
 -- END SEAT AREA
 
 /-- B5. Tietze: kill `c` (generator 2) in the genus-two group; generators
