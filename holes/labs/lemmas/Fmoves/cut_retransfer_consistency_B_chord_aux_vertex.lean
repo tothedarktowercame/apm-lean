@@ -9487,7 +9487,115 @@ theorem cut_retransfer_consistency_B_chord_aux_vertex {Label : Type*} [Decidable
     (hτ : τ.1 = 1) (hs : s₀.1 = 0) (hadj : u.length = (e + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hpL : p < L := by dsimp [L, p]; simp
+  have hqL : q < L := by dsimp [L, q]; simp; omega
+  have hs₀ : s₀ = (0 : Icc (0 : ℝ) 1) := Subtype.ext hs
+  subst s₀
+  have hτ' : τ = (1 : Icc (0 : ℝ) 1) := Subtype.ext hτ
+  subst τ
+  have hP' : (P : ℂ) = cutPoint L p := by
+    rw [hP]
+    change oldB (cutChordParamB L p q (0 : Icc (0 : ℝ) 1)) = _
+    rw [D.oldB_chord]
+    simp [cutChordB]
+    congr 1
+    dsimp [L, p]
+    simp
+  have edge_end (a : ℕ) : edgePoint L a (1 : Icc (0 : ℝ) 1) =
+      edgePoint L (a + 1) (0 : Icc (0 : ℝ) 1) := by
+    apply Subtype.ext
+    simp [edgePoint]
+  change p = (e + 1) % L at hadj
+  by_cases hp : p = 0
+  · have heL : e + 1 = L := by
+      by_contra hn
+      have hlt : e + 1 < L := by omega
+      rw [Nat.mod_eq_of_lt hlt, hp] at hadj
+      omega
+    have heqL : e = L - 1 := by omega
+    by_cases ht : t = []
+    · have heq : e = q := by
+        dsimp [L, q, p] at heL ⊢
+        simp [hp, ht] at heL ⊢
+        omega
+      by_cases hv : v = []
+      · let S : Disk := edgePoint L q (0 : Icc (0 : ℝ) 1)
+        have hq : q = 1 := by
+          dsimp [q, p]
+          change u.length + 1 + v.length = 1
+          rw [show u.length = 0 by exact hp]
+          simp [hv]
+        have hu : u = [] := List.eq_nil_of_length_eq_zero (by simpa [p] using hp)
+        refine ⟨S, ?_, ?_⟩
+        · change (S : ℂ) = cutRetransfer L p q e (1 : Icc (0 : ℝ) 1)
+          simp [S, cutRetransfer, heq, hp, hu, hv, hq, cutChordB, cutPoint,
+            cutAlpha, edgePoint, mul_comm]
+        · rw [show P = edgePoint L p (0 : Icc (0 : ℝ) 1) by
+              apply Subtype.ext
+              rw [hP']
+              simp [edgePoint, cutPoint, cutAlpha, mul_comm]]
+          exact (cut_retransfer_consistency_B_chord_aux_x u v t x
+            (0 : Icc (0 : ℝ) 1)).symm
+      · let S : Disk := edgePoint L p (1 : Icc (0 : ℝ) 1)
+        have hvlen : 0 < v.length := List.length_pos_iff.mpr hv
+        have hq : 1 < q := by dsimp [q, p]; omega
+        have hq0 : q ≠ 0 := by omega
+        have hq1 : q ≠ 1 := by omega
+        refine ⟨S, ?_, ?_⟩
+        · change (S : ℂ) = cutRetransfer L p q e (1 : Icc (0 : ℝ) 1)
+          simp [S, cutRetransfer, heq, hp, hv, hq, hq0, hq1, reverseParameter,
+            cutPoint, cutAlpha, edgePoint, mul_comm]
+        · rw [show P = edgePoint L q (1 : Icc (0 : ℝ) 1) by
+              apply Subtype.ext
+              rw [hP']
+              change cutPoint L p = (edgePoint L q (1 : Icc (0 : ℝ) 1) : ℂ)
+              have hqL' : q + 1 = L := by omega
+              rw [edge_end q, hqL']
+              rw [show edgePoint L L (0 : Icc (0 : ℝ) 1) =
+                    edgePoint L 0 (0 : Icc (0 : ℝ) 1) by
+                  simpa using rotation_aux_edgePoint_period L 0 (by omega)
+                    (0 : Icc (0 : ℝ) 1)]
+              simp [edgePoint, cutPoint, cutAlpha, hp, mul_comm]]
+          exact cut_retransfer_consistency_B_chord_aux_x u v t x
+            (1 : Icc (0 : ℝ) 1)
+    · refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      have hqe : q < e := by
+        have htlen : 0 < t.length := List.length_pos_iff.mpr ht
+        dsimp [L, p, q] at heL ⊢
+        simp [hp] at heL ⊢
+        omega
+      have hne : ¬ (e = p ∨ e = p + 1) := by omega
+      have href : ¬ (p + 1 < e ∧ e ≤ q) := by omega
+      change (P : ℂ) = cutRetransfer L p q e (1 : Icc (0 : ℝ) 1)
+      rw [hP']
+      simp only [cutRetransfer, if_neg hne, if_neg href]
+      rw [show edgePoint L e (1 : Icc (0 : ℝ) 1) =
+            edgePoint L (e + 1) (0 : Icc (0 : ℝ) 1) from edge_end e,
+          heL]
+      rw [show edgePoint L L (0 : Icc (0 : ℝ) 1) =
+            edgePoint L 0 (0 : Icc (0 : ℝ) 1) by
+          simpa using rotation_aux_edgePoint_period L 0 (by omega)
+            (0 : Icc (0 : ℝ) 1)]
+      simp [edgePoint, cutPoint, cutAlpha, hp, mul_comm]
+  · have he' : e + 1 = p := by
+      have hne : e + 1 ≠ L := by
+        intro h
+        rw [h, Nat.mod_self] at hadj
+        exact hp hadj
+      rw [Nat.mod_eq_of_lt (by omega : e + 1 < L)] at hadj
+      exact hadj.symm
+    refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+    have hep : e < p := by omega
+    have hnot : ¬ (p + 1 < e ∧ e ≤ q) := by omega
+    have hne : ¬ (e = p ∨ e = p + 1) := by omega
+    change (P : ℂ) = cutRetransfer L p q e (1 : Icc (0 : ℝ) 1)
+    rw [hP']
+    simp only [cutRetransfer, if_neg hne, if_neg hnot]
+    rw [edge_end e, he']
+    simp [edgePoint, cutPoint, cutAlpha, mul_comm]
 -- END SEAT AREA
 
 /-- Piece `B`, chord position `s₀`. -/
