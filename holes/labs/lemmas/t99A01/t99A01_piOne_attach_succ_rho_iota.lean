@@ -1230,7 +1230,20 @@ lemma t99A01_piOne_attach_succ_rho_iota {r : ℕ} (degree : Fin (r + 1) → ℕ)
     (ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc), APMT99A01.succCircleSide degree))
     (hι : ∀ y, (ι y).1 = APMT99A01.attachCastSucc degree y) :
     (t99A01_succRho degree).comp ι = ContinuousMap.id _ := by
-  sorry
+  ext y
+  change (t99A01_succRho degree (ι y)) = y
+  change Quotient.lift _ _ (ι y).1 = y
+  rw [hι]
+  induction y using Quotient.ind with
+  | _ x =>
+      cases x with
+      | inl z => rfl
+      | inr p =>
+          rcases p with ⟨i, z⟩
+          simp [APMT99A01.attachCastSucc,
+            APMT99A01.attachCastSuccRaw,
+            t99A01_piOne_attach_succ_retract_aux_raw,
+            Fin.castSucc_ne_last]
 -- END SEAT AREA
 
 /-- **Leaf.** `ι ∘ ρ ≃ id`: push the last disk radially to its boundary, fixing everything
