@@ -1642,6 +1642,26 @@ theorem torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat
     (pathTwoOpenSubdivisionRunPrefixBlockPiece S i)
     (torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece S i)
 
+/-- Consecutive cumulative-prefix run blocks meet at the same subdivision
+vertex, providing the endpoint equation for the outer regrouping fold. -/
+theorem torusRP2_subdivisionRunPrefixBlock_adjacent
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i j : Fin (boolSideRunPartition S.side).length)
+    (hij : j.val = i.val + 1) :
+    pathTwoOpenSubdivisionRunPrefixBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) =
+      pathTwoOpenSubdivisionRunPrefixBlockPoint S j 0 := by
+  unfold pathTwoOpenSubdivisionRunPrefixBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  simp only [Fin.val_last, Fin.val_zero]
+  rw [hij]
+  exact pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1721,6 +1741,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunFold_exists_outerPath_at_endpoints
 #print axioms torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece
 #print axioms torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat
+#print axioms torusRP2_subdivisionRunPrefixBlock_adjacent
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
