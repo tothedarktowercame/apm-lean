@@ -2,6 +2,7 @@ import ConstructionTargets.ManifoldFundamentalClass
 import ConstructionTargets.CircleHomology
 import ConstructionTargets.DiskBoundedPreimageDuality
 import ConstructionTargets.SardGenuineSmoothManifoldVector
+import Mathlib.Analysis.Calculus.Implicit
 
 /-!
 # Local fundamental-class coordinates for t00J02
@@ -325,6 +326,143 @@ theorem transverse_incidenceDifferenceDerivative_hasLinearRightInverse
 
 #print axioms transverse_incidenceDifferenceDerivative_hasLinearRightInverse
 
+/-- In finite-dimensional target coordinates, an algebraic linear right
+inverse is automatically continuous.  Thus the incidence splitting becomes
+the split-surjection input expected by the Banach-space chart theorem once it
+has been transported from opaque tangent spaces to model coordinates. -/
+theorem continuousLinearMap_hasRightInverse_of_linearRightInverse
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    (A : E →L[ℝ] F) (g : F →ₗ[ℝ] E)
+    (hg : A.toLinearMap.comp g = LinearMap.id) : A.HasRightInverse := by
+  refine ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun y ↦ ?_⟩
+  exact LinearMap.congr_fun hg y
+
+#print axioms continuousLinearMap_hasRightInverse_of_linearRightInverse
+
+/-- A linear right inverse transports through source and target coordinate
+equivalences.  The displayed order is the chart-coordinate derivative
+`eF ∘ A ∘ eE⁻¹`, with right inverse `eE ∘ g ∘ eF⁻¹`. -/
+theorem exists_linearRightInverse_conj
+    {E F E' F' : Type}
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    [AddCommGroup E'] [Module ℝ E'] [AddCommGroup F'] [Module ℝ F']
+    (A : E →ₗ[ℝ] F) (hA : ∃ g : F →ₗ[ℝ] E, A.comp g = LinearMap.id)
+    (eE : E ≃ₗ[ℝ] E') (eF : F ≃ₗ[ℝ] F') :
+    ∃ g' : F' →ₗ[ℝ] E',
+      (eF.toLinearMap.comp (A.comp eE.symm.toLinearMap)).comp g' =
+        LinearMap.id := by
+  obtain ⟨g, hg⟩ := hA
+  refine ⟨eE.toLinearMap.comp (g.comp eF.symm.toLinearMap), ?_⟩
+  ext y
+  have hgy : A (g (eF.symm y)) = eF.symm y :=
+    LinearMap.congr_fun hg (eF.symm y)
+  simp only [LinearMap.comp_apply, LinearEquiv.coe_coe, LinearMap.id_apply]
+  rw [eE.symm_apply_apply, hgy, eF.apply_symm_apply]
+
+#print axioms exists_linearRightInverse_conj
+
+/-- Once a coordinate derivative is identified with the conjugate of a split
+tangent derivative, it has a continuous linear right inverse.  This packages
+the two representation steps needed immediately before the chart-level
+submersion theorem. -/
+theorem coordinateDerivative_hasRightInverse_of_eq_conj
+    {E F E' F' : Type}
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup F'] [NormedSpace ℝ F'] [FiniteDimensional ℝ F']
+    (A : E →ₗ[ℝ] F) (hA : ∃ g : F →ₗ[ℝ] E, A.comp g = LinearMap.id)
+    (eE : E ≃ₗ[ℝ] E') (eF : F ≃ₗ[ℝ] F') (A' : E' →L[ℝ] F')
+    (hA' : A'.toLinearMap =
+      eF.toLinearMap.comp (A.comp eE.symm.toLinearMap)) :
+    A'.HasRightInverse := by
+  obtain ⟨g', hg'⟩ := exists_linearRightInverse_conj A hA eE eF
+  apply continuousLinearMap_hasRightInverse_of_linearRightInverse A' g'
+  rw [hA']
+  exact hg'
+
+#print axioms coordinateDerivative_hasRightInverse_of_eq_conj
+
+/-- In product chart coordinates, the derivative of the incidence difference
+`F(u) - C(v)` is the coproduct of `dF` and `-dC`. -/
+theorem hasFDerivAt_incidenceDifference
+    {E F G : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    {Fmap : E → G} {Cmap : F → G} {u : E} {v : F}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hF : HasFDerivAt Fmap A u) (hC : HasFDerivAt Cmap B v) :
+    HasFDerivAt (fun p : E × F ↦ Fmap p.1 - Cmap p.2)
+      (A.coprod (-B)) (u, v) := by
+  have hF' : HasFDerivAt (fun p : E × F ↦ Fmap p.1)
+      (A.comp (ContinuousLinearMap.fst ℝ E F)) (u, v) := by
+    simpa [Function.comp_def] using
+      hF.comp (u, v) (hasFDerivAt_fst (𝕜 := ℝ) (p := (u, v)))
+  have hC' : HasFDerivAt (fun p : E × F ↦ Cmap p.2)
+      (B.comp (ContinuousLinearMap.snd ℝ E F)) (u, v) := by
+    simpa [Function.comp_def] using
+      hC.comp (u, v) (hasFDerivAt_snd (𝕜 := ℝ) (p := (u, v)))
+  have hderiv :
+      A.comp (ContinuousLinearMap.fst ℝ E F) -
+          B.comp (ContinuousLinearMap.snd ℝ E F) = A.coprod (-B) := by
+    apply ContinuousLinearMap.ext
+    rintro ⟨p, q⟩
+    change A p - B q = A p + (-B) q
+    rw [sub_eq_add_neg]
+    rfl
+  rw [← hderiv]
+  simpa only [Pi.sub_apply] using hF'.sub hC'
+
+#print axioms hasFDerivAt_incidenceDifference
+
+/-- Fréchet derivatives transport through continuous linear source and target
+coordinate equivalences.  The derivative has the chart order
+`eF ∘ A ∘ eE⁻¹`. -/
+theorem hasFDerivAt_conj
+    {E F E' F' : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup F'] [NormedSpace ℝ F']
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasFDerivAt f A x) (eE : E ≃L[ℝ] E') (eF : F ≃L[ℝ] F') :
+    HasFDerivAt (fun y : E' ↦ eF (f (eE.symm y)))
+      (eF.toContinuousLinearMap.comp
+        (A.comp eE.symm.toContinuousLinearMap)) (eE x) := by
+  have hinv : HasFDerivAt (fun y : E' ↦ eE.symm y)
+      eE.symm.toContinuousLinearMap (eE x) :=
+    eE.symm.hasFDerivAt
+  have hf' : HasFDerivAt f A (eE.symm (eE x)) := by
+    simpa only [eE.symm_apply_apply] using hf
+  have hmiddle := hf'.comp (eE x) hinv
+  have hout := eF.hasFDerivAt.comp (eE x) hmiddle
+  simpa [Function.comp_def] using hout
+
+#print axioms hasFDerivAt_conj
+
+/-- The incidence-difference derivative formula remains exact after replacing
+the product and target tangent spaces by continuous linear chart coordinates. -/
+theorem hasFDerivAt_incidenceDifference_conj
+    {E F G E' G' : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup G'] [NormedSpace ℝ G']
+    {Fmap : E → G} {Cmap : F → G} {u : E} {v : F}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hF : HasFDerivAt Fmap A u) (hC : HasFDerivAt Cmap B v)
+    (eEF : (E × F) ≃L[ℝ] E') (eG : G ≃L[ℝ] G') :
+    HasFDerivAt
+      (fun z : E' ↦
+        eG (Fmap (eEF.symm z).1 - Cmap (eEF.symm z).2))
+      (eG.toContinuousLinearMap.comp
+        ((A.coprod (-B)).comp eEF.symm.toContinuousLinearMap))
+      (eEF (u, v)) :=
+  hasFDerivAt_conj (hasFDerivAt_incidenceDifference hF hC) eEF eG
+
+#print axioms hasFDerivAt_incidenceDifference_conj
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
@@ -385,6 +523,315 @@ theorem exists_hasMFDerivAt_equiv_of_contMDiff_surjective
 
 #print axioms exists_hasMFDerivAt_equiv_of_contMDiff_surjective
 
+/-- For boundaryless source and target models, a manifold derivative is the
+ordinary full-space derivative of the preferred extended-chart expression.
+This version allows the source and target model spaces to have different
+dimensions, as required for the circle-to-surface incidence map. -/
+theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
+    {E E' M M' : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace M'] [ChartedSpace E' M']
+    (f : M → M') (x : M) (A : E →L[ℝ] E')
+    (h : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, E') f x A) :
+    HasFDerivAt (writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, E') x f) A
+      (extChartAt 𝓘(ℝ, E) x x) := by
+  apply HasFDerivWithinAt.hasFDerivAt_of_univ
+  simpa only [HasMFDerivAt, modelWithCornersSelf_coe, Set.range_id] using h.2
+
+#print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
+
+/-- For a boundaryless self model, manifold `C¹` regularity is ordinary
+`C¹` regularity of the preferred extended-chart expression at its base
+point. -/
+theorem contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
+    {E F M N : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    (f : M → N) (x : M)
+    (h : ContMDiffAt 𝓘(ℝ, E) 𝓘(ℝ, F) 1 f x) :
+    ContDiffAt ℝ 1 (writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, F) x f)
+      (extChartAt 𝓘(ℝ, E) x x) := by
+  have h' := (contMDiffAt_iff.mp h).2
+  simpa only [writtenInExtChartAt, modelWithCornersSelf_coe, Set.range_id,
+    contDiffWithinAt_univ] using h'
+
+#print axioms contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
+
+/-- At an incidence point, manifold `C¹` regularity of the second map gives
+`C¹` regularity in the common target chart centered at the value of the
+first map. -/
+theorem contDiffAt_commonTarget_of_contMDiffAt_self
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    (f : M → P) (c : N → P) (x : M) (y : N)
+    (hxy : f x = c y) (hc : ContMDiffAt 𝓘(ℝ, F) 𝓘(ℝ, G) 1 c y) :
+    ContDiffAt ℝ 1
+      (fun z : F ↦ extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm z)))
+      (extChartAt 𝓘(ℝ, F) y y) := by
+  rw [hxy]
+  exact contDiffAt_writtenInExtChartAt_of_contMDiffAt_self c y hc
+
+#print axioms contDiffAt_commonTarget_of_contMDiffAt_self
+
+/-- In the product of two preferred source charts, the difference of the two
+preferred target-chart expressions has signed-coproduct derivative.  Taking
+the source models to be a surface and a circle gives the analytic incidence
+map used by the preimage construction. -/
+theorem hasFDerivAt_incidenceDifference_writtenInExtChartAt_self
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B) :
+    HasFDerivAt
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          writtenInExtChartAt 𝓘(ℝ, F) 𝓘(ℝ, G) y c p.2)
+      (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) :=
+  hasFDerivAt_incidenceDifference
+    (hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self f x A hf)
+    (hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self c y B hc)
+
+#print axioms hasFDerivAt_incidenceDifference_writtenInExtChartAt_self
+
+/-- At an incidence point, the preferred target chart of the second map is
+literally the target chart centered at the value of the first map. -/
+theorem writtenInExtChartAt_eq_commonTarget_of_eq
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    (f : M → P) (c : N → P) (x : M) (y : N) (hxy : f x = c y) :
+    writtenInExtChartAt 𝓘(ℝ, F) 𝓘(ℝ, G) y c =
+      fun z : F ↦ extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm z)) := by
+  funext z
+  simp only [writtenInExtChartAt, Function.comp_apply]
+  rw [hxy]
+
+#print axioms writtenInExtChartAt_eq_commonTarget_of_eq
+
+/-- At an incidence point, the mixed-model derivative formula can be written
+using one common target chart centered at the shared value. -/
+theorem hasFDerivAt_incidenceDifference_commonTarget
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B)
+    (hxy : f x = c y) :
+    HasFDerivAt
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) := by
+  have h :=
+    hasFDerivAt_incidenceDifference_writtenInExtChartAt_self hf hc
+  rw [writtenInExtChartAt_eq_commonTarget_of_eq
+    (E := E) (F := F) (G := G) (M := M) (N := N) (P := P)
+    f c x y hxy] at h
+  exact h
+
+#print axioms hasFDerivAt_incidenceDifference_commonTarget
+
+/-- The difference of the two common-target chart expressions is `C¹` in
+product coordinates when the two chart expressions are `C¹` at their base
+points. -/
+theorem contDiffAt_incidenceDifference_commonTarget
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    (f : M → P) (c : N → P) (x : M) (y : N)
+    (hf : ContDiffAt ℝ 1
+      (writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f)
+      (extChartAt 𝓘(ℝ, E) x x))
+    (hc : ContDiffAt ℝ 1
+      (fun z : F ↦ extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm z)))
+      (extChartAt 𝓘(ℝ, F) y y)) :
+    ContDiffAt ℝ 1
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) := by
+  exact
+    (hf.comp
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y)
+      contDiffAt_fst).sub
+    (hc.comp
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y)
+      contDiffAt_snd)
+
+#print axioms contDiffAt_incidenceDifference_commonTarget
+
+/-- Continuous differentiability upgrades the common-target incidence
+derivative to the strict derivative required by the implicit-function
+theorem.  The geometric chart-smoothness input remains explicit. -/
+theorem hasStrictFDerivAt_incidenceDifference_commonTarget
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B)
+    (hxy : f x = c y)
+    (hsmooth : ContDiffAt ℝ 1
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y)) :
+    HasStrictFDerivAt
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) :=
+  hsmooth.hasStrictFDerivAt'
+    (hasFDerivAt_incidenceDifference_commonTarget hf hc hxy) one_ne_zero
+
+#print axioms hasStrictFDerivAt_incidenceDifference_commonTarget
+
+/-- A strict coordinate derivative with a continuous linear right inverse has
+the complemented-kernel data required by the implicit-function theorem.  The
+finite-dimensional target is exactly the incidence-map situation. -/
+noncomputable def implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    OpenPartialHomeomorph E (F × A.ker) :=
+  hf.implicitToOpenPartialHomeomorph f A
+    (LinearMap.range_eq_top.mpr hA.choose_spec.surjective)
+
+#print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse
+
+/-- The first coordinate of the split-derivative implicit chart is the
+original function, so its level sets become vertical slices. -/
+@[simp] theorem implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse_fst
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x y : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    (implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA y).fst =
+      f y := by
+  rfl
+
+#print axioms implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse_fst
+
+/-- The zero fiber of the original function is exactly the preimage of the
+vertical zero slice under the implicit chart. -/
+theorem implicitToOpenPartialHomeomorph_mem_zeroSlice_iff
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x y : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA y ∈
+        ({0} : Set F) ×ˢ (Set.univ : Set A.ker) ↔
+      f y = 0 := by
+  simp
+
+#print axioms implicitToOpenPartialHomeomorph_mem_zeroSlice_iff
+
+/-- On its source, the implicit chart sends the zero fiber exactly onto the
+part of its target lying in the vertical zero slice. -/
+theorem implicitToOpenPartialHomeomorph_image_zeroFiber
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    let e := implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA
+    e '' (e.source ∩ {y | f y = 0}) =
+      e.target ∩ (({0} : Set F) ×ˢ (Set.univ : Set A.ker)) := by
+  let e := implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA
+  ext z
+  constructor
+  · rintro ⟨y, ⟨hy_source, hy_zero⟩, rfl⟩
+    exact ⟨e.map_source hy_source,
+      (implicitToOpenPartialHomeomorph_mem_zeroSlice_iff hf hA).2 hy_zero⟩
+  · rintro ⟨hz_target, hz_slice⟩
+    refine ⟨e.symm z, ⟨e.symm.map_source hz_target, ?_⟩, e.right_inv hz_target⟩
+    apply (implicitToOpenPartialHomeomorph_mem_zeroSlice_iff hf hA).1
+    rw [e.right_inv hz_target]
+    exact hz_slice
+
+#print axioms implicitToOpenPartialHomeomorph_image_zeroFiber
+
+/-- The banked chart-smoothness, strict-derivative, and split-surjection steps
+assemble into an implicit local chart for the incidence equation. -/
+noncomputable def incidenceImplicitToOpenPartialHomeomorph
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G] [FiniteDimensional ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B)
+    (hcf : ContMDiffAt 𝓘(ℝ, E) 𝓘(ℝ, G) 1 f x)
+    (hcc : ContMDiffAt 𝓘(ℝ, F) 𝓘(ℝ, G) 1 c y)
+    (hxy : f x = c y) (hRight : (A.coprod (-B)).HasRightInverse) :
+    OpenPartialHomeomorph (E × F) (G × (A.coprod (-B)).ker) := by
+  let Φ : E × F → G := fun p ↦
+    writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+      extChartAt 𝓘(ℝ, G) (f x)
+        (c ((extChartAt 𝓘(ℝ, F) y).symm p.2))
+  have hΦ : HasStrictFDerivAt Φ (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) :=
+    hasStrictFDerivAt_incidenceDifference_commonTarget hf hc hxy <|
+      contDiffAt_incidenceDifference_commonTarget
+        (E := E) (F := F) (G := G) (M := M) (N := N) (P := P) f c x y
+        (contDiffAt_writtenInExtChartAt_of_contMDiffAt_self
+          (E := E) (F := G) f x hcf)
+        (contDiffAt_commonTarget_of_contMDiffAt_self
+          (E := E) (F := F) (G := G) (M := M) (N := N) (P := P)
+          f c x y hxy hcc)
+  exact implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hΦ hRight
+
+#print axioms incidenceImplicitToOpenPartialHomeomorph
+
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
 theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
@@ -395,8 +842,8 @@ theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
     HasFDerivAt
       (writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f)
       (e : SurfaceModel →L[ℝ] SurfaceModel) (extChartAt SurfaceModelWithCorners x x) := by
-  apply HasFDerivWithinAt.hasFDerivAt_of_univ
-  simpa only [HasMFDerivAt, modelWithCornersSelf_coe, Set.range_id] using h.2
+  exact hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self
+    (E := SurfaceModel) (E' := SurfaceModel) f x e h
 
 #print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
 

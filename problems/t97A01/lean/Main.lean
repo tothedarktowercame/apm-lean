@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.Surfaces
+import ConstructionTargets.t97A01Closure
 
 /-!
 # APM t97A01 — the nonorientable genus-three surface
@@ -157,13 +158,174 @@ def apm_t97a01_X_homeomorph_standardN3 :
       apm_t97a01_X_equiv_standardN3.symm (Quotient.mk _ x))
     simpa [apm_t97a01_X_equiv_standardN3] using apm_t97a01_continuous_quotientX
 
+/-- The first frozen quotient is the exact pairing-space input to the banked
+polygon homology theorem. -/
+def apm_t97a01_X_homeomorph_pairingSpace :
+    apm_t97a01_X ≃ₜ
+      ConstructionTargets.t97A01Closure.aabbccPairingData.Space :=
+  apm_t97a01_X_homeomorph_standardN3.trans
+    (ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph
+      false 3 (by omega)).symm
+
+/-- The frozen torus-crosscap generators are the canonical literal
+torus-crosscap generators used by the polygon library. -/
+lemma apm_t97a01_RelTorusRP2_to_canonical {x y : apm_t97a01_Disk}
+    (h : apm_t97a01_RelTorusRP2 x y) :
+    ConstructionTargets.PolygonTorusCrosscapRelation.TorusCrosscapRel x y := by
+  cases h with
+  | a t => exact .a t
+  | b t => exact .b t
+  | c t => exact .c t
+
+/-- Conversely, every canonical literal torus-crosscap generator is one of
+the frozen generators. -/
+lemma apm_t97a01_canonical_to_RelTorusRP2 {x y : apm_t97a01_Disk}
+    (h : ConstructionTargets.PolygonTorusCrosscapRelation.TorusCrosscapRel x y) :
+    apm_t97a01_RelTorusRP2 x y := by
+  cases h with
+  | a t => exact .a t
+  | b t => exact .b t
+  | c t => exact .c t
+
+theorem apm_t97a01_torusRP2_eqvGen_iff (x y : apm_t97a01_Disk) :
+    Relation.EqvGen apm_t97a01_RelTorusRP2 x y ↔
+      Relation.EqvGen
+        ConstructionTargets.PolygonTorusCrosscapRelation.TorusCrosscapRel x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact .rel _ _ (apm_t97a01_RelTorusRP2_to_canonical h)
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h => exact .rel _ _ (apm_t97a01_canonical_to_RelTorusRP2 h)
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+
+/-- The second frozen quotient is the exact pairing-space input to the
+banked polygon homology theorem. -/
+def apm_t97a01_TorusRP2_homeomorph_pairingSpace :
+    apm_t97a01_TorusRP2 ≃ₜ
+      ConstructionTargets.t97A01Closure.torusRP2PairingData.Space :=
+  ConstructionTargets.t97A01Closure.quotientHomeomorphOfEqvGenIff
+    apm_t97a01_RelTorusRP2
+    ConstructionTargets.t97A01Closure.torusRP2PairingData.Rel
+    isQuotientMap_quotient_mk' isQuotientMap_quotient_mk'
+    (fun x y => (apm_t97a01_torusRP2_eqvGen_iff x y).trans
+      (ConstructionTargets.PolygonSurfacePiOne.torusRP2_eqvGen_iff x y).symm)
+
 abbrev apm_t97a01_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of Y))
 
+/-- Homology transport from the frozen `aabbcc` quotient to the pairing-space
+model used by the polygon Mayer--Vietoris calculation. -/
+noncomputable def apm_t97a01_X_homologyIsoPairingSpace (k : ℕ) :
+    apm_t97a01_H k apm_t97a01_X ≅
+      ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.aabbccPairingData k :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo apm_t97a01_X_homeomorph_pairingSpace)
+
+/-- Homology transport from the frozen torus-crosscap quotient to the
+pairing-space model used by the polygon Mayer--Vietoris calculation. -/
+noncomputable def apm_t97a01_TorusRP2_homologyIsoPairingSpace (k : ℕ) :
+    apm_t97a01_H k apm_t97a01_TorusRP2 ≅
+      ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.torusRP2PairingData k :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).mapIso
+      (TopCat.isoOfHomeo apm_t97a01_TorusRP2_homeomorph_pairingSpace)
+
+theorem apm_t97a01_aabbcc_homology_isZero (k : ℕ) (hk : 2 ≤ k) :
+    Limits.IsZero
+      (ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.aabbccPairingData k) := by
+  rcases ConstructionTargets.t97A01Closure.aabbccPolygonHomology with
+    ⟨_, _, ⟨h2⟩, hhi⟩
+  rcases eq_or_lt_of_le hk with rfl | hk'
+  · have hz : Limits.IsZero
+        (ModuleCat.of ℤ
+          (ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel
+            ConstructionTargets.t97A01Closure.aabbccPairingData)) := by
+      rw [ConstructionTargets.t97A01Closure.aabbccBoundaryKernel_eq_bot]
+      exact ModuleCat.isZero_of_subsingleton _
+    exact hz.of_iso h2
+  · exact hhi k (by omega)
+
+theorem apm_t97a01_torusRP2_homology_isZero (k : ℕ) (hk : 2 ≤ k) :
+    Limits.IsZero
+      (ConstructionTargets.PolygonSurfaceHomology.H
+        ConstructionTargets.t97A01Closure.torusRP2PairingData k) := by
+  rcases ConstructionTargets.t97A01Closure.torusRP2PolygonHomology with
+    ⟨_, _, ⟨h2⟩, hhi⟩
+  rcases eq_or_lt_of_le hk with rfl | hk'
+  · have hz : Limits.IsZero
+        (ModuleCat.of ℤ
+          (ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel
+            ConstructionTargets.t97A01Closure.torusRP2PairingData)) := by
+      rw [ConstructionTargets.t97A01Closure.torusRP2BoundaryKernel_eq_bot]
+      exact ModuleCat.isZero_of_subsingleton _
+    exact hz.of_iso h2
+  · exact hhi k (by omega)
+
+/-- The integral singular homology of both frozen six-edge quotients. -/
+theorem apm_t97a01_polygon_singular_homology :
+    (Nonempty (apm_t97a01_H 0 apm_t97a01_X ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (apm_t97a01_H 1 apm_t97a01_X ≅
+        ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)) ∧
+      ∀ k : ℕ, 2 ≤ k → Limits.IsZero (apm_t97a01_H k apm_t97a01_X)) ∧
+    (Nonempty (apm_t97a01_H 0 apm_t97a01_TorusRP2 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (apm_t97a01_H 1 apm_t97a01_TorusRP2 ≅
+        ModuleCat.of ℤ (ℤ × ℤ × ZMod 2)) ∧
+      ∀ k : ℕ, 2 ≤ k → Limits.IsZero
+        (apm_t97a01_H k apm_t97a01_TorusRP2)) := by
+  rcases ConstructionTargets.t97A01Closure.aabbccPolygonHomology with
+    ⟨⟨hX0⟩, ⟨hX1⟩, _, _⟩
+  rcases ConstructionTargets.t97A01Closure.torusRP2PolygonHomology with
+    ⟨⟨hT0⟩, ⟨hT1⟩, _, _⟩
+  refine ⟨⟨⟨apm_t97a01_X_homologyIsoPairingSpace 0 ≪≫ hX0⟩,
+    ⟨apm_t97a01_X_homologyIsoPairingSpace 1 ≪≫ hX1 ≪≫
+      ConstructionTargets.t97A01Closure.aabbccBoundaryCokernelSmithEquiv.toModuleIso⟩,
+    ?_⟩,
+    ⟨⟨apm_t97a01_TorusRP2_homologyIsoPairingSpace 0 ≪≫ hT0⟩,
+    ⟨apm_t97a01_TorusRP2_homologyIsoPairingSpace 1 ≪≫ hT1 ≪≫
+      ConstructionTargets.t97A01Closure.torusRP2BoundaryCokernelSmithEquiv.toModuleIso⟩,
+    ?_⟩⟩
+  · intro k hk
+    exact (apm_t97a01_aabbcc_homology_isZero k hk).of_iso
+      (apm_t97a01_X_homologyIsoPairingSpace k)
+  · intro k hk
+    exact (apm_t97a01_torusRP2_homology_isZero k hk).of_iso
+      (apm_t97a01_TorusRP2_homologyIsoPairingSpace k)
+
+#print axioms apm_t97a01_polygon_singular_homology
+
 def apm_t97a01_baseX : apm_t97a01_X := Quotient.mk _ (0 : apm_t97a01_Disk)
 def apm_t97a01_baseTorusRP2 : apm_t97a01_TorusRP2 :=
   Quotient.mk _ (0 : apm_t97a01_Disk)
+
+@[simp] theorem apm_t97a01_TorusRP2_homeomorph_pairingSpace_base :
+    apm_t97a01_TorusRP2_homeomorph_pairingSpace apm_t97a01_baseTorusRP2 =
+      ConstructionTargets.t97A01Closure.torusRP2PairingData.center := by
+  rfl
+
+/-- The frozen based fundamental group is exactly the pairing-space based
+fundamental group to which the radial van Kampen computation applies. -/
+noncomputable def apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace :
+    FundamentalGroup apm_t97a01_TorusRP2 apm_t97a01_baseTorusRP2 ≃*
+      FundamentalGroup
+        ConstructionTargets.t97A01Closure.torusRP2PairingData.Space
+        ConstructionTargets.t97A01Closure.torusRP2PairingData.center := by
+  rw [← apm_t97a01_TorusRP2_homeomorph_pairingSpace_base]
+  exact ConstructionTargets.t97A01Closure.fundamentalGroupEquivOfHomeomorph
+    apm_t97a01_TorusRP2_homeomorph_pairingSpace apm_t97a01_baseTorusRP2
+
+#print axioms apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace
 
 def apm_t97a01_relator : FreeGroup (Fin 3) :=
   (.of 0) * (.of 1) * (.of 0)⁻¹ * (.of 1)⁻¹ * (.of 2) * (.of 2)

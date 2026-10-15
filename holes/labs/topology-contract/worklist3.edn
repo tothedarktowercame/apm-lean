@@ -37110,55 +37110,59 @@
    :other-consumers []}
   {:consumer :t96A06,
    :owner-reopen
-   "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
-   :stop-count 2,
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Expand transfer sum to id+antipodal; H3 injectivity, higher vanishing, degree four, invariants/Main.",
+    "Differentiate radial normalization; transport local signs; degree four; invariants/Main.",
     :outcome :stop,
-    :warnings ["Main retains one placeholder."],
+    :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t96A06_projectedSimplex_lifts_exact_pair",
-      :type "canonical lifts are distinct and exhaustive",
+    [{:name "polynomialMapAmbient_fderiv_regularTangentBasis",
+      :type
+      "ambient derivative scales three tangent directions by sqrt 2",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_projectedSimplex_lift_eq_or_eq_antipodal"],
+      :depends-on
+      ["polynomialMapAmbient_fderiv"
+       "polynomialSphereLift_regularPoint"],
       :area "rp-rational-homology"}
-     {:name "t96A06_rp3_antipodal_H3",
-      :type "deck-sum gives H3(RP3;Q)=Q",
+     {:name "polynomialSphereLift_regularPoint_tangentDerivative",
+      :type
+      "normalized lift tangent derivative has positive determinant",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_projectedSimplex_lifts_exact_pair"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_rp3_rational_homology",
-      :type "RP3 rational homology Q,0,0,Q",
-      :status :partial,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_antipodal_H3"],
+      :depends-on ["polynomialMapAmbient_fderiv_regularTangentBasis"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the distinct exhaustive pair of canonical projected-simplex lifts; transfer-sum expansion remains.",
+    "Committed positive scalar action on the chosen tangent basis.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
+     {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
-     {:cmd "scope git status", :exit 0}
-     {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check --stat cdeb74fba", :exit 0}],
+     {:cmd "git status --short --untracked-files=no", :exit 0}
+     {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
+     {:cmd "git show --check 8bfa7bd61", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial compile",
+    [{:cmd "initial compiles",
       :exit 1,
-      :note
-      "corrected projection orientation and antipodal inequality"}],
-    :commit "cdeb74fbade0dd51d8ac56f3f1074469c1f4e4b5",
+      :note "made the regular-vector Euclidean norm explicit"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792053981717-13705-36063e67",
+     :finding
+     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
+    :commit "8bfa7bd61",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37166,7 +37170,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37188,7 +37192,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 2,
+   :fail-count 4,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -37433,50 +37437,62 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 1,
+   :stop-count 8,
    :evidence
-   {:placeholder-delta {:t97J07 [2 2]},
+   {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Create closure module; copy proved adapters; prove fixed set; build CP2 rational homology/Euler characteristic; assemble Main.",
+    "Compute patch/intersection homology by coefficient MV; CP1→CP2; Main.",
     :outcome :stop,
-    :warnings [],
+    :warnings
+    ["Main: one placeholder." "Unrelated t97A01 edit untouched."],
     :missing-theorems
-    [{:name "t97J07_fixed_set",
-      :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
+    [{:name "t97J07_cp1_twoAffine_openCover",
+      :type "two affine patches are open and cover CP1",
+      :status :proved,
+      :consumers [:t97J07],
+      :depends-on ["t97J07_cp1_rationalH0Iso"],
+      :area "rational-homology-cpn"}
+     {:name "t97J07_cp1_twoAffine_mayerVietoris",
+      :type "two-chart MV computes CP1 H1 and H2",
+      :status :partial,
+      :consumers [:t97J07],
+      :depends-on ["t97J07_cp1_twoAffine_openCover"],
+      :area "rational-homology-cpn"}
+     {:name "complexProjectiveRationalHomologyStep_zero_one",
+      :type "CP0 data implies CP1 data",
+      :status :partial,
+      :consumers [:t97J07],
+      :depends-on ["t97J07_cp1_twoAffine_mayerVietoris"],
+      :area "rational-homology-cpn"}
+     {:name "complexProjectiveRationalHomologyStep_one_two",
+      :type "CP1 data implies CP2 data",
       :status :not-started,
       :consumers [:t97J07],
-      :depends-on [],
-      :area "projective-quotient-fixed-locus"}
-     {:name "t97J07_eulerCharacteristic",
-      :type "HasEulerCharacteristic CP2 3",
-      :status :not-started,
-      :consumers [:t97J07],
-      :depends-on [],
+      :depends-on ["complexProjectiveRationalHomologyStep_zero_one"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Blueprint written; implementation begins next program job.",
+    :reason "Committed the literal CP1 two-affine-patch open cover.",
     :commands
-    [{:cmd "test/rg blueprint nodes", :exit 0}
-     {:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
+    [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder count", :exit 0}
-     {:cmd "git diff --check", :exit 0}],
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "sha256sum fixture", :exit 0}
+     {:cmd "git show --check 83c229d1d", :exit 0}],
     :review
     {:outcome :pass,
      :seat "codex-11",
-     :job "invoke-1792011810680-12411-08a69c40",
+     :job "invoke-1792051625302-13660-2c814344",
      :commands
-     ["git show --check/stat 2725995b; exact path and fixture SHA-256 assertions"
-      "lake env lean problems/t97J07/lean/Main.lean"
-      "statement-registry check; placeholder recount"],
+     ["git show/check/diff-tree e474731bb; fixture sha256"
+      "lake env lean archived committed Main via authority-linked worktree"
+      "statement-registry check; sorry recount 2->1"],
      :finding
-     "PASS: committed scope is exactly the closure blueprint and its frozen hash matches. Mathematics is sound: diag(1,1,3) fixes CP1 z2=0 plus [0:0:1]; CP2 rational homology is Q in degrees 0,2,4, yielding Euler characteristic 3. Milestones and representation boundaries are coherent; the final theorem has no hypotheses. Main compiles, registry 166/166, placeholders remain 2->2. Singular-placeholder prose is editorial only."},
-    :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
-    :changed-paths ["ConstructionTargets/t97J07Closure.blueprint.md"],
+     "PASS: e474731bb is new compiled, standard-axiom progress. It proves the exact fixed locus equals the coordinate CP1 line union the isolated third-axis point, with both set-inclusion directions and projective representatives handled correctly. Scope is one allowed file; fixture hash matches; registry 166/166; placeholders 2->1. Remaining CP2 rational homology, Euler characteristic, and final theorem are listed."},
+    :commit "83c229d1d",
+    :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
      :sha256
@@ -37501,7 +37517,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; implementation begins next program job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the literal CP1 two-affine-patch open cover.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -37513,7 +37529,35 @@
    [{:job 1,
      :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
      :reason
-     "Blueprint written; implementation begins next program job."}]}
+     "Blueprint written; implementation begins next program job."}
+    {:job 2,
+     :commit "e474731bbaae6b591a521604ab660cb2e6312830",
+     :reason
+     "Committed exact fixed-locus classification; CP2 rational homology and Euler characteristic remain."}
+    {:job 3,
+     :commit "f39dfc1ac41b139f4bd744d18562c558d8abb621",
+     :reason
+     "Committed the homology-table-to-Euler-characteristic adapter; exact CP2 homology data remains."}
+    {:job 4,
+     :commit "754c66314c599114af05c4de224e17e35aef8952",
+     :reason
+     "Committed the shared CPn-to-CP2 adapter; the filtration step remains."}
+    {:job 5,
+     :commit "7713e5a35",
+     :reason
+     "Committed the exact CP0 rational homology base; the projective-filtration successor remains."}
+    {:job 6,
+     :commit "88e57cf8e",
+     :reason
+     "Committed a bounded CP2 adapter requiring only filtration steps 0→1 and 1→2."}
+    {:job 7,
+     :commit "0c7fbd85d",
+     :reason
+     "Committed path-connectedness and rational H0 for literal CP1."}
+    {:job 8,
+     :commit "83c229d1d",
+     :reason
+     "Committed the literal CP1 two-affine-patch open cover."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -38198,7 +38242,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_rational_homology",
@@ -38207,7 +38251,10 @@
    {:name "t96A06_rp3_rational_homology",
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "RP3 rational homology Q,0,0,Q",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-rp3-rational-homology,
    :kind :lemma,
    :depends-on
@@ -38218,7 +38265,8 @@
     :lemma-t96a06-rp3-rational-homologymap-surjective
     :lemma-t96a06-rp3-rational-middle-homology
     :lemma-t96a06-sphere3-rational-h3iso
-    :lemma-t96a06-rp3-antipodal-h3],
+    :lemma-t96a06-rp3-antipodal-h3
+    :lemma-t96a06-rp3-rational-homology-iszero-of-gt],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40028,7 +40076,7 @@
    :other-consumers []}
   {:consumer :t97J07,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t97J07_fixed_set",
@@ -40037,7 +40085,10 @@
    {:name "t97J07_fixed_set",
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
-    :area "projective-quotient-fixed-locus"},
+    :area "projective-quotient-fixed-locus",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "e474731bbaae6b591a521604ab660cb2e6312830"},
    :id :lemma-t97j07-fixed-set,
    :kind :lemma,
    :depends-on [],
@@ -40056,7 +40107,9 @@
     :area "rational-homology-cpn"},
    :id :lemma-t97j07-eulercharacteristic,
    :kind :lemma,
-   :depends-on [],
+   :depends-on
+   [:lemma-t97j07-cp2rationalhomologydata-exists
+    :lemma-t97j07-eulercharacteristic-of-homologydata],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -40444,7 +40497,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rp3_antipodal_H3",
@@ -40455,14 +40508,22 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "antipodal acts trivially on H3(S3;Q), so transfer identifies H3(RP3;Q) with Q",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-rp3-antipodal-h3,
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphere3-rational-h3iso
     :lemma-t96a06-sphere3-antipodal-h3
     :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal
-    :lemma-t96a06-projectedsimplex-lifts-exact-pair],
+    :lemma-t96a06-projectedsimplex-lifts-exact-pair
+    :lemma-t96a06-transfersimplex-projected
+    :lemma-t96a06-rational-transfersimplex-projected
+    :lemma-t96a06-rational-projection-transferdegree
+    :lemma-t96a06-rational-homology-projection-transfer
+    :lemma-t96a06-rp3-rational-h3-projection-injective],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40662,7 +40723,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
@@ -40672,14 +40733,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "projected simplex lifts are original or antipodal",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal,
    :kind :lemma,
    :depends-on [:lemma-t96a06-sphere3-antipodal-h3],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_projectedSimplex_lifts_exact_pair",
@@ -40689,11 +40752,929 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "canonical lifts are distinct and exhaustive",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-projectedsimplex-lifts-exact-pair,
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_transferSimplex_projected",
+    :type "projected-simplex transfer deck-sum"},
+   :lemma
+   {:name "t96A06_transferSimplex_projected",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "projected-simplex transfer deck-sum",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-transfersimplex-projected,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-projectedsimplex-lifts-exact-pair],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp2RationalHomologyData_exists",
+    :type "CP2 rational homology Q in degrees 0,2,4"},
+   :lemma
+   {:name "t97J07_cp2RationalHomologyData_exists",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP2 rational homology Q in degrees 0,2,4",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-cp2rationalhomologydata-exists,
+   :kind :lemma,
+   :depends-on [:lemma-complexprojectiverationalhomologystep],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rational_transferSimplex_projected",
+    :type "rational projected-simplex transfer deck-sum"},
+   :lemma
+   {:name "t96A06_rational_transferSimplex_projected",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "rational projected-simplex transfer deck-sum",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rational-transfersimplex-projected,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-transfersimplex-projected],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rational_projection_transferDegree",
+    :type "projection then transfer is id plus antipodal on chains"},
+   :lemma
+   {:name "t96A06_rational_projection_transferDegree",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "projection then transfer is id plus antipodal on chains",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rational-projection-transferdegree,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rational-transfersimplex-projected],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rational_homology_projection_transfer",
+    :type "projection-transfer equals id plus antipodal on homology"},
+   :lemma
+   {:name "t96A06_rational_homology_projection_transfer",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "projection-transfer equals id plus antipodal on homology",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rational-homology-projection-transfer,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rational-projection-transferdegree],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_H3_projection_injective",
+    :type "sphere-to-RP3 H3 map is injective"},
+   :lemma
+   {:name "t96A06_rp3_rational_H3_projection_injective",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "sphere-to-RP3 H3 map is injective",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rp3-rational-h3-projection-injective,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rational-homology-projection-transfer],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_eulerCharacteristic_of_homologyData",
+    :type "CP2 homology data implies Euler characteristic 3"},
+   :lemma
+   {:name "t97J07_eulerCharacteristic_of_homologyData",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP2 homology data implies Euler characteristic 3",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "f39dfc1ac41b139f4bd744d18562c558d8abb621"},
+   :id :lemma-t97j07-eulercharacteristic-of-homologydata,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_homology_isZero_of_gt",
+    :type "H_k(RP3;Q)=0 for 3<k"},
+   :lemma
+   {:name "t96A06_rp3_rational_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "H_k(RP3;Q)=0 for 3<k",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rp3-rational-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-antipodal-h3],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialDescent_degree_four",
+    :type "descent acts by 4 on H3"},
+   :lemma
+   {:name "t96A06_polynomialDescent_degree_four",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "descent acts by 4 on H3",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-polynomialdescent-degree-four,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-rp3-rational-homology
+    :lemma-t96a06-polynomialspherelift-degree-four
+    :lemma-t96a06-polynomialdescent-degree-four-of-sphere],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialDescent_invariants",
+    :type "Lefschetz values -3 and 0; nonhomotopy"},
+   :lemma
+   {:name "t96A06_polynomialDescent_invariants",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Lefschetz values -3 and 0; nonhomotopy",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-polynomialdescent-invariants-faaa8267baf0,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialdescent-degree-four],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_projection",
+    :type "S3 lift projects to polynomialDescent"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_projection",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "S3 lift projects to polynomialDescent",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-projection,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-homology],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_degree_four",
+    :type "lift acts by 4 on H3(S3;Q)"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_degree_four",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "lift acts by 4 on H3(S3;Q)",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-polynomialspherelift-degree-four,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-polynomialspherelift-projection
+    :lemma-t96a06-polynomialspherelift-regular-fiber
+    :lemma-t96a06-polynomialspherelift-local-signs],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp2RationalHomologyData_of_zero_of_step",
+    :type "shared CP0 base and successor yield CP2 data"},
+   :lemma
+   {:name "t97J07_cp2RationalHomologyData_of_zero_of_step",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "shared CP0 base and successor yield CP2 data",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "754c66314c599114af05c4de224e17e35aef8952"},
+   :id :lemma-t97j07-cp2rationalhomologydata-of-zero-of-step,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "complexProjectiveRationalHomologyStep",
+    :type "CPn data implies CP(n+1) data"},
+   :lemma
+   {:name "complexProjectiveRationalHomologyStep",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CPn data implies CP(n+1) data",
+    :area "rational-homology-cpn"},
+   :id :lemma-complexprojectiverationalhomologystep,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-complexprojectiverationalhomologydata-zero],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialDescent_degree_four_of_sphere",
+    :type "sphere degree 4 implies RP3 degree 4"},
+   :lemma
+   {:name "t96A06_polynomialDescent_degree_four_of_sphere",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "sphere degree 4 implies RP3 degree 4",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialdescent-degree-four-of-sphere,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-projection],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMap_flipFirstPair",
+    :type "first sign flip invariance"},
+   :lemma
+   {:name "polynomialMap_flipFirstPair",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "first sign flip invariance",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialmap-flipfirstpair,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMap_flipSecondPair",
+    :type "second sign flip invariance"},
+   :lemma
+   {:name "polynomialMap_flipSecondPair",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "second sign flip invariance",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialmap-flipsecondpair,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_regular_fiber",
+    :type "regular fiber has four sign translates"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_regular_fiber",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "regular fiber has four sign translates",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-polynomialspherelift-regular-fiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmap-flipfirstpair
+    :lemma-polynomialmap-flipsecondpair
+    :lemma-t96a06-polynomialspherelift-pairsign-invariant
+    :lemma-t96a06-polynomialspherelift-pairsign-action
+    :lemma-t96a06-polynomialspherelift-pairsign-free
+    :lemma-t96a06-polynomialspherelift-four-distinct
+    :lemma-t96a06-polynomialspherelift-orbit-subset-fiber
+    :lemma-realpair-eq-or-eq-neg-of-squarecoordinates
+    :lemma-polynomialmap-eq-iff-pairsigns
+    :lemma-rp3radialtosphere-eq-imp-posscalar
+    :lemma-polynomialmap-sphere-posscalar-eq-one
+    :lemma-polynomialspherelift-fiber-subset-pairsignorbit],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_pairSign_invariant",
+    :type "lift invariant under both pair-sign maps"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_pairSign_invariant",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "lift invariant under both pair-sign maps",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-pairsign-invariant,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmap-flipfirstpair
+    :lemma-polynomialmap-flipsecondpair],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_pairSign_action",
+    :type
+    "pair flips are commuting involutions with antipodal product"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_pairSign_action",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "pair flips are commuting involutions with antipodal product",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-pairsign-action,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-invariant],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_complexProjectiveRationalHomologyData_zero",
+    :type "literal CP0 has rational homology Q in degree zero only"},
+   :lemma
+   {:name "t97J07_complexProjectiveRationalHomologyData_zero",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "literal CP0 has rational homology Q in degree zero only",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "7713e5a35"},
+   :id :lemma-t97j07-complexprojectiverationalhomologydata-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_pairSign_free",
+    :type "pair flips have no fixed points off coordinate circles"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_pairSign_free",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "pair flips have no fixed points off coordinate circles",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-pairsign-free,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-action],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_four_distinct",
+    :type
+    "four pair-sign translates are pairwise distinct at regular points"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_four_distinct",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "four pair-sign translates are pairwise distinct at regular points",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-four-distinct,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-pairsign-free],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_orbit_subset_fiber",
+    :type "four sign translates lie in the lift fiber"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_orbit_subset_fiber",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "four sign translates lie in the lift fiber",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-polynomialspherelift-orbit-subset-fiber,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-polynomialspherelift-four-distinct],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "realPair_eq_or_eq_neg_of_squareCoordinates",
+    :type
+    "equal complex-square coordinates imply simultaneous sign equality"},
+   :lemma
+   {:name "realPair_eq_or_eq_neg_of_squareCoordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "equal complex-square coordinates imply simultaneous sign equality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-realpair-eq-or-eq-neg-of-squarecoordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp2RationalHomologyData_of_two_steps",
+    :type "CP0 base plus steps 0→1 and 1→2 yields CP2 data"},
+   :lemma
+   {:name "t97J07_cp2RationalHomologyData_of_two_steps",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP0 base plus steps 0→1 and 1→2 yields CP2 data",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "88e57cf8e"},
+   :id :lemma-t97j07-cp2rationalhomologydata-of-two-steps,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-complexprojectiverationalhomologydata-zero],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "complexProjectiveRationalHomologyStep_zero_one",
+    :type "CP0 data implies CP1 data"},
+   :lemma
+   {:name "complexProjectiveRationalHomologyStep_zero_one",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP0 data implies CP1 data",
+    :area "rational-homology-cpn"},
+   :id :lemma-complexprojectiverationalhomologystep-zero-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-complexprojectiverationalhomologydata-zero
+    :lemma-t97j07-cp1-rationalh0iso
+    :lemma-t97j07-cp1-twoaffine-mayervietoris],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "complexProjectiveRationalHomologyStep_one_two",
+    :type "CP1 data implies CP2 data"},
+   :lemma
+   {:name "complexProjectiveRationalHomologyStep_one_two",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "CP1 data implies CP2 data",
+    :area "rational-homology-cpn"},
+   :id :lemma-complexprojectiverationalhomologystep-one-two,
+   :kind :lemma,
+   :depends-on [:lemma-complexprojectiverationalhomologystep-zero-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMap_eq_iff_pairSigns",
+    :type
+    "equal quadratic vectors imply one of four pair-sign relations"},
+   :lemma
+   {:name "polynomialMap_eq_iff_pairSigns",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "equal quadratic vectors imply one of four pair-sign relations",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialmap-eq-iff-pairsigns,
+   :kind :lemma,
+   :depends-on [:lemma-realpair-eq-or-eq-neg-of-squarecoordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "rp3RadialToSphere_eq_imp_posScalar",
+    :type
+    "equal radial normalizations imply positive scalar relation"},
+   :lemma
+   {:name "rp3RadialToSphere_eq_imp_posScalar",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "equal radial normalizations imply positive scalar relation",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-rp3radialtosphere-eq-imp-posscalar,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMap_sphere_posScalar_eq_one",
+    :type "positive quadratic-image scale on unit inputs is one"},
+   :lemma
+   {:name "polynomialMap_sphere_posScalar_eq_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "positive quadratic-image scale on unit inputs is one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialmap-sphere-posscalar-eq-one,
+   :kind :lemma,
+   :depends-on [:lemma-rp3radialtosphere-eq-imp-posscalar],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_fiber_subset_pairSignOrbit",
+    :type "normalized fiber lies in pair-sign orbit"},
+   :lemma
+   {:name "polynomialSphereLift_fiber_subset_pairSignOrbit",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "normalized fiber lies in pair-sign orbit",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialspherelift-fiber-subset-pairsignorbit,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmap-sphere-posscalar-eq-one
+    :lemma-polynomialmap-eq-iff-pairsigns],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_nonzeroVectors_pathConnected",
+    :type "nonzero C2 vector model is path connected"},
+   :lemma
+   {:name "t97J07_cp1_nonzeroVectors_pathConnected",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "nonzero C2 vector model is path connected",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "0c7fbd85d"},
+   :id :lemma-t97j07-cp1-nonzerovectors-pathconnected,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_rationalH0Iso", :type "H0(CP1;Q) is Q"},
+   :lemma
+   {:name "t97J07_cp1_rationalH0Iso",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "H0(CP1;Q) is Q",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "0c7fbd85d"},
+   :id :lemma-t97j07-cp1-rationalh0iso,
+   :kind :lemma,
+   :depends-on [:lemma-t97j07-cp1-nonzerovectors-pathconnected],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_regular_fiber_ncard",
+    :type "every pair-sign-regular lift fiber has cardinality four"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_regular_fiber_ncard",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "every pair-sign-regular lift fiber has cardinality four",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-polynomialspherelift-regular-fiber-ncard,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-polynomialspherelift-regular-fiber
+    :lemma-t96a06-polynomialspherelift-four-distinct],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialSphereLift_local_signs",
+    :type "all four regular preimages have positive local sign"},
+   :lemma
+   {:name "t96A06_polynomialSphereLift_local_signs",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "all four regular preimages have positive local sign",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-polynomialspherelift-local-signs,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-polynomialspherelift-regular-fiber-ncard
+    :lemma-flipfirstpairsphere-rational-h3
+    :lemma-flipsecondpairsphere-rational-h3
+    :lemma-flipbothpairssphere-rational-h3
+    :lemma-polynomialsphereregularpoint-fiber-ncard
+    :lemma-polynomialspherelift-regularpoint
+    :lemma-polynomialspherelift-regularpoint-tangentderivative],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "flipFirstPairSphere_rational_H3",
+    :type "first flip: identity on H3(Q)"},
+   :lemma
+   {:name "flipFirstPairSphere_rational_H3",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "first flip: identity on H3(Q)",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-flipfirstpairsphere-rational-h3,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "flipSecondPairSphere_rational_H3",
+    :type "second flip: identity on H3(Q)"},
+   :lemma
+   {:name "flipSecondPairSphere_rational_H3",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "second flip: identity on H3(Q)",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-flipsecondpairsphere-rational-h3,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "flipBothPairsSphere_rational_H3",
+    :type "composite pair flip is identity on H3(Q)"},
+   :lemma
+   {:name "flipBothPairsSphere_rational_H3",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "composite pair flip is identity on H3(Q)",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-flipbothpairssphere-rational-h3,
+   :kind :lemma,
+   :depends-on
+   [:lemma-flipfirstpairsphere-rational-h3
+    :lemma-flipsecondpairsphere-rational-h3],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereRegularPoint_isRegular",
+    :type "chosen point is regular"},
+   :lemma
+   {:name "polynomialSphereRegularPoint_isRegular",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chosen point is regular",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialsphereregularpoint-isregular,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereRegularPoint_fiber_ncard",
+    :type "chosen fiber has four points"},
+   :lemma
+   {:name "polynomialSphereRegularPoint_fiber_ncard",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chosen fiber has four points",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-polynomialsphereregularpoint-fiber-ncard,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialsphereregularpoint-isregular
+    :lemma-t96a06-polynomialspherelift-regular-fiber-ncard],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_twoAffine_openCover",
+    :type "two affine patches are open and cover CP1"},
+   :lemma
+   {:name "t97J07_cp1_twoAffine_openCover",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "two affine patches are open and cover CP1",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07,
+    :banked-by :program-2026-10-13-close-t97j07,
+    :banked-commit "83c229d1d"},
+   :id :lemma-t97j07-cp1-twoaffine-opencover,
+   :kind :lemma,
+   :depends-on [:lemma-t97j07-cp1-rationalh0iso],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_twoAffine_mayerVietoris",
+    :type "two-chart MV computes CP1 H1 and H2"},
+   :lemma
+   {:name "t97J07_cp1_twoAffine_mayerVietoris",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "two-chart MV computes CP1 H1 and H2",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-cp1-twoaffine-mayervietoris,
+   :kind :lemma,
+   :depends-on [:lemma-t97j07-cp1-twoaffine-opencover],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_regularPoint",
+    :type "chosen regular point is fixed by lift"},
+   :lemma
+   {:name "polynomialSphereLift_regularPoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chosen regular point is fixed by lift",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialspherelift-regularpoint,
+   :kind :lemma,
+   :depends-on [:lemma-polynomialsphereregularpoint-isregular],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMapAmbient_hasFDerivAt",
+    :type "explicit derivative of complex-square blocks"},
+   :lemma
+   {:name "polynomialMapAmbient_hasFDerivAt",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "explicit derivative of complex-square blocks",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialmapambient-hasfderivat,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_regularPoint_tangentDerivative",
+    :type "tangent derivative has positive determinant"},
+   :lemma
+   {:name "polynomialSphereLift_regularPoint_tangentDerivative",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "tangent derivative has positive determinant",
+    :area "rp-rational-homology"},
+   :id :lemma-polynomialspherelift-regularpoint-tangentderivative,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmapambient-hasfderivat
+    :lemma-polynomialspherelift-regularpoint
+    :lemma-polynomialmapambient-fderiv
+    :lemma-polynomialmapambient-fderiv-regulartangentbasis],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMapAmbient_fderiv",
+    :type "ambient derivative coordinate formula"},
+   :lemma
+   {:name "polynomialMapAmbient_fderiv",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "ambient derivative coordinate formula",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialmapambient-fderiv,
+   :kind :lemma,
+   :depends-on [:lemma-polynomialmapambient-hasfderivat],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialMapAmbient_fderiv_regularTangentBasis",
+    :type
+    "ambient derivative scales three tangent directions by sqrt 2"},
+   :lemma
+   {:name "polynomialMapAmbient_fderiv_regularTangentBasis",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "ambient derivative scales three tangent directions by sqrt 2",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialmapambient-fderiv-regulartangentbasis,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialmapambient-fderiv
+    :lemma-polynomialspherelift-regularpoint],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses

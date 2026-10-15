@@ -133,6 +133,71 @@ theorem contMDiffOn_tangentSection_of_trivialization_coordinates
 
 #print axioms contMDiffOn_tangentSection_of_trivialization_coordinates
 
+/-- A coordinate solution is the required manifold-derivative lift once the
+coordinate family is identified with `mfderiv`.  Injectivity is supplied by
+the target tangent trivialization at the image point. -/
+theorem mfderiv_eq_of_trivialization_coordinates
+    {n m : ℕ} {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [ChartedSpace (E n) X] [ChartedSpace (E m) Y]
+    [IsManifold (𝓡 n) ∞ X] [IsManifold (𝓡 m) ∞ Y]
+    (f : X → Y) (v : ∀ y : Y, TangentSpace (𝓡 m) y)
+    (w : ∀ x : X, TangentSpace (𝓡 n) x)
+    (A : X → E n →L[ℝ] E m) (x₀ : X) (y₀ : Y) (x : X)
+    (hy : f x ∈ (trivializationAt (E m) (TangentSpace (𝓡 m)) y₀).baseSet)
+    (hA : ((trivializationAt (E m) (TangentSpace (𝓡 m)) y₀)
+      (⟨f x, mfderiv (𝓡 n) (𝓡 m) f x (w x)⟩ :
+        TangentBundle (𝓡 m) Y)).2 =
+      A x (((trivializationAt (E n) (TangentSpace (𝓡 n)) x₀)
+        (⟨x, w x⟩ : TangentBundle (𝓡 n) X)).2))
+    (hsolve : A x (((trivializationAt (E n) (TangentSpace (𝓡 n)) x₀)
+        (⟨x, w x⟩ : TangentBundle (𝓡 n) X)).2) =
+      ((trivializationAt (E m) (TangentSpace (𝓡 m)) y₀)
+        (⟨f x, v (f x)⟩ : TangentBundle (𝓡 m) Y)).2) :
+    mfderiv (𝓡 n) (𝓡 m) f x (w x) = v (f x) := by
+  apply ((trivializationAt (E m) (TangentSpace (𝓡 m)) y₀).linearEquivAt
+    ℝ (f x) hy).injective
+  simpa only [Bundle.Trivialization.linearEquivAt_apply] using hA.trans hsolve
+
+#print axioms mfderiv_eq_of_trivialization_coordinates
+
+/-- Neighborhoodwise solutions in fixed tangent-trivialization coordinates
+assemble into the local smooth lift datum used by partition-of-unity gluing. -/
+theorem hasLocalSmoothLift_of_trivialization_coordinates
+    {n m : ℕ} {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [ChartedSpace (E n) X] [ChartedSpace (E m) Y]
+    [IsManifold (𝓡 n) ∞ X] [IsManifold (𝓡 m) ∞ Y]
+    (f : X → Y) (v : ∀ y : Y, TangentSpace (𝓡 m) y)
+    (hcoord : ∀ x₀ : X, ∃ U ∈ 𝓝 x₀,
+      ∃ w : ∀ x : X, TangentSpace (𝓡 n) x,
+      ∃ A : X → E n →L[ℝ] E m, ∃ y₀ : Y,
+        U ⊆ (trivializationAt (E n) (TangentSpace (𝓡 n)) x₀).baseSet ∧
+        (∀ x ∈ U,
+          f x ∈ (trivializationAt (E m) (TangentSpace (𝓡 m)) y₀).baseSet) ∧
+        ContMDiffOn (𝓡 n) (𝓡 n) ∞
+          (fun x ↦ ((trivializationAt (E n) (TangentSpace (𝓡 n)) x₀)
+            (⟨x, w x⟩ : TangentBundle (𝓡 n) X)).2) U ∧
+        (∀ x ∈ U,
+          ((trivializationAt (E m) (TangentSpace (𝓡 m)) y₀)
+            (⟨f x, mfderiv (𝓡 n) (𝓡 m) f x (w x)⟩ :
+              TangentBundle (𝓡 m) Y)).2 =
+            A x (((trivializationAt (E n) (TangentSpace (𝓡 n)) x₀)
+              (⟨x, w x⟩ : TangentBundle (𝓡 n) X)).2)) ∧
+        (∀ x ∈ U,
+          A x (((trivializationAt (E n) (TangentSpace (𝓡 n)) x₀)
+            (⟨x, w x⟩ : TangentBundle (𝓡 n) X)).2) =
+            ((trivializationAt (E m) (TangentSpace (𝓡 m)) y₀)
+              (⟨f x, v (f x)⟩ : TangentBundle (𝓡 m) Y)).2)) :
+    HasLocalSmoothLift (n := n) (m := m) f v := by
+  intro x₀
+  obtain ⟨U, hU, w, A, y₀, hsource, htarget, hsmooth, hA, hsolve⟩ := hcoord x₀
+  refine ⟨U, hU, w,
+    contMDiffOn_tangentSection_of_trivialization_coordinates x₀ U w hsource hsmooth, ?_⟩
+  intro x hx
+  exact mfderiv_eq_of_trivialization_coordinates f v w A x₀ y₀ x
+    (htarget x hx) (hA x hx) (hsolve x hx)
+
+#print axioms hasLocalSmoothLift_of_trivialization_coordinates
+
 theorem t98A06_global_vectorField_lift
     (hlocal : ∀ (n m : ℕ) (X Y : Type) [TopologicalSpace X] [TopologicalSpace Y]
       [T2Space X] [T2Space Y] [SecondCountableTopology X] [SecondCountableTopology Y]

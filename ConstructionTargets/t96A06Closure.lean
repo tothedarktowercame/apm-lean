@@ -9,6 +9,9 @@ import ConstructionTargets.CoefficientCoveringTransfer
 import ConstructionTargets.CoefficientConnectedH0Map
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CoefficientSphereAntipodal
+import ConstructionTargets.SphereZeroCoefficients
+import ConstructionTargets.CoefficientCoordinateReflections
+import ConstructionTargets.CoefficientFirstReflection
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -18,6 +21,7 @@ open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.RealProjectiveSmoothTarget
 open ConstructionTargets.CoveringDegree
 open CategoryTheory CategoryTheory.Limits
+open scoped Simplicial
 
 noncomputable section
 namespace ConstructionTargets.t96A06Closure
@@ -27,6 +31,146 @@ abbrev RP3 := Space ℝ 3
 def polynomialMap (v : Vectors ℝ 3) : Vectors ℝ 3 :=
   ![v 0 ^ 2 - v 1 ^ 2, 2 * v 0 * v 1,
     v 2 ^ 2 - v 3 ^ 2, 2 * v 2 * v 3]
+
+/-- The same quadratic map on the Euclidean `L²` model used by the sphere. -/
+def polynomialMapAmbient (p : EuclideanSpace ℝ (Fin 4)) :
+    EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 (polynomialMap (WithLp.ofLp p))
+
+/-- The real derivative of the two complex-square blocks. -/
+def polynomialMapAmbientDerivative (p : EuclideanSpace ℝ (Fin 4)) :
+    EuclideanSpace ℝ (Fin 4) →L[ℝ] EuclideanSpace ℝ (Fin 4) :=
+  (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 4 => ℝ)).symm.toContinuousLinearMap.comp
+    (ContinuousLinearMap.pi fun i =>
+      match i with
+      | 0 => (2 * p 0) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 0 -
+          (2 * p 1) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 1
+      | 1 => (2 * p 1) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 0 +
+          (2 * p 0) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 1
+      | 2 => (2 * p 2) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 2 -
+          (2 * p 3) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 3
+      | 3 => (2 * p 3) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 2 +
+          (2 * p 2) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 3)
+
+theorem polynomialMapAmbient_hasFDerivAt (p : EuclideanSpace ℝ (Fin 4)) :
+    HasFDerivAt polynomialMapAmbient (polynomialMapAmbientDerivative p) p := by
+  unfold polynomialMapAmbient polynomialMapAmbientDerivative polynomialMap
+  apply (PiLp.hasFDerivAt_toLp 2 _).comp p
+  apply hasFDerivAt_pi.mpr
+  intro i
+  fin_cases i
+  · convert ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 0).pow 2).sub
+      ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 1).pow 2) using 1 <;>
+      ext <;> simp [two_mul]
+  · convert (((hasFDerivAt_const (x := p) (c := (2 : ℝ))).mul
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 0)).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 1)) using 1 <;>
+      ext <;> simp [mul_assoc, mul_comm, mul_left_comm] <;> ring
+  · convert ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 2).pow 2).sub
+      ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 3).pow 2) using 1 <;>
+      ext <;> simp [two_mul]
+  · convert (((hasFDerivAt_const (x := p) (c := (2 : ℝ))).mul
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 2)).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 3)) using 1 <;>
+      ext <;> simp [mul_assoc, mul_comm, mul_left_comm] <;> ring
+
+/-- Coordinate formula for the ambient derivative, used to evaluate the
+three tangent directions at the selected regular point. -/
+theorem polynomialMapAmbient_fderiv
+    (p v : EuclideanSpace ℝ (Fin 4)) :
+    fderiv ℝ polynomialMapAmbient p v = WithLp.toLp 2 ![
+      2 * p 0 * v 0 - 2 * p 1 * v 1,
+      2 * p 1 * v 0 + 2 * p 0 * v 1,
+      2 * p 2 * v 2 - 2 * p 3 * v 3,
+      2 * p 3 * v 2 + 2 * p 2 * v 3] := by
+  rw [(polynomialMapAmbient_hasFDerivAt p).fderiv]
+  ext i
+  fin_cases i <;>
+    simp [polynomialMapAmbientDerivative, mul_assoc, mul_comm, mul_left_comm]
+
+/-- Change the sign of the first complex coordinate pair. -/
+def flipFirstPair (v : Vectors ℝ 3) : Vectors ℝ 3 :=
+  ![-v 0, -v 1, v 2, v 3]
+
+/-- Change the sign of the second complex coordinate pair. -/
+def flipSecondPair (v : Vectors ℝ 3) : Vectors ℝ 3 :=
+  ![v 0, v 1, -v 2, -v 3]
+
+theorem polynomialMap_flipFirstPair (v : Vectors ℝ 3) :
+    polynomialMap (flipFirstPair v) = polynomialMap v := by
+  ext i
+  fin_cases i <;> simp [polynomialMap, flipFirstPair] <;> ring
+
+theorem polynomialMap_flipSecondPair (v : Vectors ℝ 3) :
+    polynomialMap (flipSecondPair v) = polynomialMap v := by
+  ext i
+  fin_cases i <;> simp [polynomialMap, flipSecondPair] <;> ring
+
+/-- The two real coordinates of a complex square determine the original
+real coordinate pair up to simultaneous sign. -/
+theorem realPair_eq_or_eq_neg_of_squareCoordinates
+    {a b c d : ℝ}
+    (hre : a ^ 2 - b ^ 2 = c ^ 2 - d ^ 2)
+    (him : 2 * a * b = 2 * c * d) :
+    (a = c ∧ b = d) ∨ (a = -c ∧ b = -d) := by
+  let z : ℂ := ⟨a, b⟩
+  let w : ℂ := ⟨c, d⟩
+  have hsq : z ^ 2 = w ^ 2 := by
+    apply Complex.ext
+    · simpa [z, w, pow_two] using hre
+    · simp [z, w, pow_two]
+      nlinarith [him]
+  have hfactor : (z - w) * (z + w) = 0 := by
+    calc
+      (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring
+      _ = 0 := by rw [hsq, sub_self]
+  rcases mul_eq_zero.mp hfactor with h | h
+  · left
+    have hzw : z = w := sub_eq_zero.mp h
+    exact ⟨congrArg Complex.re hzw, congrArg Complex.im hzw⟩
+  · right
+    have hzw : z = -w := eq_neg_of_add_eq_zero_left h
+    exact ⟨congrArg Complex.re hzw, congrArg Complex.im hzw⟩
+
+/-- Equality of the full quadratic vector map has exactly the four independent
+pair-sign possibilities. -/
+theorem polynomialMap_eq_iff_pairSigns {v w : Vectors ℝ 3}
+    (h : polynomialMap v = polynomialMap w) :
+    v = w ∨ v = flipFirstPair w ∨ v = flipSecondPair w ∨
+      v = flipFirstPair (flipSecondPair w) := by
+  have h0 := congrFun h (0 : Fin 4)
+  have h1 := congrFun h (1 : Fin 4)
+  have h2 := congrFun h (2 : Fin 4)
+  have h3 := congrFun h (3 : Fin 4)
+  simp only [polynomialMap, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three] at h0 h1 h2 h3
+  rcases realPair_eq_or_eq_neg_of_squareCoordinates h0 h1 with
+    hfirst | hfirst <;>
+  rcases realPair_eq_or_eq_neg_of_squareCoordinates h2 h3 with
+    hsecond | hsecond
+  · left
+    ext i
+    fin_cases i <;> simp_all
+  · right; right; left
+    ext i
+    fin_cases i <;> simp_all [flipSecondPair]
+  · right; left
+    ext i
+    fin_cases i <;> simp_all [flipFirstPair]
+  · right; right; right
+    ext i
+    fin_cases i <;> simp_all [flipFirstPair, flipSecondPair]
+
+theorem flipFirstPair_comm_flipSecondPair (v : Vectors ℝ 3) :
+    flipFirstPair (flipSecondPair v) =
+      flipSecondPair (flipFirstPair v) := by
+  ext i
+  fin_cases i <;> simp [flipFirstPair, flipSecondPair]
+
+theorem flipFirstPair_flipSecondPair (v : Vectors ℝ 3) :
+    flipFirstPair (flipSecondPair v) = -v := by
+  ext i
+  fin_cases i <;> simp [flipFirstPair, flipSecondPair]
 
 theorem polynomialMap_eq_consumerPolynomial (v : Vectors ℝ 3) :
     polynomialMap v = t96A06Polynomial v := rfl
@@ -120,6 +264,503 @@ theorem rp3SphereProjection_comp_radial :
   exact ⟨‖WithLp.toLp 2 v.1‖⁻¹, by
     ext i
     simp [rp3RadialToSphere, sphereVector]⟩
+
+/-- The nonzero quadratic image of a sphere point, before radial
+normalization back to the sphere. -/
+def polynomialSphereVector (p : Sphere 3) : NonzeroVectors ℝ 3 :=
+  ⟨polynomialMap (sphereVector 3 p).1,
+    polynomialMap_nonzero (sphereVector 3 p)⟩
+
+theorem polynomialSphereVector_continuous :
+    Continuous polynomialSphereVector := by
+  apply Continuous.subtype_mk
+  change Continuous (fun p : Sphere 3 => polynomialMap (sphereVector 3 p).1)
+  apply continuous_pi
+  intro i
+  fin_cases i <;> simp [polynomialMap, sphereVector] <;> fun_prop
+
+/-- The first independent sign change, restricted to the concrete unit
+three-sphere. -/
+def flipFirstPairSphere : C(Sphere 3, Sphere 3) :=
+  (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (1 : Fin 4)).comp
+    (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 4))
+
+/-- The second independent sign change, restricted to the concrete unit
+three-sphere. -/
+def flipSecondPairSphere : C(Sphere 3, Sphere 3) :=
+  (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (3 : Fin 4)).comp
+    (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (2 : Fin 4))
+
+theorem sphereVector_flipFirstPairSphere (p : Sphere 3) :
+    (sphereVector 3 (flipFirstPairSphere p)).1 =
+      flipFirstPair (sphereVector 3 p).1 := by
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere, flipFirstPair, sphereVector,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem sphereVector_flipSecondPairSphere (p : Sphere 3) :
+    (sphereVector 3 (flipSecondPairSphere p)).1 =
+      flipSecondPair (sphereVector 3 p).1 := by
+  ext i
+  fin_cases i <;>
+    simp [flipSecondPairSphere, flipSecondPair, sphereVector,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipFirstPairSphere_involutive (p : Sphere 3) :
+    flipFirstPairSphere (flipFirstPairSphere p) = p := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipSecondPairSphere_involutive (p : Sphere 3) :
+    flipSecondPairSphere (flipSecondPairSphere p) = p := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
+    flipFirstPairSphere (flipSecondPairSphere p) =
+      flipSecondPairSphere (flipFirstPairSphere p) := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere, flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipFirstPairSphere_flipSecondPairSphere (p : Sphere 3) :
+    flipFirstPairSphere (flipSecondPairSphere p) = sphereAntipodalN 3 p := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere, flipSecondPairSphere, sphereAntipodalN,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+/-- Each pair-sign action preserves the rational top-dimensional sphere
+class: it is a composite of two coordinate reflections. -/
+theorem flipFirstPairSphere_rational_H3 :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3 = 𝟙 _ := by
+  change (ConstructionTargets.CoefficientCoordinateReflections.H ℚ 3).map
+      (TopCat.ofHom flipFirstPairSphere) = 𝟙 _
+  rw [show TopCat.ofHom flipFirstPairSphere =
+      TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 4)) ≫
+        TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (1 : Fin 4)) by rfl]
+  rw [Functor.map_comp]
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 0,
+    ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 1]
+  simp
+
+theorem flipSecondPairSphere_rational_H3 :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3 = 𝟙 _ := by
+  change (ConstructionTargets.CoefficientCoordinateReflections.H ℚ 3).map
+      (TopCat.ofHom flipSecondPairSphere) = 𝟙 _
+  rw [show TopCat.ofHom flipSecondPairSphere =
+      TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (2 : Fin 4)) ≫
+        TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (3 : Fin 4)) by rfl]
+  rw [Functor.map_comp]
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 2,
+    ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 3]
+  simp
+
+/-- The fourth pair-sign translate also preserves the rational fundamental
+class.  This packages the orientation transport needed to compare all four
+points of a regular fiber with one representative. -/
+theorem flipBothPairsSphere_rational_H3 :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          (flipFirstPairSphere.comp flipSecondPairSphere)) 3 = 𝟙 _ := by
+  rw [← ConstructionTargets.CoefficientBarycentricNaturality.singularPostcomposition_comp,
+    HomologicalComplex.homologyMap_comp,
+    flipSecondPairSphere_rational_H3,
+    flipFirstPairSphere_rational_H3]
+  simp
+
+/-- Away from the two coordinate circles, neither independent pair flip has
+a fixed point.  This is the freeness condition used for a regular fiber. -/
+def PairSignRegular (p : Sphere 3) : Prop :=
+  (p.1 0 ≠ 0 ∨ p.1 1 ≠ 0) ∧ (p.1 2 ≠ 0 ∨ p.1 3 ≠ 0)
+
+/-- A concrete regular source point for the four-sheet computation: both
+complex coordinate pairs are nonzero. -/
+noncomputable def polynomialSphereRegularPoint : Sphere 3 :=
+  rp3RadialToSphere
+    ⟨![1, 0, 1, 0], by
+      intro h
+      have h0 := congrFun h (0 : Fin 4)
+      simp at h0⟩
+
+theorem polynomialSphereRegularPoint_isRegular :
+    PairSignRegular polynomialSphereRegularPoint := by
+  constructor <;> left
+  · simp [polynomialSphereRegularPoint, rp3RadialToSphere]
+  · simp [polynomialSphereRegularPoint, rp3RadialToSphere]
+
+/-- Three tangent directions at the selected regular point.  The first two
+rotate the complex coordinate pairs and the third changes their relative
+radii. -/
+def polynomialRegularTangentOne : EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 ![0, 1, 0, 0]
+
+def polynomialRegularTangentTwo : EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 ![0, 0, 0, 1]
+
+def polynomialRegularTangentThree : EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 ![1, 0, -1, 0]
+
+/-- On the natural tangent basis at the selected fixed point, the ambient
+quadratic derivative is multiplication by the positive scalar `sqrt 2`. -/
+theorem polynomialMapAmbient_fderiv_regularTangentBasis :
+    (fderiv ℝ polynomialMapAmbient polynomialSphereRegularPoint.1
+        polynomialRegularTangentOne =
+      Real.sqrt 2 • polynomialRegularTangentOne) ∧
+    (fderiv ℝ polynomialMapAmbient polynomialSphereRegularPoint.1
+        polynomialRegularTangentTwo =
+      Real.sqrt 2 • polynomialRegularTangentTwo) ∧
+    (fderiv ℝ polynomialMapAmbient polynomialSphereRegularPoint.1
+        polynomialRegularTangentThree =
+      Real.sqrt 2 • polynomialRegularTangentThree) := by
+  have hs : Real.sqrt (2 : ℝ) ≠ 0 := Real.sqrt_ne_zero'.mpr (by norm_num)
+  have hsq : Real.sqrt (2 : ℝ) * Real.sqrt 2 = 2 :=
+    by nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+  have hnorm : ‖(WithLp.toLp 2 ![1, 0, 1, 0] :
+      EuclideanSpace ℝ (Fin 4))‖ = Real.sqrt 2 := by
+    rw [EuclideanSpace.norm_eq]
+    simp [Fin.sum_univ_four] <;> norm_num
+  constructor
+  · rw [polynomialMapAmbient_fderiv]
+    ext i
+    fin_cases i <;>
+      simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+        polynomialRegularTangentOne, hnorm] <;> field_simp [hs] <;> nlinarith
+  constructor
+  · rw [polynomialMapAmbient_fderiv]
+    ext i
+    fin_cases i <;>
+      simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+        polynomialRegularTangentTwo, hnorm] <;> field_simp [hs] <;> nlinarith
+  · rw [polynomialMapAmbient_fderiv]
+    ext i
+    fin_cases i <;>
+      simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+        polynomialRegularTangentThree, hnorm] <;> field_simp [hs] <;> nlinarith
+
+theorem flipFirstPairSphere_ne_of_pairSignRegular
+    {p : Sphere 3} (hp : PairSignRegular p) :
+    flipFirstPairSphere p ≠ p := by
+  intro h
+  rcases hp.1 with h0 | h1
+  · apply h0
+    have hc := congrArg (fun q : Sphere 3 => q.1 0) h
+    simp [flipFirstPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+  · apply h1
+    have hc := congrArg (fun q : Sphere 3 => q.1 1) h
+    simp [flipFirstPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+
+theorem flipSecondPairSphere_ne_of_pairSignRegular
+    {p : Sphere 3} (hp : PairSignRegular p) :
+    flipSecondPairSphere p ≠ p := by
+  intro h
+  rcases hp.2 with h2 | h3
+  · apply h2
+    have hc := congrArg (fun q : Sphere 3 => q.1 2) h
+    simp [flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+  · apply h3
+    have hc := congrArg (fun q : Sphere 3 => q.1 3) h
+    simp [flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply] at hc
+    linarith
+
+theorem polynomialSphereVector_flipFirstPairSphere (p : Sphere 3) :
+    polynomialSphereVector (flipFirstPairSphere p) = polynomialSphereVector p := by
+  apply Subtype.ext
+  change polynomialMap (sphereVector 3 (flipFirstPairSphere p)).1 =
+    polynomialMap (sphereVector 3 p).1
+  rw [sphereVector_flipFirstPairSphere, polynomialMap_flipFirstPair]
+
+theorem polynomialSphereVector_flipSecondPairSphere (p : Sphere 3) :
+    polynomialSphereVector (flipSecondPairSphere p) = polynomialSphereVector p := by
+  apply Subtype.ext
+  change polynomialMap (sphereVector 3 (flipSecondPairSphere p)).1 =
+    polynomialMap (sphereVector 3 p).1
+  rw [sphereVector_flipSecondPairSphere, polynomialMap_flipSecondPair]
+
+/-- Radially normalized sphere lift of the printed quadratic map. -/
+noncomputable def polynomialSphereLift : C(Sphere 3, Sphere 3) :=
+  ⟨fun p => rp3RadialToSphere (polynomialSphereVector p),
+    rp3RadialToSphere_continuous.comp polynomialSphereVector_continuous⟩
+
+/-- The selected regular source point is also its own normalized quadratic
+image, so its tangent derivative can be computed in one chart. -/
+theorem polynomialSphereLift_regularPoint :
+    polynomialSphereLift polynomialSphereRegularPoint =
+      polynomialSphereRegularPoint := by
+  apply Subtype.ext
+  apply WithLp.ofLp_injective
+  ext i
+  fin_cases i <;>
+    simp [polynomialSphereLift, polynomialSphereVector,
+      polynomialSphereRegularPoint, rp3RadialToSphere, polynomialMap,
+      sphereVector, EuclideanSpace.norm_eq, Fin.sum_univ_four] <;>
+    norm_num1
+  all_goals
+    have hs : Real.sqrt (2 : ℝ) ≠ 0 :=
+      Real.sqrt_ne_zero'.mpr (by norm_num)
+    rw [Real.sqrt_div (by norm_num : (0 : ℝ) ≤ 1)]
+    norm_num
+    field_simp [hs]
+    nlinarith [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+
+theorem polynomialSphereLift_flipFirstPairSphere :
+    polynomialSphereLift.comp flipFirstPairSphere = polynomialSphereLift := by
+  apply ContinuousMap.ext
+  intro p
+  exact congrArg rp3RadialToSphere
+    (polynomialSphereVector_flipFirstPairSphere p)
+
+theorem polynomialSphereLift_flipSecondPairSphere :
+    polynomialSphereLift.comp flipSecondPairSphere = polynomialSphereLift := by
+  apply ContinuousMap.ext
+  intro p
+  exact congrArg rp3RadialToSphere
+    (polynomialSphereVector_flipSecondPairSphere p)
+
+/-- The explicit four-point pair-sign orbit through a sphere point. -/
+def pairSignOrbit (p : Sphere 3) : Set (Sphere 3) :=
+  {p, flipFirstPairSphere p, flipSecondPairSphere p,
+    flipFirstPairSphere (flipSecondPairSphere p)}
+
+/-- All four pair-sign translates are in the same fiber of the normalized
+quadratic lift. -/
+theorem pairSignOrbit_subset_polynomialSphereLift_fiber (p : Sphere 3) :
+    pairSignOrbit p ⊆ polynomialSphereLift ⁻¹' {polynomialSphereLift p} := by
+  have hf (x : Sphere 3) :
+      polynomialSphereLift (flipFirstPairSphere x) = polynomialSphereLift x := by
+    exact congrArg (fun f : C(Sphere 3, Sphere 3) => f x)
+      polynomialSphereLift_flipFirstPairSphere
+  have hs (x : Sphere 3) :
+      polynomialSphereLift (flipSecondPairSphere x) = polynomialSphereLift x := by
+    exact congrArg (fun f : C(Sphere 3, Sphere 3) => f x)
+      polynomialSphereLift_flipSecondPairSphere
+  intro q hq
+  simp only [pairSignOrbit, Set.mem_insert_iff, Set.mem_singleton_iff] at hq ⊢
+  rcases hq with rfl | rfl | rfl | rfl
+  · rfl
+  · exact hf p
+  · exact hs p
+  · calc
+      polynomialSphereLift
+          (flipFirstPairSphere (flipSecondPairSphere p)) =
+          polynomialSphereLift (flipSecondPairSphere p) :=
+        hf (flipSecondPairSphere p)
+      _ = polynomialSphereLift p := hs p
+
+/-- Equality after radial normalization makes the original nonzero vectors
+positive scalar multiples.  This is the normalization bridge needed before
+the quadratic fiber classification can be applied. -/
+theorem rp3RadialToSphere_eq_imp_posScalar
+    {v w : NonzeroVectors ℝ 3} (h : rp3RadialToSphere v = rp3RadialToSphere w) :
+    ∃ c : ℝ, 0 < c ∧ v.1 = c • w.1 := by
+  let nv : ℝ := ‖WithLp.toLp 2 v.1‖
+  let nw : ℝ := ‖WithLp.toLp 2 w.1‖
+  have hnv : 0 < nv := norm_pos_iff.mpr (by
+    intro hz
+    apply v.2
+    have hz' := congrArg WithLp.ofLp hz
+    simpa [nv] using hz')
+  have hnw : 0 < nw := norm_pos_iff.mpr (by
+    intro hz
+    apply w.2
+    have hz' := congrArg WithLp.ofLp hz
+    simpa [nw] using hz')
+  refine ⟨nv / nw, div_pos hnv hnw, ?_⟩
+  have hvw := congrArg (fun q : Sphere 3 => WithLp.ofLp q.1) h
+  change nv⁻¹ • v.1 = nw⁻¹ • w.1 at hvw
+  ext i
+  have hi := congrFun hvw i
+  simp only [Pi.smul_apply, smul_eq_mul] at hi ⊢
+  field_simp [hnv.ne', hnw.ne'] at hi ⊢
+  nlinarith
+
+set_option maxHeartbeats 800000 in
+/-- A positive scaling between quadratic images of unit four-vectors is
+necessarily trivial. -/
+theorem polynomialMap_sphere_posScalar_eq_one
+    {p q : Sphere 3} {c : ℝ} (hc : 0 < c)
+    (h : polynomialMap (sphereVector 3 p).1 =
+      c • polynomialMap (sphereVector 3 q).1) : c = 1 := by
+  have hs (x : Sphere 3) : ∑ i : Fin 4, x.1 i ^ 2 = 1 := by
+    have hn : ‖x.1‖ = 1 := by
+      simpa only [Metric.mem_sphere, dist_zero_right] using x.property
+    have hh := PiLp.norm_sq_eq_of_L2 (fun _ : Fin 4 => ℝ) x.1
+    rw [hn] at hh
+    simpa only [Real.norm_eq_abs, sq_abs, one_pow] using hh.symm
+  have hp := hs p
+  have hq := hs q
+  simp [Fin.sum_univ_succ] at hp hq
+  have h0 := congrFun h (0 : Fin 4)
+  have h1 := congrFun h (1 : Fin 4)
+  have h2 := congrFun h (2 : Fin 4)
+  have h3 := congrFun h (3 : Fin 4)
+  change p.1 2 ^ 2 - p.1 3 ^ 2 = c * (q.1 2 ^ 2 - q.1 3 ^ 2) at h2
+  change 2 * p.1 2 * p.1 3 = c * (2 * q.1 2 * q.1 3) at h3
+  simp only [polynomialMap, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three, Pi.smul_apply, smul_eq_mul,
+    sphereVector] at h0 h1 h2 h3
+  have h0sq := congrArg (fun x : ℝ => x ^ 2) h0
+  have h1sq := congrArg (fun x : ℝ => x ^ 2) h1
+  have h2sq := congrArg (fun x : ℝ => x ^ 2) h2
+  have h3sq := congrArg (fun x : ℝ => x ^ 2) h3
+  have hfirst : (p.1 0 ^ 2 + p.1 1 ^ 2) ^ 2 =
+      c ^ 2 * (q.1 0 ^ 2 + q.1 1 ^ 2) ^ 2 := by
+    nlinarith
+  have hsecond : (p.1 2 ^ 2 + p.1 3 ^ 2) ^ 2 =
+      c ^ 2 * (q.1 2 ^ 2 + q.1 3 ^ 2) ^ 2 := by
+    nlinarith
+  have hf : p.1 0 ^ 2 + p.1 1 ^ 2 = c * (q.1 0 ^ 2 + q.1 1 ^ 2) := by
+    apply (sq_eq_sq₀ (by positivity) (mul_nonneg hc.le (by positivity))).mp
+    calc
+      (p.1 0 ^ 2 + p.1 1 ^ 2) ^ 2 =
+          c ^ 2 * (q.1 0 ^ 2 + q.1 1 ^ 2) ^ 2 := hfirst
+      _ = (c * (q.1 0 ^ 2 + q.1 1 ^ 2)) ^ 2 := by ring
+  have hs' : p.1 2 ^ 2 + p.1 3 ^ 2 = c * (q.1 2 ^ 2 + q.1 3 ^ 2) := by
+    apply (sq_eq_sq₀ (by positivity) (mul_nonneg hc.le (by positivity))).mp
+    calc
+      (p.1 2 ^ 2 + p.1 3 ^ 2) ^ 2 =
+          c ^ 2 * (q.1 2 ^ 2 + q.1 3 ^ 2) ^ 2 := hsecond
+      _ = (c * (q.1 2 ^ 2 + q.1 3 ^ 2)) ^ 2 := by ring
+  nlinarith
+
+/-- Equality in a normalized quadratic fiber forces membership in the
+four-point pair-sign orbit. -/
+theorem polynomialSphereLift_fiber_subset_pairSignOrbit {p q : Sphere 3}
+    (h : polynomialSphereLift q = polynomialSphereLift p) :
+    q ∈ pairSignOrbit p := by
+  obtain ⟨c, hc, hscale⟩ := rp3RadialToSphere_eq_imp_posScalar h
+  have hc1 : c = 1 := polynomialMap_sphere_posScalar_eq_one hc hscale
+  subst c
+  simp only [one_smul] at hscale
+  rcases polynomialMap_eq_iff_pairSigns hscale with hqp | hqp | hqp | hqp
+  · have h' : q = p := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      exact hqp
+    simp [pairSignOrbit, h']
+
+  · have h' : q = flipFirstPairSphere p := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      exact hqp.trans (sphereVector_flipFirstPairSphere p).symm
+    simp [pairSignOrbit, h']
+
+  · have h' : q = flipSecondPairSphere p := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      exact hqp.trans (sphereVector_flipSecondPairSphere p).symm
+    simp [pairSignOrbit, h']
+  · have h' : q = flipFirstPairSphere (flipSecondPairSphere p) := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      calc
+        _ = flipFirstPair (flipSecondPair (sphereVector 3 p).1) := hqp
+        _ = flipFirstPair (sphereVector 3 (flipSecondPairSphere p)).1 :=
+          congrArg flipFirstPair (sphereVector_flipSecondPairSphere p).symm
+        _ = (sphereVector 3
+            (flipFirstPairSphere (flipSecondPairSphere p))).1 :=
+          (sphereVector_flipFirstPairSphere (flipSecondPairSphere p)).symm
+    simp [pairSignOrbit, h']
+
+/-- The normalized quadratic lift fiber is exactly the four pair-sign
+translates (with repetitions possible on the coordinate circles). -/
+theorem t96A06_polynomialSphereLift_regular_fiber (p : Sphere 3) :
+    polynomialSphereLift ⁻¹' {polynomialSphereLift p} = pairSignOrbit p := by
+  apply Set.Subset.antisymm
+  · intro q hq
+    exact polynomialSphereLift_fiber_subset_pairSignOrbit hq
+  · exact pairSignOrbit_subset_polynomialSphereLift_fiber p
+
+/-- The normalized sphere lift descends through the exact double cover to
+the chosen projective polynomial descent. -/
+theorem polynomialSphereLift_projection (p : Sphere 3) :
+    sphereProjection 3 (polynomialSphereLift p) =
+      polynomialDescent (sphereProjection 3 p) := by
+  rw [show sphereProjection 3 (polynomialSphereLift p) =
+      quotientMap ℝ 3 (polynomialSphereVector p) by
+    exact congrFun rp3SphereProjection_comp_radial (polynomialSphereVector p)]
+  exact (polynomialDescent_quotientMap (sphereVector 3 p)).symm
+
+/-- The exact lift square commutes after passage to rational third homology. -/
+theorem polynomialSphereLift_homology_square :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 ≫
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3 =
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3 ≫
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialDescent) 3 := by
+  rw [← HomologicalComplex.homologyMap_comp,
+    ← HomologicalComplex.homologyMap_comp]
+  congr 1
+  rw [ConstructionTargets.CoefficientBarycentricNaturality.singularPostcomposition_comp,
+    ConstructionTargets.CoefficientBarycentricNaturality.singularPostcomposition_comp]
+  congr 1
+  ext p
+  exact polynomialSphereLift_projection p
+
+/-- Once the concrete sphere lift has degree four, the commuting cover square
+forces the projective descent to have the same action on top homology. -/
+theorem polynomialDescent_degree_four_of_sphere
+    (hsphere :
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+        (4 : ℚ) • 𝟙 _)
+    (hsurj : Function.Surjective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3)) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialDescent) 3 =
+      (4 : ℚ) • 𝟙 _ := by
+  ext y
+  obtain ⟨x, rfl⟩ := hsurj y
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    polynomialSphereLift_homology_square x
+  rw [hsphere] at h
+  simpa [CategoryTheory.comp_apply] using h.symm
 
 /-- The concrete unit-sphere projection generates exactly the frozen quotient
 topology on `RP3`.  This is the quotient half of the double-cover input for
@@ -282,6 +923,58 @@ theorem rp3SphereAntipodal_ne (p : Sphere 3) :
     exact (smul_eq_zero.mp hsmul).resolve_left (by norm_num)
   have hn := p.2
   simpa [Metric.mem_sphere, hp0] using hn
+
+/-- At a point off the coordinate circles, the four pair-sign translates are
+pairwise distinct. -/
+theorem pairSignOrbit_four_distinct {p : Sphere 3} (hp : PairSignRegular p) :
+    p ≠ flipFirstPairSphere p ∧
+    p ≠ flipSecondPairSphere p ∧
+    p ≠ flipFirstPairSphere (flipSecondPairSphere p) ∧
+    flipFirstPairSphere p ≠ flipSecondPairSphere p ∧
+    flipFirstPairSphere p ≠ flipFirstPairSphere (flipSecondPairSphere p) ∧
+    flipSecondPairSphere p ≠ flipFirstPairSphere (flipSecondPairSphere p) := by
+  have hpf : p ≠ flipFirstPairSphere p :=
+    (flipFirstPairSphere_ne_of_pairSignRegular hp).symm
+  have hps : p ≠ flipSecondPairSphere p :=
+    (flipSecondPairSphere_ne_of_pairSignRegular hp).symm
+  have hpfs : p ≠ flipFirstPairSphere (flipSecondPairSphere p) := by
+    rw [flipFirstPairSphere_flipSecondPairSphere]
+    exact (rp3SphereAntipodal_ne p).symm
+  refine ⟨hpf, hps, hpfs, ?_, ?_, ?_⟩
+  · intro h
+    have hc := congrArg flipFirstPairSphere h
+    rw [flipFirstPairSphere_involutive] at hc
+    exact hpfs hc
+  · intro h
+    have hc := congrArg flipFirstPairSphere h
+    rw [flipFirstPairSphere_involutive,
+      flipFirstPairSphere_involutive] at hc
+    exact hps hc
+  · intro h
+    have hc := congrArg flipSecondPairSphere h
+    rw [flipSecondPairSphere_involutive,
+      ← flipFirstPairSphere_comm_flipSecondPairSphere,
+      flipSecondPairSphere_involutive] at hc
+    exact hpf hc
+
+/-- Every pair-sign-regular fiber of the normalized quadratic sphere map has
+exactly four points. -/
+theorem t96A06_polynomialSphereLift_regular_fiber_ncard
+    {p : Sphere 3} (hp : PairSignRegular p) :
+    (polynomialSphereLift ⁻¹' {polynomialSphereLift p}).ncard = 4 := by
+  rw [t96A06_polynomialSphereLift_regular_fiber]
+  rcases pairSignOrbit_four_distinct hp with
+    ⟨hpf, hps, hpfs, hfs, hffs, hsfs⟩
+  simp [pairSignOrbit, Set.ncard_insert_of_notMem, hpf, hps, hpfs,
+    hfs, hffs, hsfs]
+
+/-- The chosen regular value has exactly the four preimages whose local
+orientation signs enter the degree computation. -/
+theorem polynomialSphereRegularPoint_fiber_ncard :
+    (polynomialSphereLift ⁻¹'
+      {polynomialSphereLift polynomialSphereRegularPoint}).ncard = 4 :=
+  t96A06_polynomialSphereLift_regular_fiber_ncard
+    polynomialSphereRegularPoint_isRegular
 
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
@@ -459,6 +1152,266 @@ theorem t96A06_projectedSimplex_lifts_exact_pair (n : ℕ)
     · right
       exact Subtype.ext h
 
+/-- On a projected simplex, the integral transfer is the sum of the original
+simplex and its antipodal image. -/
+theorem t96A06_transferSimplex_projected (n : ℕ)
+    (s : C(stdSimplex ℝ (Fin (n + 1)), Sphere 3)) :
+    ConstructionTargets.CoveringSimplexTransfer.transferSimplex
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n
+        ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+          C(Sphere 3, RP3)).comp s) =
+      ConstructionTargets.SingularSubdivision.singularGenerator
+          (TopCat.of (Sphere 3)) n
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of (Sphere 3)) n s) +
+        ConstructionTargets.SingularSubdivision.singularGenerator
+          (TopCat.of (Sphere 3)) n
+          (ConstructionTargets.SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of (Sphere 3)) n
+            ((⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩ :
+              C(Sphere 3, Sphere 3)).comp s)) := by
+  classical
+  let a : ConstructionTargets.CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨s, rfl⟩
+  let anti : C(Sphere 3, Sphere 3) :=
+    ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩
+  let b : ConstructionTargets.CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨anti.comp s, by
+    funext x
+    exact ((rp3SphereProjection_eq_iff (s x) (sphereAntipodalN 3 (s x))).mpr
+      (Or.inr rfl)).symm⟩
+  have hab : a ≠ b := by
+    intro h
+    have hv := congrArg (fun l => l.1
+      (ConstructionTargets.CoveringSimplexTransfer.vertex n)) h
+    simp only [a, b, anti, ContinuousMap.comp_apply] at hv
+    exact rp3SphereAntipodal_ne (s
+      (ConstructionTargets.CoveringSimplexTransfer.vertex n)) hv.symm
+  letI := ConstructionTargets.CoveringSimplexTransfer.finiteLifts
+    (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n
+    ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+      C(Sphere 3, RP3)).comp s)
+  letI := Fintype.ofFinite
+    (ConstructionTargets.CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s))
+  have huniv : (Finset.univ : Finset
+      (ConstructionTargets.CoveringLiftRestriction.Lifts
+        (sphereProjection 3)
+        ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+          C(Sphere 3, RP3)).comp s))) = {a, b} := by
+    ext l
+    simp only [Finset.mem_univ, Finset.mem_insert, Finset.mem_singleton,
+      true_iff]
+    rcases t96A06_projectedSimplex_lift_eq_or_eq_antipodal n s l with h | h
+    · left
+      apply Subtype.ext
+      exact h
+    · right
+      apply Subtype.ext
+      exact h
+  unfold ConstructionTargets.CoveringSimplexTransfer.transferSimplex
+  rw [huniv, Finset.sum_insert (by simpa using hab), Finset.sum_singleton]
+
+/-- The rational-coefficient transfer has the same two-term deck expansion.
+This is the generator formula consumed by the chain-map comparison. -/
+theorem t96A06_rational_transferSimplex_projected (n : ℕ)
+    (s : C(stdSimplex ℝ (Fin (n + 1)), Sphere 3)) :
+    CoefficientCoveringTransfer.transferSimplex ℚ
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n
+        ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+          C(Sphere 3, RP3)).comp s) =
+      CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n
+          (SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of (Sphere 3)) n s) +
+        CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n
+          (SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of (Sphere 3)) n
+            ((⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩ :
+              C(Sphere 3, Sphere 3)).comp s)) := by
+  classical
+  let a : CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨s, rfl⟩
+  let anti : C(Sphere 3, Sphere 3) :=
+    ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩
+  let b : CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨anti.comp s, by
+    funext x
+    exact ((rp3SphereProjection_eq_iff (s x) (sphereAntipodalN 3 (s x))).mpr
+      (Or.inr rfl)).symm⟩
+  have hab : a ≠ b := by
+    intro h
+    have hv := congrArg (fun l => l.1
+      (CoveringSimplexTransfer.vertex n)) h
+    simp only [a, b, anti, ContinuousMap.comp_apply] at hv
+    exact rp3SphereAntipodal_ne (s (CoveringSimplexTransfer.vertex n)) hv.symm
+  letI := CoveringSimplexTransfer.finiteLifts
+    (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n
+    ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+      C(Sphere 3, RP3)).comp s)
+  letI := Fintype.ofFinite (CoveringLiftRestriction.Lifts
+    (sphereProjection 3)
+    ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+      C(Sphere 3, RP3)).comp s))
+  have huniv : (Finset.univ : Finset (CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s))) = {a, b} := by
+    ext l
+    simp only [Finset.mem_insert, Finset.mem_singleton, Finset.mem_univ,
+      true_iff]
+    rcases t96A06_projectedSimplex_lift_eq_or_eq_antipodal n s l with h | h
+    · left; apply Subtype.ext; exact h
+    · right; apply Subtype.ext; exact h
+  unfold CoefficientCoveringTransfer.transferSimplex
+  rw [huniv, Finset.sum_insert (by simpa using hab), Finset.sum_singleton]
+
+/-- Degreewise on rational singular chains, projection followed by transfer
+is the sum of the identity and antipodal deck transformation. -/
+theorem t96A06_rational_projection_transferDegree (n : ℕ) :
+    (CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, rp3SphereProjection_continuous⟩).f n ≫
+      CoefficientCoveringTransfer.transferDegree ℚ
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n =
+      𝟙 _ +
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩).f n := by
+  apply Limits.Sigma.hom_ext
+  intro simplex
+  let s := (TopCat.toSSetObjEquiv (TopCat.of (Sphere 3))
+    (Opposite.op ⦋n⦌)) simplex
+  have hs : SingularSubdivision.singularSimplexOfContinuousMap
+      (TopCat.of (Sphere 3)) n s = simplex :=
+    (TopCat.toSSetObjEquiv (TopCat.of (Sphere 3))
+      (Opposite.op ⦋n⦌)).symm_apply_apply simplex
+  change CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n simplex ≫ _ =
+    CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n simplex ≫ _
+  rw [← hs, ← Category.assoc,
+    CoefficientH0.singularGenerator_singularPostcomposition,
+    CoefficientCoveringTransfer.generator_transfer,
+    t96A06_rational_transferSimplex_projected]
+  simp only [Preadditive.comp_add, Category.comp_id,
+    CoefficientH0.singularGenerator_singularPostcomposition]
+
+/-- Projection followed by rational transfer is the deck sum as a morphism
+of singular chain complexes. -/
+theorem t96A06_rational_projection_transfer :
+    CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, rp3SphereProjection_continuous⟩ ≫
+      CoefficientCoveringTransfer.transfer ℚ
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted =
+      𝟙 _ + CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩ := by
+  ext n : 1
+  exact t96A06_rational_projection_transferDegree n
+
+/-- The deck-sum identity after passage to rational singular homology. -/
+theorem t96A06_rational_homology_projection_transfer (n : ℕ) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) n ≫
+      HomologicalComplex.homologyMap
+        (CoefficientCoveringTransfer.transfer ℚ
+          (sphereProjection 3) t96A06_rp3_sphere_twoSheeted) n =
+      𝟙 _ + HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩) n := by
+  change (HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+      (ComplexShape.down ℕ) n).map _ ≫
+    (HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+      (ComplexShape.down ℕ) n).map _ = _
+  rw [← Functor.map_comp, t96A06_rational_projection_transfer,
+    Functor.map_add]
+  congr 1
+  exact CategoryTheory.Functor.map_id _ _
+
+/-- In degree three the sphere-to-projective-space homology map is injective:
+postcomposition with transfer is multiplication by two, because the
+antipodal map acts as the identity. -/
+theorem t96A06_rp3_rational_H3_projection_injective :
+    Function.Injective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3) := by
+  let proj := HomologicalComplex.homologyMap
+    (CoefficientH0.singularPostcomposition ℚ
+      ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3
+  let tr := HomologicalComplex.homologyMap
+    (CoefficientCoveringTransfer.transfer ℚ
+      (sphereProjection 3) t96A06_rp3_sphere_twoSheeted) 3
+  have hcomp : proj ≫ tr = (2 : ℕ) • 𝟙 _ := by
+    rw [show proj ≫ tr = 𝟙 _ +
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ
+            ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩) 3 from
+      t96A06_rational_homology_projection_transfer 3]
+    rw [show HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ
+            ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩) 3 = 𝟙 _ from
+      t96A06_sphere3_antipodal_H3]
+    simp [two_smul]
+  intro x y hxy
+  have htr : tr (proj x) = tr (proj y) := congrArg tr hxy
+  have hx := CategoryTheory.ConcreteCategory.congr_hom hcomp x
+  have hy := CategoryTheory.ConcreteCategory.congr_hom hcomp y
+  have htwo : (2 : ℚ) • x = (2 : ℚ) • y := by
+    simpa [CategoryTheory.comp_apply, two_smul] using hx.symm.trans (htr.trans hy)
+  have hinv := congrArg (fun z => (2 : ℚ)⁻¹ • z) htwo
+  simpa [smul_smul] using hinv
+
+/-- Rational top homology of the concrete projective three-space is
+one-dimensional.  The covering projection is a linear equivalence in degree
+three: transfer gives its surjectivity, while the deck-sum computation gives
+its injectivity. -/
+noncomputable def t96A06_rp3_rational_H3Iso :
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ := by
+  let proj := HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ
+        ⟨sphereProjection 3, rp3SphereProjection_continuous⟩) 3
+  have hbij : Function.Bijective proj :=
+    ⟨t96A06_rp3_rational_H3_projection_injective, by
+      simpa [proj] using t96A06_rp3_rational_homologyMap_surjective 3⟩
+  exact (LinearEquiv.ofBijective proj.hom hbij).toModuleIso.symm ≪≫
+      t96A06_sphere3_rational_H3Iso
+
+/-- Ledger-facing name for the top-degree transfer/deck-sum milestone. -/
+noncomputable def t96A06_rp3_antipodal_H3 :=
+  t96A06_rp3_rational_H3Iso
+
+/-- Rational homology of the concrete three-sphere vanishes strictly above
+degree three, by three coefficient sphere shifts and positive-degree
+vanishing for the zero-sphere. -/
+theorem t96A06_sphere3_rational_homology_isZero_of_gt
+    (k : ℕ) (hk : 3 < k) :
+    IsZero (CoefficientH0.SingularHomology ℚ k (TopCat.of (Sphere 3))) := by
+  have hk1 : k - 1 ≠ 0 := by omega
+  have hk2 : k - 2 ≠ 0 := by omega
+  have hk3 : k - 3 ≠ 0 := by omega
+  have e3 : CoefficientH0.SingularHomology ℚ k (TopCat.of (Sphere 3)) ≅
+      CoefficientH0.SingularHomology ℚ (k - 1) (TopCat.of (Sphere 2)) := by
+    simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+      (CoefficientSphereShift.sphereShift ℚ 3 (k - 1) hk1)
+  have e2 : CoefficientH0.SingularHomology ℚ (k - 1) (TopCat.of (Sphere 2)) ≅
+      CoefficientH0.SingularHomology ℚ (k - 2) (TopCat.of (Sphere 1)) := by
+    simpa [show k - 2 + 1 = k - 1 by omega] using
+      (CoefficientSphereShift.sphereShift ℚ 2 (k - 2) hk2)
+  have e1 : CoefficientH0.SingularHomology ℚ (k - 2) (TopCat.of (Sphere 1)) ≅
+      CoefficientH0.SingularHomology ℚ (k - 3) (TopCat.of (Sphere 0)) := by
+    simpa [show k - 3 + 1 = k - 2 by omega] using
+      (CoefficientSphereShift.sphereShift ℚ 1 (k - 3) hk3)
+  exact (ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ
+    (k - 3) (by omega)).of_iso (e3 ≪≫ e2 ≪≫ e1)
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -488,7 +1441,63 @@ theorem t96A06_rp3_rational_H2_isZero :
   t96A06_rp3_rational_homology_isZero_of_sphere 2
     t96A06_sphere3_rational_H2_isZero
 
+/-- Rational homology of the projective quotient vanishes above degree
+three, because it is a quotient of the corresponding zero sphere group. -/
+theorem t96A06_rp3_rational_homology_isZero_of_gt
+    (k : ℕ) (hk : 3 < k) :
+    IsZero (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) :=
+  t96A06_rp3_rational_homology_isZero_of_sphere k
+    (t96A06_sphere3_rational_homology_isZero_of_gt k hk)
+
+/-- Every rational singular homology group of the concrete projective
+three-space is finite-dimensional. -/
+theorem t96A06_rp3_rational_homology_finite (k : ℕ) :
+    FiniteDimensional ℚ
+      (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) := by
+  by_cases hk0 : k = 0
+  · subst k
+    exact rp3RationalH0Iso.toLinearEquiv.symm.finiteDimensional
+  by_cases hk3 : k = 3
+  · subst k
+    exact t96A06_rp3_rational_H3Iso.toLinearEquiv.symm.finiteDimensional
+  have hz : IsZero
+      (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) := by
+    rcases (show k = 1 ∨ k = 2 ∨ 3 < k by omega) with h | h | h
+    · simpa [h] using t96A06_rp3_rational_H1_isZero
+    · simpa [h] using t96A06_rp3_rational_H2_isZero
+    · exact t96A06_rp3_rational_homology_isZero_of_gt k h
+  letI : Subsingleton
+      (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3)) :=
+    ModuleCat.isZero_iff_subsingleton.mp hz
+  exact FiniteDimensional.of_injective
+    (0 : CoefficientH0.SingularHomology ℚ k (TopCat.of RP3) →ₗ[ℚ] ℚ)
+    (Function.injective_of_subsingleton _)
+
+/-- The complete rational homology table for the literal projective-space
+model used by the consumer. -/
+theorem t96A06_rp3_rational_homology :
+    Nonempty (CoefficientH0.SingularHomology ℚ 0 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ) ∧
+    (∀ k, k ≠ 0 → k ≠ 3 →
+      IsZero (CoefficientH0.SingularHomology ℚ k (TopCat.of RP3))) ∧
+    Nonempty (CoefficientH0.SingularHomology ℚ 3 (TopCat.of RP3) ≅
+      ModuleCat.of ℚ ℚ) := by
+  refine ⟨⟨rp3RationalH0Iso⟩, ?_, ⟨t96A06_rp3_rational_H3Iso⟩⟩
+  intro k hk0 hk3
+  rcases (show k = 1 ∨ k = 2 ∨ 3 < k by omega) with h | h | h
+  · simpa [h] using t96A06_rp3_rational_H1_isZero
+  · simpa [h] using t96A06_rp3_rational_H2_isZero
+  · exact t96A06_rp3_rational_homology_isZero_of_gt k h
+
 #print axioms polynomialMap_nonzero
+#print axioms polynomialMapAmbient_hasFDerivAt
+#print axioms polynomialMapAmbient_fderiv
+#print axioms polynomialMap_flipFirstPair
+#print axioms polynomialMap_flipSecondPair
+#print axioms realPair_eq_or_eq_neg_of_squareCoordinates
+#print axioms polynomialMap_eq_iff_pairSigns
+#print axioms flipFirstPair_comm_flipSecondPair
+#print axioms flipFirstPair_flipSecondPair
 #print axioms polynomialDescent
 #print axioms polynomialDescent_quotientMap
 #print axioms exists_polynomialDescent_formula
@@ -499,6 +1508,31 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms rp3RadialToSphere_continuous
 #print axioms rp3SphereProjection_continuous
 #print axioms rp3SphereProjection_comp_radial
+#print axioms polynomialSphereVector_continuous
+#print axioms sphereVector_flipFirstPairSphere
+#print axioms sphereVector_flipSecondPairSphere
+#print axioms flipFirstPairSphere_involutive
+#print axioms flipSecondPairSphere_involutive
+#print axioms flipFirstPairSphere_comm_flipSecondPairSphere
+#print axioms flipFirstPairSphere_flipSecondPairSphere
+#print axioms flipFirstPairSphere_rational_H3
+#print axioms flipSecondPairSphere_rational_H3
+#print axioms flipBothPairsSphere_rational_H3
+#print axioms polynomialSphereRegularPoint_isRegular
+#print axioms polynomialMapAmbient_fderiv_regularTangentBasis
+#print axioms polynomialSphereLift_regularPoint
+#print axioms flipFirstPairSphere_ne_of_pairSignRegular
+#print axioms flipSecondPairSphere_ne_of_pairSignRegular
+#print axioms polynomialSphereLift_flipFirstPairSphere
+#print axioms polynomialSphereLift_flipSecondPairSphere
+#print axioms pairSignOrbit_subset_polynomialSphereLift_fiber
+#print axioms rp3RadialToSphere_eq_imp_posScalar
+#print axioms polynomialMap_sphere_posScalar_eq_one
+#print axioms polynomialSphereLift_fiber_subset_pairSignOrbit
+#print axioms t96A06_polynomialSphereLift_regular_fiber
+#print axioms polynomialSphereLift_projection
+#print axioms polynomialSphereLift_homology_square
+#print axioms polynomialDescent_degree_four_of_sphere
 #print axioms rp3SphereProjection_isQuotientMap
 #print axioms rp3SphereProjection_eq_iff
 #print axioms rp3SphereProjection_isOpenMap
@@ -506,6 +1540,9 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms rp3SphereProjection_isClosedMap
 #print axioms t96A06_rp3_sphere_covering
 #print axioms rp3SphereAntipodal_ne
+#print axioms pairSignOrbit_four_distinct
+#print axioms t96A06_polynomialSphereLift_regular_fiber_ncard
+#print axioms polynomialSphereRegularPoint_fiber_ncard
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
@@ -514,6 +1551,18 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
+#print axioms t96A06_transferSimplex_projected
+#print axioms t96A06_rational_transferSimplex_projected
+#print axioms t96A06_rational_projection_transferDegree
+#print axioms t96A06_rational_projection_transfer
+#print axioms t96A06_rational_homology_projection_transfer
+#print axioms t96A06_rp3_rational_H3_projection_injective
+#print axioms t96A06_rp3_rational_H3Iso
+#print axioms t96A06_rp3_antipodal_H3
+#print axioms t96A06_sphere3_rational_homology_isZero_of_gt
+#print axioms t96A06_rp3_rational_homology_isZero_of_gt
+#print axioms t96A06_rp3_rational_homology_finite
+#print axioms t96A06_rp3_rational_homology
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero

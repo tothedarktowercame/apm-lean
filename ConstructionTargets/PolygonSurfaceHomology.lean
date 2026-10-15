@@ -5565,6 +5565,85 @@ theorem lowDegreeHomology (P : PairingData) :
   ⟨⟨radialH0ModuleIsoInt P⟩, ⟨⟨radialH1BoundaryCokernelModuleIso P⟩,
     ⟨radialH2BoundaryKernelModuleIso P⟩⟩⟩
 
+/-- Vanishing of an integral-module homology object, transferred to the
+additive-group presentation used by the production Mayer--Vietoris sequence. -/
+theorem singularHomologyGroupIsZeroOfModuleIsZero (X : TopCat) (k : ℕ)
+    (h : IsZero (SpaceH X k)) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k X) := by
+  have hu : IsZero
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH X k)) := by
+    rw [IsZero.iff_id_eq_zero]
+    rw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id,
+      ← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_zero]
+    exact congrArg
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map)
+      (h.eq_of_src _ _)
+  exact hu.of_iso
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      X k).symm
+
+/-- Above degree two, both radial cover-piece groups vanish. -/
+theorem radialHigherPiecesGroupIsZero (P : PairingData) (k : ℕ) (hk : 3 ≤ k) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+          (TopCat.of (InnerPiece P)) ⊞
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+          (TopCat.of (OuterPiece P))) := by
+  rw [biprod_isZero_iff]
+  exact ⟨singularHomologyGroupIsZeroOfModuleIsZero _ _
+      (innerHigherHomology_isZero P k (by omega)),
+    singularHomologyGroupIsZeroOfModuleIsZero _ _
+      (outerHigherHomologyIsZero P k (by omega))⟩
+
+/-- In the preceding degree, the radial intersection group vanishes. -/
+theorem radialHigherIntersectionGroupIsZero (P : PairingData) (k : ℕ)
+    (hk : 3 ≤ k) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology (k - 1)
+        (TopCat.of
+          ((openCover P).inner ∩ (openCover P).outer :
+            Set (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)))) := by
+  exact (singularHomologyGroupIsZeroOfModuleIsZero
+      (TopCat.of (OverlapPiece P)) (k - 1)
+      (overlapHigherHomology_isZero P (k - 1) (by omega))).of_iso
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv (k - 1))
+
+/-- B9 in the additive-group presentation: the polygon quotient has no
+homology in degrees at least three. -/
+theorem radialSurfaceHigherGroupIsZero (P : PairingData) (k : ℕ) (hk : 3 ≤ k) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel))) := by
+  cases k with
+  | zero => omega
+  | succ n =>
+      have hex := radialMVUnionExact P n
+      apply hex.isZero_X₂
+      · exact (radialHigherPiecesGroupIsZero P (n + 1) (by omega)).eq_of_src _ _
+      · exact (radialHigherIntersectionGroupIsZero P (n + 1) (by omega)).eq_of_tgt _ _
+
+/-- B9: the polygon quotient has no integral homology in degrees at least
+three. -/
+theorem highDegreeHomology (P : PairingData) :
+    ∀ k : ℕ, 3 ≤ k → IsZero (H P k) := by
+  intro k hk
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      _ k (radialSurfaceHigherGroupIsZero P k hk)
+
+/-- B10: the complete integral homology calculation for a polygon quotient. -/
+theorem polygonQuotient_homology (P : PairingData) :
+    Nonempty (H P 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (H P 1 ≅ ModuleCat.of ℤ (BoundaryCokernel P)) ∧
+      Nonempty (H P 2 ≅ ModuleCat.of ℤ (BoundaryKernel P)) ∧
+      ∀ k : ℕ, 3 ≤ k → IsZero (H P k) := by
+  exact ⟨(lowDegreeHomology P).1, (lowDegreeHomology P).2.1,
+    (lowDegreeHomology P).2.2, highDegreeHomology P⟩
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :

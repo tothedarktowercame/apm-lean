@@ -76864,7 +76864,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance {:strategy "Rerun after B8."},
@@ -87907,36 +87907,25 @@
    :stop-count 2,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove B9 from adjacent MV exactness and piece vanishing; assemble B10.",
-    :outcome :stop,
-    :warnings ["preexisting lint" "unrelated dirt preserved"],
+    :residual "Final theorem compiles; consumer adapters remain.",
+    :outcome :done-unreviewed,
+    :warnings ["preexisting lint" "unrelated review dirs preserved"],
     :missing-theorems
-    [{:name "radialH2BoundaryKernelModuleIso",
-      :type "surface H2 equals attaching kernel",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVConnectingH1CoordinatesLinear_range"],
-      :area "polygon-quotient-homology"}
-     {:name "lowDegreeHomology",
-      :type "B8 H0/H1/H2 extraction",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialH2BoundaryKernelModuleIso"
-       "boundaryCokernelRadialH1Equiv"],
-      :area "polygon-quotient-homology"}
-     {:name "highDegreeHomology",
+    [{:name "highDegreeHomology",
       :type "B9 vanishing for k>=3",
-      :status :partial,
+      :status :proved,
       :consumers [:t97A01 :t94J09],
       :depends-on ["lowDegreeHomology"],
+      :area "polygon-quotient-homology"}
+     {:name "polygonQuotient_homology",
+      :type "B10 complete integral homology table",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["lowDegreeHomology" "highDegreeHomology"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Completed B8 low-degree homology.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87944,21 +87933,32 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 8a04c4e3d", :exit 0}],
+     {:cmd "git show --check 21eebc07b", :exit 0}],
     :diagnostic-history
-    [{:cmd "B8 drafts",
+    [{:cmd "initial B9 build",
       :exit 1,
-      :correction
-      "exposed composite mono and supplied H0 nonempty instances"}],
-    :commit "8a04c4e3d",
+      :correction "fixed biproduct token and explicit overlap type"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792040670286-13292-9deb9afc",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms on B9/B10 declarations"
+      "git show --check 21eebc07b; fixture SHA-256 and placeholder scans"],
+     :finding
+     "Commit 21eebc07b by topo-6 changes only PolygonSurfaceHomology.lean and completes B9-B10 after 8a04c4e3d. Exact snapshot builds; fixture SHA-256 4d0cc0a43b8581aa8d5219062f0544d4b5bae6bbd9de50daf67303f396e81f01 matches; 0 placeholders; registry 166/0; only propext, Classical.choice, Quot.sound. For k=n+1>=3, MV exactness places surface H(k) between vanishing piece H(k) and overlap H(k-1), so the zero-object orientations are correct. Module/group comparison is used in the valid direction. polygonQuotient_homology exactly matches blueprint B10 and uses both B8 and B9; consumer adapters alone remain."},
+    :commit "21eebc07b",
+    :commits ["8a04c4e3d" "21eebc07b"],
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "abdc28fd8e899e45c05abe5956e5a574ab4d64ecba3c625144b3dfb39a6a1cf5"},
+     "4d0cc0a43b8581aa8d5219062f0544d4b5bae6bbd9de50daf67303f396e81f01"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87978,7 +87978,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H2 connecting range as BoundaryKernel.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Completed B8 low-degree homology.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88324,11 +88324,80 @@
      :reason "Banked B8 surface-H1 cokernel equivalence."}
     {:job 1,
      :commit "b94c993d7",
-     :reason "Banked H2 connecting range as BoundaryKernel."}]}
+     :reason "Banked H2 connecting range as BoundaryKernel."}
+    {:job 2,
+     :commit "8a04c4e3d",
+     :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 0,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 4,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Extract based surjectivity and reverse kernel inclusion; assemble.",
+    :outcome :stop,
+    :warnings ["Main: 1 placeholder" "dirt preserved"],
+    :missing-theorems
+    [{:name "torusRP2PolygonPseudopushout_arrow_eq_reconstructed",
+      :type "radial reconstruction",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on [],
+      :area "polygon-surface-pi1"}
+     {:name "torusRP2PairingSpace_basedVanKampen",
+      :type "surjectivity; reverse kernel inclusion",
+      :status :partial,
+      :consumers [:t97A01],
+      :depends-on
+      ["torusRP2PolygonPseudopushout_arrow_eq_reconstructed"
+       "torusRP2Relator_normalClosure_le_kernel"],
+      :area "polygon-surface-pi1"}
+     {:name "apm_t97a01_torusRP2_fundamentalGroup",
+      :type "literal van Kampen",
+      :status :partial,
+      :consumers [:t97A01],
+      :depends-on ["torusRP2PairingSpace_basedVanKampen"],
+      :area "polygon-surface-pi1"}],
+    :statement-hashes {:registry "166/0"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :reason "Banked radial-cover pseudopushout reconstruction.",
+    :commands
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
+      :exit 0}
+     {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
+     {:cmd "git show --check 06eff46c1", :exit 0}],
+    :diagnostic-history
+    [{:cmd "pseudopushout draft",
+      :exit 1,
+      :correction "fixed namespaces/notation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792053961691-13703-f9b8874d",
+     :commands
+     ["git show/diff/check 06eff46c1"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "lake env lean ConstructionTargets/t97A01Closure.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 06eff46c1 adds compiled, sorry-free progress beyond d97eb2896: specialization of the proved two-open fundamental-groupoid pseudopushout to the polygon radial cover and its reconstruction-unit arrow identity. Only t97A01Closure.lean changed; fixture SHA edc3e12712a80a40769337d6fd50e25477251c42638769debe01248bb2354cb6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. The equation has the correct direction by unit naturality and hom-inv cancellation. This is cover-level input, not a facade discharge: based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
+    :commit "06eff46c1",
+    :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
+    :fixture
+    {:path "ConstructionTargets/t97A01Closure.lean",
+     :sha256
+     "edc3e12712a80a40769337d6fd50e25477251c42638769debe01248bb2354cb6"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88346,18 +88415,151 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t97A01/BLUEPRINT.md's plan into ConstructionTargets/t97A01Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked radial-cover pseudopushout reconstruction.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
    :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "06f6bde3c",
+     :reason
+     "Blueprint written; independent review required before formalization."}
+    {:job 2,
+     :commit "401abd2a7",
+     :reason "Banked homology specializations."}
+    {:job 3,
+     :commit "5969dfc4a",
+     :reason "Banked literal quotient homeomorphism adapter."}
+    {:job 4,
+     :commit "53223ee93",
+     :reason "Banked quotient homeomorphisms."}
+    {:job 5,
+     :commit "4ce974c33",
+     :reason "Banked both orbit-coordinate linear equivalences."}
+    {:job 6,
+     :commit "1f944e1c3",
+     :reason "Banked signed attaching vectors."}
+    {:job 7,
+     :commit "9bc6a459c",
+     :reason "Banked boundary conjugations."}
+    {:job 8,
+     :commit "5db954851",
+     :reason "Banked injectivity and zero kernels."}
+    {:job 9,
+     :commit "4cacd825f",
+     :reason "Banked attaching-range transport."}
+    {:job 1,
+     :commit "36c33f454",
+     :reason "Banked literal polygon homology."}
+    {:job 2,
+     :commit "8c2c65144",
+     :reason "Banked literal pi1 transport to pairing-space centre."}
+    {:job 3,
+     :commit "594a2323e",
+     :reason "Banked Fin-3 skeleton epimorphism."}
+    {:job 4,
+     :commit "3e6fbc0b2",
+     :reason "Banked relator signs and six-edge coordinates."}
+    {:job 5,
+     :commit "8deb5ceae",
+     :reason "Banked exact geometric boundary edge product."}
+    {:job 6,
+     :commit "d643012dc",
+     :reason "Banked normalized six-edge product."}
+    {:job 7,
+     :commit "e28e5f0f0",
+     :reason "Banked relator normal closures."}
+    {:job 8,
+     :commit "31c603c81",
+     :reason "Banked exact Fin-3 generator transport."}
+    {:job 9,
+     :commit "dbbc6a148",
+     :reason "Banked geometric attaching-word normal closure."}
+    {:job 1,
+     :commit "8ea6fc5b6",
+     :reason "Banked disk boundary nullhomotopy in polygon quotient."}
+    {:job 2,
+     :commit "9cf7f3444",
+     :reason "Banked disk/skeleton boundary basepoint alignment."}
+    {:job 3,
+     :commit "d97eb2896",
+     :reason "Banked boundary transport and forward kernel inclusion."}
+    {:job 4,
+     :commit "06eff46c1",
+     :reason "Banked radial-cover pseudopushout reconstruction."}]}
   {:consumer :t94J09,
-   :stop-count 0,
+   :stop-count 2,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compute six-coordinate Smith cokernel; transport N6 homology; normalize frozen two-vertex polygon.",
+    :outcome :stop,
+    :warnings
+    ["Main: 1 placeholder; dirt preserved"
+     "foundation PairingData is one-vertex; frozen source has two vertices"],
+    :missing-theorems
+    [{:name "n6PolygonHomology",
+      :type "standard N6 foundation specialization",
+      :status :proved,
+      :consumers [:t94J09],
+      :depends-on ["polygonQuotient_homology"],
+      :area "polygon-surface-homology"}
+     {:name "n6BoundaryKernel_eq_bot",
+      :type "standard N6 H2 kernel vanishes",
+      :status :proved,
+      :consumers [:t94J09],
+      :depends-on ["n6PolygonHomology"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t94J09_polygon_homology",
+      :type "literal source integral homology",
+      :status :partial,
+      :consumers [:t94J09],
+      :depends-on ["n6PolygonHomology" "n6BoundaryKernel_eq_bot"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t94J09_polygon_normalization",
+      :type "source quotient homeomorphic to N6",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on [],
+      :area "polygon-cut-and-paste"}],
+    :statement-hashes {:registry "166/0"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :reason
+    "Banked standard N6 homology specialization and zero top kernel.",
+    :commands
+    [{:cmd "lake build ConstructionTargets.t94J09Closure", :exit 0}
+     {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
+     {:cmd "statement-registry check", :exit 0}
+     {:cmd "scans; git check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792051237190-13649-8c29b93e",
+     :commands
+     ["git show/diff/check 56607caa5"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 56607caa5 adds compiled, sorry-free progress beyond blueprint commit 2d4b43869: the standard one-vertex N6 homology specialization, six orbit coordinates, boundary degrees -2, and injectivity/zero H2 kernel. Only t94J09Closure.lean changed; fixture SHA 0b8caa792fc2b7423405996133283b39693e5ac30df9b50430c72cac79454226 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; printed axioms are standard. Orientation is correct: coordinates compose with the attaching boundary as the negative of the +2 Smith map, preserving injectivity. Six-coordinate cokernel, N6 homology transport, and normalization from the frozen two-vertex polygon remain explicitly listed."},
+    :commit "56607caa5",
+    :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
+    :fixture
+    {:path "ConstructionTargets/t94J09Closure.lean",
+     :sha256
+     "0b8caa792fc2b7423405996133283b39693e5ac30df9b50430c72cac79454226"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88375,14 +88577,23 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t94J09/BLUEPRINT.md's plan into ConstructionTargets/t94J09Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked standard N6 homology specialization and zero top kernel.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
    :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "2d4b43869",
+     :reason
+     "Blueprint written; independent review required before formalization."}
+    {:job 2,
+     :commit "56607caa5",
+     :reason
+     "Banked standard N6 homology specialization and zero top kernel."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -88639,7 +88850,7 @@
   {:consumer :t00J07,
    :stop-count 0,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["problems/t00J07/lean/Main.lean"
     "problems/t00J07/status.json"
@@ -88668,7 +88879,7 @@
   {:consumer :t97A03,
    :stop-count 0,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -88763,7 +88974,7 @@
   {:consumer :t99A01,
    :stop-count 0,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["problems/t99A01/lean/Main.lean"
     "problems/t99A01/status.json"
@@ -88792,7 +89003,7 @@
   {:consumer :t97J04,
    :stop-count 0,
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["problems/t97J04/lean/Main.lean"
     "problems/t97J04/status.json"
@@ -89217,7 +89428,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonQuotient_homology",
@@ -89226,13 +89437,18 @@
    {:name "polygonQuotient_homology",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "H0=ℤ; H1=cokernel; H2=kernel; Hk=0,k≥3",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "21eebc07b"},
    :id :lemma-polygonquotient-homology,
    :kind :lemma,
    :depends-on
    [:lemma-attachingboundary
     :lemma-outerhomology
-    :lemma-inneroverlaphomology],
+    :lemma-inneroverlaphomology
+    :lemma-lowdegreehomology
+    :lemma-highdegreehomology],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92989,7 +93205,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "lowDegreeHomology",
@@ -92999,7 +93215,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B8 H0/H1/H2 kernel-cokernel extraction",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-lowdegreehomology,
    :kind :lemma,
    :depends-on
@@ -93301,7 +93519,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialH2BoundaryKernelModuleIso",
@@ -93311,14 +93529,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "surface H2 equals attaching kernel",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-radialh2boundarykernelmoduleiso,
    :kind :lemma,
    :depends-on [:lemma-radialmvconnectingh1coordinateslinear-range],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "highDegreeHomology", :type "B9 vanishing for k>=3"},
@@ -93326,8 +93546,885 @@
    {:name "highDegreeHomology",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B9 vanishing for k>=3",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "21eebc07b"},
    :id :lemma-highdegreehomology,
    :kind :lemma,
    :depends-on [:lemma-lowdegreehomology],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_polygon_singular_homology",
+    :type "literal quotient homology adapter"},
+   :lemma
+   {:name "apm_t97a01_polygon_singular_homology",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal quotient homology adapter",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "36c33f454"},
+   :id :lemma-apm-t97a01-polygon-singular-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonquotient-homology
+    :lemma-aabbccpolygonhomology
+    :lemma-torusrp2polygonhomology
+    :lemma-quotienthomeomorphofeqvgeniff
+    :lemma-apm-t97a01-x-homeomorph-pairingspace
+    :lemma-apm-t97a01-torusrp2-homeomorph-pairingspace
+    :lemma-aabbccorbitcoordinates
+    :lemma-torusrp2orbitcoordinates
+    :lemma-aabbccorbitcoordinates-attachingdegree
+    :lemma-torusrp2orbitcoordinates-attachingdegree
+    :lemma-aabbccorbitcoordinates-comp-attachingboundary
+    :lemma-torusrp2orbitcoordinates-comp-attachingboundary
+    :lemma-aabbccboundarykernel-eq-bot
+    :lemma-torusrp2boundarykernel-eq-bot
+    :lemma-aabbccorbitcoordinates-map-boundaryrange
+    :lemma-torusrp2orbitcoordinates-map-boundaryrange
+    :lemma-aabbccboundarycokernelsmithequiv
+    :lemma-torusrp2boundarycokernelsmithequiv],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_torusRP2_fundamentalGroup",
+    :type "literal torus-crosscap van Kampen"},
+   :lemma
+   {:name "apm_t97a01_torusRP2_fundamentalGroup",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal torus-crosscap van Kampen",
+    :area "polygon-surface-pi1"},
+   :id :lemma-apm-t97a01-torusrp2-fundamentalgroup,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2pairingspace-fundamentalgroup
+    :lemma-torusrp2pairingspace-basedvankampen],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccPolygonHomology",
+    :type "foundation specialized to aabbcc pairing"},
+   :lemma
+   {:name "aabbccPolygonHomology",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "foundation specialized to aabbcc pairing",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "401abd2a7"},
+   :id :lemma-aabbccpolygonhomology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PolygonHomology",
+    :type "foundation specialized to torus-crosscap pairing"},
+   :lemma
+   {:name "torusRP2PolygonHomology",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "foundation specialized to torus-crosscap pairing",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "401abd2a7"},
+   :id :lemma-torusrp2polygonhomology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "quotientHomeomorphOfEqvGenIff",
+    :type "coinduced literal quotient comparison"},
+   :lemma
+   {:name "quotientHomeomorphOfEqvGenIff",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "coinduced literal quotient comparison",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5969dfc4a"},
+   :id :lemma-quotienthomeomorphofeqvgeniff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_X_homeomorph_pairingSpace",
+    :type "aabbcc quotient homeomorphism"},
+   :lemma
+   {:name "apm_t97a01_X_homeomorph_pairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "aabbcc quotient homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "53223ee93"},
+   :id :lemma-apm-t97a01-x-homeomorph-pairingspace,
+   :kind :lemma,
+   :depends-on [:lemma-quotienthomeomorphofeqvgeniff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_TorusRP2_homeomorph_pairingSpace",
+    :type "torus-crosscap quotient homeomorphism"},
+   :lemma
+   {:name "apm_t97a01_TorusRP2_homeomorph_pairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "torus-crosscap quotient homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "53223ee93"},
+   :id :lemma-apm-t97a01-torusrp2-homeomorph-pairingspace,
+   :kind :lemma,
+   :depends-on [:lemma-quotienthomeomorphofeqvgeniff],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccOrbitCoordinates", :type "orbit functions ≃ₗ Z3"},
+   :lemma
+   {:name "aabbccOrbitCoordinates",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "orbit functions ≃ₗ Z3",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4ce974c33"},
+   :id :lemma-aabbccorbitcoordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitCoordinates", :type "orbit functions ≃ₗ Z3"},
+   :lemma
+   {:name "torusRP2OrbitCoordinates",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "orbit functions ≃ₗ Z3",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4ce974c33"},
+   :id :lemma-torusrp2orbitcoordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccOrbitCoordinates_attachingDegree",
+    :type "vector=(-2,-2,-2)"},
+   :lemma
+   {:name "aabbccOrbitCoordinates_attachingDegree",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "vector=(-2,-2,-2)",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "1f944e1c3"},
+   :id :lemma-aabbccorbitcoordinates-attachingdegree,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitCoordinates_attachingDegree",
+    :type "vector=(0,0,-2)"},
+   :lemma
+   {:name "torusRP2OrbitCoordinates_attachingDegree",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "vector=(0,0,-2)",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "1f944e1c3"},
+   :id :lemma-torusrp2orbitcoordinates-attachingdegree,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2orbitcoordinates],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccOrbitCoordinates_comp_attachingBoundary",
+    :type "boundary conjugation"},
+   :lemma
+   {:name "aabbccOrbitCoordinates_comp_attachingBoundary",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "boundary conjugation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "9bc6a459c"},
+   :id :lemma-aabbccorbitcoordinates-comp-attachingboundary,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates-attachingdegree],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitCoordinates_comp_attachingBoundary",
+    :type "boundary conjugation"},
+   :lemma
+   {:name "torusRP2OrbitCoordinates_comp_attachingBoundary",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "boundary conjugation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "9bc6a459c"},
+   :id :lemma-torusrp2orbitcoordinates-comp-attachingboundary,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2orbitcoordinates-attachingdegree],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccAttachingBoundary_injective", :type "injective"},
+   :lemma
+   {:name "aabbccAttachingBoundary_injective",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "injective",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
+   :id :lemma-aabbccattachingboundary-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2AttachingBoundary_injective", :type "injective"},
+   :lemma
+   {:name "torusRP2AttachingBoundary_injective",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "injective",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
+   :id :lemma-torusrp2attachingboundary-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccBoundaryKernel_eq_bot", :type "kernel=bottom"},
+   :lemma
+   {:name "aabbccBoundaryKernel_eq_bot",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel=bottom",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
+   :id :lemma-aabbccboundarykernel-eq-bot,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccattachingboundary-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2BoundaryKernel_eq_bot", :type "kernel=bottom"},
+   :lemma
+   {:name "torusRP2BoundaryKernel_eq_bot",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel=bottom",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
+   :id :lemma-torusrp2boundarykernel-eq-bot,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2attachingboundary-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccOrbitCoordinates_map_boundaryRange",
+    :type "range transport"},
+   :lemma
+   {:name "aabbccOrbitCoordinates_map_boundaryRange",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "range transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4cacd825f"},
+   :id :lemma-aabbccorbitcoordinates-map-boundaryrange,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates-comp-attachingboundary],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitCoordinates_map_boundaryRange",
+    :type "range transport"},
+   :lemma
+   {:name "torusRP2OrbitCoordinates_map_boundaryRange",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "range transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4cacd825f"},
+   :id :lemma-torusrp2orbitcoordinates-map-boundaryrange,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2orbitcoordinates-comp-attachingboundary],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccBoundaryCokernelSmithEquiv", :type "cokernel=Smith"},
+   :lemma
+   {:name "aabbccBoundaryCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cokernel=Smith",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
+   :id :lemma-aabbccboundarycokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates-map-boundaryrange],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2BoundaryCokernelSmithEquiv",
+    :type "cokernel=Smith"},
+   :lemma
+   {:name "torusRP2BoundaryCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cokernel=Smith",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
+   :id :lemma-torusrp2boundarycokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2orbitcoordinates-map-boundaryrange],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_polygon_normalization",
+    :type "literal polygon quotient homeomorphic to N6"},
+   :lemma
+   {:name "apm_t94J09_polygon_normalization",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "literal polygon quotient homeomorphic to N6",
+    :area "polygon-cut-and-paste"},
+   :id :lemma-apm-t94j09-polygon-normalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t94J09_polygon_homology",
+    :type "literal quotient integral homology"},
+   :lemma
+   {:name "apm_t94J09_polygon_homology",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "literal quotient integral homology",
+    :area "polygon-surface-homology"},
+   :id :lemma-apm-t94j09-polygon-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonquotient-homology
+    :lemma-n6polygonhomology
+    :lemma-n6boundarykernel-eq-bot],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_X_homologyIsoPairingSpace",
+    :type "literal X homology transport"},
+   :lemma
+   {:name "apm_t97a01_X_homologyIsoPairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal X homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "36c33f454"},
+   :id :lemma-apm-t97a01-x-homologyisopairingspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_TorusRP2_homologyIsoPairingSpace",
+    :type "literal torus-crosscap homology transport"},
+   :lemma
+   {:name "apm_t97a01_TorusRP2_homologyIsoPairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "literal torus-crosscap homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "36c33f454"},
+   :id :lemma-apm-t97a01-torusrp2-homologyisopairingspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace",
+    :type "frozen pi1 transport"},
+   :lemma
+   {:name "apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "frozen pi1 transport",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8c2c65144"},
+   :id :lemma-apm-t97a01-torusrp2-fundamentalgroupequivpairingspace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PairingSpace_fundamentalGroup",
+    :type "pairing-space centre pi1 is relator presentation"},
+   :lemma
+   {:name "torusRP2PairingSpace_fundamentalGroup",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "pairing-space centre pi1 is relator presentation",
+    :area "polygon-surface-pi1"},
+   :id :lemma-torusrp2pairingspace-fundamentalgroup,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2pairingspace-basedvankampen],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2SkeletonFinFreeGroupMap_surjective",
+    :type "Fin3 free group onto skeleton pi1"},
+   :lemma
+   {:name "torusRP2SkeletonFinFreeGroupMap_surjective",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "Fin3 free group onto skeleton pi1",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "594a2323e"},
+   :id :lemma-torusrp2skeletonfinfreegroupmap-surjective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2AttachingWord", :type "boundary word formula"},
+   :lemma
+   {:name "torusRP2AttachingWord",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "boundary word formula",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "dbbc6a148"},
+   :id :lemma-torusrp2attachingword,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2skeletonfinfreegroupmap-surjective
+    :lemma-torusrp2generatorsignequiv
+    :lemma-torusrp2polygonboundarylegword-coordinates
+    :lemma-torusrp2geometricboundary-eq-signededgeproduct
+    :lemma-torusrp2signededgeproduct-explicit
+    :lemma-torusrp2positiveboundary-normalclosure
+    :lemma-torusrp2negativeboundary-normalclosure
+    :lemma-torusrp2skeletonfinfreegroupmap-of],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PairingSpace_basedVanKampen",
+    :type "kernel normal closure"},
+   :lemma
+   {:name "torusRP2PairingSpace_basedVanKampen",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel normal closure",
+    :area "polygon-surface-pi1"},
+   :id :lemma-torusrp2pairingspace-basedvankampen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2attachingword
+    :lemma-torusrp2diskboundarypath-map-quotient-eq-one
+    :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map
+    :lemma-torusrp2relator-normalclosure-le-kernel
+    :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2GeneratorSignEquiv", :type "invert c generator"},
+   :lemma
+   {:name "torusRP2GeneratorSignEquiv",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "invert c generator",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "3e6fbc0b2"},
+   :id :lemma-torusrp2generatorsignequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PolygonBoundaryLegWord_coordinates",
+    :type "six signed edges"},
+   :lemma
+   {:name "torusRP2PolygonBoundaryLegWord_coordinates",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "six signed edges",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "3e6fbc0b2"},
+   :id :lemma-torusrp2polygonboundarylegword-coordinates,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2GeometricBoundary_eq_signedEdgeProduct",
+    :type "boundary class equals six-edge product"},
+   :lemma
+   {:name "torusRP2GeometricBoundary_eq_signedEdgeProduct",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "boundary class equals six-edge product",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8deb5ceae"},
+   :id :lemma-torusrp2geometricboundary-eq-signededgeproduct,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2SignedEdgeProduct_explicit",
+    :type "normalized six-edge product"},
+   :lemma
+   {:name "torusRP2SignedEdgeProduct_explicit",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "normalized six-edge product",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d643012dc"},
+   :id :lemma-torusrp2signededgeproduct-explicit,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PositiveBoundary_normalClosure",
+    :type "+ relator comparison"},
+   :lemma
+   {:name "torusRP2PositiveBoundary_normalClosure",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "+ relator comparison",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "e28e5f0f0"},
+   :id :lemma-torusrp2positiveboundary-normalclosure,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2NegativeBoundary_normalClosure",
+    :type "- relator comparison"},
+   :lemma
+   {:name "torusRP2NegativeBoundary_normalClosure",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "- relator comparison",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "e28e5f0f0"},
+   :id :lemma-torusrp2negativeboundary-normalclosure,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2SkeletonFinFreeGroupMap_of",
+    :type "generator transport"},
+   :lemma
+   {:name "torusRP2SkeletonFinFreeGroupMap_of",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "generator transport",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "31c603c81"},
+   :id :lemma-torusrp2skeletonfinfreegroupmap-of,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen",
+    :type "kernel quotient and centre transport"},
+   :lemma
+   {:name
+    "torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel quotient and centre transport",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
+   :id
+   :lemma-torusrp2pairingspace-center-fundamentalgroup-of-basedvankampen,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2attachingword],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "n6PolygonHomology",
+    :type "standard N6 foundation specialization"},
+   :lemma
+   {:name "n6PolygonHomology",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "standard N6 foundation specialization",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "56607caa5"},
+   :id :lemma-n6polygonhomology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "n6BoundaryKernel_eq_bot",
+    :type "standard N6 H2 kernel vanishes"},
+   :lemma
+   {:name "n6BoundaryKernel_eq_bot",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "standard N6 H2 kernel vanishes",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "56607caa5"},
+   :id :lemma-n6boundarykernel-eq-bot,
+   :kind :lemma,
+   :depends-on [:lemma-n6polygonhomology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2DiskBoundaryPath_map_quotient_eq_one",
+    :type "disk boundary dies in quotient pi1"},
+   :lemma
+   {:name "torusRP2DiskBoundaryPath_map_quotient_eq_one",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "disk boundary dies in quotient pi1",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8ea6fc5b6"},
+   :id :lemma-torusrp2diskboundarypath-map-quotient-eq-one,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2DiskBoundaryBase_eq_skeletonBase",
+    :type "boundary base alignment"},
+   :lemma
+   {:name "torusRP2DiskBoundaryBase_eq_skeletonBase",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "boundary base alignment",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "9cf7f3444"},
+   :id :lemma-torusrp2diskboundarybase-eq-skeletonbase,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
+    :type "typed boundary-class transport"},
+   :lemma
+   {:name "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "typed boundary-class transport",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d97eb2896"},
+   :id :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2diskboundarybase-eq-skeletonbase
+    :lemma-torusrp2diskboundarypath-map-quotient-eq-one],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2Relator_normalClosure_le_kernel",
+    :type "forward kernel inclusion"},
+   :lemma
+   {:name "torusRP2Relator_normalClosure_le_kernel",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "forward kernel inclusion",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "d97eb2896"},
+   :id :lemma-torusrp2relator-normalclosure-le-kernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2skeletonboundary-map-eq-diskboundary-map],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PolygonPseudopushout_arrow_eq_reconstructed",
+    :type "radial reconstruction"},
+   :lemma
+   {:name "torusRP2PolygonPseudopushout_arrow_eq_reconstructed",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "radial reconstruction",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "06eff46c1"},
+   :id :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}]}
