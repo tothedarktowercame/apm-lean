@@ -123,7 +123,17 @@ lemma T96A06_polynomialDescent_trace_three
 lemma T96A06_identity_trace_three :
     LinearMap.trace ℚ (Homology T96A06.RP3 3)
       (induced (ContinuousMap.id T96A06.RP3) 3).hom = 1 := by
-  sorry
+  rcases RP3Homology.rp3_rationalHomology with ⟨_, _, h3⟩
+  let e := Classical.choice h3
+  letI : FiniteDimensional ℚ (Homology T96A06.RP3 3) :=
+    e.symm.toLinearEquiv.finiteDimensional
+  have hfinrank : Module.finrank ℚ (Homology T96A06.RP3 3) = 1 := by
+    rw [LinearEquiv.finrank_eq e.toLinearEquiv]
+    simp
+  have hinduced : (induced (ContinuousMap.id T96A06.RP3) 3).hom = LinearMap.id := by
+    simp [induced]
+  rw [hinduced, LinearMap.trace_id, hfinrank]
+  norm_num
 -- END SEAT AREA
 
 open CategoryTheory CategoryTheory.MonoidalCategory
