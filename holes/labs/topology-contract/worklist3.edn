@@ -37451,35 +37451,36 @@
   {:consumer :t97J07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Build the CP1 Mayer-Vietoris step; then CP2 filtration and Main.",
+    "Identify MV maps in endpoint coordinates; compute CP1 homology; then CP2 filtration and Main.",
     :outcome :stop,
-    :warnings ["Main: one placeholder."],
+    :warnings ["Main retains its one assigned placeholder."],
     :missing-theorems
-    [{:name "t97J07_cp1_puncturedOverlap_homology",
-      :type "literal overlap rational H0 and H1 are each Q",
-      :status :proved,
-      :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_overlapHomologyIsoCircle"],
-      :area "rational-homology-cpn"}
-     {:name "t97J07_cp1_mayerVietoris_homology",
+    [{:name "t97J07_cp1_mayerVietoris_exact_pieces",
       :type
-      "two affine patches and overlap endpoints compute rational CP1 homology",
-      :status :not-started,
+      "literal two-affine-cover production MV exactness at patch terms in every degree",
+      :status :proved,
       :consumers [:t97J07],
       :depends-on
       ["t97J07_cp1_puncturedOverlap_homology"
        "t97J07_cp1_affinePatch_higherHomology_isZero"],
+      :area "rational-homology-cpn"}
+     {:name "t97J07_cp1_mayerVietoris_boundary_coordinates",
+      :type
+      "identify the overlap H1 connecting map with the CP1 H2 generator",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on ["t97J07_cp1_mayerVietoris_exact_pieces"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed rational H0 and H1 isomorphisms for the literal CP1 overlap.",
+    "Committed production Mayer-Vietoris exactness for the literal CP1 two-chart cover.",
     :commands
     [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
@@ -37487,19 +37488,12 @@
      {:cmd "sha256sum ConstructionTargets/t97J07Closure.blueprint.md",
       :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792067228225-14046-4229b7ba",
-     :commands
-     ["git show --check --stat b84d78ab6"
-      "git diff --name-only b84d78ab6^ b84d78ab6"
-      "git-show fixture | sha256sum"
-      "lake env lean problems/t97J07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit b84d78ab6 changes only scoped Main.lean and adds the compiled, sorry-free CP1-overlap homeomorphism milestone; fixture hash matches 3fa01c79...76dbe7, registry 166/166, and the new declaration uses standard axioms only. Remaining final theorem is listed unfinished work."},
-    :commit "797b4d11a",
+    :diagnostic-history
+    [{:cmd "initial Main compiles",
+      :exit 1,
+      :note
+      "Corrected ShortComplex proof packaging and qualified names."}],
+    :commit "1b652fd87",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
@@ -37507,7 +37501,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -42958,6 +42952,45 @@
    :depends-on
    [:lemma-t96a06-sphere3-homologymap-eq-topdegreecoordinate-smul
     :lemma-polynomialspherelift-four-positive-regularfiber],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_mayerVietoris_exact_pieces",
+    :type
+    "literal two-affine-cover production MV exactness at patch terms in every degree"},
+   :lemma
+   {:name "t97J07_cp1_mayerVietoris_exact_pieces",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type
+    "literal two-affine-cover production MV exactness at patch terms in every degree",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07},
+   :id :lemma-t97j07-cp1-mayervietoris-exact-pieces,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-cp1-puncturedoverlap-homology
+    :lemma-t97j07-cp1-affinepatch-higherhomology-iszero],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_mayerVietoris_boundary_coordinates",
+    :type
+    "identify the overlap H1 connecting map with the CP1 H2 generator"},
+   :lemma
+   {:name "t97J07_cp1_mayerVietoris_boundary_coordinates",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type
+    "identify the overlap H1 connecting map with the CP1 H2 generator",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-cp1-mayervietoris-boundary-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-t97j07-cp1-mayervietoris-exact-pieces],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
