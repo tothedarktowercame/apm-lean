@@ -11022,7 +11022,41 @@ theorem cut_retransfer_consistency_A_arc_aux_v_next {Label : Type*} [DecidableEq
     (hτ : τ.1 = 1) (hs : s₀.1 = 1) (hk : u.length + 1 + v.length + u.length + 1 - e₀ = (e + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+  rw [hP, D.oldA_arc e₀ s₀ he₀ he₀q]
+  have htau : τ = ⟨1, by simp⟩ := Subtype.ext hτ
+  have hs0 : s₀ = ⟨1, by simp⟩ := Subtype.ext hs
+  rw [htau, hs0, edgePoint_one_eq_cutPoint]
+  have hklt : u.length + 1 + v.length + u.length + 1 - e₀ <
+      (u ++ [x] ++ v ++ [x] ++ t).length := by
+    simp only [List.length_append, List.length_singleton]
+    omega
+  have he1 : e + 1 < (u ++ [x] ++ v ++ [x] ++ t).length := by
+    have hele : e + 1 ≤ (u ++ [x] ++ v ++ [x] ++ t).length := by omega
+    by_contra hn
+    have heqL : e + 1 = (u ++ [x] ++ v ++ [x] ++ t).length := by omega
+    rw [heqL, Nat.mod_self] at hk
+    omega
+  have hk' : u.length + 1 + v.length + u.length + 1 - e₀ = e + 1 := by
+    rw [Nat.mod_eq_of_lt he1] at hk
+    exact hk
+  unfold cutRetransfer
+  by_cases hep : e = u.length + 1
+  · rw [if_pos (Or.inr hep)]
+    have hev : e₀ + 1 = u.length + 1 + v.length := by omega
+    rw [hev]
+    simp [cutChordB]
+  · rw [if_neg (by omega)]
+    have hei : u.length + 1 < e ∧ e ≤ u.length + 1 + v.length := by
+      constructor <;> omega
+    rw [if_pos hei]
+    have hind : u.length + 1 + v.length + u.length + 1 - e = e₀ + 1 := by
+      omega
+    rw [hind]
+    have hr : reverseParameter (⟨1, by simp⟩ : Icc (0 : ℝ) 1) = ⟨0, by simp⟩ := by
+      apply Subtype.ext
+      simp [reverseParameter]
+    rw [hr, edgePoint_zero_eq_cutPoint]
 
 /-- `(e, τ)` is the start (`τ = 0`) of the side after the reflected side `k`, which ends there (`reverse s₀ = 1`, i.e. `s₀ = 0`). -/
 theorem cut_retransfer_consistency_A_arc_aux_v_prev {Label : Type*} [DecidableEq Label]
