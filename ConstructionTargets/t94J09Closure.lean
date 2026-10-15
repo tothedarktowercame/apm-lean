@@ -419,6 +419,19 @@ noncomputable def frozenFaceCokernelSmithEquiv :
       n6SmithCoordinate.quotKerEquivOfSurjective
         n6SmithCoordinate_surjective)
 
+/-- The final algebraic step of the Mayer--Vietoris calculation: any
+surjective degree-one map whose kernel is the literal frozen face boundary
+has the required Smith-form target. -/
+noncomputable def frozenH1SmithEquivOfSurjectiveKernel
+    {D : Type*} [AddCommGroup D] [Module ℤ D]
+    (g : (Fin 6 → ℤ) →ₗ[ℤ] D) (hg : Function.Surjective g)
+    (hker : LinearMap.ker g =
+      LinearMap.range frozenFaceBoundaryCoordinates) :
+    D ≃ₗ[ℤ] N6Smith :=
+  (g.quotKerEquivOfSurjective hg).symm ≪≫ₗ
+    Submodule.quotEquivOfEq _ _ hker ≪≫ₗ
+      frozenFaceCokernelSmithEquiv
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -453,5 +466,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
+#print axioms frozenH1SmithEquivOfSurjectiveKernel
 
 end ConstructionTargets.t94J09Closure
