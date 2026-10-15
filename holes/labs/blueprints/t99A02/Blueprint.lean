@@ -383,8 +383,135 @@ lemma (`Continuous.if_le` / `continuous_if_le` on `0 ≤ x₂`) for `diskOf`,
 the two branches `planar`, `-planar` being continuous and agreeing after
 `surfaceQuotient` on the equator `x₂ = 0` (there `‖planar x‖ = 1` and
 `SurfaceRel false 1 z (-z)`); then `continuous_surfaceQuotient`. -/
+def rp2Proj_factor_aux_continuous_edgePointCircle
+    (n e : ℕ) (t : Set.Icc (0 : ℝ) 1) : Circle :=
+  ⟨edgePoint n e t, by
+    rw [show ((edgePoint n e t : Disk) : ℂ) =
+      Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + t.1) / n)) by rfl]
+    simpa [Submonoid.unitSphere, Complex.norm_exp]⟩
+
+lemma rp2Proj_factor_aux_continuous_edgePointCircle_eq (n e : ℕ)
+    (t : Set.Icc (0 : ℝ) 1) :
+    rp2Proj_factor_aux_continuous_edgePointCircle n e t =
+      AddCircle.toCircle (((e : ℝ) + t.1 : AddCircle (n : ℝ))) := by
+  apply Subtype.ext
+  change Complex.exp _ = Complex.exp _
+  congr 1
+  push_cast
+  field_simp
+
+lemma rp2Proj_factor_aux_continuous_boundary (x : Disk)
+    (hx : ‖(x : ℂ)‖ = 1) :
+    ∃ (i : Fin 2) (t : Set.Icc (0 : ℝ) 1), edgePoint 2 i t = x := by
+  letI : Fact (0 < (2 : ℝ)) := ⟨by norm_num⟩
+  let z : Circle := ⟨x.1, by simpa [Circle, Submonoid.unitSphere] using hx⟩
+  let a : AddCircle (2 : ℝ) :=
+    (AddCircle.homeomorphCircle (T := (2 : ℝ)) (by norm_num)).symm z
+  let s := AddCircle.equivIco (2 : ℝ) 0 a
+  have hs0 : 0 ≤ s.1 := s.2.1
+  have hsn : s.1 < 2 := by simpa using s.2.2
+  let e := ⌊s.1⌋₊
+  have hen : e < 2 := (Nat.floor_lt hs0).2 hsn
+  let t : Set.Icc (0 : ℝ) 1 :=
+    ⟨s.1 - e, by
+      constructor
+      · exact sub_nonneg.mpr (Nat.floor_le hs0)
+      · linarith [Nat.lt_floor_add_one s.1]⟩
+  have hsa : (s.1 : AddCircle (2 : ℝ)) = a := by
+    apply (AddCircle.equivIco (2 : ℝ) 0).injective
+    rw [AddCircle.equivIco_coe_eq]
+  have haz : AddCircle.toCircle a = z := by
+    rw [← AddCircle.homeomorphCircle_apply]
+    exact Homeomorph.apply_symm_apply _ z
+  refine ⟨⟨e, hen⟩, t, ?_⟩
+  apply Subtype.ext
+  have hcircle : rp2Proj_factor_aux_continuous_edgePointCircle 2 e t = z := by
+    rw [rp2Proj_factor_aux_continuous_edgePointCircle_eq]
+    have het : (e : ℝ) + t.1 = s.1 := by dsimp [t]; ring
+    have heq : (((e : ℝ) + t.1 : ℝ) : AddCircle (2 : ℝ)) =
+        (s.1 : AddCircle (2 : ℝ)) := congrArg (fun r : ℝ => (r : AddCircle (2 : ℝ))) het
+    have heq' : ((e : ℝ) : AddCircle (2 : ℝ)) +
+        (t.1 : AddCircle (2 : ℝ)) = (s.1 : AddCircle (2 : ℝ)) := by simpa using heq
+    exact (congrArg AddCircle.toCircle heq').trans (by rw [hsa]; exact haz)
+  exact congrArg (fun w : Circle => (w : ℂ)) hcircle
+
+lemma rp2Proj_factor_aux_continuous_edge_neg (t : Set.Icc (0 : ℝ) 1) :
+    ((edgePoint 2 1 t : Disk) : ℂ) =
+      -((edgePoint 2 0 t : Disk) : ℂ) := by
+  simp only [edgePoint, Subtype.coe_mk]
+  norm_num
+  change Complex.exp (Complex.I * (2 * Real.pi * ((1 : ℂ) + t.1) / 2)) =
+    -Complex.exp (Complex.I * (2 * Real.pi * t.1 / 2))
+  calc
+    _ = Complex.exp (Real.pi * Complex.I) *
+        Complex.exp (Complex.I * (Real.pi * t.1)) := by rw [← Complex.exp_add]; congr 1 <;> ring
+    _ = _ := by rw [Complex.exp_pi_mul_I]; ring
+
+lemma rp2Proj_factor_aux_continuous_antipodal_boundary {x y : Disk}
+    (hx : ‖(x : ℂ)‖ = 1) (hy : (y : ℂ) = -(x : ℂ)) :
+    Relation.EqvGen (SurfaceRel false 1) x y := by
+  obtain ⟨i, t, hi⟩ := rp2Proj_factor_aux_continuous_boundary x hx
+  fin_cases i
+  · have hy' : y = edgePoint 2 1 t := by
+      apply Subtype.ext
+      rw [hy, ← hi]
+      exact (rp2Proj_factor_aux_continuous_edge_neg t).symm
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, Bool.false_eq_true, if_false]
+    exact ⟨0, by omega, t, hi.symm, hy'⟩
+  · have hy' : y = edgePoint 2 0 t := by
+      apply Subtype.ext
+      rw [hy, ← hi]
+      rw [rp2Proj_factor_aux_continuous_edge_neg, neg_neg]
+    apply Relation.EqvGen.symm _ _
+    apply Relation.EqvGen.rel _ _
+    simp only [SurfaceRel, Bool.false_eq_true, if_false]
+    exact ⟨0, by omega, t, hy', hi.symm⟩
+
 lemma rp2Proj_factor_aux_continuous : Continuous rp2Proj := by
-  sorry
+  let f : S2 → RealProjectivePlane := fun x =>
+    if 0 ≤ (x : E3) 2 then
+      surfaceQuotient false 1 ⟨planar x, by
+        simpa [Metric.mem_closedBall, dist_zero_right] using norm_planar_le x⟩
+    else surfaceQuotient false 1 ⟨-planar x, by
+      simpa [Metric.mem_closedBall, dist_zero_right] using norm_planar_le x⟩
+  have hrf : rp2Proj = f := by
+    funext x
+    simp only [rp2Proj, diskOf, f]
+    split_ifs <;> rfl
+  rw [hrf]
+  unfold f
+  have hp : Continuous planar := by
+    have h0 : Continuous (fun x : S2 => ((x : E3) 0 : ℂ)) :=
+      Complex.continuous_ofReal.comp (by fun_prop)
+    have h1 : Continuous (fun x : S2 => ((x : E3) 1 : ℂ)) :=
+      Complex.continuous_ofReal.comp (by fun_prop)
+    have h := h0.add ((continuous_const : Continuous (fun _ : S2 => Complex.I)).mul h1)
+    convert h using 1
+    funext x
+    apply Complex.ext <;> simp [planar]
+  apply Continuous.if_le
+  · exact (continuous_surfaceQuotient false 1).comp
+      (Continuous.subtype_mk hp _)
+  · exact (continuous_surfaceQuotient false 1).comp
+      (Continuous.subtype_mk hp.neg _)
+  · exact continuous_const
+  · fun_prop
+  · intro x hx
+    apply Quotient.sound
+    apply rp2Proj_factor_aux_continuous_antipodal_boundary
+    · have hs : ‖(x : E3)‖ ^ 2 = (x : E3) 0 ^ 2 + (x : E3) 1 ^ 2 + (x : E3) 2 ^ 2 := by
+        rw [EuclideanSpace.norm_eq, Real.sq_sqrt (by positivity), Fin.sum_univ_three]
+        simp [Real.norm_eq_abs, sq_abs]
+      have hp : ‖planar x‖ ^ 2 = (x : E3) 0 ^ 2 + (x : E3) 1 ^ 2 := by
+        rw [Complex.sq_norm, Complex.normSq_apply]; simp [planar]; ring
+      have hsphere : ‖(x : E3)‖ = 1 := by simp
+      have hnonneg := norm_nonneg (planar x)
+      rw [hsphere] at hs
+      rw [← hx] at hs
+      norm_num at hs
+      nlinarith
+    · rfl
 
 /-- Leaf (split from `rp2Proj_factor`).  `rp2Proj` is antipodally invariant:
 for `x₂ ≠ 0` exactly one of `x, -x` is in the upper hemisphere and `diskOf`
