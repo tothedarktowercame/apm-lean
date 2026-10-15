@@ -512,6 +512,22 @@ theorem radialNormalizeAmbient_differentiableAt_regularImage :
   exact (((differentiableAt_id.norm ℝ hq).inv
     (norm_ne_zero_iff.mpr hq)).smul differentiableAt_id)
 
+/-- Every selected tangent direction is orthogonal to the radial direction
+at the raw image.  Hence the norm derivative contributes no radial correction
+on this basis. -/
+theorem polynomialMapAmbient_regularPoint_orthogonal_tangentBasis :
+    inner ℝ (polynomialMapAmbient polynomialSphereRegularPoint.1)
+      polynomialRegularTangentOne = 0 ∧
+    inner ℝ (polynomialMapAmbient polynomialSphereRegularPoint.1)
+      polynomialRegularTangentTwo = 0 ∧
+    inner ℝ (polynomialMapAmbient polynomialSphereRegularPoint.1)
+      polynomialRegularTangentThree = 0 := by
+  rw [polynomialMapAmbient_regularPoint]
+  simp [polynomialSphereRegularPoint, rp3RadialToSphere,
+    polynomialRegularTangentOne, polynomialRegularTangentTwo,
+    polynomialRegularTangentThree, PiLp.inner_apply, RCLike.inner_apply,
+    Fin.sum_univ_four]
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -1573,6 +1589,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialMapAmbient_regularPoint
 #print axioms norm_polynomialMapAmbient_regularPoint
 #print axioms radialNormalizeAmbient_differentiableAt_regularImage
+#print axioms polynomialMapAmbient_regularPoint_orthogonal_tangentBasis
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
