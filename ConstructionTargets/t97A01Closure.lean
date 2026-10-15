@@ -656,6 +656,30 @@ theorem torusRP2NegativeBoundary_normalClosure :
     (FreeGroup.of 2 * FreeGroup.of 2)
     (torusRP2NegativeBoundaryBasisHom torusRP2FrozenRelator)
 
+/-- The skeleton epimorphism sends each finite-coordinate generator to the
+corresponding normalized wedge loop, transported back across the skeleton
+homeomorphism. -/
+theorem torusRP2SkeletonFinFreeGroupMap_of (j : Fin 3) :
+    torusRP2SkeletonFinFreeGroupMap (FreeGroup.of j) =
+      torusRP2SkeletonFundamentalGroupEquivWedge.symm
+        (torusRP2WedgeGenerator j) := by
+  have hinv :
+      torusRP2OrbitFreeGroupEquiv.symm (FreeGroup.of j) =
+        FreeGroup.of (torusRP2OrbitEquiv.symm j) := by
+    rw [torusRP2OrbitFreeGroupEquiv.symm_apply_eq]
+    change FreeGroup.of j =
+      FreeGroup.map torusRP2OrbitEquiv
+        (FreeGroup.of (torusRP2OrbitEquiv.symm j))
+    rw [FreeGroup.map.of, torusRP2OrbitEquiv.apply_symm_apply]
+  rw [show torusRP2SkeletonFinFreeGroupMap (FreeGroup.of j) =
+      torusRP2SkeletonFreeGroupMap
+        (torusRP2OrbitFreeGroupEquiv.symm (FreeGroup.of j)) by rfl, hinv]
+  change torusRP2SkeletonFundamentalGroupEquivWedge.symm
+      ((FreeGroup.lift (finiteWedgeLegFundamentalClassAtBase torusRP2PairingData))
+        (FreeGroup.of (torusRP2OrbitEquiv.symm j))) = _
+  rw [FreeGroup.lift_apply_of]
+  rfl
+
 #print axioms quotientLinearEquivOfMapEq
 #print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
@@ -674,5 +698,6 @@ theorem torusRP2NegativeBoundary_normalClosure :
 #print axioms normalClosure_singleton_conj
 #print axioms torusRP2PositiveBoundary_normalClosure
 #print axioms torusRP2NegativeBoundary_normalClosure
+#print axioms torusRP2SkeletonFinFreeGroupMap_of
 
 end ConstructionTargets.t97A01Closure
