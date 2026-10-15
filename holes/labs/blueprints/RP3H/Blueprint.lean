@@ -11,6 +11,8 @@ import ConstructionTargets.CoefficientIntersectionRangeComparison
 import ConstructionTargets.CoefficientPieceRangeBiproductComparison
 import ConstructionTargets.CoefficientHomologyBiprodIso
 import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import ConstructionTargets.CoefficientModelLocal
+import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 
 /-! # Rational homology of ℝP³ (design claude-14, 2026-10-15)
 
