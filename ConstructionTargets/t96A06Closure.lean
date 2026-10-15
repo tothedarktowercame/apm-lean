@@ -430,6 +430,55 @@ theorem rp3RadialToSphere_eq_imp_posScalar
   field_simp [hnv.ne', hnw.ne'] at hi ⊢
   nlinarith
 
+set_option maxHeartbeats 800000 in
+/-- A positive scaling between quadratic images of unit four-vectors is
+necessarily trivial. -/
+theorem polynomialMap_sphere_posScalar_eq_one
+    {p q : Sphere 3} {c : ℝ} (hc : 0 < c)
+    (h : polynomialMap (sphereVector 3 p).1 =
+      c • polynomialMap (sphereVector 3 q).1) : c = 1 := by
+  have hs (x : Sphere 3) : ∑ i : Fin 4, x.1 i ^ 2 = 1 := by
+    have hn : ‖x.1‖ = 1 := by
+      simpa only [Metric.mem_sphere, dist_zero_right] using x.property
+    have hh := PiLp.norm_sq_eq_of_L2 (fun _ : Fin 4 => ℝ) x.1
+    rw [hn] at hh
+    simpa only [Real.norm_eq_abs, sq_abs, one_pow] using hh.symm
+  have hp := hs p
+  have hq := hs q
+  simp [Fin.sum_univ_succ] at hp hq
+  have h0 := congrFun h (0 : Fin 4)
+  have h1 := congrFun h (1 : Fin 4)
+  have h2 := congrFun h (2 : Fin 4)
+  have h3 := congrFun h (3 : Fin 4)
+  change p.1 2 ^ 2 - p.1 3 ^ 2 = c * (q.1 2 ^ 2 - q.1 3 ^ 2) at h2
+  change 2 * p.1 2 * p.1 3 = c * (2 * q.1 2 * q.1 3) at h3
+  simp only [polynomialMap, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three, Pi.smul_apply, smul_eq_mul,
+    sphereVector] at h0 h1 h2 h3
+  have h0sq := congrArg (fun x : ℝ => x ^ 2) h0
+  have h1sq := congrArg (fun x : ℝ => x ^ 2) h1
+  have h2sq := congrArg (fun x : ℝ => x ^ 2) h2
+  have h3sq := congrArg (fun x : ℝ => x ^ 2) h3
+  have hfirst : (p.1 0 ^ 2 + p.1 1 ^ 2) ^ 2 =
+      c ^ 2 * (q.1 0 ^ 2 + q.1 1 ^ 2) ^ 2 := by
+    nlinarith
+  have hsecond : (p.1 2 ^ 2 + p.1 3 ^ 2) ^ 2 =
+      c ^ 2 * (q.1 2 ^ 2 + q.1 3 ^ 2) ^ 2 := by
+    nlinarith
+  have hf : p.1 0 ^ 2 + p.1 1 ^ 2 = c * (q.1 0 ^ 2 + q.1 1 ^ 2) := by
+    apply (sq_eq_sq₀ (by positivity) (mul_nonneg hc.le (by positivity))).mp
+    calc
+      (p.1 0 ^ 2 + p.1 1 ^ 2) ^ 2 =
+          c ^ 2 * (q.1 0 ^ 2 + q.1 1 ^ 2) ^ 2 := hfirst
+      _ = (c * (q.1 0 ^ 2 + q.1 1 ^ 2)) ^ 2 := by ring
+  have hs' : p.1 2 ^ 2 + p.1 3 ^ 2 = c * (q.1 2 ^ 2 + q.1 3 ^ 2) := by
+    apply (sq_eq_sq₀ (by positivity) (mul_nonneg hc.le (by positivity))).mp
+    calc
+      (p.1 2 ^ 2 + p.1 3 ^ 2) ^ 2 =
+          c ^ 2 * (q.1 2 ^ 2 + q.1 3 ^ 2) ^ 2 := hsecond
+      _ = (c * (q.1 2 ^ 2 + q.1 3 ^ 2)) ^ 2 := by ring
+  nlinarith
+
 /-- The normalized sphere lift descends through the exact double cover to
 the chosen projective polynomial descent. -/
 theorem polynomialSphereLift_projection (p : Sphere 3) :
@@ -1220,6 +1269,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_flipSecondPairSphere
 #print axioms pairSignOrbit_subset_polynomialSphereLift_fiber
 #print axioms rp3RadialToSphere_eq_imp_posScalar
+#print axioms polynomialMap_sphere_posScalar_eq_one
 #print axioms polynomialSphereLift_projection
 #print axioms polynomialSphereLift_homology_square
 #print axioms polynomialDescent_degree_four_of_sphere
