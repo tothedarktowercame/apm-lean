@@ -88329,33 +88329,45 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport kernels/ranges and Smith cokernels to finish B1; then B2.",
+    "Transport cokernels through coordinates and Smith isomorphisms for B1; then B2.",
     :outcome :stop,
-    :warnings ["Main has 1 prior placeholder; lint preserved"],
+    :warnings
+    ["Main has 1 prior placeholder; concurrent commits preserved"],
     :missing-theorems
-    [{:name "aabbccOrbitCoordinates_comp_attachingBoundary",
-      :type "boundary conjugation",
+    [{:name "aabbccAttachingBoundary_injective",
+      :type "injective",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["aabbccOrbitCoordinates_attachingDegree"],
+      :depends-on [],
       :area "polygon-surface-homology"}
-     {:name "torusRP2OrbitCoordinates_comp_attachingBoundary",
-      :type "boundary conjugation",
+     {:name "torusRP2AttachingBoundary_injective",
+      :type "injective",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2OrbitCoordinates_attachingDegree"],
+      :depends-on [],
+      :area "polygon-surface-homology"}
+     {:name "aabbccBoundaryKernel_eq_bot",
+      :type "kernel=bottom",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["aabbccAttachingBoundary_injective"],
+      :area "polygon-surface-homology"}
+     {:name "torusRP2BoundaryKernel_eq_bot",
+      :type "kernel=bottom",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["torusRP2AttachingBoundary_injective"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
       :type "homology adapter",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["aabbccOrbitCoordinates_comp_attachingBoundary"
-       "torusRP2OrbitCoordinates_comp_attachingBoundary"],
+      ["aabbccBoundaryKernel_eq_bot" "torusRP2BoundaryKernel_eq_bot"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "van Kampen",
@@ -88367,7 +88379,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked boundary conjugations.",
+    :reason "Banked injectivity and zero kernels.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88375,31 +88387,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 9bc6a459c", :exit 0}],
+     {:cmd "git show --check 5db954851", :exit 0}],
     :diagnostic-history
-    [{:cmd "conjugation draft",
+    [{:cmd "IsZero draft",
       :exit 1,
-      :correction "expanded scalar action"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792043710036-13413-d660e15c",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms; git show --check; fixture/hash placeholder scans"],
-     :finding
-     "Commit 9bc6a459c by topo-6 changes only t97A01Closure.lean and adds compiled progress after 1f944e1c3. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 9c2cfb20a18626830cb0a8aa2c1e55140becb6961e9eaedf1e0d8abb0e0b0e57 matches; registry 166/0; both conjugations use only propext, Classical.choice, Quot.sound. Linearity transports the established vectors to equalities coordinateMap o attachingBoundary = -SmithBoundary in the correct orientation. The minus sign is retained explicitly and preserves the kernels and ranges needed next. Kernel/range and Smith transports for B1, then B2, remain listed."},
-    :commit "9bc6a459c",
+      :correction "proved kernel=bottom"}],
+    :commit "5db954851",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "9c2cfb20a18626830cb0a8aa2c1e55140becb6961e9eaedf1e0d8abb0e0b0e57"},
+     "affbc02d35ebc40e857135f93c8ded8173ef7e988e717e2d11332f6b05640c7c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93463,7 +93464,9 @@
     :lemma-aabbccorbitcoordinates-attachingdegree
     :lemma-torusrp2orbitcoordinates-attachingdegree
     :lemma-aabbccorbitcoordinates-comp-attachingboundary
-    :lemma-torusrp2orbitcoordinates-comp-attachingboundary],
+    :lemma-torusrp2orbitcoordinates-comp-attachingboundary
+    :lemma-aabbccboundarykernel-eq-bot
+    :lemma-torusrp2boundarykernel-eq-bot],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93687,4 +93690,68 @@
    :id :lemma-torusrp2orbitcoordinates-comp-attachingboundary,
    :kind :lemma,
    :depends-on [:lemma-torusrp2orbitcoordinates-attachingdegree],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccAttachingBoundary_injective", :type "injective"},
+   :lemma
+   {:name "aabbccAttachingBoundary_injective",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "injective",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-aabbccattachingboundary-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2AttachingBoundary_injective", :type "injective"},
+   :lemma
+   {:name "torusRP2AttachingBoundary_injective",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "injective",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2attachingboundary-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccBoundaryKernel_eq_bot", :type "kernel=bottom"},
+   :lemma
+   {:name "aabbccBoundaryKernel_eq_bot",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel=bottom",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-aabbccboundarykernel-eq-bot,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccattachingboundary-injective],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2BoundaryKernel_eq_bot", :type "kernel=bottom"},
+   :lemma
+   {:name "torusRP2BoundaryKernel_eq_bot",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "kernel=bottom",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2boundarykernel-eq-bot,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2attachingboundary-injective],
    :other-consumers []}]}
