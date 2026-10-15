@@ -809,6 +809,106 @@ def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_lef
           QuotientGroup.mk' N B * QuotientGroup.mk' N A
         rw [h, map_mul] }
 
+def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlapConnector
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace (U ∩ V : Set X)] (x : (U ∩ V : Set X))
+    (Z : FundamentalGroupoid (U ∩ V : Set X)) :
+    FundamentalGroupoid.mk x ≅ Z :=
+  asIso (Path.Homotopic.Quotient.mk (PathConnectedSpace.somePath x Z.as))
+
+def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace U] [PathConnectedSpace (U ∩ V : Set X)]
+    (x : (U ∩ V : Set X)) (Z : FundamentalGroupoid U) :
+    FundamentalGroupoid.mk (apm_t92J05_twoOpen_overlapToLeft U V x) ≅ Z := by
+  classical
+  exact if h : Z.as.1 ∈ V then
+    (FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V)).mapIso
+      (apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlapConnector
+        U V x (FundamentalGroupoid.mk ⟨Z.as.1, Z.as.2, h⟩))
+  else
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_leftConnector
+      U V x Z
+
+def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedLeftFunctor
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace U] [PathConnectedSpace (U ∩ V : Set X)]
+    (x : (U ∩ V : Set X)) :
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    FundamentalGroupoid U ⥤
+      SingleObj (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+        Subgroup.normalClosure (overlapMap.range : Set
+          (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
+  dsimp only
+  let c := apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector U V x
+  let N := Subgroup.normalClosure
+    ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set
+      (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))
+  exact
+    { obj := fun _ => SingleObj.star _
+      map := fun {a b} p => QuotientGroup.mk' N ((c a).hom ≫ p ≫ (c b).inv)
+      map_id := by
+        intro a
+        change QuotientGroup.mk' N ((c a).hom ≫ 𝟙 a ≫ (c a).inv) = 1
+        rw [show (c a).hom ≫ 𝟙 a ≫ (c a).inv = 𝟙 _ by simp]
+        exact map_one _
+      map_comp := by
+        intro a b d p q
+        let A : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) :=
+          (c a).hom ≫ p ≫ (c b).inv
+        let B : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) :=
+          (c b).hom ≫ q ≫ (c d).inv
+        have h : (c a).hom ≫ (p ≫ q) ≫ (c d).inv = B * A := by
+          change (c a).hom ≫ (p ≫ q) ≫ (c d).inv =
+            ((c a).hom ≫ p ≫ (c b).inv) ≫ ((c b).hom ≫ q ≫ (c d).inv)
+          simp [Category.assoc]
+        change QuotientGroup.mk' N ((c a).hom ≫ (p ≫ q) ≫ (c d).inv) =
+          QuotientGroup.mk' N B * QuotientGroup.mk' N A
+        rw [h, map_mul] }
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlap_killed
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace U] [PathConnectedSpace (U ∩ V : Set X)]
+    (x : (U ∩ V : Set X))
+    {a b : FundamentalGroupoid (U ∩ V : Set X)} (p : a ⟶ b) :
+    (FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V) ⋙
+      apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedLeftFunctor
+        U V x).map p = 𝟙 _ := by
+  classical
+  let d := apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlapConnector U V x
+  let loop : FundamentalGroup (U ∩ V : Set X) x :=
+    (d a).hom ≫ p ≫ (d b).inv
+  change QuotientGroup.mk' _ _ = 1
+  apply (QuotientGroup.eq_one_iff _).2
+  apply Subgroup.subset_normalClosure
+  refine ⟨loop, ?_⟩
+  change FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x loop = _
+  rw [show
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+      U V x ((FundamentalGroupoid.map
+        (apm_t92J05_twoOpen_overlapToLeft U V)).obj a) =
+      (FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V)).mapIso (d a) by
+        unfold apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+        rw [dif_pos (show
+          ((FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V)).obj a).as.1 ∈ V
+          from a.as.2.2)]
+        rfl,
+    show
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+      U V x ((FundamentalGroupoid.map
+        (apm_t92J05_twoOpen_overlapToLeft U V)).obj b) =
+      (FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V)).mapIso (d b) by
+        unfold apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+        rw [dif_pos (show
+          ((FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V)).obj b).as.1 ∈ V
+          from b.as.2.2)]
+        rfl]
+  let F := FundamentalGroupoid.map (apm_t92J05_twoOpen_overlapToLeft U V)
+  change F.map loop = F.map (d a).hom ≫ F.map p ≫ F.map (d b).inv
+  dsimp [loop]
+  rw [F.map_comp, F.map_comp]
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
