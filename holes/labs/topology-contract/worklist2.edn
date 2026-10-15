@@ -88375,6 +88375,19 @@
     [{:cmd "Main before build completed",
       :exit 1,
       :correction "waited for build; reran successfully"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792065147298-13989-08fdb1cc",
+     :commands
+     ["git show/diff/check 0b1a5be91"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 0b1a5be91 adds compiled, sorry-free progress beyond 866b5689a. It proves cumulative run boundaries are strictly monotone because every run length is positive, and proves their endpoints are 0 and S.n+1. Only t97A01Closure.lean changed; fixture SHA e441b95cd80023e9877548ce42992cc8d66dd49cebfe3eb07bd323c95f87e4b0 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Strict-order orientation, Fin domain, and terminal boundary representation are correct. Unique run/offset decomposition, fold equality, van Kampen, and final assembly remain explicitly listed."},
     :commit "0b1a5be91e65f149b950a3ad1b53e11a5bbb1a6c",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88396,7 @@
      "e441b95cd80023e9877548ce42992cc8d66dd49cebfe3eb07bd323c95f87e4b0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88414,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flattened run-factor indices.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cumulative run-boundary order.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88534,7 +88547,10 @@
      :reason "Banked literal-endpoint global prefix fold."}
     {:job 5,
      :commit "866b5689adfa0f863971885e76273bf1a12d5106",
-     :reason "Banked flattened run-factor indices."}]}
+     :reason "Banked flattened run-factor indices."}
+    {:job 6,
+     :commit "0b1a5be91e65f149b950a3ad1b53e11a5bbb1a6c",
+     :reason "Banked cumulative run-boundary order."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -94981,7 +94997,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunPrefixLength_strictMono",
@@ -94991,7 +95007,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cumulative run boundaries strictly increase from 0 to n+1",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "0b1a5be91e65f149b950a3ad1b53e11a5bbb1a6c"},
    :id :lemma-torusrp2-subdivisionrunprefixlength-strictmono,
    :kind :lemma,
    :depends-on
