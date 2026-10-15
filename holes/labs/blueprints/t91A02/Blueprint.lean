@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.Surfaces
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.PolygonSurfaceHomology
+import ConstructionTargets.GenusTwoSurfacePiOne
 import ConstructionTargets.CoveringMonodromyCosets
 import ConstructionTargets.FiniteIndexFreeGroupSchreierRank
 
@@ -381,6 +382,24 @@ lemma t91A02_polygon_pi1_wedge_quotient (P : PairingData) (x : P.Space) :
       FundamentalGroup
           (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) ⧸
         Subgroup.normalClosure ({polygonBoundaryFundamentalClass P} : Set _)) := by
+  sorry
+
+/-- Leaf (generic, split from `t91A02_polygonBoundary_freeWord`, lemma-2 PARTIAL
+2026-10-15).  A homomorphism from π₁ of the finite wedge to `ℚ` vanishes on
+elements with zero Hurewicz image.  Route: `ℚ` is abelian, so `f` factors
+through the abelianization; for a path-connected space the Hurewicz map
+identifies the abelianization of π₁ with H₁ (Hurewicz utilities in
+`PolygonSurfaceHomology` / `GenusTwoSurfacePiOne`), so a class with zero
+Hurewicz image lies in the commutator subgroup, on which `f` vanishes. -/
+lemma t91A02_polygonBoundary_freeWord_aux_kernel (P : PairingData)
+    (f : Additive (FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P)) →+ ℚ)
+    (g : FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P))
+    (hg : moduleHurewicz (orbitWedgeBase P) g = 0) :
+    f (Additive.ofMul g) = 0 := by
   sorry
 
 /-- **Leaf T2 (generic).**  Free coordinates on the orbit wedge in which the
