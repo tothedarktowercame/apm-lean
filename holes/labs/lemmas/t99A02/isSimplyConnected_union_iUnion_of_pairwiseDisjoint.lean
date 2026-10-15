@@ -1024,7 +1024,27 @@ from `ConstructionTargets/SimplyConnectedOpenCover.lean`.  About 70 lines. -/
 lemma isSimplyConnected_union {U V : Set X} (hU : IsOpen U) (hV : IsOpen V)
     (hUs : IsSimplyConnected U) (hVs : IsSimplyConnected V)
     (hUV : IsPathConnected (U ∩ V)) : IsSimplyConnected (U ∪ V) := by
-  sorry
+  let A : Set ↥(U ∪ V) := Subtype.val ⁻¹' U
+  let B : Set ↥(U ∪ V) := Subtype.val ⁻¹' V
+  have hAopen : IsOpen A := hU.preimage continuous_subtype_val
+  have hBopen : IsOpen B := hV.preimage continuous_subtype_val
+  have hAs : IsSimplyConnected A := by
+    rw [← IsEmbedding.subtypeVal.isSimplyConnected_image,
+      Subtype.image_preimage_val, inter_eq_right.2 subset_union_left]
+    exact hUs
+  have hBs : IsSimplyConnected B := by
+    rw [← IsEmbedding.subtypeVal.isSimplyConnected_image,
+      Subtype.image_preimage_val, inter_eq_right.2 subset_union_right]
+    exact hVs
+  have hAB : IsPathConnected (A ∩ B) := by
+    have hpre : IsPathConnected (Subtype.val ⁻¹' (U ∩ V) : Set ↥(U ∪ V)) :=
+      hUV.preimage_coe (by intro x hx; exact Or.inl hx.1)
+    simpa [A, B, preimage_inter] using hpre
+  have hcover : A ∪ B = (Set.univ : Set ↥(U ∪ V)) := by
+    ext x
+    simp only [A, B, mem_union, mem_preimage, mem_univ, iff_true]
+    exact x.2
+  exact simplyConnectedSpace_of_union_eq_univ hAopen hBopen hcover hAs hBs hAB
 
 /-- **Leaf (generic, directed unions).**  A directed union of open simply
 connected sets is simply connected.
@@ -1037,7 +1057,34 @@ null-homotopy in `U k` stays in the union.  About 80 lines. -/
 lemma isSimplyConnected_iUnion_of_directed {ι : Type*} [Nonempty ι]
     (U : ι → Set X) (hdir : Directed (· ⊆ ·) U) (hU : ∀ i, IsOpen (U i))
     (hUs : ∀ i, IsSimplyConnected (U i)) : IsSimplyConnected (⋃ i, U i) := by
-  sorry
+  rw [isSimplyConnected_iff_exists_homotopy_refl_forall_mem]
+  constructor
+  · rw [isPathConnected_iff]
+    constructor
+    · let i : ι := Classical.choice ‹Nonempty ι›
+      obtain ⟨x, hx⟩ := (hUs i).nonempty
+      exact ⟨x, Set.mem_iUnion.2 ⟨i, hx⟩⟩
+    · intro x hx y hy
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.1 hx
+      obtain ⟨j, hyj⟩ := Set.mem_iUnion.1 hy
+      obtain ⟨k, hik, hjk⟩ := hdir i j
+      obtain ⟨p, hp⟩ := (hUs k).isPathConnected.joinedIn x (hik hxi) y (hjk hyj)
+      exact ⟨p, fun t => Set.mem_iUnion.2 ⟨k, hp t⟩⟩
+  · intro x p hp
+    have hrange : Set.range p ⊆ ⋃ i, U i := by
+      rintro _ ⟨t, rfl⟩
+      exact hp t
+    obtain ⟨s, hs⟩ := (isCompact_range p.continuous).elim_finite_subcover U hU hrange
+    obtain ⟨k, hk⟩ := hdir.finset_le s
+    have hpk : ∀ t, p t ∈ U k := by
+      intro t
+      have hpt : p t ∈ ⋃ i ∈ s, U i := hs ⟨t, rfl⟩
+      simp only [Set.mem_iUnion] at hpt
+      obtain ⟨i, hi, hpti⟩ := hpt
+      exact hk i hi hpti
+    obtain ⟨F, hF⟩ :=
+      (isSimplyConnected_iff_exists_homotopy_refl_forall_mem.mp (hUs k)).2 x p hpk
+    exact ⟨F, fun t => Set.mem_iUnion.2 ⟨k, hF t⟩⟩
 
 /-- **Leaf (generic, attaching a disjoint family).**  Attaching to `U` a
 pairwise disjoint family of open simply connected sets, each meeting `U` in a
