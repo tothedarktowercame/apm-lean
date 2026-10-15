@@ -5477,6 +5477,94 @@ theorem radialMVConnectingH1CoordinatesLinear_range (P : PairingData) :
     _ = LinearMap.ker (radialMVBoundaryLinear P) := rfl
     _ = BoundaryKernel P := radialMVBoundaryLinear_ker P
 
+/-- The coordinate form of the connecting map remains injective. -/
+theorem radialMVConnectingH1CoordinatesLinear_injective (P : PairingData) :
+    Function.Injective (radialMVConnectingH1CoordinatesLinear P) := by
+  letI := radialMVConnectingH1_mono P
+  change Function.Injective (radialMVH2KernelComplex P).f
+  rw [← AddCommGrpCat.mono_iff_injective]
+  change Mono
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        (openCover P).inner (openCover P).outer
+        (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1 ≫
+      (radialIntersectionH1GroupIsoInt P).hom)
+  infer_instance
+
+/-- B8 in degree two, first in the production additive-group model. -/
+noncomputable def radialH2BoundaryKernelLinearEquiv (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) ≃ₗ[ℤ]
+      BoundaryKernel P :=
+  (LinearEquiv.ofInjective (radialMVConnectingH1CoordinatesLinear P)
+      (radialMVConnectingH1CoordinatesLinear_injective P)).trans
+    (LinearEquiv.ofEq _ _ (radialMVConnectingH1CoordinatesLinear_range P))
+
+/-- B8 in degree two in the additive-group category. -/
+noncomputable def radialH2BoundaryKernelGroupIso (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) ≅
+      AddCommGrpCat.of (BoundaryKernel P) :=
+  (radialH2BoundaryKernelLinearEquiv P).toAddEquiv.toAddCommGrpIso
+
+/-- B8 in degree two in the canonical integral-module presentation. -/
+noncomputable def radialH2BoundaryKernelModuleIso (P : PairingData) :
+    H P 2 ≅ ModuleCat.of ℤ (BoundaryKernel P) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) 2 _
+    (radialH2BoundaryKernelGroupIso P)
+
+/-- Integral H₀ coordinates on the radial outer piece. -/
+noncomputable def radialOuterH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of (OuterPiece P)) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (outerHomotopyEquivWedge P) 0 ≪≫
+    finiteWedgeGroupH0IsoInt P
+
+/-- The polygon quotient has the expected connected degree-zero homology. -/
+noncomputable def radialSurfaceH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) ≅
+      AddCommGrpCat.of ℤ := by
+  exact @T00A01MayerVietorisAdapters.openCoverH0IsoOfCoordinates
+    (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel) _
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover
+    ⟨(radialIntersectionPositiveCircle P) 1⟩
+    ⟨(openCover P).center⟩
+    ⟨⟨((radialIntersectionPositiveCircle P) 1).1,
+      ((radialIntersectionPositiveCircle P) 1).2.2⟩⟩
+    (radialIntersectionH0GroupIsoInt P) (radialInnerH0GroupIsoInt P)
+    (radialOuterH0GroupIsoInt P)
+
+/-- B8 in degree zero in the canonical integral-module presentation. -/
+noncomputable def radialH0ModuleIsoInt (P : PairingData) :
+    H P 0 ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) 0 _
+    (radialSurfaceH0GroupIsoInt P)
+
+/-- B8 in degree one in the canonical integral-module presentation. -/
+noncomputable def radialH1BoundaryCokernelModuleIso (P : PairingData) :
+    H P 1 ≅ ModuleCat.of ℤ (BoundaryCokernel P) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) 1 _
+    (boundaryCokernelRadialH1Equiv P).symm.toAddEquiv.toAddCommGrpIso
+
+/-- B8: low-degree homology of the polygon quotient. -/
+theorem lowDegreeHomology (P : PairingData) :
+    Nonempty (H P 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (H P 1 ≅ ModuleCat.of ℤ (BoundaryCokernel P)) ∧
+      Nonempty (H P 2 ≅ ModuleCat.of ℤ (BoundaryKernel P)) :=
+  ⟨⟨radialH0ModuleIsoInt P⟩, ⟨⟨radialH1BoundaryCokernelModuleIso P⟩,
+    ⟨radialH2BoundaryKernelModuleIso P⟩⟩⟩
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
