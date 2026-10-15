@@ -37153,6 +37153,12 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
      {:cmd "git show --check a00d59b90", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792041308865-13326-53ebc872",
+     :finding
+     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
     :commit "a00d59b9023065621ec44a245cf817a5437090ca",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
@@ -37161,7 +37167,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37183,7 +37189,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 3,
+   :fail-count 4,
    :depends-on [],
    :program true,
    :other-consumers [],
