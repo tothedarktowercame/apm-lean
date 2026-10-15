@@ -994,7 +994,90 @@ lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = 
     Function.Surjective (FundamentalGroup.map (cellIncl γ) y) ∧
       (FundamentalGroup.map (cellIncl γ) y).ker =
         Subgroup.normalClosure {loopClassAt γ y h} := by
-  sorry
+  subst y
+  let x0 : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) := cellOverlapCircle γ 1
+  let u0 : cellOuter γ :=
+    apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ) x0
+  let v0 : cellOuter γ := cellInclOuter γ (γ 1)
+  let j : C(cellOuter γ, Cell γ) :=
+    apm_t92J05_twoOpen_leftInclusion (cellOuter γ)
+  let l0 := FundamentalGroup.map j u0
+  let r0 : FundamentalGroup (cellOuter γ) u0 :=
+    FundamentalGroup.map
+      ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)) 1
+      PolygonSurfaceHomology.circleIntegerLoopOneClass
+  letI : PathConnectedSpace (cellOuter γ) := hA6.1
+  letI : PathConnectedSpace (cellOuter γ ∩ cellInner γ : Set (Cell γ)) := hA6.2.1
+  letI : PathConnectedSpace (Cell γ) := hA6.2.2
+  letI : ContractibleSpace (cellInner γ) := hA2
+  obtain ⟨hs0, hk0⟩ :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel
+      (cellOuter γ) (cellInner γ) hA1.1 hA1.2.1 hA1.2.2 x0
+  have hk0' : MonoidHom.ker l0 =
+      Subgroup.normalClosure ({r0} : Set (FundamentalGroup (cellOuter γ) u0)) := by
+    simpa [l0, u0, x0, r0] using hk0.trans hgen
+  obtain ⟨p, hp⟩ := hconj
+    ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+      (cellOverlapCircle γ)) ((cellInclOuter γ).comp γ) hA5 1
+  let ep : FundamentalGroup (cellOuter γ) v0 ≃* FundamentalGroup (cellOuter γ) u0 :=
+    FundamentalGroup.fundamentalGroupMulEquivOfPath p
+  let a : FundamentalGroup Y (γ 1) := FundamentalGroup.map γ 1
+    PolygonSurfaceHomology.circleIntegerLoopOneClass
+  have hr : r0 = ep (FundamentalGroup.map (cellInclOuter γ) (γ 1) a) := by
+    simpa [r0, ep, v0, u0, x0] using
+      hp PolygonSurfaceHomology.circleIntegerLoopOneClass
+  let eqout : FundamentalGroup (Cell γ) (j v0) ≃* FundamentalGroup (Cell γ) (j u0) :=
+    FundamentalGroup.fundamentalGroupMulEquivOfPath (p.map j.continuous)
+  let l : FundamentalGroup (cellOuter γ) u0 →* FundamentalGroup (Cell γ) (j v0) :=
+    eqout.symm.toMonoidHom.comp l0
+  have hsl : Function.Surjective l := eqout.symm.surjective.comp hs0
+  have hkl : MonoidHom.ker l =
+      Subgroup.normalClosure ({r0} : Set (FundamentalGroup (cellOuter γ) u0)) := by
+    rw [← hk0']
+    ext z
+    simp [l, eqout]
+  obtain ⟨e, he⟩ := hA4
+  have hb := hbij e (γ 1)
+  rw [he] at hb
+  let ei : FundamentalGroup Y (γ 1) ≃* FundamentalGroup (cellOuter γ) v0 :=
+    { toFun := FundamentalGroup.map (cellInclOuter γ) (γ 1)
+      invFun := Function.invFun (FundamentalGroup.map (cellInclOuter γ) (γ 1))
+      left_inv := Function.leftInverse_invFun hb.1
+      right_inv := Function.rightInverse_invFun hb.2
+      map_mul' := (FundamentalGroup.map (cellInclOuter γ) (γ 1)).map_mul }
+  obtain ⟨hs1, hk1⟩ := cell_piOne_aux_transport_kernel ep l r0 hsl hkl
+  rw [hr] at hk1
+  have hk1' : MonoidHom.ker (l.comp ep.toMonoidHom) =
+      Subgroup.normalClosure
+        ({FundamentalGroup.map (cellInclOuter γ) (γ 1)
+          a} :
+          Set (FundamentalGroup (cellOuter γ) v0)) := by
+    simpa [ep] using hk1
+  obtain ⟨hs2, hk2⟩ := cell_piOne_aux_transport_kernel ei
+    (l.comp ep.toMonoidHom)
+    (FundamentalGroup.map (cellInclOuter γ) (γ 1)
+      a) hs1 hk1'
+  have hmaps : (l.comp ep.toMonoidHom).comp ei.toMonoidHom =
+      FundamentalGroup.map (cellIncl γ) (γ 1) := by
+    ext z
+    apply eqout.injective
+    change eqout (eqout.symm (l0 (ep (ei z)))) =
+      eqout (FundamentalGroup.map (cellIncl γ) (γ 1) z)
+    rw [eqout.apply_symm_apply]
+    have hz := apm_t92J05_map_ofPath j p (ei z)
+    have hc : FundamentalGroup.map j v0 (ei z) =
+        FundamentalGroup.map (cellIncl γ) (γ 1) z := by
+      induction z using Path.Homotopic.Quotient.ind with
+      | mk q => rfl
+    rw [← hc]
+    simpa [ep, eqout, l0, v0, u0] using hz
+  rw [hmaps] at hs2 hk2
+  refine ⟨hs2, ?_⟩
+  have hei : ei.symm (FundamentalGroup.map (cellInclOuter γ) (γ 1) a) = a := by
+    exact ei.symm_apply_apply a
+  rw [hei] at hk2
+  simpa [a, loopClassAt] using hk2
 -- END SEAT AREA
 /-- A8. **H₁ of a 2-cell attachment.**  Integral Mayer–Vietoris
 (`IntegralMV.integralMayerVietoris`, transported to the `singularHomologyFunctor`
