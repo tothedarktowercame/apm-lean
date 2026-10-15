@@ -116659,7 +116659,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rp3_rationalHomology",
@@ -116670,7 +116670,9 @@
     :reported-by [:owner],
     :type
     "H_0(RP3;ℚ) ≅ ℚ ∧ H_3(RP3;ℚ) ≅ ℚ ∧ ∀ k ≠ 0, k ≠ 3, IsZero (H_k(RP3;ℚ))  (size: 500-1000 lines / 2-4 weeks)",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/RP3RationalHomology.lean"]},
    :id :lemma-rp3-rationalhomology,
    :kind :lemma,
    :depends-on [],
@@ -119181,6 +119183,18 @@
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :finding "used linear split"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792040153168-13266-0eb0ca91",
+     :commands
+     ["git diff/show 7862ae58 archived sources"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds compiled, sorry-free incidence sign bridge and algebraic right inverse. Negating the input converts A u+B v=y to A u-B(-v)=y; range-sum transversality therefore gives the incidence difference derivative surjective, and the standard linear splitting theorem supplies a right inverse. No continuous/chart splitting is claimed; it remains listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "7862ae58a1c53319d9fecd2e9129001b61c05735",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119203,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119221,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence tangent regularity transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence linear splitting.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119405,7 +119419,10 @@
      :reason "Banked incidence-kernel projection bridge."}
     {:job 9,
      :commit "d5630b7e4415a05e94758003a997b2cf6559df40",
-     :reason "Banked incidence tangent regularity transport."}]}
+     :reason "Banked incidence tangent regularity transport."}
+    {:job 1,
+     :commit "7862ae58a1c53319d9fecd2e9129001b61c05735",
+     :reason "Banked incidence linear splitting."}]}
   {:consumer :t98A06,
    :stop-count 8,
    :review-finding
@@ -121317,7 +121334,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -121329,7 +121346,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "linear right inverse",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "7862ae58a1c53319d9fecd2e9129001b61c05735"},
    :id
    :lemma-transverse-incidencedifferencederivative-haslinearrightinverse,
    :kind :lemma,
