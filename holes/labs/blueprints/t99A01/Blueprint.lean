@@ -1193,7 +1193,35 @@ the last disk entirely; continuity through the quotient: `continuous_coinduced_r
 lemma t99A01_piOne_attach_succ_iota {r : ℕ} (degree : Fin (r + 1) → ℕ) :
     ∃ ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc), APMT99A01.succCircleSide degree),
       ∀ y, (ι y).1 = APMT99A01.attachCastSucc degree y := by
-  sorry
+  have hraw : Continuous (APMT99A01.attachCastSuccRaw degree) := by
+    apply continuous_sum_dom.mpr
+    constructor
+    · exact continuous_inl
+    · exact continuous_inr.comp
+        ((continuous_of_discreteTopology.comp continuous_fst).prodMk continuous_snd)
+  have hcast : Continuous (APMT99A01.attachCastSucc degree) := by
+    apply continuous_coinduced_dom.mpr
+    exact continuous_coinduced_rng.comp hraw
+  have havoid : ∀ y, APMT99A01.attachCastSucc degree y ∈
+      APMT99A01.succCircleSide degree := by
+    intro y
+    induction y using Quotient.ind with
+    | _ x =>
+      intro he
+      have hr := Quotient.exact he.symm
+      have hx := (t99A01_piOne_attach_succ_cover_aux_centre degree
+        (APMT99A01.attachCastSuccRaw degree x)).mp hr
+      cases x with
+      | inl z => cases hx
+      | inr p =>
+        have hi : Fin.castSucc p.1 = Fin.last r :=
+          (Prod.mk.inj (Sum.inr.inj hx)).1
+        exact (Fin.castSucc_ne_last p.1) hi
+  let ι : C(APMT99A01.AttachSpace (degree ∘ Fin.castSucc),
+      APMT99A01.succCircleSide degree) :=
+    ⟨fun y => ⟨APMT99A01.attachCastSucc degree y, havoid y⟩,
+      Continuous.subtype_mk hcast havoid⟩
+  exact ⟨ι, fun _ => rfl⟩
 
 /-- **Leaf.** `ρ ∘ ι = id`: on representatives, `raw (attachCastSuccRaw x) = x`
 (circle and non-last disks are untouched). -/
