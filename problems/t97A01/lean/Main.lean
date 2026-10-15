@@ -309,6 +309,24 @@ def apm_t97a01_baseX : apm_t97a01_X := Quotient.mk _ (0 : apm_t97a01_Disk)
 def apm_t97a01_baseTorusRP2 : apm_t97a01_TorusRP2 :=
   Quotient.mk _ (0 : apm_t97a01_Disk)
 
+@[simp] theorem apm_t97a01_TorusRP2_homeomorph_pairingSpace_base :
+    apm_t97a01_TorusRP2_homeomorph_pairingSpace apm_t97a01_baseTorusRP2 =
+      ConstructionTargets.t97A01Closure.torusRP2PairingData.center := by
+  rfl
+
+/-- The frozen based fundamental group is exactly the pairing-space based
+fundamental group to which the radial van Kampen computation applies. -/
+noncomputable def apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace :
+    FundamentalGroup apm_t97a01_TorusRP2 apm_t97a01_baseTorusRP2 ≃*
+      FundamentalGroup
+        ConstructionTargets.t97A01Closure.torusRP2PairingData.Space
+        ConstructionTargets.t97A01Closure.torusRP2PairingData.center := by
+  rw [← apm_t97a01_TorusRP2_homeomorph_pairingSpace_base]
+  exact ConstructionTargets.t97A01Closure.fundamentalGroupEquivOfHomeomorph
+    apm_t97a01_TorusRP2_homeomorph_pairingSpace apm_t97a01_baseTorusRP2
+
+#print axioms apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace
+
 def apm_t97a01_relator : FreeGroup (Fin 3) :=
   (.of 0) * (.of 1) * (.of 0)⁻¹ * (.of 1)⁻¹ * (.of 2) * (.of 2)
 

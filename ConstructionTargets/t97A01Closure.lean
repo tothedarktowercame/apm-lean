@@ -20,6 +20,35 @@ open ConstructionTargets.PolygonSurfacePiOne
 open ConstructionTargets.PolygonSurfaceHomology
 open ConstructionTargets.T97A01SmithQuotients
 
+/-- A homeomorphism transports the based fundamental group. -/
+def fundamentalGroupEquivOfHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
 /-- Two quotients of the same source by extensionally equal generated
 relations are homeomorphic whenever their canonical projections carry the
 quotient topologies.  This is the exact adapter used for the frozen literal
@@ -299,6 +328,7 @@ noncomputable def torusRP2BoundaryCokernelSmithEquiv :
     torusCrosscapRangeQuotientSmithEquiv
 
 #print axioms quotientLinearEquivOfMapEq
+#print axioms fundamentalGroupEquivOfHomeomorph
 #print axioms aabbccBoundaryCokernelSmithEquiv
 #print axioms torusRP2BoundaryCokernelSmithEquiv
 
