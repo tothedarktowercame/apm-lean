@@ -244,3 +244,36 @@ one.  The winding leaf fixes one orientation simultaneously for the whole
 family, so its row is the positive row rather than an unspecified row up to
 sign.  Dimension zero is handled only by the explicit degree-zero coordinate
 and injectivity/surjectivity fields, not by a positive-degree vanishing lemma.
+
+## Third split: explicit transport coordinates
+
+The coordinate choices are now definitions with their geometric witnesses as
+arguments, so downstream leaves cannot silently choose unrelated isomorphisms.
+
+* `t99A01_sideA_homotopyEquiv` and `t99A01_sideA_coordinate` (definitions):
+  use `CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv` on the
+  supplied `ρ`, `ι`, `ρ ∘ ι = id`, and `ι ∘ ρ ~ id`.
+* `t99A01_diskSide_sigma_coordinate` (definition): transport along the supplied
+  disk-side homeomorphism via `Homeomorph.toHomotopyEquiv`.
+* `t99A01_overlap_sigma_coordinate` (definition): transport along the supplied
+  overlap equivalence.  Its inverse is the fixed `halfLoop`, fixing the sign
+  subsequently read by `hwinding`.
+* `t99A01_attach_transport_aux_low_degree` (120--150 lines): construct the six
+  arrows in degrees two through zero and establish the degree row, the formula
+  `x ↦ (∑ i, x i, x)`, exactness, and endpoint properties.  Useful tools are
+  `Limits.biproduct.mapBiproduct_inv_map_desc`, homotopy-iso naturality, and
+  `LinearMap.range_comp`/`LinearMap.ker_comp`.  Keep the minus sign in
+  `zJ = desc(toX,-toX)`; it vanishes in the degree-one disk component but not
+  in the degree-zero calculation.
+* `t99A01_attach_transport_aux_higher` (50--100 lines, independent): use
+  `CoefficientContractiblePair.higher_zero` for open balls and the `IsZero`
+  projections of `SphereHomology.sphereModuleHomology` for circles.  This
+  needs no low-degree coordinate, winding row, or positivity assumption.
+* `t99A01_attach_transport_aux_coordinates` is the sorry-free assembly of the
+  low-degree record and higher-vanishing leaf.
+
+Degenerate checks: `hr` excludes the empty sigma in degree zero.  Higher
+vanishing remains valid for empty index sets and degree-zero attaching maps.
+The overlap excludes disk centres before radial normalization, while boundary
+points have norm one.  The convention throughout is
+`zI = lift(incl,incl)` and `zJ = desc(toX,-toX)`.
