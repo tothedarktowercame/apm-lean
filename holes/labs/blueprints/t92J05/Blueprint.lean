@@ -2183,6 +2183,42 @@ skeleton), `_aux_boundarySkeletonHomeomorph` (skeleton ≃ₜ wedge),
 `finiteWedge_finSucc_fundamentalGroup_free 3` with its leg coordinates and
 `finiteWedge_reindex_homeomorph` (orbits ≃ Fin 4), then read the boundary loop
 edge by edge (`PairingData.skeletonHomeomorphWedge_skeletonArc`, `standardSign`). -/
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_boundary_factorization
+    (P : ConstructionTargets.PolygonSurfacePiOne.PairingData) :
+    (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath P) :
+      FundamentalGroup _ _) =
+      ((List.ofFn fun i : Fin P.edgeCount =>
+        ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryExplicitEdgeClass P i) :
+          List (FundamentalGroup _ _)).reverse.prod := by
+  have hq :
+      (Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (P.edgeCount + 1) =>
+            ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase P)
+          (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryCanonicalSubdivisionPathAtBase P)) :
+          FundamentalGroup _ _) =
+        Path.Homotopic.Quotient.mk
+          (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath P) :=
+    Quotient.sound
+      (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryCanonicalConcat_homotopic P)
+  calc
+    _ = Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (P.edgeCount + 1) =>
+            ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase P)
+          (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryCanonicalSubdivisionPathAtBase P)) :=
+      hq.symm
+    _ = ((List.ofFn fun i => Path.Homotopic.Quotient.mk
+          (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryCanonicalSubdivisionPathAtBase P i)) :
+            List (FundamentalGroup _ _)).reverse.prod :=
+      ConstructionTargets.PolygonSurfaceHomology.fundamentalGroup_mk_concat_eq_reverse_list_prod
+        P.edgeCount _ _
+    _ = _ := by
+      congr 2
+      apply congrArg List.ofFn
+      funext i
+      rw [ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge]
+      exact ConstructionTargets.PolygonSurfaceHomology.polygonBoundarySignedEdgePathAtBase_mk P i
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
@@ -2193,7 +2229,6 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
                 Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   sorry
-
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
     (houter : ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
