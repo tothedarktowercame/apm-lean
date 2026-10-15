@@ -37121,37 +37121,41 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Identify signed count with rational H3 scalar; then degree four, invariants, Main.",
+    "Prove canonical global localization; then degree four, invariants, Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialSphereLift_signedRegularFiberCount_eq_four",
-      :type "the explicit signed regular-fiber count is four",
+    [{:name
+      "signedRegularFiberCount_homologyScalar_iff_globalLocalization",
+      :type
+      "signed-count scalar action iff canonical global localization",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_signedRegularFiberCertificate"],
+      ["polynomialSphereLift_signedRegularFiberCount_eq_four"
+       "polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour"],
       :area "rp-rational-homology"}
-     {:name "signedRegularFiberCount_eq_homologyScalar",
+     {:name
+      "polynomialSphereLift_globalImage_eq_deckLocalContribution_sum",
       :type
-      "signed regular-fiber count equals the rational top-homology scalar",
+      "global image fundamental class equals the canonical deck-local sum",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_signedRegularFiberCount_eq_four"],
+      ["signedRegularFiberCount_homologyScalar_iff_globalLocalization"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the four-point signed local count; top-homology localization remains.",
+    "Committed the exact equivalence between signed-count scalar action and global localization.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37160,17 +37164,7 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
-      :exit 1,
-      :note "Moved invariant pair below its Lefschetz dependency."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792066828011-14033-7a75aec1",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "1f5805862",
+    :commit "3e19add21",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37178,7 +37172,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42628,7 +42622,8 @@
    :lemma-polynomialspherelift-globalimage-eq-decklocalcontribution-sum,
    :kind :lemma,
    :depends-on
-   [:lemma-polynomialspherelift-decklocalcontribution-spec],
+   [:lemma-polynomialspherelift-decklocalcontribution-spec
+    :lemma-signedregularfibercount-homologyscalar-iff-globallocalization],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -42793,6 +42788,30 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-signedregularfibercount-eq-four],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "signedRegularFiberCount_homologyScalar_iff_globalLocalization",
+    :type
+    "signed-count scalar action iff canonical global localization"},
+   :lemma
+   {:name
+    "signedRegularFiberCount_homologyScalar_iff_globalLocalization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "signed-count scalar action iff canonical global localization",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-signedregularfibercount-homologyscalar-iff-globallocalization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-signedregularfibercount-eq-four
+    :lemma-polynomialspherelift-globalimage-eq-decksum-iff-degreefour],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
