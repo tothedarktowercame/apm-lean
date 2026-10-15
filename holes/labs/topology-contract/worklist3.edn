@@ -37214,41 +37214,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove native coordinate one and chart naturality; four classes and Main.",
+    "Prove corrected sign positive; chart naturality; four classes and Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings
+    ["Existing lints; Main one placeholder; untracked files untouched."],
     :missing-theorems
-    [{:name "t96A06_mappedIntegralLocalGenerator_unmap",
-      :type "forward preservation recovers native class",
+    [{:name
+      "t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one",
+      :type "coefficient one implies native coordinate one",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on
-      ["t96A06_mappedIntegralLocalGenerator_mapsTo_ambient"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_mappedIntegralLocalGenerator_coordinate_iff",
-      :type "forgotten coordinate one iff native coordinate one",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_mappedIntegralLocalGenerator_unmap"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_nativeIntegralLocalGenerator_coordinate",
-      :type "native positive class has integral coordinate one",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_mappedIntegralLocalGenerator_coordinate_iff"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_correctedLocalGeneratorCoefficient_positive",
+      :type "corrected coefficient equals one",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed native integral-coordinate reduction.",
+    :reason
+    "Committed native coordinate reduction to the corrected positive sign.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37257,15 +37254,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline b3ba2c139",
+      "git diff --check && git show --check --stat --oneline 9f061709e",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792105102364-14790-46cda8f7",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b3ba2c139",
+    :diagnostic-history
+    [{:cmd "native-coordinate assembly",
+      :exit 1,
+      :note "Made cancellation elementwise; normalized 1+2."}],
+    :commit "9f061709e",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37273,7 +37268,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44448,6 +44443,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-overlap-topiso-of-unitsphere],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one",
+    :type "coefficient one implies native coordinate one"},
+   :lemma
+   {:name
+    "t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient one implies native coordinate one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedintegrallocalgenerator-coordinate-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_correctedLocalGeneratorCoefficient_positive",
+    :type "corrected coefficient equals one"},
+   :lemma
+   {:name "t96A06_correctedLocalGeneratorCoefficient_positive",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "corrected coefficient equals one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-correctedlocalgeneratorcoefficient-positive,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
