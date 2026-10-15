@@ -119181,6 +119181,18 @@
     :diagnostic-history
     [{:cmd "drafts", :exit 1, :finding "fixed ext"}
      {:cmd "scan", :exit 130, :finding "stopped"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792042353449-13351-07e85685",
+     :commands
+     ["git diff/show 5ea5563a archived sources"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds a compiled, sorry-free derivative formula for the incidence difference. Projection-chain derivatives give A on the first factor and B on the second; subtraction yields A.coprod(-B), matching the incidence-kernel orientation. It does not claim the pending chart identification or implicit incidence chart, which remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "5ea5563afd675d581777463b466957363ca76564",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coordinate derivative split endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence derivative formula.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119417,7 +119429,10 @@
      :reason "Banked chart conjugation of linear splitting."}
     {:job 4,
      :commit "fbc162707b3ba10f2b83b3e313c8ee129da7a50a",
-     :reason "Banked coordinate derivative split endpoint."}]}
+     :reason "Banked coordinate derivative split endpoint."}
+    {:job 5,
+     :commit "5ea5563afd675d581777463b466957363ca76564",
+     :reason "Banked incidence derivative formula."}]}
   {:consumer :t98A06,
    :stop-count 8,
    :review-finding
@@ -121420,7 +121435,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "hasFDerivAt_incidenceDifference",
@@ -121430,7 +121445,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "derivative of F(u)-C(v)",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "5ea5563afd675d581777463b466957363ca76564"},
    :id :lemma-hasfderivat-incidencedifference,
    :kind :lemma,
    :depends-on
