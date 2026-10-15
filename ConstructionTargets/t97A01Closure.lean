@@ -2586,6 +2586,26 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_zero
     exact (Nat.lt_irrefl 0 hstrict)
   exact ⟨hrun, hoffset⟩
 
+/-- The full dependent inverse coordinate of the first flat factor is the
+first run paired with its first local offset. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    let i0 : Fin (boolSideRunPartition S.side).length :=
+      ⟨0, Nat.zero_lt_of_lt
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm 0).1.isLt⟩
+    (torusRP2_subdivisionRunOffsetEquiv S).symm 0 =
+      ⟨i0, Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S i0)
+          (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i0 + 1))⟩ := by
+  dsimp only
+  apply (torusRP2_subdivisionRunOffsetEquiv S).injective
+  rw [(torusRP2_subdivisionRunOffsetEquiv S).apply_symm_apply]
+  apply Fin.ext
+  rw [torusRP2_subdivisionRunOffsetEquiv_apply]
+  exact (torusRP2_subdivisionRunPrefixLength_endpoints S).1.symm
+
 /-- The final flattened subdivision factor has the final run and its final
 local offset.  This is the terminal coordinate for the nested/flat fold
 comparison. -/
@@ -3118,6 +3138,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
 #print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
 #print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
