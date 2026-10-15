@@ -1585,6 +1585,54 @@ theorem polygonBoundarySignedEdgePathAtBase_apply (P : PairingData)
       polygonBoundarySignedEdgePath P i t := by
   exact congrFun (Path.cast_coe _ _ _) t
 
+/-- The affine `i`th subdivision path, with both endpoints transported
+directly to the common polygon-word basepoint. -/
+noncomputable def polygonBoundarySubdivisionPathAtBase (P : PairingData)
+    (i : Fin P.edgeCount) : Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  ((polygonBoundaryIntegerLoopPath P).subpath
+    (polygonBoundarySubdivisionVertex P i.castSucc)
+    (polygonBoundarySubdivisionVertex P i.succ)).cast
+      ((PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
+          (polygonBoundarySignedEdge_source_eq_subdivision P i))
+      ((PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
+          (polygonBoundarySignedEdge_target_eq_subdivision P i))
+
+/-- Each common-base subdivision loop is exactly its common-base signed edge. -/
+theorem polygonBoundarySubdivisionPathAtBase_eq_signedEdge (P : PairingData)
+    (i : Fin P.edgeCount) :
+    polygonBoundarySubdivisionPathAtBase P i =
+      polygonBoundarySignedEdgePathAtBase P i := by
+  ext t
+  rw [polygonBoundarySubdivisionPathAtBase,
+    polygonBoundarySignedEdgePathAtBase]
+  rw [show (((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P i.castSucc)
+      (polygonBoundarySubdivisionVertex P i.succ)).cast _ _) t =
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ)) t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  rw [show ((polygonBoundarySignedEdgePath P i).cast _ _) t =
+      polygonBoundarySignedEdgePath P i t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  exact polygonBoundaryIntegerLoop_subpath_apply P i t
+
+/-- Hurewicz sends the common-base finite subdivision concatenation to the
+ordered sum of the corresponding geometric signed-edge classes. -/
+theorem polygonBoundarySubdivisionConcat_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk
+          (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+            (polygonBoundarySubdivisionPathAtBase P))) =
+      (List.ofFn fun i : Fin P.edgeCount =>
+        moduleHurewicz (orbitWedgeBase P)
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundarySignedEdgePathAtBase P i))).sum := by
+  rw [moduleHurewicz_mk_concat_eq_list_sum]
+  simp_rw [polygonBoundarySubdivisionPathAtBase_eq_signedEdge]
+
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
 theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
