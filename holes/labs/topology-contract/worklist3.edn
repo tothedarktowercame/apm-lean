@@ -37108,29 +37108,27 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (latest completion has :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Repair package authority; then transfer/deck-sum H3, higher vanishing, degree four, invariants/Main.",
+    "Deck-sum chain identity, H3 injectivity, higher vanishing, degree four, invariants/Main.",
     :outcome :stop,
-    :warnings
-    ["No Lake command run; scope unchanged."
-     "Main retains placeholder."],
+    :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_sphere3_antipodal_H3",
-      :type "antipodal identity on H3(S3;Q)",
+    [{:name "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
+      :type "projected simplex lifts are original or antipodal",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_sphere3_rational_H3Iso"],
+      :depends-on ["t96A06_sphere3_antipodal_H3"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_antipodal_H3",
-      :type "transfer/deck-sum gives H3(RP3;Q)=Q",
+      :type "deck-sum gives H3(RP3;Q)=Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_sphere3_antipodal_H3"],
+      :depends-on ["t96A06_projectedSimplex_lift_eq_or_eq_antipodal"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 rational homology Q,0,0,Q",
@@ -37140,34 +37138,32 @@
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    ".lake/packages remains a directory, not the canonical authority symlink; Lake verification and transfer work are forbidden pending lifecycle repair.",
+    "Committed exact two-lift classification for projected simplices; chain deck-sum and H3 injectivity remain.",
     :commands
-    [{:cmd "stat .lake/packages; test -L .lake/packages",
-      :exit 1,
-      :expected-exit 1}
+    [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
+      :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
-     {:cmd "sha256sum fixture", :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792032783001-13079-92ec16ea",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (latest completion has :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit nil,
-    :changed-paths [],
+     {:cmd "sha256sum fixture", :exit 0}
+     {:cmd "git show --check --stat 03ca89f24", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :note
+      "fixed equality orientations and covering uniqueness arguments"}],
+    :commit "03ca89f24206f01bb87c68b22f0b1709001eaad6",
+    :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
      :sha256
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -40461,7 +40457,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphere3-rational-h3iso
-    :lemma-t96a06-sphere3-antipodal-h3],
+    :lemma-t96a06-sphere3-antipodal-h3
+    :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40658,6 +40655,23 @@
    :id :lemma-pathtwoopensubdivisionrunblock-eq-prefixblock,
    :kind :lemma,
    :depends-on [:lemma-pathtwoopensubdivisionrunprefixblock],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
+    :type "projected simplex lifts are original or antipodal"},
+   :lemma
+   {:name "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "projected simplex lifts are original or antipodal",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-sphere3-antipodal-h3],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
