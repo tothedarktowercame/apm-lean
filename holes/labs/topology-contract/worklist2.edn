@@ -88331,7 +88331,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88379,7 +88379,7 @@
      "1133326d2084ed77d2adeac7b560077b39984f5de5ded74ec7c928b86638be46"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88565,6 +88565,19 @@
     [{:cmd "initial closure build",
       :exit 1,
       :correction "fixed quotient/composition glyphs"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792062015245-13912-d7b97f84",
+     :commands
+     ["git show/diff/check bd338eb84"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit bd338eb84 adds compiled, sorry-free progress beyond e88af09f1. It proves orbit coordinates map the actual attaching-boundary range onto the N6 model range, constructs a valid linear equivalence between quotients under such a range equality, and obtains the actual N6 boundary cokernel equivalence. Only t94J09Closure.lean changed; fixture SHA 635ef5fdff61c191154dc631e4b09684418b48448e8cd58e8affba65e288be91 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Map directions and quotient representation boundaries are correct. N6 H1/H2 transport, frozen two-vertex polygon normalization, and final assembly remain explicitly listed."},
     :commit "bd338eb84",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88573,7 +88586,7 @@
      "635ef5fdff61c191154dc631e4b09684418b48448e8cd58e8affba65e288be91"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88591,7 +88604,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit N6 Smith cokernel.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked actual-boundary cokernel transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88610,7 +88623,10 @@
      "Banked standard N6 homology specialization and zero top kernel."}
     {:job 3,
      :commit "e88af09f1",
-     :reason "Banked explicit N6 Smith cokernel."}]}
+     :reason "Banked explicit N6 Smith cokernel."}
+    {:job 4,
+     :commit "bd338eb84",
+     :reason "Banked actual-boundary cokernel transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -94792,7 +94808,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunPrefixBlockPoint_zero",
@@ -94802,14 +94818,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "run source is cumulative subdivision boundary",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id :lemma-torusrp2-subdivisionrunprefixblockpoint-zero,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunprefixblockpoint-last],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "n6BoundaryCokernelSmithEquiv",
@@ -94819,7 +94837,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "actual N6 boundary cokernel is Z^5 x ZMod 2",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "bd338eb84"},
    :id :lemma-n6boundarycokernelsmithequiv,
    :kind :lemma,
    :depends-on [:lemma-n6smithcokerneliso],
