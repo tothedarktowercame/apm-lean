@@ -447,6 +447,82 @@ theorem interiorCoordinate_eq_of_eqvGen {a b : RealizationRaw V}
   | symm _ _ _ ih => exact ih.symm
   | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
 
+/-- A raw endpoint remembers the graph vertex to which it is glued.  Open
+edge points have no vertex coordinate. -/
+noncomputable def vertexCoordinate : RealizationRaw V → Option V
+  | .inl v => some v
+  | .inr (i, v, t) =>
+      if t = intervalZero then some v
+      else if t = intervalOne then some (D.step i v)
+      else none
+
+theorem vertexCoordinate_eq_of_eqvGen {a b : RealizationRaw V}
+    (h : Relation.EqvGen D.RealizationRel a b) :
+    D.vertexCoordinate a = D.vertexCoordinate b := by
+  induction h with
+  | rel _ _ hab =>
+      cases hab <;> norm_num [vertexCoordinate, intervalZero, intervalOne]
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Distinct graph vertices remain distinct in the endpoint quotient. -/
+theorem vertex_injective : Function.Injective D.vertex := by
+  intro v w hvw
+  have hc := D.vertexCoordinate_eq_of_eqvGen (Quotient.exact hvw)
+  simpa [vertexCoordinate] using hc
+
+theorem intervalCircle_eq_base_cases (t : UnitInterval)
+    (h : intervalCircle t = circleBase) :
+    t = intervalZero ∨ t = intervalOne := by
+  have h0 : intervalCircle t = intervalCircle intervalZero := by simpa using h
+  rcases intervalCircle_eq_imp_coordinate_cases t intervalZero h0 with
+    htz | hends | hends
+  · exact Or.inl htz
+  · exact Or.inl hends.1
+  · exact Or.inr hends.1
+
+/-- Every point over the wedge vertex is represented by exactly one graph
+vertex. -/
+theorem existsUnique_vertex_of_projection_eq_wedgePoint
+    (e : D.Realization) (he : D.projection e = inl circleBase) :
+    ∃! v : V, e = D.vertex v := by
+  induction e using Quotient.inductionOn with
+  | _ raw =>
+      cases raw with
+      | inl v =>
+          refine ⟨v, rfl, ?_⟩
+          intro w hw
+          exact D.vertex_injective hw.symm
+      | inr itu =>
+          rcases itu with ⟨i, v, t⟩
+          have hc : intervalCircle t = circleBase := by
+            fin_cases i
+            · exact inl_injective (by
+                simpa [projection, realizationRawProjection, edgeProjection] using he)
+            · exact (inl_eq_inr_iff circleBase (intervalCircle t)).mp (by
+                simpa [projection, realizationRawProjection, edgeProjection] using he.symm) |>.2
+          rcases intervalCircle_eq_base_cases t hc with rfl | rfl
+          · refine ⟨v, D.edgePoint_zero i v, ?_⟩
+            intro w hw
+            exact D.vertex_injective (hw.symm.trans (D.edgePoint_zero i v))
+          · refine ⟨D.step i v, D.edgePoint_one i v, ?_⟩
+            intro w hw
+            exact D.vertex_injective (hw.symm.trans (D.edgePoint_one i v))
+
+/-- The fiber over the wedge point is canonically the graph vertex type. -/
+noncomputable def vertexFiberEquiv :
+    {e : D.Realization // D.projection e = inl circleBase} ≃ V where
+  toFun e := (D.existsUnique_vertex_of_projection_eq_wedgePoint e e.2).choose
+  invFun v := ⟨D.vertex v, by simp⟩
+  left_inv e := by
+    apply Subtype.ext
+    exact (D.existsUnique_vertex_of_projection_eq_wedgePoint e e.2).choose_spec.1.symm
+  right_inv v := by
+    have h := D.existsUnique_vertex_of_projection_eq_wedgePoint
+      (D.vertex v) (by simp)
+    exact h.unique h.choose_spec.1 rfl
+
 /-- Distinct graph-edge labels cannot be identified at an interior parameter
 by the endpoint quotient.  In particular, the vertex coordinate is retained
 throughout each open edge. -/
@@ -529,6 +605,10 @@ noncomputable def interiorFiberEquiv (i : Fin 2) (t : UnitInterval)
       ⟨D.edgePoint i v t, by simp⟩
     have h := existsUnique_edgePoint_of_projection_eq_interior D i t ht e e.2
     exact h.unique h.choose_spec.1 rfl
+
+#print axioms vertex_injective
+#print axioms existsUnique_vertex_of_projection_eq_wedgePoint
+#print axioms vertexFiberEquiv
 
 end TwoLoopGraphCoverData
 
