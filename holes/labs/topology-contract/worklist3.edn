@@ -37125,39 +37125,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove the normalization scalar is one; transport four local classes; sum and close Main.",
+    "Prove the nonzero comparison scalar is one; transport four local classes; sum and close Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name
-      "polynomialSphereLift_base_localFundamentalClass_positive_iff",
-      :type
-      "selected rational base localization is the positive chart generator iff its comparison scalar is one",
+    [{:name "polynomialSphereLift_baseLocalizationScalar_ne_zero",
+      :type "rational base-localization comparison scalar is nonzero",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_base_integralFundamentalClass_positive"],
+      ["polynomialSphereLift_base_localFundamentalClass_positive_iff"],
       :area "rp-rational-homology"}
      {:name "polynomialSphereLift_baseLocalizationScalar_eq_one",
       :type
-      "global sphere-shift and local chart normalizations have comparison scalar one",
+      "global sphere-shift and local chart normalization comparison scalar is one",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_base_localFundamentalClass_positive_iff"],
+      ["polynomialSphereLift_baseLocalizationScalar_ne_zero"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the exact rational base-localization scalar and positivity iff scalar one.",
+    "Committed rational base localization isomorphism and nonzero comparison scalar.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37165,19 +37163,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --oneline --stat b55ceebe8", :exit 0}],
+     {:cmd "git show --check --oneline --stat 108006d6d", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial closure compile",
+    [{:cmd "initial scalar nonzero proof",
       :exit 1,
-      :note
-      "Moved specialization below its constants; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792074631369-14212-195e86b6",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b55ceebe8",
+      :note "Used explicit map-zero equalities; rerun passed."}],
+    :commit "108006d6d",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37185,7 +37176,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43252,6 +43243,25 @@
     "global sphere-shift and local chart normalizations have comparison scalar one",
     :area "rp-rational-homology"},
    :id :lemma-polynomialspherelift-baselocalizationscalar-eq-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-base-localfundamentalclass-positive-iff
+    :lemma-polynomialspherelift-baselocalizationscalar-ne-zero],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_baseLocalizationScalar_ne_zero",
+    :type "rational base-localization comparison scalar is nonzero"},
+   :lemma
+   {:name "polynomialSphereLift_baseLocalizationScalar_ne_zero",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "rational base-localization comparison scalar is nonzero",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialspherelift-baselocalizationscalar-ne-zero,
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-base-localfundamentalclass-positive-iff],
