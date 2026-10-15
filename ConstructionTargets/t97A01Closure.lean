@@ -2304,6 +2304,35 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_run_le_succ
     torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j.succ]
   exact Fin.castSucc_lt_succ
 
+/-- Consecutive inverse coordinates cannot skip a run. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1.val ≤
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1.val + 1 := by
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc
+  let w := (torusRP2_subdivisionRunOffsetEquiv S).symm j.succ
+  by_contra hnot
+  change ¬ w.1.val ≤ z.1.val + 1 at hnot
+  have hskip : z.1.val + 1 < w.1.val := by omega
+  let a : Fin ((boolSideRunPartition S.side).length + 1) :=
+    ⟨z.1.val + 1, by have := w.1.isLt; omega⟩
+  have hab : a < w.1.castSucc := by
+    change z.1.val + 1 < w.1.val
+    exact hskip
+  have hboundary := (torusRP2_subdivisionRunPrefixLength_strictMono S) hab
+  change pathTwoOpenSubdivisionRunPrefixLength S (z.1.val + 1) <
+    pathTwoOpenSubdivisionRunPrefixLength S w.1.val at hboundary
+  have hz := torusRP2_subdivisionRunOffset_lt_nextPrefix S z.1 z.2
+  have hw := torusRP2_subdivisionRunPrefixLength_le_runOffset S w.1 w.2
+  have hsucc := torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ S j
+  change pathTwoOpenSubdivisionRunPrefixLength S w.1.val + w.2.val =
+    pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val + 1 at hsucc
+  omega
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2413,6 +2442,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_le_succ
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
