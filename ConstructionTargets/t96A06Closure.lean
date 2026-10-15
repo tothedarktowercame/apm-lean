@@ -199,6 +199,47 @@ theorem sphereVector_flipSecondPairSphere (p : Sphere 3) :
       ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
       ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
 
+theorem flipFirstPairSphere_involutive (p : Sphere 3) :
+    flipFirstPairSphere (flipFirstPairSphere p) = p := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipSecondPairSphere_involutive (p : Sphere 3) :
+    flipSecondPairSphere (flipSecondPairSphere p) = p := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
+    flipFirstPairSphere (flipSecondPairSphere p) =
+      flipSecondPairSphere (flipFirstPairSphere p) := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere, flipSecondPairSphere,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem flipFirstPairSphere_flipSecondPairSphere (p : Sphere 3) :
+    flipFirstPairSphere (flipSecondPairSphere p) = sphereAntipodalN 3 p := by
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere, flipSecondPairSphere, sphereAntipodalN,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
 theorem polynomialSphereVector_flipFirstPairSphere (p : Sphere 3) :
     polynomialSphereVector (flipFirstPairSphere p) = polynomialSphereVector p := by
   apply Subtype.ext
@@ -977,6 +1018,10 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereVector_continuous
 #print axioms sphereVector_flipFirstPairSphere
 #print axioms sphereVector_flipSecondPairSphere
+#print axioms flipFirstPairSphere_involutive
+#print axioms flipSecondPairSphere_involutive
+#print axioms flipFirstPairSphere_comm_flipSecondPairSphere
+#print axioms flipFirstPairSphere_flipSecondPairSphere
 #print axioms polynomialSphereLift_flipFirstPairSphere
 #print axioms polynomialSphereLift_flipSecondPairSphere
 #print axioms polynomialSphereLift_projection
