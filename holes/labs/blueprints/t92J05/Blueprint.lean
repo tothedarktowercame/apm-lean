@@ -2363,6 +2363,32 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     obtain ⟨c, hc⟩ := hrel
     exact ⟨c, hc.inv_right⟩
 
+/-- **Leaf W1 (wedge word, pure algebra on 8 explicit edges).** Under any free
+coordinate of the orbit wedge sending each explicit leg class to its generator
+(re-indexed by `orientableOrbitEquiv 2`), the boundary loop is conjugate to the genus-two
+relator or its inverse.  Use the banked `_aux_boundary_factorization` and the definition of
+`polygonBoundaryExplicitEdgeClass` (leg class or inverse by `P.sign`); a 71-line attempt
+proving literal equality is in `~/notes/packets/lemmas/partials/` (…outer_equiv.1015-092606.lean). -/
+lemma apm_t92J05_genusTwo_W1_boundary_word
+    (e : FundamentalGroup
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair))
+        (ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase apm_t92J05_genusTwo_polygon_attach_specialization_aux_P) ≃*
+        FreeGroup (Fin 4))
+    (hcoord : ∀ l,
+      e (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase apm_t92J05_genusTwo_polygon_attach_specialization_aux_P l) =
+        FreeGroup.of
+          (((ConstructionTargets.PolygonSurfacePiOne.orientableOrbitEquiv 2).trans
+            (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+              (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin (2 * 2)))) l)) :
+    IsConj (e (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
+        apm_t92J05_genusTwoRelator ∨
+      IsConj (e (Path.Homotopic.Quotient.mk
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
+        apm_t92J05_genusTwoRelator⁻¹ := by
+  sorry
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
     (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
