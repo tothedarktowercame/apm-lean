@@ -119066,41 +119066,41 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Identify incidence tangent with derivative kernel; apply Sard; calculations; Main.",
+    "Construct incidence manifold/chart tangent equivalence; apply Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "direction_lifts_of_surjective_incidenceKernel_snd",
-      :type "regular incidence projection gives direction lifts",
+    [{:name "direction_lifts_of_incidenceTangentEquiv",
+      :type "regular tangent projection gives direction lifts",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on [],
+      :depends-on
+      ["direction_lifts_of_surjective_incidenceKernel_snd"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["direction_lifts_of_surjective_incidenceKernel_snd"],
+      :depends-on ["direction_lifts_of_incidenceTangentEquiv"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "5d0ada2854a6bb1deed76339855226c22e9ec268caca0333070c9f5b30ec1056",
+     "7fa3bc1f844cd6df4815ef99342be33e962b24dca975bac6434f4a9d919d0aa8",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence-kernel projection bridge.",
+    :reason "Banked incidence tangent regularity transport.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119108,23 +119108,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial compile",
-      :exit 1,
-      :finding "preserved kernel equality before simp"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792037421166-13178-02677aed",
-     :commands
-     ["git show 97895f... archived closure/Main/blueprint"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholder counts; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds compiled, sorry-free incidence-kernel projection bridge; orientation A u - B v = 0 gives A u = B v and surjective snd yields every direction. Only propext; scope is closure only. Blueprint/Main/closure hashes match; placeholders 0/1; registry 166/166. Residual milestones list tangent-kernel identification, Sard, calculations, Main."},
-    :commit "97895f175bed4ad4c5e7d23b174ced99f3acde17",
+    :commit "d5630b7e4415a05e94758003a997b2cf6559df40",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119132,7 +119116,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119564,7 +119548,8 @@
     :lemma-exists-nhds-injon-of-contmdiff-surjective
     :lemma-locallyinjectivealongfiber-of-mfderiv-surjective
     :lemma-exists-circleparameter-direction-lifts-of-sard
-    :lemma-direction-lifts-of-surjective-incidencekernel-snd],
+    :lemma-direction-lifts-of-surjective-incidencekernel-snd
+    :lemma-direction-lifts-of-incidencetangentequiv],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121179,6 +121164,24 @@
    :id :lemma-direction-lifts-of-surjective-incidencekernel-snd,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "direction_lifts_of_incidenceTangentEquiv",
+    :type "regular tangent projection gives direction lifts"},
+   :lemma
+   {:name "direction_lifts_of_incidenceTangentEquiv",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular tangent projection gives direction lifts",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-direction-lifts-of-incidencetangentequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-direction-lifts-of-surjective-incidencekernel-snd],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
