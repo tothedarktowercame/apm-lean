@@ -88378,37 +88378,42 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Classify every interior fiber via the retained vertex coordinate; then construct vertex charts, Cayley tree, and finite invariants.",
+    "Construct vertex charts and covering map; then Cayley tree and finite invariants.",
     :outcome :stop,
     :warnings
     ["preexisting lint"
-     "Main retains 1 prior placeholder"
-     "review dirs preserved"],
+     "Main: 1 prior placeholder"
+     "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "edgePoint_injective_of_interior",
-      :type
-      "endpoint quotient retains graph vertex on every open edge",
+    [{:name "existsUnique_edgePoint_of_projection_eq_interior",
+      :type "unique vertex representative",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["edgePoint_ne_vertex_of_interior"],
+      :depends-on ["edgePoint_injective_of_interior"],
+      :area "graph-covering-realization"}
+     {:name "interiorFiberEquiv",
+      :type "open-edge fiber equivalence",
+      :status :proved,
+      :consumers [:t92J06],
+      :depends-on ["existsUnique_edgePoint_of_projection_eq_interior"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "local charts and exact fibers",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["edgePoint_injective_of_interior"],
+      :depends-on ["interiorFiberEquiv"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked open-edge quotient rigidity.",
+    :reason "Banked open-edge fiber classification.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
@@ -88416,31 +88421,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 9231737b5", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792029758897-13012-be9aca70",
-     :commands
-     ["git show/diff-tree 9231737b5"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "#print axioms new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 9231737b5 by topo-6 adds 38 lines only to the scoped closure target; fixture hash a17f8c26...2dfbf matches. Exact snapshot builds; Main compiles with its one prior placeholder; target has 0 placeholders; registry 166/0; standard axioms only. The quotient relation identifies only graph endpoints; interiorCoordinate is invariant on its EqvGen and retains the edge vertex label for t in (0,1), so the claimed interior injectivity is faithful. New progress since history commit 040fde936; remaining realization charts, Cayley tree, and finite-cover invariants are listed."},
-    :commit "9231737b5",
+     {:cmd "git show --check 7cfdde03e", :exit 0}],
+    :diagnostic-history
+    [{:cmd "fiber drafts",
+      :exit 1,
+      :correction "unfolded quotient projection; fixed substitution"}],
+    :commit "7cfdde03e",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "a17f8c26cf6d853f3c7a01cc597f8310d3b5c5c9354c278cf4d3b6342882dfbf"},
+     "2dd1d6bcbd7cdcc709ee0bf60101c4ee4f8269414a51ac261925efc8c41ecb90"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90224,7 +90218,8 @@
     :lemma-edgeprojection-eq-of-interior
     :lemma-projection-edgepoint-eq-of-interior
     :lemma-edgepoint-ne-vertex-of-interior
-    :lemma-edgepoint-injective-of-interior],
+    :lemma-edgepoint-injective-of-interior
+    :lemma-interiorfiberequiv],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93198,4 +93193,38 @@
    :id :lemma-radialmvconnectingh1-mono,
    :kind :lemma,
    :depends-on [:lemma-radialh2piecesgroupiszero],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "existsUnique_edgePoint_of_projection_eq_interior",
+    :type "unique vertex representative"},
+   :lemma
+   {:name "existsUnique_edgePoint_of_projection_eq_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "unique vertex representative",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-existsunique-edgepoint-of-projection-eq-interior,
+   :kind :lemma,
+   :depends-on [:lemma-edgepoint-injective-of-interior],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "interiorFiberEquiv", :type "open-edge fiber equivalence"},
+   :lemma
+   {:name "interiorFiberEquiv",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "open-edge fiber equivalence",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-interiorfiberequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-existsunique-edgepoint-of-projection-eq-interior],
+   :other-consumers []}]}
