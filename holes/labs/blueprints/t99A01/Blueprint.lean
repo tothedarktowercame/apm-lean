@@ -416,7 +416,129 @@ theorem t99A01_attach_circleSide_aux_retraction {r : ℕ} (degree : Fin r → �
       ∀ (i : Fin r) (z : APMT99A01.Disk)
         (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideA degree),
         ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i := by
-  sorry
+  let radial : (z : APMT99A01.Disk) → (z : ℂ) ≠ 0 → Circle :=
+    fun z hz => ⟨(z : ℂ) / (‖(z : ℂ)‖ : ℂ), by
+      simp [Submonoid.unitSphere, div_self (norm_ne_zero_iff.mpr hz)]⟩
+  let raw : Sum Circle (Fin r × APMT99A01.Disk) → Circle
+    | Sum.inl z => z
+    | Sum.inr p => if h : (p.2 : ℂ) = 0 then 1 else (radial p.2 h) ^ degree p.1
+  have hraw_rel : ∀ a b, APMT99A01.AttachRel degree a b → raw a = raw b := by
+    intro a b hab
+    cases hab with
+    | boundary i z =>
+      simp only [raw]
+      have hz : ((APMT99A01.circleInDisk z : APMT99A01.Disk) : ℂ) ≠ 0 := by
+        intro h
+        have hn := Circle.norm_coe z
+        change (z : ℂ) = 0 at h
+        rw [h, norm_zero] at hn
+        norm_num at hn
+      simp only [dif_neg hz]
+      apply Subtype.ext
+      change (z : ℂ) ^ degree i =
+        (((APMT99A01.circleInDisk z : APMT99A01.Disk) : ℂ) /
+          (‖((APMT99A01.circleInDisk z : APMT99A01.Disk) : ℂ)‖ : ℂ)) ^ degree i
+      simp [APMT99A01.circleInDisk, Circle.norm_coe]
+  have hraw_eqv : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+      raw a = raw b := by
+    intro a b hab
+    induction hab with
+    | rel a b h => exact hraw_rel a b h
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let f : APMT99A01.AttachSpace degree → Circle := Quotient.lift raw hraw_eqv
+  have hf_comp : ∀ x, f (APMT99A01.attachMk degree x) = raw x := by
+    intro x
+    rfl
+  let q : (APMT99A01.attachMk degree ⁻¹' APMT99A01.sideA degree) →
+      APMT99A01.sideA degree :=
+    (APMT99A01.sideA degree).restrictPreimage (APMT99A01.attachMk degree)
+  have hq : Topology.IsQuotientMap q :=
+    (isQuotientMap_quotient_mk'.restrictPreimage_isOpen
+      (t99A01_attach_openCover degree).1)
+  have hraw_cont : Continuous (fun x :
+      (APMT99A01.attachMk degree ⁻¹' APMT99A01.sideA degree) => raw x.1) := by
+    rw [continuous_iff_continuousAt]
+    intro x
+    rcases x with ⟨x, hx⟩
+    cases x with
+    | inl z =>
+      let g : Sum Circle (Fin r × APMT99A01.Disk) → Circle :=
+        Sum.elim id (fun _ => 1)
+      have hg : Continuous g := continuous_sum_dom.mpr ⟨continuous_id, continuous_const⟩
+      apply (hg.continuousAt.comp continuousAt_subtype_val).congr_of_eventuallyEq
+      filter_upwards [(isOpen_range_inl.preimage continuous_subtype_val).mem_nhds ⟨z, rfl⟩]
+        with y hy
+      rcases hy with ⟨w, hw⟩
+      change raw y.1 = g y.1
+      rw [← hw]
+      rfl
+    | inr p =>
+      rcases p with ⟨i, z⟩
+      have hz : (z : ℂ) ≠ 0 :=
+        t99A01_attach_circleSide_aux_ne_zero degree i z hx
+      have hopen : IsOpen {w : APMT99A01.Disk | (w : ℂ) ≠ 0} :=
+        isClosed_singleton.isOpen_compl.preimage continuous_subtype_val
+      have hnorm : Continuous (fun w : {w : APMT99A01.Disk | (w : ℂ) ≠ 0} =>
+          radial w.1 w.2) := by
+        apply Continuous.subtype_mk
+        exact (continuous_subtype_val.comp continuous_subtype_val).div₀
+          (Complex.continuous_ofReal.comp
+            (continuous_norm.comp (continuous_subtype_val.comp continuous_subtype_val)))
+          (fun w => by exact_mod_cast norm_ne_zero_iff.mpr w.2)
+      have hc : ContinuousAt (fun w : APMT99A01.Disk =>
+          if h : (w : ℂ) = 0 then (1 : Circle) else (radial w h) ^ degree i) z := by
+        refine (hopen.isOpenEmbedding_subtypeVal.continuousAt_iff
+          (g := fun w : APMT99A01.Disk =>
+            if h : (w : ℂ) = 0 then (1 : Circle) else (radial w h) ^ degree i)
+          (x := ⟨z, hz⟩)).mp ?_
+        have heq : (fun w : APMT99A01.Disk =>
+            if h : (w : ℂ) = 0 then (1 : Circle) else (radial w h) ^ degree i) ∘
+              (fun w : {w : APMT99A01.Disk | (w : ℂ) ≠ 0} => w.1) =
+            fun w => (radial w.1 w.2) ^ degree i := by
+          funext w
+          simp only [Function.comp_apply]
+          rw [dif_neg w.2]
+        rw [heq]
+        exact hnorm.continuousAt.pow (degree i)
+      let g : Sum Circle (Fin r × APMT99A01.Disk) → Circle :=
+        Sum.elim (fun _ => 1) (fun p =>
+          if h : (p.2 : ℂ) = 0 then 1 else (radial p.2 h) ^ degree i)
+      have hg : ContinuousAt g (Sum.inr (i, z)) :=
+        (Topology.IsOpenEmbedding.inr.continuousAt_iff
+          (g := g) (x := (i, z))).mp
+          (by
+            change ContinuousAt (fun p : Fin r × APMT99A01.Disk =>
+              if h : (p.2 : ℂ) = 0 then (1 : Circle)
+              else (radial p.2 h) ^ degree i) (i, z)
+            exact hc.comp (x := (i, z)) continuousAt_snd)
+      apply (hg.comp (x := ⟨Sum.inr (i, z), hx⟩) continuousAt_subtype_val).congr_of_eventuallyEq
+      have hopprod : IsOpen (({i} : Set (Fin r)) ×ˢ
+          (Set.univ : Set APMT99A01.Disk)) :=
+        (isOpen_discrete _).prod isOpen_univ
+      have hop : IsOpen (Sum.inr '' (({i} : Set (Fin r)) ×ˢ
+          (Set.univ : Set APMT99A01.Disk))) :=
+        (isOpenMap_inr (X := Circle)) _ hopprod
+      filter_upwards [(hop.preimage continuous_subtype_val).mem_nhds
+        ⟨(i, z), by simp⟩] with y hy
+      obtain ⟨⟨j, w⟩, hp_mem, hp⟩ := hy
+      have hji : j = i := by simpa using hp_mem.1
+      subst j
+      change raw y.1 = g y.1
+      rw [← hp]
+      rfl
+  let ρ : C(APMT99A01.sideA degree, Circle) :=
+    ⟨fun x => f x.1, hq.continuous_iff.mpr (by simpa [q, Function.comp_def] using hraw_cont)⟩
+  refine ⟨ρ, ?_, ?_⟩
+  · intro z h
+    rfl
+  · intro i z h
+    have hz : (z : ℂ) ≠ 0 := t99A01_attach_circleSide_aux_ne_zero degree i z h
+    change ((f (APMT99A01.attachMk degree (Sum.inr (i, z))) : Circle) : ℂ) = _
+    rw [hf_comp]
+    simp only [raw, dif_neg hz]
+    rfl
 
 /-- **Leaf (radial deformation).** For any `ρ` with the two retraction properties,
 `ι ∘ ρ ≃ id` on `sideA`.  Homotopy: `(t, inl z) ↦ inl z`,
