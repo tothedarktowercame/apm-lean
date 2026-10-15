@@ -1724,6 +1724,19 @@ noncomputable def polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
   secondNatural := polynomialSphereLift_deckLocalContribution_spec.2.2.1
   bothNatural := polynomialSphereLift_deckLocalContribution_spec.2.2.2.1
 
+/-- On one-dimensional rational top homology, the sole global localization
+equation is exactly the degree-four scalar-map equation. -/
+theorem polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour :
+    (HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i) ↔
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+        (4 : ℚ) • 𝟙 _ := by
+  rw [polynomialSphereLift_deckLocalContribution_spec.2.2.2.2]
+  exact (t96A06_sphere3_endomorphism_eq_smul_id_iff _ 4).symm
+
 /-- The exact remaining geometric boundary implies degree four on rational
 top homology, with all bookkeeping discharged. -/
 theorem polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
@@ -2415,6 +2428,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
 #print axioms polynomialSphereLift_deckLocalContribution_spec
 #print axioms polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
+#print axioms polynomialSphereLift_globalImage_eq_deckSum_iff_degreeFour
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
