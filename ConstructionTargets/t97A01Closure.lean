@@ -1616,6 +1616,32 @@ theorem torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece
       (pathTwoOpenSubdivisionRunBlockPiece S i k) _ _) t).trans
     (pathTwoOpenSubdivisionRunBlockPiece_eq_prefixBlockPiece S i k t)
 
+/-- The dependent concatenation of a run, after each factor is rebased to
+the cumulative-prefix vertices, has the class of the literal prefix block. -/
+theorem torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (⟦Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+        (fun k => (pathTwoOpenSubdivisionRunBlockPiece S i k).cast
+          (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+            k.castSucc).symm
+          (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+            k.succ).symm)⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+        (pathTwoOpenSubdivisionRunPrefixBlockPiece S i)⟧ := by
+  exact torusRP2_pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+    (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+    (fun k => (pathTwoOpenSubdivisionRunBlockPiece S i k).cast
+      (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+        k.castSucc).symm
+      (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+        k.succ).symm)
+    (pathTwoOpenSubdivisionRunPrefixBlockPiece S i)
+    (torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece S i)
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1694,6 +1720,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunFold_exists_outerPath
 #print axioms torusRP2_subdivisionRunFold_exists_outerPath_at_endpoints
 #print axioms torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece
+#print axioms torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
