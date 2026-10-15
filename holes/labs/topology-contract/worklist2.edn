@@ -88331,27 +88331,29 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Instantiate transported within/cross-run fold induction; van Kampen; assemble.",
+    "Instantiate cross-run branch and finish nested/flat fold induction; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_pathHomotopicQuotient_cast_trans",
+    [{:name "torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc",
       :type
-      "endpoint cast of a composite equals composition through a shared cast endpoint",
+      "transported left-associated three-factor fold equals transported right-associated fold",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_pathHomotopicQuotient_trans_congr"],
+      :depends-on
+      ["torusRP2_pathHomotopicQuotient_cast_trans"
+       "torusRP2_pathHomotopicQuotient_trans_assoc"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_pathHomotopicQuotient_cast_trans"
+      ["torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc"
        "torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases_eq"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,7 +88366,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked quotient cast/composition transport.",
+    :reason "Banked transported three-factor reassociation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88374,28 +88376,16 @@
       "rg -n 'sorry|admit' ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check fbccc7248", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792100355320-14718-9a23710e",
-     :commands
-     ["git show/diff/check fbccc7248"
-      "sha256sum + placeholder recount from fbccc7248"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit fbccc7248 adds compiled, sorry-free progress beyond history 3e9caad4c. The theorem transports an actual quotient composite and both factors through the same middle-endpoint equality; ha,hb,hc all point from new endpoints to original endpoints, matching Quotient.cast, and ind2 reduces the claim definitionally. Only t97A01Closure.lean changed; fixture SHA 05857ad8d3b4c78cc8f7ed6c7e6e65b7c81cc381a724b45b42109d896b13b17a matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Transported fold induction, van Kampen, and assembly remain listed."},
-    :commit "fbccc7248",
+     {:cmd "git show --check 7af6e0888", :exit 0}],
+    :commit "7af6e0888",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "05857ad8d3b4c78cc8f7ed6c7e6e65b7c81cc381a724b45b42109d896b13b17a"},
+     "746a615e268e90929a651d97bd4ae0902a041bd57a6adc9d3650711c6cc67de7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94398,7 +94388,8 @@
     :lemma-torusrp2-pathhomotopicquotient-concat-two
     :lemma-torusrp2-pathhomotopicquotient-trans-assoc
     :lemma-torusrp2-pathhomotopicquotient-trans-congr
-    :lemma-torusrp2-pathhomotopicquotient-cast-trans],
+    :lemma-torusrp2-pathhomotopicquotient-cast-trans
+    :lemma-torusrp2-pathhomotopicquotient-cast-trans-trans-assoc],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96226,4 +96217,25 @@
    :id :lemma-torusrp2-pathhomotopicquotient-cast-trans,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-pathhomotopicquotient-trans-congr],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc",
+    :type
+    "transported left-associated three-factor fold equals transported right-associated fold"},
+   :lemma
+   {:name "torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "transported left-associated three-factor fold equals transported right-associated fold",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-pathhomotopicquotient-cast-trans-trans-assoc,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-pathhomotopicquotient-cast-trans
+    :lemma-torusrp2-pathhomotopicquotient-trans-assoc],
    :other-consumers []}]}
