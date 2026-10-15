@@ -372,6 +372,39 @@ noncomputable def t99J05_cp_successor_overlap_homologyIso_unitSphere
   ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
       (t99J05_cp_successor_overlap_homotopyEquiv_unitSphere n) k
 
+/-- Punctured affine coordinates are path connected, including the first
+successor step where the affine space has one complex coordinate. -/
+theorem t99J05_puncturedAffine_isPathConnected (n : ℕ) :
+    IsPathConnected
+      ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+        Set (AffineCoordinates (Fin.last (n + 1)))) := by
+  apply isPathConnected_compl_singleton_of_one_lt_rank
+  rw [← Module.finrank_eq_rank']
+  norm_cast
+  rw [Module.finrank_pi_fintype]
+  simp [AffineCoordinates]
+  omega
+
+/-- The overlap has rational zeroth homology `ℚ`. -/
+noncomputable def t99J05_cp_successor_overlap_rational_H0 (n : ℕ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) 0 ≅ ModuleCat.of ℚ ℚ := by
+  letI : PathConnectedSpace
+      ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+        Set (AffineCoordinates (Fin.last (n + 1)))) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (t99J05_puncturedAffine_isPathConnected n)
+  let e := t99J05_cp_successor_overlap_homeomorph_puncturedAffine n
+  letI : PathConnectedSpace
+      ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+        Set (CP (n + 1))) :=
+    e.symm.surjective.pathConnectedSpace e.symm.continuous
+  exact ConstructionTargets.CoefficientH0.h0Iso ℚ
+    (Classical.choice inferInstance)
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -423,6 +456,8 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_overlap_homologyIso_puncturedAffine
 #print axioms t99J05_cp_successor_overlap_homotopyEquiv_unitSphere
 #print axioms t99J05_cp_successor_overlap_homologyIso_unitSphere
+#print axioms t99J05_puncturedAffine_isPathConnected
+#print axioms t99J05_cp_successor_overlap_rational_H0
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
