@@ -88380,6 +88380,19 @@
     [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "registry; scans; git check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792046698089-13546-a8c2a23b",
+     :commands
+     ["git show/diff/check 3e6fbc0b2"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 3e6fbc0b2 adds compiled, sorry-free progress beyond 594a2323e: an involutive generator-sign automorphism, frozen/signed relators, frozen-coordinate skeleton epimorphism, and literal six-edge boundary coordinates. Only t97A01Closure.lean changed; fixture SHA 65f37eddb26ec07cec9185c9232fc5d9851979ee22bff5686ce4e6712fee6957 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; printed axioms are standard. Orientation is correct: boundary coordinates end in c^-1,c^-1, and the domain sign equivalence sends frozen c,c to them. Kernel/normal closure, van Kampen presentation, and final assembly remain explicitly listed."},
     :commit "3e6fbc0b2",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88388,7 +88401,7 @@
      "65f37eddb26ec07cec9185c9232fc5d9851979ee22bff5686ce4e6712fee6957"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88406,7 +88419,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-3 skeleton epimorphism.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked relator signs and six-edge coordinates.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88451,7 +88464,10 @@
      :reason "Banked literal pi1 transport to pairing-space centre."}
     {:job 3,
      :commit "594a2323e",
-     :reason "Banked Fin-3 skeleton epimorphism."}]}
+     :reason "Banked Fin-3 skeleton epimorphism."}
+    {:job 4,
+     :commit "3e6fbc0b2",
+     :reason "Banked relator signs and six-edge coordinates."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -94068,7 +94084,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2GeneratorSignEquiv", :type "invert c generator"},
@@ -94077,14 +94093,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "invert c generator",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "3e6fbc0b2"},
    :id :lemma-torusrp2generatorsignequiv,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2PolygonBoundaryLegWord_coordinates",
@@ -94094,7 +94112,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "six signed edges",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "3e6fbc0b2"},
    :id :lemma-torusrp2polygonboundarylegword-coordinates,
    :kind :lemma,
    :depends-on [],
