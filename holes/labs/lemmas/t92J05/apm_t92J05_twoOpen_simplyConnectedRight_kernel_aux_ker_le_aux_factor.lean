@@ -597,6 +597,50 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
     simpa [twoChart] using
       (show (a t).1 ∈ U ∩ U from ⟨(a t).2, (a t).2⟩)
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_telescoping
+    {C : Type*} [Category C] {n : ℕ}
+    (A B : Fin (n + 1) → C)
+    (f : (i : Fin n) → A i.castSucc ⟶ A i.succ)
+    (g : (i : Fin n) → B i.castSucc ⟶ B i.succ)
+    (e : (i : Fin (n + 1)) → B i ≅ A i)
+    (h : ∀ i, g i = (e i.castSucc).hom ≫ f i ≫ (e i.succ).inv) :
+    ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin B g =
+      (e 0).hom ≫
+        ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin A f ≫
+        (e (Fin.last n)).inv := by
+  induction n with
+  | zero =>
+      simp only [
+        ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin_zero]
+      simp
+  | succ n ih =>
+      rw [
+        ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin_succ,
+        ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum.composeFin_succ]
+      have hp := ih (A := A ∘ Fin.castSucc) (B := B ∘ Fin.castSucc)
+        (f := fun i ↦ f i.castSucc) (g := fun i ↦ g i.castSucc)
+        (e := fun i ↦ e i.castSucc) (fun i ↦ h i.castSucc)
+      rw [hp, h (Fin.last n)]
+      simp only [Function.comp_apply, Category.assoc]
+      rw [Iso.inv_hom_id_assoc]
+      simpa only [Category.assoc, Fin.castSucc_zero, Fin.succ_last]
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_product_range
+    {G H : Type*} [Group G] [Group H] (f : G →* H) (l : List H)
+    (h : ∀ z ∈ l, z = 1 ∨ z ∈ f.range) : l.prod ∈ f.range := by
+  induction l with
+  | nil =>
+      exact ⟨1, map_one f⟩
+  | cons z l ih =>
+      have hz := h z (by simp)
+      obtain ⟨gz, hgz⟩ : ∃ gz : G, f gz = z := by
+        rcases hz with rfl | ⟨gz, rfl⟩
+        · exact ⟨1, map_one f⟩
+        · exact ⟨gz, rfl⟩
+      obtain ⟨gl, hgl⟩ := ih (fun w hw ↦ h w (by simp [hw]))
+      refine ⟨gz * gl, ?_⟩
+      simp only [map_mul, List.prod_cons, hgz, hgl]
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -656,6 +700,44 @@ def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_rig
           (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
   dsimp only
   exact (Functor.const _).obj (SingleObj.star _)
+
+def apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_leftFunctor
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    [PathConnectedSpace U] (x : (U ∩ V : Set X)) :
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    FundamentalGroupoid U ⥤
+      SingleObj (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+        Subgroup.normalClosure (overlapMap.range : Set
+          (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
+  dsimp only
+  let c := apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_leftConnector U V x
+  let N := Subgroup.normalClosure
+    ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set
+      (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))
+  exact
+    { obj := fun _ => SingleObj.star _
+      map := fun {a b} p => QuotientGroup.mk' N
+        ((c a).hom ≫ p ≫ (c b).inv)
+      map_id := by
+        intro a
+        change QuotientGroup.mk' N ((c a).hom ≫ 𝟙 a ≫ (c a).inv) = 1
+        rw [show (c a).hom ≫ 𝟙 a ≫ (c a).inv = 𝟙 _ by simp]
+        exact map_one _
+      map_comp := by
+        intro a b d p q
+        let A : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) :=
+          (c a).hom ≫ p ≫ (c b).inv
+        let B : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) :=
+          (c b).hom ≫ q ≫ (c d).inv
+        have h : (c a).hom ≫ (p ≫ q) ≫ (c d).inv = B * A := by
+          change (c a).hom ≫ (p ≫ q) ≫ (c d).inv =
+            ((c a).hom ≫ p ≫ (c b).inv) ≫
+              ((c b).hom ≫ q ≫ (c d).inv)
+          simp [Category.assoc]
+        change QuotientGroup.mk' N ((c a).hom ≫ (p ≫ q) ≫ (c d).inv) =
+          QuotientGroup.mk' N B * QuotientGroup.mk' N A
+        rw [h, map_mul] }
 
 -- BEGIN SEAT AREA
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
