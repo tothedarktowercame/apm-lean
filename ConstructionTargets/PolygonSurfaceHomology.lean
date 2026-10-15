@@ -1344,6 +1344,22 @@ theorem fundamentalGroup_mk_concat_eq_reverse_list_prod
       rw [ih (fun k => F k.castSucc)]
       rfl
 
+/-- Hurewicz removes the `End`-multiplication reversal from a finite path
+concatenation: its image is the sum of the factors in traversal order. -/
+theorem moduleHurewicz_mk_concat_eq_list_sum
+    {Y : Type} [TopologicalSpace Y] (n : ℕ) (y : Y)
+    (F : Fin n → Path y y) :
+    moduleHurewicz y
+        (Path.Homotopic.Quotient.mk
+          (Path.concat (fun _ : Fin (n + 1) => y) F) : FundamentalGroup Y y) =
+      (List.ofFn fun i =>
+        moduleHurewicz y
+          (Path.Homotopic.Quotient.mk (F i) : FundamentalGroup Y y)).sum := by
+  rw [fundamentalGroup_mk_concat_eq_reverse_list_prod,
+    moduleHurewicz_list_prod, List.map_reverse, List.sum_reverse]
+  rw [List.map_ofFn]
+  rfl
+
 /-- On the `i`th equal subdivision interval, affine interpolation of the
 once-around parameter is exactly the polygon edge parameter `(i+t)/n`. -/
 theorem integerLoop_convexCombo_subdivisionVertex (P : PairingData)
