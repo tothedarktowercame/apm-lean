@@ -1015,6 +1015,169 @@ lemma t99A01_piOne_attach_succ_retract_aux_raw_half {r : ℕ}
   simp [t99A01_piOne_attach_succ_retract_aux_radial, Circle.norm_coe,
     norm_div]
 
+abbrev t99A01_piOne_attach_succ_retract_aux_Pre {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :=
+  ↥((fun x : Sum Circle (Fin (r + 1) × APMT99A01.Disk) =>
+    (Quotient.mk _ x : APMT99A01.AttachSpace degree)) ⁻¹'
+      APMT99A01.succCircleSide degree)
+
+def t99A01_piOne_attach_succ_retract_aux_q {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    t99A01_piOne_attach_succ_retract_aux_Pre degree →
+      APMT99A01.succCircleSide degree :=
+  fun x => ⟨Quotient.mk _ x.1, x.2⟩
+
+lemma t99A01_piOne_attach_succ_retract_aux_q_quotient {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    Topology.IsQuotientMap (t99A01_piOne_attach_succ_retract_aux_q degree) := by
+  exact isQuotientMap_quotient_mk'.restrictPreimage_isOpen
+    (t99A01_piOne_attach_succ_cover degree).1
+
+lemma t99A01_piOne_attach_succ_retract_aux_raw_continuous {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    Continuous (fun x : t99A01_piOne_attach_succ_retract_aux_Pre degree =>
+      t99A01_piOne_attach_succ_retract_aux_raw degree x.1) := by
+  rw [continuous_iff_continuousAt]
+  intro x
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl z =>
+      let g : Sum Circle (Fin (r + 1) × APMT99A01.Disk) →
+          APMT99A01.AttachSpace (degree ∘ Fin.castSucc) :=
+        Sum.elim (fun w => Quotient.mk _ (Sum.inl w)) (fun _ => Quotient.mk _ (Sum.inl 1))
+      have hg : Continuous g := continuous_sum_dom.mpr
+        ⟨by
+          change Continuous (fun w : Circle =>
+            (Quotient.mk _ (Sum.inl w) :
+              APMT99A01.AttachSpace (degree ∘ Fin.castSucc)))
+          exact continuous_coinduced_rng.comp continuous_inl,
+        continuous_const⟩
+      apply (hg.continuousAt.comp continuousAt_subtype_val).congr_of_eventuallyEq
+      filter_upwards [(isOpen_range_inl.preimage continuous_subtype_val).mem_nhds ⟨z, rfl⟩]
+        with y hy
+      rcases hy with ⟨w, hw⟩
+      change t99A01_piOne_attach_succ_retract_aux_raw degree y.1 = g y.1
+      rw [← hw]
+      rfl
+  | inr p =>
+      rcases p with ⟨i, z⟩
+      by_cases hi : i = Fin.last r
+      · subst i
+        have hz : (z : ℂ) ≠ 0 :=
+          t99A01_piOne_attach_succ_retract_aux_ne_zero degree z hx
+        have hopen : IsOpen {w : APMT99A01.Disk | (w : ℂ) ≠ 0} :=
+          isClosed_singleton.isOpen_compl.preimage continuous_subtype_val
+        have hrad : Continuous (fun w : {w : APMT99A01.Disk | (w : ℂ) ≠ 0} =>
+            t99A01_piOne_attach_succ_retract_aux_radial (w.1 : ℂ)) := by
+          apply Continuous.subtype_mk
+          change Continuous (fun w : {w : APMT99A01.Disk | (w : ℂ) ≠ 0} =>
+            ((t99A01_piOne_attach_succ_retract_aux_radial (w.1 : ℂ) : Circle) : ℂ))
+          rw [show (fun w : {w : APMT99A01.Disk | (w : ℂ) ≠ 0} =>
+              ((t99A01_piOne_attach_succ_retract_aux_radial (w.1 : ℂ) : Circle) : ℂ)) =
+              fun w => (w.1 : ℂ) / (‖(w.1 : ℂ)‖ : ℂ) by
+            funext w
+            rw [t99A01_piOne_attach_succ_retract_aux_radial, dif_neg w.2]]
+          exact (continuous_subtype_val.comp continuous_subtype_val).div₀
+            (Complex.continuous_ofReal.comp
+              (continuous_norm.comp (continuous_subtype_val.comp continuous_subtype_val)))
+            (fun w => Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr w.2))
+        have hc : ContinuousAt (fun w : APMT99A01.Disk =>
+            (Quotient.mk _ (Sum.inl
+              ((t99A01_piOne_attach_succ_retract_aux_radial (w : ℂ)) ^
+                degree (Fin.last r))) :
+              APMT99A01.AttachSpace (degree ∘ Fin.castSucc))) z := by
+          refine (hopen.isOpenEmbedding_subtypeVal.continuousAt_iff
+            (x := ⟨z, hz⟩)).mp ?_
+          exact continuous_coinduced_rng.continuousAt.comp
+            (continuous_inl.continuousAt.comp
+              (hrad.continuousAt.pow (degree (Fin.last r))))
+        let g : Sum Circle (Fin (r + 1) × APMT99A01.Disk) →
+            APMT99A01.AttachSpace (degree ∘ Fin.castSucc) :=
+          Sum.elim (fun _ => Quotient.mk _ (Sum.inl 1)) (fun p =>
+            Quotient.mk _ (Sum.inl
+              ((t99A01_piOne_attach_succ_retract_aux_radial (p.2 : ℂ)) ^
+                degree (Fin.last r))))
+        have hg : ContinuousAt g (Sum.inr (Fin.last r, z)) :=
+          (Topology.IsOpenEmbedding.inr.continuousAt_iff (g := g)).mp (by
+            change ContinuousAt (fun p : Fin (r + 1) × APMT99A01.Disk =>
+              (Quotient.mk _ (Sum.inl
+                ((t99A01_piOne_attach_succ_retract_aux_radial (p.2 : ℂ)) ^
+                  degree (Fin.last r))) :
+                APMT99A01.AttachSpace (degree ∘ Fin.castSucc))) (Fin.last r, z)
+            exact hc.comp (f := Prod.snd) (x := (Fin.last r, z)) continuousAt_snd)
+        apply (hg.comp (x := ⟨Sum.inr (Fin.last r, z), hx⟩)
+          continuousAt_subtype_val).congr_of_eventuallyEq
+        have hop : IsOpen (Sum.inr '' (({Fin.last r} : Set (Fin (r + 1))) ×ˢ
+            {w : APMT99A01.Disk | (w : ℂ) ≠ 0})) :=
+          (isOpenMap_inr (X := Circle)) _
+            ((isOpen_discrete _).prod hopen)
+        filter_upwards [(hop.preimage continuous_subtype_val).mem_nhds
+          ⟨(Fin.last r, z), by
+            refine ⟨(Set.mem_singleton_iff).2 rfl, hz⟩, rfl⟩] with y hy
+        obtain ⟨⟨j, w⟩, hjw, he⟩ := hy
+        have hj : j = Fin.last r := by simpa using hjw.1
+        subst j
+        change t99A01_piOne_attach_succ_retract_aux_raw degree y.1 = g y.1
+        rw [← he]
+        simp [t99A01_piOne_attach_succ_retract_aux_raw, g]
+      · let g : Sum Circle (Fin (r + 1) × APMT99A01.Disk) →
+            APMT99A01.AttachSpace (degree ∘ Fin.castSucc) :=
+          Sum.elim (fun _ => Quotient.mk _ (Sum.inl 1)) (fun p =>
+            Quotient.mk _ (Sum.inr (i.castPred hi, p.2)))
+        have hg : ContinuousAt g (Sum.inr (i, z)) :=
+          (Topology.IsOpenEmbedding.inr.continuousAt_iff (g := g)).mp (by
+            change ContinuousAt (fun p : Fin (r + 1) × APMT99A01.Disk =>
+              Quotient.mk _ (Sum.inr (i.castPred hi, p.2))) (i, z)
+            exact continuous_coinduced_rng.continuousAt.comp
+              (continuous_inr.continuousAt.comp
+                (continuous_const.prodMk continuous_snd).continuousAt))
+        apply (hg.comp (x := ⟨Sum.inr (i, z), hx⟩)
+          continuousAt_subtype_val).congr_of_eventuallyEq
+        have hop : IsOpen (Sum.inr '' (({i} : Set (Fin (r + 1))) ×ˢ
+            (Set.univ : Set APMT99A01.Disk))) :=
+          (isOpenMap_inr (X := Circle)) _ ((isOpen_discrete _).prod isOpen_univ)
+        filter_upwards [(hop.preimage continuous_subtype_val).mem_nhds
+          ⟨(i, z), by simp⟩] with y hy
+        obtain ⟨⟨j, w⟩, hjw, he⟩ := hy
+        have hj : j = i := by simpa using hjw.1
+        subst j
+        change t99A01_piOne_attach_succ_retract_aux_raw degree y.1 = g y.1
+        rw [← he]
+        simp [t99A01_piOne_attach_succ_retract_aux_raw, g, hi]
+
+lemma t99A01_piOne_attach_succ_retract_aux_retraction {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    ∃ ρ : C(APMT99A01.succCircleSide degree,
+        APMT99A01.AttachSpace (degree ∘ Fin.castSucc)),
+      (∀ z : Circle, ρ ⟨Quotient.mk _ (Sum.inl z),
+          t99A01_piOne_attach_succ_retract_aux_circle_mem degree z⟩ =
+        Quotient.mk _ (Sum.inl z)) ∧
+      ∀ (w : Circle) (h : (Quotient.mk _ (Sum.inr (Fin.last r,
+          (⟨(w : ℂ) / 2, by
+            rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+            norm_num⟩ : APMT99A01.Disk))) : APMT99A01.AttachSpace degree) ∈
+            APMT99A01.succCircleSide degree),
+        ρ ⟨Quotient.mk _ (Sum.inr (Fin.last r,
+          (⟨(w : ℂ) / 2, by
+            rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+            norm_num⟩ : APMT99A01.Disk))), h⟩ =
+          Quotient.mk _ (Sum.inl (w ^ degree (Fin.last r))) := by
+  let f : APMT99A01.AttachSpace degree →
+      APMT99A01.AttachSpace (degree ∘ Fin.castSucc) :=
+    Quotient.lift (t99A01_piOne_attach_succ_retract_aux_raw degree)
+      (fun _ _ h => t99A01_piOne_attach_succ_retract_aux_raw_respects degree h)
+  let ρ : C(APMT99A01.succCircleSide degree,
+      APMT99A01.AttachSpace (degree ∘ Fin.castSucc)) :=
+    ⟨fun x => f x.1,
+      (t99A01_piOne_attach_succ_retract_aux_q_quotient degree).continuous_iff.mpr
+        (by simpa [t99A01_piOne_attach_succ_retract_aux_q, f, Function.comp_def] using
+          t99A01_piOne_attach_succ_retract_aux_raw_continuous degree)⟩
+  refine ⟨ρ, ?_, ?_⟩
+  · intro z
+    rfl
+  · intro w h
+    exact t99A01_piOne_attach_succ_retract_aux_raw_half degree w
+
 -- BEGIN SEAT AREA
 lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
     :
