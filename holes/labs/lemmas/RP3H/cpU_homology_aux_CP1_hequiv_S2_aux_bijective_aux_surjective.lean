@@ -1077,7 +1077,62 @@ lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_surjective
     (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
     (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
     Function.Surjective g := by
-  sorry
+  intro p
+  have hnorm : ‖p.1‖ = 1 := by
+    simpa [Metric.mem_sphere] using p.2
+  have hsumsq : (p.1 0) ^ 2 + (p.1 1) ^ 2 + (p.1 2) ^ 2 = 1 := by
+    have h := congrArg (fun x : ℝ => x ^ 2) hnorm
+    change ‖p.1‖ ^ 2 = 1 ^ 2 at h
+    rw [EuclideanSpace.real_norm_sq_eq] at h
+    simp [Fin.sum_univ_succ] at h
+    nlinarith
+  by_cases hy : p.1 2 = -1
+  · let v : ProjectiveSpaceTopology.NonzeroVectors ℂ 1 :=
+      ⟨![0, 1], by
+        intro h
+        have := congrFun h 1
+        simpa using this⟩
+    refine ⟨quotientMap ℂ 1 v, ?_⟩
+    rw [hg]
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;>
+      simp [cpU_homology_aux_CP1_hequiv_S2_aux_hopf,
+        cpU_homology_aux_CP1_hequiv_S2_aux_raw,
+        cpU_homology_aux_CP1_hequiv_S2_aux_den, v, hy] <;>
+      nlinarith
+  · have ha : 1 + p.1 2 ≠ 0 := by
+      intro h
+      apply hy
+      linarith
+    let v : ProjectiveSpaceTopology.NonzeroVectors ℂ 1 :=
+      ⟨![(1 + p.1 2 : ℂ), ⟨p.1 0, -p.1 1⟩], by
+        intro h
+        have h0 := congrFun h 0
+        apply ha
+        apply_fun Complex.re at h0
+        simpa using h0⟩
+    have hden : (1 + p.1 2) ^ 2 + ((p.1 0) ^ 2 + (p.1 1) ^ 2) =
+        2 * (1 + p.1 2) := by
+      nlinarith [hsumsq]
+    have hden' :
+        (1 + p.1 2) * (1 + p.1 2) +
+            (p.1 0 * p.1 0 + p.1 1 * p.1 1) = 2 * (1 + p.1 2) := by
+      nlinarith [hden]
+    refine ⟨quotientMap ℂ 1 v, ?_⟩
+    rw [hg]
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;>
+      simp [cpU_homology_aux_CP1_hequiv_S2_aux_hopf,
+        cpU_homology_aux_CP1_hequiv_S2_aux_raw,
+        cpU_homology_aux_CP1_hequiv_S2_aux_den, v,
+        Complex.normSq_apply] <;>
+      rw [hden'] <;>
+      field_simp [ha] <;>
+      nlinarith [hsumsq]
 -- END SEAT AREA
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective
