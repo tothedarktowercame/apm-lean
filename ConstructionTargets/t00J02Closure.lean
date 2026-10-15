@@ -262,6 +262,44 @@ theorem transverse_coprodDerivative_surjective
   exact ConstructionTargets.TransversePreimageGeometry.surjective_coprod_of_range_sup_eq_top
     (htrans x z hxz)
 
+/-- Surjectivity of the sum-form coproduct is unchanged when the second
+input is negated.  This converts the frozen transversality convention
+`df(u) + dc(v)` to the derivative `df(u) - dc(v)` of the incidence equation. -/
+theorem surjective_coprod_sub_of_surjective_coprod_add
+    {R E F G : Type} [Ring R]
+    [AddCommGroup E] [Module R E]
+    [AddCommGroup F] [Module R F]
+    [AddCommGroup G] [Module R G]
+    (A : E →ₗ[R] G) (B : F →ₗ[R] G)
+    (h : Function.Surjective (LinearMap.coprod A B)) :
+    Function.Surjective (LinearMap.coprod A (-B)) := by
+  intro y
+  obtain ⟨uv, huv⟩ := h y
+  refine ⟨(uv.1, -uv.2), ?_⟩
+  simpa [LinearMap.coprod_apply] using huv
+
+#print axioms surjective_coprod_sub_of_surjective_coprod_add
+
+/-- The derivative of the incidence equation is surjective at every
+incidence point under the frozen range-sum transversality hypothesis. -/
+theorem transverse_incidenceDifferenceDerivative_surjective
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∀ x z, f x = c z → Function.Surjective
+      (LinearMap.coprod
+        (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+        (-((mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap))) := by
+  intro x z hxz
+  apply surjective_coprod_sub_of_surjective_coprod_add
+  exact transverse_coprodDerivative_surjective f c htrans x z hxz
+
+#print axioms transverse_incidenceDifferenceDerivative_surjective
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
