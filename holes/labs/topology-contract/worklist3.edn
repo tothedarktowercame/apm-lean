@@ -37121,27 +37121,27 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Construct local classes and prove global sum/base sign/naturality; then degree/invariants/Main.",
+    "Construct the exact local-class boundary; then descent degree, invariants, Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
     [{:name
-      "polynomialSphereLift_localizationData_of_base_and_deckTransport",
-      :type "sum, base sign, transports imply localization data",
+      "polynomialSphereLift_degree_four_of_localClassDecompositionAndBase",
+      :type "exact local-class boundary implies lift acts by 4 on H3",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck"],
+      ["polynomialSphereLift_localizationData_of_base_and_deckTransport"],
       :area "rp-rational-homology"}
-     {:name "polynomialSphereLift_localClassDecompositionAndBase",
+     {:name "PolynomialSphereLiftLocalClassDecompositionAndBaseData",
       :type
-      "construct local classes with global sum, positive base, deck naturality",
+      "local classes with global sum, positive base, deck naturality",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
@@ -37152,7 +37152,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed localization assembly from global sum, base sign, and deck naturality.",
+    "Committed the exact local-class boundary and its degree-four consequence.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37161,13 +37161,11 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792061804682-13905-1cb5c247",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "dcb03680a",
+    :diagnostic-history
+    [{:cmd "piped closure compile",
+      :exit 1,
+      :note "fixed Type-valued theorem to def; reran Lake directly"}],
+    :commit "68a5ab9be",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37175,7 +37173,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42367,6 +42365,46 @@
    :id :lemma-t97j07-cp1-puncturedcomplex-radialhomotopyequiv,
    :kind :lemma,
    :depends-on [:lemma-t97j07-cp1-puncturedaffinehomeomorphcomplex],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polynomialSphereLift_degree_four_of_localClassDecompositionAndBase",
+    :type "exact local-class boundary implies lift acts by 4 on H3"},
+   :lemma
+   {:name
+    "polynomialSphereLift_degree_four_of_localClassDecompositionAndBase",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "exact local-class boundary implies lift acts by 4 on H3",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-polynomialspherelift-degree-four-of-localclassdecompositionandbase,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialspherelift-localizationdata-of-base-and-decktransport],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "PolynomialSphereLiftLocalClassDecompositionAndBaseData",
+    :type
+    "local classes with global sum, positive base, deck naturality"},
+   :lemma
+   {:name "PolynomialSphereLiftLocalClassDecompositionAndBaseData",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "local classes with global sum, positive base, deck naturality",
+    :area "rp-rational-homology"},
+   :id :lemma-polynomialsphereliftlocalclassdecompositionandbasedata,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialsphereregularfiberequiv-exists-orientationpreservingdeck],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
