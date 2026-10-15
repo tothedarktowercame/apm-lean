@@ -88376,6 +88376,19 @@
     [{:cmd "no-skip draft",
       :exit 1,
       :correction "normalized negated inequality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792072497479-14151-161d05b9",
+     :commands
+     ["git show/diff/check 051849305"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 051849305 adds compiled, sorry-free progress beyond history commit 4b0c8199c. It proves consecutive inverse run-offset coordinates cannot skip a run: a hypothetical skipped boundary lies strictly between their run boundaries, contradicting successor flattening plus the prior lower/upper offset bounds. Only t97A01Closure.lean changed; fixture SHA 2633d8b5c2ef99d30c25773285de86bfef0e1bc3731d0213ac4631e826e15cfb matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Inequality directions and Fin/Sigma boundaries are correct. Cross-run endpoint offsets, nested concatenation, van Kampen, and assembly remain listed."},
     :commit "051849305",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "2633d8b5c2ef99d30c25773285de86bfef0e1bc3731d0213ac4631e826e15cfb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor run monotonicity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor no-skipping bound.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88571,7 +88584,10 @@
      :reason "Banked flattened-coordinate run order."}
     {:job 8,
      :commit "4b0c8199c",
-     :reason "Banked successor run monotonicity."}]}
+     :reason "Banked successor run monotonicity."}
+    {:job 9,
+     :commit "051849305",
+     :reason "Banked successor no-skipping bound."}]}
   {:consumer :t94J09,
    :stop-count 5,
    :evidence
@@ -95348,7 +95364,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95360,7 +95376,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "successive inverse coordinates cannot skip a run",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "051849305"},
    :id
    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-le-add-one,
    :kind :lemma,
