@@ -37077,7 +37077,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 5,
    :review-finding
-   "extend Mathlib: state and prove the missing theorem in scope",
+   "Program STOP commits nothing new since the last :program-history entry (latest completion has :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
@@ -37120,6 +37120,12 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792032783001-13079-92ec16ea",
+     :finding
+     "Program STOP commits nothing new since the last :program-history entry (latest completion has :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -37128,7 +37134,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37150,7 +37156,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
