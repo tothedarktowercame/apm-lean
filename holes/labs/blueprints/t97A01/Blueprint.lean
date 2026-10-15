@@ -413,10 +413,41 @@ edgePointCircle, Surfaces.edgePoint]`), use the cell boundary relation
 `PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint` twice and
 `(P.signedWedgeArc_pair i t).symm`.  This is `X_fwd_aux_edges` of
 `problems/t97J04/lean/Main.lean` with `8` replaced by `P.edgeCount`. -/
+lemma polyToCell_respects_aux_boundary {Y : Type} [TopologicalSpace Y]
+    (γ : C(Circle, Y)) (z : Circle) :
+    cellDisk γ (circleToDisk z) = cellIncl γ (γ z) := by
+  exact Quotient.sound (Relation.EqvGen.symm _ _
+    (Relation.EqvGen.rel _ _ (CellRel.boundary z)))
+
+lemma polyToCell_respects_aux_edge (i : Fin P.edgeCount)
+    (t : Set.Icc (0 : ℝ) 1) :
+    cellDisk (bword P) (Surfaces.edgePoint P.edgeCount i t) =
+      cellDisk (bword P) (Surfaces.edgePoint P.edgeCount (P.pair i)
+        (pairedParameter P.pair P.sign i t)) := by
+  rw [show Surfaces.edgePoint P.edgeCount i t =
+      circleToDisk (edgePointCircle P.edgeCount i t) by
+        rfl,
+    show Surfaces.edgePoint P.edgeCount (P.pair i)
+        (pairedParameter P.pair P.sign i t) =
+      circleToDisk (edgePointCircle P.edgeCount (P.pair i)
+        (pairedParameter P.pair P.sign i t)) by
+        rfl,
+    polyToCell_respects_aux_boundary, polyToCell_respects_aux_boundary]
+  congr 1
+  rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint,
+    PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint]
+  exact (P.signedWedgeArc_pair i t).symm
+
 lemma polyToCell_respects (x y : Surfaces.Disk)
     (h : Relation.EqvGen P.Rel x y) :
     cellDisk (bword P) x = cellDisk (bword P) y := by
-  sorry
+  induction h with
+  | rel x y h =>
+      rcases h with ⟨i, t, rfl, rfl⟩
+      exact polyToCell_respects_aux_edge P i t
+  | refl x => rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
 
 /-- Polygon quotient → cell: the disk is the 2-cell. -/
 noncomputable def polyToCell : P.Space → Cell (bword P) :=
