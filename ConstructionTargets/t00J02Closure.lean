@@ -589,6 +589,37 @@ theorem writtenInExtChartAt_eq_commonTarget_of_eq
 
 #print axioms writtenInExtChartAt_eq_commonTarget_of_eq
 
+/-- At an incidence point, the mixed-model derivative formula can be written
+using one common target chart centered at the shared value. -/
+theorem hasFDerivAt_incidenceDifference_commonTarget
+    {E F G M N P : Type}
+    [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [TopologicalSpace M] [ChartedSpace E M]
+    [TopologicalSpace N] [ChartedSpace F N]
+    [TopologicalSpace P] [ChartedSpace G P]
+    {f : M → P} {c : N → P} {x : M} {y : N}
+    {A : E →L[ℝ] G} {B : F →L[ℝ] G}
+    (hf : HasMFDerivAt 𝓘(ℝ, E) 𝓘(ℝ, G) f x A)
+    (hc : HasMFDerivAt 𝓘(ℝ, F) 𝓘(ℝ, G) c y B)
+    (hxy : f x = c y) :
+    HasFDerivAt
+      (fun p : E × F ↦
+        writtenInExtChartAt 𝓘(ℝ, E) 𝓘(ℝ, G) x f p.1 -
+          extChartAt 𝓘(ℝ, G) (f x)
+            (c ((extChartAt 𝓘(ℝ, F) y).symm p.2)))
+      (A.coprod (-B))
+      (extChartAt 𝓘(ℝ, E) x x, extChartAt 𝓘(ℝ, F) y y) := by
+  have h :=
+    hasFDerivAt_incidenceDifference_writtenInExtChartAt_self hf hc
+  rw [writtenInExtChartAt_eq_commonTarget_of_eq
+    (E := E) (F := F) (G := G) (M := M) (N := N) (P := P)
+    f c x y hxy] at h
+  exact h
+
+#print axioms hasFDerivAt_incidenceDifference_commonTarget
+
 /-- For the boundaryless self model, the derivative datum of a manifold map
 is an ordinary full-space derivative of its preferred chart expression. -/
 theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
