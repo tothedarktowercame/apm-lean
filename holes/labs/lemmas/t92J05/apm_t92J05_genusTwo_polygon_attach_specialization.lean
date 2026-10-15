@@ -12,6 +12,8 @@ import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
 import ConstructionTargets.Surfaces
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.PolygonSurfacePiOne
+import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.PolygonSurfaceHomology
 
 open CategoryTheory Set
 open scoped ContDiff Manifold LinearAlgebra.Projectivization
@@ -1117,8 +1119,201 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
       r.comp leftMap = QuotientGroup.mk'
         (Subgroup.normalClosure (overlapMap.range : Set
           (FundamentalGroup U
-            (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
-  sorry
+              (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
+  classical
+  dsimp only
+  let Q := FundamentalGroup U
+      (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+    Subgroup.normalClosure
+      ((FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set _)
+  let L :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedLeftFunctor U V x
+  let R :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_rightTrivial U V x
+  let D : @ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum
+      X _ U V (SingleObj Q) _ :=
+    { obj := fun _ => SingleObj.star Q
+      functor := by intro b; cases b; exact R; exact L
+      obj_eq := by intro b z; cases b <;> rfl
+      overlap_eq := by
+        intro a b p hpU hpV
+        rw [apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom]
+        simp only [SingleObj.comp_as_mul, SingleObj.id_as_one, one_mul, mul_one]
+        change (1 : Q) = L.map _
+        symm
+        let q : Path (⟨a, by simpa using hpU 0, by simpa using hpV 0⟩ : (U ∩ V : Set X))
+            (⟨b, by simpa using hpU 1, by simpa using hpV 1⟩ : (U ∩ V : Set X)) :=
+          { toFun := fun t => ⟨p t, hpU t, hpV t⟩
+            continuous_toFun := p.continuous.subtype_mk _
+            source' := Subtype.ext p.source
+            target' := Subtype.ext p.target }
+        exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlap_killed
+          U V x (Path.Homotopic.Quotient.mk q) }
+  let F := ConstructionTargets.TwoOpenDescentFunctor.twoOpenDescentFunctor hU hV hcover D
+  let c := apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+      U V x (FundamentalGroupoid.mk (⟨x.1, x.2.1⟩ : U))
+  let k : Q := QuotientGroup.mk' _ c.hom
+  let s : FundamentalGroup X x.1 →* Q := F.mapEnd _
+  let r : FundamentalGroup X x.1 →* Q :=
+    { toFun := fun g => k * s g * k⁻¹
+      map_one' := by rw [map_one]; group
+      map_mul' := by intro a b; rw [map_mul]; group }
+  refine ⟨r, ?_⟩
+  ext g
+  change k * F.map ((FundamentalGroupoid.map
+    (apm_t92J05_twoOpen_leftInclusion U)).map g) * k⁻¹ = _
+  let z := FundamentalGroupoid.mk (⟨x.1, x.2.1⟩ : U)
+  have hn := (ConstructionTargets.TwoOpenDescentRestriction.pieceRestrictionIso
+    hU hV hcover D true).hom.naturality g
+  have hn' : L.map g = F.map ((FundamentalGroupoid.map
+      (apm_t92J05_twoOpen_leftInclusion U)).map g) := by
+    have hn0 : (D.functor true).map g =
+        (ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor
+          hU hV hcover D true).map g := by
+      simp only [ConstructionTargets.TwoOpenDescentRestriction.pieceRestrictionIso,
+        ConstructionTargets.TwoOpenDescentRestriction.restrictionAppIso,
+        NatIso.ofComponents_hom_app, eqToIso.hom] at hn
+      calc
+        (D.functor true).map g = (D.functor true).map g ≫ 𝟙 _ := (Category.comp_id _).symm
+        _ = 𝟙 _ ≫ (ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor
+              hU hV hcover D true).map g := hn
+        _ = _ := Category.id_comp _
+    have hncover : L.map g = F.map ((FundamentalGroupoid.map
+        (ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+          (U := U) (V := V) true)).map g) := by
+      simpa [D, L, F,
+        ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor] using hn0
+    have hi : ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+        (U := U) (V := V) true = apm_t92J05_twoOpen_leftInclusion U := rfl
+    simpa [hi] using hncover
+  rw [← hn']
+  let N : Subgroup (FundamentalGroup U
+      (apm_t92J05_twoOpen_overlapToLeft U V x)) := Subgroup.normalClosure
+    ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set _)
+  letI : N.Normal := inferInstance
+  change FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) at g
+  have hL : L.map g = k⁻¹ * QuotientGroup.mk' N g * k := by
+    have hLraw : L.map g = QuotientGroup.mk' N (c.hom ≫ g ≫ c.inv) := rfl
+    rw [hLraw]
+    let cg : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) := c.hom
+    have hk : k = QuotientGroup.mk' N cg := rfl
+    rw [hk]
+    rw [← map_inv, ← map_mul, ← map_mul]
+    congr 1
+    dsimp [cg]
+    change c.hom ≫ g ≫ c.inv = c.hom ≫ g ≫ Groupoid.inv c.hom
+    rw [Groupoid.inv_eq_inv]
+    have hc : CategoryTheory.inv c.hom = c.inv :=
+      IsIso.inv_eq_of_hom_inv_id c.hom_inv_id
+    exact congrArg (fun q => c.hom ≫ g ≫ q) hc.symm
+  change k * L.map g * k⁻¹ = QuotientGroup.mk' N g
+  rw [hL]
+  group
+/-
+  classical
+  dsimp only
+  let Q := FundamentalGroup U
+      (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+    Subgroup.normalClosure
+      ((FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set _)
+  let L :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedLeftFunctor
+      U V x
+  let R :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_rightTrivial
+      U V x
+  let D : @ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum
+      X _ U V (SingleObj Q) _ :=
+    { obj := fun _ => SingleObj.star Q
+      functor := by
+        intro b
+        cases b
+        · exact R
+        · exact L
+      obj_eq := by intro b z; cases b <;> rfl
+      overlap_eq := by
+        intro a b p hpU hpV
+        rw [apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom]
+        simp only [SingleObj.comp_as_mul, SingleObj.id_as_one, one_mul, mul_one]
+        change (1 : Q) = L.map _
+        symm
+        let q : Path (⟨a, by simpa using hpU 0, by simpa using hpV 0⟩ : (U ∩ V : Set X))
+            (⟨b, by simpa using hpU 1, by simpa using hpV 1⟩ : (U ∩ V : Set X)) :=
+          { toFun := fun t => ⟨p t, hpU t, hpV t⟩
+            continuous_toFun := p.continuous.subtype_mk _
+            source' := Subtype.ext p.source
+            target' := Subtype.ext p.target }
+        have hk :=
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlap_killed
+            U V x (Path.Homotopic.Quotient.mk q)
+        exact hk }
+  let F := ConstructionTargets.TwoOpenDescentFunctor.twoOpenDescentFunctor
+    hU hV hcover D
+  let c :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+      U V x (FundamentalGroupoid.mk (⟨x.1, x.2.1⟩ : U))
+  let k : Q := QuotientGroup.mk' _ c.hom
+  let s : FundamentalGroup X x.1 →* Q := F.mapEnd _
+  let r : FundamentalGroup X x.1 →* Q :=
+    { toFun := fun g => k * s g * k⁻¹
+      map_one' := by rw [map_one]; group
+      map_mul' := by intro a b; rw [map_mul]; group }
+  refine ⟨r, ?_⟩
+  ext g
+  change k * F.map ((FundamentalGroupoid.map
+    (apm_t92J05_twoOpen_leftInclusion U)).map g) * k⁻¹ = _
+  let z := FundamentalGroupoid.mk (⟨x.1, x.2.1⟩ : U)
+  have hn := (ConstructionTargets.TwoOpenDescentRestriction.pieceRestrictionIso
+    hU hV hcover D true).hom.naturality g
+  have hn' : L.map g =
+      F.map ((FundamentalGroupoid.map
+        (apm_t92J05_twoOpen_leftInclusion U)).map g) := by
+    have heta : (ConstructionTargets.TwoOpenDescentRestriction.pieceRestrictionIso
+      hU hV hcover D true).hom.app z = (1 : Q) := by
+      rfl
+    rw [heta] at hn
+    have hncover : L.map g = F.map ((FundamentalGroupoid.map
+        (ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+          (U := U) (V := V) true)).map g) := by
+      have hn0 := hn
+      simp [D, L, F,
+        ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor,
+        SingleObj.comp_as_mul] at hn0
+      change (1 : Q) * L.map g = F.map ((FundamentalGroupoid.map
+        (ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+          (U := U) (V := V) true)).map g) * 1 at hn0
+      simpa using hn0
+    have hi : ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+        (U := U) (V := V) true = apm_t92J05_twoOpen_leftInclusion U := rfl
+    simpa [hi] using hncover
+  rw [← hn']
+  let N : Subgroup (FundamentalGroup U
+      (apm_t92J05_twoOpen_overlapToLeft U V x)) := Subgroup.normalClosure
+    ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range :
+      Set (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x)))
+  letI : N.Normal := inferInstance
+  have hz : z = FundamentalGroupoid.mk
+      (apm_t92J05_twoOpen_overlapToLeft U V x) := by rfl
+  subst z
+  have hL : L.map g = k⁻¹ * QuotientGroup.mk' N g * k := by
+    dsimp [L, k, c,
+      apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedLeftFunctor]
+    change QuotientGroup.mk' N (c.hom ≫ g ≫ c.inv) = _
+    rw [show c.hom ≫ g ≫ c.inv = c.inv * g * c.hom by rfl]
+    simp [map_mul]
+  rw [hL]
+  change k * (k⁻¹ * QuotientGroup.mk' N g * k) * k⁻¹ =
+    QuotientGroup.mk' N g
+  group
+-/
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -1317,8 +1512,622 @@ def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv :
         apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).fixed 1 z.1 z.2
     rw [hmap]
 
+noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundarySkeletonHomeomorph :
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_Boundary ≃ₜ
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton where
+  toFun z := ⟨z.1.1,
+    (ConstructionTargets.PolygonSurfacePiOne.mem_outerBoundarySkeleton_iff
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P z.1).mp z.2⟩
+  invFun z := ⟨⟨z.1, by
+    obtain ⟨x, hx, hxq⟩ := z.2
+    exact ⟨x, by
+      change 1 / 4 < ‖(x : ℂ)‖
+      rw [hx]
+      norm_num, hxq⟩⟩,
+    (ConstructionTargets.PolygonSurfacePiOne.mem_outerBoundarySkeleton_iff
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P _).mpr z.2⟩
+  left_inv z := by rfl
+  right_inv z := by rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv :
+    ContinuousMap.HomotopyEquiv
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton :=
+  apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv.trans
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundarySkeletonHomeomorph.toHomotopyEquiv
+
+/-! ### B8: positive finite wedges of circles
+
+The quotient model `FiniteWedge` is empty on an empty index type.  Consequently
+the useful library statement starts at rank one and the induction adjoins one
+circle to an already nonempty wedge. -/
+
+open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
+
+/-- Split a wedge of at least two circles into the old nonempty wedge and one
+new circle.  The formulas on `castSucc` and `Fin.last` are supplied by
+`finiteWedgeFinSuccHomeomorphPointWedge_castSucc` and `_last`. -/
+def finiteWedge_finSucc_homeomorph_pointWedge_aux_e (n : ℕ) :
+    Fin ((n + 1) + 1) ≃ Fin (n + 1) ⊕ Unit :=
+  finSumFinEquiv.symm.trans (Equiv.sumCongr (Equiv.refl _) finOneEquiv)
+
+noncomputable def finiteWedge_finSucc_homeomorph_pointWedge_aux_f (n : ℕ) :
+    FiniteWedge (Fin ((n + 1) + 1)) →
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) :=
+  Quotient.lift (fun p =>
+    match finiteWedge_finSucc_homeomorph_pointWedge_aux_e n p.1 with
+    | .inl i => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+        (.inl (wedgeCircle i p.2))
+    | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+        (.inr (wedgeCircle u p.2))) (by
+      intro p q h
+      change Relation.EqvGen (FiniteWedgeRel _) p q at h
+      rw [eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · have hp' : p.2 = (1 : Circle) := Subtype.ext hp
+        have hq' : q.2 = (1 : Circle) := Subtype.ext hq
+        change (match finiteWedge_finSucc_homeomorph_pointWedge_aux_e n p.1 with
+          | .inl i => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inl (wedgeCircle i p.2))
+          | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inr (wedgeCircle u p.2))) =
+          (match finiteWedge_finSucc_homeomorph_pointWedge_aux_e n q.1 with
+          | .inl i => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inl (wedgeCircle i q.2))
+          | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+              (.inr (wedgeCircle u q.2)))
+        rw [hp', hq']
+        split <;> split
+        · apply congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl x))
+          exact wedgeCircle_base_eq _ _
+        · calc
+            ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl (wedgeCircle _ 1)) =
+                ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inl (wedgeCircle (0 : Fin (n + 1)) 1)) :=
+              congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl x))
+                (wedgeCircle_base_eq _ _)
+            _ = ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inr (wedgeCircle () 1)) :=
+              Quotient.sound (Relation.EqvGen.rel _ _
+                ConstructionTargets.PointWedgeQuotient.Rel.base)
+            _ = ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inr (wedgeCircle _ 1)) :=
+              congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr x))
+                (wedgeCircle_base_eq _ _)
+        · calc
+            ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr (wedgeCircle _ 1)) =
+                ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inl (wedgeCircle (0 : Fin (n + 1)) 1)) := by
+              rw [wedgeCircle_base_eq _ ()]
+              exact (Quotient.sound (Relation.EqvGen.rel _ _
+                ConstructionTargets.PointWedgeQuotient.Rel.base)).symm
+            _ = ConstructionTargets.PointWedgeQuotient.quotientMap _ _
+                  (.inl (wedgeCircle _ 1)) :=
+              congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl x))
+                (wedgeCircle_base_eq _ _)
+        · apply congrArg (fun x => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr x))
+          exact wedgeCircle_base_eq _ _)
+
+noncomputable def finiteWedge_finSucc_homeomorph_pointWedge_aux_g (n : ℕ) :
+    ConstructionTargets.PointWedgeQuotient.Wedge
+        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) →
+      FiniteWedge (Fin ((n + 1) + 1)) :=
+  Quotient.lift (Sum.elim
+    (Quotient.lift (fun p => wedgeCircle
+      ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inl p.1)) p.2)
+      (by intro p q h
+          change Relation.EqvGen (FiniteWedgeRel _) p q at h
+          rw [eqvGen_finiteWedgeRel_iff] at h
+          rcases h with rfl | ⟨hp, hq⟩
+          · rfl
+          · apply Quotient.sound
+            change Relation.EqvGen (FiniteWedgeRel _) _ _
+            rw [eqvGen_finiteWedgeRel_iff]
+            exact Or.inr ⟨hp, hq⟩))
+    (Quotient.lift (fun p => wedgeCircle
+      ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inr p.1)) p.2)
+      (by intro p q h
+          change Relation.EqvGen (FiniteWedgeRel _) p q at h
+          rw [eqvGen_finiteWedgeRel_iff] at h
+          rcases h with rfl | ⟨hp, hq⟩
+          · rfl
+          · apply Quotient.sound
+            change Relation.EqvGen (FiniteWedgeRel _) _ _
+            rw [eqvGen_finiteWedgeRel_iff]
+            exact Or.inr ⟨hp, hq⟩))) (by
+      intro a b h
+      induction h with
+      | rel a b h =>
+          cases h
+          apply Quotient.sound
+          change Relation.EqvGen (FiniteWedgeRel _) _ _
+          rw [eqvGen_finiteWedgeRel_iff]
+          exact Or.inr ⟨rfl, rfl⟩
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+lemma finiteWedge_finSucc_homeomorph_pointWedge (n : ℕ) :
+    ∃ h : FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1),
+      (∀ (i : Fin (n + 1)) (z : Circle), h (wedgeCircle i.castSucc z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inl (wedgeCircle i z))) ∧
+      (∀ z : Circle, h (wedgeCircle (Fin.last (n + 1)) z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inr (wedgeCircle () z))) := by
+  let e := finiteWedge_finSucc_homeomorph_pointWedge_aux_e n
+  let f := finiteWedge_finSucc_homeomorph_pointWedge_aux_f n
+  let g := finiteWedge_finSucc_homeomorph_pointWedge_aux_g n
+  have hfg : ∀ x, g (f x) = x := by
+    rintro ⟨⟨i, z⟩⟩
+    change g (match e i with
+      | .inl j => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inl (wedgeCircle j z))
+      | .inr u => ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (.inr (wedgeCircle u z))) = _
+    cases he : e i with
+    | inl j =>
+      change wedgeCircle (e.symm (.inl j)) z = wedgeCircle i z
+      rw [← he, e.symm_apply_apply]
+    | inr u =>
+      change wedgeCircle (e.symm (.inr u)) z = wedgeCircle i z
+      rw [← he, e.symm_apply_apply]
+  have hgf : ∀ x, f (g x) = x := by
+    rintro ⟨x⟩
+    rcases x with x | x
+    · rcases x with ⟨⟨i, z⟩⟩
+      change f (wedgeCircle (e.symm (.inl i)) z) = _
+      change (match e (e.symm (.inl i)) with | .inl j => _ | .inr u => _) = _
+      rw [e.apply_symm_apply]
+      rfl
+    · rcases x with ⟨⟨u, z⟩⟩
+      change f (wedgeCircle (e.symm (.inr u)) z) = _
+      change (match e (e.symm (.inr u)) with | .inl j => _ | .inr v => _) = _
+      rw [e.apply_symm_apply]
+      rfl
+  have hf : Continuous f := by
+    dsimp [f, finiteWedge_finSucc_homeomorph_pointWedge_aux_f]
+    apply Continuous.quotient_lift
+    letI : TopologicalSpace (Fin ((n + 1) + 1)) := ⊥
+    letI : DiscreteTopology (Fin ((n + 1) + 1)) := ⟨rfl⟩
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    cases he : finiteWedge_finSucc_homeomorph_pointWedge_aux_e n i with
+    | inl j =>
+      simpa only [Prod.fst, Prod.snd, he] using
+        ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+          (continuous_inl.comp (continuous_wedgeCircle j)))
+    | inr u =>
+      simpa only [Prod.fst, Prod.snd, he] using
+        ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+          (continuous_inr.comp (continuous_wedgeCircle u)))
+  have hg : Continuous g := by
+    dsimp [g, finiteWedge_finSucc_homeomorph_pointWedge_aux_g]
+    apply Continuous.quotient_lift
+    rw [continuous_sum_dom]
+    constructor <;> apply Continuous.quotient_lift
+    · letI : TopologicalSpace (Fin (n + 1)) := ⊥
+      letI : DiscreteTopology (Fin (n + 1)) := ⟨rfl⟩
+      rw [continuous_prod_of_discrete_left]
+      intro i
+      simpa only using (continuous_wedgeCircle
+        ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inl i)))
+    · letI : TopologicalSpace Unit := ⊥
+      letI : DiscreteTopology Unit := ⟨rfl⟩
+      rw [continuous_prod_of_discrete_left]
+      intro u
+      simpa only using (continuous_wedgeCircle
+        ((finiteWedge_finSucc_homeomorph_pointWedge_aux_e n).symm (.inr u)))
+  let h : FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) :=
+    { toEquiv := ⟨f, g, hfg, hgf⟩
+      continuous_toFun := hf
+      continuous_invFun := hg }
+  refine ⟨h, ?_, ?_⟩
+  · intro i z
+    change f (Quotient.mk _ (i.castSucc, z)) = _
+    dsimp [f, finiteWedge_finSucc_homeomorph_pointWedge_aux_f]
+    have he : finiteWedge_finSucc_homeomorph_pointWedge_aux_e n i.castSucc = Sum.inl i := by
+      simp [finiteWedge_finSucc_homeomorph_pointWedge_aux_e]
+    rw [he]
+  · intro z
+    change f (Quotient.mk _ (Fin.last (n + 1), z)) = _
+    dsimp [f, finiteWedge_finSucc_homeomorph_pointWedge_aux_f]
+    have he : finiteWedge_finSucc_homeomorph_pointWedge_aux_e n (Fin.last (n + 1)) = Sum.inr () := by
+      simp [finiteWedge_finSucc_homeomorph_pointWedge_aux_e]
+    rw [he]
+
+/-- The algebraic successor identity, with the old generators first and the
+new generator last. -/
+lemma coprodFreeGroupFinSucc_equiv (n : ℕ) :
+    ∃ e : Monoid.Coprod (FreeGroup (Fin (n + 1))) (FreeGroup (Fin 1)) ≃*
+        FreeGroup (Fin ((n + 1) + 1)),
+      (∀ i : Fin (n + 1), e (Monoid.Coprod.inl (FreeGroup.of i)) = FreeGroup.of i.castSucc) ∧
+      e (Monoid.Coprod.inr (FreeGroup.of 0)) = FreeGroup.of (Fin.last (n + 1)) := by
+  let e : Monoid.Coprod (FreeGroup (Fin (n + 1))) (FreeGroup (Fin 1)) ≃*
+      FreeGroup (Fin ((n + 1) + 1)) :=
+    (ConstructionTargets.PointWedgeVanKampen.coprodFreeGroupEquivFreeGroupSum
+      (Fin (n + 1)) (Fin 1)).trans
+      (MulEquiv.ofBijective (FreeGroup.map finSumFinEquiv)
+        ⟨FreeGroup.map_injective finSumFinEquiv.injective,
+          FreeGroup.map_surjective finSumFinEquiv.surjective⟩)
+  refine ⟨e, ?_, ?_⟩
+  · intro i
+    change FreeGroup.map finSumFinEquiv (FreeGroup.of (Sum.inl i)) = _
+    rw [FreeGroup.map.of, finSumFinEquiv_apply_left]
+    congr 1
+  · change FreeGroup.map finSumFinEquiv (FreeGroup.of (Sum.inr 0)) = _
+    rw [FreeGroup.map.of, finSumFinEquiv_apply_right]
+    rfl
+
+/-- All topological inputs needed by point-wedge van Kampen at a successor
+split.  The neighborhood packages include openness, the basepoint, and a
+pointed contraction. -/
+structure finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+    (X : Type*) [TopologicalSpace X] (x : X) where
+  carrier : Set X
+  isOpen : IsOpen carrier
+  mem : x ∈ carrier
+  contraction :
+    ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      carrier ⟨x, mem⟩
+
+def finiteWedge_finSucc_pointWedge_inputs_aux_restrict
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (S : Set Y) : e ⁻¹' S ≃ₜ S where
+  toFun x := ⟨e x.1, x.2⟩
+  invFun y := ⟨e.symm y.1, by simpa using y.2⟩
+  left_inv x := by ext; exact e.symm_apply_apply x.1
+  right_inv y := by ext; exact e.apply_symm_apply y.1
+  continuous_toFun := Continuous.subtype_mk
+    (e.continuous.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (e.symm.continuous.comp continuous_subtype_val) _
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_pullback
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x : X}
+    (e : X ≃ₜ Y)
+    (P : finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood Y (e x)) :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood X x where
+  carrier := e ⁻¹' P.carrier
+  isOpen := P.isOpen.preimage e.continuous
+  mem := P.mem
+  contraction :=
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm
+      (finiteWedge_finSucc_pointWedge_inputs_aux_restrict e P.carrier) P.contraction
+
+def finiteWedge_finSucc_pointWedge_inputs_aux_circle :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood Circle 1 where
+  carrier := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+  isOpen := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+  mem := ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+  contraction := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_collapse
+    {L : Type} [Subsingleton L] (l : L) : FiniteWedge L → Circle :=
+  Quotient.lift (fun p : L × Circle => p.2) (by
+    intro a b hab
+    change Relation.EqvGen
+      (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) a b at hab
+    rw [ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+      at hab
+    rcases hab with rfl | ⟨ha, hb⟩
+    · rfl
+    · apply Circle.coe_injective
+      simpa using ha.trans hb.symm)
+
+lemma finiteWedge_finSucc_pointWedge_inputs_aux_collapse_continuous
+    {L : Type} [Subsingleton L] (l : L) :
+    Continuous (finiteWedge_finSucc_pointWedge_inputs_aux_collapse l) := by
+  apply continuous_coinduced_dom.mpr
+  letI : TopologicalSpace L := ⊥
+  simpa [finiteWedge_finSucc_pointWedge_inputs_aux_collapse] using
+    (continuous_snd : Continuous (fun p : L × Circle => p.2))
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph
+    {L : Type} [Subsingleton L] (l : L) : FiniteWedge L ≃ₜ Circle where
+  toFun := finiteWedge_finSucc_pointWedge_inputs_aux_collapse l
+  invFun := wedgeCircle l
+  left_inv x := by
+    refine Quotient.inductionOn x ?_
+    rintro ⟨k, z⟩
+    have hk : k = l := Subsingleton.elim _ _
+    subst k
+    rfl
+  right_inv z := rfl
+  continuous_toFun := finiteWedge_finSucc_pointWedge_inputs_aux_collapse_continuous l
+  continuous_invFun := continuous_wedgeCircle l
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_unit :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+      (FiniteWedge Unit) (wedgeCircle () 1) :=
+  finiteWedge_finSucc_pointWedge_inputs_aux_pullback
+    (finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ())
+    finiteWedge_finSucc_pointWedge_inputs_aux_circle
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_wedge
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x : X} {y : Y}
+    (PX : finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood X x)
+    (PY : finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood Y y) :
+    finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+      (ConstructionTargets.PointWedgeQuotient.Wedge x y)
+      (ConstructionTargets.PointWedgeQuotient.quotientMap x y (.inl x)) := by
+  let U := ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen x y
+    PX.carrier PY.carrier
+  have hU : IsOpen U :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen_isOpen
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  have hb : ConstructionTargets.PointWedgeQuotient.quotientMap x y (.inl x) ∈ U :=
+    ⟨.inl x, PX.mem, rfl⟩
+  let e : U ≃ₜ ConstructionTargets.PointWedgeQuotient.Wedge
+      (⟨x, PX.mem⟩ : PX.carrier) (⟨y, PY.mem⟩ : PY.carrier) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  let h := ConstructionTargets.PointWedgeVanKampen.wedgePointedContraction
+    PX.contraction PY.contraction
+  have he : e ⟨_, hb⟩ = ConstructionTargets.PointWedgeQuotient.quotientMap
+      (⟨x, PX.mem⟩ : PX.carrier) (⟨y, PY.mem⟩ : PY.carrier)
+      (.inl ⟨x, PX.mem⟩) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge_left
+      _ _ _ _ _ _
+  rw [← he] at h
+  exact ⟨U, hU, hb,
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h⟩
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_fin :
+    (n : ℕ) → finiteWedge_finSucc_pointWedge_inputs_aux_Neighborhood
+      (FiniteWedge (Fin (n + 1))) (wedgeCircle (0 : Fin (n + 1)) 1)
+  | 0 => finiteWedge_finSucc_pointWedge_inputs_aux_pullback
+      (letI : Subsingleton (Fin 1) := ⟨fun a b => Fin.ext (by omega)⟩
+       finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph 0)
+      finiteWedge_finSucc_pointWedge_inputs_aux_circle
+  | n + 1 => by
+      let old := finiteWedge_finSucc_pointWedge_inputs_aux_fin n
+      let combined := finiteWedge_finSucc_pointWedge_inputs_aux_wedge old
+        finiteWedge_finSucc_pointWedge_inputs_aux_unit
+      let e := Classical.choose (finiteWedge_finSucc_homeomorph_pointWedge n)
+      have he := (Classical.choose_spec (finiteWedge_finSucc_homeomorph_pointWedge n)).1
+      have hbase : e (wedgeCircle (0 : Fin ((n + 1) + 1)) 1) =
+          ConstructionTargets.PointWedgeQuotient.quotientMap
+            (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1)
+            (.inl (wedgeCircle (0 : Fin (n + 1)) 1)) := by
+        simpa using he (0 : Fin (n + 1)) 1
+      rw [← hbase] at combined
+      exact finiteWedge_finSucc_pointWedge_inputs_aux_pullback e combined
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_path :
+    (n : ℕ) → PathConnectedSpace (FiniteWedge (Fin (n + 1)))
+  | 0 => by
+      letI : Subsingleton (Fin 1) := ⟨fun a b => Fin.ext (by omega)⟩
+      let e := finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph (0 : Fin 1)
+      exact e.symm.surjective.pathConnectedSpace e.symm.continuous
+  | n + 1 => by
+      letI := finiteWedge_finSucc_pointWedge_inputs_aux_path n
+      letI : PathConnectedSpace (FiniteWedge Unit) :=
+        let e := finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()
+        e.symm.surjective.pathConnectedSpace e.symm.continuous
+      let e := Classical.choose (finiteWedge_finSucc_homeomorph_pointWedge n)
+      exact e.symm.surjective.pathConnectedSpace e.symm.continuous
+
+noncomputable def finiteWedge_finSucc_pointWedge_inputs_aux_locPath :
+    (n : ℕ) → LocPathConnectedSpace (FiniteWedge (Fin (n + 1)))
+  | 0 => by
+      letI : Subsingleton (Fin 1) := ⟨fun a b => Fin.ext (by omega)⟩
+      exact (finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph 0).symm.isQuotientMap.locPathConnectedSpace
+  | n + 1 => by
+      letI := finiteWedge_finSucc_pointWedge_inputs_aux_locPath n
+      letI : LocPathConnectedSpace (FiniteWedge Unit) :=
+        (finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()).symm.isQuotientMap.locPathConnectedSpace
+      letI : LocPathConnectedSpace
+          (ConstructionTargets.PointWedgeQuotient.Wedge
+            (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1)) :=
+        (show Topology.IsQuotientMap
+            (ConstructionTargets.PointWedgeQuotient.quotientMap
+              (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1)) from
+          ⟨ConstructionTargets.PointWedgeQuotient.surjective_quotientMap _ _, rfl⟩).locPathConnectedSpace
+      let e := Classical.choose (finiteWedge_finSucc_homeomorph_pointWedge n)
+      exact e.symm.isQuotientMap.locPathConnectedSpace
+
+lemma finiteWedge_finSucc_pointWedge_inputs (n : ℕ) :
+    Nonempty (PathConnectedSpace (FiniteWedge (Fin (n + 1)))) ∧
+    Nonempty (LocPathConnectedSpace (FiniteWedge (Fin (n + 1)))) ∧
+    Nonempty (PathConnectedSpace (FiniteWedge Unit)) ∧
+    Nonempty (LocPathConnectedSpace (FiniteWedge Unit)) ∧
+    (∃ (N : Set (FiniteWedge (Fin (n + 1))))
+        (hN : IsOpen N) (hb : wedgeCircle (0 : Fin (n + 1)) 1 ∈ N),
+      Nonempty
+        (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+          N ⟨wedgeCircle (0 : Fin (n + 1)) 1, hb⟩)) ∧
+    (∃ (M : Set (FiniteWedge Unit)) (hM : IsOpen M)
+        (hb : wedgeCircle () 1 ∈ M),
+      Nonempty
+        (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+          M ⟨wedgeCircle () 1, hb⟩)) := by
+  let P := finiteWedge_finSucc_pointWedge_inputs_aux_fin n
+  let Q := finiteWedge_finSucc_pointWedge_inputs_aux_unit
+  letI : Subsingleton Unit := inferInstance
+  refine ⟨⟨finiteWedge_finSucc_pointWedge_inputs_aux_path n⟩,
+    ⟨finiteWedge_finSucc_pointWedge_inputs_aux_locPath n⟩,
+    ⟨by
+      let e := finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()
+      exact e.symm.surjective.pathConnectedSpace e.symm.continuous⟩,
+    ⟨(finiteWedge_finSucc_pointWedge_inputs_aux_singletonHomeomorph ()).symm.isQuotientMap.locPathConnectedSpace⟩,
+    ?_, ?_⟩
+  · exact ⟨P.carrier, P.isOpen, P.mem, ⟨P.contraction⟩⟩
+  · exact ⟨Q.carrier, Q.isOpen, Q.mem, ⟨Q.contraction⟩⟩
+
+/-- The positively oriented circle class, normalized by winding number one. -/
+noncomputable def apm_t92J05_circlePositiveClass : FundamentalGroup Circle 1 :=
+  ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.symm
+    (Multiplicative.ofAdd 1)
+
+/-- Insert a based circle loop into leg `i`, then identify its endpoint with
+the common zeroth-leg basepoint. -/
+noncomputable def apm_t92J05_finiteWedgeLegMap (n : ℕ) (i : Fin (n + 1)) :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup (FiniteWedge (Fin (n + 1)))
+        (wedgeCircle (0 : Fin (n + 1)) 1) :=
+  FundamentalGroup.mapOfEq
+    ⟨wedgeCircle i, continuous_wedgeCircle i⟩
+    (wedgeCircle_base_eq i 0)
+
+/-- Coordinate predicate for the positive-rank theorem.  The chosen circle
+class is the positive generator fixed by `CircleUniversalCover`. -/
+def FiniteWedgeFreeCoordinates (n : ℕ)
+    (e : FundamentalGroup (FiniteWedge (Fin (n + 1)))
+        (wedgeCircle (0 : Fin (n + 1)) 1) ≃* FreeGroup (Fin (n + 1))) : Prop :=
+  ∀ i : Fin (n + 1),
+    e (apm_t92J05_finiteWedgeLegMap n i apm_t92J05_circlePositiveClass) = FreeGroup.of i
+
+/-- The independent induction step.  Its predecessor equivalence and literal
+leg coordinates are hypotheses, so a seat can prove this before the base case
+or final recursion lands. -/
+lemma finiteWedge_finSucc_fundamentalGroup_step_aux_circle_generator :
+    (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+      ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne)
+      apm_t92J05_circlePositiveClass = FreeGroup.of (0 : Fin 1) := by
+  simp [apm_t92J05_circlePositiveClass,
+    ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne]
+  change FreeGroup.of (default : Fin 1) ^ (1 : ℤ) = FreeGroup.of 0
+  simp
+
+lemma finiteWedge_finSucc_fundamentalGroup_step (n : ℕ)
+    (hsplit : ∀ k : ℕ, ∃ h : FiniteWedge (Fin ((k + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge (wedgeCircle (0 : Fin (k + 1)) 1) (wedgeCircle () 1),
+      (∀ (i : Fin (k + 1)) (z : Circle), h (wedgeCircle i.castSucc z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inl (wedgeCircle i z))) ∧
+      (∀ z : Circle, h (wedgeCircle (Fin.last (k + 1)) z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inr (wedgeCircle () z))))
+    (hcoprod : ∀ k : ℕ, ∃ e : Monoid.Coprod (FreeGroup (Fin (k + 1))) (FreeGroup (Fin 1)) ≃*
+        FreeGroup (Fin ((k + 1) + 1)),
+      (∀ i : Fin (k + 1), e (Monoid.Coprod.inl (FreeGroup.of i)) = FreeGroup.of i.castSucc) ∧
+      e (Monoid.Coprod.inr (FreeGroup.of 0)) = FreeGroup.of (Fin.last (k + 1)))
+    (hinputs : ∀ k : ℕ,
+    Nonempty (PathConnectedSpace (FiniteWedge (Fin (k + 1)))) ∧
+    Nonempty (LocPathConnectedSpace (FiniteWedge (Fin (k + 1)))) ∧
+    Nonempty (PathConnectedSpace (FiniteWedge Unit)) ∧
+    Nonempty (LocPathConnectedSpace (FiniteWedge Unit)) ∧
+    (∃ (N : Set (FiniteWedge (Fin (k + 1))))
+        (hN : IsOpen N) (hb : wedgeCircle (0 : Fin (k + 1)) 1 ∈ N),
+      Nonempty
+        (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+          N ⟨wedgeCircle (0 : Fin (k + 1)) 1, hb⟩)) ∧
+    (∃ (M : Set (FiniteWedge Unit)) (hM : IsOpen M)
+        (hb : wedgeCircle () 1 ∈ M),
+      Nonempty
+        (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+          M ⟨wedgeCircle () 1, hb⟩)))
+    (hprev : n = 0 ∨
+      ∃ (k : ℕ) (hk : n = k + 1)
+        (old : FundamentalGroup (FiniteWedge (Fin (k + 1)))
+          (wedgeCircle (0 : Fin (k + 1)) 1) ≃* FreeGroup (Fin (k + 1))),
+        ∀ i : Fin (k + 1),
+          old (FundamentalGroup.mapOfEq
+              ⟨wedgeCircle i, continuous_wedgeCircle i⟩
+              (wedgeCircle_base_eq i 0) apm_t92J05_circlePositiveClass) =
+            FreeGroup.of i) :
+    ∃ next : FundamentalGroup (FiniteWedge (Fin (n + 1)))
+        (wedgeCircle (0 : Fin (n + 1)) 1) ≃* FreeGroup (Fin (n + 1)),
+      FiniteWedgeFreeCoordinates n next := by
+  sorry
+/-- Relabel a finite wedge along an equivalence of its leg types. -/
+lemma finiteWedge_reindex_homeomorph
+    {L : Type*} (n : ℕ) (e : L ≃ Fin (n + 1)) :
+    ∃ h : FiniteWedge L ≃ₜ FiniteWedge (Fin (n + 1)),
+      ∀ (l : L) (z : Circle), h (wedgeCircle l z) = wedgeCircle (e l) z := by
+  let h : FiniteWedge L ≃ₜ FiniteWedge (Fin (n + 1)) :=
+    { toFun := Quotient.lift (fun p => wedgeCircle (e p.1) p.2) (by
+        intro p q hpq
+        change Relation.EqvGen (FiniteWedgeRel L) p q at hpq
+        rw [eqvGen_finiteWedgeRel_iff] at hpq
+        rcases hpq with rfl | ⟨hp, hq⟩
+        · rfl
+        · apply Quotient.sound
+          change Relation.EqvGen (FiniteWedgeRel (Fin (n + 1)))
+            (e p.1, p.2) (e q.1, q.2)
+          rw [eqvGen_finiteWedgeRel_iff]
+          exact Or.inr ⟨hp, hq⟩)
+      invFun := Quotient.lift (fun p => wedgeCircle (e.symm p.1) p.2) (by
+        intro p q hpq
+        change Relation.EqvGen (FiniteWedgeRel (Fin (n + 1))) p q at hpq
+        rw [eqvGen_finiteWedgeRel_iff] at hpq
+        rcases hpq with rfl | ⟨hp, hq⟩
+        · rfl
+        · apply Quotient.sound
+          change Relation.EqvGen (FiniteWedgeRel L)
+            (e.symm p.1, p.2) (e.symm q.1, q.2)
+          rw [eqvGen_finiteWedgeRel_iff]
+          exact Or.inr ⟨hp, hq⟩)
+      left_inv := by
+        rintro ⟨⟨l, z⟩⟩
+        change wedgeCircle (e.symm (e l)) z = _
+        rw [e.symm_apply_apply]
+        rfl
+      right_inv := by
+        rintro ⟨⟨i, z⟩⟩
+        change wedgeCircle (e (e.symm i)) z = _
+        rw [e.apply_symm_apply]
+        rfl
+      continuous_toFun := by
+        letI : TopologicalSpace L := ⊥
+        letI : DiscreteTopology L := ⟨rfl⟩
+        apply Continuous.quotient_lift
+        rw [continuous_prod_of_discrete_left]
+        exact fun l => continuous_wedgeCircle (e l)
+      continuous_invFun := by
+        letI : TopologicalSpace (Fin (n + 1)) := ⊥
+        letI : DiscreteTopology (Fin (n + 1)) := ⟨rfl⟩
+        apply Continuous.quotient_lift
+        rw [continuous_prod_of_discrete_left]
+        exact fun i => continuous_wedgeCircle (e.symm i) }
+  exact ⟨h, fun l z => rfl⟩
+
+/-- Positive-rank B8, assembled without further axioms from the rank-one
+circle calculation and the successor leaf. -/
+theorem finiteWedge_finSucc_fundamentalGroup_free (n : ℕ) :
+    ∃ e : FundamentalGroup (FiniteWedge (Fin (n + 1)))
+        (wedgeCircle (0 : Fin (n + 1)) 1) ≃* FreeGroup (Fin (n + 1)),
+      FiniteWedgeFreeCoordinates n e := by
+  induction n with
+  | zero =>
+      exact finiteWedge_finSucc_fundamentalGroup_step 0 finiteWedge_finSucc_homeomorph_pointWedge
+        coprodFreeGroupFinSucc_equiv finiteWedge_finSucc_pointWedge_inputs (Or.inl rfl)
+  | succ n ih =>
+      rcases ih with ⟨old, hold⟩
+      exact finiteWedge_finSucc_fundamentalGroup_step (n + 1)
+        finiteWedge_finSucc_homeomorph_pointWedge coprodFreeGroupFinSucc_equiv
+        finiteWedge_finSucc_pointWedge_inputs (Or.inr ⟨n, rfl, old, hold⟩)
+
+/-- **Leaf (B8 + B9 for genus two).** π₁ of the outer piece is free on the four
+edge orbits, and under that identification the normal closure of the annulus loop is
+the normal closure of `[a₁,b₁][a₂,b₂]`.  Route: `_aux_outerSkeletonEquiv` (outer ≃ₕ
+skeleton), `_aux_boundarySkeletonHomeomorph` (skeleton ≃ₜ wedge),
+`finiteWedge_finSucc_fundamentalGroup_free 3` with its leg coordinates and
+`finiteWedge_reindex_homeomorph` (orbits ≃ Fin 4), then read the boundary loop
+edge by edge (`PairingData.skeletonHomeomorphWedge_skeletonArc`, `standardSign`). -/
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
+    ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
+      ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x) ≃* FreeGroup (Fin 4),
+        Subgroup.map e.toMonoidHom
+            (Subgroup.normalClosure
+              ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range :
+                Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
+          Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
+  sorry
+
 -- BEGIN SEAT AREA
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
+    (houter : ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
+      ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x) ≃* FreeGroup (Fin 4),
+        Subgroup.map e.toMonoidHom
+            (Subgroup.normalClosure
+              ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range :
+                Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
+          Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))))
     (hattach : ∀ {X : Type} [TopologicalSpace X] (U V : Set X)
       (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
       [PathConnectedSpace U] [PathConnectedSpace V]
@@ -1345,6 +2154,7 @@ theorem apm_t92J05_genusTwo_polygon_vanKampen_at_center :
           apm_t92J05_genusTwo_center ≃*
         apm_t92J05_genusTwoGroup) := by
   exact apm_t92J05_genusTwo_polygon_attach_specialization
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word
     apm_t92J05_twoOpen_attach_one_cell
 
 /-- The standard genus-two polygon quotient is path connected.  This is
