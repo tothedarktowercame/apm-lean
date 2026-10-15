@@ -88331,7 +88331,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88384,7 +88384,7 @@
      "8b2742f56faced2ba568fcc066af53ce368fcb107e34b6ed4f4e58f2bd51edf1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88671,6 +88671,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 9cbf92387", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792093854695-14541-e5a47f60",
+     :commands
+     ["git show/diff/check 9cbf92387"
+      "sha256sum + placeholder recount from 9cbf92387"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 9cbf92387 adds compiled, sorry-free progress beyond history 307ed881c. The signed degrees [2,2,0,-2,-2,2,-2] correctly count the frozen word in orbit order; d and g both have degree -2, so the two-vertex graph boundary vanishes, and the kernel equivalence correctly drops the dependent seventh coordinate to [2,2,0,-2,-2,2]. Only t94J09Closure.lean changed; fixture SHA f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Face cokernel, MV H1, normalization, and assembly remain listed."},
     :commit "9cbf92387",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88679,7 +88691,7 @@
      "f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88697,7 +88709,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked two-vertex graph boundary kernel.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked frozen face boundary.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88729,7 +88741,10 @@
      "Banked frozen fourteen-edge pairing and seven-orbit coordinates."}
     {:job 7,
      :commit "307ed881c",
-     :reason "Banked two-vertex graph boundary kernel."}]}
+     :reason "Banked two-vertex graph boundary kernel."}
+    {:job 8,
+     :commit "9cbf92387",
+     :reason "Banked frozen face boundary."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -95938,7 +95953,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95952,7 +95967,9 @@
     :type
     "within-run successor offset equality after dependent run-length transport",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id
    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-offset-cast-of-run-eq,
    :kind :lemma,
@@ -95961,7 +95978,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGraphBoundary_attachingDegree_zero",
@@ -95971,14 +95988,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "seven-orbit face boundary is a graph cycle",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9cbf92387"},
    :id :lemma-frozengraphboundary-attachingdegree-zero,
    :kind :lemma,
    :depends-on [:lemma-frozengraphboundarykernelequiv],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGraphBoundaryKernelEquiv_attachingCycle",
@@ -95988,7 +96007,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "cycle coordinates (2,2,0,-2,-2,2)",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9cbf92387"},
    :id :lemma-frozengraphboundarykernelequiv-attachingcycle,
    :kind :lemma,
    :depends-on [:lemma-frozengraphboundary-attachingdegree-zero],
