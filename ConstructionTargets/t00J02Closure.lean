@@ -361,6 +361,27 @@ theorem exists_linearRightInverse_conj
 
 #print axioms exists_linearRightInverse_conj
 
+/-- Once a coordinate derivative is identified with the conjugate of a split
+tangent derivative, it has a continuous linear right inverse.  This packages
+the two representation steps needed immediately before the chart-level
+submersion theorem. -/
+theorem coordinateDerivative_hasRightInverse_of_eq_conj
+    {E F E' F' : Type}
+    [AddCommGroup E] [Module ℝ E] [AddCommGroup F] [Module ℝ F]
+    [NormedAddCommGroup E'] [NormedSpace ℝ E']
+    [NormedAddCommGroup F'] [NormedSpace ℝ F'] [FiniteDimensional ℝ F']
+    (A : E →ₗ[ℝ] F) (hA : ∃ g : F →ₗ[ℝ] E, A.comp g = LinearMap.id)
+    (eE : E ≃ₗ[ℝ] E') (eF : F ≃ₗ[ℝ] F') (A' : E' →L[ℝ] F')
+    (hA' : A'.toLinearMap =
+      eF.toLinearMap.comp (A.comp eE.symm.toLinearMap)) :
+    A'.HasRightInverse := by
+  obtain ⟨g', hg'⟩ := exists_linearRightInverse_conj A hA eE eF
+  apply continuousLinearMap_hasRightInverse_of_linearRightInverse A' g'
+  rw [hA']
+  exact hg'
+
+#print axioms coordinateDerivative_hasRightInverse_of_eq_conj
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
