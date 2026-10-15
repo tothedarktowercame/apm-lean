@@ -147,6 +147,18 @@ def clean(body: str) -> str:
     return body
 
 
+def dollar_inline(text: str) -> str:
+    r"""Write inline math as $...$ rather than \(...\).
+
+    The two are the same to LaTeX, but futon6's anatomy pass (S1) was built on
+    arXiv sources, which mostly use dollars. Measured on a00J02 (2026-10-15):
+    with \(...\) S1 found 12 clause units (bind/let, constrain/relation, ...),
+    with $...$ it found 53, and IATC candidates need those units as spans; five
+    of the sixteen pilot proofs were refused at the precheck for having none.
+    """
+    return re.sub(r"\\\((.*?)\\\)", lambda m: "$" + m.group(1) + "$", text, flags=re.S)
+
+
 def sections(body: str) -> list[dict]:
     """Split a body at its headings: [{level, title, head, text}], where the
     first entry (level 0) is whatever precedes the first heading."""
@@ -256,7 +268,8 @@ def main() -> int:
                   file=sys.stderr)
             return 1
         body, shape = restructure(clean(body_path.read_text()))
-        stmt = clean(stmt_path.read_text()).strip()
+        body = dollar_inline(body)
+        stmt = dollar_inline(clean(stmt_path.read_text()).strip())
         doc = (PREAMBLE.replace("@MACROS@", macros).replace("@ID@", pid)
                + "\n\\begin{problem}\n" + stmt + "\n\\end{problem}\n\n"
                + body + "\n\\end{document}\n")
