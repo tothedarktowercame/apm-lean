@@ -467,6 +467,69 @@ theorem edgePoint_injective_of_interior (i : Fin 2) (t : UnitInterval)
     Option.some.injEq, Prod.mk.injEq] at hc
   exact hc.2.1
 
+/-- Every point above an interior base-edge point has a unique graph-vertex
+coordinate.  This is the exact interior-fiber classification used by the
+edge charts of the realization. -/
+theorem existsUnique_edgePoint_of_projection_eq_interior
+    (i : Fin 2) (t : UnitInterval) (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1)
+    (e : D.Realization) (he : D.projection e = edgeProjection i t) :
+    ∃! v : V, e = D.edgePoint i v t := by
+  induction e using Quotient.inductionOn with
+  | _ raw =>
+      cases raw with
+      | inl v =>
+          exfalso
+          exact edgeProjection_ne_wedgePoint i t ht (by
+            simpa only [projection_vertex] using he.symm)
+      | inr itu =>
+          rcases itu with ⟨j, w, u⟩
+          have hu0 : u ≠ intervalZero := by
+            intro h
+            subst u
+            exact edgeProjection_ne_wedgePoint i t ht (by
+              simpa [projection, realizationRawProjection] using he.symm)
+          have hu1 : u ≠ intervalOne := by
+            intro h
+            subst u
+            exact edgeProjection_ne_wedgePoint i t ht (by
+              simpa [projection, realizationRawProjection] using he.symm)
+          have hu : u.1 ∈ Set.Ioo (0 : ℝ) 1 := by
+            constructor
+            · apply lt_of_le_of_ne u.2.1
+              intro h
+              apply hu0
+              apply Subtype.ext
+              simpa [intervalZero] using h.symm
+            · apply lt_of_le_of_ne u.2.2
+              intro h
+              apply hu1
+              apply Subtype.ext
+              simpa [intervalOne] using h
+          have hij := edgeProjection_eq_of_interior j i u t hu ht (by
+            simpa only [projection_edgePoint] using he)
+          rcases hij with ⟨hji, hut⟩
+          subst j
+          subst u
+          refine ⟨w, rfl, ?_⟩
+          intro v hv
+          exact edgePoint_injective_of_interior D i t ht hv.symm
+
+/-- The fiber over every open-edge point is canonically the graph vertex
+type. -/
+noncomputable def interiorFiberEquiv (i : Fin 2) (t : UnitInterval)
+    (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) :
+    {e : D.Realization // D.projection e = edgeProjection i t} ≃ V where
+  toFun e := (existsUnique_edgePoint_of_projection_eq_interior D i t ht e e.2).choose
+  invFun v := ⟨D.edgePoint i v t, by simp⟩
+  left_inv e := by
+    apply Subtype.ext
+    exact (existsUnique_edgePoint_of_projection_eq_interior D i t ht e e.2).choose_spec.1.symm
+  right_inv v := by
+    let e : {e : D.Realization // D.projection e = edgeProjection i t} :=
+      ⟨D.edgePoint i v t, by simp⟩
+    have h := existsUnique_edgePoint_of_projection_eq_interior D i t ht e e.2
+    exact h.unique h.choose_spec.1 rfl
+
 end TwoLoopGraphCoverData
 
 end ConstructionTargets.t92J06Closure
