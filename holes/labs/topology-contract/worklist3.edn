@@ -37111,33 +37111,40 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
-    :residual "Higher vanishing, degree four, invariants/Main.",
+    :residual
+    "Package finite-dimensional homology; degree four, invariants/Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_rp3_antipodal_H3",
-      :type "H3(RP3;Q)=Q",
+    [{:name "t96A06_rp3_rational_homology_isZero_of_gt",
+      :type "H_k(RP3;Q)=0 for 3<k",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_H3_projection_injective"],
+      :depends-on ["t96A06_rp3_antipodal_H3"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
-      :type "RP3 homology Q,0,0,Q",
+      :type "finite-dimensional RP3 homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_antipodal_H3"],
+      :depends-on ["t96A06_rp3_rational_homology_isZero_of_gt"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_polynomialDescent_degree_four",
+      :type "descent acts by 4 on H3",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on ["t96A06_rp3_rational_homology"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the RP3 degree-three rational homology isomorphism; higher-degree vanishing and degree-four/Lefschetz work remain.",
+    "Committed rational homology vanishing above degree three for S3 and RP3; finite-dimensional packaging and degree computation remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37145,18 +37152,9 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check --stat 21d7c0151", :exit 0}],
-    :diagnostic-history
-    [{:cmd "initial compile",
-      :exit 1,
-      :note "made the underlying ModuleCat linear map explicit"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792042483918-13357-0b73dcc7",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "21d7c01516d58ffdd76ffccf6afe4c867b0a8ec4",
+     {:cmd "git show --check --stat 4660c0697", :exit 0}],
+    :diagnostic-history [],
+    :commit "4660c0697c599af95828b94d1e646fd9ff1f12b6",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37164,7 +37162,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -38233,7 +38231,8 @@
     :lemma-t96a06-rp3-rational-homologymap-surjective
     :lemma-t96a06-rp3-rational-middle-homology
     :lemma-t96a06-sphere3-rational-h3iso
-    :lemma-t96a06-rp3-antipodal-h3],
+    :lemma-t96a06-rp3-antipodal-h3
+    :lemma-t96a06-rp3-rational-homology-iszero-of-gt],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40854,6 +40853,39 @@
    :id :lemma-t97j07-eulercharacteristic-of-homologydata,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_homology_isZero_of_gt",
+    :type "H_k(RP3;Q)=0 for 3<k"},
+   :lemma
+   {:name "t96A06_rp3_rational_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "H_k(RP3;Q)=0 for 3<k",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-rp3-rational-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-antipodal-h3],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_polynomialDescent_degree_four",
+    :type "descent acts by 4 on H3"},
+   :lemma
+   {:name "t96A06_polynomialDescent_degree_four",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "descent acts by 4 on H3",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-polynomialdescent-degree-four,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-homology],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
