@@ -87901,33 +87901,35 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compare the explicit loop with the normalized circle generator and the MV outer minus sign; conclude B7, then B8-B10.",
+    "Transport normalized boundary H1 through outer coordinates and combine with the MV outer minus sign; conclude B7, then B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; review dirs preserved"],
     :missing-theorems
-    [{:name "polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned",
+    [{:name
+      "polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree",
       :type
-      "explicit boundary H1 equals orientation-signed attaching vector",
+      "normalized boundary H1 equals attaching vector coordinates",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finitePathSubdivision_boundary"],
+      :depends-on
+      ["polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned"],
+      ["polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked orientation-signed geometric boundary formula.",
+    :reason "Banked normalized polygon-boundary H1 formula.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87935,35 +87937,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check e99149f35", :exit 0}],
+     {:cmd "git show --check f3c14aef4", :exit 0}],
     :diagnostic-history
-    [{:cmd "cast/product drafts",
+    [{:cmd "normalization drafts",
       :exit 1,
       :correction
-      "made cast-symmetry explicit and specialized product equality"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792030589093-13029-9395e5e6",
-     :commands
-     ["git show/diff-tree e99149f35"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms three new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit e99149f35 by topo-6 changes only the scoped target; fixture hash 0a5bf81d...b1a67 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The false-sign geometric edge is inverted and cast_symm transports that inversion correctly; the true-sign edge remains forward. Substitution into the traversal-order Hurewicz sum agrees with the explicit attaching-degree calculation, with no extra reversal. New compiled progress; remaining milestone is the normalized circle/MV outer-minus comparison for B7, then B8-B10."},
-    :commit "e99149f35",
+      "specialized mapped class and rewrote zpow -1 explicitly"}],
+    :commit "f3c14aef4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "0a5bf81d9bff4f94685f52bdd0eb529c3c208cee68649cc70980cacab44b1a67"},
+     "516a7db26b480de1c3a4f26f563aeefc9c81acad110717126c0c7844a18fdf0f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92092,7 +92080,8 @@
    :depends-on
    [:lemma-circlearc-eq-integerloop-one
     :lemma-finitepathsubdivision-boundary
-    :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned],
+    :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned
+    :lemma-polygonboundaryfundamentalclass-hurewicz-eq-attachingdegree],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92812,4 +92801,26 @@
    :id :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned,
    :kind :lemma,
    :depends-on [:lemma-finitepathsubdivision-boundary],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree",
+    :type
+    "normalized boundary H1 equals attaching vector coordinates"},
+   :lemma
+   {:name
+    "polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "normalized boundary H1 equals attaching vector coordinates",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id
+   :lemma-polygonboundaryfundamentalclass-hurewicz-eq-attachingdegree,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned],
    :other-consumers [:t94J09]}]}
