@@ -87945,6 +87945,17 @@
       :exit 1,
       :correction
       "fixed iso orientation and categorical reassociation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792039303051-13229-069ee491",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms on three new theorems"
+      "git show --check b94c993d7; fixture SHA-256 and placeholder scans"],
+     :finding
+     "Commit b94c993d7 by topo-6 changes only PolygonSurfaceHomology.lean and adds new compiled progress beyond history f94cb352b. Exact recorded snapshot builds; fixture SHA-256 d14ae6db3940fd04d2d255523657e3b1bde9bdaae0042929aa2e5eac74aaf643 matches; 0 placeholders; registry 166/0; only propext, Classical.choice, Quot.sound. The short-complex orientation is connecting map then MV boundary, hence exactness gives its range as the boundary kernel; AddMonoidHom/AddSubgroup to integer-linear representations align definitionally, and the final rewrite to BoundaryKernel is faithful. Milestones are properly listed; lowDegreeHomology H2/H0 and B9-B10 remain."},
     :commit "b94c993d7",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87953,7 +87964,7 @@
      "d14ae6db3940fd04d2d255523657e3b1bde9bdaae0042929aa2e5eac74aaf643"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87973,7 +87984,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked B8 surface-H1 cokernel equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H2 connecting range as BoundaryKernel.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88316,7 +88327,10 @@
      :reason "Banked injectivity of the B8 cokernel-to-H1 map."}
     {:job 9,
      :commit "f94cb352b",
-     :reason "Banked B8 surface-H1 cokernel equivalence."}]}
+     :reason "Banked B8 surface-H1 cokernel equivalence."}
+    {:job 1,
+     :commit "b94c993d7",
+     :reason "Banked H2 connecting range as BoundaryKernel."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -93253,7 +93267,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVH2KernelComplex_exact",
@@ -93263,14 +93277,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "coordinatized H2 segment exact",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b94c993d7"},
    :id :lemma-radialmvh2kernelcomplex-exact,
    :kind :lemma,
    :depends-on [:lemma-radialmvconnectingh1-mono],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "radialMVConnectingH1CoordinatesLinear_range",
@@ -93280,7 +93296,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "connecting range equals BoundaryKernel",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "b94c993d7"},
    :id :lemma-radialmvconnectingh1coordinateslinear-range,
    :kind :lemma,
    :depends-on [:lemma-radialmvh2kernelcomplex-exact],
