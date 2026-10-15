@@ -2428,7 +2428,16 @@ lemma cLoop_loopClass :
     loopClassAt cLoop sBase cLoop_one =
       FundamentalGroup.map (cellIncl word) wBase
         (wedgeCoords.symm (FreeGroup.of (orbitLabel cOrbit))) := by
-  sorry
+  have hleg :
+      wedgeCoords.symm (FreeGroup.of (orbitLabel cOrbit)) =
+        PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase P cOrbit := by
+    apply wedgeCoords.injective
+    rw [wedgeCoords.apply_symm_apply]
+    exact
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord
+        cOrbit |>.symm
+  rw [hleg]
+  rfl
 
 /-- B3'. Edge 4 lies in handle 1 at position 0: label `(1, false) ↦ 2`
 (`orientableOrbitEquiv`, `finTwoEquiv`, `finProdFinEquiv`). -/
