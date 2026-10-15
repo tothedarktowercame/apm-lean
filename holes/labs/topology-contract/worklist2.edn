@@ -88372,6 +88372,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check 7a2b97699", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792069198347-14076-4b5eaf73",
+     :commands
+     ["git show/diff/check 7a2b97699"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 7a2b97699 adds compiled, sorry-free progress beyond 8573065c0. It proves successive original subdivision indices correspond to inverse run-offset coordinates whose flattened values differ by exactly one. Only t97A01Closure.lean changed; fixture SHA b8a16180505ce4b5ed1e4d6626c4d50b39b81b1290880736fe2906e2fc3d8a4e matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Fin domains, successor/castSucc roles, recurrence orientation, and representation boundary are correct. Nested-concat induction, van Kampen, and final assembly remain explicitly listed."},
     :commit "7a2b97699",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88380,7 +88393,7 @@
      "b8a16180505ce4b5ed1e4d6626c4d50b39b81b1290880736fe2906e2fc3d8a4e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88398,7 +88411,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked ordered inverse run-offset coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked successor run-offset recurrence.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88552,7 +88565,10 @@
      :reason "Banked inverse run-offset factor transport."}
     {:job 3,
      :commit "8573065c0",
-     :reason "Banked ordered inverse run-offset coordinates."}]}
+     :reason "Banked ordered inverse run-offset coordinates."}
+    {:job 4,
+     :commit "7a2b97699",
+     :reason "Banked successor run-offset recurrence."}]}
   {:consumer :t94J09,
    :stop-count 5,
    :evidence
@@ -95210,7 +95226,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ",
@@ -95222,7 +95238,9 @@
     :type
     "successive subdivision indices give successive flattened run-offset coordinates",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "7a2b97699"},
    :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-flatten-succ,
    :kind :lemma,
    :depends-on
