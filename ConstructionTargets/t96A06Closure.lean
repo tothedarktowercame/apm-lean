@@ -332,6 +332,25 @@ theorem flipSecondPairSphere_involutive (p : Sphere 3) :
       ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
       ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
 
+/-- The first pair-sign deck map as an actual self-homeomorphism, with its
+involution supplying the inverse. -/
+def flipFirstPairSphereHomeomorph : Sphere 3 ≃ₜ Sphere 3 where
+  toFun := flipFirstPairSphere
+  invFun := flipFirstPairSphere
+  left_inv := flipFirstPairSphere_involutive
+  right_inv := flipFirstPairSphere_involutive
+  continuous_toFun := flipFirstPairSphere.continuous
+  continuous_invFun := flipFirstPairSphere.continuous
+
+/-- The second pair-sign deck map as an actual self-homeomorphism. -/
+def flipSecondPairSphereHomeomorph : Sphere 3 ≃ₜ Sphere 3 where
+  toFun := flipSecondPairSphere
+  invFun := flipSecondPairSphere
+  left_inv := flipSecondPairSphere_involutive
+  right_inv := flipSecondPairSphere_involutive
+  continuous_toFun := flipSecondPairSphere.continuous
+  continuous_invFun := flipSecondPairSphere.continuous
+
 theorem flipFirstPairSphere_comm_flipSecondPairSphere (p : Sphere 3) :
     flipFirstPairSphere (flipSecondPairSphere p) =
       flipSecondPairSphere (flipFirstPairSphere p) := by
@@ -2551,6 +2570,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms sphereVector_flipSecondPairSphere
 #print axioms flipFirstPairSphere_involutive
 #print axioms flipSecondPairSphere_involutive
+#print axioms flipFirstPairSphereHomeomorph
+#print axioms flipSecondPairSphereHomeomorph
 #print axioms flipFirstPairSphere_comm_flipSecondPairSphere
 #print axioms flipFirstPairSphere_flipSecondPairSphere
 #print axioms flipFirstPairSphere_rational_H3
