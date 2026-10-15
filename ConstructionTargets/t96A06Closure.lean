@@ -1934,6 +1934,36 @@ theorem t96A06_integralToRational_relativeChains_projection
     rfl
   simpa only [t96A06_integralToRational_relativeChains, Category.assoc] using h₁.trans h₂
 
+/-- Extension of coefficients commutes on homology with localization from
+absolute chains to the coefficient-relative complex.  This is the generic
+chain-level naturality square needed at each puncture of the three-sphere. -/
+theorem t96A06_integralToRational_localization_naturality
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ A))) k ≫
+      HomologicalComplex.homologyMap
+        (t96A06_integralToRational_relativeChains A) k =
+    HomologicalComplex.homologyMap
+        (t96A06_integralToRational_singularChainMap (TopCat.of X)) k ≫
+      HomologicalComplex.homologyMap
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A))) k := by
+  have h := congrArg (fun f => HomologicalComplex.homologyMap f k)
+    (t96A06_integralToRational_relativeChains_projection A)
+  dsimp only at h
+  rw [HomologicalComplex.homologyMap_comp] at h
+  exact h.trans (HomologicalComplex.homologyMap_comp
+    (t96A06_integralToRational_singularChainMap (TopCat.of X))
+    ((t96A06_forgetRatModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).map
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A))) k)
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -3211,6 +3241,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_relativeChains
 #print axioms t96A06_forgetRationalRelativeCokernelComparison_projection
 #print axioms t96A06_integralToRational_relativeChains_projection
+#print axioms t96A06_integralToRational_localization_naturality
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
