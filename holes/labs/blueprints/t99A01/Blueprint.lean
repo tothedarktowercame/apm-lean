@@ -2088,9 +2088,38 @@ lemma t99A01_low_exact_j₁_δ₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01
     exact hz
 
 /-- **Leaf.** Exactness at `ℤ^r` in degree zero (`hsum`, `hid`). -/
+lemma t99A01_low_exact_δ₁_i₀_aux_I₀_injective {r : ℕ} {degree : Fin r → ℕ}
+    (D : t99A01_LowInput degree) : Function.Injective D.I₀.hom := by
+  intro x y hxy
+  have key : ∀ z : D.O₀, D.cO₀.hom.hom z =
+      (D.cO₀.inv ≫ D.I₀ ≫ Limits.biprod.snd ≫ D.cB₀.hom).hom (D.cO₀.hom.hom z) := by
+    intro z; rw [D.hid]; rfl
+  have hx := key x
+  have hy := key y
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply, Iso.hom_inv_id_apply] at hx hy
+  have hcoord : D.cO₀.hom.hom x = D.cO₀.hom.hom y := by
+    rw [hx, hy, hxy]
+  have hback := congrArg D.cO₀.inv.hom hcoord
+  simpa using hback
+
 lemma t99A01_low_exact_δ₁_i₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     LinearMap.range D.δ₁c = LinearMap.ker t99A01_LowInput.i₀ := by
-  sorry
+  ext x
+  constructor
+  · rintro ⟨y, rfl⟩
+    rw [LinearMap.mem_ker]
+    have hy : D.δ₀.hom y = 0 := by
+      apply t99A01_low_exact_δ₁_i₀_aux_I₀_injective D
+      rw [map_zero]
+      exact LinearMap.mem_ker.mp
+        (D.hδ₀I₀ ▸ LinearMap.mem_range_self D.δ₀.hom y)
+    simp [t99A01_LowInput.δ₁c, hy]
+  · intro hx
+    have hx0 : x = 0 := by
+      have := congrArg Prod.snd (LinearMap.mem_ker.mp hx)
+      simpa [t99A01_LowInput.i₀] using this
+    subst x
+    exact ⟨0, map_zero _⟩
 
 /-- **Leaf.** Exactness at `ℤ × ℤ^r` (`hsum`, `hid`). -/
 lemma t99A01_low_exact_i₀_j₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
