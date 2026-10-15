@@ -772,6 +772,30 @@ theorem implicitToOpenPartialHomeomorph_mem_zeroSlice_iff
 
 #print axioms implicitToOpenPartialHomeomorph_mem_zeroSlice_iff
 
+/-- On its source, the implicit chart sends the zero fiber exactly onto the
+part of its target lying in the vertical zero slice. -/
+theorem implicitToOpenPartialHomeomorph_image_zeroFiber
+    {E F : Type} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [FiniteDimensional ℝ F]
+    {f : E → F} {A : E →L[ℝ] F} {x : E}
+    (hf : HasStrictFDerivAt f A x) (hA : A.HasRightInverse) :
+    let e := implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA
+    e '' (e.source ∩ {y | f y = 0}) =
+      e.target ∩ (({0} : Set F) ×ˢ (Set.univ : Set A.ker)) := by
+  let e := implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse hf hA
+  ext z
+  constructor
+  · rintro ⟨y, ⟨hy_source, hy_zero⟩, rfl⟩
+    exact ⟨e.map_source hy_source,
+      (implicitToOpenPartialHomeomorph_mem_zeroSlice_iff hf hA).2 hy_zero⟩
+  · rintro ⟨hz_target, hz_slice⟩
+    refine ⟨e.symm z, ⟨e.symm.map_source hz_target, ?_⟩, e.right_inv hz_target⟩
+    apply (implicitToOpenPartialHomeomorph_mem_zeroSlice_iff hf hA).1
+    rw [e.right_inv hz_target]
+    exact hz_slice
+
+#print axioms implicitToOpenPartialHomeomorph_image_zeroFiber
+
 /-- The banked chart-smoothness, strict-derivative, and split-surjection steps
 assemble into an implicit local chart for the incidence equation. -/
 noncomputable def incidenceImplicitToOpenPartialHomeomorph
