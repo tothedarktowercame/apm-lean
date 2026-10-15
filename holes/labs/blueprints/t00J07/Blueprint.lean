@@ -1028,7 +1028,74 @@ lemma hurewicz_injective_of_zmod2 {X : Type} [TopologicalSpace X] [PathConnected
 lemma nullhomotopic_of_loopClassAt_eq_one {Y : Type} [TopologicalSpace Y]
     (γ : C(Circle, Y)) (h : loopClassAt γ (γ 1) rfl = 1) :
     ∃ p : Y, ContinuousMap.Homotopic γ (ContinuousMap.const Circle p) := by
-  sorry
+  let a := ConstructionTargets.CircleUniversalCover.integerLoop 1
+  have hq : Path.Homotopic.Quotient.mk (a.map γ.continuous) =
+      Path.Homotopic.Quotient.mk (Path.refl (γ 1)) := by
+    simpa [loopClassAt, PolygonSurfaceHomology.circleIntegerLoopOneClass,
+      FundamentalGroup.map_apply] using h
+  obtain ⟨H⟩ := Path.Homotopic.Quotient.exact hq
+  let c : C(Set.Icc (0 : ℝ) 1, Circle) :=
+    ⟨PolygonSurfacePiOne.circleArc, by
+      exact AddCircle.continuous_toCircle.comp
+        ((AddCircle.continuous_mk' 1).comp continuous_subtype_val)⟩
+  have hc_surj : Function.Surjective c :=
+    PolygonSurfacePiOne.surjective_circleArc
+  have hc_quot : Topology.IsQuotientMap c :=
+    IsQuotientMap.of_surjective_continuous hc_surj c.continuous
+  let G : C(unitInterval × Set.Icc (0 : ℝ) 1, Y) :=
+    ⟨fun ts ↦ H (ts.1, ts.2), H.continuous⟩
+  have hfac : Function.FactorsThrough G
+      (ContinuousMap.prodMap (ContinuousMap.id unitInterval) c) := by
+    rintro ⟨t, x⟩ ⟨u, y⟩ hxy
+    change (t, c x) = (u, c y) at hxy
+    have ht : t = u := congrArg (fun q : unitInterval × Circle ↦ q.1) hxy
+    have hs : c x = c y := congrArg (fun q : unitInterval × Circle ↦ q.2) hxy
+    subst u
+    rcases (PolygonSurfacePiOne.circleArc_eq_iff x y).mp hs with
+      hxy | hends | hends
+    · subst hxy
+      rfl
+    · rcases hends with ⟨rfl, rfl⟩
+      exact (H.source t).trans (H.target t).symm
+    · rcases hends with ⟨rfl, rfl⟩
+      exact (H.target t).trans (H.source t).symm
+  let Kfun : unitInterval × Circle → Y := fun tz ↦
+    G (tz.1, Function.surjInv hc_surj tz.2)
+  have hKcomp : ∀ ts : unitInterval × Set.Icc (0 : ℝ) 1,
+      Kfun (ts.1, c ts.2) = G ts := by
+    intro ts
+    exact hfac (by
+      apply Prod.ext
+      · rfl
+      · exact Function.rightInverse_surjInv hc_surj (c ts.2))
+  have hKcont : Continuous Kfun := by
+    apply hc_quot.continuous_lift_prod_right
+    simpa only [hKcomp] using G.continuous
+  let K : C(unitInterval × Circle, Y) := ⟨Kfun, hKcont⟩
+  refine ⟨γ 1, ⟨{
+    toContinuousMap := K
+    map_zero_left := ?_
+    map_one_left := ?_ }⟩⟩
+  · intro z
+    let s := Function.surjInv hc_surj z
+    have hs : c s = z := Function.rightInverse_surjInv hc_surj z
+    rw [← hs]
+    change Kfun (0, c s) = γ (c s)
+    rw [hKcomp (0, s)]
+    change H (0, s) = γ (c s)
+    rw [H.apply_zero]
+    change γ (a s) = γ (c s)
+    congr 1
+    exact (PolygonSurfaceHomology.circleArc_eq_integerLoop_one s).symm
+  · intro z
+    let s := Function.surjInv hc_surj z
+    have hs : c s = z := Function.rightInverse_surjInv hc_surj z
+    rw [← hs]
+    change Kfun (1, c s) = γ 1
+    rw [hKcomp (1, s)]
+    change H (1, s) = γ 1
+    rw [H.apply_one]
+    rfl
 
 /-! ## Part F. `H₂` of a cell attached to a space with `H₂ = 0` -/
 
