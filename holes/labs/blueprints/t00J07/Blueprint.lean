@@ -549,7 +549,81 @@ lemma continuous_hemi : Continuous hemi := by
 
 /-- Every line through the origin meets the closed upper unit hemisphere. -/
 lemma hemi_surjective : Function.Surjective hemi := by
-  sorry
+  intro p
+  let v : Fin 3 → ℝ := Projectivization.rep p
+  have hv : v ≠ 0 := Projectivization.rep_nonzero p
+  let w : Fin 3 → ℝ := if 0 ≤ v 2 then v else -v
+  have hw : w ≠ 0 := by
+    dsimp [w]
+    split <;> simp_all
+  have hw2 : 0 ≤ w 2 := by
+    dsimp [w]
+    split
+    · assumption
+    · simp only [Pi.neg_apply]
+      exact neg_nonneg.mpr (le_of_not_ge ‹¬ 0 ≤ v 2›)
+  let S : ℝ := (w 0) ^ 2 + (w 1) ^ 2 + (w 2) ^ 2
+  have hS : 0 < S := by
+    by_contra h
+    have hle : S ≤ 0 := le_of_not_gt h
+    have h0 : w 0 = 0 := by
+      dsimp [S] at hle
+      nlinarith [sq_nonneg (w 0), sq_nonneg (w 1), sq_nonneg (w 2)]
+    have h1 : w 1 = 0 := by
+      dsimp [S] at hle
+      nlinarith [sq_nonneg (w 0), sq_nonneg (w 1), sq_nonneg (w 2)]
+    have h2 : w 2 = 0 := by
+      dsimp [S] at hle
+      nlinarith [sq_nonneg (w 0), sq_nonneg (w 1), sq_nonneg (w 2)]
+    apply hw
+    funext i
+    fin_cases i <;> assumption
+  let n : ℝ := Real.sqrt S
+  have hn : 0 < n := Real.sqrt_pos.2 hS
+  have hn_sq : n ^ 2 = S := by
+    dsimp [n]
+    rw [Real.sq_sqrt hS.le]
+  let zc : ℂ := ⟨w 0 / n, w 1 / n⟩
+  have hzc_sq : ‖zc‖ ^ 2 = ((w 0) ^ 2 + (w 1) ^ 2) / n ^ 2 := by
+    rw [Complex.sq_norm]
+    dsimp [zc]
+    ring
+  have hzc_le : ‖zc‖ ≤ 1 := by
+    have hn0 : 0 ≤ ‖zc‖ := norm_nonneg _
+    have hden : 0 < n ^ 2 := sq_pos_of_pos hn
+    have hs : ‖zc‖ ^ 2 ≤ 1 := by
+      rw [hzc_sq, div_le_one hden]
+      dsimp [S] at hn_sq
+      nlinarith [sq_nonneg (w 2)]
+    nlinarith [sq_nonneg (‖zc‖ - 1)]
+  let z : Surfaces.Disk := ⟨zc, by simpa [Metric.mem_closedBall, dist_zero_right]⟩
+  have hsqrt : Real.sqrt (1 - ‖(z : ℂ)‖ ^ 2) = w 2 / n := by
+    have hden : 0 < n ^ 2 := sq_pos_of_pos hn
+    have hsq : 1 - ‖(z : ℂ)‖ ^ 2 = (w 2 / n) ^ 2 := by
+      change 1 - ‖zc‖ ^ 2 = _
+      rw [hzc_sq]
+      field_simp
+      dsimp [S] at hn_sq
+      nlinarith
+    rw [hsq, Real.sqrt_sq (div_nonneg hw2 hn.le)]
+  have hvec : hemiVec z = fun i => w i / n := by
+    funext i
+    fin_cases i
+    · rfl
+    · rfl
+    · exact hsqrt
+  refine ⟨z, ?_⟩
+  rw [← Projectivization.mk_rep p]
+  apply (Projectivization.mk_eq_mk_iff' ℝ _ _ (hemiVec_ne_zero z) hv).mpr
+  by_cases h : 0 ≤ v 2
+  · refine ⟨n⁻¹, ?_⟩
+    rw [hvec]
+    funext i
+    simp [w, h, div_eq_inv_mul]
+  · refine ⟨-n⁻¹, ?_⟩
+    rw [hvec]
+    funext i
+    simp [w, h, div_eq_inv_mul]
 
 /-- The chart identifies the two edges of the one-crosscap polygon. -/
 lemma hemi_respects {x y : Surfaces.Disk} (h : SurfaceRel false 1 x y) : hemi x = hemi y := by
