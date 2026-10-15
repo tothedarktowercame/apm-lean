@@ -119180,6 +119180,19 @@
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :finding "fixed snd inference"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792046682686-13544-2af3fdbf",
+     :commands
+     ["git diff 46bf^ 46bf -- ConstructionTargets/t00J02Closure.lean"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum archived closure/Main and blueprint"
+      "rg placeholder counts"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit adds a genuine product-coordinate C1 assembly from separate chart-expression C1 inputs (correct fst/snd orientation and common target); it does not assume incidence-map C1. Archived closure and Main compile; hashes match 83f394ab..., 0b3b4888..., afb497a6...; placeholders 0/1; registry 166/166; axioms only propext, Classical.choice, Quot.sound. Milestone is new since prior history; remaining chart C1 inputs, implicit chart, Sard, calculations, Main are listed."},
     :commit "46bf9b17683018d66e363a12c8651429ee31cc67",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119188,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119206,7 +119219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked strict common-target derivative.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked product-chart C1 assembly.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119440,7 +119453,10 @@
      :reason "Banked split-derivative implicit chart."}
     {:job 3,
      :commit "bb63f8e6568a98dd849686b0791caeeeab6caf91",
-     :reason "Banked strict common-target derivative."}]}
+     :reason "Banked strict common-target derivative."}
+    {:job 4,
+     :commit "46bf9b17683018d66e363a12c8651429ee31cc67",
+     :reason "Banked product-chart C1 assembly."}]}
   {:consumer :t98A06,
    :stop-count 9,
    :review-finding
@@ -121658,7 +121674,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "contDiffAt_incidenceDifference_commonTarget",
@@ -121668,7 +121684,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "two C1 chart maps give C1 product incidence map",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "46bf9b17683018d66e363a12c8651429ee31cc67"},
    :id :lemma-contdiffat-incidencedifference-commontarget,
    :kind :lemma,
    :depends-on
