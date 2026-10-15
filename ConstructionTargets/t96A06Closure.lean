@@ -2001,6 +2001,30 @@ noncomputable def t96A06_rp3_rational_H3Iso :
   exact (LinearEquiv.ofBijective proj.hom hbij).toModuleIso.symm ≪≫
       t96A06_sphere3_rational_H3Iso
 
+/-- Consequently the degree-three trace term in the Lefschetz sum is four. -/
+theorem polynomialDescent_trace_three_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    LinearMap.trace ℚ
+        (Homology RP3 3) (induced polynomialDescent 3).hom = 4 := by
+  let e := t96A06_rp3_rational_H3Iso
+  letI : FiniteDimensional ℚ (Homology RP3 3) :=
+    e.symm.toLinearEquiv.finiteDimensional
+  have hdeg :=
+    polynomialDescent_degree_four_of_localClassDecompositionAndBase h
+  change LinearMap.trace ℚ (Homology RP3 3)
+    (HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ polynomialDescent) 3).hom = 4
+  rw [hdeg]
+  change LinearMap.trace ℚ (Homology RP3 3)
+    ((4 : ℚ) • LinearMap.id) = 4
+  rw [map_smul, LinearMap.trace_id]
+  have hrank :
+      Module.finrank ℚ (Homology RP3 3) = 1 := by
+    rw [LinearEquiv.finrank_eq e.toLinearEquiv]
+    simp
+  rw [hrank]
+  norm_num
+
 /-- Ledger-facing name for the top-degree transfer/deck-sum milestone. -/
 noncomputable def t96A06_rp3_antipodal_H3 :=
   t96A06_rp3_rational_H3Iso
@@ -2186,6 +2210,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
+#print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
