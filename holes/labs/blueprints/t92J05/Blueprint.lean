@@ -2363,6 +2363,20 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     obtain ⟨c, hc⟩ := hrel
     exact ⟨c, hc.inv_right⟩
 
+lemma apm_t92J05_ofPath_trans : ∀ {X : Type} [TopologicalSpace X] {x y z : X} (p : Path x y) (q : Path y z)
+      (a : FundamentalGroup X x),
+      FundamentalGroup.fundamentalGroupMulEquivOfPath (p.trans q) a =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath q
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) := by
+  sorry
+
+lemma apm_t92J05_map_ofPath : ∀ {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) {x y : X}
+      (t : Path x y) (a : FundamentalGroup X x),
+      FundamentalGroup.map f y (FundamentalGroup.fundamentalGroupMulEquivOfPath t a) =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath (t.map f.continuous)
+          (FundamentalGroup.map f x a) := by
+  sorry
+
 /-- **Leaf (generic).** Homotopic maps induce conjugate maps on π₁: along the track of
 the homotopy at `x`, `π₁(g) = (basepoint change) ∘ π₁(f)`.  Mathlib:
 `ContinuousMap.Homotopy`, `FundamentalGroupoidFunctor.homotopicMapsNatIso` /
@@ -2702,6 +2716,16 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
   exact Path.Homotopic.projRight_prod _ _
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
+    (hG2 : ∀ {X : Type} [TopologicalSpace X] {x y z : X} (p : Path x y) (q : Path y z)
+      (a : FundamentalGroup X x),
+      FundamentalGroup.fundamentalGroupMulEquivOfPath (p.trans q) a =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath q
+          (FundamentalGroup.fundamentalGroupMulEquivOfPath p a))
+    (hG3 : ∀ {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (f : C(X, Y)) {x y : X}
+      (t : Path x y) (a : FundamentalGroup X x),
+      FundamentalGroup.map f y (FundamentalGroup.fundamentalGroupMulEquivOfPath t a) =
+        FundamentalGroup.fundamentalGroupMulEquivOfPath (t.map f.continuous)
+          (FundamentalGroup.map f x a))
     (hcoordW : ∀ l, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
         (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase
           apm_t92J05_genusTwo_polygon_attach_specialization_aux_P l) =
@@ -2823,7 +2847,7 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
   intro x
   obtain ⟨g, hg⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range x
-  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord (fun h x => apm_t92J05_homotopic_map_conj h x) apm_t92J05_genusTwo_W1_boundary_word x g hg
+  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv apm_t92J05_ofPath_trans apm_t92J05_map_ofPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord (fun h x => apm_t92J05_homotopic_map_conj h x) apm_t92J05_genusTwo_W1_boundary_word x g hg
   refine ⟨e, ?_⟩
   rw [hg, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_zpowers, Subgroup.map_normalClosure _ _ e.surjective,
     Set.image_singleton]
