@@ -87901,33 +87901,33 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Use the boundary formula with signed-edge H1 coordinates to prove B7, then B8-B10.",
+    "Compare the explicit loop with the normalized circle generator and the MV outer minus sign; conclude B7, then B8-B10.",
     :outcome :stop,
     :warnings ["preexisting lint; review dirs preserved"],
     :missing-theorems
-    [{:name "finitePathSubdivision_boundary",
-      :type "boundary H1 is ordered signed-edge sum",
+    [{:name "polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned",
+      :type
+      "explicit boundary H1 equals orientation-signed attaching vector",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["polygonBoundaryCanonicalConcat_homotopic"
-       "polygonBoundarySubdivisionConcat_hurewicz"],
+      :depends-on ["finitePathSubdivision_boundary"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 sign-corrected map",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["finitePathSubdivision_boundary"],
+      :depends-on
+      ["polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked finite boundary subdivision Hurewicz formula.",
+    :reason "Banked orientation-signed geometric boundary formula.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87935,20 +87935,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 978c9af12", :exit 0}],
+     {:cmd "git show --check e99149f35", :exit 0}],
     :diagnostic-history
-    [{:cmd "rw concat-Hurewicz draft",
+    [{:cmd "cast/product drafts",
       :exit 1,
-      :correction "used explicit calc specialization"}],
-    :commit "978c9af12",
+      :correction
+      "made cast-symmetry explicit and specialized product equality"}],
+    :commit "e99149f35",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "52c77c656e42aac128992d45b3a0f3142dde976d13b1f4242359923e13e165d7"},
+     "0a5bf81d9bff4f94685f52bdd0eb529c3c208cee68649cc70980cacab44b1a67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92073,7 +92074,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-circlearc-eq-integerloop-one
-    :lemma-finitepathsubdivision-boundary],
+    :lemma-finitepathsubdivision-boundary
+    :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92772,4 +92774,23 @@
    :id :lemma-edgepoint-injective-of-interior,
    :kind :lemma,
    :depends-on [:lemma-edgepoint-ne-vertex-of-interior],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned",
+    :type
+    "explicit boundary H1 equals orientation-signed attaching vector"},
+   :lemma
+   {:name "polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type
+    "explicit boundary H1 equals orientation-signed attaching vector",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundaryintegerloop-hurewicz-eq-orientationsigned,
+   :kind :lemma,
+   :depends-on [:lemma-finitepathsubdivision-boundary],
+   :other-consumers [:t94J09]}]}
