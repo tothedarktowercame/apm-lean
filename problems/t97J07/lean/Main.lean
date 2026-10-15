@@ -402,6 +402,58 @@ theorem t97J07_cp1_twoAffine_openCover :
   · exact h.1
   · exact h.2
 
+/-- The inverse affine-coordinate construction really lands in its named
+patch.  This is the point-set bridge needed before applying coefficient
+homology to the two pieces and their punctured intersection. -/
+theorem t97J07_cp1_chartInverse_rep_ne (i : Fin 2)
+    (z : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i) :
+    Projectivization.rep
+      (ConstructionTargets.ComplexProjectiveChartTargets.chartInverse i z) i ≠ 0 := by
+  let v : Fin 2 → ℂ := fun j => if h : j = i then 1 else z ⟨j, h⟩
+  have hv : v ≠ 0 := by
+    intro h
+    have hi := congrFun h i
+    simp [v] at hi
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+  change (Projectivization.mk ℂ v hv).rep i ≠ 0
+  rw [← ha]
+  change a.1 * v i ≠ 0
+  simp [v]
+
+/-- Each literal affine patch of `CP¹` is exactly its affine coordinate
+space, at the level of points. -/
+noncomputable def t97J07_cp1_affinePatchEquiv (i : Fin 2) :
+    {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
+      Projectivization.rep p i ≠ 0} ≃
+      ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i where
+  toFun p := ConstructionTargets.ComplexProjectiveChartTargets.coordinates i p.1
+  invFun z := ⟨ConstructionTargets.ComplexProjectiveChartTargets.chartInverse i z,
+    t97J07_cp1_chartInverse_rep_ne i z⟩
+  left_inv p := by
+    apply Subtype.ext
+    exact ConstructionTargets.ComplexProjectiveChartTargets.chartInverse_coordinates
+      i p.1 p.2
+  right_inv z :=
+    ConstructionTargets.ComplexProjectiveChartTargets.coordinates_chartInverse i z
+
+/-- In either affine chart, membership in the other chart is precisely the
+nonvanishing of its sole affine coordinate. -/
+theorem t97J07_cp1_chartInverse_other_rep_ne_iff (i j : Fin 2) (hji : j ≠ i)
+    (z : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i) :
+    Projectivization.rep
+        (ConstructionTargets.ComplexProjectiveChartTargets.chartInverse i z) j ≠ 0 ↔
+      z ⟨j, hji⟩ ≠ 0 := by
+  let v : Fin 2 → ℂ := fun k => if h : k = i then 1 else z ⟨k, h⟩
+  have hv : v ≠ 0 := by
+    intro h
+    have hi := congrFun h i
+    simp [v] at hi
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
+  change (Projectivization.mk ℂ v hv).rep j ≠ 0 ↔ z ⟨j, hji⟩ ≠ 0
+  rw [← ha]
+  change a.1 * v j ≠ 0 ↔ z ⟨j, hji⟩ ≠ 0
+  simp [v, hji]
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -461,6 +513,9 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_pathConnected
 #print axioms t97J07_cp1_rationalH0Iso
 #print axioms t97J07_cp1_twoAffine_openCover
+#print axioms t97J07_cp1_chartInverse_rep_ne
+#print axioms t97J07_cp1_affinePatchEquiv
+#print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
