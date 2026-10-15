@@ -1655,6 +1655,52 @@ noncomputable def t96A06_integralToRational_singularChainsDegree
       (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
         ModuleCat.of ℚ ℚ)).inv
 
+/-- On each canonical simplex summand, degreewise extension is coefficient
+casting followed by the corresponding rational simplex injection. -/
+theorem t96A06_integralToRational_singularChainsDegree_generator
+    (X : TopCat) (n : ℕ)
+    (σ : ConstructionTargets.SingularSubdivision.SingularSimplex X n) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (CoefficientH0.singularGenerator ℤ X n σ) ≫
+      t96A06_integralToRational_singularChainsDegree X n =
+    t96A06_intToRatCoefficient ≫
+      t96A06_forgetRatModules.map
+        (CoefficientH0.singularGenerator ℚ X n σ) := by
+  unfold t96A06_integralToRational_singularChainsDegree
+    CoefficientH0.singularGenerator
+  simp only [id_eq]
+  have hZ :
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          (Limits.Sigma.ι
+            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+              ModuleCat.of ℤ ℤ) σ) ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+            ModuleCat.of ℤ ℤ)).hom =
+      Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+          AddCommGrpCat.of ℤ) σ := by
+    apply (cancel_mono (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+        ModuleCat.of ℤ ℤ)).inv).mp
+    simp only [Category.assoc, Iso.hom_inv_id, Category.comp_id]
+    rw [PreservesCoproduct.inv_hom]
+    exact (Limits.ι_comp_sigmaComparison
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+        ModuleCat.of ℤ ℤ) σ).symm
+  slice_lhs 1 2 => erw [hZ]
+  rw [Limits.Sigma.ι_map]
+  rw [PreservesCoproduct.inv_hom]
+  rw [Category.assoc]
+  congr 1
+  exact Limits.ι_comp_sigmaComparison
+    t96A06_forgetRatModules
+    (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex X n =>
+      ModuleCat.of ℚ ℚ) σ
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -2922,6 +2968,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
+#print axioms t96A06_integralToRational_singularChainsDegree_generator
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
