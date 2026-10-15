@@ -1,14 +1,7 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveSpaceTopology
-import ConstructionTargets.t99J05Closure
-import ConstructionTargets.CoefficientH0
-import ConstructionTargets.CoefficientContractiblePair
-import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
-import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
-import ConstructionTargets.CircleHomology
-import ConstructionTargets.CoefficientSphereEndpoints
-import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import ConstructionTargets.CP2RationalHomology
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -26,7 +19,6 @@ the linear map `diag(1,1,3)` on `ℂ³` and `t97J07Map` for its projectivization
 -/
 
 open scoped LinearAlgebra.Projectivization Matrix
-open scoped ContinuousMap
 
 abbrev T97J07CP2 := ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 2
 
@@ -185,11 +177,16 @@ lemma t97J07IsolatedPoint_not_mem :
   apply a.ne_zero
   simpa [Units.smul_def] using ha2
 
-/-- Why this unblocks `apm_t97j07`: this is the missing classification of
-all fixed points of the projectivized diagonal map.  It asserts that a fixed
-projective class is exactly either a class with zero third coordinate or the
-third coordinate axis, which is the sole unresolved conjunct below. -/
-theorem apm_t97J07_bridge_1 :
+/-! ## Remaining proof boundaries
+
+The elementary coordinate, derivative, determinant, and arithmetic results above
+are reused from the solve loop.  The two declarations below isolate the actual
+projective classification and global homology computation.
+-/
+
+/-- A fixed projective class of diag(1,1,3) lies in exactly one of its two
+projectivized eigenspaces. -/
+theorem t97J07_fixed_set :
     {p : T97J07CP2 | t97J07Map p = p} =
       t97J07FixedLine ∪ {t97J07IsolatedPoint} := by
   ext p
@@ -261,8 +258,9 @@ theorem apm_t97J07_bridge_1 :
       funext i
       fin_cases i <;> simp [t97J07Linear, Pi.single_apply]
 
-/-- The exact rational homology data needed to compute the Euler
-characteristic of the literal quotient-topological `CP²`. -/
+/-- The exact rational singular-homology computation needed below.  Keeping
+the isomorphisms as data (rather than merely recording dimensions) lets the
+trace calculation use Mathlib's finite-dimensional linear-algebra API. -/
 structure T97J07CP2RationalHomologyData where
   finiteDimensional : ∀ k,
     FiniteDimensional ℚ
@@ -283,348 +281,48 @@ structure T97J07CP2RationalHomologyData where
   fourEquiv :
     ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ
 
-/-- Specialize the shared finite-complex-projective-space homology interface
-to the exact `CP²` certificate consumed below. -/
-noncomputable def t97J07_cp2RationalHomologyData_of_shared
-    (h : ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 2) :
-    T97J07CP2RationalHomologyData where
-  finiteDimensional := h.finiteDimensional
-  vanishesAbove := h.vanishesAbove
-  zeroEquiv := by
-    simpa using h.evenEquiv (0 : Fin 3)
-  oneSubsingleton := h.vanishesOdd 1 (by exact ⟨0, by omega⟩)
-  twoEquiv := by
-    simpa using h.evenEquiv (1 : Fin 3)
-  threeSubsingleton := h.vanishesOdd 3 (by exact ⟨1, by omega⟩)
-  fourEquiv := by
-    simpa using h.evenEquiv (2 : Fin 3)
+/-- LIBRARY: the cellular/singular comparison for the literal quotient model
+of `CP²`.  This is the one genuinely missing topology foundation: one cell in
+real dimensions `0`, `2`, and `4`, and no other rational homology. -/
+theorem t97J07_cp2RationalHomologyData_exists :
+    Nonempty T97J07CP2RationalHomologyData := by
+  obtain ⟨⟨e0⟩, ⟨e2⟩, ⟨e4⟩, hz⟩ := RP3Homology.cp2_rationalHomology
+  have sub : ∀ k, k ≠ 0 → k ≠ 2 → k ≠ 4 →
+      Subsingleton (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) := by
+    intro k a b c
+    refine ⟨fun x y => ?_⟩
+    have hid : CategoryTheory.CategoryStruct.id (RP3Homology.HQ k RP3Homology.CP2) = 0 :=
+      (hz k a b c).eq_of_src _ _
+    have hx := congrArg (fun g => g.hom x) hid
+    have hy := congrArg (fun g => g.hom y) hid
+    simpa using hx.trans hy.symm
+  let l0 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0 ≃ₗ[ℚ] ℚ :=
+    e0.toLinearEquiv
+  let l2 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2 ≃ₗ[ℚ] ℚ :=
+    e2.toLinearEquiv
+  let l4 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ :=
+    e4.toLinearEquiv
+  refine ⟨{ finiteDimensional := ?_
+            vanishesAbove := fun k hk => sub k (by omega) (by omega) (by omega)
+            zeroEquiv := l0
+            oneSubsingleton := sub 1 (by decide) (by decide) (by decide)
+            twoEquiv := l2
+            threeSubsingleton := sub 3 (by decide) (by decide) (by decide)
+            fourEquiv := l4 }⟩
+  intro k
+  by_cases h0 : k = 0
+  · subst h0; exact l0.symm.finiteDimensional
+  by_cases h2 : k = 2
+  · subst h2; exact l2.symm.finiteDimensional
+  by_cases h4 : k = 4
+  · subst h4; exact l4.symm.finiteDimensional
+  haveI := sub k h0 h2 h4
+  infer_instance
 
-/-- The shared `CP⁰` base and one-cell successor theorem produce the exact
-consumer certificate at dimension two. -/
-noncomputable def t97J07_cp2RationalHomologyData_of_zero_of_step
-    (hzero : ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 0)
-    (hstep : ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyStep) :
-    T97J07CP2RationalHomologyData :=
-  t97J07_cp2RationalHomologyData_of_shared
-    (ConstructionTargets.t99J05Closure.complexProjectiveRationalHomologyData_of_zero_of_step
-      hzero hstep 2)
-
-/-- The literal one-point quotient `CP⁰` supplies the base case for the shared
-finite complex-projective-space filtration. -/
-noncomputable def t97J07_complexProjectiveRationalHomologyData_zero :
-    ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 0 := by
-  letI : Subsingleton
-      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) :=
-    ConstructionTargets.t99J05Closure.cp_zero_subsingleton
-  let p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0 :=
-    ConstructionTargets.ProjectiveSpaceTopology.coordinateLine ℂ 0 0
-  letI : Nonempty
-      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) := ⟨p⟩
-  letI : ContractibleSpace
-      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) := inferInstance
-  let h0 := ConstructionTargets.CoefficientH0.h0Iso ℚ p
-  refine {
-    finiteDimensional := fun k => ?_
-    vanishesAbove := fun k hk => ?_
-    vanishesOdd := fun k hk => ?_
-    evenEquiv := fun i => ?_ }
-  · by_cases hk : k = 0
-    · subst k
-      exact h0.toLinearEquiv.symm.finiteDimensional
-    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
-          ℚ (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k hk
-      letI : Subsingleton
-          (ConstructionTargets.RationalLefschetz.Homology
-            (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k) :=
-        ModuleCat.isZero_iff_subsingleton.mp hz
-      exact FiniteDimensional.of_injective
-        (0 : ConstructionTargets.RationalLefschetz.Homology
-          (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k →ₗ[ℚ] ℚ)
-        (Function.injective_of_subsingleton _)
-  · exact ModuleCat.isZero_iff_subsingleton.mp
-      (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ
-        (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k (by omega))
-  · exact ModuleCat.isZero_iff_subsingleton.mp
-      (ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ
-        (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 0) k (by
-          rcases hk with ⟨j, rfl⟩
-          omega))
-  · have hi : i = 0 := Fin.ext (by omega)
-    subst i
-    simpa using h0.toLinearEquiv
-
-/-- The nonzero-vector presentation of the literal complex projective line
-is path connected. -/
-theorem t97J07_cp1_nonzeroVectors_pathConnected :
-    PathConnectedSpace
-      (ConstructionTargets.ProjectiveSpaceTopology.NonzeroVectors ℂ 1) := by
-  apply isPathConnected_iff_pathConnectedSpace.mp
-  change IsPathConnected ({0}ᶜ : Set (Fin 2 → ℂ))
-  apply isPathConnected_compl_singleton_of_one_lt_rank
-  rw [← Module.finrank_eq_rank]
-  norm_num [Module.finrank_fin_fun]
-
-/-- Hence the exact quotient-topological `CP¹` used by the filtration is
-path connected. -/
-theorem t97J07_cp1_pathConnected :
-    PathConnectedSpace
-      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) := by
-  letI : PathConnectedSpace
-      (ConstructionTargets.ProjectiveSpaceTopology.NonzeroVectors ℂ 1) :=
-    t97J07_cp1_nonzeroVectors_pathConnected
-  exact (ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℂ 1).pathConnectedSpace
-    (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℂ 1)
-
-/-- The degree-zero part of the bounded `CP⁰ → CP¹` filtration step. -/
-noncomputable def t97J07_cp1_rationalH0Iso :
-    ConstructionTargets.RationalLefschetz.Homology
-        (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) 0 ≃ₗ[ℚ] ℚ := by
-  letI : PathConnectedSpace
-      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) :=
-    t97J07_cp1_pathConnected
-  exact (ConstructionTargets.CoefficientH0.h0Iso ℚ
-    (ConstructionTargets.ProjectiveSpaceTopology.coordinateLine ℂ 1 0)).toLinearEquiv
-
-/-- The two literal affine patches form the open cover of `CP¹` used by the
-bounded Mayer--Vietoris computation. -/
-theorem t97J07_cp1_twoAffine_openCover :
-    IsOpen {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
-      Projectivization.rep p 0 ≠ 0} ∧
-    IsOpen {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
-      Projectivization.rep p 1 ≠ 0} ∧
-    {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
-      Projectivization.rep p 0 ≠ 0} ∪
-      {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
-        Projectivization.rep p 1 ≠ 0} = Set.univ := by
-  refine ⟨ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen 0,
-    ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen 1, ?_⟩
-  ext p
-  simp only [Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
-  by_contra h
-  push_neg at h
-  apply p.rep_nonzero
-  funext i
-  fin_cases i
-  · exact h.1
-  · exact h.2
-
-abbrev T97J07CP1ZeroPatch : Set
-    (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) :=
-  {p | Projectivization.rep p 0 ≠ 0}
-
-abbrev T97J07CP1OnePatch : Set
-    (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) :=
-  {p | Projectivization.rep p 1 ≠ 0}
-
-/-- The production Mayer--Vietoris sequence for the literal two-chart cover
-is exact at the two affine-patch terms in every degree. -/
-noncomputable def t97J07_cp1_mayerVietoris_exact_pieces (k : ℕ) :=
-  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
-      T97J07CP1ZeroPatch T97J07CP1OnePatch
-      t97J07_cp1_twoAffine_openCover.1
-      t97J07_cp1_twoAffine_openCover.2.1
-      t97J07_cp1_twoAffine_openCover.2.2 k
-
-/-- The inverse affine-coordinate construction really lands in its named
-patch.  This is the point-set bridge needed before applying coefficient
-homology to the two pieces and their punctured intersection. -/
-theorem t97J07_cp1_chartInverse_rep_ne (i : Fin 2)
-    (z : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i) :
-    Projectivization.rep
-      (ConstructionTargets.ComplexProjectiveChartTargets.chartInverse i z) i ≠ 0 := by
-  let v : Fin 2 → ℂ := fun j => if h : j = i then 1 else z ⟨j, h⟩
-  have hv : v ≠ 0 := by
-    intro h
-    have hi := congrFun h i
-    simp [v] at hi
-  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
-  change (Projectivization.mk ℂ v hv).rep i ≠ 0
-  rw [← ha]
-  change a.1 * v i ≠ 0
-  simp [v]
-
-/-- Each literal affine patch of `CP¹` is exactly its affine coordinate
-space, at the level of points. -/
-noncomputable def t97J07_cp1_affinePatchEquiv (i : Fin 2) :
-    {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
-      Projectivization.rep p i ≠ 0} ≃
-      ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i where
-  toFun p := ConstructionTargets.ComplexProjectiveChartTargets.coordinates i p.1
-  invFun z := ⟨ConstructionTargets.ComplexProjectiveChartTargets.chartInverse i z,
-    t97J07_cp1_chartInverse_rep_ne i z⟩
-  left_inv p := by
-    apply Subtype.ext
-    exact ConstructionTargets.ComplexProjectiveChartTargets.chartInverse_coordinates
-      i p.1 p.2
-  right_inv z :=
-    ConstructionTargets.ComplexProjectiveChartTargets.coordinates_chartInverse i z
-
-/-- The shared arbitrary-affine-chart continuity theorem upgrades the exact
-point-set equivalence to a homeomorphism. -/
-noncomputable def t97J07_cp1_affinePatchHomeomorph (i : Fin 2) :
-    {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
-      Projectivization.rep p i ≠ 0} ≃ₜ
-      ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i where
-  toEquiv := t97J07_cp1_affinePatchEquiv i
-  continuous_toFun := by
-    exact continuousOn_iff_continuous_restrict.mp
-      (ConstructionTargets.T99J05ArbitraryAffineChartContinuity.t99J05_coordinates_continuousOn i)
-  continuous_invFun := by
-    apply Continuous.subtype_mk
-    exact ConstructionTargets.T99J05ArbitraryAffineChartContinuity.t99J05_chartInverse_continuous i
-
-/-- Each literal affine patch is contractible, transported from its affine
-coordinate topological vector space. -/
-theorem t97J07_cp1_affinePatch_contractible (i : Fin 2) :
-    ContractibleSpace
-      {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
-        Projectivization.rep p i ≠ 0} := by
-  exact (t97J07_cp1_affinePatchHomeomorph i).contractibleSpace
-
-/-- Consequently, either affine patch has zero rational singular homology in
-every positive degree. -/
-theorem t97J07_cp1_affinePatch_higherHomology_isZero
-    (i : Fin 2) (n : ℕ) (hn : n ≠ 0) :
-    CategoryTheory.Limits.IsZero (ConstructionTargets.RationalLefschetz.Homology
-      {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
-        Projectivization.rep p i ≠ 0} n) := by
-  letI := t97J07_cp1_affinePatch_contractible i
-  exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ _ n hn
-
-/-- In either affine chart, membership in the other chart is precisely the
-nonvanishing of its sole affine coordinate. -/
-theorem t97J07_cp1_chartInverse_other_rep_ne_iff (i j : Fin 2) (hji : j ≠ i)
-    (z : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates i) :
-    Projectivization.rep
-        (ConstructionTargets.ComplexProjectiveChartTargets.chartInverse i z) j ≠ 0 ↔
-      z ⟨j, hji⟩ ≠ 0 := by
-  let v : Fin 2 → ℂ := fun k => if h : k = i then 1 else z ⟨k, h⟩
-  have hv : v ≠ 0 := by
-    intro h
-    have hi := congrFun h i
-    simp [v] at hi
-  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ v hv
-  change (Projectivization.mk ℂ v hv).rep j ≠ 0 ↔ z ⟨j, hji⟩ ≠ 0
-  rw [← ha]
-  change a.1 * v j ≠ 0 ↔ z ⟨j, hji⟩ ≠ 0
-  simp [v, hji]
-
-/-- The literal overlap, presented inside the zero affine patch. -/
-abbrev T97J07CP1ZeroPatchOverlap :=
-  {p : {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
-      Projectivization.rep p (0 : Fin 2) ≠ 0} //
-    Projectivization.rep p.1 (1 : Fin 2) ≠ 0}
-
-/-- The coordinate model of the overlap is the nonzero locus in the sole
-affine coordinate. -/
-abbrev T97J07CP1PuncturedAffine :=
-  {z : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates
-      (0 : Fin 2) // z ⟨1, by decide⟩ ≠ 0}
-
-/-- The overlap characterization upgrades to an actual homeomorphism with
-the punctured affine coordinate space. -/
-noncomputable def t97J07_cp1_overlapHomeomorphPuncturedAffine :
-    T97J07CP1ZeroPatchOverlap ≃ₜ T97J07CP1PuncturedAffine :=
-  (t97J07_cp1_affinePatchHomeomorph 0).subtype (fun p => by
-    change Projectivization.rep p.1 1 ≠ 0 ↔
-      ConstructionTargets.ComplexProjectiveChartTargets.coordinates 0 p.1
-        ⟨1, by decide⟩ ≠ 0
-    have h := t97J07_cp1_chartInverse_other_rep_ne_iff 0 1 (by decide)
-      (ConstructionTargets.ComplexProjectiveChartTargets.coordinates 0 p.1)
-    rw [ConstructionTargets.ComplexProjectiveChartTargets.chartInverse_coordinates
-      0 p.1 p.2] at h
-    exact h)
-
-/-- The one-coordinate punctured affine model is the ordinary punctured
-complex line. -/
-noncomputable def t97J07_cp1_puncturedAffineHomeomorphComplex :
-    T97J07CP1PuncturedAffine ≃ₜ {z : ℂ // z ≠ 0} where
-  toFun z := ⟨z.1 ⟨1, by decide⟩, z.2⟩
-  invFun w := ⟨fun _ => w.1, w.2⟩
-  left_inv z := by
-    apply Subtype.ext
-    funext j
-    have hj : j = ⟨1, by decide⟩ := by
-      apply Subtype.ext
-      exact Fin.eq_one_of_ne_zero j.1 j.2
-    subst j
-    rfl
-  right_inv w := rfl
-  continuous_toFun := by
-    apply Continuous.subtype_mk
-    exact (continuous_apply
-      (⟨1, by decide⟩ : {j : Fin 2 // j ≠ (0 : Fin 2)})).comp
-        continuous_subtype_val
-  continuous_invFun := by fun_prop
-
-/-- Radial normalization exhibits the punctured complex line as homotopy
-equivalent to its unit circle. -/
-noncomputable def t97J07_cp1_puncturedComplex_radialHomotopyEquiv :
-    {z : ℂ // z ≠ 0} ≃ₕ Metric.sphere (0 : ℂ) 1 :=
-  (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
-    ℂ).symm
-
-/-- The literal two-chart overlap is homotopy equivalent to the unit circle,
-with the direction fixed from overlap coordinates to the circle. -/
-noncomputable def t97J07_cp1_overlapHomotopyEquivCircle :
-    T97J07CP1ZeroPatchOverlap ≃ₕ Metric.sphere (0 : ℂ) 1 :=
-  t97J07_cp1_overlapHomeomorphPuncturedAffine.toHomotopyEquiv |>.trans
-    (t97J07_cp1_puncturedAffineHomeomorphComplex.toHomotopyEquiv |>.trans
-      t97J07_cp1_puncturedComplex_radialHomotopyEquiv)
-
-/-- Rational singular homology transports across the exact overlap-to-circle
-homotopy equivalence in every degree. -/
-noncomputable def t97J07_cp1_overlapHomologyIsoCircle (k : ℕ) :
-    ConstructionTargets.CoefficientH0.SingularHomology ℚ k
-        (TopCat.of T97J07CP1ZeroPatchOverlap) ≅
-      ConstructionTargets.CoefficientH0.SingularHomology ℚ k
-        (TopCat.of (Metric.sphere (0 : ℂ) 1)) :=
-  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
-      t97J07_cp1_overlapHomotopyEquivCircle k
-
-/-- Rational homology comparison from the complex unit circle to the
-Euclidean one-sphere used by the coefficient endpoint library. -/
-noncomputable def t97J07_circleHomologyIsoSphereOne (k : ℕ) :
-    ConstructionTargets.CoefficientH0.SingularHomology ℚ k
-        (TopCat.of (Metric.sphere (0 : ℂ) 1)) ≅
-      ConstructionTargets.CoefficientH0.SingularHomology ℚ k
-        (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) :=
-  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
-      (ModuleCat.of ℚ ℚ)).mapIso
-    (TopCat.isoOfHomeo
-      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne)
-
-/-- The overlap has one-dimensional rational homology in degree zero. -/
-noncomputable def t97J07_cp1_puncturedOverlap_H0 :
-    ConstructionTargets.CoefficientH0.SingularHomology ℚ 0
-        (TopCat.of T97J07CP1ZeroPatchOverlap) ≅ ModuleCat.of ℚ ℚ :=
-  t97J07_cp1_overlapHomologyIsoCircle 0 ≪≫
-    t97J07_circleHomologyIsoSphereOne 0 ≪≫
-      ConstructionTargets.CoefficientH0.sphereH0 ℚ 1
-
-/-- The overlap has one-dimensional rational homology in degree one. -/
-noncomputable def t97J07_cp1_puncturedOverlap_H1 :
-    ConstructionTargets.CoefficientH0.SingularHomology ℚ 1
-        (TopCat.of T97J07CP1ZeroPatchOverlap) ≅ ModuleCat.of ℚ ℚ :=
-  t97J07_cp1_overlapHomologyIsoCircle 1 ≪≫
-    t97J07_circleHomologyIsoSphereOne 1 ≪≫
-      ConstructionTargets.CoefficientSphereEndpoints.circleH1 ℚ
-
-/-- Only the first two filtration steps are needed by this consumer.  This
-bounded adapter avoids requiring an all-dimensional successor theorem. -/
-noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
-    (h01 :
-      ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 0 →
-        ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 1)
-    (h12 :
-      ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 1 →
-        ConstructionTargets.t99J05Closure.ComplexProjectiveRationalHomologyData 2) :
-    T97J07CP2RationalHomologyData :=
-  t97J07_cp2RationalHomologyData_of_shared
-    (h12 (h01 t97J07_complexProjectiveRationalHomologyData_zero))
-
-/-- Once the CP² homology table is supplied, finite-dimensional trace
-calculation gives Euler characteristic three. -/
+/-- Given the degree-by-degree homology computation, the remaining step is
+finite-dimensional linear algebra: the identity induces identity maps, their
+traces are `1, 0, 1, 0, 1`, and the alternating sum through degree four is
+`3`.  The hypothesis makes this seat independent of the topology seat. -/
 theorem t97J07_eulerCharacteristic_of_homologyData
     (h : T97J07CP2RationalHomologyData) :
     ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
@@ -665,25 +363,14 @@ theorem t97J07_eulerCharacteristic_of_homologyData
       CategoryTheory.Functor.map_id, LinearMap.trace_id]
     norm_num [Finset.sum_range_succ, h0, h1, h2, h3, h4]
 
-#print axioms t97J07_cp1_nonzeroVectors_pathConnected
-#print axioms t97J07_cp1_pathConnected
-#print axioms t97J07_cp1_rationalH0Iso
-#print axioms t97J07_cp1_twoAffine_openCover
-#print axioms t97J07_cp1_mayerVietoris_exact_pieces
-#print axioms t97J07_cp1_chartInverse_rep_ne
-#print axioms t97J07_cp1_affinePatchEquiv
-#print axioms t97J07_cp1_affinePatchHomeomorph
-#print axioms t97J07_cp1_affinePatch_contractible
-#print axioms t97J07_cp1_affinePatch_higherHomology_isZero
-#print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
-#print axioms t97J07_cp1_overlapHomeomorphPuncturedAffine
-#print axioms t97J07_cp1_puncturedAffineHomeomorphComplex
-#print axioms t97J07_cp1_puncturedComplex_radialHomotopyEquiv
-#print axioms t97J07_cp1_overlapHomotopyEquivCircle
-#print axioms t97J07_cp1_overlapHomologyIsoCircle
-#print axioms t97J07_circleHomologyIsoSphereOne
-#print axioms t97J07_cp1_puncturedOverlap_H0
-#print axioms t97J07_cp1_puncturedOverlap_H1
+/-- The rational singular-homology Euler characteristic of complex
+projective two-space is 3.  This declaration is only the assembly of the
+topological homology certificate and the independent trace calculation. -/
+theorem t97J07_eulerCharacteristic :
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+      T97J07CP2 3 := by
+  exact t97J07_cp2RationalHomologyData_exists.elim
+    t97J07_eulerCharacteristic_of_homologyData
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
@@ -707,4 +394,12 @@ theorem apm_t97j07 :
     t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 ∧
     ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
       T97J07CP2 3 := by
-  sorry
+  exact ⟨t97J07_fixed_set, t97J07IsolatedPoint_not_mem,
+    t97J07LineChart_map, t97J07PointChart_map,
+    t97J07LineLocal_fderiv, t97J07PointLocal_fderiv,
+    t97J07LineNormalDet_eq, t97J07PointDet_eq,
+    t97J07LineIndex_eq, t97J07PointIndex_eq,
+    t97J07LineContribution_eq, t97J07TotalContribution_eq,
+    t97J07_eulerCharacteristic⟩
+
+#print axioms apm_t97j07

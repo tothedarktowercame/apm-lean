@@ -83,14 +83,549 @@ lemma rationalMayerVietoris_aux_smallComparison
 `CoefficientSubcomplexMayerVietoris`, `CoefficientSubspaceUnionRangeHomologyEquivalence`,
 `CoefficientAmbientSubspaceRangeComparison`, `CoefficientIntersectionRangeComparison`,
 `CoefficientPieceRangeBiproductComparison`, and `ProductionOpenCoverMayerVietoris.transportShortComplex_exact`. -/
+abbrev rationalMayerVietoris_aux_chains :=
+  (AlgebraicTopology.SSet.singularChainComplexFunctor (ModuleCat ℚ)).obj
+    (ModuleCat.of ℚ ℚ)
+
+abbrev rationalMayerVietoris_aux_P {X : Type} [TopologicalSpace X] (U : Set X) :=
+  ConstructionTargets.SingularExcision.ambientSubspaceRange U
+
+noncomputable def rationalMayerVietoris_aux_negIso (M : ModuleCat ℚ) : M ≅ M where
+  hom := -𝟙 M
+  inv := -𝟙 M
+  hom_inv_id := by simp
+  inv_hom_id := by simp
+
+noncomputable def rationalMayerVietoris_aux_interIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    ((rationalMayerVietoris_aux_chains).obj
+      (((rationalMayerVietoris_aux_P U ⊓ rationalMayerVietoris_aux_P V) :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet)).homology n ≅
+      HQ n ↥(U ∩ V) :=
+  CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso ℚ U V n
+
+noncomputable def rationalMayerVietoris_aux_pieceIso
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P U : SSet)) ⊞
+      ((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P V : SSet))).homology n ≅
+      HQ n U ⊞ HQ n V :=
+  CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n ≪≫
+    CoefficientPieceRangeBiproductComparison.pieceHomologyIso ℚ U V n ≪≫
+    biprod.mapIso (Iso.refl _) (rationalMayerVietoris_aux_negIso _)
+
+lemma rationalMayerVietoris_aux_unionMap_isIso
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap
+      ((rationalMayerVietoris_aux_chains).map
+        (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n) := by
+  have h := rationalMayerVietoris_aux_smallComparison U V hU hV hcov n
+  have heq : ConstructionTargets.SingularSubdivision.coverSmallSSet
+      (fun b : Bool => if b then U else V) =
+      rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V := by
+    rw [ConstructionTargets.SingularExcision.coverSmallSSet_bool_eq_sup]
+    rfl
+  rw [← heq]
+  exact h
+
+noncomputable def rationalMayerVietoris_aux_unionIso
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    ((rationalMayerVietoris_aux_chains).obj
+      (((rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V) :
+        (TopCat.toSSet.obj (TopCat.of X)).Subcomplex) : SSet)).homology n ≅
+      HQ n X := by
+  let f := HomologicalComplex.homologyMap
+    ((rationalMayerVietoris_aux_chains).map
+      (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n
+  exact @asIso _ _ _ _ f
+    (rationalMayerVietoris_aux_unionMap_isIso U V hU hV hcov n)
+
+abbrev rationalMayerVietoris_aux_SC {X : Type} [TopologicalSpace X] (U V : Set X) :=
+  CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+    (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)
+
+lemma rationalMayerVietoris_aux_lift_fst
+    {W K L : ChainComplex (ModuleCat ℚ) ℕ} (f : W ⟶ K) (g : W ⟶ L) (n : ℕ) :
+    HomologicalComplex.homologyMap (biprod.lift f g) n ≫
+      (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).hom ≫ biprod.fst =
+      HomologicalComplex.homologyMap f n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_hom, biprod.lift_fst,
+    ← HomologicalComplex.homologyMap_comp, biprod.lift_fst]
+
+lemma rationalMayerVietoris_aux_lift_snd
+    {W K L : ChainComplex (ModuleCat ℚ) ℕ} (f : W ⟶ K) (g : W ⟶ L) (n : ℕ) :
+    HomologicalComplex.homologyMap (biprod.lift f g) n ≫
+      (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).hom ≫ biprod.snd =
+      HomologicalComplex.homologyMap g n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_hom, biprod.lift_snd,
+    ← HomologicalComplex.homologyMap_comp, biprod.lift_snd]
+
+lemma rationalMayerVietoris_aux_interArrow_aux_fst
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.fst =
+      mvIncl Set.inter_subset_left n := by
+  rw [show (rationalMayerVietoris_aux_SC U V).f =
+      biprod.lift
+        ((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))
+        (-((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))) by rfl]
+  have htail :
+      ((ConstructionTargets.CoefficientPieceRangeBiproductComparison.pieceHomologyIso
+          ℚ U V n).hom ≫
+          biprod.map (𝟙 _) (rationalMayerVietoris_aux_negIso _).hom) ≫ biprod.fst =
+        biprod.fst ≫
+          (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ U n).hom := by
+    rw [Category.assoc, biprod.map_fst]
+    simp only [Category.comp_id, ← Category.assoc,
+      ConstructionTargets.CoefficientPieceRangeBiproductComparison.pieceHomologyIso_hom_fst]
+  have htail2 := congrArg
+    (fun k => (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ
+      ((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P U : SSet))
+      ((rationalMayerVietoris_aux_chains).obj (rationalMayerVietoris_aux_P V : SSet)) n).hom ≫ k)
+    htail
+  calc
+    _ = (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        (HomologicalComplex.homologyMap
+          (biprod.lift
+            ((rationalMayerVietoris_aux_chains).map
+              (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+                (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))
+            (-((rationalMayerVietoris_aux_chains).map
+              (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+                (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))))) n ≫
+          (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫
+          biprod.fst) ≫
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ U n).hom := by
+      simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_hom,
+        biprod.mapIso_hom, Iso.refl_hom]
+      slice_lhs 3 5 => exact htail2
+      simp only [Category.assoc]
+      rfl
+    _ = (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          ((rationalMayerVietoris_aux_chains).map
+            (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+              (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ U n).hom := by
+      rw [rationalMayerVietoris_aux_lift_fst]
+    _ = _ := by
+      change
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ (U ∩ V) n).inv ≫
+          (ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+            ℚ U V n).hom ≫
+          HomologicalComplex.homologyMap
+            ((rationalMayerVietoris_aux_chains).map
+              (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+                (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+          (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ U n).hom = _
+      rw [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso_hom]
+      have hs :=
+        ConstructionTargets.CoefficientIntersectionRangeNaturality.homology_square_left
+          ℚ U V n
+      slice_lhs 3 4 =>
+        exact hs.symm
+      rw [HomologicalComplex.homologyMap_comp]
+      change
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ (U ∩ V) n).inv ≫
+          (ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+            ℚ U V n).hom ≫
+          ((ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+            ℚ U V n).inv ≫
+            (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+              ℚ (U ∩ V) n).hom) ≫
+          HomologicalComplex.homologyMap
+            ((rationalMayerVietoris_aux_chains).map
+              (TopCat.toSSet.map
+                (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+                  Set.inter_subset_left))) n = _
+      simp [mvIncl, Category.assoc]
+      rfl
+
+lemma rationalMayerVietoris_aux_interArrow_aux_snd
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.snd =
+      mvIncl Set.inter_subset_right n := by
+  have hpiece : (rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.snd =
+      (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫
+        biprod.snd ≫ (CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ V n).hom ≫
+        (rationalMayerVietoris_aux_negIso _).hom := by
+    simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_hom,
+      biprod.mapIso_hom, Category.assoc, biprod.map_snd]
+    simpa only [Category.assoc] using congrArg
+      (fun k => (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫
+        k ≫ (rationalMayerVietoris_aux_negIso _).hom)
+      (CoefficientPieceRangeBiproductComparison.pieceHomologyIso_hom_snd ℚ U V n)
+  calc
+    _ = ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+          HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n) ≫
+        ((rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.snd) := by
+          simp only [Category.assoc]
+    _ = ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+          HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n) ≫
+        ((CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫
+          biprod.snd ≫
+          (CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ V n).hom ≫
+          (rationalMayerVietoris_aux_negIso _).hom) := by
+            exact congrArg (fun k =>
+              ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+                HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n) ≫ k)
+              hpiece
+    _ = _ := by
+      have hcomponent :
+          HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+              (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫ biprod.snd =
+            -HomologicalComplex.homologyMap
+              ((rationalMayerVietoris_aux_chains).map
+                (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+                  (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n := by
+        change HomologicalComplex.homologyMap
+            (biprod.lift
+              ((rationalMayerVietoris_aux_chains).map
+                (ConstructionTargets.SingularExcision.subcomplexIntersectionToLeft
+                  (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)))
+              (-((rationalMayerVietoris_aux_chains).map
+                (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+                  (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))))) n ≫
+              (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫ biprod.snd = _
+        rw [rationalMayerVietoris_aux_lift_snd]
+        rw [HomologicalComplex.homologyMap_neg]
+      rw [show (rationalMayerVietoris_aux_negIso _).hom = -𝟙 _ by rfl]
+      simp only [Category.assoc]
+      have hc := congrArg (fun k =>
+        (rationalMayerVietoris_aux_interIso U V n).inv ≫ k ≫
+          (CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ V n).hom ≫
+          (-𝟙 _)) hcomponent
+      have hc' :
+          (rationalMayerVietoris_aux_interIso U V n).inv ≫
+              HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+              (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).hom ≫ biprod.snd ≫
+              (CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ V n).hom ≫ (-𝟙 _) =
+            (rationalMayerVietoris_aux_interIso U V n).inv ≫
+              (-HomologicalComplex.homologyMap
+                ((rationalMayerVietoris_aux_chains).map
+                  (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+                    (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n) ≫
+              (CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ V n).hom ≫ (-𝟙 _) := by
+        simpa only [Category.assoc] using hc
+      rw [hc']
+      simp only [Preadditive.comp_neg, Preadditive.neg_comp, neg_neg, Category.comp_id]
+      have hsquare :=
+        ConstructionTargets.CoefficientIntersectionRangeNaturality.homology_square_right
+          ℚ U V n
+      have hsquare' : (rationalMayerVietoris_aux_interIso U V n).hom ≫
+            mvIncl Set.inter_subset_right n =
+          HomologicalComplex.homologyMap
+              ((rationalMayerVietoris_aux_chains).map
+                (ConstructionTargets.SingularExcision.subcomplexIntersectionToRight
+                  (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+            (CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ V n).hom := by
+        simpa [rationalMayerVietoris_aux_interIso,
+          CoefficientIntersectionRangeComparison.infimumToIntersectionHomologyIso_hom,
+          CoefficientIntersectionRangeComparison.intersectionHomologyIso,
+          CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso_hom,
+          HomologicalComplex.homologyMap_comp, mvIncl,
+          CoefficientH0.singularPostcomposition] using hsquare
+      rw [← hsquare']
+      simp
+
+lemma rationalMayerVietoris_aux_interArrow
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n := by
+  apply biprod.hom_ext
+  · simpa [mvI] using rationalMayerVietoris_aux_interArrow_aux_fst U V n
+  · simpa [mvI] using rationalMayerVietoris_aux_interArrow_aux_snd U V n
+lemma rationalMayerVietoris_aux_unionArrow_aux_inl
+    {K L T : ChainComplex (ModuleCat ℚ) ℕ} (f : K ⟶ T) (g : L ⟶ T) (n : ℕ) :
+    biprod.inl ≫ (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).inv ≫
+        HomologicalComplex.homologyMap (biprod.desc f g) n =
+      HomologicalComplex.homologyMap f n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_inv,
+    biprod.inl_desc_assoc, ← HomologicalComplex.homologyMap_comp, biprod.inl_desc]
+
+lemma rationalMayerVietoris_aux_unionArrow_aux_inr
+    {K L T : ChainComplex (ModuleCat ℚ) ℕ} (f : K ⟶ T) (g : L ⟶ T) (n : ℕ) :
+    biprod.inr ≫ (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).inv ≫
+        HomologicalComplex.homologyMap (biprod.desc f g) n =
+      HomologicalComplex.homologyMap g n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_inv,
+    biprod.inr_desc_assoc, ← HomologicalComplex.homologyMap_comp, biprod.inr_desc]
+
+lemma rationalMayerVietoris_aux_unionArrow_aux_component
+    {X : Type} [TopologicalSpace X] (A B : Set X) (h : A ⊆ B) (n : ℕ) :
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+        ℚ A n).inv ≫
+      HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h)) n ≫
+      (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+        ℚ B n).hom =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨Set.inclusion h, continuous_inclusion h⟩) n := by
+  calc
+    _ = (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ A n).inv ≫
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ A n).hom ≫
+        HomologicalComplex.homologyMap
+          ((rationalMayerVietoris_aux_chains).map
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) n := by
+      simpa only [Category.assoc] using congrArg
+        (fun k ↦
+          (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ A n).inv ≫ k)
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeNaturality.homology_square
+          ℚ h n).symm
+    _ = _ := by simp; rfl
+
+lemma rationalMayerVietoris_aux_unionArrow_aux_ambient
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+        ℚ A n).inv ≫
+      HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (rationalMayerVietoris_aux_P A).ι) n =
+      mvToX A n := by
+  rw [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso_inv,
+    ← HomologicalComplex.homologyMap_comp]
+  apply congrArg (fun f ↦ HomologicalComplex.homologyMap f n)
+  apply (cancel_epi
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso
+      ℚ A).hom).1
+  simpa [mvToX, CoefficientRelativeSmall.subspaceMap, Category.assoc] using
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso_hom_comp_subspaceMap
+      ℚ A).symm
+
+lemma rationalMayerVietoris_aux_unionArrow
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
+    (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n := by
+  apply biprod.hom_ext'
+  · simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_inv, Category.assoc]
+    change biprod.inl ≫
+      (biprod.map (𝟙 _) (-𝟙 _) ≫
+        (CoefficientPieceRangeBiproductComparison.pieceHomologyIso ℚ U V n).inv ≫
+        (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).inv) ≫
+      HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+      (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = _
+    simp only [Category.assoc]
+    rw [biprod.inl_map_assoc]
+    simp only [Category.id_comp]
+    dsimp [CoefficientPieceRangeBiproductComparison.pieceHomologyIso]
+    rw [biprod.inl_map_assoc]
+    dsimp [rationalMayerVietoris_aux_SC,
+      CoefficientSubcomplexMayerVietoris.shortComplex]
+    slice_lhs 2 4 =>
+      rw [rationalMayerVietoris_aux_unionArrow_aux_inl]
+    change _ ≫ HomologicalComplex.homologyMap
+      ((rationalMayerVietoris_aux_chains).map
+        (ConstructionTargets.SingularExcision.subcomplexLeftToUnion
+          (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+      HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n = _
+    slice_lhs 2 3 => rw [← HomologicalComplex.homologyMap_comp]
+    rw [← Functor.map_comp]
+    change _ ≫ HomologicalComplex.homologyMap
+      ((rationalMayerVietoris_aux_chains).map (rationalMayerVietoris_aux_P U).ι) n = _
+    simpa [mvJ] using rationalMayerVietoris_aux_unionArrow_aux_ambient U n
+  · simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_inv, Category.assoc]
+    change biprod.inr ≫
+      (biprod.map (𝟙 _) (-𝟙 _) ≫
+        (CoefficientPieceRangeBiproductComparison.pieceHomologyIso ℚ U V n).inv ≫
+        (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).inv) ≫
+      HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+      (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = _
+    simp only [Category.assoc]
+    rw [biprod.inr_map_assoc]
+    dsimp [CoefficientPieceRangeBiproductComparison.pieceHomologyIso]
+    rw [Preadditive.neg_comp, biprod.inr_map_assoc]
+    dsimp [rationalMayerVietoris_aux_SC,
+      CoefficientSubcomplexMayerVietoris.shortComplex]
+    simp only [Category.id_comp]
+    slice_lhs 3 5 => rw [rationalMayerVietoris_aux_unionArrow_aux_inr]
+    change -((ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+      ℚ V n).inv ≫ HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.subcomplexRightToUnion
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+        HomologicalComplex.homologyMap
+          ((rationalMayerVietoris_aux_chains).map
+            (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n) = _
+    rw [← HomologicalComplex.homologyMap_comp, ← Functor.map_comp]
+    change -((ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+      ℚ V n).inv ≫ HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map (rationalMayerVietoris_aux_P V).ι) n) = _
+    rw [rationalMayerVietoris_aux_unionArrow_aux_ambient]
+    simp [mvJ]
+    rfl
+
+/-- Transport of the subcomplex Mayer–Vietoris sequence (`CoefficientSubcomplexMayerVietoris`:
+exactness at pieces/union/intersection + connecting map) along `interIso`, `pieceIso`,
+`unionIso`, given that the transported arrows are `mvI` and `mvJ`. -/
+lemma rationalMayerVietoris_aux_transport_aux_pieces
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hI : ∀ n, (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n)
+    (hJ : ∀ n, (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n)
+    (n : ℕ) :
+    LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom := by
+  have hex := ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _
+    (rationalMayerVietoris_aux_interIso U V n)
+    (rationalMayerVietoris_aux_pieceIso U V n)
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov n)
+    (CoefficientSubcomplexMayerVietoris.exact_pieces ℚ
+      (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n)
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hex
+  dsimp only [ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex] at hex
+  have hI' := hI n
+  have hJ' := hJ n
+  dsimp only [rationalMayerVietoris_aux_SC] at hI' hJ'
+  have hIhom := congrArg ModuleCat.Hom.hom hI'
+  have hJhom := congrArg ModuleCat.Hom.hom hJ'
+  have hIrange : LinearMap.range (mvI U V n).hom =
+      LinearMap.range ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom).hom := by
+    exact hIhom ▸ rfl
+  have hJker : LinearMap.ker
+      ((rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom).hom =
+      LinearMap.ker (mvJ U V n).hom := by
+    exact hJhom ▸ rfl
+  exact hIrange.trans (hex.trans hJker)
+
+lemma rationalMayerVietoris_aux_transport_aux_union
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hJ : ∀ n, (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n)
+    (n : ℕ) :
+    LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker
+      ((rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).inv ≫
+        CoefficientSubcomplexMayerVietoris.connecting ℚ
+          (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n ≫
+        (rationalMayerVietoris_aux_interIso U V n).hom).hom := by
+  have hex := ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _
+    (rationalMayerVietoris_aux_pieceIso U V (n + 1))
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1))
+    (rationalMayerVietoris_aux_interIso U V n)
+    (CoefficientSubcomplexMayerVietoris.exact_union ℚ
+      (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n)
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hex
+  dsimp only [ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex] at hex
+  have hJ' := hJ (n + 1)
+  dsimp only [rationalMayerVietoris_aux_SC] at hJ'
+  have hJhom := congrArg ModuleCat.Hom.hom hJ'
+  have hJrange : LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.range
+      ((rationalMayerVietoris_aux_pieceIso U V (n + 1)).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).g (n + 1) ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).hom).hom := by
+    exact hJhom ▸ rfl
+  exact hJrange.trans hex
+
+lemma rationalMayerVietoris_aux_transport_aux_intersection
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hI : ∀ n, (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n)
+    (n : ℕ) :
+    LinearMap.range
+      ((rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).inv ≫
+        CoefficientSubcomplexMayerVietoris.connecting ℚ
+          (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n ≫
+        (rationalMayerVietoris_aux_interIso U V n).hom).hom =
+      LinearMap.ker (mvI U V n).hom := by
+  have hex := ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1))
+    (rationalMayerVietoris_aux_interIso U V n)
+    (rationalMayerVietoris_aux_pieceIso U V n)
+    (CoefficientSubcomplexMayerVietoris.exact_intersection ℚ
+      (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n)
+  rw [ShortComplex.moduleCat_exact_iff_range_eq_ker] at hex
+  dsimp only [ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex] at hex
+  have hI' := hI n
+  dsimp only [rationalMayerVietoris_aux_SC] at hI'
+  have hIhom := congrArg ModuleCat.Hom.hom hI'
+  have hIker : LinearMap.ker
+      ((rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap
+          (CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V)).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom).hom =
+      LinearMap.ker (mvI U V n).hom := by
+    exact hIhom ▸ rfl
+  exact hex.trans hIker
+
+lemma rationalMayerVietoris_aux_transport
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ)
+    (hI : ∀ n, (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n)
+    (hJ : ∀ n, (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+        (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n) :
+    ∃ δ : ∀ n, HQ (n + 1) X ⟶ HQ n ↥(U ∩ V),
+      (∀ n, LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom) ∧
+      (∀ n, LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (mvI U V n).hom) := by
+  let δ : ∀ n, HQ (n + 1) X ⟶ HQ n ↥(U ∩ V) := fun n =>
+    (rationalMayerVietoris_aux_unionIso U V hU hV hcov (n + 1)).inv ≫
+      CoefficientSubcomplexMayerVietoris.connecting ℚ
+        (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V) n ≫
+      (rationalMayerVietoris_aux_interIso U V n).hom
+  refine ⟨δ, fun n => rationalMayerVietoris_aux_transport_aux_pieces
+    U V hU hV hcov hI hJ n, ?_, ?_⟩
+  · intro n
+    exact rationalMayerVietoris_aux_transport_aux_union U V hU hV hcov hJ n
+  · intro n
+    exact rationalMayerVietoris_aux_transport_aux_intersection U V hU hV hcov hI n
+
 theorem rationalMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
     ∃ δ : ∀ n, HQ (n + 1) X ⟶ HQ n ↥(U ∩ V),
       (∀ n, LinearMap.range (mvI U V n).hom = LinearMap.ker (mvJ U V n).hom) ∧
       (∀ n, LinearMap.range (mvJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
-      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (mvI U V n).hom) := by
-  sorry
-
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (mvI U V n).hom) :=
+  rationalMayerVietoris_aux_transport U V hU hV hcov
+    (fun n => rationalMayerVietoris_aux_interArrow U V n)
+    (fun n => rationalMayerVietoris_aux_unionArrow U V hU hV hcov n)
 abbrev CP2 := ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 2
 
 /-- `ℂP²` minus `[0:0:1]`. -/
@@ -483,6 +1018,120 @@ lemma cpU_homology_aux_cpU_hequiv_CP1_aux_retraction
   · simpa only [Pi.smul_apply, Units.smul_def, Matrix.cons_val_zero,
       Matrix.cons_val_one] using congrFun ha 1
 
+lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_nonzero
+    (t : unitInterval) (x : cpU) :
+    (![x.1.rep 0, x.1.rep 1, t.1 * x.1.rep 2] : Fin 3 → ℂ) ≠ 0 := by
+  intro h
+  have h0 := congrFun h 0
+  have h1 := congrFun h 1
+  simp at h0 h1
+  rcases x.2 with hx | hx
+  · exact hx h0
+  · exact hx h1
+
+noncomputable def cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun
+    (p : unitInterval × cpU) : cpU :=
+  ⟨quotientMap ℂ 2
+      ⟨![p.2.1.rep 0, p.2.1.rep 1, p.1.1 * p.2.1.rep 2],
+        cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_nonzero p.1 p.2⟩,
+    by
+      change (quotientMap ℂ 2 _).rep 0 ≠ 0 ∨
+        (quotientMap ℂ 2 _).rep 1 ≠ 0
+      rw [cp_open_cover_aux_coord, cp_open_cover_aux_coord]
+      exact p.2.2⟩
+
+lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_continuous :
+    Continuous cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun := by
+  let q : NonzeroVectors ℂ 2 → CP2 := quotientMap ℂ 2
+  let D : Set (NonzeroVectors ℂ 2) := q ⁻¹' cpU
+  let qr : D → cpU := fun v => ⟨q v.1, v.2⟩
+  have hqo : IsOpenMap q :=
+    ConstructionTargets.ProjectiveQuotientDescent.projectiveQuotientMap_isOpen ℂ 2
+  have hU : IsOpen cpU := cp_open_cover.1
+  have hqr : Topology.IsQuotientMap qr := by
+    rw [Topology.isQuotientMap_iff]
+    constructor
+    · rintro ⟨x, hx⟩
+      obtain ⟨v, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 2 x
+      exact ⟨⟨v, hx⟩, rfl⟩
+    · intro s
+      constructor
+      · exact fun hs => hs.preimage
+          ((ProjectiveSpaceTopology.continuous_quotientMap ℂ 2).subtype_map (fun _ h => h))
+      · intro hs
+        rw [isOpen_induced_iff] at hs ⊢
+        obtain ⟨u, hu, hus⟩ := hs
+        refine ⟨q '' (q ⁻¹' cpU ∩ u), hqo _
+          ((hU.preimage (ProjectiveSpaceTopology.continuous_quotientMap ℂ 2)).inter hu), ?_⟩
+        ext x
+        constructor
+        · rintro ⟨v, ⟨hvU, hvu⟩, hvx⟩
+          have hvt : qr ⟨v, hvU⟩ ∈ s :=
+            (Set.ext_iff.mp hus ⟨v, hvU⟩).mp hvu
+          have he : qr ⟨v, hvU⟩ = x := by
+            apply Subtype.ext
+            exact hvx
+          exact he ▸ hvt
+        · intro hx
+          obtain ⟨v, hv⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 2 x.1
+          have hvU : q v ∈ cpU := by simpa [q] using (hv ▸ x.2)
+          have he : qr ⟨v, hvU⟩ = x := Subtype.ext hv
+          have hmem : qr ⟨v, hvU⟩ ∈ s := by rw [he]; exact hx
+          have hvu : v ∈ u := (Set.ext_iff.mp hus ⟨v, hvU⟩).mpr hmem
+          exact ⟨v, ⟨hvU, hvu⟩, hv⟩
+  apply hqr.continuous_lift_prod_right
+  let lift : unitInterval × D → cpU := fun p =>
+    ⟨quotientMap ℂ 2 ⟨![p.2.1.1 0, p.2.1.1 1, p.1.1 * p.2.1.1 2], by
+      intro h
+      have h0 := congrFun h 0
+      have h1 := congrFun h 1
+      simp at h0 h1
+      have hp := p.2.2
+      change (q p.2.1).rep 0 ≠ 0 ∨ (q p.2.1).rep 1 ≠ 0 at hp
+      rw [cp_open_cover_aux_coord, cp_open_cover_aux_coord] at hp
+      exact hp.elim (fun hn => hn h0) (fun hn => hn h1)⟩, by
+        change (quotientMap ℂ 2 _).rep 0 ≠ 0 ∨
+          (quotientMap ℂ 2 _).rep 1 ≠ 0
+        have hp := p.2.2
+        change (q p.2.1).rep 0 ≠ 0 ∨ (q p.2.1).rep 1 ≠ 0 at hp
+        rw [cp_open_cover_aux_coord, cp_open_cover_aux_coord] at hp
+        rcases hp with hp | hp
+        · left
+          exact (cp_open_cover_aux_coord 0 _).mpr (by simpa using hp)
+        · right
+          exact (cp_open_cover_aux_coord 1 _).mpr (by simpa using hp)⟩
+  have hlift : Continuous lift := by
+    apply Continuous.subtype_mk
+    apply (continuous_quotientMap ℂ 2).comp
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    fin_cases j
+    · exact ((continuous_apply 0).comp
+        (continuous_subtype_val.comp continuous_subtype_val)).comp continuous_snd
+    · exact ((continuous_apply 1).comp
+        (continuous_subtype_val.comp continuous_subtype_val)).comp continuous_snd
+    · exact (Complex.ofRealCLM.continuous.comp
+        (continuous_subtype_val.comp continuous_fst)).mul
+        (((continuous_apply 2).comp
+          (continuous_subtype_val.comp continuous_subtype_val)).comp continuous_snd)
+  convert hlift using 1
+  funext p
+  apply Subtype.ext
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+  obtain ⟨a, ha⟩ := Projectivization.exists_smul_eq_mk_rep ℂ p.2.1.1 p.2.1.2
+  refine ⟨a, ?_⟩
+  funext j
+  fin_cases j
+  · simpa only [Matrix.cons_val_zero] using congrFun ha 0
+  · simpa only [Matrix.cons_val_zero, Matrix.cons_val_one] using congrFun ha 1
+  · change a.1 * (p.1.1 * p.2.1.1 2) = p.1.1 * (q p.2.1).rep 2
+    calc
+      _ = p.1.1 * (a.1 * p.2.1.1 2) := by ring
+      _ = p.1.1 * (q p.2.1).rep 2 := by
+        rw [show a.1 * p.2.1.1 2 = (q p.2.1).rep 2 by
+          simpa [q, Pi.smul_apply, Units.smul_def] using congrFun ha 2]
+
 lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation
     (i : C(cpU_homology_aux_CP1, cpU))
     (hi : ∀ v : NonzeroVectors ℂ 1,
@@ -497,7 +1146,31 @@ lemma cpU_homology_aux_cpU_hequiv_CP1_aux_deformation
     ContinuousMap.Homotopic
       (i.comp cpU_homology_aux_cpU_hequiv_CP1_aux_r)
       (ContinuousMap.id cpU) := by
-  sorry
+  let H : C(unitInterval × cpU, cpU) :=
+    ⟨cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun,
+      cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_continuous⟩
+  refine ⟨{ toContinuousMap := H, map_zero_left := ?_, map_one_left := ?_ }⟩
+  · intro x
+    apply Subtype.ext
+    let v : NonzeroVectors ℂ 1 :=
+      ⟨![x.1.rep 0, x.1.rep 1],
+        cpU_homology_aux_cpU_hequiv_CP1_aux_pair_nonzero x⟩
+    change (cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun (0, x)).1 =
+      (i (cpU_homology_aux_cpU_hequiv_CP1_aux_r x)).1
+    rw [show cpU_homology_aux_cpU_hequiv_CP1_aux_r x = quotientMap ℂ 1 v by rfl]
+    rw [hi v]
+    simp [cpU_homology_aux_cpU_hequiv_CP1_aux_deformation_fun, v]
+  · intro x
+    apply Subtype.ext
+    change quotientMap ℂ 2
+      ⟨![x.1.rep 0, x.1.rep 1, ((1 : unitInterval).1) * x.1.rep 2], _⟩ = x.1
+    calc
+      _ = Projectivization.mk ℂ x.1.rep (Projectivization.rep_nonzero x.1) := by
+        apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+        refine ⟨1, ?_⟩
+        funext j
+        fin_cases j <;> simp [Pi.smul_apply]
+      _ = x.1 := Projectivization.mk_rep x.1
 
 theorem cpU_homology_aux_cpU_hequiv_CP1 :
     Nonempty (ContinuousMap.HomotopyEquiv cpU cpU_homology_aux_CP1) := by
@@ -617,17 +1290,244 @@ lemma cpU_homology_aux_CP1_hequiv_S2_aux_invariant
     (a b : ProjectiveSpaceTopology.NonzeroVectors ℂ 1) (t : ℂ)
     (hab : (a : ProjectiveSpaceTopology.Vectors ℂ 1) = t • (b : ProjectiveSpaceTopology.Vectors ℂ 1)) :
     cpU_homology_aux_CP1_hequiv_S2_aux_hopf a = cpU_homology_aux_CP1_hequiv_S2_aux_hopf b := by
-  sorry
+  have ht : t ≠ 0 := by
+    intro ht
+    apply a.2
+    apply funext
+    intro i
+    have hi := congrFun hab i
+    simpa [ht] using hi
+  have hcoord (i : Fin 2) : a.1 i = t * b.1 i := by
+    have hi := congrFun hab i
+    simpa [Pi.smul_apply, smul_eq_mul] using hi
+  have hns : Complex.normSq t ≠ 0 := by
+    exact (Complex.normSq_eq_zero.not).2 ht
+  have htre : t.re ^ 2 + t.im ^ 2 ≠ 0 := by
+    simpa [Complex.normSq_apply, pow_two] using hns
+  have hdb : cpU_homology_aux_CP1_hequiv_S2_aux_den b ≠ 0 :=
+    ne_of_gt (cpU_homology_aux_CP1_hequiv_S2_aux_den_pos b)
+  have hden : cpU_homology_aux_CP1_hequiv_S2_aux_den a =
+      Complex.normSq t * cpU_homology_aux_CP1_hequiv_S2_aux_den b := by
+    simp only [cpU_homology_aux_CP1_hequiv_S2_aux_den, hcoord, Complex.normSq_mul]
+    ring
+  apply Subtype.ext
+  apply PiLp.ext
+  intro i
+  fin_cases i <;>
+    simp [cpU_homology_aux_CP1_hequiv_S2_aux_hopf,
+      cpU_homology_aux_CP1_hequiv_S2_aux_raw, hcoord, hden,
+      Complex.normSq_apply] <;>
+    field_simp [hns, hdb, htre] <;> ring
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_compact : CompactSpace cpU_homology_aux_CP1 := by
-  sorry
+  let S := Metric.sphere (0 : Fin 2 → ℂ) 1
+  let π : S → cpU_homology_aux_CP1 := fun x ↦
+    Projectivization.mk ℂ x.1 (by
+      intro hx
+      have : ‖(x : Fin 2 → ℂ)‖ = 1 := by
+        simpa [S, Metric.mem_sphere] using x.2
+      simpa [hx] using this)
+  have hπ : Continuous π := by
+    let j : S → {v : Fin 2 → ℂ // v ≠ 0} := fun x ↦
+      ⟨x.1, by
+        intro hx
+        have : ‖(x : Fin 2 → ℂ)‖ = 1 := by
+          simpa [S, Metric.mem_sphere] using x.2
+        simpa [hx] using this⟩
+    have hj : Continuous j := Continuous.subtype_mk continuous_subtype_val _
+    exact (ProjectiveSpaceTopology.continuous_quotientMap ℂ 1).comp hj
+  have hsurj : Function.Surjective π := by
+    intro y
+    obtain ⟨v, hv, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 y
+    have hnorm : ‖(v : Fin 2 → ℂ)‖ ≠ 0 := norm_ne_zero_iff.mpr v.2
+    let w : Fin 2 → ℂ := (‖(v : Fin 2 → ℂ)‖ : ℂ)⁻¹ • v.1
+    have hw_norm : ‖w‖ = 1 := by
+      simp [w, norm_smul, hnorm]
+    have hw : w ≠ 0 := norm_ne_zero_iff.mp (by simpa [hw_norm])
+    let x : S := ⟨w, by simpa [S, Metric.mem_sphere, hw_norm]⟩
+    refine ⟨x, ?_⟩
+    apply (Projectivization.mk_eq_mk_iff' ℂ w v.1 hw v.2).mpr
+    exact ⟨(‖(v : Fin 2 → ℂ)‖ : ℂ)⁻¹, rfl⟩
+  have hcompact : IsCompact (Set.range π) := isCompact_range hπ
+  rw [hsurj.range_eq] at hcompact
+  exact ⟨hcompact⟩
+
+lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_injective
+    (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
+    (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
+    Function.Injective g := by
+  intro x y hxy
+  obtain ⟨v, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 x
+  obtain ⟨w, rfl⟩ := ProjectiveSpaceTopology.surjective_quotientMap ℂ 1 y
+  rw [hg v, hg w] at hxy
+  have hcoord (i : Fin 3) :
+      cpU_homology_aux_CP1_hequiv_S2_aux_raw v i =
+        cpU_homology_aux_CP1_hequiv_S2_aux_raw w i := by
+    exact congrArg (fun z => z.1 i) hxy
+  have hdv : cpU_homology_aux_CP1_hequiv_S2_aux_den v ≠ 0 :=
+    ne_of_gt (cpU_homology_aux_CP1_hequiv_S2_aux_den_pos v)
+  have hdw : cpU_homology_aux_CP1_hequiv_S2_aux_den w ≠ 0 :=
+    ne_of_gt (cpU_homology_aux_CP1_hequiv_S2_aux_den_pos w)
+  have h0 := hcoord 0
+  have h1 := hcoord 1
+  have h2 := hcoord 2
+  simp [cpU_homology_aux_CP1_hequiv_S2_aux_raw] at h0 h1 h2
+  apply (Projectivization.mk_eq_mk_iff' ℂ _ _ v.2 w.2).2
+  by_cases hv1 : v.1 1 = 0
+  · have hw1 : w.1 1 = 0 := by
+      have nv0 : Complex.normSq (v.1 0) ≠ 0 := by
+        intro hz
+        apply v.2
+        funext i
+        fin_cases i
+        · exact Complex.normSq_eq_zero.mp hz
+        · exact hv1
+      have hvden : cpU_homology_aux_CP1_hequiv_S2_aux_den v =
+          Complex.normSq (v.1 0) := by
+        simp [cpU_homology_aux_CP1_hequiv_S2_aux_den, hv1]
+      rw [hvden] at h2
+      simp [hv1] at h2
+      have : Complex.normSq (w.1 1) = 0 := by
+        field_simp [nv0, hdw] at h2
+        unfold cpU_homology_aux_CP1_hequiv_S2_aux_den at hdw h2
+        nlinarith [Complex.normSq_nonneg (w.1 0), Complex.normSq_nonneg (w.1 1)]
+      exact Complex.normSq_eq_zero.mp this
+    have hv0 : v.1 0 ≠ 0 := by
+      intro hz
+      apply v.2
+      funext i
+      fin_cases i <;> assumption
+    have hw0 : w.1 0 ≠ 0 := by
+      intro hz
+      apply w.2
+      funext i
+      fin_cases i <;> assumption
+    refine ⟨v.1 0 / w.1 0, ?_⟩
+    funext i
+    fin_cases i
+    · simp [Pi.smul_apply, smul_eq_mul, hw0]
+    · simp [Pi.smul_apply, smul_eq_mul, hv1, hw1]
+  · have hw1 : w.1 1 ≠ 0 := by
+      intro hw1
+      have nw0 : Complex.normSq (w.1 0) ≠ 0 := by
+        intro hz
+        apply w.2
+        funext i
+        fin_cases i
+        · exact Complex.normSq_eq_zero.mp hz
+        · exact hw1
+      have hwden : cpU_homology_aux_CP1_hequiv_S2_aux_den w =
+          Complex.normSq (w.1 0) := by
+        simp [cpU_homology_aux_CP1_hequiv_S2_aux_den, hw1]
+      rw [hwden] at h2
+      simp [hw1] at h2
+      field_simp [nw0, hdv] at h2
+      unfold cpU_homology_aux_CP1_hequiv_S2_aux_den at hdv h2
+      have : Complex.normSq (v.1 1) = 0 := by
+        nlinarith [Complex.normSq_nonneg (v.1 0), Complex.normSq_nonneg (v.1 1)]
+      exact hv1 (Complex.normSq_eq_zero.mp this)
+    refine ⟨v.1 1 / w.1 1, ?_⟩
+    funext i
+    fin_cases i
+    · unfold cpU_homology_aux_CP1_hequiv_S2_aux_den at h0 h1 h2 hdv hdw
+      have hnv : (v.1 1).re ^ 2 + (v.1 1).im ^ 2 ≠ 0 := by
+        simpa [Complex.normSq_apply, pow_two] using
+          (show Complex.normSq (v.1 1) ≠ 0 from (Complex.normSq_eq_zero.not).2 hv1)
+      have hnw : (w.1 1).re ^ 2 + (w.1 1).im ^ 2 ≠ 0 := by
+        simpa [Complex.normSq_apply, pow_two] using
+          (show Complex.normSq (w.1 1) ≠ 0 from (Complex.normSq_eq_zero.not).2 hw1)
+      simp only [Complex.normSq_apply] at h0 h1 h2 hdv hdw
+      field_simp [hdv, hdw] at h0 h1 h2
+      have hn : ((v.1 1).re * (v.1 1).re + (v.1 1).im * (v.1 1).im) *
+          ((w.1 0).re * (w.1 0).re + (w.1 0).im * (w.1 0).im +
+            ((w.1 1).re * (w.1 1).re + (w.1 1).im * (w.1 1).im)) =
+          ((w.1 1).re * (w.1 1).re + (w.1 1).im * (w.1 1).im) *
+          ((v.1 0).re * (v.1 0).re + (v.1 0).im * (v.1 0).im +
+            ((v.1 1).re * (v.1 1).re + (v.1 1).im * (v.1 1).im)) := by
+        nlinarith [h2]
+      have hcconj : (v.1 0 * w.1 1) * conj (w.1 1) =
+          (v.1 1 * w.1 0) * conj (w.1 1) := by
+        apply Complex.ext
+        · simp [Complex.mul_re]
+          apply (mul_left_cancel₀ hdv)
+          linear_combination (v.1 1).re * h0 - (v.1 1).im * h1 - (v.1 0).re * hn
+        · simp [Complex.mul_im]
+          apply (mul_left_cancel₀ hdv)
+          linear_combination (v.1 1).im * h0 + (v.1 1).re * h1 - (v.1 0).im * hn
+      have hc : v.1 0 * w.1 1 = v.1 1 * w.1 0 :=
+        mul_right_cancel₀ ((map_ne_zero conj).2 hw1) hcconj
+      simp only [Pi.smul_apply, smul_eq_mul]
+      rw [div_mul_eq_mul_div]
+      exact (div_eq_iff hw1).2 hc.symm
+    · simp [Pi.smul_apply, smul_eq_mul, hw1]
+
+lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_surjective
+    (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
+    (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
+    Function.Surjective g := by
+  intro p
+  have hnorm : ‖p.1‖ = 1 := by
+    simpa [Metric.mem_sphere] using p.2
+  have hsumsq : (p.1 0) ^ 2 + (p.1 1) ^ 2 + (p.1 2) ^ 2 = 1 := by
+    have h := congrArg (fun x : ℝ => x ^ 2) hnorm
+    change ‖p.1‖ ^ 2 = 1 ^ 2 at h
+    rw [EuclideanSpace.real_norm_sq_eq] at h
+    simp [Fin.sum_univ_succ] at h
+    nlinarith
+  by_cases hy : p.1 2 = -1
+  · let v : ProjectiveSpaceTopology.NonzeroVectors ℂ 1 :=
+      ⟨![0, 1], by
+        intro h
+        have := congrFun h 1
+        simpa using this⟩
+    refine ⟨quotientMap ℂ 1 v, ?_⟩
+    rw [hg]
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;>
+      simp [cpU_homology_aux_CP1_hequiv_S2_aux_hopf,
+        cpU_homology_aux_CP1_hequiv_S2_aux_raw,
+        cpU_homology_aux_CP1_hequiv_S2_aux_den, v, hy] <;>
+      nlinarith
+  · have ha : 1 + p.1 2 ≠ 0 := by
+      intro h
+      apply hy
+      linarith
+    let v : ProjectiveSpaceTopology.NonzeroVectors ℂ 1 :=
+      ⟨![(1 + p.1 2 : ℂ), ⟨p.1 0, -p.1 1⟩], by
+        intro h
+        have h0 := congrFun h 0
+        apply ha
+        apply_fun Complex.re at h0
+        simpa using h0⟩
+    have hden : (1 + p.1 2) ^ 2 + ((p.1 0) ^ 2 + (p.1 1) ^ 2) =
+        2 * (1 + p.1 2) := by
+      nlinarith [hsumsq]
+    have hden' :
+        (1 + p.1 2) * (1 + p.1 2) +
+            (p.1 0 * p.1 0 + p.1 1 * p.1 1) = 2 * (1 + p.1 2) := by
+      nlinarith [hden]
+    refine ⟨quotientMap ℂ 1 v, ?_⟩
+    rw [hg]
+    apply Subtype.ext
+    apply PiLp.ext
+    intro i
+    fin_cases i <;>
+      simp [cpU_homology_aux_CP1_hequiv_S2_aux_hopf,
+        cpU_homology_aux_CP1_hequiv_S2_aux_raw,
+        cpU_homology_aux_CP1_hequiv_S2_aux_den, v,
+        Complex.normSq_apply] <;>
+      rw [hden'] <;>
+      field_simp [ha] <;>
+      nlinarith [hsumsq]
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_bijective
     (g : C(cpU_homology_aux_CP1, cpU_homology_aux_S2))
     (hg : ∀ v, g (quotientMap ℂ 1 v) = cpU_homology_aux_CP1_hequiv_S2_aux_hopf v) :
     Function.Bijective g := by
-  sorry
-
+  exact ⟨cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_injective g hg,
+    cpU_homology_aux_CP1_hequiv_S2_aux_bijective_aux_surjective g hg⟩
 theorem cpU_homology_aux_CP1_hequiv_S2 :
     Nonempty (ContinuousMap.HomotopyEquiv cpU_homology_aux_CP1 cpU_homology_aux_S2) := by
   obtain ⟨g, hg⟩ :=
@@ -851,12 +1751,93 @@ def cpUV_homology_aux_homeomorph : cpV ≃ₜ cpUV_homology_aux_Affine where
   continuous_invFun := cpUV_homology_aux_inverse_continuous.subtype_mk _
 
 /-- `U ∩ V ≅ ℂ² ∖ 0 ≃ S³`; uses the S³ facts as hypotheses. -/
+def cpUV_homology_aux_puncturedHomeomorph :
+    ↥(cpU ∩ cpV) ≃ₜ {z : cpUV_homology_aux_Affine // z ≠ 0} where
+  toFun x := ⟨cpUV_homology_aux_coordinates x.1, by
+    intro hz
+    have h0 := congrFun hz (⟨0, by decide⟩ : {j : Fin 3 // j ≠ 2})
+    have h1 := congrFun hz (⟨1, by decide⟩ : {j : Fin 3 // j ≠ 2})
+    simp only [cpUV_homology_aux_coordinates, Pi.zero_apply] at h0 h1
+    have hv : x.1.rep 2 ≠ 0 := x.2.2
+    have hr0 : x.1.rep 0 = 0 := (div_eq_zero_iff).mp h0 |>.resolve_right hv
+    have hr1 : x.1.rep 1 = 0 := (div_eq_zero_iff).mp h1 |>.resolve_right hv
+    exact x.2.1.elim (fun h => h hr0) (fun h => h hr1)⟩
+  invFun z := ⟨cpUV_homology_aux_inverse z.1, by
+    constructor
+    · change (cpUV_homology_aux_inverse z.1).rep 0 ≠ 0 ∨
+        (cpUV_homology_aux_inverse z.1).rep 1 ≠ 0
+      by_contra h
+      push_neg at h
+      apply z.2
+      rw [← cpUV_homology_aux_coordinates_inverse z.1]
+      funext j
+      rcases j with ⟨j, hj⟩
+      unfold cpUV_homology_aux_coordinates
+      fin_cases j
+      · simp [h.1]
+      · simp [h.2]
+      · exact (hj rfl).elim
+    · exact cpUV_homology_aux_inverse_mem z.1⟩
+  left_inv x := Subtype.ext (cpUV_homology_aux_inverse_coordinates ⟨x.1, x.2.2⟩)
+  right_inv z := Subtype.ext (cpUV_homology_aux_coordinates_inverse z.1)
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    let g : ↥(cpU ∩ cpV) → cpV := fun x => ⟨x.1, x.2.2⟩
+    have hg : Continuous g := continuous_subtype_val.subtype_mk _
+    exact cpUV_homology_aux_coordinates_continuous.comp hg
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    exact cpUV_homology_aux_inverse_continuous.comp continuous_subtype_val
+
+def cpUV_homology_aux_linearEquiv :
+    cpUV_homology_aux_Affine ≃L[ℝ] EuclideanSpace ℝ (Fin 4) := by
+  have hdim : Module.finrank ℝ cpUV_homology_aux_Affine = 4 := by
+    rw [Module.finrank_pi_fintype]
+    norm_num
+  exact ContinuousLinearEquiv.ofFinrankEq (by simpa using hdim)
+
+def cpUV_homology_aux_puncturedLinearHomeomorph :
+    {z : cpUV_homology_aux_Affine // z ≠ 0} ≃ₜ
+      ConstructionTargets.CoefficientModelLocal.puncture 4 where
+  toFun z := ⟨cpUV_homology_aux_linearEquiv z.1, by
+    intro h
+    apply z.2
+    apply cpUV_homology_aux_linearEquiv.injective
+    simpa using h⟩
+  invFun z := ⟨cpUV_homology_aux_linearEquiv.symm z.1, by
+    intro h
+    apply z.2
+    apply cpUV_homology_aux_linearEquiv.symm.injective
+    simpa using h⟩
+  left_inv z := Subtype.ext (cpUV_homology_aux_linearEquiv.symm_apply_apply z.1)
+  right_inv z := Subtype.ext (cpUV_homology_aux_linearEquiv.apply_symm_apply z.1)
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def cpUV_homology_aux_equivSphere :
+    ContinuousMap.HomotopyEquiv ↥(cpU ∩ cpV) S3 :=
+  cpUV_homology_aux_puncturedHomeomorph.toHomotopyEquiv |>.trans
+    (cpUV_homology_aux_puncturedLinearHomeomorph.toHomotopyEquiv |>.trans
+    (PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+        (ConstructionTargets.CoefficientModelLocal.E 4)).symm
+    )
+
 theorem cpUV_homology (hS0 : ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k S3))
     (hS3 : Nonempty (HQ 3 S3 ≅ ModuleCat.of ℚ ℚ)) :
     Nonempty (HQ 0 ↥(cpU ∩ cpV) ≅ ModuleCat.of ℚ ℚ) ∧
     Nonempty (HQ 3 ↥(cpU ∩ cpV) ≅ ModuleCat.of ℚ ℚ) ∧
     ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k ↥(cpU ∩ cpV)) := by
-  sorry
+  let e (k : ℕ) :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℚ cpUV_homology_aux_equivSphere k
+  have hzero : Nonempty (HQ 0 S3 ≅ ModuleCat.of ℚ ℚ) := by
+    exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℚ
+      (⟨EuclideanSpace.single 0 1, by
+        simp [S3, T02A06.euclideanUnitSphere]⟩ : S3)⟩
+  refine ⟨hzero.map (fun i => e 0 ≪≫ i), ?_, ?_⟩
+  · exact hS3.map (fun i => e 3 ≪≫ i)
+  · intro k hk0 hk3
+    exact (hS0 k hk0 hk3).of_iso (e k)
 
 theorem cp_mvI_zero_injective_aux_h0_map
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]

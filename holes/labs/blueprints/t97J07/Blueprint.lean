@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveSpaceTopology
+import ConstructionTargets.CP2RationalHomology
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -285,7 +286,38 @@ of `CP²`.  This is the one genuinely missing topology foundation: one cell in
 real dimensions `0`, `2`, and `4`, and no other rational homology. -/
 theorem t97J07_cp2RationalHomologyData_exists :
     Nonempty T97J07CP2RationalHomologyData := by
-  sorry
+  obtain ⟨⟨e0⟩, ⟨e2⟩, ⟨e4⟩, hz⟩ := RP3Homology.cp2_rationalHomology
+  have sub : ∀ k, k ≠ 0 → k ≠ 2 → k ≠ 4 →
+      Subsingleton (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) := by
+    intro k a b c
+    refine ⟨fun x y => ?_⟩
+    have hid : CategoryTheory.CategoryStruct.id (RP3Homology.HQ k RP3Homology.CP2) = 0 :=
+      (hz k a b c).eq_of_src _ _
+    have hx := congrArg (fun g => g.hom x) hid
+    have hy := congrArg (fun g => g.hom y) hid
+    simpa using hx.trans hy.symm
+  let l0 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0 ≃ₗ[ℚ] ℚ :=
+    e0.toLinearEquiv
+  let l2 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2 ≃ₗ[ℚ] ℚ :=
+    e2.toLinearEquiv
+  let l4 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ :=
+    e4.toLinearEquiv
+  refine ⟨{ finiteDimensional := ?_
+            vanishesAbove := fun k hk => sub k (by omega) (by omega) (by omega)
+            zeroEquiv := l0
+            oneSubsingleton := sub 1 (by decide) (by decide) (by decide)
+            twoEquiv := l2
+            threeSubsingleton := sub 3 (by decide) (by decide) (by decide)
+            fourEquiv := l4 }⟩
+  intro k
+  by_cases h0 : k = 0
+  · subst h0; exact l0.symm.finiteDimensional
+  by_cases h2 : k = 2
+  · subst h2; exact l2.symm.finiteDimensional
+  by_cases h4 : k = 4
+  · subst h4; exact l4.symm.finiteDimensional
+  haveI := sub k h0 h2 h4
+  infer_instance
 
 /-- Given the degree-by-degree homology computation, the remaining step is
 finite-dimensional linear algebra: the identity induces identity maps, their
