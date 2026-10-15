@@ -88371,6 +88371,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check b0a06eb3b", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792064086217-13960-911d7adf",
+     :commands
+     ["git show/diff/check b0a06eb3b"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit b0a06eb3b adds compiled, sorry-free progress beyond 2d80a6696. It lifts the per-run rebased prefix-block class equalities to equality of their ordered finite concatenations over the same global boundary family. Only t97A01Closure.lean changed; fixture SHA 28997e87730811532ad4be3e4e6d97ee9e00ecc2e438184e5eff2a4c14249680 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Fold order, equality orientation, endpoint family, and quotient representation are correct. Identifying this fold with the subdivision, van Kampen, and final assembly remain explicitly listed."},
     :commit "b0a06eb3b",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88379,7 +88392,7 @@
      "28997e87730811532ad4be3e4e6d97ee9e00ecc2e438184e5eff2a4c14249680"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88397,7 +88410,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked globally rebased prefix blocks.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked global prefix-block concatenation.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88521,7 +88534,10 @@
      :reason "Banked global prefix-block endpoints."}
     {:job 2,
      :commit "2d80a6696",
-     :reason "Banked globally rebased prefix blocks."}]}
+     :reason "Banked globally rebased prefix blocks."}
+    {:job 3,
+     :commit "b0a06eb3b",
+     :reason "Banked global prefix-block concatenation."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -94899,7 +94915,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunGlobalPrefixBlockConcat_class",
@@ -94909,7 +94925,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "global run-factor fold equals prefix-block fold",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "b0a06eb3b"},
    :id :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-class,
    :kind :lemma,
    :depends-on
