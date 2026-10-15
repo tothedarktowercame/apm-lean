@@ -152,6 +152,40 @@ theorem frozen_eqvGen_boundaryRel_iff_generator (x y : Surfaces.Disk) :
     | symm a b _ ih => exact ih.symm
     | trans a b c _ _ ih₁ ih₂ => exact Relation.EqvGen.trans a b c ih₁ ih₂
 
+/-- Quotient carrier for the generic signed frozen relation. -/
+abbrev FrozenSignedQuotient :=
+  Quotient (Relation.EqvGen.setoid (boundaryRel 14 frozenPair frozenSign))
+
+/-- Quotient carrier for the seven explicitly oriented frozen generators. -/
+abbrev FrozenGeneratorQuotient :=
+  Quotient (Relation.EqvGen.setoid frozenGeneratorRel)
+
+/-- The two frozen quotient carriers are canonically equivalent, with the
+identity map on disk representatives in both directions. -/
+def frozenSignedQuotientEquivGenerator :
+    FrozenSignedQuotient ≃ FrozenGeneratorQuotient where
+  toFun := Quotient.map id (by
+    intro x y h
+    exact (frozen_eqvGen_boundaryRel_iff_generator x y).mp h)
+  invFun := Quotient.map id (by
+    intro x y h
+    exact (frozen_eqvGen_boundaryRel_iff_generator x y).mpr h)
+  left_inv := by
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro x
+    rfl
+  right_inv := by
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro x
+    rfl
+
+@[simp] theorem frozenSignedQuotientEquivGenerator_mk (x : Surfaces.Disk) :
+    frozenSignedQuotientEquivGenerator
+        (Quotient.mk (Relation.EqvGen.setoid
+          (boundaryRel 14 frozenPair frozenSign)) x) =
+      Quotient.mk (Relation.EqvGen.setoid frozenGeneratorRel) x := rfl
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -623,5 +657,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozen_boundaryRel_iff
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
+#print axioms frozenSignedQuotientEquivGenerator
+#print axioms frozenSignedQuotientEquivGenerator_mk
 
 end ConstructionTargets.t94J09Closure
