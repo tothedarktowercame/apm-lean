@@ -1118,6 +1118,30 @@ lemma cell_H1_aux_mv0_injective (γ : C(Circle, Y)) [PathConnectedSpace Y]
     CategoryTheory.Limits.biprod.lift_fst] at h
   exact h
 
+noncomputable def cell_H1_aux_transport_iso
+    {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
+    (e : S ≃ₕ T) (k : ℕ) : H k S ≅ H k T where
+  hom := Hmap e.toFun k
+  inv := Hmap e.invFun k
+  hom_inv_id := by
+    dsimp only [Hmap]
+    rw [← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (e.invFun.comp e.toFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) e.left_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map_id (TopCat.of S)
+  inv_hom_id := by
+    dsimp only [Hmap]
+    rw [← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (e.toFun.comp e.invFun)) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) e.right_inv k]
+    exact ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).map_id (TopCat.of T)
+
 lemma cell_H1_aux_transport (γ : C(Circle, Y))
     (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
       e.invFun = cellOverlapCircle γ)
@@ -1131,7 +1155,41 @@ lemma cell_H1_aux_transport (γ : C(Circle, Y))
           (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
           eO.hom = eI.hom ≫ Hmap γ 1 ∧
       eO.inv ≫ IntegralMV.mvToX (cellOuter γ) 1 = Hmap (cellIncl γ) 1 := by
-  sorry
+  obtain ⟨eI, heI⟩ := hA3
+  obtain ⟨eO, heO⟩ := hA4
+  refine ⟨cell_H1_aux_transport_iso eI 1,
+    cell_H1_aux_transport_iso eO 1, ?_, ?_⟩
+  · apply (cancel_epi (cell_H1_aux_transport_iso eI 1).inv).1
+    simp only [Iso.inv_hom_id_assoc]
+    change Hmap eI.invFun 1 ≫
+        IntegralMV.mvIncl Set.inter_subset_left 1 ≫ Hmap eO.toFun 1 = Hmap γ 1
+    change Hmap eI.invFun 1 ≫
+      Hmap (apm_t92J05_twoOpen_overlapToLeft
+          (cellOuter γ) (cellInner γ)) 1 ≫ Hmap eO.toFun 1 = Hmap γ 1
+    have hsquare :
+        (eO.toFun.comp ((apm_t92J05_twoOpen_overlapToLeft
+          (cellOuter γ) (cellInner γ)).comp eI.invFun)).Homotopic γ := by
+      rw [heI]
+      have h₁ := (ContinuousMap.Homotopic.refl eO.toFun).comp hA5
+      rw [← heO] at h₁
+      have h₂ := eO.right_inv.comp (ContinuousMap.Homotopic.refl γ)
+      exact h₁.trans (by simpa only [ContinuousMap.comp_assoc,
+        ContinuousMap.id_comp] using h₂)
+    dsimp only [Hmap]
+    rw [← Category.assoc, ← Functor.map_comp, ← Functor.map_comp]
+    change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+      (ModuleCat.of ℤ ℤ)).map
+        (TopCat.ofHom (eO.toFun.comp
+          ((apm_t92J05_twoOpen_overlapToLeft
+            (cellOuter γ) (cellInner γ)).comp eI.invFun))) = _
+    rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) hsquare 1]
+  · change Hmap eO.invFun 1 ≫ IntegralMV.mvToX (cellOuter γ) 1 = _
+    change Hmap eO.invFun 1 ≫
+      Hmap ⟨Subtype.val, continuous_subtype_val⟩ 1 = _
+    dsimp only [Hmap]
+    rw [← Functor.map_comp, heO]
+    rfl
 
 lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
