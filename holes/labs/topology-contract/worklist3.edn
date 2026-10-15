@@ -37121,34 +37121,31 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Construct local classes; prove sum/base/transport; then degree/invariants/Main.",
+    "Construct local classes on the fiber equivalence; then degree/invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "polynomialSphereRegularFiberPoint_range",
-      :type "Fin4 family exhausts the regular fiber",
+    [{:name "polynomialSphereRegularFiberEquiv",
+      :type "Fin4 is equivalent to the literal regular fiber",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_polynomialSphereLift_regular_fiber"],
-      :area "rp-rational-homology"}
-     {:name "polynomialSphereLift_globalClass_decomposition",
-      :type "image class is sum over the explicit fiber",
-      :status :not-started,
-      :consumers [:t96A06],
-      :depends-on ["polynomialSphereRegularFiberPoint_range"],
-      :area "rp-rational-homology"}
-     {:name "polynomialSphereLift_baseLocalClass_and_transport",
-      :type "base class positive; others are pair-flip transports",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["polynomialSphereRegularFiberPoint_range"
+       "pairSignOrbit_four_distinct"],
+      :area "rp-rational-homology"}
+     {:name "polynomialSphereLift_localizedClassFormula",
+      :type
+      "construct fiber local classes; prove global sum, base positivity, and pair-flip transport",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["polynomialSphereRegularFiberEquiv"
        "t96A06_polynomialSphereLift_localSignTransport"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
@@ -37156,7 +37153,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed a Fin4 enumeration of the literal regular fiber.",
+    "Committed an equivalence from Fin4 onto the literal regular fiber.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37165,13 +37162,11 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792060288688-13862-5c0581a8",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "d10f97953",
+    :diagnostic-history
+    [{:cmd "initial closure compile",
+      :exit 1,
+      :note "moved injectivity after distinctness"}],
+    :commit "170d178bf",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37179,7 +37174,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -42180,6 +42175,55 @@
    :depends-on
    [:lemma-t97j07-cp1-affinepatchhomeomorph
     :lemma-t97j07-cp1-chartinverse-other-rep-ne-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereRegularFiberEquiv",
+    :type "Fin4 is equivalent to the literal regular fiber"},
+   :lemma
+   {:name "polynomialSphereRegularFiberEquiv",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Fin4 is equivalent to the literal regular fiber",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialsphereregularfiberequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialsphereregularfiberpoint-range
+    :lemma-pairsignorbit-four-distinct],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "pairSignOrbit_four_distinct"},
+   :lemma {:name "pairSignOrbit_four_distinct", :reported-by []},
+   :id :lemma-pairsignorbit-four-distinct,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialSphereLift_localizedClassFormula",
+    :type
+    "construct fiber local classes; prove global sum, base positivity, and pair-flip transport"},
+   :lemma
+   {:name "polynomialSphereLift_localizedClassFormula",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "construct fiber local classes; prove global sum, base positivity, and pair-flip transport",
+    :area "rp-rational-homology"},
+   :id :lemma-polynomialspherelift-localizedclassformula,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polynomialsphereregularfiberequiv
+    :lemma-t96a06-polynomialspherelift-localsigntransport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
