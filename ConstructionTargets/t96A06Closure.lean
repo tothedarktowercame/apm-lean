@@ -532,6 +532,39 @@ theorem rp3SphereAntipodal_ne (p : Sphere 3) :
   have hn := p.2
   simpa [Metric.mem_sphere, hp0] using hn
 
+/-- At a point off the coordinate circles, the four pair-sign translates are
+pairwise distinct. -/
+theorem pairSignOrbit_four_distinct {p : Sphere 3} (hp : PairSignRegular p) :
+    p ≠ flipFirstPairSphere p ∧
+    p ≠ flipSecondPairSphere p ∧
+    p ≠ flipFirstPairSphere (flipSecondPairSphere p) ∧
+    flipFirstPairSphere p ≠ flipSecondPairSphere p ∧
+    flipFirstPairSphere p ≠ flipFirstPairSphere (flipSecondPairSphere p) ∧
+    flipSecondPairSphere p ≠ flipFirstPairSphere (flipSecondPairSphere p) := by
+  have hpf : p ≠ flipFirstPairSphere p :=
+    (flipFirstPairSphere_ne_of_pairSignRegular hp).symm
+  have hps : p ≠ flipSecondPairSphere p :=
+    (flipSecondPairSphere_ne_of_pairSignRegular hp).symm
+  have hpfs : p ≠ flipFirstPairSphere (flipSecondPairSphere p) := by
+    rw [flipFirstPairSphere_flipSecondPairSphere]
+    exact (rp3SphereAntipodal_ne p).symm
+  refine ⟨hpf, hps, hpfs, ?_, ?_, ?_⟩
+  · intro h
+    have hc := congrArg flipFirstPairSphere h
+    rw [flipFirstPairSphere_involutive] at hc
+    exact hpfs hc
+  · intro h
+    have hc := congrArg flipFirstPairSphere h
+    rw [flipFirstPairSphere_involutive,
+      flipFirstPairSphere_involutive] at hc
+    exact hps hc
+  · intro h
+    have hc := congrArg flipSecondPairSphere h
+    rw [flipSecondPairSphere_involutive,
+      ← flipFirstPairSphere_comm_flipSecondPairSphere,
+      flipSecondPairSphere_involutive] at hc
+    exact hpf hc
+
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
 theorem t96A06_rp3_sphere_twoSheeted :
@@ -1081,6 +1114,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms rp3SphereProjection_isClosedMap
 #print axioms t96A06_rp3_sphere_covering
 #print axioms rp3SphereAntipodal_ne
+#print axioms pairSignOrbit_four_distinct
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
