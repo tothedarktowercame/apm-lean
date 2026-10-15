@@ -87,7 +87,26 @@ lemma T96A06_polynomialDescent_trace_zero
     (f : ContinuousMap T96A06.RP3 T96A06.RP3)
     (hf : T96A06.IsPolynomialDescent f) :
     LinearMap.trace ℚ (Homology T96A06.RP3 0) (induced f 0).hom = 1 := by
-  sorry
+  letI : PathConnectedSpace T96A06.RP3 :=
+    ConstructionTargets.t96A06Closure.rp3PathConnectedSpace
+  let x : T96A06.RP3 := coordinateLine ℝ 3 0
+  have hmap : induced f 0 = 𝟙 _ := by
+    have h := ConstructionTargets.CoefficientConnectedH0Map.mapIso_hom ℚ f x x
+    have h' :
+        (ConstructionTargets.CoefficientConnectedH0Map.mapIso ℚ x x).hom =
+          induced f 0 := by
+      simpa [induced, ConstructionTargets.CoefficientH0.singularPostcomposition,
+        AlgebraicTopology.singularHomologyFunctor] using h
+    rw [← h']
+    simp [ConstructionTargets.CoefficientConnectedH0Map.mapIso]
+  letI : FiniteDimensional ℚ (Homology T96A06.RP3 0) :=
+    ConstructionTargets.t96A06Closure.rp3RationalH0Iso.symm.toLinearEquiv.finiteDimensional
+  rw [hmap]
+  change LinearMap.trace ℚ (Homology T96A06.RP3 0) LinearMap.id = 1
+  rw [LinearMap.trace_id]
+  have hrank := LinearEquiv.finrank_eq
+    (ConstructionTargets.t96A06Closure.rp3RationalH0Iso.toLinearEquiv)
+  simpa using hrank
 -- END SEAT AREA
 
 lemma T96A06_polynomialDescent_trace_one
