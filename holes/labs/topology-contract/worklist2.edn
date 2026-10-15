@@ -88378,6 +88378,19 @@
     [{:cmd "endpoint draft",
       :exit 1,
       :correction "used successor equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792074402784-14206-e23b9776",
+     :commands
+     ["git show/diff/check 86f862f31"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 86f862f31 adds compiled, sorry-free progress beyond history commit b13f60bd4. It identifies both endpoints of each inverse-run-offset prefix factor with the original subdivision factor, then transports the dependent Path across those equalities and proves extensional equality. Only t97A01Closure.lean changed; fixture SHA 8b1403612b789b1d20af42d11cc80b082cbbb9395a537003c0e4ed93cc5096e1 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Endpoint equality and Path.cast orientations are correct; the Sigma/Fin conversion uses the proved length equality. Path folding, van Kampen, and assembly remain listed."},
     :commit "86f862f31",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88386,7 +88399,7 @@
      "8b1403612b789b1d20af42d11cc80b082cbbb9395a537003c0e4ed93cc5096e1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88404,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cross-run boundary offsets.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse-indexed path transport.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88579,7 +88592,10 @@
      :reason "Banked successor no-skipping bound."}
     {:job 1,
      :commit "b13f60bd4",
-     :reason "Banked cross-run boundary offsets."}]}
+     :reason "Banked cross-run boundary offsets."}
+    {:job 2,
+     :commit "86f862f31",
+     :reason "Banked inverse-indexed path transport."}]}
   {:consumer :t94J09,
    :stop-count 6,
    :evidence
@@ -95450,7 +95466,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95462,7 +95478,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cast prefix factor equals original path",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "86f862f31"},
    :id
    :lemma-torusrp2-subdivisionrunprefixblockpiece-cast-runoffsetequiv-symm,
    :kind :lemma,
