@@ -2836,7 +2836,36 @@ Estimated 50–100 lines. -/
 -- BEGIN SEAT AREA
 lemma apm_t98a03_circle_cube_roots (a c : Circle) (hc : c ^ 3 = a) (z : Circle) :
     z ^ 3 = a ↔ ∃ k : Fin 3, z = apm_t98a03_zeta ^ (k : ℕ) * c := by
-  sorry
+  constructor
+  · intro hz
+    let w : Circle := z * c⁻¹
+    have hw : w ^ 3 = 1 := by
+      simp only [w, mul_pow, inv_pow]
+      rw [hz, ← hc]
+      exact mul_inv_cancel _
+    let u : rootsOfUnity 3 Circle :=
+      ⟨toUnits w, (mem_rootsOfUnity' 3 (toUnits w)).2 (by simpa using hw)⟩
+    obtain ⟨j, hj⟩ := (bijective_rootsOfUnityAddChar (n := 3)).2 u
+    let k : Fin 3 := ⟨j.val, j.val_lt⟩
+    refine ⟨k, ?_⟩
+    have hwu : ZMod.toCircle j = w := by
+      have h := congrArg (fun q : rootsOfUnity 3 Circle => (q.val : Circle)) hj
+      simpa [u] using h
+    have hjcast : (j.val : ZMod 3) = j := ZMod.natCast_zmod_val j
+    have hcircle : ZMod.toCircle j = apm_t98a03_zeta ^ j.val := by
+      rw [← hjcast, ZMod.toCircle_eq_circleExp, apm_t98a03_zeta,
+        ← Circle.exp_nsmul, nsmul_eq_mul]
+      congr 1
+      push_cast
+      ring
+    have hw' : w = apm_t98a03_zeta ^ (k : ℕ) := by
+      simpa [k] using hwu.symm.trans hcircle
+    calc
+      z = w * c := by simp [w]
+      _ = apm_t98a03_zeta ^ (k : ℕ) * c := by rw [hw']
+  · rintro ⟨k, rfl⟩
+    rw [mul_pow, ← pow_mul, Nat.mul_comm (k : ℕ) 3, pow_mul,
+      apm_t98a03_zeta_pow_three, one_pow, hc, one_mul]
 -- END SEAT AREA
 
 /-- A chosen cube root. -/
