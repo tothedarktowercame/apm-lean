@@ -37438,38 +37438,38 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Upgrade coordinate equivalences to homeomorphisms; compute patch/overlap homology and MV; CP1-to-CP2; Main.",
+    "Compute patch and punctured-overlap homology; MV; CP1-to-CP2; Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t97J07_cp1_affinePatchEquiv",
-      :type "each CP1 affine patch equals its coordinate space",
+    [{:name "t97J07_cp1_affinePatchHomeomorph",
+      :type
+      "each literal CP1 affine patch is homeomorphic to its affine coordinate space",
       :status :proved,
       :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_twoAffine_openCover"],
-      :area "rational-homology-cpn"}
-     {:name "t97J07_cp1_chartInverse_other_rep_ne_iff",
-      :type "patch overlap equals nonzero affine-coordinate locus",
-      :status :proved,
-      :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_affinePatchEquiv"],
+      :depends-on
+      ["t97J07_cp1_affinePatchEquiv"
+       "t99J05_coordinates_continuousOn"
+       "t99J05_chartInverse_continuous"],
       :area "rational-homology-cpn"}
      {:name "t97J07_cp1_twoAffine_mayerVietoris",
       :type "two-chart MV computes CP1 H1 and H2",
       :status :partial,
       :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_chartInverse_other_rep_ne_iff"],
+      :depends-on
+      ["t97J07_cp1_affinePatchHomeomorph"
+       "t97J07_cp1_chartInverse_other_rep_ne_iff"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact affine-patch and overlap coordinate identifications.",
+    "Committed exact CP1 affine-patch homeomorphisms using banked arbitrary-chart continuity.",
     :commands
     [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
@@ -37477,18 +37477,8 @@
      {:cmd "git status --short --untracked-files=no", :exit 0}
      {:cmd "sha256sum ConstructionTargets/t97J07Closure.blueprint.md",
       :exit 0}
-     {:cmd "git show --check e10b4784c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792054519212-13714-cff656ad",
-     :commands
-     ["git show/check/diff-tree e474731bb; fixture sha256"
-      "lake env lean archived committed Main via authority-linked worktree"
-      "statement-registry check; sorry recount 2->1"],
-     :finding
-     "PASS: e474731bb is new compiled, standard-axiom progress. It proves the exact fixed locus equals the coordinate CP1 line union the isolated third-axis point, with both set-inclusion directions and projective representatives handled correctly. Scope is one allowed file; fixture hash matches; registry 166/166; placeholders 2->1. Remaining CP2 rational homology, Euler characteristic, and final theorem are listed."},
-    :commit "e10b4784c",
+     {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
+    :commit "a30f65e0f",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
@@ -37496,7 +37486,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -41584,7 +41574,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t97j07-cp1-twoaffine-opencover
-    :lemma-t97j07-cp1-chartinverse-other-rep-ne-iff],
+    :lemma-t97j07-cp1-chartinverse-other-rep-ne-iff
+    :lemma-t97j07-cp1-affinepatchhomeomorph],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41813,6 +41804,48 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialmapambient-regularpoint-orthogonal-tangentbasis],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_affinePatchHomeomorph",
+    :type
+    "each literal CP1 affine patch is homeomorphic to its affine coordinate space"},
+   :lemma
+   {:name "t97J07_cp1_affinePatchHomeomorph",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type
+    "each literal CP1 affine patch is homeomorphic to its affine coordinate space",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07},
+   :id :lemma-t97j07-cp1-affinepatchhomeomorph,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-cp1-affinepatchequiv
+    :lemma-t99j05-coordinates-continuouson
+    :lemma-t99j05-chartinverse-continuous],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "t99J05_coordinates_continuousOn"},
+   :lemma {:name "t99J05_coordinates_continuousOn", :reported-by []},
+   :id :lemma-t99j05-coordinates-continuouson,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "t99J05_chartInverse_continuous"},
+   :lemma {:name "t99J05_chartInverse_continuous", :reported-by []},
+   :id :lemma-t99j05-chartinverse-continuous,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
