@@ -292,7 +292,21 @@ lemma t99A01_piOne_attach_succ_loop {r : ℕ} (degree : Fin (r + 1) → ℕ)
       Subgroup.normalClosure
         ({APMT99A01.baseCircleClass (degree ∘ Fin.castSucc) ^
           (degree (Fin.last r) : ℤ)} : Set _) := by
-  sorry
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rintro y ⟨x, rfl⟩
+    rcases hcyclic x with ⟨n, hn⟩
+    rw [← hn, map_zpow, hwinding]
+    exact (Subgroup.normalClosure
+      ({APMT99A01.baseCircleClass (degree ∘ Fin.castSucc) ^
+        (degree (Fin.last r) : ℤ)} : Set _)).zpow_mem
+          (Subgroup.subset_normalClosure (Set.mem_singleton _)) n
+  · apply Subgroup.normalClosure_mono
+    intro y hy
+    rw [Set.mem_singleton_iff] at hy
+    subst y
+    rw [← hwinding]
+    exact ⟨overlapGenerator, rfl⟩
 
 /-- **Leaf (cyclic quotient algebra, 50--100 lines).**  Killing `d` times the
 chosen generator changes modulus `g` to `gcd g d`, and preserves the class of
