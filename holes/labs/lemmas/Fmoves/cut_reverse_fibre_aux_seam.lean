@@ -7577,7 +7577,79 @@ theorem cut_reverse_fibre_aux_seam {Label : Type*} [DecidableEq Label]
     (y y' : Circle) (P P' : Disk) (h : newA y = newB y') (hne : ‖newA y‖ ≠ 1)
     (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  obtain (⟨e, s, hpe, heq, rfl⟩ | ⟨s, rfl⟩) := D.coverA y
+  · have he : e = p := by
+      by_contra hep
+      have hpe' : p + 1 ≤ e := by omega
+      have hn : ‖newA (cutEdgeCircle L e s)‖ = 1 := by
+        rw [D.newA_v e s hpe' heq]
+        exact norm_edgePoint _ _ _
+      exact hne hn
+    subst e
+    obtain (⟨e', s', he', rfl⟩ | ⟨s', rfl⟩) := D.coverB y'
+    · have heq' : e' = q := by
+        rcases he' with (⟨hqe', he'L⟩ | he'p)
+        · by_contra he'q
+          have hq1 : q + 1 ≤ e' := by omega
+          have hn : ‖newB (cutEdgeCircle L e' s')‖ = 1 := by
+            rw [D.newB_tu e' s' (Or.inl ⟨hq1, he'L⟩)]
+            exact norm_edgePoint _ _ _
+          exact False.elim (hne (by rw [h, hn]))
+        · have hn : ‖newB (cutEdgeCircle L e' s')‖ = 1 := by
+            rw [D.newB_tu e' s' (Or.inr he'p)]
+            exact norm_edgePoint _ _ _
+          exact False.elim (hne (by rw [h, hn]))
+      subst e'
+      have hseam : cutSeam L p q s = cutSeam L p q s' := by
+        rw [D.newA_x, D.newB_x] at h
+        simpa only [L, p, q] using h
+      have hpq : cutPoint L (p + 1) ≠ cutPoint L (q + 1) := by
+        apply cutPoint_ne (m := p + 1) (m' := q + 1)
+        · simp [p, q]
+        · dsimp [L, p, q]
+          simp
+          omega
+      have hss : s = s' := by
+        apply Subtype.ext
+        unfold cutSeam at hseam
+        have hd : cutPoint L (q + 1) - cutPoint L (p + 1) ≠ 0 :=
+          sub_ne_zero.mpr hpq.symm
+        have hc : (s.1 : ℂ) = (s'.1 : ℂ) := by
+          apply mul_right_cancel₀ hd
+          exact add_left_cancel hseam
+        exact_mod_cast hc
+      subst s'
+      apply Relation.EqvGen.rel
+      let i : Fin L := ⟨p, by simp [L, p]; omega⟩
+      let j : Fin L := ⟨(u ++ [x] ++ v).length, by simp [L]; omega⟩
+      refine ⟨i, j, ?_, s, ?_, ?_, ?_⟩
+      · intro hij
+        have := congrArg Fin.val hij
+        simp [i, j, p, q] at this
+      · simp [i, j, p, q, List.get_eq_getElem]
+      · apply Subtype.ext
+        simpa [i, L, p] using hP.trans
+          (D.oldA_arc p s (le_refl p) (by dsimp [p, q]; omega))
+      · simp [i, j, p, q, List.get_eq_getElem]
+        apply Subtype.ext
+        have hh := hP'.trans
+          (D.oldB_arc q s (Or.inl ⟨le_refl q, by simp [L, q]; omega⟩))
+        rw [hh]
+        congr 2
+        all_goals try simp [L, j]
+        all_goals try dsimp [q]
+        all_goals omega
+    · have hn : ‖newB (cutChordParamB L p q s')‖ = 1 := by
+        rw [D.newB_chord]
+        exact norm_edgePoint _ _ _
+      exact (hne (by rw [h, hn])).elim
+  · have hn : ‖newA (cutChordParamA L p q s)‖ = 1 := by
+      rw [D.newA_chord]
+      exact norm_edgePoint _ _ _
+    exact (hne hn).elim
 -- END SEAT AREA
 
 /-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
