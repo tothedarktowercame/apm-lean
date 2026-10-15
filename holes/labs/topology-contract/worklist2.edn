@@ -87946,6 +87946,20 @@
     [{:cmd "outer-coordinate drafts",
       :exit 1,
       :correction "isolated comparison coherence"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792032671473-13069-b8d3d02c",
+     :commands
+     ["git show/diff-tree 856d109b9"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorem"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 856d109b9 by topo-6 changes only the scoped target; fixture hash 793712db...0b831 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The theorem correctly bridges Module-valued and AddCommGrp-valued homology: applying the comparison hom cancels its inverse, and existing forward naturality proves the desired inverse-map equation in the symmetric orientation. New compiled progress; remaining circle-generator coherence and MV outer-sign/B7 obligations are explicitly listed, followed by B8-B10."},
     :commit "856d109b9",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87968,7 @@
      "793712dbf59de8d5e88418af4587135f548bf36ea5614f3b395d8dd5c1f0b831"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87988,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked normalized polygon-boundary H1 formula.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked inverse comparison naturality; circle generator coherence remains.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88297,7 +88311,11 @@
      :reason "Banked orientation-signed geometric boundary formula."}
     {:job 2,
      :commit "f3c14aef4",
-     :reason "Banked normalized polygon-boundary H1 formula."}]}
+     :reason "Banked normalized polygon-boundary H1 formula."}
+    {:job 3,
+     :commit "856d109b9",
+     :reason
+     "Banked inverse comparison naturality; circle generator coherence remains."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92835,7 +92853,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "singularHomologyComparison_inv_map",
@@ -92845,7 +92863,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "inverse comparison commutes with H maps",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "856d109b9"},
    :id :lemma-singularhomologycomparison-inv-map,
    :kind :lemma,
    :depends-on [],
