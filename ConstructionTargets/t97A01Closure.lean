@@ -2713,6 +2713,62 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
     exact (torusRP2_subdivisionRunOffset_run_unique S i z.1 k z.2
       (hik.trans hz.symm)).symm
 
+/-- Inside one cumulative-prefix interval, inverse flattening recovers the
+local offset by subtracting that run's prefix length. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1))
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hmem : pathTwoOpenSubdivisionRunPrefixLength S i.val ≤ j.val ∧
+      j.val < pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1)) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j).2.val =
+      j.val - pathTwoOpenSubdivisionRunPrefixLength S i.val := by
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j
+  have hrun : z.1 = i :=
+    (torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval S j i).2 hmem
+  have hrunval := congrArg Fin.val hrun
+  have hpref := congrArg (pathTwoOpenSubdivisionRunPrefixLength S) hrunval
+  have hflat := torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j
+  dsimp [z] at hrunval hpref
+  omega
+
+/-- The full dependent inverse coordinate on a run interval is the run index
+paired with the prefix-subtracted local offset. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_eq_run_sub_prefix_of_mem_interval
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1))
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hmem : pathTwoOpenSubdivisionRunPrefixLength S i.val ≤ j.val ∧
+      j.val < pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1)) :
+    (torusRP2_subdivisionRunOffsetEquiv S).symm j =
+      ⟨i, Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S i)
+        ⟨j.val - pathTwoOpenSubdivisionRunPrefixLength S i.val, by
+          have hboundary :=
+            pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
+          omega⟩⟩ := by
+  have hrun :=
+    (torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
+      S j i).2 hmem
+  subst i
+  refine Sigma.ext (x := (torusRP2_subdivisionRunOffsetEquiv S).symm j)
+    (y := ⟨((torusRP2_subdivisionRunOffsetEquiv S).symm j).1,
+      Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S _)
+        ⟨j.val - pathTwoOpenSubdivisionRunPrefixLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1.val, by
+            have hboundary := pathTwoOpenSubdivisionRunPrefixLength_add_predLength S
+              ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1
+            omega⟩⟩) rfl ?_
+  apply heq_of_eq
+  apply Fin.ext
+  exact torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
+    S j _ hmem
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2835,6 +2891,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
 #print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_offset_eq_sub_prefix_of_mem_interval
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_eq_run_sub_prefix_of_mem_interval
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
