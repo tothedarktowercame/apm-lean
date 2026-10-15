@@ -584,6 +584,64 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_overlap_pathConnecte
       (ConstructionTargets.PolygonSurfacePiOne.openCover
         apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph.symm.continuous
 
+abbrev apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer :=
+  ConstructionTargets.PolygonRadialOpenCover.outerOpen
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel
+
+abbrev apm_t92J05_genusTwo_polygon_attach_specialization_aux_Boundary :=
+  {z : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer //
+    z ∈ apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.outerBoundarySkeleton}
+
+def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv :
+    ContinuousMap.HomotopyEquiv
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_Boundary where
+  toFun :=
+    { toFun := fun z =>
+        ⟨(ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).homotopy (1, z),
+          (ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).one_mem z⟩
+      continuous_toFun := by fun_prop }
+  invFun :=
+    { toFun := fun z => z.1
+      continuous_toFun := continuous_subtype_val }
+  left_inv := by
+    let D := ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+    let H :
+        ContinuousMap.Homotopy
+          (ContinuousMap.id apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer)
+          ((ContinuousMap.mk
+            (fun z : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Boundary => z.1)
+            continuous_subtype_val).comp
+          (ContinuousMap.mk
+            (fun z : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer =>
+              ⟨D.homotopy (1, z), D.one_mem z⟩) (by fun_prop))) :=
+      { toFun := fun p => D.homotopy p
+        continuous_toFun := D.homotopy.continuous
+        map_zero_left := D.zero
+        map_one_left := by intro z; rfl }
+    exact ⟨H.symm⟩
+  right_inv := by
+    have hmap :
+        (ContinuousMap.mk
+            (fun z : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer =>
+              ⟨(ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract
+                apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).homotopy (1, z),
+                (ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract
+                  apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).one_mem z⟩)
+            (by fun_prop)).comp
+          (ContinuousMap.mk
+            (fun z : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Boundary => z.1)
+            continuous_subtype_val) = ContinuousMap.id _ := by
+      apply ContinuousMap.ext
+      intro z
+      apply Subtype.ext
+      exact (ConstructionTargets.PolygonSurfacePiOne.punctureDeformationRetract
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).fixed 1 z.1 z.2
+    rw [hmap]
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
     (hattach : ∀ {X : Type} [TopologicalSpace X] (U V : Set X)
       (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
