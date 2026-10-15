@@ -2979,6 +2979,27 @@ theorem torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat
   rw [torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
     S hx hy]
 
+/-- The class of the literal-endpoint flat-interval fold is precisely the
+endpoint cast of its global dependent concatenation. -/
+theorem torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints_class
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    (⟦torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints S hx hy⟧ :
+        Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.cast
+        (⟦Path.concat
+          (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+            torusRP2PairingData.Space))
+          (torusRP2_subdivisionRunGlobalFlatIntervalPath S hx hy)⟧)
+        (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+        (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm :=
+  rfl
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -3109,6 +3130,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
 #print axioms torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat
+#print axioms torusRP2_subdivisionGlobalFlatIntervalConcat_at_endpoints_class
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
