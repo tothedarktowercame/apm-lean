@@ -1964,6 +1964,39 @@ theorem t96A06_integralToRational_localization_naturality
         (cokernel.π
           (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A))) k)
 
+/-- The integral normalized sphere class, transported into homology of the
+forgotten integral coefficient-chain complex on which coefficient extension
+is defined. -/
+noncomputable def t96A06_mappedIntegralNormalizedClass :
+    ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).obj
+        (CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3)))).homology 3 :=
+  (((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint))
+
+/-- Extend the transported integral normalized class to rational coefficients
+inside homology of the forgotten rational chain complex. -/
+noncomputable def t96A06_mappedRationalExtensionClass :
+    ((t96A06_forgetRatModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).obj
+        (CoefficientH0.SingularChains ℚ (TopCat.of (Sphere 3)))).homology 3 :=
+  HomologicalComplex.homologyMap
+    (t96A06_integralToRational_singularChainMap
+      (TopCat.of (Sphere 3))) 3 t96A06_mappedIntegralNormalizedClass
+
+/-- The same extended class returned to the native rational singular-homology
+object.  The next normalization lemma identifies it with the selected
+sphere-shift generator. -/
+noncomputable def t96A06_integralNormalizedClass_rationalExtension :
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) :=
+  (((CoefficientH0.SingularChains ℚ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+      t96A06_forgetRatModules).hom.hom
+    t96A06_mappedRationalExtensionClass
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -3242,6 +3275,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_forgetRationalRelativeCokernelComparison_projection
 #print axioms t96A06_integralToRational_relativeChains_projection
 #print axioms t96A06_integralToRational_localization_naturality
+#print axioms t96A06_mappedIntegralNormalizedClass
+#print axioms t96A06_mappedRationalExtensionClass
+#print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
