@@ -171,4 +171,22 @@ theorem torusRP2OrbitCoordinates_attachingDegree :
     · exact torusRP2_attachingDegree_named 1
     · exact torusRP2_attachingDegree_named 2
 
+theorem aabbccOrbitCoordinates_comp_attachingBoundary :
+    aabbccOrbitCoordinates.toLinearMap.comp (attachingBoundary aabbccPairingData) =
+      -standardN3BoundaryLinear := by
+  apply LinearMap.ext
+  intro n
+  change aabbccOrbitCoordinates (n • attachingDegree aabbccPairingData) = _
+  rw [map_smul, aabbccOrbitCoordinates_attachingDegree]
+  ext <;> simp [standardN3BoundaryLinear, mul_comm]
+
+theorem torusRP2OrbitCoordinates_comp_attachingBoundary :
+    torusRP2OrbitCoordinates.toLinearMap.comp (attachingBoundary torusRP2PairingData) =
+      -torusCrosscapBoundaryLinear := by
+  apply LinearMap.ext
+  intro n
+  change torusRP2OrbitCoordinates (n • attachingDegree torusRP2PairingData) = _
+  rw [map_smul, torusRP2OrbitCoordinates_attachingDegree]
+  ext <;> simp [torusCrosscapBoundaryLinear, mul_comm]
+
 end ConstructionTargets.t97A01Closure
