@@ -670,7 +670,36 @@ lemma torusRP2_boundary_word :
           (FiniteWedge (PairingOrbit t97A01Closure.torusRP2PairingData.pair))
           (wBase t97A01Closure.torusRP2PairingData))) =
       Subgroup.normalClosure {wordClass t97A01Closure.torusRP2PairingData} := by
-  sorry
+  have hm := congrArg
+    (fun H : Subgroup (FundamentalGroup
+        t97A01Closure.torusRP2PairingData.skeleton
+        t97A01Closure.torusRP2SkeletonBase) =>
+      H.map t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.toMonoidHom)
+    t97A01Closure.torusRP2AttachingWord
+  dsimp only at hm
+  rw [Subgroup.map_normalClosure _
+        t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.toMonoidHom
+        t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.surjective,
+      Subgroup.map_normalClosure _
+        t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.toMonoidHom
+        t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.surjective] at hm
+  simp only [Set.image_singleton] at hm
+  change Subgroup.normalClosure
+      {t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge
+        (t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.symm _)} =
+    Subgroup.normalClosure
+      {t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge
+        (t97A01Closure.torusRP2SkeletonFundamentalGroupEquivWedge.symm _)} at hm
+  simp only [MulEquiv.apply_symm_apply] at hm
+  by_cases h : PolygonSurfaceHomology.circleIntegerLoopOneCoordinate = 1 <;>
+  simpa [torusRP2GenEquiv, MulEquiv.ofBijective_apply,
+    t97A01Closure.torusRP2SkeletonFinFreeGroupMap,
+    t97A01Closure.torusRP2SkeletonFreeGroupMap,
+    t97A01Closure.torusRP2BoundaryBasisEquiv, h,
+    apm_t97a01_relator, t97A01Closure.torusRP2FrozenRelator,
+    loopClassAt, wordClass,
+    PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath,
+    PolygonSurfaceHomology.circleIntegerLoopOneClass] using hm
 -- END SEAT AREA
 
 theorem torusRP2_pairingSpace_piOne :
