@@ -1119,7 +1119,38 @@ lemma ker_int_of_two_torsion {M N : Type} [AddCommGroup M] [Module ℤ M]
     [AddCommGroup N] [Module ℤ N]
     (eM : M ≃ₗ[ℤ] ℤ) (φ : M →ₗ[ℤ] N) (h2 : ∀ n : N, n + n = 0) :
     Nonempty (LinearMap.ker φ ≃ₗ[ℤ] ℤ) := by
-  sorry
+  letI : Module.Free ℤ M := Module.Free.of_equiv eM.symm
+  letI : Module.Finite ℤ M := Module.Finite.equiv eM.symm
+  have hker_ne : LinearMap.ker φ ≠ ⊥ := by
+    intro hker
+    let x : M := eM.symm 1
+    have hx : x + x ∈ LinearMap.ker φ := by
+      rw [LinearMap.mem_ker, map_add, h2]
+    have hx0 : x + x = 0 := by
+      have : x + x ∈ (⊥ : Submodule ℤ M) := hker ▸ hx
+      simpa using this
+    have := congrArg eM hx0
+    simp [x] at this
+  let bM := Module.Free.chooseBasis ℤ M
+  let bd := (LinearMap.ker φ).basisOfPid bM
+  let bker := bd.2
+  letI : Module ℤ (LinearMap.ker φ) := Submodule.module (LinearMap.ker φ)
+  letI : Module.Free ℤ (LinearMap.ker φ) := Module.Free.of_basis bker
+  letI : Module.Finite ℤ (LinearMap.ker φ) := Module.Finite.of_basis bker
+  have hfinrank_pos : 0 < Module.finrank ℤ (LinearMap.ker φ) := by
+    rw [Module.finrank_pos_iff]
+    exact (LinearMap.ker φ).nontrivial_iff_ne_bot.mpr hker_ne
+  have hfinrank_le : Module.finrank ℤ (LinearMap.ker φ) ≤ 1 := by
+    calc
+      Module.finrank ℤ (LinearMap.ker φ) ≤ Module.finrank ℤ M :=
+        Submodule.finrank_le _
+      _ = Module.finrank ℤ ℤ := eM.finrank_eq
+      _ = 1 := by simp
+  obtain ⟨ek⟩ := FiniteDimensional.nonempty_linearEquiv_of_finrank_eq
+    (show Module.finrank ℤ (LinearMap.ker φ) = Module.finrank ℤ ℤ by
+      rw [show Module.finrank ℤ ℤ = 1 by simp]
+      omega)
+  exact ⟨ek.toAddEquiv.toIntLinearEquiv⟩
 
 /-! ## Part G. Two-element algebra (proved) -/
 
