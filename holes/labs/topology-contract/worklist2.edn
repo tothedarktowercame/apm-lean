@@ -88331,33 +88331,33 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Discharge boundary path casts; prove reverse kernel inclusion and surjectivity; assemble.",
+    "Prove surjectivity and reverse kernel inclusion; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2DiskBoundaryBase_eq_skeletonBase",
-      :type "boundary base alignment",
+    [{:name "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
+      :type "boundary-class transport",
       :status :proved,
-      :consumers [:t97A01],
-      :depends-on [],
-      :area "polygon-surface-pi1"}
-     {:name "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
-      :type "typed boundary-class transport",
-      :status :partial,
       :consumers [:t97A01],
       :depends-on
       ["torusRP2DiskBoundaryBase_eq_skeletonBase"
        "torusRP2DiskBoundaryPath_map_quotient_eq_one"],
       :area "polygon-surface-pi1"}
-     {:name "torusRP2PairingSpace_basedVanKampen",
-      :type "surjectivity and kernel",
-      :status :partial,
+     {:name "torusRP2Relator_normalClosure_le_kernel",
+      :type "forward kernel inclusion",
+      :status :proved,
       :consumers [:t97A01],
       :depends-on ["torusRP2SkeletonBoundary_map_eq_diskBoundary_map"],
+      :area "polygon-surface-pi1"}
+     {:name "torusRP2PairingSpace_basedVanKampen",
+      :type "surjectivity; reverse kernel inclusion",
+      :status :partial,
+      :consumers [:t97A01],
+      :depends-on ["torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88369,37 +88369,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked disk/skeleton boundary basepoint alignment.",
+    :reason "Banked boundary transport and forward kernel inclusion.",
     :commands
     [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
      {:cmd "lake lean Main", :exit 0}
-     {:cmd "registry; scans; git check", :exit 0}],
+     {:cmd "registry/scans/git", :exit 0}],
     :diagnostic-history
-    [{:cmd "boundary-class draft",
+    [{:cmd "transport drafts",
       :exit 1,
-      :correction "basepoint banked; casts remain"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792052512541-13675-f96fe58b",
-     :commands
-     ["git show/diff/check 9cf7f3444"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 9cf7f3444 adds compiled, sorry-free progress beyond 8ea6fc5b6: exact alignment of the disk-boundary quotient basepoint with the literal skeleton basepoint. Only t97A01Closure.lean changed; fixture SHA 07dd4d27291b656dc58be2cd326e6ba1093b47b95a2c52451c0a9b60b6a92169 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Representation boundary is correct: equality is proved in the skeleton via the skeleton-wedge homeomorphism, then transported through Subtype.val. Typed boundary-path casts, reverse kernel inclusion, map surjectivity, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "9cf7f3444",
+      :correction "split paths and casts"}],
+    :commit "d97eb2896",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "07dd4d27291b656dc58be2cd326e6ba1093b47b95a2c52451c0a9b60b6a92169"},
+     "f81fe0a0c2f17e8ac9a6b2690bcbe2d63731d6498495d6c284ad490ecc54e293"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94130,7 +94117,8 @@
    :depends-on
    [:lemma-torusrp2attachingword
     :lemma-torusrp2diskboundarypath-map-quotient-eq-one
-    :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map],
+    :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map
+    :lemma-torusrp2relator-normalclosure-le-kernel],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94373,10 +94361,29 @@
    {:name "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "typed boundary-class transport",
-    :area "polygon-surface-pi1"},
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
    :id :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map,
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2diskboundarybase-eq-skeletonbase
     :lemma-torusrp2diskboundarypath-map-quotient-eq-one],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2Relator_normalClosure_le_kernel",
+    :type "forward kernel inclusion"},
+   :lemma
+   {:name "torusRP2Relator_normalClosure_le_kernel",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "forward kernel inclusion",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2relator-normalclosure-le-kernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2skeletonboundary-map-eq-diskboundary-map],
    :other-consumers []}]}
