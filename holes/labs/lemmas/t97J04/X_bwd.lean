@@ -653,11 +653,148 @@ classes are `ComplexRel` classes on `inl`), disk points `z ↦ xMk (.inl z)`; on
 the `cLoop` disk, `z ↦ xMk (.inr (conjDisk z))`.  Two nested quotient lifts;
 both continuous via `continuous_coinduced_dom`. -/
 -- BEGIN SEAT AREA
+lemma X_bwd_aux_poly_rel {x y : apm_t97J04_Disk}
+    (h : Relation.EqvGen P.Rel x y) :
+    xMk (.inl x) = xMk (.inl y) := by
+  apply Quotient.sound
+  have hs : Relation.EqvGen (ConstructionTargets.Surfaces.SurfaceRel true 2) x y := by
+    apply (PolygonSurfacePiOne.orientable_eqvGen_iff 2 x y).mp
+    exact h
+  have hm : ∀ {u v : apm_t97J04_Disk},
+      Relation.EqvGen (ConstructionTargets.Surfaces.SurfaceRel true 2) u v →
+        Relation.EqvGen apm_t97J04_ComplexRel (.inl u) (.inl v) := by
+    intro u v huv
+    induction huv with
+    | rel u v hrel =>
+        rcases hrel with ⟨j, hj, t, h | h⟩
+        · rcases h with ⟨rfl, rfl⟩
+          interval_cases j
+          · exact Relation.EqvGen.rel _ _ (apm_t97J04_ComplexRel.a t)
+          · exact Relation.EqvGen.rel _ _ (apm_t97J04_ComplexRel.c t)
+        · rcases h with ⟨rfl, rfl⟩
+          interval_cases j
+          · exact Relation.EqvGen.rel _ _ (apm_t97J04_ComplexRel.b t)
+          · exact Relation.EqvGen.rel _ _ (apm_t97J04_ComplexRel.d t)
+    | refl u => exact .refl _
+    | symm u v _ ih => exact .symm _ _ ih
+    | trans u v w _ _ ih₁ ih₂ => exact .trans _ _ _ ih₁ ih₂
+  exact hm hs
+
+def X_bwd_aux_poly : P.Space → apm_t97J04_X :=
+  Quotient.lift (fun z ↦ xMk (.inl z)) (fun _ _ h ↦ X_bwd_aux_poly_rel h)
+
+lemma X_bwd_aux_poly_continuous : Continuous X_bwd_aux_poly := by
+  apply continuous_coinduced_dom.mpr
+  exact continuous_coinduced_rng.comp continuous_inl
+
+def X_bwd_aux_wedge (w : W) : apm_t97J04_X :=
+  X_bwd_aux_poly (P.skeletonHomeomorphWedge.symm w).1
+
+lemma X_bwd_aux_wedge_continuous : Continuous X_bwd_aux_wedge := by
+  exact X_bwd_aux_poly_continuous.comp
+    (continuous_subtype_val.comp P.skeletonHomeomorphWedge.symm.continuous)
+
+lemma X_bwd_aux_wedge_word (z : Circle) :
+    X_bwd_aux_wedge (word z) = xMk (.inl (circleToDisk z)) := by
+  simp [X_bwd_aux_wedge, word, PolygonSurfaceHomology.polygonBoundaryWedgeLoop,
+    PolygonSurfaceHomology.polygonBoundarySkeletonLoop, X_bwd_aux_poly,
+    circleToDisk, PolygonSurfacePiOne.PairingData.quotientMap]
+
+def X_bwd_aux_sigma : Sigma → apm_t97J04_X :=
+  Quotient.lift
+    (Sum.elim X_bwd_aux_wedge (fun z ↦ xMk (.inl z)))
+    (by
+      intro a b h
+      change Relation.EqvGen (CellRel word) a b at h
+      induction h with
+      | rel a b h =>
+          cases h with
+          | boundary z => exact X_bwd_aux_wedge_word z
+      | refl a => exact rfl
+      | symm a b _ ih => exact ih.symm
+      | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+lemma X_bwd_aux_sigma_continuous : Continuous X_bwd_aux_sigma := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  exact ⟨X_bwd_aux_wedge_continuous,
+    continuous_coinduced_rng.comp continuous_inl⟩
+
+lemma X_bwd_aux_wedge_cOrbit (t : Set.Icc (0 : ℝ) 1) :
+    X_bwd_aux_wedge (wedgeCircle cOrbit (PolygonSurfacePiOne.circleArc t)) =
+      xMk (.inl (apm_t97J04_edgePoint 8 4 (PolygonSurfacePiOne.reverseIcc t))) := by
+  rw [show wedgeCircle cOrbit (PolygonSurfacePiOne.circleArc t) =
+      P.skeletonHomeomorphWedge
+        (P.skeletonArc cEdge (PolygonSurfacePiOne.reverseIcc t)) by
+    rw [P.skeletonHomeomorphWedge_skeletonArc,
+      P.signedWedgeArc_of_not_sign _ _ X_homeomorph_aux_cEdge_sign,
+      PolygonSurfacePiOne.reverseIcc_reverseIcc, cOrbit]]
+  simp [X_bwd_aux_wedge, X_bwd_aux_poly,
+    PolygonSurfacePiOne.PairingData.skeletonArc,
+    PolygonSurfacePiOne.PairingData.quotientMap, cEdge,
+    X_homeomorph_aux_edgeCount, apm_t97J04_edgePoint]
+
+lemma X_bwd_aux_conj_boundary (t : Set.Icc (0 : ℝ) 1) :
+    conjDisk (circleToDisk (PolygonSurfacePiOne.circleArc t)) =
+      apm_t97J04_edgePoint 1 0 (PolygonSurfacePiOne.reverseIcc t) := by
+  rw [X_homeomorph_aux_oneDisk_boundary]
+  apply Subtype.ext
+  change (starRingEnd ℂ) (PolygonSurfacePiOne.circleArc t : ℂ) =
+    (PolygonSurfacePiOne.circleArc (PolygonSurfacePiOne.reverseIcc t) : ℂ)
+  simp only [PolygonSurfacePiOne.circleArc, AddCircle.toCircle_apply_mk,
+    Circle.coe_exp]
+  rw [← Complex.exp_conj]
+  simp only [map_mul, map_ofNat, Complex.conj_ofReal, Complex.conj_I]
+  norm_num [PolygonSurfacePiOne.reverseIcc]
+  rw [show (2 * (Real.pi : ℂ) * (1 - t.1)) * Complex.I =
+      ((2 * (Real.pi : ℂ) * t.1) * -Complex.I) + 2 * Real.pi * Complex.I by ring,
+    Complex.exp_periodic]
+  congr 1
+  ring
+
+lemma X_bwd_aux_sigma_cLoop (z : Circle) :
+    X_bwd_aux_sigma (cLoop z) =
+      xMk (.inr (conjDisk (circleToDisk z))) := by
+  obtain ⟨t, rfl⟩ := PolygonSurfacePiOne.surjective_circleArc z
+  change X_bwd_aux_wedge
+      (wedgeCircle cOrbit (PolygonSurfacePiOne.circleArc t)) = _
+  rw [X_bwd_aux_wedge_cOrbit, X_bwd_aux_conj_boundary]
+  apply Quotient.sound
+  exact Relation.EqvGen.rel _ _
+    (apm_t97J04_ComplexRel.meridian (PolygonSurfacePiOne.reverseIcc t))
+
+def X_bwd_aux_map : Xc → apm_t97J04_X :=
+  Quotient.lift
+    (Sum.elim X_bwd_aux_sigma (fun z ↦ xMk (.inr (conjDisk z))))
+    (by
+      intro a b h
+      change Relation.EqvGen (CellRel cLoop) a b at h
+      induction h with
+      | rel a b h =>
+          cases h with
+          | boundary z => exact X_bwd_aux_sigma_cLoop z
+      | refl a => exact rfl
+      | symm a b _ ih => exact ih.symm
+      | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+lemma X_bwd_aux_map_continuous : Continuous X_bwd_aux_map := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.mpr
+  refine ⟨X_bwd_aux_sigma_continuous, ?_⟩
+  exact (continuous_coinduced_rng.comp continuous_inr).comp
+    (by
+      apply Continuous.subtype_mk
+      exact Complex.continuous_conj.comp continuous_subtype_val)
+
 lemma X_bwd :
     ∃ g : C(Xc, apm_t97J04_X),
       (∀ z, g (cellIncl cLoop (cellDisk word z)) = xMk (.inl z)) ∧
       (∀ z, g (cellDisk cLoop z) = xMk (.inr (conjDisk z))) := by
-  sorry
+  refine ⟨⟨X_bwd_aux_map, X_bwd_aux_map_continuous⟩, ?_, ?_⟩
+  · intro z
+    rfl
+  · intro z
+    rfl
 -- END SEAT AREA
 
 /-- B1c. Every point of `Xc` lies on one of the two disks
