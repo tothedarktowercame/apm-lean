@@ -3831,9 +3831,148 @@ relations (`EqvGen` induction; the two glue cases are `sheetPoint 0 = 1` and
 `continuous_coinduced_dom` with `continuous_sum_dom`.  Pattern: t97J04
 `X_fwd`/`X_bwd`. 100-180 lines. -/
 -- BEGIN SEAT AREA
+def apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw :
+    Sum (Fin 2 × apm_t01a04_Torus) Circle → apm_t01A04_nh_CCModel
+  | .inl (i, q) => if i = 0 then
+      quotientMap apm_t01A04_nh_circleAntipode (1, 1)
+        (.inl (quotientMap (1, 1) 1 (.inl q)))
+    else quotientMap apm_t01A04_nh_circleAntipode (1, 1) (.inr q)
+  | .inr z => quotientMap apm_t01A04_nh_circleAntipode (1, 1)
+      (.inl (quotientMap (1, 1) 1 (.inr z)))
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_fwd_respects {u v}
+    (h : Relation.EqvGen apm_t01a04_circleCoverRel u v) :
+    apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw u =
+      apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h with
+      | glue i =>
+        fin_cases i
+        · exact congrArg
+            (fun w => quotientMap apm_t01A04_nh_circleAntipode (1, 1) (.inl w))
+            (Quotient.sound (Relation.EqvGen.rel _ _
+              (ConstructionTargets.PointWedgeQuotient.Rel.base)))
+        · change quotientMap apm_t01A04_nh_circleAntipode (1, 1) (.inr (1, 1)) =
+            quotientMap apm_t01A04_nh_circleAntipode (1, 1)
+              (.inl apm_t01A04_nh_circleAntipode)
+          exact Quotient.sound (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+            (ConstructionTargets.PointWedgeQuotient.Rel.base)))
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_fwd :
+    apm_t01a04_CircleCover → apm_t01A04_nh_CCModel :=
+  Quotient.lift apm_t01A04_nh_circleCover_homeomorph_aux_fwdRaw
+    (fun _ _ h => apm_t01A04_nh_circleCover_homeomorph_aux_fwd_respects h)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_fwd_continuous :
+    Continuous apm_t01A04_nh_circleCover_homeomorph_aux_fwd := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · apply continuous_prod_of_discrete_left.mpr
+    intro i
+    fin_cases i
+    · exact (continuous_quotientMap _ _).comp
+        (continuous_inl.comp ((continuous_quotientMap _ _).comp continuous_inl))
+    · exact (continuous_quotientMap _ _).comp continuous_inr
+  · exact (continuous_quotientMap _ _).comp
+      (continuous_inl.comp ((continuous_quotientMap _ _).comp continuous_inr))
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw :
+    Sum apm_t01a04_Torus Circle → apm_t01a04_CircleCover
+  | .inl q => Quotient.mk _ (.inl (0, q))
+  | .inr z => Quotient.mk _ (.inr z)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_inner_respects {u v}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PointWedgeQuotient.Rel (1, 1) 1) u v) :
+    apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw u =
+      apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h
+      exact Quotient.sound (Relation.EqvGen.rel _ _
+        (apm_t01a04_circleCoverRel.glue 0))
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_inner :
+    apm_t01A04_nh_W → apm_t01a04_CircleCover :=
+  Quotient.lift apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw
+    (fun _ _ h => apm_t01A04_nh_circleCover_homeomorph_aux_inner_respects h)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_inner_continuous :
+    Continuous apm_t01A04_nh_circleCover_homeomorph_aux_inner := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  constructor
+  · simpa [apm_t01A04_nh_circleCover_homeomorph_aux_inner,
+      apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw] using
+      (continuous_coinduced_rng.comp (continuous_inl.comp
+        (continuous_const.prodMk continuous_id)) : Continuous
+          (fun q : apm_t01a04_Torus =>
+            (Quotient.mk _ (.inl ((0 : Fin 2), q)) : apm_t01a04_CircleCover)))
+  · simpa [apm_t01A04_nh_circleCover_homeomorph_aux_inner,
+      apm_t01A04_nh_circleCover_homeomorph_aux_innerRaw] using
+      (continuous_coinduced_rng.comp continuous_inr : Continuous
+        (fun z : Circle => (Quotient.mk _ (.inr z) : apm_t01a04_CircleCover)))
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw :
+    Sum apm_t01A04_nh_W apm_t01a04_Torus → apm_t01a04_CircleCover
+  | .inl w => apm_t01A04_nh_circleCover_homeomorph_aux_inner w
+  | .inr q => Quotient.mk _ (.inl (1, q))
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_bwd_respects {u v}
+    (h : Relation.EqvGen (ConstructionTargets.PointWedgeQuotient.Rel
+      apm_t01A04_nh_circleAntipode (1, 1)) u v) :
+    apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw u =
+      apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw v := by
+  induction h with
+  | rel _ _ h =>
+      cases h
+      exact Quotient.sound (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        (apm_t01a04_circleCoverRel.glue 1)))
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def apm_t01A04_nh_circleCover_homeomorph_aux_bwd :
+    apm_t01A04_nh_CCModel → apm_t01a04_CircleCover :=
+  Quotient.lift apm_t01A04_nh_circleCover_homeomorph_aux_bwdRaw
+    (fun _ _ h => apm_t01A04_nh_circleCover_homeomorph_aux_bwd_respects h)
+
+lemma apm_t01A04_nh_circleCover_homeomorph_aux_bwd_continuous :
+    Continuous apm_t01A04_nh_circleCover_homeomorph_aux_bwd := by
+  apply continuous_coinduced_dom.mpr
+  apply continuous_sum_dom.2
+  exact ⟨apm_t01A04_nh_circleCover_homeomorph_aux_inner_continuous,
+    continuous_coinduced_rng.comp (continuous_inl.comp
+      (continuous_const.prodMk continuous_id))⟩
+
 lemma apm_t01A04_nh_circleCover_homeomorph :
     Nonempty (apm_t01a04_CircleCover ≃ₜ apm_t01A04_nh_CCModel) := by
-  sorry
+  refine ⟨{
+    toFun := apm_t01A04_nh_circleCover_homeomorph_aux_fwd
+    invFun := apm_t01A04_nh_circleCover_homeomorph_aux_bwd
+    left_inv := ?_
+    right_inv := ?_
+    continuous_toFun := apm_t01A04_nh_circleCover_homeomorph_aux_fwd_continuous
+    continuous_invFun := apm_t01A04_nh_circleCover_homeomorph_aux_bwd_continuous }⟩
+  · intro x
+    refine Quotient.inductionOn x ?_
+    rintro (⟨i, q⟩ | z)
+    · fin_cases i <;> rfl
+    · rfl
+  · intro x
+    refine Quotient.inductionOn x ?_
+    rintro (w | q)
+    · refine Quotient.inductionOn w ?_
+      rintro (p | z) <;> rfl
+    · rfl
 -- END SEAT AREA
 
 /-- LEAF (quotient homeomorphism).  Forward on representatives:
