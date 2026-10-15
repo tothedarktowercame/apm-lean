@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.Surfaces
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.PolygonSurfaceHomology
+import ConstructionTargets.GenusTwoSurfacePiOne
 import ConstructionTargets.CoveringMonodromyCosets
 import ConstructionTargets.FiniteIndexFreeGroupSchreierRank
 
@@ -309,7 +310,108 @@ lemma t91A02_finiteIndex_relators {G : Type*} [Group G] (r : G)
           (Subgroup.normalClosure ({r} : Set G)))) ⧸
         Subgroup.normalClosure (T : Set (H.comap (QuotientGroup.mk'
           (Subgroup.normalClosure ({r} : Set G)))))) := by
-  sorry
+  classical
+  let N : Subgroup G := Subgroup.normalClosure ({r} : Set G)
+  letI : N.Normal := by dsimp [N]; infer_instance
+  let q : G →* G ⧸ Subgroup.normalClosure ({r} : Set G) :=
+    QuotientGroup.mk' (Subgroup.normalClosure ({r} : Set G))
+  let K : Subgroup G := H.comap q
+  have hNK : N ≤ K := by
+    intro x hx
+    change q x ∈ H
+    have : q x = 1 := by
+      change QuotientGroup.mk' N x = 1
+      rw [← MonoidHom.mem_ker, QuotientGroup.ker_mk']
+      exact hx
+    simpa [this]
+  letI : Fintype (G ⧸ K) := K.fintypeOfIndexNeZero (by
+    rw [show K.index = H.index from Subgroup.index_comap_of_surjective
+      (f := q) H (by simpa [q] using
+        (QuotientGroup.mk'_surjective (N := Subgroup.normalClosure ({r} : Set G))))]
+    omega)
+  let rep : G ⧸ K → G := fun c => Quotient.out c
+  have hrep (c : G ⧸ K) : QuotientGroup.mk (rep c) = c := Quotient.out_eq c
+  have hrK (c : G ⧸ K) : (rep c)⁻¹ * r * rep c ∈ K := by
+    apply hNK
+    simpa using (Subgroup.normalClosure_normal (s := ({r} : Set G))).conj_mem r
+      (Subgroup.subset_normalClosure (Set.mem_singleton r)) (rep c)⁻¹
+  let a : G ⧸ K → K := fun c => ⟨(rep c)⁻¹ * r * rep c, hrK c⟩
+  let T : Finset K := Finset.univ.image a
+  have hTmem (c : G ⧸ K) : a c ∈ T := by
+    dsimp [T]
+    exact Finset.mem_image.2 ⟨c, Finset.mem_univ _, rfl⟩
+  have hTne : T.Nonempty := ⟨a (QuotientGroup.mk 1 : G ⧸ K), hTmem _⟩
+  have hTcard : T.card ≤ k := by
+    calc
+      T.card ≤ Fintype.card (G ⧸ K) := Finset.card_image_le
+      _ = K.index := by rw [Subgroup.index_eq_card, Nat.card_eq_fintype_card]
+      _ = H.index := Subgroup.index_comap_of_surjective H (by
+        simpa [q] using (QuotientGroup.mk'_surjective
+          (N := Subgroup.normalClosure ({r} : Set G))))
+      _ = k := hH
+  have hTconj : ∀ t ∈ T, ∃ g : G, (t : G) = g⁻¹ * r * g := by
+    intro t ht
+    obtain ⟨c, -, rfl⟩ := Finset.mem_image.1 ht
+    exact ⟨rep c, rfl⟩
+  let L : Subgroup K := Subgroup.normalClosure (T : Set K)
+  letI : L.Normal := by dsimp [L]; infer_instance
+  have hNL : N.subgroupOf K = L := by
+    apply le_antisymm
+    · intro x hx
+      change x.1 ∈ N at hx
+      have main : ∀ (y : G) (hy : y ∈ N), (⟨y, hNK hy⟩ : K) ∈ L := by
+        intro y hy
+        change y ∈ Subgroup.closure (Group.conjugatesOfSet ({r} : Set G)) at hy
+        induction hy using Subgroup.closure_induction with
+        | mem y hy =>
+          rcases Group.mem_conjugatesOfSet_iff.1 hy with ⟨z, hz, hconj⟩
+          have hz' : z = r := Set.mem_singleton_iff.1 hz
+          subst z
+          obtain ⟨g, rfl⟩ := isConj_iff.1 hconj
+          let c : G ⧸ K := QuotientGroup.mk g⁻¹
+          have huK : (rep c)⁻¹ * g⁻¹ ∈ K := by
+            apply QuotientGroup.leftRel_apply.1
+            apply Quotient.exact
+            exact (hrep c).trans rfl
+          let u : G := (rep c)⁻¹ * g⁻¹
+          have hg : g⁻¹ = rep c * u := by simp [u]
+          have heq : g * r * g⁻¹ = u⁻¹ * ((rep c)⁻¹ * r * rep c) * u := by
+            rw [hg, mul_inv_rev]
+            simp [mul_assoc]
+          have ha : a c ∈ L := Subgroup.subset_normalClosure (hTmem c)
+          have hc := (inferInstance : L.Normal).conj_mem (a c) ha
+            ⟨u⁻¹, K.inv_mem huK⟩
+          convert hc using 1
+          apply Subtype.ext
+          simpa [a] using heq
+        | one => exact L.one_mem
+        | mul x y _ _ hx hy => exact L.mul_mem hx hy
+        | inv x _ hx => exact L.inv_mem hx
+      exact main x.1 hx
+    · apply Subgroup.normalClosure_le_normal (s := (T : Set K))
+      intro x hx
+      obtain ⟨c, -, rfl⟩ := Finset.mem_image.1 hx
+      change (rep c)⁻¹ * r * rep c ∈ N
+      simpa using
+        ((Subgroup.normalClosure_normal (s := ({r} : Set G))).conj_mem r
+          (Subgroup.subset_normalClosure (Set.mem_singleton r)) (rep c)⁻¹)
+  let f : K →* H := (q.restrict K).codRestrict H (fun x => x.2)
+  have hf : Function.Surjective f := by
+    intro y
+    obtain ⟨x, hx⟩ := (QuotientGroup.mk'_surjective
+      (N := Subgroup.normalClosure ({r} : Set G))) y.1
+    refine ⟨⟨x, ?_⟩, Subtype.ext hx⟩
+    change QuotientGroup.mk' (Subgroup.normalClosure ({r} : Set G)) x ∈ H
+    rw [hx]
+    exact y.2
+  have hker : f.ker = L := by
+    rw [show f.ker = N.subgroupOf K by
+      ext x
+      simp [f, q, N, QuotientGroup.ker_mk']]
+    exact hNL
+  refine ⟨T, hTne, hTcard, hTconj, ?_⟩
+  exact ⟨(QuotientGroup.quotientKerEquivOfSurjective f hf).symm.trans
+    (QuotientGroup.quotientMulEquivOfEq hker)⟩
 
 /-! ## Generic algebra assemblies (sorry-free) -/
 
@@ -381,6 +483,24 @@ lemma t91A02_polygon_pi1_wedge_quotient (P : PairingData) (x : P.Space) :
       FundamentalGroup
           (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair)) (orbitWedgeBase P) ⧸
         Subgroup.normalClosure ({polygonBoundaryFundamentalClass P} : Set _)) := by
+  sorry
+
+/-- Leaf (generic, split from `t91A02_polygonBoundary_freeWord`, lemma-2 PARTIAL
+2026-10-15).  A homomorphism from π₁ of the finite wedge to `ℚ` vanishes on
+elements with zero Hurewicz image.  Route: `ℚ` is abelian, so `f` factors
+through the abelianization; for a path-connected space the Hurewicz map
+identifies the abelianization of π₁ with H₁ (Hurewicz utilities in
+`PolygonSurfaceHomology` / `GenusTwoSurfacePiOne`), so a class with zero
+Hurewicz image lies in the commutator subgroup, on which `f` vanishes. -/
+lemma t91A02_polygonBoundary_freeWord_aux_kernel (P : PairingData)
+    (f : Additive (FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P)) →+ ℚ)
+    (g : FundamentalGroup
+      (PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+      (orbitWedgeBase P))
+    (hg : moduleHurewicz (orbitWedgeBase P) g = 0) :
+    f (Additive.ofMul g) = 0 := by
   sorry
 
 /-- **Leaf T2 (generic).**  Free coordinates on the orbit wedge in which the
