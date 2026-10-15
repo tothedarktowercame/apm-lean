@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36149,26 +36149,16 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged.",
+    "HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched.",
     :commands
     [{:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
-     {:cmd "sha256sum fixture", :exit 0}],
+     {:cmd "scope git status", :exit 0}],
     :diagnostic-history
     [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
-      :correction "baseline dependency failure; no scoped edit"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792023290184-12810-4ac6a0f0",
-     :commands
-     ["git show/check/diff-tree 8c4eb4f exact scope"
-      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and is real progress after 263f5d47. The interface faithfully gives Fin(runs+1)-indexed boundaries in outer subtype V and a coercion equality to each corresponding ambient canonical boundary, oriented for run-fold assembly. It does not assume based van Kampen. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining fold, kernel/surjectivity, winding, C1/C2/Main are listed."},
+      :correction "new HEAD tested; baseline failure persists"}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36177,7 +36167,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
