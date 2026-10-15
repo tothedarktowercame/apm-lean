@@ -96,7 +96,7 @@ The five independent leaves are:
   wedge from being presented as a based space.
 
 The existing genus-two consumer is
-`apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_free`: transport
+`apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word` (replaces the former outer_free/boundary_word placeholders; claude-14 2026-10-15): transport
 the skeleton through `PairingData.skeletonHomeomorphWedge`, reindex the two
 pairing orbits by `orientableOrbitEquiv 2` (then `Fin 2 × Bool ≃ Fin 4`),
 and apply B8 at rank four.  This supplies only the outer free group; the B9
