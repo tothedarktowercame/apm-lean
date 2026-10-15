@@ -656,7 +656,47 @@ lemma t99A01_attach_circleSide_aux_deformation_aux_respects {r : ℕ}
         (t99A01_attach_circleSide_aux_deformation_raw degree (t, x)) =
       APMT99A01.attachMk degree
         (t99A01_attach_circleSide_aux_deformation_raw degree (t, y)) := by
-  sorry
+  have hxy' : Relation.EqvGen (APMT99A01.AttachRel degree) x.1 y.1 := by
+    have hh := Quotient.exact (congrArg Subtype.val hxy)
+    change Relation.EqvGen (APMT99A01.AttachRel degree) x.1 y.1 at hh
+    exact hh
+  have hgen : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+      ∀ (ha : a ∈ (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree)
+        (hb : b ∈ (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree),
+      APMT99A01.attachMk degree
+          (t99A01_attach_circleSide_aux_deformation_raw degree
+            (t, ⟨a, ha⟩)) =
+        APMT99A01.attachMk degree
+          (t99A01_attach_circleSide_aux_deformation_raw degree
+            (t, ⟨b, hb⟩)) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab =>
+        intro ha hb
+        cases hab with
+        | boundary i z =>
+          have hn : ‖(APMT99A01.circleInDisk z : ℂ)‖ = 1 := Circle.norm_coe z
+          have hs : t99A01_attach_circleSide_aux_deformation_scale t
+              (APMT99A01.circleInDisk z : ℂ) = 1 := by
+            simp [t99A01_attach_circleSide_aux_deformation_scale, hn]
+          apply Quotient.sound
+          simpa [t99A01_attach_circleSide_aux_deformation_raw, hs] using
+            (Relation.EqvGen.rel
+              _ _
+              (APMT99A01.AttachRel.boundary (degree := degree) i z))
+    | refl a => intro ha hb; rfl
+    | symm a b hab ih => intro ha hb; exact (ih hb ha).symm
+    | trans a b c hab hbc ih₁ ih₂ =>
+        intro ha hc
+        have hb : b ∈ (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree := by
+          have heq : APMT99A01.attachMk degree a = APMT99A01.attachMk degree b :=
+            Quotient.sound hab
+          change APMT99A01.attachMk degree b ∈ APMT99A01.sideA degree
+          change APMT99A01.attachMk degree a ∈ APMT99A01.sideA degree at ha
+          rw [← heq]
+          exact ha
+        exact (ih₁ ha hb).trans (ih₂ hb hc)
+  exact hgen x.1 y.1 hxy' x.2 y.2
 
 /-- **Leaf (descent + endpoints).** Descend `raw` through `unitInterval × q`
 (`Topology.IsQuotientMap.continuous_lift_prod_left/right`; `q` is a quotient map:
