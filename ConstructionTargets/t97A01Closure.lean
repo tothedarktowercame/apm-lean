@@ -1373,6 +1373,24 @@ theorem torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc
   rw [torusRP2_pathHomotopicQuotient_cast_trans a b hw hx hy]
   exact torusRP2_pathHomotopicQuotient_trans_assoc _ _ _
 
+/-- Successor induction for dependent concatenations at the quotient level:
+replace the initial fold and final factor by their target classes, then
+compose them in traversal order. -/
+theorem torusRP2_pathHomotopicQuotient_concat_succ_eq_of_eq
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (a : Path.Homotopic.Quotient (point 0) (point (Fin.last n).castSucc))
+    (b : Path.Homotopic.Quotient
+      (point (Fin.last n).castSucc) (point (Fin.last (n + 1))))
+    (ha : (⟦Path.concat (point ∘ Fin.castSucc)
+        (fun k ↦ F k.castSucc)⟧ : Path.Homotopic.Quotient _ _) = a)
+    (hb : (⟦F (Fin.last n)⟧ : Path.Homotopic.Quotient _ _) = b) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.trans a b := by
+  rw [torusRP2_pathHomotopicQuotient_concat_succ]
+  exact torusRP2_pathHomotopicQuotient_trans_congr ha hb
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3310,6 +3328,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_pathHomotopicQuotient_trans_congr
 #print axioms torusRP2_pathHomotopicQuotient_cast_trans
 #print axioms torusRP2_pathHomotopicQuotient_cast_trans_trans_assoc
+#print axioms torusRP2_pathHomotopicQuotient_concat_succ_eq_of_eq
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
