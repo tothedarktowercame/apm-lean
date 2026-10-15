@@ -1564,6 +1564,39 @@ theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
     rw [hx, map_smul, h]
     simp [smul_smul, mul_comm]
 
+/-- Rational top-degree coordinate of a sphere self-map in the fixed
+sphere-shift normalization. -/
+noncomputable def t96A06_sphere3_topDegreeCoordinate
+    (f : C(Sphere 3, Sphere 3)) : ℚ :=
+  t96A06_sphere3_rational_H3Iso.hom
+    (HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ f) 3
+      t96A06_sphere3_rational_fundamentalClass)
+
+/-- Every rational H3 endomorphism of the three-sphere is multiplication by
+its top-degree coordinate. -/
+theorem t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul
+    (f : C(Sphere 3, Sphere 3)) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ f) 3 =
+      t96A06_sphere3_topDegreeCoordinate f • 𝟙 _ := by
+  apply (t96A06_sphere3_endomorphism_eq_smul_id_iff _ _).2
+  let F := HomologicalComplex.homologyMap
+    (CoefficientH0.singularPostcomposition ℚ f) 3
+  let a : ℚ := t96A06_sphere3_rational_H3Iso.hom
+    (F t96A06_sphere3_rational_fundamentalClass)
+  have h : F t96A06_sphere3_rational_fundamentalClass =
+      a • t96A06_sphere3_rational_fundamentalClass := by
+    calc
+      _ = t96A06_sphere3_rational_H3Iso.inv
+          (t96A06_sphere3_rational_H3Iso.hom
+            (F t96A06_sphere3_rational_fundamentalClass)) := by simp
+      _ = t96A06_sphere3_rational_H3Iso.inv (a • 1) := by simp [a]
+      _ = a • t96A06_sphere3_rational_fundamentalClass := by
+        rw [map_smul]
+        rfl
+  simpa [F, a, t96A06_sphere3_topDegreeCoordinate] using h
+
 /-- Thus the remaining regular-value formula is exactly its value on the
 chosen rational fundamental class. -/
 theorem polynomialSphereLift_regularValueFormula_iff_fundamentalClass :
@@ -2527,6 +2560,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_rational_H2_isZero
 #print axioms t96A06_sphere3_rational_H3Iso
 #print axioms t96A06_sphere3_endomorphism_eq_smul_id_iff
+#print axioms t96A06_sphere3_homologyMap_eq_topDegreeCoordinate_smul
 #print axioms polynomialSphereLift_regularValueFormula_iff_fundamentalClass
 #print axioms polynomialSphereLift_regularValueFormula_of_localizationData
 #print axioms t96A06_pairFlips_fix_sphere3_fundamentalClass
