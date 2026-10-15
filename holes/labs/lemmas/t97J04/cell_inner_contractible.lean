@@ -307,9 +307,168 @@ lemma cell_cover (γ : C(Circle, Y)) :
 
 /-- A2. The inner piece is homeomorphic to the open ball `|z| < 2/3`. -/
 -- BEGIN SEAT AREA
+noncomputable def cell_inner_contractible_aux_diskOfBall
+    (z : Metric.ball (0 : ℂ) ((2 : ℝ) / 3)) : apm_t97J04_Disk :=
+  ⟨z, by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have hz : ‖(z : ℂ)‖ < (2 : ℝ) / 3 := by
+      simpa only [Metric.mem_ball, dist_zero_right] using z.2
+    linarith⟩
+
+lemma cell_inner_contractible_aux_eqv (gamma : C(Circle, Y))
+    {z w : apm_t97J04_Disk}
+    (hz : ‖(z : ℂ)‖ < (2 : ℝ) / 3)
+    (h : Relation.EqvGen (CellRel gamma) (Sum.inr z) (Sum.inr w)) : z = w := by
+  let P := fun x : Y ⊕ apm_t97J04_Disk => x = Sum.inr z
+  have hrel : ∀ a b, CellRel gamma a b → (P a ↔ P b) := by
+    intro a b hab
+    cases hab with
+    | boundary u =>
+      constructor
+      · intro bad
+        cases bad
+      · intro bad
+        have he : circleToDisk u = z := Sum.inr.inj bad
+        have hn := congrArg (fun v : apm_t97J04_Disk => ‖(v : ℂ)‖) he
+        change ‖((circleToDisk u : apm_t97J04_Disk) : ℂ)‖ = ‖(z : ℂ)‖ at hn
+        rw [cell_cover_aux_circle_norm] at hn
+        linarith
+  have hinv : ∀ a b, Relation.EqvGen (CellRel gamma) a b → (P a ↔ P b) := by
+    intro a b hab
+    induction hab with
+    | rel a b hab => exact hrel a b hab
+    | refl => exact Iff.rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  exact Sum.inr.inj ((hinv _ _ h).mp rfl).symm
+
+noncomputable def cell_inner_contractible_aux_g (gamma : C(Circle, Y))
+    (z : Metric.ball (0 : ℂ) ((2 : ℝ) / 3)) : cellInner gamma :=
+  ⟨cellMk gamma (.inr (cell_inner_contractible_aux_diskOfBall z)),
+    ⟨.inr (cell_inner_contractible_aux_diskOfBall z),
+      ⟨cell_inner_contractible_aux_diskOfBall z, by
+        simpa only [cell_inner_contractible_aux_diskOfBall,
+          Metric.mem_ball, dist_zero_right] using z.2, rfl⟩, rfl⟩⟩
+
+lemma cell_inner_contractible_aux_g_cont_bij (gamma : C(Circle, Y)) :
+    Continuous (cell_inner_contractible_aux_g gamma) ∧
+      Function.Bijective (cell_inner_contractible_aux_g gamma) := by
+  constructor
+  · apply Continuous.subtype_mk
+    exact (continuous_cellMk gamma).comp
+      (continuous_inr.comp (Continuous.subtype_mk continuous_subtype_val _))
+  constructor
+  · intro z w h
+    have he := Quotient.exact (congrArg Subtype.val h)
+    have hi := cell_inner_contractible_aux_eqv gamma
+      (by simpa only [cell_inner_contractible_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using z.2) he
+    apply Subtype.ext
+    exact congrArg (fun x : apm_t97J04_Disk => (x : ℂ)) hi
+  · rintro ⟨q, x, ⟨z, hz, rfl⟩, rfl⟩
+    let w : Metric.ball (0 : ℂ) ((2 : ℝ) / 3) :=
+      ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩
+    refine ⟨w, Subtype.ext ?_⟩
+    rfl
+
+lemma cell_inner_contractible_aux_g_open (gamma : C(Circle, Y)) :
+    IsOpenMap (cell_inner_contractible_aux_g gamma) := by
+  intro U hU
+  let d := cell_inner_contractible_aux_diskOfBall
+  let F : Metric.ball (0 : ℂ) ((2 : ℝ) / 3) →
+      Y ⊕ apm_t97J04_Disk := fun z => Sum.inr (d z)
+  have hopenC : IsOpen
+      ((fun z : Metric.ball (0 : ℂ) ((2 : ℝ) / 3) => (z : ℂ)) '' U) :=
+    Metric.isOpen_ball.isOpenEmbedding_subtypeVal.isOpenMap U hU
+  have hopenD : IsOpen (d '' U) := by
+    have heq : d '' U = Subtype.val ⁻¹'
+        ((fun z : Metric.ball (0 : ℂ) ((2 : ℝ) / 3) => (z : ℂ)) '' U) := by
+      ext z
+      constructor
+      · rintro ⟨w, hw, rfl⟩
+        exact ⟨w, hw, rfl⟩
+      · rintro ⟨w, hw, he⟩
+        exact ⟨w, hw, Subtype.ext he⟩
+    rw [heq]
+    exact hopenC.preimage continuous_subtype_val
+  have hopenF : IsOpen (F '' U) := by
+    rw [isOpen_sum_iff]
+    constructor
+    · convert (isOpen_empty : IsOpen (∅ : Set Y)) using 1
+      ext x
+      simp only [Set.mem_preimage, Set.mem_image, Set.mem_empty_iff_false, iff_false]
+      rintro ⟨z, -, h⟩
+      cases h
+    · have heq : Sum.inr ⁻¹' (F '' U) = d '' U := by
+        ext z
+        constructor
+        · rintro ⟨w, hw, he⟩
+          exact ⟨w, hw, Sum.inr.inj he⟩
+        · rintro ⟨w, hw, rfl⟩
+          exact ⟨w, hw, rfl⟩
+      rw [heq]
+      exact hopenD
+  have hsat : (cellMk gamma) ⁻¹' (cellMk gamma '' (F '' U)) = F '' U := by
+    ext x
+    constructor
+    · rintro ⟨y, ⟨z, hzU, rfl⟩, hxy⟩
+      have hr := Quotient.exact hxy
+      have hz : ‖(d z : ℂ)‖ < (2 : ℝ) / 3 := by
+        simpa only [d, cell_inner_contractible_aux_diskOfBall,
+          Metric.mem_ball, dist_zero_right] using z.2
+      have he : x = F z := by
+        let P := fun v : Y ⊕ apm_t97J04_Disk => v = F z
+        have hrel : ∀ a b, CellRel gamma a b → (P a ↔ P b) := by
+          intro a b hab
+          cases hab with
+          | boundary u =>
+            constructor
+            · intro bad; cases bad
+            · intro bad
+              have hd : circleToDisk u = d z := Sum.inr.inj bad
+              have hn := congrArg (fun v : apm_t97J04_Disk => ‖(v : ℂ)‖) hd
+              change ‖((circleToDisk u : apm_t97J04_Disk) : ℂ)‖ = ‖(d z : ℂ)‖ at hn
+              rw [cell_cover_aux_circle_norm] at hn
+              linarith
+        have hinv : ∀ a b, Relation.EqvGen (CellRel gamma) a b → (P a ↔ P b) := by
+          intro a b hab
+          induction hab with
+          | rel a b hab => exact hrel a b hab
+          | refl => exact Iff.rfl
+          | symm _ _ _ ih => exact ih.symm
+          | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+        exact (hinv _ _ hr).mp rfl
+      exact ⟨z, hzU, he.symm⟩
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨F z, ⟨z, hz, rfl⟩, rfl⟩
+  have hquot : IsOpen (cellMk gamma '' (F '' U) : Set (Cell gamma)) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((cellMk gamma) ⁻¹' (cellMk gamma '' (F '' U)))
+    rw [hsat]
+    exact hopenF
+  have heq : cell_inner_contractible_aux_g gamma '' U =
+      Subtype.val ⁻¹' (cellMk gamma '' (F '' U) : Set (Cell gamma)) := by
+    ext q
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨F z, ⟨z, hz, rfl⟩, rfl⟩
+    · rintro ⟨x, ⟨z, hz, hx⟩, hxq⟩
+      refine ⟨z, hz, Subtype.ext ?_⟩
+      exact (congrArg (cellMk gamma) hx).trans hxq
+  rw [heq]
+  exact hquot.preimage continuous_subtype_val
+
+noncomputable def cell_inner_contractible_aux_homeomorph (gamma : C(Circle, Y)) :
+    Metric.ball (0 : ℂ) ((2 : ℝ) / 3) ≃ₜ cellInner gamma := by
+  obtain ⟨hc, hb⟩ := cell_inner_contractible_aux_g_cont_bij gamma
+  exact (Equiv.ofBijective _ hb).toHomeomorphOfContinuousOpen hc
+    (cell_inner_contractible_aux_g_open gamma)
+
 lemma cell_inner_contractible (γ : C(Circle, Y)) :
     ContractibleSpace (cellInner γ) := by
-  sorry
+  letI : ContractibleSpace (Metric.ball (0 : ℂ) ((2 : ℝ) / 3)) :=
+    Metric.contractibleSpace_ball (by norm_num)
+  exact (cell_inner_contractible_aux_homeomorph γ).symm.contractibleSpace
 -- END SEAT AREA
 
 /-- A3. The overlap annulus `1/3 < |z| < 2/3` deformation retracts to the
