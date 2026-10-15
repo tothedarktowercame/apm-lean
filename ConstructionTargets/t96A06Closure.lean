@@ -403,6 +403,33 @@ theorem pairSignOrbit_subset_polynomialSphereLift_fiber (p : Sphere 3) :
         hf (flipSecondPairSphere p)
       _ = polynomialSphereLift p := hs p
 
+/-- Equality after radial normalization makes the original nonzero vectors
+positive scalar multiples.  This is the normalization bridge needed before
+the quadratic fiber classification can be applied. -/
+theorem rp3RadialToSphere_eq_imp_posScalar
+    {v w : NonzeroVectors ℝ 3} (h : rp3RadialToSphere v = rp3RadialToSphere w) :
+    ∃ c : ℝ, 0 < c ∧ v.1 = c • w.1 := by
+  let nv : ℝ := ‖WithLp.toLp 2 v.1‖
+  let nw : ℝ := ‖WithLp.toLp 2 w.1‖
+  have hnv : 0 < nv := norm_pos_iff.mpr (by
+    intro hz
+    apply v.2
+    have hz' := congrArg WithLp.ofLp hz
+    simpa [nv] using hz')
+  have hnw : 0 < nw := norm_pos_iff.mpr (by
+    intro hz
+    apply w.2
+    have hz' := congrArg WithLp.ofLp hz
+    simpa [nw] using hz')
+  refine ⟨nv / nw, div_pos hnv hnw, ?_⟩
+  have hvw := congrArg (fun q : Sphere 3 => WithLp.ofLp q.1) h
+  change nv⁻¹ • v.1 = nw⁻¹ • w.1 at hvw
+  ext i
+  have hi := congrFun hvw i
+  simp only [Pi.smul_apply, smul_eq_mul] at hi ⊢
+  field_simp [hnv.ne', hnw.ne'] at hi ⊢
+  nlinarith
+
 /-- The normalized sphere lift descends through the exact double cover to
 the chosen projective polynomial descent. -/
 theorem polynomialSphereLift_projection (p : Sphere 3) :
@@ -1192,6 +1219,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_flipFirstPairSphere
 #print axioms polynomialSphereLift_flipSecondPairSphere
 #print axioms pairSignOrbit_subset_polynomialSphereLift_fiber
+#print axioms rp3RadialToSphere_eq_imp_posScalar
 #print axioms polynomialSphereLift_projection
 #print axioms polynomialSphereLift_homology_square
 #print axioms polynomialDescent_degree_four_of_sphere
