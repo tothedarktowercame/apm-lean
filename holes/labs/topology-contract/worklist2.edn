@@ -88379,6 +88379,19 @@
     [{:cmd "nested transport drafts",
       :exit 1,
       :correction "added explicit quotient class"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792078143139-14262-7016f14e",
+     :commands
+     ["git show/diff/check a29e7911d"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit a29e7911d adds compiled, sorry-free progress beyond history commit aeb789872. It defines the literal-endpoint rebasing of the actual nested run-block concatenation and proves its homotopy class equals the globally rebased prefix-block fold, using the established per-run replacement and endpoint casts. Only t97A01Closure.lean changed; fixture SHA cd65a6637f311e06131cbf02134c793d6a14b76ba2a54e7f538ac261217d0c9e matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Quotient.cast endpoints and equality directions are correct. Comparison of nested ordering to the flat fold, van Kampen, and assembly remain listed."},
     :commit "a29e7911d",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88387,7 +88400,7 @@
      "cd65a6637f311e06131cbf02134c793d6a14b76ba2a54e7f538ac261217d0c9e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88405,7 +88418,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flat prefix-fold reconstruction.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nested/global prefix-fold transport.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88598,7 +88611,10 @@
      :reason "Banked complete inverse-coordinate successor cases."}
     {:job 7,
      :commit "aeb789872",
-     :reason "Banked flat prefix-fold reconstruction."}]}
+     :reason "Banked flat prefix-fold reconstruction."}
+    {:job 8,
+     :commit "a29e7911d",
+     :reason "Banked nested/global prefix-fold transport."}]}
   {:consumer :t94J09,
    :stop-count 6,
    :evidence
@@ -95604,7 +95620,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95616,7 +95632,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "nested run-block class equals global prefix-fold class",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "a29e7911d"},
    :id
    :lemma-torusrp2-subdivisionrunblocknestedconcat-eq-globalprefix-class,
    :kind :lemma,
