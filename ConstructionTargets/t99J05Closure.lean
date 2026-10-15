@@ -155,6 +155,34 @@ theorem cpSuccessor_openCover (n : ℕ) :
       exact not_ne_iff.mp hlast
     · exact h i hi
 
+/-- In the last affine chart, the overlap with the lower filtration patch is
+exactly the punctured affine coordinate space. -/
+theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
+    (p : CP (n + 1))
+    (htop : p ∈ cpSuccessorTopPatch n) :
+    p ∈ cpSuccessorLowerPatch n ↔
+      coordinates (Fin.last (n + 1)) p ≠ 0 := by
+  constructor
+  · rintro ⟨i, hi, hrep⟩ hzero
+    have hcoord := congrFun hzero
+      (⟨i, hi⟩ : {j : Fin (n + 2) // j ≠ Fin.last (n + 1)})
+    change Projectivization.rep p i /
+        Projectivization.rep p (Fin.last (n + 1)) = 0 at hcoord
+    exact hrep ((div_eq_zero_iff.mp hcoord).resolve_right htop)
+  · intro hcoord
+    by_contra hlower
+    have hz : ∀ i : Fin (n + 2), i ≠ Fin.last (n + 1) →
+        Projectivization.rep p i = 0 := by
+      intro i hi
+      by_contra hrep
+      exact hlower ⟨i, hi, hrep⟩
+    apply hcoord
+    funext j
+    change Projectivization.rep p j.1 /
+      Projectivization.rep p (Fin.last (n + 1)) = 0
+    rw [hz j.1 j.2]
+    exact zero_div _
+
 theorem t99J05_coordinates_continuousOn_exact {n : ℕ} (i : Fin (n + 1)) :
     ContinuousOn (coordinates i)
       {x : CP n | Projectivization.rep x i ≠ 0} := by
@@ -300,6 +328,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorTopPatch_isOpen
 #print axioms cpSuccessorLowerPatch_isOpen
 #print axioms cpSuccessor_openCover
+#print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
