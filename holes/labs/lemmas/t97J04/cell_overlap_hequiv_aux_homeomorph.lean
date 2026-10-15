@@ -485,12 +485,138 @@ lemma cell_overlap_hequiv_aux_eq_of_eqvGen
 `cellMk γ (.inr z) ↦ z` (A3a gives injectivity; openness of `cellMk` on the
 saturated open set `inr '' {1/3 < |z| < 2/3}` gives continuity of the inverse). -/
 -- BEGIN SEAT AREA
+noncomputable def cell_overlap_hequiv_aux_homeomorph_aux_disk
+    (z : Annulus13) : apm_t97J04_Disk :=
+  ⟨z, by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    exact le_trans (le_of_lt z.2.2) (by norm_num)⟩
+
+noncomputable def cell_overlap_hequiv_aux_homeomorph_aux_g
+    (γ : C(Circle, Y)) (z : Annulus13) :
+    (cellOuter γ ∩ cellInner γ : Set (Cell γ)) :=
+  ⟨cellMk γ (.inr (cell_overlap_hequiv_aux_homeomorph_aux_disk z)),
+    ⟨⟨.inr (cell_overlap_hequiv_aux_homeomorph_aux_disk z),
+        Or.inr ⟨_, z.2.1, rfl⟩, rfl⟩,
+      ⟨.inr (cell_overlap_hequiv_aux_homeomorph_aux_disk z),
+        ⟨_, z.2.2, rfl⟩, rfl⟩⟩⟩
+
+lemma cell_overlap_hequiv_aux_homeomorph_aux_cont_bij (γ : C(Circle, Y))
+    (heq : ∀ {z w : apm_t97J04_Disk}, Relation.EqvGen (CellRel γ) (.inr z) (.inr w) →
+      ‖(z : ℂ)‖ < 1 → z = w) :
+    Continuous (cell_overlap_hequiv_aux_homeomorph_aux_g γ) ∧
+      Function.Bijective (cell_overlap_hequiv_aux_homeomorph_aux_g γ) := by
+  constructor
+  · apply Continuous.subtype_mk
+    exact (continuous_cellMk γ).comp
+      (continuous_inr.comp (Continuous.subtype_mk continuous_subtype_val _))
+  constructor
+  · intro z w h
+    have hr := Quotient.exact (congrArg Subtype.val h)
+    have hd := heq hr (lt_trans z.2.2 (by norm_num))
+    apply Subtype.ext
+    exact congrArg (fun x : apm_t97J04_Disk ↦ (x : ℂ)) hd
+  · rintro ⟨q, ho, hi⟩
+    rcases hi with ⟨_, ⟨z, hz, rfl⟩, rfl⟩
+    rcases ho with ⟨x, hx, hqx⟩
+    have hr := Quotient.exact hqx
+    have hzouter := (cell_cover_aux_outer_invariant γ hr).mp hx
+    have hzlow : (1 : ℝ) / 3 < ‖(z : ℂ)‖ := by
+      rcases hzouter with (⟨y, hy⟩ | ⟨w, hw, he⟩)
+      · cases hy
+      · exact Sum.inr.inj he ▸ hw
+    let a : Annulus13 := ⟨(z : ℂ), hzlow, hz⟩
+    refine ⟨a, Subtype.ext ?_⟩
+    rfl
+
+lemma cell_overlap_hequiv_aux_homeomorph_aux_open (γ : C(Circle, Y))
+    (heq : ∀ {z w : apm_t97J04_Disk}, Relation.EqvGen (CellRel γ) (.inr z) (.inr w) →
+      ‖(z : ℂ)‖ < 1 → z = w) :
+    IsOpenMap (cell_overlap_hequiv_aux_homeomorph_aux_g γ) := by
+  intro U hU
+  let d := cell_overlap_hequiv_aux_homeomorph_aux_disk
+  let F : Annulus13 → Y ⊕ apm_t97J04_Disk := fun z => .inr (d z)
+  have hopenC : IsOpen ((fun z : Annulus13 => (z : ℂ)) '' U) := by
+    have ha : IsOpen {z : ℂ | (1 : ℝ) / 3 < ‖z‖ ∧ ‖z‖ < (2 : ℝ) / 3} :=
+      (isOpen_lt continuous_const continuous_norm).inter
+        (isOpen_lt continuous_norm continuous_const)
+    exact ha.isOpenEmbedding_subtypeVal.isOpenMap U hU
+  have hopenD : IsOpen (d '' U) := by
+    have he : d '' U = Subtype.val ⁻¹'
+        ((fun z : Annulus13 => (z : ℂ)) '' U) := by
+      ext z
+      constructor
+      · rintro ⟨w, hw, rfl⟩
+        exact ⟨w, hw, rfl⟩
+      · rintro ⟨w, hw, e⟩
+        exact ⟨w, hw, Subtype.ext e⟩
+    rw [he]
+    exact hopenC.preimage continuous_subtype_val
+  have hopenF : IsOpen (F '' U) := by
+    rw [isOpen_sum_iff]
+    constructor
+    · have he : Sum.inl ⁻¹' (F '' U) = (∅ : Set Y) := by
+        ext y
+        simp only [Set.mem_preimage, Set.mem_image, Set.mem_empty_iff_false,
+          iff_false]
+        rintro ⟨z, -, bad⟩
+        cases bad
+      rw [he]
+      exact isOpen_empty
+    · have he : Sum.inr ⁻¹' (F '' U) = d '' U := by
+        ext z
+        constructor
+        · rintro ⟨w, hw, e⟩
+          exact ⟨w, hw, Sum.inr.inj e⟩
+        · rintro ⟨w, hw, rfl⟩
+          exact ⟨w, hw, rfl⟩
+      rw [he]
+      exact hopenD
+  have hsat : cellMk γ ⁻¹' (cellMk γ '' (F '' U)) = F '' U := by
+    ext x
+    constructor
+    · rintro ⟨_, ⟨z, hz, rfl⟩, h⟩
+      have hr := Quotient.exact h
+      have hi := (cell_cover_aux_inner_invariant γ hr).mp
+        ⟨d z, z.2.2, rfl⟩
+      rcases hi with ⟨w, hw, rfl⟩
+      have hd := heq hr (lt_trans z.2.2 (by norm_num))
+      exact ⟨z, hz, congrArg Sum.inr hd⟩
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨F z, ⟨z, hz, rfl⟩, rfl⟩
+  have hquot : IsOpen (cellMk γ '' (F '' U) : Set (Cell γ)) := by
+    rw [isOpen_coinduced]
+    change IsOpen (cellMk γ ⁻¹' (cellMk γ '' (F '' U)))
+    rw [hsat]
+    exact hopenF
+  have himage : cell_overlap_hequiv_aux_homeomorph_aux_g γ '' U =
+      Subtype.val ⁻¹' (cellMk γ '' (F '' U) : Set (Cell γ)) := by
+    ext q
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨F z, ⟨z, hz, rfl⟩, rfl⟩
+    · rintro ⟨_, ⟨z, hz, e⟩, eq⟩
+      refine ⟨z, hz, Subtype.ext ?_⟩
+      exact (congrArg (cellMk γ) e).trans eq
+  rw [himage]
+  exact hquot.preimage continuous_subtype_val
+
 lemma cell_overlap_hequiv_aux_homeomorph (γ : C(Circle, Y))
     (heq : ∀ {z w : apm_t97J04_Disk}, Relation.EqvGen (CellRel γ) (.inr z) (.inr w) →
       ‖(z : ℂ)‖ < 1 → z = w) :
     ∃ h : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₜ Annulus13,
       ∀ z : Circle, ((h (cellOverlapCircle γ z) : Annulus13) : ℂ) = (z : ℂ) / 2 := by
-  sorry
+  obtain ⟨hc, hb⟩ := cell_overlap_hequiv_aux_homeomorph_aux_cont_bij γ heq
+  let e : Annulus13 ≃ₜ (cellOuter γ ∩ cellInner γ : Set (Cell γ)) :=
+    (Equiv.ofBijective _ hb).toHomeomorphOfContinuousOpen hc
+      (cell_overlap_hequiv_aux_homeomorph_aux_open γ heq)
+  refine ⟨e.symm, ?_⟩
+  intro z
+  let a : Annulus13 := ⟨(z : ℂ) / 2, by
+    constructor <;> rw [norm_div, Circle.norm_coe] <;> norm_num⟩
+  have ha : e.symm (cellOverlapCircle γ z) = a := by
+    rw [Homeomorph.symm_apply_eq]
+    rfl
+  exact congrArg (fun w : Annulus13 => (w : ℂ)) ha
 -- END SEAT AREA
 
 /-- A3c. The annulus deformation retracts radially onto the radius-`1/2`
