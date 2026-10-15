@@ -87901,30 +87901,24 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Pass the subdivision homotopy through quotient and Hurewicz; then B7-B10.",
+    "Use the boundary formula with signed-edge H1 coordinates to prove B7, then B8-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint"],
+    :warnings ["preexisting lint; review dirs preserved"],
     :missing-theorems
-    [{:name "polygonBoundaryCanonicalConcat_homotopic",
-      :type "based subdivision concat is homotopic to boundary loop",
+    [{:name "finitePathSubdivision_boundary",
+      :type "boundary H1 is ordered signed-edge sum",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundaryConcat_cast_eq_canonical"],
-      :area "polygon-quotient-homology"}
-     {:name "finitePathSubdivision_boundary",
-      :type "boundary H1 is signed-edge sum",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
       ["polygonBoundaryCanonicalConcat_homotopic"
        "polygonBoundarySubdivisionConcat_hurewicz"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
-      :type "B7 map",
+      :type "B7 sign-corrected map",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["finitePathSubdivision_boundary"],
@@ -87933,7 +87927,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked the boundary subdivision homotopy.",
+    :reason "Banked finite boundary subdivision Hurewicz formula.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,34 +87935,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 8f6afae39", :exit 0}],
+     {:cmd "git show --check 978c9af12", :exit 0}],
     :diagnostic-history
-    [{:cmd "endpoint drafts",
+    [{:cmd "rw concat-Hurewicz draft",
       :exit 1,
-      :correction "used pointwise casts and reversed conversion"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792028834737-12979-984acd08",
-     :commands
-     ["git show/diff-tree 8f6afae39"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 8f6afae39 by topo-6 changes only the scoped target; fixture hash 96845ae7...0460e matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The endpoint subpath uses parameters 0 and 1, so affine reparametrization is the original boundary path. Casting concat_subpath preserves its homotopy direction from canonical subdivision concat to that endpoint subpath, hence to the boundary loop. New compiled progress; remaining milestone is passing this homotopy through quotient/Hurewicz, then B7-B10."},
-    :commit "8f6afae39",
+      :correction "used explicit calc specialization"}],
+    :commit "978c9af12",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "96845ae777a4ac847037637fd806cc47c5ec241bace63f107b2aba2a9cc0460e"},
+     "52c77c656e42aac128992d45b3a0f3142dde976d13b1f4242359923e13e165d7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92213,7 +92193,8 @@
    {:name "finitePathSubdivision_boundary",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "boundary circle class is ordered product of edge classes",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-finitepathsubdivision-boundary,
    :kind :lemma,
    :depends-on
