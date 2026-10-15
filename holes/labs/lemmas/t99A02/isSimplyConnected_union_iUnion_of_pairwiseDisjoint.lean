@@ -1102,7 +1102,73 @@ lemma isSimplyConnected_union_iUnion_of_pairwiseDisjoint {J : Type*} {U : Set X}
     (hdisj : Pairwise fun i j => Disjoint (V i) (V j))
     (hUV : ∀ j, IsPathConnected (U ∩ V j)) :
     IsSimplyConnected (U ∪ ⋃ j, V j) := by
-  sorry
+  classical
+  let W : Finset J → Set X := fun s => U ∪ ⋃ j ∈ s, V j
+  have hWopen : ∀ s, IsOpen (W s) := by
+    intro s
+    exact hU.union (isOpen_iUnion fun j => isOpen_iUnion fun (_ : j ∈ s) => hV j)
+  have hWsimple : ∀ s, IsSimplyConnected (W s) := by
+    intro s
+    induction s using Finset.induction_on with
+    | empty =>
+        simpa [W] using hUs
+    | @insert k s hks ih =>
+        have hinter : W s ∩ V k = U ∩ V k := by
+          apply Set.Subset.antisymm
+          · rintro x ⟨hx, hxk⟩
+            rcases hx with hxU | hxV
+            · exact ⟨hxU, hxk⟩
+            · simp only [Set.mem_iUnion] at hxV
+              obtain ⟨j, hj, hxj⟩ := hxV
+              have hjk : j ≠ k := by
+                intro h
+                subst j
+                exact hks hj
+              exact False.elim (Set.disjoint_left.1 (hdisj hjk) hxj hxk)
+          · rintro x ⟨hxU, hxk⟩
+            exact ⟨Or.inl hxU, hxk⟩
+        have hunion : W (insert k s) = W s ∪ V k := by
+          ext x
+          simp [W, or_assoc, or_left_comm, or_comm]
+        rw [hunion]
+        exact isSimplyConnected_union (hWopen s) (hV k) ih (hVs k)
+          (hinter ▸ hUV k)
+  have hWdir : Directed (· ⊆ ·) W := by
+    intro s t
+    refine ⟨s ∪ t, ?_, ?_⟩
+    · intro x hx
+      rcases hx with hxU | hxV
+      · exact Or.inl hxU
+      · right
+        simp only [Set.mem_iUnion] at hxV ⊢
+        obtain ⟨j, hj, hxj⟩ := hxV
+        exact ⟨j, Finset.mem_union_left t hj, hxj⟩
+    · intro x hx
+      rcases hx with hxU | hxV
+      · exact Or.inl hxU
+      · right
+        simp only [Set.mem_iUnion] at hxV ⊢
+        obtain ⟨j, hj, hxj⟩ := hxV
+        exact ⟨j, Finset.mem_union_right s hj, hxj⟩
+  have hfinal := isSimplyConnected_iUnion_of_directed W hWdir hWopen hWsimple
+  have hUnion : (⋃ s, W s) = U ∪ ⋃ j, V j := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨s, hx⟩ := Set.mem_iUnion.1 hx
+      rcases hx with hxU | hxV
+      · exact Or.inl hxU
+      · right
+        simp only [Set.mem_iUnion] at hxV ⊢
+        obtain ⟨j, _, hxj⟩ := hxV
+        exact ⟨j, hxj⟩
+    · rintro (hxU | hxV)
+      · exact Set.mem_iUnion.2 ⟨∅, Or.inl hxU⟩
+      · obtain ⟨j, hxj⟩ := Set.mem_iUnion.1 hxV
+        refine Set.mem_iUnion.2 ⟨{j}, Or.inr ?_⟩
+        simp only [Set.mem_iUnion]
+        exact ⟨j, by simp, hxj⟩
+  rwa [hUnion] at hfinal
 -- END SEAT AREA
 
 /-- An open cover by simply connected sets whose intersection pattern is a
