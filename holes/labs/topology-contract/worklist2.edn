@@ -88329,33 +88329,32 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Lift coordinates to quotient cokernels and compose Smith isomorphisms for B1; then B2.",
+    :residual "Finish B1 topological transport; then B2.",
     :outcome :stop,
-    :warnings ["Main has 1 prior placeholder; lint preserved"],
+    :warnings ["Main: 1 prior placeholder" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "aabbccOrbitCoordinates_map_boundaryRange",
-      :type "range transport",
+    [{:name "aabbccBoundaryCokernelSmithEquiv",
+      :type "cokernel=Smith",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["aabbccOrbitCoordinates_comp_attachingBoundary"],
+      :depends-on ["aabbccOrbitCoordinates_map_boundaryRange"],
       :area "polygon-surface-homology"}
-     {:name "torusRP2OrbitCoordinates_map_boundaryRange",
-      :type "range transport",
+     {:name "torusRP2BoundaryCokernelSmithEquiv",
+      :type "cokernel=Smith",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2OrbitCoordinates_comp_attachingBoundary"],
+      :depends-on ["torusRP2OrbitCoordinates_map_boundaryRange"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
       :type "homology adapter",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["aabbccOrbitCoordinates_map_boundaryRange"
-       "torusRP2OrbitCoordinates_map_boundaryRange"],
+      ["aabbccBoundaryCokernelSmithEquiv"
+       "torusRP2BoundaryCokernelSmithEquiv"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "van Kampen",
@@ -88367,7 +88366,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked attaching-range transport.",
+    :reason "Banked quotient-cokernel Smith equivalences.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88375,27 +88374,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 4cacd825f", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792044282863-13440-5206723c",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms; git show --check; fixture/hash placeholder scans"],
-     :finding
-     "Commit 4cacd825f by topo-6 changes only t97A01Closure.lean and adds compiled progress after 5db954851. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 f8ece2ca6ea77ccfd1d03028ef5cc388950770fe5542b2ef5292f79f8c39374d matches; registry 166/0; new range theorems use only propext, Classical.choice, Quot.sound. range_comp is used in the correct direction to turn coordinate-map image of the abstract boundary range into the composite range; the proved negative conjugation and range_neg then yield the positive Smith range. Quotient-cokernel/Smith isomorphisms for B1 and B2 remain listed."},
-    :commit "4cacd825f",
+     {:cmd "git show --check e6d0579fd", :exit 0}],
+    :diagnostic-history
+    [{:cmd "quotient drafts",
+      :exit 1,
+      :correction "fixed notation/induction"}],
+    :commit "e6d0579fd",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "f8ece2ca6ea77ccfd1d03028ef5cc388950770fe5542b2ef5292f79f8c39374d"},
+     "8cdc6f488dabc684bdce63a700f34c42b83f84bf40571331533c9eb25b65ec7d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93469,7 +93461,9 @@
     :lemma-aabbccboundarykernel-eq-bot
     :lemma-torusrp2boundarykernel-eq-bot
     :lemma-aabbccorbitcoordinates-map-boundaryrange
-    :lemma-torusrp2orbitcoordinates-map-boundaryrange],
+    :lemma-torusrp2orbitcoordinates-map-boundaryrange
+    :lemma-aabbccboundarycokernelsmithequiv
+    :lemma-torusrp2boundarycokernelsmithequiv],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93804,4 +93798,37 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2orbitcoordinates-comp-attachingboundary],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccBoundaryCokernelSmithEquiv", :type "cokernel=Smith"},
+   :lemma
+   {:name "aabbccBoundaryCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cokernel=Smith",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-aabbccboundarycokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates-map-boundaryrange],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2BoundaryCokernelSmithEquiv",
+    :type "cokernel=Smith"},
+   :lemma
+   {:name "torusRP2BoundaryCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cokernel=Smith",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2boundarycokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2orbitcoordinates-map-boundaryrange],
    :other-consumers []}]}
