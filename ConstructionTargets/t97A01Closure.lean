@@ -1881,6 +1881,38 @@ theorem torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
         (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm :=
   rfl
 
+/-- A factor in the cumulative-prefix block for run `i` is literally the
+original subdivision factor at the flattened index `prefixLength i + k`.
+This is the pointwise identification used to compare the nested run fold
+with the original subdivision fold. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunPrefixBlockPiece S i k t =
+      S.piece ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k, by
+        have h := pathTwoOpenSubdivisionRunPrefixBlock_le S i
+        omega⟩ t := by
+  rfl
+
+/-- The flattened index of a factor in run `i` lies strictly before the
+cumulative boundary of the next run. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_globalIndex_lt_next
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val + k <
+      pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  rw [← pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i]
+  omega
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1969,6 +2001,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockPath_class
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockConcat_class
 #print axioms torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_globalIndex_lt_next
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
