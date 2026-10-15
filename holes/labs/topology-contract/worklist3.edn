@@ -37111,25 +37111,18 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
-    :residual
-    "Combine injectivity/surjectivity into H3 iso; higher vanishing, degree four, invariants/Main.",
+    :residual "Higher vanishing, degree four, invariants/Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_rp3_rational_H3_projection_injective",
-      :type "sphere-to-RP3 H3 map is injective",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_rational_homology_projection_transfer"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_rp3_antipodal_H3",
+    [{:name "t96A06_rp3_antipodal_H3",
       :type "H3(RP3;Q)=Q",
-      :status :partial,
+      :status :proved,
       :consumers [:t96A06],
       :depends-on ["t96A06_rp3_rational_H3_projection_injective"],
       :area "rp-rational-homology"}
@@ -37144,7 +37137,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed degree-three projection injectivity; package its bijection as an RP3 H3 isomorphism next.",
+    "Committed the RP3 degree-three rational homology isomorphism; higher-degree vanishing and degree-four/Lefschetz work remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37152,14 +37145,12 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check a00d59b90", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792041308865-13326-53ebc872",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "a00d59b9023065621ec44a245cf817a5437090ca",
+     {:cmd "git show --check --stat 21d7c0151", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial compile",
+      :exit 1,
+      :note "made the underlying ModuleCat linear map explicit"}],
+    :commit "21d7c01516d58ffdd76ffccf6afe4c867b0a8ec4",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37167,7 +37158,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -40478,7 +40469,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "antipodal acts trivially on H3(S3;Q), so transfer identifies H3(RP3;Q) with Q",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-rp3-antipodal-h3,
    :kind :lemma,
    :depends-on
