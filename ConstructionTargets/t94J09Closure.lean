@@ -257,6 +257,19 @@ theorem frozenCycleToN6Coordinates_map_faceBoundaryRange :
   rw [← LinearMap.range_comp,
     frozenCycleToN6Coordinates_comp_faceBoundary]
 
+/-- The literal frozen face boundary is injective, so its degree-two
+cellular kernel vanishes. -/
+theorem frozenFaceBoundaryCoordinates_injective :
+    Function.Injective frozenFaceBoundaryCoordinates := by
+  intro a b hab
+  have h0 := congrFun hab (0 : Fin 6)
+  change a * 2 = b * 2 at h0
+  omega
+
+theorem frozenFaceBoundaryCoordinates_ker_eq_bot :
+    LinearMap.ker frozenFaceBoundaryCoordinates = ⊥ :=
+  LinearMap.ker_eq_bot.mpr frozenFaceBoundaryCoordinates_injective
+
 theorem n6OrbitCoordinates_comp_attachingBoundary :
     n6OrbitCoordinates.toLinearMap.comp (attachingBoundary n6PairingData) =
       -n6BoundaryLinear := by
@@ -467,5 +480,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
 #print axioms frozenH1SmithEquivOfSurjectiveKernel
+#print axioms frozenFaceBoundaryCoordinates_injective
+#print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 
 end ConstructionTargets.t94J09Closure
