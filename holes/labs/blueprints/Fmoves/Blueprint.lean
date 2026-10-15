@@ -9174,7 +9174,112 @@ theorem cut_transfer_consistency_A_arc_aux_prev {Label : Type*} [DecidableEq Lab
     (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0) (hadj : e = (e₀ + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hqL : q < L := by
+    dsimp [L, q]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have he₀L : e₀ + 1 < L := by
+    dsimp [L, q] at he₀q ⊢
+    simp at he₀q ⊢
+    omega
+  have he_eq : e = e₀ + 1 := by
+    rw [hadj, Nat.mod_eq_of_lt he₀L]
+  clear hadj
+  subst e
+  have hs₀' : s₀ = ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hs₀
+  have hτ' : τ = ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hτ
+  subst s₀
+  subst τ
+  by_cases hlast : e₀ + 1 = q
+  · have he₀q' : e₀ < q := by omega
+    have hnew : (N : ℂ) = (edgePoint L (p + 2) ⟨0, by constructor <;> norm_num⟩ : Disk) := by
+      by_cases he₀p : e₀ = p
+      · subst e₀
+        rw [hN, D.newA_x (⟨1, by constructor <;> norm_num⟩)]
+        have hq : q = p + 1 := by omega
+        change cutSeam L p q 1 = (edgePoint L (p + 2) ⟨0, by constructor <;> norm_num⟩ : Disk)
+        simp [cutSeam, cutPoint, cutAlpha, edgePoint, hq]
+        congr 1
+        ring
+      · rw [hN, D.newA_v e₀ ⟨1, by constructor <;> norm_num⟩ (by omega) he₀q']
+        have hidx : q + p + 1 - e₀ = p + 2 := by omega
+        change (edgePoint L (q + p + 1 - e₀) (reverseParameter ⟨1, by constructor <;> norm_num⟩) : ℂ) = _
+        rw [hidx]
+        congr 2
+        apply Subtype.ext
+        simp [reverseParameter]
+    let T : Disk := edgePoint L (p + 1) ⟨0, by constructor <;> norm_num⟩
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      rw [hlast]
+      change (edgePoint L (p + 1) ⟨0, by constructor <;> norm_num⟩ : Disk) =
+        cutTransfer L p q q ⟨0, by constructor <;> norm_num⟩
+      simp [cutTransfer, cutSeam, cutPoint, cutAlpha, edgePoint]
+      congr 1
+      ring
+    · have hx := cut_transfer_consistency_aux_x u v t x
+          (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+      have hN' : N = edgePoint L (p + 1) ⟨1, by constructor <;> norm_num⟩ := by
+        apply Subtype.ext
+        rw [hnew]
+        simp only [edgePoint]
+        congr 1
+        norm_num
+        push_cast
+        ring
+      have hT' : T = edgePoint L p ⟨1, by constructor <;> norm_num⟩ := by
+        apply Subtype.ext
+        simp [T, L, p, edgePoint, cutPoint]
+      rw [hN', hT']
+      exact hx
+  · have hnotq : e₀ + 1 ≠ q := hlast
+    by_cases he₀p : e₀ = p
+    · subst e₀
+      have hp1q : p + 1 < q := by omega
+      let T : Disk := edgePoint L q ⟨1, by constructor <;> norm_num⟩
+      refine ⟨T, ?_, ?_⟩
+      · dsimp [T]
+        change (edgePoint L q ⟨1, by constructor <;> norm_num⟩ : Disk) =
+          cutTransfer L p q (p + 1) ⟨0, by constructor <;> norm_num⟩
+        simp [cutTransfer, hp1q.ne, hp1q, reverseParameter, edgePoint]
+      · have hNT : N = T := by
+          apply Subtype.ext
+          rw [hN, D.newA_x (⟨1, by constructor <;> norm_num⟩)]
+          simp [T, cutSeam, cutPoint, cutAlpha, edgePoint, L, p, q]
+          congr 1
+          ring
+        rw [hNT]
+        exact Relation.EqvGen.refl T
+    · have hp_e₀ : p + 1 ≤ e₀ := by omega
+      have heq : e₀ + 1 < q := by omega
+      let T : Disk := edgePoint L (q + p - e₀) ⟨1, by constructor <;> norm_num⟩
+      refine ⟨T, ?_, ?_⟩
+      · dsimp [T]
+        change (edgePoint L (q + p - e₀) ⟨1, by constructor <;> norm_num⟩ : Disk) =
+          cutTransfer L p q (e₀ + 1) ⟨0, by constructor <;> norm_num⟩
+        have hidx : q + p + 1 - (e₀ + 1) = q + p - e₀ := by omega
+        have hnep : e₀ + 1 ≠ p := by omega
+        have hneq : e₀ + 1 ≠ q := by omega
+        have hpe : p < e₀ + 1 := by omega
+        simp [cutTransfer, hnep, hneq, hpe, heq, reverseParameter, hidx, edgePoint]
+      · have hNT : N = T := by
+          apply Subtype.ext
+          rw [hN, D.newA_v e₀ ⟨1, by constructor <;> norm_num⟩ hp_e₀ he₀q]
+          have hidx : q + p + 1 - e₀ = q + p - e₀ + 1 := by omega
+          change (edgePoint L (q + p + 1 - e₀) (reverseParameter ⟨1, by constructor <;> norm_num⟩) : ℂ) = _
+          rw [hidx]
+          simp only [T, reverseParameter, edgePoint]
+          congr 1
+          norm_num
+        rw [hNT]
+        exact Relation.EqvGen.refl T
 
 /-- Piece `A`, side position `(e₀, s₀)` with `p ≤ e₀ < q`. -/
 theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
