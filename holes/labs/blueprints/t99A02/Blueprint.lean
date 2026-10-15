@@ -518,8 +518,77 @@ for `x₂ ≠ 0` exactly one of `x, -x` is in the upper hemisphere and `diskOf`
 gives the same disk point; for `x₂ = 0`, `diskOf x = planar x` and
 `diskOf (-x) = -planar x` (as `0 ≤ -x₂`), boundary points identified by
 `SurfaceRel false 1` (`edgePoint 2 0 t = exp(iπt)`, `edgePoint 2 1 t = -exp(iπt)`). -/
+lemma rp2Proj_factor_aux_neg_boundary (z : Disk) (hz : ‖(z : ℂ)‖ = 1) :
+    surfaceQuotient false 1 (-z) = surfaceQuotient false 1 z := by
+  have relate (w : Disk) (hw : ‖(w : ℂ)‖ = 1) (him : 0 ≤ (w : ℂ).im) :
+      SurfaceRel false 1 w (-w) := by
+    let t : Set.Icc (0 : ℝ) 1 := ⟨Complex.arg (w : ℂ) / Real.pi, by
+      constructor
+      · exact div_nonneg (Complex.arg_nonneg_iff.mpr him) Real.pi_nonneg
+      · exact (div_le_one Real.pi_pos).mpr (Complex.arg_le_pi _) ⟩
+    refine ⟨0, by omega, t, ?_, ?_⟩
+    · apply Subtype.ext
+      simp only [edgePoint, t]
+      norm_num
+      rw [show Complex.I *
+          (2 * Real.pi * (Complex.arg (w : ℂ) / Real.pi) / 2) =
+          Complex.arg (w : ℂ) * Complex.I by
+        push_cast
+        field_simp [Real.pi_ne_zero]]
+      simpa [hw] using (Complex.norm_mul_exp_arg_mul_I (w : ℂ)).symm
+    · apply Subtype.ext
+      simp only [edgePoint, t]
+      change -(w : ℂ) = _
+      norm_num
+      rw [show Complex.I *
+          (2 * Real.pi * (1 + Complex.arg (w : ℂ) / Real.pi) / 2) =
+          Complex.arg (w : ℂ) * Complex.I + Real.pi * Complex.I by
+        push_cast
+        field_simp [Real.pi_ne_zero]
+        ring]
+      rw [Complex.exp_add, Complex.exp_pi_mul_I]
+      simpa [hw] using congrArg Neg.neg
+        (Complex.norm_mul_exp_arg_mul_I (w : ℂ)).symm
+  apply Quotient.sound
+  by_cases him : 0 ≤ (z : ℂ).im
+  · exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (relate z hz him))
+  · have hn : 0 ≤ ((-z : Disk) : ℂ).im := by simp; exact le_of_not_ge him
+    exact Relation.EqvGen.rel _ _ (by simpa only [neg_neg] using
+      (relate (-z) (by simpa using hz) hn))
+
 lemma rp2Proj_factor_aux_neg (x : S2) : rp2Proj (-x) = rp2Proj x := by
-  sorry
+  by_cases h : ((x : S2) : E3) 2 = 0
+  · change surfaceQuotient false 1 (diskOf (-x)) =
+      surfaceQuotient false 1 (diskOf x)
+    have hp : ‖planar x‖ = 1 := by
+      have hx : ‖(x : E3)‖ = 1 := by simp
+      have h2 : ‖(x : E3)‖ ^ 2 = (x : E3) 0 ^ 2 + (x : E3) 1 ^ 2 + (x : E3) 2 ^ 2 := by
+        rw [EuclideanSpace.norm_eq, Real.sq_sqrt (by positivity), Fin.sum_univ_three]
+        simp [Real.norm_eq_abs, sq_abs]
+      have hp2 : ‖planar x‖ ^ 2 = (x : E3) 0 ^ 2 + (x : E3) 1 ^ 2 := by
+        rw [Complex.sq_norm, Complex.normSq_apply]
+        simp [planar]
+        ring
+      nlinarith [norm_nonneg (planar x)]
+    have hs : planar (-x) = -planar x := by
+      apply Complex.ext <;> simp [planar]
+    simp only [diskOf]
+    simp [h, hs]
+    exact rp2Proj_factor_aux_neg_boundary
+      (⟨planar x, by simpa [Metric.mem_closedBall, dist_zero_right] using norm_planar_le x⟩ : Disk) hp
+  · change surfaceQuotient false 1 (diskOf (-x)) =
+      surfaceQuotient false 1 (diskOf x)
+    congr 1
+    apply Subtype.ext
+    have hp : planar (-x) = -planar x := by
+      apply Complex.ext <;> simp [planar]
+    simp only [diskOf, PiLp.neg_apply, hp]
+    by_cases hx : 0 < ((x : S2) : E3) 2
+    · rw [if_pos hx.le, if_neg]
+      · simp
+      · simpa using hx
+    · have hx' : ((x : S2) : E3) 2 < 0 := lt_of_le_of_ne (le_of_not_gt hx) h
+      simp [not_le_of_gt hx', hx'.le]
 
 /-- Leaf (split from `rp2Proj_factor`).  The upper-hemisphere lift respects
 the polygon gluing: generators of `SurfaceRel false 1` relate boundary points
