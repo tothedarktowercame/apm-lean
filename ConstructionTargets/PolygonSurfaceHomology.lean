@@ -1360,6 +1360,35 @@ theorem moduleHurewicz_mk_concat_eq_list_sum
   rw [List.map_ofFn]
   rfl
 
+/-- Casting every vertex of a finite composable path family to one point
+commutes with finite concatenation. -/
+theorem path_concat_cast_vertices {Y : Type} [TopologicalSpace Y]
+    (n : ℕ) (p : Fin (n + 1) → Y) (y : Y) (h : ∀ i, y = p i)
+    (F : (i : Fin n) → Path (p i.castSucc) (p i.succ)) :
+    (Path.concat p F).cast (h 0) (h (Fin.last n)) =
+      Path.concat (fun _ : Fin (n + 1) => y)
+        (fun i => (F i).cast (h i.castSucc) (h i.succ)) := by
+  induction n with
+  | zero =>
+      rw [Path.concat_zero, Path.concat_zero]
+      ext t
+      change p 0 = y
+      exact (h 0).symm
+  | succ n ih =>
+      rw [Path.concat_succ, Path.concat_succ]
+      calc
+        ((Path.concat (p ∘ Fin.castSucc) (fun k => F k.castSucc)).trans
+            (F (Fin.last n))).cast (h 0) (h (Fin.last (n + 1))) =
+          ((Path.concat (p ∘ Fin.castSucc) (fun k => F k.castSucc)).cast
+              (h 0) (h (Fin.last n).castSucc)).trans
+            ((F (Fin.last n)).cast (h (Fin.last n).castSucc)
+              (h (Fin.last (n + 1)))) := by
+                exact Path.cast_trans _ _ _ _ _
+        _ = _ := by
+          rw [ih (p ∘ Fin.castSucc) (fun i => h i.castSucc)
+            (fun i => F i.castSucc)]
+          congr 1
+
 /-- On the `i`th equal subdivision interval, affine interpolation of the
 once-around parameter is exactly the polygon edge parameter `(i+t)/n`. -/
 theorem integerLoop_convexCombo_subdivisionVertex (P : PairingData)
@@ -1677,6 +1706,26 @@ theorem polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge
       polygonBoundarySignedEdgePathAtBase P i :=
   (polygonBoundaryCanonicalSubdivisionPathAtBase_eq P i).trans
     (polygonBoundarySubdivisionPathAtBase_eq_signedEdge P i)
+
+/-- The globally transported dependent subdivision concatenation is exactly
+the constant-base concatenation of the canonical subdivision factors. -/
+theorem polygonBoundaryConcat_cast_eq_canonical (P : PairingData) :
+    (Path.concat
+      (polygonBoundaryIntegerLoopPath P ∘ polygonBoundarySubdivisionVertex P)
+      (fun k => (polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P k.castSucc)
+        (polygonBoundarySubdivisionVertex P k.succ))).cast
+          (orbitWedgeBase_eq_boundarySubdivisionVertex P 0)
+          (orbitWedgeBase_eq_boundarySubdivisionVertex P
+            (Fin.last P.edgeCount)) =
+      Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+        (polygonBoundaryCanonicalSubdivisionPathAtBase P) := by
+  exact path_concat_cast_vertices P.edgeCount
+    (polygonBoundaryIntegerLoopPath P ∘ polygonBoundarySubdivisionVertex P)
+    (orbitWedgeBase P) (orbitWedgeBase_eq_boundarySubdivisionVertex P)
+    (fun k => (polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P k.castSucc)
+      (polygonBoundarySubdivisionVertex P k.succ))
 
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
