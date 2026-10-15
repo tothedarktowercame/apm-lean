@@ -10,6 +10,7 @@ import ConstructionTargets.CoefficientConnectedH0Map
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CoefficientSphereAntipodal
 import ConstructionTargets.SphereZeroCoefficients
+import ConstructionTargets.CoefficientCoordinateReflections
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -166,10 +167,70 @@ theorem polynomialSphereVector_continuous :
   intro i
   fin_cases i <;> simp [polynomialMap, sphereVector] <;> fun_prop
 
+/-- The first independent sign change, restricted to the concrete unit
+three-sphere. -/
+def flipFirstPairSphere : C(Sphere 3, Sphere 3) :=
+  (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (1 : Fin 4)).comp
+    (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 4))
+
+/-- The second independent sign change, restricted to the concrete unit
+three-sphere. -/
+def flipSecondPairSphere : C(Sphere 3, Sphere 3) :=
+  (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (3 : Fin 4)).comp
+    (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (2 : Fin 4))
+
+theorem sphereVector_flipFirstPairSphere (p : Sphere 3) :
+    (sphereVector 3 (flipFirstPairSphere p)).1 =
+      flipFirstPair (sphereVector 3 p).1 := by
+  ext i
+  fin_cases i <;>
+    simp [flipFirstPairSphere, flipFirstPair, sphereVector,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem sphereVector_flipSecondPairSphere (p : Sphere 3) :
+    (sphereVector 3 (flipSecondPairSphere p)).1 =
+      flipSecondPair (sphereVector 3 p).1 := by
+  ext i
+  fin_cases i <;>
+    simp [flipSecondPairSphere, flipSecondPair, sphereVector,
+      ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
+      ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
+      ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+theorem polynomialSphereVector_flipFirstPairSphere (p : Sphere 3) :
+    polynomialSphereVector (flipFirstPairSphere p) = polynomialSphereVector p := by
+  apply Subtype.ext
+  change polynomialMap (sphereVector 3 (flipFirstPairSphere p)).1 =
+    polynomialMap (sphereVector 3 p).1
+  rw [sphereVector_flipFirstPairSphere, polynomialMap_flipFirstPair]
+
+theorem polynomialSphereVector_flipSecondPairSphere (p : Sphere 3) :
+    polynomialSphereVector (flipSecondPairSphere p) = polynomialSphereVector p := by
+  apply Subtype.ext
+  change polynomialMap (sphereVector 3 (flipSecondPairSphere p)).1 =
+    polynomialMap (sphereVector 3 p).1
+  rw [sphereVector_flipSecondPairSphere, polynomialMap_flipSecondPair]
+
 /-- Radially normalized sphere lift of the printed quadratic map. -/
 noncomputable def polynomialSphereLift : C(Sphere 3, Sphere 3) :=
   ⟨fun p => rp3RadialToSphere (polynomialSphereVector p),
     rp3RadialToSphere_continuous.comp polynomialSphereVector_continuous⟩
+
+theorem polynomialSphereLift_flipFirstPairSphere :
+    polynomialSphereLift.comp flipFirstPairSphere = polynomialSphereLift := by
+  apply ContinuousMap.ext
+  intro p
+  exact congrArg rp3RadialToSphere
+    (polynomialSphereVector_flipFirstPairSphere p)
+
+theorem polynomialSphereLift_flipSecondPairSphere :
+    polynomialSphereLift.comp flipSecondPairSphere = polynomialSphereLift := by
+  apply ContinuousMap.ext
+  intro p
+  exact congrArg rp3RadialToSphere
+    (polynomialSphereVector_flipSecondPairSphere p)
 
 /-- The normalized sphere lift descends through the exact double cover to
 the chosen projective polynomial descent. -/
@@ -914,6 +975,10 @@ theorem t96A06_rp3_rational_homology :
 #print axioms rp3SphereProjection_continuous
 #print axioms rp3SphereProjection_comp_radial
 #print axioms polynomialSphereVector_continuous
+#print axioms sphereVector_flipFirstPairSphere
+#print axioms sphereVector_flipSecondPairSphere
+#print axioms polynomialSphereLift_flipFirstPairSphere
+#print axioms polynomialSphereLift_flipSecondPairSphere
 #print axioms polynomialSphereLift_projection
 #print axioms polynomialSphereLift_homology_square
 #print axioms polynomialDescent_degree_four_of_sphere
