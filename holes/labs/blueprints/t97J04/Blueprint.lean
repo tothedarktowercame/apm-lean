@@ -1294,7 +1294,152 @@ lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
       eO.inv ≫ IntegralMV.mvToX (cellOuter γ) 1 = Hmap (cellIncl γ) 1) :
     Function.Surjective (Hmap (cellIncl γ) 1).hom ∧
       LinearMap.ker (Hmap (cellIncl γ) 1).hom = LinearMap.range (Hmap γ 1).hom := by
-  sorry
+  rcases htrans with ⟨eI, eO, hf, hg⟩
+  obtain ⟨δ, hexI, hexJ, hexδ⟩ :=
+    IntegralMV.integralMayerVietoris (cellOuter γ) (cellInner γ)
+      hA1.1 hA1.2.1 hA1.2.2
+  letI : Subsingleton (IntegralMV.HZ 1 (cellInner γ)) := hinner
+  have hzero := ModuleCat.isZero_of_subsingleton (IntegralMV.HZ 1 (cellInner γ))
+  have hproj : (Limits.biprod.fst :
+      IntegralMV.HZ 1 (cellOuter γ) ⊞ IntegralMV.HZ 1 (cellInner γ) ⟶ _) ≫
+      Limits.biprod.inl = 𝟙 _ := by
+    rw [← Limits.biprod.total]
+    rw [hzero.eq_of_tgt (Limits.biprod.snd : _ ⟶ IntegralMV.HZ 1 (cellInner γ)) 0]
+    simp
+  have hsplit : ∀ x : (IntegralMV.HZ 1 (cellOuter γ) ⊞
+      IntegralMV.HZ 1 (cellInner γ) : ModuleCat ℤ),
+      (Limits.biprod.inl : IntegralMV.HZ 1 (cellOuter γ) ⟶ _).hom
+        ((Limits.biprod.fst : _ ⟶ IntegralMV.HZ 1 (cellOuter γ)).hom x) = x := by
+    intro x
+    have := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hproj) x
+    simpa [ModuleCat.hom_comp] using this
+  have hd_zero : (δ 0).hom = 0 := by
+    apply LinearMap.range_eq_bot.mp
+    rw [hexδ 0, LinearMap.ker_eq_bot.mpr hmv0]
+  have hJ_surj : Function.Surjective
+      (IntegralMV.mvJ (cellOuter γ) (cellInner γ) 1).hom := by
+    rw [← LinearMap.range_eq_top, hexJ 0, hd_zero, LinearMap.ker_zero]
+  have hcore : Function.Surjective (IntegralMV.mvToX (cellOuter γ) 1).hom ∧
+      LinearMap.ker (IntegralMV.mvToX (cellOuter γ) 1).hom =
+        LinearMap.range (IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1).hom := by
+    constructor
+    · intro y
+      obtain ⟨x, hx⟩ := hJ_surj y
+      refine ⟨(Limits.biprod.fst : _ ⟶ IntegralMV.HZ 1 (cellOuter γ)).hom x, ?_⟩
+      have hx' : (IntegralMV.mvJ (cellOuter γ) (cellInner γ) 1).hom
+          ((Limits.biprod.inl : IntegralMV.HZ 1 (cellOuter γ) ⟶ _).hom
+            ((Limits.biprod.fst : _ ⟶ IntegralMV.HZ 1 (cellOuter γ)).hom x)) = y := by
+        rw [hsplit x, hx]
+      change ((Limits.biprod.inl ≫ IntegralMV.mvJ
+        (cellOuter γ) (cellInner γ) 1).hom
+          ((Limits.biprod.fst : _ ⟶ IntegralMV.HZ 1 (cellOuter γ)).hom x)) = y at hx'
+      rw [show Limits.biprod.inl ≫ IntegralMV.mvJ
+        (cellOuter γ) (cellInner γ) 1 = IntegralMV.mvToX (cellOuter γ) 1 by
+          simp [IntegralMV.mvJ]] at hx'
+      exact hx'
+    · ext x
+      constructor
+      · intro hx
+        have hq : (Limits.biprod.inl : IntegralMV.HZ 1 (cellOuter γ) ⟶ _).hom x ∈
+            LinearMap.ker (IntegralMV.mvJ (cellOuter γ) (cellInner γ) 1).hom := by
+          change ((Limits.biprod.inl ≫ IntegralMV.mvJ
+            (cellOuter γ) (cellInner γ) 1).hom x) = 0
+          rw [show Limits.biprod.inl ≫ IntegralMV.mvJ
+            (cellOuter γ) (cellInner γ) 1 = IntegralMV.mvToX (cellOuter γ) 1 by
+              simp [IntegralMV.mvJ]]
+          exact hx
+        rw [← hexI 1] at hq
+        obtain ⟨z, hz⟩ := hq
+        refine ⟨z, ?_⟩
+        have hp : IntegralMV.mvI (cellOuter γ) (cellInner γ) 1 ≫
+            Limits.biprod.fst = IntegralMV.mvIncl Set.inter_subset_left 1 := by
+          simp [IntegralMV.mvI]
+        have hz' := congrArg
+          (fun q => (Limits.biprod.fst : _ ⟶ IntegralMV.HZ 1 (cellOuter γ)).hom q) hz
+        have hp' := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hp) z
+        apply hp'.symm.trans
+        apply hz'.trans
+        change ((Limits.biprod.inl ≫ Limits.biprod.fst :
+          IntegralMV.HZ 1 (cellOuter γ) ⟶ _).hom x) = x
+        rw [Limits.biprod.inl_fst]
+        rfl
+      · rintro ⟨z, rfl⟩
+        have hi : (IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom z =
+            (Limits.biprod.inl : IntegralMV.HZ 1 (cellOuter γ) ⟶ _).hom
+              ((IntegralMV.mvIncl
+                (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1).hom z) := by
+          have hiMor : IntegralMV.mvI (cellOuter γ) (cellInner γ) 1 =
+              IntegralMV.mvIncl Set.inter_subset_left 1 ≫ Limits.biprod.inl := by
+            apply Limits.biprod.hom_ext
+            · simp [IntegralMV.mvI]
+            · simp only [IntegralMV.mvI, Limits.biprod.lift_snd,
+                Category.assoc, Limits.biprod.inl_snd]
+              simp
+              exact hzero.eq_of_tgt _ _
+          simpa [ModuleCat.hom_comp] using
+            DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hiMor) z
+        have hk : (IntegralMV.mvI (cellOuter γ) (cellInner γ) 1).hom z ∈
+            LinearMap.ker (IntegralMV.mvJ (cellOuter γ) (cellInner γ) 1).hom := by
+          rw [← hexI 1]
+          exact ⟨z, rfl⟩
+        rw [hi] at hk
+        change ((Limits.biprod.inl ≫ IntegralMV.mvJ
+          (cellOuter γ) (cellInner γ) 1).hom
+            ((IntegralMV.mvIncl
+              (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1).hom z)) = 0 at hk
+        rw [show Limits.biprod.inl ≫ IntegralMV.mvJ
+          (cellOuter γ) (cellInner γ) 1 = IntegralMV.mvToX (cellOuter γ) 1 by
+            simp [IntegralMV.mvJ]] at hk
+        exact hk
+  constructor
+  · intro x
+    obtain ⟨y, hy⟩ := hcore.1 x
+    refine ⟨eO.hom.hom y, ?_⟩
+    have hge := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hg) (eO.hom.hom y)
+    simpa [ModuleCat.hom_comp, hy] using hge.symm
+  · apply le_antisymm
+    · intro x hx
+      have hx' : eO.inv.hom x ∈ LinearMap.ker
+          (IntegralMV.mvToX (cellOuter γ) 1).hom := by
+        have hge := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hg) x
+        simpa [ModuleCat.hom_comp] using hge.trans hx
+      rw [hcore.2] at hx'
+      obtain ⟨z, hz⟩ := hx'
+      refine ⟨eI.hom.hom z, ?_⟩
+      have hfe := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hf) z
+      have heO : eO.hom.hom (eO.inv.hom x) = x := by simp
+      rw [← heO, ← hz]
+      simpa [ModuleCat.hom_comp] using hfe.symm
+    · rintro x ⟨z, rfl⟩
+      have hfe := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hf) (eI.inv.hom z)
+      have hz : eI.hom.hom (eI.inv.hom z) = z := by simp
+      rw [← hz]
+      simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply] at hfe
+      rw [← hfe]
+      have hr : (IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1).hom
+          (eI.inv.hom z) ∈ LinearMap.range
+            (IntegralMV.mvIncl
+              (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1).hom :=
+        ⟨eI.inv.hom z, rfl⟩
+      rw [← hcore.2] at hr
+      change (Hmap (cellIncl γ) 1).hom
+        ((IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+          eO.hom).hom (eI.inv.hom z)) = 0
+      have hge := DFunLike.congr_fun (congrArg ModuleCat.Hom.hom hg)
+        ((IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1 ≫
+          eO.hom).hom (eI.inv.hom z))
+      have hr' := hr
+      change (IntegralMV.mvToX (cellOuter γ) 1).hom
+        ((IntegralMV.mvIncl
+          (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 1).hom
+          (eI.inv.hom z)) = 0 at hr'
+      simp only [ModuleCat.hom_comp, LinearMap.coe_comp, Function.comp_apply] at hge
+      simp at hge
+      simpa using hge.symm.trans hr'
 /-- A9. If `γ_*` is injective on `H₁`, then `H₂(Y) → H₂(Y ∪_γ D²)` is bijective
 (Mayer–Vietoris at degree 2: `H₂(overlap) = 0`, connecting map lands in
 `ker γ_* = 0`). -/
