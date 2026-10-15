@@ -2110,7 +2110,57 @@ lemma apm_t98a03_glueMap_isOpenMap {J A B A' B' : Type} [TopologicalSpace A]
         apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀) y ↔
       apm_t98a03_GlueEq (fun _ : Unit => a₀) (fun _ : Unit => b₀) x y) :
     IsOpenMap (apm_t98a03_glueMap p q hp hq) := by
-  sorry
+  intro O hO
+  let mkE := apm_t98a03_glueMk σ τ
+  let mkX := apm_t98a03_glueMk (fun _ : Unit => a₀) (fun _ : Unit => b₀)
+  let g : A' ⊕ B' → A ⊕ B := Sum.map p q
+  have hpre : mkX ⁻¹' (apm_t98a03_glueMap p q hp hq '' O) =
+      g '' (mkE ⁻¹' O) := by
+    ext x
+    constructor
+    · rintro ⟨z, hzO, hzx⟩
+      obtain ⟨e, rfl⟩ := apm_t98a03_glueMk_surjective σ τ z
+      have heO : e ∈ mkE ⁻¹' O := hzO
+      have heq : mkX (g e) = mkX x := by
+        simpa [mkE, mkX, g] using hzx
+      have hrel := (hmkX (g e) x).mp heq
+      rcases hrel with hsame | ⟨j, hcross | hcross⟩
+      · exact ⟨e, heO, hsame⟩
+      · rcases hcross with ⟨hge, hx⟩
+        cases e with
+        | inl a' =>
+            simp only [g, Sum.map_inl, Sum.inl.injEq] at hge
+            have ha0 : p a' = a₀ := hge
+            obtain ⟨k, rfl⟩ := (hpσ a').mp ha0
+            refine ⟨Sum.inr (τ k), ?_, ?_⟩
+            · have heO' : apm_t98a03_glueMk σ τ (Sum.inl (σ k)) ∈ O := by
+                simpa [mkE] using heO
+              rw [apm_t98a03_glueMk_glue σ τ k] at heO'
+              simpa [mkE] using heO'
+            · simpa [g, hx] using (hq k)
+        | inr b' => simp [g] at hge
+      · rcases hcross with ⟨hge, hx⟩
+        cases e with
+        | inl a' => simp [g] at hge
+        | inr b' =>
+            simp only [g, Sum.map_inr, Sum.inr.injEq] at hge
+            have hb0 : q b' = b₀ := hge
+            obtain ⟨k, rfl⟩ := (hqτ b').mp hb0
+            refine ⟨Sum.inl (σ k), ?_, ?_⟩
+            · have heO' : apm_t98a03_glueMk σ τ (Sum.inr (τ k)) ∈ O := by
+                simpa [mkE] using heO
+              rw [← apm_t98a03_glueMk_glue σ τ k] at heO'
+              simpa [mkE] using heO'
+            · simpa [g, hx] using (hp k)
+    · rintro ⟨e, heO, rfl⟩
+      refine ⟨mkE e, heO, ?_⟩
+      simp [mkE, mkX, g, apm_t98a03_glueMap_mk]
+  rw [isOpen_coinduced]
+  change IsOpen (mkX ⁻¹' (apm_t98a03_glueMap p q hp hq '' O))
+  rw [hpre]
+  apply hpo.sumMap hqo
+  rw [← isOpen_coinduced]
+  exact hO
 
 /-- Seat (generic): local injectivity at an unglued point of `A'`.
 
