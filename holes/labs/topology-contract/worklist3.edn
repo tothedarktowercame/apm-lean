@@ -36164,6 +36164,16 @@
     [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
       :correction "baseline index failures"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792026112280-12886-3dfd78eb",
+     :commands
+     ["git show/check/diff-tree 8c4eb4f exact scope"
+      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and adds progress after 263f5d47. Its exact interface provides Fin(runs+1)-indexed boundaries in outer subtype V and a correctly oriented coercion equality to matching ambient canonical boundaries, enabling run-fold assembly. It does not assume the partial based van Kampen theorem. Scope/hash match; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36172,7 +36182,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36190,7 +36200,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Closure source remains at bd5ebdee; changes since the last rebuild affect only t00J02Closure, not this row or build configuration. The reproduced line-1366+ dependency failures remain the blocker.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Fresh closure rebuild fails before quotient work: obsolete List.getElem_mem calls at 1366/1368 and nonempty Fin-index failures from 1391. Scope unchanged.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36588,7 +36598,11 @@
     {:job 9,
      :commit nil,
      :reason
-     "Closure source remains at bd5ebdee; changes since the last rebuild affect only t00J02Closure, not this row or build configuration. The reproduced line-1366+ dependency failures remain the blocker."}]}
+     "Closure source remains at bd5ebdee; changes since the last rebuild affect only t00J02Closure, not this row or build configuration. The reproduced line-1366+ dependency failures remain the blocker."}
+    {:job 1,
+     :commit nil,
+     :reason
+     "Fresh closure rebuild fails before quotient work: obsolete List.getElem_mem calls at 1366/1368 and nonempty Fin-index failures from 1391. Scope unchanged."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
