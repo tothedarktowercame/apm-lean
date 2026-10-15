@@ -2050,6 +2050,54 @@ theorem torusRP2_subdivisionRunOffset_run_unique
     have hl := torusRP2_subdivisionRunOffset_lt_nextPrefix S j l
     omega
 
+/-- Flatten a dependent run/local-offset coordinate to the corresponding
+original subdivision-factor index. -/
+def torusRP2_subdivisionRunOffsetIndex
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    (Σ i : Fin (boolSideRunPartition S.side).length,
+      Fin (pathTwoOpenSubdivisionRunFamily S i).length) → Fin (S.n + 1) :=
+  fun z => ⟨pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val, by
+    have h := ((pathTwoOpenSubdivisionRunFamily S z.1).get z.2).isLt
+    rw [torusRP2_subdivisionRunFamily_get_val_eq_prefix_add S z.1 z.2] at h
+    exact h⟩
+
+/-- Flattening run/local-offset coordinates is bijective. -/
+theorem torusRP2_subdivisionRunOffsetIndex_bijective
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    Function.Bijective (torusRP2_subdivisionRunOffsetIndex S) := by
+  constructor
+  · rintro ⟨i, k⟩ ⟨j, l⟩ h
+    have hcoord := congrArg Fin.val h
+    change pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val =
+      pathTwoOpenSubdivisionRunPrefixLength S j.val + l.val at hcoord
+    have hij := torusRP2_subdivisionRunOffset_run_unique S i j k l hcoord
+    subst j
+    have hkl : k = l := Fin.ext (by omega)
+    subst l
+    rfl
+  · intro j
+    obtain ⟨i, k, hik⟩ := torusRP2_subdivisionIndex_exists_runOffset S j
+    refine ⟨⟨i, k⟩, Fin.ext ?_⟩
+    exact hik
+
+/-- The dependent family of all run offsets is exactly the original finite
+subdivision index type. -/
+noncomputable def torusRP2_subdivisionRunOffsetEquiv
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    (Σ i : Fin (boolSideRunPartition S.side).length,
+      Fin (pathTwoOpenSubdivisionRunFamily S i).length) ≃ Fin (S.n + 1) :=
+  Equiv.ofBijective (torusRP2_subdivisionRunOffsetIndex S)
+    (torusRP2_subdivisionRunOffsetIndex_bijective S)
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2146,6 +2194,8 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionIndex_exists_runOffset
 #print axioms torusRP2_subdivisionRunOffset_lt_nextPrefix
 #print axioms torusRP2_subdivisionRunOffset_run_unique
+#print axioms torusRP2_subdivisionRunOffsetIndex_bijective
+#print axioms torusRP2_subdivisionRunOffsetEquiv
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
