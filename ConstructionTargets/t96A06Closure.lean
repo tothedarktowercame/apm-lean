@@ -1261,6 +1261,22 @@ noncomputable def polynomialSphereRegularFiberEquiv :
         obtain ⟨i, hi⟩ := hp
         exact ⟨i, Subtype.ext hi⟩⟩
 
+@[simp] theorem polynomialSphereRegularFiberEquiv_apply_val (i : Fin 4) :
+    (polynomialSphereRegularFiberEquiv i).1 =
+      polynomialSphereRegularFiberPoint i := rfl
+
+/-- The four fiber indices agree exactly with the identity and the three
+pair-flip deck transformations used by local-class transport. -/
+theorem polynomialSphereRegularFiberEquiv_deckCoordinates :
+    (polynomialSphereRegularFiberEquiv 0).1 = polynomialSphereRegularPoint ∧
+    (polynomialSphereRegularFiberEquiv 1).1 =
+      flipFirstPairSphere polynomialSphereRegularPoint ∧
+    (polynomialSphereRegularFiberEquiv 2).1 =
+      flipSecondPairSphere polynomialSphereRegularPoint ∧
+    (polynomialSphereRegularFiberEquiv 3).1 =
+      flipFirstPairSphere (flipSecondPairSphere polynomialSphereRegularPoint) := by
+  simp [polynomialSphereRegularFiberPoint]
+
 /-- Every pair-sign-regular fiber of the normalized quadratic sphere map has
 exactly four points. -/
 theorem t96A06_polynomialSphereLift_regular_fiber_ncard
@@ -2033,6 +2049,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms pairSignOrbit_four_distinct
 #print axioms t96A06_polynomialSphereLift_regular_fiber_ncard
 #print axioms polynomialSphereRegularPoint_fiber_ncard
+#print axioms polynomialSphereRegularFiberEquiv_deckCoordinates
 #print axioms t96A06_polynomialSphereLift_localSignTransport
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
