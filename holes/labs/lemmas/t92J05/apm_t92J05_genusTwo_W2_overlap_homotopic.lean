@@ -2396,7 +2396,48 @@ lemma apm_t92J05_genusTwo_W2_overlap_homotopic :
         ((ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).comp
           ((⟨fun z : Circle => z⁻¹, continuous_inv⟩ : C(Circle, Circle)).comp
             apm_t92J05_genusTwo_overlapAngle)) := by
-  sorry
+  left
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let D := ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel) ∩
+    (ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel))
+  let k : C(D, ConstructionTargets.PolygonSurfaceHomology.OverlapPiece P) :=
+    ⟨fun x => ⟨x.1, by
+      change x.1 ∈ ConstructionTargets.PolygonRadialOpenCover.overlapOpen P.Rel
+      rw [C.overlap_eq]
+      exact ⟨x.2.2, x.2.1⟩⟩, by fun_prop⟩
+  let j : C(ConstructionTargets.PolygonSurfaceHomology.OverlapPiece P,
+      ConstructionTargets.PolygonSurfaceHomology.OuterPiece P) :=
+    ⟨fun x => ⟨x.1, by
+      change x.1 ∈ ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel
+      have hx := x.2
+      change x.1 ∈ ConstructionTargets.PolygonRadialOpenCover.overlapOpen P.Rel at hx
+      rw [C.overlap_eq] at hx
+      exact hx.2⟩, by fun_prop⟩
+  let E := ConstructionTargets.PolygonSurfaceHomology.overlapHomotopyEquivCircle P
+  let G : C(ConstructionTargets.PolygonSurfaceHomology.OverlapPiece P,
+      ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit P.pair)) :=
+    (ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivWedge P).toFun.comp j
+  have hk : ContinuousMap.Homotopic k (E.invFun.comp (E.toFun.comp k)) := by
+    exact (E.left_inv.comp (ContinuousMap.Homotopic.refl k)).symm
+  have hmain := (ContinuousMap.Homotopic.refl G).comp hk
+  have hright :
+      G.comp (E.invFun.comp (E.toFun.comp k)) =
+        (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop P).comp
+          apm_t92J05_genusTwo_overlapAngle := by
+    apply ContinuousMap.ext
+    intro x
+    exact ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivWedge_radialOverlapCircle
+      P (apm_t92J05_genusTwo_overlapAngle x)
+  rw [hright] at hmain
+  simpa [P, C, D, k, j, G, E,
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv,
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv,
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundarySkeletonHomeomorph,
+    ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivWedge,
+    ConstructionTargets.PolygonSurfaceHomology.outerHomotopyEquivBoundary,
+    ConstructionTargets.PolygonSurfaceHomology.outerBoundaryHomeomorphSkeleton] using hmain
 -- END SEAT AREA
 
 /-- **Leaf W1 (wedge word, pure algebra on 8 explicit edges).** Under any free
