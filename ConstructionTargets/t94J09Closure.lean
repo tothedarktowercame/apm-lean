@@ -166,9 +166,63 @@ theorem n6AttachingBoundary_injective :
 theorem n6BoundaryKernel_eq_bot : BoundaryKernel n6PairingData = ⊥ :=
   LinearMap.ker_eq_bot.mpr n6AttachingBoundary_injective
 
+theorem n6OrbitCoordinates_map_boundaryRange :
+    Submodule.map n6OrbitCoordinates.toLinearMap
+        (LinearMap.range (attachingBoundary n6PairingData)) =
+      LinearMap.range n6BoundaryLinear := by
+  rw [← LinearMap.range_comp,
+    n6OrbitCoordinates_comp_attachingBoundary, LinearMap.range_neg]
+
+/-- A coordinate equivalence carrying one boundary range onto another
+descends to the corresponding quotient modules. -/
+noncomputable def quotientLinearEquivOfMapEq
+    {M N : Type*} [AddCommGroup M] [AddCommGroup N]
+    [Module ℤ M] [Module ℤ N]
+    (e : M ≃ₗ[ℤ] N) (p : Submodule ℤ M) (q : Submodule ℤ N)
+    (h : Submodule.map e.toLinearMap p = q) :
+    (M ⧸ p) ≃ₗ[ℤ] (N ⧸ q) := by
+  let f : (M ⧸ p) →ₗ[ℤ] (N ⧸ q) :=
+    p.mapQ q e.toLinearMap (by
+      intro x hx
+      change e x ∈ q
+      rw [← h]
+      exact ⟨x, hx, rfl⟩)
+  let g : (N ⧸ q) →ₗ[ℤ] (M ⧸ p) :=
+    q.mapQ p e.symm.toLinearMap (by
+      intro y hy
+      change e.symm y ∈ p
+      have hy' : y ∈ Submodule.map e.toLinearMap p := h.symm ▸ hy
+      rcases hy' with ⟨x, hx, hxy⟩
+      simpa [← hxy] using hx)
+  exact LinearEquiv.ofLinear f g
+    (by
+      apply LinearMap.ext
+      intro x
+      refine Quotient.inductionOn x ?_
+      intro x
+      change (Quotient.mk _ (e (e.symm x))) = Quotient.mk _ x
+      rw [e.apply_symm_apply])
+    (by
+      apply LinearMap.ext
+      intro y
+      refine Quotient.inductionOn y ?_
+      intro y
+      change (Quotient.mk _ (e.symm (e y))) = Quotient.mk _ y
+      rw [e.symm_apply_apply])
+
+/-- The actual polygon boundary cokernel in explicit Smith coordinates. -/
+noncomputable def n6BoundaryCokernelSmithEquiv :
+    BoundaryCokernel n6PairingData ≃ₗ[ℤ] N6Smith :=
+  quotientLinearEquivOfMapEq n6OrbitCoordinates _ _
+      n6OrbitCoordinates_map_boundaryRange ≪≫ₗ
+    (Submodule.quotEquivOfEq _ _ n6BoundaryLinear_range_eq_ker ≪≫ₗ
+      n6SmithCoordinate.quotKerEquivOfSurjective
+        n6SmithCoordinate_surjective)
+
 #print axioms n6PolygonHomology
 #print axioms n6AttachingBoundary_injective
 #print axioms n6BoundaryKernel_eq_bot
 #print axioms n6SmithCokernelIso
+#print axioms n6BoundaryCokernelSmithEquiv
 
 end ConstructionTargets.t94J09Closure
