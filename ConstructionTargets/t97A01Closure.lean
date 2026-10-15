@@ -1684,6 +1684,27 @@ theorem torusRP2_subdivisionRunPrefixBlock_trans
             (torusRP2_subdivisionRunPrefixBlock_adjacent S i j hij) rfl)⟧ := by
   exact (Path.Homotopic.Quotient.mk_trans _ _).symm
 
+/-- The terminal vertex of a cumulative-prefix run block is the subdivision
+vertex at the cumulative length through that run. -/
+theorem torusRP2_subdivisionRunPrefixBlockPoint_last
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) =
+      S.point ⟨pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1), by
+        rw [← pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i]
+        have h := pathTwoOpenSubdivisionRunPrefixBlock_le S i
+        omega⟩ := by
+  unfold pathTwoOpenSubdivisionRunPrefixBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  simp only [Fin.val_last]
+  exact pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1765,6 +1786,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat
 #print axioms torusRP2_subdivisionRunPrefixBlock_adjacent
 #print axioms torusRP2_subdivisionRunPrefixBlock_trans
+#print axioms torusRP2_subdivisionRunPrefixBlockPoint_last
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
