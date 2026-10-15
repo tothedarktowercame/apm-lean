@@ -88319,33 +88319,37 @@
    :program true,
    :other-consumers []}
   {:consumer :t92J06,
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Build vertex and interior evenly-covered charts and exact fibers; then Cayley tree and finite invariants.",
+    "Prove quotient rigidity on edge interiors and exact fibers; then vertex charts, Cayley tree, and finite invariants.",
     :outcome :stop,
-    :warnings ["preexisting lint" "Main retains 1 prior placeholder"],
+    :warnings
+    ["preexisting lint"
+     "Main retains 1 prior placeholder"
+     "unrelated review dir preserved"],
     :missing-theorems
-    [{:name "projection_edgePoint_eq_of_interior",
-      :type "interior base equality fixes label and coordinate",
+    [{:name "edgePoint_ne_vertex_of_interior",
+      :type
+      "lifted interior edge point differs from every lifted vertex",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["edgeProjection_eq_of_interior"],
+      :depends-on ["projection_edgePoint_eq_of_interior"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "local charts and exact fibers",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["projection_edgePoint_eq_of_interior"],
+      :depends-on ["edgePoint_ne_vertex_of_interior"],
       :area "graph-covering-realization"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked interior fiber label-coordinate separation.",
+    :reason "Banked vertex/interior separation for graph realization.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
@@ -88353,28 +88357,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 040fde936", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792017288491-12573-a15b666a",
-     :commands
-     ["git show/diff 040fde936; blob sha256; diff --check"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "lake env lean /dev/stdin (#print axioms)"
-      "placeholder scans; statement-registry.py check"],
-     :finding
-     "PASS: reviewer codex-7; 040fde936 (topo-6) is new beyond program-history and changes only scoped t92J06Closure.lean; fixture SHA-256 f79ad40569c1e6c22950ab6a669138e62699cc9f756c4d5e8bd214658654b9f8 matches. Exact blob and Main compile; changed file has 0 placeholders, Main retains its disclosed prior 1; standard axioms; registry 166/0. Projection equality of lifted interior edge points reduces definitionally to base edgeProjection equality, so the earlier separation theorem correctly fixes edge label and interval coordinate while leaving only the lift vertex free. New sorry-free supporting progress; remaining vertex/interior charts and exact fibers, then Cayley tree and finite invariants."},
-    :commit "040fde936",
+     {:cmd "git show --check 1cc1b2f6a", :exit 0}],
+    :diagnostic-history
+    [{:cmd "vertex-separation draft",
+      :exit 1,
+      :correction "selected conjunction field"}],
+    :commit "1cc1b2f6a",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "f79ad40569c1e6c22950ab6a669138e62699cc9f756c4d5e8bd214658654b9f8"},
+     "c39f1aace144d0de145a098440c9cfa24a8c94f15a193024b8d163d38970dddf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90083,7 +90079,8 @@
     :lemma-twoloopgraphcoverdata-projection
     :lemma-intervalcircle-injective-on-interior
     :lemma-edgeprojection-eq-of-interior
-    :lemma-projection-edgepoint-eq-of-interior],
+    :lemma-projection-edgepoint-eq-of-interior
+    :lemma-edgepoint-ne-vertex-of-interior],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -92339,4 +92336,23 @@
    :id :lemma-polygonboundaryintegerloop-subpath-apply,
    :kind :lemma,
    :depends-on [:lemma-integerloop-convexcombo-subdivisionvertex],
-   :other-consumers [:t94J09]}]}
+   :other-consumers [:t94J09]}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "edgePoint_ne_vertex_of_interior",
+    :type
+    "lifted interior edge point differs from every lifted vertex"},
+   :lemma
+   {:name "edgePoint_ne_vertex_of_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type
+    "lifted interior edge point differs from every lifted vertex",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-edgepoint-ne-vertex-of-interior,
+   :kind :lemma,
+   :depends-on [:lemma-projection-edgepoint-eq-of-interior],
+   :other-consumers []}]}
