@@ -5487,6 +5487,35 @@ def cutAlpha (L m : ℕ) : ℝ := 2 * Real.pi * m / L
 
 def cutPoint (L m : ℕ) : ℂ := Complex.exp ((cutAlpha L m : ℂ) * Complex.I)
 
+theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
+  unfold cutPoint
+  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
+
+theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
+    cutPoint L m ≠ cutPoint L m' := by
+  intro heq
+  have hL : 0 < L := by omega
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
+  have him := congrArg Complex.im hk
+  simp [cutPoint, cutAlpha] at him
+  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
+  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
+    field_simp [ne_of_gt hLreal] at him
+    nlinarith [Real.pi_pos]
+  have hkneg : (k : ℝ) < 0 := by
+    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
+    nlinarith
+  have hk_le : k ≤ -1 := by
+    have hkneg' : k < 0 := by exact_mod_cast hkneg
+    omega
+  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
+    nlinarith
+  have hgap : (m' : ℝ) - m < L := by
+    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
+    linarith
+  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
+  nlinarith
+
 /-- `cutCross w z = Im (conj w · z)`, positive when `z` is to the left of `w`. -/
 def cutCross (w z : ℂ) : ℝ := (starRingEnd ℂ w * z).im
 
@@ -5692,7 +5721,57 @@ theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ 
 lemma cutPiece_frontier_aux_line {P Q z : ℂ} (hPQ : P ≠ Q)
     (hz : cutCross (Q - P) (z - P) = 0) :
     ∃ t : ℝ, z = (1 - t) • P + t • Q := by
-  sorry
+  have hw : Q - P ≠ 0 := sub_ne_zero.mpr hPQ.symm
+  have hcross : (Q - P).re * (z - P).im -
+      (Q - P).im * (z - P).re = 0 := by
+    dsimp [cutCross] at hz
+    change (Q.re - P.re) * (z.im - P.im) -
+      (Q.im - P.im) * (z.re - P.re) = 0
+    linarith [hz]
+  by_cases hre : (Q - P).re = 0
+  · have him : (Q - P).im ≠ 0 := by
+      intro h
+      apply hw
+      apply Complex.ext <;> simp [hre, h]
+    have him' : Q.im - P.im ≠ 0 := by simpa using him
+    let t : ℝ := (z - P).im / (Q - P).im
+    have hvre : (z - P).re = 0 := by
+      rw [hre, zero_mul, zero_sub] at hcross
+      exact (mul_eq_zero.mp (neg_eq_zero.mp hcross)).resolve_left him
+    refine ⟨t, ?_⟩
+    apply Complex.ext
+    · simp only [Complex.add_re, Complex.smul_re, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_re]
+      dsimp [t]
+      simp only [Complex.sub_re] at hre hvre
+      have hQP : Q.re = P.re := sub_eq_zero.mp hre
+      have hzP : z.re = P.re := sub_eq_zero.mp hvre
+      rw [hQP, hzP]
+      ring
+    · simp only [Complex.add_im, Complex.smul_im, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_im]
+      dsimp [t]
+      field_simp [him']
+      ring
+  · let t : ℝ := (z - P).re / (Q - P).re
+    have hre' : Q.re - P.re ≠ 0 := by simpa using hre
+    have hvim : (z - P).im = t * (Q - P).im := by
+      dsimp [t]
+      field_simp [hre']
+      change (Q.re - P.re) * (z.im - P.im) -
+        (Q.im - P.im) * (z.re - P.re) = 0 at hcross
+      linear_combination hcross
+    refine ⟨t, ?_⟩
+    apply Complex.ext
+    · simp only [Complex.add_re, Complex.smul_re, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_re]
+      dsimp [t]
+      field_simp [hre']
+      ring
+    · simp only [Complex.add_im, Complex.smul_im, smul_eq_mul, sub_mul, one_mul,
+        Complex.sub_im]
+      dsimp [t] at hvim ⊢
+      nlinarith [hvim]
 
 lemma cutPiece_frontier_aux_chord {P Q z : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1)
     (hPQ : P ≠ Q)
@@ -5712,7 +5791,89 @@ lemma cutPiece_frontier_aux_closed (P Q : ℂ) : IsClosed (cutPiece P Q) := by
 lemma cutPiece_frontier_aux_interior {P Q : ℂ} (hPQ : P ≠ Q) :
     interior (cutPiece P Q) =
       {z | ‖z‖ < 1 ∧ cutCross (Q - P) (z - P) < 0} := by
-  sorry
+  let U : Set ℂ := {z | ‖z‖ < 1 ∧ cutCross (Q - P) (z - P) < 0}
+  have hUopen : IsOpen U := by
+    exact (isOpen_lt continuous_norm continuous_const).inter
+      (isOpen_lt
+        (Complex.continuous_im.comp
+          (continuous_const.mul (continuous_id.sub continuous_const)))
+        continuous_const)
+  apply Set.Subset.antisymm
+  · intro z hz
+    have hzpiece : z ∈ cutPiece P Q := interior_subset hz
+    have hznorm : ‖z‖ ≤ 1 := hzpiece.1
+    have hzcross : cutCross (Q - P) (z - P) ≤ 0 := hzpiece.2
+    have hznhds : cutPiece P Q ∈ nhds z := mem_interior_iff_mem_nhds.mp hz
+    rcases Metric.mem_nhds_iff.mp hznhds with ⟨r, hr, hball⟩
+    have hnormlt : ‖z‖ < 1 := by
+      apply lt_of_le_of_ne hznorm
+      intro he
+      have hnormeq : ‖z‖ = 1 := he
+      let e : ℝ := r / 2
+      let y : ℂ := (1 + e : ℂ) * z
+      have he : 0 < e := div_pos hr (by norm_num)
+      have hyball : y ∈ Metric.ball z r := by
+        rw [Metric.mem_ball, dist_eq_norm]
+        have : y - z = (e : ℂ) * z := by
+          dsimp [y]
+          ring
+        rw [this, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos he,
+          hnormeq, mul_one]
+        dsimp [e]
+        linarith
+      have hynorm := (hball hyball).1
+      have hynorm_eq : ‖y‖ = 1 + e := by
+        dsimp [y]
+        rw [norm_mul, show (1 : ℂ) + (e : ℂ) = ((1 + e : ℝ) : ℂ) by norm_num,
+          Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hnormeq, mul_one]
+      linarith
+    have hcrosslt : cutCross (Q - P) (z - P) < 0 := by
+      apply lt_of_le_of_ne hzcross
+      intro he
+      have hcrosszero : cutCross (Q - P) (z - P) = 0 := he
+      let w : ℂ := Q - P
+      let d : ℝ := ‖w‖
+      have hd : 0 < d := by
+        dsimp [d, w]
+        exact norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+      let e : ℝ := r / (2 * d)
+      let y : ℂ := z + (e : ℂ) * (Complex.I * w)
+      have he : 0 < e := div_pos hr (mul_pos (by norm_num) hd)
+      have hed : e * d = r / 2 := by
+        dsimp [e]
+        field_simp [ne_of_gt hd]
+      have hyball : y ∈ Metric.ball z r := by
+        rw [Metric.mem_ball, dist_eq_norm]
+        have : y - z = (e : ℂ) * (Complex.I * w) := by
+          dsimp [y]
+          ring
+        rw [this, norm_mul, norm_mul, Complex.norm_I, one_mul,
+          Complex.norm_real, Real.norm_eq_abs, abs_of_pos he]
+        rw [show ‖w‖ = d by rfl, hed]
+        linarith
+      have hycross := (hball hyball).2
+      have hcrossdir : cutCross w (Complex.I * w) = d ^ 2 := by
+        dsimp [cutCross, d]
+        rw [Complex.sq_norm]
+        simp [Complex.normSq_apply]
+      have hycross_eq : cutCross (Q - P) (y - P) = e * d ^ 2 := by
+        change cutCross w (y - P) = e * d ^ 2
+        rw [show y - P = (z - P) + (e : ℂ) * (Complex.I * w) by
+          dsimp [y]
+          ring]
+        rw [show cutCross w ((z - P) + (e : ℂ) * (Complex.I * w)) =
+            cutCross w (z - P) + e * cutCross w (Complex.I * w) by
+          simp [cutCross, Complex.mul_im]
+          ring]
+        rw [hcrosszero, hcrossdir, zero_add]
+      rw [hycross_eq] at hycross
+      exact (not_lt_of_ge hycross) (mul_pos he (sq_pos_of_pos hd))
+    exact ⟨hnormlt, hcrosslt⟩
+  · intro z hz
+    apply mem_interior_iff_mem_nhds.mpr
+    apply Filter.mem_of_superset (hUopen.mem_nhds hz)
+    intro y hy
+    exact ⟨le_of_lt hy.1, le_of_lt hy.2⟩
 
 theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     frontier (cutPiece P Q) =
@@ -5734,10 +5895,69 @@ theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ
 
 /-- The two pieces cover the disk; for `P ≠ Q` the interior of one misses the other
 (for `P = Q` the piece is the whole disk: blueprint-2, 10-14). -/
+lemma cutPiece_union_disjoint_aux_cross (P Q z : ℂ) :
+    cutCross (P - Q) (z - Q) = -cutCross (Q - P) (z - P) := by
+  simp [cutCross, Complex.mul_im]
+  ring
+
+lemma cutPiece_union_disjoint_aux_interior (P Q z : ℂ) (hPQ : P ≠ Q)
+    (hz : z ∈ interior (cutPiece P Q)) :
+    cutCross (Q - P) (z - P) < 0 := by
+  have hn : 0 < ‖Q - P‖ := norm_pos_iff.mpr (sub_ne_zero.mpr hPQ.symm)
+  rcases Metric.mem_nhds_iff.mp (mem_interior_iff_mem_nhds.mp hz) with
+    ⟨ε, hε, hball⟩
+  let t : ℝ := ε / (2 * ‖Q - P‖)
+  let y : ℂ := z + (t : ℂ) * (Complex.I * (Q - P))
+  have ht : 0 < t := div_pos hε (mul_pos (by norm_num) hn)
+  have hdist : dist y z < ε := by
+    calc
+      dist y z = t * ‖Q - P‖ := by
+        rw [dist_eq_norm,
+          show y - z = (t : ℂ) * (Complex.I * (Q - P)) by simp [y]]
+        simp [norm_mul, abs_of_pos ht]
+      _ = ε / 2 := by
+        dsimp [t]
+        field_simp
+      _ < ε := by linarith
+  have hy := hball (Metric.mem_ball.mpr hdist)
+  have hycross : cutCross (Q - P) (y - P) ≤ 0 := hy.2
+  have hformula : cutCross (Q - P) (y - P) =
+      cutCross (Q - P) (z - P) + t * ‖Q - P‖ ^ 2 := by
+    dsimp [y, cutCross]
+    rw [Complex.sq_norm]
+    simp [Complex.mul_im, Complex.normSq_apply]
+    ring
+  rw [hformula] at hycross
+  have hsquare : 0 < ‖Q - P‖ ^ 2 := sq_pos_of_pos hn
+  nlinarith
+
 theorem cutPiece_union_disjoint (P Q : ℂ) (hPQ : P ≠ Q) :
     cutPiece P Q ∪ cutPiece Q P = Metric.closedBall 0 1 ∧
       interior (cutPiece P Q) ∩ cutPiece Q P = ∅ := by
-  sorry
+  constructor
+  · ext z
+    simp only [Set.mem_union, cutPiece, Set.mem_setOf_eq, Metric.mem_closedBall,
+      dist_zero_right]
+    have hc := cutPiece_union_disjoint_aux_cross P Q z
+    constructor
+    · rintro (⟨hz, -⟩ | ⟨hz, -⟩) <;> exact hz
+    · intro hz
+      by_cases h : cutCross (Q - P) (z - P) ≤ 0
+      · exact Or.inl ⟨hz, h⟩
+      · exact Or.inr ⟨hz, by rw [hc]; linarith⟩
+  · ext z
+    rw [Set.mem_empty_iff_false]
+    constructor
+    · intro hz
+      rcases hz with ⟨hz, hpiece⟩
+      have hneg := cutPiece_union_disjoint_aux_interior P Q z hPQ hz
+      rw [cutPiece] at hpiece
+      change ‖z‖ ≤ 1 ∧ cutCross (P - Q) (z - Q) ≤ 0 at hpiece
+      have hc := cutPiece_union_disjoint_aux_cross P Q z
+      rw [hc] at hpiece
+      linarith [hpiece.2]
+    · intro h
+      contradiction
 
 theorem cutCross_exp (α γ φ : ℝ) :
     cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
@@ -6149,9 +6369,103 @@ theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutNewA L p q) := by
   sorry
 
+lemma cutNewB_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileNewB L p q) := by
+  have hL : 0 < L := by omega
+  unfold cutProfileNewB
+  apply Continuous.if_le (by unfold cutSeam; fun_prop) (by
+    unfold cutSB
+    apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+    intro x hx
+    dsimp at hx ⊢
+    rw [hx]
+    have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+      unfold cutAlpha
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      apply ne_of_gt
+      exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+        (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+    rw [show (cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+        (cutAlpha L q - cutAlpha L p) = 0 by
+      rw [show cutAlpha L p + 2 * Real.pi - cutAlpha L p - 2 * Real.pi = 0 by ring,
+        zero_div]]
+    simp only [zero_mul, add_zero]
+    rw [show (((cutAlpha L p + 2 * Real.pi : ℝ) : ℂ) * Complex.I) =
+        2 * Real.pi * Complex.I + (cutAlpha L p : ℂ) * Complex.I by
+      push_cast; ring]
+    rw [Complex.exp_add, Complex.exp_two_pi_mul_I, one_mul]) continuous_id continuous_const
+  · intro x hx
+    dsimp at hx ⊢
+    have hbranch : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+      simp only [cutAlpha]
+      have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+      have hq1 : ((q + 1 : ℕ) : ℝ) ≤ p + L := by exact_mod_cast (show q + 1 ≤ p + L by omega)
+      field_simp
+      nlinarith [Real.pi_pos, hq1]
+    rw [hx]
+    rw [if_pos hbranch]
+    have hs : (cutAlpha L (q + 1) - cutAlpha L q) * L / (2 * Real.pi) = 1 := by
+      have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      simp only [cutAlpha]
+      push_cast
+      field_simp
+      ring
+    rw [hs]
+    simp [cutSeam, cutPoint]
 theorem cutNewB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutNewB L p q) := by
-  sorry
+  unfold cutNewB
+  have hL : 0 < L := by omega
+  have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+  have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L q) (cutProfileNewB L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold cutProfileNewB
+      rw [if_pos (by
+        unfold cutAlpha
+        gcongr
+        omega)]
+      rw [if_neg (by
+        rw [not_le]
+        have heq : cutAlpha L q + 2 * Real.pi = cutAlpha L (q + L) := by
+          unfold cutAlpha
+          push_cast
+          field_simp
+        rw [heq]
+        unfold cutAlpha
+        gcongr
+        omega)]
+      rw [if_neg (by
+        rw [not_le]
+        apply (add_lt_add_iff_right (2 * Real.pi)).2
+        unfold cutAlpha
+        gcongr)]
+      have hs0 : (cutAlpha L q - cutAlpha L q) * L / (2 * Real.pi) = 0 := by ring
+      have hden : cutAlpha L q - cutAlpha L p ≠ 0 := by
+        unfold cutAlpha
+        have hLr : 0 < (L : ℝ) := by exact_mod_cast hL
+        apply ne_of_gt
+        exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hLr).2
+          (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+      have hs1 : (cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi) /
+          (cutAlpha L q - cutAlpha L p) = 1 := by
+        rw [show cutAlpha L q + 2 * Real.pi - cutAlpha L p - 2 * Real.pi =
+          cutAlpha L q - cutAlpha L p by ring]
+        exact div_self hden
+      have hcut : cutSB L p q (cutAlpha L q + 2 * Real.pi) = 1 := by
+        exact hs1
+      rw [hs0, hcut]
+      simp [cutSeam, cutPoint, cutSB]
+      congr 2
+      push_cast
+      simp only [cutAlpha]
+      field_simp
+      norm_num [Nat.cast_add]
+      ring
+    · exact (cutNewB_continuous_aux_profile hpq hqL).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
 
 lemma cutOldA_injective_aux_exp {a x y : ℝ}
     (hx : x ∈ Ico a (a + 2 * Real.pi)) (hy : y ∈ Ico a (a + 2 * Real.pi))
@@ -6435,6 +6749,81 @@ theorem cutOldB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     Set.range (cutOldB L p q) = frontier (cutPiece (cutPoint L q) (cutPoint L p)) := by
   sorry
 
+lemma cutNewA_range_aux_cross_iff {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hcross : ∀ α γ φ : ℝ,
+      cutCross (Complex.exp ((γ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I))
+          (Complex.exp ((φ : ℂ) * Complex.I) - Complex.exp ((α : ℂ) * Complex.I)) =
+        4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2))
+    {φ : ℝ} (hφ : φ ∈ Set.Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi)) :
+    cutCross (cutPoint L (q + 1) - cutPoint L (p + 1))
+        (Complex.exp ((φ : ℂ) * Complex.I) - cutPoint L (p + 1)) ≤ 0 ↔
+      cutAlpha L (p + 1) ≤ φ ∧ φ ≤ cutAlpha L (q + 1) := by
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hstep : cutAlpha L (p + 1) = cutAlpha L p + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+    ring
+  have hstepq : cutAlpha L (q + 1) = cutAlpha L q + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+    ring
+  have haγ : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    have : (p + 1 : ℕ) < q + 1 := by omega
+    exact mul_lt_mul_of_pos_left (by exact_mod_cast this)
+      (mul_pos (by norm_num) Real.pi_pos)
+  have hγtop : cutAlpha L (q + 1) < cutAlpha L p + 2 * Real.pi := by
+    rw [hstepq]
+    unfold cutAlpha
+    have hq1 : (q + 1 : ℝ) ≤ L := by exact_mod_cast (by omega : q + 1 ≤ L)
+    have hp0 : 0 ≤ (p : ℝ) := by positivity
+    have hpi := Real.pi_pos
+    field_simp
+    nlinarith
+  have hbasea : cutAlpha L p ≤ cutAlpha L (p + 1) := by
+    rw [hstep]
+    positivity
+  rw [show cutPoint L (q + 1) =
+        Complex.exp ((cutAlpha L (q + 1) : ℂ) * Complex.I) by rfl,
+      show cutPoint L (p + 1) =
+        Complex.exp ((cutAlpha L (p + 1) : ℂ) * Complex.I) by rfl,
+      hcross]
+  have hs_mid : 0 < Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) := by
+    apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith
+  constructor
+  · intro hc
+    constructor
+    · by_contra hna
+      have hs_left : Real.sin ((φ - cutAlpha L (q + 1)) / 2) < 0 := by
+        apply Real.sin_neg_of_neg_of_neg_pi_lt <;> nlinarith [hφ.1, hγtop]
+      have hs_right : Real.sin ((φ - cutAlpha L (p + 1)) / 2) < 0 := by
+        apply Real.sin_neg_of_neg_of_neg_pi_lt <;> nlinarith [hφ.1, hγtop]
+      have : 0 < 4 * Real.sin ((φ - cutAlpha L (q + 1)) / 2) *
+          Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) *
+          Real.sin ((φ - cutAlpha L (p + 1)) / 2) := by positivity
+      linarith
+    · by_contra hnγ
+      have hs_left : 0 < Real.sin ((φ - cutAlpha L (q + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hφ.2, hγtop]
+      have hs_right : 0 < Real.sin ((φ - cutAlpha L (p + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hφ.2, hγtop]
+      have : 0 < 4 * Real.sin ((φ - cutAlpha L (q + 1)) / 2) *
+          Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) *
+          Real.sin ((φ - cutAlpha L (p + 1)) / 2) := by positivity
+      linarith
+  · rintro ⟨ha, hγ⟩
+    have hs_left : Real.sin ((φ - cutAlpha L (q + 1)) / 2) ≤ 0 :=
+      Real.sin_nonpos_of_nonpos_of_neg_pi_le (by linarith) (by nlinarith [hφ.1, hγtop])
+    have hs_right : 0 ≤ Real.sin ((φ - cutAlpha L (p + 1)) / 2) :=
+      Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by nlinarith [hφ.2, hγtop])
+    exact mul_nonpos_of_nonpos_of_nonneg
+      (mul_nonpos_of_nonpos_of_nonneg
+        (mul_nonpos_of_nonneg_of_nonpos (by positivity) hs_left) hs_mid.le) hs_right
+
 -- BEGIN SEAT AREA
 theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) =
@@ -6524,35 +6913,6 @@ theorem cut_reverse_fibre {Label : Type*} [DecidableEq Label]
     (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
   sorry
-
-theorem cutPoint_norm (L m : ℕ) : ‖cutPoint L m‖ = 1 := by
-  unfold cutPoint
-  exact Complex.norm_exp_ofReal_mul_I (cutAlpha L m)
-
-theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
-    cutPoint L m ≠ cutPoint L m' := by
-  intro heq
-  have hL : 0 < L := by omega
-  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp heq
-  have him := congrArg Complex.im hk
-  simp [cutPoint, cutAlpha] at him
-  have hLreal : (0 : ℝ) < L := by exact_mod_cast hL
-  have hratio : (m : ℝ) = (m' : ℝ) + (k : ℝ) * L := by
-    field_simp [ne_of_gt hLreal] at him
-    nlinarith [Real.pi_pos]
-  have hkneg : (k : ℝ) < 0 := by
-    have hmreal : (m : ℝ) < m' := by exact_mod_cast h
-    nlinarith
-  have hk_le : k ≤ -1 := by
-    have hkneg' : k < 0 := by exact_mod_cast hkneg
-    omega
-  have hdiff : (m' : ℝ) - m = (-(k : ℝ)) * L := by
-    nlinarith
-  have hgap : (m' : ℝ) - m < L := by
-    have hh : (m' : ℝ) < m + L := by exact_mod_cast h'
-    linarith
-  have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
-  nlinarith
 
 /-- From four piece charts to the two maps `Fin 2 × Disk → Disk` (index `0` = `A`,
 `1` = `B`).  A boundary value of a chart comes from the parameter circle, because
