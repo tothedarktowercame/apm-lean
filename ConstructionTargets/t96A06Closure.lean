@@ -1207,6 +1207,55 @@ theorem polynomialSphereRegularPoint_fiber_ncard :
   t96A06_polynomialSphereLift_regular_fiber_ncard
     polynomialSphereRegularPoint_isRegular
 
+/-- All concrete inputs needed to transport the positive local orientation
+from the selected preimage to the other three pair-sign translates. -/
+structure PolynomialSphereLiftLocalSignTransportData : Prop where
+  baseDerivative : PolynomialSphereLiftRegularPointTangentDerivativeData
+  fiberCardinality :
+    (polynomialSphereLift ⁻¹'
+      {polynomialSphereLift polynomialSphereRegularPoint}).ncard = 4
+  firstPreservesLift :
+    polynomialSphereLift (flipFirstPairSphere polynomialSphereRegularPoint) =
+      polynomialSphereLift polynomialSphereRegularPoint
+  secondPreservesLift :
+    polynomialSphereLift (flipSecondPairSphere polynomialSphereRegularPoint) =
+      polynomialSphereLift polynomialSphereRegularPoint
+  bothPreserveLift :
+    polynomialSphereLift
+        ((flipFirstPairSphere.comp flipSecondPairSphere) polynomialSphereRegularPoint) =
+      polynomialSphereLift polynomialSphereRegularPoint
+  firstPreservesOrientation :
+    HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3 = 𝟙 _
+  secondPreservesOrientation :
+    HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3 = 𝟙 _
+  bothPreserveOrientation :
+    HomologicalComplex.homologyMap
+      (CoefficientH0.singularPostcomposition ℚ
+        (flipFirstPairSphere.comp flipSecondPairSphere)) 3 = 𝟙 _
+
+theorem t96A06_polynomialSphereLift_localSignTransport :
+    PolynomialSphereLiftLocalSignTransportData := by
+  refine ⟨polynomialSphereLift_regularPoint_tangentDerivative,
+    polynomialSphereRegularPoint_fiber_ncard, ?_, ?_, ?_,
+    flipFirstPairSphere_rational_H3, flipSecondPairSphere_rational_H3,
+    flipBothPairsSphere_rational_H3⟩
+  · change rp3RadialToSphere
+      (polynomialSphereVector (flipFirstPairSphere polynomialSphereRegularPoint)) = _
+    rw [polynomialSphereVector_flipFirstPairSphere]
+    rfl
+  · change rp3RadialToSphere
+      (polynomialSphereVector (flipSecondPairSphere polynomialSphereRegularPoint)) = _
+    rw [polynomialSphereVector_flipSecondPairSphere]
+    rfl
+  · change rp3RadialToSphere
+      (polynomialSphereVector
+        (flipFirstPairSphere (flipSecondPairSphere polynomialSphereRegularPoint))) = _
+    rw [polynomialSphereVector_flipFirstPairSphere,
+      polynomialSphereVector_flipSecondPairSphere]
+    rfl
+
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
 theorem t96A06_rp3_sphere_twoSheeted :
@@ -1783,6 +1832,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms pairSignOrbit_four_distinct
 #print axioms t96A06_polynomialSphereLift_regular_fiber_ncard
 #print axioms polynomialSphereRegularPoint_fiber_ncard
+#print axioms t96A06_polynomialSphereLift_localSignTransport
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
