@@ -2774,7 +2774,50 @@ Route: `Circle.exp` is injective on `[0, 2π)` / `Circle.exp_eq_one`
 -- BEGIN SEAT AREA
 lemma apm_t98a03_zeta_pow_injective :
     Function.Injective (fun k : Fin 3 => apm_t98a03_zeta ^ (k : ℕ)) := by
-  sorry
+  intro i j hij
+  fin_cases i <;> fin_cases j <;> norm_num at hij ⊢
+  · have h := Circle.exp_eq_one.mp (by
+      simpa [apm_t98a03_zeta] using hij.symm)
+    obtain ⟨n, hn⟩ := h
+    have hn' : (3 : ℝ) * n = 1 := by
+      nlinarith [Real.pi_pos]
+    have hn'' : (3 : ℤ) * n = 1 := by exact_mod_cast hn'
+    omega
+  · have h := Circle.exp_eq_one.mp (by
+      simpa [apm_t98a03_zeta, ← Circle.exp_nsmul] using hij.symm)
+    obtain ⟨n, hn⟩ := h
+    have hn' : (3 : ℝ) * n = 2 := by
+      nlinarith [Real.pi_pos]
+    have hn'' : (3 : ℤ) * n = 2 := by exact_mod_cast hn'
+    omega
+  · have h := Circle.exp_eq_one.mp (by
+      simpa [apm_t98a03_zeta] using hij)
+    obtain ⟨n, hn⟩ := h
+    have hn' : (3 : ℝ) * n = 1 := by
+      nlinarith [Real.pi_pos]
+    have hn'' : (3 : ℤ) * n = 1 := by exact_mod_cast hn'
+    omega
+  · rw [apm_t98a03_zeta, ← Circle.exp_nsmul, nsmul_eq_mul,
+      Circle.exp_eq_exp] at hij
+    obtain ⟨n, hn⟩ := hij
+    have hn' : (3 : ℝ) * n = -1 := by
+      nlinarith [Real.pi_pos]
+    have hn'' : (3 : ℤ) * n = -1 := by exact_mod_cast hn'
+    omega
+  · have h := Circle.exp_eq_one.mp (by
+      simpa [apm_t98a03_zeta, ← Circle.exp_nsmul] using hij)
+    obtain ⟨n, hn⟩ := h
+    have hn' : (3 : ℝ) * n = 2 := by
+      nlinarith [Real.pi_pos]
+    have hn'' : (3 : ℤ) * n = 2 := by exact_mod_cast hn'
+    omega
+  · rw [apm_t98a03_zeta, ← Circle.exp_nsmul, nsmul_eq_mul,
+      Circle.exp_eq_exp] at hij
+    obtain ⟨n, hn⟩ := hij
+    have hn' : (3 : ℝ) * n = 1 := by
+      nlinarith [Real.pi_pos]
+    have hn'' : (3 : ℤ) * n = 1 := by exact_mod_cast hn'
+    omega
 -- END SEAT AREA
 
 /-- Seat: the cube roots of `a = c³` in the circle are `c, ζc, ζ²c`.
