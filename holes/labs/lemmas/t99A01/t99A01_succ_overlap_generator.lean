@@ -1940,6 +1940,53 @@ theorem t99A01_succ_overlap_generator_aux_pball_circle :
   · intro w
     rfl
 
+noncomputable def t99A01_succ_overlap_generator_aux_half {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    C(Circle, ↥(APMT99A01.succCircleSide degree ∩
+      APMT99A01.succDiskSide degree)) := by
+  let z : Circle → APMT99A01.Disk := fun w =>
+    ⟨(w : ℂ) / 2, by
+      rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+      norm_num⟩
+  refine ⟨fun w => ⟨Quotient.mk _ (Sum.inr (Fin.last r, z w)), ?_, ?_⟩, ?_⟩
+  · intro he
+    have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (Fin.last r,
+          (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk)))
+        (Sum.inr (Fin.last r, z w)) := Quotient.exact he.symm
+    have hx := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+    have hp := Sum.inr.inj hx
+    have hz : (w : ℂ) / 2 = (0 : ℂ) :=
+      congrArg (fun p : Fin (r + 1) × APMT99A01.Disk => (p.2 : ℂ)) hp
+    have hn := congrArg norm hz
+    simp [norm_div, Circle.norm_coe] at hn
+  · refine ⟨z w, ?_, rfl⟩
+    dsimp [z]
+    rw [norm_div, Circle.norm_coe]
+    norm_num
+  · apply Continuous.subtype_mk
+    exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (continuous_const.prodMk
+        (Continuous.subtype_mk (continuous_subtype_val.div_const 2) _)))
+
+lemma t99A01_succ_overlap_generator_aux_half_basepoint {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    t99A01_succ_overlap_generator_aux_half degree 1 =
+      t99A01_piOne_attach_succ_aux_vankampen_aux_point degree := by
+  apply Subtype.ext
+  rfl
+
+lemma t99A01_succ_overlap_generator_aux_half_rho {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (w : Circle) :
+    ((t99A01_succRho degree).comp
+      (apm_t92J05_twoOpen_overlapToLeft
+        (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree)))
+      (t99A01_succ_overlap_generator_aux_half degree w) =
+        Quotient.mk _ (Sum.inl (w ^ degree (Fin.last r))) := by
+  dsimp [t99A01_succ_overlap_generator_aux_half,
+    apm_t92J05_twoOpen_overlapToLeft, t99A01_succRho]
+  simpa using t99A01_piOne_attach_succ_retract_aux_raw_half degree w
+
 -- BEGIN SEAT AREA
 lemma t99A01_succ_overlap_generator {r : ℕ} (degree : Fin (r + 1) → ℕ) :
     ∃ (γ : FundamentalGroup ↥((APMT99A01.succCircleSide degree) ∩ (APMT99A01.succDiskSide degree)) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree))
