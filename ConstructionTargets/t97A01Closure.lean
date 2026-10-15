@@ -340,6 +340,10 @@ noncomputable def torusRP2SkeletonBase : torusRP2PairingData.skeleton :=
       orbitWedgeBase torusRP2PairingData := by
   exact torusRP2PairingData.skeletonHomeomorphWedge.apply_symm_apply _
 
+@[simp] theorem torusRP2SkeletonHomeomorphWedge_symm_base :
+    torusRP2PairingData.skeletonHomeomorphWedge.symm
+        (orbitWedgeBase torusRP2PairingData) = torusRP2SkeletonBase := rfl
+
 /-- Based fundamental groups of the literal polygon skeleton and its
 orbit-indexed circle wedge agree. -/
 noncomputable def torusRP2SkeletonFundamentalGroupEquivWedge :
@@ -819,6 +823,16 @@ theorem torusRP2DiskBoundaryPath_map_quotient_eq_one :
   rw [hdisk]
   rfl
 
+theorem torusRP2DiskBoundaryBase_eq_skeletonBase :
+    torusRP2PairingData.quotientMap (circleToPolygonDisk (1 : Circle)) =
+      torusRP2SkeletonToPairingSpace torusRP2SkeletonBase := by
+  have hs : polygonBoundarySkeletonLoop torusRP2PairingData 1 =
+      torusRP2SkeletonBase := by
+    apply torusRP2PairingData.skeletonHomeomorphWedge.injective
+    rw [torusRP2SkeletonHomeomorphWedge_base]
+    exact polygonBoundaryWedgeLoop_one torusRP2PairingData
+  exact congrArg Subtype.val hs
+
 /-- Choose the basis change forced by the (globally constant) orientation of
 the normalized circle generator. -/
 noncomputable def torusRP2BoundaryBasisEquiv :
@@ -905,6 +919,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2SkeletonFinFreeGroupMap_negativeBoundary
 #print axioms torusRP2AttachingWord
 #print axioms torusRP2DiskBoundaryPath_map_quotient_eq_one
+#print axioms torusRP2DiskBoundaryBase_eq_skeletonBase
 #print axioms torusRP2BoundaryFreeGroupMap_surjective
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
