@@ -1411,6 +1411,32 @@ theorem polynomialSphereLift_regularValueFormula_iff_fundamentalClass :
           t96A06_sphere3_rational_fundamentalClass := by
   exact t96A06_sphere3_endomorphism_eq_smul_id_iff _ _
 
+/-- Exact geometric payload of regular-value localization.  The image of the
+global class decomposes over the four fiber points, and every transported
+local contribution is the positive normalized class. -/
+structure PolynomialSphereLiftFundamentalClassLocalizationData where
+  localContribution : Fin 4 →
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3))
+  image_eq_sum :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+        t96A06_sphere3_rational_fundamentalClass =
+      ∑ i, localContribution i
+  localPositive : ∀ i,
+    localContribution i = t96A06_sphere3_rational_fundamentalClass
+
+/-- The geometric decomposition and the four positive local identifications
+assemble the full regular-value formula. -/
+theorem polynomialSphereLift_regularValueFormula_of_localizationData
+    (h : PolynomialSphereLiftFundamentalClassLocalizationData) :
+    PolynomialSphereLiftRegularValueFormula := by
+  rw [polynomialSphereLift_regularValueFormula_iff_fundamentalClass,
+    h.image_eq_sum]
+  simp_rw [h.localPositive]
+  norm_num [Fin.sum_univ_four]
+  exact (Nat.cast_smul_eq_nsmul ℚ 4
+    t96A06_sphere3_rational_fundamentalClass).symm
+
 /-- The antipodal deck transformation acts trivially on rational top
 homology of the concrete three-sphere.  This is the odd-dimensional sign in
 the sphere antipodal formula, specialized to the cover of `RP3`. -/
@@ -1904,6 +1930,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_rational_H3Iso
 #print axioms t96A06_sphere3_endomorphism_eq_smul_id_iff
 #print axioms polynomialSphereLift_regularValueFormula_iff_fundamentalClass
+#print axioms polynomialSphereLift_regularValueFormula_of_localizationData
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
