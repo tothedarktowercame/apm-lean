@@ -1069,7 +1069,83 @@ theorem t99A01_sigma_hequiv (r : ℕ) {X Y : Type} [TopologicalSpace X] [Topolog
     (e : ContinuousMap.HomotopyEquiv X Y) :
     ∃ E : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, X) (Σ _ : Fin r, Y),
       ∀ (i : Fin r) (y : Y), E.invFun ⟨i, y⟩ = ⟨i, e.invFun y⟩ := by
-  sorry
+  let F : C((Σ _ : Fin r, X), (Σ _ : Fin r, Y)) :=
+    ⟨Sigma.map id (fun _ => e.toFun),
+      Continuous.sigma_map (fun _ => e.toFun.continuous)⟩
+  let G : C((Σ _ : Fin r, Y), (Σ _ : Fin r, X)) :=
+    ⟨Sigma.map id (fun _ => e.invFun),
+      Continuous.sigma_map (fun _ => e.invFun.continuous)⟩
+  obtain ⟨hleft⟩ := e.left_inv
+  obtain ⟨hright⟩ := e.right_inv
+  let Hleft : ContinuousMap.Homotopy (G.comp F) (ContinuousMap.id _) := {
+    toFun := fun tx => ⟨tx.2.1, hleft (tx.1, tx.2.2)⟩
+    continuous_toFun := by
+      rw [continuous_iff_continuousAt]
+      rintro ⟨t, ⟨i, x⟩⟩
+      have hc : Continuous (fun tx : unitInterval × (Σ _ : Fin r, X) =>
+          (⟨i, hleft (tx.1, tx.2.2)⟩ : Σ _ : Fin r, X)) :=
+        continuous_sigmaMk.comp
+          (hleft.continuous.comp (continuous_fst.prodMk (by
+            exact (continuous_sigma fun _ => continuous_id).comp continuous_snd)))
+      apply hc.continuousAt.congr_of_eventuallyEq
+      have hsnd : Continuous (fun p : unitInterval × Sigma (fun _ : Fin r => X) => p.2) :=
+        continuous_snd
+      filter_upwards [((@isOpen_range_sigmaMk (Fin r) (fun _ => X) _ i).preimage
+        hsnd).mem_nhds ⟨x, rfl⟩] with tx htx
+      rcases tx with ⟨t', ⟨j, z⟩⟩
+      have hji : j = i := by
+        obtain ⟨w, hw⟩ := htx
+        exact (congrArg Sigma.fst hw).symm
+      subst j
+      rfl
+    map_zero_left := by
+      rintro ⟨i, x⟩
+      change (Sigma.mk i (hleft (0, x)) : Sigma (fun _ : Fin r => X)) =
+        Sigma.mk i (e.invFun (e.toFun x))
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => X)))
+        (hleft.map_zero_left x)
+    map_one_left := by
+      rintro ⟨i, x⟩
+      change (Sigma.mk i (hleft (1, x)) : Sigma (fun _ : Fin r => X)) = Sigma.mk i x
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => X)))
+        (hleft.map_one_left x) }
+  let Hright : ContinuousMap.Homotopy (F.comp G) (ContinuousMap.id _) := {
+    toFun := fun ty => ⟨ty.2.1, hright (ty.1, ty.2.2)⟩
+    continuous_toFun := by
+      rw [continuous_iff_continuousAt]
+      rintro ⟨t, ⟨i, y⟩⟩
+      have hc : Continuous (fun ty : unitInterval × (Σ _ : Fin r, Y) =>
+          (⟨i, hright (ty.1, ty.2.2)⟩ : Σ _ : Fin r, Y)) :=
+        continuous_sigmaMk.comp
+          (hright.continuous.comp (continuous_fst.prodMk (by
+            exact (continuous_sigma fun _ => continuous_id).comp continuous_snd)))
+      apply hc.continuousAt.congr_of_eventuallyEq
+      have hsnd : Continuous (fun p : unitInterval × Sigma (fun _ : Fin r => Y) => p.2) :=
+        continuous_snd
+      filter_upwards [((@isOpen_range_sigmaMk (Fin r) (fun _ => Y) _ i).preimage
+        hsnd).mem_nhds ⟨y, rfl⟩] with ty hty
+      rcases ty with ⟨t', ⟨j, z⟩⟩
+      have hji : j = i := by
+        obtain ⟨w, hw⟩ := hty
+        exact (congrArg Sigma.fst hw).symm
+      subst j
+      rfl
+    map_zero_left := by
+      rintro ⟨i, y⟩
+      change (Sigma.mk i (hright (0, y)) : Sigma (fun _ : Fin r => Y)) =
+        Sigma.mk i (e.toFun (e.invFun y))
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => Y)))
+        (hright.map_zero_left y)
+    map_one_left := by
+      rintro ⟨i, y⟩
+      change (Sigma.mk i (hright (1, y)) : Sigma (fun _ : Fin r => Y)) = Sigma.mk i y
+      exact congrArg (fun z => (Sigma.mk i z : Sigma (fun _ : Fin r => Y)))
+        (hright.map_one_left y) }
+  let E : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, X) (Σ _ : Fin r, Y) :=
+    ⟨F, G, ⟨Hleft⟩, ⟨Hright⟩⟩
+  refine ⟨E, ?_⟩
+  intro i y
+  rfl
 
 /-- Punctured disks retract radially onto the radius-`1/2` circles. -/
 theorem t99A01_attach_overlap_aux_pball (r : ℕ) :
