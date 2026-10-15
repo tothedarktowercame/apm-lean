@@ -1708,6 +1708,22 @@ theorem polynomialSphereLift_deckLocalContribution_spec :
   exact (Nat.cast_smul_eq_nsmul ℚ 4
     t96A06_sphere3_rational_fundamentalClass).symm
 
+/-- The global localization equation for the canonical deck family is the
+only remaining field needed to build the exact local-class packet. -/
+noncomputable def polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
+    (hglobal :
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        ∑ i, polynomialSphereLift_deckLocalContribution i) :
+    PolynomialSphereLiftLocalClassDecompositionAndBaseData where
+  localContribution := polynomialSphereLift_deckLocalContribution
+  image_eq_sum := hglobal
+  basePositive := polynomialSphereLift_deckLocalContribution_spec.1
+  firstNatural := polynomialSphereLift_deckLocalContribution_spec.2.1
+  secondNatural := polynomialSphereLift_deckLocalContribution_spec.2.2.1
+  bothNatural := polynomialSphereLift_deckLocalContribution_spec.2.2.2.1
+
 /-- The exact remaining geometric boundary implies degree four on rational
 top homology, with all bookkeeping discharged. -/
 theorem polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
@@ -2398,6 +2414,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_localClasses_positive_of_pairFlipTransport
 #print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
 #print axioms polynomialSphereLift_deckLocalContribution_spec
+#print axioms polynomialSphereLift_localClassData_of_globalImage_eq_deckSum
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
