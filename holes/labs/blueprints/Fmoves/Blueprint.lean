@@ -11313,6 +11313,22 @@ lemma cut_retransfer_consistency_B_arc_aux_chord_end {L p q : ℕ}
   exact (not_lt_of_ge (le_of_eq h.symm)) hlt
 
 /-- Side `q` (the old second `x`): `newB` is the seam, a unit point only at `s₀ ∈ {0, 1}`. -/
+lemma cut_retransfer_consistency_B_arc_aux_seam_aux_end {L p q : ℕ}
+    (hpq : p < q) (hq : q < p + L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutSeam L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L (p + 1) ≠ cutPoint L (q + 1) := cutPoint_ne (by omega) (by omega)
+  have hlt := norm_combo_lt_of_ne (x := cutPoint L (p + 1)) (y := cutPoint L (q + 1))
+    (r := (1 : ℝ)) (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have he : (1 - (s : ℝ)) • cutPoint L (p + 1) + (s : ℝ) • cutPoint L (q + 1) = cutSeam L p q s := by
+    apply Complex.ext <;> simp [cutSeam, Complex.real_smul] <;> ring
+  rw [← he] at h
+  exact (not_lt_of_ge (le_of_eq h.symm)) hlt
+
 theorem cut_retransfer_consistency_B_arc_aux_seam {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)
@@ -11329,7 +11345,119 @@ theorem cut_retransfer_consistency_B_arc_aux_seam {Label : Type*} [DecidableEq L
     (hq : e₀ = u.length + 1 + v.length) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  subst e₀
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hpq : p < q := by simp [p, q]; omega
+  have hqL : q < L := by simp [q, L]; omega
+  have hL : 2 ≤ L := by simp [L]; omega
+  have hseam : (edgePoint L e τ : ℂ) = cutSeam L p q s₀ := hN.trans (D.newB_x s₀)
+  have hs : s₀.1 = 0 ∨ s₀.1 = 1 := by
+    apply cut_retransfer_consistency_B_arc_aux_seam_aux_end (L := L) (p := p) (q := q) hpq (by omega)
+    rw [← hseam]
+    exact norm_edgePoint L e τ
+  have hPedge : (P : ℂ) = (edgePoint L q s₀ : ℂ) :=
+    hP.trans (D.oldB_arc q s₀ (Or.inl ⟨le_refl q, hqL⟩))
+  rcases hs with hs | hs
+  · have hs' : s₀ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hs
+    subst s₀
+    have hedges : edgePoint L e τ = edgePoint L (p + 1) (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      rw [edgePoint_zero_eq_cutPoint]
+      simpa [cutSeam] using hseam
+    rcases heq hL (by exact he) (by omega) hedges with hsame | hnext | hprev
+    · rcases hsame with ⟨rfl, rfl⟩
+      refine ⟨edgePoint L p (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1), ?_, ?_⟩
+      · rw [edgePoint_zero_eq_cutPoint]
+        simp [cutRetransfer, p, q, cutChordB, L, Nat.add_assoc, Nat.add_comm,
+          Nat.add_left_comm]
+      · have hx := cut_retransfer_consistency_A_arc_aux_x u v t x
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hPd : P = edgePoint L q (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hPedge
+        subst P
+        exact hx
+    · rcases hnext with ⟨hτ, -, hadj⟩
+      have he' : e = p := by
+        by_cases hlt : e + 1 < L
+        · rw [Nat.mod_eq_of_lt hlt] at hadj
+          omega
+        · have hel : e + 1 = L := by omega
+          rw [hel, Nat.mod_self] at hadj
+          omega
+      subst e
+      refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      apply hPedge.trans
+      rw [edgePoint_zero_eq_cutPoint]
+      simp [cutRetransfer, p, q, L, hτ, cutChordB, Nat.add_assoc, Nat.add_comm,
+        Nat.add_left_comm]
+    · rcases hprev with ⟨hzero, -, -⟩
+      norm_num at hzero
+  · have hs' : s₀ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hs
+    subst s₀
+    have hedges : edgePoint L e τ = edgePoint L q (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      rw [edgePoint_one_eq_cutPoint]
+      simpa [cutSeam] using hseam
+    rcases heq hL (by exact he) hqL hedges with hsame | hnext | hprev
+    · rcases hsame with ⟨rfl, rfl⟩
+      refine ⟨edgePoint L p (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1), ?_, ?_⟩
+      · rw [edgePoint_one_eq_cutPoint]
+        unfold cutRetransfer
+        by_cases hv : v = []
+        · rw [if_pos (by simp [p, q, hv])]
+          simp only [cutChordB]
+          simp [p, q, L, hv, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+        · have hvpos : 0 < v.length := List.length_pos_of_ne_nil hv
+          rw [if_neg (by dsimp [p, q]; omega), if_pos (by dsimp [p, q]; omega)]
+          have hr : reverseParameter (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+              ⟨0, by simp⟩ := Subtype.ext (by simp [reverseParameter])
+          rw [hr, edgePoint_zero_eq_cutPoint]
+          congr 1
+          omega
+      · have hx := cut_retransfer_consistency_A_arc_aux_x u v t x
+            (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hPd : P = edgePoint L q (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hPedge
+        subst P
+        exact hx
+    · rcases hnext with ⟨-, hzero, -⟩
+      norm_num at hzero
+    · rcases hprev with ⟨-, hτ, hadj⟩
+      refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      apply hPedge.trans
+      rw [edgePoint_one_eq_cutPoint]
+      have hτ' : τ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hτ
+      subst τ
+      by_cases hq1L : q + 1 < L
+      · rw [Nat.mod_eq_of_lt hq1L] at hadj
+        subst e
+        rw [show cutRetransfer L p q (q + 1)
+            (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+            (edgePoint L (q + 1) (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) by
+          simp [cutRetransfer]
+          omega]
+        rw [edgePoint_zero_eq_cutPoint]
+      · have heqL : q + 1 = L := by
+          dsimp [q, L] at hq1L ⊢
+          simp only [List.length_append, List.length_cons, List.length_nil] at hq1L ⊢
+          omega
+        rw [heqL, Nat.mod_self] at hadj
+        subst e
+        have hvertex : cutPoint L (q + 1) = cutPoint L 0 := by
+          rw [heqL]
+          simpa using (cutPoint_add_length (L := L) (by omega) 0)
+        rw [hvertex]
+        by_cases hp0 : p = 0
+        · unfold cutRetransfer
+          rw [if_pos (Or.inl hp0.symm)]
+          change cutPoint L 0 = cutChordB L p q
+            (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+          simp [cutChordB, hp0]
+        · rw [show cutRetransfer L p q 0
+              (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) =
+              (edgePoint L 0 (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) by
+            simp [cutRetransfer, hp0]; omega]
+          rw [edgePoint_zero_eq_cutPoint]
 
 /-- A `t` or `u` side: `newB` is the same point, unchanged by the move. -/
 theorem cut_retransfer_consistency_B_arc_aux_tu {Label : Type*} [DecidableEq Label]
