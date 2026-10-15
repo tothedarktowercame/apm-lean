@@ -88331,29 +88331,28 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove interval-wise nested/flat concat equality; van Kampen; assemble.",
+    "Prove interval nested/flat concat; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
     [{:name
-      "torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates",
-      :type
-      "each run flattens from its prefix through one before its next prefix",
+      "torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval",
+      :type "run iff index in prefix interval",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class"],
+      ["torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88365,7 +88364,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked flattened run endpoint coordinates.",
+    :reason "Banked inverse run interval.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88375,33 +88374,18 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 0db7a0d2a", :exit 0}],
+     {:cmd "git show --check 2901e4d55", :exit 0}],
     :diagnostic-history
-    [{:cmd "endpoint-coordinate drafts",
-      :exit 1,
-      :correction "cast dependent Fin offsets"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792078971399-14273-1c6c2f29",
-     :commands
-     ["git show/diff/check 0db7a0d2a"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 0db7a0d2a adds compiled, sorry-free progress beyond history commit a29e7911d. It proves each run’s first local coordinate flattens to its cumulative prefix and its final local coordinate plus one flattens to the next prefix. The dependent Fin offsets are cast through the proved run-length equality, and both endpoint orientations are correct. Only t97A01Closure.lean changed; fixture SHA 3e033675f404f35c878c938e83a8043594d63aee1026de3554e1e04f0f5339d5 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Interval-wise nested/flat concatenation, van Kampen, and assembly remain listed."},
-    :commit "0db7a0d2a",
+    [{:cmd "draft", :exit 1, :correction "transported prefix values"}],
+    :commit "2901e4d55",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "3e033675f404f35c878c938e83a8043594d63aee1026de3554e1e04f0f5339d5"},
+     "e7300ae20a16b0840c8309d29a1dead703369533caab6375322a53be2b84a47a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94328,7 +94312,8 @@
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-cases
     :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-class
     :lemma-torusrp2-subdivisionrunblocknestedconcat-eq-globalprefix-class
-    :lemma-torusrp2-subdivisionrunoffsetequiv-run-endpoint-coordinates],
+    :lemma-torusrp2-subdivisionrunoffsetequiv-run-endpoint-coordinates
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-run-eq-iff-mem-interval],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95670,4 +95655,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunblocknestedconcat-eq-globalprefix-class],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval",
+    :type "run iff index in prefix interval"},
+   :lemma
+   {:name
+    "torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "run iff index in prefix interval",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunoffsetequiv-symm-run-eq-iff-mem-interval,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunoffsetequiv-run-endpoint-coordinates],
    :other-consumers []}]}
