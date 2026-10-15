@@ -7641,7 +7641,118 @@ theorem cutNewA_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     Set.range (cutNewA L p q) ⊆
       frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have halpha (m : ℕ) : cutAlpha L (m + 1) = cutAlpha L m + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+    done
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqp : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+    calc
+      2 * Real.pi * (q : ℝ) / L < 2 * Real.pi * ((p : ℝ) + L) / L :=
+        (div_lt_div_iff_of_pos_right hL).2
+          (mul_lt_mul_of_pos_left hqp (mul_pos (by norm_num) Real.pi_pos))
+      _ = 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi := by field_simp
+  have hΓtop : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [halpha p, halpha q]
+    linarith
+  have hAΓ : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    rw [halpha p, halpha q]
+    linarith
+  have hp1q : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_le_div_iff_of_pos_right hL).2
+    exact mul_le_mul_of_nonneg_left (by exact_mod_cast (show p + 1 ≤ q by omega))
+      (mul_nonneg (by norm_num) hpi.le)
+  have hpoint (m : ℕ) : cutPoint L m =
+      Complex.exp ((cutAlpha L m : ℂ) * Complex.I) := rfl
+  have harc : ∀ θ : ℝ, cutAlpha L (p + 1) ≤ θ →
+      θ ≤ cutAlpha L (q + 1) →
+      cutCross (cutPoint L (q + 1) - cutPoint L (p + 1))
+        (Complex.exp ((θ : ℂ) * Complex.I) - cutPoint L (p + 1)) ≤ 0 := by
+    intro θ hlo hhi
+    rw [hpoint, hpoint, hcross]
+    have hs1 : Real.sin ((θ - cutAlpha L (q + 1)) / 2) ≤ 0 :=
+      Real.sin_nonpos_of_nonpos_of_neg_pi_le (by linarith)
+        (by nlinarith [hΓtop])
+    have hs2 : 0 < Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) := by
+      apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hΓtop, hAΓ]
+    have hs3 : 0 ≤ Real.sin ((θ - cutAlpha L (p + 1)) / 2) :=
+      Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by nlinarith [hΓtop])
+    exact mul_nonpos_of_nonpos_of_nonneg
+      (mul_nonpos_of_nonpos_of_nonneg
+        (mul_nonpos_of_nonneg_of_nonpos (by positivity) hs1) hs2.le) hs3
+  rw [hfront]
+  rintro z ⟨b, rfl⟩
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)
+    (AddCircle.homeomorphCircle'.symm b)
+  have hxmem : (x : ℝ) ∈ Set.Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi) := x.2
+  have hval : cutNewA L p q b = cutProfileNewA L p q x := by rfl
+  by_cases hx1 : (x : ℝ) ≤ cutAlpha L (p + 1)
+  · right
+    rw [hval]
+    simp only [cutProfileNewA, if_pos hx1]
+    unfold segment
+    let s := ((x : ℝ) - cutAlpha L p) * L / (2 * Real.pi)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      exact div_nonneg (mul_nonneg (sub_nonneg.mpr hxmem.1) hL.le)
+        (mul_nonneg (by norm_num) hpi.le)
+    have hs1 : s ≤ 1 := by
+      rw [halpha p] at hx1
+      dsimp [s]
+      apply (div_le_one (mul_pos (by norm_num) hpi)).2
+      have hxmul := mul_le_mul_of_nonneg_right hx1 hL.le
+      field_simp [ne_of_gt hL] at hxmul
+      linarith
+    refine ⟨1 - s, s, by linarith, hs0, by ring, ?_⟩
+    simp [cutSeam, s, smul_eq_mul]
+    ring
+  · by_cases hxq : (x : ℝ) ≤ cutAlpha L q
+    · left
+      rw [hval]
+      simp only [cutProfileNewA, if_neg hx1, if_pos hxq]
+      constructor
+      · rw [Complex.norm_exp]
+        simp
+      · apply harc
+        · rw [halpha p, halpha q]
+          have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+            div_pos (mul_pos (by norm_num) hpi) hL
+          linarith [hxq]
+        · rw [halpha p, halpha q]
+          have hx1' : cutAlpha L (p + 1) < (x : ℝ) := lt_of_not_ge hx1
+          rw [halpha p] at hx1'
+          linarith
+    · left
+      rw [hval]
+      simp only [cutProfileNewA, if_neg hx1, if_neg hxq]
+      constructor
+      · rw [Complex.norm_exp]
+        simp
+      · apply harc
+        · have hsle : cutSA L p q x ≤ 1 :=
+            (div_le_one (sub_pos.mpr hqtop)).2 (by linarith [hxmem.2])
+          rw [halpha (p + 1), halpha p]
+          have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+            div_pos (mul_pos (by norm_num) hpi) hL
+          nlinarith
+        · have hs0 : 0 ≤ cutSA L p q x := by
+            unfold cutSA
+            exact (div_nonneg (sub_nonneg.mpr (le_of_not_ge hxq))
+              (sub_nonneg.mpr hqtop.le))
+          rw [halpha (p + 1), halpha q]
+          have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+            div_pos (mul_pos (by norm_num) hpi) hL
+          nlinarith [mul_nonneg hs0 hstep.le]
 -- END SEAT AREA
 
 /-- Explicit preimages for frontier points (model: `cutOldA_range`). -/
