@@ -2367,7 +2367,38 @@ by `Monoid.Coprod.fst` (detects every item involving `a`) and to
 `b * b = inr (ofAdd 2) = 1` by `decide` in `ZMod 2`.  About 40 lines. -/
 lemma G_facts :
     a ≠ 1 ∧ b ≠ 1 ∧ b * b = 1 ∧ a * a ≠ 1 ∧ a ≠ b ∧ a⁻¹ ≠ b ∧ a * b ≠ 1 := by
-  sorry
+  constructor
+  · intro h
+    have := congrArg (Monoid.Coprod.fst : G → Multiplicative ℤ) h
+    simp [a] at this
+  constructor
+  · intro h
+    have := congrArg (Monoid.Coprod.snd : G → Multiplicative (ZMod 2)) h
+    norm_num [b] at this
+  constructor
+  · have hz : (Multiplicative.ofAdd 1 * Multiplicative.ofAdd 1 :
+        Multiplicative (ZMod 2)) = 1 := by decide
+    calc
+      b * b = Monoid.Coprod.inr
+          (Multiplicative.ofAdd 1 * Multiplicative.ofAdd 1) := by simp [b]
+      _ = Monoid.Coprod.inr 1 := congrArg Monoid.Coprod.inr hz
+      _ = 1 := map_one _
+  constructor
+  · intro h
+    have := congrArg (Monoid.Coprod.fst : G → Multiplicative ℤ) h
+    change Multiplicative.ofAdd (1 + 1 : ℤ) = Multiplicative.ofAdd 0 at this
+    norm_num at this
+  constructor
+  · intro h
+    have := congrArg (Monoid.Coprod.fst : G → Multiplicative ℤ) h
+    simp [a, b] at this
+  constructor
+  · intro h
+    have := congrArg (Monoid.Coprod.fst : G → Multiplicative ℤ) h
+    norm_num [a, b] at this
+  · intro h
+    have := congrArg (Monoid.Coprod.fst : G → Multiplicative ℤ) h
+    simp [a, b] at this
 
 /-- **Leaf.**  Disjoint-translate neighbourhood of an interior edge point:
 `V = inl ({g} × (0,1))`.  No relation touches interior edge points, and
