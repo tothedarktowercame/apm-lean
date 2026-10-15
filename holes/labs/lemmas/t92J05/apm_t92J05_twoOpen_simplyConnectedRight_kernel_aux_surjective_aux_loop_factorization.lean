@@ -785,11 +785,26 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       A B f g e (by intro k; simp [f])
   have hf_piece : ∀ k, f k = Path.Homotopic.Quotient.mk
       ((a k.castSucc).symm.trans ((S.piece k).trans (a k.succ))) := by
-    sorry
--- END SEAT AREA
+    intro k
+    simp only [f, e, g, A, B, asIso_inv, asIso_hom]
+    have hi : inv (FundamentalGroupoid.fromPath
+        (Path.Homotopic.Quotient.mk (a k.castSucc))) =
+        FundamentalGroupoid.fromPath
+          (Path.Homotopic.Quotient.mk (a k.castSucc).symm) := by
+      rw [← Groupoid.inv_eq_inv]
+      rfl
+    rw [hi]
+    change Path.Homotopic.Quotient.trans
+        (Path.Homotopic.Quotient.mk (a k.castSucc).symm)
+        (Path.Homotopic.Quotient.trans
+          (Path.Homotopic.Quotient.mk (S.piece k))
+          (Path.Homotopic.Quotient.mk (a k.succ))) = _
+    rw [← Path.Homotopic.Quotient.mk_trans,
+      ← Path.Homotopic.Quotient.mk_trans]
   have hd : ∀ (k : Fin (S.n + 1)) t,
       a k.succ t ∈ twoChart U V (S.side k) := by
     sorry
+-- END SEAT AREA
   have hf : ∀ k, f k = 1 ∨ f k ∈
       (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
         (⟨x.1, x.2.1⟩ : U)).range := by
@@ -999,6 +1014,15 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_o
   dsimp [loop]
   rw [F.map_comp, F.map_comp]
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom
+    {G : Type} [Group G] (a b : SingleObj G) (h : a = b) :
+    (eqToHom h : a ⟶ b) = 𝟙 _ := by
+  cases a
+  cases b
+  cases h
+  rfl
+
+set_option maxHeartbeats 800000 in
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
