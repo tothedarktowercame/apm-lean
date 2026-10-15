@@ -2219,6 +2219,48 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_bound
       rw [ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge]
       exact ConstructionTargets.PolygonSurfaceHomology.polygonBoundarySignedEdgePathAtBase_mk P i
 
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_zpowers
+    {G : Type*} [Group G] (g : G) :
+    Subgroup.normalClosure (Subgroup.zpowers g : Set G) =
+      Subgroup.normalClosure ({g} : Set G) := by
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    exact Subgroup.zpowers_le_of_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton g))
+  · apply Subgroup.normalClosure_mono
+    exact Set.singleton_subset_iff.mpr (Subgroup.mem_zpowers g)
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_isConj
+    {G : Type*} [Group G] {g h : G} (hc : IsConj g h) :
+    Subgroup.normalClosure ({g} : Set G) =
+      Subgroup.normalClosure ({h} : Set G) := by
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, rfl⟩ := isConj_iff.mp hc.symm
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, rfl⟩ := isConj_iff.mp hc
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_inverse
+    {G : Type*} [Group G] (g : G) :
+    Subgroup.normalClosure ({g⁻¹} : Set G) =
+      Subgroup.normalClosure ({g} : Set G) := by
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    exact (Subgroup.normalClosure (Set.singleton g)).inv_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton g))
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    have h := (Subgroup.normalClosure (Set.singleton g⁻¹)).inv_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton g⁻¹))
+    simpa using h
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
