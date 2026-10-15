@@ -2363,6 +2363,40 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     obtain ⟨c, hc⟩ := hrel
     exact ⟨c, hc.inv_right⟩
 
+/-- The overlap's circle coordinate (annulus `≃ₜ Ioo 0 1 × Circle`, second factor). -/
+noncomputable def apm_t92J05_genusTwo_overlapAngle :
+    C(↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)), Circle) :=
+  ⟨fun x => ((ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph
+      ⟨x.1, by
+        rw [(ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_eq]
+        exact ⟨x.2.2, x.2.1⟩⟩).2,
+    continuous_snd.comp
+      ((ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_homeomorph.continuous.comp
+        (continuous_subtype_val.subtype_mk (fun x => by
+          rw [(ConstructionTargets.PolygonSurfacePiOne.openCover apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).overlap_eq]
+          exact ⟨x.2.2, x.2.1⟩)))⟩
+
+/-- **Leaf W2 (geometry).** On the overlap annulus, the map to the orbit wedge through the
+outer piece (`outerSkeletonEquiv`, then `skeletonHomeomorphWedge`) is homotopic to the
+polygon boundary loop of the annulus angle, possibly with reversed orientation: the radial
+deformation retract sends the circle of angle `θ` to the boundary point at angle `θ`. -/
+lemma apm_t92J05_genusTwo_W2_overlap_homotopic :
+    let Φ : C(↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
+        ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (ConstructionTargets.PolygonSurfacePiOne.PairingOrbit apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair)) :=
+      (⟨apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeletonHomeomorphWedge, apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeletonHomeomorphWedge.continuous⟩ :
+          C(apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton, _)).comp
+        ((apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv.toFun).comp
+          (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)))
+    ContinuousMap.Homotopic Φ
+        ((ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).comp
+          apm_t92J05_genusTwo_overlapAngle) ∨
+      ContinuousMap.Homotopic Φ
+        ((ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryWedgeLoop apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).comp
+          ((⟨fun z : Circle => z⁻¹, continuous_inv⟩ : C(Circle, Circle)).comp
+            apm_t92J05_genusTwo_overlapAngle)) := by
+  sorry
+
 /-- **Leaf W1 (wedge word, pure algebra on 8 explicit edges).** Under any free
 coordinate of the orbit wedge sending each explicit leg class to its generator
 (re-indexed by `orientableOrbitEquiv 2`), the boundary loop is conjugate to the genus-two
