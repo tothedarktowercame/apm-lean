@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36130,7 +36130,7 @@
     "Restore closure dependency coherence; then run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
     :warnings
-    ["Main compiles with existing placeholder; unchanged closure baseline fails."],
+    ["Main compiles with existing placeholder; closure baseline rebuild fails."],
     :missing-theorems
     [{:name "pathHomotopicQuotient_concat_succ",
       :type "quotient recurrence for Path.concat",
@@ -36149,29 +36149,18 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Closure source remains at bd5ebdee; changes since the last rebuild affect only t00J02Closure, not this row or build configuration. The reproduced line-1366+ dependency failures remain the blocker.",
+    "PolygonSurfaceHomology changed, so closure was rebuilt at HEAD 350e17e; the same line-1366+ closure errors persist. Dependency coherence remains blocked and scoped files are untouched.",
     :commands
     [{:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
-     {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git diff --name-only 1dea841..HEAD -- row/dependencies",
-      :exit 0}],
+     {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history
-    [{:cmd "prior fresh lake build ConstructionTargets.t93J03Closure",
+    [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
-      :correction "not rerun: closure inputs unchanged"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792024695098-12852-f61ac1cc",
-     :commands
-     ["git show/check/diff-tree 8c4eb4f exact scope"
-      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: 8c4eb4f is compiled, sorry-free standard-axiom progress after 263f5d47. The committed type gives Fin(runs+1) boundaries in outer subtype V, and its theorem correctly recovers the corresponding ambient canonical boundary after coercion, enabling run-fold assembly. It does not assume the partial based van Kampen theorem. Scope/hash match; registry 166/166; Main 1->1 placeholder; residual milestones are explicit."},
+      :correction
+      "changed dependency tested; baseline errors persist"}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36180,7 +36169,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
