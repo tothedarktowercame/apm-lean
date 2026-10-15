@@ -88375,6 +88375,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check aeb789872", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792077245376-14252-1bf25458",
+     :commands
+     ["git show/diff/check aeb789872"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit aeb789872 adds compiled, sorry-free progress beyond history commit 5c1edd2f5. It proves the flat transported prefix-block fold represents the original path class at literal subdivision endpoints by applying the existing subdivision reconstruction theorem to the proved piece equalities. Only t97A01Closure.lean changed; fixture SHA 1b8e6bdcbb76c935b533b7aed6e911bd57d49686554ce358f57104f4a8ef92ea matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Quotient equality is oriented from the cast original path to the flat fold. The theorem does not yet compare the globally rebased nested fold; that bridge, van Kampen, and assembly remain listed."},
     :commit "aeb789872",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88396,7 @@
      "1b8e6bdcbb76c935b533b7aed6e911bd57d49686554ce358f57104f4a8ef92ea"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88414,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked complete inverse-coordinate successor cases.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked flat prefix-fold reconstruction.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88591,7 +88604,10 @@
      :reason "Banked inverse run-offset terminal coordinate."}
     {:job 6,
      :commit "5c1edd2f5",
-     :reason "Banked complete inverse-coordinate successor cases."}]}
+     :reason "Banked complete inverse-coordinate successor cases."}
+    {:job 7,
+     :commit "aeb789872",
+     :reason "Banked flat prefix-fold reconstruction."}]}
   {:consumer :t94J09,
    :stop-count 6,
    :evidence
@@ -95574,7 +95590,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class",
@@ -95586,7 +95602,9 @@
     :type
     "flat prefix-block fold reconstructs original path class at literal endpoints",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "aeb789872"},
    :id :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-class,
    :kind :lemma,
    :depends-on
