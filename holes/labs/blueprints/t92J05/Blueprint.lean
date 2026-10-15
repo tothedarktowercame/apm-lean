@@ -534,6 +534,26 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le
   apply apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_normalClosure_le_ker
   exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_overlap_killed U V x
 
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_right_loop
+    {X : Type*} [TopologicalSpace X] (V : Set X)
+    [PathConnectedSpace V] [SimplyConnectedSpace V] (v : V)
+    (r : Path v v) :
+    FundamentalGroup.map
+        (⟨Subtype.val, continuous_subtype_val⟩ : ContinuousMap V X) v
+        (Path.Homotopic.Quotient.mk r) = 1 := by
+  letI : Subsingleton (FundamentalGroup V v) := by
+    change Subsingleton (Path.Homotopic.Quotient _ _)
+    infer_instance
+  have hr : (Path.Homotopic.Quotient.mk r : FundamentalGroup V v) =
+      (1 : FundamentalGroup V v) :=
+    Subsingleton.elim _ _
+  simpa [hr]
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization_aux_connector
+    {X : Type*} [TopologicalSpace X] (U : Set X) [PathConnectedSpace U]
+    (u₀ u₁ : U) : Nonempty (Path u₀ u₁) := by
+  exact PathConnectedSpace.joined u₀ u₁
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -544,7 +564,6 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_fac
       FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion U)
           (⟨x.1, x.2.1⟩ : U) q = Path.Homotopic.Quotient.mk p := by
   sorry
-
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
