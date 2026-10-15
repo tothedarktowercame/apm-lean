@@ -37209,37 +37209,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Cancel preservation isomorphisms elementwise; coordinate one, four classes, Main.",
+    "Prove rational local coordinate one; four classes and Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name
-      "t96A06_normalizedClass_projection_preservation_naturality",
-      :type
-      "forgotten native projection/relative inverse equals absolute inverse/mapped projection",
+    [{:name "t96A06_normalizedClass_projection_preservation_cancel",
+      :type "preservation inverse/forward cancel",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_forget_nativeProjection_normalizedClass"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_mappedIntegralNormalizedClass_localizes",
-      :type "mapped global class localizes positively",
-      :status :partial,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_normalizedClass_projection_preservation_naturality"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_mappedIntegralNormalizedClass_localizes",
+      :type "mapped global class localizes positively",
+      :status :proved,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_normalizedClass_projection_preservation_cancel"],
       :area "rp-rational-homology"}],
-    :statement-hashes {:registry "167/167"},
+    :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the specialized normalized-class projection preservation square.",
+    "Committed preservation cancellation and positive localization.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37248,20 +37247,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 70fac0ff2",
+      "git diff --check && git show --check --stat --oneline 2b8f42b30",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "direct localization assembly",
+    [{:cmd "element rewrite",
       :exit 1,
-      :note
-      "Comparison coercions did not align; specialized square retained."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792102740569-14751-8e4855fb",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "70fac0ff2",
+      :note "Used explicit congruence."}],
+    :commit "2b8f42b30",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37269,7 +37261,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44075,7 +44067,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "mapped integral global class localizes to pulled-back positive local class",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-mappedintegralnormalizedclass-localizes,
    :kind :lemma,
    :depends-on
@@ -44085,7 +44078,8 @@
     :lemma-t96a06-absolutecomparison-composite
     :lemma-t96a06-absolutecomparison-localization-normalizedclass
     :lemma-t96a06-forget-nativeprojection-normalizedclass
-    :lemma-t96a06-normalizedclass-projection-preservation-naturality],
+    :lemma-t96a06-normalizedclass-projection-preservation-naturality
+    :lemma-t96a06-normalizedclass-projection-preservation-cancel],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -44277,6 +44271,24 @@
    :lemma-t96a06-normalizedclass-projection-preservation-naturality,
    :kind :lemma,
    :depends-on [:lemma-t96a06-forget-nativeprojection-normalizedclass],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_normalizedClass_projection_preservation_cancel",
+    :type "preservation inverse/forward cancel"},
+   :lemma
+   {:name "t96A06_normalizedClass_projection_preservation_cancel",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "preservation inverse/forward cancel",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-normalizedclass-projection-preservation-cancel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-normalizedclass-projection-preservation-naturality],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
