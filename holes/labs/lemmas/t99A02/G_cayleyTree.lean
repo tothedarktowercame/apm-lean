@@ -3583,6 +3583,94 @@ and `w ++ [s]` otherwise (both are reduced and evaluate correctly; apply
 uniqueness).  Distinctness of the three neighbours uses `G_facts`
 (`a * a ≠ 1`, `a ≠ b`, `a⁻¹ ≠ b`).  About 120 lines. -/
 -- BEGIN SEAT AREA
+lemma G_cayleyTree_aux_transition (w : List Letter) (hw : Reduced w) (s : Letter) :
+    ∃ v : List Letter, Reduced v ∧
+      wordEval v = wordEval w * s.toG ∧
+      (v = w ++ [s] ∨ w = v ++ [s.inv]) := by
+  rcases w.eq_nil_or_concat with rfl | ⟨u, t, rfl⟩
+  · refine ⟨[s], by simp [Reduced], by simp [wordEval], Or.inl rfl⟩
+  · simp only [List.concat_eq_append] at hw ⊢
+    by_cases h : t = s.inv
+    · subst t
+      refine ⟨u, hw.left_of_append, ?_, Or.inr rfl⟩
+      rw [G_normalForm_aux_wordEval_append]
+      simp [wordEval, G_normalForm_aux_toG_inv]
+    · refine ⟨(u ++ [t]) ++ [s], ?_, ?_, Or.inl rfl⟩
+      · rw [Reduced, List.isChain_append]
+        refine ⟨hw, by simp, ?_⟩
+        intro x hx y hy
+        have hys : y = s := (by simpa using hy : s = y).symm
+        subst y
+        have hxt : x = t := (by simpa using hx : t = x).symm
+        subst x
+        intro hs
+        apply h
+        rw [← G_normalForm_aux_inv_inv t]
+        exact (congrArg Letter.inv hs).symm
+      · rw [G_normalForm_aux_wordEval_append]
+        simp [wordEval]
+
+noncomputable def G_cayleyTree_aux_word
+    (hNF : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g) (g : G) :
+    List Letter := Classical.choose (ExistsUnique.exists (hNF g))
+
+lemma G_cayleyTree_aux_word_spec
+    (hNF : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g) (g : G) :
+    Reduced (G_cayleyTree_aux_word hNF g) ∧
+      wordEval (G_cayleyTree_aux_word hNF g) = g :=
+  Classical.choose_spec (ExistsUnique.exists (hNF g))
+
+lemma G_cayleyTree_aux_word_unique
+    (hNF : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g)
+    {g : G} {w : List Letter} (hw : Reduced w) (he : wordEval w = g) :
+    w = G_cayleyTree_aux_word hNF g := by
+  exact (hNF g).unique ⟨hw, he⟩ (G_cayleyTree_aux_word_spec hNF g)
+
+lemma G_cayleyTree_aux_word_eq_nil_iff
+    (hNF : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g) (g : G) :
+    G_cayleyTree_aux_word hNF g = [] ↔ g = 1 := by
+  constructor
+  · intro h
+    simpa [h, wordEval] using (G_cayleyTree_aux_word_spec hNF g).2.symm
+  · rintro rfl
+    symm
+    exact G_cayleyTree_aux_word_unique hNF (by simp [Reduced]) (by simp [wordEval])
+
+lemma G_cayleyTree_aux_adjacency
+    (hNF : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g)
+    (g : G) (s : Letter) :
+    (g ≠ 1 ∧ g * s.toG =
+        wordEval (G_cayleyTree_aux_word hNF g).dropLast) ∨
+      (g * s.toG ≠ 1 ∧ g =
+        wordEval (G_cayleyTree_aux_word hNF (g * s.toG)).dropLast) := by
+  let w := G_cayleyTree_aux_word hNF g
+  have hw := G_cayleyTree_aux_word_spec hNF g
+  obtain ⟨v, hv, hev, happ | hcancel⟩ := G_cayleyTree_aux_transition w hw.1 s
+  · have hvW : v = G_cayleyTree_aux_word hNF (g * s.toG) :=
+      G_cayleyTree_aux_word_unique hNF hv (hev.trans (congrArg (fun x => x * s.toG) hw.2))
+    right
+    constructor
+    · intro hone
+      have : G_cayleyTree_aux_word hNF (g * s.toG) = [] :=
+        (G_cayleyTree_aux_word_eq_nil_iff hNF _).2 hone
+      rw [← hvW, happ] at this
+      simp at this
+    · rw [← hvW, happ]
+      simpa using hw.2.symm
+  · left
+    constructor
+    · intro hone
+      have : w = [] := by
+        rw [show w = G_cayleyTree_aux_word hNF g by rfl]
+        exact (G_cayleyTree_aux_word_eq_nil_iff hNF g).2 hone
+      rw [hcancel] at this
+      simp at this
+    · rw [show G_cayleyTree_aux_word hNF g = w by rfl, hcancel]
+      calc
+        g * s.toG = wordEval w * s.toG := congrArg (fun x => x * s.toG) hw.2.symm
+        _ = wordEval v := hev.symm
+        _ = wordEval (v ++ [s.inv]).dropLast := by simp
+
 lemma G_cayleyTree
     (hNF : ∀ g : G, ∃! w : List Letter, Reduced w ∧ wordEval w = g) :
     ∃ (depth : G → ℕ) (parent : G → G),
@@ -3591,7 +3679,47 @@ lemma G_cayleyTree
         (parent g = g * a ∨ parent g = g * a⁻¹ ∨ parent g = g * b)) ∧
       (∀ g h, (h = g * a ∨ h = g * a⁻¹ ∨ h = g * b) →
         (g ≠ 1 ∧ h = parent g) ∨ (h ≠ 1 ∧ g = parent h)) := by
-  sorry
+  let W : G → List Letter := G_cayleyTree_aux_word hNF
+  let depth : G → ℕ := fun g => (W g).length
+  let parent : G → G := fun g => wordEval (W g).dropLast
+  refine ⟨depth, parent, ?_, ?_, ?_⟩
+  · intro g
+    change (W g).length = 0 ↔ g = 1
+    rw [List.length_eq_zero_iff]
+    exact G_cayleyTree_aux_word_eq_nil_iff hNF g
+  · intro g hg
+    have hW := G_cayleyTree_aux_word_spec hNF g
+    rcases (W g).eq_nil_or_concat with he | ⟨u, s, he⟩
+    · exact False.elim (hg ((G_cayleyTree_aux_word_eq_nil_iff hNF g).mp he))
+    · have hev : wordEval u * s.toG = g := by
+        simpa [W, he, G_normalForm_aux_wordEval_append, wordEval] using hW.2
+      have hp : parent g = wordEval u := by simp [parent, he]
+      have hWu : W g = u ++ [s] := by simpa only [List.concat_eq_append] using he
+      have huR : Reduced u := by
+        have hWR : Reduced (W g) := hW.1
+        rw [hWu] at hWR
+        exact hWR.left_of_append
+      have hu : u = W (wordEval u) :=
+        G_cayleyTree_aux_word_unique hNF huR rfl
+      have hp' : parent g = g * s.toG⁻¹ := by
+        rw [hp]
+        exact (eq_mul_inv_iff_mul_eq).2 hev
+      constructor
+      · change (W (parent g)).length + 1 = (W g).length
+        rw [hp, ← hu, hWu]
+        simp
+      · cases s with
+        | a => exact Or.inr (Or.inl (by simpa [Letter.toG] using hp'))
+        | ai => exact Or.inl (by simpa [Letter.toG] using hp')
+        | b =>
+            refine Or.inr (Or.inr ?_)
+            have hb : b⁻¹ = b := eq_inv_of_mul_eq_one_left G_facts.2.2.1 |>.symm
+            simpa [Letter.toG, hb] using hp'
+  · intro g h hadj
+    rcases hadj with rfl | rfl | rfl
+    · simpa [parent, W, Letter.toG] using G_cayleyTree_aux_adjacency hNF g .a
+    · simpa [parent, W, Letter.toG] using G_cayleyTree_aux_adjacency hNF g .ai
+    · simpa [parent, W, Letter.toG] using G_cayleyTree_aux_adjacency hNF g .b
 -- END SEAT AREA
 
 theorem lineSphereTree_simplyConnected : SimplyConnectedSpace LineSphereTree := by
