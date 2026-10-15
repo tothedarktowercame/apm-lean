@@ -87946,6 +87946,20 @@
     [{:cmd "endpoint drafts",
       :exit 1,
       :correction "used pointwise casts and reversed conversion"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792028834737-12979-984acd08",
+     :commands
+     ["git show/diff-tree 8f6afae39"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 8f6afae39 by topo-6 changes only the scoped target; fixture hash 96845ae7...0460e matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. The endpoint subpath uses parameters 0 and 1, so affine reparametrization is the original boundary path. Casting concat_subpath preserves its homotopy direction from canonical subdivision concat to that endpoint subpath, hence to the boundary loop. New compiled progress; remaining milestone is passing this homotopy through quotient/Hurewicz, then B7-B10."},
     :commit "8f6afae39",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87968,7 @@
      "96845ae777a4ac847037637fd806cc47c5ec241bace63f107b2aba2a9cc0460e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87988,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked concat endpoint transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked the boundary subdivision homotopy.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88288,7 +88302,10 @@
      :reason "Banked globally normalized subdivision factors."}
     {:job 8,
      :commit "ed6ade796",
-     :reason "Banked concat endpoint transport."}]}
+     :reason "Banked concat endpoint transport."}
+    {:job 9,
+     :commit "8f6afae39",
+     :reason "Banked the boundary subdivision homotopy."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92720,7 +92737,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundaryCanonicalConcat_homotopic",
@@ -92730,7 +92747,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "based subdivision concat is homotopic to boundary loop",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "8f6afae39"},
    :id :lemma-polygonboundarycanonicalconcat-homotopic,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryconcat-cast-eq-canonical],
