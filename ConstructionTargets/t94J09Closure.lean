@@ -90,6 +90,55 @@ def frozenOrbitEquiv : PairingOrbit frozenPair ≃ Fin 7 where
     intro j
     fin_cases j <;> rfl
 
+/-! ## The frozen two-vertex graph boundary -/
+
+/-- The degree-one boundary of the frozen quotient graph in the orbit order
+`a,b,c,d,e,f,g`.  Only `d` and `g` join the two vertex classes. -/
+def frozenGraphBoundary : (Fin 7 → ℤ) →ₗ[ℤ] (Fin 2 → ℤ) where
+  toFun v := ![v 6 - v 3, v 3 - v 6]
+  map_add' := by
+    intro x y
+    funext i
+    fin_cases i <;> simp <;> ring
+  map_smul' := by
+    intro n x
+    funext i
+    fin_cases i <;> simp <;> ring
+
+/-- Six independent cycle coordinates for the frozen two-vertex graph. -/
+noncomputable def frozenGraphBoundaryKernelEquiv :
+    LinearMap.ker frozenGraphBoundary ≃ₗ[ℤ] (Fin 6 → ℤ) where
+  toFun x i := x.1 i.castSucc
+  invFun w :=
+    ⟨fun i => ![w 0, w 1, w 2, w 3, w 4, w 5, w 3] i,
+      by
+        rw [LinearMap.mem_ker]
+        ext i
+        fin_cases i <;> simp [frozenGraphBoundary]⟩
+  left_inv := by
+    intro x
+    apply Subtype.ext
+    funext i
+    have hx := x.2
+    rw [LinearMap.mem_ker] at hx
+    have h63 := congrFun hx (0 : Fin 2)
+    have h63' : x.1 6 = x.1 3 := by
+      change x.1 6 - x.1 3 = 0 at h63
+      exact sub_eq_zero.mp h63
+    fin_cases i <;> simp [h63']
+  right_inv := by
+    intro w
+    funext i
+    fin_cases i <;> rfl
+  map_add' := by
+    intro x y
+    funext i
+    rfl
+  map_smul' := by
+    intro n x
+    funext i
+    rfl
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -321,5 +370,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPair_pair
 #print axioms frozenPair_ne
 #print axioms frozenOrbitEquiv
+#print axioms frozenGraphBoundaryKernelEquiv
 
 end ConstructionTargets.t94J09Closure
