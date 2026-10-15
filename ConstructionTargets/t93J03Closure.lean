@@ -1606,6 +1606,29 @@ noncomputable def pathTwoOpenSubdivisionRunBlockPiece
       rw [pathTwoOpenSubdivisionRunPredLength_add_one]
       exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
 
+/-- Every point of the reindexed run block is the original subdivision point
+at the corresponding cumulative-prefix offset. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_apply_prefix
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) :
+    pathTwoOpenSubdivisionRunBlockPoint S i k =
+      S.point ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k,
+        by
+          rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+          have h := pathTwoOpenSubdivisionRunStart_add_length_le S i
+          rw [← pathTwoOpenSubdivisionRunPredLength_add_one S i] at h
+          omega⟩ := by
+  unfold pathTwoOpenSubdivisionRunBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  change pathTwoOpenSubdivisionRunStart S i + k.val =
+    pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val
+  have hs := pathTwoOpenSubdivisionRunStart_eq_prefixLength S i
+  omega
+
 /-- A run-block factor is the original subdivision factor at its cumulative
 prefix offset. -/
 theorem pathTwoOpenSubdivisionRunBlockPiece_apply_prefix
