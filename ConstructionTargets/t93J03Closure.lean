@@ -1680,6 +1680,18 @@ theorem pathTwoOpenSubdivisionRunBlockPoint_apply_prefix
   have hs := pathTwoOpenSubdivisionRunStart_eq_prefixLength S i
   omega
 
+/-- The selected-slice and cumulative-prefix presentations have the same
+vertex at every dependent index. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) :
+    pathTwoOpenSubdivisionRunBlockPoint S i k =
+      pathTwoOpenSubdivisionRunPrefixBlockPoint S i k := by
+  rw [pathTwoOpenSubdivisionRunBlockPoint_apply_prefix]
+  rfl
+
 /-- A run-block factor is the original subdivision factor at its cumulative
 prefix offset. -/
 theorem pathTwoOpenSubdivisionRunBlockPiece_apply_prefix
@@ -1707,6 +1719,19 @@ theorem pathTwoOpenSubdivisionRunBlockPiece_apply_prefix
     pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val
   have hs := pathTwoOpenSubdivisionRunStart_eq_prefixLength S i
   omega
+
+/-- The selected-slice and cumulative-prefix run factors agree pointwise
+after forgetting their propositionally equal endpoint indices. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_eq_prefixBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunBlockPiece S i k t =
+      pathTwoOpenSubdivisionRunPrefixBlockPiece S i k t := by
+  rw [pathTwoOpenSubdivisionRunBlockPiece_apply_prefix]
+  rfl
 
 /-- Reindexing a maximal run as a dependent block preserves its uniform
 chart-range certificate.  This is the final range input needed to choose the
