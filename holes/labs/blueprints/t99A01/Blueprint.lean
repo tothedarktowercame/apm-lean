@@ -812,15 +812,30 @@ theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
       ∀ (i : Fin r) (z : APMT99A01.Disk) (h0 : 0 < ‖(z : ℂ)‖) (h1 : ‖(z : ℂ)‖ < 1),
         (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
   sorry
-/-- **Leaf (pure, no quotient).** Punctured disks retract radially onto the
-radius-`1/2` circles: `z ↦ z/‖z‖` one way, `w ↦ w/2` back, homotopy
-`(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖`. -/
+/-- **Leaf (one punctured disk, 50--100 lines).** `z ↦ z/‖z‖` and `w ↦ w/2` are
+homotopy inverse: `(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖` stays in the punctured disk. -/
+theorem t99A01_pball_circle :
+    ∃ e : ContinuousMap.HomotopyEquiv ↥t99A01_pball Circle,
+      ∀ w : Circle, ((e.invFun w : ↥t99A01_pball) : ℂ) = (w : ℂ) / 2 := by
+  sorry
+
+/-- **Leaf (generic, 40--80 lines).** A homotopy equivalence induces one between
+constant-fibre sigma types, index-preserving (`Sigma.map`/`continuous_sigma`; the
+homotopies are `(t, ⟨i, x⟩) ↦ ⟨i, H (t, x)⟩`, continuous on each summand). -/
+theorem t99A01_sigma_hequiv (r : ℕ) {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) :
+    ∃ E : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, X) (Σ _ : Fin r, Y),
+      ∀ (i : Fin r) (y : Y), E.invFun ⟨i, y⟩ = ⟨i, e.invFun y⟩ := by
+  sorry
+
+/-- Punctured disks retract radially onto the radius-`1/2` circles. -/
 theorem t99A01_attach_overlap_aux_pball (r : ℕ) :
     ∃ e : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, ↥t99A01_pball) (Σ _ : Fin r, Circle),
       ∀ (i : Fin r) (w : Circle),
         (e.invFun ⟨i, w⟩).1 = i ∧ ((e.invFun ⟨i, w⟩).2 : ℂ) = (w : ℂ) / 2 := by
-  sorry
-
+  obtain ⟨e, he⟩ := t99A01_pball_circle
+  obtain ⟨E, hE⟩ := t99A01_sigma_hequiv r e
+  exact ⟨E, fun i w => by rw [hE]; exact ⟨rfl, he w⟩⟩
 theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : ContinuousMap.HomotopyEquiv
         ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
