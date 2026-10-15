@@ -37442,47 +37442,50 @@
   {:consumer :t97J07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Compute patch and punctured-overlap homology; MV; CP1-to-CP2; Main.",
+    "Compute overlap H0/H1 and MV; then CP1-to-CP2 and Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t97J07_cp1_affinePatchHomeomorph",
-      :type
-      "each literal CP1 affine patch is homeomorphic to its affine coordinate space",
+    [{:name "t97J07_cp1_affinePatch_higherHomology_isZero",
+      :type "affine patches have zero positive rational homology",
       :status :proved,
       :consumers [:t97J07],
-      :depends-on
-      ["t97J07_cp1_affinePatchEquiv"
-       "t99J05_coordinates_continuousOn"
-       "t99J05_chartInverse_continuous"],
+      :depends-on ["t97J07_cp1_affinePatchHomeomorph"],
+      :area "rational-homology-cpn"}
+     {:name "t97J07_cp1_puncturedOverlap_homology",
+      :type "compute rational H0 and H1 of the overlap",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on ["t97J07_cp1_chartInverse_other_rep_ne_iff"],
       :area "rational-homology-cpn"}
      {:name "t97J07_cp1_twoAffine_mayerVietoris",
       :type "two-chart MV computes CP1 H1 and H2",
       :status :partial,
       :consumers [:t97J07],
       :depends-on
-      ["t97J07_cp1_affinePatchHomeomorph"
-       "t97J07_cp1_chartInverse_other_rep_ne_iff"],
+      ["t97J07_cp1_affinePatch_higherHomology_isZero"
+       "t97J07_cp1_puncturedOverlap_homology"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact CP1 affine-patch homeomorphisms using banked arbitrary-chart continuity.",
+    "Committed positive-degree homology vanishing for both CP1 affine patches.",
     :commands
     [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
-     {:cmd "git status --short --untracked-files=no", :exit 0}
      {:cmd "sha256sum ConstructionTargets/t97J07Closure.blueprint.md",
       :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :commit "a30f65e0f",
+    :diagnostic-history
+    [{:cmd "initial Main compile", :exit 1, :note "qualified IsZero"}],
+    :commit "7e6497dbe",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
@@ -37490,7 +37493,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -41580,7 +41583,9 @@
    :depends-on
    [:lemma-t97j07-cp1-twoaffine-opencover
     :lemma-t97j07-cp1-chartinverse-other-rep-ne-iff
-    :lemma-t97j07-cp1-affinepatchhomeomorph],
+    :lemma-t97j07-cp1-affinepatchhomeomorph
+    :lemma-t97j07-cp1-affinepatch-higherhomology-iszero
+    :lemma-t97j07-cp1-puncturedoverlap-homology],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41974,6 +41979,39 @@
    :id :lemma-polynomialsphereliftregularvalueformula,
    :kind :lemma,
    :depends-on [:lemma-t96a06-polynomialspherelift-localsigntransport],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_affinePatch_higherHomology_isZero",
+    :type "affine patches have zero positive rational homology"},
+   :lemma
+   {:name "t97J07_cp1_affinePatch_higherHomology_isZero",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "affine patches have zero positive rational homology",
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07},
+   :id :lemma-t97j07-cp1-affinepatch-higherhomology-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-t97j07-cp1-affinepatchhomeomorph],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_puncturedOverlap_homology",
+    :type "compute rational H0 and H1 of the overlap"},
+   :lemma
+   {:name "t97J07_cp1_puncturedOverlap_homology",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "compute rational H0 and H1 of the overlap",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-cp1-puncturedoverlap-homology,
+   :kind :lemma,
+   :depends-on [:lemma-t97j07-cp1-chartinverse-other-rep-ne-iff],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
