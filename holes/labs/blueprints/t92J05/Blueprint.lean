@@ -2372,7 +2372,21 @@ lemma apm_t92J05_homotopic_map_conj {X Y : Type} [TopologicalSpace X] [Topologic
     ∃ p : Path (f x) (g x), ∀ a : FundamentalGroup X x,
       FundamentalGroup.map g x a =
         FundamentalGroup.fundamentalGroupMulEquivOfPath p (FundamentalGroup.map f x a) := by
-  sorry
+  obtain ⟨H⟩ := h
+  refine ⟨H.evalAt x, ?_⟩
+  intro a
+  have hn := (FundamentalGroupoidFunctor.homotopicMapsNatIso H).naturality a
+  dsimp [FundamentalGroup.map, FundamentalGroup.fundamentalGroupMulEquivOfPath]
+  dsimp [FundamentalGroupoidFunctor.homotopicMapsNatIso] at hn
+  change (FundamentalGroupoid.map f).map a ≫ ⟦H.evalAt x⟧ =
+      ⟦H.evalAt x⟧ ≫ (FundamentalGroupoid.map g).map a at hn
+  symm
+  change CategoryTheory.Groupoid.inv ⟦H.evalAt x⟧ ≫
+      (FundamentalGroupoid.map f).map a ≫ ⟦H.evalAt x⟧ =
+        (FundamentalGroupoid.map g).map a
+  rw [hn]
+  simp
+  rfl
 
 /-- The overlap's circle coordinate (annulus `≃ₜ Ioo 0 1 × Circle`, second factor). -/
 noncomputable def apm_t92J05_genusTwo_overlapAngle :
