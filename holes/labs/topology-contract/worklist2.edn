@@ -88383,6 +88383,17 @@
      {:cmd "coordinate drafts",
       :exit 1,
       :correction "used explicit Fin-3 evaluation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792042982394-13384-ff6cdc32",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 4ce974c33 by topo-6 changes only t97A01Closure.lean and adds compiled progress after 53223ee93. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 3a110a5ac4b28837991bea53dbc6a365f8fbf6daa876e90f213cbe321057a26b matches; registry 166/0; both equivalences use only propext, Classical.choice, Quot.sound. Each map evaluates orbit functions at labels 0,1,2 and reconstructs via the forward orbit label; inverse laws use e.symm(e q)=q and coordinate reflexivity, so the representation boundary and coordinate ordering are faithful. Attaching-vector formulas, Smith transport/B1, and B2 remain listed."},
     :commit "4ce974c33",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88391,7 +88402,7 @@
      "3a110a5ac4b28837991bea53dbc6a365f8fbf6daa876e90f213cbe321057a26b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88409,7 +88420,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient homeomorphisms.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked both orbit-coordinate linear equivalences.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88430,7 +88441,10 @@
      :reason "Banked literal quotient homeomorphism adapter."}
     {:job 4,
      :commit "53223ee93",
-     :reason "Banked quotient homeomorphisms."}]}
+     :reason "Banked quotient homeomorphisms."}
+    {:job 5,
+     :commit "4ce974c33",
+     :reason "Banked both orbit-coordinate linear equivalences."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93557,7 +93571,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccOrbitCoordinates", :type "orbit functions ≃ₗ Z3"},
@@ -93566,14 +93580,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "orbit functions ≃ₗ Z3",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4ce974c33"},
    :id :lemma-aabbccorbitcoordinates,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2OrbitCoordinates", :type "orbit functions ≃ₗ Z3"},
@@ -93582,7 +93598,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "orbit functions ≃ₗ Z3",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "4ce974c33"},
    :id :lemma-torusrp2orbitcoordinates,
    :kind :lemma,
    :depends-on [],
