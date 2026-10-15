@@ -730,7 +730,34 @@ lemma cpU_homology_aux_CP1_hequiv_S2_aux_invariant
     (a b : ProjectiveSpaceTopology.NonzeroVectors ℂ 1) (t : ℂ)
     (hab : (a : ProjectiveSpaceTopology.Vectors ℂ 1) = t • (b : ProjectiveSpaceTopology.Vectors ℂ 1)) :
     cpU_homology_aux_CP1_hequiv_S2_aux_hopf a = cpU_homology_aux_CP1_hequiv_S2_aux_hopf b := by
-  sorry
+  have ht : t ≠ 0 := by
+    intro ht
+    apply a.2
+    apply funext
+    intro i
+    have hi := congrFun hab i
+    simpa [ht] using hi
+  have hcoord (i : Fin 2) : a.1 i = t * b.1 i := by
+    have hi := congrFun hab i
+    simpa [Pi.smul_apply, smul_eq_mul] using hi
+  have hns : Complex.normSq t ≠ 0 := by
+    exact (Complex.normSq_eq_zero.not).2 ht
+  have htre : t.re ^ 2 + t.im ^ 2 ≠ 0 := by
+    simpa [Complex.normSq_apply, pow_two] using hns
+  have hdb : cpU_homology_aux_CP1_hequiv_S2_aux_den b ≠ 0 :=
+    ne_of_gt (cpU_homology_aux_CP1_hequiv_S2_aux_den_pos b)
+  have hden : cpU_homology_aux_CP1_hequiv_S2_aux_den a =
+      Complex.normSq t * cpU_homology_aux_CP1_hequiv_S2_aux_den b := by
+    simp only [cpU_homology_aux_CP1_hequiv_S2_aux_den, hcoord, Complex.normSq_mul]
+    ring
+  apply Subtype.ext
+  apply PiLp.ext
+  intro i
+  fin_cases i <;>
+    simp [cpU_homology_aux_CP1_hequiv_S2_aux_hopf,
+      cpU_homology_aux_CP1_hequiv_S2_aux_raw, hcoord, hden,
+      Complex.normSq_apply] <;>
+    field_simp [hns, hdb, htre] <;> ring
 -- END SEAT AREA
 
 lemma cpU_homology_aux_CP1_hequiv_S2_aux_compact : CompactSpace cpU_homology_aux_CP1 := by
