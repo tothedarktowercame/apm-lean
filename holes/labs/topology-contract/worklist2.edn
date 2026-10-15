@@ -88545,31 +88545,29 @@
      :commit "7ade53460e9c563e05eddeb88068dc68113f7b26",
      :reason "Banked subdivision run-offset equivalence."}]}
   {:consumer :t94J09,
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport N6 H1/H2, formalize frozen two-vertex polygon, normalize, assemble.",
+    "Formalize frozen two-vertex polygon boundary/orbits; transport homology; normalize; assemble.",
     :outcome :stop,
     :warnings
     ["Main: 1 placeholder"
      "dirt preserved"
      "frozen source has two vertices"],
     :missing-theorems
-    [{:name "n6BoundaryCokernelSmithEquiv",
-      :type "actual N6 boundary cokernel is Z^5 x ZMod 2",
+    [{:name "n6PolygonHomologyExplicit",
+      :type "standard N6 H0=Z, H1=Z^5 x ZMod 2, Hk=0 for k>=2",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["n6SmithCokernelIso"],
+      :depends-on
+      ["n6BoundaryCokernelSmithEquiv" "n6BoundaryKernel_eq_bot"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "literal source integral homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on
-      ["n6PolygonHomology"
-       "n6BoundaryKernel_eq_bot"
-       "n6BoundaryCokernelSmithEquiv"],
+      :depends-on ["n6PolygonHomologyExplicit"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
       :type "source quotient homeomorphic to N6",
@@ -88581,40 +88579,28 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked actual-boundary cokernel transport.",
+    :reason "Banked explicit standard N6 homology.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check bd338eb84", :exit 0}],
+     {:cmd "git show --check aca4dd83e", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial closure build",
+    [{:cmd "explicit N6 homology drafts",
       :exit 1,
-      :correction "fixed quotient/composition glyphs"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792062015245-13912-d7b97f84",
-     :commands
-     ["git show/diff/check bd338eb84"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit bd338eb84 adds compiled, sorry-free progress beyond e88af09f1. It proves orbit coordinates map the actual attaching-boundary range onto the N6 model range, constructs a valid linear equivalence between quotients under such a range equality, and obtains the actual N6 boundary cokernel equivalence. Only t94J09Closure.lean changed; fixture SHA 635ef5fdff61c191154dc631e4b09684418b48448e8cd58e8affba65e288be91 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Map directions and quotient representation boundaries are correct. N6 H1/H2 transport, frozen two-vertex polygon normalization, and final assembly remain explicitly listed."},
-    :commit "bd338eb84",
+      :correction
+      "fixed composition glyph and zero-object iso orientation"}],
+    :commit "aca4dd83e766cc7c9bc0cf8ab2f61a65f0ce9ae0",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "635ef5fdff61c191154dc631e4b09684418b48448e8cd58e8affba65e288be91"},
+     "02ec2a6cfe7a3c7a2f412506dba891646b3fe62f931fe7275b9e13fa69a51f61"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94060,7 +94046,8 @@
     :lemma-n6polygonhomology
     :lemma-n6boundarykernel-eq-bot
     :lemma-n6smithcokerneliso
-    :lemma-n6boundarycokernelsmithequiv],
+    :lemma-n6boundarycokernelsmithequiv
+    :lemma-n6polygonhomologyexplicit],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95096,4 +95083,23 @@
    :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-runoffsetequiv,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionrunoffsetequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "n6PolygonHomologyExplicit",
+    :type "standard N6 H0=Z, H1=Z^5 x ZMod 2, Hk=0 for k>=2"},
+   :lemma
+   {:name "n6PolygonHomologyExplicit",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "standard N6 H0=Z, H1=Z^5 x ZMod 2, Hk=0 for k>=2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-n6polygonhomologyexplicit,
+   :kind :lemma,
+   :depends-on
+   [:lemma-n6boundarycokernelsmithequiv
+    :lemma-n6boundarykernel-eq-bot],
    :other-consumers []}]}
