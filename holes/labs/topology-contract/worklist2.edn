@@ -87901,38 +87901,43 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport radial exactness to the B8 models; then B9-B10.",
+    "Prove the cokernel-to-H1 map bijective from adjacent exactness; extract H2 kernel, then B9-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint/dirt"],
+    :warnings ["lint/dirt"],
     :missing-theorems
-    [{:name "radialMVBoundaryKernelEquiv",
-      :type "production kernel equivalence",
+    [{:name "radialMVBoundary_range_le_reassembly_ker",
+      :type "boundary range killed by reassembly",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVBoundaryGroup_apply_eq_zero_iff"],
+      :depends-on ["radialMVBoundaryCokernelEquiv"],
       :area "polygon-quotient-homology"}
-     {:name "radialMVBoundaryCokernelEquiv",
-      :type "production cokernel equivalence",
+     {:name "radialMVH1QuotientMap",
+      :type "reassembly descends through quotient",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVBoundaryGroup_mem_range_iff"],
+      :depends-on ["radialMVBoundary_range_le_reassembly_ker"],
+      :area "polygon-quotient-homology"}
+     {:name "boundaryCokernelToRadialH1",
+      :type "canonical B3-cokernel to surface H1 map",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["radialMVH1QuotientMap"],
       :area "polygon-quotient-homology"}
      {:name "lowDegreeHomology",
       :type "B8 exactness extraction",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on
-      ["radialMVBoundaryKernelEquiv" "radialMVBoundaryCokernelEquiv"],
+      :depends-on ["boundaryCokernelToRadialH1"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked B8 kernel/cokernel models.",
+    :reason "Banked B8 cokernel-to-H1 map.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,30 +87945,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check c4dc936df", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792035513756-13121-a794c4de",
-     :commands
-     ["git show/diff-tree c4dc936df"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms five new declarations"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit c4dc936df by topo-6 changes only the scoped target; fixture hash d85736a8...e9835 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Conversion to an integer-linear map preserves the production boundary pointwise. Negation leaves kernel and range unchanged, so ofEq and quotEquivOfEq faithfully package the existing BoundaryKernel and BoundaryCokernel, with no residual sign. New compiled progress; transporting radial exactness into these B8 models remains, then B9-B10."},
-    :commit "c4dc936df",
+     {:cmd "git show --check b98d0fbe4", :exit 0}],
+    :diagnostic-history
+    [{:cmd "quotient-map draft",
+      :exit 1,
+      :correction "fixed namespace"}],
+    :commit "b98d0fbe4",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "d85736a85556ed848379264f093ab694cbd6c2c618a73d85b7656e800bce9835"},
+     "027287160ae7c1e5f474c38357a9067d53a0a75032753e58a3999804afbe518f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92989,7 +92984,8 @@
    [:lemma-radialmvboundarygroup-apply-eq-zero-iff
     :lemma-radialmvboundarygroup-mem-range-iff
     :lemma-radialmvboundarykernelequiv
-    :lemma-radialmvboundarycokernelequiv],
+    :lemma-radialmvboundarycokernelequiv
+    :lemma-boundarycokerneltoradialh1],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93028,4 +93024,55 @@
    :id :lemma-radialmvboundarycokernelequiv,
    :kind :lemma,
    :depends-on [:lemma-radialmvboundarygroup-mem-range-iff],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVBoundary_range_le_reassembly_ker",
+    :type "boundary range killed by reassembly"},
+   :lemma
+   {:name "radialMVBoundary_range_le_reassembly_ker",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "boundary range killed by reassembly",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvboundary-range-le-reassembly-ker,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvboundarycokernelequiv],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVH1QuotientMap",
+    :type "reassembly descends through quotient"},
+   :lemma
+   {:name "radialMVH1QuotientMap",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "reassembly descends through quotient",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvh1quotientmap,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvboundary-range-le-reassembly-ker],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boundaryCokernelToRadialH1",
+    :type "canonical B3-cokernel to surface H1 map"},
+   :lemma
+   {:name "boundaryCokernelToRadialH1",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "canonical B3-cokernel to surface H1 map",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-boundarycokerneltoradialh1,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvh1quotientmap],
    :other-consumers [:t94J09]}]}
