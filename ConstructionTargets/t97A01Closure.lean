@@ -1881,6 +1881,76 @@ theorem torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
         (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm :=
   rfl
 
+/-- The original run-block nested fold, rebased to the literal endpoints. -/
+noncomputable def torusRP2_subdivisionRunBlockNestedConcat_at_endpoints
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    Path (S.point 0) (S.point (Fin.last (S.n + 1))) :=
+  (Path.concat
+    (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+      torusRP2PairingData.Space))
+    (fun i => (Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+      (fun k => (pathTwoOpenSubdivisionRunBlockPiece S i k).cast
+        (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+          k.castSucc).symm
+        (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+          k.succ).symm)).cast
+      (torusRP2_subdivisionOuterRunBoundaryFamily_castSucc_eq_prefixBlockPoint_zero
+        S hx hy i)
+      (torusRP2_subdivisionOuterRunBoundaryFamily_succ_eq_prefixBlockPoint_last
+        S hx hy i))).cast
+    (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+    (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm
+
+theorem torusRP2_subdivisionRunBlockNestedConcat_at_endpoints_class
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    (⟦torusRP2_subdivisionRunBlockNestedConcat_at_endpoints S hx hy⟧ :
+        Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.cast
+        (⟦Path.concat
+          (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+            torusRP2PairingData.Space))
+          (fun i => (Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+            (fun k => (pathTwoOpenSubdivisionRunBlockPiece S i k).cast
+              (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+                k.castSucc).symm
+              (pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint S i
+                k.succ).symm)).cast
+            (torusRP2_subdivisionOuterRunBoundaryFamily_castSucc_eq_prefixBlockPoint_zero
+              S hx hy i)
+            (torusRP2_subdivisionOuterRunBoundaryFamily_succ_eq_prefixBlockPoint_last
+              S hx hy i))⟧)
+        (torusRP2_subdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+        (torusRP2_subdivisionOuterRunBoundaryFamily_last S hx hy).symm := rfl
+
+/-- Replacing every run block by its prefix-block presentation preserves the
+class of the complete nested fold after rebasing to the literal endpoints. -/
+theorem torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    (⟦torusRP2_subdivisionRunBlockNestedConcat_at_endpoints S hx hy⟧ :
+        Path.Homotopic.Quotient _ _) =
+      ⟦torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints S hx hy⟧ := by
+  rw [torusRP2_subdivisionRunBlockNestedConcat_at_endpoints_class S hx hy]
+  rw [torusRP2_subdivisionRunGlobalPrefixBlockConcat_class S hx hy]
+  exact (torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class S hx hy).symm
+
 /-- A factor in the cumulative-prefix block for run `i` is literally the
 original subdivision factor at the flattened index `prefixLength i + k`.
 This is the pointwise identification used to compare the nested run fold
@@ -2670,6 +2740,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockPath_class
 #print axioms torusRP2_subdivisionRunGlobalPrefixBlockConcat_class
 #print axioms torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class
+#print axioms torusRP2_subdivisionRunBlockNestedConcat_eq_globalPrefix_class
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_globalIndex_lt_next
 #print axioms torusRP2_subdivisionRunPrefixLength_strictMono
