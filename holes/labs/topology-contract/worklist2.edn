@@ -87901,7 +87901,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -87948,7 +87948,7 @@
      "52c77c656e42aac128992d45b3a0f3142dde976d13b1f4242359923e13e165d7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -88386,6 +88386,21 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 9231737b5", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792029758897-13012-be9aca70",
+     :commands
+     ["git show/diff-tree 9231737b5"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 9231737b5 by topo-6 adds 38 lines only to the scoped closure target; fixture hash a17f8c26...2dfbf matches. Exact snapshot builds; Main compiles with its one prior placeholder; target has 0 placeholders; registry 166/0; standard axioms only. The quotient relation identifies only graph endpoints; interiorCoordinate is invariant on its EqvGen and retains the edge vertex label for t in (0,1), so the claimed interior injectivity is faithful. New progress since history commit 040fde936; remaining realization charts, Cayley tree, and finite-cover invariants are listed."},
     :commit "9231737b5",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88394,7 +88409,7 @@
      "a17f8c26cf6d853f3c7a01cc597f8310d3b5c5c9354c278cf4d3b6342882dfbf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88412,7 +88427,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked interior fiber label-coordinate separation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-edge quotient rigidity.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88444,7 +88459,10 @@
      "Banked exact wedge-leg and interior projection separation."}
     {:job 9,
      :commit "040fde936",
-     :reason "Banked interior fiber label-coordinate separation."}]}
+     :reason "Banked interior fiber label-coordinate separation."}
+    {:job 1,
+     :commit "9231737b5",
+     :reason "Banked open-edge quotient rigidity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -92181,7 +92199,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "finitePathSubdivision_boundary",
@@ -92191,7 +92209,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "boundary circle class is ordered product of edge classes",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PolygonSurfaceHomology.lean"]},
    :id :lemma-finitepathsubdivision-boundary,
    :kind :lemma,
    :depends-on
@@ -92446,7 +92466,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "edgePoint_ne_vertex_of_interior",
@@ -92458,7 +92478,9 @@
     :type
     "lifted interior edge point differs from every lifted vertex",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "9231737b5"},
    :id :lemma-edgepoint-ne-vertex-of-interior,
    :kind :lemma,
    :depends-on [:lemma-projection-edgepoint-eq-of-interior],
@@ -92734,7 +92756,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "edgePoint_injective_of_interior",
@@ -92744,7 +92766,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "endpoint quotient retains graph vertex on every open edge",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "9231737b5"},
    :id :lemma-edgepoint-injective-of-interior,
    :kind :lemma,
    :depends-on [:lemma-edgepoint-ne-vertex-of-interior],
