@@ -7447,7 +7447,50 @@ theorem cutNewB_injective_of_branches {L p q : ℕ} (hpq : p < q) (hqL : q < L)
       (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
       (∀ φ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ)) :
     Function.Injective (cutNewB L p q) := by
-  sorry
+  intro z w hzw
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm z)
+  let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm w)
+  have hxy : cutProfileNewB L p q x = cutProfileNewB L p q y := by
+    simpa [cutNewB, AddCircle.liftIco, x, y] using hzw
+  have hx : (x : ℝ) ∈ Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := x.property
+  have hy : (y : ℝ) ∈ Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := y.property
+  have finish (h : (x : ℝ) = y) : z = w := by
+    have hsub : x = y := Subtype.ext h
+    have hadd := congrArg (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).symm hsub
+    have hadd' : AddCircle.homeomorphCircle'.symm z =
+        AddCircle.homeomorphCircle'.symm w := by simpa [x, y] using hadd
+    exact AddCircle.homeomorphCircle'.symm.injective hadd'
+  by_cases hxa : (x : ℝ) ≤ cutAlpha L (q + 1)
+  · have hx1 : (x : ℝ) ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)) :=
+      ⟨hx.1, hxa⟩
+    by_cases hya : (y : ℝ) ≤ cutAlpha L (q + 1)
+    · exact finish (hinj.1 hx1 ⟨hy.1, hya⟩ hxy)
+    · have hylo : cutAlpha L (q + 1) < (y : ℝ) := lt_of_not_ge hya
+      by_cases hyb : (y : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+      · exact False.elim (hdisj.1 x hx1 y ⟨hylo, hyb⟩ hxy)
+      · exact False.elim (hdisj.2.1 x hx1 y
+          ⟨lt_of_not_ge hyb, hy.2⟩ hxy)
+  · have hxalo : cutAlpha L (q + 1) < (x : ℝ) := lt_of_not_ge hxa
+    by_cases hxb : (x : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+    · have hx2 : (x : ℝ) ∈ Ioc (cutAlpha L (q + 1))
+          (cutAlpha L p + 2 * Real.pi) := ⟨hxalo, hxb⟩
+      by_cases hya : (y : ℝ) ≤ cutAlpha L (q + 1)
+      · exact False.elim (hdisj.1 y ⟨hy.1, hya⟩ x hx2 hxy.symm)
+      · have hyalo : cutAlpha L (q + 1) < (y : ℝ) := lt_of_not_ge hya
+        by_cases hyb : (y : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+        · exact finish (hinj.2.1 hx2 ⟨hyalo, hyb⟩ hxy)
+        · exact False.elim (hdisj.2.2 x hx2 y
+            ⟨lt_of_not_ge hyb, hy.2⟩ hxy)
+    · have hx3 : (x : ℝ) ∈ Ioo (cutAlpha L p + 2 * Real.pi)
+          (cutAlpha L q + 2 * Real.pi) := ⟨lt_of_not_ge hxb, hx.2⟩
+      by_cases hya : (y : ℝ) ≤ cutAlpha L (q + 1)
+      · exact False.elim (hdisj.2.1 y ⟨hy.1, hya⟩ x hx3 hxy.symm)
+      · have hyalo : cutAlpha L (q + 1) < (y : ℝ) := lt_of_not_ge hya
+        by_cases hyb : (y : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+        · exact False.elim (hdisj.2.2 y ⟨hyalo, hyb⟩ x hx3 hxy.symm)
+        · exact finish (hinj.2.2 hx3 ⟨lt_of_not_ge hyb, hy.2⟩ hxy)
 
 theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutNewB L p q) := by
@@ -7787,7 +7830,118 @@ theorem cutNewA_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     Set.range (cutNewA L p q) ⊆
       frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have halpha (m : ℕ) : cutAlpha L (m + 1) = cutAlpha L m + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+    done
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqp : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+    calc
+      2 * Real.pi * (q : ℝ) / L < 2 * Real.pi * ((p : ℝ) + L) / L :=
+        (div_lt_div_iff_of_pos_right hL).2
+          (mul_lt_mul_of_pos_left hqp (mul_pos (by norm_num) Real.pi_pos))
+      _ = 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi := by field_simp
+  have hΓtop : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [halpha p, halpha q]
+    linarith
+  have hAΓ : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    rw [halpha p, halpha q]
+    linarith
+  have hp1q : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_le_div_iff_of_pos_right hL).2
+    exact mul_le_mul_of_nonneg_left (by exact_mod_cast (show p + 1 ≤ q by omega))
+      (mul_nonneg (by norm_num) hpi.le)
+  have hpoint (m : ℕ) : cutPoint L m =
+      Complex.exp ((cutAlpha L m : ℂ) * Complex.I) := rfl
+  have harc : ∀ θ : ℝ, cutAlpha L (p + 1) ≤ θ →
+      θ ≤ cutAlpha L (q + 1) →
+      cutCross (cutPoint L (q + 1) - cutPoint L (p + 1))
+        (Complex.exp ((θ : ℂ) * Complex.I) - cutPoint L (p + 1)) ≤ 0 := by
+    intro θ hlo hhi
+    rw [hpoint, hpoint, hcross]
+    have hs1 : Real.sin ((θ - cutAlpha L (q + 1)) / 2) ≤ 0 :=
+      Real.sin_nonpos_of_nonpos_of_neg_pi_le (by linarith)
+        (by nlinarith [hΓtop])
+    have hs2 : 0 < Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) := by
+      apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hΓtop, hAΓ]
+    have hs3 : 0 ≤ Real.sin ((θ - cutAlpha L (p + 1)) / 2) :=
+      Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by nlinarith [hΓtop])
+    exact mul_nonpos_of_nonpos_of_nonneg
+      (mul_nonpos_of_nonpos_of_nonneg
+        (mul_nonpos_of_nonneg_of_nonpos (by positivity) hs1) hs2.le) hs3
+  rw [hfront]
+  rintro z ⟨b, rfl⟩
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L p)
+    (AddCircle.homeomorphCircle'.symm b)
+  have hxmem : (x : ℝ) ∈ Set.Ico (cutAlpha L p) (cutAlpha L p + 2 * Real.pi) := x.2
+  have hval : cutNewA L p q b = cutProfileNewA L p q x := by rfl
+  by_cases hx1 : (x : ℝ) ≤ cutAlpha L (p + 1)
+  · right
+    rw [hval]
+    simp only [cutProfileNewA, if_pos hx1]
+    unfold segment
+    let s := ((x : ℝ) - cutAlpha L p) * L / (2 * Real.pi)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      exact div_nonneg (mul_nonneg (sub_nonneg.mpr hxmem.1) hL.le)
+        (mul_nonneg (by norm_num) hpi.le)
+    have hs1 : s ≤ 1 := by
+      rw [halpha p] at hx1
+      dsimp [s]
+      apply (div_le_one (mul_pos (by norm_num) hpi)).2
+      have hxmul := mul_le_mul_of_nonneg_right hx1 hL.le
+      field_simp [ne_of_gt hL] at hxmul
+      linarith
+    refine ⟨1 - s, s, by linarith, hs0, by ring, ?_⟩
+    simp [cutSeam, s, smul_eq_mul]
+    ring
+  · by_cases hxq : (x : ℝ) ≤ cutAlpha L q
+    · left
+      rw [hval]
+      simp only [cutProfileNewA, if_neg hx1, if_pos hxq]
+      constructor
+      · rw [Complex.norm_exp]
+        simp
+      · apply harc
+        · rw [halpha p, halpha q]
+          have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+            div_pos (mul_pos (by norm_num) hpi) hL
+          linarith [hxq]
+        · rw [halpha p, halpha q]
+          have hx1' : cutAlpha L (p + 1) < (x : ℝ) := lt_of_not_ge hx1
+          rw [halpha p] at hx1'
+          linarith
+    · left
+      rw [hval]
+      simp only [cutProfileNewA, if_neg hx1, if_neg hxq]
+      constructor
+      · rw [Complex.norm_exp]
+        simp
+      · apply harc
+        · have hsle : cutSA L p q x ≤ 1 :=
+            (div_le_one (sub_pos.mpr hqtop)).2 (by linarith [hxmem.2])
+          rw [halpha (p + 1), halpha p]
+          have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+            div_pos (mul_pos (by norm_num) hpi) hL
+          nlinarith
+        · have hs0 : 0 ≤ cutSA L p q x := by
+            unfold cutSA
+            exact (div_nonneg (sub_nonneg.mpr (le_of_not_ge hxq))
+              (sub_nonneg.mpr hqtop.le))
+          rw [halpha (p + 1), halpha q]
+          have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+            div_pos (mul_pos (by norm_num) hpi) hL
+          nlinarith [mul_nonneg hs0 hstep.le]
 
 /-- Explicit preimages for frontier points (model: `cutOldA_range`). -/
 theorem cutNewA_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
@@ -7801,7 +7955,220 @@ theorem cutNewA_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
         4 * Real.sin ((φ - γ) / 2) * Real.sin ((γ - α) / 2) * Real.sin ((φ - α) / 2)) :
     frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) ⊆
       Set.range (cutNewA L p q) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : 0 < (L : ℝ) := by exact_mod_cast hLnat
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hstep : 0 < 2 * Real.pi / (L : ℝ) :=
+    div_pos (mul_pos (by norm_num) hpi) hL
+  have halpha (m : ℕ) : cutAlpha L (m + 1) = cutAlpha L m + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+    done
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqp : (q : ℝ) < p + L := by exact_mod_cast (by omega : q < p + L)
+    calc
+      2 * Real.pi * (q : ℝ) / L < 2 * Real.pi * ((p : ℝ) + L) / L :=
+        (div_lt_div_iff_of_pos_right hL).2
+          (mul_lt_mul_of_pos_left hqp (mul_pos (by norm_num) Real.pi_pos))
+      _ = 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi := by field_simp
+  have hΓtop : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [halpha p, halpha q]
+    linarith
+  have hAΓ : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    rw [halpha p, halpha q]
+    linarith
+  have hp2 : cutAlpha L (p + 2) = cutAlpha L (p + 1) + 2 * Real.pi / L := by
+    convert halpha (p + 1) using 1 <;> omega
+  have hp1q : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_le_div_iff_of_pos_right hL).2
+    exact mul_le_mul_of_nonneg_left (by exact_mod_cast (show p + 1 ≤ q by omega))
+      (mul_nonneg (by norm_num) hpi.le)
+  have hpoint (m : ℕ) : cutPoint L m =
+      Complex.exp ((cutAlpha L m : ℂ) * Complex.I) := rfl
+  rw [hfront]
+  intro z
+  rintro (hz | hz)
+  · rcases hz with ⟨hnorm, hcrossz⟩
+    let b0 : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hnorm⟩
+    let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L (p + 1))
+      (AddCircle.homeomorphCircle'.symm b0)
+    have hymem : (y : ℝ) ∈ Ico (cutAlpha L (p + 1))
+        (cutAlpha L (p + 1) + 2 * Real.pi) := y.2
+    have hexp : Complex.exp (((y : ℝ) : ℂ) * Complex.I) = z := by
+      change Complex.exp (((y : ℝ) : ℂ) * Complex.I) = (b0 : ℂ)
+      have hyangle : ((y : ℝ) : AddCircle (2 * Real.pi)) =
+          AddCircle.homeomorphCircle'.symm b0 :=
+        (AddCircle.equivIco (2 * Real.pi) (cutAlpha L (p + 1))).symm_apply_apply _
+      have hh := congrArg AddCircle.homeomorphCircle' hyangle
+      have hcirc : Real.Angle.toCircle ((y : ℝ) : Real.Angle) = b0 := by
+        simpa only [AddCircle.homeomorphCircle'_apply,
+          AddCircle.homeomorphCircle'.apply_symm_apply] using hh
+      calc
+        Complex.exp (((y : ℝ) : ℂ) * Complex.I) =
+            (Real.Angle.toCircle ((y : ℝ) : Real.Angle) : ℂ) := by
+              simp [Real.Angle.toCircle_coe, Circle.coe_exp]
+        _ = (b0 : ℂ) := congrArg Subtype.val hcirc
+    have hyΓ : (y : ℝ) ≤ cutAlpha L (q + 1) := by
+      by_contra hn
+      have hs1 : 0 < Real.sin (((y : ℝ) - cutAlpha L (q + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hymem.2, hΓtop]
+      have hs2 : 0 < Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hΓtop, hAΓ]
+      have hs3 : 0 < Real.sin (((y : ℝ) - cutAlpha L (p + 1)) / 2) := by
+        apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hymem.1, hymem.2]
+      rw [← hexp, hpoint, hpoint, hcross] at hcrossz
+      have : 0 < 4 * Real.sin (((y : ℝ) - cutAlpha L (q + 1)) / 2) *
+          Real.sin ((cutAlpha L (q + 1) - cutAlpha L (p + 1)) / 2) *
+          Real.sin (((y : ℝ) - cutAlpha L (p + 1)) / 2) := by positivity
+      linarith
+    by_cases hyp2 : (y : ℝ) < cutAlpha L (p + 2)
+    · by_cases hyP : (y : ℝ) = cutAlpha L (p + 1)
+      · let a : AddCircle (2 * Real.pi) := (cutAlpha L p : ℝ)
+        let b : Circle := AddCircle.homeomorphCircle' a
+        refine ⟨b, ?_⟩
+        unfold cutNewA
+        rw [show AddCircle.homeomorphCircle'.symm b = a from
+          AddCircle.homeomorphCircle'.symm_apply_apply a]
+        rw [AddCircle.liftIco_coe_apply ⟨le_rfl, by linarith [hpi]⟩]
+        have hp_le : cutAlpha L p ≤ cutAlpha L (p + 1) := by
+          rw [halpha p]
+          exact le_add_of_nonneg_right hstep.le
+        simp only [cutProfileNewA, if_pos hp_le]
+        simp [cutSeam]
+        rw [hpoint, ← hexp, hyP]
+      · let φ := cutAlpha L q +
+          (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) *
+            (cutAlpha L p + 2 * Real.pi - cutAlpha L q)
+        have hφlo : cutAlpha L p ≤ φ := by
+          dsimp [φ]
+          have hr0 : 0 ≤ cutAlpha L (p + 2) - (y : ℝ) := by linarith
+          have hgap : 0 < cutAlpha L p + 2 * Real.pi - cutAlpha L q := sub_pos.mpr hqtop
+          have hfac0 : 0 ≤ (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) :=
+            div_nonneg (mul_nonneg hr0 hL.le) (mul_nonneg (by norm_num) hpi.le)
+          nlinarith [mul_nonneg hfac0 hgap.le]
+        have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+          dsimp [φ]
+          rw [hp2] at hyp2
+          have hylo : cutAlpha L (p + 1) < (y : ℝ) :=
+            lt_of_le_of_ne hymem.1 (Ne.symm hyP)
+          have hr : (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) < 1 := by
+            apply (div_lt_one (mul_pos (by norm_num) hpi)).2
+            have hdiff : cutAlpha L (p + 2) - (y : ℝ) < 2 * Real.pi / L := by
+              linarith [hp2]
+            have hm := mul_lt_mul_of_pos_right hdiff hL
+            field_simp [ne_of_gt hL] at hm
+            linarith
+          nlinarith [sub_pos.mpr hqtop]
+        let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+        let b : Circle := AddCircle.homeomorphCircle' a
+        refine ⟨b, ?_⟩
+        unfold cutNewA
+        rw [show AddCircle.homeomorphCircle'.symm b = a from
+          AddCircle.homeomorphCircle'.symm_apply_apply a]
+        rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+        have hqφ : ¬ φ ≤ cutAlpha L q := by
+          dsimp [φ]
+          have hfac : 0 < (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) :=
+            div_pos (mul_pos (sub_pos.mpr hyp2) hL) (mul_pos (by norm_num) hpi)
+          have hgap : 0 < cutAlpha L p + 2 * Real.pi - cutAlpha L q := sub_pos.mpr hqtop
+          nlinarith [mul_pos hfac hgap]
+        have hpφ : ¬ φ ≤ cutAlpha L (p + 1) := fun hh => hqφ (hh.trans hp1q)
+        simp only [cutProfileNewA, if_neg hpφ, if_neg hqφ]
+        have hsa : cutSA L p q φ =
+            (cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi) := by
+          unfold cutSA φ
+          field_simp [ne_of_gt hL, ne_of_gt hpi, ne_of_gt (sub_pos.mpr hqtop)]
+          ring
+        rw [hsa]
+        rw [show cutAlpha L (p + 2) -
+            ((cutAlpha L (p + 2) - (y : ℝ)) * L / (2 * Real.pi)) *
+              (2 * Real.pi / L) = (y : ℝ) by field_simp; ring]
+        exact hexp
+    · let φ := cutAlpha L (q + 1) + cutAlpha L (p + 1) - (y : ℝ)
+      have hφlo : cutAlpha L p ≤ φ := by
+        dsimp [φ]
+        linarith [halpha p, halpha q]
+      have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+        dsimp [φ]
+        have hylo := hymem.1
+        nlinarith [halpha p, halpha q, hqtop]
+      let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+      let b : Circle := AddCircle.homeomorphCircle' a
+      refine ⟨b, ?_⟩
+      unfold cutNewA
+      rw [show AddCircle.homeomorphCircle'.symm b = a from
+        AddCircle.homeomorphCircle'.symm_apply_apply a]
+      rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+      by_cases hyEq : (y : ℝ) = cutAlpha L (q + 1)
+      · have hφeq : φ = cutAlpha L (p + 1) := by dsimp [φ]; linarith
+        rw [hφeq]
+        simp only [cutProfileNewA, if_pos le_rfl]
+        have hparam : (cutAlpha L (p + 1) - cutAlpha L p) * L /
+            (2 * Real.pi) = 1 := by
+          rw [halpha p]
+          field_simp [ne_of_gt hL, ne_of_gt hpi]
+          ring
+        rw [hparam]
+        simp [cutSeam]
+        rw [hpoint, ← hexp, hyEq]
+      have hp1φ : ¬ φ ≤ cutAlpha L (p + 1) := by
+        dsimp [φ]
+        have hyltΓ : (y : ℝ) < cutAlpha L (q + 1) := lt_of_le_of_ne hyΓ hyEq
+        linarith
+      have hφq : φ ≤ cutAlpha L q := by
+        dsimp [φ]
+        have hyp2' : cutAlpha L (p + 2) ≤ (y : ℝ) := le_of_not_gt hyp2
+        linarith [hp2, halpha q]
+      simp [cutProfileNewA, hp1φ, hφq, φ, hexp]
+  · unfold segment at hz
+    rcases hz with ⟨a0, s, ha0, hs0, has, hz⟩
+    have hs1 : s ≤ 1 := by linarith
+    have haeq : a0 = 1 - s := by linarith
+    subst a0
+    rw [← hz]
+    let φ := cutAlpha L p + s * (2 * Real.pi / L)
+    have hφlo : cutAlpha L p ≤ φ := by
+      dsimp [φ]
+      exact le_add_of_nonneg_right (mul_nonneg hs0 hstep.le)
+    have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+      dsimp [φ]
+      have hstep_lt : 2 * Real.pi / L ≤ 2 * Real.pi := by
+        apply (div_le_iff₀ hL).2
+        have : (1 : ℝ) ≤ L := by exact_mod_cast hLnat
+        nlinarith [hpi]
+      have hsstep : s * (2 * Real.pi / L) ≤ 2 * Real.pi / L :=
+        mul_le_of_le_one_left hstep.le hs1
+      have hLtwo : (2 : ℝ) ≤ L := by exact_mod_cast (show 2 ≤ L by omega)
+      have hstrict : 2 * Real.pi / L < 2 * Real.pi := by
+        apply (div_lt_iff₀ hL).2
+        nlinarith [hpi]
+      nlinarith
+    let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+    let b : Circle := AddCircle.homeomorphCircle' a
+    refine ⟨b, ?_⟩
+    unfold cutNewA
+    rw [show AddCircle.homeomorphCircle'.symm b = a from
+      AddCircle.homeomorphCircle'.symm_apply_apply a]
+    rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+    have hφ1 : φ ≤ cutAlpha L (p + 1) := by
+      rw [halpha p]
+      dsimp [φ]
+      nlinarith
+    simp only [cutProfileNewA, if_pos hφ1]
+    have hparam : (φ - cutAlpha L p) * L / (2 * Real.pi) = s := by
+      dsimp [φ]
+      field_simp [ne_of_gt hL, ne_of_gt hpi]
+      ring
+    rw [hparam]
+    simp [cutSeam, smul_eq_mul]
+    ring
 
 theorem cutNewA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (p + 1)) (cutPoint L (q + 1))) =
@@ -8205,7 +8572,122 @@ theorem cutBoundary_coverA {L p q : ℕ} (hpq : p < q) (hqL : q < L) (y : Circle
 theorem cutBoundary_coverB {L p q : ℕ} (hpq : p < q) (hqL : q < L) (y : Circle) :
     (∃ e s, ((q ≤ e ∧ e < L) ∨ e < p) ∧ y = cutEdgeCircle L e s) ∨
       (∃ s : Icc (0 : ℝ) 1, y = cutChordParamB L p q s) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : (0 : ℝ) < L := by exact_mod_cast hLnat
+  have hd : 0 < 2 * Real.pi / (L : ℝ) := div_pos Real.two_pi_pos hL
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+    (AddCircle.homeomorphCircle'.symm y)
+  let φ : ℝ := x.1
+  have hφmem : φ ∈ Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := x.2
+  have hcircle : y = AddCircle.homeomorphCircle'
+      (φ : AddCircle (2 * Real.pi)) := by
+    rw [← AddCircle.homeomorphCircle'.apply_symm_apply y]
+    congr 1
+    apply (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).injective
+    rw [AddCircle.equivIco_coe_eq hφmem]
+  by_cases harc : φ < cutAlpha L p + 2 * Real.pi
+  · left
+    by_cases hturn : φ < 2 * Real.pi
+    · let r : ℝ := φ / (2 * Real.pi / L)
+      let e : ℕ := ⌊r⌋₊
+      let s₀ : ℝ := r - e
+      have hr0 : 0 ≤ r := by
+        apply div_nonneg
+        · exact (by
+            have : 0 ≤ cutAlpha L q := by unfold cutAlpha; positivity
+            exact this.trans hφmem.1)
+        · exact hd.le
+      have he_le_r : (e : ℝ) ≤ r := by
+        dsimp [e]
+        exact Nat.floor_le hr0
+      have hr_lt : r < e + 1 := by
+        dsimp [e]
+        exact Nat.lt_floor_add_one r
+      let s : Icc (0 : ℝ) 1 := ⟨s₀, by dsimp [s₀]; linarith,
+        by dsimp [s₀]; linarith⟩
+      have hφ : φ = cutAlpha L e + s * (2 * Real.pi / L) := by
+        dsimp [s, s₀, r]
+        unfold cutAlpha
+        field_simp
+        ring
+      have hqe : q ≤ e := by
+        apply Nat.le_floor
+        dsimp [r]
+        rw [le_div_iff₀ hd]
+        unfold cutAlpha at hφmem
+        convert hφmem.1 using 1 <;> field_simp <;> ring
+      have heL : e < L := by
+        have hrL : r < (L : ℝ) := by
+          dsimp [r]
+          rw [div_lt_iff₀ hd]
+          convert hturn using 1 <;> field_simp <;> ring
+        exact_mod_cast (lt_of_le_of_lt he_le_r hrL)
+      refine ⟨e, s, Or.inl ⟨hqe, heL⟩, ?_⟩
+      rw [cutBoundaryData_concrete_aux_edge_circle, hcircle, hφ]
+    · have htwo : 2 * Real.pi ≤ φ := le_of_not_gt hturn
+      let ψ : ℝ := φ - 2 * Real.pi
+      let r : ℝ := ψ / (2 * Real.pi / L)
+      let e : ℕ := ⌊r⌋₊
+      let s₀ : ℝ := r - e
+      have hr0 : 0 ≤ r := by
+        dsimp [r, ψ]
+        exact div_nonneg (sub_nonneg.mpr htwo) hd.le
+      have he_le_r : (e : ℝ) ≤ r := by
+        dsimp [e]
+        exact Nat.floor_le hr0
+      have hr_lt : r < e + 1 := by
+        dsimp [e]
+        exact Nat.lt_floor_add_one r
+      let s : Icc (0 : ℝ) 1 := ⟨s₀, by dsimp [s₀]; linarith,
+        by dsimp [s₀]; linarith⟩
+      have hψ : ψ = cutAlpha L e + s * (2 * Real.pi / L) := by
+        dsimp [s, s₀, r]
+        unfold cutAlpha
+        field_simp
+        ring
+      have hep : e < p := by
+        have hrp : r < (p : ℝ) := by
+          dsimp [r, ψ]
+          rw [div_lt_iff₀ hd]
+          calc
+            φ - 2 * Real.pi < cutAlpha L p := sub_lt_iff_lt_add.mpr harc
+            _ = (p : ℝ) * (2 * Real.pi / L) := by
+              unfold cutAlpha
+              ring
+        exact_mod_cast (lt_of_le_of_lt he_le_r hrp)
+      refine ⟨e, s, Or.inr hep, ?_⟩
+      rw [cutBoundaryData_concrete_aux_edge_circle, hcircle]
+      congr 1
+      rw [← hψ]
+      change (φ : AddCircle (2 * Real.pi)) = (ψ : AddCircle (2 * Real.pi))
+      apply QuotientAddGroup.eq_iff_sub_mem.mpr
+      refine ⟨1, ?_⟩
+      dsimp [ψ]
+      ring
+  · right
+    have hstart : cutAlpha L p + 2 * Real.pi ≤ φ := le_of_not_gt harc
+    have hden : 0 < cutAlpha L q - cutAlpha L p := by
+      unfold cutAlpha
+      exact sub_pos.mpr ((div_lt_div_iff_of_pos_right hL).2
+        (mul_lt_mul_of_pos_left (by exact_mod_cast hpq) Real.two_pi_pos))
+    let s₀ := cutSB L p q φ
+    have hs0 : 0 ≤ s₀ := by
+      dsimp [s₀, cutSB]
+      exact div_nonneg (by linarith) hden.le
+    have hs1 : s₀ ≤ 1 := by
+      dsimp [s₀, cutSB]
+      rw [div_le_one hden]
+      linarith [hφmem.2.le]
+    let s : Icc (0 : ℝ) 1 := ⟨s₀, hs0, hs1⟩
+    refine ⟨s, ?_⟩
+    rw [hcircle]
+    unfold cutChordParamB
+    apply congrArg AddCircle.homeomorphCircle'
+    apply QuotientAddGroup.eq_iff_sub_mem.mpr
+    refine ⟨0, ?_⟩
+    dsimp [s, s₀, cutSB]
+    field_simp
+    ring
 
 theorem cutBoundary_old_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ s : Icc (0 : ℝ) 1, cutOldA L p q (cutChordParamA L p q s) = cutChordA L p q s) ∧
@@ -8429,6 +8911,44 @@ lemma cut_transfer_consistency_aux_chordB_end {L p q : ℕ}
   rw [h] at hh
   exact (lt_irrefl 1 hh)
 
+/-- Shared vertex: the point is the start of side `e₀` (`s₀ = 0`) written as the end of side `e` (`τ = 1`), `e₀ = (e+1) % L`. -/
+theorem cut_transfer_consistency_A_arc_aux_next {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hτ : τ.1 = 1) (hs₀ : s₀.1 = 0) (hadj : e₀ = (e + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Shared vertex: the point is the end of side `e₀` (`s₀ = 1`) written as the start of side `e` (`τ = 0`), `e = (e₀+1) % L`. -/
+theorem cut_transfer_consistency_A_arc_aux_prev {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0) (hadj : e = (e₀ + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
 /-- Piece `A`, side position `(e₀, s₀)` with `p ≤ e₀ < q`. -/
 theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -8445,7 +8965,36 @@ theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hL : 2 ≤ L := by
+    dsimp [L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have he₀L : e₀ < L := by
+    dsimp [L, q] at he₀q ⊢
+    simp at he₀q ⊢
+    omega
+  have hedges : edgePoint L e τ = edgePoint L e₀ s₀ := by
+    apply Subtype.ext
+    exact hP.trans (D.oldA_arc e₀ s₀ he₀ he₀q)
+  rcases heq hL (by change e < L at he; exact he) he₀L hedges with hs | hf | hb
+  · rcases hs with ⟨rfl, rfl⟩
+    refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hN]
+    by_cases hp : e = p
+    · subst e
+      rw [D.newA_x]
+      simp [cutTransfer, p, q, L]
+    · have hp' : p < e := by omega
+      have hq' : e ≠ q := by omega
+      rw [D.newA_v e τ (by omega) he₀q]
+      simp [cutTransfer, hp, hq', p, q, L, hp', he₀q]
+  · rcases hf with ⟨hτ, hs₀, hadj⟩
+    exact cut_transfer_consistency_A_arc_aux_next u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ he₀q hP hN hτ hs₀ hadj
+  · rcases hb with ⟨hs₀, hτ, hadj⟩
+    exact cut_transfer_consistency_A_arc_aux_prev u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ he₀q hP hN hs₀ hτ hadj
 
 /-- Piece `A`, chord position `s₀` (a unit point only at the ends `Q`, `P`). -/
 -- BEGIN SEAT AREA
@@ -8534,6 +9083,92 @@ theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
     · exact cut_transfer_consistency_B_chord u v t x oldA oldB newA newB D heq e he τ N
         s₀ (by simpa using hP) (by simpa using hN)
 
+lemma cut_transfer_generator_aux_get_u {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) (e : ℕ)
+    (he : e < u.length) :
+    (u ++ [x] ++ v ++ [x] ++ t)[e]'(by simp; omega) = u[e] := by
+  simp [List.getElem_append, he]
+
+lemma cut_transfer_generator_aux_get_x₁ {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t)[u.length]'(by simp) = x := by
+  simp [List.getElem_append]
+
+lemma cut_transfer_generator_aux_get_x₂ {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t)[u.length + 1 + v.length]'(by simp; omega) = x := by
+  have h : (u ++ [x] ++ v ++ [x] ++ t) = (u ++ [x] ++ v) ++ (x :: t) := by simp
+  have hl : (u ++ [x] ++ v).length = u.length + 1 + v.length := by simp; omega
+  simp only [h]
+  rw [List.getElem_append_right (by omega)]
+  simp only [hl, Nat.sub_self, List.getElem_cons_zero]
+
+/-- The new position of an old non-`x` side: `v` sides are reflected, others stay. -/
+def cutSideMap (p q e : ℕ) : ℕ := if p < e ∧ e < q then q + p + 1 - e else e
+
+theorem cut_transfer_side {L p q e : ℕ} (hep : e ≠ p) (heq : e ≠ q) (τ : Icc (0 : ℝ) 1) :
+    cutTransfer L p q e τ = (edgePoint L (cutSideMap p q e)
+      (if p < e ∧ e < q then reverseParameter τ else τ) : ℂ) := by
+  unfold cutTransfer
+  rw [if_neg (by omega)]
+  unfold cutSideMap
+  split_ifs <;> rfl
+
+/-- An `x`-labelled old side is one of the two `x`'s (freshness). -/
+theorem cut_x_index {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i : Fin (u ++ [x] ++ v ++ [x] ++ t).length) (h : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = x.1) :
+    (i : ℕ) = u.length ∨ (i : ℕ) = u.length + 1 + v.length := by
+  sorry
+
+/-- Old non-`x` sides land in the new word on the side `cutSideMap`, holding the same
+letter (or its inverse, for `v`); `cutSideMap` is injective on them. -/
+theorem cut_word_side {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (∀ e : Fin (u ++ [x] ++ v ++ [x] ++ t).length, (e : ℕ) ≠ u.length → (e : ℕ) ≠ u.length + 1 + v.length →
+      ∃ h : cutSideMap u.length (u.length + 1 + v.length) e < (u ++ [x, x] ++ inverseWord v ++ t).length,
+        (u ++ [x, x] ++ inverseWord v ++ t).get ⟨_, h⟩ =
+          if u.length < (e : ℕ) ∧ (e : ℕ) < u.length + 1 + v.length
+            then inv ((u ++ [x] ++ v ++ [x] ++ t).get e) else (u ++ [x] ++ v ++ [x] ++ t).get e) ∧
+    (∀ e e' : ℕ, e ≠ u.length → e ≠ u.length + 1 + v.length → e' ≠ u.length →
+      e' ≠ u.length + 1 + v.length →
+      cutSideMap u.length (u.length + 1 + v.length) e =
+        cutSideMap u.length (u.length + 1 + v.length) e' → e = e') := by
+  sorry
+
+/-- The non-`x` case of `cut_transfer_generator`, from the side facts. -/
+theorem cut_transfer_generator_aux_sides {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hside : ∀ e : Fin (u ++ [x] ++ v ++ [x] ++ t).length, (e : ℕ) ≠ u.length →
+      (e : ℕ) ≠ u.length + 1 + v.length →
+      ∃ h : cutSideMap u.length (u.length + 1 + v.length) e < (u ++ [x, x] ++ inverseWord v ++ t).length,
+        (u ++ [x, x] ++ inverseWord v ++ t).get ⟨_, h⟩ =
+          if u.length < (e : ℕ) ∧ (e : ℕ) < u.length + 1 + v.length
+            then inv ((u ++ [x] ++ v ++ [x] ++ t).get e) else (u ++ [x] ++ v ++ [x] ++ t).get e)
+    (hinj : ∀ e e' : ℕ, e ≠ u.length → e ≠ u.length + 1 + v.length → e' ≠ u.length →
+      e' ≠ u.length + 1 + v.length →
+      cutSideMap u.length (u.length + 1 + v.length) e =
+        cutSideMap u.length (u.length + 1 + v.length) e' → e = e')
+    (i j : Fin (u ++ [x] ++ v ++ [x] ++ t).length) (hij : i ≠ j) (τ : Icc (0 : ℝ) 1)
+    (hlab : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = ((u ++ [x] ++ v ++ [x] ++ t).get j).1)
+    (hi : (i : ℕ) ≠ u.length ∧ (i : ℕ) ≠ u.length + 1 + v.length)
+    (hj : (j : ℕ) ≠ u.length ∧ (j : ℕ) ≠ u.length + 1 + v.length)
+    (T T' : Disk)
+    (hT : (T : ℂ) = (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length
+      (cutSideMap u.length (u.length + 1 + v.length) i)
+      (if u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length
+        then reverseParameter τ else τ) : ℂ))
+    (hT' : (T' : ℂ) = (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length
+      (cutSideMap u.length (u.length + 1 + v.length) j)
+      (if u.length < (j : ℕ) ∧ (j : ℕ) < u.length + 1 + v.length
+        then reverseParameter
+          (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2 then τ else reverseParameter τ)
+        else (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2 then τ
+          else reverseParameter τ)) : ℂ)) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) T T' := by
+  sorry
+
 theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
@@ -8547,6 +9182,115 @@ theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
       (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2
         then τ else reverseParameter τ)) :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) T T' := by
+  have hgx : ∀ k : Fin (u ++ [x] ++ v ++ [x] ++ t).length,
+      ((k : ℕ) = u.length ∨ (k : ℕ) = u.length + 1 + v.length) →
+      (u ++ [x] ++ v ++ [x] ++ t).get k = x := by
+    rintro ⟨k, hk⟩ (h | h) <;> simp only at h <;> subst h
+    · simpa using cut_transfer_generator_aux_get_x₁ u v t x
+    · simpa using cut_transfer_generator_aux_get_x₂ u v t x
+  by_cases hxi : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = x.1
+  · -- both are `x`: the two transfers are the same seam point
+    have hxj : ((u ++ [x] ++ v ++ [x] ++ t).get j).1 = x.1 := hlab ▸ hxi
+    have hsign : ((u ++ [x] ++ v ++ [x] ++ t).get i).2 =
+        ((u ++ [x] ++ v ++ [x] ++ t).get j).2 := by
+      rw [hgx i (cut_x_index u v t x hx i hxi), hgx j (cut_x_index u v t x hx j hxj)]
+    have hT0 : (T : ℂ) = cutSeam (u ++ [x] ++ v ++ [x] ++ t).length u.length
+        (u.length + 1 + v.length) τ := by
+      rw [hT]; unfold cutTransfer
+      rw [if_pos (cut_x_index u v t x hx i hxi)]
+    have hT1 : (T' : ℂ) = cutSeam (u ++ [x] ++ v ++ [x] ++ t).length u.length
+        (u.length + 1 + v.length) τ := by
+      rw [hT', if_pos hsign]; unfold cutTransfer
+      rw [if_pos (cut_x_index u v t x hx j hxj)]
+    rw [show T = T' from Subtype.ext (hT0.trans hT1.symm)]
+    exact Relation.EqvGen.refl _
+  · have hxj : ¬ ((u ++ [x] ++ v ++ [x] ++ t).get j).1 = x.1 := hlab ▸ hxi
+    have hi : (i : ℕ) ≠ u.length ∧ (i : ℕ) ≠ u.length + 1 + v.length :=
+      ⟨fun h => hxi (by rw [hgx i (Or.inl h)]), fun h => hxi (by rw [hgx i (Or.inr h)])⟩
+    have hj : (j : ℕ) ≠ u.length ∧ (j : ℕ) ≠ u.length + 1 + v.length :=
+      ⟨fun h => hxj (by rw [hgx j (Or.inl h)]), fun h => hxj (by rw [hgx j (Or.inr h)])⟩
+    obtain ⟨hside, hinj⟩ := cut_word_side u v t x
+    exact cut_transfer_generator_aux_sides u v t x hside hinj i j hij τ hlab hi hj T T'
+      (by rw [hT, cut_transfer_side hi.1 hi.2])
+      (by rw [hT', cut_transfer_side hj.1 hj.2])
+
+lemma cut_retransfer_consistency_aux_chords {L p q : ℕ}
+    (s : Icc (0 : ℝ) 1) :
+    cutChordA L p q s = cutChordB L p q (reverseParameter s) := by
+  apply Complex.ext <;>
+    simp [cutChordA, cutChordB, reverseParameter] <;> ring
+
+
+/-- Piece `A`, side position `(e₀, s₀)`, `p ≤ e₀ < q` (side `p` gives the seam: a unit point only at `P'`, `Q'`). -/
+theorem cut_retransfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hP : (P : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
+  sorry
+
+/-- Piece `A`, chord position `s₀`. -/
+theorem cut_retransfer_consistency_A_chord {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = newA (cutChordParamA (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀))
+    (hP : (P : ℂ) = oldA (cutChordParamA (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀)) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
+  sorry
+
+/-- Piece `B`, side position `(e₀, s₀)`, `q ≤ e₀ < L` or `e₀ < p`. -/
+theorem cut_retransfer_consistency_B_arc {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : (u.length + 1 + v.length ≤ e₀ ∧ e₀ < (u ++ [x] ++ v ++ [x] ++ t).length) ∨ e₀ < u.length)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = newB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hP : (P : ℂ) = oldB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
+  sorry
+
+/-- Piece `B`, chord position `s₀`. -/
+theorem cut_retransfer_consistency_B_chord {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (s₀ : Icc (0 : ℝ) 1)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = newB (cutChordParamB (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀))
+    (hP : (P : ℂ) = oldB (cutChordParamB (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀)) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
   sorry
 
 theorem cut_retransfer_consistency {Label : Type*} [DecidableEq Label]
@@ -8566,7 +9310,19 @@ theorem cut_retransfer_consistency {Label : Type*} [DecidableEq Label]
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
         (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  cases i with
+  | false =>
+    rcases D.coverA y with ⟨e₀, s₀, h1, h2, rfl⟩ | ⟨s₀, rfl⟩
+    · exact cut_retransfer_consistency_A_arc u v t x oldA oldB newA newB D heq e he τ P
+        e₀ s₀ h1 h2 (by simpa using hN) (by simpa using hP)
+    · exact cut_retransfer_consistency_A_chord u v t x oldA oldB newA newB D heq e he τ P
+        s₀ (by simpa using hN) (by simpa using hP)
+  | true =>
+    rcases D.coverB y with ⟨e₀, s₀, h1, rfl⟩ | ⟨s₀, rfl⟩
+    · exact cut_retransfer_consistency_B_arc u v t x oldA oldB newA newB D heq e he τ P
+        e₀ s₀ h1 (by simpa using hN) (by simpa using hP)
+    · exact cut_retransfer_consistency_B_chord u v t x oldA oldB newA newB D heq e he τ P
+        s₀ (by simpa using hN) (by simpa using hP)
 
 theorem cut_retransfer_generator {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -8768,7 +9524,79 @@ theorem cut_reverse_fibre_aux_seam {Label : Type*} [DecidableEq Label]
     (y y' : Circle) (P P' : Disk) (h : newA y = newB y') (hne : ‖newA y‖ ≠ 1)
     (hP : (P : ℂ) = oldA y) (hP' : (P' : ℂ) = oldB y') :
     Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P P' := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  obtain (⟨e, s, hpe, heq, rfl⟩ | ⟨s, rfl⟩) := D.coverA y
+  · have he : e = p := by
+      by_contra hep
+      have hpe' : p + 1 ≤ e := by omega
+      have hn : ‖newA (cutEdgeCircle L e s)‖ = 1 := by
+        rw [D.newA_v e s hpe' heq]
+        exact norm_edgePoint _ _ _
+      exact hne hn
+    subst e
+    obtain (⟨e', s', he', rfl⟩ | ⟨s', rfl⟩) := D.coverB y'
+    · have heq' : e' = q := by
+        rcases he' with (⟨hqe', he'L⟩ | he'p)
+        · by_contra he'q
+          have hq1 : q + 1 ≤ e' := by omega
+          have hn : ‖newB (cutEdgeCircle L e' s')‖ = 1 := by
+            rw [D.newB_tu e' s' (Or.inl ⟨hq1, he'L⟩)]
+            exact norm_edgePoint _ _ _
+          exact False.elim (hne (by rw [h, hn]))
+        · have hn : ‖newB (cutEdgeCircle L e' s')‖ = 1 := by
+            rw [D.newB_tu e' s' (Or.inr he'p)]
+            exact norm_edgePoint _ _ _
+          exact False.elim (hne (by rw [h, hn]))
+      subst e'
+      have hseam : cutSeam L p q s = cutSeam L p q s' := by
+        rw [D.newA_x, D.newB_x] at h
+        simpa only [L, p, q] using h
+      have hpq : cutPoint L (p + 1) ≠ cutPoint L (q + 1) := by
+        apply cutPoint_ne (m := p + 1) (m' := q + 1)
+        · simp [p, q]
+        · dsimp [L, p, q]
+          simp
+          omega
+      have hss : s = s' := by
+        apply Subtype.ext
+        unfold cutSeam at hseam
+        have hd : cutPoint L (q + 1) - cutPoint L (p + 1) ≠ 0 :=
+          sub_ne_zero.mpr hpq.symm
+        have hc : (s.1 : ℂ) = (s'.1 : ℂ) := by
+          apply mul_right_cancel₀ hd
+          exact add_left_cancel hseam
+        exact_mod_cast hc
+      subst s'
+      apply Relation.EqvGen.rel
+      let i : Fin L := ⟨p, by simp [L, p]; omega⟩
+      let j : Fin L := ⟨(u ++ [x] ++ v).length, by simp [L]; omega⟩
+      refine ⟨i, j, ?_, s, ?_, ?_, ?_⟩
+      · intro hij
+        have := congrArg Fin.val hij
+        simp [i, j, p, q] at this
+      · simp [i, j, p, q, List.get_eq_getElem]
+      · apply Subtype.ext
+        simpa [i, L, p] using hP.trans
+          (D.oldA_arc p s (le_refl p) (by dsimp [p, q]; omega))
+      · simp [i, j, p, q, List.get_eq_getElem]
+        apply Subtype.ext
+        have hh := hP'.trans
+          (D.oldB_arc q s (Or.inl ⟨le_refl q, by simp [L, q]; omega⟩))
+        rw [hh]
+        congr 2
+        all_goals try simp [L, j]
+        all_goals try dsimp [q]
+        all_goals omega
+    · have hn : ‖newB (cutChordParamB L p q s')‖ = 1 := by
+        rw [D.newB_chord]
+        exact norm_edgePoint _ _ _
+      exact (hne (by rw [h, hn])).elim
+  · have hn : ‖newA (cutChordParamA L p q s)‖ = 1 := by
+      rw [D.newA_chord]
+      exact norm_edgePoint _ _ _
+    exact (hne hn).elim
 
 /-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
 theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
