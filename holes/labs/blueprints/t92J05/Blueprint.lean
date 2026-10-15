@@ -2487,7 +2487,73 @@ lemma apm_t92J05_genusTwo_W1_boundary_word
       IsConj (e (Path.Homotopic.Quotient.mk
         (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)))
         apm_t92J05_genusTwoRelator⁻¹ := by
-  sorry
+  right
+  have heq :
+      e (Path.Homotopic.Quotient.mk
+          (ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryIntegerLoopPath
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)) =
+        apm_t92J05_genusTwoRelator⁻¹ := by
+    calc
+      _ = e (((List.ofFn fun i : Fin
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.edgeCount =>
+          ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryExplicitEdgeClass
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P i) :
+              List (FundamentalGroup _ _)).reverse.prod) :=
+        congrArg e
+          (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_boundary_factorization
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P)
+      _ = _ := by
+        simp only [map_list_prod, List.map_reverse, List.map_ofFn,
+          ConstructionTargets.PolygonSurfaceHomology.polygonBoundaryExplicitEdgeClass,
+          map_inv]
+        change ((List.ofFn fun i : Fin 8 =>
+          e (if apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign i then
+            ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase
+              apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+              (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit i)
+          else
+            (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase
+              apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+              (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit i))⁻¹)).reverse.prod =
+                apm_t92J05_genusTwoRelator⁻¹)
+        have hs0 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (0 : Fin 8) = false := rfl
+        have hs1 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (1 : Fin 8) = false := rfl
+        have hs2 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (2 : Fin 8) = true := rfl
+        have hs3 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (3 : Fin 8) = true := rfl
+        have hs4 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (4 : Fin 8) = false := rfl
+        have hs5 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (5 : Fin 8) = false := rfl
+        have hs6 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (6 : Fin 8) = true := rfl
+        have hs7 : apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.sign (7 : Fin 8) = true := rfl
+        let c := (ConstructionTargets.PolygonSurfacePiOne.orientableOrbitEquiv 2).trans
+          (((Equiv.refl (Fin 2)).prodCongr finTwoEquiv.symm).trans
+            (finProdFinEquiv : Fin 2 × Fin 2 ≃ Fin 4))
+        have hc0 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (0 : Fin 8)) = 0 := rfl
+        have hc1 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (1 : Fin 8)) = 1 := rfl
+        have hc2 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (2 : Fin 8)) = 0 := rfl
+        have hc3 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (3 : Fin 8)) = 1 := rfl
+        have hc4 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (4 : Fin 8)) = 2 := rfl
+        have hc5 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (5 : Fin 8)) = 3 := rfl
+        have hc6 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (6 : Fin 8)) = 2 := rfl
+        have hc7 : c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (7 : Fin 8)) = 3 := rfl
+        simp only [List.ofFn_succ, List.ofFn_zero, List.reverse_cons,
+          List.reverse_nil, List.nil_append, List.prod_append, List.prod_cons,
+          List.prod_nil, hs0, hs1, hs2, hs3, hs4, hs5, hs6, hs7,
+          Bool.false_eq_true, Bool.true_eq, if_false, if_true,
+          apply_ite e, map_inv, hcoord]
+        change FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (7 : Fin 8))) *
+          FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (6 : Fin 8))) *
+          (FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (5 : Fin 8))))⁻¹ *
+          (FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (4 : Fin 8))))⁻¹ *
+          FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (3 : Fin 8))) *
+          FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (2 : Fin 8))) *
+          (FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (1 : Fin 8))))⁻¹ *
+          (FreeGroup.of (c (apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.orbit (0 : Fin 8))))⁻¹ =
+            apm_t92J05_genusTwoRelator⁻¹
+        simp only [hc0, hc1, hc2, hc3, hc4, hc5, hc6, hc7,
+          apm_t92J05_genusTwoRelator, apm_t92J05_commutator,
+          mul_inv_rev, inv_inv]
+        simp only [mul_assoc]
+  exact heq ▸ IsConj.refl apm_t92J05_genusTwoRelator⁻¹
 
 noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_homotopyFG
     {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
