@@ -651,6 +651,31 @@ theorem frozenPolygonHomology_of_comparisons
     exact hz.of_iso e2
   · exact hhigh k (by omega)
 
+/-- Once Mayer--Vietoris computes the explicit generator quotient, the same
+homology result holds for the generic signed quotient. -/
+theorem frozenSignedHomology_of_generator_comparisons
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (g : (Fin 6 → ℤ) →ₗ[ℤ] SpaceH FrozenGeneratorQuotient 1)
+    (hg : Function.Surjective g)
+    (hker : LinearMap.ker g =
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH FrozenSignedQuotient 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH FrozenSignedQuotient 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH FrozenSignedQuotient k) := by
+  rcases frozenPolygonHomology_of_comparisons
+      (fun k => SpaceH FrozenGeneratorQuotient k)
+      h0 g hg hker h2 hhigh with ⟨h0', h1', hhigh'⟩
+  refine ⟨?_, ?_, ?_⟩
+  · rcases h0' with ⟨e⟩
+    exact ⟨frozenSignedQuotientHomologyIsoGenerator 0 ≪≫ e⟩
+  · rcases h1' with ⟨e⟩
+    exact ⟨frozenSignedQuotientHomologyIsoGenerator 1 ≪≫ e⟩
+  · intro k hk
+    exact (hhigh' k hk).of_iso (frozenSignedQuotientHomologyIsoGenerator k)
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -698,5 +723,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedQuotientHomeomorphGenerator
 #print axioms frozenSignedQuotientHomeomorphGenerator_mk
 #print axioms frozenSignedQuotientHomologyIsoGenerator
+#print axioms frozenSignedHomology_of_generator_comparisons
 
 end ConstructionTargets.t94J09Closure
