@@ -88331,26 +88331,25 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Prove last coordinate and nested/flat fold equality; van Kampen; assemble.",
+    :residual "Prove nested/flat fold equality; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2_subdivisionRunOffsetEquiv_symm_zero",
-      :type "subdivision index zero maps to run zero, offset zero",
+    [{:name "torusRP2_subdivisionRunOffsetEquiv_symm_last",
+      :type
+      "final subdivision index maps to final run and final local offset",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq"],
+      :depends-on ["torusRP2_subdivisionRunOffsetEquiv_symm_zero"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
-      :depends-on ["torusRP2_subdivisionRunOffsetEquiv_symm_zero"],
+      :depends-on ["torusRP2_subdivisionRunOffsetEquiv_symm_last"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88362,7 +88361,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked inverse run-offset base coordinate.",
+    :reason "Banked inverse run-offset terminal coordinate.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88372,29 +88371,16 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check ae3ce56c3", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792075705881-14224-bb44422e",
-     :commands
-     ["git show/diff/check ae3ce56c3"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit ae3ce56c3 adds compiled, sorry-free progress beyond history commit b141f5e81. It proves inverse flattening sends subdivision index zero to run zero and offset zero: flattening gives zero prefix plus offset, while strict monotonicity excludes any positive run index. Only t97A01Closure.lean changed; fixture SHA 0620fc2ebf08974fc521c5261a82b4c7cb9a38e0277ac76d099cefe6039e8dfd matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. The coordinate orientation and Fin cast comparison are correct. Last-coordinate and nested/flat fold equality, van Kampen, and assembly remain listed."},
-    :commit "ae3ce56c3",
+     {:cmd "git show --check 3a9a19270", :exit 0}],
+    :commit "3a9a19270",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "0620fc2ebf08974fc521c5261a82b4c7cb9a38e0277ac76d099cefe6039e8dfd"},
+     "340a720d610341b9302c8bbd11e8ce3a9742abe79534791d837e480e820ce017"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94301,7 +94287,8 @@
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets
     :lemma-torusrp2-subdivisionrunprefixblockpiece-cast-runoffsetequiv-symm
     :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-eq
-    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero],
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95531,4 +95518,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-eq],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_last",
+    :type
+    "final subdivision index maps to final run and final local offset"},
+   :lemma
+   {:name "torusRP2_subdivisionRunOffsetEquiv_symm_last",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "final subdivision index maps to final run and final local offset",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunoffsetequiv-symm-last,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-zero],
    :other-consumers []}]}
