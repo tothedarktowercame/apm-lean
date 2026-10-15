@@ -134,8 +134,20 @@ theorem cpUV_homology (hS0 : ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k S3))
 theorem cp_mvI_zero_injective : Function.Injective (mvI cpU cpV 0).hom := by
   sorry
 
+theorem cp2_h0_aux_nonzeroVectorsPathConnected :
+    PathConnectedSpace (NonzeroVectors ℂ 2) := by
+  apply isPathConnected_iff_pathConnectedSpace.mp
+  change IsPathConnected ({0}ᶜ : Set (Fin 3 → ℂ))
+  apply isPathConnected_compl_singleton_of_one_lt_rank
+  rw [← Module.finrank_eq_rank]
+  norm_num [Module.finrank_fin_fun]
+
 theorem cp2_h0 : Nonempty (HQ 0 CP2 ≅ ModuleCat.of ℚ ℚ) := by
-  sorry
+  letI : PathConnectedSpace (NonzeroVectors ℂ 2) :=
+    cp2_h0_aux_nonzeroVectorsPathConnected
+  letI : PathConnectedSpace CP2 :=
+    (surjective_quotientMap ℂ 2).pathConnectedSpace (continuous_quotientMap ℂ 2)
+  exact ⟨CoefficientH0.h0Iso ℚ (coordinateLine ℂ 2 0)⟩
 
 /-- The dimension count. -/
 theorem cp2_homology_of_mv
