@@ -1424,6 +1424,23 @@ theorem polynomialSphereLift_signedRegularFiberCount_eq_four :
     PolynomialSphereLiftSignedRegularFiberCertificate.localSign,
     Fin.sum_univ_four]
 
+/-- Expanded geometric form of the signed regular-fiber certificate: the
+four-point fiber, positive base Jacobian, and orientation-preserving deck
+transports are available simultaneously for the localization theorem. -/
+theorem polynomialSphereLift_four_positive_regularFiber :
+    ∃ e : Fin 4 ≃
+        {q : Sphere 3 // polynomialSphereLift q =
+          polynomialSphereLift polynomialSphereRegularPoint},
+      0 < Matrix.det polynomialSphereLiftRegularPointTangentMatrix ∧
+      ∀ i : Fin 4, i = 0 ∨
+        ∃ d : C(Sphere 3, Sphere 3),
+          d polynomialSphereRegularPoint = (e i).1 ∧
+          polynomialSphereLift.comp d = polynomialSphereLift ∧
+          HomologicalComplex.homologyMap
+            (CoefficientH0.singularPostcomposition ℚ d) 3 = 𝟙 _ := by
+  let c := polynomialSphereLift_signedRegularFiberCertificate
+  exact ⟨c.fiberEquiv, c.baseDeterminantPositive, c.deckTransport⟩
+
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
 theorem t96A06_rp3_sphere_twoSheeted :
@@ -2503,6 +2520,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_polynomialSphereLift_localSignTransport
 #print axioms polynomialSphereLift_signedRegularFiberCertificate
 #print axioms polynomialSphereLift_signedRegularFiberCount_eq_four
+#print axioms polynomialSphereLift_four_positive_regularFiber
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
