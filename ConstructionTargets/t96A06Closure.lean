@@ -8,6 +8,7 @@ import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoefficientCoveringTransfer
 import ConstructionTargets.CoefficientConnectedH0Map
 import ConstructionTargets.CoefficientSphereEndpoints
+import ConstructionTargets.CoefficientSphereAntipodal
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -374,6 +375,18 @@ noncomputable def t96A06_sphere3_rational_H3Iso :
   CoefficientSphereShift.sphereShift ℚ 3 2 (by decide) ≪≫
     CoefficientSphereEndpoints.sphereH2 ℚ
 
+/-- The antipodal deck transformation acts trivially on rational top
+homology of the concrete three-sphere.  This is the odd-dimensional sign in
+the sphere antipodal formula, specialized to the cover of `RP3`. -/
+theorem t96A06_sphere3_antipodal_H3 :
+    (ConstructionTargets.CoefficientCoordinateReflections.H ℚ 3).map
+        (TopCat.ofHom
+          (ConstructionTargets.CoefficientSphereAntipodal.antipodal (d := 4))) =
+      𝟙 _ := by
+  rw [ConstructionTargets.CoefficientSphereAntipodal.antipodal_action ℚ 3
+    (by omega)]
+  norm_num
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -426,6 +439,7 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_sphere3_rational_H1_isZero
 #print axioms t96A06_sphere3_rational_H2_isZero
 #print axioms t96A06_sphere3_rational_H3Iso
+#print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
