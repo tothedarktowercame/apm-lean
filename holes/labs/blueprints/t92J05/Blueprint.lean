@@ -13,6 +13,7 @@ import ConstructionTargets.Surfaces
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
 import ConstructionTargets.PolygonSurfacePiOne
 import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.PolygonSurfaceHomology
 
 open CategoryTheory Set
 open scoped ContDiff Manifold LinearAlgebra.Projectivization
