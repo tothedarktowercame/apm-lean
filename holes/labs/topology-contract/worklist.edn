@@ -119112,6 +119112,16 @@
     [{:cmd "isolation drafts",
       :exit 1,
       :finding "fixed membership transport"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792024617959-12848-7703f4fe",
+     :commands
+     ["git show/diff-tree 1291718c"
+      "archive 1291718c; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit 1291718c changes only t00J02Closure.lean and adds compiled, sorry-free progress: IsDiscrete singleton fiber implies LocallyIsolatedFiber, then packages the same derived Fintype and calculations into LocallyIsolatedCanonicalFiberData. The subtype/open-set proof has the required direction, and the dependent finite-fiber instance is definitionally identical across choice and calculations. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; new endpoint has only standard axioms; registry 166/166. Transverse discrete fiber/calculations and Main remain listed."},
     :commit "1291718c17049d8ed55da8989e99638bd5b2d7c8",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119120,7 +119130,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119138,7 +119148,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked locally-isolated fiber-data constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked discrete-fiber constructor.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119294,7 +119304,10 @@
      :reason "Banked locally-isolated canonical-fiber endpoint."}
     {:job 4,
      :commit "01096eb73a725508d816e9fba48b878b42658ee3",
-     :reason "Banked locally-isolated fiber-data constructor."}]}
+     :reason "Banked locally-isolated fiber-data constructor."}
+    {:job 5,
+     :commit "1291718c17049d8ed55da8989e99638bd5b2d7c8",
+     :reason "Banked discrete-fiber constructor."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120771,7 +120784,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "locallyIsolatedCanonicalFiberData_of_isDiscrete",
@@ -120783,7 +120796,9 @@
     :type
     "discrete selected fiber plus calculations gives bundled data",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1291718c17049d8ed55da8989e99638bd5b2d7c8"},
    :id :lemma-locallyisolatedcanonicalfiberdata-of-isdiscrete,
    :kind :lemma,
    :depends-on
@@ -120792,11 +120807,14 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "locallyIsolatedFiber_of_isDiscrete"},
    :lemma
-   {:name "locallyIsolatedFiber_of_isDiscrete", :reported-by []},
+   {:name "locallyIsolatedFiber_of_isDiscrete",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-locallyisolatedfiber-of-isdiscrete,
    :kind :lemma,
    :depends-on [],
