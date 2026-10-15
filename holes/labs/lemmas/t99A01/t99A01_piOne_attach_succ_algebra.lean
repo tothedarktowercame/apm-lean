@@ -205,6 +205,13 @@ lemma t99A01_piOne_attach_succ_loop {r : ℕ} (degree : Fin (r + 1) → ℕ)
 chosen generator changes modulus `g` to `gcd g d`, and preserves the class of
 one. -/
 -- BEGIN SEAT AREA
+lemma t99A01_piOne_attach_succ_algebra_aux_normalClosure
+    {A : Type*} [CommGroup A] (a : A) :
+    Subgroup.normalClosure ({a} : Set A) = Subgroup.closure {a} := by
+  apply le_antisymm
+  · exact Subgroup.normalClosure_le_normal Subgroup.subset_closure
+  · exact (Subgroup.closure_le _).2 Subgroup.subset_normalClosure
+
 lemma t99A01_piOne_attach_succ_algebra (g d : ℕ) :
     ∃ e : (Multiplicative (ZMod g) ⧸
         Subgroup.normalClosure ({Multiplicative.ofAdd (d : ZMod g)} :
@@ -212,7 +219,67 @@ lemma t99A01_piOne_attach_succ_algebra (g d : ℕ) :
         Multiplicative (ZMod (Nat.gcd g d)),
       e (QuotientGroup.mk' _ (Multiplicative.ofAdd 1)) =
         Multiplicative.ofAdd 1 := by
-  sorry
+  let q := Nat.gcd g d
+  have hqg : q ∣ g := Nat.gcd_dvd_left g d
+  let fAdd : ZMod g →+ ZMod q := (ZMod.castHom hqg (ZMod q)).toAddMonoidHom
+  let f : Multiplicative (ZMod g) →* Multiplicative (ZMod q) :=
+    AddMonoidHom.toMultiplicative fAdd
+  have hsurj : Function.Surjective f := by
+    intro y
+    obtain ⟨n, rfl⟩ := ZMod.intCast_surjective y.toAdd
+    exact ⟨Multiplicative.ofAdd (n : ZMod g), by
+      change fAdd (n : ZMod g) = (n : ZMod q)
+      simp [fAdd]⟩
+  have hker : MonoidHom.ker f =
+      Subgroup.normalClosure ({Multiplicative.ofAdd (d : ZMod g)} : Set _) := by
+    rw [t99A01_piOne_attach_succ_algebra_aux_normalClosure]
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨n, hn⟩ := ZMod.intCast_surjective x.toAdd
+      have hzero : (n : ZMod q) = 0 := by
+        have := hx
+        change f x = 1 at this
+        have hrepr : Multiplicative.ofAdd x.toAdd = x := rfl
+        rw [← hrepr, ← hn] at this
+        exact congrArg Multiplicative.toAdd (by simpa [f, fAdd] using this)
+      obtain ⟨k, hk⟩ := (ZMod.intCast_zmod_eq_zero_iff_dvd n q).mp hzero
+      rw [Subgroup.mem_closure_singleton]
+      refine ⟨k * Nat.gcdB g d, ?_⟩
+      have hadd : (k * Nat.gcdB g d) • (d : ZMod g) = x.toAdd := by
+        rw [← hn]
+        rw [hk]
+        simp only [zsmul_eq_mul]
+        push_cast
+        have hb := Nat.gcd_eq_gcd_ab g d
+        push_cast at hb
+        change (q : ℤ) = (g : ℤ) * Nat.gcdA g d +
+          (d : ℤ) * Nat.gcdB g d at hb
+        have hb' := congrArg (fun z : ℤ => (z : ZMod g)) hb
+        norm_num at hb'
+        rw [hb']
+        simp [add_mul, mul_assoc, mul_comm, mul_left_comm]
+      change Multiplicative.ofAdd (((k * Nat.gcdB g d) : ℤ) • (d : ZMod g)) = x
+      simpa [mul_comm] using congrArg Multiplicative.ofAdd hadd
+    · intro hx
+      rw [Subgroup.mem_closure_singleton] at hx
+      rcases hx with ⟨n, rfl⟩
+      change f (Multiplicative.ofAdd (d : ZMod g) ^ n) = 1
+      rw [map_zpow]
+      suffices f (Multiplicative.ofAdd (d : ZMod g)) = 1 by simp [this]
+      apply congrArg Multiplicative.toAdd
+      change fAdd (d : ZMod g) = 0
+      simpa [fAdd] using
+        (ZMod.intCast_zmod_eq_zero_iff_dvd (d : ℤ) q).2
+          (Int.ofNat_dvd.2 (Nat.gcd_dvd_right g d))
+  let E := (QuotientGroup.quotientMulEquivOfEq hker.symm).trans
+    (QuotientGroup.quotientKerEquivOfSurjective f hsurj)
+  refine ⟨E, ?_⟩
+  change E (QuotientGroup.mk' _ (Multiplicative.ofAdd 1)) = _
+  change f (Multiplicative.ofAdd 1) = Multiplicative.ofAdd 1
+  apply congrArg Multiplicative.toAdd
+  change fAdd (1 : ZMod g) = (1 : ZMod q)
+  exact ZMod.cast_one hqg
 -- END SEAT AREA
 
 /-- The one-cell step is the sorry-free assembly of the four leaves above. -/
