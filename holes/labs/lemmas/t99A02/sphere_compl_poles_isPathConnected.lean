@@ -138,7 +138,49 @@ step is exactly this statement) identifies it with the punctured plane
 -- BEGIN SEAT AREA
 lemma sphere_compl_poles_isPathConnected :
     IsPathConnected {x : S2 | x ≠ north ∧ x ≠ south} := by
-  sorry
+  let v : E3 := EuclideanSpace.single 2 1
+  have hv : ‖v‖ = 1 := by simp [v]
+  let eN := stereographic hv
+  let eS := stereographic (show ‖-v‖ = 1 by simpa using hv)
+  have hsouth : eN south = 0 := by
+    simpa [north, south, v, eN] using stereographic_apply_neg north
+  have hns : north ≠ south := north_ne_south
+  have hrank : 1 < Module.rank ℝ (ℝ ∙ v)ᗮ := by
+    rw [← Module.finrank_eq_rank]
+    have hv0 : v ≠ 0 := by simp [v]
+    letI : Fact (Module.finrank ℝ E3 = 2 + 1) := ⟨by simp⟩
+    rw [Submodule.finrank_orthogonal_span_singleton (n := 2) hv0]
+    norm_num
+  have hpunct : IsPathConnected ({0}ᶜ : Set (ℝ ∙ v)ᗮ) :=
+    isPathConnected_compl_singleton_of_one_lt_rank hrank 0
+  have himage := hpunct.image'
+    (eN.symm.continuousOn.mono (by intro; simp [eN]))
+  have hset : eN.symm '' ({0}ᶜ : Set (ℝ ∙ v)ᗮ) = eN.source ∩ eS.source := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      refine ⟨eN.symm.map_source (by simp [eN]), ?_⟩
+      simp only [eS, stereographic_source, Set.mem_compl_iff,
+        Set.mem_singleton_iff]
+      intro h
+      apply hy
+      calc
+        y = eN (eN.symm y) := (eN.right_inv (by simp [eN])).symm
+        _ = eN south := congrArg eN h
+        _ = 0 := hsouth
+    · rintro ⟨hxN, hxS⟩
+      refine ⟨eN x, ?_, eN.left_inv hxN⟩
+      intro hz
+      apply hxS
+      have hsouthN : south ∈ eN.source := by
+        simpa [eN, north, south, v] using hns.symm
+      calc
+        x = eN.symm (eN x) := (eN.left_inv hxN).symm
+        _ = eN.symm 0 := congrArg eN.symm hz
+        _ = eN.symm (eN south) := congrArg eN.symm hsouth.symm
+        _ = south := eN.left_inv hsouthN
+  rw [hset] at himage
+  convert himage using 1
 -- END SEAT AREA
 
 /-! ## 1. The antipodal cover in the polygon model of RP²
