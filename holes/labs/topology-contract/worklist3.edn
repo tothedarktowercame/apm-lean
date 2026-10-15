@@ -36159,6 +36159,16 @@
     [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
       :correction "new HEAD tested; baseline failure persists"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792023586186-12824-ecde905e",
+     :commands
+     ["exact recorded scope and fixture SHA-256 assertions"
+      "committed forbidden-token audit; recorded snapshot Lean compile"
+      "statement-registry check; parent/commit placeholder recount"],
+     :finding
+     "PASS: 8c4eb4f is compiled, sorry-free progress after 263f5d47 with standard axioms only. Its exact type provides Fin(runs+1) boundaries in outer subtype V, and its theorem correctly identifies their coercions with corresponding ambient canonical boundaries for run-fold assembly. It does not assume the partial based van Kampen theorem. Scope/hash match; registry 166/166; Main 1->1 placeholder; residual milestones listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36167,7 +36177,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36185,7 +36195,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36571,7 +36581,11 @@
     {:job 6,
      :commit nil,
      :reason
-     "Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged."}]}
+     "Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged."}
+    {:job 7,
+     :commit nil,
+     :reason
+     "HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
