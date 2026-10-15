@@ -2513,7 +2513,92 @@ lemma t99A01_succ_vk_quotient {r : ℕ} (degree : Fin (r + 1) → ℕ) :
               Set (Multiplicative (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))))),
         ∀ a, f (QuotientGroup.mk' _ a) =
           QuotientGroup.mk' _ (eS (FundamentalGroup.mapOfEq (t99A01_succRho degree) h a)) := by
-  sorry
+  intro eS heS h
+  let U := APMT99A01.succCircleSide degree
+  let V := APMT99A01.succDiskSide degree
+  let x := t99A01_piOne_attach_succ_aux_vankampen_aux_point degree
+  let j := apm_t92J05_twoOpen_overlapToLeft U V
+  let u := j x
+  let S := APMT99A01.AttachSpace (degree ∘ Fin.castSucc)
+  let b := APMT99A01.basepoint (degree ∘ Fin.castSucc)
+  let ρ := t99A01_succRho degree
+  let A := Multiplicative
+    (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))
+  let d : A := Multiplicative.ofAdd (degree (Fin.last r) :
+    ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))
+  let N := Subgroup.normalClosure
+    ((FundamentalGroup.map j x).range : Set (FundamentalGroup U u))
+  let M := Subgroup.normalClosure ({d} : Set A)
+  obtain ⟨ι, hι⟩ := t99A01_piOne_attach_succ_iota degree
+  let retract : ContinuousMap.HomotopyEquiv U S :=
+    { toFun := ρ
+      invFun := ι
+      left_inv := t99A01_piOne_attach_succ_deform degree ι hι
+      right_inv := by
+        rw [t99A01_piOne_attach_succ_rho_iota degree ι hι] }
+  let EF := FundamentalGroupoidFunctor.equivOfHomotopyEquiv retract
+  let ff := EF.fullyFaithfulFunctor
+  let m := FundamentalGroup.map ρ u
+  let eρ : FundamentalGroup U u ≃* FundamentalGroup S (ρ u) :=
+    { toFun := m
+      invFun := fun g ↦ ff.preimage g
+      left_inv := fun g ↦ ff.preimage_map g
+      right_inv := fun g ↦ ff.map_preimage g
+      map_mul' := m.map_mul }
+  let eh : FundamentalGroup S (ρ u) ≃* FundamentalGroup S b :=
+    (CategoryTheory.eqToIso (congrArg FundamentalGroupoid.mk h)).conj
+  let E : FundamentalGroup U u ≃* A := (eρ.trans eh).trans eS
+  have hE (a : FundamentalGroup U u) :
+      E a = eS (FundamentalGroup.mapOfEq ρ h a) := rfl
+  obtain ⟨γ, hγbase, hcyclic, hγ⟩ := t99A01_succ_overlap_generator degree
+  have hcomp :
+      (FundamentalGroup.mapOfEq ρ h).comp (FundamentalGroup.map j x) =
+        FundamentalGroup.mapOfEq (ρ.comp j) hγbase := by
+    ext a
+    induction a using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [MonoidHom.comp_apply, FundamentalGroup.map_apply,
+        ← Path.Homotopic.Quotient.mk_map,
+        FundamentalGroup.mapOfEq_apply, FundamentalGroup.mapOfEq_apply]
+      rfl
+  have hgen : E ((FundamentalGroup.map j x) γ) = d := by
+    rw [hE]
+    rw [show FundamentalGroup.mapOfEq ρ h ((FundamentalGroup.map j x) γ) =
+      FundamentalGroup.mapOfEq (ρ.comp j) hγbase γ by
+        exact DFunLike.congr_fun hcomp γ]
+    rw [hγ, map_zpow, heS]
+    rw [zpow_natCast]
+    change (Multiplicative.ofAdd (1 :
+      ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))) ^
+        degree (Fin.last r) = d
+    dsimp [d]
+    induction degree (Fin.last r) with
+    | zero => simp
+    | succ n ih => simp [pow_succ, ih, Nat.cast_succ]
+  have hclosures :
+      Subgroup.normalClosure (E '' ((FundamentalGroup.map j x).range : Set _)) = M := by
+    dsimp [M]
+    apply le_antisymm
+    · apply Subgroup.normalClosure_le_normal
+      rintro _ ⟨_, ⟨y, rfl⟩, rfl⟩
+      rcases hcyclic y with ⟨n, rfl⟩
+      rw [map_zpow, map_zpow, hgen]
+      exact (Subgroup.normalClosure ({d} : Set A)).zpow_mem
+        (Subgroup.subset_normalClosure (Set.mem_singleton d)) n
+    · apply Subgroup.normalClosure_mono
+      intro a ha
+      rw [Set.mem_singleton_iff] at ha
+      subst a
+      exact ⟨(FundamentalGroup.map j x) γ, ⟨γ, rfl⟩, hgen⟩
+  have hNM : N.map E = M := by
+    have hEs : Function.Surjective E.toMonoidHom := E.surjective
+    have hm := Subgroup.map_normalClosure
+      ((FundamentalGroup.map j x).range : Set _) E.toMonoidHom hEs
+    exact hm.trans hclosures
+  let f := QuotientGroup.congr N M E hNM
+  refine ⟨f, ?_⟩
+  intro a
+  exact QuotientGroup.congr_mk' N M E hNM a
 -- END SEAT AREA
 
 lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
