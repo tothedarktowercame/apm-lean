@@ -88392,6 +88392,17 @@
     [{:cmd "IsZero draft",
       :exit 1,
       :correction "proved kernel=bottom"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792044027301-13427-6f942e27",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 5db954851 by topo-6 changes only t97A01Closure.lean and adds compiled progress after 9bc6a459c. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 affbc02d35ebc40e857135f93c8ded8173ef7e988e717e2d11332f6b05640c7c matches; registry 166/0; new theorems use only propext, Classical.choice, Quot.sound. Each proof transports equality through orbit coordinates, rewrites both sides as negative Smith boundaries, cancels the sign, and applies the correct injectivity theorem; ker_eq_bot then has the required orientation. Cokernel/Smith transport for B1 and B2 remain listed."},
     :commit "5db954851",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88400,7 +88411,7 @@
      "affbc02d35ebc40e857135f93c8ded8173ef7e988e717e2d11332f6b05640c7c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88418,7 +88429,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary conjugations.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked injectivity and zero kernels.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88448,7 +88459,10 @@
      :reason "Banked signed attaching vectors."}
     {:job 7,
      :commit "9bc6a459c",
-     :reason "Banked boundary conjugations."}]}
+     :reason "Banked boundary conjugations."}
+    {:job 8,
+     :commit "5db954851",
+     :reason "Banked injectivity and zero kernels."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93693,7 +93707,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccAttachingBoundary_injective", :type "injective"},
@@ -93702,14 +93716,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "injective",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
    :id :lemma-aabbccattachingboundary-injective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2AttachingBoundary_injective", :type "injective"},
@@ -93718,14 +93734,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "injective",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
    :id :lemma-torusrp2attachingboundary-injective,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccBoundaryKernel_eq_bot", :type "kernel=bottom"},
@@ -93734,14 +93752,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "kernel=bottom",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
    :id :lemma-aabbccboundarykernel-eq-bot,
    :kind :lemma,
    :depends-on [:lemma-aabbccattachingboundary-injective],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2BoundaryKernel_eq_bot", :type "kernel=bottom"},
@@ -93750,7 +93770,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "kernel=bottom",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5db954851"},
    :id :lemma-torusrp2boundarykernel-eq-bot,
    :kind :lemma,
    :depends-on [:lemma-torusrp2attachingboundary-injective],
