@@ -32,6 +32,48 @@ def polynomialMap (v : Vectors ℝ 3) : Vectors ℝ 3 :=
   ![v 0 ^ 2 - v 1 ^ 2, 2 * v 0 * v 1,
     v 2 ^ 2 - v 3 ^ 2, 2 * v 2 * v 3]
 
+/-- The same quadratic map on the Euclidean `L²` model used by the sphere. -/
+def polynomialMapAmbient (p : EuclideanSpace ℝ (Fin 4)) :
+    EuclideanSpace ℝ (Fin 4) :=
+  WithLp.toLp 2 (polynomialMap (WithLp.ofLp p))
+
+/-- The real derivative of the two complex-square blocks. -/
+def polynomialMapAmbientDerivative (p : EuclideanSpace ℝ (Fin 4)) :
+    EuclideanSpace ℝ (Fin 4) →L[ℝ] EuclideanSpace ℝ (Fin 4) :=
+  (PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 4 => ℝ)).symm.toContinuousLinearMap.comp
+    (ContinuousLinearMap.pi fun i =>
+      match i with
+      | 0 => (2 * p 0) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 0 -
+          (2 * p 1) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 1
+      | 1 => (2 * p 1) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 0 +
+          (2 * p 0) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 1
+      | 2 => (2 * p 2) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 2 -
+          (2 * p 3) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 3
+      | 3 => (2 * p 3) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 2 +
+          (2 * p 2) • PiLp.proj 2 (fun _ : Fin 4 => ℝ) 3)
+
+theorem polynomialMapAmbient_hasFDerivAt (p : EuclideanSpace ℝ (Fin 4)) :
+    HasFDerivAt polynomialMapAmbient (polynomialMapAmbientDerivative p) p := by
+  unfold polynomialMapAmbient polynomialMapAmbientDerivative polynomialMap
+  apply (PiLp.hasFDerivAt_toLp 2 _).comp p
+  apply hasFDerivAt_pi.mpr
+  intro i
+  fin_cases i
+  · convert ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 0).pow 2).sub
+      ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 1).pow 2) using 1 <;>
+      ext <;> simp [two_mul]
+  · convert (((hasFDerivAt_const (x := p) (c := (2 : ℝ))).mul
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 0)).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 1)) using 1 <;>
+      ext <;> simp [mul_assoc, mul_comm, mul_left_comm] <;> ring
+  · convert ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 2).pow 2).sub
+      ((PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 3).pow 2) using 1 <;>
+      ext <;> simp [two_mul]
+  · convert (((hasFDerivAt_const (x := p) (c := (2 : ℝ))).mul
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 2)).mul'
+      (PiLp.hasFDerivAt_apply (𝕜 := ℝ) 2 p 3)) using 1 <;>
+      ext <;> simp [mul_assoc, mul_comm, mul_left_comm] <;> ring
+
 /-- Change the sign of the first complex coordinate pair. -/
 def flipFirstPair (v : Vectors ℝ 3) : Vectors ℝ 3 :=
   ![-v 0, -v 1, v 2, v 3]
@@ -1385,6 +1427,7 @@ theorem t96A06_rp3_rational_homology :
   · exact t96A06_rp3_rational_homology_isZero_of_gt k h
 
 #print axioms polynomialMap_nonzero
+#print axioms polynomialMapAmbient_hasFDerivAt
 #print axioms polynomialMap_flipFirstPair
 #print axioms polynomialMap_flipSecondPair
 #print axioms realPair_eq_or_eq_neg_of_squareCoordinates
