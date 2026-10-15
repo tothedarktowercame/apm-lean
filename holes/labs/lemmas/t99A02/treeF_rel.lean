@@ -2082,7 +2082,24 @@ plus `Rel.base` for the vertex relation, `rp2Proj_neg` for the pair relation.
 About 25 lines. -/
 -- BEGIN SEAT AREA
 lemma treeF_rel (z w : TreeZ) (h : TreeRel z w) : treeF z = treeF w := by
-  sorry
+  cases h with
+  | edge g =>
+      unfold treeF circleOfUnit
+      simp
+  | vertex g =>
+      unfold treeF
+      change quotientMap (1 : Circle) (surfacePoint false 1) (.inl (circleOfUnit 0)) =
+        quotientMap (1 : Circle) (surfacePoint false 1) (.inr (rp2Proj north))
+      rw [rp2Proj_north]
+      simpa [circleOfUnit] using
+        (Quotient.sound (Relation.EqvGen.rel _ _ Rel.base) :
+          quotientMap (1 : Circle) (surfacePoint false 1) (.inl 1) =
+            quotientMap (1 : Circle) (surfacePoint false 1) (.inr (surfacePoint false 1)))
+  | pair g x =>
+      unfold treeF
+      change quotientMap (1 : Circle) (surfacePoint false 1) (.inr (rp2Proj x)) =
+        quotientMap (1 : Circle) (surfacePoint false 1) (.inr (rp2Proj (-x)))
+      rw [rp2Proj_neg]
 -- END SEAT AREA
 
 lemma treeF_smul (g : G) (z : TreeZ) : treeF (g • z) = treeF z := by
