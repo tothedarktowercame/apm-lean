@@ -9107,7 +9107,10 @@ def cutSideMap (p q e : ℕ) : ℕ := if p < e ∧ e < q then q + p + 1 - e else
 theorem cut_transfer_side {L p q e : ℕ} (hep : e ≠ p) (heq : e ≠ q) (τ : Icc (0 : ℝ) 1) :
     cutTransfer L p q e τ = (edgePoint L (cutSideMap p q e)
       (if p < e ∧ e < q then reverseParameter τ else τ) : ℂ) := by
-  sorry
+  unfold cutTransfer
+  rw [if_neg (by omega)]
+  unfold cutSideMap
+  split_ifs <;> rfl
 
 /-- An `x`-labelled old side is one of the two `x`'s (freshness). -/
 theorem cut_x_index {Label : Type*} [DecidableEq Label]
