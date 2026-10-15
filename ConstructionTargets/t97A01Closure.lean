@@ -1705,6 +1705,20 @@ theorem torusRP2_subdivisionRunPrefixBlockPoint_last
   simp only [Fin.val_last]
   exact pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
 
+/-- The initial vertex of a cumulative-prefix run block is the subdivision
+vertex after all strictly preceding runs. -/
+theorem torusRP2_subdivisionRunPrefixBlockPoint_zero
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixBlockPoint S i 0 =
+      S.point ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val, by
+        have h := pathTwoOpenSubdivisionRunPrefixBlock_le S i
+        omega⟩ := by
+  rfl
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1787,6 +1801,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlock_adjacent
 #print axioms torusRP2_subdivisionRunPrefixBlock_trans
 #print axioms torusRP2_subdivisionRunPrefixBlockPoint_last
+#print axioms torusRP2_subdivisionRunPrefixBlockPoint_zero
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
