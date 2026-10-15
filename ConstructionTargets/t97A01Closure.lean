@@ -9,7 +9,7 @@ steps identify these quotient spaces with the literal `EqvGen` quotients and
 reduce the displayed kernel and cokernel models to the requested groups.
 -/
 
-open CategoryTheory CategoryTheory.Limits
+open CategoryTheory CategoryTheory.Limits Topology
 
 noncomputable section
 
@@ -17,6 +17,31 @@ namespace ConstructionTargets.t97A01Closure
 
 open ConstructionTargets.PolygonSurfacePiOne
 open ConstructionTargets.PolygonSurfaceHomology
+
+/-- Two quotients of the same source by extensionally equal generated
+relations are homeomorphic whenever their canonical projections carry the
+quotient topologies.  This is the exact adapter used for the frozen literal
+`EqvGen` quotient types. -/
+def quotientHomeomorphOfEqvGenIff {X : Type*} [TopologicalSpace X]
+    (R S : X → X → Prop)
+    [TopologicalSpace (Quotient (Relation.EqvGen.setoid R))]
+    [TopologicalSpace (Quotient (Relation.EqvGen.setoid S))]
+    (hR : IsQuotientMap
+      (Quotient.mk (Relation.EqvGen.setoid R) :
+        X → Quotient (Relation.EqvGen.setoid R)))
+    (hS : IsQuotientMap
+      (Quotient.mk (Relation.EqvGen.setoid S) :
+        X → Quotient (Relation.EqvGen.setoid S)))
+    (hrel : ∀ x y, Relation.EqvGen R x y ↔ Relation.EqvGen S x y) :
+    Quotient (Relation.EqvGen.setoid R) ≃ₜ
+      Quotient (Relation.EqvGen.setoid S) where
+  toEquiv := by
+    apply Quotient.congrRight
+    exact hrel
+  continuous_toFun := hR.continuous_iff.mpr (by
+    simpa using hS.continuous)
+  continuous_invFun := hS.continuous_iff.mpr (by
+    simpa using hR.continuous)
 
 /-- Pairing data for the frozen `a a b b c c` polygon. -/
 def aabbccPairingData : PairingData :=
