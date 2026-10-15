@@ -84,6 +84,22 @@ def frozenGeneratorRel (x y : Surfaces.Disk) : Prop :=
     (x = Surfaces.edgePoint 14 4 t ∧ y = Surfaces.edgePoint 14 11 t) ∨
     (x = Surfaces.edgePoint 14 3 t ∧ y = Surfaces.edgePoint 14 9 t)
 
+/-- Every frozen generator identifies boundary points of the same radius. -/
+theorem frozenGeneratorRel_radius_eq {x y : Surfaces.Disk}
+    (h : frozenGeneratorRel x y) :
+    PolygonRadialOpenCover.radius x = PolygonRadialOpenCover.radius y := by
+  rcases h with ⟨t, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, rfl⟩ <;>
+    simp [PolygonRadialOpenCover.radius, norm_edgePoint]
+
+/-- The genuine radial two-open cover of the explicit frozen generator
+quotient. -/
+def frozenGeneratorRadialPackage :
+    PolygonRadialOpenCover.Package frozenGeneratorRel
+      (fun {_ _} h => frozenGeneratorRel_radius_eq h) :=
+  PolygonRadialOpenCover.package frozenGeneratorRel
+    (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -716,6 +732,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
+#print axioms frozenGeneratorRel_radius_eq
+#print axioms frozenGeneratorRadialPackage
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
