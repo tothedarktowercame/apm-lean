@@ -2224,6 +2224,28 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ
     torusRP2_subdivisionRunOffsetEquiv_symm_flatten S j.castSucc]
   rfl
 
+/-- If two consecutive inverse coordinates remain in the same run, their
+local offsets are consecutive. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n)
+    (hrun : ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1 =
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).2.val =
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).2.val + 1 := by
+  have h := torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ S j
+  have hp := congrArg
+    (fun i => pathTwoOpenSubdivisionRunPrefixLength S i.val) hrun
+  change pathTwoOpenSubdivisionRunPrefixLength S
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1.val =
+    pathTwoOpenSubdivisionRunPrefixLength S
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1.val at hp
+  rw [hp] at h
+  omega
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2329,6 +2351,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_strictMono
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_offset_of_run_eq
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
