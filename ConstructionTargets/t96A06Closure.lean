@@ -11,6 +11,7 @@ import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CoefficientSphereAntipodal
 import ConstructionTargets.SphereZeroCoefficients
 import ConstructionTargets.CoefficientCoordinateReflections
+import ConstructionTargets.CoefficientFirstReflection
 
 /-! Compiled closure milestones for t96A06. -/
 
@@ -294,6 +295,34 @@ theorem flipFirstPairSphere_flipSecondPairSphere (p : Sphere 3) :
       ConstructionTargets.CoefficientCoordinateReflections.reflectionMap,
       ConstructionTargets.CoefficientCoordinateReflections.sphereHomeo,
       ConstructionTargets.CoefficientCoordinateReflections.reflection_apply]
+
+/-- Each pair-sign action preserves the rational top-dimensional sphere
+class: it is a composite of two coordinate reflections. -/
+theorem flipFirstPairSphere_rational_H3 :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3 = 𝟙 _ := by
+  change (ConstructionTargets.CoefficientCoordinateReflections.H ℚ 3).map
+      (TopCat.ofHom flipFirstPairSphere) = 𝟙 _
+  rw [show TopCat.ofHom flipFirstPairSphere =
+      TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (0 : Fin 4)) ≫
+        TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (1 : Fin 4)) by rfl]
+  rw [Functor.map_comp]
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 0,
+    ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 1]
+  simp
+
+theorem flipSecondPairSphere_rational_H3 :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3 = 𝟙 _ := by
+  change (ConstructionTargets.CoefficientCoordinateReflections.H ℚ 3).map
+      (TopCat.ofHom flipSecondPairSphere) = 𝟙 _
+  rw [show TopCat.ofHom flipSecondPairSphere =
+      TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (2 : Fin 4)) ≫
+        TopCat.ofHom (ConstructionTargets.CoefficientCoordinateReflections.reflectionMap (3 : Fin 4)) by rfl]
+  rw [Functor.map_comp]
+  rw [ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 2,
+    ConstructionTargets.CoefficientFirstReflection.all_reflections_negative ℚ 3 (by omega) 3]
+  simp
 
 /-- Away from the two coordinate circles, neither independent pair flip has
 a fixed point.  This is the freeness condition used for a regular fiber. -/
@@ -1322,6 +1351,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipSecondPairSphere_involutive
 #print axioms flipFirstPairSphere_comm_flipSecondPairSphere
 #print axioms flipFirstPairSphere_flipSecondPairSphere
+#print axioms flipFirstPairSphere_rational_H3
+#print axioms flipSecondPairSphere_rational_H3
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
 #print axioms polynomialSphereLift_flipFirstPairSphere
