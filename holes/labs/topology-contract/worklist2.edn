@@ -88720,6 +88720,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check accfce741", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792108164615-14852-5f678f13",
+     :commands
+     ["git show/diff/check accfce741"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from accfce741"],
+     :finding
+     "PASS program STOP: topo-6 commit accfce741 adds compiled, sorry-free progress beyond history 6328279bd. It equips both quotient carriers with the coinduced topology from the same disk and upgrades the identity-on-representatives equivalence to a homeomorphism. Both continuity obligations use quotient_lift in the correct direction and continuous_coinduced_rng for the representative map; the mk lemma orientation is correct. This crosses the carrier/topology boundary without claiming the remaining MV comparison. Only t94J09Closure.lean changed; fixture SHA 31f271b7d4c3eb2415c3041016206733721094b0aa4421980e7f3a4e42975170 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Two-vertex radial MV, normalization, and assembly remain listed."},
     :commit "accfce741",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88741,7 @@
      "31f271b7d4c3eb2415c3041016206733721094b0aa4421980e7f3a4e42975170"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient homeomorphism.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88794,7 +88807,10 @@
     {:job 5, :commit "00fa1a440", :reason "Banked setoid comparison."}
     {:job 6,
      :commit "6328279bd",
-     :reason "Banked quotient equivalence."}]}
+     :reason "Banked quotient equivalence."}
+    {:job 7,
+     :commit "accfce741",
+     :reason "Banked quotient homeomorphism."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96528,7 +96544,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenSignedQuotientHomeomorphGenerator",
@@ -96538,7 +96554,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "coinduced quotient homeomorphism",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "accfce741"},
    :id :lemma-frozensignedquotienthomeomorphgenerator,
    :kind :lemma,
    :depends-on [:lemma-frozensignedquotientequivgenerator],
