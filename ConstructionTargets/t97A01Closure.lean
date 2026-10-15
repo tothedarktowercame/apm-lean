@@ -1296,6 +1296,19 @@ theorem torusRP2_pathHomotopicQuotient_concat_one
   rw [Path.concat_succ, Path.concat_zero]
   exact Path.Homotopic.refl_trans _
 
+/-- A two-factor dependent concatenation composes its factor classes in
+traversal order.  This is the first successor case of the flat/nested fold
+induction and fixes the orientation of every later induction step. -/
+theorem torusRP2_pathHomotopicQuotient_concat_two
+    {X : Type*} [TopologicalSpace X]
+    (point : Fin 3 → X)
+    (F : (k : Fin 2) → Path (point k.castSucc) (point k.succ)) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.trans ⟦F 0⟧ ⟦F 1⟧ := by
+  rw [torusRP2_pathHomotopicQuotient_concat_succ]
+  rw [torusRP2_pathHomotopicQuotient_concat_one]
+  rfl
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3228,6 +3241,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms torusRP2_pathHomotopicQuotient_concat_succ
 #print axioms torusRP2_pathHomotopicQuotient_concat_one
+#print axioms torusRP2_pathHomotopicQuotient_concat_two
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
