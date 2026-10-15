@@ -8954,7 +8954,69 @@ theorem cut_transfer_consistency_A_arc_aux_next_seam {Label : Type*} [DecidableE
     (hp : e₀ = u.length) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  let z : Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num⟩
+  change e₀ = p at hp
+  rw [hp] at hP hN he₀ he₀q hadj
+  have hs : s₀ = z := Subtype.ext hs₀
+  have hN' : N = edgePoint L (p + 1) z := by
+    apply Subtype.ext
+    calc
+      (N : ℂ) = newA (cutEdgeCircle L p s₀) := hN
+      _ = cutSeam L p q s₀ := D.newA_x s₀
+      _ = cutSeam L p q z := by rw [hs]
+      _ = (edgePoint L (p + 1) z : Disk) := by
+        simpa [z] using cut_transfer_consistency_A_arc_aux_next_aux_seam_zero L p q
+  have hEP : (edgePoint L e τ : ℂ) = (edgePoint L p z : ℂ) := by
+    calc
+      (edgePoint L e τ : ℂ) = oldA (cutEdgeCircle L p s₀) := hP
+      _ = (edgePoint L p s₀ : ℂ) := D.oldA_arc p s₀ (by omega) he₀q
+      _ = (edgePoint L p z : ℂ) := by rw [hs]
+  refine ⟨edgePoint L p z, ?_, ?_⟩
+  · change (edgePoint L p z : ℂ) = cutTransfer L p q e τ
+    have hτ' : τ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+      Subtype.ext hτ
+    subst τ
+    have hL : L = u.length + v.length + t.length + 2 := by
+      simp [L]
+      omega
+    have heL : e < L := by exact he
+    by_cases hp0 : p = 0
+    · have he_last : e + 1 = L := by
+        have hle : e + 1 ≤ L := by omega
+        by_contra hn
+        have hlt : e + 1 < L := by omega
+        rw [Nat.mod_eq_of_lt hlt] at hadj
+        omega
+      by_cases heq : e = q
+      · subst e
+        rw [cutTransfer, if_pos (Or.inr rfl)]
+        rw [cut_transfer_consistency_A_arc_aux_next_aux_seam_one]
+        exact hEP.symm.trans
+          (congrArg Subtype.val
+            (cut_transfer_consistency_A_arc_aux_next_aux_edge L q))
+      · rw [cutTransfer, if_neg]
+        · rw [if_neg]
+          · exact hEP.symm
+          · omega
+        · omega
+    · have he_next : e + 1 = p := by
+        have hlt : e + 1 < L := by
+          by_contra hn
+          have heqL : e + 1 = L := by omega
+          rw [heqL, Nat.mod_self] at hadj
+          omega
+        rw [Nat.mod_eq_of_lt hlt] at hadj
+        exact hadj.symm
+      rw [cutTransfer, if_neg]
+      · rw [if_neg]
+        · exact hEP.symm
+        · omega
+      · omega
+  · rw [hN']
+    exact cut_transfer_consistency_aux_x u v t x z
 -- END SEAT AREA
 
 /-- `p < e₀ < q`: the point is vertex `e₀` (start of a `v` side); `N` is the reflected new vertex. -/
