@@ -88672,25 +88672,26 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
-    :residual "Transport quotient topology/MV; normalize; assemble.",
+    :residual
+    "Upgrade quotient equivalence to homeomorphism; MV; normalize; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 sorry" "dirt"],
     :missing-theorems
-    [{:name "frozen_eqvGen_boundaryRel_iff_generator",
-      :type "quotient setoids agree",
+    [{:name "frozenSignedQuotientEquivGenerator",
+      :type "identity-on-representatives quotient equivalence",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozen_boundaryRel_iff_generator"],
+      :depends-on ["frozen_eqvGen_boundaryRel_iff_generator"],
       :area "polygon-surface-homology"}
      {:name "frozenPolygonHomology_comparisons",
       :type "two-vertex homology comparisons",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozen_eqvGen_boundaryRel_iff_generator"
+      ["frozenSignedQuotientEquivGenerator"
        "frozenPolygonHomology_of_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked setoid comparison.",
+    :reason "Banked quotient equivalence.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,31 +88720,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 00fa1a440", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "explicit trans"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792107545562-14838-e3a159cc",
-     :commands
-     ["git show/diff/check 00fa1a440"
-      "verify .lake/packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from 00fa1a440"],
-     :finding
-     "PASS program STOP: topo-6 commit 00fa1a440 adds compiled, sorry-free progress beyond history 8adff214b. frozen_eqvGen_boundaryRel_iff_generator correctly proves that equivalence closure removes the explicit symmetric alternative: forward relation steps use the generator or its EqvGen symmetry; reverse steps embed generators through frozen_boundaryRel_iff_generator; refl/symm/trans are preserved. This is a valid setoid representation bridge, while quotient topology/MV transport remains explicitly partial. Only t94J09Closure.lean changed; fixture SHA a5a22327cfc8b425136bd05f6311f8bd0ffe45bae3214dbe8d2c857b4ccf5e12 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard."},
-    :commit "00fa1a440",
+     {:cmd "git show --check 6328279bd", :exit 0}],
+    :commit "6328279bd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "a5a22327cfc8b425136bd05f6311f8bd0ffe45bae3214dbe8d2c857b4ccf5e12"},
+     "84315af68298754790989e19c8ddffe062dc6db33e31527bf1f2ddb802d60888"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96446,7 +96432,8 @@
    [:lemma-frozenpolygonhomology-of-comparisons
     :lemma-frozen-boundaryrel-iff
     :lemma-frozen-boundaryrel-iff-generator
-    :lemma-frozen-eqvgen-boundaryrel-iff-generator],
+    :lemma-frozen-eqvgen-boundaryrel-iff-generator
+    :lemma-frozensignedquotientequivgenerator],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96518,4 +96505,21 @@
    :id :lemma-frozen-eqvgen-boundaryrel-iff-generator,
    :kind :lemma,
    :depends-on [:lemma-frozen-boundaryrel-iff-generator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedQuotientEquivGenerator",
+    :type "identity-on-representatives quotient equivalence"},
+   :lemma
+   {:name "frozenSignedQuotientEquivGenerator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "identity-on-representatives quotient equivalence",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozensignedquotientequivgenerator,
+   :kind :lemma,
+   :depends-on [:lemma-frozen-eqvgen-boundaryrel-iff-generator],
    :other-consumers []}]}
