@@ -49,6 +49,32 @@ theorem polynomialMap_flipSecondPair (v : Vectors ℝ 3) :
   ext i
   fin_cases i <;> simp [polynomialMap, flipSecondPair] <;> ring
 
+/-- The two real coordinates of a complex square determine the original
+real coordinate pair up to simultaneous sign. -/
+theorem realPair_eq_or_eq_neg_of_squareCoordinates
+    {a b c d : ℝ}
+    (hre : a ^ 2 - b ^ 2 = c ^ 2 - d ^ 2)
+    (him : 2 * a * b = 2 * c * d) :
+    (a = c ∧ b = d) ∨ (a = -c ∧ b = -d) := by
+  let z : ℂ := ⟨a, b⟩
+  let w : ℂ := ⟨c, d⟩
+  have hsq : z ^ 2 = w ^ 2 := by
+    apply Complex.ext
+    · simpa [z, w, pow_two] using hre
+    · simp [z, w, pow_two]
+      nlinarith [him]
+  have hfactor : (z - w) * (z + w) = 0 := by
+    calc
+      (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring
+      _ = 0 := by rw [hsq, sub_self]
+  rcases mul_eq_zero.mp hfactor with h | h
+  · left
+    have hzw : z = w := sub_eq_zero.mp h
+    exact ⟨congrArg Complex.re hzw, congrArg Complex.im hzw⟩
+  · right
+    have hzw : z = -w := eq_neg_of_add_eq_zero_left h
+    exact ⟨congrArg Complex.re hzw, congrArg Complex.im hzw⟩
+
 theorem flipFirstPair_comm_flipSecondPair (v : Vectors ℝ 3) :
     flipFirstPair (flipSecondPair v) =
       flipSecondPair (flipFirstPair v) := by
@@ -1111,6 +1137,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialMap_nonzero
 #print axioms polynomialMap_flipFirstPair
 #print axioms polynomialMap_flipSecondPair
+#print axioms realPair_eq_or_eq_neg_of_squareCoordinates
 #print axioms flipFirstPair_comm_flipSecondPair
 #print axioms flipFirstPair_flipSecondPair
 #print axioms polynomialDescent
