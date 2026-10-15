@@ -36704,33 +36704,34 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Package overlap homology; retract lower patch to CPn; apply MV successor and Main.",
+    "Compute sphere groups; retract lower patch to CPn; apply MV successor and Main.",
     :outcome :stop,
-    :warnings ["Main: one placeholder."],
+    :warnings ["Main: one placeholder; unrelated edit untouched."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_overlap_homeomorph_puncturedAffine",
-      :type "overlap homeomorphic to punctured affine space",
+    [{:name "t99J05_cp_successor_overlap_homologyIso_unitSphere",
+      :type
+      "overlap homology isomorphic to affine unit-sphere homology",
       :status :proved,
-      :consumers [:t99J05],
-      :depends-on ["cpSuccessor_overlap_topCoordinates_ne_zero"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_overlap_rational_homology",
-      :type "overlap homology from its punctured-affine sphere model",
-      :status :not-started,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_overlap_homeomorph_puncturedAffine"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_overlap_rational_homology",
+      :type "explicit overlap groups from rational sphere homology",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on
+      ["t99J05_cp_successor_overlap_homologyIso_unitSphere"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed the overlap homeomorphism to punctured affine space.",
+    :reason "Committed overlap homology transport to its unit sphere.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36741,15 +36742,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd
-      "git diff --check && git show --check --oneline --stat 682b21f2e",
+     {:cmd "git diff --check && git show --check --stat ba6af8f7d",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "initial homeomorph compile",
+    [{:cmd "initial sphere transport compile",
       :exit 1,
-      :note
-      "Rewrote inverse coordinates before proving nonzero membership."}],
-    :commit "682b21f2e",
+      :note "Opened notation; rerun passed."}],
+    :commit "ba6af8f7d",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36757,7 +36756,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -43687,7 +43686,8 @@
    :id :lemma-t99j05-cp-successor-overlap-rational-homology,
    :kind :lemma,
    :depends-on
-   [:lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine],
+   [:lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine
+    :lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -43782,6 +43782,25 @@
    :id :lemma-t96a06-integraltorational-relativechains-projection,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-relativechains],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_homologyIso_unitSphere",
+    :type
+    "overlap homology isomorphic to affine unit-sphere homology"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_homologyIso_unitSphere",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "overlap homology isomorphic to affine unit-sphere homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
