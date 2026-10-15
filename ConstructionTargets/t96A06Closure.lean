@@ -416,6 +416,27 @@ noncomputable def polynomialSphereLift : C(Sphere 3, Sphere 3) :=
   ⟨fun p => rp3RadialToSphere (polynomialSphereVector p),
     rp3RadialToSphere_continuous.comp polynomialSphereVector_continuous⟩
 
+/-- The selected regular source point is also its own normalized quadratic
+image, so its tangent derivative can be computed in one chart. -/
+theorem polynomialSphereLift_regularPoint :
+    polynomialSphereLift polynomialSphereRegularPoint =
+      polynomialSphereRegularPoint := by
+  apply Subtype.ext
+  apply WithLp.ofLp_injective
+  ext i
+  fin_cases i <;>
+    simp [polynomialSphereLift, polynomialSphereVector,
+      polynomialSphereRegularPoint, rp3RadialToSphere, polynomialMap,
+      sphereVector, EuclideanSpace.norm_eq, Fin.sum_univ_four] <;>
+    norm_num1
+  all_goals
+    have hs : Real.sqrt (2 : ℝ) ≠ 0 :=
+      Real.sqrt_ne_zero'.mpr (by norm_num)
+    rw [Real.sqrt_div (by norm_num : (0 : ℝ) ≤ 1)]
+    norm_num
+    field_simp [hs]
+    nlinarith [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+
 theorem polynomialSphereLift_flipFirstPairSphere :
     polynomialSphereLift.comp flipFirstPairSphere = polynomialSphereLift := by
   apply ContinuousMap.ext
@@ -1391,6 +1412,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipSecondPairSphere_rational_H3
 #print axioms flipBothPairsSphere_rational_H3
 #print axioms polynomialSphereRegularPoint_isRegular
+#print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
 #print axioms polynomialSphereLift_flipFirstPairSphere
