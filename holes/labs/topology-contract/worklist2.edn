@@ -88375,6 +88375,17 @@
     [{:cmd "quotient adapter draft",
       :exit 1,
       :correction "opened Topology namespace"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792042193841-13344-4bf597a7",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 5969dfc4a by topo-6 changes only t97A01Closure.lean and adds compiled progress after 401abd2a7. Exact snapshot builds; Main has its prior 1 placeholder; target has 0; fixture SHA-256 836c3fd102175e2662e2c4c0fb76e2ea72a698b9d46a98428084182cb7908878 matches; registry 166/0; adapter uses only propext, Classical.choice, Quot.sound. quotientHomeomorphOfEqvGenIff correctly separates relation equality from topology: Quotient.congrRight supplies the equivalence, and each continuity direction descends the opposite canonical projection through the appropriate quotient map. No representation boundary is assumed. Literal relation instantiations, Smith reductions, and B2 remain listed."},
     :commit "5969dfc4a",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88383,7 +88394,7 @@
      "836c3fd102175e2662e2c4c0fb76e2ea72a698b9d46a98428084182cb7908878"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88401,7 +88412,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homology specializations.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal quotient homeomorphism adapter.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88416,7 +88427,10 @@
      "Blueprint written; independent review required before formalization."}
     {:job 2,
      :commit "401abd2a7",
-     :reason "Banked homology specializations."}]}
+     :reason "Banked homology specializations."}
+    {:job 3,
+     :commit "5969dfc4a",
+     :reason "Banked literal quotient homeomorphism adapter."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93482,7 +93496,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "quotientHomeomorphOfEqvGenIff",
@@ -93492,7 +93506,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "coinduced literal quotient comparison",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "5969dfc4a"},
    :id :lemma-quotienthomeomorphofeqvgeniff,
    :kind :lemma,
    :depends-on [],
