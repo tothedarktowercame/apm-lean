@@ -68,7 +68,7 @@
    "decls": [
     "apm_m01j04"
    ],
-   "sha256": "5880a34c7d6ff83db2d2b610b4d5ac4239bf47167a3895598287795784747ca3",
+   "sha256": "a86de291cc3dea0e93d564ff7681c4d80e2527b5a64c66092446cf2b554ab48e",
    "defs": [
     "apm_m01J04_H1",
     "apm_m01J04_H1WeaklyConverges",
@@ -86,8 +86,8 @@
    "grader": "claude-14 outside grader (read-only subagent)",
    "evidence": "holes/labs/statement-registry/m01J04-regrade.md",
    "prelim_defect": null,
-   "rev": "1e07a41a6",
-   "approved_at": "2026-10-15T13:27:19Z"
+   "rev": "492e10bba",
+   "approved_at": "2026-10-15T13:39:17Z"
   },
   "m02J05": {
    "decls": [
