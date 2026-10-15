@@ -317,11 +317,34 @@ abbrev Annulus13 := {z : ℂ // (1 : ℝ) / 3 < ‖z‖ ∧ ‖z‖ < (2 : ℝ) 
 points with one of norm `< 1` are related only if equal (cf. the saturation
 argument in `cell_cover`). -/
 -- BEGIN SEAT AREA
+lemma cell_overlap_hequiv_aux_eq_of_eqvGen_aux_interior
+    (gamma : C(Circle, Y)) {x y : Y ⊕ apm_t97J04_Disk}
+    (h : Relation.EqvGen (CellRel gamma) x y)
+    (z : apm_t97J04_Disk) (hz : ‖(z : ℂ)‖ < 1) :
+    (x = .inr z ↔ y = .inr z) := by
+  induction h with
+  | rel x y h =>
+      cases h with
+      | boundary u =>
+          constructor
+          · intro hx
+            cases hx
+          · intro hy
+            have huz : circleToDisk u = z := Sum.inr.inj hy
+            subst z
+            rw [cell_cover_aux_circle_norm] at hz
+            linarith
+  | refl x => exact Iff.rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y u hxy hyu ih₁ ih₂ => exact ih₁.trans ih₂
+
 lemma cell_overlap_hequiv_aux_eq_of_eqvGen
     (γ : C(Circle, Y)) {z w : apm_t97J04_Disk}
     (h : Relation.EqvGen (CellRel γ) (.inr z) (.inr w))
     (hz : ‖(z : ℂ)‖ < 1) : z = w := by
-  sorry
+  have hw : (Sum.inr w : Y ⊕ apm_t97J04_Disk) = .inr z :=
+    (cell_overlap_hequiv_aux_eq_of_eqvGen_aux_interior γ h z hz).mp rfl
+  exact (Sum.inr.inj hw).symm
 -- END SEAT AREA
 
 /-- A3b. The overlap is homeomorphic to the literal annulus, sending
