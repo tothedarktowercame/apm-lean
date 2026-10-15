@@ -119181,6 +119181,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792044225225-13436-65cc86c3",
+     :commands
+     ["git diff/show c45a18b4 archived sources"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds a compiled, sorry-free signed-coproduct derivative for the difference of the two mixed-model extended-chart expressions. Its A.coprod(-B) orientation and product base point are correct. The two expressions are not yet shown to use one target chart; the row accurately lists common-target identification as residual, so no facade is claimed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "c45a18b4f18ec6361e98624aea35ce5e2cd379aa",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked mixed-model chart derivative.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked mixed-model incidence chart derivative.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119429,7 +119441,10 @@
      :reason "Banked incidence chart derivative."}
     {:job 8,
      :commit "0b62a848fb4bd80deb0e94239dd0c174a4b99598",
-     :reason "Banked mixed-model chart derivative."}]}
+     :reason "Banked mixed-model chart derivative."}
+    {:job 9,
+     :commit "c45a18b4f18ec6361e98624aea35ce5e2cd379aa",
+     :reason "Banked mixed-model incidence chart derivative."}]}
   {:consumer :t98A06,
    :stop-count 8,
    :review-finding
@@ -121514,7 +121529,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "hasFDerivAt_incidenceDifference_writtenInExtChartAt_self",
@@ -121524,7 +121539,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "signed coproduct derivative in mixed source charts",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "c45a18b4f18ec6361e98624aea35ce5e2cd379aa"},
    :id :lemma-hasfderivat-incidencedifference-writteninextchartat-self,
    :kind :lemma,
    :depends-on
