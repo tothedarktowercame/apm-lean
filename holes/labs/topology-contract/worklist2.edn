@@ -88329,22 +88329,31 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Implement B1 homology adapter, B2 pi1 adapter, then copy final assembly.",
+    "Literal quotient homeomorphisms and Smith reductions for B1; then B2.",
     :outcome :stop,
-    :warnings
-    ["source blueprint has two expected sorryAx obligations"
-     "unrelated t96A06 dirt appeared after commit"
-     "review dirs preserved"],
+    :warnings ["Main placeholder" "unrelated dirt preserved" "lint"],
     :missing-theorems
-    [{:name "apm_t97a01_polygon_singular_homology",
-      :type "literal quotient homology adapter",
-      :status :not-started,
+    [{:name "aabbccPolygonHomology",
+      :type "foundation specialized to aabbcc pairing",
+      :status :proved,
       :consumers [:t97A01],
       :depends-on ["polygonQuotient_homology"],
+      :area "polygon-surface-homology"}
+     {:name "torusRP2PolygonHomology",
+      :type "foundation specialized to torus-crosscap pairing",
+      :status :proved,
+      :consumers [:t97A01],
+      :depends-on ["polygonQuotient_homology"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t97a01_polygon_singular_homology",
+      :type "literal quotient homology adapter",
+      :status :partial,
+      :consumers [:t97A01],
+      :depends-on ["aabbccPolygonHomology" "torusRP2PolygonHomology"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal torus-crosscap van Kampen",
@@ -88354,35 +88363,26 @@
       :area "polygon-surface-pi1"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
-    :axioms [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason
-    "Blueprint written; independent review required before formalization.",
+    :reason "Banked homology specializations.",
     :commands
-    [{:cmd "lake env lean holes/labs/blueprints/t97A01/Blueprint.lean",
+    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
+     {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "git show --check 06f6bde3c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792040887803-13305-9e2d7762",
-     :commands
-     ["lake env lean holes/labs/blueprints/t97A01/Blueprint.lean"
-      "python3 scripts/statement-registry.py check"
-      "git show --check 06f6bde3c; fixture SHA-256 and placeholder scans"],
-     :finding
-     "Commit 06f6bde3c by topo-6 changes only t97A01Closure.blueprint.md; fixture SHA-256 7ac697c3d72300464e0918d095e319df5b6898164f00b7692189f0988578b1fa matches. Source blueprint compiles with exactly its 2 declared LIBRARY sorries; closure blueprint has 0 placeholders; registry 166/0. Mathematics is sound: aabbcc and aba^-1b^-1cc are nonorientable genus 3; boundary vectors (2,2,2) and (0,0,2) are injective with cokernel Z^2 plus Z/2; the stated pi1 relator abelianizes consistently. B1/B2 use only frozen definitions and listed foundations; B3 uses every output of B1 and B2, and its Lean type exactly matches the registered conjunction. Proper blueprint milestone; both library adapters remain."},
-    :commit "06f6bde3c",
-    :changed-paths ["ConstructionTargets/t97A01Closure.blueprint.md"],
+     {:cmd "placeholder scan", :exit 0}
+     {:cmd "axioms check", :exit 0}
+     {:cmd "git show --check 401abd2a7", :exit 0}],
+    :commit "401abd2a7",
+    :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
-    {:path "ConstructionTargets/t97A01Closure.blueprint.md",
+    {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "7ac697c3d72300464e0918d095e319df5b6898164f00b7692189f0988578b1fa"},
+     "c8763dce182c9732798989579102387f3896207c6024818a23cd3bf3adc8fe22"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93416,7 +93416,10 @@
     :area "polygon-surface-homology"},
    :id :lemma-apm-t97a01-polygon-singular-homology,
    :kind :lemma,
-   :depends-on [:lemma-polygonquotient-homology],
+   :depends-on
+   [:lemma-polygonquotient-homology
+    :lemma-aabbccpolygonhomology
+    :lemma-torusrp2polygonhomology],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93433,4 +93436,38 @@
    :id :lemma-apm-t97a01-torusrp2-fundamentalgroup,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccPolygonHomology",
+    :type "foundation specialized to aabbcc pairing"},
+   :lemma
+   {:name "aabbccPolygonHomology",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "foundation specialized to aabbcc pairing",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-aabbccpolygonhomology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PolygonHomology",
+    :type "foundation specialized to torus-crosscap pairing"},
+   :lemma
+   {:name "torusRP2PolygonHomology",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "foundation specialized to torus-crosscap pairing",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2polygonhomology,
+   :kind :lemma,
+   :depends-on [:lemma-polygonquotient-homology],
    :other-consumers []}]}
