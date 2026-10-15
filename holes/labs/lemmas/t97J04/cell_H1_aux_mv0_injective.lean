@@ -1015,13 +1015,58 @@ lemma cell_H1_aux_inner_zero (γ : C(Circle, Y))
   sorry
 
 -- BEGIN SEAT AREA
+lemma cell_H1_aux_mv0_injective_aux_pathConnected
+    {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
+    (e : S ≃ₕ T) [PathConnectedSpace T] : PathConnectedSpace S := by
+  rcases e.left_inv with ⟨K⟩
+  refine ⟨⟨e.invFun (Classical.choice (inferInstance : Nonempty T))⟩, ?_⟩
+  intro x y
+  refine ⟨(K.evalAt x).symm.trans
+    (((PathConnectedSpace.somePath (e x) (e y)).map e.invFun.continuous).trans
+      (K.evalAt y))⟩
+
 lemma cell_H1_aux_mv0_injective (γ : C(Circle, Y)) [PathConnectedSpace Y]
     (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
       e.invFun = cellOverlapCircle γ)
     (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
     (hA2 : ContractibleSpace (cellInner γ)) :
     Function.Injective (IntegralMV.mvI (cellOuter γ) (cellInner γ) 0).hom := by
-  sorry
+  rcases hA3 with ⟨eI, heI⟩
+  rcases hA4 with ⟨eO, heO⟩
+  letI : PathConnectedSpace (cellOuter γ ∩ cellInner γ : Set (Cell γ)) :=
+    cell_H1_aux_mv0_injective_aux_pathConnected eI
+  letI : PathConnectedSpace (cellOuter γ) :=
+    cell_H1_aux_mv0_injective_aux_pathConnected eO
+  let f : C((cellOuter γ ∩ cellInner γ : Set (Cell γ)), cellOuter γ) :=
+    ⟨Set.inclusion Set.inter_subset_left, continuous_inclusion Set.inter_subset_left⟩
+  let p : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) :=
+    Classical.choice inferInstance
+  let q : cellOuter γ := Classical.choice inferInstance
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℤ p ≪≫
+    (ConstructionTargets.CoefficientH0.h0Iso ℤ q).symm
+  have hmap : e.hom = IntegralMV.mvIncl Set.inter_subset_left 0 := by
+    apply (cancel_mono (ConstructionTargets.CoefficientH0.h0Iso ℤ q).hom).mp
+    change (ConstructionTargets.CoefficientH0.h0Augmentation ℤ ≫
+        ConstructionTargets.CoefficientH0.singularVertexH0Class ℤ q) ≫
+        ConstructionTargets.CoefficientH0.h0Augmentation ℤ = _
+    rw [Category.assoc,
+      ConstructionTargets.CoefficientH0.singularVertexH0Class_comp_h0Augmentation,
+      Category.comp_id]
+    exact (ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℤ f).symm
+  have hincl : Function.Injective
+      (IntegralMV.mvIncl
+        (Set.inter_subset_left : cellOuter γ ∩ cellInner γ ⊆ cellOuter γ) 0).hom := by
+    rw [← hmap]
+    exact (ModuleCat.mono_iff_injective e.hom).mp inferInstance
+  intro a b hab
+  apply hincl
+  have h := congrArg
+    (fun z => (CategoryTheory.Limits.biprod.fst : IntegralMV.HZ 0 (cellOuter γ) ⊞
+      IntegralMV.HZ 0 (cellInner γ) ⟶ IntegralMV.HZ 0 (cellOuter γ)).hom z) hab
+  simp only [IntegralMV.mvI] at h
+  rw [← ModuleCat.comp_apply, ← ModuleCat.comp_apply,
+    CategoryTheory.Limits.biprod.lift_fst] at h
+  exact h
 -- END SEAT AREA
 
 lemma cell_H1_aux_transport (γ : C(Circle, Y))
