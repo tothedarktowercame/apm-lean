@@ -1199,6 +1199,28 @@ structure LocallyIsolatedCanonicalFiberData
     CanonicalRegularFiberDegreeCalculations
       (f := f) (c := c) choice.mem_circle e
 
+/-- Constructor for the bundled geometric datum from a selected locally
+isolated circle fiber.  The calculations are required under exactly the
+finite instance derived from that isolation proof. -/
+noncomputable def locallyIsolatedCanonicalFiberData_of
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [ChartedSpace SurfaceModel S]
+    (f : C(S, S)) (c : C(Circle, S))
+    (e : surfaceHomology S ≅ ModuleCat.of ℤ ℤ)
+    (y : S) (hy : y ∈ Set.range c)
+    (hlocal : LocallyIsolatedFiber f y)
+    (calculations : letI :=
+      regularFiberFintype_of_locallyIsolatedFiber f y hlocal
+      CanonicalRegularFiberDegreeCalculations
+        (f := f) (c := c) hy e) :
+    LocallyIsolatedCanonicalFiberData f c e := by
+  let choice : FiniteRegularFiberChoice f c :=
+    ⟨y, hy, regularFiberFintype_of_locallyIsolatedFiber f y hlocal⟩
+  exact
+    { choice := choice
+      locallyIsolated := hlocal
+      calculations := calculations }
+
 /-- A locally isolated canonical fiber datum supplies the integrated witness
 without changing its dependent finite-fiber representation. -/
 noncomputable def LocallyIsolatedCanonicalFiberData.toWitness
@@ -1319,6 +1341,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.CanonicalRegularFiberWitness.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_isDiscrete
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyIsolatedFiber
+#print axioms ConstructionTargets.T00J02Closure.locallyIsolatedCanonicalFiberData_of
 #print axioms ConstructionTargets.T00J02Closure.LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.canonicalRegularFiberWitness_of_locallyInjective
 #print axioms ConstructionTargets.T00J02Closure.topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness
