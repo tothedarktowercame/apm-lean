@@ -2021,7 +2021,21 @@ lemma t99A01_low_exact_i₀_j₀ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_
 -- BEGIN SEAT AREA
 lemma t99A01_low_j₀_surjective {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     Function.Surjective D.j₀ := by
-  sorry
+  intro y
+  rcases D.hJ₀ y with ⟨z, rfl⟩
+  let fst₀ : D.A₀ ⊞ D.B₀ ⟶ D.A₀ := Limits.biprod.fst
+  let snd₀ : D.A₀ ⊞ D.B₀ ⟶ D.B₀ := Limits.biprod.snd
+  let inl₀ : D.A₀ ⟶ D.A₀ ⊞ D.B₀ := Limits.biprod.inl
+  let inr₀ : D.B₀ ⟶ D.A₀ ⊞ D.B₀ := Limits.biprod.inr
+  refine ⟨(D.cA₀.hom.hom (fst₀.hom z), D.cB₀.hom.hom (snd₀.hom z)), ?_⟩
+  simp only [t99A01_LowInput.j₀, LinearMap.coprod_apply]
+  simp only [ModuleCat.hom_comp, LinearMap.comp_apply]
+  rw [D.cA₀.hom_inv_id_apply, D.cB₀.hom_inv_id_apply]
+  rw [← map_add]
+  congr 1
+  have hcat : (fst₀ ≫ inl₀) + (snd₀ ≫ inr₀) = 𝟙 (D.A₀ ⊞ D.B₀) := by
+    apply Limits.biprod.hom_ext <;> simp [fst₀, snd₀, inl₀, inr₀]
+  exact congrArg (fun f : D.A₀ ⊞ D.B₀ ⟶ D.A₀ ⊞ D.B₀ => f.hom z) hcat
 -- END SEAT AREA
 
 /-- **Leaf.** `δ₂` is injective (`A₂ = B₂ = 0` kill the range of `J₂`). -/
