@@ -88331,27 +88331,28 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
-    :residual "Fold paths through concat; prove van Kampen; assemble.",
+    :residual
+    "Identify nested run fold with flat fold; prove van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm",
-      :type "cast prefix factor equals original path",
+    [{:name "torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq",
+      :type
+      "flat transported prefix fold equals original subdivision fold",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets"],
+      ["torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm"],
+      ["torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88363,7 +88364,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked inverse-indexed path transport.",
+    :reason "Banked flat prefix-factor concatenation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88373,33 +88374,16 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 86f862f31", :exit 0}],
-    :diagnostic-history
-    [{:cmd "endpoint draft",
-      :exit 1,
-      :correction "used successor equality"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792074402784-14206-e23b9776",
-     :commands
-     ["git show/diff/check 86f862f31"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 86f862f31 adds compiled, sorry-free progress beyond history commit b13f60bd4. It identifies both endpoints of each inverse-run-offset prefix factor with the original subdivision factor, then transports the dependent Path across those equalities and proves extensional equality. Only t97A01Closure.lean changed; fixture SHA 8b1403612b789b1d20af42d11cc80b082cbbb9395a537003c0e4ed93cc5096e1 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Endpoint equality and Path.cast orientations are correct; the Sigma/Fin conversion uses the proved length equality. Path folding, van Kampen, and assembly remain listed."},
-    :commit "86f862f31",
+     {:cmd "git show --check b141f5e81", :exit 0}],
+    :commit "b141f5e81",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "8b1403612b789b1d20af42d11cc80b082cbbb9395a537003c0e4ed93cc5096e1"},
+     "18daad118668d12eef453177ba527992383f87ab346c25a64bf8fbfcc5a9ca52"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94298,7 +94282,8 @@
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-le-add-one
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets
-    :lemma-torusrp2-subdivisionrunprefixblockpiece-cast-runoffsetequiv-symm],
+    :lemma-torusrp2-subdivisionrunprefixblockpiece-cast-runoffsetequiv-symm
+    :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-eq],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95486,4 +95471,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq",
+    :type
+    "flat transported prefix fold equals original subdivision fold"},
+   :lemma
+   {:name "torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "flat transported prefix fold equals original subdivision fold",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunprefixblockpieceflat-concat-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunprefixblockpiece-cast-runoffsetequiv-symm],
    :other-consumers []}]}
