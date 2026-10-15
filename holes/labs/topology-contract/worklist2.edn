@@ -88370,6 +88370,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
      {:cmd "git show --check 504d3252d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792071006427-14105-0ab3e5e0",
+     :commands
+     ["git show/diff/check 504d3252d"
+      "sha256sum frozen fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 504d3252d adds compiled, sorry-free progress beyond 246bf0ffa. It proves each flattened run/local-offset index is at least its run prefix boundary, the required lower interval bound. Only t97A01Closure.lean changed; fixture SHA 876870838f5ae412dc5d1dbc980dbef9ce3590b59ac5851dbd37f4b2cc8b5673 matches. Recorded snapshot target builds and Main compiles; target/fixture placeholders 0/1; registry 166/0; axioms standard. Inequality orientation and dependent offset representation are correct. Cross-run successor, nested concatenation, van Kampen, and final assembly remain listed."},
     :commit "504d3252d",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88378,7 +88391,7 @@
      "876870838f5ae412dc5d1dbc980dbef9ce3590b59ac5851dbd37f4b2cc8b5673"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88396,7 +88409,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked within-run successor offset.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked run-offset lower boundary.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88556,7 +88569,10 @@
      :reason "Banked successor run-offset recurrence."}
     {:job 5,
      :commit "246bf0ffa",
-     :reason "Banked within-run successor offset."}]}
+     :reason "Banked within-run successor offset."}
+    {:job 6,
+     :commit "504d3252d",
+     :reason "Banked run-offset lower boundary."}]}
   {:consumer :t94J09,
    :stop-count 5,
    :evidence
@@ -95266,7 +95282,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunPrefixLength_le_runOffset",
@@ -95276,7 +95292,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "flattened run offset lies at or above its run boundary",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "504d3252d"},
    :id :lemma-torusrp2-subdivisionrunprefixlength-le-runoffset,
    :kind :lemma,
    :depends-on
