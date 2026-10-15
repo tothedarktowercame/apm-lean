@@ -7447,7 +7447,50 @@ theorem cutNewB_injective_of_branches {L p q : ℕ} (hpq : p < q) (hqL : q < L)
       (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
       (∀ φ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ)) :
     Function.Injective (cutNewB L p q) := by
-  sorry
+  intro z w hzw
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm z)
+  let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+      (AddCircle.homeomorphCircle'.symm w)
+  have hxy : cutProfileNewB L p q x = cutProfileNewB L p q y := by
+    simpa [cutNewB, AddCircle.liftIco, x, y] using hzw
+  have hx : (x : ℝ) ∈ Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := x.property
+  have hy : (y : ℝ) ∈ Ico (cutAlpha L q) (cutAlpha L q + 2 * Real.pi) := y.property
+  have finish (h : (x : ℝ) = y) : z = w := by
+    have hsub : x = y := Subtype.ext h
+    have hadd := congrArg (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).symm hsub
+    have hadd' : AddCircle.homeomorphCircle'.symm z =
+        AddCircle.homeomorphCircle'.symm w := by simpa [x, y] using hadd
+    exact AddCircle.homeomorphCircle'.symm.injective hadd'
+  by_cases hxa : (x : ℝ) ≤ cutAlpha L (q + 1)
+  · have hx1 : (x : ℝ) ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)) :=
+      ⟨hx.1, hxa⟩
+    by_cases hya : (y : ℝ) ≤ cutAlpha L (q + 1)
+    · exact finish (hinj.1 hx1 ⟨hy.1, hya⟩ hxy)
+    · have hylo : cutAlpha L (q + 1) < (y : ℝ) := lt_of_not_ge hya
+      by_cases hyb : (y : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+      · exact False.elim (hdisj.1 x hx1 y ⟨hylo, hyb⟩ hxy)
+      · exact False.elim (hdisj.2.1 x hx1 y
+          ⟨lt_of_not_ge hyb, hy.2⟩ hxy)
+  · have hxalo : cutAlpha L (q + 1) < (x : ℝ) := lt_of_not_ge hxa
+    by_cases hxb : (x : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+    · have hx2 : (x : ℝ) ∈ Ioc (cutAlpha L (q + 1))
+          (cutAlpha L p + 2 * Real.pi) := ⟨hxalo, hxb⟩
+      by_cases hya : (y : ℝ) ≤ cutAlpha L (q + 1)
+      · exact False.elim (hdisj.1 y ⟨hy.1, hya⟩ x hx2 hxy.symm)
+      · have hyalo : cutAlpha L (q + 1) < (y : ℝ) := lt_of_not_ge hya
+        by_cases hyb : (y : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+        · exact finish (hinj.2.1 hx2 ⟨hyalo, hyb⟩ hxy)
+        · exact False.elim (hdisj.2.2 x hx2 y
+            ⟨lt_of_not_ge hyb, hy.2⟩ hxy)
+    · have hx3 : (x : ℝ) ∈ Ioo (cutAlpha L p + 2 * Real.pi)
+          (cutAlpha L q + 2 * Real.pi) := ⟨lt_of_not_ge hxb, hx.2⟩
+      by_cases hya : (y : ℝ) ≤ cutAlpha L (q + 1)
+      · exact False.elim (hdisj.2.1 y ⟨hy.1, hya⟩ x hx3 hxy.symm)
+      · have hyalo : cutAlpha L (q + 1) < (y : ℝ) := lt_of_not_ge hya
+        by_cases hyb : (y : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+        · exact False.elim (hdisj.2.2 y ⟨hyalo, hyb⟩ x hx3 hxy.symm)
+        · exact finish (hinj.2.2 hx3 ⟨lt_of_not_ge hyb, hy.2⟩ hxy)
 
 theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutNewB L p q) := by
