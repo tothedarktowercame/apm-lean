@@ -322,6 +322,21 @@ theorem exists_hasMFDerivAt_equiv_of_contMDiff_surjective
 
 #print axioms exists_hasMFDerivAt_equiv_of_contMDiff_surjective
 
+/-- For the boundaryless self model, the derivative datum of a manifold map
+is an ordinary full-space derivative of its preferred chart expression. -/
+theorem hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (x : S) (e : SurfaceModel ≃L[ℝ] SurfaceModel)
+    (h : HasMFDerivAt SurfaceModelWithCorners SurfaceModelWithCorners f x
+      (e : SurfaceModel →L[ℝ] SurfaceModel)) :
+    HasFDerivAt
+      (writtenInExtChartAt SurfaceModelWithCorners SurfaceModelWithCorners x f)
+      (e : SurfaceModel →L[ℝ] SurfaceModel) (extChartAt SurfaceModelWithCorners x x) := by
+  apply HasFDerivWithinAt.hasFDerivAt_of_univ
+  simpa only [HasMFDerivAt, modelWithCornersSelf_coe, Set.range_id] using h.2
+
+#print axioms hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt
+
 /-- At an incidence point, transversality and liftability of every tangent
 direction of the circle force the full derivative of `f` to be surjective.
 This is the linear conclusion supplied by a regular value of the projection
