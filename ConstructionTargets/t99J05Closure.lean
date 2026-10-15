@@ -439,6 +439,21 @@ theorem t99J05_cp_successor_overlap_subsingleton_of_unitSphere
     (t99J05_cp_successor_overlap_homologyIso_unitSphere n k).hom).1
   exact Subsingleton.elim _ _
 
+/-- A top-degree computation for the unit-sphere model transports back to the
+exact successor overlap.  This isolates the remaining sphere-model comparison
+from the Mayer--Vietoris argument. -/
+noncomputable def t99J05_cp_successor_overlap_topIso_of_unitSphere
+    (n : ℕ)
+    (e : Homology
+          (Metric.sphere
+            (0 : AffineCoordinates (Fin.last (n + 1))) 1) (2 * n + 1) ≅
+        ModuleCat.of ℚ ℚ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) (2 * n + 1) ≅ ModuleCat.of ℚ ℚ :=
+  t99J05_cp_successor_overlap_homologyIso_unitSphere n (2 * n + 1) ≪≫ e
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -494,6 +509,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_overlap_rational_H0
 #print axioms t99J05_cp_successor_overlap_finiteDimensional_of_unitSphere
 #print axioms t99J05_cp_successor_overlap_subsingleton_of_unitSphere
+#print axioms t99J05_cp_successor_overlap_topIso_of_unitSphere
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
