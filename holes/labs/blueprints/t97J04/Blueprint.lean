@@ -1234,10 +1234,59 @@ theorem cell_outer_hequiv (γ : C(Circle, Y)) :
   rw [this]
 /-- A5. The radius-`1/2` circle, pushed into the outer piece, is freely
 homotopic to `γ` (radial push to the boundary circle, where `inr z = inl (γ z)`). -/
+def cell_overlap_loop_aux_disk (p : unitInterval × Circle) : apm_t97J04_Disk :=
+  ⟨((((1 + (p.1 : ℝ)) / 2 : ℝ) : ℂ) * (p.2 : ℂ)), by
+    rw [Metric.mem_closedBall, dist_zero_right, norm_mul, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_nonneg]
+    · rw [Circle.norm_coe]
+      have ht := p.1.2.2
+      norm_num at ht ⊢
+      linarith
+    · have ht := p.1.2.1
+      positivity⟩
+
+lemma cell_overlap_loop_aux_disk_continuous :
+    Continuous cell_overlap_loop_aux_disk := by
+  apply Continuous.subtype_mk
+  fun_prop
+
+def cell_overlap_loop_aux_map (γ : C(Circle, Y)) :
+    C(unitInterval × Circle, cellOuter γ) :=
+  ⟨fun p ↦ ⟨cellMk γ (.inr (cell_overlap_loop_aux_disk p)),
+      ⟨.inr (cell_overlap_loop_aux_disk p), Or.inr
+        ⟨cell_overlap_loop_aux_disk p, by
+          change (1 : ℝ) / 3 <
+            ‖((((1 + (p.1 : ℝ)) / 2 : ℝ) : ℂ) * (p.2 : ℂ))‖
+          rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg,
+            Circle.norm_coe]
+          · have ht := p.1.2.1
+            norm_num at ht ⊢
+            linarith
+          · have ht := p.1.2.1
+            positivity, rfl⟩, rfl⟩⟩,
+    ((continuous_cellMk γ).comp
+      (continuous_inr.comp cell_overlap_loop_aux_disk_continuous)).subtype_mk _⟩
+
 lemma cell_overlap_loop (γ : C(Circle, Y)) :
     ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
         (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ) := by
-  sorry
+  refine ⟨ContinuousMap.Homotopy.mk (cell_overlap_loop_aux_map γ) ?_ ?_⟩
+  · intro z
+    apply Subtype.ext
+    change cellMk γ (.inr (cell_overlap_loop_aux_disk (0, z))) =
+      cellMk γ (.inr (halfDisk z))
+    congr 2
+    apply Subtype.ext
+    simp [cell_overlap_loop_aux_disk, halfDisk, div_eq_mul_inv, mul_comm]
+  · intro z
+    apply Subtype.ext
+    change cellMk γ (.inr _) = cellMk γ (.inl (γ z))
+    apply Quotient.sound
+    convert (Relation.EqvGen.rel _ _ (CellRel.boundary (γ := γ) z)).symm using 1
+    apply congrArg Sum.inr
+    apply Subtype.ext
+    simp [cell_overlap_loop_aux_disk, circleToDisk,
+      PolygonSurfaceHomology.circleToPolygonDisk]
 
 /-- A6. Path-connectedness of the pieces and of the cell space. -/
 lemma cell_pathConnected (γ : C(Circle, Y)) [PathConnectedSpace Y]
