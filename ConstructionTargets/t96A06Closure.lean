@@ -2046,6 +2046,17 @@ theorem t96A06_relativeComparison_cancel_nativeNormalizedLocalization :
           ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv_hom_id)
     t96A06_nativeIntegralNormalizedLocalization
 
+/-- The absolute comparison composite appearing in the projection theorem is
+exactly the production integral singular-homology comparison. -/
+theorem t96A06_absoluteComparison_composite :
+    (((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+          (TopCat.of (Sphere 3))).hom 3 =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).hom := rfl
+
 /-- Extend the transported integral normalized class to rational coefficients
 inside homology of the forgotten rational chain complex. -/
 noncomputable def t96A06_mappedRationalExtensionClass :
@@ -3494,6 +3505,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralNormalizedClass_eq_comparisonInv
 #print axioms t96A06_nativeIntegralNormalizedLocalization
 #print axioms t96A06_relativeComparison_cancel_nativeNormalizedLocalization
+#print axioms t96A06_absoluteComparison_composite
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
