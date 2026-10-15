@@ -88785,74 +88785,64 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Construct vertex charts and covering map; then Cayley tree and finite invariants.",
+    :residual "Charts; Cayley tree; finite invariants.",
     :outcome :stop,
-    :warnings
-    ["preexisting lint"
-     "Main: 1 prior placeholder"
-     "unrelated dirt preserved"],
+    :warnings ["lint" "Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "existsUnique_edgePoint_of_projection_eq_interior",
-      :type "unique vertex representative",
+    [{:name "vertexFiberEquiv",
+      :type "wedge fiber equivalent to vertices",
       :status :proved,
-      :consumers [:t92J06],
-      :depends-on ["edgePoint_injective_of_interior"],
-      :area "graph-covering-realization"}
-     {:name "interiorFiberEquiv",
-      :type "open-edge fiber equivalence",
-      :status :proved,
-      :consumers [:t92J06],
-      :depends-on ["existsUnique_edgePoint_of_projection_eq_interior"],
-      :area "graph-covering-realization"}
-     {:name "twoLoopGraphCoverData_realization",
-      :type "local charts and exact fibers",
-      :status :partial,
       :consumers [:t92J06],
       :depends-on ["interiorFiberEquiv"],
+      :area "graph-covering-realization"}
+     {:name "twoLoopGraphCoverData_realization",
+      :type "charts and covering map",
+      :status :partial,
+      :consumers [:t92J06],
+      :depends-on ["vertexFiberEquiv" "interiorFiberEquiv"],
+      :area "graph-covering-realization"}
+     {:name "apm_t92J06_exists_simplyConnected_cover",
+      :type "Cayley-tree cover",
+      :status :not-started,
+      :consumers [:t92J06],
+      :depends-on ["twoLoopGraphCoverData_realization"],
+      :area "graph-covering-realization"}
+     {:name "apm_t92J06_exists_four_threeSheeted_covers",
+      :type "four distinct 3-sheet covers",
+      :status :not-started,
+      :consumers [:t92J06],
+      :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}],
-    :statement-hashes {:registry "166/0"},
+    :statement-hashes {:registry "168/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked open-edge fiber classification.",
+    :reason "Banked vertex fiber.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
-     {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 7cfdde03e", :exit 0}],
+     {:cmd "git show --check b0415d1fa", :exit 0}],
     :diagnostic-history
-    [{:cmd "fiber drafts",
+    [{:cmd "vertex draft",
       :exit 1,
-      :correction "unfolded quotient projection; fixed substitution"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792038644210-13202-4ec679ea",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "#print axioms for both new declarations"
-      "statement-registry.py check; git show --check; placeholder/hash audits"],
-     :finding
-     "Commit 7cfdde03e by topo-6 changes only ConstructionTargets/t92J06Closure.lean. Frozen fixture hash matches 2dd1d6bc...ecb90. Exact snapshot builds; Main compiles with its prior 1 placeholder; target has 0; registry 166/0; new declarations use only propext, Classical.choice, Quot.sound. Interior-fiber existence/uniqueness and the induced fiber equivalence have correct orientations and stay across the quotient boundary. This is new compiled program progress; vertex charts/covering map, Cayley tree, and finite invariants remain."},
-    :commit "7cfdde03e",
+      :correction "fixed endpoints/orientation"}],
+    :commit "b0415d1fa",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "2dd1d6bcbd7cdcc709ee0bf60101c4ee4f8269414a51ac261925efc8c41ecb90"},
+     "d5921ab0dbf229478a9ce286d383b1aa93769df0417cd8f740feb4a1bb2f3000"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90654,7 +90644,8 @@
     :lemma-projection-edgepoint-eq-of-interior
     :lemma-edgepoint-ne-vertex-of-interior
     :lemma-edgepoint-injective-of-interior
-    :lemma-interiorfiberequiv],
+    :lemma-interiorfiberequiv
+    :lemma-vertexfiberequiv],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96333,4 +96324,21 @@
    :id :lemma-frozenpolygonh1-surjective-kernel,
    :kind :lemma,
    :depends-on [:lemma-frozenh1smithequivofsurjectivekernel],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "vertexFiberEquiv",
+    :type "wedge fiber equivalent to vertices"},
+   :lemma
+   {:name "vertexFiberEquiv",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "wedge fiber equivalent to vertices",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-vertexfiberequiv,
+   :kind :lemma,
+   :depends-on [:lemma-interiorfiberequiv],
    :other-consumers []}]}
