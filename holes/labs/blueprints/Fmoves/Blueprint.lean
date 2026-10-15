@@ -8388,7 +8388,168 @@ theorem cutNewB_range_supset_aux_unit {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     {z : ℂ | ‖z‖ = 1 ∧
         cutCross (cutPoint L (p + 1) - cutPoint L (q + 1)) (z - cutPoint L (q + 1)) ≤ 0} ⊆
       Set.range (cutNewB L p q) := by
-  sorry
+  intro z hz
+  rcases hz with ⟨hnorm, hcrossz⟩
+  have hL : 0 < (L : ℝ) := by exact_mod_cast Nat.zero_lt_of_lt hqL
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have hapq : cutAlpha L p < cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hp1q1 : cutAlpha L (p + 1) < cutAlpha L (q + 1) := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    push_cast
+    nlinarith [show (p : ℝ) < q by exact_mod_cast hpq]
+  have hq1top : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    unfold cutAlpha
+    apply (div_lt_iff₀ hL).2
+    have hqL' : (q : ℝ) < L := by exact_mod_cast hqL
+    field_simp
+    push_cast
+    nlinarith [hpi]
+  have hq1le : cutAlpha L (q + 1) ≤ cutAlpha L p + 2 * Real.pi := by
+    have h1 : cutAlpha L (q + 1) ≤ 2 * Real.pi := by
+      unfold cutAlpha
+      apply (div_le_iff₀ hL).2
+      have hn : (q + 1 : ℕ) ≤ L := by omega
+      have hr : (q + 1 : ℝ) ≤ L := by exact_mod_cast hn
+      gcongr
+    have h2 : 0 ≤ cutAlpha L p := by unfold cutAlpha; positivity
+    linarith
+  have hpoint (m : ℕ) : cutPoint L m =
+      Complex.exp ((cutAlpha L m : ℂ) * Complex.I) := rfl
+  let c : Circle := ⟨z, by simpa [Circle, Submonoid.unitSphere] using hnorm⟩
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L (q + 1))
+    (AddCircle.homeomorphCircle'.symm c)
+  have hxmem : (x : ℝ) ∈ Set.Ico (cutAlpha L (q + 1))
+      (cutAlpha L (q + 1) + 2 * Real.pi) := x.2
+  have hexp : Complex.exp (((x : ℝ) : ℂ) * Complex.I) = z := by
+    have hxclass : (((x : ℝ) : AddCircle (2 * Real.pi))) =
+        AddCircle.homeomorphCircle'.symm c := by
+      exact (AddCircle.equivIco (2 * Real.pi) (cutAlpha L (q + 1))).symm_apply_apply _
+    have hcangle : (((x : ℝ) : Real.Angle).toCircle) = c := by
+      have hh := congrArg AddCircle.homeomorphCircle' hxclass
+      rw [Homeomorph.apply_symm_apply] at hh
+      exact hh
+    have hcval := congrArg Subtype.val hcangle
+    simpa [c, Real.Angle.toCircle_coe, Circle.exp] using hcval
+  have hxhi : (x : ℝ) ≤ cutAlpha L (p + 1) + 2 * Real.pi := by
+    by_contra hn
+    have hs1 : Real.sin (((x : ℝ) - cutAlpha L (p + 1)) / 2) < 0 := by
+      rw [show ((x : ℝ) - cutAlpha L (p + 1)) / 2 =
+          (((x : ℝ) - cutAlpha L (p + 1)) / 2 - 2 * Real.pi) +
+            (1 : ℤ) * (2 * Real.pi) by ring, Real.sin_add_int_mul_two_pi]
+      apply Real.sin_neg_of_neg_of_neg_pi_lt <;> nlinarith [hxmem.2, hq1top]
+    have hs2 : Real.sin ((cutAlpha L (p + 1) - cutAlpha L (q + 1)) / 2) < 0 := by
+      apply Real.sin_neg_of_neg_of_neg_pi_lt <;> nlinarith [hp1q1, hq1top]
+    have hs3 : 0 < Real.sin (((x : ℝ) - cutAlpha L (q + 1)) / 2) := by
+      apply Real.sin_pos_of_pos_of_lt_pi <;> nlinarith [hxmem.2]
+    rw [← hexp, hpoint, hpoint, hcross] at hcrossz
+    have h12 := mul_pos_of_neg_of_neg hs1 hs2
+    have hpos : 0 < 4 * Real.sin (((x : ℝ) - cutAlpha L (p + 1)) / 2) *
+        Real.sin ((cutAlpha L (p + 1) - cutAlpha L (q + 1)) / 2) *
+        Real.sin (((x : ℝ) - cutAlpha L (q + 1)) / 2) := by nlinarith
+    exact (not_lt_of_ge hcrossz hpos).elim
+  by_cases hx : (x : ℝ) ≤ cutAlpha L p + 2 * Real.pi
+  · let a : AddCircle (2 * Real.pi) := ((x : ℝ) : ℝ)
+    let b : Circle := AddCircle.homeomorphCircle' a
+    refine ⟨b, ?_⟩
+    rw [cutNewB]
+    simp only [b, Homeomorph.symm_apply_apply]
+    rw [AddCircle.liftIco_coe_apply]
+    · simp only [cutProfileNewB]
+      by_cases heq : (x : ℝ) = cutAlpha L (q + 1)
+      · rw [if_pos heq.le, heq]
+        have hs : (cutAlpha L (q + 1) - cutAlpha L q) * L /
+            (2 * Real.pi) = 1 := by
+          unfold cutAlpha
+          field_simp [ne_of_gt hpi, ne_of_gt hL]
+          push_cast
+          ring
+        rw [hs]
+        simp [cutSeam, cutPoint, ← hexp, heq]
+      · rw [if_neg (not_le.mpr (lt_of_le_of_ne hxmem.1 (Ne.symm heq))), if_pos hx]
+        exact hexp
+    · constructor
+      · have ht : cutAlpha L q < cutAlpha L (q + 1) := by
+          unfold cutAlpha
+          apply (div_lt_div_iff_of_pos_right hL).2
+          push_cast
+          nlinarith [hpi]
+        exact ht.le.trans hxmem.1
+      · exact lt_of_le_of_lt hx (by linarith [hapq])
+  · by_cases hxend : (x : ℝ) = cutAlpha L (p + 1) + 2 * Real.pi
+    · let a : AddCircle (2 * Real.pi) := (cutAlpha L q : ℝ)
+      let b : Circle := AddCircle.homeomorphCircle' a
+      refine ⟨b, ?_⟩
+      rw [cutNewB]
+      simp only [b, Homeomorph.symm_apply_apply]
+      rw [AddCircle.liftIco_coe_apply ⟨le_rfl, by nlinarith [hpi]⟩]
+      simp only [cutProfileNewB, if_pos (show cutAlpha L q ≤ cutAlpha L (q + 1) by
+        unfold cutAlpha; apply (div_le_div_iff_of_pos_right hL).2; push_cast; nlinarith [hpi])]
+      have hs : (cutAlpha L q - cutAlpha L q) * L / (2 * Real.pi) = 0 := by ring
+      rw [hs]
+      simp only [cutSeam, zero_smul, zero_add]
+      rw [← hexp, hxend, hpoint]
+      rw [show (((cutAlpha L (p + 1) + 2 * Real.pi : ℝ) : ℂ) * Complex.I) =
+          (cutAlpha L (p + 1) : ℂ) * Complex.I + 2 * Real.pi * Complex.I by
+            push_cast; ring,
+        Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+      simp
+    · let φ := cutAlpha L p + 2 * Real.pi +
+          ((x : ℝ) - cutAlpha L p - 2 * Real.pi) * L / (2 * Real.pi) *
+            (cutAlpha L q - cutAlpha L p)
+      have hxhi' : (x : ℝ) < cutAlpha L (p + 1) + 2 * Real.pi :=
+        lt_of_le_of_ne hxhi hxend
+      have hfactor0 : 0 < ((x : ℝ) - cutAlpha L p - 2 * Real.pi) * L /
+          (2 * Real.pi) := div_pos (mul_pos (by linarith) hL) (by positivity)
+      have hfactor1 : ((x : ℝ) - cutAlpha L p - 2 * Real.pi) * L /
+          (2 * Real.pi) < 1 := by
+        unfold cutAlpha at hxhi' ⊢
+        push_cast at hxhi' ⊢
+        field_simp [ne_of_gt hpi, ne_of_gt hL] at hxhi' ⊢
+        nlinarith
+      have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+        unfold cutAlpha
+        apply (div_lt_iff₀ hL).2
+        have hqL' : (q : ℝ) < L := by exact_mod_cast hqL
+        field_simp
+        nlinarith [hpi]
+      have hφlo : cutAlpha L q ≤ φ := by
+        dsimp [φ]
+        have ht := mul_pos hfactor0 (sub_pos.mpr hapq)
+        nlinarith [hqtop]
+      have hφhi : φ < cutAlpha L q + 2 * Real.pi := by
+        dsimp [φ]
+        have hm := mul_lt_mul_of_pos_right hfactor1 (sub_pos.mpr hapq)
+        nlinarith [hapq]
+      let a : AddCircle (2 * Real.pi) := (φ : ℝ)
+      let b : Circle := AddCircle.homeomorphCircle' a
+      refine ⟨b, ?_⟩
+      rw [cutNewB]
+      simp only [b, Homeomorph.symm_apply_apply]
+      rw [AddCircle.liftIco_coe_apply ⟨hφlo, hφhi⟩]
+      have hφp : ¬ φ ≤ cutAlpha L p + 2 * Real.pi := by
+        dsimp [φ]
+        exact not_le.mpr (lt_add_of_pos_right _ (mul_pos hfactor0 (sub_pos.mpr hapq)))
+      have hsb : cutSB L p q φ =
+          ((x : ℝ) - cutAlpha L p - 2 * Real.pi) * L / (2 * Real.pi) := by
+        unfold cutSB
+        dsimp [φ]
+        field_simp [ne_of_gt (sub_pos.mpr hapq)]
+        ring
+      simp only [cutProfileNewB, if_neg (not_le.mpr (lt_of_le_of_lt hq1le
+        (lt_of_not_ge hφp))), if_neg hφp, hsb]
+      rw [show cutAlpha L p +
+          (((x : ℝ) - cutAlpha L p - 2 * Real.pi) * L / (2 * Real.pi)) *
+            (2 * Real.pi / L) = (x : ℝ) - 2 * Real.pi by
+        field_simp [ne_of_gt hpi, ne_of_gt hL]
+        ring]
+      rw [show (((x : ℝ) - 2 * Real.pi : ℝ) : ℂ) * Complex.I =
+        ((x : ℝ) : ℂ) * Complex.I - 2 * Real.pi * Complex.I by
+        push_cast; ring, Complex.exp_sub, Complex.exp_two_pi_mul_I, div_one]
+      exact hexp
 
 /-- Explicit preimages for frontier points (model: `cutOldB_range`). -/
 theorem cutNewB_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
