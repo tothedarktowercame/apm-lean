@@ -88331,28 +88331,29 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove flattened prefix fold equals subdivision; prove van Kampen; assemble.",
+    "Induct flattened fold equals subdivision; prove van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
     [{:name
-      "torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class",
-      :type "global prefix fold rebased to subdivision endpoints",
+      "torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex",
+      :type
+      "prefix-block factors are subdivision factors at flattened indices, bounded by next run boundary",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunGlobalPrefixBlockConcat_class"],
+      ["torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionGlobalPrefixBlockConcat_at_endpoints_class"],
+      ["torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88364,36 +88365,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked literal-endpoint global prefix fold.",
+    :reason "Banked flattened run-factor indices.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check a25fccb0f", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792064364343-13969-ff2b0dca",
-     :commands
-     ["git show/diff/check a25fccb0f"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit a25fccb0f adds compiled, sorry-free progress beyond b0a06eb3b. It rebases the global prefix-block fold from the auxiliary boundary family to the subdivision literal endpoints; its class equality is definitionally exact. Only t97A01Closure.lean changed; fixture SHA 2f5f7339f209108736bb1c5558b37735e7a3f038733a953b0e8fa95d6d82a084 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Both endpoint casts correctly use the inverse boundary equalities, and the quotient representation matches the path definition. Flattened-fold/subdivision comparison, van Kampen, and final assembly remain explicitly listed."},
-    :commit "a25fccb0f",
+     {:cmd "git show --check 866b5689a", :exit 0}],
+    :commit "866b5689adfa0f863971885e76273bf1a12d5106",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "2f5f7339f209108736bb1c5558b37735e7a3f038733a953b0e8fa95d6d82a084"},
+     "1d2fb744b0a0098343e4c9ac15e8007aa9a565101ea38f53c83adf3d8670b58f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94217,7 +94205,8 @@
     :lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints
     :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class
     :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-class
-    :lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class],
+    :lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class
+    :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-globalindex],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94960,4 +94949,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunglobalprefixblockconcat-class],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex",
+    :type
+    "prefix-block factors are subdivision factors at flattened indices, bounded by next run boundary"},
+   :lemma
+   {:name "torusRP2_subdivisionRunPrefixBlockPiece_apply_globalIndex",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "prefix-block factors are subdivision factors at flattened indices, bounded by next run boundary",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-globalindex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionglobalprefixblockconcat-at-endpoints-class],
    :other-consumers []}]}
