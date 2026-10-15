@@ -1458,17 +1458,22 @@ open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
 /-- Split a wedge of at least two circles into the old nonempty wedge and one
 new circle.  The formulas on `castSucc` and `Fin.last` are supplied by
 `finiteWedgeFinSuccHomeomorphPointWedge_castSucc` and `_last`. -/
-noncomputable def finiteWedge_finSucc_homeomorph_pointWedge (n : ℕ) :
-    FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
-      ConstructionTargets.PointWedgeQuotient.Wedge
-        (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1) := by
+lemma finiteWedge_finSucc_homeomorph_pointWedge (n : ℕ) :
+    ∃ h : FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge (wedgeCircle (0 : Fin (n + 1)) 1) (wedgeCircle () 1),
+      (∀ (i : Fin (n + 1)) (z : Circle), h (wedgeCircle i.castSucc z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inl (wedgeCircle i z))) ∧
+      (∀ z : Circle, h (wedgeCircle (Fin.last (n + 1)) z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inr (wedgeCircle () z))) := by
   sorry
 
 /-- The algebraic successor identity, with the old generators first and the
 new generator last. -/
-noncomputable def coprodFreeGroupFinSucc_equiv (n : ℕ) :
-    Monoid.Coprod (FreeGroup (Fin (n + 1))) (FreeGroup (Fin 1)) ≃*
-      FreeGroup (Fin ((n + 1) + 1)) := by
+lemma coprodFreeGroupFinSucc_equiv (n : ℕ) :
+    ∃ e : Monoid.Coprod (FreeGroup (Fin (n + 1))) (FreeGroup (Fin 1)) ≃*
+        FreeGroup (Fin ((n + 1) + 1)),
+      (∀ i : Fin (n + 1), e (Monoid.Coprod.inl (FreeGroup.of i)) = FreeGroup.of i.castSucc) ∧
+      e (Monoid.Coprod.inr (FreeGroup.of 0)) = FreeGroup.of (Fin.last (n + 1)) := by
   sorry
 
 /-- All topological inputs needed by point-wedge van Kampen at a successor
@@ -1518,6 +1523,31 @@ def FiniteWedgeFreeCoordinates (n : ℕ)
 leg coordinates are hypotheses, so a seat can prove this before the base case
 or final recursion lands. -/
 lemma finiteWedge_finSucc_fundamentalGroup_step (n : ℕ)
+    (hsplit : ∀ k : ℕ, ∃ h : FiniteWedge (Fin ((k + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge (wedgeCircle (0 : Fin (k + 1)) 1) (wedgeCircle () 1),
+      (∀ (i : Fin (k + 1)) (z : Circle), h (wedgeCircle i.castSucc z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inl (wedgeCircle i z))) ∧
+      (∀ z : Circle, h (wedgeCircle (Fin.last (k + 1)) z) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap _ _ (Sum.inr (wedgeCircle () z))))
+    (hcoprod : ∀ k : ℕ, ∃ e : Monoid.Coprod (FreeGroup (Fin (k + 1))) (FreeGroup (Fin 1)) ≃*
+        FreeGroup (Fin ((k + 1) + 1)),
+      (∀ i : Fin (k + 1), e (Monoid.Coprod.inl (FreeGroup.of i)) = FreeGroup.of i.castSucc) ∧
+      e (Monoid.Coprod.inr (FreeGroup.of 0)) = FreeGroup.of (Fin.last (k + 1)))
+    (hinputs : ∀ k : ℕ,
+    Nonempty (PathConnectedSpace (FiniteWedge (Fin (k + 1)))) ∧
+    Nonempty (LocPathConnectedSpace (FiniteWedge (Fin (k + 1)))) ∧
+    Nonempty (PathConnectedSpace (FiniteWedge Unit)) ∧
+    Nonempty (LocPathConnectedSpace (FiniteWedge Unit)) ∧
+    (∃ (N : Set (FiniteWedge (Fin (k + 1))))
+        (hN : IsOpen N) (hb : wedgeCircle (0 : Fin (k + 1)) 1 ∈ N),
+      Nonempty
+        (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+          N ⟨wedgeCircle (0 : Fin (k + 1)) 1, hb⟩)) ∧
+    (∃ (M : Set (FiniteWedge Unit)) (hM : IsOpen M)
+        (hb : wedgeCircle () 1 ∈ M),
+      Nonempty
+        (ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+          M ⟨wedgeCircle () 1, hb⟩)))
     (hprev : n = 0 ∨
       ∃ (k : ℕ) (hk : n = k + 1)
         (old : FundamentalGroup (FiniteWedge (Fin (k + 1)))
@@ -1533,9 +1563,10 @@ lemma finiteWedge_finSucc_fundamentalGroup_step (n : ℕ)
   sorry
 
 /-- Relabel a finite wedge along an equivalence of its leg types. -/
-noncomputable def finiteWedge_reindex_homeomorph
+lemma finiteWedge_reindex_homeomorph
     {L : Type*} (n : ℕ) (e : L ≃ Fin (n + 1)) :
-    FiniteWedge L ≃ₜ FiniteWedge (Fin (n + 1)) := by
+    ∃ h : FiniteWedge L ≃ₜ FiniteWedge (Fin (n + 1)),
+      ∀ (l : L) (z : Circle), h (wedgeCircle l z) = wedgeCircle (e l) z := by
   sorry
 
 /-- Positive-rank B8, assembled without further axioms from the rank-one
@@ -1546,11 +1577,13 @@ theorem finiteWedge_finSucc_fundamentalGroup_free (n : ℕ) :
       FiniteWedgeFreeCoordinates n e := by
   induction n with
   | zero =>
-      exact finiteWedge_finSucc_fundamentalGroup_step 0 (Or.inl rfl)
+      exact finiteWedge_finSucc_fundamentalGroup_step 0 finiteWedge_finSucc_homeomorph_pointWedge
+        coprodFreeGroupFinSucc_equiv finiteWedge_finSucc_pointWedge_inputs (Or.inl rfl)
   | succ n ih =>
       rcases ih with ⟨old, hold⟩
-      apply finiteWedge_finSucc_fundamentalGroup_step (n + 1)
-      exact Or.inr ⟨n, rfl, old, hold⟩
+      exact finiteWedge_finSucc_fundamentalGroup_step (n + 1)
+        finiteWedge_finSucc_homeomorph_pointWedge coprodFreeGroupFinSucc_equiv
+        finiteWedge_finSucc_pointWedge_inputs (Or.inr ⟨n, rfl, old, hold⟩)
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_free :
     ∀ x : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer,
