@@ -2596,7 +2596,119 @@ vertex points; `k • V ∩ V ≠ ∅` gives `k g = g`, `k g b = g b`, or a poin
 lemma tree_local_sphere (g : G) (x : S2) (hN : x ≠ north) (hS : x ≠ south) :
     ∃ V : Set TreeZ, IsOpen V ∧ .inr (g, x) ∈ V ∧ Saturated TreeRel V ∧
       ∀ k : G, (∃ v ∈ V, k • v ∈ V) → k = 1 := by
-  sorry
+  let d : ℝ := min (dist x north) (min (dist x south) (dist x (-x)))
+  let r : ℝ := d / 3
+  have hxneg : x ≠ -x := by
+    intro h
+    have h' := congrArg (fun y : S2 => (y : E3)) h
+    have hxnorm : ‖(x : E3)‖ = 1 := by simpa using x.2
+    change (x : E3) = -(x : E3) at h'
+    have hxzero : (x : E3) = 0 := by
+      rw [eq_neg_iff_add_eq_zero] at h'
+      have htwo : (2 : ℝ) • (x : E3) = 0 := by simpa [two_smul] using h'
+      exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+    rw [hxzero, norm_zero] at hxnorm
+    norm_num at hxnorm
+  have hd : 0 < d := by
+    dsimp [d]
+    exact lt_min (dist_pos.mpr hN) (lt_min (dist_pos.mpr hS) (dist_pos.mpr hxneg))
+  have hr : 0 < r := by dsimp [r]; positivity
+  have hbb : b * b = 1 := G_facts.2.2.1
+  let B : Set S2 := Metric.ball x r
+  let C : Set S2 := Metric.ball (-x) r
+  let V : Set TreeZ :=
+    Sum.inr '' (({g} ×ˢ B) ∪ ({g * b} ×ˢ C))
+  have hnegB (y : S2) : -y ∈ B ↔ y ∈ C := by
+    simp only [B, C, Metric.mem_ball]
+    have he : dist (-y) x = dist y (-x) := by
+      change ‖((-y : S2) : E3) - (x : E3)‖ =
+        ‖(y : E3) - ((-x : S2) : E3)‖
+      rw [show ((-y : S2) : E3) = -(y : E3) by rfl,
+        show ((-x : S2) : E3) = -(x : E3) by rfl]
+      rw [sub_neg_eq_add, show -(y : E3) - (x : E3) =
+        -((y : E3) + (x : E3)) by module, norm_neg, add_comm]
+    rw [he]
+  have hnegC (y : S2) : -y ∈ C ↔ y ∈ B := by
+    rw [← hnegB (-y)]
+    simp
+  have hdis (y : S2) : ¬ (y ∈ B ∧ y ∈ C) := by
+    rintro ⟨hyB, hyC⟩
+    have hxy : dist x y < d / 3 := by simpa [B, r, dist_comm] using hyB
+    have hynx : dist y (-x) < d / 3 := by simpa [C, r] using hyC
+    have htri : dist x (-x) ≤ dist x y + dist y (-x) := dist_triangle _ _ _
+    have hle : d ≤ dist x (-x) := (min_le_right _ _).trans (min_le_right _ _)
+    linarith
+  have hmem (q : G) (y : S2) :
+      (Sum.inr (q, y) : TreeZ) ∈ V ↔
+        (q = g ∧ y ∈ B) ∨ (q = g * b ∧ y ∈ C) := by
+    simp [V]
+  have hnotmem (q : G) (t : unitInterval) :
+      (Sum.inl (q, t) : TreeZ) ∉ V := by simp [V]
+  refine ⟨V, ?_, ?_, ?_, ?_⟩
+  · apply isOpenMap_inr
+    exact ((isOpen_discrete ({g} : Set G)).prod Metric.isOpen_ball).union
+      ((isOpen_discrete ({g * b} : Set G)).prod Metric.isOpen_ball)
+  · exact ⟨(g, x), by simp [B, V, hr], rfl⟩
+  · intro z w hzw
+    cases hzw with
+    | edge q => simp [hnotmem]
+    | vertex q =>
+        constructor
+        · exact fun h => (hnotmem q 0 h).elim
+        · intro hn
+          rw [hmem] at hn
+          rcases hn with ⟨hq, hn⟩ | ⟨hq, hn⟩
+          · have hle : d ≤ dist x north := min_le_left _ _
+            have : dist x north < d / 3 := by simpa [B, r, dist_comm] using hn
+            linarith
+          · have hs : south ∈ B := by
+              have hs' : -north ∈ B := (hnegC (-north)).1 (by simpa using hn)
+              simpa [neg_north] using hs'
+            have hle : d ≤ dist x south := (min_le_right _ _).trans (min_le_left _ _)
+            have : dist x south < d / 3 := by simpa [B, r, dist_comm] using hs
+            linarith
+    | pair q y =>
+        rw [hmem, hmem]
+        constructor
+        · rintro (⟨hq, hy⟩ | ⟨hq, hy⟩)
+          · right
+            refine ⟨?_, (hnegC y).2 hy⟩
+            simpa [hq]
+          · left
+            refine ⟨?_, (hnegB y).2 hy⟩
+            calc
+              q * b = (g * b) * b := by rw [hq]
+              _ = g := by rw [mul_assoc, hbb, mul_one]
+        · rintro (⟨hkg, hny⟩ | ⟨hkgb, hny⟩)
+          · right
+            have hk : q = g * b := by
+              calc q = q * 1 := by simp
+                _ = q * (b * b) := by rw [hbb]
+                _ = (q * b) * b := by rw [mul_assoc]
+                _ = g * b := by rw [hkg]
+            exact ⟨hk, (hnegB y).1 hny⟩
+          · left
+            have hk : q = g := by
+              calc q = q * 1 := by simp
+                _ = q * (b * b) := by rw [hbb]
+                _ = (q * b) * b := by rw [mul_assoc]
+                _ = (g * b) * b := by rw [hkgb]
+                _ = g := by rw [mul_assoc, hbb, mul_one]
+            exact ⟨hk, (hnegC y).1 hny⟩
+  · intro k hk
+    obtain ⟨v, hv, hkv⟩ := hk
+    rcases v with ⟨h, t⟩ | ⟨h, y⟩
+    · exact (hnotmem h t hv).elim
+    · rw [hmem] at hv
+      rw [treeSMul_inr, hmem] at hkv
+      rcases hv with ⟨hh, hy⟩ | ⟨hh, hy⟩ <;>
+        rcases hkv with ⟨he, hy'⟩ | ⟨he, hy'⟩
+      · have he' : k * h = 1 * h := by simpa [hh] using he
+        exact mul_right_cancel he'
+      · exact (hdis y ⟨hy, hy'⟩).elim
+      · exact (hdis y ⟨hy', hy⟩).elim
+      · have he' : k * h = 1 * h := by simpa [hh] using he
+        exact mul_right_cancel he'
 -- END SEAT AREA
 
 lemma tree_local (z : TreeZ) :
