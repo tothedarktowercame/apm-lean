@@ -119066,41 +119066,41 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Specialize Sard to a circle-projection fiber; calculations; Main.",
+    "Construct incidence projection; Sard gives direction lifts; calculations; Main.",
     :outcome :stop,
-    :warnings
-    ["Main sorryAx" "unnecessarySimpa; unrelated edits preserved"],
+    :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "locallyInjectiveAlongFiber_of_mfderiv_surjective",
-      :type "fiberwise regular derivative gives local injectivity",
+    [{:name
+      "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts",
+      :type "regular circle parameter gives locally injective fiber",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["exists_nhds_injOn_of_contMDiff_surjective"],
+      :depends-on ["locallyInjectiveAlongFiber_of_mfderiv_surjective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["locallyInjectiveAlongFiber_of_mfderiv_surjective"],
+      :depends-on ["exists_circleParameter_direction_lifts_of_sard"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "1f161951d68dac4cb2de7617497cdea6c98567b1b87c74b5c3e4961889bad6ff",
+     "571046afef908d6b6aa87ee481ea243bd48b48b646e9e498a23a3fa98c529426",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked regular-fiber local injectivity.",
+    :reason "Banked circle-fiber local injectivity.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119108,17 +119108,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792035309338-13119-3ff31a3c",
-     :commands
-     ["git show/diff-tree c4c74789"
-      "archive c4c74789; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit c4c74789 changes only t00J02Closure.lean and adds compiled, sorry-free progress. Pointwise surjectivity on a chosen fiber is passed at each x to the proved smooth-surjective local-injectivity theorem, exactly producing LocallyInjectiveAlongFiber; the existential adapter preserves the same selected value and fiber predicate. Quantifier order, derivative orientation, and surface model agree. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Circle-projection Sard specialization, calculations, and Main remain listed."},
-    :commit "c4c74789306628b163b55446416c343f8ca709b2",
+    :commit "6e517d638f6ec4e1f3ef8372379894f15301b4bd",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119126,7 +119116,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119550,7 +119540,8 @@
     :lemma-exists-smoothlocalinverse-writteninextchartat
     :lemma-exists-nhds-injon-writteninextchartat
     :lemma-exists-nhds-injon-of-contmdiff-surjective
-    :lemma-locallyinjectivealongfiber-of-mfderiv-surjective],
+    :lemma-locallyinjectivealongfiber-of-mfderiv-surjective
+    :lemma-exists-circleparameter-direction-lifts-of-sard],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121110,6 +121101,40 @@
    :id :lemma-locallyinjectivealongfiber-of-mfderiv-surjective,
    :kind :lemma,
    :depends-on [:lemma-exists-nhds-injon-of-contmdiff-surjective],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts",
+    :type "regular circle parameter gives locally injective fiber"},
+   :lemma
+   {:name
+    "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular circle parameter gives locally injective fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-exists-circlevalue-locallyinjectivealongfiber-of-direction-lifts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-locallyinjectivealongfiber-of-mfderiv-surjective],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_circleParameter_direction_lifts_of_sard"},
+   :lemma
+   {:name "exists_circleParameter_direction_lifts_of_sard",
+    :reported-by []},
+   :id :lemma-exists-circleparameter-direction-lifts-of-sard,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
