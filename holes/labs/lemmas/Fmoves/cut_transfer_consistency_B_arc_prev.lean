@@ -10078,7 +10078,83 @@ theorem cut_transfer_consistency_B_arc_prev {Label : Type*} [DecidableEq Label]
     (hs : s₀.1 = 1) (hτ : τ.1 = 0) (hadj : e = (e₀ + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  change CutBoundaryData L p q oldA oldB newA newB at D
+  change (N : ℂ) = newB (cutEdgeCircle L e₀ s₀) at hN
+  have hL : 0 < L := by
+    dsimp [L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have hpq : p < q := by dsimp [p, q]; omega
+  have hqL : q < L := by
+    dsimp [L, q]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have hs' : s₀ = ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hs
+  have hτ' : τ = ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hτ
+  subst s₀
+  subst τ
+  have he₀L : e₀ < L := by
+    rcases he₀ with h | h
+    · exact h.2
+    · omega
+  have hNvertex : N = edgePoint L ((e₀ + 1) % L)
+      ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    rw [hN]
+    by_cases heq : e₀ = q
+    · subst e₀
+      rw [D.newB_x]
+      change cutSeam L p q 1 =
+        (edgePoint L ((q + 1) % L) ⟨0, by constructor <;> norm_num⟩ : ℂ)
+      rw [edgePoint_zero_eq_cutPoint, cutPoint_mod hL]
+      simp [cutSeam]
+    · have htu : (q + 1 ≤ e₀ ∧ e₀ < L) ∨ e₀ < p := by
+        rcases he₀ with h | h
+        · left; omega
+        · exact Or.inr h
+      rw [D.newB_tu e₀ _ htu, edgePoint_one_eq_cutPoint,
+        edgePoint_zero_eq_cutPoint, cutPoint_mod hL]
+  rw [← hadj] at hNvertex
+  have hsucc : (e = e₀ + 1 ∧ e₀ + 1 < L) ∨
+      (e = 0 ∧ e₀ + 1 = L) := by
+    have hle : e₀ + 1 ≤ L := by omega
+    rcases hle.eq_or_lt with hlast | hlt
+    · right
+      refine ⟨?_, hlast⟩
+      rw [hadj, hlast, Nat.mod_self]
+    · left
+      refine ⟨?_, hlt⟩
+      rw [hadj, Nat.mod_eq_of_lt hlt]
+  by_cases hep : e = p
+  · rw [hep] at hNvertex ⊢
+    let T : Disk := edgePoint L (p + 1) ⟨0, by constructor <;> norm_num⟩
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      change (edgePoint L (p + 1) _ : ℂ) = cutTransfer L p q p _
+      rw [cutTransfer, if_pos (Or.inl rfl)]
+      simpa [cutSeam] using edgePoint_zero_eq_cutPoint L (p + 1)
+    · rw [hNvertex]
+      simpa only [L, p] using (cut_transfer_consistency_aux_x u v t x
+        (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)).symm
+  · refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hNvertex]
+    change (edgePoint L e ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+      cutTransfer L p q e ⟨0, by constructor <;> norm_num⟩
+    have heq : e ≠ q := by
+      intro heq
+      subst e
+      rcases he₀ with h | h <;> rcases hsucc with h' | h' <;> omega
+    have hmid : ¬ (p < e ∧ e < q) := by
+      intro hm
+      rcases he₀ with h | h <;> rcases hsucc with h' | h' <;> omega
+    simp [cutTransfer, hep, heq, hmid]
 -- END SEAT AREA
 
 /-- Piece `B`, side position `(e₀, s₀)` with `q ≤ e₀ < L` or `e₀ < p`. -/
