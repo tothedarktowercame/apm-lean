@@ -88331,29 +88331,29 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport nested Path.concat; prove van Kampen; assemble.",
+    "Induct nested Path.concat over ordered run offsets; prove van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
     [{:name
-      "torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv",
+      "torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm",
       :type
-      "run-offset factor family equals flattened subdivision family",
+      "inverse run-offset coordinate selects the original subdivision factor",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv"],
+      ["torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv"],
+      ["torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88365,38 +88365,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked run-offset factor-family transport.",
+    :reason "Banked inverse run-offset factor transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check ae3f3a303", :exit 0}],
-    :diagnostic-history
-    [{:cmd "early Main", :exit 1, :correction "reran after build"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792067289299-14050-b237e400",
-     :commands
-     ["git show/diff/check ae3f3a303; git log since 7ade53460"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: recorded topo-6 commit ae3f3a303 and preceding source commit 000a6017a add compiled, sorry-free progress beyond history commit 7ade53460. They prove pointwise and extensional equality between dependent prefix-block factors and original subdivision factors under the concrete run-offset equivalence. Only t97A01Closure.lean changed; fixture SHA 37d2dc82a4682c8a0d94d88bf9c46137564420aa3cb4391167e3bbd1d533cd9c matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Dependent Fin cast and flattened-index orientation are correct. Nested Path.concat transport, van Kampen, and final assembly remain listed."},
-    :commit "ae3f3a303",
+     {:cmd "git show --check bede4c254", :exit 0}],
+    :commit "bede4c254",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "37d2dc82a4682c8a0d94d88bf9c46137564420aa3cb4391167e3bbd1d533cd9c"},
+     "0e2292f29820d4b88b3d45b6f06320025162a0e2336d47ce0474c5118ccff61c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94248,7 +94233,8 @@
     :lemma-torusrp2-subdivisionrunoffset-run-unique
     :lemma-torusrp2-subdivisionrunoffsetequiv
     :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-runoffsetequiv
-    :lemma-torusrp2-subdivisionrunprefixblockpiece-family-runoffsetequiv],
+    :lemma-torusrp2-subdivisionrunprefixblockpiece-family-runoffsetequiv
+    :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-runoffsetequiv-symm],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95167,4 +95153,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunprefixblockpiece-apply-runoffsetequiv],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm",
+    :type
+    "inverse run-offset coordinate selects the original subdivision factor"},
+   :lemma
+   {:name
+    "torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "inverse run-offset coordinate selects the original subdivision factor",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-runoffsetequiv-symm,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunprefixblockpiece-family-runoffsetequiv],
    :other-consumers []}]}
