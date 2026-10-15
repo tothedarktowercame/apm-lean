@@ -87901,31 +87901,28 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Compare subdivision concat with the boundary loop; then B7-B10.",
+    "Transport concat_subpath along the endpoint family and compare boundary H1; then B7-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "polygonBoundarySubdivisionPathAtBase_eq_signedEdge",
-      :type "based subpath equals signed edge",
+    [{:name "orbitWedgeBase_eq_boundarySubdivisionVertex",
+      :type "all subdivision vertices equal the word basepoint",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundarySignedEdgePathAtBase_apply"],
-      :area "polygon-quotient-homology"}
-     {:name "polygonBoundarySubdivisionConcat_hurewicz",
-      :type "concat H1 is signed-edge sum",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["moduleHurewicz_mk_concat_eq_list_sum"],
+      :depends-on
+      ["polygonBoundarySubdivisionPathAtBase_eq_signedEdge"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
       :type "boundary H1 is signed-edge sum",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["polygonBoundarySubdivisionConcat_hurewicz"],
+      :depends-on
+      ["orbitWedgeBase_eq_boundarySubdivisionVertex"
+       "polygonBoundarySubdivisionConcat_hurewicz"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
       :type "B7 map",
@@ -87937,7 +87934,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked subdivision Hurewicz sum.",
+    :reason "Banked the common-base subdivision endpoint family.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87945,30 +87942,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 95be1e92e", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792026580946-12902-db972e89",
-     :commands
-     ["git show/diff-tree 95be1e92e"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 95be1e92e by topo-6 changes only the scoped target; fixture hash eccce64d...b3f34 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Endpoint composition is base=leg=subdivision, the direction required to cast each geometric subpath to the common base; cast erasure preserves the forward signed-edge parametrization. Applying the verified concat-Hurewicz theorem therefore gives the ordered signed-edge sum. New compiled progress; remaining milestones are comparison with the boundary loop, then B7-B10."},
-    :commit "95be1e92e",
+     {:cmd "git show --check ffd7c7602", :exit 0}],
+    :commit "ffd7c7602",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "eccce64ddf0c5b749c45c0d6fb425a565d5101e44b6cbe948d49ba66829b3f34"},
+     "d5001e686faafef1bcbb0db1fa23c4bf236cfa3ec05dc29420137ea2ccba5140"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92217,7 +92200,8 @@
     :lemma-fundamentalgroup-mk-concat-eq-reverse-list-prod
     :lemma-modulehurewicz-mk-concat-eq-list-sum
     :lemma-polygonboundarysignededgepathatbase-apply
-    :lemma-polygonboundarysubdivisionconcat-hurewicz],
+    :lemma-polygonboundarysubdivisionconcat-hurewicz
+    :lemma-orbitwedgebase-eq-boundarysubdivisionvertex],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92643,4 +92627,22 @@
    :id :lemma-polygonboundarysubdivisionconcat-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-modulehurewicz-mk-concat-eq-list-sum],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "orbitWedgeBase_eq_boundarySubdivisionVertex",
+    :type "all subdivision vertices equal the word basepoint"},
+   :lemma
+   {:name "orbitWedgeBase_eq_boundarySubdivisionVertex",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "all subdivision vertices equal the word basepoint",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-orbitwedgebase-eq-boundarysubdivisionvertex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-polygonboundarysubdivisionpathatbase-eq-signededge],
    :other-consumers [:t94J09]}]}
