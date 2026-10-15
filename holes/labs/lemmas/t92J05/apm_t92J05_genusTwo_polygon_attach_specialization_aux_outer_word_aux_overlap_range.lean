@@ -2262,6 +2262,24 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_norma
     simpa using h
 
 -- BEGIN SEAT AREA
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range_aux_cyclic
+    {A G : Type*} [Group A] [Group G]
+    (e : A ≃* Multiplicative ℤ) (f : A →* G) :
+    ∃ g : G, f.range = Subgroup.zpowers g := by
+  let h : Multiplicative ℤ →* G := f.comp e.symm.toMonoidHom
+  let g : G := h (Multiplicative.ofAdd 1)
+  have hh : h = zpowersHom G g := by
+    simpa [g] using ((zpowersHom G).apply_symm_apply h).symm
+  refine ⟨g, ?_⟩
+  have hrange : f.range = h.range := by
+    apply le_antisymm
+    · rintro _ ⟨a, rfl⟩
+      exact ⟨e a, by simp [h]⟩
+    · rintro _ ⟨n, rfl⟩
+      exact ⟨e.symm n, rfl⟩
+  rw [hrange, hh]
+  exact Subgroup.range_zpowersHom _
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range
     (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
@@ -2282,7 +2300,41 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overl
           (ConstructionTargets.PolygonRadialOpenCover.innerOpen
             apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range =
         Subgroup.zpowers g := by
-  sorry
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let eann :
+      ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel ∩
+        ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel) ≃ₜ
+        Set.Ioo (0 : ℝ) 1 × Circle :=
+    (Homeomorph.setCongr (by
+      simpa [C] using
+        (inter_comm
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel)).trans
+            C.overlap_eq.symm)).trans
+      C.overlap_homeomorph
+  let y := eann x
+  let I := Set.Ioo (0 : ℝ) 1
+  letI : ContractibleSpace I :=
+    (convex_Ioo 0 1).contractibleSpace ⟨y.1.1, y.1.2⟩
+  letI : SimplyConnectedSpace I := SimplyConnectedSpace.ofContractible _
+  letI : Subsingleton (FundamentalGroup I y.1) := by
+    change Subsingleton (Path.Homotopic.Quotient y.1 y.1)
+    infer_instance
+  let ecircle : FundamentalGroup Circle y.2 ≃* Multiplicative ℤ :=
+    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected y.2 1).trans
+      ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt
+  let eprod : FundamentalGroup (I × Circle) y ≃* Multiplicative ℤ :=
+    (apm_t92J05_product_group_of_subsingleton_left y.1 y.2 ⟨ecircle⟩).some
+  let e : FundamentalGroup
+      ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel ∩
+        ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel) x ≃*
+        Multiplicative ℤ :=
+    (ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+      eann x).trans eprod
+  exact
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range_aux_cyclic
+      e _
 -- END SEAT AREA
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
