@@ -2809,7 +2809,13 @@ lemma apm_t92J05_genusTwo_relator_infinite : ¬ IsOfFinOrder apm_t92J05_genusTwo
 lemma apm_t92J05_circle_generator_transport : ∀ (y : Circle) (t : Path y 1) (z : FundamentalGroup Circle y),
       ∃ n : ℤ, z = (FundamentalGroup.fundamentalGroupMulEquivOfPath t.symm
         ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass) ^ n := by
-  sorry
+  intro y t z
+  let e := FundamentalGroup.fundamentalGroupMulEquivOfPath t.symm
+  obtain ⟨n, hn⟩ :=
+    ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass_generates
+      (e.symm z)
+  refine ⟨n, ?_⟩
+  rw [← e.apply_symm_apply z, ← hn, map_zpow]
 -- END SEAT AREA
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
