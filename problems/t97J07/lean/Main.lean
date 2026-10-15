@@ -379,6 +379,29 @@ noncomputable def t97J07_cp1_rationalH0Iso :
   exact (ConstructionTargets.CoefficientH0.h0Iso ℚ
     (ConstructionTargets.ProjectiveSpaceTopology.coordinateLine ℂ 1 0)).toLinearEquiv
 
+/-- The two literal affine patches form the open cover of `CP¹` used by the
+bounded Mayer--Vietoris computation. -/
+theorem t97J07_cp1_twoAffine_openCover :
+    IsOpen {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
+      Projectivization.rep p 0 ≠ 0} ∧
+    IsOpen {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
+      Projectivization.rep p 1 ≠ 0} ∧
+    {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
+      Projectivization.rep p 0 ≠ 0} ∪
+      {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 |
+        Projectivization.rep p 1 ≠ 0} = Set.univ := by
+  refine ⟨ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen 0,
+    ConstructionTargets.ComplexProjectiveChartTargets.affineSource_isOpen 1, ?_⟩
+  ext p
+  simp only [Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+  by_contra h
+  push_neg at h
+  apply p.rep_nonzero
+  funext i
+  fin_cases i
+  · exact h.1
+  · exact h.2
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -437,6 +460,7 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_nonzeroVectors_pathConnected
 #print axioms t97J07_cp1_pathConnected
 #print axioms t97J07_cp1_rationalH0Iso
+#print axioms t97J07_cp1_twoAffine_openCover
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
