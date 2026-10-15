@@ -64,6 +64,31 @@
    "rev": "573847ac4",
    "approved_at": "2026-10-13T04:19:30Z"
   },
+  "m01J04": {
+   "decls": [
+    "apm_m01j04"
+   ],
+   "sha256": "5880a34c7d6ff83db2d2b610b4d5ac4239bf47167a3895598287795784747ca3",
+   "defs": [
+    "apm_m01J04_H1",
+    "apm_m01J04_H1WeaklyConverges",
+    "apm_m01J04_H1dist",
+    "apm_m01J04_H1norm",
+    "apm_m01J04_HasRellichProperty",
+    "apm_m01J04_L2StronglyConverges",
+    "apm_m01J04_L2WeaklyConverges",
+    "apm_m01J04_divStronglyConverges",
+    "apm_m01J04_isH1Zero",
+    "apm_m01J04_isTestFunction",
+    "apm_m01J04_weaklyConverges"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only subagent)",
+   "evidence": "holes/labs/statement-registry/m01J04-regrade.md",
+   "prelim_defect": null,
+   "rev": "1e07a41a6",
+   "approved_at": "2026-10-15T13:27:19Z"
+  },
   "m02J05": {
    "decls": [
     "apm_m02j05"
