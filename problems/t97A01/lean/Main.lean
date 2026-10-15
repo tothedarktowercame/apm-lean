@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.Surfaces
+import ConstructionTargets.t97A01Closure
 
 /-!
 # APM t97A01 — the nonorientable genus-three surface
@@ -156,6 +157,65 @@ def apm_t97a01_X_homeomorph_standardN3 :
     change Continuous (fun x : ConstructionTargets.Surfaces.Disk =>
       apm_t97a01_X_equiv_standardN3.symm (Quotient.mk _ x))
     simpa [apm_t97a01_X_equiv_standardN3] using apm_t97a01_continuous_quotientX
+
+/-- The first frozen quotient is the exact pairing-space input to the banked
+polygon homology theorem. -/
+def apm_t97a01_X_homeomorph_pairingSpace :
+    apm_t97a01_X ≃ₜ
+      ConstructionTargets.t97A01Closure.aabbccPairingData.Space :=
+  apm_t97a01_X_homeomorph_standardN3.trans
+    (ConstructionTargets.PolygonSurfacePiOne.standardPairingData_space_homeomorph
+      false 3 (by omega)).symm
+
+/-- The frozen torus-crosscap generators are the canonical literal
+torus-crosscap generators used by the polygon library. -/
+lemma apm_t97a01_RelTorusRP2_to_canonical {x y : apm_t97a01_Disk}
+    (h : apm_t97a01_RelTorusRP2 x y) :
+    ConstructionTargets.PolygonTorusCrosscapRelation.TorusCrosscapRel x y := by
+  cases h with
+  | a t => exact .a t
+  | b t => exact .b t
+  | c t => exact .c t
+
+/-- Conversely, every canonical literal torus-crosscap generator is one of
+the frozen generators. -/
+lemma apm_t97a01_canonical_to_RelTorusRP2 {x y : apm_t97a01_Disk}
+    (h : ConstructionTargets.PolygonTorusCrosscapRelation.TorusCrosscapRel x y) :
+    apm_t97a01_RelTorusRP2 x y := by
+  cases h with
+  | a t => exact .a t
+  | b t => exact .b t
+  | c t => exact .c t
+
+theorem apm_t97a01_torusRP2_eqvGen_iff (x y : apm_t97a01_Disk) :
+    Relation.EqvGen apm_t97a01_RelTorusRP2 x y ↔
+      Relation.EqvGen
+        ConstructionTargets.PolygonTorusCrosscapRelation.TorusCrosscapRel x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact .rel _ _ (apm_t97a01_RelTorusRP2_to_canonical h)
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h => exact .rel _ _ (apm_t97a01_canonical_to_RelTorusRP2 h)
+    | refl x => exact .refl x
+    | symm x y _ ih => exact .symm x y ih
+    | trans x y z _ _ ih₁ ih₂ => exact .trans x y z ih₁ ih₂
+
+/-- The second frozen quotient is the exact pairing-space input to the
+banked polygon homology theorem. -/
+def apm_t97a01_TorusRP2_homeomorph_pairingSpace :
+    apm_t97a01_TorusRP2 ≃ₜ
+      ConstructionTargets.t97A01Closure.torusRP2PairingData.Space :=
+  ConstructionTargets.t97A01Closure.quotientHomeomorphOfEqvGenIff
+    apm_t97a01_RelTorusRP2
+    ConstructionTargets.t97A01Closure.torusRP2PairingData.Rel
+    isQuotientMap_quotient_mk' isQuotientMap_quotient_mk'
+    (fun x y => (apm_t97a01_torusRP2_eqvGen_iff x y).trans
+      (ConstructionTargets.PolygonSurfacePiOne.torusRP2_eqvGen_iff x y).symm)
 
 abbrev apm_t97a01_H (k : ℕ) (Y : Type) [TopologicalSpace Y] :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
