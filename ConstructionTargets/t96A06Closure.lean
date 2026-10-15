@@ -1703,6 +1703,21 @@ theorem polynomialSphereLift_baseNormalizationComparisonIso_apply (q : ℚ) :
       rw [polynomialSphereLift_baseNormalizationComparisonIso_one]
       rfl
 
+/-- The explicit normalization comparison is the identity exactly when its
+recorded scalar is one.  Thus the remaining normalization obligation is a
+coefficient-change compatibility statement, not merely nonvanishing. -/
+theorem polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff :
+    polynomialSphereLift_baseNormalizationComparisonIso.hom = 𝟙 _ ↔
+      polynomialSphereLift_baseLocalizationScalar = 1 := by
+  constructor
+  · intro h
+    have hone := CategoryTheory.ConcreteCategory.congr_hom h 1
+    simpa [polynomialSphereLift_baseNormalizationComparisonIso_one] using hone
+  · intro h
+    ext q
+    rw [polynomialSphereLift_baseNormalizationComparisonIso_apply, h]
+    simp
+
 /-- The comparison scalar is nonzero: both the rational localization map and
 the local chart normalization are isomorphisms, and the selected global class
 is the inverse image of `1`. -/
@@ -2860,5 +2875,6 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
+#print axioms polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff
 
 end ConstructionTargets.t96A06Closure
