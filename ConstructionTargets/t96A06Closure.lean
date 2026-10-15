@@ -2114,6 +2114,55 @@ theorem t96A06_rp3_rational_homology_finite (k : ℕ) :
     (0 : CoefficientH0.SingularHomology ℚ k (TopCat.of RP3) →ₗ[ℚ] ℚ)
     (Function.injective_of_subsingleton _)
 
+/-- The local-degree packet determines the complete rational Lefschetz sum
+of the descended polynomial map. -/
+theorem polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    HasLefschetzNumber polynomialDescent (-3) := by
+  refine ⟨t96A06_rp3_rational_homology_finite, 3,
+    (fun k hk => ModuleCat.isZero_iff_subsingleton.mp
+      (t96A06_rp3_rational_homology_isZero_of_gt k hk)), ?_⟩
+  have h0 : LinearMap.trace ℚ (Homology RP3 0)
+      (induced polynomialDescent 0).hom = 1 := by
+    letI : PathConnectedSpace RP3 := rp3PathConnectedSpace
+    let x : RP3 := coordinateLine ℝ 3 0
+    have hmap : induced polynomialDescent 0 = 𝟙 _ := by
+      have hx := CoefficientConnectedH0Map.mapIso_hom ℚ polynomialDescent x x
+      have hx' : (CoefficientConnectedH0Map.mapIso ℚ x x).hom =
+          induced polynomialDescent 0 := by
+        simpa [induced, CoefficientH0.singularPostcomposition,
+          AlgebraicTopology.singularHomologyFunctor] using hx
+      rw [← hx']
+      simp [CoefficientConnectedH0Map.mapIso]
+    letI : FiniteDimensional ℚ (Homology RP3 0) :=
+      rp3RationalH0Iso.symm.toLinearEquiv.finiteDimensional
+    rw [hmap]
+    change LinearMap.trace ℚ (Homology RP3 0) LinearMap.id = 1
+    rw [LinearMap.trace_id]
+    have hrank := LinearEquiv.finrank_eq rp3RationalH0Iso.toLinearEquiv
+    simpa using hrank
+  have h1 : LinearMap.trace ℚ (Homology RP3 1)
+      (induced polynomialDescent 1).hom = 0 := by
+    letI : Subsingleton (Homology RP3 1) :=
+      ModuleCat.isZero_iff_subsingleton.mp t96A06_rp3_rational_H1_isZero
+    have hinduced : (induced polynomialDescent 1).hom = 0 :=
+      Subsingleton.elim _ _
+    rw [hinduced]
+    exact LinearMap.map_zero (LinearMap.trace ℚ (Homology RP3 1))
+  have h2 : LinearMap.trace ℚ (Homology RP3 2)
+      (induced polynomialDescent 2).hom = 0 := by
+    letI : Subsingleton (Homology RP3 2) :=
+      ModuleCat.isZero_iff_subsingleton.mp t96A06_rp3_rational_H2_isZero
+    have hinduced : (induced polynomialDescent 2).hom = 0 :=
+      Subsingleton.elim _ _
+    rw [hinduced]
+    exact LinearMap.map_zero (LinearMap.trace ℚ (Homology RP3 2))
+  rw [Finset.sum_range_succ, Finset.sum_range_succ,
+    Finset.sum_range_succ, Finset.sum_range_succ]
+  rw [h0, h1, h2,
+    polynomialDescent_trace_three_of_localClassDecompositionAndBase h]
+  norm_num
+
 /-- The complete rational homology table for the literal projective-space
 model used by the consumer. -/
 theorem t96A06_rp3_rational_homology :
@@ -2211,6 +2260,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
+#print axioms polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
