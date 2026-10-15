@@ -88371,6 +88371,17 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 8c2c65144", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792045870645-13504-cdc3887f",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show --check 8c2c65144; fixture/hash placeholder scans"],
+     :finding
+     "Commit 8c2c65144 by topo-6 changes only scoped closure target and Main, adding compiled progress after 36c33f454. Exact snapshot builds; Main retains 1 B2 placeholder; target has 0; fixture SHA-256 d544f6a52cace2f7e417ec09cae3297e69aafaa33a7bb02e328c1784c1f6926e matches; registry 166/0; new transport uses only propext, Classical.choice, Quot.sound. fundamentalGroupEquivOfHomeomorph maps loops forward and back with the correct basepoint equality and proves inverse laws by e.symm(e(p t)) and e(e.symm(p t)); the frozen centre maps definitionally to the pairing centre. Pairing-space van Kampen, its boundary word/kernel proof, and final assembly remain listed."},
     :commit "8c2c65144",
     :changed-paths
     ["ConstructionTargets/t97A01Closure.lean"
@@ -88381,7 +88392,7 @@
      "d544f6a52cace2f7e417ec09cae3297e69aafaa33a7bb02e328c1784c1f6926e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88399,7 +88410,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal polygon homology.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal pi1 transport to pairing-space centre.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88438,7 +88449,10 @@
      :reason "Banked attaching-range transport."}
     {:job 1,
      :commit "36c33f454",
-     :reason "Banked literal polygon homology."}]}
+     :reason "Banked literal polygon homology."}
+    {:job 2,
+     :commit "8c2c65144",
+     :reason "Banked literal pi1 transport to pairing-space centre."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -93965,7 +93979,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "apm_t97a01_TorusRP2_fundamentalGroupEquivPairingSpace",
@@ -93975,7 +93989,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "frozen pi1 transport",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8c2c65144"},
    :id :lemma-apm-t97a01-torusrp2-fundamentalgroupequivpairingspace,
    :kind :lemma,
    :depends-on [],
