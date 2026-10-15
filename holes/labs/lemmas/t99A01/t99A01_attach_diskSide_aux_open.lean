@@ -772,9 +772,111 @@ open, saturated preimage under the quotient map (interior points are singleton c
 banked above), so its image is open in the quotient, hence in `sideB`
 (`isOpen_coinduced`, `IsOpen.isOpenMap_subtype_val`/`Topology.IsInducing.isOpen_iff`). -/
 -- BEGIN SEAT AREA
+lemma t99A01_attach_diskSide_aux_open_diskOfBall :
+    IsOpenMap t99A01_attach_diskSide_aux_diskOfBall := by
+  intro U hU
+  have hball : IsOpen (Metric.ball (0 : ℂ) 1) := Metric.isOpen_ball
+  have hopen : IsOpen ((fun z : Metric.ball (0 : ℂ) 1 => (z : ℂ)) '' U) :=
+    hball.isOpenEmbedding_subtypeVal.isOpenMap U hU
+  have heq : t99A01_attach_diskSide_aux_diskOfBall '' U =
+      Subtype.val ⁻¹' ((fun z : Metric.ball (0 : ℂ) 1 => (z : ℂ)) '' U) := by
+    ext z
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      exact ⟨w, hw, rfl⟩
+    · rintro ⟨w, hw, he⟩
+      refine ⟨w, hw, Subtype.ext ?_⟩
+      exact he
+  rw [heq]
+  exact hopen.preimage continuous_subtype_val
+
+lemma t99A01_attach_diskSide_aux_open_raw {r : ℕ} :
+    IsOpenMap (fun p : (Σ _ : Fin r, Metric.ball (0 : ℂ) 1) =>
+      (Sum.inr (p.1, t99A01_attach_diskSide_aux_diskOfBall p.2) :
+        Sum Circle (Fin r × APMT99A01.Disk))) := by
+  intro U hU
+  rw [isOpen_sum_iff]
+  constructor
+  · convert (isOpen_empty : IsOpen (∅ : Set Circle)) using 1
+    ext x
+    simp only [Set.mem_preimage, Set.mem_image, Set.mem_empty_iff_false, iff_false]
+    rintro ⟨p, -, h⟩
+    cases h
+  · rw [isOpen_prod_iff]
+    intro i b hb
+    rcases hb with ⟨p, hpU, hp⟩
+    rcases p with ⟨j, z⟩
+    have hp' : (j, t99A01_attach_diskSide_aux_diskOfBall z) = (i, b) :=
+      Sum.inr.inj hp
+    have hji : j = i := (Prod.mk.inj hp').1
+    subst j
+    have hzb : t99A01_attach_diskSide_aux_diskOfBall z = b := (Prod.mk.inj hp').2
+    let Ui : Set (Metric.ball (0 : ℂ) 1) := {z | (⟨i, z⟩ :
+      Σ _ : Fin r, Metric.ball (0 : ℂ) 1) ∈ U}
+    have hUi : IsOpen Ui := by
+      simpa only [Ui, Set.mem_setOf_eq] using (isOpen_sigma_iff.mp hU) i
+    have hdi : IsOpen (t99A01_attach_diskSide_aux_diskOfBall ''
+        Ui) :=
+      t99A01_attach_diskSide_aux_open_diskOfBall _ hUi
+    refine ⟨{i}, t99A01_attach_diskSide_aux_diskOfBall ''
+      Ui, isOpen_discrete _, hdi, rfl, ⟨z, hpU, hzb⟩, ?_⟩
+    rintro ⟨k, c⟩ ⟨hk, hc⟩
+    simp only [Set.mem_singleton_iff] at hk
+    rcases hc with ⟨w, hwU, rfl⟩
+    subst k
+    exact ⟨⟨i, w⟩, hwU, rfl⟩
+
 lemma t99A01_attach_diskSide_aux_open {r : ℕ} (degree : Fin r → ℕ) :
     IsOpenMap (t99A01_attach_diskSide_aux_g degree) := by
-  sorry
+  intro U hU
+  let F : (Σ _ : Fin r, Metric.ball (0 : ℂ) 1) →
+      Sum Circle (Fin r × APMT99A01.Disk) := fun p =>
+    Sum.inr (p.1, t99A01_attach_diskSide_aux_diskOfBall p.2)
+  have hFU : IsOpen (F '' U) := t99A01_attach_diskSide_aux_open_raw U hU
+  have hsat : (APMT99A01.attachMk degree) ⁻¹'
+      ((APMT99A01.attachMk degree) '' (F '' U)) = F '' U := by
+    ext x
+    constructor
+    · rintro ⟨y, ⟨p, hpU, rfl⟩, hxy⟩
+      rcases p with ⟨i, z⟩
+      have hz : ‖((t99A01_attach_diskSide_aux_diskOfBall z : APMT99A01.Disk) : ℂ)‖ < 1 := by
+        simpa only [t99A01_attach_diskSide_aux_diskOfBall_coe,
+          Metric.mem_ball, dist_zero_right] using z.2
+      have heq := t99A01_attach_diskSide_aux_decode_eqv degree (Quotient.exact hxy)
+      cases x with
+      | inl w =>
+          simp [F, t99A01_attach_diskSide_aux_decode, hz] at heq
+      | inr q =>
+          rcases q with ⟨j, w⟩
+          simp only [F] at hxy ⊢
+          have hw : ‖(w : ℂ)‖ < 1 := by
+            by_contra hn
+            dsimp [F] at heq
+            simp [t99A01_attach_diskSide_aux_decode, hz, hn] at heq
+          have hij := t99A01_attach_diskSide_aux_eqv degree hz hw
+            (Quotient.exact hxy)
+          rcases hij with ⟨rfl, hwz⟩
+          subst w
+          exact ⟨⟨i, z⟩, hpU, rfl⟩
+    · rintro ⟨p, hp, rfl⟩
+      exact ⟨F p, ⟨p, hp, rfl⟩, rfl⟩
+  have hquot : IsOpen ((APMT99A01.attachMk degree) '' (F '' U)) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((APMT99A01.attachMk degree) ⁻¹'
+      ((APMT99A01.attachMk degree) '' (F '' U)))
+    rw [hsat]
+    exact hFU
+  have heq : t99A01_attach_diskSide_aux_g degree '' U =
+      Subtype.val ⁻¹' ((APMT99A01.attachMk degree) '' (F '' U)) := by
+    ext q
+    constructor
+    · rintro ⟨p, hp, rfl⟩
+      exact ⟨F p, ⟨p, hp, rfl⟩, rfl⟩
+    · rintro ⟨x, ⟨p, hp, hxp⟩, hxq⟩
+      refine ⟨p, hp, Subtype.ext ?_⟩
+      exact (congrArg (APMT99A01.attachMk degree) hxp).trans hxq
+  rw [heq]
+  exact hquot.preimage continuous_subtype_val
 -- END SEAT AREA
 
 theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
