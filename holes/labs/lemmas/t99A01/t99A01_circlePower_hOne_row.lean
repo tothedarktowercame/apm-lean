@@ -711,7 +711,49 @@ theorem t99A01_circlePower_hOne_row {r : ℕ} (degree : Fin r → ℕ) :
             (ModuleCat.of ℤ ℤ)).map
               (TopCat.ofHom (APMT99A01.circlePower (degree i))) ≫ e.hom =
           ModuleCat.ofHom (APMT99A01.intTimesNat (degree i)) := by
-  sorry
+  open ConstructionTargets.IntegralSingularHomologyComparison in
+    let e : APMT99A01.H 1 Circle ≅ ModuleCat.of ℤ ℤ :=
+      singularHomologyModuleIsoOfGroupIso (TopCat.of Circle) 1
+        (ModuleCat.of ℤ ℤ)
+        ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt
+    refine ⟨e, ?_⟩
+    intro i
+    apply forgetIntModules.map_injective
+    rw [Functor.map_comp, Functor.map_comp]
+    have he_hom : forgetIntModules.map e.hom =
+        (singularHomologyComparison (TopCat.of Circle) 1).hom ≫
+          ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.hom := by
+      dsimp [e, singularHomologyModuleIsoOfGroupIso,
+        moduleIsoOfUnderlyingIso]
+      exact forgetIntModules.map_preimage _
+    have he_inv : forgetIntModules.map e.inv =
+        ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.inv ≫
+          (singularHomologyComparison (TopCat.of Circle) 1).inv := by
+      apply (cancel_mono (forgetIntModules.map e.hom)).1
+      rw [← Functor.map_comp, e.inv_hom_id]
+      rw [he_hom]
+      rw [Category.assoc, Iso.inv_hom_id_assoc, Iso.inv_hom_id]
+      exact forgetIntModules.map_id _
+    rw [he_inv, he_hom]
+    have hpower : APMT99A01.circlePower (degree i) =
+        ConstructionTargets.T97A04Closure.circleZPow (degree i : ℤ) := by
+      ext z
+      exact (zpow_natCast (z : ℂ) (degree i)).symm
+    rw [hpower]
+    simp only [Category.assoc]
+    rw [← Category.assoc _
+          (singularHomologyComparison (TopCat.of Circle) 1).hom,
+      singularHomologyComparison_naturality, Category.assoc,
+      Iso.inv_hom_id_assoc]
+    change
+      ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.inv ≫
+          HomologicalComplex.homologyMap
+            (ConstructionTargets.SingularSubdivision.singularPostcomposition
+              (ConstructionTargets.T97A04Closure.circleZPow (degree i : ℤ))) 1 ≫
+          ConstructionTargets.BoundaryTorusMayerVietoris.circleH1GroupIsoInt.hom = _
+    rw [ConstructionTargets.T97A04Closure.circleZPow_H1_coordinate]
+    ext x
+    simp [APMT99A01.intTimesNat, smul_eq_mul]
 -- END SEAT AREA
 
 /-- **Leaf (integral open-cover Mayer–Vietoris).** The ℤ version of
