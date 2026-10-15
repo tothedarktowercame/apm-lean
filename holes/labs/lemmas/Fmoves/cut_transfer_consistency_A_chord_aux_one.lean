@@ -9428,7 +9428,110 @@ theorem cut_transfer_consistency_A_chord_aux_one {Label : Type*} [DecidableEq La
     (hs : s₀.1 = 1) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hL : 2 ≤ L := by
+    dsimp [L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have hpq : p < q := by dsimp [p, q]; omega
+  have hqL : q < L := by
+    dsimp [L, q]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have hs' : s₀ = ⟨1, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    exact hs
+  subst s₀
+  have hedges : edgePoint L e τ =
+      edgePoint L p ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    calc
+      (edgePoint L e τ : ℂ) = oldA (cutChordParamA L p q
+          ⟨1, by constructor <;> norm_num⟩) := hP
+      _ = cutChordA L p q 1 := D.oldA_chord _
+      _ = (edgePoint L p ⟨0, by constructor <;> norm_num⟩ : Disk) := by
+        change cutPoint L q + (1 : ℂ) * (cutPoint L p - cutPoint L q) = _
+        rw [one_mul]
+        abel_nf
+        exact (edgePoint_zero_eq_cutPoint L p).symm
+  have hN' : N = edgePoint L (p + 1)
+      ⟨0, by constructor <;> norm_num⟩ := by
+    apply Subtype.ext
+    calc
+      (N : ℂ) = newA (cutChordParamA L p q
+          ⟨1, by constructor <;> norm_num⟩) := hN
+      _ = (edgePoint L (p + 1)
+          (reverseParameter ⟨1, by constructor <;> norm_num⟩) : Disk) := D.newA_chord _
+      _ = (edgePoint L (p + 1)
+          ⟨0, by constructor <;> norm_num⟩ : Disk) := by
+        congr 2
+        apply Subtype.ext
+        simp [reverseParameter]
+  rcases heq hL (by change e < L at he; exact he) (by omega : p < L) hedges with
+      hsame | hnext | hprev
+  · rcases hsame with ⟨rfl, hτ⟩
+    subst τ
+    refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hN']
+    change (edgePoint L (p + 1) ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+      cutTransfer L p q p ⟨0, by constructor <;> norm_num⟩
+    simp [cutTransfer, cutSeam]
+    exact edgePoint_zero_eq_cutPoint L (p + 1)
+  · rcases hnext with ⟨hτ, -, hadj⟩
+    have hτ' : τ = ⟨1, by constructor <;> norm_num⟩ := by
+      apply Subtype.ext
+      exact hτ
+    subst τ
+    let T : Disk := edgePoint L p ⟨0, by constructor <;> norm_num⟩
+    refine ⟨T, ?_, ?_⟩
+    · dsimp [T]
+      change (edgePoint L p ⟨0, by constructor <;> norm_num⟩ : ℂ) =
+        cutTransfer L p q e ⟨1, by constructor <;> norm_num⟩
+      by_cases hp0 : p = 0
+      · have heLast : e + 1 = L := by
+          have he1le : e + 1 ≤ L := by omega
+          rcases he1le.eq_or_lt with heqL | hlt
+          · exact heqL
+          · rw [Nat.mod_eq_of_lt hlt, hp0] at hadj
+            omega
+        by_cases heq : e = q
+        · subst e
+          have hz := edgePoint_zero_eq_cutPoint L 0
+          have hper := cutPoint_add_length (by omega : 0 < L) 0
+          simp [cutTransfer, cutSeam, hp0, edgePoint_one_eq_cutPoint,
+            heLast] at ⊢
+          exact hz.trans (by simpa using hper.symm)
+        · have hnotmid : ¬(p < e ∧ e < q) := by
+            intro hm
+            omega
+          have hene0 : e ≠ 0 := by omega
+          have hz := edgePoint_zero_eq_cutPoint L 0
+          have hper := cutPoint_add_length (by omega : 0 < L) 0
+          rw [hp0, cutTransfer, if_neg (not_or_intro hene0 heq), if_neg (by simpa [hp0] using hnotmid),
+            edgePoint_zero_eq_cutPoint, edgePoint_one_eq_cutPoint, heLast]
+          simpa using hper.symm
+      · have he1lt : e + 1 < L := by
+          have he1le : e + 1 ≤ L := by omega
+          rcases he1le.eq_or_lt with heqL | hlt
+          · rw [heqL, Nat.mod_self] at hadj
+            omega
+          · exact hlt
+        have hpmod : p = e + 1 := by
+          rw [Nat.mod_eq_of_lt he1lt] at hadj
+          exact hadj
+        have hep : e < p := by omega
+        have hnotmid : ¬(p < e ∧ e < q) := by omega
+        simp [cutTransfer, hpmod, hep.ne, (show e ≠ q by omega), hnotmid,
+          edgePoint_one_eq_cutPoint, edgePoint_zero_eq_cutPoint]
+        exact (edgePoint_zero_eq_cutPoint L (e + 1)).trans
+          (edgePoint_one_eq_cutPoint L e).symm
+    · rw [hN']
+      exact cut_transfer_consistency_aux_x u v t x
+        (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+  · rcases hprev with ⟨hpone, -⟩
+    norm_num at hpone
 -- END SEAT AREA
 
 /-- Piece `A`, chord position `s₀` (a unit point only at the ends `Q`, `P`). -/
