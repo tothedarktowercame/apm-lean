@@ -2884,6 +2884,66 @@ theorem torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat
   funext k
   exact torusRP2_subdivisionRunPrefixBlockPiece_eq_flatIntervalPiece S i k
 
+/-- One flat interval concat, rebased to the global run-boundary family. -/
+noncomputable def torusRP2_subdivisionRunGlobalFlatIntervalPath
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) : Path
+      (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc :
+        torusRP2PairingData.Space)
+      (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ :
+        torusRP2PairingData.Space) :=
+  (Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+    (torusRP2_subdivisionRunFlatIntervalPiece S i)).cast
+      (torusRP2_subdivisionOuterRunBoundaryFamily_castSucc_eq_prefixBlockPoint_zero
+        S hx hy i)
+      (torusRP2_subdivisionOuterRunBoundaryFamily_succ_eq_prefixBlockPoint_last
+        S hx hy i)
+
+/-- Rebasing preserves the per-run concat comparison. -/
+theorem torusRP2_subdivisionRunGlobalPrefixBlockPath_eq_flatIntervalPath
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    torusRP2_subdivisionRunGlobalPrefixBlockPath S hx hy i =
+      torusRP2_subdivisionRunGlobalFlatIntervalPath S hx hy i := by
+  unfold torusRP2_subdivisionRunGlobalPrefixBlockPath
+  unfold torusRP2_subdivisionRunGlobalFlatIntervalPath
+  rw [torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat S i]
+
+/-- The outer fold of globally rebased prefix blocks is the outer fold of
+the contiguous flat intervals. -/
+theorem torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (hx : S.point 0 ∈ (openCover torusRP2PairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈
+      (openCover torusRP2PairingData).outer) :
+    Path.concat
+        (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+          torusRP2PairingData.Space))
+        (torusRP2_subdivisionRunGlobalPrefixBlockPath S hx hy) =
+      Path.concat
+        (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+          torusRP2PairingData.Space))
+        (torusRP2_subdivisionRunGlobalFlatIntervalPath S hx hy) := by
+  congr 1
+  funext i
+  exact torusRP2_subdivisionRunGlobalPrefixBlockPath_eq_flatIntervalPath
+    S hx hy i
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -3012,6 +3072,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_eq_flat_prefix_add
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_eq_flat_prefix_add
 #print axioms torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat
+#print axioms torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
