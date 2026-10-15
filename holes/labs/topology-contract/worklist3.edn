@@ -37111,27 +37111,27 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Chain/homology deck-sum, H3 injectivity, higher vanishing, degree four, invariants/Main.",
+    "Promote deck-sum to chain/homology equality; H3 injectivity, higher vanishing, degree four, invariants/Main.",
     :outcome :stop,
     :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_transferSimplex_projected",
-      :type "projected-simplex transfer deck-sum",
+    [{:name "t96A06_rational_transferSimplex_projected",
+      :type "rational projected-simplex transfer deck-sum",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_projectedSimplex_lifts_exact_pair"],
+      :depends-on ["t96A06_transferSimplex_projected"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_antipodal_H3",
       :type "deck-sum gives H3(RP3;Q)=Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_transferSimplex_projected"],
+      :depends-on ["t96A06_rational_transferSimplex_projected"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 homology Q,0,0,Q",
@@ -37144,7 +37144,7 @@
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed simplex deck-sum; chain/homology identity and H3 injectivity remain.",
+    "Committed rational generator deck-sum; chain-map equality and H3 injectivity remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37152,18 +37152,8 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}
-     {:cmd "git show --check 32ef70aaa", :exit 0}],
-    :diagnostic-history
-    [{:cmd "intermediate compiles",
-      :exit 1,
-      :note "fixed API qualification and instances"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792040339945-13277-a9c564d4",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "32ef70aaaf963ebdbcb3a80c67c0a5baf617c8b2",
+     {:cmd "git show --check 4ef0a122c", :exit 0}],
+    :commit "4ef0a122cf4a6e99ceb8162369ace893f6a44adc",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37171,7 +37161,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -40482,7 +40472,8 @@
     :lemma-t96a06-sphere3-antipodal-h3
     :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal
     :lemma-t96a06-projectedsimplex-lifts-exact-pair
-    :lemma-t96a06-transfersimplex-projected],
+    :lemma-t96a06-transfersimplex-projected
+    :lemma-t96a06-rational-transfersimplex-projected],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40753,6 +40744,23 @@
    :id :lemma-t97j07-cp2rationalhomologydata-exists,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rational_transferSimplex_projected",
+    :type "rational projected-simplex transfer deck-sum"},
+   :lemma
+   {:name "t96A06_rational_transferSimplex_projected",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "rational projected-simplex transfer deck-sum",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-rational-transfersimplex-projected,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-transfersimplex-projected],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
