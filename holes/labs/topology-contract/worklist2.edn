@@ -88730,9 +88730,61 @@
    :program true,
    :other-consumers []}
   {:consumer :t99A03,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Review blueprint; then bank the three LIBRARY obligations and assemble Main.",
+    :outcome :stop,
+    :warnings
+    ["Main retains 1 prior placeholder"
+     "unrelated review dirs preserved"],
+    :missing-theorems
+    [{:name "t99A03_wedge_lefschetz_number",
+      :type
+      "every four-RP2-wedge self-map has rational Lefschetz number 1",
+      :status :not-started,
+      :consumers [:t99A03],
+      :depends-on [],
+      :area "rp-rational-homology"}
+     {:name "t99A03_wedge_fixed_point_of_lefschetz",
+      :type
+      "Lefschetz number 1 implies a fixed point on the fourfold wedge",
+      :status :not-started,
+      :consumers [:t99A03],
+      :depends-on [],
+      :area "lefschetz-fixed-point-theorem"}
+     {:name "t99A03_exists_N4_deck_involution",
+      :type
+      "connected double cover N4 to N3 with nonidentity deck involution",
+      :status :not-started,
+      :consumers [:t99A03],
+      :depends-on [],
+      :area "polygon-covering-classification"}],
+    :statement-hashes {:registry "166/0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-6",
+    :reason
+    "Blueprint written; independent review required before formalization.",
+    :commands
+    [{:cmd "cmp reviewed and scoped blueprints", :exit 0}
+     {:cmd "lake env lean problems/t99A03/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git show --check 35323aaba", :exit 0}],
+    :diagnostic-history
+    [{:cmd "initial blueprint copy check",
+      :exit 2,
+      :correction "fixed patch header and recreated exact copy"}],
+    :commit "35323aaba",
+    :changed-paths ["ConstructionTargets/t99A03Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t99A03Closure.blueprint.md",
+     :sha256
+     "ab9417893e3b2bb5f6a74f8d4d6a4f83489bf4e570728538f22a8c4924e41bb3"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99A03/lean/Main.lean"
     "problems/t99A03/status.json"
@@ -92355,4 +92407,58 @@
    :id :lemma-edgepoint-ne-vertex-of-interior,
    :kind :lemma,
    :depends-on [:lemma-projection-edgepoint-eq-of-interior],
+   :other-consumers []}
+  {:consumer :t99A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99A03_wedge_lefschetz_number",
+    :type
+    "every four-RP2-wedge self-map has rational Lefschetz number 1"},
+   :lemma
+   {:name "t99A03_wedge_lefschetz_number",
+    :reported-by [:program-2026-10-13-close-t99a03],
+    :type
+    "every four-RP2-wedge self-map has rational Lefschetz number 1",
+    :area "rp-rational-homology"},
+   :id :lemma-t99a03-wedge-lefschetz-number,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99A03_wedge_fixed_point_of_lefschetz",
+    :type
+    "Lefschetz number 1 implies a fixed point on the fourfold wedge"},
+   :lemma
+   {:name "t99A03_wedge_fixed_point_of_lefschetz",
+    :reported-by [:program-2026-10-13-close-t99a03],
+    :type
+    "Lefschetz number 1 implies a fixed point on the fourfold wedge",
+    :area "lefschetz-fixed-point-theorem"},
+   :id :lemma-t99a03-wedge-fixed-point-of-lefschetz,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t99A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99A03_exists_N4_deck_involution",
+    :type
+    "connected double cover N4 to N3 with nonidentity deck involution"},
+   :lemma
+   {:name "t99A03_exists_N4_deck_involution",
+    :reported-by [:program-2026-10-13-close-t99a03],
+    :type
+    "connected double cover N4 to N3 with nonidentity deck involution",
+    :area "polygon-covering-classification"},
+   :id :lemma-t99a03-exists-n4-deck-involution,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
