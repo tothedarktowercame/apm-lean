@@ -37130,39 +37130,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove integral-to-rational normalization compatibility; derive scalar one; transport four local classes and close Main.",
+    "Prove coefficient-extension localization naturality; derive scalar one; transport four local classes and close Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
     [{:name
-      "polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff",
+      "t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization",
       :type
-      "normalization comparison is identity iff its scalar is one",
+      "selected rational H3 coordinate equals canonical coefficient-sphere normalization",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on
-      ["polynomialSphereLift_baseNormalizationComparisonIso_apply"],
+      :depends-on [],
       :area "rp-rational-homology"}
-     {:name "t96A06_integralToRational_normalizedClass_compatibility",
+     {:name "t96A06_integralToRational_localization_naturality",
       :type
-      "coefficient extension sends the normalized integral S3 class to the selected rational sphere-shift generator",
+      "coefficient extension commutes with sphere localization and sends integral local generator to rational local generator",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff"],
+      ["t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed identity iff scalar-one characterization; coefficient-change normalization remains.",
+    "Committed definitional identification of the selected rational H3 coordinate with canonical coefficient-sphere normalization.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37170,14 +37169,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --oneline --stat 5c429b58b", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792077194190-14248-f370c3a9",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "5c429b58b",
+     {:cmd "git show --check --oneline --stat 5fbcdfe8b", :exit 0}],
+    :commit "5fbcdfe8b",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37185,7 +37178,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43405,6 +43398,45 @@
    :kind :lemma,
    :depends-on
    [:lemma-polynomialspherelift-basenormalizationcomparisoniso-hom-eq-id-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization",
+    :type
+    "selected rational H3 coordinate equals canonical coefficient-sphere normalization"},
+   :lemma
+   {:name "t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "selected rational H3 coordinate equals canonical coefficient-sphere normalization",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-sphere3-rational-h3iso-eq-coefficientnormalization,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_localization_naturality",
+    :type
+    "coefficient extension commutes with sphere localization and sends integral local generator to rational local generator"},
+   :lemma
+   {:name "t96A06_integralToRational_localization_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient extension commutes with sphere localization and sends integral local generator to rational local generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-localization-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphere3-rational-h3iso-eq-coefficientnormalization],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
