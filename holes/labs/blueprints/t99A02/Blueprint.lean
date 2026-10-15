@@ -2569,7 +2569,34 @@ lemma G_facts :
 lemma tree_local_edge (g : G) (t : unitInterval) (h0 : (t : ℝ) ≠ 0) (h1 : (t : ℝ) ≠ 1) :
     ∃ V : Set TreeZ, IsOpen V ∧ .inl (g, t) ∈ V ∧ Saturated TreeRel V ∧
       ∀ k : G, (∃ v ∈ V, k • v ∈ V) → k = 1 := by
-  sorry
+  let U : Set unitInterval := {s | (s : ℝ) ≠ 0 ∧ (s : ℝ) ≠ 1}
+  let V : Set TreeZ := {z | match z with
+    | .inl (h, s) => h = g ∧ s ∈ U
+    | .inr _ => False}
+  refine ⟨V, ?_, ?_, ?_, ?_⟩
+  · rw [isOpen_sum_iff]
+    constructor
+    · simpa [V, U] using
+        ((isOpen_discrete ({g} : Set G)).prod
+          ((isClosed_singleton.isOpen_compl.inter isClosed_singleton.isOpen_compl :
+            IsOpen ({0}ᶜ ∩ {1}ᶜ : Set unitInterval))))
+    · simp [V]
+  · exact ⟨rfl, h0, h1⟩
+  · intro z w hzw
+    cases hzw with
+    | edge h => simp [V, U]
+    | vertex h => simp [V, U]
+    | pair h x => simp [V]
+  · intro k hk
+    obtain ⟨v, hv, hkv⟩ := hk
+    rcases v with ⟨h, s⟩ | ⟨h, x⟩
+    · have hv' : h = g ∧ s ∈ U := by simpa [V] using hv
+      have hh : h = g := hv'.1
+      subst h
+      have hkv' : k * g = g ∧ s ∈ U := by simpa [V] using hkv
+      have hkg : k * g = g := hkv'.1
+      exact (mul_right_cancel (hkg.trans (one_mul g).symm))
+    · simp [V] at hv
 
 /-- **Leaf.**  Disjoint-translate neighbourhood of the vertex `g`:
 `V = inl ({g} × [0,1/2)) ∪ inl ({g a⁻¹} × (1/2,1]) ∪ inr ({g} × cap north)
