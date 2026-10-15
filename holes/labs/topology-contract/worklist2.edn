@@ -88329,7 +88329,9 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 10,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Finish B1 topological transport; then B2.",
@@ -88387,7 +88389,7 @@
      "8cdc6f488dabc684bdce63a700f34c42b83f84bf40571331533c9eb25b65ec7d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88479,6 +88481,16 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git show --check 2d4b43869", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792044944516-13466-688b4483",
+     :commands
+     ["lake env lean holes/labs/blueprints/t94J09/Blueprint.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show --check 2d4b43869; fixture SHA-256 and placeholder scans"],
+     :finding
+     "Commit 2d4b43869 by topo-6 changes only t94J09Closure.blueprint.md; fixture SHA-256 4992777ceee3403c5881180f237900137299161a68f72bd4f50963a8adef6c67 matches. Source blueprint compiles with exactly its 2 declared LIBRARY sorries; closure blueprint has 0 placeholders; registry 166/0. Mathematics is sound: the relation yields vertex classes {3,9} and the other 12 vertices, so chi=2-7+1=-4; same-orientation edge pairs make it nonorientable, hence N6. H1=Z^5 plus Z/2 and Hk=0 for k>=2 are correct. B2 normalization and B3 homology are independent, accurately typed library obligations; B4 uses all five finite certificates plus both library results and exactly matches the registered conjunction."},
     :commit "2d4b43869",
     :changed-paths ["ConstructionTargets/t94J09Closure.blueprint.md"],
     :fixture
@@ -88487,7 +88499,7 @@
      "4992777ceee3403c5881180f237900137299161a68f72bd4f50963a8adef6c67"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88505,14 +88517,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t94J09/BLUEPRINT.md's plan into ConstructionTargets/t94J09Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; independent review required before formalization.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
    :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "2d4b43869",
+     :reason
+     "Blueprint written; independent review required before formalization."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -93843,7 +93860,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccBoundaryCokernelSmithEquiv", :type "cokernel=Smith"},
@@ -93852,14 +93869,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cokernel=Smith",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id :lemma-aabbccboundarycokernelsmithequiv,
    :kind :lemma,
    :depends-on [:lemma-aabbccorbitcoordinates-map-boundaryrange],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2BoundaryCokernelSmithEquiv",
@@ -93869,7 +93888,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cokernel=Smith",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id :lemma-torusrp2boundarycokernelsmithequiv,
    :kind :lemma,
    :depends-on [:lemma-torusrp2orbitcoordinates-map-boundaryrange],
