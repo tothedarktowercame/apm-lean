@@ -9219,6 +9219,73 @@ lemma cut_retransfer_consistency_aux_chords {L p q : ℕ}
     simp [cutChordA, cutChordB, reverseParameter] <;> ring
 
 
+lemma cut_retransfer_consistency_A_arc_aux_x {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length
+        (u.length + 1 + v.length) s)
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length u.length s) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x] ++ v ++ [x] ++ t).length :=
+    ⟨u.length + 1 + v.length, by simp; omega⟩
+  let j : Fin (u ++ [x] ++ v ++ [x] ++ t).length :=
+    ⟨u.length, by simp⟩
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp only [i, j, Fin.val_mk] at this
+    omega
+  · rw [show (u ++ [x] ++ v ++ [x] ++ t).get i = x by
+        simpa [i] using cut_transfer_generator_aux_get_x₂ u v t x]
+    rw [show (u ++ [x] ++ v ++ [x] ++ t).get j = x by
+        simpa [j] using cut_transfer_generator_aux_get_x₁ u v t x]
+  · rw [show (u ++ [x] ++ v ++ [x] ++ t).get i = x by
+        simpa [i] using cut_transfer_generator_aux_get_x₂ u v t x]
+    rw [show (u ++ [x] ++ v ++ [x] ++ t).get j = x by
+        simpa [j] using cut_transfer_generator_aux_get_x₁ u v t x]
+    simp
+    rfl
+
+
+/-- Side `p` (the old first `x`): `newA` is the seam, a unit point only at `s₀ ∈ {0, 1}` (`P'`, `Q'`). -/
+theorem cut_retransfer_consistency_A_arc_aux_seam {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hP : (P : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hp : e₀ = u.length) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
+  sorry
+
+/-- A `v` side (`p < e₀ < q`): `newA` is the reflected new side `q + p + 1 - e₀` at the reversed parameter. -/
+theorem cut_retransfer_consistency_A_arc_aux_v {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (P : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hN : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hP : (P : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hp : u.length < e₀) :
+    ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
+  sorry
+
 /-- Piece `A`, side position `(e₀, s₀)`, `p ≤ e₀ < q` (side `p` gives the seam: a unit point only at `P'`, `Q'`). -/
 theorem cut_retransfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -9235,7 +9302,9 @@ theorem cut_retransfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (hP : (P : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  rcases Nat.eq_or_lt_of_le he₀ with h | h
+  · exact cut_retransfer_consistency_A_arc_aux_seam u v t x oldA oldB newA newB D heq e he τ P e₀ s₀ he₀ he₀q hN hP h.symm
+  · exact cut_retransfer_consistency_A_arc_aux_v u v t x oldA oldB newA newB D heq e he τ P e₀ s₀ he₀ he₀q hN hP h
 
 /-- Piece `A`, chord position `s₀`. -/
 theorem cut_retransfer_consistency_A_chord {Label : Type*} [DecidableEq Label]
