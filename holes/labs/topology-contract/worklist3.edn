@@ -36702,7 +36702,7 @@
      :reason
      "Committed canonical prefix-indexed point/path families; quotient fold induction remains."}]}
   {:consumer :t99J05,
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
@@ -36710,25 +36710,25 @@
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "cpSuccessor_overlap_topCoordinates_ne_zero",
-      :type "top/lower overlap equals nonzero top-chart coordinates",
+    [{:name "t99J05_cp_successor_overlap_homeomorph_puncturedAffine",
+      :type "overlap homeomorphic to punctured affine space",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_affineChartConstruction_all"],
+      :depends-on ["cpSuccessor_overlap_topCoordinates_ne_zero"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_overlap_homeomorph_puncturedAffine",
-      :type
-      "overlap is homeomorphic to punctured affine space, hence sphere-like",
+     {:name "t99J05_cp_successor_overlap_rational_homology",
+      :type "overlap homology from its punctured-affine sphere model",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessor_overlap_topCoordinates_ne_zero"],
+      :depends-on
+      ["t99J05_cp_successor_overlap_homeomorph_puncturedAffine"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the successor overlap as punctured affine coordinates.",
+    "Committed the overlap homeomorphism to punctured affine space.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36737,27 +36737,17 @@
       "lake env lean /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check; fixture hash; git show 6de2542e1",
+     {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check && git show --check --oneline --stat 682b21f2e",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "initial overlap compile",
+    [{:cmd "initial homeomorph compile",
       :exit 1,
-      :note "Expanded negation and zero division; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792079454930-14277-7aaf1a48",
-     :commands
-     ["git show --check --stat 7337cdfc2"
-      "git diff --name-only 7337cdfc2^ 7337cdfc2"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed one."},
-    :commit "6de2542e1",
+      :note
+      "Rewrote inverse coordinates before proving nonzero membership."}],
+    :commit "682b21f2e",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36765,7 +36755,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -43528,7 +43518,8 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type
     "overlap is homeomorphic to punctured affine space, hence sphere-like",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine,
    :kind :lemma,
    :depends-on [:lemma-cpsuccessor-overlap-topcoordinates-ne-zero],
@@ -43609,6 +43600,23 @@
    :id :lemma-t96a06-integraltorational-relativechainmap,
    :kind :lemma,
    :depends-on [:lemma-t96a06-integraltorational-singularchainmap],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_rational_homology",
+    :type "overlap homology from its punctured-affine sphere model"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_rational_homology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "overlap homology from its punctured-affine sphere model",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-overlap-rational-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
