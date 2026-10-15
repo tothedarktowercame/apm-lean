@@ -2354,6 +2354,37 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne
     exact hne (Fin.ext h)
   omega
 
+/-- When consecutive flattened coordinates cross a run boundary, the first
+coordinate is the final local offset of its run and the second is the zero
+offset of the next run. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin S.n)
+    (hne : ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).1 ≠
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1) :
+    ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).2.val =
+        pathTwoOpenSubdivisionRunPredLength S
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc).1 ∧
+      ((torusRP2_subdivisionRunOffsetEquiv S).symm j.succ).2.val = 0 := by
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j.castSucc
+  let w := (torusRP2_subdivisionRunOffsetEquiv S).symm j.succ
+  have hrun :=
+    torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne S j hne
+  change w.1.val = z.1.val + 1 at hrun
+  have hcoord := torusRP2_subdivisionRunOffsetEquiv_symm_flatten_succ S j
+  change pathTwoOpenSubdivisionRunPrefixLength S w.1.val + w.2.val =
+    pathTwoOpenSubdivisionRunPrefixLength S z.1.val + z.2.val + 1 at hcoord
+  rw [hrun] at hcoord
+  have hboundary := pathTwoOpenSubdivisionRunPrefixLength_add_predLength S z.1
+  have hzlt := z.2.isLt
+  have hlen := pathTwoOpenSubdivisionRunPredLength_add_one S z.1
+  change z.2.val = pathTwoOpenSubdivisionRunPredLength S z.1 ∧
+    w.2.val = 0
+  constructor <;> omega
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2465,6 +2496,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_le_succ
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
