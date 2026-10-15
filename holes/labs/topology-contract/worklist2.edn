@@ -87946,6 +87946,20 @@
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
      {:cmd "git show --check 95be1e92e", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792026580946-12902-db972e89",
+     :commands
+     ["git show/diff-tree 95be1e92e"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new theorems"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 95be1e92e by topo-6 changes only the scoped target; fixture hash eccce64d...b3f34 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Endpoint composition is base=leg=subdivision, the direction required to cast each geometric subpath to the common base; cast erasure preserves the forward signed-edge parametrization. Applying the verified concat-Hurewicz theorem therefore gives the ordered signed-edge sum. New compiled progress; remaining milestones are comparison with the boundary loop, then B7-B10."},
     :commit "95be1e92e",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87968,7 @@
      "eccce64ddf0c5b749c45c0d6fb425a565d5101e44b6cbe948d49ba66829b3f34"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87988,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-base signed-edge paths.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked subdivision Hurewicz sum.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88276,7 +88290,10 @@
      :reason "Banked Hurewicz finite-concat sum in traversal order."}
     {:job 4,
      :commit "2d90f2ee3",
-     :reason "Banked common-base signed-edge paths."}]}
+     :reason "Banked common-base signed-edge paths."}
+    {:job 5,
+     :commit "95be1e92e",
+     :reason "Banked subdivision Hurewicz sum."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92591,7 +92608,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundarySubdivisionPathAtBase_eq_signedEdge",
@@ -92601,14 +92618,16 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "based subpath equals signed edge",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "95be1e92e"},
    :id :lemma-polygonboundarysubdivisionpathatbase-eq-signededge,
    :kind :lemma,
    :depends-on [:lemma-polygonboundarysignededgepathatbase-apply],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundarySubdivisionConcat_hurewicz",
@@ -92618,7 +92637,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "concat H1 is signed-edge sum",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "95be1e92e"},
    :id :lemma-polygonboundarysubdivisionconcat-hurewicz,
    :kind :lemma,
    :depends-on [:lemma-modulehurewicz-mk-concat-eq-list-sum],
