@@ -114,6 +114,25 @@ theorem contDiff_lift_of_comp_isInvertible
 
 #print axioms contDiff_lift_of_comp_isInvertible
 
+/-- Smooth fixed-trivialization coordinates determine a smooth tangent
+section on any set contained in that trivialization's source. -/
+theorem contMDiffOn_tangentSection_of_trivialization_coordinates
+    {n : ℕ} {X : Type} [TopologicalSpace X]
+    [ChartedSpace (E n) X] [IsManifold (𝓡 n) ∞ X]
+    (x₀ : X) (U : Set X) (w : ∀ x : X, TangentSpace (𝓡 n) x)
+    (hU : U ⊆ (trivializationAt (E n) (TangentSpace (𝓡 n)) x₀).baseSet)
+    (hcoord : ContMDiffOn (𝓡 n) (𝓡 n) ∞
+      (fun x ↦ ((trivializationAt (E n) (TangentSpace (𝓡 n)) x₀)
+        (⟨x, w x⟩ : TangentBundle (𝓡 n) X)).2) U) :
+    ContMDiffOn (𝓡 n) (𝓡 n).tangent ∞
+      (fun x ↦ (w x : TangentBundle (𝓡 n) X)) U := by
+  intro x hx
+  exact (Bundle.Trivialization.contMDiffWithinAt_section
+    (e := trivializationAt (E n) (TangentSpace (𝓡 n)) x₀) U (hU hx)).2
+      (hcoord x hx)
+
+#print axioms contMDiffOn_tangentSection_of_trivialization_coordinates
+
 theorem t98A06_global_vectorField_lift
     (hlocal : ∀ (n m : ℕ) (X Y : Type) [TopologicalSpace X] [TopologicalSpace Y]
       [T2Space X] [T2Space Y] [SecondCountableTopology X] [SecondCountableTopology Y]
