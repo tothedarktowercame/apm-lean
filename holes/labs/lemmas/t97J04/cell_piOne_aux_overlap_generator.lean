@@ -850,7 +850,52 @@ lemma cell_piOne_aux_overlap_generator (γ : C(Circle, Y))
       Subgroup.normalClosure {FundamentalGroup.map
         ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
           (cellOverlapCircle γ)) 1 PolygonSurfaceHomology.circleIntegerLoopOneClass} := by
-  sorry
+  obtain ⟨e, he⟩ := hA3
+  have hc : Function.Surjective
+      (FundamentalGroup.map (cellOverlapCircle γ) (1 : Circle)) := by
+    have hb := (cell_piOne_aux_hequiv_bijective e (1 : Circle)).2
+    rw [he] at hb
+    exact hb
+  have hmap (z : FundamentalGroup Circle 1) :
+      FundamentalGroup.map
+          ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+            (cellOverlapCircle γ)) 1 z =
+        FundamentalGroup.map
+          (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ))
+          (cellOverlapCircle γ 1)
+          (FundamentalGroup.map (cellOverlapCircle γ) 1 z) := by
+    induction z using Path.Homotopic.Quotient.ind with
+    | mk p => rfl
+  apply le_antisymm
+  · refine Subgroup.normalClosure_le_normal
+      (N := Subgroup.normalClosure
+        ({FundamentalGroup.map
+          ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+            (cellOverlapCircle γ)) 1
+            PolygonSurfaceHomology.circleIntegerLoopOneClass} : _)) ?_
+    rintro y ⟨x, rfl⟩
+    obtain ⟨z, hz⟩ := hc x
+    obtain ⟨n, hn⟩ :=
+      PolygonSurfaceHomology.circleIntegerLoopOneClass_generates z
+    subst x
+    rw [← hn, map_zpow]
+    rw [map_zpow, ← hmap]
+    exact (Subgroup.normalClosure
+      ({FundamentalGroup.map
+        ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+          (cellOverlapCircle γ)) 1
+          PolygonSurfaceHomology.circleIntegerLoopOneClass} :
+        Set (FundamentalGroup (cellOuter γ)
+          (apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)
+            (cellOverlapCircle γ 1))))).zpow_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) n
+  · apply Subgroup.normalClosure_mono
+    intro y hy
+    rw [Set.mem_singleton_iff] at hy
+    subst y
+    rw [hmap]
+    exact ⟨FundamentalGroup.map (cellOverlapCircle γ) 1
+      PolygonSurfaceHomology.circleIntegerLoopOneClass, rfl⟩
 -- END SEAT AREA
 
 /-- A7. **van Kampen for one 2-cell.**  The inclusion `Y → Y ∪_γ D²` is onto
