@@ -88380,6 +88380,17 @@
     [{:cmd "conjugation draft",
       :exit 1,
       :correction "expanded scalar action"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792043710036-13413-d660e15c",
+     :commands
+     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms; git show --check; fixture/hash placeholder scans"],
+     :finding
+     "Commit 9bc6a459c by topo-6 changes only t97A01Closure.lean and adds compiled progress after 1f944e1c3. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 9c2cfb20a18626830cb0a8aa2c1e55140becb6961e9eaedf1e0d8abb0e0b0e57 matches; registry 166/0; both conjugations use only propext, Classical.choice, Quot.sound. Linearity transports the established vectors to equalities coordinateMap o attachingBoundary = -SmithBoundary in the correct orientation. The minus sign is retained explicitly and preserves the kernels and ranges needed next. Kernel/range and Smith transports for B1, then B2, remain listed."},
     :commit "9bc6a459c",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88388,7 +88399,7 @@
      "9c2cfb20a18626830cb0a8aa2c1e55140becb6961e9eaedf1e0d8abb0e0b0e57"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88406,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked signed attaching vectors.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary conjugations.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88433,7 +88444,10 @@
      :reason "Banked both orbit-coordinate linear equivalences."}
     {:job 6,
      :commit "1f944e1c3",
-     :reason "Banked signed attaching vectors."}]}
+     :reason "Banked signed attaching vectors."}
+    {:job 7,
+     :commit "9bc6a459c",
+     :reason "Banked boundary conjugations."}]}
   {:consumer :t94J09,
    :stop-count 0,
    :phase :implementation,
@@ -93638,7 +93652,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "aabbccOrbitCoordinates_comp_attachingBoundary",
@@ -93648,14 +93662,16 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "boundary conjugation",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "9bc6a459c"},
    :id :lemma-aabbccorbitcoordinates-comp-attachingboundary,
    :kind :lemma,
    :depends-on [:lemma-aabbccorbitcoordinates-attachingdegree],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2OrbitCoordinates_comp_attachingBoundary",
@@ -93665,7 +93681,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "boundary conjugation",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "9bc6a459c"},
    :id :lemma-torusrp2orbitcoordinates-comp-attachingboundary,
    :kind :lemma,
    :depends-on [:lemma-torusrp2orbitcoordinates-attachingdegree],
