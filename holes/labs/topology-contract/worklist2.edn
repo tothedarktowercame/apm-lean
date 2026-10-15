@@ -88374,6 +88374,19 @@
     [{:cmd "uniqueness drafts",
       :exit 1,
       :correction "normalized dependent boundaries"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792066054664-14014-bca31911",
+     :commands
+     ["git show/diff/check 948779af7"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 948779af7 adds compiled, sorry-free progress beyond 363a4453a. It proves local offsets lie in their run half-open intervals and that equal flattened coordinates force equal run indices via strict cumulative-boundary order. Only t97A01Closure.lean changed; fixture SHA 472293df459c4228adbaf46d9173d0d2f0aa75b5a35c6374b6fdfe2d2807ea72 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Both order cases, inequality directions, and Fin representations are correct; offset equality is not overclaimed. Packaging the run-offset equivalence, nested-fold equality, van Kampen, and final assembly remain explicitly listed."},
     :commit "948779af7e07751ef1979caee954f64f6516ea49",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88382,7 +88395,7 @@
      "472293df459c4228adbaf46d9173d0d2f0aa75b5a35c6374b6fdfe2d2807ea72"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88400,7 +88413,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked subdivision run-offset decomposition.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked uniqueness of subdivision run coordinates.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88539,7 +88552,10 @@
      :reason "Banked cumulative run-boundary order."}
     {:job 7,
      :commit "363a4453a73efcfc14a73bf0f0d06643daf557c2",
-     :reason "Banked subdivision run-offset decomposition."}]}
+     :reason "Banked subdivision run-offset decomposition."}
+    {:job 8,
+     :commit "948779af7e07751ef1979caee954f64f6516ea49",
+     :reason "Banked uniqueness of subdivision run coordinates."}]}
   {:consumer :t94J09,
    :stop-count 4,
    :evidence
@@ -95029,7 +95045,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_subdivisionRunOffset_run_unique",
@@ -95041,7 +95057,9 @@
     :type
     "equal flattened run-offset coordinates have equal run indices",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "948779af7e07751ef1979caee954f64f6516ea49"},
    :id :lemma-torusrp2-subdivisionrunoffset-run-unique,
    :kind :lemma,
    :depends-on [:lemma-torusrp2-subdivisionindex-exists-runoffset],
