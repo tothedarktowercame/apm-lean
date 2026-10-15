@@ -1767,12 +1767,50 @@ lemma t99A01_piOne_attach_succ_algebra (g d : ℕ) :
   exact ZMod.cast_one hqg
 
 /-- The one-cell step is the sorry-free assembly of the four leaves above. -/
+lemma t99A01_piOne_attach_succ_aux_gcd {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    APMT99A01.degreeGCD degree =
+      Nat.gcd (APMT99A01.degreeGCD (degree ∘ Fin.castSucc))
+        (degree (Fin.last r)) := by
+  simp only [APMT99A01.degreeGCD]
+  rw [Fin.univ_castSuccEmb, Finset.gcd_cons]
+  simp [Finset.gcd_def, Function.comp_def, Nat.gcd_comm]
+  rfl
+
+/-- The remaining geometric bridge: van Kampen, the radial equivalence, and
+basepoint transport identify the newly killed overlap class with `d` times
+the normalized generator supplied by the induction hypothesis. -/
+lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    (ih : APMT99A01.PiOneCoordinate (degree ∘ Fin.castSucc)) :
+    ∃ e : FundamentalGroup (APMT99A01.AttachSpace degree)
+          (APMT99A01.basepoint degree) ≃*
+        (Multiplicative
+            (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc))) ⧸
+          Subgroup.normalClosure
+            ({Multiplicative.ofAdd
+                (degree (Fin.last r) :
+                  ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))} :
+              Set (Multiplicative
+                (ZMod (APMT99A01.degreeGCD (degree ∘ Fin.castSucc)))))),
+      e (APMT99A01.baseCircleClass degree) =
+        QuotientGroup.mk' _ (Multiplicative.ofAdd 1) := by
+  sorry
+
 lemma t99A01_piOne_attach_succ {r : ℕ} (degree : Fin (r + 1) → ℕ)
     (_hpos : ∀ i, 0 < degree i)
     (ih : APMT99A01.PiOneCoordinate (degree ∘ Fin.castSucc)) :
     APMT99A01.PiOneCoordinate degree := by
-  sorry
-
+  obtain ⟨eVK, heVK⟩ :=
+    t99A01_piOne_attach_succ_aux_vankampen degree ih
+  obtain ⟨eAlg, heAlg⟩ := t99A01_piOne_attach_succ_algebra
+    (APMT99A01.degreeGCD (degree ∘ Fin.castSucc))
+    (degree (Fin.last r))
+  unfold APMT99A01.PiOneCoordinate
+  rw [t99A01_piOne_attach_succ_aux_gcd degree]
+  refine ⟨eVK.trans eAlg, ?_⟩
+  change eAlg (eVK (APMT99A01.baseCircleClass degree)) = _
+  rw [heVK, heAlg]
 /-- Fundamental group of a circle with finitely many positive-degree disks
 attached.  This is a sorry-free induction assembling the two geometric leaves
 above; in particular it also covers `r = 0`. -/
