@@ -2612,7 +2612,116 @@ lemma tree_local_vertex (g : G) :
     ∃ V : Set TreeZ, IsOpen V ∧ .inl (g, 0) ∈ V ∧ .inl (g * a⁻¹, 1) ∈ V ∧
       .inr (g, north) ∈ V ∧ .inr (g * b, south) ∈ V ∧ Saturated TreeRel V ∧
       ∀ k : G, (∃ v ∈ V, k • v ∈ V) → k = 1 := by
-  sorry
+  let V : Set TreeZ := {z | match z with
+    | .inl (h, t) =>
+        (h = g ∧ (t : ℝ) < (1 / 2 : ℝ)) ∨
+        (h = g * a⁻¹ ∧ (1 / 2 : ℝ) < (t : ℝ))
+    | .inr (h, x) =>
+        (h = g ∧ (0 : ℝ) < (x : E3) 2) ∨
+        (h = g * b ∧ (x : E3) 2 < 0)}
+  have hbb : b * b = 1 := G_facts.2.2.1
+  have hVopen : IsOpen V := by
+    rw [isOpen_sum_iff]
+    constructor
+    · change IsOpen ({p : G × unitInterval |
+          (p.1 = g ∧ (p.2 : ℝ) < (1 / 2 : ℝ)) ∨
+          (p.1 = g * a⁻¹ ∧ (1 / 2 : ℝ) < (p.2 : ℝ))})
+      apply IsOpen.union
+      · exact (isOpen_discrete ({g} : Set G)).prod
+          (isOpen_lt continuous_subtype_val continuous_const)
+      · exact (isOpen_discrete ({g * a⁻¹} : Set G)).prod
+          (isOpen_lt continuous_const continuous_subtype_val)
+    · change IsOpen ({p : G × S2 |
+          (p.1 = g ∧ (0 : ℝ) < (p.2 : E3) 2) ∨
+          (p.1 = g * b ∧ (p.2 : E3) 2 < 0)})
+      have hc : Continuous (fun x : S2 => ((x : E3) 2 : ℝ)) := by fun_prop
+      apply IsOpen.union
+      · exact (isOpen_discrete ({g} : Set G)).prod
+          (isOpen_lt continuous_const hc)
+      · exact (isOpen_discrete ({g * b} : Set G)).prod
+          (isOpen_lt hc continuous_const)
+  refine ⟨V, hVopen, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact Or.inl ⟨rfl, by norm_num⟩
+  · exact Or.inr ⟨rfl, by norm_num⟩
+  · exact Or.inl ⟨rfl, by simp [north]⟩
+  · exact Or.inr ⟨rfl, by simp [south]⟩
+  · intro z w hzw
+    cases hzw with
+    | edge h =>
+        change
+          ((h = g ∧ (1 : ℝ) < 1 / 2) ∨ (h = g * a⁻¹ ∧ 1 / 2 < (1 : ℝ))) ↔
+          ((h * a = g ∧ (0 : ℝ) < 1 / 2) ∨
+            (h * a = g * a⁻¹ ∧ 1 / 2 < (0 : ℝ)))
+        constructor
+        · rintro (ha | ha)
+          · norm_num at ha
+          · left
+            refine ⟨?_, by norm_num⟩
+            calc h * a = (g * a⁻¹) * a := congrArg (fun q => q * a) ha.1
+              _ = g := by simp
+        · rintro (ha | ha)
+          · right
+            refine ⟨?_, by norm_num⟩
+            calc h = (h * a) * a⁻¹ := by simp
+              _ = g * a⁻¹ := congrArg (fun q => q * a⁻¹) ha.1
+          · norm_num at ha
+    | vertex h =>
+        change
+          ((h = g ∧ (0 : ℝ) < 1 / 2) ∨ (h = g * a⁻¹ ∧ 1 / 2 < (0 : ℝ))) ↔
+          ((h = g ∧ (0 : ℝ) < ((north : S2) : E3) 2) ∨
+            (h = g * b ∧ (((north : S2) : E3) 2) < 0))
+        norm_num [north]
+    | pair h x =>
+        change
+          ((h = g ∧ 0 < (x : E3) 2) ∨ (h = g * b ∧ (x : E3) 2 < 0)) ↔
+          ((h * b = g ∧ 0 < ((-x : S2) : E3) 2) ∨
+            (h * b = g * b ∧ ((-x : S2) : E3) 2 < 0))
+        change
+          ((h = g ∧ 0 < (x : E3) 2) ∨ (h = g * b ∧ (x : E3) 2 < 0)) ↔
+          ((h * b = g ∧ 0 < -(x : E3) 2) ∨
+            (h * b = g * b ∧ -(x : E3) 2 < 0))
+        constructor
+        · rintro (hx | hx)
+          · right
+            exact ⟨congrArg (fun q => q * b) hx.1, neg_lt_zero.mpr hx.2⟩
+          · left
+            refine ⟨?_, neg_pos.mpr hx.2⟩
+            calc h * b = (g * b) * b := congrArg (fun q => q * b) hx.1
+              _ = g := by rw [mul_assoc, hbb, mul_one]
+        · rintro (hx | hx)
+          · right
+            refine ⟨?_, neg_pos.mp hx.2⟩
+            calc h = (h * b) * b := by rw [mul_assoc, hbb, mul_one]
+              _ = g * b := congrArg (fun q => q * b) hx.1
+          · left
+            exact ⟨mul_right_cancel hx.1, neg_lt_zero.mp hx.2⟩
+  · intro k hk
+    obtain ⟨v, hv, hkv⟩ := hk
+    rcases v with ⟨h, t⟩ | ⟨h, x⟩
+    · change
+        ((h = g ∧ (t : ℝ) < 1 / 2) ∨ (h = g * a⁻¹ ∧ 1 / 2 < (t : ℝ))) at hv
+      change
+        ((k * h = g ∧ (t : ℝ) < 1 / 2) ∨
+          (k * h = g * a⁻¹ ∧ 1 / 2 < (t : ℝ))) at hkv
+      rcases hv with hv | hv <;> rcases hkv with hw | hw
+      · apply mul_right_cancel (b := h)
+        simpa using hw.1.trans hv.1.symm
+      · linarith [hv.2, hw.2]
+      · linarith [hv.2, hw.2]
+      · apply mul_right_cancel (b := h)
+        simpa using hw.1.trans hv.1.symm
+    · change
+        ((h = g ∧ 0 < (x : E3) 2) ∨ (h = g * b ∧ (x : E3) 2 < 0)) at hv
+      change
+        ((k * h = g ∧ 0 < (x : E3) 2) ∨
+          (k * h = g * b ∧ (x : E3) 2 < 0)) at hkv
+      rcases hv with hv | hv <;> rcases hkv with hw | hw
+      · apply mul_right_cancel (b := h)
+        simpa using hw.1.trans hv.1.symm
+      · linarith [hv.2, hw.2]
+      · linarith [hv.2, hw.2]
+      · apply mul_right_cancel (b := h)
+        simpa using hw.1.trans hv.1.symm
 
 /-- **Leaf.**  Disjoint-translate neighbourhood of a non-pole sphere point:
 `V = inr ({g} × B) ∪ inr ({g b} × -B)` with `B = ball x r`, `r` as in
