@@ -119066,19 +119066,18 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Produce a regular projected value, its discrete fiber and canonical calculations; assemble Main.",
+    "Prove Sard nullity for transverse projection; derive fiber calculations; assemble Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx; unrelated review dirs preserved"],
+    :warnings ["Main sorryAx; review dirs preserved"],
     :missing-theorems
-    [{:name "transverse_mfderiv_surjective_of_circleDirection_lifts",
-      :type
-      "transversality and lifted circle directions imply surjective derivative",
+    [{:name "exists_regularValue_of_criticalValues_measure_zero",
+      :type "null critical values yield a value regular on its fiber",
       :status :proved,
       :consumers [:t00J02],
       :depends-on [],
@@ -119088,21 +119087,22 @@
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["transverse_mfderiv_surjective_of_circleDirection_lifts"
+      ["exists_regularValue_of_criticalValues_measure_zero"
+       "transverse_mfderiv_surjective_of_circleDirection_lifts"
        "locallyIsolatedCanonicalFiberData_of_isDiscrete"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "0b53b8b8f740c4aeadf53c4cd71369231c51a1973bbd1a4e79d20d165417bce8",
+     "0815bce2b23c2f8660c480abb648ba93a96f1c071b2be966d47fea7a40b359d6",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked transverse regularity linear step.",
+    :reason "Banked regular-value selection.",
     :commands
     [{:cmd
       "lake env lean -o closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119110,17 +119110,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792025321175-12869-c14c31b4",
-     :commands
-     ["git show/diff-tree 68467442"
-      "archive 68467442; lake env lean closure and Main"
-      "sha256sum/placeholders; statement-registry check"],
-     :finding
-     "PASS program STOP: commit 68467442 changes only t00J02Closure.lean and adds compiled, sorry-free progress. The linear range lemma correctly derives range A=top from range B<=range A and range A sup range B=top. Its transverse derivative corollary uses lifted circle directions in the correct direction to put range(dc) inside range(df), hence df is surjective; manifold tangent representations and coercions align. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; both new theorems use only standard axioms; registry 166/166. A regular projected value, its discrete fiber/calculations, and Main remain listed."},
-    :commit "68467442f989dc4836cdd26fca100b6df6fc8bdb",
+    :commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119128,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119518,7 +119508,8 @@
     :lemma-locallyisolatedcanonicalfiberdata-tophomologymap-eq-zero
     :lemma-locallyisolatedcanonicalfiberdata-of
     :lemma-locallyisolatedcanonicalfiberdata-of-isdiscrete
-    :lemma-transverse-mfderiv-surjective-of-circledirection-lifts],
+    :lemma-transverse-mfderiv-surjective-of-circledirection-lifts
+    :lemma-exists-regularvalue-of-criticalvalues-measure-zero],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120839,6 +120830,23 @@
     :banked-by :program-2026-10-13-close-t00j02,
     :banked-commit "68467442f989dc4836cdd26fca100b6df6fc8bdb"},
    :id :lemma-transverse-mfderiv-surjective-of-circledirection-lifts,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_regularValue_of_criticalValues_measure_zero",
+    :type "null critical values yield a value regular on its fiber"},
+   :lemma
+   {:name "exists_regularValue_of_criticalValues_measure_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "null critical values yield a value regular on its fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-regularvalue-of-criticalvalues-measure-zero,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}],
