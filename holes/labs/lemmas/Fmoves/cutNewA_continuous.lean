@@ -5345,9 +5345,118 @@ theorem cutOldB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
   sorry
 
 -- BEGIN SEAT AREA
+lemma cutNewA_continuous_aux_profile {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Continuous (cutProfileNewA L p q) := by
+  have hL : 0 < L := by omega
+  have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+  unfold cutProfileNewA
+  refine Continuous.if_le (by
+    unfold cutSeam cutPoint cutAlpha
+    fun_prop) ?_ continuous_id continuous_const ?_
+  · have h₁ : Continuous (fun φ : ℝ =>
+        Complex.exp (((cutAlpha L (q + 1) + cutAlpha L (p + 1) - φ : ℝ) : ℂ) *
+          Complex.I)) := by fun_prop
+    have h₂ : Continuous (fun φ : ℝ =>
+        Complex.exp (((cutAlpha L (p + 2) - cutSA L p q φ *
+          (2 * Real.pi / L) : ℝ) : ℂ) * Complex.I)) := by
+      unfold cutSA
+      fun_prop
+    exact Continuous.if_le h₁ h₂ continuous_id continuous_const (by
+      intro x hx
+      rw [hx]
+      have hsa : cutSA L p q (cutAlpha L q) = 0 := by
+        simp [cutSA]
+      rw [hsa]
+      simp only [zero_mul, sub_zero]
+      congr 2
+      norm_cast
+      have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+      push_cast
+      simp only [cutAlpha]
+      field_simp
+      norm_num [Nat.cast_add]
+      ring)
+  · intro x hx
+    rw [hx]
+    have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+    have hs : (cutAlpha L (p + 1) - cutAlpha L p) * (L : ℝ) /
+        (2 * Real.pi) = 1 := by
+      simp only [cutAlpha]
+      push_cast
+      field_simp
+      ring
+    rw [hs]
+    rw [show cutSeam L p q 1 = cutPoint L (q + 1) by
+      unfold cutSeam
+      push_cast
+      ring]
+    rw [if_pos (by
+      simp only [cutAlpha]
+      push_cast
+      apply div_le_div_of_nonneg_right ?_ (by positivity)
+      have hpq1 : (p : ℝ) + 1 ≤ q := by exact_mod_cast (by omega : p + 1 ≤ q)
+      nlinarith [Real.pi_pos, hpq1])]
+    simp only [cutPoint]
+    congr 2
+    simp only [cutAlpha]
+    push_cast
+    field_simp
+    ring
+
 theorem cutNewA_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Continuous (cutNewA L p q) := by
-  sorry
+  unfold cutNewA
+  have hcontinuous : Continuous
+      (AddCircle.liftIco (2 * Real.pi) (cutAlpha L p) (cutProfileNewA L p q)) := by
+    apply AddCircle.liftIco_continuous
+    · unfold cutProfileNewA
+      have hL : 0 < L := by omega
+      have hL0 : (L : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hL)
+      have hpi : (Real.pi : ℝ) ≠ 0 := ne_of_gt Real.pi_pos
+      have hLtwo : (2 : ℝ) ≤ L := by exact_mod_cast (by omega : 2 ≤ L)
+      have hqLr : (q : ℝ) < L := by exact_mod_cast hqL
+      rw [if_pos (by
+        simp only [cutAlpha]
+        push_cast
+        field_simp
+        nlinarith [Real.pi_pos])]
+      rw [if_neg (by
+        simp only [cutAlpha]
+        push_cast
+        rw [not_le]
+        field_simp
+        nlinarith [Real.pi_pos, hLtwo])]
+      rw [if_neg (by
+        simp only [cutAlpha]
+        push_cast
+        rw [not_le]
+        field_simp
+        nlinarith [Real.pi_pos, hqLr])]
+      have hs0 : (cutAlpha L p - cutAlpha L p) * (L : ℝ) /
+          (2 * Real.pi) = 0 := by ring
+      have hsa : cutSA L p q (cutAlpha L p + 2 * Real.pi) = 1 := by
+        simp only [cutSA]
+        have hd : cutAlpha L p + 2 * Real.pi - cutAlpha L q ≠ 0 := by
+          apply ne_of_gt
+          rw [show cutAlpha L p + 2 * Real.pi - cutAlpha L q =
+              2 * Real.pi * ((p : ℝ) + L - q) / L by
+            simp only [cutAlpha]
+            field_simp
+            ]
+          exact div_pos (mul_pos Real.two_pi_pos (by nlinarith [hqLr])) (by positivity)
+        field_simp
+      rw [hs0, hsa]
+      simp only [cutSeam, cutPoint]
+      have harg : cutAlpha L (p + 2) - 1 * (2 * Real.pi / L) =
+          cutAlpha L (p + 1) := by
+        simp only [cutAlpha]
+        push_cast
+        field_simp
+        ring
+      rw [harg]
+      simp
+    · exact (cutNewA_continuous_aux_profile hpq hqL).continuousOn
+  exact hcontinuous.comp AddCircle.homeomorphCircle'.symm.continuous
 -- END SEAT AREA
 
 theorem cutNewB_continuous {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
