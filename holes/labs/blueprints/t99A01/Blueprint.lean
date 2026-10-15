@@ -642,6 +642,45 @@ private lemma t99A01_attach_circleSide_aux_deformation_raw_mem {r : ℕ}
       exact (t99A01_attach_circleSide_aux_deformation_scale_ne t _
         (t99A01_attach_circleSide_aux_ne_zero degree q.1 q.2 hxmem)) hz
 
+lemma t99A01_attach_circleSide_aux_deformation_aux_continuous {r : ℕ}
+    (degree : Fin r → ℕ) :
+    Continuous (t99A01_attach_circleSide_aux_deformation_raw degree) := by
+  sorry
+
+lemma t99A01_attach_circleSide_aux_deformation_aux_respects {r : ℕ}
+    (degree : Fin r → ℕ) (t : unitInterval)
+    (x y : t99A01_attach_circleSide_aux_deformation_Pre degree)
+    (hxy : t99A01_attach_circleSide_aux_deformation_q degree x =
+      t99A01_attach_circleSide_aux_deformation_q degree y) :
+    APMT99A01.attachMk degree
+        (t99A01_attach_circleSide_aux_deformation_raw degree (t, x)) =
+      APMT99A01.attachMk degree
+        (t99A01_attach_circleSide_aux_deformation_raw degree (t, y)) := by
+  sorry
+
+/-- **Leaf (descent + endpoints).** Descend `raw` through `unitInterval × q`
+(`Topology.IsQuotientMap.continuous_lift_prod_left/right`; `q` is a quotient map:
+banked `_q_quotient`), landing in `sideA` by `_raw_mem`; endpoints: scale `0` is the
+identity, scale `1` sends `s·w` to the boundary point `w`, whose class is that of
+`inl (w ^ dᵢ)` (`AttachRel.boundary`), matching `ι ∘ ρ` by `hρ₁`, `hρ₂`, `hι`. -/
+lemma t99A01_attach_circleSide_aux_deformation_aux_descend {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle))
+    (hρ₁ : ∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
+      ρ ⟨APMT99A01.circleIncl degree z, h⟩ = z)
+    (hρ₂ : ∀ (i : Fin r) (z : APMT99A01.Disk)
+      (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideA degree),
+      ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i)
+    (ι : C(Circle, APMT99A01.sideA degree))
+    (hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z)
+    (hcont : Continuous (t99A01_attach_circleSide_aux_deformation_raw degree))
+    (hresp : ∀ (t : unitInterval) (x y : t99A01_attach_circleSide_aux_deformation_Pre degree),
+      t99A01_attach_circleSide_aux_deformation_q degree x =
+        t99A01_attach_circleSide_aux_deformation_q degree y →
+      APMT99A01.attachMk degree (t99A01_attach_circleSide_aux_deformation_raw degree (t, x)) =
+        APMT99A01.attachMk degree (t99A01_attach_circleSide_aux_deformation_raw degree (t, y))) :
+    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
+  sorry
+
 theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → ℕ)
     (ρ : C(APMT99A01.sideA degree, Circle))
     (hρ₁ : ∀ z (h : APMT99A01.circleIncl degree z ∈ APMT99A01.sideA degree),
@@ -651,8 +690,10 @@ theorem t99A01_attach_circleSide_aux_deformation {r : ℕ} (degree : Fin r → �
       ((ρ ⟨_, h⟩ : Circle) : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ degree i)
     (ι : C(Circle, APMT99A01.sideA degree))
     (hι : ∀ z, (ι z).1 = APMT99A01.circleIncl degree z) :
-    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) := by
-  sorry
+    ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _) :=
+  t99A01_attach_circleSide_aux_deformation_aux_descend degree ρ hρ₁ hρ₂ ι hι
+    (t99A01_attach_circleSide_aux_deformation_aux_continuous degree)
+    (fun t x y h => t99A01_attach_circleSide_aux_deformation_aux_respects degree t x y h)
 theorem t99A01_attach_circleSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ (ρ : C(APMT99A01.sideA degree, Circle)) (ι : C(Circle, APMT99A01.sideA degree)),
       (∀ z, (ι z).1 = APMT99A01.circleIncl degree z) ∧
