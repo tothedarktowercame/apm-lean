@@ -1614,6 +1614,24 @@ theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
       ConstructionTargets.CoefficientSphereAntipodal.normalization ℚ 2 := by
   rfl
 
+/-- The coefficient morphism underlying extension from integral to rational
+singular chains. -/
+def t96A06_intToRatCoefficient :
+    AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of ℚ :=
+  AddCommGrpCat.ofHom (Int.castAddHom ℚ)
+
+@[simp] theorem t96A06_intToRatCoefficient_apply (z : ℤ) :
+    t96A06_intToRatCoefficient.hom z = (z : ℚ) := rfl
+
+/-- Scalar extension respects every signed incidence coefficient appearing
+in the singular boundary. -/
+theorem t96A06_intToRatCoefficient_signedIncidence (i : ℕ) (z : ℤ) :
+    t96A06_intToRatCoefficient.hom (((-1 : ℤ) ^ i) * z) =
+      ((-1 : ℚ) ^ i) * (z : ℚ) := by
+  change ((((-1 : ℤ) ^ i) * z : ℤ) : ℚ) = _
+  push_cast
+  rfl
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -2879,6 +2897,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_H2_isZero
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
+#print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
