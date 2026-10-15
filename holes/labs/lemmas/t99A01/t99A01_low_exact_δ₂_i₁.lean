@@ -2151,7 +2151,40 @@ lemma t99A01_low_δ₂_injective {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_
 -- BEGIN SEAT AREA
 lemma t99A01_low_exact_δ₂_i₁ {r : ℕ} {degree : Fin r → ℕ} (D : t99A01_LowInput degree) :
     LinearMap.range D.δ₂c = LinearMap.ker (APMT99A01.degreeMap degree) := by
-  sorry
+  let fst₁ : (D.A₁ ⊞ D.B₁) ⟶ D.A₁ := Limits.biprod.fst
+  let snd₁ : (D.A₁ ⊞ D.B₁) ⟶ D.B₁ := Limits.biprod.snd
+  ext x
+  constructor
+  · rintro ⟨y, rfl⟩
+    rw [LinearMap.mem_ker]
+    have hker : D.δ₁.hom y ∈ LinearMap.ker D.I₁.hom := by
+      rw [← D.hδ₁I₁]
+      exact LinearMap.mem_range_self D.δ₁.hom y
+    have hzero : D.I₁.hom (D.δ₁.hom y) = 0 := LinearMap.mem_ker.mp hker
+    have hdegree := congrArg (fun f => f (D.cO₁.hom.hom (D.δ₁.hom y)))
+      (congrArg CategoryTheory.ConcreteCategory.hom D.hdegree)
+    simp only [ModuleCat.hom_comp, LinearMap.comp_apply] at hdegree
+    rw [D.cO₁.hom_inv_id_apply] at hdegree
+    rw [hzero, map_zero, map_zero] at hdegree
+    simpa [t99A01_LowInput.δ₂c, fst₁] using hdegree.symm
+  · intro hx
+    rw [LinearMap.mem_ker] at hx
+    have hker : D.cO₁.inv.hom x ∈ LinearMap.ker D.I₁.hom := by
+      rw [LinearMap.mem_ker]
+      apply (ModuleCat.biprodIsoProd D.A₁ D.B₁).toLinearEquiv.injective
+      apply Prod.ext
+      · change fst₁.hom (D.I₁.hom (D.cO₁.inv.hom x)) = fst₁.hom 0
+        have hdegree := congrArg (fun f => f x)
+          (congrArg CategoryTheory.ConcreteCategory.hom D.hdegree)
+        simpa [fst₁, hx] using congrArg D.cA₁.inv.hom hdegree
+      · change snd₁.hom (D.I₁.hom (D.cO₁.inv.hom x)) = snd₁.hom 0
+        exact (ModuleCat.subsingleton_of_isZero D.hB₁).elim _ _
+    rw [← D.hδ₁I₁] at hker
+    rcases hker with ⟨y, hy⟩
+    refine ⟨y, ?_⟩
+    change D.cO₁.hom.hom (D.δ₁.hom y) = x
+    rw [hy]
+    exact D.cO₁.inv_hom_id_apply x
 -- END SEAT AREA
 
 lemma t99A01_lowData_of_coordinates {r : ℕ} (degree : Fin r → ℕ)
