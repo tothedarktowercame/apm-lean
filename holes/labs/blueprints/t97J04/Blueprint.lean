@@ -292,9 +292,41 @@ lemma cell_outer_hequiv_aux_descend_incl (gamma : C(Circle, Y)) (y : Y) :
     cell_outer_hequiv_aux_descend gamma (cellIncl gamma y) = y := by
   rfl
 
-lemma cell_outer_hequiv (γ : C(Circle, Y)) :
-    ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ := by
+/-- A4a. The descended radial retraction is continuous on the outer piece.
+`cellOuter γ` is open and saturated, so `cellMk` restricted to its preimage is
+a quotient map (`IsQuotientMap.restrictPreimage_isOpen`); on that preimage the
+raw map is continuous (`inl`: identity; `inr` on `1/3 < |z|`: `γ ∘ radial`,
+with `z ≠ 0`). -/
+lemma cell_outer_hequiv_aux_continuous (γ : C(Circle, Y)) :
+    Continuous (fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1) := by
   sorry
+
+/-- A4b. Radial homotopy from `cellInclOuter γ ∘ retraction` to the identity
+of the outer piece: `H(t, inl y) = inl y`,
+`H(t, inr z) = inr (cell_outer_hequiv_aux_scale t z * z)` (stays in `1/3 < |·|`,
+fixes the boundary circle, so respects `CellRel`).  Continuity on
+`cellOuter γ × I`: product of the restricted quotient map with the locally
+compact `I` is a quotient map (`IsQuotientMap.prodMap` / `quotientMap_prod_unitInterval`
+pattern in `PolygonSurfacePiOne`). -/
+lemma cell_outer_hequiv_aux_homotopy (γ : C(Circle, Y))
+    (hc : Continuous (fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1)) :
+    ((cellInclOuter γ).comp ⟨fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1, hc⟩).Homotopic
+      (ContinuousMap.id (cellOuter γ)) := by
+  sorry
+
+/-- A4. Assembly (sorry-free over A4a, A4b). -/
+theorem cell_outer_hequiv (γ : C(Circle, Y)) :
+    ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ := by
+  have hc := cell_outer_hequiv_aux_continuous γ
+  refine ⟨{ toFun := ⟨fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1, hc⟩,
+             invFun := cellInclOuter γ,
+             left_inv := cell_outer_hequiv_aux_homotopy γ hc,
+             right_inv := ?_ }, rfl⟩
+  have : (⟨fun p : cellOuter γ ↦ cell_outer_hequiv_aux_descend γ p.1, hc⟩ : C(cellOuter γ, Y)).comp
+      (cellInclOuter γ) = ContinuousMap.id Y := by
+    ext y
+    exact cell_outer_hequiv_aux_descend_incl γ y
+  rw [this]
 /-- A5. The radius-`1/2` circle, pushed into the outer piece, is freely
 homotopic to `γ` (radial push to the boundary circle, where `inr z = inl (γ z)`). -/
 lemma cell_overlap_loop (γ : C(Circle, Y)) :
