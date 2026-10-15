@@ -252,6 +252,70 @@ theorem apm_t97J07_bridge_1 :
       funext i
       fin_cases i <;> simp [t97J07Linear, Pi.single_apply]
 
+/-- The exact rational homology data needed to compute the Euler
+characteristic of the literal quotient-topological `CP²`. -/
+structure T97J07CP2RationalHomologyData where
+  finiteDimensional : ∀ k,
+    FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k)
+  vanishesAbove : ∀ k, 4 < k →
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k)
+  zeroEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0 ≃ₗ[ℚ] ℚ
+  oneSubsingleton :
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1)
+  twoEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2 ≃ₗ[ℚ] ℚ
+  threeSubsingleton :
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3)
+  fourEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ
+
+/-- Once the CP² homology table is supplied, finite-dimensional trace
+calculation gives Euler characteristic three. -/
+theorem t97J07_eulerCharacteristic_of_homologyData
+    (h : T97J07CP2RationalHomologyData) :
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+      T97J07CP2 3 := by
+  unfold ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+  unfold ConstructionTargets.RationalLefschetz.HasLefschetzNumber
+  constructor
+  · exact h.finiteDimensional
+  · refine ⟨4, h.vanishesAbove, ?_⟩
+    letI (k : ℕ) : FiniteDimensional ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) :=
+      h.finiteDimensional k
+    have h0 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0) = 1 := by
+      rw [LinearEquiv.finrank_eq h.zeroEquiv]
+      simp
+    have h1 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) :=
+        h.oneSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h2 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2) = 1 := by
+      rw [LinearEquiv.finrank_eq h.twoEquiv]
+      simp
+    have h3 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) :=
+        h.threeSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h4 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4) = 1 := by
+      rw [LinearEquiv.finrank_eq h.fourEquiv]
+      simp
+    simp only [ConstructionTargets.RationalLefschetz.induced,
+      CategoryTheory.Functor.map_id, LinearMap.trace_id]
+    norm_num [Finset.sum_range_succ, h0, h1, h2, h3, h4]
+
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
         t97J07FixedLine ∪ {t97J07IsolatedPoint} ∧
