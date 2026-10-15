@@ -1995,8 +1995,39 @@ lemma t99A01_succ_overlap_generator {r : ℕ} (degree : Fin (r + 1) → ℕ) :
       FundamentalGroup.mapOfEq ((t99A01_succRho degree).comp (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree))) h γ =
         APMT99A01.baseCircleClass (degree ∘ Fin.castSucc) ^ (degree (Fin.last r) : ℤ) := by
   sorry
+/-- **Leaf V1 (canonical van Kampen iso).** From
+`apm_t92J05_twoOpen_simplyConnectedRight_kernel` (left inclusion surjective, kernel = N)
+and `QuotientGroup.quotientKerEquivOfSurjective` + `quotientMulEquivOfEq`; commutes with
+the left inclusion by construction.  Instances from `t99A01_piOne_attach_succ_cover`. -/
+lemma t99A01_succ_vk_canonical {r : ℕ} (degree : Fin (r + 1) → ℕ) :
+    ∃ e : FundamentalGroup (APMT99A01.AttachSpace degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree).1 ≃*
+        FundamentalGroup ↥(APMT99A01.succCircleSide degree) (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)) ⧸
+          Subgroup.normalClosure ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree)) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)).range :
+          Set (FundamentalGroup ↥(APMT99A01.succCircleSide degree) (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)))),
+      ∀ a, e (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion (APMT99A01.succCircleSide degree))
+          (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)) a) = QuotientGroup.mk' _ a := by
+  sorry
+
+/-- **Leaf V2 (generic).** Basepoint transports differ by conjugation
+(`p.symm.trans q` is a loop), which is trivial in a commutative target. -/
+lemma t99A01_transport_abelian : ∀ {X : Type} [TopologicalSpace X] {x y : X} {A : Type} [CommGroup A]
+      (φ : FundamentalGroup X y →* A) (p q : Path x y) (a : FundamentalGroup X x),
+      φ (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) =
+        φ (FundamentalGroup.fundamentalGroupMulEquivOfPath q a) := by
+  sorry
+
 lemma t99A01_piOne_attach_succ_aux_vankampen {r : ℕ}
     (degree : Fin (r + 1) → ℕ)
+    (hV1 : ∃ e : FundamentalGroup (APMT99A01.AttachSpace degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree).1 ≃*
+        FundamentalGroup ↥(APMT99A01.succCircleSide degree) (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)) ⧸
+          Subgroup.normalClosure ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree)) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)).range :
+          Set (FundamentalGroup ↥(APMT99A01.succCircleSide degree) (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)))),
+      ∀ a, e (FundamentalGroup.map (apm_t92J05_twoOpen_leftInclusion (APMT99A01.succCircleSide degree))
+          (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)) a) = QuotientGroup.mk' _ a)
+    (hV2 : ∀ {X : Type} [TopologicalSpace X] {x y : X} {A : Type} [CommGroup A]
+      (φ : FundamentalGroup X y →* A) (p q : Path x y) (a : FundamentalGroup X x),
+      φ (FundamentalGroup.fundamentalGroupMulEquivOfPath p a) =
+        φ (FundamentalGroup.fundamentalGroupMulEquivOfPath q a))
     (hgen : ∃ (γ : FundamentalGroup ↥((APMT99A01.succCircleSide degree) ∩ (APMT99A01.succDiskSide degree)) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree))
       (h : ((t99A01_succRho degree).comp (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree))) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree) =
         APMT99A01.basepoint (degree ∘ Fin.castSucc)),
@@ -2022,7 +2053,7 @@ lemma t99A01_piOne_attach_succ {r : ℕ} (degree : Fin (r + 1) → ℕ)
     (ih : APMT99A01.PiOneCoordinate (degree ∘ Fin.castSucc)) :
     APMT99A01.PiOneCoordinate degree := by
   obtain ⟨eVK, heVK⟩ :=
-    t99A01_piOne_attach_succ_aux_vankampen degree (t99A01_succ_overlap_generator degree) ih
+    t99A01_piOne_attach_succ_aux_vankampen degree (t99A01_succ_vk_canonical degree) @t99A01_transport_abelian (t99A01_succ_overlap_generator degree) ih
   obtain ⟨eAlg, heAlg⟩ := t99A01_piOne_attach_succ_algebra
     (APMT99A01.degreeGCD (degree ∘ Fin.castSucc))
     (degree (Fin.last r))
