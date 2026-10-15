@@ -493,6 +493,25 @@ theorem norm_polynomialMapAmbient_regularPoint :
   rw [Real.norm_eq_abs, abs_of_pos (div_pos (by norm_num) hs)]
   simp
 
+/-- Ambient radial normalization, separated from its restriction to the
+sphere so its Fréchet derivative can be computed directly. -/
+noncomputable def radialNormalizeAmbient (v : EuclideanSpace ℝ (Fin 4)) :
+    EuclideanSpace ℝ (Fin 4) :=
+  ‖v‖⁻¹ • v
+
+/-- Radial normalization is differentiable at the selected raw quadratic
+image; its norm is nonzero by the exact scale computation above. -/
+theorem radialNormalizeAmbient_differentiableAt_regularImage :
+    DifferentiableAt ℝ radialNormalizeAmbient
+      (polynomialMapAmbient polynomialSphereRegularPoint.1) := by
+  have hq : polynomialMapAmbient polynomialSphereRegularPoint.1 ≠ 0 := by
+    apply norm_ne_zero_iff.mp
+    rw [norm_polynomialMapAmbient_regularPoint]
+    exact div_ne_zero one_ne_zero
+      (Real.sqrt_ne_zero'.mpr (by norm_num))
+  exact (((differentiableAt_id.norm ℝ hq).inv
+    (norm_ne_zero_iff.mpr hq)).smul differentiableAt_id)
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -1553,6 +1572,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialMapAmbient_fderiv_regularTangentBasis
 #print axioms polynomialMapAmbient_regularPoint
 #print axioms norm_polynomialMapAmbient_regularPoint
+#print axioms radialNormalizeAmbient_differentiableAt_regularImage
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
