@@ -1363,9 +1363,9 @@ theorem pathTwoOpenSubdivisionRunStart_eq_previous_end
   have hadj := (List.isChain_iff_getElem.mp
     (boolSideRunPartition_adjacent_indices S.side)) i.val hibound
   have hne_i : (boolSideRunPartition S.side)[i.val] ≠ [] := by
-    exact List.ne_nil_of_mem_splitBy (List.getElem_mem _ _)
+    exact List.ne_nil_of_mem_splitBy (List.getElem_mem i.isLt)
   have hne_j : (boolSideRunPartition S.side)[i.val + 1] ≠ [] := by
-    exact List.ne_nil_of_mem_splitBy (List.getElem_mem _ _)
+    exact List.ne_nil_of_mem_splitBy (List.getElem_mem hibound)
   have hidx := hadj hne_i hne_j
   have hidx' : ((pathTwoOpenSubdivisionRunFamily S j).head
         (pathTwoOpenSubdivisionRunFamily_ne_nil S j)).val =
@@ -1388,15 +1388,20 @@ theorem pathTwoOpenSubdivisionRunStart_eq_previous_end
 @[simp] theorem pathTwoOpenSubdivisionRunStart_zero
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
-    pathTwoOpenSubdivisionRunStart S 0 = 0 := by
+    pathTwoOpenSubdivisionRunStart S
+      ⟨0, List.length_pos_iff_ne_nil.mpr
+        (boolSideRunPartition_end_indices S.side).1⟩ = 0 := by
   obtain ⟨hr, hfirst, _⟩ := boolSideRunPartition_end_indices S.side
-  have hfamily : pathTwoOpenSubdivisionRunFamily S 0 =
+  let i : Fin (boolSideRunPartition S.side).length :=
+    ⟨0, List.length_pos_iff_ne_nil.mpr hr⟩
+  have hfamily : pathTwoOpenSubdivisionRunFamily S i =
       (boolSideRunPartition S.side).head hr := by
     unfold pathTwoOpenSubdivisionRunFamily
     rw [List.get_eq_getElem, ← List.head_eq_getElem_zero]
-  rw [pathTwoOpenSubdivisionRunFamily_head_val]
-  have hne : pathTwoOpenSubdivisionRunFamily S 0 ≠ [] :=
-    pathTwoOpenSubdivisionRunFamily_ne_nil S 0
+  change pathTwoOpenSubdivisionRunStart S i = 0
+  rw [← pathTwoOpenSubdivisionRunFamily_head_val]
+  have hne : pathTwoOpenSubdivisionRunFamily S i ≠ [] :=
+    pathTwoOpenSubdivisionRunFamily_ne_nil S i
   simpa [hfamily] using congrArg Fin.val hfirst
 
 /-- The last maximal run ends immediately after the final subdivision piece. -/
@@ -1404,18 +1409,22 @@ theorem pathTwoOpenSubdivisionRunLast_end
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
     pathTwoOpenSubdivisionRunStart S
-        (Fin.last ((boolSideRunPartition S.side).length - 1)) +
+        ⟨(boolSideRunPartition S.side).length - 1,
+          Nat.sub_lt (List.length_pos_iff_ne_nil.mpr
+            (boolSideRunPartition_end_indices S.side).1) (by omega)⟩ +
       (pathTwoOpenSubdivisionRunFamily S
-        (Fin.last ((boolSideRunPartition S.side).length - 1))).length =
+        ⟨(boolSideRunPartition S.side).length - 1,
+          Nat.sub_lt (List.length_pos_iff_ne_nil.mpr
+            (boolSideRunPartition_end_indices S.side).1) (by omega)⟩).length =
       S.n + 1 := by
   obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
   let i : Fin (boolSideRunPartition S.side).length :=
-    Fin.last ((boolSideRunPartition S.side).length - 1)
+    ⟨(boolSideRunPartition S.side).length - 1,
+      Nat.sub_lt (List.length_pos_iff_ne_nil.mpr hr) (by omega)⟩
   have hfamily : pathTwoOpenSubdivisionRunFamily S i =
       (boolSideRunPartition S.side).getLast hr := by
     unfold pathTwoOpenSubdivisionRunFamily
     rw [List.getLast_eq_getElem, List.get_eq_getElem]
-    congr 1
   rw [← pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i]
   have hne : pathTwoOpenSubdivisionRunFamily S i ≠ [] :=
     pathTwoOpenSubdivisionRunFamily_ne_nil S i
@@ -1441,9 +1450,13 @@ theorem pathTwoOpenSubdivisionRunStart_eq_prefixLength
       pathTwoOpenSubdivisionRunPrefixLength S i.val := by
   induction hval : i.val using Nat.rec generalizing i with
   | zero =>
-      have hi : i = 0 := Fin.ext hval
+      obtain ⟨hr, _, _⟩ := boolSideRunPartition_end_indices S.side
+      let i0 : Fin (boolSideRunPartition S.side).length :=
+        ⟨0, List.length_pos_iff_ne_nil.mpr hr⟩
+      have hi : i = i0 := Fin.ext (by simpa [i0] using hval)
       subst i
-      simp [pathTwoOpenSubdivisionRunPrefixLength]
+      simpa [pathTwoOpenSubdivisionRunPrefixLength, i0] using
+        pathTwoOpenSubdivisionRunStart_zero S
   | succ k ih =>
       have hklt : k < (boolSideRunPartition S.side).length := by omega
       let j : Fin (boolSideRunPartition S.side).length := ⟨k, hklt⟩
@@ -1451,8 +1464,9 @@ theorem pathTwoOpenSubdivisionRunStart_eq_prefixLength
       rw [pathTwoOpenSubdivisionRunStart_eq_previous_end S j i hij]
       rw [ih j rfl]
       unfold pathTwoOpenSubdivisionRunPrefixLength
-      rw [show i.val = k + 1 by omega, List.take_succ,
-        List.flatten_append, List.length_append]
+      rw [List.take_succ, List.flatten_append, List.length_append]
+      change _ + (pathTwoOpenSubdivisionRunFamily S j).length = _
+      rw [List.getElem?_eq_getElem hklt]
       simp [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, j]
 
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
