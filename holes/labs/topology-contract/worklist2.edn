@@ -88331,28 +88331,33 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify disk boundary with skeleton attaching class; prove reverse kernel inclusion and surjectivity; assemble.",
+    "Discharge boundary path casts; prove reverse kernel inclusion and surjectivity; assemble.",
     :outcome :stop,
-    :warnings
-    ["Main retains 1 placeholder" "unrelated dirt preserved"],
+    :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "torusRP2DiskBoundaryPath_map_quotient_eq_one",
-      :type "disk boundary dies in quotient pi1",
+    [{:name "torusRP2DiskBoundaryBase_eq_skeletonBase",
+      :type "boundary base alignment",
       :status :proved,
       :consumers [:t97A01],
       :depends-on [],
       :area "polygon-surface-pi1"}
-     {:name "torusRP2PairingSpace_basedVanKampen",
-      :type "canonical map surjective; kernel=relator closure",
+     {:name "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
+      :type "typed boundary-class transport",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2AttachingWord"
+      ["torusRP2DiskBoundaryBase_eq_skeletonBase"
        "torusRP2DiskBoundaryPath_map_quotient_eq_one"],
+      :area "polygon-surface-pi1"}
+     {:name "torusRP2PairingSpace_basedVanKampen",
+      :type "surjectivity and kernel",
+      :status :partial,
+      :consumers [:t97A01],
+      :depends-on ["torusRP2SkeletonBoundary_map_eq_diskBoundary_map"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88364,40 +88369,24 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked disk boundary nullhomotopy in polygon quotient.",
+    :reason "Banked disk/skeleton boundary basepoint alignment.",
     :commands
-    [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
-      :exit 0}
-     {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder/axiom scans; git show --check", :exit 0}],
+    [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
+     {:cmd "lake lean Main", :exit 0}
+     {:cmd "registry; scans; git check", :exit 0}],
     :diagnostic-history
-    [{:cmd "boundary-nullhomotopy drafts",
+    [{:cmd "boundary-class draft",
       :exit 1,
-      :correction
-      "wrapped quotient map as ContinuousMap; used path refl"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792051694803-13664-ceb72549",
-     :commands
-     ["git log/show/diff/check dbbc6a148..8ea6fc5b6"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 snapshot 8ea6fc5b6 adds compiled, sorry-free progress beyond dbbc6a148: the polygon disk boundary loop maps to one in quotient pi1. Only t97A01Closure.lean changed; fixture SHA b8c5e890ba6304f4654a0374a26daae4732493df1d4708bf529e071790e4a7c6 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. The proof correctly uses disk contractibility before functorial mapping. Snapshot also contains conditional presentation assembly from 40125480b; it is not counted as van Kampen discharge. The row explicitly retains boundary-class identification, reverse kernel inclusion, map surjectivity, and final assembly."},
-    :commit "8ea6fc5b6",
+      :correction "basepoint banked; casts remain"}],
+    :commit "9cf7f3444",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "b8c5e890ba6304f4654a0374a26daae4732493df1d4708bf529e071790e4a7c6"},
+     "07dd4d27291b656dc58be2cd326e6ba1093b47b95a2c52451c0a9b60b6a92169"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94125,7 +94114,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2attachingword
-    :lemma-torusrp2diskboundarypath-map-quotient-eq-one],
+    :lemma-torusrp2diskboundarypath-map-quotient-eq-one
+    :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94337,4 +94327,39 @@
    :id :lemma-torusrp2diskboundarypath-map-quotient-eq-one,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2DiskBoundaryBase_eq_skeletonBase",
+    :type "boundary base alignment"},
+   :lemma
+   {:name "torusRP2DiskBoundaryBase_eq_skeletonBase",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "boundary base alignment",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2diskboundarybase-eq-skeletonbase,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
+    :type "typed boundary-class transport"},
+   :lemma
+   {:name "torusRP2SkeletonBoundary_map_eq_diskBoundary_map",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "typed boundary-class transport",
+    :area "polygon-surface-pi1"},
+   :id :lemma-torusrp2skeletonboundary-map-eq-diskboundary-map,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2diskboundarybase-eq-skeletonbase
+    :lemma-torusrp2diskboundarypath-map-quotient-eq-one],
    :other-consumers []}]}
