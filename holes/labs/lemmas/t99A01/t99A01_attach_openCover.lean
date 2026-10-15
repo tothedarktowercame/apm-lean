@@ -196,10 +196,159 @@ union of the open disk interiors, because only boundary points of a disk are
 identified with circle points.  Use `isOpen_coinduced`, `Relation.EqvGen`
 induction on `AttachRel`. -/
 -- BEGIN SEAT AREA
+lemma t99A01_attach_openCover_aux_centre {r : ℕ} (degree : Fin r → ℕ)
+    (i : Fin r) (x : Sum Circle (Fin r × APMT99A01.Disk)) :
+    Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (i, APMT99A01.diskCentre)) x ↔
+      x = Sum.inr (i, APMT99A01.diskCentre) := by
+  let P := fun x : Sum Circle (Fin r × APMT99A01.Disk) =>
+    x = Sum.inr (i, APMT99A01.diskCentre)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b h
+    cases h with
+    | boundary j z =>
+      constructor
+      · intro h
+        cases h
+      · intro h
+        have hz : APMT99A01.circleInDisk z ≠ APMT99A01.diskCentre := by
+          intro he
+          have hv := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) he
+          change (z : ℂ) = 0 at hv
+          have := Circle.norm_coe z
+          rw [hv, norm_zero] at this
+          norm_num at this
+        have hp : (j, APMT99A01.circleInDisk z) =
+            (i, APMT99A01.diskCentre) := Sum.inr.inj h
+        exact False.elim (hz (Prod.mk.inj hp).2)
+  constructor
+  · intro h
+    have hinv : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+        (P a ↔ P b) := by
+      intro a b hab
+      induction hab with
+      | rel a b hab => exact hrel a b hab
+      | refl => exact Iff.rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+    exact (hinv _ _ h).mp rfl
+  · rintro rfl
+    exact Relation.EqvGen.refl _
+
+lemma t99A01_attach_openCover_aux_interior {r : ℕ} (degree : Fin r → ℕ)
+    (x y : Sum Circle (Fin r × APMT99A01.Disk))
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    (∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)) ↔
+      ∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ y = Sum.inr (i, z) := by
+  let P := fun x : Sum Circle (Fin r × APMT99A01.Disk) =>
+    ∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b hab
+    cases hab with
+    | boundary i z =>
+      constructor
+      · rintro ⟨j, w, hw, hbad⟩
+        cases hbad
+      · rintro ⟨j, w, hw, he⟩
+        have hp : (i, APMT99A01.circleInDisk z) = (j, w) := Sum.inr.inj he
+        have hij : i = j := (Prod.mk.inj hp).1
+        subst j
+        have hw' : w = APMT99A01.circleInDisk z := (Prod.mk.inj hp).2.symm
+        subst w
+        simp [APMT99A01.circleInDisk, Circle.norm_coe] at hw
+  induction h with
+  | rel a b hab => exact hrel a b hab
+  | refl => exact Iff.rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 theorem t99A01_attach_openCover {r : ℕ} (degree : Fin r → ℕ) :
     IsOpen (APMT99A01.sideA degree) ∧ IsOpen (APMT99A01.sideB degree) ∧
       APMT99A01.sideA degree ∪ APMT99A01.sideB degree = Set.univ := by
-  sorry
+  have hApre : (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree =
+      {x | ∀ i : Fin r, x ≠ Sum.inr (i, APMT99A01.diskCentre)} := by
+    ext x
+    simp only [Set.mem_preimage, APMT99A01.sideA, Set.mem_setOf_eq]
+    constructor
+    · intro h i he
+      apply h i
+      apply Quotient.sound
+      rw [he]
+    · intro h i he
+      apply h i
+      have heq : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, APMT99A01.diskCentre)) x := (Quotient.exact he.symm)
+      exact (t99A01_attach_openCover_aux_centre degree i x).mp heq
+  have hBpre : (APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideB degree =
+      {x | ∃ (i : Fin r) (z : APMT99A01.Disk),
+        ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)} := by
+    ext x
+    simp only [Set.mem_preimage, APMT99A01.sideB, Set.mem_setOf_eq]
+    constructor
+    · rintro ⟨i, z, hz, he⟩
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree) x (Sum.inr (i, z)) :=
+        Quotient.exact he
+      exact (t99A01_attach_openCover_aux_interior degree x _ hr).mpr ⟨i, z, hz, rfl⟩
+    · rintro ⟨i, z, hz, rfl⟩
+      exact ⟨i, z, hz, rfl⟩
+  have hA : IsOpen (APMT99A01.sideA degree) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideA degree)
+    rw [hApre]
+    have heq : {x : Sum Circle (Fin r × APMT99A01.Disk) |
+        ∀ i : Fin r, x ≠ Sum.inr (i, APMT99A01.diskCentre)} =
+        ⋂ i : Fin r, ({Sum.inr (i, APMT99A01.diskCentre)}ᶜ :
+          Set (Sum Circle (Fin r × APMT99A01.Disk))) := by
+      ext x
+      simp
+    rw [heq]
+    exact isOpen_iInter_of_finite fun i => isOpen_compl_singleton
+  have hB : IsOpen (APMT99A01.sideB degree) := by
+    rw [isOpen_coinduced]
+    change IsOpen ((APMT99A01.attachMk degree) ⁻¹' APMT99A01.sideB degree)
+    rw [hBpre, isOpen_sum_iff]
+    constructor
+    · simp
+    · have heq : Sum.inr ⁻¹' {x : Sum Circle (Fin r × APMT99A01.Disk) |
+          ∃ (i : Fin r) (z : APMT99A01.Disk), ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (i, z)} =
+          {p : Fin r × APMT99A01.Disk | ‖(p.2 : ℂ)‖ < 1} := by
+          ext p
+          constructor
+          · rintro ⟨i, z, hz, he⟩
+            have hp : p = (i, z) := Sum.inr.inj he
+            subst p
+            exact hz
+          · intro hp
+            exact ⟨p.1, p.2, hp, rfl⟩
+      rw [heq]
+      exact isOpen_lt
+        (continuous_norm.comp (continuous_subtype_val.comp continuous_snd)) continuous_const
+  refine ⟨hA, hB, Set.eq_univ_of_forall ?_⟩
+  intro q
+  refine Quotient.inductionOn q ?_
+  intro x
+  cases x with
+  | inl z =>
+      left
+      intro i he
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (i, APMT99A01.diskCentre)) (Sum.inl z) := Quotient.exact he.symm
+      have := (t99A01_attach_openCover_aux_centre degree i (Sum.inl z)).mp hr
+      cases this
+  | inr p =>
+      rcases p with ⟨i, z⟩
+      by_cases hz : ‖(z : ℂ)‖ < 1
+      · right
+        exact ⟨i, z, hz, rfl⟩
+      · left
+        intro j he
+        have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+            (Sum.inr (j, APMT99A01.diskCentre)) (Sum.inr (i, z)) := Quotient.exact he.symm
+        have hx := (t99A01_attach_openCover_aux_centre degree j (Sum.inr (i, z))).mp hr
+        have hp : (i, z) = (j, APMT99A01.diskCentre) := Sum.inr.inj hx
+        have hz0 : z = APMT99A01.diskCentre := (Prod.mk.inj hp).2
+        subst z
+        simp [APMT99A01.diskCentre] at hz
 -- END SEAT AREA
 
 /-- **Leaf (radial deformation, 100--150 lines).** `sideA` deformation retracts
