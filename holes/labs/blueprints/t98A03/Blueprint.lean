@@ -1825,13 +1825,64 @@ Route: `Quotient.map'` of `Sum.map α β` (relation preserved: `glue j` goes to
 `glue (π j)` by `hα, hβ`), and of `Sum.map α.symm β.symm` for the inverse
 (`α.symm (σ (π j)) = σ j`); continuity by `Continuous.quotient_map'` and
 `Continuous.sumMap`, as in `apm_t98a03_glueMap` below.  Estimated 40–70 lines. -/
+lemma apm_t98a03_glue_homeomorph_aux_respects {J A B : Type}
+    {σ : J → A} {τ : J → B} (α : A ≃ A) (β : B ≃ B) (π : J ≃ J)
+    (hα : ∀ j, α (σ j) = σ (π j)) (hβ : ∀ j, β (τ j) = τ (π j))
+    {x y : A ⊕ B} (h : Relation.EqvGen (apm_t98a03_GlueRel σ τ) x y) :
+    Relation.EqvGen (apm_t98a03_GlueRel σ τ) (Sum.map α β x) (Sum.map α β y) := by
+  induction h with
+  | rel x y hxy =>
+      cases hxy with
+      | glue j =>
+          simp only [Sum.map_inl, Sum.map_inr, hα, hβ]
+          exact Relation.EqvGen.rel _ _ (apm_t98a03_GlueRel.glue (π j))
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
 lemma apm_t98a03_glue_homeomorph {J A B : Type} [TopologicalSpace A]
     [TopologicalSpace B] {σ : J → A} {τ : J → B}
     (α : A ≃ₜ A) (β : B ≃ₜ B) (π : J ≃ J)
     (hα : ∀ j, α (σ j) = σ (π j)) (hβ : ∀ j, β (τ j) = τ (π j)) :
     ∃ h : apm_t98a03_Glue σ τ ≃ₜ apm_t98a03_Glue σ τ,
       ∀ x, h (apm_t98a03_glueMk σ τ x) = apm_t98a03_glueMk σ τ (Sum.map α β x) := by
-  sorry
+  have hα' : ∀ j, α.symm (σ j) = σ (π.symm j) := by
+    intro j
+    apply α.injective
+    simpa using (hα (π.symm j)).symm
+  have hβ' : ∀ j, β.symm (τ j) = τ (π.symm j) := by
+    intro j
+    apply β.injective
+    simpa using (hβ (π.symm j)).symm
+  let f : apm_t98a03_Glue σ τ → apm_t98a03_Glue σ τ :=
+    Quotient.map' (Sum.map α β)
+      (fun _ _ h => apm_t98a03_glue_homeomorph_aux_respects α β π hα hβ h)
+  let g : apm_t98a03_Glue σ τ → apm_t98a03_Glue σ τ :=
+    Quotient.map' (Sum.map α.symm β.symm)
+      (fun _ _ h => apm_t98a03_glue_homeomorph_aux_respects
+        α.symm β.symm π.symm hα' hβ' h)
+  have hfg : Function.LeftInverse g f := by
+    rintro ⟨x⟩
+    change apm_t98a03_glueMk σ τ
+        (Sum.map α.symm β.symm (Sum.map α β x)) = apm_t98a03_glueMk σ τ x
+    cases x <;> simp
+  have hgf : Function.RightInverse g f := by
+    rintro ⟨x⟩
+    change apm_t98a03_glueMk σ τ
+        (Sum.map α β (Sum.map α.symm β.symm x)) = apm_t98a03_glueMk σ τ x
+    cases x <;> simp
+  let e : apm_t98a03_Glue σ τ ≃ apm_t98a03_Glue σ τ :=
+    { toFun := f, invFun := g, left_inv := hfg, right_inv := hgf }
+  refine ⟨{ e with
+    continuous_toFun := ?_
+    continuous_invFun := ?_ }, ?_⟩
+  · exact Continuous.quotient_map' (α.continuous.sumMap β.continuous)
+      (fun _ _ h => apm_t98a03_glue_homeomorph_aux_respects α β π hα hβ h)
+  · exact Continuous.quotient_map' (α.symm.continuous.sumMap β.symm.continuous)
+      (fun _ _ h => apm_t98a03_glue_homeomorph_aux_respects
+        α.symm β.symm π.symm hα' hβ' h)
+  · intro x
+    rfl
 
 /-- The point wedge as a glued space. -/
 abbrev apm_t98a03_Wedge {A B : Type} (a₀ : A) (b₀ : B) :=
