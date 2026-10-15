@@ -87901,26 +87901,26 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Cast concat_subpath homotopy; identify endpoint subpath with boundary, then B7-B10.",
+    "Pass the subdivision homotopy through quotient and Hurewicz; then B7-B10.",
     :outcome :stop,
     :warnings ["preexisting lint"],
     :missing-theorems
-    [{:name "polygonBoundaryConcat_cast_eq_canonical",
-      :type "cast subdivision concat equals based concat",
+    [{:name "polygonBoundaryCanonicalConcat_homotopic",
+      :type "based subdivision concat is homotopic to boundary loop",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["path_concat_cast_vertices"],
+      :depends-on ["polygonBoundaryConcat_cast_eq_canonical"],
       :area "polygon-quotient-homology"}
      {:name "finitePathSubdivision_boundary",
       :type "boundary H1 is signed-edge sum",
       :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on
-      ["polygonBoundaryConcat_cast_eq_canonical"
+      ["polygonBoundaryCanonicalConcat_homotopic"
        "polygonBoundarySubdivisionConcat_hurewicz"],
       :area "polygon-quotient-homology"}
      {:name "radialMV_boundary_eq_orientationSigned",
@@ -87933,7 +87933,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked concat endpoint transport.",
+    :reason "Banked the boundary subdivision homotopy.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87941,34 +87941,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check ed6ade796", :exit 0}],
+     {:cmd "git show --check 8f6afae39", :exit 0}],
     :diagnostic-history
-    [{:cmd "transport draft",
+    [{:cmd "endpoint drafts",
       :exit 1,
-      :correction "made casts explicit"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792028219181-12956-1616a232",
-     :commands
-     ["git show/diff-tree ed6ade796"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit ed6ade796 by topo-6 changes only the scoped target; fixture hash 1f98f0b2...473c6 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Path.concat_succ and Path.cast_trans distribute the global endpoint transport over the initial factors followed by the last, preserving traversal order; the n=0 equality is oriented correctly. Specialization therefore equates the dependent subdivision concat with its common-base canonical concat. New compiled progress; remaining milestones are casting the concat_subpath homotopy and comparing boundary H1, then B7-B10."},
-    :commit "ed6ade796",
+      :correction "used pointwise casts and reversed conversion"}],
+    :commit "8f6afae39",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "1f98f0b2614bdbcf1089195e247af938055b526e573ca9b1ff576a078dc473c6"},
+     "96845ae777a4ac847037637fd806cc47c5ec241bace63f107b2aba2a9cc0460e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92229,7 +92215,8 @@
     :lemma-polygonboundarysubdivisionconcat-hurewicz
     :lemma-orbitwedgebase-eq-boundarysubdivisionvertex
     :lemma-polygonboundarycanonicalsubdivisionpathatbase-eq-signededge
-    :lemma-polygonboundaryconcat-cast-eq-canonical],
+    :lemma-polygonboundaryconcat-cast-eq-canonical
+    :lemma-polygonboundarycanonicalconcat-homotopic],
    :other-consumers [:t94J09]}
   {:consumer :t92J06,
    :phase :lemma,
@@ -92730,4 +92717,21 @@
    :id :lemma-path-concat-cast-vertices,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}]}
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polygonBoundaryCanonicalConcat_homotopic",
+    :type "based subdivision concat is homotopic to boundary loop"},
+   :lemma
+   {:name "polygonBoundaryCanonicalConcat_homotopic",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "based subdivision concat is homotopic to boundary loop",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-polygonboundarycanonicalconcat-homotopic,
+   :kind :lemma,
+   :depends-on [:lemma-polygonboundaryconcat-cast-eq-canonical],
+   :other-consumers [:t94J09]}]}
