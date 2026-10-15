@@ -87946,6 +87946,20 @@
     [{:cmd "class drafts",
       :exit 1,
       :correction "banked endpoint transport first"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792026105528-12885-24a627f1",
+     :commands
+     ["git show/diff-tree 2d90f2ee3"
+      "sha256sum committed blob"
+      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
+      "#print axioms new definitions/theorem"
+      "statement-registry.py check"
+      "placeholder scan"
+      "git show --check"],
+     :finding
+     "Reviewer codex-7: commit 2d90f2ee3 by topo-6 changes only the scoped target; fixture hash f8a4f820...c5d32 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Both endpoints are transported from the signed edge leg point to the chosen polygon-word basepoint by the canonical wedge-point equality; Path.cast_coe verifies the pointwise parametrization is unchanged. New compiled progress; remaining milestones are subdivision-loop identification and concat-sum, then B7-B10."},
     :commit "2d90f2ee3",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
@@ -87954,7 +87968,7 @@
      "f8a4f82050c72aee245add2653926b1b1096d10aa941ede0be12cd56c24c5d32"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -87974,7 +87988,7 @@
     :blueprint
     "ConstructionTargets/PolygonSurfaceHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Hurewicz finite-concat sum in traversal order.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked common-base signed-edge paths.",
    :id :program-2026-10-13-polygon-surface-homology,
    :kind :reusable-theorem,
    :campaign-priority 31,
@@ -88273,7 +88287,10 @@
      :reason "Banked exact finite-concat product order."}
     {:job 3,
      :commit "350e17e86",
-     :reason "Banked Hurewicz finite-concat sum in traversal order."}]}
+     :reason "Banked Hurewicz finite-concat sum in traversal order."}
+    {:job 4,
+     :commit "2d90f2ee3",
+     :reason "Banked common-base signed-edge paths."}]}
   {:consumer :t97A01,
    :stop-count 0,
    :phase :implementation,
@@ -92568,7 +92585,7 @@
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "polygonBoundarySignedEdgePathAtBase_apply",
@@ -92578,7 +92595,9 @@
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "common-base transport preserves path values",
     :area "polygon-quotient-homology",
-    :proved-in :program-2026-10-13-polygon-surface-homology},
+    :proved-in :program-2026-10-13-polygon-surface-homology,
+    :banked-by :program-2026-10-13-polygon-surface-homology,
+    :banked-commit "2d90f2ee3"},
    :id :lemma-polygonboundarysignededgepathatbase-apply,
    :kind :lemma,
    :depends-on [:lemma-polygonboundaryintegerloop-subpath-cast],
