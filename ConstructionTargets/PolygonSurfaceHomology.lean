@@ -5261,6 +5261,29 @@ noncomputable def boundaryCokernelToRadialH1 (P : PairingData) :
   (radialMVH1QuotientMap P).comp
     (radialMVBoundaryCokernelEquiv P).symm.toLinearMap
 
+/-- Exactness at the reduced outer-piece term identifies the reassembly
+kernel with the production boundary range. -/
+theorem radialMVReassemblyLinear_ker (P : PairingData) :
+    LinearMap.ker (radialMVReassemblyLinear P) =
+      LinearMap.range (radialMVBoundaryLinear P) := by
+  symm
+  exact congrArg (fun S : AddSubgroup (PairingOrbit P.pair → ℤ) => S.toIntSubmodule)
+    (radialMVReducedPiecesExact P).ab_range_eq_ker
+
+/-- The quotient-to-surface-H₁ map is injective; this is the middle
+exactness half of the B8 cokernel identification. -/
+theorem radialMVH1QuotientMap_injective (P : PairingData) :
+    Function.Injective (radialMVH1QuotientMap P) := by
+  rw [← LinearMap.ker_eq_bot]
+  apply Submodule.ker_liftQ_eq_bot
+  rw [radialMVReassemblyLinear_ker]
+
+/-- The canonical B3-cokernel map is injective. -/
+theorem boundaryCokernelToRadialH1_injective (P : PairingData) :
+    Function.Injective (boundaryCokernelToRadialH1 P) :=
+  (radialMVH1QuotientMap_injective P).comp
+    (radialMVBoundaryCokernelEquiv P).symm.injective
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
