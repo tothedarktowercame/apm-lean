@@ -4,11 +4,11 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import Mathlib.GroupTheory.PresentedGroup
 import ConstructionTargets.Surfaces
-import ConstructionTargets.PointWedgeQuotient
-import ConstructionTargets.PointWedgeVanKampen
-import ConstructionTargets.GenericTargetNaturalSourceReconstruction
-import ConstructionTargets.TorusCircleWedgeMayerVietoris
-import ConstructionTargets.T00A01MayerVietorisAdapters
+import ConstructionTargets.GenusTwoSurfacePiOne
+import ConstructionTargets.TwoOpenAttachOneCell
+import ConstructionTargets.IntegralOpenCoverMayerVietoris
+import ConstructionTargets.IntegralSingularHomologyComparison
+import ConstructionTargets.PolygonSurfaceHomology
 
 open CategoryTheory Set
 
@@ -20,31 +20,40 @@ def apm_t97J04_edgePoint (n : ℕ) (j : Fin n)
     (t : Set.Icc (0 : ℝ) 1) : apm_t97J04_Disk :=
   ConstructionTargets.Surfaces.edgePoint n j t
 
+/-- The genus-two octagon, together with a second disk attached along the
+meridian represented by the fifth edge.  The first four octagon letters are
+the first punctured torus and the last four are the second punctured torus;
+the extra disk is its meridional disk. -/
 inductive apm_t97J04_ComplexRel :
     Sum apm_t97J04_Disk apm_t97J04_Disk →
       Sum apm_t97J04_Disk apm_t97J04_Disk → Prop
   | a (t : Set.Icc (0 : ℝ) 1) :
       apm_t97J04_ComplexRel
         (.inl (apm_t97J04_edgePoint 8 0 t))
-        (.inl (apm_t97J04_edgePoint 8 2 ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩))
+        (.inl (apm_t97J04_edgePoint 8 2 ⟨1 - t.1, by
+          constructor <;> linarith [t.2.1, t.2.2]⟩))
   | b (t : Set.Icc (0 : ℝ) 1) :
       apm_t97J04_ComplexRel
         (.inl (apm_t97J04_edgePoint 8 1 t))
-        (.inl (apm_t97J04_edgePoint 8 3 ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩))
+        (.inl (apm_t97J04_edgePoint 8 3 ⟨1 - t.1, by
+          constructor <;> linarith [t.2.1, t.2.2]⟩))
   | c (t : Set.Icc (0 : ℝ) 1) :
       apm_t97J04_ComplexRel
         (.inl (apm_t97J04_edgePoint 8 4 t))
-        (.inl (apm_t97J04_edgePoint 8 6 ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩))
+        (.inl (apm_t97J04_edgePoint 8 6 ⟨1 - t.1, by
+          constructor <;> linarith [t.2.1, t.2.2]⟩))
   | d (t : Set.Icc (0 : ℝ) 1) :
       apm_t97J04_ComplexRel
         (.inl (apm_t97J04_edgePoint 8 5 t))
-        (.inl (apm_t97J04_edgePoint 8 7 ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩))
+        (.inl (apm_t97J04_edgePoint 8 7 ⟨1 - t.1, by
+          constructor <;> linarith [t.2.1, t.2.2]⟩))
   | meridian (t : Set.Icc (0 : ℝ) 1) :
       apm_t97J04_ComplexRel
         (.inl (apm_t97J04_edgePoint 8 4 t))
         (.inr (apm_t97J04_edgePoint 1 0 t))
 
-def apm_t97J04_X := Quotient (Relation.EqvGen.setoid apm_t97J04_ComplexRel)
+def apm_t97J04_X :=
+  Quotient (Relation.EqvGen.setoid apm_t97J04_ComplexRel)
 
 noncomputable instance : TopologicalSpace apm_t97J04_X :=
   TopologicalSpace.coinduced
@@ -55,7 +64,8 @@ def apm_t97J04_basepoint : apm_t97J04_X :=
   Quotient.mk _ (.inl (0 : apm_t97J04_Disk))
 
 def apm_t97J04_relator : FreeGroup (Fin 3) :=
-  FreeGroup.of 0 * FreeGroup.of 1 * (FreeGroup.of 0)⁻¹ * (FreeGroup.of 1)⁻¹
+  FreeGroup.of 0 * FreeGroup.of 1 *
+    (FreeGroup.of 0)⁻¹ * (FreeGroup.of 1)⁻¹
 
 abbrev apm_t97J04_piOne :=
   PresentedGroup ({apm_t97J04_relator} : Set (FreeGroup (Fin 3)))
@@ -64,254 +74,445 @@ abbrev apm_t97J04_H (k : ℕ) :=
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t97J04_X))
 
-abbrev apm_t97J04_W :=
-  ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge
 
-def apm_t97J04_wedgeBase : apm_t97J04_W :=
-  ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase
+/-! # Blueprint for APM t97J04 (claude-14, 2026-10-15)
 
-abbrev apm_t97J04_WH (k : ℕ) :=
-  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
-    (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t97J04_W))
+`X` = genus-two octagon + a disk on the meridian edge `c` (edge 4).  Route:
+`X ≅ (W ∪_word D²) ∪_c D²`, where `W` is the orbit-indexed wedge of four
+circles, `word` the polygon boundary loop (`[a,b][c,d]`), and `c` the leg of
+edge 4.  Part A proves, once and generically, π₁ and homology of a space with
+one 2-cell attached along a loop `γ : C(Circle, Y)`; part B applies it twice.
+No homotopy equivalence of `X` itself is constructed.
+-/
 
-/-- LIBRARY: the remaining geometric core.  Construct the two quotient maps
-and the two explicit homotopies which collapse the meridian disk together
-with the `c`-handle.  This is kept as one leaf because the repository has no
-polygon/CW coordinate model in which the four constructions can be stated
-separately without making the compatibility condition circular. -/
-theorem apm_t97J04_complex_wedge_homotopyEquiv :
-    Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W) := by
+namespace APMT97J04
+
+open scoped ContinuousMap
+
+open ConstructionTargets
+open ConstructionTargets.PolygonSurfacePiOne
+open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
+
+/-! ## Part A: attaching one 2-cell along a loop -/
+
+section AttachCell
+
+variable {Y : Type} [TopologicalSpace Y]
+
+/-- The boundary circle of the attached disk. -/
+abbrev circleToDisk (z : Circle) : apm_t97J04_Disk :=
+  PolygonSurfaceHomology.circleToPolygonDisk z
+
+/-- `inl (γ z) ~ inr z` for `z` on the boundary circle of the disk. -/
+inductive CellRel (γ : C(Circle, Y)) :
+    Y ⊕ apm_t97J04_Disk → Y ⊕ apm_t97J04_Disk → Prop
+  | boundary (z : Circle) : CellRel γ (.inl (γ z)) (.inr (circleToDisk z))
+
+/-- `Y ∪_γ D²`. -/
+def Cell (γ : C(Circle, Y)) : Type :=
+  Quotient (Relation.EqvGen.setoid (CellRel γ))
+
+instance (γ : C(Circle, Y)) : TopologicalSpace (Cell γ) :=
+  TopologicalSpace.coinduced
+    (fun x : Y ⊕ apm_t97J04_Disk ↦ Quotient.mk (Relation.EqvGen.setoid (CellRel γ)) x)
+    inferInstance
+
+def cellMk (γ : C(Circle, Y)) (x : Y ⊕ apm_t97J04_Disk) : Cell γ :=
+  Quotient.mk (Relation.EqvGen.setoid (CellRel γ)) x
+
+theorem continuous_cellMk (γ : C(Circle, Y)) : Continuous (cellMk γ) :=
+  continuous_coinduced_rng
+
+/-- The inclusion `Y → Y ∪_γ D²`. -/
+def cellIncl (γ : C(Circle, Y)) : C(Y, Cell γ) :=
+  ⟨fun y ↦ cellMk γ (.inl y), (continuous_cellMk γ).comp continuous_inl⟩
+
+/-- The characteristic map of the cell. -/
+def cellDisk (γ : C(Circle, Y)) : C(apm_t97J04_Disk, Cell γ) :=
+  ⟨fun z ↦ cellMk γ (.inr z), (continuous_cellMk γ).comp continuous_inr⟩
+
+/-- Outer piece: `Y` together with the annulus `1/3 < |z| ≤ 1`. -/
+def cellOuter (γ : C(Circle, Y)) : Set (Cell γ) :=
+  cellMk γ '' (Set.range (Sum.inl : Y → Y ⊕ apm_t97J04_Disk) ∪
+    Sum.inr '' {z : apm_t97J04_Disk | (1 : ℝ) / 3 < ‖(z : ℂ)‖})
+
+/-- Inner piece: the open disk `|z| < 2/3`. -/
+def cellInner (γ : C(Circle, Y)) : Set (Cell γ) :=
+  cellMk γ '' (Sum.inr '' {z : apm_t97J04_Disk | ‖(z : ℂ)‖ < (2 : ℝ) / 3})
+
+/-- `Y` into the outer piece. -/
+def cellInclOuter (γ : C(Circle, Y)) : C(Y, cellOuter γ) :=
+  ⟨fun y ↦ ⟨cellIncl γ y, ⟨.inl y, Or.inl ⟨y, rfl⟩, rfl⟩⟩,
+    (cellIncl γ).continuous.subtype_mk _⟩
+
+/-- The circle of radius `1/2` in the disk. -/
+def halfDisk (z : Circle) : apm_t97J04_Disk :=
+  ⟨(z : ℂ) / 2, by
+    rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]
+    norm_num⟩
+
+theorem norm_halfDisk (z : Circle) : ‖((halfDisk z : apm_t97J04_Disk) : ℂ)‖ = 1 / 2 := by
+  change ‖(z : ℂ) / 2‖ = 1 / 2
+  rw [norm_div, Circle.norm_coe]
+  norm_num
+
+theorem continuous_halfDisk : Continuous halfDisk :=
+  (continuous_subtype_val.div_const 2).subtype_mk _
+
+/-- The radius-`1/2` circle in the overlap annulus. -/
+def cellOverlapCircle (γ : C(Circle, Y)) :
+    C(Circle, (cellOuter γ ∩ cellInner γ : Set (Cell γ))) :=
+  ⟨fun z ↦ ⟨cellMk γ (.inr (halfDisk z)),
+      ⟨⟨.inr (halfDisk z), Or.inr ⟨halfDisk z, by
+          change (1 : ℝ) / 3 < ‖((halfDisk z : apm_t97J04_Disk) : ℂ)‖
+          rw [norm_halfDisk]; norm_num, rfl⟩, rfl⟩,
+       ⟨.inr (halfDisk z), ⟨halfDisk z, by
+          change ‖((halfDisk z : apm_t97J04_Disk) : ℂ)‖ < (2 : ℝ) / 3
+          rw [norm_halfDisk]; norm_num, rfl⟩, rfl⟩⟩⟩,
+    (((continuous_cellMk γ).comp (continuous_inr.comp continuous_halfDisk))).subtype_mk _⟩
+
+/-- The class of `γ` in `π₁(Y, y)`, for any name `y` of `γ 1`. -/
+def loopClassAt (γ : C(Circle, Y)) (y : Y) (h : γ 1 = y) : FundamentalGroup Y y :=
+  Path.Homotopic.Quotient.cast
+    (FundamentalGroup.map γ 1 PolygonSurfaceHomology.circleIntegerLoopOneClass)
+    h.symm h.symm
+
+/-- Integral singular homology (the problem's functor) and induced maps. -/
+abbrev H (k : ℕ) (S : Type) [TopologicalSpace S] : ModuleCat ℤ :=
+  PolygonSurfaceHomology.SpaceH S k
+
+def Hmap {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
+    (f : C(S, T)) (k : ℕ) : H k S ⟶ H k T :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
+
+
+/-- A1. The two pieces are open and cover. Saturation: `cellMk⁻¹(outer)` is
+`range inl ∪ inr '' {1/3 < |z|}` (boundary points of the disk are related only
+to points of `Y`); same for inner (no boundary points). -/
+lemma cell_cover (γ : C(Circle, Y)) :
+    IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ := by
   sorry
 
-/-- A supplied geometric homotopy equivalence gives the required based
-fundamental-group comparison.  The conclusion of the geometric leaf is an
-explicit hypothesis, so this transport can be proved independently. -/
-local instance apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_circlePathConnected :
-    PathConnectedSpace Circle :=
-  pathConnectedSpace_iff_univ.mpr (by
-    have hc : IsPathConnected
-        (ConstructionTargets.CircleHomology.circleHomeomorphSphereOne ⁻¹'
-          (Set.univ : Set (ConstructionTargets.SphereHomology.Sphere 1))) :=
-      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.isPathConnected_preimage.mpr
-        isPathConnected_univ
-    simpa using hc)
+/-- A2. The inner piece is homeomorphic to the open ball `|z| < 2/3`. -/
+lemma cell_inner_contractible (γ : C(Circle, Y)) :
+    ContractibleSpace (cellInner γ) := by
+  sorry
 
-local instance apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_torusPathConnected :
-    PathConnectedSpace (Circle × Circle) :=
-  ⟨⟨(1, 1)⟩, fun x y ↦
-    ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
-      (PathConnectedSpace.somePath x.2 y.2)⟩⟩
+/-- A3. The overlap annulus `1/3 < |z| < 2/3` deformation retracts to the
+radius-`1/2` circle. -/
+lemma cell_overlap_hequiv (γ : C(Circle, Y)) :
+    ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ := by
+  sorry
 
-theorem apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_wedge_isPathConnected :
-    IsPathConnected (Set.univ : Set apm_t97J04_W) := by
-  let qmap := ConstructionTargets.PointWedgeQuotient.quotientMap
-    ((1, 1) : Circle × Circle) (1 : Circle)
-  refine ⟨qmap (.inl (1, 1)), Set.mem_univ _, ?_⟩
-  intro r _
-  obtain ⟨b, rfl⟩ :=
-    ConstructionTargets.PointWedgeQuotient.surjective_quotientMap
-      ((1, 1) : Circle × Circle) (1 : Circle) r
-  have hleft : Continuous (fun x : Circle × Circle ↦ qmap (.inl x)) :=
-    (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
-      ((1, 1) : Circle × Circle) (1 : Circle)).comp continuous_inl
-  have hright : Continuous (fun y : Circle ↦ qmap (.inr y)) :=
-    (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
-      ((1, 1) : Circle × Circle) (1 : Circle)).comp continuous_inr
-  rw [joinedIn_univ]
-  cases b with
-  | inl x =>
-      obtain ⟨γ⟩ := PathConnectedSpace.joined ((1, 1) : Circle × Circle) x
-      exact ⟨γ.map hleft⟩
-  | inr y =>
-      obtain ⟨δ⟩ := PathConnectedSpace.joined (1 : Circle) y
-      have hw : qmap (.inl (1, 1)) = qmap (.inr 1) :=
-        Quotient.sound (Relation.EqvGen.rel _ _
-          (ConstructionTargets.PointWedgeQuotient.Rel.base
-            (x₀ := ((1, 1) : Circle × Circle)) (y₀ := (1 : Circle))))
-      exact ⟨(Path.refl _).trans ((δ.map hright).cast hw rfl)⟩
+/-- A4. Radial retraction of the outer piece onto `Y`:
+`inr w ↦ inl (γ (w / |w|))`, homotopic to the identity through
+`inr w ↦ inr ((1 - t) w + t w / |w|)` (as in t99A01's succ_retract/deform). -/
+lemma cell_outer_hequiv (γ : C(Circle, Y)) :
+    ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ := by
+  sorry
 
-local instance apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_wedgePathConnected :
-    PathConnectedSpace apm_t97J04_W :=
-  pathConnectedSpace_iff_univ.mpr
-    apm_t97J04_fundamentalGroup_of_homotopyEquiv_aux_wedge_isPathConnected
+/-- A5. The radius-`1/2` circle, pushed into the outer piece, is freely
+homotopic to `γ` (radial push to the boundary circle, where `inr z = inl (γ z)`). -/
+lemma cell_overlap_loop (γ : C(Circle, Y)) :
+    ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ) := by
+  sorry
 
-theorem apm_t97J04_fundamentalGroup_of_homotopyEquiv
-    (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W)) :
-    Nonempty
-      (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
-        FundamentalGroup apm_t97J04_W apm_t97J04_wedgeBase) := by
-  obtain ⟨e⟩ := h
-  let E := FundamentalGroupoidFunctor.equivOfHomotopyEquiv e
-  let eπ := E.fullyFaithfulFunctor.mulEquivEnd
-    (FundamentalGroupoid.mk apm_t97J04_basepoint)
-  exact ⟨eπ.trans
-    (FundamentalGroup.fundamentalGroupMulEquivOfPathConnected
-      (e apm_t97J04_basepoint) apm_t97J04_wedgeBase)⟩
+/-- A6. Path-connectedness of the pieces and of the cell space. -/
+lemma cell_pathConnected (γ : C(Circle, Y)) [PathConnectedSpace Y]
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ) :
+    PathConnectedSpace (cellOuter γ) ∧
+      PathConnectedSpace (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ∧
+      PathConnectedSpace (Cell γ) := by
+  sorry
 
-/-- A supplied geometric homotopy equivalence induces the all-degree
-singular-homology comparison.  This is independent of the based fundamental
-group transport. -/
-theorem apm_t97J04_homology_of_homotopyEquiv
-    (h : Nonempty (ContinuousMap.HomotopyEquiv apm_t97J04_X apm_t97J04_W)) :
-    ∀ k : ℕ, Nonempty (apm_t97J04_H k ≅ apm_t97J04_WH k) := by
-  rcases h with ⟨e⟩
-  intro k
-  exact ⟨ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv e k⟩
+/-- A7. **van Kampen for one 2-cell.**  The inclusion `Y → Y ∪_γ D²` is onto
+on π₁ with kernel the normal closure of `[γ]`.  Apply
+`apm_t92J05_twoOpen_simplyConnectedRight_kernel` to the cover (A1, A2, A6) at
+the overlap point `cellOverlapCircle γ 1`; transfer from the outer piece to
+`Y` by A4, identify the overlap image with a conjugate of `[γ]` by A3 + A5
+(a free homotopy conjugates; normal closures absorb conjugation), and move the
+basepoint along any path (again a conjugation). -/
+lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = y)
+    (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ)
+    (hA2 : ContractibleSpace (cellInner γ))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
+    (hA6 : PathConnectedSpace (cellOuter γ) ∧
+      PathConnectedSpace (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ∧
+      PathConnectedSpace (Cell γ)) :
+    Function.Surjective (FundamentalGroup.map (cellIncl γ) y) ∧
+      (FundamentalGroup.map (cellIncl γ) y).ker =
+        Subgroup.normalClosure {loopClassAt γ y h} := by
+  sorry
 
-/-- Assemble the two invariant transports from the common geometric
-homotopy equivalence. -/
-theorem apm_t97J04_complex_to_wedge :
-    Nonempty
-      (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
-        FundamentalGroup apm_t97J04_W apm_t97J04_wedgeBase) ∧
-    (∀ k : ℕ, Nonempty (apm_t97J04_H k ≅ apm_t97J04_WH k)) := by
-  exact
-    ⟨apm_t97J04_fundamentalGroup_of_homotopyEquiv
-        apm_t97J04_complex_wedge_homotopyEquiv,
-      apm_t97J04_homology_of_homotopyEquiv
-        apm_t97J04_complex_wedge_homotopyEquiv⟩
+/-- A8. **H₁ of a 2-cell attachment.**  Integral Mayer–Vietoris
+(`IntegralMV.integralMayerVietoris`, transported to the `singularHomologyFunctor`
+form by `IntegralSingularHomologyComparison`) for the cover A1: `H₁(inner) = 0`,
+`H₀(overlap) → H₀(outer) ⊕ H₀(inner)` injective, `H₁(overlap) ≅ H₁(Circle)` by
+A3 and its image is `γ_*` by A5, `H₁(outer) ≅ H₁(Y)` by A4. -/
+lemma cell_H1 (γ : C(Circle, Y)) [PathConnectedSpace Y]
+    (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ)
+    (hA2 : ContractibleSpace (cellInner γ))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ)) :
+    Function.Surjective (Hmap (cellIncl γ) 1).hom ∧
+      LinearMap.ker (Hmap (cellIncl γ) 1).hom = LinearMap.range (Hmap γ 1).hom := by
+  sorry
 
-/-- Pure group-presentation simplification: `ℤ² * ℤ` is the three-generator
-presentation with the single commutator relation on the first two generators. -/
-def apm_t97J04_coprod_equiv_presentation_aux_zpowHom {G : Type*} [Group G] (x : G) :
-    Multiplicative ℤ →* G where
-  toFun n := x ^ Multiplicative.toAdd n
-  map_one' := by simp
-  map_mul' m n := by
-    change x ^ (Multiplicative.toAdd m + Multiplicative.toAdd n) = _
-    exact zpow_add x _ _
+/-- A9. If `γ_*` is injective on `H₁`, then `H₂(Y) → H₂(Y ∪_γ D²)` is bijective
+(Mayer–Vietoris at degree 2: `H₂(overlap) = 0`, connecting map lands in
+`ker γ_* = 0`). -/
+lemma cell_H2_of_injective (γ : C(Circle, Y))
+    (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ)
+    (hA2 : ContractibleSpace (cellInner γ))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
+    (hinj : Function.Injective (Hmap γ 1).hom) :
+    Function.Bijective (Hmap (cellIncl γ) 2).hom := by
+  sorry
 
-def apm_t97J04_coprod_equiv_presentation_aux_prodHom {G : Type*} [Group G]
-    (x y : G) (hxy : Commute x y) : Multiplicative (ℤ × ℤ) →* G :=
-  (apm_t97J04_coprod_equiv_presentation_aux_zpowHom x).noncommCoprod
-    (apm_t97J04_coprod_equiv_presentation_aux_zpowHom y)
-    (fun m n ↦ hxy.zpow_zpow (Multiplicative.toAdd m) (Multiplicative.toAdd n))
+/-- A10. If `H₂(Y) = 0` and `γ_* = 0` on `H₁`, then `H₂(Y ∪_γ D²) ≅ ℤ`
+(the connecting map is an iso onto `H₁(overlap) ≅ H₁(Circle) ≅ ℤ`). -/
+lemma cell_H2_of_zero (γ : C(Circle, Y))
+    (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ)
+    (hA2 : ContractibleSpace (cellInner γ))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (hA5 : ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ))
+    (hY2 : Limits.IsZero (H 2 Y)) (hγ : Hmap γ 1 = 0) :
+    Nonempty (H 2 (Cell γ) ≅ ModuleCat.of ℤ ℤ) := by
+  sorry
 
-theorem apm_t97J04_coprod_equiv_presentation :
-    Nonempty
-      (Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ) ≃*
-        apm_t97J04_piOne) := by
-  let P := apm_t97J04_piOne
-  let a : P := PresentedGroup.of 0
-  let b : P := PresentedGroup.of 1
-  let c : P := PresentedGroup.of 2
-  have hrel : a * b * a⁻¹ * b⁻¹ = 1 := by
-    exact PresentedGroup.one_of_mem (by simp [apm_t97J04_relator, a, b])
-  have hab : Commute a b := by
-    rw [commute_iff_eq]
-    exact (mul_inv_eq_iff_eq_mul).mp ((mul_eq_one_iff_eq_inv).mp hrel)
-  let fAB : Multiplicative (ℤ × ℤ) →* P :=
-    apm_t97J04_coprod_equiv_presentation_aux_prodHom a b hab
-  let fC : Multiplicative ℤ →* P :=
-    apm_t97J04_coprod_equiv_presentation_aux_zpowHom c
-  let f : Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ) →* P :=
-    Monoid.Coprod.lift fAB fC
-  let A := Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ)
-  let gen : Fin 3 → A := ![
-    Monoid.Coprod.inl (Multiplicative.ofAdd (1, 0)),
-    Monoid.Coprod.inl (Multiplicative.ofAdd (0, 1)),
-    Monoid.Coprod.inr (Multiplicative.ofAdd 1)]
-  have gen_rel : ∀ r ∈ ({apm_t97J04_relator} : Set (FreeGroup (Fin 3))),
-      FreeGroup.lift gen r = 1 := by
-    intro r hr
-    simp only [Set.mem_singleton_iff] at hr
-    subst r
-    change gen 0 * gen 1 * (gen 0)⁻¹ * (gen 1)⁻¹ = 1
-    simp only [gen, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two]
-    have hc : Commute
-        ((Monoid.Coprod.inl : Multiplicative (ℤ × ℤ) →* A)
-          (Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))))
-        ((Monoid.Coprod.inl : Multiplicative (ℤ × ℤ) →* A)
-          (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ)))) := by
-      exact (Commute.all
-        (Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ)))
-        (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ)))).map
-          (Monoid.Coprod.inl : Multiplicative (ℤ × ℤ) →* A)
-    rw [hc.mul_inv_cancel, mul_inv_cancel]
-  let g : P →* A := PresentedGroup.toGroup gen_rel
-  have hgf : g.comp f = MonoidHom.id A := by
-    apply Monoid.Coprod.hom_ext
-    · apply MonoidHom.ext
-      intro p
-      rcases p with ⟨m, n⟩
-      change g (a ^ m * b ^ n) = Monoid.Coprod.inl (Multiplicative.ofAdd (m, n))
-      rw [map_mul, map_zpow, map_zpow]
-      simp only [g, a, b, PresentedGroup.toGroup.of, gen, Matrix.cons_val_zero,
-        Matrix.cons_val_one]
-      change Monoid.Coprod.inl (Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))) ^ m *
-        Monoid.Coprod.inl (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ))) ^ n =
-        Monoid.Coprod.inl (Multiplicative.ofAdd (m, n))
-      calc
-        _ = Monoid.Coprod.inl
-            ((Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))) ^ m) *
-            Monoid.Coprod.inl
-            ((Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ))) ^ n) := by
-              rw [map_zpow, map_zpow]
-        _ = Monoid.Coprod.inl
-            ((Multiplicative.ofAdd ((1 : ℤ), (0 : ℤ))) ^ m *
-             (Multiplicative.ofAdd ((0 : ℤ), (1 : ℤ))) ^ n) := by rw [map_mul]
-        _ = _ := by
-          congr
-          apply Multiplicative.toAdd.injective
-          ext <;> simp
-    · apply MonoidHom.ext
-      intro n
-      simp only [MonoidHom.comp_apply, f, Monoid.Coprod.lift_apply_inr, fC,
-        apm_t97J04_coprod_equiv_presentation_aux_zpowHom, g, PresentedGroup.toGroup.of,
-        MonoidHom.id_apply, gen]
-      norm_num
-      change Monoid.Coprod.inr (Multiplicative.ofAdd 1) ^ Multiplicative.toAdd n =
-        Monoid.Coprod.inr n
-      rw [← map_zpow]
-      congr
-      apply Multiplicative.toAdd.injective
-      simp
-  have hfg : f.comp g = MonoidHom.id P := by
-    apply PresentedGroup.ext
-    intro i
-    change f (g (PresentedGroup.of i)) = PresentedGroup.of i
-    rw [show g (PresentedGroup.of i) = gen i from PresentedGroup.toGroup.of gen_rel]
-    fin_cases i
-    · change a ^ (1 : ℤ) * b ^ (0 : ℤ) = PresentedGroup.of 0
-      simp [a]
-    · change a ^ (0 : ℤ) * b ^ (1 : ℤ) = PresentedGroup.of 1
-      simp [b]
-    · change c ^ (1 : ℤ) = PresentedGroup.of 2
-      simp [c]
-  exact ⟨MonoidHom.toMulEquiv f g hgf hfg⟩
+/-- A11. In degrees `k ≥ 3` the inclusion is an isomorphism on homology
+(`H_k` and `H_{k-1}` of the overlap and `H_k` of the inner piece vanish). -/
+lemma cell_H_high (γ : C(Circle, Y))
+    (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ)
+    (hA2 : ContractibleSpace (cellInner γ))
+    (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ)
+    (hA4 : ∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ)
+    (k : ℕ) (hk : 3 ≤ k) :
+    Function.Bijective (Hmap (cellIncl γ) k).hom := by
+  sorry
 
-/-- Transport the already-computed torus-circle wedge invariants across the
-geometric comparison.  The comparison is an explicit hypothesis so this
-lemma can be proved in parallel with the library construction. -/
-theorem apm_t97J04_invariants_of_comparison
-    (hπ : Nonempty
-      (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
-        FundamentalGroup apm_t97J04_W apm_t97J04_wedgeBase))
-    (hH : ∀ k : ℕ, Nonempty (apm_t97J04_H k ≅ apm_t97J04_WH k))
-    (hpres : Nonempty
-      (Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ) ≃*
-        apm_t97J04_piOne)) :
-    Nonempty
-      (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
-        apm_t97J04_piOne) ∧
-    Nonempty (apm_t97J04_H 0 ≅ ModuleCat.of ℤ ℤ) ∧
-    Nonempty (apm_t97J04_H 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
-    Nonempty (apm_t97J04_H 2 ≅ ModuleCat.of ℤ ℤ) ∧
-    ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t97J04_H k) := by
-  rcases hπ with ⟨eπ⟩
-  rcases hpres with ⟨epres⟩
-  refine ⟨⟨(eπ.trans
-    ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv).trans
-      epres⟩, ?_⟩
-  rcases
-      ConstructionTargets.TorusCircleWedgeMayerVietoris.genericWedge_complete_module_homology with
-    ⟨⟨e0⟩, ⟨e1⟩, ⟨e2⟩, higher⟩
-  refine ⟨⟨(Nonempty.some (hH 0)).trans e0⟩,
-    ⟨(Nonempty.some (hH 1)).trans e1⟩,
-    ⟨(Nonempty.some (hH 2)).trans e2⟩, ?_⟩
-  intro k hk
-  exact (higher k hk).of_iso (Nonempty.some (hH k))
+end AttachCell
 
+/-! ## Part B: the space of t97J04 -/
+
+abbrev P : PairingData := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+
+/-- The orbit-indexed wedge of four circles. -/
+abbrev W := FiniteWedge (PairingOrbit P.pair)
+
+/-- The polygon boundary loop in `W` (the word `[a₁,b₁][a₂,b₂]`). -/
+def word : C(Circle, W) := PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+
+/-- `W ∪_word D²` (the genus-two surface). -/
+abbrev Sigma := Cell word
+
+/-- The edge-4 (meridian `c`) orbit. -/
+def cEdge : Fin P.edgeCount := ⟨4, by decide⟩
+
+def cOrbit : PairingOrbit P.pair := P.orbit cEdge
+
+/-- The meridian loop `c` in `Sigma`. -/
+def cLoop : C(Circle, Sigma) :=
+  (cellIncl word).comp ⟨wedgeCircle cOrbit, continuous_wedgeCircle cOrbit⟩
+
+/-- `Sigma ∪_c D²`, the model of `X`. -/
+abbrev Xc := Cell cLoop
+
+/-- Base points: the wedge point, its images. -/
+def wBase : W := PolygonSurfaceHomology.orbitWedgeBase P
+
+def sBase : Sigma := cellIncl word wBase
+
+def xBase : Xc := cellIncl cLoop sBase
+
+/-- Wedge coordinates on `π₁(W)` (banked from t92J05, B8). -/
+abbrev wedgeCoords :
+    FundamentalGroup W wBase ≃* FreeGroup (Fin 4) :=
+  apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
+
+abbrev orbitLabel : PairingOrbit P.pair ≃ Fin 4 :=
+  apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv
+
+/-- B1. **The model.**  `X ≅ Xc`, sending the octagon centre to the centre of
+the first cell.  Maps: octagon point `z ↦ cellIncl cLoop (cellDisk word z)`,
+meridian-disk point `z ↦ cellDisk cLoop (conj z)` (edge 4 has `P.sign = false`,
+so `signedWedgeArc 4 t = wedgeCircle cOrbit (circleArc (1 - t))`: the octagon
+runs `c` backwards; `edgePoint 1 0 t = circleToDisk (circleArc t)`); inverse on `W` via
+`P.skeletonHomeomorphWedge.symm`.  Boundary compatibility:
+`PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint` (octagon edges)
+and `edgePoint 1 0 t = circleToDisk (circleArc t)` (meridian). Both directions
+are continuous as lifts through quotient maps (no Hausdorffness needed). -/
+lemma X_homeomorph :
+    ∃ h : apm_t97J04_X ≃ₜ Xc,
+      h apm_t97J04_basepoint = cellIncl cLoop (cellDisk word 0) := by
+  sorry
+
+/-- B2. The word's loop class in wedge coordinates is a conjugate of the
+genus-two relator or its inverse (W1, banked). -/
+lemma word_loopClass_coords :
+    IsConj (wedgeCoords (loopClassAt word wBase
+        (PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P)))
+        apm_t92J05_genusTwoRelator ∨
+      IsConj (wedgeCoords (loopClassAt word wBase
+        (PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P)))
+        apm_t92J05_genusTwoRelator⁻¹ := by
+  sorry
+
+/-- `cLoop 1 = sBase`. -/
+theorem cLoop_one : cLoop 1 = sBase := by
+  change cellIncl word (wedgeCircle cOrbit 1) = cellIncl word wBase
+  congr 1
+  exact wedgeCircle_base_eq _ _
+
+/-- B3. The loop class of `c` is the image of the `cOrbit` leg
+(`finiteWedgeExplicitLegClassAtBase P cOrbit`, whose wedge coordinate is
+`FreeGroup.of (orbitLabel cOrbit)` by the banked `..._wedge_hcoord`). -/
+lemma cLoop_loopClass :
+    loopClassAt cLoop sBase cLoop_one =
+      FundamentalGroup.map (cellIncl word) wBase
+        (wedgeCoords.symm (FreeGroup.of (orbitLabel cOrbit))) := by
+  sorry
+
+/-- B3'. Edge 4 lies in handle 1 at position 0: label `(1, false) ↦ 2`
+(`orientableOrbitEquiv`, `finTwoEquiv`, `finProdFinEquiv`). -/
+lemma cOrbit_label : orbitLabel cOrbit = 2 := by
+  sorry
+
+/-- B4. Two successive one-relator quotients (pure group theory). -/
+lemma two_step_quotient {G H K : Type*} [Group G] [Group H] [Group K]
+    (f : G →* H) (g : H →* K) (hf : Function.Surjective f)
+    (hg : Function.Surjective g) (a b : G)
+    (hkf : f.ker = Subgroup.normalClosure {a})
+    (hkg : g.ker = Subgroup.normalClosure {f b}) :
+    Nonempty (K ≃* G ⧸ Subgroup.normalClosure ({a, b} : Set G)) := by
+  sorry
+
+/-- B5. Tietze: kill `c` (generator 2) in the genus-two group; generators
+`a, b, d` ↦ `0, 1, 2`.  The relator may enter up to conjugacy/inversion. -/
+lemma presentation_algebra (r : FreeGroup (Fin 4))
+    (hr : IsConj r apm_t92J05_genusTwoRelator ∨
+      IsConj r apm_t92J05_genusTwoRelator⁻¹) :
+    Nonempty (FreeGroup (Fin 4) ⧸
+        Subgroup.normalClosure ({r, FreeGroup.of 2} : Set (FreeGroup (Fin 4))) ≃*
+      apm_t97J04_piOne) := by
+  sorry
+
+/-- B6. Homology of the wedge: path connected, and zero in degrees `≥ 2`
+(`PolygonSurfaceHomology.finiteWedgeHigherHomologyIsZero`). -/
+lemma W_homology : PathConnectedSpace W ∧ ∀ k, 2 ≤ k → Limits.IsZero (H k W) := by
+  sorry
+
+/-- B7. `word_* = 0` on `H₁`: Hurewicz naturality
+(`PolygonSurfaceHomology.moduleHurewicz_naturality`) sends the circle class to
+the Hurewicz image of the word's loop class, a product of commutators. -/
+lemma word_H1_zero : Hmap word 1 = 0 := by
+  sorry
+
+/-- B8. `c_*` is injective on `H₁`: `c = incl ∘ leg`, `incl_*` is injective on
+`H₁` (A8 with `word_* = 0`), and `leg_*` has the left inverse
+`finiteWedgeCollapse` (`finiteWedgeLegH1_collapse_self`). -/
+lemma cLoop_H1_injective
+    (hA8 : Function.Surjective (Hmap (cellIncl word) 1).hom ∧
+      LinearMap.ker (Hmap (cellIncl word) 1).hom = LinearMap.range (Hmap word 1).hom)
+    (hB7 : Hmap word 1 = 0) :
+    Function.Injective (Hmap cLoop 1).hom := by
+  sorry
+
+/-- B9. `H₁(Xc) ≅ ℤ³`: `H₁(Xc) ≅ H₁(Sigma)/range c_*` (A8 for `cLoop`),
+`H₁(Sigma) ≅ H₁(W)` (A8 for `word`, B7), and `H₁(W) ≅ (PairingOrbit → ℤ)` by the
+collapse coordinates (`finiteWedgeH1CoordinateMap`), under which the `cOrbit`
+leg is a basis vector. -/
+lemma Xc_H1
+    (hA8w : Function.Surjective (Hmap (cellIncl word) 1).hom ∧
+      LinearMap.ker (Hmap (cellIncl word) 1).hom = LinearMap.range (Hmap word 1).hom)
+    (hA8c : Function.Surjective (Hmap (cellIncl cLoop) 1).hom ∧
+      LinearMap.ker (Hmap (cellIncl cLoop) 1).hom = LinearMap.range (Hmap cLoop 1).hom)
+    (hB7 : Hmap word 1 = 0) :
+    Nonempty (H 1 Xc ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) := by
+  sorry
+
+/-- B10. `H₀` of a path-connected space is `ℤ`. -/
+lemma H0_of_pathConnected (S : Type) [TopologicalSpace S] [PathConnectedSpace S] :
+    Nonempty (H 0 S ≅ ModuleCat.of ℤ ℤ) := by
+  sorry
+
+/-- B11. A homeomorphism induces isomorphisms on the problem's homology. -/
+lemma H_of_homeomorph {S T : Type} [TopologicalSpace S] [TopologicalSpace T]
+    (h : S ≃ₜ T) (k : ℕ) : Nonempty (H k S ≅ H k T) := by
+  sorry
+
+
+/-! ## Assembly -/
+
+theorem cell_facts {Y : Type} [TopologicalSpace Y] (γ : C(Circle, Y)) :
+    (IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
+      cellOuter γ ∪ cellInner γ = Set.univ) ∧
+    ContractibleSpace (cellInner γ) ∧
+    (∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
+      e.invFun = cellOverlapCircle γ) ∧
+    (∃ e : (cellOuter γ) ≃ₕ Y, e.invFun = cellInclOuter γ) ∧
+    ((apm_t92J05_twoOpen_overlapToLeft (cellOuter γ) (cellInner γ)).comp
+        (cellOverlapCircle γ)).Homotopic ((cellInclOuter γ).comp γ) :=
+  ⟨cell_cover γ, cell_inner_contractible γ, cell_overlap_hequiv γ,
+    cell_outer_hequiv γ, cell_overlap_loop γ⟩
+
+theorem cell_pc {Y : Type} [TopologicalSpace Y] [PathConnectedSpace Y]
+    (γ : C(Circle, Y)) : PathConnectedSpace (Cell γ) :=
+  (cell_pathConnected γ (cell_overlap_hequiv γ) (cell_outer_hequiv γ)).2.2
+
+instance : PathConnectedSpace W := W_homology.1
+
+instance : PathConnectedSpace Sigma := cell_pc word
+
+instance : PathConnectedSpace Xc := cell_pc cLoop
+
+theorem Xc_piOne : Nonempty (FundamentalGroup Xc xBase ≃* apm_t97J04_piOne) := by
+  obtain ⟨hA1w, hA2w, hA3w, hA4w, hA5w⟩ := cell_facts word
+  obtain ⟨hA1c, hA2c, hA3c, hA4c, hA5c⟩ := cell_facts cLoop
+  obtain ⟨hfs, hfk⟩ := cell_piOne word wBase
+    (PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P) hA1w hA2w hA3w hA4w hA5w
+    (cell_pathConnected word hA3w hA4w)
+  obtain ⟨hgs, hgk⟩ := cell_piOne cLoop sBase cLoop_one hA1c hA2c hA3c hA4c hA5c
+    (cell_pathConnected cLoop hA3c hA4c)
+  rw [cLoop_loopClass, cOrbit_label] at hgk
+  obtain ⟨e1⟩ := two_step_quotient _ _ hfs hgs _ _ hfk hgk
+  let r := wedgeCoords (loopClassAt word wBase
+    (PolygonSurfaceHomology.polygonBoundaryWedgeLoop_one P))
+  obtain ⟨e2⟩ := presentation_algebra r word_loopClass_coords
+  refine ⟨e1.trans ((QuotientGroup.congr _ _ wedgeCoords ?_).trans e2)⟩
+  rw [Subgroup.map_normalClosure _ _ wedgeCoords.surjective]
+  congr 1
+  simp [r, Set.image_insert_eq, Set.image_singleton]
+
+end APMT97J04
+
+open APMT97J04 in
 theorem apm_t97j04 :
     Nonempty
       (FundamentalGroup apm_t97J04_X apm_t97J04_basepoint ≃*
@@ -320,8 +521,37 @@ theorem apm_t97j04 :
     Nonempty (apm_t97J04_H 1 ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
     Nonempty (apm_t97J04_H 2 ≅ ModuleCat.of ℤ ℤ) ∧
     ∀ k : ℕ, 3 ≤ k → Limits.IsZero (apm_t97J04_H k) := by
-  rcases apm_t97J04_complex_to_wedge with ⟨hπ, hH⟩
-  exact apm_t97J04_invariants_of_comparison hπ hH
-    apm_t97J04_coprod_equiv_presentation
-
-#print axioms apm_t97j04
+  obtain ⟨h, hbase⟩ := X_homeomorph
+  obtain ⟨hA1w, hA2w, hA3w, hA4w, hA5w⟩ := cell_facts word
+  obtain ⟨hA1c, hA2c, hA3c, hA4c, hA5c⟩ := cell_facts cLoop
+  have hA8w := cell_H1 word hA1w hA2w hA3w hA4w hA5w
+  have hA8c := cell_H1 cLoop hA1c hA2c hA3c hA4c hA5c
+  have hX : ∀ k, Nonempty (apm_t97J04_H k ≅ H k Xc) := fun k => H_of_homeomorph h k
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · obtain ⟨e⟩ := Xc_piOne
+    exact ⟨(ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+      h apm_t97J04_basepoint).trans
+        ((FundamentalGroup.fundamentalGroupMulEquivOfPathConnected _ xBase).trans e)⟩
+  · obtain ⟨e⟩ := hX 0
+    obtain ⟨f⟩ := H0_of_pathConnected Xc
+    exact ⟨e ≪≫ f⟩
+  · obtain ⟨e⟩ := hX 1
+    obtain ⟨f⟩ := Xc_H1 hA8w hA8c word_H1_zero
+    exact ⟨e ≪≫ f⟩
+  · obtain ⟨e⟩ := hX 2
+    have hinj := cLoop_H1_injective hA8w word_H1_zero
+    have hbij := cell_H2_of_injective cLoop hA1c hA2c hA3c hA4c hA5c hinj
+    obtain ⟨f⟩ := cell_H2_of_zero word hA1w hA2w hA3w hA4w hA5w
+      (W_homology.2 2 le_rfl) word_H1_zero
+    exact ⟨e ≪≫ (LinearEquiv.toModuleIso
+      (LinearEquiv.ofBijective (Hmap (cellIncl cLoop) 2).hom hbij)).symm ≪≫ f⟩
+  · intro k hk
+    obtain ⟨e⟩ := hX k
+    have hc := cell_H_high cLoop hA1c hA2c hA3c hA4c k hk
+    have hw := cell_H_high word hA1w hA2w hA3w hA4w k hk
+    have hW := W_homology.2 k (by omega)
+    refine Limits.IsZero.of_iso ?_ e
+    refine Limits.IsZero.of_iso ?_ (LinearEquiv.toModuleIso
+      (LinearEquiv.ofBijective (Hmap (cellIncl cLoop) k).hom hc)).symm
+    exact Limits.IsZero.of_iso hW (LinearEquiv.toModuleIso
+      (LinearEquiv.ofBijective (Hmap (cellIncl word) k).hom hw)).symm
