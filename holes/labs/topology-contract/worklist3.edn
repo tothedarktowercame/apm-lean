@@ -37039,24 +37039,26 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "extend Mathlib: state and prove the missing theorem in scope",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove transfer/deck-sum on H3, then higher vanishing, degree four, invariants/Main.",
+    "Repair package authority; then transfer/deck-sum H3, higher vanishing, degree four, invariants/Main.",
     :outcome :stop,
-    :warnings ["Main retains its existing placeholder."],
+    :warnings
+    ["No Lake command run; scope unchanged."
+     "Main retains placeholder."],
     :missing-theorems
     [{:name "t96A06_sphere3_antipodal_H3",
-      :type "antipodal acts as identity on H3(S3;Q)",
+      :type "antipodal identity on H3(S3;Q)",
       :status :proved,
       :consumers [:t96A06],
       :depends-on ["t96A06_sphere3_rational_H3Iso"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_antipodal_H3",
-      :type "transfer/deck-sum identifies H3(RP3;Q) with Q",
+      :type "transfer/deck-sum gives H3(RP3;Q)=Q",
       :status :partial,
       :consumers [:t96A06],
       :depends-on ["t96A06_sphere3_antipodal_H3"],
@@ -37069,35 +37071,28 @@
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms [propext Classical.choice Quot.sound],
+    :axioms [],
     :author :topo-10,
     :reason
-    "Committed the compiled degree-three antipodal action. The remaining boundary is the transfer/deck-sum identity needed to prove injectivity and identify H3(RP3;Q).",
+    ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids Lake verification or transfer/deck-sum implementation pending lifecycle repair.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
+    [{:cmd "stat .lake/packages; test -L .lake/packages",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}],
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "scope git status", :exit 0}
+     {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792025357550-12871-c0a55d5e",
-     :commands
-     ["git show/check/diff-tree b7a01bad exact scope"
-      "fixture SHA-256; committed H3 construction and forbidden-token audit; snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: b7a01bad is compiled, sorry-free progress after f170a303. The committed equivalence is correctly represented and oriented: H3(S3;Q) shifts to H2(S2;Q), then the existing sphere endpoint gives Q. It does not claim unresolved H3(RP3;Q); antipodal/transfer detection, higher vanishing, degree four, invariants/Main remain listed. Scope/hash match; standard axioms; registry 166/166; closure forbidden 0->0; Main 1->1 placeholder."},
-    :commit "81a215738",
-    :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
+    :commit nil,
+    :changed-paths [],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
      :sha256
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
