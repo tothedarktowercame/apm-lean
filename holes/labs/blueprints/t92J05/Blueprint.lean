@@ -1317,6 +1317,44 @@ def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv :
         apm_t92J05_genusTwo_polygon_attach_specialization_aux_P).fixed 1 z.1 z.2
     rw [hmap]
 
+noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundarySkeletonHomeomorph :
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_Boundary ≃ₜ
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton where
+  toFun z := ⟨z.1.1,
+    (ConstructionTargets.PolygonSurfacePiOne.mem_outerBoundarySkeleton_iff
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P z.1).mp z.2⟩
+  invFun z := ⟨⟨z.1, by
+    obtain ⟨x, hx, hxq⟩ := z.2
+    exact ⟨x, by
+      change 1 / 4 < ‖(x : ℂ)‖
+      rw [hx]
+      norm_num, hxq⟩⟩,
+    (ConstructionTargets.PolygonSurfacePiOne.mem_outerBoundarySkeleton_iff
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P _).mpr z.2⟩
+  left_inv z := by rfl
+  right_inv z := by rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerSkeletonEquiv :
+    ContinuousMap.HomotopyEquiv
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.skeleton :=
+  apm_t92J05_genusTwo_polygon_attach_specialization_aux_outerBoundaryEquiv.trans
+    apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundarySkeletonHomeomorph.toHomotopyEquiv
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_free :
+    ∀ x : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer,
+      Nonempty
+        (FundamentalGroup
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer x ≃*
+          FreeGroup (Fin 4)) := by
+  sorry
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundary_word :
+    True := by
+  sorry
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization
     (hattach : ∀ {X : Type} [TopologicalSpace X] (U V : Set X)
       (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
