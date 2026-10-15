@@ -2146,6 +2146,28 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv
   funext z t
   exact torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv S z t
 
+/-- Reindex the factor identification back over the original subdivision
+indices.  Thus the inverse run/offset coordinate selects exactly the original
+factor, not merely one with the same flattened numerical index. -/
+theorem torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) (t : unitInterval) :
+    pathTwoOpenSubdivisionRunPrefixBlockPiece S
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1
+        (Fin.cast
+          (pathTwoOpenSubdivisionRunPredLength_add_one S
+            ((torusRP2_subdivisionRunOffsetEquiv S).symm j).1).symm
+          ((torusRP2_subdivisionRunOffsetEquiv S).symm j).2) t =
+      S.piece j t := by
+  calc
+    _ = S.piece (torusRP2_subdivisionRunOffsetEquiv S
+        ((torusRP2_subdivisionRunOffsetEquiv S).symm j)) t :=
+      torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv S _ t
+    _ = S.piece j t := by rw [Equiv.apply_symm_apply]
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2247,6 +2269,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_apply
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_family_runOffsetEquiv
+#print axioms torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
