@@ -87901,37 +87901,38 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Extract surface H2 as the attaching kernel, finish H0, then B9-B10.",
+    "Identify the connecting-map range with BoundaryKernel, finish H0, then B9-B10.",
     :outcome :stop,
-    :warnings ["preexisting lint; review dirs preserved"],
+    :warnings
+    ["preexisting lint; unrelated dirt/review dirs preserved"],
     :missing-theorems
-    [{:name "radialMVReducedReassembly_surjective",
-      :type "reduced reassembly is onto",
+    [{:name "radialH2PiecesGroupIsZero",
+      :type "both radial piece H2 groups vanish",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["boundaryCokernelToRadialH1_injective"],
+      :depends-on [],
       :area "polygon-quotient-homology"}
-     {:name "boundaryCokernelRadialH1Equiv",
-      :type "surface H1 equals attaching cokernel",
+     {:name "radialMVConnectingH1_mono",
+      :type "surface H2 connecting map is injective",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVReducedReassembly_surjective"],
+      :depends-on ["radialH2PiecesGroupIsZero"],
       :area "polygon-quotient-homology"}
      {:name "lowDegreeHomology",
       :type "B8 H0/H1/H2 extraction",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["boundaryCokernelRadialH1Equiv"],
+      :depends-on ["radialMVConnectingH1_mono"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked B8 surface-H1 cokernel equivalence.",
+    :reason "Banked injectivity of the H2 connecting map.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87939,35 +87940,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check f94cb352b", :exit 0}],
+     {:cmd "git show --check 72efbd20a", :exit 0}],
     :diagnostic-history
-    [{:cmd "surjectivity drafts",
+    [{:cmd "connecting-mono draft",
       :exit 1,
-      :correction
-      "fixed namespaces, concrete composition, and inverse orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792037482311-13182-4d73dd77",
-     :commands
-     ["git show/diff-tree f94cb352b"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms four new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit f94cb352b by topo-6 changes only the scoped target; fixture hash 71e98cd9...0f993 matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. H0 intersection injectivity and adjacent exactness make H1 reassembly epic. Inner-piece H1 vanishing identifies every preimage with an outer coordinate; quotient surjectivity plus prior injectivity gives BoundaryCokernel equiv surface H1 in the correct direction. New compiled progress; H2-kernel and H0 extraction remain, then B9-B10."},
-    :commit "f94cb352b",
+      :correction "made the zero-arrow equality argument explicit"}],
+    :commit "72efbd20a",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "71e98cd916e971b101a1e9f1c46897d10e9c14a82b24e63acc1bf91aec90f993"},
+     "69f66c052ea529fbdf62f14f93d553a3442bc4edade908302171927a58025609"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -93005,7 +92991,8 @@
     :lemma-radialmvboundarycokernelequiv
     :lemma-boundarycokerneltoradialh1
     :lemma-boundarycokerneltoradialh1-injective
-    :lemma-boundarycokernelradialh1equiv],
+    :lemma-boundarycokernelradialh1equiv
+    :lemma-radialmvconnectingh1-mono],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93177,4 +93164,38 @@
    :id :lemma-boundarycokernelradialh1equiv,
    :kind :lemma,
    :depends-on [:lemma-radialmvreducedreassembly-surjective],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialH2PiecesGroupIsZero",
+    :type "both radial piece H2 groups vanish"},
+   :lemma
+   {:name "radialH2PiecesGroupIsZero",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "both radial piece H2 groups vanish",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialh2piecesgroupiszero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVConnectingH1_mono",
+    :type "surface H2 connecting map is injective"},
+   :lemma
+   {:name "radialMVConnectingH1_mono",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "surface H2 connecting map is injective",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvconnectingh1-mono,
+   :kind :lemma,
+   :depends-on [:lemma-radialh2piecesgroupiszero],
    :other-consumers [:t94J09]}]}
