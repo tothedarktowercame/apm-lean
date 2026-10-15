@@ -420,6 +420,25 @@ theorem t99J05_cp_successor_overlap_finiteDimensional_of_unitSphere
           Set (CP (n + 1))) k) :=
   (t99J05_cp_successor_overlap_homologyIso_unitSphere n k).symm.toLinearEquiv.finiteDimensional
 
+/-- Off-degree vanishing of the unit-sphere model transports back to the
+exact successor overlap. -/
+theorem t99J05_cp_successor_overlap_subsingleton_of_unitSphere
+    (n k : ℕ)
+    [Subsingleton
+      (Homology
+        (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) k)] :
+    Subsingleton
+      (Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k) := by
+  constructor
+  intro x y
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (t99J05_cp_successor_overlap_homologyIso_unitSphere n k).hom).1
+  exact Subsingleton.elim _ _
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -474,6 +493,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_puncturedAffine_isPathConnected
 #print axioms t99J05_cp_successor_overlap_rational_H0
 #print axioms t99J05_cp_successor_overlap_finiteDimensional_of_unitSphere
+#print axioms t99J05_cp_successor_overlap_subsingleton_of_unitSphere
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
