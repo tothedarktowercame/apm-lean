@@ -21,6 +21,7 @@ open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.RealProjectiveSmoothTarget
 open ConstructionTargets.CoveringDegree
 open CategoryTheory CategoryTheory.Limits
+open CategoryTheory.MonoidalCategory
 open scoped Simplicial
 
 noncomputable section
@@ -2025,6 +2026,90 @@ theorem polynomialDescent_trace_three_of_localClassDecompositionAndBase
   rw [hrank]
   norm_num
 
+theorem t96A06_identity_trace_three :
+    LinearMap.trace ℚ (Homology RP3 3)
+      (induced (ContinuousMap.id RP3) 3).hom = 1 := by
+  let e := t96A06_rp3_rational_H3Iso
+  letI : FiniteDimensional ℚ (Homology RP3 3) :=
+    e.symm.toLinearEquiv.finiteDimensional
+  have hfinrank : Module.finrank ℚ (Homology RP3 3) = 1 := by
+    rw [LinearEquiv.finrank_eq e.toLinearEquiv]
+    simp
+  have hinduced : (induced (ContinuousMap.id RP3) 3).hom = LinearMap.id := by
+    simp [induced]
+  rw [hinduced, LinearMap.trace_id, hfinrank]
+  norm_num
+
+noncomputable def t96A06_homotopic_induced_eq_aux_cylinder
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.of X ⊗ TopCat.I ⟶ TopCat.of Y :=
+  TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+    H.continuous.comp
+      ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+
+theorem t96A06_homotopic_induced_eq_aux_zero
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.ι₀ ≫ t96A06_homotopic_induced_eq_aux_cylinder H = TopCat.ofHom f := by
+  ext x
+  change H (0, x) = f x
+  simp
+
+theorem t96A06_homotopic_induced_eq_aux_one
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    TopCat.ι₁ ≫ t96A06_homotopic_induced_eq_aux_cylinder H = TopCat.ofHom g := by
+  ext x
+  change H (1, x) = g x
+  simp
+
+noncomputable def t96A06_homotopic_induced_eq_aux_sset
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) :
+    SSet.Homotopy (TopCat.toSSet.map (TopCat.ofHom f))
+      (TopCat.toSSet.map (TopCat.ofHom g)) where
+  h := (TopCat.toSSet.obj (TopCat.of X) ◁ SSet.stdSimplex.toSSetObjI) ≫
+    CategoryTheory.Functor.LaxMonoidal.μ TopCat.toSSet (TopCat.of X) TopCat.I ≫
+    TopCat.toSSet.map (t96A06_homotopic_induced_eq_aux_cylinder H)
+  h₀ := by
+    change _ = TopCat.toSSet.map (TopCat.ofHom f)
+    simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, t96A06_homotopic_induced_eq_aux_zero H]
+  h₁ := by
+    change _ = TopCat.toSSet.map (TopCat.ofHom g)
+    simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, t96A06_homotopic_induced_eq_aux_one H]
+  rel := by
+    ext n x
+    exact x.1.property.elim
+
+theorem t96A06_homotopic_induced_eq
+    (f g : ContinuousMap RP3 RP3)
+    (h : ContinuousMap.Homotopic f g) (k : ℕ) :
+    induced f k = induced g k := by
+  rcases h with ⟨H⟩
+  simpa [induced, AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℚ) (R := ModuleCat.of ℚ ℚ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (H := (t96A06_homotopic_induced_eq_aux_sset H).toSimplicialObjectHomotopy) k
+
+theorem polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    ¬ ContinuousMap.Homotopic polynomialDescent (ContinuousMap.id RP3) := by
+  intro hhom
+  have heq := t96A06_homotopic_induced_eq polynomialDescent
+    (ContinuousMap.id RP3) hhom 3
+  have htrace := congrArg
+    (fun u => LinearMap.trace ℚ (Homology RP3 3) u.hom) heq
+  dsimp only at htrace
+  rw [polynomialDescent_trace_three_of_localClassDecompositionAndBase h,
+    t96A06_identity_trace_three] at htrace
+  norm_num at htrace
+
 /-- Ledger-facing name for the top-degree transfer/deck-sum milestone. -/
 noncomputable def t96A06_rp3_antipodal_H3 :=
   t96A06_rp3_rational_H3Iso
@@ -2261,6 +2346,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialDescent_degree_four_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase
+#print axioms polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
