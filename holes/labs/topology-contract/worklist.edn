@@ -119111,6 +119111,17 @@
     [{:cmd "forced source compile",
       :exit 1,
       :finding "exposed malformed equality; repaired"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792022234967-12758-48e15046",
+     :commands
+     ["git diff-tree/show 163e9b3e"
+      "archive 163e9b3e; forced-source lake env lean -o closure; lean Main"
+      "sha256sum/placeholders at 163e9b3e"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS repaired program STOP: commit changes only t00J02Closure.lean. The malformed subset/equality calc is replaced by antisymmetry, and a reducible locally-isolated-fiber Fintype ensures the calculation and witness constructor use the exact same dependent instance. Forced source compilation now reports only propext, Classical.choice, Quot.sound for the milestone; no sorryAx. Fixture/frozen hashes match; closure has 0 placeholders, Main baseline 1; registry 166/166. Transversality isolation/calculations and Main remain listed."},
     :commit "163e9b3e435606eb790ee9706686ef5a3a148799",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119119,7 +119130,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119137,7 +119148,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked discrete-fiber witness constructor.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired locally-isolated witness; standard axioms only.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119283,7 +119294,11 @@
      :reason "Banked existential regular-fiber endpoint."}
     {:job 9,
      :commit "1dd5348253adc83eb15080b120507a4c4090bbbb",
-     :reason "Banked discrete-fiber witness constructor."}]}
+     :reason "Banked discrete-fiber witness constructor."}
+    {:job 2,
+     :commit "163e9b3e435606eb790ee9706686ef5a3a148799",
+     :reason
+     "Repaired locally-isolated witness; standard axioms only."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120677,7 +120692,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
@@ -120689,7 +120704,9 @@
     :type
     "locally isolated circle fiber plus calculations gives witness",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "163e9b3e435606eb790ee9706686ef5a3a148799"},
    :id :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber,
    :kind :lemma,
    :depends-on
@@ -120698,13 +120715,15 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "isDiscrete_preimage_singleton_of_locallyIsolatedFiber"},
    :lemma
    {:name "isDiscrete_preimage_singleton_of_locallyIsolatedFiber",
-    :reported-by []},
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-isdiscrete-preimage-singleton-of-locallyisolatedfiber,
    :kind :lemma,
    :depends-on [],
