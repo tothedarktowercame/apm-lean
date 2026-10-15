@@ -185,13 +185,134 @@ lemma rationalMayerVietoris_aux_interArrow
   apply biprod.hom_ext
   · simpa [mvI] using rationalMayerVietoris_aux_interArrow_aux_fst U V n
   · simpa [mvI] using rationalMayerVietoris_aux_interArrow_aux_snd U V n
+lemma rationalMayerVietoris_aux_unionArrow_aux_inl
+    {K L T : ChainComplex (ModuleCat ℚ) ℕ} (f : K ⟶ T) (g : L ⟶ T) (n : ℕ) :
+    biprod.inl ≫ (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).inv ≫
+        HomologicalComplex.homologyMap (biprod.desc f g) n =
+      HomologicalComplex.homologyMap f n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_inv,
+    biprod.inl_desc_assoc, ← HomologicalComplex.homologyMap_comp, biprod.inl_desc]
+
+lemma rationalMayerVietoris_aux_unionArrow_aux_inr
+    {K L T : ChainComplex (ModuleCat ℚ) ℕ} (f : K ⟶ T) (g : L ⟶ T) (n : ℕ) :
+    biprod.inr ≫ (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ K L n).inv ≫
+        HomologicalComplex.homologyMap (biprod.desc f g) n =
+      HomologicalComplex.homologyMap g n := by
+  rw [CoefficientHomologyBiprodIso.homologyBiprodIso_inv,
+    biprod.inr_desc_assoc, ← HomologicalComplex.homologyMap_comp, biprod.inr_desc]
+
+lemma rationalMayerVietoris_aux_unionArrow_aux_component
+    {X : Type} [TopologicalSpace X] (A B : Set X) (h : A ⊆ B) (n : ℕ) :
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+        ℚ A n).inv ≫
+      HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h)) n ≫
+      (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+        ℚ B n).hom =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          ⟨Set.inclusion h, continuous_inclusion h⟩) n := by
+  calc
+    _ = (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ A n).inv ≫
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+          ℚ A n).hom ≫
+        HomologicalComplex.homologyMap
+          ((rationalMayerVietoris_aux_chains).map
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) n := by
+      simpa only [Category.assoc] using congrArg
+        (fun k ↦
+          (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+            ℚ A n).inv ≫ k)
+        (ConstructionTargets.CoefficientAmbientSubspaceRangeNaturality.homology_square
+          ℚ h n).symm
+    _ = _ := by simp; rfl
+
+lemma rationalMayerVietoris_aux_unionArrow_aux_ambient
+    {X : Type} [TopologicalSpace X] (A : Set X) (n : ℕ) :
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+        ℚ A n).inv ≫
+      HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (rationalMayerVietoris_aux_P A).ι) n =
+      mvToX A n := by
+  rw [ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso_inv,
+    ← HomologicalComplex.homologyMap_comp]
+  apply congrArg (fun f ↦ HomologicalComplex.homologyMap f n)
+  apply (cancel_epi
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeChainsIso
+      ℚ A).hom).1
+  simpa [mvToX, CoefficientRelativeSmall.subspaceMap, Category.assoc] using
+    (ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso_hom_comp_subspaceMap
+      ℚ A).symm
+
 lemma rationalMayerVietoris_aux_unionArrow
     {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) (n : ℕ) :
     (rationalMayerVietoris_aux_pieceIso U V n).inv ≫
         HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
         (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = mvJ U V n := by
-  sorry
+  apply biprod.hom_ext'
+  · simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_inv, Category.assoc]
+    change biprod.inl ≫
+      (biprod.map (𝟙 _) (-𝟙 _) ≫
+        (CoefficientPieceRangeBiproductComparison.pieceHomologyIso ℚ U V n).inv ≫
+        (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).inv) ≫
+      HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+      (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = _
+    simp only [Category.assoc]
+    rw [biprod.inl_map_assoc]
+    simp only [Category.id_comp]
+    dsimp [CoefficientPieceRangeBiproductComparison.pieceHomologyIso]
+    rw [biprod.inl_map_assoc]
+    dsimp [rationalMayerVietoris_aux_SC,
+      CoefficientSubcomplexMayerVietoris.shortComplex]
+    slice_lhs 2 4 =>
+      rw [rationalMayerVietoris_aux_unionArrow_aux_inl]
+    change _ ≫ HomologicalComplex.homologyMap
+      ((rationalMayerVietoris_aux_chains).map
+        (ConstructionTargets.SingularExcision.subcomplexLeftToUnion
+          (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+      HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n = _
+    slice_lhs 2 3 => rw [← HomologicalComplex.homologyMap_comp]
+    rw [← Functor.map_comp]
+    change _ ≫ HomologicalComplex.homologyMap
+      ((rationalMayerVietoris_aux_chains).map (rationalMayerVietoris_aux_P U).ι) n = _
+    simpa [mvJ] using rationalMayerVietoris_aux_unionArrow_aux_ambient U n
+  · simp only [rationalMayerVietoris_aux_pieceIso, Iso.trans_inv, Category.assoc]
+    change biprod.inr ≫
+      (biprod.map (𝟙 _) (-𝟙 _) ≫
+        (CoefficientPieceRangeBiproductComparison.pieceHomologyIso ℚ U V n).inv ≫
+        (CoefficientHomologyBiprodIso.homologyBiprodIso ℚ _ _ n).inv) ≫
+      HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).g n ≫
+      (rationalMayerVietoris_aux_unionIso U V hU hV hcov n).hom = _
+    simp only [Category.assoc]
+    rw [biprod.inr_map_assoc]
+    dsimp [CoefficientPieceRangeBiproductComparison.pieceHomologyIso]
+    rw [Preadditive.neg_comp, biprod.inr_map_assoc]
+    dsimp [rationalMayerVietoris_aux_SC,
+      CoefficientSubcomplexMayerVietoris.shortComplex]
+    simp only [Category.id_comp]
+    slice_lhs 3 5 => rw [rationalMayerVietoris_aux_unionArrow_aux_inr]
+    change -((ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+      ℚ V n).inv ≫ HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map
+          (ConstructionTargets.SingularExcision.subcomplexRightToUnion
+            (rationalMayerVietoris_aux_P U) (rationalMayerVietoris_aux_P V))) n ≫
+        HomologicalComplex.homologyMap
+          ((rationalMayerVietoris_aux_chains).map
+            (rationalMayerVietoris_aux_P U ⊔ rationalMayerVietoris_aux_P V).ι) n) = _
+    rw [← HomologicalComplex.homologyMap_comp, ← Functor.map_comp]
+    change -((ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso
+      ℚ V n).inv ≫ HomologicalComplex.homologyMap
+        ((rationalMayerVietoris_aux_chains).map (rationalMayerVietoris_aux_P V).ι) n) = _
+    rw [rationalMayerVietoris_aux_unionArrow_aux_ambient]
+    simp [mvJ]
+    rfl
 
 /-- Transport of the subcomplex Mayer–Vietoris sequence (`CoefficientSubcomplexMayerVietoris`:
 exactness at pieces/union/intersection + connecting map) along `interIso`, `pieceIso`,
