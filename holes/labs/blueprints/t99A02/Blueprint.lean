@@ -1429,7 +1429,16 @@ disk centre and `n`, `n+1` have opposite parities, so both junction points go
 to the wedge point.  Route: `rp2Proj_north`, `rp2Proj_south`, `Int.emod_two_eq`,
 `Quotient.sound (EqvGen.rel _ _ Rel.base)`.  About 25 lines. -/
 lemma chainF_rel (z w : ℤ × S2) (h : ChainRel z w) : chainF z = chainF w := by
-  sorry
+  cases h with
+  | link n =>
+    unfold chainF chainSide
+    rw [rp2Proj_north, rp2Proj_south]
+    split_ifs <;> try rfl
+    · exact Quotient.sound
+        (Relation.EqvGen.rel _ _ Rel.base)
+    · exact Quotient.sound
+        (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ Rel.base))
 
 /-- **Leaf.**  `chainF` is `D∞`-invariant: rotations preserve parity,
 reflections preserve parity (`-2i - n ≡ n`) and `rp2Proj_neg`.  About 25

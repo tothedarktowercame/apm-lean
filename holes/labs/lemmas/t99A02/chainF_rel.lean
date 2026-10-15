@@ -1297,7 +1297,16 @@ to the wedge point.  Route: `rp2Proj_north`, `rp2Proj_south`, `Int.emod_two_eq`,
 `Quotient.sound (EqvGen.rel _ _ Rel.base)`.  About 25 lines. -/
 -- BEGIN SEAT AREA
 lemma chainF_rel (z w : ℤ × S2) (h : ChainRel z w) : chainF z = chainF w := by
-  sorry
+  cases h with
+  | link n =>
+    unfold chainF chainSide
+    rw [rp2Proj_north, rp2Proj_south]
+    split_ifs <;> try rfl
+    · exact Quotient.sound
+        (Relation.EqvGen.rel _ _ Rel.base)
+    · exact Quotient.sound
+        (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ Rel.base))
 -- END SEAT AREA
 
 /-- **Leaf.**  `chainF` is `D∞`-invariant: rotations preserve parity,
