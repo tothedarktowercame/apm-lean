@@ -479,6 +479,54 @@ theorem polynomialMap_sphere_posScalar_eq_one
       _ = (c * (q.1 2 ^ 2 + q.1 3 ^ 2)) ^ 2 := by ring
   nlinarith
 
+/-- Equality in a normalized quadratic fiber forces membership in the
+four-point pair-sign orbit. -/
+theorem polynomialSphereLift_fiber_subset_pairSignOrbit {p q : Sphere 3}
+    (h : polynomialSphereLift q = polynomialSphereLift p) :
+    q ∈ pairSignOrbit p := by
+  obtain ⟨c, hc, hscale⟩ := rp3RadialToSphere_eq_imp_posScalar h
+  have hc1 : c = 1 := polynomialMap_sphere_posScalar_eq_one hc hscale
+  subst c
+  simp only [one_smul] at hscale
+  rcases polynomialMap_eq_iff_pairSigns hscale with hqp | hqp | hqp | hqp
+  · have h' : q = p := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      exact hqp
+    simp [pairSignOrbit, h']
+
+  · have h' : q = flipFirstPairSphere p := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      exact hqp.trans (sphereVector_flipFirstPairSphere p).symm
+    simp [pairSignOrbit, h']
+
+  · have h' : q = flipSecondPairSphere p := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      exact hqp.trans (sphereVector_flipSecondPairSphere p).symm
+    simp [pairSignOrbit, h']
+  · have h' : q = flipFirstPairSphere (flipSecondPairSphere p) := by
+      apply Subtype.ext
+      apply WithLp.ofLp_injective
+      calc
+        _ = flipFirstPair (flipSecondPair (sphereVector 3 p).1) := hqp
+        _ = flipFirstPair (sphereVector 3 (flipSecondPairSphere p)).1 :=
+          congrArg flipFirstPair (sphereVector_flipSecondPairSphere p).symm
+        _ = (sphereVector 3
+            (flipFirstPairSphere (flipSecondPairSphere p))).1 :=
+          (sphereVector_flipFirstPairSphere (flipSecondPairSphere p)).symm
+    simp [pairSignOrbit, h']
+
+/-- The normalized quadratic lift fiber is exactly the four pair-sign
+translates (with repetitions possible on the coordinate circles). -/
+theorem t96A06_polynomialSphereLift_regular_fiber (p : Sphere 3) :
+    polynomialSphereLift ⁻¹' {polynomialSphereLift p} = pairSignOrbit p := by
+  apply Set.Subset.antisymm
+  · intro q hq
+    exact polynomialSphereLift_fiber_subset_pairSignOrbit hq
+  · exact pairSignOrbit_subset_polynomialSphereLift_fiber p
+
 /-- The normalized sphere lift descends through the exact double cover to
 the chosen projective polynomial descent. -/
 theorem polynomialSphereLift_projection (p : Sphere 3) :
@@ -1270,6 +1318,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms pairSignOrbit_subset_polynomialSphereLift_fiber
 #print axioms rp3RadialToSphere_eq_imp_posScalar
 #print axioms polynomialMap_sphere_posScalar_eq_one
+#print axioms polynomialSphereLift_fiber_subset_pairSignOrbit
+#print axioms t96A06_polynomialSphereLift_regular_fiber
 #print axioms polynomialSphereLift_projection
 #print axioms polynomialSphereLift_homology_square
 #print axioms polynomialDescent_degree_four_of_sphere
