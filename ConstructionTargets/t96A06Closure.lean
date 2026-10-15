@@ -2033,6 +2033,39 @@ theorem t96A06_mappedIntegralNormalizedClass_localization_naturality
     t96A06_integralToRational_localization_naturality_apply
       A 3 t96A06_mappedIntegralNormalizedClass
 
+/-- The positive ambient local class pulled back to the forgotten integral
+coefficient-relative homology object used by coefficient extension. -/
+noncomputable def t96A06_mappedIntegralLocalGenerator :
+    ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).obj
+        (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint))).homology 3 :=
+  (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint) |>
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+
+/-- The pulled-back coefficient class is exactly the positive ambient local
+generator after the integral relative-homology comparison. -/
+theorem t96A06_mappedIntegralLocalGenerator_mapsTo_ambient :
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom
+      ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+        t96A06_mappedIntegralLocalGenerator) =
+    ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+      (k := 1) polynomialSphereRegularPoint := by
+  simp [t96A06_mappedIntegralLocalGenerator]
+
 /-- The same extended class returned to the native rational singular-homology
 object.  The next normalization lemma identifies it with the selected
 sphere-shift generator. -/
@@ -3344,6 +3377,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralNormalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
+#print axioms t96A06_mappedIntegralLocalGenerator
+#print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
 #print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
