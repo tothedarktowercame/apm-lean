@@ -1201,7 +1201,109 @@ one) and `O k ∩ U i = U i ∩ U (parent i)` (a member of depth `≤ k` meeting
 -- BEGIN SEAT AREA
 lemma TreeCover.simplyConnectedSpace {ι : Type*} (T : TreeCover X ι) :
     SimplyConnectedSpace X := by
-  sorry
+  classical
+  let O : ℕ → Set X := fun k => ⋃ i, ⋃ (_ : T.depth i ≤ k), T.U i
+  have hOopen : ∀ k, IsOpen (O k) := by
+    intro k
+    exact isOpen_iUnion fun i => isOpen_iUnion fun _ => T.isOpen i
+  have hOzero : O 0 = T.U T.root := by
+    apply Set.Subset.antisymm
+    · intro x hx
+      simp only [O, Set.mem_iUnion] at hx
+      obtain ⟨i, hi, hxi⟩ := hx
+      have hd : T.depth i = 0 := Nat.eq_zero_of_le_zero hi
+      simpa [(T.depth_eq_zero i).mp hd] using hxi
+    · intro x hx
+      simp only [O, Set.mem_iUnion]
+      exact ⟨T.root, (T.depth_eq_zero T.root).mpr rfl ▸ le_rfl, hx⟩
+  have hOsimple : ∀ k, IsSimplyConnected (O k) := by
+    intro k
+    induction k with
+    | zero => simpa [hOzero] using T.simplyConnected T.root
+    | succ k ih =>
+      let J := {i : ι // T.depth i = k + 1}
+      let V : J → Set X := fun i => T.U i.1
+      have hroot (i : J) : i.1 ≠ T.root := by
+        intro hir
+        have : k + 1 = 0 := by
+          rw [← i.2, hir]
+          exact (T.depth_eq_zero T.root).mpr rfl
+        omega
+      have hdisj : Pairwise fun i j : J => Disjoint (V i) (V j) := by
+        intro i j hij
+        rw [Set.disjoint_left]
+        intro x hxi hxj
+        have hij' : i.1 ≠ j.1 := by
+          intro h
+          apply hij
+          exact Subtype.ext h
+        rcases T.inter_adj i.1 j.1 hij' ⟨x, hxi, hxj⟩ with h | h
+        · have hd := T.depth_parent i.1 (hroot i)
+          rw [← h.2, i.2, j.2] at hd
+          omega
+        · have hd := T.depth_parent j.1 (hroot j)
+          rw [← h.2, i.2, j.2] at hd
+          omega
+      have hinter (i : J) : O k ∩ V i = T.U i.1 ∩ T.U (T.parent i.1) := by
+        apply Set.Subset.antisymm
+        · rintro x ⟨hxO, hxi⟩
+          simp only [O, Set.mem_iUnion] at hxO
+          obtain ⟨j, hj, hxj⟩ := hxO
+          by_cases hji : j = i.1
+          · subst j
+            rw [i.2] at hj
+            omega
+          · rcases T.inter_adj j i.1 hji ⟨x, hxj, hxi⟩ with h | h
+            · have hd := T.depth_parent j h.1
+              rw [← h.2, i.2] at hd
+              omega
+            · exact ⟨hxi, h.2 ▸ hxj⟩
+        · rintro x ⟨hxi, hp⟩
+          constructor
+          · simp only [O, Set.mem_iUnion]
+            refine ⟨T.parent i.1, ?_, hp⟩
+            have hd := T.depth_parent i.1 (hroot i)
+            rw [i.2] at hd
+            omega
+          · exact hxi
+      have hstep : O (k + 1) = O k ∪ ⋃ i : J, V i := by
+        ext x
+        simp only [O, V, J, Set.mem_iUnion, Set.mem_union]
+        constructor
+        · rintro ⟨i, hi, hxi⟩
+          rcases Nat.lt_or_eq_of_le hi with hi | hi
+          · exact Or.inl ⟨i, Nat.le_of_lt_succ hi, hxi⟩
+          · exact Or.inr ⟨⟨i, hi⟩, hxi⟩
+        · rintro (⟨i, hi, hxi⟩ | ⟨i, hxi⟩)
+          · exact ⟨i, Nat.le_trans hi (Nat.le_succ k), hxi⟩
+          · exact ⟨i.1, i.2.le, hxi⟩
+      rw [hstep]
+      refine isSimplyConnected_union_iUnion_of_pairwiseDisjoint V (hOopen k)
+        (fun i => T.isOpen i.1) ih (fun i => T.simplyConnected i.1) hdisj ?_
+      intro i
+      rw [hinter i]
+      exact T.inter_parent i.1 (hroot i)
+  have hdir : Directed (· ⊆ ·) O := by
+    intro i j
+    refine ⟨max i j, ?_, ?_⟩ <;> intro x hx <;>
+      simp only [O, Set.mem_iUnion] at hx ⊢
+    · obtain ⟨a, ha, hxa⟩ := hx
+      exact ⟨a, ha.trans (Nat.le_max_left _ _), hxa⟩
+    · obtain ⟨a, ha, hxa⟩ := hx
+      exact ⟨a, ha.trans (Nat.le_max_right _ _), hxa⟩
+  have hall : (⋃ k, O k) = (Set.univ : Set X) := by
+    rw [← T.cover]
+    ext x
+    simp only [O, Set.mem_iUnion]
+    constructor
+    · rintro ⟨k, i, _, hxi⟩
+      exact ⟨i, hxi⟩
+    · rintro ⟨i, hxi⟩
+      exact ⟨T.depth i, i, le_rfl, hxi⟩
+  have huniv : IsSimplyConnected (Set.univ : Set X) := by
+    rw [← hall]
+    exact isSimplyConnected_iUnion_of_directed O hdir hOopen hOsimple
+  exact (Homeomorph.Set.univ X).toHomotopyEquiv.simplyConnectedSpace_iff.mp huniv
 -- END SEAT AREA
 
 end SimplyConnectedGluing
