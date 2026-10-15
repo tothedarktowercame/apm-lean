@@ -646,7 +646,86 @@ private lemma t99A01_attach_circleSide_aux_deformation_raw_mem {r : ℕ}
 lemma t99A01_attach_circleSide_aux_deformation_aux_continuous {r : ℕ}
     (degree : Fin r → ℕ) :
     Continuous (t99A01_attach_circleSide_aux_deformation_raw degree) := by
-  sorry
+  rw [continuous_iff_continuousAt]
+  rintro p
+  rcases p with ⟨t, x⟩
+  rcases x with ⟨x, hx⟩
+  cases x with
+  | inl z =>
+      let getZ : t99A01_attach_circleSide_aux_deformation_Pre degree → Circle :=
+        fun y => Sum.elim id (fun _ => z) y.1
+      have hgetZ : Continuous getZ :=
+        (continuous_sumElim.2 ⟨continuous_id, continuous_const⟩).comp
+          continuous_subtype_val
+      apply (continuous_inl.comp (hgetZ.comp continuous_snd)).continuousAt.congr_of_eventuallyEq
+      have hopen : IsOpen (Sum.inl '' (Set.univ : Set Circle)) :=
+        (isOpenMap_inl (X := Circle) (Y := Fin r × APMT99A01.Disk)) _ isOpen_univ
+      filter_upwards [((hopen.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds
+          (by simp))] with y hy
+      obtain ⟨w, -, hw⟩ := hy
+      rcases y with ⟨s, ⟨u, hu⟩⟩
+      dsimp at hw ⊢
+      cases u <;> simp_all [t99A01_attach_circleSide_aux_deformation_raw, getZ]
+  | inr q =>
+      let getQ : t99A01_attach_circleSide_aux_deformation_Pre degree →
+          Fin r × APMT99A01.Disk :=
+        fun y => Sum.elim (fun _ => q) id y.1
+      have hgetQ : Continuous getQ :=
+        (continuous_sumElim.2 ⟨continuous_const, continuous_id⟩).comp
+          continuous_subtype_val
+      have hne : ∀ y : t99A01_attach_circleSide_aux_deformation_Pre degree,
+          ((getQ y).2 : ℂ) ≠ 0 := by
+        intro y
+        cases hy : y.1 with
+        | inl w =>
+            simpa [getQ, hy] using
+              (t99A01_attach_circleSide_aux_deformation_disk_ne degree
+                ⟨Sum.inr q, hx⟩ q.1 q.2 rfl)
+        | inr q' =>
+            simpa [getQ, hy] using
+              (t99A01_attach_circleSide_aux_deformation_disk_ne degree y q'.1 q'.2 hy)
+      let diskMap : unitInterval × t99A01_attach_circleSide_aux_deformation_Pre degree →
+          Fin r × APMT99A01.Disk := fun y =>
+        ((getQ y.2).1, ⟨
+          (t99A01_attach_circleSide_aux_deformation_scale y.1 ((getQ y.2).2 : ℂ) : ℂ) *
+            (getQ y.2).2,
+          by
+            rw [Metric.mem_closedBall, dist_zero_right]
+            apply t99A01_attach_circleSide_aux_deformation_scale_norm y.1 _ (hne y.2)
+            have hz := (getQ y.2).2.property
+            simpa only [Metric.mem_closedBall, dist_zero_right] using hz⟩)
+      have hdisk : Continuous diskMap := by
+        apply Continuous.prodMk (hgetQ.fst.comp continuous_snd)
+        apply Continuous.subtype_mk
+        dsimp [diskMap, t99A01_attach_circleSide_aux_deformation_scale]
+        have hv : Continuous (fun y : unitInterval ×
+            t99A01_attach_circleSide_aux_deformation_Pre degree =>
+            ((getQ y.2).2 : ℂ)) :=
+          (continuous_subtype_val.comp (hgetQ.snd.comp continuous_snd))
+        have hn : Continuous (fun y : unitInterval ×
+            t99A01_attach_circleSide_aux_deformation_Pre degree =>
+            ‖((getQ y.2).2 : ℂ)‖) := hv.norm
+        have hn0 : ∀ y : unitInterval ×
+            t99A01_attach_circleSide_aux_deformation_Pre degree,
+            ‖((getQ y.2).2 : ℂ)‖ ≠ 0 := fun y => norm_ne_zero_iff.mpr (hne y.2)
+        have hquot : Continuous (fun y : unitInterval ×
+            t99A01_attach_circleSide_aux_deformation_Pre degree =>
+            (1 - (y.1 : ℝ)) / ‖((getQ y.2).2 : ℂ)‖) :=
+          (continuous_const.sub (continuous_subtype_val.comp continuous_fst)).div hn hn0
+        exact (Complex.continuous_ofReal.comp
+          ((continuous_subtype_val.comp continuous_fst).add hquot)).mul hv
+      apply (continuous_inr.comp hdisk).continuousAt.congr_of_eventuallyEq
+      have hopen : IsOpen (Sum.inr ''
+          (Set.univ : Set (Fin r × APMT99A01.Disk))) :=
+        (isOpenMap_inr (X := Circle) (Y := Fin r × APMT99A01.Disk)) _ isOpen_univ
+      filter_upwards [((hopen.preimage
+        (continuous_subtype_val.comp continuous_snd)).mem_nhds
+          (by simp))] with y hy
+      obtain ⟨q', -, hq'⟩ := hy
+      rcases y with ⟨s, ⟨u, hu⟩⟩
+      dsimp at hq' ⊢
+      cases u <;> simp_all [t99A01_attach_circleSide_aux_deformation_raw, diskMap, getQ]
 -- END SEAT AREA
 
 lemma t99A01_attach_circleSide_aux_deformation_aux_respects {r : ℕ}
