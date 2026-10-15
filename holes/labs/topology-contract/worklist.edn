@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
@@ -119118,7 +119118,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119140,7 +119140,7 @@
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -119348,6 +119348,16 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum fixture/Main/closure; placeholder count",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792028729779-12974-aa412822",
+     :commands
+     ["git show/diff-tree 5c0f2e06"
+      "archive 5c0f2e06; lake env lean closure and Main"
+      "sha256sum/placeholders; statement-registry check"],
+     :finding
+     "PASS program STOP: commit 5c0f2e06 changes only t98A06Closure.lean and adds compiled, sorry-free progress. It applies the previously proved smooth family of right inverses Q(z) to the smooth target vector b(z); smoothness follows from continuous-linear-map evaluation, and congruence of A(z) composed with Q(z) gives A(z)(w(z))=b(z) in the correct order and coordinate spaces. Fixture and frozen Main hashes match; closure has 0 placeholders, Main baseline 1; only standard axioms; registry 166/166. Transport through tangent charts, compact flow, and Main remain listed."},
     :commit "5c0f2e062494ca836b5a554e2f17712718aaacef",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119356,7 +119366,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119374,7 +119384,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth fixed-coordinate right inverses.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth coordinate lift solution.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119397,7 +119407,10 @@
      :reason "Banked correction."}
     {:job 5,
      :commit "2914de86857a9e7f16e8e708c0dd33988f173917",
-     :reason "Banked smooth fixed-coordinate right inverses."}]}
+     :reason "Banked smooth fixed-coordinate right inverses."}
+    {:job 6,
+     :commit "5c0f2e062494ca836b5a554e2f17712718aaacef",
+     :reason "Banked smooth coordinate lift solution."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -120890,7 +120903,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "exists_mfderivEquiv_of_surjective",
@@ -120902,7 +120915,9 @@
     :type
     "surjective surface mfderiv is a continuous linear equivalence",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-exists-mfderivequiv-of-surjective,
    :kind :lemma,
    :depends-on
@@ -120910,7 +120925,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "contDiff_lift_of_comp_isInvertible",
@@ -120920,7 +120935,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "smooth coordinate lift solving A(z)w(z)=b(z)",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "5c0f2e062494ca836b5a554e2f17712718aaacef"},
    :id :lemma-contdiff-lift-of-comp-isinvertible,
    :kind :lemma,
    :depends-on [:lemma-contdiff-rightinverse-of-comp-isinvertible],
