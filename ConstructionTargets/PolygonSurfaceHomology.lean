@@ -1648,6 +1648,36 @@ theorem orbitWedgeBase_eq_boundarySubdivisionVertex (P : PairingData)
         (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
         (polygonBoundarySignedEdge_source_eq_subdivision P i)
 
+/-- The subdivision factor using the single global vertex-to-basepoint
+equality at both endpoints. -/
+noncomputable def polygonBoundaryCanonicalSubdivisionPathAtBase
+    (P : PairingData) (i : Fin P.edgeCount) :
+    Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  ((polygonBoundaryIntegerLoopPath P).subpath
+    (polygonBoundarySubdivisionVertex P i.castSucc)
+    (polygonBoundarySubdivisionVertex P i.succ)).cast
+      (orbitWedgeBase_eq_boundarySubdivisionVertex P i.castSucc)
+      (orbitWedgeBase_eq_boundarySubdivisionVertex P i.succ)
+
+/-- The global endpoint normalization agrees exactly with the earlier
+edge-derived common-base normalization. -/
+theorem polygonBoundaryCanonicalSubdivisionPathAtBase_eq (P : PairingData)
+    (i : Fin P.edgeCount) :
+    polygonBoundaryCanonicalSubdivisionPathAtBase P i =
+      polygonBoundarySubdivisionPathAtBase P i := by
+  ext t
+  rw [polygonBoundaryCanonicalSubdivisionPathAtBase,
+    polygonBoundarySubdivisionPathAtBase]
+
+/-- With the global endpoint family, each subdivision factor is still the
+corresponding signed edge. -/
+theorem polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge
+    (P : PairingData) (i : Fin P.edgeCount) :
+    polygonBoundaryCanonicalSubdivisionPathAtBase P i =
+      polygonBoundarySignedEdgePathAtBase P i :=
+  (polygonBoundaryCanonicalSubdivisionPathAtBase_eq P i).trans
+    (polygonBoundarySubdivisionPathAtBase_eq_signedEdge P i)
+
 /-- In every wedge leg, the explicit geometric loop differs from the
 H₁-normalized leg generator by exactly the global orientation unit. -/
 theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
