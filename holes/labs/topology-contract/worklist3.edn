@@ -36121,7 +36121,7 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
@@ -36156,7 +36156,7 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "Repeated fresh check: .lake/packages remains a real directory rather than the required authority symlink; workspace policy forbids Lake verification and implementation pending lifecycle repair.",
+    "Authority invariant remains broken: .lake/packages is a real directory, not the required symlink. Lake verification and implementation remain forbidden pending lifecycle repair.",
     :commands
     [{:cmd "stat .lake/packages; test -L .lake/packages",
       :exit 1,
@@ -36166,16 +36166,6 @@
      {:cmd "scope git status", :exit 0}
      {:cmd "sha256sum fixture", :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792027716686-12939-25f2775d",
-     :commands
-     ["git show/check/diff-tree 8c4eb4f exact scope"
-      "fixture SHA-256 and committed forbidden-token assertions; snapshot compile"
-      "statement-registry check; parent/commit placeholder recount"],
-     :finding
-     "PASS: recorded 8c4eb4f compiles sorry-free with standard axioms and adds real progress after 263f5d47. The exact interface gives Fin(runs+1)-indexed outer-subtype boundaries and proves coercion to corresponding ambient canonical boundaries, in the direction needed for run-fold assembly. It does not assume based van Kampen. Scope/hash match; registry 166/166; Main 1->1 placeholder; remaining milestones are listed."},
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36184,7 +36174,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
