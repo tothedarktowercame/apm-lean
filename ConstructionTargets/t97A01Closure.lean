@@ -1662,6 +1662,28 @@ theorem torusRP2_subdivisionRunPrefixBlock_adjacent
   rw [hij]
   exact pathTwoOpenSubdivisionRunPrefixLength_add_predLength S i
 
+/-- Two consecutive cumulative-prefix blocks compose as the class of their
+joined path after the next block is cast along the adjacency equation. -/
+theorem torusRP2_subdivisionRunPrefixBlock_trans
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (i j : Fin (boolSideRunPartition S.side).length)
+    (hij : j.val = i.val + 1) :
+    Path.Homotopic.Quotient.trans
+        ⟦Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+          (pathTwoOpenSubdivisionRunPrefixBlockPiece S i)⟧
+        ⟦(Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S j)
+          (pathTwoOpenSubdivisionRunPrefixBlockPiece S j)).cast
+            (torusRP2_subdivisionRunPrefixBlock_adjacent S i j hij) rfl⟧ =
+      ⟦(Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S i)
+          (pathTwoOpenSubdivisionRunPrefixBlockPiece S i)).trans
+        ((Path.concat (pathTwoOpenSubdivisionRunPrefixBlockPoint S j)
+          (pathTwoOpenSubdivisionRunPrefixBlockPiece S j)).cast
+            (torusRP2_subdivisionRunPrefixBlock_adjacent S i j hij) rfl)⟧ := by
+  exact (Path.Homotopic.Quotient.mk_trans _ _).symm
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1742,6 +1764,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunBlockPiece_cast_eq_prefixBlockPiece
 #print axioms torusRP2_subdivisionRunBlockConcat_cast_eq_prefixBlockConcat
 #print axioms torusRP2_subdivisionRunPrefixBlock_adjacent
+#print axioms torusRP2_subdivisionRunPrefixBlock_trans
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
