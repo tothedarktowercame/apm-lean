@@ -76831,7 +76831,7 @@
     "One-hundred-thirteenth repeated STOP; scheduler reset outer stop-count despite reviewed terminal evidence and no missing lemmas.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope ["ConstructionTargets/PolygonSurfacePiOne.lean"],
    :dag-node "ConstructionTargets/PolygonSurfacePiOne.blueprint.md/B8",
    :acceptance
@@ -76842,7 +76842,10 @@
     :blueprint "ConstructionTargets/PolygonSurfacePiOne.blueprint.md",
     :placeholder "five pi1 routes",
     :route-step "B8 finite-wedge pi1 with coordinates"},
+   :superseded-note
+   "t96J02 closed by the blueprint/lemma rounds, lemmas commit d1c165e8f (claude-14 2026-10-15)",
    :id :routes-2026-10-13-polygon-b8-topo2-r1,
+   :superseded-by :blueprint-t96J02,
    :kind :reusable-theorem,
    :area "polygon-surface-pi1",
    :fail-count 0,

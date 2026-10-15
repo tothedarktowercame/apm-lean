@@ -88146,7 +88146,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/T99J01PathComponentCoverRestriction.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/component-cover-isksheeted",
@@ -88165,7 +88165,10 @@
      "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-11-t99j01-component-cover-isksheeted-111,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :area "covering-subgroup-correspondence",
    :fail-count 1,
@@ -88263,7 +88266,7 @@
       "6b09629d7b3805a73e9d3b146a92dbdff525d643d668534c56f8fba11a44cd2a"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/path-component-sheet-restriction",
@@ -88278,7 +88281,10 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-t99j01-path-component-sheet-restriction-4,
+   :superseded-by :blueprint-t99J01,
    :kind :final-adapter,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
@@ -88755,7 +88761,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"],
    :dag-node
@@ -88779,7 +88785,10 @@
     ["lake env lean ConstructionTargets/T99J01ExplicitConnectedCyclicCover.lean"
      "lake env lean /tmp/t99j01-explicit-connected-cyclic-cover-probe.lean"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-t99j01-cyclic-graph-cover-realization-1,
+   :superseded-by :blueprint-t99J01,
    :kind :uptake,
    :fail-count 1,
    :depends-on [],
@@ -88874,7 +88883,7 @@
      :residual
      "Exactly one compiled prerequisite remains: the cyclic n-vertex graph realization as a connected n-sheeted cover of ThreeCircles. The fiber-count predicate is already banked; arbitrary permutation covers and tree covers remain outside this row."}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J01/explicit-connected-cyclic-cover",
@@ -88889,7 +88898,10 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-t99j01-explicit-connected-cyclic-cover-4,
+   :superseded-by :blueprint-t99J01,
    :kind :uptake,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-uptake-mv-repair-3
@@ -89157,7 +89169,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/KleinDeckActionPolygonIdentification.lean"],
    :dag-node
@@ -89184,7 +89196,10 @@
      "lake env lean -o /tmp/Main.olean problems/t93J03/lean/Main.lean"
      "lake env bash -c 'export LEAN_PATH=\"/tmp:$LEAN_PATH\"; lean /tmp/t93j03-klein-deck-action-polygon-identification-probe.lean'"
      "python3 scripts/statement-registry.py check"]},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :id :routes-2026-10-10-t93j03-klein-deck-action-polygon-package-1,
+   :superseded-by :blueprint-t93J03,
    :kind :uptake,
    :fail-count 1,
    :depends-on [],
@@ -89291,7 +89306,7 @@
       "a7af38c238c547b240c88ffc75871f3afb2bc7b662d3e63e4e77c70009a2ff78"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-deck-action-polygon-identification",
@@ -89307,8 +89322,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-t93j03-klein-deck-action-polygon-identification-5,
+   :superseded-by :blueprint-t93J03,
    :kind :final-adapter,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-covering-schreier-components-4
@@ -90496,7 +90514,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierGeneratorCount.lean"],
    :dag-node
@@ -90519,7 +90537,10 @@
     "t99J01 step 3 and t97A03 step 8, finite Schreier-graph generator count",
     :implementation
     "Construct the finite connected Schreier coset quiver for H, choose a spanning tree rooted at the identity coset, identify Mathlib's Nielsen-Schreier generators with the oriented non-tree edges, and prove their count is r*n-(n-1)=(r-1)*n+1. Reindex IsFreeGroup.basis along that equivalence."},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-finite-index-schreier-generator-count-1,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :fail-count 1,
    :depends-on [],
@@ -90596,7 +90617,7 @@
      :residual
      "Exactly one prerequisite remains: an equivalence between Mathlib's chosen subgroup generator type and Fin ((r-1)*n+1)."}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank",
@@ -90613,7 +90634,10 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-finite-index-schreier-positive-rank-1,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-owner-reopen-1
@@ -90840,7 +90864,7 @@
      :proof-placeholder-count 1},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/FiniteIndexFreeGroupSchreierPositiveIndex.lean"],
    :dag-node
@@ -90863,8 +90887,11 @@
     "t99J01 step 3 and t97A03 step 8, positive-rank positive-index Schreier generator count",
     :implementation
     "Use 0<n and H.index=n to obtain the finite coset type. Construct its connected r-labelled Schreier quiver, choose a rooted spanning tree, identify the Nielsen-Schreier basis with oriented non-tree edges, and count r*n-(n-1)=(r-1)*n+1. Export the generator-type equivalence; Mathlib's IsFreeGroup.toFreeGroup and FreeGroup.freeGroupCongr then supply all requested group equivalences."},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-finite-index-schreier-positive-index-generator-count-2,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :fail-count 1,
    :depends-on [],
@@ -90942,7 +90969,7 @@
      :residual
      "One corrected prerequisite remains: identify Mathlib's chosen Nielsen-Schreier generator type with Fin ((r-1)*n+1) for positive r and positive subgroup index."}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-rank-positive-index",
@@ -90959,8 +90986,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-finite-index-schreier-positive-rank-positive-index-2,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-10-10-checkpoint-topo1-after-algebra-repair-2
@@ -91436,7 +91466,7 @@
       :finding "The worktree is clean."}],
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/spanning-tree-complement-count",
@@ -91453,8 +91483,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-10-finite-schreier-spanning-tree-complement-count-9,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :fail-count 1,
    :depends-on
@@ -91705,7 +91738,7 @@
      :proof-placeholder-count 0},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/finite-index-free-group-schreier-rank/positive-index/action-groupoid-edge-comparison",
@@ -91722,6 +91755,8 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :representation
    {:source
     "Banked positive-edge coordinates Fin r × (FreeGroup (Fin r) ⧸ H), with generator permutations on cosets",
@@ -91731,6 +91766,7 @@
     "Explicit endpoint-preserving equivalence from banked generator/coset coordinates to Mathlib action-groupoid generator arrows, with exact source, target, label, and inverse-orientation equations"},
    :id
    :routes-2026-10-10-finite-schreier-action-groupoid-edge-comparison-11,
+   :superseded-by :blueprint-t99J01,
    :kind :representation-comparison,
    :fail-count 1,
    :depends-on
@@ -98604,7 +98640,7 @@
       "threeNew_base"]},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/FiniteCircleWedgeFundamentalGroup.lean"],
    :dag-node
@@ -98624,7 +98660,10 @@
      "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-11-finite-circle-wedge-pi1-induction-74,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :fail-count 1,
    :depends-on [],
@@ -98723,7 +98762,7 @@
       "Recursive finite-circle-wedge fundamental-group equivalences, specialized to ThreeCircles, with representative inclusion coordinates."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J01/closure",
    :acceptance
@@ -98738,7 +98777,10 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-10-t99j01-closure-probe-40,
+   :superseded-by :blueprint-t99J01,
    :kind :consumer-closure,
    :area "covering-subgroup-correspondence",
    :depends-on
@@ -104636,7 +104678,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["ConstructionTargets/KleinCompatibleCarrierComponentBridge.lean"],
    :dag-node
@@ -104656,7 +104698,10 @@
      "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :id :routes-2026-10-11-klein-relation-locus-four-components-108,
+   :superseded-by :blueprint-t93J03,
    :kind :reusable-theorem,
    :area "polygon-quotient-identification",
    :fail-count 1,
@@ -104781,7 +104826,7 @@
        :area "polygon-quotient-identification"}],
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-aabb-square-polygon-presentation-equivalence",
@@ -104797,6 +104842,8 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :representation
    {:source "The frozen aabb disk polygon quotient Surface false 2",
     :target "The standard opposite-side closed-square Klein quotient",
@@ -104804,6 +104851,7 @@
     "Homeomorphism from the frozen aabb disk polygon quotient to the standard square quotient, induced by exact quotient-fiber equivalence rather than an edgewise carrier map"},
    :id
    :routes-2026-10-11-klein-aabb-square-polygon-presentation-equivalence-83,
+   :superseded-by :blueprint-t93J03,
    :kind :representation-comparison,
    :area "polygon-quotient-identification",
    :fail-count 0,
@@ -105347,7 +105395,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :blocked,
+   :state :superseded,
    :scope
    ["ConstructionTargets/TwoOpenFreeProductMappingCompositeCounitIdentity.lean"],
    :dag-node
@@ -105368,7 +105416,10 @@
      "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id :routes-2026-10-11-composite-counit-component-identity-91,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :fail-count 0,
@@ -105467,7 +105518,7 @@
       "The five transported counit components in the composite two-open mapping equivalence multiply to the identity at the free-product target object."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/generic-point-wedge-fundamental-group-coordinates",
@@ -105483,8 +105534,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-11-generic-point-wedge-fundamental-group-coordinates-84,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :depends-on
@@ -105501,7 +105555,7 @@
    :implements-lemma
    :lemma-genericpointwedgefundamentalgroupcoordinates-threecirclesgroupequivalence-coordi,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/three-circles-fundamental-group-coordinates",
@@ -105516,8 +105570,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-11-three-circles-fundamental-group-coordinates-85,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :depends-on
@@ -106190,7 +106247,7 @@
      :status :unverified-workspace-invalid},
     :seat "topo-2"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope ["ConstructionTargets/KleinPlaneOrbitQuotientTopology.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t93J03/klein-plane-same-orbit-closed",
    :acceptance
@@ -106208,7 +106265,10 @@
      "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :id :routes-2026-10-11-klein-plane-same-orbit-closed-110,
+   :superseded-by :blueprint-t93J03,
    :kind :reusable-theorem,
    :area "deck-group-fundamental-group",
    :fail-count 1,
@@ -106318,7 +106378,7 @@
       "8e4299059594f2ffa506913e99f99b148e9c139e5a5120bf713f07e2439d3ec9"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/t93J03/klein-orbit-quotient-homeomorph",
@@ -106334,6 +106394,8 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :representation
    {:source
     "The quotient of the explicit PresentedKleinGroup action on the plane",
@@ -106342,6 +106404,7 @@
     :direction
     "Homeomorphism from the plane-action orbit quotient to the frozen polygon quotient, induced by exact equality between orbit fibers and the polygon boundary EqvGen fibers"},
    :id :routes-2026-10-11-klein-orbit-quotient-homeomorph-96,
+   :superseded-by :blueprint-t93J03,
    :kind :representation-comparison,
    :area "deck-group-fundamental-group",
    :depends-on
@@ -106651,7 +106714,7 @@
      :status :self-axiomatized},
     :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["ConstructionTargets/TwoOpenPseudopushoutCounitBaseIdentity.lean"],
    :dag-node
@@ -106672,8 +106735,11 @@
      "zero source and fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-106,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :fail-count 0,
@@ -106785,7 +106851,7 @@
       "For the pseudococone obtained by pulling the free-product identity functor backward through the four downstream equivalences, both cover-leg components of the two-open pseudopushout counit at the common overlap basepoint are identity morphisms."},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "TOPOLOGY-ROUTES.md/shared/two-open-pseudopushout-counit-base-identity",
@@ -106801,8 +106867,11 @@
      "zero fixture sorry"
      "standard-only axioms"
      "registry check"]},
+   :superseded-note
+   "t99J01 closed by the blueprint/lemma rounds, lemmas commit b39c1f9cc (claude-14 2026-10-15)",
    :id
    :routes-2026-10-11-two-open-pseudopushout-counit-base-identity-98,
+   :superseded-by :blueprint-t99J01,
    :kind :reusable-theorem,
    :area "fundamental-group-wedge-of-circles",
    :depends-on

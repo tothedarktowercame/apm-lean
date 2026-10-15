@@ -36171,7 +36171,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :superseded,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36188,9 +36188,12 @@
     ["lake env lean problems/t93J03/lean/Main.lean"
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
+   :superseded-note
+   "t93J03 closed by the blueprint/lemma rounds, lemmas commit f32581c54 (claude-14 2026-10-15)",
    :continue-from
    "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed canonical prefix-indexed point/path families; quotient fold induction remains.",
    :id :program-2026-10-13-close-t93j03,
+   :superseded-by :blueprint-t93J03,
    :kind :final-adapter,
    :campaign-priority 30,
    :fail-count 0,
