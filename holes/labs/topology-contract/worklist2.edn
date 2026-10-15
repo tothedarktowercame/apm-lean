@@ -88378,6 +88378,19 @@
     [{:cmd "lake build ConstructionTargets.t97A01Closure", :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "registry; placeholder/axiom scans; git check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792046313878-13527-d8c3395a",
+     :commands
+     ["git show 594a2323e --stat --check -- ConstructionTargets/t97A01Closure.lean"
+      "sha256sum problems/t97A01/lean/Main.lean"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: 594a2323e adds new compiled progress after prior history: orbit and Fin-3 free-group maps surject onto the polygon skeleton pi1. Exact snapshot builds; target has 0 placeholders, frozen fixture retains its expected 1; fixture SHA 0f668117982c4a9ca0977b121884d05f91b351e20f17a03b363032b81ef26c0d matches; registry 166/0; new declarations use only propext, Classical.choice, Quot.sound. Orientations and boundaries are correct: inverse homeomorphism transport maps wedge pi1 to skeleton pi1, and inverse orbit relabeling maps Fin 3 generators to pairing orbits. Boundary word/kernel, van Kampen presentation, and final assembly remain explicitly listed."},
     :commit "594a2323e",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88386,7 +88399,7 @@
      "0f668117982c4a9ca0977b121884d05f91b351e20f17a03b363032b81ef26c0d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88404,7 +88417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked literal pi1 transport to pairing-space centre.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked Fin-3 skeleton epimorphism.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88446,7 +88459,10 @@
      :reason "Banked literal polygon homology."}
     {:job 2,
      :commit "8c2c65144",
-     :reason "Banked literal pi1 transport to pairing-space centre."}]}
+     :reason "Banked literal pi1 transport to pairing-space centre."}
+    {:job 3,
+     :commit "594a2323e",
+     :reason "Banked Fin-3 skeleton epimorphism."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -94008,7 +94024,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2SkeletonFinFreeGroupMap_surjective",
@@ -94018,7 +94034,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "Fin3 free group onto skeleton pi1",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "594a2323e"},
    :id :lemma-torusrp2skeletonfinfreegroupmap-surjective,
    :kind :lemma,
    :depends-on [],
