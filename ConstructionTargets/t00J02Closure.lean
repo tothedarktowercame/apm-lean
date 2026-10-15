@@ -300,6 +300,31 @@ theorem transverse_incidenceDifferenceDerivative_surjective
 
 #print axioms transverse_incidenceDifferenceDerivative_surjective
 
+/-- The surjective derivative of the transverse incidence equation is
+algebraically split.  This identifies the linear complement that the local
+submersion chart construction must promote to a continuous chart splitting. -/
+theorem transverse_incidenceDifferenceDerivative_hasLinearRightInverse
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    (f : S → S) (c : Circle → S)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∀ x z, f x = c z → ∃ g :
+        TangentSpace SurfaceModelWithCorners (f x) →ₗ[ℝ]
+          (TangentSpace SurfaceModelWithCorners x × TangentSpace (𝓡 1) z),
+      (LinearMap.coprod
+        (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+        (-((mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap))).comp g =
+          LinearMap.id := by
+  intro x z hxz
+  apply LinearMap.exists_rightInverse_of_surjective
+  exact LinearMap.range_eq_top_of_surjective _
+    (transverse_incidenceDifferenceDerivative_surjective f c htrans x z hxz)
+
+#print axioms transverse_incidenceDifferenceDerivative_hasLinearRightInverse
+
 /-- If two linear ranges span the target and the second range is already
 contained in the first, then the first map is surjective. -/
 theorem surjective_of_range_sup_eq_top_of_range_le
