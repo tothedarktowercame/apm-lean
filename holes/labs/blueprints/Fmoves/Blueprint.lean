@@ -8891,6 +8891,24 @@ theorem cutBoundary_old_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ s : Icc (0 : ℝ) 1, cutOldB L p q (cutChordParamB L p q s) = cutChordB L p q s) := by
   sorry
 
+/-- New side `p` (the old first `x`): the seam. -/
+theorem cutBoundary_newA_x {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    ∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutEdgeCircle L p s) = cutSeam L p q s := by
+  sorry
+
+/-- `v` sides: the reflection. -/
+theorem cutBoundary_newA_v {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    ∀ e s, p + 1 ≤ e → e < q →
+      cutNewA L p q (cutEdgeCircle L e s) =
+        (edgePoint L (q + p + 1 - e) (reverseParameter s) : ℂ) := by
+  sorry
+
+/-- The chord: the new side `p + 1`, reversed. -/
+theorem cutBoundary_newA_chord {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    ∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutChordParamA L p q s) =
+      (edgePoint L (p + 1) (reverseParameter s) : ℂ) := by
+  sorry
+
 theorem cutBoundary_newA_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutEdgeCircle L p s) = cutSeam L p q s) ∧
     (∀ e s, p + 1 ≤ e → e < q →
@@ -8898,7 +8916,7 @@ theorem cutBoundary_newA_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
         (edgePoint L (q + p + 1 - e) (reverseParameter s) : ℂ)) ∧
     (∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutChordParamA L p q s) =
       (edgePoint L (p + 1) (reverseParameter s) : ℂ)) := by
-  sorry
+  exact ⟨cutBoundary_newA_x hpq hqL, cutBoundary_newA_v hpq hqL, cutBoundary_newA_chord hpq hqL⟩
 
 theorem cutBoundary_newB_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ s : Icc (0 : ℝ) 1, cutNewB L p q (cutEdgeCircle L q s) = cutSeam L p q s) ∧
