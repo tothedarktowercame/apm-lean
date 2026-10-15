@@ -525,6 +525,63 @@ theorem t96A06_transferSimplex_projected (n : ℕ)
   unfold ConstructionTargets.CoveringSimplexTransfer.transferSimplex
   rw [huniv, Finset.sum_insert (by simpa using hab), Finset.sum_singleton]
 
+/-- The rational-coefficient transfer has the same two-term deck expansion.
+This is the generator formula consumed by the chain-map comparison. -/
+theorem t96A06_rational_transferSimplex_projected (n : ℕ)
+    (s : C(stdSimplex ℝ (Fin (n + 1)), Sphere 3)) :
+    CoefficientCoveringTransfer.transferSimplex ℚ
+        (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n
+        ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+          C(Sphere 3, RP3)).comp s) =
+      CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n
+          (SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of (Sphere 3)) n s) +
+        CoefficientH0.singularGenerator ℚ (TopCat.of (Sphere 3)) n
+          (SingularSubdivision.singularSimplexOfContinuousMap
+            (TopCat.of (Sphere 3)) n
+            ((⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩ :
+              C(Sphere 3, Sphere 3)).comp s)) := by
+  classical
+  let a : CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨s, rfl⟩
+  let anti : C(Sphere 3, Sphere 3) :=
+    ⟨sphereAntipodalN 3, rp3SphereAntipodal_continuous⟩
+  let b : CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s) := ⟨anti.comp s, by
+    funext x
+    exact ((rp3SphereProjection_eq_iff (s x) (sphereAntipodalN 3 (s x))).mpr
+      (Or.inr rfl)).symm⟩
+  have hab : a ≠ b := by
+    intro h
+    have hv := congrArg (fun l => l.1
+      (CoveringSimplexTransfer.vertex n)) h
+    simp only [a, b, anti, ContinuousMap.comp_apply] at hv
+    exact rp3SphereAntipodal_ne (s (CoveringSimplexTransfer.vertex n)) hv.symm
+  letI := CoveringSimplexTransfer.finiteLifts
+    (sphereProjection 3) t96A06_rp3_sphere_twoSheeted n
+    ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+      C(Sphere 3, RP3)).comp s)
+  letI := Fintype.ofFinite (CoveringLiftRestriction.Lifts
+    (sphereProjection 3)
+    ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+      C(Sphere 3, RP3)).comp s))
+  have huniv : (Finset.univ : Finset (CoveringLiftRestriction.Lifts
+      (sphereProjection 3)
+      ((⟨sphereProjection 3, rp3SphereProjection_continuous⟩ :
+        C(Sphere 3, RP3)).comp s))) = {a, b} := by
+    ext l
+    simp only [Finset.mem_insert, Finset.mem_singleton, Finset.mem_univ,
+      true_iff]
+    rcases t96A06_projectedSimplex_lift_eq_or_eq_antipodal n s l with h | h
+    · left; apply Subtype.ext; exact h
+    · right; apply Subtype.ext; exact h
+  unfold CoefficientCoveringTransfer.transferSimplex
+  rw [huniv, Finset.sum_insert (by simpa using hab), Finset.sum_singleton]
+
 /-- A surjection from a zero sphere-homology group forces the corresponding
 homology group of the projective quotient to be zero. -/
 theorem t96A06_rp3_rational_homology_isZero_of_sphere
@@ -581,6 +638,7 @@ theorem t96A06_rp3_rational_H2_isZero :
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
 #print axioms t96A06_transferSimplex_projected
+#print axioms t96A06_rational_transferSimplex_projected
 #print axioms t96A06_rp3_rational_homology_isZero_of_sphere
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
