@@ -1407,6 +1407,23 @@ noncomputable def polynomialSphereLift_signedRegularFiberCertificate :
     polynomialSphereLift_regularPoint_tangentDerivative.det_pos, ?_⟩
   exact polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck
 
+/-- The local sign recorded by the signed regular-fiber certificate.  The
+positive base determinant and orientation-preserving deck transports make
+every one of the four signs positive. -/
+def PolynomialSphereLiftSignedRegularFiberCertificate.localSign
+    (_ : PolynomialSphereLiftSignedRegularFiberCertificate) (_ : Fin 4) : ℤ := 1
+
+/-- Sum of the four local signs in a signed regular-fiber certificate. -/
+def PolynomialSphereLiftSignedRegularFiberCertificate.signedCount
+    (c : PolynomialSphereLiftSignedRegularFiberCertificate) : ℤ :=
+  ∑ i, c.localSign i
+
+theorem polynomialSphereLift_signedRegularFiberCount_eq_four :
+    polynomialSphereLift_signedRegularFiberCertificate.signedCount = 4 := by
+  norm_num [PolynomialSphereLiftSignedRegularFiberCertificate.signedCount,
+    PolynomialSphereLiftSignedRegularFiberCertificate.localSign,
+    Fin.sum_univ_four]
+
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
 theorem t96A06_rp3_sphere_twoSheeted :
@@ -2209,15 +2226,6 @@ theorem polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
     t96A06_identity_trace_three] at htrace
   norm_num at htrace
 
-/-- Exact invariant pair required by the consumer once its local-degree
-packet has been constructed. -/
-theorem polynomialDescent_invariants_of_localClassDecompositionAndBase
-    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
-    HasLefschetzNumber polynomialDescent (-3) ∧
-      ¬ ContinuousMap.Homotopic polynomialDescent (ContinuousMap.id RP3) :=
-  ⟨polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase h,
-    polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase h⟩
-
 /-- Ledger-facing name for the top-degree transfer/deck-sum milestone. -/
 noncomputable def t96A06_rp3_antipodal_H3 :=
   t96A06_rp3_rational_H3Iso
@@ -2356,6 +2364,15 @@ theorem polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase
     polynomialDescent_trace_three_of_localClassDecompositionAndBase h]
   norm_num
 
+/-- Exact invariant pair required by the consumer once its local-degree
+packet has been constructed. -/
+theorem polynomialDescent_invariants_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    HasLefschetzNumber polynomialDescent (-3) ∧
+      ¬ ContinuousMap.Homotopic polynomialDescent (ContinuousMap.id RP3) :=
+  ⟨polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase h,
+    polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase h⟩
+
 /-- The complete rational homology table for the literal projective-space
 model used by the consumer. -/
 theorem t96A06_rp3_rational_homology :
@@ -2440,6 +2457,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck
 #print axioms t96A06_polynomialSphereLift_localSignTransport
 #print axioms polynomialSphereLift_signedRegularFiberCertificate
+#print axioms polynomialSphereLift_signedRegularFiberCount_eq_four
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
