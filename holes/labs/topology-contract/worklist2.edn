@@ -87901,38 +87901,37 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Use adjacent exactness to prove surjectivity, extract H2 kernel, then B9-B10.",
+    "Extract surface H2 as the attaching kernel, finish H0, then B9-B10.",
     :outcome :stop,
-    :warnings
-    ["preexisting lint; unrelated dirt/review dirs preserved"],
+    :warnings ["preexisting lint; review dirs preserved"],
     :missing-theorems
-    [{:name "radialMVReassemblyLinear_ker",
-      :type "reassembly kernel equals production boundary range",
+    [{:name "radialMVReducedReassembly_surjective",
+      :type "reduced reassembly is onto",
       :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["boundaryCokernelToRadialH1"],
-      :area "polygon-quotient-homology"}
-     {:name "boundaryCokernelToRadialH1_injective",
-      :type "B8 cokernel map injective",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVReassemblyLinear_ker"],
-      :area "polygon-quotient-homology"}
-     {:name "lowDegreeHomology",
-      :type "B8 exactness extraction",
-      :status :partial,
       :consumers [:t97A01 :t94J09],
       :depends-on ["boundaryCokernelToRadialH1_injective"],
+      :area "polygon-quotient-homology"}
+     {:name "boundaryCokernelRadialH1Equiv",
+      :type "surface H1 equals attaching cokernel",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["radialMVReducedReassembly_surjective"],
+      :area "polygon-quotient-homology"}
+     {:name "lowDegreeHomology",
+      :type "B8 H0/H1/H2 extraction",
+      :status :partial,
+      :consumers [:t97A01 :t94J09],
+      :depends-on ["boundaryCokernelRadialH1Equiv"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked injectivity of the B8 cokernel-to-H1 map.",
+    :reason "Banked B8 surface-H1 cokernel equivalence.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87940,30 +87939,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 16d1b45c3", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792036683876-13160-b90cf394",
-     :commands
-     ["git show/diff-tree 16d1b45c3"
-      "sha256sum committed blob"
-      "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "#print axioms three new theorems"
-      "statement-registry.py check"
-      "placeholder scan"
-      "git show --check"],
-     :finding
-     "Reviewer codex-7: commit 16d1b45c3 by topo-6 changes only the scoped target; fixture hash 6f7f11dc...6063f matches. Exact snapshot builds; registry 166/0; 0 placeholders; standard axioms only. Reduced exactness gives range(boundary)=ker(reassembly); reversing it matches the kernel-first linear statement. The quotient-lift kernel criterion then proves injectivity, preserved by the cokernel equivalence. New compiled progress; adjacent exactness for surjectivity and H2-kernel extraction remain, then B9-B10."},
-    :commit "16d1b45c3",
+     {:cmd "git show --check f94cb352b", :exit 0}],
+    :diagnostic-history
+    [{:cmd "surjectivity drafts",
+      :exit 1,
+      :correction
+      "fixed namespaces, concrete composition, and inverse orientation"}],
+    :commit "f94cb352b",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "6f7f11dce9888ba1bbeb991cdf5fd4348a253fd8563b6d978c16faab7186063f"},
+     "71e98cd916e971b101a1e9f1c46897d10e9c14a82b24e63acc1bf91aec90f993"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -92997,7 +92987,8 @@
     :lemma-radialmvboundarykernelequiv
     :lemma-radialmvboundarycokernelequiv
     :lemma-boundarycokerneltoradialh1
-    :lemma-boundarycokerneltoradialh1-injective],
+    :lemma-boundarycokerneltoradialh1-injective
+    :lemma-boundarycokernelradialh1equiv],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93131,4 +93122,38 @@
    :id :lemma-boundarycokerneltoradialh1-injective,
    :kind :lemma,
    :depends-on [:lemma-radialmvreassemblylinear-ker],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialMVReducedReassembly_surjective",
+    :type "reduced reassembly is onto"},
+   :lemma
+   {:name "radialMVReducedReassembly_surjective",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "reduced reassembly is onto",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialmvreducedreassembly-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-boundarycokerneltoradialh1-injective],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "boundaryCokernelRadialH1Equiv",
+    :type "surface H1 equals attaching cokernel"},
+   :lemma
+   {:name "boundaryCokernelRadialH1Equiv",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "surface H1 equals attaching cokernel",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-boundarycokernelradialh1equiv,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvreducedreassembly-surjective],
    :other-consumers [:t94J09]}]}
