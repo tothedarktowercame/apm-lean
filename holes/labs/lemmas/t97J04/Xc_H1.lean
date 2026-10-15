@@ -2668,6 +2668,29 @@ lemma cLoop_H1_injective
 collapse coordinates (`finiteWedgeH1CoordinateMap`), under which the `cOrbit`
 leg is a basis vector. -/
 -- BEGIN SEAT AREA
+noncomputable def Xc_H1_aux_orbitCoords :
+    ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) ≅ ModuleCat.of ℤ (Fin 4 → ℤ) :=
+  LinearEquiv.toModuleIso
+    { toFun := fun v i ↦ v (orbitLabel.symm i)
+      invFun := fun v l ↦ v (orbitLabel l)
+      map_add' := by intros; rfl
+      map_smul' := by intros; rfl
+      left_inv := by intro v; ext l; simp
+      right_inv := by intro v; ext i; simp }
+
+noncomputable def Xc_H1_aux_delete :
+    ModuleCat.of ℤ (Fin 4 → ℤ) ⟶ ModuleCat.of ℤ (Fin 3 → ℤ) :=
+  ModuleCat.ofHom {
+    toFun := fun v i ↦ ![v 0, v 1, v 3] i
+    map_add' := by intro x y; ext i; fin_cases i <;> rfl
+    map_smul' := by intro n x; ext i; fin_cases i <;> rfl }
+
+lemma Xc_H1_aux_delete_surjective : Function.Surjective Xc_H1_aux_delete.hom := by
+  intro v
+  refine ⟨![v 0, v 1, 0, v 2], ?_⟩
+  ext i
+  fin_cases i <;> rfl
+
 lemma Xc_H1
     (hA8w : Function.Surjective (Hmap (cellIncl word) 1).hom ∧
       LinearMap.ker (Hmap (cellIncl word) 1).hom = LinearMap.range (Hmap word 1).hom)
@@ -2675,7 +2698,92 @@ lemma Xc_H1
       LinearMap.ker (Hmap (cellIncl cLoop) 1).hom = LinearMap.range (Hmap cLoop 1).hom)
     (hB7 : Hmap word 1 = 0) :
     Nonempty (H 1 Xc ≅ ModuleCat.of ℤ (Fin 3 → ℤ)) := by
-  sorry
+  have hiw : Function.Injective (Hmap (cellIncl word) 1).hom := by
+    rw [← LinearMap.ker_eq_bot]
+    rw [hA8w.2, hB7]
+    exact LinearMap.range_zero
+  let iw : H 1 W ≅ H 1 Sigma := LinearEquiv.toModuleIso
+    (LinearEquiv.ofBijective (Hmap (cellIncl word) 1).hom ⟨hiw, hA8w.1⟩)
+  let ec : H 1 Sigma ≅ ModuleCat.of ℤ (Fin 4 → ℤ) :=
+    iw.symm.trans ((PolygonSurfaceHomology.finiteWedgeH1CoordinateIso P).symm.trans
+      Xc_H1_aux_orbitCoords)
+  let p : H 1 Sigma ⟶ ModuleCat.of ℤ (Fin 3 → ℤ) := ec.hom ≫ Xc_H1_aux_delete
+  have hp_surj : Function.Surjective p.hom := by
+    exact Xc_H1_aux_delete_surjective.comp
+      ((ModuleCat.epi_iff_surjective ec.hom).mp inferInstance)
+  have hec (a : H 1 Circle) :
+      ec.hom.hom ((Hmap cLoop 1).hom a) =
+        fun i ↦ if i = 2 then ConstructionTargets.CircleHomology.circleH1IsoInt.hom a else 0 := by
+    have hw : (PolygonSurfaceHomology.finiteWedgeH1CoordinateIso P).inv.hom
+        ((PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom a) =
+        PolygonSurfaceHomology.orbitBasis P cOrbit
+          (ConstructionTargets.CircleHomology.circleH1IsoInt.hom a) := by
+      apply (ModuleCat.mono_iff_injective
+        (PolygonSurfaceHomology.finiteWedgeH1CoordinateIso P).hom).mp inferInstance
+      rw [Iso.inv_hom_id_apply]
+      change _ = (PolygonSurfaceHomology.finiteWedgeH1CoordinateMap P).hom _
+      rw [PolygonSurfaceHomology.finiteWedgeH1CoordinateMap_single]
+      simp
+    have hc : Hmap cLoop 1 =
+        PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit ≫ Hmap (cellIncl word) 1 := by
+      dsimp [cLoop, Hmap, PolygonSurfaceHomology.finiteWedgeLegH1]
+      rw [Functor.map_comp]
+    rw [hc, ModuleCat.comp_apply]
+    change Xc_H1_aux_orbitCoords.hom.hom
+      ((PolygonSurfaceHomology.finiteWedgeH1CoordinateIso P).inv.hom
+        (iw.inv.hom ((Hmap (cellIncl word) 1).hom
+          ((PolygonSurfaceHomology.finiteWedgeLegH1 cOrbit).hom a)))) = _
+    have hiwdef : iw.hom = Hmap (cellIncl word) 1 := rfl
+    rw [← hiwdef]
+    have hcancel (z : H 1 W) : iw.inv.hom (iw.hom.hom z) = z := by
+      exact DFunLike.congr_fun (congrArg ModuleCat.Hom.hom iw.hom_inv_id) z
+    rw [hcancel, hw]
+    ext i
+    have hh : (cOrbit = orbitLabel.symm i) ↔ i = 2 := by
+      constructor
+      · intro h
+        have := congrArg orbitLabel h
+        simpa [cOrbit_label] using this.symm
+      · intro h
+        subst i
+        rw [← cOrbit_label, orbitLabel.symm_apply_apply]
+    have hh' : (orbitLabel.symm i = cOrbit) ↔ i = 2 := eq_comm.trans hh
+    simp [Xc_H1_aux_orbitCoords, PolygonSurfaceHomology.orbitBasis,
+      Pi.single_apply, hh']
+  have hpc : LinearMap.ker p.hom = LinearMap.range (Hmap cLoop 1).hom := by
+    apply le_antisymm
+    · intro x hx
+      let v := ec.hom.hom x
+      have hv0 : v 0 = 0 := by
+        have := LinearMap.mem_ker.mp hx
+        exact congrFun this 0
+      have hv1 : v 1 = 0 := by
+        have := LinearMap.mem_ker.mp hx
+        exact congrFun this 1
+      have hv3 : v 3 = 0 := by
+        have := LinearMap.mem_ker.mp hx
+        exact congrFun this 2
+      let n := v 2
+      let a : H 1 Circle := ConstructionTargets.CircleHomology.circleH1IsoInt.inv n
+      refine ⟨a, ?_⟩
+      apply (ModuleCat.mono_iff_injective ec.hom).mp inferInstance
+      ext i
+      fin_cases i
+      · rw [hec]; simpa [v] using hv0.symm
+      · rw [hec]; simpa [v] using hv1.symm
+      · rw [hec]
+        simp [a, n, v]
+      · rw [hec]; simpa [v] using hv3.symm
+    · rintro x ⟨a, rfl⟩
+      apply LinearMap.mem_ker.mpr
+      ext i
+      change Xc_H1_aux_delete.hom (ec.hom.hom ((Hmap cLoop 1).hom a)) i = 0
+      rw [hec]
+      fin_cases i <;> simp [p, Xc_H1_aux_delete]
+  let q := (Hmap (cellIncl cLoop) 1).hom.quotKerEquivOfSurjective hA8c.1
+  let r := p.hom.quotKerEquivOfSurjective hp_surj
+  rw [hA8c.2, ← hpc] at q
+  exact ⟨LinearEquiv.toModuleIso (q.symm.trans r)⟩
 -- END SEAT AREA
 
 /-- B10. `H₀` of a path-connected space is `ℤ`. -/
