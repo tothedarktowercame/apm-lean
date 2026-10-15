@@ -1057,7 +1057,13 @@ lemma cell_H1_aux_exact
 lemma cell_H1_aux_inner_zero (γ : C(Circle, Y))
     (hA2 : ContractibleSpace (cellInner γ)) :
     Subsingleton (IntegralMV.HZ 1 (cellInner γ)) := by
-  sorry
+  letI := hA2
+  apply ModuleCat.subsingleton_of_isZero
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      _ 1
+      (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+        _ 1 (by decide))
 
 lemma cell_H1_aux_mv0_injective (γ : C(Circle, Y)) [PathConnectedSpace Y]
     (hA3 : ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
