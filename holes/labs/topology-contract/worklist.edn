@@ -119335,7 +119335,7 @@
      :commit "d5630b7e4415a05e94758003a997b2cf6559df40",
      :reason "Banked incidence tangent regularity transport."}]}
   {:consumer :t98A06,
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
    :evidence
@@ -119369,30 +119369,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked tangent-section chart transport.",
+    :reason
+    "Banked tangent-section chart transport; fixture hash repaired.",
     :commands
-    [{:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
+    [{:cmd "git show commit:fixture | sha256sum", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/count/diff", :exit 0}],
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
     :diagnostic-history
     [{:cmd "drafts", :exit 1, :finding "fixed inference"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1792039214666-13224-6e05ff0a",
-     :finding
-     "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash"},
     :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t98A06Closure.blueprint.md",
      :sha256
-     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e"},
+     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
