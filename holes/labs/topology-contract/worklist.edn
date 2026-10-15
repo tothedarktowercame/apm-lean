@@ -119137,40 +119137,40 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Identify chart conjugate; implicit incidence chart; Sard; calculations; Main.",
+    "Specialize to extended charts; implicit incidence chart; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "hasFDerivAt_incidenceDifference",
-      :type "derivative of F(u)-C(v)",
+    [{:name "hasFDerivAt_conj",
+      :type "derivative transports through coordinate equivalences",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on ["coordinateDerivative_hasRightInverse_of_eq_conj"],
+      :depends-on ["hasFDerivAt_incidenceDifference"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on ["hasFDerivAt_incidenceDifference"],
+      :depends-on ["hasFDerivAt_conj"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "1f257c558a56723fb55d9a983960df48760940388cd42ae7cb88faf98dfdfe4b",
+     "5b1c4db63ff74b096905195a5cd00a9cc7911402bb7abeb9f8725c5e19a56b8c",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence derivative formula.",
+    :reason "Banked chart derivative conjugation.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119179,21 +119179,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
-    [{:cmd "drafts", :exit 1, :finding "fixed ext"}
-     {:cmd "scan", :exit 130, :finding "stopped"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792042353449-13351-07e85685",
-     :commands
-     ["git diff/show 5ea5563a archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds a compiled, sorry-free derivative formula for the incidence difference. Projection-chain derivatives give A on the first factor and B on the second; subtraction yields A.coprod(-B), matching the incidence-kernel orientation. It does not claim the pending chart identification or implicit incidence chart, which remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "5ea5563afd675d581777463b466957363ca76564",
+    [{:cmd "API probe/first draft",
+      :exit 1,
+      :finding "made base-point cancellation explicit"}],
+    :commit "97beac5dd31444378f560ce79569fdd7beca278f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119201,7 +119190,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119669,7 +119658,8 @@
     :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse
     :lemma-exists-linearrightinverse-conj
     :lemma-coordinatederivative-hasrightinverse-of-eq-conj
-    :lemma-hasfderivat-incidencedifference],
+    :lemma-hasfderivat-incidencedifference
+    :lemma-hasfderivat-conj],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121452,6 +121442,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-coordinatederivative-hasrightinverse-of-eq-conj],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "hasFDerivAt_conj",
+    :type "derivative transports through coordinate equivalences"},
+   :lemma
+   {:name "hasFDerivAt_conj",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "derivative transports through coordinate equivalences",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-hasfderivat-conj,
+   :kind :lemma,
+   :depends-on [:lemma-hasfderivat-incidencedifference],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
