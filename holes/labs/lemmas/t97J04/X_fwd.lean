@@ -532,11 +532,107 @@ octagon pairs `a,b,c,d` go to the same point of `W` via
 (conjugation turns `circleArc t` into `circleArc (1 - t)`).  Continuous as a
 lift through the coinduced topology. -/
 -- BEGIN SEAT AREA
+lemma X_fwd_aux_conj_continuous : Continuous conjDisk := by
+  exact (continuous_star.comp continuous_subtype_val).subtype_mk _
+
+lemma X_fwd_aux_cell_boundary {Y : Type} [TopologicalSpace Y]
+    (γ : C(Circle, Y)) (z : Circle) :
+    cellDisk γ (circleToDisk z) = cellIncl γ (γ z) := by
+  exact Quotient.sound (Relation.EqvGen.symm _ _
+    (Relation.EqvGen.rel _ _ (CellRel.boundary z)))
+
+lemma X_fwd_aux_edges (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    cellDisk word
+        (apm_t97J04_edgePoint 8 i
+          t) =
+      cellDisk word
+        (apm_t97J04_edgePoint 8 (P.pair i)
+          (PolygonSurfacePiOne.pairedParameter P.pair P.sign i t)) := by
+  rw [show apm_t97J04_edgePoint 8 i t =
+      circleToDisk (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) by
+        apply Subtype.ext
+        simp [apm_t97J04_edgePoint, circleToDisk,
+          PolygonSurfaceHomology.circleToPolygonDisk,
+          PolygonSurfacePiOne.edgePointCircle, X_homeomorph_aux_edgeCount],
+    show apm_t97J04_edgePoint 8 (P.pair i)
+        (PolygonSurfacePiOne.pairedParameter P.pair P.sign i t) =
+      circleToDisk (PolygonSurfacePiOne.edgePointCircle P.edgeCount (P.pair i)
+        (PolygonSurfacePiOne.pairedParameter P.pair P.sign i t)) by
+        apply Subtype.ext
+        simp [apm_t97J04_edgePoint, circleToDisk,
+          PolygonSurfaceHomology.circleToPolygonDisk,
+          PolygonSurfacePiOne.edgePointCircle, X_homeomorph_aux_edgeCount],
+    X_fwd_aux_cell_boundary word, X_fwd_aux_cell_boundary word]
+  congr 1
+  change PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+      (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+    PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+      (PolygonSurfacePiOne.edgePointCircle P.edgeCount (P.pair i)
+        (PolygonSurfacePiOne.pairedParameter P.pair P.sign i t))
+  rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint,
+    PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint]
+  exact (P.signedWedgeArc_pair i t).symm
+
 lemma X_fwd :
     ∃ f : C(apm_t97J04_X, Xc),
       (∀ z, f (xMk (.inl z)) = cellIncl cLoop (cellDisk word z)) ∧
       (∀ z, f (xMk (.inr z)) = cellDisk cLoop (conjDisk z)) := by
-  sorry
+  let F : apm_t97J04_Disk ⊕ apm_t97J04_Disk → Xc := fun x =>
+    Sum.elim (fun z => cellIncl cLoop (cellDisk word z))
+      (fun z => cellDisk cLoop (conjDisk z)) x
+  have hrel : ∀ a b, apm_t97J04_ComplexRel a b → F a = F b := by
+    intro a b h
+    cases h with
+    | a t =>
+        apply congrArg (cellIncl cLoop)
+        simpa [P, PolygonSurfacePiOne.pairedParameter,
+          PolygonSurfacePiOne.reverseIcc] using X_fwd_aux_edges (i := (0 : Fin 8)) t
+    | b t =>
+        apply congrArg (cellIncl cLoop)
+        simpa [P, PolygonSurfacePiOne.pairedParameter,
+          PolygonSurfacePiOne.reverseIcc] using X_fwd_aux_edges (i := (1 : Fin 8)) t
+    | c t =>
+        apply congrArg (cellIncl cLoop)
+        simpa [P, PolygonSurfacePiOne.pairedParameter,
+          PolygonSurfacePiOne.reverseIcc] using X_fwd_aux_edges (i := (4 : Fin 8)) t
+    | d t =>
+        apply congrArg (cellIncl cLoop)
+        simpa [P, PolygonSurfacePiOne.pairedParameter,
+          PolygonSurfacePiOne.reverseIcc] using X_fwd_aux_edges (i := (5 : Fin 8)) t
+    | meridian t =>
+        dsimp [F]
+        have hconj : conjDisk (apm_t97J04_edgePoint 1 0 t) =
+            circleToDisk (PolygonSurfacePiOne.circleArc
+              (PolygonSurfacePiOne.reverseIcc t)) := by
+          rw [X_homeomorph_aux_oneDisk_boundary]
+          apply Subtype.ext
+          change (starRingEnd ℂ)
+              ((AddCircle.toCircle ((t : ℝ) : AddCircle (1 : ℝ)) : Circle) : ℂ) = _
+          rw [← Circle.coe_inv_eq_conj,
+            ← AddCircle.toCircle_neg (T := (1 : ℝ))]
+          congr 2
+          simp [PolygonSurfacePiOne.reverseIcc, AddCircle.coe_period]
+        rw [hconj, X_fwd_aux_cell_boundary cLoop]
+        have hedge : apm_t97J04_edgePoint 8 4 t =
+            circleToDisk (PolygonSurfacePiOne.edgePointCircle P.edgeCount cEdge t) := by
+          apply Subtype.ext
+          simp [apm_t97J04_edgePoint, circleToDisk,
+            PolygonSurfaceHomology.circleToPolygonDisk,
+            PolygonSurfacePiOne.edgePointCircle, cEdge, X_homeomorph_aux_edgeCount]
+        rw [hedge, X_fwd_aux_cell_boundary word, X_homeomorph_aux_word_cEdge]
+        rfl
+  let f0 : apm_t97J04_X → Xc := Quotient.lift F (by
+    intro a b hab
+    exact Relation.EqvGen.rec (fun _ _ h => hrel _ _ h)
+      (fun _ => rfl) (fun _ _ _ h => h.symm)
+      (fun _ _ _ _ _ h₁ h₂ => h₁.trans h₂) hab)
+  have hf0 : Continuous f0 := by
+    apply continuous_coinduced_dom.mpr
+    change Continuous F
+    simpa only [F, Function.comp_apply] using
+      (((cellIncl cLoop).continuous.comp (cellDisk word).continuous).sumElim
+        ((cellDisk cLoop).continuous.comp X_fwd_aux_conj_continuous))
+  refine ⟨⟨f0, hf0⟩, ?_, ?_⟩ <;> intro z <;> rfl
 -- END SEAT AREA
 
 /-- B1b. Backward map `Xc → X`: on `Sigma = Cell word`, `W`-points go through
