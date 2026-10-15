@@ -347,6 +347,38 @@ noncomputable def t97J07_complexProjectiveRationalHomologyData_zero :
     subst i
     simpa using h0.toLinearEquiv
 
+/-- The nonzero-vector presentation of the literal complex projective line
+is path connected. -/
+theorem t97J07_cp1_nonzeroVectors_pathConnected :
+    PathConnectedSpace
+      (ConstructionTargets.ProjectiveSpaceTopology.NonzeroVectors ℂ 1) := by
+  apply isPathConnected_iff_pathConnectedSpace.mp
+  change IsPathConnected ({0}ᶜ : Set (Fin 2 → ℂ))
+  apply isPathConnected_compl_singleton_of_one_lt_rank
+  rw [← Module.finrank_eq_rank]
+  norm_num [Module.finrank_fin_fun]
+
+/-- Hence the exact quotient-topological `CP¹` used by the filtration is
+path connected. -/
+theorem t97J07_cp1_pathConnected :
+    PathConnectedSpace
+      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) := by
+  letI : PathConnectedSpace
+      (ConstructionTargets.ProjectiveSpaceTopology.NonzeroVectors ℂ 1) :=
+    t97J07_cp1_nonzeroVectors_pathConnected
+  exact (ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap ℂ 1).pathConnectedSpace
+    (ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap ℂ 1)
+
+/-- The degree-zero part of the bounded `CP⁰ → CP¹` filtration step. -/
+noncomputable def t97J07_cp1_rationalH0Iso :
+    ConstructionTargets.RationalLefschetz.Homology
+        (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) 0 ≃ₗ[ℚ] ℚ := by
+  letI : PathConnectedSpace
+      (ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1) :=
+    t97J07_cp1_pathConnected
+  exact (ConstructionTargets.CoefficientH0.h0Iso ℚ
+    (ConstructionTargets.ProjectiveSpaceTopology.coordinateLine ℂ 1 0)).toLinearEquiv
+
 /-- Only the first two filtration steps are needed by this consumer.  This
 bounded adapter avoids requiring an all-dimensional successor theorem. -/
 noncomputable def t97J07_cp2RationalHomologyData_of_two_steps
@@ -401,6 +433,10 @@ theorem t97J07_eulerCharacteristic_of_homologyData
     simp only [ConstructionTargets.RationalLefschetz.induced,
       CategoryTheory.Functor.map_id, LinearMap.trace_id]
     norm_num [Finset.sum_range_succ, h0, h1, h2, h3, h4]
+
+#print axioms t97J07_cp1_nonzeroVectors_pathConnected
+#print axioms t97J07_cp1_pathConnected
+#print axioms t97J07_cp1_rationalH0Iso
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
