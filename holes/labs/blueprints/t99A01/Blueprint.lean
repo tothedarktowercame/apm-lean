@@ -491,10 +491,44 @@ theorem t99A01_cokernel_Y : Nonempty
     (t99A01_cokernel_Y_aux_exact.linearEquivOfSurjective ?_)⟩
   exact ZMod.intCast_surjective
 
+def t99A01_kernel_Y_aux_coordinate :
+    APMT99A01.DegreeKernel APMT99A01.degreeY →ₗ[ℤ] ℤ where
+  toFun x := x.1 1
+  map_add' x y := by simp
+  map_smul' c x := by simp
+
+lemma t99A01_kernel_Y_aux_bijective :
+    Function.Bijective t99A01_kernel_Y_aux_coordinate := by
+  constructor
+  · intro x y hxy
+    apply Subtype.ext
+    funext i
+    fin_cases i
+    · have hx : APMT99A01.degreeMap APMT99A01.degreeY x.1 = 0 :=
+        LinearMap.mem_ker.mp x.2
+      have hy : APMT99A01.degreeMap APMT99A01.degreeY y.1 = 0 :=
+        LinearMap.mem_ker.mp y.2
+      simp [APMT99A01.degreeMap, APMT99A01.degreeY] at hx hy
+      change x.1 1 = y.1 1 at hxy
+      have hx' : x.1 0 + 2 * x.1 1 = 0 := by omega
+      have hy' : y.1 0 + 2 * y.1 1 = 0 := by omega
+      change x.1 0 = y.1 0
+      omega
+    · exact hxy
+  · intro n
+    let x : Fin 2 → ℤ := ![-2 * n, n]
+    have hx : APMT99A01.degreeMap APMT99A01.degreeY x = 0 := by
+      simp [APMT99A01.degreeMap, APMT99A01.degreeY, x]
+      ring
+    refine ⟨⟨x, hx⟩, ?_⟩
+    rfl
+
 theorem t99A01_kernel_Y : Nonempty
     (ModuleCat.of ℤ (APMT99A01.DegreeKernel APMT99A01.degreeY) ≅
       ModuleCat.of ℤ ℤ) := by
-  sorry
+  exact ⟨LinearEquiv.toModuleIso
+    (LinearEquiv.ofBijective t99A01_kernel_Y_aux_coordinate
+      t99A01_kernel_Y_aux_bijective)⟩
 
 theorem t99A01_cokernel_Z : Limits.IsZero
     (ModuleCat.of ℤ (APMT99A01.DegreeCokernel APMT99A01.degreeZ)) := by
