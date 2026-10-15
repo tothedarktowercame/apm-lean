@@ -88720,6 +88720,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 258ff314a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792108366010-14858-320e5f47",
+     :commands
+     ["git show/diff/check 258ff314a"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 258ff314a"],
+     :finding
+     "PASS program STOP: topo-6 commit 258ff314a adds compiled, sorry-free progress beyond history accfce741. frozenSignedQuotientHomologyIsoGenerator correctly applies singularHomologyFunctor.mapIso to TopCat.isoOfHomeo of the signed-to-generator quotient homeomorphism, yielding SpaceH signed k isomorphic to SpaceH generator k in the stated orientation for every natural degree. It transports homology across the established topological boundary without pretending to compute the generator quotient. Only t94J09Closure.lean changed; fixture SHA 470a4a2290042923ddf3fc0349bb14cdef7ae339cdb5638f8f4d142e46545e53 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Generator-quotient MV computation, normalization, and assembly remain listed."},
     :commit "258ff314a",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88741,7 @@
      "470a4a2290042923ddf3fc0349bb14cdef7ae339cdb5638f8f4d142e46545e53"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient homeomorphism.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked homology transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88797,7 +88810,10 @@
      :reason "Banked quotient equivalence."}
     {:job 7,
      :commit "accfce741",
-     :reason "Banked quotient homeomorphism."}]}
+     :reason "Banked quotient homeomorphism."}
+    {:job 8,
+     :commit "258ff314a",
+     :reason "Banked homology transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96551,7 +96567,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenSignedQuotientHomologyIsoGenerator",
@@ -96561,7 +96577,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "all-degree singular homology transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "258ff314a"},
    :id :lemma-frozensignedquotienthomologyisogenerator,
    :kind :lemma,
    :depends-on [:lemma-frozensignedquotienthomeomorphgenerator],
