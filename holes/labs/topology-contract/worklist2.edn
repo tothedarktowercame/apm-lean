@@ -88331,29 +88331,29 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Identify global flat-interval fold with flat concat; van Kampen; assemble.",
+    "Compare literal flat-interval fold class with single flat concat; van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
     [{:name
-      "torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat",
+      "torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat",
       :type
-      "global prefix-block fold equals globally rebased flat-interval fold",
+      "literal-endpoint global prefix fold equals flat-interval fold",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockConcat_eq_flatIntervalConcat"],
+      ["torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunGlobalPrefixBlockConcat_eq_flatIntervalConcat"],
+      ["torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88365,7 +88365,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked global flat-interval outer fold.",
+    :reason "Banked literal-endpoint flat interval fold.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88375,29 +88375,16 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check d2f7336b1", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792083995651-14343-c5bff541",
-     :commands
-     ["git show/diff/check d2f7336b1"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit d2f7336b1 adds compiled, sorry-free progress beyond history commit 4f1202503. It rebases each per-run flat-interval concat to the global run-boundary family, proves equality with the globally rebased prefix-block path, and lifts this factorwise equality through the outer Path.concat. Only t97A01Closure.lean changed; fixture SHA 047efc24274791f21c00b27898486626b3d4c9576c4aca2c17bb98e58664fa58 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Global boundary casts and outer-concat orientation are correct. Identifying the global interval fold with the single flat concat, van Kampen, and assembly remain listed."},
-    :commit "d2f7336b1",
+     {:cmd "git show --check 9fff259c0", :exit 0}],
+    :commit "9fff259c0",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "047efc24274791f21c00b27898486626b3d4c9576c4aca2c17bb98e58664fa58"},
+     "b9e6acfbcdf7520ad59346319bb6e694a8e60aa6d41ec8837995f344a12f898e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94351,7 +94338,8 @@
     :lemma-torusrp2-subdivisionrunprefixblockpiece-apply-sub-prefix-eq-flat-of-mem-interval
     :lemma-torusrp2-subdivisionrunprefixblockpiece-family-eq-flat-prefix-add
     :lemma-torusrp2-subdivisionrunprefixblockconcat-eq-flatintervalconcat
-    :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-eq-flatintervalconcat],
+    :lemma-torusrp2-subdivisionrunglobalprefixblockconcat-eq-flatintervalconcat
+    :lemma-torusrp2-subdivisionglobalprefixblockconcat-eq-flatintervalconcat],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95852,4 +95840,27 @@
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-subdivisionrunprefixblockconcat-eq-flatintervalconcat],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat",
+    :type
+    "literal-endpoint global prefix fold equals flat-interval fold"},
+   :lemma
+   {:name
+    "torusRP2_subdivisionGlobalPrefixBlockConcat_eq_flatIntervalConcat",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type
+    "literal-endpoint global prefix fold equals flat-interval fold",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionglobalprefixblockconcat-eq-flatintervalconcat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunglobalprefixblockconcat-eq-flatintervalconcat],
    :other-consumers []}]}
