@@ -36708,34 +36708,34 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Compute sphere groups; retract lower patch to CPn; apply MV successor and Main.",
+    "Compute positive sphere groups; retract lower patch to CPn; prove MV successor and Main.",
     :outcome :stop,
-    :warnings ["Main: one placeholder; unrelated edit untouched."],
+    :warnings
+    ["Main has one placeholder; unrelated untracked files untouched."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_overlap_homologyIso_unitSphere",
-      :type
-      "overlap homology isomorphic to affine unit-sphere homology",
+    [{:name "t99J05_cp_successor_overlap_rational_H0",
+      :type "overlap rational H0 is Q",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_overlap_homeomorph_puncturedAffine"],
+      ["t99J05_cp_successor_overlap_homologyIso_unitSphere"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_overlap_rational_homology",
-      :type "explicit overlap groups from rational sphere homology",
-      :status :not-started,
+      :type "explicit overlap groups in all degrees",
+      :status :partial,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_overlap_homologyIso_unitSphere"],
+      :depends-on ["t99J05_cp_successor_overlap_rational_H0"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed overlap homology transport to its unit sphere.",
+    :reason
+    "Committed path-connectedness and rational H0 of every successor overlap.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36746,27 +36746,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git diff --check && git show --check --stat ba6af8f7d",
+     {:cmd "git diff --check && git show --check --stat cc0929ea3",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "initial sphere transport compile",
+    [{:cmd "initial rank proof",
       :exit 1,
-      :note "Opened notation; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792088774052-14431-11975f38",
-     :commands
-     ["git show --check --stat 7337cdfc2"
-      "git diff --name-only 7337cdfc2^ 7337cdfc2"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed one."},
-    :commit "ba6af8f7d",
+      :note "Expanded pi-space finrank; rerun passed."}],
+    :commit "cc0929ea3",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36774,7 +36760,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -43709,7 +43695,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine
-    :lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere],
+    :lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere
+    :lemma-t99j05-cp-successor-overlap-rational-h0],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -43932,6 +43919,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-mappedintegralnormalizedclass-localization-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_rational_H0",
+    :type "overlap rational H0 is Q"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_rational_H0",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "overlap rational H0 is Q",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-overlap-rational-h0,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
