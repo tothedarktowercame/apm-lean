@@ -2185,6 +2185,32 @@ theorem t96A06_mappedIntegralLocalGenerator_mapsTo_ambient :
       (k := 1) polynomialSphereRegularPoint := by
   simp [t96A06_mappedIntegralLocalGenerator]
 
+/-- The preservation isomorphisms commute with the exact deleted-point
+projection used for the normalized class. -/
+theorem t96A06_normalizedClass_projection_preservation_naturality :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint))) 3) ≫
+      (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+    (((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+      HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3 :=
+  ConstructionTargets.ManifoldFundamentalClass.coefficientRelativeProjection_mapHomologyIso_naturality
+    (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+      polynomialSphereRegularPoint) 3
+
 /-- Extend the positive integral local class to native rational relative
 homology. -/
 noncomputable def t96A06_mappedRationalLocalExtension :=
@@ -3576,6 +3602,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
+#print axioms t96A06_normalizedClass_projection_preservation_naturality
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_integralToRational_localGenerator_iff
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
