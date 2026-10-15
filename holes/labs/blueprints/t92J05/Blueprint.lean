@@ -560,6 +560,41 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective
         apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_surjective_aux_loop_factorization
           U V hU hV hcover x p
       exact ⟨q, hq⟩
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_of_factor
+    {G H K : Type*} [Group G] [Group H] [Group K]
+    (f : G →* H) (a : K →* G)
+    (r : H →* (G ⧸ Subgroup.normalClosure (a.range : Set G)))
+    (hfactor : r.comp f =
+      QuotientGroup.mk' (Subgroup.normalClosure (a.range : Set G))) :
+    MonoidHom.ker f ≤ Subgroup.normalClosure (a.range : Set G) := by
+  intro g hg
+  have hq : QuotientGroup.mk' (Subgroup.normalClosure (a.range : Set G)) g = 1 := by
+    rw [← hfactor]
+    change r (f g) = 1
+    rw [hg, map_one]
+  exact (QuotientGroup.eq_one_iff g).mp hq
+
+lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
+    {X : Type*} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
+    [PathConnectedSpace U] [PathConnectedSpace V]
+    [PathConnectedSpace (U ∩ V : Set X)] [SimplyConnectedSpace V]
+    (x : (U ∩ V : Set X)) :
+    let leftMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_leftInclusion U) (⟨x.1, x.2.1⟩ : U)
+    let overlapMap := FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft U V) x
+    ∃ r : FundamentalGroup X x.1 →*
+        (FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+          Subgroup.normalClosure (overlapMap.range : Set
+            (FundamentalGroup U
+              (apm_t92J05_twoOpen_overlapToLeft U V x)))),
+      r.comp leftMap = QuotientGroup.mk'
+        (Subgroup.normalClosure (overlapMap.range : Set
+          (FundamentalGroup U
+            (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
+  sorry
+
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
@@ -573,8 +608,11 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le
           (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set
             (FundamentalGroup U
               (apm_t92J05_twoOpen_overlapToLeft U V x))) := by
-  sorry
-
+  obtain ⟨r, hr⟩ :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
+      U V hU hV hcover x
+  exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_of_factor
+    _ _ r hr
 lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel
     {X : Type*} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcover : U ∪ V = Set.univ)
