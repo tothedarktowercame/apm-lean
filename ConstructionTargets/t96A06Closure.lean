@@ -1369,6 +1369,48 @@ noncomputable def t96A06_sphere3_rational_H3Iso :
   CoefficientSphereShift.sphereShift ℚ 3 2 (by decide) ≪≫
     CoefficientSphereEndpoints.sphereH2 ℚ
 
+/-- The concrete rational fundamental class selected by the sphere-shift
+normalization. -/
+noncomputable def t96A06_sphere3_rational_fundamentalClass :
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) :=
+  t96A06_sphere3_rational_H3Iso.inv 1
+
+/-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
+when it has that value on the selected fundamental class. -/
+theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
+    (f : CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)) ⟶
+      CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3))) (q : ℚ) :
+    f = q • 𝟙 _ ↔
+      f t96A06_sphere3_rational_fundamentalClass =
+        q • t96A06_sphere3_rational_fundamentalClass := by
+  constructor
+  · rintro rfl
+    simp
+  · intro h
+    ext x
+    let a : ℚ := t96A06_sphere3_rational_H3Iso.hom x
+    have hx : x = a • t96A06_sphere3_rational_fundamentalClass := by
+      calc
+        x = t96A06_sphere3_rational_H3Iso.inv
+            (t96A06_sphere3_rational_H3Iso.hom x) := by simp
+        _ = t96A06_sphere3_rational_H3Iso.inv (a • 1) := by simp [a]
+        _ = a • t96A06_sphere3_rational_fundamentalClass := by
+          rw [map_smul]
+          rfl
+    rw [hx, map_smul, h]
+    simp [smul_smul, mul_comm]
+
+/-- Thus the remaining regular-value formula is exactly its value on the
+chosen rational fundamental class. -/
+theorem polynomialSphereLift_regularValueFormula_iff_fundamentalClass :
+    PolynomialSphereLiftRegularValueFormula ↔
+      HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+          t96A06_sphere3_rational_fundamentalClass =
+        (∑ _ : Fin 4, (1 : ℚ)) •
+          t96A06_sphere3_rational_fundamentalClass := by
+  exact t96A06_sphere3_endomorphism_eq_smul_id_iff _ _
+
 /-- The antipodal deck transformation acts trivially on rational top
 homology of the concrete three-sphere.  This is the odd-dimensional sign in
 the sphere antipodal formula, specialized to the cover of `RP3`. -/
@@ -1860,6 +1902,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphere3_rational_H1_isZero
 #print axioms t96A06_sphere3_rational_H2_isZero
 #print axioms t96A06_sphere3_rational_H3Iso
+#print axioms t96A06_sphere3_endomorphism_eq_smul_id_iff
+#print axioms polynomialSphereLift_regularValueFormula_iff_fundamentalClass
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
