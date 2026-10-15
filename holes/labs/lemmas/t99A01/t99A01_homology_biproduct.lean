@@ -849,7 +849,15 @@ theorem t99A01_homology_biproduct {r : ℕ} (Cs : Fin r → ChainComplex (Module
     (D : ChainComplex (ModuleCat ℤ) ℕ) (f : ∀ i, Cs i ⟶ D)
     (hf : IsIso (Limits.biproduct.desc f)) (k : ℕ) :
     IsIso (Limits.biproduct.desc fun i ↦ HomologicalComplex.homologyMap (f i) k) := by
-  sorry
+  let F := HomologicalComplex.homologyFunctor (ModuleCat ℤ) (ComplexShape.down ℕ) k
+  letI : IsIso (Limits.biproduct.desc f) := hf
+  haveI : IsIso (F.map (Limits.biproduct.desc f)) := inferInstance
+  haveI : IsIso (F.mapBiproduct Cs).inv := inferInstance
+  have hcomp : IsIso ((F.mapBiproduct Cs).inv ≫
+      F.map (Limits.biproduct.desc f)) := IsIso.comp_isIso
+  change IsIso (Limits.biproduct.desc fun i => F.map (f i))
+  rw [← Limits.biproduct.mapBiproduct_inv_map_desc F Cs f]
+  exact hcomp
 -- END SEAT AREA
 
 theorem t99A01_sigma_homology {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
