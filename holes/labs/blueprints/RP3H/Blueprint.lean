@@ -52,8 +52,48 @@ theorem proj_cover : CoveringDegree.IsKSheetedCover projFun 2 := by
 
 /-- Rational homology of `S³` vanishes in positive degrees other than `3` (iterate
 `CoefficientSphereShift.sphereShift` down to `S¹`/`S⁰`). -/
+theorem sphere_isZero_aux_H1 : IsZero (HQ 1 S3) := by
+  letI : ContractibleSpace
+      (T02A06.euclideanClosedDisk 3) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : PathConnectedSpace (T02A06.euclideanUnitSphere 3) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by rw [← Module.finrank_eq_rank']; norm_num) 0 (by norm_num))
+  letI : PathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 3) :=
+    (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 3).symm.surjective.pathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 3).symm.continuous
+  apply (ConstructionTargets.CoefficientSphereShift.sphereH1KernelIso ℚ 3).isZero_iff.mpr
+  exact ConstructionTargets.CoefficientConnectedH0Map.inclusion_kernel_zero ℚ _
+
 theorem sphere_isZero (k : ℕ) (hk0 : k ≠ 0) (hk3 : k ≠ 3) : IsZero (HQ k S3) := by
-  sorry
+  rcases Nat.lt_trichotomy k 3 with hk | hk | hk
+  · interval_cases k
+    · exact (hk0 rfl).elim
+    · exact sphere_isZero_aux_H1
+    · let e : HQ 2 S3 ≅ CoefficientContractiblePair.H ℚ 1
+          (TopCat.of (T02A06.euclideanUnitSphere 3)) := by
+        simpa using ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 3 1 (by decide)
+      exact (ConstructionTargets.CoefficientConnectedH0Map.sphereTwo_H1_zero ℚ).of_iso e
+  · exact (hk3 hk).elim
+  · let e₃ : HQ k S3 ≅ CoefficientContractiblePair.H ℚ (k - 1)
+        (TopCat.of (T02A06.euclideanUnitSphere 3)) := by
+      simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+        ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 3 (k - 1) (by omega)
+    let e₂ : CoefficientContractiblePair.H ℚ (k - 1)
+        (TopCat.of (T02A06.euclideanUnitSphere 3)) ≅
+        CoefficientContractiblePair.H ℚ (k - 2)
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) := by
+      simpa only [show k - 2 + 1 = k - 1 by omega] using
+        ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 2 (k - 2) (by omega)
+    let e₁ : CoefficientContractiblePair.H ℚ (k - 2)
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) ≅
+        CoefficientContractiblePair.H ℚ (k - 3)
+          (TopCat.of (T02A06.euclideanUnitSphere 1)) := by
+      simpa only [show k - 3 + 1 = k - 2 by omega] using
+        ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k - 3) (by omega)
+    have hzero := ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ (k - 3) (by omega)
+    exact ((hzero.of_iso e₁).of_iso e₂).of_iso e₃
 
 /-- `H₃(S³; ℚ) ≅ ℚ` (banked `CoefficientFirstReflection.topIso ℚ 2`). -/
 theorem sphere_top : Nonempty (HQ 3 S3 ≅ ModuleCat.of ℚ ℚ) := by
