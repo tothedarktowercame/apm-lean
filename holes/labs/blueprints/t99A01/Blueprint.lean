@@ -363,7 +363,13 @@ theorem t99A01_attachMVData_hTwo {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) :
     Nonempty (APMT99A01.H 2 (APMT99A01.AttachSpace degree) ≅
       ModuleCat.of ℤ (APMT99A01.DegreeKernel degree)) := by
-  sorry
+  have hrange : LinearMap.range D.δ₂ =
+      LinearMap.ker (APMT99A01.degreeMap degree) := by
+    rw [← D.i₁_eq_degreeMap]
+    exact D.exact_δ₂_i₁
+  exact ⟨LinearEquiv.toModuleIso
+    ((LinearEquiv.ofInjective D.δ₂ D.δ₂_injective).trans
+      (LinearEquiv.ofEq _ _ hrange))⟩
 
 theorem t99A01_attachMVData_hHigher {r : ℕ} (degree : Fin r → ℕ)
     (D : APMT99A01.AttachMVData degree) (k : ℕ) (hk : 3 ≤ k) :
