@@ -119066,7 +119066,7 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
@@ -119117,7 +119117,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119379,6 +119379,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
     :diagnostic-history
     [{:cmd "drafts", :exit 1, :finding "fixed inference"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792039406528-13240-d7eb75bb",
+     :commands
+     ["git show 419de7e1 archived closure/Main/blueprint"
+      "lake env lean archived t98A06Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP after fixture repair: commit adds compiled, sorry-free tangent-section chart transport. The theorem faithfully converts smooth fixed trivialization coordinates to a tangent-bundle section on U via the trivialization section equivalence; all hypotheses are used. Standard axioms only. Scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166. Residual milestones identify solver with mfderiv, local lifts, compact flow, Main."},
     :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
     :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
     :fixture
@@ -119387,7 +119399,7 @@
      "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t98A06/lean/Main.lean"
     "problems/t98A06/status.json"
@@ -119405,7 +119417,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked smooth coordinate lift solution.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked tangent-section chart transport; fixture hash repaired.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
@@ -119431,7 +119443,11 @@
      :reason "Banked smooth fixed-coordinate right inverses."}
     {:job 6,
      :commit "5c0f2e062494ca836b5a554e2f17712718aaacef",
-     :reason "Banked smooth coordinate lift solution."}]}
+     :reason "Banked smooth coordinate lift solution."}
+    {:job 8,
+     :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
+     :reason
+     "Banked tangent-section chart transport; fixture hash repaired."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -121188,7 +121204,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverse_incidenceDifferenceDerivative_surjective",
@@ -121200,14 +121216,16 @@
     :type
     "transversality makes incidence difference derivative surjective",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-transverse-incidencedifferencederivative-surjective,
    :kind :lemma,
    :depends-on [:lemma-transverse-coprodderivative-surjective],
    :other-consumers []}
   {:consumer :t98A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "contMDiffOn_tangentSection_of_trivialization_coordinates",
@@ -121217,7 +121235,9 @@
     :reported-by [:program-2026-10-13-close-t98a06],
     :type "fixed tangent coordinates give smooth local section",
     :area "smooth-manifold-submersion",
-    :proved-in :program-2026-10-13-close-t98a06},
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a"},
    :id :lemma-contmdiffon-tangentsection-of-trivialization-coordinates,
    :kind :lemma,
    :depends-on [:lemma-contdiff-lift-of-comp-isinvertible],
