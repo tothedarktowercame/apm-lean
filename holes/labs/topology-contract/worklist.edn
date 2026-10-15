@@ -119137,62 +119137,51 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Restrict zero-slice chart to incidence fiber; Sard; calculations; Main.",
+    "Package zero-fiber subtype chart; Sard; calculations; Main.",
     :outcome :stop,
-    :warnings ["Main sorryAx; lint; unrelated edits preserved"],
+    :warnings ["Main sorryAx" "lint" "unrelated edits preserved"],
     :missing-theorems
-    [{:name "implicitToOpenPartialHomeomorph_mem_zeroSlice_iff",
-      :type "zero fiber iff chart image lies in vertical zero slice",
+    [{:name "implicitToOpenPartialHomeomorph_image_zeroFiber",
+      :type
+      "chart maps source zero fiber exactly to target zero slice",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["implicitToOpenPartialHomeomorph_of_hasStrictFDerivAt_hasRightInverse_fst"],
+      ["implicitToOpenPartialHomeomorph_mem_zeroSlice_iff"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
-      :depends-on
-      ["implicitToOpenPartialHomeomorph_mem_zeroSlice_iff"],
+      :depends-on ["implicitToOpenPartialHomeomorph_image_zeroFiber"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "15770a53ea1ff077213b77cab229dc92719425b8e662c34cb4d1242d05ff6f9d",
+     "4284495a9582c9d40a0178f6910227c41065d5ee5eab2a7c7079062e130e2f66",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked implicit-chart zero slice.",
+    :reason "Banked exact zero-fiber image under implicit chart.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792050401413-13628-679ff85f",
-     :commands
-     ["git show/diff 0ae2a206^..0ae2a206"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum archived closure/Main and blueprint"
-      "rg placeholders, sorryAx, theorem axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: 0ae2a206 adds 14 lines only in the scoped closure file. The theorem correctly equates the original zero fiber with implicit-chart membership in {0} x univ via the already proved first-coordinate identity; it does not claim the still-missing restricted fiber chart. Archived closure/Main compile; hashes 15770a53..., 0b3b4888..., afb497a6... match; placeholders 0/1; no sorryAx; standard axioms only; registry 166/166. This is new compiled progress; residual lists restricting the zero slice, Sard, calculations, Main."},
-    :commit "0ae2a206d297fc5cb71205ee0d00a2b99e70db2d",
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :finding "used right_inv API"}],
+    :commit "859e63363d8410fe225161d29077060c3b5f8c61",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119200,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119724,7 +119713,8 @@
     :lemma-contdiffat-commontarget-of-contmdiffat-self
     :lemma-incidenceimplicittoopenpartialhomeomorph
     :lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse-fst
-    :lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff],
+    :lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff
+    :lemma-implicittoopenpartialhomeomorph-image-zerofiber],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121812,6 +121802,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-implicittoopenpartialhomeomorph-of-hasstrictfderivat-hasrightinverse-fst],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "implicitToOpenPartialHomeomorph_image_zeroFiber",
+    :type "chart maps source zero fiber exactly to target zero slice"},
+   :lemma
+   {:name "implicitToOpenPartialHomeomorph_image_zeroFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart maps source zero fiber exactly to target zero slice",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-implicittoopenpartialhomeomorph-image-zerofiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
