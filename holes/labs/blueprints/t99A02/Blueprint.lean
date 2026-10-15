@@ -1024,7 +1024,27 @@ from `ConstructionTargets/SimplyConnectedOpenCover.lean`.  About 70 lines. -/
 lemma isSimplyConnected_union {U V : Set X} (hU : IsOpen U) (hV : IsOpen V)
     (hUs : IsSimplyConnected U) (hVs : IsSimplyConnected V)
     (hUV : IsPathConnected (U ∩ V)) : IsSimplyConnected (U ∪ V) := by
-  sorry
+  let A : Set ↥(U ∪ V) := Subtype.val ⁻¹' U
+  let B : Set ↥(U ∪ V) := Subtype.val ⁻¹' V
+  have hAopen : IsOpen A := hU.preimage continuous_subtype_val
+  have hBopen : IsOpen B := hV.preimage continuous_subtype_val
+  have hAs : IsSimplyConnected A := by
+    rw [← IsEmbedding.subtypeVal.isSimplyConnected_image,
+      Subtype.image_preimage_val, inter_eq_right.2 subset_union_left]
+    exact hUs
+  have hBs : IsSimplyConnected B := by
+    rw [← IsEmbedding.subtypeVal.isSimplyConnected_image,
+      Subtype.image_preimage_val, inter_eq_right.2 subset_union_right]
+    exact hVs
+  have hAB : IsPathConnected (A ∩ B) := by
+    have hpre : IsPathConnected (Subtype.val ⁻¹' (U ∩ V) : Set ↥(U ∪ V)) :=
+      hUV.preimage_coe (by intro x hx; exact Or.inl hx.1)
+    simpa [A, B, preimage_inter] using hpre
+  have hcover : A ∪ B = (Set.univ : Set ↥(U ∪ V)) := by
+    ext x
+    simp only [A, B, mem_union, mem_preimage, mem_univ, iff_true]
+    exact x.2
+  exact simplyConnectedSpace_of_union_eq_univ hAopen hBopen hcover hAs hBs hAB
 
 /-- **Leaf (generic, directed unions).**  A directed union of open simply
 connected sets is simply connected.
