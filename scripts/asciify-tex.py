@@ -327,6 +327,51 @@ DISPLAY_OPEN = re.compile(r"\\\[|\$\$|\\begin\{(?:" + "|".join(
 SKIP_LINE = re.compile(r"\\(?:sub)*section|\\paragraph|\\texorpdfstring|^\s*%")
 
 
+TEXTLIKE = re.compile(r"\\(?:text|textrm|textit|textbf|mathrm|operatorname|mbox)\{")
+
+
+def primes(math: str) -> str:
+    """Write each run of bare primes as ^{\\prime...}: a lone quote is
+    ambiguous between prime and apostrophe, and sets poorly besides. Quotes
+    inside \\text{..} and friends are apostrophes and stay."""
+    out, i = [], 0
+    while i < len(math):
+        m = TEXTLIKE.match(math, i)
+        if m:
+            j = group_end_at(math, m.end() - 1)
+            j = j if j > 0 else len(math)
+            out.append(math[i:j])
+            i = j
+            continue
+        if math[i] == "\\" and i + 1 < len(math):
+            out.append(math[i:i + 2])
+            i += 2
+            continue
+        if math[i] == "'":
+            k = i
+            while k < len(math) and math[k] == "'":
+                k += 1
+            sup = "\\prime" * (k - i)
+            before = "".join(out)
+            # merge with a superscript that follows: f'^{2} -> f^{\prime 2}
+            if math.startswith("^{", k):
+                e = group_end_at(math, k + 1)
+                if e > 0:
+                    sup += " " + math[k + 2:e - 1]
+                    k = e
+            elif re.match(r"\^[A-Za-z0-9]", math[k:]):
+                sup += " " + math[k + 1]
+                k += 2
+            # a superscript just before would make a double superscript
+            pad = "{}" if re.search(r"\^(?:\{[^{}]*\}|[A-Za-z0-9])$", before) else ""
+            out.append(pad + "^{" + sup + "}")
+            i = k
+            continue
+        out.append(math[i])
+        i += 1
+    return "".join(out)
+
+
 def glue_math(word: str) -> str:
     word = word.replace(r"\textbar{}", "|").replace(r"\textbar", "|").replace(r"\_", "_")
     word = word.replace(r"\textquotesingle{}", "'").replace(r"\textquotesingle", "'")
@@ -396,6 +441,12 @@ def strip_ensuremath(math: str) -> str:
         math = math[:i] + math[i + len(r"\ensuremath{"):j - 1] + math[j:]
 
 
+def anchor(kind: str, text: str) -> bool:
+    """A run becomes a math span if it holds a math fragment, or a prime:
+    "f\\textquotesingle(t)" is f'(t) even with no span beside it."""
+    return kind == "M" or (kind == "G" and "\\textquotesingle" in text)
+
+
 def merge_line(line: str) -> str:
     segs = line_segments(line)
     if segs is None or sum(k == "M" for k, _ in segs) == 0:
@@ -417,7 +468,16 @@ def merge_line(line: str) -> str:
                 continue
             m = SENTENCE_PUNCT.match(piece)
             core, punct = (m.group(1), m.group(2)) if m else (piece, "")
-            if core and is_glue(core):
+            # Three letters at least: "(kx)", "(ab)", "(iy)" are products.
+            wordarg = re.match(r"\(([A-Za-z]{3,12})\)", core)
+            if (wordarg and items and items[-1][0] == "M"
+                    and (core[wordarg.end():] == "" or is_glue(core[wordarg.end():]))):
+                # mu(univ)=1: a function applied to a word, set as \text
+                items.append(("G", "(\\text{" + wordarg.group(1) + "})"
+                              + core[wordarg.end():]))
+                if punct:
+                    items.append(("W", punct))
+            elif core and is_glue(core):
                 items.append(("G", core))
                 if punct:
                     items.append(("W", punct))
@@ -427,7 +487,7 @@ def merge_line(line: str) -> str:
     while i < len(items):
         kind, text = items[i]
         if kind not in ("M", "G") or (kind == "G" and text == "a"):
-            out.append(text if kind != "M" else r"\(" + text + r"\)")
+            out.append(text if kind != "M" else r"\(" + primes(text) + r"\)")
             i += 1
             continue
         # Extend a candidate run over M, G and the spaces between them.
@@ -437,6 +497,9 @@ def merge_line(line: str) -> str:
                 last = j
             j += 1
         run = items[i:last + 1]
+        # the article "a" does not end a span either
+        while len(run) > 1 and run[-1][0] in ("G", "S") and (run[-1][0] == "S" or run[-1][1] == "a"):
+            run.pop()
         # A bracket glued on at either end must be closed inside the span, or
         # the span would open "(" in math and close ")" in text.
         while run and run[0][0] in ("G", "S") and (run[0][0] == "S" or (
@@ -448,7 +511,7 @@ def merge_line(line: str) -> str:
                 re.fullmatch(r"[)\]]+", run[-1][1]) and bracket_balance(
                     "".join(t for k, t in run if k == "G")) < 0)):
             run.pop()
-        if not any(k == "M" for k, _ in run):
+        if not any(anchor(k, t) for k, t in run):
             out.append(text)
             i += 1
             continue
@@ -458,11 +521,8 @@ def merge_line(line: str) -> str:
             # "\varphi" + "A" must not fuse into the undefined "\varphiA".
             if re.search(r"\\[A-Za-z]+$", body) and re.match(r"[A-Za-z]", piece):
                 body += " "
-            # A prime is itself a superscript: "T^{N}" + "'" needs a {} between.
-            if piece.startswith("'") and re.search(r"\^(?:\{[^{}]*\}|.)$", body):
-                body += "{}"
             body += piece
-        out.append(r"\(" + body.strip() + r"\)")
+        out.append(r"\(" + primes(body.strip()) + r"\)")
         i += len(run)
     return "".join(out)
 
