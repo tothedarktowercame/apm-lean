@@ -119179,6 +119179,19 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792050401413-13628-679ff85f",
+     :commands
+     ["git show/diff 0ae2a206^..0ae2a206"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum archived closure/Main and blueprint"
+      "rg placeholders, sorryAx, theorem axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 0ae2a206 adds 14 lines only in the scoped closure file. The theorem correctly equates the original zero fiber with implicit-chart membership in {0} x univ via the already proved first-coordinate identity; it does not claim the still-missing restricted fiber chart. Archived closure/Main compile; hashes 15770a53..., 0b3b4888..., afb497a6... match; placeholders 0/1; no sorryAx; standard axioms only; registry 166/166. This is new compiled progress; residual lists restricting the zero slice, Sard, calculations, Main."},
     :commit "0ae2a206d297fc5cb71205ee0d00a2b99e70db2d",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119187,7 +119200,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119205,7 +119218,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked implicit-chart level coordinate.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked implicit-chart zero slice.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119454,7 +119467,10 @@
      :reason "Banked assembled incidence implicit chart."}
     {:job 8,
      :commit "3fa3968c3ee708f689e0516379f2c8f487c88750",
-     :reason "Banked implicit-chart level coordinate."}]}
+     :reason "Banked implicit-chart level coordinate."}
+    {:job 9,
+     :commit "0ae2a206d297fc5cb71205ee0d00a2b99e70db2d",
+     :reason "Banked implicit-chart zero slice."}]}
   {:consumer :t98A06,
    :stop-count 9,
    :review-finding
@@ -121779,7 +121795,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "implicitToOpenPartialHomeomorph_mem_zeroSlice_iff",
@@ -121789,7 +121805,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "zero fiber iff chart image lies in vertical zero slice",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "0ae2a206d297fc5cb71205ee0d00a2b99e70db2d"},
    :id :lemma-implicittoopenpartialhomeomorph-mem-zeroslice-iff,
    :kind :lemma,
    :depends-on
