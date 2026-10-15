@@ -669,7 +669,8 @@ lift of `z` is `z` (third coordinate `√(…) ≥ 0`;
 `rp2Proj_factor_aux_sphere_planar`). -/
 lemma rp2Proj_factor_aux_right (z : Disk) :
     rp2Proj (rp2Proj_factor_aux_sphere z) = surfaceQuotient false 1 z := by
-  sorry
+  simp [rp2Proj, diskOf, rp2Proj_factor_aux_sphere_last,
+    Real.sqrt_nonneg, rp2Proj_factor_aux_sphere_planar]
 
 lemma rp2Proj_factor_aux_eqvGen {α β : Type*} {R : α → α → Prop} (f : α → β)
     (hf : ∀ a b, R a b → f a = f b) (a b : α) (h : Relation.EqvGen R a b) :
