@@ -119137,43 +119137,43 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Promote splitting in charts; incidence tangent equivalence; Sard; calculations; Main.",
+    "Conjugate splitting into charts; build incidence tangent equivalence; Sard; calculations; Main.",
     :outcome :stop,
     :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
     [{:name
-      "transverse_incidenceDifferenceDerivative_hasLinearRightInverse",
-      :type "linear right inverse",
+      "continuousLinearMap_hasRightInverse_of_linearRightInverse",
+      :type "finite-dimensional linear split is continuous",
       :status :proved,
       :consumers [:t00J02],
       :depends-on
-      ["transverse_incidenceDifferenceDerivative_surjective"],
+      ["transverse_incidenceDifferenceDerivative_hasLinearRightInverse"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["transverse_incidenceDifferenceDerivative_hasLinearRightInverse"],
+      ["continuousLinearMap_hasRightInverse_of_linearRightInverse"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "b0b378d078222a708c92832e44b87b2be85f7dd899d46c98934a203db8a21fd0",
+     "24152c428bfec5e2649b07c2762232590496a84503b8edda301a70b447577cfb",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked incidence linear splitting.",
+    :reason "Banked finite-dimensional right-inverse promotion.",
     :commands
     [{:cmd
       "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
@@ -119181,21 +119181,7 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :finding "used linear split"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1792040153168-13266-0eb0ca91",
-     :commands
-     ["git diff/show 7862ae58 archived sources"
-      "lake env lean archived t00J02Closure.lean"
-      "lake env lean archived Main.lean"
-      "sha256sum; placeholders; #print axioms"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: commit adds compiled, sorry-free incidence sign bridge and algebraic right inverse. Negating the input converts A u+B v=y to A u-B(-v)=y; range-sum transversality therefore gives the incidence difference derivative surjective, and the standard linear splitting theorem supplies a right inverse. No continuous/chart splitting is claimed; it remains listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
-    :commit "7862ae58a1c53319d9fecd2e9129001b61c05735",
+    :commit "38bd6fb59738c4c4d19cba9c7f33c2d6f1e7a00f",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119203,7 +119189,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119655,7 +119641,8 @@
     :lemma-direction-lifts-of-surjective-incidencekernel-snd
     :lemma-direction-lifts-of-incidencetangentequiv
     :lemma-transverse-incidencedifferencederivative-surjective
-    :lemma-transverse-incidencedifferencederivative-haslinearrightinverse],
+    :lemma-transverse-incidencedifferencederivative-haslinearrightinverse
+    :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -121354,6 +121341,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-transverse-incidencedifferencederivative-surjective],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "continuousLinearMap_hasRightInverse_of_linearRightInverse",
+    :type "finite-dimensional linear split is continuous"},
+   :lemma
+   {:name "continuousLinearMap_hasRightInverse_of_linearRightInverse",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "finite-dimensional linear split is continuous",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id
+   :lemma-continuouslinearmap-hasrightinverse-of-linearrightinverse,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transverse-incidencedifferencederivative-haslinearrightinverse],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
