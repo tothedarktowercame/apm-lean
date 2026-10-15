@@ -2185,6 +2185,40 @@ theorem t96A06_mappedIntegralLocalGenerator_mapsTo_ambient :
       (k := 1) polynomialSphereRegularPoint := by
   simp [t96A06_mappedIntegralLocalGenerator]
 
+/-- Removing the forgotten-chain presentation from the selected integral
+local class recovers the inverse comparison of the positive ambient class. -/
+theorem t96A06_mappedIntegralLocalGenerator_unmap :
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      t96A06_mappedIntegralLocalGenerator) =
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).inv.hom
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint) := by
+  simp [t96A06_mappedIntegralLocalGenerator]
+
+/-- The integral coordinate-one obligation is exactly the native comparison
+inverse evaluated in the selected coefficient chart. -/
+theorem t96A06_mappedIntegralLocalGenerator_coordinate_iff :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+          t96A06_mappedIntegralLocalGenerator) = 1 ↔
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint)) = 1 := by
+  rw [t96A06_mappedIntegralLocalGenerator_unmap]
+
 /-- The preservation isomorphisms commute with the exact deleted-point
 projection used for the normalized class. -/
 theorem t96A06_normalizedClass_projection_preservation_naturality :
@@ -3721,6 +3755,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
+#print axioms t96A06_mappedIntegralLocalGenerator_unmap
+#print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
 #print axioms t96A06_normalizedClass_projection_preservation_cancel
 #print axioms t96A06_mappedIntegralNormalizedClass_localizes
