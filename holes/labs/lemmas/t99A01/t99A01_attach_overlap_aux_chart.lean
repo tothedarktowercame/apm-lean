@@ -1061,12 +1061,109 @@ lemma t99A01_attach_overlap_aux_chart_mem {r : ℕ} (degree : Fin r → ℕ)
     · exact ⟨i, z, h1, rfl⟩
 
 -- BEGIN SEAT AREA
+private def t99A01_attach_overlap_aux_chart_aux_sigmaProd
+    (X : Type*) [TopologicalSpace X] {r : ℕ} :
+    (Σ _ : Fin r, X) ≃ₜ Fin r × X where
+  toEquiv := Equiv.sigmaEquivProd (Fin r) X
+  continuous_toFun := continuous_sigma fun _ =>
+    continuous_const.prodMk continuous_id
+  continuous_invFun := by
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    exact continuous_sigmaMk (i := i) (σ := fun _ : Fin r => X)
+
+private def t99A01_attach_overlap_aux_chart_aux_prodSubtype {r : ℕ} :
+    {p : Fin r × Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖} ≃ₜ
+      Fin r × {z : Metric.ball (0 : ℂ) 1 // 0 < ‖(z : ℂ)‖} where
+  toFun p := (p.1.1, ⟨p.1.2, p.2⟩)
+  invFun p := ⟨(p.1, p.2.1), p.2.2⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun :=
+    continuous_fst.comp continuous_subtype_val |>.prodMk <|
+      Continuous.subtype_mk (continuous_snd.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd)) _
+
+private def t99A01_attach_overlap_aux_chart_aux_ballSubtype :
+    {z : Metric.ball (0 : ℂ) 1 // 0 < ‖(z : ℂ)‖} ≃ₜ ↥t99A01_pball where
+  toFun z := ⟨z.1.1, z.2, by
+    simpa only [Metric.mem_ball, dist_zero_right] using z.1.2⟩
+  invFun z := ⟨⟨z.1, by
+    simpa only [Metric.mem_ball, dist_zero_right] using z.2.2⟩, z.2.1⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun := Continuous.subtype_mk
+    (continuous_subtype_val.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (Continuous.subtype_mk continuous_subtype_val (fun z => by
+      simpa only [Metric.mem_ball, dist_zero_right] using z.2.2)) _
+
+private def t99A01_attach_overlap_aux_chart_aux_regroup {r : ℕ} :
+    {p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖} ≃ₜ
+      Σ _ : Fin r, ↥t99A01_pball :=
+  ((t99A01_attach_overlap_aux_chart_aux_sigmaProd
+      (Metric.ball (0 : ℂ) 1)).subtype (fun _ => Iff.rfl)).trans <|
+    t99A01_attach_overlap_aux_chart_aux_prodSubtype.trans <|
+      (Homeomorph.prodCongr (Homeomorph.refl _)
+        t99A01_attach_overlap_aux_chart_aux_ballSubtype).trans <|
+      (t99A01_attach_overlap_aux_chart_aux_sigmaProd
+        ↥t99A01_pball).symm
+
 theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
     ∃ c : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
         (Σ _ : Fin r, ↥t99A01_pball),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (h0 : 0 < ‖(z : ℂ)‖) (h1 : ‖(z : ℂ)‖ < 1),
         (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
-  sorry
+  obtain ⟨E, hE⟩ := t99A01_attach_diskSide degree
+  have hpred : ∀ q : APMT99A01.sideB degree,
+      (q.1 ∈ APMT99A01.sideA degree) ↔ 0 < ‖((E q).2 : ℂ)‖ := by
+    rintro ⟨q, i, z, hz, rfl⟩
+    have he := hE i z hz ⟨i, z, hz, rfl⟩
+    rw [he]
+    constructor
+    · intro ha
+      exact (t99A01_attach_overlap_aux_chart_mem degree i z hz).mp
+        ⟨ha, i, z, hz, rfl⟩
+    · intro h0
+      exact ((t99A01_attach_overlap_aux_chart_mem degree i z hz).mpr h0).1
+  let R : {q : APMT99A01.sideB degree // q.1 ∈ APMT99A01.sideA degree} ≃ₜ
+      {p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖} :=
+    E.subtype hpred
+  let F : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
+      {q : APMT99A01.sideB degree // q.1 ∈ APMT99A01.sideA degree} :=
+    { toFun := fun q => ⟨⟨q.1, q.2.2⟩, q.2.1⟩
+      invFun := fun q => ⟨q.1.1, q.2, q.1.2⟩
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl
+      continuous_toFun := Continuous.subtype_mk
+        (Continuous.subtype_mk continuous_subtype_val _) _
+      continuous_invFun := Continuous.subtype_mk
+        (continuous_subtype_val.comp continuous_subtype_val) _ }
+  let c := F.trans (R.trans t99A01_attach_overlap_aux_chart_aux_regroup)
+  refine ⟨c, ?_⟩
+  intro i z h0 h1
+  have hm : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈
+      APMT99A01.sideA degree ∩ APMT99A01.sideB degree :=
+    (t99A01_attach_overlap_aux_chart_mem degree i z h1).2 h0
+  have he := hE i z h1 hm.2
+  let x : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) :=
+    ⟨APMT99A01.attachMk degree (Sum.inr (i, z)), hm⟩
+  have hx : c x = ⟨i, ⟨(z : ℂ), h0, h1⟩⟩ := by
+    change t99A01_attach_overlap_aux_chart_aux_regroup
+      ⟨E ⟨_, hm.2⟩, _⟩ = _
+    have hEp : 0 < ‖((E ⟨APMT99A01.attachMk degree
+        (Sum.inr (i, z)), hm.2⟩).2 : ℂ)‖ := (hpred _).mp hm.1
+    have hp : (⟨E ⟨APMT99A01.attachMk degree (Sum.inr (i, z)), hm.2⟩, hEp⟩ :
+        {p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖}) =
+        ⟨⟨i, ⟨(z : ℂ), by
+          simpa only [Metric.mem_ball, dist_zero_right] using h1⟩⟩, h0⟩ :=
+      Subtype.ext he
+    rw [hp]
+    rfl
+  have hxi : c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩ = x := by
+    rw [← hx, c.symm_apply_apply]
+  exact congrArg Subtype.val hxi
 -- END SEAT AREA
 /-- **Leaf (one punctured disk, 50--100 lines).** `z ↦ z/‖z‖` and `w ↦ w/2` are
 homotopy inverse: `(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖` stays in the punctured disk. -/

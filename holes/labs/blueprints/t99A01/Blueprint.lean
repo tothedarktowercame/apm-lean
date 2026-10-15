@@ -126,6 +126,27 @@ structure AttachMVData {r : ℕ} (degree : Fin r → ℕ) where
   exact_δ₂_i₁ : LinearMap.range δ₂ = LinearMap.ker i₁
   higher : ∀ k : ℕ, 3 ≤ k → Limits.IsZero (H k (AttachSpace degree))
 
+/-- The low-degree part of `AttachMVData`.  It is separated from higher
+vanishing so that the Mayer--Vietoris diagram chase and the dimension argument
+can be proved independently. -/
+structure AttachMVLowData {r : ℕ} (degree : Fin r → ℕ) where
+  i₁ : (Fin r → ℤ) →ₗ[ℤ] ℤ
+  j₁ : ℤ →ₗ[ℤ] (H 1 (AttachSpace degree))
+  δ₁ : (H 1 (AttachSpace degree)) →ₗ[ℤ] (Fin r → ℤ)
+  i₀ : (Fin r → ℤ) →ₗ[ℤ] (ℤ × (Fin r → ℤ))
+  j₀ : (ℤ × (Fin r → ℤ)) →ₗ[ℤ] (H 0 (AttachSpace degree))
+  δ₂ : (H 2 (AttachSpace degree)) →ₗ[ℤ] (Fin r → ℤ)
+  i₁_eq_degreeMap : i₁ = degreeMap degree
+  i₀_injective : Function.Injective i₀
+  i₀_eq : ∀ x, i₀ x = (∑ i, x i, x)
+  exact_i₁_j₁ : LinearMap.range i₁ = LinearMap.ker j₁
+  exact_j₁_δ₁ : LinearMap.range j₁ = LinearMap.ker δ₁
+  exact_δ₁_i₀ : LinearMap.range δ₁ = LinearMap.ker i₀
+  exact_i₀_j₀ : LinearMap.range i₀ = LinearMap.ker j₀
+  j₀_surjective : Function.Surjective j₀
+  δ₂_injective : Function.Injective δ₂
+  exact_δ₂_i₁ : LinearMap.range δ₂ = LinearMap.ker i₁
+
 end APMT99A01
 
 namespace APMT99A01
@@ -1139,12 +1160,109 @@ lemma t99A01_attach_overlap_aux_chart_mem {r : ℕ} (degree : Fin r → ℕ)
       exact (lt_irrefl 0 h0).elim
     · exact ⟨i, z, h1, rfl⟩
 
+private def t99A01_attach_overlap_aux_chart_aux_sigmaProd
+    (X : Type*) [TopologicalSpace X] {r : ℕ} :
+    (Σ _ : Fin r, X) ≃ₜ Fin r × X where
+  toEquiv := Equiv.sigmaEquivProd (Fin r) X
+  continuous_toFun := continuous_sigma fun _ =>
+    continuous_const.prodMk continuous_id
+  continuous_invFun := by
+    rw [continuous_prod_of_discrete_left]
+    intro i
+    exact continuous_sigmaMk (i := i) (σ := fun _ : Fin r => X)
+
+private def t99A01_attach_overlap_aux_chart_aux_prodSubtype {r : ℕ} :
+    {p : Fin r × Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖} ≃ₜ
+      Fin r × {z : Metric.ball (0 : ℂ) 1 // 0 < ‖(z : ℂ)‖} where
+  toFun p := (p.1.1, ⟨p.1.2, p.2⟩)
+  invFun p := ⟨(p.1, p.2.1), p.2.2⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun :=
+    continuous_fst.comp continuous_subtype_val |>.prodMk <|
+      Continuous.subtype_mk (continuous_snd.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd)) _
+
+private def t99A01_attach_overlap_aux_chart_aux_ballSubtype :
+    {z : Metric.ball (0 : ℂ) 1 // 0 < ‖(z : ℂ)‖} ≃ₜ ↥t99A01_pball where
+  toFun z := ⟨z.1.1, z.2, by
+    simpa only [Metric.mem_ball, dist_zero_right] using z.1.2⟩
+  invFun z := ⟨⟨z.1, by
+    simpa only [Metric.mem_ball, dist_zero_right] using z.2.2⟩, z.2.1⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun := Continuous.subtype_mk
+    (continuous_subtype_val.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (Continuous.subtype_mk continuous_subtype_val (fun z => by
+      simpa only [Metric.mem_ball, dist_zero_right] using z.2.2)) _
+
+private def t99A01_attach_overlap_aux_chart_aux_regroup {r : ℕ} :
+    {p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖} ≃ₜ
+      Σ _ : Fin r, ↥t99A01_pball :=
+  ((t99A01_attach_overlap_aux_chart_aux_sigmaProd
+      (Metric.ball (0 : ℂ) 1)).subtype (fun _ => Iff.rfl)).trans <|
+    t99A01_attach_overlap_aux_chart_aux_prodSubtype.trans <|
+      (Homeomorph.prodCongr (Homeomorph.refl _)
+        t99A01_attach_overlap_aux_chart_aux_ballSubtype).trans <|
+      (t99A01_attach_overlap_aux_chart_aux_sigmaProd
+        ↥t99A01_pball).symm
+
 theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
     ∃ c : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
         (Σ _ : Fin r, ↥t99A01_pball),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (h0 : 0 < ‖(z : ℂ)‖) (h1 : ‖(z : ℂ)‖ < 1),
         (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
-  sorry
+  obtain ⟨E, hE⟩ := t99A01_attach_diskSide degree
+  have hpred : ∀ q : APMT99A01.sideB degree,
+      (q.1 ∈ APMT99A01.sideA degree) ↔ 0 < ‖((E q).2 : ℂ)‖ := by
+    rintro ⟨q, i, z, hz, rfl⟩
+    have he := hE i z hz ⟨i, z, hz, rfl⟩
+    rw [he]
+    constructor
+    · intro ha
+      exact (t99A01_attach_overlap_aux_chart_mem degree i z hz).mp
+        ⟨ha, i, z, hz, rfl⟩
+    · intro h0
+      exact ((t99A01_attach_overlap_aux_chart_mem degree i z hz).mpr h0).1
+  let R : {q : APMT99A01.sideB degree // q.1 ∈ APMT99A01.sideA degree} ≃ₜ
+      {p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖} :=
+    E.subtype hpred
+  let F : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
+      {q : APMT99A01.sideB degree // q.1 ∈ APMT99A01.sideA degree} :=
+    { toFun := fun q => ⟨⟨q.1, q.2.2⟩, q.2.1⟩
+      invFun := fun q => ⟨q.1.1, q.2, q.1.2⟩
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl
+      continuous_toFun := Continuous.subtype_mk
+        (Continuous.subtype_mk continuous_subtype_val _) _
+      continuous_invFun := Continuous.subtype_mk
+        (continuous_subtype_val.comp continuous_subtype_val) _ }
+  let c := F.trans (R.trans t99A01_attach_overlap_aux_chart_aux_regroup)
+  refine ⟨c, ?_⟩
+  intro i z h0 h1
+  have hm : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈
+      APMT99A01.sideA degree ∩ APMT99A01.sideB degree :=
+    (t99A01_attach_overlap_aux_chart_mem degree i z h1).2 h0
+  have he := hE i z h1 hm.2
+  let x : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) :=
+    ⟨APMT99A01.attachMk degree (Sum.inr (i, z)), hm⟩
+  have hx : c x = ⟨i, ⟨(z : ℂ), h0, h1⟩⟩ := by
+    change t99A01_attach_overlap_aux_chart_aux_regroup
+      ⟨E ⟨_, hm.2⟩, _⟩ = _
+    have hEp : 0 < ‖((E ⟨APMT99A01.attachMk degree
+        (Sum.inr (i, z)), hm.2⟩).2 : ℂ)‖ := (hpred _).mp hm.1
+    have hp : (⟨E ⟨APMT99A01.attachMk degree (Sum.inr (i, z)), hm.2⟩, hEp⟩ :
+        {p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1 // 0 < ‖(p.2 : ℂ)‖}) =
+        ⟨⟨i, ⟨(z : ℂ), by
+          simpa only [Metric.mem_ball, dist_zero_right] using h1⟩⟩, h0⟩ :=
+      Subtype.ext he
+    rw [hp]
+    rfl
+  have hxi : c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩ = x := by
+    rw [← hx, c.symm_apply_apply]
+  exact congrArg Subtype.val hxi
 /-- **Leaf (one punctured disk, 50--100 lines).** `z ↦ z/‖z‖` and `w ↦ w/2` are
 homotopy inverse: `(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖` stays in the punctured disk. -/
 theorem t99A01_pball_circle :
@@ -1619,6 +1737,46 @@ lemma t99A01_attach_transport_aux_mv {r : ℕ} (degree : Fin r → ℕ)
       (∀ n, LinearMap.range (δ n).hom = LinearMap.ker
         (APMT99A01.zI (APMT99A01.sideA degree) (APMT99A01.sideB degree) n).hom) := by
   exact hmv _ _ hcover.1 hcover.2.1 hcover.2.2
+
+/-! The following coordinates are definitions, not existential choices.  This
+is important: all later map equations therefore refer to literally the same
+coordinate. -/
+
+noncomputable def t99A01_sideA_homotopyEquiv {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle))
+    (ι : C(Circle, APMT99A01.sideA degree))
+    (hρι : ρ.comp ι = ContinuousMap.id Circle)
+    (hιρ : ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _)) :
+    ContinuousMap.HomotopyEquiv (APMT99A01.sideA degree) Circle where
+  toFun := ρ
+  invFun := ι
+  left_inv := hιρ
+  right_inv := by simpa [hρι] using
+    (ContinuousMap.Homotopic.refl (ContinuousMap.id Circle))
+
+noncomputable def t99A01_sideA_coordinate {r : ℕ} (degree : Fin r → ℕ)
+    (ρ : C(APMT99A01.sideA degree, Circle))
+    (ι : C(Circle, APMT99A01.sideA degree))
+    (hρι : ρ.comp ι = ContinuousMap.id Circle)
+    (hιρ : ContinuousMap.Homotopic (ι.comp ρ) (ContinuousMap.id _)) (n : ℕ) :
+    APMT99A01.H n (APMT99A01.sideA degree) ≅ APMT99A01.H n Circle :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℤ
+    (t99A01_sideA_homotopyEquiv degree ρ ι hρι hιρ) n
+
+noncomputable def t99A01_diskSide_sigma_coordinate {r : ℕ} (degree : Fin r → ℕ)
+    (e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1)) (n : ℕ) :
+    APMT99A01.H n (APMT99A01.sideB degree) ≅
+      APMT99A01.H n (Σ _ : Fin r, Metric.ball (0 : ℂ) 1) :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℤ
+    e.toHomotopyEquiv n
+
+noncomputable def t99A01_overlap_sigma_coordinate {r : ℕ} (degree : Fin r → ℕ)
+    (e : ContinuousMap.HomotopyEquiv
+      ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle))
+    (n : ℕ) :
+    APMT99A01.H n ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≅
+      APMT99A01.H n (Σ _ : Fin r, Circle) :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℤ e n
 
 lemma t99A01_attach_transport_aux_coordinates {r : ℕ} (degree : Fin r → ℕ)
     (hr : 0 < r) (hdegree : ∀ i, 0 < degree i)
