@@ -7124,6 +7124,9 @@ theorem cutNewA_branch_injOn {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
 ends `P'` (angle `α(p+1)`) and `Q'` (angle `α(q+1)`); reflection values are unit points
 at angles in `[α(p+2), α(q+1))`; side-`p+1` values are unit points at angles in
 `(α(p+1), α(p+2))`. -/
+lemma cutNewA_branch_disjoint_aux_doc : True := by trivial
+
+set_option maxHeartbeats 800000 in
 theorem cutNewA_branch_disjoint {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ φ ∈ Icc (cutAlpha L p) (cutAlpha L (p + 1)),
       ∀ ψ ∈ Ioc (cutAlpha L (p + 1)) (cutAlpha L q),
@@ -7134,7 +7137,219 @@ theorem cutNewA_branch_disjoint {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     (∀ φ ∈ Ioc (cutAlpha L (p + 1)) (cutAlpha L q),
       ∀ ψ ∈ Ioo (cutAlpha L q) (cutAlpha L p + 2 * Real.pi),
         cutProfileNewA L p q φ ≠ cutProfileNewA L p q ψ) := by
-  sorry
+  have hLnat : 0 < L := by omega
+  have hL : (0 : ℝ) < L := by exact_mod_cast hLnat
+  have hpi : (0 : ℝ) < 2 * Real.pi := Real.two_pi_pos
+  have hstep : 0 < 2 * Real.pi / L := div_pos hpi hL
+  have hLstep : (L : ℝ) * (2 * Real.pi / L) = 2 * Real.pi := by field_simp
+  have hstep_lt : 2 * Real.pi / L < 2 * Real.pi := by
+    exact div_lt_self hpi (by exact_mod_cast (by omega : 1 < L))
+  have hap : cutAlpha L p < cutAlpha L (p + 1) := by
+    unfold cutAlpha
+    apply (div_lt_div_iff_of_pos_right hL).2
+    push_cast
+    nlinarith
+  have haq : cutAlpha L (p + 1) ≤ cutAlpha L q := by
+    unfold cutAlpha
+    apply (div_le_div_iff_of_pos_right hL).2
+    push_cast
+    nlinarith [show (p : ℝ) + 1 ≤ q by exact_mod_cast (by omega : p + 1 ≤ q)]
+  have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+    unfold cutAlpha
+    have hqr : (q : ℝ) < L := by exact_mod_cast hqL
+    field_simp
+    nlinarith [Real.pi_pos]
+  have ha_succ (m : ℕ) : cutAlpha L (m + 1) = cutAlpha L m + 2 * Real.pi / L := by
+    unfold cutAlpha
+    push_cast
+    field_simp
+  have hwindow : cutAlpha L (q + 1) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [ha_succ, ha_succ]
+    linarith
+  have hp2window : cutAlpha L (p + 2) < cutAlpha L (p + 1) + 2 * Real.pi := by
+    rw [show p + 2 = (p + 1) + 1 by omega, ha_succ]
+    linarith [hstep_lt]
+  have hp2eq : cutAlpha L (p + 2) = cutAlpha L (p + 1) + 2 * Real.pi / L := by
+    convert ha_succ (p + 1) using 1 <;> omega
+  have hp2q1 : cutAlpha L (p + 2) ≤ cutAlpha L (q + 1) := by
+    calc
+      cutAlpha L (p + 2) = cutAlpha L (p + 1) + 2 * Real.pi / L := by
+        convert ha_succ (p + 1) using 1 <;> omega
+      _ ≤ cutAlpha L q + 2 * Real.pi / L := by linarith [haq]
+      _ = cutAlpha L (q + 1) := (ha_succ q).symm
+  constructor
+  · set_option maxHeartbeats 800000 in
+    intro φ hφ ψ hψ heq
+    have hφp : φ ≤ cutAlpha L (p + 1) := hφ.2
+    have hψp : ¬ ψ ≤ cutAlpha L (p + 1) := not_le.mpr hψ.1
+    have hψq : ψ ≤ cutAlpha L q := hψ.2
+    simp only [cutProfileNewA, if_pos hφp, if_neg hψp, if_pos hψq] at heq
+    let s : ℝ := (φ - cutAlpha L p) * L / (2 * Real.pi)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      exact div_nonneg (mul_nonneg (sub_nonneg.mpr hφ.1) hL.le) hpi.le
+    have hs1 : s ≤ 1 := by
+      dsimp [s]
+      apply (div_le_one hpi).2
+      rw [ha_succ] at hφp
+      nlinarith [mul_le_mul_of_nonneg_right (sub_le_sub_right hφp (cutAlpha L p)) hL.le,
+        mul_pos hL hstep, hLstep]
+    have hsnorm : ‖cutSeam L p q s‖ = 1 := by
+      rw [heq]
+      rw [Complex.norm_exp]
+      simp
+    rcases cutNewA_injective_aux_seam_norm hpq hqL hs0 hs1 hsnorm with hs | hs
+    · have hφeq : φ = cutAlpha L p := by
+        dsimp [s] at hs
+        have hz : (φ - cutAlpha L p) * (L : ℝ) = 0 :=
+          (div_eq_zero_iff).mp hs |>.resolve_right (ne_of_gt hpi)
+        rcases mul_eq_zero.mp hz with hz | hz
+        · linarith
+        · exact False.elim ((ne_of_gt hL) hz)
+      rw [show (φ - cutAlpha L p) * L / (2 * Real.pi) = s by rfl, hs] at heq
+      have hang : cutAlpha L (p + 1) =
+          cutAlpha L (q + 1) + cutAlpha L (p + 1) - ψ := by
+        apply cutOldA_injective_aux_exp (a := cutAlpha L (p + 1))
+        · exact ⟨le_rfl, by linarith⟩
+        · constructor
+          · simp only [ha_succ]
+            linarith [hψ.2]
+          · exact lt_trans (by linarith [hψ.1]) hwindow
+        · simpa [cutSeam, cutPoint] using heq
+      simp only [ha_succ] at hang
+      linarith [hψ.2]
+    · have hφeq : φ = cutAlpha L (p + 1) := by
+        dsimp [s] at hs
+        rw [div_eq_one_iff_eq (ne_of_gt hpi)] at hs
+        rw [ha_succ]
+        nlinarith [hLstep]
+      rw [show (φ - cutAlpha L p) * L / (2 * Real.pi) = s by rfl, hs] at heq
+      have hang : cutAlpha L (q + 1) =
+          cutAlpha L (q + 1) + cutAlpha L (p + 1) - ψ := by
+        apply cutOldA_injective_aux_exp (a := cutAlpha L (p + 1))
+        · exact ⟨haq.trans (by rw [ha_succ]; linarith), hwindow⟩
+        · constructor
+          · simp only [ha_succ]
+            linarith [hψ.2]
+          · exact lt_trans (by linarith [hψ.1]) hwindow
+        · simpa [cutSeam, cutPoint] using heq
+      linarith [hψ.1]
+  constructor
+  · intro φ hφ ψ hψ heq
+    have hφp : φ ≤ cutAlpha L (p + 1) := hφ.2
+    have hψp : ¬ ψ ≤ cutAlpha L (p + 1) := by
+      exact not_le.mpr (lt_of_le_of_lt haq hψ.1)
+    have hψq : ¬ ψ ≤ cutAlpha L q := not_le.mpr hψ.1
+    simp only [cutProfileNewA, if_pos hφp, if_neg hψp, if_neg hψq] at heq
+    let s : ℝ := (φ - cutAlpha L p) * L / (2 * Real.pi)
+    have hs0 : 0 ≤ s := by
+      dsimp [s]
+      exact div_nonneg (mul_nonneg (sub_nonneg.mpr hφ.1) hL.le) hpi.le
+    have hs1 : s ≤ 1 := by
+      dsimp [s]
+      apply (div_le_one hpi).2
+      rw [ha_succ] at hφp
+      nlinarith [mul_le_mul_of_nonneg_right (sub_le_sub_right hφp (cutAlpha L p)) hL.le,
+        mul_pos hL hstep, hLstep]
+    have hsnorm : ‖cutSeam L p q s‖ = 1 := by
+      rw [heq, Complex.norm_exp]
+      simp
+    rcases cutNewA_injective_aux_seam_norm hpq hqL hs0 hs1 hsnorm with hs | hs
+    · have hφeq : φ = cutAlpha L p := by
+        dsimp [s] at hs
+        have hz : (φ - cutAlpha L p) * (L : ℝ) = 0 :=
+          (div_eq_zero_iff).mp hs |>.resolve_right (ne_of_gt hpi)
+        rcases mul_eq_zero.mp hz with hz | hz
+        · linarith
+        · exact False.elim ((ne_of_gt hL) hz)
+      rw [show (φ - cutAlpha L p) * L / (2 * Real.pi) = s by rfl, hs] at heq
+      have hsψ0 : 0 < cutSA L p q ψ := by
+        unfold cutSA
+        exact div_pos (sub_pos.mpr hψ.1) (sub_pos.mpr hqtop)
+      let aψ := cutAlpha L (p + 2) - cutSA L p q ψ * (2 * Real.pi / L)
+      have haψlo : cutAlpha L (p + 1) < aψ := by
+        have hsψ1 : cutSA L p q ψ < 1 := by
+          unfold cutSA
+          exact (div_lt_one (sub_pos.mpr hqtop)).2 (by linarith [hψ.2])
+        dsimp [aψ]
+        simp only [ha_succ]
+        nlinarith [mul_lt_mul_of_pos_right hsψ1 hstep, hLstep]
+      have haψhi : aψ < cutAlpha L (p + 2) := by
+        dsimp [aψ]
+        nlinarith [mul_pos hsψ0 hstep]
+      have hang : cutAlpha L (p + 1) = aψ := by
+        apply cutOldA_injective_aux_exp (a := cutAlpha L (p + 1))
+        · exact ⟨le_rfl, by linarith⟩
+        · exact ⟨haψlo.le, lt_trans haψhi hp2window⟩
+        · simpa [cutSeam, cutPoint, aψ] using heq
+      linarith
+    · have hφeq : φ = cutAlpha L (p + 1) := by
+        dsimp [s] at hs
+        rw [div_eq_one_iff_eq (ne_of_gt hpi)] at hs
+        rw [ha_succ]
+        nlinarith [hLstep]
+      rw [show (φ - cutAlpha L p) * L / (2 * Real.pi) = s by rfl, hs] at heq
+      have hsψ0 : 0 < cutSA L p q ψ := by
+        unfold cutSA
+        exact div_pos (sub_pos.mpr hψ.1) (sub_pos.mpr hqtop)
+      have hsψ1 : cutSA L p q ψ < 1 := by
+        unfold cutSA
+        exact (div_lt_one (sub_pos.mpr hqtop)).2 (by linarith [hψ.2])
+      let aψ := cutAlpha L (p + 2) - cutSA L p q ψ * (2 * Real.pi / L)
+      have haψlo : cutAlpha L (p + 1) < aψ := by
+        dsimp [aψ]
+        simp only [ha_succ]
+        nlinarith [mul_lt_mul_of_pos_right hsψ1 hstep, hLstep]
+      have haψhi : aψ < cutAlpha L (p + 2) := by
+        dsimp [aψ]
+        nlinarith [mul_pos hsψ0 hstep]
+      have hang : cutAlpha L (q + 1) = aψ := by
+        apply cutOldA_injective_aux_exp (a := cutAlpha L (p + 1))
+        · exact ⟨by simp only [ha_succ]; linarith [haq], hwindow⟩
+        · exact ⟨haψlo.le, lt_trans haψhi hp2window⟩
+        · simpa [cutSeam, cutPoint, aψ] using heq
+      exact (not_lt_of_ge hp2q1) (hang.trans_lt haψhi)
+  · set_option maxHeartbeats 800000 in
+    intro φ hφ ψ hψ heq
+    have hφp : ¬ φ ≤ cutAlpha L (p + 1) := not_le.mpr hφ.1
+    have hφq : φ ≤ cutAlpha L q := hφ.2
+    have hψp : ¬ ψ ≤ cutAlpha L (p + 1) := not_le.mpr (lt_of_le_of_lt haq hψ.1)
+    have hψq : ¬ ψ ≤ cutAlpha L q := not_le.mpr hψ.1
+    simp only [cutProfileNewA, if_neg hφp, if_pos hφq,
+      if_neg hψp, if_neg hψq] at heq
+    have hsψ0 : 0 < cutSA L p q ψ := by
+      unfold cutSA
+      exact div_pos (sub_pos.mpr hψ.1) (sub_pos.mpr hqtop)
+    have hsψ1 : cutSA L p q ψ < 1 := by
+      unfold cutSA
+      exact (div_lt_one (sub_pos.mpr hqtop)).2 (by linarith [hψ.2])
+    let aφ := cutAlpha L (q + 1) + cutAlpha L (p + 1) - φ
+    let aψ := cutAlpha L (p + 2) - cutSA L p q ψ * (2 * Real.pi / L)
+    have haφlo : cutAlpha L (p + 2) ≤ aφ := by
+      dsimp [aφ]
+      simp only [ha_succ]
+      linarith [hφ.2, hLstep]
+    have haψhi : aψ < cutAlpha L (p + 2) := by
+      dsimp [aψ]
+      linarith [mul_pos hsψ0 hstep]
+    have haφmem : aφ ∈ Ico (cutAlpha L (p + 1))
+        (cutAlpha L (p + 1) + 2 * Real.pi) := by
+      constructor
+      · exact le_trans (by simp only [ha_succ]; linarith) haφlo
+      · dsimp [aφ]
+        exact lt_trans (by linarith [hφ.1]) hwindow
+    have haψmem : aψ ∈ Ico (cutAlpha L (p + 1))
+        (cutAlpha L (p + 1) + 2 * Real.pi) := by
+      constructor
+      · dsimp [aψ]
+        rw [hp2eq]
+        linarith [mul_lt_mul_of_pos_right hsψ1 hstep]
+      · exact lt_trans haψhi hp2window
+    have heq' : Complex.exp ((aφ : ℂ) * Complex.I) =
+        Complex.exp ((aψ : ℂ) * Complex.I) := by
+      exact heq
+    have hang : aφ = aψ := cutOldA_injective_aux_exp haφmem haψmem heq'
+    exact (not_lt_of_ge haφlo) (hang.trans_lt haψhi)
 
 /-- Injectivity on the circle from the branch facts (as `cutOldA_injective`:
 representatives in `Ico (α p) (α p + 2π)`, which the three intervals cover). -/
