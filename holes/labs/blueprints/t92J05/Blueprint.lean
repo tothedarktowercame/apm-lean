@@ -2627,6 +2627,23 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt,
     ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
 
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_transport_aux_cast
+    {X : Type*} [TopologicalSpace X] {x y : X} (h : x = y)
+    (a : FundamentalGroup X x) :
+    FundamentalGroup.fundamentalGroupMulEquivOfPath
+        (Path.cast (Path.refl y) h rfl) a =
+      Path.Homotopic.Quotient.cast a h.symm h.symm := by
+  cases h
+  rw [Path.Homotopic.Quotient.cast_rfl_rfl]
+  change ((Groupoid.isoEquivHom _ _).symm
+      (Path.Homotopic.Quotient.refl x)).conj a = a
+  rw [show Path.Homotopic.Quotient.refl x =
+      (𝟙 (FundamentalGroupoid.mk x) : FundamentalGroupoid.mk x ⟶
+        FundamentalGroupoid.mk x) from rfl]
+  rw [CategoryTheory.Iso.conj_apply]
+  change Groupoid.inv (𝟙 (FundamentalGroupoid.mk x)) ≫ a ≫ 𝟙 _ = a
+  simp
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_transport
     (l : ConstructionTargets.PolygonSurfacePiOne.PairingOrbit
       apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair) :
@@ -2644,7 +2661,31 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
         wh b)
         (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase P l)) =
       apm_t92J05_finiteWedgeLegMap 3 (oe l) apm_t92J05_circlePositiveClass := by
-  sorry
+  dsimp
+  rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_circle]
+  unfold ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase
+  unfold ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClass
+  unfold apm_t92J05_finiteWedgeLegMap
+  induction ConstructionTargets.PolygonSurfaceHomology.circleIntegerLoopOneClass using
+      Path.Homotopic.Quotient.ind with
+  | mk γ =>
+    rw [FundamentalGroup.map_apply]
+    rw [FundamentalGroup.mapOfEq_apply]
+    rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_transport_aux_cast]
+    apply Quotient.sound
+    let p : Path (wedgeCircle (0 : Fin 4) 1) (wedgeCircle (0 : Fin 4) 1) :=
+      (γ.map (continuous_wedgeCircle
+        (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv l))).cast
+        (wedgeCircle_base_eq
+          (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv l) 0).symm
+        (wedgeCircle_base_eq
+          (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv l) 0).symm
+    refine ⟨Path.Homotopy.cast (Path.Homotopy.refl p) ?_ rfl⟩
+    apply Path.ext
+    funext t
+    simp [p, Path.cast_coe, Path.map_coe,
+      Classical.choose_spec (finiteWedge_reindex_homeomorph 3
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv)]
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord :
     ∀ l, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
