@@ -1024,7 +1024,27 @@ from `ConstructionTargets/SimplyConnectedOpenCover.lean`.  About 70 lines. -/
 lemma isSimplyConnected_union {U V : Set X} (hU : IsOpen U) (hV : IsOpen V)
     (hUs : IsSimplyConnected U) (hVs : IsSimplyConnected V)
     (hUV : IsPathConnected (U ∩ V)) : IsSimplyConnected (U ∪ V) := by
-  sorry
+  let A : Set ↥(U ∪ V) := Subtype.val ⁻¹' U
+  let B : Set ↥(U ∪ V) := Subtype.val ⁻¹' V
+  have hAopen : IsOpen A := hU.preimage continuous_subtype_val
+  have hBopen : IsOpen B := hV.preimage continuous_subtype_val
+  have hAs : IsSimplyConnected A := by
+    rw [← IsEmbedding.subtypeVal.isSimplyConnected_image,
+      Subtype.image_preimage_val, inter_eq_right.2 subset_union_left]
+    exact hUs
+  have hBs : IsSimplyConnected B := by
+    rw [← IsEmbedding.subtypeVal.isSimplyConnected_image,
+      Subtype.image_preimage_val, inter_eq_right.2 subset_union_right]
+    exact hVs
+  have hAB : IsPathConnected (A ∩ B) := by
+    have hpre : IsPathConnected (Subtype.val ⁻¹' (U ∩ V) : Set ↥(U ∪ V)) :=
+      hUV.preimage_coe (by intro x hx; exact Or.inl hx.1)
+    simpa [A, B, preimage_inter] using hpre
+  have hcover : A ∪ B = (Set.univ : Set ↥(U ∪ V)) := by
+    ext x
+    simp only [A, B, mem_union, mem_preimage, mem_univ, iff_true]
+    exact x.2
+  exact simplyConnectedSpace_of_union_eq_univ hAopen hBopen hcover hAs hBs hAB
 
 /-- **Leaf (generic, directed unions).**  A directed union of open simply
 connected sets is simply connected.
@@ -1037,7 +1057,34 @@ null-homotopy in `U k` stays in the union.  About 80 lines. -/
 lemma isSimplyConnected_iUnion_of_directed {ι : Type*} [Nonempty ι]
     (U : ι → Set X) (hdir : Directed (· ⊆ ·) U) (hU : ∀ i, IsOpen (U i))
     (hUs : ∀ i, IsSimplyConnected (U i)) : IsSimplyConnected (⋃ i, U i) := by
-  sorry
+  rw [isSimplyConnected_iff_exists_homotopy_refl_forall_mem]
+  constructor
+  · rw [isPathConnected_iff]
+    constructor
+    · let i : ι := Classical.choice ‹Nonempty ι›
+      obtain ⟨x, hx⟩ := (hUs i).nonempty
+      exact ⟨x, Set.mem_iUnion.2 ⟨i, hx⟩⟩
+    · intro x hx y hy
+      obtain ⟨i, hxi⟩ := Set.mem_iUnion.1 hx
+      obtain ⟨j, hyj⟩ := Set.mem_iUnion.1 hy
+      obtain ⟨k, hik, hjk⟩ := hdir i j
+      obtain ⟨p, hp⟩ := (hUs k).isPathConnected.joinedIn x (hik hxi) y (hjk hyj)
+      exact ⟨p, fun t => Set.mem_iUnion.2 ⟨k, hp t⟩⟩
+  · intro x p hp
+    have hrange : Set.range p ⊆ ⋃ i, U i := by
+      rintro _ ⟨t, rfl⟩
+      exact hp t
+    obtain ⟨s, hs⟩ := (isCompact_range p.continuous).elim_finite_subcover U hU hrange
+    obtain ⟨k, hk⟩ := hdir.finset_le s
+    have hpk : ∀ t, p t ∈ U k := by
+      intro t
+      have hpt : p t ∈ ⋃ i ∈ s, U i := hs ⟨t, rfl⟩
+      simp only [Set.mem_iUnion] at hpt
+      obtain ⟨i, hi, hpti⟩ := hpt
+      exact hk i hi hpti
+    obtain ⟨F, hF⟩ :=
+      (isSimplyConnected_iff_exists_homotopy_refl_forall_mem.mp (hUs k)).2 x p hpk
+    exact ⟨F, fun t => Set.mem_iUnion.2 ⟨k, hF t⟩⟩
 
 /-- **Leaf (generic, attaching a disjoint family).**  Attaching to `U` a
 pairwise disjoint family of open simply connected sets, each meeting `U` in a
@@ -1054,7 +1101,73 @@ lemma isSimplyConnected_union_iUnion_of_pairwiseDisjoint {J : Type*} {U : Set X}
     (hdisj : Pairwise fun i j => Disjoint (V i) (V j))
     (hUV : ∀ j, IsPathConnected (U ∩ V j)) :
     IsSimplyConnected (U ∪ ⋃ j, V j) := by
-  sorry
+  classical
+  let W : Finset J → Set X := fun s => U ∪ ⋃ j ∈ s, V j
+  have hWopen : ∀ s, IsOpen (W s) := by
+    intro s
+    exact hU.union (isOpen_iUnion fun j => isOpen_iUnion fun (_ : j ∈ s) => hV j)
+  have hWsimple : ∀ s, IsSimplyConnected (W s) := by
+    intro s
+    induction s using Finset.induction_on with
+    | empty =>
+        simpa [W] using hUs
+    | @insert k s hks ih =>
+        have hinter : W s ∩ V k = U ∩ V k := by
+          apply Set.Subset.antisymm
+          · rintro x ⟨hx, hxk⟩
+            rcases hx with hxU | hxV
+            · exact ⟨hxU, hxk⟩
+            · simp only [Set.mem_iUnion] at hxV
+              obtain ⟨j, hj, hxj⟩ := hxV
+              have hjk : j ≠ k := by
+                intro h
+                subst j
+                exact hks hj
+              exact False.elim (Set.disjoint_left.1 (hdisj hjk) hxj hxk)
+          · rintro x ⟨hxU, hxk⟩
+            exact ⟨Or.inl hxU, hxk⟩
+        have hunion : W (insert k s) = W s ∪ V k := by
+          ext x
+          simp [W, or_assoc, or_left_comm, or_comm]
+        rw [hunion]
+        exact isSimplyConnected_union (hWopen s) (hV k) ih (hVs k)
+          (hinter ▸ hUV k)
+  have hWdir : Directed (· ⊆ ·) W := by
+    intro s t
+    refine ⟨s ∪ t, ?_, ?_⟩
+    · intro x hx
+      rcases hx with hxU | hxV
+      · exact Or.inl hxU
+      · right
+        simp only [Set.mem_iUnion] at hxV ⊢
+        obtain ⟨j, hj, hxj⟩ := hxV
+        exact ⟨j, Finset.mem_union_left t hj, hxj⟩
+    · intro x hx
+      rcases hx with hxU | hxV
+      · exact Or.inl hxU
+      · right
+        simp only [Set.mem_iUnion] at hxV ⊢
+        obtain ⟨j, hj, hxj⟩ := hxV
+        exact ⟨j, Finset.mem_union_right s hj, hxj⟩
+  have hfinal := isSimplyConnected_iUnion_of_directed W hWdir hWopen hWsimple
+  have hUnion : (⋃ s, W s) = U ∪ ⋃ j, V j := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨s, hx⟩ := Set.mem_iUnion.1 hx
+      rcases hx with hxU | hxV
+      · exact Or.inl hxU
+      · right
+        simp only [Set.mem_iUnion] at hxV ⊢
+        obtain ⟨j, _, hxj⟩ := hxV
+        exact ⟨j, hxj⟩
+    · rintro (hxU | hxV)
+      · exact Set.mem_iUnion.2 ⟨∅, Or.inl hxU⟩
+      · obtain ⟨j, hxj⟩ := Set.mem_iUnion.1 hxV
+        refine Set.mem_iUnion.2 ⟨{j}, Or.inr ?_⟩
+        simp only [Set.mem_iUnion]
+        exact ⟨j, by simp, hxj⟩
+  rwa [hUnion] at hfinal
 
 /-- An open cover by simply connected sets whose intersection pattern is a
 rooted tree: each non-root member meets its parent in a path-connected set,
@@ -1112,9 +1225,51 @@ Route.  The vector `v = (1-t)x + tp` vanishes only for `t = 1/2, x = -p`
 `dite` is the `else` branch, and `v ↦ ‖v‖⁻¹ • v` is continuous on `{v ≠ 0}`
 (`ContinuousOn.smul`, `continuousOn_inv₀`, `continuous_norm`).
 About 50 lines. -/
+lemma spherePush_continuousOn_aux_ne_zero (p : S2)
+    (q : unitInterval × S2) (hq : q ∈ (univ ×ˢ {x | x ≠ -p})) :
+    (1 - (q.1 : ℝ)) • (q.2 : E3) + (q.1 : ℝ) • (p : E3) ≠ 0 := by
+  intro hzero
+  have hp : ‖(p : E3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using p.property
+  have hx : ‖(q.2 : E3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using q.2.property
+  have ht0 : 0 ≤ (q.1 : ℝ) := q.1.property.1
+  have ht1 : (q.1 : ℝ) ≤ 1 := q.1.property.2
+  simp only [add_eq_zero_iff_eq_neg] at hzero
+  have heq : (q.1 : ℝ) = 1 / 2 := by
+    have habs : |1 - (q.1 : ℝ)| = |(q.1 : ℝ)| := by
+      have := congrArg norm hzero
+      simpa [norm_smul, hx, hp] using this
+    rw [abs_of_nonneg (sub_nonneg.mpr ht1), abs_of_nonneg ht0] at habs
+    linarith
+  have : q.2 = -p := by
+    apply Subtype.ext
+    have := hzero
+    rw [heq] at this
+    have htwice := congrArg (fun z : E3 ↦ (2 : ℝ) • z) this
+    convert htwice using 1 <;> norm_num [smul_smul]
+  exact hq.2 this
+
 lemma spherePush_continuousOn (p : S2) :
     ContinuousOn (spherePush p) (univ ×ˢ {x | x ≠ -p}) := by
-  sorry
+  let v : unitInterval × S2 → E3 := fun q ↦
+    (1 - (q.1 : ℝ)) • (q.2 : E3) + (q.1 : ℝ) • (p : E3)
+  have hv : Continuous v := by
+    fun_prop
+  have hne (q : unitInterval × S2) (hq : q ∈ univ ×ˢ {x | x ≠ -p}) : v q ≠ 0 := by
+    exact spherePush_continuousOn_aux_ne_zero p q hq
+  have hscalar : ContinuousOn (fun q ↦ ‖v q‖⁻¹)
+      (univ ×ˢ {x : S2 | x ≠ -p}) := by
+    intro q hq
+    exact (hv.continuousAt.norm.inv₀ (by simpa using hne q hq)).continuousWithinAt
+  have hval : ContinuousOn (fun q ↦ (spherePush p q : E3))
+      (univ ×ˢ {x : S2 | x ≠ -p}) := by
+    apply (hscalar.smul hv.continuousOn).congr
+    intro q hq
+    simp only [spherePush, v, dif_neg (hne q hq)]
+  apply continuousOn_iff_continuous_restrict.mpr
+  apply continuous_induced_rng.mpr
+  exact continuousOn_iff_continuous_restrict.mp hval
 
 /-- **Leaf (generic sphere push, identities).**
 
@@ -1129,7 +1284,74 @@ lemma spherePush_spec (p : S2) :
     (∀ t, spherePush p (t, p) = p) ∧
     (∀ t x, x ≠ -p → spherePush p (t, x) ≠ -p) ∧
     (∀ t x, spherePush (-p) (t, -x) = -spherePush p (t, x)) := by
-  sorry
+  have hnorm (x : S2) : ‖(x : E3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using x.property
+  constructor
+  · intro x
+    simp [spherePush, hnorm]
+  constructor
+  · intro x hx
+    have hp0 : (p : E3) ≠ 0 := by
+      intro hp
+      have := hnorm p
+      rw [hp, norm_zero] at this
+      norm_num at this
+    simp [spherePush, hnorm, hp0]
+  constructor
+  · intro t
+    simp [spherePush, ← add_smul, hnorm]
+  constructor
+  · intro t x hx hbad
+    let v : E3 := (1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)
+    by_cases hv : v = 0
+    · have heq : spherePush p (t, x) = x := by simp [spherePush, v, hv]
+      exact hx (by rw [← heq]; exact hbad)
+    · have hout : ‖v‖⁻¹ • v = -(p : E3) := by
+        have := congrArg (fun z : S2 => (z : E3)) hbad
+        simpa [spherePush, v, hv] using this
+      have hvform : v = -‖v‖ • (p : E3) := by
+        have hn : ‖v‖ ≠ 0 := norm_ne_zero_iff.mpr hv
+        calc
+          v = ‖v‖ • (‖v‖⁻¹ • v) := by
+            rw [smul_smul, mul_inv_cancel₀ hn, one_smul]
+          _ = ‖v‖ • (-(p : E3)) := by rw [hout]
+          _ = -(‖v‖ • (p : E3)) := by rw [smul_neg]
+          _ = -‖v‖ • (p : E3) := by rw [neg_smul]
+      have hip : @inner ℝ E3 _ (x : E3) (p : E3) = -1 := by
+        have he := congrArg (fun z : E3 => @inner ℝ E3 _ z ((x : E3) + p)) hvform
+        simp only [v, inner_add_left, inner_add_right, inner_smul_left,
+          inner_self_eq_norm_sq_to_K, hnorm, one_pow, mul_one] at he
+        rw [real_inner_comm (p : E3) x] at he
+        norm_num at he
+        ring_nf at he
+        have hn : 0 ≤ ‖v‖ := norm_nonneg _
+        have hip' : @inner ℝ E3 _ (p : E3) (x : E3) = -1 := by nlinarith
+        simpa [real_inner_comm] using hip'
+      have hxneg : (x : E3) = -(p : E3) :=
+        (inner_eq_neg_one_iff_of_norm_eq_one (hnorm x) (hnorm p)).mp hip
+      apply hx
+      exact Subtype.ext hxneg
+  · intro t x
+    have hv : (1 - (t : ℝ)) • ((-x : S2) : E3) + (t : ℝ) • ((-p : S2) : E3) =
+        -((1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)) := by
+      change (1 - (t : ℝ)) • (-(x : E3)) + (t : ℝ) • (-(p : E3)) = _
+      module
+    by_cases h : (1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3) = 0
+    · have hneg : (1 - (t : ℝ)) • ((-x : S2) : E3) +
+          (t : ℝ) • ((-p : S2) : E3) = 0 := by rw [hv, h, neg_zero]
+      simp only [spherePush, dif_pos h, dif_pos hneg]
+    · have hneg : (1 - (t : ℝ)) • ((-x : S2) : E3) +
+          (t : ℝ) • ((-p : S2) : E3) ≠ 0 := by
+        rw [hv]
+        exact neg_ne_zero.mpr h
+      simp only [spherePush, dif_neg h, dif_neg hneg]
+      apply Subtype.ext
+      change ‖(1 - (t : ℝ)) • ((-x : S2) : E3) + (t : ℝ) • ((-p : S2) : E3)‖⁻¹ •
+          ((1 - (t : ℝ)) • ((-x : S2) : E3) + (t : ℝ) • ((-p : S2) : E3)) =
+        -(‖(1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)‖⁻¹ •
+          ((1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)))
+      rw [hv, norm_neg]
+      module
 
 /-! ## 5. Part (a): the chain of spheres -/
 
