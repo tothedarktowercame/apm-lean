@@ -119066,51 +119066,53 @@
   {:consumer :t00J02,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Construct the chart inverse-function local diffeomorphism; specialize circle-projection Sard; derive calculations; assemble Main.",
+    "Build chart inverse theorem (Mathlib TODO); Sard; calculations; Main.",
     :outcome :stop,
     :warnings
     ["Main sorryAx" "unnecessarySimpa; review dirs preserved"],
     :missing-theorems
-    [{:name "exists_mfderivEquiv_of_surjective",
+    [{:name "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
       :type
-      "surjective surface mfderiv is a continuous linear equivalence",
+      "surjective surface derivative gives equivalence-valued HasMFDerivAt",
       :status :proved,
       :consumers [:t00J02],
-      :depends-on
-      ["transverse_mfderiv_surjective_of_circleDirection_lifts"],
+      :depends-on ["exists_mfderivEquiv_of_surjective"],
       :area "oriented-surface-degree"}
      {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
       :type "H2 map zero",
       :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["exists_mfderivEquiv_of_surjective"
+      ["exists_hasMFDerivAt_equiv_of_contMDiff_surjective"
        "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
      :implementation
-     "86235653c93fdfc48fd1b6e7440af271ac34a00f06bf8bfeb045d1160486d975",
+     "734432345d2697dbbda4215a851fb451ccf383219018b0e6e987cefec3318a49",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :topo-2,
-    :reason "Banked equivalence-valued surface derivative.",
+    :reason "Banked manifold derivative witness.",
     :commands
-    [{:cmd "lake env lean -o ... t00J02Closure.lean", :exit 0}
+    [{:cmd
+      "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
+      :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "hash/placeholders/diff", :exit 0}],
-    :commit "79e3988636c0f5eed0d2ee08686c120f007ed05f",
+     {:cmd "sha256sum fixture/Main/closure; placeholder count",
+      :exit 0}],
+    :commit "2766d583b68055cb4206e918952cd376a5c78337",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
@@ -119118,7 +119120,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119518,7 +119520,8 @@
     :lemma-exists-regularvalue-of-criticalvalues-measure-zero
     :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector
     :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber
-    :lemma-exists-mfderivequiv-of-surjective],
+    :lemma-exists-mfderivequiv-of-surjective
+    :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
@@ -120941,6 +120944,25 @@
    :id :lemma-contdiff-lift-of-comp-isinvertible,
    :kind :lemma,
    :depends-on [:lemma-contdiff-rightinverse-of-comp-isinvertible],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
+    :type
+    "surjective surface derivative gives equivalence-valued HasMFDerivAt"},
+   :lemma
+   {:name "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "surjective surface derivative gives equivalence-valued HasMFDerivAt",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02},
+   :id :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-exists-mfderivequiv-of-surjective],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
