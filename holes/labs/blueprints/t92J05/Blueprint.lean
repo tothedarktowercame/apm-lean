@@ -1119,7 +1119,99 @@ lemma apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor
         (Subgroup.normalClosure (overlapMap.range : Set
           (FundamentalGroup U
               (apm_t92J05_twoOpen_overlapToLeft U V x)))) := by
-  sorry
+  classical
+  dsimp only
+  let Q := FundamentalGroup U
+      (apm_t92J05_twoOpen_overlapToLeft U V x) ⧸
+    Subgroup.normalClosure
+      ((FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set _)
+  let L :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedLeftFunctor U V x
+  let R :=
+    apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_rightTrivial U V x
+  let D : @ConstructionTargets.FundamentalGroupoidTwoOpenDescent.TwoOpenDescentDatum
+      X _ U V (SingleObj Q) _ :=
+    { obj := fun _ => SingleObj.star Q
+      functor := by intro b; cases b; exact R; exact L
+      obj_eq := by intro b z; cases b <;> rfl
+      overlap_eq := by
+        intro a b p hpU hpV
+        rw [apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom,
+          apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_eqToHom]
+        simp only [SingleObj.comp_as_mul, SingleObj.id_as_one, one_mul, mul_one]
+        change (1 : Q) = L.map _
+        symm
+        let q : Path (⟨a, by simpa using hpU 0, by simpa using hpV 0⟩ : (U ∩ V : Set X))
+            (⟨b, by simpa using hpU 1, by simpa using hpV 1⟩ : (U ∩ V : Set X)) :=
+          { toFun := fun t => ⟨p t, hpU t, hpV t⟩
+            continuous_toFun := p.continuous.subtype_mk _
+            source' := Subtype.ext p.source
+            target' := Subtype.ext p.target }
+        exact apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_overlap_killed
+          U V x (Path.Homotopic.Quotient.mk q) }
+  let F := ConstructionTargets.TwoOpenDescentFunctor.twoOpenDescentFunctor hU hV hcover D
+  let c := apm_t92J05_twoOpen_simplyConnectedRight_kernel_aux_ker_le_aux_factor_aux_refinedConnector
+      U V x (FundamentalGroupoid.mk (⟨x.1, x.2.1⟩ : U))
+  let k : Q := QuotientGroup.mk' _ c.hom
+  let s : FundamentalGroup X x.1 →* Q := F.mapEnd _
+  let r : FundamentalGroup X x.1 →* Q :=
+    { toFun := fun g => k * s g * k⁻¹
+      map_one' := by rw [map_one]; group
+      map_mul' := by intro a b; rw [map_mul]; group }
+  refine ⟨r, ?_⟩
+  ext g
+  change k * F.map ((FundamentalGroupoid.map
+    (apm_t92J05_twoOpen_leftInclusion U)).map g) * k⁻¹ = _
+  let z := FundamentalGroupoid.mk (⟨x.1, x.2.1⟩ : U)
+  have hn := (ConstructionTargets.TwoOpenDescentRestriction.pieceRestrictionIso
+    hU hV hcover D true).hom.naturality g
+  have hn' : L.map g = F.map ((FundamentalGroupoid.map
+      (apm_t92J05_twoOpen_leftInclusion U)).map g) := by
+    have hn0 : (D.functor true).map g =
+        (ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor
+          hU hV hcover D true).map g := by
+      simp only [ConstructionTargets.TwoOpenDescentRestriction.pieceRestrictionIso,
+        ConstructionTargets.TwoOpenDescentRestriction.restrictionAppIso,
+        NatIso.ofComponents_hom_app, eqToIso.hom] at hn
+      calc
+        (D.functor true).map g = (D.functor true).map g ≫ 𝟙 _ := (Category.comp_id _).symm
+        _ = 𝟙 _ ≫ (ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor
+              hU hV hcover D true).map g := hn
+        _ = _ := Category.id_comp _
+    have hncover : L.map g = F.map ((FundamentalGroupoid.map
+        (ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+          (U := U) (V := V) true)).map g) := by
+      simpa [D, L, F,
+        ConstructionTargets.TwoOpenDescentRestriction.restrictedAmbientFunctor] using hn0
+    have hi : ConstructionTargets.TwoOpenDescentRestriction.coverPieceInclusion
+        (U := U) (V := V) true = apm_t92J05_twoOpen_leftInclusion U := rfl
+    simpa [hi] using hncover
+  rw [← hn']
+  let N : Subgroup (FundamentalGroup U
+      (apm_t92J05_twoOpen_overlapToLeft U V x)) := Subgroup.normalClosure
+    ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft U V) x).range : Set _)
+  letI : N.Normal := inferInstance
+  change FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) at g
+  have hL : L.map g = k⁻¹ * QuotientGroup.mk' N g * k := by
+    have hLraw : L.map g = QuotientGroup.mk' N (c.hom ≫ g ≫ c.inv) := rfl
+    rw [hLraw]
+    let cg : FundamentalGroup U (apm_t92J05_twoOpen_overlapToLeft U V x) := c.hom
+    have hk : k = QuotientGroup.mk' N cg := rfl
+    rw [hk]
+    rw [← map_inv, ← map_mul, ← map_mul]
+    congr 1
+    dsimp [cg]
+    change c.hom ≫ g ≫ c.inv = c.hom ≫ g ≫ Groupoid.inv c.hom
+    rw [Groupoid.inv_eq_inv]
+    have hc : CategoryTheory.inv c.hom = c.inv :=
+      IsIso.inv_eq_of_hom_inv_id c.hom_inv_id
+    exact congrArg (fun q => c.hom ≫ g ≫ q) hc.symm
+  change k * L.map g * k⁻¹ = QuotientGroup.mk' N g
+  rw [hL]
+  group
 /-
   classical
   dsimp only
