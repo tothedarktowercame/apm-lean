@@ -88331,7 +88331,7 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88387,7 +88387,7 @@
      "373ebe10de8a6cfa3972790e03508626bb87230f64f343e1c24db7123cb582f9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88623,6 +88623,20 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 5c8a7b9cc", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792073021325-14170-5fd2e280",
+     :commands
+     ["git show/diff/check 5c8a7b9cc"
+      "compare frozen word/pairing relations"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "rg placeholder recount"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 5c8a7b9cc adds compiled, sorry-free progress beyond aca4dd83e. It defines the literal fourteen-edge involution and proves its quotient has exactly seven orbits. The pairs 0/12, 6/13, 1/7, 2/8, 5/10, 4/11, 3/9 exactly match the frozen a,b,c,d,e,f,g relations; orbit labels and representatives are mutually inverse across Quotient. Only t94J09Closure.lean changed; fixture SHA e9f3fe826dcbe1bd740012587b8f5d909623eb57cd332b229bbabea3370a5328 matches. Exact snapshot builds; Main compiles; target/fixture placeholders 0/1; registry 167/0; axioms standard. Two-vertex homology boundary, normalization, and assembly remain listed."},
     :commit "5c8a7b9cc",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88631,7 +88645,7 @@
      "e9f3fe826dcbe1bd740012587b8f5d909623eb57cd332b229bbabea3370a5328"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88649,7 +88663,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked explicit standard N6 homology.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked frozen fourteen-edge pairing and seven-orbit coordinates.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88674,7 +88688,11 @@
      :reason "Banked actual-boundary cokernel transport."}
     {:job 5,
      :commit "aca4dd83e766cc7c9bc0cf8ab2f61a65f0ce9ae0",
-     :reason "Banked explicit standard N6 homology."}]}
+     :reason "Banked explicit standard N6 homology."}
+    {:job 6,
+     :commit "5c8a7b9cc",
+     :reason
+     "Banked frozen fourteen-edge pairing and seven-orbit coordinates."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -95363,7 +95381,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -95375,7 +95393,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "cross-run successor advances exactly one run",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id
    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne,
    :kind :lemma,
@@ -95384,7 +95404,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenOrbitEquiv",
@@ -95396,7 +95416,9 @@
     :type
     "exact seven pairing orbits of the frozen fourteen-edge involution",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5c8a7b9cc"},
    :id :lemma-frozenorbitequiv,
    :kind :lemma,
    :depends-on [],
