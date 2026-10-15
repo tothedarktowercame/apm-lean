@@ -119181,6 +119181,18 @@
      {:cmd "hash/count/diff", :exit 0}],
     :diagnostic-history
     [{:cmd "drafts", :exit 1, :finding "fixed model notation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792043846164-13419-6e7af309",
+     :commands
+     ["git diff/show 0b62a848 archived sources"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds compiled, sorry-free extraction of an ordinary extended-chart derivative from HasMFDerivAt for distinct boundaryless source/target models. The self-model ranges are univ, while E and E-prime remain distinct, faithfully preserving the circle-to-surface dimension boundary. Actual combined chart construction remains listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "0b62a848fb4bd80deb0e94239dd0c174a4b99598",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence chart derivative.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked mixed-model chart derivative.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119426,7 +119438,10 @@
      :reason "Banked chart derivative conjugation."}
     {:job 7,
      :commit "acb6fce871b48ce0f274a5ee28d2a38df1b8f447",
-     :reason "Banked incidence chart derivative."}]}
+     :reason "Banked incidence chart derivative."}
+    {:job 8,
+     :commit "0b62a848fb4bd80deb0e94239dd0c174a4b99598",
+     :reason "Banked mixed-model chart derivative."}]}
   {:consumer :t98A06,
    :stop-count 8,
    :review-finding
@@ -121491,7 +121506,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt_self",
@@ -121501,7 +121516,9 @@
     :reported-by [:program-2026-10-13-close-t00j02],
     :type "mixed-dimensional self-model chart derivative",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "0b62a848fb4bd80deb0e94239dd0c174a4b99598"},
    :id :lemma-hasfderivat-writteninextchartat-of-hasmfderivat-self,
    :kind :lemma,
    :depends-on [:lemma-hasfderivat-incidencedifference-conj],
