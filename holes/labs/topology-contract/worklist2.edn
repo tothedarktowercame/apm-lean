@@ -88376,6 +88376,19 @@
     [{:cmd "boundary-product draft",
       :exit 1,
       :correction "typed quotient factors and both path rewrites"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792047177037-13559-fdb36f0b",
+     :commands
+     ["git show/diff/check 8deb5ceae"
+      "sha256sum recorded fixture"
+      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
+      "lake env lean problems/t97A01/lean/Main.lean"
+      "rg sorry/admit target+fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: topo-6 commit 8deb5ceae adds compiled, sorry-free progress beyond 3e6fbc0b2: the exact geometric polygon-boundary class equals the reversed ordered product of signed edge classes. Only t97A01Closure.lean changed; fixture SHA 9170b892058e4ca062e31b5ab20ef567d28506d830cff640fa4ce956457ae3f7 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Orientation is correct: canonical path concatenation is converted by the existing theorem to reverse-list multiplication, then every subdivision factor is rewritten to its signed explicit edge class. Frozen-coordinate transport, kernel normal closure, van Kampen presentation, and final assembly remain explicitly listed."},
     :commit "8deb5ceae",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
@@ -88384,7 +88397,7 @@
      "9170b892058e4ca062e31b5ab20ef567d28506d830cff640fa4ce956457ae3f7"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -88402,7 +88415,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A01Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked relator signs and six-edge coordinates.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact geometric boundary edge product.",
    :id :program-2026-10-13-close-t97a01,
    :kind :final-adapter,
    :campaign-priority 32,
@@ -88450,7 +88463,10 @@
      :reason "Banked Fin-3 skeleton epimorphism."}
     {:job 4,
      :commit "3e6fbc0b2",
-     :reason "Banked relator signs and six-edge coordinates."}]}
+     :reason "Banked relator signs and six-edge coordinates."}
+    {:job 5,
+     :commit "8deb5ceae",
+     :reason "Banked exact geometric boundary edge product."}]}
   {:consumer :t94J09,
    :stop-count 1,
    :evidence
@@ -94105,7 +94121,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2GeometricBoundary_eq_signedEdgeProduct",
@@ -94115,7 +94131,9 @@
     :reported-by [:program-2026-10-13-close-t97a01],
     :type "boundary class equals six-edge product",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :program-2026-10-13-close-t97a01,
+    :banked-commit "8deb5ceae"},
    :id :lemma-torusrp2geometricboundary-eq-signededgeproduct,
    :kind :lemma,
    :depends-on [],
