@@ -1325,6 +1325,20 @@ theorem torusRP2_pathHomotopicQuotient_trans_assoc
   intro p q r
   exact Quotient.sound (Path.Homotopic.trans_assoc p q r)
 
+/-- Equal path classes may be substituted simultaneously in both inputs of
+typed quotient composition.  This is the congruence step used to insert the
+flat-prefix induction hypothesis and the current run-factor equality. -/
+theorem torusRP2_pathHomotopicQuotient_trans_congr
+    {X : Type*} [TopologicalSpace X] {x y z : X}
+    {a a' : Path.Homotopic.Quotient x y}
+    {b b' : Path.Homotopic.Quotient y z}
+    (ha : a = a') (hb : b = b') :
+    Path.Homotopic.Quotient.trans a b =
+      Path.Homotopic.Quotient.trans a' b' := by
+  subst a'
+  subst b'
+  rfl
+
 /-- Replacing every piece of a subordinate subdivision by an equal path
 class reconstructs the class of the original path. -/
 theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
@@ -3259,6 +3273,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_pathHomotopicQuotient_concat_one
 #print axioms torusRP2_pathHomotopicQuotient_concat_two
 #print axioms torusRP2_pathHomotopicQuotient_trans_assoc
+#print axioms torusRP2_pathHomotopicQuotient_trans_congr
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2_subdivisionRun_exists_outerRepresentative
