@@ -283,6 +283,50 @@ theorem t99J05_affineChartConstruction_all (n : ℕ) :
   · exact hlineCoord
   · exact hzero
 
+/-- The overlap of the two successor patches is exactly punctured affine
+space in the last-coordinate chart. -/
+noncomputable def t99J05_cp_successor_overlap_homeomorph_puncturedAffine
+    (n : ℕ) :
+    ({p : CP (n + 1) |
+        p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1))) ≃ₜ
+      ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+        Set (AffineCoordinates (Fin.last (n + 1)))) := by
+  have hinvMem (z : AffineCoordinates (Fin.last (n + 1))) :
+      Projectivization.rep
+          (chartInverse (Fin.last (n + 1)) z) (Fin.last (n + 1)) ≠ 0 := by
+    unfold chartInverse
+    let v : NonzeroVectors ℂ (n + 1) :=
+      ⟨fun j => if h : j = Fin.last (n + 1) then 1 else z ⟨j, h⟩, by
+        intro hz
+        have hi := congrFun hz (Fin.last (n + 1))
+        simp at hi⟩
+    have hv : v ∈ {w : NonzeroVectors ℂ (n + 1) |
+        w.1 (Fin.last (n + 1)) ≠ 0} := by simp [v]
+    exact (Set.ext_iff.mp (affineSource_preimage (Fin.last (n + 1))) v).mpr hv
+  refine
+    { toFun := fun p =>
+        ⟨coordinates (Fin.last (n + 1)) p.1,
+          (cpSuccessor_overlap_topCoordinates_ne_zero n p.1 p.2.2).mp p.2.1⟩
+      invFun := fun z =>
+        ⟨chartInverse (Fin.last (n + 1)) z.1,
+          ⟨(cpSuccessor_overlap_topCoordinates_ne_zero n _ (hinvMem z.1)).mpr
+              (by simpa only [coordinates_chartInverse] using z.2),
+            hinvMem z.1⟩⟩
+      left_inv := fun p => by
+        apply Subtype.ext
+        exact chartInverse_coordinates (Fin.last (n + 1)) p.1 p.2.2
+      right_inv := fun z => by
+        apply Subtype.ext
+        exact coordinates_chartInverse (Fin.last (n + 1)) z.1
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        exact (t99J05_coordinates_continuousOn_exact (Fin.last (n + 1))).comp_continuous
+          continuous_subtype_val (fun p => p.2.2)
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        exact (t99J05_chartInverse_continuous_exact (Fin.last (n + 1))).comp
+          continuous_subtype_val }
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -330,6 +374,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessor_openCover
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
+#print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
