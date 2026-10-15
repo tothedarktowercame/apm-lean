@@ -37447,34 +37447,35 @@
   {:consumer :t97J07,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:t97J07 [1 1]},
     :residual
-    "Attach circle H0/H1 endpoints to overlap isomorphisms; then MV, CP2, Main.",
+    "Build the CP1 Mayer-Vietoris step; then CP2 filtration and Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "t97J07_cp1_overlapHomologyIsoCircle",
-      :type
-      "rational homology of the literal overlap is isomorphic to unit-circle homology in every degree",
+    [{:name "t97J07_cp1_puncturedOverlap_homology",
+      :type "literal overlap rational H0 and H1 are each Q",
       :status :proved,
       :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_puncturedComplex_radialHomotopyEquiv"],
+      :depends-on ["t97J07_cp1_overlapHomologyIsoCircle"],
       :area "rational-homology-cpn"}
-     {:name "t97J07_cp1_puncturedOverlap_homology",
+     {:name "t97J07_cp1_mayerVietoris_homology",
       :type
-      "identify overlap rational H0 and H1 using circle endpoints",
+      "two affine patches and overlap endpoints compute rational CP1 homology",
       :status :not-started,
       :consumers [:t97J07],
-      :depends-on ["t97J07_cp1_overlapHomologyIsoCircle"],
+      :depends-on
+      ["t97J07_cp1_puncturedOverlap_homology"
+       "t97J07_cp1_affinePatch_higherHomology_isZero"],
       :area "rational-homology-cpn"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed the exact overlap-to-circle homotopy equivalence and rational homology isomorphisms.",
+    "Committed rational H0 and H1 isomorphisms for the literal CP1 overlap.",
     :commands
     [{:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
@@ -37482,19 +37483,7 @@
      {:cmd "sha256sum ConstructionTargets/t97J07Closure.blueprint.md",
       :exit 0}
      {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792065689112-14010-c18b29ce",
-     :commands
-     ["git show --check --stat b84d78ab6"
-      "git diff --name-only b84d78ab6^ b84d78ab6"
-      "git-show fixture | sha256sum"
-      "lake env lean problems/t97J07/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit b84d78ab6 changes only scoped Main.lean and adds the compiled, sorry-free CP1-overlap homeomorphism milestone; fixture hash matches 3fa01c79...76dbe7, registry 166/166, and the new declaration uses standard axioms only. Remaining final theorem is listed unfinished work."},
-    :commit "17818e8a1",
+    :commit "797b4d11a",
     :changed-paths ["problems/t97J07/lean/Main.lean"],
     :fixture
     {:path "ConstructionTargets/t97J07Closure.blueprint.md",
@@ -37502,7 +37491,7 @@
      "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97J07/lean/Main.lean"
     "problems/t97J07/status.json"
@@ -42051,7 +42040,8 @@
    {:name "t97J07_cp1_puncturedOverlap_homology",
     :reported-by [:program-2026-10-13-close-t97j07],
     :type "compute rational H0 and H1 of the overlap",
-    :area "rational-homology-cpn"},
+    :area "rational-homology-cpn",
+    :proved-in :program-2026-10-13-close-t97j07},
    :id :lemma-t97j07-cp1-puncturedoverlap-homology,
    :kind :lemma,
    :depends-on
@@ -42818,6 +42808,26 @@
    :depends-on
    [:lemma-polynomialspherelift-signedregularfibercount-eq-four
     :lemma-polynomialspherelift-globalimage-eq-decksum-iff-degreefour],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_cp1_mayerVietoris_homology",
+    :type
+    "two affine patches and overlap endpoints compute rational CP1 homology"},
+   :lemma
+   {:name "t97J07_cp1_mayerVietoris_homology",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type
+    "two affine patches and overlap endpoints compute rational CP1 homology",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-cp1-mayervietoris-homology,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t97j07-cp1-puncturedoverlap-homology
+    :lemma-t97j07-cp1-affinepatch-higherhomology-iszero],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
