@@ -87901,37 +87901,39 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Use connecting injectivity plus its range equality for H2; finish H0, then B9-B10.",
+    "Prove B9 from adjacent MV exactness and piece vanishing; assemble B10.",
     :outcome :stop,
     :warnings ["preexisting lint" "unrelated dirt preserved"],
     :missing-theorems
-    [{:name "radialMVH2KernelComplex_exact",
-      :type "coordinatized H2 segment exact",
+    [{:name "radialH2BoundaryKernelModuleIso",
+      :type "surface H2 equals attaching kernel",
       :status :proved,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVConnectingH1_mono"],
-      :area "polygon-quotient-homology"}
-     {:name "radialMVConnectingH1CoordinatesLinear_range",
-      :type "connecting range equals BoundaryKernel",
-      :status :proved,
-      :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVH2KernelComplex_exact"],
+      :depends-on ["radialMVConnectingH1CoordinatesLinear_range"],
       :area "polygon-quotient-homology"}
      {:name "lowDegreeHomology",
       :type "B8 H0/H1/H2 extraction",
+      :status :proved,
+      :consumers [:t97A01 :t94J09],
+      :depends-on
+      ["radialH2BoundaryKernelModuleIso"
+       "boundaryCokernelRadialH1Equiv"],
+      :area "polygon-quotient-homology"}
+     {:name "highDegreeHomology",
+      :type "B9 vanishing for k>=3",
       :status :partial,
       :consumers [:t97A01 :t94J09],
-      :depends-on ["radialMVConnectingH1CoordinatesLinear_range"],
+      :depends-on ["lowDegreeHomology"],
       :area "polygon-quotient-homology"}],
     :statement-hashes {:registry "166/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked H2 connecting range as BoundaryKernel.",
+    :reason "Completed B8 low-degree homology.",
     :commands
     [{:cmd
       "lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology",
@@ -87939,32 +87941,21 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check b94c993d7", :exit 0}],
+     {:cmd "git show --check 8a04c4e3d", :exit 0}],
     :diagnostic-history
-    [{:cmd "H2 exactness drafts",
+    [{:cmd "B8 drafts",
       :exit 1,
       :correction
-      "fixed iso orientation and categorical reassociation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792039303051-13229-069ee491",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.PolygonSurfaceHomology"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms on three new theorems"
-      "git show --check b94c993d7; fixture SHA-256 and placeholder scans"],
-     :finding
-     "Commit b94c993d7 by topo-6 changes only PolygonSurfaceHomology.lean and adds new compiled progress beyond history f94cb352b. Exact recorded snapshot builds; fixture SHA-256 d14ae6db3940fd04d2d255523657e3b1bde9bdaae0042929aa2e5eac74aaf643 matches; 0 placeholders; registry 166/0; only propext, Classical.choice, Quot.sound. The short-complex orientation is connecting map then MV boundary, hence exactness gives its range as the boundary kernel; AddMonoidHom/AddSubgroup to integer-linear representations align definitionally, and the final rewrite to BoundaryKernel is faithful. Milestones are properly listed; lowDegreeHomology H2/H0 and B9-B10 remain."},
-    :commit "b94c993d7",
+      "exposed composite mono and supplied H0 nonempty instances"}],
+    :commit "8a04c4e3d",
     :changed-paths ["ConstructionTargets/PolygonSurfaceHomology.lean"],
     :fixture
     {:path "ConstructionTargets/PolygonSurfaceHomology.lean",
      :sha256
-     "d14ae6db3940fd04d2d255523657e3b1bde9bdaae0042929aa2e5eac74aaf643"},
+     "abdc28fd8e899e45c05abe5956e5a574ab4d64ecba3c625144b3dfb39a6a1cf5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PolygonSurfaceHomology.lean"
     "ConstructionTargets/PolygonSurfaceHomology.md"
@@ -93004,7 +92995,8 @@
    {:name "lowDegreeHomology",
     :reported-by [:program-2026-10-13-polygon-surface-homology],
     :type "B8 H0/H1/H2 kernel-cokernel extraction",
-    :area "polygon-quotient-homology"},
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
    :id :lemma-lowdegreehomology,
    :kind :lemma,
    :depends-on
@@ -93016,7 +93008,8 @@
     :lemma-boundarycokerneltoradialh1-injective
     :lemma-boundarycokernelradialh1equiv
     :lemma-radialmvconnectingh1-mono
-    :lemma-radialmvconnectingh1coordinateslinear-range],
+    :lemma-radialmvconnectingh1coordinateslinear-range
+    :lemma-radialh2boundarykernelmoduleiso],
    :other-consumers [:t94J09]}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93302,4 +93295,36 @@
    :id :lemma-radialmvconnectingh1coordinateslinear-range,
    :kind :lemma,
    :depends-on [:lemma-radialmvh2kernelcomplex-exact],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "radialH2BoundaryKernelModuleIso",
+    :type "surface H2 equals attaching kernel"},
+   :lemma
+   {:name "radialH2BoundaryKernelModuleIso",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "surface H2 equals attaching kernel",
+    :area "polygon-quotient-homology",
+    :proved-in :program-2026-10-13-polygon-surface-homology},
+   :id :lemma-radialh2boundarykernelmoduleiso,
+   :kind :lemma,
+   :depends-on [:lemma-radialmvconnectingh1coordinateslinear-range],
+   :other-consumers [:t94J09]}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "highDegreeHomology", :type "B9 vanishing for k>=3"},
+   :lemma
+   {:name "highDegreeHomology",
+    :reported-by [:program-2026-10-13-polygon-surface-homology],
+    :type "B9 vanishing for k>=3",
+    :area "polygon-quotient-homology"},
+   :id :lemma-highdegreehomology,
+   :kind :lemma,
+   :depends-on [:lemma-lowdegreehomology],
    :other-consumers [:t94J09]}]}
