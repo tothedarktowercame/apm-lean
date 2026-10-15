@@ -1493,6 +1493,18 @@ theorem pathTwoOpenSubdivisionRunStart_eq_prefixLength
       rw [List.getElem?_eq_getElem hklt]
       simp [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, j]
 
+/-- The end index of run `i` is the cumulative length through run `i`.
+This is the index equation used by the successor step of run regrouping. -/
+theorem pathTwoOpenSubdivisionRunEnd_eq_prefixLength_succ
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length =
+      pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  rw [pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+  rw [pathTwoOpenSubdivisionRunPrefixLength_succ S i.val i.isLt]
+
 theorem pathTwoOpenSubdivisionRunFamily_length_pos
     {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
     {U V : Set X} (S : PathTwoOpenSubdivision p U V)
@@ -1593,6 +1605,34 @@ noncomputable def pathTwoOpenSubdivisionRunBlockPiece
     (pathTwoOpenSubdivisionRunPredLength S i + 1) (by
       rw [pathTwoOpenSubdivisionRunPredLength_add_one]
       exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
+
+/-- A run-block factor is the original subdivision factor at its cumulative
+prefix offset. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_apply_prefix
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunBlockPiece S i k t =
+      S.piece ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k,
+        by
+          rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+          have h := pathTwoOpenSubdivisionRunStart_add_length_le S i
+          rw [← pathTwoOpenSubdivisionRunPredLength_add_one S i] at h
+          omega⟩ t := by
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  rw [← pathTwoOpenSubdivisionRunPredLength_add_one S i] at hbound
+  have hk : pathTwoOpenSubdivisionRunStart S i + k.val < S.n + 1 := by
+    omega
+  unfold pathTwoOpenSubdivisionRunBlockPiece
+  change S.piece ⟨pathTwoOpenSubdivisionRunStart S i + k, hk⟩ t = _
+  apply congrArg (fun j : Fin (S.n + 1) ↦ S.piece j t)
+  apply Fin.ext
+  change pathTwoOpenSubdivisionRunStart S i + k.val =
+    pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val
+  have hs := pathTwoOpenSubdivisionRunStart_eq_prefixLength S i
+  omega
 
 /-- Reindexing a maximal run as a dependent block preserves its uniform
 chart-range certificate.  This is the final range input needed to choose the
