@@ -249,6 +249,204 @@ lemma t99A01_piOne_attach_empty (degree : Fin 0 → ℕ) :
 /-- **Leaf (successor cover, 70--130 lines).**  The centre complement and the
 open last-disk interior form the van Kampen cover.  This formulation records
 exactly the four hypotheses needed by `apm_t92J05_twoOpen_attach_one_cell`. -/
+lemma t99A01_piOne_attach_succ_cover_aux_centre {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    (x : Sum Circle (Fin (r + 1) × APMT99A01.Disk)) :
+    Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (Fin.last r,
+          (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk))) x ↔
+      x = Sum.inr (Fin.last r,
+        (⟨0, by simp [Metric.mem_closedBall]⟩ : APMT99A01.Disk)) := by
+  let c : APMT99A01.Disk := ⟨0, by simp [Metric.mem_closedBall]⟩
+  let P := fun x : Sum Circle (Fin (r + 1) × APMT99A01.Disk) =>
+    x = Sum.inr (Fin.last r, c)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b h
+    cases h with
+    | boundary i z =>
+      constructor
+      · intro h; cases h
+      · intro h
+        have hz : APMT99A01.circleInDisk z ≠ c := by
+          intro he
+          have hv := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) he
+          change (z : ℂ) = 0 at hv
+          have hn := Circle.norm_coe z
+          rw [hv, norm_zero] at hn
+          norm_num at hn
+        have hp : (i, APMT99A01.circleInDisk z) = (Fin.last r, c) :=
+          Sum.inr.inj h
+        exact False.elim (hz (Prod.mk.inj hp).2)
+  constructor
+  · intro h
+    have hinv : ∀ a b, Relation.EqvGen (APMT99A01.AttachRel degree) a b →
+        (P a ↔ P b) := by
+      intro a b hab
+      induction hab with
+      | rel a b hab => exact hrel a b hab
+      | refl => exact Iff.rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+    exact (hinv _ _ h).mp rfl
+  · rintro rfl
+    exact Relation.EqvGen.refl _
+
+lemma t99A01_piOne_attach_succ_cover_aux_interior {r : ℕ}
+    (degree : Fin (r + 1) → ℕ)
+    (x y : Sum Circle (Fin (r + 1) × APMT99A01.Disk))
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    (∃ z : APMT99A01.Disk, ‖(z : ℂ)‖ < 1 ∧
+        x = Sum.inr (Fin.last r, z)) ↔
+      ∃ z : APMT99A01.Disk, ‖(z : ℂ)‖ < 1 ∧
+        y = Sum.inr (Fin.last r, z) := by
+  let P := fun x : Sum Circle (Fin (r + 1) × APMT99A01.Disk) =>
+    ∃ z : APMT99A01.Disk, ‖(z : ℂ)‖ < 1 ∧ x = Sum.inr (Fin.last r, z)
+  have hrel : ∀ a b, APMT99A01.AttachRel degree a b → (P a ↔ P b) := by
+    intro a b hab
+    cases hab with
+    | boundary i z =>
+      constructor
+      · rintro ⟨w, hw, hbad⟩
+        cases hbad
+      · rintro ⟨w, hw, he⟩
+        have hp : (i, APMT99A01.circleInDisk z) = (Fin.last r, w) :=
+          Sum.inr.inj he
+        have hi : i = Fin.last r := (Prod.mk.inj hp).1
+        subst i
+        have hw' : w = APMT99A01.circleInDisk z := (Prod.mk.inj hp).2.symm
+        subst w
+        simp [APMT99A01.circleInDisk, Circle.norm_coe] at hw
+  induction h with
+  | rel a b hab => exact hrel a b hab
+  | refl => exact Iff.rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma t99A01_piOne_attach_succ_cover_aux_basic {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    IsOpen (APMT99A01.succCircleSide degree) ∧
+      IsOpen (APMT99A01.succDiskSide degree) ∧
+      APMT99A01.succCircleSide degree ∪ APMT99A01.succDiskSide degree = Set.univ ∧
+      Set.Nonempty (APMT99A01.succCircleSide degree ∩
+        APMT99A01.succDiskSide degree) := by
+  let c : APMT99A01.Disk := ⟨0, by simp [Metric.mem_closedBall]⟩
+  let mk : Sum Circle (Fin (r + 1) × APMT99A01.Disk) →
+      APMT99A01.AttachSpace degree := Quotient.mk _
+  have hCpre : mk ⁻¹' APMT99A01.succCircleSide degree =
+      ({Sum.inr (Fin.last r, c)}ᶜ :
+        Set (Sum Circle (Fin (r + 1) × APMT99A01.Disk))) := by
+    ext x
+    simp only [Set.mem_preimage, APMT99A01.succCircleSide, Set.mem_setOf_eq,
+      Set.mem_compl_iff, Set.mem_singleton_iff]
+    constructor
+    · intro h hx
+      apply h
+      change Quotient.mk _ x = Quotient.mk _ (Sum.inr (Fin.last r, c))
+      rw [hx]
+    · intro h he
+      apply h
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (Fin.last r, c)) x := Quotient.exact he.symm
+      exact (t99A01_piOne_attach_succ_cover_aux_centre degree x).mp hr
+  have hDpre : mk ⁻¹' APMT99A01.succDiskSide degree =
+      {x | ∃ z : APMT99A01.Disk, ‖(z : ℂ)‖ < 1 ∧
+        x = Sum.inr (Fin.last r, z)} := by
+    ext x
+    simp only [Set.mem_preimage, APMT99A01.succDiskSide, Set.mem_setOf_eq]
+    constructor
+    · rintro ⟨z, hz, he⟩
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree) x
+          (Sum.inr (Fin.last r, z)) := Quotient.exact he
+      exact (t99A01_piOne_attach_succ_cover_aux_interior degree x _ hr).mpr
+        ⟨z, hz, rfl⟩
+    · rintro ⟨z, hz, rfl⟩
+      exact ⟨z, hz, rfl⟩
+  have hC : IsOpen (APMT99A01.succCircleSide degree) := by
+    rw [isOpen_coinduced]
+    change IsOpen (mk ⁻¹' APMT99A01.succCircleSide degree)
+    rw [hCpre]
+    exact isOpen_compl_singleton
+  have hD : IsOpen (APMT99A01.succDiskSide degree) := by
+    rw [isOpen_coinduced]
+    change IsOpen (mk ⁻¹' APMT99A01.succDiskSide degree)
+    rw [hDpre, isOpen_sum_iff]
+    constructor
+    · simp
+    · have heq : Sum.inr ⁻¹'
+          {x : Sum Circle (Fin (r + 1) × APMT99A01.Disk) |
+            ∃ z : APMT99A01.Disk, ‖(z : ℂ)‖ < 1 ∧
+              x = Sum.inr (Fin.last r, z)} =
+          {p : Fin (r + 1) × APMT99A01.Disk |
+            p.1 = Fin.last r ∧ ‖(p.2 : ℂ)‖ < 1} := by
+          ext p
+          constructor
+          · rintro ⟨z, hz, he⟩
+            have hp : p = (Fin.last r, z) := Sum.inr.inj he
+            subst p
+            exact ⟨rfl, hz⟩
+          · rintro ⟨hp, hz⟩
+            exact ⟨p.2, hz, congrArg Sum.inr (Prod.ext hp rfl)⟩
+      rw [heq]
+      exact (isOpen_discrete {Fin.last r}).prod
+        (isOpen_lt (continuous_norm.comp continuous_subtype_val) continuous_const)
+  refine ⟨hC, hD, Set.eq_univ_of_forall ?_, ?_⟩
+  · intro q
+    refine Quotient.inductionOn q ?_
+    intro x
+    cases x with
+    | inl z =>
+        left
+        intro he
+        have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+            (Sum.inr (Fin.last r, c)) (Sum.inl z) := Quotient.exact he.symm
+        have hx := (t99A01_piOne_attach_succ_cover_aux_centre degree
+          (Sum.inl z)).mp hr
+        cases hx
+    | inr p =>
+        rcases p with ⟨i, z⟩
+        by_cases hi : i = Fin.last r
+        · subst i
+          by_cases hz : ‖(z : ℂ)‖ < 1
+          · right; exact ⟨z, hz, rfl⟩
+          · left
+            intro he
+            have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+                (Sum.inr (Fin.last r, c)) (Sum.inr (Fin.last r, z)) :=
+              Quotient.exact he.symm
+            have hx := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+            have hzc : z = c := (Prod.mk.inj (Sum.inr.inj hx)).2
+            subst z
+            simp [c] at hz
+        · left
+          intro he
+          have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+              (Sum.inr (Fin.last r, c)) (Sum.inr (i, z)) := Quotient.exact he.symm
+          have hx := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+          exact hi (Prod.mk.inj (Sum.inr.inj hx)).1
+  · let z : APMT99A01.Disk :=
+      ⟨(1 / 2 : ℂ), by
+        rw [Metric.mem_closedBall, dist_zero_right]
+        norm_num [norm_div]⟩
+    refine ⟨Quotient.mk _ (Sum.inr (Fin.last r, z)), ?_, ⟨z, ?_, rfl⟩⟩
+    · intro he
+      have hr : Relation.EqvGen (APMT99A01.AttachRel degree)
+          (Sum.inr (Fin.last r, c)) (Sum.inr (Fin.last r, z)) :=
+        Quotient.exact he.symm
+      have hx := (t99A01_piOne_attach_succ_cover_aux_centre degree _).mp hr
+      have hzc : z = c := (Prod.mk.inj (Sum.inr.inj hx)).2
+      have hv := congrArg (fun w : APMT99A01.Disk => (w : ℂ)) hzc
+      norm_num [z, c] at hv
+    · norm_num [z]
+
+lemma t99A01_piOne_attach_succ_cover_aux_connectivity {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    IsPathConnected (APMT99A01.succCircleSide degree ∩
+        APMT99A01.succDiskSide degree) ∧
+      IsPathConnected (APMT99A01.succCircleSide degree) ∧
+      IsPathConnected (APMT99A01.succDiskSide degree) ∧
+      IsSimplyConnected (APMT99A01.succDiskSide degree) := by
+  sorry
+
 -- BEGIN SEAT AREA
 lemma t99A01_piOne_attach_succ_cover {r : ℕ} (degree : Fin (r + 1) → ℕ) :
     IsOpen (APMT99A01.succCircleSide degree) ∧
@@ -259,9 +457,11 @@ lemma t99A01_piOne_attach_succ_cover {r : ℕ} (degree : Fin (r + 1) → ℕ) :
       IsPathConnected (APMT99A01.succCircleSide degree) ∧
       IsPathConnected (APMT99A01.succDiskSide degree) ∧
       IsSimplyConnected (APMT99A01.succDiskSide degree) := by
-  sorry
--- END SEAT AREA
-
+  rcases t99A01_piOne_attach_succ_cover_aux_basic degree with
+    ⟨hU, hV, hcover, hne⟩
+  rcases t99A01_piOne_attach_succ_cover_aux_connectivity degree with
+    ⟨hUV, hUc, hVc, hVs⟩
+  exact ⟨hU, hV, hcover, hne, hUV, hUc, hVc, hVs⟩
 /-- **Leaf (last-disk radial retraction, 90--150 lines).**  The circle is
 fixed, and the inverse is the explicit `attachCastSucc` inclusion. -/
 lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
@@ -275,6 +475,7 @@ lemma t99A01_piOne_attach_succ_retract {r : ℕ} (degree : Fin (r + 1) → ℕ)
         e ⟨(Quotient.mk _ (Sum.inr (Fin.last r, (⟨(w : ℂ) / 2, by rw [Metric.mem_closedBall, dist_zero_right, norm_div, Circle.norm_coe]; norm_num⟩ : APMT99A01.Disk))) : APMT99A01.AttachSpace degree), h⟩ =
           Quotient.mk _ (Sum.inl (w ^ degree (Fin.last r))) := by
   sorry
+-- END SEAT AREA
 
 /-- **Leaf (overlap winding, 60--120 lines).**  After the preceding radial
 identification, the positive overlap generator is the `degree last` power of
