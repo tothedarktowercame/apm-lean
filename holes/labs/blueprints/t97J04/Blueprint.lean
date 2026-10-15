@@ -310,12 +310,47 @@ lemma cell_inner_contractible (γ : C(Circle, Y)) :
     ContractibleSpace (cellInner γ) := by
   sorry
 
-/-- A3. The overlap annulus `1/3 < |z| < 2/3` deformation retracts to the
-radius-`1/2` circle. -/
-lemma cell_overlap_hequiv (γ : C(Circle, Y)) :
+/-- The open annulus `1/3 < |z| < 2/3`. -/
+abbrev Annulus13 := {z : ℂ // (1 : ℝ) / 3 < ‖z‖ ∧ ‖z‖ < (2 : ℝ) / 3}
+
+/-- A3a. `CellRel` only relates disk points on the boundary circle: two disk
+points with one of norm `< 1` are related only if equal (cf. the saturation
+argument in `cell_cover`). -/
+lemma cell_overlap_hequiv_aux_eq_of_eqvGen
+    (γ : C(Circle, Y)) {z w : apm_t97J04_Disk}
+    (h : Relation.EqvGen (CellRel γ) (.inr z) (.inr w))
+    (hz : ‖(z : ℂ)‖ < 1) : z = w := by
+  sorry
+
+/-- A3b. The overlap is homeomorphic to the literal annulus, sending
+`cellMk γ (.inr z) ↦ z` (A3a gives injectivity; openness of `cellMk` on the
+saturated open set `inr '' {1/3 < |z| < 2/3}` gives continuity of the inverse). -/
+lemma cell_overlap_hequiv_aux_homeomorph (γ : C(Circle, Y))
+    (heq : ∀ {z w : apm_t97J04_Disk}, Relation.EqvGen (CellRel γ) (.inr z) (.inr w) →
+      ‖(z : ℂ)‖ < 1 → z = w) :
+    ∃ h : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₜ Annulus13,
+      ∀ z : Circle, ((h (cellOverlapCircle γ z) : Annulus13) : ℂ) = (z : ℂ) / 2 := by
+  sorry
+
+/-- A3c. The annulus deformation retracts radially onto the radius-`1/2`
+circle: `Annulus13 ≃ₕ Circle`, `w ↦ w / |w|`, inverse `z ↦ z / 2`. -/
+lemma cell_overlap_hequiv_aux_annulus :
+    ∃ e : Annulus13 ≃ₕ Circle, ∀ z : Circle, ((e.invFun z : Annulus13) : ℂ) = (z : ℂ) / 2 := by
+  sorry
+
+/-- A3. Assembly (sorry-free over A3a–c). -/
+theorem cell_overlap_hequiv (γ : C(Circle, Y)) :
     ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
       e.invFun = cellOverlapCircle γ := by
-  sorry
+  obtain ⟨h, hh⟩ := cell_overlap_hequiv_aux_homeomorph γ
+    (fun hzw hz => cell_overlap_hequiv_aux_eq_of_eqvGen γ hzw hz)
+  obtain ⟨e, he⟩ := cell_overlap_hequiv_aux_annulus
+  refine ⟨h.toHomotopyEquiv.trans e, ?_⟩
+  ext1 z
+  change h.symm (e.invFun z) = cellOverlapCircle γ z
+  rw [Homeomorph.symm_apply_eq]
+  apply Subtype.ext
+  rw [hh, he]
 
 /-- A4. Radial retraction of the outer piece onto `Y`:
 `inr w ↦ inl (γ (w / |w|))`, homotopic to the identity through
