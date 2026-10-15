@@ -119181,6 +119181,18 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/count/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792041273064-13323-ec6d73ff",
+     :commands
+     ["git diff/show fbc16270 archived sources"
+      "lake env lean archived t00J02Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: commit adds compiled, sorry-free coordinate-derivative split endpoint. It transports the algebraic inverse through eE/eF, rewrites only under the explicit hypothesis identifying A with the conjugated derivative, then applies finite-dimensional continuity. Thus the pending derivative equality and incidence charts are not assumed away and remain listed. Standard axioms only; scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166."},
     :commit "fbc162707b3ba10f2b83b3e313c8ee129da7a50a",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119189,7 +119201,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119207,7 +119219,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked chart conjugation of linear splitting.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked coordinate derivative split endpoint.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119414,7 +119426,10 @@
      :reason "Banked finite-dimensional right-inverse promotion."}
     {:job 3,
      :commit "19c7c4b9d789db415431533aa768b6784d402f30",
-     :reason "Banked chart conjugation of linear splitting."}]}
+     :reason "Banked chart conjugation of linear splitting."}
+    {:job 4,
+     :commit "fbc162707b3ba10f2b83b3e313c8ee129da7a50a",
+     :reason "Banked coordinate derivative split endpoint."}]}
   {:consumer :t98A06,
    :stop-count 8,
    :review-finding
@@ -121393,7 +121408,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "coordinateDerivative_hasRightInverse_of_eq_conj",
@@ -121405,7 +121420,9 @@
     :type
     "conjugated coordinate derivative has continuous right inverse",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "fbc162707b3ba10f2b83b3e313c8ee129da7a50a"},
    :id :lemma-coordinatederivative-hasrightinverse-of-eq-conj,
    :kind :lemma,
    :depends-on
