@@ -2469,6 +2469,21 @@ theorem torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
   funext j
   exact torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece S j
 
+/-- The flattened prefix-block fold reconstructs the original path class at
+the literal subdivision endpoints.  This is the flat side of the remaining
+nested/flat fold comparison. -/
+theorem torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    (⟦p.cast S.point_zero S.point_last⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat S.point
+        (torusRP2_subdivisionRunPrefixBlockPieceFlat S)⟧ := by
+  exact torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq S _
+    (fun j => congrArg Path.Homotopic.Quotient.mk
+      (torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece S j).symm)
+
 /-- The first flattened subdivision factor has the first run and first local
 offset.  This supplies the base coordinate for comparing the nested run fold
 with the flat subdivision fold. -/
@@ -2682,6 +2697,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
+#print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_class
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
