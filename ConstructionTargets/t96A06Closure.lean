@@ -1838,6 +1838,32 @@ theorem t96A06_integralToRational_relativeProjection_naturality
   unfold t96A06_integralToRational_relativeChainMap cokernel.map
   rw [cokernel.π_desc]
 
+/-- Forgetting rational scalar structure commutes with the relative-chain
+cokernel of a subspace inclusion. -/
+noncomputable def t96A06_forgetRationalRelativeCokernelComparison
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)).obj
+        (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ A) ≅
+      cokernel ((t96A06_forgetRatModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)) :=
+  PreservesCokernel.iso
+    (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ))
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A)
+
+/-- Coefficient extension between the actual integral and rational
+coefficient-relative chain complexes, after forgetting scalar structure. -/
+noncomputable def t96A06_integralToRational_relativeChains
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+      (ComplexShape.down ℕ)).obj
+        (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ A) ⟶
+    (t96A06_forgetRatModules.mapHomologicalComplex (ComplexShape.down ℕ)).obj
+        (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ A) :=
+  (ConstructionTargets.ManifoldFundamentalClass.forgetIntegralRelativeCokernelComparison A).hom ≫
+    t96A06_integralToRational_relativeChainMap A ≫
+    (t96A06_forgetRationalRelativeCokernelComparison A).inv
+
 /-- The concrete rational fundamental class selected by the sphere-shift
 normalization. -/
 noncomputable def t96A06_sphere3_rational_fundamentalClass :
@@ -3111,6 +3137,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_subspaceMap_naturality
 #print axioms t96A06_integralToRational_relativeChainMap
 #print axioms t96A06_integralToRational_relativeProjection_naturality
+#print axioms t96A06_forgetRationalRelativeCokernelComparison
+#print axioms t96A06_integralToRational_relativeChains
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
