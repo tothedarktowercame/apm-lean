@@ -462,6 +462,37 @@ theorem polynomialMapAmbient_fderiv_regularTangentBasis :
       simp [polynomialSphereRegularPoint, rp3RadialToSphere,
         polynomialRegularTangentThree, hnorm] <;> field_simp [hs] <;> nlinarith
 
+/-- The unnormalized quadratic image of the selected sphere point lies on
+the same positive ray, with the exact scale needed for radial
+normalization. -/
+theorem polynomialMapAmbient_regularPoint :
+    polynomialMapAmbient polynomialSphereRegularPoint.1 =
+      (1 / Real.sqrt 2) • polynomialSphereRegularPoint.1 := by
+  have hs : Real.sqrt (2 : ℝ) ≠ 0 := Real.sqrt_ne_zero'.mpr (by norm_num)
+  have hsq : Real.sqrt (2 : ℝ) * Real.sqrt 2 = 2 := by
+    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+  have hnorm : ‖(WithLp.toLp 2 ![1, 0, 1, 0] :
+      EuclideanSpace ℝ (Fin 4))‖ = Real.sqrt 2 := by
+    rw [EuclideanSpace.norm_eq]
+    simp [Fin.sum_univ_four] <;> norm_num
+  ext i
+  fin_cases i <;>
+    simp [polynomialMapAmbient, polynomialSphereRegularPoint,
+      rp3RadialToSphere, polynomialMap, hnorm] <;>
+      field_simp [hs] <;> nlinarith
+
+/-- Consequently the raw quadratic image has norm `1 / sqrt 2`. -/
+theorem norm_polynomialMapAmbient_regularPoint :
+    ‖polynomialMapAmbient polynomialSphereRegularPoint.1‖ =
+      1 / Real.sqrt 2 := by
+  have hp : ‖polynomialSphereRegularPoint.1‖ = 1 := by
+    simpa only [Metric.mem_sphere, dist_zero_right] using
+      polynomialSphereRegularPoint.2
+  rw [polynomialMapAmbient_regularPoint, norm_smul, hp]
+  have hs : 0 < Real.sqrt (2 : ℝ) := Real.sqrt_pos.2 (by norm_num)
+  rw [Real.norm_eq_abs, abs_of_pos (div_pos (by norm_num) hs)]
+  simp
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -1520,6 +1551,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms flipBothPairsSphere_rational_H3
 #print axioms polynomialSphereRegularPoint_isRegular
 #print axioms polynomialMapAmbient_fderiv_regularTangentBasis
+#print axioms polynomialMapAmbient_regularPoint
+#print axioms norm_polynomialMapAmbient_regularPoint
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
