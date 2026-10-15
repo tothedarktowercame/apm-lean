@@ -5181,6 +5181,46 @@ theorem radialMVBoundaryGroup_mem_range_iff (P : PairingData)
     refine ⟨-n, ?_⟩
     simpa using h
 
+/-- Linear-map form of the reduced production boundary, used by the
+kernel/cokernel extraction in B8. -/
+noncomputable def radialMVBoundaryLinear (P : PairingData) :
+    ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ) :=
+  (radialMVBoundaryGroup P).hom.toIntLinearMap
+
+theorem radialMVBoundaryLinear_eq_neg_attachingBoundary (P : PairingData) :
+    radialMVBoundaryLinear P = -attachingBoundary P := by
+  apply LinearMap.ext
+  intro n
+  exact congrArg (fun f => f n)
+    (congrArg ConcreteCategory.hom
+      (radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup P))
+
+/-- The actual reduced production boundary has the B3 kernel model. -/
+theorem radialMVBoundaryLinear_ker (P : PairingData) :
+    LinearMap.ker (radialMVBoundaryLinear P) = BoundaryKernel P := by
+  rw [radialMVBoundaryLinear_eq_neg_attachingBoundary]
+  ext n
+  simp
+
+/-- The actual reduced production boundary has the B3 range model. -/
+theorem radialMVBoundaryLinear_range (P : PairingData) :
+    LinearMap.range (radialMVBoundaryLinear P) =
+      LinearMap.range (attachingBoundary P) := by
+  rw [radialMVBoundaryLinear_eq_neg_attachingBoundary, LinearMap.range_neg]
+
+/-- The kernel object of the reduced production boundary is the B3 model. -/
+noncomputable def radialMVBoundaryKernelEquiv (P : PairingData) :
+    LinearMap.ker (radialMVBoundaryLinear P) ≃ₗ[ℤ] BoundaryKernel P :=
+  LinearEquiv.ofEq _ _ (radialMVBoundaryLinear_ker P)
+
+/-- The quotient by the reduced production boundary is the B3 cokernel
+model, with no remaining sign choice. -/
+noncomputable def radialMVBoundaryCokernelEquiv (P : PairingData) :
+    ((PairingOrbit P.pair → ℤ) ⧸
+        LinearMap.range (radialMVBoundaryLinear P)) ≃ₗ[ℤ]
+      BoundaryCokernel P :=
+  Submodule.quotEquivOfEq _ _ (radialMVBoundaryLinear_range P)
+
 /-- Consequently the remaining raw B7 equality is exactly the statement
 that the unsigned outer inclusion has the negative attaching class. -/
 theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
