@@ -1425,3 +1425,131 @@ by the unshifted counit image must equal the chosen target connector.
 independent `somePath` choice: it transports source connectors through an
 equivalence and then composes with that equivalence's counit.  The next step
 is to install this construction in the right-piece coordinate comparison.
+`connectorSystemChangeBase` rebases such a transported system along a named
+isomorphism, and `genericPointWedgeCoherentRightConnectors` now installs the
+right-cover system at the literal base `y₀` using the already proved quotient
+representative equality.  The next step is to replace the independent right
+coordinate connectors by this system and identify the resulting comparison.
+`genericPointWedgeCoherentRightConnectors_connector_hom` exposes each such
+connector as the literal-base transport, mapped right-piece connector, and
+cover counit in the precise categorical order required by the remaining
+square.  The next comparison can therefore proceed by expanding the pulled
+back source connector rather than reasoning about an opaque path choice.
+`genericPointWedgeCoherentRightSourceConnectors` names that pulled-back system,
+and its connector theorem expands it into the right-base change, inverse image
+of the literal `Y` connector, and inverse unit.  The remaining comparison is
+now a triangle/counit simplification of these explicit factors.
+`connectorSystemMap_comap_connector_hom_expanded` exposes the mapped inverse
+connector, mapped inverse unit, and counit in their exact categorical order.
+It also records why no general cancellation is available: the connector at
+the forward-inverse object is an arbitrary choice unless the installed system
+supplies the required coherence.  The right-wedge specialization now has that
+coherence by construction; its named base transports remain to be combined.
+`connectorSystemMapEquivalence_connectorSquare` isolates the usable
+naturality principle: a connector square in the source system maps to the
+corresponding square in the target system, with the equivalence counits
+discharged by their naturality equation.  Thus the overlap comparison can now
+be pulled back to the right-piece connector system before its base changes are
+normalized.
+`connectorSystemChangeBase_connectorSquare` removes the remaining bookkeeping
+around those base changes: precomposing both connectors by the same rebasing
+isomorphism preserves the square.  Together the two generic lemmas reduce the
+installed target comparison to the corresponding square in the original
+pulled-back right-piece connector system.
+`connectorSystemComapEquivalence_connectorSquare` supplies the reverse
+transport step.  Its proof uses inverse-unit naturality, so the right-piece
+square is reduced to the literal `Y` connector square for the forward image
+of the overlap component.  The remaining specialization must identify that
+forward image with the based endpoint transport already calculated below.
+`genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport` makes that
+identification in the coordinate groupoid: its hom-set is subsingleton, so the
+forward image is exactly transport along the named shifted-object equality.
+`genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport` carries
+that equality through the inverse overlap and right-piece functors, retaining
+the induced endpoint equality explicitly.
+`connectorSystem_connectorSquare_eqToHom` is the general connector law for
+such transports, and
+`genericPointWedgeCoherentRightSource_overlap_connectorSquare` applies it to
+the original coherent right-cover system.
+`genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped` maps
+that square through the right-cover equivalence without changing its factor
+order, and
+`genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased`
+precomposes both sides by the named transport from the literal `Y` base.
+The remaining step is the inverse-round-trip/comap identification that turns
+these rebased mapped connectors into the installed literal `Y` connectors.
+`genericPointWedgeCoherentRightConnectors_functorObj_connector_hom` exposes
+the installed connector at a forward-image endpoint as the literal-base
+change, mapped inverse–forward source connector, and counit.  The remaining
+comparison is exactly the unit/counit identification between that source
+connector and the already rebased mapped connector.
+`genericPointWedgeCoherentRight_overlap_connectorSquare_of_endpoints` packages the
+final installation step: once the source and target inverse-forward
+connectors are identified with their rebased mapped forms, the banked
+right-cover square is literally the connector square in `Y`.  Thus the B6
+residual is reduced to those two endpoint identifications, with no additional
+functorial or reassociation obligations.
+`connectorSystemMapEquivalence_functorObj_connector_hom_eq_map` isolates the
+condition needed at either endpoint: the source connector must respect the
+right equivalence inverse-unit. Under that square, functoriality and the
+equivalence triangle identify the installed connector with the mapped source
+connector. The next job proves this source square at the two overlap endpoints.
+`genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target`
+specializes the unshifted source endpoint to the fixed right-cover
+representative. Its source inverse-unit square now follows from one literal
+`Y` connector square along the mapped inverse unit, retaining the dependent
+endpoint rather than rewriting it away.
+`genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit`
+uses the equivalence triangle to replace that mapped inverse unit by the
+right-equivalence counit under the exact dependent connector prefix. The
+unshifted endpoint is therefore reduced to one literal connector–counit
+square; the shifted endpoint remains separate.
+`genericPointWedgeCoherentRightConnectors_rightBase_of_counit` composes that
+source-square reduction with the equivalence transport theorem. Consequently
+the literal counit square yields the exact installed-versus-rebased connector
+equality required at the unshifted endpoint of the final overlap square. The
+shifted endpoint and the literal counit square remain.
+`connectorSystem_connectorSquare_iff_normalForm_eq_id` identifies any
+connector square with triviality of the associated connector normal form.
+Its fixed-endpoint specialization,
+`genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm`, shows that
+the remaining literal counit square is exactly the assertion that the
+right-equivalence counit has trivial normal form for the chosen `Y`
+connectors. Thus the next proof must establish this normalization (and its
+shifted counterpart), rather than appeal only to equivalence naturality.
+`genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm`
+performs the same reduction at an arbitrary right-piece object. A trivial
+literal counit normal form now supplies the exact inverse-unit square in the
+pulled-back and rebased source system, so the theorem applies directly to the
+shifted overlap endpoint as well as the fixed representative. The two normal
+form triviality proofs remain; no counit-identity assumption is introduced.
+`genericPointWedgeRightLeg_overlap_connectorSquare` avoids those two
+normal-form obligations: the actual transported overlap component is already
+the equality transport between its literal `Y` endpoints, so the ordinary
+connector law proves the required square directly.
+`genericPointWedgeRightBase_rightProjection_eq_one` feeds that square into the
+banked projection criterion and proves that the B3 base-change element has
+trivial right-factor projection. The remaining B6 step is the coproduct
+kernel statement extracting an `inl` factor from this equality.
+The kernel implication is false for a general free-product element: the
+kernel also contains conjugates of left-factor elements.
+`genericPointWedgeOuterRightComparison_eq_inr_normalForms` instead records
+the special representation available here—the forward outer-right comparison
+is itself a right injection.
+`genericPointWedgeOuterRightComparison_eq_one` combines that representation
+with the trivial global right projection, proving that this whole comparison
+is the unit. It remains to express the inverse outer-left comparison as an
+`inl`; the global comparison formula will then give the required B6
+factorization directly.
+`genericPointWedgeOuterLeftComparison_eq_inl_normalForms` supplies that
+literal left-factor representation. Together with the unit outer-right
+comparison it yields `genericPointWedgeRightBase_exists_inl`, so the existing
+partial conjugation construction applies without a projection-kernel claim.
+`genericPointWedgeLegCoordinatesEquiv` and
+`genericPointWedgeLegCoordinates_vanKampen` complete blueprint node B6: both
+literal wedge legs map to their corresponding coproduct injections.
+`PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv` completes
+B12.  The inner B6 equivalence is converted to `FreeGroup (Fin 2)` using the
+two circle winding coordinates; the outer B6 equivalence adds the final
+rank-one factor, and B7 identifies the resulting coproduct with
+`FreeGroup (Fin 3)` at the literal `threeBase` representative.

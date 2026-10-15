@@ -8,6 +8,10 @@ import ConstructionTargets.T02A06SphereH0
 import ConstructionTargets.CoefficientSigmaConstFinsuppComparison
 import ConstructionTargets.SingularHomologyHomotopy
 import ConstructionTargets.DegreeOneHurewiczSurjective
+import ConstructionTargets.CircleHurewiczIsomorphism
+import ConstructionTargets.CircleUniversalCover
+import ConstructionTargets.PointWedgeVanKampen
+import ConstructionTargets.T00A01MayerVietorisAdapters
 
 /-!
 # Homology of one-vertex polygon quotients
@@ -316,6 +320,51 @@ theorem outerHomotopyEquivWedge_skeleton (P : PairingData) (z : P.skeleton) :
     ((punctureDeformationRetract P).fixed 1 (skeletonToOuter P z)
       ((mem_outerBoundarySkeleton_iff P (skeletonToOuter P z)).mpr z.2))
 
+/-! ### The ordered polygon boundary loop -/
+
+/-- The unit circle regarded as the boundary of the polygon disk. -/
+def circleToPolygonDisk (z : Circle) : ConstructionTargets.Surfaces.Disk :=
+  ⟨(z : ℂ), by
+    rw [Metric.mem_closedBall, dist_zero_right, Circle.norm_coe]⟩
+
+theorem continuous_circleToPolygonDisk : Continuous circleToPolygonDisk :=
+  continuous_subtype_val.subtype_mk _
+
+/-- The positively oriented geometric boundary circle, with its image
+remembered as a point of the quotient boundary skeleton. -/
+def polygonBoundarySkeletonLoop (P : PairingData) : C(Circle, P.skeleton) where
+  toFun z :=
+    ⟨P.quotientMap (circleToPolygonDisk z),
+      ⟨circleToPolygonDisk z, by
+        change ‖(z : ℂ)‖ = 1
+        exact Circle.norm_coe z, rfl⟩⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact P.continuous_quotientMap.comp continuous_circleToPolygonDisk
+
+/-- The ordered boundary loop in the fixed orbit-indexed wedge coordinates. -/
+noncomputable def polygonBoundaryWedgeLoop (P : PairingData) :
+    C(Circle,
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) :=
+  (⟨P.skeletonHomeomorphWedge, P.skeletonHomeomorphWedge.continuous⟩ :
+    C(P.skeleton,
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair))).comp (polygonBoundarySkeletonLoop P)
+
+/-- On the `i`th polygon interval the ordered boundary loop is exactly the
+signed wedge arc fixed by the pairing data. -/
+theorem polygonBoundaryWedgeLoop_edgePoint (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      P.signedWedgeArc i t := by
+  change P.skeletonHomeomorphWedge
+      (polygonBoundarySkeletonLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t)) = _
+  rw [← P.skeletonHomeomorphWedge_skeletonArc i t]
+  congr 1
+
 /-! ### Degree zero of a finite circle wedge -/
 
 /-- Every nonempty indexed wedge of circles is path connected.  The proof
@@ -355,6 +404,29 @@ def orbitWedgeBase (P : PairingData) :
     PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) :=
   PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
     (P.orbit ⟨0, P.edgeCount_pos⟩) 1
+
+/-- The ordered boundary loop is based at the fixed common wedge point. -/
+theorem polygonBoundaryWedgeLoop_one (P : PairingData) :
+    polygonBoundaryWedgeLoop P 1 = orbitWedgeBase P := by
+  let t : Set.Icc (0 : ℝ) 1 := ⟨0, by simp⟩
+  let i : Fin P.edgeCount := ⟨0, P.edgeCount_pos⟩
+  have he : PolygonSurfacePiOne.edgePointCircle P.edgeCount i t = (1 : Circle) := by
+    apply Subtype.ext
+    simp [PolygonSurfacePiOne.edgePointCircle,
+      ConstructionTargets.Surfaces.edgePoint, i, t]
+  rw [← he, polygonBoundaryWedgeLoop_edgePoint]
+  have ht : PolygonSurfacePiOne.circleArc t = (1 : Circle) :=
+    (PolygonSurfacePiOne.circleArc_eq_one_iff t).2 (Or.inl (by rfl))
+  have hr : PolygonSurfacePiOne.circleArc
+      (PolygonSurfacePiOne.reverseIcc t) = (1 : Circle) := by
+    apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+    right
+    simp [PolygonSurfacePiOne.reverseIcc, t]
+  change P.signedWedgeArc i t =
+    PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1
+  cases hs : P.sign i
+  · rw [P.signedWedgeArc_of_not_sign i t hs, hr]
+  · rw [P.signedWedgeArc_of_sign i t hs, ht]
 
 /-- Additive-group degree-zero homology of the orbit-indexed wedge. -/
 noncomputable def finiteWedgeGroupH0IsoInt (P : PairingData) :
@@ -779,6 +851,51 @@ theorem moduleHurewicz_naturality {X Y : Type} [TopologicalSpace X]
   rw [hc]
   exact congrArg Multiplicative.toAdd hhurewicz.symm
 
+/-- The inverse comparison commutes with every induced homology map. -/
+theorem singularHomologyComparison_inv_map {X Y : TopCat} (f : X ⟶ Y)
+    (k : ℕ)
+    (a : ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).obj X) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      Y k).inv
+        ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat k).obj
+          (AddCommGrpCat.of ℤ)).map f)
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            X k).hom a)) =
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+        (ModuleCat.of ℤ ℤ)).map f) a := by
+  apply (AddCommGrpCat.mono_iff_injective
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      Y k).hom).mp inferInstance
+  rw [Iso.inv_hom_id_apply]
+  symm
+  simpa using congrArg (fun q => q a)
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      f k)
+
+/-- The transferred module normalization of the positive one-sphere uses
+exactly the generator selected by the additive-group normalization. -/
+theorem sphereOneGroupGenerator_comparison :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).inv
+        ((ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 1 one_pos).inv 1) =
+      (ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt 1 one_pos).inv 1 := by
+  simp only [ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt,
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso,
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso,
+    CategoryTheory.Functor.preimageIso_inv, Iso.trans_inv]
+  let e := (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 1 one_pos).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).inv
+  have hp := congrArg ConcreteCategory.hom
+    (CategoryTheory.Functor.map_preimage
+      (X := ModuleCat.of ℤ ℤ)
+      (Y := ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).obj
+          (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)))
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules e)
+  simpa [e] using (congrArg (fun q => q (1 : ℤ)) hp).symm
+
 /-- A based circle class whose Hurewicz image is the positive generator fixed
 by `circleH1IsoInt`.  Choosing it through Hurewicz surjectivity avoids adding
 a second, potentially incompatible orientation convention for explicit
@@ -832,6 +949,38 @@ theorem moduleHurewicz_circlePositiveFundamentalClass :
           (e.hom (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1))))]
   exact e.hom_inv_id_apply _
 
+/-- The comparison-normalized Hurewicz map is injective on the circle's
+fundamental group. -/
+theorem moduleHurewicz_circle_injective :
+    Function.Injective (moduleHurewicz (1 : Circle)) := by
+  intro p q hpq
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1
+  have hadd : Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 p) =
+      Multiplicative.toAdd
+        (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 q) := by
+    have h := congrArg (fun z => e.hom z) hpq
+    simpa [moduleHurewicz, e] using h
+  have hmul :
+      ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 p =
+        ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom 1 q :=
+    Multiplicative.toAdd.injective hadd
+  have hab : Abelianization.of p = Abelianization.of q := by
+    apply ConstructionTargets.CircleHurewiczIsomorphism.circleAbelianizedFundamentalGroupH1MulEquiv.injective
+    change ConstructionTargets.DegreeOneHurewiczMap.abelianizedFundamentalGroupToH1 1
+        (Abelianization.of p) =
+      ConstructionTargets.DegreeOneHurewiczMap.abelianizedFundamentalGroupToH1 1
+        (Abelianization.of q)
+    simpa using hmul
+  apply ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.injective
+  have hcoord := congrArg
+    ConstructionTargets.CircleHurewiczIsomorphism.circleAbelianizedFundamentalGroupMulEquivInt hab
+  simpa [ConstructionTargets.CircleHurewiczIsomorphism.circleAbelianizedFundamentalGroupMulEquivInt,
+    ConstructionTargets.CircleHurewiczIsomorphism.commGroupAbelianizationMulEquiv]
+    using hcoord
+
 /-- The positive circle fundamental class mapped into the `l`th wedge leg. -/
 noncomputable def finiteWedgeLegFundamentalClass {L : Type} (l : L) :
     FundamentalGroup
@@ -859,6 +1008,4574 @@ theorem finiteWedgeLegFundamentalClass_hurewicz {L : Type} (l : L) :
   rw [moduleHurewicz_naturality,
     moduleHurewicz_circlePositiveFundamentalClass]
   rfl
+
+/-- Changing a fundamental-group basepoint along a literal equality does not
+change its comparison-normalized Hurewicz class. -/
+theorem moduleHurewicz_cast {X : Type} [TopologicalSpace X] {x y : X}
+    (h : x = y) (g : FundamentalGroup X y) :
+    moduleHurewicz x (Path.Homotopic.Quotient.cast g h h) =
+      moduleHurewicz y g := by
+  subst h
+  induction g using Quotient.inductionOn with
+  | _ p =>
+      change moduleHurewicz x
+          ((Path.Homotopic.Quotient.mk p).cast rfl rfl) =
+        moduleHurewicz x (Path.Homotopic.Quotient.mk p)
+      rw [← Path.Homotopic.Quotient.mk_cast]
+      have hp : p.cast rfl rfl = p := by
+        ext t
+        rfl
+      rw [hp]
+
+/-- Transport of a based homotopy class along one endpoint equality
+commutes with inversion. -/
+theorem homotopicQuotient_cast_symm {X : Type} [TopologicalSpace X] {x y : X}
+    (h : x = y) (g : Path.Homotopic.Quotient y y) :
+    Path.Homotopic.Quotient.cast (Path.Homotopic.Quotient.symm g) h h =
+      Path.Homotopic.Quotient.symm (Path.Homotopic.Quotient.cast g h h) := by
+  subst y
+  induction g using Quotient.ind with
+  | _ p => rfl
+
+/-- The actual ordered polygon boundary, based at the common wedge point and
+applied to the fixed positive circle class. -/
+noncomputable def polygonBoundaryFundamentalClass (P : PairingData) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  Path.Homotopic.Quotient.cast
+    (FundamentalGroup.map (polygonBoundaryWedgeLoop P)
+      1 circlePositiveFundamentalClass)
+    (polygonBoundaryWedgeLoop_one P).symm
+    (polygonBoundaryWedgeLoop_one P).symm
+
+/-- Naturality computes the normalized Hurewicz class of the geometric
+boundary as the map induced by the explicit boundary circle. -/
+theorem polygonBoundaryFundamentalClass_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P) (polygonBoundaryFundamentalClass P) =
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+  rw [polygonBoundaryFundamentalClass, moduleHurewicz_cast,
+    moduleHurewicz_naturality, moduleHurewicz_circlePositiveFundamentalClass]
+
+/-- The positive `l`th leg class transported to the single common basepoint
+used for words in the orbit-indexed finite wedge. -/
+noncomputable def finiteWedgeLegFundamentalClassAtBase (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  Path.Homotopic.Quotient.cast (finiteWedgeLegFundamentalClass l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+
+/-- Transporting a leg class to the common wedge basepoint preserves its
+positive coordinate-presentation H1 class. -/
+theorem finiteWedgeLegFundamentalClassAtBase_hurewicz (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeLegFundamentalClassAtBase P l) =
+      finiteWedgeLegH1 l
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+  rw [finiteWedgeLegFundamentalClassAtBase, moduleHurewicz_cast,
+    finiteWedgeLegFundamentalClass_hurewicz]
+
+/-- At the common wedge basepoint, the Hurewicz image of the `l`th leg
+fundamental class is literally the normalized coordinate-map image of the
+`l`th standard basis vector. -/
+theorem finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate
+    (P : PairingData) (l : PairingOrbit P.pair) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeLegFundamentalClassAtBase P l) =
+      finiteWedgeH1CoordinateMap P (orbitBasis P l 1) := by
+  rw [finiteWedgeLegFundamentalClassAtBase_hurewicz,
+    finiteWedgeH1CoordinateMap_single]
+  rfl
+
+/-- The comparison-normalized Hurewicz construction is a group homomorphism
+when the additive module target is written multiplicatively.  This is the
+algebraic input for passing from words in wedge-leg classes to sums of their
+coordinate images. -/
+noncomputable def moduleHurewiczHom {X : Type} [TopologicalSpace X] (x : X) :
+    FundamentalGroup X x →*
+      Multiplicative
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of X)) where
+  toFun g := Multiplicative.ofAdd (moduleHurewicz x g)
+  map_one' := by
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv
+        (Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x 1))) = 1
+    rw [map_one]
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv 0) = 1
+    rw [map_zero]
+    rfl
+  map_mul' g h := by
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv
+        (Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x (g * h)))) = _
+    rw [map_mul]
+    change Multiplicative.ofAdd
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) 1).inv
+        (Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x g) +
+         Multiplicative.toAdd
+          (ConstructionTargets.DegreeOneHurewiczMap.fundamentalGroupH1Hom x h))) = _
+    rw [map_add]
+    rfl
+
+@[simp]
+theorem moduleHurewicz_mul {X : Type} [TopologicalSpace X] (x : X)
+    (g h : FundamentalGroup X x) :
+    moduleHurewicz x (g * h) =
+      moduleHurewicz x g + moduleHurewicz x h := by
+  exact congrArg Multiplicative.toAdd (map_mul (moduleHurewiczHom x) g h)
+
+@[simp]
+theorem moduleHurewicz_zpow {X : Type} [TopologicalSpace X] (x : X)
+    (g : FundamentalGroup X x) (n : ℤ) :
+    moduleHurewicz x (g ^ n) = n • moduleHurewicz x g := by
+  exact congrArg Multiplicative.toAdd (map_zpow (moduleHurewiczHom x) g n)
+
+@[simp]
+theorem moduleHurewicz_inv {X : Type} [TopologicalSpace X] (x : X)
+    (g : FundamentalGroup X x) :
+    moduleHurewicz x g⁻¹ = -moduleHurewicz x g := by
+  exact congrArg Multiplicative.toAdd (map_inv (moduleHurewiczHom x) g)
+
+@[simp]
+theorem moduleHurewicz_one {X : Type} [TopologicalSpace X] (x : X) :
+    moduleHurewicz x 1 = 0 := by
+  exact congrArg Multiplicative.toAdd (map_one (moduleHurewiczHom x))
+
+/-- Hurewicz sends an ordered finite product of based loop classes to the
+corresponding ordered finite sum. -/
+theorem moduleHurewicz_list_prod {X : Type} [TopologicalSpace X] (x : X)
+    (w : List (FundamentalGroup X x)) :
+    moduleHurewicz x w.prod = (w.map (moduleHurewicz x)).sum := by
+  induction w with
+  | nil => simp
+  | cons g w ih => simp [ih]
+
+/-- Every circle fundamental-group class is an integer power of the positive
+class fixed by the homology orientation. -/
+theorem circlePositiveFundamentalClass_generates
+    (g : FundamentalGroup Circle 1) :
+    ∃ n : ℤ, circlePositiveFundamentalClass ^ n = g := by
+  let n : ℤ := ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+    (moduleHurewicz (1 : Circle) g)
+  refine ⟨n, moduleHurewicz_circle_injective ?_⟩
+  rw [moduleHurewicz_zpow, moduleHurewicz_circlePositiveFundamentalClass]
+  rw [← map_zsmul]
+  simp only [smul_eq_mul, mul_one]
+  change ConstructionTargets.CircleHomology.circleH1IsoInt.inv n = _
+  exact ConstructionTargets.CircleHomology.circleH1IsoInt.hom_inv_id_apply _
+
+/-! ### Algebraic leg-word evaluation -/
+
+/-- A finite word in the common-basepoint positive leg classes, with integer
+exponents. -/
+abbrev FiniteWedgeLegWord (P : PairingData) :=
+  List (PairingOrbit P.pair × ℤ)
+
+/-- Evaluate a leg word in the fundamental group of the finite wedge. -/
+noncomputable def finiteWedgeLegWordGroup (P : PairingData)
+    (w : FiniteWedgeLegWord P) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  (w.map fun q => finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2).prod
+
+/-- The coordinate sum encoded by a leg word, retaining repeated legs. -/
+noncomputable def finiteWedgeLegWordCoordinatesList (P : PairingData)
+    (w : FiniteWedgeLegWord P) : PairingOrbit P.pair → ℤ :=
+  (w.map fun q => q.2 • orbitBasis P q.1 1).sum
+
+/-- The ordered polygon boundary as a signed word in its paired-edge orbit
+labels.  Each geometric edge occurs once and contributes according to the
+orientation fixed by `P.sign`. -/
+noncomputable def polygonBoundaryLegWord (P : PairingData) :
+    FiniteWedgeLegWord P :=
+  List.ofFn fun i : Fin P.edgeCount =>
+    (P.orbit i, if P.sign i then (1 : ℤ) else -1)
+
+/-- The interval parametrization used by every polygon edge is literally the
+once-around loop from the exponential universal-cover model.  This fixes the
+path-level orientation needed to compare the geometric boundary with the
+positive circle generator; the remaining comparison is solely the Hurewicz
+normalization of that explicit loop. -/
+theorem circleArc_eq_integerLoop_one (t : Set.Icc (0 : ℝ) 1) :
+    PolygonSurfacePiOne.circleArc t =
+      ConstructionTargets.CircleUniversalCover.integerLoop 1 t := by
+  simp [PolygonSurfacePiOne.circleArc,
+    ConstructionTargets.CircleUniversalCover.integerLoop,
+    ConstructionTargets.CircleUniversalCover.circleCover, AddCircle.toCircle]
+
+/-- A positively signed polygon edge is the winding-one loop in its wedge
+leg, with the same interval parameter. -/
+theorem polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_sign
+    (P : PairingData) (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1)
+    (h : P.sign i = true) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1 t) := by
+  rw [polygonBoundaryWedgeLoop_edgePoint,
+    P.signedWedgeArc_of_sign i t h, circleArc_eq_integerLoop_one]
+
+/-- A negatively signed polygon edge is the reverse parametrization of the
+winding-one loop in its wedge leg. -/
+theorem polygonBoundaryWedgeLoop_edgePoint_integerLoop_of_not_sign
+    (P : PairingData) (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1)
+    (h : P.sign i = false) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1
+          (PolygonSurfacePiOne.reverseIcc t)) := by
+  rw [polygonBoundaryWedgeLoop_edgePoint,
+    P.signedWedgeArc_of_not_sign i t h, circleArc_eq_integerLoop_one]
+
+/-- One signed polygon edge packaged as a based path in its wedge leg.  This
+is the finite family of path pieces whose concatenation remains to be
+identified with the complete geometric boundary loop. -/
+noncomputable def polygonBoundarySignedEdgePath (P : PairingData)
+    (i : Fin P.edgeCount) :
+    Path
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1) where
+  toFun := P.signedWedgeArc i
+  continuous_toFun := by
+    have hpair : Continuous (fun t : Set.Icc (0 : ℝ) 1 => (i, t)) := by
+      fun_prop
+    simpa [PairingData.signedWedgeArcMap, Function.comp_def] using
+      P.continuous_signedWedgeArcMap.comp hpair
+  source' := by
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+      (if P.sign i then PolygonSurfacePiOne.circleArc ⟨0, by norm_num⟩
+        else PolygonSurfacePiOne.circleArc
+          (PolygonSurfacePiOne.reverseIcc ⟨0, by norm_num⟩)) = _
+    congr 1
+    cases hs : P.sign i
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      right
+      apply Subtype.ext
+      simp [PolygonSurfacePiOne.reverseIcc]
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      left
+      rfl
+  target' := by
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i)
+      (if P.sign i then PolygonSurfacePiOne.circleArc ⟨1, by norm_num⟩
+        else PolygonSurfacePiOne.circleArc
+          (PolygonSurfacePiOne.reverseIcc ⟨1, by norm_num⟩)) = _
+    congr 1
+    cases hs : P.sign i
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      left
+      apply Subtype.ext
+      simp [PolygonSurfacePiOne.reverseIcc]
+    · apply (PolygonSurfacePiOne.circleArc_eq_one_iff _).2
+      right
+      rfl
+
+/-- Restricting the geometric boundary loop to the `i`th standard polygon
+interval is pointwise exactly the packaged signed edge path. -/
+theorem polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath
+    (P : PairingData) (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundaryWedgeLoop P
+        (PolygonSurfacePiOne.edgePointCircle P.edgeCount i t) =
+      polygonBoundarySignedEdgePath P i t := by
+  exact polygonBoundaryWedgeLoop_edgePoint P i t
+
+/-- A positive packaged edge is literally the winding-one circle path mapped
+into its wedge leg. -/
+theorem polygonBoundarySignedEdgePath_of_sign (P : PairingData)
+    (i : Fin P.edgeCount) (h : P.sign i = true) :
+    polygonBoundarySignedEdgePath P i =
+      (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          (P.orbit i)) := by
+  ext t
+  change P.signedWedgeArc i t = _
+  rw [P.signedWedgeArc_of_sign i t h, circleArc_eq_integerLoop_one]
+  rfl
+
+/-- A negative packaged edge is literally the reverse of the winding-one
+circle path mapped into its wedge leg. -/
+theorem polygonBoundarySignedEdgePath_of_not_sign (P : PairingData)
+    (i : Fin P.edgeCount) (h : P.sign i = false) :
+    polygonBoundarySignedEdgePath P i =
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          (P.orbit i))).symm := by
+  ext t
+  change P.signedWedgeArc i t = _
+  rw [P.signedWedgeArc_of_not_sign i t h, circleArc_eq_integerLoop_one]
+  rfl
+
+/-- The equally spaced subdivision vertices of the explicit once-around
+boundary path. -/
+def polygonBoundarySubdivisionVertex (P : PairingData)
+    (k : Fin (P.edgeCount + 1)) : Set.Icc (0 : ℝ) 1 :=
+  ⟨(k : ℝ) / P.edgeCount, by
+    constructor
+    · positivity
+    · apply (div_le_one (by exact_mod_cast P.edgeCount_pos)).2
+      exact_mod_cast Nat.le_of_lt_succ k.isLt⟩
+
+@[simp] theorem polygonBoundarySubdivisionVertex_zero (P : PairingData) :
+    polygonBoundarySubdivisionVertex P 0 = 0 := by
+  apply Subtype.ext
+  simp [polygonBoundarySubdivisionVertex]
+
+@[simp] theorem polygonBoundarySubdivisionVertex_last (P : PairingData) :
+    polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount) = 1 := by
+  apply Subtype.ext
+  simp [polygonBoundarySubdivisionVertex, ne_of_gt P.edgeCount_pos]
+
+/-- The explicit once-around circle path followed by the geometric polygon
+boundary loop. -/
+noncomputable def polygonBoundaryIntegerLoopPath (P : PairingData) :
+    Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  ((ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+    (polygonBoundaryWedgeLoop P).continuous).cast
+      (by simpa using (polygonBoundaryWedgeLoop_one P).symm)
+      (by simpa using (polygonBoundaryWedgeLoop_one P).symm)
+
+/-- Mathlib's finite subpath concatenation theorem applied to the equally
+spaced polygon vertices.  It remains only to identify each subpath with the
+corresponding packaged signed edge. -/
+theorem polygonBoundaryIntegerLoop_concatSubpath (P : PairingData) :
+    Path.Homotopic
+      (Path.concat
+        (polygonBoundaryIntegerLoopPath P ∘
+          polygonBoundarySubdivisionVertex P)
+        (fun k => (polygonBoundaryIntegerLoopPath P).subpath
+          (polygonBoundarySubdivisionVertex P k.castSucc)
+          (polygonBoundarySubdivisionVertex P k.succ)))
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P 0)
+        (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))) := by
+  exact Path.Homotopic.concat_subpath
+    (polygonBoundaryIntegerLoopPath P)
+    (polygonBoundarySubdivisionVertex P)
+
+/-- The homotopy class of a finite ordered concatenation of loops is the
+reverse list product of the individual loop classes.  The reversal is forced
+by Mathlib's `End` convention: multiplication reverses categorical
+composition, while `Path.concat` appends paths in traversal order. -/
+theorem fundamentalGroup_mk_concat_eq_reverse_list_prod
+    {Y : Type} [TopologicalSpace Y] (n : ℕ) (y : Y)
+    (F : Fin n → Path y y) :
+    (Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (n + 1) => y) F) : FundamentalGroup Y y) =
+      ((List.ofFn fun i =>
+        Path.Homotopic.Quotient.mk (F i)) :
+          List (FundamentalGroup Y y)).reverse.prod := by
+  induction n with
+  | zero =>
+      rw [Path.concat_zero, List.ofFn_zero]
+      change Path.Homotopic.Quotient.mk (Path.refl y) =
+        (1 : FundamentalGroup Y y)
+      rfl
+  | succ n ih =>
+      rw [Path.concat_succ, List.ofFn_succ_last, List.reverse_append,
+        List.prod_append]
+      simp only [List.reverse_singleton, List.prod_singleton]
+      change Path.Homotopic.Quotient.mk
+          ((Path.concat (fun _ : Fin (n + 1) => y)
+            (fun k => F k.castSucc)).trans (F (Fin.last n))) = _
+      rw [Path.Homotopic.Quotient.mk_trans]
+      rw [ih (fun k => F k.castSucc)]
+      rfl
+
+/-- Hurewicz removes the `End`-multiplication reversal from a finite path
+concatenation: its image is the sum of the factors in traversal order. -/
+theorem moduleHurewicz_mk_concat_eq_list_sum
+    {Y : Type} [TopologicalSpace Y] (n : ℕ) (y : Y)
+    (F : Fin n → Path y y) :
+    moduleHurewicz y
+        (Path.Homotopic.Quotient.mk
+          (Path.concat (fun _ : Fin (n + 1) => y) F) : FundamentalGroup Y y) =
+      (List.ofFn fun i =>
+        moduleHurewicz y
+          (Path.Homotopic.Quotient.mk (F i) : FundamentalGroup Y y)).sum := by
+  rw [fundamentalGroup_mk_concat_eq_reverse_list_prod,
+    moduleHurewicz_list_prod, List.map_reverse, List.sum_reverse]
+  rw [List.map_ofFn]
+  rfl
+
+/-- Casting every vertex of a finite composable path family to one point
+commutes with finite concatenation. -/
+theorem path_concat_cast_vertices {Y : Type} [TopologicalSpace Y]
+    (n : ℕ) (p : Fin (n + 1) → Y) (y : Y) (h : ∀ i, y = p i)
+    (F : (i : Fin n) → Path (p i.castSucc) (p i.succ)) :
+    (Path.concat p F).cast (h 0) (h (Fin.last n)) =
+      Path.concat (fun _ : Fin (n + 1) => y)
+        (fun i => (F i).cast (h i.castSucc) (h i.succ)) := by
+  induction n with
+  | zero =>
+      rw [Path.concat_zero, Path.concat_zero]
+      ext t
+      change p 0 = y
+      exact (h 0).symm
+  | succ n ih =>
+      rw [Path.concat_succ, Path.concat_succ]
+      calc
+        ((Path.concat (p ∘ Fin.castSucc) (fun k => F k.castSucc)).trans
+            (F (Fin.last n))).cast (h 0) (h (Fin.last (n + 1))) =
+          ((Path.concat (p ∘ Fin.castSucc) (fun k => F k.castSucc)).cast
+              (h 0) (h (Fin.last n).castSucc)).trans
+            ((F (Fin.last n)).cast (h (Fin.last n).castSucc)
+              (h (Fin.last (n + 1)))) := by
+                exact Path.cast_trans _ _ _ _ _
+        _ = _ := by
+          rw [ih (p ∘ Fin.castSucc) (fun i => h i.castSucc)
+            (fun i => F i.castSucc)]
+          congr 1
+
+/-- On the `i`th equal subdivision interval, affine interpolation of the
+once-around parameter is exactly the polygon edge parameter `(i+t)/n`. -/
+theorem integerLoop_convexCombo_subdivisionVertex (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    ConstructionTargets.CircleUniversalCover.integerLoop 1
+        (Set.Icc.convexCombo
+          (polygonBoundarySubdivisionVertex P i.castSucc)
+          (polygonBoundarySubdivisionVertex P i.succ) t) =
+      PolygonSurfacePiOne.edgePointCircle P.edgeCount i t := by
+  apply Subtype.ext
+  simp only [ConstructionTargets.CircleUniversalCover.integerLoop,
+    ConstructionTargets.CircleUniversalCover.circleCover,
+    PolygonSurfacePiOne.edgePointCircle,
+    ConstructionTargets.Surfaces.edgePoint,
+    polygonBoundarySubdivisionVertex, Path.coe_mk_mk,
+    Set.Icc.coe_convexCombo]
+  congr 1
+  simp only [Fin.val_castSucc, Fin.val_succ]
+  push_cast
+  field_simp
+  ring
+
+/-- The `i`th affine subpath of the complete boundary path has exactly the
+pointwise parametrization of the packaged signed edge. -/
+theorem polygonBoundaryIntegerLoop_subpath_apply (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ)) t =
+      polygonBoundarySignedEdgePath P i t := by
+  change polygonBoundaryIntegerLoopPath P
+      (Set.Icc.convexCombo
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ) t) = _
+  rw [show polygonBoundaryIntegerLoopPath P
+      (Set.Icc.convexCombo
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ) t) =
+      polygonBoundaryWedgeLoop P
+        (ConstructionTargets.CircleUniversalCover.integerLoop 1
+          (Set.Icc.convexCombo
+            (polygonBoundarySubdivisionVertex P i.castSucc)
+            (polygonBoundarySubdivisionVertex P i.succ) t)) by
+    exact congrFun (Path.cast_coe _ _ _)
+      (Set.Icc.convexCombo
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ) t)]
+  rw [integerLoop_convexCombo_subdivisionVertex,
+    polygonBoundaryWedgeLoop_edgePoint_eq_signedEdgePath]
+
+/-- The common endpoint of a signed edge is the source of its geometric
+subdivision subpath. -/
+theorem polygonBoundarySignedEdge_source_eq_subdivision (P : PairingData)
+    (i : Fin P.edgeCount) :
+    PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1 =
+      polygonBoundaryIntegerLoopPath P
+        (polygonBoundarySubdivisionVertex P i.castSucc) := by
+  have h := polygonBoundaryIntegerLoop_subpath_apply P i
+    (0 : Set.Icc (0 : ℝ) 1)
+  simpa using h.symm
+
+/-- The common endpoint of a signed edge is the target of its geometric
+subdivision subpath. -/
+theorem polygonBoundarySignedEdge_target_eq_subdivision (P : PairingData)
+    (i : Fin P.edgeCount) :
+    PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (P.orbit i) 1 =
+      polygonBoundaryIntegerLoopPath P
+        (polygonBoundarySubdivisionVertex P i.succ) := by
+  have h := polygonBoundaryIntegerLoop_subpath_apply P i
+    (1 : Set.Icc (0 : ℝ) 1)
+  simpa using h.symm
+
+/-- After the endpoint equalities are made explicit, the `i`th geometric
+subpath is exactly the packaged signed edge as a dependent `Path`. -/
+theorem polygonBoundaryIntegerLoop_subpath_cast (P : PairingData)
+    (i : Fin P.edgeCount) :
+    ((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P i.castSucc)
+      (polygonBoundarySubdivisionVertex P i.succ)).cast
+        (polygonBoundarySignedEdge_source_eq_subdivision P i)
+        (polygonBoundarySignedEdge_target_eq_subdivision P i) =
+      polygonBoundarySignedEdgePath P i := by
+  ext t
+  rw [show (((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P i.castSucc)
+      (polygonBoundarySubdivisionVertex P i.succ)).cast _ _) t =
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ)) t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  exact polygonBoundaryIntegerLoop_subpath_apply P i t
+
+/-- The explicit winding-one class associated to the polygon-edge
+parametrization. -/
+noncomputable def circleIntegerLoopOneClass : FundamentalGroup Circle 1 :=
+  Path.Homotopic.Quotient.mk
+    (ConstructionTargets.CircleUniversalCover.integerLoop 1)
+
+/-- The explicit winding-one class generates the circle fundamental group.
+This conclusion uses the universal-cover winding coordinate and is therefore
+independent of the orientation chosen by the singular-homology isomorphism. -/
+theorem circleIntegerLoopOneClass_generates (g : FundamentalGroup Circle 1) :
+    ∃ n : ℤ, circleIntegerLoopOneClass ^ n = g := by
+  open ConstructionTargets.CircleUniversalCover in
+    let n : ℤ := Multiplicative.toAdd (circleFundamentalGroupMulEquivInt g)
+    refine ⟨n, ?_⟩
+    apply circleFundamentalGroupMulEquivInt.injective
+    change circleWindingHom (circleIntegerLoopOneClass ^ n) = circleWindingHom g
+    rw [map_zpow]
+    have ha : circleWindingHom circleIntegerLoopOneClass =
+        Multiplicative.ofAdd 1 := by
+      simp [circleIntegerLoopOneClass, circleWindingHom_mk]
+    rw [ha]
+    change Multiplicative.ofAdd (n • (1 : ℤ)) =
+      circleFundamentalGroupMulEquivInt g
+    simp [n]
+
+/-- The integer coordinate assigned by the existing singular-homology
+isomorphism to the explicit winding-one loop. -/
+noncomputable def circleIntegerLoopOneCoordinate : ℤ :=
+  ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+    (moduleHurewicz (1 : Circle) circleIntegerLoopOneClass)
+
+/-- The existing H₁ coordinate can differ from winding orientation only by
+the unique unit ambiguity.  Thus the missing normalization is exactly the
+choice between `+1` and `-1`, rather than any further geometric comparison. -/
+theorem circleIntegerLoopOneCoordinate_eq_one_or_neg_one :
+    circleIntegerLoopOneCoordinate = 1 ∨
+      circleIntegerLoopOneCoordinate = -1 := by
+  obtain ⟨n, hn⟩ :=
+    circleIntegerLoopOneClass_generates circlePositiveFundamentalClass
+  have hh := congrArg (moduleHurewicz (1 : Circle)) hn
+  rw [moduleHurewicz_zpow,
+    moduleHurewicz_circlePositiveFundamentalClass] at hh
+  have hc := congrArg
+    (fun z => ConstructionTargets.CircleHomology.circleH1IsoInt.hom z) hh
+  have hc2 : n • circleIntegerLoopOneCoordinate =
+      ConstructionTargets.CircleHomology.circleH1IsoInt.hom
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) := by
+    simpa [circleIntegerLoopOneCoordinate] using hc
+  rw [ConstructionTargets.CircleHomology.circleH1IsoInt.inv_hom_id_apply] at hc2
+  rw [smul_eq_mul] at hc2
+  exact Int.eq_one_or_neg_one_of_mul_eq_one
+    (by simpa [mul_comm] using hc2)
+
+/-- The explicit winding-one class is the existing H₁-normalized positive
+class raised to the orientation coordinate. -/
+theorem circleIntegerLoopOneClass_eq_positive_zpow_coordinate :
+    circleIntegerLoopOneClass =
+      circlePositiveFundamentalClass ^ circleIntegerLoopOneCoordinate := by
+  apply moduleHurewicz_circle_injective
+  rw [moduleHurewicz_zpow, moduleHurewicz_circlePositiveFundamentalClass]
+  apply (show Function.Injective
+      ConstructionTargets.CircleHomology.circleH1IsoInt.hom from by
+    intro x y h
+    have hi := congrArg
+      ConstructionTargets.CircleHomology.circleH1IsoInt.inv h
+    simpa using hi)
+  rw [map_zsmul,
+    ConstructionTargets.CircleHomology.circleH1IsoInt.inv_hom_id_apply]
+  change circleIntegerLoopOneCoordinate =
+    circleIntegerLoopOneCoordinate • (1 : ℤ)
+  simp
+
+/-- Conversely, the previously chosen positive class is the explicit
+winding-one class raised to the same unit sign. -/
+theorem circlePositiveFundamentalClass_eq_integerLoop_zpow_coordinate :
+    circlePositiveFundamentalClass =
+      circleIntegerLoopOneClass ^ circleIntegerLoopOneCoordinate := by
+  have he := circleIntegerLoopOneClass_eq_positive_zpow_coordinate
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · simpa [h] using he.symm
+  · rw [h] at he ⊢
+    rw [he]
+    simp
+
+/-- The explicit winding-one circle class mapped into a wedge leg, before
+transporting that leg's basepoint to the common word basepoint. -/
+noncomputable def finiteWedgeExplicitLegClass {L : Type} (l : L) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1) :=
+  FundamentalGroup.map
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
+    1 circleIntegerLoopOneClass
+
+/-- The homotopy class of each packaged geometric edge is exactly the
+explicit signed wedge-leg factor, before common-basepoint transport. -/
+theorem polygonBoundarySignedEdgePath_mk (P : PairingData)
+    (i : Fin P.edgeCount) :
+    Path.Homotopic.Quotient.mk (polygonBoundarySignedEdgePath P i) =
+      if P.sign i then finiteWedgeExplicitLegClass (P.orbit i)
+      else (finiteWedgeExplicitLegClass (P.orbit i))⁻¹ := by
+  cases hs : P.sign i
+  · rw [if_neg (Bool.false_ne_true),
+      polygonBoundarySignedEdgePath_of_not_sign P i hs,
+      Path.Homotopic.Quotient.mk_symm]
+    rw [finiteWedgeExplicitLegClass, circleIntegerLoopOneClass,
+      FundamentalGroup.map_apply,
+      ← Path.Homotopic.Quotient.mk_map]
+    rfl
+  · rw [if_pos rfl, polygonBoundarySignedEdgePath_of_sign P i hs]
+    rw [finiteWedgeExplicitLegClass, circleIntegerLoopOneClass,
+      FundamentalGroup.map_apply,
+      ← Path.Homotopic.Quotient.mk_map]
+
+/-- A packaged signed edge, transported from its leg endpoint to the common
+polygon-word basepoint. -/
+noncomputable def polygonBoundarySignedEdgePathAtBase (P : PairingData)
+    (i : Fin P.edgeCount) : Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  (polygonBoundarySignedEdgePath P i).cast
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i))
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i))
+
+/-- Endpoint transport changes only the dependent path endpoints, not the
+pointwise signed-edge parametrization. -/
+theorem polygonBoundarySignedEdgePathAtBase_apply (P : PairingData)
+    (i : Fin P.edgeCount) (t : Set.Icc (0 : ℝ) 1) :
+    polygonBoundarySignedEdgePathAtBase P i t =
+      polygonBoundarySignedEdgePath P i t := by
+  exact congrFun (Path.cast_coe _ _ _) t
+
+/-- The affine `i`th subdivision path, with both endpoints transported
+directly to the common polygon-word basepoint. -/
+noncomputable def polygonBoundarySubdivisionPathAtBase (P : PairingData)
+    (i : Fin P.edgeCount) : Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  ((polygonBoundaryIntegerLoopPath P).subpath
+    (polygonBoundarySubdivisionVertex P i.castSucc)
+    (polygonBoundarySubdivisionVertex P i.succ)).cast
+      ((PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
+          (polygonBoundarySignedEdge_source_eq_subdivision P i))
+      ((PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
+          (polygonBoundarySignedEdge_target_eq_subdivision P i))
+
+/-- Each common-base subdivision loop is exactly its common-base signed edge. -/
+theorem polygonBoundarySubdivisionPathAtBase_eq_signedEdge (P : PairingData)
+    (i : Fin P.edgeCount) :
+    polygonBoundarySubdivisionPathAtBase P i =
+      polygonBoundarySignedEdgePathAtBase P i := by
+  ext t
+  rw [polygonBoundarySubdivisionPathAtBase,
+    polygonBoundarySignedEdgePathAtBase]
+  rw [show (((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P i.castSucc)
+      (polygonBoundarySubdivisionVertex P i.succ)).cast _ _) t =
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P i.castSucc)
+        (polygonBoundarySubdivisionVertex P i.succ)) t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  rw [show ((polygonBoundarySignedEdgePath P i).cast _ _) t =
+      polygonBoundarySignedEdgePath P i t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  exact polygonBoundaryIntegerLoop_subpath_apply P i t
+
+/-- Hurewicz sends the common-base finite subdivision concatenation to the
+ordered sum of the corresponding geometric signed-edge classes. -/
+theorem polygonBoundarySubdivisionConcat_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk
+          (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+            (polygonBoundarySubdivisionPathAtBase P))) =
+      (List.ofFn fun i : Fin P.edgeCount =>
+        moduleHurewicz (orbitWedgeBase P)
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundarySignedEdgePathAtBase P i))).sum := by
+  rw [moduleHurewicz_mk_concat_eq_list_sum]
+  simp_rw [polygonBoundarySubdivisionPathAtBase_eq_signedEdge]
+
+/-- Every subdivision vertex of the boundary loop is the common wedge
+basepoint.  This is the endpoint family needed to compare the dependent
+`concat_subpath` path with the constant-base concatenation. -/
+theorem orbitWedgeBase_eq_boundarySubdivisionVertex (P : PairingData)
+    (k : Fin (P.edgeCount + 1)) :
+    orbitWedgeBase P = polygonBoundaryIntegerLoopPath P
+      (polygonBoundarySubdivisionVertex P k) := by
+  refine Fin.lastCases ?_ (fun i => ?_) k
+  · rw [polygonBoundarySubdivisionVertex_last]
+    exact (polygonBoundaryIntegerLoopPath P).target.symm
+  · exact
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+        (P.orbit ⟨0, P.edgeCount_pos⟩) (P.orbit i)).trans
+        (polygonBoundarySignedEdge_source_eq_subdivision P i)
+
+/-- The subdivision factor using the single global vertex-to-basepoint
+equality at both endpoints. -/
+noncomputable def polygonBoundaryCanonicalSubdivisionPathAtBase
+    (P : PairingData) (i : Fin P.edgeCount) :
+    Path (orbitWedgeBase P) (orbitWedgeBase P) :=
+  ((polygonBoundaryIntegerLoopPath P).subpath
+    (polygonBoundarySubdivisionVertex P i.castSucc)
+    (polygonBoundarySubdivisionVertex P i.succ)).cast
+      (orbitWedgeBase_eq_boundarySubdivisionVertex P i.castSucc)
+      (orbitWedgeBase_eq_boundarySubdivisionVertex P i.succ)
+
+/-- The global endpoint normalization agrees exactly with the earlier
+edge-derived common-base normalization. -/
+theorem polygonBoundaryCanonicalSubdivisionPathAtBase_eq (P : PairingData)
+    (i : Fin P.edgeCount) :
+    polygonBoundaryCanonicalSubdivisionPathAtBase P i =
+      polygonBoundarySubdivisionPathAtBase P i := by
+  ext t
+  rw [polygonBoundaryCanonicalSubdivisionPathAtBase,
+    polygonBoundarySubdivisionPathAtBase]
+
+/-- With the global endpoint family, each subdivision factor is still the
+corresponding signed edge. -/
+theorem polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge
+    (P : PairingData) (i : Fin P.edgeCount) :
+    polygonBoundaryCanonicalSubdivisionPathAtBase P i =
+      polygonBoundarySignedEdgePathAtBase P i :=
+  (polygonBoundaryCanonicalSubdivisionPathAtBase_eq P i).trans
+    (polygonBoundarySubdivisionPathAtBase_eq_signedEdge P i)
+
+/-- The globally transported dependent subdivision concatenation is exactly
+the constant-base concatenation of the canonical subdivision factors. -/
+theorem polygonBoundaryConcat_cast_eq_canonical (P : PairingData) :
+    (Path.concat
+      (polygonBoundaryIntegerLoopPath P ∘ polygonBoundarySubdivisionVertex P)
+      (fun k => (polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P k.castSucc)
+        (polygonBoundarySubdivisionVertex P k.succ))).cast
+          (orbitWedgeBase_eq_boundarySubdivisionVertex P 0)
+          (orbitWedgeBase_eq_boundarySubdivisionVertex P
+            (Fin.last P.edgeCount)) =
+      Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+        (polygonBoundaryCanonicalSubdivisionPathAtBase P) := by
+  exact path_concat_cast_vertices P.edgeCount
+    (polygonBoundaryIntegerLoopPath P ∘ polygonBoundarySubdivisionVertex P)
+    (orbitWedgeBase P) (orbitWedgeBase_eq_boundarySubdivisionVertex P)
+    (fun k => (polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P k.castSucc)
+      (polygonBoundarySubdivisionVertex P k.succ))
+
+/-- The endpoint subpath appearing in `concat_subpath`, transported back to
+the common basepoint, is the original boundary path. -/
+theorem polygonBoundaryEndpointSubpath_cast_eq (P : PairingData) :
+    ((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P 0)
+      (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))).cast
+        (orbitWedgeBase_eq_boundarySubdivisionVertex P 0)
+        (orbitWedgeBase_eq_boundarySubdivisionVertex P
+          (Fin.last P.edgeCount)) =
+      polygonBoundaryIntegerLoopPath P := by
+  ext t
+  rw [show ((((polygonBoundaryIntegerLoopPath P).subpath
+      (polygonBoundarySubdivisionVertex P 0)
+      (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))).cast
+        _ _) t) =
+      ((polygonBoundaryIntegerLoopPath P).subpath
+        (polygonBoundarySubdivisionVertex P 0)
+        (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount))) t by
+    exact congrFun (Path.cast_coe _ _ _) t]
+  change polygonBoundaryIntegerLoopPath P
+      (Set.Icc.convexCombo (polygonBoundarySubdivisionVertex P 0)
+        (polygonBoundarySubdivisionVertex P (Fin.last P.edgeCount)) t) = _
+  rw [polygonBoundarySubdivisionVertex_zero,
+    polygonBoundarySubdivisionVertex_last]
+  congr 1
+  apply Subtype.ext
+  simp [Set.Icc.coe_convexCombo]
+
+/-- The canonical common-base subdivision concatenation is homotopic rel
+endpoints to the original based boundary loop. -/
+theorem polygonBoundaryCanonicalConcat_homotopic (P : PairingData) :
+    Path.Homotopic
+      (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+        (polygonBoundaryCanonicalSubdivisionPathAtBase P))
+      (polygonBoundaryIntegerLoopPath P) := by
+  have h := (polygonBoundaryIntegerLoop_concatSubpath P).pathCast
+    (orbitWedgeBase_eq_boundarySubdivisionVertex P 0)
+    (orbitWedgeBase_eq_boundarySubdivisionVertex P (Fin.last P.edgeCount))
+  rw [polygonBoundaryConcat_cast_eq_canonical] at h
+  convert h using 1
+  exact (polygonBoundaryEndpointSubpath_cast_eq P).symm
+
+/-- The geometric boundary loop has the ordered signed-edge Hurewicz sum.
+This is the finite path-subdivision identity needed by the B7 calculation. -/
+theorem finitePathSubdivision_boundary (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P)) =
+      (List.ofFn fun i : Fin P.edgeCount =>
+        moduleHurewicz (orbitWedgeBase P)
+          (Path.Homotopic.Quotient.mk
+            (polygonBoundarySignedEdgePathAtBase P i))).sum := by
+  have hq :
+      (Path.Homotopic.Quotient.mk
+        (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+          (polygonBoundaryCanonicalSubdivisionPathAtBase P)) :
+            FundamentalGroup _ _) =
+        Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) :=
+    Quotient.sound (polygonBoundaryCanonicalConcat_homotopic P)
+  calc
+    _ = moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk
+          (Path.concat (fun _ : Fin (P.edgeCount + 1) => orbitWedgeBase P)
+            (polygonBoundaryCanonicalSubdivisionPathAtBase P))) :=
+      congrArg (moduleHurewicz (orbitWedgeBase P)) hq.symm
+    _ = _ := by
+      simpa only [polygonBoundaryCanonicalSubdivisionPathAtBase_eq_signedEdge] using
+        moduleHurewicz_mk_concat_eq_list_sum P.edgeCount (orbitWedgeBase P)
+          (polygonBoundaryCanonicalSubdivisionPathAtBase P)
+
+/-- In every wedge leg, the explicit geometric loop differs from the
+H₁-normalized leg generator by exactly the global orientation unit. -/
+theorem finiteWedgeExplicitLegClass_eq_positive_zpow {L : Type} (l : L) :
+    finiteWedgeExplicitLegClass l =
+      finiteWedgeLegFundamentalClass l ^ circleIntegerLoopOneCoordinate := by
+  rw [finiteWedgeExplicitLegClass,
+    circleIntegerLoopOneClass_eq_positive_zpow_coordinate, map_zpow]
+  rfl
+
+/-- The explicit geometric leg class transported to the common basepoint used
+by the polygon boundary word. -/
+noncomputable def finiteWedgeExplicitLegClassAtBase (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  Path.Homotopic.Quotient.cast (finiteWedgeExplicitLegClass l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+      (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+
+/-- In common-basepoint H₁ coordinates, an explicit once-around leg is the
+normalized basis class multiplied by the single global orientation unit. -/
+theorem finiteWedgeExplicitLegClassAtBase_hurewicz (P : PairingData)
+    (l : PairingOrbit P.pair) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeExplicitLegClassAtBase P l) =
+      circleIntegerLoopOneCoordinate •
+        finiteWedgeH1CoordinateMap P (orbitBasis P l 1) := by
+  rw [finiteWedgeExplicitLegClassAtBase, moduleHurewicz_cast,
+    finiteWedgeExplicitLegClass_eq_positive_zpow, moduleHurewicz_zpow,
+    finiteWedgeLegFundamentalClass_hurewicz,
+    finiteWedgeH1CoordinateMap_single]
+  rfl
+
+/-- The explicit common-basepoint factor contributed by one oriented polygon
+edge: the forward leg for positive sign and its inverse for negative sign. -/
+noncomputable def polygonBoundaryExplicitEdgeClass (P : PairingData)
+    (i : Fin P.edgeCount) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  if P.sign i then finiteWedgeExplicitLegClassAtBase P (P.orbit i)
+  else (finiteWedgeExplicitLegClassAtBase P (P.orbit i))⁻¹
+
+/-- Each explicit signed edge factor has the expected signed orbit-basis H₁
+coordinate, including the global circle-orientation unit. -/
+theorem polygonBoundaryExplicitEdgeClass_hurewicz (P : PairingData)
+    (i : Fin P.edgeCount) :
+    moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeClass P i) =
+      (if P.sign i then (1 : ℤ) else -1) •
+        (circleIntegerLoopOneCoordinate •
+          finiteWedgeH1CoordinateMap P (orbitBasis P (P.orbit i) 1)) := by
+  cases hs : P.sign i <;>
+    simp [polygonBoundaryExplicitEdgeClass, hs,
+      finiteWedgeExplicitLegClassAtBase_hurewicz]
+
+/-- Endpoint transport turns the geometric signed edge into exactly the
+explicit common-basepoint factor used by the attaching-word calculation. -/
+theorem polygonBoundarySignedEdgePathAtBase_mk (P : PairingData)
+    (i : Fin P.edgeCount) :
+    Path.Homotopic.Quotient.mk (polygonBoundarySignedEdgePathAtBase P i) =
+      polygonBoundaryExplicitEdgeClass P i := by
+  rw [polygonBoundarySignedEdgePathAtBase,
+    Path.Homotopic.Quotient.mk_cast,
+    polygonBoundarySignedEdgePath_mk]
+  cases hs : P.sign i
+  · simp only [polygonBoundaryExplicitEdgeClass, hs, Bool.false_eq_true,
+      ↓reduceIte, finiteWedgeExplicitLegClassAtBase]
+    change Path.Homotopic.Quotient.cast
+        (Path.Homotopic.Quotient.symm (finiteWedgeExplicitLegClass (P.orbit i))) _ _ =
+      Path.Homotopic.Quotient.symm
+        (Path.Homotopic.Quotient.cast (finiteWedgeExplicitLegClass (P.orbit i)) _ _)
+    exact homotopicQuotient_cast_symm _ _
+  · simp [polygonBoundaryExplicitEdgeClass, finiteWedgeExplicitLegClassAtBase, hs]
+
+/-- The ordered product of the explicit signed edge factors.  The remaining
+geometric subdivision theorem identifies the actual boundary class with this
+already-normalized product. -/
+noncomputable def polygonBoundaryExplicitEdgeProduct (P : PairingData) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  (List.ofFn fun i : Fin P.edgeCount =>
+    polygonBoundaryExplicitEdgeClass P i).prod
+
+/-- Hurewicz evaluates the ordered explicit boundary product as the finite
+sum of its signed, orientation-normalized edge coordinates. -/
+theorem polygonBoundaryExplicitEdgeProduct_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeProduct P) =
+      (List.ofFn fun i : Fin P.edgeCount =>
+        (if P.sign i then (1 : ℤ) else -1) •
+          (circleIntegerLoopOneCoordinate •
+            finiteWedgeH1CoordinateMap P
+              (orbitBasis P (P.orbit i) 1))).sum := by
+  rw [polygonBoundaryExplicitEdgeProduct, moduleHurewicz_list_prod,
+    List.map_ofFn]
+  change (List.ofFn fun i : Fin P.edgeCount =>
+      moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeClass P i)).sum = _
+  simp_rw [polygonBoundaryExplicitEdgeClass_hurewicz]
+
+/-- The boundary map computed in the existing H₁ coordinates.  Its extra
+factor records the only orientation ambiguity left by `circleH1IsoInt`. -/
+noncomputable def orientationSignedAttachingBoundary (P : PairingData) :
+    ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ) where
+  toFun n := n • (circleIntegerLoopOneCoordinate • attachingDegree P)
+  map_add' m n := by simp [add_smul]
+  map_smul' m n := by
+    ext l
+    simp [mul_assoc, mul_left_comm]
+
+/-- Multiplying the attaching vector by the unresolved orientation unit does
+not change its kernel. -/
+theorem orientationSignedAttachingBoundary_ker (P : PairingData) :
+    LinearMap.ker (orientationSignedAttachingBoundary P) = BoundaryKernel P := by
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · have hm : orientationSignedAttachingBoundary P = attachingBoundary P := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm]
+  · have hm : orientationSignedAttachingBoundary P = -(attachingBoundary P) := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm]
+    ext n
+    simp
+
+/-- Multiplying the attaching vector by the unresolved orientation unit does
+not change its range, hence does not change the quotient used for H₁. -/
+theorem orientationSignedAttachingBoundary_range (P : PairingData) :
+    LinearMap.range (orientationSignedAttachingBoundary P) =
+      LinearMap.range (attachingBoundary P) := by
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · have hm : orientationSignedAttachingBoundary P = attachingBoundary P := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm]
+  · have hm : orientationSignedAttachingBoundary P = -(attachingBoundary P) := by
+      apply LinearMap.ext
+      intro n
+      funext l
+      simp [orientationSignedAttachingBoundary, h]
+    rw [hm, LinearMap.range_neg]
+
+/-- The coordinate sum of the ordered signed boundary word is precisely the
+attaching degree vector fixed at the start of the calculation. -/
+theorem polygonBoundaryLegWord_coordinates (P : PairingData) :
+    finiteWedgeLegWordCoordinatesList P (polygonBoundaryLegWord P) =
+      attachingDegree P := by
+  classical
+  ext l
+  simp [finiteWedgeLegWordCoordinatesList, polygonBoundaryLegWord,
+    attachingDegree, edgeOrbitContribution, edgeAttachingDegree,
+    orbitBasis, List.sum_ofFn]
+  apply Finset.sum_congr rfl
+  intro i _
+  by_cases ho : P.orbit i = l
+  · subst l
+    by_cases hs : P.sign i <;> simp [hs]
+  · by_cases hs : P.sign i <;> simp [ho, hs]
+
+/-- The ordered explicit-edge product already has the complete
+orientation-signed attaching-vector H₁ class.  The remaining boundary
+subdivision theorem is therefore purely a geometric identification. -/
+theorem polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree
+    (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (polygonBoundaryExplicitEdgeProduct P) =
+      finiteWedgeH1CoordinateMap P
+        (circleIntegerLoopOneCoordinate • attachingDegree P) := by
+  rw [polygonBoundaryExplicitEdgeProduct_hurewicz,
+    ← polygonBoundaryLegWord_coordinates, map_zsmul]
+  simp only [finiteWedgeLegWordCoordinatesList, polygonBoundaryLegWord,
+    List.map_ofFn, List.sum_ofFn, map_sum]
+  let F := fun x : Fin P.edgeCount => finiteWedgeH1CoordinateMap P
+    (((fun q => q.2 • orbitBasis P q.1 1) ∘
+      fun i => (P.orbit i, if P.sign i then (1 : ℤ) else -1)) x)
+  have hdist (s : Finset (Fin P.edgeCount)) :
+      circleIntegerLoopOneCoordinate • (∑ x ∈ s, F x) =
+        ∑ x ∈ s, circleIntegerLoopOneCoordinate • F x := by
+    induction s using Finset.induction_on with
+    | empty => rw [Finset.sum_empty, Finset.sum_empty, zsmul_zero]
+    | @insert a s ha ih =>
+        rw [Finset.sum_insert ha, Finset.sum_insert ha, zsmul_add, ih]
+  change _ = circleIntegerLoopOneCoordinate • ∑ x, F x
+  rw [show circleIntegerLoopOneCoordinate • (∑ x, F x) =
+      ∑ x, circleIntegerLoopOneCoordinate • F x by
+    simpa using hdist Finset.univ]
+  apply Finset.sum_congr rfl
+  intro i _
+  by_cases hs : P.sign i <;> simp [F, hs]
+
+/-- The explicit once-around boundary path has the complete
+orientation-signed attaching-vector H₁ class. -/
+theorem polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned
+    (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P)) =
+      finiteWedgeH1CoordinateMap P
+        (circleIntegerLoopOneCoordinate • attachingDegree P) := by
+  rw [finitePathSubdivision_boundary]
+  simp_rw [polygonBoundarySignedEdgePathAtBase_mk]
+  have h := polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree P
+  rw [polygonBoundaryExplicitEdgeProduct, moduleHurewicz_list_prod,
+    List.map_ofFn] at h
+  exact h
+
+/-- Mapping the explicit winding loop around the polygon boundary gives the
+chosen normalized boundary class raised to the global orientation unit. -/
+theorem polygonBoundaryIntegerLoopClass_eq_fundamental_zpow_coordinate
+    (P : PairingData) :
+    Path.Homotopic.Quotient.mk (polygonBoundaryIntegerLoopPath P) =
+      polygonBoundaryFundamentalClass P ^ circleIntegerLoopOneCoordinate := by
+  rw [polygonBoundaryIntegerLoopPath, Path.Homotopic.Quotient.mk_cast,
+    polygonBoundaryFundamentalClass]
+  change Path.Homotopic.Quotient.cast
+      (FundamentalGroup.map (polygonBoundaryWedgeLoop P) 1
+        circleIntegerLoopOneClass) _ _ = _
+  rw [circleIntegerLoopOneClass_eq_positive_zpow_coordinate,
+    map_zpow]
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · simp [h, circleIntegerLoopOneClass, FundamentalGroup.map_apply,
+      Path.Homotopic.Quotient.mk_map]
+  · rw [h]
+    rw [zpow_neg_one, zpow_neg_one]
+    exact homotopicQuotient_cast_symm (polygonBoundaryWedgeLoop_one P).symm
+      (FundamentalGroup.map (polygonBoundaryWedgeLoop P) 1
+        circlePositiveFundamentalClass)
+
+/-- After cancelling the square of the orientation unit, the normalized
+boundary class has exactly the unsigned attaching-degree coordinates. -/
+theorem polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree
+    (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P) (polygonBoundaryFundamentalClass P) =
+      finiteWedgeH1CoordinateMap P (attachingDegree P) := by
+  have hc := congrArg (moduleHurewicz (orbitWedgeBase P))
+    (polygonBoundaryIntegerLoopClass_eq_fundamental_zpow_coordinate P)
+  rw [moduleHurewicz_zpow] at hc
+  have hi := polygonBoundaryIntegerLoop_hurewicz_eq_orientationSigned P
+  rcases circleIntegerLoopOneCoordinate_eq_one_or_neg_one with h | h
+  · simpa [h] using hc.symm.trans hi
+  · rw [h] at hc hi
+    apply neg_injective
+    simpa using hc.symm.trans hi
+
+/-- Once finite subdivision identifies the geometric boundary class with the
+explicit edge product, naturality gives the complete orientation-signed H₁
+formula needed by B7. -/
+theorem polygonBoundaryWedgeLoop_hurewicz_of_eq_explicitEdgeProduct
+    (P : PairingData)
+    (hprod : polygonBoundaryFundamentalClass P =
+      polygonBoundaryExplicitEdgeProduct P) :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) =
+      finiteWedgeH1CoordinateMap P
+        (circleIntegerLoopOneCoordinate • attachingDegree P) := by
+  rw [← polygonBoundaryFundamentalClass_hurewicz, hprod,
+    polygonBoundaryExplicitEdgeProduct_hurewicz_eq_attachingDegree]
+
+/-- Hurewicz evaluation of a finite leg word is the normalized coordinate map
+applied to its list-based coordinate sum. -/
+theorem finiteWedgeLegWord_hurewicz (P : PairingData)
+    (w : FiniteWedgeLegWord P) :
+    moduleHurewicz (orbitWedgeBase P) (finiteWedgeLegWordGroup P w) =
+      finiteWedgeH1CoordinateMap P (finiteWedgeLegWordCoordinatesList P w) := by
+  induction w with
+  | nil =>
+      change moduleHurewicz (orbitWedgeBase P) 1 =
+        finiteWedgeH1CoordinateMap P 0
+      have h := moduleHurewicz_mul (orbitWedgeBase P) 1 1
+      have hz : moduleHurewicz (orbitWedgeBase P) 1 = 0 := by
+        apply add_left_cancel (a := moduleHurewicz (orbitWedgeBase P) 1)
+        simpa using h.symm
+      simpa using hz
+  | cons q w ih =>
+      change moduleHurewicz (orbitWedgeBase P)
+          (finiteWedgeLegFundamentalClassAtBase P q.1 ^ q.2 *
+            finiteWedgeLegWordGroup P w) =
+        finiteWedgeH1CoordinateMap P
+          (q.2 • orbitBasis P q.1 1 + finiteWedgeLegWordCoordinatesList P w)
+      rw [moduleHurewicz_mul, moduleHurewicz_zpow,
+        finiteWedgeLegFundamentalClassAtBase_hurewicz_eq_coordinate,
+        map_add, map_zsmul, ih]
+
+/-- The signed polygon word has Hurewicz image equal to the normalized
+coordinate-map image of the attaching degree vector. -/
+theorem polygonBoundaryLegWord_hurewicz (P : PairingData) :
+    moduleHurewicz (orbitWedgeBase P)
+        (finiteWedgeLegWordGroup P (polygonBoundaryLegWord P)) =
+      finiteWedgeH1CoordinateMap P (attachingDegree P) := by
+  rw [finiteWedgeLegWord_hurewicz, polygonBoundaryLegWord_coordinates]
+
+/-- Once the geometric boundary class is identified with its explicit signed
+leg word, naturality and the word calculation give the precise module-H₁
+coordinate formula needed by B7. -/
+theorem polygonBoundaryWedgeLoop_hurewicz_of_eq_legWord (P : PairingData)
+    (hword : polygonBoundaryFundamentalClass P =
+      finiteWedgeLegWordGroup P (polygonBoundaryLegWord P)) :
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+        (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1) =
+      finiteWedgeH1CoordinateMap P (attachingDegree P) := by
+  rw [← polygonBoundaryFundamentalClass_hurewicz, hword,
+    polygonBoundaryLegWord_hurewicz]
+
+/-- The canonical map from the free group on the orbit labels to the
+common-basepoint fundamental group, sending each generator to its positive
+circle-leg class. -/
+noncomputable def finiteWedgeLegFreeGroupMap (P : PairingData) :
+    FreeGroup (PairingOrbit P.pair) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair)) (orbitWedgeBase P) :=
+  FreeGroup.lift (finiteWedgeLegFundamentalClassAtBase P)
+
+/-- Every element in the image of the canonical free-group map has the exact
+finite integer-exponent leg-word form used by `finiteWedgeLegWord_hurewicz`. -/
+theorem finiteWedgeLegFreeGroupMap_exists_word (P : PairingData)
+    (x : FreeGroup (PairingOrbit P.pair)) :
+    ∃ w : FiniteWedgeLegWord P,
+      finiteWedgeLegWordGroup P w = finiteWedgeLegFreeGroupMap P x := by
+  induction x using FreeGroup.induction_on with
+  | C1 =>
+      exact ⟨[], by simp [finiteWedgeLegWordGroup]⟩
+  | of l =>
+      exact ⟨[(l, 1)], by
+        simp [finiteWedgeLegWordGroup, finiteWedgeLegFreeGroupMap]⟩
+  | inv_of l _ =>
+      exact ⟨[(l, -1)], by
+        simp [finiteWedgeLegWordGroup, finiteWedgeLegFreeGroupMap]⟩
+  | mul x y ihx ihy =>
+      rcases ihx with ⟨wx, hx⟩
+      rcases ihy with ⟨wy, hy⟩
+      exact ⟨wx ++ wy, by
+        rw [map_mul]
+        simpa only [finiteWedgeLegWordGroup, List.map_append, List.prod_append]
+          using congrArg₂ (· * ·) hx hy⟩
+
+/-- Surjectivity of the canonical free-group map is precisely the remaining
+topological input needed to obtain leg-word generation. -/
+theorem finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective
+    (P : PairingData) (hsurj : Function.Surjective (finiteWedgeLegFreeGroupMap P))
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P)) :
+    ∃ w : FiniteWedgeLegWord P, finiteWedgeLegWordGroup P w = g := by
+  rcases hsurj g with ⟨x, rfl⟩
+  exact finiteWedgeLegFreeGroupMap_exists_word P x
+
+/-! ### Relabelling finite wedges -/
+
+/-- An equivalence of leg labels induces a homeomorphism of the corresponding
+finite circle wedges. -/
+noncomputable def finiteWedgeHomeomorphOfEquiv {L K : Type*} (e : L ≃ K) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L ≃ₜ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge K where
+  toFun := Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel K)
+          (e p.1, p.2) (e q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+  invFun := Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e.symm p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel K) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L)
+          (e.symm p.1, p.2) (e.symm q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+  left_inv := by
+    rintro ⟨⟨l, z⟩⟩
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e.symm (e l)) z = _
+    rw [e.symm_apply_apply]
+    rfl
+  right_inv := by
+    rintro ⟨⟨k, z⟩⟩
+    change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e (e.symm k)) z = _
+    rw [e.apply_symm_apply]
+    rfl
+  continuous_toFun := by
+    letI : TopologicalSpace L := ⊥
+    letI : DiscreteTopology L := ⟨rfl⟩
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    exact fun l =>
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (e l)
+  continuous_invFun := by
+    letI : TopologicalSpace K := ⊥
+    letI : DiscreteTopology K := ⟨rfl⟩
+    apply Continuous.quotient_lift
+    rw [continuous_prod_of_discrete_left]
+    exact fun k =>
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (e.symm k)
+
+@[simp]
+theorem finiteWedgeHomeomorphOfEquiv_wedgeCircle {L K : Type*} (e : L ≃ K)
+    (l : L) (z : Circle) :
+    finiteWedgeHomeomorphOfEquiv e
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (e l) z := rfl
+
+/-- The polygon's orbit-indexed wedge relabelled by the canonical finite
+coordinate type. -/
+noncomputable def finiteWedgeOrbitHomeomorphFin (P : PairingData) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) ≃ₜ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (Fin (Fintype.card (PairingOrbit P.pair))) :=
+  finiteWedgeHomeomorphOfEquiv (Fintype.equivFin (PairingOrbit P.pair))
+
+@[simp]
+theorem finiteWedgeOrbitHomeomorphFin_wedgeCircle (P : PairingData)
+    (l : PairingOrbit P.pair) (z : Circle) :
+    finiteWedgeOrbitHomeomorphFin P
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (Fintype.equivFin (PairingOrbit P.pair) l) z := rfl
+
+/-! ### Sum-indexed wedge inclusions -/
+
+/-- Include the left family of circle legs into the wedge indexed by a sum. -/
+noncomputable def finiteWedgeSumLeft {L K : Type*} :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L →
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) :=
+  Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inl p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel L) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel (L ⊕ K))
+          (Sum.inl p.1, p.2) (Sum.inl q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+
+/-- Include the right family of circle legs into the wedge indexed by a sum. -/
+noncomputable def finiteWedgeSumRight {L K : Type*} :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge K →
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) :=
+  Quotient.lift
+    (fun p => PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inr p.1) p.2)
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel K) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · apply Quotient.sound
+        change Relation.EqvGen
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel (L ⊕ K))
+          (Sum.inr p.1, p.2) (Sum.inr q.1, q.2)
+        rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff]
+        exact Or.inr ⟨hp, hq⟩
+
+@[simp]
+theorem finiteWedgeSumLeft_wedgeCircle {L K : Type*} (l : L) (z : Circle) :
+    finiteWedgeSumLeft (K := K)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inl l) z := rfl
+
+@[simp]
+theorem finiteWedgeSumRight_wedgeCircle {L K : Type*} (k : K) (z : Circle) :
+    finiteWedgeSumRight (L := L)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (.inr k) z := rfl
+
+theorem continuous_finiteWedgeSumLeft {L K : Type*} :
+    Continuous (finiteWedgeSumLeft (L := L) (K := K)) := by
+  letI : TopologicalSpace L := ⊥
+  letI : DiscreteTopology L := ⟨rfl⟩
+  apply Continuous.quotient_lift
+  rw [continuous_prod_of_discrete_left]
+  exact fun l =>
+    PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (Sum.inl l)
+
+theorem continuous_finiteWedgeSumRight {L K : Type*} :
+    Continuous (finiteWedgeSumRight (L := L) (K := K)) := by
+  letI : TopologicalSpace K := ⊥
+  letI : DiscreteTopology K := ⟨rfl⟩
+  apply Continuous.quotient_lift
+  rw [continuous_prod_of_discrete_left]
+  exact fun k =>
+    PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle (Sum.inr k)
+
+theorem finiteWedgeSum_base_eq {L K : Type*} (l : L) (k : K) :
+    finiteWedgeSumLeft (K := K)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1) =
+      finiteWedgeSumRight (L := L)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1) := by
+  exact PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+    (Sum.inl l) (Sum.inr k)
+
+/-- Descend the two sum-family inclusions through the point-wedge quotient. -/
+noncomputable def pointWedgeToFiniteWedgeSum {L K : Type*} (l : L) (k : K) :
+    ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1) →
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) :=
+  Quotient.lift (Sum.elim finiteWedgeSumLeft finiteWedgeSumRight) fun a b h => by
+    induction h with
+    | rel a b h =>
+        cases h
+        exact finiteWedgeSum_base_eq l k
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+theorem continuous_pointWedgeToFiniteWedgeSum {L K : Type*} (l : L) (k : K) :
+    Continuous (pointWedgeToFiniteWedgeSum l k) := by
+  apply Continuous.quotient_lift
+  rw [continuous_sum_dom]
+  exact ⟨continuous_finiteWedgeSumLeft, continuous_finiteWedgeSumRight⟩
+
+@[simp]
+theorem pointWedgeToFiniteWedgeSum_left {L K : Type*} (l₀ : L) (k₀ : K)
+    (x : PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L) :
+    pointWedgeToFiniteWedgeSum l₀ k₀
+        (ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) (.inl x)) =
+      finiteWedgeSumLeft x := rfl
+
+@[simp]
+theorem pointWedgeToFiniteWedgeSum_right {L K : Type*} (l₀ : L) (k₀ : K)
+    (y : PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge K) :
+    pointWedgeToFiniteWedgeSum l₀ k₀
+        (ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) (.inr y)) =
+      finiteWedgeSumRight y := rfl
+
+/-- Send a sum-indexed finite wedge to the binary point wedge of its two
+subfamilies. -/
+noncomputable def finiteWedgeSumToPointWedge {L K : Type*} (l₀ : L) (k₀ : K) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) →
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) :=
+  Quotient.lift
+    (fun p => match p.1 with
+      | .inl l => ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)
+          (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l p.2))
+      | .inr k => ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)
+          (.inr (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k p.2)))
+    fun p q h => by
+      change Relation.EqvGen
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel (L ⊕ K)) p q at h
+      rw [PolygonSurfacePiOne.PointWedgeQuotient.eqvGen_finiteWedgeRel_iff] at h
+      rcases h with rfl | ⟨hp, hq⟩
+      · rfl
+      · cases p with
+        | mk sp zp =>
+          cases q with
+          | mk sq zq =>
+            have hzp : zp = 1 := Subtype.ext hp
+            have hzq : zq = 1 := Subtype.ext hq
+            subst zp
+            subst zq
+            let qmap := ConstructionTargets.PointWedgeQuotient.quotientMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)
+            have hb : ∀ s : L ⊕ K,
+                (match s with
+                  | .inl l => qmap (.inl
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l 1))
+                  | .inr k => qmap (.inr
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1))) =
+                  qmap (.inl
+                    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)) := by
+              rintro (l | k)
+              · exact congrArg (fun x => qmap (.inl x))
+                  (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq l l₀)
+              · calc
+                  qmap (.inr
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k 1)) =
+                      qmap (.inr
+                        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)) :=
+                    congrArg (fun x => qmap (.inr x))
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq k k₀)
+                  _ = qmap (.inl
+                      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)) :=
+                    (Quotient.sound (Relation.EqvGen.rel _ _
+                      ConstructionTargets.PointWedgeQuotient.Rel.base)).symm
+            exact (hb sp).trans (hb sq).symm
+
+theorem continuous_finiteWedgeSumToPointWedge {L K : Type*} (l₀ : L) (k₀ : K) :
+    Continuous (finiteWedgeSumToPointWedge l₀ k₀) := by
+  letI : TopologicalSpace (L ⊕ K) := ⊥
+  letI : DiscreteTopology (L ⊕ K) := ⟨rfl⟩
+  apply Continuous.quotient_lift
+  rw [continuous_prod_of_discrete_left]
+  rintro (l | k)
+  · exact (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+      (continuous_inl.comp
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l))
+  · exact (ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+      (continuous_inr.comp
+        (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle k))
+
+theorem pointWedgeToFiniteWedgeSum_finiteWedgeSumToPointWedge
+    {L K : Type*} (l₀ : L) (k₀ : K)
+    (x : PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K)) :
+    pointWedgeToFiniteWedgeSum l₀ k₀ (finiteWedgeSumToPointWedge l₀ k₀ x) = x := by
+  refine Quotient.inductionOn x ?_
+  rintro ⟨l | k, z⟩ <;> rfl
+
+theorem finiteWedgeSumToPointWedge_pointWedgeToFiniteWedgeSum
+    {L K : Type*} (l₀ : L) (k₀ : K)
+    (x : ConstructionTargets.PointWedgeQuotient.Wedge
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1)) :
+    finiteWedgeSumToPointWedge l₀ k₀ (pointWedgeToFiniteWedgeSum l₀ k₀ x) = x := by
+  refine Quotient.inductionOn x ?_
+  rintro (x | y)
+  · refine Quotient.inductionOn x ?_
+    rintro ⟨l, z⟩
+    rfl
+  · refine Quotient.inductionOn y ?_
+    rintro ⟨k, z⟩
+    rfl
+
+/-- A finite wedge indexed by a sum is the binary point wedge of the two
+subfamily wedges, with chosen representatives of their common basepoints. -/
+noncomputable def finiteWedgeSumHomeomorphPointWedge {L K : Type*}
+    (l₀ : L) (k₀ : K) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (L ⊕ K) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l₀ 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k₀ 1) where
+  toFun := finiteWedgeSumToPointWedge l₀ k₀
+  invFun := pointWedgeToFiniteWedgeSum l₀ k₀
+  left_inv := pointWedgeToFiniteWedgeSum_finiteWedgeSumToPointWedge l₀ k₀
+  right_inv := finiteWedgeSumToPointWedge_pointWedgeToFiniteWedgeSum l₀ k₀
+  continuous_toFun := continuous_finiteWedgeSumToPointWedge l₀ k₀
+  continuous_invFun := continuous_pointWedgeToFiniteWedgeSum l₀ k₀
+
+/-- Split the labels of a nonempty successor finite type into its first labels
+and its last label. -/
+def finSuccEquivSumUnit (n : ℕ) : Fin (n + 1) ≃ Fin n ⊕ Unit :=
+  finSumFinEquiv.symm.trans (Equiv.sumCongr (Equiv.refl (Fin n)) finOneEquiv)
+
+@[simp]
+theorem finSuccEquivSumUnit_castSucc (n : ℕ) (i : Fin n) :
+    finSuccEquivSumUnit n i.castSucc = Sum.inl i := by
+  simp [finSuccEquivSumUnit]
+
+@[simp]
+theorem finSuccEquivSumUnit_last (n : ℕ) :
+    finSuccEquivSumUnit n (Fin.last n) = Sum.inr () := by
+  simp [finSuccEquivSumUnit]
+
+/-- A wedge of `n + 1` circles, with `n` nonempty, is the point wedge of the
+first `n` circles and the final circle. -/
+noncomputable def finiteWedgeFinSuccHomeomorphPointWedge (n : ℕ) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)) ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  (finiteWedgeHomeomorphOfEquiv (finSuccEquivSumUnit (n + 1))).trans
+    (finiteWedgeSumHomeomorphPointWedge (0 : Fin (n + 1)) ())
+
+@[simp]
+theorem finiteWedgeFinSuccHomeomorphPointWedge_castSucc (n : ℕ)
+    (i : Fin (n + 1)) (z : Circle) :
+    finiteWedgeFinSuccHomeomorphPointWedge n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i.castSucc z) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i z)) := by
+  change finiteWedgeSumHomeomorphPointWedge (0 : Fin (n + 1)) ()
+      (finiteWedgeHomeomorphOfEquiv (finSuccEquivSumUnit (n + 1))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i.castSucc z)) = _
+  rw [finiteWedgeHomeomorphOfEquiv_wedgeCircle,
+    finSuccEquivSumUnit_castSucc]
+  rfl
+
+@[simp]
+theorem finiteWedgeFinSuccHomeomorphPointWedge_last (n : ℕ) (z : Circle) :
+    finiteWedgeFinSuccHomeomorphPointWedge n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (Fin.last (n + 1)) z) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inr (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () z)) := by
+  change finiteWedgeSumHomeomorphPointWedge (0 : Fin (n + 1)) ()
+      (finiteWedgeHomeomorphOfEquiv (finSuccEquivSumUnit (n + 1))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (Fin.last (n + 1)) z)) = _
+  rw [finiteWedgeHomeomorphOfEquiv_wedgeCircle,
+    finSuccEquivSumUnit_last]
+  rfl
+
+/-- A wedge with a unique label is just its single circle.  This is the
+geometric base case for the successor-point-wedge induction. -/
+noncomputable def finiteWedgeSubsingletonHomeomorphCircle
+    {L : Type} [Subsingleton L] (l : L) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge L ≃ₜ Circle := by
+  classical
+  exact
+    { toFun := finiteWedgeCollapse l
+      invFun := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l
+      left_inv := by
+        intro x
+        refine Quotient.inductionOn x ?_
+        rintro ⟨k, z⟩
+        have hk : k = l := Subsingleton.elim _ _
+        subst k
+        change PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l
+            (finiteWedgeCollapse l
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z)) = _
+        rw [finiteWedgeCollapse_wedgeCircle_self]
+        rfl
+      right_inv := fun z => finiteWedgeCollapse_wedgeCircle_self l z
+      continuous_toFun := continuous_finiteWedgeCollapse l
+      continuous_invFun :=
+        PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l }
+
+@[simp]
+theorem finiteWedgeSubsingletonHomeomorphCircle_wedgeCircle
+    {L : Type} [Subsingleton L] (l k : L) (z : Circle) :
+    finiteWedgeSubsingletonHomeomorphCircle l
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle k z) = z := by
+  classical
+  have hk : k = l := Subsingleton.elim _ _
+  subst k
+  exact finiteWedgeCollapse_wedgeCircle_self l z
+
+/-- The one-circle finite wedge in the standard finite-coordinate family. -/
+noncomputable def finiteWedgeFinOneHomeomorphCircle :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1) ≃ₜ Circle :=
+  finiteWedgeSubsingletonHomeomorphCircle 0
+
+/-! ### Pointed contractible base neighborhoods -/
+
+/-- The local datum required by the generic point-wedge van Kampen theorem. -/
+structure PointedContractibleNeighborhood (X : Type*) [TopologicalSpace X]
+    (x₀ : X) where
+  carrier : Set X
+  isOpen : IsOpen carrier
+  mem : x₀ ∈ carrier
+  contraction :
+    ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      carrier ⟨x₀, mem⟩
+
+/-- A homeomorphism restricts to a homeomorphism from the preimage of a set
+onto that set. -/
+def homeomorphPreimageSet {X Y : Type*} [TopologicalSpace X]
+    [TopologicalSpace Y] (e : X ≃ₜ Y) (S : Set Y) :
+    {x : X // e x ∈ S} ≃ₜ S where
+  toFun x := ⟨e x.1, x.2⟩
+  invFun y := ⟨e.symm y.1, by rw [e.apply_symm_apply]; exact y.2⟩
+  left_inv x := by ext; exact e.symm_apply_apply x.1
+  right_inv y := by ext; exact e.apply_symm_apply y.1
+  continuous_toFun := Continuous.subtype_mk
+    (e.continuous.comp continuous_subtype_val) _
+  continuous_invFun := Continuous.subtype_mk
+    (e.symm.continuous.comp continuous_subtype_val) _
+
+/-- Pull a pointed contractible open neighborhood backward through a
+homeomorphism. -/
+noncomputable def PointedContractibleNeighborhood.preimageHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} (e : X ≃ₜ Y)
+    (P : PointedContractibleNeighborhood Y (e x₀)) :
+    PointedContractibleNeighborhood X x₀ where
+  carrier := e ⁻¹' P.carrier
+  isOpen := P.isOpen.preimage e.continuous
+  mem := P.mem
+  contraction :=
+    ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm
+      (homeomorphPreimageSet e P.carrier) P.contraction
+
+/-- The standard punctured-circle neighborhood as packaged local data. -/
+def circlePointedContractibleNeighborhood :
+    PointedContractibleNeighborhood Circle 1 where
+  carrier := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood
+  isOpen := ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_isOpen
+  mem := ConstructionTargets.PointWedgeVanKampen.circleBase_mem
+  contraction :=
+    ConstructionTargets.PointWedgeVanKampen.circleBaseNeighborhood_contraction
+
+/-- The contractible base neighborhood for the one-circle finite wedge. -/
+noncomputable def finiteWedgeFinOnePointedContractibleNeighborhood :
+    PointedContractibleNeighborhood
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle 0 1) :=
+  circlePointedContractibleNeighborhood.preimageHomeomorph
+    finiteWedgeFinOneHomeomorphCircle
+
+/-- Contractible pointed neighborhoods on two spaces combine to one on their
+point wedge.  The carrier is the restricted open wedge of the two carriers. -/
+noncomputable def pointWedgePointedContractibleNeighborhood
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ : X} {y₀ : Y}
+    (PX : PointedContractibleNeighborhood X x₀)
+    (PY : PointedContractibleNeighborhood Y y₀) :
+    PointedContractibleNeighborhood
+      (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)
+      (ConstructionTargets.PointWedgeQuotient.quotientMap x₀ y₀ (.inl x₀)) := by
+  let U := ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen x₀ y₀
+    PX.carrier PY.carrier
+  have hU : IsOpen U :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpen_isOpen
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  have hb : ConstructionTargets.PointWedgeQuotient.quotientMap x₀ y₀ (.inl x₀) ∈ U :=
+    ⟨.inl x₀, PX.mem, rfl⟩
+  let e : U ≃ₜ ConstructionTargets.PointWedgeQuotient.Wedge
+      (⟨x₀, PX.mem⟩ : PX.carrier) (⟨y₀, PY.mem⟩ : PY.carrier) :=
+    ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge
+      PX.isOpen PY.isOpen PX.mem PY.mem
+  let h := ConstructionTargets.PointWedgeVanKampen.wedgePointedContraction
+    PX.contraction PY.contraction
+  have he : e ⟨_, hb⟩ =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (⟨x₀, PX.mem⟩ : PX.carrier) (⟨y₀, PY.mem⟩ : PY.carrier)
+        (.inl ⟨x₀, PX.mem⟩) := by
+    exact ConstructionTargets.PointWedgeRestrictedOpenQuotient.restrictedOpenHomeomorphWedge_left
+      _ _ _ _ _ _
+  rw [← he] at h
+  exact
+    { carrier := U
+      isOpen := hU
+      mem := hb
+      contraction :=
+        ConstructionTargets.PointWedgeVanKampen.PointedContraction.homeomorphSymm e h }
+
+/-- The one-circle wedge indexed by `Unit`, used as the new final leg in a
+successor split. -/
+noncomputable def finiteWedgeUnitPointedContractibleNeighborhood :
+    PointedContractibleNeighborhood
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  circlePointedContractibleNeighborhood.preimageHomeomorph
+    (finiteWedgeSubsingletonHomeomorphCircle ())
+
+/-- Every nonempty standard finite wedge has a pointed contractible open
+neighborhood, obtained by adjoining its circles one at a time. -/
+noncomputable def finiteWedgeFinPointedContractibleNeighborhood :
+    (n : ℕ) → PointedContractibleNeighborhood
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+  | 0 => finiteWedgeFinOnePointedContractibleNeighborhood
+  | n + 1 => by
+      let old := finiteWedgeFinPointedContractibleNeighborhood n
+      let last := finiteWedgeUnitPointedContractibleNeighborhood
+      let combined := pointWedgePointedContractibleNeighborhood old last
+      let e := finiteWedgeFinSuccHomeomorphPointWedge n
+      have he : e
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin ((n + 1) + 1)) 1) =
+          ConstructionTargets.PointWedgeQuotient.quotientMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+            (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+              (0 : Fin (n + 1)) 1)) := by
+        simpa using finiteWedgeFinSuccHomeomorphPointWedge_castSucc n
+          (0 : Fin (n + 1)) 1
+      rw [← he] at combined
+      exact combined.preimageHomeomorph e
+
+/-- The two pointed neighborhood packages supplied to van Kampen at a
+successor split, exposed without the recursive implementation details. -/
+noncomputable def finiteWedgeFinSuccPointWedgeNeighborhoods (n : ℕ) :
+    PointedContractibleNeighborhood
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ×
+      PointedContractibleNeighborhood
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  (finiteWedgeFinPointedContractibleNeighborhood n,
+    finiteWedgeUnitPointedContractibleNeighborhood)
+
+/-- The left outer comparison in the generic point-wedge reconstruction is
+literally in the left coproduct factor, not merely in the kernel of the right
+projection. -/
+theorem genericPointWedgeOuterLeftComparison_mem_inl
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+    (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+    (cM : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      M ⟨y₀, hy⟩)
+    (cN : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      N ⟨x₀, hx⟩) :
+    let l := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualLeft
+      x₀ y₀ M N
+    let l' := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoordinateLeft x₀
+    let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase x₀ y₀ M N
+    ∃ a : FundamentalGroup X x₀,
+      (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseLeftComparison
+        l l' eK eL aL Q.left).inv.app z = Monoid.Coprod.inl a := by
+  dsimp only
+  simp only [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase]
+  rw [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterLeftComparison_app,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterLeftRoundTrip_eq_map,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterLeftSpanFactor_eq_map]
+  simp only [CategoryTheory.SingleObj.comp_as_mul]
+  rw [eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_left_map
+        x₀ y₀ _),
+    eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_left_map
+        x₀ y₀ _)]
+  rw [← (Monoid.Coprod.inl
+    (N := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroup y₀)).map_mul]
+  exact ⟨_, rfl⟩
+
+/-- Dually, the complete outer-right comparison is literally in the right
+coproduct factor. -/
+theorem genericPointWedgeOuterRightComparison_mem_inr
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+    (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+    (cM : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      M ⟨y₀, hy⟩)
+    (cN : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      N ⟨x₀, hx⟩) :
+    let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+      x₀ y₀ M N
+    let r' := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoordinateRight y₀
+    let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase x₀ y₀ M N
+    ∃ b : FundamentalGroup Y y₀,
+      (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseRightComparison
+        r r' eK eR aR Q.right).hom.app z = Monoid.Coprod.inr b := by
+  dsimp only
+  simp only [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase]
+  rw [ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterRightComparison_app,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterRightSpanFactor_eq_map,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityOuterRightRoundTrip_eq_map]
+  simp only [CategoryTheory.SingleObj.comp_as_mul]
+  rw [eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_right_map
+        x₀ y₀ _),
+    eq_of_heq
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan_right_map
+        x₀ y₀ _)]
+  rw [← (Monoid.Coprod.inr
+    (M := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftGroup x₀)).map_mul]
+  exact ⟨_, rfl⟩
+
+/-- The reconstruction conjugator for the successor finite-wedge split. -/
+noncomputable def finiteWedgeSuccessorRightBaseElement (n : ℕ) :=
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+
+/-- The named outer-right factor in the successor reconstruction
+conjugator. -/
+noncomputable def finiteWedgeSuccessorOuterRightElement (n : ℕ) :
+    Monoid.Coprod
+      (FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1))
+      (FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+    x₀ y₀ P.2.carrier P.1.carrier
+  let r' := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoordinateRight y₀
+  let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let aR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightSpanIso
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let Q := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityCoordinateSpan x₀ y₀
+  let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase
+    x₀ y₀ P.2.carrier P.1.carrier
+  exact (ConstructionTargets.GenericSpanPseudoCoconeTransport.reverseRightComparison
+    r r' eK eR aR Q.right).hom.app z
+
+/-- The named successor outer-right comparison has a literal right-factor
+coordinate. -/
+theorem finiteWedgeSuccessorOuterRight_mem_inr (n : ℕ) :
+    ∃ b : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1),
+      finiteWedgeSuccessorOuterRightElement n = Monoid.Coprod.inr b := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  simpa [finiteWedgeSuccessorOuterRightElement] using
+    genericPointWedgeOuterRightComparison_mem_inr
+      x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+        P.2.mem P.1.mem P.2.contraction P.1.contraction
+
+/-- The successor right-base element is the named outer-right comparison
+followed, in single-object multiplication order, by an old-factor element. -/
+theorem finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl (n : ℕ) :
+    ∃ a : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+      finiteWedgeSuccessorRightBaseElement n =
+        finiteWedgeSuccessorOuterRightElement n * Monoid.Coprod.inl a := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  obtain ⟨a, ha⟩ := genericPointWedgeOuterLeftComparison_mem_inl
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  refine ⟨a, ?_⟩
+  rw [finiteWedgeSuccessorRightBaseElement,
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement_eq_outerComparisons]
+  change _ = finiteWedgeSuccessorOuterRightElement n * Monoid.Coprod.inl a
+  rw [CategoryTheory.SingleObj.comp_as_mul, ha]
+  rfl
+
+/-- The exact left-factor condition needed for partial normalization. -/
+def finiteWedgeRightBaseInOldFactor (n : ℕ) : Prop :=
+  ∃ a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+    finiteWedgeSuccessorRightBaseElement n = Monoid.Coprod.inl a
+
+/-- It is enough to factor the single outer-right comparison through the old
+factor; the other outer comparison is already there structurally. -/
+theorem finiteWedgeRightBaseInOldFactor_of_outerRightInOldFactor (n : ℕ)
+    (h : ∃ b : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+      finiteWedgeSuccessorOuterRightElement n = Monoid.Coprod.inl b) :
+    finiteWedgeRightBaseInOldFactor n := by
+  obtain ⟨a, ha⟩ := finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl n
+  obtain ⟨b, hb⟩ := h
+  refine ⟨b * a, ?_⟩
+  rw [ha, hb, map_mul]
+
+/-- The exact remaining connector square after specializing generic van Kampen
+to the successor finite-wedge neighborhoods. -/
+def finiteWedgeRightConnectorSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+    x₀ y₀ P.2.carrier P.1.carrier
+  let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase
+    x₀ y₀ P.2.carrier P.1.carrier
+  exact
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+      ((eK.functor ⋙ eK.inverse ⋙ r ⋙ eR.functor).obj z)).hom ≫
+        (eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom
+
+/-- The same remaining obstruction in endpoint-transport form: the overlap
+counit component must be exactly the transport determined by the two
+installed right connectors. -/
+def finiteWedgeRightConnectorTransport (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let r := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeActualRight
+    x₀ y₀ P.2.carrier P.1.carrier
+  let eK := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let z := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeOverlapBase
+    x₀ y₀ P.2.carrier P.1.carrier
+  exact
+    (eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        ((eK.functor ⋙ eK.inverse ⋙ r ⋙ eR.functor).obj z)).inv ≫
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        ((r ⋙ eR.functor).obj z)).hom
+
+/-- The literal target-side inverse-unit connector square at the fixed right
+cover base. -/
+def finiteWedgeRightBaseTargetUnitSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  exact
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+      (eR.functor.obj (eR.inverse.obj (eR.functor.obj b)))).hom ≫
+        eR.functor.map (eR.unitIso.inv.app b) =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj b)).hom
+
+/-- The target-side square with the inverse unit rewritten as the right
+equivalence counit.  This is the literal endpoint equation left after the
+equivalence triangle identity. -/
+def finiteWedgeRightBaseCounitSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  exact
+    ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+      (eR.functor.obj (eR.inverse.obj (eR.functor.obj b)))).hom ≫
+        eR.counitIso.hom.app (eR.functor.obj b) =
+      ((ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).connector
+        (eR.functor.obj b)).hom
+
+/-- The remaining counit obstruction expressed at the common connector
+base: its chosen connector normal form must be the identity. -/
+def finiteWedgeRightBaseCounitNormalFormTrivial (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  exact
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).normalForm
+        (eR.counitIso.hom.app (eR.functor.obj b)) =
+      𝟙 (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).base
+
+/-- The literal finite-wedge counit square is exactly triviality of its
+connector normal form. -/
+theorem finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial (n : ℕ) :
+    finiteWedgeRightBaseCounitSquare n ↔
+      finiteWedgeRightBaseCounitNormalFormTrivial n := by
+  unfold finiteWedgeRightBaseCounitSquare
+  unfold finiteWedgeRightBaseCounitNormalFormTrivial
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm
+    _ _ _ _ _ _ _ _ _ _
+
+/-- The coherent source-side inverse-unit square induced at the same base. -/
+def finiteWedgeCoherentRightSourceUnitSquare (n : ℕ) : Prop := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  let b := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase
+    x₀ y₀ P.1.carrier
+  let source := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+  exact
+    (source.connector (eR.inverse.obj (eR.functor.obj b))).hom ≫
+        eR.unitIso.inv.app b = (source.connector b).hom
+
+/-- The generic connector transport construction specializes without any
+endpoint casts to the finite-wedge successor packages. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_of_target (n : ℕ)
+    (h : finiteWedgeRightBaseTargetUnitSquare n) :
+    finiteWedgeCoherentRightSourceUnitSquare n := by
+  unfold finiteWedgeRightBaseTargetUnitSquare at h
+  unfold finiteWedgeCoherentRightSourceUnitSquare
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+    _ _ _ _ _ _ _ _ _ _ h
+
+/-- The counit formulation implies the coherent source connector square at
+the successor right base. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_of_counit (n : ℕ)
+    (h : finiteWedgeRightBaseCounitSquare n) :
+    finiteWedgeCoherentRightSourceUnitSquare n := by
+  unfold finiteWedgeRightBaseCounitSquare at h
+  unfold finiteWedgeCoherentRightSourceUnitSquare
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
+    _ _ _ _ _ _ _ _ _ _ h
+
+/-- Triviality of the based counit normal form supplies the coherent source
+inverse-unit square needed by the installed connector comparison. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_of_counitNormalFormTrivial
+    (n : ℕ) (h : finiteWedgeRightBaseCounitNormalFormTrivial n) :
+    finiteWedgeCoherentRightSourceUnitSquare n :=
+  finiteWedgeCoherentRightSourceUnitSquare_of_counit n
+    ((finiteWedgeRightBaseCounitSquare_iff_normalFormTrivial n).mpr h)
+
+/-- The same reduction at an arbitrary right-piece endpoint, in particular
+the shifted overlap endpoint used by the installed connector transport. -/
+theorem finiteWedgeCoherentRightSourceUnitSquare_at_of_counitNormalForm
+    (n : ℕ) :
+    let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+    let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+    let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+    let eR := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+        P.2.mem P.1.mem P.2.contraction P.1.contraction
+    let source := ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+        P.2.mem P.1.mem P.2.contraction P.1.contraction
+    ∀ A : FundamentalGroupoid
+        (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightPiece
+          x₀ y₀ P.1.carrier),
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).normalForm
+          (eR.counitIso.hom.app (eR.functor.obj A)) =
+        𝟙 (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeConnectors y₀).base →
+      (source.connector (eR.inverse.obj (eR.functor.obj A))).hom ≫
+          eR.unitIso.inv.app A = (source.connector A).hom := by
+  dsimp only
+  intro A h
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
+    _ _ _ _ _ _ _ _ _ _ A h
+
+/-- Endpoint transport and connector-square formulations are exactly
+equivalent, with the direction fixed by left cancellation. -/
+theorem finiteWedgeRightConnectorTransport_iff_connectorSquare (n : ℕ) :
+    finiteWedgeRightConnectorTransport n ↔ finiteWedgeRightConnectorSquare n := by
+  exact ConstructionTargets.PointWedgeVanKampen.eq_connectorTransport_iff_connectorSquare
+    _ _
+
+/-- For the successor finite wedge, triviality of the reconstruction
+conjugator's right projection is exactly the named connector square above. -/
+theorem finiteWedgeRightProjection_eq_one_iff_connectorSquare (n : ℕ) : by
+    let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+    let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+    let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+    exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFreeProductRightProjection
+      x₀ y₀
+      (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement
+        x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+          P.2.mem P.1.mem P.2.contraction P.1.contraction) = 1 ↔
+      finiteWedgeRightConnectorSquare n := by
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare
+    _ _ _ _ _ _ _ _ _ _
+
+/-- For this particular outer-right factor, the connector square does imply
+old-factor membership: the factor is already known to be an `inr`, so its
+trivial right projection forces it to be the identity. -/
+theorem finiteWedgeSuccessorOuterRight_mem_inl_of_connectorSquare (n : ℕ)
+    (h : finiteWedgeRightConnectorSquare n) :
+    ∃ b : FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1),
+      finiteWedgeSuccessorOuterRightElement n = Monoid.Coprod.inl b := by
+  have hp := (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mpr h
+  obtain ⟨a, ha⟩ := finiteWedgeSuccessorRightBase_eq_outerRight_mul_inl n
+  obtain ⟨b, hb⟩ := finiteWedgeSuccessorOuterRight_mem_inr n
+  change ConstructionTargets.PointWedgeVanKampen.genericPointWedgeFreeProductRightProjection
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+      (finiteWedgeSuccessorRightBaseElement n) = 1 at hp
+  have hb1 : b = 1 := by
+    simpa [ha, hb] using hp
+  refine ⟨1, ?_⟩
+  rw [hb, hb1]
+  simp
+
+/-- Thus the specialized connector square is sufficient for the complete
+successor right-base factorization, using the two structural factor lemmas. -/
+theorem finiteWedgeRightBaseInOldFactor_of_connectorSquare (n : ℕ)
+    (h : finiteWedgeRightConnectorSquare n) :
+    finiteWedgeRightBaseInOldFactor n :=
+  finiteWedgeRightBaseInOldFactor_of_outerRightInOldFactor n
+    (finiteWedgeSuccessorOuterRight_mem_inl_of_connectorSquare n h)
+
+/-- Left-factor membership implies the connector square.  This is the valid
+direction; trivial right projection alone does not characterize `inl`. -/
+theorem finiteWedgeRightConnectorSquare_of_inOldFactor (n : ℕ)
+    (h : finiteWedgeRightBaseInOldFactor n) :
+    finiteWedgeRightConnectorSquare n := by
+  rcases h with ⟨a, ha⟩
+  apply (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mp
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
+    _ _ _ _ _ _ _ _ _ _ a ha
+
+/-- The structural left/right factorization upgrades the projection
+calculation to the exact old-factor criterion needed for normalization. -/
+theorem finiteWedgeRightBaseInOldFactor_iff_connectorSquare (n : ℕ) :
+    finiteWedgeRightBaseInOldFactor n ↔ finiteWedgeRightConnectorSquare n :=
+  ⟨finiteWedgeRightConnectorSquare_of_inOldFactor n,
+    finiteWedgeRightBaseInOldFactor_of_connectorSquare n⟩
+
+/-- Exact endpoint-transport criterion for the old-factor membership needed
+by partial normalization. -/
+theorem finiteWedgeRightBaseInOldFactor_iff_connectorTransport (n : ℕ) :
+    finiteWedgeRightBaseInOldFactor n ↔ finiteWedgeRightConnectorTransport n :=
+  (finiteWedgeRightBaseInOldFactor_iff_connectorSquare n).trans
+    (finiteWedgeRightConnectorTransport_iff_connectorSquare n).symm
+
+/-- The installed successor connector square holds: the overlap comparison
+is literal endpoint transport in the right-piece connector system. -/
+theorem finiteWedgeRightConnectorSystemComparison (n : ℕ) :
+    finiteWedgeRightConnectorSquare n := by
+  apply (finiteWedgeRightProjection_eq_one_iff_connectorSquare n).mp
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  let x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1
+  let y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1
+  exact ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightBase_rightProjection_eq_one
+    x₀ y₀ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction
+
+/-- The successor reconstruction conjugator lies in the old finite-wedge
+factor, which is the hypothesis required by partial normalization. -/
+theorem finiteWedgePointWedge_rightBase_inl (n : ℕ) :
+    finiteWedgeRightBaseInOldFactor n :=
+  finiteWedgeRightBaseInOldFactor_of_connectorSquare n
+    (finiteWedgeRightConnectorSystemComparison n)
+
+/-! ### Algebraic word extraction from a point-wedge computation -/
+
+/-- Evaluate a word whose letters come from the two factors of a coproduct. -/
+def coprodLegWordValue {A B G : Type*} [Group A] [Group B] [Group G]
+    (left : A → G) (right : B → G) (w : List (A ⊕ B)) : G :=
+  (w.map (Sum.elim left right)).prod
+
+/-- Once a group equivalence with a free product has the expected values on
+the two leg maps, every source element is a finite word in those legs.  This
+is the algebraic induction used at each successor step of the finite wedge. -/
+theorem exists_coprodLegWord_of_mulEquiv
+    {A B G : Type*} [Group A] [Group B] [Group G]
+    (E : G ≃* Monoid.Coprod A B) (left : A → G) (right : B → G)
+    (hleft : ∀ a, E (left a) = Monoid.Coprod.inl a)
+    (hright : ∀ b, E (right b) = Monoid.Coprod.inr b)
+    (x : G) :
+    ∃ w : List (A ⊕ B), coprodLegWordValue left right w = x := by
+  suffices ∀ y : Monoid.Coprod A B,
+      ∃ w : List (A ⊕ B), coprodLegWordValue left right w = E.symm y by
+    simpa using this (E x)
+  intro y
+  induction y using Monoid.Coprod.induction_on with
+  | inl a =>
+      refine ⟨[.inl a], ?_⟩
+      apply E.injective
+      simp [coprodLegWordValue, hleft]
+  | inr b =>
+      refine ⟨[.inr b], ?_⟩
+      apply E.injective
+      simp [coprodLegWordValue, hright]
+  | mul u v hu hv =>
+      rcases hu with ⟨wu, hu⟩
+      rcases hv with ⟨wv, hv⟩
+      refine ⟨wu ++ wv, ?_⟩
+      simp only [coprodLegWordValue, List.map_append, List.prod_append]
+      change coprodLegWordValue left right wu *
+          coprodLegWordValue left right wv = E.symm (u * v)
+      rw [hu, hv, map_mul]
+
+/-- The generic van Kampen computation supplies literal leg words as soon as
+its remaining right-base conjugator is known to lie in the left factor. -/
+theorem genericPointWedge_exists_legWord_of_rightBase_inl
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] [PathConnectedSpace Y]
+    (x₀ : X) (y₀ : Y) (M : Set Y) (N : Set X)
+    (hM : IsOpen M) (hN : IsOpen N) (hy : y₀ ∈ M) (hx : x₀ ∈ N)
+    (cM : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      M ⟨y₀, hy⟩)
+    (cN : ConstructionTargets.PointedPuncturedCircleContraction.PointedContraction
+      N ⟨x₀, hx⟩)
+    (a : FundamentalGroup X x₀)
+    (ha : ConstructionTargets.PointWedgeVanKampen.genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN = Monoid.Coprod.inl a)
+    (g : FundamentalGroup
+      (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)
+      (ConstructionTargets.PointWedgeQuotient.quotientMap x₀ y₀ (.inl x₀))) :
+    ∃ w : List (FundamentalGroup X x₀ ⊕ FundamentalGroup Y y₀),
+      coprodLegWordValue
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap x₀ y₀)
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap x₀ y₀)
+          w = g := by
+  have hcoords :=
+    ConstructionTargets.PointWedgeVanKampen.genericPointWedgePartiallyNormalized_legCoordinates
+        x₀ y₀ M N hM hN hy hx cM cN a ha
+  exact exists_coprodLegWord_of_mulEquiv
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+        x₀ y₀ M N hM hN hy hx cM cN a)
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap x₀ y₀)
+    (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap x₀ y₀)
+    hcoords.1 hcoords.2 g
+
+/-- At every successor split, the point-wedge fundamental group is generated
+by words from the old finite wedge and the final one-circle wedge. -/
+theorem finiteWedgeFinSuccPointWedge_exists_legWord (n : ℕ)
+    (g : FundamentalGroup
+      (ConstructionTargets.PointWedgeQuotient.Wedge
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+      (ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin (n + 1)) 1)))) :
+    ∃ w : List
+        (FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+          FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)),
+      coprodLegWordValue
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) w = g := by
+  let P := finiteWedgeFinSuccPointWedgeNeighborhoods n
+  rcases finiteWedgePointWedge_rightBase_inl n with ⟨a, ha⟩
+  exact genericPointWedge_exists_legWord_of_rightBase_inl
+    _ _ P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen
+      P.2.mem P.1.mem P.2.contraction P.1.contraction a ha g
+
+/-- A homeomorphism transports the based fundamental group.  This local
+version keeps the successor-wedge induction independent of later closure
+modules that use the same construction. -/
+noncomputable def fundamentalGroupEquivOfHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
+/-- The successor splitting homeomorphism, including its basepoint
+identification, induces the based fundamental-group equivalence used to pull
+point-wedge words back to the finite wedge. -/
+noncomputable def finiteWedgeFinSuccFundamentalGroupEquiv (n : ℕ) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin ((n + 1) + 1)) 1) ≃*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+        (ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+          (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin (n + 1)) 1))) := by
+  let e := finiteWedgeFinSuccHomeomorphPointWedge n
+  have he : e (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+      (0 : Fin ((n + 1) + 1)) 1) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        (.inl (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin (n + 1)) 1)) := by
+    simpa using finiteWedgeFinSuccHomeomorphPointWedge_castSucc n
+      (0 : Fin (n + 1)) 1
+  rw [← he]
+  exact fundamentalGroupEquivOfHomeomorph e _
+
+/-- The old-wedge inclusion into a successor wedge, obtained by pulling the
+literal left point-wedge leg back through the splitting homeomorphism. -/
+noncomputable def finiteWedgeFinSuccOldInclusion (n : ℕ) : C(
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)),
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1))) :=
+  ⟨fun x => (finiteWedgeFinSuccHomeomorphPointWedge n).symm
+      (ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inl x)),
+    (finiteWedgeFinSuccHomeomorphPointWedge n).symm.continuous.comp
+      ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+        continuous_inl)⟩
+
+/-- The final-circle inclusion into a successor wedge, pulled back from the
+literal right point-wedge leg. -/
+noncomputable def finiteWedgeFinSuccLastInclusion (n : ℕ) : C(
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit,
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1))) :=
+  ⟨fun x => (finiteWedgeFinSuccHomeomorphPointWedge n).symm
+      (ConstructionTargets.PointWedgeQuotient.quotientMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inr x)),
+    (finiteWedgeFinSuccHomeomorphPointWedge n).symm.continuous.comp
+      ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap _ _).comp
+        continuous_inr)⟩
+
+@[simp]
+theorem finiteWedgeFinSuccOldInclusion_wedgeCircle (n : ℕ)
+    (i : Fin (n + 1)) (z : Circle) :
+    finiteWedgeFinSuccOldInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i.castSucc z := by
+  apply (finiteWedgeFinSuccHomeomorphPointWedge n).injective
+  simp [finiteWedgeFinSuccOldInclusion]
+
+@[simp]
+theorem finiteWedgeFinSuccLastInclusion_wedgeCircle (n : ℕ) (z : Circle) :
+    finiteWedgeFinSuccLastInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (Fin.last (n + 1)) z := by
+  apply (finiteWedgeFinSuccHomeomorphPointWedge n).injective
+  simp [finiteWedgeFinSuccLastInclusion]
+
+/-- The old-factor inclusion is based at the common zeroth-circle point. -/
+theorem finiteWedgeFinSuccOldInclusion_base (n : ℕ) :
+    finiteWedgeFinSuccOldInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1 := by
+  simpa using finiteWedgeFinSuccOldInclusion_wedgeCircle n (0 : Fin (n + 1)) 1
+
+/-- The final-factor inclusion has the same common wedge basepoint. -/
+theorem finiteWedgeFinSuccLastInclusion_base (n : ℕ) :
+    finiteWedgeFinSuccLastInclusion n
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1 := by
+  rw [finiteWedgeFinSuccLastInclusion_wedgeCircle]
+  exact PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq _ _
+
+/-- The old factor's based fundamental-group map into the successor wedge. -/
+noncomputable def finiteWedgeFinSuccOldFundamentalGroupMap (n : ℕ) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin ((n + 1) + 1)) 1) :=
+  FundamentalGroup.mapOfEq (finiteWedgeFinSuccOldInclusion n)
+    (finiteWedgeFinSuccOldInclusion_base n)
+
+/-- The final factor's based fundamental-group map into the successor wedge. -/
+noncomputable def finiteWedgeFinSuccLastFundamentalGroupMap (n : ℕ) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (0 : Fin ((n + 1) + 1)) 1) :=
+  FundamentalGroup.mapOfEq (finiteWedgeFinSuccLastInclusion n)
+    (finiteWedgeFinSuccLastInclusion_base n)
+
+/-- An arbitrary circle loop inserted in the `i`th leg of a standard finite
+wedge and transported to its common zeroth-leg basepoint. -/
+noncomputable def finiteWedgeFinLegMap (n : ℕ) (i : Fin (n + 1)) :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  FundamentalGroup.mapOfEq
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle i⟩
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq i 0)
+
+/-- An arbitrary circle loop inserted in the unique leg of the `Unit`-indexed
+wedge, at its literal basepoint. -/
+noncomputable def finiteWedgeUnitLegMap :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) :=
+  FundamentalGroup.map
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (),
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle ()⟩ 1
+
+/-- The arbitrary-loop leg map is the literal leg map followed by the common
+basepoint cast. -/
+theorem finiteWedgeFinLegMap_apply (n : ℕ) (i : Fin (n + 1))
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinLegMap n i g =
+      Path.Homotopic.Quotient.cast
+        (FundamentalGroup.map
+          ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i,
+            PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle i⟩ 1 g)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i) := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinLegMap, FundamentalGroup.mapOfEq_apply,
+        FundamentalGroup.map_apply]
+      rfl
+
+/-- The arbitrary-loop leg map specializes to the previously fixed positive
+fundamental class. -/
+theorem finiteWedgeFinLegMap_positive (n : ℕ) (i : Fin (n + 1)) :
+    finiteWedgeFinLegMap n i circlePositiveFundamentalClass =
+      Path.Homotopic.Quotient.cast (finiteWedgeLegFundamentalClass i)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq 0 i) := by
+  exact finiteWedgeFinLegMap_apply n i circlePositiveFundamentalClass
+
+/-- Words whose letters are arbitrary circle loops assigned to finite-wedge
+labels.  Integer-exponent words arise later by circle generation. -/
+abbrev FiniteWedgeFinLoopWord (n : ℕ) :=
+  List (Fin (n + 1) × FundamentalGroup Circle 1)
+
+/-- Evaluate an arbitrary-loop leg word at the common finite-wedge basepoint. -/
+noncomputable def finiteWedgeFinLoopWordValue (n : ℕ)
+    (w : FiniteWedgeFinLoopWord n) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  (w.map fun q => finiteWedgeFinLegMap n q.1 q.2).prod
+
+/-- The installed old-factor map preserves arbitrary loop letters and sends
+their labels through `Fin.castSucc`. -/
+theorem finiteWedgeFinSuccOldFundamentalGroupMap_leg (n : ℕ)
+    (i : Fin (n + 1)) (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinSuccOldFundamentalGroupMap n (finiteWedgeFinLegMap n i g) =
+      finiteWedgeFinLegMap (n + 1) i.castSucc g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinLegMap, finiteWedgeFinSuccOldFundamentalGroupMap,
+        FundamentalGroup.mapOfEq_apply, FundamentalGroup.mapOfEq_apply,
+        finiteWedgeFinLegMap, FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          i.castSucc)).cast _ _) using 1
+
+/-- The installed final-factor map preserves arbitrary loop letters and sends
+the unique label to `Fin.last`. -/
+theorem finiteWedgeFinSuccLastFundamentalGroupMap_leg (n : ℕ)
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinSuccLastFundamentalGroupMap n (finiteWedgeUnitLegMap g) =
+      finiteWedgeFinLegMap (n + 1) (Fin.last (n + 1)) g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeUnitLegMap, FundamentalGroup.map_apply,
+        finiteWedgeFinSuccLastFundamentalGroupMap]
+      change (FundamentalGroup.mapOfEq (finiteWedgeFinSuccLastInclusion n) _)
+          (Path.Homotopic.Quotient.mk
+            (p.map (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle ()))) = _
+      rw [FundamentalGroup.mapOfEq_apply, finiteWedgeFinLegMap,
+        FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+          (Fin.last (n + 1)))).cast _ _) using 1
+
+/-- Mapping the installed old-factor inclusion across the splitting
+homeomorphism recovers the literal left point-wedge leg map. -/
+theorem finiteWedgeFinSuccOldFundamentalGroupMap_comparison (n : ℕ)
+    (a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)) :
+    finiteWedgeFinSuccFundamentalGroupEquiv n
+        (finiteWedgeFinSuccOldFundamentalGroupMap n a) =
+      ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a := by
+  induction a using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinSuccOldFundamentalGroupMap,
+        FundamentalGroup.mapOfEq_apply]
+      change finiteWedgeFinSuccFundamentalGroupEquiv n
+          (Path.Homotopic.Quotient.mk
+            ((p.map (finiteWedgeFinSuccOldInclusion n).continuous).cast _ _)) = _
+      change FundamentalGroup.map
+          ⟨finiteWedgeFinSuccHomeomorphPointWedge n,
+            (finiteWedgeFinSuccHomeomorphPointWedge n).continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            ((p.map (finiteWedgeFinSuccOldInclusion n).continuous).cast _ _)) = _
+      rw [FundamentalGroup.map_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        (p.map (ConstructionTargets.PointWedgePointedContractionDescent.includeLeft
+          (x₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+            (0 : Fin (n + 1)) 1)
+          (y₀ := PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).continuous) using 1
+      ext t
+      change finiteWedgeFinSuccHomeomorphPointWedge n
+          (((p.map (finiteWedgeFinSuccOldInclusion n).continuous).cast _ _) t) = _
+      rw [show ((p.map (finiteWedgeFinSuccOldInclusion n).continuous).cast _ _) t =
+          (p.map (finiteWedgeFinSuccOldInclusion n).continuous) t by
+        exact congrFun (Path.cast_coe _ _ _) t]
+      change finiteWedgeFinSuccHomeomorphPointWedge n
+          (finiteWedgeFinSuccOldInclusion n (p t)) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inl (p t))
+      simp [finiteWedgeFinSuccOldInclusion]
+
+/-- In the pullback orientation used by the split-word theorem, the literal
+left leg is exactly the installed old-factor map. -/
+theorem finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport (n : ℕ)
+    (a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)) :
+    (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+        (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a) =
+      finiteWedgeFinSuccOldFundamentalGroupMap n a := by
+  apply (finiteWedgeFinSuccFundamentalGroupEquiv n).injective
+  rw [MulEquiv.apply_symm_apply,
+    finiteWedgeFinSuccOldFundamentalGroupMap_comparison]
+
+/-- Mapping the installed final-factor inclusion across the splitting
+homeomorphism recovers the literal right point-wedge leg map, including its
+quotient basepoint transport. -/
+theorem finiteWedgeFinSuccLastFundamentalGroupMap_comparison (n : ℕ)
+    (a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) :
+    finiteWedgeFinSuccFundamentalGroupEquiv n
+        (finiteWedgeFinSuccLastFundamentalGroupMap n a) =
+      ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a := by
+  induction a using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinSuccLastFundamentalGroupMap,
+        FundamentalGroup.mapOfEq_apply]
+      change finiteWedgeFinSuccFundamentalGroupEquiv n
+          (Path.Homotopic.Quotient.mk
+            ((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _)) = _
+      change FundamentalGroup.map
+          ⟨finiteWedgeFinSuccHomeomorphPointWedge n,
+            (finiteWedgeFinSuccHomeomorphPointWedge n).continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            ((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _)) = _
+      rw [FundamentalGroup.map_apply,
+        ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap,
+        FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).comp
+            continuous_inr)).cast _ _) using 1
+      ext t
+      change finiteWedgeFinSuccHomeomorphPointWedge n
+          (((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _) t) = _
+      rw [show ((p.map (finiteWedgeFinSuccLastInclusion n).continuous).cast _ _) t =
+          (p.map (finiteWedgeFinSuccLastInclusion n).continuous) t by
+        exact congrFun (Path.cast_coe _ _ _) t]
+      rw [show ((p.map ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).comp
+            continuous_inr)).cast _ _) t =
+          (p.map ((ConstructionTargets.PointWedgeQuotient.continuous_quotientMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)).comp
+              continuous_inr)) t by
+        exact congrFun (Path.cast_coe _ _ _) t]
+      change finiteWedgeFinSuccHomeomorphPointWedge n
+          (finiteWedgeFinSuccLastInclusion n (p t)) =
+        ConstructionTargets.PointWedgeQuotient.quotientMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) (.inr (p t))
+      simp [finiteWedgeFinSuccLastInclusion]
+
+/-- In the pullback orientation used by the split-word theorem, the literal
+right leg is exactly the installed final-factor map. -/
+theorem finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport (n : ℕ)
+    (a : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) :
+    (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+        (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a) =
+      finiteWedgeFinSuccLastFundamentalGroupMap n a := by
+  apply (finiteWedgeFinSuccFundamentalGroupEquiv n).injective
+  rw [MulEquiv.apply_symm_apply,
+    finiteWedgeFinSuccLastFundamentalGroupMap_comparison]
+
+/-- Pulling the point-wedge word theorem through the successor homeomorphism
+gives a word theorem on the finite wedge.  Its letters are still grouped into
+the old wedge and final circle; the next induction step expands the old
+letters into individually labelled circle legs. -/
+theorem finiteWedgeFinSucc_exists_splitLegWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1)) :
+    ∃ w : List
+        (FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+          FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)),
+      coprodLegWordValue
+          (fun a => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a))
+          (fun b => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) b)) w = g := by
+  rcases finiteWedgeFinSuccPointWedge_exists_legWord n
+      (finiteWedgeFinSuccFundamentalGroupEquiv n g) with ⟨w, hw⟩
+  refine ⟨w, ?_⟩
+  apply (finiteWedgeFinSuccFundamentalGroupEquiv n).injective
+  calc
+    finiteWedgeFinSuccFundamentalGroupEquiv n
+        (coprodLegWordValue
+          (fun a => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) a))
+          (fun b => (finiteWedgeFinSuccFundamentalGroupEquiv n).symm
+            (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+              (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) b)) w) =
+        coprodLegWordValue
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeLeftLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+          (ConstructionTargets.PointWedgeVanKampen.genericPointWedgeRightLegMap
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) w := by
+          clear hw g
+          induction w with
+          | nil => simp [coprodLegWordValue]
+          | cons x w ih =>
+              cases x <;>
+                simp only [coprodLegWordValue, List.map_cons, List.prod_cons,
+                  map_mul, Sum.elim_inl, Sum.elim_inr] <;>
+                change _ * (finiteWedgeFinSuccFundamentalGroupEquiv n)
+                    (coprodLegWordValue _ _ w) = _ * coprodLegWordValue _ _ w <;>
+                rw [MulEquiv.apply_symm_apply, ih]
+    _ = finiteWedgeFinSuccFundamentalGroupEquiv n g := hw
+
+/-- The transported split word can be stated entirely with the installed
+old- and final-factor maps on the successor finite wedge. -/
+theorem finiteWedgeFinSucc_exists_installedSplitLegWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1)) :
+    ∃ w : List
+        (FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+          FundamentalGroup
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+            (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)),
+      coprodLegWordValue
+          (finiteWedgeFinSuccOldFundamentalGroupMap n)
+          (finiteWedgeFinSuccLastFundamentalGroupMap n) w = g := by
+  rcases finiteWedgeFinSucc_exists_splitLegWord n g with ⟨w, hw⟩
+  refine ⟨w, ?_⟩
+  simpa only [finiteWedgeFinSuccOldFundamentalGroupMap_eq_transport,
+    finiteWedgeFinSuccLastFundamentalGroupMap_eq_transport] using hw
+
+/-- The one-leg finite wedge has the based fundamental group of the circle. -/
+noncomputable def finiteWedgeFinOneFundamentalGroupEquiv :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin 1) 1) ≃*
+      FundamentalGroup Circle 1 := by
+  simpa [finiteWedgeFinOneHomeomorphCircle] using
+    (fundamentalGroupEquivOfHomeomorph finiteWedgeFinOneHomeomorphCircle
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin 1) 1))
+
+/-- Under the one-circle identification, the unique arbitrary-loop leg map
+is the identity map on the circle fundamental group. -/
+theorem finiteWedgeFinOneFundamentalGroupEquiv_leg
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeFinOneFundamentalGroupEquiv (finiteWedgeFinLegMap 0 0 g) = g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeFinLegMap, FundamentalGroup.mapOfEq_apply]
+      change FundamentalGroup.map
+          ⟨finiteWedgeFinOneHomeomorphCircle,
+            finiteWedgeFinOneHomeomorphCircle.continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            ((p.map
+              (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+                (0 : Fin 1))).cast _ _)) = _
+      rw [FundamentalGroup.map_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+
+/-- Every loop on the one-leg finite wedge is a one-letter labelled leg word. -/
+theorem finiteWedgeFinOne_exists_legWord
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 1))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin 1) 1)) :
+    ∃ w : FiniteWedgeFinLoopWord 0,
+      finiteWedgeFinLoopWordValue 0 w = g := by
+  refine ⟨[((0 : Fin 1), finiteWedgeFinOneFundamentalGroupEquiv g)], ?_⟩
+  apply finiteWedgeFinOneFundamentalGroupEquiv.injective
+  simp [finiteWedgeFinLoopWordValue,
+    finiteWedgeFinOneFundamentalGroupEquiv_leg]
+
+/-- The uniquely labelled `Unit` wedge has the based fundamental group of the
+circle. -/
+noncomputable def finiteWedgeUnitFundamentalGroupEquiv :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1) ≃*
+      FundamentalGroup Circle 1 := by
+  simpa using
+    (fundamentalGroupEquivOfHomeomorph
+      (finiteWedgeSubsingletonHomeomorphCircle ())
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))
+
+theorem finiteWedgeUnitFundamentalGroupEquiv_leg
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeUnitFundamentalGroupEquiv (finiteWedgeUnitLegMap g) = g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [finiteWedgeUnitLegMap, FundamentalGroup.map_apply]
+      change FundamentalGroup.map
+          ⟨finiteWedgeSubsingletonHomeomorphCircle (),
+            (finiteWedgeSubsingletonHomeomorphCircle ()).continuous⟩ _
+          (Path.Homotopic.Quotient.mk
+            (p.map
+              (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle ()))) = _
+      rw [FundamentalGroup.map_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+
+/-- Every loop in the final `Unit` factor is an arbitrary circle-loop leg. -/
+theorem finiteWedgeUnitLegMap_surjective
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)) :
+    ∃ a, finiteWedgeUnitLegMap a = g := by
+  refine ⟨finiteWedgeUnitFundamentalGroupEquiv g, ?_⟩
+  apply finiteWedgeUnitFundamentalGroupEquiv.injective
+  simp [finiteWedgeUnitFundamentalGroupEquiv_leg]
+
+/-- Relabelling an old-factor word by `Fin.castSucc` realizes its image under
+the installed old-factor map. -/
+theorem finiteWedgeFinSucc_oldLoopWordValue (n : ℕ)
+    (w : FiniteWedgeFinLoopWord n) :
+    finiteWedgeFinLoopWordValue (n + 1)
+        (w.map fun q => (q.1.castSucc, q.2)) =
+      finiteWedgeFinSuccOldFundamentalGroupMap n
+        (finiteWedgeFinLoopWordValue n w) := by
+  induction w with
+  | nil => simp [finiteWedgeFinLoopWordValue]
+  | cons q w ih =>
+      simp only [List.map_cons, finiteWedgeFinLoopWordValue, List.prod_cons,
+        map_mul]
+      rw [finiteWedgeFinSuccOldFundamentalGroupMap_leg]
+      change finiteWedgeFinLegMap (n + 1) q.1.castSucc q.2 *
+          finiteWedgeFinLoopWordValue (n + 1)
+            (w.map fun q => (q.1.castSucc, q.2)) =
+        finiteWedgeFinLegMap (n + 1) q.1.castSucc q.2 *
+          finiteWedgeFinSuccOldFundamentalGroupMap n
+            (finiteWedgeFinLoopWordValue n w)
+      rw [ih]
+
+/-- Substitute labelled words for every old/final letter of an installed
+successor split word. -/
+theorem finiteWedgeFinSucc_expand_splitWord (n : ℕ)
+    (hold : ∀ g, ∃ w : FiniteWedgeFinLoopWord n,
+      finiteWedgeFinLoopWordValue n w = g)
+    (w : List
+      (FundamentalGroup
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) ⊕
+        FundamentalGroup
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1))) :
+    ∃ v : FiniteWedgeFinLoopWord (n + 1),
+      finiteWedgeFinLoopWordValue (n + 1) v =
+        coprodLegWordValue
+          (finiteWedgeFinSuccOldFundamentalGroupMap n)
+          (finiteWedgeFinSuccLastFundamentalGroupMap n) w := by
+  induction w with
+  | nil =>
+      refine ⟨[], ?_⟩
+      simp [finiteWedgeFinLoopWordValue, coprodLegWordValue]
+  | cons q w ih =>
+      rcases ih with ⟨vw, hvw⟩
+      cases q with
+      | inl a =>
+          rcases hold a with ⟨wa, hwa⟩
+          refine ⟨(wa.map fun q => (q.1.castSucc, q.2)) ++ vw, ?_⟩
+          rw [finiteWedgeFinLoopWordValue, List.map_append, List.prod_append]
+          change finiteWedgeFinLoopWordValue (n + 1)
+              (wa.map fun q => (q.1.castSucc, q.2)) *
+              finiteWedgeFinLoopWordValue (n + 1) vw = _
+          rw [finiteWedgeFinSucc_oldLoopWordValue, hwa, hvw]
+          rfl
+      | inr b =>
+          rcases finiteWedgeUnitLegMap_surjective b with ⟨a, ha⟩
+          refine ⟨((Fin.last (n + 1), a) :: vw), ?_⟩
+          simp only [finiteWedgeFinLoopWordValue, List.map_cons, List.prod_cons]
+          rw [← finiteWedgeFinSuccLastFundamentalGroupMap_leg n a, ha]
+          change finiteWedgeFinSuccLastFundamentalGroupMap n b *
+              finiteWedgeFinLoopWordValue (n + 1) vw =
+            finiteWedgeFinSuccLastFundamentalGroupMap n b *
+              coprodLegWordValue
+                (finiteWedgeFinSuccOldFundamentalGroupMap n)
+                (finiteWedgeFinSuccLastFundamentalGroupMap n) w
+          rw [hvw]
+
+/-- If old finite-wedge loops have labelled words, successor loops do too. -/
+theorem finiteWedgeFinSucc_exists_legWord (n : ℕ)
+    (hold : ∀ g, ∃ w : FiniteWedgeFinLoopWord n,
+      finiteWedgeFinLoopWordValue n w = g)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin ((n + 1) + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (0 : Fin ((n + 1) + 1)) 1)) :
+    ∃ w : FiniteWedgeFinLoopWord (n + 1),
+      finiteWedgeFinLoopWordValue (n + 1) w = g := by
+  rcases finiteWedgeFinSucc_exists_installedSplitLegWord n g with ⟨w, hw⟩
+  rcases finiteWedgeFinSucc_expand_splitWord n hold w with ⟨v, hv⟩
+  exact ⟨v, hv.trans hw⟩
+
+/-- Every loop in a nonempty standard finite wedge is a finite word in its
+individually labelled circle legs. -/
+theorem finiteWedgeFin_exists_legWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)) :
+    ∃ w : FiniteWedgeFinLoopWord n,
+      finiteWedgeFinLoopWordValue n w = g := by
+  induction n with
+  | zero => exact finiteWedgeFinOne_exists_legWord g
+  | succ n ih => exact finiteWedgeFinSucc_exists_legWord n ih g
+
+/-- Integer-exponent words in the positive generators of a standard finite
+wedge. -/
+abbrev FiniteWedgeFinGeneratorWord (n : ℕ) := List (Fin (n + 1) × ℤ)
+
+noncomputable def finiteWedgeFinGeneratorWordValue (n : ℕ)
+    (w : FiniteWedgeFinGeneratorWord n) :
+    FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  (w.map fun q =>
+    finiteWedgeFinLegMap n q.1 circlePositiveFundamentalClass ^ q.2).prod
+
+/-- Replace every arbitrary circle-loop letter by an integer power of the
+fixed positive circle class. -/
+theorem finiteWedgeFinLoopWord_exists_generatorWord (n : ℕ)
+    (w : FiniteWedgeFinLoopWord n) :
+    ∃ u : FiniteWedgeFinGeneratorWord n,
+      finiteWedgeFinGeneratorWordValue n u =
+        finiteWedgeFinLoopWordValue n w := by
+  induction w with
+  | nil =>
+      exact ⟨[], by simp [finiteWedgeFinGeneratorWordValue,
+        finiteWedgeFinLoopWordValue]⟩
+  | cons q w ih =>
+      rcases circlePositiveFundamentalClass_generates q.2 with ⟨z, hz⟩
+      rcases ih with ⟨u, hu⟩
+      refine ⟨(q.1, z) :: u, ?_⟩
+      simp only [finiteWedgeFinGeneratorWordValue, finiteWedgeFinLoopWordValue,
+        List.map_cons, List.prod_cons]
+      rw [← map_zpow, hz]
+      change finiteWedgeFinLegMap n q.1 q.2 *
+          finiteWedgeFinGeneratorWordValue n u =
+        finiteWedgeFinLegMap n q.1 q.2 * finiteWedgeFinLoopWordValue n w
+      rw [hu]
+
+/-- Every finite-wedge loop is an integer-exponent word in the fixed positive
+leg generators. -/
+theorem finiteWedgeFin_exists_generatorWord (n : ℕ)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+      (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1)) :
+    ∃ w : FiniteWedgeFinGeneratorWord n,
+      finiteWedgeFinGeneratorWordValue n w = g := by
+  rcases finiteWedgeFin_exists_legWord n g with ⟨w, hw⟩
+  rcases finiteWedgeFinLoopWord_exists_generatorWord n w with ⟨u, hu⟩
+  exact ⟨u, hu.trans hw⟩
+
+/-- The canonical free-group map for the standard `Fin`-labelled wedge. -/
+noncomputable def finiteWedgeFinLegFreeGroupMap (n : ℕ) :
+    FreeGroup (Fin (n + 1)) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (n + 1)))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (n + 1)) 1) :=
+  FreeGroup.lift (fun i =>
+    finiteWedgeFinLegMap n i circlePositiveFundamentalClass)
+
+/-- A generator word is the image of the corresponding product in the free
+group. -/
+theorem finiteWedgeFinGeneratorWord_in_freeGroupImage (n : ℕ)
+    (w : FiniteWedgeFinGeneratorWord n) :
+    ∃ x : FreeGroup (Fin (n + 1)),
+      finiteWedgeFinLegFreeGroupMap n x =
+        finiteWedgeFinGeneratorWordValue n w := by
+  induction w with
+  | nil => exact ⟨1, by simp [finiteWedgeFinGeneratorWordValue]⟩
+  | cons q w ih =>
+      rcases ih with ⟨x, hx⟩
+      refine ⟨FreeGroup.of q.1 ^ q.2 * x, ?_⟩
+      rw [map_mul, map_zpow, hx]
+      simp [finiteWedgeFinLegFreeGroupMap,
+        finiteWedgeFinGeneratorWordValue]
+
+/-- The canonical free-group map onto a nonempty finite circle wedge is
+surjective. -/
+theorem finiteWedgeFinLegFreeGroupMap_surjective (n : ℕ) :
+    Function.Surjective (finiteWedgeFinLegFreeGroupMap n) := by
+  intro g
+  rcases finiteWedgeFin_exists_generatorWord n g with ⟨w, hw⟩
+  rcases finiteWedgeFinGeneratorWord_in_freeGroupImage n w with ⟨x, hx⟩
+  exact ⟨x, hx.trans hw⟩
+
+/-- The same leg map indexed by an arbitrary positive finite cardinal, with
+its proof-carrying zero coordinate made explicit. -/
+noncomputable def finiteWedgeFinLegMapCard (N : ℕ) (hN : 0 < N)
+    (i : Fin N) :
+    FundamentalGroup Circle 1 →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin N))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle ⟨0, hN⟩ 1) :=
+  FundamentalGroup.mapOfEq
+    ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle i,
+      PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle i⟩
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq i ⟨0, hN⟩)
+
+noncomputable def finiteWedgeFinLegFreeGroupMapCard (N : ℕ) (hN : 0 < N) :
+    FreeGroup (Fin N) →*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin N))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle ⟨0, hN⟩ 1) :=
+  FreeGroup.lift (fun i =>
+    finiteWedgeFinLegMapCard N hN i circlePositiveFundamentalClass)
+
+/-- Surjectivity in the proof-carrying positive-cardinality presentation. -/
+theorem finiteWedgeFinLegFreeGroupMapCard_surjective (N : ℕ) (hN : 0 < N) :
+    Function.Surjective (finiteWedgeFinLegFreeGroupMapCard N hN) := by
+  cases N with
+  | zero => omega
+  | succ n =>
+      simpa [finiteWedgeFinLegFreeGroupMapCard, finiteWedgeFinLegMapCard,
+        finiteWedgeFinLegFreeGroupMap, finiteWedgeFinLegMap] using
+        finiteWedgeFinLegFreeGroupMap_surjective n
+
+/-- A finite coordinate labelling chosen so that the polygon's distinguished
+orbit is sent to coordinate zero. -/
+theorem pairingOrbitCard_pos (P : PairingData) :
+    0 < Fintype.card (PairingOrbit P.pair) :=
+  Fintype.card_pos_iff.mpr ⟨P.orbit ⟨0, P.edgeCount_pos⟩⟩
+
+def pairingOrbitFinZero (P : PairingData) :
+    Fin (Fintype.card (PairingOrbit P.pair)) :=
+  ⟨0, pairingOrbitCard_pos P⟩
+
+noncomputable def pairingOrbitEquivFinZero (P : PairingData) :
+    PairingOrbit P.pair ≃ Fin (Fintype.card (PairingOrbit P.pair)) :=
+  (Fintype.equivFin (PairingOrbit P.pair)).trans
+    (Equiv.swap
+      (Fintype.equivFin (PairingOrbit P.pair)
+        (P.orbit ⟨0, P.edgeCount_pos⟩)) (pairingOrbitFinZero P))
+
+@[simp]
+theorem pairingOrbitEquivFinZero_base (P : PairingData) :
+    pairingOrbitEquivFinZero P (P.orbit ⟨0, P.edgeCount_pos⟩) =
+      pairingOrbitFinZero P := by
+  simp [pairingOrbitEquivFinZero]
+
+/-- Relabel the orbit-indexed wedge while preserving the selected based
+fundamental-group point exactly. -/
+noncomputable def finiteWedgeOrbitHomeomorphFinZero (P : PairingData) :
+    PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair) ≃ₜ
+      PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (Fin (Fintype.card (PairingOrbit P.pair))) :=
+  finiteWedgeHomeomorphOfEquiv (pairingOrbitEquivFinZero P)
+
+@[simp]
+theorem finiteWedgeOrbitHomeomorphFinZero_wedgeCircle (P : PairingData)
+    (l : PairingOrbit P.pair) (z : Circle) :
+    finiteWedgeOrbitHomeomorphFinZero P
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l z) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (pairingOrbitEquivFinZero P l) z := rfl
+
+theorem finiteWedgeOrbitHomeomorphFinZero_base (P : PairingData) :
+    finiteWedgeOrbitHomeomorphFinZero P (orbitWedgeBase P) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (pairingOrbitFinZero P) 1 := by
+  simp [orbitWedgeBase]
+
+/-- The based fundamental group of the orbit-indexed wedge transported to
+finite coordinates with the distinguished orbit at zero. -/
+noncomputable def finiteWedgeOrbitFundamentalGroupEquivFin (P : PairingData) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+        (orbitWedgeBase P) ≃*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin (Fintype.card (PairingOrbit P.pair))))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (pairingOrbitFinZero P) 1) := by
+  let e := finiteWedgeOrbitHomeomorphFinZero P
+  have he : e (orbitWedgeBase P) =
+      PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+        (pairingOrbitFinZero P) 1 :=
+    finiteWedgeOrbitHomeomorphFinZero_base P
+  rw [← he]
+  exact fundamentalGroupEquivOfHomeomorph e (orbitWedgeBase P)
+
+/-- A homeomorphism with a separately specified target basepoint induces a
+group equivalence whose forward map is definitionally `mapOfEq`. -/
+noncomputable def fundamentalGroupEquivOfHomeomorphEq
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) (y : Y) (h : e x = y) :
+    FundamentalGroup X x ≃* FundamentalGroup Y y := by
+  have hs : e.symm y = x := by rw [← h, e.symm_apply_apply]
+  exact
+    { toFun := FundamentalGroup.mapOfEq ⟨e, e.continuous⟩ h
+      invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩ hs
+      left_inv := by
+        intro p
+        induction p using Path.Homotopic.Quotient.ind with
+        | mk p =>
+            rw [FundamentalGroup.mapOfEq_apply,
+              FundamentalGroup.mapOfEq_apply]
+            apply Path.Homotopic.Quotient.eq.mpr
+            convert Path.Homotopic.refl p using 1
+            ext t
+            rw [show (((p.map e.continuous).cast _ _).map
+                e.symm.continuous).cast _ _ t =
+                e.symm (e (p t)) by
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              change e.symm (((p.map e.continuous).cast _ _) t) = _
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              rfl]
+            exact e.symm_apply_apply (p t)
+      right_inv := by
+        intro p
+        induction p using Path.Homotopic.Quotient.ind with
+        | mk p =>
+            rw [FundamentalGroup.mapOfEq_apply,
+              FundamentalGroup.mapOfEq_apply]
+            apply Path.Homotopic.Quotient.eq.mpr
+            convert Path.Homotopic.refl p using 1
+            ext t
+            rw [show (((p.map e.symm.continuous).cast _ _).map
+                e.continuous).cast _ _ t =
+                e (e.symm (p t)) by
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              change e (((p.map e.symm.continuous).cast _ _) t) = _
+              rw [congrFun (Path.cast_coe _ _ _) t]
+              rfl]
+            exact e.apply_symm_apply (p t)
+      map_mul' := map_mul _ }
+
+/-- The orbit relabelling equivalence in the explicit based-map presentation. -/
+noncomputable def finiteWedgeOrbitFundamentalGroupEquivFinExplicit
+    (P : PairingData) :
+    FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (PairingOrbit P.pair))
+        (orbitWedgeBase P) ≃*
+      FundamentalGroup
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (Fin (Fintype.card (PairingOrbit P.pair))))
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+          (pairingOrbitFinZero P) 1) :=
+  fundamentalGroupEquivOfHomeomorphEq
+    (finiteWedgeOrbitHomeomorphFinZero P) (orbitWedgeBase P)
+    (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
+      (pairingOrbitFinZero P) 1)
+    (finiteWedgeOrbitHomeomorphFinZero_base P)
+
+/-- Explicit orbit relabelling carries an arbitrary based circle loop in an
+orbit leg to the corresponding finite-coordinate leg. -/
+theorem finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap
+    (P : PairingData) (l : PairingOrbit P.pair)
+    (g : FundamentalGroup Circle 1) :
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+        (Path.Homotopic.Quotient.cast
+          (FundamentalGroup.map
+            ⟨PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle l,
+              PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle l⟩
+            1 g)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+            (P.orbit ⟨0, P.edgeCount_pos⟩) l)
+          (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle_base_eq
+            (P.orbit ⟨0, P.edgeCount_pos⟩) l)) =
+      finiteWedgeFinLegMapCard (Fintype.card (PairingOrbit P.pair))
+        (pairingOrbitCard_pos P) (pairingOrbitEquivFinZero P l)
+        g := by
+  induction g using Path.Homotopic.Quotient.ind with
+  | mk p =>
+      rw [FundamentalGroup.map_apply]
+      unfold finiteWedgeOrbitFundamentalGroupEquivFinExplicit
+        fundamentalGroupEquivOfHomeomorphEq
+      change FundamentalGroup.mapOfEq
+          ⟨finiteWedgeOrbitHomeomorphFinZero P,
+            (finiteWedgeOrbitHomeomorphFinZero P).continuous⟩
+          (finiteWedgeOrbitHomeomorphFinZero_base P)
+          ((Path.Homotopic.Quotient.mk _).cast _ _) = _
+      rw [← Path.Homotopic.Quotient.mk_cast,
+        FundamentalGroup.mapOfEq_apply]
+      rw [finiteWedgeFinLegMapCard, FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl
+        ((p.map
+          (PolygonSurfacePiOne.PointWedgeQuotient.continuous_wedgeCircle
+            (pairingOrbitEquivFinZero P l))).cast _ _) using 1
+
+/-- The positive generators are identified by the explicit based orbit
+relabeling. -/
+theorem finiteWedgeOrbitFundamentalGroupEquivFinExplicit_leg
+    (P : PairingData) (l : PairingOrbit P.pair) :
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+        (finiteWedgeLegFundamentalClassAtBase P l) =
+      finiteWedgeFinLegMapCard (Fintype.card (PairingOrbit P.pair))
+        (pairingOrbitCard_pos P) (pairingOrbitEquivFinZero P l)
+        circlePositiveFundamentalClass := by
+  simpa [finiteWedgeLegFundamentalClassAtBase,
+    finiteWedgeLegFundamentalClass] using
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit_legMap P l
+      circlePositiveFundamentalClass
+
+/-- Relabelling the orbit generators before applying the finite-coordinate
+map agrees with applying the orbit map and then transporting fundamental
+groups. -/
+theorem finiteWedgeOrbitFreeGroupMapComparison (P : PairingData)
+    (x : FreeGroup (PairingOrbit P.pair)) :
+    finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+        (finiteWedgeLegFreeGroupMap P x) =
+      finiteWedgeFinLegFreeGroupMapCard
+          (Fintype.card (PairingOrbit P.pair)) (pairingOrbitCard_pos P)
+        (FreeGroup.map (pairingOrbitEquivFinZero P) x) := by
+  induction x using FreeGroup.induction_on with
+  | C1 =>
+      simp only [map_one]
+      rfl
+  | of l =>
+      simpa [finiteWedgeLegFreeGroupMap,
+        finiteWedgeFinLegFreeGroupMapCard] using
+        finiteWedgeOrbitFundamentalGroupEquivFinExplicit_leg P l
+  | inv_of l _ =>
+      simp only [map_inv]
+      have h :
+          finiteWedgeOrbitFundamentalGroupEquivFinExplicit P
+              (finiteWedgeLegFreeGroupMap P (FreeGroup.of l)) =
+            finiteWedgeFinLegFreeGroupMapCard
+                (Fintype.card (PairingOrbit P.pair)) (pairingOrbitCard_pos P)
+              (FreeGroup.map (pairingOrbitEquivFinZero P) (FreeGroup.of l)) := by
+        simpa [finiteWedgeLegFreeGroupMap,
+          finiteWedgeFinLegFreeGroupMapCard] using
+          finiteWedgeOrbitFundamentalGroupEquivFinExplicit_leg P l
+      exact congrArg (fun z => z⁻¹) h
+  | mul x y hx hy =>
+      simp only [map_mul]
+      rw [hx, hy]
+      rfl
+
+/-- The canonical positive-leg map onto the orbit-indexed finite wedge is
+surjective. -/
+theorem finiteWedgeLegFreeGroupMap_surjective (P : PairingData) :
+    Function.Surjective (finiteWedgeLegFreeGroupMap P) := by
+  intro g
+  obtain ⟨y, hy⟩ :=
+    finiteWedgeFinLegFreeGroupMapCard_surjective
+      (Fintype.card (PairingOrbit P.pair)) (pairingOrbitCard_pos P)
+      (finiteWedgeOrbitFundamentalGroupEquivFinExplicit P g)
+  obtain ⟨x, rfl⟩ := FreeGroup.map_surjective
+    (pairingOrbitEquivFinZero P).surjective y
+  refine ⟨x, (finiteWedgeOrbitFundamentalGroupEquivFinExplicit P).injective ?_⟩
+  rw [finiteWedgeOrbitFreeGroupMapComparison, hy]
+
+/-- Every based-loop Hurewicz class is in the normalized finite-wedge
+coordinate image. -/
+theorem finiteWedgeHurewicz_generated_by_coordinates (P : PairingData)
+    (g : FundamentalGroup
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) (orbitWedgeBase P)) :
+    ∃ v : PairingOrbit P.pair → ℤ,
+      finiteWedgeH1CoordinateMap P v = finiteWedgeModuleHurewicz P g := by
+  obtain ⟨w, hw⟩ :=
+    finiteWedgeFundamentalGroup_generated_by_legs_of_freeGroup_surjective P
+      (finiteWedgeLegFreeGroupMap_surjective P) g
+  refine ⟨finiteWedgeLegWordCoordinatesList P w, ?_⟩
+  rw [← hw]
+  simpa [finiteWedgeModuleHurewicz, moduleHurewicz] using
+    (finiteWedgeLegWord_hurewicz P w).symm
+
+/-- The normalized finite-wedge first-homology coordinate map is onto. -/
+theorem finiteWedgeH1CoordinateMap_surjective (P : PairingData) :
+    Function.Surjective (finiteWedgeH1CoordinateMap P) :=
+  finiteWedgeH1CoordinateMap_surjective_of_hurewicz_generation P
+    (finiteWedgeHurewicz_generated_by_coordinates P)
+
+noncomputable instance finiteWedgeH1CoordinateMap_epi (P : PairingData) :
+    Epi (finiteWedgeH1CoordinateMap P) :=
+  (ModuleCat.epi_iff_surjective (finiteWedgeH1CoordinateMap P)).mpr
+    (finiteWedgeH1CoordinateMap_surjective P)
+
+/-- The normalized coordinates give the required finite-wedge H₁
+isomorphism, with the positive leg basis fixed. -/
+noncomputable def finiteWedgeH1CoordinateIso (P : PairingData) :
+    ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) ≅
+      SpaceH
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+          (PairingOrbit P.pair)) 1 := by
+  letI : IsIso (finiteWedgeH1CoordinateMap P) :=
+    isIso_of_mono_of_epi (finiteWedgeH1CoordinateMap P)
+  exact asIso (finiteWedgeH1CoordinateMap P)
+
+/-- B4 in degree one: transport the fixed positive-leg coordinates from the
+finite wedge to the radial outer piece. -/
+noncomputable def outerH1IsoCoordinates (P : PairingData) :
+    SpaceH (OuterPiece P) 1 ≅ ModuleCat.of ℤ (PairingOrbit P.pair → ℤ) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of (OuterPiece P)) 1
+    (ModuleCat.of ℤ (PairingOrbit P.pair → ℤ))
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        (outerHomotopyEquivWedge P) 1 ≪≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (PairingOrbit P.pair))) 1).symm ≪≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (finiteWedgeH1CoordinateIso P).symm)
+
+/-! ### Higher homology of finite wedges -/
+
+/-- Mayer--Vietoris preserves higher-homology vanishing when two pointed
+spaces are joined at contractible base neighborhoods.  This is the induction
+step used for finite wedges of circles. -/
+theorem pointWedgeHigherHomologyIsZero
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (x₀ : X) (y₀ : Y)
+    (PX : PointedContractibleNeighborhood X x₀)
+    (PY : PointedContractibleNeighborhood Y y₀)
+    (n : ℕ) (hn : 2 ≤ n)
+    (hX : IsZero (SpaceH X n)) (hY : IsZero (SpaceH Y n)) :
+    IsZero (SpaceH (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀) n) := by
+  let p := ConstructionTargets.GenericPointWedgeOpenCoverComparison.genericPointWedgeCoverPackage
+    x₀ y₀ PY.carrier PX.carrier PY.isOpen PX.isOpen PY.mem PX.mem
+      PY.contraction PX.contraction
+  let U := ConstructionTargets.PointWedgeQuotient.leftOpen
+    x₀ y₀ PY.carrier
+  let V := ConstructionTargets.PointWedgeQuotient.rightOpen
+    x₀ y₀ PX.carrier
+  let GH (k : ℕ) (Z : Type) [TopologicalSpace Z] :=
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology k (TopCat.of Z)
+  have hI (k : ℕ) (hk : k ≠ 0) : IsZero (GH k (U ∩ V : Set _)) :=
+    (ConstructionTargets.SingularHomologyConcrete.contractibleHigherHomology_isZero
+      Unit k hk).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.intersectionEquiv k)
+  have hIso : IsIso
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) := by
+    have hm : Mono
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) :=
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+        U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ n).mono_g_iff.mpr
+          ((hI n (by omega)).eq_of_src _ _)
+    have heq : n - 1 + 1 = n := by omega
+    have he : Epi
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow U V n) := by
+      rw [← heq]
+      exact
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+          U V p.leftOpen_isOpen p.rightOpen_isOpen p.union_eq_univ (n - 1)).epi_f_iff.mpr
+            ((hI (n - 1) (by omega)).eq_of_tgt _ _)
+    letI := hm
+    letI := he
+    exact isIso_of_mono_of_epi _
+  letI := hIso
+  have underlyingIsZero {A : ModuleCat ℤ} (hA : IsZero A) :
+      IsZero
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj A) := by
+    rw [IsZero.iff_id_eq_zero]
+    rw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id,
+      ← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_zero]
+    exact congrArg
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map)
+      (hA.eq_of_src _ _)
+  have hUG : IsZero (GH n U) :=
+    (underlyingIsZero hX).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of X) n).symm |>.of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.leftEquiv n)
+  have hVG : IsZero (GH n V) :=
+    (underlyingIsZero hY).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Y) n).symm |>.of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        p.rightEquiv n)
+  have hW : IsZero (GH n (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)) := by
+    have hp : IsZero (GH n U ⊞ GH n V) :=
+      (biprod_isZero_iff _ _).mpr ⟨hUG, hVG⟩
+    exact hp.of_iso
+      (asIso (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        U V n)).symm
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+      (TopCat.of (ConstructionTargets.PointWedgeQuotient.Wedge x₀ y₀)) n hW
+
+/-- Integral homology transport along a homotopy equivalence, in the module
+presentation used by the polygon calculation. -/
+noncomputable def spaceHHomotopyEquivIso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₕ Y) (n : ℕ) : SpaceH X n ≅ SpaceH Y n :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of X) n (SpaceH Y n)
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv e n ≪≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Y) n).symm)
+
+/-- Every nonempty standard finite wedge of circles has zero integral
+homology above degree one. -/
+theorem finiteWedgeFinHigherHomologyIsZero :
+    ∀ (m n : ℕ), 2 ≤ n →
+      IsZero (SpaceH
+        (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin (m + 1))) n)
+  | 0, n, hn => by
+      have hc : IsZero (SpaceH Circle n) :=
+        ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+          (TopCat.of Circle) n
+          (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+            n (by omega))
+      exact hc.of_iso
+        (spaceHHomotopyEquivIso finiteWedgeFinOneHomeomorphCircle.toHomotopyEquiv n)
+  | m + 1, n, hn => by
+      let P := finiteWedgeFinSuccPointWedgeNeighborhoods m
+      have hold := finiteWedgeFinHigherHomologyIsZero m n hn
+      have hlast : IsZero
+          (SpaceH
+            (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge Unit) n) := by
+        have hc : IsZero (SpaceH Circle n) :=
+          ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+            (TopCat.of Circle) n
+            (ConstructionTargets.BoundaryTorusMayerVietoris.circleHomology_isZero_of_one_lt
+              n (by omega))
+        exact hc.of_iso
+          (spaceHHomotopyEquivIso
+            (finiteWedgeSubsingletonHomeomorphCircle ()).toHomotopyEquiv n)
+      have hw := pointWedgeHigherHomologyIsZero
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle (0 : Fin (m + 1)) 1)
+        (PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle () 1)
+        P.1 P.2 n hn hold hlast
+      exact hw.of_iso
+        (spaceHHomotopyEquivIso
+          (finiteWedgeFinSuccHomeomorphPointWedge m).toHomotopyEquiv n)
+
+/-- B4 above degree one for the polygon's orbit-indexed finite wedge. -/
+theorem finiteWedgeHigherHomologyIsZero (P : PairingData) (n : ℕ) (hn : 2 ≤ n) :
+    IsZero (SpaceH
+      (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+        (PairingOrbit P.pair)) n) := by
+  generalize hc :
+    Fintype.card (PairingOrbit P.pair) = c
+  cases c with
+  | zero =>
+      exfalso
+      have := pairingOrbitCard_pos P
+      omega
+  | succ m =>
+      have hfin := finiteWedgeFinHigherHomologyIsZero m n hn
+      let e := finiteWedgeOrbitHomeomorphFin P
+      rw [hc] at e
+      exact hfin.of_iso (spaceHHomotopyEquivIso e.toHomotopyEquiv n)
+
+/-- B4 above degree one, transported from the finite wedge to the radial
+outer piece. -/
+theorem outerHigherHomologyIsZero (P : PairingData) (n : ℕ) (hn : 2 ≤ n) :
+    IsZero (SpaceH (OuterPiece P) n) :=
+  (finiteWedgeHigherHomologyIsZero P n hn).of_iso
+    (spaceHHomotopyEquivIso (outerHomotopyEquivWedge P) n)
+
+/-! ### Radial Mayer--Vietoris segment -/
+
+/-- The literal intersection of the two radial cover members, identified
+with the annular overlap model used by B5. -/
+def radialIntersectionHomeomorphOverlap (P : PairingData) :
+    {q // q ∈ (openCover P).inner ∩ (openCover P).outer} ≃ₜ OverlapPiece P :=
+  Homeomorph.setCongr (openCover P).overlap_eq.symm
+
+/-- The positive circle in the literal intersection: radius one half with
+the standard counterclockwise circle parameter. -/
+def radialIntersectionPositiveCircle (P : PairingData) :
+    C(Circle, {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) :=
+  (⟨(radialIntersectionHomeomorphOverlap P).symm,
+      (radialIntersectionHomeomorphOverlap P).symm.continuous⟩ :
+    C(OverlapPiece P,
+      {q // q ∈ (openCover P).inner ∩ (openCover P).outer})).comp
+    (overlapHomotopyEquivCircle P).invFun
+
+/-- The chosen intersection circle is exactly the inverse of the positive
+overlap-to-circle equivalence. -/
+theorem radialIntersectionPositiveCircle_toOverlap (P : PairingData)
+    (z : Circle) :
+    radialIntersectionHomeomorphOverlap P
+        (radialIntersectionPositiveCircle P z) =
+      (overlapHomotopyEquivCircle P).invFun z := by
+  rfl
+
+/-- After forgetting the inner-membership proof, the chosen intersection
+circle is the quotient of the literal radius-one-half circle. -/
+theorem radialIntersectionPositiveCircle_val (P : PairingData) (z : Circle) :
+    (radialIntersectionPositiveCircle P z).1 =
+      ConstructionTargets.PolygonRadialOpenCover.quotientMap P.Rel
+        (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1 := by
+  rfl
+
+/-- The same positive overlap circle included in the outer radial member. -/
+def radialOverlapCircleInOuter (P : PairingData) : C(Circle, OuterPiece P) :=
+  (⟨fun q => ⟨q.1, q.2.2⟩, by fun_prop⟩ :
+    C({q // q ∈ (openCover P).inner ∩ (openCover P).outer}, OuterPiece P)).comp
+    (radialIntersectionPositiveCircle P)
+
+/-- The outer-member loop retains the literal radius-one-half quotient
+representative, fixing its orientation before homology is applied. -/
+theorem radialOverlapCircleInOuter_val (P : PairingData) (z : Circle) :
+    (radialOverlapCircleInOuter P z).1 =
+      ConstructionTargets.PolygonRadialOpenCover.quotientMap P.Rel
+        (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1 := by
+  exact radialIntersectionPositiveCircle_val P z
+
+/-- The radius-one-half representative regarded in the source of the outer
+radial quotient. -/
+def halfCircleOuter (z : Circle) :
+    ConstructionTargets.PolygonOuterRadialDeformation.Outer :=
+  ⟨(ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).1,
+    (ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap z).2.2⟩
+
+/-- At time one, radial deformation of the half-radius representative is the
+unit boundary point with the same positive circle parameter. -/
+theorem radialHomotopy_one_halfCircle (z : Circle) :
+    (ConstructionTargets.PolygonOuterRadialDeformation.radialHomotopy
+      (1, halfCircleOuter z)).1 = circleToPolygonDisk z := by
+  apply Subtype.ext
+  simp [ConstructionTargets.PolygonOuterRadialDeformation.radialHomotopy,
+    ConstructionTargets.PolygonOuterRadialDeformation.scale,
+    halfCircleOuter, ConstructionTargets.PolygonAnnulusRadialMaps.halfCircleMap,
+    ConstructionTargets.PolygonRadialOpenCover.radius, circleToPolygonDisk]
+
+/-- The radial outer deformation carries the positive overlap circle to the
+ordered polygon boundary loop. -/
+theorem outerHomotopyEquivWedge_radialOverlapCircle (P : PairingData)
+    (z : Circle) :
+    outerHomotopyEquivWedge P (radialOverlapCircleInOuter P z) =
+      polygonBoundaryWedgeLoop P z := by
+  change P.skeletonHomeomorphWedge
+      ((outerBoundaryHomeomorphSkeleton P)
+        ((outerHomotopyEquivBoundary P) (radialOverlapCircleInOuter P z))) =
+    P.skeletonHomeomorphWedge (polygonBoundarySkeletonLoop P z)
+  congr 1
+  apply Subtype.ext
+  change
+    (ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy P.Rel
+      (fun {_ _} h => pairingRel_radius P h)
+      (fun {_ _} h => pairingRel_boundary P h)
+      (1, radialOverlapCircleInOuter P z)).1 =
+      P.quotientMap (circleToPolygonDisk z)
+  simp only [ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy]
+  rw [show
+    (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+      P.Rel (fun {_ _} h => pairingRel_radius P h)).symm
+        (radialOverlapCircleInOuter P z) =
+      Quotient.mk _ (halfCircleOuter z) by
+        apply (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+          P.Rel (fun {_ _} h => pairingRel_radius P h)).injective
+        rw [Homeomorph.apply_symm_apply,
+          ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph_mk]
+        apply Subtype.ext
+        exact radialOverlapCircleInOuter_val P z]
+  rw [ConstructionTargets.PolygonOuterRadialQuotientDeformation.quotientHomotopy_mk,
+    ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph_mk]
+  change P.quotientMap
+      (ConstructionTargets.PolygonOuterRadialDeformation.radialHomotopy
+        (1, halfCircleOuter z)).1 = _
+  rw [radialHomotopy_one_halfCircle]
+
+/-- Degree-one integral singular homology map induced by a continuous map,
+in the additive-group presentation used by the production MV sequence. -/
+noncomputable def singularH1Map {X Y : Type} [TopologicalSpace X]
+    [TopologicalSpace Y] (f : C(X, Y)) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of X) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of Y) :=
+  HomologicalComplex.homologyMap
+    (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map (TopCat.toSSet.map (TopCat.ofHom f))) 1
+
+theorem singularH1Map_comp {X Y Z : Type} [TopologicalSpace X]
+    [TopologicalSpace Y] [TopologicalSpace Z] (f : C(X, Y)) (g : C(Y, Z)) :
+    singularH1Map (g.comp f) = singularH1Map f ≫ singularH1Map g := by
+  change HomologicalComplex.homologyMap
+      (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).map
+        (TopCat.toSSet.map (TopCat.ofHom f ≫ TopCat.ofHom g))) 1 = _
+  rw [Functor.map_comp, Functor.map_comp]
+  simp only [singularH1Map]
+  exact HomologicalComplex.homologyMap_comp _ _ 1
+
+/-- The pointwise radial comparison is equality of the corresponding
+continuous circle maps. -/
+theorem outerHomotopyEquivWedge_comp_radialOverlapCircle (P : PairingData) :
+    (outerHomotopyEquivWedge P).toFun.comp (radialOverlapCircleInOuter P) =
+      polygonBoundaryWedgeLoop P := by
+  apply ContinuousMap.ext
+  exact outerHomotopyEquivWedge_radialOverlapCircle P
+
+/-- Functorial degree-one homology therefore identifies the included overlap
+circle with the ordered signed polygon boundary loop. -/
+theorem radialOverlapCircle_h1_eq_boundaryLoop_h1 (P : PairingData) :
+    singularH1Map
+        ((outerHomotopyEquivWedge P).toFun.comp
+          (radialOverlapCircleInOuter P)) =
+      singularH1Map (polygonBoundaryWedgeLoop P) := by
+  rw [outerHomotopyEquivWedge_comp_radialOverlapCircle]
+
+/-- Expanded through functoriality, the same comparison is a commuting H₁
+triangle from the positive overlap circle through the outer member. -/
+theorem radialOverlapCircle_h1_naturality (P : PairingData) :
+    singularH1Map (radialOverlapCircleInOuter P) ≫
+        singularH1Map (outerHomotopyEquivWedge P).toFun =
+      singularH1Map (polygonBoundaryWedgeLoop P) := by
+  rw [← singularH1Map_comp, radialOverlapCircle_h1_eq_boundaryLoop_h1]
+
+/-- Positive integral coordinates on the actual intersection object occurring
+in the production Mayer--Vietoris sequence. -/
+noncomputable def radialIntersectionH1GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) ≅
+      AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (overlapHomotopyEquivCircle P) 1 ≪≫
+    circleGroupH1IsoInt
+
+/-- Integral H₀ coordinates on the literal radial intersection. -/
+noncomputable def radialIntersectionH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) ≅
+      AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv 0 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (overlapHomotopyEquivCircle P) 0 ≪≫
+    circleGroupH0IsoInt
+
+/-- Integral H₀ coordinates on the contractible inner radial piece. -/
+noncomputable def radialInnerH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of (InnerPiece P)) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (innerHomotopyEquivPoint P) 0 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.pointH0IsoInt
+
+theorem singularHomologyIsoOfHomotopyEquiv_inv_h1
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) :
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      e 1).inv = singularH1Map e.invFun := by
+  apply (cancel_mono
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      e 1).hom).1
+  rw [Iso.inv_hom_id]
+  rw [ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv_hom]
+  change 𝟙 (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of Y)) =
+    singularH1Map e.invFun ≫ singularH1Map e.toFun
+  rw [← singularH1Map_comp]
+  change 𝟙 (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of Y)) =
+    ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom (e.toFun.comp e.invFun))
+  rw [ConstructionTargets.SingularHomologyConcrete.singularHomology_map_eq_of_topCatHomotopy
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder
+      (Classical.choice e.right_inv))
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_zero
+      (Classical.choice e.right_inv))
+    (ConstructionTargets.SingularHomologyConcrete.continuousMapHomotopyCylinder_one
+      (Classical.choice e.right_inv))]
+  have h : TopCat.ofHom (ContinuousMap.id Y) = 𝟙 (TopCat.of Y) := by rfl
+  rw [h]
+  exact ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+    (AddCommGrpCat.of ℤ)).map_id (TopCat.of Y) |>.symm
+
+/-- The additive-group and module-category normalizations select the same
+positive circle generator under the canonical comparison. -/
+theorem circleGroupH1IsoInt_inv_one_comparison :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).inv (circleGroupH1IsoInt.inv 1) =
+      ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1 := by
+  change (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).inv
+    ((ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv 1).inv
+      ((ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 1 one_pos).inv 1)) = _
+  rw [singularHomologyIsoOfHomotopyEquiv_inv_h1]
+  have hs := congrArg
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).hom
+    sphereOneGroupGenerator_comparison
+  rw [Iso.inv_hom_id_apply] at hs
+  rw [hs]
+  change (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).inv
+    ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+        (TopCat.ofHom
+          ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv.invFun))
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (ConstructionTargets.SphereHomology.Sphere 1)) 1).hom
+        ((ConstructionTargets.SphereHomology.sphereModuleTopHomologyIsoInt 1 one_pos).inv 1))) = _
+  rw [singularHomologyComparison_inv_map]
+  rfl
+
+/-- The element selected by the intersection coordinate is precisely the
+positive circle class mapped through the explicit intersection circle. -/
+theorem radialIntersectionPositiveGenerator_eq (P : PairingData) :
+    (radialIntersectionH1GroupIsoInt P).inv 1 =
+      singularH1Map (radialIntersectionPositiveCircle P)
+        (circleGroupH1IsoInt.inv 1) := by
+  change ((ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (radialIntersectionHomeomorphOverlap P).toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (overlapHomotopyEquivCircle P) 1 ≪≫ circleGroupH1IsoInt).inv) 1 = _
+  rw [Iso.trans_inv, Iso.trans_inv,
+    singularHomologyIsoOfHomotopyEquiv_inv_h1,
+    singularHomologyIsoOfHomotopyEquiv_inv_h1]
+  rw [Category.assoc, ← singularH1Map_comp]
+  rfl
+
+/-- Fixed orbit coordinates on the outer term of the production sequence. -/
+noncomputable def radialOuterH1GroupIsoCoordinates (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (OuterPiece P)) ≅
+      AddCommGrpCat.of (PairingOrbit P.pair → ℤ) :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (OuterPiece P)) 1).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (outerH1IsoCoordinates P)
+
+/-- B6 before coordinate transport: exactness at the two radial pieces in
+every degree. -/
+theorem radialMVPiecesExact (P : PairingData) (n : ℕ) :
+    (ShortComplex.mk
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (openCover P).inner (openCover P).outer n)
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer n)
+      (by
+        rw [← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionArrow_eq_production,
+          ← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanReassemblyArrow_eq_production
+            (openCover P).inner (openCover P).outer
+            (openCover P).inner_open (openCover P).outer_open (openCover P).cover]
+        simp only [Category.assoc, Iso.hom_inv_id_assoc]
+        have hz :
+            HomologicalComplex.homologyMap
+                (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+                  (openCover P).inner (openCover P).outer).f n ≫
+              HomologicalComplex.homologyMap
+                (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+                  (openCover P).inner (openCover P).outer).g n = 0 := by
+          rw [← HomologicalComplex.homologyMap_comp,
+            (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+              (openCover P).inner (openCover P).outer).zero,
+            HomologicalComplex.homologyMap_zero]
+        simpa only [Category.assoc, zero_comp, comp_zero] using
+          congrArg (fun k ↦
+            (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso
+              (openCover P).inner (openCover P).outer n).inv ≫ k ≫
+            (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
+              (openCover P).inner (openCover P).outer
+              (openCover P).inner_open (openCover P).outer_open
+              (openCover P).cover n).hom) hz)).Exact :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
+
+/-- The remaining production exactness witness at the surface term.  Its
+inferred type retains the canonical connecting morphism and its zero proof. -/
+noncomputable def radialMVUnionExact (P : PairingData) (n : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
+
+/-- The remaining production exactness witness at the next intersection
+term, completing the named radial long-exact-sequence fragment. -/
+noncomputable def radialMVIntersectionExact (P : PairingData) (n : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover n
+
+/-- The inner degree-one group in the radial sequence is zero. -/
+theorem radialInnerH1GroupIsZero (P : PairingData) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (InnerPiece P))) :=
+  (ConstructionTargets.SingularHomologyConcrete.pointHigherHomology_isZero 1
+    (by omega)).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        (innerHomotopyEquivPoint P) 1)
+
+/-- The one nonzero degree-one map left after removing the contractible inner
+summand, expressed in the fixed positive-overlap and outer-orbit coordinates.
+This is the morphism computed geometrically in B7. -/
+noncomputable def radialMVBoundaryGroup (P : PairingData) :
+    AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of (PairingOrbit P.pair → ℤ) :=
+  (radialIntersectionH1GroupIsoInt P).inv ≫
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      (openCover P).inner (openCover P).outer 1 ≫
+    (biprod.snd :
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+          (TopCat.of (InnerPiece P)) ⊞
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+          (TopCat.of (OuterPiece P)) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (OuterPiece P))) ≫
+    (radialOuterH1GroupIsoCoordinates P).hom
+
+/-- Projection away from a zero first summand is an isomorphism. -/
+noncomputable def biprodSndIsoOfIsZero {A B : AddCommGrpCat}
+    (hA : IsZero A) : A ⊞ B ≅ B where
+  hom := biprod.snd
+  inv := biprod.inr
+  hom_inv_id := by
+    apply biprod.hom_ext
+    · exact hA.eq_of_tgt _ _
+    · simp
+  inv_hom_id := by simp
+
+theorem radialMVPieces_comp_zero (P : PairingData) :
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (openCover P).inner (openCover P).outer 1 ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1 = 0 := by
+  rw [← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionArrow_eq_production,
+    ← ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanReassemblyArrow_eq_production
+      (openCover P).inner (openCover P).outer
+      (openCover P).inner_open (openCover P).outer_open (openCover P).cover]
+  simp only [Category.assoc, Iso.hom_inv_id_assoc]
+  have hz :
+      HomologicalComplex.homologyMap
+          (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+            (openCover P).inner (openCover P).outer).f 1 ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+            (openCover P).inner (openCover P).outer).g 1 = 0 := by
+    rw [← HomologicalComplex.homologyMap_comp,
+      (ConstructionTargets.BooleanTwoCoverScaffold.shortComplex
+        (openCover P).inner (openCover P).outer).zero,
+      HomologicalComplex.homologyMap_zero]
+  simpa only [Category.assoc, zero_comp, comp_zero] using
+    congrArg (fun k ↦
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanIntersectionProductionHomologyIso
+        (openCover P).inner (openCover P).outer 1).inv ≫ k ≫
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.booleanUnionProductionHomologyIso
+        (openCover P).inner (openCover P).outer
+        (openCover P).inner_open (openCover P).outer_open
+        (openCover P).cover 1).hom) hz
+
+/-- The degree-one radial pieces segment after deleting the zero inner
+summand and applying the fixed overlap and outer coordinates. -/
+noncomputable def radialMVReducedPieces (P : PairingData) :
+    ShortComplex AddCommGrpCat :=
+  ShortComplex.mk (radialMVBoundaryGroup P)
+    ((radialOuterH1GroupIsoCoordinates P).inv ≫ biprod.inr ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1)
+    (by
+      simp only [radialMVBoundaryGroup, Category.assoc,
+        Iso.hom_inv_id_assoc]
+      calc
+        _ = (radialIntersectionH1GroupIsoInt P).inv ≫
+              ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+                (openCover P).inner (openCover P).outer 1 ≫
+              ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+                (openCover P).inner (openCover P).outer 1 := by
+            simpa only [biprodSndIsoOfIsZero] using
+              congrArg (fun k ↦
+                (radialIntersectionH1GroupIsoInt P).inv ≫
+                  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+                    (openCover P).inner (openCover P).outer 1 ≫ k)
+                ((biprodSndIsoOfIsZero
+                  (radialInnerH1GroupIsZero P)).hom_inv_id_assoc
+                    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+                      (openCover P).inner (openCover P).outer 1))
+        _ = 0 := by
+          simpa only [Category.assoc, comp_zero] using
+            congrArg (fun k ↦ (radialIntersectionH1GroupIsoInt P).inv ≫ k)
+              (radialMVPieces_comp_zero P))
+
+/-- B6 at the middle term, transported through the zero inner summand and
+the fixed degree-one coordinates. -/
+theorem radialMVReducedPiecesExact (P : PairingData) :
+    (radialMVReducedPieces P).Exact := by
+  apply ShortComplex.exact_of_iso ?_ (radialMVPiecesExact P 1)
+  exact ShortComplex.isoMk
+    (radialIntersectionH1GroupIsoInt P)
+    ((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+      radialOuterH1GroupIsoCoordinates P)
+    (Iso.refl _)
+    (by
+      simpa only [radialMVReducedPieces, radialMVBoundaryGroup,
+        Iso.trans_hom, Category.comp_id] using
+        (radialIntersectionH1GroupIsoInt P).hom_inv_id_assoc
+          (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+            (openCover P).inner (openCover P).outer 1 ≫
+            ((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+              radialOuterH1GroupIsoCoordinates P).hom))
+    (by
+      simpa only [radialMVReducedPieces, Category.comp_id] using
+        (((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+          radialOuterH1GroupIsoCoordinates P).hom_inv_id_assoc
+            (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+              (openCover P).inner (openCover P).outer 1)))
+
+/-- A proof-relevant exactness package exposing the two arrows while hiding
+only the proof that their composite is zero. -/
+def HasExactArrows {C : Type*} [Category C] [HasZeroMorphisms C]
+    {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) : Prop :=
+  ∃ h : f ≫ g = 0, (ShortComplex.mk f g h).Exact
+
+theorem hasExactArrows_of_exact {C : Type*} [Category C] [HasZeroMorphisms C]
+    {S : ShortComplex C} (hS : S.Exact) : HasExactArrows S.f S.g :=
+  ⟨S.zero, by simpa only using hS⟩
+
+/-- B6: the degree-two/degree-one radial Mayer--Vietoris fragment.  The
+middle short complex is in the fixed integer/orbit coordinates; the adjacent
+packages expose the production connecting, reassembly, and intersection
+arrows in their long-exact-sequence order. -/
+theorem radialMVSegment (P : PairingData) :
+    (radialMVReducedPieces P).Exact ∧
+      HasExactArrows
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+          (openCover P).inner (openCover P).outer 1)
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+          (openCover P).inner (openCover P).outer
+          (openCover P).inner_open (openCover P).outer_open (openCover P).cover 0) ∧
+      HasExactArrows
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+          (openCover P).inner (openCover P).outer
+          (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1)
+        (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          (openCover P).inner (openCover P).outer 1) := by
+  exact ⟨radialMVReducedPiecesExact P,
+    hasExactArrows_of_exact (radialMVUnionExact P 0),
+    hasExactArrows_of_exact (radialMVIntersectionExact P 1)⟩
+
+/-! ### Attaching-map coordinates -/
+
+/-- The algebraic attaching boundary in the additive-group category used by
+the production Mayer--Vietoris sequence. -/
+def attachingBoundaryGroup (P : PairingData) :
+    AddCommGrpCat.of ℤ ⟶ AddCommGrpCat.of (PairingOrbit P.pair → ℤ) :=
+  AddCommGrpCat.ofHom (attachingBoundary P).toAddMonoidHom
+
+@[simp] theorem attachingBoundaryGroup_apply (P : PairingData) (n : ℤ) :
+    attachingBoundaryGroup P n = n • attachingDegree P := rfl
+
+/-- Additive homomorphisms out of the infinite cyclic group are determined
+by the positive generator. -/
+theorem addCommGrpHom_int_ext {A : AddCommGrpCat}
+    (f g : AddCommGrpCat.of ℤ ⟶ A) (h : f 1 = g 1) : f = g := by
+  apply ConcreteCategory.hom_ext
+  intro n
+  calc
+    f n = n • f 1 := by
+      simpa using (map_zsmul f.hom n (1 : ℤ))
+    _ = n • g 1 := congrArg (fun x ↦ n • x) h
+    _ = g n := by
+      simpa using (map_zsmul g.hom n (1 : ℤ)).symm
+
+/-- B7 is reduced exactly to the image of the positive overlap generator;
+no coordinate or sign information is discarded. -/
+theorem radialMV_boundary_eq_iff_one (P : PairingData) :
+    radialMVBoundaryGroup P = attachingBoundaryGroup P ↔
+      radialMVBoundaryGroup P 1 = attachingDegree P := by
+  constructor
+  · intro h
+    rw [h]
+    rw [attachingBoundaryGroup_apply]
+    simp
+  · intro h
+    apply addCommGrpHom_int_ext
+    exact h.trans (by
+      simpa using (attachingBoundaryGroup_apply P 1).symm)
+
+/-- The uncoordinatized outer-piece H₁ class obtained by including the
+positive overlap generator into the outer member of the radial cover. -/
+noncomputable def radialOuterBoundaryGenerator (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of (OuterPiece P)) :=
+  (biprod.snd : _ ⟶
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of (OuterPiece P)))
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      (openCover P).inner (openCover P).outer 1
+      ((radialIntersectionH1GroupIsoInt P).inv 1))
+
+/-- The raw outer-piece class whose fixed coordinates are the signed
+attaching-degree vector. -/
+noncomputable def attachingOuterClass (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (TopCat.of (OuterPiece P)) :=
+  (radialOuterH1GroupIsoCoordinates P).inv (attachingDegree P)
+
+theorem radialMVBoundaryGroup_one_formula (P : PairingData) :
+    radialMVBoundaryGroup P 1 =
+      (radialOuterH1GroupIsoCoordinates P).hom
+        (radialOuterBoundaryGenerator P) := by
+  change (radialOuterH1GroupIsoCoordinates P).hom.hom
+    (radialOuterBoundaryGenerator P) = _
+  rfl
+
+/-- The remaining generator computation can equivalently be carried out
+before outer-piece coordinates are applied. -/
+theorem radialMVBoundaryGroup_one_iff_outerClass (P : PairingData) :
+    radialMVBoundaryGroup P 1 = attachingDegree P ↔
+      radialOuterBoundaryGenerator P = attachingOuterClass P := by
+  rw [radialMVBoundaryGroup_one_formula]
+  constructor
+  · intro h
+    apply_fun (radialOuterH1GroupIsoCoordinates P).inv at h
+    simpa [attachingOuterClass] using h
+  · intro h
+    rw [h, attachingOuterClass]
+    simp
+
+/-- The unsigned inclusion-induced H₁ map from the radial intersection to
+the outer cover member.  The production MV arrow uses its negative. -/
+noncomputable def radialIntersectionToOuterH1 (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of {q // q ∈ (openCover P).inner ∩ (openCover P).outer}) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of (OuterPiece P)) :=
+  HomologicalComplex.homologyMap
+    (((AlgebraicTopology.SSet.singularChainComplexFunctor AddCommGrpCat).obj
+      (AddCommGrpCat.of ℤ)).map
+      (TopCat.toSSet.map
+        (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+          (Set.inter_subset_right)))) 1
+
+/-- The chosen intersection generator is carried by the unsigned outer
+inclusion to the explicit positive overlap circle class. -/
+theorem radialIntersectionToOuterH1_positiveGenerator_eq (P : PairingData) :
+    radialIntersectionToOuterH1 P
+        ((radialIntersectionH1GroupIsoInt P).inv 1) =
+      singularH1Map (radialOverlapCircleInOuter P)
+        (circleGroupH1IsoInt.inv 1) := by
+  rw [radialIntersectionPositiveGenerator_eq]
+  change singularH1Map
+      (⟨fun q => ⟨q.1, q.2.2⟩, by fun_prop⟩ :
+        C({q // q ∈ (openCover P).inner ∩ (openCover P).outer}, OuterPiece P))
+      (singularH1Map (radialIntersectionPositiveCircle P)
+        (circleGroupH1IsoInt.inv 1)) = _
+  change (singularH1Map (radialIntersectionPositiveCircle P) ≫
+      singularH1Map
+        (⟨fun q => ⟨q.1, q.2.2⟩, by fun_prop⟩ :
+          C({q // q ∈ (openCover P).inner ∩ (openCover P).outer}, OuterPiece P)))
+      (circleGroupH1IsoInt.inv 1) = _
+  rw [← singularH1Map_comp]
+  rfl
+
+/-- After applying the fixed outer deformation coordinates, the chosen
+intersection generator becomes the H₁ class of the ordered polygon boundary
+loop. -/
+theorem radialIntersectionToOuterH1_generator_eq_boundaryLoop (P : PairingData) :
+    singularH1Map (outerHomotopyEquivWedge P).toFun
+        (radialIntersectionToOuterH1 P
+          ((radialIntersectionH1GroupIsoInt P).inv 1)) =
+      singularH1Map (polygonBoundaryWedgeLoop P)
+        (circleGroupH1IsoInt.inv 1) := by
+  rw [radialIntersectionToOuterH1_positiveGenerator_eq]
+  change (singularH1Map (radialOverlapCircleInOuter P) ≫
+      singularH1Map (outerHomotopyEquivWedge P).toFun)
+      (circleGroupH1IsoInt.inv 1) = _
+  rw [radialOverlapCircle_h1_naturality]
+
+/-- In the fixed outer-piece coordinates, the unsigned overlap inclusion
+sends the positive generator to the attaching-degree vector. -/
+theorem radialIntersectionToOuterH1_generator_coordinates (P : PairingData) :
+    (radialOuterH1GroupIsoCoordinates P).hom
+        (radialIntersectionToOuterH1 P
+          ((radialIntersectionH1GroupIsoInt P).inv 1)) =
+      attachingDegree P := by
+  change (((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (OuterPiece P)) 1).inv ≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          (outerH1IsoCoordinates P).hom)
+      (radialIntersectionToOuterH1 P
+        ((radialIntersectionH1GroupIsoInt P).inv 1))) = _
+  simp only [outerH1IsoCoordinates,
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso,
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso,
+    CategoryTheory.Functor.preimageIso_hom,
+    CategoryTheory.Functor.map_preimage,
+    Iso.trans_hom, Iso.inv_hom_id_assoc]
+  change (finiteWedgeH1CoordinateIso P).inv
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (PairingOrbit P.pair))) 1).inv
+        (singularH1Map (outerHomotopyEquivWedge P).toFun
+          (radialIntersectionToOuterH1 P
+            ((radialIntersectionH1GroupIsoInt P).inv 1)))) = _
+  rw [radialIntersectionToOuterH1_generator_eq_boundaryLoop]
+  have hc := congrArg
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Circle) 1).hom
+    circleGroupH1IsoInt_inv_one_comparison
+  rw [Iso.inv_hom_id_apply] at hc
+  rw [hc]
+  change (finiteWedgeH1CoordinateIso P).inv
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of
+          (PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge
+            (PairingOrbit P.pair))) 1).inv
+        ((((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+          (AddCommGrpCat.of ℤ)).map (TopCat.ofHom (polygonBoundaryWedgeLoop P)))
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of Circle) 1).hom
+            (ConstructionTargets.CircleHomology.circleH1IsoInt.inv 1)))) = _
+  rw [singularHomologyComparison_inv_map,
+    ← polygonBoundaryFundamentalClass_hurewicz,
+    polygonBoundaryFundamentalClass_hurewicz_eq_attachingDegree]
+  exact (finiteWedgeH1CoordinateIso P).hom_inv_id_apply _
+
+/-- The outer projection of the production intersection arrow is literally
+the negative outer inclusion, fixing the MV sign before the geometric loop
+calculation begins. -/
+theorem radialIntersectionArrow_snd (P : PairingData) :
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          (openCover P).inner (openCover P).outer 1 ≫
+        (Limits.biprod.snd :
+          (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+              (TopCat.of (InnerPiece P)) ⊞
+            ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+              (TopCat.of (OuterPiece P))) ⟶
+          ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+            (TopCat.of (OuterPiece P))) =
+      -radialIntersectionToOuterH1 P := by
+  change Limits.biprod.lift _ (-radialIntersectionToOuterH1 P) ≫
+      Limits.biprod.snd = -radialIntersectionToOuterH1 P
+  simp
+
+theorem radialOuterBoundaryGenerator_eq_neg_inclusion (P : PairingData) :
+    radialOuterBoundaryGenerator P =
+      -radialIntersectionToOuterH1 P
+        ((radialIntersectionH1GroupIsoInt P).inv 1) := by
+  change
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+          (openCover P).inner (openCover P).outer 1 ≫ Limits.biprod.snd)
+        ((radialIntersectionH1GroupIsoInt P).inv 1) = _
+  have h := congrArg ConcreteCategory.hom (radialIntersectionArrow_snd P)
+  have hx := congrArg
+    (fun f => f ((radialIntersectionH1GroupIsoInt P).inv 1)) h
+  simpa using hx
+
+/-- With the production Mayer--Vietoris convention, the reduced boundary is
+the negative of the geometrically oriented attaching-degree map. -/
+theorem radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup (P : PairingData) :
+    radialMVBoundaryGroup P = -attachingBoundaryGroup P := by
+  apply addCommGrpHom_int_ext
+  rw [radialMVBoundaryGroup_one_formula,
+    radialOuterBoundaryGenerator_eq_neg_inclusion, map_neg,
+    radialIntersectionToOuterH1_generator_coordinates]
+  simpa using (attachingBoundaryGroup_apply P 1).symm
+
+/-- The production boundary and the attaching map have the same kernel,
+expressed pointwise in the coordinates used by the reduced exact sequence. -/
+theorem radialMVBoundaryGroup_apply_eq_zero_iff (P : PairingData) (n : ℤ) :
+    radialMVBoundaryGroup P n = 0 ↔ attachingBoundary P n = 0 := by
+  rw [radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup]
+  change -(attachingBoundary P n) = 0 ↔ attachingBoundary P n = 0
+  simp
+
+/-- Negating the production boundary does not change its range. -/
+theorem radialMVBoundaryGroup_mem_range_iff (P : PairingData)
+    (x : PairingOrbit P.pair → ℤ) :
+    (∃ n : ℤ, radialMVBoundaryGroup P n = x) ↔
+      ∃ n : ℤ, attachingBoundary P n = x := by
+  rw [radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup]
+  constructor
+  · rintro ⟨n, h⟩
+    refine ⟨-n, ?_⟩
+    simpa using h
+  · rintro ⟨n, h⟩
+    refine ⟨-n, ?_⟩
+    simpa using h
+
+/-- Linear-map form of the reduced production boundary, used by the
+kernel/cokernel extraction in B8. -/
+noncomputable def radialMVBoundaryLinear (P : PairingData) :
+    ℤ →ₗ[ℤ] (PairingOrbit P.pair → ℤ) :=
+  (radialMVBoundaryGroup P).hom.toIntLinearMap
+
+theorem radialMVBoundaryLinear_eq_neg_attachingBoundary (P : PairingData) :
+    radialMVBoundaryLinear P = -attachingBoundary P := by
+  apply LinearMap.ext
+  intro n
+  exact congrArg (fun f => f n)
+    (congrArg ConcreteCategory.hom
+      (radialMVBoundaryGroup_eq_neg_attachingBoundaryGroup P))
+
+/-- The actual reduced production boundary has the B3 kernel model. -/
+theorem radialMVBoundaryLinear_ker (P : PairingData) :
+    LinearMap.ker (radialMVBoundaryLinear P) = BoundaryKernel P := by
+  rw [radialMVBoundaryLinear_eq_neg_attachingBoundary]
+  ext n
+  simp
+
+/-- The actual reduced production boundary has the B3 range model. -/
+theorem radialMVBoundaryLinear_range (P : PairingData) :
+    LinearMap.range (radialMVBoundaryLinear P) =
+      LinearMap.range (attachingBoundary P) := by
+  rw [radialMVBoundaryLinear_eq_neg_attachingBoundary, LinearMap.range_neg]
+
+/-- The kernel object of the reduced production boundary is the B3 model. -/
+noncomputable def radialMVBoundaryKernelEquiv (P : PairingData) :
+    LinearMap.ker (radialMVBoundaryLinear P) ≃ₗ[ℤ] BoundaryKernel P :=
+  LinearEquiv.ofEq _ _ (radialMVBoundaryLinear_ker P)
+
+/-- The quotient by the reduced production boundary is the B3 cokernel
+model, with no remaining sign choice. -/
+noncomputable def radialMVBoundaryCokernelEquiv (P : PairingData) :
+    ((PairingOrbit P.pair → ℤ) ⧸
+        LinearMap.range (radialMVBoundaryLinear P)) ≃ₗ[ℤ]
+      BoundaryCokernel P :=
+  Submodule.quotEquivOfEq _ _ (radialMVBoundaryLinear_range P)
+
+/-- Linear-map form of the reduced reassembly arrow into surface H₁. -/
+noncomputable def radialMVReassemblyLinear (P : PairingData) :
+    (PairingOrbit P.pair → ℤ) →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  (radialMVReducedPieces P).g.hom.toIntLinearMap
+
+/-- The reduced boundary range is killed by the surface reassembly map, the
+well-definedness input for the B8 cokernel map. -/
+theorem radialMVBoundary_range_le_reassembly_ker (P : PairingData) :
+    LinearMap.range (radialMVBoundaryLinear P) ≤
+      LinearMap.ker (radialMVReassemblyLinear P) := by
+  rw [LinearMap.range_le_ker_iff]
+  apply LinearMap.ext
+  intro n
+  have hz := congrArg ConcreteCategory.hom (radialMVReducedPieces P).zero
+  exact congrArg (fun f => f n) hz
+
+/-- The reduced reassembly arrow descends to the quotient by the production
+boundary range. -/
+noncomputable def radialMVH1QuotientMap (P : PairingData) :
+    ((PairingOrbit P.pair → ℤ) ⧸
+        LinearMap.range (radialMVBoundaryLinear P)) →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  Submodule.liftQ _ (radialMVReassemblyLinear P)
+    (radialMVBoundary_range_le_reassembly_ker P)
+
+/-- B3's concrete cokernel model maps canonically to the production surface
+H₁ term.  Exactness will identify this map as an equivalence. -/
+noncomputable def boundaryCokernelToRadialH1 (P : PairingData) :
+    BoundaryCokernel P →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  (radialMVH1QuotientMap P).comp
+    (radialMVBoundaryCokernelEquiv P).symm.toLinearMap
+
+/-- Exactness at the reduced outer-piece term identifies the reassembly
+kernel with the production boundary range. -/
+theorem radialMVReassemblyLinear_ker (P : PairingData) :
+    LinearMap.ker (radialMVReassemblyLinear P) =
+      LinearMap.range (radialMVBoundaryLinear P) := by
+  symm
+  exact congrArg (fun S : AddSubgroup (PairingOrbit P.pair → ℤ) => S.toIntSubmodule)
+    (radialMVReducedPiecesExact P).ab_range_eq_ker
+
+/-- The quotient-to-surface-H₁ map is injective; this is the middle
+exactness half of the B8 cokernel identification. -/
+theorem radialMVH1QuotientMap_injective (P : PairingData) :
+    Function.Injective (radialMVH1QuotientMap P) := by
+  rw [← LinearMap.ker_eq_bot]
+  apply Submodule.ker_liftQ_eq_bot
+  rw [radialMVReassemblyLinear_ker]
+
+/-- The canonical B3-cokernel map is injective. -/
+theorem boundaryCokernelToRadialH1_injective (P : PairingData) :
+    Function.Injective (boundaryCokernelToRadialH1 P) :=
+  (radialMVH1QuotientMap_injective P).comp
+    (radialMVBoundaryCokernelEquiv P).symm.injective
+
+/-- Exactness at surface H₁ and injectivity of the connected H₀ overlap
+arrow make the reduced reassembly map surjective. -/
+theorem radialMVReducedReassembly_surjective (P : PairingData) :
+    Function.Surjective (radialMVReducedPieces P).g := by
+  letI : Nonempty {q // q ∈ (openCover P).inner ∩ (openCover P).outer} :=
+    ⟨(radialIntersectionPositiveCircle P) 1⟩
+  letI : Nonempty (InnerPiece P) := ⟨(openCover P).center⟩
+  letI : Mono
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (openCover P).inner (openCover P).outer 0) :=
+    T00A01MayerVietorisAdapters.productionIntersectionArrow_mono_zero_of_coordinates
+        (openCover P).inner (openCover P).outer
+        (radialIntersectionH0GroupIsoInt P) (radialInnerH0GroupIsoInt P)
+  letI : Epi
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1) :=
+    (radialMVUnionExact P 0).epi_f
+      ((radialMVIntersectionExact P 0).mono_g_iff.mp inferInstance)
+  have hs : Function.Surjective
+      (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1) := by
+    rw [← AddCommGrpCat.epi_iff_surjective]
+    infer_instance
+  intro y
+  obtain ⟨x, hx⟩ := hs y
+  let e :
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+            (TopCat.of (InnerPiece P)) ⊞
+          ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+            (TopCat.of (OuterPiece P)) ≅
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+          (TopCat.of (OuterPiece P)) :=
+    biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)
+  refine ⟨(radialOuterH1GroupIsoCoordinates P).hom (e.hom x), ?_⟩
+  change ((radialOuterH1GroupIsoCoordinates P).inv ≫
+      biprod.inr ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+        (openCover P).inner (openCover P).outer 1)
+      ((radialOuterH1GroupIsoCoordinates P).hom (e.hom x)) = y
+  rw [ConcreteCategory.comp_apply, ConcreteCategory.comp_apply,
+    Iso.hom_inv_id_apply]
+  rw [← hx]
+  exact congrArg
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (openCover P).inner (openCover P).outer 1)
+    (e.hom_inv_id_apply x)
+
+/-- Surjectivity descends through the quotient by the boundary range. -/
+theorem radialMVH1QuotientMap_surjective (P : PairingData) :
+    Function.Surjective (radialMVH1QuotientMap P) := by
+  intro y
+  obtain ⟨x, hx⟩ := radialMVReducedReassembly_surjective P y
+  refine ⟨Submodule.Quotient.mk x, ?_⟩
+  simpa only [radialMVH1QuotientMap, Submodule.liftQ_apply] using hx
+
+/-- The canonical B3-cokernel map is surjective. -/
+theorem boundaryCokernelToRadialH1_surjective (P : PairingData) :
+    Function.Surjective (boundaryCokernelToRadialH1 P) := by
+  intro y
+  obtain ⟨x, hx⟩ := radialMVH1QuotientMap_surjective P y
+  refine ⟨radialMVBoundaryCokernelEquiv P x, ?_⟩
+  change radialMVH1QuotientMap P
+      ((radialMVBoundaryCokernelEquiv P).symm
+        (radialMVBoundaryCokernelEquiv P x)) = y
+  rw [(radialMVBoundaryCokernelEquiv P).symm_apply_apply]
+  exact hx
+
+/-- B8 in degree one: surface H₁ is the attaching-map cokernel. -/
+noncomputable def boundaryCokernelRadialH1Equiv (P : PairingData) :
+    BoundaryCokernel P ≃ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) :=
+  LinearEquiv.ofBijective (boundaryCokernelToRadialH1 P)
+    ⟨boundaryCokernelToRadialH1_injective P,
+      boundaryCokernelToRadialH1_surjective P⟩
+
+/-- Both degree-two radial cover-piece groups vanish in the additive-group
+presentation used by the production Mayer--Vietoris sequence. -/
+theorem radialH2PiecesGroupIsZero (P : PairingData) : IsZero
+    (ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+          (TopCat.of (InnerPiece P)) ⊞
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+          (TopCat.of (OuterPiece P))) := by
+  have underlyingIsZero {A : ModuleCat ℤ} (hA : IsZero A) :
+      IsZero
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj A) := by
+    rw [IsZero.iff_id_eq_zero]
+    rw [← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_id,
+      ← ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_zero]
+    exact congrArg
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map)
+      (hA.eq_of_src _ _)
+  rw [biprod_isZero_iff]
+  constructor
+  · exact (underlyingIsZero (innerHigherHomology_isZero P 2 (by omega))).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (InnerPiece P)) 2).symm
+  · exact (underlyingIsZero (outerHigherHomologyIsZero P 2 (by omega))).of_iso
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (OuterPiece P)) 2).symm
+
+/-- The degree-two surface connecting map is injective because its preceding
+cover-piece term vanishes. -/
+theorem radialMVConnectingH1_mono (P : PairingData) : Mono
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+      (openCover P).inner (openCover P).outer
+      (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1) := by
+  exact (radialMVUnionExact P 1).mono_g
+    ((radialH2PiecesGroupIsZero P).eq_of_src _ _)
+
+/-- The degree-two connecting segment after putting the overlap and the
+degree-one pieces in the coordinates used by the attaching map. -/
+noncomputable def radialMVH2KernelComplex (P : PairingData) :
+    ShortComplex AddCommGrpCat :=
+  ShortComplex.mk
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        (openCover P).inner (openCover P).outer
+        (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1 ≫
+      (radialIntersectionH1GroupIsoInt P).hom)
+    (radialMVBoundaryGroup P)
+    (by
+      rcases (radialMVSegment P).2.2 with ⟨hz, _⟩
+      simp only [radialMVBoundaryGroup, Category.assoc]
+      slice_lhs 2 3 => exact (radialIntersectionH1GroupIsoInt P).hom_inv_id
+      slice_lhs 2 3 => exact Category.id_comp _
+      slice_lhs 1 2 => exact hz
+      simp)
+
+/-- Exactness identifies the image of the surface connecting map, in the
+fixed overlap coordinate, with the kernel of the production boundary. -/
+theorem radialMVH2KernelComplex_exact (P : PairingData) :
+    (radialMVH2KernelComplex P).Exact := by
+  apply ShortComplex.exact_of_iso ?_ (radialMVIntersectionExact P 1)
+  exact ShortComplex.isoMk
+    (Iso.refl _)
+    (radialIntersectionH1GroupIsoInt P)
+    ((biprodSndIsoOfIsZero (radialInnerH1GroupIsZero P)) ≪≫
+      radialOuterH1GroupIsoCoordinates P)
+    (by simp [radialMVH2KernelComplex])
+    (by
+      simp only [radialMVH2KernelComplex, radialMVBoundaryGroup,
+        Iso.trans_hom]
+      slice_lhs 1 2 => exact (radialIntersectionH1GroupIsoInt P).hom_inv_id
+      slice_lhs 1 2 => exact Category.id_comp _
+      rfl)
+
+/-- Range/kernel form of the degree-two Mayer--Vietoris extraction. -/
+theorem radialMVConnectingH1Coordinates_range_eq_kernel (P : PairingData) :
+    AddMonoidHom.range (radialMVH2KernelComplex P).f.hom =
+      AddMonoidHom.ker (radialMVBoundaryGroup P).hom :=
+  (radialMVH2KernelComplex_exact P).ab_range_eq_ker
+
+/-- Linear-map form of the connecting morphism in the fixed overlap
+coordinate. -/
+noncomputable def radialMVConnectingH1CoordinatesLinear (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) →ₗ[ℤ] ℤ :=
+  (radialMVH2KernelComplex P).f.hom.toIntLinearMap
+
+/-- The connecting-map range is exactly the B3 attaching-kernel model. -/
+theorem radialMVConnectingH1CoordinatesLinear_range (P : PairingData) :
+    LinearMap.range (radialMVConnectingH1CoordinatesLinear P) =
+      BoundaryKernel P := by
+  calc
+    _ = (AddMonoidHom.range (radialMVH2KernelComplex P).f.hom).toIntSubmodule := rfl
+    _ = (AddMonoidHom.ker (radialMVBoundaryGroup P).hom).toIntSubmodule :=
+      congrArg (fun S : AddSubgroup ℤ => S.toIntSubmodule)
+        (radialMVConnectingH1Coordinates_range_eq_kernel P)
+    _ = LinearMap.ker (radialMVBoundaryLinear P) := rfl
+    _ = BoundaryKernel P := radialMVBoundaryLinear_ker P
+
+/-- The coordinate form of the connecting map remains injective. -/
+theorem radialMVConnectingH1CoordinatesLinear_injective (P : PairingData) :
+    Function.Injective (radialMVConnectingH1CoordinatesLinear P) := by
+  letI := radialMVConnectingH1_mono P
+  change Function.Injective (radialMVH2KernelComplex P).f
+  rw [← AddCommGrpCat.mono_iff_injective]
+  change Mono
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        (openCover P).inner (openCover P).outer
+        (openCover P).inner_open (openCover P).outer_open (openCover P).cover 1 ≫
+      (radialIntersectionH1GroupIsoInt P).hom)
+  infer_instance
+
+/-- B8 in degree two, first in the production additive-group model. -/
+noncomputable def radialH2BoundaryKernelLinearEquiv (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) ≃ₗ[ℤ]
+      BoundaryKernel P :=
+  (LinearEquiv.ofInjective (radialMVConnectingH1CoordinatesLinear P)
+      (radialMVConnectingH1CoordinatesLinear_injective P)).trans
+    (LinearEquiv.ofEq _ _ (radialMVConnectingH1CoordinatesLinear_range P))
+
+/-- B8 in degree two in the additive-group category. -/
+noncomputable def radialH2BoundaryKernelGroupIso (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 2
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) ≅
+      AddCommGrpCat.of (BoundaryKernel P) :=
+  (radialH2BoundaryKernelLinearEquiv P).toAddEquiv.toAddCommGrpIso
+
+/-- B8 in degree two in the canonical integral-module presentation. -/
+noncomputable def radialH2BoundaryKernelModuleIso (P : PairingData) :
+    H P 2 ≅ ModuleCat.of ℤ (BoundaryKernel P) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) 2 _
+    (radialH2BoundaryKernelGroupIso P)
+
+/-- Integral H₀ coordinates on the radial outer piece. -/
+noncomputable def radialOuterH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of (OuterPiece P)) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      (outerHomotopyEquivWedge P) 0 ≪≫
+    finiteWedgeGroupH0IsoInt P
+
+/-- The polygon quotient has the expected connected degree-zero homology. -/
+noncomputable def radialSurfaceH0GroupIsoInt (P : PairingData) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of
+          (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) ≅
+      AddCommGrpCat.of ℤ := by
+  exact @T00A01MayerVietorisAdapters.openCoverH0IsoOfCoordinates
+    (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel) _
+    (openCover P).inner (openCover P).outer
+    (openCover P).inner_open (openCover P).outer_open (openCover P).cover
+    ⟨(radialIntersectionPositiveCircle P) 1⟩
+    ⟨(openCover P).center⟩
+    ⟨⟨((radialIntersectionPositiveCircle P) 1).1,
+      ((radialIntersectionPositiveCircle P) 1).2.2⟩⟩
+    (radialIntersectionH0GroupIsoInt P) (radialInnerH0GroupIsoInt P)
+    (radialOuterH0GroupIsoInt P)
+
+/-- B8 in degree zero in the canonical integral-module presentation. -/
+noncomputable def radialH0ModuleIsoInt (P : PairingData) :
+    H P 0 ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) 0 _
+    (radialSurfaceH0GroupIsoInt P)
+
+/-- B8 in degree one in the canonical integral-module presentation. -/
+noncomputable def radialH1BoundaryCokernelModuleIso (P : PairingData) :
+    H P 1 ≅ ModuleCat.of ℤ (BoundaryCokernel P) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of
+      (ConstructionTargets.PolygonRadialOpenCover.PolygonQuotient P.Rel)) 1 _
+    (boundaryCokernelRadialH1Equiv P).symm.toAddEquiv.toAddCommGrpIso
+
+/-- B8: low-degree homology of the polygon quotient. -/
+theorem lowDegreeHomology (P : PairingData) :
+    Nonempty (H P 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (H P 1 ≅ ModuleCat.of ℤ (BoundaryCokernel P)) ∧
+      Nonempty (H P 2 ≅ ModuleCat.of ℤ (BoundaryKernel P)) :=
+  ⟨⟨radialH0ModuleIsoInt P⟩, ⟨⟨radialH1BoundaryCokernelModuleIso P⟩,
+    ⟨radialH2BoundaryKernelModuleIso P⟩⟩⟩
+
+/-- Consequently the remaining raw B7 equality is exactly the statement
+that the unsigned outer inclusion has the negative attaching class. -/
+theorem radialOuterBoundaryGenerator_eq_attachingOuterClass_iff (P : PairingData) :
+    radialOuterBoundaryGenerator P = attachingOuterClass P ↔
+      radialIntersectionToOuterH1 P
+          ((radialIntersectionH1GroupIsoInt P).inv 1) =
+        -attachingOuterClass P := by
+  rw [radialOuterBoundaryGenerator_eq_neg_inclusion]
+  constructor <;> intro h
+  · simpa only [neg_eq_iff_eq_neg] using h
+  · simpa only [neg_eq_iff_eq_neg] using h
 
 end
 

@@ -112881,7 +112881,7 @@
    :other-consumers [:t01A03 :t92J06 :t97A01 :t97A03]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "genericPointWedgeLegCoordinates_vanKampen",
@@ -112892,7 +112892,9 @@
     :reported-by [:owner],
     :type
     "standard-only point-wedge van Kampen leg-coordinate theorem: pi1 of a point wedge of two path-connected, locally contractible-at-basepoint spaces ≃* Monoid.Coprod of the pieces' pi1 (current coordinate stack stops at interface declarations and an unfinished counit normalization)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id :lemma-genericpointwedgelegcoordinates-vankampen,
    :kind :lemma,
    :depends-on [],
@@ -113856,62 +113858,74 @@
   {:consumer :t99J01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 0,
    :review-finding
    "Recorded fixture hash mismatch: :fixture.sha256 is 0bca6ce32c019fc3053c7f813c26917169cf817375b44d5e722b864b61a526450c1, but ConstructionTargets/PointWedgeVanKampen.blueprint.md at recorded commit c9b3af27 has exact SHA-256 0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0. Re-record the fixture hash for the reviewed commit.",
    :implements-lemma :lemma-threecirclesfundamentalgroupequiv,
    :evidence
    {:placeholder-delta {:source-before 0, :source-after 0},
-    :residual
-    "Install transported connectors in the right-piece comparison; then projection/B6/B12.",
-    :outcome :stop,
-    :warnings ["existing linter"],
+    :residual "Program complete; final equivalence compiles.",
+    :outcome :done-unreviewed,
+    :warnings ["existing linters"],
     :missing-theorems
-    [{:name
-      "PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen",
-      :type "Leg equivalence",
-      :status :partial,
-      :consumers [:t99J01 :t01A03 :t92J06 :t97A01 :t97A03],
+    [{:name "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
+      :type
+      "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
+      :status :proved,
+      :consumers [:t99J01],
       :depends-on
-      ["PointWedgeVanKampen.genericPointWedgeSourceEquivalence"],
+      ["PointWedgeVanKampen.genericPointWedgeLegCoordinates_vanKampen"],
       :area "fundamental-group-wedge-of-circles"}],
     :statement-hashes
     {:source
-     "fa847f2e65ca1627ee9464498394758f3a9b8a7d84a4b036b6bbc75c0000b612",
+     "9015735d1111638d415245efc42d52b6af07ff9066439d8ce8d0f79a657275a8",
      :documentation
-     "bc9d72108403cde5267467b87a78459d739bf86af8782778772ba3aa13955f5f",
+     "e0454da1192575b2aee903f449c43f1208467d350b10dfd340cd9c5a3bd74f31",
+     :implementation
+     "77e6a7e24387c482ac010e59e4733e58f40ae26893a27e156d87a912df6e7f53",
      :blueprint
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0",
      :registry "166/166"},
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason
-    "Banked equivalence-coherent connector transport; arbitrary somePath connectors do not supply the required square.",
     :commands
     [{:cmd
-      "lake env lean ConstructionTargets/PointWedgeVanKampen.lean",
+      "lake env lean ConstructionTargets/ThreeCirclesFundamentalGroup.lean",
       :exit 0}
      {:cmd "lake build ConstructionTargets.PointWedgeVanKampen",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256/diff/placeholders", :exit 0}],
-    :diagnostic-history
-    [{:cmd
+     {:cmd
       "lake build ConstructionTargets.ThreeCirclesFundamentalGroup",
-      :exit 1,
-      :finding "B12 absent."}],
-    :commit "560cad44455f248e25bdb92246711ae86c90136c",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "hash/diff/placeholders", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1791999420549-11984-fe234fb5",
+     :commands
+     ["git show/diff-tree 64a4242e...,138677800..."
+      "archive final commit; lean PointWedgeVanKampen.lean and ThreeCirclesFundamentalGroup.lean"
+      "sha256sum source/doc/implementation/blueprint; count placeholders"
+      "python3 scripts/statement-registry.py check"
+      "#print axioms B6/final"
+      "lake build both targets"],
+     :finding
+     "PASS: both commits have exact in-scope paths and all recorded hashes match; archived files compile; placeholders 0->0; registry 166/166. B6 obtains rightBase=inl from explicit outer-factor representations, then proves both literal leg coordinates. B12 composes the inner and outer wedge equivalences with circle/free-group coordinates to the exact type FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3). Standard axioms only; program complete."},
+    :commit "138677800d75266909157be691407b56795dcdef",
+    :commits
+    ["64a4242e04051bc5bb0eb213b76c4e82183087ca"
+     "138677800d75266909157be691407b56795dcdef"],
     :changed-paths
-    ["ConstructionTargets/PointWedgeVanKampen.lean"
-     "ConstructionTargets/PointWedgeVanKampen.md"],
+    ["ConstructionTargets/PointWedgeVanKampen.md"
+     "ConstructionTargets/ThreeCirclesFundamentalGroup.lean"],
     :fixture
     {:path "ConstructionTargets/PointWedgeVanKampen.blueprint.md",
      :sha256
      "0bca6ce32c019fc3053c7be96eef941c10e51582807b879c80311ff1fbe8c8b0"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PointWedgeVanKampen.lean"
     "ConstructionTargets/PointWedgeVanKampen.md"
@@ -113932,7 +113946,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/PointWedgeVanKampen.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Projection obstruction reduced to a naturality-oriented connector square.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked right-factor representation and eliminated the outer-right comparison.",
    :id :program-2026-10-11-point-wedge-van-kampen,
    :kind :reusable-theorem,
    :campaign-priority 43,
@@ -114821,10 +114835,90 @@
     {:job 6,
      :commit "017f8bcbc2102871addea3509813436ee041038c",
      :reason
-     "Projection obstruction reduced to a naturality-oriented connector square."}]}
+     "Projection obstruction reduced to a naturality-oriented connector square."}
+    {:job 7,
+     :commit "560cad44455f248e25bdb92246711ae86c90136c",
+     :reason
+     "Banked equivalence-coherent connector transport; arbitrary somePath connectors do not supply the required square."}
+    {:job 8,
+     :commit "dc3608fabab77541b24109719459b19c110d339d",
+     :reason
+     "Installed coherent right connectors at the literal base."}
+    {:job 9,
+     :commit "ba328d3e84b981caadf9e85b826223ba81c9d7bb",
+     :reason
+     "Exposed the coherent right connector in exact transport-map-counit order."}
+    {:job 1,
+     :commit "900db39d71f88c8e27a735447e1eab3960c77939",
+     :reason
+     "Expanded mapped connector factors; arbitrary connectors lack counit coherence."}
+    {:job 2,
+     :commit "331fdbde8cca3e5cb96271723ab8b9793d036848",
+     :reason
+     "Banked source-to-target connector-square transport through an equivalence."}
+    {:job 3,
+     :commit "cefbe61453e46e88b155c34ddefd80d57d23c096",
+     :reason
+     "Banked preservation of connector squares under explicit base change."}
+    {:job 4,
+     :commit "9207818481215819dc3fe6cc3cb02d312f2a3f6a",
+     :reason
+     "Banked connector-square pullback through an equivalence."}
+    {:job 5,
+     :commit "b0d880546b5a8cc9b7053a3bd09cb8198be06296",
+     :reason
+     "Banked the forward overlap component as named endpoint transport."}
+    {:job 6,
+     :commit "25f376324f4dcdcc92ecde368247bf61182c47aa",
+     :reason
+     "Banked endpoint transport through the right overlap leg."}
+    {:job 7,
+     :commit "740fcc702b8cbfc275e88cbc62970d9a30dc6bf3",
+     :reason "Banked the coherent right-cover connector square."}
+    {:job 8,
+     :commit "137c47dfbb5b3eecbb304baa6003eb800c4a6941",
+     :reason
+     "Banked the right-cover image of the coherent connector square."}
+    {:job 9,
+     :commit "8193ba58a31f1d11bc8f616087bd356e01180263",
+     :reason
+     "Banked literal-base rebasing of the mapped coherent connector square."}
+    {:job 1,
+     :commit "05dee7b05b9b22fe9508d70fdbb673cccbc984d4",
+     :reason
+     "Banked installed-square reduction to two endpoint identifications."}
+    {:job 2,
+     :commit "2e1d7a4742f5c0829bce99b25b2269d05d7c8b87",
+     :reason
+     "Banked mapped-connector reduction to a source inverse-unit square."}
+    {:job 3,
+     :commit "a59f2c33bb1ce3f3503d916b269f3faa4792f345",
+     :reason
+     "Banked fixed-right-base source-square reduction to the literal Y connector square."}
+    {:job 4,
+     :commit "59133341b92aa3e8db20e25fa2b39479a6a048a5",
+     :reason
+     "Banked fixed-base reduction from mapped inverse unit to the literal Y counit square."}
+    {:job 5,
+     :commit "b05794c9af02edddf90f5cf0fb5a5571fa26217f",
+     :reason "Banked fixed-endpoint installed connector reduction."}
+    {:job 6,
+     :commit "5464a3cb6490e83ed9c8f90a558ed39da9d8e1ce",
+     :reason "Banked literal counit square iff trivial normal form."}
+    {:job 7,
+     :commit "a6d0d9ddb90ab82dc72d9023e826c0d78943eecb",
+     :reason "Banked arbitrary-endpoint counit-normal-form reduction."}
+    {:job 8,
+     :commit "940f6fd89d940ebab6bc2c77cb38bdb808a44c3c",
+     :reason
+     "Banked the literal overlap connector square and trivial right-factor projection."}
+    {:job 9,
+     :commit "73ca2d97834e7ee98776825ce0a1220b132e7444",
+     :reason
+     "Banked right-factor representation and eliminated the outer-right comparison."}]}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -114837,7 +114931,10 @@
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type
     "For a point wedge of two path-connected spaces with contractible-to-basepoint open neighbourhoods of the wedge point, FundamentalGroup of the wedge is multiplicatively equivalent to the coproduct of the two piece fundamental groups, with literal leg coordinates.",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/PointWedgeVanKampen.lean"]},
    :id
    :lemma-pointwedgevankampen-genericpointwedgelegcoordinates-vankampen,
    :kind :lemma,
@@ -114890,7 +114987,7 @@
    :other-consumers []}
   {:consumer :t99J01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "PointWedgeVanKampen.threeCirclesFundamentalGroupEquiv",
@@ -114901,7 +114998,10 @@
     :reported-by [:program-2026-10-11-point-wedge-van-kampen],
     :type
     "FundamentalGroup ThreeCircles threeBase ≃* FreeGroup (Fin 3)",
-    :area "fundamental-group-wedge-of-circles"},
+    :area "fundamental-group-wedge-of-circles",
+    :proved-in :program-2026-10-11-point-wedge-van-kampen,
+    :banked-by :program-2026-10-11-point-wedge-van-kampen,
+    :banked-commit "138677800d75266909157be691407b56795dcdef"},
    :id :lemma-pointwedgevankampen-threecirclesfundamentalgroupequiv,
    :kind :lemma,
    :depends-on
@@ -118964,63 +119064,58 @@
    :depends-on [:lemma-apm-t91j06-bridge-compatible-stage-coordinates],
    :other-consumers []}
   {:consumer :t00J02,
-   :stop-count 1,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 0,
+   :review-finding
+   "New milestone is not sorry-free: archived commit 0970de36 compiles, but #print axioms canonicalRegularFiberWitness_of_locallyIsolatedFiber includes sorryAx. Repair the locally-isolated-fiber proof/dependency so the reported constructor has only standard axioms; textual placeholder count 0 is insufficient.",
    :evidence
    {:placeholder-delta {:source-before 1, :source-after 1},
     :residual
-    "Implement local-fundamental-class stage; then signed-count stages and consumer assembly.",
+    "Build implicit-function incidence charts/tangent equivalence; Sard; calculations; Main.",
     :outcome :stop,
-    :warnings
-    ["existing fixture/Main sorryAx"
-     "unrelated dirty t93J03 files preserved"],
+    :warnings ["Main sorryAx" "lint; unrelated edits preserved"],
     :missing-theorems
-    [{:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+    [{:name "transverse_incidenceDifferenceDerivative_surjective",
       :type
-      "transverse disk-bounded preimage implies induced H₂ map is zero",
-      :status :not-started,
+      "transversality makes incidence difference derivative surjective",
+      :status :proved,
+      :consumers [:t00J02],
+      :depends-on ["transverse_coprodDerivative_surjective"],
+      :area "oriented-surface-degree"}
+     {:name "t00J02_transverse_diskBounded_topHomologyMap_eq_zero",
+      :type "H2 map zero",
+      :status :partial,
       :consumers [:t00J02],
       :depends-on
-      ["surfaceTopHomology_localFundamentalClassIso"
-       "regularValue_topHomologyMap_signedCount"
-       "transverseCircle_preimage_component_signedCount"
-       "circleDegree_eq_homologyMap"],
+      ["transverse_incidenceDifferenceDerivative_surjective"],
       :area "oriented-surface-degree"}],
     :statement-hashes
     {:source
      "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
-     :documentation
-     "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
+     :implementation
+     "0a4fcf2de4a12bcac3897edff9d765995347577ff977ae37ec284de9182d7249",
      :blueprint
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984",
      :registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
-    :author "topo-2",
-    :reason "Blueprint written.",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-2,
+    :reason "Banked incidence derivative sign conversion.",
     :commands
-    [{:cmd "diff audited/target blueprint", :exit 0}
-     {:cmd "lake env lean holes/labs/blueprints/t00J02/Blueprint.lean",
+    [{:cmd
+      "lake env lean -o /tmp/t00J02Closure.olean ConstructionTargets/t00J02Closure.lean",
       :exit 0}
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "sha256/diff-tree/placeholders", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-3",
-     :job "invoke-1791931210822-10748-9c7865c4",
-     :commands
-     ["git show/diff-tree 7d9f683de"
-      "git archive 7d9f683de; lake env lean archived Blueprint.lean and Main.lean"
-      "sha256sum; placeholder delta; statement-registry.py check"],
-     :finding
-     "Recorded commit adds only the blueprint; fixture/Main hashes match afb497a6/0b3b4888, Main placeholders stay 1->1, registry 166/166. Archived Blueprint and Main compile; sole sorryAx is the declared library boundary. Mathematics is sound: transverse preimage components are circles; disk fillings kill their H1 classes; nonzero Circle H1 map is mono into H1(S)=Z^4; signed local degrees therefore vanish, forcing H2(f)=0, and the frozen degree adapter yields degree=0. All final hypotheses feed the library lemma or adapter; Producer is correctly excluded. This is a valid initial blueprint milestone."},
-    :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
-    :changed-paths ["ConstructionTargets/t00J02Closure.blueprint.md"],
+     {:cmd "hash/count", :exit 0}],
+    :commit "f1b3c8e74aef660ca90715a2ce86b4abc2dca8f3",
+    :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t00J02Closure.blueprint.md",
      :sha256
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
-    :seat "topo-2"},
+    :seat :topo-2},
    :phase :implementation,
    :state :open,
    :scope
@@ -119040,7 +119135,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked incidence tangent regularity transport.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119051,9 +119146,258 @@
    :program-history
    [{:job 1,
      :commit "7d9f683de2d6d5ad371b9c3bd59cdf0d3220b4a9",
-     :reason "Blueprint written."}]}
+     :reason "Blueprint written."}
+    {:job 2,
+     :commit "b389f11d593ba185db398a8b0e85d00e8eec18ed",
+     :reason "Banked local fundamental-class coordinates."}
+    {:job 3,
+     :commit "9642998740f30f564d076dfef0630b8ba7b407a7",
+     :reason "Banked circle-degree coordinates."}
+    {:job 4,
+     :commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a",
+     :reason "Banked zero component signed counts."}
+    {:job 5,
+     :commit "6fb31fac2ba6584bcf268151f80f2b7511f2bd0a",
+     :reason "Banked finite signed-count aggregation."}
+    {:job 6,
+     :commit "23d28b99d91d0474720fe052af9e9e7f5153b48b",
+     :reason
+     "Banked the global H2 integer-coordinate action; the geometric regular-value localization identity remains."}
+    {:job 7,
+     :commit "1e9d1d107df204f2f79e20eed70c3fd9a33de03f",
+     :reason
+     "Banked zero H2-degree to zero-map; localization remains."}
+    {:job 8,
+     :commit "77428242203cb60fa9820ef63b9ae70d86b6afaf",
+     :reason
+     "Banked signed-count-to-H2 assembly; geometric formula remains."}
+    {:job 9,
+     :commit "b3649cbc71b4d78f0a38906c493fc324fe02a28d",
+     :reason
+     "Banked compact-discrete regular-fiber finiteness; transversality-to-discreteness remains."}
+    {:job 1,
+     :commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4",
+     :reason
+     "Banked zero-degree fiber choices; local-degree formula remains."}
+    {:job 3,
+     :commit "72e2be5a3866e5158e73a16c8b94d545a7dfb91d",
+     :reason
+     "Repair: removed false pointwise degree bridge; banked grouping by genuine component."}
+    {:job 4,
+     :commit "d46cfd969b54f992c84a36c1416a8333521e6196",
+     :reason
+     "Banked genuine component indexing for literal fiber points."}
+    {:job 5,
+     :commit "711b2032df1c48210a7984d09b9c19d057b72ead",
+     :reason "Banked component-degree aggregation."}
+    {:job 6,
+     :commit "63b0caefb1239e8f32f0e496841f0cb825ac527f",
+     :reason "Banked finite occupied components."}
+    {:job 7,
+     :commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de",
+     :reason "Banked exact component lifts."}
+    {:job 8,
+     :commit "5aeeae275e75b2397c2bc241f214652218fa1525",
+     :reason "Banked lift-degree aggregation."}
+    {:job 9,
+     :commit "8b9632e39322f6ee0d3885c58b2adc21349418c2",
+     :reason "Banked literal regular-fiber Fintype."}
+    {:job 1,
+     :commit "46b552a85a8e7fe4748fe055a8c5544cfa99df66",
+     :reason "Banked locally-injective fiber Fintype."}
+    {:job 2,
+     :commit "6ab093ec8c4d7c0afadb809e9949b87fa0b735c5",
+     :reason "Banked finite regular-fiber choice representation."}
+    {:job 3,
+     :commit "dcfc7440576fc0692eb98db5bf2c6600a61a89d0",
+     :reason "Banked componentwise degree comparison interface."}
+    {:job 5,
+     :commit "45dab8131ff80411fe29265826a71b06cd9fdc26",
+     :reason
+     "Corrected fixture provenance; signed-count reindexing remains banked."}
+    {:job 6,
+     :commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd",
+     :reason "Banked zero point count from component comparison."}
+    {:job 7,
+     :commit "485f6fe6495199758abf0a8061c388409fbd2141",
+     :reason "Banked signed-count H2 assembly."}
+    {:job 8,
+     :commit "6063ebde809a66e0c6c27aa8ecd1cfb4eb934985",
+     :reason "Banked exact-lift regular-fiber H2 assembly."}
+    {:job 9,
+     :commit "8a49059565653885f645d112eaaf316b43107802",
+     :reason
+     "Banked exact geometric formula interface and H2 consequence."}
+    {:job 1,
+     :commit "9cf78a1a3e6d97570c7b25f8232393cfb36c104e",
+     :reason "Banked localized formula constructor."}
+    {:job 2,
+     :commit "f0390823547747d6e59ad3dd68ef0d0e3e5eb612",
+     :reason "Banked localized H2 assembly."}
+    {:job 3,
+     :commit "d9b53e27fd1b748a76d2241581da652f5532e6b4",
+     :reason "Banked component-localization interface."}
+    {:job 4,
+     :commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d",
+     :reason "Banked top-degree localization interface."}
+    {:job 5,
+     :commit "636cca0780ffd4ea44101fbedb0538af96f40a40",
+     :reason "Banked local-degree coefficient uniqueness."}
+    {:job 6,
+     :commit "d362f7092f6d53eacae6e022043554bb7bc8ba1e",
+     :reason "Banked component-sum coefficient transport."}
+    {:job 7,
+     :commit "8500d6f95c3bc1b4889fc0b45f2cfbcea8027eaa",
+     :reason "Banked signed-sum coefficient transport."}
+    {:job 8,
+     :commit "7bdf2eec630cc25bda7e18480b330cde48f5c03e",
+     :reason "Banked chart-coefficient component constructor."}
+    {:job 9,
+     :commit "63c77275209d11d18f575f6d0baf055e57c05a84",
+     :reason "Banked chart-coefficient top-degree constructor."}
+    {:job 1,
+     :commit "a52ccee229312c565378d09e95a5eec9bdb4a666",
+     :reason "Banked bundled chart-calculation H2 consequence."}
+    {:job 2,
+     :commit "c95471737d57a6c3d34ecdf85371ce435127078d",
+     :reason "Banked canonical chart-calculation constructor."}
+    {:job 3,
+     :commit "0849f2f553851b3d9b067f1a3ab2c16121762120",
+     :reason "Reduced component comparison to canonical zero sums."}
+    {:job 4,
+     :commit "f28fac1855457bbe2754c4d2a3e31b64ac507894",
+     :reason "Banked canonical zero-sum H2 endpoint."}
+    {:job 5,
+     :commit "c5787e160bf304b9420924e4074d581cc5809954",
+     :reason "Banked canonical geometric payload."}
+    {:job 6,
+     :commit "317c855c567bed9d1b46e74cd7ca80b273a585dc",
+     :reason "Banked canonical finite-regrouping endpoint."}
+    {:job 7,
+     :commit "eccdf019ab9cae2cf7435c7d56da7cbe0d8ae612",
+     :reason "Banked integrated canonical regular-fiber witness."}
+    {:job 8,
+     :commit "13721a38d02fa8d5a808082d2b96d81e47b93d2c",
+     :reason "Banked existential regular-fiber endpoint."}
+    {:job 9,
+     :commit "1dd5348253adc83eb15080b120507a4c4090bbbb",
+     :reason "Banked discrete-fiber witness constructor."}
+    {:job 2,
+     :commit "163e9b3e435606eb790ee9706686ef5a3a148799",
+     :reason
+     "Repaired locally-isolated witness; standard axioms only."}
+    {:job 3,
+     :commit "174e4dee1c42140fcd175ed45cc413b39f21ef34",
+     :reason "Banked locally-isolated canonical-fiber endpoint."}
+    {:job 4,
+     :commit "01096eb73a725508d816e9fba48b878b42658ee3",
+     :reason "Banked locally-isolated fiber-data constructor."}
+    {:job 5,
+     :commit "1291718c17049d8ed55da8989e99638bd5b2d7c8",
+     :reason "Banked discrete-fiber constructor."}
+    {:job 6,
+     :commit "68467442f989dc4836cdd26fca100b6df6fc8bdb",
+     :reason "Banked transverse regularity linear step."}
+    {:job 7,
+     :commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319",
+     :reason "Banked regular-value selection."}
+    {:job 8,
+     :commit "da6e039f1a724ae592d9690cd9e627b14f19c969",
+     :reason "Banked Sard regular-fiber adapter."}
+    {:job 9,
+     :commit "9421e419a44300b57eb7e2946d62087cbecb94d7",
+     :reason "Banked local-diffeomorphism fiber isolation."}
+    {:job 1,
+     :commit "2766d583b68055cb4206e918952cd376a5c78337",
+     :reason "Banked manifold derivative witness."}
+    {:job 2,
+     :commit "27e868e0853d114f772ffc6602624333a48ed719",
+     :reason "Banked chart derivative."}
+    {:job 3,
+     :commit "e451d9d480ec49c82fff9e39f0c346b15c9f3532",
+     :reason "Banked chart local inverse."}
+    {:job 4,
+     :commit "def09043f2a636ce01451704125b833618c51c7f",
+     :reason "Banked chart injectivity."}
+    {:job 5,
+     :commit "64781283f90e4768965a92200750b5ed1151d074",
+     :reason "Banked manifold local injectivity."}
+    {:job 6,
+     :commit "c4c74789306628b163b55446416c343f8ca709b2",
+     :reason "Banked regular-fiber local injectivity."}
+    {:job 7,
+     :commit "6e517d638f6ec4e1f3ef8372379894f15301b4bd",
+     :reason "Banked circle-fiber local injectivity."}
+    {:job 8,
+     :commit "97895f175bed4ad4c5e7d23b174ced99f3acde17",
+     :reason "Banked incidence-kernel projection bridge."}
+    {:job 9,
+     :commit "d5630b7e4415a05e94758003a997b2cf6559df40",
+     :reason "Banked incidence tangent regularity transport."}]}
   {:consumer :t98A06,
-   :stop-count 0,
+   :stop-count 8,
+   :review-finding
+   "fixture hash mismatch: row records 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c823842d26e, but git show 419de7e1:ConstructionTargets/t98A06Closure.blueprint.md hashes to 9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196; repair the recorded fixture hash",
+   :evidence
+   {:placeholder-delta {:source-before 1, :source-after 1},
+    :residual
+    "Identify solver with mfderiv; finish local lifts; compact flow; Main.",
+    :outcome :stop,
+    :warnings ["Main sorryAx" "unrelated files preserved"],
+    :missing-theorems
+    [{:name "contMDiffOn_tangentSection_of_trivialization_coordinates",
+      :type "fixed tangent coordinates give smooth local section",
+      :status :proved,
+      :consumers [:t98A06],
+      :depends-on ["contDiff_lift_of_comp_isInvertible"],
+      :area "smooth-manifold-submersion"}
+     {:name "t98A06_local_smooth_submersion_lift",
+      :type "local smooth lifts",
+      :status :partial,
+      :consumers [:t98A06],
+      :depends-on
+      ["contMDiffOn_tangentSection_of_trivialization_coordinates"],
+      :area "smooth-manifold-submersion"}],
+    :statement-hashes
+    {:source
+     "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
+     :implementation
+     "a01a47daa02c4772d13b8270c81d926044c3cd94ec58130f77ce0376e34292a3",
+     :blueprint
+     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196",
+     :registry "166/166"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :topo-2,
+    :reason
+    "Banked tangent-section chart transport; fixture hash repaired.",
+    :commands
+    [{:cmd "git show commit:fixture | sha256sum", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/t98A06Closure.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "drafts", :exit 1, :finding "fixed inference"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792039406528-13240-d7eb75bb",
+     :commands
+     ["git show 419de7e1 archived closure/Main/blueprint"
+      "lake env lean archived t98A06Closure.lean"
+      "lake env lean archived Main.lean"
+      "sha256sum; placeholders; #print axioms"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP after fixture repair: commit adds compiled, sorry-free tangent-section chart transport. The theorem faithfully converts smooth fixed trivialization coordinates to a tangent-bundle section on U via the trivialization section equivalence; all hypotheses are used. Standard axioms only. Scope closure-only; fixture/Main/closure hashes match; placeholders 0/1; registry 166/166. Residual milestones identify solver with mfderiv, local lifts, compact flow, Main."},
+    :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
+    :changed-paths ["ConstructionTargets/t98A06Closure.lean"],
+    :fixture
+    {:path "ConstructionTargets/t98A06Closure.blueprint.md",
+     :sha256
+     "9838452bf081767e1df000700b7c24774e94f50633c1cc10b2aa0e8c82319196"},
+    :seat :topo-2},
    :phase :implementation,
    :state :open,
    :scope
@@ -119073,14 +119417,37 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t98A06Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t98A06/BLUEPRINT.md's plan into ConstructionTargets/t98A06Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked tangent-section chart transport; fixture hash repaired.",
    :id :program-2026-10-13-close-t98a06,
    :kind :final-adapter,
    :campaign-priority 50,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "fcd285c205339940c0512a1418e00019aaef3c35",
+     :reason "Blueprint written; implementation awaits review."}
+    {:job 2,
+     :commit "1f334efd354c87554eb3f200daefb09084b9b525",
+     :reason "Banked B1 representations and B3 gluing."}
+    {:job 3,
+     :commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460",
+     :reason "Banked derivative right inverses."}
+    {:job 4,
+     :commit "eebf94553a1cef785f5a621f57baf092bc23d1b0",
+     :reason "Banked correction."}
+    {:job 5,
+     :commit "2914de86857a9e7f16e8e708c0dd33988f173917",
+     :reason "Banked smooth fixed-coordinate right inverses."}
+    {:job 6,
+     :commit "5c0f2e062494ca836b5a554e2f17712718aaacef",
+     :reason "Banked smooth coordinate lift solution."}
+    {:job 8,
+     :commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a",
+     :reason
+     "Banked tangent-section chart transport; fixture hash repaired."}]}
   {:consumer :t01A01,
    :stop-count 0,
    :phase :implementation,
@@ -119133,20 +119500,92 @@
    [:lemma-surfacetophomology-localfundamentalclassiso
     :lemma-regularvalue-tophomologymap-signedcount
     :lemma-transversecircle-preimage-component-signedcount
-    :lemma-circledegree-eq-homologymap],
+    :lemma-circledegree-eq-homologymap
+    :lemma-regularvalue-topdegree-eq-zero-of-signedcount
+    :lemma-surfacetopdegree-eq-homologymap
+    :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero
+    :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount
+    :lemma-finite-regularfiber-of-isdiscrete
+    :lemma-transverse-coprodderivative-surjective
+    :lemma-regularfiber-zerodegreecomponentlifts
+    :lemma-regularfiber-componentsignedcount-eq-zero
+    :lemma-groupedcomponentsignedcount-eq-zero
+    :lemma-regularfibercomponentindex
+    :lemma-groupedcomponentsignedcount-eq-zero-of-comparison
+    :lemma-occupiedregularfibercomponent
+    :lemma-occupiedregularfiber-exactzerodegreelifts
+    :lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison
+    :lemma-regularfiberfintype-of-isdiscrete
+    :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber
+    :lemma-regularfiberfintype-of-locallyinjectivealongfiber
+    :lemma-finiteregularfiberchoice-of-locallyinjective
+    :lemma-regularfibersignedcount-eq-zero-of-comparison
+    :lemma-pointsignedcount-eq-groupedcomponentsignedcount
+    :lemma-pointsignedcount-eq-zero-of-componentcomparison
+    :lemma-tophomologymap-eq-zero-of-pointsignedcountcomparison
+    :lemma-tophomologymap-eq-zero-of-regularfibercomparison
+    :lemma-regularfibertopdegreeformula
+    :lemma-tophomologymap-eq-zero-of-regularfibertopdegreeformula
+    :lemma-regularfiberlocaldegree-localization-eq
+    :lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons
+    :lemma-tophomologymap-eq-zero-of-localfundamentalclasscomparisons
+    :lemma-regularfiberlocalizedcomponentformula-tocomparison
+    :lemma-regularfibertopdegreeformula-of-localizedformulas
+    :lemma-regularfiberlocaldegree-eq-of-localization-eq
+    :lemma-componentlocaldegreesum-eq-of-localizationcoefficients
+    :lemma-regularfibersignedsum-eq-of-localizationcoefficients
+    :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients
+    :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
+    :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations
+    :lemma-regularfiberchartcalculations-tophomologymap-eq-zero
+    :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees
+    :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero
+    :lemma-tophomologymap-eq-zero-of-canonicalcomponentsums
+    :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero
+    :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero-withoutlifts
+    :lemma-canonicalregularfiberwitness-tophomologymap-eq-zero
+    :lemma-tophomologymap-eq-zero-of-exists-canonicalregularfiberwitness
+    :lemma-canonicalregularfiberwitness-of-isdiscrete
+    :lemma-canonicalregularfiberwitness-of-locallyinjective
+    :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber
+    :lemma-locallyisolatedcanonicalfiberdata-tophomologymap-eq-zero
+    :lemma-locallyisolatedcanonicalfiberdata-of
+    :lemma-locallyisolatedcanonicalfiberdata-of-isdiscrete
+    :lemma-transverse-mfderiv-surjective-of-circledirection-lifts
+    :lemma-exists-regularvalue-of-criticalvalues-measure-zero
+    :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector
+    :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber
+    :lemma-exists-mfderivequiv-of-surjective
+    :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective
+    :lemma-hasfderivat-writteninextchartat-of-hasmfderivat
+    :lemma-exists-smoothlocalinverse-writteninextchartat
+    :lemma-exists-nhds-injon-writteninextchartat
+    :lemma-exists-nhds-injon-of-contmdiff-surjective
+    :lemma-locallyinjectivealongfiber-of-mfderiv-surjective
+    :lemma-exists-circleparameter-direction-lifts-of-sard
+    :lemma-direction-lifts-of-surjective-incidencekernel-snd
+    :lemma-direction-lifts-of-incidencetangentequiv
+    :lemma-transverse-incidencedifferencederivative-surjective],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
-   :acceptance {:lemma "surfaceTopHomology_localFundamentalClassIso"},
+   :acceptance
+   {:lemma "surfaceTopHomology_localFundamentalClassIso",
+    :type "H2 coordinate with local coefficients"},
    :lemma
    {:name "surfaceTopHomology_localFundamentalClassIso",
-    :reported-by []},
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "H2 coordinate with local coefficients",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "b389f11d593ba185db398a8b0e85d00e8eec18ed"},
    :id :lemma-surfacetophomology-localfundamentalclassiso,
    :kind :lemma,
    :depends-on [],
-   :other-consumers []}
+   :other-consumers [:t98A02]}
   {:consumer :portfolio,
    :phase :lemma,
    :state :backlog,
@@ -119158,28 +119597,1650 @@
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
-  {:consumer :portfolio,
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "transverseCircle_preimage_component_signedCount",
+    :type "component degree zero"},
+   :lemma
+   {:name "transverseCircle_preimage_component_signedCount",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component degree zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "354ae8990f0293fc6f739ded05d6cbf08e5d576a"},
+   :id :lemma-transversecircle-preimage-component-signedcount,
+   :kind :lemma,
+   :depends-on [:lemma-circledegree-eq-homologymap],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "circleDegree_eq_homologyMap",
+    :type "coordinate action is multiplication by degree"},
+   :lemma
+   {:name "circleDegree_eq_homologyMap",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "coordinate action is multiplication by degree",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "9642998740f30f564d076dfef0630b8ba7b407a7"},
+   :id :lemma-circledegree-eq-homologymap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularValue_topDegree_eq_zero_of_signedCount",
+    :type "signed count of zero component degrees is zero"},
+   :lemma
+   {:name "regularValue_topDegree_eq_zero_of_signedCount",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "signed count of zero component degrees is zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6fb31fac2ba6584bcf268151f80f2b7511f2bd0a"},
+   :id :lemma-regularvalue-topdegree-eq-zero-of-signedcount,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transversecircle-preimage-component-signedcount],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "surfaceTopDegree_eq_homologyMap",
+    :type
+    "chosen H2 coordinate action is multiplication by top degree"},
+   :lemma
+   {:name "surfaceTopDegree_eq_homologyMap",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "chosen H2 coordinate action is multiplication by top degree",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "23d28b99d91d0474720fe052af9e9e7f5153b48b"},
+   :id :lemma-surfacetopdegree-eq-homologymap,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero",
+    :type "zero H2 degree implies zero H2 map"},
+   :lemma
+   {:name "surfaceTopHomologyMap_eq_zero_of_surfaceTopDegree_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "zero H2 degree implies zero H2 map",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1e9d1d107df204f2f79e20eed70c3fd9a33de03f"},
+   :id
+   :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero,
+   :kind :lemma,
+   :depends-on [:lemma-surfacetopdegree-eq-homologymap],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_regularValue_signedCount",
+    :type "signed count plus zero components implies H2 map zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_regularValue_signedCount",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "signed count plus zero components implies H2 map zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "77428242203cb60fa9820ef63b9ae70d86b6afaf"},
+   :id :lemma-tophomologymap-eq-zero-of-regularvalue-signedcount,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularvalue-topdegree-eq-zero-of-signedcount
+    :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "finite_regularFiber_of_isDiscrete",
+    :type "compact discrete point fiber is finite"},
+   :lemma
+   {:name "finite_regularFiber_of_isDiscrete",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "compact discrete point fiber is finite",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "b3649cbc71b4d78f0a38906c493fc324fe02a28d"},
+   :id :lemma-finite-regularfiber-of-isdiscrete,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "transverse_coprodDerivative_surjective",
+    :type "range-sum implies coproduct derivative surjective"},
+   :lemma
+   {:name "transverse_coprodDerivative_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "range-sum implies coproduct derivative surjective",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-transverse-coprodderivative-surjective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t98A06,
    :phase :lemma,
    :state :backlog,
    :scope [],
    :acceptance
-   {:lemma "transverseCircle_preimage_component_signedCount"},
+   {:lemma "t98A06_local_smooth_submersion_lift",
+    :type "smooth submersions admit local smooth vector-field lifts"},
    :lemma
-   {:name "transverseCircle_preimage_component_signedCount",
-    :reported-by []},
-   :id :lemma-transversecircle-preimage-component-signedcount,
+   {:name "t98A06_local_smooth_submersion_lift",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth submersions admit local smooth vector-field lifts",
+    :area "smooth-manifold-submersion"},
+   :id :lemma-t98a06-local-smooth-submersion-lift,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surjective-continuouslinearmap-has-rightinverse
+    :lemma-rightinverse-of-comp-continuouslinearequiv
+    :lemma-contdiff-rightinverse-of-comp-isinvertible
+    :lemma-contdiff-lift-of-comp-isinvertible
+    :lemma-contmdiffon-tangentsection-of-trivialization-coordinates],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t98A06_global_vectorField_lift",
+    :type "partition-of-unity glues local derivative lifts"},
+   :lemma
+   {:name "t98A06_global_vectorField_lift",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "partition-of-unity glues local derivative lifts",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "1f334efd354c87554eb3f200daefb09084b9b525"},
+   :id :lemma-t98a06-global-vectorfield-lift,
+   :kind :lemma,
+   :depends-on [:lemma-t98a06-local-smooth-submersion-lift],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t98A06_compact_circle_fibers_diffeomorphic",
+    :type "compact submersion circle fibers are diffeomorphic"},
+   :lemma
+   {:name "t98A06_compact_circle_fibers_diffeomorphic",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "compact submersion circle fibers are diffeomorphic",
+    :area "smooth-manifold-submersion"},
+   :id :lemma-t98a06-compact-circle-fibers-diffeomorphic,
+   :kind :lemma,
+   :depends-on [:lemma-t98a06-global-vectorfield-lift],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiber_zeroDegreeComponentLifts",
+    :type "zero-degree lift at each fiber point"},
+   :lemma
+   {:name "regularFiber_zeroDegreeComponentLifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "zero-degree lift at each fiber point",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "72ea7906636c48bcf45ac21c24cea72cf7b653a4"},
+   :id :lemma-regularfiber-zerodegreecomponentlifts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transversecircle-preimage-component-signedcount],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiber_componentSignedCount_eq_zero",
+    :type "chosen finite-fiber component signed sum is zero"},
+   :lemma
+   {:name "regularFiber_componentSignedCount_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chosen finite-fiber component signed sum is zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "72e2be5a3866e5158e73a16c8b94d545a7dfb91d"},
+   :id :lemma-regularfiber-componentsignedcount-eq-zero,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiber-zerodegreecomponentlifts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "groupedComponentSignedCount_eq_zero",
+    :type
+    "zero component-local-degree sums imply weighted total zero"},
+   :lemma
+   {:name "groupedComponentSignedCount_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "zero component-local-degree sums imply weighted total zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "72e2be5a3866e5158e73a16c8b94d545a7dfb91d"},
+   :id :lemma-groupedcomponentsignedcount-eq-zero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberComponentIndex",
+    :type "fiber points map to genuine connected preimage components"},
+   :lemma
+   {:name "regularFiberComponentIndex",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "fiber points map to genuine connected preimage components",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d46cfd969b54f992c84a36c1416a8333521e6196"},
+   :id :lemma-regularfibercomponentindex,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "groupedComponentSignedCount_eq_zero_of_comparison",
+    :type
+    "component sums equal zero lift degrees imply weighted total zero"},
+   :lemma
+   {:name "groupedComponentSignedCount_eq_zero_of_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "component sums equal zero lift degrees imply weighted total zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "711b2032df1c48210a7984d09b9c19d057b72ead"},
+   :id :lemma-groupedcomponentsignedcount-eq-zero-of-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-groupedcomponentsignedcount-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "OccupiedRegularFiberComponent",
+    :type "finite genuine components meeting the regular fiber"},
+   :lemma
+   {:name "OccupiedRegularFiberComponent",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "finite genuine components meeting the regular fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "63b0caefb1239e8f32f0e496841f0cb825ac527f"},
+   :id :lemma-occupiedregularfibercomponent,
+   :kind :lemma,
+   :depends-on [:lemma-regularfibercomponentindex],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "occupiedRegularFiber_exactZeroDegreeLifts",
+    :type "exact occupied-component lifts have degree zero"},
+   :lemma
+   {:name "occupiedRegularFiber_exactZeroDegreeLifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "exact occupied-component lifts have degree zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8aa8be49e5271bdc8f77f9ad025131f3f38d45de"},
+   :id :lemma-occupiedregularfiber-exactzerodegreelifts,
+   :kind :lemma,
+   :depends-on [:lemma-occupiedregularfibercomponent],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison",
+    :type
+    "component comparison and zero lift degrees imply zero signed count"},
+   :lemma
+   {:name
+    "occupiedComponentSignedCount_eq_zero_of_localDegreeComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "component comparison and zero lift degrees imply zero signed count",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "5aeeae275e75b2397c2bc241f214652218fa1525"},
+   :id
+   :lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-occupiedregularfiber-exactzerodegreelifts
+    :lemma-groupedcomponentsignedcount-eq-zero-of-comparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberFintype_of_isDiscrete",
+    :type
+    "compact discrete singleton preimage gives Fintype on equality fiber"},
+   :lemma
+   {:name "regularFiberFintype_of_isDiscrete",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "compact discrete singleton preimage gives Fintype on equality fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8b9632e39322f6ee0d3885c58b2adc21349418c2"},
+   :id :lemma-regularfiberfintype-of-isdiscrete,
+   :kind :lemma,
+   :depends-on [:lemma-finite-regularfiber-of-isdiscrete],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber",
+    :type "local injectivity implies discrete fiber"},
+   :lemma
+   {:name
+    "isDiscrete_preimage_singleton_of_locallyInjectiveAlongFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "local injectivity implies discrete fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id
+   :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberFintype_of_locallyInjectiveAlongFiber",
+    :type "locally-injective fiber Fintype"},
+   :lemma
+   {:name "regularFiberFintype_of_locallyInjectiveAlongFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "locally-injective fiber Fintype",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "46b552a85a8e7fe4748fe055a8c5544cfa99df66"},
+   :id :lemma-regularfiberfintype-of-locallyinjectivealongfiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber
+    :lemma-regularfiberfintype-of-isdiscrete],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "finiteRegularFiberChoice_of_locallyInjective",
+    :type
+    "circle value plus local injectivity gives finite fiber datum"},
+   :lemma
+   {:name "finiteRegularFiberChoice_of_locallyInjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "circle value plus local injectivity gives finite fiber datum",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6ab093ec8c4d7c0afadb809e9949b87fa0b735c5"},
+   :id :lemma-finiteregularfiberchoice-of-locallyinjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberfintype-of-locallyinjectivealongfiber],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberSignedCount_eq_zero_of_comparison",
+    :type "comparison gives zero signed count"},
+   :lemma
+   {:name "regularFiberSignedCount_eq_zero_of_comparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "comparison gives zero signed count",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "dcfc7440576fc0692eb98db5bf2c6600a61a89d0"},
+   :id :lemma-regularfibersignedcount-eq-zero-of-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-occupiedcomponentsignedcount-eq-zero-of-localdegreecomparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pointSignedCount_eq_groupedComponentSignedCount",
+    :type "point sum equals component sum"},
+   :lemma
+   {:name "pointSignedCount_eq_groupedComponentSignedCount",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "point sum equals component sum",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "45dab8131ff80411fe29265826a71b06cd9fdc26"},
+   :id :lemma-pointsignedcount-eq-groupedcomponentsignedcount,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pointSignedCount_eq_zero_of_componentComparison",
+    :type "component comparison gives zero point count"},
+   :lemma
+   {:name "pointSignedCount_eq_zero_of_componentComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component comparison gives zero point count",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6bda52066b6b819f9c6f1b27a16a8bed1d3457cd"},
+   :id :lemma-pointsignedcount-eq-zero-of-componentcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointsignedcount-eq-groupedcomponentsignedcount
+    :lemma-groupedcomponentsignedcount-eq-zero-of-comparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_pointSignedCountComparison",
+    :type "point count comparison gives H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_pointSignedCountComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "point count comparison gives H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "485f6fe6495199758abf0a8061c388409fbd2141"},
+   :id :lemma-tophomologymap-eq-zero-of-pointsignedcountcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pointsignedcount-eq-zero-of-componentcomparison
+    :lemma-surfacetophomologymap-eq-zero-of-surfacetopdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_regularFiberComparison",
+    :type "exact lifts plus two geometric identities give H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_regularFiberComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "exact lifts plus two geometric identities give H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6063ebde809a66e0c6c27aa8ecd1cfb4eb934985"},
+   :id :lemma-tophomologymap-eq-zero-of-regularfibercomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-pointsignedcountcomparison
+    :lemma-occupiedregularfiber-exactzerodegreelifts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula",
+    :type "bundled component/top-degree formula implies H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_regularFiberTopDegreeFormula",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "bundled component/top-degree formula implies H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8a49059565653885f645d112eaaf316b43107802"},
+   :id :lemma-tophomologymap-eq-zero-of-regularfibertopdegreeformula,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-regularfibercomparison],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "RegularFiberTopDegreeFormula"},
+   :lemma
+   {:name "RegularFiberTopDegreeFormula",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-regularfibertopdegreeformula,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberLocalDegree_localization_eq",
+    :type
+    "fiber local degree is the localized global fundamental-class coefficient"},
+   :lemma
+   {:name "regularFiberLocalDegree_localization_eq",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "fiber local degree is the localized global fundamental-class coefficient",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-regularfiberlocaldegree-localization-eq,
+   :kind :lemma,
+   :depends-on [:lemma-surfacetophomology-localfundamentalclassiso],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "surjective_continuousLinearMap_has_rightInverse",
+    :type "surjective CLM has CLM right inverse"},
+   :lemma
+   {:name "surjective_continuousLinearMap_has_rightInverse",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "surjective CLM has CLM right inverse",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "c5e1d7cd37bb0be2debd3ae20a4019307db2a460"},
+   :id :lemma-surjective-continuouslinearmap-has-rightinverse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "regularFiberTopDegreeFormula_of_localFundamentalClassComparisons",
+    :type "two localized equalities package formula"},
+   :lemma
+   {:name
+    "regularFiberTopDegreeFormula_of_localFundamentalClassComparisons",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "two localized equalities package formula",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "9cf78a1a3e6d97570c7b25f8232393cfb36c104e"},
+   :id
+   :lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "topHomologyMap_eq_zero_of_localFundamentalClassComparisons",
+    :type "localized comparisons imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_localFundamentalClassComparisons",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "localized comparisons imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "f0390823547747d6e59ad3dd68ef0d0e3e5eb612"},
+   :id
+   :lemma-tophomologymap-eq-zero-of-localfundamentalclasscomparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfibertopdegreeformula-of-localfundamentalclasscomparisons],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "RegularFiberLocalizedComponentFormula.toComparison",
+    :type "component localization supplies signed-count comparison"},
+   :lemma
+   {:name "RegularFiberLocalizedComponentFormula.toComparison",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component localization supplies signed-count comparison",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d9b53e27fd1b748a76d2241581da652f5532e6b4"},
+   :id :lemma-regularfiberlocalizedcomponentformula-tocomparison,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberTopDegreeFormula_of_localizedFormulas",
+    :type "component and top-degree formulas combine"},
+   :lemma
+   {:name "regularFiberTopDegreeFormula_of_localizedFormulas",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "component and top-degree formulas combine",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "a7feb28a91ce4aae5595b82b5cb443b7906e593d"},
+   :id :lemma-regularfibertopdegreeformula-of-localizedformulas,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberlocalizedcomponentformula-tocomparison],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberLocalDegree_eq_of_localization_eq",
+    :type "localized chart coefficient equals point local degree"},
+   :lemma
+   {:name "regularFiberLocalDegree_eq_of_localization_eq",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "localized chart coefficient equals point local degree",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "636cca0780ffd4ea44101fbedb0538af96f40a40"},
+   :id :lemma-regularfiberlocaldegree-eq-of-localization-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberlocaldegree-localization-eq
+    :lemma-ambientlocalgenerator-zsmul-injective],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "ambientLocalGenerator_zsmul_injective"},
+   :lemma
+   {:name "ambientLocalGenerator_zsmul_injective",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
+   :id :lemma-ambientlocalgenerator-zsmul-injective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "componentLocalDegreeSum_eq_of_localizationCoefficients",
+    :type
+    "chart coefficients replace local degrees in component sums"},
+   :lemma
+   {:name "componentLocalDegreeSum_eq_of_localizationCoefficients",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart coefficients replace local degrees in component sums",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d362f7092f6d53eacae6e022043554bb7bc8ba1e"},
+   :id :lemma-componentlocaldegreesum-eq-of-localizationcoefficients,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-eq-of-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "regularFiberSignedSum_eq_of_localizationCoefficients",
+    :type "chart coefficients replace local degrees in signed sum"},
+   :lemma
+   {:name "regularFiberSignedSum_eq_of_localizationCoefficients",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart coefficients replace local degrees in signed sum",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "8500d6f95c3bc1b4889fc0b45f2cfbcea8027eaa"},
+   :id :lemma-regularfibersignedsum-eq-of-localizationcoefficients,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-eq-of-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "regularFiberLocalizedComponentFormula_of_chartCoefficients",
+    :type "chart localization and component sums construct formula"},
+   :lemma
+   {:name "regularFiberLocalizedComponentFormula_of_chartCoefficients",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart localization and component sums construct formula",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "7bdf2eec630cc25bda7e18480b330cde48f5c03e"},
+   :id
+   :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients,
+   :kind :lemma,
+   :depends-on
+   [:lemma-componentlocaldegreesum-eq-of-localizationcoefficients],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "regularFiberLocalizedTopDegreeFormula_of_chartCoefficients",
+    :type "chart localization and signed sum construct top formula"},
+   :lemma
+   {:name "regularFiberLocalizedTopDegreeFormula_of_chartCoefficients",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart localization and signed sum construct top formula",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "63c77275209d11d18f575f6d0baf055e57c05a84"},
+   :id
+   :lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfibersignedsum-eq-of-localizationcoefficients],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
+    :type
+    "chart component and signed-count calculations imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_chartCoefficientCalculations",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "chart component and signed-count calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberlocalizedtopdegreeformula-of-chartcoefficients
+    :lemma-regularfiberlocalizedcomponentformula-of-chartcoefficients],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "rightInverse_of_comp_continuousLinearEquiv",
+    :type "invertible composite gives right inverse"},
+   :lemma
+   {:name "rightInverse_of_comp_continuousLinearEquiv",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "invertible composite gives right inverse",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "eebf94553a1cef785f5a621f57baf092bc23d1b0"},
+   :id :lemma-rightinverse-of-comp-continuouslinearequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-surjective-continuouslinearmap-has-rightinverse],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "RegularFiberChartCalculations.topHomologyMap_eq_zero",
+    :type "bundled chart calculations imply H2 zero"},
+   :lemma
+   {:name "RegularFiberChartCalculations.topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "bundled chart calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "a52ccee229312c565378d09e95a5eec9bdb4a666"},
+   :id :lemma-regularfiberchartcalculations-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-chartcoefficientcalculations],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
+    :type
+    "canonical local degrees plus component/top formulas give chart calculations"},
+   :lemma
+   {:name "RegularFiberChartCalculations.ofCanonicalLocalDegrees",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "canonical local degrees plus component/top formulas give chart calculations",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "c95471737d57a6c3d34ecdf85371ce435127078d"},
+   :id :lemma-regularfiberchartcalculations-ofcanonicallocaldegrees,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberlocaldegree-localization-eq],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero",
+    :type
+    "zero canonical component sums plus top formula give chart calculations"},
+   :lemma
+   {:name
+    "RegularFiberChartCalculations.ofCanonicalComponentSumsEqZero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "zero canonical component sums plus top formula give chart calculations",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "0849f2f553851b3d9b067f1a3ab2c16121762120"},
+   :id
+   :lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberchartcalculations-ofcanonicallocaldegrees
+    :lemma-exactliftcomponentdegree-eq-zero],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "exactLiftComponentDegree_eq_zero"},
+   :lemma
+   {:name "exactLiftComponentDegree_eq_zero",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-exactliftcomponentdegree-eq-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "topHomologyMap_eq_zero_of_canonicalComponentSums",
+    :type
+    "canonical component zero sums and top signed-count formula imply H2 zero"},
+   :lemma
+   {:name "topHomologyMap_eq_zero_of_canonicalComponentSums",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "canonical component zero sums and top signed-count formula imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "f28fac1855457bbe2754c4d2a3e31b64ac507894"},
+   :id :lemma-tophomologymap-eq-zero-of-canonicalcomponentsums,
+   :kind :lemma,
+   :depends-on
+   [:lemma-regularfiberchartcalculations-ofcanonicalcomponentsumseqzero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero",
+    :type "canonical component/top calculations imply H2 zero"},
+   :lemma
+   {:name
+    "CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "canonical component/top calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "c5787e160bf304b9420924e4074d581cc5809954"},
+   :id
+   :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-tophomologymap-eq-zero-of-canonicalcomponentsums],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts",
+    :type "canonical calculations imply H2 zero without lift data"},
+   :lemma
+   {:name
+    "CanonicalRegularFiberDegreeCalculations.topHomologyMap_eq_zero_withoutLifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "canonical calculations imply H2 zero without lift data",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "317c855c567bed9d1b46e74cd7ca80b273a585dc"},
+   :id
+   :lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero-withoutlifts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberdegreecalculations-surfacetopdegree-eq-zero],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
    :state :backlog,
    :scope [],
-   :acceptance {:lemma "circleDegree_eq_homologyMap"},
-   :lemma {:name "circleDegree_eq_homologyMap", :reported-by []},
-   :id :lemma-circledegree-eq-homologymap,
+   :acceptance
+   {:lemma
+    "CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero"},
+   :lemma
+   {:name
+    "CanonicalRegularFiberDegreeCalculations.surfaceTopDegree_eq_zero",
+    :reported-by []},
+   :id
+   :lemma-canonicalregularfiberdegreecalculations-surfacetopdegree-eq-zero,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "CanonicalRegularFiberWitness.topHomologyMap_eq_zero",
+    :type
+    "finite circle fiber with canonical calculations implies H2 zero"},
+   :lemma
+   {:name "CanonicalRegularFiberWitness.topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "finite circle fiber with canonical calculations implies H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "eccdf019ab9cae2cf7435c7d56da7cbe0d8ae612"},
+   :id :lemma-canonicalregularfiberwitness-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberdegreecalculations-tophomologymap-eq-zero-withoutlifts],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness",
+    :type
+    "existence of canonical regular-fiber witness implies H2 zero"},
+   :lemma
+   {:name
+    "topHomologyMap_eq_zero_of_exists_canonicalRegularFiberWitness",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "existence of canonical regular-fiber witness implies H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "13721a38d02fa8d5a808082d2b96d81e47b93d2c"},
+   :id
+   :lemma-tophomologymap-eq-zero-of-exists-canonicalregularfiberwitness,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-tophomologymap-eq-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalRegularFiberWitness_of_isDiscrete",
+    :type
+    "discrete circle fiber plus canonical calculations gives witness"},
+   :lemma
+   {:name "canonicalRegularFiberWitness_of_isDiscrete",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "discrete circle fiber plus canonical calculations gives witness",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1dd5348253adc83eb15080b120507a4c4090bbbb"},
+   :id :lemma-canonicalregularfiberwitness-of-isdiscrete,
+   :kind :lemma,
+   :depends-on [:lemma-regularfiberfintype-of-isdiscrete],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalRegularFiberWitness_of_locallyInjective",
+    :type "local injectivity plus calculations gives witness"},
+   :lemma
+   {:name "canonicalRegularFiberWitness_of_locallyInjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "local injectivity plus calculations gives witness",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-canonicalregularfiberwitness-of-locallyinjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-isdiscrete
+    :lemma-isdiscrete-preimage-singleton-of-locallyinjectivealongfiber],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "contDiff_rightInverse_of_comp_isInvertible",
+    :type "smooth family of corrected right inverses"},
+   :lemma
+   {:name "contDiff_rightInverse_of_comp_isInvertible",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth family of corrected right inverses",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "2914de86857a9e7f16e8e708c0dd33988f173917"},
+   :id :lemma-contdiff-rightinverse-of-comp-isinvertible,
+   :kind :lemma,
+   :depends-on [:lemma-rightinverse-of-comp-continuouslinearequiv],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
+    :type
+    "locally isolated circle fiber plus calculations gives witness"},
+   :lemma
+   {:name "canonicalRegularFiberWitness_of_locallyIsolatedFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "locally isolated circle fiber plus calculations gives witness",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "163e9b3e435606eb790ee9706686ef5a3a148799"},
+   :id :lemma-canonicalregularfiberwitness-of-locallyisolatedfiber,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-isdiscrete
+    :lemma-isdiscrete-preimage-singleton-of-locallyisolatedfiber],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "isDiscrete_preimage_singleton_of_locallyIsolatedFiber"},
+   :lemma
+   {:name "isDiscrete_preimage_singleton_of_locallyIsolatedFiber",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-isdiscrete-preimage-singleton-of-locallyisolatedfiber,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero",
+    :type "bundled isolated fiber calculations imply H2 zero"},
+   :lemma
+   {:name "LocallyIsolatedCanonicalFiberData.topHomologyMap_eq_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "bundled isolated fiber calculations imply H2 zero",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "174e4dee1c42140fcd175ed45cc413b39f21ef34"},
+   :id :lemma-locallyisolatedcanonicalfiberdata-tophomologymap-eq-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-locallyisolatedfiber],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "locallyIsolatedCanonicalFiberData_of",
+    :type
+    "selected isolated fiber plus calculations gives bundled data"},
+   :lemma
+   {:name "locallyIsolatedCanonicalFiberData_of",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "selected isolated fiber plus calculations gives bundled data",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "01096eb73a725508d816e9fba48b878b42658ee3"},
+   :id :lemma-locallyisolatedcanonicalfiberdata-of,
+   :kind :lemma,
+   :depends-on
+   [:lemma-canonicalregularfiberwitness-of-locallyisolatedfiber],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "locallyIsolatedCanonicalFiberData_of_isDiscrete",
+    :type
+    "discrete selected fiber plus calculations gives bundled data"},
+   :lemma
+   {:name "locallyIsolatedCanonicalFiberData_of_isDiscrete",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "discrete selected fiber plus calculations gives bundled data",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "1291718c17049d8ed55da8989e99638bd5b2d7c8"},
+   :id :lemma-locallyisolatedcanonicalfiberdata-of-isdiscrete,
+   :kind :lemma,
+   :depends-on
+   [:lemma-locallyisolatedfiber-of-isdiscrete
+    :lemma-locallyisolatedcanonicalfiberdata-of],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "locallyIsolatedFiber_of_isDiscrete"},
+   :lemma
+   {:name "locallyIsolatedFiber_of_isDiscrete",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-locallyisolatedfiber-of-isdiscrete,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "transverse_mfderiv_surjective_of_circleDirection_lifts",
+    :type
+    "transversality and lifted circle directions imply surjective derivative"},
+   :lemma
+   {:name "transverse_mfderiv_surjective_of_circleDirection_lifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "transversality and lifted circle directions imply surjective derivative",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "68467442f989dc4836cdd26fca100b6df6fc8bdb"},
+   :id :lemma-transverse-mfderiv-surjective-of-circledirection-lifts,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_regularValue_of_criticalValues_measure_zero",
+    :type "null critical values yield a value regular on its fiber"},
+   :lemma
+   {:name "exists_regularValue_of_criticalValues_measure_zero",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "null critical values yield a value regular on its fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "2dff9ce3f47371547cda82af3d3c921c5ac6b319"},
+   :id :lemma-exists-regularvalue-of-criticalvalues-measure-zero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_mfderiv_surjective_fiber_manifold_to_vector",
+    :type "manifold-to-vector regular fiber"},
+   :lemma
+   {:name "exists_mfderiv_surjective_fiber_manifold_to_vector",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "manifold-to-vector regular fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "da6e039f1a724ae592d9690cd9e627b14f19c969"},
+   :id :lemma-exists-mfderiv-surjective-fiber-manifold-to-vector,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-regularvalue-of-criticalvalues-measure-zero],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
+    :type "local diffeomorphisms along a fiber imply local isolation"},
+   :lemma
+   {:name "locallyIsolatedFiber_of_isLocalDiffeomorphAlongFiber",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "local diffeomorphisms along a fiber imply local isolation",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "9421e419a44300b57eb7e2946d62087cbecb94d7"},
+   :id :lemma-locallyisolatedfiber-of-islocaldiffeomorphalongfiber,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_mfderivEquiv_of_surjective",
+    :type
+    "surjective surface mfderiv is a continuous linear equivalence"},
+   :lemma
+   {:name "exists_mfderivEquiv_of_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "surjective surface mfderiv is a continuous linear equivalence",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-exists-mfderivequiv-of-surjective,
+   :kind :lemma,
+   :depends-on
+   [:lemma-transverse-mfderiv-surjective-of-circledirection-lifts],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "contDiff_lift_of_comp_isInvertible",
+    :type "smooth coordinate lift solving A(z)w(z)=b(z)"},
+   :lemma
+   {:name "contDiff_lift_of_comp_isInvertible",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "smooth coordinate lift solving A(z)w(z)=b(z)",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "5c0f2e062494ca836b5a554e2f17712718aaacef"},
+   :id :lemma-contdiff-lift-of-comp-isinvertible,
+   :kind :lemma,
+   :depends-on [:lemma-contdiff-rightinverse-of-comp-isinvertible],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
+    :type
+    "surjective surface derivative gives equivalence-valued HasMFDerivAt"},
+   :lemma
+   {:name "exists_hasMFDerivAt_equiv_of_contMDiff_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "surjective surface derivative gives equivalence-valued HasMFDerivAt",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "2766d583b68055cb4206e918952cd376a5c78337"},
+   :id :lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-exists-mfderivequiv-of-surjective],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt",
+    :type "manifold derivative gives chart derivative"},
+   :lemma
+   {:name "hasFDerivAt_writtenInExtChartAt_of_hasMFDerivAt",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "manifold derivative gives chart derivative",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "27e868e0853d114f772ffc6602624333a48ed719"},
+   :id :lemma-hasfderivat-writteninextchartat-of-hasmfderivat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-exists-hasmfderivat-equiv-of-contmdiff-surjective],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_smoothLocalInverse_writtenInExtChartAt",
+    :type "smooth chart local inverse"},
+   :lemma
+   {:name "exists_smoothLocalInverse_writtenInExtChartAt",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "smooth chart local inverse",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "e451d9d480ec49c82fff9e39f0c346b15c9f3532"},
+   :id :lemma-exists-smoothlocalinverse-writteninextchartat,
+   :kind :lemma,
+   :depends-on
+   [:lemma-hasfderivat-writteninextchartat-of-hasmfderivat],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_injOn_of_eventually_leftInverse",
+    :type "local left inverse gives neighborhood injectivity"},
+   :lemma
+   {:name "exists_nhds_injOn_of_eventually_leftInverse",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "local left inverse gives neighborhood injectivity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "def09043f2a636ce01451704125b833618c51c7f"},
+   :id :lemma-exists-nhds-injon-of-eventually-leftinverse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_injOn_writtenInExtChartAt",
+    :type "chart expression locally injective"},
+   :lemma
+   {:name "exists_nhds_injOn_writtenInExtChartAt",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "chart expression locally injective",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "def09043f2a636ce01451704125b833618c51c7f"},
+   :id :lemma-exists-nhds-injon-writteninextchartat,
+   :kind :lemma,
+   :depends-on [:lemma-exists-smoothlocalinverse-writteninextchartat],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "exists_nhds_injOn_of_contMDiff_surjective",
+    :type "surjective derivative gives local injectivity"},
+   :lemma
+   {:name "exists_nhds_injOn_of_contMDiff_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "surjective derivative gives local injectivity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "64781283f90e4768965a92200750b5ed1151d074"},
+   :id :lemma-exists-nhds-injon-of-contmdiff-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-exists-nhds-injon-writteninextchartat],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "locallyInjectiveAlongFiber_of_mfderiv_surjective",
+    :type "fiberwise regular derivative gives local injectivity"},
+   :lemma
+   {:name "locallyInjectiveAlongFiber_of_mfderiv_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "fiberwise regular derivative gives local injectivity",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "c4c74789306628b163b55446416c343f8ca709b2"},
+   :id :lemma-locallyinjectivealongfiber-of-mfderiv-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-exists-nhds-injon-of-contmdiff-surjective],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts",
+    :type "regular circle parameter gives locally injective fiber"},
+   :lemma
+   {:name
+    "exists_circleValue_locallyInjectiveAlongFiber_of_direction_lifts",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular circle parameter gives locally injective fiber",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "6e517d638f6ec4e1f3ef8372379894f15301b4bd"},
+   :id
+   :lemma-exists-circlevalue-locallyinjectivealongfiber-of-direction-lifts,
+   :kind :lemma,
+   :depends-on
+   [:lemma-locallyinjectivealongfiber-of-mfderiv-surjective],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "exists_circleParameter_direction_lifts_of_sard"},
+   :lemma
+   {:name "exists_circleParameter_direction_lifts_of_sard",
+    :reported-by []},
+   :id :lemma-exists-circleparameter-direction-lifts-of-sard,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "direction_lifts_of_surjective_incidenceKernel_snd",
+    :type "regular incidence projection gives direction lifts"},
+   :lemma
+   {:name "direction_lifts_of_surjective_incidenceKernel_snd",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular incidence projection gives direction lifts",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "97895f175bed4ad4c5e7d23b174ced99f3acde17"},
+   :id :lemma-direction-lifts-of-surjective-incidencekernel-snd,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "direction_lifts_of_incidenceTangentEquiv",
+    :type "regular tangent projection gives direction lifts"},
+   :lemma
+   {:name "direction_lifts_of_incidenceTangentEquiv",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type "regular tangent projection gives direction lifts",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "d5630b7e4415a05e94758003a997b2cf6559df40"},
+   :id :lemma-direction-lifts-of-incidencetangentequiv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-direction-lifts-of-surjective-incidencekernel-snd],
+   :other-consumers []}
+  {:consumer :t00J02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "transverse_incidenceDifferenceDerivative_surjective",
+    :type
+    "transversality makes incidence difference derivative surjective"},
+   :lemma
+   {:name "transverse_incidenceDifferenceDerivative_surjective",
+    :reported-by [:program-2026-10-13-close-t00j02],
+    :type
+    "transversality makes incidence difference derivative surjective",
+    :area "oriented-surface-degree",
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
+   :id :lemma-transverse-incidencedifferencederivative-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-transverse-coprodderivative-surjective],
+   :other-consumers []}
+  {:consumer :t98A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "contMDiffOn_tangentSection_of_trivialization_coordinates",
+    :type "fixed tangent coordinates give smooth local section"},
+   :lemma
+   {:name "contMDiffOn_tangentSection_of_trivialization_coordinates",
+    :reported-by [:program-2026-10-13-close-t98a06],
+    :type "fixed tangent coordinates give smooth local section",
+    :area "smooth-manifold-submersion",
+    :proved-in :program-2026-10-13-close-t98a06,
+    :banked-by :program-2026-10-13-close-t98a06,
+    :banked-commit "419de7e1dc8a5aa3cedd05ce35f945203f71a43a"},
+   :id :lemma-contmdiffon-tangentsection-of-trivialization-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-contdiff-lift-of-comp-isinvertible],
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

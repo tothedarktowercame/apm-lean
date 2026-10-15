@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "boundary": "Hop 4 states three exact remaining contracts: the product-cover/deck-group package, nonsurjective torus maps acting trivially on H2, and the fixed-point consequence for maps lifting through the four-sheeted cover.",
   "imported_at": "2026-07-13T17:26:56.679076Z",

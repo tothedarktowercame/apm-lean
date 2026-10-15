@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "boundary": "The compact monotone exhaustion and common relative-interior chart coverage for every pair of points are compiled. Remaining work is choosing compatible orientations, extending coordinates across successive stages, and gluing them into a global homeomorphism.",
   "imported_at": "2026-07-13T17:26:57.440905Z"

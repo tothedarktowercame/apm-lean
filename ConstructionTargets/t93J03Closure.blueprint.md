@@ -77,6 +77,13 @@ basepoint and induced fundamental-group map to the outer piece.  The remaining
 step identifies its range with `aabb` and extracts the based quotient.
 Its fundamental group is now explicitly identified with `Multiplicative ℤ`
 by discarding the contractible radial interval and taking circle winding number.
+The outer cover piece is also now equipped with the exact homotopy equivalence
+to the actual polygon skeleton, proved to restrict to the identity on skeleton
+points.  The remaining comparison transports the winding generator through it.
+The induced fundamental-groupoid equivalence is now compiled as well, with its
+object action on embedded skeleton points reduced to literal equality.
+Restricting it to automorphism groups is now compiled at every outer basepoint,
+and specialized to the chosen overlap point's image.
 
 For every `k : KleinBottle`, construct an equivalence between
 `FundamentalGroup k` and the frozen `PresentedKleinGroup`.
@@ -219,8 +226,298 @@ fundamental-groupoid van Kampen theorem by
 the based group quotient and identifies its overlap image with `aabb`.
 `kleinPolygonInnerContractibleSpace` and
 `kleinPolygonInnerFundamentalGroup_subsingleton` now discharge the simply
-connected inner-vertex group in that extraction.  It remains to transport the
-overlap image through the outer-piece coordinates and take its normal closure.
+connected inner-vertex group in that extraction.  The arbitrary-endpoint
+versions `kleinPolygonInnerFundamentalGroupoid_hom_subsingleton` and
+`kleinPolygonInner_pathClass_eq` identify any two inner runs between fixed
+overlap vertices.  Together with `pathTwoOpenSubdivision_transition_mem_overlap`,
+this supplies the local replacement step for collapsing maximal inner runs.
+The specialized `kleinPolygonInner_pathClass_eq_overlapReplacement` chooses
+an actual overlap path and proves that its inner image represents the given
+inner run, so the replacement is now available in the exact cover coordinates.
+`kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement` maps this
+equality into the polygon and identifies the same overlap path routed through
+the outer inclusion, providing the factorwise rewrite for the finite-word fold.
+`kleinPolygonInnerRun_exists_outerOverlapReplacement` packages the same rewrite
+for a raw ambient inner run from endpoint-overlap and range-membership proofs,
+so the finite normalization no longer has to manufacture subtype paths.
+`pathHomotopicQuotient_concat_eq_of_pieceClass_eq` performs that dependent
+finite fold: equality of every segment class implies equality of the complete
+`Path.concat` class used by the subdivision reconstruction.
+`pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq` now binds that
+fold to the subdivision's reconstruction theorem, including its endpoint
+casts.  Only the concrete normalized outer replacement family remains to be
+chosen pointwise.
+For the required maximal-run partition, `path_concat_mem_of_piece_mem` proves
+that every nonempty concatenated block stays in the inner open when each of
+its subdivision factors does; this supplies the range hypothesis of the raw
+inner-run replacement adapter.
+`kleinPolygonInnerBlock_exists_outerOverlapReplacement` combines these facts:
+a nonempty dependent inner block whose two boundary vertices lie in the
+overlap is equal to a single overlap path routed through the outer piece.
+`boolSideRunPartition` now partitions the exact finite side-index word into
+ordered maximal constant runs.  `boolSideRunPartition_spec` proves flattening,
+nonemptiness, constant sides inside runs, and side changes across adjacent
+run boundaries; these boundary changes feed the overlap-vertex theorem.
+`boolSideRunPartition_mem_side_eq_head` extracts pointwise side equality from
+each run, and `kleinPolygonInnerSideRun_piece_mem` turns a true-side run into
+the exact inner-cover range proof needed for its dependent path concatenation.
+`boolSideRunPartition_isInfix_finRange` proves each run is a contiguous block
+of the ordered finite index list, preserving the endpoint order needed to
+package its pieces as one dependent path family.
+`boolSideRunPartition_exists_slice` supplies explicit start/length coordinates;
+`pathTwoOpenSubdivisionBlockPoint` and `pathTwoOpenSubdivisionBlockPiece` use
+them to reindex the original pieces as an exact dependent path family.
+`pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement` sends such a
+nonempty inner block with overlap endpoints to one equal overlap path routed
+through the outer piece.  Only reassembly across the run list remains.
+`path_concat_exists_subtype_path` lifts a set-valued finite concatenation to
+its subtype, and `pathTwoOpenSubdivisionOuterBlock_exists_outerPath` applies
+it to each unchanged packaged outer run.  Thus both run kinds now yield one
+outer-piece path before finite reassembly.
+It remains to transport the overlap image through the outer-piece coordinates
+and take its normal closure.
+The outer-to-skeleton equivalence is now restricted at the literal overlap
+image.  Path connectedness transported from the standard two-circle model
+supplies a chosen path from its deformed image to `kleinSkeletonPoint`, and
+the resulting based equivalence lands at the exact basepoint used by the
+fixed `FreeGroup Bool` coordinates.  The remaining comparison is therefore
+the winding-one image in those coordinates.
+`kleinPolygonOverlapToSkeletonFreeGroup` composes the complete based route,
+and `kleinPolygonOverlapWindingHom` rewrites its source in integer winding
+coordinates.  The factorization theorem verifies that no loop information is
+lost; the remaining geometric equality is exactly
+`kleinPolygonOverlapWindingOneImage = kleinAabbWord`.
+`kleinPolygonOverlapWindingHom_range` proves that the full overlap image is
+exactly the cyclic subgroup generated by this single word, so that equality
+will also provide the subgroup input needed by the based quotient extraction.
+`kleinPolygonOverlapWindingHom_normalClosure` performs the algebraic part of
+that extraction: the normal closure of the full image is already the normal
+closure of the singleton winding-one word.  Only its geometric identification
+with `kleinAabbWord` remains before the based quotient can use the banked
+presentation kernel.
+Because the chosen path to `kleinSkeletonPoint` is not canonical, the exact
+word may be conjugated.  The quotient needs only its normal closure.
+`fundamentalGroup_pathTransport_isConj` proves the general basepoint-change
+fact: transporting the same loop along any two connectors with common
+endpoints produces conjugate target loops.  The geometric calculation may
+therefore choose a convenient connector without changing the quotient.
+`kleinPolygonUntransportedWindingOne` exposes the exact loop before that
+connector, and `kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq` reduces
+the required conjugacy to computing its image along any convenient explicit
+path as `kleinAabbWord`.
+`kleinPolygonStandardModelConnector` supplies that connector by choosing it
+after applying `kleinSkeletonHomeomorphStandardTwoCircles` and pulling it back.
+Consequently the remaining loop calculation is wholly in the same standard
+two-circle model used to define the fixed free-group coordinates.
+`kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj` proves that conjugacy of
+the winding-one image with `kleinAabbWord` gives exactly the required normal
+closure equality.  The remaining geometric comparison should therefore be
+stated as conjugacy, not literal equality.
+`kleinSkeletonAabbQuotientEquiv` completes the independent algebraic half of
+based quotient extraction: quotienting the actual skeleton group by the
+pulled-back normal closure of `aabb` is the frozen presented group.  The
+remaining van Kampen step must identify the topological kernel with precisely
+this subgroup.
+`kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb` now performs the
+corresponding image calculation on the topological side: conditional only on
+the geometric winding-one conjugacy, the normal closure of the actual based
+overlap inclusion is the pulled-back `aabb` subgroup.  What remains is the
+based van Kampen theorem identifying this normal closure as the polygon-map
+kernel.
+`kleinPolygonFundamentalGroupEquivPresented_of_vanKampen` completes the
+quotient algebra for the actual skeleton inclusion.  Given its surjectivity,
+its van Kampen kernel equality, and the remaining winding conjugacy, the first
+isomorphism theorem and `kleinSkeletonAabbQuotientEquiv` produce the required
+polygon fundamental-group presentation.  Thus no quotient manipulation
+remains after those two topological facts are proved.
+`kleinBottle_pi1_every_basepoint_of_vanKampen_inputs` carries that assembled
+polygon equivalence through the fixed polygon/Klein homeomorphism and then to
+every basepoint.  It is the complete C1 endpoint conditional only on the
+winding conjugacy and the paired surjectivity/kernel statement of based van
+Kampen; no further basepoint or presentation adapter remains.
+`KleinPolygonBasedVanKampen` is the exact paired output to extract from the
+banked groupoid pseudopushout: the actual skeleton map is surjective and its
+kernel is the normal closure of the actual overlap image.
+`kleinPolygonPseudopushoutReconstructedIdentity` applies that mapping
+equivalence to the identity polygon-groupoid functor, and
+`kleinPolygonPseudopushout_arrow_eq_reconstructed` proves every ambient arrow
+is its reconstructed cover-piece arrow conjugated by the unit components.
+The remaining based extraction must normalize that reconstructed arrow using
+contractibility of the inner piece and path connectedness of the overlap.
+`pathTwoOpenSubdivision_transition_mem_overlap` supplies the first
+normalization invariant: every vertex where adjacent subdivision pieces
+switch sides is in the intersection.  Thus maximal inner runs have overlap
+endpoints and can be compared through the connected overlap before their
+contractible contribution is erased.
+`kleinPolygonOverlapToSpacePiOne_eq_one` proves the first genuine kernel
+inclusion input: every overlap loop dies after inclusion into the polygon,
+because that inclusion factors through the contractible inner radial piece.
+`kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker` promotes this to
+the full forward subgroup inclusion for the outer-piece map.  Transport to
+the skeleton, the reverse kernel inclusion, and skeleton-map surjectivity
+remain to extract from the pseudopushout.
+`kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel` now performs
+the exact algebraic transport into the preferred skeleton coordinates.  Its
+kernel map still targets the original polygon basepoint, so the remaining
+geometric seam is comparison with `kleinPolygonSkeletonToSpacePiOne` after
+the induced target-basepoint transport.
+`kleinPolygonOuterImageToSkeletonPointSpacePath` constructs that target path
+from the inverse deformation-unit path followed by the mapped skeleton
+connector. `kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel`
+therefore gives the forward kernel inclusion for a map with exactly the
+literal skeleton map's source and target types.  Only equality of those two
+maps remains at this seam.
+`kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct` proves the geometric
+half of that equality: the literal skeleton map is exactly the composite of
+the direct skeleton-to-outer map with outer-to-polygon inclusion.  The
+remaining comparison is solely between this direct outer coordinate and the
+inverse homotopy-equivalence/basepoint transport coordinate.
+`kleinPolygonOuterImageToDirectSkeletonPointPath` now supplies the single
+outer-piece connector used by that comparison: the inverse deformation unit
+followed by the skeleton connector included into the outer piece.
+`kleinPolygonOuterImageToDirectSkeletonPointPath_map` proves its polygon
+image is exactly the already chosen target connector, and
+`kleinPolygonOuterImageFundamentalGroupEquivAtDirectSkeletonPoint` records
+the resulting outer-piece basepoint equivalence.  It remains to prove that
+transport through this equivalence identifies the inverse
+homotopy-equivalence coordinate with the direct skeleton-to-outer map.
+`fundamentalGroup_map_pathTransport_natural` proves the general naturality
+equation needed to move a mapped basepoint change across an induced
+fundamental-group map.  Its specialization
+`kleinPolygonTargetTransportedOuterToSpacePiOne_factor` rewrites the entire
+target-transported map as outer inclusion after the two competing source
+coordinates.  The remaining equality is therefore exactly between those
+source maps into the outer-piece fundamental group; no target transport
+remains in the comparison.
+`equivalence_unit_mapIso_conj_preimage` proves the categorical half of that
+source equality for an arbitrary groupoid equivalence: the fully-faithful
+preimage, conjugated along the unit and an inverse-mapped target connector,
+is exactly the inverse functor's map.  The remaining Klein-specific seam is
+to identify the quotient class of
+`kleinPolygonOuterImageToDirectSkeletonPointPath` with that unit--mapped
+connector composite; the source-coordinate equality then follows from this
+general theorem.
+`kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector` proves the
+corresponding geometric equality directly in the fundamental groupoid: the
+chosen concrete outer path is the inverse deformation-unit arrow followed
+by the inverse-map image of the skeleton connector.  What remains at this
+seam is only reconciling Mathlib's casts in the packaged equivalence unit
+with this explicit quotient arrow, then applying the preceding categorical
+identity.
+`kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map` separately closes the
+target side of that cast comparison: at the preferred skeleton point, the
+literal direct skeleton-to-outer homomorphism is definitionally the inverse
+functor map.  Thus only the packaged unit/connector conjugation remains.
+Mathlib's `Equivalence.mk` adjointifies the raw homotopy unit, so it need not
+be definitionally the deformation path used in the concrete connector.
+`kleinPolygonPackagedUnitPath` now chooses a genuine path representing that
+actual packaged unit, and `kleinPolygonPackagedUnitPath_mk` proves its exact
+fundamental-groupoid class.  The next comparison can therefore use this path
+without unfolding or equating proof-dependent casts.
+`kleinPolygonPackagedUnitConnector` composes that representative with the
+inverse-mapped skeleton connector, and
+`kleinPolygonPackagedUnitConnector_mk` proves that its class is exactly the
+packaged unit followed by the inverse functor map.  Comparing this connector
+with the earlier concrete deformation connector is the remaining cast seam.
+Rather than equating those chosen paths,
+`kleinPolygonPackagedSourceCoordinate_eq_direct` applies the equivalence-unit
+identity to prove that the packaged source-coordinate map is exactly the
+literal skeleton-to-outer map.  The remaining comparison may transport the
+outer-to-polygon map along this packaged connector, whose target-side map has
+the same kernel as any other basepoint transport.
+`kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct` performs
+that transport and proves exact equality with the literal skeleton map.
+Consequently
+`kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel` supplies
+the forward kernel inclusion in the final coordinates; only the reverse
+inclusion and surjectivity remain in the based van Kampen extraction.
+`kleinBottle_pi1_every_basepoint_of_basedVanKampen` confirms this single
+topological contract and the independent winding conjugacy are now the only
+C1 inputs.
+
+For the remaining finite normalization,
+`path_concat_map_subtype` proves that mapping an ordered dependent path fold
+out of a subspace commutes with the fold, and
+`path_concat_class_eq_outer_of_pieceClass_eq` constructs one outer path from
+any ordered family whose ambient factors are represented by outer paths.
+`boolSideRunPartition_adjacent_indices` now proves that adjacent maximal runs
+meet at consecutive original piece indices, identifying the exact shared
+subdivision vertex at which the side-change overlap lemma applies.
+`pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap` performs that exact
+application, with its conclusion expressed at the head index of the following
+run so it matches both neighboring block endpoints.
+`pathTwoOpenSubdivision_runPartition_isChain_overlap` packages this result
+over the complete ordered run list: every adjacent run boundary is an overlap
+vertex. `boolSideRunPartition_end_indices` identifies the remaining exterior
+boundaries: the first run starts at piece zero and the last ends at the final
+piece. `pathTwoOpenSubdivision_runPartition_boundary_spec` combines the
+interior certificate with literal equality between each preceding block target
+and following block source.  The next step is to use this boundary
+specification and the exterior endpoint identities to define the subtype
+endpoint family for the outer fold. The ambient family is now concretely
+`pathTwoOpenSubdivisionRunBoundaryPoints`: subdivision point zero followed by
+the target of each attached maximal run, with length exactly one more than the
+run count and literal initial point. Its last entry is now also proved to be
+the final subdivision vertex. `pathTwoOpenSubdivision_runTarget_mem_outer`
+splits each run into final or followed cases, using that final identity or the
+adjacent overlap certificate; consequently
+`pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer` proves every boundary
+outer when the two exterior endpoints are outer.
+`pathTwoOpenSubdivisionOuterRunBoundaryPoints` now lifts the complete list to
+the outer subtype, preserves its run-count-plus-one length, and maps back
+exactly to the ambient boundary list.
+`pathTwoOpenSubdivisionOuterRunBoundaryFamily` reindexes that list by
+`Fin (runs.length + 1)` and its value theorem recovers the corresponding
+ambient canonical boundary exactly.
+`pathTwoOpenSubdivisionRunFamily` now reindexes the maximal runs by the
+matching `Fin runs.length`; every indexed run is nonempty, has exact
+contiguous slice coordinates in the original subdivision, and has constant
+side equal to its head. `pathTwoOpenSubdivisionRunStart` canonically selects
+those slice coordinates, with bounds and exact-list recovery, while
+`pathTwoOpenSubdivisionRunFamily_piece_mem_chart` packages the uniform chart
+range of every piece in the run. The positive length is now split as
+`pathTwoOpenSubdivisionRunPredLength + 1`, and the `RunBlockPoint` and
+`RunBlockPiece` definitions instantiate the dependent point and path families
+consumed by `Path.concat`.
+`pathTwoOpenSubdivisionRunFamily_head_val` identifies the selected start with
+the run head, and `pathTwoOpenSubdivisionRunBlockPoint_zero` consequently
+identifies each block's source vertex literally. The matching `getLast` index
+calculation and `pathTwoOpenSubdivisionRunBlockPoint_last` now identify the
+block's target vertex literally as well.
+`pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last`
+identifies that target with outer boundary `i.succ`, and
+`pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero`
+identifies the source with outer boundary `i`. Thus each indexed block now
+has the exact dependent endpoints needed for representative selection.
+`pathTwoOpenSubdivisionRunBlockPiece_mem_chart` additionally transports the
+run's uniform chart certificate to the dependent block family, so the next
+step can apply the existing inner-replacement or literal-outer constructors.
+The `_mem_inner_of_side_eq_true` and `_mem_outer_of_side_eq_false` corollaries
+now supply their exact range hypotheses; it remains to choose the corresponding
+outer representative for each indexed run against the boundary family and
+instantiate the fold
+before extracting based surjectivity and the reverse kernel inclusion.
+`pathTwoOpenSubdivisionRun_exists_outerRepresentative` now performs that
+Boolean choice: every indexed maximal run has a literal ambient path with the
+same groupoid class as its dependent block, exact block endpoints, and range
+contained in the outer piece.  Casting these representatives to consecutive
+entries of the canonical outer boundary family is now packaged by
+`pathTwoOpenSubdivisionRun_exists_outerBoundaryPath`, preserving the endpoint-
+cast ambient groupoid class. `pathTwoOpenSubdivisionOuterRunPath` chooses the
+dependent family, and `pathTwoOpenSubdivisionRunFold_exists_outerPath` folds
+it to one outer path with the ordered endpoint-cast block class. Comparing
+that block fold with the original subdivision reconstruction remains. The
+`_BoundaryFamily_zero`/`_last` lemmas and
+`pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints` already rebase
+the folded representative at the literal subdivision endpoints.
+`pathTwoOpenSubdivisionRunStart_eq_previous_end` proves consecutive selected
+run slices are arithmetically contiguous, the induction invariant needed to
+identify the run-block fold with the original piece fold.
+`pathTwoOpenSubdivisionRunStart_zero` and
+`pathTwoOpenSubdivisionRunLast_end` prove the slices start at zero and finish
+at `S.n + 1`; the run slices therefore cover the full subdivision.
+`pathTwoOpenSubdivisionRunStart_eq_prefixLength` strengthens adjacency to the
+cumulative identity: run `i` starts after exactly the pieces in prior runs.
 
 - Layer 1: C1, C3, and C4. C1 and C3 are independent; C4 is already complete.
 - Layer 2: C2 against the explicit C1 equivalence interface.

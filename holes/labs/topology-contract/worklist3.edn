@@ -29470,7 +29470,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "surfaceTopHomology_localFundamentalClassIso",
@@ -29481,7 +29481,9 @@
     :reported-by [:owner],
     :type
     "For a compact oriented surface S and y : S, H_2(S;Z) -> H_2(S,S\\{y};Z) is an isomorphism and the local group is Z, naturally in maps  (size: 250-500 lines / 2-4 days residual)",
-    :area "manifold-fundamental-class"},
+    :area "manifold-fundamental-class",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-surfacetophomology-localfundamentalclassiso,
    :kind :lemma,
    :depends-on [],
@@ -29506,7 +29508,7 @@
    :other-consumers [:t98A02]}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "transverseCircle_preimage_component_signedCount",
@@ -29517,14 +29519,16 @@
     :reported-by [:owner],
     :type
     "For f transverse to an embedded smooth circle, group the signed local-degree count by compact one-manifold preimage components, each equal to plus-or-minus the circle degree  (size: 350-700 lines / 3-6 days)",
-    :area "transverse-preimage-submanifold"},
+    :area "transverse-preimage-submanifold",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-transversecircle-preimage-component-signedcount,
    :kind :lemma,
    :depends-on [:lemma-regularvalue-tophomologymap-signedcount],
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "circleDegree_eq_homologyMap",
@@ -29535,7 +29539,9 @@
     :reported-by [:owner],
     :type
     "The signed degree of a smooth circle map equals the integer represented by its induced H_1 morphism  (size: 180-350 lines / 1-2 days)",
-    :area "circle-degree-signed-count"},
+    :area "circle-degree-signed-count",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t00J02Closure.lean"]},
    :id :lemma-circledegree-eq-homologymap,
    :kind :lemma,
    :depends-on [],
@@ -36114,62 +36120,58 @@
    :other-consumers []}
   {:consumer :t93J03,
    :owner-reopen
-   "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
+   :stop-count 10,
    :review-finding
-   "Program STOP commits nothing new since the prior reviewed attempt: it reuses commit 512a220f, and git history shows no later scoped commit. The unresolved SemilocallySimplyConnected hypothesis-coverage conflict is unchanged. Obtain the required owner specification decision or commit a new compiled milestone before resubmitting.",
+   "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Compute overlap winding-one image=aabb; extract based quotient; apply C1, C2/Main.",
+    "Fold induction, kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
-    :warnings ["unused SLSC owner-approved"],
+    :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "kleinPolygonOverlapFundamentalGroupEquivInt",
-      :type "exact radial overlap pi1 equiv Multiplicative Z",
+    [{:name "pathTwoOpenSubdivisionRunBlock_eq_prefixBlock",
+      :type "point/factor comparison",
       :status :proved,
       :consumers [:t93J03],
-      :depends-on ["kleinPolygonBasedOverlapMap"],
+      :depends-on ["pathTwoOpenSubdivisionRunPrefixBlock"],
       :area "covering-subgroup-correspondence"}
-     {:name "t93J03_polygon_van_kampen",
-      :type "polygon pi1 equals PresentedGroup(aabb)",
+     {:name "pathTwoOpenSubdivision_quotient_eq_runFold",
+      :type "fold equality",
       :status :partial,
       :consumers [:t93J03],
-      :depends-on
-      ["kleinSkeletonAabbPresentationQuotient"
-       "kleinPolygonOverlapFundamentalGroupEquivInt"],
+      :depends-on ["pathTwoOpenSubdivisionRunBlock_eq_prefixBlock"],
+      :area "covering-subgroup-correspondence"}
+     {:name "t93J03_polygon_based_van_kampen",
+      :type "surjectivity/kernel",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on ["pathTwoOpenSubdivision_quotient_eq_runFold"],
       :area "covering-subgroup-correspondence"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain.",
+    "Committed pointwise comparison of selected-run and canonical-prefix families; fold induction remains.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t93J03Closure", :exit 0}
-     {:cmd "lake env lean overlap-pi1 fixture; Main", :exit 0}
-     {:cmd "registry; placeholder; diff", :exit 0}
-     {:cmd "rg forbidden", :exit 1, :expected-exit 1}
-     {:cmd "git commit; show --check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lean closure",
-      :exit 1,
-      :correction "fixed qualified-name line break"}
-     {:cmd "git commit",
-      :exit 128,
-      :correction "transient stale lock vanished; retry passed"}],
-    :commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e",
-    :changed-paths
-    ["ConstructionTargets/t93J03Closure.lean"
-     "ConstructionTargets/t93J03Closure.blueprint.md"],
+    [{:cmd "overlay lean ConstructionTargets/t93J03Closure.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "scope git status", :exit 0}
+     {:cmd "sha256sum fixture", :exit 0}
+     {:cmd "git show --check --stat HEAD", :exit 0}],
+    :commit "7c70eb2ed90c1c771f4c09df868db7c948465e11",
+    :changed-paths ["ConstructionTargets/t93J03Closure.lean"],
     :fixture
-    {:path "/tmp/t93j03_overlap_pi1_check.lean",
+    {:path "/tmp/t93j03_quotient_fold_algebra_check.lean",
      :sha256
-     "5ff25e86e6dc3d40bee63df195d682f8c77e99b28f6a72cca64e012268ae267f",
-     :mode :post-build-export-check},
+     "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -36187,7 +36189,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t93J03Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed canonical prefix-indexed point/path families; quotient fold induction remains.",
    :id :program-2026-10-13-close-t93j03,
    :kind :final-adapter,
    :campaign-priority 30,
@@ -36281,7 +36283,419 @@
     {:job 4,
      :commit "bbe67b7794cd9b11293da6a47fb461668b71a91b",
      :reason
-     "Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain."}]}
+     "Committed path-connected exact overlap, basepoint, and induced pi1 map; image=aabb and based quotient remain."}
+    {:job 5,
+     :commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e",
+     :reason
+     "Committed exact overlap pi1 equivalence with integer winding; generator image and based quotient remain."}
+    {:job 6,
+     :commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29",
+     :reason
+     "Committed outer-piece homotopy equivalence to the actual skeleton; generator comparison remains."}
+    {:job 7,
+     :commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab",
+     :reason
+     "Committed outer-to-skeleton fundamental-groupoid equivalence with literal skeleton object action."}
+    {:job 8,
+     :commit "f4e25e72be4536e94d2bcbc3e30de690de1f659c",
+     :reason
+     "Committed based outer-to-skeleton pi1 equivalence at exact overlap image; winding comparison remains."}
+    {:job 9,
+     :commit "04bd64ef15ae2e68a2145986ee81c2c153d272b4",
+     :reason
+     "Committed path and pi1 transport to preferred skeleton point; winding comparison remains."}
+    {:job 1,
+     :commit "16ff4928fc9b43c65ac7a362f1a09e2000705231",
+     :reason
+     "Committed proof that the overlap image is generated by its winding-one word; word=aabb and quotient remain."}
+    {:job 2,
+     :commit "1eb08914473614efd9eba993c45b8b9a1f93df6a",
+     :reason
+     "Committed equality of normal closures for the full overlap image and winding-one generator; word=aabb remains."}
+    {:job 3,
+     :commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb",
+     :reason
+     "Committed conjugacy-to-normal-closure adapter; geometric conjugacy and based quotient remain."}
+    {:job 4,
+     :commit "d033ca7433e3bff48e8b4520d9703ee208bb929b",
+     :reason
+     "Committed path-transport conjugacy; canonical boundary-loop comparison and quotient remain."}
+    {:job 5,
+     :commit "4b74ccc8d92968bd0d53207c708f14621a659cf8",
+     :reason
+     "Committed untransported winding generator and canonical-connector reduction; explicit geometry remains."}
+    {:job 6,
+     :commit "88eaef2001d953da38c04003bf1887e18d088339",
+     :reason
+     "Committed connector pulled back from standard two-circle coordinates; loop computation and quotient remain."}
+    {:job 7,
+     :commit "e40aea65bdeaf4a7c03b693c382fade2502196de",
+     :reason
+     "Committed skeleton aabb quotient equivalence; topological kernel identification remains."}
+    {:job 8,
+     :commit "cb58e058246984b895a459e89324c923288a9b51",
+     :reason
+     "Committed actual overlap-image normal closure in skeleton coordinates; geometric conjugacy and van Kampen kernel remain."}
+    {:job 9,
+     :commit "922abd5ab2afae5570d16d39dffb443a274990d7",
+     :reason
+     "Committed exact first-isomorphism assembly from winding conjugacy and based van Kampen hypotheses."}
+    {:job 2,
+     :commit "c454760138501d322f23734cecc5d356b4fa717d",
+     :reason
+     "Proved overlap loops die via the contractible inner radial piece; reverse kernel inclusion, surjectivity and winding remain."}
+    {:job 3,
+     :commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793",
+     :reason
+     "Proved the overlap-image normal closure lies in the outer-to-polygon kernel; skeleton transport, reverse inclusion, surjectivity and winding remain."}
+    {:job 4,
+     :commit "761b8821a80e774da35733af17705fbf7f177221",
+     :reason
+     "Transported forward kernel inclusion to skeleton coordinates; comparison, reverse inclusion, surjectivity and winding remain."}
+    {:job 5,
+     :commit "d7297e3e75e94a762e551350420cfd1c40478a33",
+     :reason
+     "Committed target-basepoint path and forward kernel inclusion after transport; map equality, reverse inclusion, surjectivity and winding remain."}
+    {:job 6,
+     :commit "44f5d424e3ef2ac634898fb671808a5e07c04bef",
+     :reason
+     "Proved the literal skeleton map is exactly the direct skeleton-to-outer composite; equivalence-coordinate comparison, reverse inclusion, surjectivity and winding remain."}
+    {:job 7,
+     :commit "f869be3704ca9938a77d7108060a03e2ea600652",
+     :reason
+     "Committed exact outer-piece connector, its polygon image equality, and induced basepoint equivalence; map comparison and based van Kampen remain."}
+    {:job 8,
+     :commit "1f843184e63c1069706c11cc8498750d603ddc22",
+     :reason
+     "Committed path-transport naturality and target-map factorization; source equality and based van Kampen remain."}
+    {:job 9,
+     :commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8",
+     :reason
+     "Committed the categorical equivalence-unit/preimage identity; concrete outer-connector identification remains."}
+    {:job 1,
+     :commit "135c809b7929f6786434fdf975d48f1ac0401a4a",
+     :reason
+     "Proved the direct skeleton-to-outer map is literally the equivalence inverse map; packaged unit/connector casts remain."}
+    {:job 2,
+     :commit "0fc9df5737f275deaba79ad46c8fdbf8e7a96e5f",
+     :reason
+     "Represented Mathlib adjointified equivalence unit by an exact concrete path; packaged connector assembly remains."}
+    {:job 3,
+     :commit "7640486c6397e450fd355dabe430dc4501444963",
+     :reason
+     "Committed exact concrete representative of the packaged unit-plus-connector composite; comparison with the deformation connector and based van Kampen remain."}
+    {:job 4,
+     :commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f",
+     :reason
+     "Proved literal-map equality and forward kernel inclusion; reverse inclusion/surjectivity remain."}
+    {:job 5,
+     :commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0",
+     :reason
+     "Extracted every polygon-groupoid arrow as its pseudopushout reconstruction conjugated by unit components; normalization to the outer piece remains."}
+    {:job 6,
+     :commit "962be8771e84a7039a9cffd581eb22c778f1d587",
+     :reason
+     "Proved every subdivision side-change vertex lies in the overlap, giving the endpoints needed to erase maximal inner runs; normalization remains."}
+    {:job 7,
+     :commit "ebda004808872a29a245f67338ad64f23bb87e52",
+     :reason
+     "Proved arbitrary-endpoint inner path-class uniqueness; run assembly and based van Kampen remain."}
+    {:job 8,
+     :commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b",
+     :reason
+     "Proved each inner path between overlap endpoints equals an actual overlap-path image; finite-run assembly remains."}
+    {:job 9,
+     :commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7",
+     :reason
+     "Transported each inner-run replacement to equality with an outer-piece arrow in the ambient polygon groupoid; finite fold remains."}
+    {:job 1,
+     :commit "52b6d5e5a66da6c1c5b00e71e16b58967f3ae4bc",
+     :reason
+     "Bound the generic finite fold to the actual subdivision reconstruction and endpoint casts; the concrete normalized outer factor family remains."}
+    {:job 2,
+     :commit "f8ea046cd937e69a6595922a691bea2dc1247706",
+     :reason
+     "Converted any ambient inner run with overlap endpoints into an equal overlap path routed through the outer piece; finite maximal-run partition remains."}
+    {:job 3,
+     :commit "77c92bf3b7390a1d297408e68d2f41a6b01c7e71",
+     :reason
+     "Proved every nonempty finite dependent concatenation stays in a set when each factor does; maximal-run index partition remains."}
+    {:job 4,
+     :commit "24e6bfc0f31c41558794f23c04f50fc568a4110f",
+     :reason
+     "Combined finite inner-factor range control with the raw-run adapter: every overlap-bounded nonempty inner block has one equal outer-routed overlap replacement; side-index partition remains."}
+    {:job 5,
+     :commit "71a51ad224037e3d35a102d8600e0a5ffd1cff25",
+     :reason
+     "Partitioned exact side indices into ordered maximal constant runs with flattening, nonempty blocks, constant interiors, and adjacent side changes; converting blocks to dependent path families remains."}
+    {:job 6,
+     :commit "9f16b2393d73376ac4f97e72ef39c7f17ce5f637",
+     :reason
+     "Proved every maximal-run index has the head side, so each true-run piece stays in the inner cover; dependent block packaging remains."}
+    {:job 7,
+     :commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68",
+     :reason
+     "Proved every side run is a contiguous infix of finRange, preserving subdivision index and endpoint order; constructing its dependent Path.concat family remains."}
+    {:job 8,
+     :commit "6e424b225407c469abb1967d43e31277e41dcd2c",
+     :reason
+     "Gave each run bounded slice coordinates and reindexed its pieces as an exact dependent path family; replacement/reassembly remains."}
+    {:job 9,
+     :commit "06b841a6396013640183b3461ac597cfcaa7e557",
+     :reason
+     "Proved each packaged nonempty inner block with overlap endpoints equals one overlap path routed through the outer piece; finite run-list reassembly remains."}
+    {:job 1,
+     :commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b",
+     :reason
+     "Finite outer-represented factors now concatenate to one outer path with equal ambient groupoid class; maximal-run instantiation remains."}
+    {:job 2,
+     :commit "eb1767255ebf00e330120719700e7c8f8da63be0",
+     :reason
+     "Proved adjacent maximal side runs end and begin at consecutive original piece indices, identifying their shared subdivision boundary; endpoint-family packaging remains."}
+    {:job 3,
+     :commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289",
+     :reason
+     "Proved adjacent maximal runs meet at an overlap subdivision vertex; endpoint-family packaging remains."}
+    {:job 4,
+     :commit "978a84a40d74390b2f572b313be98c0237bedff4",
+     :reason
+     "Packaged every adjacent maximal-run boundary as an overlap vertex; subtype endpoint-family construction remains."}
+    {:job 5,
+     :commit "32d3aa6e76fbf4739749aef6f1d274fec06bc885",
+     :reason
+     "Identified the first and last maximal-run boundaries with subdivision indices zero and final; full subtype endpoint family remains."}
+    {:job 6,
+     :commit "d23066ebf135266f6492546e82217349a47bc686",
+     :reason
+     "Packaged each adjacent run boundary with literal endpoint equality and overlap membership; subtype family remains."}
+    {:job 7,
+     :commit "83b52a407f4be5673b93570b691710c7bd6ab7ed",
+     :reason
+     "Defined the canonical run-boundary list with exact length and initial vertex; outer-membership remains."}
+    {:job 8,
+     :commit "fde20b59294e670ee4f473d71714c9ac0198fa8d",
+     :reason
+     "Proved the run-boundary list ends at the final subdivision vertex; intermediate outer-membership remains."}
+    {:job 9,
+     :commit "263f5d4719c9f6b3f23824426c3e31e770badff0",
+     :reason
+     "Proved all canonical run boundaries are outer from outer endpoints; subtype lift remains."}
+    {:job 1,
+     :commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6",
+     :reason
+     "Indexed outer boundaries by Fin(runs+1) with exact ambient values; run representative family remains."}
+    {:job 2,
+     :commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75",
+     :reason
+     "Indexed maximal runs with membership, nonemptiness, exact slices and constant side; representative choice remains."}
+    {:job 3,
+     :commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19",
+     :reason
+     "Selected bounded slice coordinates for every indexed run and proved every piece stays in its head-selected chart; outer representative choice remains."}
+    {:job 4,
+     :commit "d1f33974b4b2f99f6a186874a1ad29108b7719e6",
+     :reason
+     "Packaged every indexed maximal run as the exact dependent point/path family consumed by Path.concat; boundary endpoint identification remains."}
+    {:job 5,
+     :commit "b032e84260f3dfcb0272bdfda8f6cd572728231c",
+     :reason
+     "Proved each selected run block starts at the literal source vertex of its indexed maximal run; target/boundary identification remains."}
+    {:job 6,
+     :commit "10390da8355dcd72034364c3ddf78c28f2cdf7d3",
+     :reason
+     "Proved each selected run block ends at its literal target vertex; outer-boundary comparison remains."}
+    {:job 7,
+     :commit "22202c41575e25e4d174a57a8149f7b15881d382",
+     :reason
+     "Matched outer boundary i.succ exactly to indexed run block target; source boundary i remains."}
+    {:job 8,
+     :commit "e48debde7dffad504dff78f1acd08acc1d137d16",
+     :reason
+     "Matched outer boundary i exactly to indexed run block source; representative choice remains."}
+    {:job 9,
+     :commit "e1ece6539bc8be947cc0b71eed2ab9d3a26c581f",
+     :reason
+     "Proved every reindexed run-block piece stays in its head-selected chart; Boolean representative choice remains."}
+    {:job 1,
+     :commit "657c9520bc1295803f113d25d5a087cc5a0a191d",
+     :reason
+     "Chose an outer-range representative for every run; boundary casts/fold remain."}
+    {:job 2,
+     :commit "b87f68fbe2e6b103154e5df3f961105476ac6537",
+     :reason
+     "Packaged every run representative as an exact outer-boundary path; dependent fold remains."}
+    {:job 3,
+     :commit "515bbfb930df7f4d01751001d1ad67e427fd6d11",
+     :reason
+     "Chose the dependent outer-run family and folded it to one outer path; comparison with subdivision reconstruction remains."}
+    {:job 4,
+     :commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991",
+     :reason
+     "Rebased the outer run fold at literal subdivision endpoints; regrouping remains."}
+    {:job 5,
+     :commit "d300e0a26ae3af85cfd4c89f220fc09d804bd495",
+     :reason
+     "Proved consecutive maximal-run slices are contiguous; first/last coverage and fold induction remain."}
+    {:job 6,
+     :commit "04869b05c2fca01f44f7ddac411a81f39399d36f",
+     :reason
+     "Proved first/last run-slice coverage; quotient-class fold induction remains."}
+    {:job 7,
+     :commit "bd5ebdee7d40582e385b90e9070b60791e06ac10",
+     :reason
+     "Identified each run start with the flattened preceding-run length; quotient fold induction remains."}
+    {:job 8,
+     :commit nil,
+     :reason
+     ".lake/packages is a real directory, not the required canonical-authority symlink; AGENTS.md requires stopping before further Lake verification. Scoped edits were reverted and no commit made."}
+    {:job 9,
+     :commit nil,
+     :reason
+     "Second consecutive invocation finds .lake/packages as a real directory; canonical-authority symlink remains absent, so AGENTS.md forbids Lake verification or implementation."}
+    {:job 1,
+     :commit nil,
+     :reason
+     "Fresh check still finds .lake/packages as a real directory rather than the canonical-authority symlink; workspace policy forbids Lake verification and implementation."}
+    {:job 2,
+     :commit nil,
+     :reason
+     "Repeated fresh check confirms .lake/packages remains a real directory, not the canonical-authority symlink; workspace policy forbids Lake verification and implementation."}
+    {:job 3,
+     :commit nil,
+     :reason
+     "Third consecutive reopened-sequence check confirms .lake/packages is still a real directory, not the canonical-authority symlink. The row is blocked until external workspace lifecycle repair."}
+    {:job 4,
+     :commit nil,
+     :reason
+     "External repair has not occurred: .lake/packages remains a real directory instead of the canonical-authority symlink, so workspace policy forbids Lake work."}
+    {:job 5,
+     :commit nil,
+     :reason
+     "Unchanged closure cannot emit a clean object: baseline rebuild fails before this milestone at lines 1366,1368,1391. Dependency coherence must be restored; scoped experiment remains reverted."}
+    {:job 6,
+     :commit nil,
+     :reason
+     "Fresh unchanged-closure rebuild still fails before this milestone at lines 1366,1368,1391. Dependency coherence remains unresolved; scoped files are unchanged."}
+    {:job 7,
+     :commit nil,
+     :reason
+     "HEAD changed to 2e90ce4, so closure was rebuilt; unchanged baseline still fails at lines 1366,1368,1391. Dependency coherence remains blocked and scoped files are untouched."}
+    {:job 8,
+     :commit nil,
+     :reason
+     "HEAD changed to 1dea841, so closure was rebuilt; baseline still fails from line 1366 onward. Dependency coherence remains blocked and scoped files are untouched."}
+    {:job 9,
+     :commit nil,
+     :reason
+     "Closure source remains at bd5ebdee; changes since the last rebuild affect only t00J02Closure, not this row or build configuration. The reproduced line-1366+ dependency failures remain the blocker."}
+    {:job 1,
+     :commit nil,
+     :reason
+     "Fresh closure rebuild fails before quotient work: obsolete List.getElem_mem calls at 1366/1368 and nonempty Fin-index failures from 1391. Scope unchanged."}
+    {:job 2,
+     :commit nil,
+     :reason
+     "Repair requires threading first/last Fin witnesses through dependent endpoints and prefix induction; local edits fail. Experiment reverted; scope clean."}
+    {:job 3,
+     :commit nil,
+     :reason
+     "Verified boundary: getElem_mem takes a bound proof, length_pos became length_pos_iff, and Fin.last needs a length cast. Central witnesses must flow through dependent run theorems."}
+    {:job 4,
+     :commit nil,
+     :reason
+     "Third check: closure remains at bd5ebdee; run-index API mismatch persists. Central Fin witnesses must thread through dependent endpoint/prefix theorems."}
+    {:job 5,
+     :commit nil,
+     :reason
+     ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids further Lake work pending lifecycle repair."}
+    {:job 6,
+     :commit nil,
+     :reason
+     "Fresh check confirms .lake/packages is still a real directory, not the required authority symlink; workspace policy forbids Lake verification and implementation pending lifecycle repair."}
+    {:job 7,
+     :commit nil,
+     :reason
+     "Repeated fresh check: .lake/packages remains a real directory rather than the required authority symlink; workspace policy forbids Lake verification and implementation pending lifecycle repair."}
+    {:job 8,
+     :commit nil,
+     :reason
+     "Authority invariant remains broken: .lake/packages is a real directory, not the required symlink. Lake verification and implementation remain forbidden pending lifecycle repair."}
+    {:job 9,
+     :commit nil,
+     :reason
+     "Fresh check still finds .lake/packages as a real directory, not the required authority symlink. Lake work is forbidden until canonical lifecycle repair."}
+    {:job 1,
+     :commit nil,
+     :reason
+     "Fresh check confirms .lake/packages remains a real directory, not the required authority symlink; workspace policy forbids Lake work until lifecycle repair."}
+    {:job 2,
+     :commit nil,
+     :reason
+     "Package authority remains invalid: .lake/packages is a real directory instead of the canonical symlink. Workspace policy forbids Lake work pending lifecycle repair."}
+    {:job 3,
+     :commit nil,
+     :reason
+     "Repeated check confirms .lake/packages remains a real directory, not the required authority symlink; Lake work is forbidden pending lifecycle repair."}
+    {:job 4,
+     :commit nil,
+     :reason
+     "Third consecutive reopened check confirms .lake/packages is still a real directory, not the authority symlink. This row is blocked until external lifecycle repair."}
+    {:job 5,
+     :commit nil,
+     :reason
+     "External repair remains absent: .lake/packages is a real directory, not the authority symlink; workspace policy forbids Lake work."}
+    {:job 6,
+     :commit nil,
+     :reason
+     "Fresh check: .lake/packages remains a real directory, not the authority symlink; workspace policy forbids Lake work."}
+    {:job 7,
+     :commit nil,
+     :reason
+     "Authority invariant still fails: .lake/packages is a directory, not the canonical symlink; Lake work is forbidden pending lifecycle repair."}
+    {:job 8,
+     :commit nil,
+     :reason
+     "Fresh verification confirms .lake/packages is a directory, not the canonical symlink; Lake work remains forbidden pending lifecycle repair."}
+    {:job 9,
+     :commit nil,
+     :reason
+     "Package authority remains unrepaired: .lake/packages is a directory, not the canonical symlink; policy forbids Lake work."}
+    {:job 1,
+     :commit "c2618daada06b51cc8ae7709a26e0f8728e3e407",
+     :reason
+     "Committed run-index coherence; next boundary is quotient-cast/fold recurrence at lines 2348,2440,2483."}
+    {:job 2,
+     :commit "5dde98f96395c16d860e539ab4c1c203b3ab9bcc",
+     :reason
+     "Committed quotient-cast/run-fold endpoint coherence; next is subdivision reconstruction equality."}
+    {:job 3,
+     :commit "c62ac5ee56a1c6fc7870634cd60d6067a38a5a20",
+     :reason
+     "Committed quotient successor recurrence; next is the piece-fold/maximal-run-fold induction."}
+    {:job 4,
+     :commit "658cfac1cef2af4ea3a2b3ac53dae5eee5cdcef5",
+     :reason
+     "Committed run-prefix successor/coverage equations; next is quotient-fold induction."}
+    {:job 5,
+     :commit "fb506d8c760573fb75e215eb10ea86a90669238c",
+     :reason
+     "Committed run-end and original prefix-slice equalities; quotient induction remains."}
+    {:job 6,
+     :commit "215b8169dc2e441b6a952367bb14ff0ff17a14db",
+     :reason
+     "Committed exact run-block point/prefix identification; quotient fold induction remains."}
+    {:job 7,
+     :commit "889c25fce29360e16633a26938a9df156b3530ee",
+     :reason
+     "Committed prefix/block-length equation; quotient fold induction remains."}
+    {:job 8,
+     :commit "20c3d0fff72404a9c5285cfe82dff77eb0d6d46f",
+     :reason
+     "Committed canonical prefix-block bound; quotient fold induction remains."}
+    {:job 9,
+     :commit "f363a202d2ceb6004df3425363aa37898a91c1d4",
+     :reason
+     "Committed canonical prefix-indexed point/path families; quotient fold induction remains."}]}
   {:consumer :t99J05,
    :stop-count 5,
    :evidence
@@ -36692,74 +37106,64 @@
    :depends-on [:lemma-cp-zero-subsingleton],
    :other-consumers []}
   {:consumer :t96A06,
-   :stop-count 4,
+   :owner-reopen
+   "reopened: canonical /home/joe/code/apm-lean correctly owns its real .lake/packages directory; the symlink requirement applies only to frame worktrees",
+   :stop-count 1,
    :review-finding
-   "extend Mathlib: state and prove the missing theorem in scope",
+   "Program STOP commits nothing new since the last :program-history entry (latest completion has :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Complete positive-degree RP3 rational homology; prove degree four; invariants/Main.",
+    "Deck-sum chain identity, H3 injectivity, higher vanishing, degree four, invariants/Main.",
     :outcome :stop,
-    :warnings [],
+    :warnings ["Main retains one placeholder."],
     :missing-theorems
-    [{:name "t96A06_rp3_rational_h0",
-      :type "H0(RP3;Q) equiv Q",
+    [{:name "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
+      :type "projected simplex lifts are original or antipodal",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on [],
+      :depends-on ["t96A06_sphere3_antipodal_H3"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_rp3_antipodal_H3",
+      :type "deck-sum gives H3(RP3;Q)=Q",
+      :status :partial,
+      :consumers [:t96A06],
+      :depends-on ["t96A06_projectedSimplex_lift_eq_or_eq_antipodal"],
       :area "rp-rational-homology"}
      {:name "t96A06_rp3_rational_homology",
       :type "RP3 rational homology Q,0,0,Q",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_rp3_rational_h0"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_polynomial_degree_four",
-      :type "quadratic acts by 4 on H3",
-      :status :not-started,
-      :consumers [:t96A06],
-      :depends-on ["T96A06_polynomialMap_descends"],
-      :area "sphere-map-degree"}],
+      :depends-on ["t96A06_rp3_antipodal_H3"],
+      :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain.",
+    "Committed exact two-lift classification for projected simplices; chain deck-sum and H3 injectivity remain.",
     :commands
-    [{:cmd "lake build ConstructionTargets.t96A06Closure", :exit 0}
-     {:cmd "lake env lean /tmp/t96a06_rp3_h0_check.lean", :exit 0}
-     {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
+    [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
+      :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "rg forbidden closure", :exit 1, :expected-exit 1}
-     {:cmd "git commit; show --check", :exit 0}],
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "scope git status", :exit 0}
+     {:cmd "sha256sum fixture", :exit 0}
+     {:cmd "git show --check --stat 03ca89f24", :exit 0}],
     :diagnostic-history
-    [{:cmd "lean path probe",
+    [{:cmd "initial compile",
       :exit 1,
-      :correction "named local instance and rank computation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1791942615601-11264-2b07fb51",
-     :commands
-     ["git show/diff/show --check 8bcfbf5df"
-      "sha256sum RP3-H0 fixture; placeholders 1->1; scope diff"
-      "lake build ConstructionTargets.t96A06Closure; lean fixture and Main"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled sorry-free standard-axiom progress. It proves path connectedness of the exact RP3 quotient and derives H0(RP3;Q)≅Q from the coefficient-H0 theorem at an explicit point. Positive-degree RP3 homology and degree four remain accurately listed. Scope/hash verified; registry 166/166; final placeholder remains 1."},
-    :commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0",
-    :changed-paths
-    ["ConstructionTargets/t96A06Closure.lean"
-     "ConstructionTargets/t96A06Closure.blueprint.md"],
+      :note
+      "fixed equality orientations and covering uniqueness arguments"}],
+    :commit "03ca89f24206f01bb87c68b22f0b1709001eaad6",
+    :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
-    {:path "/tmp/t96a06_rp3_h0_check.lean",
+    {:path "/tmp/t96a06_sphere3_h3_check.lean",
      :sha256
-     "bb8a04124501b20a6a2fa696ac89635285cadbffaa491748e63e7e60b6a20d22",
-     :mode :post-build-export-check},
+     "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -36777,11 +37181,11 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t96A06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain.",
+   "Continue this program from its last commit; earlier jobs: :program-history. This is the canonical /home/joe/code/apm-lean checkout: its real .lake/packages directory is the package authority. The symlink requirement applies only to APM frame worktrees. Proceed with the transfer/deck-sum proof of t96A06_rp3_antipodal_H3, then higher-degree vanishing, degree four, invariants, and Main.",
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 2,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -36793,7 +37197,43 @@
     {:job 4,
      :commit "8bcfbf5df1502cf68b51bf1243875543af17e1a0",
      :reason
-     "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain."}]}
+     "Committed exact RP3 path-connectedness and rational H0; positive homology and degree remain."}
+    {:job 5,
+     :commit "300329fda93c12ce54fb62b3ba5f243ba812118a",
+     :reason
+     "Committed the exact S3-to-RP3 quotient projection and antipodal fiber classification; covering transfer remains."}
+    {:job 6,
+     :commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58",
+     :reason
+     "Committed open-map and local-homeomorphism structure for exact S3-to-RP3 projection; common two-sheet trivialization remains."}
+    {:job 7,
+     :commit "941de27ddd408535b6c86c0ed540c3d455cd02c7",
+     :reason
+     "Proved the exact S3-to-RP3 projection is a covering; rational transfer remains."}
+    {:job 8,
+     :commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46",
+     :reason
+     "Packaged the frozen S3-to-RP3 projection as an exact two-sheeted cover; induced rational homology transfer remains."}
+    {:job 9,
+     :commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd",
+     :reason
+     "Specialized rational transfer to the exact double cover and proved the induced sphere-to-RP3 homology map surjective in every degree; sphere-group identification remains."}
+    {:job 1,
+     :commit "b7a01bad22a84df73d65de2605dacd326499232d",
+     :reason
+     "Proved H3(S3;Q)=Q; identifying H3(RP3;Q) now requires the degree-three antipodal/transfer comparison."}
+    {:job 2,
+     :commit nil,
+     :reason
+     ".lake/packages is a real directory, not the canonical APM package-authority symlink; AGENTS.md forbids Lake verification or implementation until lifecycle provisioning repairs it."}
+    {:job 3,
+     :commit "81a215738",
+     :reason
+     "Committed the compiled degree-three antipodal action. The remaining boundary is the transfer/deck-sum identity needed to prove injectivity and identify H3(RP3;Q)."}
+    {:job 4,
+     :commit nil,
+     :reason
+     ".lake/packages is a real directory, not the required authority symlink; workspace policy forbids Lake verification or transfer/deck-sum implementation pending lifecycle repair."}]}
   {:consumer :t96J05,
    :stop-count 0,
    :phase :implementation,
@@ -36990,7 +37430,55 @@
    :depends-on [],
    :other-consumers []}
   {:consumer :t97J07,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t97J07 [2 2]},
+    :residual
+    "Create closure module; copy proved adapters; prove fixed set; build CP2 rational homology/Euler characteristic; assemble Main.",
+    :outcome :stop,
+    :warnings [],
+    :missing-theorems
+    [{:name "t97J07_fixed_set",
+      :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on [],
+      :area "projective-quotient-fixed-locus"}
+     {:name "t97J07_eulerCharacteristic",
+      :type "HasEulerCharacteristic CP2 3",
+      :status :not-started,
+      :consumers [:t97J07],
+      :depends-on [],
+      :area "rational-homology-cpn"}],
+    :statement-hashes {:registry "166/166"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Blueprint written; implementation begins next program job.",
+    :commands
+    [{:cmd "test/rg blueprint nodes", :exit 0}
+     {:cmd "lake env lean problems/t97J07/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "placeholder count", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792011810680-12411-08a69c40",
+     :commands
+     ["git show --check/stat 2725995b; exact path and fixture SHA-256 assertions"
+      "lake env lean problems/t97J07/lean/Main.lean"
+      "statement-registry check; placeholder recount"],
+     :finding
+     "PASS: committed scope is exactly the closure blueprint and its frozen hash matches. Mathematics is sound: diag(1,1,3) fixes CP1 z2=0 plus [0:0:1]; CP2 rational homology is Q in degrees 0,2,4, yielding Euler characteristic 3. Milestones and representation boundaries are coherent; the final theorem has no hypotheses. Main compiles, registry 166/166, placeholders remain 2->2. Singular-placeholder prose is editorial only."},
+    :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
+    :changed-paths ["ConstructionTargets/t97J07Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t97J07Closure.blueprint.md",
+     :sha256
+     "3fa01c79e1a49b4fddfb9d897e2d6b13ff505e4da9002e02666678554176dbe7"},
+    :seat :topo-10},
    :phase :implementation,
    :state :open,
    :scope
@@ -37010,14 +37498,19 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97J07Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t97J07/BLUEPRINT.md's plan into ConstructionTargets/t97J07Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; implementation begins next program job.",
    :id :program-2026-10-13-close-t97j07,
    :kind :final-adapter,
    :campaign-priority 31,
    :fail-count 0,
    :depends-on [],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "2725995b4f6766e9f90e2a3366745404fda5f4dd",
+     :reason
+     "Blueprint written; implementation begins next program job."}]}
   {:consumer :t95J05,
    :stop-count 0,
    :phase :implementation,
@@ -37629,7 +38122,22 @@
     :lemma-kleinpolygonfundamentalgroupoidpseudopushout
     :lemma-kleinpolygoninnerfundamentalgrouptrivial
     :lemma-kleinpolygonbasedoverlapmap
-    :lemma-kleinpolygonoverlapfundamentalgroupequivint],
+    :lemma-kleinpolygonoverlapfundamentalgroupequivint
+    :lemma-kleinpolygonouterhomotopyequivskeleton
+    :lemma-kleinpolygonouterfundamentalgroupoidequivalence
+    :lemma-kleinpolygonoverlapimagefundamentalgroupequivskeleton
+    :lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint
+    :lemma-kleinpolygonoverlapwindinghom-factor
+    :lemma-kleinpolygonoverlapwindinghom-range
+    :lemma-kleinpolygonoverlapwindinghom-normalclosure
+    :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj
+    :lemma-fundamentalgroup-pathtransport-isconj
+    :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq
+    :lemma-kleinpolygonstandardmodelconnector
+    :lemma-kleinskeletonaabbquotientequiv
+    :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb
+    :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen
+    :lemma-kleinbottle-pi1-every-basepoint-of-vankampen-inputs],
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
@@ -37699,7 +38207,15 @@
     :area "rp-rational-homology"},
    :id :lemma-t96a06-rp3-rational-homology,
    :kind :lemma,
-   :depends-on [:lemma-t96a06-rp3-rational-h0],
+   :depends-on
+   [:lemma-t96a06-rp3-rational-h0
+    :lemma-t96a06-rp3-sphere-quotient
+    :lemma-t96a06-rp3-sphere-covering
+    :lemma-t96a06-rp3-sphere-twosheeted
+    :lemma-t96a06-rp3-rational-homologymap-surjective
+    :lemma-t96a06-rp3-rational-middle-homology
+    :lemma-t96a06-sphere3-rational-h3iso
+    :lemma-t96a06-rp3-antipodal-h3],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -38032,7 +38548,7 @@
    :other-consumers []}
   {:consumer :t93J03,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "kleinPolygonOverlapFundamentalGroupEquivInt",
@@ -38042,10 +38558,2120 @@
     :reported-by [:program-2026-10-13-close-t93j03],
     :type "exact radial overlap pi1 equiv Multiplicative Z",
     :area "covering-subgroup-correspondence",
-    :proved-in :program-2026-10-13-close-t93j03},
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "4cf4a1fd88248aa249ce06a8e4880af398bbe32e"},
    :id :lemma-kleinpolygonoverlapfundamentalgroupequivint,
    :kind :lemma,
    :depends-on [:lemma-kleinpolygonbasedoverlapmap],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOuterHomotopyEquivSkeleton",
+    :type
+    "outer piece homotopy equiv actual skeleton; identity on skeleton"},
+   :lemma
+   {:name "kleinPolygonOuterHomotopyEquivSkeleton",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "outer piece homotopy equiv actual skeleton; identity on skeleton",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "dda49fe91bcd60e9628fc0ebc7e44c19f94ffd29"},
+   :id :lemma-kleinpolygonouterhomotopyequivskeleton,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonbasedoverlapmap],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOuterFundamentalGroupoidEquivalence",
+    :type
+    "outer-to-skeleton groupoid equivalence with literal object action"},
+   :lemma
+   {:name "kleinPolygonOuterFundamentalGroupoidEquivalence",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "outer-to-skeleton groupoid equivalence with literal object action",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "12f3f8882eb9d1253582d8625dd30db41a63a6ab"},
+   :id :lemma-kleinpolygonouterfundamentalgroupoidequivalence,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonouterhomotopyequivskeleton],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapImageFundamentalGroupEquivSkeleton",
+    :type
+    "based outer pi1 equiv skeleton pi1 at deformed overlap image"},
+   :lemma
+   {:name "kleinPolygonOverlapImageFundamentalGroupEquivSkeleton",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "based outer pi1 equiv skeleton pi1 at deformed overlap image",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f4e25e72be4536e94d2bcbc3e30de690de1f659c"},
+   :id :lemma-kleinpolygonoverlapimagefundamentalgroupequivskeleton,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonouterfundamentalgroupoidequivalence],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint",
+    :type
+    "overlap-image pi1 equiv skeleton pi1 at preferred basepoint"},
+   :lemma
+   {:name
+    "kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "overlap-image pi1 equiv skeleton pi1 at preferred basepoint",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "04bd64ef15ae2e68a2145986ee81c2c153d272b4"},
+   :id
+   :lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlapimagefundamentalgroupequivskeleton],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapWindingHom_factor",
+    :type
+    "based overlap map factors through integer winding into FreeGroup Bool"},
+   :lemma
+   {:name "kleinPolygonOverlapWindingHom_factor",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "based overlap map factors through integer winding into FreeGroup Bool",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id :lemma-kleinpolygonoverlapwindinghom-factor,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlapimagefundamentalgroupequivatskeletonpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_sphere_quotient",
+    :type
+    "S3 projection has frozen RP3 quotient topology and fibers {p,-p}"},
+   :lemma
+   {:name "t96A06_rp3_sphere_quotient",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "S3 projection has frozen RP3 quotient topology and fibers {p,-p}",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "300329fda93c12ce54fb62b3ba5f243ba812118a"},
+   :id :lemma-t96a06-rp3-sphere-quotient,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapWindingHom_range",
+    :type "overlap image equals zpowers of winding-one word"},
+   :lemma
+   {:name "kleinPolygonOverlapWindingHom_range",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "overlap image equals zpowers of winding-one word",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "16ff4928fc9b43c65ac7a362f1a09e2000705231"},
+   :id :lemma-kleinpolygonoverlapwindinghom-range,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonoverlapwindinghom-factor],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapWindingHom_normalClosure",
+    :type
+    "normal closure of overlap image equals normal closure of winding-one word"},
+   :lemma
+   {:name "kleinPolygonOverlapWindingHom_normalClosure",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "normal closure of overlap image equals normal closure of winding-one word",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1eb08914473614efd9eba993c45b8b9a1f93df6a"},
+   :id :lemma-kleinpolygonoverlapwindinghom-normalclosure,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonoverlapwindinghom-range],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
+    :type "conjugacy to aabb identifies normal closures"},
+   :lemma
+   {:name "kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "conjugacy to aabb identifies normal closures",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "b8bce9d8294e1892901bc5969e1bc0967f1927cb"},
+   :id :lemma-kleinpolygonoverlapnormalclosure-eq-aabb-of-isconj,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonoverlapwindinghom-normalclosure],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "fundamentalGroup_pathTransport_isConj",
+    :type "two path transports of one based loop are conjugate"},
+   :lemma
+   {:name "fundamentalGroup_pathTransport_isConj",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "two path transports of one based loop are conjugate",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d033ca7433e3bff48e8b4520d9703ee208bb929b"},
+   :id :lemma-fundamentalgroup-pathtransport-isconj,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq",
+    :type "any connector computing aabb proves winding-one conjugacy"},
+   :lemma
+   {:name "kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "any connector computing aabb proves winding-one conjugacy",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "4b74ccc8d92968bd0d53207c708f14621a659cf8"},
+   :id :lemma-kleinpolygonoverlapwindingone-isconj-aabb-of-path-eq,
+   :kind :lemma,
+   :depends-on [:lemma-fundamentalgroup-pathtransport-isconj],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonStandardModelConnector",
+    :type "connector pulled back from standard TwoCircles model"},
+   :lemma
+   {:name "kleinPolygonStandardModelConnector",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "connector pulled back from standard TwoCircles model",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "88eaef2001d953da38c04003bf1887e18d088339"},
+   :id :lemma-kleinpolygonstandardmodelconnector,
+   :kind :lemma,
+   :depends-on [:lemma-fundamentalgroup-pathtransport-isconj],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinSkeletonAabbQuotientEquiv",
+    :type
+    "skeleton pi1 / pulled-back normalClosure(aabb) equiv PresentedGroup(aabb)"},
+   :lemma
+   {:name "kleinSkeletonAabbQuotientEquiv",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "skeleton pi1 / pulled-back normalClosure(aabb) equiv PresentedGroup(aabb)",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e40aea65bdeaf4a7c03b693c382fade2502196de"},
+   :id :lemma-kleinskeletonaabbquotientequiv,
+   :kind :lemma,
+   :depends-on [:lemma-kleinskeletonaabbpresentationquotient],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
+    :type
+    "winding conjugacy implies overlap normal closure equals pulled-back aabb"},
+   :lemma
+   {:name "kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy implies overlap normal closure equals pulled-back aabb",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "cb58e058246984b895a459e89324c923288a9b51"},
+   :id :lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonstandardmodelconnector
+    :lemma-kleinskeletonaabbquotientequiv],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
+    :type
+    "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)"},
+   :lemma
+   {:name "kleinPolygonFundamentalGroupEquivPresented_of_vanKampen",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy plus surjective skeleton map and overlap-normal-closure kernel imply polygon pi1 equiv PresentedGroup(aabb)",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "922abd5ab2afae5570d16d39dffb443a274990d7"},
+   :id :lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlaptoskeletonpione-normalclosure-eq-aabb
+    :lemma-kleinskeletonaabbquotientequiv],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinBottle_pi1_every_basepoint_of_vanKampen_inputs",
+    :type
+    "winding conjugacy plus based van Kampen imply Klein pi1 presentation at every basepoint"},
+   :lemma
+   {:name "kleinBottle_pi1_every_basepoint_of_vanKampen_inputs",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy plus based van Kampen imply Klein pi1 presentation at every basepoint",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id :lemma-kleinbottle-pi1-every-basepoint-of-vankampen-inputs,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonfundamentalgroupequivpresented-of-vankampen],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "rp3SphereProjection_isLocalHomeomorph",
+    :type "S3 projection to frozen RP3 is a local homeomorphism"},
+   :lemma
+   {:name "rp3SphereProjection_isLocalHomeomorph",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "S3 projection to frozen RP3 is a local homeomorphism",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "ddec9674fe0129e68cff55ab38c5a0d35c42cd58"},
+   :id :lemma-rp3sphereprojection-islocalhomeomorph,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-sphere-quotient],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_sphere_covering",
+    :type "S3 projection is a two-sheeted covering of frozen RP3"},
+   :lemma
+   {:name "t96A06_rp3_sphere_covering",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "S3 projection is a two-sheeted covering of frozen RP3",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "941de27ddd408535b6c86c0ed540c3d455cd02c7"},
+   :id :lemma-t96a06-rp3-sphere-covering,
+   :kind :lemma,
+   :depends-on [:lemma-rp3sphereprojection-islocalhomeomorph],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinBottle_pi1_every_basepoint_of_basedVanKampen",
+    :type
+    "winding conjugacy plus based van Kampen imply C1 everywhere"},
+   :lemma
+   {:name "kleinBottle_pi1_every_basepoint_of_basedVanKampen",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "winding conjugacy plus based van Kampen imply C1 everywhere",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "c454760138501d322f23734cecc5d356b4fa717d"},
+   :id :lemma-kleinbottle-pi1-every-basepoint-of-basedvankampen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinbottle-pi1-every-basepoint-of-vankampen-inputs],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t93J03_polygon_based_van_kampen",
+    :type
+    "skeleton map surjective; kernel equals overlap normal closure"},
+   :lemma
+   {:name "t93J03_polygon_based_van_kampen",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "skeleton map surjective; kernel equals overlap normal closure",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-t93j03-polygon-based-van-kampen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonfundamentalgroupoidpseudopushout
+    :lemma-kleinpolygonoverlaptospacepione-eq-one
+    :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker
+    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel
+    :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel
+    :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct
+    :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map
+    :lemma-kleinpolygontargettransportedoutertospacepione-factor
+    :lemma-equivalence-unit-mapiso-conj-preimage
+    :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector
+    :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map
+    :lemma-kleinpolygonpackagedunitpath-mk
+    :lemma-kleinpolygonpackagedunitconnector-mk
+    :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed
+    :lemma-pathtwoopensubdivision-transition-mem-overlap
+    :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton
+    :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement
+    :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement
+    :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq
+    :lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq
+    :lemma-kleinpolygoninnerrun-exists-outeroverlapreplacement
+    :lemma-path-concat-mem-of-piece-mem
+    :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement
+    :lemma-boolsiderunpartition-spec
+    :lemma-kleinpolygoninnersiderun-piece-mem
+    :lemma-boolsiderunpartition-isinfix-finrange
+    :lemma-pathtwoopensubdivisionblockpiece
+    :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement
+    :lemma-pathtwoopensubdivisionouterblock-exists-outerpath
+    :lemma-path-concat-class-eq-outer-of-piececlass-eq
+    :lemma-boolsiderunpartition-adjacent-indices
+    :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap
+    :lemma-pathtwoopensubdivision-runpartition-ischain-overlap
+    :lemma-boolsiderunpartition-end-indices
+    :lemma-pathtwoopensubdivision-runpartition-boundary-spec
+    :lemma-pathtwoopensubdivisionrunboundarypoints
+    :lemma-pathtwoopensubdivisionrunboundarypoints-getlast
+    :lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer
+    :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val
+    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val
+    :lemma-pathtwoopensubdivisionrunfamily-exists-slice
+    :lemma-pathtwoopensubdivisionrunfamily-piece-mem-chart
+    :lemma-pathtwoopensubdivisionrunblockpiece
+    :lemma-pathtwoopensubdivisionrunblockpoint-zero
+    :lemma-pathtwoopensubdivisionrunblockpoint-last
+    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-succ-eq-runblockpoint-last
+    :lemma-pathtwoopensubdivisionouterrunboundaryfamily-castsucc-eq-runblockpoint-zero
+    :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart
+    :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases
+    :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative
+    :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath
+    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath
+    :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints
+    :lemma-pathtwoopensubdivisionrunstart-eq-previous-end
+    :lemma-pathtwoopensubdivisionrunlast-end
+    :lemma-pathtwoopensubdivisionrunstart-eq-prefixlength
+    :lemma-pathhomotopicquotient-concat-succ
+    :lemma-pathtwoopensubdivision-quotient-eq-runfold],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapToSpacePiOne_eq_one",
+    :type "overlap loops map trivially via contractible inner piece"},
+   :lemma
+   {:name "kleinPolygonOverlapToSpacePiOne_eq_one",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "overlap loops map trivially via contractible inner piece",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "c454760138501d322f23734cecc5d356b4fa717d"},
+   :id :lemma-kleinpolygonoverlaptospacepione-eq-one,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygoninnercontractiblespace],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "kleinPolygonInnerContractibleSpace"},
+   :lemma
+   {:name "kleinPolygonInnerContractibleSpace",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id :lemma-kleinpolygoninnercontractiblespace,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker",
+    :type
+    "normal closure of actual overlap image is contained in outer-to-polygon kernel"},
+   :lemma
+   {:name "kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "normal closure of actual overlap image is contained in outer-to-polygon kernel",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "fc950d9a2e0bdc8863b80786dedf8f035a21e793"},
+   :id
+   :lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonoverlaptospacepione-eq-one],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel",
+    :type "forward kernel inclusion in skeleton coordinates"},
+   :lemma
+   {:name
+    "kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "forward kernel inclusion in skeleton coordinates",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "761b8821a80e774da35733af17705fbf7f177221"},
+   :id
+   :lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlapnormalclosure-le-outertospacepione-ker],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel",
+    :type "forward kernel inclusion after target transport"},
+   :lemma
+   {:name
+    "kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "forward kernel inclusion after target transport",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d7297e3e75e94a762e551350420cfd1c40478a33"},
+   :id
+   :lemma-kleinpolygonoverlapskeletonnormalclosure-le-targettransportedkernel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonoverlapskeletonnormalclosure-le-transportedkernel],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
+    :type
+    "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map"},
+   :lemma
+   {:name "kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "literal skeleton pi1 map equals outer inclusion composed with direct skeleton-to-outer map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "44f5d424e3ef2ac634898fb671808a5e07c04bef"},
+   :id :lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
+    :type "outer connector maps exactly to target polygon connector"},
+   :lemma
+   {:name "kleinPolygonOuterImageToDirectSkeletonPointPath_map",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "outer connector maps exactly to target polygon connector",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f869be3704ca9938a77d7108060a03e2ea600652"},
+   :id :lemma-kleinpolygonouterimagetodirectskeletonpointpath-map,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonskeletontospacepione-eq-outer-comp-direct],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
+    :type
+    "target map factors through outer inclusion and source-coordinate comparison"},
+   :lemma
+   {:name "kleinPolygonTargetTransportedOuterToSpacePiOne_factor",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "target map factors through outer inclusion and source-coordinate comparison",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1f843184e63c1069706c11cc8498750d603ddc22"},
+   :id :lemma-kleinpolygontargettransportedoutertospacepione-factor,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonouterimagetodirectskeletonpointpath-map],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "equivalence_unit_mapIso_conj_preimage",
+    :type
+    "unit and inverse-mapped connector conjugation of preimage equals inverse-functor map"},
+   :lemma
+   {:name "equivalence_unit_mapIso_conj_preimage",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "unit and inverse-mapped connector conjugation of preimage equals inverse-functor map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a99d1a8d1b73e3760af0f8cb89a9a4151be047d8"},
+   :id :lemma-equivalence-unit-mapiso-conj-preimage,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector",
+    :type
+    "concrete outer connector equals inverse deformation unit followed by inverse-mapped skeleton connector"},
+   :lemma
+   {:name
+    "kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "concrete outer connector equals inverse deformation unit followed by inverse-mapped skeleton connector",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id
+   :lemma-kleinpolygonouterconnector-eq-inverseunit-comp-mappedconnector,
+   :kind :lemma,
+   :depends-on [:lemma-equivalence-unit-mapiso-conj-preimage],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
+    :type
+    "direct skeleton-to-outer map equals equivalence inverse map"},
+   :lemma
+   {:name "kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "direct skeleton-to-outer map equals equivalence inverse map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "135c809b7929f6786434fdf975d48f1ac0401a4a"},
+   :id :lemma-kleinpolygonskeletontoouterpione-apply-eq-inverse-map,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPackagedUnitPath_mk",
+    :type
+    "chosen path class equals packaged equivalence unit component"},
+   :lemma
+   {:name "kleinPolygonPackagedUnitPath_mk",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "chosen path class equals packaged equivalence unit component",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "0fc9df5737f275deaba79ad46c8fdbf8e7a96e5f"},
+   :id :lemma-kleinpolygonpackagedunitpath-mk,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPackagedUnitConnector_mk",
+    :type
+    "packaged connector class equals unit followed by inverse-mapped skeleton connector"},
+   :lemma
+   {:name "kleinPolygonPackagedUnitConnector_mk",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "packaged connector class equals unit followed by inverse-mapped skeleton connector",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "7640486c6397e450fd355dabe430dc4501444963"},
+   :id :lemma-kleinpolygonpackagedunitconnector-mk,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonpackagedunitpath-mk],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPackagedSourceCoordinate_eq_direct",
+    :type "packaged source equals direct"},
+   :lemma
+   {:name "kleinPolygonPackagedSourceCoordinate_eq_direct",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "packaged source equals direct",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f"},
+   :id :lemma-kleinpolygonpackagedsourcecoordinate-eq-direct,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonpackagedunitconnector-mk],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel",
+    :type "forward kernel inclusion"},
+   :lemma
+   {:name
+    "kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "forward kernel inclusion",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "a6f0c4b61e88c36e45b9bbfb5d394decf1fd8f2f"},
+   :id
+   :lemma-kleinpolygonoverlapskeletonnormalclosure-le-skeletontospacekernel,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonpackagedsourcecoordinate-eq-direct],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonPseudopushout_arrow_eq_reconstructed",
+    :type
+    "ambient arrow equals unit-conjugated pseudopushout reconstruction"},
+   :lemma
+   {:name "kleinPolygonPseudopushout_arrow_eq_reconstructed",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "ambient arrow equals unit-conjugated pseudopushout reconstruction",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d72cefa5d7b7ff749f163173ed9200e7542a62c0"},
+   :id :lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygonfundamentalgroupoidpseudopushout],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_transition_mem_overlap",
+    :type "adjacent side-change vertex belongs to overlap"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_transition_mem_overlap",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "adjacent side-change vertex belongs to overlap",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "962be8771e84a7039a9cffd581eb22c778f1d587"},
+   :id :lemma-pathtwoopensubdivision-transition-mem-overlap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygonpseudopushout-arrow-eq-reconstructed],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerFundamentalGroupoid_hom_subsingleton",
+    :type "inner hom sets subsingleton"},
+   :lemma
+   {:name "kleinPolygonInnerFundamentalGroupoid_hom_subsingleton",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "inner hom sets subsingleton",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "ebda004808872a29a245f67338ad64f23bb87e52"},
+   :id :lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivision-transition-mem-overlap],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInner_pathClass_eq_overlapReplacement",
+    :type
+    "inner path between overlap endpoints equals image of an overlap path"},
+   :lemma
+   {:name "kleinPolygonInner_pathClass_eq_overlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "inner path between overlap endpoints equals image of an overlap path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "0c1e3c722fcff7ea48c6781d31c78f8a0ce0827b"},
+   :id :lemma-kleinpolygoninner-pathclass-eq-overlapreplacement,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninnerfundamentalgroupoid-hom-subsingleton],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement",
+    :type
+    "ambient inner run equals overlap replacement through outer piece"},
+   :lemma
+   {:name
+    "kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "ambient inner run equals overlap replacement through outer piece",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5f821fed12858efa2e7aa8bf6df1eaa30e5767c7"},
+   :id
+   :lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninner-pathclass-eq-overlapreplacement],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
+    :type
+    "pointwise path-class equality implies finite concatenation equality"},
+   :lemma
+   {:name "pathHomotopicQuotient_concat_eq_of_pieceClass_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "pointwise path-class equality implies finite concatenation equality",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id :lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninner-ambientpathclass-eq-outeroverlapreplacement],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_sphere_twoSheeted",
+    :type "IsKSheetedCover (sphereProjection 3) 2"},
+   :lemma
+   {:name "t96A06_rp3_sphere_twoSheeted",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "IsKSheetedCover (sphereProjection 3) 2",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "e25d1d3c16af5c726f6e3d15302b3e75ae6c5a46"},
+   :id :lemma-t96a06-rp3-sphere-twosheeted,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-sphere-covering],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq",
+    :type
+    "subdivision path class equals concat of any pointwise-equal replacement family"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "subdivision path class equals concat of any pointwise-equal replacement family",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "52b6d5e5a66da6c1c5b00e71e16b58967f3ae4bc"},
+   :id
+   :lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathhomotopicquotient-concat-eq-of-piececlass-eq],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerRun_exists_outerOverlapReplacement",
+    :type
+    "ambient inner run with overlap endpoints equals an overlap path routed through outer piece"},
+   :lemma
+   {:name "kleinPolygonInnerRun_exists_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "ambient inner run with overlap endpoints equals an overlap path routed through outer piece",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f8ea046cd937e69a6595922a691bea2dc1247706"},
+   :id :lemma-kleinpolygoninnerrun-exists-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivision-quotient-eq-concat-of-piececlass-eq],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_mem_of_piece_mem",
+    :type
+    "nonempty finite path concat stays in U when each factor stays in U"},
+   :lemma
+   {:name "path_concat_mem_of_piece_mem",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "nonempty finite path concat stays in U when each factor stays in U",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "77c92bf3b7390a1d297408e68d2f41a6b01c7e71"},
+   :id :lemma-path-concat-mem-of-piece-mem,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninnerrun-exists-outeroverlapreplacement],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerBlock_exists_outerOverlapReplacement",
+    :type
+    "overlap-bounded nonempty inner block equals one overlap path routed through outer piece"},
+   :lemma
+   {:name "kleinPolygonInnerBlock_exists_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "overlap-bounded nonempty inner block equals one overlap path routed through outer piece",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "24e6bfc0f31c41558794f23c04f50fc568a4110f"},
+   :id :lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-mem-of-piece-mem],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_spec",
+    :type
+    "finRange splits into nonempty constant runs with adjacent side changes"},
+   :lemma
+   {:name "boolSideRunPartition_spec",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "finRange splits into nonempty constant runs with adjacent side changes",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "71a51ad224037e3d35a102d8600e0a5ffd1cff25"},
+   :id :lemma-boolsiderunpartition-spec,
+   :kind :lemma,
+   :depends-on
+   [:lemma-kleinpolygoninnerblock-exists-outeroverlapreplacement],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_mem_side_eq_head",
+    :type "run members have head side"},
+   :lemma
+   {:name "boolSideRunPartition_mem_side_eq_head",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run members have head side",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9f16b2393d73376ac4f97e72ef39c7f17ce5f637"},
+   :id :lemma-boolsiderunpartition-mem-side-eq-head,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-spec],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "kleinPolygonInnerSideRun_piece_mem",
+    :type "true-run pieces stay inner"},
+   :lemma
+   {:name "kleinPolygonInnerSideRun_piece_mem",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "true-run pieces stay inner",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9f16b2393d73376ac4f97e72ef39c7f17ce5f637"},
+   :id :lemma-kleinpolygoninnersiderun-piece-mem,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-mem-side-eq-head],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_isInfix_finRange",
+    :type "each side run is a contiguous finRange block"},
+   :lemma
+   {:name "boolSideRunPartition_isInfix_finRange",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "each side run is a contiguous finRange block",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "9a19183ffc9cd2c1c59f0084eeabaa564135ee68"},
+   :id :lemma-boolsiderunpartition-isinfix-finrange,
+   :kind :lemma,
+   :depends-on [:lemma-kleinpolygoninnersiderun-piece-mem],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_exists_slice",
+    :type "bounded start/length slice"},
+   :lemma
+   {:name "boolSideRunPartition_exists_slice",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "bounded start/length slice",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "6e424b225407c469abb1967d43e31277e41dcd2c"},
+   :id :lemma-boolsiderunpartition-exists-slice,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-isinfix-finrange],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionBlockPiece",
+    :type "run reindexed as dependent piece paths"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionBlockPiece",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run reindexed as dependent piece paths",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "6e424b225407c469abb1967d43e31277e41dcd2c"},
+   :id :lemma-pathtwoopensubdivisionblockpiece,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-exists-slice],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement",
+    :type "packaged inner block equals one outer-routed overlap path"},
+   :lemma
+   {:name
+    "pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "packaged inner block equals one outer-routed overlap path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "06b841a6396013640183b3461ac597cfcaa7e557"},
+   :id
+   :lemma-pathtwoopensubdivisioninnerblock-exists-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionblockpiece],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_exists_subtype_path",
+    :type "set-valued finite concat lifts to subtype path"},
+   :lemma
+   {:name "path_concat_exists_subtype_path",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "set-valued finite concat lifts to subtype path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id :lemma-path-concat-exists-subtype-path,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-mem-of-piece-mem],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
+    :type "packaged outer block is ambient image of outer path"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionOuterBlock_exists_outerPath",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "packaged outer block is ambient image of outer path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t93J03Closure.lean"]},
+   :id :lemma-pathtwoopensubdivisionouterblock-exists-outerpath,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-exists-subtype-path],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_homologyMap_surjective",
+    :type
+    "sphereProjection induces a surjection on rational homology in every degree"},
+   :lemma
+   {:name "t96A06_rp3_rational_homologyMap_surjective",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphereProjection induces a surjection on rational homology in every degree",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "f170a303979c4503ee97dc13f70b5ec00dfa6fcd"},
+   :id :lemma-t96a06-rp3-rational-homologymap-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-sphere-twosheeted],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_map_subtype",
+    :type "subtype concat mapping commutes with concat"},
+   :lemma
+   {:name "path_concat_map_subtype",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "subtype concat mapping commutes with concat",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b"},
+   :id :lemma-path-concat-map-subtype,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-exists-subtype-path],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "path_concat_class_eq_outer_of_pieceClass_eq",
+    :type "outer-represented factors fold to one outer path"},
+   :lemma
+   {:name "path_concat_class_eq_outer_of_pieceClass_eq",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "outer-represented factors fold to one outer path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1d93d0b25c6f2fcf77e9296540eea268f893c28b"},
+   :id :lemma-path-concat-class-eq-outer-of-piececlass-eq,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-map-subtype],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_adjacent_indices",
+    :type "adjacent runs have consecutive boundary indices"},
+   :lemma
+   {:name "boolSideRunPartition_adjacent_indices",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "adjacent runs have consecutive boundary indices",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "eb1767255ebf00e330120719700e7c8f8da63be0"},
+   :id :lemma-boolsiderunpartition-adjacent-indices,
+   :kind :lemma,
+   :depends-on [:lemma-path-concat-class-eq-outer-of-piececlass-eq],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap",
+    :type
+    "adjacent maximal runs meet at an overlap subdivision vertex"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "adjacent maximal runs meet at an overlap subdivision vertex",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "6aafd2ba0b98dd14a3b138fbb4bc325f143bd289"},
+   :id :lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-adjacent-indices],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_runPartition_isChain_overlap",
+    :type "all adjacent run boundaries are overlap vertices"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_runPartition_isChain_overlap",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "all adjacent run boundaries are overlap vertices",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "978a84a40d74390b2f572b313be98c0237bedff4"},
+   :id :lemma-pathtwoopensubdivision-runpartition-ischain-overlap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivision-adjacentrunboundary-mem-overlap],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "boolSideRunPartition_end_indices",
+    :type "first run starts at zero and last run ends at final index"},
+   :lemma
+   {:name "boolSideRunPartition_end_indices",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "first run starts at zero and last run ends at final index",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "32d3aa6e76fbf4739749aef6f1d274fec06bc885"},
+   :id :lemma-boolsiderunpartition-end-indices,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivision-runpartition-ischain-overlap],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_runPartition_boundary_spec",
+    :type
+    "adjacent run targets equal following sources and lie in overlap"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_runPartition_boundary_spec",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "adjacent run targets equal following sources and lie in overlap",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d23066ebf135266f6492546e82217349a47bc686"},
+   :id :lemma-pathtwoopensubdivision-runpartition-boundary-spec,
+   :kind :lemma,
+   :depends-on [:lemma-boolsiderunpartition-end-indices],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints",
+    :type "canonical boundary list, length runs+1, head point zero"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBoundaryPoints",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "canonical boundary list, length runs+1, head point zero",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "83b52a407f4be5673b93570b691710c7bd6ab7ed"},
+   :id :lemma-pathtwoopensubdivisionrunboundarypoints,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivision-runpartition-boundary-spec],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints_getLast",
+    :type "final boundary point equals final subdivision vertex"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBoundaryPoints_getLast",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "final boundary point equals final subdivision vertex",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "fde20b59294e670ee4f473d71714c9ac0198fa8d"},
+   :id :lemma-pathtwoopensubdivisionrunboundarypoints-getlast,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunboundarypoints],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer",
+    :type "all run-boundary points lie in outer from outer endpoints"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "all run-boundary points lie in outer from outer endpoints",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "263f5d4719c9f6b3f23824426c3e31e770badff0"},
+   :id :lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunboundarypoints-getlast],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val",
+    :type "outer boundary list with exact map"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "outer boundary list with exact map",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6"},
+   :id :lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunboundarypoints-mem-outer],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_rational_middle_homology",
+    :type "H1(RP3;Q)=0 and H2(RP3;Q)=0"},
+   :lemma
+   {:name "t96A06_rp3_rational_middle_homology",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "H1(RP3;Q)=0 and H2(RP3;Q)=0",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "b7a01bad22a84df73d65de2605dacd326499232d"},
+   :id :lemma-t96a06-rp3-rational-middle-homology,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-homologymap-surjective],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_fixed_set",
+    :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis"},
+   :lemma
+   {:name "t97J07_fixed_set",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "fixed locus of diag(1,1,3) is CP1 plus isolated axis",
+    :area "projective-quotient-fixed-locus"},
+   :id :lemma-t97j07-fixed-set,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97J07,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t97J07_eulerCharacteristic",
+    :type "HasEulerCharacteristic CP2 3"},
+   :lemma
+   {:name "t97J07_eulerCharacteristic",
+    :reported-by [:program-2026-10-13-close-t97j07],
+    :type "HasEulerCharacteristic CP2 3",
+    :area "rational-homology-cpn"},
+   :id :lemma-t97j07-eulercharacteristic,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
+    :type "Fin-indexed outer boundaries recover ambient list"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionOuterRunBoundaryFamily_val",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "Fin-indexed outer boundaries recover ambient list",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "8c4eb4f96b95d89f92b10c478320a1c73ac05bf6"},
+   :id :lemma-pathtwoopensubdivisionouterrunboundaryfamily-val,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionouterrunboundarypoints-map-val],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunFamily_exists_slice",
+    :type "indexed nonempty runs; exact slices; constant side"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunFamily_exists_slice",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "indexed nonempty runs; exact slices; constant side",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "daed472889c76a6ad1d273f5dc8cc6bea11a1a75"},
+   :id :lemma-pathtwoopensubdivisionrunfamily-exists-slice,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionouterrunboundaryfamily-val],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunFamily_piece_mem_chart",
+    :type "canonical run slice; every piece stays in head chart"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunFamily_piece_mem_chart",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "canonical run slice; every piece stays in head chart",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1824df6191b36a90b7bc50eb8b3fa89a54c78f19"},
+   :id :lemma-pathtwoopensubdivisionrunfamily-piece-mem-chart,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunfamily-exists-slice],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlockPiece",
+    :type
+    "dependent original-piece family for every indexed maximal run"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlockPiece",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "dependent original-piece family for every indexed maximal run",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d1f33974b4b2f99f6a186874a1ad29108b7719e6"},
+   :id :lemma-pathtwoopensubdivisionrunblockpiece,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunfamily-piece-mem-chart],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlockPoint_zero",
+    :type "run block source equals indexed run head vertex"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlockPoint_zero",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run block source equals indexed run head vertex",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "b032e84260f3dfcb0272bdfda8f6cd572728231c"},
+   :id :lemma-pathtwoopensubdivisionrunblockpoint-zero,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunblockpiece],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlockPoint_last",
+    :type "run block target equals literal successor vertex"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlockPoint_last",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run block target equals literal successor vertex",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "10390da8355dcd72034364c3ddf78c28f2cdf7d3"},
+   :id :lemma-pathtwoopensubdivisionrunblockpoint-last,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunblockpoint-zero],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last",
+    :type "boundary i.succ equals run block target"},
+   :lemma
+   {:name
+    "pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "boundary i.succ equals run block target",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "22202c41575e25e4d174a57a8149f7b15881d382"},
+   :id
+   :lemma-pathtwoopensubdivisionouterrunboundaryfamily-succ-eq-runblockpoint-last,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunblockpoint-last],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero",
+    :type "boundary i equals run block source"},
+   :lemma
+   {:name
+    "pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "boundary i equals run block source",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e48debde7dffad504dff78f1acd08acc1d137d16"},
+   :id
+   :lemma-pathtwoopensubdivisionouterrunboundaryfamily-castsucc-eq-runblockpoint-zero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionouterrunboundaryfamily-succ-eq-runblockpoint-last],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlockPiece_mem_chart",
+    :type "indexed dependent run block stays in selected chart"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlockPiece_mem_chart",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "indexed dependent run block stays in selected chart",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "e1ece6539bc8be947cc0b71eed2ab9d3a26c581f"},
+   :id :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionouterrunboundaryfamily-castsucc-eq-runblockpoint-zero],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlockPiece_mem_chart_cases",
+    :type "true gives inner range; false gives outer range"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlockPiece_mem_chart_cases",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "true gives inner range; false gives outer range",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "657c9520bc1295803f113d25d5a087cc5a0a191d"},
+   :id :lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunblockpiece-mem-chart],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphere3_rational_H3Iso", :type "H3(S3;Q) ≅ Q"},
+   :lemma
+   {:name "t96A06_sphere3_rational_H3Iso",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "H3(S3;Q) ≅ Q",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "b7a01bad22a84df73d65de2605dacd326499232d"},
+   :id :lemma-t96a06-sphere3-rational-h3iso,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-rp3-rational-middle-homology],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRun_exists_outerRepresentative",
+    :type "equal-class outer path per run"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRun_exists_outerRepresentative",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "equal-class outer path per run",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "657c9520bc1295803f113d25d5a087cc5a0a191d"},
+   :id :lemma-pathtwoopensubdivisionrun-exists-outerrepresentative,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunblockpiece-mem-chart-cases],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
+    :type
+    "exact consecutive outer-boundary path preserving endpoint-cast run class"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRun_exists_outerBoundaryPath",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type
+    "exact consecutive outer-boundary path preserving endpoint-cast run class",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "b87f68fbe2e6b103154e5df3f961105476ac6537"},
+   :id :lemma-pathtwoopensubdivisionrun-exists-outerboundarypath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrun-exists-outerrepresentative],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunFold_exists_outerPath",
+    :type "dependent maximal-run fold has one equal-class outer path"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunFold_exists_outerPath",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "dependent maximal-run fold has one equal-class outer path",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "515bbfb930df7f4d01751001d1ad67e427fd6d11"},
+   :id :lemma-pathtwoopensubdivisionrunfold-exists-outerpath,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrun-exists-outerboundarypath],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints",
+    :type "outer run fold at subdivision endpoints"},
+   :lemma
+   {:name
+    "pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "outer run fold at subdivision endpoints",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "1a9e51341cedd3aaf263365ff943b0cf0c9c1991"},
+   :id
+   :lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunfold-exists-outerpath],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunStart_eq_previous_end",
+    :type "adjacent maximal-run slices have contiguous coordinates"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunStart_eq_previous_end",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "adjacent maximal-run slices have contiguous coordinates",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "d300e0a26ae3af85cfd4c89f220fc09d804bd495"},
+   :id :lemma-pathtwoopensubdivisionrunstart-eq-previous-end,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunfold-exists-outerpath-at-endpoints],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunLast_end",
+    :type "run slices start at zero and finish at S.n+1"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunLast_end",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run slices start at zero and finish at S.n+1",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "04869b05c2fca01f44f7ddac411a81f39399d36f"},
+   :id :lemma-pathtwoopensubdivisionrunlast-end,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunstart-eq-previous-end],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunStart_eq_prefixLength",
+    :type "run start equals preceding flattened-run length"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunStart_eq_prefixLength",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run start equals preceding flattened-run length",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "bd5ebdee7d40582e385b90e9070b60791e06ac10"},
+   :id :lemma-pathtwoopensubdivisionrunstart-eq-prefixlength,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunlast-end],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathHomotopicQuotient_concat_succ",
+    :type "quotient class recurrence for dependent Path.concat"},
+   :lemma
+   {:name "pathHomotopicQuotient_concat_succ",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "quotient class recurrence for dependent Path.concat",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "5dde98f96395c16d860e539ab4c1c203b3ab9bcc"},
+   :id :lemma-pathhomotopicquotient-concat-succ,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunstart-eq-prefixlength
+    :lemma-pathtwoopensubdivisionrunindexcoherence],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rp3_antipodal_H3",
+    :type
+    "antipodal acts trivially on H3(S3;Q), so transfer identifies H3(RP3;Q) with Q"},
+   :lemma
+   {:name "t96A06_rp3_antipodal_H3",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "antipodal acts trivially on H3(S3;Q), so transfer identifies H3(RP3;Q) with Q",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-rp3-antipodal-h3,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphere3-rational-h3iso
+    :lemma-t96a06-sphere3-antipodal-h3
+    :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphere3_antipodal_H3",
+    :type "antipodal acts as identity on H3(S3;Q)"},
+   :lemma
+   {:name "t96A06_sphere3_antipodal_H3",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "antipodal acts as identity on H3(S3;Q)",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :program-2026-10-13-close-t96a06,
+    :banked-commit "81a215738"},
+   :id :lemma-t96a06-sphere3-antipodal-h3,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-sphere3-rational-h3iso],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunIndexCoherence",
+    :type "run-partition Fin indices and endpoint coherence"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunIndexCoherence",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run-partition Fin indices and endpoint coherence",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "c2618daada06b51cc8ae7709a26e0f8728e3e407"},
+   :id :lemma-pathtwoopensubdivisionrunindexcoherence,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunstart-eq-prefixlength],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivision_quotient_eq_runFold",
+    :type "fold equality"},
+   :lemma
+   {:name "pathTwoOpenSubdivision_quotient_eq_runFold",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "fold equality",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-pathtwoopensubdivision-quotient-eq-runfold,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathhomotopicquotient-concat-succ
+    :lemma-pathtwoopensubdivisionrunprefixcoverage
+    :lemma-pathtwoopensubdivisionrunprefixsliceidentification
+    :lemma-pathtwoopensubdivisionrunblockpoint-apply-prefix
+    :lemma-pathtwoopensubdivisionrunprefixlength-add-predlength
+    :lemma-pathtwoopensubdivisionrunprefixblock-le
+    :lemma-pathtwoopensubdivisionrunprefixblock
+    :lemma-pathtwoopensubdivisionrunblock-eq-prefixblock],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunPrefixCoverage",
+    :type "run-prefix equations"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunPrefixCoverage",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run-prefix equations",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "658cfac1cef2af4ea3a2b3ac53dae5eee5cdcef5"},
+   :id :lemma-pathtwoopensubdivisionrunprefixcoverage,
+   :kind :lemma,
+   :depends-on [:lemma-pathhomotopicquotient-concat-succ],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunPrefixSliceIdentification",
+    :type "run index equalities"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunPrefixSliceIdentification",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run index equalities",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "fb506d8c760573fb75e215eb10ea86a90669238c"},
+   :id :lemma-pathtwoopensubdivisionrunprefixsliceidentification,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunprefixcoverage],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlockPoint_apply_prefix",
+    :type "run-block point/prefix equality"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlockPoint_apply_prefix",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run-block point/prefix equality",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "215b8169dc2e441b6a952367bb14ff0ff17a14db"},
+   :id :lemma-pathtwoopensubdivisionrunblockpoint-apply-prefix,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunprefixsliceidentification],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunPrefixLength_add_predLength",
+    :type "prefix/block equation"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunPrefixLength_add_predLength",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "prefix/block equation",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "889c25fce29360e16633a26938a9df156b3530ee"},
+   :id :lemma-pathtwoopensubdivisionrunprefixlength-add-predlength,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunblockpoint-apply-prefix],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunPrefixBlock_le",
+    :type "prefix block bound"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunPrefixBlock_le",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "prefix block bound",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "20c3d0fff72404a9c5285cfe82dff77eb0d6d46f"},
+   :id :lemma-pathtwoopensubdivisionrunprefixblock-le,
+   :kind :lemma,
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunprefixlength-add-predlength],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunPrefixBlock",
+    :type "canonical prefix-indexed dependent point/path families"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunPrefixBlock",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "canonical prefix-indexed dependent point/path families",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03,
+    :banked-by :program-2026-10-13-close-t93j03,
+    :banked-commit "f363a202d2ceb6004df3425363aa37898a91c1d4"},
+   :id :lemma-pathtwoopensubdivisionrunprefixblock,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunprefixblock-le],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunBlock_eq_prefixBlock",
+    :type "point/factor comparison"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunBlock_eq_prefixBlock",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "point/factor comparison",
+    :area "covering-subgroup-correspondence",
+    :proved-in :program-2026-10-13-close-t93j03},
+   :id :lemma-pathtwoopensubdivisionrunblock-eq-prefixblock,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunprefixblock],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
+    :type "projected simplex lifts are original or antipodal"},
+   :lemma
+   {:name "t96A06_projectedSimplex_lift_eq_or_eq_antipodal",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "projected simplex lifts are original or antipodal",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-projectedsimplex-lift-eq-or-eq-antipodal,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-sphere3-antipodal-h3],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses

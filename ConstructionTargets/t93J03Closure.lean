@@ -9,6 +9,7 @@ import ConstructionTargets.PolygonSurfacePiOne
 import ConstructionTargets.PointWedgeVanKampen
 import ConstructionTargets.FundamentalGroupProduct
 import ConstructionTargets.BoundaryTorusHurewiczIsomorphism
+import ConstructionTargets.PolygonSurfaceHomology
 
 /-! # Generic closing lemmas for t93J03
 
@@ -37,6 +38,8 @@ open ConstructionTargets.PointWedgeVanKampen
 open ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient
 open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
+open ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision
+open ConstructionTargets.PolygonSurfaceHomology
 
 /-- An orbit intersection determines both integer normal-form coordinates by
 the source and target points.  These are the equations used to bound the
@@ -465,6 +468,68 @@ def fundamentalGroupEquivOfHomeomorph
       exact e.apply_symm_apply (p t)
   map_mul' := map_mul _
 
+/-- Transporting a based loop along two paths with the same endpoints changes
+its target loop only by conjugacy. -/
+theorem fundamentalGroup_pathTransport_isConj
+    {X : Type*} [TopologicalSpace X] {x y : X}
+    (p q : Path x y) (g : FundamentalGroup X x) :
+    IsConj (FundamentalGroup.fundamentalGroupMulEquivOfPath p g)
+      (FundamentalGroup.fundamentalGroupMulEquivOfPath q g) := by
+  let ep := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦p⟧
+  let eq := (CategoryTheory.Groupoid.isoEquivHom
+    (FundamentalGroupoid.mk x) (FundamentalGroupoid.mk y)).symm ⟦q⟧
+  refine ⟨toUnits (ep.inv ≫ eq.hom), ?_⟩
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath p g) ≫
+      (ep.inv ≫ eq.hom) =
+    (ep.inv ≫ eq.hom) ≫
+      (FundamentalGroup.fundamentalGroupMulEquivOfPath q g)
+  rw [show FundamentalGroup.fundamentalGroupMulEquivOfPath p g =
+    ep.inv ≫ g ≫ ep.hom from rfl]
+  rw [show FundamentalGroup.fundamentalGroupMulEquivOfPath q g =
+    eq.inv ≫ g ≫ eq.hom from rfl]
+  simp only [CategoryTheory.Category.assoc,
+    CategoryTheory.Iso.hom_inv_id_assoc]
+
+/-- Mapping a loop and then changing its basepoint along the mapped path is
+the same as first changing basepoint and then mapping the loop.  This is the
+based fundamental-group form of functoriality of conjugation. -/
+theorem fundamentalGroup_map_pathTransport_natural
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {x₀ x₁ : X} (f : C(X, Y)) (p : Path x₀ x₁) :
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath
+        (p.map f.continuous)).toMonoidHom.comp
+        (FundamentalGroup.map f x₀) =
+      (FundamentalGroup.map f x₁).comp
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p).toMonoidHom := by
+  ext g
+  induction g using Quotient.inductionOn with
+  | h q =>
+    change
+      ((FundamentalGroupoid.map f).mapIso
+        ((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧)).conj
+          ((FundamentalGroupoid.map f).map ⟦q⟧) =
+        (FundamentalGroupoid.map f).map
+          (((CategoryTheory.Groupoid.isoEquivHom _ _).symm ⟦p⟧).conj ⟦q⟧)
+    exact ((FundamentalGroupoid.map f).map_conj _ _).symm
+
+/-- The fully-faithful preimage supplied by an equivalence agrees with its
+inverse functor after rebasing along the equivalence unit and a mapped target
+connector.  This isolates the categorical identity used when comparing a
+homotopy-equivalence coordinate with a concrete inverse map. -/
+theorem equivalence_unit_mapIso_conj_preimage
+    {C D : Type*} [Groupoid C] [Groupoid D]
+    (E : C ≌ D) (A : C) (B : D) (q : E.functor.obj A ≅ B) (f : End B) :
+    ((E.unitIso.app A) ≪≫ E.inverse.mapIso q).conj
+        (E.fullyFaithfulFunctor.preimage (q.symm.conj f)) =
+      E.inverse.map f := by
+  simp [Iso.conj_apply, Equivalence.fullyFaithfulFunctor]
+  change ((E.unitIso.app A ≪≫ E.inverse.mapIso q).inv ≫
+      (E.unitIso.hom.app A ≫ E.inverse.map q.hom ≫ E.inverse.map f ≫
+        E.inverse.map q.inv ≫ E.unitIso.inv.app A) ≫
+      (E.unitIso.app A ≪≫ E.inverse.mapIso q).hom) = _
+  simp
+
 /-- The frozen Klein bottle is path connected because it is the continuous
 surjective image of the convex closed disk under its defining quotient map. -/
 noncomputable instance kleinBottlePathConnectedSpace :
@@ -688,6 +753,20 @@ theorem kleinSkeletonPresentationMap_ker :
     kleinSkeletonPresentationMap, MonoidHom.coe_comp, Function.comp_apply,
     PresentedGroup.mk_eq_one_iff]
 
+/-- The algebraic quotient demanded by based van Kampen is already the
+frozen `aabb` presentation.  Thus the remaining topological extraction only
+has to identify its kernel with this pulled-back normal closure. -/
+noncomputable def kleinSkeletonAabbQuotientEquiv :
+    (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint ⧸
+      Subgroup.comap
+        kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+        (Subgroup.normalClosure kleinPolygonRelations)) ≃*
+      KleinPolygonPresentedGroup :=
+  (QuotientGroup.quotientMulEquivOfEq
+      kleinSkeletonPresentationMap_ker.symm).trans
+    (QuotientGroup.quotientKerEquivOfSurjective
+      kleinSkeletonPresentationMap kleinSkeletonPresentationMap_surjective)
+
 /-- The generic two-open van Kampen mapping equivalence specialized to the
 exact radial cover of the Klein polygon quotient.  This is the topological
 input from which the remaining based normal-closure quotient is extracted. -/
@@ -701,6 +780,1325 @@ noncomputable def kleinPolygonFundamentalGroupoidPseudopushout
     (openCover kleinPairingData).inner_open
     (openCover kleinPairingData).outer_open
     (openCover kleinPairingData).cover
+
+/-- Reconstruct the identity functor of the polygon fundamental groupoid from
+its two restricted cover-piece functors through the proved pseudopushout. -/
+noncomputable def kleinPolygonPseudopushoutReconstructedIdentity :
+    FundamentalGroupoid kleinPairingData.Space ⥤
+      FundamentalGroupoid kleinPairingData.Space :=
+  (kleinPolygonFundamentalGroupoidPseudopushout
+    (FundamentalGroupoid kleinPairingData.Space)).inverse.obj
+      ((kleinPolygonFundamentalGroupoidPseudopushout
+        (FundamentalGroupoid kleinPairingData.Space)).functor.obj
+          (𝟭 (FundamentalGroupoid kleinPairingData.Space)))
+
+/-- The pseudopushout unit compares the literal identity functor with its
+cover-piece reconstruction. -/
+noncomputable def kleinPolygonPseudopushoutReconstructionUnit :
+    (𝟭 (FundamentalGroupoid kleinPairingData.Space)) ≅
+      kleinPolygonPseudopushoutReconstructedIdentity :=
+  (kleinPolygonFundamentalGroupoidPseudopushout
+    (FundamentalGroupoid kleinPairingData.Space)).unitIso.app _
+
+/-- Every polygon-groupoid arrow is the reconstructed cover-piece arrow,
+conjugated by the pseudopushout unit components.  This is the first direct
+based extraction from the mapping-category pseudopushout. -/
+theorem kleinPolygonPseudopushout_arrow_eq_reconstructed
+    {x y : FundamentalGroupoid kleinPairingData.Space} (g : x ⟶ y) :
+    g = kleinPolygonPseudopushoutReconstructionUnit.hom.app x ≫
+      kleinPolygonPseudopushoutReconstructedIdentity.map g ≫
+      kleinPolygonPseudopushoutReconstructionUnit.inv.app y := by
+  rw [← Category.assoc,
+    ← kleinPolygonPseudopushoutReconstructionUnit.hom.naturality g]
+  rw [Category.assoc, Iso.hom_inv_id_app, Category.comp_id]
+  rfl
+
+/-- At every change of sides in a subordinate two-open subdivision, the
+shared vertex lies in the overlap.  These are the exact vertices at which
+inner-piece factors can be replaced during based van Kampen normalization. -/
+theorem pathTwoOpenSubdivision_transition_mem_overlap
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (k : Fin S.n) (hside : S.side k.castSucc ≠ S.side k.succ) :
+    S.point k.succ.castSucc ∈ U ∩ V := by
+  have h₀ := S.piece_mem k.castSucc (1 : unitInterval)
+  have h₁ := S.piece_mem k.succ (0 : unitInterval)
+  have hp₀ : S.piece k.castSucc (1 : unitInterval) =
+      S.point k.succ.castSucc := by
+    calc
+      _ = S.point k.castSucc.succ := (S.piece k.castSucc).target
+      _ = _ := by congr 1
+  have hp₁ : S.piece k.succ (0 : unitInterval) =
+      S.point k.succ.castSucc := by
+    exact (S.piece k.succ).source
+  rw [hp₀] at h₀
+  rw [hp₁] at h₁
+  cases hs₀ : S.side k.castSucc <;> cases hs₁ : S.side k.succ
+  · exact False.elim (hside (by simp [hs₀, hs₁]))
+  · exact ⟨by simpa [twoChart, hs₁] using h₁,
+      by simpa [twoChart, hs₀] using h₀⟩
+  · exact ⟨by simpa [twoChart, hs₀] using h₀,
+      by simpa [twoChart, hs₁] using h₁⟩
+  · exact False.elim (hside (by simp [hs₀, hs₁]))
+
+/-- Partition a finite Boolean side assignment into its ordered maximal
+constant runs.  Flattening recovers every original index; blocks are nonempty
+and constant-sided, while adjacent block boundaries change side. -/
+def boolSideRunPartition {n : ℕ} (side : Fin n → Bool) :
+    List (List (Fin n)) :=
+  (List.finRange n).splitBy (fun i j => side i == side j)
+
+theorem boolSideRunPartition_spec {n : ℕ} (side : Fin n → Bool) :
+    List.finRange n = (boolSideRunPartition side).flatten ∧
+      [] ∉ boolSideRunPartition side ∧
+      (∀ block ∈ boolSideRunPartition side,
+        block.IsChain fun i j => side i == side j) ∧
+      (boolSideRunPartition side).IsChain fun a b =>
+        ∃ ha hb, (side (a.getLast ha) == side (b.head hb)) = false := by
+  exact List.splitBy_eq_iff.mp rfl
+
+/-- For a nonempty finite side assignment, the first maximal run begins at
+index zero and the last maximal run ends at the final index.  Together with
+the overlap certificates between runs, these are the two exterior endpoints
+needed to build the run-level dependent point family. -/
+theorem boolSideRunPartition_end_indices {n : ℕ}
+    (side : Fin (n + 1) → Bool) :
+    let runs := boolSideRunPartition side
+    ∃ hr : runs ≠ [],
+      (runs.head hr).head
+          (List.ne_nil_of_mem_splitBy (List.head_mem hr)) = 0 ∧
+      (runs.getLast hr).getLast
+          (List.ne_nil_of_mem_splitBy (List.getLast_mem hr)) = Fin.last n := by
+  dsimp only
+  have hn : List.finRange (n + 1) ≠ [] := by simp
+  let hr : boolSideRunPartition side ≠ [] := by
+    simpa [boolSideRunPartition] using (List.splitBy_ne_nil.2 hn)
+  refine ⟨hr, ?_, ?_⟩
+  · unfold boolSideRunPartition at hr ⊢
+    rw [List.head_head_splitBy (fun i j => side i == side j) hn]
+    apply Fin.ext
+    simp [List.finRange]
+  · unfold boolSideRunPartition at hr ⊢
+    rw [List.getLast_getLast_splitBy (fun i j => side i == side j) hn]
+    apply Fin.ext
+    rw [List.getLast_eq_getElem]
+    simp
+
+/-- Adjacent maximal side runs meet at consecutive subdivision-piece
+indices.  This recovers the geometric boundary vertex between two blocks,
+not merely the fact that their Boolean labels differ. -/
+theorem boolSideRunPartition_adjacent_indices {n : ℕ}
+    (side : Fin n → Bool) :
+    (boolSideRunPartition side).IsChain fun a b =>
+      ∀ (ha : a ≠ []) (hb : b ≠ []),
+        (b.head hb).val = (a.getLast ha).val + 1 := by
+  have hfin : (List.finRange n).IsChain fun a b => b.val = a.val + 1 := by
+    rw [List.isChain_iff_getElem]
+    intro i hi
+    simp only [List.length_finRange, List.getElem_finRange]
+    rfl
+  have hflat : (boolSideRunPartition side).flatten.IsChain
+      (fun a b => b.val = a.val + 1) := by
+    rw [← (boolSideRunPartition_spec side).1]
+    exact hfin
+  have hc := (List.isChain_flatten
+    (boolSideRunPartition_spec side).2.1).mp hflat
+  exact hc.2.imp fun a b h ha hb => by
+    have hlast : a.getLast ha ∈ a.getLast? := by
+      rw [List.getLast?_eq_getLast_of_ne_nil ha]
+      simp
+    have hhead : b.head hb ∈ b.head? := by
+      rw [List.head?_eq_some_head hb]
+      simp
+    exact h (a.getLast ha) hlast (b.head hb) hhead
+
+/-- Consecutive runs with different side labels meet at an overlap vertex of
+the original subordinate subdivision.  The conclusion uses the first piece
+index of the second run, exactly matching the endpoint of the preceding
+block and the source of the following block. -/
+theorem pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (a b : List (Fin (S.n + 1))) (ha : a ≠ []) (hb : b ≠ [])
+    (hidx : (b.head hb).val = (a.getLast ha).val + 1)
+    (hside : S.side (a.getLast ha) ≠ S.side (b.head hb)) :
+    S.point (b.head hb).castSucc ∈ U ∩ V := by
+  let k : Fin S.n := ⟨(a.getLast ha).val, by
+    have hlt := (b.head hb).isLt
+    omega⟩
+  have hk₀ : k.castSucc = a.getLast ha := by
+    apply Fin.ext
+    rfl
+  have hk₁ : k.succ = b.head hb := by
+    apply Fin.ext
+    exact hidx.symm
+  have hm := pathTwoOpenSubdivision_transition_mem_overlap S k (by
+    simpa [hk₀, hk₁] using hside)
+  simpa [hk₁] using hm
+
+/-- Every boundary between consecutive maximal side runs is an overlap
+vertex.  This packages the local transition calculation over the complete
+ordered run list, ready to serve as the endpoint data for the outer fold. -/
+theorem pathTwoOpenSubdivision_runPartition_isChain_overlap
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (boolSideRunPartition S.side).IsChain fun a b =>
+      ∀ (ha : a ≠ []) (hb : b ≠ []),
+        S.point (b.head hb).castSucc ∈ U ∩ V := by
+  rw [List.isChain_iff_forall_rel_of_append_cons_cons]
+  intro a b l₁ l₂ hab ha hb
+  have hsides := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (boolSideRunPartition_spec S.side).2.2.2) hab
+  obtain ⟨ha', hb', hsides⟩ := hsides
+  have hsides' : S.side (a.getLast ha) ≠ S.side (b.head hb) := by
+    simpa using hsides
+  have hidx := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (boolSideRunPartition_adjacent_indices S.side)) hab ha hb
+  exact pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
+    S a b ha hb hidx hsides'
+
+/-- The complete boundary specification for consecutive maximal runs: the
+target vertex of the preceding block is literally the source vertex of the
+following block, and that common vertex lies in the overlap (hence in the
+outer piece).  This is the dependent endpoint relation used by reassembly. -/
+theorem pathTwoOpenSubdivision_runPartition_boundary_spec
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (boolSideRunPartition S.side).IsChain fun a b =>
+      ∀ (ha : a ≠ []) (hb : b ≠ []),
+        S.point (a.getLast ha).succ = S.point (b.head hb).castSucc ∧
+          S.point (b.head hb).castSucc ∈ U ∩ V := by
+  rw [List.isChain_iff_forall_rel_of_append_cons_cons]
+  intro a b l₁ l₂ hab ha hb
+  have hidx := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (boolSideRunPartition_adjacent_indices S.side)) hab ha hb
+  have hpoint : S.point (a.getLast ha).succ =
+      S.point (b.head hb).castSucc := by
+    apply congrArg S.point
+    apply Fin.ext
+    exact hidx.symm
+  have hoverlap := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+    (pathTwoOpenSubdivision_runPartition_isChain_overlap S)) hab ha hb
+  exact ⟨hpoint, hoverlap⟩
+
+/-- The canonical ordered boundary list for the maximal side runs: the
+initial subdivision vertex followed by the target vertex of every run.  Each
+attached run carries the membership proof needed to recover its nonemptiness.
+This is the ambient list underlying the forthcoming outer-subtype family. -/
+noncomputable def pathTwoOpenSubdivisionRunBoundaryPoints
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) : List X :=
+    S.point 0 :: (boolSideRunPartition S.side).attach.map fun block =>
+    S.point (block.1.getLast
+      (fun h => (boolSideRunPartition_spec S.side).2.1 (h ▸ block.2))).succ
+
+@[simp] theorem pathTwoOpenSubdivisionRunBoundaryPoints_length
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (pathTwoOpenSubdivisionRunBoundaryPoints S).length =
+      (boolSideRunPartition S.side).length + 1 := by
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints]
+
+@[simp] theorem pathTwoOpenSubdivisionRunBoundaryPoints_head
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (pathTwoOpenSubdivisionRunBoundaryPoints S).head? = some (S.point 0) := by
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints]
+
+/-- The final entry of the run-boundary list is the final subdivision vertex.
+Thus the two external outer-membership hypotheses attach to the literal head
+and last entries, while all intermediate entries come from overlap changes. -/
+@[simp] theorem pathTwoOpenSubdivisionRunBoundaryPoints_getLast
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    (pathTwoOpenSubdivisionRunBoundaryPoints S).getLast (by
+      simp [pathTwoOpenSubdivisionRunBoundaryPoints]) =
+      S.point (Fin.last (S.n + 1)) := by
+  obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
+  simp only [pathTwoOpenSubdivisionRunBoundaryPoints]
+  rw [List.getLast_cons (by simp [hr])]
+  rw [List.getLast_map]
+  simp only [List.getLast_attach]
+  simpa [hlast]
+
+/-- The target of every maximal run lies in the outer set, provided the final
+subdivision vertex does.  A nonfinal run is followed by another run, so its
+target is their certified overlap boundary; the final run uses the endpoint
+identity above. -/
+theorem pathTwoOpenSubdivision_runTarget_mem_outer
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (block : List (Fin (S.n + 1)))
+    (hb : block ∈ boolSideRunPartition S.side) :
+    S.point (block.getLast (fun h =>
+      (boolSideRunPartition_spec S.side).2.1 (h ▸ hb))).succ ∈ V := by
+  obtain ⟨pre, suffix, hsplit⟩ := List.mem_iff_append.mp hb
+  cases suffix with
+  | nil =>
+      obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
+      have hne : block ≠ [] := fun h =>
+        (boolSideRunPartition_spec S.side).2.1 (h ▸ hb)
+      have hout : (boolSideRunPartition S.side).getLast hr = block := by
+        calc
+          _ = (pre ++ [block]).getLast (by simp) :=
+            List.getLast_congr hr (by simp) hsplit
+          _ = block := List.getLast_append_singleton pre
+      have hneLast : (boolSideRunPartition S.side).getLast hr ≠ [] :=
+        fun h => (boolSideRunPartition_spec S.side).2.1
+          (h ▸ List.getLast_mem hr)
+      have hidx : block.getLast hne = Fin.last S.n := by
+        calc
+          _ = ((boolSideRunPartition S.side).getLast hr).getLast hneLast :=
+            List.getLast_congr hne hneLast hout.symm
+          _ = _ := hlast
+      simpa [hidx] using hy
+  | cons next rest =>
+      have hadj := (List.isChain_iff_forall_rel_of_append_cons_cons.mp
+        (pathTwoOpenSubdivision_runPartition_boundary_spec S)) hsplit
+      have hs := hadj
+        (fun h => (boolSideRunPartition_spec S.side).2.1 (h ▸ hb))
+        (fun h => (boolSideRunPartition_spec S.side).2.1 (by
+          rw [hsplit]
+          simp [h]))
+      rw [hs.1]
+      exact hs.2.2
+
+/-- With outer endpoints, every entry of the canonical run-boundary list lies
+in the outer set.  This is exactly the pointwise proof needed to lift the
+ambient list to the outer subtype. -/
+theorem pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    ∀ z ∈ pathTwoOpenSubdivisionRunBoundaryPoints S, z ∈ V := by
+  intro z hz
+  simp only [pathTwoOpenSubdivisionRunBoundaryPoints, List.mem_cons,
+    List.mem_map] at hz
+  rcases hz with rfl | ⟨block, _, rfl⟩
+  · exact hx
+  · exact pathTwoOpenSubdivision_runTarget_mem_outer S hy block.1 block.2
+
+/-- The canonical run boundaries lifted to the outer subtype.  The attached
+ambient entries supply exactly the membership evidence proved above. -/
+noncomputable def pathTwoOpenSubdivisionOuterRunBoundaryPoints
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) : List V :=
+  (pathTwoOpenSubdivisionRunBoundaryPoints S).attach.map fun z =>
+    ⟨z.1, pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer S hx hy z.1 z.2⟩
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryPoints_length
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryPoints S hx hy).length =
+      (boolSideRunPartition S.side).length + 1 := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryPoints]
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryPoints S hx hy).map Subtype.val =
+      pathTwoOpenSubdivisionRunBoundaryPoints S := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryPoints]
+
+/-- The outer run boundaries as an exact finite family.  Its domain has one
+more element than the maximal-run list, so run `i` has endpoints `i` and
+`i.succ` without any list-bound side conditions. -/
+noncomputable def pathTwoOpenSubdivisionOuterRunBoundaryFamily
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V) :
+    Fin ((boolSideRunPartition S.side).length + 1) → V :=
+  fun i => (pathTwoOpenSubdivisionOuterRunBoundaryPoints S hx hy).get
+    (Fin.cast
+      (pathTwoOpenSubdivisionOuterRunBoundaryPoints_length S hx hy).symm i)
+
+/-- Forgetting the subtype proof recovers the corresponding canonical
+ambient boundary entry exactly. -/
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (i : Fin ((boolSideRunPartition S.side).length + 1)) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i : X) =
+      (pathTwoOpenSubdivisionRunBoundaryPoints S).get
+        (Fin.cast (pathTwoOpenSubdivisionRunBoundaryPoints_length S).symm i) := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryFamily,
+    pathTwoOpenSubdivisionOuterRunBoundaryPoints]
+
+/-- Every member of a maximal Boolean side run has the side recorded at its
+head.  This turns the local chain certificate returned by `splitBy` into the
+pointwise fact needed to package a whole subdivision block. -/
+theorem boolSideRunPartition_mem_side_eq_head {n : ℕ}
+    (side : Fin n → Bool) (block : List (Fin n))
+    (hb : block ∈ boolSideRunPartition side) (hne : block ≠ []) :
+    ∀ k ∈ block, side k = side (block.head hne) := by
+  have hc := (boolSideRunPartition_spec side).2.2.1 block hb
+  have hc' : block.IsChain (fun i j => side i = side j) :=
+    hc.imp fun h => by simpa using h
+  letI : Trans (fun i j => side i = side j)
+      (fun i j => side i = side j) (fun i j => side i = side j) :=
+    ⟨fun h₁ h₂ => Eq.trans h₁ h₂⟩
+  rw [List.isChain_iff_pairwise] at hc'
+  obtain ⟨a, l, rfl⟩ := List.exists_cons_of_ne_nil hne
+  intro k hk
+  simp only [List.mem_cons] at hk
+  rcases hk with rfl | hk
+  · rfl
+  · exact ((List.pairwise_cons.mp hc').1 k hk).symm
+
+/-- Every Boolean side run is a contiguous block of the original ordered
+finite index list.  Thus its subdivision pieces retain their endpoint order
+when they are repackaged as one dependent concatenation. -/
+theorem boolSideRunPartition_isInfix_finRange {n : ℕ}
+    (side : Fin n → Bool) (block : List (Fin n))
+    (hb : block ∈ boolSideRunPartition side) :
+    block <:+: List.finRange n := by
+  have h : [block] <:+: boolSideRunPartition side :=
+    (List.singleton_infix_iff block _).2 hb
+  have hf := h.flatten
+  simpa [boolSideRunPartition] using hf
+
+/-- A side run has explicit start and length coordinates inside `finRange`. -/
+theorem boolSideRunPartition_exists_slice {n : ℕ}
+    (side : Fin n → Bool) (block : List (Fin n))
+    (hb : block ∈ boolSideRunPartition side) :
+    ∃ start, start + block.length ≤ n ∧
+      block = ((List.finRange n).drop start).take block.length := by
+  have hi := boolSideRunPartition_isInfix_finRange side block hb
+  rcases hi with ⟨a, b, hab⟩
+  refine ⟨a.length, ?_, ?_⟩
+  · have hlen := congrArg List.length hab
+    simp only [List.length_append, List.length_finRange] at hlen
+    omega
+  · rw [← hab]
+    simp
+
+/-- The maximal subdivision runs as an exact finite family.  This is the
+indexing used by the outer boundary family: run `i` lies between boundaries
+`i` and `i.succ`. -/
+def pathTwoOpenSubdivisionRunFamily
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    Fin (boolSideRunPartition S.side).length → List (Fin (S.n + 1)) :=
+  fun i => (boolSideRunPartition S.side).get i
+
+theorem pathTwoOpenSubdivisionRunFamily_mem
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunFamily S i ∈ boolSideRunPartition S.side := by
+  exact List.get_mem _ _
+
+theorem pathTwoOpenSubdivisionRunFamily_ne_nil
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunFamily S i ≠ [] := by
+  exact List.ne_nil_of_mem_splitBy
+    (pathTwoOpenSubdivisionRunFamily_mem S i)
+
+/-- Each indexed maximal run comes with exact contiguous slice coordinates
+inside the original ordered subdivision pieces. -/
+theorem pathTwoOpenSubdivisionRunFamily_exists_slice
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ start, start + (pathTwoOpenSubdivisionRunFamily S i).length ≤ S.n + 1 ∧
+      pathTwoOpenSubdivisionRunFamily S i =
+        ((List.finRange (S.n + 1)).drop start).take
+          (pathTwoOpenSubdivisionRunFamily S i).length := by
+  exact boolSideRunPartition_exists_slice S.side _
+    (pathTwoOpenSubdivisionRunFamily_mem S i)
+
+/-- Every piece of an indexed run has the side recorded by that run's head. -/
+theorem pathTwoOpenSubdivisionRunFamily_mem_side_eq_head
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∀ k ∈ pathTwoOpenSubdivisionRunFamily S i,
+      S.side k = S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) := by
+  exact boolSideRunPartition_mem_side_eq_head S.side _
+    (pathTwoOpenSubdivisionRunFamily_mem S i)
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+
+/-- The canonical start coordinate selected from the exact slice certificate
+of an indexed maximal run. -/
+noncomputable def pathTwoOpenSubdivisionRunStart
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) : ℕ :=
+  Classical.choose (pathTwoOpenSubdivisionRunFamily_exists_slice S i)
+
+theorem pathTwoOpenSubdivisionRunStart_add_length_le
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length ≤ S.n + 1 :=
+  (Classical.choose_spec
+    (pathTwoOpenSubdivisionRunFamily_exists_slice S i)).1
+
+theorem pathTwoOpenSubdivisionRunFamily_eq_slice
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunFamily S i =
+      ((List.finRange (S.n + 1)).drop
+        (pathTwoOpenSubdivisionRunStart S i)).take
+          (pathTwoOpenSubdivisionRunFamily S i).length :=
+  (Classical.choose_spec
+    (pathTwoOpenSubdivisionRunFamily_exists_slice S i)).2
+
+/-- The head of an indexed run is exactly its selected slice start. -/
+theorem pathTwoOpenSubdivisionRunFamily_head_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ((pathTwoOpenSubdivisionRunFamily S i).head
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).val =
+        pathTwoOpenSubdivisionRunStart S i := by
+  have hstart : pathTwoOpenSubdivisionRunStart S i < S.n + 1 := by
+    have hb := pathTwoOpenSubdivisionRunStart_add_length_le S i
+    have hp : 0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+      List.length_pos_iff_ne_nil.mpr
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+    omega
+  have heq := congrArg (fun l => l[0]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hzero : 0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+    List.length_pos_iff_ne_nil.mpr
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+  have hleft : (pathTwoOpenSubdivisionRunFamily S i)[0]? =
+      some ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) := by
+    rw [List.getElem?_eq_getElem hzero]
+    exact congrArg some
+      (List.head_eq_getElem_zero
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).symm
+  have hright : (((List.finRange (S.n + 1)).drop
+      (pathTwoOpenSubdivisionRunStart S i)).take
+        (pathTwoOpenSubdivisionRunFamily S i).length)[0]? =
+      some ⟨pathTwoOpenSubdivisionRunStart S i, hstart⟩ := by
+    simp [hzero, hstart]
+  dsimp at heq
+  rw [hleft, hright] at heq
+  exact congrArg Fin.val (Option.some.inj heq)
+
+/-- The successor of the last piece index is exactly the selected slice end. -/
+theorem pathTwoOpenSubdivisionRunFamily_getLast_succ_val
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ((pathTwoOpenSubdivisionRunFamily S i).getLast
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).succ.val =
+        pathTwoOpenSubdivisionRunStart S i +
+          (pathTwoOpenSubdivisionRunFamily S i).length := by
+  have hlen : 0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+    List.length_pos_iff_ne_nil.mpr
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  have heq := congrArg
+    (fun l => l[(pathTwoOpenSubdivisionRunFamily S i).length - 1]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hleft : (fun l =>
+      l[(pathTwoOpenSubdivisionRunFamily S i).length - 1]?)
+      (pathTwoOpenSubdivisionRunFamily S i) =
+      some ((pathTwoOpenSubdivisionRunFamily S i).getLast
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) := by
+    dsimp
+    rw [List.getElem?_eq_getElem (by omega)]
+    congr 1
+    rw [List.getLast_eq_getElem]
+  have hidx : pathTwoOpenSubdivisionRunStart S i +
+      (pathTwoOpenSubdivisionRunFamily S i).length - 1 < S.n + 1 := by omega
+  have hidx2 : pathTwoOpenSubdivisionRunStart S i +
+      ((pathTwoOpenSubdivisionRunFamily S i).length - 1) < S.n + 1 := by omega
+  have hright : (fun l =>
+      l[(pathTwoOpenSubdivisionRunFamily S i).length - 1]?)
+      (((List.finRange (S.n + 1)).drop
+        (pathTwoOpenSubdivisionRunStart S i)).take
+          (pathTwoOpenSubdivisionRunFamily S i).length) =
+      some ⟨pathTwoOpenSubdivisionRunStart S i +
+          (pathTwoOpenSubdivisionRunFamily S i).length - 1, hidx⟩ := by
+    dsimp
+    simp [hlen]
+    rw [List.getElem?_eq_getElem (by simpa using hidx2)]
+    apply congrArg some
+    apply Fin.ext
+    simp
+    omega
+  dsimp at heq hleft hright
+  rw [hleft, hright] at heq
+  have hv := congrArg Fin.val (Option.some.inj heq)
+  have hv' : ((pathTwoOpenSubdivisionRunFamily S i).getLast
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).val =
+      pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length - 1 := by simpa using hv
+  simp only [Fin.val_succ]
+  omega
+
+/-- Consecutive maximal runs have contiguous slice coordinates: the next
+run begins exactly one past the last piece of the preceding run. -/
+theorem pathTwoOpenSubdivisionRunStart_eq_previous_end
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i j : Fin (boolSideRunPartition S.side).length)
+    (hij : j.val = i.val + 1) :
+    pathTwoOpenSubdivisionRunStart S j =
+      pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length := by
+  have hibound : i.val + 1 < (boolSideRunPartition S.side).length := by
+    simpa [hij] using j.isLt
+  have hadj := (List.isChain_iff_getElem.mp
+    (boolSideRunPartition_adjacent_indices S.side)) i.val hibound
+  have hne_i : (boolSideRunPartition S.side)[i.val] ≠ [] := by
+    exact List.ne_nil_of_mem_splitBy (List.getElem_mem i.isLt)
+  have hne_j : (boolSideRunPartition S.side)[i.val + 1] ≠ [] := by
+    exact List.ne_nil_of_mem_splitBy (List.getElem_mem hibound)
+  have hidx := hadj hne_i hne_j
+  have hidx' : ((pathTwoOpenSubdivisionRunFamily S j).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S j)).val =
+      ((pathTwoOpenSubdivisionRunFamily S i).getLast
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).val + 1 := by
+    simpa [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, hij] using hidx
+  calc
+    pathTwoOpenSubdivisionRunStart S j =
+        ((pathTwoOpenSubdivisionRunFamily S j).head
+          (pathTwoOpenSubdivisionRunFamily_ne_nil S j)).val :=
+      (pathTwoOpenSubdivisionRunFamily_head_val S j).symm
+    _ = ((pathTwoOpenSubdivisionRunFamily S i).getLast
+          (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).succ.val := by
+      simpa using hidx'
+    _ = pathTwoOpenSubdivisionRunStart S i +
+          (pathTwoOpenSubdivisionRunFamily S i).length :=
+      pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i
+
+/-- The first maximal run begins at the first subdivision piece. -/
+@[simp] theorem pathTwoOpenSubdivisionRunStart_zero
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    pathTwoOpenSubdivisionRunStart S
+      ⟨0, List.length_pos_iff_ne_nil.mpr
+        (boolSideRunPartition_end_indices S.side).1⟩ = 0 := by
+  obtain ⟨hr, hfirst, _⟩ := boolSideRunPartition_end_indices S.side
+  let i : Fin (boolSideRunPartition S.side).length :=
+    ⟨0, List.length_pos_iff_ne_nil.mpr hr⟩
+  have hfamily : pathTwoOpenSubdivisionRunFamily S i =
+      (boolSideRunPartition S.side).head hr := by
+    unfold pathTwoOpenSubdivisionRunFamily
+    rw [List.get_eq_getElem, ← List.head_eq_getElem_zero]
+  change pathTwoOpenSubdivisionRunStart S i = 0
+  rw [← pathTwoOpenSubdivisionRunFamily_head_val]
+  have hne : pathTwoOpenSubdivisionRunFamily S i ≠ [] :=
+    pathTwoOpenSubdivisionRunFamily_ne_nil S i
+  simpa [hfamily] using congrArg Fin.val hfirst
+
+/-- The last maximal run ends immediately after the final subdivision piece. -/
+theorem pathTwoOpenSubdivisionRunLast_end
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    pathTwoOpenSubdivisionRunStart S
+        ⟨(boolSideRunPartition S.side).length - 1,
+          Nat.sub_lt (List.length_pos_iff_ne_nil.mpr
+            (boolSideRunPartition_end_indices S.side).1) (by omega)⟩ +
+      (pathTwoOpenSubdivisionRunFamily S
+        ⟨(boolSideRunPartition S.side).length - 1,
+          Nat.sub_lt (List.length_pos_iff_ne_nil.mpr
+            (boolSideRunPartition_end_indices S.side).1) (by omega)⟩).length =
+      S.n + 1 := by
+  obtain ⟨hr, _, hlast⟩ := boolSideRunPartition_end_indices S.side
+  let i : Fin (boolSideRunPartition S.side).length :=
+    ⟨(boolSideRunPartition S.side).length - 1,
+      Nat.sub_lt (List.length_pos_iff_ne_nil.mpr hr) (by omega)⟩
+  have hfamily : pathTwoOpenSubdivisionRunFamily S i =
+      (boolSideRunPartition S.side).getLast hr := by
+    unfold pathTwoOpenSubdivisionRunFamily
+    rw [List.getLast_eq_getElem, List.get_eq_getElem]
+  rw [← pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i]
+  have hne : pathTwoOpenSubdivisionRunFamily S i ≠ [] :=
+    pathTwoOpenSubdivisionRunFamily_ne_nil S i
+  have heq : (pathTwoOpenSubdivisionRunFamily S i).getLast hne =
+      Fin.last S.n := by
+    simpa [hfamily] using hlast
+  simp [heq]
+
+/-- Number of original subdivision pieces contained in the maximal runs
+strictly preceding `k`. -/
+def pathTwoOpenSubdivisionRunPrefixLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) (k : ℕ) : ℕ :=
+  (((boolSideRunPartition S.side).take k).flatten).length
+
+/-- Extending the run prefix by one block adds exactly that block's number
+of original subdivision pieces. -/
+theorem pathTwoOpenSubdivisionRunPrefixLength_succ
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) (k : ℕ)
+    (hk : k < (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S (k + 1) =
+      pathTwoOpenSubdivisionRunPrefixLength S k +
+        (pathTwoOpenSubdivisionRunFamily S ⟨k, hk⟩).length := by
+  unfold pathTwoOpenSubdivisionRunPrefixLength
+  rw [List.take_succ, List.flatten_append, List.length_append]
+  rw [List.getElem?_eq_getElem hk]
+  simp [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem]
+
+/-- The full run prefix contains every original subdivision piece. -/
+@[simp] theorem pathTwoOpenSubdivisionRunPrefixLength_all
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V) :
+    pathTwoOpenSubdivisionRunPrefixLength S
+        (boolSideRunPartition S.side).length = S.n + 1 := by
+  unfold pathTwoOpenSubdivisionRunPrefixLength
+  rw [List.take_length, ← (boolSideRunPartition_spec S.side).1]
+  simp
+
+/-- The selected slice start of every maximal run is its cumulative prefix
+length in the run partition. -/
+theorem pathTwoOpenSubdivisionRunStart_eq_prefixLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunStart S i =
+      pathTwoOpenSubdivisionRunPrefixLength S i.val := by
+  induction hval : i.val using Nat.rec generalizing i with
+  | zero =>
+      obtain ⟨hr, _, _⟩ := boolSideRunPartition_end_indices S.side
+      let i0 : Fin (boolSideRunPartition S.side).length :=
+        ⟨0, List.length_pos_iff_ne_nil.mpr hr⟩
+      have hi : i = i0 := Fin.ext (by simpa [i0] using hval)
+      subst i
+      simpa [pathTwoOpenSubdivisionRunPrefixLength, i0] using
+        pathTwoOpenSubdivisionRunStart_zero S
+  | succ k ih =>
+      have hklt : k < (boolSideRunPartition S.side).length := by omega
+      let j : Fin (boolSideRunPartition S.side).length := ⟨k, hklt⟩
+      have hij : i.val = j.val + 1 := by simp [j, hval]
+      rw [pathTwoOpenSubdivisionRunStart_eq_previous_end S j i hij]
+      rw [ih j rfl]
+      unfold pathTwoOpenSubdivisionRunPrefixLength
+      rw [List.take_succ, List.flatten_append, List.length_append]
+      change _ + (pathTwoOpenSubdivisionRunFamily S j).length = _
+      rw [List.getElem?_eq_getElem hklt]
+      simp [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, j]
+
+/-- The end index of run `i` is the cumulative length through run `i`.
+This is the index equation used by the successor step of run regrouping. -/
+theorem pathTwoOpenSubdivisionRunEnd_eq_prefixLength_succ
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunStart S i +
+        (pathTwoOpenSubdivisionRunFamily S i).length =
+      pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  rw [pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+  rw [pathTwoOpenSubdivisionRunPrefixLength_succ S i.val i.isLt]
+
+theorem pathTwoOpenSubdivisionRunFamily_length_pos
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    0 < (pathTwoOpenSubdivisionRunFamily S i).length :=
+  List.length_pos_iff_ne_nil.mpr
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i)
+
+/-- The predecessor length presenting a nonempty run in the `n + 1` form
+expected by the block replacement lemmas. -/
+def pathTwoOpenSubdivisionRunPredLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) : ℕ :=
+  (pathTwoOpenSubdivisionRunFamily S i).length - 1
+
+@[simp] theorem pathTwoOpenSubdivisionRunPredLength_add_one
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPredLength S i + 1 =
+      (pathTwoOpenSubdivisionRunFamily S i).length := by
+  unfold pathTwoOpenSubdivisionRunPredLength
+  exact Nat.sub_add_cancel (pathTwoOpenSubdivisionRunFamily_length_pos S i)
+
+/-- The block length used by `Path.concat`, added to its cumulative-prefix
+start, reaches exactly the next run prefix. -/
+theorem pathTwoOpenSubdivisionRunPrefixLength_add_predLength
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val +
+        (pathTwoOpenSubdivisionRunPredLength S i + 1) =
+      pathTwoOpenSubdivisionRunPrefixLength S (i.val + 1) := by
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+  exact pathTwoOpenSubdivisionRunEnd_eq_prefixLength_succ S i
+
+/-- The cumulative-prefix presentation of an indexed run is a valid block
+inside the complete subdivision. -/
+theorem pathTwoOpenSubdivisionRunPrefixBlock_le
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunPrefixLength S i.val +
+        (pathTwoOpenSubdivisionRunPredLength S i + 1) ≤ S.n + 1 := by
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+  exact pathTwoOpenSubdivisionRunStart_add_length_le S i
+
+/-- Every original piece in an indexed run stays in the chart selected by
+the run head.  This is the uniform range input used to choose either the
+literal outer representative or the contractible-inner replacement. -/
+theorem pathTwoOpenSubdivisionRunFamily_piece_mem_chart
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∀ k ∈ pathTwoOpenSubdivisionRunFamily S i, ∀ t,
+      S.piece k t ∈ twoChart U V
+        (S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+          (pathTwoOpenSubdivisionRunFamily_ne_nil S i))) := by
+  intro k hk t
+  have hside := pathTwoOpenSubdivisionRunFamily_mem_side_eq_head S i k hk
+  simpa [hside] using S.piece_mem k t
+
+/-- The endpoint family of a contiguous subdivision block. -/
+def pathTwoOpenSubdivisionBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (start len : ℕ) (h : start + len ≤ S.n + 1) : Fin (len + 1) → X :=
+  fun k => S.point ⟨start + k, by omega⟩
+
+/-- The original subdivision pieces, reindexed as one dependent path family
+over a contiguous block. -/
+noncomputable def pathTwoOpenSubdivisionBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (start len : ℕ) (h : start + len ≤ S.n + 1) :
+    (k : Fin len) → Path
+      (pathTwoOpenSubdivisionBlockPoint S start len h k.castSucc)
+      (pathTwoOpenSubdivisionBlockPoint S start len h k.succ) := by
+  intro k
+  let j : Fin (S.n + 1) := ⟨start + k, by omega⟩
+  exact (S.piece j).cast (by rfl) (by
+    apply congrArg S.point
+    apply Fin.ext
+    simp [j]
+    omega)
+
+@[simp] theorem pathTwoOpenSubdivisionBlockPiece_apply
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (start len : ℕ) (h : start + len ≤ S.n + 1)
+    (k : Fin len) (t : unitInterval) :
+    pathTwoOpenSubdivisionBlockPiece S start len h k t =
+      S.piece ⟨start + k, by omega⟩ t := by
+  rfl
+
+/-- The selected subdivision points of an indexed maximal run, in the exact
+dependent shape consumed by `Path.concat`. -/
+noncomputable def pathTwoOpenSubdivisionRunBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    Fin (pathTwoOpenSubdivisionRunPredLength S i + 2) → X :=
+  pathTwoOpenSubdivisionBlockPoint S
+    (pathTwoOpenSubdivisionRunStart S i)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1) (by
+      rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+      exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
+
+/-- The original subdivision pieces of an indexed maximal run as one
+dependent path family. -/
+noncomputable def pathTwoOpenSubdivisionRunBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) → Path
+      (pathTwoOpenSubdivisionRunBlockPoint S i k.castSucc)
+      (pathTwoOpenSubdivisionRunBlockPoint S i k.succ) :=
+  pathTwoOpenSubdivisionBlockPiece S
+    (pathTwoOpenSubdivisionRunStart S i)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1) (by
+      rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+      exact pathTwoOpenSubdivisionRunStart_add_length_le S i)
+
+/-- The same indexed run, presented canonically by its cumulative-prefix
+start rather than by the selected slice start. -/
+noncomputable def pathTwoOpenSubdivisionRunPrefixBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    Fin (pathTwoOpenSubdivisionRunPredLength S i + 2) → X :=
+  pathTwoOpenSubdivisionBlockPoint S
+    (pathTwoOpenSubdivisionRunPrefixLength S i.val)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1)
+    (pathTwoOpenSubdivisionRunPrefixBlock_le S i)
+
+/-- The original factors of a run in its canonical cumulative-prefix
+presentation. -/
+noncomputable def pathTwoOpenSubdivisionRunPrefixBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)) → Path
+      (pathTwoOpenSubdivisionRunPrefixBlockPoint S i k.castSucc)
+      (pathTwoOpenSubdivisionRunPrefixBlockPoint S i k.succ) :=
+  pathTwoOpenSubdivisionBlockPiece S
+    (pathTwoOpenSubdivisionRunPrefixLength S i.val)
+    (pathTwoOpenSubdivisionRunPredLength S i + 1)
+    (pathTwoOpenSubdivisionRunPrefixBlock_le S i)
+
+/-- Every point of the reindexed run block is the original subdivision point
+at the corresponding cumulative-prefix offset. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_apply_prefix
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) :
+    pathTwoOpenSubdivisionRunBlockPoint S i k =
+      S.point ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k,
+        by
+          rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+          have h := pathTwoOpenSubdivisionRunStart_add_length_le S i
+          rw [← pathTwoOpenSubdivisionRunPredLength_add_one S i] at h
+          omega⟩ := by
+  unfold pathTwoOpenSubdivisionRunBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  change pathTwoOpenSubdivisionRunStart S i + k.val =
+    pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val
+  have hs := pathTwoOpenSubdivisionRunStart_eq_prefixLength S i
+  omega
+
+/-- The selected-slice and cumulative-prefix presentations have the same
+vertex at every dependent index. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_eq_prefixBlockPoint
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) :
+    pathTwoOpenSubdivisionRunBlockPoint S i k =
+      pathTwoOpenSubdivisionRunPrefixBlockPoint S i k := by
+  rw [pathTwoOpenSubdivisionRunBlockPoint_apply_prefix]
+  rfl
+
+/-- A run-block factor is the original subdivision factor at its cumulative
+prefix offset. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_apply_prefix
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunBlockPiece S i k t =
+      S.piece ⟨pathTwoOpenSubdivisionRunPrefixLength S i.val + k,
+        by
+          rw [← pathTwoOpenSubdivisionRunStart_eq_prefixLength S i]
+          have h := pathTwoOpenSubdivisionRunStart_add_length_le S i
+          rw [← pathTwoOpenSubdivisionRunPredLength_add_one S i] at h
+          omega⟩ t := by
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  rw [← pathTwoOpenSubdivisionRunPredLength_add_one S i] at hbound
+  have hk : pathTwoOpenSubdivisionRunStart S i + k.val < S.n + 1 := by
+    omega
+  unfold pathTwoOpenSubdivisionRunBlockPiece
+  change S.piece ⟨pathTwoOpenSubdivisionRunStart S i + k, hk⟩ t = _
+  apply congrArg (fun j : Fin (S.n + 1) ↦ S.piece j t)
+  apply Fin.ext
+  change pathTwoOpenSubdivisionRunStart S i + k.val =
+    pathTwoOpenSubdivisionRunPrefixLength S i.val + k.val
+  have hs := pathTwoOpenSubdivisionRunStart_eq_prefixLength S i
+  omega
+
+/-- The selected-slice and cumulative-prefix run factors agree pointwise
+after forgetting their propositionally equal endpoint indices. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_eq_prefixBlockPiece
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (k : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1))
+    (t : unitInterval) :
+    pathTwoOpenSubdivisionRunBlockPiece S i k t =
+      pathTwoOpenSubdivisionRunPrefixBlockPiece S i k t := by
+  rw [pathTwoOpenSubdivisionRunBlockPiece_apply_prefix]
+  rfl
+
+/-- Reindexing a maximal run as a dependent block preserves its uniform
+chart-range certificate.  This is the final range input needed to choose the
+literal outer path or the inner-to-outer replacement for the run. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_mem_chart
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∀ k t, pathTwoOpenSubdivisionRunBlockPiece S i k t ∈
+      twoChart U V (S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i))) := by
+  intro k t
+  have hlen := pathTwoOpenSubdivisionRunPredLength_add_one S i
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  unfold pathTwoOpenSubdivisionRunBlockPiece
+  change S.piece ⟨pathTwoOpenSubdivisionRunStart S i + k, by omega⟩ t ∈ _
+  apply pathTwoOpenSubdivisionRunFamily_piece_mem_chart S i
+  let j : Fin (S.n + 1) :=
+    ⟨pathTwoOpenSubdivisionRunStart S i + k, by omega⟩
+  let kr : Fin (pathTwoOpenSubdivisionRunFamily S i).length :=
+    ⟨k, by omega⟩
+  have hm : (pathTwoOpenSubdivisionRunFamily S i).get kr ∈
+      pathTwoOpenSubdivisionRunFamily S i := List.get_mem _ _
+  have heq := congrArg (fun l => l[k.val]?)
+    (pathTwoOpenSubdivisionRunFamily_eq_slice S i)
+  have hleft : (pathTwoOpenSubdivisionRunFamily S i)[k.val]? =
+      some ((pathTwoOpenSubdivisionRunFamily S i).get kr) := by
+    rw [List.getElem?_eq_getElem (by exact kr.isLt)]
+    rfl
+  have hright : (((List.finRange (S.n + 1)).drop
+      (pathTwoOpenSubdivisionRunStart S i)).take
+        (pathTwoOpenSubdivisionRunFamily S i).length)[k.val]? = some j := by
+    dsimp [j]
+    rw [List.getElem?_eq_getElem (by simp; omega)]
+    apply congrArg some
+    apply Fin.ext
+    simp
+  dsimp at heq
+  rw [hleft, hright] at heq
+  have hj : (pathTwoOpenSubdivisionRunFamily S i).get kr = j :=
+    Option.some.inj heq
+  have hjmem : j ∈ pathTwoOpenSubdivisionRunFamily S i := hj ▸ hm
+  exact hjmem
+
+/-- A run whose head selects the inner chart supplies the inner-block
+replacement constructor's range hypothesis. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_mem_inner_of_side_eq_true
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hs : S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) = true) :
+    ∀ k t, pathTwoOpenSubdivisionRunBlockPiece S i k t ∈ U := by
+  intro k t
+  simpa [twoChart, hs] using
+    pathTwoOpenSubdivisionRunBlockPiece_mem_chart S i k t
+
+/-- A run whose head selects the outer chart supplies the literal outer-block
+constructor's range hypothesis. -/
+theorem pathTwoOpenSubdivisionRunBlockPiece_mem_outer_of_side_eq_false
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length)
+    (hs : S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+      (pathTwoOpenSubdivisionRunFamily_ne_nil S i)) = false) :
+    ∀ k t, pathTwoOpenSubdivisionRunBlockPiece S i k t ∈ V := by
+  intro k t
+  simpa [twoChart, hs] using
+    pathTwoOpenSubdivisionRunBlockPiece_mem_chart S i k t
+
+/-- The selected block begins at the literal source vertex of its indexed
+maximal run. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_zero
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunBlockPoint S i 0 =
+      S.point ((pathTwoOpenSubdivisionRunFamily S i).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).castSucc := by
+  unfold pathTwoOpenSubdivisionRunBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  simpa using (pathTwoOpenSubdivisionRunFamily_head_val S i).symm
+
+/-- The selected block ends at the literal target vertex of its indexed
+maximal run. -/
+theorem pathTwoOpenSubdivisionRunBlockPoint_last
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) =
+      S.point ((pathTwoOpenSubdivisionRunFamily S i).getLast
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S i)).succ := by
+  unfold pathTwoOpenSubdivisionRunBlockPoint
+  unfold pathTwoOpenSubdivisionBlockPoint
+  apply congrArg S.point
+  apply Fin.ext
+  simp only [Fin.val_last]
+  rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+  exact (pathTwoOpenSubdivisionRunFamily_getLast_succ_val S i).symm
+
+/-- The target of indexed run `i` is exactly outer boundary `i.succ`.
+This is the target-endpoint identification needed to place the run
+representative between consecutive entries of the outer boundary family. -/
+theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ : X) =
+      pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) := by
+  rw [pathTwoOpenSubdivisionRunBlockPoint_last]
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  unfold pathTwoOpenSubdivisionRunBoundaryPoints
+  simp [pathTwoOpenSubdivisionRunFamily]
+
+/-- The source of indexed run `i` is exactly outer boundary `i`.  At the
+first run this is the initial subdivision vertex; at every later run it is
+the target of the preceding run, by the maximal-run adjacency certificate. -/
+theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+    {X : Type*} [TopologicalSpace X] {x y : X} {p : Path x y}
+    {U V : Set X} (S : PathTwoOpenSubdivision p U V)
+    (hx : S.point 0 ∈ V)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ V)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc : X) =
+      pathTwoOpenSubdivisionRunBlockPoint S i 0 := by
+  rw [pathTwoOpenSubdivisionRunBlockPoint_zero]
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  by_cases hi : i.val = 0
+  · have hz : 0 < (boolSideRunPartition S.side).length :=
+      Nat.zero_lt_of_lt i.isLt
+    let z : Fin (boolSideRunPartition S.side).length := ⟨0, hz⟩
+    have hieq : i = z := Fin.ext hi
+    subst i
+    obtain ⟨hr, hfirst, _⟩ := boolSideRunPartition_end_indices S.side
+    change (pathTwoOpenSubdivisionRunBoundaryPoints S)[0] = _
+    rw [show (pathTwoOpenSubdivisionRunBoundaryPoints S)[0] = S.point 0 by
+      simp [pathTwoOpenSubdivisionRunBoundaryPoints]]
+    apply congrArg S.point
+    apply Fin.ext
+    have hget : (boolSideRunPartition S.side).get z =
+        (boolSideRunPartition S.side).head hr := by
+      rw [List.get_eq_getElem]
+      exact List.getElem_zero hz
+    have hblock : pathTwoOpenSubdivisionRunFamily S z =
+        (boolSideRunPartition S.side).head hr := hget
+    have hh : (boolSideRunPartition S.side).head hr ≠ [] :=
+      List.ne_nil_of_mem_splitBy (List.head_mem hr)
+    have hhead : (pathTwoOpenSubdivisionRunFamily S z).head
+        (pathTwoOpenSubdivisionRunFamily_ne_nil S z) =
+        ((boolSideRunPartition S.side).head hr).head hh := by
+      apply Option.some.inj
+      rw [← List.head?_eq_some_head, ← List.head?_eq_some_head]
+      exact congrArg List.head? hblock
+    rw [hhead]
+    simpa using (congrArg Fin.val hfirst).symm
+  · obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero hi
+    have hkbound : k + 1 < (boolSideRunPartition S.side).length := by
+      simpa [hk] using i.isLt
+    have hadj := (List.isChain_iff_getElem.mp
+      (pathTwoOpenSubdivision_runPartition_boundary_spec S)) k hkbound
+    have ha : (boolSideRunPartition S.side)[k] ≠ [] := fun h =>
+      (boolSideRunPartition_spec S.side).2.1
+        (h ▸ List.getElem_mem (Nat.lt_of_succ_lt hkbound))
+    have hb : (boolSideRunPartition S.side)[k + 1] ≠ [] := fun h =>
+      (boolSideRunPartition_spec S.side).2.1
+        (h ▸ List.getElem_mem hkbound)
+    have hadj' := (hadj ha hb).1
+    change (pathTwoOpenSubdivisionRunBoundaryPoints S)[i.val] = _
+    unfold pathTwoOpenSubdivisionRunBoundaryPoints
+    simp only [hk, List.getElem_cons_succ, List.getElem_map,
+      List.getElem_attach]
+    simpa [pathTwoOpenSubdivisionRunFamily, List.get_eq_getElem, hk] using hadj'
+
+/-- Every piece indexed by an inner run of the exact Klein subdivision stays
+in the inner cover, supplying the range hypothesis for block concatenation. -/
+theorem kleinPolygonInnerSideRun_piece_mem
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (block : List (Fin (S.n + 1)))
+    (hb : block ∈ boolSideRunPartition S.side) (hne : block ≠ [])
+    (hs : S.side (block.head hne) = true) :
+    ∀ k ∈ block, ∀ t,
+      S.piece k t ∈ (openCover kleinPairingData).inner := by
+  intro k hk t
+  have hkSide := boolSideRunPartition_mem_side_eq_head
+    S.side block hb hne k hk
+  have hm := S.piece_mem k t
+  simpa [twoChart, hkSide, hs] using hm
+
+/-- Equality of the homotopy class of every factor propagates through the
+dependent finite concatenation used by a subordinate subdivision.  This is
+the finite-fold assembly step for replacing all maximal inner runs. -/
+theorem pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 1) → X)
+    (F G : (k : Fin n) → Path (point k.castSucc) (point k.succ))
+    (h : ∀ k, (⟦F k⟧ : Path.Homotopic.Quotient _ _) = ⟦G k⟧) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat point G⟧ := by
+  apply Quotient.sound
+  exact Path.Homotopic.concat_hcomp point F G
+    (fun k => Quotient.eq.mp (h k))
+
+/-- The homotopy class of a nonempty dependent concatenation is the
+composition of its initial concatenation with its final factor.  This is the
+quotient-level recurrence used to regroup subdivision pieces by maximal
+cover-side runs. -/
+theorem pathHomotopicQuotient_concat_succ
+    {X : Type*} [TopologicalSpace X] {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ)) :
+    (⟦Path.concat point F⟧ : Path.Homotopic.Quotient _ _) =
+      Path.Homotopic.Quotient.trans
+        ⟦Path.concat (point ∘ Fin.castSucc) (fun k ↦ F k.castSucc)⟧
+        ⟦F (Fin.last n)⟧ := by
+  rw [Path.concat_succ]
+  exact Path.Homotopic.Quotient.mk_trans _ _
+
+/-- A nonempty dependent finite concatenation stays in a set whenever each
+of its factors does.  This supplies the range proof for every maximal inner
+block extracted from a subordinate subdivision. -/
+theorem path_concat_mem_of_piece_mem
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hF : ∀ k t, F k t ∈ U) :
+    ∀ t, Path.concat point F t ∈ U := by
+  induction n with
+  | zero =>
+      intro t
+      rw [Path.concat_succ]
+      rw [Path.concat_zero]
+      have ht : ((Path.concat (point ∘ Fin.castSucc)
+          (fun k => F k.castSucc)).trans (F (Fin.last 0))) t ∈
+          Set.range ((Path.concat (point ∘ Fin.castSucc)
+            (fun k => F k.castSucc)).trans (F (Fin.last 0))) :=
+        Set.mem_range_self t
+      rw [Path.concat_zero] at ht
+      rw [Path.trans_range] at ht
+      rcases ht with ht | ht
+      · rcases ht with ⟨s, hs⟩
+        have hm : (Path.refl ((point ∘ Fin.castSucc) 0)) s ∈ U := by
+          change point 0 ∈ U
+          convert hF 0 0 using 1
+          rw [(F 0).source]
+          congr 1
+        exact hs ▸ hm
+      · rcases ht with ⟨s, hs⟩
+        have hm : (F (Fin.last 0)) s ∈ U := hF _ s
+        exact hs ▸ hm
+  | succ n ih =>
+      intro t
+      rw [Path.concat_succ]
+      change ((Path.concat (point ∘ Fin.castSucc)
+        (fun k => F k.castSucc)).trans (F (Fin.last (n + 1)))) t ∈ U
+      have ht : ((Path.concat (point ∘ Fin.castSucc)
+          (fun k => F k.castSucc)).trans (F (Fin.last (n + 1)))) t ∈
+          Set.range ((Path.concat (point ∘ Fin.castSucc)
+            (fun k => F k.castSucc)).trans (F (Fin.last (n + 1)))) :=
+        Set.mem_range_self t
+      rw [Path.trans_range] at ht
+      rcases ht with ⟨s, hs⟩ | ⟨s, hs⟩
+      · exact hs ▸ ih (point ∘ Fin.castSucc) (fun k => F k.castSucc)
+          (fun k u => hF k.castSucc u) s
+      · exact hs ▸ hF (Fin.last (n + 1)) s
+
+/-- A finite concatenation whose factors stay in a set is literally the
+ambient image of a path in that subtype. -/
+theorem path_concat_exists_subtype_path
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 2) → X)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hF : ∀ k t, F k t ∈ U) :
+    ∃ q : Path
+        (⟨point 0, by
+          rw [← (Path.concat point F).source]
+          exact path_concat_mem_of_piece_mem point F hF 0⟩ : U)
+        (⟨point (Fin.last (n + 1)), by
+          rw [← (Path.concat point F).target]
+          exact path_concat_mem_of_piece_mem point F hF 1⟩ : U),
+      q.map continuous_subtype_val = Path.concat point F := by
+  let hp := path_concat_mem_of_piece_mem point F hF
+  let q : Path
+      (⟨point 0, by rw [← (Path.concat point F).source]; exact hp 0⟩ : U)
+      (⟨point (Fin.last (n + 1)), by
+        rw [← (Path.concat point F).target]; exact hp 1⟩ : U) :=
+    { toFun := fun t => ⟨Path.concat point F t, hp t⟩
+      continuous_toFun := (Path.concat point F).continuous.subtype_mk _
+      source' := Subtype.ext (Path.concat point F).source
+      target' := Subtype.ext (Path.concat point F).target }
+  exact ⟨q, rfl⟩
+
+/-- Mapping a dependent finite concatenation out of a subspace commutes
+literally with its ordered fold.  This is the finite reassembly operation
+used after each maximal cover-side run has been replaced by one outer path. -/
+theorem path_concat_map_subtype
+    {X : Type*} [TopologicalSpace X] {U : Set X} {n : ℕ}
+    (point : Fin (n + 1) → U)
+    (F : (k : Fin n) → Path (point k.castSucc) (point k.succ)) :
+    (Path.concat point F).map continuous_subtype_val =
+      Path.concat (fun k => (point k : X))
+        (fun k => (F k).map continuous_subtype_val) := by
+  induction n with
+  | zero =>
+      simp only [Path.concat_zero]
+      rfl
+  | succ n ih =>
+      rw [Path.concat_succ, Path.concat_succ]
+      calc
+        _ = ((Path.concat (point ∘ Fin.castSucc)
+              (fun k => F k.castSucc)).map continuous_subtype_val).trans
+              ((F (Fin.last n)).map continuous_subtype_val) :=
+          Path.map_trans _ _ _
+        _ = _ := congrArg
+          (fun q => q.trans ((F (Fin.last n)).map continuous_subtype_val))
+          (ih (point := point ∘ Fin.castSucc)
+            (F := fun k => F k.castSucc))
+
+/-- If every factor of a dependent ambient concatenation is represented by
+an outer-piece path, their ordered concatenation is represented by one
+outer-piece path.  This constructs the exact path and identifies its ambient
+homotopy class. -/
+theorem path_concat_class_eq_outer_of_pieceClass_eq
+    {n : ℕ}
+    (point : Fin (n + 1) →
+      {z // z ∈ (openCover kleinPairingData).outer})
+    (F : (k : Fin n) → Path
+      (point k.castSucc : kleinPairingData.Space)
+      (point k.succ : kleinPairingData.Space))
+    (Q : (k : Fin n) → Path (point k.castSucc) (point k.succ))
+    (h : ∀ k,
+      (⟦F k⟧ : Path.Homotopic.Quotient _ _) =
+        ⟦(Q k).map continuous_subtype_val⟧) :
+    ∃ q : Path (point 0) (point (Fin.last n)),
+      (⟦Path.concat (fun k => (point k : kleinPairingData.Space)) F⟧ :
+          FundamentalGroupoid.mk (point 0 : kleinPairingData.Space) ⟶
+            FundamentalGroupoid.mk (point (Fin.last n) : kleinPairingData.Space)) =
+        ⟦q.map continuous_subtype_val⟧ := by
+  refine ⟨Path.concat point Q, ?_⟩
+  rw [path_concat_map_subtype]
+  exact pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+    (fun k => (point k : kleinPairingData.Space)) F
+      (fun k => (Q k).map continuous_subtype_val) h
+
+/-- A pointwise replacement of the pieces of a subordinate subdivision
+reconstructs the class of its original path.  This combines the subdivision's
+endpoint casts with the generic dependent finite-fold lemma. -/
+theorem pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
+    {X : Type*} [TopologicalSpace X]
+    {x y : X} {p : Path x y} {U V : Set X}
+    (S : PathTwoOpenSubdivision p U V)
+    (G : (k : Fin (S.n + 1)) →
+      Path (S.point k.castSucc) (S.point k.succ))
+    (h : ∀ k, (⟦S.piece k⟧ : Path.Homotopic.Quotient _ _) = ⟦G k⟧) :
+    (⟦p.cast S.point_zero S.point_last⟧ : Path.Homotopic.Quotient _ _) =
+      ⟦Path.concat S.point G⟧ := by
+  calc
+    _ = ⟦Path.concat S.point S.piece⟧ := S.quotient_concat_eq.symm
+    _ = _ := pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+      S.point S.piece G h
 
 /-- The inner vertex of the exact radial cover is contractible, using the
 pointed contraction carried by the polygon cover package. -/
@@ -726,6 +2124,36 @@ theorem kleinPolygonInnerFundamentalGroup_subsingleton :
   change Subsingleton (Path.Homotopic.Quotient
     (openCover kleinPairingData).center (openCover kleinPairingData).center)
   infer_instance
+
+/-- Contractibility of the inner piece controls paths between arbitrary
+endpoints, not only loops at the chosen center. Thus every inner run with
+fixed overlap endpoints has a unique fundamental-groupoid class. -/
+theorem kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
+    (x y : {q // q ∈ (openCover kleinPairingData).inner}) :
+    Subsingleton (FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  change Subsingleton (Path.Homotopic.Quotient x y)
+  infer_instance
+
+/-- Two paths through the inner piece with the same endpoints represent the
+same arrow. This replaces maximal inner runs whose boundary vertices lie in
+the overlap. -/
+theorem kleinPolygonInner_pathClass_eq
+    {x y : {q // q ∈ (openCover kleinPairingData).inner}}
+    (p q : Path x y) :
+    (⟦p⟧ : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) = ⟦q⟧ := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  exact Quotient.sound (SimplyConnectedSpace.paths_homotopic p q)
 
 /-- The annular overlap in the exact radial cover is path connected. -/
 theorem kleinPolygonOverlapPathConnectedSpace :
@@ -768,6 +2196,558 @@ noncomputable def kleinPolygonOverlapToOuterPiOne :
         (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) :=
   FundamentalGroup.map kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
 
+/-- The same overlap inclusion, regarded as a map into the contractible inner
+piece of the radial cover. -/
+noncomputable def kleinPolygonOverlapToInner :
+    C(overlapOpen kleinPairingData.Rel,
+      {q // q ∈ (openCover kleinPairingData).inner}) :=
+  ⟨fun z ↦ ⟨z.1, (by
+      have hz : z.1 ∈ (openCover kleinPairingData).inner ∩
+          (openCover kleinPairingData).outer := by
+        rw [← (openCover kleinPairingData).overlap_eq]
+        exact z.2
+      exact hz.1)⟩,
+    Continuous.subtype_mk continuous_subtype_val (fun z ↦ by
+      have hz : z.1 ∈ (openCover kleinPairingData).inner ∩
+          (openCover kleinPairingData).outer := by
+        rw [← (openCover kleinPairingData).overlap_eq]
+        exact z.2
+      exact hz.1)⟩
+
+/-- Inclusion of the inner radial piece into the polygon quotient. -/
+noncomputable def kleinPolygonInnerToSpace :
+    C({q // q ∈ (openCover kleinPairingData).inner}, kleinPairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- Any path through the contractible inner piece whose endpoints come from
+the overlap can be replaced, in the fundamental groupoid, by the inner image
+of an actual overlap path.  This is the concrete replacement used on each
+maximal inner run of a subordinate subdivision. -/
+theorem kleinPolygonInner_pathClass_eq_overlapReplacement
+    (x y : overlapOpen kleinPairingData.Rel)
+    (p : Path (kleinPolygonOverlapToInner x)
+      (kleinPolygonOverlapToInner y)) :
+    ∃ q : Path x y,
+      (⟦p⟧ : FundamentalGroupoid.mk (kleinPolygonOverlapToInner x) ⟶
+          FundamentalGroupoid.mk (kleinPolygonOverlapToInner y)) =
+        ⟦q.map kleinPolygonOverlapToInner.continuous⟧ := by
+  letI : PathConnectedSpace (overlapOpen kleinPairingData.Rel) :=
+    kleinPolygonOverlapPathConnectedSpace
+  let q : Path x y := PathConnectedSpace.somePath x y
+  exact ⟨q, kleinPolygonInner_pathClass_eq p
+    (q.map kleinPolygonOverlapToInner.continuous)⟩
+
+/-- Inclusion of the outer radial piece into the polygon quotient. -/
+noncomputable def kleinPolygonOuterToSpace :
+    C({q // q ∈ (openCover kleinPairingData).outer}, kleinPairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- After inclusion into the polygon quotient, an inner run between overlap
+vertices is equal to an overlap replacement routed through the outer piece.
+This is the factorwise equality needed to normalize a reconstructed finite
+word to outer-piece arrows. -/
+theorem kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
+    (x y : overlapOpen kleinPairingData.Rel)
+    (p : Path (kleinPolygonOverlapToInner x)
+      (kleinPolygonOverlapToInner y)) :
+    ∃ q : Path x y,
+      (⟦p.map kleinPolygonInnerToSpace.continuous⟧ :
+          FundamentalGroupoid.mk x.1 ⟶ FundamentalGroupoid.mk y.1) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨q, hq⟩ :=
+    kleinPolygonInner_pathClass_eq_overlapReplacement x y p
+  refine ⟨q, ?_⟩
+  have hmap := congrArg
+    (fun z : FundamentalGroupoid.mk (kleinPolygonOverlapToInner x) ⟶
+        FundamentalGroupoid.mk (kleinPolygonOverlapToInner y) =>
+      (FundamentalGroupoid.map kleinPolygonInnerToSpace).map z)
+    hq
+  simpa [kleinPolygonInnerToSpace, kleinPolygonOverlapToInner,
+    kleinPolygonOuterToSpace, kleinPolygonOverlapToOuter] using hmap
+
+/-- An ambient path forming an inner run can be normalized directly from
+membership data: if both endpoints lie in the overlap, its ambient class is
+represented by an actual overlap path routed through the outer piece. -/
+theorem kleinPolygonInnerRun_exists_outerOverlapReplacement
+    {x y : kleinPairingData.Space}
+    (hx : x ∈ (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (hy : y ∈ (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (p : Path x y)
+    (hp : ∀ t, p t ∈ (openCover kleinPairingData).inner) :
+    ∃ q : Path
+        (⟨x, by rw [(openCover kleinPairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen kleinPairingData.Rel)
+        (⟨y, by rw [(openCover kleinPairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen kleinPairingData.Rel),
+      (⟦p⟧ : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk y) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  let xo : overlapOpen kleinPairingData.Rel := ⟨x, by
+    rw [(openCover kleinPairingData).overlap_eq]
+    exact hx⟩
+  let yo : overlapOpen kleinPairingData.Rel := ⟨y, by
+    rw [(openCover kleinPairingData).overlap_eq]
+    exact hy⟩
+  let pInner : Path (kleinPolygonOverlapToInner xo)
+      (kleinPolygonOverlapToInner yo) :=
+    { toFun := fun t => ⟨p t, hp t⟩
+      continuous_toFun := p.continuous.subtype_mk _
+      source' := Subtype.ext p.source
+      target' := Subtype.ext p.target }
+  obtain ⟨q, hq⟩ :=
+    kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement xo yo pInner
+  refine ⟨q, ?_⟩
+  simpa [pInner, kleinPolygonInnerToSpace, kleinPolygonOuterToSpace] using hq
+
+/-- A whole nonempty inner block, presented as a dependent finite family of
+paths, has one overlap replacement routed through the outer piece.  Thus the
+remaining normalization only has to partition the subdivision side indices. -/
+theorem kleinPolygonInnerBlock_exists_outerOverlapReplacement
+    {n : ℕ}
+    (point : Fin (n + 2) → kleinPairingData.Space)
+    (F : (k : Fin (n + 1)) → Path (point k.castSucc) (point k.succ))
+    (hx : point 0 ∈ (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (hy : point (Fin.last (n + 1)) ∈
+      (openCover kleinPairingData).inner ∩
+      (openCover kleinPairingData).outer)
+    (hF : ∀ k t, F k t ∈ (openCover kleinPairingData).inner) :
+    ∃ q : Path
+        (⟨point 0, by rw [(openCover kleinPairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen kleinPairingData.Rel)
+        (⟨point (Fin.last (n + 1)), by
+          rw [(openCover kleinPairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen kleinPairingData.Rel),
+      (⟦Path.concat point F⟧ : FundamentalGroupoid.mk (point 0) ⟶
+          FundamentalGroupoid.mk (point (Fin.last (n + 1)))) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  exact kleinPolygonInnerRun_exists_outerOverlapReplacement hx hy
+    (Path.concat point F) (path_concat_mem_of_piece_mem point F hF)
+
+/-- A packaged nonempty subdivision block with inner range and overlap
+endpoints is replaced by one overlap path routed through the outer piece. -/
+theorem pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (start n : ℕ) (h : start + (n + 1) ≤ S.n + 1)
+    (hx : pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0 ∈
+      (openCover kleinPairingData).inner ∩ (openCover kleinPairingData).outer)
+    (hy : pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+        (Fin.last (n + 1)) ∈
+      (openCover kleinPairingData).inner ∩ (openCover kleinPairingData).outer)
+    (hF : ∀ k t,
+      pathTwoOpenSubdivisionBlockPiece S start (n + 1) h k t ∈
+        (openCover kleinPairingData).inner) :
+    ∃ q : Path
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0,
+          by rw [(openCover kleinPairingData).overlap_eq]; exact hx⟩ :
+          overlapOpen kleinPairingData.Rel)
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+            (Fin.last (n + 1)),
+          by rw [(openCover kleinPairingData).overlap_eq]; exact hy⟩ :
+          overlapOpen kleinPairingData.Rel),
+      (⟦Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+          (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h)⟧ :
+        FundamentalGroupoid.mk
+            (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0) ⟶
+          FundamentalGroupoid.mk
+            (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+              (Fin.last (n + 1)))) =
+        ⟦(q.map kleinPolygonOverlapToOuter.continuous).map
+          kleinPolygonOuterToSpace.continuous⟧ := by
+  exact kleinPolygonInnerBlock_exists_outerOverlapReplacement
+    (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+    (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) hx hy hF
+
+/-- An unchanged packaged outer block is literally the ambient image of one
+path in the outer radial piece. -/
+theorem pathTwoOpenSubdivisionOuterBlock_exists_outerPath
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (start n : ℕ) (h : start + (n + 1) ≤ S.n + 1)
+    (hF : ∀ k t,
+      pathTwoOpenSubdivisionBlockPiece S start (n + 1) h k t ∈
+        (openCover kleinPairingData).outer) :
+    ∃ q : Path
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h 0, by
+          rw [← (Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+            (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h)).source]
+          exact path_concat_mem_of_piece_mem _ _ hF 0⟩ :
+          {z // z ∈ (openCover kleinPairingData).outer})
+        (⟨pathTwoOpenSubdivisionBlockPoint S start (n + 1) h
+            (Fin.last (n + 1)), by
+          rw [← (Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+            (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h)).target]
+          exact path_concat_mem_of_piece_mem _ _ hF 1⟩ :
+          {z // z ∈ (openCover kleinPairingData).outer}),
+      q.map kleinPolygonOuterToSpace.continuous =
+        Path.concat (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+          (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) := by
+  simpa [kleinPolygonOuterToSpace] using
+    (path_concat_exists_subtype_path
+      (pathTwoOpenSubdivisionBlockPoint S start (n + 1) h)
+      (pathTwoOpenSubdivisionBlockPiece S start (n + 1) h) hF)
+
+/-- Every indexed maximal run has one representative in the outer piece.
+For an outer run this is its literal dependent concatenation; for an inner
+run it is the overlap replacement supplied by contractibility of the inner
+piece.  The representative has the literal ambient block endpoints and its
+whole range lies in the outer piece, ready for the canonical-boundary fold. -/
+theorem pathTwoOpenSubdivisionRun_exists_outerRepresentative
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ q : Path (pathTwoOpenSubdivisionRunBlockPoint S i 0)
+        (pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1))),
+      (∀ t, q t ∈ (openCover kleinPairingData).outer) ∧
+      (⟦Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+          (pathTwoOpenSubdivisionRunBlockPiece S i)⟧ :
+        FundamentalGroupoid.mk (pathTwoOpenSubdivisionRunBlockPoint S i 0) ⟶
+          FundamentalGroupoid.mk (pathTwoOpenSubdivisionRunBlockPoint S i
+            (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)))) =
+        ⟦q⟧ := by
+  let side := S.side ((pathTwoOpenSubdivisionRunFamily S i).head
+    (pathTwoOpenSubdivisionRunFamily_ne_nil S i))
+  have hbound := pathTwoOpenSubdivisionRunStart_add_length_le S i
+  have hbound' : pathTwoOpenSubdivisionRunStart S i +
+      (pathTwoOpenSubdivisionRunPredLength S i + 1) ≤ S.n + 1 := by
+    rw [pathTwoOpenSubdivisionRunPredLength_add_one]
+    exact hbound
+  by_cases hs : side = true
+  · have hF := pathTwoOpenSubdivisionRunBlockPiece_mem_inner_of_side_eq_true S i hs
+    have hxInner : pathTwoOpenSubdivisionRunBlockPoint S i 0 ∈
+        (openCover kleinPairingData).inner := by
+      have hz : (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 2)) =
+          (0 : Fin (pathTwoOpenSubdivisionRunPredLength S i + 1)).castSucc := rfl
+      rw [hz]
+      rw [← (pathTwoOpenSubdivisionRunBlockPiece S i 0).source]
+      exact hF 0 0
+    have hyInner : pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) ∈
+        (openCover kleinPairingData).inner := by
+      have hi : (Fin.last (pathTwoOpenSubdivisionRunPredLength S i)).succ =
+          Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1) := by
+        apply Fin.ext
+        simp
+      rw [← hi]
+      rw [← (pathTwoOpenSubdivisionRunBlockPiece S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i))).target]
+      exact hF (Fin.last (pathTwoOpenSubdivisionRunPredLength S i)) 1
+    have hxOuter : pathTwoOpenSubdivisionRunBlockPoint S i 0 ∈
+        (openCover kleinPairingData).outer := by
+      rw [← pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+        S hx hy i]
+      exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily _ _ _ _).property
+    have hyOuter : pathTwoOpenSubdivisionRunBlockPoint S i
+        (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)) ∈
+        (openCover kleinPairingData).outer := by
+      rw [← pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+        S hx hy i]
+      exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily _ _ _ _).property
+    obtain ⟨q, hq⟩ := pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
+      S (pathTwoOpenSubdivisionRunStart S i)
+      (pathTwoOpenSubdivisionRunPredLength S i) hbound'
+      ⟨hxInner, hxOuter⟩ ⟨hyInner, hyOuter⟩ hF
+    refine ⟨(q.map kleinPolygonOverlapToOuter.continuous).map
+      kleinPolygonOuterToSpace.continuous, ?_, hq⟩
+    intro t
+    exact ((q.map kleinPolygonOverlapToOuter.continuous) t).property
+  · have hs' : side = false := Bool.eq_false_of_not_eq_true hs
+    have hF := pathTwoOpenSubdivisionRunBlockPiece_mem_outer_of_side_eq_false S i hs'
+    obtain ⟨q, hq⟩ := pathTwoOpenSubdivisionOuterBlock_exists_outerPath
+      S (pathTwoOpenSubdivisionRunStart S i)
+      (pathTwoOpenSubdivisionRunPredLength S i) hbound' hF
+    refine ⟨q.map kleinPolygonOuterToSpace.continuous, ?_, ?_⟩
+    · intro t
+      exact (q t).property
+    · exact congrArg Path.Homotopic.Quotient.mk hq.symm
+
+/-- Each maximal-run representative can be based at the consecutive entries
+of the canonical outer boundary family.  After forgetting the subtype, its
+class is exactly the endpoint-cast class of the original run block. -/
+theorem pathTwoOpenSubdivisionRun_exists_outerBoundaryPath
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    ∃ q : Path
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc)
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ),
+      (Path.Homotopic.Quotient.cast
+          (⟦Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+            (pathTwoOpenSubdivisionRunBlockPiece S i)⟧)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+            S hx hy i)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+            S hx hy i)) =
+        ⟦q.map kleinPolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨r, hrange, hr⟩ :=
+    pathTwoOpenSubdivisionRun_exists_outerRepresentative S hx hy i
+  let r' : Path
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i 0,
+        by simpa using hrange 0⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer})
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)),
+        by simpa using hrange 1⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer}) :=
+    { toFun := fun t => ⟨r t, hrange t⟩
+      continuous_toFun := r.continuous.subtype_mk _
+      source' := Subtype.ext r.source
+      target' := Subtype.ext r.target }
+  have hs : pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc =
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i 0,
+        by simpa using hrange 0⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer}) := by
+    apply Subtype.ext
+    exact pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+      S hx hy i
+  have ht : pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ =
+      (⟨pathTwoOpenSubdivisionRunBlockPoint S i
+          (Fin.last (pathTwoOpenSubdivisionRunPredLength S i + 1)),
+        by simpa using hrange 1⟩ :
+        {z // z ∈ (openCover kleinPairingData).outer}) := by
+    apply Subtype.ext
+    exact pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+      S hx hy i
+  refine ⟨r'.cast hs ht, ?_⟩
+  rw [hr]
+  change ⟦r.cast _ _⟧ = _
+  apply congrArg Path.Homotopic.Quotient.mk
+  ext t
+  exact (congrFun (Path.cast_coe r _ _) t).trans
+    (congrArg Subtype.val (congrFun (Path.cast_coe r' hs ht) t)).symm
+
+/-- The chosen outer path for each maximal run, with endpoints in the
+canonical dependent boundary family. -/
+noncomputable def pathTwoOpenSubdivisionOuterRunPath
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) : Path
+      (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.castSucc)
+      (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy i.succ) :=
+  Classical.choose
+    (pathTwoOpenSubdivisionRun_exists_outerBoundaryPath S hx hy i)
+
+theorem pathTwoOpenSubdivisionOuterRunPath_class
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer)
+    (i : Fin (boolSideRunPartition S.side).length) :
+    Path.Homotopic.Quotient.cast
+        (⟦Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+          (pathTwoOpenSubdivisionRunBlockPiece S i)⟧)
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+          S hx hy i)
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+          S hx hy i) =
+      ⟦(pathTwoOpenSubdivisionOuterRunPath S hx hy i).map
+        kleinPolygonOuterToSpace.continuous⟧ :=
+  Classical.choose_spec
+    (pathTwoOpenSubdivisionRun_exists_outerBoundaryPath S hx hy i)
+
+/-- Folding the chosen run representatives gives one outer path whose
+ambient class is the ordered concatenation of all endpoint-cast run blocks. -/
+theorem pathTwoOpenSubdivisionRunFold_exists_outerPath
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    ∃ q : Path
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0)
+        (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+          (Fin.last (boolSideRunPartition S.side).length)),
+      (⟦Path.concat
+          (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+            kleinPairingData.Space))
+          (fun i => (Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+            (pathTwoOpenSubdivisionRunBlockPiece S i)).cast
+              (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+                S hx hy i)
+              (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+                S hx hy i))⟧ : Path.Homotopic.Quotient _ _) =
+        ⟦q.map kleinPolygonOuterToSpace.continuous⟧ := by
+  simpa [kleinPolygonOuterToSpace] using
+    (path_concat_class_eq_outer_of_pieceClass_eq
+      (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy)
+      (fun i => (Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+        (pathTwoOpenSubdivisionRunBlockPiece S i)).cast
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+            S hx hy i)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+            S hx hy i))
+      (pathTwoOpenSubdivisionOuterRunPath S hx hy)
+      (pathTwoOpenSubdivisionOuterRunPath_class S hx hy))
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_zero
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0 :
+      kleinPairingData.Space) = S.point 0 := by
+  simp [pathTwoOpenSubdivisionOuterRunBoundaryFamily,
+    pathTwoOpenSubdivisionOuterRunBoundaryPoints,
+    pathTwoOpenSubdivisionRunBoundaryPoints]
+
+@[simp] theorem pathTwoOpenSubdivisionOuterRunBoundaryFamily_last
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+      (Fin.last (boolSideRunPartition S.side).length) :
+      kleinPairingData.Space) = S.point (Fin.last (S.n + 1)) := by
+  rw [pathTwoOpenSubdivisionOuterRunBoundaryFamily_val]
+  rw [← pathTwoOpenSubdivisionRunBoundaryPoints_getLast S]
+  rw [List.getLast_eq_getElem]
+  congr 1
+  apply Fin.ext
+  simp [pathTwoOpenSubdivisionRunBoundaryPoints_length]
+
+/-- The folded outer representative can be rebased at the literal source and
+target vertices of the original subdivision, preserving its cast class. -/
+theorem pathTwoOpenSubdivisionRunFold_exists_outerPath_at_endpoints
+    {x y : kleinPairingData.Space} {p : Path x y}
+    (S : PathTwoOpenSubdivision p (openCover kleinPairingData).inner
+      (openCover kleinPairingData).outer)
+    (hx : S.point 0 ∈ (openCover kleinPairingData).outer)
+    (hy : S.point (Fin.last (S.n + 1)) ∈ (openCover kleinPairingData).outer) :
+    ∃ q : Path (⟨S.point 0, hx⟩ : {z // z ∈ (openCover kleinPairingData).outer})
+        (⟨S.point (Fin.last (S.n + 1)), hy⟩ :
+          {z // z ∈ (openCover kleinPairingData).outer}),
+      Path.Homotopic.Quotient.cast
+          (⟦Path.concat
+            (fun k => (pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy k :
+              kleinPairingData.Space))
+            (fun i => (Path.concat (pathTwoOpenSubdivisionRunBlockPoint S i)
+              (pathTwoOpenSubdivisionRunBlockPiece S i)).cast
+                (pathTwoOpenSubdivisionOuterRunBoundaryFamily_castSucc_eq_runBlockPoint_zero
+                  S hx hy i)
+                (pathTwoOpenSubdivisionOuterRunBoundaryFamily_succ_eq_runBlockPoint_last
+                  S hx hy i))⟧)
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+          (pathTwoOpenSubdivisionOuterRunBoundaryFamily_last S hx hy).symm =
+        ⟦q.map kleinPolygonOuterToSpace.continuous⟧ := by
+  obtain ⟨q, hq⟩ := pathTwoOpenSubdivisionRunFold_exists_outerPath S hx hy
+  have hs : (⟨S.point 0, hx⟩ :
+      {z // z ∈ (openCover kleinPairingData).outer}) =
+      pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy 0 := by
+    apply Subtype.ext
+    exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily_zero S hx hy).symm
+  have ht : (⟨S.point (Fin.last (S.n + 1)), hy⟩ :
+      {z // z ∈ (openCover kleinPairingData).outer}) =
+      pathTwoOpenSubdivisionOuterRunBoundaryFamily S hx hy
+        (Fin.last (boolSideRunPartition S.side).length) := by
+    apply Subtype.ext
+    exact (pathTwoOpenSubdivisionOuterRunBoundaryFamily_last S hx hy).symm
+  refine ⟨q.cast hs ht, ?_⟩
+  rw [hq]
+  change ⟦(q.map kleinPolygonOuterToSpace.continuous).cast _ _⟧ = _
+  apply congrArg Path.Homotopic.Quotient.mk
+  ext t
+  exact (congrFun
+      (Path.cast_coe (q.map kleinPolygonOuterToSpace.continuous) _ _) t).trans
+    (congrArg Subtype.val (congrFun (Path.cast_coe q hs ht) t)).symm
+
+/-- Every overlap loop maps trivially in the polygon quotient.  This is the
+kernel inclusion in based van Kampen: the overlap inclusion factors through
+the contractible inner radial piece. -/
+theorem kleinPolygonOverlapToSpacePiOne_eq_one
+    (g : FundamentalGroup (overlapOpen kleinPairingData.Rel)
+      kleinPolygonOverlapPoint) :
+    FundamentalGroup.map
+        (kleinPolygonOuterToSpace.comp kleinPolygonOverlapToOuter)
+        kleinPolygonOverlapPoint g = 1 := by
+  letI : ContractibleSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    kleinPolygonInnerContractibleSpace
+  letI : SimplyConnectedSpace
+      {q // q ∈ (openCover kleinPairingData).inner} :=
+    SimplyConnectedSpace.ofContractible _
+  letI : Subsingleton (FundamentalGroup
+      {q // q ∈ (openCover kleinPairingData).inner}
+      (kleinPolygonOverlapToInner kleinPolygonOverlapPoint)) := by
+    change Subsingleton (Path.Homotopic.Quotient _ _)
+    infer_instance
+  have hinner : FundamentalGroup.map kleinPolygonOverlapToInner
+      kleinPolygonOverlapPoint g = 1 := by
+    apply Subsingleton.elim
+  have hnat :
+      FundamentalGroup.map
+          (kleinPolygonInnerToSpace.comp kleinPolygonOverlapToInner)
+          kleinPolygonOverlapPoint g =
+        FundamentalGroup.map kleinPolygonInnerToSpace
+          (kleinPolygonOverlapToInner kleinPolygonOverlapPoint)
+          (FundamentalGroup.map kleinPolygonOverlapToInner
+            kleinPolygonOverlapPoint g) := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  rw [show (kleinPolygonOuterToSpace.comp kleinPolygonOverlapToOuter) =
+      (kleinPolygonInnerToSpace.comp kleinPolygonOverlapToInner) by rfl]
+  rw [hnat, hinner, map_one]
+  rfl
+
+/-- The based fundamental-group map from the outer radial piece into the
+polygon quotient, at the chosen overlap image. -/
+noncomputable def kleinPolygonOuterToSpacePiOne :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonOuterToSpace
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  FundamentalGroup.map kleinPolygonOuterToSpace
+    (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+
+/-- The normal closure of the actual overlap image lies in the kernel of the
+outer-piece inclusion.  This promotes the pointwise nullity through the
+normal subgroup closure, giving the forward half of the based van Kampen
+kernel equality before transport from the outer piece to the skeleton. -/
+theorem kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToOuterPiOne.range : Set
+          (FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+            (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))) ≤
+      MonoidHom.ker kleinPolygonOuterToSpacePiOne := by
+  apply Subgroup.normalClosure_le_normal
+  rintro x ⟨g, rfl⟩
+  change kleinPolygonOuterToSpacePiOne
+      (kleinPolygonOverlapToOuterPiOne g) = 1
+  have hnat :
+      kleinPolygonOuterToSpacePiOne
+          (kleinPolygonOverlapToOuterPiOne g) =
+        FundamentalGroup.map
+          (kleinPolygonOuterToSpace.comp kleinPolygonOverlapToOuter)
+          kleinPolygonOverlapPoint g := by
+    induction g using Quotient.inductionOn with
+    | h p =>
+      apply Quotient.sound
+      exact ⟨Path.Homotopy.refl _⟩
+  rw [hnat]
+  exact kleinPolygonOverlapToSpacePiOne_eq_one g
+
 /-- Winding number coordinates for the exact annular overlap.  The interval
 factor is contractible, so only the circle coordinate contributes. -/
 noncomputable def kleinPolygonOverlapFundamentalGroupEquivInt :
@@ -798,6 +2778,694 @@ noncomputable def kleinPolygonOverlapFundamentalGroupEquivInt :
         (MulEquiv.uniqueProd.trans
           ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt))
 
+/-- The exact outer cover piece deformation retracts onto the actual polygon
+skeleton, before any choice of free-group coordinates. -/
+noncomputable def kleinPolygonOuterHomotopyEquivSkeleton :
+    ContinuousMap.HomotopyEquiv
+      (OuterPiece kleinPairingData) kleinPairingData.skeleton :=
+  (outerHomotopyEquivBoundary kleinPairingData).trans
+    (outerBoundaryHomeomorphSkeleton kleinPairingData).toHomotopyEquiv
+
+/-- On an actual skeleton point the preceding equivalence is literally the
+identity after forgetting the redundant outer-membership proof. -/
+theorem kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
+    (z : kleinPairingData.skeleton) :
+    kleinPolygonOuterHomotopyEquivSkeleton
+      (skeletonToOuter kleinPairingData z) = z := by
+  change (outerBoundaryHomeomorphSkeleton kleinPairingData)
+    ((outerHomotopyEquivBoundary kleinPairingData)
+      (skeletonToOuter kleinPairingData z)) = z
+  apply Subtype.ext
+  exact congrArg (fun w : OuterPiece kleinPairingData ↦ w.1)
+    ((punctureDeformationRetract kleinPairingData).fixed 1
+      (skeletonToOuter kleinPairingData z)
+      ((mem_outerBoundarySkeleton_iff kleinPairingData
+        (skeletonToOuter kleinPairingData z)).mpr z.2))
+
+/-- The preceding deformation equivalence at the fundamental-groupoid level;
+this retains all basepoints while the winding generator is transported. -/
+noncomputable def kleinPolygonOuterFundamentalGroupoidEquivalence :
+    FundamentalGroupoid (OuterPiece kleinPairingData) ≌
+      FundamentalGroupoid kleinPairingData.skeleton :=
+  FundamentalGroupoidFunctor.equivOfHomotopyEquiv
+    kleinPolygonOuterHomotopyEquivSkeleton
+
+/-- On embedded skeleton objects, the groupoid equivalence has the literal
+skeleton object as its target. -/
+theorem kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
+    (z : kleinPairingData.skeleton) :
+    kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+        (FundamentalGroupoid.mk (skeletonToOuter kleinPairingData z)) =
+      FundamentalGroupoid.mk z := by
+  change FundamentalGroupoid.mk (kleinPolygonOuterHomotopyEquivSkeleton
+    (skeletonToOuter kleinPairingData z)) = FundamentalGroupoid.mk z
+  rw [kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton]
+
+/-- Restriction of the outer groupoid equivalence to the automorphism group
+at any literal outer-piece basepoint. -/
+noncomputable def kleinPolygonOuterFundamentalGroupEquivSkeleton
+    (x : OuterPiece kleinPairingData) :
+    FundamentalGroup (OuterPiece kleinPairingData) x ≃*
+      FundamentalGroup kleinPairingData.skeleton
+        (kleinPolygonOuterHomotopyEquivSkeleton x) := by
+  let e := kleinPolygonOuterFundamentalGroupoidEquivalence
+  let h := e.fullyFaithfulFunctor
+  let m := FundamentalGroup.map
+    kleinPolygonOuterHomotopyEquivSkeleton.toFun x
+  exact
+    { toFun := m
+      invFun := fun g ↦ h.preimage g
+      left_inv := fun g ↦ h.preimage_map g
+      right_inv := fun g ↦ h.map_preimage g
+      map_mul' := m.map_mul }
+
+/-- The based restriction at the actual image of the chosen overlap point. -/
+noncomputable def kleinPolygonOverlapImageFundamentalGroupEquivSkeleton :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup kleinPairingData.skeleton
+        (kleinPolygonOuterHomotopyEquivSkeleton
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  kleinPolygonOuterFundamentalGroupEquivSkeleton _
+
+/-- The actual polygon skeleton is path connected, transported from the
+standard two-circle wedge along the already fixed homeomorphism. -/
+theorem kleinSkeletonPathConnectedSpace :
+    PathConnectedSpace kleinPairingData.skeleton :=
+  kleinSkeletonHomeomorphStandardTwoCircles.symm.surjective.pathConnectedSpace
+    kleinSkeletonHomeomorphStandardTwoCircles.symm.continuous
+
+/-- A chosen path from the deformed overlap image to the preferred skeleton
+basepoint used by the literal free-group coordinates. -/
+noncomputable def kleinPolygonOverlapImageToSkeletonPointPath :
+    Path
+      (kleinPolygonOuterHomotopyEquivSkeleton
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      kleinSkeletonPoint := by
+  letI : PathConnectedSpace kleinPairingData.skeleton :=
+    kleinSkeletonPathConnectedSpace
+  exact PathConnectedSpace.somePath _ _
+
+/-- The overlap-image fundamental group transported all the way to the
+preferred skeleton basepoint.  The final winding calculation can therefore
+be stated directly in the fixed `FreeGroup Bool` coordinates. -/
+noncomputable def kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint :=
+  kleinPolygonOverlapImageFundamentalGroupEquivSkeleton.trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      kleinPolygonOverlapImageToSkeletonPointPath)
+
+/-- The positive overlap generator after entering and deforming the outer
+piece, but before making any path choice to the preferred skeleton basepoint. -/
+noncomputable def kleinPolygonUntransportedWindingOne :
+    FundamentalGroup kleinPairingData.skeleton
+      (kleinPolygonOuterHomotopyEquivSkeleton
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  kleinPolygonOverlapImageFundamentalGroupEquivSkeleton
+    (kleinPolygonOverlapToOuterPiOne
+      (kleinPolygonOverlapFundamentalGroupEquivInt.symm
+        (Multiplicative.ofAdd (1 : ℤ))))
+
+/-- A connector chosen in the standard two-circle model and pulled back to
+the actual polygon skeleton.  This moves the remaining calculation entirely
+into the coordinates in which the two free generators were defined. -/
+noncomputable def kleinPolygonStandardModelConnector :
+    Path
+      (kleinPolygonOuterHomotopyEquivSkeleton
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      kleinSkeletonPoint := by
+  let z := kleinPolygonOuterHomotopyEquivSkeleton
+    (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+  let q : Path (kleinSkeletonHomeomorphStandardTwoCircles z) twoCirclesPoint := by
+    letI : PathConnectedSpace TwoCircles := inferInstance
+    exact PathConnectedSpace.somePath _ _
+  exact (q.map kleinSkeletonHomeomorphStandardTwoCircles.symm.continuous).cast
+    (kleinSkeletonHomeomorphStandardTwoCircles.symm_apply_apply z).symm rfl
+
+/-- The overlap inclusion expressed directly in the fixed free-group
+coordinates on the actual polygon skeleton. -/
+noncomputable def kleinPolygonOverlapToSkeletonFreeGroup :
+    FundamentalGroup (overlapOpen kleinPairingData.Rel)
+        kleinPolygonOverlapPoint →* FreeGroup Bool :=
+  kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom.comp
+    (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.toMonoidHom.comp
+      kleinPolygonOverlapToOuterPiOne)
+
+/-- The same overlap inclusion before applying the fixed free-group
+coordinates on the skeleton. -/
+noncomputable def kleinPolygonOverlapToSkeletonPiOne :
+    FundamentalGroup (overlapOpen kleinPairingData.Rel)
+        kleinPolygonOverlapPoint →*
+      FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint :=
+  kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.toMonoidHom.comp
+    kleinPolygonOverlapToOuterPiOne
+
+/-- The outer-to-polygon map expressed on the preferred skeleton group by
+precomposing with the inverse of the already fixed outer-to-skeleton
+basepoint equivalence.  Its target basepoint is deliberately still the
+original overlap image in the polygon; comparison with the literal skeleton
+inclusion requires the remaining geometric basepoint transport. -/
+noncomputable def kleinPolygonTransportedOuterToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonOuterToSpace
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  kleinPolygonOuterToSpacePiOne.comp
+    kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm.toMonoidHom
+
+/-- Exact forward-kernel transport from outer-piece coordinates to the
+preferred skeleton coordinates.  This is equality-driven transport in the
+direction needed by the consumer: the target skeleton overlap image is
+pulled back through the inverse equivalence before applying the proved outer
+kernel inclusion. -/
+theorem kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) ≤
+      MonoidHom.ker kleinPolygonTransportedOuterToSpacePiOne := by
+  apply Subgroup.normalClosure_le_normal
+  rintro x ⟨g, rfl⟩
+  change kleinPolygonTransportedOuterToSpacePiOne
+      (kleinPolygonOverlapToSkeletonPiOne g) = 1
+  change kleinPolygonOuterToSpacePiOne
+      (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm
+        (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint
+          (kleinPolygonOverlapToOuterPiOne g))) = 1
+  rw [kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm_apply_apply]
+  exact (kleinPolygonOverlapNormalClosure_le_outerToSpacePiOne_ker
+    (Subgroup.le_normalClosure ⟨g, rfl⟩))
+
+/-- The same map with the annular source written in integer winding
+coordinates.  Its value at `ofAdd 1` is the sole remaining geometric word
+calculation in the attaching-cell argument. -/
+noncomputable def kleinPolygonOverlapWindingHom :
+    Multiplicative ℤ →* FreeGroup Bool :=
+  kleinPolygonOverlapToSkeletonFreeGroup.comp
+    kleinPolygonOverlapFundamentalGroupEquivInt.symm.toMonoidHom
+
+/-- The winding-coordinate map recovers the literal overlap map on every
+based loop. -/
+theorem kleinPolygonOverlapWindingHom_factor
+    (g : FundamentalGroup (overlapOpen kleinPairingData.Rel)
+      kleinPolygonOverlapPoint) :
+    kleinPolygonOverlapWindingHom
+        (kleinPolygonOverlapFundamentalGroupEquivInt g) =
+      kleinPolygonOverlapToSkeletonFreeGroup g := by
+  simp [kleinPolygonOverlapWindingHom]
+
+/-- Changing the annular source from based loops to integer winding
+coordinates does not change the image subgroup in the skeleton coordinates. -/
+theorem kleinPolygonOverlapWindingHom_range_eq_skeleton_range :
+    kleinPolygonOverlapWindingHom.range =
+      kleinPolygonOverlapToSkeletonFreeGroup.range := by
+  apply le_antisymm
+  · rintro _ ⟨n, rfl⟩
+    exact ⟨kleinPolygonOverlapFundamentalGroupEquivInt.symm n, by
+      simp [kleinPolygonOverlapWindingHom]⟩
+  · rintro _ ⟨g, rfl⟩
+    exact ⟨kleinPolygonOverlapFundamentalGroupEquivInt g,
+      kleinPolygonOverlapWindingHom_factor g⟩
+
+/-- The exact free-group word traced by one positive turn around the radial
+overlap. -/
+noncomputable def kleinPolygonOverlapWindingOneImage : FreeGroup Bool :=
+  kleinPolygonOverlapWindingHom (Multiplicative.ofAdd (1 : ℤ))
+
+/-- To identify the overlap generator up to conjugacy, it suffices to compute
+the untransported generator along any convenient connector. -/
+theorem kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq
+    (p : Path
+      (kleinPolygonOuterHomotopyEquivSkeleton
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      kleinSkeletonPoint)
+    (h : kleinActualSkeletonFundamentalGroupEquivFreeGroupBool
+        (FundamentalGroup.fundamentalGroupMulEquivOfPath p
+          kleinPolygonUntransportedWindingOne) = kleinAabbWord) :
+    IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord := by
+  have hc := fundamentalGroup_pathTransport_isConj
+    kleinPolygonOverlapImageToSkeletonPointPath p
+    kleinPolygonUntransportedWindingOne
+  have hm := kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom.map_isConj hc
+  change kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath p
+      kleinPolygonUntransportedWindingOne) = kleinAabbWord at h
+  rw [h] at hm
+  simpa [kleinPolygonOverlapWindingOneImage, kleinPolygonOverlapWindingHom,
+    kleinPolygonOverlapToSkeletonFreeGroup,
+    kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint,
+    kleinPolygonUntransportedWindingOne] using hm
+
+/-- The complete overlap image is the cyclic subgroup generated by the
+winding-one word.  Thus identifying that one word with `aabb` also identifies
+the normal subgroup imposed by van Kampen. -/
+theorem kleinPolygonOverlapWindingHom_range :
+    kleinPolygonOverlapWindingHom.range =
+      Subgroup.zpowers kleinPolygonOverlapWindingOneImage := by
+  have hhom : kleinPolygonOverlapWindingHom =
+      zpowersHom (FreeGroup Bool) kleinPolygonOverlapWindingOneImage := by
+    simpa [kleinPolygonOverlapWindingOneImage] using
+      ((zpowersHom (FreeGroup Bool)).apply_symm_apply
+        kleinPolygonOverlapWindingHom).symm
+  rw [hhom]
+  exact Subgroup.range_zpowersHom _
+
+/-- Passing from the cyclic overlap image to its winding-one generator does
+not change the normal subgroup imposed by van Kampen. -/
+theorem kleinPolygonOverlapWindingHom_normalClosure :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapWindingHom.range : Set (FreeGroup Bool)) =
+      Subgroup.normalClosure {kleinPolygonOverlapWindingOneImage} := by
+  rw [kleinPolygonOverlapWindingHom_range]
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    exact Subgroup.zpowers_le_of_mem
+      (Subgroup.subset_normalClosure (Set.mem_singleton _))
+  · apply Subgroup.normalClosure_mono
+    exact Set.singleton_subset_iff.mpr (Subgroup.mem_zpowers _)
+
+/-- The arbitrary path used to move the overlap basepoint may conjugate its
+word, but conjugation does not change the normal closure used by van Kampen. -/
+theorem kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
+    (h : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord) :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapWindingHom.range : Set (FreeGroup Bool)) =
+      Subgroup.normalClosure kleinPolygonRelations := by
+  rw [kleinPolygonOverlapWindingHom_normalClosure]
+  change Subgroup.normalClosure {kleinPolygonOverlapWindingOneImage} =
+    Subgroup.normalClosure {kleinAabbWord}
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, hc⟩ := isConj_iff.mp h.symm
+    rw [← hc]
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, hc⟩ := isConj_iff.mp h
+    rw [← hc]
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+
+/-- Once the winding-one word is identified up to conjugacy, the normal
+closure of the actual overlap image in the skeleton group is exactly the
+pullback of the `aabb` relation subgroup. -/
+theorem kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
+    (h : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord) :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) =
+      Subgroup.comap
+        kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom
+        (Subgroup.normalClosure kleinPolygonRelations) := by
+  apply Subgroup.map_injective
+    (f := kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.toMonoidHom)
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.injective
+  rw [Subgroup.map_normalClosure _ _
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.surjective]
+  rw [Subgroup.map_comap_eq_self_of_surjective
+    kleinActualSkeletonFundamentalGroupEquivFreeGroupBool.surjective]
+  rw [← kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj h]
+  rw [kleinPolygonOverlapWindingHom_range_eq_skeleton_range]
+  apply congrArg Subgroup.normalClosure
+  ext x
+  constructor
+  · rintro ⟨_, ⟨g, rfl⟩, rfl⟩
+    exact ⟨g, rfl⟩
+  · rintro ⟨g, rfl⟩
+    exact ⟨kleinPolygonOverlapToSkeletonPiOne g, ⟨g, rfl⟩, rfl⟩
+
+/-- Inclusion of the actual polygon skeleton into the polygon quotient. -/
+noncomputable def kleinPolygonSkeletonToSpace :
+    C(kleinPairingData.skeleton, kleinPairingData.Space) :=
+  ⟨Subtype.val, continuous_subtype_val⟩
+
+/-- The based map whose kernel is computed by the attaching-cell form of
+van Kampen. -/
+noncomputable def kleinPolygonSkeletonToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  FundamentalGroup.map kleinPolygonSkeletonToSpace kleinSkeletonPoint
+
+/-- The literal skeleton inclusion factored through the radial outer piece. -/
+noncomputable def kleinPolygonSkeletonToOuter :
+    C(kleinPairingData.skeleton,
+      {q // q ∈ (openCover kleinPairingData).outer}) :=
+  ⟨skeletonToOuter kleinPairingData,
+    Continuous.subtype_mk continuous_subtype_val
+      (skeleton_mem_outer kleinPairingData)⟩
+
+/-- The induced map of the direct skeleton-to-outer inclusion at the preferred
+basepoint. -/
+noncomputable def kleinPolygonSkeletonToOuterPiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  FundamentalGroup.map kleinPolygonSkeletonToOuter kleinSkeletonPoint
+
+/-- Exact equality from the outer-piece composite representation to the
+literal skeleton-in-polygon representation.  This proves the geometric half
+of the remaining map comparison; no basepoint change occurs in this direct
+factorization. -/
+theorem kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct :
+    (FundamentalGroup.map kleinPolygonOuterToSpace
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint)).comp
+        kleinPolygonSkeletonToOuterPiOne =
+      kleinPolygonSkeletonToSpacePiOne := by
+  ext g
+  induction g using Quotient.inductionOn with
+  | h p =>
+    apply Quotient.sound
+    exact ⟨Path.Homotopy.refl _⟩
+
+/-- The outer-piece connector whose two stages underlie both basepoint
+changes.  Its first stage is the inverse homotopy-equivalence unit; its
+second is the chosen connector inside the skeleton, included back into the
+outer piece. -/
+noncomputable def kleinPolygonOuterImageToDirectSkeletonPointPath :
+    Path
+      (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+      (kleinPolygonSkeletonToOuter kleinSkeletonPoint) := by
+  let x := kleinPolygonOverlapToOuter kleinPolygonOverlapPoint
+  let p₁ := (kleinPolygonOuterHomotopyEquivSkeleton.left_inv.some.evalAt x).symm
+  let p₂ := kleinPolygonOverlapImageToSkeletonPointPath.map
+    kleinPolygonSkeletonToOuter.continuous
+  exact p₁.trans p₂
+
+/-- In the fundamental groupoid, the concrete outer connector is exactly the
+inverse deformation-unit arrow followed by the inverse map of the chosen
+skeleton connector.  This is the geometric identification required by
+`equivalence_unit_mapIso_conj_preimage`. -/
+theorem kleinPolygonOuterConnector_eq_inverseUnit_comp_mappedConnector :
+    (⟦kleinPolygonOuterImageToDirectSkeletonPointPath⟧ :
+      FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonSkeletonToOuter kleinSkeletonPoint)) =
+      ⟦(kleinPolygonOuterHomotopyEquivSkeleton.left_inv.some.evalAt
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)).symm⟧ ≫
+        (FundamentalGroupoid.map
+          kleinPolygonOuterHomotopyEquivSkeleton.invFun).map
+            ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧ := by
+  rfl
+
+/-- A concrete path representative of the unit component actually packaged
+by Mathlib's groupoid equivalence.  `Equivalence.mk` adjointifies the raw
+homotopy unit, so this representative is kept distinct from the deformation
+path used above. -/
+theorem exists_kleinPolygonPackagedUnitPath :
+    ∃ p : Path
+      (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.obj
+        (kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+          (FundamentalGroupoid.mk
+            (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)))).as,
+      ⟦p⟧ = kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app
+        (FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) := by
+  exact Path.Homotopic.Quotient.mk_surjective _
+
+noncomputable def kleinPolygonPackagedUnitPath :=
+  Classical.choose exists_kleinPolygonPackagedUnitPath
+
+theorem kleinPolygonPackagedUnitPath_mk :
+    ⟦kleinPolygonPackagedUnitPath⟧ =
+      kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app
+        (FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) :=
+  Classical.choose_spec exists_kleinPolygonPackagedUnitPath
+
+/-- A concrete representative of the connector used by the packaged
+outer-piece equivalence: first its actual unit component, then the inverse
+image of the chosen skeleton connector. -/
+noncomputable def kleinPolygonPackagedUnitConnector : Path
+    (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)
+    (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  kleinPolygonPackagedUnitPath.trans
+    (kleinPolygonOverlapImageToSkeletonPointPath.map
+      kleinPolygonOuterHomotopyEquivSkeleton.invFun.continuous)
+
+/-- The packaged connector represents exactly the unit followed by the
+inverse functor's image of the chosen skeleton connector. -/
+theorem kleinPolygonPackagedUnitConnector_mk :
+    (⟦kleinPolygonPackagedUnitConnector⟧ :
+      FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonSkeletonToOuter kleinSkeletonPoint)) =
+      kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app _ ≫
+        kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.map
+          ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧ := by
+  change ⟦kleinPolygonPackagedUnitPath.trans
+    (kleinPolygonOverlapImageToSkeletonPointPath.map
+      kleinPolygonOuterHomotopyEquivSkeleton.invFun.continuous)⟧ = _
+  let q :
+      FundamentalGroupoid.mk
+          (kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.obj
+            (kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+              (FundamentalGroupoid.mk
+                (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)))).as ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+    ⟦kleinPolygonOverlapImageToSkeletonPointPath.map
+      kleinPolygonOuterHomotopyEquivSkeleton.invFun.continuous⟧
+  change (⟦kleinPolygonPackagedUnitPath⟧ :
+      FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ⟶
+        FundamentalGroupoid.mk
+          (kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.obj
+            (kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+              (FundamentalGroupoid.mk
+                (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)))).as) ≫ q = _
+  calc
+    _ = kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.hom.app _ ≫ q :=
+      congrArg (fun f => f ≫ q) kleinPolygonPackagedUnitPath_mk
+    _ = _ := by congr 1
+
+/-- Basepoint transport in the outer piece along the connector belonging to
+the actual unit packaged by Mathlib's groupoid equivalence. -/
+noncomputable def kleinPolygonPackagedOuterImageFundamentalGroupEquivAtDirectSkeletonPoint :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonPackagedUnitConnector
+
+/-- In packaged equivalence coordinates, returning from the skeleton and
+then transporting along the packaged connector is exactly the literal
+skeleton-to-outer map. -/
+theorem kleinPolygonPackagedSourceCoordinate_eq_direct :
+    kleinPolygonPackagedOuterImageFundamentalGroupEquivAtDirectSkeletonPoint.toMonoidHom.comp
+        kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm.toMonoidHom =
+      kleinPolygonSkeletonToOuterPiOne := by
+  ext g
+  change kleinPolygonPackagedOuterImageFundamentalGroupEquivAtDirectSkeletonPoint
+      (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g) = _
+  let q : kleinPolygonOuterFundamentalGroupoidEquivalence.functor.obj
+        (FundamentalGroupoid.mk
+          (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint)) ≅
+      FundamentalGroupoid.mk kleinSkeletonPoint :=
+    (CategoryTheory.Groupoid.isoEquivHom _ _).symm
+      ⟦kleinPolygonOverlapImageToSkeletonPointPath⟧
+  have hinv :
+      kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g =
+        kleinPolygonOuterFundamentalGroupoidEquivalence.fullyFaithfulFunctor.preimage
+          (q.symm.conj g) := by rfl
+  rw [hinv]
+  change ((CategoryTheory.Groupoid.isoEquivHom _ _).symm
+      ⟦kleinPolygonPackagedUnitConnector⟧).conj
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.fullyFaithfulFunctor.preimage
+        (q.symm.conj g)) = _
+  have hconn : (CategoryTheory.Groupoid.isoEquivHom _ _).symm
+        ⟦kleinPolygonPackagedUnitConnector⟧ =
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.unitIso.app _) ≪≫
+        kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.mapIso q := by
+    apply Iso.ext
+    exact kleinPolygonPackagedUnitConnector_mk
+  have h₁ := congrArg (fun z => z.conj
+      (kleinPolygonOuterFundamentalGroupoidEquivalence.fullyFaithfulFunctor.preimage
+        (q.symm.conj g))) hconn
+  have h₂ := equivalence_unit_mapIso_conj_preimage
+    kleinPolygonOuterFundamentalGroupoidEquivalence _ _ q g
+  exact h₁.trans h₂
+
+/-- On the preferred skeleton basepoint, the direct skeleton-to-outer map is
+literally the inverse functor of the groupoid equivalence.  This removes the
+target-side cast from the remaining source-coordinate comparison. -/
+theorem kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
+    (g : FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint) :
+    kleinPolygonSkeletonToOuterPiOne g =
+      kleinPolygonOuterFundamentalGroupoidEquivalence.inverse.map g := by
+  rfl
+
+/-- The target-basepoint path matching the two stages already used on the
+domain side.  First the inverse homotopy-equivalence unit runs from the
+overlap image to its radial deformation; then the chosen skeleton connector
+runs to `kleinSkeletonPoint`.  Both stages are included into the polygon. -/
+noncomputable def kleinPolygonOuterImageToSkeletonPointSpacePath :
+    Path
+      (kleinPolygonOuterToSpace
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+      (kleinPolygonSkeletonToSpace kleinSkeletonPoint) := by
+  exact kleinPolygonOuterImageToDirectSkeletonPointPath.map
+    kleinPolygonOuterToSpace.continuous
+
+/-- The polygon target connector is exactly the image of the corresponding
+outer-piece connector.  Thus the remaining homomorphism comparison has one
+specified basepoint path rather than two independently chosen transports. -/
+theorem kleinPolygonOuterImageToDirectSkeletonPointPath_map :
+    kleinPolygonOuterImageToDirectSkeletonPointPath.map
+        kleinPolygonOuterToSpace.continuous =
+      kleinPolygonOuterImageToSkeletonPointSpacePath :=
+  rfl
+
+/-- Basepoint transport in the outer piece along the exact connector used by
+the target-side transport. -/
+noncomputable def kleinPolygonOuterImageFundamentalGroupEquivAtDirectSkeletonPoint :
+    FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint) ≃*
+      FundamentalGroup {q // q ∈ (openCover kleinPairingData).outer}
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint) :=
+  FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonOuterImageToDirectSkeletonPointPath
+
+/-- The transported outer-to-polygon map after applying the matching target
+basepoint change.  It now has exactly the source and target groups of the
+literal skeleton inclusion map. -/
+noncomputable def kleinPolygonTargetTransportedOuterToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      kleinPolygonOuterImageToSkeletonPointSpacePath).toMonoidHom.comp
+    kleinPolygonTransportedOuterToSpacePiOne
+
+/-- Naturality moves the target-side path transport through the outer-piece
+inclusion.  Consequently the remaining comparison with the literal skeleton
+map is entirely a comparison of the two source-coordinate maps into the
+outer-piece fundamental group. -/
+theorem kleinPolygonTargetTransportedOuterToSpacePiOne_factor :
+    kleinPolygonTargetTransportedOuterToSpacePiOne =
+      (FundamentalGroup.map kleinPolygonOuterToSpace
+        (kleinPolygonSkeletonToOuter kleinSkeletonPoint)).comp
+        (kleinPolygonOuterImageFundamentalGroupEquivAtDirectSkeletonPoint.toMonoidHom.comp
+          kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm.toMonoidHom) := by
+  ext g
+  exact DFunLike.congr_fun
+    (fundamentalGroup_map_pathTransport_natural kleinPolygonOuterToSpace
+      kleinPolygonOuterImageToDirectSkeletonPointPath)
+    (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g)
+
+/-- The packaged connector included into the polygon quotient. -/
+noncomputable def kleinPolygonPackagedUnitConnectorSpacePath : Path
+    (kleinPolygonOuterToSpace
+      (kleinPolygonOverlapToOuter kleinPolygonOverlapPoint))
+    (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  kleinPolygonPackagedUnitConnector.map kleinPolygonOuterToSpace.continuous
+
+/-- The outer-to-polygon map transported using the actual connector belonging
+to the packaged groupoid equivalence. -/
+noncomputable def kleinPolygonPackagedTargetTransportedOuterToSpacePiOne :
+    FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint →*
+      FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) :=
+  (FundamentalGroup.fundamentalGroupMulEquivOfPath
+      kleinPolygonPackagedUnitConnectorSpacePath).toMonoidHom.comp
+    kleinPolygonTransportedOuterToSpacePiOne
+
+/-- Naturality and the packaged source-coordinate identity identify the
+packaged transported map with the literal skeleton inclusion map. -/
+theorem kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct :
+    kleinPolygonPackagedTargetTransportedOuterToSpacePiOne =
+      kleinPolygonSkeletonToSpacePiOne := by
+  rw [← kleinPolygonSkeletonToSpacePiOne_eq_outer_comp_direct,
+    ← kleinPolygonPackagedSourceCoordinate_eq_direct]
+  ext g
+  exact DFunLike.congr_fun
+    (fundamentalGroup_map_pathTransport_natural kleinPolygonOuterToSpace
+      kleinPolygonPackagedUnitConnector)
+    (kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint.symm g)
+
+/-- Target basepoint transport is an equivalence, so the forward kernel
+inclusion survives unchanged and now lands in the kernel of a map with the
+literal skeleton inclusion's exact source and target types. -/
+theorem kleinPolygonOverlapSkeletonNormalClosure_le_targetTransportedKernel :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) ≤
+      MonoidHom.ker kleinPolygonTargetTransportedOuterToSpacePiOne := by
+  intro g hg
+  change kleinPolygonTargetTransportedOuterToSpacePiOne g = 1
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonOuterImageToSkeletonPointSpacePath)
+      (kleinPolygonTransportedOuterToSpacePiOne g) = 1
+  rw [show kleinPolygonTransportedOuterToSpacePiOne g = 1 from
+    kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel hg]
+  exact map_one _
+
+/-- The already proved forward van Kampen kernel inclusion, now expressed for
+the literal skeleton-to-polygon map via the packaged connector identity. -/
+theorem kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel :
+    Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint)) ≤
+      MonoidHom.ker kleinPolygonSkeletonToSpacePiOne := by
+  rw [← kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct]
+  intro g hg
+  change (FundamentalGroup.fundamentalGroupMulEquivOfPath
+    kleinPolygonPackagedUnitConnectorSpacePath)
+      (kleinPolygonTransportedOuterToSpacePiOne g) = 1
+  rw [show kleinPolygonTransportedOuterToSpacePiOne g = 1 from
+    kleinPolygonOverlapSkeletonNormalClosure_le_transportedKernel hg]
+  exact map_one _
+
+/-- Quotient assembly after the two remaining topological facts have been
+supplied: winding-one conjugacy identifies the relation subgroup, while based
+van Kampen says that subgroup is exactly the kernel and that the skeleton map
+is onto. -/
+noncomputable def kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hsurj : Function.Surjective kleinPolygonSkeletonToSpacePiOne)
+    (hker : MonoidHom.ker kleinPolygonSkeletonToSpacePiOne =
+      Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint))) :
+    FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) ≃*
+      KleinPolygonPresentedGroup :=
+  (QuotientGroup.quotientKerEquivOfSurjective
+      kleinPolygonSkeletonToSpacePiOne hsurj).symm.trans
+    ((QuotientGroup.quotientMulEquivOfEq
+      (hker.trans
+        (kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb hconj))).trans
+      kleinSkeletonAabbQuotientEquiv)
+
+/-- Exact based consequence still to extract from the already proved
+fundamental-groupoid pseudopushout.  Surjectivity and the kernel calculation
+belong together because they are the two outputs of the same van Kampen map. -/
+structure KleinPolygonBasedVanKampen : Prop where
+  surjective : Function.Surjective kleinPolygonSkeletonToSpacePiOne
+  ker_eq_overlap_normalClosure :
+    MonoidHom.ker kleinPolygonSkeletonToSpacePiOne =
+      Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint))
+
+/-- The exact polygon presentation from the packaged based van Kampen
+consequence and the independent geometric winding comparison. -/
+noncomputable def kleinPolygonFundamentalGroupEquivPresented
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hvk : KleinPolygonBasedVanKampen) :
+    FundamentalGroup kleinPairingData.Space
+        (kleinPolygonSkeletonToSpace kleinSkeletonPoint) ≃*
+      KleinPolygonPresentedGroup :=
+  kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+    hconj hvk.surjective hvk.ker_eq_overlap_normalClosure
+
 def finiteWedgeBoolPoint : FiniteWedge Bool := wedgeCircle false 1
 
 @[simp] theorem finiteWedgeBoolHomeomorphTwoCircles_point :
@@ -823,6 +3491,33 @@ theorem kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
   obtain ⟨eimage⟩ := himage
   exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPathConnected k
     (kleinPairingSpaceHomeomorph q₀)).trans eimage⟩
+
+/-- Complete C1 assembly from the two remaining topological inputs.  This
+also transports the polygon computation through the fixed Klein-bottle
+homeomorphism and from the skeleton image to every basepoint. -/
+theorem kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hsurj : Function.Surjective kleinPolygonSkeletonToSpacePiOne)
+    (hker : MonoidHom.ker kleinPolygonSkeletonToSpacePiOne =
+      Subgroup.normalClosure
+        (kleinPolygonOverlapToSkeletonPiOne.range : Set
+          (FundamentalGroup kleinPairingData.skeleton kleinSkeletonPoint))) :
+    ∀ k : KleinBottle,
+      Nonempty (FundamentalGroup KleinBottle k ≃* PresentedKleinGroup) :=
+  kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
+    (kleinPolygonSkeletonToSpace kleinSkeletonPoint)
+    ⟨kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+      hconj hsurj hker⟩
+
+/-- C1 in its final two-input form: one geometric word comparison and one
+based consequence of the groupoid pseudopushout. -/
+theorem kleinBottle_pi1_every_basepoint_of_basedVanKampen
+    (hconj : IsConj kleinPolygonOverlapWindingOneImage kleinAabbWord)
+    (hvk : KleinPolygonBasedVanKampen) :
+    ∀ k : KleinBottle,
+      Nonempty (FundamentalGroup KleinBottle k ≃* PresentedKleinGroup) :=
+  kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
+    hconj hvk.surjective hvk.ker_eq_overlap_normalClosure
 
 /-- Once proper discontinuity of the explicit affine action is supplied, the
 banked deck-group theorem computes the fundamental group at the canonical
@@ -899,6 +3594,7 @@ theorem lift_isEmbedding_assembly
 #print axioms coveringLift_of_subgroup_le
 #print axioms lift_isEmbedding_assembly
 #print axioms fundamentalGroupEquiv_every_basepoint
+#print axioms fundamentalGroup_pathTransport_isConj
 #print axioms kleinPlaneContinuousConstSMul
 #print axioms kleinPlaneOrbit_pi1_at_origin
 #print axioms coordinate_equations_of_smul_eq
@@ -931,11 +3627,75 @@ theorem lift_isEmbedding_assembly
 #print axioms kleinSkeletonPresentationMap_attachingClass
 #print axioms kleinSkeletonPresentationMap_ker
 #print axioms kleinPolygonFundamentalGroupoidPseudopushout
+#print axioms kleinPolygonPseudopushout_arrow_eq_reconstructed
+#print axioms pathTwoOpenSubdivision_transition_mem_overlap
+#print axioms boolSideRunPartition_spec
+#print axioms boolSideRunPartition_end_indices
+#print axioms boolSideRunPartition_adjacent_indices
+#print axioms pathTwoOpenSubdivision_adjacentRunBoundary_mem_overlap
+#print axioms pathTwoOpenSubdivision_runPartition_isChain_overlap
+#print axioms pathTwoOpenSubdivision_runPartition_boundary_spec
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_length
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_head
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_getLast
+#print axioms pathTwoOpenSubdivision_runTarget_mem_outer
+#print axioms pathTwoOpenSubdivisionRunBoundaryPoints_mem_outer
+#print axioms pathTwoOpenSubdivisionOuterRunBoundaryPoints_length
+#print axioms pathTwoOpenSubdivisionOuterRunBoundaryPoints_map_val
+#print axioms pathTwoOpenSubdivisionOuterRunBoundaryFamily_val
+#print axioms boolSideRunPartition_mem_side_eq_head
+#print axioms boolSideRunPartition_isInfix_finRange
+#print axioms boolSideRunPartition_exists_slice
+#print axioms pathTwoOpenSubdivisionBlockPiece_apply
+#print axioms kleinPolygonInnerSideRun_piece_mem
+#print axioms pathHomotopicQuotient_concat_eq_of_pieceClass_eq
+#print axioms path_concat_mem_of_piece_mem
+#print axioms path_concat_exists_subtype_path
+#print axioms path_concat_map_subtype
+#print axioms path_concat_class_eq_outer_of_pieceClass_eq
+#print axioms pathTwoOpenSubdivision_quotient_eq_concat_of_pieceClass_eq
 #print axioms kleinPolygonInnerContractibleSpace
 #print axioms kleinPolygonInnerFundamentalGroup_subsingleton
+#print axioms kleinPolygonInnerFundamentalGroupoid_hom_subsingleton
+#print axioms kleinPolygonInner_pathClass_eq
+#print axioms kleinPolygonInner_pathClass_eq_overlapReplacement
+#print axioms kleinPolygonInner_ambientPathClass_eq_outerOverlapReplacement
+#print axioms kleinPolygonInnerRun_exists_outerOverlapReplacement
+#print axioms kleinPolygonInnerBlock_exists_outerOverlapReplacement
+#print axioms pathTwoOpenSubdivisionInnerBlock_exists_outerOverlapReplacement
+#print axioms pathTwoOpenSubdivisionOuterBlock_exists_outerPath
+#print axioms pathTwoOpenSubdivisionRun_exists_outerRepresentative
 #print axioms kleinPolygonOverlapPathConnectedSpace
 #print axioms kleinPolygonOverlapToOuterPiOne
 #print axioms kleinPolygonOverlapFundamentalGroupEquivInt
+#print axioms kleinPolygonOuterHomotopyEquivSkeleton_on_skeleton
+#print axioms kleinPolygonOuterFundamentalGroupoidEquivalence_obj_skeleton
+#print axioms kleinPolygonOverlapImageFundamentalGroupEquivSkeleton
+#print axioms kleinSkeletonPathConnectedSpace
+#print axioms kleinPolygonOverlapImageToSkeletonPointPath
+#print axioms kleinPolygonOverlapImageFundamentalGroupEquivAtSkeletonPoint
+#print axioms kleinPolygonOverlapToSkeletonFreeGroup
+#print axioms kleinPolygonOverlapWindingHom
+#print axioms kleinPolygonOverlapWindingHom_factor
+#print axioms kleinPolygonOverlapWindingOneImage
+#print axioms kleinPolygonUntransportedWindingOne
+#print axioms kleinPolygonStandardModelConnector
+#print axioms kleinPolygonOverlapWindingOne_isConj_aabb_of_path_eq
+#print axioms kleinPolygonOverlapWindingHom_range
+#print axioms kleinPolygonOverlapWindingHom_normalClosure
+#print axioms kleinPolygonOverlapNormalClosure_eq_aabb_of_isConj
+#print axioms kleinPolygonOverlapWindingHom_range_eq_skeleton_range
+#print axioms kleinPolygonOverlapToSkeletonPiOne_normalClosure_eq_aabb
+#print axioms kleinPolygonPackagedUnitPath_mk
+#print axioms kleinPolygonPackagedUnitConnector_mk
+#print axioms kleinPolygonPackagedSourceCoordinate_eq_direct
+#print axioms kleinPolygonPackagedTargetTransportedOuterToSpacePiOne_eq_direct
+#print axioms kleinPolygonOverlapSkeletonNormalClosure_le_skeletonToSpaceKernel
+#print axioms kleinPolygonSkeletonToOuterPiOne_apply_eq_inverse_map
+#print axioms kleinPolygonFundamentalGroupEquivPresented_of_vanKampen
+#print axioms kleinPolygonFundamentalGroupEquivPresented
 #print axioms kleinBottle_pi1_every_basepoint_of_polygon_van_kampen
+#print axioms kleinBottle_pi1_every_basepoint_of_vanKampen_inputs
+#print axioms kleinBottle_pi1_every_basepoint_of_basedVanKampen
 
 end ConstructionTargets.t93J03Closure

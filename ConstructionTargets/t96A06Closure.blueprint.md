@@ -46,6 +46,39 @@ The first part now compiles in `t96A06Closure.lean`:
 `nonzeroVectors3PathConnectedSpace` and `rp3PathConnectedSpace` establish
 connectedness of the exact quotient model, and `rp3RationalH0Iso` computes
 its degree-zero rational homology as `ℚ`.
+The normalized projection from the concrete unit three-sphere is now tied to
+the frozen quotient topology: `rp3RadialToSphere` is continuous, its composite
+with `sphereProjection 3` is the original nonzero-vector quotient map, and
+`rp3SphereProjection_isQuotientMap` proves the exact quotient authority needed
+before constructing the two-sheeted covering transfer.  The companion theorem
+`rp3SphereProjection_eq_iff` computes every fiber as exactly a point and its
+antipode.
+The local half of the covering construction is also compiled:
+`rp3SphereProjection_isOpenMap` follows from the quotient authority and the
+antipodal saturation formula, while positive hemispheres give injective open
+restrictions around every sphere point.  Hence
+`rp3SphereProjection_isLocalHomeomorph`.  The covering milestone is now
+compiled as well: `rp3SphereProjection_isClosedMap` uses the same antipodal
+saturation formula for closed sets, and
+`t96A06_rp3_sphere_covering` applies the finite-fiber local-homeomorphism
+criterion after bounding each fiber by its explicit antipodal pair.  Rational
+transfer through this covering now has its exact sheet-count input:
+`rp3SphereAntipodal_ne` separates the two points and
+`t96A06_rp3_sphere_twoSheeted` packages finiteness and cardinality two as
+`IsKSheetedCover (sphereProjection 3) 2`.  The induced rational homology
+transfer is now specialized at this exact cover:
+`t96A06_rp3_rational_homologyMap_surjective` proves that the sphere-to-RP3
+map is onto in rational homology in every degree, using the transfer/projection
+identity and invertibility of two.  The coefficient sphere shift and connected
+boundary calculation now prove rational `H₁(S³)` and `H₂(S³)` vanish; the
+surjection consequently gives `t96A06_rp3_rational_H1_isZero` and
+`t96A06_rp3_rational_H2_isZero`.  The top group `H₃(RP³; ℚ)` and vanishing
+above degree three remain.  The sphere-side top group is now computed by
+`t96A06_sphere3_rational_H3Iso`, which composes the coefficient sphere shift
+with the compiled `H₂(S²; ℚ) ≅ ℚ` endpoint.  Identifying the projective top
+group still requires proving that the rational transfer detects all of this
+one-dimensional sphere group (equivalently, that the antipodal action is
+trivial in degree three).
 
 ## C3. Degree four of the quadratic map — library
 

@@ -293,6 +293,164 @@ theorem connectorSystemMapEquivalence_connector_hom
       e.functor.map (S.connector (e.inverse.obj A)).hom ≫
         e.counitIso.hom.app A := rfl
 
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- A connector square before transport remains a connector square after
+transport through an equivalence. -/
+theorem connectorSystemMapEquivalence_connectorSquare
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem C) (e : C ≌ D) {A B : D} (f : A ⟶ B)
+    (h : (S.connector (e.inverse.obj A)).hom ≫ e.inverse.map f =
+      (S.connector (e.inverse.obj B)).hom) :
+    ((connectorSystemMapEquivalence S e).connector A).hom ≫ f =
+      ((connectorSystemMapEquivalence S e).connector B).hom := by
+  rw [connectorSystemMapEquivalence_connector_hom,
+    connectorSystemMapEquivalence_connector_hom]
+  calc
+    _ = e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        (e.counitIso.hom.app A ≫ f) := Category.assoc _ _ _
+    _ = e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        (e.functor.map (e.inverse.map f) ≫ e.counitIso.hom.app B) := by
+          congr 1
+          exact (e.counitIso.hom.naturality f).symm
+    _ = (e.functor.map (S.connector (e.inverse.obj A)).hom ≫
+        e.functor.map (e.inverse.map f)) ≫ e.counitIso.hom.app B :=
+          (Category.assoc _ _ _).symm
+    _ = e.functor.map
+          ((S.connector (e.inverse.obj A)).hom ≫ e.inverse.map f) ≫
+        e.counitIso.hom.app B := by rw [Functor.map_comp]
+    _ = _ := by rw [h]
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- At a forward-image object, an installed mapped connector is the direct
+image of the source connector exactly when the source connector respects the
+equivalence inverse-unit there. -/
+theorem connectorSystemMapEquivalence_functorObj_connector_hom_eq_map
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem C) (e : C ≌ D) (A : C)
+    (h : (S.connector (e.inverse.obj (e.functor.obj A))).hom ≫
+      e.unitIso.inv.app A = (S.connector A).hom) :
+    ((connectorSystemMapEquivalence S e).connector
+      (e.functor.obj A)).hom = e.functor.map (S.connector A).hom := by
+  rw [connectorSystemMapEquivalence_connector_hom, e.counit_app_functor]
+  calc
+    _ = e.functor.map
+        ((S.connector (e.inverse.obj (e.functor.obj A))).hom ≫
+          e.unitIso.inv.app A) := (e.functor.map_comp _ _).symm
+    _ = _ := congrArg e.functor.map h
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- A connector square is equivalent to triviality of the corresponding
+connector normal form. -/
+theorem connectorSystem_connectorSquare_iff_normalForm_eq_id
+    {C : Type} [Groupoid C] (S : ConnectorSystem C) {A B : C} (f : A ⟶ B) :
+    (S.connector A).hom ≫ f = (S.connector B).hom ↔
+      S.normalForm f = 𝟙 S.base := by
+  constructor
+  · intro h
+    simp only [ConnectorSystem.normalForm]
+    rw [← Category.assoc, h]
+    simp
+  · intro h
+    have hf : f = (S.connector A).inv ≫ (S.connector B).hom := by
+      apply S.normalForm_injective
+      rw [h]
+      simp [ConnectorSystem.normalForm]
+    rw [hf]
+    simp
+
+/-- Rebase a connector system along a specified isomorphism.  Keeping the
+isomorphism explicit lets transported connector choices be installed at the
+literal base object used by a based fundamental group. -/
+def connectorSystemChangeBase
+    {C : Type} [Groupoid C] (S : ConnectorSystem C)
+    (B : C) (b : B ≅ S.base) : ConnectorSystem C where
+  base := B
+  connector A := b ≪≫ S.connector A
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+theorem connectorSystemChangeBase_connector_hom
+    {C : Type} [Groupoid C] (S : ConnectorSystem C)
+    (B : C) (b : B ≅ S.base) (A : C) :
+    ((connectorSystemChangeBase S B b).connector A).hom =
+      b.hom ≫ (S.connector A).hom := rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Changing the base connector preserves a connector square. -/
+theorem connectorSystemChangeBase_connectorSquare
+    {C : Type} [Groupoid C] (S : ConnectorSystem C)
+    (O : C) (o : O ≅ S.base) {A B : C} (f : A ⟶ B)
+    (h : (S.connector A).hom ≫ f = (S.connector B).hom) :
+    ((connectorSystemChangeBase S O o).connector A).hom ≫ f =
+      ((connectorSystemChangeBase S O o).connector B).hom := by
+  rw [connectorSystemChangeBase_connector_hom,
+    connectorSystemChangeBase_connector_hom]
+  calc
+    (o.hom ≫ (S.connector A).hom) ≫ f =
+        o.hom ≫ ((S.connector A).hom ≫ f) := Category.assoc _ _ _
+    _ = _ := by rw [h]
+
+/-- Pull a connector system back through an equivalence. -/
+def connectorSystemComapEquivalence
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) : ConnectorSystem C where
+  base := e.inverse.obj S.base
+  connector A := e.inverse.mapIso (S.connector (e.functor.obj A)) ≪≫
+    (e.unitIso.app A).symm
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+theorem connectorSystemComapEquivalence_connector_hom
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) (A : C) :
+    ((connectorSystemComapEquivalence S e).connector A).hom =
+      e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        e.unitIso.inv.app A := rfl
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- A connector square in the target system pulls back through an
+equivalence to a connector square in the source system. -/
+theorem connectorSystemComapEquivalence_connectorSquare
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) {A B : C} (f : A ⟶ B)
+    (h : (S.connector (e.functor.obj A)).hom ≫ e.functor.map f =
+      (S.connector (e.functor.obj B)).hom) :
+    ((connectorSystemComapEquivalence S e).connector A).hom ≫ f =
+      ((connectorSystemComapEquivalence S e).connector B).hom := by
+  rw [connectorSystemComapEquivalence_connector_hom,
+    connectorSystemComapEquivalence_connector_hom]
+  calc
+    (e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        e.unitIso.inv.app A) ≫ f =
+      e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        (e.unitIso.inv.app A ≫ f) := Category.assoc _ _ _
+    _ = e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        (e.inverse.map (e.functor.map f) ≫ e.unitIso.inv.app B) := by
+          congr 1
+          exact (e.unitIso.inv.naturality f).symm
+    _ = (e.inverse.map (S.connector (e.functor.obj A)).hom ≫
+        e.inverse.map (e.functor.map f)) ≫ e.unitIso.inv.app B :=
+          (Category.assoc _ _ _).symm
+    _ = e.inverse.map
+          ((S.connector (e.functor.obj A)).hom ≫ e.functor.map f) ≫
+        e.unitIso.inv.app B := by rw [Functor.map_comp]
+    _ = _ := by rw [h]
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Mapping a pulled-back connector exposes the inverse-map, inverse-unit,
+and counit factors in their categorical order. -/
+theorem connectorSystemMap_comap_connector_hom_expanded
+    {C D : Type} [Groupoid C] [Groupoid D]
+    (S : ConnectorSystem D) (e : C ≌ D) (A : D) :
+    e.functor.map
+          ((connectorSystemComapEquivalence S e).connector
+            (e.inverse.obj A)).hom ≫ e.counitIso.hom.app A =
+      (e.functor.map (e.inverse.map
+          (S.connector (e.functor.obj (e.inverse.obj A))).hom) ≫
+        e.functor.map (e.unitIso.inv.app (e.inverse.obj A))) ≫
+          e.counitIso.hom.app A := by
+  rw [connectorSystemComapEquivalence_connector_hom]
+  exact congrArg (fun k => k ≫ e.counitIso.hom.app A)
+    (e.functor.map_comp _ _)
+
 theorem genericPointWedgeConnectors_base
     {Z : Type} [TopologicalSpace Z] [PathConnectedSpace Z] (z₀ : Z) :
     (genericPointWedgeConnectors z₀).base = FundamentalGroupoid.mk z₀ := rfl
@@ -1146,7 +1304,7 @@ theorem genericPointWedgeIdentityCoordinateSpan_glue_unitBase_eq_one :
     genericPointWedgeIdentityCoordinateLeftLegFactor_eq_one,
     genericPointWedgeIdentityCoordinateRightLegFactor_eq_one,
     genericPointWedgeIdentityCoordinateRightRoundTrip_eq_one]
-  simp only [SingleObj.comp_as_mul, one_mul]
+  simp only [SingleObj.comp_as_mul, mul_one]
 
 /-- After transporting the unit coordinate glue through the overlap
 equivalence, the reverse-coordinate glue at the chosen overlap representative
@@ -4857,6 +5015,119 @@ theorem genericPointWedgeRightEquiv_obj_rightBase :
   exact (genericPointWedgePackage
     x₀ y₀ M N hM hN hy hx cM cN).right_inclusion y₀
 
+/-- Pull the literal `Y` connectors back to the right cover and rebase them at
+the fixed right-cover representative. -/
+def genericPointWedgeCoherentRightSourceConnectors : ConnectorSystem
+    (FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :=
+  let e := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let h := genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  connectorSystemChangeBase
+    (connectorSystemComapEquivalence (genericPointWedgeConnectors y₀) e)
+    (genericPointWedgeRightBase x₀ y₀ N)
+    (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
+      e.inverse.mapIso (eqToIso h))
+
+/-- A pulled-back source connector is the base-change map, the inverse image
+of the literal `Y` connector, and the inverse unit, in that order. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_connector_hom
+    (A : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    ((genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector A).hom =
+      (e.unitIso.app (genericPointWedgeRightBase x₀ y₀ N) ≪≫
+        e.inverse.mapIso (eqToIso h)).hom ≫
+      e.inverse.map (genericPointWedgeBasedConnector y₀
+        (e.functor.obj A)).hom ≫ e.unitIso.inv.app A := rfl
+
+/-- At the fixed right-cover representative, a literal `Y` connector square
+along the mapped inverse unit supplies the corresponding source square. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+    (htarget :
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse.obj
+            ((genericPointWedgeRightGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+              (genericPointWedgeRightBase x₀ y₀ N))))).hom ≫
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.map
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).unitIso.inv.app
+            (genericPointWedgeRightBase x₀ y₀ N)) =
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          (genericPointWedgeRightBase x₀ y₀ N))).hom) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (source.connector (e.inverse.obj (e.functor.obj
+      (genericPointWedgeRightBase x₀ y₀ N)))).hom ≫
+        e.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N) =
+      (source.connector (genericPointWedgeRightBase x₀ y₀ N)).hom := by
+  dsimp only
+  apply connectorSystemChangeBase_connectorSquare
+  apply connectorSystemComapEquivalence_connectorSquare
+  exact htarget
+
+/-- The right-piece connector system transported through the chosen cover
+equivalence and rebased at the literal point `y₀`.  Unlike an independent
+`somePath` choice, its connector square contains the equivalence counit by
+construction. -/
+def genericPointWedgeCoherentRightConnectors :
+    ConnectorSystem (FundamentalGroupoid Y) :=
+  let e := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let h := genericPointWedgeRightEquiv_obj_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  connectorSystemChangeBase (connectorSystemMapEquivalence
+    (genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN) e)
+    (FundamentalGroupoid.mk y₀) (eqToIso h.symm)
+
+/-- The installed coherent connector is, in exact order, the literal-base
+transport, the mapped right-piece connector, and the cover-equivalence
+counit.  This is the form consumed by the remaining connector square. -/
+theorem genericPointWedgeCoherentRightConnectors_connector_hom
+    (A : FundamentalGroupoid Y) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector A).hom =
+      (eqToIso h.symm).hom ≫
+        e.functor.map (source.connector (e.inverse.obj A)).hom ≫
+        e.counitIso.hom.app A := rfl
+
+/-- At a forward-image endpoint, the installed coherent connector exposes
+the inverse–forward source connector and the cover-equivalence counit. -/
+theorem genericPointWedgeCoherentRightConnectors_functorObj_connector_hom
+    (A : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N)) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (e.functor.obj A)).hom =
+      (eqToIso h.symm).hom ≫
+        e.functor.map (source.connector
+          (e.inverse.obj (e.functor.obj A))).hom ≫
+        e.counitIso.hom.app (e.functor.obj A) := rfl
+
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- At the unique coordinate object, the object equality induced by the named
 right-span functor equality is the fixed right-base equality. -/
@@ -5014,6 +5285,130 @@ theorem genericPointWedgeRightEquiv_map_unitInv_rightBase :
   exact ((genericPointWedgeRightGroupoidEquivalence
     x₀ y₀ M N hM hN hy hx cM cN).counit_app_functor
       (genericPointWedgeRightBase x₀ y₀ N)).symm
+
+/-- At the fixed right-cover representative, it is enough to verify the
+literal `Y` connector square against the right-equivalence counit. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
+    (htarget :
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse.obj
+            ((genericPointWedgeRightGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+              (genericPointWedgeRightBase x₀ y₀ N))))).hom ≫
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.app
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+            (genericPointWedgeRightBase x₀ y₀ N)) =
+      ((genericPointWedgeConnectors y₀).connector
+        ((genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+          (genericPointWedgeRightBase x₀ y₀ N))).hom) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (source.connector (e.inverse.obj (e.functor.obj
+      (genericPointWedgeRightBase x₀ y₀ N)))).hom ≫
+        e.unitIso.inv.app (genericPointWedgeRightBase x₀ y₀ N) =
+      (source.connector (genericPointWedgeRightBase x₀ y₀ N)).hom := by
+  apply genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_target
+  let eR := genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let c := ((genericPointWedgeConnectors y₀).connector
+    (eR.functor.obj (eR.inverse.obj
+      (eR.functor.obj (genericPointWedgeRightBase x₀ y₀ N))))).hom
+  have hu := genericPointWedgeRightEquiv_map_unitInv_rightBase
+    x₀ y₀ M N hM hN hy hx cM cN
+  exact (congrArg (fun k => c ≫ k) hu).trans htarget
+
+/-- A literal `Y` counit square at the fixed right-cover representative
+identifies the installed coherent connector with the rebased mapped source
+connector at that endpoint. -/
+theorem genericPointWedgeCoherentRightConnectors_rightBase_of_counit :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let h := genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (((genericPointWedgeConnectors y₀).connector
+          (e.functor.obj (e.inverse.obj (e.functor.obj
+            (genericPointWedgeRightBase x₀ y₀ N))))).hom ≫
+        e.counitIso.hom.app
+          (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N)) =
+      ((genericPointWedgeConnectors y₀).connector
+        (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N))).hom) →
+    ((genericPointWedgeCoherentRightConnectors
+        x₀ y₀ M N hM hN hy hx cM cN).connector
+          (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N))).hom =
+      (eqToIso h.symm).hom ≫
+        e.functor.map
+          (source.connector (genericPointWedgeRightBase x₀ y₀ N)).hom := by
+  dsimp only
+  intro htarget
+  change (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫
+      ((connectorSystemMapEquivalence
+        (genericPointWedgeCoherentRightSourceConnectors
+          x₀ y₀ M N hM hN hy hx cM cN)
+        (genericPointWedgeRightGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN)).connector
+            ((genericPointWedgeRightGroupoidEquivalence
+              x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+                (genericPointWedgeRightBase x₀ y₀ N))).hom = _
+  rw [connectorSystemMapEquivalence_functorObj_connector_hom_eq_map _ _ _
+    (genericPointWedgeCoherentRightSourceConnectors_rightBase_unitInv_of_counit
+      x₀ y₀ M N hM hN hy hx cM cN htarget)]
+  rfl
+
+/-- The remaining literal `Y` counit square at the fixed endpoint is exactly
+the assertion that its connector normal form is trivial. -/
+theorem genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let A := e.functor.obj (e.inverse.obj
+      (e.functor.obj (genericPointWedgeRightBase x₀ y₀ N)))
+    let B := e.functor.obj (genericPointWedgeRightBase x₀ y₀ N)
+    ((genericPointWedgeConnectors y₀).connector A).hom ≫
+        e.counitIso.hom.app B =
+      ((genericPointWedgeConnectors y₀).connector B).hom ↔
+    (genericPointWedgeConnectors y₀).normalForm
+        (e.counitIso.hom.app B) =
+      𝟙 (genericPointWedgeConnectors y₀).base := by
+  dsimp only
+  exact connectorSystem_connectorSquare_iff_normalForm_eq_id
+    (genericPointWedgeConnectors y₀) _
+
+/-- At any right-piece endpoint, triviality of the literal `Y` counit normal
+form supplies the inverse-unit connector square in the coherent pulled-back
+source system.  This includes the shifted overlap endpoint. -/
+theorem genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
+    (A : FundamentalGroupoid (genericPointWedgeRightPiece x₀ y₀ N))
+    (hnormal :
+      (genericPointWedgeConnectors y₀).normalForm
+          ((genericPointWedgeRightGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).counitIso.hom.app
+              ((genericPointWedgeRightGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).functor.obj A)) =
+        𝟙 (genericPointWedgeConnectors y₀).base) :
+    let e := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    (source.connector (e.inverse.obj (e.functor.obj A))).hom ≫
+        e.unitIso.inv.app A = (source.connector A).hom := by
+  dsimp only
+  apply connectorSystemChangeBase_connectorSquare
+  apply connectorSystemComapEquivalence_connectorSquare
+  have ht := (connectorSystem_connectorSquare_iff_normalForm_eq_id
+    (genericPointWedgeConnectors y₀) _).mpr hnormal
+  rw [(genericPointWedgeRightGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN).counit_app_functor] at ht
+  exact ht
 
 omit [PathConnectedSpace X] in
 /-- The canonical connector normal form with its inverse-unit factor rewritten
@@ -6128,6 +6523,38 @@ theorem genericPointWedgeOuterLeftComparison_rightProjection_eq_one :
     x₀ y₀ _)]
   simp
 
+/-- The inverse outer-left comparison lies literally in the left coproduct
+factor, with coordinate the ordered product of its two connector normal
+forms. -/
+theorem genericPointWedgeOuterLeftComparison_eq_inl_normalForms :
+    let l := genericPointWedgeActualLeft x₀ y₀ M N
+    let l' := genericPointWedgeCoordinateLeft x₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eL := genericPointWedgeLeftGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aL := genericPointWedgeLeftSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (reverseLeftComparison l l' eK eL aL Q.left).inv.app z =
+      (Monoid.Coprod.inl
+        ((genericPointWedgeConnectors x₀).normalForm
+            ((eK.funInvIdAssoc (l ⋙ eL.functor)).inv.app z) *
+          (genericPointWedgeConnectors x₀).normalForm
+            (aL.hom.app (eK.functor.obj z))) :
+        genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  simp only [genericPointWedgeOverlapBase]
+  rw [genericPointWedgeIdentityOuterLeftComparison_app,
+    genericPointWedgeIdentityOuterLeftRoundTrip_eq_map,
+    genericPointWedgeIdentityOuterLeftSpanFactor_eq_map]
+  simp only [SingleObj.comp_as_mul]
+  rw [eq_of_heq (genericPointWedgeIdentityCoordinateSpan_left_map
+    x₀ y₀ _), eq_of_heq (genericPointWedgeIdentityCoordinateSpan_left_map
+    x₀ y₀ _)]
+  exact (Monoid.Coprod.inl.map_mul _ _).symm
+
 /-- Consequently the right projection of the reconstruction conjugator is
 exactly the projection of the forward right outer comparison. -/
 theorem genericPointWedgeRightBase_rightProjection_eq_outerRight :
@@ -6181,6 +6608,38 @@ theorem genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms :
     x₀ y₀ _), eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
     x₀ y₀ _)]
   rfl
+
+/-- The forward outer-right comparison itself lies in the right coproduct
+factor, with coordinate given by the same ordered normal-form product as its
+right projection. -/
+theorem genericPointWedgeOuterRightComparison_eq_inr_normalForms :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (reverseRightComparison r r' eK eR aR Q.right).hom.app z =
+      (Monoid.Coprod.inr
+        ((genericPointWedgeConnectors y₀).normalForm
+            (aR.inv.app (eK.functor.obj z)) *
+          (genericPointWedgeConnectors y₀).normalForm
+            ((eK.funInvIdAssoc (r ⋙ eR.functor)).hom.app z)) :
+        genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  simp only [genericPointWedgeOverlapBase]
+  rw [genericPointWedgeIdentityOuterRightComparison_app,
+    genericPointWedgeIdentityOuterRightSpanFactor_eq_map,
+    genericPointWedgeIdentityOuterRightRoundTrip_eq_map]
+  simp only [SingleObj.comp_as_mul]
+  rw [eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ _), eq_of_heq (genericPointWedgeIdentityCoordinateSpan_right_map
+    x₀ y₀ _)]
+  exact (Monoid.Coprod.inr.map_mul _ _).symm
 
 /-- Expand the overlap round-trip factor in the projected forward-right
 comparison into its endpoint connectors and component.  Together with the
@@ -6361,6 +6820,211 @@ theorem genericPointWedgeOverlap_shiftedCoordinateObject_eq :
       eK.functor.obj z := by
   dsimp only
   exact Subsingleton.elim _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- The forward image of the unshifted overlap component is precisely the
+canonical endpoint transport in the one-object coordinate groupoid. -/
+theorem genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport :
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    eK.functor.map (eK.unitInv.app z) =
+      eqToHom (genericPointWedgeOverlap_shiftedCoordinateObject_eq
+        x₀ y₀ M N hM hN hy hx cM cN) := by
+  dsimp only
+  exact Subsingleton.elim _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Carrying the coordinate endpoint transport through the right overlap leg
+gives the corresponding endpoint transport between its right-piece images. -/
+theorem genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (eK.inverse ⋙ r ⋙ eR.functor).map
+        (eK.functor.map (eK.unitInv.app z)) =
+      eqToHom (congrArg (eK.inverse ⋙ r ⋙ eR.functor).obj
+        (genericPointWedgeOverlap_shiftedCoordinateObject_eq
+          x₀ y₀ M N hM hN hy hx cM cN)) := by
+  dsimp only
+  rw [genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport]
+  exact eqToHom_map _ _
+
+omit [PathConnectedSpace X] [PathConnectedSpace Y] in
+/-- Every connector system carries equality transport to its target connector. -/
+theorem connectorSystem_connectorSquare_eqToHom
+    {C : Type} [Groupoid C] (S : ConnectorSystem C) {A B : C} (h : A = B) :
+    (S.connector A).hom ≫ eqToHom h = (S.connector B).hom := by
+  subst B
+  simp
+
+omit [PathConnectedSpace X] in
+/-- The literal right-piece connector system carries the transported overlap
+component, since that component is exactly equality transport between its
+two endpoints. -/
+theorem genericPointWedgeRightLeg_overlap_connectorSquare :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    ((genericPointWedgeConnectors y₀).connector
+        ((eK.inverse ⋙ r ⋙ eR.functor).obj
+          (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom ≫
+      (eK.inverse ⋙ r ⋙ eR.functor).map
+        (eK.functor.map (eK.unitInv.app z)) =
+    ((genericPointWedgeConnectors y₀).connector
+        ((eK.inverse ⋙ r ⋙ eR.functor).obj
+          (eK.functor.obj z))).hom := by
+  dsimp only
+  rw [genericPointWedgeRightLeg_map_overlapUnitInv_eq_endpointTransport]
+  exact connectorSystem_connectorSquare_eqToHom _ _
+
+omit [PathConnectedSpace X] in
+/-- The transported overlap component satisfies the connector square in the
+coherent right-cover connector system before mapping and base change. -/
+theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    ((genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom ≫
+      F.map (eK.functor.map (eK.unitInv.app z)) =
+    ((genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (F.obj (eK.functor.obj z))).hom := by
+  dsimp only
+  have ht :
+      ((genericPointWedgeOverlapGroupoidEquivalence
+          x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+        genericPointWedgeActualRight x₀ y₀ M N).map
+          ((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).functor.map
+              ((genericPointWedgeOverlapGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).unitInv.app
+                  (genericPointWedgeOverlapBase x₀ y₀ M N))) =
+        eqToHom (congrArg
+          ((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).inverse ⋙
+              genericPointWedgeActualRight x₀ y₀ M N).obj
+            (genericPointWedgeOverlap_shiftedCoordinateObject_eq
+              x₀ y₀ M N hM hN hy hx cM cN)) := by
+    rw [genericPointWedgeOverlap_functor_map_unitInv_eq_endpointTransport]
+    exact eqToHom_map _ _
+  rw [ht]
+  exact connectorSystem_connectorSquare_eqToHom _ _
+
+omit [PathConnectedSpace X] in
+/-- Mapping the coherent right-cover source square through the right-cover
+equivalence preserves its composition order. -/
+theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    eR.functor.map
+        (((genericPointWedgeCoherentRightSourceConnectors
+          x₀ y₀ M N hM hN hy hx cM cN).connector
+            (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom) ≫
+      eR.functor.map (F.map (eK.functor.map (eK.unitInv.app z))) =
+    eR.functor.map
+        (((genericPointWedgeCoherentRightSourceConnectors
+          x₀ y₀ M N hM hN hy hx cM cN).connector
+            (F.obj (eK.functor.obj z))).hom) := by
+  dsimp only
+  rw [← Functor.map_comp]
+  exact congrArg
+    (genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN).functor.map
+    (genericPointWedgeCoherentRightSource_overlap_connectorSquare
+      x₀ y₀ M N hM hN hy hx cM cN)
+
+omit [PathConnectedSpace X] in
+/-- Rebasing the mapped coherent square at the literal `Y` base preserves the
+same right-leg connector equation. -/
+theorem genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    let source := genericPointWedgeCoherentRightSourceConnectors
+      x₀ y₀ M N hM hN hy hx cM cN
+    let b := eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm
+    (b.hom ≫ eR.functor.map
+        (source.connector
+          (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z)))).hom) ≫
+      eR.functor.map (F.map (eK.functor.map (eK.unitInv.app z))) =
+    b.hom ≫ eR.functor.map
+      (source.connector (F.obj (eK.functor.obj z))).hom := by
+  dsimp only
+  simpa only [Category.assoc] using congrArg
+    (fun q => (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+      x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫ q)
+    (genericPointWedgeCoherentRightSource_overlap_connectorSquare_mapped
+      x₀ y₀ M N hM hN hy hx cM cN)
+
+omit [PathConnectedSpace X] in
+/-- Installing the coherent source system in `Y` turns the transported
+overlap component into the literal connector square used by the based right
+leg.  Both the equivalence counit and the base change are retained by the two
+generic connector-system transports. -/
+theorem genericPointWedgeCoherentRight_overlap_connectorSquare_of_endpoints :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    let F := eK.inverse ⋙ r
+    ∀ (hsource :
+      ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+          (eR.functor.obj
+            (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z))))).hom =
+        (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+          x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫
+          eR.functor.map
+            ((genericPointWedgeCoherentRightSourceConnectors
+              x₀ y₀ M N hM hN hy hx cM cN).connector
+                (F.obj (eK.functor.obj
+                  ((eK.functor ⋙ eK.inverse).obj z)))).hom)
+    (htarget :
+      ((genericPointWedgeCoherentRightConnectors
+        x₀ y₀ M N hM hN hy hx cM cN).connector
+          (eR.functor.obj (F.obj (eK.functor.obj z)))).hom =
+        (eqToIso (genericPointWedgeRightEquiv_obj_rightBase
+          x₀ y₀ M N hM hN hy hx cM cN).symm).hom ≫
+          eR.functor.map
+            ((genericPointWedgeCoherentRightSourceConnectors
+              x₀ y₀ M N hM hN hy hx cM cN).connector
+                (F.obj (eK.functor.obj z))).hom),
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (eR.functor.obj
+          (F.obj (eK.functor.obj ((eK.functor ⋙ eK.inverse).obj z))))).hom ≫
+      eR.functor.map (F.map (eK.functor.map (eK.unitInv.app z))) =
+    ((genericPointWedgeCoherentRightConnectors
+      x₀ y₀ M N hM hN hy hx cM cN).connector
+        (eR.functor.obj (F.obj (eK.functor.obj z)))).hom := by
+  dsimp only
+  intro hsource htarget
+  rw [hsource, htarget]
+  exact genericPointWedgeCoherentRightSource_overlap_connectorSquare_rebased
+    x₀ y₀ M N hM hN hy hx cM cN
 
 omit [PathConnectedSpace X] [PathConnectedSpace Y] in
 /-- The shifted and unshifted inverse right-span components are dependently
@@ -7276,6 +7940,113 @@ theorem genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare :
       (eq_connectorTransport_iff_connectorSquare
         (genericPointWedgeConnectors y₀) _)
 
+/-- The canonical right projection of the B3 base-change element is trivial:
+the remaining connector square is the literal endpoint-transport square. -/
+theorem genericPointWedgeRightBase_rightProjection_eq_one :
+    genericPointWedgeFreeProductRightProjection x₀ y₀
+        (genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN) = 1 := by
+  apply (genericPointWedgeRightBase_rightProjection_eq_one_iff_connectorSquare
+    x₀ y₀ M N hM hN hy hx cM cN).2
+  simpa using genericPointWedgeRightLeg_overlap_connectorSquare
+    x₀ y₀ M N hM hN hy hx cM cN
+
+/-- The forward outer-right comparison is the unit: it lies in the right
+factor, and its right coordinate is the already trivial projection of the
+global base-change element. -/
+theorem genericPointWedgeOuterRightComparison_eq_one :
+    let r := genericPointWedgeActualRight x₀ y₀ M N
+    let r' := genericPointWedgeCoordinateRight y₀
+    let eK := genericPointWedgeOverlapGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let eR := genericPointWedgeRightGroupoidEquivalence
+      x₀ y₀ M N hM hN hy hx cM cN
+    let aR := genericPointWedgeRightSpanIso
+      x₀ y₀ M N hM hN hy hx cM cN
+    let Q := genericPointWedgeIdentityCoordinateSpan x₀ y₀
+    let z := genericPointWedgeOverlapBase x₀ y₀ M N
+    (reverseRightComparison r r' eK eR aR Q.right).hom.app z =
+      (1 : genericPointWedgeFreeProduct x₀ y₀) := by
+  dsimp only
+  rw [genericPointWedgeOuterRightComparison_eq_inr_normalForms]
+  have hp := genericPointWedgeRightBase_rightProjection_eq_outerRight
+    x₀ y₀ M N hM hN hy hx cM cN
+  have ho := genericPointWedgeRightBase_rightProjection_eq_one
+    x₀ y₀ M N hM hN hy hx cM cN
+  have hn := genericPointWedgeOuterRightComparison_rightProjection_eq_normalForms
+    x₀ y₀ M N hM hN hy hx cM cN
+  dsimp only at hp ho hn
+  have hcoord :
+      (genericPointWedgeConnectors y₀).normalForm
+          ((genericPointWedgeRightSpanIso
+            x₀ y₀ M N hM hN hy hx cM cN).inv.app
+              ((genericPointWedgeOverlapGroupoidEquivalence
+                x₀ y₀ M N hM hN hy hx cM cN).functor.obj
+                  (genericPointWedgeOverlapBase x₀ y₀ M N))) *
+        (genericPointWedgeConnectors y₀).normalForm
+          (((genericPointWedgeOverlapGroupoidEquivalence
+            x₀ y₀ M N hM hN hy hx cM cN).funInvIdAssoc
+              (genericPointWedgeActualRight x₀ y₀ M N ⋙
+                (genericPointWedgeRightGroupoidEquivalence
+                  x₀ y₀ M N hM hN hy hx cM cN).functor)).hom.app
+                    (genericPointWedgeOverlapBase x₀ y₀ M N)) = 1 := by
+    rw [← hn, ← hp]
+    exact ho
+  rw [hcoord]
+  exact (Monoid.Coprod.inr
+    (M := genericPointWedgeLeftGroup x₀)).map_one
+
+/-- The B3 right-base conjugator comes from the left coproduct factor. The
+right outer comparison is the unit, while the inverse left comparison is a
+literal left injection. -/
+theorem genericPointWedgeRightBase_exists_inl :
+    ∃ a : FundamentalGroup X x₀,
+      genericPointWedgeIdentityGlobalRightBaseElement
+          x₀ y₀ M N hM hN hy hx cM cN = Monoid.Coprod.inl a := by
+  let l := genericPointWedgeActualLeft x₀ y₀ M N
+  let eK := genericPointWedgeOverlapGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let eL := genericPointWedgeLeftGroupoidEquivalence
+    x₀ y₀ M N hM hN hy hx cM cN
+  let aL := genericPointWedgeLeftSpanIso
+    x₀ y₀ M N hM hN hy hx cM cN
+  let z := genericPointWedgeOverlapBase x₀ y₀ M N
+  refine ⟨(genericPointWedgeConnectors x₀).normalForm
+        ((eK.funInvIdAssoc (l ⋙ eL.functor)).inv.app z) *
+      (genericPointWedgeConnectors x₀).normalForm
+        (aL.hom.app (eK.functor.obj z)), ?_⟩
+  rw [genericPointWedgeIdentityGlobalRightBaseElement_eq_outerComparisons,
+    genericPointWedgeOuterLeftComparison_eq_inl_normalForms,
+    genericPointWedgeOuterRightComparison_eq_one]
+  dsimp only [l, eK, eL, aL, z]
+  simp only [SingleObj.comp_as_mul, one_mul]
+
+/-- The B6 equivalence, normalized by the witnessed left coordinate of the
+reconstruction conjugator. -/
+noncomputable def genericPointWedgeLegCoordinatesEquiv :
+    FundamentalGroup (Wedge x₀ y₀) (quotientMap x₀ y₀ (.inl x₀)) ≃*
+      genericPointWedgeFreeProduct x₀ y₀ :=
+  genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+    x₀ y₀ M N hM hN hy hx cM cN
+      (genericPointWedgeRightBase_exists_inl
+        x₀ y₀ M N hM hN hy hx cM cN).choose
+
+/-- B6: the van Kampen equivalence has the literal coproduct coordinates on
+both wedge legs. -/
+theorem genericPointWedgeLegCoordinates_vanKampen :
+    (∀ g : FundamentalGroup X x₀,
+      genericPointWedgeLegCoordinatesEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeLeftLegMap x₀ y₀ g) = Monoid.Coprod.inl g) ∧
+    (∀ g : FundamentalGroup Y y₀,
+      genericPointWedgeLegCoordinatesEquiv
+          x₀ y₀ M N hM hN hy hx cM cN
+          (genericPointWedgeRightLegMap x₀ y₀ g) = Monoid.Coprod.inr g) := by
+  exact genericPointWedgePartiallyNormalized_legCoordinates
+    x₀ y₀ M N hM hN hy hx cM cN _
+      (genericPointWedgeRightBase_exists_inl
+        x₀ y₀ M N hM hN hy hx cM cN).choose_spec
+
 /-- An `inl` factorization of the right-base conjugator forces its canonical
 right projection to be trivial. -/
 theorem genericPointWedgeRightBase_inl_implies_rightProjection_eq_one
@@ -8053,5 +8824,17 @@ def twoCirclesBaseNeighborhood_contraction :
 #print axioms genericPointWedgeLegCoordinates_iff_mapped
 #print axioms genericPointWedgeLegCoordinates_iff_sourceFunctor
 #print axioms genericPointWedgeLegCoordinates_iff_inverseIdentity
+#print axioms genericPointWedgeCoherentRightConnectors_rightBase_of_counit
+#print axioms connectorSystem_connectorSquare_iff_normalForm_eq_id
+#print axioms genericPointWedgeRightBase_counit_connectorSquare_iff_normalForm
+#print axioms genericPointWedgeCoherentRightSourceConnectors_unitInv_of_counit_normalForm
+#print axioms genericPointWedgeRightLeg_overlap_connectorSquare
+#print axioms genericPointWedgeRightBase_rightProjection_eq_one
+#print axioms genericPointWedgeOuterRightComparison_eq_inr_normalForms
+#print axioms genericPointWedgeOuterRightComparison_eq_one
+#print axioms genericPointWedgeOuterLeftComparison_eq_inl_normalForms
+#print axioms genericPointWedgeRightBase_exists_inl
+#print axioms genericPointWedgeLegCoordinatesEquiv
+#print axioms genericPointWedgeLegCoordinates_vanKampen
 
 end ConstructionTargets.PointWedgeVanKampen
