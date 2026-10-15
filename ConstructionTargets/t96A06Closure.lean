@@ -1277,6 +1277,43 @@ theorem polynomialSphereRegularFiberEquiv_deckCoordinates :
       flipFirstPairSphere (flipSecondPairSphere polynomialSphereRegularPoint) := by
   simp [polynomialSphereRegularFiberPoint]
 
+/-- Each indexed point of the regular fiber is reached from the base point by
+an explicit orientation-preserving deck transformation. -/
+theorem polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck
+    (i : Fin 4) :
+    i = 0 ∨
+      ∃ d : C(Sphere 3, Sphere 3),
+        d polynomialSphereRegularPoint =
+          (polynomialSphereRegularFiberEquiv i).1 ∧
+        polynomialSphereLift.comp d = polynomialSphereLift ∧
+        HomologicalComplex.homologyMap
+            (CoefficientH0.singularPostcomposition ℚ d) 3 = 𝟙 _ := by
+  fin_cases i
+  · exact Or.inl rfl
+  · right
+    refine ⟨flipFirstPairSphere, ?_,
+      polynomialSphereLift_flipFirstPairSphere,
+      flipFirstPairSphere_rational_H3⟩
+    · simp [polynomialSphereRegularFiberPoint]
+  · right
+    refine ⟨flipSecondPairSphere, ?_,
+      polynomialSphereLift_flipSecondPairSphere,
+      flipSecondPairSphere_rational_H3⟩
+    · simp [polynomialSphereRegularFiberPoint]
+  · right
+    refine ⟨flipFirstPairSphere.comp flipSecondPairSphere, ?_, ?_,
+      flipBothPairsSphere_rational_H3⟩
+    · simp [polynomialSphereRegularFiberPoint]
+    · calc
+        polynomialSphereLift.comp
+            (flipFirstPairSphere.comp flipSecondPairSphere) =
+            (polynomialSphereLift.comp flipFirstPairSphere).comp
+              flipSecondPairSphere := rfl
+        _ = polynomialSphereLift.comp flipSecondPairSphere := by
+          rw [polynomialSphereLift_flipFirstPairSphere]
+        _ = polynomialSphereLift :=
+          polynomialSphereLift_flipSecondPairSphere
+
 /-- Every pair-sign-regular fiber of the normalized quadratic sphere map has
 exactly four points. -/
 theorem t96A06_polynomialSphereLift_regular_fiber_ncard
@@ -2050,6 +2087,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_polynomialSphereLift_regular_fiber_ncard
 #print axioms polynomialSphereRegularPoint_fiber_ncard
 #print axioms polynomialSphereRegularFiberEquiv_deckCoordinates
+#print axioms polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck
 #print axioms t96A06_polynomialSphereLift_localSignTransport
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
