@@ -2066,6 +2066,40 @@ theorem t96A06_mappedIntegralLocalGenerator_mapsTo_ambient :
       (k := 1) polynomialSphereRegularPoint := by
   simp [t96A06_mappedIntegralLocalGenerator]
 
+/-- Extend the positive integral local class to native rational relative
+homology. -/
+noncomputable def t96A06_mappedRationalLocalExtension :=
+  ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+    (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+      polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+        t96A06_forgetRatModules).hom.hom
+    (HomologicalComplex.homologyMap
+      (t96A06_integralToRational_relativeChains
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)) 3
+      t96A06_mappedIntegralLocalGenerator))
+
+/-- Exact local-generator transport is equivalent to normalization coordinate
+one in the rational chart-local isomorphism. -/
+theorem t96A06_integralToRational_localGenerator_iff :
+    t96A06_mappedRationalLocalExtension =
+        ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint ↔
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension = 1 := by
+  constructor
+  · intro h
+    rw [h]
+    exact ConstructionTargets.CoefficientChartLocal.generator_normalization
+      ℚ 1 polynomialSphereRegularPoint
+  · intro h
+    apply (ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
+    exact h
+
 /-- The same extended class returned to the native rational singular-homology
 object.  The next normalization lemma identifies it with the selected
 sphere-shift generator. -/
@@ -3379,6 +3413,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
+#print axioms t96A06_mappedRationalLocalExtension
+#print axioms t96A06_integralToRational_localGenerator_iff
 #print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
