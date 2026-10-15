@@ -2645,6 +2645,20 @@ theorem torusRP2_subdivisionRunOffsetEquiv_symm_last
   · exact hrun
   · omega
 
+/-- The dependent local coordinate of the final flat factor is exactly the
+last local factor of its run. -/
+theorem torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    let z := (torusRP2_subdivisionRunOffsetEquiv S).symm (Fin.last S.n)
+    z.2 = Fin.cast (pathTwoOpenSubdivisionRunPredLength_add_one S z.1)
+      (Fin.last (pathTwoOpenSubdivisionRunPredLength S z.1)) := by
+  dsimp only
+  apply Fin.ext
+  exact (torusRP2_subdivisionRunOffsetEquiv_symm_last S).2
+
 /-- Every successor step in flattened order is either the next local offset
 of the same run, or the last-to-zero transition into the next run.  This is
 the complete induction step for comparing the nested and flat folds. -/
@@ -3140,6 +3154,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_zero_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last
+#print axioms torusRP2_subdivisionRunOffsetEquiv_symm_last_offset_eq
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_succ_cases
 #print axioms torusRP2_subdivisionRunOffsetEquiv_run_endpoint_coordinates
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_run_eq_iff_mem_interval
