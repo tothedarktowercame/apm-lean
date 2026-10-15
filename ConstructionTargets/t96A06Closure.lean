@@ -1603,7 +1603,7 @@ theorem polynomialSphereLift_localClasses_positive_of_pairFlipTransport
 
 /-- The remaining geometric inputs can be stated as one global decomposition,
 one positive base computation, and three deck-naturality equations. -/
-theorem polynomialSphereLift_localizationData_of_base_and_deckTransport
+noncomputable def polynomialSphereLift_localizationData_of_base_and_deckTransport
     (localContribution : Fin 4 →
       CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3)))
     (image_eq_sum :
@@ -1632,6 +1632,47 @@ theorem polynomialSphereLift_localizationData_of_base_and_deckTransport
       localPositive :=
         polynomialSphereLift_localClasses_positive_of_pairFlipTransport
           localContribution h0 h1 h2 h3 }
+
+/-- Exact geometric boundary still required from local degree theory. -/
+structure PolynomialSphereLiftLocalClassDecompositionAndBaseData where
+  localContribution : Fin 4 →
+    CoefficientH0.SingularHomology ℚ 3 (TopCat.of (Sphere 3))
+  image_eq_sum :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3
+        t96A06_sphere3_rational_fundamentalClass =
+      ∑ i, localContribution i
+  basePositive :
+    localContribution 0 = t96A06_sphere3_rational_fundamentalClass
+  firstNatural :
+    localContribution 1 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipFirstPairSphere) 3
+        (localContribution 0)
+  secondNatural :
+    localContribution 2 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ flipSecondPairSphere) 3
+        (localContribution 0)
+  bothNatural :
+    localContribution 3 =
+      HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ
+          (flipFirstPairSphere.comp flipSecondPairSphere)) 3
+        (localContribution 0)
+
+/-- The exact remaining geometric boundary implies degree four on rational
+top homology, with all bookkeeping discharged. -/
+theorem polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ polynomialSphereLift) 3 =
+      (4 : ℚ) • 𝟙 _ := by
+  exact polynomialSphereLift_degree_four_of_regularValueFormula
+    (polynomialSphereLift_regularValueFormula_of_localizationData
+      (polynomialSphereLift_localizationData_of_base_and_deckTransport
+        h.localContribution h.image_eq_sum h.basePositive h.firstNatural
+          h.secondNatural h.bothNatural))
 
 /-- The antipodal deck transformation acts trivially on rational top
 homology of the concrete three-sphere.  This is the odd-dimensional sign in
@@ -2132,6 +2173,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_pairFlips_fix_sphere3_fundamentalClass
 #print axioms polynomialSphereLift_localClasses_positive_of_pairFlipTransport
 #print axioms polynomialSphereLift_localizationData_of_base_and_deckTransport
+#print axioms polynomialSphereLift_degree_four_of_localClassDecompositionAndBase
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
