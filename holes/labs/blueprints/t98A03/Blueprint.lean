@@ -3316,7 +3316,33 @@ lemma apm_t98a03_irrQ_fiber_card
       apm_t98a03_sphereProj y = apm_t98a03_sphereProj x ↔ y = x ∨ y = -x)
     (hne : ∀ x : apm_t98a03_t92_S2, x ≠ -x) (r : apm_t98a03_RP2) :
     Nat.card {b // apm_t98a03_irrQ b = r} = 3 := by
-  sorry
+  let s := apm_t98a03_unitRep r
+  let f : Fin 3 → {b // apm_t98a03_irrQ b = r} := fun k =>
+    match k with
+    | ⟨0, _⟩ => ⟨Sum.inr r, rfl⟩
+    | ⟨1, _⟩ => ⟨Sum.inl s, apm_t98a03_sphereProj_unitRep r⟩
+    | ⟨2, _⟩ => ⟨Sum.inl (-s), by
+        exact (apm_t98a03_sphereProj_neg s).trans
+          (apm_t98a03_sphereProj_unitRep r)⟩
+  have hf_inj : Function.Injective f := by
+    intro i j hij
+    fin_cases i <;> fin_cases j <;> simp [f] at hij ⊢
+    · exact (hne s hij).elim
+    · exact (hne s hij.symm).elim
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨b, hb⟩
+    rcases b with x | q
+    · have hx : x = s ∨ x = -s := by
+        exact (hproj s x).mp
+          (hb.trans (apm_t98a03_sphereProj_unitRep r).symm)
+      rcases hx with rfl | rfl
+      · exact ⟨1, by simp [f]⟩
+      · exact ⟨2, by simp [f]⟩
+    · have hq : q = r := hb
+      subst q
+      exact ⟨0, by simp [f]⟩
+  rw [← Nat.card_congr (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩)]
+  simp
 
 abbrev apm_t98a03_IrrE (t₀ : apm_t98a03_Torus) (r₀ : apm_t98a03_RP2) :=
   apm_t98a03_Glue (apm_t98a03_sheetPt t₀) (apm_t98a03_irrTau r₀)
