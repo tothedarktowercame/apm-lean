@@ -2432,6 +2432,43 @@ theorem torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
   exact (congrFun (Path.cast_coe _ _ _) t).trans
     (torusRP2_subdivisionRunPrefixBlockPiece_apply_runOffsetEquiv_symm S j t)
 
+/-- The prefix-block factors, flattened and rebased over the original
+subdivision endpoint family. -/
+noncomputable def torusRP2_subdivisionRunPrefixBlockPieceFlat
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) : Path (S.point j.castSucc) (S.point j.succ) :=
+  let z := (torusRP2_subdivisionRunOffsetEquiv S).symm j
+  let k := Fin.cast
+    (pathTwoOpenSubdivisionRunPredLength_add_one S z.1).symm z.2
+  let h :=
+    torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm S j
+  (pathTwoOpenSubdivisionRunPrefixBlockPiece S z.1 k).cast h.1.symm h.2.symm
+
+theorem torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer)
+    (j : Fin (S.n + 1)) :
+    torusRP2_subdivisionRunPrefixBlockPieceFlat S j = S.piece j :=
+  torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm S j
+
+/-- The flat concatenation of transported prefix-block factors is literally
+the original subordinate-subdivision concatenation. -/
+theorem torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    Path.concat S.point (torusRP2_subdivisionRunPrefixBlockPieceFlat S) =
+      Path.concat S.point S.piece := by
+  congr 1
+  funext j
+  exact torusRP2_subdivisionRunPrefixBlockPieceFlat_eq_piece S j
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -2546,6 +2583,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_endpoints_runOffsetEquiv_symm
 #print axioms torusRP2_subdivisionRunPrefixBlockPiece_cast_runOffsetEquiv_symm
+#print axioms torusRP2_subdivisionRunPrefixBlockPieceFlat_concat_eq
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
