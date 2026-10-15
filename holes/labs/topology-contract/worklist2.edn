@@ -88331,30 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Fold global prefix blocks; derive surjectivity/reverse kernel; assemble.",
+    "Concatenate global prefix blocks; reassemble subdivision; prove van Kampen; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2_subdivisionOuterRunBoundaryFamily_eq_prefixBlockEndpoints",
-      :type "global run boundaries equal prefix-block endpoints",
+    [{:name "torusRP2_subdivisionRunGlobalPrefixBlockPath_class",
+      :type "rebased run factors equal global prefix block",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunPrefixBlockPoint_zero"
-       "torusRP2_subdivisionRunPrefixBlockPoint_last"],
+      ["torusRP2_subdivisionOuterRunBoundaryFamily_eq_prefixBlockEndpoints"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
-      :type "surjective; reverse kernel inclusion",
+      :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionOuterRunBoundaryFamily_eq_prefixBlockEndpoints"
-       "torusRP2Relator_normalClosure_le_kernel"],
+      ["torusRP2_subdivisionRunGlobalPrefixBlockPath_class"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88366,36 +88363,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked global prefix-block endpoints.",
+    :reason "Banked globally rebased prefix blocks.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 55fd500b0", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792062758294-13928-b619027d",
-     :commands
-     ["git show/diff/check 55fd500b0"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg placeholder recount"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 55fd500b0 adds compiled, sorry-free progress beyond f10813fc0: it identifies each prefix block source with global boundary castSucc and target with global boundary succ. Only t97A01Closure.lean changed; fixture SHA 40549a0491d3decd9b1cc1046d07e9f12077209530306b83a33a7501d5974144 matches. Exact snapshot builds; Main compiles; target/dependency/fixture placeholders are 0/0/1; registry 166/0; axioms standard. Endpoint orientations and the run-block-to-prefix-block representation transport are correct. Run-block induction, surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "55fd500b0",
+     {:cmd "git show --check 2d80a6696", :exit 0}],
+    :diagnostic-history
+    [{:cmd "global-block drafts",
+      :exit 1,
+      :correction "used quotient cast"}],
+    :commit "2d80a6696",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "40549a0491d3decd9b1cc1046d07e9f12077209530306b83a33a7501d5974144"},
+     "84967db573f6aece49f423cf96e7cb35b546bc1c0047a6cb138f8ff752ab904c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94207,7 +94195,8 @@
     :lemma-torusrp2-subdivisionrunprefixblock-trans
     :lemma-torusrp2-subdivisionrunprefixblockpoint-last
     :lemma-torusrp2-subdivisionrunprefixblockpoint-zero
-    :lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints],
+    :lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints
+    :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94887,4 +94876,22 @@
    :depends-on
    [:lemma-torusrp2-subdivisionrunprefixblockpoint-zero
     :lemma-torusrp2-subdivisionrunprefixblockpoint-last],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunGlobalPrefixBlockPath_class",
+    :type "rebased run factors equal global prefix block"},
+   :lemma
+   {:name "torusRP2_subdivisionRunGlobalPrefixBlockPath_class",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "rebased run factors equal global prefix block",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2-subdivisionrunglobalprefixblockpath-class,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionouterrunboundaryfamily-eq-prefixblockendpoints],
    :other-consumers []}]}
