@@ -2211,6 +2211,96 @@ theorem t96A06_normalizedClass_projection_preservation_naturality :
     (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
       polynomialSphereRegularPoint) 3
 
+/-- Applying the forward relative preservation isomorphism cancels the
+inverse in the specialized projection square. -/
+theorem t96A06_normalizedClass_projection_preservation_cancel
+    (z : ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
+        (ModuleCat.of ℤ ℤ) |>.obj (TopCat.of (Sphere 3)))) :
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      (((((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+            (ComplexShape.down ℕ)).map
+              (cokernel.π
+                (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+                  (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                    polynomialSphereRegularPoint)))) 3).hom z) =
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3)).hom z := by
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_normalizedClass_projection_preservation_naturality z
+  have hc := CategoryTheory.ConcreteCategory.congr_hom
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv_hom_id)
+    ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3)).hom z)
+  simp only [CategoryTheory.ConcreteCategory.comp_apply,
+    CategoryTheory.ConcreteCategory.id_apply] at hc
+  exact (congrArg
+    (fun w => (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom w)
+    h.symm).trans hc
+
+/-- The transported normalized global class localizes to the transported
+positive integral local generator. -/
+theorem t96A06_mappedIntegralNormalizedClass_localizes :
+    HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3
+          t96A06_mappedIntegralNormalizedClass =
+      t96A06_mappedIntegralLocalGenerator := by
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom).1
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom).1
+  rw [t96A06_mappedIntegralLocalGenerator_mapsTo_ambient]
+  rw [t96A06_mappedIntegralNormalizedClass_eq_comparisonInv]
+  let z :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv.hom
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint)
+  have hc := t96A06_normalizedClass_projection_preservation_cancel z
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3)
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv.hom
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint))
+  exact (congrArg
+    (fun w => (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom.hom w) hc).trans
+    (h.trans t96A06_absoluteComparison_localization_normalizedClass)
+
 /-- Extend the positive integral local class to native rational relative
 homology. -/
 noncomputable def t96A06_mappedRationalLocalExtension :=
@@ -3603,6 +3693,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
+#print axioms t96A06_normalizedClass_projection_preservation_cancel
+#print axioms t96A06_mappedIntegralNormalizedClass_localizes
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_integralToRational_localGenerator_iff
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
