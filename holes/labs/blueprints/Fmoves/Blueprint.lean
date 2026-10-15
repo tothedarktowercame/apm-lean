@@ -8911,6 +8911,44 @@ lemma cut_transfer_consistency_aux_chordB_end {L p q : ℕ}
   rw [h] at hh
   exact (lt_irrefl 1 hh)
 
+/-- Shared vertex: the point is the start of side `e₀` (`s₀ = 0`) written as the end of side `e` (`τ = 1`), `e₀ = (e+1) % L`. -/
+theorem cut_transfer_consistency_A_arc_aux_next {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hτ : τ.1 = 1) (hs₀ : s₀.1 = 0) (hadj : e₀ = (e + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Shared vertex: the point is the end of side `e₀` (`s₀ = 1`) written as the start of side `e` (`τ = 0`), `e = (e₀+1) % L`. -/
+theorem cut_transfer_consistency_A_arc_aux_prev {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hs₀ : s₀.1 = 1) (hτ : τ.1 = 0) (hadj : e = (e₀ + 1) % (u ++ [x] ++ v ++ [x] ++ t).length) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
 /-- Piece `A`, side position `(e₀, s₀)` with `p ≤ e₀ < q`. -/
 theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
@@ -8927,7 +8965,36 @@ theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hL : 2 ≤ L := by
+    dsimp [L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have he₀L : e₀ < L := by
+    dsimp [L, q] at he₀q ⊢
+    simp at he₀q ⊢
+    omega
+  have hedges : edgePoint L e τ = edgePoint L e₀ s₀ := by
+    apply Subtype.ext
+    exact hP.trans (D.oldA_arc e₀ s₀ he₀ he₀q)
+  rcases heq hL (by change e < L at he; exact he) he₀L hedges with hs | hf | hb
+  · rcases hs with ⟨rfl, rfl⟩
+    refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hN]
+    by_cases hp : e = p
+    · subst e
+      rw [D.newA_x]
+      simp [cutTransfer, p, q, L]
+    · have hp' : p < e := by omega
+      have hq' : e ≠ q := by omega
+      rw [D.newA_v e τ (by omega) he₀q]
+      simp [cutTransfer, hp, hq', p, q, L, hp', he₀q]
+  · rcases hf with ⟨hτ, hs₀, hadj⟩
+    exact cut_transfer_consistency_A_arc_aux_next u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ he₀q hP hN hτ hs₀ hadj
+  · rcases hb with ⟨hs₀, hτ, hadj⟩
+    exact cut_transfer_consistency_A_arc_aux_prev u v t x oldA oldB newA newB D heq e he τ N e₀ s₀ he₀ he₀q hP hN hs₀ hτ hadj
 
 /-- Piece `A`, chord position `s₀` (a unit point only at the ends `Q`, `P`). -/
 theorem cut_transfer_consistency_A_chord {Label : Type*} [DecidableEq Label]
