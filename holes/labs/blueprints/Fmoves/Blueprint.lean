@@ -9363,7 +9363,38 @@ theorem cutBoundary_old_fields {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
 /-- New side `p` (the old first `x`): the seam. -/
 theorem cutBoundary_newA_x {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     ∀ s : Icc (0 : ℝ) 1, cutNewA L p q (cutEdgeCircle L p s) = cutSeam L p q s := by
-  sorry
+  have hL : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
+  have hpi : (0 : ℝ) < Real.pi := Real.pi_pos
+  intro s
+  let φ : ℝ := cutAlpha L p + s * (2 * Real.pi / L)
+  have hφlo : cutAlpha L p ≤ φ := by
+    dsimp [φ]
+    exact le_add_of_nonneg_right
+      (mul_nonneg s.2.1 (div_nonneg (by positivity) hL.le))
+  have hφhi : φ < cutAlpha L p + 2 * Real.pi := by
+    have hs : (s : ℝ) ≤ 1 := s.2.2
+    dsimp [φ]
+    have hd : 2 * Real.pi / (L : ℝ) < 2 * Real.pi := by
+      apply (div_lt_iff₀ hL).2
+      have hLn : (1 : ℝ) < L := by exact_mod_cast (by omega : 1 < L)
+      nlinarith
+    have hdpos : 0 < 2 * Real.pi / (L : ℝ) := div_pos (by positivity) hL
+    nlinarith [s.2.1]
+  have hφp1 : φ ≤ cutAlpha L (p + 1) := by
+    have hs : (s : ℝ) ≤ 1 := s.2.2
+    dsimp [φ]
+    unfold cutAlpha
+    push_cast
+    field_simp [ne_of_gt hL]
+    nlinarith [hpi]
+  rw [cutNewA, cutBoundaryData_concrete_aux_edge_circle]
+  rw [cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφhi⟩]
+  simp only [cutProfileNewA, if_pos hφp1]
+  congr 1
+  dsimp [φ]
+  unfold cutAlpha
+  field_simp
+  ring
 
 /-- `v` sides: the reflection. -/
 theorem cutBoundary_newA_v {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
