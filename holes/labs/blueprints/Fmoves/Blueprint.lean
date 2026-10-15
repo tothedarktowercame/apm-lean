@@ -5516,6 +5516,40 @@ theorem cutPoint_ne {L m m' : ℕ} (h : m < m') (h' : m' < m + L) :
   have hk_le_real : (k : ℝ) ≤ -1 := by exact_mod_cast hk_le
   nlinarith
 
+/-- Vertex normal forms (claude-14): side `e` starts at vertex `e` and ends at vertex `e + 1`;
+vertex indices are taken mod `L`. -/
+theorem edgePoint_zero_eq_cutPoint (L e : ℕ) :
+    (edgePoint L e ⟨0, by simp⟩ : ℂ) = cutPoint L e := by
+  simp only [edgePoint, cutPoint, cutAlpha]
+  congr 1
+  push_cast
+  ring
+
+theorem edgePoint_one_eq_cutPoint (L e : ℕ) :
+    (edgePoint L e ⟨1, by simp⟩ : ℂ) = cutPoint L (e + 1) := by
+  simp only [edgePoint, cutPoint, cutAlpha]
+  congr 1
+  push_cast
+  ring
+
+theorem cutPoint_add_length {L : ℕ} (hL : 0 < L) (m : ℕ) :
+    cutPoint L (m + L) = cutPoint L m := by
+  simp only [cutPoint, cutAlpha]
+  have hLc : (L : ℂ) ≠ 0 := by exact_mod_cast hL.ne'
+  have h : ((2 * Real.pi * ((m + L : ℕ) : ℝ) / L : ℝ) : ℂ) * Complex.I =
+      ((2 * Real.pi * (m : ℝ) / L : ℝ) : ℂ) * Complex.I + 2 * Real.pi * Complex.I := by
+    push_cast
+    field_simp
+  rw [h, Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+
+theorem cutPoint_mod {L : ℕ} (hL : 0 < L) (m : ℕ) :
+    cutPoint L (m % L) = cutPoint L m := by
+  conv_rhs => rw [← Nat.mod_add_div m L]
+  induction m / L with
+  | zero => simp
+  | succ k ih =>
+    rw [Nat.mul_succ, ← Nat.add_assoc, cutPoint_add_length hL, ih]
+
 /-- `cutCross w z = Im (conj w · z)`, positive when `z` is to the left of `w`. -/
 def cutCross (w z : ℂ) : ℝ := (starRingEnd ℂ w * z).im
 
