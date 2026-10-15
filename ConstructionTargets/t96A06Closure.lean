@@ -559,6 +559,104 @@ theorem fderiv_norm_regularImage_eq_zero_of_inner_eq_zero
   · exact (hq hzero).elim
   · simpa [q] using hderiv
 
+/-- On a direction orthogonal to the selected raw image, radial
+normalization differentiates to multiplication by the inverse radius. -/
+theorem radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero
+    (v : EuclideanSpace ℝ (Fin 4))
+    (hv : inner ℝ (polynomialMapAmbient polynomialSphereRegularPoint.1) v = 0) :
+    fderiv ℝ radialNormalizeAmbient
+        (polynomialMapAmbient polynomialSphereRegularPoint.1) v =
+      ‖polynomialMapAmbient polynomialSphereRegularPoint.1‖⁻¹ • v := by
+  let q := polynomialMapAmbient polynomialSphereRegularPoint.1
+  have hq : q ≠ 0 := by
+    apply norm_ne_zero_iff.mp
+    dsimp [q]
+    rw [norm_polynomialMapAmbient_regularPoint]
+    exact div_ne_zero one_ne_zero
+      (Real.sqrt_ne_zero'.mpr (by norm_num))
+  have hn : ‖q‖ ≠ 0 := norm_ne_zero_iff.mpr hq
+  have hnorm : DifferentiableAt ℝ
+      (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖) q :=
+    differentiableAt_id.norm ℝ hq
+  have hinv : DifferentiableAt ℝ
+      (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖⁻¹) q :=
+    hnorm.inv hn
+  have hinv_zero :
+      fderiv ℝ (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖⁻¹) q v = 0 := by
+    change (fderiv ℝ
+      (Inv.inv ∘ fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖) q) v = 0
+    rw [fderiv_comp q (differentiableAt_inv hn) hnorm,
+      ContinuousLinearMap.comp_apply,
+      fderiv_norm_regularImage_eq_zero_of_inner_eq_zero v hv,
+      map_zero]
+  change fderiv ℝ (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖⁻¹ • x) q v = _
+  rw [fderiv_fun_smul hinv differentiableAt_id]
+  simp [q, hinv_zero]
+
+/-- At the selected raw image, radial normalization multiplies each chosen
+tangent-basis vector by `sqrt 2`. -/
+theorem radialNormalizeAmbient_fderiv_regularTangentBasis :
+    (fderiv ℝ radialNormalizeAmbient
+        (polynomialMapAmbient polynomialSphereRegularPoint.1)
+        polynomialRegularTangentOne =
+      Real.sqrt 2 • polynomialRegularTangentOne) ∧
+    (fderiv ℝ radialNormalizeAmbient
+        (polynomialMapAmbient polynomialSphereRegularPoint.1)
+        polynomialRegularTangentTwo =
+      Real.sqrt 2 • polynomialRegularTangentTwo) ∧
+    (fderiv ℝ radialNormalizeAmbient
+        (polynomialMapAmbient polynomialSphereRegularPoint.1)
+        polynomialRegularTangentThree =
+      Real.sqrt 2 • polynomialRegularTangentThree) := by
+  have hs : Real.sqrt (2 : ℝ) ≠ 0 := Real.sqrt_ne_zero'.mpr (by norm_num)
+  rcases polynomialMapAmbient_regularPoint_orthogonal_tangentBasis with
+    ⟨h₁, h₂, h₃⟩
+  constructor
+  · rw [radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero _ h₁,
+      norm_polynomialMapAmbient_regularPoint]
+    field_simp
+  constructor
+  · rw [radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero _ h₂,
+      norm_polynomialMapAmbient_regularPoint]
+    field_simp
+  · rw [radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero _ h₃,
+      norm_polynomialMapAmbient_regularPoint]
+    field_simp
+
+/-- The normalized ambient quadratic map acts by the positive scalar `2` on
+the selected tangent basis. -/
+theorem polynomialNormalizedAmbient_fderiv_regularTangentBasis :
+    (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
+        polynomialSphereRegularPoint.1 polynomialRegularTangentOne =
+      2 • polynomialRegularTangentOne) ∧
+    (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
+        polynomialSphereRegularPoint.1 polynomialRegularTangentTwo =
+      2 • polynomialRegularTangentTwo) ∧
+    (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
+        polynomialSphereRegularPoint.1 polynomialRegularTangentThree =
+      2 • polynomialRegularTangentThree) := by
+  have hp : DifferentiableAt ℝ polynomialMapAmbient
+      polynomialSphereRegularPoint.1 :=
+    polynomialMapAmbient_hasFDerivAt.differentiableAt
+  rw [fderiv_comp polynomialSphereRegularPoint.1
+      radialNormalizeAmbient_differentiableAt_regularImage hp]
+  rcases polynomialMapAmbient_fderiv_regularTangentBasis with
+    ⟨hp₁, hp₂, hp₃⟩
+  rcases radialNormalizeAmbient_fderiv_regularTangentBasis with
+    ⟨hr₁, hr₂, hr₃⟩
+  simp only [ContinuousLinearMap.comp_apply]
+  constructor
+  · rw [hp₁, map_smul, hr₁, smul_smul]
+    congr 1
+    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+  constructor
+  · rw [hp₂, map_smul, hr₂, smul_smul]
+    congr 1
+    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+  · rw [hp₃, map_smul, hr₃, smul_smul]
+    congr 1
+    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
     flipFirstPairSphere p ≠ p := by
@@ -1622,6 +1720,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms radialNormalizeAmbient_differentiableAt_regularImage
 #print axioms polynomialMapAmbient_regularPoint_orthogonal_tangentBasis
 #print axioms fderiv_norm_regularImage_eq_zero_of_inner_eq_zero
+#print axioms radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero
+#print axioms radialNormalizeAmbient_fderiv_regularTangentBasis
+#print axioms polynomialNormalizedAmbient_fderiv_regularTangentBasis
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
