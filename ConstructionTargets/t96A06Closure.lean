@@ -2110,6 +2110,15 @@ theorem polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
     t96A06_identity_trace_three] at htrace
   norm_num at htrace
 
+/-- Exact invariant pair required by the consumer once its local-degree
+packet has been constructed. -/
+theorem polynomialDescent_invariants_of_localClassDecompositionAndBase
+    (h : PolynomialSphereLiftLocalClassDecompositionAndBaseData) :
+    HasLefschetzNumber polynomialDescent (-3) ∧
+      ¬ ContinuousMap.Homotopic polynomialDescent (ContinuousMap.id RP3) :=
+  ⟨polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase h,
+    polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase h⟩
+
 /-- Ledger-facing name for the top-degree transfer/deck-sum milestone. -/
 noncomputable def t96A06_rp3_antipodal_H3 :=
   t96A06_rp3_rational_H3Iso
@@ -2347,6 +2356,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialDescent_trace_three_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_hasLefschetzNumber_of_localClassDecompositionAndBase
 #print axioms polynomialDescent_not_homotopic_id_of_localClassDecompositionAndBase
+#print axioms polynomialDescent_invariants_of_localClassDecompositionAndBase
 #print axioms t96A06_sphere3_antipodal_H3
 #print axioms t96A06_projectedSimplex_lift_eq_or_eq_antipodal
 #print axioms t96A06_projectedSimplex_lifts_exact_pair
