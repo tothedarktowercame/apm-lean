@@ -1148,7 +1148,74 @@ lemma spherePush_spec (p : S2) :
     (∀ t, spherePush p (t, p) = p) ∧
     (∀ t x, x ≠ -p → spherePush p (t, x) ≠ -p) ∧
     (∀ t x, spherePush (-p) (t, -x) = -spherePush p (t, x)) := by
-  sorry
+  have hnorm (x : S2) : ‖(x : E3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using x.property
+  constructor
+  · intro x
+    simp [spherePush, hnorm]
+  constructor
+  · intro x hx
+    have hp0 : (p : E3) ≠ 0 := by
+      intro hp
+      have := hnorm p
+      rw [hp, norm_zero] at this
+      norm_num at this
+    simp [spherePush, hnorm, hp0]
+  constructor
+  · intro t
+    simp [spherePush, ← add_smul, hnorm]
+  constructor
+  · intro t x hx hbad
+    let v : E3 := (1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)
+    by_cases hv : v = 0
+    · have heq : spherePush p (t, x) = x := by simp [spherePush, v, hv]
+      exact hx (by rw [← heq]; exact hbad)
+    · have hout : ‖v‖⁻¹ • v = -(p : E3) := by
+        have := congrArg (fun z : S2 => (z : E3)) hbad
+        simpa [spherePush, v, hv] using this
+      have hvform : v = -‖v‖ • (p : E3) := by
+        have hn : ‖v‖ ≠ 0 := norm_ne_zero_iff.mpr hv
+        calc
+          v = ‖v‖ • (‖v‖⁻¹ • v) := by
+            rw [smul_smul, mul_inv_cancel₀ hn, one_smul]
+          _ = ‖v‖ • (-(p : E3)) := by rw [hout]
+          _ = -(‖v‖ • (p : E3)) := by rw [smul_neg]
+          _ = -‖v‖ • (p : E3) := by rw [neg_smul]
+      have hip : @inner ℝ E3 _ (x : E3) (p : E3) = -1 := by
+        have he := congrArg (fun z : E3 => @inner ℝ E3 _ z ((x : E3) + p)) hvform
+        simp only [v, inner_add_left, inner_add_right, inner_smul_left,
+          inner_self_eq_norm_sq_to_K, hnorm, one_pow, mul_one] at he
+        rw [real_inner_comm (p : E3) x] at he
+        norm_num at he
+        ring_nf at he
+        have hn : 0 ≤ ‖v‖ := norm_nonneg _
+        have hip' : @inner ℝ E3 _ (p : E3) (x : E3) = -1 := by nlinarith
+        simpa [real_inner_comm] using hip'
+      have hxneg : (x : E3) = -(p : E3) :=
+        (inner_eq_neg_one_iff_of_norm_eq_one (hnorm x) (hnorm p)).mp hip
+      apply hx
+      exact Subtype.ext hxneg
+  · intro t x
+    have hv : (1 - (t : ℝ)) • ((-x : S2) : E3) + (t : ℝ) • ((-p : S2) : E3) =
+        -((1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)) := by
+      change (1 - (t : ℝ)) • (-(x : E3)) + (t : ℝ) • (-(p : E3)) = _
+      module
+    by_cases h : (1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3) = 0
+    · have hneg : (1 - (t : ℝ)) • ((-x : S2) : E3) +
+          (t : ℝ) • ((-p : S2) : E3) = 0 := by rw [hv, h, neg_zero]
+      simp only [spherePush, dif_pos h, dif_pos hneg]
+    · have hneg : (1 - (t : ℝ)) • ((-x : S2) : E3) +
+          (t : ℝ) • ((-p : S2) : E3) ≠ 0 := by
+        rw [hv]
+        exact neg_ne_zero.mpr h
+      simp only [spherePush, dif_neg h, dif_neg hneg]
+      apply Subtype.ext
+      change ‖(1 - (t : ℝ)) • ((-x : S2) : E3) + (t : ℝ) • ((-p : S2) : E3)‖⁻¹ •
+          ((1 - (t : ℝ)) • ((-x : S2) : E3) + (t : ℝ) • ((-p : S2) : E3)) =
+        -(‖(1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)‖⁻¹ •
+          ((1 - (t : ℝ)) • (x : E3) + (t : ℝ) • (p : E3)))
+      rw [hv, norm_neg]
+      module
 -- END SEAT AREA
 
 /-! ## 5. Part (a): the chain of spheres -/
