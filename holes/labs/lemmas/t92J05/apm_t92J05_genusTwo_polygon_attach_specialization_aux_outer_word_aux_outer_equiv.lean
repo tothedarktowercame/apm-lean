@@ -2795,7 +2795,38 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
 angle map is a homotopy equivalence (contract the interval), hence injective on π₁. -/
 lemma apm_t92J05_genusTwo_angle_injective : ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       Function.Injective (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x) := by
-  sorry
+  intro x p q hpq
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let C := ConstructionTargets.PolygonSurfacePiOne.openCover P
+  let eann :
+      ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel ∩
+        ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel) ≃ₜ
+        Set.Ioo (0 : ℝ) 1 × Circle :=
+    (Homeomorph.setCongr (by
+      simpa [C] using
+        (inter_comm
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen P.Rel)).trans
+            C.overlap_eq.symm)).trans C.overlap_homeomorph
+  let y := eann x
+  let E :=
+    ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+      eann x
+  apply E.injective
+  apply (apm_t92J05_fundamentalGroup_prod_equiv y.1 y.2).injective
+  apply Prod.ext
+  · letI : ContractibleSpace (Set.Ioo (0 : ℝ) 1) :=
+      (convex_Ioo 0 1).contractibleSpace ⟨1 / 2, by norm_num⟩
+    change Path.Homotopic.projLeft (E p) = Path.Homotopic.projLeft (E q)
+    exact Subsingleton.elim _ _
+  · change Path.Homotopic.projRight (E p) = Path.Homotopic.projRight (E q)
+    have hangle : ∀ z,
+        FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x z =
+          Path.Homotopic.projRight (E z) := by
+      intro z
+      induction z using Path.Homotopic.Quotient.ind with
+      | mk z => rfl
+    rw [← hangle p, ← hangle q, hpq]
 
 /-- **Leaf (b).** The genus-two relator is not of finite order: free groups are torsion free
 and the relator ≠ 1. -/
@@ -2976,9 +3007,51 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
       rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_castRefl]
       rfl
     refine ⟨e, ?_⟩
+    have hrange : (FundamentalGroup.map j x).range = Subgroup.zpowers r := by
+      ext z
+      constructor
+      · rintro ⟨b, rfl⟩
+        obtain ⟨n, hn⟩ := hC y t (FundamentalGroup.map apm_t92J05_genusTwo_overlapAngle x b)
+        have hab : b = a ^ n := by
+          apply hA x
+          rw [map_zpow, ha, hn]
+        rw [hab, map_zpow]
+        exact Subgroup.zpow_mem_zpowers r n
+      · intro hz
+        rw [Subgroup.mem_zpowers_iff] at hz
+        obtain ⟨n, rfl⟩ := hz
+        refine ⟨a ^ n, ?_⟩
+        change FundamentalGroup.map j x (a ^ n) = _
+        rw [map_zpow]
+    have hgr : Subgroup.zpowers g = Subgroup.zpowers r := hg.symm.trans hrange
+    have hr : ¬ IsOfFinOrder r := by
+      intro hfin
+      have hefin : IsOfFinOrder (e r) :=
+        ((Function.Injective.isOfFinOrder_iff (f := e.toMonoidHom) e.injective).mpr hfin)
+      rcases hw with hw | hw
+      · apply hB
+        apply hw.isOfFinOrder
+        simpa [her] using hefin
+      · apply hB
+        apply IsOfFinOrder.of_inv
+        apply hw.isOfFinOrder
+        simpa [her] using hefin
+    rcases hw with hw | hw
+    · apply apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_assembly
+        g r e hr hgr
+      simpa [her] using hw
+    · rcases
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_zpowers_generator
+            hr hgr with hgr' | hgr'
+      · right
+        simpa [hgr', her] using hw
+      · left
+        rw [hgr', map_inv, her]
+        obtain ⟨c, hc⟩ := hw
+        exact ⟨c, by simpa using hc.inv_right⟩
+  · -- second W2 branch (orientation reversed)
     sorry
 -- END SEAT AREA
-  · sorry
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
