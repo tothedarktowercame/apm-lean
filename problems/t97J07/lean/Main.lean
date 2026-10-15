@@ -1,6 +1,7 @@
 import Mathlib
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveSpaceTopology
+import ConstructionTargets.CP2RationalHomology
 
 /-!
 # APM t97J07 — Lefschetz data for a projective linear map
@@ -176,14 +177,200 @@ lemma t97J07IsolatedPoint_not_mem :
   apply a.ne_zero
   simpa [Units.smul_def] using ha2
 
-/-- Why this unblocks `apm_t97j07`: this is the missing classification of
-all fixed points of the projectivized diagonal map.  It asserts that a fixed
-projective class is exactly either a class with zero third coordinate or the
-third coordinate axis, which is the sole unresolved conjunct below. -/
-theorem apm_t97J07_bridge_1 :
+/-! ## Remaining proof boundaries
+
+The elementary coordinate, derivative, determinant, and arithmetic results above
+are reused from the solve loop.  The two declarations below isolate the actual
+projective classification and global homology computation.
+-/
+
+/-- A fixed projective class of diag(1,1,3) lies in exactly one of its two
+projectivized eigenspaces. -/
+theorem t97J07_fixed_set :
     {p : T97J07CP2 | t97J07Map p = p} =
       t97J07FixedLine ∪ {t97J07IsolatedPoint} := by
-  sorry
+  ext p
+  constructor
+  · intro hp
+    change t97J07Map p = p at hp
+    have hp' :
+        Projectivization.mk ℂ (t97J07Linear p.rep)
+            (by
+              intro h
+              apply p.rep_nonzero
+              funext i
+              have hi := congrFun h i
+              by_cases h2 : i = 2
+              · subst i
+                have hi' : (3 : ℂ) * p.rep 2 = 3 * 0 := by
+                  simpa [t97J07Linear] using hi
+                exact mul_left_cancel₀ (by norm_num : (3 : ℂ) ≠ 0) hi'
+              · simpa [t97J07Linear, h2] using hi) =
+          Projectivization.mk ℂ p.rep p.rep_nonzero := by
+      rw [← Projectivization.mk_rep p] at hp
+      simpa only [t97J07Map, Projectivization.map_mk] using hp
+    obtain ⟨a, ha⟩ :=
+      (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).1 hp'
+    by_cases h2 : p.rep 2 = 0
+    · exact Or.inl h2
+    · right
+      have ha2 := congrFun ha 2
+      have ae : a = 3 := by
+        simp only [Pi.smul_apply, smul_eq_mul, t97J07Linear, if_pos] at ha2
+        exact mul_right_cancel₀ h2 ha2
+      have h0 : p.rep 0 = 0 := by
+        have ha0 := congrFun ha 0
+        rw [ae] at ha0
+        norm_num [t97J07Linear, show (0 : Fin 3) ≠ 2 by decide] at ha0
+        apply mul_left_cancel₀ (by norm_num : (2 : ℂ) ≠ 0)
+        linear_combination ha0
+      have h1 : p.rep 1 = 0 := by
+        have ha1 := congrFun ha 1
+        rw [ae] at ha1
+        norm_num [t97J07Linear, show (1 : Fin 3) ≠ 2 by decide] at ha1
+        apply mul_left_cancel₀ (by norm_num : (2 : ℂ) ≠ 0)
+        linear_combination ha1
+      change p = t97J07IsolatedPoint
+      rw [← Projectivization.mk_rep p]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      refine ⟨p.rep 2, ?_⟩
+      funext i
+      fin_cases i <;> simp [Pi.single_apply, h0, h1]
+  · rintro (hp | hp)
+    · change t97J07Map p = p
+      change p.rep 2 = 0 at hp
+      rw [← Projectivization.mk_rep p]
+      simp only [t97J07Map, Projectivization.map_mk]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      refine ⟨1, ?_⟩
+      funext i
+      by_cases hi : i = 2
+      · subst i
+        simp [t97J07Linear, hp]
+      · simp [t97J07Linear, hi]
+    · simp only [Set.mem_singleton_iff] at hp
+      subst p
+      change t97J07Map t97J07IsolatedPoint = t97J07IsolatedPoint
+      simp only [t97J07Map, t97J07IsolatedPoint,
+        Projectivization.map_mk]
+      apply (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).2
+      refine ⟨3, ?_⟩
+      funext i
+      fin_cases i <;> simp [t97J07Linear, Pi.single_apply]
+
+/-- The exact rational singular-homology computation needed below.  Keeping
+the isomorphisms as data (rather than merely recording dimensions) lets the
+trace calculation use Mathlib's finite-dimensional linear-algebra API. -/
+structure T97J07CP2RationalHomologyData where
+  finiteDimensional : ∀ k,
+    FiniteDimensional ℚ
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k)
+  vanishesAbove : ∀ k, 4 < k →
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k)
+  zeroEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0 ≃ₗ[ℚ] ℚ
+  oneSubsingleton :
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1)
+  twoEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2 ≃ₗ[ℚ] ℚ
+  threeSubsingleton :
+    Subsingleton
+      (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3)
+  fourEquiv :
+    ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ
+
+/-- LIBRARY: the cellular/singular comparison for the literal quotient model
+of `CP²`.  This is the one genuinely missing topology foundation: one cell in
+real dimensions `0`, `2`, and `4`, and no other rational homology. -/
+theorem t97J07_cp2RationalHomologyData_exists :
+    Nonempty T97J07CP2RationalHomologyData := by
+  obtain ⟨⟨e0⟩, ⟨e2⟩, ⟨e4⟩, hz⟩ := RP3Homology.cp2_rationalHomology
+  have sub : ∀ k, k ≠ 0 → k ≠ 2 → k ≠ 4 →
+      Subsingleton (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) := by
+    intro k a b c
+    refine ⟨fun x y => ?_⟩
+    have hid : CategoryTheory.CategoryStruct.id (RP3Homology.HQ k RP3Homology.CP2) = 0 :=
+      (hz k a b c).eq_of_src _ _
+    have hx := congrArg (fun g => g.hom x) hid
+    have hy := congrArg (fun g => g.hom y) hid
+    simpa using hx.trans hy.symm
+  let l0 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0 ≃ₗ[ℚ] ℚ :=
+    e0.toLinearEquiv
+  let l2 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2 ≃ₗ[ℚ] ℚ :=
+    e2.toLinearEquiv
+  let l4 : ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4 ≃ₗ[ℚ] ℚ :=
+    e4.toLinearEquiv
+  refine ⟨{ finiteDimensional := ?_
+            vanishesAbove := fun k hk => sub k (by omega) (by omega) (by omega)
+            zeroEquiv := l0
+            oneSubsingleton := sub 1 (by decide) (by decide) (by decide)
+            twoEquiv := l2
+            threeSubsingleton := sub 3 (by decide) (by decide) (by decide)
+            fourEquiv := l4 }⟩
+  intro k
+  by_cases h0 : k = 0
+  · subst h0; exact l0.symm.finiteDimensional
+  by_cases h2 : k = 2
+  · subst h2; exact l2.symm.finiteDimensional
+  by_cases h4 : k = 4
+  · subst h4; exact l4.symm.finiteDimensional
+  haveI := sub k h0 h2 h4
+  infer_instance
+
+/-- Given the degree-by-degree homology computation, the remaining step is
+finite-dimensional linear algebra: the identity induces identity maps, their
+traces are `1, 0, 1, 0, 1`, and the alternating sum through degree four is
+`3`.  The hypothesis makes this seat independent of the topology seat. -/
+theorem t97J07_eulerCharacteristic_of_homologyData
+    (h : T97J07CP2RationalHomologyData) :
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+      T97J07CP2 3 := by
+  unfold ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+  unfold ConstructionTargets.RationalLefschetz.HasLefschetzNumber
+  constructor
+  · exact h.finiteDimensional
+  · refine ⟨4, h.vanishesAbove, ?_⟩
+    letI (k : ℕ) : FiniteDimensional ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 k) :=
+      h.finiteDimensional k
+    have h0 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 0) = 1 := by
+      rw [LinearEquiv.finrank_eq h.zeroEquiv]
+      simp
+    have h1 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 1) :=
+        h.oneSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h2 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 2) = 1 := by
+      rw [LinearEquiv.finrank_eq h.twoEquiv]
+      simp
+    have h3 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) = 0 := by
+      letI : Subsingleton
+          (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 3) :=
+        h.threeSubsingleton
+      exact Module.finrank_eq_zero_of_subsingleton ℚ _
+    have h4 : Module.finrank ℚ
+        (ConstructionTargets.RationalLefschetz.Homology T97J07CP2 4) = 1 := by
+      rw [LinearEquiv.finrank_eq h.fourEquiv]
+      simp
+    simp only [ConstructionTargets.RationalLefschetz.induced,
+      CategoryTheory.Functor.map_id, LinearMap.trace_id]
+    norm_num [Finset.sum_range_succ, h0, h1, h2, h3, h4]
+
+/-- The rational singular-homology Euler characteristic of complex
+projective two-space is 3.  This declaration is only the assembly of the
+topological homology certificate and the independent trace calculation. -/
+theorem t97J07_eulerCharacteristic :
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
+      T97J07CP2 3 := by
+  exact t97J07_cp2RationalHomologyData_exists.elim
+    t97J07_eulerCharacteristic_of_homologyData
 
 theorem apm_t97j07 :
     {p : T97J07CP2 | t97J07Map p = p} =
@@ -207,4 +394,12 @@ theorem apm_t97j07 :
     t97J07LineContribution + t97J07IndexFromDet t97J07PointDet = 3 ∧
     ConstructionTargets.RationalLefschetz.HasEulerCharacteristic
       T97J07CP2 3 := by
-  sorry
+  exact ⟨t97J07_fixed_set, t97J07IsolatedPoint_not_mem,
+    t97J07LineChart_map, t97J07PointChart_map,
+    t97J07LineLocal_fderiv, t97J07PointLocal_fderiv,
+    t97J07LineNormalDet_eq, t97J07PointDet_eq,
+    t97J07LineIndex_eq, t97J07PointIndex_eq,
+    t97J07LineContribution_eq, t97J07TotalContribution_eq,
+    t97J07_eulerCharacteristic⟩
+
+#print axioms apm_t97j07
