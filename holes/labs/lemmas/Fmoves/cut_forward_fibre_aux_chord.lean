@@ -7565,7 +7565,52 @@ theorem cut_forward_fibre_aux_chord {Label : Type*} [DecidableEq Label]
     (y y' : Circle) (N N' : Disk) (h : oldA y = oldB y') (hne : ‖oldA y‖ ≠ 1)
     (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  obtain (⟨e, s, hpe, heq, hy⟩ | ⟨s, hy⟩) := D.coverA y
+  · exfalso
+    apply hne
+    rw [hy, D.oldA_arc e s hpe heq]
+    exact norm_edgePoint L e s
+  obtain (⟨e, s', he, hy'⟩ | ⟨s', hy'⟩) := D.coverB y'
+  · exfalso
+    apply hne
+    rw [h, hy', D.oldB_arc e s' he]
+    exact norm_edgePoint L e s'
+  have hchord : cutChordA L p q s = cutChordB L p q s' := by
+    rw [← D.oldA_chord s, ← D.oldB_chord s', ← hy, ← hy']
+    exact h
+  have hpq : p < q := by dsimp [p, q]; omega
+  have hqL : q < L := by dsimp [q, L]; simp; omega
+  have hPQ : cutPoint L p - cutPoint L q ≠ 0 :=
+    sub_ne_zero.mpr (cutPoint_ne hpq (by omega))
+  have hcoefC : ((s.1 : ℂ) + (s'.1 : ℂ) - 1) = 0 := by
+    have hmul : ((s.1 : ℂ) + (s'.1 : ℂ) - 1) *
+        (cutPoint L p - cutPoint L q) = 0 := by
+      rw [cutChordA, cutChordB] at hchord
+      calc
+        ((s.1 : ℂ) + (s'.1 : ℂ) - 1) *
+            (cutPoint L p - cutPoint L q) =
+            (cutPoint L q + (s.1 : ℂ) * (cutPoint L p - cutPoint L q)) -
+              (cutPoint L p + (s'.1 : ℂ) * (cutPoint L q - cutPoint L p)) := by ring
+        _ = 0 := sub_eq_zero.mpr hchord
+    exact (mul_eq_zero.mp hmul).resolve_right hPQ
+  have hcoef : s.1 + s'.1 - 1 = 0 := by exact_mod_cast hcoefC
+  have hs : s' = reverseParameter s := by
+    apply Subtype.ext
+    simp [reverseParameter]
+    linarith
+  have hNN : N = edgePoint L (p + 1) (reverseParameter s) := by
+    rw [hy, D.newA_chord s] at hN
+    apply Subtype.ext
+    exact hN
+  have hNN' : N' = edgePoint L p (reverseParameter s) := by
+    rw [hy', D.newB_chord s', hs] at hN'
+    apply Subtype.ext
+    exact hN'
+  rw [hNN, hNN']
+  exact cut_forward_fibre_aux_x u v t x (reverseParameter s)
 -- END SEAT AREA
 
 /-- Reverse fibre, off the circle: a common non-unit point of the new pieces is an
