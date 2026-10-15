@@ -590,8 +590,9 @@ theorem radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero
       fderiv_norm_regularImage_eq_zero_of_inner_eq_zero v hv,
       map_zero]
   change fderiv ℝ (fun x : EuclideanSpace ℝ (Fin 4) => ‖x‖⁻¹ • x) q v = _
-  rw [fderiv_fun_smul hinv differentiableAt_id]
-  simp [q, hinv_zero]
+  have hformula := congrArg (fun L => L v)
+    (fderiv_fun_smul hinv differentiableAt_id)
+  simpa [Function.id_def, q, hinv_zero] using hformula
 
 /-- At the selected raw image, radial normalization multiplies each chosen
 tangent-basis vector by `sqrt 2`. -/
@@ -628,34 +629,69 @@ the selected tangent basis. -/
 theorem polynomialNormalizedAmbient_fderiv_regularTangentBasis :
     (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
         polynomialSphereRegularPoint.1 polynomialRegularTangentOne =
-      2 • polynomialRegularTangentOne) ∧
+      (2 : ℝ) • polynomialRegularTangentOne) ∧
     (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
         polynomialSphereRegularPoint.1 polynomialRegularTangentTwo =
-      2 • polynomialRegularTangentTwo) ∧
+      (2 : ℝ) • polynomialRegularTangentTwo) ∧
     (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
         polynomialSphereRegularPoint.1 polynomialRegularTangentThree =
-      2 • polynomialRegularTangentThree) := by
+      (2 : ℝ) • polynomialRegularTangentThree) := by
   have hp : DifferentiableAt ℝ polynomialMapAmbient
       polynomialSphereRegularPoint.1 :=
-    polynomialMapAmbient_hasFDerivAt.differentiableAt
+    (polynomialMapAmbient_hasFDerivAt _).differentiableAt
   rw [fderiv_comp polynomialSphereRegularPoint.1
       radialNormalizeAmbient_differentiableAt_regularImage hp]
   rcases polynomialMapAmbient_fderiv_regularTangentBasis with
     ⟨hp₁, hp₂, hp₃⟩
   rcases radialNormalizeAmbient_fderiv_regularTangentBasis with
     ⟨hr₁, hr₂, hr₃⟩
+  have hsq : Real.sqrt (2 : ℝ) * Real.sqrt 2 = 2 :=
+    by simpa [pow_two] using Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)
   simp only [ContinuousLinearMap.comp_apply]
   constructor
   · rw [hp₁, map_smul, hr₁, smul_smul]
-    congr 1
-    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+    rw [hsq]
   constructor
   · rw [hp₂, map_smul, hr₂, smul_smul]
-    congr 1
-    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+    rw [hsq]
   · rw [hp₃, map_smul, hr₃, smul_smul]
-    congr 1
-    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)]
+    rw [hsq]
+
+/-- Coordinate matrix of the normalized lift derivative in the three chosen
+tangent directions. -/
+def polynomialSphereLiftRegularPointTangentMatrix : Matrix (Fin 3) (Fin 3) ℝ :=
+  Matrix.diagonal fun _ => 2
+
+/-- The selected tangent derivative is orientation preserving: its coordinate
+matrix is `2I`, hence has determinant eight. -/
+theorem polynomialSphereLift_regularPoint_tangentMatrix_det :
+    Matrix.det polynomialSphereLiftRegularPointTangentMatrix = 8 ∧
+      0 < Matrix.det polynomialSphereLiftRegularPointTangentMatrix := by
+  have hdet : Matrix.det polynomialSphereLiftRegularPointTangentMatrix = 8 := by
+    simp [polynomialSphereLiftRegularPointTangentMatrix, Matrix.det_diagonal,
+      Finset.prod_const]
+    norm_num
+  exact ⟨hdet, by rw [hdet]; norm_num⟩
+
+/-- The bounded derivative package used by the local-sign calculation. -/
+structure PolynomialSphereLiftRegularPointTangentDerivativeData : Prop where
+  actsByTwo :
+    (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
+        polynomialSphereRegularPoint.1 polynomialRegularTangentOne =
+      (2 : ℝ) • polynomialRegularTangentOne) ∧
+    (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
+        polynomialSphereRegularPoint.1 polynomialRegularTangentTwo =
+      (2 : ℝ) • polynomialRegularTangentTwo) ∧
+    (fderiv ℝ (radialNormalizeAmbient ∘ polynomialMapAmbient)
+        polynomialSphereRegularPoint.1 polynomialRegularTangentThree =
+      (2 : ℝ) • polynomialRegularTangentThree)
+  det_eq : Matrix.det polynomialSphereLiftRegularPointTangentMatrix = 8
+  det_pos : 0 < Matrix.det polynomialSphereLiftRegularPointTangentMatrix
+
+theorem polynomialSphereLift_regularPoint_tangentDerivative :
+    PolynomialSphereLiftRegularPointTangentDerivativeData := by
+  rcases polynomialSphereLift_regularPoint_tangentMatrix_det with ⟨hdet, hpos⟩
+  exact ⟨polynomialNormalizedAmbient_fderiv_regularTangentBasis, hdet, hpos⟩
 
 theorem flipFirstPairSphere_ne_of_pairSignRegular
     {p : Sphere 3} (hp : PairSignRegular p) :
@@ -1723,6 +1759,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms radialNormalizeAmbient_fderiv_regularImage_of_inner_eq_zero
 #print axioms radialNormalizeAmbient_fderiv_regularTangentBasis
 #print axioms polynomialNormalizedAmbient_fderiv_regularTangentBasis
+#print axioms polynomialSphereLift_regularPoint_tangentDerivative
 #print axioms polynomialSphereLift_regularPoint
 #print axioms flipFirstPairSphere_ne_of_pairSignRegular
 #print axioms flipSecondPairSphere_ne_of_pairSignRegular
