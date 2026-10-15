@@ -963,12 +963,93 @@ def cpUV_homology_aux_homeomorph : cpV ≃ₜ cpUV_homology_aux_Affine where
   continuous_invFun := cpUV_homology_aux_inverse_continuous.subtype_mk _
 
 /-- `U ∩ V ≅ ℂ² ∖ 0 ≃ S³`; uses the S³ facts as hypotheses. -/
+def cpUV_homology_aux_puncturedHomeomorph :
+    ↥(cpU ∩ cpV) ≃ₜ {z : cpUV_homology_aux_Affine // z ≠ 0} where
+  toFun x := ⟨cpUV_homology_aux_coordinates x.1, by
+    intro hz
+    have h0 := congrFun hz (⟨0, by decide⟩ : {j : Fin 3 // j ≠ 2})
+    have h1 := congrFun hz (⟨1, by decide⟩ : {j : Fin 3 // j ≠ 2})
+    simp only [cpUV_homology_aux_coordinates, Pi.zero_apply] at h0 h1
+    have hv : x.1.rep 2 ≠ 0 := x.2.2
+    have hr0 : x.1.rep 0 = 0 := (div_eq_zero_iff).mp h0 |>.resolve_right hv
+    have hr1 : x.1.rep 1 = 0 := (div_eq_zero_iff).mp h1 |>.resolve_right hv
+    exact x.2.1.elim (fun h => h hr0) (fun h => h hr1)⟩
+  invFun z := ⟨cpUV_homology_aux_inverse z.1, by
+    constructor
+    · change (cpUV_homology_aux_inverse z.1).rep 0 ≠ 0 ∨
+        (cpUV_homology_aux_inverse z.1).rep 1 ≠ 0
+      by_contra h
+      push_neg at h
+      apply z.2
+      rw [← cpUV_homology_aux_coordinates_inverse z.1]
+      funext j
+      rcases j with ⟨j, hj⟩
+      unfold cpUV_homology_aux_coordinates
+      fin_cases j
+      · simp [h.1]
+      · simp [h.2]
+      · exact (hj rfl).elim
+    · exact cpUV_homology_aux_inverse_mem z.1⟩
+  left_inv x := Subtype.ext (cpUV_homology_aux_inverse_coordinates ⟨x.1, x.2.2⟩)
+  right_inv z := Subtype.ext (cpUV_homology_aux_coordinates_inverse z.1)
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    let g : ↥(cpU ∩ cpV) → cpV := fun x => ⟨x.1, x.2.2⟩
+    have hg : Continuous g := continuous_subtype_val.subtype_mk _
+    exact cpUV_homology_aux_coordinates_continuous.comp hg
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+    exact cpUV_homology_aux_inverse_continuous.comp continuous_subtype_val
+
+def cpUV_homology_aux_linearEquiv :
+    cpUV_homology_aux_Affine ≃L[ℝ] EuclideanSpace ℝ (Fin 4) := by
+  have hdim : Module.finrank ℝ cpUV_homology_aux_Affine = 4 := by
+    rw [Module.finrank_pi_fintype]
+    norm_num
+  exact ContinuousLinearEquiv.ofFinrankEq (by simpa using hdim)
+
+def cpUV_homology_aux_puncturedLinearHomeomorph :
+    {z : cpUV_homology_aux_Affine // z ≠ 0} ≃ₜ
+      ConstructionTargets.CoefficientModelLocal.puncture 4 where
+  toFun z := ⟨cpUV_homology_aux_linearEquiv z.1, by
+    intro h
+    apply z.2
+    apply cpUV_homology_aux_linearEquiv.injective
+    simpa using h⟩
+  invFun z := ⟨cpUV_homology_aux_linearEquiv.symm z.1, by
+    intro h
+    apply z.2
+    apply cpUV_homology_aux_linearEquiv.symm.injective
+    simpa using h⟩
+  left_inv z := Subtype.ext (cpUV_homology_aux_linearEquiv.symm_apply_apply z.1)
+  right_inv z := Subtype.ext (cpUV_homology_aux_linearEquiv.apply_symm_apply z.1)
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def cpUV_homology_aux_equivSphere :
+    ContinuousMap.HomotopyEquiv ↥(cpU ∩ cpV) S3 :=
+  cpUV_homology_aux_puncturedHomeomorph.toHomotopyEquiv |>.trans
+    (cpUV_homology_aux_puncturedLinearHomeomorph.toHomotopyEquiv |>.trans
+    (PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+        (ConstructionTargets.CoefficientModelLocal.E 4)).symm
+    )
+
 theorem cpUV_homology (hS0 : ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k S3))
     (hS3 : Nonempty (HQ 3 S3 ≅ ModuleCat.of ℚ ℚ)) :
     Nonempty (HQ 0 ↥(cpU ∩ cpV) ≅ ModuleCat.of ℚ ℚ) ∧
     Nonempty (HQ 3 ↥(cpU ∩ cpV) ≅ ModuleCat.of ℚ ℚ) ∧
     ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k ↥(cpU ∩ cpV)) := by
-  sorry
+  let e (k : ℕ) :=
+    ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℚ cpUV_homology_aux_equivSphere k
+  have hzero : Nonempty (HQ 0 S3 ≅ ModuleCat.of ℚ ℚ) := by
+    exact ⟨ConstructionTargets.CoefficientH0.h0Iso ℚ
+      (⟨EuclideanSpace.single 0 1, by
+        simp [S3, T02A06.euclideanUnitSphere]⟩ : S3)⟩
+  refine ⟨hzero.map (fun i => e 0 ≪≫ i), ?_, ?_⟩
+  · exact hS3.map (fun i => e 3 ≪≫ i)
+  · intro k hk0 hk3
+    exact (hS0 k hk0 hk3).of_iso (e k)
 
 theorem cp_mvI_zero_injective_aux_h0_map
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
