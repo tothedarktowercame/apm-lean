@@ -9137,6 +9137,11 @@ theorem cut_word_side {Label : Type*} [DecidableEq Label]
 
 /-- The non-`x` case of `cut_transfer_generator`, from the side facts. -/
 -- BEGIN SEAT AREA
+lemma cut_transfer_generator_aux_sides_aux_reverseParameter_involutive
+    (s : Icc (0 : ℝ) 1) : reverseParameter (reverseParameter s) = s := by
+  apply Subtype.ext
+  simp [reverseParameter]
+
 theorem cut_transfer_generator_aux_sides {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hside : ∀ e : Fin (u ++ [x] ++ v ++ [x] ++ t).length, (e : ℕ) ≠ u.length →
@@ -9166,7 +9171,72 @@ theorem cut_transfer_generator_aux_sides {Label : Type*} [DecidableEq Label]
         else (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 = ((u ++ [x] ++ v ++ [x] ++ t).get j).2 then τ
           else reverseParameter τ)) : ℂ)) :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) T T' := by
-  sorry
+  obtain ⟨hib, hwi⟩ := hside i hi.1 hi.2
+  obtain ⟨hjb, hwj⟩ := hside j hj.1 hj.2
+  let i' : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨cutSideMap u.length (u.length + 1 + v.length) i, hib⟩
+  let j' : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨cutSideMap u.length (u.length + 1 + v.length) j, hjb⟩
+  have hij' : i' ≠ j' := by
+    intro h
+    apply hij
+    apply Fin.ext
+    apply hinj i j hi.1 hi.2 hj.1 hj.2
+    exact congrArg Fin.val h
+  apply Relation.EqvGen.rel
+  refine ⟨i', j', hij',
+    (if u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length
+      then reverseParameter τ else τ), ?_, ?_, ?_⟩
+  · change ((u ++ [x, x] ++ inverseWord v ++ t).get i').1 =
+      ((u ++ [x, x] ++ inverseWord v ++ t).get j').1
+    simp only [i', j']
+    rw [hwi, hwj]
+    have hlab' : (u ++ [x] ++ v ++ [x] ++ t)[(i : ℕ)].1 =
+        (u ++ [x] ++ v ++ [x] ++ t)[(j : ℕ)].1 := by
+      simpa only [List.get_eq_getElem] using hlab
+    have hlab'' : (u ++ x :: (v ++ x :: t))[(i : ℕ)].1 =
+        (u ++ x :: (v ++ x :: t))[(j : ℕ)].1 := by
+      simpa only [List.append_assoc, List.singleton_append] using hlab'
+    by_cases hiV : u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length <;>
+      by_cases hjV : u.length < (j : ℕ) ∧ (j : ℕ) < u.length + 1 + v.length <;>
+      simp [hiV, hjV, inv] <;> exact hlab''
+  · apply Subtype.ext
+    change (T : ℂ) = (edgePoint (u ++ [x, x] ++ inverseWord v ++ t).length
+      (cutSideMap u.length (u.length + 1 + v.length) i)
+      (if u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length
+        then reverseParameter τ else τ) : ℂ)
+    rw [← cutAndPaste_aux_length u v t x]
+    exact hT
+  · apply Subtype.ext
+    have hp :
+        (if ((u ++ [x, x] ++ inverseWord v ++ t).get i').2 =
+              ((u ++ [x, x] ++ inverseWord v ++ t).get j').2
+          then (if u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length
+            then reverseParameter τ else τ)
+          else reverseParameter
+            (if u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length
+              then reverseParameter τ else τ)) =
+        (if u.length < (j : ℕ) ∧ (j : ℕ) < u.length + 1 + v.length
+          then reverseParameter
+            (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 =
+                ((u ++ [x] ++ v ++ [x] ++ t).get j).2
+              then τ else reverseParameter τ)
+          else (if ((u ++ [x] ++ v ++ [x] ++ t).get i).2 =
+                ((u ++ [x] ++ v ++ [x] ++ t).get j).2
+              then τ else reverseParameter τ)) := by
+      simp only [i', j']
+      rw [hwi, hwj]
+      cases hiSign : (u ++ x :: (v ++ x :: t))[(i : ℕ)].2 <;>
+        cases hjSign : (u ++ x :: (v ++ x :: t))[(j : ℕ)].2 <;>
+      by_cases hiV : u.length < (i : ℕ) ∧ (i : ℕ) < u.length + 1 + v.length <;>
+        by_cases hjV : u.length < (j : ℕ) ∧ (j : ℕ) < u.length + 1 + v.length <;>
+        simp [hiV, hjV, hiSign, hjSign, inv,
+          cut_transfer_generator_aux_sides_aux_reverseParameter_involutive]
+    change (T' : ℂ) = (edgePoint (u ++ [x, x] ++ inverseWord v ++ t).length
+      (cutSideMap u.length (u.length + 1 + v.length) j) _ : ℂ)
+    rw [hp]
+    rw [← cutAndPaste_aux_length u v t x]
+    exact hT'
 -- END SEAT AREA
 
 theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
