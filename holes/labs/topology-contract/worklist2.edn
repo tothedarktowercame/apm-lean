@@ -88331,28 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Derive cross-run last/zero offsets; nested concat; van Kampen; assemble.",
+    :residual "Prove nested concat, van Kampen, assembly.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
     [{:name
-      "torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne",
-      :type "cross-run successor advances exactly one run",
+      "torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets",
+      :type "cross-run last/zero offsets",
       :status :proved,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_le_add_one"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjective; reverse kernel",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2_subdivisionRunOffsetEquiv_symm_succ_run_eq_add_one_of_ne"],
+      ["torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "literal van Kampen",
@@ -88364,7 +88363,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact cross-run successor index.",
+    :reason "Banked cross-run boundary offsets.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88374,20 +88373,20 @@
       "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t97A01Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 37fc52bc9", :exit 0}],
+     {:cmd "git show --check b13f60bd4", :exit 0}],
     :diagnostic-history
-    [{:cmd "Main before build completed",
+    [{:cmd "offset draft",
       :exit 1,
-      :correction "reran after build"}],
-    :commit "37fc52bc9",
+      :correction "separated dependent equality"}],
+    :commit "b13f60bd4",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "373ebe10de8a6cfa3972790e03508626bb87230f64f343e1c24db7123cb582f9"},
+     "200e63e2bfc2f063d626f1c3c0b3a537b8b0209f7107c7b7d8f0f35db841df5e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94278,7 +94277,8 @@
     :lemma-torusrp2-subdivisionrunoffset-run-le-of-coord-lt
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-run-le-succ
     :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-le-add-one
-    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne],
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne
+    :lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -95422,4 +95422,23 @@
    :id :lemma-frozenorbitequiv,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets",
+    :type "cross-run last/zero offsets"},
+   :lemma
+   {:name "torusRP2_subdivisionRunOffsetEquiv_symm_cross_run_offsets",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "cross-run last/zero offsets",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id
+   :lemma-torusrp2-subdivisionrunoffsetequiv-symm-cross-run-offsets,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2-subdivisionrunoffsetequiv-symm-succ-run-eq-add-one-of-ne],
    :other-consumers []}]}
