@@ -8172,6 +8172,141 @@ theorem cutEdgePoint_eq {L e e' : ℕ} (hL : 2 ≤ L) (he : e < L) (he' : e' < L
     refine ⟨hs1, hs'0, ?_⟩
     rw [he'0, helast, Nat.mod_self]
 
+lemma cut_transfer_consistency_aux_x {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1) s)
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length u.length s) := by
+  rw [cutAndPaste_aux_length u v t x]
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length + 1, by simp [inverseWord]⟩
+  let j : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length, by simp [inverseWord]⟩
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp [i, j] at this
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+
+lemma cut_transfer_consistency_aux_chordA_end {L p q : ℕ}
+    (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordA L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L q ≠ cutPoint L p :=
+    (cutPoint_ne hpq (by omega : q < p + L)).symm
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L q) (y := cutPoint L p) (r := (1 : ℝ))
+    (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have heq : (1 - (s : ℝ)) • cutPoint L q + (s : ℝ) • cutPoint L p =
+      cutChordA L p q s := by
+    apply Complex.ext <;> simp [cutChordA, Complex.real_smul] <;> ring
+  have hh : ‖cutChordA L p q s‖ < 1 := by
+    rw [← heq]
+    exact hlt
+  rw [h] at hh
+  exact (lt_irrefl 1 hh)
+
+lemma cut_transfer_consistency_aux_chordB_end {L p q : ℕ}
+    (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordB L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L p ≠ cutPoint L q :=
+    cutPoint_ne hpq (by omega : q < p + L)
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L p) (y := cutPoint L q) (r := (1 : ℝ))
+    (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have heq : (1 - (s : ℝ)) • cutPoint L p + (s : ℝ) • cutPoint L q =
+      cutChordB L p q s := by
+    apply Complex.ext <;> simp [cutChordB, Complex.real_smul] <;> ring
+  have hh : ‖cutChordB L p q s‖ < 1 := by
+    rw [← heq]
+    exact hlt
+  rw [h] at hh
+  exact (lt_irrefl 1 hh)
+
+/-- Piece `A`, side position `(e₀, s₀)` with `p ≤ e₀ < q`. -/
+theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : u.length ≤ e₀) (he₀q : e₀ < u.length + 1 + v.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Piece `A`, chord position `s₀` (a unit point only at the ends `Q`, `P`). -/
+theorem cut_transfer_consistency_A_chord {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (s₀ : Icc (0 : ℝ) 1)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldA (cutChordParamA (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀))
+    (hN : (N : ℂ) = newA (cutChordParamA (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀)) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Piece `B`, side position `(e₀, s₀)` with `q ≤ e₀ < L` or `e₀ < p`. -/
+theorem cut_transfer_consistency_B_arc {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (e₀ : ℕ) (s₀ : Icc (0 : ℝ) 1) (he₀ : (u.length + 1 + v.length ≤ e₀ ∧ e₀ < (u ++ [x] ++ v ++ [x] ++ t).length) ∨ e₀ < u.length)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀))
+    (hN : (N : ℂ) = newB (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
+/-- Piece `B`, chord position `s₀` (a unit point only at the ends `P`, `Q`). -/
+theorem cut_transfer_consistency_B_chord {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (heq : ∀ {L e e' : ℕ}, 2 ≤ L → e < L → e' < L → ∀ {s s' : Icc (0 : ℝ) 1},
+      edgePoint L e s = edgePoint L e' s' →
+      (e = e' ∧ s = s') ∨ (s.1 = 1 ∧ s'.1 = 0 ∧ e' = (e + 1) % L) ∨
+        (s'.1 = 1 ∧ s.1 = 0 ∧ e = (e' + 1) % L))
+    (e : ℕ) (he : e < (u ++ [x] ++ v ++ [x] ++ t).length) (τ : Icc (0 : ℝ) 1) (N : Disk)
+    (s₀ : Icc (0 : ℝ) 1)
+    (hP : (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length e τ : ℂ) = oldB (cutChordParamB (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀))
+    (hN : (N : ℂ) = newB (cutChordParamB (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) s₀)) :
+    ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
+      Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
+  sorry
+
 theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)
@@ -8189,7 +8324,19 @@ theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length
         (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  cases i with
+  | false =>
+    rcases D.coverA y with ⟨e₀, s₀, h1, h2, rfl⟩ | ⟨s₀, rfl⟩
+    · exact cut_transfer_consistency_A_arc u v t x oldA oldB newA newB D heq e he τ N
+        e₀ s₀ h1 h2 (by simpa using hP) (by simpa using hN)
+    · exact cut_transfer_consistency_A_chord u v t x oldA oldB newA newB D heq e he τ N
+        s₀ (by simpa using hP) (by simpa using hN)
+  | true =>
+    rcases D.coverB y with ⟨e₀, s₀, h1, rfl⟩ | ⟨s₀, rfl⟩
+    · exact cut_transfer_consistency_B_arc u v t x oldA oldB newA newB D heq e he τ N
+        e₀ s₀ h1 (by simpa using hP) (by simpa using hN)
+    · exact cut_transfer_consistency_B_chord u v t x oldA oldB newA newB D heq e he τ N
+        s₀ (by simpa using hP) (by simpa using hN)
 
 theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
