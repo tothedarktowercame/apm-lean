@@ -429,6 +429,44 @@ theorem edgePoint_ne_vertex_of_interior (i : Fin 2) (v w : V)
   exact edgeProjection_ne_wedgePoint i t ht (by
     simpa only [projection_edgePoint, projection_vertex] using hp)
 
+/-- A raw realization coordinate which records precisely the points away from
+the glued endpoints.  It is constant on the endpoint-generated relation. -/
+noncomputable def interiorCoordinate : RealizationRaw V →
+    Option (Fin 2 × V × UnitInterval)
+  | .inl _ => none
+  | .inr (i, v, t) =>
+      if t = intervalZero ∨ t = intervalOne then none else some (i, v, t)
+
+theorem interiorCoordinate_eq_of_eqvGen {a b : RealizationRaw V}
+    (h : Relation.EqvGen D.RealizationRel a b) :
+    interiorCoordinate a = interiorCoordinate b := by
+  induction h with
+  | rel _ _ hab =>
+      cases hab <;> simp [interiorCoordinate]
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- Distinct graph-edge labels cannot be identified at an interior parameter
+by the endpoint quotient.  In particular, the vertex coordinate is retained
+throughout each open edge. -/
+theorem edgePoint_injective_of_interior (i : Fin 2) (t : UnitInterval)
+    (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) :
+    Function.Injective (fun v : V => D.edgePoint i v t) := by
+  intro v w hvw
+  have ht0 : t ≠ intervalZero := by
+    intro h
+    rw [h] at ht
+    exact (lt_irrefl (0 : ℝ)) ht.1
+  have ht1 : t ≠ intervalOne := by
+    intro h
+    rw [h] at ht
+    exact (lt_irrefl (1 : ℝ)) ht.2
+  have hc := interiorCoordinate_eq_of_eqvGen D (Quotient.exact hvw)
+  simp only [interiorCoordinate, ht0, ht1, false_or, if_false,
+    Option.some.injEq, Prod.mk.injEq] at hc
+  exact hc.2.1
+
 end TwoLoopGraphCoverData
 
 end ConstructionTargets.t92J06Closure
