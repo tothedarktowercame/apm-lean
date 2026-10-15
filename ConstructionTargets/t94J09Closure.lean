@@ -18,6 +18,78 @@ surface. -/
 def n6PairingData : PairingData :=
   nonorientableStandardPairingData 6 (by omega)
 
+/-! ## The frozen fourteen-edge pairing
+
+The consumer's polygon has two vertex classes, so it does not satisfy the
+`PairingData.oneVertex` field used by the existing radial homology theorem.
+We nevertheless record its exact edge involution and seven edge orbits.  This
+is the degree-one coordinate system for the required two-vertex extension of
+that theorem. -/
+
+/-- The edge involution read literally from the frozen fourteen-edge word. -/
+def frozenPairIndex (i : Fin 14) : Fin 14 :=
+  ![12, 7, 8, 9, 11, 10, 13, 1, 2, 3, 5, 4, 0, 6] i
+
+theorem frozenPairIndex_involutive : Function.Involutive frozenPairIndex := by
+  intro i
+  fin_cases i <;> rfl
+
+/-- The frozen edge pairing as a permutation. -/
+def frozenPair : Equiv.Perm (Fin 14) where
+  toFun := frozenPairIndex
+  invFun := frozenPairIndex
+  left_inv := frozenPairIndex_involutive
+  right_inv := frozenPairIndex_involutive
+
+@[simp] theorem frozenPair_apply (i : Fin 14) :
+    frozenPair i = frozenPairIndex i := rfl
+
+theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
+  frozenPairIndex_involutive i
+
+theorem frozenPair_ne (i : Fin 14) : frozenPair i ≠ i := by
+  fin_cases i <;> decide
+
+/-- The seven labels of the frozen edge-pairing orbits, ordered `a` through
+`g`. -/
+def frozenOrbitLabel (i : Fin 14) : Fin 7 :=
+  ![0, 2, 3, 6, 5, 4, 1, 2, 3, 6, 4, 5, 0, 1] i
+
+/-- The frozen fourteen edges have exactly seven pairing orbits. -/
+def frozenOrbitEquiv : PairingOrbit frozenPair ≃ Fin 7 where
+  toFun := Quotient.lift frozenOrbitLabel (by
+    intro a b h
+    induction h with
+    | rel a b h =>
+        rcases h with ⟨rfl⟩
+        fin_cases a <;> rfl
+    | refl a => rfl
+    | symm a b _ ih => exact ih.symm
+    | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+  invFun := fun j => Quotient.mk _ (![0, 6, 1, 2, 5, 4, 3] j : Fin 14)
+  left_inv := by
+    intro q
+    refine Quotient.inductionOn q ?_
+    intro i
+    fin_cases i
+    · rfl
+    · rfl
+    · rfl
+    · rfl
+    · rfl
+    · rfl
+    · rfl
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+    · exact Quotient.sound (Relation.EqvGen.rel _ _ rfl)
+  right_inv := by
+    intro j
+    fin_cases j <;> rfl
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -246,5 +318,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms n6SmithCokernelIso
 #print axioms n6BoundaryCokernelSmithEquiv
 #print axioms n6PolygonHomologyExplicit
+#print axioms frozenPair_pair
+#print axioms frozenPair_ne
+#print axioms frozenOrbitEquiv
 
 end ConstructionTargets.t94J09Closure
