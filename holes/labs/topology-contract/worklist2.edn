@@ -88331,27 +88331,27 @@
   {:consumer :t97A01,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Normalize finite subdivision blocks; prove surjectivity and reverse kernel inclusion; assemble.",
+    "Lift normalization to finite blocks; prove surjectivity and reverse kernel inclusion; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name
-      "torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement",
-      :type "inner path equals outer-routed overlap path",
+    [{:name "torusRP2PolygonInnerRun_exists_outerOverlapReplacement",
+      :type "ambient inner run has outer overlap representative",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on ["torusRP2PolygonInner_pathClass_eq"],
+      :depends-on
+      ["torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement"],
       :area "polygon-surface-pi1"}
      {:name "torusRP2PairingSpace_basedVanKampen",
       :type "surjectivity; reverse kernel inclusion",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["torusRP2PolygonInner_ambientPathClass_eq_outerOverlapReplacement"
+      ["torusRP2PolygonInnerRun_exists_outerOverlapReplacement"
        "torusRP2Relator_normalClosure_le_kernel"],
       :area "polygon-surface-pi1"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
@@ -88364,40 +88364,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked annular-overlap based normalization.",
+    :reason "Banked ambient inner-run normalization.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
      {:cmd "lake env lean problems/t97A01/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "rg sorry/admit target", :exit 1, :expected-exit 1}
-     {:cmd "git show --check ad96ebfb8", :exit 0}],
-    :diagnostic-history
-    [{:cmd "overlap draft",
-      :exit 1,
-      :correction "fixed typed congrArg lambda"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792055085493-13728-2550b497",
-     :commands
-     ["git show/diff/check ad96ebfb8"
-      "sha256sum recorded fixture"
-      "lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "rg sorry/admit target+fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit ad96ebfb8 adds compiled, sorry-free progress beyond 7cebf660f: path-connectedness of the radial overlap and replacement of any inner-cover path between overlap points by an overlap path routed through the outer piece, equal in the ambient groupoid. Only t97A01Closure.lean changed; fixture SHA 09daf9912d36720f725215bcde852e7438f6d513feef2d81898a74b559335627 matches. Exact snapshot builds; Main compiles; target/fixture placeholders are 0/1; registry 166/0; axioms are standard. Boundaries are correct: inner contractibility compares paths before ambient mapping, and inner/outer inclusions agree on the overlap path. Finite-block normalization, based surjectivity, reverse kernel inclusion, van Kampen completion, and final assembly remain explicitly listed."},
-    :commit "ad96ebfb8",
+     {:cmd "git show --check 4a38f604c", :exit 0}],
+    :commit "4a38f604c",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "09daf9912d36720f725215bcde852e7438f6d513feef2d81898a74b559335627"},
+     "368613a682b8ca46e47eae14b6fa4c1bc7e360dd7e39522850ec3f027c3e55b6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -94145,7 +94128,8 @@
     :lemma-torusrp2relator-normalclosure-le-kernel
     :lemma-torusrp2polygonpseudopushout-arrow-eq-reconstructed
     :lemma-torusrp2polygoninner-pathclass-eq
-    :lemma-torusrp2polygoninner-ambientpathclass-eq-outeroverlapreplacement],
+    :lemma-torusrp2polygoninner-ambientpathclass-eq-outeroverlapreplacement
+    :lemma-torusrp2polygoninnerrun-exists-outeroverlapreplacement],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94478,4 +94462,22 @@
    :lemma-torusrp2polygoninner-ambientpathclass-eq-outeroverlapreplacement,
    :kind :lemma,
    :depends-on [:lemma-torusrp2polygoninner-pathclass-eq],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2PolygonInnerRun_exists_outerOverlapReplacement",
+    :type "ambient inner run has outer overlap representative"},
+   :lemma
+   {:name "torusRP2PolygonInnerRun_exists_outerOverlapReplacement",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "ambient inner run has outer overlap representative",
+    :area "polygon-surface-pi1",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2polygoninnerrun-exists-outeroverlapreplacement,
+   :kind :lemma,
+   :depends-on
+   [:lemma-torusrp2polygoninner-ambientpathclass-eq-outeroverlapreplacement],
    :other-consumers []}]}
