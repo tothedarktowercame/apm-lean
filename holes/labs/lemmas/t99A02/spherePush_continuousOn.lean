@@ -1111,9 +1111,51 @@ Route.  The vector `v = (1-t)x + tp` vanishes only for `t = 1/2, x = -p`
 (`ContinuousOn.smul`, `continuousOn_inv₀`, `continuous_norm`).
 About 50 lines. -/
 -- BEGIN SEAT AREA
+lemma spherePush_continuousOn_aux_ne_zero (p : S2)
+    (q : unitInterval × S2) (hq : q ∈ (univ ×ˢ {x | x ≠ -p})) :
+    (1 - (q.1 : ℝ)) • (q.2 : E3) + (q.1 : ℝ) • (p : E3) ≠ 0 := by
+  intro hzero
+  have hp : ‖(p : E3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using p.property
+  have hx : ‖(q.2 : E3)‖ = 1 := by
+    simpa [mem_sphere_zero_iff_norm] using q.2.property
+  have ht0 : 0 ≤ (q.1 : ℝ) := q.1.property.1
+  have ht1 : (q.1 : ℝ) ≤ 1 := q.1.property.2
+  simp only [add_eq_zero_iff_eq_neg] at hzero
+  have heq : (q.1 : ℝ) = 1 / 2 := by
+    have habs : |1 - (q.1 : ℝ)| = |(q.1 : ℝ)| := by
+      have := congrArg norm hzero
+      simpa [norm_smul, hx, hp] using this
+    rw [abs_of_nonneg (sub_nonneg.mpr ht1), abs_of_nonneg ht0] at habs
+    linarith
+  have : q.2 = -p := by
+    apply Subtype.ext
+    have := hzero
+    rw [heq] at this
+    have htwice := congrArg (fun z : E3 ↦ (2 : ℝ) • z) this
+    convert htwice using 1 <;> norm_num [smul_smul]
+  exact hq.2 this
+
 lemma spherePush_continuousOn (p : S2) :
     ContinuousOn (spherePush p) (univ ×ˢ {x | x ≠ -p}) := by
-  sorry
+  let v : unitInterval × S2 → E3 := fun q ↦
+    (1 - (q.1 : ℝ)) • (q.2 : E3) + (q.1 : ℝ) • (p : E3)
+  have hv : Continuous v := by
+    fun_prop
+  have hne (q : unitInterval × S2) (hq : q ∈ univ ×ˢ {x | x ≠ -p}) : v q ≠ 0 := by
+    exact spherePush_continuousOn_aux_ne_zero p q hq
+  have hscalar : ContinuousOn (fun q ↦ ‖v q‖⁻¹)
+      (univ ×ˢ {x : S2 | x ≠ -p}) := by
+    intro q hq
+    exact (hv.continuousAt.norm.inv₀ (by simpa using hne q hq)).continuousWithinAt
+  have hval : ContinuousOn (fun q ↦ (spherePush p q : E3))
+      (univ ×ˢ {x : S2 | x ≠ -p}) := by
+    apply (hscalar.smul hv.continuousOn).congr
+    intro q hq
+    simp only [spherePush, v, dif_neg (hne q hq)]
+  apply continuousOn_iff_continuous_restrict.mpr
+  apply continuous_induced_rng.mpr
+  exact continuousOn_iff_continuous_restrict.mp hval
 -- END SEAT AREA
 
 /-- **Leaf (generic sphere push, identities).**
