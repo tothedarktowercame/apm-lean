@@ -37209,36 +37209,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Apply named composites across concrete coercions; prove coordinate one, four classes, Main.",
+    "Bridge forgotten/native projection; coordinate one, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_absoluteComparison_composite",
+    [{:name "t96A06_absoluteComparison_localization_normalizedClass",
       :type
-      "absolute mapHomology inverse then chain comparison equals integral homology comparison",
+      "comparison/localization sends normalized class to positive generator",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_relativeComparison_cancel_nativeNormalizedLocalization"],
+      ["t96A06_absoluteComparison_composite_normalizedClass"],
       :area "rp-rational-homology"}
      {:name "t96A06_mappedIntegralNormalizedClass_localizes",
-      :type "mapped global class localizes to positive local class",
+      :type "mapped global class localizes positively",
       :status :partial,
       :consumers [:t96A06],
-      :depends-on ["t96A06_absoluteComparison_composite"],
+      :depends-on
+      ["t96A06_absoluteComparison_localization_normalizedClass"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "167/167"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact identification of the absolute comparison composite.",
+    "Committed normalized-class cancellation and positive localization composite.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37247,20 +37248,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 2783254af",
+      "git diff --check && git show --check --stat --oneline b56eb70fb",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "native localization assembly",
-      :exit 1,
-      :note
-      "Concrete/AddCommGrp coercion rewrite remains; retained compiled composite lemma."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792099698077-14694-9f307dc8",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "2783254af",
+    :commit "b56eb70fb",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37268,7 +37258,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44080,7 +44070,8 @@
    [:lemma-t96a06-mappedintegrallocalgenerator-mapsto-ambient
     :lemma-t96a06-mappedintegralnormalizedclass-eq-comparisoninv
     :lemma-t96a06-relativecomparison-cancel-nativenormalizedlocalization
-    :lemma-t96a06-absolutecomparison-composite],
+    :lemma-t96a06-absolutecomparison-composite
+    :lemma-t96a06-absolutecomparison-localization-normalizedclass],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -44169,6 +44160,39 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-relativecomparison-cancel-nativenormalizedlocalization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_absoluteComparison_localization_normalizedClass",
+    :type
+    "comparison/localization sends normalized class to positive generator"},
+   :lemma
+   {:name "t96A06_absoluteComparison_localization_normalizedClass",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "comparison/localization sends normalized class to positive generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-absolutecomparison-localization-normalizedclass,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-absolutecomparison-composite-normalizedclass],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_absoluteComparison_composite_normalizedClass"},
+   :lemma
+   {:name "t96A06_absoluteComparison_composite_normalizedClass",
+    :reported-by []},
+   :id :lemma-t96a06-absolutecomparison-composite-normalizedclass,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
