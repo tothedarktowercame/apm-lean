@@ -451,6 +451,24 @@ noncomputable def t97J07_cp1_affinePatchHomeomorph (i : Fin 2) :
     apply Continuous.subtype_mk
     exact ConstructionTargets.T99J05ArbitraryAffineChartContinuity.t99J05_chartInverse_continuous i
 
+/-- Each literal affine patch is contractible, transported from its affine
+coordinate topological vector space. -/
+theorem t97J07_cp1_affinePatch_contractible (i : Fin 2) :
+    ContractibleSpace
+      {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
+        Projectivization.rep p i ≠ 0} := by
+  exact (t97J07_cp1_affinePatchHomeomorph i).contractibleSpace
+
+/-- Consequently, either affine patch has zero rational singular homology in
+every positive degree. -/
+theorem t97J07_cp1_affinePatch_higherHomology_isZero
+    (i : Fin 2) (n : ℕ) (hn : n ≠ 0) :
+    CategoryTheory.Limits.IsZero (ConstructionTargets.RationalLefschetz.Homology
+      {p : ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1 //
+        Projectivization.rep p i ≠ 0} n) := by
+  letI := t97J07_cp1_affinePatch_contractible i
+  exact ConstructionTargets.CoefficientContractiblePair.higher_zero ℚ _ n hn
+
 /-- In either affine chart, membership in the other chart is precisely the
 nonvanishing of its sole affine coordinate. -/
 theorem t97J07_cp1_chartInverse_other_rep_ne_iff (i j : Fin 2) (hji : j ≠ i)
@@ -531,6 +549,8 @@ theorem t97J07_eulerCharacteristic_of_homologyData
 #print axioms t97J07_cp1_chartInverse_rep_ne
 #print axioms t97J07_cp1_affinePatchEquiv
 #print axioms t97J07_cp1_affinePatchHomeomorph
+#print axioms t97J07_cp1_affinePatch_contractible
+#print axioms t97J07_cp1_affinePatch_higherHomology_isZero
 #print axioms t97J07_cp1_chartInverse_other_rep_ne_iff
 
 theorem apm_t97j07 :
