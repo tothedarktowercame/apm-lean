@@ -2991,9 +2991,174 @@ sphere `g` uses `spherePush_continuousOn north` (star points have `x ≠ south =
 -north`), sphere `g b` uses `spherePush_continuousOn south` (`x ≠ north`).
 `g a⁻¹ ≠ g`, `g b ≠ g` from `G_facts`. -/
 -- BEGIN SEAT AREA
+lemma treeContraction_continuousOn_aux_b_ne_one : b ≠ (1 : G) := by
+  intro h
+  have hb := congrArg (Monoid.Coprod.snd : G → Multiplicative (ZMod 2)) h
+  norm_num [b] at hb
+
 lemma treeContraction_continuousOn (g : G) :
     ContinuousOn (treeContraction g) (univ ×ˢ treeStar g) := by
-  sorry
+  classical
+  intro q hq
+  rcases q with ⟨s, z⟩
+  rcases z with ht | hx
+  · rcases ht with ⟨h, t⟩
+    let pr : TreeZ → unitInterval :=
+      Sum.elim (fun y : G × unitInterval ↦ y.2) (fun _ ↦ t)
+    let F : unitInterval × TreeZ → TreeZ := fun q ↦
+      .inl (h, if h = g then towardZero q.1 (pr q.2)
+        else towardOne q.1 (pr q.2))
+    have hpr : Continuous pr := by
+      apply Continuous.sumElim
+      · fun_prop
+      · fun_prop
+    have hF : Continuous F := by
+      by_cases hh : h = g
+      · simp only [F, if_pos hh]
+        apply continuous_inl.comp
+        apply Continuous.prodMk continuous_const
+        apply Continuous.subtype_mk
+        change Continuous (fun q : unitInterval × TreeZ ↦
+          (1 - (q.1 : ℝ)) * (pr q.2 : ℝ))
+        fun_prop
+      · simp only [F, if_neg hh]
+        apply continuous_inl.comp
+        apply Continuous.prodMk continuous_const
+        apply Continuous.subtype_mk
+        change Continuous (fun q : unitInterval × TreeZ ↦
+          (1 - (q.1 : ℝ)) * (pr q.2 : ℝ) + q.1)
+        fun_prop
+    let U : Set (unitInterval × TreeZ) :=
+      univ ×ˢ (Sum.inl '' ({h} ×ˢ (univ : Set unitInterval)))
+    have hUopen : IsOpen U := by
+      apply IsOpen.prod isOpen_univ
+      apply isOpenMap_inl
+      exact (isOpen_discrete ({h} : Set G)).prod isOpen_univ
+    have hmem : (s, Sum.inl (h, t)) ∈ U := by
+      exact ⟨Set.mem_univ _, ⟨(h, t), ⟨rfl, Set.mem_univ _⟩, rfl⟩⟩
+    rw [← continuousWithinAt_inter (hUopen.mem_nhds hmem)]
+    have hbase : ContinuousOn F ((univ ×ˢ treeStar g) ∩ U) := hF.continuousOn
+    have hc : ContinuousOn (treeContraction g) ((univ ×ˢ treeStar g) ∩ U) :=
+      hbase.congr (by
+      intro y hy
+      rcases y with ⟨r, y⟩
+      rcases hy.2.2 with ⟨⟨k, u⟩, hk, he⟩
+      change Sum.inl (k, u) = y at he
+      subst y
+      have hkh : k = h := by simpa using hk.1
+      subst k
+      by_cases hh : h = g <;> simp [treeContraction, F, pr, hh])
+    exact hc _ ⟨hq, hmem⟩
+  · rcases hx with ⟨h, x⟩
+    have hstar : treeStarPred g (.inr (h, x)) := hq.2
+    by_cases hh : h = g
+    · subst h
+      have hxne : x ≠ -north := by
+        rcases hstar with hx' | hx'
+        · simpa [neg_north] using hx'.2
+        · have hbg : g * b ≠ g := by
+            simpa using treeContraction_continuousOn_aux_b_ne_one
+          exact (hbg hx'.1.symm).elim
+      let pr : TreeZ → S2 := Sum.elim (fun _ ↦ x) (fun y : G × S2 ↦ y.2)
+      let A : unitInterval × TreeZ → unitInterval × S2 := fun q ↦ (q.1, pr q.2)
+      let F : unitInterval × TreeZ → TreeZ := fun q ↦ .inr (g, spherePush north (A q))
+      let U : Set (unitInterval × TreeZ) :=
+        univ ×ˢ (Sum.inr '' ({g} ×ˢ (univ : Set S2)))
+      have hA : Continuous A := by
+        have hpr : Continuous pr := by apply Continuous.sumElim <;> fun_prop
+        fun_prop
+      have hUopen : IsOpen U := by
+        exact isOpen_univ.prod
+          (isOpenMap_inr _ ((isOpen_discrete ({g} : Set G)).prod isOpen_univ))
+      have hmem : (s, Sum.inr (g, x)) ∈ U := ⟨Set.mem_univ _, ⟨(g,x), ⟨rfl, Set.mem_univ _⟩, rfl⟩⟩
+      rw [← continuousWithinAt_inter (hUopen.mem_nhds hmem)]
+      have hsp : ContinuousWithinAt (spherePush north)
+          (univ ×ˢ {x : S2 | x ≠ -north}) (s, x) :=
+        spherePush_continuousOn north (s, x) ⟨Set.mem_univ _, hxne⟩
+      have hcomp : ContinuousWithinAt (spherePush north ∘ A)
+          ((univ ×ˢ treeStar g) ∩ U) (s, Sum.inr (g, x)) := by
+        refine hsp.comp_of_eq hA.continuousAt.continuousWithinAt ?_ ?_
+        · intro y hy
+          rcases y with ⟨r, y⟩
+          rcases hy.2.2 with ⟨⟨k, u⟩, hk, he⟩
+          change Sum.inr (k, u) = y at he
+          subst y
+          have : k = g := by simpa using hk.1
+          subst k
+          have hs : treeStarPred g (.inr (g, u)) := hy.1.2
+          rcases hs with hs | hs
+          · exact ⟨Set.mem_univ _, by simpa [neg_north] using hs.2⟩
+          · have hbg : g * b ≠ g := by
+              simpa using treeContraction_continuousOn_aux_b_ne_one
+            exact (hbg hs.1.symm).elim
+        · simp [A, pr]
+      have hc : ContinuousWithinAt (fun _ : unitInterval × TreeZ ↦ g)
+          ((univ ×ˢ treeStar g) ∩ U) (s, Sum.inr (g, x)) := continuousWithinAt_const
+      have hinr : Continuous (fun y : G × S2 ↦ (Sum.inr y : TreeZ)) := continuous_inr
+      have hout := hinr.continuousAt.continuousWithinAt.comp
+        (hc.prodMk hcomp) (fun _ _ ↦ Set.mem_univ _)
+      apply hout.congr_of_eventuallyEq
+      · apply EqOn.eventuallyEq_nhdsWithin
+        intro y hy
+        rcases y with ⟨r, y⟩
+        rcases hy.2.2 with ⟨⟨k, u⟩, hk, he⟩
+        change Sum.inr (k, u) = y at he
+        subst y
+        have : k = g := by simpa using hk.1
+        subst k
+        simp [treeContraction, F, A, pr]
+      · simp [treeContraction, F, A, pr]
+    · have hxne : x ≠ -south := by
+        rcases hstar with hx' | hx'
+        · exact (hh hx'.1).elim
+        · simpa [neg_south] using hx'.2
+      let pr : TreeZ → S2 := Sum.elim (fun _ ↦ x) (fun y : G × S2 ↦ y.2)
+      let A : unitInterval × TreeZ → unitInterval × S2 := fun q ↦ (q.1, pr q.2)
+      let F : unitInterval × TreeZ → TreeZ := fun q ↦ .inr (h, spherePush south (A q))
+      let U : Set (unitInterval × TreeZ) :=
+        univ ×ˢ (Sum.inr '' ({h} ×ˢ (univ : Set S2)))
+      have hA : Continuous A := by
+        have hpr : Continuous pr := by apply Continuous.sumElim <;> fun_prop
+        fun_prop
+      have hUopen : IsOpen U := by
+        exact isOpen_univ.prod
+          (isOpenMap_inr _ ((isOpen_discrete ({h} : Set G)).prod isOpen_univ))
+      have hmem : (s, Sum.inr (h, x)) ∈ U := ⟨Set.mem_univ _, ⟨(h,x), ⟨rfl, Set.mem_univ _⟩, rfl⟩⟩
+      rw [← continuousWithinAt_inter (hUopen.mem_nhds hmem)]
+      have hsp : ContinuousWithinAt (spherePush south)
+          (univ ×ˢ {x : S2 | x ≠ -south}) (s, x) :=
+        spherePush_continuousOn south (s, x) ⟨Set.mem_univ _, hxne⟩
+      have hcomp : ContinuousWithinAt (spherePush south ∘ A)
+          ((univ ×ˢ treeStar g) ∩ U) (s, Sum.inr (h, x)) := by
+        refine hsp.comp_of_eq hA.continuousAt.continuousWithinAt ?_ ?_
+        · intro y hy
+          rcases y with ⟨r, y⟩
+          rcases hy.2.2 with ⟨⟨k, u⟩, hk, he⟩
+          change Sum.inr (k, u) = y at he
+          subst y
+          have hkh : k = h := by simpa using hk.1
+          subst k
+          have hs : treeStarPred g (.inr (h, u)) := hy.1.2
+          rcases hs with hs | hs
+          · exact (hh hs.1).elim
+          · exact ⟨Set.mem_univ _, by simpa [neg_south] using hs.2⟩
+        · simp [A, pr]
+      have hc : ContinuousWithinAt (fun _ : unitInterval × TreeZ ↦ h)
+          ((univ ×ˢ treeStar g) ∩ U) (s, Sum.inr (h, x)) := continuousWithinAt_const
+      have hinr : Continuous (fun y : G × S2 ↦ (Sum.inr y : TreeZ)) := continuous_inr
+      have hout := hinr.continuousAt.continuousWithinAt.comp
+        (hc.prodMk hcomp) (fun _ _ ↦ Set.mem_univ _)
+      apply hout.congr_of_eventuallyEq
+      · apply EqOn.eventuallyEq_nhdsWithin
+        intro y hy
+        rcases y with ⟨r, y⟩
+        rcases hy.2.2 with ⟨⟨k, u⟩, hk, he⟩
+        change Sum.inr (k, u) = y at he
+        subst y
+        have : k = h := by simpa using hk.1
+        subst k
+        simp [treeContraction, F, A, pr, hh]
+      · simp [treeContraction, F, A, pr, hh]
 -- END SEAT AREA
 
 /-- Leaf (split).  The contraction keeps the star: `towardZero s t < 1` if
