@@ -229,4 +229,77 @@ theorem torusRP2OrbitCoordinates_map_boundaryRange :
   rw [← LinearMap.range_comp,
     torusRP2OrbitCoordinates_comp_attachingBoundary, LinearMap.range_neg]
 
+/-- A linear equivalence descends to quotient modules when it carries the
+source submodule exactly onto the target submodule. -/
+noncomputable def quotientLinearEquivOfMapEq
+    {M N : Type*} [AddCommGroup M] [AddCommGroup N]
+    [Module ℤ M] [Module ℤ N]
+    (e : M ≃ₗ[ℤ] N) (p : Submodule ℤ M) (q : Submodule ℤ N)
+    (h : Submodule.map e.toLinearMap p = q) :
+    (M ⧸ p) ≃ₗ[ℤ] (N ⧸ q) := by
+  let f : (M ⧸ p) →ₗ[ℤ] (N ⧸ q) :=
+    p.mapQ q e.toLinearMap (by
+      intro x hx
+      change e x ∈ q
+      rw [← h]
+      exact ⟨x, hx, rfl⟩)
+  let g : (N ⧸ q) →ₗ[ℤ] (M ⧸ p) :=
+    q.mapQ p e.symm.toLinearMap (by
+      intro y hy
+      change e.symm y ∈ p
+      have hy' : y ∈ Submodule.map e.toLinearMap p := h.symm ▸ hy
+      rcases hy' with ⟨x, hx, hxy⟩
+      simpa [← hxy] using hx)
+  exact LinearEquiv.ofLinear f g
+    (by
+      apply LinearMap.ext
+      intro x
+      refine Quotient.inductionOn x ?_
+      intro x
+      change (Quotient.mk _ (e (e.symm x))) = Quotient.mk _ x
+      rw [e.apply_symm_apply])
+    (by
+      apply LinearMap.ext
+      intro y
+      refine Quotient.inductionOn y ?_
+      intro y
+      change (Quotient.mk _ (e.symm (e y))) = Quotient.mk _ y
+      rw [e.symm_apply_apply])
+
+noncomputable def aabbccBoundaryCokernelCoordinateEquiv :
+    BoundaryCokernel aabbccPairingData ≃ₗ[ℤ]
+      (Z3 ⧸ LinearMap.range standardN3BoundaryLinear) :=
+  quotientLinearEquivOfMapEq aabbccOrbitCoordinates _ _
+    aabbccOrbitCoordinates_map_boundaryRange
+
+noncomputable def torusRP2BoundaryCokernelCoordinateEquiv :
+    BoundaryCokernel torusRP2PairingData ≃ₗ[ℤ]
+      (Z3 ⧸ LinearMap.range torusCrosscapBoundaryLinear) :=
+  quotientLinearEquivOfMapEq torusRP2OrbitCoordinates _ _
+    torusRP2OrbitCoordinates_map_boundaryRange
+
+noncomputable def standardN3RangeQuotientSmithEquiv :
+    (Z3 ⧸ LinearMap.range standardN3BoundaryLinear) ≃ₗ[ℤ] Smith :=
+  (Submodule.quotEquivOfEq _ _ standardN3_range_eq_ker) ≪≫ₗ
+    standardN3Coordinate.quotKerEquivOfSurjective standardN3Coordinate_surjective
+
+noncomputable def torusCrosscapRangeQuotientSmithEquiv :
+    (Z3 ⧸ LinearMap.range torusCrosscapBoundaryLinear) ≃ₗ[ℤ] Smith :=
+  (Submodule.quotEquivOfEq _ _ torusCrosscap_range_eq_ker) ≪≫ₗ
+    torusCrosscapCoordinate.quotKerEquivOfSurjective
+      torusCrosscapCoordinate_surjective
+
+noncomputable def aabbccBoundaryCokernelSmithEquiv :
+    BoundaryCokernel aabbccPairingData ≃ₗ[ℤ] Smith :=
+  aabbccBoundaryCokernelCoordinateEquiv ≪≫ₗ standardN3RangeQuotientSmithEquiv
+
+noncomputable def torusRP2BoundaryCokernelSmithEquiv :
+    BoundaryCokernel torusRP2PairingData ≃ₗ[ℤ] Smith :=
+  torusRP2BoundaryCokernelCoordinateEquiv ≪≫ₗ
+    torusCrosscapRangeQuotientSmithEquiv
+
+#print axioms quotientLinearEquivOfMapEq
+#print axioms aabbccBoundaryCokernelSmithEquiv
+#print axioms torusRP2BoundaryCokernelSmithEquiv
+
 end ConstructionTargets.t97A01Closure
