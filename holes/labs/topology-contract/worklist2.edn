@@ -88329,33 +88329,34 @@
      :commit "8a04c4e3d",
      :reason "Completed B8 low-degree homology."}]}
   {:consumer :t97A01,
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove attaching-vector formulas, reuse banked Smith cokernels for B1, then B2.",
+    "Use sign-invariant kernels/ranges and banked Smith cokernels for B1; then B2.",
     :outcome :stop,
     :warnings
-    ["Main retains 1 prior placeholder; lint/review dirs preserved"],
+    ["Main has 1 prior placeholder; lint/review dirs preserved"],
     :missing-theorems
-    [{:name "aabbccOrbitCoordinates",
-      :type "orbit functions ≃ₗ Z3",
+    [{:name "aabbccOrbitCoordinates_attachingDegree",
+      :type "vector=(-2,-2,-2)",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on ["aabbccOrbitCoordinates"],
       :area "polygon-surface-homology"}
-     {:name "torusRP2OrbitCoordinates",
-      :type "orbit functions ≃ₗ Z3",
+     {:name "torusRP2OrbitCoordinates_attachingDegree",
+      :type "vector=(0,0,-2)",
       :status :proved,
       :consumers [:t97A01],
-      :depends-on [],
+      :depends-on ["torusRP2OrbitCoordinates"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_polygon_singular_homology",
       :type "literal homology adapter",
       :status :partial,
       :consumers [:t97A01],
       :depends-on
-      ["aabbccOrbitCoordinates" "torusRP2OrbitCoordinates"],
+      ["aabbccOrbitCoordinates_attachingDegree"
+       "torusRP2OrbitCoordinates_attachingDegree"],
       :area "polygon-surface-homology"}
      {:name "apm_t97a01_torusRP2_fundamentalGroup",
       :type "torus-crosscap van Kampen",
@@ -88367,7 +88368,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked both orbit-coordinate linear equivalences.",
+    :reason "Banked signed attaching vectors.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t97A01Closure",
       :exit 0}
@@ -88375,34 +88376,20 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "placeholder scan", :exit 0}
      {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 4ce974c33", :exit 0}],
+     {:cmd "git show --check 1f944e1c3", :exit 0}],
     :diagnostic-history
-    [{:cmd "direct check",
+    [{:cmd "vector/axiom drafts",
       :exit 1,
-      :correction "built Smith dependency"}
-     {:cmd "coordinate drafts",
-      :exit 1,
-      :correction "used explicit Fin-3 evaluation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792042982394-13384-ff6cdc32",
-     :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t97A01Closure"
-      "lake env lean problems/t97A01/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "#print axioms; git show --check; fixture/hash placeholder scans"],
-     :finding
-     "Commit 4ce974c33 by topo-6 changes only t97A01Closure.lean and adds compiled progress after 53223ee93. Exact snapshot builds; Main retains 1 prior placeholder; target has 0; fixture SHA-256 3a110a5ac4b28837991bea53dbc6a365f8fbf6daa876e90f213cbe321057a26b matches; registry 166/0; both equivalences use only propext, Classical.choice, Quot.sound. Each map evaluates orbit functions at labels 0,1,2 and reconstructs via the forward orbit label; inverse laws use e.symm(e q)=q and coordinate reflexivity, so the representation boundary and coordinate ordering are faithful. Attaching-vector formulas, Smith transport/B1, and B2 remain listed."},
-    :commit "4ce974c33",
+      :correction "fixed orbit rewrite/sign; replaced native_decide"}],
+    :commit "1f944e1c3",
     :changed-paths ["ConstructionTargets/t97A01Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t97A01Closure.lean",
      :sha256
-     "3a110a5ac4b28837991bea53dbc6a365f8fbf6daa876e90f213cbe321057a26b"},
+     "02356a0dfcaf16db89cfb344f2f97dbdbecc33e9cc590834009bf91697df0a42"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t97A01/lean/Main.lean"
     "problems/t97A01/status.json"
@@ -93456,7 +93443,9 @@
     :lemma-apm-t97a01-x-homeomorph-pairingspace
     :lemma-apm-t97a01-torusrp2-homeomorph-pairingspace
     :lemma-aabbccorbitcoordinates
-    :lemma-torusrp2orbitcoordinates],
+    :lemma-torusrp2orbitcoordinates
+    :lemma-aabbccorbitcoordinates-attachingdegree
+    :lemma-torusrp2orbitcoordinates-attachingdegree],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -93604,4 +93593,38 @@
    :id :lemma-torusrp2orbitcoordinates,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "aabbccOrbitCoordinates_attachingDegree",
+    :type "vector=(-2,-2,-2)"},
+   :lemma
+   {:name "aabbccOrbitCoordinates_attachingDegree",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "vector=(-2,-2,-2)",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-aabbccorbitcoordinates-attachingdegree,
+   :kind :lemma,
+   :depends-on [:lemma-aabbccorbitcoordinates],
+   :other-consumers []}
+  {:consumer :t97A01,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "torusRP2OrbitCoordinates_attachingDegree",
+    :type "vector=(0,0,-2)"},
+   :lemma
+   {:name "torusRP2OrbitCoordinates_attachingDegree",
+    :reported-by [:program-2026-10-13-close-t97a01],
+    :type "vector=(0,0,-2)",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t97a01},
+   :id :lemma-torusrp2orbitcoordinates-attachingdegree,
+   :kind :lemma,
+   :depends-on [:lemma-torusrp2orbitcoordinates],
    :other-consumers []}]}
