@@ -1,5 +1,6 @@
 import ConstructionTargets.PolygonSurfaceHomology
 import ConstructionTargets.T97A01SmithQuotients
+import ConstructionTargets.t93J03Closure
 
 /-!
 # Closure adapters for t97A01
@@ -22,6 +23,7 @@ open ConstructionTargets.T97A01SmithQuotients
 open ConstructionTargets.PolygonRadialOpenCover
 open ConstructionTargets.TwoOpenFundamentalGroupoidSpan
 open ConstructionTargets.TwoOpenFundamentalGroupoidPseudopushout
+open ConstructionTargets.t93J03Closure
 
 /-- A homeomorphism transports the based fundamental group. -/
 def fundamentalGroupEquivOfHomeomorph
@@ -1284,6 +1286,23 @@ theorem torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
     _ = _ := torusRP2_pathHomotopicQuotient_concat_eq_of_pieceClass_eq
       S.point S.piece G h
 
+/-- The maximal constant-side runs of a subordinate polygon subdivision meet
+at literal common vertices in the radial overlap.  This imports the generic
+finite-run certificate already proved for two-open subdivisions, so the next
+normalization step may choose one outer replacement for each inner run. -/
+theorem torusRP2_subdivision_runPartition_boundary_spec
+    {x y : torusRP2PairingData.Space} {p : Path x y}
+    (S : ConstructionTargets.FundamentalGroupoidOpenCoverSubdivision.PathTwoOpenSubdivision
+      p (openCover torusRP2PairingData).inner
+        (openCover torusRP2PairingData).outer) :
+    (boolSideRunPartition S.side).IsChain
+      fun a b => ∀ (ha : a ≠ []) (hb : b ≠ []),
+        S.point (a.getLast ha).succ = S.point (b.head hb).castSucc ∧
+          S.point (b.head hb).castSucc ∈
+            (openCover torusRP2PairingData).inner ∩
+              (openCover torusRP2PairingData).outer := by
+  exact pathTwoOpenSubdivision_runPartition_boundary_spec S
+
 /-- Exact two-part output still required from the attaching-cell van Kampen
 argument.  It is stated directly for the canonical free-group map so no
 unproved injectivity of an intermediate coordinate map is hidden. -/
@@ -1356,6 +1375,7 @@ noncomputable def torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PolygonInnerRun_exists_outerOverlapReplacement
 #print axioms torusRP2PolygonInnerBlock_exists_outerOverlapReplacement
 #print axioms torusRP2_subdivision_quotient_eq_concat_of_pieceClass_eq
+#print axioms torusRP2_subdivision_runPartition_boundary_spec
 #print axioms torusRP2PairingSpace_fundamentalGroup_of_basedVanKampen
 #print axioms torusRP2PairingSpace_center_fundamentalGroup_of_basedVanKampen
 
