@@ -7002,9 +7002,75 @@ theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
   exact cutNewA_injective_of_branches hpq hqL (cutNewA_branch_injOn hpq hqL)
     (cutNewA_branch_disjoint hpq hqL)
 
-theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+lemma cutNewB_injective_aux_exp {x y : ℝ}
+    (hxy : Complex.exp ((x : ℂ) * Complex.I) =
+      Complex.exp ((y : ℂ) * Complex.I))
+    (hlo : -(2 * Real.pi) < x - y) (hhi : x - y < 2 * Real.pi) : x = y := by
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp hxy
+  have hi := congrArg Complex.im hk
+  simp at hi
+  have hk0 : k = 0 := by
+    by_contra hn
+    have hkpos : (1 : ℝ) ≤ k ∨ (k : ℝ) ≤ -1 := by
+      have : k ≤ -1 ∨ 1 ≤ k := by omega
+      exact this.symm.imp (fun h => by exact_mod_cast h) (fun h => by exact_mod_cast h)
+    rcases hkpos with hkpos | hkneg
+    · nlinarith [Real.pi_pos]
+    · nlinarith [Real.pi_pos]
+  subst k
+  simpa using hi
+
+lemma cutNewB_injective_aux_seam_norm {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (h : ‖cutSeam L p q s‖ = 1) :
+    s = 0 ∨ s = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0' : 0 < s := lt_of_le_of_ne hs0 hn.1.symm
+  have hs1' : 0 < 1 - s := sub_pos.mpr (lt_of_le_of_ne hs1 hn.2)
+  have hne : cutPoint L (p + 1) ≠ cutPoint L (q + 1) :=
+    cutPoint_ne (by omega) (by omega)
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L (p + 1)) (y := cutPoint L (q + 1))
+    (r := (1 : ℝ)) (a := 1 - s) (b := s)
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1' hs0' (by ring)
+  have heq : (1 - s) • cutPoint L (p + 1) + s • cutPoint L (q + 1) =
+      cutSeam L p q s := by
+    apply Complex.ext <;> simp [cutSeam, Complex.real_smul] <;> ring
+  have hlt' : ‖cutSeam L p q s‖ < 1 := by rw [← heq]; exact hlt
+  rw [h] at hlt'
+  exact (lt_irrefl 1 hlt')
+
+/-- The three branches of `cutProfileNewB` (seam, fixed arc, side `p`) are each
+injective. -/
+theorem cutNewB_branch_injOn {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Set.InjOn (cutProfileNewB L p q) (Icc (cutAlpha L q) (cutAlpha L (q + 1))) ∧
+      Set.InjOn (cutProfileNewB L p q) (Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi)) ∧
+      Set.InjOn (cutProfileNewB L p q) (Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi)) := by
+  sorry
+
+/-- Values of different branches differ: seam values have norm `< 1` except at `P'`
+(angle `α(p+1)`) and `Q'` (angle `α(q+1)`); fixed-arc values are unit points at angles in
+`(α(q+1), α p + 2π]`; side-`p` values are unit points at angles in `(α p, α(p+1))` mod `2π`. -/
+theorem cutNewB_branch_disjoint {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
+      (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
+      (∀ φ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) := by
+  sorry
+
+theorem cutNewB_injective_of_branches {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    (hinj : Set.InjOn (cutProfileNewB L p q) (Icc (cutAlpha L q) (cutAlpha L (q + 1))) ∧
+      Set.InjOn (cutProfileNewB L p q) (Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi)) ∧
+      Set.InjOn (cutProfileNewB L p q) (Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi)))
+    (hdisj : (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
+      (∀ φ ∈ Icc (cutAlpha L q) (cutAlpha L (q + 1)), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ) ∧
+      (∀ φ ∈ Ioc (cutAlpha L (q + 1)) (cutAlpha L p + 2 * Real.pi), ∀ ψ ∈ Ioo (cutAlpha L p + 2 * Real.pi) (cutAlpha L q + 2 * Real.pi), cutProfileNewB L p q φ ≠ cutProfileNewB L p q ψ)) :
     Function.Injective (cutNewB L p q) := by
   sorry
+
+theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    Function.Injective (cutNewB L p q) := by
+  exact cutNewB_injective_of_branches hpq hqL (cutNewB_branch_injOn hpq hqL)
+    (cutNewB_branch_disjoint hpq hqL)
 
 theorem cutOldA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L p) (cutPoint L q)) =
