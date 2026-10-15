@@ -2031,7 +2031,83 @@ lemma finiteWedge_finSucc_fundamentalGroup_step (n : ℕ)
     ∃ next : FundamentalGroup (FiniteWedge (Fin (n + 1)))
         (wedgeCircle (0 : Fin (n + 1)) 1) ≃* FreeGroup (Fin (n + 1)),
       FiniteWedgeFreeCoordinates n next := by
-  sorry
+  classical
+  rcases hprev with rfl | ⟨k, rfl, old, hold⟩
+  · let next :=
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinOneFundamentalGroupEquiv.trans
+        (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+          ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne)
+    refine ⟨next, ?_⟩
+    intro i
+    have hi : i = 0 := Fin.eq_zero i
+    subst i
+    change next
+        (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap 0 0
+          apm_t92J05_circlePositiveClass) = FreeGroup.of 0
+    rw [MulEquiv.trans_apply,
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinOneFundamentalGroupEquiv_leg]
+    exact finiteWedge_finSucc_fundamentalGroup_step_aux_circle_generator
+  · let P :=
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinSuccPointWedgeNeighborhoods k
+    rcases ConstructionTargets.PolygonSurfaceHomology.finiteWedgePointWedge_rightBase_inl k with
+      ⟨a, ha⟩
+    let unitEquiv : FundamentalGroup (FiniteWedge Unit) (wedgeCircle () 1) ≃*
+        FreeGroup (Fin 1) :=
+      ConstructionTargets.PolygonSurfaceHomology.finiteWedgeUnitFundamentalGroupEquiv.trans
+        (ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt.trans
+          ConstructionTargets.PointWedgeVanKampen.multiplicativeIntEquivFreeGroupFinOne)
+    let vk :=
+      ConstructionTargets.PointWedgeVanKampen.genericPointWedgePartiallyNormalizedFundamentalGroupEquiv
+        (wedgeCircle (0 : Fin (k + 1)) 1) (wedgeCircle () 1)
+        P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen P.2.mem P.1.mem
+        P.2.contraction P.1.contraction a
+    rcases hcoprod k with ⟨ec, hecOld, hecLast⟩
+    let next :=
+      (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinSuccFundamentalGroupEquiv k).trans
+        (vk.trans ((MulEquiv.coprodCongr old unitEquiv).trans ec))
+    refine ⟨next, ?_⟩
+    intro i
+    have hcoords :=
+      ConstructionTargets.PointWedgeVanKampen.genericPointWedgePartiallyNormalized_legCoordinates
+        (wedgeCircle (0 : Fin (k + 1)) 1) (wedgeCircle () 1)
+        P.2.carrier P.1.carrier P.2.isOpen P.1.isOpen P.2.mem P.1.mem
+        P.2.contraction P.1.contraction a ha
+    by_cases hi : i = Fin.last (k + 1)
+    · subst i
+      change next
+          (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap (k + 1)
+            (Fin.last (k + 1)) apm_t92J05_circlePositiveClass) = _
+      dsimp only [next]
+      rw [← ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinSuccLastFundamentalGroupMap_leg]
+      rw [MulEquiv.trans_apply, MulEquiv.trans_apply,
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinSuccLastFundamentalGroupMap_comparison,
+        hcoords.2, MulEquiv.trans_apply]
+      change ec (Monoid.Coprod.inr (unitEquiv
+        (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeUnitLegMap
+          apm_t92J05_circlePositiveClass))) = _
+      dsimp only [unitEquiv]
+      rw [MulEquiv.trans_apply,
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeUnitFundamentalGroupEquiv_leg,
+        finiteWedge_finSucc_fundamentalGroup_step_aux_circle_generator, hecLast]
+    · obtain ⟨j, rfl⟩ := Fin.exists_castSucc_eq.mpr hi
+      change next
+          (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap (k + 1)
+            j.castSucc apm_t92J05_circlePositiveClass) = _
+      dsimp only [next]
+      rw [← ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinSuccOldFundamentalGroupMap_leg]
+      rw [MulEquiv.trans_apply, MulEquiv.trans_apply,
+        ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinSuccOldFundamentalGroupMap_comparison,
+        hcoords.1, MulEquiv.trans_apply]
+      change ec (Monoid.Coprod.inl (old
+        (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeFinLegMap k j
+          apm_t92J05_circlePositiveClass))) = _
+      change ec (Monoid.Coprod.inl (old
+        (apm_t92J05_finiteWedgeLegMap k j apm_t92J05_circlePositiveClass))) = _
+      calc
+        _ = ec (Monoid.Coprod.inl (FreeGroup.of j)) := by
+          rw [show old (apm_t92J05_finiteWedgeLegMap k j
+              apm_t92J05_circlePositiveClass) = FreeGroup.of j from hold j]
+        _ = _ := hecOld j
 /-- Relabel a finite wedge along an equivalence of its leg types. -/
 lemma finiteWedge_reindex_homeomorph
     {L : Type*} (n : ℕ) (e : L ≃ Fin (n + 1)) :
