@@ -88672,32 +88672,33 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta 0,
-    :residual "Compute generator-quotient MV; normalize; assemble.",
+    :residual
+    "Prove generator-quotient MV comparisons; normalize; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 sorry" "dirt"],
     :missing-theorems
-    [{:name "frozenSignedQuotientHomologyIsoGenerator",
-      :type "all-degree singular homology transport",
+    [{:name "frozenSignedHomology_of_generator_comparisons",
+      :type "generator comparisons imply signed homology",
       :status :proved,
-      :consumers [:t94J09],
-      :depends-on ["frozenSignedQuotientHomeomorphGenerator"],
-      :area "polygon-surface-homology"}
-     {:name "frozenPolygonHomology_comparisons",
-      :type "two-vertex homology comparisons",
-      :status :partial,
       :consumers [:t94J09],
       :depends-on
       ["frozenSignedQuotientHomologyIsoGenerator"
        "frozenPolygonHomology_of_comparisons"],
       :area "polygon-surface-homology"}
+     {:name "frozenGeneratorHomology_comparisons",
+      :type "generator quotient H0/H1/H2/high comparisons",
+      :status :partial,
+      :consumers [:t94J09],
+      :depends-on ["frozenSignedHomology_of_generator_comparisons"],
+      :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "polygon homology",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenPolygonHomology_comparisons"],
+      :depends-on ["frozenGeneratorHomology_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
       :type "polygon homeomorphic to N6",
@@ -88709,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked homology transport.",
+    :reason "Banked transported assembly.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,29 +88720,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 258ff314a", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792108366010-14858-320e5f47",
-     :commands
-     ["git show/diff/check 258ff314a"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from 258ff314a"],
-     :finding
-     "PASS program STOP: topo-6 commit 258ff314a adds compiled, sorry-free progress beyond history accfce741. frozenSignedQuotientHomologyIsoGenerator correctly applies singularHomologyFunctor.mapIso to TopCat.isoOfHomeo of the signed-to-generator quotient homeomorphism, yielding SpaceH signed k isomorphic to SpaceH generator k in the stated orientation for every natural degree. It transports homology across the established topological boundary without pretending to compute the generator quotient. Only t94J09Closure.lean changed; fixture SHA 470a4a2290042923ddf3fc0349bb14cdef7ae339cdb5638f8f4d142e46545e53 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Generator-quotient MV computation, normalization, and assembly remain listed."},
-    :commit "258ff314a",
+     {:cmd "git show --check 9794bfe38", :exit 0}],
+    :commit "9794bfe38",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "470a4a2290042923ddf3fc0349bb14cdef7ae339cdb5638f8f4d142e46545e53"},
+     "9ca40bebb647b7ab6a203f205259b9bd066790e6c0e3af7323aaa1af1de7daff"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -94240,7 +94228,8 @@
     :lemma-frozenfacecokernelsmithequiv
     :lemma-frozenpolygonh1-surjective-kernel
     :lemma-frozenfaceboundarycoordinates-injective
-    :lemma-frozenpolygonhomology-comparisons],
+    :lemma-frozenpolygonhomology-comparisons
+    :lemma-frozengeneratorhomology-comparisons],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96583,4 +96572,39 @@
    :id :lemma-frozensignedquotienthomologyisogenerator,
    :kind :lemma,
    :depends-on [:lemma-frozensignedquotienthomeomorphgenerator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedHomology_of_generator_comparisons",
+    :type "generator comparisons imply signed homology"},
+   :lemma
+   {:name "frozenSignedHomology_of_generator_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator comparisons imply signed homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozensignedhomology-of-generator-comparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozensignedquotienthomologyisogenerator
+    :lemma-frozenpolygonhomology-of-comparisons],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHomology_comparisons",
+    :type "generator quotient H0/H1/H2/high comparisons"},
+   :lemma
+   {:name "frozenGeneratorHomology_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator quotient H0/H1/H2/high comparisons",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozengeneratorhomology-comparisons,
+   :kind :lemma,
+   :depends-on [:lemma-frozensignedhomology-of-generator-comparisons],
    :other-consumers []}]}
