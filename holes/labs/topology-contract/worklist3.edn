@@ -36819,9 +36819,48 @@
      :reason
      "Committed the successor overlap as punctured affine coordinates."}]}
   {:consumer :t98A02,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta {:t98A02 [1 1], :t00A01 [1 1]},
+    :residual
+    "Review blueprint; then formalize B1 collar/radial representations, followed by B2 openness and B3 puncture connectivity.",
+    :outcome :stop,
+    :warnings
+    ["Blueprint-only job; Lean gates deferred until reviewed formalization."],
+    :missing-theorems
+    [{:name "BallCollar",
+      :type
+      "collared embedded-ball package, radial regions, and quotient representation",
+      :status :not-started,
+      :consumers [:t98A02 :t00A01],
+      :depends-on [],
+      :area "ball-complement-collar"}
+     {:name "connectedSum_homology",
+      :type
+      "integral homology of a collared connected sum in all degrees",
+      :status :not-started,
+      :consumers [:t98A02 :t00A01],
+      :depends-on ["BallCollar"],
+      :area "manifold-fundamental-class"}],
+    :statement-hashes {:registry "167/167"},
+    :disposition :stop,
+    :axioms [],
+    :author :topo-10,
+    :reason
+    "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review.",
+    :commands
+    [{:cmd
+      "git diff --check -- ConstructionTargets/CollaredConnectedSumHomology.blueprint.md",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git show --check --oneline --stat 5dcf403de", :exit 0}
+     {:cmd "git diff --name-only 5dcf403de^ 5dcf403de", :exit 0}],
+    :commit "5dcf403de",
+    :changed-paths
+    ["ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"],
+    :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -43617,7 +43656,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-overlap-homeomorph-puncturedaffine],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar",
+    :type
+    "collared embedded-ball package, radial regions, and quotient representation"},
+   :lemma
+   {:name "BallCollar",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type
+    "collared embedded-ball package, radial regions, and quotient representation",
+    :area "ball-complement-collar"},
+   :id :lemma-ballcollar,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "connectedSum_homology",
+    :type
+    "integral homology of a collared connected sum in all degrees"},
+   :lemma
+   {:name "connectedSum_homology",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type
+    "integral homology of a collared connected sum in all degrees",
+    :area "manifold-fundamental-class"},
+   :id :lemma-connectedsum-homology,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar],
+   :other-consumers [:t00A01]}],
  :consumer-baselines {},
  :statuses
  #{:open
