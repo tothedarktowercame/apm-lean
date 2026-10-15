@@ -86,6 +86,74 @@ theorem n6BoundaryLinear_injective : Function.Injective n6BoundaryLinear := by
   dsimp [n6BoundaryLinear] at h0
   omega
 
+/-- Smith coordinates for the quotient of six integral coordinates by the
+constant even vector: five differences and the parity of the first entry. -/
+abbrev N6Smith := (Fin 5 → ℤ) × ZMod 2
+
+def n6SmithCoordinate : (Fin 6 → ℤ) →ₗ[ℤ] N6Smith where
+  toFun v := (fun j => v j.succ - v 0, v 0)
+  map_add' := by
+    intro x y
+    ext j
+    · simp
+      ring
+    · simp
+  map_smul' := by
+    intro m x
+    ext j <;> simp [mul_sub]
+
+theorem n6SmithCoordinate_surjective :
+    Function.Surjective n6SmithCoordinate := by
+  rintro ⟨a, c⟩
+  let v : Fin 6 → ℤ := Fin.cases c.val (fun j => a j + c.val)
+  refine ⟨v, ?_⟩
+  ext j
+  · simp [n6SmithCoordinate, v]
+  · simp [n6SmithCoordinate, v]
+
+theorem n6BoundaryLinear_range_eq_ker :
+    LinearMap.range n6BoundaryLinear = LinearMap.ker n6SmithCoordinate := by
+  ext v
+  constructor
+  · rintro ⟨n, rfl⟩
+    rw [LinearMap.mem_ker]
+    ext j
+    · simp [n6SmithCoordinate, n6BoundaryLinear]
+    · change ((2 * n : ℤ) : ZMod 2) = 0
+      rw [Int.cast_mul]
+      change (2 : ZMod 2) * (n : ZMod 2) = 0
+      have h2 : (2 : ZMod 2) = 0 := by decide
+      rw [h2, zero_mul]
+  · intro hv
+    rw [LinearMap.mem_ker] at hv
+    have hdiff : ∀ j : Fin 5, v j.succ - v 0 = 0 := by
+      intro j
+      simpa [n6SmithCoordinate] using
+        congrArg (fun q : N6Smith => q.1 j) hv
+    have hparity : ((v 0 : ℤ) : ZMod 2) = 0 := by
+      simpa [n6SmithCoordinate] using congrArg (fun q : N6Smith => q.2) hv
+    have heven : (2 : ℤ) ∣ v 0 := by
+      simpa [ZMod.intCast_zmod_eq_zero_iff_dvd] using hparity
+    rcases heven with ⟨n, hn⟩
+    refine ⟨n, ?_⟩
+    funext i
+    refine Fin.cases ?_ (fun j => ?_) i
+    · simpa [n6BoundaryLinear] using hn.symm
+    · have hj := hdiff j
+      simp only [sub_eq_zero] at hj
+      simpa [n6BoundaryLinear, hj] using hn.symm
+
+def n6BoundaryMap : ModuleCat.of ℤ ℤ ⟶ ModuleCat.of ℤ (Fin 6 → ℤ) :=
+  ModuleCat.ofHom n6BoundaryLinear
+
+/-- The explicit Smith cokernel used by the frozen degree-one answer. -/
+noncomputable def n6SmithCokernelIso :
+    cokernel n6BoundaryMap ≅ ModuleCat.of ℤ N6Smith :=
+  ModuleCat.cokernelIsoRangeQuotient n6BoundaryMap ≪≫
+    ((Submodule.quotEquivOfEq _ _ n6BoundaryLinear_range_eq_ker) ≪≫ₗ
+      n6SmithCoordinate.quotKerEquivOfSurjective
+        n6SmithCoordinate_surjective).toModuleIso
+
 theorem n6AttachingBoundary_injective :
     Function.Injective (attachingBoundary n6PairingData) := by
   intro a b h
@@ -101,5 +169,6 @@ theorem n6BoundaryKernel_eq_bot : BoundaryKernel n6PairingData = ⊥ :=
 #print axioms n6PolygonHomology
 #print axioms n6AttachingBoundary_injective
 #print axioms n6BoundaryKernel_eq_bot
+#print axioms n6SmithCokernelIso
 
 end ConstructionTargets.t94J09Closure
