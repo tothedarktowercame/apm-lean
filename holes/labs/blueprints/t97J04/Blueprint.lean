@@ -1936,7 +1936,7 @@ lemma cLoop_loopClass :
 /-- B3'. Edge 4 lies in handle 1 at position 0: label `(1, false) ↦ 2`
 (`orientableOrbitEquiv`, `finTwoEquiv`, `finProdFinEquiv`). -/
 lemma cOrbit_label : orbitLabel cOrbit = 2 := by
-  sorry
+  rfl
 
 /-- B4. Two successive one-relator quotients (pure group theory). -/
 lemma two_step_quotient {G H K : Type*} [Group G] [Group H] [Group K]

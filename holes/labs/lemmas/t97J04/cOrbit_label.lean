@@ -1792,7 +1792,7 @@ lemma cLoop_loopClass :
 (`orientableOrbitEquiv`, `finTwoEquiv`, `finProdFinEquiv`). -/
 -- BEGIN SEAT AREA
 lemma cOrbit_label : orbitLabel cOrbit = 2 := by
-  sorry
+  rfl
 -- END SEAT AREA
 
 /-- B4. Two successive one-relator quotients (pure group theory). -/
