@@ -271,6 +271,23 @@ theorem transverse_mfderiv_surjective_of_circleDirection_lifts
   rcases hlift v with ⟨u, hu⟩
   exact ⟨u, hu⟩
 
+/-- A null set of critical values in a nonzero measure space cannot exhaust
+the target.  Thus one can choose a value at which every point of the fiber
+satisfies the specified regularity predicate. -/
+theorem exists_regularValue_of_criticalValues_measure_zero
+    {X Y : Type} [MeasurableSpace Y] (g : X → Y) (regular : X → Prop)
+    (mu : MeasureTheory.Measure Y) [NeZero mu]
+    (hnull : mu (g '' {x | ¬ regular x}) = 0) :
+    ∃ y, ∀ x, g x = y → regular x := by
+  have hne : g '' {x | ¬ regular x} ≠ Set.univ := by
+    intro hall
+    have hzero : mu Set.univ = 0 := by simpa [hall] using hnull
+    exact (MeasureTheory.Measure.measure_univ_ne_zero.mpr (NeZero.ne mu)) hzero
+  rcases (Set.ne_univ_iff_exists_notMem _).mp hne with ⟨y, hy⟩
+  refine ⟨y, fun x hx ↦ ?_⟩
+  by_contra hcritical
+  exact hy ⟨x, hcritical, hx⟩
+
 /-- One chosen component lift through a point of the inverse image, including
 the zero circle-degree conclusion supplied by disk boundedness. -/
 structure ZeroDegreeComponentLift
@@ -1427,6 +1444,7 @@ end ConstructionTargets.T00J02Closure
 #print axioms ConstructionTargets.T00J02Closure.transverse_coprodDerivative_surjective
 #print axioms ConstructionTargets.T00J02Closure.surjective_of_range_sup_eq_top_of_range_le
 #print axioms ConstructionTargets.T00J02Closure.transverse_mfderiv_surjective_of_circleDirection_lifts
+#print axioms ConstructionTargets.T00J02Closure.exists_regularValue_of_criticalValues_measure_zero
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_zeroDegreeComponentLifts
 #print axioms ConstructionTargets.T00J02Closure.regularFiber_chosenComponentDegree_eq_zero
 #print axioms ConstructionTargets.T00J02Closure.componentSignedCount_eq_zero_of_componentDegree_eq_zero
