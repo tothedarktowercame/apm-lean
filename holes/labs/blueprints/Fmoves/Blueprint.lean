@@ -11631,6 +11631,42 @@ lemma cut_retransfer_consistency_A_arc_aux_x {Label : Type*} [DecidableEq Label]
 
 
 /-- Side `p` (the old first `x`): `newA` is the seam, a unit point only at `s₀ ∈ {0, 1}` (`P'`, `Q'`). -/
+lemma cut_retransfer_consistency_A_arc_aux_seam_aux_end {L p q : ℕ}
+    (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutSeam L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L (p + 1) ≠ cutPoint L (q + 1) :=
+    cutPoint_ne (by omega) (by omega)
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L (p + 1)) (y := cutPoint L (q + 1)) (r := (1 : ℝ))
+    (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have heq : (1 - (s : ℝ)) • cutPoint L (p + 1) + (s : ℝ) • cutPoint L (q + 1) =
+      cutSeam L p q s := by
+    apply Complex.ext <;> simp [cutSeam, Complex.real_smul] <;> ring
+  have hh : ‖cutSeam L p q s‖ < 1 := by rw [← heq]; exact hlt
+  rw [h] at hh
+  exact (lt_irrefl 1 hh)
+
+lemma cut_retransfer_consistency_A_arc_aux_seam_aux_zero (L k : ℕ) :
+    (edgePoint L k (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+      cutPoint L k := by
+  change Complex.exp _ = Complex.exp _
+  congr 1
+  simp [cutAlpha]
+  ring
+
+lemma cut_retransfer_consistency_A_arc_aux_seam_aux_one (L k : ℕ) :
+    (edgePoint L k (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) : ℂ) =
+      cutPoint L (k + 1) := by
+  change Complex.exp _ = Complex.exp _
+  congr 1
+  simp [cutAlpha]
+  ring
+
 theorem cut_retransfer_consistency_A_arc_aux_seam {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)
@@ -11647,7 +11683,184 @@ theorem cut_retransfer_consistency_A_arc_aux_seam {Label : Type*} [DecidableEq L
     (hp : e₀ = u.length) :
     ∃ S : Disk, (S : ℂ) = cutRetransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t)) P S := by
-  sorry
+  subst e₀
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hpq : p < q := by dsimp [p, q]; omega
+  have hqL : q < L := by simp [q, L]; omega
+  have hL : 2 ≤ L := by simp [L]; omega
+  have hLform : L = u.length + v.length + t.length + 2 := by
+    simp [L]
+    omega
+  have hlen : (u ++ [x] ++ v ++ [x] ++ t).length =
+      u.length + v.length + t.length + 2 := by
+    simp
+    omega
+  have hseam : (edgePoint L e τ : ℂ) = cutSeam L p q s₀ := by
+    exact hN.trans (D.newA_x s₀)
+  have hs : s₀.1 = 0 ∨ s₀.1 = 1 := by
+    apply cut_retransfer_consistency_A_arc_aux_seam_aux_end hpq hqL
+    rw [← hseam]
+    exact norm_edgePoint L e τ
+  have hPedge : (P : ℂ) = (edgePoint L p s₀ : ℂ) :=
+    hP.trans (D.oldA_arc p s₀ (le_refl p) (by simpa [p, q] using hpq))
+  rcases hs with hs | hs
+  · have hs' : s₀ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+      Subtype.ext hs
+    subst s₀
+    have hedges : edgePoint L e τ =
+        edgePoint L (p + 1) (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      rw [cut_retransfer_consistency_A_arc_aux_seam_aux_zero]
+      simpa [cutSeam] using hseam
+    rcases heq hL (by exact he) (by omega) hedges with hsame | hnext | hprev
+    · rcases hsame with ⟨rfl, rfl⟩
+      refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      rw [hPedge]
+      simp [cutRetransfer, p, q, cutChordB,
+        cut_retransfer_consistency_A_arc_aux_seam_aux_zero, L, Nat.add_assoc]
+      calc
+        _ = cutPoint (u.length + (v.length + (2 + t.length))) u.length :=
+          cut_retransfer_consistency_A_arc_aux_seam_aux_zero _ _
+        _ = _ := by congr 2 <;> omega
+    · rcases hnext with ⟨hτ, -, hadj⟩
+      have he' : e = p := by
+        by_cases hh : e + 1 < L
+        · rw [Nat.mod_eq_of_lt hh] at hadj
+          omega
+        · have hel : e + 1 = L := by omega
+          rw [hel, Nat.mod_self] at hadj
+          omega
+      subst e
+      refine ⟨edgePoint L q (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1), ?_, ?_⟩
+      · simp [cutRetransfer, p, q, hτ, cutChordB,
+          cut_retransfer_consistency_A_arc_aux_seam_aux_zero, L, Nat.add_assoc]
+        calc
+          _ = cutPoint (u.length + (v.length + (2 + t.length)))
+              (u.length + (1 + v.length)) :=
+            cut_retransfer_consistency_A_arc_aux_seam_aux_zero _ _
+          _ = _ := by
+            congr 2 <;> (try simp only [List.length_append, List.length_cons, List.length_nil]) <;> omega
+      · have hx := cut_retransfer_consistency_A_arc_aux_x u v t x
+          (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hPeq : P = edgePoint L p (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+          Subtype.ext hPedge
+        subst P
+        simpa [L, p, q, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hx.symm
+    · rcases hprev with ⟨hzero, -, -⟩
+      norm_num at hzero
+  · have hs' : s₀ = (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+      Subtype.ext hs
+    subst s₀
+    have hedges : edgePoint L e τ =
+        edgePoint L q (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      rw [cut_retransfer_consistency_A_arc_aux_seam_aux_one]
+      simpa [cutSeam] using hseam
+    rcases heq hL (by exact he) hqL hedges with hsame | hnext | hprev
+    · rcases hsame with ⟨rfl, rfl⟩
+      refine ⟨P, ?_, Relation.EqvGen.refl P⟩
+      rw [hPedge]
+      by_cases hv : v = []
+      · subst v
+        simp at hLform hlen
+        have hlen' : (u ++ [x] ++ [] ++ [x] ++ t).length = u.length + t.length + 2 := by
+          simp
+          omega
+        simp [cutRetransfer, p, q, L, cutChordB, cutPoint, cutAlpha,
+          Nat.add_assoc]
+        calc
+          _ = cutPoint (u.length + (2 + t.length)) (u.length + 1) :=
+            cut_retransfer_consistency_A_arc_aux_seam_aux_one _ _
+          _ = _ := by
+            unfold cutPoint cutAlpha
+            congr 1
+            push_cast
+            ring
+      · simp [cutRetransfer, p, q, L, hv, reverseParameter, cutPoint, cutAlpha,
+          Nat.add_assoc]
+        have hvpos : 0 < v.length := by
+          cases v with
+          | nil => exact (hv rfl).elim
+          | cons a v => simp
+        simp [hvpos]
+        calc
+          _ = cutPoint (u.length + (v.length + (2 + t.length))) (u.length + 1) :=
+            cut_retransfer_consistency_A_arc_aux_seam_aux_one _ _
+          _ = cutPoint (u.length + (v.length + (t.length + 2))) (u.length + 1) := by
+            congr 2 <;> omega
+          _ = _ := by
+            convert (cut_retransfer_consistency_A_arc_aux_seam_aux_zero _ _).symm using 1 <;>
+              congr 2 <;> omega
+    · rcases hnext with ⟨-, hzero, -⟩
+      norm_num at hzero
+    · rcases hprev with ⟨-, hτ, hadj⟩
+      have hτ' : τ = (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) := Subtype.ext hτ
+      subst τ
+      refine ⟨edgePoint L e (⟨0, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1), ?_, ?_⟩
+      · by_cases hw : q + 1 < L
+        · have heq' : e = q + 1 := by rw [hadj, Nat.mod_eq_of_lt hw]
+          simp [cutRetransfer, p, q, L, hτ, heq', hw, Nat.add_assoc]
+          congr 2 <;> (try simp only [List.length_append, List.length_cons, List.length_nil]) <;> omega
+        · have hqeq : q + 1 = L := by omega
+          have he0 : e = 0 := by rw [hadj, hqeq, Nat.mod_self]
+          subst e
+          by_cases hp0 : p = 0
+          · have hu0 : u.length = 0 := by simpa [p] using hp0
+            have hu : u = [] := by
+              cases u with
+              | nil => rfl
+              | cons a u => simp at hu0
+            subst u
+            simp at hlen
+            have hlen' : ([] ++ [x] ++ v ++ [x] ++ t).length = v.length + t.length + 2 := by
+              simp
+              omega
+            have hmod : (1 + v.length + 1) % (v.length + 1 + 1 + t.length) = 0 := by
+              simpa [q, L, hu0] using he0
+            rw [hlen']
+            simp [cutRetransfer, q, L, hτ, cutChordB, hqeq,
+              cut_retransfer_consistency_A_arc_aux_seam_aux_zero,
+              cut_retransfer_consistency_A_arc_aux_seam_aux_one, hp0, hu0, hmod]
+            calc
+              _ = cutPoint (v.length + 1 + 1 + t.length) 0 :=
+                cut_retransfer_consistency_A_arc_aux_seam_aux_zero _ _
+              _ = _ := by
+                try dsimp [L]
+                try rw [hlen']
+                try simp [List.length_append]
+                try simp only [List.length_append, List.length_singleton, List.length_cons,
+                  List.length_nil, Nat.add_zero]
+                rw [show v.length + 1 + 1 + t.length =
+                  v.length + t.length + 2 by omega]
+          · have hpne : u.length ≠ 0 := by simpa [p] using hp0
+            simp only [List.length_append, List.length_singleton, List.length_cons,
+              List.length_nil, Nat.add_zero] at hlen
+            have hlen' : (u ++ [x] ++ v ++ [x] ++ t).length =
+                u.length + v.length + t.length + 2 := by
+              simp
+              omega
+            have hmod : (u.length + 1 + v.length + 1) %
+                (u.length + (v.length + 1 + 1) + t.length) = 0 := by
+              simpa [q, L] using he0
+            rw [hlen']
+            simp [cutRetransfer, p, q, L, hτ, hp0, hpne, he0, hmod]
+            try dsimp [L]
+            try rw [hlen']
+            try simp [List.length_append]
+            try simp only [List.length_append, List.length_singleton, List.length_cons,
+              List.length_nil, Nat.add_zero]
+            rw [show u.length + (v.length + 1 + 1) + t.length =
+              u.length + v.length + t.length + 2 by omega]
+            rw [if_neg hpne.symm]
+      · have hx := cut_retransfer_consistency_A_arc_aux_x u v t x
+          (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1)
+        have hPeq : P = edgePoint L p (⟨1, by constructor <;> norm_num⟩ : Icc (0 : ℝ) 1) :=
+          Subtype.ext hPedge
+        subst P
+        rw [hedges]
+        simpa [L, p, q, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hx.symm
 
 /-- Equal positions: `(e, τ) = (q + p + 1 - e₀, reverse s₀)`; `cutRetransfer` undoes the reflection, `S = P`. -/
 theorem cut_retransfer_consistency_A_arc_aux_v_same {Label : Type*} [DecidableEq Label]
