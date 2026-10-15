@@ -554,6 +554,66 @@ the overlap point `cellOverlapCircle γ 1`; transfer from the outer piece to
 `Y` by A4, identify the overlap image with a conjugate of `[γ]` by A3 + A5
 (a free homotopy conjugates; normal closures absorb conjugation), and move the
 basepoint along any path (again a conjugation). -/
+lemma cell_piOne_aux_normalClosure_isConj
+    {G : Type*} [Group G] {a b : G} (h : IsConj a b) :
+    Subgroup.normalClosure ({a} : Set G) =
+      Subgroup.normalClosure ({b} : Set G) := by
+  apply le_antisymm
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, rfl⟩ := isConj_iff.mp h.symm
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+  · apply Subgroup.normalClosure_le_normal
+    rw [Set.singleton_subset_iff]
+    obtain ⟨c, rfl⟩ := isConj_iff.mp h
+    exact Subgroup.normalClosure_normal.conj_mem _
+      (Subgroup.subset_normalClosure (Set.mem_singleton _)) c
+
+lemma cell_piOne_aux_transport_kernel
+    {G H K : Type*} [Group G] [Group H] [Group K]
+    (e : G ≃* H) (f : H →* K) (r : H)
+    (hsurj : Function.Surjective f)
+    (hker : MonoidHom.ker f = Subgroup.normalClosure ({r} : Set H)) :
+    Function.Surjective (f.comp e.toMonoidHom) ∧
+      MonoidHom.ker (f.comp e.toMonoidHom) =
+        Subgroup.normalClosure ({e.symm r} : Set G) := by
+  constructor
+  · intro k
+    obtain ⟨x, rfl⟩ := hsurj k
+    exact ⟨e.symm x, by simp⟩
+  · ext x
+    rw [MonoidHom.mem_ker, MonoidHom.coe_comp, Function.comp_apply]
+    change f (e x) = 1 ↔ _
+    rw [show f (e x) = 1 ↔ e x ∈ MonoidHom.ker f by rfl, hker]
+    constructor
+    · intro hx
+      have hx' : e.symm (e x) ∈
+          (Subgroup.normalClosure ({r} : Set H)).map e.symm.toMonoidHom :=
+        ⟨e x, hx, rfl⟩
+      have hm : (Subgroup.normalClosure ({r} : Set H)).map e.symm.toMonoidHom =
+          Subgroup.normalClosure ({e.symm r} : Set G) := by
+        rw [Subgroup.map_normalClosure ({r} : Set H) e.symm.toMonoidHom
+          e.symm.surjective]
+        congr 1
+        ext z
+        simp
+      rw [hm] at hx'
+      simpa using hx'
+    · intro hx
+      have hx' : e (e.symm (e x)) ∈
+          (Subgroup.normalClosure ({e.symm r} : Set G)).map e.toMonoidHom :=
+        ⟨x, hx, by simp⟩
+      have hm : (Subgroup.normalClosure ({e.symm r} : Set G)).map e.toMonoidHom =
+          Subgroup.normalClosure ({r} : Set H) := by
+        rw [Subgroup.map_normalClosure ({e.symm r} : Set G) e.toMonoidHom
+          e.surjective]
+        congr 1
+        ext z
+        simp
+      rw [hm] at hx'
+      simpa using hx'
+
 lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = y)
     (hA1 : IsOpen (cellOuter γ) ∧ IsOpen (cellInner γ) ∧
       cellOuter γ ∪ cellInner γ = Set.univ)
@@ -570,7 +630,6 @@ lemma cell_piOne (γ : C(Circle, Y)) [PathConnectedSpace Y] (y : Y) (h : γ 1 = 
       (FundamentalGroup.map (cellIncl γ) y).ker =
         Subgroup.normalClosure {loopClassAt γ y h} := by
   sorry
-
 /-- A8. **H₁ of a 2-cell attachment.**  Integral Mayer–Vietoris
 (`IntegralMV.integralMayerVietoris`, transported to the `singularHomologyFunctor`
 form by `IntegralSingularHomologyComparison`) for the cover A1: `H₁(inner) = 0`,
