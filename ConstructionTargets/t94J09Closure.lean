@@ -164,6 +164,31 @@ theorem frozenGraphBoundaryKernelEquiv_attachingCycle :
   funext i
   fin_cases i <;> rfl
 
+/-- A unimodular change of graph-cycle coordinates sending the frozen face
+cycle to the standard genus-six face cycle. -/
+def frozenCycleToN6Coordinates :
+    (Fin 6 → ℤ) ≃ₗ[ℤ] (Fin 6 → ℤ) where
+  toFun x i := ![x 0, x 1, x 2 + x 0, -x 3, -x 4, x 5] i
+  invFun y i := ![y 0, y 1, y 2 - y 0, -y 3, -y 4, y 5] i
+  left_inv := by intro x; funext i; fin_cases i <;> simp
+  right_inv := by intro y; funext i; fin_cases i <;> simp
+  map_add' := by intro x y; funext i; fin_cases i <;> simp <;> ring
+  map_smul' := by intro n x; funext i; fin_cases i <;> simp <;> ring
+
+theorem frozenCycleToN6Coordinates_attachingCycle :
+    frozenCycleToN6Coordinates
+        (frozenGraphBoundaryKernelEquiv frozenAttachingCycle) =
+      fun _ => 2 := by
+  rw [frozenGraphBoundaryKernelEquiv_attachingCycle]
+  funext i
+  fin_cases i <;> rfl
+
+/-- The face boundary written in the six independent cycle coordinates. -/
+def frozenFaceBoundaryCoordinates : ℤ →ₗ[ℤ] (Fin 6 → ℤ) where
+  toFun n := n • frozenGraphBoundaryKernelEquiv frozenAttachingCycle
+  map_add' := by intros; simp [add_smul]
+  map_smul' := by intros; simp [mul_smul]
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -213,6 +238,24 @@ def n6BoundaryLinear : ℤ →ₗ[ℤ] (Fin 6 → ℤ) where
   toFun n := fun _ => 2 * n
   map_add' := by intros; funext; simp [mul_add]
   map_smul' := by intros; funext; simp [mul_left_comm]
+
+theorem frozenCycleToN6Coordinates_comp_faceBoundary :
+    frozenCycleToN6Coordinates.toLinearMap.comp
+        frozenFaceBoundaryCoordinates = n6BoundaryLinear := by
+  apply LinearMap.ext
+  intro n
+  funext i
+  change frozenCycleToN6Coordinates
+      (n • frozenGraphBoundaryKernelEquiv frozenAttachingCycle) i = 2 * n
+  rw [map_smul, frozenCycleToN6Coordinates_attachingCycle]
+  simp [mul_comm]
+
+theorem frozenCycleToN6Coordinates_map_faceBoundaryRange :
+    Submodule.map frozenCycleToN6Coordinates.toLinearMap
+        (LinearMap.range frozenFaceBoundaryCoordinates) =
+      LinearMap.range n6BoundaryLinear := by
+  rw [← LinearMap.range_comp,
+    frozenCycleToN6Coordinates_comp_faceBoundary]
 
 theorem n6OrbitCoordinates_comp_attachingBoundary :
     n6OrbitCoordinates.toLinearMap.comp (attachingBoundary n6PairingData) =
@@ -365,6 +408,17 @@ noncomputable def n6BoundaryCokernelSmithEquiv :
       n6SmithCoordinate.quotKerEquivOfSurjective
         n6SmithCoordinate_surjective)
 
+/-- The cokernel of the literal frozen two-vertex face boundary has the
+required five free coordinates and one parity coordinate. -/
+noncomputable def frozenFaceCokernelSmithEquiv :
+    ((Fin 6 → ℤ) ⧸ LinearMap.range frozenFaceBoundaryCoordinates) ≃ₗ[ℤ]
+      N6Smith :=
+  quotientLinearEquivOfMapEq frozenCycleToN6Coordinates _ _
+      frozenCycleToN6Coordinates_map_faceBoundaryRange ≪≫ₗ
+    (Submodule.quotEquivOfEq _ _ n6BoundaryLinear_range_eq_ker ≪≫ₗ
+      n6SmithCoordinate.quotKerEquivOfSurjective
+        n6SmithCoordinate_surjective)
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -398,5 +452,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphBoundaryKernelEquiv
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
+#print axioms frozenFaceCokernelSmithEquiv
 
 end ConstructionTargets.t94J09Closure
