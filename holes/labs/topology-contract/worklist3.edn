@@ -36746,6 +36746,20 @@
     [{:cmd "initial closure compile",
       :exit 1,
       :note "Used the derived coordinate-zero equality directly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792072738314-14160-4aa1c26e",
+     :commands
+     ["git show --check --stat 7337cdfc2"
+      "git diff --name-only 7337cdfc2^ 7337cdfc2"
+      "sha256sum /tmp/t99j05_cp_homology_interface_check.lean"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the CP-successor two-patch open-cover milestone, with correct patch orientation and standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed single final placeholder."},
     :commit "7337cdfc2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36754,7 +36768,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36772,7 +36786,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed singleton rational homology and literal CP0 data; MV successor remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed the general two-affine-region open cover for the CP successor filtration.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36804,7 +36818,11 @@
     {:job 6,
      :commit "d040389f5",
      :reason
-     "Committed singleton rational homology and literal CP0 data; MV successor remains."}]}
+     "Committed singleton rational homology and literal CP0 data; MV successor remains."}
+    {:job 7,
+     :commit "7337cdfc2",
+     :reason
+     "Committed the general two-affine-region open cover for the CP successor filtration."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37107,7 +37125,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37165,7 +37183,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37187,7 +37205,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -42946,7 +42964,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "regularValue_topDegreeCoordinate_eq_signedCount",
@@ -42958,7 +42976,9 @@
     :type
     "localization equates the top-degree coordinate and signed fiber count",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-regularvalue-topdegreecoordinate-eq-signedcount,
    :kind :lemma,
    :depends-on
@@ -43008,7 +43028,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -43021,7 +43041,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "global localization iff lift top-degree coordinate is four",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-polynomialspherelift-globalimage-eq-decksum-iff-topdegreecoordinate-four,
    :kind :lemma,
@@ -43108,7 +43130,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_openCover",
@@ -43120,7 +43142,9 @@
     :type
     "last affine chart and remaining affine charts form an open cover of literal CP(n+1)",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "7337cdfc2"},
    :id :lemma-t99j05-cp-successor-opencover,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-zero-rational-homology],
