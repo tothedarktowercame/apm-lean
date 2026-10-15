@@ -37121,59 +37121,50 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compute radial-normalization fderiv on the basis; transport signs; degree four; invariants/Main.",
+    "Package tangent determinant; transport signs; degree four; invariants/Main.",
     :outcome :stop,
     :warnings ["Main: one placeholder."],
     :missing-theorems
-    [{:name "fderiv_norm_regularImage_eq_zero_of_inner_eq_zero",
+    [{:name "polynomialNormalizedAmbient_fderiv_regularTangentBasis",
       :type
-      "norm derivative vanishes on directions orthogonal to the raw image",
+      "normalized ambient derivative scales three tangent vectors by 2",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["polynomialMapAmbient_regularPoint_orthogonal_tangentBasis"],
+      ["fderiv_norm_regularImage_eq_zero_of_inner_eq_zero"
+       "polynomialMapAmbient_fderiv_regularTangentBasis"],
       :area "rp-rational-homology"}
      {:name "polynomialSphereLift_regularPoint_tangentDerivative",
-      :type "normalized tangent derivative has positive determinant",
+      :type "sphere-lift tangent derivative has positive determinant",
       :status :partial,
       :consumers [:t96A06],
       :depends-on
-      ["fderiv_norm_regularImage_eq_zero_of_inner_eq_zero"
-       "radialNormalizeAmbient_differentiableAt_regularImage"],
+      ["polynomialNormalizedAmbient_fderiv_regularTangentBasis"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "166/166"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed vanishing of the norm derivative on orthogonal directions.",
+    "Committed normalized quadratic derivatives on the selected tangent basis.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
-     {:cmd "lake env lean problems/t96A06/lean/Main.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "git status --short --untracked-files=no", :exit 0}
-     {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check ea9fbceb6", :exit 0}],
+     {:cmd
+      "lake env lean problems/t96A06/lean/Main.lean; registry; diff; fixture hash; status",
+      :exit 0}
+     {:cmd "git show --check --oneline --stat HEAD", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial compiles",
+    [{:cmd "initial compile",
       :exit 1,
-      :note
-      "used explicit power derivative; split zero-product result"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792056364823-13759-cede8816",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "ea9fbceb6",
+      :note "exposed inverse-norm composition"}],
+    :commit "2f652f97d",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37181,7 +37172,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -41649,7 +41640,8 @@
     :lemma-norm-polynomialmapambient-regularpoint
     :lemma-radialnormalizeambient-differentiableat-regularimage
     :lemma-polynomialmapambient-regularpoint-orthogonal-tangentbasis
-    :lemma-fderiv-norm-regularimage-eq-zero-of-inner-eq-zero],
+    :lemma-fderiv-norm-regularimage-eq-zero-of-inner-eq-zero
+    :lemma-polynomialnormalizedambient-fderiv-regulartangentbasis],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -41901,6 +41893,27 @@
    :depends-on
    [:lemma-cpzerohomologydataofsubsingletondata
     :lemma-t99j05-subsingleton-rational-homology],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "polynomialNormalizedAmbient_fderiv_regularTangentBasis",
+    :type
+    "normalized ambient derivative scales three tangent vectors by 2"},
+   :lemma
+   {:name "polynomialNormalizedAmbient_fderiv_regularTangentBasis",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "normalized ambient derivative scales three tangent vectors by 2",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-polynomialnormalizedambient-fderiv-regulartangentbasis,
+   :kind :lemma,
+   :depends-on
+   [:lemma-fderiv-norm-regularimage-eq-zero-of-inner-eq-zero
+    :lemma-polynomialmapambient-fderiv-regulartangentbasis],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
