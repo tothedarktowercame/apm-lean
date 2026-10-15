@@ -36121,22 +36121,27 @@
   {:consumer :t93J03,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits no new mathematical progress since the prior milestone: KleinPolygonBasedVanKampen merely packages the already-required surjectivity and kernel hypotheses, and both consumers only reapply the previously proved three-input theorem. Prove the based van Kampen surjectivity/kernel result (or winding conjugacy) in scope; extend Mathlib: state and prove the missing theorem in scope.",
    :evidence
    {:placeholder-delta {:t93J03 [1 1]},
     :residual
-    "Restore closure dependency coherence; then run-fold induction, reverse kernel/surjectivity, winding, C1/C2/Main.",
+    "Repair run indices; then quotient fold, kernel/surjectivity, winding, C1/C2/Main.",
     :outcome :stop,
-    :warnings
-    ["Main compiles with existing placeholder; closure baseline rebuild fails."],
+    :warnings ["Main retains its placeholder."],
     :missing-theorems
-    [{:name "pathHomotopicQuotient_concat_succ",
+    [{:name "pathTwoOpenSubdivisionRunIndexCoherence",
+      :type "run-partition Fin indices and endpoint coherence",
+      :status :partial,
+      :consumers [:t93J03],
+      :depends-on ["pathTwoOpenSubdivisionRunStart_eq_prefixLength"],
+      :area "covering-subgroup-correspondence"}
+     {:name "pathHomotopicQuotient_concat_succ",
       :type "quotient recurrence for Path.concat",
       :status :not-started,
       :consumers [:t93J03],
-      :depends-on ["pathTwoOpenSubdivisionRunStart_eq_prefixLength"],
+      :depends-on ["pathTwoOpenSubdivisionRunIndexCoherence"],
       :area "covering-subgroup-correspondence"}
      {:name "t93J03_polygon_based_van_kampen",
       :type "surjectivity; kernel equality",
@@ -36149,18 +36154,16 @@
     :axioms [],
     :author :topo-10,
     :reason
-    "PolygonSurfaceHomology changed, so closure was rebuilt at HEAD 350e17e; the same line-1366+ closure errors persist. Dependency coherence remains blocked and scoped files are untouched.",
+    "Fresh closure rebuild fails before quotient work: obsolete List.getElem_mem calls at 1366/1368 and nonempty Fin-index failures from 1391. Scope unchanged.",
     :commands
     [{:cmd "lake env lean problems/t93J03/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}
-     {:cmd "scope git status", :exit 0}
-     {:cmd "sha256sum fixture", :exit 0}],
+     {:cmd "scope git status", :exit 0}],
     :diagnostic-history
     [{:cmd "lake build ConstructionTargets.t93J03Closure",
       :exit 1,
-      :correction
-      "changed dependency tested; baseline errors persist"}],
+      :correction "baseline index failures"}],
     :commit nil,
     :changed-paths [],
     :fixture
@@ -36169,7 +36172,7 @@
      "57669ee92b655e88fde71c50d99aa588dee734adbcfbcb4e1fcf6863c7a0b085"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t93J03/lean/Main.lean"
     "problems/t93J03/status.json"
@@ -40320,7 +40323,9 @@
     :area "covering-subgroup-correspondence"},
    :id :lemma-pathhomotopicquotient-concat-succ,
    :kind :lemma,
-   :depends-on [:lemma-pathtwoopensubdivisionrunstart-eq-prefixlength],
+   :depends-on
+   [:lemma-pathtwoopensubdivisionrunstart-eq-prefixlength
+    :lemma-pathtwoopensubdivisionrunindexcoherence],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -40360,6 +40365,22 @@
    :id :lemma-t96a06-sphere3-antipodal-h3,
    :kind :lemma,
    :depends-on [:lemma-t96a06-sphere3-rational-h3iso],
+   :other-consumers []}
+  {:consumer :t93J03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "pathTwoOpenSubdivisionRunIndexCoherence",
+    :type "run-partition Fin indices and endpoint coherence"},
+   :lemma
+   {:name "pathTwoOpenSubdivisionRunIndexCoherence",
+    :reported-by [:program-2026-10-13-close-t93j03],
+    :type "run-partition Fin indices and endpoint coherence",
+    :area "covering-subgroup-correspondence"},
+   :id :lemma-pathtwoopensubdivisionrunindexcoherence,
+   :kind :lemma,
+   :depends-on [:lemma-pathtwoopensubdivisionrunstart-eq-prefixlength],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
