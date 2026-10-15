@@ -119109,6 +119109,17 @@
      {:cmd "lake env lean problems/t00J02/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "hash/placeholders/diff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1792023404833-12817-3c5125fc",
+     :commands
+     ["git diff-tree/show 01096eb7"
+      "archive 01096eb7; forced-source lake env lean -o closure; lean Main"
+      "sha256sum/placeholders at 01096eb7"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS program STOP: new commit changes only t00J02Closure.lean and adds a compiled, sorry-free constructor for bundled locally-isolated canonical-fiber data. It builds the choice with the reducible Fintype derived from the same isolation proof required by calculations, so all dependent fields align definitionally; no theorem orientation changes. Forced source audit reports only standard axioms. Fixture/frozen hashes match; closure 0 placeholders, Main baseline 1; registry 166/166. Producing isolation/calculations from transversality and Main remain listed."},
     :commit "01096eb73a725508d816e9fba48b878b42658ee3",
     :changed-paths ["ConstructionTargets/t00J02Closure.lean"],
     :fixture
@@ -119117,7 +119128,7 @@
      "afb497a6df6187f797ce6aeaa36c575f1dfd73fea55484771472965a6d95f984"},
     :seat :topo-2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t00J02/lean/Main.lean"
     "problems/t00J02/status.json"
@@ -119135,7 +119146,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t00J02Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked locally-isolated canonical-fiber endpoint.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked locally-isolated fiber-data constructor.",
    :id :program-2026-10-13-close-t00j02,
    :kind :final-adapter,
    :campaign-priority 45,
@@ -119288,7 +119299,10 @@
      "Repaired locally-isolated witness; standard axioms only."}
     {:job 3,
      :commit "174e4dee1c42140fcd175ed45cc413b39f21ef34",
-     :reason "Banked locally-isolated canonical-fiber endpoint."}]}
+     :reason "Banked locally-isolated canonical-fiber endpoint."}
+    {:job 4,
+     :commit "01096eb73a725508d816e9fba48b878b42658ee3",
+     :reason "Banked locally-isolated fiber-data constructor."}]}
   {:consumer :t98A06,
    :stop-count 5,
    :evidence
@@ -120742,7 +120756,7 @@
    :other-consumers []}
   {:consumer :t00J02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "locallyIsolatedCanonicalFiberData_of",
@@ -120754,7 +120768,9 @@
     :type
     "selected isolated fiber plus calculations gives bundled data",
     :area "oriented-surface-degree",
-    :proved-in :program-2026-10-13-close-t00j02},
+    :proved-in :program-2026-10-13-close-t00j02,
+    :banked-by :program-2026-10-13-close-t00j02,
+    :banked-commit "01096eb73a725508d816e9fba48b878b42658ee3"},
    :id :lemma-locallyisolatedcanonicalfiberdata-of,
    :kind :lemma,
    :depends-on
