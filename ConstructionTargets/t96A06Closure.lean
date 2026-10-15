@@ -1383,6 +1383,30 @@ theorem t96A06_polynomialSphereLift_localSignTransport :
       polynomialSphereVector_flipSecondPairSphere]
     rfl
 
+/-- Concrete signed regular-fiber certificate for the normalized quadratic
+sphere map: the chosen fiber is exactly `Fin 4`, its base derivative has
+positive determinant, and every other point is reached by an
+orientation-preserving deck transformation. -/
+structure PolynomialSphereLiftSignedRegularFiberCertificate where
+  fiberEquiv : Fin 4 ≃
+    {q : Sphere 3 // polynomialSphereLift q =
+      polynomialSphereLift polynomialSphereRegularPoint}
+  baseDeterminantPositive :
+    0 < Matrix.det polynomialSphereLiftRegularPointTangentMatrix
+  deckTransport : ∀ i : Fin 4,
+    i = 0 ∨
+      ∃ d : C(Sphere 3, Sphere 3),
+        d polynomialSphereRegularPoint = (fiberEquiv i).1 ∧
+        polynomialSphereLift.comp d = polynomialSphereLift ∧
+        HomologicalComplex.homologyMap
+          (CoefficientH0.singularPostcomposition ℚ d) 3 = 𝟙 _
+
+noncomputable def polynomialSphereLift_signedRegularFiberCertificate :
+    PolynomialSphereLiftSignedRegularFiberCertificate := by
+  refine ⟨polynomialSphereRegularFiberEquiv,
+    polynomialSphereLift_regularPoint_tangentDerivative.det_pos, ?_⟩
+  exact polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck
+
 /-- The exact covering has two sheets in the finite-fiber sense required by
 the rational chain transfer. -/
 theorem t96A06_rp3_sphere_twoSheeted :
@@ -2415,6 +2439,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereRegularFiberEquiv_deckCoordinates
 #print axioms polynomialSphereRegularFiberEquiv_exists_orientationPreservingDeck
 #print axioms t96A06_polynomialSphereLift_localSignTransport
+#print axioms polynomialSphereLift_signedRegularFiberCertificate
 #print axioms t96A06_rp3_sphere_twoSheeted
 #print axioms t96A06_rp3_rational_homologyMap_surjective
 #print axioms t96A06_sphere3_rational_H1_isZero
