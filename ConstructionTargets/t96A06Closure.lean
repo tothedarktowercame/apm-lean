@@ -3036,6 +3036,54 @@ theorem t96A06_unitH0_homologyComparison_factorization :
 
 #print axioms t96A06_unitH0_homologyComparison_factorization
 
+/-- The module singular chains after forgetting their scalar structure. -/
+noncomputable abbrev t96A06_unitMappedModuleChains :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+    (ComplexShape.down ℕ)).obj
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit))
+
+/-- The chain comparison carries the projected mapped module generator to
+the projected additive generator in the actual homological complexes. -/
+theorem t96A06_unitH0_chainComparison_projected_generators :
+    (HomologicalComplex.opcyclesMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+        t96A06_unitH0ModuleChainGenerator) =
+      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+            t96A06_unitH0AdditiveChainGenerator) := by
+  rw [← ConcreteCategory.comp_apply,
+    HomologicalComplex.p_opcyclesMap,
+    ConcreteCategory.comp_apply]
+  rw [t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex,
+    t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex]
+  change (ConcreteCategory.hom
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          (Limits.Sigma.ι
+            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+              (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+            (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+              (Opposite.op (SimplexCategory.mk 0))) ())) ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+          (TopCat.of Unit) 0).hom ≫
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0) (1 : ℤ) =
+    ConcreteCategory.hom
+      (Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0) (1 : ℤ))
+  rw [← CategoryTheory.Category.assoc,
+    t96A06_unitH0_chainComparison_degreeZero_generator]
+  rfl
+
+#print axioms t96A06_unitH0_chainComparison_projected_generators
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
