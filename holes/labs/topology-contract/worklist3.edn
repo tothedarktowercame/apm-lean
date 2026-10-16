@@ -37247,39 +37247,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove positive generator comparison; then coefficient naturality, four classes, Main.",
+    "Prove coordinate equality; then naturality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison",
-      :type
-      "positive generator comparison implies iterated local endpoint",
+      "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff",
+      :type "generator comparison iff orientation coordinates agree",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint"],
+      ["t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison"],
       :area "rp-rational-homology"}
-     {:name
-      "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass",
+     {:name "t96A06_coefficientDegree_eq_normalizedClassCoordinate",
       :type
-      "integral comparison sends iterated coefficient-sphere generator to positively normalized production sphere class",
+      "coefficient degree 2 equals normalized production sphere coordinate",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison"],
+      ["t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed exact sphere-generator comparison reduction.",
+    :reason "Reduced comparison to integer coordinates.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37288,15 +37286,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 5f41212a2",
+      "git diff --check && git show --check --stat --oneline 5099299cc",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792143317625-15301-186bf019",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "5f41212a2",
+    :diagnostic-history
+    [{:cmd "closure compile attempts",
+      :exit 1,
+      :note "Fixed syntax and heartbeat scope."}],
+    :commit "5099299cc",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37304,7 +37300,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45913,6 +45909,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-of-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff",
+    :type "generator comparison iff orientation coordinates agree"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "generator comparison iff orientation coordinates agree",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-of-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientDegree_eq_normalizedClassCoordinate",
+    :type
+    "coefficient degree 2 equals normalized production sphere coordinate"},
+   :lemma
+   {:name "t96A06_coefficientDegree_eq_normalizedClassCoordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient degree 2 equals normalized production sphere coordinate",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
