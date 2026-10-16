@@ -2699,11 +2699,9 @@ theorem t96A06_unitH0ModuleGenerator_eq_opcycleGenerator :
 /-- The unique module-valued degree-zero singular chain of `Unit`, with
 coefficient one. -/
 noncomputable def t96A06_unitH0ModuleChainGenerator :=
-  (Limits.Sigma.ι
-    (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
-      (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
-    (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
-      (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ)
+  (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0 |>.hom
+      ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ))
 
 #print axioms t96A06_unitH0ModuleChainGenerator
 
@@ -2888,61 +2886,6 @@ theorem t96A06_unitH0_chainComparison_degreeZero_generator_inv :
 
 #print axioms t96A06_unitH0_chainComparison_degreeZero_generator_inv
 
-/-- The chain comparison carries the projected forgotten Unit generator to
-the projected native additive generator. -/
-theorem t96A06_unitH0_opcyclesMap_generator :
-    (HomologicalComplex.opcyclesMap
-      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
-        (TopCat.of Unit)).hom 0).hom
-      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
-            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).pOpcycles.hom
-        t96A06_unitH0ModuleChainGenerator) =
-      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
-          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
-        ((Limits.Sigma.ι
-          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
-            (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
-          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
-            (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ))) := by
-  rw [← ConcreteCategory.comp_apply,
-    HomologicalComplex.p_opcyclesMap,
-    ConcreteCategory.comp_apply]
-  rw [← ConcreteCategory.comp_apply,
-    t96A06_unitH0_chainComparison_degreeZero_generator,
-    ConcreteCategory.comp_apply]
-
-#print axioms t96A06_unitH0_opcyclesMap_generator
-
-/-- Naturality of degree-zero homology lifts the explicit opcycles comparison
-to the corresponding homology classes. -/
-theorem t96A06_unitH0_induced_opcycle_generator :
-    (HomologicalComplex.homologyMap
-      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
-        (TopCat.of Unit)).hom 0).hom
-      (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
-            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).isoHomologyι₀.inv).hom
-        (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
-            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).pOpcycles.hom
-          t96A06_unitH0ModuleChainGenerator) =
-      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
-          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv).hom
-        (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
-          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
-          ((Limits.Sigma.ι
-            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
-              (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
-            (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
-              (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ))) := by
-  rw [← ConcreteCategory.comp_apply,
-    ChainComplex.isoHomologyι₀_inv_naturality,
-    ConcreteCategory.comp_apply,
-    t96A06_unitH0_opcyclesMap_generator]
-
-#print axioms t96A06_unitH0_induced_opcycle_generator
-
 /-- The Unit homology comparison factors as preservation of module homology
 followed by the homology map induced by the explicit chain comparison. -/
 theorem t96A06_unitH0_homologyComparison_factorization :
@@ -2957,60 +2900,6 @@ theorem t96A06_unitH0_homologyComparison_factorization :
   rfl
 
 #print axioms t96A06_unitH0_homologyComparison_factorization
-
-/-- The homology-preservation comparison sends the selected forgotten module
-class to the class represented by its explicit mapped degree-zero chain. -/
-theorem t96A06_unitH0_preservation_generator :
-    ((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
-          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
-      t96A06_unitH0CoordinateGenerator =
-    (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
-          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).isoHomologyι₀.inv).hom
-      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
-          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).pOpcycles.hom
-        t96A06_unitH0ModuleChainGenerator) := by
-  rfl
-
-#print axioms t96A06_unitH0_preservation_generator
-
-/-- The native additive Unit generator is represented by the corresponding
-projected native degree-zero simplex. -/
-theorem t96A06_unitH0_nativeGenerator_eq_projected_generator :
-    t96A06_unitH0NativeGenerator =
-      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
-        (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv).hom
-        (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
-          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
-          ((Limits.Sigma.ι
-            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
-              (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
-            (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
-              (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ))) := by
-  rfl
-
-#print axioms t96A06_unitH0_nativeGenerator_eq_projected_generator
-
-/-- The integral comparison preserves the selected explicit Unit generator. -/
-theorem t96A06_unitH0_comparison_generator :
-    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
-      (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
-        t96A06_unitH0NativeGenerator := by
-  rw [t96A06_unitH0_homologyComparison_factorization]
-  change (HomologicalComplex.homologyMap
-    (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
-      (TopCat.of Unit)).hom 0).hom
-      ((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
-          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
-        t96A06_unitH0CoordinateGenerator) = t96A06_unitH0NativeGenerator
-  rw [t96A06_unitH0_preservation_generator,
-    t96A06_unitH0_induced_opcycle_generator,
-    t96A06_unitH0_nativeGenerator_eq_projected_generator]
-
-#print axioms t96A06_unitH0_comparison_generator
 
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
