@@ -505,6 +505,53 @@ def frozenGeneratorBoundaryHomologyIsoGraph (k : ℕ) :
   (frozenGeneratorCircleBoundaryHomologyIso k).symm ≪≫
     frozenGeneratorCircleHomologyIsoBoundaryGraph k
 
+/-- A disk-boundary point regarded as a point of the outer annulus. -/
+def frozenBoundaryAsOuter
+    (x : ConstructionTargets.PolygonBoundaryCircleSource.Boundary) :
+    ConstructionTargets.PolygonOuterRadialDeformation.Outer :=
+  ⟨x.1, by
+    change 1 / 4 < PolygonRadialOpenCover.radius x.1
+    rw [show PolygonRadialOpenCover.radius x.1 = 1 by exact x.2]
+    norm_num⟩
+
+/-- A boundary representative determines a class in the outer boundary
+skeleton. -/
+def frozenBoundaryRepresentativeToOuterSkeleton
+    (x : ConstructionTargets.PolygonBoundaryCircleSource.Boundary) :
+    FrozenGeneratorOuterBoundaryPiece :=
+  ⟨ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+      frozenGeneratorRel (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+      (Quotient.mk _ (frozenBoundaryAsOuter x)),
+    ⟨frozenBoundaryAsOuter x, x.2, rfl⟩⟩
+
+/-- The boundary-representative map respects the full equivalence closure of
+the boundary relation. -/
+theorem frozenBoundaryRepresentativeToOuterSkeleton_eq_of_eqvGen
+    {x y : ConstructionTargets.PolygonBoundaryCircleSource.Boundary}
+    (h : Relation.EqvGen
+      (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+        frozenGeneratorRel) x y) :
+    frozenBoundaryRepresentativeToOuterSkeleton x =
+      frozenBoundaryRepresentativeToOuterSkeleton y := by
+  apply Subtype.ext
+  apply congrArg (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+    frozenGeneratorRel (fun {_ _} h => frozenGeneratorRel_radius_eq h))
+  apply Quotient.sound
+  apply ConstructionTargets.PolygonOuterRestrictedEqvGen.eqvGen_outerRel_of_eqvGen
+    frozenGeneratorRel (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+  exact ConstructionTargets.PolygonBoundaryInducedQuotient.eqvGen_map
+    (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+      frozenGeneratorRel) frozenGeneratorRel
+    (fun z : ConstructionTargets.PolygonBoundaryCircleSource.Boundary => z.1)
+    (fun {_ _} hz => hz) h
+
+/-- The induced map from the boundary quotient into the outer boundary
+skeleton. -/
+def frozenBoundaryQuotientToOuterSkeleton :
+    FrozenGeneratorBoundaryQuotient → FrozenGeneratorOuterBoundaryPiece :=
+  Quotient.lift frozenBoundaryRepresentativeToOuterSkeleton
+    (fun _ _ h => frozenBoundaryRepresentativeToOuterSkeleton_eq_of_eqvGen h)
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1150,6 +1197,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
 #print axioms frozenGeneratorCircleHomologyIsoBoundaryGraph
 #print axioms frozenGeneratorBoundaryHomologyIsoGraph
+#print axioms frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
