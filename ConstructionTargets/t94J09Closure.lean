@@ -1458,6 +1458,28 @@ noncomputable def frozenGeneratorOuterHomologyIsoGraph (k : ℕ) :
   frozenGeneratorOuterHomologyIsoBoundary k ≪≫
     frozenGeneratorOuterBoundaryHomologyIsoGraph k
 
+/-- The literal outer member in the additive-group presentation used by the
+production Mayer--Vietoris sequence, transported to the graph quotient. -/
+noncomputable def frozenGeneratorOuterGroupHomologyIsoGraph (k : ℕ) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+        (TopCat.of FrozenGeneratorOuterPiece) ≅
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient k) :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of FrozenGeneratorOuterPiece) k).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (frozenGeneratorOuterHomologyIsoGraph k)
+
+/-- The degree-one inner term in the production sequence vanishes. -/
+theorem frozenGeneratorInnerH1GroupIsZero :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of FrozenGeneratorInnerPiece)) :=
+  (ConstructionTargets.SingularHomologyConcrete.pointHigherHomology_isZero 1
+    (by omega)).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        frozenGeneratorInnerHomotopyEquivPoint 1)
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2062,6 +2084,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryQuotientHomeomorphOuterSkeleton
 #print axioms frozenGeneratorOuterBoundaryHomologyIsoGraph
 #print axioms frozenGeneratorOuterHomologyIsoGraph
+#print axioms frozenGeneratorOuterGroupHomologyIsoGraph
+#print axioms frozenGeneratorInnerH1GroupIsZero
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
