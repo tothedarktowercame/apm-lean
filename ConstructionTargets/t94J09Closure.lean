@@ -1786,6 +1786,28 @@ theorem frozenGeneratorMVConnecting_comp_H0_eq_production :
         frozenGeneratorRadialPackage.outer_isOpen
         frozenGeneratorRadialPackage.cover 0 ≫ k) hcancel
 
+/-- After transporting the quotient source to the canonical topology, the
+connecting/intersection composite is the same production composite preceded
+by the inverse quotient-homology comparison. -/
+theorem frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production :
+    frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt ≫
+      frozenGeneratorMVIntersectionH0ArrowToIntGraph =
+        (frozenGeneratorRadialGroupHomologyIso 1).inv ≫
+          ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+              (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+              (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+              frozenGeneratorRadialPackage.inner_isOpen
+              frozenGeneratorRadialPackage.outer_isOpen
+              frozenGeneratorRadialPackage.cover 0 ≫
+            ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+              (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+              (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫
+          frozenGeneratorMVPiecesH0GroupIsoIntGraph.hom := by
+  rw [frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt]
+  simp only [Category.assoc]
+  rw [frozenGeneratorMVConnecting_comp_H0_eq_production]
+  rfl
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2427,5 +2449,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVConnectingH1ToIntersectionInt
 #print axioms frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt
 #print axioms frozenGeneratorMVConnecting_comp_H0_eq_production
+#print axioms frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production
 
 end ConstructionTargets.t94J09Closure
