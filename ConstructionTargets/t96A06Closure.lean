@@ -2631,6 +2631,38 @@ theorem t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
   rw [hnatural, hintegral]
   norm_num
 
+/-- Exact transport of the integral and rational chart generators supplies
+the coefficient-extension chart-coordinate naturality equation. -/
+theorem t96A06_integralToRational_chart_naturality_of_generator_transport
+    (hintegral :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+        (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint)
+    (hrational :
+      t96A06_mappedRationalLocalExtension =
+        ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint) :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom
+        t96A06_mappedRationalLocalExtension =
+      algebraMap ℤ ℚ
+        ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+          polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator)) := by
+  rw [hrational,
+    ConstructionTargets.CoefficientChartLocal.generator_normalization,
+    t96A06_mappedIntegralLocalGenerator_unmap, hintegral,
+    ConstructionTargets.CoefficientChartLocal.generator_normalization]
+  norm_num
+
 /-- Integral localization together with the single rational local coordinate
 equation makes the rational extension localize to the positive generator. -/
 theorem t96A06_rationalExtension_localizes_of_coordinate_one
@@ -4001,6 +4033,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_normalizedClass_projection_preservation_cancel
 #print axioms t96A06_mappedIntegralNormalizedClass_localizes
 #print axioms t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
+#print axioms t96A06_integralToRational_chart_naturality_of_generator_transport
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_integralToRational_localGenerator_iff
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
