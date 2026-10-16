@@ -1526,6 +1526,30 @@ noncomputable def frozenGeneratorMVGraphH1ReassemblyArrow :
       (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1
 
+/-- Composing the graph-coordinate arrows cancels the middle-term transport,
+leaving the production Mayer--Vietoris composite in overlap coordinates. -/
+theorem frozenGeneratorMVGraphH1_comp_eq_production :
+    frozenGeneratorMVIntersectionH1ArrowToGraph ≫
+      frozenGeneratorMVGraphH1ReassemblyArrow =
+        frozenGeneratorIntersectionH1GroupIsoInt.inv ≫
+          ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+            (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+            (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1 ≫
+          ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+            (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+            (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1 := by
+  rw [frozenGeneratorMVIntersectionH1ArrowToGraph,
+    frozenGeneratorMVGraphH1ReassemblyArrow]
+  have hcancel := frozenGeneratorMVPiecesH1GroupIsoGraph.hom_inv_id_assoc
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1)
+  simpa only [Category.assoc] using congrArg
+    (fun k ↦ frozenGeneratorIntersectionH1GroupIsoInt.inv ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+        (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1 ≫ k) hcancel
+
 /-- Degree-zero coordinates on both members of the production cover: the
 inner member contributes one integer and the outer member is transported to
 the boundary graph. -/
@@ -2165,5 +2189,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedQuotientHomologyIsoGenerator
 #print axioms frozenSignedHomology_of_generator_comparisons
 #print axioms frozenGeneratorRadialTopologyComparison
+#print axioms frozenGeneratorMVGraphH1_comp_eq_production
 
 end ConstructionTargets.t94J09Closure
