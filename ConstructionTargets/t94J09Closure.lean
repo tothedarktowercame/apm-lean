@@ -209,6 +209,97 @@ theorem frozenGeneratorInnerOverlapHomology :
     ⟨frozenGeneratorOverlapH1IsoInt⟩,
     frozenGeneratorOverlapHigherHomology_isZero⟩
 
+/-- The outer member of the literal frozen radial cover. -/
+abbrev FrozenGeneratorOuterPiece :=
+  PolygonRadialOpenCover.outerOpen frozenGeneratorRel
+
+/-- Boundary classes inside the literal frozen outer member. -/
+def frozenGeneratorOuterBoundarySkeleton :
+    Set FrozenGeneratorOuterPiece :=
+  {z | ConstructionTargets.PolygonOuterOpenDeformation.IsBoundaryClass
+    frozenGeneratorRel
+      (fun {_ _} h => frozenGeneratorRel_radius_eq h) z}
+
+/-- The boundary skeleton as a topological subspace of the outer member. -/
+abbrev FrozenGeneratorOuterBoundaryPiece :=
+  {z : FrozenGeneratorOuterPiece //
+    z ∈ frozenGeneratorOuterBoundarySkeleton}
+
+/-- The generic radial deformation specialized to the literal frozen
+two-vertex relation. -/
+def frozenGeneratorOuterHomotopy :
+    C(unitInterval × FrozenGeneratorOuterPiece,
+      FrozenGeneratorOuterPiece) :=
+  ⟨ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy
+      frozenGeneratorRel
+      (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+      (fun {_ _} h => frozenGeneratorRel_boundary h),
+    ConstructionTargets.PolygonOuterOpenDeformation.continuous_outerOpenHomotopy
+        frozenGeneratorRel
+        (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+        (fun {_ _} h => frozenGeneratorRel_boundary h)⟩
+
+/-- The literal frozen outer member has the homotopy type of its two-vertex,
+seven-edge boundary graph. -/
+def frozenGeneratorOuterHomotopyEquivBoundary :
+    ContinuousMap.HomotopyEquiv FrozenGeneratorOuterPiece
+      FrozenGeneratorOuterBoundaryPiece where
+  toFun :=
+    { toFun := fun z =>
+        ⟨frozenGeneratorOuterHomotopy (1, z),
+          ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy_one_boundary
+              frozenGeneratorRel
+              (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+              (fun {_ _} h => frozenGeneratorRel_boundary h) z⟩
+      continuous_toFun := by fun_prop }
+  invFun :=
+    { toFun := fun z => z.1
+      continuous_toFun := continuous_subtype_val }
+  left_inv := by
+    let H :
+        ContinuousMap.Homotopy (ContinuousMap.id FrozenGeneratorOuterPiece)
+          ((ContinuousMap.mk
+              (fun z : FrozenGeneratorOuterBoundaryPiece => z.1)
+              continuous_subtype_val).comp
+            (ContinuousMap.mk
+              (fun z : FrozenGeneratorOuterPiece =>
+                ⟨frozenGeneratorOuterHomotopy (1, z),
+                  ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy_one_boundary
+                      frozenGeneratorRel
+                      (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+                      (fun {_ _} h => frozenGeneratorRel_boundary h) z⟩)
+              (by fun_prop))) :=
+      { toFun := fun p => frozenGeneratorOuterHomotopy p
+        continuous_toFun := frozenGeneratorOuterHomotopy.continuous
+        map_zero_left := ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy_zero
+            frozenGeneratorRel
+            (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+            (fun {_ _} h => frozenGeneratorRel_boundary h)
+        map_one_left := by intro z; rfl }
+    exact ⟨H.symm⟩
+  right_inv := by
+    have hmap :
+        (ContinuousMap.mk
+            (fun z : FrozenGeneratorOuterPiece =>
+              ⟨frozenGeneratorOuterHomotopy (1, z),
+                ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy_one_boundary
+                    frozenGeneratorRel
+                    (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+                    (fun {_ _} h => frozenGeneratorRel_boundary h) z⟩)
+            (by fun_prop)).comp
+          (ContinuousMap.mk
+            (fun z : FrozenGeneratorOuterBoundaryPiece => z.1)
+            continuous_subtype_val) =
+          ContinuousMap.id FrozenGeneratorOuterBoundaryPiece := by
+      apply ContinuousMap.ext
+      intro z
+      apply Subtype.ext
+      exact ConstructionTargets.PolygonOuterOpenDeformation.outerOpenHomotopy_fixed
+          frozenGeneratorRel
+          (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+          (fun {_ _} h => frozenGeneratorRel_boundary h) 1 z.1 z.2
+    rw [hmap]
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -845,6 +936,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorRadialPackage
 #print axioms frozenGeneratorRel_boundary
 #print axioms frozenGeneratorInnerOverlapHomology
+#print axioms frozenGeneratorOuterHomotopyEquivBoundary
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
