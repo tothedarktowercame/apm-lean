@@ -37239,37 +37239,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compute sphere-shift localization sign; then coefficient naturality, comparison, four classes, Main.",
+    "Exclude negative localization branch; then coefficient naturality, comparison, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name
-      "t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization",
+    [{:name "t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg",
       :type
-      "coordinate -1 iff sphere-shift generator localizes negatively",
+      "sphere-shift generator localizes to positive or negative ambient generator",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one"],
+      ["t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization"],
       :area "rp-rational-homology"}
      {:name "t96A06_sphereShiftGenerator_localization_ne_neg",
-      :type "sphere-shift generator does not localize negatively",
+      :type "exclude the negative localization branch",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization"],
+      ["t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed negative-coordinate/localization equivalence.",
+    :reason "Committed sphere-shift localization sign dichotomy.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37277,18 +37276,14 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 81934153d", :exit 0}],
+     {:cmd
+      "git diff --check && git show --check --stat --oneline a43ad3d4c",
+      :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile attempts",
+    [{:cmd "closure compile",
       :exit 1,
-      :note "Fixed coercion rewrites; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792140001116-15247-f2b13e85",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "81934153d",
+      :note "Added explicit module endpoints; rerun passed."}],
+    :commit "a43ad3d4c",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37296,7 +37291,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45663,7 +45658,8 @@
    :id :lemma-t96a06-sphereshiftgenerator-localization-ne-neg,
    :kind :lemma,
    :depends-on
-   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization],
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization
+    :lemma-t96a06-sphereshiftgenerator-localizes-eq-or-eq-neg],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -45703,6 +45699,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-cpsuccessorlowervectorhomotopyinpatch-continuous],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg",
+    :type
+    "sphere-shift generator localizes to positive or negative ambient generator"},
+   :lemma
+   {:name "t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphere-shift generator localizes to positive or negative ambient generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-sphereshiftgenerator-localizes-eq-or-eq-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
