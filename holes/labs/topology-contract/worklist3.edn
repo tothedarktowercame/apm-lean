@@ -37239,36 +37239,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Exclude negative localization branch; then coefficient naturality, comparison, four classes, Main.",
+    "Compute explicit normalization composite; then coefficient naturality, comparison, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg",
+    [{:name
+      "t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id",
       :type
-      "sphere-shift generator localizes to positive or negative ambient generator",
+      "positive localization iff sphere-shift/local normalization composite is identity",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization"],
+      ["t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg"],
       :area "rp-rational-homology"}
-     {:name "t96A06_sphereShiftGenerator_localization_ne_neg",
-      :type "exclude the negative localization branch",
+     {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id",
+      :type
+      "the explicit sphere-shift/local normalization composite is identity",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg"],
+      ["t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed sphere-shift localization sign dichotomy.",
+    :reason
+    "Reduced positive localization to an explicit automorphism identity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37277,19 +37280,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline a43ad3d4c",
+      "git diff --check && git show --check --stat --oneline aee26f0e0",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :note "Added explicit module endpoints; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792140989208-15261-3e78f1e0",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "a43ad3d4c",
+    :commit "aee26f0e0",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37297,7 +37290,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45725,6 +45718,48 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id",
+    :type
+    "positive localization iff sphere-shift/local normalization composite is identity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "positive localization iff sphere-shift/local normalization composite is identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftgenerator-localizes-eq-or-eq-neg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id",
+    :type
+    "the explicit sphere-shift/local normalization composite is identity"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "the explicit sphere-shift/local normalization composite is identity",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
