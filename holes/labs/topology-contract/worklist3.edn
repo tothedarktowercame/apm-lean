@@ -36751,6 +36751,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :note "Explicit continuity and unit scalar; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792146718448-15333-f08e4e63",
+     :commands
+     ["git show --check --stat c1ebea9b0; inspect diff"
+      "verify commit blob equals compiled file"
+      "sha256sum fixture => 4aeb8b6a...beea8d"
+      "lake env lean Closure, Main, fixture"
+      "statement-registry.py check => 168/168"],
+     :finding
+     "PASS: c1ebea9b0 adds compiled, sorry-free progress beyond history: continuous zero-last inclusion CP n -> lower patch, nonzero truncation, include/truncate identity, and correct time-one factorization. Projective scalar orientation and representation conversion are sound. Fixture hash matches; axioms standard. Main remains 1->1; truncation descent, inverse laws, deformation retract, MV, and Main milestones are listed."},
     :commit "c1ebea9b0",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36759,7 +36771,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36777,7 +36789,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed restricted quotient homotopy descent.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed CP n inclusion and time-one factorization.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36863,7 +36875,10 @@
      :reason "Committed continuous lower-patch vector homotopy."}
     {:job 3,
      :commit "380841fbd",
-     :reason "Committed restricted quotient homotopy descent."}]}
+     :reason "Committed restricted quotient homotopy descent."}
+    {:job 4,
+     :commit "c1ebea9b0",
+     :reason "Committed CP n inclusion and time-one factorization."}]}
   {:consumer :t98A02,
    :stop-count 2,
    :evidence
@@ -37233,7 +37248,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37294,7 +37309,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37316,7 +37331,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -45862,7 +45877,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45876,7 +45891,9 @@
     :type
     "positive generator comparison implies iterated local endpoint",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-of-comparison,
    :kind :lemma,
@@ -45907,7 +45924,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45919,7 +45936,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "generator comparison iff orientation coordinates agree",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff,
    :kind :lemma,
@@ -45947,7 +45966,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45959,7 +45978,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "excluding opposite signs forces coordinate equality",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate-of-ne-neg,
    :kind :lemma,
@@ -45988,7 +46009,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -46002,7 +46023,9 @@
     :type
     "sign exclusion iff compared generator is not the negative normalized class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate-iff,
    :kind :lemma,
@@ -46031,7 +46054,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
@@ -46041,7 +46064,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "time-one factors through CP n zero-last inclusion",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "c1ebea9b0"},
    :id :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion,
    :kind :lemma,
    :depends-on
