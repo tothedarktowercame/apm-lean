@@ -37282,43 +37282,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Use Unit comparison in the Bool square; then boundary, signs, Main.",
+    "Compare inverse-discrete and explicit chains; then homology, Bool square, boundary, signs, Main.",
     :outcome :stop,
-    :warnings
-    ["Existing lints; Main one placeholder; unrelated changes untouched."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_preservation_generator",
+    [{:name "t96A06_unitH0_opcycle_eq_projected_chainGenerator",
       :type
-      "preservation iso carries the Unit coordinate to its projected class",
+      "opcycle projects from the inverse-discrete chain generator",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_induced_opcycle_generator"],
+      :depends-on ["t96A06_unitH0ModuleChainGenerator"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_comparison_generator",
+     {:name "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
       :type
-      "integral comparison preserves the explicit Unit generator",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_preservation_generator"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_boolH0_comparison_square",
-      :type
-      "integral comparison commutes on the two Bool H0 generators",
+      "inverse-discrete Unit chain generator equals the explicit singular simplex",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_comparison_generator"],
+      :depends-on
+      ["t96A06_unitH0_opcycle_eq_projected_chainGenerator"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed the explicit Unit homology comparison.",
+    :reason
+    "Repaired compile failures; committed exact Unit chain/opcycle generator.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37326,14 +37320,13 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline af3350f5d", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792173080421-15710-9c2e81fa",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "af3350f5d",
+     {:cmd "git show --check --stat --oneline 7ddab2206", :exit 0}],
+    :diagnostic-history
+    [{:cmd "direct closure compile",
+      :exit 1,
+      :note
+      "Piped status hid errors; removed invalid claims and corrected generator."}],
+    :commit "7ddab2206",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37341,7 +37334,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47581,6 +47574,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
+    :type
+    "inverse-discrete Unit chain generator equals the explicit singular simplex"},
+   :lemma
+   {:name "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "inverse-discrete Unit chain generator equals the explicit singular simplex",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
