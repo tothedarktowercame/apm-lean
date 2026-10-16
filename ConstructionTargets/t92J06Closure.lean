@@ -227,6 +227,24 @@ theorem realizationQuotientMap_isQuotientMap :
         Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) z) :=
   isQuotientMap_quotient_mk'
 
+/-- The raw open interval belonging to one labeled lifted edge. -/
+def rawEdgeInterior (i : Fin 2) (v : V) : Set (RealizationRaw V) :=
+  Sum.inr '' ({i} ×ˢ ({v} ×ˢ
+    {t : UnitInterval | t.1 ∈ Set.Ioo (0 : ℝ) 1}))
+
+/-- A single lifted edge interior is open before taking the endpoint
+quotient. -/
+theorem rawEdgeInterior_isOpen (i : Fin 2) (v : V) :
+    IsOpen (rawEdgeInterior i v) := by
+  letI : TopologicalSpace V := ⊥
+  letI : DiscreteTopology V := ⟨rfl⟩
+  change @IsOpen (V ⊕ (Fin 2 × V × UnitInterval))
+    inferInstance (rawEdgeInterior i v)
+  apply isOpenMap_inr
+  exact (isOpen_discrete ({i} : Set (Fin 2))).prod
+    ((isOpen_discrete ({v} : Set V)).prod
+      (isOpen_Ioo.preimage continuous_subtype_val))
+
 def vertex (v : V) : D.Realization := Quotient.mk _ (.inl v)
 
 def edgePoint (i : Fin 2) (v : V) (t : UnitInterval) : D.Realization :=
@@ -773,6 +791,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
 
 #print axioms vertex_injective
 #print axioms realizationQuotientMap_isQuotientMap
+#print axioms rawEdgeInterior_isOpen
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
