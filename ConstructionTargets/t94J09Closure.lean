@@ -2672,6 +2672,34 @@ noncomputable def frozenGeneratorH1SmithEquiv_of_section
       (frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
         s hsection))
 
+/-- The module-valued and concrete additive-group constructions of canonical
+generator-quotient H1 agree as integral linear modules. -/
+noncomputable def frozenGeneratorCanonicalModuleH1EquivConcrete :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).obj
+          (@TopCat.of FrozenGeneratorQuotient
+            (@instTopologicalSpaceQuotient Surfaces.Disk
+              (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance))) : Type) ≃ₗ[ℤ]
+    (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (@TopCat.of FrozenGeneratorQuotient
+        (@instTopologicalSpaceQuotient Surfaces.Disk
+          (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) := by
+  let c :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (@TopCat.of FrozenGeneratorQuotient
+        (@instTopologicalSpaceQuotient Surfaces.Disk
+          (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) 1
+  exact LinearEquiv.ofBijective c.hom.hom.toIntLinearMap
+    ⟨by
+      intro x y hxy
+      have h := congrArg (fun z => c.inv z) hxy
+      simpa using h,
+     by
+      intro y
+      refine ⟨c.inv y, ?_⟩
+      exact c.inv_hom_id_apply y⟩
+
 /-- Assemble the literal homology calculation once the geometric comparison
 maps identify the Mayer--Vietoris groups with the frozen chain complex. -/
 theorem frozenPolygonHomology_of_comparisons
@@ -2777,6 +2805,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenH1SmithEquivOfSurjectiveKernel
 #print axioms frozenGeneratorH1SmithEquiv_of_comparisons
 #print axioms frozenGeneratorH1SmithEquiv_of_section
+#print axioms frozenGeneratorCanonicalModuleH1EquivConcrete
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
