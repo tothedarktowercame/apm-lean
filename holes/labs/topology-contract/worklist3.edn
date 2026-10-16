@@ -36750,6 +36750,18 @@
     [{:cmd "closure compile",
       :exit 1,
       :note "Fixed prodMk spelling; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792151882878-15423-74194873",
+     :commands
+     ["git show --check --stat 87bd5a00f1; inspect diff"
+      "verify commit blob equals compiled file"
+      "sha256sum fixture => 4aeb8b6a...beea8d"
+      "lake env lean Closure, Main, fixture"
+      "statement-registry.py check => 168/168"],
+     :finding
+     "PASS: 87bd5a00f1 adds compiled, sorry-free progress beyond history: time-one is inclusion after retraction, the time-first homotopy is bundled with correct endpoints, and these maps form a homotopy equivalence CP n ~= lower patch. Representation directions are correct. Fixture hash matches; axioms standard. Main remains 1->1; MV, homology, Lefschetz, and Main milestones are listed."},
     :commit "87bd5a00f1",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36758,7 +36770,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36776,7 +36788,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed truncation descent and left inverse.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged lower-patch homotopy equivalence; MV remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36868,7 +36880,11 @@
      :reason "Committed CP n inclusion and time-one factorization."}
     {:job 5,
      :commit "70fe46d76",
-     :reason "Committed truncation descent and left inverse."}]}
+     :reason "Committed truncation descent and left inverse."}
+    {:job 6,
+     :commit "87bd5a00f1",
+     :reason
+     "Packaged lower-patch homotopy equivalence; MV remains."}]}
   {:consumer :t98A02,
    :stop-count 2,
    :evidence
@@ -37238,7 +37254,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37294,7 +37310,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37316,7 +37332,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -45305,7 +45321,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_lowerPatch_deformationRetract",
@@ -45317,7 +45333,9 @@
     :type
     "lower patch deformation retracts onto the zero-last projective subspace CP n",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "87bd5a00f1"},
    :id :lemma-t99j05-cp-successor-lowerpatch-deformationretract,
    :kind :lemma,
    :depends-on
@@ -46237,7 +46255,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -46249,7 +46267,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coordinate nonnegativity implies endpoint nonnegativity",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-sphereshiftlocalnormalizationiteratedendpoint-nonneg-of-coordinate-nonneg,
    :kind :lemma,
@@ -46277,7 +46297,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_coefficientDegree_two_nonneg_of_circle_and_steps",
@@ -46287,7 +46307,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "circle and suspension signs imply coefficient sign",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-coefficientdegree-two-nonneg-of-circle-and-steps,
    :kind :lemma,
    :depends-on
@@ -46316,7 +46338,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -46328,7 +46350,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "exact circle comparison implies positive endpoint",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-coefficientcircleorientationendpoint-nonneg-of-comparison,
    :kind :lemma,
@@ -46356,7 +46380,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_coefficientCircleComparison_eq_native_of_apply_one",
@@ -46366,7 +46390,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coordinate at one determines exact circle comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-coefficientcirclecomparison-eq-native-of-apply-one,
    :kind :lemma,
