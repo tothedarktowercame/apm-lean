@@ -37264,35 +37264,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove Unit-to-Bool naturality square; then boundary map, circle sign, suspensions, Main.",
+    "Prove additive point coordinate and comparison naturality; then boundary map, circle sign, suspensions, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t96A06_boolH0_all_points_iff_comparison",
-      :type "all Bool point comparisons iff full comparison",
+    [{:name "t96A06_boolH0_module_pointInclusion_coordinates",
+      :type
+      "module H0 Unit-to-Bool map is the selected coproduct injection",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_boolH0_endpoint_pair_iff_comparison"],
+      :depends-on ["t96A06_boolH0_all_points_iff_comparison"],
       :area "rp-rational-homology"}
-     {:name "t96A06_boolH0PointComparison_of_unit_naturality",
-      :type "Unit-to-Bool naturality proves each point comparison",
+     {:name "t96A06_boolH0_additive_pointInclusion_coordinates",
+      :type
+      "additive H0 Unit-to-Bool map is the selected coproduct injection",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_boolH0_all_points_iff_comparison"],
+      :depends-on ["t96A06_boolH0_module_pointInclusion_coordinates"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact pointwise criterion; the Unit-to-Bool naturality square remains.",
+    "Committed module-valued Unit-to-Bool coordinate edge; additive edge and comparison square remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37300,14 +37302,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 3db2591c23", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792157238994-15491-c10eaeb0",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "3db2591c23",
+     {:cmd "git show --check --stat --oneline 0a33fc2190", :exit 0}],
+    :commit "0a33fc2190",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37315,7 +37311,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46751,6 +46747,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_module_pointInclusion_coordinates",
+    :type
+    "module H0 Unit-to-Bool map is the selected coproduct injection"},
+   :lemma
+   {:name "t96A06_boolH0_module_pointInclusion_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "module H0 Unit-to-Bool map is the selected coproduct injection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-boolh0-module-pointinclusion-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-all-points-iff-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_additive_pointInclusion_coordinates",
+    :type
+    "additive H0 Unit-to-Bool map is the selected coproduct injection"},
+   :lemma
+   {:name "t96A06_boolH0_additive_pointInclusion_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "additive H0 Unit-to-Bool map is the selected coproduct injection",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-additive-pointinclusion-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-module-pointinclusion-coordinates],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
