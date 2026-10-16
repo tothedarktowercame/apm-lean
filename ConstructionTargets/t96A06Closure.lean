@@ -1914,6 +1914,46 @@ theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpo
   apply t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
   simpa [CoefficientSphereEndpoints.sphereH2] using hendpoint
 
+/-- The coefficient generator obtained by two inverse suspension shifts from
+the normalized circle generator. -/
+noncomputable def t96A06_integralIteratedSphereGenerator :=
+  (CoefficientSphereShift.sphereShift ℤ 3 2 (by decide)).inv.hom
+    ((CoefficientSphereShift.sphereShift ℤ 2 1 (by decide)).inv.hom
+      ((CoefficientSphereEndpoints.circleH1 ℤ).inv.hom 1))
+
+/-- The iterated generator is exactly the inverse image of `1` under the
+integral three-sphere coordinate used by this closure. -/
+theorem t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one :
+    t96A06_integralIteratedSphereGenerator =
+      t96A06_sphere3_integral_H3Iso.inv.hom 1 := by
+  rfl
+
+/-- Exact comparison with the positively normalized production class closes
+the remaining iterated endpoint calculation. -/
+theorem t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
+    (hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint) :
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) = 1 := by
+  rw [hcomparison]
+  change (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+    1 polynomialSphereRegularPoint).hom.hom
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint)) = 1
+  rw [t96A06_sphere3_integral_normalizedClass_localizes,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4740,6 +4780,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint
+#print axioms t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one
+#print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
