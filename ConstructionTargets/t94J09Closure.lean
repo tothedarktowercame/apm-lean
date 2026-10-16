@@ -1615,6 +1615,19 @@ theorem frozenGeneratorMVIntGraphH0_comp_eq_production :
         (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
         (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫ k) hcancel
 
+/-- The Mayer--Vietoris connecting morphism from quotient degree one to the
+integral coordinate on the degree-zero intersection. -/
+noncomputable def frozenGeneratorMVConnectingH1ToIntersectionInt :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of FrozenGeneratorQuotient) ⟶ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+      frozenGeneratorRadialPackage.inner_isOpen
+      frozenGeneratorRadialPackage.outer_isOpen
+      frozenGeneratorRadialPackage.cover 0 ≫
+    frozenGeneratorIntersectionH0GroupIsoInt.hom
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2243,5 +2256,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
 #print axioms frozenGeneratorMVIntGraphH0_comp_eq_production
+#print axioms frozenGeneratorMVConnectingH1ToIntersectionInt
 
 end ConstructionTargets.t94J09Closure
