@@ -37264,39 +37264,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove Unit H0 normalization and compose square; then boundary map, circle sign, suspensions, Main.",
+    "Compute Unit generator coordinate and compose Bool square; then boundary, circle sign, suspensions, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t96A06_boolH0_comparison_pointInclusion_naturality",
+    [{:name "t96A06_unitH0_integralComparison_of_generator",
       :type
-      "integral comparison naturality for each Unit-to-Bool point inclusion",
+      "the Unit generator coordinate determines the full H0 comparison",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_boolH0_additive_pointInclusion_coordinates"],
+      ["t96A06_boolH0_comparison_pointInclusion_naturality"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_integralComparison",
+     {:name "t96A06_unitH0_integralComparison_generator",
       :type
-      "forgotten module and additive direct H0 coordinates agree on Unit",
+      "forgotten module and additive Unit H0 generator coordinates agree",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_boolH0_comparison_pointInclusion_naturality"],
+      :depends-on ["t96A06_unitH0_integralComparison_of_generator"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed point-inclusion comparison naturality; Unit normalization and square composition remain.",
+    "Committed Unit comparison reduction to its sole generator coordinate; scalar calculation remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37304,14 +37303,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 6ff9407af6", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792158495722-15523-51e95569",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "6ff9407af6",
+     {:cmd "git show --check --stat --oneline a0882751cf", :exit 0}],
+    :commit "a0882751cf",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37319,7 +37312,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46852,6 +46845,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_of_generator",
+    :type
+    "the Unit generator coordinate determines the full H0 comparison"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_of_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "the Unit generator coordinate determines the full H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-integralcomparison-of-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_generator",
+    :type
+    "forgotten module and additive Unit H0 generator coordinates agree"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten module and additive Unit H0 generator coordinates agree",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-integralcomparison-generator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison-of-generator],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
