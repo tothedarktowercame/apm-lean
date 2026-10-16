@@ -3206,6 +3206,25 @@ theorem t96A06_unitH0_mappedRightHomology_triangle :
 
 #print axioms t96A06_unitH0_mappedRightHomology_triangle
 
+/-- After forgetting module structure, the original right-homology triangle
+still carries the canonical degree-zero opcycle presentation to the chosen
+right-data opcycles. -/
+theorem t96A06_unitH0_forgottenRightHomology_opcycle_triangle :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom := by
+  simpa only [Functor.map_comp, Category.assoc] using congrArg
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+    t96A06_unitH0_rightHomology_opcycle_transport
+
+#print axioms t96A06_unitH0_forgottenRightHomology_opcycle_triangle
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
