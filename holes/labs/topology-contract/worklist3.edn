@@ -36755,6 +36755,19 @@
       :exit 1,
       :note
       "Fixed composition syntax and explicit chain-map types; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792173999436-15722-63637562",
+     :commands
+     ["git show/check ddbe3be23"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: repair commit compiles the general range-to-literal homology naturality milestone; composition orientation is range A→literal A→literal B = range A→range B→literal B. Fixture hash matches; supporting file has 0 placeholders; standard axioms only; registry 168/168; Main retains its declared one placeholder."},
     :commit "ddbe3be23",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36763,7 +36776,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36794,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed ambient-inclusion naturality for literal-patch transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired compiled range homology naturality.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36896,7 +36909,10 @@
     {:job 2,
      :commit "b9f1d3a49",
      :reason
-     "Committed ambient-inclusion naturality for literal-patch transport."}]}
+     "Committed ambient-inclusion naturality for literal-patch transport."}
+    {:job 4,
+     :commit "ddbe3be23",
+     :reason "Repaired compiled range homology naturality."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37266,7 +37282,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37325,7 +37341,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37347,7 +37363,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47066,7 +47082,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_comparison_generator",
@@ -47076,7 +47092,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "comparison preserves explicit Unit generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-comparison-generator,
    :kind :lemma,
    :depends-on
@@ -47372,7 +47390,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_induced_opcycle_generator",
@@ -47384,7 +47402,9 @@
     :type
     "chain-comparison homology map carries the explicit Unit opcycle class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-induced-opcycle-generator,
    :kind :lemma,
    :depends-on
@@ -47415,7 +47435,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_opcycle_eq_projected_chainGenerator",
@@ -47427,7 +47447,9 @@
     :type
     "Unit opcycle generator equals projection of the explicit chain generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0modulechaingenerator],
@@ -47478,7 +47500,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_opcyclesMap_generator",
@@ -47490,7 +47512,9 @@
     :type
     "chain comparison carries the projected Unit generator to the native projection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-opcyclesmap-generator,
    :kind :lemma,
    :depends-on
@@ -47498,7 +47522,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_preservation_generator",
@@ -47510,7 +47534,9 @@
     :type
     "homology-preservation isomorphism carries the Unit coordinate to its projected opcycle class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-preservation-generator,
    :kind :lemma,
    :depends-on
@@ -47536,7 +47562,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_ambientSubspaceRangeHomologyIso_naturality",
@@ -47548,7 +47574,9 @@
     :type
     "range-to-literal homology transport is natural for subspace inclusions",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ddbe3be23"},
    :id :lemma-t99j05-ambientsubspacerangehomologyiso-naturality,
    :kind :lemma,
    :depends-on
