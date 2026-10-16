@@ -659,11 +659,86 @@ noncomputable def interiorFiberEquiv (i : Fin 2) (t : UnitInterval)
     have h := existsUnique_edgePoint_of_projection_eq_interior D i t ht e e.2
     exact h.unique h.choose_spec.1 rfl
 
+/-- Every fiber of the graph realization projection has the cardinality of
+the graph vertex type. -/
+theorem projection_fiberCard [Finite V] (x : X) :
+    Nat.card {e : D.Realization // D.projection e = x} = Nat.card V := by
+  induction x using Quotient.inductionOn with
+  | _ raw =>
+      cases raw with
+      | inl z =>
+          change Nat.card {e : D.Realization // D.projection e = inl z} = Nat.card V
+          by_cases hz : z = circleBase
+          · subst z
+            exact Nat.card_congr D.vertexFiberEquiv
+          · obtain ⟨t, ht⟩ := intervalCircle_surjective z
+            have ht0 : t ≠ intervalZero := by
+              intro h
+              apply hz
+              rw [← ht]
+              simp [h]
+            have ht1 : t ≠ intervalOne := by
+              intro h
+              apply hz
+              rw [← ht]
+              simp [h]
+            have hti : t.1 ∈ Set.Ioo (0 : ℝ) 1 := by
+              constructor
+              · exact lt_of_le_of_ne t.2.1 (by
+                  intro h
+                  apply ht0
+                  apply Subtype.ext
+                  simpa [intervalZero] using h.symm)
+              · exact lt_of_le_of_ne t.2.2 (by
+                  intro h
+                  apply ht1
+                  apply Subtype.ext
+                  simpa [intervalOne] using h)
+            have hx : inl z = edgeProjection 0 t := by
+              simp [edgeProjection, ht]
+            rw [hx]
+            exact Nat.card_congr (D.interiorFiberEquiv 0 t hti)
+      | inr z =>
+          change Nat.card {e : D.Realization // D.projection e = inr z} = Nat.card V
+          by_cases hz : z = circleBase
+          · subst z
+            rw [← inl_base_eq_inr_base]
+            exact Nat.card_congr D.vertexFiberEquiv
+          · obtain ⟨t, ht⟩ := intervalCircle_surjective z
+            have ht0 : t ≠ intervalZero := by
+              intro h
+              apply hz
+              rw [← ht]
+              simp [h]
+            have ht1 : t ≠ intervalOne := by
+              intro h
+              apply hz
+              rw [← ht]
+              simp [h]
+            have hti : t.1 ∈ Set.Ioo (0 : ℝ) 1 := by
+              constructor
+              · exact lt_of_le_of_ne t.2.1 (by
+                  intro h
+                  apply ht0
+                  apply Subtype.ext
+                  simpa [intervalZero] using h.symm)
+              · exact lt_of_le_of_ne t.2.2 (by
+                  intro h
+                  apply ht1
+                  apply Subtype.ext
+                  simpa [intervalOne] using h)
+            have hx : inr z = edgeProjection 1 t := by
+              change inr z = inr (intervalCircle t)
+              rw [ht]
+            rw [hx]
+            exact Nat.card_congr (D.interiorFiberEquiv 1 t hti)
+
 #print axioms vertex_injective
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
 #print axioms projection_surjective
+#print axioms projection_fiberCard
 
 end TwoLoopGraphCoverData
 
