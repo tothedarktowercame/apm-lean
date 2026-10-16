@@ -36709,6 +36709,8 @@
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 3,
+   :review-finding
+   "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
@@ -36750,6 +36752,12 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd "git show --check --stat --oneline 19019d1bf", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792173244687-15716-4afa245a",
+     :finding
+     "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone."},
     :commit "19019d1bf",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36758,7 +36766,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36780,7 +36788,7 @@
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
