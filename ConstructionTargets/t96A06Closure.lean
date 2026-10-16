@@ -2672,6 +2672,58 @@ theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
     t96A06_unitH0ComparisonRhs, t96A06_unitH0CoordinateGenerator] at h ⊢
   simpa only [Iso.inv_hom_id_apply] using h
 
+/-- Native additive `H₀(Unit)` generator corresponding to the same forgotten
+module coproduct coordinate. -/
+noncomputable def t96A06_unitH0NativeGenerator :=
+  ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit) ≪≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).symm).inv.hom
+        ((PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+            ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ)))
+
+/-- It now suffices to show that the homology comparison itself carries the
+explicit module generator to the explicit additive generator. -/
+theorem t96A06_unitH0_coordinate_normalization_of_comparison_generator
+    (h :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+          t96A06_unitH0NativeGenerator) :
+      (t96A06_unitH0ComparisonLhs).hom t96A06_unitH0CoordinateGenerator =
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.hom
+            t96A06_unitH0CoordinateGenerator := by
+  rw [t96A06_unitH0ComparisonLhs, AddCommGrpCat.comp_apply, AddCommGrpCat.comp_apply, h]
+  dsimp [t96A06_unitH0NativeGenerator, t96A06_unitH0CoordinateGenerator]
+  rw [← PreservesCoproduct.inv_hom]
+  rw [(PreservesCoproduct.iso
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+    (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv_hom_id_apply]
+  change
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+        ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom.hom
+          ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+            AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv.hom
+            ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom 1))) =
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.hom
+        ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.hom
+          ((PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+            ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom 1)))
+  rw [(ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+    AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv_hom_id_apply]
+  rw [(ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv_hom_id_apply]
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5579,6 +5631,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_unitH0_generator_iff_comparison
 #print axioms t96A06_unitH0_generator_eq_of_apply_one
 #print axioms t96A06_unitH0_integralComparison_apply_one_of_coordinate
+#print axioms t96A06_unitH0_coordinate_normalization_of_comparison_generator
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
