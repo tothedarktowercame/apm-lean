@@ -37271,37 +37271,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Lift inverse chain equality through homology; then Bool square, boundary, signs, Main.",
+    "Prove induced H0 generator equality; then Bool square, boundary, signs, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_chainComparison_degreeZero_generator_inv",
+    [{:name "t96A06_unitH0_homologyComparison_factorization",
       :type
-      "inverse chain comparison preserves the Unit simplex generator",
+      "Unit comparison factors through preserved homology and induced chain map",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_chainComparison_degreeZero_generator"],
+      ["t96A06_unitH0_chainComparison_degreeZero_generator_inv"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0ChainGeneratorCompatibility",
-      :type "homology comparison preserves selected Unit H0 class",
+     {:name "t96A06_unitH0_induced_generator",
+      :type
+      "induced homology map carries the selected Unit degree-zero class",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_unitH0_chainComparison_degreeZero_generator_inv"],
+      :depends-on ["t96A06_unitH0_homologyComparison_factorization"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed inverse chain comparison on the Unit degree-zero generator.",
+    "Committed chain-to-homology factorization; induced generator calculation remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37309,18 +37309,13 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 62d542681", :exit 0}],
+     {:cmd "git show --check --stat --oneline 447f8d8a0", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :note "Reassociation failed; used Iso.comp_inv_eq and reran."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792166039505-15611-4d1f95d6",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "62d542681",
+      :note
+      "Direct simp made no progress; isolated exact homology factorization."}],
+    :commit "447f8d8a0",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37328,7 +37323,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47268,6 +47263,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_homologyComparison_factorization",
+    :type
+    "Unit comparison factors through preserved homology and induced chain map"},
+   :lemma
+   {:name "t96A06_unitH0_homologyComparison_factorization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Unit comparison factors through preserved homology and induced chain map",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-homologycomparison-factorization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-chaincomparison-degreezero-generator-inv],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_induced_generator",
+    :type
+    "induced homology map carries the selected Unit degree-zero class"},
+   :lemma
+   {:name "t96A06_unitH0_induced_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "induced homology map carries the selected Unit degree-zero class",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-induced-generator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-homologycomparison-factorization],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
