@@ -88847,18 +88847,17 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Construct covering charts; Cayley tree; finite invariants.",
+    :residual "Open charts/trivializations; tree; finite invariants.",
     :outcome :stop,
-    :warnings ["Main:1 sorry" "lint" "dirt"],
+    :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "projection_fiberCard",
-      :type "all fibers have Nat.card V",
+    [{:name "projection_preimage_edgePoint",
+      :type "exact vertex/interior range fibers",
       :status :proved,
       :consumers [:t92J06],
       :depends-on ["vertexFiberEquiv" "interiorFiberEquiv"],
@@ -88867,7 +88866,7 @@
       :type "covering charts",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["projection_fiberCard" "projection_surjective"],
+      :depends-on ["projection_preimage_edgePoint"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
       :type "tree cover",
@@ -88885,38 +88884,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked uniform fiber cardinality.",
+    :reason "Banked exact projection fibers.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "comment-stripped placeholder scan", :exit 0}
-     {:cmd "git show --check 18d427092", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "exposed quotient legs"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792113056394-14953-69bb5fc8",
-     :commands
-     ["git show/diff/check 18d427092"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and comment-stripped placeholder recount from 18d427092"],
-     :finding
-     "PASS program STOP: topo-6 commit 18d427092 adds compiled, sorry-free progress beyond history 5899fb786. projection_fiberCard exhausts both wedge legs. At the shared basepoint it uses vertexFiberEquiv; otherwise intervalCircle_surjective supplies a representative, non-basepoint excludes both endpoints and gives an interior parameter, then interiorFiberEquiv gives the fiber-to-V equivalence. The inr basepoint is correctly rewritten to the common inl basepoint. Thus all finite fibers have Nat.card V without assuming covering charts. Only t92J06Closure.lean changed; fixture SHA 7659a4c7f71751321f5f79cb2a51a09e18a62557f5cda4ab1169fa8e69863cf9 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Covering charts, Cayley tree, and finite invariants remain listed."},
-    :commit "18d427092",
+     {:cmd "git show --check 9c8d9a5d1", :exit 0}],
+    :commit "9c8d9a5d1",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "7659a4c7f71751321f5f79cb2a51a09e18a62557f5cda4ab1169fa8e69863cf9"},
+     "51ebafc46092d459a54d5c67298a2b2715e99a9064e21e39a5d9ede555c6be2b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90726,7 +90710,8 @@
     :lemma-interiorfiberequiv
     :lemma-vertexfiberequiv
     :lemma-projection-surjective
-    :lemma-projection-fibercard],
+    :lemma-projection-fibercard
+    :lemma-projection-preimage-edgepoint],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -97130,4 +97115,21 @@
    :id :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projection_preimage_edgePoint",
+    :type "exact vertex/interior range fibers"},
+   :lemma
+   {:name "projection_preimage_edgePoint",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "exact vertex/interior range fibers",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-projection-preimage-edgepoint,
+   :kind :lemma,
+   :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
    :other-consumers []}]}
