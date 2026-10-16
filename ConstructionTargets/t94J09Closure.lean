@@ -313,6 +313,32 @@ noncomputable def frozenGeneratorOuterHomologyIsoBoundary (k : ℕ) :
         (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
             (TopCat.of FrozenGeneratorOuterBoundaryPiece) k).symm)
 
+/-- Circle-source presentation of the literal frozen boundary quotient. -/
+abbrev FrozenGeneratorCircleQuotient :=
+  ConstructionTargets.PolygonBoundaryInducedQuotient.CircleQuotient
+    frozenGeneratorRel
+
+/-- Boundary-subtype presentation of the literal frozen boundary quotient. -/
+abbrev FrozenGeneratorBoundaryQuotient :=
+  ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryQuotient
+    frozenGeneratorRel
+
+/-- Passing through the standard circle parametrization preserves the exact
+frozen boundary quotient topology. -/
+def frozenGeneratorCircleBoundaryHomeomorph :
+    FrozenGeneratorCircleQuotient ≃ₜ FrozenGeneratorBoundaryQuotient :=
+  ConstructionTargets.PolygonBoundaryInducedQuotient.circleBoundaryQuotientHomeomorph
+    frozenGeneratorRel
+
+/-- The circle and disk-boundary presentations have canonically isomorphic
+integral singular homology in every degree. -/
+def frozenGeneratorCircleBoundaryHomologyIso (k : ℕ) :
+    SpaceH FrozenGeneratorCircleQuotient k ≅
+      SpaceH FrozenGeneratorBoundaryQuotient k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo frozenGeneratorCircleBoundaryHomeomorph))
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -951,6 +977,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorInnerOverlapHomology
 #print axioms frozenGeneratorOuterHomotopyEquivBoundary
 #print axioms frozenGeneratorOuterHomologyIsoBoundary
+#print axioms frozenGeneratorCircleBoundaryHomeomorph
+#print axioms frozenGeneratorCircleBoundaryHomologyIso
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
