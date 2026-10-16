@@ -1591,6 +1591,30 @@ noncomputable def frozenGeneratorMVIntGraphH0ReassemblyArrow :
       (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0
 
+/-- Composing the degree-zero coordinate arrows cancels the middle transport
+and leaves the production Mayer--Vietoris composite. -/
+theorem frozenGeneratorMVIntGraphH0_comp_eq_production :
+    frozenGeneratorMVIntersectionH0ArrowToIntGraph ≫
+      frozenGeneratorMVIntGraphH0ReassemblyArrow =
+        frozenGeneratorIntersectionH0GroupIsoInt.inv ≫
+          ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+            (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+            (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫
+          ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+            (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+            (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 := by
+  rw [frozenGeneratorMVIntersectionH0ArrowToIntGraph,
+    frozenGeneratorMVIntGraphH0ReassemblyArrow]
+  have hcancel := frozenGeneratorMVPiecesH0GroupIsoIntGraph.hom_inv_id_assoc
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0)
+  simpa only [Category.assoc] using congrArg
+    (fun k ↦ frozenGeneratorIntersectionH0GroupIsoInt.inv ≫
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+        (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+        (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫ k) hcancel
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2218,5 +2242,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
+#print axioms frozenGeneratorMVIntGraphH0_comp_eq_production
 
 end ConstructionTargets.t94J09Closure
