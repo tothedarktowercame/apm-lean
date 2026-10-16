@@ -2705,6 +2705,70 @@ noncomputable def t96A06_unitH0ModuleChainGenerator :=
 
 #print axioms t96A06_unitH0ModuleChainGenerator
 
+/-- The inverse discrete-chain coordinate is the literal unique degree-zero
+singular simplex of `Unit`, with coefficient one. -/
+theorem t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex :
+    t96A06_unitH0ModuleChainGenerator =
+      (Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ) := by
+  change
+    ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0).hom
+        ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ)) = _
+  have hforward :
+    ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.f 0).hom
+        ((Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ)) =
+      (Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ) := by
+    change ((Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+      Limits.Sigma.map'
+        ((TopCat.toSSetIsoConst (TopCat.of Unit)).hom.app
+          (Opposite.op (SimplexCategory.mk 0))) (fun _ ↦ 𝟙 _) ≫
+      (AlgebraicTopology.alternatingFaceMapComplexConst.hom.app
+        (∐ fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).f 0).hom (1 : ℤ) = _)
+    rw [← CategoryTheory.Category.assoc, Limits.Sigma.ι_comp_map']
+    have halt :
+        (AlgebraicTopology.alternatingFaceMapComplexConst.hom.app
+          (∐ fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).f 0 = 𝟙 _ := rfl
+    rw [halt]
+    simp [ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso,
+      AlgebraicTopology.singularChainComplexFunctorIsoOfTotallyDisconnectedSpace,
+      AlgebraicTopology.singularChainComplexFunctor,
+      AlgebraicTopology.SSet.singularChainComplexFunctor]
+    rfl
+  rw [← hforward]
+  have hcomp :
+      (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.f 0 ≫
+        (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0 = 𝟙 _ := by
+    change ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom ≫
+      (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv).f 0 = _
+    rw [(ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom_inv_id]
+    rfl
+  change (((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.f 0 ≫
+    (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0).hom _) = _
+  rw [hcomp]
+  rfl
+
+#print axioms t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex
+
 /-- The explicit Unit opcycle is obtained by projecting the corresponding
 degree-zero singular chain to opcycles. -/
 theorem t96A06_unitH0_opcycle_eq_projected_chainGenerator :
