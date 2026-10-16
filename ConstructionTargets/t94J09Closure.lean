@@ -1704,6 +1704,26 @@ theorem frozenGeneratorMVReassemblyLinear_surjective_iff
       (frozenGeneratorMVReassemblyLinear_comp_coordinates e) x
     exact hc.trans hx
 
+/-- A concrete right inverse for the canonical graph reassembly arrow is
+enough to discharge the remaining degree-one surjectivity obligation. -/
+theorem frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id) :
+    Function.Surjective
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap := by
+  intro y
+  refine ⟨s y, ?_⟩
+  have h := LinearMap.congr_fun hsection y
+  simpa using h
+
 /-- Composing the graph-coordinate arrows cancels the middle-term transport,
 leaving the production Mayer--Vietoris composite in overlap coordinates. -/
 theorem frozenGeneratorMVGraphH1_comp_eq_production :
@@ -2679,6 +2699,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
 #print axioms frozenGeneratorMVReassemblyLinear_surjective_iff
+#print axioms frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
 #print axioms frozenGeneratorMVReassemblyLinear_comp_faceBoundary
 #print axioms frozenFaceBoundary_range_le_ker_reassembly
 #print axioms frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
