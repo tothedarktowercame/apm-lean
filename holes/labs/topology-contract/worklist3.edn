@@ -36708,36 +36708,37 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Prove overlap-to-pieces naturality and exactness; then successor data, Lefschetz, Main.",
+    "Specialize both overlap-to-patch legs and transport exactness; then successor data, Lefschetz, Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings
+    ["Existing lints; Main one placeholder; unrelated changes untouched."],
     :missing-theorems
-    [{:name
-      "t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap",
-      :type "literal transport commutes with ambient inclusion",
+    [{:name "t99J05_ambientSubspaceRangeHomologyIso_naturality",
+      :type
+      "range-to-literal homology transport is natural for subspace inclusions",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_rangeHomologyIsos"],
+      ["t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap"],
       :area "rational-homology-lefschetz"}
      {:name
       "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
-      :type "overlap-to-pieces MV map commutes with transport",
+      :type
+      "both overlap-to-patch MV legs commute with literal transport",
       :status :not-started,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap"],
+      ["t99J05_ambientSubspaceRangeHomologyIso_naturality"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed ambient-inclusion naturality for literal-patch transport.",
+    :reason "Committed general range-to-literal homology naturality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36748,26 +36749,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline b9f1d3a49", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :note
-      "Fixed composition and lifted chain equality; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792170421920-15677-ba16f21d",
-     :commands
-     ["git show/check b9f1d3a49"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit adds ambient-inclusion naturality after prior progress. Composition is correctly oriented range→literal subspace→ambient and equals range inclusion; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains its declared one placeholder."},
-    :commit "b9f1d3a49",
+     {:cmd "git show --check --stat --oneline 19019d1bf", :exit 0}],
+    :commit "19019d1bf",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36775,7 +36758,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -47485,7 +47468,8 @@
    :lemma-t99j05-cp-successor-mayervietoris-overlap-pieces-naturality,
    :kind :lemma,
    :depends-on
-   [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap],
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap
+    :lemma-t99j05-ambientsubspacerangehomologyiso-naturality],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -47544,6 +47528,26 @@
    :id :lemma-t96a06-boolh0-comparison-square,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-comparison-generator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_ambientSubspaceRangeHomologyIso_naturality",
+    :type
+    "range-to-literal homology transport is natural for subspace inclusions"},
+   :lemma
+   {:name "t99J05_ambientSubspaceRangeHomologyIso_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "range-to-literal homology transport is natural for subspace inclusions",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-ambientsubspacerangehomologyiso-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
