@@ -36708,13 +36708,13 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Prove both biproduct components via overlap naturality; transport exactness.",
+    "Prove biproduct components via overlap naturality; transport exactness.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
@@ -36725,18 +36725,17 @@
       :depends-on ["t99J05_rationalHomologyBiprodIso"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_mayerVietoris_f_transport",
-      :type "transported MV arrow equals signed literal arrow",
+      :type "transport equals signed literal arrow",
       :status :not-started,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_map"
-       "t99J05_cp_successor_literalOverlapToPieces_components"],
+      ["t99J05_cp_successor_mayerVietoris_f_transport_map"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed transported CP successor MV arrow.",
+    :reason "Repaired and compiled transported MV arrow.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36747,14 +36746,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 29f66a99f", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792194689933-15930-26d10e8f",
-     :finding
-     "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone."},
-    :commit "29f66a99f",
+     {:cmd "git show --check --stat --oneline 8323662f3", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile (3 attempts)",
+      :exit 1,
+      :note
+      "Fixed glyph, precedence, and missing intersection-range leg."}],
+    :commit "8323662f3",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36762,7 +36760,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
