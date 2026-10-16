@@ -106,7 +106,12 @@ three items in `problems/t98A01/proof-outline.md` under "Remaining boundary":
    already imports it. Swapping in `ZMod 5` on the first factor (rotation by a
    fifth root of unity) and the identity on the second should give t98A01's
    cover, its fibres and its deck action. `CircleUniversalCover` and
-   `LiteralCoveringPullback` came up for the circle factor too.
+   `LiteralCoveringPullback` came up for the circle factor too. t98A03 (complete,
+   no sorry) builds a regular 3-fold cover of $T^2 \vee \mathbb{RP}^2$ from a
+   torus rotation: see `apm_t98a03_regular_threeFoldCover`,
+   `apm_t98a03_torusRot` and `apm_t98a03_coverOf_regular_iff` in
+   `problems/t98A03/lean/Main.lean`. That is regularity proved for a
+   rotation-built torus cover, which is the shape t98A01 needs.
 2. **Homeomorphic orientable presentations have equal genus.**
    `apm_t99J03_orientable_genus_eq_of_eulerCharacteristic_eq` (in
    `problems/t99J03/lean/`) is the nearest proved statement; also see
