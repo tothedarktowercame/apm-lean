@@ -2724,6 +2724,22 @@ theorem t96A06_unitH0_coordinate_normalization_of_comparison_generator
   rw [(ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv_hom_id_apply]
 
+/-- The explicit generator comparison discharges the complete Unit `H₀`
+comparison after the preceding coordinate reductions. -/
+theorem t96A06_unitH0_integralComparison_of_comparison_generator
+    (h :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+          t96A06_unitH0NativeGenerator) :
+    t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  apply t96A06_unitH0_generator_iff_comparison.mp
+  apply t96A06_unitH0_generator_eq_of_apply_one
+  apply t96A06_unitH0_integralComparison_apply_one_of_coordinate
+  apply t96A06_unitH0_coordinate_normalization_of_comparison_generator
+  exact h
+
+#print axioms t96A06_unitH0_integralComparison_of_comparison_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
