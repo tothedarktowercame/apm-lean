@@ -858,6 +858,20 @@ abbrev FrozenBoundaryGraphQuotient :=
 noncomputable instance : TopologicalSpace FrozenBoundaryGraphQuotient :=
   TopologicalSpace.coinduced (fun z : Circle => Quotient.mk _ z) inferInstance
 
+/-- The explicit frozen boundary graph quotient is Hausdorff because its
+generated equivalence relation has the closed graph identified above. -/
+noncomputable instance frozenBoundaryGraphQuotientT2Space :
+    T2Space FrozenBoundaryGraphQuotient :=
+  ConstructionTargets.compact_closed_equivalence_quotient_t2
+    (Relation.EqvGen.setoid FrozenBoundaryGraphRel) (by
+      have heq : {p : Circle × Circle |
+          (Relation.EqvGen.setoid FrozenBoundaryGraphRel).r p.1 p.2} =
+          {p : Circle × Circle | FrozenBoundaryClosedRel p.1 p.2} := by
+        ext p
+        exact frozenBoundaryEqvGen_iff_closedRel p.1 p.2
+      rw [heq]
+      exact frozenBoundaryClosedRel_isClosed)
+
 /-- The induced boundary quotient and explicit graph quotient agree by the
 identity on circle representatives, including their quotient topologies. -/
 def frozenGeneratorCircleHomeomorphBoundaryGraph :
@@ -1726,6 +1740,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryClosedRel_trans
 #print axioms frozenBoundaryClosedRel_symm
 #print axioms frozenBoundaryEqvGen_iff_closedRel
+#print axioms frozenBoundaryGraphQuotientT2Space
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
