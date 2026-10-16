@@ -1877,6 +1877,25 @@ theorem t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id :
       ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one, hid]
     rfl
 
+/-- The remaining endpoint calculation implies identity of the full
+sphere-shift/local normalization automorphism. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
+    (hendpoint :
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.HigherSphereLocalization.localizationIso
+          polynomialSphereRegularPoint).hom.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            ((CoefficientSphereShift.sphereShift ℤ 3 2 (by decide)).inv.hom
+              ((CoefficientSphereEndpoints.sphereH2 ℤ).inv.hom 1)))) = 1) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom = 𝟙 _ := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = 1
+  simpa [t96A06_sphereShiftLocalNormalizationAutomorphism,
+    t96A06_sphere3_integral_H3Iso] using hendpoint
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4701,6 +4720,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one
 #print axioms t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg
 #print axioms t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
