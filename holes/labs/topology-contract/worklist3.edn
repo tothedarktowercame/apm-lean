@@ -37264,38 +37264,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compose coefficient naturality with both point coordinates; then boundary map, circle sign, suspensions, Main.",
+    "Prove Unit H0 normalization and compose square; then boundary map, circle sign, suspensions, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t96A06_boolH0_additive_pointInclusion_coordinates",
+    [{:name "t96A06_boolH0_comparison_pointInclusion_naturality",
       :type
-      "additive H0 Unit-to-Bool map is selected coproduct injection",
+      "integral comparison naturality for each Unit-to-Bool point inclusion",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_boolH0_module_pointInclusion_coordinates"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_boolH0PointComparison_of_comparison_naturality",
-      :type
-      "coefficient comparison naturality plus both coordinate edges gives each Bool point comparison",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_boolH0_additive_pointInclusion_coordinates"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_unitH0_integralComparison",
+      :type
+      "forgotten module and additive direct H0 coordinates agree on Unit",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_boolH0_comparison_pointInclusion_naturality"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed additive Unit-to-Bool coordinate edge; coefficient-comparison naturality remains.",
+    "Committed point-inclusion comparison naturality; Unit normalization and square composition remain.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37303,14 +37304,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline d8c596ec09", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792158172310-15515-05289b50",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "d8c596ec09",
+     {:cmd "git show --check --stat --oneline 6ff9407af6", :exit 0}],
+    :commit "6ff9407af6",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37318,7 +37313,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46812,6 +46807,45 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-boolh0-additive-pointinclusion-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_comparison_pointInclusion_naturality",
+    :type
+    "integral comparison naturality for each Unit-to-Bool point inclusion"},
+   :lemma
+   {:name "t96A06_boolH0_comparison_pointInclusion_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integral comparison naturality for each Unit-to-Bool point inclusion",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-boolh0-comparison-pointinclusion-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-additive-pointinclusion-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison",
+    :type
+    "forgotten module and additive direct H0 coordinates agree on Unit"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten module and additive direct H0 coordinates agree on Unit",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-integralcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
