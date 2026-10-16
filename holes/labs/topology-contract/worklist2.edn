@@ -88993,26 +88993,27 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Trivializations; vertex charts; tree; finite covers.",
+    :residual
+    "Openness; trivializations; vertex charts; tree; covers.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "mem_edgeChart_iff",
-      :type "membership",
+    [{:name "projection_preimage_baseEdgeChart",
+      :type "preimage",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["edgeChart_isOpen"],
+      :depends-on ["mem_edgeChart_iff"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "trivializations",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["mem_edgeChart_iff"],
+      :depends-on ["projection_preimage_baseEdgeChart"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
       :type "tree",
@@ -89030,7 +89031,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked edge-chart membership.",
+    :reason "Banked exact edge-chart preimage.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
@@ -89038,33 +89039,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "Main placeholder scan", :exit 0}
      {:cmd "closure placeholder scan", :exit 0}
-     {:cmd "git show --check dd6791273", :exit 0}],
+     {:cmd "git show --check c1cac6ac2", :exit 0}],
     :diagnostic-history
-    [{:cmd "initial proof",
-      :exit 1,
-      :correction "preserved witness; simplified memberships"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792171486422-15694-f17d25d0",
-     :commands
-     ["git show/check dd6791273"
-      "fixture/scope/comment-stripped placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "lake env lean ConstructionTargets/t92J06Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free edge-chart membership characterization beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Both directions preserve the raw quotient witness: descended chart points are exactly interior lifted-edge points with the prescribed base label, and endpoints are excluded by the open-interval condition. Only standard axioms occur; trivializations, vertex charts, tree cover, and finite covers remain listed."},
-    :commit "dd6791273",
+    [{:cmd "draft", :exit 1, :correction "reversed image equality"}],
+    :commit "c1cac6ac2",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "5067194b130cc4d0be50cc2f676c431ffa64d7d94cddd7e9120cb58ed75a1a0d"},
+     "007d9ea654cd9effd168d1fe0227506afddab37a00104c5bb9606b9453293207b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90956,7 +90942,8 @@
     :lemma-rawedgechart-isopen
     :lemma-rawedgechart-mem-iff-of-eqvgen
     :lemma-edgechart-isopen
-    :lemma-mem-edgechart-iff],
+    :lemma-mem-edgechart-iff
+    :lemma-projection-preimage-baseedgechart],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -98947,4 +98934,20 @@
    :id :lemma-frozengeneratorcanonicalmoduleh1smithiso-of-section,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projection_preimage_baseEdgeChart", :type "preimage"},
+   :lemma
+   {:name "projection_preimage_baseEdgeChart",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "preimage",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-projection-preimage-baseedgechart,
+   :kind :lemma,
+   :depends-on [:lemma-mem-edgechart-iff],
    :other-consumers []}]}
