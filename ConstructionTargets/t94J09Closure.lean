@@ -1627,6 +1627,14 @@ noncomputable def frozenGeneratorMVIntersectionH1ArrowToGraph :
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1 ≫
     frozenGeneratorMVPiecesH1GroupIsoGraph.hom
 
+/-- The frozen degree-one Mayer--Vietoris boundary, viewed as an integral
+linear map so that its graph-homology coordinates can be computed. -/
+noncomputable def frozenGeneratorMVBoundaryLinear :
+    ℤ →ₗ[ℤ]
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) :=
+  frozenGeneratorMVIntersectionH1ArrowToGraph.hom.toIntLinearMap
+
 /-- The outgoing degree-one Mayer--Vietoris map, with its source transported
 from the two cover pieces to the boundary-graph homology object. -/
 noncomputable def frozenGeneratorMVGraphH1ReassemblyArrow :
@@ -2028,6 +2036,34 @@ def frozenFaceBoundaryCoordinates : ℤ →ₗ[ℤ] (Fin 6 → ℤ) where
   toFun n := n • frozenGraphBoundaryKernelEquiv frozenAttachingCycle
   map_add' := by intros; simp [add_smul]
   map_smul' := by intros; simp [mul_smul]
+
+/-- After choosing six graph-cycle coordinates, identifying the frozen
+Mayer--Vietoris boundary with the cellular face boundary is equivalent to
+computing the image of the positive overlap generator. -/
+theorem frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) :
+    e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+        frozenFaceBoundaryCoordinates ↔
+      e (frozenGeneratorMVBoundaryLinear 1) =
+        frozenGraphBoundaryKernelEquiv frozenAttachingCycle := by
+  constructor
+  · intro h
+    have h1 := LinearMap.congr_fun h (1 : ℤ)
+    simpa [frozenFaceBoundaryCoordinates] using h1
+  · intro h
+    apply LinearMap.ext
+    intro n
+    calc
+      (e.toLinearMap.comp frozenGeneratorMVBoundaryLinear) n =
+          n • e (frozenGeneratorMVBoundaryLinear 1) := by
+            change e (frozenGeneratorMVBoundaryLinear n) = _
+            rw [show n = n • (1 : ℤ) by simp, map_smul, map_smul]
+            simp
+      _ = n • frozenGraphBoundaryKernelEquiv frozenAttachingCycle :=
+        congrArg (fun x ↦ n • x) h
+      _ = frozenFaceBoundaryCoordinates n := rfl
 
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
@@ -2437,6 +2473,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
+#print axioms frozenGeneratorMVBoundaryLinear
+#print axioms frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one
 #print axioms frozenGeneratorMVGraphH1ReassemblyArrow
 #print axioms frozenGeneratorCanonicalMVGraphH1ReassemblyArrow
 #print axioms frozenGeneratorMVPiecesH0GroupIsoIntGraph
