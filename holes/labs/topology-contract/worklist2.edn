@@ -88727,6 +88727,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check d69c383cd", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792177483223-15744-7429f75f",
+     :commands
+     ["git show/check d69c383cd"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free coordinate-section transport beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. A canonical section is mapped forward through the graph-H1-to-six-cycle equivalence; reassociation and the established coordinate cancellation show coordinate reassembly followed by this section is identity. Sources, targets, and orientation are correct; actual section construction remains listed. Only standard axioms occur; H1 comparison, exactness, canonical section, homology assembly, and normalization remain."},
     :commit "d69c383cd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88735,7 +88748,7 @@
      "eb6fb0f8dfd9d2f4b7d1ebdb184c94d27556c9b206b70c3972aa3de5fea8771d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88981,7 +88994,8 @@
     {:job 1, :commit "fda8e08ff", :reason "Banked."}
     {:job 2, :commit "8e6918ba1", :reason "Banked H1 Smith assembly."}
     {:job 3, :commit "5d1cc7620", :reason "."}
-    {:job 4, :commit "145503c1b", :reason "."}]}
+    {:job 4, :commit "145503c1b", :reason "."}
+    {:job 5, :commit "d69c383cd", :reason "."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98828,7 +98842,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVReassemblyLinear_comp_section",
@@ -98838,7 +98852,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "section transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "d69c383cd"},
    :id :lemma-frozengeneratormvreassemblylinear-comp-section,
    :kind :lemma,
    :depends-on
