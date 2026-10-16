@@ -1578,6 +1578,19 @@ noncomputable def frozenGeneratorMVIntersectionH0ArrowToIntGraph :
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫
     frozenGeneratorMVPiecesH0GroupIsoIntGraph.hom
 
+/-- The outgoing degree-zero Mayer--Vietoris map, transported from the two
+cover pieces to their integral/graph coordinates. -/
+noncomputable def frozenGeneratorMVIntGraphH0ReassemblyArrow :
+    CategoryTheory.Limits.biprod (AddCommGrpCat.of ℤ)
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 0)) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of FrozenGeneratorQuotient) :=
+  frozenGeneratorMVPiecesH0GroupIsoIntGraph.inv ≫
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2204,5 +2217,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorRadialTopologyComparison
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
+#print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
 
 end ConstructionTargets.t94J09Closure
