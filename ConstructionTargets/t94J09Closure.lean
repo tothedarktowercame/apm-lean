@@ -2037,6 +2037,33 @@ theorem frozenGraphCycleInclusion_range :
     exact congrArg Subtype.val
       (frozenGraphBoundaryKernelEquiv.symm_apply_apply ⟨x, hx⟩)
 
+/-- Assemble six graph-cycle coordinates from a singular-H1 chain
+representative once the remaining comparison proves that representatives are
+cycles, injective, and fill the graph-boundary kernel. -/
+noncomputable def frozenGraphH1CoordinatesOfCycleComparison
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 7 → ℤ))
+    (hcycle : ∀ x, frozenGraphBoundary (c x) = 0)
+    (hinj : Function.Injective c)
+    (hrange : LinearMap.range c = LinearMap.ker frozenGraphBoundary) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ) :=
+  (LinearEquiv.ofBijective
+    (c.codRestrict (LinearMap.ker frozenGraphBoundary) hcycle)
+    ⟨by
+      intro x y h
+      apply hinj
+      exact congrArg Subtype.val h,
+     by
+      intro z
+      have hz : z.1 ∈ LinearMap.range c := by
+        rw [hrange]
+        exact z.2
+      rcases hz with ⟨x, hx⟩
+      refine ⟨x, Subtype.ext ?_⟩
+      exact hx⟩).trans frozenGraphBoundaryKernelEquiv
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -2488,6 +2515,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphCycleProjection_comp_inclusion
 #print axioms frozenGraphCycleInclusion_injective
 #print axioms frozenGraphCycleInclusion_range
+#print axioms frozenGraphH1CoordinatesOfCycleComparison
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
