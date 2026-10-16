@@ -3256,6 +3256,19 @@ theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
   t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
     (t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket h)
 
+/-- The remaining global packet is equivalent to two concrete endomorphism
+normalizations: coefficient extension has sphere coordinate one, and the
+global-to-local comparison automorphism is the identity.  This removes all
+class-valued equalities from the final coefficient-change obligation. -/
+theorem t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates :
+    t96A06_globalRationalComparison_and_baseScalar_one ↔
+      t96A06_sphere3_rational_H3Iso.hom.hom
+          t96A06_integralNormalizedClass_rationalExtension = 1 ∧
+        polynomialSphereLift_baseNormalizationComparisonIso.hom = 𝟙 _ := by
+  unfold t96A06_globalRationalComparison_and_baseScalar_one
+  rw [t96A06_integralNormalizedClass_mapsTo_rational_iff,
+    polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff]
+
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
 theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
@@ -4428,6 +4441,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_globalRationalComparison_and_baseScalar_one
 #print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket
 #print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
+#print axioms t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff
