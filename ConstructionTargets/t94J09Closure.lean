@@ -509,6 +509,36 @@ theorem frozenBoundaryGraphSymm_isClosed :
       (continuous_snd.prodMk continuous_fst)
   exact hdiag.union (hforward.union hreverse)
 
+/-- The finite locus of endpoints of the fourteen frozen boundary arcs. -/
+def FrozenBoundaryEndpoint (z : Circle) : Prop :=
+  ∃ j : Fin 14,
+    z = frozenCircleEdgePoint j ⟨0, by norm_num⟩ ∨
+      z = frozenCircleEdgePoint j ⟨1, by norm_num⟩
+
+theorem frozenBoundaryEndpoint_isClosed :
+    IsClosed {z : Circle | FrozenBoundaryEndpoint z} := by
+  let e0 : Fin 14 → Circle :=
+    fun j => frozenCircleEdgePoint j ⟨0, by norm_num⟩
+  let e1 : Fin 14 → Circle :=
+    fun j => frozenCircleEdgePoint j ⟨1, by norm_num⟩
+  have h0 : IsClosed (Set.range e0) := (Set.finite_range e0).isClosed
+  have h1 : IsClosed (Set.range e1) := (Set.finite_range e1).isClosed
+  rw [show {z : Circle | FrozenBoundaryEndpoint z} =
+      Set.range e0 ∪ Set.range e1 by
+    ext z
+    simp only [Set.mem_setOf_eq, FrozenBoundaryEndpoint, Set.mem_union,
+      Set.mem_range, e0, e1, exists_or]
+    tauto]
+  exact h0.union h1
+
+/-- Pairs of frozen boundary endpoints form a closed finite locus in the
+product circle. -/
+theorem frozenBoundaryEndpointPair_isClosed :
+    IsClosed {p : Circle × Circle |
+      FrozenBoundaryEndpoint p.1 ∧ FrozenBoundaryEndpoint p.2} :=
+  (frozenBoundaryEndpoint_isClosed.preimage continuous_fst).inter
+    (frozenBoundaryEndpoint_isClosed.preimage continuous_snd)
+
 @[simp] theorem eq_frozenCircleEdgePoint_iff (z : Circle) (j : Fin 14)
     (t : Set.Icc (0 : ℝ) 1) :
     z = frozenCircleEdgePoint j t ↔
@@ -1405,6 +1435,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms isClosed_range_frozenCircleEdgePair_reverse
 #print axioms frozenBoundaryGraphRel_isClosed
 #print axioms frozenBoundaryGraphSymm_isClosed
+#print axioms frozenBoundaryEndpointPair_isClosed
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
