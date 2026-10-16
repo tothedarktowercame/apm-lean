@@ -88672,27 +88672,32 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Compare graph H1 to split cycles; generator; assemble; normalize.",
+    :residual "H1; generator; assemble; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGraphCycleProjection_comp_inclusion",
-      :type "cycle projection splits inclusion",
+    [{:name "frozenGraphH1CoordinatesOfCycleComparison",
+      :type "assembly",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphCycleInclusion_range"],
+      :depends-on ["frozenGraphCycleProjection_comp_inclusion"],
+      :area "polygon-surface-homology"}
+     {:name "frozenBoundaryGraphH1CycleComparison",
+      :type "comparison",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on ["frozenGraphH1CoordinatesOfCycleComparison"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "singular H1/cycles; generator",
+      :type "coordinates",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphCycleProjection_comp_inclusion"],
+      :depends-on ["frozenBoundaryGraphH1CycleComparison"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88710,7 +88715,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked split graph cycles.",
+    :reason "Done.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,33 +88725,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 689174171", :exit 0}],
-    :diagnostic-history
-    [{:cmd "split injectivity draft",
-      :exit 1,
-      :correction "used pointwise splitting identity"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792166101445-15615-a7d3d76e",
-     :commands
-     ["git show/check 689174171"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free split graph-cycle coordinates beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Projection reads the first six ambient coordinates, while inclusion preserves them and uses only the seventh to close the cycle; projection-after-inclusion is identity and proves injectivity without asserting an inverse on arbitrary chains. Only standard axioms occur; singular-H1/cycle comparison, generator, assembly, and normalization remain listed."},
-    :commit "689174171",
+     {:cmd "git show --check b9673fedd", :exit 0}],
+    :commit "b9673fedd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "f7161c703d95faab71829f24eef95feeb43a4cb9c937f05eaf10c4c84187a952"},
+     "696895a98a20de6e948ade10a20ad125fe50130c41ead863d2aff83386800978"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96949,7 +96937,8 @@
     :lemma-frozengeneratormvboundarylinear-ker-eq-bot-of-coordinates
     :lemma-frozengeneratormvboundarylinear-map-range-of-coordinates
     :lemma-frozengraphcycleinclusion-range
-    :lemma-frozengraphcycleprojection-comp-inclusion],
+    :lemma-frozengraphcycleprojection-comp-inclusion
+    :lemma-frozenboundarygraphh1cyclecomparison],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98586,4 +98575,36 @@
    :id :lemma-frozengraphcycleprojection-comp-inclusion,
    :kind :lemma,
    :depends-on [:lemma-frozengraphcycleinclusion-range],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphH1CoordinatesOfCycleComparison",
+    :type "assembly"},
+   :lemma
+   {:name "frozenGraphH1CoordinatesOfCycleComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "assembly",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengraphh1coordinatesofcyclecomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphcycleprojection-comp-inclusion],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphH1CycleComparison", :type "comparison"},
+   :lemma
+   {:name "frozenBoundaryGraphH1CycleComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "comparison",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozenboundarygraphh1cyclecomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphh1coordinatesofcyclecomparison],
    :other-consumers []}]}
