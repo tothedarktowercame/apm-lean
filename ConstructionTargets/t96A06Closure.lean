@@ -2658,6 +2658,26 @@ noncomputable def t96A06_unitH0CoordinateGenerator :=
       (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
         ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ)))
 
+/-- The same selected class before forgetting the integral module structure. -/
+noncomputable def t96A06_unitH0ModuleGenerator :=
+  (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.hom
+    ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ))
+
+/-- The forgotten-module coordinate used by the comparison is literally the
+underlying module-valued Unit generator. -/
+theorem t96A06_unitH0CoordinateGenerator_eq_moduleGenerator :
+    t96A06_unitH0CoordinateGenerator = t96A06_unitH0ModuleGenerator := by
+  dsimp [t96A06_unitH0CoordinateGenerator, t96A06_unitH0ModuleGenerator]
+  congr 1
+  have h := congrArg (fun f => f.hom (1 : ℤ))
+    (Limits.ι_comp_sigmaComparison
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ())
+  simpa only [AddCommGrpCat.comp_apply] using h
+
+#print axioms t96A06_unitH0CoordinateGenerator_eq_moduleGenerator
+
 /-- The concrete normalization of the chain comparison on the selected Unit
 coordinate supplies the remaining equality at one. -/
 theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
