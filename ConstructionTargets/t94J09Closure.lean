@@ -627,6 +627,29 @@ theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
     apply Quotient.sound
     exact Relation.EqvGen.refl _
 
+/-- The inclusion of the polygon boundary in the radial outer annulus is
+continuous. -/
+theorem continuous_frozenBoundaryAsOuter :
+    Continuous frozenBoundaryAsOuter := by
+  apply Continuous.subtype_mk
+  exact continuous_subtype_val
+
+/-- The representative-level map from the polygon boundary to the outer
+skeleton is continuous. -/
+theorem continuous_frozenBoundaryRepresentativeToOuterSkeleton :
+    Continuous frozenBoundaryRepresentativeToOuterSkeleton := by
+  apply Continuous.subtype_mk
+  exact (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+    frozenGeneratorRel
+    (fun {_ _} h => frozenGeneratorRel_radius_eq h)).continuous.comp
+      (continuous_quotient_mk'.comp continuous_frozenBoundaryAsOuter)
+
+/-- The boundary-quotient map into the outer skeleton is continuous. -/
+theorem continuous_frozenBoundaryQuotientToOuterSkeleton :
+    Continuous frozenBoundaryQuotientToOuterSkeleton := by
+  apply Continuous.quotient_lift
+  exact continuous_frozenBoundaryRepresentativeToOuterSkeleton
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1274,6 +1297,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorBoundaryHomologyIsoGraph
 #print axioms frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
+#print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
