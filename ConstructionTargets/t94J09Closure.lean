@@ -339,6 +339,71 @@ def frozenGeneratorCircleBoundaryHomologyIso (k : ℕ) :
       (ModuleCat.of ℤ ℤ)).mapIso
     (TopCat.isoOfHomeo frozenGeneratorCircleBoundaryHomeomorph))
 
+/-- The point on the boundary of the frozen fourteen-gon with edge coordinate
+`t` on edge `j`. -/
+def frozenBoundaryEdgePoint (j : Fin 14) (t : Set.Icc (0 : ℝ) 1) :
+    ConstructionTargets.PolygonBoundaryCircleSource.Boundary :=
+  ⟨Surfaces.edgePoint 14 j t, by
+    simpa [PolygonRadialOpenCover.radius] using norm_edgePoint 14 j t⟩
+
+/-- The corresponding point in the standard circle source. -/
+def frozenCircleEdgePoint (j : Fin 14) (t : Set.Icc (0 : ℝ) 1) : Circle :=
+  ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle
+    (frozenBoundaryEdgePoint j t)
+
+@[simp] theorem circleToBoundary_frozenCircleEdgePoint
+    (j : Fin 14) (t : Set.Icc (0 : ℝ) 1) :
+    ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+        (frozenCircleEdgePoint j t) = frozenBoundaryEdgePoint j t :=
+  ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary_boundaryToCircle _
+
+/-- The seven literal pairings hold in the induced circle relation. -/
+theorem frozenGeneratorCircleRel_generators (t : Set.Icc (0 : ℝ) 1) :
+    let R := ConstructionTargets.PolygonBoundaryInducedQuotient.CircleRel
+      frozenGeneratorRel
+    R (frozenCircleEdgePoint 0 t) (frozenCircleEdgePoint 12 t) ∧
+    R (frozenCircleEdgePoint 6 t) (frozenCircleEdgePoint 13 t) ∧
+    R (frozenCircleEdgePoint 1 t)
+      (frozenCircleEdgePoint 7 (reverseIcc t)) ∧
+    R (frozenCircleEdgePoint 2 t) (frozenCircleEdgePoint 8 t) ∧
+    R (frozenCircleEdgePoint 5 t) (frozenCircleEdgePoint 10 t) ∧
+    R (frozenCircleEdgePoint 4 t) (frozenCircleEdgePoint 11 t) ∧
+    R (frozenCircleEdgePoint 3 t) (frozenCircleEdgePoint 9 t) := by
+  dsimp [ConstructionTargets.PolygonBoundaryInducedQuotient.CircleRel,
+    ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel]
+  simp only [circleToBoundary_frozenCircleEdgePoint, frozenBoundaryEdgePoint]
+  exact ⟨⟨t, Or.inl ⟨rfl, rfl⟩⟩,
+    ⟨t, Or.inr (Or.inl ⟨rfl, rfl⟩)⟩,
+    ⟨t, Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩))⟩,
+    ⟨t, Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩)))⟩,
+    ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩))))⟩,
+    ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl ⟨rfl, rfl⟩)))))⟩,
+    ⟨t, Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr ⟨rfl, rfl⟩)))))⟩⟩
+
+/-- The quotient map identifies the seven displayed pairs needed for the
+two-vertex, seven-edge boundary graph presentation. -/
+theorem frozenGeneratorCircleQuotient_identifies_generators
+    (t : Set.Icc (0 : ℝ) 1) :
+    let q : Circle → FrozenGeneratorCircleQuotient := Quotient.mk _
+    q (frozenCircleEdgePoint 0 t) = q (frozenCircleEdgePoint 12 t) ∧
+    q (frozenCircleEdgePoint 6 t) = q (frozenCircleEdgePoint 13 t) ∧
+    q (frozenCircleEdgePoint 1 t) =
+      q (frozenCircleEdgePoint 7 (reverseIcc t)) ∧
+    q (frozenCircleEdgePoint 2 t) = q (frozenCircleEdgePoint 8 t) ∧
+    q (frozenCircleEdgePoint 5 t) = q (frozenCircleEdgePoint 10 t) ∧
+    q (frozenCircleEdgePoint 4 t) = q (frozenCircleEdgePoint 11 t) ∧
+    q (frozenCircleEdgePoint 3 t) = q (frozenCircleEdgePoint 9 t) := by
+  dsimp only
+  rcases frozenGeneratorCircleRel_generators t with
+    ⟨h0, h1, h2, h3, h4, h5, h6⟩
+  exact ⟨Quotient.sound (Relation.EqvGen.rel _ _ h0),
+    Quotient.sound (Relation.EqvGen.rel _ _ h1),
+    Quotient.sound (Relation.EqvGen.rel _ _ h2),
+    Quotient.sound (Relation.EqvGen.rel _ _ h3),
+    Quotient.sound (Relation.EqvGen.rel _ _ h4),
+    Quotient.sound (Relation.EqvGen.rel _ _ h5),
+    Quotient.sound (Relation.EqvGen.rel _ _ h6)⟩
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -979,6 +1044,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterHomologyIsoBoundary
 #print axioms frozenGeneratorCircleBoundaryHomeomorph
 #print axioms frozenGeneratorCircleBoundaryHomologyIso
+#print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
