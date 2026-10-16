@@ -37289,36 +37289,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Combine mapped and original right-data triangles; then Unit compatibility and Bool square.",
+    "Cancel right-data comparisons, specialize to generator; then Unit compatibility and Bool square.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_mappedRightHomology_triangle",
-      :type "mapped right homology-to-opcycles triangle",
+    [{:name "t96A06_unitH0_forgottenRightHomology_opcycle_triangle",
+      :type "forgotten original right-data triangle",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_mapHomologyIso'_eq_rightData"],
+      :depends-on ["t96A06_unitH0_rightHomology_opcycle_transport"],
       :area "rp-rational-homology"}
      {:name "t96A06_unitH0_preservation_coordinate_generator",
       :type "preservation of Unit coordinate",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_mappedRightHomology_triangle"
-       "t96A06_unitH0_rightHomology_opcycle_transport"
+      ["t96A06_unitH0_forgottenRightHomology_opcycle_triangle"
+       "t96A06_unitH0_mappedRightHomology_triangle"
        "t96A06_unitH0_chainComparison_homology_generators"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed mapped Unit right-homology triangle.",
+    :reason "Committed forgotten Unit right-homology triangle.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37326,14 +37326,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 0a4a787aa", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792191216046-15853-b11a9989",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "0a4a787aa",
+     {:cmd "git show --check --stat --oneline 958e93253", :exit 0}],
+    :commit "958e93253",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37341,7 +37335,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47750,7 +47744,8 @@
     :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata
     :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator
     :lemma-t96a06-unith0-maphomologyiso-eq-rightdata
-    :lemma-t96a06-unith0-mappedrighthomology-triangle],
+    :lemma-t96a06-unith0-mappedrighthomology-triangle
+    :lemma-t96a06-unith0-forgottenrighthomology-opcycle-triangle],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -47901,6 +47896,23 @@
    :id :lemma-t96a06-unith0-mappedrighthomology-triangle,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-maphomologyiso-eq-rightdata],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_forgottenRightHomology_opcycle_triangle",
+    :type "forgotten original right-data triangle"},
+   :lemma
+   {:name "t96A06_unitH0_forgottenRightHomology_opcycle_triangle",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "forgotten original right-data triangle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-forgottenrighthomology-opcycle-triangle,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-righthomology-opcycle-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
