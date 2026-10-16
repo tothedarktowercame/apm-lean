@@ -3156,6 +3156,26 @@ theorem t96A06_unitH0_mapOpcyclesIso_eq_rightData :
 
 #print axioms t96A06_unitH0_mapOpcyclesIso_eq_rightData
 
+/-- The canonical opcycle-preservation isomorphism, evaluated on the explicit
+mapped Unit generator, agrees with its right-homology-data presentation. -/
+theorem t96A06_unitH0_mapOpcyclesIso_explicit_generator :
+    (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+        t96A06_unitH0ModuleChainGenerator) =
+    ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso ≪≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.symm).hom.hom
+      ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+        t96A06_unitH0ModuleChainGenerator) := by
+  exact congrArg
+    (fun e => e.hom.hom ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+      t96A06_unitH0ModuleChainGenerator))
+    t96A06_unitH0_mapOpcyclesIso_eq_rightData
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_explicit_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
