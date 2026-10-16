@@ -88672,17 +88672,18 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Compute MV coordinate arrows/exactness; normalize.",
+    :residual
+    "Prove MV exactness and compute coordinate maps; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVIntersectionH0ArrowToIntGraph",
-      :type "H0 coordinate arrow",
+    [{:name "frozenGeneratorMVIntGraphH0ReassemblyArrow",
+      :type "H0 reassembly arrow",
       :status :proved,
       :consumers [:t94J09],
       :depends-on ["frozenGeneratorMVPiecesH0GroupIsoIntGraph"],
@@ -88691,7 +88692,7 @@
       :type "coordinates/exactness",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorMVIntersectionH0ArrowToIntGraph"],
+      :depends-on ["frozenGeneratorMVIntGraphH0ReassemblyArrow"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88709,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked degree-zero MV coordinates.",
+    :reason "Banked H0 reassembly coordinates.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,16 +88720,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 51cd6ee02", :exit 0}],
-    :commit "51cd6ee02",
+     {:cmd "git show --check a529a17e1", :exit 0}],
+    :commit "a529a17e1",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "e3241544670a888fcf590ce8cd5c31e0b49a6f5aa51b53f51cf2970f6784c185"},
+     "7d38dd450355d7aa350ec8b5dadff575f657ecdd0a5115e6fc77479419e16bdc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96783,7 +96784,8 @@
     :lemma-frozengeneratormvgraphh1reassemblyarrow
     :lemma-frozengeneratorradialtopologycomparison
     :lemma-frozengeneratormvgraphh1-comp-eq-production
-    :lemma-frozengeneratormvintersectionh0arrowtointgraph],
+    :lemma-frozengeneratormvintersectionh0arrowtointgraph
+    :lemma-frozengeneratormvintgraphh0reassemblyarrow],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97871,4 +97873,21 @@
    :id :lemma-rawedgechart-isopen,
    :kind :lemma,
    :depends-on [:lemma-rawedgeinterior-isopen],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntGraphH0ReassemblyArrow",
+    :type "H0 reassembly arrow"},
+   :lemma
+   {:name "frozenGeneratorMVIntGraphH0ReassemblyArrow",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H0 reassembly arrow",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvintgraphh0reassemblyarrow,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvpiecesh0groupisointgraph],
    :other-consumers []}]}
