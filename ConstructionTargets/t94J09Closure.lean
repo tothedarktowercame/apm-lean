@@ -3027,6 +3027,31 @@ theorem frozenSignedHomology_of_generator_section
   · intro k hk
     exact (hhigh' k hk).of_iso (frozenSignedQuotientHomologyIsoGenerator k)
 
+/-- Homology transport from any named polygon model homeomorphic to the
+frozen signed quotient. -/
+def homologyIsoFrozenSignedOfHomeomorph {X : Type} [TopologicalSpace X]
+    (h : X ≃ₜ FrozenSignedQuotient) (k : ℕ) :
+    SpaceH X k ≅ SpaceH FrozenSignedQuotient k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo h))
+
+/-- Transport the complete frozen signed homology calculation to a named
+homeomorphic polygon model. -/
+theorem homology_of_homeomorph_frozenSigned {X : Type} [TopologicalSpace X]
+    (h : X ≃ₜ FrozenSignedQuotient)
+    (hs :
+      Nonempty (SpaceH FrozenSignedQuotient 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH FrozenSignedQuotient 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH FrozenSignedQuotient k)) :
+    Nonempty (SpaceH X 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH X 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH X k) := by
+  rcases hs with ⟨⟨h0⟩, ⟨h1⟩, hhigh⟩
+  refine ⟨⟨homologyIsoFrozenSignedOfHomeomorph h 0 ≪≫ h0⟩,
+    ⟨homologyIsoFrozenSignedOfHomeomorph h 1 ≪≫ h1⟩, ?_⟩
+  intro k hk
+  exact (hhigh k hk).of_iso (homologyIsoFrozenSignedOfHomeomorph h k)
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -3096,6 +3121,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorHomology_of_comparisons
 #print axioms frozenGeneratorHomology_of_section
 #print axioms frozenSignedHomology_of_generator_section
+#print axioms homologyIsoFrozenSignedOfHomeomorph
+#print axioms homology_of_homeomorph_frozenSigned
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
 #print axioms frozenGeneratorRel_radius_eq
