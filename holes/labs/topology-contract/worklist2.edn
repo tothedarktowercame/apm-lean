@@ -88722,6 +88722,19 @@
      {:cmd "git show --check 1e8c5f871", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "closed Fin cases"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792119702878-15062-ee71a3d8",
+     :commands
+     ["git show/diff/check 1e8c5f871"
+      "verify committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 1e8c5f871"],
+     :finding
+     "PASS program STOP: topo-6 commit 1e8c5f871 adds compiled, sorry-free progress after d01181b09. frozenBoundaryGraphRel_right_unique_of_not_endpoint expands both generator witnesses, uses nonvertex coordinate rigidity to force their source labels and parameters equal, eliminates impossible Fin-label cases, and obtains equal mates; the orientation is right uniqueness as stated. Left uniqueness, chain collapse/T2/MV, homology, and normalization remain explicitly listed. Scope is one target file; fixture SHA 3269795aa7e399e7dfb420adb54fc6aa146bb0fa44ca456bf7227b13e069006e; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "1e8c5f871",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88730,7 +88743,7 @@
      "3269795aa7e399e7dfb420adb54fc6aa146bb0fa44ca456bf7227b13e069006e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88748,7 +88761,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nonvertex coordinate rigidity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked right-uniqueness.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88847,7 +88860,8 @@
      :reason "Banked endpoint invariance."}
     {:job 2,
      :commit "d01181b09",
-     :reason "Banked nonvertex coordinate rigidity."}]}
+     :reason "Banked nonvertex coordinate rigidity."}
+    {:job 3, :commit "1e8c5f871", :reason "Banked right-uniqueness."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97201,7 +97215,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryGraphRel_right_unique_of_not_endpoint",
@@ -97211,7 +97225,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "right-unique off vertices",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "1e8c5f871"},
    :id :lemma-frozenboundarygraphrel-right-unique-of-not-endpoint,
    :kind :lemma,
    :depends-on [:lemma-frozencircleedgepoint-eq-of-not-endpoint],
