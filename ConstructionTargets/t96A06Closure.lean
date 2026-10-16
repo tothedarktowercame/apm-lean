@@ -2765,6 +2765,44 @@ theorem t96A06_unitH0_comparison_generator_of_chain_compatibility
 
 #print axioms t96A06_unitH0_comparison_generator_of_chain_compatibility
 
+/-- In degree zero, the chain comparison sends the forgotten module-valued
+Unit simplex generator to the native additive Unit simplex generator. -/
+theorem t96A06_unitH0_chainComparison_degreeZero_generator :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ())) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+        (TopCat.of Unit) 0).hom =
+    Limits.Sigma.ι
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+        (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+      (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+        (Opposite.op (SimplexCategory.mk 0))) ()) := by
+  dsimp only [ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso]
+  have hhom :
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)).hom =
+        inv (sigmaComparison
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)) := by
+    symm
+    apply IsIso.inv_eq_of_hom_inv_id
+    simpa only [PreservesCoproduct.inv_hom] using
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)).inv_hom_id
+  rw [hhom]
+  exact Limits.map_ι_comp_inv_sigmaComparison _ _ _
+
+#print axioms t96A06_unitH0_chainComparison_degreeZero_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
