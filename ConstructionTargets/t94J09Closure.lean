@@ -2235,6 +2235,25 @@ theorem frozenFaceBoundary_range_le_ker_reassembly
     (frozenGeneratorMVReassemblyLinear_comp_faceBoundary e hboundary hzero) x
   simpa using h
 
+/-- Once Mayer--Vietoris supplies the reverse inclusion, the previously
+computed zero composite identifies the reassembly kernel exactly with the
+literal frozen face-boundary range. -/
+theorem frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates) :
+    LinearMap.range frozenFaceBoundaryCoordinates =
+      LinearMap.ker (frozenGeneratorMVReassemblyLinear e) :=
+  le_antisymm
+    (frozenFaceBoundary_range_le_ker_reassembly e hboundary hzero) hreverse
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -2614,6 +2633,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
 #print axioms frozenGeneratorMVReassemblyLinear_comp_faceBoundary
 #print axioms frozenFaceBoundary_range_le_ker_reassembly
+#print axioms frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
