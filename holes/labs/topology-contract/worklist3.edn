@@ -36854,60 +36854,55 @@
      :commit "5370feaf8",
      :reason "Committed affine and overlap above-top vanishing."}]}
   {:consumer :t98A02,
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:t98A02 [1 1], :t00A01 [1 1]},
     :residual
-    "Review blueprint; then formalize B1 collar/radial representations, followed by B2 openness and B3 puncture connectivity.",
+    "B2 large-interior openness; B3 puncture connectivity; then local orientation and homology.",
     :outcome :stop,
-    :warnings
-    ["Blueprint-only job; Lean gates deferred until reviewed formalization."],
+    :warnings ["Three existing-style simp lints."],
     :missing-theorems
     [{:name "BallCollar",
       :type
-      "collared embedded-ball package, radial regions, and quotient representation",
-      :status :not-started,
+      "collared embedded-ball package, puncture, continuous boundary map, radial regions, and oriented quotient",
+      :status :proved,
       :consumers [:t98A02 :t00A01],
       :depends-on [],
       :area "ball-complement-collar"}
-     {:name "connectedSum_homology",
+     {:name "BallCollar.largeInterior_isOpen",
       :type
-      "integral homology of a collared connected sum in all degrees",
+      "the image of the radius-two interior under the large collar embedding is open in an n-manifold",
       :status :not-started,
       :consumers [:t98A02 :t00A01],
       :depends-on ["BallCollar"],
-      :area "manifold-fundamental-class"}],
-    :statement-hashes {:registry "167/167"},
+      :area "ball-complement-collar"}
+     {:name "BallCollar.punctured_pathConnected",
+      :type
+      "a collared puncture of a connected boundaryless n-manifold, n at least two, is path connected",
+      :status :not-started,
+      :consumers [:t98A02 :t00A01],
+      :depends-on ["BallCollar.largeInterior_isOpen"],
+      :area "ball-complement-collar"}],
+    :statement-hashes {:registry "168/168"},
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review.",
+    "Committed compiled B1 collar and quotient representations.",
     :commands
     [{:cmd
-      "git diff --check -- ConstructionTargets/CollaredConnectedSumHomology.blueprint.md",
+      "lake build ConstructionTargets.CollaredConnectedSumHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check --oneline --stat 5dcf403de", :exit 0}
-     {:cmd "git diff --name-only 5dcf403de^ 5dcf403de", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792083938315-14341-e8f12f85",
-     :commands
-     ["git show --check --stat 5dcf403de"
-      "git diff --name-only 5dcf403de^ 5dcf403de"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"
-      "rg blueprint nodes/uses/placeholders"],
-     :finding
-     "PASS: commit 5dcf403de changes only the scoped blueprint. B1-B13 are mathematically coherent; each node cites the prior results/external inputs its proof needs, quotient orientations and representation conversions are explicit, and B11 hypotheses are used. Hash 13f3a610...da741a4; registry 167/167; no placeholders. This is valid committed program progress."},
-    :commit "5dcf403de",
+     {:cmd
+      "git diff --check && git show --check --stat --oneline 9067e7d41",
+      :exit 0}],
+    :commit "9067e7d41",
     :changed-paths
-    ["ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"],
+    ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -43741,7 +43736,8 @@
     :reported-by [:program-2026-10-13-collared-connected-sum-homology],
     :type
     "collared embedded-ball package, radial regions, and quotient representation",
-    :area "ball-complement-collar"},
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology},
    :id :lemma-ballcollar,
    :kind :lemma,
    :depends-on [],
@@ -45276,7 +45272,43 @@
    :id :lemma-t99j05-cp-successor-lowerpatch-deformationretract,
    :kind :lemma,
    :depends-on [:lemma-cpsuccessorzerolastvector],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.largeInterior_isOpen",
+    :type
+    "the image of the radius-two interior under the large collar embedding is open in an n-manifold"},
+   :lemma
+   {:name "BallCollar.largeInterior_isOpen",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type
+    "the image of the radius-two interior under the large collar embedding is open in an n-manifold",
+    :area "ball-complement-collar"},
+   :id :lemma-ballcollar-largeinterior-isopen,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.punctured_pathConnected",
+    :type
+    "a collared puncture of a connected boundaryless n-manifold, n at least two, is path connected"},
+   :lemma
+   {:name "BallCollar.punctured_pathConnected",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type
+    "a collared puncture of a connected boundaryless n-manifold, n at least two, is path connected",
+    :area "ball-complement-collar"},
+   :id :lemma-ballcollar-punctured-pathconnected,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-largeinterior-isopen],
+   :other-consumers [:t00A01]}],
  :consumer-baselines {},
  :statuses
  #{:open
