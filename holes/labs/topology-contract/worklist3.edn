@@ -36708,36 +36708,37 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Identify both legs with MV f; transport exactness; then successor data, Lefschetz, Main.",
+    "Build ModuleCat homology-biproduct comparison; identify MV f; transport exactness.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name
-      "t99J05_cp_successor_mayerVietoris_overlap_lower_naturality",
-      :type "lower-leg naturality",
+    [{:name "t99J05_cp_successor_literalOverlapToPieces_components",
+      :type "signed map component formulas",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_ambientSubspaceRangeHomologyIso_naturality"],
+      ["t99J05_cp_successor_mayerVietoris_overlap_lower_naturality"
+       "t99J05_cp_successor_mayerVietoris_overlap_top_naturality"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
-      :type "top-leg naturality",
-      :status :proved,
+     {:name "t99J05_cp_successor_mayerVietoris_f_transport",
+      :type "MV first-arrow transport",
+      :status :not-started,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_ambientSubspaceRangeHomologyIso_naturality"],
+      ["t99J05_cp_successor_literalOverlapToPieces_components"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed both overlap-leg naturality proofs.",
+    :reason
+    "Committed literal signed overlap map and component formulas.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36748,23 +36749,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 9bea96bc2", :exit 0}],
+     {:cmd "git show --check --stat --oneline 2c9276d49", :exit 0}],
     :diagnostic-history
-    [{:cmd "compile", :exit 1, :note "Corrected declaration syntax."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792181515062-15768-c22426c9",
-     :commands
-     ["git show/check 9bea96bc2"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit specializes the proved naturality square to both overlap inclusions, using inter_subset_left for lower and inter_subset_right for top. Directions and representation boundaries are correct; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains one declared placeholder."},
-    :commit "9bea96bc2",
+    [{:cmd "closure compile (3 attempts)",
+      :exit 1,
+      :note
+      "Fixed syntax/types; existing biproduct iso is group-only."}],
+    :commit "2c9276d49",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36772,7 +36763,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -47791,6 +47782,42 @@
    :id :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-righthomology-opcycle-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_literalOverlapToPieces_components",
+    :type "signed map component formulas"},
+   :lemma
+   {:name "t99J05_cp_successor_literalOverlapToPieces_components",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "signed map component formulas",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-literaloverlaptopieces-components,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-overlap-lower-naturality
+    :lemma-t99j05-cp-successor-mayervietoris-overlap-top-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_f_transport",
+    :type "MV first-arrow transport"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_f_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "MV first-arrow transport",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-f-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-literaloverlaptopieces-components],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
