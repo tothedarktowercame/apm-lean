@@ -88672,20 +88672,22 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "H1; exact; section; homology; norm.",
+    :residual
+    "H1 comparison; exactness; construct section; homology; norm.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete",
+    [{:name "frozenGeneratorCanonicalModuleH1SmithEquiv_of_section",
       :type "T",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on [],
+      :depends-on
+      ["frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88715,7 +88717,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked H1 transport.",
+    :reason "Banked section H1 assembly.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88725,29 +88727,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 22d53848c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792181420928-15766-d826a33b",
-     :commands
-     ["git show/check 22d53848c"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free canonical module-H1 Smith transport beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The equivalence composes module-valued canonical H1 to concrete canonical H1 and then the supplied concrete Smith equivalence to N6Smith, matching the frozen homology statement with correct direction. Only standard axioms occur; H1 comparison, reverse exactness, canonical section, full homology assembly, and normalization remain listed."},
-    :commit "22d53848c",
+     {:cmd "git show --check f59af914f", :exit 0}],
+    :commit "f59af914f",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "e322982344a4a0ec8912cf63677b7e7b186cae63669f91a1087c6f2ae670d768"},
+     "c62770859338eadd105581d7d1c53726fda220955498a861b369892bc83ce3b4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98918,4 +98907,22 @@
    :id :lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-concrete,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalModuleH1SmithEquiv_of_section",
+    :type "T"},
+   :lemma
+   {:name "frozenGeneratorCanonicalModuleH1SmithEquiv_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-section,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-concrete],
    :other-consumers []}]}
