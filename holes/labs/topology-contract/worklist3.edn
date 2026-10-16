@@ -36708,7 +36708,7 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
@@ -36757,7 +36757,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36897,12 +36897,24 @@
      {:cmd
       "git diff --check && git show --check --stat --oneline 9067e7d41",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792118954346-15048-108b4cb7",
+     :commands
+     ["git show --check --stat 9067e7d41; inspect diff"
+      "verify commit blob equals compiled file"
+      "rg sorry/admit/axiom"
+      "lake build ConstructionTargets.CollaredConnectedSumHomology"
+      "statement-registry.py check => 168/168"],
+     :finding
+     "PASS: 9067e7d41 is new compiled, sorry-free program progress in exact scope: collar compatibility, puncture boundary map, radial-region representations, and quotient by equal sphere parameters. Relation orientation and quotient topology match B1; printed axioms are standard. No fixture is recorded; consumer placeholders remain 1->1. B2/B3 and later homology milestones are listed."},
     :commit "9067e7d41",
     :changed-paths
     ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -36922,7 +36934,7 @@
     :blueprint
     "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed compiled B1 collar and quotient representations.",
    :id :program-2026-10-13-collared-connected-sum-homology,
    :kind :reusable-theorem,
    :campaign-priority 32,
@@ -36934,7 +36946,11 @@
    [{:job 1,
      :commit "5dcf403de",
      :reason
-     "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review."}]}
+     "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review."}
+    {:job 2,
+     :commit "9067e7d41",
+     :reason
+     "Committed compiled B1 collar and quotient representations."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37206,7 +37222,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37262,7 +37278,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37284,7 +37300,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -43725,7 +43741,7 @@
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "BallCollar",
@@ -43737,7 +43753,9 @@
     :type
     "collared embedded-ball package, radial regions, and quotient representation",
     :area "ball-complement-collar",
-    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "9067e7d41"},
    :id :lemma-ballcollar,
    :kind :lemma,
    :depends-on [],
@@ -45115,7 +45133,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45127,7 +45145,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "rational localization implies raw generator transport",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-rationallocalization,
    :kind :lemma,
@@ -45136,7 +45156,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rationalNormalizedClassLocalizesToRawGenerator",
@@ -45145,7 +45165,9 @@
    {:name "t96A06_rationalNormalizedClassLocalizesToRawGenerator",
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "rational extension projects to the chart generator",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator,
    :kind :lemma,
    :depends-on
@@ -45153,7 +45175,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_rationalProjection_preservation_naturality",
@@ -45163,7 +45185,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "rational homology preservation commutes with projection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-rationalprojection-preservation-naturality,
    :kind :lemma,
    :depends-on
@@ -45171,7 +45195,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45185,7 +45209,9 @@
     :type
     "global rational comparison and scalar one imply local generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator-of-globalcomparison,
    :kind :lemma,
@@ -45194,7 +45220,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_globalRationalComparison_and_baseScalar_one",
@@ -45205,7 +45231,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "extended integral class is rational generator and base scalar is one",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-globalrationalcomparison-and-basescalar-one,
    :kind :lemma,
    :depends-on
@@ -45214,7 +45242,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45228,7 +45256,9 @@
     :type
     "global normalization packet implies raw coefficient transport",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-globalpacket,
    :kind :lemma,
@@ -45237,7 +45267,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "cpSuccessorZeroLastVector",
@@ -45249,7 +45279,9 @@
     :type
     "zeroing the last coordinate of a lower-patch representative remains nonzero, with endpoint equations",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-cpsuccessorzerolastvector,
    :kind :lemma,
    :depends-on
