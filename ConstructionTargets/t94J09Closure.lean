@@ -1987,6 +1987,30 @@ noncomputable def frozenGraphBoundaryKernelEquiv :
     funext i
     rfl
 
+/-- The six independent frozen graph cycles, embedded in the seven oriented
+edge coordinates.  The seventh edge closes the fourth coordinate cycle. -/
+noncomputable def frozenGraphCycleInclusion :
+    (Fin 6 → ℤ) →ₗ[ℤ] (Fin 7 → ℤ) :=
+  (LinearMap.ker frozenGraphBoundary).subtype.comp
+    frozenGraphBoundaryKernelEquiv.symm.toLinearMap
+
+@[simp] theorem frozenGraphCycleInclusion_apply (w : Fin 6 → ℤ) :
+    frozenGraphCycleInclusion w =
+      fun i ↦ ![w 0, w 1, w 2, w 3, w 4, w 5, w 3] i := rfl
+
+/-- The explicit six-cycle inclusion fills precisely the kernel of the
+two-vertex graph boundary. -/
+theorem frozenGraphCycleInclusion_range :
+    LinearMap.range frozenGraphCycleInclusion =
+      LinearMap.ker frozenGraphBoundary := by
+  apply le_antisymm
+  · rintro x ⟨w, rfl⟩
+    exact (frozenGraphBoundaryKernelEquiv.symm w).2
+  · intro x hx
+    refine ⟨frozenGraphBoundaryKernelEquiv ⟨x, hx⟩, ?_⟩
+    exact congrArg Subtype.val
+      (frozenGraphBoundaryKernelEquiv.symm_apply_apply ⟨x, hx⟩)
+
 /-! ## The frozen face boundary in graph-cycle coordinates -/
 
 /-- Signed degree of the fourteen-edge attaching word in orbit order
@@ -2433,6 +2457,9 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPair_ne
 #print axioms frozenOrbitEquiv
 #print axioms frozenGraphBoundaryKernelEquiv
+#print axioms frozenGraphCycleInclusion
+#print axioms frozenGraphCycleInclusion_apply
+#print axioms frozenGraphCycleInclusion_range
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
