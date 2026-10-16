@@ -571,6 +571,95 @@ theorem cpSuccessorLowerPatchHomotopy_one_eq_inclusion (n : ℕ)
           (cpSuccessorLowerRepresentative n p)))
   rw [cpSuccessorZeroLastInclude_truncate]
 
+theorem cpSuccessorLowerTruncateVector_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerTruncateVector n) := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro i
+  exact (continuous_apply i.castSucc).comp
+    (continuous_subtype_val.comp continuous_subtype_val)
+
+/-- Truncation respects homogeneous scalar multiplication. -/
+theorem cpSuccessorLowerTruncateVector_smul (n : ℕ)
+    (v w : CPSuccessorLowerVectors n) (a : ℂ)
+    (hvw : v.1.1 = a • w.1.1) :
+    (cpSuccessorLowerTruncateVector n v).1 =
+      a • (cpSuccessorLowerTruncateVector n w).1 := by
+  funext i
+  exact congrFun hvw i.castSucc
+
+/-- Truncate a lower-patch representative and pass to `CP n`. -/
+def cpSuccessorLowerTruncationOnVectors (n : ℕ)
+    (v : CPSuccessorLowerVectors n) : CP n :=
+  quotientMap ℂ n (cpSuccessorLowerTruncateVector n v)
+
+theorem cpSuccessorLowerTruncationOnVectors_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerTruncationOnVectors n) :=
+  (continuous_quotientMap ℂ n).comp
+    (cpSuccessorLowerTruncateVector_continuous n)
+
+/-- The projective truncation map from the lower successor patch to `CP n`. -/
+noncomputable def cpSuccessorLowerRetraction (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) : CP n :=
+  cpSuccessorLowerTruncationOnVectors n
+    (cpSuccessorLowerRepresentative n p)
+
+/-- Pulling the projective truncation back to any lower-patch representative
+recovers its literal truncated projective class. -/
+theorem cpSuccessorLowerRetraction_quotient (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorLowerRetraction n (cpSuccessorLowerQuotientMap n v) =
+      cpSuccessorLowerTruncationOnVectors n v := by
+  let w := cpSuccessorLowerRepresentative n (cpSuccessorLowerQuotientMap n v)
+  have hq : quotientMap ℂ (n + 1) w.1 = quotientMap ℂ (n + 1) v.1 := by
+    exact congrArg Subtype.val
+      (cpSuccessorLowerRepresentative_quotient n
+        (cpSuccessorLowerQuotientMap n v))
+  obtain ⟨a, ha⟩ :=
+    (Projectivization.mk_eq_mk_iff ℂ w.1.1 v.1.1 w.1.2 v.1.2).mp hq
+  change quotientMap ℂ n (cpSuccessorLowerTruncateVector n w) =
+    quotientMap ℂ n (cpSuccessorLowerTruncateVector n v)
+  apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+  refine ⟨a, ?_⟩
+  exact (cpSuccessorLowerTruncateVector_smul n w v a ha.symm).symm
+
+theorem cpSuccessorLowerRetraction_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerRetraction n) := by
+  apply (cpSuccessorLowerQuotientMap_isOpenQuotient n).isQuotientMap.continuous_iff.mpr
+  have hcomp : cpSuccessorLowerRetraction n ∘ cpSuccessorLowerQuotientMap n =
+      cpSuccessorLowerTruncationOnVectors n := by
+    funext v
+    exact cpSuccessorLowerRetraction_quotient n v
+  rw [hcomp]
+  exact cpSuccessorLowerTruncationOnVectors_continuous n
+
+@[simp] theorem cpSuccessorLowerTruncate_include (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    cpSuccessorLowerTruncateVector n
+        ⟨cpSuccessorZeroLastIncludeVector n v,
+          cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩ = v := by
+  apply Subtype.ext
+  funext i
+  simp [cpSuccessorLowerTruncateVector, cpSuccessorZeroLastIncludeVector]
+
+/-- Projective truncation is a left inverse to the zero-last-coordinate
+inclusion. -/
+@[simp] theorem cpSuccessorLowerRetraction_inclusion (n : ℕ) (x : CP n) :
+    cpSuccessorLowerRetraction n (cpSuccessorZeroLastInclusion n x) = x := by
+  obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ n x
+  rw [cpSuccessorZeroLastInclusion_quotient]
+  change cpSuccessorLowerRetraction n
+      (cpSuccessorLowerQuotientMap n
+        ⟨cpSuccessorZeroLastIncludeVector n v,
+          cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩) =
+    quotientMap ℂ n v
+  rw [cpSuccessorLowerRetraction_quotient]
+  change quotientMap ℂ n
+      (cpSuccessorLowerTruncateVector n
+        ⟨cpSuccessorZeroLastIncludeVector n v,
+          cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩) = _
+  rw [cpSuccessorLowerTruncate_include]
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
@@ -1099,6 +1188,13 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorLowerTruncateVector
 #print axioms cpSuccessorZeroLastInclude_truncate
 #print axioms cpSuccessorLowerPatchHomotopy_one_eq_inclusion
+#print axioms cpSuccessorLowerTruncateVector_continuous
+#print axioms cpSuccessorLowerTruncateVector_smul
+#print axioms cpSuccessorLowerTruncationOnVectors_continuous
+#print axioms cpSuccessorLowerRetraction_quotient
+#print axioms cpSuccessorLowerRetraction_continuous
+#print axioms cpSuccessorLowerTruncate_include
+#print axioms cpSuccessorLowerRetraction_inclusion
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
