@@ -245,6 +245,16 @@ theorem rawEdgeInterior_isOpen (i : Fin 2) (v : V) :
     ((isOpen_discrete ({v} : Set V)).prod
       (isOpen_Ioo.preimage continuous_subtype_val))
 
+/-- The full raw chart above one open base edge, obtained by taking all
+vertex-labelled lifted edge interiors. -/
+def rawEdgeChart (V : Type*) (i : Fin 2) : Set (RealizationRaw V) :=
+  ⋃ v : V, rawEdgeInterior i v
+
+/-- The full raw edge chart is open. -/
+theorem rawEdgeChart_isOpen (i : Fin 2) : IsOpen (rawEdgeChart V i) := by
+  unfold rawEdgeChart
+  exact isOpen_iUnion (fun v => rawEdgeInterior_isOpen (V := V) i v)
+
 def vertex (v : V) : D.Realization := Quotient.mk _ (.inl v)
 
 def edgePoint (i : Fin 2) (v : V) (t : UnitInterval) : D.Realization :=
@@ -792,6 +802,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms vertex_injective
 #print axioms realizationQuotientMap_isQuotientMap
 #print axioms rawEdgeInterior_isOpen
+#print axioms rawEdgeChart_isOpen
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
