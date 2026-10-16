@@ -650,6 +650,26 @@ theorem continuous_frozenBoundaryQuotientToOuterSkeleton :
   apply Continuous.quotient_lift
   exact continuous_frozenBoundaryRepresentativeToOuterSkeleton
 
+/-- The frozen boundary quotient is compact: its boundary source is a circle,
+and the quotient topology is coinduced by the canonical projection. -/
+theorem compactSpace_frozenGeneratorBoundaryQuotient :
+    CompactSpace FrozenGeneratorBoundaryQuotient := by
+  letI : CompactSpace ConstructionTargets.PolygonBoundaryCircleSource.Boundary :=
+    ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.compactSpace
+  exact Quotient.compactSpace
+
+/-- The outer boundary skeleton is compact as the continuous image of the
+compact boundary quotient. -/
+theorem compactSpace_frozenGeneratorOuterBoundaryPiece :
+    CompactSpace FrozenGeneratorOuterBoundaryPiece := by
+  letI : CompactSpace FrozenGeneratorBoundaryQuotient :=
+    compactSpace_frozenGeneratorBoundaryQuotient
+  constructor
+  rw [← Set.range_eq_univ.mpr
+    frozenBoundaryQuotientToOuterSkeleton_bijective.surjective]
+  simpa only [Set.image_univ] using
+    isCompact_univ.image continuous_frozenBoundaryQuotientToOuterSkeleton
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1298,6 +1318,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
+#print axioms compactSpace_frozenGeneratorBoundaryQuotient
+#print axioms compactSpace_frozenGeneratorOuterBoundaryPiece
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
