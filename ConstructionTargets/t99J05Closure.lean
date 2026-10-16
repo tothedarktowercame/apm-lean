@@ -7,9 +7,8 @@ import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.CoefficientSubcomplexMayerVietoris
 import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
+import ConstructionTargets.HomologyBiprodIso
 import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.Algebra.Homology.Additive
-import Mathlib.Algebra.Homology.HomologicalComplexBiprod
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -1344,7 +1343,7 @@ noncomputable def t99J05_rationalHomologyBiprodIso
     (ComplexShape.down ℕ) k
   letI : F.Additive := inferInstance
   letI : PreservesFiniteBiproducts F :=
-    Functor.preservesFiniteBiproductsOfAdditive F
+    CategoryTheory.Functor.preservesFiniteBiproductsOfAdditive F
   letI : PreservesBinaryBiproducts F :=
     preservesBinaryBiproducts_of_preservesBiproducts F
   exact F.mapBiprod K L
