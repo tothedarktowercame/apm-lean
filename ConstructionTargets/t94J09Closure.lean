@@ -1683,6 +1683,27 @@ theorem frozenGeneratorMVReassemblyLinear_comp_coordinates
   intro x
   simp [frozenGeneratorMVReassemblyLinear]
 
+/-- Changing to six graph-cycle coordinates does not alter surjectivity of
+the canonical degree-one reassembly arrow. -/
+theorem frozenGeneratorMVReassemblyLinear_surjective_iff
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) :
+    Function.Surjective (frozenGeneratorMVReassemblyLinear e) ↔
+      Function.Surjective
+        frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap := by
+  constructor
+  · intro h y
+    rcases h y with ⟨x, hx⟩
+    refine ⟨e.symm x, ?_⟩
+    simpa [frozenGeneratorMVReassemblyLinear] using hx
+  · intro h y
+    rcases h y with ⟨x, hx⟩
+    refine ⟨e x, ?_⟩
+    have hc := LinearMap.congr_fun
+      (frozenGeneratorMVReassemblyLinear_comp_coordinates e) x
+    exact hc.trans hx
+
 /-- Composing the graph-coordinate arrows cancels the middle-term transport,
 leaving the production Mayer--Vietoris composite in overlap coordinates. -/
 theorem frozenGeneratorMVGraphH1_comp_eq_production :
@@ -2657,6 +2678,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
+#print axioms frozenGeneratorMVReassemblyLinear_surjective_iff
 #print axioms frozenGeneratorMVReassemblyLinear_comp_faceBoundary
 #print axioms frozenFaceBoundary_range_le_ker_reassembly
 #print axioms frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
