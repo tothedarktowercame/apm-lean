@@ -36751,6 +36751,19 @@
      {:cmd "git show --check --stat --oneline 9bea96bc2", :exit 0}],
     :diagnostic-history
     [{:cmd "compile", :exit 1, :note "Corrected declaration syntax."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792181515062-15768-c22426c9",
+     :commands
+     ["git show/check 9bea96bc2"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit specializes the proved naturality square to both overlap inclusions, using inter_subset_left for lower and inter_subset_right for top. Directions and representation boundaries are correct; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains one declared placeholder."},
     :commit "9bea96bc2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36759,7 +36772,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36777,7 +36790,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired compiled range homology naturality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed both overlap-leg naturality proofs.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36895,7 +36908,10 @@
      "Committed ambient-inclusion naturality for literal-patch transport."}
     {:job 4,
      :commit "ddbe3be23",
-     :reason "Repaired compiled range homology naturality."}]}
+     :reason "Repaired compiled range homology naturality."}
+    {:job 5,
+     :commit "9bea96bc2",
+     :reason "Committed both overlap-leg naturality proofs."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37265,7 +37281,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37323,7 +37339,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37345,7 +37361,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47566,7 +47582,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
@@ -47578,7 +47594,9 @@
     :type
     "inverse-discrete Unit chain generator equals the explicit singular simplex",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex,
    :kind :lemma,
    :depends-on
@@ -47603,7 +47621,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex",
@@ -47613,7 +47631,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "additive generator equals literal simplex",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0additivechaingenerator-eq-explicitsimplex,
    :kind :lemma,
    :depends-on
@@ -47621,7 +47641,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_chainComparison_projected_generators",
@@ -47631,7 +47651,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "comparison carries module opcycle to additive opcycle",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-chaincomparison-projected-generators,
    :kind :lemma,
    :depends-on
@@ -47659,7 +47681,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -47670,7 +47692,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "lower-leg naturality",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9bea96bc2"},
    :id
    :lemma-t99j05-cp-successor-mayervietoris-overlap-lower-naturality,
    :kind :lemma,
@@ -47679,7 +47703,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
@@ -47689,7 +47713,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "top-leg naturality",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9bea96bc2"},
    :id :lemma-t99j05-cp-successor-mayervietoris-overlap-top-naturality,
    :kind :lemma,
    :depends-on
