@@ -1607,6 +1607,50 @@ noncomputable def t96A06_sphere3_rational_H3Iso :
   CoefficientSphereShift.sphereShift ℚ 3 2 (by decide) ≪≫
     CoefficientSphereEndpoints.sphereH2 ℚ
 
+/-- Integral coordinate on the same concrete three-sphere, using exactly the
+same iterated sphere-shift normalization as the rational coordinate. -/
+noncomputable def t96A06_sphere3_integral_H3Iso :
+    CoefficientH0.SingularHomology ℤ 3 (TopCat.of (Sphere 3)) ≅
+      ModuleCat.of ℤ ℤ :=
+  CoefficientSphereShift.sphereShift ℤ 3 2 (by decide) ≪≫
+    CoefficientSphereEndpoints.sphereH2 ℤ
+
+noncomputable def t96A06_sphere3_integral_normalizedClass :
+    CoefficientH0.SingularHomology ℤ 3 (TopCat.of (Sphere 3)) :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of (Sphere 3)) 3).inv.hom
+      (ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint)
+
+/-- The stereographically selected integral normalized class has a unit
+coordinate in the canonical integral sphere-shift normalization.  Thus its
+coefficient extension can differ from rational coordinate one only by the
+remaining orientation sign, not by an arbitrary nonzero scalar. -/
+theorem t96A06_integralNormalizedClass_coordinate_isUnit :
+    IsUnit (t96A06_sphere3_integral_H3Iso.hom.hom
+      t96A06_sphere3_integral_normalizedClass) := by
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3
+  obtain ⟨m, hm⟩ :=
+    ConstructionTargets.HigherSphereLocalization.normalizedClass_generates
+      polynomialSphereRegularPoint
+      (e.hom.hom (t96A06_sphere3_integral_H3Iso.inv.hom 1))
+  have hm'' : m • t96A06_sphere3_integral_normalizedClass =
+      t96A06_sphere3_integral_H3Iso.inv.hom 1 := by
+    calc
+      _ = e.inv.hom (m •
+          ConstructionTargets.HigherSphereLocalization.normalizedClass
+            polynomialSphereRegularPoint) := by
+        exact (e.inv.hom.map_zsmul _ _).symm
+      _ = e.inv.hom (e.hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) := congrArg e.inv.hom hm
+      _ = _ := e.hom_inv_id_apply _
+  have h := congrArg t96A06_sphere3_integral_H3Iso.hom.hom hm''
+  simp only [map_zsmul, Iso.hom_inv_id_apply] at h
+  apply IsUnit.of_mul_eq_one m
+  simpa [smul_eq_mul, mul_comm] using h
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
