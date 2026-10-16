@@ -36708,37 +36708,34 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
-    :residual "Lower-patch retract; MV successor; Main.",
+    :residual
+    "Descend zero-last homotopy; identify CP n; MV successor; Main.",
     :outcome :stop,
     :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_affineUnitSphere_homology_isZero_of_gt",
-      :type "affine sphere vanishes above top",
+    [{:name "cpSuccessorZeroLastVector",
+      :type
+      "zeroing the last coordinate of a lower-patch representative remains nonzero, with endpoint equations",
       :status :proved,
-      :consumers [:t99J05],
-      :depends-on ["t99J05_euclideanUnitSphere_homology_isZero_of_gt"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_overlap_homology_isZero_of_gt",
-      :type "successor overlap vanishes above top",
-      :status :proved,
-      :consumers [:t99J05],
-      :depends-on ["t99J05_affineUnitSphere_homology_isZero_of_gt"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_lowerPatch_retract",
-      :type "lower patch retracts to CP n",
-      :status :not-started,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_overlap_homology_isZero_of_gt"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
+      :type
+      "lower patch deformation retracts onto the zero-last projective subspace CP n",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on ["cpSuccessorZeroLastVector"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed affine and overlap above-top vanishing.",
+    :reason "Committed the lower-patch zero-last endpoint.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36750,21 +36747,9 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 5370feaf8",
+      "git diff --check && git show --check --stat --oneline 8c7aca0ba",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792115318129-14995-c9ff51f1",
-     :commands
-     ["git show --check --stat 5370feaf8; inspect diff"
-      "verify commit blob equals compiled file"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean Closure, Main, fixture"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: 5370feaf8 adds compiled, sorry-free progress beyond history, transporting above-top vanishing through the affine-sphere homotopy equivalence and then the overlap homology isomorphism in the correct direction. Fixture hash matches; only standard axioms. Main placeholder remains 1->1; lower retract, MV, and Main milestones are listed."},
-    :commit "5370feaf8",
+    :commit "8c7aca0ba",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36772,7 +36757,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -45253,6 +45238,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator-of-globalcomparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorZeroLastVector",
+    :type
+    "zeroing the last coordinate of a lower-patch representative remains nonzero, with endpoint equations"},
+   :lemma
+   {:name "cpSuccessorZeroLastVector",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "zeroing the last coordinate of a lower-patch representative remains nonzero, with endpoint equations",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-cpsuccessorzerolastvector,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_deformationRetract",
+    :type
+    "lower patch deformation retracts onto the zero-last projective subspace CP n"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "lower patch deformation retracts onto the zero-last projective subspace CP n",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-lowerpatch-deformationretract,
+   :kind :lemma,
+   :depends-on [:lemma-cpsuccessorzerolastvector],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
