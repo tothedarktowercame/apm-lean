@@ -1313,6 +1313,26 @@ theorem t99J05_ambientSubspaceRangeHomologyIso_naturality
 
 #print axioms t99J05_ambientSubspaceRangeHomologyIso_naturality
 
+/-- Naturality specialized to the overlap inclusion into the lower successor
+patch. -/
+def t99J05_cp_successor_mayerVietoris_overlap_lower_naturality
+    (n k : ℕ) :=
+  t99J05_ambientSubspaceRangeHomologyIso_naturality
+    (A := cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n)
+    (B := cpSuccessorLowerPatch n) Set.inter_subset_left k
+
+#print axioms t99J05_cp_successor_mayerVietoris_overlap_lower_naturality
+
+/-- Naturality specialized to the overlap inclusion into the top successor
+patch. -/
+def t99J05_cp_successor_mayerVietoris_overlap_top_naturality
+    (n k : ℕ) :=
+  t99J05_ambientSubspaceRangeHomologyIso_naturality
+    (A := cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n)
+    (B := cpSuccessorTopPatch n) Set.inter_subset_right k
+
+#print axioms t99J05_cp_successor_mayerVietoris_overlap_top_naturality
+
 /-- The three range-presented terms in the successor Mayer--Vietoris sequence
 transport to the literal overlap and two patches. -/
 noncomputable def t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
