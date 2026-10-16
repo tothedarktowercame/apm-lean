@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 208f7140a", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792141380917-15273-7f427664",
+     :commands
+     ["git show/diff/check 208f7140a"
+      "verify boundary product pullback representation"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 208f7140a"],
+     :finding
+     "PASS program STOP: topo-6 commit 208f7140a adds compiled, sorry-free progress after a30b7172a. frozenBoundarySubtypeEqvGen_isClosed uses the continuous product of the actual boundaryToCircle homeomorphism, pulls back frozenBoundaryClosedRel_isClosed, and rewrites by the exact boundary EqvGen pullback theorem. Thus closedness is proved on the genuine boundary subtype and product topology. Embedding into the disk graph, disk T2, inverse continuity/MV, and normalization remain explicitly listed. Scope is one target file; fixture SHA eaf6939cd50f1dd98cd788187a5df21d8352fe4e47ed52074cd5e73cfcb45b5d; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "208f7140a",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "eaf6939cd50f1dd98cd788187a5df21d8352fe4e47ed52074cd5e73cfcb45b5d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary relation pullback.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked closed boundary EqvGen graph.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88871,7 +88884,10 @@
     {:job 3, :commit "98ac1c4c9", :reason "Banked disk EqvGen split."}
     {:job 4,
      :commit "a30b7172a",
-     :reason "Banked boundary relation pullback."}]}
+     :reason "Banked boundary relation pullback."}
+    {:job 5,
+     :commit "208f7140a",
+     :reason "Banked closed boundary EqvGen graph."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97497,7 +97513,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundarySubtypeEqvGen_isClosed",
@@ -97507,7 +97523,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "closed boundary EqvGen graph",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "208f7140a"},
    :id :lemma-frozenboundarysubtypeeqvgen-isclosed,
    :kind :lemma,
    :depends-on [:lemma-frozenboundarysubtypeeqvgen-iff-closedrel],
