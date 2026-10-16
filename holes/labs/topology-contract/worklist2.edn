@@ -88672,22 +88672,21 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "H1 comparison; reverse inclusion and surjectivity; normalize.",
+    :residual "H1; exact; surj; norm.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorH1SmithEquiv_of_comparisons",
-      :type "H1 Smith",
+    [{:name "frozenGeneratorMVReassemblyLinear_surjective_iff",
+      :type "surj",
       :status :proved,
       :consumers [:t94J09],
       :depends-on
-      ["frozenFaceBoundary_range_eq_ker_reassembly_of_reverse"],
+      ["frozenGeneratorMVReassemblyLinear_comp_coordinates"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88717,7 +88716,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked H1 Smith assembly.",
+    :reason ".",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88727,29 +88726,18 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 8e6918ba1", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792173133340-15714-476109e8",
-     :commands
-     ["git show/check 8e6918ba1"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free canonical H1 Smith assembly beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The exactness equality is reversed to the kernel=face-range orientation required by the quotient theorem, and surjectivity then identifies canonical quotient H1 with the established face cokernel and N6 Smith coordinates. Missing H1 comparison, reverse inclusion, and surjectivity remain explicit. Only standard axioms occur; those facts and normalization remain listed."},
-    :commit "8e6918ba1",
+     {:cmd "git show --check 5d1cc7620", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :correction "category"}],
+    :commit "5d1cc7620",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "81776beaf3286d08e80700c563c1c0208f1c0edb8c906e1c3db7853ead1babe0"},
+     "6b60ee473e75d30af21a6eef2aaa4c727371b970d80250aa1c89807447a26e0d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98796,4 +98784,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozenfaceboundary-range-eq-ker-reassembly-of-reverse],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_surjective_iff",
+    :type "surj"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_surjective_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "surj",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvreassemblylinear-surjective-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvreassemblylinear-comp-coordinates],
    :other-consumers []}]}
