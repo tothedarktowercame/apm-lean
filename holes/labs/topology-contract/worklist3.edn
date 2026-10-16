@@ -37256,37 +37256,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove endpoint pair; then boundary map, circle sign, suspensions, Main.",
+    "Prove unit-to-Bool point naturality; then boundary map, circle sign, suspensions, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t96A06_boolH0_integralComparison_of_endpoint_pair",
-      :type "endpoint conjunction implies full Bool H0 comparison",
+    [{:name "t96A06_boolH0_endpoint_pair_iff_all_points",
+      :type "endpoint pair iff every Bool point comparison",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_boolH0_integralComparison_of_false_true"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_boolH0_integralComparison_endpoint_pair",
-      :type
-      "false and true point coordinates for forgotten/native discrete H0",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_boolH0_integralComparison_of_endpoint_pair"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_boolH0PointComparison_of_unit_naturality",
+      :type
+      "unit comparison naturality gives each Bool point coordinate",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on ["t96A06_boolH0_endpoint_pair_iff_all_points"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed endpoint-pair assembly; endpoint coordinates remain.",
+    "Banked equivalence of endpoint-pair and pointwise Bool comparisons; naturality calculation remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37294,14 +37294,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline c46ceb387b", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792155913522-15471-392cd38f",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "c46ceb387b",
+     {:cmd "git show --check --stat --oneline 641e8de0f6", :exit 0}],
+    :commit "641e8de0f6",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37309,7 +37303,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46643,6 +46637,42 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-boolh0-integralcomparison-of-endpoint-pair],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_endpoint_pair_iff_all_points",
+    :type "endpoint pair iff every Bool point comparison"},
+   :lemma
+   {:name "t96A06_boolH0_endpoint_pair_iff_all_points",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint pair iff every Bool point comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-boolh0-endpoint-pair-iff-all-points,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-integralcomparison-of-endpoint-pair],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0PointComparison_of_unit_naturality",
+    :type
+    "unit comparison naturality gives each Bool point coordinate"},
+   :lemma
+   {:name "t96A06_boolH0PointComparison_of_unit_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "unit comparison naturality gives each Bool point coordinate",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0pointcomparison-of-unit-naturality,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-endpoint-pair-iff-all-points],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
