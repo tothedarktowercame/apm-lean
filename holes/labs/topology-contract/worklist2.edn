@@ -88724,6 +88724,19 @@
     [{:cmd "draft compile",
       :exit 1,
       :correction "fixed coefficient comparison"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792110422623-14897-861e4ec7",
+     :commands
+     ["git show/diff/check 129dd2715"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 129dd2715"],
+     :finding
+     "PASS program STOP: topo-6 commit 129dd2715 adds compiled, sorry-free progress after 9f9e5a9a9. frozenGeneratorOuterHomologyIsoBoundary transports the established outer-to-boundary homotopy equivalence into integral singular homology in every degree. The group-level homology isomorphism is composed with the boundary comparison in the correct outer-to-boundary direction, then lifted to ModuleCat by the comparison adapter. It does not mistake the boundary skeleton for the still-unmodeled explicit graph; graph/maps remain listed. Only t94J09Closure.lean changed; fixture SHA f935272bb5f5a635f24299677e4892901959100091b8947b183f145b5f5a027e matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. MV, normalization, and assembly remain."},
     :commit "129dd2715",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88732,7 +88745,7 @@
      "f935272bb5f5a635f24299677e4892901959100091b8947b183f145b5f5a027e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88763,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked outer deformation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88807,9 +88820,8 @@
      :commit "9794bfe38",
      :reason "Banked transported assembly."}
     {:job 1, :commit "f2fbce234", :reason "Banked pieces."}
-    {:job 2,
-     :commit "9f9e5a9a9",
-     :reason "Banked outer deformation."}]}
+    {:job 2, :commit "9f9e5a9a9", :reason "Banked outer deformation."}
+    {:job 3, :commit "129dd2715", :reason "Banked transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96719,7 +96731,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorOuterHomologyIsoBoundary",
@@ -96729,7 +96741,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "outer/boundary homology",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "129dd2715"},
    :id :lemma-frozengeneratorouterhomologyisoboundary,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorouterhomotopyequivboundary],
