@@ -351,6 +351,38 @@ def frozenCircleEdgePoint (j : Fin 14) (t : Set.Icc (0 : ℝ) 1) : Circle :=
   ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle
     (frozenBoundaryEdgePoint j t)
 
+/-- Each frozen boundary edge parametrization is continuous on its closed
+unit interval. -/
+theorem continuous_frozenCircleEdgePoint (j : Fin 14) :
+    Continuous (frozenCircleEdgePoint j) := by
+  unfold frozenCircleEdgePoint frozenBoundaryEdgePoint
+  apply ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.symm.continuous.comp
+  apply Continuous.subtype_mk
+  unfold Surfaces.edgePoint
+  apply Continuous.subtype_mk
+  change Continuous fun t : Set.Icc (0 : ℝ) 1 =>
+    Complex.exp (Complex.I * (2 * Real.pi * ((j : ℝ) + t.1) / 14))
+  fun_prop
+
+/-- A directly parametrized pair of frozen boundary edges has closed graph
+inside the product circle. -/
+theorem isClosed_range_frozenCircleEdgePair (j k : Fin 14) :
+    IsClosed (Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+      (frozenCircleEdgePoint j t, frozenCircleEdgePoint k t)) := by
+  rw [← Set.image_univ]
+  exact (isCompact_univ.image
+    ((continuous_frozenCircleEdgePoint j).prodMk
+      (continuous_frozenCircleEdgePoint k))).isClosed
+
+/-- The reversed-coordinate frozen edge pair likewise has closed graph. -/
+theorem isClosed_range_frozenCircleEdgePair_reverse (j k : Fin 14) :
+    IsClosed (Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+      (frozenCircleEdgePoint j t, frozenCircleEdgePoint k (reverseIcc t))) := by
+  rw [← Set.image_univ]
+  exact (isCompact_univ.image
+    ((continuous_frozenCircleEdgePoint j).prodMk
+      ((continuous_frozenCircleEdgePoint k).comp continuous_reverseIcc))).isClosed
+
 @[simp] theorem circleToBoundary_frozenCircleEdgePoint
     (j : Fin 14) (t : Set.Icc (0 : ℝ) 1) :
     ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
@@ -1310,6 +1342,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterHomologyIsoBoundary
 #print axioms frozenGeneratorCircleBoundaryHomeomorph
 #print axioms frozenGeneratorCircleBoundaryHomologyIso
+#print axioms isClosed_range_frozenCircleEdgePair
+#print axioms isClosed_range_frozenCircleEdgePair_reverse
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
