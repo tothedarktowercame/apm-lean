@@ -37282,36 +37282,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Lift chain equality through opcycles/H0; then Bool square, boundary, signs, Main.",
+    "Prove typed opcycle/H0 comparison; then Bool square, boundary, signs, Main.",
     :outcome :stop,
     :warnings
-    ["Existing lints; one new unused-simp lint; Main one placeholder."],
+    ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
-      :type "discrete Unit generator equals literal simplex",
+    [{:name "t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex",
+      :type "additive generator equals literal simplex",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_opcycle_eq_projected_chainGenerator"],
+      ["t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_chainGeneratorCompatibility",
-      :type "chain comparison induces selected Unit H0 generator",
+     {:name "t96A06_unitH0_chainComparison_projected_generators",
+      :type "comparison carries module opcycle to additive opcycle",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex"],
+      ["t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex"
+       "t96A06_unitH0_chainComparison_degreeZero_generator"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed Unit discrete-chain/literal-simplex equality.",
+    :reason "Committed additive Unit chain generator.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37319,18 +37320,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline d1c8f6a31", :exit 0}],
+     {:cmd "git show --check --stat --oneline ecaa308ab", :exit 0}],
     :diagnostic-history
-    [{:cmd "bridge compile",
+    [{:cmd "compat compile",
       :exit 1,
-      :note "Replaced rfl with iso computation."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792177437792-15740-f264dbaf",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "d1c8f6a31",
+      :note "Short-complex mismatch; built additive bridge."}],
+    :commit "ecaa308ab",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37338,7 +37333,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47615,6 +47610,42 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex",
+    :type "additive generator equals literal simplex"},
+   :lemma
+   {:name "t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "additive generator equals literal simplex",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0additivechaingenerator-eq-explicitsimplex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainComparison_projected_generators",
+    :type "comparison carries module opcycle to additive opcycle"},
+   :lemma
+   {:name "t96A06_unitH0_chainComparison_projected_generators",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "comparison carries module opcycle to additive opcycle",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-chaincomparison-projected-generators,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0additivechaingenerator-eq-explicitsimplex
+    :lemma-t96a06-unith0-chaincomparison-degreezero-generator],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
