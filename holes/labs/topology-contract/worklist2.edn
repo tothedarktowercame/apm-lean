@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -88731,7 +88731,7 @@
      "9a6265525a0fd434fdce2c6b91944cc83e7cdf8db74b67a84ca316d1f4d5e06f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88860,6 +88860,19 @@
     [{:cmd "drafts",
       :exit 1,
       :correction "fixed positivity/right leg"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792109387688-14875-2f62a36b",
+     :commands
+     ["git show/diff/check 5899fb786"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and comment-stripped placeholder recount from 5899fb786"],
+     :finding
+     "PASS program STOP: topo-6 commit 5899fb786 adds compiled, sorry-free progress beyond history b0415d1fa. intervalCircle_surjective covers nonnegative arguments by arg/(2pi) and negative arguments by (arg+2pi)/(2pi), with valid UnitInterval bounds and the correct exponential periodicity. projection_surjective then handles both wedge legs by choosing any graph vertex and the matching edgePoint; both orientations reduce to the established edge projection. Only t92J06Closure.lean changed; fixture SHA c4b425640ea3dbd63aaedeb3a53151f93554b06d20f1e29d154e273e470ff42c matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Covering charts, Cayley-tree cover, and finite cover invariants remain listed."},
     :commit "5899fb786",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88868,7 +88881,7 @@
      "c4b425640ea3dbd63aaedeb3a53151f93554b06d20f1e29d154e273e470ff42c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88886,7 +88899,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked vertex fiber.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked surjectivity.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88925,7 +88938,8 @@
     {:job 2,
      :commit "7cfdde03e",
      :reason "Banked open-edge fiber classification."}
-    {:job 3, :commit "b0415d1fa", :reason "Banked vertex fiber."}]}
+    {:job 3, :commit "b0415d1fa", :reason "Banked vertex fiber."}
+    {:job 4, :commit "5899fb786", :reason "Banked surjectivity."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -96609,7 +96623,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorRadialPackage", :type "open radial cover"},
@@ -96618,24 +96632,30 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "open radial cover",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratorradialpackage,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorrel-radius-eq],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "frozenGeneratorRel_radius_eq"},
-   :lemma {:name "frozenGeneratorRel_radius_eq", :reported-by []},
+   :lemma
+   {:name "frozenGeneratorRel_radius_eq",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratorrel-radius-eq,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "projection_surjective", :type "realization onto wedge"},
@@ -96644,7 +96664,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "realization onto wedge",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "5899fb786"},
    :id :lemma-projection-surjective,
    :kind :lemma,
    :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
