@@ -2438,6 +2438,37 @@ theorem t96A06_boolH0_integralComparison_of_points
   apply Limits.Sigma.hom_ext
   exact hpoint
 
+/-- The individual point-coordinate equation used by the discrete comparison
+extensionality theorem. -/
+def t96A06_boolH0PointComparison (b : Bool) : Prop :=
+  Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+            (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+        t96A06_boolH0ComparisonLhs =
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+            (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+        t96A06_boolH0ComparisonRhs
+
+/-- The two explicit endpoint calculations supply every `Bool` point
+coordinate required by coproduct extensionality. -/
+theorem t96A06_boolH0_integralComparison_points_of_false_true
+    (hfalse : t96A06_boolH0PointComparison false)
+    (htrue : t96A06_boolH0PointComparison true) :
+    ∀ b : Bool, t96A06_boolH0PointComparison b := by
+  intro b
+  cases b
+  · exact hfalse
+  · exact htrue
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5332,6 +5363,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
 #print axioms t96A06_coefficientCircleBoundary_integralComparison_of_bool
 #print axioms t96A06_boolH0_integralComparison_of_points
+#print axioms t96A06_boolH0_integralComparison_points_of_false_true
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
