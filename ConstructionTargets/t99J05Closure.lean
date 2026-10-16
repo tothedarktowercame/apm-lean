@@ -1207,6 +1207,24 @@ theorem t99J05_cp_successor_mayerVietoris_exact_pieces (n k : ℕ) :
     (ConstructionTargets.SingularExcision.ambientSubspaceRange
       (cpSuccessorTopPatch n)) k
 
+/-- The connecting map of the specialized successor sequence, retaining the
+degree shift from ambient degree `k+1` to overlap degree `k`. -/
+noncomputable def t99J05_cp_successor_mayerVietorisConnecting (n k : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.connecting ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
+/-- Exactness at the overlap homology term in the specialized projective
+Mayer--Vietoris sequence. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_exact_overlap (n k : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.exact_intersection ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -1305,6 +1323,8 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_subcomplexMayerVietoris_shortExact
 #print axioms t99J05_cp_successor_mayerVietorisShortComplex
 #print axioms t99J05_cp_successor_mayerVietoris_exact_pieces
+#print axioms t99J05_cp_successor_mayerVietorisConnecting
+#print axioms t99J05_cp_successor_mayerVietoris_exact_overlap
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
