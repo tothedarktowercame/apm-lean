@@ -18,6 +18,7 @@ open ConstructionTargets.ProjectiveSpaceTopology
 open ConstructionTargets.ComplexProjectiveChartTargets
 open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.ProjectiveQuotientDescent
+open CategoryTheory.Limits
 open Set Topology
 open scoped ContinuousMap
 
@@ -510,6 +511,59 @@ noncomputable def t99J05_affineUnitSphere_topHomologyIso (n : ℕ) :
       (t99J05_affineUnitSphereHomotopyEquivEuclidean n) (2 * n + 1) ≪≫
     ConstructionTargets.CoefficientFirstReflection.topIso ℚ (2 * n)
 
+/-- Rational first homology of every Euclidean unit sphere of dimension at
+least two vanishes; this is the endpoint for the sphere-shift induction. -/
+theorem t99J05_euclideanUnitSphere_H1_isZero
+    (m : ℕ) (hm : 2 < m) :
+    IsZero (Homology (T02A06.euclideanUnitSphere m) 1) := by
+  have hd : m - 1 + 1 = m := Nat.sub_add_cancel (by omega)
+  letI : ContractibleSpace (T02A06.euclideanClosedDisk (m - 1)) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : PathConnectedSpace (T02A06.euclideanUnitSphere (m - 1)) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by
+        rw [← Module.finrank_eq_rank']
+        simp
+        omega) 0 (by norm_num))
+  letI : PathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet (m - 1)) :=
+    (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph (m - 1)).symm.surjective.pathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph (m - 1)).symm.continuous
+  have hz :=
+    (ConstructionTargets.CoefficientSphereShift.sphereH1KernelIso ℚ (m - 1)).isZero_iff.mpr
+      (ConstructionTargets.CoefficientConnectedH0Map.inclusion_kernel_zero ℚ _)
+  change IsZero
+    (Homology (T02A06.euclideanUnitSphere (m - 1 + 1)) 1) at hz
+  rw [hd] at hz
+  exact hz
+
+/-- Rational homology vanishes in every positive degree strictly below the
+top dimension of a Euclidean unit sphere. -/
+theorem t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
+    (m k : ℕ) (hk : 0 < k) (hkm : k < m - 1) :
+    IsZero (Homology (T02A06.euclideanUnitSphere m) k) := by
+  induction m generalizing k with
+  | zero => omega
+  | succ m ih =>
+      cases k with
+      | zero => omega
+      | succ k =>
+          cases k with
+          | zero =>
+              exact t99J05_euclideanUnitSphere_H1_isZero (m + 1) (by omega)
+          | succ k =>
+              have hz :
+                  IsZero
+                    (Homology (T02A06.euclideanUnitSphere m) (k + 1)) :=
+                ih (k + 1) (by omega) (by omega)
+              have e :
+                  Homology (T02A06.euclideanUnitSphere (m + 1)) (k + 2) ≅
+                    Homology (T02A06.euclideanUnitSphere m) (k + 1) := by
+                simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+                  ConstructionTargets.CoefficientSphereShift.sphereShift
+                    ℚ m (k + 1) (by omega)
+              exact hz.of_iso e
+
 /-- Consequently, the successor overlap has one-dimensional rational homology
 in its unique positive top degree. -/
 noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
@@ -580,6 +634,8 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_puncturedAffineCoordinatesEuclideanHomeomorph
 #print axioms t99J05_affineUnitSphereHomotopyEquivEuclidean
 #print axioms t99J05_affineUnitSphere_topHomologyIso
+#print axioms t99J05_euclideanUnitSphere_H1_isZero
+#print axioms t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
 #print axioms t99J05_cp_successor_overlap_rational_topHomology
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
