@@ -36708,32 +36708,32 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Descend truncation; prove inverses; deformation retract; MV; Main.",
+    "Prove endpoint/retraction identity; package retract; MV; Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings
+    ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
-      :type "time-one factors through CP n zero-last inclusion",
+    [{:name "cpSuccessorLowerRetraction_inclusion",
+      :type "truncation is a left inverse to zero-last inclusion",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_lowerPatch_quotientHomotopy"],
+      :depends-on ["cpSuccessorLowerPatchHomotopy_one_eq_inclusion"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
-      :type
-      "continuous truncation and lower-patch deformation retract to CP n",
+      :type "package lower-patch deformation retract",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessorLowerPatchHomotopy_one_eq_inclusion"],
+      :depends-on ["cpSuccessorLowerRetraction_inclusion"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed CP n inclusion and time-one factorization.",
+    :reason "Committed truncation descent and left inverse.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36745,25 +36745,14 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline c1ebea9b0",
-      :exit 0}],
+      "git diff --check -- ConstructionTargets/t99J05Closure.lean",
+      :exit 0}
+     {:cmd "git show --check --stat --oneline 70fe46d76", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :note "Explicit continuity and unit scalar; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792146718448-15333-f08e4e63",
-     :commands
-     ["git show --check --stat c1ebea9b0; inspect diff"
-      "verify commit blob equals compiled file"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean Closure, Main, fixture"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: c1ebea9b0 adds compiled, sorry-free progress beyond history: continuous zero-last inclusion CP n -> lower patch, nonzero truncation, include/truncate identity, and correct time-one factorization. Projective scalar orientation and representation conversion are sound. Fixture hash matches; axioms standard. Main remains 1->1; truncation descent, inverse laws, deformation retract, MV, and Main milestones are listed."},
-    :commit "c1ebea9b0",
+      :note "Fixed vector equality; rerun passed."}],
+    :commit "70fe46d76",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36771,7 +36760,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -45335,7 +45324,8 @@
    [:lemma-cpsuccessorzerolastvector
     :lemma-cpsuccessorlowervectorhomotopy
     :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy
-    :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion],
+    :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion
+    :lemma-cpsuccessorlowerretraction-inclusion],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -46217,6 +46207,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one-of-nonneg],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorLowerRetraction_inclusion",
+    :type "truncation is a left inverse to zero-last inclusion"},
+   :lemma
+   {:name "cpSuccessorLowerRetraction_inclusion",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "truncation is a left inverse to zero-last inclusion",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-cpsuccessorlowerretraction-inclusion,
+   :kind :lemma,
+   :depends-on [:lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
