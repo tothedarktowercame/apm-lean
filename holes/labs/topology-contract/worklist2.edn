@@ -88672,27 +88672,27 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Compute coordinate matrices; assemble homology; normalize.",
+    :residual "Graph H1 coordinates; generator; homology; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCanonicalMVIntersectionExact",
-      :type "canonical degree-zero intersection exactness",
+    [{:name "frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one",
+      :type "generator reduction",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorCanonicalMVPiecesExact"],
+      :depends-on ["frozenGeneratorCanonicalMVIntersectionExact"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "coordinates/exactness",
+      :type "coordinates/matrix",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorCanonicalMVIntersectionExact"],
+      :depends-on
+      ["frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88710,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked canonical MV intersection exactness.",
+    :reason "Banked generator reduction.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,29 +88720,20 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 150a635a7", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792160274698-15557-7e09c53a",
-     :commands
-     ["git show/check 150a635a7"
-      "recorded fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free canonical degree-zero intersection exactness beyond prior history. Hash and one-file scope match; frozen Main retains one placeholder. The forward comparison transports only the incoming named quotient H1 object to canonical quotient H1; intersection H0 and pieces H0 remain fixed, so orientation and boundaries are correct. Only standard axioms occur; coordinate matrices, homology assembly, and normalization remain listed."},
-    :commit "150a635a7",
+     {:cmd "git show --check 1948f1c93", :exit 0}],
+    :diagnostic-history
+    [{:cmd "generator draft",
+      :exit 1,
+      :correction "normalize scalar"}],
+    :commit "1948f1c93",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "279312240ee193c4b0ebc5347e5c106dad8c613036931fa2d7c683285d91d6f1"},
+     "88ef8294144cf8efc9d89c9ef291aa1ba8c861d0db6cfbbc1d605aadc812dbcb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96916,7 +96907,8 @@
     :lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production
     :lemma-frozengeneratorcanonicalmvunionexact
     :lemma-frozengeneratorcanonicalmvpiecesexact
-    :lemma-frozengeneratorcanonicalmvintersectionexact],
+    :lemma-frozengeneratorcanonicalmvintersectionexact
+    :lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98434,4 +98426,21 @@
    :id :lemma-frozengeneratorcanonicalmvintersectionexact,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorcanonicalmvpiecesexact],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one",
+    :type "generator reduction"},
+   :lemma
+   {:name "frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator reduction",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcanonicalmvintersectionexact],
    :other-consumers []}]}
