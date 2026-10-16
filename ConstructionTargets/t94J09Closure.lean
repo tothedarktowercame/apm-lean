@@ -1617,6 +1617,18 @@ noncomputable def frozenGeneratorMVGraphH1ReassemblyArrow :
       (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1
 
+/-- The degree-one graph-coordinate reassembly arrow with its quotient target
+transported from the named radial topology to the canonical quotient topology. -/
+noncomputable def frozenGeneratorCanonicalMVGraphH1ReassemblyArrow :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) :=
+  frozenGeneratorMVGraphH1ReassemblyArrow ≫
+    (frozenGeneratorRadialGroupHomologyIso 1).hom
+
 /-- Composing the graph-coordinate arrows cancels the middle-term transport,
 leaving the production Mayer--Vietoris composite in overlap coordinates. -/
 theorem frozenGeneratorMVGraphH1_comp_eq_production :
@@ -2358,6 +2370,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
 #print axioms frozenGeneratorMVGraphH1ReassemblyArrow
+#print axioms frozenGeneratorCanonicalMVGraphH1ReassemblyArrow
 #print axioms frozenGeneratorMVPiecesH0GroupIsoIntGraph
 #print axioms frozenGeneratorInnerH1GroupIsZero
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
