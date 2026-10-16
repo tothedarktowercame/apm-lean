@@ -179,6 +179,18 @@ wait_job() {
       continue
     fi
     state="$(jq -r '.job.state // empty' <<<"$body")"
+    # Agency recovery can append an immutable terminal event without updating
+    # the job envelope.  On 2026-10-16 a worker restart left a job in
+    # `delivering` with a final `failed`/`worker-lost-on-restart` event; polling
+    # only `.job.state` retained that dead job until the four-hour timeout.
+    # Feed the terminal event through the existing failed-job handling, which
+    # clears the in-flight pointer and redispatches work that never completed.
+    if [[ "$state" != done && "$state" != failed && "$state" != error &&
+          "$state" != cancelled ]] &&
+       [ "$(jq -r '.job.events[-1].type // empty' <<<"$body")" = failed ]; then
+      log "$label job=$job has terminal failed event under state=$state; treating as failed"
+      state=failed
+    fi
     case "$state" in
       done)
         LAST_JOB="$job"; mkdir -p "$RUNS/jobs"
