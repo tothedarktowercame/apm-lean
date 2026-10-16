@@ -5,6 +5,7 @@ import ConstructionTargets.CoefficientH0
 import ConstructionTargets.ProjectiveQuotientDescent
 import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.CoefficientSubcomplexMayerVietoris
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Rational homology interface for the t99J05 closure
@@ -1165,6 +1166,20 @@ noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
   t99J05_cp_successor_overlap_topIso_of_unitSphere n
     (t99J05_affineUnitSphere_topHomologyIso n)
 
+/-- The rational chain-level Mayer--Vietoris sequence for the two literal
+projective patches is short exact before transport from small simplices. -/
+theorem t99J05_cp_successor_subcomplexMayerVietoris_shortExact (n : ℕ) :
+    (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange
+        (cpSuccessorLowerPatch n))
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange
+        (cpSuccessorTopPatch n))).ShortExact := by
+  exact ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n))
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -1260,6 +1275,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_affineUnitSphere_homology_isZero_of_gt
 #print axioms t99J05_cp_successor_overlap_homology_isZero_of_gt
 #print axioms t99J05_cp_successor_overlap_rational_topHomology
+#print axioms t99J05_cp_successor_subcomplexMayerVietoris_shortExact
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
