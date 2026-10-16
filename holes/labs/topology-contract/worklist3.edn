@@ -37278,39 +37278,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Lift the opcycles equation through degree-zero homology; then Bool square, boundary, signs, Main.",
+    "Identify the preservation-iso Unit generator; then Bool square, boundary, signs, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated changes untouched."],
     :missing-theorems
-    [{:name "t96A06_unitH0_opcyclesMap_generator",
-      :type
-      "chain comparison carries the projected Unit generator to the native projection",
+    [{:name "t96A06_unitH0_induced_opcycle_generator",
+      :type "homology map carries the explicit Unit opcycle class",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_unitH0_opcycle_eq_projected_chainGenerator"],
+      :depends-on ["t96A06_unitH0_opcyclesMap_generator"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_induced_opcycle_generator",
+     {:name "t96A06_unitH0_preservation_generator",
       :type
-      "homology comparison carries the explicit Unit opcycle class",
+      "homology-preservation isomorphism carries the Unit coordinate to its projected opcycle class",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_opcyclesMap_generator"
+      ["t96A06_unitH0_induced_opcycle_generator"
        "t96A06_unitH0_homologyComparison_factorization"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed the Unit opcycles comparison.",
+    :reason "Committed the induced Unit opcycle homology equation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37318,14 +37316,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline b9d447a5e", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792171769145-15698-84b17b58",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b9d447a5e",
+     {:cmd "git show --check --stat --oneline b5f242a5d", :exit 0}],
+    :commit "b5f242a5d",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37333,7 +37325,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47389,7 +47381,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "chain-comparison homology map carries the explicit Unit opcycle class",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-unith0-induced-opcycle-generator,
    :kind :lemma,
    :depends-on
@@ -47499,6 +47492,26 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preservation_generator",
+    :type
+    "homology-preservation isomorphism carries the Unit coordinate to its projected opcycle class"},
+   :lemma
+   {:name "t96A06_unitH0_preservation_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "homology-preservation isomorphism carries the Unit coordinate to its projected opcycle class",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-preservation-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-induced-opcycle-generator
+    :lemma-t96a06-unith0-homologycomparison-factorization],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
