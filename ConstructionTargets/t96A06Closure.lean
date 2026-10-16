@@ -3176,6 +3176,20 @@ theorem t96A06_unitH0_mapOpcyclesIso_explicit_generator :
 
 #print axioms t96A06_unitH0_mapOpcyclesIso_explicit_generator
 
+/-- On the Unit degree-zero short complex, homology preservation is the
+transport between the mapped and original right-homology presentations. -/
+theorem t96A06_unitH0_mapHomologyIso'_eq_rightData :
+    t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules =
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso ≪≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.symm := by
+  exact t96A06_unitH0ModuleShortComplex.homologyData.right.mapHomologyIso'_eq
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+
+#print axioms t96A06_unitH0_mapHomologyIso'_eq_rightData
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
