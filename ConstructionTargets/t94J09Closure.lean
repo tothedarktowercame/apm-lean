@@ -1414,6 +1414,14 @@ noncomputable instance : TopologicalSpace FrozenGeneratorQuotient :=
   TopologicalSpace.coinduced
     (fun x : Surfaces.Disk => Quotient.mk _ x) inferInstance
 
+/-- The explicit topology used for the frozen generator quotient is the
+standard quotient topology on the same generated setoid. -/
+theorem frozenGeneratorRadialTopologyComparison :
+    (inferInstance : TopologicalSpace FrozenGeneratorQuotient) =
+      (@instTopologicalSpaceQuotient Surfaces.Disk
+        (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance) :=
+  rfl
+
 /-- The actual frozen disk quotient is Hausdorff because its generated
 equivalence relation has closed graph on the compact polygon disk. -/
 noncomputable instance frozenGeneratorQuotientT2Space :
@@ -2156,5 +2164,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedQuotientHomeomorphGenerator_mk
 #print axioms frozenSignedQuotientHomologyIsoGenerator
 #print axioms frozenSignedHomology_of_generator_comparisons
+#print axioms frozenGeneratorRadialTopologyComparison
 
 end ConstructionTargets.t94J09Closure
