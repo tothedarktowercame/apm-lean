@@ -88672,30 +88672,31 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "H1/generator; assemble; normalize.",
+    :residual "H1; exactness; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVBoundaryCoordinates_of_cycleComparison",
-      :type "adapter",
+    [{:name "frozenGeneratorMVReassemblyLinear_comp_coordinates",
+      :type "reassembly",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphH1Coordinates_generator_eq_iff"],
+      :depends-on
+      ["frozenGeneratorMVBoundaryCoordinates_of_cycleComparison"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
       :status :not-started,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorMVBoundaryCoordinates_of_cycleComparison"],
+      ["frozenGeneratorMVReassemblyLinear_comp_coordinates"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "coords",
+      :type "exactness",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenBoundaryGraphH1CycleComparison"],
@@ -88726,29 +88727,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 4a4718954", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792168722169-15650-7f775e62",
-     :commands
-     ["git show/check 4a4718954"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free MV coordinate adapter beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The literal seven-edge generator equation is converted to assembled six-cycle generator equality, then the integer-generator reduction gives equality of the full linear boundary maps; all unresolved cycle-comparison data remain explicit hypotheses. Only standard axioms occur; H1 comparison, coordinates, homology assembly, and normalization remain listed."},
-    :commit "4a4718954",
+     {:cmd "git show --check efd5f7159", :exit 0}],
+    :commit "efd5f7159",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "cb514c7854f4efab3f06d618f4ebaafd0771054039e2a8211c37ff9fe1e99dbb"},
+     "439f4770c5646b88e784121f3f987113ce5a8a5d20c28b8dc218634eb422c86b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98626,7 +98614,8 @@
    :depends-on
    [:lemma-frozengraphh1coordinatesofcyclecomparison
     :lemma-frozengraphh1coordinates-generator-eq-iff
-    :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison],
+    :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison
+    :lemma-frozengeneratormvreassemblylinear-comp-coordinates],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98665,4 +98654,22 @@
    :id :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison,
    :kind :lemma,
    :depends-on [:lemma-frozengraphh1coordinates-generator-eq-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_comp_coordinates",
+    :type "reassembly"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_comp_coordinates",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reassembly",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvreassemblylinear-comp-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison],
    :other-consumers []}]}
