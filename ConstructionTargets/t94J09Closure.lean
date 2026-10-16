@@ -1432,6 +1432,18 @@ noncomputable def frozenGeneratorRadialTopCatIso :
           (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance) :=
   eqToIso (by congr 1)
 
+/-- Integral singular homology transported from the named frozen quotient
+topology to the canonical quotient topology used by the production sequence. -/
+noncomputable def frozenGeneratorRadialHomologyIso (k : ℕ) :
+    SpaceH FrozenGeneratorQuotient k ≅
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+        (ModuleCat.of ℤ ℤ)).obj
+          (@TopCat.of FrozenGeneratorQuotient
+            (@instTopologicalSpaceQuotient Surfaces.Disk
+              (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance))) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso frozenGeneratorRadialTopCatIso)
+
 /-- The actual frozen disk quotient is Hausdorff because its generated
 equivalence relation has closed graph on the compact polygon disk. -/
 noncomputable instance frozenGeneratorQuotientT2Space :
@@ -2294,6 +2306,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedHomology_of_generator_comparisons
 #print axioms frozenGeneratorRadialTopologyComparison
 #print axioms frozenGeneratorRadialTopCatIso
+#print axioms frozenGeneratorRadialHomologyIso
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
