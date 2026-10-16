@@ -88935,27 +88935,27 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove saturation/trivializations; tree; finite invariants.",
+    "Build quotient edge charts/trivializations; tree; finite invariants.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "rawEdgeChart_isOpen",
-      :type "raw chart open",
+    [{:name "rawEdgeChart_mem_iff_of_eqvGen",
+      :type "raw chart saturation",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["rawEdgeInterior_isOpen"],
+      :depends-on ["rawEdgeChart_isOpen"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
       :type "charts/trivializations",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["rawEdgeChart_isOpen"],
+      :depends-on ["rawEdgeChart_mem_iff_of_eqvGen"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
       :type "tree cover",
@@ -88973,39 +88973,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked raw edge-chart openness.",
+    :reason "Banked raw edge-chart saturation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "comment-stripped placeholder scan", :exit 0}
-     {:cmd "git show --check 983ed2796", :exit 0}],
+     {:cmd "git show --check 3b8a4d3bb", :exit 0}],
     :diagnostic-history
-    [{:cmd "bare rg placeholder scan",
-      :exit 0,
-      :correction "matched prose; comment-stripped scan passed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792150729906-15397-79eabd6a",
-     :commands
-     ["git show/check 983ed2796"
-      "fixture/scope/comment-stripped placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: 983ed2796 is new since history and changes only t92J06Closure; fixture hash matches; closure has 0 code placeholders; build/Main pass; registry 168/0. rawEdgeChart is exactly the union of open labelled interiors and openness follows by iUnion; it claims no quotient saturation/trivialization, which remain listed."},
-    :commit "983ed2796",
+    [{:cmd "saturation draft",
+      :exit 1,
+      :correction "factored membership characterization"}],
+    :commit "3b8a4d3bb",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "38f3c7c63fddaabed68eca4fa8b1b470eaf571680cde85f3300be0e5a2e160bf"},
+     "f5713adeab0328a611f70fd8678de19dedac562ae8d315ace0ac73d189509447"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90829,7 +90817,8 @@
     :lemma-projection-preimage-edgepoint
     :lemma-realizationquotientmap-isquotientmap
     :lemma-rawedgeinterior-isopen
-    :lemma-rawedgechart-isopen],
+    :lemma-rawedgechart-isopen
+    :lemma-rawedgechart-mem-iff-of-eqvgen],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -98109,4 +98098,21 @@
    :id :lemma-frozengeneratornamedmvintersectionexact,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratornamedmvunionexact],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rawEdgeChart_mem_iff_of_eqvGen",
+    :type "raw chart saturation"},
+   :lemma
+   {:name "rawEdgeChart_mem_iff_of_eqvGen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw chart saturation",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-rawedgechart-mem-iff-of-eqvgen,
+   :kind :lemma,
+   :depends-on [:lemma-rawedgechart-isopen],
    :other-consumers []}]}
