@@ -2146,6 +2146,21 @@ theorem frozenFaceBoundaryCoordinates_ker_eq_bot :
     LinearMap.ker frozenFaceBoundaryCoordinates = ⊥ :=
   LinearMap.ker_eq_bot.mpr frozenFaceBoundaryCoordinates_injective
 
+/-- Any six-cycle coordinate system identifying the Mayer--Vietoris boundary
+with the frozen cellular face boundary also identifies its kernel as zero. -/
+theorem frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (h : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates) :
+    LinearMap.ker frozenGeneratorMVBoundaryLinear = ⊥ := by
+  apply LinearMap.ker_eq_bot.mpr
+  intro a b hab
+  apply frozenFaceBoundaryCoordinates_injective
+  rw [← LinearMap.congr_fun h a, ← LinearMap.congr_fun h b]
+  exact congrArg e hab
+
 theorem n6OrbitCoordinates_comp_attachingBoundary :
     n6OrbitCoordinates.toLinearMap.comp (attachingBoundary n6PairingData) =
       -n6BoundaryLinear := by
@@ -2411,6 +2426,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenH1SmithEquivOfSurjectiveKernel
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
+#print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
