@@ -2707,6 +2707,20 @@ noncomputable def t96A06_unitH0ModuleChainGenerator :=
 
 #print axioms t96A06_unitH0ModuleChainGenerator
 
+/-- The explicit Unit opcycle is obtained by projecting the corresponding
+degree-zero singular chain to opcycles. -/
+theorem t96A06_unitH0_opcycle_eq_projected_chainGenerator :
+    t96A06_unitH0ModuleOpcycleGenerator =
+      ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+          t96A06_unitH0ModuleChainGenerator := by
+  dsimp [t96A06_unitH0ModuleOpcycleGenerator,
+    ConstructionTargets.SingularHomologyConcrete.directDiscreteOpcyclesIso,
+    t96A06_unitH0ModuleChainGenerator]
+  rfl
+
+#print axioms t96A06_unitH0_opcycle_eq_projected_chainGenerator
+
 /-- The concrete normalization of the chain comparison on the selected Unit
 coordinate supplies the remaining equality at one. -/
 theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
