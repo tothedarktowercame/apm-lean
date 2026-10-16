@@ -627,6 +627,11 @@ theorem mem_edgeChart_iff (i : Fin 2) (e : D.Realization) :
         true_and]
       exact ht, rfl⟩⟩
 
+/-- The open part of one labeled loop in the base wedge, parametrized away
+from the two interval endpoints. -/
+def baseEdgeChart (i : Fin 2) : Set X :=
+  edgeProjection i '' {t : UnitInterval | t.1 ∈ Set.Ioo (0 : ℝ) 1}
+
 /-- A raw endpoint remembers the graph vertex to which it is glued.  Open
 edge points have no vertex coordinate. -/
 noncomputable def vertexCoordinate : RealizationRaw V → Option V
@@ -783,6 +788,20 @@ theorem existsUnique_edgePoint_of_projection_eq_interior
           intro v hv
           exact edgePoint_injective_of_interior D i t ht hv.symm
 
+/-- The descended lifted-edge chart is exactly the full preimage of its
+corresponding open base edge. -/
+theorem projection_preimage_baseEdgeChart (i : Fin 2) :
+    D.projection ⁻¹' baseEdgeChart i = D.edgeChart i := by
+  ext e
+  rw [Set.mem_preimage, D.mem_edgeChart_iff]
+  constructor
+  · rintro ⟨t, ht, he⟩
+    obtain ⟨v, hv, _⟩ :=
+      D.existsUnique_edgePoint_of_projection_eq_interior i t ht e he.symm
+    exact ⟨v, t, ht, hv⟩
+  · rintro ⟨v, t, ht, rfl⟩
+    exact ⟨t, ht, D.projection_edgePoint i v t⟩
+
 /-- The fiber over every open-edge point is canonically the graph vertex
 type. -/
 noncomputable def interiorFiberEquiv (i : Fin 2) (t : UnitInterval)
@@ -897,6 +916,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms realization_preimage_edgeChart
 #print axioms edgeChart_isOpen
 #print axioms mem_edgeChart_iff
+#print axioms projection_preimage_baseEdgeChart
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
