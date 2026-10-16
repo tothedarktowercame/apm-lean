@@ -388,6 +388,35 @@ theorem intervalCircle_ne_base {t : UnitInterval}
   · rw [hends.1] at ht
     exact (lt_irrefl (1 : ℝ)) ht.2
 
+/-- The open interval parametrizes precisely the circle with its basepoint
+removed.  This is the base-space input for the open edge charts used by the
+covering trivializations. -/
+theorem intervalCircle_image_interior :
+    intervalCircle '' {t : UnitInterval | t.1 ∈ Set.Ioo (0 : ℝ) 1} =
+      {z : S1 | z ≠ circleBase} := by
+  ext z
+  constructor
+  · rintro ⟨t, ht, rfl⟩
+    exact intervalCircle_ne_base ht
+  · intro hz
+    obtain ⟨t, rfl⟩ := intervalCircle_surjective z
+    refine ⟨t, ?_, rfl⟩
+    constructor
+    · apply lt_of_le_of_ne t.2.1
+      intro h
+      apply hz
+      have : t = intervalZero := by
+        apply Subtype.ext
+        simpa [intervalZero] using h.symm
+      simpa [this]
+    · apply lt_of_le_of_ne t.2.2
+      intro h
+      apply hz
+      have : t = intervalOne := by
+        apply Subtype.ext
+        simpa [intervalOne] using h
+      simpa [this]
+
 /-- The two interval labels map to the two circle legs of the rose. -/
 def edgeProjection (i : Fin 2) : C(UnitInterval, X) :=
   Fin.cases
