@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "Skeleton inverse/homeomorphism; MV; normalize.",
+    :residual "Homeomorphism; MV; normalize.",
     :outcome :stop,
-    :warnings ["Main:1 sorry" "lint" "dirt"],
+    :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenBoundaryQuotientToOuterSkeleton",
-      :type "boundary/skeleton map",
+    [{:name "frozenBoundaryQuotientToOuterSkeleton_bijective",
+      :type "boundary/skeleton bijection",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorBoundaryHomologyIsoGraph"],
+      :depends-on ["frozenBoundaryQuotientToOuterSkeleton"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryQuotientToOuterSkeleton"
+      ["frozenBoundaryQuotientToOuterSkeleton_bijective"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked boundary/skeleton map.",
+    :reason "Banked skeleton bijection.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,18 +88719,18 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check e783bffa3", :exit 0}],
+     {:cmd "git show --check 2b7195e8d", :exit 0}],
     :diagnostic-history
-    [{:cmd "drafts", :exit 1, :correction "typed nested subtype"}],
-    :commit "e783bffa3",
+    [{:cmd "draft", :exit 1, :correction "explicit setoid endpoints"}],
+    :commit "2b7195e8d",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "06f56c6542a0bb9c6a5e73477eb7b2c7326cc8793ba450f8fc4036ed151e291f"},
+     "8d6677b82949d2d9c99e9b5ac914e970c2c19aa202d45735de0701bf38477edb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96649,7 +96649,8 @@
     :lemma-frozengeneratorcirclehomeomorphboundarygraph
     :lemma-frozengeneratorcirclehomologyisoboundarygraph
     :lemma-frozengeneratorboundaryhomologyisograph
-    :lemma-frozenboundaryquotienttoouterskeleton],
+    :lemma-frozenboundaryquotienttoouterskeleton
+    :lemma-frozenboundaryquotienttoouterskeleton-bijective],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96909,4 +96910,21 @@
    :id :lemma-projection-fibercard,
    :kind :lemma,
    :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryQuotientToOuterSkeleton_bijective",
+    :type "boundary/skeleton bijection"},
+   :lemma
+   {:name "frozenBoundaryQuotientToOuterSkeleton_bijective",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "boundary/skeleton bijection",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundaryquotienttoouterskeleton-bijective,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryquotienttoouterskeleton],
    :other-consumers []}]}
