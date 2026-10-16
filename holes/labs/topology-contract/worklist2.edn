@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
-    :residual "Model boundary graph/maps; normalize; assemble.",
+    :residual "Graph/maps; normalize; assemble.",
     :outcome :stop,
-    :warnings ["Main: 1 sorry" "lint" "dirt preserved"],
+    :warnings ["Main:1 sorry" "lint" "dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorOuterHomotopyEquivBoundary",
-      :type "outer piece equivalent to boundary graph",
+    [{:name "frozenGeneratorOuterHomologyIsoBoundary",
+      :type "outer/boundary homology",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorInnerOverlapHomology"],
+      :depends-on ["frozenGeneratorOuterHomotopyEquivBoundary"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "generator MV comparisons",
+      :type "MV comparisons",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorOuterHomotopyEquivBoundary"
+      ["frozenGeneratorOuterHomologyIsoBoundary"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88700,7 +88700,7 @@
       :depends-on ["frozenGeneratorHomology_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
-      :type "polygon homeomorphic to N6",
+      :type "normalization",
       :status :not-started,
       :consumers [:t94J09],
       :depends-on [],
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked outer deformation.",
+    :reason "Banked transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,29 +88719,20 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 9f9e5a9a9", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792110030457-14891-9047231d",
-     :commands
-     ["git show/diff/check 9f9e5a9a9"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from 9f9e5a9a9"],
-     :finding
-     "PASS program STOP: topo-6 commit 9f9e5a9a9 adds compiled, sorry-free progress after f2fbce234 and beyond recorded history. The endpoint-one radial map lands in the actual boundary-class subtype; inclusion is its homotopy inverse. The outer homotopy has id at zero and inclusion-after-retraction at one, so H.symm has the required left-inverse orientation, while boundary classes are fixed for the right inverse. This proves deformation to the quotient boundary skeleton without falsely identifying its graph combinatorics; modeling that graph/maps remains listed. Only t94J09Closure.lean changed; fixture SHA d210972c77967dab8380e96df6451609aacab7214e8ee40c743df13ccdc59255 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization and assembly also remain."},
-    :commit "9f9e5a9a9",
+     {:cmd "git show --check 129dd2715", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft compile",
+      :exit 1,
+      :correction "fixed coefficient comparison"}],
+    :commit "129dd2715",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "d210972c77967dab8380e96df6451609aacab7214e8ee40c743df13ccdc59255"},
+     "f935272bb5f5a635f24299677e4892901959100091b8947b183f145b5f5a027e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96635,7 +96626,8 @@
    [:lemma-frozensignedhomology-of-generator-comparisons
     :lemma-frozengeneratorradialpackage
     :lemma-frozengeneratorinneroverlaphomology
-    :lemma-frozengeneratorouterhomotopyequivboundary],
+    :lemma-frozengeneratorouterhomotopyequivboundary
+    :lemma-frozengeneratorouterhomologyisoboundary],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96724,4 +96716,21 @@
    :id :lemma-frozengeneratorouterhomotopyequivboundary,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorinneroverlaphomology],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterHomologyIsoBoundary",
+    :type "outer/boundary homology"},
+   :lemma
+   {:name "frozenGeneratorOuterHomologyIsoBoundary",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "outer/boundary homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorouterhomologyisoboundary,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhomotopyequivboundary],
    :other-consumers []}]}
