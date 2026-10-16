@@ -37248,39 +37248,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Exclude negative generator comparison; then naturality, four classes, Main.",
+    "Exclude negative automorphism by circle/hemisphere orientation; then naturality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff",
+      "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg",
       :type
-      "sign exclusion iff compared generator is not the negative normalized class",
+      "nonnegative automorphism branch excludes negative generator comparison",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg"],
+      ["t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff"],
       :area "rp-rational-homology"}
-     {:name
-      "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass",
-      :type "compared generator is not the negative normalized class",
+     {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg",
+      :type
+      "sphere-shift/local-normalization automorphism is not negative identity",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff"],
+      ["t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Identified the negative-orientation branch as an integral homology equality.",
+    "Reduced negative generator comparison to exclusion of the negative normalization automorphism.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37289,19 +37289,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 44e55abf9",
+      "git diff --check && git show --check --stat --oneline 50d60ee11",
       :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile attempts",
-      :exit 1,
-      :note "Made mapped negation explicit; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792146435104-15325-d1f0036a",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "44e55abf9",
+    :commit "50d60ee11",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37309,7 +37299,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46071,6 +46061,48 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg",
+    :type
+    "nonnegative automorphism branch excludes negative generator comparison"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "nonnegative automorphism branch excludes negative generator comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg",
+    :type
+    "sphere-shift/local-normalization automorphism is not negative identity"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphere-shift/local-normalization automorphism is not negative identity",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
