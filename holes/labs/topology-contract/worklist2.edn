@@ -88720,6 +88720,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 86592147d", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792138516442-15235-d686455d",
+     :commands
+     ["git show/diff/check 86592147d"
+      "verify committed quotient/subtype equivalence types"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 86592147d"],
+     :finding
+     "PASS program STOP: topo-6 commit 86592147d adds compiled, sorry-free progress after the prior quotient-separation milestones. frozenBoundaryQuotientEquivOuterSkeleton packages the previously proved bijection of the actual FrozenGeneratorBoundaryQuotient and FrozenGeneratorOuterBoundaryPiece with the correct forward direction. It does not overclaim a homeomorphism: inverse continuity and Mayer-Vietoris remain explicitly listed, along with normalization. Scope is one target file; fixture SHA 04bb8ac3f8bb6b13025bba446dbb65abc335fec5665d67117f92004a33bdad1f; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "86592147d6f62f826eacd69809dd1a3182dab737",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88741,7 @@
      "04bb8ac3f8bb6b13025bba446dbb65abc335fec5665d67117f92004a33bdad1f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient T2.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact boundary/outer-skeleton equivalence.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88860,7 +88873,10 @@
     {:job 8,
      :commit "a8d390c59",
      :reason "Banked exact EqvGen equality."}
-    {:job 9, :commit "0e43d77a5", :reason "Banked quotient T2."}]}
+    {:job 9, :commit "0e43d77a5", :reason "Banked quotient T2."}
+    {:job 1,
+     :commit "86592147d6f62f826eacd69809dd1a3182dab737",
+     :reason "Banked exact boundary/outer-skeleton equivalence."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97406,7 +97422,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryQuotientEquivOuterSkeleton",
@@ -97416,7 +97432,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "exact boundary/outer-skeleton equivalence",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "86592147d6f62f826eacd69809dd1a3182dab737"},
    :id :lemma-frozenboundaryquotientequivouterskeleton,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorboundaryquotientt2space],
