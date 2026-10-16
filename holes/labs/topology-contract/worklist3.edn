@@ -36708,7 +36708,7 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
@@ -36754,7 +36754,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36921,12 +36921,23 @@
      {:cmd
       "git diff --check && git show --check --stat --oneline 4ac235ef5",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792162731467-15579-c7c20459",
+     :commands
+     ["git show/check 4ac235ef5"
+      "lake build ConstructionTargets.CollaredConnectedSumHomology"
+      "statement-registry.py check"
+      "placeholder recount"],
+     :finding
+     "PASS: recorded commit is new since program history and adds the open radius-two domain, correctly oriented restricted embedding/range equality, and open-map adapter in scope. Build passes; 0 placeholders; standard axioms only; registry 168/168. No fixture is recorded for this row."},
     :commit "4ac235ef5",
     :changed-paths
     ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -36946,7 +36957,7 @@
     :blueprint
     "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed compiled B1 collar and quotient representations.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains.",
    :id :program-2026-10-13-collared-connected-sum-homology,
    :kind :reusable-theorem,
    :campaign-priority 32,
@@ -36962,7 +36973,11 @@
     {:job 2,
      :commit "9067e7d41",
      :reason
-     "Committed compiled B1 collar and quotient representations."}]}
+     "Committed compiled B1 collar and quotient representations."}
+    {:job 3,
+     :commit "4ac235ef5",
+     :reason
+     "Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37234,7 +37249,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37291,7 +37306,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37313,7 +37328,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -46896,7 +46911,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_exact_ambient",
@@ -46906,7 +46921,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "exactness at ambient homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-ambient,
    :kind :lemma,
    :depends-on
@@ -46914,7 +46931,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_generator_iff_comparison",
@@ -46924,14 +46941,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "Unit generator equality iff full H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-generator-iff-comparison,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-integralcomparison-of-generator],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_generator_eq_of_apply_one",
@@ -46941,7 +46960,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "equality at one determines Unit generator-probe equality",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-generator-eq-of-apply-one,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-generator-iff-comparison],
@@ -46966,7 +46987,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
@@ -46976,7 +46997,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coordinate normalization implies Unit comparison at one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-generator-eq-of-apply-one],
@@ -47001,7 +47024,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -47013,7 +47036,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "generator comparison implies normalization",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator,
    :kind :lemma,
@@ -47039,7 +47064,7 @@
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "BallCollar.largeInteriorMap_isEmbedding",
@@ -47049,14 +47074,16 @@
     :reported-by [:program-2026-10-13-collared-connected-sum-homology],
     :type "restricted large-collar interior map is an embedding",
     :area "ball-complement-collar",
-    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "4ac235ef5"},
    :id :lemma-ballcollar-largeinteriormap-isembedding,
    :kind :lemma,
    :depends-on [:lemma-ballcollar],
    :other-consumers [:t00A01]}
   {:consumer :t98A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "BallCollar.range_largeInteriorMap",
@@ -47066,7 +47093,9 @@
     :reported-by [:program-2026-10-13-collared-connected-sum-homology],
     :type "restricted map range equals radialTwo",
     :area "ball-complement-collar",
-    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "4ac235ef5"},
    :id :lemma-ballcollar-range-largeinteriormap,
    :kind :lemma,
    :depends-on [:lemma-ballcollar-largeinteriormap-isembedding],
