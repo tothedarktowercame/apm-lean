@@ -37239,39 +37239,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compute explicit normalization composite; then coefficient naturality, comparison, four classes, Main.",
+    "Prove endpoint; then coefficient naturality, comparison, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id",
-      :type
-      "positive localization iff sphere-shift/local normalization composite is identity",
+      "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint",
+      :type "endpoint equation implies composite identity",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg"],
+      ["t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id"],
       :area "rp-rational-homology"}
-     {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id",
+     {:name "t96A06_sphereShiftLocalNormalization_endpoint",
       :type
-      "the explicit sphere-shift/local normalization composite is identity",
+      "sphereH2/sphereShift/comparison/localization endpoint sends 1 to 1",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id"],
+      ["t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Reduced positive localization to an explicit automorphism identity.",
+    :reason "Isolated the sphere-shift endpoint equation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37279,16 +37277,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd
-      "git diff --check && git show --check --stat --oneline aee26f0e0",
-      :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792141327475-15269-ba18d985",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "aee26f0e0",
+     {:cmd "git show --check --stat --oneline 1762a34b1", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure probes",
+      :exit 1,
+      :note "rfl/simp exposed endpoint; rerun passed."}],
+    :commit "1762a34b1",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37296,7 +37290,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45766,6 +45760,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint",
+    :type "endpoint equation implies composite identity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint equation implies composite identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalization_endpoint",
+    :type
+    "sphereH2/sphereShift/comparison/localization endpoint sends 1 to 1"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalization_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphereH2/sphereShift/comparison/localization endpoint sends 1 to 1",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalization-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
