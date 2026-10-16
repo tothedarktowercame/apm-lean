@@ -2333,6 +2333,35 @@ theorem t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
   rw [t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison hcomparison]
   norm_num
 
+/-- Since every endomorphism of the additive group `ℤ` is determined by
+`1`, the exact circle comparison follows from its single oriented coordinate. -/
+theorem t96A06_coefficientCircleComparison_eq_native_of_apply_one
+    (hone :
+      (((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom ≫
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.hom).hom (1 : ℤ)) = 1) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom =
+      ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.inv := by
+  apply ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one
+    hone
+
+theorem t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
+    (hone :
+      (((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom ≫
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.hom).hom (1 : ℤ)) = 1) :
+    0 ≤ t96A06_coefficientCircleOrientationEndpoint := by
+  exact t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
+    (t96A06_coefficientCircleComparison_eq_native_of_apply_one hone)
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5223,6 +5252,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
 #print axioms t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison
 #print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
+#print axioms t96A06_coefficientCircleComparison_eq_native_of_apply_one
+#print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
