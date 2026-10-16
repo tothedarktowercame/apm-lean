@@ -88672,16 +88672,16 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "H1; exact; section; SpaceH; homology; norm.",
+    :residual "H1 comparison; exactness; section; homology; norm.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCanonicalModuleH1SmithIso_of_section",
+    [{:name "frozenGeneratorSpaceHForgetLinearEquiv",
       :type "T",
       :status :proved,
       :consumers [:t94J09],
@@ -88715,7 +88715,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked H1 module iso.",
+    :reason "Banked SpaceH module bridge.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88725,18 +88725,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check fa9e3e73e", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "module mismatch"}],
-    :commit "fa9e3e73e",
+     {:cmd "git show --check a36e2ec92", :exit 0}],
+    :commit "a36e2ec92",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "08d0f7c979c2832ee5a2b1129fdb165cb1a79c59fc0181bb1e3a468565649d85"},
+     "0cbc4bb1abda142544401857ad51d27c5bb9edb821021ee55e1a0e53c85331a6a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98970,4 +98968,20 @@
    :id :lemma-projection-preimage-baseedgechart,
    :kind :lemma,
    :depends-on [:lemma-mem-edgechart-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorSpaceHForgetLinearEquiv", :type "T"},
+   :lemma
+   {:name "frozenGeneratorSpaceHForgetLinearEquiv",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorspacehforgetlinearequiv,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
