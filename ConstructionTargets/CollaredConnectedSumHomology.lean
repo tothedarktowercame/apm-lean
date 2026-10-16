@@ -76,6 +76,35 @@ def radialThreeHalves (c : BallCollar n M) : Set M :=
   c.largeMap '' radialRegion (3 / 2)
 def radialTwo (c : BallCollar n M) : Set M := c.largeMap '' radialRegion 2
 
+/-- The open radius-two part of the collar domain. -/
+abbrev LargeInterior := {x : Disk n 2 // x ∈ radialRegion (n := n) 2}
+
+theorem radialRegion_isOpen (r : ℝ) : IsOpen (radialRegion (n := n) r) := by
+  change IsOpen ((fun x : Disk n 2 ↦ x.1) ⁻¹' Metric.ball 0 r)
+  exact Metric.isOpen_ball.preimage continuous_subtype_val
+
+/-- Restriction of the large collar map to its open interior. -/
+def largeInteriorMap (c : BallCollar n M) : LargeInterior (n := n) → M :=
+  fun x ↦ c.largeMap x.1
+
+theorem largeInteriorMap_isEmbedding (c : BallCollar n M) :
+    IsEmbedding c.largeInteriorMap := by
+  exact c.largeEmbedding.comp Topology.IsEmbedding.subtypeVal
+
+theorem range_largeInteriorMap (c : BallCollar n M) :
+    Set.range c.largeInteriorMap = c.radialTwo := by
+  ext y
+  constructor
+  · rintro ⟨x, rfl⟩
+    exact ⟨x.1, x.2, rfl⟩
+  · rintro ⟨x, hx, rfl⟩
+    exact ⟨⟨x, hx⟩, rfl⟩
+
+theorem largeInterior_isOpen_of_isOpenMap (c : BallCollar n M)
+    (hopen : IsOpenMap c.largeInteriorMap) : IsOpen c.radialTwo := by
+  rw [← c.range_largeInteriorMap]
+  simpa only [Set.image_univ] using hopen Set.univ isOpen_univ
+
 end BallCollar
 
 inductive GlueRel {n : ℕ} {M₁ M₂ : Type}
@@ -104,5 +133,9 @@ noncomputable instance {n : ℕ} {M₁ M₂ : Type}
 #print axioms continuous_sphereToDisk
 #print axioms BallCollar.largeMap_unitToLarge
 #print axioms BallCollar.continuous_boundaryMap
+#print axioms BallCollar.radialRegion_isOpen
+#print axioms BallCollar.largeInteriorMap_isEmbedding
+#print axioms BallCollar.range_largeInteriorMap
+#print axioms BallCollar.largeInterior_isOpen_of_isOpenMap
 
 end ConstructionTargets.CollaredConnectedSumHomology
