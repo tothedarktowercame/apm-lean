@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88736,7 +88736,7 @@
      "08d0f7c979c2832ee5a2b1129fdb165cb1a79c59fc0181bb1e3a468565649d85"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -89042,6 +89042,19 @@
      {:cmd "git show --check c1cac6ac2", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "reversed image equality"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792187077637-15796-8a8b67f8",
+     :commands
+     ["git show/check c1cac6ac2"
+      "fixture/scope/comment-stripped placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "lake env lean ConstructionTargets/t92J06Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free exact edge-chart preimage beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Membership in the open base edge invokes the established unique lifted-edge-point theorem, while every interior lifted edge projects back to that base chart; endpoint cases stay excluded and fiber labels are preserved. Only standard axioms occur; base-chart openness, trivializations, vertex charts, tree cover, and finite covers remain listed."},
     :commit "c1cac6ac2",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -89050,7 +89063,7 @@
      "007d9ea654cd9effd168d1fe0227506afddab37a00104c5bb9606b9453293207b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89068,7 +89081,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked edge-chart membership.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact edge-chart preimage.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89127,7 +89140,10 @@
      :reason "Banked quotient edge-chart openness."}
     {:job 2,
      :commit "dd6791273",
-     :reason "Banked edge-chart membership."}]}
+     :reason "Banked edge-chart membership."}
+    {:job 3,
+     :commit "c1cac6ac2",
+     :reason "Banked exact edge-chart preimage."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -98920,7 +98936,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorCanonicalModuleH1SmithIso_of_section",
@@ -98930,14 +98946,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "T",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratorcanonicalmoduleh1smithiso-of-section,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "projection_preimage_baseEdgeChart", :type "preimage"},
@@ -98946,7 +98964,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "preimage",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "c1cac6ac2"},
    :id :lemma-projection-preimage-baseedgechart,
    :kind :lemma,
    :depends-on [:lemma-mem-edgechart-iff],
