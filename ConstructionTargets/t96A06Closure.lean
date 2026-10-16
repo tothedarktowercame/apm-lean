@@ -2172,6 +2172,52 @@ theorem t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endp
     (t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
       hauto)
 
+/-- The integer detected by the explicit two inverse sphere shifts followed
+by coefficient comparison, localization, and stereographic normalization. -/
+noncomputable def t96A06_sphereShiftLocalNormalizationIteratedEndpoint : ℤ :=
+  (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+    1 polynomialSphereRegularPoint).hom.hom
+    ((ConstructionTargets.HigherSphereLocalization.localizationIso
+      polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator))
+
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_automorphism_apply_one :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint =
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 := by
+  rfl
+
+/-- The explicit endpoint is an orientation sign, so it is `1` or `-1`. -/
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_or_neg_one :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint = 1 ∨
+      t96A06_sphereShiftLocalNormalizationIteratedEndpoint = -1 := by
+  rw [t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_automorphism_apply_one]
+  exact t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one
+
+/-- Nonnegativity of the explicit orientation endpoint rules out its negative
+branch. -/
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg
+    (h : 0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint) :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint ≠ -1 := by
+  intro hneg
+  rw [hneg] at h
+  omega
+
+/-- Named-endpoint nonnegativity supplies the explicit endpoint inequality
+consumed by the negative-automorphism adapter above. -/
+theorem t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg
+    (h : 0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint) :
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) ≠ -1 := by
+  change t96A06_sphereShiftLocalNormalizationIteratedEndpoint ≠ -1
+  exact t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg h
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -5011,6 +5057,10 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_automorphism_apply_one
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_or_neg_one
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg
+#print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
