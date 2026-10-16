@@ -2696,6 +2696,17 @@ theorem t96A06_unitH0ModuleGenerator_eq_opcycleGenerator :
 
 #print axioms t96A06_unitH0ModuleGenerator_eq_opcycleGenerator
 
+/-- The unique module-valued degree-zero singular chain of `Unit`, with
+coefficient one. -/
+noncomputable def t96A06_unitH0ModuleChainGenerator :=
+  (Limits.Sigma.ι
+    (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+      (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+    (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+      (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ)
+
+#print axioms t96A06_unitH0ModuleChainGenerator
+
 /-- The concrete normalization of the chain comparison on the selected Unit
 coordinate supplies the remaining equality at one. -/
 theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
