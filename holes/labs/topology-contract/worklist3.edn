@@ -36752,6 +36752,18 @@
      {:cmd
       "git diff --check && git show --check --stat --oneline 5370feaf8",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792115318129-14995-c9ff51f1",
+     :commands
+     ["git show --check --stat 5370feaf8; inspect diff"
+      "verify commit blob equals compiled file"
+      "sha256sum fixture => 4aeb8b6a...beea8d"
+      "lake env lean Closure, Main, fixture"
+      "statement-registry.py check => 168/168"],
+     :finding
+     "PASS: 5370feaf8 adds compiled, sorry-free progress beyond history, transporting above-top vanishing through the affine-sphere homotopy equivalence and then the overlap homology isomorphism in the correct direction. Fixture hash matches; only standard axioms. Main placeholder remains 1->1; lower retract, MV, and Main milestones are listed."},
     :commit "5370feaf8",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36760,7 +36772,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36790,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed rational sphere vanishing above top.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed affine and overlap above-top vanishing.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36852,7 +36864,10 @@
      :reason "Committed rational sphere vanishing below top."}
     {:job 8,
      :commit "926cc81f4",
-     :reason "Committed rational sphere vanishing above top."}]}
+     :reason "Committed rational sphere vanishing above top."}
+    {:job 9,
+     :commit "5370feaf8",
+     :reason "Committed affine and overlap above-top vanishing."}]}
   {:consumer :t98A02,
    :stop-count 1,
    :evidence
@@ -37211,7 +37226,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37267,7 +37282,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37289,7 +37304,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -44943,7 +44958,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_affineUnitSphere_homology_isZero_of_gt",
@@ -44953,7 +44968,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "affine unit-sphere rational homology vanishes above top",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "5370feaf8"},
    :id :lemma-t99j05-affineunitsphere-homology-iszero-of-gt,
    :kind :lemma,
    :depends-on
@@ -44961,7 +44978,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44975,7 +44992,9 @@
     :type
     "coefficient one and chart naturality give the rational generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-mappedrationallocalextension-eq-generator-of-coefficient-one,
    :kind :lemma,
@@ -44984,7 +45003,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44998,7 +45017,9 @@
     :type
     "coefficient one plus chart naturality implies raw transport",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coefficient-one,
    :kind :lemma,
@@ -45007,7 +45028,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_integralToRationalLocalChartNaturality",
@@ -45018,7 +45039,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "coefficient extension commutes with selected chart coordinates",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-integraltorationallocalchartnaturality,
    :kind :lemma,
    :depends-on
@@ -45027,7 +45050,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45039,7 +45062,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coefficient one: named chart naturality iff raw transport",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorationallocalchartnaturality-iff-rawtransport-of-coefficient-on,
    :kind :lemma,
@@ -45048,7 +45073,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -45062,7 +45087,9 @@
     :type
     "coefficient one identifies native inverse with integral chart generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-nativeintegrallocalgenerator-eq-generator-of-coefficient-one,
    :kind :lemma,
@@ -45071,7 +45098,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_overlap_homology_isZero_of_gt",
@@ -45081,7 +45108,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "successor overlap vanishes above top",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "5370feaf8"},
    :id :lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt,
    :kind :lemma,
    :depends-on [:lemma-t99j05-affineunitsphere-homology-iszero-of-gt],
