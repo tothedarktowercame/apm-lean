@@ -1180,6 +1180,33 @@ theorem t99J05_cp_successor_subcomplexMayerVietoris_shortExact (n : ℕ) :
     (ConstructionTargets.SingularExcision.ambientSubspaceRange
       (cpSuccessorTopPatch n))
 
+/-- The specialized chain sequence, named so its three homology exactness
+positions can be transported to the literal patch homology groups. -/
+noncomputable def t99J05_cp_successor_mayerVietorisShortComplex (n : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n))
+
+/-- Exactness at the direct sum of the two patch homology groups in the
+specialized projective Mayer--Vietoris sequence. -/
+theorem t99J05_cp_successor_mayerVietoris_exact_pieces (n k : ℕ) :
+    (CategoryTheory.ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).f k)
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).g k)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp]
+        rw [(t99J05_cp_successor_mayerVietorisShortComplex n).zero,
+          HomologicalComplex.homologyMap_zero])).Exact := by
+  exact ConstructionTargets.CoefficientSubcomplexMayerVietoris.exact_pieces ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -1276,6 +1303,8 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_overlap_homology_isZero_of_gt
 #print axioms t99J05_cp_successor_overlap_rational_topHomology
 #print axioms t99J05_cp_successor_subcomplexMayerVietoris_shortExact
+#print axioms t99J05_cp_successor_mayerVietorisShortComplex
+#print axioms t99J05_cp_successor_mayerVietoris_exact_pieces
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
