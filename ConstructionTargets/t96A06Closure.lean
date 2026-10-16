@@ -3190,6 +3190,22 @@ theorem t96A06_unitH0_mapHomologyIso'_eq_rightData :
 
 #print axioms t96A06_unitH0_mapHomologyIso'_eq_rightData
 
+/-- The mapped right-homology presentation reaches canonical opcycles through
+its chosen inclusion and inverse opcycle comparison. -/
+theorem t96A06_unitH0_mappedRightHomology_triangle :
+    (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso.inv ≫
+      (t96A06_unitH0ModuleShortComplex.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι =
+    (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).ι ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv := by
+  exact (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso_inv_comp_homologyι
+
+#print axioms t96A06_unitH0_mappedRightHomology_triangle
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
