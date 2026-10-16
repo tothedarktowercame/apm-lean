@@ -2551,6 +2551,24 @@ theorem t96A06_boolH0_additive_pointInclusion_coordinates (b : Bool) :
   exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
     AddCommGrpCat (AddCommGrpCat.of ℤ) b
 
+/-- Naturality of the integral coefficient comparison for the selected
+`Unit → Bool` point inclusion, in the direction joining the two coordinate
+edges above. -/
+theorem t96A06_boolH0_comparison_pointInclusion_naturality (b : Bool) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 0).obj
+          (ModuleCat.of ℤ ℤ)).map
+            (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) := by
+  exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+    (ConstructionTargets.SingularHomologyConcrete.pointInclusion b) 0
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5453,6 +5471,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_all_points_iff_comparison
 #print axioms t96A06_boolH0_module_pointInclusion_coordinates
 #print axioms t96A06_boolH0_additive_pointInclusion_coordinates
+#print axioms t96A06_boolH0_comparison_pointInclusion_naturality
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
