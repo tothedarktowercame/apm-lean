@@ -1083,6 +1083,29 @@ theorem frozenBoundarySubtypeEqvGen_iff_closedRel
     rw [← frozenGeneratorCircleRel_iff_graphRel] at hab
     exact hab
 
+/-- The generated relation on the actual boundary subtype has closed graph. -/
+theorem frozenBoundarySubtypeEqvGen_isClosed :
+    IsClosed {p :
+        ConstructionTargets.PolygonBoundaryCircleSource.Boundary ×
+          ConstructionTargets.PolygonBoundaryCircleSource.Boundary |
+      Relation.EqvGen
+        (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+          frozenGeneratorRel) p.1 p.2} := by
+  let f :
+      ConstructionTargets.PolygonBoundaryCircleSource.Boundary ×
+        ConstructionTargets.PolygonBoundaryCircleSource.Boundary → Circle × Circle :=
+    fun p =>
+      (ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle p.1,
+        ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle p.2)
+  have hf : Continuous f :=
+    (ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.symm.continuous.comp
+      continuous_fst).prodMk
+    (ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.symm.continuous.comp
+      continuous_snd)
+  have hc := frozenBoundaryClosedRel_isClosed.preimage hf
+  simpa only [Set.preimage_setOf_eq, f,
+    frozenBoundarySubtypeEqvGen_iff_closedRel] using hc
+
 /-- The boundary quotient parametrizes every outer boundary class exactly
 once. -/
 theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
@@ -1845,6 +1868,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozenGeneratorEqvGen_iff_eq_or_boundary
 #print axioms frozenBoundarySubtypeEqvGen_iff_closedRel
+#print axioms frozenBoundarySubtypeEqvGen_isClosed
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
