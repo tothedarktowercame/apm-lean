@@ -37239,41 +37239,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Select +1; prove coefficient naturality; comparison identity, four classes, Main.",
+    "Exclude global coordinate -1; then coefficient naturality, comparison identity, four classes, Main.",
     :outcome :stop,
-    :warnings ["Existing lints; one placeholder."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one",
-      :type "integral coordinate is +1 or -1",
+      "t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one",
+      :type "integral coordinate is +1 iff it is not -1",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_integralNormalizedClass_coordinate_isUnit"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_integralNormalizedClass_coordinate_eq_one",
-      :type "local orientation selects +1",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one"],
       :area "rp-rational-homology"}
-     {:name "t96A06_rationalExtensionCoordinateOne",
-      :type "coefficient extension preserves +1",
+     {:name "t96A06_integralNormalizedClass_coordinate_ne_neg_one",
+      :type
+      "local orientation excludes global sphere-shift coordinate -1",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_integralNormalizedClass_coordinate_eq_one"],
+      :depends-on
+      ["t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed integral orientation-sign dichotomy.",
+    :reason "Committed exact positive-sign exclusion criterion.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37282,15 +37278,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 10f7147cb",
+      "git diff --check && git show --check --stat --oneline 4c27dab1a",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792137874550-15229-df3eb9dc",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "10f7147cb",
+    :diagnostic-history
+    [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
+      :exit 1,
+      :note "Replaced omega with norm_num; rerun passed."}],
+    :commit "4c27dab1a",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37298,7 +37292,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45578,6 +45572,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-or-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one",
+    :type "integral coordinate is +1 iff it is not -1"},
+   :lemma
+   {:name
+    "t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "integral coordinate is +1 iff it is not -1",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-integralnormalizedclass-coordinate-eq-one-iff-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-or-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralNormalizedClass_coordinate_ne_neg_one",
+    :type
+    "local orientation excludes global sphere-shift coordinate -1"},
+   :lemma
+   {:name "t96A06_integralNormalizedClass_coordinate_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "local orientation excludes global sphere-shift coordinate -1",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integralnormalizedclass-coordinate-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-iff-ne-neg-one],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
