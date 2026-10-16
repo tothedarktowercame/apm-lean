@@ -3225,6 +3225,35 @@ theorem t96A06_unitH0_forgottenRightHomology_opcycle_triangle :
 
 #print axioms t96A06_unitH0_forgottenRightHomology_opcycle_triangle
 
+/-- The inverse homology-preservation map is the two successive inverse
+right-data transports.  This is the normal form used to cancel the mapped
+and forgotten right-homology triangles. -/
+theorem t96A06_unitH0_mapHomologyIso'_inv_eq_rightData :
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.symm).inv ≫
+        (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso.inv := by
+  rw [t96A06_unitH0_mapHomologyIso'_eq_rightData]
+  rfl
+
+#print axioms t96A06_unitH0_mapHomologyIso'_inv_eq_rightData
+
+/-- The inverse opcycle-preservation map is the corresponding two successive
+inverse right-data transports. -/
+theorem t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData :
+    (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.symm).inv ≫
+        (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv := by
+  rw [t96A06_unitH0_mapOpcyclesIso_eq_rightData]
+  rfl
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
