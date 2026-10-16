@@ -2362,6 +2362,37 @@ theorem t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
   exact t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
     (t96A06_coefficientCircleComparison_eq_native_of_apply_one hone)
 
+/-- Naturality transports the discrete two-point comparison to the actual
+boundary of the one-disk, with the signed-coordinate convention fixed. -/
+theorem t96A06_coefficientCircleBoundary_integralComparison_of_bool
+    (hbool :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of Bool) 0).hom ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).hom) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.isoOfHomeo
+            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
+      ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (CoefficientSphereEndpoints.boundaryIso ℤ).hom := by
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool
+    hbool
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5254,6 +5285,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
 #print axioms t96A06_coefficientCircleComparison_eq_native_of_apply_one
 #print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
+#print axioms t96A06_coefficientCircleBoundary_integralComparison_of_bool
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
