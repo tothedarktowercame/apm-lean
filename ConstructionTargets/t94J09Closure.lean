@@ -497,6 +497,14 @@ def frozenGeneratorCircleHomologyIsoBoundaryGraph (k : ℕ) :
       (ModuleCat.of ℤ ℤ)).mapIso
     (TopCat.isoOfHomeo frozenGeneratorCircleHomeomorphBoundaryGraph))
 
+/-- Direct homology comparison from the disk-boundary quotient presentation
+to the explicit seven-edge graph presentation. -/
+def frozenGeneratorBoundaryHomologyIsoGraph (k : ℕ) :
+    SpaceH FrozenGeneratorBoundaryQuotient k ≅
+      SpaceH FrozenBoundaryGraphQuotient k :=
+  (frozenGeneratorCircleBoundaryHomologyIso k).symm ≪≫
+    frozenGeneratorCircleHomologyIsoBoundaryGraph k
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1141,6 +1149,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
 #print axioms frozenGeneratorCircleHomologyIsoBoundaryGraph
+#print axioms frozenGeneratorBoundaryHomologyIsoGraph
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
