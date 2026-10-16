@@ -2700,6 +2700,24 @@ noncomputable def frozenGeneratorCanonicalModuleH1EquivConcrete :
       refine ⟨c.inv y, ?_⟩
       exact c.inv_hom_id_apply y⟩
 
+/-- Transport a concrete canonical H1 Smith equivalence to the module-valued
+canonical H1 used by the frozen homology statement. -/
+noncomputable def frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
+    (h :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) ≃ₗ[ℤ]
+        N6Smith) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+        (ModuleCat.of ℤ ℤ)).obj
+          (@TopCat.of FrozenGeneratorQuotient
+            (@instTopologicalSpaceQuotient Surfaces.Disk
+              (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance))) : Type) ≃ₗ[ℤ]
+      N6Smith :=
+  frozenGeneratorCanonicalModuleH1EquivConcrete.trans h
+
 /-- Assemble the literal homology calculation once the geometric comparison
 maps identify the Mayer--Vietoris groups with the frozen chain complex. -/
 theorem frozenPolygonHomology_of_comparisons
@@ -2806,6 +2824,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorH1SmithEquiv_of_comparisons
 #print axioms frozenGeneratorH1SmithEquiv_of_section
 #print axioms frozenGeneratorCanonicalModuleH1EquivConcrete
+#print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
