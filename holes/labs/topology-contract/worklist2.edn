@@ -88891,26 +88891,26 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Open charts/trivializations; tree; finite invariants.",
+    :residual "Saturate charts; trivialize; tree; finite invariants.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "realizationQuotientMap_isQuotientMap",
-      :type "raw realization quotient authority",
+    [{:name "rawEdgeInterior_isOpen",
+      :type "raw edge open",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["projection_preimage_edgePoint"],
+      :depends-on ["realizationQuotientMap_isQuotientMap"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
-      :type "open charts/trivializations",
+      :type "charts/trivializations",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["realizationQuotientMap_isQuotientMap"],
+      :depends-on ["rawEdgeInterior_isOpen"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
       :type "tree cover",
@@ -88928,40 +88928,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked realization quotient authority.",
+    :reason "Banked raw edge openness.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "comment-stripped placeholder scan", :exit 0}
-     {:cmd "git show --check 7dcd7cd9f", :exit 0}],
+     {:cmd "git show --check 8217909a6", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft build",
-      :exit 1,
-      :correction "qualified Topology.IsQuotientMap"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792137795985-15227-05f5d0a0",
-     :commands
-     ["git show/diff/check 7dcd7cd9f"
-      "verify committed realization quotient representation"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum, scope, and placeholder recount at 7dcd7cd9f"],
-     :finding
-     "PASS program STOP: topo-6 commit 7dcd7cd9f adds compiled, sorry-free progress after 9c8d9a5d1. realizationQuotientMap_isQuotientMap uses the exact RealizationRaw carrier, EqvGen setoid, quotient constructor, and coinduced topology defining D.Realization, so it supplies the correct quotient authority for saturated open-chart proofs rather than a parallel model. Open charts/trivializations, tree cover, and four finite covers remain explicitly listed. Scope is one target file; fixture SHA 62e0753a69056713ae18a36942ef1fb57a33cf73eb77ed77e500eb836ef56de8; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
-    :commit "7dcd7cd9f",
+    [{:cmd "draft", :exit 1, :correction "open injection image"}],
+    :commit "8217909a6",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "62e0753a69056713ae18a36942ef1fb57a33cf73eb77ed77e500eb836ef56de8"},
+     "310c0bc68794e69c7b455c32c4d6b712fc7396cabecf47b9e4ec9d09d566a862"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90779,7 +90764,8 @@
     :lemma-projection-surjective
     :lemma-projection-fibercard
     :lemma-projection-preimage-edgepoint
-    :lemma-realizationquotientmap-isquotientmap],
+    :lemma-realizationquotientmap-isquotientmap
+    :lemma-rawedgeinterior-isopen],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -97629,4 +97615,20 @@
    :depends-on
    [:lemma-frozengeneratorinneroverlaphomology
     :lemma-frozengeneratorouterhomologyisograph],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "rawEdgeInterior_isOpen", :type "raw edge open"},
+   :lemma
+   {:name "rawEdgeInterior_isOpen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw edge open",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-rawedgeinterior-isopen,
+   :kind :lemma,
+   :depends-on [:lemma-realizationquotientmap-isquotientmap],
    :other-consumers []}]}
