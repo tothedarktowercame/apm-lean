@@ -1333,6 +1333,56 @@ def t99J05_cp_successor_mayerVietoris_overlap_top_naturality
 
 #print axioms t99J05_cp_successor_mayerVietoris_overlap_top_naturality
 
+/-- The literal overlap-to-patches arrow, with the Mayer--Vietoris sign on
+the top-patch component. -/
+noncomputable def t99J05_cp_successor_literalOverlapToPieces (n k : ℕ) :
+    Homology ({p : CP (n + 1) |
+      p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1))) k ⟶
+      Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k :=
+  biprod.lift
+    (HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_left : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorLowerPatch n)))) k)
+    (-HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_right : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorTopPatch n)))) k)
+
+/-- The first component of the literal successor overlap map is the lower
+patch inclusion on homology. -/
+theorem t99J05_cp_successor_literalOverlapToPieces_fst (n k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+      (t99J05_cp_successor_literalOverlapToPieces n k) biprod.fst =
+    HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_left : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorLowerPatch n)))) k := by
+  simp [t99J05_cp_successor_literalOverlapToPieces]
+
+/-- The second component of the literal successor overlap map is the negated
+top-patch inclusion on homology. -/
+theorem t99J05_cp_successor_literalOverlapToPieces_snd (n k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+      (t99J05_cp_successor_literalOverlapToPieces n k) biprod.snd =
+    -HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_right : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorTopPatch n)))) k := by
+  simp [t99J05_cp_successor_literalOverlapToPieces]
+
+#print axioms t99J05_cp_successor_literalOverlapToPieces_fst
+#print axioms t99J05_cp_successor_literalOverlapToPieces_snd
+
 /-- The three range-presented terms in the successor Mayer--Vietoris sequence
 transport to the literal overlap and two patches. -/
 noncomputable def t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
