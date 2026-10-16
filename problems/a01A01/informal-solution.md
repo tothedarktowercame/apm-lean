@@ -4,23 +4,23 @@
 
 ## Why It's Hard
 
-This asks for a sequence that is "large everywhere eventually" (limsup = ∞ at every point) yet "small in total" (integrals → 0). These two requirements pull in opposite directions. If you try to make functions that are big everywhere, the integrals stay large. If you make the integrals small, the functions seem to vanish. The resolution requires the functions to be big on *different* small sets at different times, cycling through the interval so that every point is hit infinitely often, but each individual function has small support.
+This asks for a sequence that is "large everywhere eventually" ($\limsup = \infty$ at every point) yet "small in total" (integrals $\to 0$). These two requirements pull in opposite directions. If you try to make functions that are big everywhere, the integrals stay large. If you make the integrals small, the functions seem to vanish. The resolution requires the functions to be big on *different* small sets at different times, cycling through the interval so that every point is hit infinitely often, but each individual function has small support.
 
 ## The Key Insight
 
-Use a "typewriter" or "sliding bump" construction. Tile [0,1] with intervals of length 1/n, and cycle a bump of height n across these intervals. The k-th function is an indicator of a small interval, scaled to be tall. Each point is covered infinitely often (the bumps sweep past every point repeatedly), but each function's integral is height × width = n × (1/n²) or similar, which → 0.
+Use a "typewriter" or "sliding bump" construction. Tile $[0,1]$ with intervals of length $1/n$, and cycle a bump of height $n$ across these intervals. The $k$-th function is an indicator of a small interval, scaled to be tall. Each point is covered infinitely often (the bumps sweep past every point repeatedly), but each function's integral is height $\times$ width $= n \times (1/n^{2})$ or similar, which $\to 0$.
 
-Concretely: enumerate the intervals [j/n, (j+1)/n] for n = 1, 2, 3, ... and j = 0, ..., n-1 in sequence, and set f\_k = n · 1\_{[j/n, (j+1)/n]} for the k-th such pair. The integral is n · (1/n) = 1 — too big. Instead use f\_k = 1\_{[j/n, (j+1)/n]} (height 1, width 1/n, integral 1/n). Then the integral → 0 but limsup = 1, not ∞. To get limsup = ∞, use height n: f\_k = n · 1\_{[j/n, (j+1)/n]}, integral = 1. Still too big.
+Concretely: enumerate the intervals $[j/n, (j+1)/n]$ for $n = 1, 2, 3, \ldots$ and $j = 0, \ldots, n-1$ in sequence, and set $f_k = n \cdot 1_{[j/n, (j+1)/n]}$ for the $k$-th such pair. The integral is $n \cdot (1/n) = 1$ — too big. Instead use $f_k = 1_{[j/n, (j+1)/n]}$ (height 1, width $1/n$, integral $1/n$). Then the integral $\to 0$ but $\limsup = 1$, not $\infty$. To get $\limsup = \infty$, use height $n$: $f_k = n \cdot 1_{[j/n, (j+1)/n]}$, integral $= 1$. Still too big.
 
-The fix: decouple the height growth from the sweep rate. Use intervals of length 1/n², with height n, so integral = n/n² = 1/n → 0. But then you need n² intervals to cover [0,1], so each "sweep" takes n² functions. This still works: every point is hit during each complete sweep, and the heights grow.
+The fix: decouple the height growth from the sweep rate. Use intervals of length $1/n^{2}$, with height $n$, so integral $= n/n^{2} = 1/n \to 0$. But then you need $n^{2}$ intervals to cover $[0,1]$, so each "sweep" takes $n^{2}$ functions. This still works: every point is hit during each complete sweep, and the heights grow.
 
-Actually, the simplest clean construction is: let n(k) and j(k) be defined by enumerating all pairs (n, j) with n ≥ 1 and 0 ≤ j < n. Set f\_k = n · 1\_{[j/n, (j+1)/n]}. The integral is n · (1/n) = 1 — constant, doesn't → 0. Let me use a better indexing.
+Actually, the simplest clean construction is: let $n(k)$ and $j(k)$ be defined by enumerating all pairs $(n, j)$ with $n \geq 1$ and $0 \leq j < n$. Set $f_k = n \cdot 1_{[j/n, (j+1)/n]}$. The integral is $n \cdot (1/n) = 1$ — constant, doesn't $\to 0$. Let me use a better indexing.
 
-**Clean construction:** For each k, write k in the form k = n(n-1)/2 + j where 0 ≤ j < n (triangular enumeration). Set:
+**Clean construction:** For each $k$, write $k$ in the form $k = n(n-1)/2 + j$ where $0 \leq j < n$ (triangular enumeration). Set:
 
 $$f_k = \mathbf{1}_{[j/n,\, (j+1)/n]}$$
 
-Then ∫ f\_k = 1/n → 0 as k → ∞ (since n ~ √(2k)). And for every x ∈ [0,1], during the n-th sweep (the n functions with this value of n), exactly one of them has f\_k(x) = 1. This happens for infinitely many n, so limsup f\_k(x) ≥ 1 for all x — but we want limsup = ∞, not just ≥ 1.
+Then $\int f_k = 1/n \to 0$ as $k \to \infty$ (since $n \sim \sqrt{2k}$). And for every $x \in [0,1]$, during the $n$-th sweep (the $n$ functions with this value of $n$), exactly one of them has $f_k(x) = 1$. This happens for infinitely many $n$, so $\limsup f_k(x) \geq 1$ for all $x$ — but we want $\limsup = \infty$, not just $\geq 1$.
 
 **Final construction (correct):** Use height that grows. For the same indexing:
 
@@ -32,65 +32,65 @@ Wait, this over-complicates things. Let me just give the clean standard answer.
 
 **Construction on [0,1].**
 
-For each integer n ≥ 1, partition [0,1] into n equal subintervals:
+For each integer $n \geq 1$, partition $[0,1]$ into $n$ equal subintervals:
 
 $$I_{n,j} = \left[\frac{j}{n}, \frac{j+1}{n}\right), \quad j = 0, 1, \ldots, n-1.$$
 
-There are n intervals for each n, giving a total sequence of intervals enumerated as:
+There are $n$ intervals for each $n$, giving a total sequence of intervals enumerated as:
 
 $$I_{1,0},\; I_{2,0}, I_{2,1},\; I_{3,0}, I_{3,1}, I_{3,2},\; I_{4,0}, \ldots$$
 
-The k-th interval corresponds to the unique pair (n,j) where k = n(n-1)/2 + j + 1 (triangular numbering), with 0 ≤ j < n.
+The $k$-th interval corresponds to the unique pair $(n,j)$ where $k = n(n-1)/2 + j + 1$ (triangular numbering), with $0 \leq j < n$.
 
 Define:
 
 $$f_k = n^{1/2} \cdot \mathbf{1}_{I_{n,j}}$$
 
-where (n,j) is the pair corresponding to index k.
+where $(n,j)$ is the pair corresponding to index $k$.
 
-**Claim 1: ∫₀¹ f\_k dx → 0.**
+**Claim 1: $\int_{0}^{1} f_k\,dx \to 0$.**
 
 $$\int_0^1 f_k\,dx = n^{1/2} \cdot m(I_{n,j}) = n^{1/2} \cdot \frac{1}{n} = \frac{1}{n^{1/2}} = \frac{1}{\sqrt{n}}.$$
 
-Since n → ∞ as k → ∞ (specifically n ~ √(2k)), we have ∫ f\_k → 0. ✓
+Since $n \to \infty$ as $k \to \infty$ (specifically $n \sim \sqrt{2k}$), we have $\int f_k \to 0$. ✓
 
-**Claim 2: limsup\_{k→∞} f\_k(x) = ∞ for every x ∈ [0,1].**
+**Claim 2: $\limsup_{k\to\infty} f_k(x) = \infty$ for every $x \in [0,1]$.**
 
-Fix x ∈ [0,1]. For each n, there exists exactly one j = j(n) ∈ {0, ..., n-1} such that x ∈ I\_{n,j(n)} (with at most endpoint ambiguity, irrelevant for a.e. statement — but in fact we can handle endpoints by using half-open intervals, ensuring every x ∈ [0,1) is in exactly one interval per n; x = 1 is in I\_{n,n-1} by convention).
+Fix $x \in [0,1]$. For each $n$, there exists exactly one $j = j(n) \in \{0, \ldots, n-1\}$ such that $x \in I_{n,j(n)}$ (with at most endpoint ambiguity, irrelevant for a.e. statement — but in fact we can handle endpoints by using half-open intervals, ensuring every $x \in [0,1)$ is in exactly one interval per $n$; $x = 1$ is in $I_{n,n-1}$ by convention).
 
-For the index k(n) corresponding to the pair (n, j(n)):
+For the index $k(n)$ corresponding to the pair $(n, j(n))$:
 
 $$f_{k(n)}(x) = n^{1/2}.$$
 
-Since n^{1/2} → ∞, we have
+Since $n^{1/2} \to \infty$, we have
 
 $$\limsup_{k \to \infty} f_k(x) \geq \lim_{n \to \infty} f_{k(n)}(x) = \lim_{n \to \infty} n^{1/2} = \infty. \qquad \checkmark$$
 
-**(Both claims together complete the proof for [0,1].)** ∎
+**(Both claims together complete the proof for $[0,1]$.)** ∎
 
-**Adaptation to ℝⁿ.**
+**Adaptation to $\mathbb{R}^{n}$.**
 
-The same idea works with cubes instead of intervals. For each m ≥ 1, tile the cube [-m, m]ⁿ with sub-cubes of side length 1/m, giving (2m²)ⁿ sub-cubes. Let Q\_{m,j} enumerate these sub-cubes. Define:
+The same idea works with cubes instead of intervals. For each $m \geq 1$, tile the cube $[-m, m]^{n}$ with sub-cubes of side length $1/m$, giving $(2m^{2})^{n}$ sub-cubes. Let $Q_{m,j}$ enumerate these sub-cubes. Define:
 
 $$g_k = m^{n/2} \cdot \mathbf{1}_{Q_{m,j}}$$
 
-where (m,j) is the pair corresponding to index k under a suitable enumeration.
+where $(m,j)$ is the pair corresponding to index $k$ under a suitable enumeration.
 
 Then:
 
 $$\int_{\mathbb{R}^n} g_k\,dx = m^{n/2} \cdot m(Q_{m,j}) = m^{n/2} \cdot \frac{1}{m^n} = \frac{1}{m^{n/2}} \to 0.$$
 
-And for any x ∈ ℝⁿ, x ∈ [-m,m]ⁿ for all sufficiently large m, and for each such m, x belongs to some sub-cube Q\_{m,j(m)}, so g\_{k(m)}(x) = m^{n/2} → ∞. Hence limsup g\_k(x) = ∞ for all x ∈ ℝⁿ. ∎
+And for any $x \in \mathbb{R}^{n}$, $x \in [-m,m]^{n}$ for all sufficiently large $m$, and for each such $m$, $x$ belongs to some sub-cube $Q_{m,j(m)}$, so $g_{k(m)}(x) = m^{n/2} \to \infty$. Hence $\limsup g_k(x) = \infty$ for all $x \in \mathbb{R}^{n}$. ∎
 
 ## What Connects
 
-**To the typewriter sequence.** The construction f\_k = 1\_{I\_{n,j}} (without the height factor) is the standard "typewriter sequence" showing that a.e. convergence does not follow from L^1 convergence. Adding height makes the limsup infinite rather than just nonzero.
+**To the typewriter sequence.** The construction $f_k = 1_{I_{n,j}}$ (without the height factor) is the standard "typewriter sequence" showing that a.e. convergence does not follow from $L^1$ convergence. Adding height makes the limsup infinite rather than just nonzero.
 
-**To convergence in measure.** The typewriter sequence converges to 0 in measure (m({f\_k > ε}) = 1/n → 0) but not a.e. (limsup > 0 everywhere). This problem strengthens the pathology: not only does a.e. convergence fail, but the limsup is *infinite* everywhere, and the integrals still vanish.
+**To convergence in measure.** The typewriter sequence converges to 0 in measure ($m(\{f_k > \varepsilon\}) = 1/n \to 0$) but not a.e. ($\limsup > 0$ everywhere). This problem strengthens the pathology: not only does a.e. convergence fail, but the limsup is *infinite* everywhere, and the integrals still vanish.
 
-**To the Borel-Cantelli lemma.** Borel-Cantelli says: if Σ m(A\_k) < ∞, then a.e. x is in only finitely many A\_k. Here Σ m(I\_{n,j}) = Σ\_n (n · 1/n) = Σ 1 = ∞, so Borel-Cantelli does *not* apply, and indeed every x is in infinitely many of the sets — which is exactly what we need.
+**To the Borel-Cantelli lemma.** Borel-Cantelli says: if $\sum m(A_k) < \infty$, then a.e. $x$ is in only finitely many $A_k$. Here $\sum m(I_{n,j}) = \sum_n (n \cdot 1/n) = \sum 1 = \infty$, so Borel-Cantelli does *not* apply, and indeed every $x$ is in infinitely many of the sets — which is exactly what we need.
 
-**To the Banach-Saks theorem.** The fact that L^1 convergence does not imply a.e. convergence (demonstrated by the typewriter sequence) is one motivation for the Banach-Saks theorem, which recovers a.e. convergence by passing to Cesàro means of a subsequence.
+**To the Banach-Saks theorem.** The fact that $L^1$ convergence does not imply a.e. convergence (demonstrated by the typewriter sequence) is one motivation for the Banach-Saks theorem, which recovers a.e. convergence by passing to Cesàro means of a subsequence.
 
 ---
 
