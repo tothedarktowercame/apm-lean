@@ -88672,41 +88672,42 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "H1; generator; assemble; normalize.",
+    :residual "H1/generator; assemble; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGraphH1Coordinates_generator_eq_iff",
-      :type "reduction",
+    [{:name "frozenGeneratorMVBoundaryCoordinates_of_cycleComparison",
+      :type "adapter",
       :status :proved,
-      :consumers [:t94J09],
-      :depends-on ["frozenGraphH1CoordinatesOfCycleComparison"],
-      :area "polygon-surface-homology"}
-     {:name "frozenBoundaryGraphH1CycleComparison",
-      :type "comparison",
-      :status :not-started,
       :consumers [:t94J09],
       :depends-on ["frozenGraphH1Coordinates_generator_eq_iff"],
       :area "polygon-surface-homology"}
+     {:name "frozenBoundaryGraphH1CycleComparison",
+      :type "H1",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on
+      ["frozenGeneratorMVBoundaryCoordinates_of_cycleComparison"],
+      :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "coordinates",
+      :type "coords",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenBoundaryGraphH1CycleComparison"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
-      :type "homology",
+      :type "H",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenGeneratorHomology_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_normalization",
-      :type "normalization",
+      :type "norm",
       :status :not-started,
       :consumers [:t94J09],
       :depends-on [],
@@ -88725,29 +88726,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check f4183ccea", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792168133733-15637-830317b6",
-     :commands
-     ["git show/check f4183ccea"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free graph-generator reduction beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The assembled coordinate equivalence compares kernel subtypes injectively, and subtype equality reduces exactly to equality of their seven-edge values, so the generator calculation is faithfully reduced to the literal attaching-degree equation. Only standard axioms occur; cycle comparison, generator proof, homology assembly, and normalization remain listed."},
-    :commit "f4183ccea",
+     {:cmd "git show --check 4a4718954", :exit 0}],
+    :commit "4a4718954",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "046c44a8e4b2a591676b3502bf547f22d3a0a22fc5b3896fb63085624b6a2c63"},
+     "cb514c7854f4efab3f06d618f4ebaafd0771054039e2a8211c37ff9fe1e99dbb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98623,7 +98611,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengraphh1coordinatesofcyclecomparison
-    :lemma-frozengraphh1coordinates-generator-eq-iff],
+    :lemma-frozengraphh1coordinates-generator-eq-iff
+    :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98643,4 +98632,21 @@
    :id :lemma-frozengraphh1coordinates-generator-eq-iff,
    :kind :lemma,
    :depends-on [:lemma-frozengraphh1coordinatesofcyclecomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVBoundaryCoordinates_of_cycleComparison",
+    :type "adapter"},
+   :lemma
+   {:name "frozenGeneratorMVBoundaryCoordinates_of_cycleComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "adapter",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphh1coordinates-generator-eq-iff],
    :other-consumers []}]}
