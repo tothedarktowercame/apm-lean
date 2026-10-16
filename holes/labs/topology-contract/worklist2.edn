@@ -88723,6 +88723,18 @@
      {:cmd "git show --check 49a791d9b", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "notation"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792147233202-15339-7e07e339",
+     :commands
+     ["git show/check 49a791d9b"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 49a791d9b changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. MV middle term is inner-then-outer, and reversing isoZeroBiprod correctly removes the zero inner H1 before graph transport; graph-arrow comparison remains listed."},
     :commit "49a791d9b",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88731,7 +88743,7 @@
      "3284b3ea72e54de64e099c9abbca4f2fdb108f6c76ae04a6a8aae014b15a4540"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88749,7 +88761,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked outer group representation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked MV pieces/graph bridge.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88894,7 +88906,10 @@
      :reason "Banked intersection and inner coordinates."}
     {:job 2,
      :commit "f40c1658c",
-     :reason "Banked outer group representation."}]}
+     :reason "Banked outer group representation."}
+    {:job 3,
+     :commit "49a791d9b",
+     :reason "Banked MV pieces/graph bridge."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97702,7 +97717,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVPiecesH1GroupIsoGraph",
@@ -97712,7 +97727,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "MV pieces/graph iso",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "49a791d9b"},
    :id :lemma-frozengeneratormvpiecesh1groupisograph,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratoroutergrouphomologyisograph],
