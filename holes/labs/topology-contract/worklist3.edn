@@ -36754,6 +36754,19 @@
       :exit 1,
       :note
       "Fixed composition and lifted chain equality; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792170421920-15677-ba16f21d",
+     :commands
+     ["git show/check b9f1d3a49"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit adds ambient-inclusion naturality after prior progress. Composition is correctly oriented range→literal subspace→ambient and equals range inclusion; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains its declared one placeholder."},
     :commit "b9f1d3a49",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36762,7 +36775,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36780,7 +36793,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal-patch homology isomorphisms; map naturality remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed ambient-inclusion naturality for literal-patch transport.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36891,7 +36904,11 @@
     {:job 1,
      :commit "d69b5953f",
      :reason
-     "Committed literal-patch homology isomorphisms; map naturality remains."}]}
+     "Committed literal-patch homology isomorphisms; map naturality remains."}
+    {:job 2,
+     :commit "b9f1d3a49",
+     :reason
+     "Committed ambient-inclusion naturality for literal-patch transport."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37261,7 +37278,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37318,7 +37335,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37340,7 +37357,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47261,7 +47278,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_homologyComparison_factorization",
@@ -47273,7 +47290,9 @@
     :type
     "Unit comparison factors through preserved homology and induced chain map",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-homologycomparison-factorization,
    :kind :lemma,
    :depends-on
@@ -47299,7 +47318,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0CoordinateGenerator_eq_moduleGenerator",
@@ -47311,7 +47330,9 @@
     :type
     "forgotten Unit H0 coordinate equals underlying module generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0coordinategenerator-eq-modulegenerator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-homologycomparison-factorization],
@@ -47337,7 +47358,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0ModuleGenerator_eq_opcycleGenerator",
@@ -47349,7 +47370,9 @@
     :type
     "module Unit H0 generator is the canonical class of its explicit opcycle",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0modulegenerator-eq-opcyclegenerator,
    :kind :lemma,
    :depends-on
@@ -47376,7 +47399,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0ModuleChainGenerator",
@@ -47386,7 +47409,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "explicit module-valued Unit degree-zero simplex generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0modulechaingenerator,
    :kind :lemma,
    :depends-on
@@ -47412,7 +47437,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -47424,7 +47449,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "literal transport commutes with ambient inclusion",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b9f1d3a49"},
    :id
    :lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap,
    :kind :lemma,
