@@ -88672,27 +88672,26 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "MV coordinate arrows; normalize.",
+    :residual "Outer graph coordinates/arrows; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVIntersectionExact",
-      :type "production MV exactness segment",
+    [{:name "frozenGeneratorIntersectionH1GroupIsoInt",
+      :type "intersection/inner MV coordinates",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenGeneratorInnerOverlapHomology"
-       "frozenGeneratorOuterHomologyIsoGraph"],
+      :depends-on ["frozenGeneratorMVIntersectionExact"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "MV coordinates",
+      :type "outer graph arrows",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorMVIntersectionExact"
+      ["frozenGeneratorIntersectionH1GroupIsoInt"
+       "frozenGeneratorOuterHomologyIsoGraph"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88711,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked literal MV exactness segment.",
+    :reason "Banked intersection and inner coordinates.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88721,16 +88720,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check e90057a01", :exit 0}],
-    :commit "e90057a01",
+     {:cmd "git show --check b835e56f9", :exit 0}],
+    :commit "b835e56f9",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "9ceb6d75869895b36b8e56e83a0c78e5ae7f7570fb382e3cba9ad8a4c7a1ca9b"},
+     "52ce68066343a234994a6e8dff71758960fd950e7991fdff91cdbb92a02b878e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96753,7 +96752,8 @@
     :lemma-frozengeneratoreqvgen-isclosed
     :lemma-frozenboundaryquotienthomeomorphouterskeleton
     :lemma-frozengeneratorouterhomologyisograph
-    :lemma-frozengeneratormvintersectionexact],
+    :lemma-frozengeneratormvintersectionexact
+    :lemma-frozengeneratorintersectionh1groupisoint],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97651,4 +97651,21 @@
    :id :lemma-rawedgeinterior-isopen,
    :kind :lemma,
    :depends-on [:lemma-realizationquotientmap-isquotientmap],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorIntersectionH1GroupIsoInt",
+    :type "intersection/inner MV coordinates"},
+   :lemma
+   {:name "frozenGeneratorIntersectionH1GroupIsoInt",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "intersection/inner MV coordinates",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorintersectionh1groupisoint,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvintersectionexact],
    :other-consumers []}]}
