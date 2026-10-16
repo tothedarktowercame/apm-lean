@@ -450,6 +450,46 @@ def FrozenBoundaryGraphRel (z w : Circle) : Prop :=
     (z = frozenCircleEdgePoint 4 t ∧ w = frozenCircleEdgePoint 11 t) ∨
     (z = frozenCircleEdgePoint 3 t ∧ w = frozenCircleEdgePoint 9 t)
 
+/-- The explicit seven-edge generating relation has closed graph in the
+product circle. -/
+theorem frozenBoundaryGraphRel_isClosed :
+    IsClosed {p : Circle × Circle | FrozenBoundaryGraphRel p.1 p.2} := by
+  let s0 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 0 t, frozenCircleEdgePoint 12 t)
+  let s1 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 6 t, frozenCircleEdgePoint 13 t)
+  let s2 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 1 t, frozenCircleEdgePoint 7 (reverseIcc t))
+  let s3 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 2 t, frozenCircleEdgePoint 8 t)
+  let s4 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 5 t, frozenCircleEdgePoint 10 t)
+  let s5 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 4 t, frozenCircleEdgePoint 11 t)
+  let s6 := Set.range fun t : Set.Icc (0 : ℝ) 1 =>
+    (frozenCircleEdgePoint 3 t, frozenCircleEdgePoint 9 t)
+  have hc0 : IsClosed s0 := isClosed_range_frozenCircleEdgePair 0 12
+  have hc1 : IsClosed s1 := isClosed_range_frozenCircleEdgePair 6 13
+  have hc2 : IsClosed s2 := isClosed_range_frozenCircleEdgePair_reverse 1 7
+  have hc3 : IsClosed s3 := isClosed_range_frozenCircleEdgePair 2 8
+  have hc4 : IsClosed s4 := isClosed_range_frozenCircleEdgePair 5 10
+  have hc5 : IsClosed s5 := isClosed_range_frozenCircleEdgePair 4 11
+  have hc6 : IsClosed s6 := isClosed_range_frozenCircleEdgePair 3 9
+  have hc : IsClosed (s0 ∪ s1 ∪ s2 ∪ s3 ∪ s4 ∪ s5 ∪ s6) := by
+    exact (((((hc0.union hc1).union hc2).union hc3).union hc4).union hc5).union hc6
+  have reassoc (A B C D E F G : Prop) :
+      (A ∨ B ∨ C ∨ D ∨ E ∨ F ∨ G) ↔
+        ((((((A ∨ B) ∨ C) ∨ D) ∨ E) ∨ F) ∨ G) := by
+    tauto
+  rw [show {p : Circle × Circle | FrozenBoundaryGraphRel p.1 p.2} =
+      s0 ∪ s1 ∪ s2 ∪ s3 ∪ s4 ∪ s5 ∪ s6 by
+    ext p
+    simp only [s0, s1, s2, s3, s4, s5, s6, Set.mem_setOf_eq,
+      Set.mem_union, Set.mem_range, FrozenBoundaryGraphRel, Prod.ext_iff,
+      eq_comm, exists_or]
+    apply reassoc]
+  exact hc
+
 @[simp] theorem eq_frozenCircleEdgePoint_iff (z : Circle) (j : Fin 14)
     (t : Set.Icc (0 : ℝ) 1) :
     z = frozenCircleEdgePoint j t ↔
@@ -1344,6 +1384,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleBoundaryHomologyIso
 #print axioms isClosed_range_frozenCircleEdgePair
 #print axioms isClosed_range_frozenCircleEdgePair_reverse
+#print axioms frozenBoundaryGraphRel_isClosed
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
