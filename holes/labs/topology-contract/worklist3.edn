@@ -37218,37 +37218,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove native generator equality; chart naturality; four classes; Main.",
+    "Prove integral/rational generator transport and native equality; four classes; Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_correctedCoefficient_eq_one_iff_nativeGenerator",
-      :type
-      "coefficient one iff native inverse equals chart generator",
+    [{:name
+      "t96A06_integralToRational_chart_naturality_of_generator_transport",
+      :type "generator transport implies chart naturality",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one"],
+      ["t96A06_correctedCoefficient_eq_one_iff_nativeGenerator"],
       :area "rp-rational-homology"}
-     {:name "t96A06_nativeIntegralLocalGenerator_eq_generator",
-      :type "native inverse equals positive chart generator",
+     {:name "t96A06_integralToRational_localGenerator_transport",
+      :type "integral local generator extends to rational generator",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_correctedCoefficient_eq_one_iff_nativeGenerator"],
+      ["t96A06_integralToRational_chart_naturality_of_generator_transport"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed positive coefficient/native generator equivalence.",
+    "Committed chart naturality reduction to generator transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37257,15 +37257,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline bcb2581f2",
+      "git diff --check && git show --check --stat --oneline 35ecd85ca",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792109990171-14887-890e8f45",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "bcb2581f2",
+    :commit "35ecd85ca",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37273,7 +37267,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44724,6 +44718,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-correctedcoefficient-eq-one-iff-nativegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_chart_naturality_of_generator_transport",
+    :type "generator transport implies chart naturality"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_chart_naturality_of_generator_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "generator transport implies chart naturality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-integraltorational-chart-naturality-of-generator-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedcoefficient-eq-one-iff-nativegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_localGenerator_transport",
+    :type "integral local generator extends to rational generator"},
+   :lemma
+   {:name "t96A06_integralToRational_localGenerator_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "integral local generator extends to rational generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-localgenerator-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-chart-naturality-of-generator-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
