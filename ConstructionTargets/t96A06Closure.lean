@@ -2958,6 +2958,60 @@ theorem t96A06_unitH0_homologyComparison_factorization :
 
 #print axioms t96A06_unitH0_homologyComparison_factorization
 
+/-- The homology-preservation comparison sends the selected forgotten module
+class to the class represented by its explicit mapped degree-zero chain. -/
+theorem t96A06_unitH0_preservation_generator :
+    ((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+      t96A06_unitH0CoordinateGenerator =
+    (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).isoHomologyι₀.inv).hom
+      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).pOpcycles.hom
+        t96A06_unitH0ModuleChainGenerator) := by
+  rfl
+
+#print axioms t96A06_unitH0_preservation_generator
+
+/-- The native additive Unit generator is represented by the corresponding
+projected native degree-zero simplex. -/
+theorem t96A06_unitH0_nativeGenerator_eq_projected_generator :
+    t96A06_unitH0NativeGenerator =
+      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+        (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv).hom
+        (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+          ((Limits.Sigma.ι
+            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+              (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+            (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+              (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ))) := by
+  rfl
+
+#print axioms t96A06_unitH0_nativeGenerator_eq_projected_generator
+
+/-- The integral comparison preserves the selected explicit Unit generator. -/
+theorem t96A06_unitH0_comparison_generator :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+        t96A06_unitH0NativeGenerator := by
+  rw [t96A06_unitH0_homologyComparison_factorization]
+  change (HomologicalComplex.homologyMap
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+      (TopCat.of Unit)).hom 0).hom
+      ((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+        t96A06_unitH0CoordinateGenerator) = t96A06_unitH0NativeGenerator
+  rw [t96A06_unitH0_preservation_generator,
+    t96A06_unitH0_induced_opcycle_generator,
+    t96A06_unitH0_nativeGenerator_eq_projected_generator]
+
+#print axioms t96A06_unitH0_comparison_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
