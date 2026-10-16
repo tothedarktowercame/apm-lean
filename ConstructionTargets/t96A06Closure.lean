@@ -2647,6 +2647,31 @@ theorem t96A06_unitH0_generator_eq_of_apply_one
   apply AddMonoidHom.ext_int
   exact hone
 
+/-- The literal forgotten-module coordinate selected by the unique Unit
+coproduct generator. -/
+noncomputable def t96A06_unitH0CoordinateGenerator :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv.hom
+    ((PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+        ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ)))
+
+/-- The concrete normalization of the chain comparison on the selected Unit
+coordinate supplies the remaining equality at one. -/
+theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
+    (h :
+      (t96A06_unitH0ComparisonLhs).hom t96A06_unitH0CoordinateGenerator =
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.hom
+            t96A06_unitH0CoordinateGenerator) :
+      (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs).hom (1 : ℤ) =
+        (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs).hom (1 : ℤ) := by
+  dsimp [t96A06_unitH0GeneratorProbe, t96A06_unitH0ComparisonLhs,
+    t96A06_unitH0ComparisonRhs, t96A06_unitH0CoordinateGenerator] at h ⊢
+  simpa only [Iso.inv_hom_id_apply] using h
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5553,6 +5578,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_unitH0_integralComparison_of_generator
 #print axioms t96A06_unitH0_generator_iff_comparison
 #print axioms t96A06_unitH0_generator_eq_of_apply_one
+#print axioms t96A06_unitH0_integralComparison_apply_one_of_coordinate
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
