@@ -88672,26 +88672,27 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
-    :residual "MV arrows/exactness; normalize.",
+    :residual "MV coordinate arrows; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorOuterHomologyIsoGraph",
-      :type "outer homology/graph comparison",
+    [{:name "frozenGeneratorMVIntersectionExact",
+      :type "production MV exactness segment",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenBoundaryQuotientHomeomorphOuterSkeleton"],
+      :depends-on
+      ["frozenGeneratorInnerOverlapHomology"
+       "frozenGeneratorOuterHomologyIsoGraph"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "MV",
+      :type "MV coordinates",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorOuterHomologyIsoGraph"
-       "frozenGeneratorInnerOverlapHomology"
+      ["frozenGeneratorMVIntersectionExact"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88710,7 +88711,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked outer-piece homology comparison.",
+    :reason "Banked literal MV exactness segment.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,29 +88721,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check b776926da", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792143381071-15305-e855d4b1",
-     :commands
-     ["git show/diff/check b776926da"
-      "verify homology-isomorphism source/target directions"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum, scope, and placeholder recount at b776926da"],
-     :finding
-     "PASS program STOP: topo-6 commit b776926da adds compiled, sorry-free progress after 8f5cf7f54. frozenGeneratorOuterBoundaryHomologyIsoGraph maps the outer-boundary skeleton to the boundary quotient using the inverse of the proved homeomorphism, then composes with the boundary-to-graph homology iso. frozenGeneratorOuterHomologyIsoGraph first maps the literal outer radial piece to its boundary skeleton, so both compositions have the stated orientations. MV arrows/exactness and normalization remain explicitly listed. Scope is one target file; fixture SHA a98fe570c3efd65ddbf59d69a0bdf4459ebb15a03445e4b10483c56dd262a6a5; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
-    :commit "b776926da",
+     {:cmd "git show --check e90057a01", :exit 0}],
+    :commit "e90057a01",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "a98fe570c3efd65ddbf59d69a0bdf4459ebb15a03445e4b10483c56dd262a6a5"},
+     "9ceb6d75869895b36b8e56e83a0c78e5ae7f7570fb382e3cba9ad8a4c7a1ca9b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96762,7 +96750,8 @@
     :lemma-frozenboundaryeqvgen-diskimage-isclosed
     :lemma-frozengeneratoreqvgen-isclosed
     :lemma-frozenboundaryquotienthomeomorphouterskeleton
-    :lemma-frozengeneratorouterhomologyisograph],
+    :lemma-frozengeneratorouterhomologyisograph
+    :lemma-frozengeneratormvintersectionexact],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97621,4 +97610,23 @@
    :id :lemma-frozengeneratorouterhomologyisograph,
    :kind :lemma,
    :depends-on [:lemma-frozenboundaryquotienthomeomorphouterskeleton],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntersectionExact",
+    :type "production MV exactness segment"},
+   :lemma
+   {:name "frozenGeneratorMVIntersectionExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "production MV exactness segment",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvintersectionexact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorinneroverlaphomology
+    :lemma-frozengeneratorouterhomologyisograph],
    :other-consumers []}]}
