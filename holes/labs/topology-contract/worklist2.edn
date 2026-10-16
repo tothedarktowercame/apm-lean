@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta 0,
-    :residual "EqvGen induction; T2/MV; normalize.",
+    :residual "Nonvertex chains; T2/MV; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
-      :type "vertex iff parameter endpoint",
+    [{:name "frozenBoundaryEqvGen_endpoint_iff",
+      :type "EqvGen preserves vertices",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on [],
+      :depends-on ["frozenBoundaryEndpoint_frozenCircleEdgePoint_iff"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "EqvGen/T2/MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryEndpoint_frozenCircleEdgePoint_iff"
+      ["frozenBoundaryEqvGen_endpoint_iff"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked endpoint criterion.",
+    :reason "Banked endpoint invariance.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,20 +88719,18 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 3dcf3a908", :exit 0}],
+     {:cmd "git show --check 877a05dad", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft builds",
-      :exit 1,
-      :correction "fixed equality direction"}],
-    :commit "3dcf3a908",
+    [{:cmd "draft", :exit 1, :correction "fixed reverse arithmetic"}],
+    :commit "877a05dad",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "64921cac8a7aa5f8aaa2272a3c5de92d3f299e055d1eeec13e912a8f69018e75"},
+     "fdadc1093c1f87a1f9272477d0f2199b03f7982658938c44c7285f26171e7fb9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96679,7 +96677,8 @@
     :lemma-frozenboundaryendpointpair-isclosed
     :lemma-frozenboundaryendpointpair-finite
     :lemma-frozenboundaryclosedrel-isclosed
-    :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff],
+    :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff
+    :lemma-frozenboundaryeqvgen-endpoint-iff],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97152,4 +97151,22 @@
    :id :lemma-projection-preimage-edgepoint,
    :kind :lemma,
    :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEqvGen_endpoint_iff",
+    :type "EqvGen preserves vertices"},
+   :lemma
+   {:name "frozenBoundaryEqvGen_endpoint_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "EqvGen preserves vertices",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundaryeqvgen-endpoint-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundaryendpoint-frozencircleedgepoint-iff],
    :other-consumers []}]}
