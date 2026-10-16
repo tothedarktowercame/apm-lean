@@ -1651,6 +1651,15 @@ theorem t96A06_integralNormalizedClass_coordinate_isUnit :
   apply IsUnit.of_mul_eq_one m
   simpa [smul_eq_mul, mul_comm] using h
 
+/-- Consequently the only possible integral normalization coordinates are
+the two orientation signs. -/
+theorem t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one :
+    t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = 1 ∨
+      t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = -1 := by
+  exact Int.isUnit_iff.mp t96A06_integralNormalizedClass_coordinate_isUnit
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
