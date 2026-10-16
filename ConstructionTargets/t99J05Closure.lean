@@ -190,6 +190,61 @@ def cpSuccessorZeroLastVector (n : ℕ) (v : CPSuccessorLowerVectors n) :
     (cpSuccessorZeroLastVector n v).1 i.castSucc = v.1.1 i.castSucc := by
   simp [cpSuccessorZeroLastVector, Fin.castSucc_ne_last]
 
+/-- Scale only the last homogeneous coordinate toward zero.  An earlier
+coordinate supplied by lower-patch membership stays unchanged, so the whole
+path consists of nonzero vectors. -/
+def cpSuccessorLowerVectorHomotopy (n : ℕ) (v : CPSuccessorLowerVectors n)
+    (s : Set.Icc (0 : ℝ) 1) : NonzeroVectors ℂ (n + 1) :=
+  ⟨fun j => if j = Fin.last (n + 1)
+      then ((1 - s.1 : ℝ) : ℂ) * v.1.1 j else v.1.1 j, by
+    obtain ⟨i, hi, hrep⟩ := v.2
+    have hvi : v.1.1 i ≠ 0 := by
+      have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+          {p : CP (n + 1) | Projectivization.rep p i ≠ 0} := hrep
+      exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp hmem
+    intro hz
+    have := congrFun hz i
+    simp [hi, hvi] at this⟩
+
+@[simp] theorem cpSuccessorLowerVectorHomotopy_zero (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorLowerVectorHomotopy n v ⟨0, by simp⟩ = v.1 := by
+  apply Subtype.ext
+  funext j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp [cpSuccessorLowerVectorHomotopy, hj]
+  · simp [cpSuccessorLowerVectorHomotopy, hj]
+
+@[simp] theorem cpSuccessorLowerVectorHomotopy_one (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorLowerVectorHomotopy n v ⟨1, by simp⟩ =
+      cpSuccessorZeroLastVector n v := by
+  apply Subtype.ext
+  funext j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp [cpSuccessorLowerVectorHomotopy, cpSuccessorZeroLastVector, hj]
+  · simp [cpSuccessorLowerVectorHomotopy, cpSuccessorZeroLastVector, hj]
+
+/-- The vector homotopy is homogeneous, which is the algebraic condition
+needed for descent through the projective quotient. -/
+theorem cpSuccessorLowerVectorHomotopy_smul (n : ℕ)
+    (v w : CPSuccessorLowerVectors n) (s : Set.Icc (0 : ℝ) 1) (a : ℂ)
+    (hvw : v.1.1 = a • w.1.1) :
+    (cpSuccessorLowerVectorHomotopy n v s).1 =
+      a • (cpSuccessorLowerVectorHomotopy n w s).1 := by
+  funext j
+  have hj := congrFun hvw j
+  by_cases hlast : j = Fin.last (n + 1)
+  · subst j
+    have hcoord := congrFun hvw (Fin.last (n + 1))
+    change v.1.1 (Fin.last (n + 1)) =
+      a * w.1.1 (Fin.last (n + 1)) at hcoord
+    simp only [cpSuccessorLowerVectorHomotopy, if_pos, Pi.smul_apply,
+      smul_eq_mul]
+    rw [hcoord]
+    ring
+  · simp [cpSuccessorLowerVectorHomotopy, hlast, hj]
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
