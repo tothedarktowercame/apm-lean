@@ -88720,6 +88720,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 58cf7bafe", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792110774250-14905-2df64eff",
+     :commands
+     ["git show/diff/check 58cf7bafe"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 58cf7bafe"],
+     :finding
+     "PASS program STOP: topo-6 commit 58cf7bafe adds compiled, sorry-free progress after 129dd2715. It specializes the established induced-boundary quotient construction to the literal frozen generator relation, giving a circle-source to disk-boundary homeomorphism; functorial mapIso then yields integral homology in the same circle-to-boundary orientation for every degree. This is an actual quotient-topology comparison, while the separate identification with the explicit two-vertex graph and MV maps remains listed. Only t94J09Closure.lean changed; fixture SHA a7a4af4d4796fd7061cad56a970d852817b022d8b1cbfd06ef917554d1ae1e7c matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization also remains."},
     :commit "58cf7bafe",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88741,7 @@
      "a7a4af4d4796fd7061cad56a970d852817b022d8b1cbfd06ef917554d1ae1e7c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary presentation.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88804,7 +88817,10 @@
      :reason "Banked transported assembly."}
     {:job 1, :commit "f2fbce234", :reason "Banked pieces."}
     {:job 2, :commit "9f9e5a9a9", :reason "Banked outer deformation."}
-    {:job 3, :commit "129dd2715", :reason "Banked transport."}]}
+    {:job 3, :commit "129dd2715", :reason "Banked transport."}
+    {:job 4,
+     :commit "58cf7bafe",
+     :reason "Banked boundary presentation."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96734,7 +96750,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorCircleBoundaryHomologyIso",
@@ -96744,7 +96760,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "circle/boundary quotient homology",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "58cf7bafe"},
    :id :lemma-frozengeneratorcircleboundaryhomologyiso,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorouterhomologyisoboundary],
