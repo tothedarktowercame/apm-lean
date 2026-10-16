@@ -1659,6 +1659,30 @@ noncomputable def frozenGeneratorCanonicalMVGraphH1ReassemblyArrow :
   frozenGeneratorMVGraphH1ReassemblyArrow ≫
     (frozenGeneratorRadialGroupHomologyIso 1).hom
 
+/-- The canonical degree-one reassembly map written in any chosen six
+graph-cycle coordinates. -/
+noncomputable def frozenGeneratorMVReassemblyLinear
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) :
+    (Fin 6 → ℤ) →ₗ[ℤ]
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) :=
+  frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+    e.symm.toLinearMap
+
+theorem frozenGeneratorMVReassemblyLinear_comp_coordinates
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ)) :
+    (frozenGeneratorMVReassemblyLinear e).comp e.toLinearMap =
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap := by
+  apply LinearMap.ext
+  intro x
+  simp [frozenGeneratorMVReassemblyLinear]
+
 /-- Composing the graph-coordinate arrows cancels the middle-term transport,
 leaving the production Mayer--Vietoris composite in overlap coordinates. -/
 theorem frozenGeneratorMVGraphH1_comp_eq_production :
@@ -2555,6 +2579,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphH1CoordinatesOfCycleComparison
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
+#print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
