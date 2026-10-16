@@ -6,11 +6,11 @@
 
 **Why it's hard.** The length of $C = f(\partial\Delta)$ involves $\int|f'(e^{i\theta})| d\theta$, which depends on the global behaviour of $f'$ on the circle — not just at the origin. The conditions $f(0) = 0$ and $|f'(0)| = 1$ normalise $f$ at one point, but controlling the boundary integral requires connecting the interior derivative to the boundary derivative.
 
-**The key insight.** The length is $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$. By Parseval/power series: $f'(z) = \sum n a_{n} z^{n-1}$ with $a_{1} = f'(0)$, $|a_{1}| = 1$. Then $\int_{0}^{2}\pi |f'(e^{i\theta})|^{2} d\theta = 2\pi \sum n^{2}|a_{n}|^{2} \geq 2\pi|a_{1}|^{2} = 2\pi$. By Cauchy-Schwarz: $\ell(C)^{2} = (\int|f'|)^{2} \leq 2\pi \int|f'|^{2}$, but we need the reverse — $\ell(C) = \int|f'| \geq 2\pi|a_{1}| = 2\pi$ directly from the mean value property.
+**The key insight.** The length is $\ell(C) = \int_{0}^{2\pi} |f'(e^{i\theta})| d\theta$. By Parseval/power series: $f'(z) = \sum n a_{n} z^{n-1}$ with $a_{1} = f'(0)$, $|a_{1}| = 1$. Then $\int_{0}^{2\pi} |f'(e^{i\theta})|^{2} d\theta = 2\pi \sum n^{2}|a_{n}|^{2} \geq 2\pi|a_{1}|^{2} = 2\pi$. By Cauchy-Schwarz: $\ell(C)^{2} = (\int|f'|)^{2} \leq 2\pi \int|f'|^{2}$, but we need the reverse — $\ell(C) = \int|f'| \geq 2\pi|a_{1}| = 2\pi$ directly from the mean value property.
 
-Actually the cleanest: $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta \geq |\int_{0}^{2}\pi f'(e^{i\theta}) d\theta|$... no, that doesn't directly give $2\pi$. Instead use: by Cauchy-Schwarz, $(\int_{0}^{2}\pi 1 \cdot |f'| d\theta)^{2} \leq 2\pi \cdot \int_{0}^{2}\pi |f'|^{2} d\theta$ — this goes the wrong way.
+Actually the cleanest: $\ell(C) = \int_{0}^{2\pi} |f'(e^{i\theta})| d\theta \geq |\int_{0}^{2\pi} f'(e^{i\theta}) d\theta|$... no, that doesn't directly give $2\pi$. Instead use: by Cauchy-Schwarz, $(\int_{0}^{2\pi} 1 \cdot |f'| d\theta)^{2} \leq 2\pi \cdot \int_{0}^{2\pi} |f'|^{2} d\theta$ — this goes the wrong way.
 
-Better: $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$. Since $|f'(e^{i\theta})| \geq 0$, by Jensen's inequality or direct computation: $\ell(C) \geq 2\pi \cdot \exp((1/2\pi)\int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta)$. By Jensen applied to the subharmonic function $\log|f'|$: $(1/2\pi)\int \log|f'(e^{i\theta})|d\theta \geq \log|f'(0)| = \log 1 = 0$. So $\ell(C) \geq 2\pi \cdot e^{0} = 2\pi$. (This uses the AM-GM/Jensen inequality for the exponential function and the mean value property for subharmonic functions.)
+Better: $\ell(C) = \int_{0}^{2\pi} |f'(e^{i\theta})| d\theta$. Since $|f'(e^{i\theta})| \geq 0$, by Jensen's inequality or direct computation: $\ell(C) \geq 2\pi \cdot \exp((1/2\pi)\int_{0}^{2\pi} \log|f'(e^{i\theta})| d\theta)$. By Jensen applied to the subharmonic function $\log|f'|$: $(1/2\pi)\int \log|f'(e^{i\theta})|d\theta \geq \log|f'(0)| = \log 1 = 0$. So $\ell(C) \geq 2\pi \cdot e^{0} = 2\pi$. (This uses the AM-GM/Jensen inequality for the exponential function and the mean value property for subharmonic functions.)
 
 **Proof.**
 
@@ -18,19 +18,19 @@ Better: $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$. Since $|f'(e^{i\t
 
 The length of $C$ is:
 
-$\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$.
+$\ell(C) = \int_{0}^{2\pi} |f'(e^{i\theta})| d\theta$.
 
 Since $f'$ is analytic and nonvanishing on a neighbourhood of Δ̄ ($f$ is univalent, so $f' \neq 0$), $\log|f'|$ is harmonic on $\Delta$. By the mean value property for harmonic functions:
 
-$\log|f'(0)| = (1/2\pi) \int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta$.
+$\log|f'(0)| = (1/2\pi) \int_{0}^{2\pi} \log|f'(e^{i\theta})| d\theta$.
 
-Since $|f'(0)| = 1$: $(1/2\pi) \int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta = 0$.
+Since $|f'(0)| = 1$: $(1/2\pi) \int_{0}^{2\pi} \log|f'(e^{i\theta})| d\theta = 0$.
 
 By Jensen's inequality ($\log$ is concave, so $\exp$ is convex):
 
-$(1/2\pi) \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta \geq \exp((1/2\pi) \int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta) = e^{0} = 1$.
+$(1/2\pi) \int_{0}^{2\pi} |f'(e^{i\theta})| d\theta \geq \exp((1/2\pi) \int_{0}^{2\pi} \log|f'(e^{i\theta})| d\theta) = e^{0} = 1$.
 
-Therefore $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta \geq 2\pi \cdot 1 = 2\pi$. ✓
+Therefore $\ell(C) = \int_{0}^{2\pi} |f'(e^{i\theta})| d\theta \geq 2\pi \cdot 1 = 2\pi$. ✓
 
 *Part 2: $\ell(C) = 2\pi \Longrightarrow \Delta \subseteq D$.*
 
@@ -125,7 +125,7 @@ end
 - `DifferentiableOn ℂ f S` — analyticity on a region
 - `InjOn f S` — injectivity on a set (univalence)
 - `Metric.closedBall`, `Metric.ball`, `Metric.sphere` — disks and circle
-- `intervalIntegral` — for $\int_{0}^{2}\pi$
+- `intervalIntegral` — for $\int_{0}^{2\pi}$
 - `Complex.exp`, `Complex.I` — for $e^{i\theta}$
 
 **Key lemmas:**

@@ -28,7 +28,7 @@ For $x,y$ in different spikes or between a spike and the "ground": the function 
 
 Consider the intervals $I_{n} = [1/(n+1), 1/n]$ for $n = N, N+1, \ldots, 2N$. These are disjoint. Their total length:
 
-$\sum_{n=n}^{2N} 1/(n(n+1)) \leq \sum 1/n^{2} \leq \int_{N-1}^{2N} 1/x^{2} dx = 1/(N-1) - 1/(2N) \to 0$.
+$\sum_{n=N}^{2N} 1/(n(n+1)) \leq \sum 1/n^{2} \leq \int_{N-1}^{2N} 1/x^{2} dx = 1/(N-1) - 1/(2N) \to 0$.
 
 The total oscillation on each $I_{n}$ is $|f(m_{n}) - f(1/n)| + |f(1/(n+1)) - f(m_{n})| = 2/n$.
 

@@ -79,7 +79,7 @@ runs over $[0,2\pi]$.
 Let $D=\{|z|\le R\}$, so $\partial D=C_R$. Suppose, for contradiction, that $f$ has **no zero** in $D$. Then
 $f:D\to\mathbb C\setminus\{0\}$ is a continuous map from the disk into the punctured plane. Restricting to the
 boundary, $f|_{C_R}$ extends to the continuous map $f$ over all of $D$; since $D$ is contractible, $f|_{C_R}$
-is **null-homotopic in $\mathbb C\setminus\{0\}}$** (contract $C_R$ to a point inside $D$ and carry the values
+is **null-homotopic in $\mathbb C\setminus\{0\}$** (contract $C_R$ to a point inside $D$ and carry the values
 along by $f$). A null-homotopic loop has winding number
 $$
 \operatorname{wind}_0\big(f|_{C_R}\big) = 0 .

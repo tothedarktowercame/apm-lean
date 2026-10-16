@@ -98,7 +98,7 @@ $$A^n \cdot m(B_{n,1}) \leq 2A \cdot C_K \cdot 2^{K} \cdot 2^{-(n-1)} \to 0. \qq
 
 ## What Connects
 
-**To the Gamma function.** The exact volume is $m(B_{n,1}) = \pi^{n}/^{2} / \Gamma(n/2 + 1)$. Stirling's approximation gives $\Gamma(n/2+1) \sim \sqrt{\pi n}(n/(2e))^{n/2}$, so $m(B_{n,1}) \sim (2\pi e/n)^{n/2} / \sqrt{\pi n}$ — superexponential decay in $n$, confirming part (c).
+**To the Gamma function.** The exact volume is $m(B_{n,1}) = \pi^{n/2} / \Gamma(n/2 + 1)$. Stirling's approximation gives $\Gamma(n/2+1) \sim \sqrt{\pi n}(n/(2e))^{n/2}$, so $m(B_{n,1}) \sim (2\pi e/n)^{n/2} / \sqrt{\pi n}$ — superexponential decay in $n$, confirming part (c).
 
 **To concentration of measure.** The fact that the integral $I_n = \int(1-t^{2})^{n/2}\, dt \to 0$ is a manifestation of measure concentration: the mass of the unit ball in $\mathbb{R}^{n+1}$ concentrates near the equatorial slice $t = 0$, with the projections onto the $t$-axis becoming ever more peaked.
 

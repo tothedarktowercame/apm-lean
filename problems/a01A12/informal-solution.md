@@ -41,7 +41,7 @@ Translation by 1. The slit $(-\infty, 0]$ becomes $(-\infty, 1]$. ✓
 
 Here $\xi^{1/4}$ uses the principal branch (branch cut on $(-\infty, 0]$, argument in $(-\pi, \pi)$). But our domain is $\mathbb{C} \setminus (-\infty, 1]$, which has a different branch cut. Let me be more precise.
 
-Define the fourth root on $\mathbb{C} \setminus (-\infty, 1]$ as follows. Write $\xi = 1 + rе^{i\theta}$... actually, let me reconsider.
+Define the fourth root on $\mathbb{C} \setminus (-\infty, 1]$ as follows. Write $\xi = 1 + re^{i\theta}$... actually, let me reconsider.
 
 The domain of $f_{4}$ is $\mathbb{C} \setminus (-\infty, 1]$. We need a branch of $\xi^{1/4}$ on this domain. Since $\mathbb{C} \setminus (-\infty, 1]$ is simply connected, a holomorphic fourth root exists. Choose the branch with $1^{1/4} = 1$ (positive real fourth root on $(1, \infty)$).
 

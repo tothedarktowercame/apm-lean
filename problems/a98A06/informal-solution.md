@@ -23,7 +23,7 @@ so $F$ extends $f$ across the origin.  Therefore $f$ has a removable singularity
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
 
-1. *Weighted bound $\Rightarrow$ bounded product.*  From $|f(z)||z|^{1/2}|\le C$ on a small disc we deduce that $g(z)=z f(z)$ is bounded there.  This supplies the hypothesis for Riemann's removable-singularity theorem.  (Lean target: `bound_z_mul`.)
+1. *Weighted bound $\Rightarrow$ bounded product.*  From $|f(z)||z|^{1/2}\le C$ on a small disc we deduce that $g(z)=z f(z)$ is bounded there.  This supplies the hypothesis for Riemann's removable-singularity theorem.  (Lean target: `bound_z_mul`.)
 2. *Riemann's theorem for $g$.*  Apply Mathlib's `Complex.differentiableOn_update_limUnder_of_bddAbove` to extend $g$ across the origin, obtaining an analytic $G$ with $G(0)=0$.  (Lean target: `extend_z_mul_f`.)
 3. *Divide by $z$.*  Analytic functions that vanish at a point admit a derivative-style quotient (Mathlib's `dslope`).  Using `Complex.differentiableOn_dslope`, we conclude that $F(z)=dslope\,G\,0$ is analytic on the disc and satisfies $F=g/z=f$ off the origin.  (Lean target: `extend_f_via_dslope`.)
 
@@ -32,7 +32,7 @@ so $F$ extends $f$ across the origin.  Therefore $f$ has a removable singularity
 Files touched: `ApmCanaries/Frames/A98A06/Apm_v2_a98A06_1775004274108/Main.lean` and its scratch sibling.
 
 Plan:
-- Encode the local hypothesis as the existence of $r>0$ and $C\ge 0$ with $|f(z)||z|^{1/2}|\le C$ for $|z|<r$.
+- Encode the local hypothesis as the existence of $r>0$ and $C\ge 0$ with $|f(z)||z|^{1/2}\le C$ for $|z|<r$.
 - Define $g(z)=z f(z)$ and prove it is holomorphic on the punctured ball plus bounded there; package this as `holomorphicOn_zmul` together with a `BddAbove` witness.
 - Invoke `Complex.differentiableOn_update_limUnder_of_bddAbove` on the closed ball to extend $g$ to an analytic $G$; prove separately (using the weight bound) that the limiting value is zero.
 - Use `Complex.differentiableOn_dslope` to turn $G$ into the desired extension of $f$, and finish with an `EqOn` statement.

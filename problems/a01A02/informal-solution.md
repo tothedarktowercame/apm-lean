@@ -77,7 +77,7 @@ $$\boxed{\int_E |f|\,dx \leq 2\sqrt{C}\,\sqrt{m(E)}.} \qquad \blacksquare$$
 
 ## What Connects
 
-**To weak-$L^p$ spaces and interpolation.** This is a special case of the general principle: weak-$L^p$ on a $\sigma$-finite measure space implies $L^q$ on sets of finite measure for any $q < p$. The exponent in $\sqrt{m(E)} = m(E)^{1/1 - 1/2 + 1/1}$... more precisely, for weak-$L^p$, the bound is $\int_E |f|^q \leq C(p,q) \cdot m(E)^{1 - q/p}$ for $0 < q < p$. Here $p = 2$, $q = 1$: exponent $= 1 - 1/2 = 1/2$. This was problem a03J04(b)/(c) in general form.
+**To weak-$L^p$ spaces and interpolation.** This is a special case of the general principle: weak-$L^p$ on a $\sigma$-finite measure space implies $L^q$ on sets of finite measure for any $q < p$. The exponent in $\sqrt{m(E)} = m(E)^{1/2}$... more precisely, for weak-$L^p$, the bound is $\int_E |f|^q \leq C(p,q) \cdot m(E)^{1 - q/p}$ for $0 < q < p$. Here $p = 2$, $q = 1$: exponent $= 1 - 1/2 = 1/2$. This was problem a03J04(b)/(c) in general form.
 
 **To the Marcinkiewicz interpolation theorem.** The splitting trick (truncate at a height, bound each piece differently) is the core of the Marcinkiewicz interpolation argument. The optimization over the truncation level is what produces the sharp constant and the correct exponent.
 
