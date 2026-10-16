@@ -6,6 +6,7 @@ import ConstructionTargets.ProjectiveQuotientDescent
 import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.CoefficientSubcomplexMayerVietoris
+import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Rational homology interface for the t99J05 closure
@@ -1234,6 +1235,36 @@ noncomputable def t99J05_cp_successor_mayerVietoris_exact_ambient (n k : ℕ) :=
     (ConstructionTargets.SingularExcision.ambientSubspaceRange
       (cpSuccessorTopPatch n)) k
 
+/-- Rational chains on an ambient subspace range are canonically the literal
+singular chains of that subspace. -/
+noncomputable def t99J05_ambientSubspaceRangeChainsIso
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange A : SSet) ≅
+      (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (TopCat.toSSet.obj (TopCat.of A)) :=
+  ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso ℚ A
+
+/-- Homology-level rational transport from an ambient range presentation to
+the corresponding literal topological subspace. -/
+noncomputable def t99J05_ambientSubspaceRangeHomologyIso
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange A : SSet)).homology k ≅
+      Homology A k :=
+  (HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+    (ComplexShape.down ℕ) k).mapIso
+      (t99J05_ambientSubspaceRangeChainsIso A)
+
+/-- The three range-presented terms in the successor Mayer--Vietoris sequence
+transport to the literal overlap and two patches. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
+    (n k : ℕ) :=
+  (t99J05_ambientSubspaceRangeHomologyIso
+      (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k,
+    t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k,
+    t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k)
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -1335,6 +1366,9 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_mayerVietorisConnecting
 #print axioms t99J05_cp_successor_mayerVietoris_exact_overlap
 #print axioms t99J05_cp_successor_mayerVietoris_exact_ambient
+#print axioms t99J05_ambientSubspaceRangeChainsIso
+#print axioms t99J05_ambientSubspaceRangeHomologyIso
+#print axioms t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
