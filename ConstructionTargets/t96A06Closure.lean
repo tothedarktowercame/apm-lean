@@ -2479,6 +2479,13 @@ theorem t96A06_boolH0_integralComparison_of_false_true
   intro b
   exact t96A06_boolH0_integralComparison_points_of_false_true hfalse htrue b
 
+/-- A single endpoint packet supplies the complete discrete comparison. -/
+theorem t96A06_boolH0_integralComparison_of_endpoint_pair
+    (h : t96A06_boolH0PointComparison false ∧
+      t96A06_boolH0PointComparison true) :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs :=
+  t96A06_boolH0_integralComparison_of_false_true h.1 h.2
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5375,6 +5382,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_integralComparison_of_points
 #print axioms t96A06_boolH0_integralComparison_points_of_false_true
 #print axioms t96A06_boolH0_integralComparison_of_false_true
+#print axioms t96A06_boolH0_integralComparison_of_endpoint_pair
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
