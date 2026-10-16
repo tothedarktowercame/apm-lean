@@ -2,18 +2,38 @@ import Mathlib
 import Mathlib.Analysis.Fourier.AddCircle
 import Mathlib.Topology.Covering.AddCircle
 import ConstructionTargets.Surfaces
+import ConstructionTargets.PolygonMoves
+import ConstructionTargets.RationalLefschetz
 
 /-!
 # APM t98A01 — a five-fold surface cover and a connected sum
 
-The fivefold example is the genuine map `(x,y) ↦ (5x,y)` on
-`(ℝ/ℤ)²`.  General closed orientable surfaces and the connected-sum
-calculation use the concrete polygon quotients and classification arithmetic
-from `ConstructionTargets.Surfaces`.
+(a) The fivefold example is the genuine map `(x,y) ↦ (5x,y)` on `(ℝ/ℤ)²`.
+The universal clause says that among the repository's closed orientable
+surfaces only the torus admits a regular five-sheeted self-cover.
+
+(b) A surface presented by a polygon word `w` is
+`PolygonMoves.PolygonSurface w`: the closed disk with its boundary arcs paired
+as `w` prescribes (equal signs glue `t ↔ t`, opposite signs `t ↔ 1 - t`).  For
+words with disjoint labels, the connected sum of the surfaces of `w₁` and `w₂`
+is the surface of the concatenated word `w₁ ++ w₂`: cutting a disk at a vertex
+of each polygon and gluing the boundary circles leaves the single polygon
+`w₁w₂` (Massey, *Algebraic Topology: An Introduction*, Ch. 1 §7).  `T`, `P`, `K`
+are the words `aba⁻¹b⁻¹`, `aa`, `aba⁻¹b`; the statement certifies each against
+the repository's standard models `Surface true 1`, `Surface false 1`,
+`Surface false 2`.  The canonical form of `K#T#T#P#K#T` is `Surface false 11`
+(eleven crosscaps).  The Euler characteristic is the alternating rank sum of
+rational singular homology (`HasEulerCharacteristic`), a homeomorphism
+invariant.
 
 ## Statement repairs
 
-None.
+2026-10-16 (claude-14): part (b) previously computed classification data
+with the arithmetic function `connectedSum : Bool → ℕ → Bool → ℕ → Bool × ℕ`
+(which encodes `T#P ≅ P#P#P`, the substance of the exercise) and certified the
+homeomorphism by `Homeomorph.refl`; χ was the formula `2 - g`.  Part (b) is
+replaced by the polygon-word connected sum and the rational-homology Euler
+characteristic above.  Part (a) is unchanged.
 
 ## Encoding questions
 
@@ -29,21 +49,6 @@ abbrev T98A01Torus := UnitAddCircle × UnitAddCircle
 def t98A01TorusFiveCover : C(T98A01Torus, T98A01Torus) :=
   ⟨fun p ↦ (5 • p.1, p.2), by fun_prop⟩
 
-/-- The first-coordinate factor in the displayed torus map is a genuine
-quotient covering map by its five-torsion kernel. -/
-lemma t98A01_circleFive_isAddQuotientCoveringMap :
-    IsAddQuotientCoveringMap (5 • · : UnitAddCircle → UnitAddCircle)
-      (nsmulAddMonoidHom (α := UnitAddCircle) 5).ker := by
-  exact AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero (1 : ℝ) 5
-
-lemma t98A01_circleFive_isCoveringMap :
-    IsCoveringMap (5 • · : UnitAddCircle → UnitAddCircle) :=
-  t98A01_circleFive_isAddQuotientCoveringMap.isCoveringMap
-
-lemma t98A01_circleFive_surjective :
-    Function.Surjective (5 • · : UnitAddCircle → UnitAddCircle) :=
-  t98A01_circleFive_isAddQuotientCoveringMap.surjective
-
 def t98A01IsNfoldCover {E B : Type*}
     [TopologicalSpace E] [TopologicalSpace B]
     (n : ℕ) (p : E → B) : Prop :=
@@ -56,50 +61,32 @@ def t98A01IsRegularNfoldCover {E B : Type*}
     ∀ x y : E, p x = p y →
       ∃ h : E ≃ₜ E, (∀ z : E, p (h z) = p z) ∧ h x = y
 
-def t98A01SumKT : Bool × ℕ := connectedSum false 2 true 1
-def t98A01SumKTT : Bool × ℕ :=
-  connectedSum t98A01SumKT.1 t98A01SumKT.2 true 1
-def t98A01SumKTTP : Bool × ℕ :=
-  connectedSum t98A01SumKTT.1 t98A01SumKTT.2 false 1
-def t98A01SumKTTPK : Bool × ℕ :=
-  connectedSum t98A01SumKTTP.1 t98A01SumKTTP.2 false 2
+/-- The six summands of `K # T # T # P # K # T`. -/
+inductive T98A01Summand
+  | K₁ | T₁ | T₂ | P | K₂ | T₃
+  deriving DecidableEq
 
-/-- Classification coordinates of `K # T # T # P # K # T`. -/
-def t98A01PrintedSurfaceData : Bool × ℕ :=
-  connectedSum t98A01SumKTTPK.1 t98A01SumKTTPK.2 true 1
+/-- Edge labels: summand `s` uses `(s, false)` (`a`) and `(s, true)` (`b`). -/
+abbrev T98A01Edge := T98A01Summand × Bool
 
-abbrev T98A01PrintedSurface :=
-  Surface t98A01PrintedSurfaceData.1 t98A01PrintedSurfaceData.2
+/-- `T = a b a⁻¹ b⁻¹`. -/
+def t98A01TorusWord (s : T98A01Summand) : List (PolygonMoves.Signed T98A01Edge) :=
+  [((s, false), true), ((s, true), true), ((s, false), false), ((s, true), false)]
 
-/-- The promoted connected-sum arithmetic computes the printed classification
-data without any topological assumptions. -/
-lemma t98A01PrintedSurfaceData_eq :
-    t98A01PrintedSurfaceData = (false, 11) := by
-  decide
+/-- `P = a a`. -/
+def t98A01ProjectiveWord (s : T98A01Summand) : List (PolygonMoves.Signed T98A01Edge) :=
+  [((s, false), true), ((s, false), true)]
 
-lemma t98A01PrintedSurface_homeomorph :
-    Nonempty (T98A01PrintedSurface ≃ₜ Surface false 11) := by
-  change Nonempty
-    (Surface t98A01PrintedSurfaceData.1 t98A01PrintedSurfaceData.2 ≃ₜ
-      Surface false 11)
-  rw [t98A01PrintedSurfaceData_eq]
-  exact ⟨Homeomorph.refl _⟩
+/-- `K = a b a⁻¹ b`. -/
+def t98A01KleinWord (s : T98A01Summand) : List (PolygonMoves.Signed T98A01Edge) :=
+  [((s, false), true), ((s, true), true), ((s, false), false), ((s, true), true)]
 
-lemma t98A01PrintedSurface_eulerCharacteristic :
-    eulerCharacteristic t98A01PrintedSurfaceData.1
-      t98A01PrintedSurfaceData.2 = -9 := by
-  rw [t98A01PrintedSurfaceData_eq]
-  norm_num [eulerCharacteristic]
+/-- The word of `K # T # T # P # K # T`. -/
+def t98A01SumWord : List (PolygonMoves.Signed T98A01Edge) :=
+  t98A01KleinWord .K₁ ++ t98A01TorusWord .T₁ ++ t98A01TorusWord .T₂ ++
+    t98A01ProjectiveWord .P ++ t98A01KleinWord .K₂ ++ t98A01TorusWord .T₃
 
-/-- Once homeomorphic orientable presentations are known to have equal genus,
-Euler multiplicativity for five sheets forces both genera to be one. -/
-lemma t98A01_orientable_genus_arithmetic (g h : ℕ)
-    (hgh : g = h)
-    (hχ : eulerCharacteristic true g =
-      5 * eulerCharacteristic true h) :
-    g = 1 ∧ h = 1 := by
-  simp [eulerCharacteristic] at hχ
-  omega
+abbrev T98A01SumSurface := PolygonMoves.PolygonSurface t98A01SumWord
 
 theorem apm_t98a01 :
     t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover ∧
@@ -108,41 +95,10 @@ theorem apm_t98a01 :
       Nonempty (Surface true g ≃ₜ Surface true h) →
       eulerCharacteristic true g = 5 * eulerCharacteristic true h ∧
       g = 1 ∧ h = 1) ∧
-    t98A01PrintedSurfaceData = (false, 11) ∧
-    Nonempty (T98A01PrintedSurface ≃ₜ Surface false 11) ∧
-    eulerCharacteristic t98A01PrintedSurfaceData.1
-      t98A01PrintedSurfaceData.2 = -9 := by
-  /-
-  CLOSER HOP 3 boundary. A deeper Mathlib search found the previously missed
-  `Topology.Covering.AddCircle` module. The new compiled lemmas
-  `t98A01_circleFive_isAddQuotientCoveringMap`,
-  `t98A01_circleFive_isCoveringMap`, and
-  `t98A01_circleFive_surjective` prove that `x ↦ 5 • x` is genuinely the
-  quotient covering by its five-torsion kernel. This supplies not merely a
-  local-homeomorphism approximation but the exact orbit-transitivity data
-  needed for future deck transformations. This theorem also now wires the
-  already-compiled connected-sum data, homeomorphism, and Euler arithmetic
-  into the final three frozen conjuncts.
-
-  Renewed consultation of `LEMMA-INDEX.md`, `ConstructionTargets/`, Mathlib's
-  `Topology.Covering.AddCircle`, quotient-covering, product-homeomorphism,
-  kernel/fiber-equivalence, and covering APIs, surface-cover siblings, and git
-  history found no product constructor promoting this circle quotient cover
-  directly to `IsCoveringMap (x,y ↦ (5x,y))`. The remaining concrete cover
-  work is to build product trivializations, identify every torus fiber with
-  the five-torsion kernel and prove its `Nat.card` is five, then package kernel
-  translations as deck homeomorphisms. Independently, the polygon-surface
-  classification-injectivity and Euler-multiplicativity theorems remain absent.
-  The frozen statement is unchanged.
-  -/
-  have hfront :
-      t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover ∧
-      (∀ (g h : ℕ) (p : Surface true g → Surface true h),
-        t98A01IsRegularNfoldCover 5 p →
-        Nonempty (Surface true g ≃ₜ Surface true h) →
-        eulerCharacteristic true g = 5 * eulerCharacteristic true h ∧
-        g = 1 ∧ h = 1) := by
-    sorry
-  exact ⟨hfront.1, hfront.2, t98A01PrintedSurfaceData_eq,
-    t98A01PrintedSurface_homeomorph,
-    t98A01PrintedSurface_eulerCharacteristic⟩
+    Nonempty (PolygonMoves.PolygonSurface (t98A01TorusWord .T₁) ≃ₜ Surface true 1) ∧
+    Nonempty (PolygonMoves.PolygonSurface (t98A01ProjectiveWord .P) ≃ₜ
+      Surface false 1) ∧
+    Nonempty (PolygonMoves.PolygonSurface (t98A01KleinWord .K₁) ≃ₜ Surface false 2) ∧
+    Nonempty (T98A01SumSurface ≃ₜ Surface false 11) ∧
+    ConstructionTargets.RationalLefschetz.HasEulerCharacteristic T98A01SumSurface (-9) := by
+  sorry
