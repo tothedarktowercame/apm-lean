@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Outer-boundary homeomorphism/MV; normalize.",
@@ -88732,7 +88732,7 @@
      "c55a6875a2f40fb941d7055a8dc78f124da6f61860040f44422053ddf857f57e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88917,6 +88917,19 @@
     [{:cmd "draft build",
       :exit 1,
       :correction "qualified Topology.IsQuotientMap"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792137795985-15227-05f5d0a0",
+     :commands
+     ["git show/diff/check 7dcd7cd9f"
+      "verify committed realization quotient representation"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 7dcd7cd9f"],
+     :finding
+     "PASS program STOP: topo-6 commit 7dcd7cd9f adds compiled, sorry-free progress after 9c8d9a5d1. realizationQuotientMap_isQuotientMap uses the exact RealizationRaw carrier, EqvGen setoid, quotient constructor, and coinduced topology defining D.Realization, so it supplies the correct quotient authority for saturated open-chart proofs rather than a parallel model. Open charts/trivializations, tree cover, and four finite covers remain explicitly listed. Scope is one target file; fixture SHA 62e0753a69056713ae18a36942ef1fb57a33cf73eb77ed77e500eb836ef56de8; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "7dcd7cd9f",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88925,7 +88938,7 @@
      "62e0753a69056713ae18a36942ef1fb57a33cf73eb77ed77e500eb836ef56de8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88943,7 +88956,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact projection fibers.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked realization quotient authority.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88989,7 +89002,10 @@
      :reason "Banked uniform fiber cardinality."}
     {:job 6,
      :commit "9c8d9a5d1",
-     :reason "Banked exact projection fibers."}]}
+     :reason "Banked exact projection fibers."}
+    {:job 7,
+     :commit "7dcd7cd9f",
+     :reason "Banked realization quotient authority."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -97355,7 +97371,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorBoundaryQuotientT2Space",
@@ -97365,14 +97381,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "T2 MV boundary quotient",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratorboundaryquotientt2space,
    :kind :lemma,
    :depends-on [:lemma-frozenboundarygraphquotientt2space],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "realizationQuotientMap_isQuotientMap",
@@ -97382,7 +97400,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "raw realization quotient authority",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7dcd7cd9f"},
    :id :lemma-realizationquotientmap-isquotientmap,
    :kind :lemma,
    :depends-on [:lemma-projection-preimage-edgepoint],
