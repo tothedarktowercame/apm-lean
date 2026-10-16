@@ -37289,35 +37289,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Apply opcycle preservation to the explicit generator; then Unit compatibility, Bool square, boundary, signs, Main.",
+    "Relate mapHomologyIso' to right-data transport; then Unit compatibility and Bool square.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_mapOpcyclesIso_eq_rightData",
-      :type "Unit opcycle preservation equals right-data transport",
+    [{:name "t96A06_unitH0_mapOpcyclesIso_explicit_generator",
+      :type "preservation on Unit generator",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_rightHomology_opcycle_transport"],
+      :depends-on ["t96A06_unitH0_mapOpcyclesIso_eq_rightData"],
       :area "rp-rational-homology"}
      {:name "t96A06_unitH0_preservation_coordinate_generator",
-      :type "preservation carries Unit coordinate to mapped class",
+      :type "preservation of Unit coordinate",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_mapOpcyclesIso_eq_rightData"
+      ["t96A06_unitH0_mapOpcyclesIso_explicit_generator"
+       "t96A06_unitH0_rightHomology_opcycle_transport"
        "t96A06_unitH0_chainComparison_homology_generators"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed Unit opcycle-preservation specialization.",
+    :reason "Committed explicit Unit-generator opcycle preservation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37325,14 +37326,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 504266f7a", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792187123824-15798-cefa5c5a",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "504266f7a",
+     {:cmd "git show --check --stat --oneline 4af9ad8c4", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile (3 attempts)",
+      :exit 1,
+      :note "Exposed mapHomology/right-data seam; fixed syntax."}],
+    :commit "4af9ad8c4",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37340,7 +37339,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47746,7 +47745,8 @@
     :lemma-t96a06-unith0-homologycomparison-factorization
     :lemma-t96a06-unith0-preservation-right-eq-left
     :lemma-t96a06-unith0-righthomology-opcycle-transport
-    :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata],
+    :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata
+    :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -47845,6 +47845,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-literaloverlaptopieces-components],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapOpcyclesIso_explicit_generator",
+    :type "preservation on Unit generator"},
+   :lemma
+   {:name "t96A06_unitH0_mapOpcyclesIso_explicit_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "preservation on Unit generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
