@@ -88672,21 +88672,20 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "H0/H2/high; H1 comparison/exactness/section construction; final homology; norm.",
+    :residual "H0/H2/high; H1 geometry; homology; norm.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorHomology_of_section",
+    [{:name "frozenSignedHomology_of_generator_section",
       :type "H",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorHomology_of_comparisons"],
+      :depends-on ["frozenGeneratorHomology_of_section"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88716,7 +88715,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked section homology assembly.",
+    :reason "Banked signed homology.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88726,28 +88725,18 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 9f6fb9fcf", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792192316876-15877-52d132d4",
-     :commands
-     ["hash/scope/placeholders"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
-     :finding
-     "PASS: reviewed 9f6fb9fcf (author topo-6), new after f9a16a312. Fixture f77b434c... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0. The section has the correct concrete-H1 to forgotten boundary-module type; its right-inverse equation yields canonical-arrow surjectivity, then the existing iff transfers this to the coordinate reassembly map. Remaining homology data pass unchanged. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual milestones are listed."},
-    :commit "9f6fb9fcf",
+     {:cmd "git show --check af2fbc859", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :correction "Iso.trans"}],
+    :commit "af2fbc859",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "f77b434c08aef7d8e2c5a0f191ff7b01112723b34b3c7c82c620edd950361183"},
+     "af7539df61d7413990bf3778c038828672e6bd4c5ad6597da418a96862c2bc15"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -99126,4 +99115,20 @@
    :id :lemma-frozengeneratorhomology-of-section,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorhomology-of-comparisons],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedHomology_of_generator_section", :type "H"},
+   :lemma
+   {:name "frozenSignedHomology_of_generator_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozensignedhomology-of-generator-section,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorhomology-of-section],
    :other-consumers []}]}
