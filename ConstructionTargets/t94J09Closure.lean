@@ -1028,6 +1028,31 @@ theorem frozenBoundaryEqvGen_of_diskEqvGen
         exact Relation.EqvGen.trans _ _ _ (ih₁ ha hb) (ih₂ hb hc)
   exact lift h x.2 y.2
 
+/-- The full generated disk relation is equality away from the boundary and
+the induced boundary equivalence on boundary points. -/
+theorem frozenGeneratorEqvGen_iff_eq_or_boundary (x y : Surfaces.Disk) :
+    Relation.EqvGen frozenGeneratorRel x y ↔
+      x = y ∨ ∃ bx byp : ConstructionTargets.PolygonBoundaryCircleSource.Boundary,
+        bx.1 = x ∧ byp.1 = y ∧
+          Relation.EqvGen
+            (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+              frozenGeneratorRel) bx byp := by
+  constructor
+  · intro h
+    by_cases hxy : x = y
+    · exact Or.inl hxy
+    · have hb := frozenGeneratorEqvGen_boundary_of_ne h hxy
+      let bx : ConstructionTargets.PolygonBoundaryCircleSource.Boundary := ⟨x, hb.1⟩
+      let byp : ConstructionTargets.PolygonBoundaryCircleSource.Boundary := ⟨y, hb.2⟩
+      exact Or.inr ⟨bx, byp, rfl, rfl, frozenBoundaryEqvGen_of_diskEqvGen h⟩
+  · rintro (rfl | ⟨bx, byp, rfl, rfl, h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact ConstructionTargets.PolygonBoundaryInducedQuotient.eqvGen_map
+        (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+          frozenGeneratorRel) frozenGeneratorRel
+        (fun z : ConstructionTargets.PolygonBoundaryCircleSource.Boundary => z.1)
+        (fun {_ _} hz => hz) h
+
 /-- The boundary quotient parametrizes every outer boundary class exactly
 once. -/
 theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
@@ -1788,6 +1813,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleHomologyIsoBoundaryGraph
 #print axioms frozenGeneratorBoundaryHomologyIsoGraph
 #print axioms frozenBoundaryQuotientToOuterSkeleton
+#print axioms frozenGeneratorEqvGen_iff_eq_or_boundary
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
