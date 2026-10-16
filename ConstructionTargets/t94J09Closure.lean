@@ -1724,6 +1724,40 @@ theorem frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
   have h := LinearMap.congr_fun hsection y
   simpa using h
 
+/-- Transport a canonical graph-H1 reassembly section into the chosen six
+cycle coordinates. -/
+noncomputable def frozenGeneratorMVReassemblySection
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type)) :=
+  e.toLinearMap.comp s
+
+theorem frozenGeneratorMVReassemblyLinear_comp_section
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id) :
+    (frozenGeneratorMVReassemblyLinear e).comp
+        (frozenGeneratorMVReassemblySection e s) = LinearMap.id := by
+  rw [frozenGeneratorMVReassemblySection, ← LinearMap.comp_assoc,
+    frozenGeneratorMVReassemblyLinear_comp_coordinates, hsection]
+
 /-- Composing the graph-coordinate arrows cancels the middle-term transport,
 leaving the production Mayer--Vietoris composite in overlap coordinates. -/
 theorem frozenGeneratorMVGraphH1_comp_eq_production :
@@ -2700,6 +2734,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
 #print axioms frozenGeneratorMVReassemblyLinear_surjective_iff
 #print axioms frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
+#print axioms frozenGeneratorMVReassemblyLinear_comp_section
 #print axioms frozenGeneratorMVReassemblyLinear_comp_faceBoundary
 #print axioms frozenFaceBoundary_range_le_ker_reassembly
 #print axioms frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
