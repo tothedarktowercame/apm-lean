@@ -1996,6 +1996,51 @@ theorem t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff :
     rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate]
     exact h
 
+/-- The sphere-top coordinate of the locally normalized production class is
+an integer unit, because that class generates top homology. -/
+theorem t96A06_normalizedClassSphereTopCoordinate_isUnit :
+    IsUnit t96A06_normalizedClassSphereTopCoordinate := by
+  let e := ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3 (by omega)
+  let c := ConstructionTargets.HigherSphereLocalization.normalizedClass
+    (k := 1) polynomialSphereRegularPoint
+  obtain ⟨m, hm⟩ :=
+    ConstructionTargets.HigherSphereLocalization.normalizedClass_generates
+      polynomialSphereRegularPoint (e.inv.hom 1)
+  have h := congrArg e.hom.hom hm
+  change IsUnit (e.hom.hom c)
+  change e.hom.hom (m • c) = e.hom.hom (e.inv.hom 1) at h
+  have hz := map_zsmul e.hom.hom m c
+  have h' : m • e.hom.hom c = 1 :=
+    hz.symm.trans (h.trans (e.inv_hom_id_apply 1))
+  apply IsUnit.of_mul_eq_one m
+  simpa [smul_eq_mul, mul_comm] using h'
+
+/-- The coefficient normalization-comparison degree is also an integer unit. -/
+theorem t96A06_coefficientSphereNormalizationComparisonDegree_isUnit :
+    IsUnit (ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2) := by
+  rw [← ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree]
+  exact (ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit 2).isUnit
+
+/-- Since both coordinates are signs, excluding the opposite-sign branch
+forces the desired coordinate equality. -/
+theorem t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
+    (hne : ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 ≠
+      -t96A06_normalizedClassSphereTopCoordinate) :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+      t96A06_normalizedClassSphereTopCoordinate := by
+  rcases Int.isUnit_iff.mp
+      t96A06_coefficientSphereNormalizationComparisonDegree_isUnit with h₁ | h₁ <;>
+    rcases Int.isUnit_iff.mp
+      t96A06_normalizedClassSphereTopCoordinate_isUnit with h₂ | h₂
+  · exact h₁.trans h₂.symm
+  · exfalso
+    apply hne
+    omega
+  · exfalso
+    apply hne
+    omega
+  · exact h₁.trans h₂.symm
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4826,6 +4871,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
 #print axioms t96A06_integralIteratedSphereGenerator_comparison_coordinate
 #print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff
+#print axioms t96A06_normalizedClassSphereTopCoordinate_isUnit
+#print axioms t96A06_coefficientSphereNormalizationComparisonDegree_isUnit
+#print axioms t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
