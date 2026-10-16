@@ -609,6 +609,42 @@ theorem frozenBoundaryClosedRel_eqvGen (z w : Circle)
     apply ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.injective
     exact Subtype.ext h
 
+theorem frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
+    (j : Fin 14) (t : Set.Icc (0 : ℝ) 1) :
+    FrozenBoundaryEndpoint (frozenCircleEdgePoint j t) ↔
+      t = ⟨0, by norm_num⟩ ∨ t = ⟨1, by norm_num⟩ := by
+  constructor
+  · rintro ⟨k, hk | hk⟩
+    · have he : Surfaces.edgePoint 14 j t =
+          Surfaces.edgePoint 14 k ⟨0, by norm_num⟩ := by
+        change (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+            (frozenCircleEdgePoint j t)).1 =
+          (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+            (frozenCircleEdgePoint k ⟨0, by norm_num⟩)).1
+        exact congrArg Subtype.val (congrArg
+          ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary hk)
+      rcases edgePoint_eq_imp_same_or_endpoints 14 (by omega) j k t
+          ⟨0, by norm_num⟩ he with hsame | hend
+      · exact Or.inl hsame.2
+      · exact hend.1
+    · have he : Surfaces.edgePoint 14 j t =
+          Surfaces.edgePoint 14 k ⟨1, by norm_num⟩ := by
+        change (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+            (frozenCircleEdgePoint j t)).1 =
+          (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+            (frozenCircleEdgePoint k ⟨1, by norm_num⟩)).1
+        exact congrArg Subtype.val (congrArg
+          ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary hk)
+      rcases edgePoint_eq_imp_same_or_endpoints 14 (by omega) j k t
+          ⟨1, by norm_num⟩ he with hsame | hend
+      · exact Or.inr hsame.2
+      · exact hend.1
+  · intro ht
+    refine ⟨j, ?_⟩
+    rcases ht with rfl | rfl
+    · exact Or.inl rfl
+    · exact Or.inr rfl
+
 /-- The induced circle relation is exactly the explicit seven-edge graph
 relation, not merely a relation containing its generators. -/
 theorem frozenGeneratorCircleRel_iff_graphRel (z w : Circle) :
@@ -1498,6 +1534,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryEndpointEqv_finite
 #print axioms frozenBoundaryClosedRel_isClosed
 #print axioms frozenBoundaryClosedRel_eqvGen
+#print axioms frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
