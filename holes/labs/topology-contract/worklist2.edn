@@ -88727,6 +88727,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 9f6fb9fcf", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792192316876-15877-52d132d4",
+     :commands
+     ["hash/scope/placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed 9f6fb9fcf (author topo-6), new after f9a16a312. Fixture f77b434c... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0. The section has the correct concrete-H1 to forgotten boundary-module type; its right-inverse equation yields canonical-arrow surjectivity, then the existing iff transfers this to the coordinate reassembly map. Remaining homology data pass unchanged. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual milestones are listed."},
     :commit "9f6fb9fcf",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88735,7 +88747,7 @@
      "f77b434c08aef7d8e2c5a0f191ff7b01112723b34b3c7c82c620edd950361183"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88753,7 +88765,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generator homology assembly.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked section homology assembly.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89004,7 +89016,10 @@
      :reason "Banked comparison SpaceH Smith iso."}
     {:job 6,
      :commit "f9a16a312",
-     :reason "Banked generator homology assembly."}]}
+     :reason "Banked generator homology assembly."}
+    {:job 7,
+     :commit "9f6fb9fcf",
+     :reason "Banked section homology assembly."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99096,7 +99111,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorHomology_of_section", :type "H"},
@@ -99105,7 +99120,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9f6fb9fcf"},
    :id :lemma-frozengeneratorhomology-of-section,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorhomology-of-comparisons],
