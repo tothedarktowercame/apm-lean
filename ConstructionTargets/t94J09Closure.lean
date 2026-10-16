@@ -1505,6 +1505,14 @@ noncomputable def frozenGeneratorCanonicalToNamedMVConnecting (k : ℕ) :=
       frozenGeneratorRadialPackage.outer_isOpen
       frozenGeneratorRadialPackage.cover k
 
+/-- The named-topology Mayer--Vietoris reassembly arrow with its target
+transported to the canonical quotient homology object. -/
+noncomputable def frozenGeneratorNamedToCanonicalMVReassembly (k : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) k ≫
+    (frozenGeneratorRadialGroupHomologyIso k).hom
+
 /-- The actual frozen disk quotient is Hausdorff because its generated
 equivalence relation has closed graph on the compact polygon disk. -/
 noncomputable instance frozenGeneratorQuotientT2Space :
@@ -2373,6 +2381,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorNamedMVUnionExact
 #print axioms frozenGeneratorNamedMVIntersectionExact
 #print axioms frozenGeneratorCanonicalToNamedMVConnecting
+#print axioms frozenGeneratorNamedToCanonicalMVReassembly
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
