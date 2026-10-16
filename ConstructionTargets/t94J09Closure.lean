@@ -2751,6 +2751,35 @@ noncomputable def frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
   frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
     (frozenGeneratorH1SmithEquiv_of_section e hboundary hzero hreverse s hsection)
 
+/-- The section-based degree-one calculation bundled as a `ModuleCat`
+isomorphism on the canonical comparison's underlying integral module. -/
+noncomputable def frozenGeneratorCanonicalModuleH1SmithIso_of_section
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id) :
+    ModuleCat.of ℤ
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenGeneratorQuotient 1) : Type) ≅ ModuleCat.of ℤ N6Smith :=
+  (frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
+    e hboundary hzero hreverse s hsection).toModuleIso
+
 /-- Assemble the literal homology calculation once the geometric comparison
 maps identify the Mayer--Vietoris groups with the frozen chain complex. -/
 theorem frozenPolygonHomology_of_comparisons
@@ -2859,6 +2888,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCanonicalModuleH1EquivConcrete
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
+#print axioms frozenGeneratorCanonicalModuleH1SmithIso_of_section
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
