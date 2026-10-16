@@ -100,6 +100,115 @@ def frozenGeneratorRadialPackage :
   PolygonRadialOpenCover.package frozenGeneratorRel
     (fun {_ _} h => frozenGeneratorRel_radius_eq h)
 
+/-- Every frozen generator identifies points on the polygon boundary. -/
+theorem frozenGeneratorRel_boundary {x y : Surfaces.Disk}
+    (h : frozenGeneratorRel x y) :
+    PolygonRadialOpenCover.radius x = 1 ∧
+      PolygonRadialOpenCover.radius y = 1 := by
+  rcases h with ⟨t, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, rfl⟩ <;>
+    simp [PolygonRadialOpenCover.radius, norm_edgePoint]
+
+/-- The inner member of the frozen generator radial cover. -/
+abbrev FrozenGeneratorInnerPiece :=
+  {q // q ∈ PolygonRadialOpenCover.innerOpen frozenGeneratorRel}
+
+/-- The annular intersection of the frozen generator radial cover. -/
+abbrev FrozenGeneratorOverlapPiece :=
+  PolygonRadialOpenCover.overlapOpen frozenGeneratorRel
+
+/-- The literal frozen inner piece contracts to its center. -/
+def frozenGeneratorInnerHomotopyEquivPoint :
+    ContinuousMap.HomotopyEquiv FrozenGeneratorInnerPiece Unit where
+  toFun := ContinuousMap.const FrozenGeneratorInnerPiece ()
+  invFun := ContinuousMap.const Unit
+    (ConstructionTargets.PolygonInnerOpenPointedContraction.innerBase
+      frozenGeneratorRel)
+  left_inv := ⟨(ConstructionTargets.PolygonInnerOpenPointedContraction.innerOpenPointedContraction
+      frozenGeneratorRel
+      (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+      (fun {_ _} h => frozenGeneratorRel_boundary h)).homotopy.symm⟩
+  right_inv := by
+    rw [show (ContinuousMap.const FrozenGeneratorInnerPiece ()).comp
+        (ContinuousMap.const Unit
+          (ConstructionTargets.PolygonInnerOpenPointedContraction.innerBase
+            frozenGeneratorRel)) =
+        ContinuousMap.id Unit by
+      apply ContinuousMap.ext
+      intro u
+      exact Subsingleton.elim _ _]
+
+/-- The literal frozen overlap has the homotopy type of the positive circle. -/
+def frozenGeneratorOverlapHomotopyEquivCircle :
+    ContinuousMap.HomotopyEquiv FrozenGeneratorOverlapPiece Circle :=
+  (ConstructionTargets.PolygonOverlapHomotopyEquivCircle.overlapHomotopyEquivCircle
+      frozenGeneratorRel
+      (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+      (fun {_ _} h => frozenGeneratorRel_boundary h)).symm
+
+/-- Zeroth homology of the frozen inner piece. -/
+noncomputable def frozenGeneratorInnerH0IsoInt :
+    SpaceH FrozenGeneratorInnerPiece 0 ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of FrozenGeneratorInnerPiece) 0 (ModuleCat.of ℤ ℤ)
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          frozenGeneratorInnerHomotopyEquivPoint 0 ≪≫
+        ConstructionTargets.SingularHomologyConcrete.pointH0IsoInt)
+
+/-- Positive-degree homology of the frozen inner piece vanishes. -/
+theorem frozenGeneratorInnerHigherHomology_isZero (k : ℕ) (hk : k ≠ 0) :
+    IsZero (SpaceH FrozenGeneratorInnerPiece k) := by
+  apply ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+  exact (ConstructionTargets.SingularHomologyConcrete.pointHigherHomology_isZero
+      k hk).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          frozenGeneratorInnerHomotopyEquivPoint k)
+
+/-- Zeroth homology of the frozen annular overlap. -/
+noncomputable def frozenGeneratorOverlapH0IsoInt :
+    SpaceH FrozenGeneratorOverlapPiece 0 ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of FrozenGeneratorOverlapPiece) 0 (ModuleCat.of ℤ ℤ)
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          frozenGeneratorOverlapHomotopyEquivCircle 0 ≪≫
+        circleGroupH0IsoInt)
+
+/-- First homology of the frozen annular overlap. -/
+noncomputable def frozenGeneratorOverlapH1IsoInt :
+    SpaceH FrozenGeneratorOverlapPiece 1 ≅ ModuleCat.of ℤ ℤ :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of FrozenGeneratorOverlapPiece) 1 (ModuleCat.of ℤ ℤ)
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          frozenGeneratorOverlapHomotopyEquivCircle 1 ≪≫
+        circleGroupH1IsoInt)
+
+/-- Homology of the frozen annular overlap vanishes above degree one. -/
+theorem frozenGeneratorOverlapHigherHomology_isZero (k : ℕ) (hk : 1 < k) :
+    IsZero (SpaceH FrozenGeneratorOverlapPiece k) := by
+  apply ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+  exact (ConstructionTargets.SphereHomology.sphereHomology_isZero_of_gt
+      1 k hk).of_iso
+      ((ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          frozenGeneratorOverlapHomotopyEquivCircle k).trans
+        (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+            ConstructionTargets.CircleHomology.circleHomeomorphSphereOne.toHomotopyEquiv
+              k))
+
+/-- The complete homology table for the inner and overlap members of the
+literal frozen radial cover. -/
+theorem frozenGeneratorInnerOverlapHomology :
+    Nonempty (SpaceH FrozenGeneratorInnerPiece 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ k : ℕ, k ≠ 0 → IsZero (SpaceH FrozenGeneratorInnerPiece k)) ∧
+    Nonempty (SpaceH FrozenGeneratorOverlapPiece 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (SpaceH FrozenGeneratorOverlapPiece 1 ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ k : ℕ, 1 < k →
+      IsZero (SpaceH FrozenGeneratorOverlapPiece k)) := by
+  exact ⟨⟨frozenGeneratorInnerH0IsoInt⟩,
+    frozenGeneratorInnerHigherHomology_isZero,
+    ⟨frozenGeneratorOverlapH0IsoInt⟩,
+    ⟨frozenGeneratorOverlapH1IsoInt⟩,
+    frozenGeneratorOverlapHigherHomology_isZero⟩
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -734,6 +843,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozen_boundaryRel_iff
 #print axioms frozenGeneratorRel_radius_eq
 #print axioms frozenGeneratorRadialPackage
+#print axioms frozenGeneratorRel_boundary
+#print axioms frozenGeneratorInnerOverlapHomology
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
