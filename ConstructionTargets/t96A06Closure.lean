@@ -2831,6 +2831,18 @@ theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
   apply t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one hcoeff
   exact hnatural
 
+/-- Once the corrected coefficient is one, the two named remaining
+coefficient-change equations are equivalent. -/
+theorem t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1) :
+    t96A06_integralToRationalLocalChartNaturality ↔
+      t96A06_integralToRationalRawLocalGeneratorTransport := by
+  apply t96A06_integralToRational_localChart_naturality_iff_rawTransport
+  apply t96A06_mappedIntegralLocalGenerator_coordinate_iff.mpr
+  exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one hcoeff
+
 /-- Exact transport of the integral and rational chart generators supplies
 the coefficient-extension chart-coordinate naturality equation. -/
 theorem t96A06_integralToRational_chart_naturality_of_generator_transport
@@ -4237,6 +4249,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_localChart_naturality_iff_rawTransport
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one
 #print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
+#print axioms t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one
 #print axioms t96A06_integralToRational_chart_naturality_of_generator_transport
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_iff_raw
