@@ -2203,6 +2203,21 @@ theorem frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
   exact (frozenGraphH1Coordinates_generator_eq_iff c hcycle hinj hrange).2
     hgenerator
 
+/-- Transporting the canonical zero composite through graph-cycle
+coordinates shows that reassembly kills the literal frozen face boundary. -/
+theorem frozenGeneratorMVReassemblyLinear_comp_faceBoundary
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0) :
+    (frozenGeneratorMVReassemblyLinear e).comp frozenFaceBoundaryCoordinates = 0 := by
+  rw [← hboundary, ← LinearMap.comp_assoc,
+    frozenGeneratorMVReassemblyLinear_comp_coordinates, hzero]
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -2580,6 +2595,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
+#print axioms frozenGeneratorMVReassemblyLinear_comp_faceBoundary
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
