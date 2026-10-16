@@ -2242,6 +2242,66 @@ theorem t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoin
   exact t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff.mpr
     hcoordinate
 
+/-- A nonnegative unit coordinate for the locally normalized production
+class is necessarily the positive coordinate. -/
+theorem t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg
+    (h : 0 ≤ t96A06_normalizedClassSphereTopCoordinate) :
+    t96A06_normalizedClassSphereTopCoordinate = 1 := by
+  rcases Int.isUnit_iff.mp t96A06_normalizedClassSphereTopCoordinate_isUnit with
+    hone | hneg
+  · exact hone
+  · omega
+
+/-- A nonnegative coefficient-suspension comparison degree is necessarily
+the positive orientation. -/
+theorem t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg
+    (h : 0 ≤
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2) :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 = 1 := by
+  rcases Int.isUnit_iff.mp
+      t96A06_coefficientSphereNormalizationComparisonDegree_isUnit with hone | hneg
+  · exact hone
+  · omega
+
+/-- Positivity of the coefficient suspension orientation and of the
+stereographic production normalization determines the full iterated endpoint.
+Keeping both hypotheses explicit prevents the two independent orientation
+choices from being identified without proof. -/
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
+    (hcoefficient : 0 ≤
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2)
+    (hnormalized : 0 ≤ t96A06_normalizedClassSphereTopCoordinate) :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint = 1 := by
+  have hdegree :=
+    t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg hcoefficient
+  have hnormal :=
+    t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg hnormalized
+  have hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+    apply t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff.mpr
+    rw [hdegree, hnormal]
+  change (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) = 1
+  exact t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison hcomparison
+
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
+    (hcoefficient : 0 ≤
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2)
+    (hnormalized : 0 ≤ t96A06_normalizedClassSphereTopCoordinate) :
+    0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint := by
+  rw [t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
+    hcoefficient hnormalized]
+  norm_num
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -5086,6 +5146,10 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg
 #print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg
 #print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg
+#print axioms t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg
+#print axioms t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
