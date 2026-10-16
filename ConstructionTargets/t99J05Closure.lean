@@ -564,6 +564,28 @@ theorem t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
                     ℚ m (k + 1) (by omega)
               exact hz.of_iso e
 
+/-- Rational homology vanishes strictly above the top dimension of every
+nonempty Euclidean unit sphere. -/
+theorem t99J05_euclideanUnitSphere_homology_isZero_of_gt
+    (m k : ℕ) (hk : m < k) :
+    IsZero (Homology (T02A06.euclideanUnitSphere (m + 1)) k) := by
+  induction m generalizing k with
+  | zero =>
+      change IsZero
+        (ConstructionTargets.SphereZeroCoefficients.H ℚ k)
+      exact ConstructionTargets.SphereZeroCoefficients.positive_vanishing
+        ℚ k (by omega)
+  | succ m ih =>
+      have hk0 : k - 1 ≠ 0 := by omega
+      have hdeg : k - 1 + 1 = k := by omega
+      have e :
+          Homology (T02A06.euclideanUnitSphere (m + 2)) k ≅
+            Homology (T02A06.euclideanUnitSphere (m + 1)) (k - 1) := by
+        simpa only [Nat.add_assoc, hdeg] using
+          ConstructionTargets.CoefficientSphereShift.sphereShift
+            ℚ (m + 1) (k - 1) hk0
+      exact (ih (k - 1) (by omega)).of_iso e
+
 /-- Consequently, the successor overlap has one-dimensional rational homology
 in its unique positive top degree. -/
 noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
@@ -636,6 +658,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_affineUnitSphere_topHomologyIso
 #print axioms t99J05_euclideanUnitSphere_H1_isZero
 #print axioms t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
+#print axioms t99J05_euclideanUnitSphere_homology_isZero_of_gt
 #print axioms t99J05_cp_successor_overlap_rational_topHomology
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
