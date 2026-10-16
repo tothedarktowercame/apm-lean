@@ -88721,6 +88721,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check bb13116b1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792155141451-15461-edb5d86d",
+     :commands
+     ["git show/check bb13116b1"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: bb13116b1 changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. Named-quotient union exactness directly instantiates productionMayerVietoris_exact_union with the literal radial opens and proved cover while the named topology is in scope. Intersection transport, matrices, normalization remain listed."},
     :commit "bb13116b1",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88741,7 @@
      "7ee743490e522b54f7881cabd6cd6081d162a62d70ed7aaa91d0b0cc3daeeba0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked named-topology pieces exactness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked named-topology union exactness.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88928,7 +88940,10 @@
      :reason "Banked concrete quotient transport."}
     {:job 8,
      :commit "4f641248a",
-     :reason "Banked named-topology pieces exactness."}]}
+     :reason "Banked named-topology pieces exactness."}
+    {:job 9,
+     :commit "bb13116b1",
+     :reason "Banked named-topology union exactness."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98072,7 +98087,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorNamedMVUnionExact",
@@ -98082,7 +98097,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "named-topology union exactness",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "bb13116b1"},
    :id :lemma-frozengeneratornamedmvunionexact,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratornamedmvpiecesexact],
