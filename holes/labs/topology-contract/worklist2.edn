@@ -88720,6 +88720,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 831c8e156", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792151537935-15413-d9eb183a",
+     :commands
+     ["git show/check 831c8e156"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 831c8e156 changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. productionConnecting at n=0 correctly maps literal quotient H1 to intersection H0, then the proved H0 coordinate maps forward to Z; exactness, matrices, and normalization remain listed."},
     :commit "831c8e156",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88740,7 @@
      "e9595ece80ced596a9494f56b17e068eb8f9b0a657064a2840808305bcbf3555"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88758,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H0 arrow cancellation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connecting-map coordinates.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88911,7 +88923,10 @@
      :reason "Banked H0 reassembly coordinates."}
     {:job 2,
      :commit "18abc8740",
-     :reason "Banked H0 arrow cancellation."}]}
+     :reason "Banked H0 arrow cancellation."}
+    {:job 3,
+     :commit "831c8e156",
+     :reason "Banked connecting-map coordinates."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97921,7 +97936,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVConnectingH1ToIntersectionInt",
@@ -97931,18 +97946,23 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "connecting coordinate",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "831c8e156"},
    :id :lemma-frozengeneratormvconnectingh1tointersectionint,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorintersectionh0groupisoint],
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "frozenGeneratorIntersectionH0GroupIsoInt"},
    :lemma
-   {:name "frozenGeneratorIntersectionH0GroupIsoInt", :reported-by []},
+   {:name "frozenGeneratorIntersectionH0GroupIsoInt",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratorintersectionh0groupisoint,
    :kind :lemma,
    :depends-on [],
