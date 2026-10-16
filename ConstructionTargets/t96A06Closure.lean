@@ -2304,6 +2304,35 @@ theorem t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
   rw [t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps hstep0 hstep1]
   exact hcircle
 
+/-- Compatibility of the coefficient circle isomorphism with the native
+integer circle computation fixes the named circle endpoint to `+1`. -/
+theorem t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison
+    (hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom =
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.inv) :
+    t96A06_coefficientCircleOrientationEndpoint = 1 := by
+  apply ConstructionTargets.ManifoldFundamentalClass.coefficientCircleEndpoint_eq_one_of_generator_comparison
+  change (((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom).hom (1 : ℤ)) = _
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientCircleGeneratorComparison_of_iso_hom
+    hcomparison
+
+theorem t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
+    (hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom =
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.inv) :
+    0 ≤ t96A06_coefficientCircleOrientationEndpoint := by
+  rw [t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison hcomparison]
+  norm_num
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5192,6 +5221,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint
 #print axioms t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps
 #print axioms t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
+#print axioms t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison
+#print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
