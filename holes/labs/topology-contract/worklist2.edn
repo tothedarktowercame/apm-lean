@@ -88724,6 +88724,19 @@
      {:cmd "git show --check 82e74c1bd", :exit 0}],
     :diagnostic-history
     [{:cmd "inverse drafts", :exit 1, :correction "symm_apply_apply"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792164802520-15603-a90d84dc",
+     :commands
+     ["git show/check 82e74c1bd"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free graph-cycle inclusion beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The map is the inverse six-coordinate kernel equivalence followed by the kernel subtype, and its explicit seventh coordinate repeats the fourth, exactly satisfying the graph-boundary equation; its range is therefore the full kernel. Only standard axioms occur; singular-H1 comparison/generator, assembly, and normalization remain listed."},
     :commit "82e74c1bd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88732,7 +88745,7 @@
      "f5db85fdf18522f5f3a9ecd694d3114c89304f555cfc0240da1af3ab9229f178"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88763,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked MV boundary range transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked cycle inclusion.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88967,7 +88980,8 @@
      :reason "Banked MV boundary kernel consequence."}
     {:job 2,
      :commit "9a5cb3102",
-     :reason "Banked MV boundary range transport."}]}
+     :reason "Banked MV boundary range transport."}
+    {:job 3, :commit "82e74c1bd", :reason "Banked cycle inclusion."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98531,7 +98545,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGraphCycleInclusion_range",
@@ -98541,7 +98555,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "cycle range=graph kernel",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "82e74c1bd"},
    :id :lemma-frozengraphcycleinclusion-range,
    :kind :lemma,
    :depends-on
