@@ -1277,25 +1277,39 @@ theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
 literal subspaces. -/
 theorem t99J05_ambientSubspaceRangeHomologyIso_naturality
     {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) (k : ℕ) :
-    (t99J05_ambientSubspaceRangeHomologyIso A k).hom ≫
-        HomologicalComplex.homologyMap
+    CategoryTheory.CategoryStruct.comp
+      (t99J05_ambientSubspaceRangeHomologyIso A k).hom
+        (HomologicalComplex.homologyMap
           ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
             (TopCat.toSSet.map
-              (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) k =
-      HomologicalComplex.homologyMap
+              (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) k) =
+      CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap
           ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
-            (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h)) k ≫
+            (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h)) k)
         (t99J05_ambientSubspaceRangeHomologyIso B k).hom := by
+  have hchain :
+      CategoryTheory.CategoryStruct.comp
+        (t99J05_ambientSubspaceRangeChainsIso A).hom
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+          (TopCat.toSSet.map
+            (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) =
+      CategoryTheory.CategoryStruct.comp
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+          (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h))
+        (t99J05_ambientSubspaceRangeChainsIso B).hom := by
+    change
+      CategoryTheory.CategoryStruct.comp
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _)
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _) =
+      CategoryTheory.CategoryStruct.comp
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _)
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _)
+    simpa only [← CategoryTheory.Functor.map_comp] using congrArg
+      (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+      (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion_square h)
   simpa only [HomologicalComplex.homologyMap_comp] using
-    congrArg (fun f => HomologicalComplex.homologyMap f k) (by
-      change
-        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _ ≫
-            (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _ =
-          (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _ ≫
-            (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _
-      simpa only [← Functor.map_comp] using congrArg
-        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
-        (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion_square h))
+    congrArg (fun f => HomologicalComplex.homologyMap f k) hchain
 
 #print axioms t99J05_ambientSubspaceRangeHomologyIso_naturality
 
