@@ -2926,6 +2926,42 @@ theorem frozenGeneratorHomology_of_comparisons
     exact hz.of_iso e2
   · exact hhigh k (by omega)
 
+/-- A canonical graph-H1 reassembly section supplies the surjectivity needed
+by the literal generator quotient's homology assembly. -/
+theorem frozenGeneratorHomology_of_section
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH FrozenGeneratorQuotient 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k) :=
+  frozenGeneratorHomology_of_comparisons h0 e hboundary hzero hreverse
+    ((frozenGeneratorMVReassemblyLinear_surjective_iff e).2
+      (frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
+        s hsection))
+    h2 hhigh
+
 /-- Once Mayer--Vietoris computes the explicit generator quotient, the same
 homology result holds for the generic signed quotient. -/
 theorem frozenSignedHomology_of_generator_comparisons
@@ -3018,6 +3054,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVBoundaryLinear_map_range_of_coordinates
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozenGeneratorHomology_of_comparisons
+#print axioms frozenGeneratorHomology_of_section
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
 #print axioms frozenGeneratorRel_radius_eq
