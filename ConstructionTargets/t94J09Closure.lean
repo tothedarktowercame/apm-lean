@@ -1046,6 +1046,14 @@ theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
     apply Quotient.sound
     exact Relation.EqvGen.refl _
 
+/-- The boundary quotient and outer skeleton have the same underlying points.
+Inverse continuity is the remaining step before this equivalence supplies the
+homeomorphism used by Mayer--Vietoris. -/
+noncomputable def frozenBoundaryQuotientEquivOuterSkeleton :
+    FrozenGeneratorBoundaryQuotient ≃ FrozenGeneratorOuterBoundaryPiece :=
+  Equiv.ofBijective frozenBoundaryQuotientToOuterSkeleton
+    frozenBoundaryQuotientToOuterSkeleton_bijective
+
 /-- The inclusion of the polygon boundary in the radial outer annulus is
 continuous. -/
 theorem continuous_frozenBoundaryAsOuter :
@@ -1758,6 +1766,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorBoundaryHomologyIsoGraph
 #print axioms frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
+#print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
 #print axioms compactSpace_frozenGeneratorBoundaryQuotient
 #print axioms compactSpace_frozenGeneratorOuterBoundaryPiece
