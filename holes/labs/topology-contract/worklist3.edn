@@ -36754,6 +36754,19 @@
       :exit 1,
       :note
       "Qualified additive preservation and imported its defining module."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792192409510-15879-db60e7fe",
+     :commands
+     ["git show/check ab85a510c"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit chain adds and repairs the rational ModuleCat homology-biproduct comparison, oriented from homology of the chain biproduct to the biproduct of homologies; its hom is proved to be the lift of both homology projections. Fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains one declared placeholder."},
     :commit "ab85a510c",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36762,7 +36775,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36780,7 +36793,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal signed overlap map and component formulas.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed rational ModuleCat homology-biproduct comparison.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36905,7 +36918,11 @@
     {:job 6,
      :commit "2c9276d49",
      :reason
-     "Committed literal signed overlap map and component formulas."}]}
+     "Committed literal signed overlap map and component formulas."}
+    {:job 7,
+     :commit "ab85a510c",
+     :reason
+     "Committed rational ModuleCat homology-biproduct comparison."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37275,7 +37292,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37327,7 +37344,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37349,7 +37366,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47840,7 +47857,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mapOpcyclesIso_explicit_generator",
@@ -47850,14 +47867,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "preservation on Unit generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mapHomologyIso'_eq_rightData",
@@ -47867,7 +47886,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "homology preservation equals right-data transport",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-maphomologyiso-eq-rightdata,
    :kind :lemma,
    :depends-on
@@ -47875,7 +47896,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mappedRightHomology_triangle",
@@ -47885,14 +47906,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "mapped right homology-to-opcycles triangle",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-mappedrighthomology-triangle,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-maphomologyiso-eq-rightdata],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_forgottenRightHomology_opcycle_triangle",
@@ -47902,14 +47925,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "forgotten original right-data triangle",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-forgottenrighthomology-opcycle-triangle,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-righthomology-opcycle-transport],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_rationalHomologyBiprodIso",
@@ -47919,7 +47944,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "ModuleCat rational homology preserves binary biproduct",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ab85a510c"},
    :id :lemma-t99j05-rationalhomologybiprodiso,
    :kind :lemma,
    :depends-on
