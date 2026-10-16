@@ -37326,6 +37326,12 @@
     [{:cmd "opcycle compile",
       :exit 1,
       :note "Corrected mapped-complex type and composition."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792181230951-15762-e7dade19",
+     :finding
+     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
     :commit "0ae01bde2",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
@@ -37334,7 +37340,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37356,7 +37362,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 3,
+   :fail-count 4,
    :depends-on [],
    :program true,
    :other-consumers [],
