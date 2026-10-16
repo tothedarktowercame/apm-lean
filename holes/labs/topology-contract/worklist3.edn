@@ -36751,6 +36751,18 @@
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
       :note "Opened IsZero; fixed sphere index."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792110719933-14903-d8f392f2",
+     :commands
+     ["git show --check --stat ebe33ec6f; inspect diff"
+      "verify commit blob equals compiled file"
+      "sha256sum fixture => 4aeb8b6a...beea8d"
+      "lake env lean Closure, Main, fixture"
+      "statement-registry.py check => 168/168"],
+     :finding
+     "PASS: ebe33ec6f adds compiled, sorry-free progress beyond history: H1 vanishing for spheres of ambient dimension >2 and positive homology vanishing strictly below top, with correct degree orientation. Fixture hash matches; new results use only propext, Classical.choice, Quot.sound. Main placeholder remains 1->1; above-top/overlap/retract/MV/Main milestones are listed."},
     :commit "ebe33ec6f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36759,7 +36771,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36777,7 +36789,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed affine sphere comparison and overlap top homology.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed rational sphere vanishing below top.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36845,7 +36857,10 @@
     {:job 6,
      :commit "d3394ea47",
      :reason
-     "Committed affine sphere comparison and overlap top homology."}]}
+     "Committed affine sphere comparison and overlap top homology."}
+    {:job 7,
+     :commit "ebe33ec6f",
+     :reason "Committed rational sphere vanishing below top."}]}
   {:consumer :t98A02,
    :stop-count 1,
    :evidence
@@ -37204,7 +37219,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37259,7 +37274,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37281,7 +37296,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -44619,7 +44634,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44631,7 +44646,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "four-map composite on one equals corrected coefficient",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-concretenormalizationcomposite-one-eq-correctedcoefficient,
    :kind :lemma,
@@ -44657,7 +44674,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44669,7 +44686,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "native coordinate one iff coefficient one",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-nativeintegrallocalgenerator-coordinate-iff-coefficient-one,
    :kind :lemma,
@@ -44678,7 +44697,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_correctedCoefficient_eq_one_iff_nativeGenerator",
@@ -44688,7 +44707,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "coefficient one iff native inverse equals chart generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-correctedcoefficient-eq-one-iff-nativegenerator,
    :kind :lemma,
    :depends-on
@@ -44713,7 +44734,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -44725,7 +44746,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "generator transport implies chart naturality",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-integraltorational-chart-naturality-of-generator-transport,
    :kind :lemma,
@@ -44751,7 +44774,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt",
@@ -44761,7 +44784,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "positive rational homology below top vanishes",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ebe33ec6f"},
    :id :lemma-t99j05-euclideanunitsphere-positivehomology-iszero-of-lt,
    :kind :lemma,
    :depends-on [:lemma-t99j05-affineunitsphere-tophomologyiso],
