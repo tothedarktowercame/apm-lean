@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "Skeleton inverse/homeomorphism; MV; normalize.",
@@ -88730,7 +88730,7 @@
      "06f56c6542a0bb9c6a5e73477eb7b2c7326cc8793ba450f8fc4036ed151e291f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88876,6 +88876,19 @@
      {:cmd "git show --check 18d427092", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "exposed quotient legs"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792113056394-14953-69bb5fc8",
+     :commands
+     ["git show/diff/check 18d427092"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and comment-stripped placeholder recount from 18d427092"],
+     :finding
+     "PASS program STOP: topo-6 commit 18d427092 adds compiled, sorry-free progress beyond history 5899fb786. projection_fiberCard exhausts both wedge legs. At the shared basepoint it uses vertexFiberEquiv; otherwise intervalCircle_surjective supplies a representative, non-basepoint excludes both endpoints and gives an interior parameter, then interiorFiberEquiv gives the fiber-to-V equivalence. The inr basepoint is correctly rewritten to the common inl basepoint. Thus all finite fibers have Nat.card V without assuming covering charts. Only t92J06Closure.lean changed; fixture SHA 7659a4c7f71751321f5f79cb2a51a09e18a62557f5cda4ab1169fa8e69863cf9 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Covering charts, Cayley tree, and finite invariants remain listed."},
     :commit "18d427092",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88884,7 +88897,7 @@
      "7659a4c7f71751321f5f79cb2a51a09e18a62557f5cda4ab1169fa8e69863cf9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88902,7 +88915,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked surjectivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked uniform fiber cardinality.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88942,7 +88955,10 @@
      :commit "7cfdde03e",
      :reason "Banked open-edge fiber classification."}
     {:job 3, :commit "b0415d1fa", :reason "Banked vertex fiber."}
-    {:job 4, :commit "5899fb786", :reason "Banked surjectivity."}]}
+    {:job 4, :commit "5899fb786", :reason "Banked surjectivity."}
+    {:job 5,
+     :commit "18d427092",
+     :reason "Banked uniform fiber cardinality."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -96859,7 +96875,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryQuotientToOuterSkeleton",
@@ -96869,14 +96885,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "boundary/skeleton map",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozenboundaryquotienttoouterskeleton,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorboundaryhomologyisograph],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "projection_fiberCard", :type "all fibers have Nat.card V"},
@@ -96885,7 +96903,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "all fibers have Nat.card V",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "18d427092"},
    :id :lemma-projection-fibercard,
    :kind :lemma,
    :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
