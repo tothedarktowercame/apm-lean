@@ -2510,6 +2510,15 @@ theorem t96A06_boolH0_endpoint_pair_iff_comparison :
   · intro h
     constructor <;> unfold t96A06_boolH0PointComparison <;> rw [h]
 
+/-- Point-inclusion naturality in both Bool components is equivalent to the
+full comparison.  This is the form used by the forthcoming `Unit → Bool`
+naturality calculation. -/
+theorem t96A06_boolH0_all_points_iff_comparison :
+    (∀ b : Bool, t96A06_boolH0PointComparison b) ↔
+      t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  rw [← t96A06_boolH0_endpoint_pair_iff_all_points,
+    t96A06_boolH0_endpoint_pair_iff_comparison]
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5409,6 +5418,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_integralComparison_of_endpoint_pair
 #print axioms t96A06_boolH0_endpoint_pair_iff_all_points
 #print axioms t96A06_boolH0_endpoint_pair_iff_comparison
+#print axioms t96A06_boolH0_all_points_iff_comparison
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
