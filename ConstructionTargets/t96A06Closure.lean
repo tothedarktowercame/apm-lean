@@ -1954,6 +1954,48 @@ theorem t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
   rw [t96A06_sphere3_integral_normalizedClass_localizes,
     ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
 
+/-- The production top-homology coordinate of the class normalized by the
+chosen stereographic local chart. -/
+noncomputable def t96A06_normalizedClassSphereTopCoordinate : ℤ :=
+  (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3 (by omega)).hom.hom
+    (ConstructionTargets.HigherSphereLocalization.normalizedClass
+      (k := 1) polynomialSphereRegularPoint)
+
+set_option maxHeartbeats 800000 in
+/-- In the production sphere coordinate, the image of the iterated
+coefficient generator is precisely the library's normalization-comparison
+degree in dimension three. -/
+theorem t96A06_integralIteratedSphereGenerator_comparison_coordinate :
+    (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3 (by omega)).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator) =
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 := by
+  rfl
+
+/-- The required generator comparison is equivalent to equality of its two
+integer orientation coordinates. -/
+theorem t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator =
+      ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint ↔
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+      t96A06_normalizedClassSphereTopCoordinate := by
+  constructor
+  · intro h
+    rw [← t96A06_integralIteratedSphereGenerator_comparison_coordinate]
+    exact congrArg
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom.hom h
+  · intro h
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom).1
+    rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate]
+    exact h
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4782,6 +4824,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint
 #print axioms t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one
 #print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
+#print axioms t96A06_integralIteratedSphereGenerator_comparison_coordinate
+#print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
