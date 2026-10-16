@@ -36708,33 +36708,32 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Identify zero-last endpoint with CP n; MV successor; Main.",
+    "Descend truncation; prove inverses; deformation retract; MV; Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_lowerPatch_quotientHomotopy",
-      :type
-      "continuous restricted quotient homotopy with zero and one endpoints",
+    [{:name "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
+      :type "time-one factors through CP n zero-last inclusion",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessorLowerVectorHomotopyInPatch_continuous"],
+      :depends-on ["t99J05_cp_successor_lowerPatch_quotientHomotopy"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
       :type
-      "identify zero-last endpoint with CP n and package deformation retract",
+      "continuous truncation and lower-patch deformation retract to CP n",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_lowerPatch_quotientHomotopy"],
+      :depends-on ["cpSuccessorLowerPatchHomotopy_one_eq_inclusion"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed restricted quotient homotopy descent.",
+    :reason "Committed CP n inclusion and time-one factorization.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36746,26 +36745,13 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 380841fbd",
+      "git diff --check && git show --check --stat --oneline c1ebea9b0",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile attempts",
+    [{:cmd "closure compile",
       :exit 1,
-      :note
-      "Fixed choice application, scalar orientation, continuity composition, endpoints."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792142803654-15291-db6b2778",
-     :commands
-     ["git show --check --stat 380841fbd; inspect diff"
-      "verify commit blob equals compiled file"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean Closure, Main, fixture"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: 380841fbd adds compiled, sorry-free progress beyond history: the restricted open quotient, representative-independent descended homotopy, continuity via quotient-map descent, and correct time-0/time-1 endpoints. The scalar orientation in projective equality is handled correctly. Fixture hash matches; axioms standard. Main remains 1->1; endpoint CP identification, MV, and Main milestones are listed."},
-    :commit "380841fbd",
+      :note "Explicit continuity and unit scalar; rerun passed."}],
+    :commit "c1ebea9b0",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36773,7 +36759,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -45336,7 +45322,8 @@
    :depends-on
    [:lemma-cpsuccessorzerolastvector
     :lemma-cpsuccessorlowervectorhomotopy
-    :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy],
+    :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy
+    :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -46041,6 +46028,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate-iff],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
+    :type "time-one factors through CP n zero-last inclusion"},
+   :lemma
+   {:name "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "time-one factors through CP n zero-last inclusion",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
