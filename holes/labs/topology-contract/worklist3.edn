@@ -36708,32 +36708,33 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Prove endpoint/retraction identity; package retract; MV; Main.",
+    "MV from retract and overlap sphere data; then homology, Lefschetz, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "cpSuccessorLowerRetraction_inclusion",
-      :type "truncation is a left inverse to zero-last inclusion",
+    [{:name "t99J05_cp_successor_lowerPatch_deformationRetract",
+      :type "lower patch homotopy equivalent to CP n",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessorLowerPatchHomotopy_one_eq_inclusion"],
+      :depends-on ["cpSuccessorLowerRetraction_inclusion"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
-      :type "package lower-patch deformation retract",
+     {:name "t99J05_cp_successor_mayerVietoris_step",
+      :type "CP successor rational homology via MV",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessorLowerRetraction_inclusion"],
+      :depends-on
+      ["t99J05_cp_successor_lowerPatch_deformationRetract"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed truncation descent and left inverse.",
+    :reason "Packaged lower-patch homotopy equivalence; MV remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36744,27 +36745,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd
-      "git diff --check -- ConstructionTargets/t99J05Closure.lean",
-      :exit 0}
-     {:cmd "git show --check --stat --oneline 70fe46d76", :exit 0}],
+     {:cmd "git show --check --stat --oneline 87bd5a00f", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :note "Fixed vector equality; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792148866434-15369-a4a325cd",
-     :commands
-     ["git show --check --stat 70fe46d76; inspect diff"
-      "verify commit blob equals compiled file"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean Closure, Main, fixture"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: 70fe46d76 adds compiled, sorry-free progress beyond history: continuous homogeneous truncation, representative-independent quotient descent, continuity of the CP n retraction, and the left-inverse law for zero-last inclusion. Scalar orientation and quotient boundary are correct. Fixture hash matches; axioms standard. Main remains 1->1; endpoint identity, packaged retract, MV, and Main milestones are listed."},
-    :commit "70fe46d76",
+      :note "Fixed prodMk spelling; rerun passed."}],
+    :commit "87bd5a00f1",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36772,7 +36758,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -45330,7 +45316,8 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type
     "lower patch deformation retracts onto the zero-last projective subspace CP n",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-lowerpatch-deformationretract,
    :kind :lemma,
    :depends-on
@@ -46402,6 +46389,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-coefficientcirclecomparison-eq-native-of-apply-one],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_step",
+    :type "CP successor rational homology via MV"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_step",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "CP successor rational homology via MV",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-step,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-deformationretract],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
