@@ -88727,6 +88727,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check f9a16a312", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792191792046-15862-e6f222c7",
+     :commands
+     ["hash/scope/placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed f9a16a312 (author topo-6), new after 2994e17c9. Fixture 24eb6505... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0. Assembly preserves H0, uses the correctly oriented H1 iso, derives H2 zero from the frozen boundary kernel, and correctly sends k>=2 with k!=2 to the k>=3 hypothesis. It compiles sorry-free with only propext, Classical.choice, Quot.sound. STOP lists all residual H0/H2/high, H1 comparison/exactness/section, final homology, and normalization milestones."},
     :commit "f9a16a312",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88735,7 +88747,7 @@
      "24eb6505f2de5ba47d791c58128761e3f3fdc33b5f3da39f2eccd64896f68779"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88753,7 +88765,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked comparison SpaceH Smith iso.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked generator homology assembly.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89001,7 +89013,10 @@
      :reason "Banked section-based SpaceH Smith iso."}
     {:job 5,
      :commit "2994e17c9",
-     :reason "Banked comparison SpaceH Smith iso."}]}
+     :reason "Banked comparison SpaceH Smith iso."}
+    {:job 6,
+     :commit "f9a16a312",
+     :reason "Banked generator homology assembly."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99075,7 +99090,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorHomology_of_comparisons", :type "H"},
@@ -99084,7 +99099,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f9a16a312"},
    :id :lemma-frozengeneratorhomology-of-comparisons,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorspacehsmithiso-of-comparisons],
