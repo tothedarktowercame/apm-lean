@@ -2535,6 +2535,22 @@ theorem t96A06_boolH0_module_pointInclusion_coordinates (b : Bool) :
   exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
     (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) b
 
+/-- The native additive edge of the same `Unit → Bool` square has the
+identical selected-summand coordinate. -/
+theorem t96A06_boolH0_additive_pointInclusion_coordinates (b : Bool) :
+    Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv ≫
+        HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+            (AddCommGrpCat.of ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0 =
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).inv := by
+  exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
+    AddCommGrpCat (AddCommGrpCat.of ℤ) b
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5436,6 +5452,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_endpoint_pair_iff_comparison
 #print axioms t96A06_boolH0_all_points_iff_comparison
 #print axioms t96A06_boolH0_module_pointInclusion_coordinates
+#print axioms t96A06_boolH0_additive_pointInclusion_coordinates
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
