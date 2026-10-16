@@ -36755,6 +36755,19 @@
       :exit 1,
       :note
       "Fixed syntax/types; existing biproduct iso is group-only."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792187528955-15806-69ac6826",
+     :commands
+     ["git show/check 2c9276d49"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit adds the literal overlap-to-patches homology arrow with lower component positive and top component negated, plus proofs of both projections. This matches MV orientation and literal-subspace boundaries; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains one declared placeholder."},
     :commit "2c9276d49",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36763,7 +36776,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36781,7 +36794,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed both overlap-leg naturality proofs.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal signed overlap map and component formulas.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36902,7 +36915,11 @@
      :reason "Repaired compiled range homology naturality."}
     {:job 5,
      :commit "9bea96bc2",
-     :reason "Committed both overlap-leg naturality proofs."}]}
+     :reason "Committed both overlap-leg naturality proofs."}
+    {:job 6,
+     :commit "2c9276d49",
+     :reason
+     "Committed literal signed overlap map and component formulas."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37272,7 +37289,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37323,7 +37340,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37345,7 +37362,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47646,7 +47663,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_chainComparison_homology_generators",
@@ -47658,7 +47675,9 @@
     :type
     "homology map carries mapped generator class to additive class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-chaincomparison-homology-generators,
    :kind :lemma,
    :depends-on
@@ -47731,7 +47750,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_preservation_right_eq_left",
@@ -47741,7 +47760,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "right and left Unit preservation agree",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-preservation-right-eq-left,
    :kind :lemma,
    :depends-on
@@ -47749,7 +47770,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_rightHomology_opcycle_transport",
@@ -47761,14 +47782,16 @@
     :type
     "canonical opcycle transport commutes with right homology data",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-righthomology-opcycle-transport,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-preservation-right-eq-left],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mapOpcyclesIso_eq_rightData",
@@ -47778,14 +47801,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "Unit opcycle preservation equals right-data transport",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-righthomology-opcycle-transport],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_literalOverlapToPieces_components",
@@ -47795,7 +47820,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "signed map component formulas",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "2c9276d49"},
    :id :lemma-t99j05-cp-successor-literaloverlaptopieces-components,
    :kind :lemma,
    :depends-on
