@@ -3052,6 +3052,41 @@ theorem homology_of_homeomorph_frozenSigned {X : Type} [TopologicalSpace X]
   intro k hk
   exact (hhigh k hk).of_iso (homologyIsoFrozenSignedOfHomeomorph h k)
 
+/-- The consumer-shaped homology tuple from a named-model homeomorphism and
+the explicit section-based Mayer--Vietoris comparison data. -/
+theorem homology_of_homeomorph_frozenSigned_section
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenSignedQuotient)
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH X 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH X 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH X k) :=
+  homology_of_homeomorph_frozenSigned h
+    (frozenSignedHomology_of_generator_section h0 e hboundary hzero hreverse
+      s hsection h2 hhigh)
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -3123,6 +3158,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
 #print axioms homology_of_homeomorph_frozenSigned
+#print axioms homology_of_homeomorph_frozenSigned_section
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
 #print axioms frozenGeneratorRel_radius_eq
