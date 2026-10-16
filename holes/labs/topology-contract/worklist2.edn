@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "MV coordinate arrows; normalize.",
@@ -88730,7 +88730,7 @@
      "9ceb6d75869895b36b8e56e83a0c78e5ae7f7570fb382e3cba9ad8a4c7a1ca9b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88938,6 +88938,19 @@
      {:cmd "git show --check 8217909a6", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "open injection image"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792145400354-15315-cee6dcbb",
+     :commands
+     ["git show/diff/check 8217909a6"
+      "verify raw realization topology and edge-set factors"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 8217909a6"],
+     :finding
+     "PASS program STOP: topo-6 commit 8217909a6 adds compiled, sorry-free progress after 7dcd7cd9f. rawEdgeInterior is exactly one label/vertex open interval in the edge summand. Under the same bottom topology on V used by realizationRawTopology, V is discrete; label and vertex singletons are open, the UnitInterval condition is the preimage of Ioo under subtype value, and Sum.inr is open. Saturated charts, trivializations, tree cover, and four finite covers remain explicitly listed. Scope is one target file; fixture SHA 310c0bc68794e69c7b455c32c4d6b712fc7396cabecf47b9e4ec9d09d566a862; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "8217909a6",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88946,7 +88959,7 @@
      "310c0bc68794e69c7b455c32c4d6b712fc7396cabecf47b9e4ec9d09d566a862"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88964,7 +88977,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked realization quotient authority.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked raw edge openness.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89013,7 +89026,10 @@
      :reason "Banked exact projection fibers."}
     {:job 7,
      :commit "7dcd7cd9f",
-     :reason "Banked realization quotient authority."}]}
+     :reason "Banked realization quotient authority."}
+    {:job 8,
+     :commit "8217909a6",
+     :reason "Banked raw edge openness."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -97599,7 +97615,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVIntersectionExact",
@@ -97609,7 +97625,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "production MV exactness segment",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratormvintersectionexact,
    :kind :lemma,
    :depends-on
@@ -97618,7 +97636,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rawEdgeInterior_isOpen", :type "raw edge open"},
@@ -97627,7 +97645,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "raw edge open",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "8217909a6"},
    :id :lemma-rawedgeinterior-isopen,
    :kind :lemma,
    :depends-on [:lemma-realizationquotientmap-isquotientmap],
