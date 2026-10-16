@@ -36708,34 +36708,36 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Prove MV-map naturality and transport exactness; then successor data, Lefschetz, Main.",
+    "Prove overlap-to-pieces naturality and exactness; then successor data, Lefschetz, Main.",
     :outcome :stop,
-    :warnings ["Existing simp lints; Main one placeholder."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
-      :type
-      "range overlap/lower/top homology isomorphic to literal patches",
+    [{:name
+      "t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap",
+      :type "literal transport commutes with ambient inclusion",
       :status :proved,
-      :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_ambient"],
-      :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_transport_naturality",
-      :type "range isomorphisms commute with MV maps",
-      :status :not-started,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_cp_successor_mayerVietoris_rangeHomologyIsos"],
+      :area "rational-homology-lefschetz"}
+     {:name
+      "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
+      :type "overlap-to-pieces MV map commutes with transport",
+      :status :not-started,
+      :consumers [:t99J05],
+      :depends-on
+      ["t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed literal-patch homology isomorphisms; map naturality remains.",
+    "Committed ambient-inclusion naturality for literal-patch transport.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36746,25 +36748,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline d69b5953f", :exit 0}],
+     {:cmd "git show --check --stat --oneline b9f1d3a49", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :note "Qualified reused comparison namespace; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792166498013-15620-053b143f",
-     :commands
-     ["git show/check d69b5953f"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit adds canonical chain and homology isomorphisms from ambient-subspace ranges to literal overlap/lower/top patches after prior progress. Representation direction is correct; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains its declared one placeholder."},
-    :commit "d69b5953f",
+      :note
+      "Fixed composition and lifted chain equality; rerun passed."}],
+    :commit "b9f1d3a49",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36772,7 +36762,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -47419,6 +47409,47 @@
    :id :lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0modulechaingenerator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap",
+    :type "literal transport commutes with ambient inclusion"},
+   :lemma
+   {:name
+    "t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "literal transport commutes with ambient inclusion",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
+    :type "overlap-to-pieces MV map commutes with transport"},
+   :lemma
+   {:name
+    "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "overlap-to-pieces MV map commutes with transport",
+    :area "rational-homology-lefschetz"},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-overlap-pieces-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
