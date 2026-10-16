@@ -37247,37 +37247,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove coordinate equality; then naturality, four classes, Main.",
+    "Exclude opposite orientation; then naturality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff",
-      :type "generator comparison iff orientation coordinates agree",
+      "t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg",
+      :type "excluding opposite signs forces coordinate equality",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison"],
+      ["t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff"],
       :area "rp-rational-homology"}
-     {:name "t96A06_coefficientDegree_eq_normalizedClassCoordinate",
+     {:name
+      "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate",
       :type
-      "coefficient degree 2 equals normalized production sphere coordinate",
+      "coefficient degree is not the negative normalized production coordinate",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff"],
+      ["t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Reduced comparison to integer coordinates.",
+    :reason
+    "Committed orientation-unit and opposite-branch reduction.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37286,19 +37288,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 5099299cc",
+      "git diff --check && git show --check --stat --oneline 19cefa247",
       :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile attempts",
       :exit 1,
-      :note "Fixed syntax and heartbeat scope."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792144265883-15309-2578e494",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "5099299cc",
+      :note "Corrected additive-map transport and iso direction."}],
+    :commit "19cefa247",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37306,7 +37302,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45955,6 +45951,47 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg",
+    :type "excluding opposite signs forces coordinate equality"},
+   :lemma
+   {:name
+    "t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "excluding opposite signs forces coordinate equality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate-of-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate",
+    :type
+    "coefficient degree is not the negative normalized production coordinate"},
+   :lemma
+   {:name "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient degree is not the negative normalized production coordinate",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate-of-ne-neg],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
