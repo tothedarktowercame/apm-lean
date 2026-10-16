@@ -88722,6 +88722,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 6c7364c1e", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792158123145-15513-d5b677c2",
+     :commands
+     ["git show/check 6c7364c1e"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 6c7364c1e changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. The established Int-plus-graph H0 production reassembly arrow is postcomposed with the verified named-to-canonical concrete H0 iso, changing only its codomain while preserving degree and biproduct order. Intersection transport, exactness, matrices, normalization remain listed."},
     :commit "6c7364c1e",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88730,7 +88742,7 @@
      "9a0acb1a014abbb5ba6780b6d43d50c7c62df32afa7dbc79bf69e9722096f203"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88748,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical graph reassembly transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical H0 reassembly transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88941,7 +88953,10 @@
      :reason "Banked reassembly transport."}
     {:job 3,
      :commit "8cd314a9a",
-     :reason "Banked canonical graph reassembly transport."}]}
+     :reason "Banked canonical graph reassembly transport."}
+    {:job 4,
+     :commit "6c7364c1e",
+     :reason "Banked canonical H0 reassembly transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98282,7 +98297,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow",
@@ -98292,7 +98307,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "Int x graph H0 -> canonical quotient H0",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "6c7364c1e"},
    :id :lemma-frozengeneratorcanonicalmvintgraphh0reassemblyarrow,
    :kind :lemma,
    :depends-on
