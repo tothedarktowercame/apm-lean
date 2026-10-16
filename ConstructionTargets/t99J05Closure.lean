@@ -1256,6 +1256,23 @@ noncomputable def t99J05_ambientSubspaceRangeHomologyIso
     (ComplexShape.down ℕ) k).mapIso
       (t99J05_ambientSubspaceRangeChainsIso A)
 
+/-- The range-to-literal homology isomorphism commutes with inclusion into
+ambient singular homology. -/
+theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap
+          (t99J05_ambientSubspaceRangeChainsIso A).hom k)
+        (HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A) k) =
+      HomologicalComplex.homologyMap
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange A).ι) k := by
+  simpa only [HomologicalComplex.homologyMap_comp] using
+    congrArg (fun f => HomologicalComplex.homologyMap f k)
+      (ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso_hom_comp_subspaceMap
+        ℚ A)
+
 /-- The three range-presented terms in the successor Mayer--Vietoris sequence
 transport to the literal overlap and two patches. -/
 noncomputable def t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
@@ -1368,6 +1385,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_mayerVietoris_exact_ambient
 #print axioms t99J05_ambientSubspaceRangeChainsIso
 #print axioms t99J05_ambientSubspaceRangeHomologyIso
+#print axioms t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
 #print axioms t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
