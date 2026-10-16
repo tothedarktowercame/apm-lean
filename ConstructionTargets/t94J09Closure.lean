@@ -2538,6 +2538,32 @@ noncomputable def frozenH1SmithEquivOfSurjectiveKernel
     Submodule.quotEquivOfEq _ _ hker ≪≫ₗ
       frozenFaceCokernelSmithEquiv
 
+/-- The degree-one Mayer--Vietoris comparison yields the required explicit
+Smith coordinates once its reverse exactness inclusion and surjectivity are
+available. -/
+noncomputable def frozenGeneratorH1SmithEquiv_of_comparisons
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (hsurjective : Function.Surjective
+      (frozenGeneratorMVReassemblyLinear e)) :
+    (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (@TopCat.of FrozenGeneratorQuotient
+        (@instTopologicalSpaceQuotient Surfaces.Disk
+          (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) ≃ₗ[ℤ]
+      N6Smith :=
+  frozenH1SmithEquivOfSurjectiveKernel
+    (frozenGeneratorMVReassemblyLinear e) hsurjective
+    (frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
+      e hboundary hzero hreverse).symm
+
 /-- Assemble the literal homology calculation once the geometric comparison
 maps identify the Mayer--Vietoris groups with the frozen chain complex. -/
 theorem frozenPolygonHomology_of_comparisons
@@ -2638,6 +2664,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
 #print axioms frozenH1SmithEquivOfSurjectiveKernel
+#print axioms frozenGeneratorH1SmithEquiv_of_comparisons
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
