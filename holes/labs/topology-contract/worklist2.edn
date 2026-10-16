@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 7316a53d0", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792139980040-15245-008f9437",
+     :commands
+     ["git show/diff/check 7316a53d0"
+      "verify committed disk/radius representation"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 7316a53d0"],
+     :finding
+     "PASS program STOP: topo-6 commit 7316a53d0 adds compiled, sorry-free progress after 86592147d. frozenGeneratorEqvGen_boundary_of_ne proves nontrivial generated pairs lie on the actual polygon-disk boundary: rel uses generator boundary support, refl contradicts x != y, symm swaps endpoints, and trans either removes an identity step or transports radius equality across the second chain. Closed quotient/T2/inverse continuity/MV and normalization remain explicitly listed. Scope is one target file; fixture SHA a2d9356466e4a375909a6440194db3bbb5d61d6be85dc14b3afef36a5ffd7eeb; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "7316a53d0",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "a2d9356466e4a375909a6440194db3bbb5d61d6be85dc14b3afef36a5ffd7eeb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact boundary/outer-skeleton equivalence.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nontrivial EqvGen boundary support.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88864,7 +88877,10 @@
     {:job 9, :commit "0e43d77a5", :reason "Banked quotient T2."}
     {:job 1,
      :commit "86592147d6f62f826eacd69809dd1a3182dab737",
-     :reason "Banked exact boundary/outer-skeleton equivalence."}]}
+     :reason "Banked exact boundary/outer-skeleton equivalence."}
+    {:job 2,
+     :commit "7316a53d0",
+     :reason "Banked nontrivial EqvGen boundary support."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97430,7 +97446,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorEqvGen_boundary_of_ne",
@@ -97440,7 +97456,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "nontrivial pairs lie on boundary",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "7316a53d0"},
    :id :lemma-frozengeneratoreqvgen-boundary-of-ne,
    :kind :lemma,
    :depends-on [],
