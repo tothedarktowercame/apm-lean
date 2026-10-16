@@ -88729,6 +88729,19 @@
      {:cmd "git show --check 5d1cc7620", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "category"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792174012195-15724-68f4103e",
+     :commands
+     ["git show/check 5d1cc7620"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free reassembly-surjectivity transport beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Coordinate preimages move through the inverse equivalence to the canonical arrow, while canonical preimages move forward through the equivalence to the coordinate arrow; both directions and representations are correct. The theorem does not assert surjectivity itself. Only standard axioms occur; H1 comparison, exactness, surjectivity, homology assembly, and normalization remain listed."},
     :commit "5d1cc7620",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88737,7 +88750,7 @@
      "6b60ee473e75d30af21a6eef2aaa4c727371b970d80250aa1c89807447a26e0d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88755,7 +88768,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H1 Smith assembly.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: .",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88981,9 +88994,8 @@
     {:job 8, :commit "efd5f7159", :reason "Done."}
     {:job 9, :commit "7bca50fb8", :reason "."}
     {:job 1, :commit "fda8e08ff", :reason "Banked."}
-    {:job 2,
-     :commit "8e6918ba1",
-     :reason "Banked H1 Smith assembly."}]}
+    {:job 2, :commit "8e6918ba1", :reason "Banked H1 Smith assembly."}
+    {:job 3, :commit "5d1cc7620", :reason "."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98787,7 +98799,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVReassemblyLinear_surjective_iff",
@@ -98797,7 +98809,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "surj",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5d1cc7620"},
    :id :lemma-frozengeneratormvreassemblylinear-surjective-iff,
    :kind :lemma,
    :depends-on
