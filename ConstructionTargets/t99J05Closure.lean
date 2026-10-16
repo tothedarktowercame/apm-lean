@@ -160,6 +160,36 @@ theorem cpSuccessor_openCover (n : ℕ) :
       exact not_ne_iff.mp hlast
     · exact h i hi
 
+/-- Nonzero homogeneous representatives of the lower filtration patch. -/
+abbrev CPSuccessorLowerVectors (n : ℕ) :=
+  {v : NonzeroVectors ℂ (n + 1) //
+    quotientMap ℂ (n + 1) v ∈ cpSuccessorLowerPatch n}
+
+/-- Zero the last homogeneous coordinate of a representative in the lower
+patch.  The result remains nonzero because some earlier coordinate is
+nonzero.  This is the endpoint used by the lower-patch deformation retract. -/
+def cpSuccessorZeroLastVector (n : ℕ) (v : CPSuccessorLowerVectors n) :
+    NonzeroVectors ℂ (n + 1) :=
+  ⟨fun j => if j = Fin.last (n + 1) then 0 else v.1.1 j, by
+    obtain ⟨i, hi, hrep⟩ := v.2
+    have hvi : v.1.1 i ≠ 0 := by
+      have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+          {p : CP (n + 1) | Projectivization.rep p i ≠ 0} := hrep
+      exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp hmem
+    intro hz
+    have := congrFun hz i
+    simp [hi, hvi] at this⟩
+
+@[simp] theorem cpSuccessorZeroLastVector_last (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    (cpSuccessorZeroLastVector n v).1 (Fin.last (n + 1)) = 0 := by
+  simp [cpSuccessorZeroLastVector]
+
+@[simp] theorem cpSuccessorZeroLastVector_castSucc (n : ℕ)
+    (v : CPSuccessorLowerVectors n) (i : Fin (n + 1)) :
+    (cpSuccessorZeroLastVector n v).1 i.castSucc = v.1.1 i.castSucc := by
+  simp [cpSuccessorZeroLastVector, Fin.castSucc_ne_last]
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
@@ -669,6 +699,9 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorTopPatch_isOpen
 #print axioms cpSuccessorLowerPatch_isOpen
 #print axioms cpSuccessor_openCover
+#print axioms cpSuccessorZeroLastVector
+#print axioms cpSuccessorZeroLastVector_last
+#print axioms cpSuccessorZeroLastVector_castSucc
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
