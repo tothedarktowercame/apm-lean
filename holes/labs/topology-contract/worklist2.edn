@@ -88724,6 +88724,19 @@
     [{:cmd "draft build",
       :exit 1,
       :correction "explicit equivalence"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792143050679-15297-97b565fb",
+     :commands
+     ["git show/diff/check 8f5cf7f54"
+      "verify disk quotient, subtype, and homeomorphism types"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 8f5cf7f54"],
+     :finding
+     "PASS program STOP: topo-6 commit 8f5cf7f54 adds compiled, sorry-free progress after 11a33e6b0. frozenGeneratorQuotientT2Space applies the compact closed-equivalence theorem to the actual disk EqvGen setoid and quotient topology; the outer skeleton is its Hausdorff subtype. The previously proved continuous bijection from the compact boundary quotient therefore has continuous inverse, yielding the correctly typed homeomorphism. MV comparison and normalization remain explicitly listed. Scope is one target file; fixture SHA 232a67ab7220d0b61bc9f5b9bf73f2375486b66c18e5b3464b144aa9b9d844ef; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "8f5cf7f54",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88732,7 +88745,7 @@
      "232a67ab7220d0b61bc9f5b9bf73f2375486b66c18e5b3464b144aa9b9d844ef"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88763,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked closed disk EqvGen graph.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked disk T2 and outer homeomorphism.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88883,7 +88896,10 @@
      :reason "Banked closed boundary disk image."}
     {:job 7,
      :commit "11a33e6b0",
-     :reason "Banked closed disk EqvGen graph."}]}
+     :reason "Banked closed disk EqvGen graph."}
+    {:job 8,
+     :commit "8f5cf7f54",
+     :reason "Banked disk T2 and outer homeomorphism."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97569,7 +97585,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryQuotientHomeomorphOuterSkeleton",
@@ -97579,7 +97595,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "homeomorphism",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8f5cf7f54"},
    :id :lemma-frozenboundaryquotienthomeomorphouterskeleton,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratoreqvgen-isclosed],
