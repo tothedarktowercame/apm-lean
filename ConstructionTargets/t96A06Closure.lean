@@ -2267,6 +2267,76 @@ theorem t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
   exact ConstructionTargets.CoefficientChartLocal.generator_normalization
     (R := ℤ) 1 polynomialSphereRegularPoint
 
+/-- The native inverse image has positive chart coordinate exactly when the
+corrected comparison has positive generator coefficient. -/
+theorem t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint)) = 1 ↔
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 := by
+  constructor
+  · intro hcoordinate
+    have hinv :
+        (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint) =
+        ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+          polynomialSphereRegularPoint := by
+      apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+        (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+          polynomialSphereRegularPoint).hom).1
+      rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
+      exact hcoordinate
+    have hforward := congrArg
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom hinv
+    have hcancel := CategoryTheory.ConcreteCategory.congr_hom
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv_hom_id
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint)
+    simp only [CategoryTheory.ConcreteCategory.comp_apply,
+      CategoryTheory.ConcreteCategory.id_apply] at hcancel
+    have hforward' :
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint =
+          (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint) 3).hom.hom
+            (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+              polynomialSphereRegularPoint) :=
+      hcancel.symm.trans hforward
+    have hgen :=
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul
+        1 polynomialSphereRegularPoint
+    have hforward'' :
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint =
+          ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+              1 polynomialSphereRegularPoint •
+            ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+              (k := 1) polynomialSphereRegularPoint :=
+      hforward'.trans (by simpa only [Nat.reduceAdd] using hgen)
+    have hnormalized := congrArg
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom hforward''
+    rw [map_zsmul] at hnormalized
+    have hnormalizes :=
+      ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
+        1 polynomialSphereRegularPoint
+    rw [hnormalizes] at hnormalized
+    simpa using hnormalized.symm
+  · exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+
 /-- At the selected point, positivity of the corrected coefficient is exactly
 the exclusion of the negation automorphism between the two normalizations. -/
 theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation :
@@ -3896,6 +3966,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator_unmap
 #print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
 #print axioms t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+#print axioms t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one
