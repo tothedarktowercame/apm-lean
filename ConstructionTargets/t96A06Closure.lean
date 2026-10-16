@@ -2914,6 +2914,35 @@ theorem t96A06_unitH0_opcyclesMap_generator :
 
 #print axioms t96A06_unitH0_opcyclesMap_generator
 
+/-- Naturality of degree-zero homology lifts the explicit opcycles comparison
+to the corresponding homology classes. -/
+theorem t96A06_unitH0_induced_opcycle_generator :
+    (HomologicalComplex.homologyMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).isoHomologyι₀.inv).hom
+        (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).map
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).pOpcycles.hom
+          t96A06_unitH0ModuleChainGenerator) =
+      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv).hom
+        (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+          ((Limits.Sigma.ι
+            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+              (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+            (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+              (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ))) := by
+  rw [← ConcreteCategory.comp_apply,
+    ChainComplex.isoHomologyι₀_inv_naturality,
+    ConcreteCategory.comp_apply,
+    t96A06_unitH0_opcyclesMap_generator]
+
+#print axioms t96A06_unitH0_induced_opcycle_generator
+
 /-- The Unit homology comparison factors as preservation of module homology
 followed by the homology map induced by the explicit chain comparison. -/
 theorem t96A06_unitH0_homologyComparison_factorization :
