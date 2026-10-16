@@ -88672,29 +88672,30 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
-    :residual "Graph equivalence/MV; normalize; assemble.",
+    :residual "Graph homeomorphism/MV; normalize; assemble.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint" "dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCircleQuotient_identifies_generators",
-      :type "seven quotient identifications",
+    [{:name "frozenGeneratorCircleRel_iff_graphRel",
+      :type "exact circle graph relation",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorCircleBoundaryHomologyIso"],
+      :depends-on
+      ["frozenGeneratorCircleQuotient_identifies_generators"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "MV comparisons",
+      :type "MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorCircleQuotient_identifies_generators"
+      ["frozenGeneratorCircleRel_iff_graphRel"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
-      :type "polygon homology",
+      :type "homology",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenGeneratorHomology_comparisons"],
@@ -88709,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked circle generator identifications.",
+    :reason "Banked exact graph relation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,29 +88720,18 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 712d692dd", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792111238199-14911-9ba6fa1d",
-     :commands
-     ["git show/diff/check 712d692dd"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from 712d692dd"],
-     :finding
-     "PASS program STOP: topo-6 commit 712d692dd adds compiled, sorry-free progress after 58cf7bafe. Boundary edge points are transported through the circle parametrization with an exact inverse lemma. The induced circle relation contains all seven frozen generators in the correct orientations: six preserve t and the 1/7 pair uses reverseIcc. EqvGen.rel followed by Quotient.sound therefore proves precisely the seven quotient identifications claimed. No converse or graph equivalence is asserted; that equivalence and MV remain listed. Only t94J09Closure.lean changed; fixture SHA 0b59044b430b8311095278a04b896675ef5d213442b97f3188b45a9a8c1be69b matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization also remains."},
-    :commit "712d692dd",
+     {:cmd "git show --check 5544234f0", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :correction "normalized Fin"}],
+    :commit "5544234f0",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "0b59044b430b8311095278a04b896675ef5d213442b97f3188b45a9a8c1be69b"},
+     "b140dc2d74671bf49d6ff30e84a55cb5cf9f298ed29e27e2a73312f8e520326c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96643,7 +96633,8 @@
     :lemma-frozengeneratorouterhomotopyequivboundary
     :lemma-frozengeneratorouterhomologyisoboundary
     :lemma-frozengeneratorcircleboundaryhomologyiso
-    :lemma-frozengeneratorcirclequotient-identifies-generators],
+    :lemma-frozengeneratorcirclequotient-identifies-generators
+    :lemma-frozengeneratorcirclerel-iff-graphrel],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96789,4 +96780,22 @@
    :id :lemma-frozengeneratorcirclequotient-identifies-generators,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorcircleboundaryhomologyiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleRel_iff_graphRel",
+    :type "exact circle graph relation"},
+   :lemma
+   {:name "frozenGeneratorCircleRel_iff_graphRel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "exact circle graph relation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorcirclerel-iff-graphrel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcirclequotient-identifies-generators],
    :other-consumers []}]}
