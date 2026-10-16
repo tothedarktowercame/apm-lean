@@ -1763,6 +1763,93 @@ theorem t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization :
     have hcoord := congrArg t96A06_sphere3_integral_H3Iso.hom.hom hclass
     simpa [c] using hcoord
 
+/-- Compare the canonical sphere-shift coordinate directly with the
+stereographic local coordinate.  This automorphism records precisely the
+remaining orientation sign. -/
+noncomputable def t96A06_sphereShiftLocalNormalizationAutomorphism :
+    AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      t96A06_sphere3_integral_H3Iso).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3 ≪≫
+    ConstructionTargets.HigherSphereLocalization.localizationIso
+      polynomialSphereRegularPoint ≪≫
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint
+
+/-- The local coordinate of the canonical sphere-shift generator is the
+value at one of the comparison automorphism. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 =
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            (t96A06_sphere3_integral_H3Iso.inv.hom 1))) := by
+  rfl
+
+/-- Consequently the localized canonical sphere-shift generator has local
+coordinate `+1` or `-1`; no other scalar ambiguity remains. -/
+theorem t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = 1 ∨
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = -1 := by
+  let em : ModuleCat.of ℤ ℤ ≅ ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso
+      t96A06_sphereShiftLocalNormalizationAutomorphism
+  let u : ℤˣ := ConstructionTargets.CoefficientChartTransitionUnit.isoUnit ℤ em
+  have hmap :
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map em.hom =
+        t96A06_sphereShiftLocalNormalizationAutomorphism.hom := by
+    dsimp [em,
+      ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso]
+    exact ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_preimage
+      (X := ModuleCat.of ℤ ℤ) (Y := ModuleCat.of ℤ ℤ)
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom
+  have happ := CategoryTheory.ConcreteCategory.congr_hom hmap (1 : ℤ)
+  have hunit : t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 =
+      (u : ℤ) := by
+    rw [← happ]
+    exact (ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action ℤ em 1).trans
+      (mul_one _)
+  rw [hunit]
+  exact Int.isUnit_eq_one_or u.isUnit
+
+/-- Elementwise form of the sign dichotomy: the canonical sphere-shift
+generator localizes to one of the two oriented ambient generators. -/
+theorem t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint ∨
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+      -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint := by
+  rcases t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one with h | h
+  · left
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator,
+      ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one]
+    exact h
+  · right
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom).1
+    rw [map_neg,
+      ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator,
+      ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one]
+    exact h
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4583,6 +4670,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one
 #print axioms t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one
 #print axioms t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one
+#print axioms t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one
+#print axioms t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
