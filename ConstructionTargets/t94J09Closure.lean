@@ -139,6 +139,53 @@ abbrev FrozenGeneratorInnerPiece :=
 abbrev FrozenGeneratorOverlapPiece :=
   PolygonRadialOpenCover.overlapOpen frozenGeneratorRel
 
+/-- The literal intersection term in the production Mayer--Vietoris
+sequence for the frozen radial cover. -/
+abbrev FrozenGeneratorIntersectionPiece :=
+  {q // q ∈ PolygonRadialOpenCover.innerOpen frozenGeneratorRel ∩
+    PolygonRadialOpenCover.outerOpen frozenGeneratorRel}
+
+/-- The production intersection is exactly the annular overlap model. -/
+def frozenGeneratorIntersectionHomeomorphOverlap :
+    FrozenGeneratorIntersectionPiece ≃ₜ FrozenGeneratorOverlapPiece :=
+  Homeomorph.setCongr frozenGeneratorRadialPackage.overlap.symm
+
+/-- Homology transport from the production intersection to the annular
+overlap model. -/
+def frozenGeneratorIntersectionHomologyIsoOverlap (k : ℕ) :
+    SpaceH FrozenGeneratorIntersectionPiece k ≅
+      SpaceH FrozenGeneratorOverlapPiece k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo frozenGeneratorIntersectionHomeomorphOverlap))
+
+/-- Exactness at the two frozen radial cover pieces in every degree. -/
+noncomputable def frozenGeneratorMVPiecesExact (k : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_pieces
+    (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+    (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+    frozenGeneratorRadialPackage.inner_isOpen
+    frozenGeneratorRadialPackage.outer_isOpen
+    frozenGeneratorRadialPackage.cover k
+
+/-- Exactness at the frozen polygon quotient term. -/
+noncomputable def frozenGeneratorMVUnionExact (k : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+    (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+    (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+    frozenGeneratorRadialPackage.inner_isOpen
+    frozenGeneratorRadialPackage.outer_isOpen
+    frozenGeneratorRadialPackage.cover k
+
+/-- Exactness at the next frozen intersection term. -/
+noncomputable def frozenGeneratorMVIntersectionExact (k : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_intersection
+    (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+    (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+    frozenGeneratorRadialPackage.inner_isOpen
+    frozenGeneratorRadialPackage.outer_isOpen
+    frozenGeneratorRadialPackage.cover k
+
 /-- The literal frozen inner piece contracts to its center. -/
 def frozenGeneratorInnerHomotopyEquivPoint :
     ContinuousMap.HomotopyEquiv FrozenGeneratorInnerPiece Unit where
@@ -1933,6 +1980,11 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorRadialPackage
 #print axioms frozenGeneratorRel_boundary
 #print axioms frozenGeneratorEqvGen_boundary_of_ne
+#print axioms frozenGeneratorIntersectionHomeomorphOverlap
+#print axioms frozenGeneratorIntersectionHomologyIsoOverlap
+#print axioms frozenGeneratorMVPiecesExact
+#print axioms frozenGeneratorMVUnionExact
+#print axioms frozenGeneratorMVIntersectionExact
 #print axioms frozenGeneratorInnerOverlapHomology
 #print axioms frozenGeneratorOuterHomotopyEquivBoundary
 #print axioms frozenGeneratorOuterHomologyIsoBoundary
