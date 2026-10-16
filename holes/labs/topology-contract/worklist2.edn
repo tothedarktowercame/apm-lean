@@ -88672,30 +88672,30 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "H1; exactness; canonical section; normalize.",
+    :residual
+    "H1 comparison; reverse exactness; canonical section; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVReassemblyLinear_comp_section",
-      :type "section transport",
+    [{:name "frozenGeneratorH1SmithEquiv_of_section",
+      :type "H1",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section"],
+      :depends-on ["frozenGeneratorMVReassemblyLinear_comp_section"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
-      :type "H1",
+      :type "H1 comparison",
       :status :not-started,
       :consumers [:t94J09],
       :depends-on [],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "exact",
+      :type "exact/section",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenBoundaryGraphH1CycleComparison"],
@@ -88726,29 +88726,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check d69c383cd", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792177483223-15744-7429f75f",
-     :commands
-     ["git show/check d69c383cd"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free coordinate-section transport beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. A canonical section is mapped forward through the graph-H1-to-six-cycle equivalence; reassociation and the established coordinate cancellation show coordinate reassembly followed by this section is identity. Sources, targets, and orientation are correct; actual section construction remains listed. Only standard axioms occur; H1 comparison, exactness, canonical section, homology assembly, and normalization remain."},
-    :commit "d69c383cd",
+     {:cmd "git show --check 92d656485", :exit 0}],
+    :commit "92d656485",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "eb6fb0f8dfd9d2f4b7d1ebdb184c94d27556c9b206b70c3972aa3de5fea8771d"},
+     "cfece4dfa4738eb396a6f3fe45c9b1c75b01f45297ed1dd14696b219863ca6b6"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98859,4 +98846,20 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow-surjective-of-section],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorH1SmithEquiv_of_section", :type "H1"},
+   :lemma
+   {:name "frozenGeneratorH1SmithEquiv_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H1",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorh1smithequiv-of-section,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvreassemblylinear-comp-section],
    :other-consumers []}]}
