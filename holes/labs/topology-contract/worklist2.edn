@@ -88726,6 +88726,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check cc844af3c", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792188840653-15814-d9022603",
+     :commands
+     ["hash/scope/placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed cc844af3c (author topo-6). Exact fixture 04c39b4d... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0. New SpaceH-to-N6Smith linear equivalence composes the forgetful bridge then concrete Smith equivalence in the correct direction and representation. It compiles sorry-free with standard axioms only. This is new program progress after a36e2ec92; residual comparison/final-homology/normalization milestones are listed."},
     :commit "cc844af3c",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88734,7 +88746,7 @@
      "04c39b4d061684240b41a0a7fa4bf51770a49a823307928f23f96b2af67ba1930"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88752,7 +88764,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked SpaceH module bridge.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked direct SpaceH Smith transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88990,7 +89002,10 @@
      :reason "Banked section H1 assembly."}
     {:job 1,
      :commit "a36e2ec92",
-     :reason "Banked SpaceH module bridge."}]}
+     :reason "Banked SpaceH module bridge."}
+    {:job 2,
+     :commit "cc844af3c",
+     :reason "Banked direct SpaceH Smith transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98992,7 +99007,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorSpaceHSmithEquiv_of_concrete", :type "T"},
@@ -99001,7 +99016,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "T",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "cc844af3c"},
    :id :lemma-frozengeneratorspacehsmithequiv-of-concrete,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorspacehforgetlinearequiv],
