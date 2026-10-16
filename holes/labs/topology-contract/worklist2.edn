@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :evidence
    {:placeholder-delta 0,
     :residual "EqvGen induction; T2/MV; normalize.",
@@ -88732,7 +88732,7 @@
      "64921cac8a7aa5f8aaa2272a3c5de92d3f299e055d1eeec13e912a8f69018e75"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88892,6 +88892,19 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "comment-stripped placeholder scan", :exit 0}
      {:cmd "git show --check 9c8d9a5d1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792118534418-15036-21e2d30a",
+     :commands
+     ["git show/diff/check 9c8d9a5d1"
+      "verify committed target blob and canonical repo packages"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 9c8d9a5d1"],
+     :finding
+     "PASS program STOP: topo-6 commit 9c8d9a5d1 adds compiled, sorry-free progress after 18d427092. projection_preimage_wedgePoint and projection_preimage_edgePoint correctly prove both set-inclusion directions: uniqueness/classification supplies a vertex representative for each preimage point, while projection_vertex/projection_edgePoint supplies the converse. These exact fibers are the stated prerequisite for covering charts; charts, tree cover, and four finite covers remain explicitly listed. Scope is one target file; fixture SHA 51ebafc46092d459a54d5c67298a2b2715e99a9064e21e39a5d9ede555c6be2b; target placeholders 0, Main 1; registry 168/0; axioms propext, Classical.choice, Quot.sound."},
     :commit "9c8d9a5d1",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88900,7 +88913,7 @@
      "51ebafc46092d459a54d5c67298a2b2715e99a9064e21e39a5d9ede555c6be2b"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88918,7 +88931,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked uniform fiber cardinality.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact projection fibers.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88961,7 +88974,10 @@
     {:job 4, :commit "5899fb786", :reason "Banked surjectivity."}
     {:job 5,
      :commit "18d427092",
-     :reason "Banked uniform fiber cardinality."}]}
+     :reason "Banked uniform fiber cardinality."}
+    {:job 6,
+     :commit "9c8d9a5d1",
+     :reason "Banked exact projection fibers."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -97101,7 +97117,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
@@ -97111,14 +97127,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "vertex iff parameter endpoint",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "projection_preimage_edgePoint",
@@ -97128,7 +97146,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "exact vertex/interior range fibers",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "9c8d9a5d1"},
    :id :lemma-projection-preimage-edgepoint,
    :kind :lemma,
    :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
