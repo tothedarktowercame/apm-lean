@@ -37248,39 +37248,39 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Exclude negative automorphism by circle/hemisphere orientation; then naturality, four classes, Main.",
+    "Prove endpoint not -1 from circle/hemisphere orientation; then naturality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg",
+      "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one",
       :type
-      "nonnegative automorphism branch excludes negative generator comparison",
+      "endpoint not -1 excludes negative normalization automorphism",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff"],
+      ["t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg"],
       :area "rp-rational-homology"}
-     {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg",
-      :type
-      "sphere-shift/local-normalization automorphism is not negative identity",
+     {:name
+      "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one",
+      :type "explicit two-suspension localized endpoint is not -1",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg"],
+      ["t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Reduced negative generator comparison to exclusion of the negative normalization automorphism.",
+    "Reduced negative automorphism to an explicit two-suspension endpoint sign.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37289,15 +37289,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 50d60ee11",
+      "git diff --check && git show --check --stat --oneline 5bee3e780",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792147283049-15341-39c58430",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "50d60ee11",
+    :commit "5bee3e780",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37305,7 +37299,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46109,6 +46103,49 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one",
+    :type
+    "endpoint not -1 excludes negative normalization automorphism"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "endpoint not -1 excludes negative normalization automorphism",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg-of-iterated-endpoint-ne-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one",
+    :type "explicit two-suspension localized endpoint is not -1"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "explicit two-suspension localized endpoint is not -1",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg-of-iterated-endpoint-ne-],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
