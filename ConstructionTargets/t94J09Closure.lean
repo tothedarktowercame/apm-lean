@@ -1363,6 +1363,24 @@ noncomputable def frozenBoundaryQuotientHomeomorphOuterSkeleton :
         (f := frozenBoundaryQuotientEquivOuterSkeleton)
         continuous_frozenBoundaryQuotientToOuterSkeleton }
 
+/-- Homology of the outer boundary skeleton in the explicit seven-edge graph
+coordinates used by the frozen Mayer--Vietoris calculation. -/
+noncomputable def frozenGeneratorOuterBoundaryHomologyIsoGraph (k : ℕ) :
+    SpaceH FrozenGeneratorOuterBoundaryPiece k ≅
+      SpaceH FrozenBoundaryGraphQuotient k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo frozenBoundaryQuotientHomeomorphOuterSkeleton.symm)) ≪≫
+      frozenGeneratorBoundaryHomologyIsoGraph k
+
+/-- Homology of the literal outer radial member in the explicit seven-edge
+graph coordinates. -/
+noncomputable def frozenGeneratorOuterHomologyIsoGraph (k : ℕ) :
+    SpaceH FrozenGeneratorOuterPiece k ≅
+      SpaceH FrozenBoundaryGraphQuotient k :=
+  frozenGeneratorOuterHomologyIsoBoundary k ≪≫
+    frozenGeneratorOuterBoundaryHomologyIsoGraph k
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -1957,6 +1975,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorQuotientT2Space
 #print axioms frozenGeneratorOuterBoundaryPieceT2Space
 #print axioms frozenBoundaryQuotientHomeomorphOuterSkeleton
+#print axioms frozenGeneratorOuterBoundaryHomologyIsoGraph
+#print axioms frozenGeneratorOuterHomologyIsoGraph
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
