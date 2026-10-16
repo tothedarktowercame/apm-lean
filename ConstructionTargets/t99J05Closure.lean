@@ -416,6 +416,161 @@ theorem cpSuccessorLowerPatchHomotopy_continuous (n : ℕ) :
       apply Subtype.ext
       exact cpSuccessorLowerVectorHomotopy_one n w
 
+/-- Append a zero last coordinate to a nonzero homogeneous vector. -/
+def cpSuccessorZeroLastIncludeVector (n : ℕ) (v : NonzeroVectors ℂ n) :
+    NonzeroVectors ℂ (n + 1) :=
+  ⟨fun j => if h : j = Fin.last (n + 1) then 0 else v.1 (j.castPred h), by
+    intro hz
+    apply v.2
+    funext i
+    have hi := congrFun hz i.castSucc
+    simpa [Fin.castSucc_ne_last] using hi⟩
+
+@[simp] theorem cpSuccessorZeroLastIncludeVector_castSucc (n : ℕ)
+    (v : NonzeroVectors ℂ n) (i : Fin (n + 1)) :
+    (cpSuccessorZeroLastIncludeVector n v).1 i.castSucc = v.1 i := by
+  simp [cpSuccessorZeroLastIncludeVector, Fin.castSucc_ne_last]
+
+@[simp] theorem cpSuccessorZeroLastIncludeVector_last (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    (cpSuccessorZeroLastIncludeVector n v).1 (Fin.last (n + 1)) = 0 := by
+  simp [cpSuccessorZeroLastIncludeVector]
+
+theorem cpSuccessorZeroLastIncludeVector_continuous (n : ℕ) :
+    Continuous (cpSuccessorZeroLastIncludeVector n) := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp only [dif_pos hj]
+    exact continuous_const
+  · simp only [cpSuccessorZeroLastIncludeVector, dif_neg hj]
+    exact (continuous_apply (j.castPred hj)).comp continuous_subtype_val
+
+theorem cpSuccessorZeroLastIncludeVector_mem_lowerPatch (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n v) ∈
+      cpSuccessorLowerPatch n := by
+  have hex : ∃ i : Fin (n + 1), v.1 i ≠ 0 := by
+    by_contra h
+    push_neg at h
+    apply v.2
+    funext i
+    exact h i
+  obtain ⟨i, hi⟩ := hex
+  refine ⟨i.castSucc, Fin.castSucc_ne_last i, ?_⟩
+  apply (Set.ext_iff.mp (affineSource_preimage i.castSucc)
+    (cpSuccessorZeroLastIncludeVector n v)).mpr
+  simpa using hi
+
+/-- The zero-last-coordinate vector inclusion, with its image bundled in the
+lower successor patch. -/
+def cpSuccessorZeroLastIncludeVectorInPatch (n : ℕ) (v : NonzeroVectors ℂ n) :
+    {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} :=
+  ⟨quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n v),
+    cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩
+
+theorem cpSuccessorZeroLastIncludeVectorInPatch_continuous (n : ℕ) :
+    Continuous (cpSuccessorZeroLastIncludeVectorInPatch n) :=
+  ((continuous_quotientMap ℂ (n + 1)).comp
+    (cpSuccessorZeroLastIncludeVector_continuous n)).subtype_mk _
+
+/-- The canonical continuous inclusion of `CP n` as the zero-last-coordinate
+projective subspace of the lower successor patch. -/
+noncomputable def cpSuccessorZeroLastInclusion (n : ℕ) :
+    C(CP n, {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :=
+  Classical.choose (projectiveHomogeneousMapDescent ℂ
+    (cpSuccessorZeroLastIncludeVectorInPatch n)
+    (cpSuccessorZeroLastIncludeVectorInPatch_continuous n)
+    (by
+      intro a b t hab
+      apply Subtype.ext
+      change quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n a) =
+        quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n b)
+      apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+      have ht : t ≠ 0 := by
+        intro ht
+        apply a.2
+        rw [hab, ht]
+        simp
+      refine ⟨Units.mk0 t ht, ?_⟩
+      funext j
+      by_cases hj : j = Fin.last (n + 1)
+      · simp [cpSuccessorZeroLastIncludeVector, hj]
+      · have hcoord := congrFun hab (j.castPred hj)
+        simpa [cpSuccessorZeroLastIncludeVector, hj] using hcoord.symm))
+
+@[simp] theorem cpSuccessorZeroLastInclusion_quotient (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    cpSuccessorZeroLastInclusion n (quotientMap ℂ n v) =
+      cpSuccessorZeroLastIncludeVectorInPatch n v :=
+  Classical.choose_spec (projectiveHomogeneousMapDescent ℂ
+    (cpSuccessorZeroLastIncludeVectorInPatch n)
+    (cpSuccessorZeroLastIncludeVectorInPatch_continuous n)
+    (by
+      intro a b t hab
+      apply Subtype.ext
+      change quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n a) =
+        quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n b)
+      apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+      have ht : t ≠ 0 := by
+        intro ht
+        apply a.2
+        rw [hab, ht]
+        simp
+      refine ⟨Units.mk0 t ht, ?_⟩
+      funext j
+      by_cases hj : j = Fin.last (n + 1)
+      · simp [cpSuccessorZeroLastIncludeVector, hj]
+      · have hcoord := congrFun hab (j.castPred hj)
+        simpa [cpSuccessorZeroLastIncludeVector, hj] using hcoord.symm)) v
+
+/-- Forget the last coordinate of a lower-patch representative.  A non-last
+coordinate is nonzero by lower-patch membership. -/
+def cpSuccessorLowerTruncateVector (n : ℕ) (v : CPSuccessorLowerVectors n) :
+    NonzeroVectors ℂ n :=
+  ⟨fun i => v.1.1 i.castSucc, by
+    obtain ⟨j, hj, hrep⟩ := v.2
+    have hvj : v.1.1 j ≠ 0 := by
+      have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+          {p : CP (n + 1) | Projectivization.rep p j ≠ 0} := hrep
+      exact (Set.ext_iff.mp (affineSource_preimage j) v.1).mp hmem
+    intro hz
+    have hcoord := congrFun hz (j.castPred hj)
+    rw [Fin.castSucc_castPred j hj] at hcoord
+    exact hvj hcoord⟩
+
+theorem cpSuccessorZeroLastInclude_truncate (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorZeroLastIncludeVector n (cpSuccessorLowerTruncateVector n v) =
+      cpSuccessorZeroLastVector n v := by
+  apply Subtype.ext
+  funext j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp [hj]
+  · simp [cpSuccessorZeroLastIncludeVector, cpSuccessorLowerTruncateVector,
+      cpSuccessorZeroLastVector, hj, Fin.castSucc_castPred]
+
+/-- The time-one endpoint of the lower-patch homotopy factors through the
+canonical zero-last inclusion of `CP n`. -/
+theorem cpSuccessorLowerPatchHomotopy_one_eq_inclusion (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+      cpSuccessorZeroLastInclusion n
+        (quotientMap ℂ n
+          (cpSuccessorLowerTruncateVector n
+            (cpSuccessorLowerRepresentative n p))) := by
+  rw [cpSuccessorLowerPatchHomotopy_one,
+    cpSuccessorZeroLastInclusion_quotient]
+  apply Subtype.ext
+  change quotientMap ℂ (n + 1)
+      (cpSuccessorZeroLastVector n (cpSuccessorLowerRepresentative n p)) =
+    quotientMap ℂ (n + 1)
+      (cpSuccessorZeroLastIncludeVector n
+        (cpSuccessorLowerTruncateVector n
+          (cpSuccessorLowerRepresentative n p)))
+  rw [cpSuccessorZeroLastInclude_truncate]
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
@@ -936,6 +1091,14 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorLowerPatchHomotopy_continuous
 #print axioms cpSuccessorLowerPatchHomotopy_zero
 #print axioms cpSuccessorLowerPatchHomotopy_one
+#print axioms cpSuccessorZeroLastIncludeVector_continuous
+#print axioms cpSuccessorZeroLastIncludeVector_mem_lowerPatch
+#print axioms cpSuccessorZeroLastIncludeVectorInPatch_continuous
+#print axioms cpSuccessorZeroLastInclusion
+#print axioms cpSuccessorZeroLastInclusion_quotient
+#print axioms cpSuccessorLowerTruncateVector
+#print axioms cpSuccessorZeroLastInclude_truncate
+#print axioms cpSuccessorLowerPatchHomotopy_one_eq_inclusion
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
