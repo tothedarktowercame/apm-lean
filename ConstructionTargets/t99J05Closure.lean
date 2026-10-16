@@ -660,6 +660,47 @@ inclusion. -/
           cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩) = _
   rw [cpSuccessorLowerTruncate_include]
 
+/-- The time-one endpoint is literally inclusion after the descended
+truncation retraction. -/
+theorem cpSuccessorLowerPatchHomotopy_one_eq_inclusion_retraction (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+      cpSuccessorZeroLastInclusion n (cpSuccessorLowerRetraction n p) := by
+  rw [cpSuccessorLowerPatchHomotopy_one_eq_inclusion]
+  rfl
+
+def cpSuccessorLowerRetractionContinuousMap (n : ℕ) :
+    C({p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}, CP n) :=
+  ⟨cpSuccessorLowerRetraction n, cpSuccessorLowerRetraction_continuous n⟩
+
+/-- The descended quotient homotopy, bundled in Mathlib's time-first
+homotopy interface. -/
+noncomputable def cpSuccessorLowerPatchDeformationHomotopy (n : ℕ) :
+    ContinuousMap.Homotopy
+      (ContinuousMap.id {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n})
+      ((cpSuccessorZeroLastInclusion n).comp
+        (cpSuccessorLowerRetractionContinuousMap n)) where
+  toFun z := cpSuccessorLowerPatchHomotopy n (z.2, z.1)
+  continuous_toFun := (cpSuccessorLowerPatchHomotopy_continuous n).comp
+    (continuous_snd.prodMk continuous_fst)
+  map_zero_left p := cpSuccessorLowerPatchHomotopy_zero n p
+  map_one_left p :=
+    cpSuccessorLowerPatchHomotopy_one_eq_inclusion_retraction n p
+
+/-- The lower affine-filtration patch is homotopy equivalent to `CP n`,
+with the concrete zero-last inclusion and truncation retraction. -/
+noncomputable def t99J05_cp_successor_lowerPatch_deformationRetract (n : ℕ) :
+    CP n ≃ₕ {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} where
+  toFun := cpSuccessorZeroLastInclusion n
+  invFun := cpSuccessorLowerRetractionContinuousMap n
+  left_inv := by
+    have h : (cpSuccessorLowerRetractionContinuousMap n).comp
+        (cpSuccessorZeroLastInclusion n) = ContinuousMap.id (CP n) := by
+      apply ContinuousMap.ext
+      exact cpSuccessorLowerRetraction_inclusion n
+    rw [h]
+  right_inv := ⟨(cpSuccessorLowerPatchDeformationHomotopy n).symm⟩
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
@@ -1195,6 +1236,9 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorLowerRetraction_continuous
 #print axioms cpSuccessorLowerTruncate_include
 #print axioms cpSuccessorLowerRetraction_inclusion
+#print axioms cpSuccessorLowerPatchHomotopy_one_eq_inclusion_retraction
+#print axioms cpSuccessorLowerPatchDeformationHomotopy
+#print axioms t99J05_cp_successor_lowerPatch_deformationRetract
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
