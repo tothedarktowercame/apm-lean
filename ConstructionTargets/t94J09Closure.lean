@@ -1494,6 +1494,14 @@ noncomputable def frozenGeneratorNamedMVIntersectionExact (k : ℕ) :=
     frozenGeneratorRadialPackage.outer_isOpen
     frozenGeneratorRadialPackage.cover k
 
+/-- Exactness at the quotient term in degree one, transported from the named
+radial topology to the canonical quotient topology while leaving the adjacent
+piece and intersection objects unchanged. -/
+noncomputable def frozenGeneratorCanonicalMVUnionExact :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+    _ (Iso.refl _) (frozenGeneratorRadialGroupHomologyIso 1) (Iso.refl _)
+    (frozenGeneratorNamedMVUnionExact 0)
+
 /-- The named-topology Mayer--Vietoris connecting arrow with its source
 transported from the canonical quotient homology object. -/
 noncomputable def frozenGeneratorCanonicalToNamedMVConnecting (k : ℕ) :=
@@ -2439,6 +2447,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorNamedMVPiecesExact
 #print axioms frozenGeneratorNamedMVUnionExact
 #print axioms frozenGeneratorNamedMVIntersectionExact
+#print axioms frozenGeneratorCanonicalMVUnionExact
 #print axioms frozenGeneratorCanonicalToNamedMVConnecting
 #print axioms frozenGeneratorNamedToCanonicalMVReassembly
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
