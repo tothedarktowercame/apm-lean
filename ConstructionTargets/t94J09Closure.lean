@@ -559,6 +559,44 @@ theorem frozenBoundaryEndpointPair_finite :
   simpa only [Set.setOf_and] using
     frozenBoundaryEndpoint_finite.prod frozenBoundaryEndpoint_finite
 
+/-- The part of the generated equivalence relation supported on polygon
+vertices is finite.  This isolates all chains that can pass from one paired
+edge to another. -/
+def FrozenBoundaryEndpointEqv (z w : Circle) : Prop :=
+  FrozenBoundaryEndpoint z ∧ FrozenBoundaryEndpoint w ∧
+    Relation.EqvGen FrozenBoundaryGraphRel z w
+
+theorem frozenBoundaryEndpointEqv_finite :
+    Set.Finite {p : Circle × Circle |
+      FrozenBoundaryEndpointEqv p.1 p.2} := by
+  apply frozenBoundaryEndpointPair_finite.subset
+  intro p hp
+  exact ⟨hp.1, hp.2.1⟩
+
+theorem frozenBoundaryEndpointEqv_isClosed :
+    IsClosed {p : Circle × Circle |
+      FrozenBoundaryEndpointEqv p.1 p.2} :=
+  frozenBoundaryEndpointEqv_finite.isClosed
+
+/-- Candidate closed graph for the full generated relation: away from the
+finite vertex locus a class has only its directly paired edge point. -/
+def FrozenBoundaryClosedRel (z w : Circle) : Prop :=
+  FrozenBoundaryGraphSymm z w ∨ FrozenBoundaryEndpointEqv z w
+
+theorem frozenBoundaryClosedRel_isClosed :
+    IsClosed {p : Circle × Circle | FrozenBoundaryClosedRel p.1 p.2} :=
+  frozenBoundaryGraphSymm_isClosed.union frozenBoundaryEndpointEqv_isClosed
+
+theorem frozenBoundaryClosedRel_eqvGen (z w : Circle)
+    (h : FrozenBoundaryClosedRel z w) :
+    Relation.EqvGen FrozenBoundaryGraphRel z w := by
+  rcases h with (h | h)
+  · rcases h with (rfl | h | h)
+    · exact Relation.EqvGen.refl _
+    · exact Relation.EqvGen.rel _ _ h
+    · exact (Relation.EqvGen.rel _ _ h).symm
+  · exact h.2.2
+
 @[simp] theorem eq_frozenCircleEdgePoint_iff (z : Circle) (j : Fin 14)
     (t : Set.Icc (0 : ℝ) 1) :
     z = frozenCircleEdgePoint j t ↔
@@ -1457,6 +1495,9 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphSymm_isClosed
 #print axioms frozenBoundaryEndpointPair_isClosed
 #print axioms frozenBoundaryEndpointPair_finite
+#print axioms frozenBoundaryEndpointEqv_finite
+#print axioms frozenBoundaryClosedRel_isClosed
+#print axioms frozenBoundaryClosedRel_eqvGen
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
