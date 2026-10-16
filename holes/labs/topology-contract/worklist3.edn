@@ -36708,33 +36708,33 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Descend restricted quotient homotopy; identify CP n; MV successor; Main.",
+    "Identify zero-last endpoint with CP n; MV successor; Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "cpSuccessorLowerVectorHomotopyInPatch_continuous",
+    [{:name "t99J05_cp_successor_lowerPatch_quotientHomotopy",
       :type
-      "jointly continuous homogeneous homotopy remaining in lower patch",
+      "continuous restricted quotient homotopy with zero and one endpoints",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessorLowerVectorHomotopy"],
+      :depends-on ["cpSuccessorLowerVectorHomotopyInPatch_continuous"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_lowerPatch_quotientHomotopy",
+     {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
       :type
-      "restricted quotient descent of lower-patch vector homotopy",
+      "identify zero-last endpoint with CP n and package deformation retract",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["cpSuccessorLowerVectorHomotopyInPatch_continuous"],
+      :depends-on ["t99J05_cp_successor_lowerPatch_quotientHomotopy"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed continuous lower-patch vector homotopy.",
+    :reason "Committed restricted quotient homotopy descent.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36746,21 +36746,14 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 7b95aaef7",
+      "git diff --check && git show --check --stat --oneline 380841fbd",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792140244139-15253-5bc84f32",
-     :commands
-     ["git show --check --stat 7b95aaef7; inspect diff"
-      "verify commit blob equals compiled file"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean Closure, Main, fixture"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: 7b95aaef7 adds compiled, sorry-free progress beyond history: joint continuity of the lower-vector homotopy, preservation of lower-patch membership, and a bundled continuous restricted homotopy. Representation stays in the preimage needed for quotient descent. Fixture hash matches; axioms standard. Main remains 1->1; quotient descent, CP identification, MV, and Main milestones are listed."},
-    :commit "7b95aaef7",
+    :diagnostic-history
+    [{:cmd "closure compile attempts",
+      :exit 1,
+      :note
+      "Fixed choice application, scalar orientation, continuity composition, endpoints."}],
+    :commit "380841fbd",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36768,7 +36761,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -45322,7 +45315,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-cpsuccessorzerolastvector
-    :lemma-cpsuccessorlowervectorhomotopy],
+    :lemma-cpsuccessorlowervectorhomotopy
+    :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -45698,7 +45692,8 @@
    {:name "t99J05_cp_successor_lowerPatch_quotientHomotopy",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "restricted quotient descent of lower-patch vector homotopy",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy,
    :kind :lemma,
    :depends-on
