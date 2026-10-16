@@ -88728,6 +88728,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check f59af914f", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792182564824-15774-42049c91",
+     :commands
+     ["git show/check f59af914f"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free section-based module H1 Smith adapter beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. It builds the concrete canonical H1 Smith equivalence from explicit coordinate, reverse-exactness, and section data, then transports it to the module-valued H1 object used by the frozen statement. All unresolved geometry remains explicit and orientation is correct. Only standard axioms occur; H1 comparison, exactness, section construction, final homology assembly, and normalization remain listed."},
     :commit "f59af914f",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88736,7 +88749,7 @@
      "c62770859338eadd105581d7d1c53726fda220955498a861b369892bc83ce3b4"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88754,7 +88767,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H1 transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked section H1 assembly.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88986,7 +88999,10 @@
     {:job 5, :commit "d69c383cd", :reason "."}
     {:job 6, :commit "92d656485", :reason "."}
     {:job 7, :commit "bd2cb95ee", :reason "."}
-    {:job 8, :commit "22d53848c", :reason "Banked H1 transport."}]}
+    {:job 8, :commit "22d53848c", :reason "Banked H1 transport."}
+    {:job 9,
+     :commit "f59af914f",
+     :reason "Banked section H1 assembly."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98910,7 +98926,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorCanonicalModuleH1SmithEquiv_of_section",
@@ -98920,7 +98936,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "T",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f59af914f"},
    :id :lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-section,
    :kind :lemma,
    :depends-on
