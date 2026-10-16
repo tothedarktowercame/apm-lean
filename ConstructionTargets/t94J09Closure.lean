@@ -895,6 +895,14 @@ def frozenGeneratorCircleHomeomorphBoundaryGraph :
     apply Continuous.quotient_lift
     exact continuous_coinduced_rng
 
+noncomputable instance frozenGeneratorCircleQuotientT2Space :
+    T2Space FrozenGeneratorCircleQuotient :=
+  frozenGeneratorCircleHomeomorphBoundaryGraph.symm.t2Space
+
+noncomputable instance frozenGeneratorBoundaryQuotientT2Space :
+    T2Space FrozenGeneratorBoundaryQuotient :=
+  frozenGeneratorCircleBoundaryHomeomorph.t2Space
+
 @[simp] theorem frozenGeneratorCircleHomeomorphBoundaryGraph_mk (z : Circle) :
     frozenGeneratorCircleHomeomorphBoundaryGraph
         (Quotient.mk _ z) = Quotient.mk _ z := rfl
@@ -1741,6 +1749,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryClosedRel_symm
 #print axioms frozenBoundaryEqvGen_iff_closedRel
 #print axioms frozenBoundaryGraphQuotientT2Space
+#print axioms frozenGeneratorCircleQuotientT2Space
+#print axioms frozenGeneratorBoundaryQuotientT2Space
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
