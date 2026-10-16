@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta 0,
-    :residual "Disk quotient T2; inverse/MV; normalize.",
+    :residual "MV comparison; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorEqvGen_isClosed",
-      :type "closed full disk EqvGen graph",
+    [{:name "frozenBoundaryQuotientHomeomorphOuterSkeleton",
+      :type "homeomorphism",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenBoundaryEqvGen_diskImage_isClosed"],
+      :depends-on ["frozenGeneratorEqvGen_isClosed"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "disk quotient T2/inverse/MV",
+      :type "MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorEqvGen_isClosed"
+      ["frozenBoundaryQuotientHomeomorphOuterSkeleton"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked closed disk EqvGen graph.",
+    :reason "Banked disk T2 and outer homeomorphism.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,29 +88719,20 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 11a33e6b0", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792142755200-15289-87385d48",
-     :commands
-     ["git show/diff/check 11a33e6b0"
-      "verify disk graph set equality in both directions"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum, scope, and placeholder recount at 11a33e6b0"],
-     :finding
-     "PASS program STOP: topo-6 commit 11a33e6b0 adds compiled, sorry-free progress after 1b53b9d78. frozenGeneratorEqvGen_graph_eq proves the full disk graph is exactly the diagonal union the embedded boundary graph: boundary witnesses map forward, and image witnesses recover both subtype coordinates by projecting the pair equality. frozenGeneratorEqvGen_isClosed then unions the closed diagonal with the closed embedded graph. Disk quotient T2, inverse continuity/MV, and normalization remain explicitly listed. Scope is one target file; fixture SHA 92df63088d6182a90dfc6eb3173d6d88cafba650019673140c3f201b892828d0; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
-    :commit "11a33e6b0",
+     {:cmd "git show --check 8f5cf7f54", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft build",
+      :exit 1,
+      :correction "explicit equivalence"}],
+    :commit "8f5cf7f54",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "92df63088d6182a90dfc6eb3173d6d88cafba650019673140c3f201b892828d0"},
+     "232a67ab7220d0b61bc9f5b9bf73f2375486b66c18e5b3464b144aa9b9d844ef"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96753,7 +96744,8 @@
     :lemma-frozenboundarysubtypeeqvgen-iff-closedrel
     :lemma-frozenboundarysubtypeeqvgen-isclosed
     :lemma-frozenboundaryeqvgen-diskimage-isclosed
-    :lemma-frozengeneratoreqvgen-isclosed],
+    :lemma-frozengeneratoreqvgen-isclosed
+    :lemma-frozenboundaryquotienthomeomorphouterskeleton],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97574,4 +97566,21 @@
    :id :lemma-frozengeneratoreqvgen-isclosed,
    :kind :lemma,
    :depends-on [:lemma-frozenboundaryeqvgen-diskimage-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryQuotientHomeomorphOuterSkeleton",
+    :type "homeomorphism"},
+   :lemma
+   {:name "frozenBoundaryQuotientHomeomorphOuterSkeleton",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundaryquotienthomeomorphouterskeleton,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoreqvgen-isclosed],
    :other-consumers []}]}
