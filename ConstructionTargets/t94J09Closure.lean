@@ -490,6 +490,25 @@ theorem frozenBoundaryGraphRel_isClosed :
     apply reassoc]
   exact hc
 
+/-- Reflexivity and reversal of the seven edge pairings still have closed
+graph; only the finite polygon-vertex classes remain to describe for the full
+equivalence closure. -/
+def FrozenBoundaryGraphSymm (z w : Circle) : Prop :=
+  z = w ∨ FrozenBoundaryGraphRel z w ∨ FrozenBoundaryGraphRel w z
+
+theorem frozenBoundaryGraphSymm_isClosed :
+    IsClosed {p : Circle × Circle | FrozenBoundaryGraphSymm p.1 p.2} := by
+  have hdiag : IsClosed {p : Circle × Circle | p.1 = p.2} :=
+    isClosed_eq continuous_fst continuous_snd
+  have hforward :
+      IsClosed {p : Circle × Circle | FrozenBoundaryGraphRel p.1 p.2} :=
+    frozenBoundaryGraphRel_isClosed
+  have hreverse :
+      IsClosed {p : Circle × Circle | FrozenBoundaryGraphRel p.2 p.1} :=
+    frozenBoundaryGraphRel_isClosed.preimage
+      (continuous_snd.prodMk continuous_fst)
+  exact hdiag.union (hforward.union hreverse)
+
 @[simp] theorem eq_frozenCircleEdgePoint_iff (z : Circle) (j : Fin 14)
     (t : Set.Icc (0 : ℝ) 1) :
     z = frozenCircleEdgePoint j t ↔
@@ -1385,6 +1404,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms isClosed_range_frozenCircleEdgePair
 #print axioms isClosed_range_frozenCircleEdgePair_reverse
 #print axioms frozenBoundaryGraphRel_isClosed
+#print axioms frozenBoundaryGraphSymm_isClosed
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
