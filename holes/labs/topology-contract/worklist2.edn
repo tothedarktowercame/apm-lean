@@ -88672,21 +88672,22 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "H1; exact; surj; norm.",
+    :residual
+    "H1; exactness; construct reassembly section; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVReassemblyLinear_surjective_iff",
-      :type "surj",
+    [{:name
+      "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section",
+      :type "criterion",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenGeneratorMVReassemblyLinear_comp_coordinates"],
+      :depends-on ["frozenGeneratorMVReassemblyLinear_surjective_iff"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88726,31 +88727,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 5d1cc7620", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "category"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792174012195-15724-68f4103e",
-     :commands
-     ["git show/check 5d1cc7620"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free reassembly-surjectivity transport beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Coordinate preimages move through the inverse equivalence to the canonical arrow, while canonical preimages move forward through the equivalence to the coordinate arrow; both directions and representations are correct. The theorem does not assert surjectivity itself. Only standard axioms occur; H1 comparison, exactness, surjectivity, homology assembly, and normalization remain listed."},
-    :commit "5d1cc7620",
+     {:cmd "git show --check 145503c1b", :exit 0}],
+    :commit "145503c1b",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "6b60ee473e75d30af21a6eef2aaa4c727371b970d80250aa1c89807447a26e0d"},
+     "3447c0c2a50ca71424f169c80ecafa1248059b56f9cace393b648bc52560ce38"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98816,4 +98802,25 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengeneratormvreassemblylinear-comp-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section",
+    :type "criterion"},
+   :lemma
+   {:name
+    "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "criterion",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id
+   :lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow-surjective-of-section,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvreassemblylinear-surjective-iff],
    :other-consumers []}]}
