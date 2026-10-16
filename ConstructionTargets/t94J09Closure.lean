@@ -2162,6 +2162,23 @@ theorem frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one
         congrArg (fun x ↦ n • x) h
       _ = frozenFaceBoundaryCoordinates n := rfl
 
+/-- A cycle comparison with the literal attaching-degree generator supplies
+the exact coordinate identity required by the frozen homology assembly. -/
+theorem frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 7 → ℤ))
+    (hcycle : ∀ x, frozenGraphBoundary (c x) = 0)
+    (hinj : Function.Injective c)
+    (hrange : LinearMap.range c = LinearMap.ker frozenGraphBoundary)
+    (hgenerator :
+      c (frozenGeneratorMVBoundaryLinear 1) = frozenAttachingDegree) :
+    (frozenGraphH1CoordinatesOfCycleComparison c hcycle hinj hrange).toLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = frozenFaceBoundaryCoordinates := by
+  rw [frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one]
+  exact (frozenGraphH1Coordinates_generator_eq_iff c hcycle hinj hrange).2
+    hgenerator
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -2537,6 +2554,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphCycleInclusion_range
 #print axioms frozenGraphH1CoordinatesOfCycleComparison
 #print axioms frozenGraphH1Coordinates_generator_eq_iff
+#print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
