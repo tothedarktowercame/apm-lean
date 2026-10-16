@@ -586,6 +586,34 @@ theorem t99J05_euclideanUnitSphere_homology_isZero_of_gt
             ℚ (m + 1) (k - 1) hk0
       exact (ih (k - 1) (by omega)).of_iso e
 
+/-- Above its top degree, the exact affine unit-sphere model also has zero
+rational homology. -/
+theorem t99J05_affineUnitSphere_homology_isZero_of_gt
+    (n k : ℕ) (hk : 2 * n + 1 < k) :
+    IsZero
+      (Homology
+        (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) k) := by
+  have hz :
+      IsZero
+        (Homology (T02A06.euclideanUnitSphere (2 * n + 1 + 1)) k) :=
+    t99J05_euclideanUnitSphere_homology_isZero_of_gt (2 * n + 1) k hk
+  exact hz.of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      (t99J05_affineUnitSphereHomotopyEquivEuclidean n) k)
+
+/-- The successor overlap inherits the same above-top vanishing from its
+affine unit-sphere model. -/
+theorem t99J05_cp_successor_overlap_homology_isZero_of_gt
+    (n k : ℕ) (hk : 2 * n + 1 < k) :
+    IsZero
+      (Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k) := by
+  exact (t99J05_affineUnitSphere_homology_isZero_of_gt n k hk).of_iso
+    (t99J05_cp_successor_overlap_homologyIso_unitSphere n k)
+
 /-- Consequently, the successor overlap has one-dimensional rational homology
 in its unique positive top degree. -/
 noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
@@ -659,6 +687,8 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_euclideanUnitSphere_H1_isZero
 #print axioms t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
 #print axioms t99J05_euclideanUnitSphere_homology_isZero_of_gt
+#print axioms t99J05_affineUnitSphere_homology_isZero_of_gt
+#print axioms t99J05_cp_successor_overlap_homology_isZero_of_gt
 #print axioms t99J05_cp_successor_overlap_rational_topHomology
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
