@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88735,7 +88735,7 @@
      "03e15a63145d5a5227a90e6a873b4ccaf017e169b7b0faba2774283342dca10d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -89031,6 +89031,19 @@
     [{:cmd "initial proof",
       :exit 1,
       :correction "preserved witness; simplified memberships"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792171486422-15694-f17d25d0",
+     :commands
+     ["git show/check dd6791273"
+      "fixture/scope/comment-stripped placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "lake env lean ConstructionTargets/t92J06Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free edge-chart membership characterization beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Both directions preserve the raw quotient witness: descended chart points are exactly interior lifted-edge points with the prescribed base label, and endpoints are excluded by the open-interval condition. Only standard axioms occur; trivializations, vertex charts, tree cover, and finite covers remain listed."},
     :commit "dd6791273",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -89039,7 +89052,7 @@
      "5067194b130cc4d0be50cc2f676c431ffa64d7d94cddd7e9120cb58ed75a1a0d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89057,7 +89070,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient edge-chart openness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked edge-chart membership.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89113,7 +89126,10 @@
      :reason "Banked raw edge-chart openness."}
     {:job 1,
      :commit "2074eb47b",
-     :reason "Banked quotient edge-chart openness."}]}
+     :reason "Banked quotient edge-chart openness."}
+    {:job 2,
+     :commit "dd6791273",
+     :reason "Banked edge-chart membership."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -98689,7 +98705,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenFaceBoundary_range_le_ker_reassembly",
@@ -98699,7 +98715,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "inclusion",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozenfaceboundary-range-le-ker-reassembly,
    :kind :lemma,
    :depends-on
@@ -98707,7 +98725,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "mem_edgeChart_iff", :type "membership"},
    :lemma
@@ -98715,7 +98733,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "membership",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "dd6791273"},
    :id :lemma-mem-edgechart-iff,
    :kind :lemma,
    :depends-on [:lemma-edgechart-isopen],
