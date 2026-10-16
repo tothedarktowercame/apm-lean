@@ -88672,29 +88672,29 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Transport remaining intersection map; exactness; matrices; normalize.",
+    :residual "Exactness; matrices; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt",
-      :type "canonical quotient H1 -> intersection Int",
+    [{:name
+      "frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production",
+      :type "canonical connecting composite",
       :status :proved,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow"],
+      ["frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "coordinates/exactness",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt"],
+      ["frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88712,7 +88712,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked canonical connecting coordinate transport.",
+    :reason "Banked canonical composite.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88722,28 +88722,18 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 8b17faa36", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792158451500-15521-f05a4076",
-     :commands
-     ["git show/check 8b17faa36"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: commit adds compiled, sorry-free canonical-source transport for the established MV connecting coordinate. Fixture hash/scope match; orientation is canonical quotient H1 via radial iso inverse, then named connecting map to intersection Int. This is new progress beyond prior history; residual milestones are listed."},
-    :commit "8b17faa36",
+     {:cmd "git show --check e87279ffa", :exit 0}],
+    :diagnostic-history
+    [{:cmd "composite draft", :exit 1, :correction "assoc+rfl"}],
+    :commit "e87279ffa",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "a8ded4e4d8202595f82fc4143eea0902b35f181531e4dae44ccae88fb83bff3f"},
+     "261e3b10b711e41b2d2203ea94bd583337e8537537e5e10b74cfd3617f29942d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96901,7 +96891,8 @@
     :lemma-frozengeneratornamedtocanonicalmvreassembly
     :lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow
     :lemma-frozengeneratorcanonicalmvintgraphh0reassemblyarrow
-    :lemma-frozengeneratorcanonicalmvconnectingh1tointersectionint],
+    :lemma-frozengeneratorcanonicalmvconnectingh1tointersectionint
+    :lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98339,4 +98330,24 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengeneratorcanonicalmvintgraphh0reassemblyarrow],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production",
+    :type "canonical connecting composite"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "canonical connecting composite",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id
+   :lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvconnectingh1tointersectionint],
    :other-consumers []}]}
