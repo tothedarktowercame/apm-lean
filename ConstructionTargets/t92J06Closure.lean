@@ -537,6 +537,49 @@ theorem interiorCoordinate_eq_of_eqvGen {a b : RealizationRaw V}
   | symm _ _ _ ih => exact ih.symm
   | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
 
+/-- Membership in a raw edge chart is exactly the presence of an interior
+coordinate with the prescribed edge label. -/
+theorem mem_rawEdgeChart_iff_interiorCoordinate (i : Fin 2)
+    (a : RealizationRaw V) :
+    a ∈ rawEdgeChart V i ↔
+      ∃ v : V, ∃ t : UnitInterval,
+        interiorCoordinate a = some (i, v, t) := by
+  cases a with
+  | inl v => simp [rawEdgeChart, rawEdgeInterior, interiorCoordinate]
+  | inr ivt =>
+      rcases ivt with ⟨j, v, t⟩
+      simp [rawEdgeChart, rawEdgeInterior, interiorCoordinate]
+      constructor
+      · rintro ⟨hji, ht0, ht1⟩
+        refine ⟨⟨?_, ?_⟩, hji⟩
+        · intro h
+          subst t
+          exact (lt_irrefl (0 : ℝ)) ht0
+        · intro h
+          subst t
+          exact (lt_irrefl (1 : ℝ)) ht1
+      · rintro ⟨⟨ht0, ht1⟩, hji⟩
+        refine ⟨hji, ?_, ?_⟩
+        · apply lt_of_le_of_ne t.2.1
+          intro h
+          apply ht0
+          apply Subtype.ext
+          simpa [intervalZero] using h.symm
+        · apply lt_of_le_of_ne t.2.2
+          intro h
+          apply ht1
+          apply Subtype.ext
+          simpa [intervalOne] using h
+
+/-- Endpoint identifications preserve membership in a raw open-edge chart.
+Thus each raw edge chart is saturated for the realization quotient. -/
+theorem rawEdgeChart_mem_iff_of_eqvGen (i : Fin 2)
+    {a b : RealizationRaw V} (h : Relation.EqvGen D.RealizationRel a b) :
+    a ∈ rawEdgeChart V i ↔ b ∈ rawEdgeChart V i := by
+  rw [mem_rawEdgeChart_iff_interiorCoordinate,
+    mem_rawEdgeChart_iff_interiorCoordinate,
+    D.interiorCoordinate_eq_of_eqvGen h]
+
 /-- A raw endpoint remembers the graph vertex to which it is glued.  Open
 edge points have no vertex coordinate. -/
 noncomputable def vertexCoordinate : RealizationRaw V → Option V
@@ -803,6 +846,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms realizationQuotientMap_isQuotientMap
 #print axioms rawEdgeInterior_isOpen
 #print axioms rawEdgeChart_isOpen
+#print axioms rawEdgeChart_mem_iff_of_eqvGen
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
