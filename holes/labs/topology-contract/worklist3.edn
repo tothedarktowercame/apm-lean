@@ -37282,37 +37282,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compare inverse-discrete and explicit chains; then homology, Bool square, boundary, signs, Main.",
+    "Lift chain equality through opcycles/H0; then Bool square, boundary, signs, Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings
+    ["Existing lints; one new unused-simp lint; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_opcycle_eq_projected_chainGenerator",
-      :type
-      "opcycle projects from the inverse-discrete chain generator",
+    [{:name "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
+      :type "discrete Unit generator equals literal simplex",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0ModuleChainGenerator"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
-      :type
-      "inverse-discrete Unit chain generator equals the explicit singular simplex",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_unitH0_opcycle_eq_projected_chainGenerator"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_unitH0_chainGeneratorCompatibility",
+      :type "chain comparison induces selected Unit H0 generator",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Repaired compile failures; committed exact Unit chain/opcycle generator.",
+    :reason "Committed Unit discrete-chain/literal-simplex equality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37320,19 +37319,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 7ddab2206", :exit 0}],
+     {:cmd "git show --check --stat --oneline d1c8f6a31", :exit 0}],
     :diagnostic-history
-    [{:cmd "direct closure compile",
+    [{:cmd "bridge compile",
       :exit 1,
-      :note
-      "Piped status hid errors; removed invalid claims and corrected generator."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792174663007-15730-806fed09",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "7ddab2206",
+      :note "Replaced rfl with iso computation."}],
+    :commit "d1c8f6a31",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37340,7 +37332,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47594,11 +47586,29 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "inverse-discrete Unit chain generator equals the explicit singular simplex",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex,
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainGeneratorCompatibility",
+    :type "chain comparison induces selected Unit H0 generator"},
+   :lemma
+   {:name "t96A06_unitH0_chainGeneratorCompatibility",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain comparison induces selected Unit H0 generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-chaingeneratorcompatibility,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
