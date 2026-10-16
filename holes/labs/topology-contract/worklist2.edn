@@ -88721,6 +88721,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 2be711ce3", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792157450530-15497-628dd1f2",
+     :commands
+     ["git show/check 2be711ce3"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 2be711ce3 changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. The actual production reassembly map lands in named quotient homology, then the verified concrete iso forward map transports only its target to canonical quotient homology. Piece/intersection transports, exactness, matrices, normalization remain listed."},
     :commit "2be711ce3",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88741,7 @@
      "df7b7a33c75f779f3995724c03c839a802e64a02cea17f9ed151eb38bede9c55"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connecting transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked reassembly transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88934,7 +88946,10 @@
      :reason "Banked named-topology union exactness."}
     {:job 1,
      :commit "303d7e13e",
-     :reason "Banked connecting transport."}]}
+     :reason "Banked connecting transport."}
+    {:job 2,
+     :commit "2be711ce3",
+     :reason "Banked reassembly transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98235,7 +98250,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorNamedToCanonicalMVReassembly",
@@ -98245,7 +98260,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "reassembly transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "2be711ce3"},
    :id :lemma-frozengeneratornamedtocanonicalmvreassembly,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorcanonicaltonamedmvconnecting],
