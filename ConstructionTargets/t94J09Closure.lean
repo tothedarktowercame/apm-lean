@@ -2218,6 +2218,23 @@ theorem frozenGeneratorMVReassemblyLinear_comp_faceBoundary
   rw [← hboundary, ← LinearMap.comp_assoc,
     frozenGeneratorMVReassemblyLinear_comp_coordinates, hzero]
 
+theorem frozenFaceBoundary_range_le_ker_reassembly
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0) :
+    LinearMap.range frozenFaceBoundaryCoordinates ≤
+      LinearMap.ker (frozenGeneratorMVReassemblyLinear e) := by
+  rintro y ⟨x, rfl⟩
+  rw [LinearMap.mem_ker]
+  have h := LinearMap.congr_fun
+    (frozenGeneratorMVReassemblyLinear_comp_faceBoundary e hboundary hzero) x
+  simpa using h
+
 theorem n6PolygonHomology :
     Nonempty (H n6PairingData 0 ≅ ModuleCat.of ℤ ℤ) ∧
       Nonempty (H n6PairingData 1 ≅
@@ -2596,6 +2613,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVBoundaryCoordinates_of_cycleComparison
 #print axioms frozenGeneratorMVReassemblyLinear_comp_coordinates
 #print axioms frozenGeneratorMVReassemblyLinear_comp_faceBoundary
+#print axioms frozenFaceBoundary_range_le_ker_reassembly
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
