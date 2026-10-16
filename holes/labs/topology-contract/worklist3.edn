@@ -37239,37 +37239,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove endpoint; then coefficient naturality, comparison, four classes, Main.",
+    "Prove iterated endpoint; then coefficient naturality, comparison, four classes, Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint",
-      :type "endpoint equation implies composite identity",
+      "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint",
+      :type
+      "iterated sphere-shift endpoint implies normalization identity",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id"],
+      ["t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint"],
       :area "rp-rational-homology"}
-     {:name "t96A06_sphereShiftLocalNormalization_endpoint",
+     {:name "t96A06_sphereShiftLocalNormalization_iterated_endpoint",
       :type
-      "sphereH2/sphereShift/comparison/localization endpoint sends 1 to 1",
+      "two inverse sphere shifts and circle normalization give positive local endpoint",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint"],
+      ["t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Isolated the sphere-shift endpoint equation.",
+    :reason "Committed iterated endpoint reduction.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37277,18 +37278,10 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 1762a34b1", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure probes",
-      :exit 1,
-      :note "rfl/simp exposed endpoint; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792142016270-15277-6f15240a",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "1762a34b1",
+     {:cmd
+      "git diff --check && git show --check --stat --oneline faf92f676",
+      :exit 0}],
+    :commit "faf92f676",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37296,7 +37289,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -45806,6 +45799,48 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint",
+    :type
+    "iterated sphere-shift endpoint implies normalization identity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "iterated sphere-shift endpoint implies normalization identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-iterated-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalization_iterated_endpoint",
+    :type
+    "two inverse sphere shifts and circle normalization give positive local endpoint"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalization_iterated_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "two inverse sphere shifts and circle normalization give positive local endpoint",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-iterated-endpoint],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
