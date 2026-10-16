@@ -36752,6 +36752,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :note "Qualified ShortComplex.mk; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792157464824-15499-f6aa0aaa",
+     :commands
+     ["git show/check cbdbb58fb8"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit adds specialized MV exactness at the patch-homology sum after the prior milestone; theorem orientation and representation boundary match the fixture, hash matches, supporting file has 0 placeholders, Lean gates pass with standard axioms, registry 168/168; Main retains its declared one placeholder."},
     :commit "cbdbb58fb8",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36760,7 +36773,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36791,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Specialized rational subcomplex MV exactness to the CP successor patches.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36877,7 +36890,11 @@
     {:job 7,
      :commit "0e6877ab20",
      :reason
-     "Specialized rational subcomplex MV exactness to the CP successor patches."}]}
+     "Specialized rational subcomplex MV exactness to the CP successor patches."}
+    {:job 8,
+     :commit "cbdbb58fb8",
+     :reason
+     "Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains."}]}
   {:consumer :t98A02,
    :stop-count 2,
    :evidence
@@ -37247,7 +37264,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37298,7 +37315,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37320,7 +37337,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -46600,7 +46617,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_integralComparison_of_endpoint_pair",
@@ -46610,7 +46627,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "endpoint conjunction implies full Bool H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-integralcomparison-of-endpoint-pair,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-false-true],
@@ -46636,7 +46655,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_endpoint_pair_iff_all_points",
@@ -46646,7 +46665,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "endpoint pair iff every Bool point comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-endpoint-pair-iff-all-points,
    :kind :lemma,
    :depends-on
@@ -46675,7 +46696,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_endpoint_pair_iff_comparison",
@@ -46685,14 +46706,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "endpoint pair iff full Bool H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-endpoint-pair-iff-comparison,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-endpoint-pair-iff-all-points],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_all_points_iff_comparison",
@@ -46702,14 +46725,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "all Bool point comparisons iff full comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-all-points-iff-comparison,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-endpoint-pair-iff-comparison],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_exact_pieces",
@@ -46719,7 +46744,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "exactness at specialized two-patch homology sum",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "cbdbb58fb8"},
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces,
    :kind :lemma,
    :depends-on
