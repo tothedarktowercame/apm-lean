@@ -2639,6 +2639,39 @@ noncomputable def frozenGeneratorH1SmithEquiv_of_comparisons
     (frozenFaceBoundary_range_eq_ker_reassembly_of_reverse
       e hboundary hzero hreverse).symm
 
+/-- A canonical graph-H1 reassembly section discharges surjectivity and
+therefore completes the explicit degree-one Smith calculation. -/
+noncomputable def frozenGeneratorH1SmithEquiv_of_section
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id) :
+    (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+      (@TopCat.of FrozenGeneratorQuotient
+        (@instTopologicalSpaceQuotient Surfaces.Disk
+          (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) ≃ₗ[ℤ]
+      N6Smith :=
+  frozenGeneratorH1SmithEquiv_of_comparisons e hboundary hzero hreverse
+    ((frozenGeneratorMVReassemblyLinear_surjective_iff e).2
+      (frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section
+        s hsection))
+
 /-- Assemble the literal homology calculation once the geometric comparison
 maps identify the Mayer--Vietoris groups with the frozen chain complex. -/
 theorem frozenPolygonHomology_of_comparisons
@@ -2743,6 +2776,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenFaceCokernelSmithEquiv
 #print axioms frozenH1SmithEquivOfSurjectiveKernel
 #print axioms frozenGeneratorH1SmithEquiv_of_comparisons
+#print axioms frozenGeneratorH1SmithEquiv_of_section
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
