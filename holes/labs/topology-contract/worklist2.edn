@@ -88673,6 +88673,8 @@
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 6,
+   :review-finding
+   "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
     :residual "Align quotient topologies; coordinates; normalize.",
@@ -88720,6 +88722,12 @@
      {:cmd "git show --check f32ca0d6f", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "instance"}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1792148861227-15368-7810e255",
+     :finding
+     "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog."},
     :commit "f32ca0d6f",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88736,7 @@
      "99f3e984d7be6b8f3887ae8470bafea89d0a43aebc1f8c5a3d760fcb01d82998"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88758,7 @@
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
    :other-consumers [],
