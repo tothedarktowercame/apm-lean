@@ -552,6 +552,81 @@ def frozenBoundaryQuotientToOuterSkeleton :
   Quotient.lift frozenBoundaryRepresentativeToOuterSkeleton
     (fun _ _ h => frozenBoundaryRepresentativeToOuterSkeleton_eq_of_eqvGen h)
 
+/-- An equivalence path between boundary points lifts to the boundary-subtype
+relation; intermediate points remain on the boundary by radius preservation. -/
+theorem frozenBoundaryEqvGen_of_diskEqvGen
+    {x y : ConstructionTargets.PolygonBoundaryCircleSource.Boundary}
+    (h : Relation.EqvGen frozenGeneratorRel x.1 y.1) :
+    Relation.EqvGen
+      (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+        frozenGeneratorRel) x y := by
+  have lift : ∀ {a b : Surfaces.Disk}, Relation.EqvGen frozenGeneratorRel a b →
+      ∀ (ha : PolygonRadialOpenCover.radius a = 1)
+        (hb : PolygonRadialOpenCover.radius b = 1),
+        Relation.EqvGen
+          (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+            frozenGeneratorRel) ⟨a, ha⟩ ⟨b, hb⟩ := by
+    intro a b hab
+    induction hab with
+    | rel a b hab =>
+        intro ha hb
+        exact Relation.EqvGen.rel _ _ hab
+    | refl a =>
+        intro ha hb
+        exact Relation.EqvGen.refl _
+    | symm a b hab ih =>
+        intro ha hb
+        exact (ih hb ha).symm
+    | trans a b c hab hbc ih₁ ih₂ =>
+        intro ha hc
+        have hb : PolygonRadialOpenCover.radius b = 1 := by
+          rw [← ha]
+          exact (ConstructionTargets.RadialQuotientOpenSets.eqvGen_preserves_of_rel_preserves
+            frozenGeneratorRel PolygonRadialOpenCover.radius
+            (fun {_ _} hr => frozenGeneratorRel_radius_eq hr) hab).symm
+        exact Relation.EqvGen.trans _ _ _ (ih₁ ha hb) (ih₂ hb hc)
+  exact lift h x.2 y.2
+
+/-- The boundary quotient parametrizes every outer boundary class exactly
+once. -/
+theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
+    Function.Bijective frozenBoundaryQuotientToOuterSkeleton := by
+  constructor
+  · intro q r hqr
+    induction q using Quotient.inductionOn with
+    | _ x =>
+      induction r using Quotient.inductionOn with
+      | _ y =>
+        apply Quotient.sound
+        apply frozenBoundaryEqvGen_of_diskEqvGen
+        have ho : Relation.EqvGen
+            (ConstructionTargets.PolygonOuterRadialRelation.OuterRel frozenGeneratorRel)
+            (frozenBoundaryAsOuter x) (frozenBoundaryAsOuter y) := by
+          have hq : (Quotient.mk _ (frozenBoundaryAsOuter x) :
+                ConstructionTargets.PolygonOuterRestrictedEqvGen.OuterQuotient
+                  frozenGeneratorRel) = Quotient.mk _ (frozenBoundaryAsOuter y) := by
+            apply (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+              frozenGeneratorRel
+              (fun {_ _} h => frozenGeneratorRel_radius_eq h)).injective
+            exact congrArg Subtype.val hqr
+          exact (Quotient.eq).mp hq
+        simpa [frozenBoundaryAsOuter] using
+          (ConstructionTargets.PolygonOuterRestrictedEqvGen.eqvGen_of_eqvGen_outerRel
+            frozenGeneratorRel ho)
+  · intro z
+    rcases z.2 with ⟨x, hx, hz⟩
+    let b : ConstructionTargets.PolygonBoundaryCircleSource.Boundary := ⟨x.1, hx⟩
+    refine ⟨Quotient.mk _ b, ?_⟩
+    apply Subtype.ext
+    change ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+        frozenGeneratorRel (fun {_ _} h => frozenGeneratorRel_radius_eq h)
+          (Quotient.mk _ (frozenBoundaryAsOuter b)) = z.1
+    rw [hz]
+    apply congrArg (ConstructionTargets.PolygonOuterRestrictedEqvGen.outerQuotientHomeomorph
+      frozenGeneratorRel (fun {_ _} h => frozenGeneratorRel_radius_eq h))
+    apply Quotient.sound
+    exact Relation.EqvGen.refl _
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1198,6 +1273,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleHomologyIsoBoundaryGraph
 #print axioms frozenGeneratorBoundaryHomologyIsoGraph
 #print axioms frozenBoundaryQuotientToOuterSkeleton
+#print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
