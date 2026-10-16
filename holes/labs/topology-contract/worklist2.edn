@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 0183e4cfa", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792112588029-14941-b98da51a",
+     :commands
+     ["git show/diff/check 0183e4cfa"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 0183e4cfa"],
+     :finding
+     "PASS program STOP: topo-6 commit 0183e4cfa adds compiled, sorry-free progress after 07aa27dc3. frozenGeneratorBoundaryHomologyIsoGraph reverses the established circle-to-disk-boundary homology isomorphism and composes it with circle-to-explicit-graph homology, so its source is the boundary quotient and target is the graph quotient exactly as stated. This is a real presentation comparison, not a graph-group computation; identification of the outer skeleton, MV maps, and graph homology computation remain listed. Only t94J09Closure.lean changed; fixture SHA 4d2d95de6652655a3b6163623f597b0e77b6c1c3a1ec68e895638894a41bf5fe matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization remains."},
     :commit "0183e4cfa",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "4d2d95de6652655a3b6163623f597b0e77b6c1c3a1ec68e895638894a41bf5fe"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked graph homology transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked boundary/graph homology comparison.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88820,7 +88833,10 @@
      :reason "Banked graph quotient homeomorphism."}
     {:job 8,
      :commit "07aa27dc3",
-     :reason "Banked graph homology transport."}]}
+     :reason "Banked graph homology transport."}
+    {:job 9,
+     :commit "0183e4cfa",
+     :reason "Banked boundary/graph homology comparison."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -96851,7 +96867,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorBoundaryHomologyIsoGraph",
@@ -96861,7 +96877,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "boundary quotient to graph homology",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0183e4cfa"},
    :id :lemma-frozengeneratorboundaryhomologyisograph,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorcirclehomologyisoboundarygraph],
