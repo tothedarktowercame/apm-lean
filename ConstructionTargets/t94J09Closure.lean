@@ -1694,6 +1694,19 @@ noncomputable def frozenGeneratorMVIntGraphH0ReassemblyArrow :
       (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0
 
+/-- The degree-zero integral/graph-coordinate reassembly arrow with its target
+transported to the canonical quotient topology. -/
+noncomputable def frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow :
+    CategoryTheory.Limits.biprod (AddCommGrpCat.of ℤ)
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 0)) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) :=
+  frozenGeneratorMVIntGraphH0ReassemblyArrow ≫
+    (frozenGeneratorRadialGroupHomologyIso 0).hom
+
 /-- Composing the degree-zero coordinate arrows cancels the middle transport
 and leaves the production Mayer--Vietoris composite. -/
 theorem frozenGeneratorMVIntGraphH0_comp_eq_production :
@@ -2398,6 +2411,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
+#print axioms frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow
 #print axioms frozenGeneratorMVIntGraphH0_comp_eq_production
 #print axioms frozenGeneratorMVConnectingH1ToIntersectionInt
 #print axioms frozenGeneratorMVConnecting_comp_H0_eq_production
