@@ -3254,6 +3254,39 @@ theorem t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData :
 
 #print axioms t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData
 
+/-- On degree-zero Unit chains, preservation carries the canonical homology
+comparison to the canonical opcycle comparison. -/
+theorem t96A06_unitH0_preservation_canonical_triangle :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+    (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+      t96A06_unitMappedModuleChains.isoHomologyι₀.inv := by
+  rw [t96A06_unitH0_mapHomologyIso'_inv_eq_rightData,
+    t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData]
+  rw [← cancel_mono
+    (t96A06_unitH0ModuleShortComplex.map
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι]
+  simp only [Category.assoc]
+  rw [t96A06_unitH0_mappedRightHomology_triangle]
+  change
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι) ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv = _
+  rw [t96A06_unitH0_forgottenRightHomology_opcycle_triangle]
+  simp
+
+#print axioms t96A06_unitH0_preservation_canonical_triangle
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
