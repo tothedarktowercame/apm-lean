@@ -88672,27 +88672,27 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Transport named arrows; exactness; matrices; normalize.",
+    "Transport named piece/intersection arrows; exactness; matrices; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCanonicalToNamedMVConnecting",
-      :type "connecting transport",
+    [{:name "frozenGeneratorNamedToCanonicalMVReassembly",
+      :type "reassembly transport",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorRadialGroupHomologyIso"],
+      :depends-on ["frozenGeneratorCanonicalToNamedMVConnecting"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "coordinates/exactness",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorCanonicalToNamedMVConnecting"],
+      :depends-on ["frozenGeneratorNamedToCanonicalMVReassembly"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88710,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked connecting transport.",
+    :reason "Banked reassembly transport.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,32 +88720,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 303d7e13e", :exit 0}],
-    :diagnostic-history
-    [{:cmd "exactness draft",
-      :exit 1,
-      :correction "split topology transport"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792157192391-15489-18160d6b",
-     :commands
-     ["git show/check 303d7e13e"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: 303d7e13e changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. The quotient iso runs named-to-canonical, so its inverse correctly transports canonical H(k+1) into the named source of the actual production connecting map, whose target remains literal intersection Hk. Named-arrow transport, exactness, matrices, normalization remain listed."},
-    :commit "303d7e13e",
+     {:cmd "git show --check 2be711ce3", :exit 0}],
+    :commit "2be711ce3",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "f85b13f308a38d7da6696076b32f8cfdaee0b081713b60d360e5fdd747f37293"},
+     "df7b7a33c75f779f3995724c03c839a802e64a02cea17f9ed151eb38bede9c55"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96887,7 +96871,8 @@
     :lemma-frozengeneratornamedmvpiecesexact
     :lemma-frozengeneratornamedmvunionexact
     :lemma-frozengeneratornamedmvintersectionexact
-    :lemma-frozengeneratorcanonicaltonamedmvconnecting],
+    :lemma-frozengeneratorcanonicaltonamedmvconnecting
+    :lemma-frozengeneratornamedtocanonicalmvreassembly],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98247,4 +98232,21 @@
    :id :lemma-frozengeneratorcanonicaltonamedmvconnecting,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorradialgrouphomologyiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorNamedToCanonicalMVReassembly",
+    :type "reassembly transport"},
+   :lemma
+   {:name "frozenGeneratorNamedToCanonicalMVReassembly",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reassembly transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratornamedtocanonicalmvreassembly,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcanonicaltonamedmvconnecting],
    :other-consumers []}]}
