@@ -2486,6 +2486,19 @@ theorem t96A06_boolH0_integralComparison_of_endpoint_pair
     t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs :=
   t96A06_boolH0_integralComparison_of_false_true h.1 h.2
 
+/-- For `Bool`, the endpoint packet is exactly the pointwise comparison.
+This lets the remaining naturality calculation be stated without choosing
+between an endpoint-pair and a universally quantified interface. -/
+theorem t96A06_boolH0_endpoint_pair_iff_all_points :
+    (t96A06_boolH0PointComparison false ∧
+        t96A06_boolH0PointComparison true) ↔
+      ∀ b : Bool, t96A06_boolH0PointComparison b := by
+  constructor
+  · rintro ⟨hfalse, htrue⟩
+    exact t96A06_boolH0_integralComparison_points_of_false_true hfalse htrue
+  · intro h
+    exact ⟨h false, h true⟩
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5383,6 +5396,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_integralComparison_points_of_false_true
 #print axioms t96A06_boolH0_integralComparison_of_false_true
 #print axioms t96A06_boolH0_integralComparison_of_endpoint_pair
+#print axioms t96A06_boolH0_endpoint_pair_iff_all_points
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
