@@ -2267,6 +2267,38 @@ theorem t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
   exact ConstructionTargets.CoefficientChartLocal.generator_normalization
     (R := ℤ) 1 polynomialSphereRegularPoint
 
+/-- Coefficient one identifies the native inverse image of the positive
+ambient class with the selected integral chart generator itself. -/
+theorem t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1) :
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint := by
+  have hgen :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+            polynomialSphereRegularPoint) =
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint := by
+    simpa only [Nat.reduceAdd] using
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
+        1 polynomialSphereRegularPoint hcoeff
+  rw [← hgen]
+  exact CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom_inv_id
+    (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+      polynomialSphereRegularPoint)
+
 /-- The native inverse image has positive chart coordinate exactly when the
 corrected comparison has positive generator coefficient. -/
 theorem t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one :
@@ -4235,6 +4267,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator_unmap
 #print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
 #print axioms t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+#print axioms t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one
 #print axioms t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one
 #print axioms t96A06_correctedCoefficient_eq_one_iff_nativeGenerator
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation
