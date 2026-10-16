@@ -88672,29 +88672,28 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Construct graph H1 coordinates; compute generator; assemble homology; normalize.",
+    "Compare graph H1 to cycles; generator; assemble; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVBoundaryLinear_map_range_of_coordinates",
-      :type "coordinate boundary range transport",
+    [{:name "frozenGraphCycleInclusion_range",
+      :type "cycle range=graph kernel",
       :status :proved,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates"],
+      ["frozenGeneratorMVBoundaryLinear_map_range_of_coordinates"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "graph H1 coordinates/generator",
+      :type "singular H1/cycles; generator",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenGeneratorMVBoundaryLinear_map_range_of_coordinates"],
+      :depends-on ["frozenGraphCycleInclusion_range"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88712,7 +88711,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked MV boundary range transport.",
+    :reason "Banked cycle inclusion.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88722,29 +88721,18 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 9a5cb3102", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792163274944-15591-1ad949f0",
-     :commands
-     ["git show/check 9a5cb3102"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free MV-boundary range transport beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. Mapping the MV range through the coordinate equivalence equals the range of the composite, which the explicit hypothesis identifies with the face-boundary map; orientation is correct and the missing coordinate construction is not assumed. Only standard axioms occur; coordinates/generator, homology assembly, and normalization remain listed."},
-    :commit "9a5cb3102",
+     {:cmd "git show --check 82e74c1bd", :exit 0}],
+    :diagnostic-history
+    [{:cmd "inverse drafts", :exit 1, :correction "symm_apply_apply"}],
+    :commit "82e74c1bd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "d5fb58718e5cfc2da057baae9f53b90ce1a7fe9963c01d8e6d67b2453a5ed6d1"},
+     "f5db85fdf18522f5f3a9ecd694d3114c89304f555cfc0240da1af3ab9229f178"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96941,7 +96929,8 @@
     :lemma-frozengeneratorcanonicalmvintersectionexact
     :lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one
     :lemma-frozengeneratormvboundarylinear-ker-eq-bot-of-coordinates
-    :lemma-frozengeneratormvboundarylinear-map-range-of-coordinates],
+    :lemma-frozengeneratormvboundarylinear-map-range-of-coordinates
+    :lemma-frozengraphcycleinclusion-range],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -98539,4 +98528,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengeneratormvboundarylinear-ker-eq-bot-of-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphCycleInclusion_range",
+    :type "cycle range=graph kernel"},
+   :lemma
+   {:name "frozenGraphCycleInclusion_range",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "cycle range=graph kernel",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengraphcycleinclusion-range,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvboundarylinear-map-range-of-coordinates],
    :other-consumers []}]}
