@@ -2890,6 +2890,42 @@ theorem frozenPolygonHomology_of_comparisons
     exact hz.of_iso e2
   · exact hhigh k (by omega)
 
+/-- Assemble the literal generator quotient's homology once the geometric
+comparison data identify its degree-one Mayer--Vietoris sequence. -/
+theorem frozenGeneratorHomology_of_comparisons
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (hsurjective : Function.Surjective
+      (frozenGeneratorMVReassemblyLinear e))
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH FrozenGeneratorQuotient 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k) := by
+  refine ⟨h0, ⟨frozenGeneratorSpaceHSmithIso_of_comparisons
+    e hboundary hzero hreverse hsurjective⟩, ?_⟩
+  intro k hk
+  by_cases hk2 : k = 2
+  · subst k
+    rcases h2 with ⟨e2⟩
+    have hz : IsZero (ModuleCat.of ℤ
+        (LinearMap.ker frozenFaceBoundaryCoordinates)) := by
+      rw [frozenFaceBoundaryCoordinates_ker_eq_bot]
+      rw [IsZero.iff_id_eq_zero]
+      ext x
+    exact hz.of_iso e2
+  · exact hhigh k (by omega)
+
 /-- Once Mayer--Vietoris computes the explicit generator quotient, the same
 homology result holds for the generic signed quotient. -/
 theorem frozenSignedHomology_of_generator_comparisons
@@ -2981,6 +3017,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
 #print axioms frozenGeneratorMVBoundaryLinear_map_range_of_coordinates
 #print axioms frozenPolygonHomology_of_comparisons
+#print axioms frozenGeneratorHomology_of_comparisons
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
 #print axioms frozenGeneratorRel_radius_eq
