@@ -37218,38 +37218,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove named chart naturality and coefficient one; then four classes and Main.",
+    "Prove raw coefficient transport; then rational native equality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one",
+      "t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one",
       :type
-      "coefficient one: named chart naturality iff raw transport",
+      "coefficient one identifies native inverse with integral chart generator",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one"],
+      ["t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one"],
       :area "rp-rational-homology"}
-     {:name "t96A06_integralToRationalLocalChartNaturality",
+     {:name "t96A06_integralToRational_rawLocalGenerator_transport",
       :type
-      "coefficient extension commutes with selected chart coordinates",
+      "coefficient extension transports the integral local generator",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one"],
+      ["t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed named transport equivalence.",
+    :reason "Committed native integral generator equality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37258,15 +37258,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline b503d0413",
+      "git diff --check && git show --check --stat --oneline 37d43f874",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792114631830-14979-a8430584",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b503d0413",
+    :commit "37d43f874",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37274,7 +37268,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44850,7 +44844,8 @@
    :depends-on
    [:lemma-t96a06-mappedrationallocalextension-eq-generator-iff-raw
     :lemma-t96a06-integraltorational-rawlocalgenerator-iff-coordinate-one
-    :lemma-t96a06-integraltorational-localchart-naturality-iff-rawtransport],
+    :lemma-t96a06-integraltorational-localchart-naturality-iff-rawtransport
+    :lemma-t96a06-nativeintegrallocalgenerator-eq-generator-of-coefficient-one],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -45050,6 +45045,29 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one",
+    :type
+    "coefficient one identifies native inverse with integral chart generator"},
+   :lemma
+   {:name
+    "t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient one identifies native inverse with integral chart generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-nativeintegrallocalgenerator-eq-generator-of-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationallocalchartnaturality-iff-rawtransport-of-coefficient-on],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
