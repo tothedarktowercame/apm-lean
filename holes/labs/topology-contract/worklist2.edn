@@ -88868,7 +88868,7 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
@@ -88877,17 +88877,17 @@
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "projection_preimage_edgePoint",
-      :type "exact vertex/interior range fibers",
+    [{:name "realizationQuotientMap_isQuotientMap",
+      :type "raw realization quotient authority",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["vertexFiberEquiv" "interiorFiberEquiv"],
+      :depends-on ["projection_preimage_edgePoint"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
-      :type "covering charts",
+      :type "open charts/trivializations",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["projection_preimage_edgePoint"],
+      :depends-on ["realizationQuotientMap_isQuotientMap"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
       :type "tree cover",
@@ -88905,36 +88905,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact projection fibers.",
+    :reason "Banked realization quotient authority.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "comment-stripped placeholder scan", :exit 0}
-     {:cmd "git show --check 9c8d9a5d1", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792118534418-15036-21e2d30a",
-     :commands
-     ["git show/diff/check 9c8d9a5d1"
-      "verify committed target blob and canonical repo packages"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum, scope, and placeholder recount at 9c8d9a5d1"],
-     :finding
-     "PASS program STOP: topo-6 commit 9c8d9a5d1 adds compiled, sorry-free progress after 18d427092. projection_preimage_wedgePoint and projection_preimage_edgePoint correctly prove both set-inclusion directions: uniqueness/classification supplies a vertex representative for each preimage point, while projection_vertex/projection_edgePoint supplies the converse. These exact fibers are the stated prerequisite for covering charts; charts, tree cover, and four finite covers remain explicitly listed. Scope is one target file; fixture SHA 51ebafc46092d459a54d5c67298a2b2715e99a9064e21e39a5d9ede555c6be2b; target placeholders 0, Main 1; registry 168/0; axioms propext, Classical.choice, Quot.sound."},
-    :commit "9c8d9a5d1",
+     {:cmd "git show --check 7dcd7cd9f", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft build",
+      :exit 1,
+      :correction "qualified Topology.IsQuotientMap"}],
+    :commit "7dcd7cd9f",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "51ebafc46092d459a54d5c67298a2b2715e99a9064e21e39a5d9ede555c6be2b"},
+     "62e0753a69056713ae18a36942ef1fb57a33cf73eb77ed77e500eb836ef56de8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90748,7 +90739,8 @@
     :lemma-vertexfiberequiv
     :lemma-projection-surjective
     :lemma-projection-fibercard
-    :lemma-projection-preimage-edgepoint],
+    :lemma-projection-preimage-edgepoint
+    :lemma-realizationquotientmap-isquotientmap],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -97377,4 +97369,21 @@
    :id :lemma-frozengeneratorboundaryquotientt2space,
    :kind :lemma,
    :depends-on [:lemma-frozenboundarygraphquotientt2space],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "realizationQuotientMap_isQuotientMap",
+    :type "raw realization quotient authority"},
+   :lemma
+   {:name "realizationQuotientMap_isQuotientMap",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw realization quotient authority",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-realizationquotientmap-isquotientmap,
+   :kind :lemma,
+   :depends-on [:lemma-projection-preimage-edgepoint],
    :other-consumers []}]}
