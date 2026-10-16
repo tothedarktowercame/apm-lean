@@ -88728,6 +88728,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 8e6918ba1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792173133340-15714-476109e8",
+     :commands
+     ["git show/check 8e6918ba1"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free canonical H1 Smith assembly beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The exactness equality is reversed to the kernel=face-range orientation required by the quotient theorem, and surjectivity then identifies canonical quotient H1 with the established face cokernel and N6 Smith coordinates. Missing H1 comparison, reverse inclusion, and surjectivity remain explicit. Only standard axioms occur; those facts and normalization remain listed."},
     :commit "8e6918ba1",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88736,7 +88749,7 @@
      "81776beaf3286d08e80700c563c1c0208f1c0edb8c906e1c3db7853ead1babe0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88754,7 +88767,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked H1 Smith assembly.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88979,7 +88992,10 @@
     {:job 7, :commit "4a4718954", :reason "Done."}
     {:job 8, :commit "efd5f7159", :reason "Done."}
     {:job 9, :commit "7bca50fb8", :reason "."}
-    {:job 1, :commit "fda8e08ff", :reason "Banked."}]}
+    {:job 1, :commit "fda8e08ff", :reason "Banked."}
+    {:job 2,
+     :commit "8e6918ba1",
+     :reason "Banked H1 Smith assembly."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98763,7 +98779,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorH1SmithEquiv_of_comparisons",
@@ -98773,7 +98789,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H1 Smith",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8e6918ba1"},
    :id :lemma-frozengeneratorh1smithequiv-of-comparisons,
    :kind :lemma,
    :depends-on
