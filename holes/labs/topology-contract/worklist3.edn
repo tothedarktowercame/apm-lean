@@ -37248,24 +37248,25 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove endpoint nonnegative from circle/hemisphere orientation; then naturality, four classes, Main.",
+    "Prove endpoint nonnegative via discrete-H0 circle boundary orientation; then naturality, four classes, Main.",
     :outcome :stop,
     :warnings
     ["Existing lint; Main one placeholder; unrelated t94J09 edit untouched."],
     :missing-theorems
     [{:name
-      "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg",
-      :type "endpoint nonnegativity excludes -1",
+      "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg",
+      :type
+      "endpoint nonnegativity gives positive integral generator comparison",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one"],
+      ["t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg"],
       :area "rp-rational-homology"}
      {:name
       "t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg",
@@ -37273,15 +37274,14 @@
       "explicit two-suspension localized endpoint is nonnegative",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg"],
+      :depends-on [],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Named the orientation endpoint and reduced its negative branch to nonnegativity.",
+    "Assembled endpoint nonnegativity into the positive integral generator comparison.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37290,15 +37290,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check -- ConstructionTargets/t96A06Closure.lean && git show --check --stat --oneline 45e007c96",
+      "git diff --check -- ConstructionTargets/t96A06Closure.lean && git show --check --stat --oneline 57ddda352",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792147959563-15355-5c5c23dd",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "45e007c96",
+    :commit "57ddda352",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37306,7 +37300,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46191,6 +46185,29 @@
     :area "rp-rational-homology"},
    :id
    :lemma-t96a06-sphereshiftlocalnormalizationiteratedendpoint-nonneg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one-of-nonneg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg",
+    :type
+    "endpoint nonnegativity gives positive integral generator comparison"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "endpoint nonnegativity gives positive integral generator comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-of-endpoint-nonneg,
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one-of-nonneg],
