@@ -88672,29 +88672,24 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual "Topology comparison; coordinates; normalization.",
+    :residual
+    "Transport MV exactness; compute coordinates; normalize.",
     :outcome :stop,
-    :warnings ["Main:1 sorry"],
+    :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVPiecesH0GroupIsoIntGraph",
-      :type "H0 coords",
+    [{:name "frozenGeneratorRadialTopologyComparison",
+      :type "quotient topology equality",
       :status :proved,
-      :consumers [:t94J09],
-      :depends-on ["frozenGeneratorOuterGroupHomologyIsoGraph"],
-      :area "polygon-surface-homology"}
-     {:name "frozenGeneratorRadialTopologyComparison",
-      :type "topology equality",
-      :status :not-started,
       :consumers [:t94J09],
       :depends-on [],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "comparisons",
+      :type "coordinates/exactness",
       :status :partial,
       :consumers [:t94J09],
       :depends-on ["frozenGeneratorRadialTopologyComparison"],
@@ -88715,38 +88710,31 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Receipt repaired.",
+    :reason "Banked quotient-topology equality.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
+      "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check f32ca0d6f", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792149305769-15375-990bf0db",
-     :commands
-     ["git show/check f32ca0d6f"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: repaired STOP now lists topology comparison, homology comparisons, polygon homology, and polygon normalization. f32ca0d6f changes only t94J09Closure; fixture hash matches; 0 closure placeholders; H0 biproduct coordinates preserve inner/outer order; build/Main pass; registry 168/0."},
-    :commit "f32ca0d6f",
+     {:cmd "git show --check 7c214a58e", :exit 0}],
+    :diagnostic-history
+    [{:cmd "package-link probe",
+      :exit 1,
+      :correction
+      "canonical authority has the real package directory"}],
+    :commit "7c214a58e",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "99f3e984d7be6b8f3887ae8470bafea89d0a43aebc1f8c5a3d760fcb01d82998"},
+     "666cc57b83215f90bf00e33c97756cd51c7f68b59d4f84e6ef2adef6e9cfdf77"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -97815,7 +97803,8 @@
    {:name "frozenGeneratorRadialTopologyComparison",
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "quotient topology equality",
-    :area "polygon-surface-homology"},
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
    :id :lemma-frozengeneratorradialtopologycomparison,
    :kind :lemma,
    :depends-on [],
