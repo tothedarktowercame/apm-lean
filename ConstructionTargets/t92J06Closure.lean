@@ -218,6 +218,15 @@ noncomputable instance realizationTopology : TopologicalSpace D.Realization :=
     (fun z : RealizationRaw V => Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) z)
     inferInstance
 
+/-- The raw graph realization map is the quotient authority for the topology
+on the realized graph.  Openness of covering charts can therefore be checked
+on their saturated raw preimages. -/
+theorem realizationQuotientMap_isQuotientMap :
+    Topology.IsQuotientMap
+      (fun z : RealizationRaw V =>
+        Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) z) :=
+  isQuotientMap_quotient_mk'
+
 def vertex (v : V) : D.Realization := Quotient.mk _ (.inl v)
 
 def edgePoint (i : Fin 2) (v : V) (t : UnitInterval) : D.Realization :=
@@ -763,6 +772,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
             exact Nat.card_congr (D.interiorFiberEquiv 1 t hti)
 
 #print axioms vertex_injective
+#print axioms realizationQuotientMap_isQuotientMap
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
