@@ -1444,6 +1444,26 @@ noncomputable def frozenGeneratorRadialHomologyIso (k : ℕ) :
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
       (ModuleCat.of ℤ ℤ)).mapIso frozenGeneratorRadialTopCatIso)
 
+/-- The same quotient-topology transport in the concrete additive-group
+presentation used by the production Mayer--Vietoris sequence. -/
+noncomputable def frozenGeneratorRadialGroupHomologyIso (k : ℕ) :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+        (@TopCat.of FrozenGeneratorQuotient
+          instTopologicalSpaceFrozenGeneratorQuotient) ≅
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (@TopCat.of FrozenGeneratorQuotient
+        instTopologicalSpaceFrozenGeneratorQuotient) k).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (frozenGeneratorRadialHomologyIso k) ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (@TopCat.of FrozenGeneratorQuotient
+        (@instTopologicalSpaceQuotient Surfaces.Disk
+          (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) k
+
 /-- The actual frozen disk quotient is Hausdorff because its generated
 equivalence relation has closed graph on the compact polygon disk. -/
 noncomputable instance frozenGeneratorQuotientT2Space :
@@ -2307,6 +2327,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorRadialTopologyComparison
 #print axioms frozenGeneratorRadialTopCatIso
 #print axioms frozenGeneratorRadialHomologyIso
+#print axioms frozenGeneratorRadialGroupHomologyIso
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
