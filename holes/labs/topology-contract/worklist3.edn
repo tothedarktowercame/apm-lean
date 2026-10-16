@@ -36708,35 +36708,32 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Transport subcomplex homology to patches; combine retract, affine and overlap data; Lefschetz, Main.",
+    "Specialize ambient exactness; transport to patch homology; successor data, Lefschetz, Main.",
     :outcome :stop,
-    :warnings
-    ["Existing lints; Main one placeholder; unrelated edits untouched."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_exact_pieces",
-      :type "exactness at specialized two-patch homology sum",
+    [{:name "t99J05_cp_successor_mayerVietoris_exact_overlap",
+      :type "exactness at overlap homology",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_subcomplexMayerVietoris_shortExact"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_pieces"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_transport",
-      :type
-      "transport specialized subcomplex MV to literal patch homology",
+     {:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
+      :type "exactness at ambient homology",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_pieces"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_overlap"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains.",
+    "Committed connecting map and overlap exactness; ambient exactness remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36747,25 +36744,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline cbdbb58fb8", :exit 0}],
+     {:cmd "git show --check --stat --oneline 4a9541db6d", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :note "Qualified ShortComplex.mk; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792157464824-15499-f6aa0aaa",
-     :commands
-     ["git show/check cbdbb58fb8"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit adds specialized MV exactness at the patch-homology sum after the prior milestone; theorem orientation and representation boundary match the fixture, hash matches, supporting file has 0 placeholders, Lean gates pass with standard axioms, registry 168/168; Main retains its declared one placeholder."},
-    :commit "cbdbb58fb8",
+      :note "Used inferred exactness witness; rerun passed."}],
+    :commit "4a9541db6d",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36773,7 +36757,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -46889,6 +46873,40 @@
    :id :lemma-t96a06-unith0-integralcomparison-generator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-integralcomparison-of-generator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_overlap",
+    :type "exactness at overlap homology"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_overlap",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at overlap homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-overlap,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_ambient",
+    :type "exactness at ambient homology"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at ambient homology",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-ambient,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-overlap],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
