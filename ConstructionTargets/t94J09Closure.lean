@@ -1518,6 +1518,21 @@ noncomputable def frozenGeneratorMVGraphH1ReassemblyArrow :
       (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1
 
+/-- Degree-zero coordinates on both members of the production cover: the
+inner member contributes one integer and the outer member is transported to
+the boundary graph. -/
+noncomputable def frozenGeneratorMVPiecesH0GroupIsoIntGraph :
+    (CategoryTheory.Limits.biprod
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of FrozenGeneratorInnerPiece))
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of FrozenGeneratorOuterPiece))) ≅
+      CategoryTheory.Limits.biprod (AddCommGrpCat.of ℤ)
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (SpaceH FrozenBoundaryGraphQuotient 0)) :=
+  CategoryTheory.Limits.biprod.mapIso frozenGeneratorInnerH0GroupIsoInt
+    (frozenGeneratorOuterGroupHomologyIsoGraph 0)
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2126,6 +2141,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
 #print axioms frozenGeneratorMVGraphH1ReassemblyArrow
+#print axioms frozenGeneratorMVPiecesH0GroupIsoIntGraph
 #print axioms frozenGeneratorInnerH1GroupIsZero
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
