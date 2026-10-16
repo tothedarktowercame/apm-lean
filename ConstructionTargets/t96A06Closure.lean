@@ -3287,6 +3287,35 @@ theorem t96A06_unitH0_preservation_canonical_triangle :
 
 #print axioms t96A06_unitH0_preservation_canonical_triangle
 
+/-- The canonical preservation triangle evaluated on the explicit projected
+Unit chain generator. -/
+theorem t96A06_unitH0_preservation_canonical_triangle_generator :
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+          t96A06_unitH0ModuleChainGenerator)) =
+      t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+        ((t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+              (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+            t96A06_unitH0ModuleChainGenerator)) := by
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_preservation_canonical_triangle
+  exact congrFun h
+    ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+      t96A06_unitH0ModuleChainGenerator)
+
+#print axioms t96A06_unitH0_preservation_canonical_triangle_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
