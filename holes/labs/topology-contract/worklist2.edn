@@ -88720,6 +88720,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check e906d4e32", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792116546967-15015-02063ae7",
+     :commands
+     ["git show/diff/check e906d4e32"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from e906d4e32"],
+     :finding
+     "PASS program STOP: topo-6 commit e906d4e32 adds compiled, sorry-free progress after 61b2a142d. The endpoint locus is identified with the union of two finite ranges indexed by Fin 14, hence finite; the endpoint-pair locus is their finite Cartesian product. These are the correct finite objects needed to describe the extra transitive closure at polygon vertices. The commit does not claim the still-missing EqvGen reduction, quotient T2, or MV calculation, all explicitly listed. Only t94J09Closure.lean changed; fixture SHA 01940607227532b9821c3ee92e657408367b12be7e18b0cadde0cb08606558c2 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization remains."},
     :commit "e906d4e32",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88741,7 @@
      "01940607227532b9821c3ee92e657408367b12be7e18b0cadde0cb08606558c2"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked endpoint locus.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked finite endpoint-pair locus.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88833,7 +88846,10 @@
     {:job 6,
      :commit "8035fa047",
      :reason "Banked closed symmetric graph."}
-    {:job 7, :commit "61b2a142d", :reason "Banked endpoint locus."}]}
+    {:job 7, :commit "61b2a142d", :reason "Banked endpoint locus."}
+    {:job 8,
+     :commit "e906d4e32",
+     :reason "Banked finite endpoint-pair locus."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97064,7 +97080,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryEndpointPair_finite",
@@ -97074,7 +97090,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "endpoint-pair locus finite",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e906d4e32"},
    :id :lemma-frozenboundaryendpointpair-finite,
    :kind :lemma,
    :depends-on [:lemma-frozenboundaryendpointpair-isclosed],
