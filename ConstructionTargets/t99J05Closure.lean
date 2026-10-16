@@ -245,6 +245,55 @@ theorem cpSuccessorLowerVectorHomotopy_smul (n : ℕ)
     ring
   · simp [cpSuccessorLowerVectorHomotopy, hlast, hj]
 
+/-- The homogeneous vector homotopy is jointly continuous in the lower-patch
+representative and the interval parameter. -/
+theorem cpSuccessorLowerVectorHomotopy_continuous (n : ℕ) :
+    Continuous (fun z : CPSuccessorLowerVectors n × Set.Icc (0 : ℝ) 1 =>
+      cpSuccessorLowerVectorHomotopy n z.1 z.2) := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro j
+  have hv : Continuous (fun z : CPSuccessorLowerVectors n × Set.Icc (0 : ℝ) 1 =>
+      z.1.1.1 j) :=
+    (continuous_apply j).comp
+      (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_fst))
+  by_cases hj : j = Fin.last (n + 1)
+  · subst j
+    simp only [cpSuccessorLowerVectorHomotopy, if_pos]
+    exact (Complex.continuous_ofReal.comp
+      (continuous_const.sub (continuous_subtype_val.comp continuous_snd))).mul hv
+  · simp only [cpSuccessorLowerVectorHomotopy, if_neg hj]
+    exact hv
+
+/-- Every point of the vector homotopy still represents a point of the lower
+projective patch, since one non-last coordinate remains unchanged and nonzero. -/
+theorem cpSuccessorLowerVectorHomotopy_mem_lowerPatch (n : ℕ)
+    (v : CPSuccessorLowerVectors n) (s : Set.Icc (0 : ℝ) 1) :
+    quotientMap ℂ (n + 1) (cpSuccessorLowerVectorHomotopy n v s) ∈
+      cpSuccessorLowerPatch n := by
+  obtain ⟨i, hi, hrep⟩ := v.2
+  refine ⟨i, hi, ?_⟩
+  have hvi : v.1.1 i ≠ 0 := by
+    have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+        {p : CP (n + 1) | Projectivization.rep p i ≠ 0} := hrep
+    exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp hmem
+  have hcoord : (cpSuccessorLowerVectorHomotopy n v s).1 i ≠ 0 := by
+    simpa [cpSuccessorLowerVectorHomotopy, hi] using hvi
+  exact (Set.ext_iff.mp (affineSource_preimage i)
+    (cpSuccessorLowerVectorHomotopy n v s)).mpr hcoord
+
+/-- The continuous vector homotopy, bundled with its proved lower-patch
+membership so it can be descended through the restricted quotient. -/
+def cpSuccessorLowerVectorHomotopyInPatch (n : ℕ)
+    (z : CPSuccessorLowerVectors n × Set.Icc (0 : ℝ) 1) :
+    CPSuccessorLowerVectors n :=
+  ⟨cpSuccessorLowerVectorHomotopy n z.1 z.2,
+    cpSuccessorLowerVectorHomotopy_mem_lowerPatch n z.1 z.2⟩
+
+theorem cpSuccessorLowerVectorHomotopyInPatch_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerVectorHomotopyInPatch n) :=
+  (cpSuccessorLowerVectorHomotopy_continuous n).subtype_mk _
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
@@ -757,6 +806,9 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorZeroLastVector
 #print axioms cpSuccessorZeroLastVector_last
 #print axioms cpSuccessorZeroLastVector_castSucc
+#print axioms cpSuccessorLowerVectorHomotopy_continuous
+#print axioms cpSuccessorLowerVectorHomotopy_mem_lowerPatch
+#print axioms cpSuccessorLowerVectorHomotopyInPatch_continuous
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
