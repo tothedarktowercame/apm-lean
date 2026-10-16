@@ -2161,6 +2161,19 @@ theorem frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
   rw [← LinearMap.congr_fun h a, ← LinearMap.congr_fun h b]
   exact congrArg e hab
 
+/-- A coordinate identification of the frozen Mayer--Vietoris boundary also
+transports its image to the literal cellular face-boundary range. -/
+theorem frozenGeneratorMVBoundaryLinear_map_range_of_coordinates
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (h : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates) :
+    Submodule.map e.toLinearMap
+        (LinearMap.range frozenGeneratorMVBoundaryLinear) =
+      LinearMap.range frozenFaceBoundaryCoordinates := by
+  rw [← LinearMap.range_comp, h]
+
 theorem n6OrbitCoordinates_comp_attachingBoundary :
     n6OrbitCoordinates.toLinearMap.comp (attachingBoundary n6PairingData) =
       -n6BoundaryLinear := by
@@ -2427,6 +2440,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenFaceBoundaryCoordinates_injective
 #print axioms frozenFaceBoundaryCoordinates_ker_eq_bot
 #print axioms frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates
+#print axioms frozenGeneratorMVBoundaryLinear_map_range_of_coordinates
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
