@@ -88722,6 +88722,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check f92b1a76b", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792147552665-15347-cc644fbd",
+     :commands
+     ["git show/check f92b1a76b"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: f92b1a76b changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. The transported arrow correctly uses intersection-coordinate inverse, the actual production MV arrow, then pieces-to-graph forward; graph-coordinate computation remains listed."},
     :commit "f92b1a76b",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88730,7 +88742,7 @@
      "0c2153e719960e8218acfe10542f3aab0fc0db8743dbb9f27efc92acff0cdd28"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88748,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked MV pieces/graph bridge.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transported MV graph arrow.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88896,7 +88908,10 @@
      :reason "Banked outer group representation."}
     {:job 3,
      :commit "49a791d9b",
-     :reason "Banked MV pieces/graph bridge."}]}
+     :reason "Banked MV pieces/graph bridge."}
+    {:job 4,
+     :commit "f92b1a76b",
+     :reason "Banked transported MV graph arrow."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97724,7 +97739,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVIntersectionH1ArrowToGraph",
@@ -97734,7 +97749,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "transported MV graph arrow",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f92b1a76b"},
    :id :lemma-frozengeneratormvintersectionh1arrowtograph,
    :kind :lemma,
    :depends-on
