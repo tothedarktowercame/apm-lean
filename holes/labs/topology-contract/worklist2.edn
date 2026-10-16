@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88735,7 +88735,7 @@
      "d462aa3fe93b33d5f9380841265fda81d84ec1a11d6fbd5e850314aabc5fd968"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -89063,6 +89063,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "comment-stripped closure placeholder scan", :exit 0}
      {:cmd "git show --check 17be3cf5f", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792194721528-15932-cb36af5c",
+     :commands
+     ["hash/scope/comment-stripped placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "direct #print axioms intervalCircle_image_interior"],
+     :finding
+     "PASS: reviewed 17be3cf5f (author topo-6), new after c1cac6ac2. Fixture 38700e1b... and frozen Main 85f64495... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest c57f3fb7... match. The image proof uses surjectivity and excludes exactly the two endpoints; both inclusions and endpoint equality orientations are correct. It compiles sorry-free with only propext, Classical.choice, Quot.sound. STOP lists remaining base-chart openness, trivializations, tree cover, and finite covers."},
     :commit "17be3cf5f",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -89071,7 +89083,7 @@
      "38700e1bfcb90a3333402ae3ae145662552bcf88fafdd5daa0eefe802f1a2fcf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89089,7 +89101,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact edge-chart preimage.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact interior-circle image.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89151,7 +89163,10 @@
      :reason "Banked edge-chart membership."}
     {:job 3,
      :commit "c1cac6ac2",
-     :reason "Banked exact edge-chart preimage."}]}
+     :reason "Banked exact edge-chart preimage."}
+    {:job 4,
+     :commit "17be3cf5f",
+     :reason "Banked exact interior-circle image."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99144,7 +99159,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "homology_of_homeomorph_frozenSigned_section", :type "H"},
@@ -99153,14 +99168,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-homology-of-homeomorph-frozensigned-section,
    :kind :lemma,
    :depends-on [:lemma-homology-of-homeomorph-frozensigned],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "intervalCircle_image_interior", :type "image"},
    :lemma
@@ -99168,7 +99185,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "image",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "17be3cf5f"},
    :id :lemma-intervalcircle-image-interior,
    :kind :lemma,
    :depends-on [:lemma-intervalcircle-surjective],
