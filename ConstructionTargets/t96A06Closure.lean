@@ -2337,6 +2337,31 @@ theorem t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one :
     simpa using hnormalized.symm
   · exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
 
+/-- Positive corrected coefficient is equivalent to exact equality between
+the native inverse comparison class and the coefficient-chart generator. -/
+theorem t96A06_correctedCoefficient_eq_one_iff_nativeGenerator :
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 ↔
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+        (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint := by
+  rw [← t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one]
+  constructor
+  · intro hcoordinate
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
+    exact hcoordinate
+  · intro hgenerator
+    rw [hgenerator]
+    exact ConstructionTargets.CoefficientChartLocal.generator_normalization
+      (R := ℤ) 1 polynomialSphereRegularPoint
+
 /-- At the selected point, positivity of the corrected coefficient is exactly
 the exclusion of the negation automorphism between the two normalizations. -/
 theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation :
@@ -3967,6 +3992,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
 #print axioms t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
 #print axioms t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one
+#print axioms t96A06_correctedCoefficient_eq_one_iff_nativeGenerator
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite
 #print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one
