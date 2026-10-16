@@ -3106,6 +3106,19 @@ theorem t96A06_unitH0_chainComparison_homology_generators :
 
 #print axioms t96A06_unitH0_chainComparison_homology_generators
 
+/-- For the Unit degree-zero short complex, the right-derived preservation
+isomorphism agrees with the left-derived preservation used by comparison. -/
+theorem t96A06_unitH0_preservation_right_eq_left :
+    (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso'
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules) =
+      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules) := by
+  exact ShortComplex.mapHomologyIso'_eq_mapHomologyIso _ _
+
+#print axioms t96A06_unitH0_preservation_right_eq_left
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
