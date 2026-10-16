@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88733,7 +88733,7 @@
      "88ef8294144cf8efc9d89c9ef291aa1ba8c861d0db6cfbbc1d605aadc812dbcb"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -89013,6 +89013,19 @@
      {:cmd "comment-stripped Main placeholder scan", :exit 0}
      {:cmd "comment-stripped closure placeholder scan", :exit 0}
      {:cmd "git show --check 2074eb47b", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792162474514-15573-06cf0699",
+     :commands
+     ["git show/check 2074eb47b"
+      "fixture/scope/comment-stripped placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "lake env lean ConstructionTargets/t92J06Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free quotient edge-chart openness beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The quotient-chart preimage is proved equal to the saturated raw chart before applying the quotient-map openness equivalence, so the raw/quotient boundary is sound. Only standard axioms occur; trivializations, vertex charts, tree cover, and finite covers remain listed."},
     :commit "2074eb47b",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -89021,7 +89034,7 @@
      "db046d5c327426210d27ced4b9f1a6b885bff272a96d7b4429d1aaf8ee6ec969"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89039,7 +89052,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked raw edge-chart openness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked quotient edge-chart openness.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89092,7 +89105,10 @@
     {:job 8, :commit "8217909a6", :reason "Banked raw edge openness."}
     {:job 9,
      :commit "983ed2796",
-     :reason "Banked raw edge-chart openness."}]}
+     :reason "Banked raw edge-chart openness."}
+    {:job 1,
+     :commit "2074eb47b",
+     :reason "Banked quotient edge-chart openness."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -98201,7 +98217,7 @@
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "rawEdgeChart_mem_iff_of_eqvGen",
@@ -98211,7 +98227,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "raw chart saturation",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "2074eb47b"},
    :id :lemma-rawedgechart-mem-iff-of-eqvgen,
    :kind :lemma,
    :depends-on [:lemma-rawedgechart-isopen],
@@ -98427,7 +98445,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one",
@@ -98437,14 +98455,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "generator reduction",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorcanonicalmvintersectionexact],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "edgeChart_isOpen", :type "quotient edge-chart openness"},
@@ -98453,7 +98473,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "quotient edge-chart openness",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "2074eb47b"},
    :id :lemma-edgechart-isopen,
    :kind :lemma,
    :depends-on [:lemma-rawedgechart-mem-iff-of-eqvgen],
