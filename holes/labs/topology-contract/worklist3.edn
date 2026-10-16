@@ -36708,36 +36708,35 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :review-finding
    "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Use biproduct component extensionality and both overlap-leg naturality proofs; transport exactness.",
+    "Prove both biproduct components via overlap naturality; transport exactness.",
     :outcome :stop,
-    :warnings
-    ["Existing lints; Main one placeholder; concurrent supervisor commit preserved."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_rationalHomologyBiprodIso",
-      :type "ModuleCat rational homology preserves binary biproduct",
+    [{:name "t99J05_cp_successor_mayerVietoris_f_transport_map",
+      :type "transported MV first-arrow definition",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_literalOverlapToPieces_components"],
+      :depends-on ["t99J05_rationalHomologyBiprodIso"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_mayerVietoris_f_transport",
-      :type "MV first-arrow transport",
+      :type "transported MV arrow equals signed literal arrow",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_rationalHomologyBiprodIso"],
+      :depends-on
+      ["t99J05_cp_successor_mayerVietoris_f_transport_map"
+       "t99J05_cp_successor_literalOverlapToPieces_components"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed rational ModuleCat homology-biproduct comparison.",
+    :reason "Committed transported CP successor MV arrow.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36748,26 +36747,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline ab85a510c", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile (3 attempts)",
-      :exit 1,
-      :note
-      "Qualified additive preservation and imported its defining module."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792192409510-15879-db60e7fe",
-     :commands
-     ["git show/check ab85a510c"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit chain adds and repairs the rational ModuleCat homology-biproduct comparison, oriented from homology of the chain biproduct to the biproduct of homologies; its hom is proved to be the lift of both homology projections. Fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains one declared placeholder."},
-    :commit "ab85a510c",
+     {:cmd "git show --check --stat --oneline 29f66a99f", :exit 0}],
+    :commit "29f66a99f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36775,7 +36756,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -47858,7 +47839,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-literaloverlaptopieces-components
-    :lemma-t99j05-rationalhomologybiprodiso],
+    :lemma-t99j05-rationalhomologybiprodiso
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-map],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -48046,6 +48028,23 @@
    :id :lemma-t96a06-unith0-mapopcyclesiso-inv-projected,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_f_transport_map",
+    :type "transported MV first-arrow definition"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_f_transport_map",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transported MV first-arrow definition",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-map,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-rationalhomologybiprodiso],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
