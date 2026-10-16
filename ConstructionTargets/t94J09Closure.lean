@@ -488,6 +488,15 @@ def frozenGeneratorCircleHomeomorphBoundaryGraph :
     frozenGeneratorCircleHomeomorphBoundaryGraph
         (Quotient.mk _ z) = Quotient.mk _ z := rfl
 
+/-- Integral singular homology transports from the induced circle quotient
+to the explicit seven-edge graph quotient in every degree. -/
+def frozenGeneratorCircleHomologyIsoBoundaryGraph (k : ℕ) :
+    SpaceH FrozenGeneratorCircleQuotient k ≅
+      SpaceH FrozenBoundaryGraphQuotient k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso
+    (TopCat.isoOfHomeo frozenGeneratorCircleHomeomorphBoundaryGraph))
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1131,6 +1140,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
+#print axioms frozenGeneratorCircleHomologyIsoBoundaryGraph
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
