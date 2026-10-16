@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 8b10c50fc", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792159885455-15549-e84ecf97",
+     :commands
+     ["git show/check 8b10c50fc"
+      "recorded fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free canonical degree-one pieces exactness beyond prior history. Hash and one-file scope match; frozen Main retains one placeholder. The transport leaves intersection and pieces objects fixed and maps only the outgoing named quotient H1 object forward to canonical quotient H1, so orientation and representation boundaries are correct. Only standard axioms occur; remaining intersection exactness, matrix, homology, and normalization milestones are listed."},
     :commit "8b10c50fc",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "43ac0676a71b5381dad2d81a0106d803abbaac3c7a76f23f74e48c438d4b67f9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical MV union exactness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical MV pieces exactness.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88952,7 +88965,10 @@
      :reason "Banked canonical composite."}
     {:job 7,
      :commit "1f4fe0e42",
-     :reason "Banked canonical MV union exactness."}]}
+     :reason "Banked canonical MV union exactness."}
+    {:job 8,
+     :commit "8b10c50fc",
+     :reason "Banked canonical MV pieces exactness."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98379,7 +98395,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorCanonicalMVPiecesExact",
@@ -98389,7 +98405,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "canonical degree-one pieces exactness",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8b10c50fc"},
    :id :lemma-frozengeneratorcanonicalmvpiecesexact,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorcanonicalmvunionexact],
