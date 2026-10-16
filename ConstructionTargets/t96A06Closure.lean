@@ -2130,6 +2130,36 @@ noncomputable def t96A06_mappedRationalExtensionClass :
     (t96A06_integralToRational_singularChainMap
       (TopCat.of (Sphere 3))) 3 t96A06_mappedIntegralNormalizedClass
 
+/-- Forward homology preservation is natural for the rational
+absolute-to-relative projection used at the selected puncture. -/
+theorem t96A06_rationalProjection_preservation_naturality :
+    HomologicalComplex.homologyMap
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3 ≫
+      (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            t96A06_forgetRatModules).hom =
+    (((CoefficientH0.SingularChains ℚ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        t96A06_forgetRatModules).hom ≫
+      t96A06_forgetRatModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint))) 3) := by
+  let φ := cokernel.π
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint))
+  let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℚ)
+    (ComplexShape.down ℕ) 3).map φ
+  exact ShortComplex.mapHomologyIso_hom_naturality ψ t96A06_forgetRatModules
+
 /-- The transported normalized class satisfies the coefficient-change
 localization square at every subset of the three-sphere. -/
 theorem t96A06_mappedIntegralNormalizedClass_localization_naturality
@@ -4291,6 +4321,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_forget_nativeProjection_normalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
+#print axioms t96A06_rationalProjection_preservation_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
 #print axioms t96A06_mappedIntegralLocalGenerator_unmap
