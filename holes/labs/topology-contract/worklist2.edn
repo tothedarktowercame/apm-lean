@@ -88722,6 +88722,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 3e6fa4a6e", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792135822607-15200-d671e236",
+     :commands
+     ["git show/diff/check 3e6fa4a6e"
+      "verify committed target blob and ClosedRel orientation"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at 3e6fa4a6e"],
+     :finding
+     "PASS program STOP: topo-6 commit 3e6fa4a6e adds compiled, sorry-free progress after a9dd96d70. frozenBoundaryClosedRel_trans correctly splits on the middle endpoint: the endpoint case embeds both steps in EqvGen, propagates endpoint membership outward, and composes them; the nonendpoint case excludes endpoint-pair branches and uses off-vertex GraphSymm transitivity. EqvGen equality, quotient T2/MV, homology, and normalization remain explicitly listed. Scope is one target file; fixture SHA 7f171bc9d9664c03a0b15d52bb13af637dde2492ef6b4dc7dec38d52ece15d85; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "3e6fa4a6e",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88730,7 +88743,7 @@
      "7f171bc9d9664c03a0b15d52bb13af637dde2492ef6b4dc7dec38d52ece15d85"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88748,7 +88761,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked off-vertex transitivity.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked closed-candidate transitivity.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88855,7 +88868,10 @@
      :reason "Banked forward-chain exclusion."}
     {:job 6,
      :commit "a9dd96d70",
-     :reason "Banked off-vertex transitivity."}]}
+     :reason "Banked off-vertex transitivity."}
+    {:job 7,
+     :commit "3e6fa4a6e",
+     :reason "Banked closed-candidate transitivity."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97292,7 +97308,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryClosedRel_trans",
@@ -97302,7 +97318,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "closed candidate transitive",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "3e6fa4a6e"},
    :id :lemma-frozenboundaryclosedrel-trans,
    :kind :lemma,
    :depends-on
