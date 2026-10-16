@@ -2740,6 +2740,31 @@ theorem t96A06_unitH0_integralComparison_of_comparison_generator
 
 #print axioms t96A06_unitH0_integralComparison_of_comparison_generator
 
+/-- The exact chain-to-homology compatibility left after unfolding the
+integral comparison on the selected Unit generator. -/
+def t96A06_unitH0ChainGeneratorCompatibility : Prop :=
+  (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).symm ≪≫
+      (HomologicalComplex.homologyFunctor AddCommGrpCat
+        (ComplexShape.down ℕ) 0).mapIso
+          (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+            (TopCat.of Unit))).hom).hom t96A06_unitH0CoordinateGenerator =
+    t96A06_unitH0NativeGenerator
+
+/-- The concrete chain-to-homology generator compatibility is precisely the
+remaining input required by the public integral homology comparison. -/
+theorem t96A06_unitH0_comparison_generator_of_chain_compatibility
+    (h : t96A06_unitH0ChainGeneratorCompatibility) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+        t96A06_unitH0NativeGenerator := by
+  simpa [t96A06_unitH0ChainGeneratorCompatibility,
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison]
+    using h
+
+#print axioms t96A06_unitH0_comparison_generator_of_chain_compatibility
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
