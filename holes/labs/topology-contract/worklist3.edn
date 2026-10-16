@@ -36710,7 +36710,7 @@
    "reopened: a lemma this row reported missing is now banked",
    :stop-count 8,
    :review-finding
-   "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone.",
+   "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
@@ -36748,6 +36748,12 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd "git show --check --stat --oneline 29f66a99f", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1792194689933-15930-26d10e8f",
+     :finding
+     "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone."},
     :commit "29f66a99f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36756,7 +36762,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36784,7 @@
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 1,
+   :fail-count 2,
    :depends-on [],
    :program true,
    :other-consumers [],
