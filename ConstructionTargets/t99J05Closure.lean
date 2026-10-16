@@ -1273,6 +1273,32 @@ theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
       (ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso_hom_comp_subspaceMap
         ℚ A)
 
+/-- Range-to-literal homology transport is natural for every inclusion of
+literal subspaces. -/
+theorem t99J05_ambientSubspaceRangeHomologyIso_naturality
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) (k : ℕ) :
+    (t99J05_ambientSubspaceRangeHomologyIso A k).hom ≫
+        HomologicalComplex.homologyMap
+          ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) k =
+      HomologicalComplex.homologyMap
+          ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+            (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h)) k ≫
+        (t99J05_ambientSubspaceRangeHomologyIso B k).hom := by
+  simpa only [HomologicalComplex.homologyMap_comp] using
+    congrArg (fun f => HomologicalComplex.homologyMap f k) (by
+      change
+        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _ ≫
+            (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _ =
+          (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _ ≫
+            (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _
+      simpa only [← Functor.map_comp] using congrArg
+        (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion_square h))
+
+#print axioms t99J05_ambientSubspaceRangeHomologyIso_naturality
+
 /-- The three range-presented terms in the successor Mayer--Vietoris sequence
 transport to the literal overlap and two patches. -/
 noncomputable def t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
