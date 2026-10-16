@@ -1628,6 +1628,37 @@ noncomputable def frozenGeneratorMVConnectingH1ToIntersectionInt :
       frozenGeneratorRadialPackage.cover 0 ≫
     frozenGeneratorIntersectionH0GroupIsoInt.hom
 
+/-- In intersection coordinates, the connecting map followed by the H0
+intersection arrow is the transported production composite. -/
+theorem frozenGeneratorMVConnecting_comp_H0_eq_production :
+    frozenGeneratorMVConnectingH1ToIntersectionInt ≫
+      frozenGeneratorMVIntersectionH0ArrowToIntGraph =
+        ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+            (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+            (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+            frozenGeneratorRadialPackage.inner_isOpen
+            frozenGeneratorRadialPackage.outer_isOpen
+            frozenGeneratorRadialPackage.cover 0 ≫
+          ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+            (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+            (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫
+          frozenGeneratorMVPiecesH0GroupIsoIntGraph.hom := by
+  rw [frozenGeneratorMVConnectingH1ToIntersectionInt,
+    frozenGeneratorMVIntersectionH0ArrowToIntGraph]
+  have hcancel := frozenGeneratorIntersectionH0GroupIsoInt.hom_inv_id_assoc
+    (ConstructionTargets.ProductionOpenCoverMayerVietoris.productionIntersectionArrow
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 0 ≫
+      frozenGeneratorMVPiecesH0GroupIsoIntGraph.hom)
+  simpa only [Category.assoc] using congrArg
+    (fun k ↦
+      ConstructionTargets.ProductionOpenCoverMayerVietoris.productionConnecting
+        (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+        (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+        frozenGeneratorRadialPackage.inner_isOpen
+        frozenGeneratorRadialPackage.outer_isOpen
+        frozenGeneratorRadialPackage.cover 0 ≫ k) hcancel
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2257,5 +2288,6 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
 #print axioms frozenGeneratorMVIntGraphH0_comp_eq_production
 #print axioms frozenGeneratorMVConnectingH1ToIntersectionInt
+#print axioms frozenGeneratorMVConnecting_comp_H0_eq_production
 
 end ConstructionTargets.t94J09Closure
