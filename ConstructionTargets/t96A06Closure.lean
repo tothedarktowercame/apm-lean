@@ -2218,6 +2218,30 @@ theorem t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_non
   change t96A06_sphereShiftLocalNormalizationIteratedEndpoint ≠ -1
   exact t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg h
 
+/-- Once the explicit endpoint is known nonnegative, all sign reductions
+assemble to the positive integral generator comparison needed downstream. -/
+theorem t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg
+    (h : 0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator =
+      ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint := by
+  have hendpoint :=
+    t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg h
+  have hauto :=
+    t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
+      hendpoint
+  have hgenerator :=
+    t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
+      hauto
+  have hcoordinate_ne :=
+    t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff.mpr hgenerator
+  have hcoordinate :=
+    t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg hcoordinate_ne
+  exact t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff.mpr
+    hcoordinate
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -5061,6 +5085,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_or_neg_one
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg
 #print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg
+#print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
