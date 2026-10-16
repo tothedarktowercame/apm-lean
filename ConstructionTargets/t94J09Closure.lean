@@ -731,6 +731,19 @@ theorem frozenBoundaryGraphRel_left_unique_of_not_endpoint
     subst s
     rfl
 
+/-- The chosen orientations of the seven pairings have disjoint source and
+target edge labels, so two forward steps can meet only at a polygon vertex. -/
+theorem frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint
+    {x y z : Circle} (hy : ¬ FrozenBoundaryEndpoint y)
+    (hxy : FrozenBoundaryGraphRel x y)
+    (hyz : FrozenBoundaryGraphRel y z) : False := by
+  rcases hxy with ⟨t, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, rfl⟩ <;>
+    rcases hyz with ⟨s, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨hs, rfl⟩ <;>
+    have hc := frozenCircleEdgePoint_eq_of_not_endpoint _ _ _ _ hy hs <;>
+    rcases hc with ⟨hij, hts⟩ <;> omega
+
 theorem frozenBoundaryEqvGen_endpoint_iff {z w : Circle}
     (h : Relation.EqvGen FrozenBoundaryGraphRel z w) :
     FrozenBoundaryEndpoint z ↔ FrozenBoundaryEndpoint w := by
@@ -1633,6 +1646,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenCircleEdgePoint_eq_of_not_endpoint
 #print axioms frozenBoundaryGraphRel_right_unique_of_not_endpoint
 #print axioms frozenBoundaryGraphRel_left_unique_of_not_endpoint
+#print axioms frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
