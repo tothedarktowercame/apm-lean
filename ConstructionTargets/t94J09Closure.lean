@@ -801,6 +801,32 @@ theorem frozenBoundaryClosedRel_trans {x y z : Circle}
       · exact hyz
       · exact False.elim (hy hyz.1)
 
+theorem frozenBoundaryClosedRel_symm {x y : Circle}
+    (hxy : FrozenBoundaryClosedRel x y) :
+    FrozenBoundaryClosedRel y x := by
+  rcases hxy with hxy | hxy
+  · left
+    rcases hxy with rfl | hxy | hxy
+    · exact Or.inl rfl
+    · exact Or.inr (Or.inr hxy)
+    · exact Or.inr (Or.inl hxy)
+  · right
+    exact ⟨hxy.2.1, hxy.1, hxy.2.2.symm⟩
+
+/-- The generated boundary equivalence relation is exactly the closed
+candidate relation. -/
+theorem frozenBoundaryEqvGen_iff_closedRel (x y : Circle) :
+    Relation.EqvGen FrozenBoundaryGraphRel x y ↔
+      FrozenBoundaryClosedRel x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel _ _ hrel => exact Or.inl (Or.inr (Or.inl hrel))
+    | refl _ => exact Or.inl (Or.inl rfl)
+    | symm _ _ _ ih => exact frozenBoundaryClosedRel_symm ih
+    | trans _ _ _ _ _ ih₁ ih₂ => exact frozenBoundaryClosedRel_trans ih₁ ih₂
+  · exact frozenBoundaryClosedRel_eqvGen x y
+
 /-- The induced circle relation is exactly the explicit seven-edge graph
 relation, not merely a relation containing its generators. -/
 theorem frozenGeneratorCircleRel_iff_graphRel (z w : Circle) :
@@ -1698,6 +1724,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphSymm_trans_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenBoundaryClosedRel_trans
+#print axioms frozenBoundaryClosedRel_symm
+#print axioms frozenBoundaryEqvGen_iff_closedRel
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
