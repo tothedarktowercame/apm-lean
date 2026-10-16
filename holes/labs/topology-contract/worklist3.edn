@@ -37219,37 +37219,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove coordinate one/raw transport; native equality; four classes; Main.",
+    "Prove chain-level chart naturality; then raw transport, native equality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
     [{:name
-      "t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one",
+      "t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality",
       :type
-      "raw generator transport iff restored rational coordinate is one",
+      "integral coordinate one and chart naturality imply raw transport",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_mappedRationalLocalExtension_eq_generator_iff_raw"],
+      ["t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one"],
       :area "rp-rational-homology"}
-     {:name "t96A06_integralToRational_rawLocalGenerator_transport",
-      :type "raw coefficient extension transports the generator",
+     {:name "t96A06_integralToRational_localChart_naturality",
+      :type
+      "coefficient extension commutes with selected integral and rational chart coordinates",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one"],
+      ["t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed raw-transport coordinate characterization.",
+    :reason "Committed raw transport assembler.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37258,15 +37259,9 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline d80cb9735",
+      "git diff --check && git show --check --stat --oneline c3df98709",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792111669990-14924-b6cad5a2",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "d80cb9735",
+    :commit "c3df98709",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37274,7 +37269,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -44868,6 +44863,48 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-mappedrationallocalextension-eq-generator-iff-raw],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality",
+    :type
+    "integral coordinate one and chart naturality imply raw transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integral coordinate one and chart naturality imply raw transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-integraltorational-rawlocalgenerator-transport-of-chart-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-rawlocalgenerator-iff-coordinate-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_localChart_naturality",
+    :type
+    "coefficient extension commutes with selected integral and rational chart coordinates"},
+   :lemma
+   {:name "t96A06_integralToRational_localChart_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient extension commutes with selected integral and rational chart coordinates",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-localchart-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-rawlocalgenerator-transport-of-chart-naturality],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
