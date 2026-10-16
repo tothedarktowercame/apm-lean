@@ -3299,6 +3299,21 @@ theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
   apply t96A06_globalRationalComparison_and_baseScalar_one_iff_split.mpr
   exact ⟨hextension, hcomparison⟩
 
+/-- The two remaining scalar normalizations already discharge the complete
+rational local-generator comparison, including projection of the extended
+global class and restoration of the native relative-homology object.  Thus no
+additional coefficient-change obligation lies between these two coordinates
+and the four local degree classes. -/
+theorem t96A06_mappedRationalLocalExtension_eq_generator_of_coordinates
+    (hextension : t96A06_rationalExtensionCoordinateOne)
+    (hcomparison : t96A06_baseNormalizationComparisonIdentity) :
+    t96A06_mappedRationalLocalExtension =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint := by
+  apply t96A06_mappedRationalLocalExtension_eq_generator_iff_raw.mpr
+  exact t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
+    hextension hcomparison
+
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
 theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
