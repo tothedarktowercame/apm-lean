@@ -36708,28 +36708,27 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Specialize both overlap legs and exactness; then successor data, Lefschetz, Main.",
+    "Identify both legs with MV f; transport exactness; then successor data, Lefschetz, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_ambientSubspaceRangeHomologyIso_naturality",
-      :type "transport is natural for subspace inclusions",
+    [{:name
+      "t99J05_cp_successor_mayerVietoris_overlap_lower_naturality",
+      :type "lower-leg naturality",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap"],
+      ["t99J05_ambientSubspaceRangeHomologyIso_naturality"],
       :area "rational-homology-lefschetz"}
-     {:name
-      "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
-      :type
-      "both overlap-to-patch MV legs commute with literal transport",
-      :status :not-started,
+     {:name "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
+      :type "top-leg naturality",
+      :status :proved,
       :consumers [:t99J05],
       :depends-on
       ["t99J05_ambientSubspaceRangeHomologyIso_naturality"],
@@ -36738,7 +36737,7 @@
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Repaired compiled range homology naturality.",
+    :reason "Committed both overlap-leg naturality proofs.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36749,26 +36748,10 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline ddbe3be23", :exit 0}],
+     {:cmd "git show --check --stat --oneline 9bea96bc2", :exit 0}],
     :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :note
-      "Fixed composition syntax and explicit chain-map types; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792173999436-15722-63637562",
-     :commands
-     ["git show/check ddbe3be23"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: repair commit compiles the general range-to-literal homology naturality milestone; composition orientation is range A→literal A→literal B = range A→range B→literal B. Fixture hash matches; supporting file has 0 placeholders; standard axioms only; registry 168/168; Main retains its declared one placeholder."},
-    :commit "ddbe3be23",
+    [{:cmd "compile", :exit 1, :note "Corrected declaration syntax."}],
+    :commit "9bea96bc2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36776,7 +36759,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -47673,6 +47656,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-chaincomparison-projected-generators],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_cp_successor_mayerVietoris_overlap_lower_naturality",
+    :type "lower-leg naturality"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_overlap_lower_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "lower-leg naturality",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-overlap-lower-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
+    :type "top-leg naturality"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "top-leg naturality",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-mayervietoris-overlap-top-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-naturality],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
