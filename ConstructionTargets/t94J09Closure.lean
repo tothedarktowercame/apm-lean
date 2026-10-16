@@ -779,6 +779,28 @@ theorem frozenBoundaryEqvGen_endpoint_iff {z w : Circle}
   | symm _ _ _ ih => exact ih.symm
   | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
 
+/-- The closed candidate is transitive: chains through a vertex remain in
+the finite endpoint relation, while chains through a nonvertex collapse to a
+single reflexive-symmetric generator step. -/
+theorem frozenBoundaryClosedRel_trans {x y z : Circle}
+    (hxy : FrozenBoundaryClosedRel x y)
+    (hyz : FrozenBoundaryClosedRel y z) :
+    FrozenBoundaryClosedRel x z := by
+  by_cases hy : FrozenBoundaryEndpoint y
+  · have exy := frozenBoundaryClosedRel_eqvGen x y hxy
+    have eyz := frozenBoundaryClosedRel_eqvGen y z hyz
+    exact Or.inr ⟨(frozenBoundaryEqvGen_endpoint_iff exy).mpr hy,
+      (frozenBoundaryEqvGen_endpoint_iff eyz).mp hy,
+      Relation.EqvGen.trans _ _ _ exy eyz⟩
+  · apply Or.inl
+    apply frozenBoundaryGraphSymm_trans_of_not_endpoint hy
+    · rcases hxy with hxy | hxy
+      · exact hxy
+      · exact False.elim (hy hxy.2.1)
+    · rcases hyz with hyz | hyz
+      · exact hyz
+      · exact False.elim (hy hyz.1)
+
 /-- The induced circle relation is exactly the explicit seven-edge graph
 relation, not merely a relation containing its generators. -/
 theorem frozenGeneratorCircleRel_iff_graphRel (z w : Circle) :
@@ -1675,6 +1697,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint
 #print axioms frozenBoundaryGraphSymm_trans_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
+#print axioms frozenBoundaryClosedRel_trans
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
