@@ -37249,38 +37249,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove explicit Unit generator comparison, then Bool square, boundary, signs, Main.",
+    "Prove chain compatibility; then Bool square, boundary, signs, Main.",
     :outcome :stop,
-    :warnings
-    ["Existing lints; Main one placeholder; unrelated files untouched."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_integralComparison_of_comparison_generator",
-      :type
-      "explicit Unit generator comparison implies full H0 comparison",
+    [{:name
+      "t96A06_unitH0_comparison_generator_of_chain_compatibility",
+      :type "chain compatibility implies Unit generator comparison",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_coordinate_normalization_of_comparison_generator"],
+      ["t96A06_unitH0_integralComparison_of_comparison_generator"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_comparison_generator",
-      :type "comparison preserves explicit Unit generator",
+     {:name "t96A06_unitH0ChainGeneratorCompatibility",
+      :type "chain comparison preserves selected Unit H0 class",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_integralComparison_of_comparison_generator"],
+      ["t96A06_unitH0_comparison_generator_of_chain_compatibility"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed compiled assembly from explicit Unit generator comparison to the full H0 comparison; the explicit generator equation remains.",
+    "Committed exact chain-homology boundary and its Unit generator adapter.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37288,14 +37287,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 13a68c1bf", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792163215922-15587-33153dfa",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "13a68c1bf",
+     {:cmd "git show --check --stat --oneline d62786645", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :note "Broad simp exposed chain equation; exact type fixed."}],
+    :commit "d62786645",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37303,7 +37300,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47117,6 +47114,42 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_comparison_generator_of_chain_compatibility",
+    :type "chain compatibility implies Unit generator comparison"},
+   :lemma
+   {:name "t96A06_unitH0_comparison_generator_of_chain_compatibility",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain compatibility implies Unit generator comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-unith0-comparison-generator-of-chain-compatibility,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-of-comparison-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0ChainGeneratorCompatibility",
+    :type "chain comparison preserves selected Unit H0 class"},
+   :lemma
+   {:name "t96A06_unitH0ChainGeneratorCompatibility",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain comparison preserves selected Unit H0 class",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0chaingeneratorcompatibility,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-comparison-generator-of-chain-compatibility],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
