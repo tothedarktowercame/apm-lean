@@ -1053,6 +1053,36 @@ theorem frozenGeneratorEqvGen_iff_eq_or_boundary (x y : Surfaces.Disk) :
         (fun z : ConstructionTargets.PolygonBoundaryCircleSource.Boundary => z.1)
         (fun {_ _} hz => hz) h
 
+/-- On the boundary subtype, the generated relation is the pullback of the
+closed circle relation along the boundary-circle homeomorphism. -/
+theorem frozenBoundarySubtypeEqvGen_iff_closedRel
+    (x y : ConstructionTargets.PolygonBoundaryCircleSource.Boundary) :
+    Relation.EqvGen
+        (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+          frozenGeneratorRel) x y ↔
+      FrozenBoundaryClosedRel
+        (ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle x)
+        (ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle y) := by
+  rw [← frozenBoundaryEqvGen_iff_closedRel]
+  constructor
+  · intro h
+    apply ConstructionTargets.PolygonBoundaryInducedQuotient.eqvGen_map
+      (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+        frozenGeneratorRel) FrozenBoundaryGraphRel
+      ConstructionTargets.PolygonBoundaryCircleSource.boundaryToCircle
+      (fun {a b} hab => ?_) h
+    rw [← frozenGeneratorCircleRel_iff_graphRel]
+    simpa [ConstructionTargets.PolygonBoundaryInducedQuotient.CircleRel] using hab
+  · intro h
+    apply ConstructionTargets.PolygonBoundaryInducedQuotient.eqvGen_map
+      FrozenBoundaryGraphRel
+      (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+        frozenGeneratorRel)
+      ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+      (fun {a b} hab => ?_) h
+    rw [← frozenGeneratorCircleRel_iff_graphRel] at hab
+    exact hab
+
 /-- The boundary quotient parametrizes every outer boundary class exactly
 once. -/
 theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
@@ -1814,6 +1844,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorBoundaryHomologyIsoGraph
 #print axioms frozenBoundaryQuotientToOuterSkeleton
 #print axioms frozenGeneratorEqvGen_iff_eq_or_boundary
+#print axioms frozenBoundarySubtypeEqvGen_iff_closedRel
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
