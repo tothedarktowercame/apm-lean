@@ -37265,37 +37265,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove chain comparison coordinate normalization, compose Bool square; then boundary, signs, Main.",
+    "Prove explicit generator comparison, Bool square; then boundary, signs, Main.",
     :outcome :stop,
-    :warnings
-    ["Existing lints; Main one placeholder; unrelated files untouched."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
-      :type "coordinate normalization implies Unit comparison at one",
+    [{:name
+      "t96A06_unitH0_coordinate_normalization_of_comparison_generator",
+      :type "generator comparison implies normalization",
       :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_generator_eq_of_apply_one"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_coordinate_normalization",
-      :type
-      "chain comparison preserves the selected Unit H0 coordinate",
-      :status :not-started,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_unitH0_integralComparison_apply_one_of_coordinate"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_unitH0_comparison_generator",
+      :type "comparison preserves explicit Unit generator",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_unitH0_coordinate_normalization_of_comparison_generator"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed exact coordinate form of Unit normalization; chain comparison on that coordinate remains.",
+    "Committed explicit Unit generators; their comparison remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37303,19 +37303,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline c84611be7", :exit 0}],
+     {:cmd "git show --check --stat --oneline 9584fa22b", :exit 0}],
     :diagnostic-history
     [{:cmd "closure compile",
       :exit 1,
-      :note
-      "Definitional simp failed; isolated exact coordinate equation."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792160900030-15561-df1b1119",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "c84611be7",
+      :note "Fixed iso orientation; rerun passed."}],
+    :commit "9584fa22b",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37323,7 +37316,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47027,6 +47020,44 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_unitH0_coordinate_normalization_of_comparison_generator",
+    :type "generator comparison implies normalization"},
+   :lemma
+   {:name
+    "t96A06_unitH0_coordinate_normalization_of_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "generator comparison implies normalization",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_comparison_generator",
+    :type "comparison preserves explicit Unit generator"},
+   :lemma
+   {:name "t96A06_unitH0_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "comparison preserves explicit Unit generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
