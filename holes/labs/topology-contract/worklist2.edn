@@ -88726,6 +88726,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check fda8e08ff", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792172072638-15702-1d5fb0a3",
+     :commands
+     ["git show/check fda8e08ff"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free reassembly-kernel equality assembler beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The established zero composite supplies face-boundary range <= reassembly kernel; the theorem keeps the missing reverse inclusion explicit and uses antisymmetry to obtain equality, without assuming surjectivity or exactness. Only standard axioms occur; H1 comparison, reverse inclusion/exactness, homology assembly, and normalization remain listed."},
     :commit "fda8e08ff",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88734,7 +88747,7 @@
      "076565723b23d482a78e4319c80b20eb38be73f67bb08e119e586d3d8f22cae8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88752,7 +88765,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: .",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88976,7 +88989,8 @@
     {:job 6, :commit "f4183ccea", :reason "Done."}
     {:job 7, :commit "4a4718954", :reason "Done."}
     {:job 8, :commit "efd5f7159", :reason "Done."}
-    {:job 9, :commit "7bca50fb8", :reason "."}]}
+    {:job 9, :commit "7bca50fb8", :reason "."}
+    {:job 1, :commit "fda8e08ff", :reason "Banked."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98741,7 +98755,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenFaceBoundary_range_eq_ker_reassembly_of_reverse",
@@ -98751,7 +98765,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "equality",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "fda8e08ff"},
    :id :lemma-frozenfaceboundary-range-eq-ker-reassembly-of-reverse,
    :kind :lemma,
    :depends-on [:lemma-frozenfaceboundary-range-le-ker-reassembly],
