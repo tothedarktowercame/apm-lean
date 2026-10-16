@@ -3037,7 +3037,7 @@ theorem t96A06_unitH0_homologyComparison_factorization :
 #print axioms t96A06_unitH0_homologyComparison_factorization
 
 /-- The module singular chains after forgetting their scalar structure. -/
-noncomputable abbrev t96A06_unitMappedModuleChains :=
+noncomputable abbrev t96A06_unitMappedModuleChains : ChainComplex AddCommGrpCat ℕ :=
   (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
     (ComplexShape.down ℕ)).obj
       (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
@@ -3083,6 +3083,28 @@ theorem t96A06_unitH0_chainComparison_projected_generators :
   rfl
 
 #print axioms t96A06_unitH0_chainComparison_projected_generators
+
+/-- The induced homology map carries the mapped module generator class to
+the additive generator class. -/
+theorem t96A06_unitH0_chainComparison_homology_generators :
+    (HomologicalComplex.homologyMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      ((t96A06_unitMappedModuleChains.isoHomologyι₀.inv).hom
+        ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+          t96A06_unitH0ModuleChainGenerator)) =
+      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv).hom
+        (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+          t96A06_unitH0AdditiveChainGenerator)) := by
+  rw [← ConcreteCategory.comp_apply,
+    ChainComplex.isoHomologyι₀_inv_naturality,
+    ConcreteCategory.comp_apply,
+    t96A06_unitH0_chainComparison_projected_generators]
+  rfl
+
+#print axioms t96A06_unitH0_chainComparison_homology_generators
 
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
