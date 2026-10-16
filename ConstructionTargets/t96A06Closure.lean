@@ -2678,6 +2678,24 @@ theorem t96A06_unitH0CoordinateGenerator_eq_moduleGenerator :
 
 #print axioms t96A06_unitH0CoordinateGenerator_eq_moduleGenerator
 
+/-- The explicit degree-zero opcycle representing the selected module-valued
+Unit homology generator. -/
+noncomputable def t96A06_unitH0ModuleOpcycleGenerator :=
+  (ConstructionTargets.SingularHomologyConcrete.directDiscreteOpcyclesIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.hom
+    ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ))
+
+/-- The selected module-valued Unit class is the canonical homology image of
+its explicit opcycle representative. -/
+theorem t96A06_unitH0ModuleGenerator_eq_opcycleGenerator :
+    t96A06_unitH0ModuleGenerator =
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv.hom
+          t96A06_unitH0ModuleOpcycleGenerator := by
+  rfl
+
+#print axioms t96A06_unitH0ModuleGenerator_eq_opcycleGenerator
+
 /-- The concrete normalization of the chain comparison on the selected Unit
 coordinate supplies the remaining equality at one. -/
 theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
