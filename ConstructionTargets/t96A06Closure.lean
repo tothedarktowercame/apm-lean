@@ -3289,6 +3289,16 @@ theorem t96A06_globalRationalComparison_and_baseScalar_one_iff_split :
   rw [t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates]
   rfl
 
+/-- The two scalar normalization statements feed the raw local generator
+transport directly, without retaining the intermediate class-valued packet. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
+    (hextension : t96A06_rationalExtensionCoordinateOne)
+    (hcomparison : t96A06_baseNormalizationComparisonIdentity) :
+    t96A06_integralToRationalRawLocalGeneratorTransport := by
+  apply t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
+  apply t96A06_globalRationalComparison_and_baseScalar_one_iff_split.mpr
+  exact ⟨hextension, hcomparison⟩
+
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
 theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
@@ -4463,6 +4473,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
 #print axioms t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates
 #print axioms t96A06_globalRationalComparison_and_baseScalar_one_iff_split
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff
