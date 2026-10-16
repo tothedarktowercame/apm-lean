@@ -576,6 +576,19 @@ noncomputable def vertexFiberEquiv :
       (D.vertex v) (by simp)
     exact h.unique h.choose_spec.1 rfl
 
+/-- The complete preimage of the wedge vertex is the discrete set of graph
+vertices.  This is the central fiber in a vertex covering chart. -/
+theorem projection_preimage_wedgePoint :
+    D.projection ⁻¹' ({inl circleBase} : Set X) = Set.range D.vertex := by
+  ext e
+  simp only [Set.mem_preimage, Set.mem_singleton_iff, Set.mem_range]
+  constructor
+  · intro he
+    obtain ⟨v, hv, _⟩ := D.existsUnique_vertex_of_projection_eq_wedgePoint e he
+    exact ⟨v, hv.symm⟩
+  · rintro ⟨v, rfl⟩
+    exact D.projection_vertex v
+
 /-- Distinct graph-edge labels cannot be identified at an interior parameter
 by the endpoint quotient.  In particular, the vertex coordinate is retained
 throughout each open edge. -/
@@ -659,6 +672,22 @@ noncomputable def interiorFiberEquiv (i : Fin 2) (t : UnitInterval)
     have h := existsUnique_edgePoint_of_projection_eq_interior D i t ht e e.2
     exact h.unique h.choose_spec.1 rfl
 
+/-- The complete preimage of an open-edge point is its labeled family of
+lifted edge points.  This is the central fiber in every edge chart. -/
+theorem projection_preimage_edgePoint (i : Fin 2) (t : UnitInterval)
+    (ht : t.1 ∈ Set.Ioo (0 : ℝ) 1) :
+    D.projection ⁻¹' ({edgeProjection i t} : Set X) =
+      Set.range (fun v : V => D.edgePoint i v t) := by
+  ext e
+  simp only [Set.mem_preimage, Set.mem_singleton_iff, Set.mem_range]
+  constructor
+  · intro he
+    obtain ⟨v, hv, _⟩ :=
+      D.existsUnique_edgePoint_of_projection_eq_interior i t ht e he
+    exact ⟨v, hv.symm⟩
+  · rintro ⟨v, rfl⟩
+    exact D.projection_edgePoint i v t
+
 /-- Every fiber of the graph realization projection has the cardinality of
 the graph vertex type. -/
 theorem projection_fiberCard [Finite V] (x : X) :
@@ -738,6 +767,8 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
 #print axioms projection_surjective
+#print axioms projection_preimage_wedgePoint
+#print axioms projection_preimage_edgePoint
 #print axioms projection_fiberCard
 
 end TwoLoopGraphCoverData
