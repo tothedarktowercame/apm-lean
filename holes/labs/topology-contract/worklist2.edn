@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88728,7 +88728,7 @@
      "e3241544670a888fcf590ce8cd5c31e0b49a6f5aa51b53f51cf2970f6784c185"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88750,7 @@
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
-   :fail-count 1,
+   :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
    :other-consumers [],
@@ -88959,6 +88959,18 @@
     [{:cmd "bare rg placeholder scan",
       :exit 0,
       :correction "matched prose; comment-stripped scan passed"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792150729906-15397-79eabd6a",
+     :commands
+     ["git show/check 983ed2796"
+      "fixture/scope/comment-stripped placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 983ed2796 is new since history and changes only t92J06Closure; fixture hash matches; closure has 0 code placeholders; build/Main pass; registry 168/0. rawEdgeChart is exactly the union of open labelled interiors and openness follows by iUnion; it claims no quotient saturation/trivialization, which remain listed."},
     :commit "983ed2796",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -88967,7 +88979,7 @@
      "38f3c7c63fddaabed68eca4fa8b1b470eaf571680cde85f3300be0e5a2e160bf"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -88985,7 +88997,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked raw edge openness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked raw edge-chart openness.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89035,9 +89047,10 @@
     {:job 7,
      :commit "7dcd7cd9f",
      :reason "Banked realization quotient authority."}
-    {:job 8,
-     :commit "8217909a6",
-     :reason "Banked raw edge openness."}]}
+    {:job 8, :commit "8217909a6", :reason "Banked raw edge openness."}
+    {:job 9,
+     :commit "983ed2796",
+     :reason "Banked raw edge-chart openness."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -97825,7 +97838,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVIntersectionH0ArrowToIntGraph",
@@ -97835,14 +97848,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H0 coordinate arrow",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratormvintersectionh0arrowtointgraph,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratormvpiecesh0groupisointgraph],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "rawEdgeChart_isOpen", :type "raw chart open"},
    :lemma
@@ -97850,7 +97865,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "raw chart open",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "983ed2796"},
    :id :lemma-rawedgechart-isopen,
    :kind :lemma,
    :depends-on [:lemma-rawedgeinterior-isopen],
