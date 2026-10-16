@@ -36708,20 +36708,18 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Specialize both overlap-to-patch legs and transport exactness; then successor data, Lefschetz, Main.",
+    "Specialize both overlap legs and exactness; then successor data, Lefschetz, Main.",
     :outcome :stop,
-    :warnings
-    ["Existing lints; Main one placeholder; unrelated changes untouched."],
+    :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
     [{:name "t99J05_ambientSubspaceRangeHomologyIso_naturality",
-      :type
-      "range-to-literal homology transport is natural for subspace inclusions",
+      :type "transport is natural for subspace inclusions",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
@@ -36740,7 +36738,7 @@
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed general range-to-literal homology naturality.",
+    :reason "Repaired compiled range homology naturality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36751,14 +36749,13 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 19019d1bf", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792173244687-15716-4afa245a",
-     :finding
-     "Recorded commit 19019d1bf does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1280:53 expected token at the first `≫`, then the naturality theorem is unknown at line 1300. Repair the composition syntax (e.g. explicit CategoryTheory.CategoryStruct.comp as in the preceding theorem), compile the committed file, and only then bank the milestone."},
-    :commit "19019d1bf",
+     {:cmd "git show --check --stat --oneline ddbe3be23", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :note
+      "Fixed composition syntax and explicit chain-map types; rerun passed."}],
+    :commit "ddbe3be23",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36766,7 +36763,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
