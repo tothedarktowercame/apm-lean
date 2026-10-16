@@ -36881,67 +36881,52 @@
      :reason
      "Committed connecting map and overlap exactness; ambient exactness remains."}]}
   {:consumer :t98A02,
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta {:t98A02 [1 1], :t00A01 [1 1]},
     :residual
-    "B2 large-interior openness; B3 puncture connectivity; then local orientation and homology.",
+    "Apply manifold invariance of domain to the restricted embedding; then puncture connectivity and homology.",
     :outcome :stop,
     :warnings ["Three existing-style simp lints."],
     :missing-theorems
-    [{:name "BallCollar",
-      :type
-      "collared embedded-ball package, puncture, continuous boundary map, radial regions, and oriented quotient",
+    [{:name "BallCollar.largeInteriorMap_isEmbedding",
+      :type "restricted large-collar interior map is an embedding",
       :status :proved,
-      :consumers [:t98A02 :t00A01],
-      :depends-on [],
-      :area "ball-complement-collar"}
-     {:name "BallCollar.largeInterior_isOpen",
-      :type
-      "the image of the radius-two interior under the large collar embedding is open in an n-manifold",
-      :status :not-started,
       :consumers [:t98A02 :t00A01],
       :depends-on ["BallCollar"],
       :area "ball-complement-collar"}
-     {:name "BallCollar.punctured_pathConnected",
-      :type
-      "a collared puncture of a connected boundaryless n-manifold, n at least two, is path connected",
+     {:name "BallCollar.range_largeInteriorMap",
+      :type "restricted map range equals radialTwo",
+      :status :proved,
+      :consumers [:t98A02 :t00A01],
+      :depends-on ["BallCollar.largeInteriorMap_isEmbedding"],
+      :area "ball-complement-collar"}
+     {:name "BallCollar.largeInterior_isOpen",
+      :type "radius-two interior image is open in the manifold",
       :status :not-started,
       :consumers [:t98A02 :t00A01],
-      :depends-on ["BallCollar.largeInterior_isOpen"],
+      :depends-on ["BallCollar.range_largeInteriorMap"],
       :area "ball-complement-collar"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed compiled B1 collar and quotient representations.",
+    "Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains.",
     :commands
     [{:cmd
       "lake build ConstructionTargets.CollaredConnectedSumHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 9067e7d41",
+      "git diff --check && git show --check --stat --oneline 4ac235ef5",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792118954346-15048-108b4cb7",
-     :commands
-     ["git show --check --stat 9067e7d41; inspect diff"
-      "verify commit blob equals compiled file"
-      "rg sorry/admit/axiom"
-      "lake build ConstructionTargets.CollaredConnectedSumHomology"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: 9067e7d41 is new compiled, sorry-free program progress in exact scope: collar compatibility, puncture boundary map, radial-region representations, and quotient by equal sphere parameters. Relation orientation and quotient topology match B1; printed axioms are standard. No fixture is recorded; consumer placeholders remain 1->1. B2/B3 and later homology milestones are listed."},
-    :commit "9067e7d41",
+    :commit "4ac235ef5",
     :changed-paths
     ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -45357,7 +45342,8 @@
     :area "ball-complement-collar"},
    :id :lemma-ballcollar-largeinterior-isopen,
    :kind :lemma,
-   :depends-on [:lemma-ballcollar],
+   :depends-on
+   [:lemma-ballcollar :lemma-ballcollar-range-largeinteriormap],
    :other-consumers [:t00A01]}
   {:consumer :t98A02,
    :phase :lemma,
@@ -47050,7 +47036,41 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.largeInteriorMap_isEmbedding",
+    :type "restricted large-collar interior map is an embedding"},
+   :lemma
+   {:name "BallCollar.largeInteriorMap_isEmbedding",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "restricted large-collar interior map is an embedding",
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+   :id :lemma-ballcollar-largeinteriormap-isembedding,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.range_largeInteriorMap",
+    :type "restricted map range equals radialTwo"},
+   :lemma
+   {:name "BallCollar.range_largeInteriorMap",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "restricted map range equals radialTwo",
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+   :id :lemma-ballcollar-range-largeinteriormap,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-largeinteriormap-isembedding],
+   :other-consumers [:t00A01]}],
  :consumer-baselines {},
  :statuses
  #{:open
