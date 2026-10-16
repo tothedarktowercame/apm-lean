@@ -36748,6 +36748,19 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd "git show --check --stat --oneline 0e6877ab2", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792155210558-15463-ee5a0ebf",
+     :commands
+     ["git show/check 0e6877ab20"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit adds a new in-scope, sorry-free MV short-exactness theorem since history; orientation/boundaries match the fixture, SHA-256 matches, Lean gates pass, axioms are standard, registry 168/168; Main retains its declared single placeholder."},
     :commit "0e6877ab20",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36756,7 +36769,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36774,7 +36787,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Packaged lower-patch homotopy equivalence; MV remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Specialized rational subcomplex MV exactness to the CP successor patches.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36869,8 +36882,11 @@
      :reason "Committed truncation descent and left inverse."}
     {:job 6,
      :commit "87bd5a00f1",
+     :reason "Packaged lower-patch homotopy equivalence; MV remains."}
+    {:job 7,
+     :commit "0e6877ab20",
      :reason
-     "Packaged lower-patch homotopy equivalence; MV remains."}]}
+     "Specialized rational subcomplex MV exactness to the CP successor patches."}]}
   {:consumer :t98A02,
    :stop-count 2,
    :evidence
@@ -37240,7 +37256,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37293,7 +37309,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37315,7 +37331,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -46418,7 +46434,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -46432,7 +46448,9 @@
     :type
     "Bool H0 comparison transports to signed circle boundary coordinates",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-coefficientcircleboundary-integralcomparison-of-bool,
    :kind :lemma,
@@ -46458,7 +46476,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_integralComparison_of_points",
@@ -46468,7 +46486,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "two point coordinates determine the Bool H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-integralcomparison-of-points,
    :kind :lemma,
    :depends-on [],
@@ -46493,7 +46513,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_integralComparison_points_of_false_true",
@@ -46505,7 +46525,9 @@
     :type
     "false and true coordinates give every Bool point coordinate",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-integralcomparison-points-of-false-true,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-points],
@@ -46531,7 +46553,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_integralComparison_of_false_true",
@@ -46541,7 +46563,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "endpoint coordinates imply the full Bool H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-integralcomparison-of-false-true,
    :kind :lemma,
    :depends-on
@@ -46549,7 +46573,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_subcomplexMayerVietoris_shortExact",
@@ -46559,7 +46583,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "rational subcomplex MV exactness for CP patches",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "0e6877ab20"},
    :id :lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact,
    :kind :lemma,
    :depends-on
