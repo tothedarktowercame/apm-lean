@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
-    :residual "Skeleton T2; homeomorphism/MV; normalize.",
+    :residual "Closed EqvGen; T2/homeomorphism/MV; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "compactSpace_frozenGeneratorOuterBoundaryPiece",
-      :type "both compact",
+    [{:name "isClosed_range_frozenCircleEdgePair_reverse",
+      :type "edge graphs closed",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["continuous_frozenBoundaryQuotientToOuterSkeleton"],
+      :depends-on [],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "T2/homeomorphism/MV",
+      :type "closed EqvGen/T2/MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["compactSpace_frozenGeneratorOuterBoundaryPiece"
+      ["isClosed_range_frozenCircleEdgePair_reverse"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked compactness.",
+    :reason "Banked closed edge graphs.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,31 +88719,20 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check e649f0a06", :exit 0}],
+     {:cmd "git show --check fe3b47e93", :exit 0}],
     :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "direction fixed"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792114226476-14975-eb7ae676",
-     :commands
-     ["git show/diff/check e649f0a06"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from e649f0a06"],
-     :finding
-     "PASS program STOP: topo-6 commit e649f0a06 adds compiled, sorry-free progress after 74950731d. The boundary source inherits compactness from its circle homeomorphism and Quotient.compactSpace transfers it to the boundary quotient. The outer skeleton is then compact because the previously proved continuous bijection is surjective, so its range is univ and compactness passes to the image. This proves compactness only; the needed T2 instance, inverse continuity/homeomorphism, and MV remain explicitly listed. Only t94J09Closure.lean changed; fixture SHA a4ff23e8eb2d60a518862398cd5d78f81bcc52fb562f8eb4d3fea371307b2ae5 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization remains."},
-    :commit "e649f0a06",
+    [{:cmd "drafts",
+      :exit 1,
+      :correction "fixed subtypes; split union"}],
+    :commit "fe3b47e93",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "a4ff23e8eb2d60a518862398cd5d78f81bcc52fb562f8eb4d3fea371307b2ae5"},
+     "25521673f1ab4d00d0d5802d8711eeabcc83964e740c3d50e829e4974823f7cc"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96668,7 +96657,8 @@
     :lemma-frozenboundaryquotienttoouterskeleton
     :lemma-frozenboundaryquotienttoouterskeleton-bijective
     :lemma-continuous-frozenboundaryquotienttoouterskeleton
-    :lemma-compactspace-frozengeneratorouterboundarypiece],
+    :lemma-compactspace-frozengeneratorouterboundarypiece
+    :lemma-isclosed-range-frozencircleedgepair-reverse],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96987,4 +96977,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-continuous-frozenboundaryquotienttoouterskeleton],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "isClosed_range_frozenCircleEdgePair_reverse",
+    :type "edge graphs closed"},
+   :lemma
+   {:name "isClosed_range_frozenCircleEdgePair_reverse",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "edge graphs closed",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-isclosed-range-frozencircleedgepair-reverse,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
