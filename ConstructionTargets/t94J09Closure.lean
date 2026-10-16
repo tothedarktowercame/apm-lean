@@ -2089,6 +2089,26 @@ theorem frozenGraphBoundaryKernelEquiv_attachingCycle :
   funext i
   fin_cases i <;> rfl
 
+/-- Under assembled graph-cycle coordinates, the missing Mayer--Vietoris
+generator calculation is exactly the equality with the literal attaching
+degree in seven-edge coordinates. -/
+theorem frozenGraphH1Coordinates_generator_eq_iff
+    (c :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) →ₗ[ℤ] (Fin 7 → ℤ))
+    (hcycle : ∀ x, frozenGraphBoundary (c x) = 0)
+    (hinj : Function.Injective c)
+    (hrange : LinearMap.range c = LinearMap.ker frozenGraphBoundary) :
+    frozenGraphH1CoordinatesOfCycleComparison c hcycle hinj hrange
+        (frozenGeneratorMVBoundaryLinear 1) =
+        frozenGraphBoundaryKernelEquiv frozenAttachingCycle ↔
+      c (frozenGeneratorMVBoundaryLinear 1) = frozenAttachingDegree := by
+  change frozenGraphBoundaryKernelEquiv
+      ⟨c (frozenGeneratorMVBoundaryLinear 1), hcycle _⟩ =
+        frozenGraphBoundaryKernelEquiv frozenAttachingCycle ↔ _
+  rw [frozenGraphBoundaryKernelEquiv.injective.eq_iff]
+  exact Subtype.ext_iff
+
 /-- A unimodular change of graph-cycle coordinates sending the frozen face
 cycle to the standard genus-six face cycle. -/
 def frozenCycleToN6Coordinates :
@@ -2516,6 +2536,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphCycleInclusion_injective
 #print axioms frozenGraphCycleInclusion_range
 #print axioms frozenGraphH1CoordinatesOfCycleComparison
+#print axioms frozenGraphH1Coordinates_generator_eq_iff
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
 #print axioms frozenFaceCokernelSmithEquiv
