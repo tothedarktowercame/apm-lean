@@ -37289,28 +37289,28 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Use mapped homology and original opcycle right-data triangles; then Unit compatibility and Bool square.",
+    "Combine mapped and original right-data triangles; then Unit compatibility and Bool square.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_mapHomologyIso'_eq_rightData",
-      :type "homology preservation equals right-data transport",
+    [{:name "t96A06_unitH0_mappedRightHomology_triangle",
+      :type "mapped right homology-to-opcycles triangle",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_mapOpcyclesIso_explicit_generator"],
+      :depends-on ["t96A06_unitH0_mapHomologyIso'_eq_rightData"],
       :area "rp-rational-homology"}
      {:name "t96A06_unitH0_preservation_coordinate_generator",
       :type "preservation of Unit coordinate",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_unitH0_mapHomologyIso'_eq_rightData"
+      ["t96A06_unitH0_mappedRightHomology_triangle"
        "t96A06_unitH0_rightHomology_opcycle_transport"
        "t96A06_unitH0_chainComparison_homology_generators"],
       :area "rp-rational-homology"}],
@@ -37318,7 +37318,7 @@
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed Unit mapHomologyIso' right-data decomposition.",
+    :reason "Committed mapped Unit right-homology triangle.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37326,19 +37326,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline aac523e5a", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile (3 attempts)",
-      :exit 1,
-      :note
-      "Concrete cancellation mismatched; right-data triangles remain."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792190610259-15840-65335f58",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "aac523e5a",
+     {:cmd "git show --check --stat --oneline 0a4a787aa", :exit 0}],
+    :commit "0a4a787aa",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37346,7 +37335,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47754,7 +47743,8 @@
     :lemma-t96a06-unith0-righthomology-opcycle-transport
     :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata
     :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator
-    :lemma-t96a06-unith0-maphomologyiso-eq-rightdata],
+    :lemma-t96a06-unith0-maphomologyiso-eq-rightdata
+    :lemma-t96a06-unith0-mappedrighthomology-triangle],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -47888,6 +47878,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-mapopcyclesiso-explicit-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mappedRightHomology_triangle",
+    :type "mapped right homology-to-opcycles triangle"},
+   :lemma
+   {:name "t96A06_unitH0_mappedRightHomology_triangle",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "mapped right homology-to-opcycles triangle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-mappedrighthomology-triangle,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-maphomologyiso-eq-rightdata],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
