@@ -36708,32 +36708,37 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
-    :residual
-    "Transport above-top vanishing to affine sphere and overlap; lower retract; MV; Main.",
+    :residual "Lower-patch retract; MV successor; Main.",
     :outcome :stop,
     :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_euclideanUnitSphere_homology_isZero_of_gt",
-      :type "rational sphere homology vanishes above top",
+    [{:name "t99J05_affineUnitSphere_homology_isZero_of_gt",
+      :type "affine sphere vanishes above top",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt"],
+      :depends-on ["t99J05_euclideanUnitSphere_homology_isZero_of_gt"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_affineUnitSphere_homology_isZero_of_gt",
-      :type "affine unit-sphere rational homology vanishes above top",
+     {:name "t99J05_cp_successor_overlap_homology_isZero_of_gt",
+      :type "successor overlap vanishes above top",
+      :status :proved,
+      :consumers [:t99J05],
+      :depends-on ["t99J05_affineUnitSphere_homology_isZero_of_gt"],
+      :area "rational-homology-lefschetz"}
+     {:name "t99J05_cp_successor_lowerPatch_retract",
+      :type "lower patch retracts to CP n",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_euclideanUnitSphere_homology_isZero_of_gt"],
+      :depends-on
+      ["t99J05_cp_successor_overlap_homology_isZero_of_gt"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed rational sphere vanishing above top.",
+    :reason "Committed affine and overlap above-top vanishing.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36745,21 +36750,9 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline 926cc81f4",
+      "git diff --check && git show --check --stat --oneline 5370feaf8",
       :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792113038915-14951-4cffad74",
-     :commands
-     ["git show --check --stat 926cc81f4; inspect diff"
-      "verify commit blob equals compiled file"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean Closure, Main, fixture"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: 926cc81f4 adds compiled, sorry-free progress beyond history: rational homology of the Euclidean unit sphere with ambient dimension m+1 vanishes for k>m, with correct above-top orientation and sphere-shift indices. Fixture hash matches; only standard axioms. Main placeholder remains 1->1; affine/overlap transport, retract, MV, and Main milestones are listed."},
-    :commit "926cc81f4",
+    :commit "5370feaf8",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36767,7 +36760,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -44959,7 +44952,8 @@
    {:name "t99J05_affineUnitSphere_homology_isZero_of_gt",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "affine unit-sphere rational homology vanishes above top",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-affineunitsphere-homology-iszero-of-gt,
    :kind :lemma,
    :depends-on
@@ -45074,6 +45068,40 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integraltorationallocalchartnaturality-iff-rawtransport-of-coefficient-on],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_homology_isZero_of_gt",
+    :type "successor overlap vanishes above top"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor overlap vanishes above top",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-affineunitsphere-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_retract",
+    :type "lower patch retracts to CP n"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_retract",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "lower patch retracts to CP n",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-lowerpatch-retract,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
