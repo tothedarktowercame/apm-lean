@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual "Disk graph equality/T2; inverse/MV; normalize.",
+    :residual "Disk quotient T2; inverse/MV; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenBoundaryEqvGen_diskImage_isClosed",
-      :type "closed embedded boundary graph",
+    [{:name "frozenGeneratorEqvGen_isClosed",
+      :type "closed full disk EqvGen graph",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenBoundarySubtypeEqvGen_isClosed"],
+      :depends-on ["frozenBoundaryEqvGen_diskImage_isClosed"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "disk graph equality/T2/inverse/MV",
+      :type "disk quotient T2/inverse/MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryEqvGen_diskImage_isClosed"
+      ["frozenGeneratorEqvGen_isClosed"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked closed boundary disk image.",
+    :reason "Banked closed disk EqvGen graph.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,29 +88719,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 1b53b9d78", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792142278149-15281-c95eaaa3",
-     :commands
-     ["git show/diff/check 1b53b9d78"
-      "verify compact boundary-to-disk image argument"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum, scope, and placeholder recount at 1b53b9d78"],
-     :finding
-     "PASS program STOP: topo-6 commit 1b53b9d78 adds compiled, sorry-free progress after 208f7140a. frozenBoundaryEqvGen_diskImage_isClosed makes the actual boundary subtype compact via its circle homeomorphism, obtains compactness of the closed EqvGen graph, and maps it continuously by both subtype inclusions into the Hausdorff disk product; compactness then yields closedness. Disk graph equality/T2, inverse continuity/MV, and normalization remain explicitly listed. Scope is one target file; fixture SHA 8e59f3626c6d2bb47483d3e4c8851c0f2c084dc9fa0a7793499e279842a3a8c1; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
-    :commit "1b53b9d78",
+     {:cmd "git show --check 11a33e6b0", :exit 0}],
+    :commit "11a33e6b0",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "8e59f3626c6d2bb47483d3e4c8851c0f2c084dc9fa0a7793499e279842a3a8c1"},
+     "92df63088d6182a90dfc6eb3173d6d88cafba650019673140c3f201b892828d0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96749,7 +96736,8 @@
     :lemma-frozengeneratoreqvgen-iff-eq-or-boundary
     :lemma-frozenboundarysubtypeeqvgen-iff-closedrel
     :lemma-frozenboundarysubtypeeqvgen-isclosed
-    :lemma-frozenboundaryeqvgen-diskimage-isclosed],
+    :lemma-frozenboundaryeqvgen-diskimage-isclosed
+    :lemma-frozengeneratoreqvgen-isclosed],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97551,4 +97539,21 @@
    :id :lemma-frozenboundaryeqvgen-diskimage-isclosed,
    :kind :lemma,
    :depends-on [:lemma-frozenboundarysubtypeeqvgen-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorEqvGen_isClosed",
+    :type "closed full disk EqvGen graph"},
+   :lemma
+   {:name "frozenGeneratorEqvGen_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "closed full disk EqvGen graph",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratoreqvgen-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryeqvgen-diskimage-isclosed],
    :other-consumers []}]}
