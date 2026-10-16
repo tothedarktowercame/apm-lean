@@ -2581,6 +2581,36 @@ noncomputable def t96A06_mappedRationalLocalExtension :=
           polynomialSphereRegularPoint)) 3
       t96A06_mappedIntegralLocalGenerator))
 
+/-- Removing the final preservation isomorphism reduces rational generator
+transport to the underlying coefficient-extension homology map. -/
+theorem t96A06_mappedRationalLocalExtension_eq_generator_iff_raw :
+    t96A06_mappedRationalLocalExtension =
+        ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint ↔
+      HomologicalComplex.homologyMap
+          (t96A06_integralToRational_relativeChains
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)) 3
+          t96A06_mappedIntegralLocalGenerator =
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              t96A06_forgetRatModules).inv.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+            polynomialSphereRegularPoint)) := by
+  constructor
+  · intro h
+    have hh := congrArg
+      (fun z => ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            t96A06_forgetRatModules).inv.hom z)) h
+    simpa [t96A06_mappedRationalLocalExtension] using hh
+  · intro h
+    unfold t96A06_mappedRationalLocalExtension
+    rw [h]
+    simp
+
 /-- Exact local-generator transport is equivalent to normalization coordinate
 one in the rational chart-local isomorphism. -/
 theorem t96A06_integralToRational_localGenerator_iff :
@@ -4035,6 +4065,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
 #print axioms t96A06_integralToRational_chart_naturality_of_generator_transport
 #print axioms t96A06_mappedRationalLocalExtension
+#print axioms t96A06_mappedRationalLocalExtension_eq_generator_iff_raw
 #print axioms t96A06_integralToRational_localGenerator_iff
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
 #print axioms t96A06_integralNormalizedClass_rationalExtension
