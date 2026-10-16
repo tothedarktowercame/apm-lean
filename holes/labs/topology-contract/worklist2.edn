@@ -88720,6 +88720,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check d01181b09", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792119196592-15054-4b865a5c",
+     :commands
+     ["git show/diff/check d01181b09"
+      "verify committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at d01181b09"],
+     :finding
+     "PASS program STOP: topo-6 commit d01181b09 adds compiled, sorry-free progress after 877a05dad. frozenCircleEdgePoint_eq_of_not_endpoint faithfully transports circle equality through circleToBoundary, applies the established edge-point classification, and rules out its endpoint branch using the nonendpoint hypothesis; the resulting label-and-coordinate equality has the needed orientation. Chain collapse/T2/MV, homology, and normalization remain explicitly listed. Scope is one target file; fixture SHA 972b5ec742c4d08039b7f7d1eab552916ed4e8774aa35451b6bda5425a003a00; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "d01181b09",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88728,7 +88741,7 @@
      "972b5ec742c4d08039b7f7d1eab552916ed4e8774aa35451b6bda5425a003a00"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88746,7 +88759,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked endpoint invariance.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked nonvertex coordinate rigidity.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88842,7 +88855,10 @@
      :reason "Banked closed EqvGen candidate and easy inclusion."}
     {:job 1,
      :commit "877a05dad",
-     :reason "Banked endpoint invariance."}]}
+     :reason "Banked endpoint invariance."}
+    {:job 2,
+     :commit "d01181b09",
+     :reason "Banked nonvertex coordinate rigidity."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97176,7 +97192,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenCircleEdgePoint_eq_of_not_endpoint",
@@ -97186,7 +97202,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "nonvertex coordinates unique",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "d01181b09"},
    :id :lemma-frozencircleedgepoint-eq-of-not-endpoint,
    :kind :lemma,
    :depends-on [:lemma-frozenboundaryeqvgen-endpoint-iff],
