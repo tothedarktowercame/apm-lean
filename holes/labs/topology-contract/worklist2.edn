@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :evidence
    {:placeholder-delta 0,
-    :residual "Graph cycle coordinates/arrows; normalize.",
+    :residual "Graph coordinates/arrows; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorOuterGroupHomologyIsoGraph",
-      :type "outer additive representation",
+    [{:name "frozenGeneratorMVPiecesH1GroupIsoGraph",
+      :type "MV pieces/graph iso",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorOuterHomologyIsoGraph"],
+      :depends-on ["frozenGeneratorOuterGroupHomologyIsoGraph"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "graph cycle coordinates/arrows",
+      :type "graph arrows",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorOuterGroupHomologyIsoGraph"
+      ["frozenGeneratorMVPiecesH1GroupIsoGraph"
        "frozenGeneratorIntersectionH1GroupIsoInt"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
@@ -88710,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked outer group representation.",
+    :reason "Banked MV pieces/graph bridge.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,28 +88720,18 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check f40c1658c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792146669455-15331-96f3861c",
-     :commands
-     ["git show/check f40c1658c"
-      "commit fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: f40c1658c changes only t94J09Closure; fixture hash matches; closure has 0 placeholders; build/Main pass; registry 168/0. Banked concrete-group-to-graph representation through the existing comparison iso and inner H1 vanishing; graph-cycle arrows remain listed."},
-    :commit "f40c1658c",
+     {:cmd "git show --check 49a791d9b", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :correction "notation"}],
+    :commit "49a791d9b",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "0192e98f9b045f4681a1817ae28862e75c2f0175f667f767a1e6a09c97e1db37"},
+     "3284b3ea72e54de64e099c9abbca4f2fdb108f6c76ae04a6a8aae014b15a4540"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96772,7 +96762,8 @@
     :lemma-frozengeneratorouterhomologyisograph
     :lemma-frozengeneratormvintersectionexact
     :lemma-frozengeneratorintersectionh1groupisoint
-    :lemma-frozengeneratoroutergrouphomologyisograph],
+    :lemma-frozengeneratoroutergrouphomologyisograph
+    :lemma-frozengeneratormvpiecesh1groupisograph],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97708,4 +97699,21 @@
    :id :lemma-frozengeneratoroutergrouphomologyisograph,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorouterhomologyisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVPiecesH1GroupIsoGraph",
+    :type "MV pieces/graph iso"},
+   :lemma
+   {:name "frozenGeneratorMVPiecesH1GroupIsoGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "MV pieces/graph iso",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvpiecesh1groupisograph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoroutergrouphomologyisograph],
    :other-consumers []}]}
