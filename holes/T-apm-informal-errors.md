@@ -89,3 +89,48 @@ unit disk)`. To list them with examples:
 The futon6 side (`scripts/pandoc-mathify.lua`) and this repository's
 `scripts/asciify-tex.py` hold the conversion rules. Fix a rule, not an
 instance.
+
+## Note for whoever is blueprinting t98A01 (2026-10-16)
+
+An experimental retrieval pass (futon6 `scripts/align_informal_lean.py`; see
+futon6 `holes/M-informal-lean-alignment.md`) matched t98A01's informal steps
+against every proved declaration in this repository: each problem's Lean
+files plus `ConstructionTargets/`, 16,344 declarations in all. Leads for the
+three items in `problems/t98A01/proof-outline.md` under "Remaining boundary":
+
+1. **The torus map (x,y) ↦ (5x,y) and its deck homeomorphisms.**
+   `ConstructionTargets.TorusSquareDeckAction` does this for the squaring map
+   (z,w) ↦ (z², w²) on `Circle × Circle`. It has the deck group
+   `ZMod 2 × ZMod 2`, `deckAction`, and `squareCover_isCoveringMap`, built on
+   `ConstructionTargets.ProductEvenlyCoveredTrivialization`, and t01A02
+   already imports it. Swapping in `ZMod 5` on the first factor (rotation by a
+   fifth root of unity) and the identity on the second should give t98A01's
+   cover, its fibres and its deck action. `CircleUniversalCover` and
+   `LiteralCoveringPullback` came up for the circle factor too.
+2. **Homeomorphic orientable presentations have equal genus.**
+   `apm_t99J03_orientable_genus_eq_of_eulerCharacteristic_eq` (in
+   `problems/t99J03/lean/`) is the nearest proved statement; also see
+   `eulerCharacteristic_orientable` in `ConstructionTargets.Surfaces`.
+3. **Euler-characteristic multiplicativity for finite covers.** Nothing in the
+   repository proves it. t91A02's blueprint
+   (`holes/labs/blueprints/t91A02/BLUEPRINT.md`) avoided it deliberately:
+   it bounds b₁ of the cover's π₁ through Reidemeister–Schreier, using banked
+   `CoveringMonodromyCosets`. For t98A01 the needed conclusion is only that
+   χ(Σ) = 5χ(Σ') together with Σ ≅ Σ' forces genus 1. Check whether the same
+   b₁ inequalities (b₁ of an index-5 subgroup of a surface group) give that
+   without χ.
+
+These leads come from word overlap, not proof. Check each before relying on
+it.
+
+## Revising informal solutions to follow the Lean (proposed, 2026-10-16)
+
+Where a problem has a complete Lean proof that takes a different route from
+its informal solution (t91A02 is an example: π₁ and b₁ instead of Euler
+characteristic), consider revising the informal solution so that its steps
+correspond to the formal ones. It should stay an informal proof, written for
+a reader, not a transcription of Lean. That makes each informal step point to
+the declaration that proves it. The alignment prototype can list where they
+diverge: informal steps with no Lean counterpart, and Lean lemmas with no
+informal step. Keep the original route as a remark where it is the more
+natural argument.
