@@ -2825,6 +2825,21 @@ theorem t96A06_unitH0_chainComparison_degreeZero_generator_inv :
 
 #print axioms t96A06_unitH0_chainComparison_degreeZero_generator_inv
 
+/-- The Unit homology comparison factors as preservation of module homology
+followed by the homology map induced by the explicit chain comparison. -/
+theorem t96A06_unitH0_homologyComparison_factorization :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom =
+      ((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+            (TopCat.of Unit)).hom 0) := by
+  rfl
+
+#print axioms t96A06_unitH0_homologyComparison_factorization
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
