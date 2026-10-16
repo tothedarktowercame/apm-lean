@@ -88672,26 +88672,27 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual "Closed relation transitivity/EqvGen; T2/MV; normalize.",
+    :residual "EqvGen equality; quotient T2/MV; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenBoundaryGraphSymm_trans_of_not_endpoint",
-      :type "symmetric generator transitive off vertices",
+    [{:name "frozenBoundaryClosedRel_trans",
+      :type "closed candidate transitive",
       :status :proved,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint"],
+      ["frozenBoundaryGraphSymm_trans_of_not_endpoint"
+       "frozenBoundaryEqvGen_endpoint_iff"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "closed relation transitivity/EqvGen/T2/MV",
+      :type "EqvGen equality/T2/MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryGraphSymm_trans_of_not_endpoint"
+      ["frozenBoundaryClosedRel_trans"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88710,7 +88711,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked off-vertex transitivity.",
+    :reason "Banked closed-candidate transitivity.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,29 +88721,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check a9dd96d70", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792120654076-15084-3fb217c2",
-     :commands
-     ["git show/diff/check a9dd96d70"
-      "verify committed target blob and GraphSymm orientation"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum, scope, and placeholder recount at a9dd96d70"],
-     :finding
-     "PASS program STOP: topo-6 commit a9dd96d70 adds compiled, sorry-free progress after eb553b602. frozenBoundaryGraphSymm_trans_of_not_endpoint handles identity steps directly, rejects like-oriented nontrivial compositions using forward-chain exclusion, and cancels opposite orientations using the correctly matched left/right uniqueness lemmas. It proves transitivity only off the endpoint locus as stated. Endpoint transitivity/EqvGen, T2/MV, homology, and normalization remain explicitly listed. Scope is one target file; fixture SHA 5f420bfd58ee92eda8e8b8118977d6994a852d55d73bdd4c38b6e29c739fea19; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
-    :commit "a9dd96d70",
+     {:cmd "git show --check 3e6fa4a6e", :exit 0}],
+    :commit "3e6fa4a6e",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "5f420bfd58ee92eda8e8b8118977d6994a852d55d73bdd4c38b6e29c739fea19"},
+     "7f171bc9d9664c03a0b15d52bb13af637dde2492ef6b4dc7dec38d52ece15d85"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96709,7 +96697,8 @@
     :lemma-frozenboundarygraphrel-right-unique-of-not-endpoint
     :lemma-frozenboundarygraphrel-left-unique-of-not-endpoint
     :lemma-frozenboundarygraphrel-no-forward-chain-of-not-endpoint
-    :lemma-frozenboundarygraphsymm-trans-of-not-endpoint],
+    :lemma-frozenboundarygraphsymm-trans-of-not-endpoint
+    :lemma-frozenboundaryclosedrel-trans],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97300,4 +97289,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozenboundarygraphrel-no-forward-chain-of-not-endpoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryClosedRel_trans",
+    :type "closed candidate transitive"},
+   :lemma
+   {:name "frozenBoundaryClosedRel_trans",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "closed candidate transitive",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundaryclosedrel-trans,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundarygraphsymm-trans-of-not-endpoint
+    :lemma-frozenboundaryeqvgen-endpoint-iff],
    :other-consumers []}]}
