@@ -88724,6 +88724,19 @@
     [{:cmd "draft",
       :exit 1,
       :correction "removed solved convert goals"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792115386093-14999-ba48bb56",
+     :commands
+     ["git show/diff/check 8035fa047"
+      "verify canonical packages and committed target blob"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum and placeholder recount from 8035fa047"],
+     :finding
+     "PASS program STOP: topo-6 commit 8035fa047 adds compiled, sorry-free progress after ab9571cb7. FrozenBoundaryGraphSymm is exactly the diagonal plus the forward and reversed seven-generator graphs. The diagonal is closed by equality in Circle, the forward graph by the prior theorem, and the reverse graph by preimage under coordinate swap; finite union gives the claimed closed reflexive-symmetric relation. The code explicitly does not call this the full transitive EqvGen closure: finite vertex closure, quotient T2, homeomorphism, and MV remain listed. Only t94J09Closure.lean changed; fixture SHA 4c9d872dbdcd7b06c8566e2c2f8044371698758104279a88903d1a350e1f1ea8 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization remains."},
     :commit "8035fa047",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88732,7 +88745,7 @@
      "4c9d872dbdcd7b06c8566e2c2f8044371698758104279a88903d1a350e1f1ea8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88763,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked closed graph relation.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked closed symmetric graph.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88833,7 +88846,10 @@
     {:job 4, :commit "fe3b47e93", :reason "Banked closed edge graphs."}
     {:job 5,
      :commit "ab9571cb7",
-     :reason "Banked closed graph relation."}]}
+     :reason "Banked closed graph relation."}
+    {:job 6,
+     :commit "8035fa047",
+     :reason "Banked closed symmetric graph."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97024,7 +97040,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryGraphSymm_isClosed",
@@ -97034,7 +97050,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "reflexive symmetric graph closed",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8035fa047"},
    :id :lemma-frozenboundarygraphsymm-isclosed,
    :kind :lemma,
    :depends-on [:lemma-frozenboundarygraphrel-isclosed],
