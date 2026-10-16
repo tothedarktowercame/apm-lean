@@ -2263,6 +2263,47 @@ theorem t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg
   · exact hone
   · omega
 
+/-- The concrete integer endpoint of the coefficient circle normalization.
+This is the remaining discrete-`H₀` boundary orientation before suspension. -/
+noncomputable def t96A06_coefficientCircleOrientationEndpoint : ℤ :=
+  (ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt).hom.hom
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.circleH1 ℤ)).inv.hom
+        (by change ℤ; exact 1)))
+
+theorem t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 0 =
+      t96A06_coefficientCircleOrientationEndpoint := by
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree_zero_eq_circle_endpoint
+
+/-- The two successor comparisons transport the circle orientation endpoint
+to the dimension-two coefficient comparison used by the three-sphere. -/
+theorem t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps
+    (hstep0 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 0)
+    (hstep1 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1) :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+      t96A06_coefficientCircleOrientationEndpoint := by
+  exact hstep1.trans (hstep0.trans
+    t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint)
+
+theorem t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
+    (hcircle : 0 ≤ t96A06_coefficientCircleOrientationEndpoint)
+    (hstep0 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 0)
+    (hstep1 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1) :
+    0 ≤ ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 := by
+  rw [t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps hstep0 hstep1]
+  exact hcircle
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5148,6 +5189,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg
 #print axioms t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg
 #print axioms t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg
+#print axioms t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint
+#print axioms t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps
+#print axioms t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
