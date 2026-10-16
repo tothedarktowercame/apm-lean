@@ -1337,6 +1337,32 @@ noncomputable instance : TopologicalSpace FrozenGeneratorQuotient :=
   TopologicalSpace.coinduced
     (fun x : Surfaces.Disk => Quotient.mk _ x) inferInstance
 
+/-- The actual frozen disk quotient is Hausdorff because its generated
+equivalence relation has closed graph on the compact polygon disk. -/
+noncomputable instance frozenGeneratorQuotientT2Space :
+    T2Space FrozenGeneratorQuotient :=
+  ConstructionTargets.compact_closed_equivalence_quotient_t2
+    (Relation.EqvGen.setoid frozenGeneratorRel)
+    frozenGeneratorEqvGen_isClosed
+
+/-- The outer boundary skeleton inherits Hausdorff separation from the full
+frozen disk quotient. -/
+noncomputable instance frozenGeneratorOuterBoundaryPieceT2Space :
+    T2Space FrozenGeneratorOuterBoundaryPiece := inferInstance
+
+/-- The continuous boundary parametrization is a homeomorphism onto the
+outer boundary skeleton. -/
+noncomputable def frozenBoundaryQuotientHomeomorphOuterSkeleton :
+    FrozenGeneratorBoundaryQuotient ≃ₜ FrozenGeneratorOuterBoundaryPiece :=
+  { frozenBoundaryQuotientEquivOuterSkeleton with
+    continuous_toFun := continuous_frozenBoundaryQuotientToOuterSkeleton
+    continuous_invFun := by
+      letI : CompactSpace FrozenGeneratorBoundaryQuotient :=
+        compactSpace_frozenGeneratorBoundaryQuotient
+      exact Continuous.continuous_symm_of_equiv_compact_to_t2
+        (f := frozenBoundaryQuotientEquivOuterSkeleton)
+        continuous_frozenBoundaryQuotientToOuterSkeleton }
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -1928,6 +1954,9 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryEqvGen_diskImage_isClosed
 #print axioms frozenGeneratorEqvGen_graph_eq
 #print axioms frozenGeneratorEqvGen_isClosed
+#print axioms frozenGeneratorQuotientT2Space
+#print axioms frozenGeneratorOuterBoundaryPieceT2Space
+#print axioms frozenBoundaryQuotientHomeomorphOuterSkeleton
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
