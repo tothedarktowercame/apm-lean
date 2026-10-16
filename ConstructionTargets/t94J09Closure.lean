@@ -404,6 +404,42 @@ theorem frozenGeneratorCircleQuotient_identifies_generators
     Quotient.sound (Relation.EqvGen.rel _ _ h5),
     Quotient.sound (Relation.EqvGen.rel _ _ h6)⟩
 
+/-- The explicit seven-edge relation on the circle source.  This is kept
+separate from the disk relation so the boundary graph can be constructed
+without referring back to interior disk points. -/
+def FrozenBoundaryGraphRel (z w : Circle) : Prop :=
+  ∃ t : Set.Icc (0 : ℝ) 1,
+    (z = frozenCircleEdgePoint 0 t ∧ w = frozenCircleEdgePoint 12 t) ∨
+    (z = frozenCircleEdgePoint 6 t ∧ w = frozenCircleEdgePoint 13 t) ∨
+    (z = frozenCircleEdgePoint 1 t ∧
+      w = frozenCircleEdgePoint 7 (reverseIcc t)) ∨
+    (z = frozenCircleEdgePoint 2 t ∧ w = frozenCircleEdgePoint 8 t) ∨
+    (z = frozenCircleEdgePoint 5 t ∧ w = frozenCircleEdgePoint 10 t) ∨
+    (z = frozenCircleEdgePoint 4 t ∧ w = frozenCircleEdgePoint 11 t) ∨
+    (z = frozenCircleEdgePoint 3 t ∧ w = frozenCircleEdgePoint 9 t)
+
+@[simp] theorem eq_frozenCircleEdgePoint_iff (z : Circle) (j : Fin 14)
+    (t : Set.Icc (0 : ℝ) 1) :
+    z = frozenCircleEdgePoint j t ↔
+      (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary z).1 =
+        Surfaces.edgePoint 14 j t := by
+  constructor
+  · rintro rfl
+    rfl
+  · intro h
+    apply ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.injective
+    exact Subtype.ext h
+
+/-- The induced circle relation is exactly the explicit seven-edge graph
+relation, not merely a relation containing its generators. -/
+theorem frozenGeneratorCircleRel_iff_graphRel (z w : Circle) :
+    ConstructionTargets.PolygonBoundaryInducedQuotient.CircleRel
+        frozenGeneratorRel z w ↔ FrozenBoundaryGraphRel z w := by
+  simp only [ConstructionTargets.PolygonBoundaryInducedQuotient.CircleRel,
+    ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel,
+    frozenGeneratorRel, FrozenBoundaryGraphRel, eq_frozenCircleEdgePoint_iff]
+  norm_num
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1045,6 +1081,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleBoundaryHomeomorph
 #print axioms frozenGeneratorCircleBoundaryHomologyIso
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
+#print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
