@@ -1422,6 +1422,16 @@ theorem frozenGeneratorRadialTopologyComparison :
         (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance) :=
   rfl
 
+/-- The topology comparison promoted to the bundled topological spaces used
+by singular homology. -/
+noncomputable def frozenGeneratorRadialTopCatIso :
+    @TopCat.of FrozenGeneratorQuotient
+        instTopologicalSpaceFrozenGeneratorQuotient ≅
+      @TopCat.of FrozenGeneratorQuotient
+        (@instTopologicalSpaceQuotient Surfaces.Disk
+          (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance) :=
+  eqToIso (by congr 1)
+
 /-- The actual frozen disk quotient is Hausdorff because its generated
 equivalence relation has closed graph on the compact polygon disk. -/
 noncomputable instance frozenGeneratorQuotientT2Space :
@@ -2283,6 +2293,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedQuotientHomologyIsoGenerator
 #print axioms frozenSignedHomology_of_generator_comparisons
 #print axioms frozenGeneratorRadialTopologyComparison
+#print axioms frozenGeneratorRadialTopCatIso
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
