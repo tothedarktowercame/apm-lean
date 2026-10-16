@@ -37252,37 +37252,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove circle, suspension, and normalized-class signs; then naturality, four classes, Main.",
+    "Prove exact circle comparison, suspension steps, normalized-class sign; then naturality, four classes, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_coefficientDegree_two_nonneg_of_circle_and_steps",
-      :type "circle and suspension signs imply coefficient sign",
+    [{:name
+      "t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison",
+      :type "exact circle comparison implies positive endpoint",
       :status :proved,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg"],
+      ["t96A06_coefficientDegree_two_nonneg_of_circle_and_steps"],
       :area "rp-rational-homology"}
-     {:name
-      "t96A06_circleOrientationEndpoint_nonneg_and_suspensionSteps",
+     {:name "t96A06_coefficientCircleComparison_eq_native",
       :type
-      "positive circle endpoint and degree-preserving suspensions",
+      "coefficient circle inverse followed by integral comparison equals native S1 inverse",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_coefficientDegree_two_nonneg_of_circle_and_steps"],
+      ["t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Reduced coefficient sign to circle and suspension signs.",
+    :reason
+    "Reduced circle positivity to an exact H1 comparison equality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37293,18 +37294,8 @@
      {:cmd
       "git diff --check -- ConstructionTargets/t96A06Closure.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline a8295aec0", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :note "Fixed namespace; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792150396261-15393-ff70d0ba",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "a8295aec0",
+     {:cmd "git show --check --stat --oneline 3bb9a2538", :exit 0}],
+    :commit "3bb9a2538",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37312,7 +37303,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46330,6 +46321,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-coefficientdegree-two-nonneg-of-circle-and-steps],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison",
+    :type "exact circle comparison implies positive endpoint"},
+   :lemma
+   {:name
+    "t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "exact circle comparison implies positive endpoint",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-coefficientcircleorientationendpoint-nonneg-of-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-two-nonneg-of-circle-and-steps],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleComparison_eq_native",
+    :type
+    "coefficient circle inverse followed by integral comparison equals native S1 inverse"},
+   :lemma
+   {:name "t96A06_coefficientCircleComparison_eq_native",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient circle inverse followed by integral comparison equals native S1 inverse",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-coefficientcirclecomparison-eq-native,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcircleorientationendpoint-nonneg-of-comparison],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
