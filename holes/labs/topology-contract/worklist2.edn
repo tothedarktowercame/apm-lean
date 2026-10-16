@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88729,7 +88729,7 @@
      "739ee1faa6b3803bb4089e4d82c2979d57dd278fbbf3bdfcb1ca826abba3fb24"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88935,7 +88935,7 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
@@ -88993,7 +88993,7 @@
      "f5713adeab0328a611f70fd8678de19dedac562ae8d315ace0ac73d189509447"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89261,6 +89261,18 @@
     [{:cmd "git show --check ac08ca7bc",
       :exit 2,
       :correction "removed trailing blank and amended"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792156268104-15477-8b92ee11",
+     :commands
+     ["git show/check 52b499d52"
+      "fixture/scope checks"
+      "lake env lean holes/labs/blueprints/t97A03/Blueprint.lean"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS blueprint mathematics: 52b499d52 changes only the scoped blueprint and fixture hash matches; source blueprint/Main compile; registry 168/0. Nonzero double-cover monodromies give two model types; both lifted CW models have V=4,E=6,two zero-boundary 2-cells, yielding H ranks 1,3,2 and pi1=F3. Nodes are independent, types faithful, and all final hypotheses are used."},
     :commit "52b499d52",
     :changed-paths ["ConstructionTargets/t97A03Closure.blueprint.md"],
     :fixture
@@ -89269,7 +89281,7 @@
      "4c5064b47def6470d103f7595130fbe7fa28509aa1e9062046df25906996b2cd"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t97A03/lean/Main.lean"
     "problems/t97A03/status.json"
@@ -89287,14 +89299,18 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t97A03/BLUEPRINT.md's plan into ConstructionTargets/t97A03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; review required.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
    :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "52b499d52",
+     :reason "Blueprint written; review required."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -98127,7 +98143,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorNamedMVIntersectionExact",
@@ -98137,7 +98153,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "named intersection exactness",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratornamedmvintersectionexact,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratornamedmvunionexact],
