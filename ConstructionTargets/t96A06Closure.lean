@@ -2138,6 +2138,40 @@ theorem t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automor
     (t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
       hneg)
 
+/-- A negative comparison automorphism forces the explicit two-suspension
+endpoint, measured in the stereographic local coordinate, to be `-1`. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
+    (hauto : t96A06_sphereShiftLocalNormalizationAutomorphism.hom = -𝟙 _) :
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) = -1 := by
+  have h := CategoryTheory.ConcreteCategory.congr_hom hauto (1 : ℤ)
+  change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = -1 at h
+  simpa [t96A06_sphereShiftLocalNormalizationAutomorphism,
+    t96A06_sphere3_integral_H3Iso,
+    t96A06_integralIteratedSphereGenerator] using h
+
+/-- Excluding `-1` at the explicit endpoint excludes the negative comparison
+automorphism. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
+    (hendpoint :
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.HigherSphereLocalization.localizationIso
+          polynomialSphereRegularPoint).hom.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            t96A06_integralIteratedSphereGenerator)) ≠ -1) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom ≠ -𝟙 _ := by
+  intro hauto
+  exact hendpoint
+    (t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
+      hauto)
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4975,6 +5009,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff
 #print axioms t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
 #print axioms t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
