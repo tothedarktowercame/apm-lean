@@ -36749,6 +36749,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :note "Used inferred exactness witness; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792159158572-15537-fa8c15d3",
+     :commands
+     ["git show/check 4a9541db6d"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit adds the degree-shifted connecting map and overlap exactness after the prior milestone; orientations and subcomplex boundary are correct, fixture hash matches, supporting file has 0 placeholders, Lean gates pass with standard axioms, registry 168/168; Main retains its declared one placeholder."},
     :commit "4a9541db6d",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36757,7 +36770,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36775,7 +36788,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed connecting map and overlap exactness; ambient exactness remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36878,7 +36891,11 @@
     {:job 8,
      :commit "cbdbb58fb8",
      :reason
-     "Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains."}]}
+     "Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains."}
+    {:job 9,
+     :commit "4a9541db6d",
+     :reason
+     "Committed connecting map and overlap exactness; ambient exactness remains."}]}
   {:consumer :t98A02,
    :stop-count 2,
    :evidence
@@ -37248,7 +37265,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37302,7 +37319,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37324,7 +37341,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -46741,7 +46758,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_module_pointInclusion_coordinates",
@@ -46753,14 +46770,16 @@
     :type
     "module H0 Unit-to-Bool map is the selected coproduct injection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-module-pointinclusion-coordinates,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-all-points-iff-comparison],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_additive_pointInclusion_coordinates",
@@ -46772,7 +46791,9 @@
     :type
     "additive H0 Unit-to-Bool map is the selected coproduct injection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-additive-pointinclusion-coordinates,
    :kind :lemma,
    :depends-on
@@ -46799,7 +46820,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_comparison_pointInclusion_naturality",
@@ -46811,7 +46832,9 @@
     :type
     "integral comparison naturality for each Unit-to-Bool point inclusion",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-comparison-pointinclusion-naturality,
    :kind :lemma,
    :depends-on
@@ -46838,7 +46861,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_integralComparison_of_generator",
@@ -46850,7 +46873,9 @@
     :type
     "the Unit generator coordinate determines the full H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-integralcomparison-of-generator,
    :kind :lemma,
    :depends-on
@@ -46876,7 +46901,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_exact_overlap",
@@ -46886,7 +46911,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "exactness at overlap homology",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "4a9541db6d"},
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-overlap,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces],
