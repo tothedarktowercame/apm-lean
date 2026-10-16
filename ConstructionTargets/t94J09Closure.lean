@@ -2700,6 +2700,14 @@ noncomputable def frozenGeneratorCanonicalModuleH1EquivConcrete :
       refine ⟨c.inv y, ?_⟩
       exact c.inv_hom_id_apply y⟩
 
+/-- Forgetting canonical `SpaceH` to an additive group and reconstructing its
+integer-module structure does not change its underlying integral module. -/
+noncomputable def frozenGeneratorSpaceHForgetLinearEquiv :
+    (SpaceH FrozenGeneratorQuotient 1 : Type) ≃ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenGeneratorQuotient 1) : Type) :=
+  (AddEquiv.refl (SpaceH FrozenGeneratorQuotient 1 : Type)).toIntLinearEquiv
+
 /-- Transport a concrete canonical H1 Smith equivalence to the module-valued
 canonical H1 used by the frozen homology statement. -/
 noncomputable def frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
@@ -2886,6 +2894,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorH1SmithEquiv_of_comparisons
 #print axioms frozenGeneratorH1SmithEquiv_of_section
 #print axioms frozenGeneratorCanonicalModuleH1EquivConcrete
+#print axioms frozenGeneratorSpaceHForgetLinearEquiv
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
 #print axioms frozenGeneratorCanonicalModuleH1SmithIso_of_section
