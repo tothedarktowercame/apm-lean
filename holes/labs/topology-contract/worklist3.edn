@@ -36708,35 +36708,35 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 7,
+   :stop-count 8,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Transport MV; combine retract, affine patch and overlap sphere; derive successor data, Lefschetz, Main.",
+    "Transport subcomplex homology to patches; combine retract, affine and overlap data; Lefschetz, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_subcomplexMayerVietoris_shortExact",
-      :type "rational subcomplex MV exactness for CP patches",
+    [{:name "t99J05_cp_successor_mayerVietoris_exact_pieces",
+      :type "exactness at specialized two-patch homology sum",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_lowerPatch_deformationRetract"],
+      ["t99J05_cp_successor_subcomplexMayerVietoris_shortExact"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_mayerVietoris_transport",
-      :type "transport MV exactness to patch homology",
+      :type
+      "transport specialized subcomplex MV to literal patch homology",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_subcomplexMayerVietoris_shortExact"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_pieces"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Specialized rational subcomplex MV exactness to the CP successor patches.",
+    "Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36747,21 +36747,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 0e6877ab2", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792155210558-15463-ee5a0ebf",
-     :commands
-     ["git show/check 0e6877ab20"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit adds a new in-scope, sorry-free MV short-exactness theorem since history; orientation/boundaries match the fixture, SHA-256 matches, Lean gates pass, axioms are standard, registry 168/168; Main retains its declared single placeholder."},
-    :commit "0e6877ab20",
+     {:cmd "git show --check --stat --oneline cbdbb58fb8", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :note "Qualified ShortComplex.mk; rerun passed."}],
+    :commit "cbdbb58fb8",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36769,7 +36760,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -46604,7 +46595,8 @@
    :id :lemma-t99j05-cp-successor-mayervietoris-transport,
    :kind :lemma,
    :depends-on
-   [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact],
+   [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact
+    :lemma-t99j05-cp-successor-mayervietoris-exact-pieces],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -46714,6 +46706,24 @@
    :id :lemma-t96a06-boolh0-all-points-iff-comparison,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-endpoint-pair-iff-comparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_pieces",
+    :type "exactness at specialized two-patch homology sum"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_pieces",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at specialized two-patch homology sum",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
