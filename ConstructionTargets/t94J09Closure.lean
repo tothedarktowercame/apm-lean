@@ -1480,6 +1480,20 @@ theorem frozenGeneratorInnerH1GroupIsZero :
       (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
         frozenGeneratorInnerHomotopyEquivPoint 1)
 
+/-- In degree one the middle term of the production Mayer--Vietoris sequence
+is exactly the outer graph term: the contractible inner summand contributes
+nothing. -/
+noncomputable def frozenGeneratorMVPiecesH1GroupIsoGraph :
+    (CategoryTheory.Limits.biprod
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of FrozenGeneratorInnerPiece))
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of FrozenGeneratorOuterPiece))) ≅
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) :=
+  (Limits.isoZeroBiprod frozenGeneratorInnerH1GroupIsZero).symm.trans
+    (frozenGeneratorOuterGroupHomologyIsoGraph 1)
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2085,6 +2099,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterBoundaryHomologyIsoGraph
 #print axioms frozenGeneratorOuterHomologyIsoGraph
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
+#print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorInnerH1GroupIsZero
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
