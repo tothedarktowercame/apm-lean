@@ -1660,6 +1660,24 @@ theorem t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one :
         t96A06_sphere3_integral_normalizedClass = -1 := by
   exact Int.isUnit_iff.mp t96A06_integralNormalizedClass_coordinate_isUnit
 
+/-- For the normalized integral class, selecting the positive orientation is
+equivalent to excluding the negative coordinate.  The unit calculation above
+shows that there is no third case. -/
+theorem t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one :
+    t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = 1 ↔
+      t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass ≠ -1 := by
+  constructor
+  · intro hone hneg
+    rw [hone] at hneg
+    norm_num at hneg
+  · intro hne
+    rcases t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one with
+      hone | hneg
+    · exact hone
+    · exact (hne hneg).elim
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4476,6 +4494,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
+#print axioms t96A06_integralNormalizedClass_coordinate_isUnit
+#print axioms t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one
+#print axioms t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
