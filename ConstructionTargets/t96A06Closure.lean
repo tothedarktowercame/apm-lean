@@ -2519,6 +2519,22 @@ theorem t96A06_boolH0_all_points_iff_comparison :
   rw [← t96A06_boolH0_endpoint_pair_iff_all_points,
     t96A06_boolH0_endpoint_pair_iff_comparison]
 
+/-- The module-valued edge of the `Unit → Bool` naturality square is the
+chosen coproduct injection in direct discrete degree-zero coordinates. -/
+theorem t96A06_boolH0_module_pointInclusion_coordinates (b : Bool) :
+    Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) () ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv ≫
+        HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0 =
+      Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) b ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).inv := by
+  exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) b
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5419,6 +5435,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_endpoint_pair_iff_all_points
 #print axioms t96A06_boolH0_endpoint_pair_iff_comparison
 #print axioms t96A06_boolH0_all_points_iff_comparison
+#print axioms t96A06_boolH0_module_pointInclusion_coordinates
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
