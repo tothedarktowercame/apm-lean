@@ -215,6 +215,36 @@ def frozenGeneratorOverlapHomotopyEquivCircle :
       (fun {_ _} h => frozenGeneratorRel_radius_eq h)
       (fun {_ _} h => frozenGeneratorRel_boundary h)).symm
 
+/-- Positive integral degree-one coordinates on the literal production
+intersection. -/
+noncomputable def frozenGeneratorIntersectionH1GroupIsoInt :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of FrozenGeneratorIntersectionPiece) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      frozenGeneratorIntersectionHomeomorphOverlap.toHomotopyEquiv 1 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      frozenGeneratorOverlapHomotopyEquivCircle 1 ≪≫
+    circleGroupH1IsoInt
+
+/-- Integral degree-zero coordinates on the literal production
+intersection. -/
+noncomputable def frozenGeneratorIntersectionH0GroupIsoInt :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of FrozenGeneratorIntersectionPiece) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      frozenGeneratorIntersectionHomeomorphOverlap.toHomotopyEquiv 0 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      frozenGeneratorOverlapHomotopyEquivCircle 0 ≪≫
+    circleGroupH0IsoInt
+
+/-- Integral degree-zero coordinates on the contractible inner member. -/
+noncomputable def frozenGeneratorInnerH0GroupIsoInt :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 0
+        (TopCat.of FrozenGeneratorInnerPiece) ≅ AddCommGrpCat.of ℤ :=
+  ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      frozenGeneratorInnerHomotopyEquivPoint 0 ≪≫
+    ConstructionTargets.SingularHomologyConcrete.pointH0IsoInt
+
 /-- Zeroth homology of the frozen inner piece. -/
 noncomputable def frozenGeneratorInnerH0IsoInt :
     SpaceH FrozenGeneratorInnerPiece 0 ≅ ModuleCat.of ℤ ℤ :=
@@ -1982,6 +2012,9 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorEqvGen_boundary_of_ne
 #print axioms frozenGeneratorIntersectionHomeomorphOverlap
 #print axioms frozenGeneratorIntersectionHomologyIsoOverlap
+#print axioms frozenGeneratorIntersectionH1GroupIsoInt
+#print axioms frozenGeneratorIntersectionH0GroupIsoInt
+#print axioms frozenGeneratorInnerH0GroupIsoInt
 #print axioms frozenGeneratorMVPiecesExact
 #print axioms frozenGeneratorMVUnionExact
 #print axioms frozenGeneratorMVIntersectionExact
