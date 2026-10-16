@@ -692,6 +692,21 @@ theorem frozenBoundaryGraphRel_endpoint_iff {z w : Circle}
       change 1 - (t : ℝ) = 1 at hv
       exact Subtype.ext (by linarith)
 
+/-- A non-vertex point belongs to only one of the seven paired source arcs,
+so its forward generator mate is unique. -/
+theorem frozenBoundaryGraphRel_right_unique_of_not_endpoint
+    {z w u : Circle} (hz : ¬ FrozenBoundaryEndpoint z)
+    (hzw : FrozenBoundaryGraphRel z w)
+    (hzu : FrozenBoundaryGraphRel z u) : w = u := by
+  rcases hzw with ⟨t, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, rfl⟩ <;>
+    rcases hzu with ⟨s, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨hs, rfl⟩ <;>
+    have hc := frozenCircleEdgePoint_eq_of_not_endpoint _ _ _ _ hz hs <;>
+    rcases hc with ⟨hij, hts⟩ <;>
+    subst s <;> try omega
+  all_goals rfl
+
 theorem frozenBoundaryEqvGen_endpoint_iff {z w : Circle}
     (h : Relation.EqvGen FrozenBoundaryGraphRel z w) :
     FrozenBoundaryEndpoint z ↔ FrozenBoundaryEndpoint w := by
@@ -1592,6 +1607,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryClosedRel_eqvGen
 #print axioms frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
 #print axioms frozenCircleEdgePoint_eq_of_not_endpoint
+#print axioms frozenBoundaryGraphRel_right_unique_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
