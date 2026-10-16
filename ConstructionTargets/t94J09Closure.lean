@@ -1106,6 +1106,29 @@ theorem frozenBoundarySubtypeEqvGen_isClosed :
   simpa only [Set.preimage_setOf_eq, f,
     frozenBoundarySubtypeEqvGen_iff_closedRel] using hc
 
+/-- The boundary equivalence graph remains closed after embedding both
+boundary coordinates into the polygon disk. -/
+theorem frozenBoundaryEqvGen_diskImage_isClosed :
+    IsClosed ((fun p :
+        ConstructionTargets.PolygonBoundaryCircleSource.Boundary ×
+          ConstructionTargets.PolygonBoundaryCircleSource.Boundary =>
+        (p.1.1, p.2.1)) ''
+      {p | Relation.EqvGen
+        (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+          frozenGeneratorRel) p.1 p.2}) := by
+  letI : CompactSpace ConstructionTargets.PolygonBoundaryCircleSource.Boundary :=
+    ConstructionTargets.PolygonBoundaryCircleSource.boundaryCircleHomeomorph.compactSpace
+  have hc : IsCompact {p :
+      ConstructionTargets.PolygonBoundaryCircleSource.Boundary ×
+        ConstructionTargets.PolygonBoundaryCircleSource.Boundary |
+      Relation.EqvGen
+        (ConstructionTargets.PolygonBoundaryInducedQuotient.BoundaryRel
+          frozenGeneratorRel) p.1 p.2} :=
+    frozenBoundarySubtypeEqvGen_isClosed.isCompact
+  exact (hc.image
+    ((continuous_subtype_val.comp continuous_fst).prodMk
+      (continuous_subtype_val.comp continuous_snd))).isClosed
+
 /-- The boundary quotient parametrizes every outer boundary class exactly
 once. -/
 theorem frozenBoundaryQuotientToOuterSkeleton_bijective :
@@ -1869,6 +1892,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorEqvGen_iff_eq_or_boundary
 #print axioms frozenBoundarySubtypeEqvGen_iff_closedRel
 #print axioms frozenBoundarySubtypeEqvGen_isClosed
+#print axioms frozenBoundaryEqvGen_diskImage_isClosed
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
 #print axioms continuous_frozenBoundaryQuotientToOuterSkeleton
