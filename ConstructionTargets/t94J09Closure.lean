@@ -2753,6 +2753,33 @@ noncomputable def frozenGeneratorSpaceHSmithIso_of_concrete
     ModuleCat.of ℤ N6Smith
   exact (frozenGeneratorSpaceHSmithEquiv_of_concrete h).toModuleIso
 
+/-- The section-based degree-one calculation as an isomorphism of the actual
+canonical `SpaceH` object. -/
+noncomputable def frozenGeneratorSpaceHSmithIso_of_section
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id) :
+    SpaceH FrozenGeneratorQuotient 1 ≅ ModuleCat.of ℤ N6Smith :=
+  frozenGeneratorSpaceHSmithIso_of_concrete
+    (frozenGeneratorH1SmithEquiv_of_section e hboundary hzero hreverse s hsection)
+
 /-- The section-based Smith calculation in the module-valued canonical H1
 representation used by the frozen homology statement. -/
 noncomputable def frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
@@ -2925,6 +2952,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
 #print axioms frozenGeneratorSpaceHSmithEquiv_of_concrete
 #print axioms frozenGeneratorSpaceHSmithIso_of_concrete
+#print axioms frozenGeneratorSpaceHSmithIso_of_section
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
 #print axioms frozenGeneratorCanonicalModuleH1SmithIso_of_section
 #print axioms frozenFaceBoundaryCoordinates_injective
