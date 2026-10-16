@@ -88721,6 +88721,19 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check a9dd96d70", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792120654076-15084-3fb217c2",
+     :commands
+     ["git show/diff/check a9dd96d70"
+      "verify committed target blob and GraphSymm orientation"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "sha256sum, scope, and placeholder recount at a9dd96d70"],
+     :finding
+     "PASS program STOP: topo-6 commit a9dd96d70 adds compiled, sorry-free progress after eb553b602. frozenBoundaryGraphSymm_trans_of_not_endpoint handles identity steps directly, rejects like-oriented nontrivial compositions using forward-chain exclusion, and cancels opposite orientations using the correctly matched left/right uniqueness lemmas. It proves transitivity only off the endpoint locus as stated. Endpoint transitivity/EqvGen, T2/MV, homology, and normalization remain explicitly listed. Scope is one target file; fixture SHA 5f420bfd58ee92eda8e8b8118977d6994a852d55d73bdd4c38b6e29c739fea19; target placeholders 0, Main 1; registry 168/0; standard axioms only."},
     :commit "a9dd96d70",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88729,7 +88742,7 @@
      "5f420bfd58ee92eda8e8b8118977d6994a852d55d73bdd4c38b6e29c739fea19"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88747,7 +88760,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked forward-chain exclusion.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked off-vertex transitivity.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88851,7 +88864,10 @@
     {:job 4, :commit "5bd16150d", :reason "Banked left-uniqueness."}
     {:job 5,
      :commit "eb553b602",
-     :reason "Banked forward-chain exclusion."}]}
+     :reason "Banked forward-chain exclusion."}
+    {:job 6,
+     :commit "a9dd96d70",
+     :reason "Banked off-vertex transitivity."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97267,7 +97283,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenBoundaryGraphSymm_trans_of_not_endpoint",
@@ -97277,7 +97293,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "symmetric generator transitive off vertices",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a9dd96d70"},
    :id :lemma-frozenboundarygraphsymm-trans-of-not-endpoint,
    :kind :lemma,
    :depends-on
