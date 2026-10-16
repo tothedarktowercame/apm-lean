@@ -37254,37 +37254,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Prove scalar circle coordinate via discrete H0 naturality; then suspension and normalized-class signs, Main.",
+    "Prove discrete Bool H0 comparison; then connecting map gives circle coordinate one, suspension signs, Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings
+    ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
     [{:name
-      "t96A06_coefficientCircleComparison_eq_native_of_apply_one",
-      :type "coordinate at one determines exact circle comparison",
+      "t96A06_coefficientCircleBoundary_integralComparison_of_bool",
+      :type
+      "Bool H0 comparison transports to signed circle boundary coordinates",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison"],
+      :depends-on [],
       :area "rp-rational-homology"}
-     {:name "t96A06_coefficientCircleComparison_apply_one",
-      :type "coefficient circle comparison has native coordinate one",
+     {:name "t96A06_boolH0_integralComparison",
+      :type
+      "forgotten module and native additive discrete H0 coordinates agree on Bool",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on
-      ["t96A06_coefficientCircleComparison_eq_native_of_apply_one"],
+      :depends-on [],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Reduced exact circle comparison to its coordinate at one.",
+    "Banked transport from discrete Bool H0 comparison to the circle boundary; the discrete comparison remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37292,17 +37293,13 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd
-      "git diff --check -- ConstructionTargets/t96A06Closure.lean",
-      :exit 0}
-     {:cmd "git show --check --stat --oneline d536404dd", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792151559241-15415-899f9f04",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "d536404dd",
+     {:cmd "git show --check --stat --oneline bc7c03407", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :note
+      "Direct rfl for Bool comparison failed; retained it as the exact next prerequisite and compiled its boundary transport."}],
+    :commit "bc7c03407a",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37310,7 +37307,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46432,6 +46429,46 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-lowerpatch-deformationretract],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientCircleBoundary_integralComparison_of_bool",
+    :type
+    "Bool H0 comparison transports to signed circle boundary coordinates"},
+   :lemma
+   {:name
+    "t96A06_coefficientCircleBoundary_integralComparison_of_bool",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Bool H0 comparison transports to signed circle boundary coordinates",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-coefficientcircleboundary-integralcomparison-of-bool,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison",
+    :type
+    "forgotten module and native additive discrete H0 coordinates agree on Bool"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten module and native additive discrete H0 coordinates agree on Bool",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-integralcomparison,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
