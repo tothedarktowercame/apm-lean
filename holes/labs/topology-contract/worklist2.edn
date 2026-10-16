@@ -88725,6 +88725,18 @@
     [{:cmd "exactness draft",
       :exit 1,
       :correction "split topology transport"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792157192391-15489-18160d6b",
+     :commands
+     ["git show/check 303d7e13e"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: 303d7e13e changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. The quotient iso runs named-to-canonical, so its inverse correctly transports canonical H(k+1) into the named source of the actual production connecting map, whose target remains literal intersection Hk. Named-arrow transport, exactness, matrices, normalization remain listed."},
     :commit "303d7e13e",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88733,7 +88745,7 @@
      "f85b13f308a38d7da6696076b32f8cfdaee0b081713b60d360e5fdd747f37293"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88751,7 +88763,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked named-topology union exactness.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked connecting transport.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88935,7 +88947,10 @@
      :reason "Banked named-topology pieces exactness."}
     {:job 9,
      :commit "bb13116b1",
-     :reason "Banked named-topology union exactness."}]}
+     :reason "Banked named-topology union exactness."}
+    {:job 1,
+     :commit "303d7e13e",
+     :reason "Banked connecting transport."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98216,7 +98231,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorCanonicalToNamedMVConnecting",
@@ -98226,7 +98241,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "connecting transport",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "303d7e13e"},
    :id :lemma-frozengeneratorcanonicaltonamedmvconnecting,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorradialgrouphomologyiso],
