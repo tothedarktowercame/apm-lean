@@ -294,6 +294,128 @@ theorem cpSuccessorLowerVectorHomotopyInPatch_continuous (n : ℕ) :
     Continuous (cpSuccessorLowerVectorHomotopyInPatch n) :=
   (cpSuccessorLowerVectorHomotopy_continuous n).subtype_mk _
 
+/-- The projective quotient restricted over the lower patch. -/
+def cpSuccessorLowerQuotientMap (n : ℕ) :
+    CPSuccessorLowerVectors n → {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} :=
+  fun v => ⟨quotientMap ℂ (n + 1) v.1, v.2⟩
+
+/-- The restricted projective quotient is still an open quotient map. -/
+theorem cpSuccessorLowerQuotientMap_isOpenQuotient (n : ℕ) :
+    IsOpenQuotientMap (cpSuccessorLowerQuotientMap n) := by
+  let s := cpSuccessorLowerPatch n
+  let q : NonzeroVectors ℂ (n + 1) → CP (n + 1) := quotientMap ℂ (n + 1)
+  change IsOpenQuotientMap (s.restrictPreimage q)
+  refine ⟨?_, (continuous_quotientMap ℂ (n + 1)).restrictPreimage, ?_⟩
+  · rintro ⟨p, hp⟩
+    obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ (n + 1) p
+    exact ⟨⟨v, hp⟩, rfl⟩
+  · exact (projectiveQuotientMap_isOpen ℂ (n + 1)).restrictPreimage s
+
+/-- A fixed representative of each point in the lower projective patch. -/
+noncomputable def cpSuccessorLowerRepresentative (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    CPSuccessorLowerVectors n :=
+  Classical.choose ((cpSuccessorLowerQuotientMap_isOpenQuotient n).surjective p)
+
+@[simp] theorem cpSuccessorLowerRepresentative_quotient (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerQuotientMap n (cpSuccessorLowerRepresentative n p) = p :=
+  Classical.choose_spec ((cpSuccessorLowerQuotientMap_isOpenQuotient n).surjective p)
+
+/-- The lower-patch vector homotopy descended through the restricted
+projective quotient. -/
+noncomputable def cpSuccessorLowerPatchHomotopy (n : ℕ)
+    (z : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} × Set.Icc (0 : ℝ) 1) :
+    {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} :=
+  cpSuccessorLowerQuotientMap n
+    (cpSuccessorLowerVectorHomotopyInPatch n
+      (cpSuccessorLowerRepresentative n z.1, z.2))
+
+/-- Pulling the descended homotopy back to a lower-patch representative
+recovers the original homogeneous vector homotopy. -/
+theorem cpSuccessorLowerPatchHomotopy_quotient (n : ℕ)
+    (v : CPSuccessorLowerVectors n) (s : Set.Icc (0 : ℝ) 1) :
+    cpSuccessorLowerPatchHomotopy n (cpSuccessorLowerQuotientMap n v, s) =
+      cpSuccessorLowerQuotientMap n
+        (cpSuccessorLowerVectorHomotopyInPatch n (v, s)) := by
+  let w := cpSuccessorLowerRepresentative n (cpSuccessorLowerQuotientMap n v)
+  have hq : quotientMap ℂ (n + 1) w.1 = quotientMap ℂ (n + 1) v.1 := by
+    exact congrArg Subtype.val
+      (cpSuccessorLowerRepresentative_quotient n
+        (cpSuccessorLowerQuotientMap n v))
+  obtain ⟨a, ha⟩ :=
+    (Projectivization.mk_eq_mk_iff ℂ w.1.1 v.1.1 w.1.2 v.1.2).mp hq
+  apply Subtype.ext
+  change quotientMap ℂ (n + 1)
+      (cpSuccessorLowerVectorHomotopy n w s) =
+    quotientMap ℂ (n + 1) (cpSuccessorLowerVectorHomotopy n v s)
+  apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+  refine ⟨a, ?_⟩
+  exact (cpSuccessorLowerVectorHomotopy_smul n w v s a ha.symm).symm
+
+/-- The descended lower-patch homotopy is jointly continuous. -/
+theorem cpSuccessorLowerPatchHomotopy_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerPatchHomotopy n) := by
+  have hq := (cpSuccessorLowerQuotientMap_isOpenQuotient n).prodMap
+    (IsOpenQuotientMap.id : IsOpenQuotientMap
+      (fun s : Set.Icc (0 : ℝ) 1 => s))
+  refine hq.isQuotientMap.continuous_iff.mpr ?_
+  have hcomp : cpSuccessorLowerPatchHomotopy n ∘
+      Prod.map (cpSuccessorLowerQuotientMap n) id =
+      cpSuccessorLowerQuotientMap n ∘
+        cpSuccessorLowerVectorHomotopyInPatch n := by
+    funext z
+    exact cpSuccessorLowerPatchHomotopy_quotient n z.1 z.2
+  rw [hcomp]
+  exact (cpSuccessorLowerQuotientMap_isOpenQuotient n).continuous.comp
+    (cpSuccessorLowerVectorHomotopyInPatch_continuous n)
+
+@[simp] theorem cpSuccessorLowerPatchHomotopy_zero (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨0, by simp⟩) = p := by
+  let w := cpSuccessorLowerRepresentative n p
+  calc
+    cpSuccessorLowerPatchHomotopy n (p, ⟨0, by simp⟩) =
+        cpSuccessorLowerPatchHomotopy n
+          (cpSuccessorLowerQuotientMap n w, ⟨0, by simp⟩) := by
+            rw [cpSuccessorLowerRepresentative_quotient n p]
+    _ = cpSuccessorLowerQuotientMap n
+        (cpSuccessorLowerVectorHomotopyInPatch n (w, ⟨0, by simp⟩)) :=
+      cpSuccessorLowerPatchHomotopy_quotient n w ⟨0, by simp⟩
+    _ = cpSuccessorLowerQuotientMap n w := by
+      congr 1
+      apply Subtype.ext
+      exact cpSuccessorLowerVectorHomotopy_zero n w
+    _ = p := cpSuccessorLowerRepresentative_quotient n p
+
+@[simp] theorem cpSuccessorLowerPatchHomotopy_one (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+      cpSuccessorLowerQuotientMap n
+        ⟨cpSuccessorZeroLastVector n (cpSuccessorLowerRepresentative n p),
+          by
+            have h := cpSuccessorLowerVectorHomotopy_mem_lowerPatch n
+              (cpSuccessorLowerRepresentative n p) ⟨1, by simp⟩
+            rw [cpSuccessorLowerVectorHomotopy_one] at h
+            exact h⟩ := by
+  let w := cpSuccessorLowerRepresentative n p
+  calc
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+        cpSuccessorLowerPatchHomotopy n
+          (cpSuccessorLowerQuotientMap n w, ⟨1, by simp⟩) := by
+            rw [cpSuccessorLowerRepresentative_quotient n p]
+    _ = cpSuccessorLowerQuotientMap n
+        (cpSuccessorLowerVectorHomotopyInPatch n (w, ⟨1, by simp⟩)) :=
+      cpSuccessorLowerPatchHomotopy_quotient n w ⟨1, by simp⟩
+    _ = cpSuccessorLowerQuotientMap n
+        ⟨cpSuccessorZeroLastVector n w, by
+          have h := cpSuccessorLowerVectorHomotopy_mem_lowerPatch n w ⟨1, by simp⟩
+          rw [cpSuccessorLowerVectorHomotopy_one] at h
+          exact h⟩ := by
+      congr 1
+      apply Subtype.ext
+      exact cpSuccessorLowerVectorHomotopy_one n w
+
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
 theorem cpSuccessor_overlap_topCoordinates_ne_zero (n : ℕ)
@@ -809,6 +931,11 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorLowerVectorHomotopy_continuous
 #print axioms cpSuccessorLowerVectorHomotopy_mem_lowerPatch
 #print axioms cpSuccessorLowerVectorHomotopyInPatch_continuous
+#print axioms cpSuccessorLowerQuotientMap_isOpenQuotient
+#print axioms cpSuccessorLowerPatchHomotopy_quotient
+#print axioms cpSuccessorLowerPatchHomotopy_continuous
+#print axioms cpSuccessorLowerPatchHomotopy_zero
+#print axioms cpSuccessorLowerPatchHomotopy_one
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
