@@ -37265,36 +37265,37 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compute Unit comparison at one, compose Bool square; then boundary, signs, Main.",
+    "Prove chain comparison coordinate normalization, compose Bool square; then boundary, signs, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated files untouched."],
     :missing-theorems
-    [{:name "t96A06_unitH0_generator_eq_of_apply_one",
-      :type "equality at one determines Unit generator-probe equality",
+    [{:name "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
+      :type "coordinate normalization implies Unit comparison at one",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_generator_iff_comparison"],
+      :depends-on ["t96A06_unitH0_generator_eq_of_apply_one"],
       :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_integralComparison_apply_one",
+     {:name "t96A06_unitH0_coordinate_normalization",
       :type
-      "chain comparison preserves the unique Unit H0 generator at one",
+      "chain comparison preserves the selected Unit H0 coordinate",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_generator_eq_of_apply_one"],
+      :depends-on
+      ["t96A06_unitH0_integralComparison_apply_one_of_coordinate"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed extensionality from the Unit generator value; chain-level value at one remains.",
+    "Committed exact coordinate form of Unit normalization; chain comparison on that coordinate remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37302,14 +37303,13 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline d8825ab33", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792160216526-15553-de08ac02",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "d8825ab33",
+     {:cmd "git show --check --stat --oneline c84611be7", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :note
+      "Definitional simp failed; isolated exact coordinate equation."}],
+    :commit "c84611be7",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37317,7 +37317,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46986,6 +46986,41 @@
    :id :lemma-t96a06-unith0-integralcomparison-apply-one,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-generator-eq-of-apply-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
+    :type "coordinate normalization implies Unit comparison at one"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coordinate normalization implies Unit comparison at one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-generator-eq-of-apply-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_coordinate_normalization",
+    :type
+    "chain comparison preserves the selected Unit H0 coordinate"},
+   :lemma
+   {:name "t96A06_unitH0_coordinate_normalization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain comparison preserves the selected Unit H0 coordinate",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-coordinate-normalization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
