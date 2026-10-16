@@ -1744,6 +1744,17 @@ noncomputable def frozenGeneratorMVConnectingH1ToIntersectionInt :
       frozenGeneratorRadialPackage.cover 0 ≫
     frozenGeneratorIntersectionH0GroupIsoInt.hom
 
+/-- The connecting morphism in the integral intersection coordinate, with
+its source transported from canonical quotient homology to the named topology. -/
+noncomputable def frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt :
+    ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) ⟶
+      AddCommGrpCat.of ℤ :=
+  (frozenGeneratorRadialGroupHomologyIso 1).inv ≫
+    frozenGeneratorMVConnectingH1ToIntersectionInt
+
 /-- In intersection coordinates, the connecting map followed by the H0
 intersection arrow is the transported production composite. -/
 theorem frozenGeneratorMVConnecting_comp_H0_eq_production :
@@ -2414,6 +2425,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow
 #print axioms frozenGeneratorMVIntGraphH0_comp_eq_production
 #print axioms frozenGeneratorMVConnectingH1ToIntersectionInt
+#print axioms frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt
 #print axioms frozenGeneratorMVConnecting_comp_H0_eq_production
 
 end ConstructionTargets.t94J09Closure
