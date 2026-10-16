@@ -36708,33 +36708,32 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Compute sphere off-degrees; lower-patch retract; MV successor; Main.",
+    "Above-top sphere vanishing; overlap groups; lower retract; MV; Main.",
     :outcome :stop,
-    :warnings
-    ["Existing lint; Main one placeholder; untracked untouched."],
+    :warnings ["Existing lint; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_affineUnitSphere_topHomologyIso",
-      :type "affine unit-sphere top rational homology is Q",
+    [{:name "t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt",
+      :type "positive rational homology below top vanishes",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_overlap_topIso_of_unitSphere"],
+      :depends-on ["t99J05_affineUnitSphere_topHomologyIso"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_euclideanUnitSphere_offDegreeHomology",
-      :type "sphere rational homology vanishes off zero and top",
+     {:name "t99J05_euclideanUnitSphere_homology_isZero_of_gt",
+      :type "rational homology above top vanishes",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_affineUnitSphere_topHomologyIso"],
+      :depends-on
+      ["t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed affine sphere comparison and overlap top homology.",
+    :reason "Committed rational sphere vanishing below top.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36746,26 +36745,13 @@
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
      {:cmd
-      "git diff --check && git show --check --stat --oneline d3394ea47",
+      "git diff --check && git show --check --stat --oneline ebe33ec6f",
       :exit 0}],
     :diagnostic-history
-    [{:cmd "model comparison",
+    [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 1,
-      :note "Fixed subtype cardinality and sphere namespace."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792108334234-14856-01633082",
-     :commands
-     ["git show --check --stat d3394ea47; inspect diff"
-      "sha256sum fixture => 4aeb8b6a...beea8d"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean /tmp/t99j05_cp_homology_interface_check.lean"
-      "statement-registry.py check => 168/168"],
-     :finding
-     "PASS: recorded commit d3394ea47 adds compiled, sorry-free progress beyond program history: affine-to-Euclidean sphere equivalence, affine top homology, and successor-overlap top homology. Fixture hash matches; declarations use only propext, Classical.choice, Quot.sound. Main still has its recorded single placeholder; remaining off-degree/MV/Main milestones are listed."},
-    :commit "d3394ea47",
+      :note "Opened IsZero; fixed sphere index."}],
+    :commit "ebe33ec6f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36773,7 +36759,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -44762,6 +44748,40 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-integraltorational-chart-naturality-of-generator-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt",
+    :type "positive rational homology below top vanishes"},
+   :lemma
+   {:name "t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "positive rational homology below top vanishes",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-euclideanunitsphere-positivehomology-iszero-of-lt,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-affineunitsphere-tophomologyiso],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_euclideanUnitSphere_homology_isZero_of_gt",
+    :type "rational homology above top vanishes"},
+   :lemma
+   {:name "t99J05_euclideanUnitSphere_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "rational homology above top vanishes",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-euclideanunitsphere-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-euclideanunitsphere-positivehomology-iszero-of-lt],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
