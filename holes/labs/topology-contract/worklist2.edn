@@ -88672,26 +88672,27 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta 0,
-    :residual "Graph coordinates/arrows; normalize.",
+    :residual "Compute graph-arrow coordinates; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorMVPiecesH1GroupIsoGraph",
-      :type "MV pieces/graph iso",
+    [{:name "frozenGeneratorMVIntersectionH1ArrowToGraph",
+      :type "transported MV graph arrow",
       :status :proved,
-      :consumers [:t94J09],
-      :depends-on ["frozenGeneratorOuterGroupHomologyIsoGraph"],
-      :area "polygon-surface-homology"}
-     {:name "frozenGeneratorHomology_comparisons",
-      :type "graph arrows",
-      :status :partial,
       :consumers [:t94J09],
       :depends-on
       ["frozenGeneratorMVPiecesH1GroupIsoGraph"
-       "frozenGeneratorIntersectionH1GroupIsoInt"
+       "frozenGeneratorIntersectionH1GroupIsoInt"],
+      :area "polygon-surface-homology"}
+     {:name "frozenGeneratorHomology_comparisons",
+      :type "graph arrow coordinates",
+      :status :partial,
+      :consumers [:t94J09],
+      :depends-on
+      ["frozenGeneratorMVIntersectionH1ArrowToGraph"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88710,7 +88711,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked MV pieces/graph bridge.",
+    :reason "Banked transported MV graph arrow.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,30 +88721,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 49a791d9b", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "notation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792147233202-15339-7e07e339",
-     :commands
-     ["git show/check 49a791d9b"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: 49a791d9b changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. MV middle term is inner-then-outer, and reversing isoZeroBiprod correctly removes the zero inner H1 before graph transport; graph-arrow comparison remains listed."},
-    :commit "49a791d9b",
+     {:cmd "git show --check f92b1a76b", :exit 0}],
+    :commit "f92b1a76b",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "3284b3ea72e54de64e099c9abbca4f2fdb108f6c76ae04a6a8aae014b15a4540"},
+     "0c2153e719960e8218acfe10542f3aab0fc0db8743dbb9f27efc92acff0cdd28"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96778,7 +96765,8 @@
     :lemma-frozengeneratormvintersectionexact
     :lemma-frozengeneratorintersectionh1groupisoint
     :lemma-frozengeneratoroutergrouphomologyisograph
-    :lemma-frozengeneratormvpiecesh1groupisograph],
+    :lemma-frozengeneratormvpiecesh1groupisograph
+    :lemma-frozengeneratormvintersectionh1arrowtograph],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97733,4 +97721,23 @@
    :id :lemma-frozengeneratormvpiecesh1groupisograph,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratoroutergrouphomologyisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntersectionH1ArrowToGraph",
+    :type "transported MV graph arrow"},
+   :lemma
+   {:name "frozenGeneratorMVIntersectionH1ArrowToGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "transported MV graph arrow",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvintersectionh1arrowtograph,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvpiecesh1groupisograph
+    :lemma-frozengeneratorintersectionh1groupisoint],
    :other-consumers []}]}
