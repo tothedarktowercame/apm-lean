@@ -603,6 +603,30 @@ theorem edgeChart_isOpen (i : Fin 2) : IsOpen (D.edgeChart i) := by
     D.realization_preimage_edgeChart]
   exact rawEdgeChart_isOpen i
 
+/-- Points of a descended edge chart are exactly realized interior points of
+lifted edges with the prescribed base-edge label. -/
+theorem mem_edgeChart_iff (i : Fin 2) (e : D.Realization) :
+    e ∈ D.edgeChart i ↔
+      ∃ v : V, ∃ t : UnitInterval,
+        t.1 ∈ Set.Ioo (0 : ℝ) 1 ∧ e = D.edgePoint i v t := by
+  constructor
+  · rintro ⟨a, ha, rfl⟩
+    change a ∈ ⋃ v, rawEdgeInterior i v at ha
+    simp only [Set.mem_iUnion] at ha
+    rcases ha with ⟨v, p, hp, rfl⟩
+    rcases p with ⟨j, w, t⟩
+    simp only [Set.mem_prod, Set.mem_singleton_iff, Set.mem_setOf_eq] at hp
+    rcases hp with ⟨rfl, rfl, ht⟩
+    exact ⟨w, t, ht, rfl⟩
+  · rintro ⟨v, t, ht, rfl⟩
+    refine ⟨.inr (i, v, t), ?_, rfl⟩
+    change .inr (i, v, t) ∈ ⋃ w, rawEdgeInterior i w
+    simp only [Set.mem_iUnion]
+    exact ⟨v, ⟨(i, v, t), by
+      simp only [Set.mem_prod, Set.mem_singleton_iff, Set.mem_setOf_eq,
+        true_and]
+      exact ht, rfl⟩⟩
+
 /-- A raw endpoint remembers the graph vertex to which it is glued.  Open
 edge points have no vertex coordinate. -/
 noncomputable def vertexCoordinate : RealizationRaw V → Option V
@@ -872,6 +896,7 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms rawEdgeChart_mem_iff_of_eqvGen
 #print axioms realization_preimage_edgeChart
 #print axioms edgeChart_isOpen
+#print axioms mem_edgeChart_iff
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
