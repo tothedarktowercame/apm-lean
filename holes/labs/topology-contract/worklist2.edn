@@ -88672,27 +88672,27 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Prove generator-quotient MV comparisons; normalize; assemble.",
+    "Compute cover-piece homology/maps; normalize; assemble.",
     :outcome :stop,
     :warnings ["Main: 1 sorry" "dirt"],
     :missing-theorems
-    [{:name "frozenSignedHomology_of_generator_comparisons",
-      :type "generator comparisons imply signed homology",
+    [{:name "frozenGeneratorRadialPackage",
+      :type "open radial cover",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenSignedQuotientHomologyIsoGenerator"
-       "frozenPolygonHomology_of_comparisons"],
+      :depends-on ["frozenGeneratorRel_radius_eq"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "generator quotient H0/H1/H2/high comparisons",
+      :type "generator H0/H1/H2/high comparisons",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenSignedHomology_of_generator_comparisons"],
+      :depends-on
+      ["frozenGeneratorRadialPackage"
+       "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "polygon homology",
@@ -88710,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked transported assembly.",
+    :reason "Banked radial cover.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,29 +88720,18 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 9794bfe38", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792108611887-14864-1cb33461",
-     :commands
-     ["git show/diff/check 9794bfe38"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from 9794bfe38"],
-     :finding
-     "PASS program STOP: topo-6 commit 9794bfe38 adds compiled, sorry-free progress beyond history 258ff314a. frozenSignedHomology_of_generator_comparisons correctly feeds generator-quotient H0/H1/H2/high data into the prior algebraic assembly, then composes the signed-to-generator homology isomorphism in degrees 0 and 1 and transports IsZero in every degree >=2 in the correct orientation. It cleanly separates the proved transport/assembly from the still-missing geometric MV inputs. Only t94J09Closure.lean changed; fixture SHA 9ca40bebb647b7ab6a203f205259b9bd066790e6c0e3af7323aaa1af1de7daff matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Generator-quotient MV comparisons, normalization, and final assembly remain listed."},
-    :commit "9794bfe38",
+     {:cmd "git show --check c6b7aa10f", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft", :exit 1, :correction "norm_edgePoint"}],
+    :commit "c6b7aa10f",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "9ca40bebb647b7ab6a203f205259b9bd066790e6c0e3af7323aaa1af1de7daff"},
+     "9a6265525a0fd434fdce2c6b91944cc83e7cdf8db74b67a84ca316d1f4d5e06f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96622,5 +96611,33 @@
     :area "polygon-surface-homology"},
    :id :lemma-frozengeneratorhomology-comparisons,
    :kind :lemma,
-   :depends-on [:lemma-frozensignedhomology-of-generator-comparisons],
+   :depends-on
+   [:lemma-frozensignedhomology-of-generator-comparisons
+    :lemma-frozengeneratorradialpackage],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorRadialPackage", :type "open radial cover"},
+   :lemma
+   {:name "frozenGeneratorRadialPackage",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "open radial cover",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorradialpackage,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorrel-radius-eq],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "frozenGeneratorRel_radius_eq"},
+   :lemma {:name "frozenGeneratorRel_radius_eq", :reported-by []},
+   :id :lemma-frozengeneratorrel-radius-eq,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
