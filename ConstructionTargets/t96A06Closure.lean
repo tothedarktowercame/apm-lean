@@ -3316,6 +3316,23 @@ theorem t96A06_unitH0_preservation_canonical_triangle_generator :
 
 #print axioms t96A06_unitH0_preservation_canonical_triangle_generator
 
+/-- Inverse opcycle preservation sends the forgotten projected Unit chains
+to the literal projected chains of the mapped complex. -/
+theorem t96A06_unitH0_mapOpcyclesIso_inv_projected :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0) ≫
+      (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+    t96A06_unitMappedModuleChains.pOpcycles 0 := by
+  rw [t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData]
+  rw [← Category.assoc, ← Functor.map_comp]
+  erw [t96A06_unitH0ModuleShortComplex.homologyData.right.pOpcycles_comp_opcyclesIso_hom]
+  exact (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).p_comp_opcyclesIso_inv
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_inv_projected
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
