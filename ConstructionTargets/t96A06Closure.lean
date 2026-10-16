@@ -1850,6 +1850,33 @@ theorem t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg :
       ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one]
     exact h
 
+/-- Positive localization of the canonical sphere-shift generator is exactly
+identity of the normalization-comparison automorphism. -/
+theorem t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint ↔
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom = 𝟙 _ := by
+  constructor
+  · intro hlocal
+    apply AddCommGrpCat.hom_ext
+    apply AddMonoidHom.ext_int
+    change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = 1
+    rw [t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one, hlocal]
+    exact ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
+      1 polynomialSphereRegularPoint
+  · intro hid
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator,
+      ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one, hid]
+    rfl
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4673,6 +4700,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one
 #print axioms t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one
 #print axioms t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg
+#print axioms t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
