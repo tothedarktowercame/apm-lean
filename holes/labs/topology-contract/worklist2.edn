@@ -88808,7 +88808,7 @@
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
@@ -88817,26 +88817,29 @@
     :outcome :stop,
     :warnings ["lint" "Main: 1 placeholder" "dirt preserved"],
     :missing-theorems
-    [{:name "vertexFiberEquiv",
-      :type "wedge fiber equivalent to vertices",
+    [{:name "projection_surjective",
+      :type "realization onto wedge",
       :status :proved,
-      :consumers [:t92J06],
-      :depends-on ["interiorFiberEquiv"],
-      :area "graph-covering-realization"}
-     {:name "twoLoopGraphCoverData_realization",
-      :type "charts and covering map",
-      :status :partial,
       :consumers [:t92J06],
       :depends-on ["vertexFiberEquiv" "interiorFiberEquiv"],
       :area "graph-covering-realization"}
+     {:name "twoLoopGraphCoverData_realization",
+      :type "covering charts",
+      :status :partial,
+      :consumers [:t92J06],
+      :depends-on
+      ["projection_surjective"
+       "vertexFiberEquiv"
+       "interiorFiberEquiv"],
+      :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_simplyConnected_cover",
-      :type "Cayley-tree cover",
+      :type "tree cover",
       :status :not-started,
       :consumers [:t92J06],
       :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}
      {:name "apm_t92J06_exists_four_threeSheeted_covers",
-      :type "four distinct 3-sheet covers",
+      :type "four covers",
       :status :not-started,
       :consumers [:t92J06],
       :depends-on ["twoLoopGraphCoverData_realization"],
@@ -88845,39 +88848,27 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked vertex fiber.",
+    :reason "Banked surjectivity.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder scan", :exit 0}
-     {:cmd "git show --check b0415d1fa", :exit 0}],
+     {:cmd "comment-stripped placeholder scan", :exit 0}
+     {:cmd "git show --check 5899fb786", :exit 0}],
     :diagnostic-history
-    [{:cmd "vertex draft",
+    [{:cmd "drafts",
       :exit 1,
-      :correction "fixed endpoints/orientation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792105175971-14795-559fe161",
-     :commands
-     ["git show/diff/check b0415d1fa"
-      "sha256sum + placeholder recount from b0415d1fa"
-      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
-      "lake env lean problems/t92J06/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit b0415d1fa adds compiled, sorry-free progress beyond history 7cfdde03e, repairing the stale prior no-progress finding. vertexCoordinate is invariant under the actual endpoint EqvGen; projection-to-wedge-point forces interval parameter 0 or 1, and endpoint relations plus vertex injectivity yield a genuine fiber equivalence to V. Only t92J06Closure.lean changed; fixture SHA d5921ab0dbf229478a9ce286d383b1aa93769df0417cd8f740feb4a1bb2f3000 matches. Exact target builds; Main compiles; code placeholders 0/1 (target has only a comment saying sorry-free); registry 168/0; axioms standard. Charts, Cayley tree, and finite invariants remain listed."},
-    :commit "b0415d1fa",
+      :correction "fixed positivity/right leg"}],
+    :commit "5899fb786",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "d5921ab0dbf229478a9ce286d383b1aa93769df0417cd8f740feb4a1bb2f3000"},
+     "c4b425640ea3dbd63aaedeb3a53151f93554b06d20f1e29d154e273e470ff42c"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -90681,7 +90672,8 @@
     :lemma-edgepoint-ne-vertex-of-interior
     :lemma-edgepoint-injective-of-interior
     :lemma-interiorfiberequiv
-    :lemma-vertexfiberequiv],
+    :lemma-vertexfiberequiv
+    :lemma-projection-surjective],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96640,4 +96632,20 @@
    :id :lemma-frozengeneratorrel-radius-eq,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "projection_surjective", :type "realization onto wedge"},
+   :lemma
+   {:name "projection_surjective",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "realization onto wedge",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06},
+   :id :lemma-projection-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
    :other-consumers []}]}
