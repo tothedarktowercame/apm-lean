@@ -2041,6 +2041,65 @@ theorem t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
     omega
   · exact h₁.trans h₂.symm
 
+/-- Opposite integer coordinates are exactly the forbidden equality between
+the compared coefficient generator and the negative normalized production
+class. -/
+theorem t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+        -t96A06_normalizedClassSphereTopCoordinate ↔
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        -ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+  constructor
+  · intro h
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom).1
+    rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate]
+    have hneg :
+        (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+          (by omega)).hom.hom
+            (-ConstructionTargets.HigherSphereLocalization.normalizedClass
+              (k := 1) polynomialSphereRegularPoint) =
+          -(ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+            (by omega)).hom.hom
+              (ConstructionTargets.HigherSphereLocalization.normalizedClass
+                (k := 1) polynomialSphereRegularPoint) :=
+      map_neg _ _
+    rw [hneg]
+    exact h
+  · intro h
+    have hc := congrArg
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom.hom h
+    rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate] at hc
+    have hneg :
+        (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+          (by omega)).hom.hom
+            (-ConstructionTargets.HigherSphereLocalization.normalizedClass
+              (k := 1) polynomialSphereRegularPoint) =
+          -(ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+            (by omega)).hom.hom
+              (ConstructionTargets.HigherSphereLocalization.normalizedClass
+                (k := 1) polynomialSphereRegularPoint) :=
+      map_neg _ _
+    rw [hneg] at hc
+    exact hc
+
+/-- Thus excluding the negative class comparison is exactly the remaining
+orientation inequality. -/
+theorem t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 ≠
+        -t96A06_normalizedClassSphereTopCoordinate ↔
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator ≠
+        -ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+  exact not_congr t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4874,6 +4933,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_normalizedClassSphereTopCoordinate_isUnit
 #print axioms t96A06_coefficientSphereNormalizationComparisonDegree_isUnit
 #print axioms t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
+#print axioms t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff
+#print axioms t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
