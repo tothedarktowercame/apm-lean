@@ -2100,6 +2100,44 @@ theorem t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff :
           (k := 1) polynomialSphereRegularPoint := by
   exact not_congr t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff
 
+/-- The forbidden negative generator comparison would make the complete
+sphere-shift/local-normalization comparison the negative identity on `ℤ`. -/
+theorem t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
+    (hneg :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        -ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom = -𝟙 _ := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = -1
+  rw [t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one,
+    ← t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one, hneg]
+  change (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+    1 polynomialSphereRegularPoint).hom.hom
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        (-ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint)) = -1
+  rw [map_neg, t96A06_sphere3_integral_normalizedClass_localizes, map_neg,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
+
+/-- It therefore suffices to exclude the negative normalization automorphism
+in order to exclude the negative generator comparison itself. -/
+theorem t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
+    (hauto : t96A06_sphereShiftLocalNormalizationAutomorphism.hom ≠ -𝟙 _) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator ≠
+      -ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint := by
+  intro hneg
+  exact hauto
+    (t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
+      hneg)
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4935,6 +4973,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
 #print axioms t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff
 #print axioms t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff
+#print axioms t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
+#print axioms t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
