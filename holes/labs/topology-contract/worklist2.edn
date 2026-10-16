@@ -88727,6 +88727,18 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git show --check 400690d43", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792190592622-15838-f53ac1ba",
+     :commands
+     ["hash/scope/placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed 400690d43 (author topo-6), new after a792494ea. Fixture f01a346d... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0. The section-based SpaceH-to-N6Smith ModuleCat iso applies the concrete adapter with every boundary, zero, reverse-exactness, and section hypothesis unchanged and correctly oriented. It compiles sorry-free with only propext, Classical.choice, Quot.sound. STOP lists the proved adapter and all residual comparison, exactness, section, homology, and normalization milestones."},
     :commit "400690d43",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88735,7 +88747,7 @@
      "f01a346d1d2552a25044edd1fdc1f6a7bd168a045006d7f2fc82e2eaa6af4e65"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88753,7 +88765,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked SpaceH Smith iso.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked section-based SpaceH Smith iso.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88995,7 +89007,10 @@
     {:job 2,
      :commit "cc844af3c",
      :reason "Banked direct SpaceH Smith transport."}
-    {:job 3, :commit "a792494ea", :reason "Banked SpaceH Smith iso."}]}
+    {:job 3, :commit "a792494ea", :reason "Banked SpaceH Smith iso."}
+    {:job 4,
+     :commit "400690d43",
+     :reason "Banked section-based SpaceH Smith iso."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99033,7 +99048,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorSpaceHSmithIso_of_section", :type "T"},
@@ -99042,7 +99057,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "T",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "400690d43"},
    :id :lemma-frozengeneratorspacehsmithiso-of-section,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorspacehsmithiso-of-concrete],
