@@ -300,6 +300,19 @@ def frozenGeneratorOuterHomotopyEquivBoundary :
           (fun {_ _} h => frozenGeneratorRel_boundary h) 1 z.1 z.2
     rw [hmap]
 
+/-- Singular homology transports from the literal frozen outer member to its
+boundary graph in every degree. -/
+noncomputable def frozenGeneratorOuterHomologyIsoBoundary (k : ℕ) :
+    SpaceH FrozenGeneratorOuterPiece k ≅
+      SpaceH FrozenGeneratorOuterBoundaryPiece k :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+    (TopCat.of FrozenGeneratorOuterPiece) k
+      (SpaceH FrozenGeneratorOuterBoundaryPiece k)
+    (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+      frozenGeneratorOuterHomotopyEquivBoundary k ≪≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of FrozenGeneratorOuterBoundaryPiece) k).symm)
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -937,6 +950,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorRel_boundary
 #print axioms frozenGeneratorInnerOverlapHomology
 #print axioms frozenGeneratorOuterHomotopyEquivBoundary
+#print axioms frozenGeneratorOuterHomologyIsoBoundary
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
