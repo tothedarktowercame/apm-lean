@@ -707,6 +707,30 @@ theorem frozenBoundaryGraphRel_right_unique_of_not_endpoint
     subst s <;> try omega
   all_goals rfl
 
+theorem reverseIcc_injective : Function.Injective reverseIcc := by
+  intro t u h
+  apply Subtype.ext
+  have hv := congrArg Subtype.val h
+  change 1 - (t : ℝ) = 1 - (u : ℝ) at hv
+  linarith
+
+/-- A non-vertex point belongs to only one paired target arc, so its backward
+generator mate is unique. -/
+theorem frozenBoundaryGraphRel_left_unique_of_not_endpoint
+    {z w u : Circle} (hz : ¬ FrozenBoundaryEndpoint z)
+    (hwz : FrozenBoundaryGraphRel w z)
+    (huz : FrozenBoundaryGraphRel u z) : w = u := by
+  rcases hwz with ⟨t, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, rfl⟩ <;>
+    rcases huz with ⟨s, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, hs⟩ <;>
+    have hc := frozenCircleEdgePoint_eq_of_not_endpoint _ _ _ _ hz hs <;>
+    rcases hc with ⟨hij, hts⟩ <;> try omega
+  all_goals try { subst s; rfl }
+  · have h := reverseIcc_injective hts
+    subst s
+    rfl
+
 theorem frozenBoundaryEqvGen_endpoint_iff {z w : Circle}
     (h : Relation.EqvGen FrozenBoundaryGraphRel z w) :
     FrozenBoundaryEndpoint z ↔ FrozenBoundaryEndpoint w := by
@@ -1608,6 +1632,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
 #print axioms frozenCircleEdgePoint_eq_of_not_endpoint
 #print axioms frozenBoundaryGraphRel_right_unique_of_not_endpoint
+#print axioms frozenBoundaryGraphRel_left_unique_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
