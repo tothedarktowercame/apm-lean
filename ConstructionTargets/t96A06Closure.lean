@@ -3233,6 +3233,29 @@ theorem t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalCompariso
         polynomialSphereRegularPoint)).sc 3).mapHomologyIso
           t96A06_forgetRatModules).inv_hom_id_apply _).symm)
 
+/-- The two global normalization equalities still owed by coefficient
+extension, bundled as the exact input to the local transport assembler. -/
+def t96A06_globalRationalComparison_and_baseScalar_one : Prop :=
+  t96A06_integralNormalizedClass_rationalExtension =
+      t96A06_sphere3_rational_fundamentalClass ∧
+    polynomialSphereLift_baseLocalizationScalar = 1
+
+/-- The bundled global normalization packet supplies the rational local
+generator equation. -/
+theorem t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket
+    (h : t96A06_globalRationalComparison_and_baseScalar_one) :
+    t96A06_rationalNormalizedClassLocalizesToRawGenerator :=
+  t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
+    h.1 h.2
+
+/-- Consequently the same global packet supplies the raw coefficient-change
+generator transport required by the local calculation. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
+    (h : t96A06_globalRationalComparison_and_baseScalar_one) :
+    t96A06_integralToRationalRawLocalGeneratorTransport :=
+  t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
+    (t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket h)
+
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
 theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
@@ -4402,6 +4425,9 @@ theorem t96A06_rp3_rational_homology :
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
 #print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
+#print axioms t96A06_globalRationalComparison_and_baseScalar_one
+#print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff
