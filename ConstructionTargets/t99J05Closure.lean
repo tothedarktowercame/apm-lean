@@ -1225,6 +1225,15 @@ noncomputable def t99J05_cp_successor_mayerVietoris_exact_overlap (n k : ℕ) :=
     (ConstructionTargets.SingularExcision.ambientSubspaceRange
       (cpSuccessorTopPatch n)) k
 
+/-- Exactness at ambient homology in degree `k + 1`, between the two-patch
+map and the degree-lowering connecting morphism. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_exact_ambient (n k : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.exact_union ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -1325,6 +1334,7 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_mayerVietoris_exact_pieces
 #print axioms t99J05_cp_successor_mayerVietorisConnecting
 #print axioms t99J05_cp_successor_mayerVietoris_exact_overlap
+#print axioms t99J05_cp_successor_mayerVietoris_exact_ambient
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step
