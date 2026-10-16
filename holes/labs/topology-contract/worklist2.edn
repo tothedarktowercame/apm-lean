@@ -88723,6 +88723,18 @@
      {:cmd "git show --check a31596b22", :exit 0}],
     :diagnostic-history
     [{:cmd "draft", :exit 1, :correction "reverted"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792148244642-15359-30e0a8cd",
+     :commands
+     ["git show/check a31596b22"
+      "fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: a31596b22 changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. Graph-source coordinate inverse is composed with the actual production reassembly arrow in the correct direction; coordinate/exactness work remains listed."},
     :commit "a31596b22",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88731,7 +88743,7 @@
      "9af99c7a183a268aa0eec6788a5472bf0672fa3659c2c6bd9f15f9ebe6191a14"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88749,7 +88761,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked transported MV graph arrow.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked graph MV map.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88900,7 +88912,8 @@
      :reason "Banked MV pieces/graph bridge."}
     {:job 4,
      :commit "f92b1a76b",
-     :reason "Banked transported MV graph arrow."}]}
+     :reason "Banked transported MV graph arrow."}
+    {:job 5, :commit "a31596b22", :reason "Banked graph MV map."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -97750,7 +97763,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorMVGraphH1ReassemblyArrow",
@@ -97760,7 +97773,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "graph MV map",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a31596b22"},
    :id :lemma-frozengeneratormvgraphh1reassemblyarrow,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratormvpiecesh1groupisograph],
