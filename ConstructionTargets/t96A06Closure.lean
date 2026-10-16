@@ -1678,6 +1678,91 @@ theorem t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one :
     · exact hone
     · exact (hne hneg).elim
 
+/-- The unwanted negative global coordinate is exactly the assertion that the
+canonical sphere-shift generator localizes to the negative stereographic
+local generator.  Thus the remaining orientation choice is a concrete
+compatibility calculation between the two constructions. -/
+theorem t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization :
+    t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = -1 ↔
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+        -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint := by
+  let e := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of (Sphere 3)) 3
+  let c := t96A06_sphere3_integral_H3Iso.inv.hom 1
+  constructor
+  · intro hcoord
+    have hclass : t96A06_sphere3_integral_normalizedClass = -c := by
+      apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+        t96A06_sphere3_integral_H3Iso.hom).1
+      simpa [c] using hcoord
+    have hmap := congrArg (fun z =>
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3 (e.hom.hom z)) hclass
+    have hcancel : e.hom.hom t96A06_sphere3_integral_normalizedClass =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+      simp [t96A06_sphere3_integral_normalizedClass, e]
+    change
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3
+          (e.hom.hom t96A06_sphere3_integral_normalizedClass) =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3 (e.hom.hom (-c)) at hmap
+    rw [hcancel,
+      t96A06_sphere3_integral_normalizedClass_localizes] at hmap
+    simp only [map_neg] at hmap
+    change _ = (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      polynomialSphereRegularPoint 3).hom (-(e.hom.hom c)) at hmap
+    have hloc_neg := (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      polynomialSphereRegularPoint 3).hom.map_neg (e.hom.hom c)
+    have hmap' :
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint =
+          -(ConstructionTargets.ManifoldFundamentalClass.localizationMap
+            polynomialSphereRegularPoint 3).hom (e.hom.hom c) :=
+      hmap.trans hloc_neg
+    simpa [e, c] using (congrArg Neg.neg hmap').symm
+  · intro hlocal
+    have hcancel : e.hom.hom t96A06_sphere3_integral_normalizedClass =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+      simp [t96A06_sphere3_integral_normalizedClass, e]
+    have hneg_local :
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap
+            polynomialSphereRegularPoint 3 (e.hom.hom (-c)) =
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint := by
+      rw [map_neg]
+      change (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3).hom (-(e.hom.hom c)) = _
+      have hloc_neg := (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3).hom.map_neg (e.hom.hom c)
+      exact hloc_neg.trans (by rw [hlocal, neg_neg])
+    have hnative :
+        e.hom.hom t96A06_sphere3_integral_normalizedClass = e.hom.hom (-c) := by
+      letI : IsIso
+          (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+            polynomialSphereRegularPoint 3) :=
+        ConstructionTargets.HigherSphereLocalization.localization_isIso
+          polynomialSphereRegularPoint
+      apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3)).1
+      rw [hneg_local]
+      rw [hcancel]
+      exact t96A06_sphere3_integral_normalizedClass_localizes
+        polynomialSphereRegularPoint
+    have hclass : t96A06_sphere3_integral_normalizedClass = -c :=
+      (CategoryTheory.ConcreteCategory.bijective_of_isIso e.hom).1 hnative
+    have hcoord := congrArg t96A06_sphere3_integral_H3Iso.hom.hom hclass
+    simpa [c] using hcoord
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4497,6 +4582,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralNormalizedClass_coordinate_isUnit
 #print axioms t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one
 #print axioms t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one
+#print axioms t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
