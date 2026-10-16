@@ -645,6 +645,26 @@ theorem frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
     · exact Or.inl rfl
     · exact Or.inr rfl
 
+/-- Away from polygon vertices, the fourteen closed edge parametrizations
+have unique edge labels and interval coordinates. -/
+theorem frozenCircleEdgePoint_eq_of_not_endpoint
+    (i j : Fin 14) (t u : Set.Icc (0 : ℝ) 1)
+    (ht : ¬ FrozenBoundaryEndpoint (frozenCircleEdgePoint i t))
+    (h : frozenCircleEdgePoint i t = frozenCircleEdgePoint j u) :
+    i = j ∧ t = u := by
+  have he : Surfaces.edgePoint 14 i t = Surfaces.edgePoint 14 j u := by
+    change (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+        (frozenCircleEdgePoint i t)).1 =
+      (ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary
+        (frozenCircleEdgePoint j u)).1
+    exact congrArg Subtype.val (congrArg
+      ConstructionTargets.PolygonBoundaryCircleSource.circleToBoundary h)
+  rcases edgePoint_eq_imp_same_or_endpoints 14 (by omega) i j t u he with
+    hsame | hend
+  · exact hsame
+  · exact False.elim (ht
+      ((frozenBoundaryEndpoint_frozenCircleEdgePoint_iff i t).2 hend.1))
+
 /-- Every paired boundary-edge point is a polygon vertex exactly when its
 mate is.  The reversed `c` edge swaps the two endpoint parameters. -/
 theorem frozenBoundaryGraphRel_endpoint_iff {z w : Circle}
@@ -1571,6 +1591,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryClosedRel_isClosed
 #print axioms frozenBoundaryClosedRel_eqvGen
 #print axioms frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
+#print axioms frozenCircleEdgePoint_eq_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
