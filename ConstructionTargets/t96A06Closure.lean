@@ -1896,6 +1896,24 @@ theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
   simpa [t96A06_sphereShiftLocalNormalizationAutomorphism,
     t96A06_sphere3_integral_H3Iso] using hendpoint
 
+/-- Expand the `S²` endpoint into its suspension shift and the normalized
+circle generator.  This is the two-step suspension form of the remaining
+orientation calculation. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint
+    (hendpoint :
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.HigherSphereLocalization.localizationIso
+          polynomialSphereRegularPoint).hom.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            ((CoefficientSphereShift.sphereShift ℤ 3 2 (by decide)).inv.hom
+              ((CoefficientSphereShift.sphereShift ℤ 2 1 (by decide)).inv.hom
+                ((CoefficientSphereEndpoints.circleH1 ℤ).inv.hom 1))))) = 1) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom = 𝟙 _ := by
+  apply t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
+  simpa [CoefficientSphereEndpoints.sphereH2] using hendpoint
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -4721,6 +4739,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg
 #print axioms t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id
 #print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
