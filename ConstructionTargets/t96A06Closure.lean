@@ -2789,6 +2789,48 @@ theorem t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one
     exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one hcoeff
   · exact hnatural
 
+/-- The remaining chart-coordinate compatibility equation for coefficient
+extension, named independently of its later consumers. -/
+def t96A06_integralToRationalLocalChartNaturality : Prop :=
+  (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom
+        t96A06_mappedRationalLocalExtension =
+    algebraMap ℤ ℚ
+      ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator))
+
+/-- The exact raw generator equation before restoring the rational
+preservation isomorphism. -/
+def t96A06_integralToRationalRawLocalGeneratorTransport : Prop :=
+  HomologicalComplex.homologyMap
+        (t96A06_integralToRational_relativeChains
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)) 3
+        t96A06_mappedIntegralLocalGenerator =
+      ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            t96A06_forgetRatModules).inv.hom
+        (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint))
+
+/-- Corrected coefficient one and the named chart equation imply the named
+raw coefficient-extension transport equation. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1)
+    (hnatural : t96A06_integralToRationalLocalChartNaturality) :
+    t96A06_integralToRationalRawLocalGeneratorTransport := by
+  apply t96A06_mappedRationalLocalExtension_eq_generator_iff_raw.mp
+  apply t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one hcoeff
+  exact hnatural
+
 /-- Exact transport of the integral and rational chart generators supplies
 the coefficient-extension chart-coordinate naturality equation. -/
 theorem t96A06_integralToRational_chart_naturality_of_generator_transport
@@ -4194,6 +4236,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality
 #print axioms t96A06_integralToRational_localChart_naturality_iff_rawTransport
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
 #print axioms t96A06_integralToRational_chart_naturality_of_generator_transport
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_iff_raw
