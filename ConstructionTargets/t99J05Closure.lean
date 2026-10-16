@@ -7,6 +7,7 @@ import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
 import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.CoefficientSubcomplexMayerVietoris
 import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
+import ConstructionTargets.CoefficientIntersectionRangeComparison
 import ConstructionTargets.HomologyBiprodIso
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
@@ -1364,8 +1365,8 @@ the top-patch component. -/
 noncomputable def t99J05_cp_successor_literalOverlapToPieces (n k : ℕ) :
     Homology ({p : CP (n + 1) |
       p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1))) k ⟶
-      Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⊞
-        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k :=
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k) :=
   biprod.lift
     (HomologicalComplex.homologyMap
       ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
@@ -1424,22 +1425,30 @@ noncomputable def t99J05_cp_successor_mayerVietoris_f_transport
     (n k : ℕ) :
     Homology ({p : CP (n + 1) |
       p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1))) k ⟶
-      Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⨞
-        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k :=
-  (t99J05_ambientSubspaceRangeHomologyIso
-      (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k).inv ≫
-    HomologicalComplex.homologyMap
-      (t99J05_cp_successor_mayerVietorisShortComplex n).f k ≫
-    (t99J05_rationalHomologyBiprodIso
-      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
-        (ConstructionTargets.SingularExcision.ambientSubspaceRange
-          (cpSuccessorLowerPatch n) : SSet))
-      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
-        (ConstructionTargets.SingularExcision.ambientSubspaceRange
-          (cpSuccessorTopPatch n) : SSet)) k).hom ≫
-    biprod.map
-      (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k).hom
-      (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k).hom
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k) := by
+  dsimp [t99J05_cp_successor_mayerVietorisShortComplex,
+    ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex]
+  exact CategoryTheory.CategoryStruct.comp
+    (t99J05_ambientSubspaceRangeHomologyIso
+      (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k).inv
+    (CategoryTheory.CategoryStruct.comp
+      (ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).hom
+      (CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap
+          (t99J05_cp_successor_mayerVietorisShortComplex n).f k)
+        (CategoryTheory.CategoryStruct.comp
+          (t99J05_rationalHomologyBiprodIso
+            ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+              (ConstructionTargets.SingularExcision.ambientSubspaceRange
+                (cpSuccessorLowerPatch n) : SSet))
+            ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+              (ConstructionTargets.SingularExcision.ambientSubspaceRange
+                (cpSuccessorTopPatch n) : SSet)) k).hom
+          (biprod.map
+            (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k).hom
+            (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k).hom))))
 
 #print axioms t99J05_cp_successor_mayerVietoris_f_transport
 
