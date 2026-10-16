@@ -744,6 +744,32 @@ theorem frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint
     have hc := frozenCircleEdgePoint_eq_of_not_endpoint _ _ _ _ hy hs <;>
     rcases hc with ⟨hij, hts⟩ <;> omega
 
+/-- Reflexive-symmetric generator steps are transitive away from the finite
+vertex locus: like-oriented steps cannot compose and opposite-oriented steps
+cancel by uniqueness. -/
+theorem frozenBoundaryGraphSymm_trans_of_not_endpoint
+    {x y z : Circle} (hy : ¬ FrozenBoundaryEndpoint y)
+    (hxy : FrozenBoundaryGraphSymm x y)
+    (hyz : FrozenBoundaryGraphSymm y z) :
+    FrozenBoundaryGraphSymm x z := by
+  rcases hxy with hxy | hxy | hxy
+  · subst y
+    exact hyz
+  · rcases hyz with hyz | hyz | hyz
+    · subst z
+      exact Or.inr (Or.inl hxy)
+    · exact False.elim
+        (frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint hy hxy hyz)
+    · have hxz := frozenBoundaryGraphRel_left_unique_of_not_endpoint hy hxy hyz
+      exact Or.inl hxz
+  · rcases hyz with hyz | hyz | hyz
+    · subst z
+      exact Or.inr (Or.inr hxy)
+    · have hxz := frozenBoundaryGraphRel_right_unique_of_not_endpoint hy hxy hyz
+      exact Or.inl hxz
+    · exact False.elim
+        (frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint hy hyz hxy)
+
 theorem frozenBoundaryEqvGen_endpoint_iff {z w : Circle}
     (h : Relation.EqvGen FrozenBoundaryGraphRel z w) :
     FrozenBoundaryEndpoint z ↔ FrozenBoundaryEndpoint w := by
@@ -1647,6 +1673,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryGraphRel_right_unique_of_not_endpoint
 #print axioms frozenBoundaryGraphRel_left_unique_of_not_endpoint
 #print axioms frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint
+#print axioms frozenBoundaryGraphSymm_trans_of_not_endpoint
 #print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
