@@ -2635,6 +2635,18 @@ theorem t96A06_unitH0_generator_iff_comparison :
   · intro h
     rw [h]
 
+/-- Equality on the unique integral generator determines the remaining Unit
+comparison probe. -/
+theorem t96A06_unitH0_generator_eq_of_apply_one
+    (hone :
+      (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs).hom (1 : ℤ) =
+        (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs).hom (1 : ℤ)) :
+    t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs =
+      t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  exact hone
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5540,6 +5552,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_comparison_pointInclusion_naturality
 #print axioms t96A06_unitH0_integralComparison_of_generator
 #print axioms t96A06_unitH0_generator_iff_comparison
+#print axioms t96A06_unitH0_generator_eq_of_apply_one
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
