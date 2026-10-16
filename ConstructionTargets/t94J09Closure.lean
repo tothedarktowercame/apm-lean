@@ -1998,6 +1998,32 @@ noncomputable def frozenGraphCycleInclusion :
     frozenGraphCycleInclusion w =
       fun i ↦ ![w 0, w 1, w 2, w 3, w 4, w 5, w 3] i := rfl
 
+/-- Read the six independent coordinates from an ambient seven-edge chain. -/
+def frozenGraphCycleProjection :
+    (Fin 7 → ℤ) →ₗ[ℤ] (Fin 6 → ℤ) where
+  toFun x i := x i.castSucc
+  map_add' := by intros; rfl
+  map_smul' := by intros; rfl
+
+/-- Coordinate extraction is a left inverse to the explicit cycle
+inclusion. -/
+theorem frozenGraphCycleProjection_comp_inclusion :
+    frozenGraphCycleProjection.comp frozenGraphCycleInclusion =
+      LinearMap.id := by
+  ext w i
+  fin_cases i <;> rfl
+
+theorem frozenGraphCycleInclusion_injective :
+    Function.Injective frozenGraphCycleInclusion := by
+  intro x y h
+  have := congrArg frozenGraphCycleProjection h
+  have hx := LinearMap.congr_fun
+    frozenGraphCycleProjection_comp_inclusion x
+  have hy := LinearMap.congr_fun
+    frozenGraphCycleProjection_comp_inclusion y
+  rw [LinearMap.comp_apply, LinearMap.id_apply] at hx hy
+  exact hx.symm.trans (this.trans hy)
+
 /-- The explicit six-cycle inclusion fills precisely the kernel of the
 two-vertex graph boundary. -/
 theorem frozenGraphCycleInclusion_range :
@@ -2459,6 +2485,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGraphBoundaryKernelEquiv
 #print axioms frozenGraphCycleInclusion
 #print axioms frozenGraphCycleInclusion_apply
+#print axioms frozenGraphCycleProjection_comp_inclusion
+#print axioms frozenGraphCycleInclusion_injective
 #print axioms frozenGraphCycleInclusion_range
 #print axioms frozenGraphBoundary_attachingDegree_zero
 #print axioms frozenGraphBoundaryKernelEquiv_attachingCycle
