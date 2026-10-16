@@ -88672,27 +88672,26 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 8,
+   :stop-count 9,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Transport MV exactness; compute coordinates; normalize.",
+    :residual "Graph exactness/coordinates; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorRadialTopologyComparison",
-      :type "quotient topology equality",
+    [{:name "frozenGeneratorMVGraphH1_comp_eq_production",
+      :type "arrow cancellation",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on [],
+      :depends-on ["frozenGeneratorRadialTopologyComparison"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "coordinates/exactness",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorRadialTopologyComparison"],
+      :depends-on ["frozenGeneratorMVGraphH1_comp_eq_production"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
       :type "homology",
@@ -88710,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked quotient-topology equality.",
+    :reason "Banked graph-arrow cancellation.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,33 +88719,18 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 7c214a58e", :exit 0}],
+     {:cmd "git show --check 0a482c37f", :exit 0}],
     :diagnostic-history
-    [{:cmd "package-link probe",
-      :exit 1,
-      :correction
-      "canonical authority has the real package directory"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792149583126-15379-2d150146",
-     :commands
-     ["git show/check 7c214a58e"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: 7c214a58e changes only t94J09Closure; fixture hash matches; 0 closure placeholders; build/Main pass; registry 168/0. The installed literal-quotient topology and standard quotient topology are definitionally the same coinduced Quotient.mk topology on the same EqvGen setoid; remaining exactness/coordinates/normalization are listed."},
-    :commit "7c214a58e",
+    [{:cmd "draft", :exit 1, :correction "split cancellation lemma"}],
+    :commit "0a482c37f",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "666cc57b83215f90bf00e33c97756cd51c7f68b59d4f84e6ef2adef6e9cfdf77"},
+     "8c166c6b31cc9d0673e0d7a9fcacec8954f833162a3fa6ec588be349baf82a9f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96792,7 +96776,8 @@
     :lemma-frozengeneratormvpiecesh1groupisograph
     :lemma-frozengeneratormvintersectionh1arrowtograph
     :lemma-frozengeneratormvgraphh1reassemblyarrow
-    :lemma-frozengeneratorradialtopologycomparison],
+    :lemma-frozengeneratorradialtopologycomparison
+    :lemma-frozengeneratormvgraphh1-comp-eq-production],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97825,4 +97810,21 @@
    :id :lemma-frozengeneratorradialtopologycomparison,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVGraphH1_comp_eq_production",
+    :type "arrow cancellation"},
+   :lemma
+   {:name "frozenGeneratorMVGraphH1_comp_eq_production",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "arrow cancellation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvgraphh1-comp-eq-production,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialtopologycomparison],
    :other-consumers []}]}
