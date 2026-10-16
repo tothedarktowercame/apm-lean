@@ -440,6 +440,54 @@ theorem frozenGeneratorCircleRel_iff_graphRel (z w : Circle) :
     frozenGeneratorRel, FrozenBoundaryGraphRel, eq_frozenCircleEdgePoint_iff]
   norm_num
 
+/-- Equivalence closure preserves the exact circle-to-graph relation
+comparison. -/
+theorem frozenGeneratorCircleEqvGen_iff_graphEqvGen (z w : Circle) :
+    Relation.EqvGen
+        (ConstructionTargets.PolygonBoundaryInducedQuotient.CircleRel
+          frozenGeneratorRel) z w ↔
+      Relation.EqvGen FrozenBoundaryGraphRel z w := by
+  constructor
+  · exact ConstructionTargets.PolygonBoundaryInducedQuotient.eqvGen_map
+      _ _ id (fun {_ _} h => (frozenGeneratorCircleRel_iff_graphRel _ _).mp h)
+  · exact ConstructionTargets.PolygonBoundaryInducedQuotient.eqvGen_map
+      _ _ id (fun {_ _} h => (frozenGeneratorCircleRel_iff_graphRel _ _).mpr h)
+
+/-- Quotient of the circle by the explicit seven-edge boundary graph
+relation. -/
+abbrev FrozenBoundaryGraphQuotient :=
+  Quotient (Relation.EqvGen.setoid FrozenBoundaryGraphRel)
+
+noncomputable instance : TopologicalSpace FrozenBoundaryGraphQuotient :=
+  TopologicalSpace.coinduced (fun z : Circle => Quotient.mk _ z) inferInstance
+
+/-- The induced boundary quotient and explicit graph quotient agree by the
+identity on circle representatives, including their quotient topologies. -/
+def frozenGeneratorCircleHomeomorphBoundaryGraph :
+    FrozenGeneratorCircleQuotient ≃ₜ FrozenBoundaryGraphQuotient where
+  toFun := Quotient.map id (by
+    intro z w h
+    exact (frozenGeneratorCircleEqvGen_iff_graphEqvGen z w).mp h)
+  invFun := Quotient.map id (by
+    intro z w h
+    exact (frozenGeneratorCircleEqvGen_iff_graphEqvGen z w).mpr h)
+  left_inv := by
+    rintro ⟨z⟩
+    rfl
+  right_inv := by
+    rintro ⟨z⟩
+    rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+@[simp] theorem frozenGeneratorCircleHomeomorphBoundaryGraph_mk (z : Circle) :
+    frozenGeneratorCircleHomeomorphBoundaryGraph
+        (Quotient.mk _ z) = Quotient.mk _ z := rfl
+
 /-- The generic signed relation is precisely the symmetric closure of the
 seven frozen generators.  This is the relation-level comparison needed to
 reuse the radial quotient construction for the consumer's inductive relation. -/
@@ -1082,6 +1130,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCircleBoundaryHomologyIso
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
+#print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
 #print axioms frozen_boundaryRel_iff_generator
 #print axioms frozen_eqvGen_boundaryRel_iff_generator
 #print axioms frozenSignedQuotientEquivGenerator
