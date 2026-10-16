@@ -3119,6 +3119,29 @@ theorem t96A06_unitH0_preservation_right_eq_left :
 
 #print axioms t96A06_unitH0_preservation_right_eq_left
 
+/-- The degree-zero short complex underlying the module-valued Unit chains. -/
+noncomputable abbrev t96A06_unitH0ModuleShortComplex :=
+  (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0
+
+/-- Transport from canonical degree-zero opcycles into the right-derived
+homology model factors through its chosen opcycle presentation. -/
+theorem t96A06_unitH0_rightHomology_opcycle_transport :
+    ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv ≫
+        t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom) ≫
+      t96A06_unitH0ModuleShortComplex.homologyData.right.ι =
+        t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom := by
+  change ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom ≫
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι) = _
+  erw [t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso_hom_comp_ι]
+  exact (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv_hom_id_assoc _
+
+#print axioms t96A06_unitH0_rightHomology_opcycle_transport
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
