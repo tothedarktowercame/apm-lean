@@ -37254,36 +37254,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Compute false/true point coordinates; then boundary connecting map, circle coordinate one, suspensions, Main.",
+    "Compute false then true point coordinates; assemble Bool comparison, boundary connecting map, circle sign, suspensions, Main.",
     :outcome :stop,
     :warnings
     ["Existing lints; Main one placeholder; unrelated edits untouched."],
     :missing-theorems
-    [{:name "t96A06_boolH0_integralComparison_of_points",
-      :type "two point coordinates determine the Bool H0 comparison",
+    [{:name "t96A06_boolH0_integralComparison_points_of_false_true",
+      :type
+      "false and true coordinates give every Bool point coordinate",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on [],
+      :depends-on ["t96A06_boolH0_integralComparison_of_points"],
       :area "rp-rational-homology"}
-     {:name "t96A06_boolH0_integralComparison_points",
+     {:name "t96A06_boolH0_integralComparison_false",
       :type
-      "forgotten and native H0 comparisons agree on both Bool point inclusions",
+      "forgotten and native discrete H0 comparisons agree at false",
       :status :not-started,
       :consumers [:t96A06],
-      :depends-on ["t96A06_boolH0_integralComparison_of_points"],
+      :depends-on
+      ["t96A06_boolH0_integralComparison_points_of_false_true"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Reduced the Bool H0 comparison to its two point-inclusion coordinates.",
+    "Split the Bool H0 pointwise comparison into explicit false and true endpoint equations.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37291,19 +37293,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline b02b4d4ab", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :note
-      "Corrected precomposition from native H0 coordinates to forgotten module coordinates; rerun passed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792153783257-15440-a43e2ec2",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "b02b4d4abc",
+     {:cmd "git show --check --stat --oneline 9de5433a3", :exit 0}],
+    :commit "9de5433a33",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37311,7 +37302,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46508,6 +46499,44 @@
    :id :lemma-t96a06-boolh0-integralcomparison-points,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-points],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_points_of_false_true",
+    :type
+    "false and true coordinates give every Bool point coordinate"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_points_of_false_true",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "false and true coordinates give every Bool point coordinate",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-boolh0-integralcomparison-points-of-false-true,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-points],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_false",
+    :type
+    "forgotten and native discrete H0 comparisons agree at false"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_false",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten and native discrete H0 comparisons agree at false",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-integralcomparison-false,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-integralcomparison-points-of-false-true],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
