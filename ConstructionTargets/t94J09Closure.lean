@@ -2987,6 +2987,46 @@ theorem frozenSignedHomology_of_generator_comparisons
   · intro k hk
     exact (hhigh' k hk).of_iso (frozenSignedQuotientHomologyIsoGenerator k)
 
+/-- Transport the section-driven generator calculation to the frozen signed
+polygon quotient used by the consumer. -/
+theorem frozenSignedHomology_of_generator_section
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH FrozenSignedQuotient 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH FrozenSignedQuotient 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH FrozenSignedQuotient k) := by
+  rcases frozenGeneratorHomology_of_section h0 e hboundary hzero hreverse
+      s hsection h2 hhigh with ⟨h0', h1', hhigh'⟩
+  refine ⟨?_, ?_, ?_⟩
+  · rcases h0' with ⟨e0⟩
+    exact ⟨frozenSignedQuotientHomologyIsoGenerator 0 ≪≫ e0⟩
+  · rcases h1' with ⟨e1⟩
+    exact ⟨frozenSignedQuotientHomologyIsoGenerator 1 ≪≫ e1⟩
+  · intro k hk
+    exact (hhigh' k hk).of_iso (frozenSignedQuotientHomologyIsoGenerator k)
+
 /-- Integral homology of the standard genus-six nonorientable polygon in the
 explicit groups required by the frozen problem. -/
 theorem n6PolygonHomologyExplicit :
@@ -3055,6 +3095,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozenGeneratorHomology_of_comparisons
 #print axioms frozenGeneratorHomology_of_section
+#print axioms frozenSignedHomology_of_generator_section
 #print axioms frozen_pairedParameter
 #print axioms frozen_boundaryRel_iff
 #print axioms frozenGeneratorRel_radius_eq
