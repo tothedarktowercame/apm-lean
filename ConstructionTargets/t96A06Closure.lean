@@ -2615,6 +2615,26 @@ theorem t96A06_unitH0_integralComparison_of_generator
   cases u
   exact h
 
+noncomputable def t96A06_unitH0GeneratorProbe :=
+  Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv
+
+/-- The remaining generator calculation is exactly equivalent to the full
+Unit comparison. -/
+theorem t96A06_unitH0_generator_iff_comparison :
+    t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs =
+        t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs ↔
+      t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  constructor
+  · exact t96A06_unitH0_integralComparison_of_generator
+  · intro h
+    rw [h]
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5519,6 +5539,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_additive_pointInclusion_coordinates
 #print axioms t96A06_boolH0_comparison_pointInclusion_naturality
 #print axioms t96A06_unitH0_integralComparison_of_generator
+#print axioms t96A06_unitH0_generator_iff_comparison
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
