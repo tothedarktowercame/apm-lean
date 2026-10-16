@@ -2726,6 +2726,19 @@ noncomputable def frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
       N6Smith :=
   frozenGeneratorCanonicalModuleH1EquivConcrete.trans h
 
+/-- A concrete canonical H1 Smith equivalence transported all the way to the
+underlying integral module of the original `SpaceH` object. -/
+noncomputable def frozenGeneratorSpaceHSmithEquiv_of_concrete
+    (h :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) ≃ₗ[ℤ]
+        N6Smith) :
+    (SpaceH FrozenGeneratorQuotient 1 : Type) ≃ₗ[ℤ] N6Smith :=
+  frozenGeneratorSpaceHForgetLinearEquiv.trans
+    (frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete h)
+
 /-- The section-based Smith calculation in the module-valued canonical H1
 representation used by the frozen homology statement. -/
 noncomputable def frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
@@ -2896,6 +2909,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorCanonicalModuleH1EquivConcrete
 #print axioms frozenGeneratorSpaceHForgetLinearEquiv
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete
+#print axioms frozenGeneratorSpaceHSmithEquiv_of_concrete
 #print axioms frozenGeneratorCanonicalModuleH1SmithEquiv_of_section
 #print axioms frozenGeneratorCanonicalModuleH1SmithIso_of_section
 #print axioms frozenFaceBoundaryCoordinates_injective
