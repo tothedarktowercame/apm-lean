@@ -3187,6 +3187,52 @@ theorem polynomialSphereLift_base_localFundamentalClass_positive_iff :
     rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
     exact h
 
+/-- Agreement of the global rational class and of the base normalization
+scalar forces the rational coefficient extension to project to the selected
+local generator. -/
+theorem t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
+    (hglobal :
+      t96A06_integralNormalizedClass_rationalExtension =
+        t96A06_sphere3_rational_fundamentalClass)
+    (hscalar : polynomialSphereLift_baseLocalizationScalar = 1) :
+    t96A06_rationalNormalizedClassLocalizesToRawGenerator := by
+  unfold t96A06_rationalNormalizedClassLocalizesToRawGenerator
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).hom).1
+  have hnat := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_rationalProjection_preservation_naturality
+    t96A06_mappedRationalExtensionClass
+  have hmid :
+      (t96A06_forgetRatModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint))) 3)).hom
+        ((((CoefficientH0.SingularChains ℚ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).hom.hom
+            t96A06_mappedRationalExtensionClass) =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint := by
+    change HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3
+        t96A06_integralNormalizedClass_rationalExtension =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint
+    rw [hglobal]
+    exact polynomialSphereLift_base_localFundamentalClass_positive_iff.mpr hscalar
+  exact hnat.trans (hmid.trans
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).inv_hom_id_apply _).symm)
+
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
 theorem t96A06_sphere3_endomorphism_eq_smul_id_iff
@@ -4355,6 +4401,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
+#print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff
