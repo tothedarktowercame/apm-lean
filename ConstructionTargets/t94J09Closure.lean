@@ -645,6 +645,42 @@ theorem frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
     · exact Or.inl rfl
     · exact Or.inr rfl
 
+/-- Every paired boundary-edge point is a polygon vertex exactly when its
+mate is.  The reversed `c` edge swaps the two endpoint parameters. -/
+theorem frozenBoundaryGraphRel_endpoint_iff {z w : Circle}
+    (h : FrozenBoundaryGraphRel z w) :
+    FrozenBoundaryEndpoint z ↔ FrozenBoundaryEndpoint w := by
+  rcases h with ⟨t, h | h | h | h | h | h | h⟩ <;>
+    rcases h with ⟨rfl, rfl⟩ <;>
+    simp only [frozenBoundaryEndpoint_frozenCircleEdgePoint_iff]
+  constructor
+  · rintro (rfl | rfl)
+    · right
+      apply Subtype.ext
+      norm_num [reverseIcc]
+    · left
+      apply Subtype.ext
+      norm_num [reverseIcc]
+  · intro h
+    rcases h with h | h
+    · right
+      have hv := congrArg Subtype.val h
+      change 1 - (t : ℝ) = 0 at hv
+      exact Subtype.ext ((sub_eq_zero.mp hv).symm)
+    · left
+      have hv := congrArg Subtype.val h
+      change 1 - (t : ℝ) = 1 at hv
+      exact Subtype.ext (by linarith)
+
+theorem frozenBoundaryEqvGen_endpoint_iff {z w : Circle}
+    (h : Relation.EqvGen FrozenBoundaryGraphRel z w) :
+    FrozenBoundaryEndpoint z ↔ FrozenBoundaryEndpoint w := by
+  induction h with
+  | rel _ _ hrel => exact frozenBoundaryGraphRel_endpoint_iff hrel
+  | refl _ => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
 /-- The induced circle relation is exactly the explicit seven-edge graph
 relation, not merely a relation containing its generators. -/
 theorem frozenGeneratorCircleRel_iff_graphRel (z w : Circle) :
@@ -1535,6 +1571,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryClosedRel_isClosed
 #print axioms frozenBoundaryClosedRel_eqvGen
 #print axioms frozenBoundaryEndpoint_frozenCircleEdgePoint_iff
+#print axioms frozenBoundaryEqvGen_endpoint_iff
 #print axioms frozenGeneratorCircleQuotient_identifies_generators
 #print axioms frozenGeneratorCircleRel_iff_graphRel
 #print axioms frozenGeneratorCircleHomeomorphBoundaryGraph
