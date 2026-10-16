@@ -2803,6 +2803,28 @@ theorem t96A06_unitH0_chainComparison_degreeZero_generator :
 
 #print axioms t96A06_unitH0_chainComparison_degreeZero_generator
 
+/-- The inverse chain comparison carries the native Unit simplex generator
+back to the forgotten module-valued generator. -/
+theorem t96A06_unitH0_chainComparison_degreeZero_generator_inv :
+    Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+        (TopCat.of Unit) 0).inv =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ())) := by
+  exact (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+    (TopCat.of Unit) 0).comp_inv_eq.mpr
+      t96A06_unitH0_chainComparison_degreeZero_generator.symm
+
+#print axioms t96A06_unitH0_chainComparison_degreeZero_generator_inv
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
