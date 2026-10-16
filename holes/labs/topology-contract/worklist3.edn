@@ -36708,32 +36708,33 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Specialize ambient exactness; transport to patch homology; successor data, Lefschetz, Main.",
+    "Transport subcomplex MV to literal patches; then successor data, Lefschetz, Main.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_exact_overlap",
-      :type "exactness at overlap homology",
+    [{:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
+      :type "exactness at ambient homology",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_pieces"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_overlap"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
-      :type "exactness at ambient homology",
+     {:name "t99J05_cp_successor_mayerVietoris_transport",
+      :type
+      "transport specialized MV exactness to literal patch homology",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_overlap"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_ambient"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed connecting map and overlap exactness; ambient exactness remains.",
+    "Committed ambient MV exactness; literal patch transport remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36744,25 +36745,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 4a9541db6d", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile",
-      :exit 1,
-      :note "Used inferred exactness witness; rerun passed."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792159158572-15537-fa8c15d3",
-     :commands
-     ["git show/check 4a9541db6d"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: recorded commit adds the degree-shifted connecting map and overlap exactness after the prior milestone; orientations and subcomplex boundary are correct, fixture hash matches, supporting file has 0 placeholders, Lean gates pass with standard axioms, registry 168/168; Main retains its declared one placeholder."},
-    :commit "4a9541db6d",
+     {:cmd "git show --check --stat --oneline f2e32fd28", :exit 0}],
+    :commit "f2e32fd28",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36770,7 +36754,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -46620,7 +46604,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact
-    :lemma-t99j05-cp-successor-mayervietoris-exact-pieces],
+    :lemma-t99j05-cp-successor-mayervietoris-exact-pieces
+    :lemma-t99j05-cp-successor-mayervietoris-exact-ambient],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -46934,7 +46919,8 @@
    {:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "exactness at ambient homology",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-ambient,
    :kind :lemma,
    :depends-on
