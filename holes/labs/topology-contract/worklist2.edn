@@ -88725,6 +88725,19 @@
      {:cmd "git show --check e87279ffa", :exit 0}],
     :diagnostic-history
     [{:cmd "composite draft", :exit 1, :correction "assoc+rfl"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792158810915-15529-42f97ac1",
+     :commands
+     ["git show/check e87279ffa"
+      "recorded fixture/scope/placeholder checks"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "lake env lean ConstructionTargets/t94J09Closure.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: new compiled, sorry-free canonical connecting composite beyond prior history. Recorded closure hash and one-file scope match; Main remains frozen with one placeholder. Arrow orientation is canonical H1 through comparison inverse, then the established connecting/intersection composite; codomain coordinates agree with production. Only standard axioms occur, and residual exactness, matrices, homology, and normalization milestones are listed."},
     :commit "e87279ffa",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88733,7 +88746,7 @@
      "261e3b10b711e41b2d2203ea94bd583337e8537537e5e10b74cfd3617f29942d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88751,7 +88764,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical connecting coordinate transport.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked canonical composite.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88950,7 +88963,10 @@
      :reason "Banked canonical H0 reassembly transport."}
     {:job 5,
      :commit "8b17faa36",
-     :reason "Banked canonical connecting coordinate transport."}]}
+     :reason "Banked canonical connecting coordinate transport."}
+    {:job 6,
+     :commit "e87279ffa",
+     :reason "Banked canonical composite."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -98333,7 +98349,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -98344,7 +98360,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "canonical connecting composite",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e87279ffa"},
    :id
    :lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production,
    :kind :lemma,
