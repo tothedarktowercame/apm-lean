@@ -251,6 +251,40 @@ def intervalCircle : C(UnitInterval, S1) :=
   rw [mul_one]
   exact Circle.exp_two_pi
 
+/-- Every circle point has a representative in the closed unit interval. -/
+theorem intervalCircle_surjective : Function.Surjective intervalCircle := by
+  intro z
+  by_cases hz : 0 ≤ Complex.arg (z : ℂ)
+  · let t : UnitInterval :=
+      ⟨Complex.arg (z : ℂ) / (2 * Real.pi), by
+        constructor
+        · positivity
+        · have hp := Real.pi_pos
+          have ha := Complex.arg_le_pi (z : ℂ)
+          apply (div_le_one (by positivity)).2
+          linarith⟩
+    refine ⟨t, ?_⟩
+    change Circle.exp (2 * Real.pi *
+      (Complex.arg (z : ℂ) / (2 * Real.pi))) = z
+    rw [mul_div_cancel₀ _ (by positivity : 2 * Real.pi ≠ 0)]
+    exact Circle.exp_arg z
+  · let t : UnitInterval :=
+      ⟨(Complex.arg (z : ℂ) + 2 * Real.pi) / (2 * Real.pi), by
+        constructor
+        · have hp := Real.pi_pos
+          have ha := Complex.neg_pi_lt_arg (z : ℂ)
+          exact le_of_lt (div_pos (by linarith) (by positivity))
+        · have hp := Real.pi_pos
+          have ha : Complex.arg (z : ℂ) < 0 := lt_of_not_ge hz
+          apply (div_le_one (by positivity)).2
+          linarith⟩
+    refine ⟨t, ?_⟩
+    change Circle.exp (2 * Real.pi *
+      ((Complex.arg (z : ℂ) + 2 * Real.pi) / (2 * Real.pi))) = z
+    rw [mul_div_cancel₀ _ (by positivity : 2 * Real.pi ≠ 0)]
+    rw [Circle.exp_add, Circle.exp_two_pi, mul_one]
+    exact Circle.exp_arg z
+
 /-- Equality along the closed interval parametrization is literal except for
 the two endpoint representatives of the circle basepoint. -/
 theorem intervalCircle_eq_imp_coordinate_cases (t u : UnitInterval)
@@ -407,6 +441,25 @@ def projection : C(D.Realization, X) :=
 
 @[simp] theorem projection_edgePoint (i : Fin 2) (v : V) (t : UnitInterval) :
     D.projection (D.edgePoint i v t) = edgeProjection i t := rfl
+
+/-- A nonempty graph realization projects onto the entire two-loop wedge. -/
+theorem projection_surjective [Nonempty V] : Function.Surjective D.projection := by
+  intro x
+  induction x using Quotient.inductionOn with
+  | _ raw =>
+      obtain ⟨v⟩ := (inferInstance : Nonempty V)
+      cases raw with
+      | inl z =>
+          obtain ⟨t, ht⟩ := intervalCircle_surjective z
+          exact ⟨D.edgePoint 0 v t, by
+            change edgeProjection 0 t = inl z
+            simp [edgeProjection, ht]⟩
+      | inr z =>
+          obtain ⟨t, ht⟩ := intervalCircle_surjective z
+          exact ⟨D.edgePoint 1 v t, by
+            change edgeProjection 1 t = inr z
+            change inr (intervalCircle t) = inr z
+            rw [ht]⟩
 
 /-- Over an interior point of either circle, equality in the base already
 determines the edge label and interval coordinate.  Thus the only remaining
@@ -609,6 +662,8 @@ noncomputable def interiorFiberEquiv (i : Fin 2) (t : UnitInterval)
 #print axioms vertex_injective
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
+#print axioms intervalCircle_surjective
+#print axioms projection_surjective
 
 end TwoLoopGraphCoverData
 
