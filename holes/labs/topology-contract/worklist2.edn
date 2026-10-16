@@ -88672,22 +88672,21 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "H1; exactness; construct reassembly section; normalize.",
+    :residual "H1; exactness; canonical section; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name
-      "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section",
-      :type "criterion",
+    [{:name "frozenGeneratorMVReassemblyLinear_comp_section",
+      :type "section transport",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorMVReassemblyLinear_surjective_iff"],
+      :depends-on
+      ["frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88727,29 +88726,16 @@
       "rg -n sorry\\|admit ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 145503c1b", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792177125885-15736-9e8e8090",
-     :commands
-     ["git show/check 145503c1b"
-      "fixture/scope/placeholder checks"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "lake env lean ConstructionTargets/t94J09Closure.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: new compiled, sorry-free canonical-reassembly section criterion beyond prior history. Recorded hash and one-file scope match; frozen Main retains one placeholder. The section maps canonical quotient H1 back to boundary-graph H1, and reassembly-after-section is identity on canonical H1; evaluation gives a preimage for every target with correct orientation. Section construction remains explicit work, not an assumed result. Only standard axioms occur; H1 comparison, exactness, section construction, homology assembly, and normalization remain listed."},
-    :commit "145503c1b",
+     {:cmd "git show --check d69c383cd", :exit 0}],
+    :commit "d69c383cd",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "3447c0c2a50ca71424f169c80ecafa1248059b56f9cace393b648bc52560ce38"},
+     "eb6fb0f8dfd9d2f4b7d1ebdb184c94d27556c9b206b70c3972aa3de5fea8771d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -98839,4 +98825,22 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengeneratormvreassemblylinear-surjective-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_comp_section",
+    :type "section transport"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_comp_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "section transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratormvreassemblylinear-comp-section,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow-surjective-of-section],
    :other-consumers []}]}
