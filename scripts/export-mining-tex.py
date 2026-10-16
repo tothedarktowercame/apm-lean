@@ -144,7 +144,35 @@ def clean(body: str) -> str:
         if collapsed == body:
             break
         body = collapsed
+    # A braced number standing alone needs no braces ("e^{{2}\pi iz}", "${0} < x$");
+    # an argument does ("\frac{1}{2}", "x_{10}"), so only after a space, an
+    # operator, an opening bracket or "$".
+    body = re.sub(r"(?<=[\s(\[=+\-*/,<>{$])\{(\d+(?:\.\d+)?)\}", r"\1", body)
+    # Headings carry \texorpdfstring{TeX}{plain}; the papers load no hyperref, so
+    # the plain copy (with \_ and \textbackslash for every symbol) is only noise
+    # in front of the miners: 1,192 of them in the APM export.
+    body = unwrap_first_of_two(body, "texorpdfstring")
     return body
+
+
+def unwrap_first_of_two(s: str, name: str) -> str:
+    """Replace every \\name{A}{B} by A."""
+    pat = re.compile(r"\\" + name + r"\{")
+    out, pos = [], 0
+    for m in pat.finditer(s):
+        if m.start() < pos:
+            continue
+        first_end = group_end(s, m.end() - 1)
+        if first_end < 0 or first_end >= len(s) or s[first_end] != "{":
+            continue
+        second_end = group_end(s, first_end)
+        if second_end < 0:
+            continue
+        out.append(s[pos:m.start()])
+        out.append(s[m.end():first_end - 1])
+        pos = second_end
+    out.append(s[pos:])
+    return "".join(out)
 
 
 def dollar_inline(text: str) -> str:

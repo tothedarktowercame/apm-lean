@@ -45,6 +45,32 @@ def odd(line: str) -> bool:
 # make it safe, because the strays are paired-but-misplaced. The source needs
 # repairing instead; see holes/ for the surviving cases.
 
+LIST_MARKER = re.compile(r"^ {0,3}[-+*]\s")
+
+
+def protect_display_continuations(text: str) -> tuple[str, int]:
+    """Indent a line inside an open $$ display that markdown would read as a list item.
+
+    A display continued on a line that begins "+ \\frac{h^4}{24}..." is read by
+    GFM as a bullet: the formula is torn in two, and later passes cut the
+    pieces into spans with unbalanced braces (m94A01 stopped compiling). Joining
+    the lines broke more than it fixed (see the note above), so no text moves
+    here: four spaces of indent make the line a paragraph continuation, which a
+    list cannot interrupt. Only within one paragraph, and only while that
+    paragraph has an odd number of $$ so far.
+    """
+    out, opened, fixed = [], 0, 0
+    for line in text.split("\n"):
+        if not line.strip():
+            opened = 0
+        elif opened % 2 == 1 and LIST_MARKER.match(line):
+            line = "    " + line.lstrip()
+            fixed += 1
+        opened += line.count("$$")
+        out.append(line)
+    return "\n".join(out), fixed
+
+
 def rejoin(text: str) -> tuple[str, int, int]:
     lines = text.split("\n")
     out: list[str] = []
@@ -104,6 +130,8 @@ def main() -> int:
     for p in sorted(Path(x) for x in args.paths):
         src = p.read_text(encoding="utf-8", errors="replace")
         fixed, joins, abandoned = rejoin(src)
+        fixed, protected = protect_display_continuations(fixed)
+        joins += protected
         if joins or abandoned:
             files += 1
             tj += joins
