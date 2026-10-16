@@ -2632,6 +2632,27 @@ theorem t96A06_integralToRational_localGenerator_iff :
     rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
     exact h
 
+/-- The raw coefficient-extension generator equation is exactly coordinate
+one after restoring the rational preservation isomorphism and applying the
+selected chart normalization. -/
+theorem t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one :
+    HomologicalComplex.homologyMap
+          (t96A06_integralToRational_relativeChains
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)) 3
+          t96A06_mappedIntegralLocalGenerator =
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              t96A06_forgetRatModules).inv.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+            polynomialSphereRegularPoint)) ↔
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension = 1 := by
+  rw [← t96A06_mappedRationalLocalExtension_eq_generator_iff_raw,
+    t96A06_integralToRational_localGenerator_iff]
+
 /-- Once coefficient extension is natural for the selected local chart, the
 integral coordinate-one equation transports to the rational chart. -/
 theorem t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
@@ -4067,6 +4088,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_iff_raw
 #print axioms t96A06_integralToRational_localGenerator_iff
+#print axioms t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
 #print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
