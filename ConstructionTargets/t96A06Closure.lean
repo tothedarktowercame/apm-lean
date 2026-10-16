@@ -2851,6 +2851,35 @@ def t96A06_integralToRationalRawLocalGeneratorTransport : Prop :=
         (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
           polynomialSphereRegularPoint))
 
+/-- The remaining rational-side projection equation after the global
+coefficient-extension localization square has been applied. -/
+def t96A06_rationalNormalizedClassLocalizesToRawGenerator : Prop :=
+  HomologicalComplex.homologyMap
+      ((t96A06_forgetRatModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint)))) 3
+      t96A06_mappedRationalExtensionClass =
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).inv.hom
+      (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint))
+
+/-- The global localization square and integral localization reduce exact raw
+generator transport to the rational normalized-class projection equation. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
+    (h : t96A06_rationalNormalizedClassLocalizesToRawGenerator) :
+    t96A06_integralToRationalRawLocalGeneratorTransport := by
+  unfold t96A06_integralToRationalRawLocalGeneratorTransport
+  unfold t96A06_rationalNormalizedClassLocalizesToRawGenerator at h
+  rw [← t96A06_mappedIntegralNormalizedClass_localization_naturality,
+    t96A06_mappedIntegralNormalizedClass_localizes] at h
+  exact h
+
 /-- Corrected coefficient one and the named chart equation imply the named
 raw coefficient-extension transport equation. -/
 theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
@@ -4283,6 +4312,8 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one
 #print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
 #print axioms t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one
+#print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
 #print axioms t96A06_integralToRational_chart_naturality_of_generator_transport
 #print axioms t96A06_mappedRationalLocalExtension
 #print axioms t96A06_mappedRationalLocalExtension_eq_generator_iff_raw
