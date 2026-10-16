@@ -2569,6 +2569,52 @@ theorem t96A06_boolH0_comparison_pointInclusion_naturality (b : Bool) :
   exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
     (ConstructionTargets.SingularHomologyConcrete.pointInclusion b) 0
 
+noncomputable def t96A06_unitH0ComparisonLhs :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom ≫
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv
+
+noncomputable def t96A06_unitH0ComparisonRhs :=
+  ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom
+
+/-- The Unit comparison is determined by its single coproduct-generator
+coordinate. -/
+theorem t96A06_unitH0_integralComparison_of_generator
+    (h : Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+          t96A06_unitH0ComparisonLhs =
+        Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+          t96A06_unitH0ComparisonRhs) :
+    t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  apply (cancel_epi
+    ((PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv)).mp
+  apply Limits.Sigma.hom_ext
+  intro u
+  cases u
+  exact h
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5472,6 +5518,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_boolH0_module_pointInclusion_coordinates
 #print axioms t96A06_boolH0_additive_pointInclusion_coordinates
 #print axioms t96A06_boolH0_comparison_pointInclusion_naturality
+#print axioms t96A06_unitH0_integralComparison_of_generator
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
