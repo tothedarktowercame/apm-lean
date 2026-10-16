@@ -580,6 +580,29 @@ theorem rawEdgeChart_mem_iff_of_eqvGen (i : Fin 2)
     mem_rawEdgeChart_iff_interiorCoordinate,
     D.interiorCoordinate_eq_of_eqvGen h]
 
+/-- The open-edge chart descended to the endpoint quotient realization. -/
+def edgeChart (i : Fin 2) : Set D.Realization :=
+  Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) '' rawEdgeChart V i
+
+/-- The raw preimage of a descended edge chart is exactly the saturated raw
+chart from which it was defined. -/
+theorem realization_preimage_edgeChart (i : Fin 2) :
+    (fun z : RealizationRaw V ↦
+      Quotient.mk (Relation.EqvGen.setoid D.RealizationRel) z) ⁻¹'
+        D.edgeChart i = rawEdgeChart V i := by
+  ext a
+  constructor
+  · rintro ⟨b, hb, hba⟩
+    exact (D.rawEdgeChart_mem_iff_of_eqvGen i (Quotient.exact hba)).mp hb
+  · intro ha
+    exact ⟨a, ha, rfl⟩
+
+/-- Each edge chart is open in the realized graph quotient. -/
+theorem edgeChart_isOpen (i : Fin 2) : IsOpen (D.edgeChart i) := by
+  rw [← D.realizationQuotientMap_isQuotientMap.isOpen_preimage,
+    D.realization_preimage_edgeChart]
+  exact rawEdgeChart_isOpen i
+
 /-- A raw endpoint remembers the graph vertex to which it is glued.  Open
 edge points have no vertex coordinate. -/
 noncomputable def vertexCoordinate : RealizationRaw V → Option V
@@ -847,6 +870,8 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms rawEdgeInterior_isOpen
 #print axioms rawEdgeChart_isOpen
 #print axioms rawEdgeChart_mem_iff_of_eqvGen
+#print axioms realization_preimage_edgeChart
+#print axioms edgeChart_isOpen
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
 #print axioms intervalCircle_surjective
