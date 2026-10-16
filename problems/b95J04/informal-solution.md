@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b95J04: Kummer theory — cyclic degree-p extensions are exactly the radical ones
+# APM b95J04: Kummer theory — cyclic degree-$p$ extensions are exactly the radical ones
 
 ## Why It's Hard
 
@@ -92,7 +92,7 @@ $$
 $$
 so $\alpha^p$ is fixed by $\sigma$, hence by all of $G=\langle\sigma\rangle$. As $E/F$ is Galois, the fixed field is $E^G=F$, so $\alpha^p\in F$.
 
-**$\alpha\notin F$.** If $\alpha\in F$, then $\sigma(\alpha)=\alpha$ (σ fixes $F$); but $\sigma(\alpha)=z\alpha$, so $(z-1)\alpha=0$, and $\alpha\ne 0$ gives $z=1$ — contradicting $z\ne 1$. So $\alpha\notin F$.
+**$\alpha\notin F$.** If $\alpha\in F$, then $\sigma(\alpha)=\alpha$ ($\sigma$ fixes $F$); but $\sigma(\alpha)=z\alpha$, so $(z-1)\alpha=0$, and $\alpha\ne 0$ gives $z=1$ — contradicting $z\ne 1$. So $\alpha\notin F$.
 
 **$E=F(\alpha)$.** Then $F\subsetneq F(\alpha)\subseteq E$ and $[E:F]=|G|=p$ is prime, so $[F(\alpha):F]\in\{1,p\}$ divides $p$ and exceeds $1$, forcing $[F(\alpha):F]=p=[E:F]$. Hence $F(\alpha)=E$. $\qquad\blacksquare$
 

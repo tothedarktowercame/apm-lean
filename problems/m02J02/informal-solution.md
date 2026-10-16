@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM m02J02: Bases for H₀¹(Ω) — discrete vs. continuous spectrum
+# APM m02J02: Bases for $H_0^1(\Omega)$ — discrete vs. continuous spectrum
 
 ## Why It's Hard
 

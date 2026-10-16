@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b97A03: x^6+3 — a radical extension that is its own splitting field, with Galois group S₃
+# APM b97A03: $x^6+3$ — a radical extension that is its own splitting field, with Galois group $S_{3}$
 
 ## Why It's Hard
 

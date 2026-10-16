@@ -7,18 +7,18 @@ from the historical proof-frame workspace.
 
 **Why it’s hard.** The definitions point in the “wrong” direction: compactness is phrased in terms of every open cover having a finite subcover, while “finer” means “more open sets”. Students often try to manufacture an explicit bad cover inside the finer topology, but that goes nowhere without knowing what the extra opens look like. Likewise, showing that a coarser topology is not Hausdorff feels strange because fewer opens usually make separation harder, yet we need a precise witness. The trap is ignoring the identity map between the two topological structures on the *same* underlying set.
 
-**Key insight.** Treat both statements as consequences of functoriality. If \(\tau\) is finer than \(\sigma\), then the identity map
-\[
+**Key insight.** Treat both statements as consequences of functoriality. If $\tau$ is finer than $\sigma$, then the identity map
+$$
 \mathrm{id} : (X,\tau) \longrightarrow (X,\sigma)
-\]
-is continuous. Should \(\tau\) also be compact, this continuous bijection from a compact space to a Hausdorff space would be a homeomorphism, forcing the two topologies to coincide—contradicting strictness. The second clause is the same argument in reverse: if \(\tau\) is coarser, then the identity map \((X,\sigma)\to (X,\tau)\) is continuous; if \(\tau\) were Hausdorff we would again obtain a homeomorphism. Thus strict inequality of topologies prevents the “better” global property from surviving.
+$$
+is continuous. Should $\tau$ also be compact, this continuous bijection from a compact space to a Hausdorff space would be a homeomorphism, forcing the two topologies to coincide—contradicting strictness. The second clause is the same argument in reverse: if $\tau$ is coarser, then the identity map $(X,\sigma)\to (X,\tau)$ is continuous; if $\tau$ were Hausdorff we would again obtain a homeomorphism. Thus strict inequality of topologies prevents the “better” global property from surviving.
 
-**Proof.** Let \(\sigma\) be a compact Hausdorff topology on \(X\).
+**Proof.** Let $\sigma$ be a compact Hausdorff topology on $X$.
 
-1. Suppose \(\tau\) is strictly finer than \(\sigma\) and yet \((X,\tau)\) is compact. The underlying function \(\mathrm{id}:X\to X\) is bijective, and because \(\sigma\le \tau\) every \(\sigma\)-open set is \(\tau\)-open, so \(\mathrm{id}
-:(X,\tau)\to (X,\sigma)\) is continuous. A continuous bijection from a compact space to a Hausdorff space is a homeomorphism, hence \(\mathrm{id}\) is a homeomorphism and \(\sigma=\tau\), contradicting the assumption that \(\tau\) is strictly finer. Therefore no strictly finer topology stays compact.
+1. Suppose $\tau$ is strictly finer than $\sigma$ and yet $(X,\tau)$ is compact. The underlying function $\mathrm{id}:X\to X$ is bijective, and because $\sigma\le \tau$ every $\sigma$-open set is $\tau$-open, so $\mathrm{id}
+:(X,\tau)\to (X,\sigma)$ is continuous. A continuous bijection from a compact space to a Hausdorff space is a homeomorphism, hence $\mathrm{id}$ is a homeomorphism and $\sigma=\tau$, contradicting the assumption that $\tau$ is strictly finer. Therefore no strictly finer topology stays compact.
 
-2. Suppose \(\tau\) is strictly coarser than \(\sigma\) and \((X,\tau)\) is Hausdorff. Then the identity map \((X,\sigma)\to (X,\tau)\) is continuous (because \(\tau\le\sigma\)). Since \((X,\sigma)\) is compact and \((X,\tau)\) is Hausdorff, the same “continuous bijection from compact to Hausdorff” criterion again gives that \(\mathrm{id}\) is a homeomorphism, forcing \(\sigma = \tau\), contradiction. Hence no strictly coarser topology stays Hausdorff.
+2. Suppose $\tau$ is strictly coarser than $\sigma$ and $(X,\tau)$ is Hausdorff. Then the identity map $(X,\sigma)\to (X,\tau)$ is continuous (because $\tau\le\sigma$). Since $(X,\sigma)$ is compact and $(X,\tau)$ is Hausdorff, the same “continuous bijection from compact to Hausdorff” criterion again gives that $\mathrm{id}$ is a homeomorphism, forcing $\sigma = \tau$, contradiction. Hence no strictly coarser topology stays Hausdorff.
 
 That proves both claims.
 
@@ -26,7 +26,7 @@ That proves both claims.
 
 - **Compact-to-Hausdorff bijection is a homeomorphism.** Formal dependency: `Continuous.isClosedMap` and `Continuous.isClosedEmbedding`. This supplies the engine for both directions by turning the identity into a homeomorphism whenever both topologies share compactness/Hausdorffness.
 - **Order vs. continuity of the identity.** `continuous_id_of_le : σ ≤ τ → Continuous[t=τ,t'=σ] id` witnesses that the ordering on the lattice of topologies matches continuity of the identity map. This is the only place where the relation “finer/coarser” is used.
-- **Strict inequality ⇒ contradiction.** Once the identity is known to be a homeomorphism, an antisymmetry argument in the lattice (or simply “a homeomorphism fixes the topology”) finishes each direction.
+- **Strict inequality $\Rightarrow$ contradiction.** Once the identity is known to be a homeomorphism, an antisymmetry argument in the lattice (or simply “a homeomorphism fixes the topology”) finishes each direction.
 
 Lean search terms: `continuous_id_of_le`, `Continuous.isClosedEmbedding`, `Homeomorph`, `ClosedEmbedding.inducing`, `antisymm`.
 

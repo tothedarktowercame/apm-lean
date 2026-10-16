@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b99A04: M_n(F) is semisimple — V = Fⁿ is its only simple module and every f.d. module is Vᵐ
+# APM b99A04: $M_n(F)$ is semisimple — $V = F^{n}$ is its only simple module and every f.d. module is $V^{m}$
 
 ## Why It's Hard
 

@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM a97J03: Convolution of L^p and L^q functions lies in C₀
+# APM a97J03: Convolution of $L^p$ and $L^q$ functions lies in $C_{0}$
 
 ## Why It's Hard
 

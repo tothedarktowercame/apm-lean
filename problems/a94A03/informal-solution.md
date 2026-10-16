@@ -4,41 +4,41 @@
 
 ## 1. Informal proof
 
-**Why it's hard.** Part (a) requires showing ||K_t f||_p ≤ ||f||_p — a convolution norm bound that for general p requires Young's inequality (not just Hölder). Part (b) requires Lp convergence of convolutions to the identity, which needs density of nice functions + the contraction bound from (a).
+**Why it's hard.** Part (a) requires showing $||K_t f||_p \leq ||f||_p$ — a convolution norm bound that for general $p$ requires Young's inequality (not just Hölder). Part (b) requires Lp convergence of convolutions to the identity, which needs density of nice functions + the contraction bound from (a).
 
-**The key insight.** The kernel φ_t(x) = (1/t)e^{-πx²/t²} is a Gaussian approximate identity: it has ∫φ_t = 1 (after checking the normalisation), so K_t f = φ_t * f. Young's inequality with ||φ_t||₁ = 1 gives ||K_t f||_p ≤ ||φ_t||₁ · ||f||_p = ||f||_p. For (b), approximate f by continuous compactly supported g, use ||K_t f - f||_p ≤ ||K_t(f-g)||_p + ||K_t g - g||_p ≤ ||f-g||_p + ||K_t g - g||_p, and the second term → 0 by uniform convergence of K_t g to g.
+**The key insight.** The kernel $\phi_t(x) = (1/t)e^{-\pi x^{2}/t^{2}}$ is a Gaussian approximate identity: it has $\int\phi_t = 1$ (after checking the normalisation), so $K_t f = \phi_t * f$. Young's inequality with $||\phi_t||_{1} = 1$ gives $||K_t f||_p \leq ||\phi_t||_{1} \cdot ||f||_p = ||f||_p$. For (b), approximate $f$ by continuous compactly supported $g$, use $||K_t f - f||_p \leq ||K_t(f-g)||_p + ||K_t g - g||_p \leq ||f-g||_p + ||K_t g - g||_p$, and the second term $\to 0$ by uniform convergence of $K_t g$ to $g$.
 
 **Proof.**
 
-*Step 0: Verify ∫φ_t = 1.* φ_t(x) = (1/t)e^{-πx²/t²}. Substituting u = √π x/t: ∫φ_t dx = (1/t)·(t/√π)·∫e^{-u²}du = (1/√π)·√π = 1. ✓
+*Step 0: Verify $\int\phi_t = 1$.* $\phi_t(x) = (1/t)e^{-\pi x^{2}/t^{2}}$. Substituting $u = \sqrt{\pi} x/t$: $\int\phi_t dx = (1/t)\cdot(t/\sqrt{\pi})\cdot\int e^{-u^{2}}du = (1/\sqrt{\pi})\cdot\sqrt{\pi} = 1$. ✓
 
-**(a) ||K_t f||_p ≤ ||f||_p.**
+**(a) $||K_t f||_p \leq ||f||_p$.**
 
-K_t f = φ_t * f where φ_t ∈ L¹ with ||φ_t||₁ = 1 and φ_t ≥ 0. By Young's convolution inequality (||g*h||_p ≤ ||g||₁ · ||h||_p):
+$K_t f = \phi_t * f$ where $\phi_t \in L^{1}$ with $||\phi_t||_{1} = 1$ and $\phi_t \geq 0$. By Young's convolution inequality ($||g*h||_p \leq ||g||_{1} \cdot ||h||_p$):
 
-||K_t f||_p = ||φ_t * f||_p ≤ ||φ_t||₁ · ||f||_p = 1 · ||f||_p = ||f||_p.
+$||K_t f||_p = ||\phi_t * f||_p \leq ||\phi_t||_{1} \cdot ||f||_p = 1 \cdot ||f||_p = ||f||_p$.
 
-So K_t maps the unit ball of Lp into itself. ✓
+So $K_t$ maps the unit ball of Lp into itself. ✓
 
-**(b) ||K_t f - f||_p → 0 as t → 0.**
+**(b) $||K_t f - f||_p \to 0$ as $t \to 0$.**
 
-Since ∫φ_t = 1: K_t f(x) - f(x) = ∫φ_t(y)[f(x-y) - f(x)]dy.
+Since $\int\phi_t = 1$: $K_t f(x) - f(x) = \int\phi_t(y)[f(x-y) - f(x)]dy$.
 
 By Minkowski's integral inequality (the continuous version):
 
-||K_t f - f||_p ≤ ∫|φ_t(y)| · ||τ_y f - f||_p dy = ∫φ_t(y) ||τ_y f - f||_p dy.
+$||K_t f - f||_p \leq \int|\phi_t(y)| \cdot ||\tau_y f - f||_p dy = \int\phi_t(y) ||\tau_y f - f||_p dy$.
 
-Now ||τ_y f - f||_p → 0 as y → 0 (continuity of Lp translation). Given ε > 0, choose δ such that ||τ_y f - f||_p < ε for |y| < δ. Split:
+Now $||\tau_y f - f||_p \to 0$ as $y \to 0$ (continuity of Lp translation). Given $\epsilon > 0$, choose $\delta$ such that $||\tau_y f - f||_p < \epsilon$ for $|y| < \delta$. Split:
 
-∫φ_t(y)||τ_y f - f||_p dy = ∫_{|y|<δ} + ∫_{|y|≥δ}.
+$\int\phi_t(y)||\tau_y f - f||_p dy = \int_{|y|<\delta} + \int_{|y|\geq\delta}$.
 
-First integral ≤ ε · ∫φ_t = ε.
+First integral $\leq \epsilon \cdot \int\phi_t = \epsilon$.
 
-Second integral ≤ 2||f||_p · ∫_{|y|≥δ} φ_t(y) dy. Now ∫_{|y|≥δ} (1/t)e^{-πy²/t²} dy = ∫_{|u|≥δ/t} (1/√π)e^{-u²} du → 0 as t → 0 (Gaussian tail).
+Second integral $\leq 2||f||_p \cdot \int_{|y|\geq\delta} \phi_t(y) dy$. Now $\int_{|y|\geq\delta} (1/t)e^{-\pi y^{2}/t^{2}} dy = \int_{|u|\geq\delta/t} (1/\sqrt{\pi})e^{-u^{2}} du \to 0$ as $t \to 0$ (Gaussian tail).
 
-So ||K_t f - f||_p ≤ ε + 2||f||_p · o(1) < 2ε for t small. ✓ ∎
+So $||K_t f - f||_p \leq \epsilon + 2||f||_p \cdot o(1) < 2\epsilon$ for $t$ small. ✓ ∎
 
-**What connects.** This is the prototypical approximate identity / mollifier result. The Gaussian kernel (1/t)e^{-πx²/t²} is the heat kernel at time t²/(4π) — so K_t f solves the heat equation with initial data f, and part (b) says the solution converges to the initial data in Lp. Part (a) is a special case of Young's inequality (the case ||φ||₁ = 1), which says convolution with an L¹ function of norm 1 is an Lp contraction. The same argument works for any approximate identity (Poisson kernel, Fejér kernel, etc.) — the Gaussian is just the smoothest example.
+**What connects.** This is the prototypical approximate identity / mollifier result. The Gaussian kernel $(1/t)e^{-\pi x^{2}/t^{2}}$ is the heat kernel at time $t^{2}/(4\pi)$ — so $K_t f$ solves the heat equation with initial data $f$, and part (b) says the solution converges to the initial data in Lp. Part (a) is a special case of Young's inequality (the case $||\phi||_{1} = 1$), which says convolution with an $L^{1}$ function of norm 1 is an Lp contraction. The same argument works for any approximate identity (Poisson kernel, Fejér kernel, etc.) — the Gaussian is just the smoothest example.
 
 ## 2. Lean 4 theorem statement
 
@@ -123,30 +123,30 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.Memℒp f p volume` — f ∈ Lp(ℝ)
+- `MeasureTheory.Memℒp f p volume` — $f \in Lp(\mathbb{R})$
 - `MeasureTheory.eLpNorm f p volume` — Lp seminorm
 - `MeasureTheory.Integrable f volume` — L¹ membership
 - `AEStronglyMeasurable` — measurability
-- `Filter.𝓝[>] 0` — right-neighbourhood filter for t → 0⁺
+- `Filter.𝓝[>] 0` — right-neighbourhood filter for $t \to 0^{+}$
 - `MeasureTheory.convolution` — Mathlib's convolution (in `Mathlib.MeasureTheory.Group.Convolution`)
 
 **Key lemmas:**
-- `integral_gaussian` / `integral_gaussian_sq` — ∫ e^{-bx²} = √(π/b). In `Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral`. Used to verify ∫φ_t = 1
-- `MeasureTheory.convolution_le_Lp_mul_L1` — Young's inequality ||g*f||_p ≤ ||g||_p · ||f||₁ (or the symmetric version). Would need to verify exact Mathlib name
-- `MeasureTheory.norm_integral_le_integral_norm` — |∫ fg| ≤ ∫ |fg|
+- `integral_gaussian` / `integral_gaussian_sq` — $\int e^{-bx^{2}} = \sqrt{\pi/b}$. In `Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral`. Used to verify $\int\phi_t = 1$
+- `MeasureTheory.convolution_le_Lp_mul_L1` — Young's inequality $||g*f||_p \leq ||g||_p \cdot ||f||_{1}$ (or the symmetric version). Would need to verify exact Mathlib name
+- `MeasureTheory.norm_integral_le_integral_norm` — $|\int fg| \leq \int |fg|$
 - `MeasureTheory.integral_mono` — monotonicity of integrals
 - `Real.exp_neg_mul_sq_le` — Gaussian tail bounds
-- `tendsto_integral_of_dominated_convergence` — DCT (for proving K_t g → g when g is nice)
-- `MeasureTheory.Lp.tendsto_approx` / density of Cc in Lp — for approximating f by nice functions in part (b)
+- `tendsto_integral_of_dominated_convergence` — DCT (for proving $K_t g \to g$ when $g$ is nice)
+- `MeasureTheory.Lp.tendsto_approx` / density of Cc in Lp — for approximating $f$ by nice functions in part (b)
 
 **Tactic hints:**
 - `calc eLpNorm (gaussConv t f) p volume ≤ ...` — for the Young chain
-- `intro ε hε` — for the ε-δ argument in part (b)
-- `obtain ⟨g, hg_supp, hg_approx⟩ := ...` — approximating f by Cc function
+- `intro ε hε` — for the $\epsilon$-$\delta$ argument in part (b)
+- `obtain ⟨g, hg_supp, hg_approx⟩ := ...` — approximating $f$ by Cc function
 - `gcongr` — for monotonicity-based norm bounds
-- `positivity` — for t > 0, π > 0, exp > 0
+- `positivity` — for $t > 0$, $\pi > 0$, $\exp > 0$
 - `simp [gaussKernel]` — unfolding the kernel definition
-- `field_simp` — for (1/t) · t = 1 type simplifications
+- `field_simp` — for $(1/t) \cdot t = 1$ type simplifications
 - `nlinarith [Real.sq_sqrt ...]` — for Gaussian integral normalisation arithmetic
-- `linarith` — combining the ε/2 bounds in the approximation argument
+- `linarith` — combining the $\epsilon/2$ bounds in the approximation argument
 - `filter_upwards` — for "eventually" arguments with the 𝓝[>] 0 filter

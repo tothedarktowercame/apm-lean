@@ -1,36 +1,36 @@
 
 
-# APM a96A04: Heat kernel — smoothness, L² contraction, L² convergence to initial data
+# APM a96A04: Heat kernel — smoothness, $L^{2}$ contraction, $L^{2}$ convergence to initial data
 
 ## 1. Informal proof
 
-**Why it's hard.** The heat kernel Gₜ(x) = (4πt)^{-n/2} e^{-|x|²/(4t)} is smooth in x and t but its convolution with f ∈ L² requires careful justification: (a) smoothness of u in x means differentiating under the integral sign infinitely often, (b) the L² bound requires Young's inequality or Fourier analysis, and (c) L² convergence as t → 0⁺ is an approximate identity result on an infinite measure space.
+**Why it's hard.** The heat kernel $G_{t}(x) = (4\pi t)^{-n/2} e^{-|x|^{2}/(4t)}$ is smooth in $x$ and $t$ but its convolution with $f \in L^{2}$ requires careful justification: (a) smoothness of $u$ in $x$ means differentiating under the integral sign infinitely often, (b) the $L^{2}$ bound requires Young's inequality or Fourier analysis, and (c) $L^{2}$ convergence as $t \to 0^{+}$ is an approximate identity result on an infinite measure space.
 
-**The key insight.** Everything is cleanest via the Fourier transform: Ĝₜ(ξ) = e^{-4π²|ξ|²t}, so û = Ĝₜ · f̂. (a) Smoothness: x-derivatives of Gₜ multiply f̂ by polynomials in ξ times the Gaussian — always in L². (b) L² bound: |Ĝₜ| ≤ 1, so ||û||₂ = ||Ĝₜ f̂||₂ ≤ ||f̂||₂ = ||f||₂ by Plancherel. (c) Convergence: Ĝₜ → 1 pointwise as t → 0⁺, and |Ĝₜ f̂| ≤ |f̂| ∈ L², so DCT gives ||û - f̂||₂ → 0.
+**The key insight.** Everything is cleanest via the Fourier transform: $\hat{G}_{t}(\xi) = e^{-4\pi^{2}|\xi|^{2}t}$, so $\hat{u} = \hat{G}_{t} \cdot \hat{f}$. (a) Smoothness: $x$-derivatives of $G_{t}$ multiply $\hat{f}$ by polynomials in $\xi$ times the Gaussian — always in $L^{2}$. (b) $L^{2}$ bound: $|\hat{G}_{t}| \leq 1$, so $||\hat{u}||_{2} = ||\hat{G}_{t} \hat{f}||_{2} \leq ||\hat{f}||_{2} = ||f||_{2}$ by Plancherel. (c) Convergence: $\hat{G}_{t} \to 1$ pointwise as $t \to 0^{+}$, and $|\hat{G}_{t} \hat{f}| \leq |\hat{f}| \in L^{2}$, so DCT gives $||\hat{u} - \hat{f}||_{2} \to 0$.
 
 **Proof.**
 
-u(x,t) = (Gₜ * f)(x) where Gₜ(x) = (4πt)^{-n/2} exp(-|x|²/(4t)).
+$u(x,t) = (G_{t} * f)(x)$ where $G_{t}(x) = (4\pi t)^{-n/2} \exp(-|x|^{2}/(4t))$.
 
-**(a) u is smooth in x (for fixed t > 0).**
+**(a) $u$ is smooth in $x$ (for fixed $t > 0$).**
 
-Differentiate under the integral: ∂ₓᵅ u(x,t) = ∫ (∂ₓᵅ Gₜ)(x-y) f(y) dy. The derivative ∂ₓᵅ Gₜ(x) is Gₜ(x) times a polynomial in x/√t (Hermite-type), hence still in L¹ ∩ L² for each fixed t > 0. The dominated convergence theorem justifies the interchange (the difference quotient is dominated by a Schwartz function times |f|). Since α is arbitrary, u is C^∞ in x. ✓
+Differentiate under the integral: $\partial_{x}^{\alpha} u(x,t) = \int (\partial_{x}^{\alpha} G_{t})(x-y) f(y) dy$. The derivative $\partial_{x}^{\alpha} G_{t}(x)$ is $G_{t}(x)$ times a polynomial in $x/\sqrt{t}$ (Hermite-type), hence still in $L^{1} \cap L^{2}$ for each fixed $t > 0$. The dominated convergence theorem justifies the interchange (the difference quotient is dominated by a Schwartz function times $|f|$). Since $\alpha$ is arbitrary, $u$ is $C^\infty$ in $x$. ✓
 
-**(b) ||u(·,t)||₂ ≤ ||f||₂.**
+**(b) $||u(\cdot,t)||_{2} \leq ||f||_{2}$.**
 
-Method 1 (Fourier): The Fourier transform of Gₜ is Ĝₜ(ξ) = e^{-4π²|ξ|²t}. By the convolution theorem: û(ξ,t) = Ĝₜ(ξ) · f̂(ξ). Since |Ĝₜ(ξ)| = e^{-4π²|ξ|²t} ≤ 1:
+Method 1 (Fourier): The Fourier transform of $G_{t}$ is $\hat{G}_{t}(\xi) = e^{-4\pi^{2}|\xi|^{2}t}$. By the convolution theorem: $\hat{u}(\xi,t) = \hat{G}_{t}(\xi) \cdot \hat{f}(\xi)$. Since $|\hat{G}_{t}(\xi)| = e^{-4\pi^{2}|\xi|^{2}t} \leq 1$:
 
-||u(·,t)||₂ = ||û(·,t)||₂ = ||Ĝₜ · f̂||₂ ≤ ||f̂||₂ = ||f||₂ (Plancherel). ✓
+$||u(\cdot,t)||_{2} = ||\hat{u}(\cdot,t)||_{2} = ||\hat{G}_{t} \cdot \hat{f}||_{2} \leq ||\hat{f}||_{2} = ||f||_{2}$ (Plancherel). ✓
 
-Method 2 (Young): Gₜ ∈ L¹ with ||Gₜ||₁ = 1. Young's inequality: ||Gₜ * f||₂ ≤ ||Gₜ||₁ · ||f||₂ = ||f||₂. ✓
+Method 2 (Young): $G_{t} \in L^{1}$ with $||G_{t}||_{1} = 1$. Young's inequality: $||G_{t} * f||_{2} \leq ||G_{t}||_{1} \cdot ||f||_{2} = ||f||_{2}$. ✓
 
-**(c) u(·,t) → f in L² as t → 0⁺.**
+**(c) $u(\cdot,t) \to f$ in $L^{2}$ as $t \to 0^{+}$.**
 
-||u(·,t) - f||₂² = ||Ĝₜ f̂ - f̂||₂² = ∫ |e^{-4π²|ξ|²t} - 1|² |f̂(ξ)|² dξ.
+$||u(\cdot,t) - f||_{2}^{2} = ||\hat{G}_{t} \hat{f} - \hat{f}||_{2}^{2} = \int |e^{-4\pi^{2}|\xi|^{2}t} - 1|^{2} |\hat{f}(\xi)|^{2} d\xi$.
 
-The integrand converges to 0 pointwise (e^{-4π²|ξ|²t} → 1 for each ξ) and is bounded by 4|f̂(ξ)|² ∈ L¹ (since |e^{-s}-1| ≤ 2). By DCT: ∫ → 0, so ||u(·,t)-f||₂ → 0. ✓ ∎
+The integrand converges to 0 pointwise ($e^{-4\pi^{2}|\xi|^{2}t} \to 1$ for each $\xi$) and is bounded by $4|\hat{f}(\xi)|^{2} \in L^{1}$ (since $|e^{-s}-1| \leq 2$). By DCT: $\int \to 0$, so $||u(\cdot,t)-f||_{2} \to 0$. ✓ ∎
 
-**What connects.** u(x,t) is the solution to the heat equation ∂ₜu = Δu with initial data u(·,0) = f. The three parts verify the well-posedness: (a) the solution is smooth for t > 0 (instantaneous regularisation — a hallmark of parabolic equations), (b) the L² norm doesn't increase (energy dissipation — the heat equation is contractive), (c) the solution recovers the initial data in L² as t → 0⁺ (continuity at the initial time). The Fourier-analytic proof is the cleanest because the heat kernel diagonalises in Fourier space: Ĝₜ = e^{-4π²|ξ|²t} acts as a multiplier, making all estimates transparent. This is the prototypical approximate identity in ℝⁿ.
+**What connects.** $u(x,t)$ is the solution to the heat equation $\partial_{t}u = \Delta u$ with initial data $u(\cdot,0) = f$. The three parts verify the well-posedness: (a) the solution is smooth for $t > 0$ (instantaneous regularisation — a hallmark of parabolic equations), (b) the $L^{2}$ norm doesn't increase (energy dissipation — the heat equation is contractive), (c) the solution recovers the initial data in $L^{2}$ as $t \to 0^{+}$ (continuity at the initial time). The Fourier-analytic proof is the cleanest because the heat kernel diagonalises in Fourier space: $\hat{G}_{t} = e^{-4\pi^{2}|\xi|^{2}t}$ acts as a multiplier, making all estimates transparent. This is the prototypical approximate identity in $\mathbb{R}^{n}$.
 
 ## 2. Lean 4 theorem statement
 
@@ -115,15 +115,15 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.Memℒp f 2 volume` — f ∈ L²(ℝⁿ)
+- `MeasureTheory.Memℒp f 2 volume` — $f \in L^{2}(\mathbb{R}^{n})$
 - `MeasureTheory.eLpNorm` — Lp seminorm
-- `ContDiff ℝ ⊤ f` — infinitely smooth (C^∞)
+- `ContDiff ℝ ⊤ f` — infinitely smooth ($C^\infty$)
 - `HasFDerivAt` — Fréchet differentiability
-- `Fin n → ℝ` — ℝⁿ with `volume` as Lebesgue measure
+- `Fin n → ℝ` — $\mathbb{R}^{n}$ with `volume` as Lebesgue measure
 - `Filter.𝓝[>] 0` — right-neighbourhood filter
 
 **Key lemmas:**
-- `integral_gaussian` — ∫ e^{-bx²} = √(π/b). For verifying ∫G_t = 1. In `Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral`
+- `integral_gaussian` — $\int e^{-bx^{2}} = \sqrt{\pi/b}$. For verifying $\int G_t = 1$. In `Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral`
 - Young's inequality — `MeasureTheory.convolution_le_Lp_mul_L1` or similar. For part (b)
 - `MeasureTheory.tendsto_integral_of_dominated_convergence` — DCT. For the Fourier-space argument in part (c) and for differentiation under the integral in part (a)
 - `ContDiff.integral_clm` — differentiating under the integral sign for parameter-dependent integrals. For part (a)
@@ -132,11 +132,11 @@ end
 - `MeasureTheory.Lp.tendsto_approx` — density for approximation arguments
 
 **Tactic hints:**
-- `apply ContDiff.integral_clm` — for part (a), differentiating under ∫
+- `apply ContDiff.integral_clm` — for part (a), differentiating under $\int$
 - `exact young_heat_L2 ht hf |>.trans (by simp [heatKernel_integral ht])` — for part (b)
 - `apply tendsto_integral_of_dominated_convergence (fun x => 4 * ‖f̂ x‖^2)` — DCT in Fourier for part (c)
 - `simp [heatKernel, Real.exp_neg]` — unfolding definitions
-- `positivity` — for t > 0, 4πt > 0
-- `gcongr` — for ‖Ĝₜ · f̂‖ ≤ ‖f̂‖
-- `field_simp` — for (4πt)^{-n/2} arithmetic
+- `positivity` — for $t > 0$, $4\pi t > 0$
+- `gcongr` — for $\Vert \hat{G}_{t} \cdot \hat{f}\Vert \leq \Vert \hat{f}\Vert$
+- `field_simp` — for $(4\pi t)^{-n/2}$ arithmetic
 - `exact?` — finding the Gaussian integral or Young's inequality

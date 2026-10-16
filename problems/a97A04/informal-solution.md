@@ -7,7 +7,7 @@ from the historical proof-frame workspace.
 
 *Why it’s hard.*  The set \(E=\{x : (f_n(x))\text{ converges}\}\) is defined by a limit that depends on \(x\); novices try to reason with “\(\lim\)” directly, but the limit operation is neither algebraic nor visibly measurable.  The trick is to replace the convergence condition by a countable collection of inequalities involving the *measurable* functions \(f_n\).  Missing this translation is the main stumbling block.
 
-*Key insight.*  A real sequence is convergent iff it is Cauchy.  For our pointwise sequence, that translates to: \(x\in E\) iff for every \(k\in\mathbb N\) there exists an \(N\) such that for all \(n,m\ge N\) we have \(|f_n(x)-f_m(x)|<1/k\).  Each inequality describes a measurable set because sublevel sets of measurable functions are measurable, and σ-algebras are closed under countable unions and intersections.  So write \(E\) as \(\bigcap_k\bigcup_N\bigcap_{n,m\ge N}\{\dots\}\) and measurability follows.
+*Key insight.*  A real sequence is convergent iff it is Cauchy.  For our pointwise sequence, that translates to: \(x\in E\) iff for every \(k\in\mathbb N\) there exists an \(N\) such that for all \(n,m\ge N\) we have \(|f_n(x)-f_m(x)|<1/k\).  Each inequality describes a measurable set because sublevel sets of measurable functions are measurable, and $\sigma$-algebras are closed under countable unions and intersections.  So write \(E\) as \(\bigcap_k\bigcup_N\bigcap_{n,m\ge N}\{\dots\}\) and measurability follows.
 
 *Proof.*  For \(k\in\mathbb N\) and \(N\in\mathbb N\) set
   \[
@@ -17,13 +17,13 @@ from the historical proof-frame workspace.
   \[
   E = \bigcap_{k=1}^\infty \ \bigcup_{N=1}^\infty A_{k,N}.
   \]
-  Again, σ-algebras are closed under countable unions and intersections, so \(E\in\Sigma\).
+  Again, $\sigma$-algebras are closed under countable unions and intersections, so \(E\in\Sigma\).
 
   It remains to check that this \(E\) equals the desired convergence set.  Fix \(x\in X\).  If \(x\in E\), then for each \(k\) there exists \(N\) such that for all \(n,m\ge N\), \(|f_n(x)-f_m(x)|<1/k\); that is exactly the Cauchy criterion for \((f_n(x))\).  Since bounded sequences in \(\mathbb R\) are complete (indeed, completeness of \(\mathbb R\) suffices), the sequence converges.
 
   Conversely, if \((f_n(x))\) converges, it is Cauchy, so for every \(k\) we can find \(N\) such that the inequalities above hold; hence \(x\in E\).  Therefore \(E\) is the set of convergence points and is measurable.
 
-*What connects.*  Writing “limit sets’’ as countable unions/intersections of measurable events (`∀/∃` turning into `⋂/⋃`) is a standard trick everywhere in measure theory and probability: e.g. the limsup of events, the set where a martingale converges, or the event \(\{\liminf X_n < \infty\}\).  Anytime you see a quantifier over \(\epsilon>0\), think of restricting to rationals so you only deal with countably many measurable sets.
+*What connects.*  Writing “limit sets’’ as countable unions/intersections of measurable events ($\forall/\exists$ turning into $\bigcap/\bigcup$) is a standard trick everywhere in measure theory and probability: e.g. the limsup of events, the set where a martingale converges, or the event \(\{\liminf X_n < \infty\}\).  Anytime you see a quantifier over \(\epsilon>0\), think of restricting to rationals so you only deal with countably many measurable sets.
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
 
@@ -50,7 +50,7 @@ The formal/informal alignment artifact lives at:
 1. Define the countable approximants `cauchySet k N` using intersections over pairs `(n,m)`.
 2. Prove `MeasurableSet (cauchySet k N)` via `MeasurableSet.iInter` and the measurability of `fun x => |f n x - f m x|`.
 3. Show the convergence set equals `⋂ k, ⋃ N, cauchySet k N` using the Cauchy criterion.
-4. Conclude measurability via closure properties of σ-algebras.
+4. Conclude measurability via closure properties of $\sigma$-algebras.
 
 Lean successfully compiles (`lake build`).
 

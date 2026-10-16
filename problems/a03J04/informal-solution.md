@@ -1,85 +1,85 @@
 
 
-# APM a03J04: Distribution functions, layer cake, and weak-L¹ estimates
+# APM a03J04: Distribution functions, layer cake, and weak-$L^{1}$ estimates
 
 ## Why It's Hard
 
-Part (a) requires the "layer cake" representation — converting a spatial integral into a height integral via Fubini on the subgraph. Parts (b)/(c) require extracting an integral bound from a distributional (weak-type) condition. The weak-L¹ condition λ(α) ≤ M/α only gives tail decay — not integrability of |f| itself — but for |f|^p with p < 1 on a finite-measure set, the reduced power p combined with the finite measure provides enough room. The challenge is optimizing the truncation level to get the sharp constant.
+Part (a) requires the "layer cake" representation — converting a spatial integral into a height integral via Fubini on the subgraph. Parts (b)/(c) require extracting an integral bound from a distributional (weak-type) condition. The weak-$L^{1}$ condition $\lambda(\alpha) \leq M/\alpha$ only gives tail decay — not integrability of $|f|$ itself — but for $|f|^p$ with $p < 1$ on a finite-measure set, the reduced power $p$ combined with the finite measure provides enough room. The challenge is optimizing the truncation level to get the sharp constant.
 
 ## The Key Insight
 
-**(a)** Think of the region under |f| as horizontal slabs. The slab at height α has base {|f| > α} and thickness dα. Fubini on the subgraph {(x,α) : 0 ≤ α < |f(x)|} gives the identity.
+**(a)** Think of the region under $|f|$ as horizontal slabs. The slab at height $\alpha$ has base $\{|f| > \alpha\}$ and thickness $d\alpha$. Fubini on the subgraph $\{(x,\alpha) : 0 \leq \alpha < |f(x)|\}$ gives the identity.
 
-**(b)/(c)** Apply the layer cake to |f|^p on E: ∫\_E |f|^p = ∫₀^∞ m(E ∩ {|f|^p > t}) dt. Bound the integrand by min(m(E), M/t^{1/p}) — the first from the trivial bound, the second from the weak-L¹ condition. Split the integral at the crossover point t₀ = (M/m(E))^p and optimize.
+**(b)/(c)** Apply the layer cake to $|f|^p$ on $E$: $\int_E |f|^p = \int_{0}^{\infty} m(E \cap \{|f|^p > t\}) dt$. Bound the integrand by $\min(m(E), M/t^{1/p})$ — the first from the trivial bound, the second from the weak-$L^{1}$ condition. Split the integral at the crossover point $t_{0} = (M/m(E))^p$ and optimize.
 
 ## Complete Proof
 
 ### Part (a): Layer cake formula
 
-**Claim.** ∫\_{ℝⁿ} |f| dx = ∫₀^∞ λ(α) dα where λ(α) = m({|f| > α}).
+**Claim.** $\int_{\mathbb{R}^{n}} |f| dx = \int_{0}^{\infty} \lambda(\alpha) d\alpha$ where $\lambda(\alpha) = m(\{|f| > \alpha\})$.
 
-**Proof.** Define S = {(x, α) ∈ ℝⁿ × [0,∞) : 0 ≤ α < |f(x)|}. This is measurable in the product σ-algebra.
+**Proof.** Define $S = \{(x, \alpha) \in \mathbb{R}^{n} \times [0,\infty) : 0 \leq \alpha < |f(x)|\}$. This is measurable in the product $\sigma$-algebra.
 
-**Slice in x:** For fixed x, S\_x = [0, |f(x)|) has 1-d measure |f(x)|. By Tonelli:
+**Slice in $x$:** For fixed $x$, $S_x = [0, |f(x)|)$ has 1-d measure $|f(x)|$. By Tonelli:
 
 $$\iint_S dx\,d\alpha = \int_{\mathbb{R}^n} |f(x)|\,dx.$$
 
-**Slice in α:** For fixed α ≥ 0, S^α = {x : |f(x)| > α} has measure λ(α). By Tonelli:
+**Slice in $\alpha$:** For fixed $\alpha \geq 0$, $S^\alpha = \{x : |f(x)| > \alpha\}$ has measure $\lambda(\alpha)$. By Tonelli:
 
 $$\iint_S dx\,d\alpha = \int_0^{\infty}\lambda(\alpha)\,d\alpha.$$
 
-Both equal the product measure of S, so ∫|f| = ∫₀^∞ λ(α) dα. ∎
+Both equal the product measure of $S$, so $\int|f| = \int_{0}^{\infty} \lambda(\alpha) d\alpha$. ∎
 
-### Part (b): ∫\_E |f|^p < ∞ for 0 < p < 1 and m(E) < ∞
+### Part (b): $\int_E |f|^p < \infty$ for $0 < p < 1$ and $m(E) < \infty$
 
-**Proof.** Apply the layer cake to |f|^p restricted to E:
+**Proof.** Apply the layer cake to $|f|^p$ restricted to $E$:
 
 $$\int_E |f|^p\,dx = \int_0^{\infty} m(E \cap \{|f|^p > t\})\,dt = \int_0^{\infty} m(E \cap \{|f| > t^{1/p}\})\,dt.$$
 
 Bound the integrand using two estimates:
 
-- **Trivial:** m(E ∩ {|f| > t^{1/p}}) ≤ m(E).
-- **Weak-L¹:** m(E ∩ {|f| > t^{1/p}}) ≤ m({|f| > t^{1/p}}) = λ(t^{1/p}) ≤ M/t^{1/p}.
+- **Trivial:** $m(E \cap \{|f| > t^{1/p}\}) \leq m(E)$.
+- **Weak-$L^{1}$:** $m(E \cap \{|f| > t^{1/p}\}) \leq m(\{|f| > t^{1/p}\}) = \lambda(t^{1/p}) \leq M/t^{1/p}$.
 
-Set t₀ = (M/m(E))^p (crossover where m(E) = M/t₀^{1/p}).
+Set $t_{0} = (M/m(E))^p$ (crossover where $m(E) = M/t_{0}^{1/p}$).
 
 $$\int_E |f|^p = \int_0^{t_0} m(E \cap \{|f| > t^{1/p}\})\,dt + \int_{t_0}^{\infty} m(E \cap \{|f| > t^{1/p}\})\,dt$$
 
 $$\leq \int_0^{t_0} m(E)\,dt + \int_{t_0}^{\infty} \frac{M}{t^{1/p}}\,dt = m(E) \cdot t_0 + \frac{M \cdot t_0^{1-1/p}}{1/p - 1}.$$
 
-The second integral converges because 1/p > 1 (since p < 1). Both terms are finite, so ∫\_E |f|^p < ∞. ∎
+The second integral converges because $1/p > 1$ (since $p < 1$). Both terms are finite, so $\int_E |f|^p < \infty$. ∎
 
 ### Part (c): The explicit bound
 
-**Proof.** Continuing from part (b) with t₀ = (M/m(E))^p:
+**Proof.** Continuing from part (b) with $t_{0} = (M/m(E))^p$:
 
-**First term:** m(E) · t₀ = m(E) · (M/m(E))^p = m(E)^{1-p} · M^p.
+**First term:** $m(E) \cdot t_{0} = m(E) \cdot (M/m(E))^p = m(E)^{1-p} \cdot M^p$.
 
-**Second term:** ∫\_{t₀}^∞ M t^{-1/p} dt = M · [t^{1-1/p}/(1-1/p)]\_{t₀}^∞. Since 1-1/p < 0, the integral equals:
+**Second term:** $\int_{t_{0}}^\infty M t^{-1/p} dt = M \cdot [t^{1-1/p}/(1-1/p)]_{t_{0}}^\infty$. Since $1-1/p < 0$, the integral equals:
 
 $$M \cdot \frac{t_0^{1-1/p}}{1/p - 1} = \frac{p}{1-p} \cdot M \cdot t_0^{(p-1)/p}.$$
 
-Now t₀^{(p-1)/p} = ((M/m(E))^p)^{(p-1)/p} = (M/m(E))^{p-1} = M^{p-1} · m(E)^{1-p}.
+Now $t_{0}^{(p-1)/p} = ((M/m(E))^p)^{(p-1)/p} = (M/m(E))^{p-1} = M^{p-1} \cdot m(E)^{1-p}$.
 
-So the second term = (p/(1-p)) · M · M^{p-1} · m(E)^{1-p} = (p/(1-p)) · M^p · m(E)^{1-p}.
+So the second term $= (p/(1-p)) \cdot M \cdot M^{p-1} \cdot m(E)^{1-p} = (p/(1-p)) \cdot M^p \cdot m(E)^{1-p}$.
 
 **Total:**
 
 $$\int_E |f|^p \leq m(E)^{1-p} M^p + \frac{p}{1-p} \cdot M^p \cdot m(E)^{1-p} = \frac{1}{1-p} \cdot m(E)^{1-p} \cdot M^p.$$
 
-So c(n,p) = 1/(1-p) (independent of n).
+So $c(n,p) = 1/(1-p)$ (independent of $n$).
 
 $$\boxed{\int_E |f|^p\,dx \leq \frac{1}{1-p}\,m(E)^{1-p}\,M^p.} \qquad \blacksquare$$
 
 ## What Connects
 
-**To interpolation.** The bound ∫\_E |f|^p ≤ C · m(E)^{1-p} M^p for 0 < p < 1 is a restricted weak-type estimate. It shows weak-L¹ ⊂ L^p\_{loc} for p < 1, which is the key input for Marcinkiewicz interpolation.
+**To interpolation.** The bound $\int_E |f|^p \leq C \cdot m(E)^{1-p} M^p$ for $0 < p < 1$ is a restricted weak-type estimate. It shows weak-$L^{1} \subset L^p_{loc}$ for $p < 1$, which is the key input for Marcinkiewicz interpolation.
 
-**To the Calderón-Zygmund theory.** The weak-L¹ condition arises naturally for singular integrals: the Hilbert transform, maximal function, etc. are bounded on L¹ only in the weak sense. Parts (b)/(c) show these operators produce locally Lp functions for p < 1.
+**To the Calderón-Zygmund theory.** The weak-$L^{1}$ condition arises naturally for singular integrals: the Hilbert transform, maximal function, etc. are bounded on $L^{1}$ only in the weak sense. Parts (b)/(c) show these operators produce locally $Lp$ functions for $p < 1$.
 
 **To the Cavalieri principle.** Part (a) is the measure-theory version of Cavalieri's principle from calculus: the volume under a surface equals the integral of cross-sectional areas.
 
-**To problem a01A02.** That problem (weak-L² ⟹ local L¹) uses the same technique: layer cake + split at the optimal truncation level. Here the roles are shifted: weak-L¹ gives local L^p for p < 1 (instead of weak-L² giving local L¹).
+**To problem a01A02.** That problem (weak-$L^{2}$ $\Longrightarrow$ local $L^{1}$) uses the same technique: layer cake + split at the optimal truncation level. Here the roles are shifted: weak-$L^{1}$ gives local $L^p$ for $p < 1$ (instead of weak-$L^{2}$ giving local $L^{1}$).
 
 ---
 
@@ -206,7 +206,7 @@ end
 **Mathlib notes:**
 
 - Part (a) is essentially `MeasureTheory.lintegral_norm_eq_lintegral_meas_lt` in Mathlib's Layercake file. The distribution function `distribFn` matches the standard formulation.
-- `MemWeakL1` encodes the weak-L¹ condition using ENNReal arithmetic: `ofReal α * μ{|f| > α} ≤ M`.
+- `MemWeakL1` encodes the weak-$L^{1}$ condition using ENNReal arithmetic: `ofReal α * μ{|f| > α} ≤ M`.
 - `(μ E) ^ (1 - p)` and `M ^ p` use `ENNReal.rpow` for real exponents on extended nonneg reals.
-- The proof chains: `layer_cake_rpow` (layer cake for |f|^p) → `levelSet_rpow_eq` (rewrite level sets) → `lintegral_Ioi_split` (split at t₀) → `low_integral_bound` + `high_integral_bound` (bound each piece) → `weakL1_Lp_bound` (combine and simplify).
-- The constant 1/(1-p) is independent of n, confirming c(n,p) = 1/(1-p).
+- The proof chains: `layer_cake_rpow` (layer cake for $|f|^p$) → `levelSet_rpow_eq` (rewrite level sets) → `lintegral_Ioi_split` (split at $t_{0}$) → `low_integral_bound` + `high_integral_bound` (bound each piece) → `weakL1_Lp_bound` (combine and simplify).
+- The constant $1/(1-p)$ is independent of $n$, confirming $c(n,p) = 1/(1-p)$.

@@ -18,11 +18,11 @@ Choose indices \(n_1<n_2<\dots\) so that \(x_{n_k}\in B_k\). For \(i>j\), \(x_{n
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
 
-- **Totally bounded ⇒ Cauchy subsequence.** (formal: lemma producing nested finite nets). Needed to manufacture the subsequence.
-- **Completeness ⇒ Cauchy subsequence converges.** Already built into `CompleteSpace`.
-- **Sequential compactness ⇔ compactness (metric).** Bridges the subsequence argument to actual compactness.
+- **Totally bounded $\Rightarrow$ Cauchy subsequence.** (formal: lemma producing nested finite nets). Needed to manufacture the subsequence.
+- **Completeness $\Rightarrow$ Cauchy subsequence converges.** Already built into `CompleteSpace`.
+- **Sequential compactness $\Leftrightarrow$ compactness (metric).** Bridges the subsequence argument to actual compactness.
 
-Lean hooks: `Metric.complete_of_cauchy`, `isClosedBall`, `TotallyBounded`.  Target lemma: `totallyBounded_iff_seqCompact`. Mathlib status: sequential compactness proofs exist but no single lemma packaging “complete + totally bounded ⇒ CompactSpace”, so additional API needs to be wired.
+Lean hooks: `Metric.complete_of_cauchy`, `isClosedBall`, `TotallyBounded`.  Target lemma: `totallyBounded_iff_seqCompact`. Mathlib status: sequential compactness proofs exist but no single lemma packaging “complete + totally bounded $\Rightarrow$ CompactSpace”, so additional API needs to be wired.
 
 **Stage 3 — LEAN FORMALIZATION**
 

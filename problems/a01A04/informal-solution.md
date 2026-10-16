@@ -1,44 +1,42 @@
-
-
 # APM a01A04: Volume of the unit ball and superexponential decay
 
 ## Why It's Hard
 
-The volume of the unit ball in ℝⁿ has a non-obvious recursive structure and decays to zero superexponentially fast in the dimension. The problem guides you through this in three steps, but each requires a different technique: (a) is a Fubini/slicing argument that produces a specific integral recurrence, (b) is an asymptotic analysis of that integral, and (c) combines (b) with the recurrence to get the superexponential decay. The conceptual difficulty is that the unit ball in ℝⁿ⁺¹ is "thinner" relative to ℝⁿ in a way that compounds multiplicatively — each added dimension contributes a shrinking factor.
+The volume of the unit ball in $\mathbb{R}^{n}$ has a non-obvious recursive structure and decays to zero superexponentially fast in the dimension. The problem guides you through this in three steps, but each requires a different technique: (a) is a Fubini/slicing argument that produces a specific integral recurrence, (b) is an asymptotic analysis of that integral, and (c) combines (b) with the recurrence to get the superexponential decay. The conceptual difficulty is that the unit ball in $\mathbb{R}^{n+1}$ is "thinner" relative to $\mathbb{R}^{n}$ in a way that compounds multiplicatively — each added dimension contributes a shrinking factor.
 
 ## The Key Insight
 
-**Slicing.** The (n+1)-dimensional ball is a stack of n-dimensional balls. At height t ∈ [-1,1], the cross-section of B\_{n+1,1} is an n-ball of radius √(1-t²). Its n-volume is (√(1-t²))ⁿ times the volume of the unit n-ball. Integrating over t gives the recurrence with f(t) = √(1-t²).
+**Slicing.** The $(n+1)$-dimensional ball is a stack of $n$-dimensional balls. At height $t \in [-1,1]$, the cross-section of $B_{n+1,1}$ is an $n$-ball of radius $\sqrt{1-t^{2}}$. Its $n$-volume is $(\sqrt{1-t^{2}})^{n}$ times the volume of the unit $n$-ball. Integrating over $t$ gives the recurrence with $f(t) = \sqrt{1-t^{2}}$.
 
-**Decay of the integral.** ∫\_{-1}^{1} (1-t²)^{n/2} dt → 0 because (1-t²) < 1 for t ≠ 0, and the set {t = 0} has measure zero — so the integrand converges pointwise to 0 on a full-measure set, and dominated convergence applies.
+**Decay of the integral.** $\int_{-1}^{1} (1-t^{2})^{n/2}\, dt \to 0$ because $(1-t^{2}) < 1$ for $t \neq 0$, and the set $\{t = 0\}$ has measure zero — so the integrand converges pointwise to 0 on a full-measure set, and dominated convergence applies.
 
-**Superexponential decay.** The recurrence Vol\_{n+1} = Vol\_n · c\_n with c\_n → 0 means the product telescopes: Vol\_n = Vol\_1 · ∏ c\_k, and since c\_k → 0 the product decays faster than any geometric series, killing Aⁿ · Vol\_n for any fixed A.
+**Superexponential decay.** The recurrence $\mathrm{Vol}_{n+1} = \mathrm{Vol}_n \cdot c_n$ with $c_n \to 0$ means the product telescopes: $\mathrm{Vol}_n = \mathrm{Vol}_1 \cdot \prod c_k$, and since $c_k \to 0$ the product decays faster than any geometric series, killing $A^{n} \cdot \mathrm{Vol}_n$ for any fixed $A$.
 
 ## Complete Proof
 
 ### Part (a): The slicing recurrence
 
-**Claim.** There exists f : ℝ → [0,1] such that m(B\_{n+1,1}) = m(B\_{n,1}) · ∫\_{-∞}^{∞} [f(t)]ⁿ dt.
+**Claim.** There exists $f : \mathbb{R} \to [0,1]$ such that $m(B_{n+1,1}) = m(B_{n,1}) \cdot \int_{-\infty}^{\infty} [f(t)]^{n}\, dt$.
 
-**Proof.** Write a point in ℝⁿ⁺¹ as (x, t) where x ∈ ℝⁿ and t ∈ ℝ. Then:
+**Proof.** Write a point in $\mathbb{R}^{n+1}$ as $(x, t)$ where $x \in \mathbb{R}^{n}$ and $t \in \mathbb{R}$. Then:
 
 $$(x, t) \in B_{n+1,1} \iff |x|^2 + t^2 \leq 1 \iff |x|^2 \leq 1 - t^2.$$
 
-For |t| ≤ 1, this is a ball in ℝⁿ of radius r(t) = √(1-t²). For |t| > 1, the cross-section is empty.
+For $|t| \leq 1$, this is a ball in $\mathbb{R}^{n}$ of radius $r(t) = \sqrt{1-t^{2}}$. For $|t| > 1$, the cross-section is empty.
 
 By Fubini's theorem:
 
 $$m(B_{n+1,1}) = \int_{-1}^{1} m_n\left(\{x \in \mathbb{R}^n : |x| \leq \sqrt{1 - t^2}\}\right) dt = \int_{-1}^{1} m(B_{n,\sqrt{1-t^2}})\,dt.$$
 
-By scaling, the volume of a ball of radius r in ℝⁿ is rⁿ · m(B\_{n,1}). So:
+By scaling, the volume of a ball of radius $r$ in $\mathbb{R}^{n}$ is $r^{n} \cdot m(B_{n,1})$. So:
 
 $$m(B_{n+1,1}) = \int_{-1}^{1} (\sqrt{1 - t^2})^n \cdot m(B_{n,1})\,dt = m(B_{n,1}) \int_{-1}^{1} (1 - t^2)^{n/2}\,dt.$$
 
-Define **f(t) = √(1-t²)** for |t| ≤ 1 and f(t) = 0 for |t| > 1. Then f : ℝ → [0,1] and [f(t)]ⁿ = (1-t²)^{n/2} for |t| ≤ 1, so:
+Define **$f(t) = \sqrt{1-t^{2}}$** for $|t| \leq 1$ and $f(t) = 0$ for $|t| > 1$. Then $f : \mathbb{R} \to [0,1]$ and $[f(t)]^{n} = (1-t^{2})^{n/2}$ for $|t| \leq 1$, so:
 
 $$m(B_{n+1,1}) = m(B_{n,1}) \int_{-\infty}^{\infty} [f(t)]^n\,dt. \qquad \blacksquare$$
 
-### Part (b): ∫ [f(t)]ⁿ dt → 0
+### Part (b): $\int [f(t)]^{n}\, dt \to 0$
 
 **Claim.** $\int_{-\infty}^{\infty} [f(t)]^n\,dt \to 0$ as $n \to \infty$.
 
@@ -48,29 +46,29 @@ $$I_n := \int_{-1}^{1} (1 - t^2)^{n/2}\,dt.$$
 
 The integrand satisfies:
 
-- For t = 0: (1 - 0)^{n/2} = 1 for all n.
-- For 0 < |t| < 1: 0 < 1-t² < 1, so (1-t²)^{n/2} → 0 as n → ∞.
-- For |t| = 1: (1-t²)^{n/2} = 0 for all n ≥ 1.
+- For $t = 0$: $(1 - 0)^{n/2} = 1$ for all $n$.
+- For $0 < |t| < 1$: $0 < 1-t^{2} < 1$, so $(1-t^{2})^{n/2} \to 0$ as $n \to \infty$.
+- For $|t| = 1$: $(1-t^{2})^{n/2} = 0$ for all $n \geq 1$.
 
-So (1-t²)^{n/2} → 0 pointwise for all t ∈ [-1,1] except t = 0 (a set of measure zero).
+So $(1-t^{2})^{n/2} \to 0$ pointwise for all $t \in [-1,1]$ except $t = 0$ (a set of measure zero).
 
-The integrand is bounded: (1-t²)^{n/2} ≤ 1 for all t ∈ [-1,1] and all n ≥ 0, and the constant function 1 is integrable on [-1,1].
+The integrand is bounded: $(1-t^{2})^{n/2} \leq 1$ for all $t \in [-1,1]$ and all $n \geq 0$, and the constant function 1 is integrable on $[-1,1]$.
 
 By the dominated convergence theorem:
 
 $$I_n = \int_{-1}^{1} (1-t^2)^{n/2}\,dt \to \int_{-1}^{1} 0\,dt = 0. \qquad \blacksquare$$
 
-**Explicit bound (optional).** For |t| ≥ δ (with 0 < δ < 1), (1-t²)^{n/2} ≤ (1-δ²)^{n/2}. So:
+**Explicit bound (optional).** For $|t| \geq \delta$ (with $0 < \delta < 1$), $(1-t^{2})^{n/2} \leq (1-\delta^{2})^{n/2}$. So:
 
 $$I_n \leq 2\delta + 2(1-\delta^2)^{n/2}.$$
 
-Choosing δ = n^{-1/3}, say, both terms → 0, giving an effective rate.
+Choosing $\delta = n^{-1/3}$, say, both terms $\to 0$, giving an effective rate.
 
-### Part (c): Aⁿ · m(B\_{n,1}) → 0 for any fixed A > 0
+### Part (c): $A^{n} \cdot m(B_{n,1}) \to 0$ for any fixed $A > 0$
 
-**Claim.** For any A > 0, Aⁿ · m(B\_{n,1}) → 0 as n → ∞.
+**Claim.** For any $A > 0$, $A^{n} \cdot m(B_{n,1}) \to 0$ as $n \to \infty$.
 
-**Proof.** From part (a), define c\_n = I\_n = ∫\_{-1}^{1} (1-t²)^{n/2} dt, so that:
+**Proof.** From part (a), define $c_n = I_n = \int_{-1}^{1} (1-t^{2})^{n/2}\, dt$, so that:
 
 $$m(B_{n+1,1}) = m(B_{n,1}) \cdot c_n.$$
 
@@ -78,35 +76,35 @@ Telescoping:
 
 $$m(B_{n,1}) = m(B_{1,1}) \cdot \prod_{k=1}^{n-1} c_k = 2 \prod_{k=1}^{n-1} c_k$$
 
-(since B\_{1,1} = [-1,1] has measure 2).
+(since $B_{1,1} = [-1,1]$ has measure 2).
 
 Therefore:
 
 $$A^n \cdot m(B_{n,1}) = 2 \cdot A^n \cdot \prod_{k=1}^{n-1} c_k = 2 \cdot \prod_{k=1}^{n-1} (A \cdot c_k) \cdot A.$$
 
-Wait, more carefully: Aⁿ = A · A^{n-1} = A · ∏\_{k=1}^{n-1} A. So:
+Wait, more carefully: $A^{n} = A \cdot A^{n-1} = A \cdot \prod_{k=1}^{n-1} A$. So:
 
 $$A^n \cdot m(B_{n,1}) = 2A \cdot \prod_{k=1}^{n-1} (A \cdot c_k).$$
 
-Since c\_k → 0 by part (b), there exists K such that c\_k < 1/(2A) for all k ≥ K. Then A · c\_k < 1/2 for k ≥ K. So for n > K:
+Since $c_k \to 0$ by part (b), there exists $K$ such that $c_k < 1/(2A)$ for all $k \geq K$. Then $A \cdot c_k < 1/2$ for $k \geq K$. So for $n > K$:
 
 $$\prod_{k=1}^{n-1} (A \cdot c_k) = \underbrace{\prod_{k=1}^{K} (A \cdot c_k)}_{= C_K, \text{ fixed}} \cdot \prod_{k=K+1}^{n-1} (A \cdot c_k) \leq C_K \cdot \left(\frac{1}{2}\right)^{n-1-K}.$$
 
-Since (1/2)^{n-1-K} → 0 as n → ∞:
+Since $(1/2)^{n-1-K} \to 0$ as $n \to \infty$:
 
 $$A^n \cdot m(B_{n,1}) \leq 2A \cdot C_K \cdot 2^{K} \cdot 2^{-(n-1)} \to 0. \qquad \blacksquare$$
 
-**Interpretation.** The volume of the unit ball decays faster than any exponential r⁻ⁿ. Equivalently, for the ball of radius R in ℝⁿ, Rⁿ · Vol(B\_{n,1}) → 0 for any fixed R: even a ball whose radius grows proportionally to the dimension has volume tending to zero. This is the "curse of dimensionality" — high-dimensional volume concentrates near the equator, and the ball becomes an ever-thinner object.
+**Interpretation.** The volume of the unit ball decays faster than any exponential $r^{-n}$. Equivalently, for the ball of radius $R$ in $\mathbb{R}^{n}$, $R^{n} \cdot \mathrm{Vol}(B_{n,1}) \to 0$ for any fixed $R$: even a ball whose radius grows proportionally to the dimension has volume tending to zero. This is the "curse of dimensionality" — high-dimensional volume concentrates near the equator, and the ball becomes an ever-thinner object.
 
 ## What Connects
 
-**To the Gamma function.** The exact volume is m(B\_{n,1}) = πⁿ/² / Γ(n/2 + 1). Stirling's approximation gives Γ(n/2+1) ~ √(πn)(n/(2e))^{n/2}, so m(B\_{n,1}) ~ (2πe/n)^{n/2} / √(πn) — superexponential decay in n, confirming part (c).
+**To the Gamma function.** The exact volume is $m(B_{n,1}) = \pi^{n}/^{2} / \Gamma(n/2 + 1)$. Stirling's approximation gives $\Gamma(n/2+1) \sim \sqrt{\pi n}(n/(2e))^{n/2}$, so $m(B_{n,1}) \sim (2\pi e/n)^{n/2} / \sqrt{\pi n}$ — superexponential decay in $n$, confirming part (c).
 
-**To concentration of measure.** The fact that the integral I\_n = ∫(1-t²)^{n/2} dt → 0 is a manifestation of measure concentration: the mass of the unit ball in ℝⁿ⁺¹ concentrates near the equatorial slice t = 0, with the projections onto the t-axis becoming ever more peaked.
+**To concentration of measure.** The fact that the integral $I_n = \int(1-t^{2})^{n/2}\, dt \to 0$ is a manifestation of measure concentration: the mass of the unit ball in $\mathbb{R}^{n+1}$ concentrates near the equatorial slice $t = 0$, with the projections onto the $t$-axis becoming ever more peaked.
 
-**To the Wallis integral.** I\_n = ∫\_{-1}^{1}(1-t²)^{n/2}dt = B(1/2, n/2+1) = √π · Γ(n/2+1)/Γ(n/2+3/2), which is a beta function. For integer n, this reduces to the Wallis integrals.
+**To the Wallis integral.** $I_n = \int_{-1}^{1}(1-t^{2})^{n/2}dt = B(1/2, n/2+1) = \sqrt{\pi} \cdot \Gamma(n/2+1)/\Gamma(n/2+3/2)$, which is a beta function. For integer $n$, this reduces to the Wallis integrals.
 
-**To high-dimensional probability.** In machine learning and statistics, the superexponential volume decay means that in high dimensions, almost all the volume of a cube [-1,1]ⁿ lies outside the inscribed ball — data points are overwhelmingly in the "corners."
+**To high-dimensional probability.** In machine learning and statistics, the superexponential volume decay means that in high dimensions, almost all the volume of a cube $[-1,1]^{n}$ lies outside the inscribed ball — data points are overwhelmingly in the "corners."
 
 ---
 
@@ -198,8 +196,8 @@ end
 
 **Mathlib notes:**
 
-- `EuclideanSpace ℝ (Fin n)` is the standard Mathlib type for ℝⁿ with the Euclidean norm. `Metric.closedBall 0 1` is the closed unit ball, and `volume` gives its Lebesgue measure.
+- `EuclideanSpace ℝ (Fin n)` is the standard Mathlib type for $\mathbb{R}^{n}$ with the Euclidean norm. `Metric.closedBall 0 1` is the closed unit ball, and `volume` gives its Lebesgue measure.
 - The slicing/Fubini argument in part (a) uses the fact that `EuclideanSpace ℝ (Fin (n+1)) ≃ EuclideanSpace ℝ (Fin n) × ℝ` and the product measure structure. Mathlib has `MeasureTheory.Measure.pi_eq` and related for product measures.
-- `Tendsto ... atTop (𝓝 0)` for `ℝ≥0∞`-valued sequences uses the topology on `ℝ≥0∞`; the neighbourhood filter at 0 includes `[0, ε)` for each ε > 0.
+- `Tendsto ... atTop (𝓝 0)` for `ℝ≥0∞`-valued sequences uses the topology on `ℝ≥0∞`; the neighbourhood filter at 0 includes $[0, \varepsilon)$ for each $\varepsilon > 0$.
 - The finite product `∏ k in Finset.range m, ...` is `Finset.prod`, the standard Mathlib finite product.
-- `∀ᶠ k in atTop, P k` means "P holds for all sufficiently large k" — the standard eventually-filter idiom.
+- `∀ᶠ k in atTop, P k` means "$P$ holds for all sufficiently large $k$" — the standard eventually-filter idiom.

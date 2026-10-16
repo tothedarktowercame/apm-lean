@@ -11,19 +11,19 @@ from the historical proof-frame workspace.
 
 **Complete proof.**
 
-(⇒) Assume \(X\) is connected. Fix an open cover \(\mathcal U\) and points \(p,q\in X\). Let
+($\Rightarrow$) Assume \(X\) is connected. Fix an open cover \(\mathcal U\) and points \(p,q\in X\). Let
 \[
  A := \{x\in X : \text{there exists a ladder in }\mathcal U\text{ from }p\text{ to }x\}.
 \]
 Then \(p\in A\), so \(A\neq\emptyset\). We claim that \(A\) is both open and closed. Given \(x\in A\), choose \(V\in\mathcal U\) with \(x\in V\). If \(y\in V\), append \(V\) to the ladder witnessing \(x\in A\) (the overlap condition is satisfied because \(x\in V\) and \(x\) is already in the previous last set). This produces a ladder from \(p\) to \(y\), so \(V\subseteq A\). Hence \(A\) is open. Similarly, if \(x\notin A\) and \(V\in\mathcal U\) contains \(x\), then \(V\cap A=\emptyset\); otherwise any \(y\in V\cap A\) would yield a ladder to \(x\) by appending \(V\). Therefore the complement of \(A\) is a union of such \(V\)’s, hence open, so \(A\) is closed. Connectedness forces \(A=X\), so \(q\in A\); this gives the desired ladder.
 
-(⇐) Assume \(X\) is ladder connected and suppose for contradiction that \(X=A\cup B\) with disjoint nonempty open sets \(A,B\). Pick \(p\in A\) and \(q\in B\). Consider the open cover \(\{A,B\}\). Any set in a ladder is either \(A\) or \(B\); consecutive overlap forces all sets to lie within a single piece, because \(A\cap B=\emptyset\). Hence no ladder can start in \(A\) and end in \(B\), contradicting ladder connectedness. Therefore no such separation exists and \(X\) is connected.
+($\Leftarrow$) Assume \(X\) is ladder connected and suppose for contradiction that \(X=A\cup B\) with disjoint nonempty open sets \(A,B\). Pick \(p\in A\) and \(q\in B\). Consider the open cover \(\{A,B\}\). Any set in a ladder is either \(A\) or \(B\); consecutive overlap forces all sets to lie within a single piece, because \(A\cap B=\emptyset\). Hence no ladder can start in \(A\) and end in \(B\), contradicting ladder connectedness. Therefore no such separation exists and \(X\) is connected.
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
 
-- **Reachable-set argument.** For the (⇒) direction we use the set \(A\) of ladder-reachable points; showing it is open and closed requires the two simple append/remove ladder lemmas described in Stage 1.
-- **Connected components are clopen.** Used implicitly in the (⇐) direction when we take \(\{A,B\}\) as cover: any separation yields an open cover with no cross-ladder.
-- **Finite chains stay within a component.** Consecutive overlaps inside a disjoint union cannot switch components; this makes the contradiction in the ladder ⇒ connected direction immediate.
+- **Reachable-set argument.** For the ($\Rightarrow$) direction we use the set \(A\) of ladder-reachable points; showing it is open and closed requires the two simple append/remove ladder lemmas described in Stage 1.
+- **Connected components are clopen.** Used implicitly in the ($\Leftarrow$) direction when we take \(\{A,B\}\) as cover: any separation yields an open cover with no cross-ladder.
+- **Finite chains stay within a component.** Consecutive overlaps inside a disjoint union cannot switch components; this makes the contradiction in the ladder $\Rightarrow$ connected direction immediate.
 
 Lean search terms: `IsConnected`, `connectedComponent`, `open_cover`, `Fin`, `List.chain`, `Nonempty`.
 
@@ -39,7 +39,7 @@ The formal/informal alignment artifact lives at:
 
 - Defined a concrete `LadderChain` structure (length + `Fin`-indexed family of opens) and the predicate `LadderConnectedSpace` in `Main.lean`. These capture the problem’s combinatorial notion without invoking extra mathlib infrastructure.
 - Tried to finish `ladderConnected_of_connected` by building the reachable-set closure. Concretely I began a lemma `LadderChain.extend` that should append one more open set containing the current endpoint; unfolding `Fin.castSucc`/`Fin.succ` showed we must carefully transport indices between `Fin (n+1)` and `Fin (n+2)` to prove the new overlap condition, so the work stalled before the lemma statement compiled. This is the blocker for turning the clopen argument into code.
-- Tried to conclude `connected_of_ladderConnected` via the two-open-set cover `{A,B}`. Here the obstacle is slightly different: we need an auxiliary lemma saying that any chain inside a two-set cover cannot switch sides because their intersection is empty. Once the append machinery exists, the remaining argument becomes a short induction on the chain length, so work is paused until `LadderChain.extend` is available.
+- Tried to conclude `connected_of_ladderConnected` via the two-open-set cover $\{A,B\}$. Here the obstacle is slightly different: we need an auxiliary lemma saying that any chain inside a two-set cover cannot switch sides because their intersection is empty. Once the append machinery exists, the remaining argument becomes a short induction on the chain length, so work is paused until `LadderChain.extend` is available.
 - Command run: `lake build ApmCanaries.Frames.T94J01.Apm_v2_t94J01_1775010781379.Main` (succeeds with the expected warnings about the two remaining `sorry`s).
 
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**

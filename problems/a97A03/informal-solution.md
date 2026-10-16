@@ -7,7 +7,7 @@ from the historical proof-frame workspace.
 
 *Why it’s hard.*  Students often forget that absolute continuity is the exact regularity hypothesis needed for the Fundamental Theorem of Calculus (FTC).  Without FTC you can’t connect bounds on \(f'\) to bounds on \(f(x)-f(y)\).  The other trap is thinking that the derivative of *any* Lipschitz function exists everywhere, so they argue pointwise; in reality it exists only almost everywhere, so you must work on the full-measure set of differentiability points.
 
-*Key insight.*  Absolute continuity provides both directions: (1) Lipschitz ⇒ \(|f'|\le B\) almost everywhere because the derivative exists a.e. and is the limit of difference quotients, each bounded by the Lipschitz constant; (2) \(|f'|\le C\) a.e. ⇒ Lipschitz because for every \(x<y\) we can write \(f(y)-f(x)=\int_x^y f'(t)\,dt\) and bound that integral by \(C|y-x|\).  So the whole equivalence is FTC plus elementary estimates.
+*Key insight.*  Absolute continuity provides both directions: (1) Lipschitz $\Rightarrow$ \(|f'|\le B\) almost everywhere because the derivative exists a.e. and is the limit of difference quotients, each bounded by the Lipschitz constant; (2) \(|f'|\le C\) a.e. $\Rightarrow$ Lipschitz because for every \(x<y\) we can write \(f(y)-f(x)=\int_x^y f'(t)\,dt\) and bound that integral by \(C|y-x|\).  So the whole equivalence is FTC plus elementary estimates.
 
 *Proof.*  Assume \(f\) is absolutely continuous on \([a,b]\).
 
@@ -25,7 +25,7 @@ from the historical proof-frame workspace.
 
 Combining the two directions we obtain the equivalence.
 
-*What connects.*  The equivalence “absolutely continuous + Lipschitz ⇔ derivative bounded a.e.” is the one-dimensional version of the general principle that Lipschitz maps live in \(W^{1,\infty}\), and that absolute continuity is the Sobolev regularity needed to integrate derivatives back to the function.  On prelims it pays dividends whenever you need uniform continuity or variation estimates from derivative information, e.g. in solving ODEs (Picard–Lindelöf) or bounding Fourier coefficients of AC functions.
+*What connects.*  The equivalence “absolutely continuous + Lipschitz $\Leftrightarrow$ derivative bounded a.e.” is the one-dimensional version of the general principle that Lipschitz maps live in \(W^{1,\infty}\), and that absolute continuity is the Sobolev regularity needed to integrate derivatives back to the function.  On prelims it pays dividends whenever you need uniform continuity or variation estimates from derivative information, e.g. in solving ODEs (Picard–Lindelöf) or bounding Fourier coefficients of AC functions.
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
 

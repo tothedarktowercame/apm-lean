@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b00J03: For a nonabelian group of order p³, Z(G) = [G,G] has order p
+# APM b00J03: For a nonabelian group of order $p^{3}$, $Z(G) = [G,G]$ has order $p$
 
 ## Why It's Hard
 

@@ -2,23 +2,23 @@
 
 ## 1. Informal proof
 
-**Why it's hard:** The space X = L^p + L^q is not a standard L^r space, so completeness doesn't follow from the usual Riesz-Fischer theorem directly. You have to work with the infimum definition of the norm, which means Cauchy sequences in X must be carefully decomposed into convergent pieces in L^p and L^q separately.
+**Why it's hard:** The space $X = L^p + L^q$ is not a standard $L^r$ space, so completeness doesn't follow from the usual Riesz-Fischer theorem directly. You have to work with the infimum definition of the norm, which means Cauchy sequences in $X$ must be carefully decomposed into convergent pieces in $L^p$ and $L^q$ separately.
 
-**The key insight:** X = L^p + L^q is isometrically isomorphic to the quotient of the product space L^p × L^q by the closed subspace {(g, -g) : g ∈ L^p ∩ L^q}. Since L^p × L^q (with norm ‖(g,h)‖ = ‖g‖_p + ‖h‖_q) is a Banach space and the kernel of the addition map is closed, the quotient is automatically a Banach space.
+**The key insight:** $X = L^p + L^q$ is isometrically isomorphic to the quotient of the product space $L^p \times L^q$ by the closed subspace $\{(g, -g) : g \in L^p \cap L^q\}$. Since $L^p \times L^q$ (with norm $\|(g,h)\| = \|g\|_p + \|h\|_q$) is a Banach space and the kernel of the addition map is closed, the quotient is automatically a Banach space.
 
 **Proof:**
 
-*X is a vector space.* If f₁ = g₁ + h₁ and f₂ = g₂ + h₂ with gᵢ ∈ L^p, hᵢ ∈ L^q, then f₁ + f₂ = (g₁ + g₂) + (h₁ + h₂) ∈ X and αf₁ = αg₁ + αh₁ ∈ X. The zero function is 0 + 0 ∈ X. So X is closed under addition and scalar multiplication.
+*$X$ is a vector space.* If $f_{1} = g_{1} + h_{1}$ and $f_{2} = g_{2} + h_{2}$ with $g_{i} \in L^p$, $h_{i} \in L^q$, then $f_{1} + f_{2} = (g_{1} + g_{2}) + (h_{1} + h_{2}) \in X$ and $\alpha f_{1} = \alpha g_{1} + \alpha h_{1} \in X$. The zero function is $0 + 0 \in X$. So $X$ is closed under addition and scalar multiplication.
 
-*‖·‖_X is a norm.* First, ‖f‖_X ≥ 0 is immediate. For homogeneity: ‖αf‖_X = $\inf\{\|g\|_p + \|h\|_q : \alpha f = g + h\}$ = $\inf\{\|\alpha g'\|_p + \|\alpha h'\|_q : f = g' + h'\}$ = |α| · ‖f‖_X. For the triangle inequality: given ε > 0, choose decompositions f₁ = g₁ + h₁ and f₂ = g₂ + h₂ with ‖gᵢ‖_p + ‖hᵢ‖_q ≤ ‖fᵢ‖_X + ε. Then f₁ + f₂ = (g₁ + g₂) + (h₁ + h₂), so ‖f₁ + f₂‖_X ≤ ‖g₁ + g₂‖_p + ‖h₁ + h₂‖_q ≤ (‖g₁‖_p + ‖g₂‖_p) + (‖h₁‖_q + ‖h₂‖_q) ≤ ‖f₁‖_X + ‖f₂‖_X + 2ε. Since ε is arbitrary, ‖f₁ + f₂‖_X ≤ ‖f₁‖_X + ‖f₂‖_X.
+*$\|\cdot\|_X$ is a norm.* First, $\|f\|_X \geq 0$ is immediate. For homogeneity: $\|\alpha f\|_X$ = $\inf\{\|g\|_p + \|h\|_q : \alpha f = g + h\}$ = $\inf\{\|\alpha g'\|_p + \|\alpha h'\|_q : f = g' + h'\}$ = $|\alpha| \cdot \|f\|_X$. For the triangle inequality: given $\varepsilon > 0$, choose decompositions $f_{1} = g_{1} + h_{1}$ and $f_{2} = g_{2} + h_{2}$ with $\|g_{i}\|_p + \|h_{i}\|_q \leq \|f_{i}\|_X + \varepsilon$. Then $f_{1} + f_{2} = (g_{1} + g_{2}) + (h_{1} + h_{2})$, so $\|f_{1} + f_{2}\|_X \leq \|g_{1} + g_{2}\|_p + \|h_{1} + h_{2}\|_q \leq (\|g_{1}\|_p + \|g_{2}\|_p) + (\|h_{1}\|_q + \|h_{2}\|_q) \leq \|f_{1}\|_X + \|f_{2}\|_X + 2\varepsilon$. Since $\varepsilon$ is arbitrary, $\|f_{1} + f_{2}\|_X \leq \|f_{1}\|_X + \|f_{2}\|_X$.
 
-For definiteness: suppose ‖f‖_X = 0. Then there exist sequences gₙ ∈ L^p, hₙ ∈ L^q with f = gₙ + hₙ and ‖gₙ‖_p + ‖hₙ‖_q → 0. So gₙ → 0 in L^p and hₙ → 0 in L^q. Both converge to 0 in measure (since [0,1] has finite measure and p, q ≥ 1). Hence f = gₙ + hₙ → 0 in measure, so f = 0 a.e.
+For definiteness: suppose $\|f\|_X = 0$. Then there exist sequences $g_{n} \in L^p$, $h_{n} \in L^q$ with $f = g_{n} + h_{n}$ and $\|g_{n}\|_p + \|h_{n}\|_q \to 0$. So $g_{n} \to 0$ in $L^p$ and $h_{n} \to 0$ in $L^q$. Both converge to 0 in measure (since $[0,1]$ has finite measure and $p, q \geq 1$). Hence $f = g_{n} + h_{n} \to 0$ in measure, so $f = 0$ a.e.
 
-*Completeness.* Consider the surjective linear map T: L^p × L^q → X defined by T(g, h) = g + h, where L^p × L^q carries the norm ‖(g,h)‖ = ‖g‖_p + ‖h‖_q. The kernel K = {(g, -g) : g ∈ L^p ∩ L^q} is closed: if (gₙ, -gₙ) → (u, v) in L^p × L^q, then gₙ → u in L^p and gₙ → -v in L^q; passing to subsequences converging a.e., u = -v a.e., so (u, v) = (u, -u) ∈ K.
+*Completeness.* Consider the surjective linear map $T: L^p \times L^q \to X$ defined by $T(g, h) = g + h$, where $L^p \times L^q$ carries the norm $\|(g,h)\| = \|g\|_p + \|h\|_q$. The kernel $K = \{(g, -g) : g \in L^p \cap L^q\}$ is closed: if $(g_{n}, -g_{n}) \to (u, v)$ in $L^p \times L^q$, then $g_{n} \to u$ in $L^p$ and $g_{n} \to -v$ in $L^q$; passing to subsequences converging a.e., $u = -v$ a.e., so $(u, v) = (u, -u) \in K$.
 
-By definition, $\|f\|_X = \inf\{\|(g,h)\| : T(g,h) = f\}$ = ‖(g,h) + K‖_{(L^p × L^q)/K}, so T induces an isometric isomorphism X ≅ (L^p × L^q)/K. Since L^p × L^q is a Banach space (both factors are complete under Riesz-Fischer) and K is a closed subspace, the quotient (L^p × L^q)/K is a Banach space. Therefore X is complete.
+By definition, $\|f\|_X = \inf\{\|(g,h)\| : T(g,h) = f\}$ = $\|(g,h) + K\|_{(L^p \times L^q)/K}$, so $T$ induces an isometric isomorphism $X \cong (L^p \times L^q)/K$. Since $L^p \times L^q$ is a Banach space (both factors are complete under Riesz-Fischer) and $K$ is a closed subspace, the quotient $(L^p \times L^q)/K$ is a Banach space. Therefore $X$ is complete.
 
-**What connects:** The quotient-of-product technique is the standard way to show sum spaces are Banach. The finite measure of [0,1] is used twice: it ensures L^q ⊂ L^p (since q > p and ν([0,1]) = 1), which means X = L^p as a set — but with a potentially different (in fact equivalent) norm. It also ensures convergence in L^p or L^q implies convergence in measure, which is needed for the definiteness argument. The closedness of the kernel K uses the fact that L^p ∩ L^q convergence can be checked via subsequences converging a.e.
+**What connects:** The quotient-of-product technique is the standard way to show sum spaces are Banach. The finite measure of $[0,1]$ is used twice: it ensures $L^q \subset L^p$ (since $q > p$ and $\nu([0,1]) = 1$), which means $X = L^p$ as a set — but with a potentially different (in fact equivalent) norm. It also ensures convergence in $L^p$ or $L^q$ implies convergence in measure, which is needed for the definiteness argument. The closedness of the kernel $K$ uses the fact that $L^p \cap L^q$ convergence can be checked via subsequences converging a.e.
 
 ## 2. Lean 4 theorem statement
 
@@ -83,7 +83,7 @@ Note: The Lean 4 formalization is awkward because Mathlib doesn't have a direct 
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.Lp` — the L^p space as a subtype of `AEEqFun`
+- `MeasureTheory.Lp` — the $L^p$ space as a subtype of `AEEqFun`
 - `MeasureTheory.AEEqFun` — equivalence classes of a.e.-equal functions
 - `MeasureTheory.Measure` — measure type
 - `MeasureTheory.IsFiniteMeasure` — typeclass for finite measures
@@ -91,15 +91,15 @@ Note: The Lean 4 formalization is awkward because Mathlib doesn't have a direct 
 - `NormedAddCommGroup` — the normed group structure on Lp
 - `CompleteSpace` — typeclass for Banach property
 - `Submodule.Quotient` / `HasQuotient` — quotient of normed spaces
-- `Prod.instNormedAddCommGroup` — product norm on L^p × L^q
+- `Prod.instNormedAddCommGroup` — product norm on $L^p \times L^q$
 
 **Key lemmas:**
-- `MeasureTheory.Lp.instCompleteSpace` — L^p is complete (Riesz-Fischer)
+- `MeasureTheory.Lp.instCompleteSpace` — $L^p$ is complete (Riesz-Fischer)
 - `MeasureTheory.Lp.instNormedAddCommGroup` — norm structure on Lp
 - `MeasureTheory.snorm_mono_measure` — snorm monotonicity
-- `MeasureTheory.Memℒp.mono` — if f ∈ L^q and q ≥ p on finite measure, then f ∈ L^p
+- `MeasureTheory.Memℒp.mono` — if $f \in L^q$ and $q \geq p$ on finite measure, then $f \in L^p$
 - `MeasureTheory.Lp.tendsto_Lp_iff_tendsto_ℒp` — convergence in Lp
-- `MeasureTheory.TendstoInMeasure.of_tendsto_snorm` — L^p convergence implies convergence in measure
+- `MeasureTheory.TendstoInMeasure.of_tendsto_snorm` — $L^p$ convergence implies convergence in measure
 - `Submodule.Quotient.instCompleteSpace` — quotient of Banach by closed subspace is Banach
 - `IsClosed.isComplete` — closed subspace of complete space is complete
 - `NormedAddGroupHom.ker` — kernel of a normed group hom

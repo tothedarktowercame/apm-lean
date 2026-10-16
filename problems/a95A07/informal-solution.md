@@ -1,52 +1,50 @@
-
-
-# APM a95A07: Σ 1/n² = π²/6 via contour integration of cot-type function
+# APM a95A07: $\sum 1/n^{2} = \pi^{2}/6$ via contour integration of cot-type function
 
 ## 1. Informal proof
 
-**Why it's hard.** Computing Σ 1/n² (the Basel problem) by contour integration requires finding a meromorphic function whose residues at the integers encode the terms 1/n², and showing the contour integral vanishes on expanding squares — the bound on the contour is the nontrivial step.
+**Why it's hard.** Computing $\sum 1/n^{2}$ (the Basel problem) by contour integration requires finding a meromorphic function whose residues at the integers encode the terms $1/n^{2}$, and showing the contour integral vanishes on expanding squares — the bound on the contour is the nontrivial step.
 
-**The key insight.** The function g(z) = (1/z²) · e^{2πiz}/(e^{2πiz}-1) has poles at all integers. At z = 0 it has a pole of order 3 (double from 1/z² and simple from 1/(e^{2πiz}-1)). At z = n ≠ 0 the residue is 1/(2πin²). Integrate over expanding square contours Cₙ with corners at (N+1/2)(±1±i); the integral → 0 as N → ∞, and the residue theorem relates the sum of residues to zero.
+**The key insight.** The function $g(z) = (1/z^{2}) \cdot e^{2\pi iz}/(e^{2\pi iz}-1)$ has poles at all integers. At $z = 0$ it has a pole of order 3 (double from $1/z^{2}$ and simple from $1/(e^{2\pi iz}-1)$). At $z = n \neq 0$ the residue is $1/(2\pi in^{2})$. Integrate over expanding square contours $C_{n}$ with corners at $(N+1/2)(\pm1\pm i)$; the integral $\to 0$ as $N \to \infty$, and the residue theorem relates the sum of residues to zero.
 
 **Proof.**
 
-Consider f(z) = π cot(πz)/z² (an equivalent and slightly cleaner formulation — the given integrand (1/z²)e^{2πiz}/(e^{2πiz}-1) is related to this by cot(πz) = i(e^{2πiz}+1)/(e^{2πiz}-1), so the two approaches are equivalent up to constant factors).
+Consider $f(z) = \pi \cot(\pi z)/z^{2}$ (an equivalent and slightly cleaner formulation — the given integrand $(1/z^{2})e^{2\pi iz}/(e^{2\pi iz}-1)$ is related to this by $\cot(\pi z) = i(e^{2\pi iz}+1)/(e^{2\pi iz}-1)$, so the two approaches are equivalent up to constant factors).
 
-Let me work with the given integrand directly. Set h(z) = (1/z²) · e^{2πiz}/(e^{2πiz}-1).
+Let me work with the given integrand directly. Set $h(z) = (1/z^{2}) \cdot e^{2\pi iz}/(e^{2\pi iz}-1)$.
 
 *Poles and residues:*
 
-e^{2πiz} - 1 = 0 when z = n ∈ ℤ. Near z = n (n ≠ 0):
+$e^{2\pi iz} - 1 = 0$ when $z = n \in \mathbb{Z}$. Near $z = n$ ($n \neq 0$):
 
-e^{2πiz}/(e^{2πiz}-1) has a simple pole with residue 1/(2πi) (since d/dz(e^{2πiz}-1)|_{z=n} = 2πi).
+$e^{2\pi iz}/(e^{2\pi iz}-1)$ has a simple pole with residue $1/(2\pi i)$ (since $d/dz(e^{2\pi iz}-1)|_{z=n} = 2\pi i$).
 
-So Res(h, n) = (1/n²) · 1/(2πi) for n ≠ 0.
+So $\operatorname{Res}(h, n) = (1/n^{2}) \cdot 1/(2\pi i)$ for $n \neq 0$.
 
-At z = 0: write e^{2πiz}/(e^{2πiz}-1) = 1/(e^{2πiz}-1) + 1. Near z = 0, 1/(e^{2πiz}-1) = 1/(2πiz + (2πiz)²/2 + ...) = (1/2πiz)(1/(1+πiz+...)) = 1/(2πiz) - 1/2 + πiz/6 + .... So h(z) = (1/z²)(1/(2πiz) - 1/2 + πiz/6 + ...) = 1/(2πiz³) - 1/(2z²) + πi/(6z) + .... The residue (coefficient of 1/z) is πi/6.
+At $z = 0$: write $e^{2\pi iz}/(e^{2\pi iz}-1) = 1/(e^{2\pi iz}-1) + 1$. Near $z = 0$, $1/(e^{2\pi iz}-1) = 1/(2\pi iz + (2\pi iz)^{2}/2 + \ldots) = (1/2\pi iz)(1/(1+\pi iz+\ldots)) = 1/(2\pi iz) - 1/2 + \pi iz/6 + \ldots$. So $h(z) = (1/z^{2})(1/(2\pi iz) - 1/2 + \pi iz/6 + \ldots) = 1/(2\pi iz^{3}) - 1/(2z^{2}) + \pi i/(6z) + \ldots$. The residue (coefficient of $1/z$) is $\pi i/6$.
 
-*Contour integral:* Let γ_N be the square with corners at (N+1/2)(±1±i). On γ_N, |e^{2πiz}/(e^{2πiz}-1)| is bounded (since the distance from any point on the contour to the nearest integer is ≥ 1/2, giving |e^{2πiz}-1| bounded below). Combined with |1/z²| = O(1/N²), the integral satisfies:
+*Contour integral:* Let $\gamma_N$ be the square with corners at $(N+1/2)(\pm1\pm i)$. On $\gamma_N$, $|e^{2\pi iz}/(e^{2\pi iz}-1)|$ is bounded (since the distance from any point on the contour to the nearest integer is $\geq 1/2$, giving $|e^{2\pi iz}-1|$ bounded below). Combined with $|1/z^{2}| = O(1/N^{2})$, the integral satisfies:
 
-|∮_{γ_N} h(z) dz| ≤ C · (1/N²) · 4(2N+1) → 0 as N → ∞.
+$|\oint_{\gamma_N} h(z) dz| \leq C \cdot (1/N^{2}) \cdot 4(2N+1) \to 0$ as $N \to \infty$.
 
 *Residue theorem:*
 
-∮_{γ_N} h(z) dz = 2πi [Res(h,0) + Σ_{n=1}^{N} Res(h,n) + Σ_{n=-N}^{-1} Res(h,n)]
+$\oint_{\gamma_N} h(z) dz = 2\pi i [\operatorname{Res}(h,0) + \sum_{n=1}^{N} \operatorname{Res}(h,n) + \sum_{n=-N}^{-1} \operatorname{Res}(h,n)]$
 
-= 2πi [πi/6 + Σ_{n=1}^{N} 1/(2πin²) + Σ_{n=1}^{N} 1/(2πin²)]
+$= 2\pi i [\pi i/6 + \sum_{n=1}^{N} 1/(2\pi in^{2}) + \sum_{n=1}^{N} 1/(2\pi in^{2})]$
 
-= 2πi [πi/6 + 2·Σ_{n=1}^{N} 1/(2πin²)]
+$= 2\pi i [\pi i/6 + 2 \cdot \sum_{n=1}^{N} 1/(2\pi in^{2})]$
 
-= 2πi [πi/6 + Σ_{n=1}^{N} 1/(πin²)]
+$= 2\pi i [\pi i/6 + \sum_{n=1}^{N} 1/(\pi in^{2})]$
 
-As N → ∞, this → 0, so:
+As $N \to \infty$, this $\to 0$, so:
 
-0 = 2πi · πi/6 + 2πi · Σ_{n=1}^{∞} 1/(πin²)
+$0 = 2\pi i \cdot \pi i/6 + 2\pi i \cdot \sum_{n=1}^{\infty} 1/(\pi in^{2})$
 
-0 = -π²/3 + 2 Σ_{n=1}^{∞} 1/n²
+$0 = -\pi^{2}/3 + 2 \sum_{n=1}^{\infty} 1/n^{2}$
 
-**Σ_{n=1}^{∞} 1/n² = π²/6.** ✓ ∎
+**$\sum_{n=1}^{\infty} 1/n^{2} = \pi^{2}/6$.** ✓ ∎
 
-**What connects.** This is Euler's Basel problem, first solved by Euler in 1735. The contour integration method (using π cot(πz)/z² or the equivalent form given) is the standard complex-analytic proof. The key tool is that π cot(πz) has simple poles at every integer with residue 1, making it a "universal" function for summing series over the integers. The same technique computes Σ 1/n^{2k} = (-1)^{k+1}(2π)^{2k}B_{2k}/(2(2k)!) where B_{2k} are Bernoulli numbers, by using π cot(πz)/z^{2k}. The contour bound on the squares (|cot| is bounded on the standard square contours) is a standard lemma in complex analysis.
+**What connects.** This is Euler's Basel problem, first solved by Euler in 1735. The contour integration method (using $\pi \cot(\pi z)/z^{2}$ or the equivalent form given) is the standard complex-analytic proof. The key tool is that $\pi \cot(\pi z)$ has simple poles at every integer with residue 1, making it a "universal" function for summing series over the integers. The same technique computes $\sum 1/n^{2k} = (-1)^{k+1}(2\pi)^{2k}B_{2k}/(2(2k)!)$ where $B_{2k}$ are Bernoulli numbers, by using $\pi \cot(\pi z)/z^{2k}$. The contour bound on the squares ($|\cot|$ is bounded on the standard square contours) is a standard lemma in complex analysis.
 
 ## 2. Lean 4 theorem statement
 
@@ -105,27 +103,27 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `HasSum f s` — the series converges to s
+- `HasSum f s` — the series converges to $s$
 - `tsum` — unconditional sum
 - `Summable` — convergence predicate
 - `Complex.exp`, `Complex.I` — complex exponential and imaginary unit
-- `Real.pi` — π
+- `Real.pi` — $\pi$
 
 **Key lemmas:**
-- `Real.summable_nat_rpow_inv` / `Real.summable_one_div_nat_rpow` — Σ 1/n^s converges for s > 1. Establishes summability for p = 2
+- `Real.summable_nat_rpow_inv` / `Real.summable_one_div_nat_rpow` — $\sum 1/n^s$ converges for $s > 1$. Establishes summability for $p = 2$
 - `hasSum_iff_tendsto_nat_of_nonneg` — relates HasSum to partial sums for nonneg series
-- `Complex.exp_int_mul_two_pi_mul_I` — e^{2πin} = 1 for integer n (pole location)
+- `Complex.exp_int_mul_two_pi_mul_I` — $e^{2\pi in} = 1$ for integer $n$ (pole location)
 - `Complex.cos_eq_exp_eq` / `Complex.cot` — relating cot to exponentials (if reformulating with cot)
-- `tsum_eq_zero_add` — separating the n=0 term
-- `Real.sq_pi` / `Real.pi_pos` — π² and positivity
+- `tsum_eq_zero_add` — separating the $n=0$ term
+- `Real.sq_pi` / `Real.pi_pos` — $\pi^{2}$ and positivity
 - `HasSum.hasSum_compl` — restricting/extending sums over complements
 
 **Tactic hints:**
-- `norm_num [Real.pi_pos]` — verifying π²/6 computations
+- `norm_num [Real.pi_pos]` — verifying $\pi^{2}/6$ computations
 - `exact HasSum.of_nat_of_sum_eq ...` — constructing HasSum from partial sum identity
-- `ring` — for algebraic identities (0 = -π²/3 + 2S ⟹ S = π²/6)
+- `ring` — for algebraic identities ($0 = -\pi^{2}/3 + 2S \Longrightarrow S = \pi^{2}/6$)
 - `field_simp` — clearing denominators in residue computations
-- `simp [Complex.exp_add, Complex.exp_int_mul_two_pi_mul_I]` — simplifying e^{2πin}
-- `positivity` — for n² > 0, π > 0
-- `push_cast` — coercing between ℕ, ℤ, ℝ, ℂ
-- `nlinarith [Real.sq_pi]` — for π² arithmetic
+- `simp [Complex.exp_add, Complex.exp_int_mul_two_pi_mul_I]` — simplifying $e^{2\pi in}$
+- `positivity` — for $n^{2} > 0$, $\pi > 0$
+- `push_cast` — coercing between $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{R}$, $\mathbb{C}$
+- `nlinarith [Real.sq_pi]` — for $\pi^{2}$ arithmetic

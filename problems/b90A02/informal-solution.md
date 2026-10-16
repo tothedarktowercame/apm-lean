@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b90A02: Free ⟹ projective ⟹ flat, and ℚ as the flat-but-not-projective ℤ-module
+# APM b90A02: Free $\Longrightarrow$ projective $\Longrightarrow$ flat, and $\mathbb{Q}$ as the flat-but-not-projective $\mathbb{Z}$-module
 
 ## Why It's Hard
 

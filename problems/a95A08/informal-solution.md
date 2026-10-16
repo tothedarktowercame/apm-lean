@@ -1,44 +1,44 @@
 
 
-# APM a95A08: Length of image curve ≥ 2π, with equality iff Δ ⊆ D
+# APM a95A08: Length of image curve $\geq 2\pi$, with equality iff $\Delta \subseteq D$
 
 ## 1. Informal proof
 
-**Why it's hard.** The length of C = f(∂Δ) involves ∫|f'(e^{iθ})| dθ, which depends on the global behaviour of f' on the circle — not just at the origin. The conditions f(0) = 0 and |f'(0)| = 1 normalise f at one point, but controlling the boundary integral requires connecting the interior derivative to the boundary derivative.
+**Why it's hard.** The length of $C = f(\partial\Delta)$ involves $\int|f'(e^{i\theta})| d\theta$, which depends on the global behaviour of $f'$ on the circle — not just at the origin. The conditions $f(0) = 0$ and $|f'(0)| = 1$ normalise $f$ at one point, but controlling the boundary integral requires connecting the interior derivative to the boundary derivative.
 
-**The key insight.** The length is ℓ(C) = ∫₀²π |f'(e^{iθ})| dθ. By Parseval/power series: f'(z) = Σ naₙz^{n-1} with a₁ = f'(0), |a₁| = 1. Then ∫₀²π |f'(e^{iθ})|² dθ = 2π Σ n²|aₙ|² ≥ 2π|a₁|² = 2π. By Cauchy-Schwarz: ℓ(C)² = (∫|f'|)² ≤ 2π ∫|f'|², but we need the reverse — ℓ(C) = ∫|f'| ≥ 2π|a₁| = 2π directly from the mean value property.
+**The key insight.** The length is $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$. By Parseval/power series: $f'(z) = \sum n a_{n} z^{n-1}$ with $a_{1} = f'(0)$, $|a_{1}| = 1$. Then $\int_{0}^{2}\pi |f'(e^{i\theta})|^{2} d\theta = 2\pi \sum n^{2}|a_{n}|^{2} \geq 2\pi|a_{1}|^{2} = 2\pi$. By Cauchy-Schwarz: $\ell(C)^{2} = (\int|f'|)^{2} \leq 2\pi \int|f'|^{2}$, but we need the reverse — $\ell(C) = \int|f'| \geq 2\pi|a_{1}| = 2\pi$ directly from the mean value property.
 
-Actually the cleanest: ℓ(C) = ∫₀²π |f'(e^{iθ})| dθ ≥ |∫₀²π f'(e^{iθ}) dθ|... no, that doesn't directly give 2π. Instead use: by Cauchy-Schwarz, (∫₀²π 1 · |f'| dθ)² ≤ 2π · ∫₀²π |f'|² dθ — this goes the wrong way.
+Actually the cleanest: $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta \geq |\int_{0}^{2}\pi f'(e^{i\theta}) d\theta|$... no, that doesn't directly give $2\pi$. Instead use: by Cauchy-Schwarz, $(\int_{0}^{2}\pi 1 \cdot |f'| d\theta)^{2} \leq 2\pi \cdot \int_{0}^{2}\pi |f'|^{2} d\theta$ — this goes the wrong way.
 
-Better: ℓ(C) = ∫₀²π |f'(e^{iθ})| dθ. Since |f'(e^{iθ})| ≥ 0, by Jensen's inequality or direct computation: ℓ(C) ≥ 2π · exp((1/2π)∫₀²π log|f'(e^{iθ})| dθ). By Jensen applied to the subharmonic function log|f'|: (1/2π)∫log|f'(e^{iθ})|dθ ≥ log|f'(0)| = log 1 = 0. So ℓ(C) ≥ 2π · e⁰ = 2π. (This uses the AM-GM/Jensen inequality for the exponential function and the mean value property for subharmonic functions.)
+Better: $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$. Since $|f'(e^{i\theta})| \geq 0$, by Jensen's inequality or direct computation: $\ell(C) \geq 2\pi \cdot \exp((1/2\pi)\int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta)$. By Jensen applied to the subharmonic function $\log|f'|$: $(1/2\pi)\int \log|f'(e^{i\theta})|d\theta \geq \log|f'(0)| = \log 1 = 0$. So $\ell(C) \geq 2\pi \cdot e^{0} = 2\pi$. (This uses the AM-GM/Jensen inequality for the exponential function and the mean value property for subharmonic functions.)
 
 **Proof.**
 
-*Part 1: ℓ(C) ≥ 2π.*
+*Part 1: $\ell(C) \geq 2\pi$.*
 
-The length of C is:
+The length of $C$ is:
 
-ℓ(C) = ∫₀²π |f'(e^{iθ})| dθ.
+$\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta$.
 
-Since f' is analytic and nonvanishing on a neighbourhood of Δ̄ (f is univalent, so f' ≠ 0), log|f'| is harmonic on Δ. By the mean value property for harmonic functions:
+Since $f'$ is analytic and nonvanishing on a neighbourhood of Δ̄ ($f$ is univalent, so $f' \neq 0$), $\log|f'|$ is harmonic on $\Delta$. By the mean value property for harmonic functions:
 
-log|f'(0)| = (1/2π) ∫₀²π log|f'(e^{iθ})| dθ.
+$\log|f'(0)| = (1/2\pi) \int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta$.
 
-Since |f'(0)| = 1: (1/2π) ∫₀²π log|f'(e^{iθ})| dθ = 0.
+Since $|f'(0)| = 1$: $(1/2\pi) \int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta = 0$.
 
-By Jensen's inequality (log is concave, so exp is convex):
+By Jensen's inequality ($\log$ is concave, so $\exp$ is convex):
 
-(1/2π) ∫₀²π |f'(e^{iθ})| dθ ≥ exp((1/2π) ∫₀²π log|f'(e^{iθ})| dθ) = e⁰ = 1.
+$(1/2\pi) \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta \geq \exp((1/2\pi) \int_{0}^{2}\pi \log|f'(e^{i\theta})| d\theta) = e^{0} = 1$.
 
-Therefore ℓ(C) = ∫₀²π |f'(e^{iθ})| dθ ≥ 2π · 1 = 2π. ✓
+Therefore $\ell(C) = \int_{0}^{2}\pi |f'(e^{i\theta})| d\theta \geq 2\pi \cdot 1 = 2\pi$. ✓
 
-*Part 2: ℓ(C) = 2π ⟹ Δ ⊆ D.*
+*Part 2: $\ell(C) = 2\pi \Longrightarrow \Delta \subseteq D$.*
 
-Equality in Jensen requires |f'(e^{iθ})| = constant = 1 for all θ. Then f maps ∂Δ isometrically to C, and |f'| = 1 on ∂Δ. By the maximum and minimum modulus principles (|f'| is harmonic-like: log|f'| is harmonic), |f'| ≡ 1 on Δ̄. So f is a rotation: f(z) = e^{iα}z for some α. Then D = f(Δ) = Δ, and Δ ⊆ D. ✓
+Equality in Jensen requires $|f'(e^{i\theta})| = \text{constant} = 1$ for all $\theta$. Then $f$ maps $\partial\Delta$ isometrically to $C$, and $|f'| = 1$ on $\partial\Delta$. By the maximum and minimum modulus principles ($|f'|$ is harmonic-like: $\log|f'|$ is harmonic), $|f'| \equiv 1$ on Δ̄. So $f$ is a rotation: $f(z) = e^{i\alpha}z$ for some $\alpha$. Then $D = f(\Delta) = \Delta$, and $\Delta \subseteq D$. ✓
 
-Contrapositive of second statement: ℓ(C) > 2π ⟹ |f'| is not identically 1 on ∂Δ ⟹ f is not a rotation ⟹ D ≠ Δ, and since f(0) = 0 with |f'(0)| = 1 but f not a rotation, D must "bulge" somewhere, potentially not containing Δ. More precisely: if Δ ⊆ D, then f⁻¹ : D → Δ satisfies f⁻¹(Δ) ⊆ Δ, f⁻¹(0) = 0, |(f⁻¹)'(0)| = 1/|f'(0)| = 1. By the Schwarz lemma applied to both f⁻¹|_Δ and f|_Δ (if Δ ⊆ D), both are Δ-self-maps fixing 0 with |derivative| = 1, forcing f(z) = e^{iα}z, giving ℓ(C) = 2π. ✓ ∎
+Contrapositive of second statement: $\ell(C) > 2\pi \Longrightarrow |f'|$ is not identically 1 on $\partial\Delta \Longrightarrow f$ is not a rotation $\Longrightarrow D \neq \Delta$, and since $f(0) = 0$ with $|f'(0)| = 1$ but $f$ not a rotation, $D$ must "bulge" somewhere, potentially not containing $\Delta$. More precisely: if $\Delta \subseteq D$, then $f^{-1} : D \to \Delta$ satisfies $f^{-1}(\Delta) \subseteq \Delta$, $f^{-1}(0) = 0$, $|(f^{-1})'(0)| = 1/|f'(0)| = 1$. By the Schwarz lemma applied to both $f^{-1}|_{\Delta}$ and $f|_{\Delta}$ (if $\Delta \subseteq D$), both are $\Delta$-self-maps fixing 0 with $|\text{derivative}| = 1$, forcing $f(z) = e^{i\alpha}z$, giving $\ell(C) = 2\pi$. ✓ ∎
 
-**What connects.** This combines Jensen's inequality for subharmonic functions (giving ℓ(C) ≥ 2π), the equality case of Jensen (characterising constant |f'|), and the Schwarz lemma (characterising isometries of the disk). The result is a sharp isoperimetric-type inequality for univalent functions: among all conformal maps of the disk normalised by f(0) = 0 and |f'(0)| = 1, the rotation has the shortest boundary curve, and it's the only map whose image contains the unit disk. This connects to the Bieberbach conjecture (de Branges' theorem) and the theory of schlicht functions, where extremal problems for univalent maps are central.
+**What connects.** This combines Jensen's inequality for subharmonic functions (giving $\ell(C) \geq 2\pi$), the equality case of Jensen (characterising constant $|f'|$), and the Schwarz lemma (characterising isometries of the disk). The result is a sharp isoperimetric-type inequality for univalent functions: among all conformal maps of the disk normalised by $f(0) = 0$ and $|f'(0)| = 1$, the rotation has the shortest boundary curve, and it's the only map whose image contains the unit disk. This connects to the Bieberbach conjecture (de Branges' theorem) and the theory of schlicht functions, where extremal problems for univalent maps are central.
 
 ## 2. Lean 4 theorem statement
 
@@ -125,14 +125,14 @@ end
 - `DifferentiableOn ℂ f S` — analyticity on a region
 - `InjOn f S` — injectivity on a set (univalence)
 - `Metric.closedBall`, `Metric.ball`, `Metric.sphere` — disks and circle
-- `intervalIntegral` — for ∫₀²π
-- `Complex.exp`, `Complex.I` — for e^{iθ}
+- `intervalIntegral` — for $\int_{0}^{2}\pi$
+- `Complex.exp`, `Complex.I` — for $e^{i\theta}$
 
 **Key lemmas:**
-- `Complex.norm_le_norm_of_mapsTo_ball_self` — Schwarz lemma: |f(z)| ≤ |z| for disk self-maps fixing 0. The engine for the equality case
-- `Complex.eq_smul_of_mapsTo_ball_self` — Schwarz equality: |f'(0)| = 1 ⟹ f(z) = cz
+- `Complex.norm_le_norm_of_mapsTo_ball_self` — Schwarz lemma: $|f(z)| \leq |z|$ for disk self-maps fixing 0. The engine for the equality case
+- `Complex.eq_smul_of_mapsTo_ball_self` — Schwarz equality: $|f'(0)| = 1 \Longrightarrow f(z) = cz$
 - `Real.add_pow_le_pow_mul_pow_of_sq_le_sq` — not directly, but Jensen's inequality. May need `MeasureTheory.integral_exp_le` or `ConvexOn.smul_le_integral`
-- `ConvexOn.le_integral` — Jensen's inequality for convex functions (exp is convex, gives ∫|f'| ≥ 2π exp(∫log|f'|/2π))
+- `ConvexOn.le_integral` — Jensen's inequality for convex functions ($\exp$ is convex, gives $\int|f'| \geq 2\pi \exp(\int \log|f'|/2\pi)$)
 - `Real.log_le_sub_one_of_le` — or related log/exp inequalities
 - `Complex.circleIntegral_sub_inv_of_mem_ball` — mean value property for harmonic functions via Cauchy formula
 - `norm_deriv_eq_one_of_injective_schwarz` — not a standard name but the content of the equality case
@@ -141,8 +141,8 @@ end
 - `have hmvp := harmonic_mean_log_deriv ...` — apply mean value property
 - `have hjensen := jensen_exp_circle ...` — apply Jensen
 - `calc 2 * π ≤ ... ≤ curveLength f` — chain the bounds
-- `nlinarith [Real.exp_zero]` — for e⁰ = 1 arithmetic
+- `nlinarith [Real.exp_zero]` — for $e^{0} = 1$ arithmetic
 - `by_contra h_subset; push_neg at h_subset` — contrapositive for part 2
 - `exact Complex.eq_smul_of_mapsTo_ball_self ...` — applying Schwarz equality
-- `positivity` — for π > 0, ‖f'‖ > 0
+- `positivity` — for $\pi > 0$, $\lVert f' \rVert > 0$
 - `simp [curveLength]` — unfolding the length definition

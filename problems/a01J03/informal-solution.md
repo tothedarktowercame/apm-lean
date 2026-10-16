@@ -4,49 +4,49 @@
 
 ## Why It's Hard
 
-Swapping a derivative with an infinite sum is dangerous — it fails for general series of differentiable functions, even uniformly convergent ones. The standard sufficient conditions (uniform convergence of the derivatives, or domination by an integrable function) are not given here. What we *do* have is that each f\_n is nondecreasing and the sum converges pointwise. The difficulty is using monotonicity, not smoothness or uniform convergence, to justify the interchange. The proof must go through the theory of monotone functions (differentiable a.e., connection to measures) rather than through standard differentiation theorems.
+Swapping a derivative with an infinite sum is dangerous — it fails for general series of differentiable functions, even uniformly convergent ones. The standard sufficient conditions (uniform convergence of the derivatives, or domination by an integrable function) are not given here. What we *do* have is that each $f_n$ is nondecreasing and the sum converges pointwise. The difficulty is using monotonicity, not smoothness or uniform convergence, to justify the interchange. The proof must go through the theory of monotone functions (differentiable a.e., connection to measures) rather than through standard differentiation theorems.
 
 ## The Key Insight
 
 Monotone functions are differentiable a.e. (Lebesgue's theorem), and the derivative can be computed via difference quotients. The key tool is the **monotone convergence theorem** applied to difference quotients — not the MCT for integrals, but the idea that nonneg terms can be summed and limited freely.
 
-More precisely: the partial sums Sₙ(x) = Σ\_{k=1}^{N} f\_k(x) are nondecreasing (finite sum of nondecreasing functions), so S\_N' exists a.e. and S\_N' = Σ\_{k=1}^{N} f\_k' a.e. (finite sum — no issue). The sequence S\_N' is nondecreasing (each added term f\_{N+1}' ≥ 0 a.e.) and S\_N' ≤ f' a.e. (since S\_N ≤ f and both are nondecreasing). The limit Σ f\_n' ≤ f' a.e. is the easy direction. The hard direction — f' ≤ Σ f\_n' a.e. — uses the fact that the "remainder" f - S\_N is also nondecreasing, so (f - S\_N)' ≥ 0 a.e., giving f' ≤ S\_N' + (f - S\_N)' ≤ S\_N' + (f - S\_N)'. We need (f - S\_N)' → 0 a.e., which requires a more careful argument via Lebesgue's differentiation theorem.
+More precisely: the partial sums $S_{n}(x) = \sum_{k=1}^{N} f_k(x)$ are nondecreasing (finite sum of nondecreasing functions), so $S_N'$ exists a.e. and $S_N' = \sum_{k=1}^{N} f_k'$ a.e. (finite sum — no issue). The sequence $S_N'$ is nondecreasing (each added term $f_{N+1}' \geq 0$ a.e.) and $S_N' \leq f'$ a.e. (since $S_N \leq f$ and both are nondecreasing). The limit $\sum f_n' \leq f'$ a.e. is the easy direction. The hard direction — $f' \leq \sum f_n'$ a.e. — uses the fact that the "remainder" $f - S_N$ is also nondecreasing, so $(f - S_N)' \geq 0$ a.e., giving $f' \leq S_N' + (f - S_N)' \leq S_N' + (f - S_N)'$. We need $(f - S_N)' \to 0$ a.e., which requires a more careful argument via Lebesgue's differentiation theorem.
 
 Actually, the cleanest proof goes through the **Lebesgue-Stieltjes measure** associated with each monotone function and uses the Radon-Nikodym theorem / MCT for measures.
 
 ## Complete Proof
 
-**Theorem.** Let f\_n : ℝ → [0,∞) be nondecreasing for each n, and suppose f(x) = Σ f\_n(x) < ∞ for all x. Then f'(x) = Σ f\_n'(x) for a.e. x.
+**Theorem.** Let $f_n : \mathbb{R} \to [0,\infty)$ be nondecreasing for each $n$, and suppose $f(x) = \sum f_n(x) < \infty$ for all $x$. Then $f'(x) = \sum f_n'(x)$ for a.e. $x$.
 
 **Proof.**
 
-**Step 1: f is nondecreasing.** If x < y, then f\_n(x) ≤ f\_n(y) for each n (since each f\_n is nondecreasing), so f(x) = Σ f\_n(x) ≤ Σ f\_n(y) = f(y). ✓
+**Step 1: $f$ is nondecreasing.** If $x < y$, then $f_n(x) \leq f_n(y)$ for each $n$ (since each $f_n$ is nondecreasing), so $f(x) = \sum f_n(x) \leq \sum f_n(y) = f(y)$. ✓
 
-**Step 2: All derivatives exist a.e.** By Lebesgue's theorem, every nondecreasing function on ℝ is differentiable a.e. So f'(x) and each f\_n'(x) exist for a.e. x, and f'(x) ≥ 0, f\_n'(x) ≥ 0 a.e.
+**Step 2: All derivatives exist a.e.** By Lebesgue's theorem, every nondecreasing function on $\mathbb{R}$ is differentiable a.e. So $f'(x)$ and each $f_n'(x)$ exist for a.e. $x$, and $f'(x) \geq 0$, $f_n'(x) \geq 0$ a.e.
 
-**Step 3: Σ f\_n'(x) ≤ f'(x) a.e.**
+**Step 3: $\sum f_n'(x) \leq f'(x)$ a.e.**
 
-Define the partial sums S\_N(x) = Σ\_{n=1}^{N} f\_n(x). Each S\_N is nondecreasing, and S\_N(x) ≤ f(x) for all x. The difference quotient satisfies:
+Define the partial sums $S_N(x) = \sum_{n=1}^{N} f_n(x)$. Each $S_N$ is nondecreasing, and $S_N(x) \leq f(x)$ for all $x$. The difference quotient satisfies:
 
 $$\frac{S_N(x+h) - S_N(x)}{h} = \sum_{n=1}^{N} \frac{f_n(x+h) - f_n(x)}{h} \leq \frac{f(x+h) - f(x)}{h}$$
 
-for h > 0 (all terms nonneg, and S\_N ≤ f implies S\_N(x+h) - S\_N(x) ≤ f(x+h) - f(x)).
+for $h > 0$ (all terms nonneg, and $S_N \leq f$ implies $S_N(x+h) - S_N(x) \leq f(x+h) - f(x)$).
 
-Taking h → 0 at points where all derivatives exist (a.e.):
+Taking $h \to 0$ at points where all derivatives exist (a.e.):
 
 $$S_N'(x) = \sum_{n=1}^{N} f_n'(x) \leq f'(x).$$
 
-Since this holds for all N, and all terms are nonneg:
+Since this holds for all $N$, and all terms are nonneg:
 
 $$\sum_{n=1}^{\infty} f_n'(x) \leq f'(x) \quad \text{a.e.}$$
 
-**Step 4: f'(x) ≤ Σ f\_n'(x) a.e., via integration.**
+**Step 4: $f'(x) \leq \sum f_n'(x)$ a.e., via integration.**
 
-It suffices to show that for every compact interval [a,b]:
+It suffices to show that for every compact interval $[a,b]$:
 
 $$\int_a^b f'(x)\,dx \leq \int_a^b \sum_{n=1}^{\infty} f_n'(x)\,dx.$$
 
-For a nondecreasing function g, Lebesgue's theorem gives ∫\_a^b g'(x) dx ≤ g(b) - g(a) (with equality iff g is absolutely continuous; the inequality holds in general).
+For a nondecreasing function $g$, Lebesgue's theorem gives $\int_a^b g'(x) dx \leq g(b) - g(a)$ (with equality iff $g$ is absolutely continuous; the inequality holds in general).
 
 We have:
 
@@ -58,43 +58,43 @@ Now:
 
 $$\sum_{n=1}^{\infty}\int_a^b f_n'(x)\,dx \leq \sum_{n=1}^{\infty}(f_n(b) - f_n(a)) = f(b) - f(a).$$
 
-(Using ∫ f\_n' ≤ f\_n(b) - f\_n(a) for each nondecreasing f\_n, and summing.)
+(Using $\int f_n' \leq f_n(b) - f_n(a)$ for each nondecreasing $f_n$, and summing.)
 
-But also, by the same inequality for f:
+But also, by the same inequality for $f$:
 
 $$\int_a^b f'(x)\,dx \leq f(b) - f(a).$$
 
-So both ∫ f' and ∫ Σ f\_n' are ≤ f(b) - f(a). This doesn't directly compare them. We need a sharper argument.
+So both $\int f'$ and $\int \sum f_n'$ are $\leq f(b) - f(a)$. This doesn't directly compare them. We need a sharper argument.
 
 **Step 4 (corrected): Use the inequality from Step 3 and the MCT.**
 
-From Step 3, Σ f\_n'(x) ≤ f'(x) a.e. Define g(x) = f'(x) - Σ f\_n'(x) ≥ 0 a.e. We want to show g = 0 a.e.
+From Step 3, $\sum f_n'(x) \leq f'(x)$ a.e. Define $g(x) = f'(x) - \sum f_n'(x) \geq 0$ a.e. We want to show $g = 0$ a.e.
 
-Define R\_N(x) = f(x) - S\_N(x) = Σ\_{n>N} f\_n(x). Then R\_N is nondecreasing (sum of nondecreasing functions with nonneg values), and R\_N(x) → 0 for each x (since f(x) = Σ f\_n(x) converges).
+Define $R_N(x) = f(x) - S_N(x) = \sum_{n>N} f_n(x)$. Then $R_N$ is nondecreasing (sum of nondecreasing functions with nonneg values), and $R_N(x) \to 0$ for each $x$ (since $f(x) = \sum f_n(x)$ converges).
 
-By Lebesgue's theorem, R\_N' exists a.e. and R\_N' ≥ 0. Also f' = S\_N' + R\_N' a.e. (since f = S\_N + R\_N and all are nondecreasing, their derivatives add; this is valid for finite sums of monotone functions). So:
+By Lebesgue's theorem, $R_N'$ exists a.e. and $R_N' \geq 0$. Also $f' = S_N' + R_N'$ a.e. (since $f = S_N + R_N$ and all are nondecreasing, their derivatives add; this is valid for finite sums of monotone functions). So:
 
 $$g(x) = f'(x) - \sum_{n=1}^{\infty} f_n'(x) \leq f'(x) - S_N'(x) = R_N'(x) \quad \text{a.e.}$$
 
-for every N. Now we show ∫\_a^b R\_N' dx → 0:
+for every $N$. Now we show $\int_a^b R_N' dx \to 0$:
 
 $$\int_a^b R_N'(x)\,dx \leq R_N(b) - R_N(a) = \sum_{n > N}(f_n(b) - f_n(a)).$$
 
-Since Σ\_{n=1}^∞ (f\_n(b) - f\_n(a)) = f(b) - f(a) < ∞, the tail Σ\_{n>N}(f\_n(b) - f\_n(a)) → 0 as N → ∞.
+Since $\sum_{n=1}^\infty (f_n(b) - f_n(a)) = f(b) - f(a) < \infty$, the tail $\sum_{n>N}(f_n(b) - f_n(a)) \to 0$ as $N \to \infty$.
 
-So ∫\_a^b R\_N' dx → 0. Since 0 ≤ g ≤ R\_N' a.e., we have 0 ≤ ∫\_a^b g dx ≤ ∫\_a^b R\_N' dx → 0, so ∫\_a^b g dx = 0 for every [a,b].
+So $\int_a^b R_N' dx \to 0$. Since $0 \leq g \leq R_N'$ a.e., we have $0 \leq \int_a^b g dx \leq \int_a^b R_N' dx \to 0$, so $\int_a^b g dx = 0$ for every $[a,b]$.
 
-Since g ≥ 0 a.e. and ∫\_a^b g = 0 for every interval, g = 0 a.e. on ℝ. ∎
+Since $g \geq 0$ a.e. and $\int_a^b g = 0$ for every interval, $g = 0$ a.e. on $\mathbb{R}$. ∎
 
 ## What Connects
 
-**To the Fubini-Tonelli philosophy.** This is an interchange-of-limits theorem for nonneg terms. The monotone convergence theorem lets you interchange Σ and ∫ freely for nonneg functions. This problem is the differentiation analogue: interchange Σ and d/dx for nondecreasing functions.
+**To the Fubini-Tonelli philosophy.** This is an interchange-of-limits theorem for nonneg terms. The monotone convergence theorem lets you interchange $\sum$ and $\int$ freely for nonneg functions. This problem is the differentiation analogue: interchange $\sum$ and $d/dx$ for nondecreasing functions.
 
-**To Lebesgue's differentiation theorem.** The fact that a nondecreasing function is differentiable a.e. is essential. Without it, "f'" doesn't even make sense. The proof of Lebesgue's theorem uses the Vitali covering lemma, which is the deep ingredient underneath this problem.
+**To Lebesgue's differentiation theorem.** The fact that a nondecreasing function is differentiable a.e. is essential. Without it, "$f'$" doesn't even make sense. The proof of Lebesgue's theorem uses the Vitali covering lemma, which is the deep ingredient underneath this problem.
 
-**To the theory of monotone functions and measures.** Each nondecreasing f\_n defines a Lebesgue-Stieltjes measure μ\_n. The sum f defines the measure μ = Σ μ\_n. The derivatives f\_n' and f' are the Radon-Nikodym derivatives dμ\_n/dm and dμ/dm. The result then follows from the countable additivity of Radon-Nikodym derivatives: d(Σ μ\_n)/dm = Σ dμ\_n/dm a.e.
+**To the theory of monotone functions and measures.** Each nondecreasing $f_n$ defines a Lebesgue-Stieltjes measure $\mu_n$. The sum $f$ defines the measure $\mu = \sum \mu_n$. The derivatives $f_n'$ and $f'$ are the Radon-Nikodym derivatives $d\mu_n/dm$ and $d\mu/dm$. The result then follows from the countable additivity of Radon-Nikodym derivatives: $d(\sum \mu_n)/dm = \sum d\mu_n/dm$ a.e.
 
-**To the Vitali-Carathéodory theorem.** The key inequality ∫ g' ≤ g(b) - g(a) for nondecreasing g (with equality iff g is absolutely continuous) is what makes the "remainder" argument work. The gap between ∫ g' and g(b) - g(a) is the singular part of the measure, which doesn't affect the a.e. derivative.
+**To the Vitali-Carathéodory theorem.** The key inequality $\int g' \leq g(b) - g(a)$ for nondecreasing $g$ (with equality iff $g$ is absolutely continuous) is what makes the "remainder" argument work. The gap between $\int g'$ and $g(b) - g(a)$ is the singular part of the measure, which doesn't affect the a.e. derivative.
 
 ---
 
@@ -190,9 +190,9 @@ end
 
 **Mathlib notes:**
 
-- `Monotone g` says g is nondecreasing (∀ x y, x ≤ y → g x ≤ g y). This is the standard Mathlib predicate.
+- `Monotone g` says $g$ is nondecreasing ($\forall x y, x \leq y \to g x \leq g y$). This is the standard Mathlib predicate.
 - `deriv g x` is the derivative; `DifferentiableAt ℝ g x` says it exists. Lebesgue's theorem (`monotone_differentiableAE`) guarantees existence a.e. for monotone functions — this is a deep result not yet fully in Mathlib.
 - `∑' n, f n x` is the infinite sum `tsum` — it equals the series when `Summable` and 0 otherwise.
-- `∀ᵐ x ∂volume, P x` is `∀ᶠ x in ae volume, P x`, the standard "for a.e. x" predicate.
-- The proof structure is: `tsum_deriv_le_deriv_tsum` (easy direction via partial sums) + `remainder_integral_deriv_tendsto` (tail integral → 0) + squeeze to get equality a.e.
-- The Lebesgue-Stieltjes measure approach (mentioned in "What Connects") would use `StieltjesFunction` and `MeasureTheory.Measure.StieltjesFunction.measure` from Mathlib, with the Radon-Nikodym derivative giving f'. This is an alternative formalization route.
+- `∀ᵐ x ∂volume, P x` is `∀ᶠ x in ae volume, P x`, the standard "for a.e. $x$" predicate.
+- The proof structure is: `tsum_deriv_le_deriv_tsum` (easy direction via partial sums) + `remainder_integral_deriv_tendsto` (tail integral $\to 0$) + squeeze to get equality a.e.
+- The Lebesgue-Stieltjes measure approach (mentioned in "What Connects") would use `StieltjesFunction` and `MeasureTheory.Measure.StieltjesFunction.measure` from Mathlib, with the Radon-Nikodym derivative giving $f'$. This is an alternative formalization route.

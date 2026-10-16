@@ -1,58 +1,56 @@
-
-
-This is identical to **apm-a00J05** (with g in place of f, and dt in place of dm(t) — both meaning Lebesgue measure). The solution is the same.
+This is identical to **apm-a00J05** (with $g$ in place of $f$, and $dt$ in place of $dm(t)$ — both meaning Lebesgue measure). The solution is the same.
 
 # APM a01A11 = a00J05: Cauchy-type integral over a compact real set
 
 ## Why It's Hard
 
-Same difficulty as a00J05: g is defined by a real integral but must be shown complex-analytic; the non-extendability requires extracting a concrete obstruction; and the limit at infinity requires dominated convergence. The function g(z) = ∫\_K 1/(t-z) dt is the Cauchy transform of Lebesgue measure restricted to K.
+Same difficulty as a00J05: $g$ is defined by a real integral but must be shown complex-analytic; the non-extendability requires extracting a concrete obstruction; and the limit at infinity requires dominated convergence. The function $g(z) = \int_K 1/(t-z)\, dt$ is the Cauchy transform of Lebesgue measure restricted to $K$.
 
 ## The Key Insight
 
-**(a)** Morera + Fubini: for any triangle in ℂ \ K, swap the contour integral with the Lebesgue integral, and apply Cauchy's theorem to the inner integral.
+**(a)** Morera + Fubini: for any triangle in $\mathbb{C} \setminus K$, swap the contour integral with the Lebesgue integral, and apply Cauchy's theorem to the inner integral.
 
-**(b)** If g extended to an entire function, Liouville (since g(z) → 0 at ∞) forces g ≡ 0. But Im g(x+iy) = ∫\_K y/((t-x)²+y²) dt > 0 for y > 0, since the Poisson kernel is strictly positive and m(K) > 0. Contradiction.
+**(b)** If $g$ extended to an entire function, Liouville (since $g(z) \to 0$ at $\infty$) forces $g \equiv 0$. But $\operatorname{Im} g(x+iy) = \int_K y/((t-x)^{2}+y^{2})\, dt > 0$ for $y > 0$, since the Poisson kernel is strictly positive and $m(K) > 0$. Contradiction.
 
-**(c)** Factor: zg(z) = ∫\_K z/(t-z) dt = ∫\_K 1/(t/z - 1) dt → ∫\_K (-1) dt = -m(K) by dominated convergence. The limit is **-m(K)**.
+**(c)** Factor: $zg(z) = \int_K z/(t-z)\, dt = \int_K 1/(t/z - 1)\, dt \to \int_K (-1)\, dt = -m(K)$ by dominated convergence. The limit is **$-m(K)$**.
 
 ## Complete Proof
 
-### Part (a): g is analytic on ℂ \ K
+### Part (a): $g$ is analytic on $\mathbb{C} \setminus K$
 
-Let Δ be a triangle in ℂ \ K. Since Δ and K are disjoint compact sets, δ := dist(Δ, K) > 0, so |1/(t-z)| ≤ 1/δ for t ∈ K, z ∈ Δ. This uniform bound justifies Fubini:
+Let $\Delta$ be a triangle in $\mathbb{C} \setminus K$. Since $\Delta$ and $K$ are disjoint compact sets, $\delta := \mathrm{dist}(\Delta, K) > 0$, so $|1/(t-z)| \leq 1/\delta$ for $t \in K$, $z \in \Delta$. This uniform bound justifies Fubini:
 
 $$\oint_\Delta g(z)\,dz = \oint_\Delta \int_K \frac{1}{t-z}\,dt\,dz = \int_K \oint_\Delta \frac{1}{t-z}\,dz\,dt = \int_K 0\,dt = 0$$
 
-since z ↦ 1/(t-z) is analytic on ℂ \ {t} ⊇ ℂ \ K ⊇ Δ for each t ∈ K. By Morera's theorem, g is analytic. ∎
+since $z \mapsto 1/(t-z)$ is analytic on $\mathbb{C} \setminus \{t\} \supseteq \mathbb{C} \setminus K \supseteq \Delta$ for each $t \in K$. By Morera's theorem, $g$ is analytic. ∎
 
-The derivative is g'(z) = ∫\_K 1/(t-z)² dt (differentiation under the integral, justified by dominated convergence with the same δ-bound).
+The derivative is $g'(z) = \int_K 1/(t-z)^{2}\, dt$ (differentiation under the integral, justified by dominated convergence with the same $\delta$-bound).
 
-### Part (b): g does not extend to an entire function
+### Part (b): $g$ does not extend to an entire function
 
-Suppose F : ℂ → ℂ is entire with F = g on ℂ \ K.
+Suppose $F : \mathbb{C} \to \mathbb{C}$ is entire with $F = g$ on $\mathbb{C} \setminus K$.
 
-**F is bounded:** For |z| large, |g(z)| ≤ ∫\_K 1/|t-z| dt ≤ m(K)/(|z| - max|K|) → 0. So F is continuous on ℂ (hence bounded on any compact set) and F(z) → 0 as |z| → ∞. By Liouville, F ≡ 0.
+**$F$ is bounded:** For $|z|$ large, $|g(z)| \leq \int_K 1/|t-z|\, dt \leq m(K)/(|z| - \max|K|) \to 0$. So $F$ is continuous on $\mathbb{C}$ (hence bounded on any compact set) and $F(z) \to 0$ as $|z| \to \infty$. By Liouville, $F \equiv 0$.
 
-**Contradiction via the Poisson kernel:** For x ∈ ℝ, y > 0, z = x + iy ∈ ℂ \ ℝ ⊂ ℂ \ K:
+**Contradiction via the Poisson kernel:** For $x \in \mathbb{R}$, $y > 0$, $z = x + iy \in \mathbb{C} \setminus \mathbb{R} \subset \mathbb{C} \setminus K$:
 
 $$\operatorname{Im}\,g(x+iy) = \int_K \frac{y}{(t-x)^2 + y^2}\,dt > 0$$
 
-since the integrand is strictly positive for all t ∈ K and m(K) > 0. But F ≡ 0 gives Im g(x+iy) = 0, a contradiction. ∎
+since the integrand is strictly positive for all $t \in K$ and $m(K) > 0$. But $F \equiv 0$ gives $\operatorname{Im} g(x+iy) = 0$, a contradiction. ∎
 
-### Part (c): lim\_{z→∞} z·g(z) = -m(K)
+### Part (c): $\lim_{z\to\infty} z\cdot g(z) = -m(K)$
 
 $$z\,g(z) = \int_K \frac{z}{t-z}\,dt = \int_K \frac{1}{t/z - 1}\,dt.$$
 
-For t ∈ K (bounded) and |z| → ∞: t/z → 0, so 1/(t/z - 1) → -1 pointwise.
+For $t \in K$ (bounded) and $|z| \to \infty$: $t/z \to 0$, so $1/(t/z - 1) \to -1$ pointwise.
 
-Domination: for |z| > 2 max\_{t∈K} |t|, we have |t/z| ≤ 1/2, so |t/z - 1| ≥ 1/2, giving |1/(t/z-1)| ≤ 2. This integrable bound (2 · m(K) < ∞) justifies dominated convergence:
+Domination: for $|z| > 2 \max_{t\in K} |t|$, we have $|t/z| \leq 1/2$, so $|t/z - 1| \geq 1/2$, giving $|1/(t/z-1)| \leq 2$. This integrable bound ($2 \cdot m(K) < \infty$) justifies dominated convergence:
 
 $$\lim_{|z|\to\infty} z\,g(z) = \int_K (-1)\,dt = -m(K). \qquad \blacksquare$$
 
 ## What Connects
 
-Same connections as a00J05: Cauchy transform, potential theory, analytic capacity, Stieltjes transform, moments via the Laurent expansion at ∞.
+Same connections as a00J05: Cauchy transform, potential theory, analytic capacity, Stieltjes transform, moments via the Laurent expansion at $\infty$.
 
 ---
 
@@ -133,4 +131,4 @@ lemma integrand_dominated (hK : IsCompact K)
 end
 ```
 
-**Mathlib notes:** Identical to a00J05. `cauchyIntegral K z` is the Bochner integral ∫\_K 1/(t-z) dt with `(↑t : ℂ)` embedding ℝ → ℂ. `DifferentiableOn ℂ` encodes holomorphicity. `cocompact ℂ` is the filter for |z| → ∞. The Poisson kernel positivity `cauchyIntegral_im_pos` is the engine of part (b): it produces the contradiction with Liouville. The residue `-(volume.restrict K univ).toReal` equals -m(K) coerced to ℂ.
+**Mathlib notes:** Identical to a00J05. `cauchyIntegral K z` is the Bochner integral $\int_K 1/(t-z)\, dt$ with `(↑t : ℂ)` embedding $\mathbb{R} \to \mathbb{C}$. `DifferentiableOn ℂ` encodes holomorphicity. `cocompact ℂ` is the filter for $|z| \to \infty$. The Poisson kernel positivity `cauchyIntegral_im_pos` is the engine of part (b): it produces the contradiction with Liouville. The residue `-(volume.restrict K univ).toReal` equals $-m(K)$ coerced to $\mathbb{C}$.

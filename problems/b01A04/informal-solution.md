@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b01A04: Realizing ℤ/3 and ℤ/3 × ℤ/3 as Galois groups over ℚ
+# APM b01A04: Realizing $\mathbb{Z}/3$ and $\mathbb{Z}/3 \times \mathbb{Z}/3$ as Galois groups over $\mathbb{Q}$
 
 ## Why It's Hard
 

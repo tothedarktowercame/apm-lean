@@ -4,35 +4,35 @@
 
 ## 1. Informal proof
 
-**Why it's hard.** The hypothesis ∫_{x-h}^x f = ∫_x^{x+h} f (symmetric averages agree) is a weak integral condition that must be upgraded to the pointwise conclusion f = constant a.e. The function is only L¹, so pointwise statements require the Lebesgue differentiation theorem, and the constancy must be extracted from the symmetry condition.
+**Why it's hard.** The hypothesis $\int_{x-h}^x f = \int_x^{x+h} f$ (symmetric averages agree) is a weak integral condition that must be upgraded to the pointwise conclusion $f =$ constant a.e. The function is only $L^{1}$, so pointwise statements require the Lebesgue differentiation theorem, and the constancy must be extracted from the symmetry condition.
 
-**The key insight.** The symmetry condition says ∫_{x-h}^{x+h} f = 2∫_x^{x+h} f, meaning the integral of f over any interval centered at x equals twice the integral over the right half. This forces f to have equal averages on all dyadic intervals of the same length, and by induction on the dyadic level, ∫_I f = m(I) · ∫_0^1 f for every dyadic interval I. The Lebesgue differentiation theorem then gives f(x) = ∫_0^1 f a.e.
+**The key insight.** The symmetry condition says $\int_{x-h}^{x+h} f = 2\int_x^{x+h} f$, meaning the integral of $f$ over any interval centered at $x$ equals twice the integral over the right half. This forces $f$ to have equal averages on all dyadic intervals of the same length, and by induction on the dyadic level, $\int_I f = m(I) \cdot \int_0^1 f$ for every dyadic interval $I$. The Lebesgue differentiation theorem then gives $f(x) = \int_0^1 f$ a.e.
 
 **Proof.**
 
-Let c = ∫_0^1 f(t) dt. We show ∫_I f = c · m(I) for every dyadic interval I = [k2⁻ʲ, (k+1)2⁻ʲ], then use Lebesgue differentiation.
+Let $c = \int_0^1 f(t) dt$. We show $\int_I f = c \cdot m(I)$ for every dyadic interval $I = [k2^{-j}, (k+1)2^{-j}]$, then use Lebesgue differentiation.
 
-*Step 1: Base case j = 0.* I = [0,1], ∫_I f = c · 1. ✓
+*Step 1: Base case $j = 0$.* $I = [0,1]$, $\int_I f = c \cdot 1$. ✓
 
-*Step 2: Dyadic splitting.* For I = [a, b] with midpoint x = (a+b)/2 and h = (b-a)/2:
+*Step 2: Dyadic splitting.* For $I = [a, b]$ with midpoint $x = (a+b)/2$ and $h = (b-a)/2$:
 
-The hypothesis gives ∫_{x-h}^x f = ∫_x^{x+h} f, i.e., ∫_a^x f = ∫_x^b f.
+The hypothesis gives $\int_{x-h}^x f = \int_x^{x+h} f$, i.e., $\int_a^x f = \int_x^b f$.
 
-Since ∫_a^b f = ∫_a^x f + ∫_x^b f = 2 ∫_a^x f, we get ∫_a^x f = (1/2)∫_a^b f and ∫_x^b f = (1/2)∫_a^b f.
+Since $\int_a^b f = \int_a^x f + \int_x^b f = 2 \int_a^x f$, we get $\int_a^x f = (1/2)\int_a^b f$ and $\int_x^b f = (1/2)\int_a^b f$.
 
-So if ∫_I f = c · m(I), then each half of I also satisfies ∫_{half} f = (1/2) · c · m(I) = c · m(half). ✓
+So if $\int_I f = c \cdot m(I)$, then each half of $I$ also satisfies $\int_{\text{half}} f = (1/2) \cdot c \cdot m(I) = c \cdot m(\text{half})$. ✓
 
-*Step 3: Induction.* By induction on j: for j = 0, ∫_{[0,1]} f = c. Splitting [0,1] into [0,1/2] and [1/2,1] using Step 2 with x = 1/2, h = 1/2: ∫_{[0,1/2]} f = c/2 = c · m([0,1/2]). Similarly ∫_{[1/2,1]} f = c/2. Continuing: at level j, every dyadic interval I of length 2⁻ʲ satisfies ∫_I f = c · 2⁻ʲ = c · m(I). ✓
+*Step 3: Induction.* By induction on $j$: for $j = 0$, $\int_{[0,1]} f = c$. Splitting $[0,1]$ into $[0,1/2]$ and $[1/2,1]$ using Step 2 with $x = 1/2$, $h = 1/2$: $\int_{[0,1/2]} f = c/2 = c \cdot m([0,1/2])$. Similarly $\int_{[1/2,1]} f = c/2$. Continuing: at level $j$, every dyadic interval $I$ of length $2^{-j}$ satisfies $\int_I f = c \cdot 2^{-j} = c \cdot m(I)$. ✓
 
-*Step 4: Lebesgue differentiation.* For a.e. x ∈ [0,1], the Lebesgue differentiation theorem gives:
+*Step 4: Lebesgue differentiation.* For a.e. $x \in [0,1]$, the Lebesgue differentiation theorem gives:
 
-f(x) = lim_{m(I)→0, x∈I} (1/m(I)) ∫_I f.
+$f(x) = \lim_{m(I)\to 0, x\in I} (1/m(I)) \int_I f$.
 
-Taking I to be the dyadic interval of level j containing x (so m(I) = 2⁻ʲ → 0):
+Taking $I$ to be the dyadic interval of level $j$ containing $x$ (so $m(I) = 2^{-j} \to 0$):
 
-f(x) = lim_{j→∞} (1/2⁻ʲ) · c · 2⁻ʲ = c = ∫_0^1 f(t) dt. ✓ ∎
+$f(x) = \lim_{j\to\infty} (1/2^{-j}) \cdot c \cdot 2^{-j} = c = \int_0^1 f(t) dt$. ✓ ∎
 
-**What connects.** This problem combines the dyadic structure of [0,1] with the Lebesgue differentiation theorem. The symmetry condition forces f to have constant averages on all dyadic intervals, and the Lebesgue differentiation theorem upgrades this to a.e. pointwise constancy. The result is a uniqueness theorem: the only L¹ function satisfying the symmetric mean value property on [0,1] is the constant function. This connects to the mean value property for harmonic functions (where symmetric averages over spheres equal the center value) and to the theory of martingales (the dyadic averages form a martingale that converges a.e. to f by the martingale convergence theorem, which is equivalent to Lebesgue differentiation in this context).
+**What connects.** This problem combines the dyadic structure of $[0,1]$ with the Lebesgue differentiation theorem. The symmetry condition forces $f$ to have constant averages on all dyadic intervals, and the Lebesgue differentiation theorem upgrades this to a.e. pointwise constancy. The result is a uniqueness theorem: the only $L^{1}$ function satisfying the symmetric mean value property on $[0,1]$ is the constant function. This connects to the mean value property for harmonic functions (where symmetric averages over spheres equal the center value) and to the theory of martingales (the dyadic averages form a martingale that converges a.e. to $f$ by the martingale convergence theorem, which is equivalent to Lebesgue differentiation in this context).
 
 ## 2. Lean 4 theorem statement
 
@@ -97,28 +97,28 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.IntegrableOn f (Icc 0 1) volume` — f ∈ L¹([0,1])
+- `MeasureTheory.IntegrableOn f (Icc 0 1) volume` — $f \in L^{1}([0,1])$
 - `intervalIntegral` / `∫ t in a..b, f t` — interval integral
 - `Filter.EventuallyEq` / `=ᵐ[μ]` — a.e. equality
 - `Measure.restrict (Icc 0 1)` — restricted measure
-- `Filter.atTop` — for j → ∞ in dyadic refinement
+- `Filter.atTop` — for $j \to \infty$ in dyadic refinement
 
 **Key lemmas:**
-- `intervalIntegral.integral_add_adjacent_intervals` — ∫_a^b + ∫_b^c = ∫_a^c. Used for the splitting step: ∫_a^b = ∫_a^x + ∫_x^b
-- `intervalIntegral.integral_symm` — ∫_a^b = -∫_b^a
+- `intervalIntegral.integral_add_adjacent_intervals` — $\int_a^b + \int_b^c = \int_a^c$. Used for the splitting step: $\int_a^b = \int_a^x + \int_x^b$
+- `intervalIntegral.integral_symm` — $\int_a^b = -\int_b^a$
 - `MeasureTheory.ae_restrict_of_ae` — transferring a.e. statements to restricted measures
 - Lebesgue differentiation theorem — `MeasureTheory.Measure.ae_tendsto_average` or related. The key tool for Step 4
-- `Nat.floor_div_mul_add_mod_eq` — relating ⌊x·2ʲ⌋ to dyadic intervals
-- `pow_pos` — 2^j > 0
+- `Nat.floor_div_mul_add_mod_eq` — relating $\lfloor x\cdot 2^{j}\rfloor$ to dyadic intervals
+- `pow_pos` — $2^j > 0$
 - `div_lt_div_right` — arithmetic with dyadic fractions
 
 **Tactic hints:**
 - `induction j with | zero => ... | succ j ih => ...` — induction on the dyadic level
 - `have hsplit := symmetric_split hsym ...` — applying the splitting lemma
 - `simp [intervalIntegral.integral_add_adjacent_intervals]` — combining adjacent integrals
-- `field_simp` — for k/2^j arithmetic
-- `norm_num` — for 2^j computations
+- `field_simp` — for $k/2^j$ arithmetic
+- `norm_num` — for $2^j$ computations
 - `linarith` — for interval containment conditions
 - `filter_upwards [lebesgue_differentiation_intervals hf]` — passing to the a.e. limit
-- `ring` — for c/2^j = c · 2⁻ʲ type simplifications
+- `ring` — for $c/2^j = c \cdot 2^{-j}$ type simplifications
 - `exact?` — finding the Lebesgue differentiation theorem

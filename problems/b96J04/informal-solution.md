@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b96J04: The splitting field of x^8+1 — cyclotomic over ℚ, Frobenius over 𝔽₄₁
+# APM b96J04: The splitting field of $x^8+1$ — cyclotomic over $\mathbb{Q}$, Frobenius over $\mathbb{F}_{41}$
 
 ## Why It's Hard
 

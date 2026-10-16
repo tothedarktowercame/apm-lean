@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b01J02: The ideal structure of ℤ[x] — maximal ideals, a non-prime ideal, and dimension 2
+# APM b01J02: The ideal structure of $\mathbb{Z}[x]$ — maximal ideals, a non-prime ideal, and dimension 2
 
 ## Why It's Hard
 

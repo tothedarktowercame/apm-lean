@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b01J03: A self-normalizing Sylow p-subgroup forces the Galois group to be cyclic of order p
+# APM b01J03: A self-normalizing Sylow p-subgroup forces the Galois group to be cyclic of order $p$
 
 ## Why It's Hard
 

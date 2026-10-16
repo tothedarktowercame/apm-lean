@@ -10,11 +10,11 @@ from the historical proof-frame workspace.
 
 *Key insight.* Approximate \(f\) by a continuous compactly supported function \(g\) with \(\|f-g\|_1\) tiny. Translations behave well on such a \(g\) because uniform continuity on a compact support makes \(|g(x-t)-g(x)|\) uniformly small, so its integral is small. Finally split the integral for \(f\) using the triangle inequality.
 
-*Complete proof.* Fix \(ε>0\). Choose \(g\in C_c(\mathbb R)\) with \(\|f-g\|_1<ε/3\) (density of \(C_c\) in \(L^1\)). Because \(g\) is uniformly continuous on its compact support, there exists \(δ>0\) such that \(|g(x-t)-g(x)|<ε/(3 M)\) whenever \(|t|<δ\), with \(M=m(\mathrm{supp}\,g)+1\). Moreover \(|g(x-t)-g(x)|\le 2\|g\|_\infty\) and the integrand vanishes outside a fixed compact set, so the dominated convergence theorem yields \(\int |g(x-t)-g(x)|<ε/3\) for \(|t|<δ\). For such \(t\),
+*Complete proof.* Fix \(\varepsilon >0\). Choose \(g\in C_c(\mathbb R)\) with \(\|f-g\|_1<\varepsilon/3\) (density of \(C_c\) in \(L^1\)). Because \(g\) is uniformly continuous on its compact support, there exists \(\delta >0\) such that \(|g(x-t)-g(x)|<\varepsilon/(3 M)\) whenever \(|t|<\delta \), with \(M=m(\mathrm{supp}\,g)+1\). Moreover \(|g(x-t)-g(x)|\le 2\|g\|_\infty\) and the integrand vanishes outside a fixed compact set, so the dominated convergence theorem yields \(\int |g(x-t)-g(x)|<\varepsilon/3\) for \(|t|<\delta \). For such \(t\),
 \[
-\int |f(x-t)-f(x)| \le \int |f(x-t)-g(x-t)| + \int |g(x-t)-g(x)| + \int |g(x)-f(x)| < ε.
+\int |f(x-t)-f(x)| \le \int |f(x-t)-g(x-t)| + \int |g(x-t)-g(x)| + \int |g(x)-f(x)| < \varepsilon .
 \]
-Therefore \(\|f(·-t)-f\|_1\to 0\) as \(t\to 0\).
+Therefore \(\|f(\cdot-t)-f\|_1\to 0\) as \(t\to 0\).
 
 *What connects.* Translation continuity in \(L^1\) underlies convolution approximation, Fourier analysis, and the proof that smooth mollifiers approximate integrable functions. The “approximate by \(C_c\) + triangle inequality” trick is widely used whenever a linear operator behaves nicely on a dense subspace.
 
@@ -26,7 +26,7 @@ Therefore \(\|f(·-t)-f\|_1\to 0\) as \(t\to 0\).
 
 **Stage 3 — LEAN FORMALIZATION**
 
-Plan: (1) reuse Mathlib’s density of `C(ℝ,ℝ)` with compact support in `L¹`. (2) Prove `translation_continuity_compact` using uniform continuity and `tendsto_integral_of_dominated_convergence`. (3) Deduce `translation_continuity_L1` via the triangle inequality. Stage 3 remains in progress; these lemmas still need to be written in `Main.lean`, though the required Mathlib facts already exist.
+Plan: (1) reuse Mathlib’s density of `C(ℝ,ℝ)` with compact support in $L^{1}$. (2) Prove `translation_continuity_compact` using uniform continuity and `tendsto_integral_of_dominated_convergence`. (3) Deduce `translation_continuity_L1` via the triangle inequality. Stage 3 remains in progress; these lemmas still need to be written in `Main.lean`, though the required Mathlib facts already exist.
 
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 

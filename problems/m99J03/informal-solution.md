@@ -20,7 +20,7 @@ Test against $\varphi\in C_c^\infty$ and Taylor-expand at the point of concentra
 - **(b)** Equal $\pm$ masses straddling $0$: writing $\varphi(x)=\varphi(0)+\varphi'(0)x+O(x^2)$, the $\varphi(0)$ terms cancel and the surviving first-moment term gives $\int g_n\varphi\to-\varphi'(0)$. **Limit $=\delta'$** (since $\langle\delta',\varphi\rangle=-\varphi'(0)$).
 - **(c)** $\psi(x/n)\to\psi(0)$ uniformly on $\operatorname{supp}\varphi$, so $\int\psi(x/n)\varphi\to\psi(0)\int\varphi$. **Limit $=\psi(0)\cdot\mathbf 1$**, the constant distribution.
 
-The three model the three basic moves of approximate-identity theory: **concentrate** (→$\delta$), **concentrate with a sign flip** (→$\delta'$), and **spread out** (→ constant).
+The three model the three basic moves of approximate-identity theory: **concentrate** ($\to\delta$), **concentrate with a sign flip** ($\to\delta'$), and **spread out** (→ constant).
 
 ## Complete Proof
 

@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b93J04: The splitting field of x⁴−10x²+1 is ℚ(√2,√3), with Galois group the Klein four-group
+# APM b93J04: The splitting field of $x^{4}−10x^{2}+1$ is $\mathbb{Q}(\sqrt{2},\sqrt{3})$, with Galois group the Klein four-group
 
 ## Why It's Hard
 

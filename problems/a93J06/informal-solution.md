@@ -11,23 +11,23 @@ from the historical proof-frame workspace.
 \[
  f(z) = f(z) - f(0) = \int_0^1 \frac{d}{dt} f(tz)\,dt = \int_0^1 z f'(tz)\,dt.
 \]
-Taking absolute values and using \(|f'(tz)| ≤ 1\) for \(|z|<1\) turns the integral into \(|z|^2/2\).
+Taking absolute values and using \(|f'(tz)| \leq 1\) for \(|z|<1\) turns the integral into \(|z|^2/2\).
 
-*Complete proof.* Let \(|z|<1\). Define \(\gamma(t)=tz\) for \(0≤t≤1\); then
+*Complete proof.* Let \(|z|<1\). Define \(\gamma(t)=tz\) for \(0\leq t\leq 1\); then
 \(f(z)-f(0)=\int_0^1 f'(\gamma(t))\gamma'(t)\,dt = \int_0^1 z f'(tz)\,dt\).
 Therefore
 \[
-|f(z)| = \left|\int_0^1 z f'(tz)\,dt\right| \le \int_0^1 |z|\,|f'(tz)|\,dt \le |z| \int_0^1 1·t\,dt = \frac{|z|^2}{2},
+|f(z)| = \left|\int_0^1 z f'(tz)\,dt\right| \le \int_0^1 |z|\,|f'(tz)|\,dt \le |z| \int_0^1 1\cdot t\,dt = \frac{|z|^2}{2},
 \]
-where the second inequality uses the hypothesis \(|f'(w)|≤1\) for \(|w|<1\). Hence \(|f(z)|≤|z|^2/2\) for every \(|z|<1\).
+where the second inequality uses the hypothesis \(|f'(w)|\leq 1\) for \(|w|<1\). Hence \(|f(z)|\leq|z|^2/2\) for every \(|z|<1\).
 
 *What connects.* This is a baby version of Schwarz–Pick: derivative bounds on the disk force quadratic vanishing at the origin. The “integrate along the radial segment” trick also shows up when proving the mean value inequality for harmonic functions and when deriving higher-order versions of Schwarz’ lemma (vanishing of order \(k\) gives a \(|z|^k/k!\) bound). Keep it in your prelim toolkit whenever you are given uniform derivative bounds and need a comparison for \(f\) itself.
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
 
 - *Radial integral lemma.* Need the identity \(f(z)=\int_0^1 z f'(tz) dt\) for analytic \(f\) with \(f(0)=0\). *Lean target:* `analytic_radial_integral`.
-- *Bounding the integral.* Uses triangle inequality plus \(|f'(tz)|≤1\). *Lean target:* `schwarz_like_bound`.
-- *Elementary calculus fact.* Evaluate \(∫_0^1 t dt = 1/2\). Already in Mathlib; no new lemma.
+- *Bounding the integral.* Uses triangle inequality plus \(|f'(tz)|\leq 1\). *Lean target:* `schwarz_like_bound`.
+- *Elementary calculus fact.* Evaluate \(\int_0^1 t dt = 1/2\). Already in Mathlib; no new lemma.
 
 **Stage 3 — LEAN FORMALIZATION**
 

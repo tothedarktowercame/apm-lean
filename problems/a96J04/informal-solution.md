@@ -45,7 +45,7 @@ theorem ac_monotone_maps_null_to_null
 | Monotone on interval | `MonotoneOn` | `Order.Monotone.Basic` |
 | Outer measure zero | `MeasureTheory.OuterMeasure` | Used for null-set covering arguments |
 | Image of set | `Set.image` | `f '' E` |
-| Absolute continuity (function) | — | No direct Mathlib predicate for AC functions on intervals; encoded manually via the ε-δ condition |
+| Absolute continuity (function) | — | No direct Mathlib predicate for AC functions on intervals; encoded manually via the $\varepsilon$-$\delta$ condition |
 | AC ⇒ maps null to null | — | Not in Mathlib as of current; sometimes called the "Lusin N-property" |
 
 **Note.** The property that AC functions satisfy the Lusin N-condition (map null sets to null sets) is classical. The converse direction—monotone + N-property implies AC—is the Banach–Zaretsky theorem. Monotonicity is used here to ensure the image of each interval is again an interval (no folding), making the covering estimate clean.

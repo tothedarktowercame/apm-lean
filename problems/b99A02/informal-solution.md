@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b99A02: Structure of groups of order 5075 = 5²·7·29 via a Sylow cascade
+# APM b99A02: Structure of groups of order $5075 = 5^{2}\cdot 7\cdot 29$ via a Sylow cascade
 
 ## Why It's Hard
 

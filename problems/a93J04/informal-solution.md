@@ -1,30 +1,28 @@
-
-
 # APM a93J04: Lp norms converge to L∞ norm (duplicate of a00J01)
 
 ## 1. Informal proof
 
-**Why it's hard.** The Lp norm involves an integral (a global averaging operation) while the L∞ norm is an essential supremum (a local extremal operation). As p grows, the integral increasingly "concentrates" on the set where |f| is near its maximum, but making this precise requires working the bound from both sides with different tools for each direction.
+**Why it's hard.** The Lp norm involves an integral (a global averaging operation) while the L∞ norm is an essential supremum (a local extremal operation). As $p$ grows, the integral increasingly "concentrates" on the set where $|f|$ is near its maximum, but making this precise requires working the bound from both sides with different tools for each direction.
 
-**The key insight.** Upper bound: |f| ≤ ||f||∞ a.e. ⟹ ||f||p ≤ ||f||∞ · m([0,1])^{1/p} = ||f||∞. Lower bound: for any c < ||f||∞, the set {|f| > c} has positive measure, so ||f||p ≥ c · m({|f|>c})^{1/p} → c as p → ∞.
+**The key insight.** Upper bound: $|f| \leq ||f||\infty$ a.e. $\Longrightarrow ||f||p \leq ||f||\infty \cdot m([0,1])^{1/p} = ||f||\infty$. Lower bound: for any $c < ||f||\infty$, the set $\{|f| > c\}$ has positive measure, so $||f||p \geq c \cdot m(\{|f|>c\})^{1/p} \to c$ as $p \to \infty$.
 
 **Proof.**
 
-**Upper bound.** Since |f(x)| ≤ ||f||∞ for a.e. x:
+**Upper bound.** Since $|f(x)| \leq ||f||\infty$ for a.e. $x$:
 
-||f||p = (∫₀¹ |f|^p)^{1/p} ≤ (∫₀¹ ||f||∞^p)^{1/p} = ||f||∞ · m([0,1])^{1/p} = ||f||∞.
+$||f||p = (\int_{0}^{1} |f|^p)^{1/p} \leq (\int_{0}^{1} ||f||\infty^p)^{1/p} = ||f||\infty \cdot m([0,1])^{1/p} = ||f||\infty$.
 
-So lim sup_{p→∞} ||f||p ≤ ||f||∞.
+So $\limsup_{p\to\infty} ||f||p \leq ||f||\infty$.
 
-**Lower bound.** Let c < ||f||∞. By definition of essential supremum, E_c = {x ∈ [0,1] : |f(x)| > c} has m(E_c) > 0. Then:
+**Lower bound.** Let $c < ||f||\infty$. By definition of essential supremum, $E_c = \{x \in [0,1] : |f(x)| > c\}$ has $m(E_c) > 0$. Then:
 
-||f||p^p = ∫₀¹ |f|^p ≥ ∫_{E_c} |f|^p ≥ c^p · m(E_c).
+$||f||p^p = \int_{0}^{1} |f|^p \geq \int_{E_c} |f|^p \geq c^p \cdot m(E_c)$.
 
-Taking p-th roots: ||f||p ≥ c · m(E_c)^{1/p}. As p → ∞, m(E_c)^{1/p} → 1 (since m(E_c) > 0 is a fixed positive constant). So lim inf ||f||p ≥ c. Since c < ||f||∞ was arbitrary, lim inf ||f||p ≥ ||f||∞.
+Taking $p$-th roots: $||f||p \geq c \cdot m(E_c)^{1/p}$. As $p \to \infty$, $m(E_c)^{1/p} \to 1$ (since $m(E_c) > 0$ is a fixed positive constant). So $\liminf ||f||p \geq c$. Since $c < ||f||\infty$ was arbitrary, $\liminf ||f||p \geq ||f||\infty$.
 
-**Combining.** ||f||∞ ≤ lim inf ||f||p ≤ lim sup ||f||p ≤ ||f||∞, so the limit exists and equals ||f||∞. ∎
+**Combining.** $||f||\infty \leq \liminf ||f||p \leq \limsup ||f||p \leq ||f||\infty$, so the limit exists and equals $||f||\infty$. ∎
 
-**What connects.** This is problem a00J01 revisited. The result underpins the fact that L∞ is the "limit" of the Lp scale — both in the norm sense and in the interpolation sense. The upper bound is the Hölder embedding Lp ↪ Lq for p > q on finite measure spaces. The lower bound uses the positivity of level sets, which is the defining property of the essential supremum. The proof technique (squeeze between lim inf and lim sup) is standard for proving that limits exist. The result extends to σ-finite measure spaces with the appropriate normalisation, and connects to the Marcinkiewicz interpolation theorem and the theory of Lorentz spaces.
+**What connects.** This is problem a00J01 revisited. The result underpins the fact that L∞ is the "limit" of the Lp scale — both in the norm sense and in the interpolation sense. The upper bound is the Hölder embedding $Lp \hookrightarrow Lq$ for $p > q$ on finite measure spaces. The lower bound uses the positivity of level sets, which is the defining property of the essential supremum. The proof technique (squeeze between lim inf and lim sup) is standard for proving that limits exist. The result extends to $\sigma$-finite measure spaces with the appropriate normalisation, and connects to the Marcinkiewicz interpolation theorem and the theory of Lorentz spaces.
 
 ## 2. Lean 4 theorem statement
 
@@ -99,30 +97,30 @@ end
 
 **Types/structures:**
 - `MeasureTheory.eLpNorm f p μ` — the Lp seminorm (formerly `snorm`)
-- `MeasureTheory.essSup` — essential supremum (eLpNorm at p = ⊤ equals essSup ‖f‖₊)
+- `MeasureTheory.essSup` — essential supremum (eLpNorm at $p = \top$ equals essSup $\Vert f\Vert_{+}$)
 - `ENNReal.ofReal p` — coercing the real exponent to ℝ≥0∞
 - `AEStronglyMeasurable` — measurability hypothesis
-- `Measure.restrict (Icc 0 1)` — Lebesgue measure on [0,1]
-- `Filter.atTop` — filter for p → ∞
+- `Measure.restrict (Icc 0 1)` — Lebesgue measure on $[0,1]$
+- `Filter.atTop` — filter for $p \to \infty$
 - `NNNorm` / `‖·‖₊` — nonneg norm
 
 **Key lemmas:**
-- `eLpNorm_le_eLpNorm_mul_rpow_measure_univ` — Hölder embedding: ||f||_p ≤ ||f||_q · μ(X)^{1/p-1/q}. For q = ⊤ this gives the upper bound. In `Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp`
-- `eLpNorm_top_eq_essSup` — ||f||_∞ = essSup ‖f‖₊
-- `MeasureTheory.meas_essSup_lt` — m({|f| > c}) > 0 when c < essSup |f| (definition of essSup)
+- `eLpNorm_le_eLpNorm_mul_rpow_measure_univ` — Hölder embedding: $||f||_p \leq ||f||_q \cdot \mu(X)^{1/p-1/q}$. For $q = \top$ this gives the upper bound. In `Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp`
+- `eLpNorm_top_eq_essSup` — $||f||_\infty = essSup \Vert f\Vert_{+}$
+- `MeasureTheory.meas_essSup_lt` — $m(\{|f| > c\}) > 0$ when $c < essSup |f|$ (definition of essSup)
 - `ENNReal.rpow_natCast` / `ENNReal.rpow_le_rpow` — power function properties
-- `ENNReal.tendsto_rpow_nhds_zero_atTop` — a^{1/p} → 1 as p → ∞ for fixed a ∈ (0,∞)
+- `ENNReal.tendsto_rpow_nhds_zero_atTop` — $a^{1/p} \to 1$ as $p \to \infty$ for fixed $a \in (0,\infty)$
 - `Filter.Tendsto.squeeze` / `tendsto_of_tendsto_of_tendsto_of_le_of_le` — squeeze theorem for the final combination
-- `Real.volume_Icc` — m([0,1]) = 1
-- `Measure.restrict_apply_univ` — μ.restrict S univ = μ S
+- `Real.volume_Icc` — $m([0,1]) = 1$
+- `Measure.restrict_apply_univ` — $\mu.restrict S univ = \mu S$
 
 **Tactic hints:**
 - `apply tendsto_of_tendsto_of_tendsto_of_le_of_le` — squeeze between upper and lower bounds
-- `intro p hp` — for ε-δ arguments with the filter
+- `intro p hp` — for $\epsilon$-$\delta$ arguments with the filter
 - `calc eLpNorm f p μ ≤ ...` — for the upper bound chain
 - `gcongr` — for monotonicity of integrals and powers
-- `simp [eLpNorm_top_eq_essSup]` — relating ||f||_∞ to essSup
-- `positivity` — for m(E_c) > 0 and exponent positivity
+- `simp [eLpNorm_top_eq_essSup]` — relating $||f||_\infty$ to essSup
+- `positivity` — for $m(E_c) > 0$ and exponent positivity
 - `exact?` — finding the Hölder embedding lemma
-- `nlinarith` — combining the ε bounds in the squeeze
-- `filter_upwards` — for "for p large enough" arguments
+- `nlinarith` — combining the $\epsilon$ bounds in the squeeze
+- `filter_upwards` — for "for $p$ large enough" arguments

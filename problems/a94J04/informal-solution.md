@@ -1,38 +1,37 @@
 
-
-# APM a94J04: Poisson kernel on the half-plane — L² contraction and approximate identity
+# APM a94J04: Poisson kernel on the half-plane — $L^{2}$ contraction and approximate identity
 
 ## 1. Informal proof
 
-**Why it's hard.** The Poisson kernel P_y(x) = (1/π)y/(y²+x²) is an approximate identity as y → 0⁺, but proving the L² operator norm bound requires either Young's inequality (which gives ||P_y||₁ ≤ 1 for any p) or Fourier analysis (where the Poisson kernel has a clean transform). Part (c) about a.e. convergence requires the Hardy-Littlewood maximal inequality, which is significantly deeper than L² convergence.
+**Why it's hard.** The Poisson kernel $P_y(x) = (1/\pi)y/(y^{2}+x^{2})$ is an approximate identity as $y \to 0^{+}$, but proving the $L^{2}$ operator norm bound requires either Young's inequality (which gives $||P_y||_{1} \leq 1$ for any $p$) or Fourier analysis (where the Poisson kernel has a clean transform). Part (c) about a.e. convergence requires the Hardy-Littlewood maximal inequality, which is significantly deeper than $L^{2}$ convergence.
 
-**The key insight.** The Poisson kernel is a probability measure (∫P_y = 1) and a convolution kernel, so P_y f = P_y * f. Young's inequality with ||P_y||₁ = 1 gives ||P_y f||₂ ≤ ||f||₂. The L² convergence follows from the approximate identity theory. A.e. convergence holds by the maximal theorem.
+**The key insight.** The Poisson kernel is a probability measure ($\int P_y = 1$) and a convolution kernel, so $P_y f = P_y * f$. Young's inequality with $||P_y||_{1} = 1$ gives $||P_y f||_{2} \leq ||f||_{2}$. The $L^{2}$ convergence follows from the approximate identity theory. A.e. convergence holds by the maximal theorem.
 
 **Proof.**
 
-**(a) ||P_y f||₂ ≤ ||f||₂.**
+**(a) $||P_y f||_{2} \leq ||f||_{2}$.**
 
-The Poisson kernel P_y(x) = (1/π)y/(y²+x²) satisfies:
-- P_y ≥ 0 everywhere.
-- ∫_{-∞}^{∞} P_y(x) dx = (1/π)∫y/(y²+x²) dx = (1/π)[arctan(x/y)]_{-∞}^{∞} = (1/π)·π = 1.
+The Poisson kernel $P_y(x) = (1/\pi)y/(y^{2}+x^{2})$ satisfies:
+- $P_y \geq 0$ everywhere.
+- $\int_{-\infty}^{\infty} P_y(x) dx = (1/\pi)\int y/(y^{2}+x^{2}) dx = (1/\pi)[\operatorname{arctan}(x/y)]_{-\infty}^{\infty} = (1/\pi)\cdot\pi = 1$.
 
-So P_y ∈ L¹(ℝ) with ||P_y||₁ = 1. The operator P_y f = P_y * f (convolution). By Young's convolution inequality (||g*f||₂ ≤ ||g||₁ · ||f||₂):
+So $P_y \in L^{1}(\mathbb{R})$ with $||P_y||_{1} = 1$. The operator $P_y f = P_y * f$ (convolution). By Young's convolution inequality ($||g*f||_{2} \leq ||g||_{1} \cdot ||f||_{2}$):
 
-||P_y f||₂ = ||P_y * f||₂ ≤ ||P_y||₁ · ||f||₂ = 1 · ||f||₂ = ||f||₂. ✓
+$||P_y f||_{2} = ||P_y * f||_{2} \leq ||P_y||_{1} \cdot ||f||_{2} = 1 \cdot ||f||_{2} = ||f||_{2}$. ✓
 
-**(b) ||P_y f - f||₂ → 0 as y → 0⁺.**
+**(b) $||P_y f - f||_{2} \to 0$ as $y \to 0^{+}$.**
 
-Since P_y is a nonneg approximate identity (∫P_y = 1, P_y ≥ 0, and for any δ > 0, ∫_{|t|>δ} P_y(t)dt → 0 as y → 0⁺), the standard approximate identity convergence theorem gives:
+Since $P_y$ is a nonneg approximate identity ($\int P_y = 1$, $P_y \geq 0$, and for any $\delta > 0$, $\int_{|t|>\delta} P_y(t)dt \to 0$ as $y \to 0^{+}$), the standard approximate identity convergence theorem gives:
 
-P_y f → f in L² as y → 0⁺.
+$P_y f \to f$ in $L^{2}$ as $y \to 0^{+}$.
 
-In detail: ||P_y f - f||₂ = ||∫ P_y(t)(f(·-t) - f(·))dt||₂ ≤ ∫ P_y(t) ||τ_t f - f||₂ dt (Minkowski integral inequality). Split at |t| = δ: the near part ≤ sup_{|t|<δ} ||τ_t f - f||₂ (which → 0 by L² translation continuity), and the far part ≤ 2||f||₂ · ∫_{|t|>δ} P_y(t)dt → 0 as y → 0. ✓
+In detail: $||P_y f - f||_{2} = ||\int P_y(t)(f(\cdot-t) - f(\cdot))dt||_{2} \leq \int P_y(t) ||\tau_t f - f||_{2} dt$ (Minkowski integral inequality). Split at $|t| = \delta$: the near part $\leq \sup_{|t|<\delta} ||\tau_t f - f||_{2}$ (which $\to 0$ by $L^{2}$ translation continuity), and the far part $\leq 2||f||_{2} \cdot \int_{|t|>\delta} P_y(t)dt \to 0$ as $y \to 0$. ✓
 
 **(c) A.e. convergence.**
 
-P_y f(x) → f(x) for a.e. x as y → 0⁺. This follows from the fact that the Poisson maximal function P*f(x) = sup_{y>0} |P_y f(x)| is bounded by the Hardy-Littlewood maximal function Mf(x) (since the Poisson kernel is bounded by a radially decreasing L¹ majorant), and the maximal inequality ||Mf||₂ ≤ C||f||₂ gives P*f ∈ L² and hence P*f < ∞ a.e. The a.e. convergence then follows from the L² convergence (part b) plus the maximal bound via the standard "almost everywhere from L²" argument: approximate f by continuous compactly supported g (for which P_y g → g pointwise everywhere), and control the remainder via the maximal inequality. ✓ ∎
+$P_y f(x) \to f(x)$ for a.e. $x$ as $y \to 0^{+}$. This follows from the fact that the Poisson maximal function $P*f(x) = \sup_{y>0} |P_y f(x)|$ is bounded by the Hardy-Littlewood maximal function $Mf(x)$ (since the Poisson kernel is bounded by a radially decreasing $L^{1}$ majorant), and the maximal inequality $||Mf||_{2} \leq C||f||_{2}$ gives $P*f \in L^{2}$ and hence $P*f < \infty$ a.e. The a.e. convergence then follows from the $L^{2}$ convergence (part b) plus the maximal bound via the standard "almost everywhere from $L^{2}$" argument: approximate $f$ by continuous compactly supported $g$ (for which $P_y g \to g$ pointwise everywhere), and control the remainder via the maximal inequality. ✓ ∎
 
-**What connects.** This is the theory of the Poisson integral for the upper half-plane. P_y f is the harmonic extension of f to the upper half-plane: u(x,y) = P_y f(x) solves Δu = 0 with boundary data u(x,0) = f(x). Part (a) says the boundary-to-interior operator is an L² contraction; part (b) says the solution converges to its boundary data in L²; part (c) — the deepest — says convergence holds a.e., which is equivalent to the nontangential convergence of harmonic functions (Fatou's theorem). The Fourier transform provides an alternative proof of (a): P̂_y(ξ) = e^{-2π|ξ|y}, so ||P_y f||₂ = ||P̂_y · f̂||₂ ≤ ||f̂||₂ = ||f||₂ by Plancherel, since |P̂_y| ≤ 1.
+**What connects.** This is the theory of the Poisson integral for the upper half-plane. $P_y f$ is the harmonic extension of $f$ to the upper half-plane: $u(x,y) = P_y f(x)$ solves $\Delta u = 0$ with boundary data $u(x,0) = f(x)$. Part (a) says the boundary-to-interior operator is an $L^{2}$ contraction; part (b) says the solution converges to its boundary data in $L^{2}$; part (c) — the deepest — says convergence holds a.e., which is equivalent to the nontangential convergence of harmonic functions (Fatou's theorem). The Fourier transform provides an alternative proof of (a): $\hat{P}_y(\xi) = e^{-2\pi|\xi|y}$, so $||P_y f||_{2} = ||\hat{P}_y \cdot \hat{f}||_{2} \leq ||\hat{f}||_{2} = ||f||_{2}$ by Plancherel, since $|\hat{P}_y| \leq 1$.
 
 ## 2. Lean 4 theorem statement
 
@@ -123,26 +122,26 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.Memℒp f 2 volume` — f ∈ L²(ℝ)
+- `MeasureTheory.Memℒp f 2 volume` — $f \in L^{2}(\mathbb{R})$
 - `MeasureTheory.eLpNorm f p volume` — Lp seminorm
 - `AEStronglyMeasurable` — measurability
-- `Filter.𝓝[>] 0` — right-neighbourhood filter for y → 0⁺
+- `Filter.𝓝[>] 0` — right-neighbourhood filter for $y \to 0^{+}$
 - `MeasureTheory.maximalFunction` — Hardy-Littlewood maximal function (may be in `Mathlib.MeasureTheory.Function.MaximalFunction` or similar)
 
 **Key lemmas:**
-- `Real.integral_inv_one_add_sq` — ∫ 1/(1+x²) dx = π (for verifying ∫P_y = 1 after substitution)
-- `MeasureTheory.integral_comp_mul_right` — substitution u = x/y
+- `Real.integral_inv_one_add_sq` — $\int 1/(1+x^{2}) dx = \pi$ (for verifying $\int P_y = 1$ after substitution)
+- `MeasureTheory.integral_comp_mul_right` — substitution $u = x/y$
 - Young's inequality — `MeasureTheory.convolution_le_Lp_mul_L1` or similar (for part a)
 - `MeasureTheory.tendsto_set_integral_of_monotone` — for the tail vanishing
-- `Lp_translation_continuous` — ||τ_h f - f||₂ → 0 (continuity of L² translation, for part b)
-- `MeasureTheory.strongType_maximalFunction` — maximal inequality ||Mf||₂ ≤ C||f||₂ (for part c)
-- `norm_integral_le_integral_norm` — |∫ gf| ≤ ∫|g||f|
+- `Lp_translation_continuous` — $||\tau_h f - f||_{2} \to 0$ (continuity of $L^{2}$ translation, for part b)
+- `MeasureTheory.strongType_maximalFunction` — maximal inequality $||Mf||_{2} \leq C||f||_{2}$ (for part c)
+- `norm_integral_le_integral_norm` — $|\int gf| \leq \int|g||f|$
 
 **Tactic hints:**
 - `calc eLpNorm (poissonConv y f) 2 volume = eLpNorm (P_y * f) 2 volume ≤ ...` — for part (a) chain
-- `intro ε hε` — for the ε-δ arguments in parts (b) and (c)
+- `intro ε hε` — for the $\varepsilon$-$\delta$ arguments in parts (b) and (c)
 - `gcongr` — for monotonicity bounds
-- `positivity` — for y > 0, π > 0, y²+x² > 0
+- `positivity` — for $y > 0$, $\pi > 0$, $y^{2}+x^{2} > 0$
 - `field_simp` — for the Poisson kernel algebra
 - `simp [poissonKernel]` — unfolding definitions
 - `filter_upwards` — for a.e. statements

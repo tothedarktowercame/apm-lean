@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b97A01: The structure of S₄, and order-24 groups with a non-normal Sylow 3-subgroup
+# APM b97A01: The structure of $S_{4}$, and order-$24$ groups with a non-normal Sylow $3$-subgroup
 
 ## Why It's Hard
 
@@ -60,7 +60,7 @@ $$
 each abelian ($V_4\trianglelefteq A_4$ since $V_4\trianglelefteq S_4$). A group with a
 subnormal series of abelian quotients is solvable, so $S_4$ is solvable. $\quad\checkmark$
 
-### (b) Order-24, not $S_4$, Sylow 3 not normal
+### (b) Order-$24$, not $S_4$, Sylow $3$ not normal
 
 Let $|G|=24=2^3\cdot3$. The number of Sylow $3$-subgroups satisfies $n_3\equiv1\pmod3$
 and $n_3\mid 8$, so $n_3\in\{1,4\}$. Since the Sylow $3$ is not normal, $n_3=4$.

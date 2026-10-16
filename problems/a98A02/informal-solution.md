@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM a98A02: A uniformly bounded orthonormal sequence is Riemann–Lebesgue against all of L¹
+# APM a98A02: A uniformly bounded orthonormal sequence is Riemann–Lebesgue against all of $L^{1}$
 
 ## Why It's Hard
 

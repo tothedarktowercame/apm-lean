@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b96A04: The fraction field K is a free/projective/finitely-generated R-module only when R = K
+# APM b96A04: The fraction field $K$ is a free/projective/finitely-generated $R$-module only when $R = K$
 
 ## Why It's Hard
 

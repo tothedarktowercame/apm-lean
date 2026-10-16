@@ -1,38 +1,38 @@
 
 
-# APM a94J07: e^z + 8z + z³ is injective on the unit disk
+# APM a94J07: $e^z + 8z + z^{3}$ is injective on the unit disk
 
 ## 1. Informal proof
 
-**Why it's hard.** Checking injectivity directly (f(z₁) = f(z₂) ⟹ z₁ = z₂) is impractical for a transcendental function like e^z + 8z + z³. The hint says to use Rouché, but Rouché counts zeros — how does that help with injectivity?
+**Why it's hard.** Checking injectivity directly ($f(z_{1}) = f(z_{2}) \Longrightarrow z_{1} = z_{2}$) is impractical for a transcendental function like $e^z + 8z + z^{3}$. The hint says to use Rouché, but Rouché counts zeros — how does that help with injectivity?
 
-**The key insight.** f is injective on Δ iff for each w ∈ f(Δ), the equation f(z) = w has exactly one solution in Δ. By the argument principle, the number of solutions is the winding number of f(γ) around w as γ traverses ∂Δ. If f'(z) ≠ 0 on Δ̄ (no critical points) and f is injective on ∂Δ (which can be shown since the dominant term 8z has winding number 1 and the perturbation is small), then f is injective on Δ. Alternatively: show |f'(z)| > 0 on Δ̄ and the winding number of f(∂Δ) around any interior value is 1.
+**The key insight.** $f$ is injective on $\Delta$ iff for each $w \in f(\Delta)$, the equation $f(z) = w$ has exactly one solution in $\Delta$. By the argument principle, the number of solutions is the winding number of $f(\gamma)$ around $w$ as $\gamma$ traverses $\partial\Delta$. If $f'(z) \neq 0$ on $\overline{\Delta}$ (no critical points) and $f$ is injective on $\partial\Delta$ (which can be shown since the dominant term $8z$ has winding number 1 and the perturbation is small), then $f$ is injective on $\Delta$. Alternatively: show $|f'(z)| > 0$ on $\overline{\Delta}$ and the winding number of $f(\partial\Delta)$ around any interior value is 1.
 
-Actually, the cleaner approach: f'(z) = e^z + 8 + 3z². On |z| ≤ 1: |e^z + 3z²| ≤ e + 3 ≈ 5.72 < 8. So by Rouché on f': f' and 8 have the same number of zeros in Δ, namely 0. So f' ≠ 0 on Δ̄, making f a local diffeomorphism. Then verify f is injective on ∂Δ using Rouché on f(z) - f(w).
+Actually, the cleaner approach: $f'(z) = e^z + 8 + 3z^{2}$. On $|z| \leq 1$: $|e^z + 3z^{2}| \leq e + 3 \approx 5.72 < 8$. So by Rouché on $f'$: $f'$ and 8 have the same number of zeros in $\Delta$, namely 0. So $f' \neq 0$ on $\overline{\Delta}$, making $f$ a local diffeomorphism. Then verify $f$ is injective on $\partial\Delta$ using Rouché on $f(z) - f(w)$.
 
 **Proof.**
 
-*Step 1: f' has no zeros in Δ̄.* f'(z) = e^z + 8 + 3z². Write f'(z) = 8 + (e^z + 3z²). On |z| = 1:
+*Step 1: $f'$ has no zeros in $\overline{\Delta}$.* $f'(z) = e^z + 8 + 3z^{2}$. Write $f'(z) = 8 + (e^z + 3z^{2})$. On $|z| = 1$:
 
-|e^z + 3z²| ≤ |e^z| + 3|z|² ≤ e¹ + 3 = e + 3 < 5.72 < 8 = |8|.
+$|e^z + 3z^{2}| \leq |e^z| + 3|z|^{2} \leq e^{1} + 3 = e + 3 < 5.72 < 8 = |8|$.
 
-By Rouché, f' and 8 have the same number of zeros in {|z| ≤ 1}: namely 0. So f' ≠ 0 on Δ̄.
+By Rouché, $f'$ and 8 have the same number of zeros in $\{|z| \leq 1\}$: namely 0. So $f' \neq 0$ on $\overline{\Delta}$.
 
-*Step 2: f is injective.* For any w ∈ ℂ, consider g_w(z) = f(z) - w. The number of zeros of g_w in Δ is:
+*Step 2: $f$ is injective.* For any $w \in \mathbb{C}$, consider $g_w(z) = f(z) - w$. The number of zeros of $g_w$ in $\Delta$ is:
 
-N(w) = (1/2πi) ∮_{|z|=1} f'(z)/(f(z)-w) dz.
+$N(w) = (1/2\pi i) \oint_{|z|=1} f'(z)/(f(z)-w)\, dz$.
 
-Write f(z) = 8z + h(z) where h(z) = e^z + z³. On |z| = 1:
+Write $f(z) = 8z + h(z)$ where $h(z) = e^z + z^{3}$. On $|z| = 1$:
 
-|h(z)| = |e^z + z³| ≤ e + 1 < 3.72 < 8 = |8z|.
+$|h(z)| = |e^z + z^{3}| \leq e + 1 < 3.72 < 8 = |8z|$.
 
-By Rouché, f(z) and 8z have the same number of zeros in Δ, i.e., f(z) = 0 has exactly 1 zero in Δ. More generally, for any w, f(z) - w and 8z - w have the same number of zeros in Δ provided |h(z)| < |8z - w| on |z| = 1. This holds when |w| is small enough, but not for all w.
+By Rouché, $f(z)$ and $8z$ have the same number of zeros in $\Delta$, i.e., $f(z) = 0$ has exactly 1 zero in $\Delta$. More generally, for any $w$, $f(z) - w$ and $8z - w$ have the same number of zeros in $\Delta$ provided $|h(z)| < |8z - w|$ on $|z| = 1$. This holds when $|w|$ is small enough, but not for all $w$.
 
-Instead, use the argument principle directly. Since f' ≠ 0 on Δ̄ (Step 1), f is a local homeomorphism on Δ̄. The map f|_{∂Δ} has winding number equal to the number of zeros of f' inside Δ plus 1... actually, the winding number of f(∂Δ) around any point in f(Δ) \ f(∂Δ) equals the number of preimages in Δ. By Step 1 and the argument principle, this number is constant on each component of ℂ \ f(∂Δ).
+Instead, use the argument principle directly. Since $f' \neq 0$ on $\overline{\Delta}$ (Step 1), $f$ is a local homeomorphism on $\overline{\Delta}$. The map $f|_{\partial\Delta}$ has winding number equal to the number of zeros of $f'$ inside $\Delta$ plus 1... actually, the winding number of $f(\partial\Delta)$ around any point in $f(\Delta) \setminus f(\partial\Delta)$ equals the number of preimages in $\Delta$. By Step 1 and the argument principle, this number is constant on each component of $\mathbb{C} \setminus f(\partial\Delta)$.
 
-Now f(z) = 8z + h(z) with |h| < 8 = |8z| on |z| = 1. By Rouché, f and 8z have the same winding number on |z| = 1 around any point inside the image. Since 8z has winding number 1 (it's a linear bijection), f also has winding number 1, meaning every value in f(Δ) has exactly 1 preimage. So f is injective on Δ. ✓ ∎
+Now $f(z) = 8z + h(z)$ with $|h| < 8 = |8z|$ on $|z| = 1$. By Rouché, $f$ and $8z$ have the same winding number on $|z| = 1$ around any point inside the image. Since $8z$ has winding number 1 (it's a linear bijection), $f$ also has winding number 1, meaning every value in $f(\Delta)$ has exactly 1 preimage. So $f$ is injective on $\Delta$. ✓ ∎
 
-**What connects.** This uses Rouché's theorem twice: once to show f' ≠ 0 (no critical points) and once to show the winding number of f|_{∂Δ} is 1. The key numerical estimate is that the "perturbation" (e^z + z³ or e^z + 3z²) is smaller than the "dominant term" (8z or 8) on the unit circle. The factor 8 is chosen to dominate e + 3 ≈ 5.72. The result connects to the theory of univalent (schlicht) functions: f is univalent on Δ iff it is injective, and the classical sufficient condition is |f''(0)/f'(0)| ≤ 1 (though this is much stronger than needed here). The Rouché approach to injectivity — comparing winding numbers — is more general and works for any function where a dominant linear term can be identified.
+**What connects.** This uses Rouché's theorem twice: once to show $f' \neq 0$ (no critical points) and once to show the winding number of $f|_{\partial\Delta}$ is 1. The key numerical estimate is that the "perturbation" ($e^z + z^{3}$ or $e^z + 3z^{2}$) is smaller than the "dominant term" ($8z$ or 8) on the unit circle. The factor 8 is chosen to dominate $e + 3 \approx 5.72$. The result connects to the theory of univalent (schlicht) functions: $f$ is univalent on $\Delta$ iff it is injective, and the classical sufficient condition is $|f''(0)/f'(0)| \leq 1$ (though this is much stronger than needed here). The Rouché approach to injectivity — comparing winding numbers — is more general and works for any function where a dominant linear term can be identified.
 
 ## 2. Lean 4 theorem statement
 
@@ -99,22 +99,22 @@ end
 - `HasDerivAt` — derivative at a point
 
 **Key lemmas:**
-- `Complex.norm_exp_le_exp_norm_re` — ‖e^z‖ ≤ e^{Re z} ≤ e^{‖z‖}. Key for bounding |e^z| ≤ e on the unit disk
-- `norm_pow_le` — ‖z^n‖ ≤ ‖z‖^n
-- `norm_add_le` — triangle inequality ‖a+b‖ ≤ ‖a‖+‖b‖
+- `Complex.norm_exp_le_exp_norm_re` — $\lVert e^z\rVert \leq e^{\mathrm{Re}\, z} \leq e^{\lVert z\rVert}$. Key for bounding $|e^z| \leq e$ on the unit disk
+- `norm_pow_le` — $\lVert z^n\rVert \leq \lVert z\rVert^n$
+- `norm_add_le` — triangle inequality $\lVert a+b\rVert \leq \lVert a\rVert+\lVert b\rVert$
 - `Complex.circleIntegral_sub_inv_of_mem_ball` — Cauchy integral formula
 - `HasDerivAt.exp` — derivative of exp
 - `HasDerivAt.add` — sum rule for derivatives
 - `HasDerivAt.pow` — power rule
 - `HasDerivAt.const_mul` — scalar multiplication rule
-- `Real.exp_le_exp` — monotonicity of exp (e^{‖z‖} ≤ e¹ for ‖z‖ ≤ 1)
+- `Real.exp_le_exp` — monotonicity of exp ($e^{\lVert z\rVert} \leq e^{1}$ for $\lVert z\rVert \leq 1$)
 
 **Tactic hints:**
 - `calc ‖exp z + 3 * z ^ 2‖ ≤ ‖exp z‖ + 3 * ‖z‖ ^ 2 ≤ e + 3 < 8` — the Rouché bound chain
-- `norm_num [Real.exp_le_exp]` — verifying e + 3 < 8
+- `norm_num [Real.exp_le_exp]` — verifying $e + 3 < 8$
 - `exact norm_add_le _ _` — triangle inequality steps
 - `gcongr` — for monotonicity in norm bounds
 - `nlinarith [Real.exp_pos 1, Real.exp_le_exp.mpr (by linarith : (1:ℝ) ≤ 1)]` — arithmetic with e
 - `exact HasDerivAt.add (HasDerivAt.add hasDerivAt_exp ...) ...` — assembling the derivative
-- `positivity` — for 8 > 0
+- `positivity` — for $8 > 0$
 - `simp [f_poly_exp]` — unfolding the definition

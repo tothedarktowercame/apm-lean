@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM m02J01: Every distribution on ℝ has a primitive, unique up to a constant
+# APM m02J01: Every distribution on $\mathbb{R}$ has a primitive, unique up to a constant
 
 ## Why It's Hard
 
