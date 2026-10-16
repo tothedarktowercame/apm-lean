@@ -1474,6 +1474,16 @@ noncomputable def frozenGeneratorNamedMVPiecesExact (k : ℕ) :=
     frozenGeneratorRadialPackage.outer_isOpen
     frozenGeneratorRadialPackage.cover k
 
+/-- Production Mayer--Vietoris exactness at the named frozen quotient term,
+with the named quotient topology in scope. -/
+noncomputable def frozenGeneratorNamedMVUnionExact (k : ℕ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_union
+    (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+    (PolygonRadialOpenCover.outerOpen frozenGeneratorRel)
+    frozenGeneratorRadialPackage.inner_isOpen
+    frozenGeneratorRadialPackage.outer_isOpen
+    frozenGeneratorRadialPackage.cover k
+
 /-- The actual frozen disk quotient is Hausdorff because its generated
 equivalence relation has closed graph on the compact polygon disk. -/
 noncomputable instance frozenGeneratorQuotientT2Space :
@@ -2339,6 +2349,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorRadialHomologyIso
 #print axioms frozenGeneratorRadialGroupHomologyIso
 #print axioms frozenGeneratorNamedMVPiecesExact
+#print axioms frozenGeneratorNamedMVUnionExact
 #print axioms frozenGeneratorMVGraphH1_comp_eq_production
 #print axioms frozenGeneratorMVIntersectionH0ArrowToIntGraph
 #print axioms frozenGeneratorMVIntGraphH0ReassemblyArrow
