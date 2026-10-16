@@ -88672,26 +88672,26 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 6,
+   :stop-count 7,
    :evidence
    {:placeholder-delta 0,
-    :residual "Graph homeomorphism/MV; normalize; assemble.",
+    :residual
+    "Compute explicit graph homology/MV; normalize; assemble.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint" "dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorCircleRel_iff_graphRel",
-      :type "exact circle graph relation",
+    [{:name "frozenGeneratorCircleHomeomorphBoundaryGraph",
+      :type "circle quotient to explicit graph quotient",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenGeneratorCircleQuotient_identifies_generators"],
+      :depends-on ["frozenGeneratorCircleRel_iff_graphRel"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
       :type "MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenGeneratorCircleRel_iff_graphRel"
+      ["frozenGeneratorCircleHomeomorphBoundaryGraph"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88710,7 +88710,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked exact graph relation.",
+    :reason "Banked graph quotient homeomorphism.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88720,31 +88720,16 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check 5544234f0", :exit 0}],
-    :diagnostic-history
-    [{:cmd "draft", :exit 1, :correction "normalized Fin"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792111596446-14919-8e36d083",
-     :commands
-     ["git show/diff/check 5544234f0"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from 5544234f0"],
-     :finding
-     "PASS program STOP: topo-6 commit 5544234f0 adds compiled, sorry-free progress after 712d692dd. FrozenBoundaryGraphRel explicitly states the seven circle-source pairings with the same six direct parameters and reversed 1/7 parameter. The boundary-circle homeomorphism gives the needed point-equality iff, and unfolding proves both directions between the induced circle relation and this explicit graph relation; this repairs the earlier one-way generator inclusion at the representation boundary. It does not yet claim a quotient graph homeomorphism or MV calculation, both still listed. Only t94J09Closure.lean changed; fixture SHA b140dc2d74671bf49d6ff30e84a55cb5cf9f298ed29e27e2a73312f8e520326c matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization also remains."},
-    :commit "5544234f0",
+     {:cmd "git show --check 4b20aaf2e", :exit 0}],
+    :commit "4b20aaf2e",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "b140dc2d74671bf49d6ff30e84a55cb5cf9f298ed29e27e2a73312f8e520326c"},
+     "e522222134de32ada1896801071464adaf836565e7a9a9e69f074c6170344fe9"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96650,7 +96635,8 @@
     :lemma-frozengeneratorouterhomologyisoboundary
     :lemma-frozengeneratorcircleboundaryhomologyiso
     :lemma-frozengeneratorcirclequotient-identifies-generators
-    :lemma-frozengeneratorcirclerel-iff-graphrel],
+    :lemma-frozengeneratorcirclerel-iff-graphrel
+    :lemma-frozengeneratorcirclehomeomorphboundarygraph],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -96816,4 +96802,21 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozengeneratorcirclequotient-identifies-generators],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleHomeomorphBoundaryGraph",
+    :type "circle quotient to explicit graph quotient"},
+   :lemma
+   {:name "frozenGeneratorCircleHomeomorphBoundaryGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "circle quotient to explicit graph quotient",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorcirclehomeomorphboundarygraph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcirclerel-iff-graphrel],
    :other-consumers []}]}
