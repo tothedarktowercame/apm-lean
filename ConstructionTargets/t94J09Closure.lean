@@ -1506,6 +1506,18 @@ noncomputable def frozenGeneratorMVIntersectionH1ArrowToGraph :
       (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1 ≫
     frozenGeneratorMVPiecesH1GroupIsoGraph.hom
 
+/-- The outgoing degree-one Mayer--Vietoris map, with its source transported
+from the two cover pieces to the boundary-graph homology object. -/
+noncomputable def frozenGeneratorMVGraphH1ReassemblyArrow :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) ⟶
+      ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (TopCat.of FrozenGeneratorQuotient) :=
+  frozenGeneratorMVPiecesH1GroupIsoGraph.inv ≫
+    ConstructionTargets.ProductionOpenCoverMayerVietoris.productionReassemblyArrow
+      (PolygonRadialOpenCover.innerOpen frozenGeneratorRel)
+      (PolygonRadialOpenCover.outerOpen frozenGeneratorRel) 1
+
 /-- The two frozen quotient carriers are canonically equivalent, with the
 identity map on disk representatives in both directions. -/
 def frozenSignedQuotientEquivGenerator :
@@ -2113,6 +2125,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
+#print axioms frozenGeneratorMVGraphH1ReassemblyArrow
 #print axioms frozenGeneratorInnerH1GroupIsZero
 #print axioms frozenBoundaryQuotientToOuterSkeleton_bijective
 #print axioms frozenBoundaryQuotientEquivOuterSkeleton
