@@ -36751,6 +36751,19 @@
     [{:cmd "closure compile",
       :exit 1,
       :note "Qualified reused comparison namespace; rerun passed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792166498013-15620-053b143f",
+     :commands
+     ["git show/check d69b5953f"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: recorded commit adds canonical chain and homology isomorphisms from ambient-subspace ranges to literal overlap/lower/top patches after prior progress. Representation direction is correct; fixture hash matches; supporting file has 0 placeholders; Lean gates pass with standard axioms; registry 168/168; Main retains its declared one placeholder."},
     :commit "d69b5953f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36759,7 +36772,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36777,7 +36790,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed connecting map and overlap exactness; ambient exactness remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed literal-patch homology isomorphisms; map naturality remains.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36884,7 +36897,11 @@
     {:job 9,
      :commit "4a9541db6d",
      :reason
-     "Committed connecting map and overlap exactness; ambient exactness remains."}]}
+     "Committed connecting map and overlap exactness; ambient exactness remains."}
+    {:job 1,
+     :commit "d69b5953f",
+     :reason
+     "Committed literal-patch homology isomorphisms; map naturality remains."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37254,7 +37271,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37311,7 +37328,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37333,7 +37350,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47108,7 +47125,7 @@
    :other-consumers [:t00A01]}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_integralComparison_of_comparison_generator",
@@ -47120,7 +47137,9 @@
     :type
     "explicit Unit generator comparison implies full H0 comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-integralcomparison-of-comparison-generator,
    :kind :lemma,
    :depends-on
@@ -47128,7 +47147,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_comparison_generator_of_chain_compatibility",
@@ -47138,7 +47157,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "chain compatibility implies Unit generator comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-unith0-comparison-generator-of-chain-compatibility,
    :kind :lemma,
@@ -47147,7 +47168,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0ChainGeneratorCompatibility",
@@ -47156,7 +47177,9 @@
    {:name "t96A06_unitH0ChainGeneratorCompatibility",
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "chain comparison preserves selected Unit H0 class",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0chaingeneratorcompatibility,
    :kind :lemma,
    :depends-on
@@ -47166,7 +47189,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_chainComparison_degreeZero_generator",
@@ -47178,14 +47201,16 @@
     :type
     "chain comparison preserves the unique Unit simplex generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-chaincomparison-degreezero-generator,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_chainComparison_degreeZero_generator_inv",
@@ -47197,7 +47222,9 @@
     :type
     "inverse chain comparison preserves the Unit simplex generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-chaincomparison-degreezero-generator-inv,
    :kind :lemma,
    :depends-on
@@ -47205,7 +47232,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
@@ -47217,7 +47244,9 @@
     :type
     "range overlap/lower/top homology isomorphic to literal patches",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d69b5953f"},
    :id :lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos,
    :kind :lemma,
    :depends-on
