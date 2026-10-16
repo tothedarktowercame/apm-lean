@@ -2806,6 +2806,31 @@
    "rev": "cab9d787",
    "approved_at": "2026-09-28T00:32:56Z"
   },
+  "t98A01": {
+   "decls": [
+    "apm_t98a01"
+   ],
+   "sha256": "1fddf34dd9a61e12cefcc1d96a04d01acf9c84641740e3467678c83c74dbff34",
+   "defs": [
+    "T98A01Edge",
+    "T98A01SumSurface",
+    "T98A01Summand",
+    "T98A01Torus",
+    "t98A01IsNfoldCover",
+    "t98A01IsRegularNfoldCover",
+    "t98A01KleinWord",
+    "t98A01ProjectiveWord",
+    "t98A01SumWord",
+    "t98A01TorusFiveCover",
+    "t98A01TorusWord"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-16)",
+   "evidence": "holes/labs/statement-registry/t98A01-repair-grade.md",
+   "prelim_defect": null,
+   "rev": "e8b7e7f69",
+   "approved_at": "2026-10-16T16:56:35Z"
+  },
   "t98A02": {
    "decls": [
     "apm_t98a02"
