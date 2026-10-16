@@ -8,6 +8,8 @@ import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.CoefficientSubcomplexMayerVietoris
 import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Algebra.Homology.Additive
+import Mathlib.Algebra.Homology.HomologicalComplexBiprod
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -1332,6 +1334,31 @@ def t99J05_cp_successor_mayerVietoris_overlap_top_naturality
     (B := cpSuccessorTopPatch n) Set.inter_subset_right k
 
 #print axioms t99J05_cp_successor_mayerVietoris_overlap_top_naturality
+
+/-- The canonical rational-module comparison from homology of a binary
+biproduct of chain complexes to the biproduct of their homologies. -/
+noncomputable def t99J05_rationalHomologyBiprodIso
+    (K L : ChainComplex (ModuleCat ℚ) ℕ) (k : ℕ) :
+    (K ⊞ L).homology k ≅ K.homology k ⊞ L.homology k := by
+  let F := HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+    (ComplexShape.down ℕ) k
+  letI : F.Additive := inferInstance
+  letI : PreservesFiniteBiproducts F :=
+    Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproducts F :=
+    preservesBinaryBiproducts_of_preservesBiproducts F
+  exact F.mapBiprod K L
+
+/-- Its hom is the lift of the two canonical homology projections. -/
+theorem t99J05_rationalHomologyBiprodIso_hom
+    (K L : ChainComplex (ModuleCat ℚ) ℕ) (k : ℕ) :
+    (t99J05_rationalHomologyBiprodIso K L k).hom =
+      biprod.lift
+        (HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) k)
+        (HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) k) := by
+  rfl
+
+#print axioms t99J05_rationalHomologyBiprodIso_hom
 
 /-- The literal overlap-to-patches arrow, with the Mayer--Vietoris sign on
 the top-patch component. -/
