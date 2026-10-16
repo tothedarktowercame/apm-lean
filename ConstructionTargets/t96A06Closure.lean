@@ -2469,6 +2469,16 @@ theorem t96A06_boolH0_integralComparison_points_of_false_true
   · exact hfalse
   · exact htrue
 
+/-- The two endpoint coordinate calculations assemble to the complete
+comparison between forgotten module-valued and native additive `H₀`. -/
+theorem t96A06_boolH0_integralComparison_of_false_true
+    (hfalse : t96A06_boolH0PointComparison false)
+    (htrue : t96A06_boolH0PointComparison true) :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  apply t96A06_boolH0_integralComparison_of_points
+  intro b
+  exact t96A06_boolH0_integralComparison_points_of_false_true hfalse htrue b
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5364,6 +5374,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientCircleBoundary_integralComparison_of_bool
 #print axioms t96A06_boolH0_integralComparison_of_points
 #print axioms t96A06_boolH0_integralComparison_points_of_false_true
+#print axioms t96A06_boolH0_integralComparison_of_false_true
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
