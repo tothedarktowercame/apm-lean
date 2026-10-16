@@ -88672,27 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Show EqvGen lies in closed candidate; then T2/MV; normalize.",
+    :residual "EqvGen induction; T2/MV; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenBoundaryClosedRel_isClosed",
-      :type
-      "closed symmetric graph plus finite endpoint EqvGen; included in EqvGen",
+    [{:name "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
+      :type "vertex iff parameter endpoint",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenBoundaryEndpointPair_finite"],
+      :depends-on [],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "reverse EqvGen reduction/T2/MV",
+      :type "EqvGen/T2/MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryClosedRel_isClosed"
+      ["frozenBoundaryEndpoint_frozenCircleEdgePoint_iff"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88711,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked closed EqvGen candidate and easy inclusion.",
+    :reason "Banked endpoint criterion.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88721,29 +88719,20 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check be332727f", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792116784845-15023-24888c0d",
-     :commands
-     ["git show/diff/check be332727f"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from be332727f"],
-     :finding
-     "PASS program STOP: topo-6 commit be332727f adds compiled, sorry-free progress after e906d4e32. FrozenBoundaryEndpointEqv restricts actual EqvGen pairs to the finite endpoint-pair locus, hence is finite and closed. Its union with the closed reflexive-symmetric generator graph yields a closed candidate. Inclusion candidate -> EqvGen has the correct orientation: diagonal, forward, reverse, and endpoint cases use refl, rel, symm, or the stored EqvGen proof. Reverse inclusion remains explicitly listed with quotient T2/MV, homology, and normalization. Scope is one target file; fixture SHA f55ebf32369d4cc4d5fdd48bc9d11419778a0598ed4bb20c8b3df3a701a3e9de; target placeholders 0; Main placeholder 1; axioms propext, Classical.choice, Quot.sound."},
-    :commit "be332727f",
+     {:cmd "git show --check 3dcf3a908", :exit 0}],
+    :diagnostic-history
+    [{:cmd "draft builds",
+      :exit 1,
+      :correction "fixed equality direction"}],
+    :commit "3dcf3a908",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "f55ebf32369d4cc4d5fdd48bc9d11419778a0598ed4bb20c8b3df3a701a3e9de"},
+     "64921cac8a7aa5f8aaa2272a3c5de92d3f299e055d1eeec13e912a8f69018e75"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96688,7 +96677,8 @@
     :lemma-frozenboundarygraphsymm-isclosed
     :lemma-frozenboundaryendpointpair-isclosed
     :lemma-frozenboundaryendpointpair-finite
-    :lemma-frozenboundaryclosedrel-isclosed],
+    :lemma-frozenboundaryclosedrel-isclosed
+    :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97123,4 +97113,21 @@
    :id :lemma-frozenboundaryclosedrel-isclosed,
    :kind :lemma,
    :depends-on [:lemma-frozenboundaryendpointpair-finite],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
+    :type "vertex iff parameter endpoint"},
+   :lemma
+   {:name "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "vertex iff parameter endpoint",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}
