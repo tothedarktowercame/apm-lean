@@ -36708,33 +36708,34 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Transport subcomplex MV to literal patches; then successor data, Lefschetz, Main.",
+    "Prove MV-map naturality and transport exactness; then successor data, Lefschetz, Main.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings ["Existing simp lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
-      :type "exactness at ambient homology",
+    [{:name "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
+      :type
+      "range overlap/lower/top homology isomorphic to literal patches",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_overlap"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_ambient"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_transport",
-      :type
-      "transport specialized MV exactness to literal patch homology",
+     {:name "t99J05_cp_successor_mayerVietoris_transport_naturality",
+      :type "range isomorphisms commute with MV maps",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_exact_ambient"],
+      :depends-on
+      ["t99J05_cp_successor_mayerVietoris_rangeHomologyIsos"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
     :reason
-    "Committed ambient MV exactness; literal patch transport remains.",
+    "Committed literal-patch homology isomorphisms; map naturality remains.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36745,8 +36746,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline f2e32fd28", :exit 0}],
-    :commit "f2e32fd28",
+     {:cmd "git show --check --stat --oneline d69b5953f", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile",
+      :exit 1,
+      :note "Qualified reused comparison namespace; rerun passed."}],
+    :commit "d69b5953f",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36754,7 +36759,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -47197,6 +47202,43 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-unith0-chaincomparison-degreezero-generator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
+    :type
+    "range overlap/lower/top homology isomorphic to literal patches"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "range overlap/lower/top homology isomorphic to literal patches",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id :lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-ambient],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_transport_naturality",
+    :type "range isomorphisms commute with MV maps"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_transport_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "range isomorphisms commute with MV maps",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-transport-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
