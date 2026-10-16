@@ -88672,25 +88672,25 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 5,
+   :stop-count 6,
    :evidence
    {:placeholder-delta 0,
-    :residual "Closed EqvGen; T2/homeomorphism/MV; normalize.",
+    :residual "Finite vertex closure; T2/homeomorphism/MV; normalize.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenBoundaryGraphRel_isClosed",
-      :type "generator relation closed",
+    [{:name "frozenBoundaryGraphSymm_isClosed",
+      :type "reflexive symmetric graph closed",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["isClosed_range_frozenCircleEdgePair_reverse"],
+      :depends-on ["frozenBoundaryGraphRel_isClosed"],
       :area "polygon-surface-homology"}
      {:name "frozenGeneratorHomology_comparisons",
-      :type "closed EqvGen/T2/MV",
+      :type "vertex closure/T2/MV",
       :status :partial,
       :consumers [:t94J09],
       :depends-on
-      ["frozenBoundaryGraphRel_isClosed"
+      ["frozenBoundaryGraphSymm_isClosed"
        "frozenSignedHomology_of_generator_comparisons"],
       :area "polygon-surface-homology"}
      {:name "apm_t94J09_polygon_homology",
@@ -88709,7 +88709,7 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked closed graph relation.",
+    :reason "Banked closed symmetric graph.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
@@ -88719,33 +88719,20 @@
       "rg -n \"sorry|admit\" ConstructionTargets/t94J09Closure.lean",
       :exit 1,
       :expected-exit 1}
-     {:cmd "git show --check ab9571cb7", :exit 0}],
+     {:cmd "git show --check 8035fa047", :exit 0}],
     :diagnostic-history
-    [{:cmd "drafts",
+    [{:cmd "draft",
       :exit 1,
-      :correction "explicit finite-union reassociation"}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792115137016-14991-0f7c8280",
-     :commands
-     ["git show/diff/check ab9571cb7"
-      "verify canonical packages and committed target blob"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "sha256sum and placeholder recount from ab9571cb7"],
-     :finding
-     "PASS program STOP: topo-6 commit ab9571cb7 adds compiled, sorry-free progress after fe3b47e93. The explicit graph relation is shown equal to the finite union of its seven parametrized edge-pair ranges, including the reversed 1/7 range; each constituent was already proved closed and finite union preserves closedness. The reassociation proof only reconciles the right-associated disjunction with the union expression. This proves the generator relation closed, not its EqvGen closure or quotient T2; those remain explicitly listed with homeomorphism/MV. Only t94J09Closure.lean changed; fixture SHA 0a28d185af5f07e086dcaf749ace59a54d6bde4cdf9e816e566e40ffb47ada42 matches. Canonical package link and committed blob verified; exact target builds; Main compiles; target/Main placeholders 0/1; registry 168/0; axioms standard. Normalization remains."},
-    :commit "ab9571cb7",
+      :correction "removed solved convert goals"}],
+    :commit "8035fa047",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "0a28d185af5f07e086dcaf749ace59a54d6bde4cdf9e816e566e40ffb47ada42"},
+     "4c9d872dbdcd7b06c8566e2c2f8044371698758104279a88903d1a350e1f1ea8"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -96676,7 +96663,8 @@
     :lemma-continuous-frozenboundaryquotienttoouterskeleton
     :lemma-compactspace-frozengeneratorouterboundarypiece
     :lemma-isclosed-range-frozencircleedgepair-reverse
-    :lemma-frozenboundarygraphrel-isclosed],
+    :lemma-frozenboundarygraphrel-isclosed
+    :lemma-frozenboundarygraphsymm-isclosed],
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
@@ -97033,4 +97021,21 @@
    :id :lemma-frozenboundarygraphrel-isclosed,
    :kind :lemma,
    :depends-on [:lemma-isclosed-range-frozencircleedgepair-reverse],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphSymm_isClosed",
+    :type "reflexive symmetric graph closed"},
+   :lemma
+   {:name "frozenBoundaryGraphSymm_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reflexive symmetric graph closed",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozenboundarygraphsymm-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundarygraphrel-isclosed],
    :other-consumers []}]}
