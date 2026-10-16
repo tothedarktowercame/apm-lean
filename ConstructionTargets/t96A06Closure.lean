@@ -2393,6 +2393,51 @@ theorem t96A06_coefficientCircleBoundary_integralComparison_of_bool
   exact ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool
     hbool
 
+noncomputable def t96A06_boolH0ComparisonLhs :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Bool) 0).hom ≫
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv
+
+noncomputable def t96A06_boolH0ComparisonRhs :=
+  ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).hom
+
+/-- The discrete comparison is determined by its two point-inclusion
+coordinates.  This isolates the remaining calculation to `false` and `true`. -/
+theorem t96A06_boolH0_integralComparison_of_points
+    (hpoint : ∀ b : Bool,
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+          t96A06_boolH0ComparisonLhs =
+        Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+          t96A06_boolH0ComparisonRhs) :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  apply (cancel_epi
+    ((PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv)).mp
+  apply Limits.Sigma.hom_ext
+  exact hpoint
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
@@ -5286,6 +5331,7 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_coefficientCircleComparison_eq_native_of_apply_one
 #print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
 #print axioms t96A06_coefficientCircleBoundary_integralComparison_of_bool
+#print axioms t96A06_boolH0_integralComparison_of_points
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
 #print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
