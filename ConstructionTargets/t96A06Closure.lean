@@ -3495,6 +3495,56 @@ theorem t96A06_unitH0_integralComparison :
 
 #print axioms t96A06_unitH0_integralComparison
 
+/-- Inverse-coordinate form of the Unit comparison.  This is the orientation
+needed after transporting a Bool point inclusion through the naturality
+square. -/
+@[reassoc]
+theorem t96A06_unitH0_integralComparison_inverse :
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom =
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv := by
+  apply (cancel_mono
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom).mp
+  apply (cancel_mono
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv).mp
+  have hu := t96A06_unitH0_integralComparison
+  simp only [t96A06_unitH0ComparisonLhs, t96A06_unitH0ComparisonRhs] at hu
+  simpa only [Category.assoc, Functor.mapIso_inv, ← Functor.map_comp,
+      Iso.inv_hom_id, Functor.map_id, Category.comp_id] using
+    congrArg (fun f =>
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫ f) hu
+
+#print axioms t96A06_unitH0_integralComparison_inverse
+
+/-- Forgetting integer-module structure carries the unique Unit coproduct
+injection to its native additive counterpart. -/
+@[reassoc]
+theorem t96A06_unitH0_preserved_pointInclusion :
+    Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv =
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()) := by
+  simp [PreservesCoproduct.inv_hom, sigmaComparison, Limits.Sigma.ι_desc]
+
+#print axioms t96A06_unitH0_preserved_pointInclusion
+
 /-- Pointwise form of the `Unit` comparison, ready for transport along either
 point inclusion `Unit → Bool`. -/
 theorem t96A06_unitH0_integralComparison_apply
