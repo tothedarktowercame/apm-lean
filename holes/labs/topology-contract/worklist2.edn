@@ -88672,23 +88672,20 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Generator homeo; H0; graph high; H1 geometry; homology; normalization.",
+    :residual "Homeo; H0; graph high; H1; homology; normalization.",
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorHigherHomology_isZero",
+    [{:name "frozenSignedHigherHomology_isZero_of_generatorComparison",
       :type "high",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on
-      ["frozenGeneratorHigherPiecesGroup_isZero"
-       "frozenGeneratorHigherIntersectionGroup_isZero"],
+      :depends-on ["frozenGeneratorHigherHomology_isZero"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88718,35 +88715,25 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked high homology.",
+    :reason "Banked high.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
-     {:cmd "git show --check 9648aabec", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792207576789-16100-2c3e9879",
-     :commands
-     ["hash/scope/comment-stripped placeholders"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
-     :finding
-     "PASS: reviewed 9648aabec (author topo-6), new after 5d7ebded4. Fixture c75c72b3... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest 8c2ed646... match. For k=n+1>=3, zero cover-piece H_k and intersection H_n make both adjacent maps in the exact union segment zero; exactness kills the concrete union group, then the standard comparison returns canonical SpaceH vanishing. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual milestones are listed."},
-    :commit "9648aabec",
+     {:cmd "git show --check 5a281c492", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lean closure", :exit 1, :correction "moved after iso"}],
+    :commit "5a281c492",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "c75c72b37a5cce40a64e7d9dffc32c2e868ae827209aeb34c0b7d66edef761c9"},
+     "79439a34ee9b61f67acf49a501891bc4d51c4d922d0ff60689e8f2953668c10e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -99529,4 +99516,21 @@
    :depends-on
    [:lemma-frozengeneratorhigherpiecesgroup-iszero
     :lemma-frozengeneratorhigherintersectiongroup-iszero],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedHigherHomology_isZero_of_generatorComparison",
+    :type "high"},
+   :lemma
+   {:name "frozenSignedHigherHomology_isZero_of_generatorComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozensignedhigherhomology-iszero-of-generatorcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorhigherhomology-iszero],
    :other-consumers []}]}
