@@ -1452,6 +1452,28 @@ noncomputable def t99J05_cp_successor_mayerVietoris_f_transport
 
 #print axioms t99J05_cp_successor_mayerVietoris_f_transport
 
+/-- After range-to-literal transport, the first Mayer--Vietoris arrow is
+exactly the signed pair of the two literal overlap inclusions. -/
+theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
+    (n k : ℕ) :
+    t99J05_cp_successor_mayerVietoris_f_transport n k =
+      t99J05_cp_successor_literalOverlapToPieces n k := by
+  apply biprod.hom_ext
+  · rw [t99J05_cp_successor_literalOverlapToPieces_fst]
+    simp [t99J05_cp_successor_mayerVietoris_f_transport,
+      t99J05_rationalHomologyBiprodIso_hom,
+      t99J05_cp_successor_mayerVietorisShortComplex,
+      ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex,
+      t99J05_cp_successor_mayerVietoris_overlap_lower_naturality]
+  · rw [t99J05_cp_successor_literalOverlapToPieces_snd]
+    simp [t99J05_cp_successor_mayerVietoris_f_transport,
+      t99J05_rationalHomologyBiprodIso_hom,
+      t99J05_cp_successor_mayerVietorisShortComplex,
+      ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex,
+      t99J05_cp_successor_mayerVietoris_overlap_top_naturality]
+
+#print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
