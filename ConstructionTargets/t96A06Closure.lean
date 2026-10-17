@@ -2583,6 +2583,36 @@ theorem t96A06_boolH0_comparison_pointInclusion_naturality (b : Bool) :
   exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
     (ConstructionTargets.SingularHomologyConcrete.pointInclusion b) 0
 
+/-- The same naturality square with the module-side homology map unfolded to
+the concrete chain-map expression used by the Bool coordinate calculation. -/
+theorem t96A06_boolH0_comparison_pointInclusion_naturality_concrete (b : Bool) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) := by
+  have h :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      (ConstructionTargets.SingularHomologyConcrete.pointInclusion b) 0
+  change
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom = _ at h
+  exact h
+
+#print axioms t96A06_boolH0_comparison_pointInclusion_naturality_concrete
+
 noncomputable def t96A06_unitH0ComparisonLhs :=
   (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
       (TopCat.of Unit) 0).hom ≫
