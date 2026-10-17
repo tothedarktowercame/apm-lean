@@ -661,6 +661,91 @@ from the two interval endpoints. -/
 def baseEdgeChart (i : Fin 2) : Set X :=
   edgeProjection i '' {t : UnitInterval | t.1 ∈ Set.Ioo (0 : ℝ) 1}
 
+/-- The raw preimage of a base open-edge chart is the corresponding open
+circle summand with its wedge endpoint removed. -/
+theorem wedge_preimage_baseEdgeChart (i : Fin 2) :
+    (fun z : Sum S1 S1 =>
+      (Quotient.mk (Relation.EqvGen.setoid WedgeRel) z : X)) ⁻¹'
+        baseEdgeChart i =
+      Fin.cases
+        (Sum.inl '' {z : S1 | z ≠ circleBase})
+        (fun _ => Sum.inr '' {z : S1 | z ≠ circleBase}) i := by
+  have hleft : baseEdgeChart 0 = inl '' {z : S1 | z ≠ circleBase} := by
+    rw [baseEdgeChart, show edgeProjection 0 = inl ∘ intervalCircle by rfl,
+      Set.image_comp, intervalCircle_image_interior]
+  have hright : baseEdgeChart 1 = inr '' {z : S1 | z ≠ circleBase} := by
+    rw [baseEdgeChart, show edgeProjection 1 = inr ∘ intervalCircle by rfl,
+      Set.image_comp, intervalCircle_image_interior]
+  fin_cases i
+  · change
+      (fun z : Sum S1 S1 =>
+        (Quotient.mk (Relation.EqvGen.setoid WedgeRel) z : X)) ⁻¹'
+          baseEdgeChart 0 = Sum.inl '' {z : S1 | z ≠ circleBase}
+    rw [hleft]
+    ext z
+    cases z with
+    | inl z =>
+        change (inl z ∈ inl '' {w : S1 | w ≠ circleBase}) ↔
+          (Sum.inl z ∈ Sum.inl '' {w : S1 | w ≠ circleBase})
+        constructor
+        · rintro ⟨w, hw, h⟩
+          exact ⟨z, (inl_injective h).symm ▸ hw, rfl⟩
+        · rintro ⟨w, hw, h⟩
+          exact ⟨z, (Sum.inl.inj h).symm ▸ hw, rfl⟩
+    | inr z =>
+        change (inr z ∈ inl '' {w : S1 | w ≠ circleBase}) ↔
+          (Sum.inr z ∈ Sum.inl '' {w : S1 | w ≠ circleBase})
+        constructor
+        · rintro ⟨w, hw, h⟩
+          exact False.elim (hw ((inl_eq_inr_iff w z).mp h |>.1))
+        · rintro ⟨w, _, h⟩
+          exfalso
+          exact Sum.inl_ne_inr h
+  · change
+      (fun z : Sum S1 S1 =>
+        (Quotient.mk (Relation.EqvGen.setoid WedgeRel) z : X)) ⁻¹'
+          baseEdgeChart 1 = Sum.inr '' {z : S1 | z ≠ circleBase}
+    rw [hright]
+    ext z
+    cases z with
+    | inl z =>
+        change (inl z ∈ inr '' {w : S1 | w ≠ circleBase}) ↔
+          (Sum.inl z ∈ Sum.inr '' {w : S1 | w ≠ circleBase})
+        constructor
+        · rintro ⟨w, hw, h⟩
+          exact False.elim (hw ((inl_eq_inr_iff z w).mp h.symm |>.2))
+        · rintro ⟨w, _, h⟩
+          exfalso
+          exact Sum.inr_ne_inl h
+    | inr z =>
+        change (inr z ∈ inr '' {w : S1 | w ≠ circleBase}) ↔
+          (Sum.inr z ∈ Sum.inr '' {w : S1 | w ≠ circleBase})
+        constructor
+        · rintro ⟨w, hw, h⟩
+          exact ⟨z, (inr_injective h).symm ▸ hw, rfl⟩
+        · rintro ⟨w, hw, h⟩
+          exact ⟨z, (Sum.inr.inj h).symm ▸ hw, rfl⟩
+
+theorem wedgeQuotientMap_isQuotientMap :
+    @Topology.IsQuotientMap (Sum S1 S1) X inferInstance instTopologicalSpaceX
+      (fun z : Sum S1 S1 =>
+        (Quotient.mk (Relation.EqvGen.setoid WedgeRel) z : X)) :=
+  ⟨Quotient.mk_surjective, rfl⟩
+
+/-- Each base loop minus the wedge vertex is open in the quotient rose. -/
+theorem baseEdgeChart_isOpen (i : Fin 2) : IsOpen (baseEdgeChart i) := by
+  apply wedgeQuotientMap_isQuotientMap.isOpen_preimage.mp
+  change IsOpen
+    ((fun z : Sum S1 S1 =>
+      (Quotient.mk (Relation.EqvGen.setoid WedgeRel) z : X)) ⁻¹'
+        baseEdgeChart i)
+  rw [wedge_preimage_baseEdgeChart]
+  fin_cases i
+  · apply isOpenMap_inl
+    exact isOpen_compl_singleton
+  · apply isOpenMap_inr
+    exact isOpen_compl_singleton
+
 /-- A raw endpoint remembers the graph vertex to which it is glued.  Open
 edge points have no vertex coordinate. -/
 noncomputable def vertexCoordinate : RealizationRaw V → Option V
@@ -945,6 +1030,8 @@ theorem projection_fiberCard [Finite V] (x : X) :
 #print axioms realization_preimage_edgeChart
 #print axioms edgeChart_isOpen
 #print axioms mem_edgeChart_iff
+#print axioms wedge_preimage_baseEdgeChart
+#print axioms baseEdgeChart_isOpen
 #print axioms projection_preimage_baseEdgeChart
 #print axioms existsUnique_vertex_of_projection_eq_wedgePoint
 #print axioms vertexFiberEquiv
