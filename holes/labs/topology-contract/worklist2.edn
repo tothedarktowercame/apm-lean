@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 5,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88681,12 +88681,13 @@
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "homologyHigher_isZero_of_homeomorph_frozenSigned",
-      :type "high",
+    [{:name "homologyAboveOne_isZero_of_homeomorph_frozenSigned",
+      :type "high-tail",
       :status :proved,
       :consumers [:t94J09],
       :depends-on
-      ["frozenSignedHigherHomology_isZero_of_generatorComparison"],
+      ["homologyH2_isZero_of_homeomorph_frozenSigned"
+       "homologyHigher_isZero_of_homeomorph_frozenSigned"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88716,35 +88717,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked named high.",
+    :reason "Banked vanishing tail.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
-     {:cmd "git show --check e08b2f9c2", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792208895267-16116-303f1b87",
-     :commands
-     ["git show/diff/hash/scope/placeholders e08b2f9c2"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
-     :finding
-     "PASS: reviewed e08b2f9c2 (author topo-6), new after history 5a281c492. Only the in-scope closure changed; fixture 28b106e5..., frozen Main 7726693f..., and pinned statement 52b4778c... recompute; placeholders are 0/1 and registry is 168/0. The named-model theorem correctly transports signed-quotient high-degree SpaceH vanishing backward across the homology iso induced by X homeomorphic to FrozenSignedQuotient. It compiles sorry-free with only propext, Classical.choice, Quot.sound; remaining H1 comparison, homology, and normalization milestones are listed."},
-    :commit "e08b2f9c2",
+     {:cmd "git show --check ec34d6c66", :exit 0}],
+    :commit "ec34d6c66",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "28b106e586a8c4227e4df81f53bc782bf43f51f0ac0f1433a9b055e991e4289e"},
+     "4e7e65a95500119ac10ad1a5122dd870242ce95bed56675a1374a624082f9372"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -99568,4 +99557,23 @@
    :kind :lemma,
    :depends-on
    [:lemma-frozensignedhigherhomology-iszero-of-generatorcomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "homologyAboveOne_isZero_of_homeomorph_frozenSigned",
+    :type "high-tail"},
+   :lemma
+   {:name "homologyAboveOne_isZero_of_homeomorph_frozenSigned",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high-tail",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-homologyaboveone-iszero-of-homeomorph-frozensigned,
+   :kind :lemma,
+   :depends-on
+   [:lemma-homologyh2-iszero-of-homeomorph-frozensigned
+    :lemma-homologyhigher-iszero-of-homeomorph-frozensigned],
    :other-consumers []}]}
