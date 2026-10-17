@@ -3077,6 +3077,27 @@ theorem homology_of_homeomorph_frozenGenerator
   intro k hk
   exact (hhigh k hk).of_iso (homologyIsoFrozenGeneratorOfHomeomorph h k)
 
+/-- A named model homeomorphic to the generator presentation inherits the
+consumer-shaped calculation directly from a surjective H1 comparison with
+the frozen face-boundary kernel. -/
+theorem homology_of_homeomorph_frozenGenerator_comparisons
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenGeneratorQuotient)
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (g : (Fin 6 → ℤ) →ₗ[ℤ] SpaceH FrozenGeneratorQuotient 1)
+    (hg : Function.Surjective g)
+    (hker : LinearMap.ker g =
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH X 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH X 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH X k) :=
+  homology_of_homeomorph_frozenGenerator h
+    (frozenPolygonHomology_of_comparisons
+      (fun k => SpaceH FrozenGeneratorQuotient k)
+      h0 g hg hker h2 hhigh)
+
 /-- The consumer-shaped homology tuple from a named-model homeomorphism and
 the direct degree-one comparison map for the frozen generator quotient. -/
 theorem homology_of_homeomorph_frozenSigned_comparisons
@@ -3204,6 +3225,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms homology_of_homeomorph_frozenSigned
 #print axioms homologyIsoFrozenGeneratorOfHomeomorph
 #print axioms homology_of_homeomorph_frozenGenerator
+#print axioms homology_of_homeomorph_frozenGenerator_comparisons
 #print axioms homology_of_homeomorph_frozenSigned_comparisons
 #print axioms homology_of_homeomorph_frozenSigned_section
 #print axioms frozen_pairedParameter
