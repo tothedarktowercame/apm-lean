@@ -3572,6 +3572,41 @@ theorem t96A06_unitH0_integralComparison_inverse_pointInclusion (b : Bool) :
 
 #print axioms t96A06_unitH0_integralComparison_inverse_pointInclusion
 
+/-- Point-inclusion naturality remains valid after adjoining the Bool
+coordinate isomorphism and coproduct-preservation tail. -/
+theorem t96A06_boolH0_comparison_pointInclusion_naturality_with_tail (b : Bool) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom ≫
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) ≫
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv := by
+  simpa only [Category.assoc] using congrArg (fun f => f ≫
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv)
+    (t96A06_boolH0_comparison_pointInclusion_naturality_concrete b)
+
+#print axioms t96A06_boolH0_comparison_pointInclusion_naturality_with_tail
+
 /-- Pointwise form of the `Unit` comparison, ready for transport along either
 point inclusion `Unit → Bool`. -/
 theorem t96A06_unitH0_integralComparison_apply
