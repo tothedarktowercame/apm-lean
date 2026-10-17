@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88732,7 +88732,7 @@
      "80ecdee15549c5485a0f044eb9e3a2d7039e413cc185b73e47d0eabbe0cc4b8d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -89087,6 +89087,18 @@
     [{:cmd "initial closure compile",
       :exit 1,
       :correction "fixed quotient topology and image cases"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792206012105-16088-cccd90f7",
+     :commands
+     ["hash/scope/comment-stripped placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+      "lake env lean problems/t92J06/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J06Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed be6ab5926 (author topo-6), new after 17be3cf5f. Fixture 11f79713... and frozen Main 85f64495... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest c57f3fb7... match. The raw preimage proof handles matching branches by injectivity and cross branches by endpoint identification; punctured circle summands are open and descend through the declared quotient topology to baseEdgeChart. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual edge/vertex trivialization, tree, and finite-cover milestones are listed."},
     :commit "be6ab5926",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
@@ -89095,7 +89107,7 @@
      "11f79713433fea3c11a6e73c0c2ad72941f80af053328a31544bfdc0cd35ecac"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t92J06/lean/Main.lean"
     "problems/t92J06/status.json"
@@ -89113,7 +89125,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked exact interior-circle image.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked base-edge chart openness.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -89178,7 +89190,10 @@
      :reason "Banked exact edge-chart preimage."}
     {:job 4,
      :commit "17be3cf5f",
-     :reason "Banked exact interior-circle image."}]}
+     :reason "Banked exact interior-circle image."}
+    {:job 5,
+     :commit "be6ab5926",
+     :reason "Banked base-edge chart openness."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -99410,7 +99425,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenGeneratorHigherPiecesGroup_isZero",
@@ -99420,14 +99435,16 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "high-pieces",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
    :id :lemma-frozengeneratorhigherpiecesgroup-iszero,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorouterhighergroup-iszero],
    :other-consumers []}
   {:consumer :t92J06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "baseEdgeChart_isOpen", :type "openness"},
    :lemma
@@ -99435,7 +99452,9 @@
     :reported-by [:program-2026-10-13-close-t92j06],
     :type "openness",
     :area "graph-covering-realization",
-    :proved-in :program-2026-10-13-close-t92j06},
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "be6ab5926"},
    :id :lemma-baseedgechart-isopen,
    :kind :lemma,
    :depends-on [:lemma-intervalcircle-image-interior],
