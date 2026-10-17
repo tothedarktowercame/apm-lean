@@ -3442,6 +3442,15 @@ theorem t96A06_unitH0_comparison_generator :
 
 #print axioms t96A06_unitH0_comparison_generator
 
+/-- The integral singular-homology comparison commutes with the concrete
+degree-zero coordinate isomorphisms for `Unit`. -/
+theorem t96A06_unitH0_integralComparison :
+    t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  exact t96A06_unitH0_integralComparison_of_comparison_generator
+    t96A06_unitH0_comparison_generator
+
+#print axioms t96A06_unitH0_integralComparison
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
