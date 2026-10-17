@@ -3209,6 +3209,7 @@ theorem t96A06_unitH0_mappedRightHomology_triangle :
 /-- After forgetting module structure, the original right-homology triangle
 still carries the canonical degree-zero opcycle presentation to the chosen
 right-data opcycles. -/
+@[reassoc]
 theorem t96A06_unitH0_forgottenRightHomology_opcycle_triangle :
     ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
         ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
@@ -3267,23 +3268,66 @@ theorem t96A06_unitH0_preservation_canonical_triangle :
       t96A06_unitMappedModuleChains.isoHomologyι₀.inv := by
   rw [t96A06_unitH0_mapHomologyIso'_inv_eq_rightData,
     t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData]
+  simp only [Functor.mapIso_inv, Iso.symm_inv]
   rw [← cancel_mono
     (t96A06_unitH0ModuleShortComplex.map
       ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι]
-  simp only [Category.assoc]
-  rw [t96A06_unitH0_mappedRightHomology_triangle]
+  ext x
   change
-    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
-        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
-          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
-      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
-        t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom ≫
-      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
-        t96A06_unitH0ModuleShortComplex.homologyData.right.ι) ≫
-      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
-        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv = _
-  rw [t96A06_unitH0_forgottenRightHomology_opcycle_triangle]
-  simp
+    ((t96A06_unitH0ModuleShortComplex.map
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι).hom
+      ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso.inv.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom).hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+              (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom x))) =
+      ((t96A06_unitH0ModuleShortComplex.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι).hom
+        (t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+          ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv.hom
+            ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+              t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom).hom x)))
+  have hm := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_mappedRightHomology_triangle
+  simp only [AddCommGrpCat.comp_apply] at hm
+  rw [hm]
+  simp only [ShortComplex.RightHomologyData.map_ι]
+  change
+    (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι).hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom).hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+              (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom x))) =
+      ((t96A06_unitH0ModuleShortComplex.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι).hom
+        (t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+          ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv.hom
+            ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+              t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom).hom x)))
+  have hf := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_forgottenRightHomology_opcycle_triangle
+  simp only [AddCommGrpCat.comp_apply] at hf
+  have hf' :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι).hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom).hom
+            ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+              ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+                (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom x)) =
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom).hom x := by
+    simpa only [AddCommGrpCat.comp_apply] using hf x
+  rw [hf']
+  exact (t96A06_unitMappedModuleChains.isoHomologyι₀.inv_hom_id_apply _).symm
 
 #print axioms t96A06_unitH0_preservation_canonical_triangle
 
@@ -3308,7 +3352,7 @@ theorem t96A06_unitH0_preservation_canonical_triangle_generator :
             t96A06_unitH0ModuleChainGenerator)) := by
   have h := CategoryTheory.ConcreteCategory.congr_hom
     t96A06_unitH0_preservation_canonical_triangle
-  exact congrFun h
+  exact h
     ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
       ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
         (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
@@ -3326,7 +3370,13 @@ theorem t96A06_unitH0_mapOpcyclesIso_inv_projected :
         ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
     t96A06_unitMappedModuleChains.pOpcycles 0 := by
   rw [t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData]
-  rw [← Category.assoc, ← Functor.map_comp]
+  change
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0) ≫
+        t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom)) ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv = _
   erw [t96A06_unitH0ModuleShortComplex.homologyData.right.pOpcycles_comp_opcyclesIso_hom]
   exact (t96A06_unitH0ModuleShortComplex.homologyData.right.map
     ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).p_comp_opcyclesIso_inv
@@ -3356,11 +3406,41 @@ theorem t96A06_unitH0_preservation_coordinate_generator :
             (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
           t96A06_unitH0ModuleChainGenerator)) = _
   rw [t96A06_unitH0_preservation_canonical_triangle_generator]
-  rw [← ConcreteCategory.comp_apply,
-    t96A06_unitH0_mapOpcyclesIso_inv_projected,
-    ConcreteCategory.comp_apply]
+  congr 1
+  exact (CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_mapOpcyclesIso_inv_projected) t96A06_unitH0ModuleChainGenerator
 
 #print axioms t96A06_unitH0_preservation_coordinate_generator
+
+/-- The integral Unit homology comparison carries the selected coordinate to
+the corresponding native additive generator. -/
+theorem t96A06_unitH0_comparison_generator :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+        t96A06_unitH0NativeGenerator := by
+  rw [t96A06_unitH0_homologyComparison_factorization]
+  change
+    (HomologicalComplex.homologyMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv).hom
+            t96A06_unitH0CoordinateGenerator) = _
+  rw [← t96A06_unitH0_preservation_right_eq_left]
+  rw [t96A06_unitH0_preservation_coordinate_generator,
+    t96A06_unitH0_chainComparison_homology_generators]
+  dsimp [t96A06_unitH0NativeGenerator,
+    ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso,
+    ConstructionTargets.SingularHomologyConcrete.directDiscreteOpcyclesIso,
+    t96A06_unitH0AdditiveChainGenerator]
+  rw [← PreservesCoproduct.inv_hom]
+  rw [(PreservesCoproduct.iso
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+    (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv_hom_id_apply]
+  rfl
+
+#print axioms t96A06_unitH0_comparison_generator
 
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
