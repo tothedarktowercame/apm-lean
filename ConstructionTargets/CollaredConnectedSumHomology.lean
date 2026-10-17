@@ -83,6 +83,27 @@ theorem radialRegion_isOpen (r : ℝ) : IsOpen (radialRegion (n := n) r) := by
   change IsOpen ((fun x : Disk n 2 ↦ x.1) ⁻¹' Metric.ball 0 r)
   exact Metric.isOpen_ball.preimage continuous_subtype_val
 
+/-- The nested-subtype presentation of the large collar interior is the
+ordinary open radius-two ball in the Euclidean model. -/
+def largeInteriorHomeomorphBall :
+    LargeInterior (n := n) ≃ₜ Metric.ball (0 : E n) 2 where
+  toFun x := ⟨x.1.1, x.2⟩
+  invFun x := ⟨⟨x.1, by
+    rw [Metric.mem_closedBall]
+    exact x.2.le⟩, by
+      change dist x.1 0 < 2
+      exact x.2⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun :=
+    (continuous_subtype_val.comp continuous_subtype_val).subtype_mk _
+  continuous_invFun :=
+    (continuous_subtype_val.subtype_mk fun x ↦ by
+      rw [Metric.mem_closedBall]
+      exact x.2.le).subtype_mk fun x ↦ by
+        change dist x.1 0 < 2
+        exact x.2
+
 /-- Restriction of the large collar map to its open interior. -/
 def largeInteriorMap (c : BallCollar n M) : LargeInterior (n := n) → M :=
   fun x ↦ c.largeMap x.1
@@ -134,6 +155,7 @@ noncomputable instance {n : ℕ} {M₁ M₂ : Type}
 #print axioms BallCollar.largeMap_unitToLarge
 #print axioms BallCollar.continuous_boundaryMap
 #print axioms BallCollar.radialRegion_isOpen
+#print axioms BallCollar.largeInteriorHomeomorphBall
 #print axioms BallCollar.largeInteriorMap_isEmbedding
 #print axioms BallCollar.range_largeInteriorMap
 #print axioms BallCollar.largeInterior_isOpen_of_isOpenMap
