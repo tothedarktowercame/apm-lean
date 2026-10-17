@@ -37282,34 +37282,36 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Extract the oriented circle generator from the boundary comparison; propagate the sign through sphere suspension.",
+    "Identify the relative interval generator via the signed boundary coordinate, then close circle comparison and suspension signs.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_coefficientCircleBoundary_integralComparison",
-      :type "signed interval-boundary comparison",
+    [{:name "t96A06_coefficientCircleBoundary_comparison_generator",
+      :type "boundary comparison maps generator to signed endpoints",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_boolH0_integralComparison"],
+      :depends-on
+      ["t96A06_coefficientCircleBoundary_integralComparison"],
       :area "rp-rational-homology"}
      {:name "t96A06_coefficientCircleComparison_apply_one",
       :type "circle comparison carries oriented generator",
       :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_coefficientCircleBoundary_integralComparison"],
+      ["t96A06_coefficientCircleBoundary_comparison_generator"
+       "integralPairConnectingComparison"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed signed circle-boundary comparison.",
+    :reason "Committed signed boundary-generator evaluation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37317,14 +37319,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 8df63d090", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792201191025-16037-0d41d775",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "8df63d090",
+     {:cmd "git show --check --stat --oneline 28505f245", :exit 0}],
+    :commit "28505f245",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37332,7 +37328,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46440,7 +46436,9 @@
    :kind :lemma,
    :depends-on
    [:lemma-t96a06-coefficientcirclecomparison-eq-native-of-apply-one
-    :lemma-t96a06-coefficientcircleboundary-integralcomparison],
+    :lemma-t96a06-coefficientcircleboundary-integralcomparison
+    :lemma-t96a06-coefficientcircleboundary-comparison-generator
+    :lemma-integralpairconnectingcomparison],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
@@ -48150,7 +48148,35 @@
    :id :lemma-manifoldembedding-isopenmap,
    :kind :lemma,
    :depends-on [:lemma-ballcollar-largeinteriorhomeomorphball],
-   :other-consumers [:t00A01]}],
+   :other-consumers [:t00A01]}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleBoundary_comparison_generator",
+    :type "boundary comparison maps generator to signed endpoints"},
+   :lemma
+   {:name "t96A06_coefficientCircleBoundary_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "boundary comparison maps generator to signed endpoints",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-coefficientcircleboundary-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcircleboundary-integralcomparison],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "integralPairConnectingComparison"},
+   :lemma {:name "integralPairConnectingComparison", :reported-by []},
+   :id :lemma-integralpairconnectingcomparison,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}],
  :consumer-baselines {},
  :statuses
  #{:open
