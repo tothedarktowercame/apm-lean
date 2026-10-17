@@ -3545,6 +3545,33 @@ theorem t96A06_unitH0_preserved_pointInclusion :
 
 #print axioms t96A06_unitH0_preserved_pointInclusion
 
+/-- The inverse Unit comparison remains valid after the selected point
+inclusion into `Bool`; this is the parenthesization produced by naturality. -/
+theorem t96A06_unitH0_integralComparison_inverse_pointInclusion (b : Bool) :
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+          (AddCommGrpCat.of ℤ)).map
+            (ConstructionTargets.SingularHomologyConcrete.pointInclusion b))) =
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) := by
+  simpa only [Category.assoc] using
+    t96A06_unitH0_integralComparison_inverse_assoc
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b))
+
+#print axioms t96A06_unitH0_integralComparison_inverse_pointInclusion
+
 /-- Pointwise form of the `Unit` comparison, ready for transport along either
 point inclusion `Unit → Bool`. -/
 theorem t96A06_unitH0_integralComparison_apply
