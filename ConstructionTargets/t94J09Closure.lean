@@ -1627,6 +1627,23 @@ theorem frozenGeneratorHigherIntersectionGroup_isZero (k : ℕ)
         (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
           frozenGeneratorIntersectionHomeomorphOverlap.toHomotopyEquiv (k - 1))
 
+/-- High-degree vanishing for the literal frozen generator quotient follows
+from boundary-graph vanishing in the same degree. -/
+theorem frozenGeneratorHigherHomology_isZero (k : ℕ) (hk : 3 ≤ k)
+    (hgraph : IsZero (SpaceH FrozenBoundaryGraphQuotient k)) :
+    IsZero (SpaceH FrozenGeneratorQuotient k) := by
+  apply
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+  cases k with
+  | zero => omega
+  | succ n =>
+      have hex := frozenGeneratorMVUnionExact n
+      apply hex.isZero_X₂
+      · exact
+          (frozenGeneratorHigherPiecesGroup_isZero (n + 1) (by omega) hgraph).eq_of_src _ _
+      · exact
+          (frozenGeneratorHigherIntersectionGroup_isZero (n + 1) (by omega)).eq_of_tgt _ _
+
 /-- The literal outer member in the additive-group presentation used by the
 production Mayer--Vietoris sequence, transported to the graph quotient. -/
 noncomputable def frozenGeneratorOuterGroupHomologyIsoGraph (k : ℕ) :
@@ -3412,6 +3429,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterHigherGroup_isZero
 #print axioms frozenGeneratorHigherPiecesGroup_isZero
 #print axioms frozenGeneratorHigherIntersectionGroup_isZero
+#print axioms frozenGeneratorHigherHomology_isZero
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
