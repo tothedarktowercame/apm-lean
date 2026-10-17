@@ -1492,6 +1492,16 @@ theorem t99J05_cp_successor_mayerVietoris_exact_pieces_transport (n k : ℕ) :
 
 #print axioms t99J05_cp_successor_mayerVietoris_exact_pieces_transport
 
+/-- The separately named transported arrow is exactly the first arrow of the
+transported short complex whose exactness was established above. -/
+theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
+    (n k : ℕ) :
+    t99J05_cp_successor_mayerVietoris_f_transport n k =
+      (t99J05_cp_successor_mayerVietoris_piecesTransport n k).f := by
+  rfl
+
+#print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
