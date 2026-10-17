@@ -88725,6 +88725,18 @@
      {:cmd "git show --check 5a281c492", :exit 0}],
     :diagnostic-history
     [{:cmd "lean closure", :exit 1, :correction "moved after iso"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792208348855-16112-1aba7f05",
+     :commands
+     ["git show/diff/hash/scope/placeholders 5a281c492"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed 5a281c492 (author topo-6), new after history 9648aabec. Only the in-scope closure changed; fixture 79439a34..., frozen Main 7726693f..., and pinned statement 52b4778c... recompute; placeholders are 0/1 and registry is 168/0. The theorem correctly transports generator high-degree SpaceH vanishing across frozenSignedQuotientHomologyIsoGenerator to FrozenSignedQuotient. It compiles sorry-free with only propext, Classical.choice, Quot.sound; remaining partial/not-started homology and normalization milestones are listed."},
     :commit "5a281c492",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88733,7 +88745,7 @@
      "79439a34ee9b61f67acf49a501891bc4d51c4d922d0ff60689e8f2953668c10e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88751,7 +88763,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked high homology.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked high.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89038,7 +89050,8 @@
     {:job 1,
      :commit "5d7ebded4",
      :reason "Banked high intersection vanishing."}
-    {:job 2, :commit "9648aabec", :reason "Banked high homology."}]}
+    {:job 2, :commit "9648aabec", :reason "Banked high homology."}
+    {:job 3, :commit "5a281c492", :reason "Banked high."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99519,7 +99532,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenSignedHigherHomology_isZero_of_generatorComparison",
@@ -99529,7 +99542,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "high",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5a281c492"},
    :id :lemma-frozensignedhigherhomology-iszero-of-generatorcomparison,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorhigherhomology-iszero],
