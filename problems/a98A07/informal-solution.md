@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM a98A07: Boundary L¹-domination forces interior uniform convergence via the Cauchy kernel
+# APM a98A07: Boundary $L^{1}$-domination forces interior uniform convergence via the Cauchy kernel
 
 ## Why It's Hard
 

@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b95J03: The map E⊗_F E → End_F(E) is "multiply then represent" — image, kernel, and the ℂ/ℝ case
+# APM b95J03: The map $E\otimes_F E \to \operatorname{End}_F(E)$ is "multiply then represent" — image, kernel, and the $\mathbb{C}/\mathbb{R}$ case
 
 ## Why It's Hard
 

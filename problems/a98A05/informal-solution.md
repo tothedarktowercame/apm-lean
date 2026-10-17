@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM a98A05: ∫₀^∞ dx/(1+x³) by a 120° pie-slice contour
+# APM a98A05: $\int_{0}^{\infty} dx/(1+x^{3})$ by a 120° pie-slice contour
 
 ## Why It's Hard
 

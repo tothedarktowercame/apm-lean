@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b99A03: The minimal polynomial of α as the product over the conjugates σᵢ(α)
+# APM b99A03: The minimal polynomial of $\alpha$ as the product over the conjugates $\sigma_{i}(\alpha)$
 
 ## Why It's Hard
 

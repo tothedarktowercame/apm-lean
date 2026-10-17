@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b94J03: The Galois group of x³−3 over ℚ, ℝ, and 𝔽₇
+# APM b94J03: The Galois group of $x^{3}-3$ over $\mathbb{Q}$, $\mathbb{R}$, and $\mathbb{F}_{7}$
 
 ## Why It's Hard
 

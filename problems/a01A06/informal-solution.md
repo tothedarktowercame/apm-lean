@@ -4,69 +4,69 @@
 
 ## 1. Informal proof
 
-**Why it's hard.** The hypothesis is a duality condition: g is bounded as a linear functional on the "unit ball" of an Orlicz space (the set of f with ∫ e^f ≤ 1). Extracting pointwise information about g from this integral condition requires choosing the right test functions, and determining whether g ∈ L² requires understanding the precise decay rate of the distribution function m({g > λ}).
+**Why it's hard.** The hypothesis is a duality condition: $g$ is bounded as a linear functional on the "unit ball" of an Orlicz space (the set of $f$ with $\int e^f \leq 1$). Extracting pointwise information about $g$ from this integral condition requires choosing the right test functions, and determining whether $g \in L^{2}$ requires understanding the precise decay rate of the distribution function $m(\{g > \lambda\})$.
 
-**The key insight.** Choosing f = c · χ_E (a constant on a measurable set) with the constraint ∫ e^f ≤ 1 gives e^c · m(E) + (1 - m(E)) ≤ 1, i.e., m(E) ≤ 1/(e^c - 1 + 1) = e^{-c}/(1 - e^{-c} + e^{-c}) — more simply, m(E)(e^c - 1) ≤ 0 unless we adjust: actually e^c · m(E) + 1 · (1 - m(E)) ≤ 1 gives m(E)(e^c - 1) ≤ 0 which is wrong. Let me redo: ∫ e^{cχ_E} = e^c m(E) + 1 · m(E^c ∩ [0,1]) = e^c m(E) + (1 - m(E)). Setting this ≤ 1: (e^c - 1)m(E) ≤ 0, which forces m(E) = 0 unless c ≤ 0. So we need c ≤ 0 to get a nontrivial test. But then ∫ gf = c ∫_E g < A, and c < 0 gives ∫_E g > A/c... this gives a lower bound on ∫_E g, not useful directly.
+**The key insight.** Choosing $f = c \cdot \chi_E$ (a constant on a measurable set) with the constraint $\int e^f \leq 1$ gives $e^c \cdot m(E) + (1 - m(E)) \leq 1$, i.e., $m(E) \leq 1/(e^c - 1 + 1) = e^{-c}/(1 - e^{-c} + e^{-c})$ — more simply, $m(E)(e^c - 1) \leq 0$ unless we adjust: actually $e^c \cdot m(E) + 1 \cdot (1 - m(E)) \leq 1$ gives $m(E)(e^c - 1) \leq 0$ which is wrong. Let me redo: $\int e^{c\chi_E} = e^c m(E) + 1 \cdot m(E^c \cap [0,1]) = e^c m(E) + (1 - m(E))$. Setting this $\leq 1$: $(e^c - 1)m(E) \leq 0$, which forces $m(E) = 0$ unless $c \leq 0$. So we need $c \leq 0$ to get a nontrivial test. But then $\int gf = c \int_E g < A$, and $c < 0$ gives $\int_E g > A/c$... this gives a lower bound on $\int_E g$, not useful directly.
 
-Instead, take f = c · χ_E with c > 0 and tune m(E) so the constraint is met. We need e^c m(E) + (1 - m(E)) ≤ 1, i.e., m(E) ≤ 0... No. The issue is that e^{cχ_E} ≥ 1 everywhere when c ≥ 0, so ∫ e^{cχ_E} ≥ 1 always, with equality only when m(E) = 0.
+Instead, take $f = c \cdot \chi_E$ with $c > 0$ and tune $m(E)$ so the constraint is met. We need $e^c m(E) + (1 - m(E)) \leq 1$, i.e., $m(E) \leq 0$... No. The issue is that $e^{c\chi_E} \geq 1$ everywhere when $c \geq 0$, so $\int e^{c\chi_E} \geq 1$ always, with equality only when $m(E) = 0$.
 
-So we should use f = -c · χ_{E^c} + 0 · χ_E = -c(1 - χ_E). Or better: take f = c χ_E - λ for a normalizing constant λ. Then e^f = e^{c χ_E - λ} and ∫ e^f = e^{-λ}[e^c m(E) + (1-m(E))] ≤ 1 iff e^{-λ} ≤ 1/[e^c m(E) + 1 - m(E)]. Choose λ = log(e^c m(E) + 1 - m(E)) so equality holds.
+So we should use $f = -c \cdot \chi_{E^c} + 0 \cdot \chi_E = -c(1 - \chi_E)$. Or better: take $f = c \chi_E - \lambda$ for a normalizing constant $\lambda$. Then $e^f = e^{c \chi_E - \lambda}$ and $\int e^f = e^{-\lambda}[e^c m(E) + (1-m(E))] \leq 1$ iff $e^{-\lambda} \leq 1/[e^c m(E) + 1 - m(E)]$. Choose $\lambda = \log(e^c m(E) + 1 - m(E))$ so equality holds.
 
-Then ∫ gf = c ∫_E g - λ ∫ g < A. So c ∫_E g < A + λ ∫g = A + (∫g) log(e^c m(E) + 1 - m(E)).
+Then $\int gf = c \int_E g - \lambda \int g < A$. So $c \int_E g < A + \lambda \int g = A + (\int g) \log(e^c m(E) + 1 - m(E))$.
 
-Now take E = {g > t} for large t. Then ∫_E g ≥ t · m(E). And with c to be optimized:
+Now take $E = \{g > t\}$ for large $t$. Then $\int_E g \geq t \cdot m(E)$. And with $c$ to be optimized:
 
-c · t · m(E) < A + (∫g) log((e^c - 1)m(E) + 1).
+$c \cdot t \cdot m(E) < A + (\int g) \log((e^c - 1)m(E) + 1)$.
 
-For small m(E), log((e^c - 1)m(E) + 1) ≈ (e^c - 1)m(E). Taking c fixed and m(E) small:
+For small $m(E)$, $\log((e^c - 1)m(E) + 1) \approx (e^c - 1)m(E)$. Taking $c$ fixed and $m(E)$ small:
 
-c · t · m(E) ≲ A + C · m(E),
+$c \cdot t \cdot m(E) ≲ A + C \cdot m(E)$,
 
-so m(E) ≲ A / (ct - C). This gives m({g > t}) = O(1/t), which is not exponential decay.
+so $m(E) ≲ A / (ct - C)$. This gives $m(\{g > t\}) = O(1/t)$, which is not exponential decay.
 
-Let me try differently. Take c = t/2 (growing with t) and E = {g > t}:
+Let me try differently. Take $c = t/2$ (growing with $t$) and $E = \{g > t\}$:
 
-(t/2) · t · m(E) ≤ A + (∫g) log((e^{t/2} - 1)m(E) + 1).
+$(t/2) \cdot t \cdot m(E) \leq A + (\int g) \log((e^{t/2} - 1)m(E) + 1)$.
 
-If m(E) is very small: log term ≈ e^{t/2} m(E), so t²m(E)/2 ≲ A + ||g||₁ e^{t/2} m(E). For the log term to not dominate, we need m(E) to be small enough that ||g||₁ e^{t/2} m(E) is bounded, giving m(E) ≲ e^{-t/2}.
+If $m(E)$ is very small: log term $\approx e^{t/2} m(E)$, so $t^{2}m(E)/2 ≲ A + ||g||_{1} e^{t/2} m(E)$. For the log term to not dominate, we need $m(E)$ to be small enough that $||g||_{1} e^{t/2} m(E)$ is bounded, giving $m(E) ≲ e^{-t/2}$.
 
-More carefully: optimize c. With f = cχ_E - log(e^c m(E) + 1 - m(E)):
+More carefully: optimize $c$. With $f = c\chi_E - \log(e^c m(E) + 1 - m(E))$:
 
-c ∫_E g - ||g||₁ log((e^c - 1)m(E) + 1) < A.
+$c \int_E g - ||g||_{1} \log((e^c - 1)m(E) + 1) < A$.
 
-Set E = {g > t}, so ∫_E g ≥ t m(E). Set m(E) = δ. Choose c to optimize. Taking c such that (e^c - 1)δ = 1, i.e., e^c = 1 + 1/δ, c = log(1 + 1/δ):
+Set $E = \{g > t\}$, so $\int_E g \geq t m(E)$. Set $m(E) = \delta$. Choose $c$ to optimize. Taking $c$ such that $(e^c - 1)\delta = 1$, i.e., $e^c = 1 + 1/\delta$, $c = \log(1 + 1/\delta)$:
 
-log(1+1/δ) · t · δ - ||g||₁ · log(1 + 1) < A.
+$\log(1+1/\delta) \cdot t \cdot \delta - ||g||_{1} \cdot \log(1 + 1) < A$.
 
-So δ · t · log(1/δ + 1) < A + ||g||₁ log 2.
+So $\delta \cdot t \cdot \log(1/\delta + 1) < A + ||g||_{1} \log 2$.
 
-For small δ: δ log(1/δ) · t ≲ A', giving δ ≲ A'/(t log(1/δ)). This is slower than exponential.
+For small $\delta$: $\delta \log(1/\delta) \cdot t ≲ A'$, giving $\delta ≲ A'/(t \log(1/\delta))$. This is slower than exponential.
 
-Actually, the sharp answer for part (a) is: **m({g > λ}) ≤ Ce^{-λ/||g||₁}** or similar exponential decay, and for part (b), this exponential decay is strong enough to give g ∈ L² (since ∫g² = ∫₀^∞ 2λ m({g>λ}) dλ ≤ C ∫₀^∞ λ e^{-cλ} dλ < ∞).
+Actually, the sharp answer for part (a) is: **$m(\{g > \lambda\}) \leq Ce^{-\lambda/||g||_{1}}$** or similar exponential decay, and for part (b), this exponential decay is strong enough to give $g \in L^{2}$ (since $\int g^{2} = \int_{0}^\infty 2\lambda m(\{g>\lambda\}) d\lambda \leq C \int_{0}^\infty \lambda e^{-c\lambda} d\lambda < \infty$).
 
 Let me redo part (a) cleanly with the right test function.
 
 **Proof.**
 
-**(a)** Fix a measurable E ⊆ [0,1] with m(E) > 0. For c > 0, define:
+**(a)** Fix a measurable $E \subseteq [0,1]$ with $m(E) > 0$. For $c > 0$, define:
 
 $$f_c = c\chi_E - \log\left(e^c m(E) + 1 - m(E)\right).$$
 
-Then ∫ e^{f_c} dx = e^{-\log(e^c m(E)+1-m(E))} · (e^c m(E) + 1-m(E)) = 1, so f_c is admissible.
+Then $\int e^{f_c} dx = e^{-\log(e^c m(E)+1-m(E))} \cdot (e^c m(E) + 1-m(E)) = 1$, so $f_c$ is admissible.
 
-The hypothesis gives ∫ g f_c < A:
+The hypothesis gives $\int g f_c < A$:
 
 $$c\int_E g - \|g\|_1 \cdot \log(e^c m(E) + 1 - m(E)) < A.$$
 
-Now set E = {g > λ}. Then ∫_E g ≥ λ m(E). Write δ = m(E). The bound becomes:
+Now set $E = \{g > \lambda\}$. Then $\int_E g \geq \lambda m(E)$. Write $\delta = m(E)$. The bound becomes:
 
 $$c\lambda\delta - \|g\|_1\log((e^c - 1)\delta + 1) < A. \quad (*)$$
 
-Choose c = λ (this balances the growth rates). For large λ with small δ:
+Choose $c = \lambda$ (this balances the growth rates). For large $\lambda$ with small $\delta$:
 
 $$(e^\lambda - 1)\delta + 1 \leq e^{\lambda\delta} + 1 \leq 2e^{\lambda\delta}$$
 
-when (e^λ - 1)δ ≤ e^{λδ}. So log(...) ≤ λδ + log 2. Then (*) gives:
+when $(e^\lambda - 1)\delta \leq e^{\lambda\delta}$. So $\log(\ldots) \leq \lambda\delta + \log 2$. Then (*) gives:
 
 $$\lambda^2 \delta - \|g\|_1(\lambda\delta + \log 2) < A,$$
 
@@ -74,63 +74,63 @@ $$\delta(\lambda^2 - \|g\|_1\lambda) < A + \|g\|_1\log 2,$$
 
 $$\delta < \frac{A + \|g\|_1\log 2}{\lambda(\lambda - \|g\|_1)}.$$
 
-So **m({g > λ}) = O(1/λ²)** for large λ. This is polynomial decay, not exponential.
+So **$m(\{g > \lambda\}) = O(1/\lambda^{2})$** for large $\lambda$. This is polynomial decay, not exponential.
 
-But we can do better by choosing c more carefully. Take c = αλ for some α < 1. Then:
+But we can do better by choosing $c$ more carefully. Take $c = \alpha\lambda$ for some $\alpha < 1$. Then:
 
 $$\alpha\lambda^2\delta - \|g\|_1\log((e^{\alpha\lambda}-1)\delta + 1) < A.$$
 
-If δ ≤ e^{-αλ}, the log term is bounded by log(2) (since (e^{αλ}-1)e^{-αλ} = 1 - e^{-αλ} < 1). Then:
+If $\delta \leq e^{-\alpha\lambda}$, the log term is bounded by $\log(2)$ (since $(e^{\alpha\lambda}-1)e^{-\alpha\lambda} = 1 - e^{-\alpha\lambda} < 1$). Then:
 
 $$\alpha\lambda^2 e^{-\alpha\lambda} \leq A + \|g\|_1\log 2.$$
 
-For large λ, the left side → 0, so this is automatically satisfied. This means the bound δ ≤ e^{-αλ} is *consistent* but not *derived*.
+For large $\lambda$, the left side $\to 0$, so this is automatically satisfied. This means the bound $\delta \leq e^{-\alpha\lambda}$ is *consistent* but not *derived*.
 
-The correct approach: from (*) with c optimized. Rearranging (*): for **any** c > 0,
+The correct approach: from (*) with $c$ optimized. Rearranging (*): for **any** $c > 0$,
 
 $$m(\{g>\lambda\}) \leq \frac{A + \|g\|_1\log((e^c-1)m(\{g>\lambda\})+1)}{c\lambda}.$$
 
-This is an implicit bound. To get an explicit one, use the simpler estimate: since (e^c-1)δ + 1 ≤ e^{cδ+...}, just bound the log crudely.
+This is an implicit bound. To get an explicit one, use the simpler estimate: since $(e^c-1)\delta + 1 \leq e^{c\delta+\ldots}$, just bound the log crudely.
 
-Actually, the cleanest bound comes from choosing c such that the constraint is tight on a different set. Let me try f = cχ_E with no subtraction, but allow ∫ e^f = e^c m(E) + (1-m(E)) which exceeds 1 for c > 0. So f = cχ_E is NOT admissible for c > 0 without normalization.
+Actually, the cleanest bound comes from choosing $c$ such that the constraint is tight on a different set. Let me try $f = c\chi_E$ with no subtraction, but allow $\int e^f = e^c m(E) + (1-m(E))$ which exceeds 1 for $c > 0$. So $f = c\chi_E$ is NOT admissible for $c > 0$ without normalization.
 
-With the normalization f_c as above, we showed m({g > λ}) = O(1/λ²), which is enough for:
+With the normalization $f_c$ as above, we showed $m(\{g > \lambda\}) = O(1/\lambda^{2})$, which is enough for:
 
-**(b) Yes, g ∈ L².** We have m({g > λ}) ≤ C/λ² for λ large. Then:
+**(b) Yes, $g \in L^{2}$.** We have $m(\{g > \lambda\}) \leq C/\lambda^{2}$ for $\lambda$ large. Then:
 
 $$\int_0^1 g^2 = \int_0^\infty 2\lambda \cdot m(\{g>\lambda\})\,d\lambda \leq \int_0^M 2\lambda\,d\lambda + \int_M^\infty \frac{2C}{\lambda}\,d\lambda.$$
 
-Wait, 2λ · C/λ² = 2C/λ, and ∫_M^∞ 2C/λ dλ = ∞. So O(1/λ²) for the distribution function is **not** enough for L²! We need O(1/λ^{2+ε}).
+Wait, $2\lambda \cdot C/\lambda^{2} = 2C/\lambda$, and $\int_M^\infty 2C/\lambda d\lambda = \infty$. So $O(1/\lambda^{2})$ for the distribution function is **not** enough for $L^{2}$! We need $O(1/\lambda^{2+\epsilon})$.
 
-Let me re-examine with c = λ/2. From (*):
+Let me re-examine with $c = \lambda/2$. From (*):
 
 $$\frac{\lambda^2}{2}\delta - \|g\|_1\log((e^{\lambda/2}-1)\delta + 1) < A.$$
 
-If δ ≤ e^{-\lambda/2}, then (e^{λ/2}-1)δ ≤ 1, log ≤ log 2, so:
+If $\delta \leq e^{-\lambda/2}$, then $(e^{\lambda/2}-1)\delta \leq 1$, $\log \leq \log 2$, so:
 
 $$\frac{\lambda^2}{2}\delta < A + \|g\|_1\log 2 \implies \delta < \frac{2(A+\|g\|_1\log 2)}{\lambda^2}.$$
 
-But this gives δ ≤ C/λ², which we already had. For the bound to give δ ≤ e^{-λ/2}, we'd need C/λ² ≤ e^{-λ/2}, which holds for large λ. So for large λ, the constraint δ ≤ e^{-λ/2} IS satisfied.
+But this gives $\delta \leq C/\lambda^{2}$, which we already had. For the bound to give $\delta \leq e^{-\lambda/2}$, we'd need $C/\lambda^{2} \leq e^{-\lambda/2}$, which holds for large $\lambda$. So for large $\lambda$, the constraint $\delta \leq e^{-\lambda/2}$ IS satisfied.
 
-In other words, for λ large enough: **m({g > λ}) ≤ e^{-λ/2}**, exponential decay!
+In other words, for $\lambda$ large enough: **$m(\{g > \lambda\}) \leq e^{-\lambda/2}$**, exponential decay!
 
-The argument: suppose for contradiction that m({g > λ}) > e^{-λ/2}. Then from (*) with c = λ/2:
+The argument: suppose for contradiction that $m(\{g > \lambda\}) > e^{-\lambda/2}$. Then from (*) with $c = \lambda/2$:
 
 $$\frac{\lambda^2}{2} \cdot e^{-\lambda/2} < \frac{\lambda^2}{2}\delta < A + \|g\|_1\log((e^{\lambda/2}-1)\delta+1) + A.$$
 
-But (e^{λ/2}-1)δ > (e^{λ/2}-1)e^{-λ/2} = 1 - e^{-λ/2} < 1, so log < log 2. Hence λ²e^{-λ/2}/2 < 2A + ||g||₁ log 2. For λ large enough this fails. So m({g>λ}) ≤ e^{-λ/2} eventually.
+But $(e^{\lambda/2}-1)\delta > (e^{\lambda/2}-1)e^{-\lambda/2} = 1 - e^{-\lambda/2} < 1$, so $\log < \log 2$. Hence $\lambda^{2}e^{-\lambda/2}/2 < 2A + ||g||_{1} \log 2$. For $\lambda$ large enough this fails. So $m(\{g>\lambda\}) \leq e^{-\lambda/2}$ eventually.
 
-More precisely: there exists λ₀ such that for λ > λ₀, m({g > λ}) ≤ e^{-λ/2}.
+More precisely: there exists $\lambda_{0}$ such that for $\lambda > \lambda_{0}$, $m(\{g > \lambda\}) \leq e^{-\lambda/2}$.
 
-**Part (a) answer:** m({g > λ}) decays at least exponentially: m({g > λ}) ≤ Ce^{-αλ} for some C, α > 0.
+**Part (a) answer:** $m(\{g > \lambda\})$ decays at least exponentially: $m(\{g > \lambda\}) \leq Ce^{-\alpha\lambda}$ for some $C, \alpha > 0$.
 
-**Part (b) answer:** Yes, g ∈ L². From the exponential decay:
+**Part (b) answer:** Yes, $g \in L^{2}$. From the exponential decay:
 
 $$\int g^2 = \int_0^\infty 2\lambda\,m(\{g>\lambda\})\,d\lambda \leq \int_0^{\lambda_0} 2\lambda\,d\lambda + \int_{\lambda_0}^\infty 2\lambda\,Ce^{-\alpha\lambda}\,d\lambda < \infty$$
 
-since ∫ λe^{-αλ} dλ converges. In fact g ∈ Lp for all p < ∞, and even e^{βg} ∈ L¹ for small β > 0.
+since $\int \lambda e^{-\alpha\lambda} d\lambda$ converges. In fact $g \in Lp$ for all $p < \infty$, and even $e^{\beta g} \in L^{1}$ for small $\beta > 0$.
 
-**What connects.** This problem is about Orlicz space duality. The constraint ∫ e^f ≤ 1 defines the unit ball of the Orlicz space L^Φ with Φ(t) = e^t. The hypothesis says g acts as a bounded functional on this ball, which by Orlicz duality means g belongs to the conjugate Orlicz space L^Ψ where Ψ(s) = s log s (the Young conjugate of Φ). Functions in L^Ψ have exponentially decaying distribution functions and belong to every Lp. This is strictly between L^∞ (which would require m({g>λ}) = 0 for large λ) and any fixed Lp. The test function technique — choosing f = cχ_E and optimizing c — is the concrete realisation of this duality.
+**What connects.** This problem is about Orlicz space duality. The constraint $\int e^f \leq 1$ defines the unit ball of the Orlicz space $L^\Phi$ with $\Phi(t) = e^t$. The hypothesis says $g$ acts as a bounded functional on this ball, which by Orlicz duality means $g$ belongs to the conjugate Orlicz space $L^\Psi$ where $\Psi(s) = s \log s$ (the Young conjugate of $\Phi$). Functions in $L^\Psi$ have exponentially decaying distribution functions and belong to every $Lp$. This is strictly between $L^\infty$ (which would require $m(\{g>\lambda\}) = 0$ for large $\lambda$) and any fixed $Lp$. The test function technique — choosing $f = c\chi_E$ and optimizing $c$ — is the concrete realisation of this duality.
 
 ## 2. Lean 4 theorem statement
 
@@ -218,14 +218,14 @@ end
 
 **Types/structures:**
 - `MeasureTheory.IntegrableOn` — integrability on a set
-- `MeasureTheory.Measure.restrict` — restricted measure (for [0,1])
-- `MeasureTheory.Memℒp` — membership in Lp (alternative to IntegrableOn for g²)
+- `MeasureTheory.Measure.restrict` — restricted measure (for $[0,1]$)
+- `MeasureTheory.Memℒp` — membership in Lp (alternative to IntegrableOn for $g^{2}$)
 - `Set.indicator` — indicator/characteristic function
 - `ENNReal` — extended nonneg reals for measure values
 - `Real.exp`, `Real.log` — exponential and logarithm
 
 **Key lemmas:**
-- `MeasureTheory.lintegral_comp_eq_lintegral_meas_lt_mul` / `lintegral_norm_eq_lintegral_meas_lt` — layer cake / Cavalieri principle (converts ∫g² to ∫ 2λ m({g>λ}) dλ)
+- `MeasureTheory.lintegral_comp_eq_lintegral_meas_lt_mul` / `lintegral_norm_eq_lintegral_meas_lt` — layer cake / Cavalieri principle (converts $\int g^{2}$ to $\int 2\lambda m(\{g>\lambda\}) d\lambda$)
 - `MeasureTheory.setLIntegral_const` — integral of constant over a set
 - `MeasureTheory.integral_indicator` — integral involving indicator functions
 - `Real.add_pow_le_pow_mul_pow_of_sq_le_sq` — not directly, but convexity-type inequalities
@@ -238,10 +238,10 @@ end
 - `Real.exp_pos` — positivity of exp
 - `ENNReal.toReal_ofReal` — coercion roundtrip
 - `MeasureTheory.integral_mul_left` — pulling constants out of integrals
-- `Real.tendsto_exp_neg_atTop_nhds_zero` — e^{-αλ} → 0 (for showing λe^{-αλ} is integrable)
+- `Real.tendsto_exp_neg_atTop_nhds_zero` — $e^{-\alpha\lambda} \to 0$ (for showing $\lambda e^{-\alpha\lambda}$ is integrable)
 
 **Tactic hints:**
-- `by_contra` — for the exponential decay argument (assume m({g>λ}) > e^{-αλ} and derive contradiction)
+- `by_contra` — for the exponential decay argument (assume $m(\{g>\lambda\}) > e^{-\alpha\lambda}$ and derive contradiction)
 - `calc` — for the chain of inequalities in the test function argument
 - `positivity` — for showing exp terms and measure values are positive
 - `field_simp` — for algebraic manipulations with log and exp

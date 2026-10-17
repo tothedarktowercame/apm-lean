@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM aunk03: Evaluating ∑1/k⁴ = π⁴/90 by residue summation with π·cot(πz)
+# APM aunk03: Evaluating $\sum 1/k^{4} = \pi^{4}/90$ by residue summation with $\pi\cdot\cot(\pi z)$
 
 ## Why It's Hard
 

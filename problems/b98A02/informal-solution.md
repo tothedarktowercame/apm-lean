@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b98A02: The maximal abelian subextension A = E^{G'}, and A(E∩L) = A(E)∩A(L)
+# APM b98A02: The maximal abelian subextension $A = E^{G'}$, and $A(E\cap L) = A(E)\cap A(L)$
 
 ## Why It's Hard
 

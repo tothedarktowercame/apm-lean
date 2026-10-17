@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b97A04: A faithful simple module over a finite-dimensional ℂ-algebra forces R ≅ Mₙ(ℂ)
+# APM b97A04: A faithful simple module over a finite-dimensional $\mathbb{C}$-algebra forces $R \cong M_{n}(\mathbb{C})$
 
 ## Why It's Hard
 

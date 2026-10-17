@@ -1,76 +1,74 @@
-
-
 # APM a03J02: Polynomial maps send null sets to null sets (Lusin's condition N)
 
 ## Why It's Hard
 
-A generic continuous map can blow up null sets to positive measure — space-filling curves are the classic example. Even smooth maps can fail: a C^{n-1} map ℝⁿ → ℝⁿ might not preserve null sets. The result requires something special about polynomial maps. The key is that polynomial maps are **locally Lipschitz**, and Lipschitz maps preserve null sets. But "locally Lipschitz" isn't quite enough on all of ℝⁿ (the Lipschitz constant grows), so you need to combine local Lipschitz control with a covering argument that respects the polynomial growth.
+A generic continuous map can blow up null sets to positive measure — space-filling curves are the classic example. Even smooth maps can fail: a $C^{n-1}$ map $\mathbb{R}^{n} \to \mathbb{R}^{n}$ might not preserve null sets. The result requires something special about polynomial maps. The key is that polynomial maps are **locally Lipschitz**, and Lipschitz maps preserve null sets. But "locally Lipschitz" isn't quite enough on all of $\mathbb{R}^{n}$ (the Lipschitz constant grows), so you need to combine local Lipschitz control with a covering argument that respects the polynomial growth.
 
 ## The Key Insight
 
-**Lipschitz maps preserve null sets** (they distort volumes by at most L^n on each ball). A polynomial map f is smooth, hence locally Lipschitz: on any bounded set, ||Df|| is bounded (since the entries of the Jacobian are polynomials, hence bounded on bounded sets). Cover E by balls of total measure < ε, control the Lipschitz constant on each ball, and conclude m(f(E)) < C·ε.
+**Lipschitz maps preserve null sets** (they distort volumes by at most $L^n$ on each ball). A polynomial map $f$ is smooth, hence locally Lipschitz: on any bounded set, $\|Df\|$ is bounded (since the entries of the Jacobian are polynomials, hence bounded on bounded sets). Cover $E$ by balls of total measure $< \varepsilon$, control the Lipschitz constant on each ball, and conclude $m(f(E)) < C \cdot \varepsilon$.
 
-More precisely: partition ℝⁿ into cubes Q\_k of side 1. On each Q\_k, the derivative Df is bounded by some L\_k. Then f maps null subsets of Q\_k to null sets (with dilation factor L\_k^n). Since E = ∪(E ∩ Q\_k) and each f(E ∩ Q\_k) is null, f(E) is null (countable union of null sets).
+More precisely: partition $\mathbb{R}^{n}$ into cubes $Q_k$ of side 1. On each $Q_k$, the derivative $Df$ is bounded by some $L_k$. Then $f$ maps null subsets of $Q_k$ to null sets (with dilation factor $L_k^n$). Since $E = \cup(E \cap Q_k)$ and each $f(E \cap Q_k)$ is null, $f(E)$ is null (countable union of null sets).
 
 ## Complete Proof
 
-**Theorem.** Let f : ℝⁿ → ℝⁿ be a polynomial map. If E ⊂ ℝⁿ has Lebesgue measure zero, then f(E) has Lebesgue measure zero.
+**Theorem.** Let $f : \mathbb{R}^{n} \to \mathbb{R}^{n}$ be a polynomial map. If $E \subset \mathbb{R}^{n}$ has Lebesgue measure zero, then $f(E)$ has Lebesgue measure zero.
 
 **Proof.**
 
 **Step 1: Locally Lipschitz property.**
 
-Since each component fᵢ is a polynomial, the partial derivatives ∂fᵢ/∂xⱼ are also polynomials. On any bounded set B ⊂ ℝⁿ, each partial derivative is bounded:
+Since each component $f_{i}$ is a polynomial, the partial derivatives $\partial f_{i}/\partial x_{j}$ are also polynomials. On any bounded set $B \subset \mathbb{R}^{n}$, each partial derivative is bounded:
 
 $$\sup_{x \in B}\left|\frac{\partial f_i}{\partial x_j}(x)\right| \leq C_B < \infty.$$
 
-By the mean value inequality (for vector-valued functions), for any x, y in a convex bounded set B:
+By the mean value inequality (for vector-valued functions), for any $x, y$ in a convex bounded set $B$:
 
 $$|f(x) - f(y)| \leq L_B \cdot |x - y|$$
 
-where L\_B = n · max\_{i,j} sup\_B |∂fᵢ/∂xⱼ| (or L\_B = sup\_B ||Df||\_op, the operator norm of the Jacobian).
+where $L_B = n \cdot \max_{i,j} \sup_B |\partial f_{i}/\partial x_{j}|$ (or $L_B = \sup_B \|Df\|_{op}$, the operator norm of the Jacobian).
 
 **Step 2: Lipschitz maps send null sets to null sets.**
 
-**Lemma.** If g : ℝⁿ → ℝⁿ is Lipschitz with constant L on a set S, and m(S) = 0, then m(g(S)) = 0.
+**Lemma.** If $g : \mathbb{R}^{n} \to \mathbb{R}^{n}$ is Lipschitz with constant $L$ on a set $S$, and $m(S) = 0$, then $m(g(S)) = 0$.
 
-*Proof of lemma.* Fix ε > 0. Since m(S) = 0, cover S by countably many balls B(xᵢ, rᵢ) with Σ rᵢⁿ < ε (we can use balls of volume < ε). Then g(S ∩ B(xᵢ, rᵢ)) ⊂ B(g(xᵢ), Lrᵢ) (since g is L-Lipschitz on S). So:
+*Proof of lemma.* Fix $\varepsilon > 0$. Since $m(S) = 0$, cover $S$ by countably many balls $B(x_{i}, r_{i})$ with $\sum r_{i}^{n} < \varepsilon$ (we can use balls of volume $< \varepsilon$). Then $g(S \cap B(x_{i}, r_{i})) \subset B(g(x_{i}), Lr_{i})$ (since $g$ is $L$-Lipschitz on $S$). So:
 
 $$m(g(S)) \leq \sum_i m(B(g(x_i), Lr_i)) = \sum_i \omega_n (Lr_i)^n = L^n \omega_n \sum_i r_i^n < L^n \omega_n \varepsilon.$$
 
-Since ε > 0 was arbitrary, m(g(S)) = 0. ∎
+Since $\varepsilon > 0$ was arbitrary, $m(g(S)) = 0$. ∎
 
 **Step 3: Decompose into bounded pieces.**
 
-Partition ℝⁿ into the unit cubes Q\_k = [k₁, k₁+1) × ··· × [kₙ, kₙ+1) for k = (k₁,...,kₙ) ∈ ℤⁿ. These are countably many, pairwise disjoint, and ∪ Q\_k = ℝⁿ.
+Partition $\mathbb{R}^{n}$ into the unit cubes $Q_k = [k_{1}, k_{1}+1) \times \cdots \times [k_{n}, k_{n}+1)$ for $k = (k_{1},\ldots,k_{n}) \in \mathbb{Z}^{n}$. These are countably many, pairwise disjoint, and $\cup Q_k = \mathbb{R}^{n}$.
 
-Set E\_k = E ∩ Q\_k. Then E = ∪\_k E\_k (disjoint), and each E\_k ⊂ Q\_k is contained in a bounded convex set.
+Set $E_k = E \cap Q_k$. Then $E = \cup_k E_k$ (disjoint), and each $E_k \subset Q_k$ is contained in a bounded convex set.
 
-**Step 4: f is Lipschitz on each Q\_k.**
+**Step 4: $f$ is Lipschitz on each $Q_k$.**
 
-On the bounded convex set Q\_k, the Jacobian Df is bounded (polynomial entries on a bounded set). Let L\_k = sup\_{x ∈ Q\_k} ||Df(x)||\_op. Then f is L\_k-Lipschitz on Q\_k (by the mean value theorem for Lipschitz estimates on convex sets).
+On the bounded convex set $Q_k$, the Jacobian $Df$ is bounded (polynomial entries on a bounded set). Let $L_k = \sup_{x \in Q_k} \|Df(x)\|_{op}$. Then $f$ is $L_k$-Lipschitz on $Q_k$ (by the mean value theorem for Lipschitz estimates on convex sets).
 
-**Step 5: Each f(E\_k) is null.**
+**Step 5: Each $f(E_k)$ is null.**
 
-Since m(E) = 0 and E\_k ⊂ E, we have m(E\_k) = 0. By Step 2 (the lemma), since f is L\_k-Lipschitz on Q\_k ⊃ E\_k, m(f(E\_k)) = 0.
+Since $m(E) = 0$ and $E_k \subset E$, we have $m(E_k) = 0$. By Step 2 (the lemma), since $f$ is $L_k$-Lipschitz on $Q_k \supset E_k$, $m(f(E_k)) = 0$.
 
-**Step 6: f(E) is null.**
+**Step 6: $f(E)$ is null.**
 
 $$f(E) = f\left(\bigcup_k E_k\right) = \bigcup_k f(E_k).$$
 
 This is a countable union of null sets, hence null. ∎
 
-**Remark.** The proof uses only that f is C¹ (so that Df exists and is continuous, hence locally bounded). The polynomial hypothesis is stronger than needed — the result holds for any C¹ map ℝⁿ → ℝⁿ. (For C¹ maps, local Lipschitz follows from continuity of the derivative.) The result even holds for locally Lipschitz maps, which includes all C¹ maps.
+**Remark.** The proof uses only that $f$ is $C^{1}$ (so that $Df$ exists and is continuous, hence locally bounded). The polynomial hypothesis is stronger than needed — the result holds for any $C^{1}$ map $\mathbb{R}^{n} \to \mathbb{R}^{n}$. (For $C^{1}$ maps, local Lipschitz follows from continuity of the derivative.) The result even holds for locally Lipschitz maps, which includes all $C^{1}$ maps.
 
 ## What Connects
 
-**To Sard's theorem.** Sard's theorem says: the set of *critical values* of a C^k map (k large enough) has measure zero. This problem is different — it says the *image of any null set* has measure zero, without restriction to critical points. This is Lusin's condition (N), and it holds for all C¹ maps (not just polynomial ones).
+**To Sard's theorem.** Sard's theorem says: the set of *critical values* of a $C^k$ map ($k$ large enough) has measure zero. This problem is different — it says the *image of any null set* has measure zero, without restriction to critical points. This is Lusin's condition (N), and it holds for all $C^{1}$ maps (not just polynomial ones).
 
-**To the change of variables formula.** The change of variables theorem says ∫\_{f(E)} g = ∫\_E (g∘f)|det Df|. If m(E) = 0, then ∫\_E anything = 0, consistent with m(f(E)) = 0. But the change of variables formula requires f to be injective (or uses multiplicity), while Lusin's condition (N) holds without injectivity.
+**To the change of variables formula.** The change of variables theorem says $\int_{f(E)} g = \int_E (g \circ f)|\det Df|$. If $m(E) = 0$, then $\int_E$ anything $= 0$, consistent with $m(f(E)) = 0$. But the change of variables formula requires $f$ to be injective (or uses multiplicity), while Lusin's condition (N) holds without injectivity.
 
-**To the area formula.** The area formula (Federer) generalises the change of variables: m(f(E)) ≤ ∫\_E |det Df| dx (with equality when f is injective). Since m(E) = 0, the right side is 0, giving m(f(E)) = 0. This is the "sophisticated" proof; our proof via Lipschitz control is more elementary.
+**To the area formula.** The area formula (Federer) generalises the change of variables: $m(f(E)) \leq \int_E |\det Df| dx$ (with equality when $f$ is injective). Since $m(E) = 0$, the right side is 0, giving $m(f(E)) = 0$. This is the "sophisticated" proof; our proof via Lipschitz control is more elementary.
 
-**To the Jacobian conjecture.** For polynomial maps f : ℂⁿ → ℂⁿ, the Jacobian conjecture asks: if det(Df) is a nonzero constant, is f a bijection? The measure-theoretic property (null sets map to null sets) is a much weaker consequence of polynomial structure, and holds without any hypothesis on the Jacobian.
+**To the Jacobian conjecture.** For polynomial maps $f : \mathbb{C}^{n} \to \mathbb{C}^{n}$, the Jacobian conjecture asks: if $\det(Df)$ is a nonzero constant, is $f$ a bijection? The measure-theoretic property (null sets map to null sets) is a much weaker consequence of polynomial structure, and holds without any hypothesis on the Jacobian.
 
 ---
 
@@ -162,9 +160,9 @@ end
 
 **Mathlib notes:**
 
-- `IsPolynomialMap f` says each component `f x i` is the evaluation of a multivariate polynomial `MvPolynomial (Fin n) ℝ` at x. This is the natural Mathlib encoding.
-- `LipschitzOnWith L f S` says f is L-Lipschitz on S: `∀ x ∈ S, ∀ y ∈ S, dist (f x) (f y) ≤ L * dist x y`.
-- `ContDiff ℝ 1 f` says f is C¹ (continuously differentiable). The lemma `lipschitzOn_of_contDiffOn_bounded` extracts a Lipschitz constant on bounded convex sets.
+- `IsPolynomialMap f` says each component `f x i` is the evaluation of a multivariate polynomial `MvPolynomial (Fin n) ℝ` at $x$. This is the natural Mathlib encoding.
+- `LipschitzOnWith L f S` says $f$ is $L$-Lipschitz on $S$: `∀ x ∈ S, ∀ y ∈ S, dist (f x) (f y) ≤ L * dist x y`.
+- `ContDiff ℝ 1 f` says $f$ is $C^{1}$ (continuously differentiable). The lemma `lipschitzOn_of_contDiffOn_bounded` extracts a Lipschitz constant on bounded convex sets.
 - `volume (f '' E) = 0` uses the image `f '' E` and Lebesgue outer measure (which equals the measure for measurable sets, and provides an upper bound in general).
-- The proof chains: `isPolynomialMap_contDiff` (polynomial ⟹ smooth) → `lipschitzOn_of_contDiffOn_bounded` (C¹ + bounded ⟹ Lipschitz) → `image_null_of_lipschitzOn_null` (Lipschitz + null ⟹ null image) → `exists_countable_cover_bounded` (decompose ℝⁿ) → `measure_iUnion_null` (countable union of null is null).
-- The more general `contDiff_map_image_null` states the result for all C¹ maps, not just polynomial ones — polynomial is stronger than needed.
+- The proof chains: `isPolynomialMap_contDiff` (polynomial ⟹ smooth) → `lipschitzOn_of_contDiffOn_bounded` ($C^{1}$ + bounded ⟹ Lipschitz) → `image_null_of_lipschitzOn_null` (Lipschitz + null ⟹ null image) → `exists_countable_cover_bounded` (decompose $\mathbb{R}^{n}$) → `measure_iUnion_null` (countable union of null is null).
+- The more general `contDiff_map_image_null` states the result for all $C^{1}$ maps, not just polynomial ones — polynomial is stronger than needed.

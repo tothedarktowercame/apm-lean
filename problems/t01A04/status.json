@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "boundary": "Hop 4 states three exact contracts: both concrete quotient maps are covering maps; the wedge fundamental group has the required torus-plus-circle presentation with parity kernels equal to the induced ranges; and singular H2 distinguishes the two total spaces. Together they unblock the frozen theorem.",
   "imported_at": "2026-07-13T17:26:56.718249Z",

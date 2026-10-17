@@ -88670,68 +88670,68 @@
      :commit "7af6e0888",
      :reason "Banked transported three-factor reassociation."}]}
   {:consumer :t94J09,
-   :stop-count 8,
+   :owner-reopen
+   "reopened: a lemma this row reported missing is now banked",
+   :stop-count 6,
+   :review-finding
+   "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Compute face cokernel; connect MV H1; normalize; assemble.",
+    :residual "Homeo; graph high; H1; homology; normalization.",
     :outcome :stop,
-    :warnings ["Main: 1 placeholder" "dirt preserved" "two vertices"],
+    :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGraphBoundary_attachingDegree_zero",
-      :type "seven-orbit face boundary is a graph cycle",
+    [{:name "frozenGeneratorH0IsoInt",
+      :type "H0",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundaryKernelEquiv"],
+      :depends-on [],
       :area "polygon-surface-homology"}
-     {:name "frozenGraphBoundaryKernelEquiv_attachingCycle",
-      :type "cycle coordinates (2,2,0,-2,-2,2)",
-      :status :proved,
+     {:name "frozenBoundaryGraphH1CycleComparison",
+      :type "H1",
+      :status :not-started,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundary_attachingDegree_zero"],
+      :depends-on [],
       :area "polygon-surface-homology"}
-     {:name "apm_t94J09_polygon_homology",
-      :type "literal two-vertex polygon homology",
+     {:name "frozenGeneratorHomology_comparisons",
+      :type "T",
       :status :partial,
       :consumers [:t94J09],
-      :depends-on ["frozenGraphBoundaryKernelEquiv_attachingCycle"],
-      :area "polygon-surface-homology"}],
-    :statement-hashes {:registry "167/0"},
+      :depends-on ["frozenBoundaryGraphH1CycleComparison"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t94J09_polygon_homology",
+      :type "H",
+      :status :partial,
+      :consumers [:t94J09],
+      :depends-on ["frozenGeneratorHomology_comparisons"],
+      :area "polygon-surface-homology"}
+     {:name "apm_t94J09_polygon_normalization",
+      :type "N",
+      :status :not-started,
+      :consumers [:t94J09],
+      :depends-on [],
+      :area "surface-classification"}],
+    :statement-hashes {:registry "168/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked frozen face boundary.",
+    :reason "Banked generator H0.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd
-      "rg -n \"\\b(sorry|admit)\\b\" ConstructionTargets/t94J09Closure.lean",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd "git show --check 9cbf92387", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792093854695-14541-e5a47f60",
-     :commands
-     ["git show/diff/check 9cbf92387"
-      "sha256sum + placeholder recount from 9cbf92387"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS program STOP: topo-6 commit 9cbf92387 adds compiled, sorry-free progress beyond history 307ed881c. The signed degrees [2,2,0,-2,-2,2,-2] correctly count the frozen word in orbit order; d and g both have degree -2, so the two-vertex graph boundary vanishes, and the kernel equivalence correctly drops the dependent seventh coordinate to [2,2,0,-2,-2,2]. Only t94J09Closure.lean changed; fixture SHA f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367 matches. Exact target builds; Main compiles; target/Main placeholders 0/1; registry 167/0; axioms standard. Face cokernel, MV H1, normalization, and assembly remain listed."},
-    :commit "9cbf92387",
+     {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
+     {:cmd "git show --check 8e89154c4", :exit 0}],
+    :commit "8e89154c4",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "f266502edc8929b0809372b399942aea9991aa0d2b170e1493d933ad1c3b2367"},
+     "094dbd39e1206621deee34ab567b00449e7f158d817cbf1cb5dbb6001337bce5"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88749,7 +88749,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked frozen face boundary.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked vanishing tail.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -88784,75 +88784,333 @@
      :reason "Banked two-vertex graph boundary kernel."}
     {:job 8,
      :commit "9cbf92387",
-     :reason "Banked frozen face boundary."}]}
+     :reason "Banked frozen face boundary."}
+    {:job 9,
+     :commit "4578e92d7",
+     :reason "Banked literal frozen face cokernel Smith form."}
+    {:job 1, :commit "8f7c9b6b5", :reason "Banked face injectivity."}
+    {:job 2, :commit "e7a1677a4", :reason "Banked homology assembly."}
+    {:job 3, :commit "7374ef2ba", :reason "Banked relation."}
+    {:job 4,
+     :commit "8adff214b",
+     :reason "Banked relation comparison."}
+    {:job 5, :commit "00fa1a440", :reason "Banked setoid comparison."}
+    {:job 6,
+     :commit "6328279bd",
+     :reason "Banked quotient equivalence."}
+    {:job 7,
+     :commit "accfce741",
+     :reason "Banked quotient homeomorphism."}
+    {:job 8, :commit "258ff314a", :reason "Banked homology transport."}
+    {:job 9,
+     :commit "9794bfe38",
+     :reason "Banked transported assembly."}
+    {:job 1, :commit "f2fbce234", :reason "Banked pieces."}
+    {:job 2, :commit "9f9e5a9a9", :reason "Banked outer deformation."}
+    {:job 3, :commit "129dd2715", :reason "Banked transport."}
+    {:job 4,
+     :commit "58cf7bafe",
+     :reason "Banked boundary presentation."}
+    {:job 5,
+     :commit "712d692dd",
+     :reason "Banked circle generator identifications."}
+    {:job 6,
+     :commit "5544234f0",
+     :reason "Banked exact graph relation."}
+    {:job 7,
+     :commit "4b20aaf2e",
+     :reason "Banked graph quotient homeomorphism."}
+    {:job 8,
+     :commit "07aa27dc3",
+     :reason "Banked graph homology transport."}
+    {:job 9,
+     :commit "0183e4cfa",
+     :reason "Banked boundary/graph homology comparison."}
+    {:job 1, :commit "2b7195e8d", :reason "Banked skeleton bijection."}
+    {:job 2, :commit "74950731d", :reason "Banked continuity."}
+    {:job 3, :commit "e649f0a06", :reason "Banked compactness."}
+    {:job 4, :commit "fe3b47e93", :reason "Banked closed edge graphs."}
+    {:job 5,
+     :commit "ab9571cb7",
+     :reason "Banked closed graph relation."}
+    {:job 6,
+     :commit "8035fa047",
+     :reason "Banked closed symmetric graph."}
+    {:job 7, :commit "61b2a142d", :reason "Banked endpoint locus."}
+    {:job 8,
+     :commit "e906d4e32",
+     :reason "Banked finite endpoint-pair locus."}
+    {:job 9,
+     :commit "be332727f",
+     :reason "Banked closed EqvGen candidate and easy inclusion."}
+    {:job 1,
+     :commit "877a05dad",
+     :reason "Banked endpoint invariance."}
+    {:job 2,
+     :commit "d01181b09",
+     :reason "Banked nonvertex coordinate rigidity."}
+    {:job 3, :commit "1e8c5f871", :reason "Banked right-uniqueness."}
+    {:job 4, :commit "5bd16150d", :reason "Banked left-uniqueness."}
+    {:job 5,
+     :commit "eb553b602",
+     :reason "Banked forward-chain exclusion."}
+    {:job 6,
+     :commit "a9dd96d70",
+     :reason "Banked off-vertex transitivity."}
+    {:job 7,
+     :commit "3e6fa4a6e",
+     :reason "Banked closed-candidate transitivity."}
+    {:job 8,
+     :commit "a8d390c59",
+     :reason "Banked exact EqvGen equality."}
+    {:job 9, :commit "0e43d77a5", :reason "Banked quotient T2."}
+    {:job 1,
+     :commit "86592147d6f62f826eacd69809dd1a3182dab737",
+     :reason "Banked exact boundary/outer-skeleton equivalence."}
+    {:job 2,
+     :commit "7316a53d0",
+     :reason "Banked nontrivial EqvGen boundary support."}
+    {:job 3, :commit "98ac1c4c9", :reason "Banked disk EqvGen split."}
+    {:job 4,
+     :commit "a30b7172a",
+     :reason "Banked boundary relation pullback."}
+    {:job 5,
+     :commit "208f7140a",
+     :reason "Banked closed boundary EqvGen graph."}
+    {:job 6,
+     :commit "1b53b9d78",
+     :reason "Banked closed boundary disk image."}
+    {:job 7,
+     :commit "11a33e6b0",
+     :reason "Banked closed disk EqvGen graph."}
+    {:job 8,
+     :commit "8f5cf7f54",
+     :reason "Banked disk T2 and outer homeomorphism."}
+    {:job 9,
+     :commit "b776926da",
+     :reason "Banked outer-piece homology comparison."}
+    {:job 1,
+     :commit "b835e56f9",
+     :reason "Banked intersection and inner coordinates."}
+    {:job 2,
+     :commit "f40c1658c",
+     :reason "Banked outer group representation."}
+    {:job 3,
+     :commit "49a791d9b",
+     :reason "Banked MV pieces/graph bridge."}
+    {:job 4,
+     :commit "f92b1a76b",
+     :reason "Banked transported MV graph arrow."}
+    {:job 5, :commit "a31596b22", :reason "Banked graph MV map."}
+    {:job 7, :commit "f32ca0d6f", :reason "Receipt repaired."}
+    {:job 8,
+     :commit "7c214a58e",
+     :reason "Banked quotient-topology equality."}
+    {:job 9,
+     :commit "0a482c37f",
+     :reason "Banked graph-arrow cancellation."}
+    {:job 1,
+     :commit "a529a17e1",
+     :reason "Banked H0 reassembly coordinates."}
+    {:job 2,
+     :commit "18abc8740",
+     :reason "Banked H0 arrow cancellation."}
+    {:job 3,
+     :commit "831c8e156",
+     :reason "Banked connecting-map coordinates."}
+    {:job 4,
+     :commit "e2778277c",
+     :reason "Banked connecting-arrow cancellation."}
+    {:job 5, :commit "0502bee45", :reason "Banked TopCat comparison."}
+    {:job 6,
+     :commit "ae8046c21",
+     :reason "Banked quotient homology transport."}
+    {:job 7,
+     :commit "0883613ef",
+     :reason "Banked concrete quotient transport."}
+    {:job 8,
+     :commit "4f641248a",
+     :reason "Banked named-topology pieces exactness."}
+    {:job 9,
+     :commit "bb13116b1",
+     :reason "Banked named-topology union exactness."}
+    {:job 1,
+     :commit "303d7e13e",
+     :reason "Banked connecting transport."}
+    {:job 2,
+     :commit "2be711ce3",
+     :reason "Banked reassembly transport."}
+    {:job 3,
+     :commit "8cd314a9a",
+     :reason "Banked canonical graph reassembly transport."}
+    {:job 4,
+     :commit "6c7364c1e",
+     :reason "Banked canonical H0 reassembly transport."}
+    {:job 5,
+     :commit "8b17faa36",
+     :reason "Banked canonical connecting coordinate transport."}
+    {:job 6,
+     :commit "e87279ffa",
+     :reason "Banked canonical composite."}
+    {:job 7,
+     :commit "1f4fe0e42",
+     :reason "Banked canonical MV union exactness."}
+    {:job 8,
+     :commit "8b10c50fc",
+     :reason "Banked canonical MV pieces exactness."}
+    {:job 9,
+     :commit "150a635a7",
+     :reason "Banked canonical MV intersection exactness."}
+    {:job 1,
+     :commit "a9c9fc51a",
+     :reason "Banked MV boundary kernel consequence."}
+    {:job 2,
+     :commit "9a5cb3102",
+     :reason "Banked MV boundary range transport."}
+    {:job 3, :commit "82e74c1bd", :reason "Banked cycle inclusion."}
+    {:job 4, :commit "689174171", :reason "Banked split graph cycles."}
+    {:job 5, :commit "b9673fedd", :reason "Done."}
+    {:job 6, :commit "f4183ccea", :reason "Done."}
+    {:job 7, :commit "4a4718954", :reason "Done."}
+    {:job 8, :commit "efd5f7159", :reason "Done."}
+    {:job 9, :commit "7bca50fb8", :reason "."}
+    {:job 1, :commit "fda8e08ff", :reason "Banked."}
+    {:job 2, :commit "8e6918ba1", :reason "Banked H1 Smith assembly."}
+    {:job 3, :commit "5d1cc7620", :reason "."}
+    {:job 4, :commit "145503c1b", :reason "."}
+    {:job 5, :commit "d69c383cd", :reason "."}
+    {:job 6, :commit "92d656485", :reason "."}
+    {:job 7, :commit "bd2cb95ee", :reason "."}
+    {:job 8, :commit "22d53848c", :reason "Banked H1 transport."}
+    {:job 9,
+     :commit "f59af914f",
+     :reason "Banked section H1 assembly."}
+    {:job 1,
+     :commit "a36e2ec92",
+     :reason "Banked SpaceH module bridge."}
+    {:job 2,
+     :commit "cc844af3c",
+     :reason "Banked direct SpaceH Smith transport."}
+    {:job 3, :commit "a792494ea", :reason "Banked SpaceH Smith iso."}
+    {:job 4,
+     :commit "400690d43",
+     :reason "Banked section-based SpaceH Smith iso."}
+    {:job 5,
+     :commit "2994e17c9",
+     :reason "Banked comparison SpaceH Smith iso."}
+    {:job 6,
+     :commit "f9a16a312",
+     :reason "Banked generator homology assembly."}
+    {:job 7,
+     :commit "9f6fb9fcf",
+     :reason "Banked section homology assembly."}
+    {:job 8, :commit "af2fbc859", :reason "Banked signed homology."}
+    {:job 9, :commit "c44d0dc56", :reason "Banked homology transport."}
+    {:job 1,
+     :commit "cff0552f1",
+     :reason "Banked named direct-comparison homology adapter."}
+    {:job 2,
+     :commit "f8e032f9d",
+     :reason "Banked generator-homeomorphism homology transport."}
+    {:job 3,
+     :commit "8f2236c96",
+     :reason "Banked named generator comparison assembly."}
+    {:job 4,
+     :commit "9c9bce0d7",
+     :reason "Banked named generator section assembly."}
+    {:job 5,
+     :commit "78d250315",
+     :reason "Banked frozen generator H2 vanishing."}
+    {:job 6,
+     :commit "0917c4ec7",
+     :reason "Banked frozen signed H2 vanishing."}
+    {:job 7,
+     :commit "55365ee79",
+     :reason "Banked named polygon H2 vanishing transport."}
+    {:job 8,
+     :commit "3551df129",
+     :reason "Banked outer-piece high homology transfer."}
+    {:job 9,
+     :commit "ba869cc4c",
+     :reason "Banked outer-piece group homology transfer."}
+    {:job 1,
+     :commit "5d7ebded4",
+     :reason "Banked high intersection vanishing."}
+    {:job 2, :commit "9648aabec", :reason "Banked high homology."}
+    {:job 3, :commit "5a281c492", :reason "Banked high."}
+    {:job 4, :commit "e08b2f9c2", :reason "Banked named high."}
+    {:job 5, :commit "ec34d6c66", :reason "Banked vanishing tail."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 5,
    :review-finding
    "program STOP commits nothing new since the last :program-history entry; recorded commit 016d44b93 is already history job 7 and :changed-paths is empty. Repair: commit new compiled, sorry-free supporting progress and list remaining theorems.",
    :evidence
    {:placeholder-delta 0,
-    :residual
-    "Construct vertex charts and covering map; then Cayley tree and finite invariants.",
+    :residual "Edge/vertex trivializations; tree and finite covers.",
     :outcome :stop,
-    :warnings
-    ["preexisting lint"
-     "Main: 1 prior placeholder"
-     "unrelated dirt preserved"],
+    :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "existsUnique_edgePoint_of_projection_eq_interior",
-      :type "unique vertex representative",
+    [{:name "baseEdgeChart_isOpen",
+      :type "openness",
       :status :proved,
       :consumers [:t92J06],
-      :depends-on ["edgePoint_injective_of_interior"],
-      :area "graph-covering-realization"}
-     {:name "interiorFiberEquiv",
-      :type "open-edge fiber equivalence",
-      :status :proved,
-      :consumers [:t92J06],
-      :depends-on ["existsUnique_edgePoint_of_projection_eq_interior"],
+      :depends-on ["intervalCircle_image_interior"],
       :area "graph-covering-realization"}
      {:name "twoLoopGraphCoverData_realization",
-      :type "local charts and exact fibers",
+      :type "trivializations",
       :status :partial,
       :consumers [:t92J06],
-      :depends-on ["interiorFiberEquiv"],
+      :depends-on
+      ["baseEdgeChart_isOpen" "projection_preimage_baseEdgeChart"],
+      :area "graph-covering-realization"}
+     {:name "apm_t92J06_exists_simplyConnected_cover",
+      :type "tree",
+      :status :not-started,
+      :consumers [:t92J06],
+      :depends-on ["twoLoopGraphCoverData_realization"],
+      :area "graph-covering-realization"}
+     {:name "apm_t92J06_exists_four_threeSheeted_covers",
+      :type "covers",
+      :status :not-started,
+      :consumers [:t92J06],
+      :depends-on ["twoLoopGraphCoverData_realization"],
       :area "graph-covering-realization"}],
-    :statement-hashes {:registry "166/0"},
+    :statement-hashes {:registry "168/0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked open-edge fiber classification.",
+    :reason "Banked base-edge chart openness.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t92J06Closure",
       :exit 0}
      {:cmd "lake env lean problems/t92J06/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "placeholder scan", :exit 0}
-     {:cmd "axioms check", :exit 0}
-     {:cmd "git show --check 7cfdde03e", :exit 0}],
+     {:cmd "comment-stripped closure placeholder scan", :exit 0}
+     {:cmd "git show --check be6ab5926", :exit 0}],
     :diagnostic-history
-    [{:cmd "fiber drafts",
+    [{:cmd "initial closure compile",
       :exit 1,
-      :correction "unfolded quotient projection; fixed substitution"}],
+      :correction "fixed quotient topology and image cases"}],
     :review
     {:outcome :pass,
      :seat "codex-7",
-     :job "invoke-1792038644210-13202-4ec679ea",
+     :job "invoke-1792206012105-16088-cccd90f7",
      :commands
-     ["lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
+     ["hash/scope/comment-stripped placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t92J06Closure"
       "lake env lean problems/t92J06/lean/Main.lean"
-      "#print axioms for both new declarations"
-      "statement-registry.py check; git show --check; placeholder/hash audits"],
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t92J06Closure.lean (axioms)"],
      :finding
-     "Commit 7cfdde03e by topo-6 changes only ConstructionTargets/t92J06Closure.lean. Frozen fixture hash matches 2dd1d6bc...ecb90. Exact snapshot builds; Main compiles with its prior 1 placeholder; target has 0; registry 166/0; new declarations use only propext, Classical.choice, Quot.sound. Interior-fiber existence/uniqueness and the induced fiber equivalence have correct orientations and stay across the quotient boundary. This is new compiled program progress; vertex charts/covering map, Cayley tree, and finite invariants remain."},
-    :commit "7cfdde03e",
+     "PASS: reviewed be6ab5926 (author topo-6), new after 17be3cf5f. Fixture 11f79713... and frozen Main 85f64495... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest c57f3fb7... match. The raw preimage proof handles matching branches by injectivity and cross branches by endpoint identification; punctured circle summands are open and descend through the declared quotient topology to baseEdgeChart. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual edge/vertex trivialization, tree, and finite-cover milestones are listed."},
+    :commit "be6ab5926",
     :changed-paths ["ConstructionTargets/t92J06Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t92J06Closure.lean",
      :sha256
-     "2dd1d6bcbd7cdcc709ee0bf60101c4ee4f8269414a51ac261925efc8c41ecb90"},
+     "11f79713433fea3c11a6e73c0c2ad72941f80af053328a31544bfdc0cd35ecac"},
     :seat "topo-6"},
    :phase :implementation,
    :state :open,
@@ -88873,7 +89131,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t92J06Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked open-edge fiber classification.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked base-edge chart openness.",
    :id :program-2026-10-13-close-t92j06,
    :kind :final-adapter,
    :campaign-priority 34,
@@ -88911,7 +89169,37 @@
      :reason "Banked open-edge quotient rigidity."}
     {:job 2,
      :commit "7cfdde03e",
-     :reason "Banked open-edge fiber classification."}]}
+     :reason "Banked open-edge fiber classification."}
+    {:job 3, :commit "b0415d1fa", :reason "Banked vertex fiber."}
+    {:job 4, :commit "5899fb786", :reason "Banked surjectivity."}
+    {:job 5,
+     :commit "18d427092",
+     :reason "Banked uniform fiber cardinality."}
+    {:job 6,
+     :commit "9c8d9a5d1",
+     :reason "Banked exact projection fibers."}
+    {:job 7,
+     :commit "7dcd7cd9f",
+     :reason "Banked realization quotient authority."}
+    {:job 8, :commit "8217909a6", :reason "Banked raw edge openness."}
+    {:job 9,
+     :commit "983ed2796",
+     :reason "Banked raw edge-chart openness."}
+    {:job 1,
+     :commit "2074eb47b",
+     :reason "Banked quotient edge-chart openness."}
+    {:job 2,
+     :commit "dd6791273",
+     :reason "Banked edge-chart membership."}
+    {:job 3,
+     :commit "c1cac6ac2",
+     :reason "Banked exact edge-chart preimage."}
+    {:job 4,
+     :commit "17be3cf5f",
+     :reason "Banked exact interior-circle image."}
+    {:job 5,
+     :commit "be6ab5926",
+     :reason "Banked base-edge chart openness."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -89071,7 +89359,62 @@
    :program true,
    :other-consumers []}
   {:consumer :t97A03,
-   :stop-count 0,
+   :stop-count 1,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Review blueprint; copy proved scaffold; build the two library milestones.",
+    :outcome :stop,
+    :warnings ["Main:3 sorry"],
+    :missing-theorems
+    [{:name "apm_t97A03_classify_connected_double_cover",
+      :type "connected double-cover classification",
+      :status :not-started,
+      :consumers [:t97A03],
+      :depends-on [],
+      :area "covering-classification-explicit"}
+     {:name "apm_t97A03_invariants_of_model",
+      :type "model homology and fundamental group",
+      :status :not-started,
+      :consumers [:t97A03],
+      :depends-on [],
+      :area "quotient-space-mayer-vietoris"}],
+    :statement-hashes {:registry "168/0"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :reason "Blueprint written; review required.",
+    :commands
+    [{:cmd "blueprint milestone scan", :exit 0}
+     {:cmd "lake env lean problems/t97A03/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/t97A03Closure.blueprint.md",
+      :exit 0}
+     {:cmd "git show --check 52b499d52", :exit 0}],
+    :diagnostic-history
+    [{:cmd "git show --check ac08ca7bc",
+      :exit 2,
+      :correction "removed trailing blank and amended"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792156268104-15477-8b92ee11",
+     :commands
+     ["git show/check 52b499d52"
+      "fixture/scope checks"
+      "lake env lean holes/labs/blueprints/t97A03/Blueprint.lean"
+      "lake env lean problems/t97A03/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS blueprint mathematics: 52b499d52 changes only the scoped blueprint and fixture hash matches; source blueprint/Main compile; registry 168/0. Nonzero double-cover monodromies give two model types; both lifted CW models have V=4,E=6,two zero-boundary 2-cells, yielding H ranks 1,3,2 and pi1=F3. Nodes are independent, types faithful, and all final hypotheses are used."},
+    :commit "52b499d52",
+    :changed-paths ["ConstructionTargets/t97A03Closure.blueprint.md"],
+    :fixture
+    {:path "ConstructionTargets/t97A03Closure.blueprint.md",
+     :sha256
+     "4c5064b47def6470d103f7595130fbe7fa28509aa1e9062046df25906996b2cd"},
+    :seat "topo-6"},
    :phase :implementation,
    :state :open,
    :scope
@@ -89091,14 +89434,18 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t97A03Closure.blueprint.md"},
    :continue-from
-   "NEXT JOB: copy holes/labs/blueprints/t97A03/BLUEPRINT.md's plan into ConstructionTargets/t97A03Closure.blueprint.md, move the blueprint's proved lemmas into place, then build the LIBRARY obligations one milestone per job.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Blueprint written; review required.",
    :id :program-2026-10-13-close-t97a03,
    :kind :final-adapter,
    :campaign-priority 36,
    :fail-count 0,
    :depends-on [:program-2026-10-13-polygon-surface-homology],
    :program true,
-   :other-consumers []}
+   :other-consumers [],
+   :program-history
+   [{:job 1,
+     :commit "52b499d52",
+     :reason "Blueprint written; review required."}]}
   {:consumer :t94A08,
    :phase :lemma,
    :state :banked,
@@ -90657,7 +91004,20 @@
     :lemma-projection-edgepoint-eq-of-interior
     :lemma-edgepoint-ne-vertex-of-interior
     :lemma-edgepoint-injective-of-interior
-    :lemma-interiorfiberequiv],
+    :lemma-interiorfiberequiv
+    :lemma-vertexfiberequiv
+    :lemma-projection-surjective
+    :lemma-projection-fibercard
+    :lemma-projection-preimage-edgepoint
+    :lemma-realizationquotientmap-isquotientmap
+    :lemma-rawedgeinterior-isopen
+    :lemma-rawedgechart-isopen
+    :lemma-rawedgechart-mem-iff-of-eqvgen
+    :lemma-edgechart-isopen
+    :lemma-mem-edgechart-iff
+    :lemma-projection-preimage-baseedgechart
+    :lemma-intervalcircle-image-interior
+    :lemma-baseedgechart-isopen],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -94203,7 +94563,12 @@
     :lemma-n6polygonhomologyexplicit
     :lemma-frozenorbitequiv
     :lemma-frozengraphboundarykernelequiv
-    :lemma-frozengraphboundarykernelequiv-attachingcycle],
+    :lemma-frozengraphboundarykernelequiv-attachingcycle
+    :lemma-frozenfacecokernelsmithequiv
+    :lemma-frozenpolygonh1-surjective-kernel
+    :lemma-frozenfaceboundarycoordinates-injective
+    :lemma-frozenpolygonhomology-comparisons
+    :lemma-frozengeneratorhomology-comparisons],
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
@@ -96262,7 +96627,7 @@
    :other-consumers []}
   {:consumer :t97A01,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "torusRP2_pathHomotopicQuotient_concat_succ_eq_of_eq",
@@ -96274,10 +96639,2957 @@
     :type
     "successor concat class from initial-fold and final-factor class equalities",
     :area "polygon-surface-pi1",
-    :proved-in :program-2026-10-13-close-t97a01},
+    :proved-in :program-2026-10-13-close-t97a01,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t97A01Closure.lean"]},
    :id :lemma-torusrp2-pathhomotopicquotient-concat-succ-eq-of-eq,
    :kind :lemma,
    :depends-on
    [:lemma-torusrp2-pathhomotopicquotient-concat-succ
     :lemma-torusrp2-pathhomotopicquotient-trans-congr],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenFaceCokernelSmithEquiv",
+    :type "literal face-boundary cokernel is Fin 5 to Z times ZMod 2"},
+   :lemma
+   {:name "frozenFaceCokernelSmithEquiv",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "literal face-boundary cokernel is Fin 5 to Z times ZMod 2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "4578e92d7"},
+   :id :lemma-frozenfacecokernelsmithequiv,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphboundarykernelequiv-attachingcycle],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenH1SmithEquivOfSurjectiveKernel",
+    :type "surjective map with face-range kernel has Smith target"},
+   :lemma
+   {:name "frozenH1SmithEquivOfSurjectiveKernel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "surjective map with face-range kernel has Smith target",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozenh1smithequivofsurjectivekernel,
+   :kind :lemma,
+   :depends-on [:lemma-frozenfacecokernelsmithequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenPolygonH1_surjective_kernel",
+    :type "MV map onto polygon H1 with face-range kernel"},
+   :lemma
+   {:name "frozenPolygonH1_surjective_kernel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "MV map onto polygon H1 with face-range kernel",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozenpolygonh1-surjective-kernel,
+   :kind :lemma,
+   :depends-on [:lemma-frozenh1smithequivofsurjectivekernel],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "vertexFiberEquiv",
+    :type "wedge fiber equivalent to vertices"},
+   :lemma
+   {:name "vertexFiberEquiv",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "wedge fiber equivalent to vertices",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "b0415d1fa"},
+   :id :lemma-vertexfiberequiv,
+   :kind :lemma,
+   :depends-on [:lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenFaceBoundaryCoordinates_injective",
+    :type "face map injective; kernel bottom"},
+   :lemma
+   {:name "frozenFaceBoundaryCoordinates_injective",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "face map injective; kernel bottom",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8f7c9b6b5"},
+   :id :lemma-frozenfaceboundarycoordinates-injective,
+   :kind :lemma,
+   :depends-on [:lemma-frozenfacecokernelsmithequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenPolygonHomology_of_comparisons",
+    :type "comparison data imply full homology"},
+   :lemma
+   {:name "frozenPolygonHomology_of_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "comparison data imply full homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e7a1677a4"},
+   :id :lemma-frozenpolygonhomology-of-comparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenh1smithequivofsurjectivekernel
+    :lemma-frozenfaceboundarycoordinates-injective],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenPolygonHomology_comparisons",
+    :type "geometric H0/H1/H2/high comparisons"},
+   :lemma
+   {:name "frozenPolygonHomology_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "geometric H0/H1/H2/high comparisons",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozenpolygonhomology-comparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenpolygonhomology-of-comparisons
+    :lemma-frozen-boundaryrel-iff
+    :lemma-frozen-boundaryrel-iff-generator
+    :lemma-frozen-eqvgen-boundaryrel-iff-generator
+    :lemma-frozensignedquotientequivgenerator
+    :lemma-frozensignedquotienthomeomorphgenerator
+    :lemma-frozensignedquotienthomologyisogenerator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozen_boundaryRel_iff",
+    :type "generic relation equals frozen expansion"},
+   :lemma
+   {:name "frozen_boundaryRel_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generic relation equals frozen expansion",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "7374ef2ba"},
+   :id :lemma-frozen-boundaryrel-iff,
+   :kind :lemma,
+   :depends-on [:lemma-frozen-pairedparameter],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "frozen_pairedParameter"},
+   :lemma
+   {:name "frozen_pairedParameter",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozen-pairedparameter,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozen_boundaryRel_iff_generator",
+    :type "relation iff symmetric generators"},
+   :lemma
+   {:name "frozen_boundaryRel_iff_generator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "relation iff symmetric generators",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8adff214b"},
+   :id :lemma-frozen-boundaryrel-iff-generator,
+   :kind :lemma,
+   :depends-on [:lemma-frozen-boundaryrel-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozen_eqvGen_boundaryRel_iff_generator",
+    :type "quotient setoids agree"},
+   :lemma
+   {:name "frozen_eqvGen_boundaryRel_iff_generator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "quotient setoids agree",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "00fa1a440"},
+   :id :lemma-frozen-eqvgen-boundaryrel-iff-generator,
+   :kind :lemma,
+   :depends-on [:lemma-frozen-boundaryrel-iff-generator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedQuotientEquivGenerator",
+    :type "identity-on-representatives quotient equivalence"},
+   :lemma
+   {:name "frozenSignedQuotientEquivGenerator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "identity-on-representatives quotient equivalence",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "6328279bd"},
+   :id :lemma-frozensignedquotientequivgenerator,
+   :kind :lemma,
+   :depends-on [:lemma-frozen-eqvgen-boundaryrel-iff-generator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedQuotientHomeomorphGenerator",
+    :type "coinduced quotient homeomorphism"},
+   :lemma
+   {:name "frozenSignedQuotientHomeomorphGenerator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "coinduced quotient homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "accfce741"},
+   :id :lemma-frozensignedquotienthomeomorphgenerator,
+   :kind :lemma,
+   :depends-on [:lemma-frozensignedquotientequivgenerator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedQuotientHomologyIsoGenerator",
+    :type "all-degree singular homology transport"},
+   :lemma
+   {:name "frozenSignedQuotientHomologyIsoGenerator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "all-degree singular homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "258ff314a"},
+   :id :lemma-frozensignedquotienthomologyisogenerator,
+   :kind :lemma,
+   :depends-on [:lemma-frozensignedquotienthomeomorphgenerator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedHomology_of_generator_comparisons",
+    :type "generator comparisons imply signed homology"},
+   :lemma
+   {:name "frozenSignedHomology_of_generator_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator comparisons imply signed homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9794bfe38"},
+   :id :lemma-frozensignedhomology-of-generator-comparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozensignedquotienthomologyisogenerator
+    :lemma-frozenpolygonhomology-of-comparisons],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHomology_comparisons",
+    :type "generator quotient H0/H1/H2/high comparisons"},
+   :lemma
+   {:name "frozenGeneratorHomology_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator quotient H0/H1/H2/high comparisons",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozengeneratorhomology-comparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozensignedhomology-of-generator-comparisons
+    :lemma-frozengeneratorradialpackage
+    :lemma-frozengeneratorinneroverlaphomology
+    :lemma-frozengeneratorouterhomotopyequivboundary
+    :lemma-frozengeneratorouterhomologyisoboundary
+    :lemma-frozengeneratorcircleboundaryhomologyiso
+    :lemma-frozengeneratorcirclequotient-identifies-generators
+    :lemma-frozengeneratorcirclerel-iff-graphrel
+    :lemma-frozengeneratorcirclehomeomorphboundarygraph
+    :lemma-frozengeneratorcirclehomologyisoboundarygraph
+    :lemma-frozengeneratorboundaryhomologyisograph
+    :lemma-frozenboundaryquotienttoouterskeleton
+    :lemma-frozenboundaryquotienttoouterskeleton-bijective
+    :lemma-continuous-frozenboundaryquotienttoouterskeleton
+    :lemma-compactspace-frozengeneratorouterboundarypiece
+    :lemma-isclosed-range-frozencircleedgepair-reverse
+    :lemma-frozenboundarygraphrel-isclosed
+    :lemma-frozenboundarygraphsymm-isclosed
+    :lemma-frozenboundaryendpointpair-isclosed
+    :lemma-frozenboundaryendpointpair-finite
+    :lemma-frozenboundaryclosedrel-isclosed
+    :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff
+    :lemma-frozenboundaryeqvgen-endpoint-iff
+    :lemma-frozencircleedgepoint-eq-of-not-endpoint
+    :lemma-frozenboundarygraphrel-right-unique-of-not-endpoint
+    :lemma-frozenboundarygraphrel-left-unique-of-not-endpoint
+    :lemma-frozenboundarygraphrel-no-forward-chain-of-not-endpoint
+    :lemma-frozenboundarygraphsymm-trans-of-not-endpoint
+    :lemma-frozenboundaryclosedrel-trans
+    :lemma-frozenboundaryeqvgen-iff-closedrel
+    :lemma-frozenboundarygraphquotientt2space
+    :lemma-frozengeneratorboundaryquotientt2space
+    :lemma-frozenboundaryquotientequivouterskeleton
+    :lemma-frozengeneratoreqvgen-boundary-of-ne
+    :lemma-frozengeneratoreqvgen-iff-eq-or-boundary
+    :lemma-frozenboundarysubtypeeqvgen-iff-closedrel
+    :lemma-frozenboundarysubtypeeqvgen-isclosed
+    :lemma-frozenboundaryeqvgen-diskimage-isclosed
+    :lemma-frozengeneratoreqvgen-isclosed
+    :lemma-frozenboundaryquotienthomeomorphouterskeleton
+    :lemma-frozengeneratorouterhomologyisograph
+    :lemma-frozengeneratormvintersectionexact
+    :lemma-frozengeneratorintersectionh1groupisoint
+    :lemma-frozengeneratoroutergrouphomologyisograph
+    :lemma-frozengeneratormvpiecesh1groupisograph
+    :lemma-frozengeneratormvintersectionh1arrowtograph
+    :lemma-frozengeneratormvgraphh1reassemblyarrow
+    :lemma-frozengeneratorradialtopologycomparison
+    :lemma-frozengeneratormvgraphh1-comp-eq-production
+    :lemma-frozengeneratormvintersectionh0arrowtointgraph
+    :lemma-frozengeneratormvintgraphh0reassemblyarrow
+    :lemma-frozengeneratormvintgraphh0-comp-eq-production
+    :lemma-frozengeneratormvconnectingh1tointersectionint
+    :lemma-frozengeneratormvconnecting-comp-h0-eq-production
+    :lemma-frozengeneratorradialtopcatiso
+    :lemma-frozengeneratorradialhomologyiso
+    :lemma-frozengeneratorradialgrouphomologyiso
+    :lemma-frozengeneratornamedmvpiecesexact
+    :lemma-frozengeneratornamedmvunionexact
+    :lemma-frozengeneratornamedmvintersectionexact
+    :lemma-frozengeneratorcanonicaltonamedmvconnecting
+    :lemma-frozengeneratornamedtocanonicalmvreassembly
+    :lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow
+    :lemma-frozengeneratorcanonicalmvintgraphh0reassemblyarrow
+    :lemma-frozengeneratorcanonicalmvconnectingh1tointersectionint
+    :lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production
+    :lemma-frozengeneratorcanonicalmvunionexact
+    :lemma-frozengeneratorcanonicalmvpiecesexact
+    :lemma-frozengeneratorcanonicalmvintersectionexact
+    :lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one
+    :lemma-frozengeneratormvboundarylinear-ker-eq-bot-of-coordinates
+    :lemma-frozengeneratormvboundarylinear-map-range-of-coordinates
+    :lemma-frozengraphcycleinclusion-range
+    :lemma-frozengraphcycleprojection-comp-inclusion
+    :lemma-frozenboundarygraphh1cyclecomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorRadialPackage", :type "open radial cover"},
+   :lemma
+   {:name "frozenGeneratorRadialPackage",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "open radial cover",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratorradialpackage,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorrel-radius-eq],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "frozenGeneratorRel_radius_eq"},
+   :lemma
+   {:name "frozenGeneratorRel_radius_eq",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratorrel-radius-eq,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "projection_surjective", :type "realization onto wedge"},
+   :lemma
+   {:name "projection_surjective",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "realization onto wedge",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "5899fb786"},
+   :id :lemma-projection-surjective,
+   :kind :lemma,
+   :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorInnerOverlapHomology",
+    :type "inner/overlap homology"},
+   :lemma
+   {:name "frozenGeneratorInnerOverlapHomology",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "inner/overlap homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f2fbce234"},
+   :id :lemma-frozengeneratorinneroverlaphomology,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialpackage],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterHomotopyEquivBoundary",
+    :type "outer piece equivalent to boundary graph"},
+   :lemma
+   {:name "frozenGeneratorOuterHomotopyEquivBoundary",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "outer piece equivalent to boundary graph",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9f9e5a9a9"},
+   :id :lemma-frozengeneratorouterhomotopyequivboundary,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorinneroverlaphomology],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterHomologyIsoBoundary",
+    :type "outer/boundary homology"},
+   :lemma
+   {:name "frozenGeneratorOuterHomologyIsoBoundary",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "outer/boundary homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "129dd2715"},
+   :id :lemma-frozengeneratorouterhomologyisoboundary,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhomotopyequivboundary],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleBoundaryHomologyIso",
+    :type "circle/boundary quotient homology"},
+   :lemma
+   {:name "frozenGeneratorCircleBoundaryHomologyIso",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "circle/boundary quotient homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "58cf7bafe"},
+   :id :lemma-frozengeneratorcircleboundaryhomologyiso,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhomologyisoboundary],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleQuotient_identifies_generators",
+    :type "seven quotient identifications"},
+   :lemma
+   {:name "frozenGeneratorCircleQuotient_identifies_generators",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "seven quotient identifications",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "712d692dd"},
+   :id :lemma-frozengeneratorcirclequotient-identifies-generators,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcircleboundaryhomologyiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleRel_iff_graphRel",
+    :type "exact circle graph relation"},
+   :lemma
+   {:name "frozenGeneratorCircleRel_iff_graphRel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "exact circle graph relation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5544234f0"},
+   :id :lemma-frozengeneratorcirclerel-iff-graphrel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcirclequotient-identifies-generators],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleHomeomorphBoundaryGraph",
+    :type "circle quotient to explicit graph quotient"},
+   :lemma
+   {:name "frozenGeneratorCircleHomeomorphBoundaryGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "circle quotient to explicit graph quotient",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "4b20aaf2e"},
+   :id :lemma-frozengeneratorcirclehomeomorphboundarygraph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcirclerel-iff-graphrel],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCircleHomologyIsoBoundaryGraph",
+    :type "all-degree graph homology transport"},
+   :lemma
+   {:name "frozenGeneratorCircleHomologyIsoBoundaryGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "all-degree graph homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "07aa27dc3"},
+   :id :lemma-frozengeneratorcirclehomologyisoboundarygraph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcirclehomeomorphboundarygraph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorBoundaryHomologyIsoGraph",
+    :type "boundary quotient to graph homology"},
+   :lemma
+   {:name "frozenGeneratorBoundaryHomologyIsoGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "boundary quotient to graph homology",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0183e4cfa"},
+   :id :lemma-frozengeneratorboundaryhomologyisograph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcirclehomologyisoboundarygraph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryQuotientToOuterSkeleton",
+    :type "boundary/skeleton map"},
+   :lemma
+   {:name "frozenBoundaryQuotientToOuterSkeleton",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "boundary/skeleton map",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozenboundaryquotienttoouterskeleton,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorboundaryhomologyisograph],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "projection_fiberCard", :type "all fibers have Nat.card V"},
+   :lemma
+   {:name "projection_fiberCard",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "all fibers have Nat.card V",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "18d427092"},
+   :id :lemma-projection-fibercard,
+   :kind :lemma,
+   :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryQuotientToOuterSkeleton_bijective",
+    :type "boundary/skeleton bijection"},
+   :lemma
+   {:name "frozenBoundaryQuotientToOuterSkeleton_bijective",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "boundary/skeleton bijection",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "2b7195e8d"},
+   :id :lemma-frozenboundaryquotienttoouterskeleton-bijective,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryquotienttoouterskeleton],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "continuous_frozenBoundaryQuotientToOuterSkeleton",
+    :type "continuity"},
+   :lemma
+   {:name "continuous_frozenBoundaryQuotientToOuterSkeleton",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "continuity",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "74950731d"},
+   :id :lemma-continuous-frozenboundaryquotienttoouterskeleton,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundaryquotienttoouterskeleton-bijective],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "compactSpace_frozenGeneratorOuterBoundaryPiece",
+    :type "both compact"},
+   :lemma
+   {:name "compactSpace_frozenGeneratorOuterBoundaryPiece",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "both compact",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e649f0a06"},
+   :id :lemma-compactspace-frozengeneratorouterboundarypiece,
+   :kind :lemma,
+   :depends-on
+   [:lemma-continuous-frozenboundaryquotienttoouterskeleton],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "isClosed_range_frozenCircleEdgePair_reverse",
+    :type "edge graphs closed"},
+   :lemma
+   {:name "isClosed_range_frozenCircleEdgePair_reverse",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "edge graphs closed",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "fe3b47e93"},
+   :id :lemma-isclosed-range-frozencircleedgepair-reverse,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphRel_isClosed",
+    :type "generator relation closed"},
+   :lemma
+   {:name "frozenBoundaryGraphRel_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator relation closed",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "ab9571cb7"},
+   :id :lemma-frozenboundarygraphrel-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-isclosed-range-frozencircleedgepair-reverse],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphSymm_isClosed",
+    :type "reflexive symmetric graph closed"},
+   :lemma
+   {:name "frozenBoundaryGraphSymm_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reflexive symmetric graph closed",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8035fa047"},
+   :id :lemma-frozenboundarygraphsymm-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundarygraphrel-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEndpointPair_isClosed",
+    :type "endpoint pairs closed"},
+   :lemma
+   {:name "frozenBoundaryEndpointPair_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "endpoint pairs closed",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "61b2a142d"},
+   :id :lemma-frozenboundaryendpointpair-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundarygraphsymm-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEndpointPair_finite",
+    :type "endpoint-pair locus finite"},
+   :lemma
+   {:name "frozenBoundaryEndpointPair_finite",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "endpoint-pair locus finite",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e906d4e32"},
+   :id :lemma-frozenboundaryendpointpair-finite,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryendpointpair-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryClosedRel_isClosed",
+    :type
+    "closed symmetric graph plus finite endpoint EqvGen; included in EqvGen"},
+   :lemma
+   {:name "frozenBoundaryClosedRel_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type
+    "closed symmetric graph plus finite endpoint EqvGen; included in EqvGen",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "be332727f"},
+   :id :lemma-frozenboundaryclosedrel-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryendpointpair-finite],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
+    :type "vertex iff parameter endpoint"},
+   :lemma
+   {:name "frozenBoundaryEndpoint_frozenCircleEdgePoint_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "vertex iff parameter endpoint",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozenboundaryendpoint-frozencircleedgepoint-iff,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "projection_preimage_edgePoint",
+    :type "exact vertex/interior range fibers"},
+   :lemma
+   {:name "projection_preimage_edgePoint",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "exact vertex/interior range fibers",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "9c8d9a5d1"},
+   :id :lemma-projection-preimage-edgepoint,
+   :kind :lemma,
+   :depends-on [:lemma-vertexfiberequiv :lemma-interiorfiberequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEqvGen_endpoint_iff",
+    :type "EqvGen preserves vertices"},
+   :lemma
+   {:name "frozenBoundaryEqvGen_endpoint_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "EqvGen preserves vertices",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "877a05dad"},
+   :id :lemma-frozenboundaryeqvgen-endpoint-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundaryendpoint-frozencircleedgepoint-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenCircleEdgePoint_eq_of_not_endpoint",
+    :type "nonvertex coordinates unique"},
+   :lemma
+   {:name "frozenCircleEdgePoint_eq_of_not_endpoint",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "nonvertex coordinates unique",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "d01181b09"},
+   :id :lemma-frozencircleedgepoint-eq-of-not-endpoint,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryeqvgen-endpoint-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphRel_right_unique_of_not_endpoint",
+    :type "right-unique off vertices"},
+   :lemma
+   {:name "frozenBoundaryGraphRel_right_unique_of_not_endpoint",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "right-unique off vertices",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "1e8c5f871"},
+   :id :lemma-frozenboundarygraphrel-right-unique-of-not-endpoint,
+   :kind :lemma,
+   :depends-on [:lemma-frozencircleedgepoint-eq-of-not-endpoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphRel_left_unique_of_not_endpoint",
+    :type "left-unique off vertices"},
+   :lemma
+   {:name "frozenBoundaryGraphRel_left_unique_of_not_endpoint",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "left-unique off vertices",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5bd16150d"},
+   :id :lemma-frozenboundarygraphrel-left-unique-of-not-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundarygraphrel-right-unique-of-not-endpoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint",
+    :type "no forward chain off vertices"},
+   :lemma
+   {:name "frozenBoundaryGraphRel_no_forward_chain_of_not_endpoint",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "no forward chain off vertices",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "eb553b602"},
+   :id :lemma-frozenboundarygraphrel-no-forward-chain-of-not-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundarygraphrel-left-unique-of-not-endpoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphSymm_trans_of_not_endpoint",
+    :type "symmetric generator transitive off vertices"},
+   :lemma
+   {:name "frozenBoundaryGraphSymm_trans_of_not_endpoint",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "symmetric generator transitive off vertices",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a9dd96d70"},
+   :id :lemma-frozenboundarygraphsymm-trans-of-not-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundarygraphrel-no-forward-chain-of-not-endpoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryClosedRel_trans",
+    :type "closed candidate transitive"},
+   :lemma
+   {:name "frozenBoundaryClosedRel_trans",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "closed candidate transitive",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "3e6fa4a6e"},
+   :id :lemma-frozenboundaryclosedrel-trans,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenboundarygraphsymm-trans-of-not-endpoint
+    :lemma-frozenboundaryeqvgen-endpoint-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEqvGen_iff_closedRel",
+    :type "EqvGen equals closed candidate"},
+   :lemma
+   {:name "frozenBoundaryEqvGen_iff_closedRel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "EqvGen equals closed candidate",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a8d390c59"},
+   :id :lemma-frozenboundaryeqvgen-iff-closedrel,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryclosedrel-trans],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphQuotientT2Space",
+    :type "T2 boundary graph quotient"},
+   :lemma
+   {:name "frozenBoundaryGraphQuotientT2Space",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T2 boundary graph quotient",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0e43d77a5"},
+   :id :lemma-frozenboundarygraphquotientt2space,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryeqvgen-iff-closedrel],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorBoundaryQuotientT2Space",
+    :type "T2 MV boundary quotient"},
+   :lemma
+   {:name "frozenGeneratorBoundaryQuotientT2Space",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T2 MV boundary quotient",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratorboundaryquotientt2space,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundarygraphquotientt2space],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "realizationQuotientMap_isQuotientMap",
+    :type "raw realization quotient authority"},
+   :lemma
+   {:name "realizationQuotientMap_isQuotientMap",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw realization quotient authority",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "7dcd7cd9f"},
+   :id :lemma-realizationquotientmap-isquotientmap,
+   :kind :lemma,
+   :depends-on [:lemma-projection-preimage-edgepoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryQuotientEquivOuterSkeleton",
+    :type "exact boundary/outer-skeleton equivalence"},
+   :lemma
+   {:name "frozenBoundaryQuotientEquivOuterSkeleton",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "exact boundary/outer-skeleton equivalence",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "86592147d6f62f826eacd69809dd1a3182dab737"},
+   :id :lemma-frozenboundaryquotientequivouterskeleton,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorboundaryquotientt2space],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorEqvGen_boundary_of_ne",
+    :type "nontrivial pairs lie on boundary"},
+   :lemma
+   {:name "frozenGeneratorEqvGen_boundary_of_ne",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "nontrivial pairs lie on boundary",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "7316a53d0"},
+   :id :lemma-frozengeneratoreqvgen-boundary-of-ne,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorEqvGen_iff_eq_or_boundary",
+    :type "diagonal/boundary split"},
+   :lemma
+   {:name "frozenGeneratorEqvGen_iff_eq_or_boundary",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "diagonal/boundary split",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "98ac1c4c9"},
+   :id :lemma-frozengeneratoreqvgen-iff-eq-or-boundary,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoreqvgen-boundary-of-ne],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundarySubtypeEqvGen_iff_closedRel",
+    :type "boundary relation pullback"},
+   :lemma
+   {:name "frozenBoundarySubtypeEqvGen_iff_closedRel",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "boundary relation pullback",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a30b7172a"},
+   :id :lemma-frozenboundarysubtypeeqvgen-iff-closedrel,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoreqvgen-iff-eq-or-boundary],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundarySubtypeEqvGen_isClosed",
+    :type "closed boundary EqvGen graph"},
+   :lemma
+   {:name "frozenBoundarySubtypeEqvGen_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "closed boundary EqvGen graph",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "208f7140a"},
+   :id :lemma-frozenboundarysubtypeeqvgen-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundarysubtypeeqvgen-iff-closedrel],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryEqvGen_diskImage_isClosed",
+    :type "closed embedded boundary graph"},
+   :lemma
+   {:name "frozenBoundaryEqvGen_diskImage_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "closed embedded boundary graph",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "1b53b9d78"},
+   :id :lemma-frozenboundaryeqvgen-diskimage-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundarysubtypeeqvgen-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorEqvGen_isClosed",
+    :type "closed full disk EqvGen graph"},
+   :lemma
+   {:name "frozenGeneratorEqvGen_isClosed",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "closed full disk EqvGen graph",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "11a33e6b0"},
+   :id :lemma-frozengeneratoreqvgen-isclosed,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryeqvgen-diskimage-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryQuotientHomeomorphOuterSkeleton",
+    :type "homeomorphism"},
+   :lemma
+   {:name "frozenBoundaryQuotientHomeomorphOuterSkeleton",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "homeomorphism",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8f5cf7f54"},
+   :id :lemma-frozenboundaryquotienthomeomorphouterskeleton,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoreqvgen-isclosed],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterHomologyIsoGraph",
+    :type "outer homology/graph comparison"},
+   :lemma
+   {:name "frozenGeneratorOuterHomologyIsoGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "outer homology/graph comparison",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "b776926da"},
+   :id :lemma-frozengeneratorouterhomologyisograph,
+   :kind :lemma,
+   :depends-on [:lemma-frozenboundaryquotienthomeomorphouterskeleton],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntersectionExact",
+    :type "production MV exactness segment"},
+   :lemma
+   {:name "frozenGeneratorMVIntersectionExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "production MV exactness segment",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratormvintersectionexact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorinneroverlaphomology
+    :lemma-frozengeneratorouterhomologyisograph],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "rawEdgeInterior_isOpen", :type "raw edge open"},
+   :lemma
+   {:name "rawEdgeInterior_isOpen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw edge open",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "8217909a6"},
+   :id :lemma-rawedgeinterior-isopen,
+   :kind :lemma,
+   :depends-on [:lemma-realizationquotientmap-isquotientmap],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorIntersectionH1GroupIsoInt",
+    :type "intersection/inner MV coordinates"},
+   :lemma
+   {:name "frozenGeneratorIntersectionH1GroupIsoInt",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "intersection/inner MV coordinates",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "b835e56f9"},
+   :id :lemma-frozengeneratorintersectionh1groupisoint,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvintersectionexact],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterGroupHomologyIsoGraph",
+    :type "outer additive representation"},
+   :lemma
+   {:name "frozenGeneratorOuterGroupHomologyIsoGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "outer additive representation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f40c1658c"},
+   :id :lemma-frozengeneratoroutergrouphomologyisograph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhomologyisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVPiecesH1GroupIsoGraph",
+    :type "MV pieces/graph iso"},
+   :lemma
+   {:name "frozenGeneratorMVPiecesH1GroupIsoGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "MV pieces/graph iso",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "49a791d9b"},
+   :id :lemma-frozengeneratormvpiecesh1groupisograph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoroutergrouphomologyisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntersectionH1ArrowToGraph",
+    :type "transported MV graph arrow"},
+   :lemma
+   {:name "frozenGeneratorMVIntersectionH1ArrowToGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "transported MV graph arrow",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f92b1a76b"},
+   :id :lemma-frozengeneratormvintersectionh1arrowtograph,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvpiecesh1groupisograph
+    :lemma-frozengeneratorintersectionh1groupisoint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVGraphH1ReassemblyArrow",
+    :type "graph MV map"},
+   :lemma
+   {:name "frozenGeneratorMVGraphH1ReassemblyArrow",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "graph MV map",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a31596b22"},
+   :id :lemma-frozengeneratormvgraphh1reassemblyarrow,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvpiecesh1groupisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVPiecesH0GroupIsoIntGraph",
+    :type "H0 coordinates"},
+   :lemma
+   {:name "frozenGeneratorMVPiecesH0GroupIsoIntGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H0 coordinates",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f32ca0d6f"},
+   :id :lemma-frozengeneratormvpiecesh0groupisointgraph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoroutergrouphomologyisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorRadialTopologyComparison",
+    :type "quotient topology equality"},
+   :lemma
+   {:name "frozenGeneratorRadialTopologyComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "quotient topology equality",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "7c214a58e"},
+   :id :lemma-frozengeneratorradialtopologycomparison,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVGraphH1_comp_eq_production",
+    :type "arrow cancellation"},
+   :lemma
+   {:name "frozenGeneratorMVGraphH1_comp_eq_production",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "arrow cancellation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0a482c37f"},
+   :id :lemma-frozengeneratormvgraphh1-comp-eq-production,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialtopologycomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntersectionH0ArrowToIntGraph",
+    :type "H0 coordinate arrow"},
+   :lemma
+   {:name "frozenGeneratorMVIntersectionH0ArrowToIntGraph",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H0 coordinate arrow",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratormvintersectionh0arrowtointgraph,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvpiecesh0groupisointgraph],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "rawEdgeChart_isOpen", :type "raw chart open"},
+   :lemma
+   {:name "rawEdgeChart_isOpen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw chart open",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "983ed2796"},
+   :id :lemma-rawedgechart-isopen,
+   :kind :lemma,
+   :depends-on [:lemma-rawedgeinterior-isopen],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntGraphH0ReassemblyArrow",
+    :type "H0 reassembly arrow"},
+   :lemma
+   {:name "frozenGeneratorMVIntGraphH0ReassemblyArrow",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H0 reassembly arrow",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a529a17e1"},
+   :id :lemma-frozengeneratormvintgraphh0reassemblyarrow,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvpiecesh0groupisointgraph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVIntGraphH0_comp_eq_production",
+    :type "H0 arrow cancellation"},
+   :lemma
+   {:name "frozenGeneratorMVIntGraphH0_comp_eq_production",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H0 arrow cancellation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "18abc8740"},
+   :id :lemma-frozengeneratormvintgraphh0-comp-eq-production,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvintgraphh0reassemblyarrow],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVConnectingH1ToIntersectionInt",
+    :type "connecting coordinate"},
+   :lemma
+   {:name "frozenGeneratorMVConnectingH1ToIntersectionInt",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "connecting coordinate",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "831c8e156"},
+   :id :lemma-frozengeneratormvconnectingh1tointersectionint,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorintersectionh0groupisoint],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "frozenGeneratorIntersectionH0GroupIsoInt"},
+   :lemma
+   {:name "frozenGeneratorIntersectionH0GroupIsoInt",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratorintersectionh0groupisoint,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVConnecting_comp_H0_eq_production",
+    :type "connecting-arrow cancellation"},
+   :lemma
+   {:name "frozenGeneratorMVConnecting_comp_H0_eq_production",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "connecting-arrow cancellation",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e2778277c"},
+   :id :lemma-frozengeneratormvconnecting-comp-h0-eq-production,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvconnectingh1tointersectionint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorRadialTopCatIso",
+    :type "bundled topology iso"},
+   :lemma
+   {:name "frozenGeneratorRadialTopCatIso",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "bundled topology iso",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0502bee45"},
+   :id :lemma-frozengeneratorradialtopcatiso,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialtopologycomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorRadialHomologyIso",
+    :type "quotient homology transport"},
+   :lemma
+   {:name "frozenGeneratorRadialHomologyIso",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "quotient homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "ae8046c21"},
+   :id :lemma-frozengeneratorradialhomologyiso,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialtopcatiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorRadialGroupHomologyIso",
+    :type "concrete quotient homology transport"},
+   :lemma
+   {:name "frozenGeneratorRadialGroupHomologyIso",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "concrete quotient homology transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0883613ef"},
+   :id :lemma-frozengeneratorradialgrouphomologyiso,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialhomologyiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorNamedMVPiecesExact",
+    :type "named-topology pieces exactness"},
+   :lemma
+   {:name "frozenGeneratorNamedMVPiecesExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "named-topology pieces exactness",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "4f641248a"},
+   :id :lemma-frozengeneratornamedmvpiecesexact,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialgrouphomologyiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorNamedMVUnionExact",
+    :type "named-topology union exactness"},
+   :lemma
+   {:name "frozenGeneratorNamedMVUnionExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "named-topology union exactness",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "bb13116b1"},
+   :id :lemma-frozengeneratornamedmvunionexact,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratornamedmvpiecesexact],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorNamedMVIntersectionExact",
+    :type "named intersection exactness"},
+   :lemma
+   {:name "frozenGeneratorNamedMVIntersectionExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "named intersection exactness",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratornamedmvintersectionexact,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratornamedmvunionexact],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "rawEdgeChart_mem_iff_of_eqvGen",
+    :type "raw chart saturation"},
+   :lemma
+   {:name "rawEdgeChart_mem_iff_of_eqvGen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "raw chart saturation",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "2074eb47b"},
+   :id :lemma-rawedgechart-mem-iff-of-eqvgen,
+   :kind :lemma,
+   :depends-on [:lemma-rawedgechart-isopen],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_classify_connected_double_cover",
+    :type "connected double-cover classification"},
+   :lemma
+   {:name "apm_t97A03_classify_connected_double_cover",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "connected double-cover classification",
+    :area "covering-classification-explicit"},
+   :id :lemma-apm-t97a03-classify-connected-double-cover,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t97A03,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "apm_t97A03_invariants_of_model",
+    :type "model homology and fundamental group"},
+   :lemma
+   {:name "apm_t97A03_invariants_of_model",
+    :reported-by [:program-2026-10-13-close-t97a03],
+    :type "model homology and fundamental group",
+    :area "quotient-space-mayer-vietoris"},
+   :id :lemma-apm-t97a03-invariants-of-model,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalToNamedMVConnecting",
+    :type "connecting transport"},
+   :lemma
+   {:name "frozenGeneratorCanonicalToNamedMVConnecting",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "connecting transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "303d7e13e"},
+   :id :lemma-frozengeneratorcanonicaltonamedmvconnecting,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorradialgrouphomologyiso],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorNamedToCanonicalMVReassembly",
+    :type "reassembly transport"},
+   :lemma
+   {:name "frozenGeneratorNamedToCanonicalMVReassembly",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reassembly transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "2be711ce3"},
+   :id :lemma-frozengeneratornamedtocanonicalmvreassembly,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcanonicaltonamedmvconnecting],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow",
+    :type "graph H1 -> canonical quotient H1"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "graph H1 -> canonical quotient H1",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8cd314a9a"},
+   :id :lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratornamedtocanonicalmvreassembly],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow",
+    :type "Int x graph H0 -> canonical quotient H0"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVIntGraphH0ReassemblyArrow",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "Int x graph H0 -> canonical quotient H0",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "6c7364c1e"},
+   :id :lemma-frozengeneratorcanonicalmvintgraphh0reassemblyarrow,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt",
+    :type "canonical quotient H1 -> intersection Int"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVConnectingH1ToIntersectionInt",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "canonical quotient H1 -> intersection Int",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8b17faa36"},
+   :id :lemma-frozengeneratorcanonicalmvconnectingh1tointersectionint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvintgraphh0reassemblyarrow],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production",
+    :type "canonical connecting composite"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVConnecting_comp_H0_eq_production",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "canonical connecting composite",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e87279ffa"},
+   :id
+   :lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvconnectingh1tointersectionint],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalMVUnionExact",
+    :type "canonical quotient-term exactness in degree one"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVUnionExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "canonical quotient-term exactness in degree one",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "1f4fe0e42"},
+   :id :lemma-frozengeneratorcanonicalmvunionexact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvconnecting-comp-h0-eq-production],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalMVPiecesExact",
+    :type "canonical degree-one pieces exactness"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVPiecesExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "canonical degree-one pieces exactness",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8b10c50fc"},
+   :id :lemma-frozengeneratorcanonicalmvpiecesexact,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcanonicalmvunionexact],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalMVIntersectionExact",
+    :type "canonical degree-zero intersection exactness"},
+   :lemma
+   {:name "frozenGeneratorCanonicalMVIntersectionExact",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "canonical degree-zero intersection exactness",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "150a635a7"},
+   :id :lemma-frozengeneratorcanonicalmvintersectionexact,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcanonicalmvpiecesexact],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one",
+    :type "generator reduction"},
+   :lemma
+   {:name "frozenGeneratorMVBoundaryCoordinates_eq_face_iff_one",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "generator reduction",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorcanonicalmvintersectionexact],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "edgeChart_isOpen", :type "quotient edge-chart openness"},
+   :lemma
+   {:name "edgeChart_isOpen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "quotient edge-chart openness",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "2074eb47b"},
+   :id :lemma-edgechart-isopen,
+   :kind :lemma,
+   :depends-on [:lemma-rawedgechart-mem-iff-of-eqvgen],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates",
+    :type "coordinate boundary has zero kernel"},
+   :lemma
+   {:name "frozenGeneratorMVBoundaryLinear_ker_eq_bot_of_coordinates",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "coordinate boundary has zero kernel",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a9c9fc51a"},
+   :id
+   :lemma-frozengeneratormvboundarylinear-ker-eq-bot-of-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvboundarycoordinates-eq-face-iff-one],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVBoundaryLinear_map_range_of_coordinates",
+    :type "coordinate boundary range transport"},
+   :lemma
+   {:name "frozenGeneratorMVBoundaryLinear_map_range_of_coordinates",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "coordinate boundary range transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9a5cb3102"},
+   :id :lemma-frozengeneratormvboundarylinear-map-range-of-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvboundarylinear-ker-eq-bot-of-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphCycleInclusion_range",
+    :type "cycle range=graph kernel"},
+   :lemma
+   {:name "frozenGraphCycleInclusion_range",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "cycle range=graph kernel",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "82e74c1bd"},
+   :id :lemma-frozengraphcycleinclusion-range,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvboundarylinear-map-range-of-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphCycleProjection_comp_inclusion",
+    :type "cycle projection splits inclusion"},
+   :lemma
+   {:name "frozenGraphCycleProjection_comp_inclusion",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "cycle projection splits inclusion",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "689174171"},
+   :id :lemma-frozengraphcycleprojection-comp-inclusion,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphcycleinclusion-range],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphH1CoordinatesOfCycleComparison",
+    :type "assembly"},
+   :lemma
+   {:name "frozenGraphH1CoordinatesOfCycleComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "assembly",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "b9673fedd"},
+   :id :lemma-frozengraphh1coordinatesofcyclecomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphcycleprojection-comp-inclusion],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenBoundaryGraphH1CycleComparison", :type "comparison"},
+   :lemma
+   {:name "frozenBoundaryGraphH1CycleComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "comparison",
+    :area "polygon-surface-homology"},
+   :id :lemma-frozenboundarygraphh1cyclecomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengraphh1coordinatesofcyclecomparison
+    :lemma-frozengraphh1coordinates-generator-eq-iff
+    :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison
+    :lemma-frozengeneratormvreassemblylinear-comp-coordinates
+    :lemma-frozengeneratorcanonicalmoduleh1equivconcrete],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGraphH1Coordinates_generator_eq_iff",
+    :type "reduction"},
+   :lemma
+   {:name "frozenGraphH1Coordinates_generator_eq_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reduction",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f4183ccea"},
+   :id :lemma-frozengraphh1coordinates-generator-eq-iff,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphh1coordinatesofcyclecomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVBoundaryCoordinates_of_cycleComparison",
+    :type "adapter"},
+   :lemma
+   {:name "frozenGeneratorMVBoundaryCoordinates_of_cycleComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "adapter",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "4a4718954"},
+   :id :lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengraphh1coordinates-generator-eq-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_comp_coordinates",
+    :type "reassembly"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_comp_coordinates",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "reassembly",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "efd5f7159"},
+   :id :lemma-frozengeneratormvreassemblylinear-comp-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvboundarycoordinates-of-cyclecomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_comp_faceBoundary",
+    :type "zero"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_comp_faceBoundary",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "zero",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "7bca50fb8"},
+   :id :lemma-frozengeneratormvreassemblylinear-comp-faceboundary,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvreassemblylinear-comp-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenFaceBoundary_range_le_ker_reassembly",
+    :type "inclusion"},
+   :lemma
+   {:name "frozenFaceBoundary_range_le_ker_reassembly",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "inclusion",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozenfaceboundary-range-le-ker-reassembly,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvreassemblylinear-comp-faceboundary],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "mem_edgeChart_iff", :type "membership"},
+   :lemma
+   {:name "mem_edgeChart_iff",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "membership",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "dd6791273"},
+   :id :lemma-mem-edgechart-iff,
+   :kind :lemma,
+   :depends-on [:lemma-edgechart-isopen],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenFaceBoundary_range_eq_ker_reassembly_of_reverse",
+    :type "equality"},
+   :lemma
+   {:name "frozenFaceBoundary_range_eq_ker_reassembly_of_reverse",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "equality",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "fda8e08ff"},
+   :id :lemma-frozenfaceboundary-range-eq-ker-reassembly-of-reverse,
+   :kind :lemma,
+   :depends-on [:lemma-frozenfaceboundary-range-le-ker-reassembly],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorH1SmithEquiv_of_comparisons",
+    :type "H1 Smith"},
+   :lemma
+   {:name "frozenGeneratorH1SmithEquiv_of_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H1 Smith",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8e6918ba1"},
+   :id :lemma-frozengeneratorh1smithequiv-of-comparisons,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozenfaceboundary-range-eq-ker-reassembly-of-reverse],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_surjective_iff",
+    :type "surj"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_surjective_iff",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "surj",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5d1cc7620"},
+   :id :lemma-frozengeneratormvreassemblylinear-surjective-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvreassemblylinear-comp-coordinates],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section",
+    :type "criterion"},
+   :lemma
+   {:name
+    "frozenGeneratorCanonicalMVGraphH1ReassemblyArrow_surjective_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "criterion",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "145503c1b"},
+   :id
+   :lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow-surjective-of-section,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratormvreassemblylinear-surjective-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorMVReassemblyLinear_comp_section",
+    :type "section transport"},
+   :lemma
+   {:name "frozenGeneratorMVReassemblyLinear_comp_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "section transport",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "d69c383cd"},
+   :id :lemma-frozengeneratormvreassemblylinear-comp-section,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmvgraphh1reassemblyarrow-surjective-of-section],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorH1SmithEquiv_of_section", :type "H1"},
+   :lemma
+   {:name "frozenGeneratorH1SmithEquiv_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H1",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "92d656485"},
+   :id :lemma-frozengeneratorh1smithequiv-of-section,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratormvreassemblylinear-comp-section],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalModuleH1EquivConcrete",
+    :type "cmp"},
+   :lemma
+   {:name "frozenGeneratorCanonicalModuleH1EquivConcrete",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "cmp",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "bd2cb95ee"},
+   :id :lemma-frozengeneratorcanonicalmoduleh1equivconcrete,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete",
+    :type "T"},
+   :lemma
+   {:name "frozenGeneratorCanonicalModuleH1SmithEquiv_of_concrete",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "22d53848c"},
+   :id :lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-concrete,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalModuleH1SmithEquiv_of_section",
+    :type "T"},
+   :lemma
+   {:name "frozenGeneratorCanonicalModuleH1SmithEquiv_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f59af914f"},
+   :id :lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-section,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorcanonicalmoduleh1smithequiv-of-concrete],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorCanonicalModuleH1SmithIso_of_section",
+    :type "T"},
+   :lemma
+   {:name "frozenGeneratorCanonicalModuleH1SmithIso_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratorcanonicalmoduleh1smithiso-of-section,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "projection_preimage_baseEdgeChart", :type "preimage"},
+   :lemma
+   {:name "projection_preimage_baseEdgeChart",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "preimage",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "c1cac6ac2"},
+   :id :lemma-projection-preimage-baseedgechart,
+   :kind :lemma,
+   :depends-on [:lemma-mem-edgechart-iff],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorSpaceHForgetLinearEquiv", :type "T"},
+   :lemma
+   {:name "frozenGeneratorSpaceHForgetLinearEquiv",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a36e2ec92"},
+   :id :lemma-frozengeneratorspacehforgetlinearequiv,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorSpaceHSmithEquiv_of_concrete", :type "T"},
+   :lemma
+   {:name "frozenGeneratorSpaceHSmithEquiv_of_concrete",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "cc844af3c"},
+   :id :lemma-frozengeneratorspacehsmithequiv-of-concrete,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorspacehforgetlinearequiv],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorSpaceHSmithIso_of_concrete", :type "T"},
+   :lemma
+   {:name "frozenGeneratorSpaceHSmithIso_of_concrete",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "a792494ea"},
+   :id :lemma-frozengeneratorspacehsmithiso-of-concrete,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorspacehsmithequiv-of-concrete],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorSpaceHSmithIso_of_section", :type "T"},
+   :lemma
+   {:name "frozenGeneratorSpaceHSmithIso_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "400690d43"},
+   :id :lemma-frozengeneratorspacehsmithiso-of-section,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorspacehsmithiso-of-concrete],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorSpaceHSmithIso_of_comparisons", :type "T"},
+   :lemma
+   {:name "frozenGeneratorSpaceHSmithIso_of_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "T",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "2994e17c9"},
+   :id :lemma-frozengeneratorspacehsmithiso-of-comparisons,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorspacehsmithiso-of-concrete],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHomology_of_comparisons", :type "H"},
+   :lemma
+   {:name "frozenGeneratorHomology_of_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f9a16a312"},
+   :id :lemma-frozengeneratorhomology-of-comparisons,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorspacehsmithiso-of-comparisons],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHomology_of_section", :type "H"},
+   :lemma
+   {:name "frozenGeneratorHomology_of_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9f6fb9fcf"},
+   :id :lemma-frozengeneratorhomology-of-section,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorhomology-of-comparisons],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedHomology_of_generator_section", :type "H"},
+   :lemma
+   {:name "frozenSignedHomology_of_generator_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "af2fbc859"},
+   :id :lemma-frozensignedhomology-of-generator-section,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorhomology-of-section],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenSigned", :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenSigned",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "c44d0dc56"},
+   :id :lemma-homology-of-homeomorph-frozensigned,
+   :kind :lemma,
+   :depends-on [:lemma-frozensignedhomology-of-generator-section],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenSigned_section", :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenSigned_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-homology-of-homeomorph-frozensigned-section,
+   :kind :lemma,
+   :depends-on [:lemma-homology-of-homeomorph-frozensigned],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "intervalCircle_image_interior", :type "image"},
+   :lemma
+   {:name "intervalCircle_image_interior",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "image",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "17be3cf5f"},
+   :id :lemma-intervalcircle-image-interior,
+   :kind :lemma,
+   :depends-on [:lemma-intervalcircle-surjective],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "intervalCircle_surjective"},
+   :lemma {:name "intervalCircle_surjective", :reported-by []},
+   :id :lemma-intervalcircle-surjective,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenSigned_comparisons",
+    :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenSigned_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "cff0552f1"},
+   :id :lemma-homology-of-homeomorph-frozensigned-comparisons,
+   :kind :lemma,
+   :depends-on [:lemma-homology-of-homeomorph-frozensigned],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenGenerator", :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenGenerator",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "f8e032f9d"},
+   :id :lemma-homology-of-homeomorph-frozengenerator,
+   :kind :lemma,
+   :depends-on [:lemma-homologyisofrozengeneratorofhomeomorph],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "homologyIsoFrozenGeneratorOfHomeomorph"},
+   :lemma
+   {:name "homologyIsoFrozenGeneratorOfHomeomorph",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-homologyisofrozengeneratorofhomeomorph,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenGenerator_comparisons",
+    :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenGenerator_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "8f2236c96"},
+   :id :lemma-homology-of-homeomorph-frozengenerator-comparisons,
+   :kind :lemma,
+   :depends-on [:lemma-homology-of-homeomorph-frozengenerator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenGenerator_section",
+    :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenGenerator_section",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9c9bce0d7"},
+   :id :lemma-homology-of-homeomorph-frozengenerator-section,
+   :kind :lemma,
+   :depends-on [:lemma-homology-of-homeomorph-frozengenerator],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "frozenGeneratorH2_isZero", :type "H2"},
+   :lemma
+   {:name "frozenGeneratorH2_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "78d250315"},
+   :id :lemma-frozengeneratorh2-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-frozenfaceboundarycoordinates-ker-eq-bot],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "frozenFaceBoundaryCoordinates_ker_eq_bot"},
+   :lemma
+   {:name "frozenFaceBoundaryCoordinates_ker_eq_bot",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozenfaceboundarycoordinates-ker-eq-bot,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedH2_isZero_of_generatorComparison", :type "H2"},
+   :lemma
+   {:name "frozenSignedH2_isZero_of_generatorComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0917c4ec7"},
+   :id :lemma-frozensignedh2-iszero-of-generatorcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorh2-iszero],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homologyH2_isZero_of_homeomorph_frozenSigned", :type "H2"},
+   :lemma
+   {:name "homologyH2_isZero_of_homeomorph_frozenSigned",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H2",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "55365ee79"},
+   :id :lemma-homologyh2-iszero-of-homeomorph-frozensigned,
+   :kind :lemma,
+   :depends-on [:lemma-frozensignedh2-iszero-of-generatorcomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterHigherHomology_isZero", :type "high"},
+   :lemma
+   {:name "frozenGeneratorOuterHigherHomology_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "3551df129"},
+   :id :lemma-frozengeneratorouterhigherhomology-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhomologyisograph],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorOuterHigherGroup_isZero",
+    :type "high-group"},
+   :lemma
+   {:name "frozenGeneratorOuterHigherGroup_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high-group",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "ba869cc4c"},
+   :id :lemma-frozengeneratorouterhighergroup-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhigherhomology-iszero],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHigherPiecesGroup_isZero",
+    :type "high-pieces"},
+   :lemma
+   {:name "frozenGeneratorHigherPiecesGroup_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high-pieces",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratorhigherpiecesgroup-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhighergroup-iszero],
+   :other-consumers []}
+  {:consumer :t92J06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "baseEdgeChart_isOpen", :type "openness"},
+   :lemma
+   {:name "baseEdgeChart_isOpen",
+    :reported-by [:program-2026-10-13-close-t92j06],
+    :type "openness",
+    :area "graph-covering-realization",
+    :proved-in :program-2026-10-13-close-t92j06,
+    :banked-by :program-2026-10-13-close-t92j06,
+    :banked-commit "be6ab5926"},
+   :id :lemma-baseedgechart-isopen,
+   :kind :lemma,
+   :depends-on [:lemma-intervalcircle-image-interior],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHigherIntersectionGroup_isZero",
+    :type "high-int"},
+   :lemma
+   {:name "frozenGeneratorHigherIntersectionGroup_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high-int",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5d7ebded4"},
+   :id :lemma-frozengeneratorhigherintersectiongroup-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratoroverlaphigherhomology-iszero],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "frozenGeneratorOverlapHigherHomology_isZero"},
+   :lemma
+   {:name "frozenGeneratorOverlapHigherHomology_isZero",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t94J09Closure.lean"]},
+   :id :lemma-frozengeneratoroverlaphigherhomology-iszero,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHigherHomology_isZero", :type "high"},
+   :lemma
+   {:name "frozenGeneratorHigherHomology_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "9648aabec"},
+   :id :lemma-frozengeneratorhigherhomology-iszero,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozengeneratorhigherpiecesgroup-iszero
+    :lemma-frozengeneratorhigherintersectiongroup-iszero],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "frozenSignedHigherHomology_isZero_of_generatorComparison",
+    :type "high"},
+   :lemma
+   {:name "frozenSignedHigherHomology_isZero_of_generatorComparison",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "5a281c492"},
+   :id :lemma-frozensignedhigherhomology-iszero-of-generatorcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorhigherhomology-iszero],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homologyHigher_isZero_of_homeomorph_frozenSigned",
+    :type "high"},
+   :lemma
+   {:name "homologyHigher_isZero_of_homeomorph_frozenSigned",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "e08b2f9c2"},
+   :id :lemma-homologyhigher-iszero-of-homeomorph-frozensigned,
+   :kind :lemma,
+   :depends-on
+   [:lemma-frozensignedhigherhomology-iszero-of-generatorcomparison],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "homologyAboveOne_isZero_of_homeomorph_frozenSigned",
+    :type "high-tail"},
+   :lemma
+   {:name "homologyAboveOne_isZero_of_homeomorph_frozenSigned",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high-tail",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "ec34d6c66"},
+   :id :lemma-homologyaboveone-iszero-of-homeomorph-frozensigned,
+   :kind :lemma,
+   :depends-on
+   [:lemma-homologyh2-iszero-of-homeomorph-frozensigned
+    :lemma-homologyhigher-iszero-of-homeomorph-frozensigned],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance {:lemma "frozenGeneratorH0IsoInt", :type "H0"},
+   :lemma
+   {:name "frozenGeneratorH0IsoInt",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H0",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorh0isoint,
+   :kind :lemma,
+   :depends-on [],
    :other-consumers []}]}

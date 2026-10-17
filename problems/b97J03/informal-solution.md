@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b97J03: How many conjugates land in ℚ(α) — the normalizer index r = [N_G(H):H]
+# APM b97J03: How many conjugates land in $\mathbb{Q}(\alpha)$ — the normalizer index $r = [N_G(H):H]$
 
 ## Why It's Hard
 

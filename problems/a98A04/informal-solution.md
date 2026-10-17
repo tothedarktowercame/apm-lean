@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM a98A04: An L¹ function that is essentially unbounded on every interval
+# APM a98A04: An $L^{1}$ function that is essentially unbounded on every interval
 
 ## Why It's Hard
 

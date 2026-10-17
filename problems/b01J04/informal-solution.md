@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b01J04: Simultaneous diagonalization of commuting matrices, and A⁻¹ as a polynomial in A
+# APM b01J04: Simultaneous diagonalization of commuting matrices, and $A^{-1}$ as a polynomial in $A$
 
 ## Why It's Hard
 

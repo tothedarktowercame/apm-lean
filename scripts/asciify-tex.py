@@ -295,6 +295,7 @@ GLUE_ATOM = (r"(?:[A-Za-z]"                       # x
              r"|\([A-Za-z0-9,+\-]{1,6}\)"             # (x), (univ)
              r"|\d+(?:\.\d+)?(?:/\d+)?"               # 2, 0.5, 1/2
              r"|[=+\-<>/|()\[\]]"                     # operators, brackets
+             r"|\.\.\."                                  # an ellipsis: 1 + x + ..."
              r"|\\textbar(?:\{\})?"                   # | written as text
              r"|\\textquotesingle(?:\{\})?)")         # a prime written as text
 GLUE = re.compile(r"(?:" + GLUE_ATOM + r")+$")
@@ -317,8 +318,53 @@ def is_glue(word: str) -> bool:
     return not re.search(r"[A-Za-z]{2}", bare)
 
 
+def is_attached_glue(word: str) -> bool:
+    """Letters written against a formula with no space between are part of it:
+    "1/(2πin²)" reaches here as \\pi, "in", ^{2}, and "in" alone reads as the
+    English word, which split the formula at \\pi (a95A07: $1/(2\\pi$in$^{2}$),
+    an unclosed bracket LaTeXML renders as CLOSE). Not a hyphenated word
+    ("σ-algebra", "ℝ-valued") or an ordinal ending ("n-th")."""
+    if re.search(r"-[A-Za-z]{2,}", word) or re.fullmatch(r"-?(?:th|st|nd|rd)", word):
+        return False
+    return GLUE.match(word) is not None and not re.search(r"[A-Za-z]{4,}", word)
+
+
 def bracket_balance(text: str) -> int:
     return text.count("(") + text.count("[") - text.count(")") - text.count("]")
+
+
+def balanced_prefix(run: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    """The run, cut before a bracket from the prose that nothing in it matches.
+
+    "$\\bar\\Delta (f$ is univalent, so $f' \\neq 0)$": the "(" opens a remark in
+    the sentence, and taking "(f" into the formula left it unclosed (LaTeXML
+    renders that as CLOSE) and the remark's ")" stranded in the next formula. A
+    bracket inside a formula the source wrote (an M item) is the source's own and
+    is left alone.
+    """
+    while True:
+        opens, cut = [], None
+        for n, (kind, text) in enumerate(run):
+            if kind not in ("M", "G"):
+                continue
+            for ch in text:
+                if ch in "([":
+                    opens.append(n)
+                elif ch in ")]":
+                    if opens:
+                        opens.pop()
+                    elif kind == "G":
+                        cut = n          # closes a bracket opened before the run
+                        break
+            if cut is not None:
+                break
+        if cut is None:
+            cut = next((n for n in opens if run[n][0] == "G"), None)
+        if cut is None:
+            return run
+        run = run[:cut]
+        while run and run[-1][0] in ("S", "C"):
+            run.pop()
 
 
 SENTENCE_PUNCT = re.compile(r"^(.*?)([.,;:!?]+)$")
@@ -453,7 +499,7 @@ def merge_line(line: str) -> str:
         return line
     # items: (kind, text) with kind M, G (glue word), S (space), W (other)
     items: list[tuple[str, str]] = []
-    for kind, text in segs:
+    for n, (kind, text) in enumerate(segs):
         if kind == "M":
             # \ensuremath inside a math span is a no-op the converters leave
             # behind (fold-unicode-scripts writes \ensuremath{_{0}} in math too).
@@ -462,7 +508,11 @@ def merge_line(line: str) -> str:
         # "\textquotesingle s" is "'s" to TeX (a control word eats the space
         # after it); write it that way so the apostrophe test below sees it.
         text = re.sub(r"\\textquotesingle\s+(?=[A-Za-z])", r"\\textquotesingle{}", text)
-        for piece in re.findall(r"\s+|\S+", text):
+        pieces = re.findall(r"\s+|\S+", text)
+        for at, piece in enumerate(pieces):
+            # touching a formula on either side, with no space between
+            attached = ((at == 0 and n > 0 and segs[n - 1][0] == "M")
+                        or (at == len(pieces) - 1 and n + 1 < len(segs) and segs[n + 1][0] == "M"))
             if piece.isspace():
                 items.append(("S", piece))
                 continue
@@ -476,13 +526,24 @@ def merge_line(line: str) -> str:
                 items.append(("G", "(\\text{" + wordarg.group(1) + "})"
                               + core[wordarg.end():]))
                 if punct:
-                    items.append(("W", punct))
-            elif core and is_glue(core):
+                    items.append(("C" if punct == "," else "W", punct))
+            elif core and (is_glue(core) or (attached and is_attached_glue(core))):
                 items.append(("G", core))
                 if punct:
-                    items.append(("W", punct))
+                    items.append(("C" if punct == "," else "W", punct))
+            elif piece == ",":
+                items.append(("C", ","))
             else:
                 items.append(("W", piece))
+    # A glued word splits at its brackets, so a cut for balance falls at the
+    # bracket ("3/2)" keeps 3/2 in the formula and leaves the ")"), not at the word.
+    split = []
+    for kind, text in items:
+        if kind == "G" and "\\" not in text:
+            split.extend(("G", part) for part in re.findall(r"[()\[\]]|[^()\[\]]+", text))
+        else:
+            split.append((kind, text))
+    items = split
     out, i = [], 0
     while i < len(items):
         kind, text = items[i]
@@ -490,10 +551,15 @@ def merge_line(line: str) -> str:
             out.append(text if kind != "M" else r"\(" + primes(text) + r"\)")
             i += 1
             continue
-        # Extend a candidate run over M, G and the spaces between them.
+        # Extend a candidate run over M, G and the spaces between them, and over
+        # a comma while a bracket the run opened is still open: "(a_i, b_i)" is
+        # one tuple, but "f, g and h" is a list in prose.
         j, last = i, i
-        while j < len(items) and items[j][0] in ("M", "G", "S"):
-            if items[j][0] != "S":
+        while j < len(items) and items[j][0] in ("M", "G", "S", "C"):
+            if items[j][0] == "C" and bracket_balance(
+                    "".join(t for k, t in items[i:j] if k in ("M", "G"))) <= 0:
+                break
+            if items[j][0] not in ("S", "C"):
                 last = j
             j += 1
         run = items[i:last + 1]
@@ -501,23 +567,29 @@ def merge_line(line: str) -> str:
         while len(run) > 1 and run[-1][0] in ("G", "S") and (run[-1][0] == "S" or run[-1][1] == "a"):
             run.pop()
         # A bracket glued on at either end must be closed inside the span, or
-        # the span would open "(" in math and close ")" in text.
+        # the span would open "(" in math and close ")" in text. The count is over
+        # the whole run: "$1/(2\\pi$in$^{2}$)" opens its bracket inside a formula.
         while run and run[0][0] in ("G", "S") and (run[0][0] == "S" or (
                 re.fullmatch(r"[(\[]+", run[0][1]) and bracket_balance(
-                    "".join(t for k, t in run if k == "G")) > 0)):
+                    "".join(t for k, t in run if k != "S")) > 0)):
             out.append(run.pop(0)[1])
             i += 1
         while run and run[-1][0] in ("G", "S") and (run[-1][0] == "S" or (
                 re.fullmatch(r"[)\]]+", run[-1][1]) and bracket_balance(
-                    "".join(t for k, t in run if k == "G")) < 0)):
+                    "".join(t for k, t in run if k != "S")) < 0)):
             run.pop()
+        run = balanced_prefix(run)
+        if not run:
+            out.append(text)
+            i += 1
+            continue
         if not any(anchor(k, t) for k, t in run):
             out.append(text)
             i += 1
             continue
         body = ""
         for k, t in run:
-            piece = " " if k == "S" else (glue_math(t) if k == "G" else t)
+            piece = " " if k == "S" else ("," if k == "C" else (glue_math(t) if k == "G" else t))
             # "\varphi" + "A" must not fuse into the undefined "\varphiA".
             if re.search(r"\\[A-Za-z]+$", body) and re.match(r"[A-Za-z]", piece):
                 body += " "

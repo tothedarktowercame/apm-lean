@@ -4,21 +4,21 @@
 
 ## Why It's Hard
 
-The hypothesis says a *single* function g ∈ L¹(ℝ) satisfies g * f' = f(x+h) - f(x-h) for *all* f ∈ C¹(ℝ). This is a strong universal quantifier — g must work for every smooth function simultaneously. The difficulty is extracting the pointwise identity g = χ\_{[-h,h]} from this integral equation. You can't just "read off" g because the convolution mixes g with f' nonlocally. The key is to use the Fourier transform, where convolution becomes multiplication and the universal quantifier pins down ĝ uniquely.
+The hypothesis says a *single* function $g \in L^{1}(\mathbb{R})$ satisfies $g * f' = f(x+h) - f(x-h)$ for *all* $f \in C^{1}(\mathbb{R})$. This is a strong universal quantifier — $g$ must work for every smooth function simultaneously. The difficulty is extracting the pointwise identity $g = \chi_{[-h,h]}$ from this integral equation. You can't just "read off" $g$ because the convolution mixes $g$ with $f'$ nonlocally. The key is to use the Fourier transform, where convolution becomes multiplication and the universal quantifier pins down $\hat{g}$ uniquely.
 
 ## The Key Insight
 
-Take Fourier transforms of both sides. On the left, convolution becomes multiplication: ĝ · (2πiξ f̂(ξ)) (since f' has transform 2πiξ f̂). On the right, f(x+h) - f(x-h) has transform (e^{2πiξh} - e^{-2πiξh}) f̂(ξ) = 2i sin(2πξh) f̂(ξ). Since this holds for all f, we can cancel f̂ and get ĝ(ξ) · 2πiξ = 2i sin(2πξh), i.e., ĝ(ξ) = sin(2πξh)/(πξ). This is exactly the Fourier transform of χ\_{[-h,h]}. Injectivity of the Fourier transform on L¹ gives g = χ\_{[-h,h]} a.e.
+Take Fourier transforms of both sides. On the left, convolution becomes multiplication: $\hat{g} \cdot (2\pi i\xi \hat{f}(\xi))$ (since $f'$ has transform $2\pi i\xi \hat{f}$). On the right, $f(x+h) - f(x-h)$ has transform $(e^{2\pi i\xi h} - e^{-2\pi i\xi h}) \hat{f}(\xi) = 2i \sin(2\pi\xi h) \hat{f}(\xi)$. Since this holds for all $f$, we can cancel $\hat{f}$ and get $\hat{g}(\xi) \cdot 2\pi i\xi = 2i \sin(2\pi\xi h)$, i.e., $\hat{g}(\xi) = \sin(2\pi\xi h)/(\pi\xi)$. This is exactly the Fourier transform of $\chi_{[-h,h]}$. Injectivity of the Fourier transform on $L^{1}$ gives $g = \chi_{[-h,h]}$ a.e.
 
-But there's a subtlety: we need f and f' to both be nice enough for the Fourier argument. The cleaner approach avoids the Fourier transform entirely and uses specific test functions.
+But there's a subtlety: we need $f$ and $f'$ to both be nice enough for the Fourier argument. The cleaner approach avoids the Fourier transform entirely and uses specific test functions.
 
 ## Complete Proof
 
-**Theorem.** Let g ∈ L¹(ℝ) and h > 0. Suppose that for every f ∈ C¹(ℝ):
+**Theorem.** Let $g \in L^{1}(\mathbb{R})$ and $h > 0$. Suppose that for every $f \in C^{1}(\mathbb{R})$:
 
 $$(g * f')(x) = f(x+h) - f(x-h) \quad \text{for all } x \in \mathbb{R}.$$
 
-Then g = χ\_{[-h,h]} almost everywhere.
+Then $g = \chi_{[-h,h]}$ almost everywhere.
 
 **Proof.**
 
@@ -30,11 +30,11 @@ The right side can also be written as a convolution. Note that:
 
 $$f(x+h) - f(x-h) = \int_{x-h}^{x+h} f'(s)\,ds = \int_{-h}^{h} f'(x - (-u))\,du = \int_{-h}^{h} f'(x + u)\,du$$
 
-Wait — let me be more careful with the substitution. Setting s = x + u:
+Wait — let me be more careful with the substitution. Setting $s = x + u$:
 
 $$f(x+h) - f(x-h) = \int_{x-h}^{x+h} f'(s)\,ds = \int_{-h}^{h} f'(x+u)\,du.$$
 
-Now substitute u = -t:
+Now substitute $u = -t$:
 
 $$= \int_{-h}^{h} f'(x - (-u))\,du = \int_{-h}^{h} f'(x+u)\,du.$$
 
@@ -42,11 +42,11 @@ Hmm, let me write it as a convolution directly. We have:
 
 $$\int_{-h}^{h} f'(x+u)\,du = \int_{-\infty}^{\infty} \chi_{[-h,h]}(u) f'(x+u)\,du.$$
 
-But convolution is (g * f')(x) = ∫ g(t) f'(x-t) dt. To match, substitute u = -t:
+But convolution is $(g * f')(x) = \int g(t) f'(x-t)\, dt$. To match, substitute $u = -t$:
 
 $$\int_{-\infty}^{\infty} \chi_{[-h,h]}(-t) f'(x-t)\,dt = \int_{-\infty}^{\infty} \chi_{[-h,h]}(t) f'(x-t)\,dt$$
 
-since χ\_{[-h,h]} is symmetric. So:
+since $\chi_{[-h,h]}$ is symmetric. So:
 
 $$f(x+h) - f(x-h) = (\chi_{[-h,h]} * f')(x).$$
 
@@ -58,31 +58,31 @@ Equivalently:
 
 $$((g - \chi_{[-h,h]}) * f')(x) = 0 \quad \text{for all } x, \text{ for all } f \in C^1(\mathbb{R}).$$
 
-**Step 2: Show g - χ\_{[-h,h]} = 0 a.e.**
+**Step 2: Show $g - \chi_{[-h,h]} = 0$ a.e.**
 
-Set φ = g - χ\_{[-h,h]} ∈ L¹(ℝ). We have φ * f' = 0 for all f ∈ C¹(ℝ).
+Set $\phi = g - \chi_{[-h,h]} \in L^{1}(\mathbb{R})$. We have $\phi * f' = 0$ for all $f \in C^{1}(\mathbb{R})$.
 
-Since f ranges over all C¹ functions, f' ranges over all continuous functions (every continuous function is the derivative of some C¹ function). So:
+Since $f$ ranges over all $C^{1}$ functions, $f'$ ranges over all continuous functions (every continuous function is the derivative of some $C^{1}$ function). So:
 
 $$\phi * \psi = 0 \quad \text{for all } \psi \in C(\mathbb{R}).$$
 
-In particular, choose ψ to be a smooth approximate identity: let ψ\_ε be a standard mollifier (nonneg, supported on [-ε, ε], integral 1). Then:
+In particular, choose $\psi$ to be a smooth approximate identity: let $\psi_\varepsilon$ be a standard mollifier (nonneg, supported on $[-\varepsilon, \varepsilon]$, integral 1). Then:
 
 $$0 = (\phi * \psi_\varepsilon)(x) \quad \text{for all } x, \varepsilon > 0.$$
 
-But φ * ψ\_ε → φ in L¹ as ε → 0 (standard approximation-to-the-identity theorem for L¹ functions). Since φ * ψ\_ε = 0 for all ε, we get φ = 0 in L¹, meaning g = χ\_{[-h,h]} almost everywhere. ∎
+But $\phi * \psi_\varepsilon \to \phi$ in $L^{1}$ as $\varepsilon \to 0$ (standard approximation-to-the-identity theorem for $L^{1}$ functions). Since $\phi * \psi_\varepsilon = 0$ for all $\varepsilon$, we get $\phi = 0$ in $L^{1}$, meaning $g = \chi_{[-h,h]}$ almost everywhere. ∎
 
-**Remark.** The step "f' ranges over all continuous functions" needs a small justification. Given any continuous ψ : ℝ → ℝ, define f(x) = ∫₀ˣ ψ(t) dt. Then f ∈ C¹(ℝ) and f' = ψ. (We don't need f to have any decay or integrability — the hypothesis holds for *all* f ∈ C¹.) Actually we need to be slightly careful: we need φ * ψ to make sense, which requires some growth control. Since φ ∈ L¹ (so it is integrable) and ψ is continuous, (φ * ψ)(x) = ∫ φ(t)ψ(x-t)dt is well-defined for each x as long as ψ is locally bounded, which all continuous functions are. The convolution is well-defined pointwise. So the argument goes through for ψ = ψ\_ε (compactly supported, smooth), which is more than sufficient.
+**Remark.** The step "$f'$ ranges over all continuous functions" needs a small justification. Given any continuous $\psi : \mathbb{R} \to \mathbb{R}$, define $f(x) = \int_{0}^{x} \psi(t)\, dt$. Then $f \in C^{1}(\mathbb{R})$ and $f' = \psi$. (We don't need $f$ to have any decay or integrability — the hypothesis holds for *all* $f \in C^{1}$.) Actually we need to be slightly careful: we need $\phi * \psi$ to make sense, which requires some growth control. Since $\phi \in L^{1}$ (so it is integrable) and $\psi$ is continuous, $(\phi * \psi)(x) = \int \phi(t)\psi(x-t)dt$ is well-defined for each $x$ as long as $\psi$ is locally bounded, which all continuous functions are. The convolution is well-defined pointwise. So the argument goes through for $\psi = \psi_\varepsilon$ (compactly supported, smooth), which is more than sufficient.
 
 ## What Connects
 
-**To the fundamental theorem of calculus.** The identity f(x+h) - f(x-h) = ∫\_{-h}^{h} f'(x+t) dt is the fundamental theorem applied to f' over the interval [x-h, x+h]. The problem asks: if some other kernel g reproduces this identity, must it be the obvious one?
+**To the fundamental theorem of calculus.** The identity $f(x+h) - f(x-h) = \int_{-h}^{h} f'(x+t)\, dt$ is the fundamental theorem applied to $f'$ over the interval $[x-h, x+h]$. The problem asks: if some other kernel $g$ reproduces this identity, must it be the obvious one?
 
-**To approximate identities and uniqueness.** The proof uses the fact that L¹ convolution with approximate identities is faithful: if φ * ψ\_ε = 0 for all ε, then φ = 0. This is the L¹ analogue of "if a distribution annihilates all test functions, it is zero."
+**To approximate identities and uniqueness.** The proof uses the fact that $L^{1}$ convolution with approximate identities is faithful: if $\phi * \psi_\varepsilon = 0$ for all $\varepsilon$, then $\phi = 0$. This is the $L^{1}$ analogue of "if a distribution annihilates all test functions, it is zero."
 
-**To the Titchmarsh convolution theorem.** A deeper result says that if f * g = 0 and both are supported on half-lines, then one of them is zero. Our problem is simpler (we get zero convolution with *all* continuous functions, not just one) but lives in the same neighborhood.
+**To the Titchmarsh convolution theorem.** A deeper result says that if $f * g = 0$ and both are supported on half-lines, then one of them is zero. Our problem is simpler (we get zero convolution with *all* continuous functions, not just one) but lives in the same neighborhood.
 
-**To uniqueness of the Fourier transform.** The Fourier-based proof (Step 0 in "Key Insight") uses the fact that ĝ is uniquely determined by the identity ĝ(ξ) · 2πiξ = 2i sin(2πξh) for all ξ ≠ 0. This gives ĝ = sin(2πξh)/(πξ), which is the sinc function — the Fourier transform of χ\_{[-h,h]}.
+**To uniqueness of the Fourier transform.** The Fourier-based proof (Step 0 in "Key Insight") uses the fact that $\hat{g}$ is uniquely determined by the identity $\hat{g}(\xi) \cdot 2\pi i\xi = 2i \sin(2\pi\xi h)$ for all $\xi \neq 0$. This gives $\hat{g} = \sin(2\pi\xi h)/(\pi\xi)$, which is the sinc function — the Fourier transform of $\chi_{[-h,h]}$.
 
 ---
 
@@ -156,8 +156,8 @@ end
 **Mathlib notes:**
 
 - `=ᵐ[volume]` is `Filter.EventuallyEq` with respect to the `ae volume` filter — the standard way to express "equal almost everywhere" in Mathlib.
-- `(Icc (-h) h).indicator (fun _ => (1 : ℝ))` is the characteristic function χ\_{[-h,h]}, written using `Set.indicator`.
-- `ContDiff ℝ 1 f` says f is C¹. `deriv f` is its derivative.
-- `Integrable g volume` encodes g ∈ L¹(ℝ).
+- `(Icc (-h) h).indicator (fun _ => (1 : ℝ))` is the characteristic function $\chi_{[-h,h]}$, written using `Set.indicator`.
+- `ContDiff ℝ 1 f` says $f$ is $C^{1}$. `deriv f` is its derivative.
+- `Integrable g volume` encodes $g \in L^{1}(\mathbb{R})$.
 - `HasCompactSupport ψ` restricts the test functions to compactly supported ones, which is sufficient for the approximate identity argument and avoids integrability issues with the convolution.
 - The convolution `∫ t, g t * ψ (x - t)` is written as a Bochner integral rather than using Mathlib's `convolution` function, to keep the types simpler. Mathlib's `MeasureTheory.convolution` uses `fun x => ∫ t, f t • g (x - t) ∂μ` with the same meaning.

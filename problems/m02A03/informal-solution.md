@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM m02A03: (1/2π)·ln|x−y| is the fundamental solution of the Laplacian in ℝ²
+# APM m02A03: $(1/2\pi) \cdot \ln|x-y|$ is the fundamental solution of the Laplacian in $\mathbb{R}^{2}$
 
 ## Why It's Hard
 

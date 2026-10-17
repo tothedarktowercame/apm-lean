@@ -1,28 +1,28 @@
 
 
-# APM a01A07: L¹ convergence of analytic functions implies uniform convergence
+# APM a01A07: $L^{1}$ convergence of analytic functions implies uniform convergence
 
 ## 1. Informal proof
 
-**Why it's hard.** The hypothesis is very weak — only L¹ convergence on disks (area integral), not pointwise or uniform. For generic continuous functions, L¹ convergence implies nothing about uniform convergence. The gap seems unbridgeable without exploiting the rigid structure of analytic functions.
+**Why it's hard.** The hypothesis is very weak — only $L^{1}$ convergence on disks (area integral), not pointwise or uniform. For generic continuous functions, $L^{1}$ convergence implies nothing about uniform convergence. The gap seems unbridgeable without exploiting the rigid structure of analytic functions.
 
-**The key insight.** The mean value property for analytic functions converts area integrals into pointwise values: |g(z₀)| ≤ (1/πr²) ∫_{D(z₀,r)} |g| dA. Applied to g = fₙ - fₘ (analytic), this bounds sup-norm by L¹ norm, upgrading L¹(disk) convergence to uniform convergence on compacts.
+**The key insight.** The mean value property for analytic functions converts area integrals into pointwise values: $|g(z_{0})| \leq (1/\pi r^{2}) \int_{D(z_{0},r)} |g| dA$. Applied to $g = f_{n} - f_{m}$ (analytic), this bounds sup-norm by $L^{1}$ norm, upgrading $L^{1}$(disk) convergence to uniform convergence on compacts.
 
 **Proof.**
 
-*Step 1: fₙ → F uniformly on compact subsets.* Fix compact K ⊂ Ω. Choose r > 0 with D(z,r) ⊂ Ω for all z ∈ K (r = dist(K,∂Ω)/2). For z ∈ K, the mean value property gives fₙ(z) = (1/πr²) ∫_{D(z,r)} fₙ dA. So:
+*Step 1: $f_{n} \to F$ uniformly on compact subsets.* Fix compact $K \subset \Omega$. Choose $r > 0$ with $D(z,r) \subset \Omega$ for all $z \in K$ ($r = \text{dist}(K,\partial\Omega)/2$). For $z \in K$, the mean value property gives $f_{n}(z) = (1/\pi r^{2}) \int_{D(z,r)} f_{n} dA$. So:
 
-fₙ(z) - F(z) = (1/πr²) ∫_{D(z,r)} (fₙ - F) dA + [F(z) − (1/πr²) ∫_{D(z,r)} F dA] + [(1/πr²) ∫_{D(z,r)} F dA − F(z)].
+$f_{n}(z) - F(z) = (1/\pi r^{2}) \int_{D(z,r)} (f_{n} - F) dA + [F(z) − (1/\pi r^{2}) \int_{D(z,r)} F dA] + [(1/\pi r^{2}) \int_{D(z,r)} F dA − F(z)]$.
 
-Wait — cleaner: |fₙ(z) - fₘ(z)| = (1/πr²)|∫_{D(z,r)} (fₙ-fₘ) dA| ≤ (1/πr²) ∫_{D(z,r)} |fₙ-fₘ| dA. Let D_K be a disk containing the r-neighbourhood of K. Then sup_K |fₙ-fₘ| ≤ (1/πr²) ∫_{D_K} |fₙ-fₘ| dA ≤ (1/πr²)[∫_{D_K} |fₙ-F| + ∫_{D_K} |fₘ-F|] → 0. So {fₙ} is uniformly Cauchy on K, converging uniformly to some limit.
+Wait — cleaner: $|f_{n}(z) - f_{m}(z)| = (1/\pi r^{2})|\int_{D(z,r)} (f_{n}-f_{m}) dA| \leq (1/\pi r^{2}) \int_{D(z,r)} |f_{n}-f_{m}| dA$. Let $D_K$ be a disk containing the $r$-neighbourhood of $K$. Then $\sup_K |f_{n}-f_{m}| \leq (1/\pi r^{2}) \int_{D_K} |f_{n}-f_{m}| dA \leq (1/\pi r^{2})[\int_{D_K} |f_{n}-F| + \int_{D_K} |f_{m}-F|] \to 0$. So $\{f_{n}\}$ is uniformly Cauchy on $K$, converging uniformly to some limit.
 
-For the limit to be F: choose r small enough that |(1/πr²) ∫_{D(z,r)} F − F(z)| < ε (uniform continuity of F on a compact neighbourhood). Then |fₙ(z) - F(z)| ≤ (1/πr²) ∫_{D(z,r)} |fₙ-F| + ε. The first term ≤ (1/πr²) ∫_{D_K} |fₙ-F| → 0 uniformly in z ∈ K. So fₙ → F uniformly on K.
+For the limit to be $F$: choose $r$ small enough that $|(1/\pi r^{2}) \int_{D(z,r)} F − F(z)| < \epsilon$ (uniform continuity of $F$ on a compact neighbourhood). Then $|f_{n}(z) - F(z)| \leq (1/\pi r^{2}) \int_{D(z,r)} |f_{n}-F| + \epsilon$. The first term $\leq (1/\pi r^{2}) \int_{D_K} |f_{n}-F| \to 0$ uniformly in $z \in K$. So $f_{n} \to F$ uniformly on $K$.
 
-*Step 2: F is analytic.* F is the uniform limit on compacts of analytic functions. By Morera's theorem: for any triangle Δ ⊂ Ω, ∮_Δ F dz = lim ∮_Δ fₙ dz = 0 (Cauchy's theorem for each fₙ; limit passes through by uniform convergence). So F is analytic.
+*Step 2: $F$ is analytic.* $F$ is the uniform limit on compacts of analytic functions. By Morera's theorem: for any triangle $\Delta \subset \Omega$, $\oint_\Delta F dz = \lim \oint_\Delta f_{n} dz = 0$ (Cauchy's theorem for each $f_{n}$; limit passes through by uniform convergence). So $F$ is analytic.
 
-*Step 3: fₙ' → F' uniformly on compacts.* For z ∈ K, choose ρ = dist(K,∂Ω)/2. By the Cauchy integral formula for derivatives: fₙ'(z) - F'(z) = (1/2πi) ∮_{|w-z|=ρ} (fₙ(w)-F(w))/(w-z)² dw. So |fₙ'(z)-F'(z)| ≤ (1/ρ) sup_{|w-z|=ρ} |fₙ(w)-F(w)| ≤ (1/ρ) ||fₙ-F||_{∞, K_ρ} → 0 uniformly in z ∈ K, by Step 1 applied to the compact set K_ρ. ∎
+*Step 3: $f_{n}' \to F'$ uniformly on compacts.* For $z \in K$, choose $\rho = \text{dist}(K,\partial\Omega)/2$. By the Cauchy integral formula for derivatives: $f_{n}'(z) - F'(z) = (1/2\pi i) \oint_{|w-z|=\rho} (f_{n}(w)-F(w))/(w-z)^{2} dw$. So $|f_{n}'(z)-F'(z)| \leq (1/\rho) \sup_{|w-z|=\rho} |f_{n}(w)-F(w)| \leq (1/\rho) ||f_{n}-F||_{\infty, K_\rho} \to 0$ uniformly in $z \in K$, by Step 1 applied to the compact set $K_\rho$. ∎
 
-**What connects.** This is a strengthened Weierstrass convergence theorem: the classical version assumes uniform convergence on compacts as hypothesis, while this problem proves that for analytic functions, the much weaker L¹(disk) convergence automatically upgrades to uniform convergence. The engine is the mean value property / sub-mean value inequality for analytic functions, which controls pointwise values by integral averages. The same principle underlies Montel's theorem and the theory of normal families. The result generalises to any class of functions satisfying elliptic regularity estimates (harmonic functions, solutions of elliptic PDE), where interior estimates bound sup-norms by L¹ norms.
+**What connects.** This is a strengthened Weierstrass convergence theorem: the classical version assumes uniform convergence on compacts as hypothesis, while this problem proves that for analytic functions, the much weaker $L^{1}$(disk) convergence automatically upgrades to uniform convergence. The engine is the mean value property / sub-mean value inequality for analytic functions, which controls pointwise values by integral averages. The same principle underlies Montel's theorem and the theory of normal families. The result generalises to any class of functions satisfying elliptic regularity estimates (harmonic functions, solutions of elliptic PDE), where interior estimates bound sup-norms by $L^{1}$ norms.
 
 ## 2. Lean 4 theorem statement
 
@@ -112,12 +112,12 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `DifferentiableOn ℂ f Ω` — holomorphicity on Ω (complex differentiability implies analyticity in Mathlib)
+- `DifferentiableOn ℂ f Ω` — holomorphicity on $\Omega$ (complex differentiability implies analyticity in Mathlib)
 - `ContinuousOn F Ω` — continuity of the limit
-- `TendstoUniformlyOn f F atTop K` — uniform convergence on K along ℕ
-- `Metric.closedBall z r` — closed disk of radius r centered at z
-- `MeasureTheory.volume` — Lebesgue measure on ℂ ≅ ℝ²
-- `Filter.atTop` — the cofinite filter on ℕ
+- `TendstoUniformlyOn f F atTop K` — uniform convergence on $K$ along $\mathbb{N}$
+- `Metric.closedBall z r` — closed disk of radius $r$ centered at $z$
+- `MeasureTheory.volume` — Lebesgue measure on $\mathbb{C} \cong \mathbb{R}^{2}$
+- `Filter.atTop` — the cofinite filter on $\mathbb{N}$
 - `Filter.Tendsto` — convergence along a filter
 - `IsCompact`, `IsOpen` — topological predicates
 
@@ -126,22 +126,22 @@ end
 - `Complex.circleIntegral.integral_sub_inv_of_mem_ball` — Cauchy integral formula in Mathlib
 - `Complex.deriv_circleIntegral` / related — derivative via Cauchy formula
 - `DifferentiableOn.mono` — restriction of differentiability
-- `IsCompact.exists_pos_forall_lt` — extracting uniform constants from compact sets (for the radius r)
-- `IsCompact.subset_interior_iff` / `IsCompact.dist_subset_closure` — compact K has positive distance to ∂Ω
-- `MeasureTheory.integral_mono` — monotonicity of integrals (for bounding L¹ norms)
+- `IsCompact.exists_pos_forall_lt` — extracting uniform constants from compact sets (for the radius $r$)
+- `IsCompact.subset_interior_iff` / `IsCompact.dist_subset_closure` — compact $K$ has positive distance to $\partial\Omega$
+- `MeasureTheory.integral_mono` — monotonicity of integrals (for bounding $L^{1}$ norms)
 - `MeasureTheory.integral_add_norm` — triangle inequality for integrals
-- `tendstoUniformlyOn_iff` — characterisation of uniform convergence in terms of ε-δ
+- `tendstoUniformlyOn_iff` — characterisation of uniform convergence in terms of $\epsilon$-$\delta$
 - `Complex.differentiableOn_of_forall_circleIntegral_eq_zero` — Morera's theorem (may not be packaged in Mathlib; would need to be stated)
 - `Metric.isCompact_closedBall` — closed disks are compact
 - `IsCompact.isBounded` — compact sets are bounded
-- `Real.volume_closedBall` — volume of a disk (πr²)
+- `Real.volume_closedBall` — volume of a disk ($\pi r^{2}$)
 
 **Tactic hints:**
 - `intro` / `obtain` / `rcases` — unpacking hypotheses and filter convergence
 - `calc` — for the chain of inequalities in the mean value estimate
 - `gcongr` — for monotonicity-based inequality steps (e.g., bounding integrals)
-- `positivity` — for πr² > 0 and similar
+- `positivity` — for $\pi r^{2} > 0$ and similar
 - `exact?` / `apply?` — finding the right Cauchy integral / mean value lemma
 - `simp [closedBall]` — set membership simplification
-- `linarith` / `nlinarith` — arithmetic combination of ε-δ bounds
+- `linarith` / `nlinarith` — arithmetic combination of $\epsilon$-$\delta$ bounds
 - `filter_upwards` — working with the atTop filter for the convergence conclusion

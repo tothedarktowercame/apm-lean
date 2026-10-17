@@ -1,36 +1,36 @@
 
 
-# APM a93A02: L²-bounded a.e. convergent sequence converges in Lp for p < 2
+# APM a93A02: $L^{2}$-bounded a.e. convergent sequence converges in $L^p$ for $p < 2$
 
 ## 1. Informal proof
 
-**Why it's hard.** A.e. convergence alone doesn't imply Lp convergence (typewriter sequence). L² boundedness alone doesn't either. Together they give Lp convergence for p < 2 but *not* for p = 2 — so the strict inequality p < 2 is essential and must be used somewhere in the proof.
+**Why it's hard.** A.e. convergence alone doesn't imply $L^p$ convergence (typewriter sequence). $L^{2}$ boundedness alone doesn't either. Together they give $L^p$ convergence for $p < 2$ but *not* for $p = 2$ — so the strict inequality $p < 2$ is essential and must be used somewhere in the proof.
 
-**The key insight.** Use Vitali's convergence theorem: on a finite measure space, a.e. convergence + uniform integrability ⟹ L¹ convergence. The L² bound provides uniform integrability of |fₙ - f|^p via Hölder (since p < 2, the Lp integrability is "buffered" by the L² margin). Alternatively, use Egorov + Hölder directly.
+**The key insight.** Use Vitali's convergence theorem: on a finite measure space, a.e. convergence + uniform integrability $\Longrightarrow$ $L^{1}$ convergence. The $L^{2}$ bound provides uniform integrability of $|f_{n} - f|^p$ via Hölder (since $p < 2$, the $L^p$ integrability is "buffered" by the $L^{2}$ margin). Alternatively, use Egorov + Hölder directly.
 
 **Proof.**
 
-*Step 0: f ∈ L² (hence Lp).* By Fatou's lemma, ∫|f|² ≤ lim inf ∫|fₙ|² ≤ (sup ||fₙ||₂)² < ∞. So f ∈ L²([0,1]). Since [0,1] has finite measure and p < 2, L² ⊂ Lp, so f ∈ Lp.
+*Step 0: $f \in L^{2}$ (hence $L^p$).* By Fatou's lemma, $\int|f|^{2} \leq \liminf \int|f_{n}|^{2} \leq (\sup \|f_{n}\|_{2})^{2} < \infty$. So $f \in L^{2}([0,1])$. Since $[0,1]$ has finite measure and $p < 2$, $L^{2} \subset L^p$, so $f \in L^p$.
 
-*Step 1: Uniform integrability of |fₙ - f|^p.* Set M = sup ||fₙ||₂. For any measurable E ⊆ [0,1], by Hölder with exponents 2/p and 2/(2-p) (conjugate since p/2 + (2-p)/2 = 1):
+*Step 1: Uniform integrability of $|f_{n} - f|^p$.* Set $M = \sup \|f_{n}\|_{2}$. For any measurable $E \subseteq [0,1]$, by Hölder with exponents $2/p$ and $2/(2-p)$ (conjugate since $p/2 + (2-p)/2 = 1$):
 
-∫_E |fₙ - f|^p ≤ (∫_E |fₙ-f|²)^{p/2} · m(E)^{(2-p)/2} ≤ (∫|fₙ-f|²)^{p/2} · m(E)^{(2-p)/2}.
+$\int_E |f_{n} - f|^p \leq (\int_E |f_{n}-f|^{2})^{p/2} \cdot m(E)^{(2-p)/2} \leq (\int|f_{n}-f|^{2})^{p/2} \cdot m(E)^{(2-p)/2}$.
 
-Now ∫|fₙ-f|² ≤ 2∫|fₙ|² + 2∫|f|² ≤ 2M² + 2M² = 4M² (by (a+b)² ≤ 2a² + 2b²). So:
+Now $\int|f_{n}-f|^{2} \leq 2\int|f_{n}|^{2} + 2\int|f|^{2} \leq 2M^{2} + 2M^{2} = 4M^{2}$ (by $(a+b)^{2} \leq 2a^{2} + 2b^{2}$). So:
 
-∫_E |fₙ - f|^p ≤ (4M²)^{p/2} · m(E)^{(2-p)/2} = C · m(E)^{(2-p)/2}.
+$\int_E |f_{n} - f|^p \leq (4M^{2})^{p/2} \cdot m(E)^{(2-p)/2} = C \cdot m(E)^{(2-p)/2}$.
 
-Since (2-p)/2 > 0, this → 0 as m(E) → 0 uniformly in n. This is uniform integrability of |fₙ - f|^p.
+Since $(2-p)/2 > 0$, this $\to 0$ as $m(E) \to 0$ uniformly in $n$. This is uniform integrability of $|f_{n} - f|^p$.
 
-*Step 2: A.e. convergence of |fₙ - f|^p.* Since fₙ → f a.e., |fₙ - f|^p → 0 a.e.
+*Step 2: A.e. convergence of $|f_{n} - f|^p$.* Since $f_{n} \to f$ a.e., $|f_{n} - f|^p \to 0$ a.e.
 
-*Step 3: Apply Vitali.* On [0,1] (finite measure), |fₙ - f|^p → 0 a.e. and {|fₙ - f|^p} is uniformly integrable. By the Vitali convergence theorem:
+*Step 3: Apply Vitali.* On $[0,1]$ (finite measure), $|f_{n} - f|^p \to 0$ a.e. and $\{|f_{n} - f|^p\}$ is uniformly integrable. By the Vitali convergence theorem:
 
-∫|fₙ - f|^p → 0, i.e., ||fₙ - f||_p → 0. ✓
+$\int|f_{n} - f|^p \to 0$, i.e., $\|f_{n} - f\|_p \to 0$. ✓
 
-*Counterexample for p = 2:* Let fₙ = √n · 1_{[0,1/n]}. Then ||fₙ||₂ = 1 for all n, and fₙ → 0 a.e. (since fₙ(x) = 0 for x > 1/n). But ||fₙ - 0||₂ = 1 ↛ 0. So L² convergence fails despite a.e. convergence and bounded L² norms. ✓ ∎
+*Counterexample for $p = 2$:* Let $f_{n} = \sqrt{n} \cdot 1_{[0,1/n]}$. Then $\|f_{n}\|_{2} = 1$ for all $n$, and $f_{n} \to 0$ a.e. (since $f_{n}(x) = 0$ for $x > 1/n$). But $\|f_{n} - 0\|_{2} = 1 \not\to 0$. So $L^{2}$ convergence fails despite a.e. convergence and bounded $L^{2}$ norms. ✓ ∎
 
-**What connects.** This is a special case of the general interpolation principle: on a finite measure space, L²-bounded sequences that converge a.e. converge in Lp for all p < 2. The mechanism is that L² boundedness provides "room" for uniform integrability at any lower exponent, and Vitali's theorem converts a.e. convergence + uniform integrability into norm convergence. The counterexample for p = 2 shows this room vanishes at the critical exponent: concentration on shrinking sets (fₙ = √n · 1_{[0,1/n]}) preserves the L² norm while converging to 0 a.e. The result generalises: if ||fₙ||_q ≤ M and fₙ → f a.e. on a finite measure space, then fₙ → f in Lp for all p < q. The Dunford-Pettis theorem provides the abstract framework: L^q-bounded families on finite measure spaces are uniformly integrable in Lp for p < q.
+**What connects.** This is a special case of the general interpolation principle: on a finite measure space, $L^{2}$-bounded sequences that converge a.e. converge in $L^p$ for all $p < 2$. The mechanism is that $L^{2}$ boundedness provides "room" for uniform integrability at any lower exponent, and Vitali's theorem converts a.e. convergence + uniform integrability into norm convergence. The counterexample for $p = 2$ shows this room vanishes at the critical exponent: concentration on shrinking sets ($f_{n} = \sqrt{n} \cdot 1_{[0,1/n]}$) preserves the $L^{2}$ norm while converging to 0 a.e. The result generalises: if $\|f_{n}\|_q \leq M$ and $f_{n} \to f$ a.e. on a finite measure space, then $f_{n} \to f$ in $L^p$ for all $p < q$. The Dunford-Pettis theorem provides the abstract framework: $L^q$-bounded families on finite measure spaces are uniformly integrable in $L^p$ for $p < q$.
 
 ## 2. Lean 4 theorem statement
 
@@ -110,32 +110,32 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.Memℒp f p μ` — f ∈ Lp(μ)
-- `MeasureTheory.eLpNorm f p μ` — the Lp seminorm
+- `MeasureTheory.Memℒp f p μ` — $f \in L^p(\mu)$
+- `MeasureTheory.eLpNorm f p μ` — the $L^p$ seminorm
 - `MeasureTheory.UnifIntegrable` — uniform integrability (in `Mathlib.MeasureTheory.Function.UnifIntegrable`)
-- `MeasureTheory.Measure.restrict` — restricted measure to [0,1]
+- `MeasureTheory.Measure.restrict` — restricted measure to $[0,1]$
 - `AEStronglyMeasurable` — measurability condition
 - `Filter.Tendsto`, `Filter.atTop` — convergence
 
 **Key lemmas:**
-- `MeasureTheory.UnifIntegrable.tendsto_Lp` / `MeasureTheory.tendsto_Lp_of_tendstoInMeasure_of_unifIntegrable` — Vitali's convergence theorem: uniform integrability + convergence in measure (or a.e. on finite measure) ⟹ Lp convergence. In `Mathlib.MeasureTheory.Function.UnifIntegrable`
-- `MeasureTheory.tendstoInMeasure_of_tendsto_ae` — on finite measure spaces, a.e. convergence ⟹ convergence in measure (Egorov). Provides the convergence-in-measure input for Vitali
-- `MeasureTheory.Memℒp.memℒp_of_exponent_le` — Lq ⊂ Lp embedding on finite measure spaces (q ≥ p)
-- `MeasureTheory.eLpNorm_le_eLpNorm_mul_rpow_measure_univ` — Hölder embedding: ||f||_p ≤ ||f||_q · μ(X)^{1/p-1/q}
-- `MeasureTheory.Memℒp.of_tendsto_ae` / Fatou — the limit inherits Lp membership
+- `MeasureTheory.UnifIntegrable.tendsto_Lp` / `MeasureTheory.tendsto_Lp_of_tendstoInMeasure_of_unifIntegrable` — Vitali's convergence theorem: uniform integrability + convergence in measure (or a.e. on finite measure) $\Longrightarrow$ $L^p$ convergence. In `Mathlib.MeasureTheory.Function.UnifIntegrable`
+- `MeasureTheory.tendstoInMeasure_of_tendsto_ae` — on finite measure spaces, a.e. convergence $\Longrightarrow$ convergence in measure (Egorov). Provides the convergence-in-measure input for Vitali
+- `MeasureTheory.Memℒp.memℒp_of_exponent_le` — $L^q \subset L^p$ embedding on finite measure spaces ($q \geq p$)
+- `MeasureTheory.eLpNorm_le_eLpNorm_mul_rpow_measure_univ` — Hölder embedding: $\|f\|_p \leq \|f\|_q \cdot \mu(X)^{1/p-1/q}$
+- `MeasureTheory.Memℒp.of_tendsto_ae` / Fatou — the limit inherits $L^p$ membership
 - `lintegral_liminf_le` — Fatou's lemma for lintegrals
 - `MeasureTheory.integral_indicator` — for the counterexample
-- `eLpNorm_indicator_const` — Lp norm of c·1_E
-- `Real.volume_Icc` — m([0, 1/n])
-- `IsFiniteMeasure` — [0,1] has finite measure
+- `eLpNorm_indicator_const` — $L^p$ norm of $c \cdot 1_E$
+- `Real.volume_Icc` — $m([0, 1/n])$
+- `IsFiniteMeasure` — $[0,1]$ has finite measure
 
 **Tactic hints:**
 - `exact MeasureTheory.tendsto_Lp_of_tendstoInMeasure_of_unifIntegrable ...` — if Vitali is packaged
 - `apply MeasureTheory.tendstoInMeasure_of_tendsto_ae` — convert a.e. to in-measure
-- `calc` — for the Hölder chain ∫_E |fₙ-f|^p ≤ (∫|fₙ-f|²)^{p/2} · m(E)^{(2-p)/2}
+- `calc` — for the Hölder chain $\int_E |f_{n}-f|^p \leq (\int|f_{n}-f|^{2})^{p/2} \cdot m(E)^{(2-p)/2}$
 - `gcongr` — for monotonicity steps in the Hölder bound
-- `positivity` — for (2-p)/2 > 0 and related
+- `positivity` — for $(2-p)/2 > 0$ and related
 - `norm_num` — for the counterexample norm computation
 - `simp [counterex_p2, Set.indicator]` — unfolding the counterexample
 - `filter_upwards` — for the a.e. convergence of the counterexample
-- `linarith` — combining p < 2 with exponent arithmetic
+- `linarith` — combining $p < 2$ with exponent arithmetic

@@ -1,18 +1,16 @@
-
-
 # APM a92J06: Trigonometric integral via contour integration
 
 ## 1. Informal proof
 
-**Why it's hard.** The integral ∫₀²π 1/(2 + cos θ) dθ has no elementary antiderivative in terms of standard trig functions — the standard substitution t = tan(θ/2) works but is tedious. The contour integral method is more systematic but requires converting the trigonometric integral into a rational function of a complex variable.
+**Why it's hard.** The integral $\int_{0}^{2\pi} 1/(2 + \cos \theta)\, d\theta$ has no elementary antiderivative in terms of standard trig functions — the standard substitution $t = \tan(\theta/2)$ works but is tedious. The contour integral method is more systematic but requires converting the trigonometric integral into a rational function of a complex variable.
 
-**The key insight.** Substitute z = e^{iθ}, so dθ = dz/(iz) and cos θ = (z + z⁻¹)/2. The integral becomes a contour integral of a rational function around the unit circle, evaluated by the residue theorem.
+**The key insight.** Substitute $z = e^{i\theta}$, so $d\theta = dz/(iz)$ and $\cos \theta = (z + z^{-1})/2$. The integral becomes a contour integral of a rational function around the unit circle, evaluated by the residue theorem.
 
 **Proof.**
 
-*Step 1: Substitution.* Let z = e^{iθ}, θ ∈ [0, 2π]. Then:
-- dz = ie^{iθ} dθ = iz dθ, so dθ = dz/(iz).
-- cos θ = (e^{iθ} + e^{-iθ})/2 = (z + 1/z)/2.
+*Step 1: Substitution.* Let $z = e^{i\theta}$, $\theta \in [0, 2\pi]$. Then:
+- $dz = ie^{i\theta}\, d\theta = iz\, d\theta$, so $d\theta = dz/(iz)$.
+- $\cos \theta = (e^{i\theta} + e^{-i\theta})/2 = (z + 1/z)/2$.
 
 The integral becomes:
 
@@ -26,13 +24,13 @@ So:
 
 $$\oint_{|z|=1}\frac{1}{\frac{z^2+4z+1}{2z}}\cdot\frac{dz}{iz} = \oint_{|z|=1}\frac{2z}{z^2+4z+1}\cdot\frac{dz}{iz} = \oint_{|z|=1}\frac{2}{i(z^2+4z+1)}\,dz.$$
 
-*Step 3: Factor the denominator.* z² + 4z + 1 = 0 gives z = (-4 ± √(16-4))/2 = -2 ± √3.
+*Step 3: Factor the denominator.* $z^{2} + 4z + 1 = 0$ gives $z = (-4 \pm \sqrt{16-4})/2 = -2 \pm \sqrt{3}$.
 
-The roots are z₁ = -2 + √3 ≈ -0.268 and z₂ = -2 - √3 ≈ -3.732.
+The roots are $z_{1} = -2 + \sqrt{3} \approx -0.268$ and $z_{2} = -2 - \sqrt{3} \approx -3.732$.
 
-Only z₁ = -2 + √3 lies inside the unit disk (|z₁| = 2 - √3 < 1).
+Only $z_{1} = -2 + \sqrt{3}$ lies inside the unit disk ($|z_{1}| = 2 - \sqrt{3} < 1$).
 
-*Step 4: Compute the residue.* The integrand is f(z) = 2/(i(z - z₁)(z - z₂)). The residue at z₁ is:
+*Step 4: Compute the residue.* The integrand is $f(z) = 2/(i(z - z_{1})(z - z_{2}))$. The residue at $z_{1}$ is:
 
 $$\text{Res}_{z=z_1} f = \frac{2}{i(z_1-z_2)} = \frac{2}{i((-2+\sqrt{3})-(-2-\sqrt{3}))} = \frac{2}{i \cdot 2\sqrt{3}} = \frac{1}{i\sqrt{3}}.$$
 
@@ -42,7 +40,7 @@ $$\oint_{|z|=1}f(z)\,dz = 2\pi i \cdot \frac{1}{i\sqrt{3}} = \frac{2\pi}{\sqrt{3
 
 $$\boxed{\int_0^{2\pi}\frac{d\theta}{2+\cos\theta} = \frac{2\pi}{\sqrt{3}}.}$$
 
-**What connects.** This is the prototypical application of the residue theorem to trigonometric integrals. The method works for any integral of the form ∫₀²π R(cos θ, sin θ) dθ where R is a rational function: substitute z = e^{iθ}, convert to a contour integral of a rational function around the unit circle, locate the poles inside |z| < 1, and sum residues. The denominator z² + 4z + 1 factors with one root inside and one outside the disk because the product of roots is 1 (by Vieta) and neither has modulus 1 (since 2 + cos θ > 0 means the integrand has no singularities on the circle). The general formula for ∫₀²π dθ/(a + cos θ) = 2π/√(a² - 1) for a > 1 follows by the same method.
+**What connects.** This is the prototypical application of the residue theorem to trigonometric integrals. The method works for any integral of the form $\int_{0}^{2\pi} R(\cos \theta, \sin \theta)\, d\theta$ where $R$ is a rational function: substitute $z = e^{i\theta}$, convert to a contour integral of a rational function around the unit circle, locate the poles inside $|z| < 1$, and sum residues. The denominator $z^{2} + 4z + 1$ factors with one root inside and one outside the disk because the product of roots is 1 (by Vieta) and neither has modulus 1 (since $2 + \cos \theta > 0$ means the integrand has no singularities on the circle). The general formula for $\int_{0}^{2\pi} d\theta/(a + \cos \theta) = 2\pi/\sqrt{a^{2} - 1}$ for $a > 1$ follows by the same method.
 
 ## 2. Lean 4 theorem statement
 
@@ -113,22 +111,22 @@ end
 - `Real.sqrt` — square root
 
 **Key lemmas:**
-- `Complex.circleIntegral_sub_inv_of_mem_ball` — Cauchy integral formula / residue computation: ∮ 1/(z-a) dz = 2πi for a inside the circle
-- `Complex.circleIntegral_eq_zero_of_differentiableOn` — Cauchy theorem: ∮ f = 0 when f is analytic inside (used for the root outside the disk)
-- `Real.cos_eq_half_exp_add_exp_neg` — cos θ = (e^{iθ} + e^{-iθ})/2 (for the substitution)
-- `Complex.exp_mul_I` — e^{iθ} computation
-- `Real.sq_sqrt` — (√a)² = a for a ≥ 0
-- `Real.sqrt_pos_of_pos` — √3 > 0
+- `Complex.circleIntegral_sub_inv_of_mem_ball` — Cauchy integral formula / residue computation: $\oint 1/(z-a)\, dz = 2\pi i$ for $a$ inside the circle
+- `Complex.circleIntegral_eq_zero_of_differentiableOn` — Cauchy theorem: $\oint f = 0$ when $f$ is analytic inside (used for the root outside the disk)
+- `Real.cos_eq_half_exp_add_exp_neg` — $\cos \theta = (e^{i\theta} + e^{-i\theta})/2$ (for the substitution)
+- `Complex.exp_mul_I` — $e^{i\theta}$ computation
+- `Real.sq_sqrt` — $(\sqrt{a})^{2} = a$ for $a \geq 0$
+- `Real.sqrt_pos_of_pos` — $\sqrt{3} > 0$
 - `intervalIntegral.integral_comp_mul_deriv` — substitution rule for interval integrals
-- `Complex.norm_eq_abs` — for checking |z₁| < 1
+- `Complex.norm_eq_abs` — for checking $|z_{1}| < 1$
 - `norm_sub_le` / `norm_add_le` — triangle inequality for root location
 
 **Tactic hints:**
-- `norm_num [Real.sqrt_lt']` — for verifying |-2+√3| < 1 and |-2-√3| > 1
-- `ring` — for z²+4z+1 = (z-z₁)(z-z₂) and algebraic simplifications
+- `norm_num [Real.sqrt_lt']` — for verifying $|-2+\sqrt{3}| < 1$ and $|-2-\sqrt{3}| > 1$
+- `ring` — for $z^{2}+4z+1 = (z-z_{1})(z-z_{2})$ and algebraic simplifications
 - `field_simp` — for clearing denominators in the residue computation
-- `simp [Complex.exp_mul_I, Complex.cos, Complex.sin]` — for the z = e^{iθ} substitution
+- `simp [Complex.exp_mul_I, Complex.cos, Complex.sin]` — for the $z = e^{i\theta}$ substitution
 - `rw [circleIntegral_sub_inv_of_mem_ball]` — applying the residue formula
-- `positivity` — for 2 + cos θ > 0 (since cos θ ≥ -1) and √3 > 0
-- `nlinarith [Real.sq_sqrt (by norm_num : (3:ℝ) ≥ 0)]` — for √3 arithmetic
-- `push_cast` — for ℝ ↔ ℂ coercions
+- `positivity` — for $2 + \cos \theta > 0$ (since $\cos \theta \geq -1$) and $\sqrt{3} > 0$
+- `nlinarith [Real.sq_sqrt (by norm_num : (3:ℝ) ≥ 0)]` — for $\sqrt{3}$ arithmetic
+- `push_cast` — for $\mathbb{R} \leftrightarrow \mathbb{C}$ coercions

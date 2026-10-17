@@ -4,6 +4,14 @@ import ConstructionTargets.CoefficientContractiblePair
 import ConstructionTargets.CoefficientH0
 import ConstructionTargets.ProjectiveQuotientDescent
 import ConstructionTargets.PuncturedNormedSpaceRadialEquivalence
+import ConstructionTargets.CoefficientFirstReflection
+import ConstructionTargets.CoefficientSubcomplexMayerVietoris
+import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
+import ConstructionTargets.CoefficientIntersectionRangeComparison
+import ConstructionTargets.CoefficientIntersectionRangeNaturality
+import ConstructionTargets.HomologyBiprodIso
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
+import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Rational homology interface for the t99J05 closure
 
@@ -16,6 +24,7 @@ open ConstructionTargets.ProjectiveSpaceTopology
 open ConstructionTargets.ComplexProjectiveChartTargets
 open ConstructionTargets.RationalLefschetz
 open ConstructionTargets.ProjectiveQuotientDescent
+open CategoryTheory.Limits
 open Set Topology
 open scoped ContinuousMap
 
@@ -156,6 +165,547 @@ theorem cpSuccessor_openCover (n : ℕ) :
     · subst i
       exact not_ne_iff.mp hlast
     · exact h i hi
+
+/-- Nonzero homogeneous representatives of the lower filtration patch. -/
+abbrev CPSuccessorLowerVectors (n : ℕ) :=
+  {v : NonzeroVectors ℂ (n + 1) //
+    quotientMap ℂ (n + 1) v ∈ cpSuccessorLowerPatch n}
+
+/-- Zero the last homogeneous coordinate of a representative in the lower
+patch.  The result remains nonzero because some earlier coordinate is
+nonzero.  This is the endpoint used by the lower-patch deformation retract. -/
+def cpSuccessorZeroLastVector (n : ℕ) (v : CPSuccessorLowerVectors n) :
+    NonzeroVectors ℂ (n + 1) :=
+  ⟨fun j => if j = Fin.last (n + 1) then 0 else v.1.1 j, by
+    obtain ⟨i, hi, hrep⟩ := v.2
+    have hvi : v.1.1 i ≠ 0 := by
+      have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+          {p : CP (n + 1) | Projectivization.rep p i ≠ 0} := hrep
+      exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp hmem
+    intro hz
+    have := congrFun hz i
+    simp [hi, hvi] at this⟩
+
+@[simp] theorem cpSuccessorZeroLastVector_last (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    (cpSuccessorZeroLastVector n v).1 (Fin.last (n + 1)) = 0 := by
+  simp [cpSuccessorZeroLastVector]
+
+@[simp] theorem cpSuccessorZeroLastVector_castSucc (n : ℕ)
+    (v : CPSuccessorLowerVectors n) (i : Fin (n + 1)) :
+    (cpSuccessorZeroLastVector n v).1 i.castSucc = v.1.1 i.castSucc := by
+  simp [cpSuccessorZeroLastVector, Fin.castSucc_ne_last]
+
+/-- Scale only the last homogeneous coordinate toward zero.  An earlier
+coordinate supplied by lower-patch membership stays unchanged, so the whole
+path consists of nonzero vectors. -/
+def cpSuccessorLowerVectorHomotopy (n : ℕ) (v : CPSuccessorLowerVectors n)
+    (s : Set.Icc (0 : ℝ) 1) : NonzeroVectors ℂ (n + 1) :=
+  ⟨fun j => if j = Fin.last (n + 1)
+      then ((1 - s.1 : ℝ) : ℂ) * v.1.1 j else v.1.1 j, by
+    obtain ⟨i, hi, hrep⟩ := v.2
+    have hvi : v.1.1 i ≠ 0 := by
+      have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+          {p : CP (n + 1) | Projectivization.rep p i ≠ 0} := hrep
+      exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp hmem
+    intro hz
+    have := congrFun hz i
+    simp [hi, hvi] at this⟩
+
+@[simp] theorem cpSuccessorLowerVectorHomotopy_zero (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorLowerVectorHomotopy n v ⟨0, by simp⟩ = v.1 := by
+  apply Subtype.ext
+  funext j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp [cpSuccessorLowerVectorHomotopy, hj]
+  · simp [cpSuccessorLowerVectorHomotopy, hj]
+
+@[simp] theorem cpSuccessorLowerVectorHomotopy_one (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorLowerVectorHomotopy n v ⟨1, by simp⟩ =
+      cpSuccessorZeroLastVector n v := by
+  apply Subtype.ext
+  funext j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp [cpSuccessorLowerVectorHomotopy, cpSuccessorZeroLastVector, hj]
+  · simp [cpSuccessorLowerVectorHomotopy, cpSuccessorZeroLastVector, hj]
+
+/-- The vector homotopy is homogeneous, which is the algebraic condition
+needed for descent through the projective quotient. -/
+theorem cpSuccessorLowerVectorHomotopy_smul (n : ℕ)
+    (v w : CPSuccessorLowerVectors n) (s : Set.Icc (0 : ℝ) 1) (a : ℂ)
+    (hvw : v.1.1 = a • w.1.1) :
+    (cpSuccessorLowerVectorHomotopy n v s).1 =
+      a • (cpSuccessorLowerVectorHomotopy n w s).1 := by
+  funext j
+  have hj := congrFun hvw j
+  by_cases hlast : j = Fin.last (n + 1)
+  · subst j
+    have hcoord := congrFun hvw (Fin.last (n + 1))
+    change v.1.1 (Fin.last (n + 1)) =
+      a * w.1.1 (Fin.last (n + 1)) at hcoord
+    simp only [cpSuccessorLowerVectorHomotopy, if_pos, Pi.smul_apply,
+      smul_eq_mul]
+    rw [hcoord]
+    ring
+  · simp [cpSuccessorLowerVectorHomotopy, hlast, hj]
+
+/-- The homogeneous vector homotopy is jointly continuous in the lower-patch
+representative and the interval parameter. -/
+theorem cpSuccessorLowerVectorHomotopy_continuous (n : ℕ) :
+    Continuous (fun z : CPSuccessorLowerVectors n × Set.Icc (0 : ℝ) 1 =>
+      cpSuccessorLowerVectorHomotopy n z.1 z.2) := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro j
+  have hv : Continuous (fun z : CPSuccessorLowerVectors n × Set.Icc (0 : ℝ) 1 =>
+      z.1.1.1 j) :=
+    (continuous_apply j).comp
+      (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_fst))
+  by_cases hj : j = Fin.last (n + 1)
+  · subst j
+    simp only [cpSuccessorLowerVectorHomotopy, if_pos]
+    exact (Complex.continuous_ofReal.comp
+      (continuous_const.sub (continuous_subtype_val.comp continuous_snd))).mul hv
+  · simp only [cpSuccessorLowerVectorHomotopy, if_neg hj]
+    exact hv
+
+/-- Every point of the vector homotopy still represents a point of the lower
+projective patch, since one non-last coordinate remains unchanged and nonzero. -/
+theorem cpSuccessorLowerVectorHomotopy_mem_lowerPatch (n : ℕ)
+    (v : CPSuccessorLowerVectors n) (s : Set.Icc (0 : ℝ) 1) :
+    quotientMap ℂ (n + 1) (cpSuccessorLowerVectorHomotopy n v s) ∈
+      cpSuccessorLowerPatch n := by
+  obtain ⟨i, hi, hrep⟩ := v.2
+  refine ⟨i, hi, ?_⟩
+  have hvi : v.1.1 i ≠ 0 := by
+    have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+        {p : CP (n + 1) | Projectivization.rep p i ≠ 0} := hrep
+    exact (Set.ext_iff.mp (affineSource_preimage i) v.1).mp hmem
+  have hcoord : (cpSuccessorLowerVectorHomotopy n v s).1 i ≠ 0 := by
+    simpa [cpSuccessorLowerVectorHomotopy, hi] using hvi
+  exact (Set.ext_iff.mp (affineSource_preimage i)
+    (cpSuccessorLowerVectorHomotopy n v s)).mpr hcoord
+
+/-- The continuous vector homotopy, bundled with its proved lower-patch
+membership so it can be descended through the restricted quotient. -/
+def cpSuccessorLowerVectorHomotopyInPatch (n : ℕ)
+    (z : CPSuccessorLowerVectors n × Set.Icc (0 : ℝ) 1) :
+    CPSuccessorLowerVectors n :=
+  ⟨cpSuccessorLowerVectorHomotopy n z.1 z.2,
+    cpSuccessorLowerVectorHomotopy_mem_lowerPatch n z.1 z.2⟩
+
+theorem cpSuccessorLowerVectorHomotopyInPatch_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerVectorHomotopyInPatch n) :=
+  (cpSuccessorLowerVectorHomotopy_continuous n).subtype_mk _
+
+/-- The projective quotient restricted over the lower patch. -/
+def cpSuccessorLowerQuotientMap (n : ℕ) :
+    CPSuccessorLowerVectors n → {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} :=
+  fun v => ⟨quotientMap ℂ (n + 1) v.1, v.2⟩
+
+/-- The restricted projective quotient is still an open quotient map. -/
+theorem cpSuccessorLowerQuotientMap_isOpenQuotient (n : ℕ) :
+    IsOpenQuotientMap (cpSuccessorLowerQuotientMap n) := by
+  let s := cpSuccessorLowerPatch n
+  let q : NonzeroVectors ℂ (n + 1) → CP (n + 1) := quotientMap ℂ (n + 1)
+  change IsOpenQuotientMap (s.restrictPreimage q)
+  refine ⟨?_, (continuous_quotientMap ℂ (n + 1)).restrictPreimage, ?_⟩
+  · rintro ⟨p, hp⟩
+    obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ (n + 1) p
+    exact ⟨⟨v, hp⟩, rfl⟩
+  · exact (projectiveQuotientMap_isOpen ℂ (n + 1)).restrictPreimage s
+
+/-- A fixed representative of each point in the lower projective patch. -/
+noncomputable def cpSuccessorLowerRepresentative (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    CPSuccessorLowerVectors n :=
+  Classical.choose ((cpSuccessorLowerQuotientMap_isOpenQuotient n).surjective p)
+
+@[simp] theorem cpSuccessorLowerRepresentative_quotient (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerQuotientMap n (cpSuccessorLowerRepresentative n p) = p :=
+  Classical.choose_spec ((cpSuccessorLowerQuotientMap_isOpenQuotient n).surjective p)
+
+/-- The lower-patch vector homotopy descended through the restricted
+projective quotient. -/
+noncomputable def cpSuccessorLowerPatchHomotopy (n : ℕ)
+    (z : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} × Set.Icc (0 : ℝ) 1) :
+    {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} :=
+  cpSuccessorLowerQuotientMap n
+    (cpSuccessorLowerVectorHomotopyInPatch n
+      (cpSuccessorLowerRepresentative n z.1, z.2))
+
+/-- Pulling the descended homotopy back to a lower-patch representative
+recovers the original homogeneous vector homotopy. -/
+theorem cpSuccessorLowerPatchHomotopy_quotient (n : ℕ)
+    (v : CPSuccessorLowerVectors n) (s : Set.Icc (0 : ℝ) 1) :
+    cpSuccessorLowerPatchHomotopy n (cpSuccessorLowerQuotientMap n v, s) =
+      cpSuccessorLowerQuotientMap n
+        (cpSuccessorLowerVectorHomotopyInPatch n (v, s)) := by
+  let w := cpSuccessorLowerRepresentative n (cpSuccessorLowerQuotientMap n v)
+  have hq : quotientMap ℂ (n + 1) w.1 = quotientMap ℂ (n + 1) v.1 := by
+    exact congrArg Subtype.val
+      (cpSuccessorLowerRepresentative_quotient n
+        (cpSuccessorLowerQuotientMap n v))
+  obtain ⟨a, ha⟩ :=
+    (Projectivization.mk_eq_mk_iff ℂ w.1.1 v.1.1 w.1.2 v.1.2).mp hq
+  apply Subtype.ext
+  change quotientMap ℂ (n + 1)
+      (cpSuccessorLowerVectorHomotopy n w s) =
+    quotientMap ℂ (n + 1) (cpSuccessorLowerVectorHomotopy n v s)
+  apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+  refine ⟨a, ?_⟩
+  exact (cpSuccessorLowerVectorHomotopy_smul n w v s a ha.symm).symm
+
+/-- The descended lower-patch homotopy is jointly continuous. -/
+theorem cpSuccessorLowerPatchHomotopy_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerPatchHomotopy n) := by
+  have hq := (cpSuccessorLowerQuotientMap_isOpenQuotient n).prodMap
+    (IsOpenQuotientMap.id : IsOpenQuotientMap
+      (fun s : Set.Icc (0 : ℝ) 1 => s))
+  refine hq.isQuotientMap.continuous_iff.mpr ?_
+  have hcomp : cpSuccessorLowerPatchHomotopy n ∘
+      Prod.map (cpSuccessorLowerQuotientMap n) id =
+      cpSuccessorLowerQuotientMap n ∘
+        cpSuccessorLowerVectorHomotopyInPatch n := by
+    funext z
+    exact cpSuccessorLowerPatchHomotopy_quotient n z.1 z.2
+  rw [hcomp]
+  exact (cpSuccessorLowerQuotientMap_isOpenQuotient n).continuous.comp
+    (cpSuccessorLowerVectorHomotopyInPatch_continuous n)
+
+@[simp] theorem cpSuccessorLowerPatchHomotopy_zero (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨0, by simp⟩) = p := by
+  let w := cpSuccessorLowerRepresentative n p
+  calc
+    cpSuccessorLowerPatchHomotopy n (p, ⟨0, by simp⟩) =
+        cpSuccessorLowerPatchHomotopy n
+          (cpSuccessorLowerQuotientMap n w, ⟨0, by simp⟩) := by
+            rw [cpSuccessorLowerRepresentative_quotient n p]
+    _ = cpSuccessorLowerQuotientMap n
+        (cpSuccessorLowerVectorHomotopyInPatch n (w, ⟨0, by simp⟩)) :=
+      cpSuccessorLowerPatchHomotopy_quotient n w ⟨0, by simp⟩
+    _ = cpSuccessorLowerQuotientMap n w := by
+      congr 1
+      apply Subtype.ext
+      exact cpSuccessorLowerVectorHomotopy_zero n w
+    _ = p := cpSuccessorLowerRepresentative_quotient n p
+
+@[simp] theorem cpSuccessorLowerPatchHomotopy_one (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+      cpSuccessorLowerQuotientMap n
+        ⟨cpSuccessorZeroLastVector n (cpSuccessorLowerRepresentative n p),
+          by
+            have h := cpSuccessorLowerVectorHomotopy_mem_lowerPatch n
+              (cpSuccessorLowerRepresentative n p) ⟨1, by simp⟩
+            rw [cpSuccessorLowerVectorHomotopy_one] at h
+            exact h⟩ := by
+  let w := cpSuccessorLowerRepresentative n p
+  calc
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+        cpSuccessorLowerPatchHomotopy n
+          (cpSuccessorLowerQuotientMap n w, ⟨1, by simp⟩) := by
+            rw [cpSuccessorLowerRepresentative_quotient n p]
+    _ = cpSuccessorLowerQuotientMap n
+        (cpSuccessorLowerVectorHomotopyInPatch n (w, ⟨1, by simp⟩)) :=
+      cpSuccessorLowerPatchHomotopy_quotient n w ⟨1, by simp⟩
+    _ = cpSuccessorLowerQuotientMap n
+        ⟨cpSuccessorZeroLastVector n w, by
+          have h := cpSuccessorLowerVectorHomotopy_mem_lowerPatch n w ⟨1, by simp⟩
+          rw [cpSuccessorLowerVectorHomotopy_one] at h
+          exact h⟩ := by
+      congr 1
+      apply Subtype.ext
+      exact cpSuccessorLowerVectorHomotopy_one n w
+
+/-- Append a zero last coordinate to a nonzero homogeneous vector. -/
+def cpSuccessorZeroLastIncludeVector (n : ℕ) (v : NonzeroVectors ℂ n) :
+    NonzeroVectors ℂ (n + 1) :=
+  ⟨fun j => if h : j = Fin.last (n + 1) then 0 else v.1 (j.castPred h), by
+    intro hz
+    apply v.2
+    funext i
+    have hi := congrFun hz i.castSucc
+    simpa [Fin.castSucc_ne_last] using hi⟩
+
+@[simp] theorem cpSuccessorZeroLastIncludeVector_castSucc (n : ℕ)
+    (v : NonzeroVectors ℂ n) (i : Fin (n + 1)) :
+    (cpSuccessorZeroLastIncludeVector n v).1 i.castSucc = v.1 i := by
+  simp [cpSuccessorZeroLastIncludeVector, Fin.castSucc_ne_last]
+
+@[simp] theorem cpSuccessorZeroLastIncludeVector_last (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    (cpSuccessorZeroLastIncludeVector n v).1 (Fin.last (n + 1)) = 0 := by
+  simp [cpSuccessorZeroLastIncludeVector]
+
+theorem cpSuccessorZeroLastIncludeVector_continuous (n : ℕ) :
+    Continuous (cpSuccessorZeroLastIncludeVector n) := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp only [dif_pos hj]
+    exact continuous_const
+  · simp only [cpSuccessorZeroLastIncludeVector, dif_neg hj]
+    exact (continuous_apply (j.castPred hj)).comp continuous_subtype_val
+
+theorem cpSuccessorZeroLastIncludeVector_mem_lowerPatch (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n v) ∈
+      cpSuccessorLowerPatch n := by
+  have hex : ∃ i : Fin (n + 1), v.1 i ≠ 0 := by
+    by_contra h
+    push_neg at h
+    apply v.2
+    funext i
+    exact h i
+  obtain ⟨i, hi⟩ := hex
+  refine ⟨i.castSucc, Fin.castSucc_ne_last i, ?_⟩
+  apply (Set.ext_iff.mp (affineSource_preimage i.castSucc)
+    (cpSuccessorZeroLastIncludeVector n v)).mpr
+  simpa using hi
+
+/-- The zero-last-coordinate vector inclusion, with its image bundled in the
+lower successor patch. -/
+def cpSuccessorZeroLastIncludeVectorInPatch (n : ℕ) (v : NonzeroVectors ℂ n) :
+    {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} :=
+  ⟨quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n v),
+    cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩
+
+theorem cpSuccessorZeroLastIncludeVectorInPatch_continuous (n : ℕ) :
+    Continuous (cpSuccessorZeroLastIncludeVectorInPatch n) :=
+  ((continuous_quotientMap ℂ (n + 1)).comp
+    (cpSuccessorZeroLastIncludeVector_continuous n)).subtype_mk _
+
+/-- The canonical continuous inclusion of `CP n` as the zero-last-coordinate
+projective subspace of the lower successor patch. -/
+noncomputable def cpSuccessorZeroLastInclusion (n : ℕ) :
+    C(CP n, {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :=
+  Classical.choose (projectiveHomogeneousMapDescent ℂ
+    (cpSuccessorZeroLastIncludeVectorInPatch n)
+    (cpSuccessorZeroLastIncludeVectorInPatch_continuous n)
+    (by
+      intro a b t hab
+      apply Subtype.ext
+      change quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n a) =
+        quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n b)
+      apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+      have ht : t ≠ 0 := by
+        intro ht
+        apply a.2
+        rw [hab, ht]
+        simp
+      refine ⟨Units.mk0 t ht, ?_⟩
+      funext j
+      by_cases hj : j = Fin.last (n + 1)
+      · simp [cpSuccessorZeroLastIncludeVector, hj]
+      · have hcoord := congrFun hab (j.castPred hj)
+        simpa [cpSuccessorZeroLastIncludeVector, hj] using hcoord.symm))
+
+@[simp] theorem cpSuccessorZeroLastInclusion_quotient (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    cpSuccessorZeroLastInclusion n (quotientMap ℂ n v) =
+      cpSuccessorZeroLastIncludeVectorInPatch n v :=
+  Classical.choose_spec (projectiveHomogeneousMapDescent ℂ
+    (cpSuccessorZeroLastIncludeVectorInPatch n)
+    (cpSuccessorZeroLastIncludeVectorInPatch_continuous n)
+    (by
+      intro a b t hab
+      apply Subtype.ext
+      change quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n a) =
+        quotientMap ℂ (n + 1) (cpSuccessorZeroLastIncludeVector n b)
+      apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+      have ht : t ≠ 0 := by
+        intro ht
+        apply a.2
+        rw [hab, ht]
+        simp
+      refine ⟨Units.mk0 t ht, ?_⟩
+      funext j
+      by_cases hj : j = Fin.last (n + 1)
+      · simp [cpSuccessorZeroLastIncludeVector, hj]
+      · have hcoord := congrFun hab (j.castPred hj)
+        simpa [cpSuccessorZeroLastIncludeVector, hj] using hcoord.symm)) v
+
+/-- Forget the last coordinate of a lower-patch representative.  A non-last
+coordinate is nonzero by lower-patch membership. -/
+def cpSuccessorLowerTruncateVector (n : ℕ) (v : CPSuccessorLowerVectors n) :
+    NonzeroVectors ℂ n :=
+  ⟨fun i => v.1.1 i.castSucc, by
+    obtain ⟨j, hj, hrep⟩ := v.2
+    have hvj : v.1.1 j ≠ 0 := by
+      have hmem : v.1 ∈ quotientMap ℂ (n + 1) ⁻¹'
+          {p : CP (n + 1) | Projectivization.rep p j ≠ 0} := hrep
+      exact (Set.ext_iff.mp (affineSource_preimage j) v.1).mp hmem
+    intro hz
+    have hcoord := congrFun hz (j.castPred hj)
+    rw [Fin.castSucc_castPred j hj] at hcoord
+    exact hvj hcoord⟩
+
+theorem cpSuccessorZeroLastInclude_truncate (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorZeroLastIncludeVector n (cpSuccessorLowerTruncateVector n v) =
+      cpSuccessorZeroLastVector n v := by
+  apply Subtype.ext
+  funext j
+  by_cases hj : j = Fin.last (n + 1)
+  · simp [hj]
+  · simp [cpSuccessorZeroLastIncludeVector, cpSuccessorLowerTruncateVector,
+      cpSuccessorZeroLastVector, hj, Fin.castSucc_castPred]
+
+/-- The time-one endpoint of the lower-patch homotopy factors through the
+canonical zero-last inclusion of `CP n`. -/
+theorem cpSuccessorLowerPatchHomotopy_one_eq_inclusion (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+      cpSuccessorZeroLastInclusion n
+        (quotientMap ℂ n
+          (cpSuccessorLowerTruncateVector n
+            (cpSuccessorLowerRepresentative n p))) := by
+  rw [cpSuccessorLowerPatchHomotopy_one,
+    cpSuccessorZeroLastInclusion_quotient]
+  apply Subtype.ext
+  change quotientMap ℂ (n + 1)
+      (cpSuccessorZeroLastVector n (cpSuccessorLowerRepresentative n p)) =
+    quotientMap ℂ (n + 1)
+      (cpSuccessorZeroLastIncludeVector n
+        (cpSuccessorLowerTruncateVector n
+          (cpSuccessorLowerRepresentative n p)))
+  rw [cpSuccessorZeroLastInclude_truncate]
+
+theorem cpSuccessorLowerTruncateVector_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerTruncateVector n) := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro i
+  exact (continuous_apply i.castSucc).comp
+    (continuous_subtype_val.comp continuous_subtype_val)
+
+/-- Truncation respects homogeneous scalar multiplication. -/
+theorem cpSuccessorLowerTruncateVector_smul (n : ℕ)
+    (v w : CPSuccessorLowerVectors n) (a : ℂ)
+    (hvw : v.1.1 = a • w.1.1) :
+    (cpSuccessorLowerTruncateVector n v).1 =
+      a • (cpSuccessorLowerTruncateVector n w).1 := by
+  funext i
+  exact congrFun hvw i.castSucc
+
+/-- Truncate a lower-patch representative and pass to `CP n`. -/
+def cpSuccessorLowerTruncationOnVectors (n : ℕ)
+    (v : CPSuccessorLowerVectors n) : CP n :=
+  quotientMap ℂ n (cpSuccessorLowerTruncateVector n v)
+
+theorem cpSuccessorLowerTruncationOnVectors_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerTruncationOnVectors n) :=
+  (continuous_quotientMap ℂ n).comp
+    (cpSuccessorLowerTruncateVector_continuous n)
+
+/-- The projective truncation map from the lower successor patch to `CP n`. -/
+noncomputable def cpSuccessorLowerRetraction (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) : CP n :=
+  cpSuccessorLowerTruncationOnVectors n
+    (cpSuccessorLowerRepresentative n p)
+
+/-- Pulling the projective truncation back to any lower-patch representative
+recovers its literal truncated projective class. -/
+theorem cpSuccessorLowerRetraction_quotient (n : ℕ)
+    (v : CPSuccessorLowerVectors n) :
+    cpSuccessorLowerRetraction n (cpSuccessorLowerQuotientMap n v) =
+      cpSuccessorLowerTruncationOnVectors n v := by
+  let w := cpSuccessorLowerRepresentative n (cpSuccessorLowerQuotientMap n v)
+  have hq : quotientMap ℂ (n + 1) w.1 = quotientMap ℂ (n + 1) v.1 := by
+    exact congrArg Subtype.val
+      (cpSuccessorLowerRepresentative_quotient n
+        (cpSuccessorLowerQuotientMap n v))
+  obtain ⟨a, ha⟩ :=
+    (Projectivization.mk_eq_mk_iff ℂ w.1.1 v.1.1 w.1.2 v.1.2).mp hq
+  change quotientMap ℂ n (cpSuccessorLowerTruncateVector n w) =
+    quotientMap ℂ n (cpSuccessorLowerTruncateVector n v)
+  apply (Projectivization.mk_eq_mk_iff ℂ _ _ _ _).mpr
+  refine ⟨a, ?_⟩
+  exact (cpSuccessorLowerTruncateVector_smul n w v a ha.symm).symm
+
+theorem cpSuccessorLowerRetraction_continuous (n : ℕ) :
+    Continuous (cpSuccessorLowerRetraction n) := by
+  apply (cpSuccessorLowerQuotientMap_isOpenQuotient n).isQuotientMap.continuous_iff.mpr
+  have hcomp : cpSuccessorLowerRetraction n ∘ cpSuccessorLowerQuotientMap n =
+      cpSuccessorLowerTruncationOnVectors n := by
+    funext v
+    exact cpSuccessorLowerRetraction_quotient n v
+  rw [hcomp]
+  exact cpSuccessorLowerTruncationOnVectors_continuous n
+
+@[simp] theorem cpSuccessorLowerTruncate_include (n : ℕ)
+    (v : NonzeroVectors ℂ n) :
+    cpSuccessorLowerTruncateVector n
+        ⟨cpSuccessorZeroLastIncludeVector n v,
+          cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩ = v := by
+  apply Subtype.ext
+  funext i
+  simp [cpSuccessorLowerTruncateVector, cpSuccessorZeroLastIncludeVector]
+
+/-- Projective truncation is a left inverse to the zero-last-coordinate
+inclusion. -/
+@[simp] theorem cpSuccessorLowerRetraction_inclusion (n : ℕ) (x : CP n) :
+    cpSuccessorLowerRetraction n (cpSuccessorZeroLastInclusion n x) = x := by
+  obtain ⟨v, rfl⟩ := surjective_quotientMap ℂ n x
+  rw [cpSuccessorZeroLastInclusion_quotient]
+  change cpSuccessorLowerRetraction n
+      (cpSuccessorLowerQuotientMap n
+        ⟨cpSuccessorZeroLastIncludeVector n v,
+          cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩) =
+    quotientMap ℂ n v
+  rw [cpSuccessorLowerRetraction_quotient]
+  change quotientMap ℂ n
+      (cpSuccessorLowerTruncateVector n
+        ⟨cpSuccessorZeroLastIncludeVector n v,
+          cpSuccessorZeroLastIncludeVector_mem_lowerPatch n v⟩) = _
+  rw [cpSuccessorLowerTruncate_include]
+
+/-- The time-one endpoint is literally inclusion after the descended
+truncation retraction. -/
+theorem cpSuccessorLowerPatchHomotopy_one_eq_inclusion_retraction (n : ℕ)
+    (p : {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}) :
+    cpSuccessorLowerPatchHomotopy n (p, ⟨1, by simp⟩) =
+      cpSuccessorZeroLastInclusion n (cpSuccessorLowerRetraction n p) := by
+  rw [cpSuccessorLowerPatchHomotopy_one_eq_inclusion]
+  rfl
+
+def cpSuccessorLowerRetractionContinuousMap (n : ℕ) :
+    C({p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n}, CP n) :=
+  ⟨cpSuccessorLowerRetraction n, cpSuccessorLowerRetraction_continuous n⟩
+
+/-- The descended quotient homotopy, bundled in Mathlib's time-first
+homotopy interface. -/
+noncomputable def cpSuccessorLowerPatchDeformationHomotopy (n : ℕ) :
+    ContinuousMap.Homotopy
+      (ContinuousMap.id {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n})
+      ((cpSuccessorZeroLastInclusion n).comp
+        (cpSuccessorLowerRetractionContinuousMap n)) where
+  toFun z := cpSuccessorLowerPatchHomotopy n (z.2, z.1)
+  continuous_toFun := (cpSuccessorLowerPatchHomotopy_continuous n).comp
+    (continuous_snd.prodMk continuous_fst)
+  map_zero_left p := cpSuccessorLowerPatchHomotopy_zero n p
+  map_one_left p :=
+    cpSuccessorLowerPatchHomotopy_one_eq_inclusion_retraction n p
+
+/-- The lower affine-filtration patch is homotopy equivalent to `CP n`,
+with the concrete zero-last inclusion and truncation retraction. -/
+noncomputable def t99J05_cp_successor_lowerPatch_deformationRetract (n : ℕ) :
+    CP n ≃ₕ {p : CP (n + 1) // p ∈ cpSuccessorLowerPatch n} where
+  toFun := cpSuccessorZeroLastInclusion n
+  invFun := cpSuccessorLowerRetractionContinuousMap n
+  left_inv := by
+    have h : (cpSuccessorLowerRetractionContinuousMap n).comp
+        (cpSuccessorZeroLastInclusion n) = ContinuousMap.id (CP n) := by
+      apply ContinuousMap.ext
+      exact cpSuccessorLowerRetraction_inclusion n
+    rw [h]
+  right_inv := ⟨(cpSuccessorLowerPatchDeformationHomotopy n).symm⟩
 
 /-- In the last affine chart, the overlap with the lower filtration patch is
 exactly the punctured affine coordinate space. -/
@@ -439,6 +989,519 @@ theorem t99J05_cp_successor_overlap_subsingleton_of_unitSphere
     (t99J05_cp_successor_overlap_homologyIso_unitSphere n k).hom).1
   exact Subsingleton.elim _ _
 
+/-- A top-degree computation for the unit-sphere model transports back to the
+exact successor overlap.  This isolates the remaining sphere-model comparison
+from the Mayer--Vietoris argument. -/
+noncomputable def t99J05_cp_successor_overlap_topIso_of_unitSphere
+    (n : ℕ)
+    (e : Homology
+          (Metric.sphere
+            (0 : AffineCoordinates (Fin.last (n + 1))) 1) (2 * n + 1) ≅
+        ModuleCat.of ℚ ℚ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) (2 * n + 1) ≅ ModuleCat.of ℚ ℚ :=
+  t99J05_cp_successor_overlap_homologyIso_unitSphere n (2 * n + 1) ≪≫ e
+
+/-- A finite-dimensional real-linear coordinate equivalence from the complex
+affine chart to the Euclidean model used by the sphere-homology computation. -/
+noncomputable def t99J05_affineCoordinatesEuclideanEquiv (n : ℕ) :
+    AffineCoordinates (Fin.last (n + 1)) ≃L[ℝ]
+      EuclideanSpace ℝ (Fin (2 * n + 2)) :=
+  ContinuousLinearEquiv.ofFinrankEq (by
+    simp [AffineCoordinates, Module.finrank_pi_fintype,
+      Fintype.card_subtype_compl]
+    omega)
+
+/-- The coordinate equivalence restricts to the complements of the origins. -/
+noncomputable def t99J05_puncturedAffineCoordinatesEuclideanHomeomorph (n : ℕ) :
+    ({z : AffineCoordinates (Fin.last (n + 1)) | z ≠ 0} :
+      Set (AffineCoordinates (Fin.last (n + 1)))) ≃ₜ
+    ({x : EuclideanSpace ℝ (Fin (2 * n + 2)) | x ≠ 0} :
+      Set (EuclideanSpace ℝ (Fin (2 * n + 2)))) where
+  toFun z := ⟨t99J05_affineCoordinatesEuclideanEquiv n z.1, by
+    intro hz
+    apply z.2
+    exact (t99J05_affineCoordinatesEuclideanEquiv n).injective (by simpa using hz)⟩
+  invFun x := ⟨(t99J05_affineCoordinatesEuclideanEquiv n).symm x.1, by
+    intro hz
+    apply x.2
+    exact (t99J05_affineCoordinatesEuclideanEquiv n).symm.injective (by simpa using hz)⟩
+  left_inv z := by ext; simp
+  right_inv x := by ext; simp
+  continuous_toFun :=
+    (t99J05_affineCoordinatesEuclideanEquiv n).continuous.comp
+      continuous_subtype_val |>.subtype_mk _
+  continuous_invFun :=
+    (t99J05_affineCoordinatesEuclideanEquiv n).symm.continuous.comp
+      continuous_subtype_val |>.subtype_mk _
+
+/-- The affine unit sphere is homotopy equivalent to the standard Euclidean
+sphere of real dimension `2n+1`. -/
+noncomputable def t99J05_affineUnitSphereHomotopyEquivEuclidean (n : ℕ) :
+    Metric.sphere (0 : AffineCoordinates (Fin.last (n + 1))) 1 ≃ₕ
+      T02A06.euclideanUnitSphere (2 * n + 2) :=
+  (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+      (AffineCoordinates (Fin.last (n + 1)))).trans
+    ((t99J05_puncturedAffineCoordinatesEuclideanHomeomorph n).toHomotopyEquiv.trans
+      (ConstructionTargets.PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace
+        (EuclideanSpace ℝ (Fin (2 * n + 2)))).symm)
+
+/-- Rational top homology of the exact affine unit-sphere model is `ℚ`. -/
+noncomputable def t99J05_affineUnitSphere_topHomologyIso (n : ℕ) :
+    Homology
+        (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) (2 * n + 1) ≅
+      ModuleCat.of ℚ ℚ :=
+  ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      (t99J05_affineUnitSphereHomotopyEquivEuclidean n) (2 * n + 1) ≪≫
+    ConstructionTargets.CoefficientFirstReflection.topIso ℚ (2 * n)
+
+/-- Rational first homology of every Euclidean unit sphere of dimension at
+least two vanishes; this is the endpoint for the sphere-shift induction. -/
+theorem t99J05_euclideanUnitSphere_H1_isZero
+    (m : ℕ) (hm : 2 < m) :
+    IsZero (Homology (T02A06.euclideanUnitSphere m) 1) := by
+  have hd : m - 1 + 1 = m := Nat.sub_add_cancel (by omega)
+  letI : ContractibleSpace (T02A06.euclideanClosedDisk (m - 1)) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : PathConnectedSpace (T02A06.euclideanUnitSphere (m - 1)) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by
+        rw [← Module.finrank_eq_rank']
+        simp
+        omega) 0 (by norm_num))
+  letI : PathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet (m - 1)) :=
+    (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph (m - 1)).symm.surjective.pathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph (m - 1)).symm.continuous
+  have hz :=
+    (ConstructionTargets.CoefficientSphereShift.sphereH1KernelIso ℚ (m - 1)).isZero_iff.mpr
+      (ConstructionTargets.CoefficientConnectedH0Map.inclusion_kernel_zero ℚ _)
+  change IsZero
+    (Homology (T02A06.euclideanUnitSphere (m - 1 + 1)) 1) at hz
+  rw [hd] at hz
+  exact hz
+
+/-- Rational homology vanishes in every positive degree strictly below the
+top dimension of a Euclidean unit sphere. -/
+theorem t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
+    (m k : ℕ) (hk : 0 < k) (hkm : k < m - 1) :
+    IsZero (Homology (T02A06.euclideanUnitSphere m) k) := by
+  induction m generalizing k with
+  | zero => omega
+  | succ m ih =>
+      cases k with
+      | zero => omega
+      | succ k =>
+          cases k with
+          | zero =>
+              exact t99J05_euclideanUnitSphere_H1_isZero (m + 1) (by omega)
+          | succ k =>
+              have hz :
+                  IsZero
+                    (Homology (T02A06.euclideanUnitSphere m) (k + 1)) :=
+                ih (k + 1) (by omega) (by omega)
+              have e :
+                  Homology (T02A06.euclideanUnitSphere (m + 1)) (k + 2) ≅
+                    Homology (T02A06.euclideanUnitSphere m) (k + 1) := by
+                simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+                  ConstructionTargets.CoefficientSphereShift.sphereShift
+                    ℚ m (k + 1) (by omega)
+              exact hz.of_iso e
+
+/-- Rational homology vanishes strictly above the top dimension of every
+nonempty Euclidean unit sphere. -/
+theorem t99J05_euclideanUnitSphere_homology_isZero_of_gt
+    (m k : ℕ) (hk : m < k) :
+    IsZero (Homology (T02A06.euclideanUnitSphere (m + 1)) k) := by
+  induction m generalizing k with
+  | zero =>
+      change IsZero
+        (ConstructionTargets.SphereZeroCoefficients.H ℚ k)
+      exact ConstructionTargets.SphereZeroCoefficients.positive_vanishing
+        ℚ k (by omega)
+  | succ m ih =>
+      have hk0 : k - 1 ≠ 0 := by omega
+      have hdeg : k - 1 + 1 = k := by omega
+      have e :
+          Homology (T02A06.euclideanUnitSphere (m + 2)) k ≅
+            Homology (T02A06.euclideanUnitSphere (m + 1)) (k - 1) := by
+        simpa only [Nat.add_assoc, hdeg] using
+          ConstructionTargets.CoefficientSphereShift.sphereShift
+            ℚ (m + 1) (k - 1) hk0
+      exact (ih (k - 1) (by omega)).of_iso e
+
+/-- Above its top degree, the exact affine unit-sphere model also has zero
+rational homology. -/
+theorem t99J05_affineUnitSphere_homology_isZero_of_gt
+    (n k : ℕ) (hk : 2 * n + 1 < k) :
+    IsZero
+      (Homology
+        (Metric.sphere
+          (0 : AffineCoordinates (Fin.last (n + 1))) 1) k) := by
+  have hz :
+      IsZero
+        (Homology (T02A06.euclideanUnitSphere (2 * n + 1 + 1)) k) :=
+    t99J05_euclideanUnitSphere_homology_isZero_of_gt (2 * n + 1) k hk
+  exact hz.of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ
+      (t99J05_affineUnitSphereHomotopyEquivEuclidean n) k)
+
+/-- The successor overlap inherits the same above-top vanishing from its
+affine unit-sphere model. -/
+theorem t99J05_cp_successor_overlap_homology_isZero_of_gt
+    (n k : ℕ) (hk : 2 * n + 1 < k) :
+    IsZero
+      (Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) k) := by
+  exact (t99J05_affineUnitSphere_homology_isZero_of_gt n k hk).of_iso
+    (t99J05_cp_successor_overlap_homologyIso_unitSphere n k)
+
+/-- Consequently, the successor overlap has one-dimensional rational homology
+in its unique positive top degree. -/
+noncomputable def t99J05_cp_successor_overlap_rational_topHomology (n : ℕ) :
+    Homology
+        ({p : CP (n + 1) |
+          p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} :
+          Set (CP (n + 1))) (2 * n + 1) ≅ ModuleCat.of ℚ ℚ :=
+  t99J05_cp_successor_overlap_topIso_of_unitSphere n
+    (t99J05_affineUnitSphere_topHomologyIso n)
+
+/-- The rational chain-level Mayer--Vietoris sequence for the two literal
+projective patches is short exact before transport from small simplices. -/
+theorem t99J05_cp_successor_subcomplexMayerVietoris_shortExact (n : ℕ) :
+    (ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange
+        (cpSuccessorLowerPatch n))
+      (ConstructionTargets.SingularExcision.ambientSubspaceRange
+        (cpSuccessorTopPatch n))).ShortExact := by
+  exact ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortExact ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n))
+
+/-- The specialized chain sequence, named so its three homology exactness
+positions can be transported to the literal patch homology groups. -/
+noncomputable def t99J05_cp_successor_mayerVietorisShortComplex (n : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n))
+
+/-- Exactness at the direct sum of the two patch homology groups in the
+specialized projective Mayer--Vietoris sequence. -/
+theorem t99J05_cp_successor_mayerVietoris_exact_pieces (n k : ℕ) :
+    (CategoryTheory.ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).f k)
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).g k)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp]
+        rw [(t99J05_cp_successor_mayerVietorisShortComplex n).zero,
+          HomologicalComplex.homologyMap_zero])).Exact := by
+  exact ConstructionTargets.CoefficientSubcomplexMayerVietoris.exact_pieces ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
+/-- The connecting map of the specialized successor sequence, retaining the
+degree shift from ambient degree `k+1` to overlap degree `k`. -/
+noncomputable def t99J05_cp_successor_mayerVietorisConnecting (n k : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.connecting ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
+/-- Exactness at the overlap homology term in the specialized projective
+Mayer--Vietoris sequence. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_exact_overlap (n k : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.exact_intersection ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
+/-- Exactness at ambient homology in degree `k + 1`, between the two-patch
+map and the degree-lowering connecting morphism. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_exact_ambient (n k : ℕ) :=
+  ConstructionTargets.CoefficientSubcomplexMayerVietoris.exact_union ℚ
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorLowerPatch n))
+    (ConstructionTargets.SingularExcision.ambientSubspaceRange
+      (cpSuccessorTopPatch n)) k
+
+/-- Rational chains on an ambient subspace range are canonically the literal
+singular chains of that subspace. -/
+noncomputable def t99J05_ambientSubspaceRangeChainsIso
+    {X : Type} [TopologicalSpace X] (A : Set X) :
+    (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange A : SSet) ≅
+      (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (TopCat.toSSet.obj (TopCat.of A)) :=
+  ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso ℚ A
+
+/-- Homology-level rational transport from an ambient range presentation to
+the corresponding literal topological subspace. -/
+noncomputable def t99J05_ambientSubspaceRangeHomologyIso
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange A : SSet)).homology k ≅
+      Homology A k :=
+  ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ A k
+
+/-- The range-to-literal homology isomorphism commutes with inclusion into
+ambient singular homology. -/
+theorem t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
+    {X : Type} [TopologicalSpace X] (A : Set X) (k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap
+          (t99J05_ambientSubspaceRangeChainsIso A).hom k)
+        (HomologicalComplex.homologyMap
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ A) k) =
+      HomologicalComplex.homologyMap
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+          (ConstructionTargets.SingularExcision.ambientSubspaceRange A).ι) k := by
+  simpa only [HomologicalComplex.homologyMap_comp] using
+    congrArg (fun f => HomologicalComplex.homologyMap f k)
+      (ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility.ambientSubspaceRangeChainsIso_hom_comp_subspaceMap
+        ℚ A)
+
+/-- Range-to-literal homology transport is natural for every inclusion of
+literal subspaces. -/
+theorem t99J05_ambientSubspaceRangeHomologyIso_naturality
+    {X : Type} [TopologicalSpace X] {A B : Set X} (h : A ⊆ B) (k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+      (t99J05_ambientSubspaceRangeHomologyIso A k).hom
+        (HomologicalComplex.homologyMap
+          ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+            (TopCat.toSSet.map
+              (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) k) =
+      CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap
+          ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+            (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h)) k)
+        (t99J05_ambientSubspaceRangeHomologyIso B k).hom := by
+  have hchain :
+      CategoryTheory.CategoryStruct.comp
+        (t99J05_ambientSubspaceRangeChainsIso A).hom
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+          (TopCat.toSSet.map
+            (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion h))) =
+      CategoryTheory.CategoryStruct.comp
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+          (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion h))
+        (t99J05_ambientSubspaceRangeChainsIso B).hom := by
+    change
+      CategoryTheory.CategoryStruct.comp
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _)
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _) =
+      CategoryTheory.CategoryStruct.comp
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _)
+        ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map _)
+    simpa only [← CategoryTheory.Functor.map_comp] using congrArg
+      (ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+      (ConstructionTargets.SingularExcision.ambientSubspaceRangeInclusion_square h)
+  simpa only [HomologicalComplex.homologyMap_comp] using
+    congrArg (fun f => HomologicalComplex.homologyMap f k) hchain
+
+#print axioms t99J05_ambientSubspaceRangeHomologyIso_naturality
+
+/-- Naturality specialized to the overlap inclusion into the lower successor
+patch. -/
+def t99J05_cp_successor_mayerVietoris_overlap_lower_naturality
+    (n k : ℕ) :=
+  t99J05_ambientSubspaceRangeHomologyIso_naturality
+    (A := cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n)
+    (B := cpSuccessorLowerPatch n) Set.inter_subset_left k
+
+#print axioms t99J05_cp_successor_mayerVietoris_overlap_lower_naturality
+
+/-- Naturality specialized to the overlap inclusion into the top successor
+patch. -/
+def t99J05_cp_successor_mayerVietoris_overlap_top_naturality
+    (n k : ℕ) :=
+  t99J05_ambientSubspaceRangeHomologyIso_naturality
+    (A := cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n)
+    (B := cpSuccessorTopPatch n) Set.inter_subset_right k
+
+#print axioms t99J05_cp_successor_mayerVietoris_overlap_top_naturality
+
+/-- The canonical rational-module comparison from homology of a binary
+biproduct of chain complexes to the biproduct of their homologies. -/
+noncomputable def t99J05_rationalHomologyBiprodIso
+    (K L : ChainComplex (ModuleCat ℚ) ℕ) (k : ℕ) :
+    (K ⊞ L).homology k ≅ K.homology k ⊞ L.homology k := by
+  let F := HomologicalComplex.homologyFunctor (ModuleCat ℚ)
+    (ComplexShape.down ℕ) k
+  letI : F.Additive := inferInstance
+  letI : PreservesFiniteBiproducts F :=
+    CategoryTheory.Functor.preservesFiniteBiproductsOfAdditive F
+  letI : PreservesBinaryBiproducts F :=
+    preservesBinaryBiproducts_of_preservesBiproducts F
+  exact F.mapBiprod K L
+
+/-- Its hom is the lift of the two canonical homology projections. -/
+theorem t99J05_rationalHomologyBiprodIso_hom
+    (K L : ChainComplex (ModuleCat ℚ) ℕ) (k : ℕ) :
+    (t99J05_rationalHomologyBiprodIso K L k).hom =
+      biprod.lift
+        (HomologicalComplex.homologyMap (biprod.fst : K ⊞ L ⟶ K) k)
+        (HomologicalComplex.homologyMap (biprod.snd : K ⊞ L ⟶ L) k) := by
+  rfl
+
+#print axioms t99J05_rationalHomologyBiprodIso_hom
+
+/-- The literal overlap-to-patches arrow, with the Mayer--Vietoris sign on
+the top-patch component. -/
+noncomputable def t99J05_cp_successor_literalOverlapToPieces (n k : ℕ) :
+    Homology ({p : CP (n + 1) |
+      p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1))) k ⟶
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k) :=
+  biprod.lift
+    (HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_left : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorLowerPatch n)))) k)
+    (-HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_right : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorTopPatch n)))) k)
+
+/-- The first component of the literal successor overlap map is the lower
+patch inclusion on homology. -/
+theorem t99J05_cp_successor_literalOverlapToPieces_fst (n k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+      (t99J05_cp_successor_literalOverlapToPieces n k) biprod.fst =
+    HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_left : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorLowerPatch n)))) k := by
+  simp [t99J05_cp_successor_literalOverlapToPieces]
+
+/-- The second component of the literal successor overlap map is the negated
+top-patch inclusion on homology. -/
+theorem t99J05_cp_successor_literalOverlapToPieces_snd (n k : ℕ) :
+    CategoryTheory.CategoryStruct.comp
+      (t99J05_cp_successor_literalOverlapToPieces n k) biprod.snd =
+    -HomologicalComplex.homologyMap
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).map
+        (TopCat.toSSet.map
+          (ConstructionTargets.SingularExcision.topologicalSubspaceInclusion
+            (Set.inter_subset_right : cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n ⊆
+              cpSuccessorTopPatch n)))) k := by
+  simp [t99J05_cp_successor_literalOverlapToPieces]
+
+#print axioms t99J05_cp_successor_literalOverlapToPieces_fst
+#print axioms t99J05_cp_successor_literalOverlapToPieces_snd
+
+/-- The three range-presented terms in the successor Mayer--Vietoris sequence
+transport to the literal overlap and two patches. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
+    (n k : ℕ) :=
+  (t99J05_ambientSubspaceRangeHomologyIso
+      (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k,
+    t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k,
+    t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k)
+
+/-- The first Mayer--Vietoris homology arrow transported from ambient-range
+chains to the literal overlap and patch homology groups. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_f_transport
+    (n k : ℕ) :
+    Homology ({p : CP (n + 1) |
+      p ∈ cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n} : Set (CP (n + 1))) k ⟶
+      (Homology ({p : CP (n + 1) | p ∈ cpSuccessorLowerPatch n} : Set (CP (n + 1))) k ⊞
+        Homology ({p : CP (n + 1) | p ∈ cpSuccessorTopPatch n} : Set (CP (n + 1))) k) := by
+  dsimp [t99J05_cp_successor_mayerVietorisShortComplex,
+    ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex]
+  exact CategoryTheory.CategoryStruct.comp
+    (t99J05_ambientSubspaceRangeHomologyIso
+      (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k).inv
+    (CategoryTheory.CategoryStruct.comp
+      (ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+        ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).hom
+      (CategoryTheory.CategoryStruct.comp
+        (HomologicalComplex.homologyMap
+          (t99J05_cp_successor_mayerVietorisShortComplex n).f k)
+        (CategoryTheory.CategoryStruct.comp
+          (t99J05_rationalHomologyBiprodIso
+            ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+              (ConstructionTargets.SingularExcision.ambientSubspaceRange
+                (cpSuccessorLowerPatch n) : SSet))
+            ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+              (ConstructionTargets.SingularExcision.ambientSubspaceRange
+                (cpSuccessorTopPatch n) : SSet)) k).hom
+          (biprod.map
+            (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k).hom
+            (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k).hom))))
+
+#print axioms t99J05_cp_successor_mayerVietoris_f_transport
+
+/-- The homology Mayer--Vietoris segment at the two pieces, transported to the
+literal overlap and literal patch homology groups.  The ambient union term is
+left in its original presentation because exactness is asserted at the middle
+object. -/
+noncomputable def t99J05_cp_successor_mayerVietoris_piecesTransport
+    (n k : ℕ) : CategoryTheory.ShortComplex (ModuleCat ℚ) :=
+  ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex
+    (CategoryTheory.ShortComplex.mk
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).f k)
+      (HomologicalComplex.homologyMap
+        (t99J05_cp_successor_mayerVietorisShortComplex n).g k)
+      (by
+        rw [← HomologicalComplex.homologyMap_comp]
+        rw [(t99J05_cp_successor_mayerVietorisShortComplex n).zero,
+          HomologicalComplex.homologyMap_zero]))
+    ((ConstructionTargets.CoefficientIntersectionRangeComparison.intersectionHomologyIso
+      ℚ (cpSuccessorLowerPatch n) (cpSuccessorTopPatch n) k).symm.trans
+        (t99J05_ambientSubspaceRangeHomologyIso
+          (cpSuccessorLowerPatch n ∩ cpSuccessorTopPatch n) k))
+    ((t99J05_rationalHomologyBiprodIso
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorLowerPatch n) : SSet))
+      ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
+        (ConstructionTargets.SingularExcision.ambientSubspaceRange
+          (cpSuccessorTopPatch n) : SSet)) k).trans
+      (biprod.mapIso
+        (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k)
+        (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k)))
+    (CategoryTheory.Iso.refl _)
+
+/-- Exactness at the literal biproduct of the two successor patches. -/
+theorem t99J05_cp_successor_mayerVietoris_exact_pieces_transport (n k : ℕ) :
+    (t99J05_cp_successor_mayerVietoris_piecesTransport n k).Exact := by
+  apply ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex_exact
+  exact t99J05_cp_successor_mayerVietoris_exact_pieces n k
+
+#print axioms t99J05_cp_successor_mayerVietoris_exact_pieces_transport
+
+/-- The separately named transported arrow is exactly the first arrow of the
+transported short complex whose exactness was established above. -/
+theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
+    (n k : ℕ) :
+    t99J05_cp_successor_mayerVietoris_f_transport n k =
+      (t99J05_cp_successor_mayerVietoris_piecesTransport n k).f := by
+  rfl
+
+#print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f
+
 /-- Install the finite-dimensional instance recorded by the homology data. -/
 theorem ComplexProjectiveRationalHomologyData.finiteDimensionalAt
     {n : ℕ} (h : ComplexProjectiveRationalHomologyData n) (k : ℕ) :
@@ -484,6 +1547,35 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms cpSuccessorTopPatch_isOpen
 #print axioms cpSuccessorLowerPatch_isOpen
 #print axioms cpSuccessor_openCover
+#print axioms cpSuccessorZeroLastVector
+#print axioms cpSuccessorZeroLastVector_last
+#print axioms cpSuccessorZeroLastVector_castSucc
+#print axioms cpSuccessorLowerVectorHomotopy_continuous
+#print axioms cpSuccessorLowerVectorHomotopy_mem_lowerPatch
+#print axioms cpSuccessorLowerVectorHomotopyInPatch_continuous
+#print axioms cpSuccessorLowerQuotientMap_isOpenQuotient
+#print axioms cpSuccessorLowerPatchHomotopy_quotient
+#print axioms cpSuccessorLowerPatchHomotopy_continuous
+#print axioms cpSuccessorLowerPatchHomotopy_zero
+#print axioms cpSuccessorLowerPatchHomotopy_one
+#print axioms cpSuccessorZeroLastIncludeVector_continuous
+#print axioms cpSuccessorZeroLastIncludeVector_mem_lowerPatch
+#print axioms cpSuccessorZeroLastIncludeVectorInPatch_continuous
+#print axioms cpSuccessorZeroLastInclusion
+#print axioms cpSuccessorZeroLastInclusion_quotient
+#print axioms cpSuccessorLowerTruncateVector
+#print axioms cpSuccessorZeroLastInclude_truncate
+#print axioms cpSuccessorLowerPatchHomotopy_one_eq_inclusion
+#print axioms cpSuccessorLowerTruncateVector_continuous
+#print axioms cpSuccessorLowerTruncateVector_smul
+#print axioms cpSuccessorLowerTruncationOnVectors_continuous
+#print axioms cpSuccessorLowerRetraction_quotient
+#print axioms cpSuccessorLowerRetraction_continuous
+#print axioms cpSuccessorLowerTruncate_include
+#print axioms cpSuccessorLowerRetraction_inclusion
+#print axioms cpSuccessorLowerPatchHomotopy_one_eq_inclusion_retraction
+#print axioms cpSuccessorLowerPatchDeformationHomotopy
+#print axioms t99J05_cp_successor_lowerPatch_deformationRetract
 #print axioms cpSuccessor_overlap_topCoordinates_ne_zero
 #print axioms t99J05_affineChartConstruction_all
 #print axioms t99J05_cp_successor_overlap_homeomorph_puncturedAffine
@@ -494,6 +1586,27 @@ noncomputable def complexProjectiveRationalHomologyData_of_zero_of_step
 #print axioms t99J05_cp_successor_overlap_rational_H0
 #print axioms t99J05_cp_successor_overlap_finiteDimensional_of_unitSphere
 #print axioms t99J05_cp_successor_overlap_subsingleton_of_unitSphere
+#print axioms t99J05_cp_successor_overlap_topIso_of_unitSphere
+#print axioms t99J05_affineCoordinatesEuclideanEquiv
+#print axioms t99J05_puncturedAffineCoordinatesEuclideanHomeomorph
+#print axioms t99J05_affineUnitSphereHomotopyEquivEuclidean
+#print axioms t99J05_affineUnitSphere_topHomologyIso
+#print axioms t99J05_euclideanUnitSphere_H1_isZero
+#print axioms t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt
+#print axioms t99J05_euclideanUnitSphere_homology_isZero_of_gt
+#print axioms t99J05_affineUnitSphere_homology_isZero_of_gt
+#print axioms t99J05_cp_successor_overlap_homology_isZero_of_gt
+#print axioms t99J05_cp_successor_overlap_rational_topHomology
+#print axioms t99J05_cp_successor_subcomplexMayerVietoris_shortExact
+#print axioms t99J05_cp_successor_mayerVietorisShortComplex
+#print axioms t99J05_cp_successor_mayerVietoris_exact_pieces
+#print axioms t99J05_cp_successor_mayerVietorisConnecting
+#print axioms t99J05_cp_successor_mayerVietoris_exact_overlap
+#print axioms t99J05_cp_successor_mayerVietoris_exact_ambient
+#print axioms t99J05_ambientSubspaceRangeChainsIso
+#print axioms t99J05_ambientSubspaceRangeHomologyIso
+#print axioms t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap
+#print axioms t99J05_cp_successor_mayerVietoris_rangeHomologyIsos
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_two_mul_lt
 #print axioms ComplexProjectiveRationalHomologyData.subsingleton_of_odd
 #print axioms complexProjectiveRationalHomologyData_of_zero_of_step

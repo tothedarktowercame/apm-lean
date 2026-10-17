@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM a99J09: The Laplace transform of an Lᵖ function is holomorphic on the right half-plane
+# APM a99J09: The Laplace transform of an $L^p$ function is holomorphic on the right half-plane
 
 ## Why It's Hard
 

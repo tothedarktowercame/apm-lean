@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM m00A04: Minimizing ½‖v‖²−f(v) proves Riesz representation and solves −Δu+u=F weakly
+# APM m00A04: Minimizing $\tfrac12\|v\|^{2}-f(v)$ proves Riesz representation and solves $-\Delta u+u=F$ weakly
 
 ## Why It's Hard
 

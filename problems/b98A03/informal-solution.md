@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b98A03: The conductor controls prime splitting — minimal splitting forces P = Q₁∩Q₂ = I
+# APM b98A03: The conductor controls prime splitting — minimal splitting forces $P = Q_{1}\cap Q_{2} = I$
 
 ## Why It's Hard
 

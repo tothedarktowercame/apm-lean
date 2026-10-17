@@ -1,58 +1,56 @@
-
-
-# APM a96A01: Lp quasi-norms for 0 < p ≤ 1, monotonicity, and the geometric mean limit
+# APM a96A01: Lp quasi-norms for $0 < p \leq 1$, monotonicity, and the geometric mean limit
 
 ## 1. Informal proof
 
-**Why it's hard.** For 0 < p < 1, ||·||_p is not a norm (fails triangle inequality), and the behaviour as p → 0⁺ is subtle — the "L⁰ norm" is not a standard object. Showing ||f||_p is decreasing in p and computing its limit requires tools from convexity applied to the function t ↦ t^p, which is *concave* for p < 1 (opposite to the p > 1 case).
+**Why it's hard.** For $0 < p < 1$, $||\cdot||_p$ is not a norm (fails triangle inequality), and the behaviour as $p \to 0^{+}$ is subtle — the "$L^{0}$ norm" is not a standard object. Showing $||f||_p$ is decreasing in $p$ and computing its limit requires tools from convexity applied to the function $t \mapsto t^p$, which is *concave* for $p < 1$ (opposite to the $p > 1$ case).
 
-**The key insight.** (a) Jensen's inequality for the concave function t ↦ t^{p/q} (with 0 < p/q < 1): (∫|f|^q)^{p/q} ≥ ∫|f|^p on a probability space, giving ||f||_p ≤ ||f||_q. (b)-(c) As p → 0⁺, (1/p)log∫|f|^p → ∫log|f| by L'Hôpital or differentiation under the integral, so ||f||_p = exp((1/p)log∫|f|^p) → exp(∫log|f|), the geometric mean.
+**The key insight.** (a) Jensen's inequality for the concave function $t \mapsto t^{p/q}$ (with $0 < p/q < 1$): $(\int|f|^q)^{p/q} \geq \int|f|^p$ on a probability space, giving $||f||_p \leq ||f||_q$. (b)-(c) As $p \to 0^{+}$, $(1/p)\log\int|f|^p \to \int \log|f|$ by L'Hôpital or differentiation under the integral, so $||f||_p = \exp((1/p)\log\int|f|^p) \to \exp(\int \log|f|)$, the geometric mean.
 
 **Proof.**
 
-**(a) ||f||_p ≤ ||f||_q for 0 < p < q ≤ 1.**
+**(a) $||f||_p \leq ||f||_q$ for $0 < p < q \leq 1$.**
 
-Let r = q/p > 1 and s = r/(r-1) (conjugate exponent). Apply Hölder's inequality with exponents r and s to the function |f|^p and the constant 1 on [0,1]:
+Let $r = q/p > 1$ and $s = r/(r-1)$ (conjugate exponent). Apply Hölder's inequality with exponents $r$ and $s$ to the function $|f|^p$ and the constant 1 on $[0,1]$:
 
-∫|f|^p = ∫|f|^p · 1 ≤ (∫(|f|^p)^r)^{1/r} · (∫1^s)^{1/s} = (∫|f|^q)^{p/q} · 1.
+$\int|f|^p = \int|f|^p \cdot 1 \leq (\int(|f|^p)^r)^{1/r} \cdot (\int 1^s)^{1/s} = (\int|f|^q)^{p/q} \cdot 1$.
 
-Taking (1/p)-th power of both sides: (∫|f|^p)^{1/p} ≤ (∫|f|^q)^{1/q}, i.e., ||f||_p ≤ ||f||_q. ✓
+Taking $(1/p)$-th power of both sides: $(\int|f|^p)^{1/p} \leq (\int|f|^q)^{1/q}$, i.e., $||f||_p \leq ||f||_q$. ✓
 
-Since f ∈ L¹ and q ≤ 1: ||f||_q ≤ ||f||₁ < ∞, so ||f||_p < ∞ for all p ∈ (0,1].
+Since $f \in L^{1}$ and $q \leq 1$: $||f||_q \leq ||f||_{1} < \infty$, so $||f||_p < \infty$ for all $p \in (0,1]$.
 
-The function p ↦ ||f||_p is decreasing, nonneg, and bounded below by 0, so L = lim_{p→0⁺} ||f||_p exists. ✓
+The function $p \mapsto ||f||_p$ is decreasing, nonneg, and bounded below by 0, so $L = \lim_{p\to 0^{+}} ||f||_p$ exists. ✓
 
-**(b) L > 0 implies |f| > 0 a.e.**
+**(b) $L > 0$ implies $|f| > 0$ a.e.**
 
-Contrapositive: suppose E = {x : f(x) = 0} has m(E) > 0. Then:
+Contrapositive: suppose $E = \{x : f(x) = 0\}$ has $m(E) > 0$. Then:
 
-∫|f|^p = ∫_{E^c} |f|^p.
+$\int|f|^p = \int_{E^c} |f|^p$.
 
-Using the hint t^p ≤ 1 + t for t ≥ 0, p ∈ (0,1]: |f(x)|^p ≤ 1 + |f(x)|. So:
+Using the hint $t^p \leq 1 + t$ for $t \geq 0$, $p \in (0,1]$: $|f(x)|^p \leq 1 + |f(x)|$. So:
 
-∫|f|^p ≤ ∫_{E^c} (1 + |f|) = m(E^c) + ∫_{E^c} |f| ≤ 1 + ||f||₁.
+$\int|f|^p \leq \int_{E^c} (1 + |f|) = m(E^c) + \int_{E^c} |f| \leq 1 + ||f||_{1}$.
 
-Thus ||f||_p = (∫|f|^p)^{1/p} ≤ (1 + ||f||₁)^{1/p}.
+Thus $||f||_p = (\int|f|^p)^{1/p} \leq (1 + ||f||_{1})^{1/p}$.
 
-But also: ∫|f|^p = ∫_{E^c} |f|^p ≤ (m(E^c))^{1-p} (∫_{E^c} |f|)^p (Hölder or just |f|^p ≤ |f| since p ≤ 1 and |f| might be ≥ 1)... hmm, need a cleaner bound.
+But also: $\int|f|^p = \int_{E^c} |f|^p \leq (m(E^c))^{1-p} (\int_{E^c} |f|)^p$ (Hölder or just $|f|^p \leq |f|$ since $p \leq 1$ and $|f|$ might be $\geq 1$)... hmm, need a cleaner bound.
 
-Directly: ∫|f|^p ≤ m(E^c) + ||f||₁ (using t^p ≤ 1+t). Since m(E) > 0, m(E^c) = 1-m(E) < 1. But we also need the limit.
+Directly: $\int|f|^p \leq m(E^c) + ||f||_{1}$ (using $t^p \leq 1+t$). Since $m(E) > 0$, $m(E^c) = 1-m(E) < 1$. But we also need the limit.
 
-Key observation: ||f||_p^p = ∫_{E^c} |f|^p → m(E^c) as p → 0 (since |f(x)|^p → 1 for x ∈ E^c where |f(x)| > 0, by DCT with dominator 1+|f|). So ||f||_p = (m(E^c))^{1/p}. Since m(E^c) < 1 and 1/p → ∞: L = lim (m(E^c))^{1/p} = 0. Contradicting L > 0. ✓
+Key observation: $||f||_p^p = \int_{E^c} |f|^p \to m(E^c)$ as $p \to 0$ (since $|f(x)|^p \to 1$ for $x \in E^c$ where $|f(x)| > 0$, by DCT with dominator $1+|f|$). So $||f||_p = (m(E^c))^{1/p}$. Since $m(E^c) < 1$ and $1/p \to \infty$: $L = \lim (m(E^c))^{1/p} = 0$. Contradicting $L > 0$. ✓
 
-**(c) L ≥ exp(∫log|f|).**
+**(c) $L \geq \exp(\int \log|f|)$.**
 
-Since L > 0 and |f| > 0 a.e. (by part b), log|f| is well-defined a.e. By Jensen (log is concave, applied on the probability space [0,1]):
+Since $L > 0$ and $|f| > 0$ a.e. (by part b), $\log|f|$ is well-defined a.e. By Jensen ($\log$ is concave, applied on the probability space $[0,1]$):
 
-(1/p) log(∫|f|^p) = (1/p) log(∫e^{p log|f|}) ≥ (1/p) · p · ∫log|f| = ∫log|f|.
+$(1/p) \log(\int|f|^p) = (1/p) \log(\int e^{p \log|f|}) \geq (1/p) \cdot p \cdot \int \log|f| = \int \log|f|$.
 
-Wait — Jensen for the convex function e^{·} gives ∫e^{p log|f|} ≥ e^{p∫log|f|}, so log(∫|f|^p) ≥ p∫log|f|, hence (1/p)log(∫|f|^p) ≥ ∫log|f|.
+Wait — Jensen for the convex function $e^{\cdot}$ gives $\int e^{p \log|f|} \geq e^{p\int \log|f|}$, so $\log(\int|f|^p) \geq p\int \log|f|$, hence $(1/p)\log(\int|f|^p) \geq \int \log|f|$.
 
-Exponentiating: ||f||_p = exp((1/p)log(∫|f|^p)) ≥ exp(∫log|f|).
+Exponentiating: $||f||_p = \exp((1/p)\log(\int|f|^p)) \geq \exp(\int \log|f|)$.
 
-Taking p → 0⁺: L ≥ exp(∫log|f|). ✓ ∎
+Taking $p \to 0^{+}$: $L \geq \exp(\int \log|f|)$. ✓ ∎
 
-**What connects.** This explores the Lp scale below p = 1, where the quasi-norm ||f||_p is decreasing in p (opposite to the p ≥ 1 behaviour on finite measure spaces, where ||f||_p increases). The limit L = lim_{p→0} ||f||_p = exp(∫log|f|) is the *geometric mean* of |f| — a fundamental quantity in information theory and multiplicative analysis. The inequality L ≥ exp(∫log|f|) becomes equality (the full computation shows L = exp(∫log|f|) when L > 0), connecting Lp theory to the AM-GM inequality in its continuous form. The concavity of t^p for p < 1 is what reverses the Jensen direction compared to p > 1.
+**What connects.** This explores the Lp scale below $p = 1$, where the quasi-norm $||f||_p$ is decreasing in $p$ (opposite to the $p \geq 1$ behaviour on finite measure spaces, where $||f||_p$ increases). The limit $L = \lim_{p\to 0} ||f||_p = \exp(\int \log|f|)$ is the *geometric mean* of $|f|$ — a fundamental quantity in information theory and multiplicative analysis. The inequality $L \geq \exp(\int \log|f|)$ becomes equality (the full computation shows $L = \exp(\int \log|f|)$ when $L > 0$), connecting Lp theory to the AM-GM inequality in its continuous form. The concavity of $t^p$ for $p < 1$ is what reverses the Jensen direction compared to $p > 1$.
 
 ## 2. Lean 4 theorem statement
 
@@ -137,31 +135,31 @@ end
 ## 3. Mathlib cross-references
 
 **Types/structures:**
-- `MeasureTheory.IntegrableOn f (Icc 0 1) volume` — f ∈ L¹([0,1])
-- `Real.rpow` — `t ^ p` for real p (via `Real.rpow`)
+- `MeasureTheory.IntegrableOn f (Icc 0 1) volume` — $f \in L^{1}([0,1])$
+- `Real.rpow` — `t ^ p` for real $p$ (via `Real.rpow`)
 - `Real.log`, `Real.exp` — logarithm and exponential
-- `Filter.𝓝[>] 0` — right-neighbourhood filter for p → 0⁺
+- `Filter.𝓝[>] 0` — right-neighbourhood filter for $p \to 0^{+}$
 - `∀ᵐ x ∂μ` — almost everywhere
 
 **Key lemmas:**
-- `MeasureTheory.integral_mul_le_Lp_mul_Lq` — Hölder's inequality (for part (a), rewriting the Jensen argument as Hölder with exponents q/p and its conjugate)
+- `MeasureTheory.integral_mul_le_Lp_mul_Lq` — Hölder's inequality (for part (a), rewriting the Jensen argument as Hölder with exponents $q/p$ and its conjugate)
 - `ConvexOn.integral_le` / Jensen's inequality — for convex function exp on a probability space. Needed for part (c)
 - `Real.rpow_le_rpow` — monotonicity of rpow
 - `Real.rpow_natCast` — connecting rpow to pow
-- `Real.add_pow_le_pow_mul_pow_of_sq_le_sq` — concavity-type inequality for p < 1
-- `tendsto_integral_of_dominated_convergence` — DCT for the p → 0 limit (|f|^p → 1_{f≠0})
-- `Real.rpow_zero` — t^0 = 1 for t > 0
-- `Real.log_rpow` — log(t^p) = p·log t
+- `Real.add_pow_le_pow_mul_pow_of_sq_le_sq` — concavity-type inequality for $p < 1$
+- `tendsto_integral_of_dominated_convergence` — DCT for the $p \to 0$ limit ($|f|^p \to 1_{f\neq 0}$)
+- `Real.rpow_zero` — $t^0 = 1$ for $t > 0$
+- `Real.log_rpow` — $\log(t^p) = p\cdot \log t$
 - `MonotonOn.tendsto_nhdsWithin` — monotone bounded function has a limit
 
 **Tactic hints:**
 - `have h_holder := integral_mul_le_Lp_mul_Lq ...` — Hölder for part (a)
 - `calc quasiNorm f p = ... ≤ ... = quasiNorm f q` — monotonicity chain
 - `apply tendsto_integral_of_dominated_convergence (fun x => 1 + ‖f x‖)` — DCT for the limit
-- `simp [Real.rpow_zero]` — |f|^0 = 1
+- `simp [Real.rpow_zero]` — $|f|^0 = 1$
 - `gcongr` — for monotonicity of rpow
-- `positivity` — for p > 0, ‖f‖ > 0
+- `positivity` — for $p > 0$, $\|f\| > 0$
 - `nlinarith [rpow_le_one_add (norm_nonneg (f x)) hp hp1]` — using the hint
 - `exact?` — finding Jensen or Hölder
-- `field_simp` — for 1/p arithmetic
+- `field_simp` — for $1/p$ arithmetic
 - `filter_upwards` — for a.e. statements

@@ -1,7 +1,7 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
 
-# APM b96J02: The R = F₂[x]/(x²) modules of order 16 — exactly three
+# APM b96J02: The $R = F_{2}[x]/(x^{2})$ modules of order 16 — exactly three
 
 ## Why It's Hard
 

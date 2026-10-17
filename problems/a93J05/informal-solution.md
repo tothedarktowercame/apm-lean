@@ -28,7 +28,7 @@ theorem doubly_periodic_entire_is_const
 
 | Concept | Mathlib name |
 |---|---|
-| Differentiable on ℂ | `Differentiable ℂ f` |
+| Differentiable on $\mathbb{C}$ | `Differentiable ℂ f` |
 | Liouville's theorem | `Complex.isConst_of_differentiable_of_bounded` or `Liouville.apply` |
 | Bounded implies constant (entire) | `Complex.Liouville.module` |
 | Compact → continuous → bounded | `IsCompact.exists_bound_of_continuousOn` |

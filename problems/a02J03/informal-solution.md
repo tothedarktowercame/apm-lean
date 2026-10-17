@@ -4,69 +4,69 @@
 
 ## Why It's Hard
 
-The function φ is *not* assumed to be periodic, not in any Lp space, and not bounded — only its averages over rectangles are controlled. As k → ∞, φ(kx) oscillates faster (or at least its averages over shrinking rectangles become small), and this should kill the integral against f ∈ L¹. But the proof requires showing that the rectangle-average bound on φ is enough to make ∫ φ(kx) g(x) dx small for simple functions g, and then extending to all of L¹ by density. The subtlety is that the bound M·m(Q)/(1+m(Q)) → 0 as m(Q) → 0, which is what provides the oscillation-type cancellation on small rectangles.
+The function $\varphi$ is *not* assumed to be periodic, not in any Lp space, and not bounded — only its averages over rectangles are controlled. As $k \to \infty$, $\varphi(kx)$ oscillates faster (or at least its averages over shrinking rectangles become small), and this should kill the integral against $f \in L^{1}$. But the proof requires showing that the rectangle-average bound on $\varphi$ is enough to make $\int \varphi(kx) g(x)\, dx$ small for simple functions $g$, and then extending to all of $L^{1}$ by density. The subtlety is that the bound $M \cdot m(Q)/(1+m(Q)) \to 0$ as $m(Q) \to 0$, which is what provides the oscillation-type cancellation on small rectangles.
 
 ## The Key Insight
 
-**For indicator functions of rectangles**, the integral ∫ φ(kx) 1\_Q(x) dx = k⁻ⁿ ∫\_{kQ} φ(y) dy, which by the hypothesis is bounded by M · m(kQ)/(1+m(kQ)) = M · kⁿm(Q)/(1+kⁿm(Q)). Dividing by m(Q): the "average" of φ(kx) over Q is bounded by Mkⁿ/(1+kⁿm(Q)), which → M/m(Q)... hmm, that doesn't go to zero.
+**For indicator functions of rectangles**, the integral $\int \varphi(kx) 1_Q(x)\, dx = k^{-n} \int_{kQ} \varphi(y)\, dy$, which by the hypothesis is bounded by $M \cdot m(kQ)/(1+m(kQ)) = M \cdot k^{n}m(Q)/(1+k^{n}m(Q))$. Dividing by $m(Q)$: the "average" of $\varphi(kx)$ over $Q$ is bounded by $Mk^{n}/(1+k^{n}m(Q))$, which $\to M/m(Q)$... hmm, that doesn't go to zero.
 
-Wait — let me re-examine. We have |∫\_{kQ} φ(y) dy| ≤ M · m(kQ)/(1+m(kQ)). So:
+Wait — let me re-examine. We have $|\int_{kQ} \varphi(y)\, dy| \leq M \cdot m(kQ)/(1+m(kQ))$. So:
 
 $$\left|\int_Q \varphi(kx)\,dx\right| = k^{-n}\left|\int_{kQ}\varphi(y)\,dy\right| \leq k^{-n} \cdot \frac{M \cdot k^n m(Q)}{1 + k^n m(Q)} = \frac{M \cdot m(Q)}{1 + k^n m(Q)}.$$
 
-As k → ∞, this → 0 (for fixed Q with m(Q) > 0). So ∫\_Q φ(kx) dx → 0.
+As $k \to \infty$, this $\to 0$ (for fixed $Q$ with $m(Q) > 0$). So $\int_Q \varphi(kx)\, dx \to 0$.
 
-For f = c · 1\_Q: ∫ φ(kx) f(x) dx = c · ∫\_Q φ(kx) dx → 0. By linearity, this extends to simple functions (finite linear combinations of indicators of rectangles). Then by density of simple functions in L¹ and a uniform bound, it extends to all f ∈ L¹.
+For $f = c \cdot 1_Q$: $\int \varphi(kx) f(x)\, dx = c \cdot \int_Q \varphi(kx)\, dx \to 0$. By linearity, this extends to simple functions (finite linear combinations of indicators of rectangles). Then by density of simple functions in $L^{1}$ and a uniform bound, it extends to all $f \in L^{1}$.
 
-**But we need a uniform bound** on ∫ φ(kx) f(x) dx in terms of ||f||₁. The hypothesis gives |∫\_Q φ| ≤ M m(Q)/(1+m(Q)) ≤ M for all Q, which means φ has bounded averages — but this doesn't directly give ||φ||\_∞ ≤ M or anything like a pointwise bound. We need a different approach for the density argument.
+**But we need a uniform bound** on $\int \varphi(kx) f(x)\, dx$ in terms of $||f||_{1}$. The hypothesis gives $|\int_Q \varphi| \leq M m(Q)/(1+m(Q)) \leq M$ for all $Q$, which means $\varphi$ has bounded averages — but this doesn't directly give $||\varphi||_\infty \leq M$ or anything like a pointwise bound. We need a different approach for the density argument.
 
-The uniform bound comes from: |∫ φ(kx) f(x) dx| ≤ ... we need to bound this for general f ∈ L¹. The bound M·m(Q)/(1+m(Q)) ≤ M gives |∫\_Q φ(kx) dx| ≤ M·m(Q)/(1+kⁿm(Q)) ≤ M·k⁻ⁿ·(kⁿm(Q))/(1+kⁿm(Q)) ≤ M·k⁻ⁿ... no, that's ≤ M/kⁿ · kⁿm(Q) = Mm(Q). So |∫\_Q φ(kx) dx| ≤ M·m(Q). This means the functional f ↦ ∫ φ(kx) f(x) dx is bounded on L¹ with norm ≤ M (uniformly in k). This is the uniform bound we need.
+The uniform bound comes from: $|\int \varphi(kx) f(x)\, dx| \leq \ldots$ we need to bound this for general $f \in L^{1}$. The bound $M \cdot m(Q)/(1+m(Q)) \leq M$ gives $|\int_Q \varphi(kx)\, dx| \leq M \cdot m(Q)/(1+k^{n}m(Q)) \leq M \cdot k^{-n} \cdot (k^{n}m(Q))/(1+k^{n}m(Q)) \leq M \cdot k^{-n}\ldots$ no, that's $\leq M/k^{n} \cdot k^{n}m(Q) = Mm(Q)$. So $|\int_Q \varphi(kx)\, dx| \leq M \cdot m(Q)$. This means the functional $f \mapsto \int \varphi(kx) f(x)\, dx$ is bounded on $L^{1}$ with norm $\leq M$ (uniformly in $k$). This is the uniform bound we need.
 
 ## Complete Proof
 
-**Theorem.** Let φ be measurable on ℝⁿ with |∫\_Q φ(x) dx| ≤ Mm(Q)/(1+m(Q)) for every rectangle Q. Let f ∈ L¹(ℝⁿ). Then ∫ φ(kx) f(x) dx → 0 as k → ∞.
+**Theorem.** Let $\varphi$ be measurable on $\mathbb{R}^{n}$ with $|\int_Q \varphi(x)\, dx| \leq Mm(Q)/(1+m(Q))$ for every rectangle $Q$. Let $f \in L^{1}(\mathbb{R}^{n})$. Then $\int \varphi(kx) f(x)\, dx \to 0$ as $k \to \infty$.
 
 **Proof.**
 
-**Step 1: Verify ∫ φ(kx) f(x) dx is well-defined and uniformly bounded.**
+**Step 1: Verify $\int \varphi(kx) f(x)\, dx$ is well-defined and uniformly bounded.**
 
-For any rectangle Q:
+For any rectangle $Q$:
 
 $$\left|\int_Q \varphi(kx)\,dx\right| = k^{-n}\left|\int_{kQ}\varphi(y)\,dy\right| \leq k^{-n} \cdot \frac{M \cdot k^n m(Q)}{1+k^n m(Q)} = \frac{M \cdot m(Q)}{1 + k^n m(Q)} \leq M \cdot m(Q).$$
 
-(Using the bound M·t/(1+t) ≤ M·t for t = kⁿm(Q) ≥ 0, and also M·t/(1+t) ≤ M.)
+(Using the bound $M \cdot t/(1+t) \leq M \cdot t$ for $t = k^{n}m(Q) \geq 0$, and also $M \cdot t/(1+t) \leq M$.)
 
-This means the linear functional Λ\_k(f) = ∫ φ(kx) f(x) dx, defined first on simple functions, satisfies |Λ\_k(1\_Q)| ≤ M · m(Q) = M · ||1\_Q||₁. By linearity, |Λ\_k(s)| ≤ M · ||s||₁ for any simple function s that is a linear combination of indicators of rectangles. By density and completeness, Λ\_k extends to a bounded linear functional on L¹ with ||Λ\_k|| ≤ M, uniformly in k. ✓
+This means the linear functional $\Lambda_k(f) = \int \varphi(kx) f(x)\, dx$, defined first on simple functions, satisfies $|\Lambda_k(1_Q)| \leq M \cdot m(Q) = M \cdot ||1_Q||_{1}$. By linearity, $|\Lambda_k(s)| \leq M \cdot ||s||_{1}$ for any simple function $s$ that is a linear combination of indicators of rectangles. By density and completeness, $\Lambda_k$ extends to a bounded linear functional on $L^{1}$ with $||\Lambda_k|| \leq M$, uniformly in $k$. ✓
 
 **Step 2: Vanishing on indicator functions of rectangles.**
 
-For a fixed rectangle Q with m(Q) > 0:
+For a fixed rectangle $Q$ with $m(Q) > 0$:
 
 $$|\Lambda_k(1_Q)| = \left|\int_Q \varphi(kx)\,dx\right| \leq \frac{M \cdot m(Q)}{1 + k^n m(Q)} \to 0 \quad \text{as } k \to \infty.$$
 
 **Step 3: Vanishing on simple functions.**
 
-By linearity, if s = Σᵢ cᵢ 1\_{Qᵢ} (finite sum, disjoint rectangles):
+By linearity, if $s = \sum_{i} c_{i} 1_{Q_{i}}$ (finite sum, disjoint rectangles):
 
 $$|\Lambda_k(s)| \leq \sum_i |c_i| \cdot |\Lambda_k(1_{Q_i})| \leq \sum_i |c_i| \cdot \frac{M \cdot m(Q_i)}{1+k^n m(Q_i)} \to 0.$$
 
-**Step 4: Extension to all f ∈ L¹ by density.**
+**Step 4: Extension to all $f \in L^{1}$ by density.**
 
-Fix ε > 0. Choose a simple function s (linear combination of indicators of rectangles) with ||f - s||₁ < ε/(2M). Then:
+Fix $\varepsilon > 0$. Choose a simple function $s$ (linear combination of indicators of rectangles) with $||f - s||_{1} < \varepsilon/(2M)$. Then:
 
 $$|\Lambda_k(f)| \leq |\Lambda_k(f - s)| + |\Lambda_k(s)| \leq M \cdot \|f - s\|_1 + |\Lambda_k(s)| < \frac{\varepsilon}{2} + |\Lambda_k(s)|.$$
 
-By Step 3, |Λ\_k(s)| → 0, so for k large enough, |Λ\_k(s)| < ε/2. Therefore |Λ\_k(f)| < ε for all large k. Since ε was arbitrary, Λ\_k(f) → 0. ∎
+By Step 3, $|\Lambda_k(s)| \to 0$, so for $k$ large enough, $|\Lambda_k(s)| < \varepsilon/2$. Therefore $|\Lambda_k(f)| < \varepsilon$ for all large $k$. Since $\varepsilon$ was arbitrary, $\Lambda_k(f) \to 0$. ∎
 
 ## What Connects
 
-**To the Riemann-Lebesgue lemma.** If φ(x) = e^{2πix·ξ₀}, then ∫ φ(kx)f(x) dx = f̂(kξ₀) → 0 by Riemann-Lebesgue. This problem generalises: φ doesn't need to be a character or even periodic — only the rectangle-average bound is needed. The bound Mm(Q)/(1+m(Q)) ensures that φ's averages over large sets are bounded by M (no blowup) and over small sets are small (cancellation), which is exactly the "oscillatory" behaviour that makes the integral vanish.
+**To the Riemann-Lebesgue lemma.** If $\varphi(x) = e^{2\pi ix \cdot \xi_{0}}$, then $\int \varphi(kx)f(x)\, dx = \hat{f}(k\xi_{0}) \to 0$ by Riemann-Lebesgue. This problem generalises: $\varphi$ doesn't need to be a character or even periodic — only the rectangle-average bound is needed. The bound $Mm(Q)/(1+m(Q))$ ensures that $\varphi$'s averages over large sets are bounded by $M$ (no blowup) and over small sets are small (cancellation), which is exactly the "oscillatory" behaviour that makes the integral vanish.
 
-**To weak-* convergence.** The statement Λ\_k(f) → 0 for all f ∈ L¹ says that the sequence of functionals Λ\_k converges to 0 in the weak-* topology of L^∞ = (L¹)*. The uniform bound ||Λ\_k|| ≤ M and pointwise convergence on a dense set (simple functions) give weak-* convergence by the Banach-Steinhaus theorem.
+**To weak-* convergence.** The statement $\Lambda_k(f) \to 0$ for all $f \in L^{1}$ says that the sequence of functionals $\Lambda_k$ converges to 0 in the weak-* topology of $L^\infty = (L^{1})^*$. The uniform bound $||\Lambda_k|| \leq M$ and pointwise convergence on a dense set (simple functions) give weak-* convergence by the Banach-Steinhaus theorem.
 
-**To mixing in ergodic theory.** In ergodic theory, a measure-preserving transformation is mixing if ∫ φ(T^n x) f(x) dx → (∫φ)(∫f). This problem is a continuous analogue: the dilation x ↦ kx "mixes" φ against f, and the rectangle-average bound plays the role of the mixing condition.
+**To mixing in ergodic theory.** In ergodic theory, a measure-preserving transformation is mixing if $\int \varphi(T^n x) f(x)\, dx \to (\int\varphi)(\int f)$. This problem is a continuous analogue: the dilation $x \mapsto kx$ "mixes" $\varphi$ against $f$, and the rectangle-average bound plays the role of the mixing condition.
 
-**To homogenisation.** In PDE homogenisation, one studies operators with rapidly oscillating coefficients a(x/ε) as ε → 0. The vanishing of ∫ a(x/ε) f(x) dx for non-constant parts of a is the cancellation mechanism that produces the homogenised (effective) equation.
+**To homogenisation.** In PDE homogenisation, one studies operators with rapidly oscillating coefficients $a(x/\varepsilon)$ as $\varepsilon \to 0$. The vanishing of $\int a(x/\varepsilon) f(x)\, dx$ for non-constant parts of $a$ is the cancellation mechanism that produces the homogenised (effective) equation.
 
 ---
 
@@ -169,10 +169,10 @@ end
 
 **Mathlib notes:**
 
-- `Fin n → ℝ` is ℝⁿ; `volume` is the product Lebesgue measure. Rectangles are `Set.pi Set.univ (fun i => Icc (a i) (b i))`.
+- `Fin n → ℝ` is $\mathbb{R}^{n}$; `volume` is the product Lebesgue measure. Rectangles are `Set.pi Set.univ (fun i => Icc (a i) (b i))`.
 - `dilate φ k x = φ(k • x)` where `k • x` is the scalar multiplication in `Fin n → ℝ`.
-- `RectAvgBound` encodes the hypothesis: the integral of φ over any rectangle Q satisfies |∫\_Q φ| ≤ M · m(Q)/(1+m(Q)).
-- The scaling identity `dilate_integral_scaling` uses the change-of-variables y = kx, giving the factor k⁻ⁿ. `k • Q` is the dilation of the set.
-- `Tendsto ... atTop (𝓝 0)` with the parameter `k : ℝ` encodes the limit as k → ∞ (along the `atTop` filter on ℝ).
-- The density lemma `simple_rect_dense` states that finite linear combinations of rectangle indicators are dense in L¹(ℝⁿ). This is a standard measure theory fact.
+- `RectAvgBound` encodes the hypothesis: the integral of $\varphi$ over any rectangle $Q$ satisfies $|\int_Q \varphi| \leq M \cdot m(Q)/(1+m(Q))$.
+- The scaling identity `dilate_integral_scaling` uses the change-of-variables $y = kx$, giving the factor $k^{-n}$. `k • Q` is the dilation of the set.
+- `Tendsto ... atTop (𝓝 0)` with the parameter `k : ℝ` encodes the limit as $k \to \infty$ (along the `atTop` filter on $\mathbb{R}$).
+- The density lemma `simple_rect_dense` states that finite linear combinations of rectangle indicators are dense in $L^{1}(\mathbb{R}^{n})$. This is a standard measure theory fact.
 - The proof chain: `dilate_integral_scaling` (change of variables) → `dilate_integral_indicator_tendsto` (vanishing on rectangles) → `dilate_integral_simple_tendsto` (linearity) → `dilate_integral_tendsto_zero` (density + uniform bound `dilate_integral_le`).

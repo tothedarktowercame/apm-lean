@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b03J04: The splitting field of xᵖ − β, and the irreducible-or-has-a-root dichotomy
+# APM b03J04: The splitting field of $x^{p} - \beta$, and the irreducible-or-has-a-root dichotomy
 
 ## Why It's Hard
 

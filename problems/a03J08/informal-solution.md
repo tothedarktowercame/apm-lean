@@ -1,32 +1,30 @@
-
-
 # APM a03J08: Surjectivity of an analytic function blowing up at all boundary points
 
 ## 1. Informal proof
 
-**Why it's hard.** The domain D = ℂ \ F is open but not simply connected, and f is not assumed injective or proper in the usual sense. Showing surjectivity (every complex value is attained) requires ruling out omitted values, which suggests using either the open mapping theorem, Picard's theorem, or a topological/compactness argument.
+**Why it's hard.** The domain $D = \mathbb{C} \setminus F$ is open but not simply connected, and $f$ is not assumed injective or proper in the usual sense. Showing surjectivity (every complex value is attained) requires ruling out omitted values, which suggests using either the open mapping theorem, Picard's theorem, or a topological/compactness argument.
 
-**The key insight.** If f omits a value w₀ ∈ ℂ, then 1/(f(z) - w₀) is analytic on D and bounded (since |f| → ∞ at every boundary point of D, including ∞, forces |f - w₀| → ∞ at every boundary point, making 1/|f - w₀| → 0). But a bounded analytic function on D with removable singularities at the finite set F extends to an entire bounded function, hence is constant by Liouville — contradicting |f| → ∞.
+**The key insight.** If $f$ omits a value $w_{0} \in \mathbb{C}$, then $1/(f(z) - w_{0})$ is analytic on $D$ and bounded (since $|f| \to \infty$ at every boundary point of $D$, including $\infty$, forces $|f - w_{0}| \to \infty$ at every boundary point, making $1/|f - w_{0}| \to 0$). But a bounded analytic function on $D$ with removable singularities at the finite set $F$ extends to an entire bounded function, hence is constant by Liouville — contradicting $|f| \to \infty$.
 
 **Proof.**
 
-Suppose for contradiction that there exists w₀ ∈ ℂ \ f(D). Define g(z) = 1/(f(z) - w₀) on D. Then g is analytic on D (since f(z) ≠ w₀ for all z ∈ D).
+Suppose for contradiction that there exists $w_{0} \in \mathbb{C} \setminus f(D)$. Define $g(z) = 1/(f(z) - w_{0})$ on $D$. Then $g$ is analytic on $D$ (since $f(z) \neq w_{0}$ for all $z \in D$).
 
-*g is bounded near each point of F:* For each zα ∈ F, |f(z)| → ∞ as z → zα, so |f(z) - w₀| → ∞, hence |g(z)| = 1/|f(z) - w₀| → 0 as z → zα. In particular, g is bounded in a punctured neighbourhood of each zα.
+*$g$ is bounded near each point of $F$:* For each $z_{\alpha} \in F$, $|f(z)| \to \infty$ as $z \to z_{\alpha}$, so $|f(z) - w_{0}| \to \infty$, hence $|g(z)| = 1/|f(z) - w_{0}| \to 0$ as $z \to z_{\alpha}$. In particular, $g$ is bounded in a punctured neighbourhood of each $z_{\alpha}$.
 
-*g is bounded near ∞:* |f(z)| → ∞ as |z| → ∞, so |g(z)| → 0 as |z| → ∞.
+*$g$ is bounded near $\infty$:* $|f(z)| \to \infty$ as $|z| \to \infty$, so $|g(z)| \to 0$ as $|z| \to \infty$.
 
-*g extends to an entire function:* At each zα ∈ F, g is analytic on a punctured neighbourhood and bounded, so by the Riemann removable singularity theorem, g extends analytically to zα (with g(zα) = 0). After extending at all points of F, g becomes entire.
+*$g$ extends to an entire function:* At each $z_{\alpha} \in F$, $g$ is analytic on a punctured neighbourhood and bounded, so by the Riemann removable singularity theorem, $g$ extends analytically to $z_{\alpha}$ (with $g(z_{\alpha}) = 0$). After extending at all points of $F$, $g$ becomes entire.
 
-*g is bounded:* g is continuous on all of ℂ (entire), and |g(z)| → 0 as |z| → ∞. A continuous function tending to 0 at infinity is bounded (it is bounded on the compact set {|z| ≤ R} by continuity, and bounded by ε outside for R large).
+*$g$ is bounded:* $g$ is continuous on all of $\mathbb{C}$ (entire), and $|g(z)| \to 0$ as $|z| \to \infty$. A continuous function tending to 0 at infinity is bounded (it is bounded on the compact set $\{|z| \leq R\}$ by continuity, and bounded by $\varepsilon$ outside for $R$ large).
 
-*Liouville:* g is entire and bounded, so g is constant by Liouville's theorem.
+*Liouville:* $g$ is entire and bounded, so $g$ is constant by Liouville's theorem.
 
-*Contradiction:* Since |g(z)| → 0 as |z| → ∞, the constant must be 0, so g ≡ 0. But g(z) = 1/(f(z) - w₀) ≠ 0 for all z ∈ D. Contradiction.
+*Contradiction:* Since $|g(z)| \to 0$ as $|z| \to \infty$, the constant must be 0, so $g \equiv 0$. But $g(z) = 1/(f(z) - w_{0}) \neq 0$ for all $z \in D$. Contradiction.
 
-Therefore f(D) = ℂ. ∎
+Therefore $f(D) = \mathbb{C}$. ∎
 
-**What connects.** This result is a concrete manifestation of the Casorati-Weierstrass / great Picard philosophy: an analytic function that blows up at every boundary component of its domain (including the point at infinity) must hit every complex value. The proof uses the trio of Riemann removable singularities + Liouville, which is the elementary substitute for Picard's theorem in situations where the singularities are all poles (or at least where 1/f is bounded near each singularity). The result generalises: f(D) misses at most one value if f has essential singularities (by great Picard), and misses no values if all singularities are poles (as in this problem, where |f| → ∞ forces poles). The properness condition (|f| → ∞ at every boundary point, including ∞) makes f a proper map ℂ \ F → ℂ, and proper holomorphic maps are surjective onto connected targets.
+**What connects.** This result is a concrete manifestation of the Casorati-Weierstrass / great Picard philosophy: an analytic function that blows up at every boundary component of its domain (including the point at infinity) must hit every complex value. The proof uses the trio of Riemann removable singularities + Liouville, which is the elementary substitute for Picard's theorem in situations where the singularities are all poles (or at least where $1/f$ is bounded near each singularity). The result generalises: $f(D)$ misses at most one value if $f$ has essential singularities (by great Picard), and misses no values if all singularities are poles (as in this problem, where $|f| \to \infty$ forces poles). The properness condition ($|f| \to \infty$ at every boundary point, including $\infty$) makes $f$ a proper map $\mathbb{C} \setminus F \to \mathbb{C}$, and proper holomorphic maps are surjective onto connected targets.
 
 ## 2. Lean 4 theorem statement
 
@@ -113,31 +111,31 @@ end
 **Types/structures:**
 - `DifferentiableOn ℂ f S` — holomorphicity on the punctured plane
 - `Differentiable ℂ g` — entirety (after removing singularities)
-- `Finset ℂ` — the finite set F
-- `Filter.cocompact ℂ` — filter for |z| → ∞
+- `Finset ℂ` — the finite set $F$
+- `Filter.cocompact ℂ` — filter for $|z| \to \infty$
 - `nhdsWithin z {z}ᶜ` / `𝓝[≠] z` — punctured neighbourhood filter
-- `Filter.atTop` — for |f| → ∞
+- `Filter.atTop` — for $|f| \to \infty$
 - `Function.Surjective` — surjectivity predicate
 
 **Key lemmas:**
 - `Complex.differentiableOn_update_of_bounded_of_isOpen` / `Complex.differentiable_update_of_bounded` — Riemann removable singularity theorem: bounded + analytic near a puncture ⟹ extends analytically. In `Mathlib.Analysis.Complex.RemovableSingularity`
 - `Complex.Polynomial.liouville` / `Differentiable.apply_eq_apply_of_bounded` — Liouville's theorem: bounded entire function is constant. In `Mathlib.Analysis.Complex.Liouville`
-- `Filter.Tendsto.norm_atTop` — if ‖f(z)‖ → ∞ then |1/(f(z) - w₀)| → 0
-- `Filter.Tendsto.inv_tendsto_atTop` — 1/x → 0 as x → ∞
+- `Filter.Tendsto.norm_atTop` — if $\|f(z)\| \to \infty$ then $|1/(f(z) - w_{0})| \to 0$
+- `Filter.Tendsto.inv_tendsto_atTop` — $1/x \to 0$ as $x \to \infty$
 - `Filter.Tendsto.comp` — composition of tendsto statements
-- `DifferentiableOn.div` — analyticity of 1/(f - w₀)
+- `DifferentiableOn.div` — analyticity of $1/(f - w_{0})$
 - `isCompact_closedBall` — for compactness arguments
 - `ContinuousOn.norm` — continuity of the norm
-- `Finset.prod_dvd_prod_of_dvd` — not directly, but finiteness of F used throughout
+- `Finset.prod_dvd_prod_of_dvd` — not directly, but finiteness of $F$ used throughout
 - `Set.compl_iUnion` / `Finset.coe_compl` — complement of a finite set is open
 
 **Tactic hints:**
-- `by_contra h; push_neg at h` — assume w₀ is omitted, derive contradiction
+- `by_contra h; push_neg at h` — assume $w_{0}$ is omitted, derive contradiction
 - `obtain ⟨w₀, hw₀⟩ := h` — extract the omitted value
 - `refine ⟨fun z => ..., ?_, ?_⟩` — construct the extended function
 - `exact?` — finding the removable singularity theorem
-- `simp [div_ne_zero]` — for 1/(f-w₀) ≠ 0
-- `positivity` — for ‖f(z) - w₀‖ > 0
+- `simp [div_ne_zero]` — for $1/(f-w_{0}) \neq 0$
+- `positivity` — for $\|f(z) - w_{0}\| > 0$
 - `filter_upwards` — for eventually-holds arguments near poles and at infinity
 - `norm_num` — for basic arithmetic in the Liouville contradiction
-- `absurd` — the final contradiction (g ≡ 0 but g ≠ 0)
+- `absurd` — the final contradiction ($g \equiv 0$ but $g \neq 0$)

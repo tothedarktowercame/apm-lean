@@ -1,6 +1,6 @@
 <!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
 
-# APM b94A01: Classifying groups of order 10 as semidirect products ℤ/5 ⋊ ℤ/2
+# APM b94A01: Classifying groups of order 10 as semidirect products $\mathbb{Z}/5 \rtimes \mathbb{Z}/2$
 
 ## Why It's Hard
 

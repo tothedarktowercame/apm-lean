@@ -4,43 +4,43 @@
 
 ## 1. Informal proof
 
-**Why it's hard.** f is AC on each complementary interval of C but the Cantor set has infinitely many complementary intervals, and the AC constants could degenerate. Piecing together infinitely many AC conditions into a single global AC condition requires controlling the total variation contribution from the Cantor set itself.
+**Why it's hard.** $f$ is AC on each complementary interval of $C$ but the Cantor set has infinitely many complementary intervals, and the AC constants could degenerate. Piecing together infinitely many AC conditions into a single global AC condition requires controlling the total variation contribution from the Cantor set itself.
 
-**The key insight.** Since f(x) = x on C (a set of measure zero), f contributes zero total oscillation on C: for any collection of intervals with endpoints in C, the function values agree with the identity. The oscillation of f on each complementary interval is controlled by AC on that interval. Since the Cantor set has measure zero, intervals covering parts of C contribute zero to Σ|f(bᵢ)-f(aᵢ)| when the total length is small.
+**The key insight.** Since $f(x) = x$ on $C$ (a set of measure zero), $f$ contributes zero total oscillation on $C$: for any collection of intervals with endpoints in $C$, the function values agree with the identity. The oscillation of $f$ on each complementary interval is controlled by AC on that interval. Since the Cantor set has measure zero, intervals covering parts of $C$ contribute zero to $\sum|f(b_{i})-f(a_{i})|$ when the total length is small.
 
 **Proof.**
 
-Fix ε > 0. We need δ > 0 such that for any collection of non-overlapping intervals {(aₖ, bₖ)} ⊂ [0,1] with Σ(bₖ-aₖ) < δ, we have Σ|f(bₖ)-f(aₖ)| < ε.
+Fix $\varepsilon > 0$. We need $\delta > 0$ such that for any collection of non-overlapping intervals $\{(a_{k}, b_{k})\} \subset [0,1]$ with $\sum(b_{k}-a_{k}) < \delta$, we have $\sum|f(b_{k})-f(a_{k})| < \varepsilon$.
 
-*Step 1: The Cantor set has measure zero.* m(C) = 0, so f = id on a null set.
+*Step 1: The Cantor set has measure zero.* $m(C) = 0$, so $f = \mathrm{id}$ on a null set.
 
-*Step 2: Structure of [0,1] \ C.* [0,1] \ C = ∪ⱼ Iⱼ where the Iⱼ are the countably many open complementary intervals. f is AC on each Iⱼ (and on its closure, since f is AC on every closed subinterval of [0,1] \ C).
+*Step 2: Structure of $[0,1] \setminus C$.* $[0,1] \setminus C = \cup_{j} I_{j}$ where the $I_{j}$ are the countably many open complementary intervals. $f$ is AC on each $I_{j}$ (and on its closure, since $f$ is AC on every closed subinterval of $[0,1] \setminus C$).
 
-*Step 3: f is of bounded variation.* Since f is a homeomorphism [0,1] → [0,1], f is monotone (continuous injective on an interval ⟹ strictly monotone). So V(f, [0,1]) = |f(1) - f(0)| ≤ 1. (BV is automatic for monotone functions.)
+*Step 3: $f$ is of bounded variation.* Since $f$ is a homeomorphism $[0,1] \to [0,1]$, $f$ is monotone (continuous injective on an interval $\Longrightarrow$ strictly monotone). So $V(f, [0,1]) = |f(1) - f(0)| \leq 1$. (BV is automatic for monotone functions.)
 
-*Step 4: Combine BV + continuity + AC on complementary intervals.* Take any collection of non-overlapping intervals {(aₖ, bₖ)} with Σ(bₖ-aₖ) < δ. Each (aₖ, bₖ) can be decomposed:
+*Step 4: Combine BV + continuity + AC on complementary intervals.* Take any collection of non-overlapping intervals $\{(a_{k}, b_{k})\}$ with $\sum(b_{k}-a_{k}) < \delta$. Each $(a_{k}, b_{k})$ can be decomposed:
 
-(aₖ, bₖ) = [(aₖ, bₖ) ∩ C] ∪ [(aₖ, bₖ) ∩ (∪ⱼ Iⱼ)].
+$(a_{k}, b_{k}) = [(a_{k}, b_{k}) \cap C] \cup [(a_{k}, b_{k}) \cap (\cup_{j} I_{j})]$.
 
-Since f(x) = x on C and f is monotone:
+Since $f(x) = x$ on $C$ and $f$ is monotone:
 
-|f(bₖ) - f(aₖ)| ≤ |f(bₖ) - bₖ| + |bₖ - aₖ| + |aₖ - f(aₖ)|.
+$|f(b_{k}) - f(a_{k})| \leq |f(b_{k}) - b_{k}| + |b_{k} - a_{k}| + |a_{k} - f(a_{k})|$.
 
-Wait — that's not quite right. Since f = id on C, if aₖ, bₖ ∈ C then |f(bₖ) - f(aₖ)| = |bₖ - aₖ|. But the endpoints need not be in C.
+Wait — that's not quite right. Since $f = \mathrm{id}$ on $C$, if $a_{k}, b_{k} \in C$ then $|f(b_{k}) - f(a_{k})| = |b_{k} - a_{k}|$. But the endpoints need not be in $C$.
 
-Better approach using monotonicity directly: since f is an increasing homeomorphism [0,1] → [0,1] (assuming orientation-preserving; if not, consider 1-f):
+Better approach using monotonicity directly: since $f$ is an increasing homeomorphism $[0,1] \to [0,1]$ (assuming orientation-preserving; if not, consider $1-f$):
 
-Σ|f(bₖ) - f(aₖ)| = Σ(f(bₖ) - f(aₖ)) = total measure of f(∪(aₖ,bₖ)).
+$\sum|f(b_{k}) - f(a_{k})| = \sum(f(b_{k}) - f(a_{k})) =$ total measure of $f(\cup(a_{k},b_{k}))$.
 
-Now f(∪(aₖ,bₖ)) = ∪f((aₖ,bₖ)) (disjoint since f is injective). Each f((aₖ,bₖ)) is an interval. Need: total length of f(∪(aₖ,bₖ)) is small when total length of ∪(aₖ,bₖ) is small.
+Now $f(\cup(a_{k},b_{k})) = \cup f((a_{k},b_{k}))$ (disjoint since $f$ is injective). Each $f((a_{k},b_{k}))$ is an interval. Need: total length of $f(\cup(a_{k},b_{k}))$ is small when total length of $\cup(a_{k},b_{k})$ is small.
 
-Since f is a homeomorphism fixing C and AC on each complementary interval, f satisfies Lusin's condition (N) on [0,1] \ C (AC ⟹ condition N on each piece). Also f = id on C (so f trivially satisfies condition N on C). Thus f satisfies condition N globally.
+Since $f$ is a homeomorphism fixing $C$ and AC on each complementary interval, $f$ satisfies Lusin's condition (N) on $[0,1] \setminus C$ (AC $\Longrightarrow$ condition N on each piece). Also $f = \mathrm{id}$ on $C$ (so $f$ trivially satisfies condition N on $C$). Thus $f$ satisfies condition N globally.
 
-Combined with BV (monotone): f is AC on [0,1]. This uses the theorem: **a continuous function of bounded variation satisfying Lusin's condition (N) is absolutely continuous.**
+Combined with BV (monotone): $f$ is AC on $[0,1]$. This uses the theorem: **a continuous function of bounded variation satisfying Lusin's condition (N) is absolutely continuous.**
 
-More explicitly: f is monotone (hence BV and continuous), and f maps null sets to null sets (condition N: on C, f = id maps null to null; on each Iⱼ, f is AC hence satisfies condition N). BV + continuous + condition N ⟹ AC. ✓ ∎
+More explicitly: $f$ is monotone (hence BV and continuous), and $f$ maps null sets to null sets (condition N: on $C$, $f = \mathrm{id}$ maps null to null; on each $I_{j}$, $f$ is AC hence satisfies condition N). BV + continuous + condition N $\Longrightarrow$ AC. ✓ ∎
 
-**What connects.** This uses the characterisation theorem: a continuous function on [0,1] is absolutely continuous if and only if it is of bounded variation and satisfies Lusin's condition (N) (null sets map to null sets). The hypotheses decompose perfectly: monotone homeomorphism gives BV + continuity; f = id on C gives condition N on C (trivially); AC on each complementary interval gives condition N on [0,1] \ C. Together they yield global condition N, hence global AC. The problem is a cousin of a93J01/a97J04: there, f was assumed AC on [a,1] for all a > 0 and BV + continuous on [0,1]; here, f is AC on each complementary interval and fixes the Cantor set. Both reduce to the BV + condition N characterisation.
+**What connects.** This uses the characterisation theorem: a continuous function on $[0,1]$ is absolutely continuous if and only if it is of bounded variation and satisfies Lusin's condition (N) (null sets map to null sets). The hypotheses decompose perfectly: monotone homeomorphism gives BV + continuity; $f = \mathrm{id}$ on $C$ gives condition N on $C$ (trivially); AC on each complementary interval gives condition N on $[0,1] \setminus C$. Together they yield global condition N, hence global AC. The problem is a cousin of a93J01/a97J04: there, $f$ was assumed AC on $[a,1]$ for all $a > 0$ and BV + continuous on $[0,1]$; here, $f$ is AC on each complementary interval and fixes the Cantor set. Both reduce to the BV + condition N characterisation.
 
 ## 2. Lean 4 theorem statement
 
@@ -126,26 +126,26 @@ end
 
 **Types/structures:**
 - `MonotoneOn f s` / `AntitoneOn f s` — monotonicity on a set
-- `ContinuousOn f s` — continuity on [0,1]
+- `ContinuousOn f s` — continuity on $[0,1]$
 - `Set.BijOn f s t` — bijection between sets (homeomorphism)
 - `MeasureTheory.volume` — Lebesgue measure
 - `Set.Icc`, `Set.invFunOn` — intervals and inverse function
 
 **Key lemmas:**
 - `ContinuousOn.injOn_of_isPreconnected` — continuous injection on connected set (for monotonicity)
-- `StrictMonoOn.bijOn` — strict monotone continuous on [a,b] is a bijection onto [f(a),f(b)]
-- `MonotoneOn.totalVariationOn_eq` — total variation of monotone function = f(b) - f(a) (for BV)
-- `measure_image_le_of_lipschitzOnWith` — or AC ⟹ condition N
-- `Set.image_eq_iUnion` — f(∪ Eₖ) = ∪ f(Eₖ) for injective f
+- `StrictMonoOn.bijOn` — strict monotone continuous on $[a,b]$ is a bijection onto $[f(a),f(b)]$
+- `MonotoneOn.totalVariationOn_eq` — total variation of monotone function $= f(b) - f(a)$ (for BV)
+- `measure_image_le_of_lipschitzOnWith` — or AC $\Longrightarrow$ condition N
+- `Set.image_eq_iUnion` — $f(\cup E_{k}) = \cup f(E_{k})$ for injective $f$
 - `measure_iUnion_null` — countable union of null sets is null
-- `Set.compl_inter` / `Set.diff_union_of_subset` — decomposing [0,1] into C and its complement
+- `Set.compl_inter` / `Set.diff_union_of_subset` — decomposing $[0,1]$ into $C$ and its complement
 
 **Tactic hints:**
 - `apply ac_of_bv_continuous_conditionN hf_cont` — reducing to the characterisation theorem
 - `rcases monotone_of_homeomorphism hf_homeo hf_cont hf_cont_inv with h | h` — case split on mono/anti
 - `intro E hE hE_null` — for verifying condition N
-- `have : E = (E ∩ cantorSet) ∪ (E \ cantorSet) := by simp [union_diff_cancel]` — splitting E
+- `have : E = (E ∩ cantorSet) ∪ (E \ cantorSet) := by simp [union_diff_cancel]` — splitting $E$
 - `exact measure_iUnion_null ...` — combining null image pieces
-- `simp [hf_fix x hx]` — f(x) = x on C
+- `simp [hf_fix x hx]` — $f(x) = x$ on $C$
 - `exact?` — finding the BV + condition N characterisation
 - `linarith` — for interval arithmetic

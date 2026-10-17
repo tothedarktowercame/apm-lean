@@ -36708,35 +36708,37 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 3,
+   :review-finding
+   "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Compute unit-sphere top/off-degree groups; lower-patch retract; MV successor; Main.",
+    "Compare chosen and literal biproduct projections; transport union.",
     :outcome :stop,
-    :warnings
-    ["Main one placeholder; unrelated untracked files untouched."],
+    :warnings ["Existing lints; Main sorry."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_overlap_subsingleton_of_unitSphere",
-      :type "sphere subsingleton homology transports to overlap",
+    [{:name
+      "t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f",
+      :type "transported arrow is exact-complex f",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_overlap_homologyIso_unitSphere"],
+      ["t99J05_cp_successor_mayerVietoris_exact_pieces_transport"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_overlap_rational_homology",
-      :type "explicit overlap groups",
-      :status :partial,
+     {:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
+      :type "transported arrow is literal signed arrow",
+      :status :not-started,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_overlap_subsingleton_of_unitSphere"],
+      ["t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f"
+       "t99J05_cp_successor_literalOverlapToPieces_components"],
       :area "rational-homology-lefschetz"}],
-    :statement-hashes {:registry "167/167"},
+    :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed off-degree homology transport from unit spheres to successor overlaps.",
+    :reason "Committed exact-arrow identity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36747,24 +36749,24 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd
-      "git diff --check && git show --check --stat --oneline 2ff030f72",
-      :exit 0}],
+     {:cmd "git show --check --stat --oneline 7edd97c7b7", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile attempts",
+      :exit 1,
+      :note "Invalid equality left projection goals."}],
     :review
     {:outcome :pass,
      :seat "codex-11",
-     :job "invoke-1792100595275-14725-a39b3f37",
+     :job "invoke-1792210135868-16124-d7dc6c32",
      :commands
-     ["git show --check --stat 7337cdfc2"
-      "git diff --name-only 7337cdfc2^ 7337cdfc2"
-      "sha256sum fixture"
+     ["git show/scope/blob checks 7edd97c7b7"
       "lake env lean ConstructionTargets/t99J05Closure.lean"
       "lake env lean problems/t99J05/lean/Main.lean"
       "lake env lean fixture"
       "python3 scripts/statement-registry.py check"],
      :finding
-     "PASS: commit 7337cdfc2 changes only scoped Closure.lean and proves the correctly oriented CP-successor two-patch open cover using standard axioms. Fixture hash matches 4aeb8b6a...beea8d; registry 167/167; Closure has 0 placeholders and Main retains the listed one."},
-    :commit "2ff030f72",
+     "PASS: 7edd97c7b7 is scoped, compiled, sorry-free progress: it proves the separately named transported arrow is definitionally the first arrow of the exact transported short complex, with correct orientation. Fixture hash matched; standard axioms only; registry 168/168; literal-arrow comparison and union transport remain listed."},
+    :commit "7edd97c7b7",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36790,11 +36792,11 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed off-degree homology transport from unit spheres to successor overlaps.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed exact-arrow identity.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 0,
+   :fail-count 1,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -36850,59 +36852,144 @@
     {:job 4,
      :commit "2ff030f72",
      :reason
-     "Committed off-degree homology transport from unit spheres to successor overlaps."}]}
+     "Committed off-degree homology transport from unit spheres to successor overlaps."}
+    {:job 5,
+     :commit "f6d62287e",
+     :reason
+     "Committed exact top-homology transport from the affine unit-sphere model to the successor overlap."}
+    {:job 6,
+     :commit "d3394ea47",
+     :reason
+     "Committed affine sphere comparison and overlap top homology."}
+    {:job 7,
+     :commit "ebe33ec6f",
+     :reason "Committed rational sphere vanishing below top."}
+    {:job 8,
+     :commit "926cc81f4",
+     :reason "Committed rational sphere vanishing above top."}
+    {:job 9,
+     :commit "5370feaf8",
+     :reason "Committed affine and overlap above-top vanishing."}
+    {:job 1,
+     :commit "d57b3af25",
+     :reason "Committed homogeneous lower-patch vector homotopy."}
+    {:job 2,
+     :commit "7b95aaef7",
+     :reason "Committed continuous lower-patch vector homotopy."}
+    {:job 3,
+     :commit "380841fbd",
+     :reason "Committed restricted quotient homotopy descent."}
+    {:job 4,
+     :commit "c1ebea9b0",
+     :reason "Committed CP n inclusion and time-one factorization."}
+    {:job 5,
+     :commit "70fe46d76",
+     :reason "Committed truncation descent and left inverse."}
+    {:job 6,
+     :commit "87bd5a00f1",
+     :reason "Packaged lower-patch homotopy equivalence; MV remains."}
+    {:job 7,
+     :commit "0e6877ab20",
+     :reason
+     "Specialized rational subcomplex MV exactness to the CP successor patches."}
+    {:job 8,
+     :commit "cbdbb58fb8",
+     :reason
+     "Committed specialized MV sequence and exactness at patch homology; space/subcomplex transport remains."}
+    {:job 9,
+     :commit "4a9541db6d",
+     :reason
+     "Committed connecting map and overlap exactness; ambient exactness remains."}
+    {:job 1,
+     :commit "d69b5953f",
+     :reason
+     "Committed literal-patch homology isomorphisms; map naturality remains."}
+    {:job 2,
+     :commit "b9f1d3a49",
+     :reason
+     "Committed ambient-inclusion naturality for literal-patch transport."}
+    {:job 4,
+     :commit "ddbe3be23",
+     :reason "Repaired compiled range homology naturality."}
+    {:job 5,
+     :commit "9bea96bc2",
+     :reason "Committed both overlap-leg naturality proofs."}
+    {:job 6,
+     :commit "2c9276d49",
+     :reason
+     "Committed literal signed overlap map and component formulas."}
+    {:job 7,
+     :commit "ab85a510c",
+     :reason
+     "Committed rational ModuleCat homology-biproduct comparison."}
+    {:job 9,
+     :commit "8323662f3",
+     :reason "Repaired and compiled transported MV arrow."}
+    {:job 2,
+     :commit "b5b25ca20",
+     :reason
+     "Committed clean transported exactness; invalid arrow equality removed."}
+    {:job 3,
+     :commit "7edd97c7b7",
+     :reason "Committed exact-arrow identity."}]}
   {:consumer :t98A02,
-   :stop-count 1,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:t98A02 [1 1], :t00A01 [1 1]},
     :residual
-    "Review blueprint; then formalize B1 collar/radial representations, followed by B2 openness and B3 puncture connectivity.",
+    "Prove bounded manifold invariance of domain for the Euclidean-ball source, then derive radialTwo openness and puncture connectivity.",
     :outcome :stop,
-    :warnings
-    ["Blueprint-only job; Lean gates deferred until reviewed formalization."],
+    :warnings ["Three existing-style simp lints."],
     :missing-theorems
-    [{:name "BallCollar",
+    [{:name "BallCollar.largeInteriorHomeomorphBall",
       :type
-      "collared embedded-ball package, radial regions, and quotient representation",
-      :status :not-started,
+      "large collar interior homeomorphic to Euclidean open ball",
+      :status :proved,
       :consumers [:t98A02 :t00A01],
-      :depends-on [],
+      :depends-on ["BallCollar.range_largeInteriorMap"],
       :area "ball-complement-collar"}
-     {:name "connectedSum_homology",
-      :type
-      "integral homology of a collared connected sum in all degrees",
+     {:name "manifoldEmbedding_isOpenMap",
+      :type "same-dimensional boundaryless manifold embedding is open",
       :status :not-started,
       :consumers [:t98A02 :t00A01],
-      :depends-on ["BallCollar"],
-      :area "manifold-fundamental-class"}],
-    :statement-hashes {:registry "167/167"},
+      :depends-on ["BallCollar.largeInteriorHomeomorphBall"],
+      :area "ball-complement-collar"}
+     {:name "BallCollar.largeInterior_isOpen",
+      :type "radius-two interior image open in manifold",
+      :status :not-started,
+      :consumers [:t98A02 :t00A01],
+      :depends-on ["manifoldEmbedding_isOpenMap"],
+      :area "ball-complement-collar"}],
+    :statement-hashes {:registry "168/168"},
     :disposition :stop,
-    :axioms [],
+    :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review.",
+    :reason "Committed Euclidean model for large collar interior.",
     :commands
     [{:cmd
-      "git diff --check -- ConstructionTargets/CollaredConnectedSumHomology.blueprint.md",
+      "lake build ConstructionTargets.CollaredConnectedSumHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd "git show --check --oneline --stat 5dcf403de", :exit 0}
-     {:cmd "git diff --name-only 5dcf403de^ 5dcf403de", :exit 0}],
+     {:cmd "git show --check --stat --oneline 1616b7810", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake build (2 attempts)",
+      :exit 1,
+      :note
+      "Expanded nested subtype membership; final build passes."}],
     :review
     {:outcome :pass,
      :seat "codex-11",
-     :job "invoke-1792083938315-14341-e8f12f85",
+     :job "invoke-1792200587498-16026-a4cf129c",
      :commands
-     ["git show --check --stat 5dcf403de"
-      "git diff --name-only 5dcf403de^ 5dcf403de"
+     ["git show/diff-tree/hash-object 1616b7810"
+      "lake build ConstructionTargets.CollaredConnectedSumHomology"
       "python3 scripts/statement-registry.py check"
-      "sha256sum ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"
-      "rg blueprint nodes/uses/placeholders"],
+      "rg placeholder/fixture checks on recorded blob"],
      :finding
-     "PASS: commit 5dcf403de changes only the scoped blueprint. B1-B13 are mathematically coherent; each node cites the prior results/external inputs its proof needs, quotient orientations and representation conversions are explicit, and B11 hypotheses are used. Hash 13f3a610...da741a4; registry 167/167; no placeholders. This is valid committed program progress."},
-    :commit "5dcf403de",
+     "PASS: commit 1616b7810 adds new compiled progress after 4ac235ef5: the scoped, correctly oriented LargeInterior-to-open-ball homeomorphism supporting blueprint B2. Recorded blob equals compiled blob; 0 placeholders; standard axioms only; registry 168/168; no fixture applies; milestone and remaining theorems are listed."},
+    :commit "1616b7810",
     :changed-paths
-    ["ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"],
+    ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
    :state :open,
@@ -36925,7 +37012,7 @@
     :blueprint
     "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed Euclidean model for large collar interior.",
    :id :program-2026-10-13-collared-connected-sum-homology,
    :kind :reusable-theorem,
    :campaign-priority 32,
@@ -36937,7 +37024,18 @@
    [{:job 1,
      :commit "5dcf403de",
      :reason
-     "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review."}]}
+     "Wrote and committed the reviewed-input blueprint; formalization starts at B1 after independent blueprint review."}
+    {:job 2,
+     :commit "9067e7d41",
+     :reason
+     "Committed compiled B1 collar and quotient representations."}
+    {:job 3,
+     :commit "4ac235ef5",
+     :reason
+     "Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains."}
+    {:job 4,
+     :commit "1616b7810",
+     :reason "Committed Euclidean model for large collar interior."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37209,37 +37307,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 1,
+   :stop-count 2,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Cancel preservation isomorphisms elementwise; coordinate one, four classes, Main.",
+    "Compare the Unit chosen-coproduct composites with the injection retained; then close Bool and circle.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings ["Existing lints; Main one sorry."],
     :missing-theorems
     [{:name
-      "t96A06_normalizedClass_projection_preservation_naturality",
-      :type
-      "forgotten native projection/relative inverse equals absolute inverse/mapped projection",
+      "t96A06_boolH0_comparison_pointInclusion_naturality_with_tail",
+      :type "Bool point naturality with coordinate tail",
       :status :proved,
       :consumers [:t96A06],
-      :depends-on ["t96A06_forget_nativeProjection_normalizedClass"],
+      :depends-on
+      ["t96A06_boolH0_comparison_pointInclusion_naturality_concrete"],
       :area "rp-rational-homology"}
-     {:name "t96A06_mappedIntegralNormalizedClass_localizes",
-      :type "mapped global class localizes positively",
-      :status :partial,
+     {:name "t96A06_unitH0_chosenCoproduct_coordinate_transport",
+      :type
+      "Unit injection identifies the two chosen coproduct composites",
+      :status :not-started,
       :consumers [:t96A06],
       :depends-on
-      ["t96A06_normalizedClass_projection_preservation_naturality"],
+      ["t96A06_unitH0_integralComparison_inverse_pointInclusion"
+       "t96A06_boolH0_comparison_pointInclusion_naturality_with_tail"],
       :area "rp-rational-homology"}],
-    :statement-hashes {:registry "167/167"},
+    :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed the specialized normalized-class projection preservation square.",
+    :reason "Committed whiskered Bool naturality.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37247,21 +37346,13 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd
-      "git diff --check && git show --check --stat --oneline 70fac0ff2",
-      :exit 0}],
+     {:cmd "git show --check --stat --oneline 16ed5cef3d", :exit 0}],
     :diagnostic-history
-    [{:cmd "direct localization assembly",
+    [{:cmd "closure proof attempts",
       :exit 1,
       :note
-      "Comparison coercions did not align; specialized square retained."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792102740569-14751-8e4855fb",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "70fac0ff2",
+      "Isolated chosen-coproduct mismatch from the valid naturality tail."}],
+    :commit "16ed5cef3d",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37269,7 +37360,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -43732,7 +43823,7 @@
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "BallCollar",
@@ -43743,7 +43834,10 @@
     :reported-by [:program-2026-10-13-collared-connected-sum-homology],
     :type
     "collared embedded-ball package, radial regions, and quotient representation",
-    :area "ball-complement-collar"},
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "9067e7d41"},
    :id :lemma-ballcollar,
    :kind :lemma,
    :depends-on [],
@@ -44064,7 +44158,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_mappedIntegralNormalizedClass_localizes",
@@ -44075,7 +44169,10 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "mapped integral global class localizes to pulled-back positive local class",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-mappedintegralnormalizedclass-localizes,
    :kind :lemma,
    :depends-on
@@ -44085,7 +44182,8 @@
     :lemma-t96a06-absolutecomparison-composite
     :lemma-t96a06-absolutecomparison-localization-normalizedclass
     :lemma-t96a06-forget-nativeprojection-normalizedclass
-    :lemma-t96a06-normalizedclass-projection-preservation-naturality],
+    :lemma-t96a06-normalizedclass-projection-preservation-naturality
+    :lemma-t96a06-normalizedclass-projection-preservation-cancel],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -44260,7 +44358,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_normalizedClass_projection_preservation_naturality",
@@ -44272,11 +44370,4143 @@
     :type
     "forgotten native projection/relative inverse equals absolute inverse/mapped projection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-normalizedclass-projection-preservation-naturality,
    :kind :lemma,
    :depends-on [:lemma-t96a06-forget-nativeprojection-normalizedclass],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_normalizedClass_projection_preservation_cancel",
+    :type "preservation inverse/forward cancel"},
+   :lemma
+   {:name "t96A06_normalizedClass_projection_preservation_cancel",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "preservation inverse/forward cancel",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-normalizedclass-projection-preservation-cancel,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-normalizedclass-projection-preservation-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality",
+    :type
+    "integer coordinate one plus chart naturality imply rational coordinate one"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integer coordinate one plus chart naturality imply rational coordinate one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorational-localgenerator-coordinate-of-chart-naturality,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-mappedintegralnormalizedclass-localizes],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_localGenerator_chart_naturality",
+    :type
+    "coefficient extension commutes with selected local chart coordinate"},
+   :lemma
+   {:name "t96A06_integralToRational_localGenerator_chart_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient extension commutes with selected local chart coordinate",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-integraltorational-localgenerator-chart-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-localgenerator-coordinate-of-chart-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_mappedIntegralLocalGenerator_unmap",
+    :type "forward preservation recovers native class"},
+   :lemma
+   {:name "t96A06_mappedIntegralLocalGenerator_unmap",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "forward preservation recovers native class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-mappedintegrallocalgenerator-unmap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedintegrallocalgenerator-mapsto-ambient],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_mappedIntegralLocalGenerator_coordinate_iff",
+    :type "forgotten coordinate one iff native coordinate one"},
+   :lemma
+   {:name "t96A06_mappedIntegralLocalGenerator_coordinate_iff",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "forgotten coordinate one iff native coordinate one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-mappedintegrallocalgenerator-coordinate-iff,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-mappedintegrallocalgenerator-unmap],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_nativeIntegralLocalGenerator_coordinate",
+    :type "native positive class has integral coordinate one"},
+   :lemma
+   {:name "t96A06_nativeIntegralLocalGenerator_coordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "native positive class has integral coordinate one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-nativeintegrallocalgenerator-coordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedintegrallocalgenerator-coordinate-iff
+    :lemma-t96a06-nativeintegrallocalgenerator-coordinate-iff-coefficient-one],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_topIso_of_unitSphere",
+    :type
+    "unit-sphere top homology iso transports to exact successor overlap"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_topIso_of_unitSphere",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "unit-sphere top homology iso transports to exact successor overlap",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "f6d62287e"},
+   :id :lemma-t99j05-cp-successor-overlap-topiso-of-unitsphere,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homologyiso-unitsphere],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_affineUnitSphere_topHomologyIso",
+    :type
+    "rational top homology of the complex affine unit sphere is Q"},
+   :lemma
+   {:name "t99J05_affineUnitSphere_topHomologyIso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "rational top homology of the complex affine unit sphere is Q",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d3394ea47"},
+   :id :lemma-t99j05-affineunitsphere-tophomologyiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-topiso-of-unitsphere],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one",
+    :type "coefficient one implies native coordinate one"},
+   :lemma
+   {:name
+    "t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient one implies native coordinate one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedintegrallocalgenerator-coordinate-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_correctedLocalGeneratorCoefficient_positive",
+    :type "corrected coefficient equals one"},
+   :lemma
+   {:name "t96A06_correctedLocalGeneratorCoefficient_positive",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "corrected coefficient equals one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-correctedlocalgeneratorcoefficient-positive,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation",
+    :type
+    "corrected coefficient is one iff normalization automorphism is not negation"},
+   :lemma
+   {:name
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "corrected coefficient is one iff normalization automorphism is not negation",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-not-negation,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_correctedLocalNormalizationAutomorphism_ne_neg",
+    :type "selected normalization comparison is not integer negation"},
+   :lemma
+   {:name "t96A06_correctedLocalNormalizationAutomorphism_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "selected normalization comparison is not integer negation",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-correctedlocalnormalizationautomorphism-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-not-negation],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite",
+    :type "coefficient one iff concrete composite is not negation"},
+   :lemma
+   {:name
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient one iff concrete composite is not negation",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-concrete-composite,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-not-negation],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_concreteNormalizationComposite_ne_neg",
+    :type "four-map composite is not negation"},
+   :lemma
+   {:name "t96A06_concreteNormalizationComposite_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "four-map composite is not negation",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-concretenormalizationcomposite-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-concrete-composite],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one",
+    :type "coefficient one iff composite one is not negative one"},
+   :lemma
+   {:name
+    "t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient one iff composite one is not negative one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-composite-one-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-concrete-composite],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_concreteNormalizationComposite_one_ne_neg_one",
+    :type "composite one is not negative one"},
+   :lemma
+   {:name "t96A06_concreteNormalizationComposite_one_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "composite one is not negative one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-concretenormalizationcomposite-one-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-composite-one-ne-neg-one],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_euclideanUnitSphere_offDegreeHomology",
+    :type "sphere rational homology vanishes off zero and top"},
+   :lemma
+   {:name "t99J05_euclideanUnitSphere_offDegreeHomology",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "sphere rational homology vanishes off zero and top",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-euclideanunitsphere-offdegreehomology,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-affineunitsphere-tophomologyiso],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_concreteNormalizationComposite_one_eq_correctedCoefficient",
+    :type "four-map composite on one equals corrected coefficient"},
+   :lemma
+   {:name
+    "t96A06_concreteNormalizationComposite_one_eq_correctedCoefficient",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "four-map composite on one equals corrected coefficient",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-concretenormalizationcomposite-one-eq-correctedcoefficient,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedlocalgeneratorcoefficient-eq-one-iff-composite-one-ne-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_concreteNormalizationComposite_one_eq_one",
+    :type "four-map normalization composite sends one to one"},
+   :lemma
+   {:name "t96A06_concreteNormalizationComposite_one_eq_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "four-map normalization composite sends one to one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-concretenormalizationcomposite-one-eq-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-concretenormalizationcomposite-one-eq-correctedcoefficient],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one",
+    :type "native coordinate one iff coefficient one"},
+   :lemma
+   {:name
+    "t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "native coordinate one iff coefficient one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-nativeintegrallocalgenerator-coordinate-iff-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_correctedCoefficient_eq_one_iff_nativeGenerator",
+    :type "coefficient one iff native inverse equals chart generator"},
+   :lemma
+   {:name "t96A06_correctedCoefficient_eq_one_iff_nativeGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient one iff native inverse equals chart generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-correctedcoefficient-eq-one-iff-nativegenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-coordinate-iff-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_nativeIntegralLocalGenerator_eq_generator",
+    :type "native inverse equals positive chart generator"},
+   :lemma
+   {:name "t96A06_nativeIntegralLocalGenerator_eq_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "native inverse equals positive chart generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-nativeintegrallocalgenerator-eq-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedcoefficient-eq-one-iff-nativegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_chart_naturality_of_generator_transport",
+    :type "generator transport implies chart naturality"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_chart_naturality_of_generator_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "generator transport implies chart naturality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorational-chart-naturality-of-generator-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-correctedcoefficient-eq-one-iff-nativegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_localGenerator_transport",
+    :type "integral local generator extends to rational generator"},
+   :lemma
+   {:name "t96A06_integralToRational_localGenerator_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "integral local generator extends to rational generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-localgenerator-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-chart-naturality-of-generator-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt",
+    :type "positive rational homology below top vanishes"},
+   :lemma
+   {:name "t99J05_euclideanUnitSphere_positiveHomology_isZero_of_lt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "positive rational homology below top vanishes",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ebe33ec6f"},
+   :id :lemma-t99j05-euclideanunitsphere-positivehomology-iszero-of-lt,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-affineunitsphere-tophomologyiso],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_euclideanUnitSphere_homology_isZero_of_gt",
+    :type "rational homology above top vanishes"},
+   :lemma
+   {:name "t99J05_euclideanUnitSphere_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "rational homology above top vanishes",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "926cc81f4"},
+   :id :lemma-t99j05-euclideanunitsphere-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-euclideanunitsphere-positivehomology-iszero-of-lt],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_mappedRationalLocalExtension_eq_generator_iff_raw",
+    :type
+    "extension equals generator iff raw image equals inverse generator"},
+   :lemma
+   {:name "t96A06_mappedRationalLocalExtension_eq_generator_iff_raw",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "extension equals generator iff raw image equals inverse generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-mappedrationallocalextension-eq-generator-iff-raw,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-chart-naturality-of-generator-transport],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_rawLocalGenerator_transport",
+    :type "raw coefficient extension transports the generator"},
+   :lemma
+   {:name "t96A06_integralToRational_rawLocalGenerator_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "raw coefficient extension transports the generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-rawlocalgenerator-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedrationallocalextension-eq-generator-iff-raw
+    :lemma-t96a06-integraltorational-rawlocalgenerator-iff-coordinate-one
+    :lemma-t96a06-integraltorational-localchart-naturality-iff-rawtransport
+    :lemma-t96a06-nativeintegrallocalgenerator-eq-generator-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one",
+    :type
+    "raw generator transport iff restored rational coordinate is one"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "raw generator transport iff restored rational coordinate is one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorational-rawlocalgenerator-iff-coordinate-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedrationallocalextension-eq-generator-iff-raw],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality",
+    :type
+    "integral coordinate one and chart naturality imply raw transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integral coordinate one and chart naturality imply raw transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorational-rawlocalgenerator-transport-of-chart-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-rawlocalgenerator-iff-coordinate-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRational_localChart_naturality",
+    :type
+    "coefficient extension commutes with selected integral and rational chart coordinates"},
+   :lemma
+   {:name "t96A06_integralToRational_localChart_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient extension commutes with selected integral and rational chart coordinates",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integraltorational-localchart-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-rawlocalgenerator-transport-of-chart-naturality
+    :lemma-t96a06-mappedrationallocalextension-eq-generator-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRational_localChart_naturality_iff_rawTransport",
+    :type
+    "under integral coordinate one, chart naturality iff raw transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRational_localChart_naturality_iff_rawTransport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "under integral coordinate one, chart naturality iff raw transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorational-localchart-naturality-iff-rawtransport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-rawlocalgenerator-transport-of-chart-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_affineUnitSphere_homology_isZero_of_gt",
+    :type "affine unit-sphere rational homology vanishes above top"},
+   :lemma
+   {:name "t99J05_affineUnitSphere_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "affine unit-sphere rational homology vanishes above top",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "5370feaf8"},
+   :id :lemma-t99j05-affineunitsphere-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-euclideanunitsphere-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one",
+    :type
+    "coefficient one and chart naturality give the rational generator"},
+   :lemma
+   {:name
+    "t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient one and chart naturality give the rational generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-mappedrationallocalextension-eq-generator-of-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorational-localchart-naturality-iff-rawtransport],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one",
+    :type
+    "coefficient one plus chart naturality implies raw transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient one plus chart naturality implies raw transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-mappedrationallocalextension-eq-generator-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralToRationalLocalChartNaturality",
+    :type
+    "coefficient extension commutes with selected chart coordinates"},
+   :lemma
+   {:name "t96A06_integralToRationalLocalChartNaturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient extension commutes with selected chart coordinates",
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-integraltorationallocalchartnaturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coefficient-one
+    :lemma-t96a06-integraltorationallocalchartnaturality-iff-rawtransport-of-coefficient-on],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one",
+    :type "coefficient one: named chart naturality iff raw transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient one: named chart naturality iff raw transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorationallocalchartnaturality-iff-rawtransport-of-coefficient-on,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one",
+    :type
+    "coefficient one identifies native inverse with integral chart generator"},
+   :lemma
+   {:name
+    "t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient one identifies native inverse with integral chart generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-nativeintegrallocalgenerator-eq-generator-of-coefficient-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationallocalchartnaturality-iff-rawtransport-of-coefficient-on],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_overlap_homology_isZero_of_gt",
+    :type "successor overlap vanishes above top"},
+   :lemma
+   {:name "t99J05_cp_successor_overlap_homology_isZero_of_gt",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "successor overlap vanishes above top",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "5370feaf8"},
+   :id :lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-affineunitsphere-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_retract",
+    :type "lower patch retracts to CP n"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_retract",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "lower patch retracts to CP n",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-lowerpatch-retract,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization",
+    :type "rational localization implies raw generator transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "rational localization implies raw generator transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-rationallocalization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-nativeintegrallocalgenerator-eq-generator-of-coefficient-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rationalNormalizedClassLocalizesToRawGenerator",
+    :type "rational extension projects to the chart generator"},
+   :lemma
+   {:name "t96A06_rationalNormalizedClassLocalizesToRawGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "rational extension projects to the chart generator",
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-rationallocalization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rationalProjection_preservation_naturality",
+    :type "rational homology preservation commutes with projection"},
+   :lemma
+   {:name "t96A06_rationalProjection_preservation_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "rational homology preservation commutes with projection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rationalprojection-preservation-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-rationallocalization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison",
+    :type
+    "global rational comparison and scalar one imply local generator"},
+   :lemma
+   {:name
+    "t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "global rational comparison and scalar one imply local generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator-of-globalcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-rationalprojection-preservation-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_globalRationalComparison_and_baseScalar_one",
+    :type
+    "extended integral class is rational generator and base scalar is one"},
+   :lemma
+   {:name "t96A06_globalRationalComparison_and_baseScalar_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "extended integral class is rational generator and base scalar is one",
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-globalrationalcomparison-and-basescalar-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator-of-globalcomparison
+    :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-globalpacket],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket",
+    :type
+    "global normalization packet implies raw coefficient transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "global normalization packet implies raw coefficient transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-globalpacket,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-rationalnormalizedclasslocalizestorawgenerator-of-globalcomparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorZeroLastVector",
+    :type
+    "zeroing the last coordinate of a lower-patch representative remains nonzero, with endpoint equations"},
+   :lemma
+   {:name "cpSuccessorZeroLastVector",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "zeroing the last coordinate of a lower-patch representative remains nonzero, with endpoint equations",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
+   :id :lemma-cpsuccessorzerolastvector,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-overlap-homology-iszero-of-gt],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_deformationRetract",
+    :type
+    "lower patch deformation retracts onto the zero-last projective subspace CP n"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_deformationRetract",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "lower patch deformation retracts onto the zero-last projective subspace CP n",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "87bd5a00f1"},
+   :id :lemma-t99j05-cp-successor-lowerpatch-deformationretract,
+   :kind :lemma,
+   :depends-on
+   [:lemma-cpsuccessorzerolastvector
+    :lemma-cpsuccessorlowervectorhomotopy
+    :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy
+    :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion
+    :lemma-cpsuccessorlowerretraction-inclusion],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.largeInterior_isOpen",
+    :type
+    "the image of the radius-two interior under the large collar embedding is open in an n-manifold"},
+   :lemma
+   {:name "BallCollar.largeInterior_isOpen",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type
+    "the image of the radius-two interior under the large collar embedding is open in an n-manifold",
+    :area "ball-complement-collar"},
+   :id :lemma-ballcollar-largeinterior-isopen,
+   :kind :lemma,
+   :depends-on
+   [:lemma-ballcollar
+    :lemma-ballcollar-range-largeinteriormap
+    :lemma-manifoldembedding-isopenmap],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.punctured_pathConnected",
+    :type
+    "a collared puncture of a connected boundaryless n-manifold, n at least two, is path connected"},
+   :lemma
+   {:name "BallCollar.punctured_pathConnected",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type
+    "a collared puncture of a connected boundaryless n-manifold, n at least two, is path connected",
+    :area "ball-complement-collar"},
+   :id :lemma-ballcollar-punctured-pathconnected,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-largeinterior-isopen],
+   :other-consumers [:t00A01]}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates",
+    :type
+    "global normalization packet iff extension coordinate one and comparison automorphism identity"},
+   :lemma
+   {:name
+    "t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "global normalization packet iff extension coordinate one and comparison automorphism identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-globalrationalcomparison-and-basescalar-one-iff-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-globalpacket],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_globalRationalComparison_coordinates",
+    :type
+    "extension has sphere coordinate one and global-to-local comparison is identity"},
+   :lemma
+   {:name "t96A06_globalRationalComparison_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "extension has sphere coordinate one and global-to-local comparison is identity",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-globalrationalcomparison-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-globalrationalcomparison-and-basescalar-one-iff-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_globalRationalComparison_and_baseScalar_one_iff_split",
+    :type "global packet iff its two coordinate normalizations"},
+   :lemma
+   {:name
+    "t96A06_globalRationalComparison_and_baseScalar_one_iff_split",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "global packet iff its two coordinate normalizations",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-globalrationalcomparison-and-basescalar-one-iff-split,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-globalrationalcomparison-and-basescalar-one-iff-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_rationalExtensionCoordinateOne",
+    :type "extended class has sphere coordinate one"},
+   :lemma
+   {:name "t96A06_rationalExtensionCoordinateOne",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "extended class has sphere coordinate one",
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-rationalextensioncoordinateone,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-globalrationalcomparison-and-basescalar-one-iff-split
+    :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coordinates
+    :lemma-t96a06-mappedrationallocalextension-eq-generator-of-coordinates
+    :lemma-t96a06-integralnormalizedclass-coordinate-isunit
+    :lemma-t96a06-integralnormalizedclass-coordinate-eq-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates",
+    :type
+    "the two normalization coordinates imply raw generator transport"},
+   :lemma
+   {:name
+    "t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "the two normalization coordinates imply raw generator transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-globalrationalcomparison-and-basescalar-one-iff-split],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_mappedRationalLocalExtension_eq_generator_of_coordinates",
+    :type "coordinates give native rational local generator"},
+   :lemma
+   {:name
+    "t96A06_mappedRationalLocalExtension_eq_generator_of_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coordinates give native rational local generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-mappedrationallocalextension-eq-generator-of-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraltorationalrawlocalgeneratortransport-of-coordinates],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorLowerVectorHomotopy",
+    :type
+    "homogeneous nonzero vector homotopy from identity to zero-last endpoint"},
+   :lemma
+   {:name "cpSuccessorLowerVectorHomotopy",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "homogeneous nonzero vector homotopy from identity to zero-last endpoint",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d57b3af25"},
+   :id :lemma-cpsuccessorlowervectorhomotopy,
+   :kind :lemma,
+   :depends-on [:lemma-cpsuccessorzerolastvector],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralNormalizedClass_coordinate_isUnit",
+    :type
+    "integral normalized sphere class has unit canonical coordinate"},
+   :lemma
+   {:name "t96A06_integralNormalizedClass_coordinate_isUnit",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integral normalized sphere class has unit canonical coordinate",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-integralnormalizedclass-coordinate-isunit,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one",
+    :type "integral coordinate is +1 or -1"},
+   :lemma
+   {:name
+    "t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "integral coordinate is +1 or -1",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integralnormalizedclass-coordinate-eq-one-or-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-isunit],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralNormalizedClass_coordinate_eq_one",
+    :type "local orientation selects +1"},
+   :lemma
+   {:name "t96A06_integralNormalizedClass_coordinate_eq_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "local orientation selects +1",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integralnormalizedclass-coordinate-eq-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-or-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one",
+    :type "integral coordinate is +1 iff it is not -1"},
+   :lemma
+   {:name
+    "t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "integral coordinate is +1 iff it is not -1",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integralnormalizedclass-coordinate-eq-one-iff-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-or-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_integralNormalizedClass_coordinate_ne_neg_one",
+    :type
+    "local orientation excludes global sphere-shift coordinate -1"},
+   :lemma
+   {:name "t96A06_integralNormalizedClass_coordinate_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "local orientation excludes global sphere-shift coordinate -1",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-integralnormalizedclass-coordinate-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-iff-ne-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization",
+    :type
+    "coordinate -1 iff sphere-shift generator localizes negatively"},
+   :lemma
+   {:name
+    "t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coordinate -1 iff sphere-shift generator localizes negatively",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-one-iff-ne-neg-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftGenerator_localization_ne_neg",
+    :type "sphere-shift generator does not localize negatively"},
+   :lemma
+   {:name "t96A06_sphereShiftGenerator_localization_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "sphere-shift generator does not localize negatively",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftgenerator-localization-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization
+    :lemma-t96a06-sphereshiftgenerator-localizes-eq-or-eq-neg],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorLowerVectorHomotopyInPatch_continuous",
+    :type
+    "jointly continuous homogeneous homotopy remaining in lower patch"},
+   :lemma
+   {:name "cpSuccessorLowerVectorHomotopyInPatch_continuous",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "jointly continuous homogeneous homotopy remaining in lower patch",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "7b95aaef7"},
+   :id :lemma-cpsuccessorlowervectorhomotopyinpatch-continuous,
+   :kind :lemma,
+   :depends-on [:lemma-cpsuccessorlowervectorhomotopy],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_lowerPatch_quotientHomotopy",
+    :type
+    "restricted quotient descent of lower-patch vector homotopy"},
+   :lemma
+   {:name "t99J05_cp_successor_lowerPatch_quotientHomotopy",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "restricted quotient descent of lower-patch vector homotopy",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "380841fbd"},
+   :id :lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy,
+   :kind :lemma,
+   :depends-on
+   [:lemma-cpsuccessorlowervectorhomotopyinpatch-continuous],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg",
+    :type
+    "sphere-shift generator localizes to positive or negative ambient generator"},
+   :lemma
+   {:name "t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphere-shift generator localizes to positive or negative ambient generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-sphereshiftgenerator-localizes-eq-or-eq-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integralnormalizedclass-coordinate-eq-neg-one-iff-localization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id",
+    :type
+    "positive localization iff sphere-shift/local normalization composite is identity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "positive localization iff sphere-shift/local normalization composite is identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftgenerator-localizes-eq-or-eq-neg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id",
+    :type
+    "the explicit sphere-shift/local normalization composite is identity"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "the explicit sphere-shift/local normalization composite is identity",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint",
+    :type "endpoint equation implies composite identity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint equation implies composite identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftgenerator-localizes-iff-automorphism-eq-id],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalization_endpoint",
+    :type
+    "sphereH2/sphereShift/comparison/localization endpoint sends 1 to 1"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalization_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphereH2/sphereShift/comparison/localization endpoint sends 1 to 1",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalization-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint",
+    :type
+    "iterated sphere-shift endpoint implies normalization identity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "iterated sphere-shift endpoint implies normalization identity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-iterated-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-endpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalization_iterated_endpoint",
+    :type
+    "two inverse sphere shifts and circle normalization give positive local endpoint"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalization_iterated_endpoint",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "two inverse sphere shifts and circle normalization give positive local endpoint",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-iterated-endpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison",
+    :type
+    "positive generator comparison implies iterated local endpoint"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "positive generator comparison implies iterated local endpoint",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-of-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-eq-id-of-iterated-endpoint],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass",
+    :type
+    "integral comparison sends iterated coefficient-sphere generator to positively normalized production sphere class"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integral comparison sends iterated coefficient-sphere generator to positively normalized production sphere class",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-of-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff",
+    :type "generator comparison iff orientation coordinates agree"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "generator comparison iff orientation coordinates agree",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-of-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientDegree_eq_normalizedClassCoordinate",
+    :type
+    "coefficient degree 2 equals normalized production sphere coordinate"},
+   :lemma
+   {:name "t96A06_coefficientDegree_eq_normalizedClassCoordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient degree 2 equals normalized production sphere coordinate",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg",
+    :type "excluding opposite signs forces coordinate equality"},
+   :lemma
+   {:name
+    "t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "excluding opposite signs forces coordinate equality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate-of-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate",
+    :type
+    "coefficient degree is not the negative normalized production coordinate"},
+   :lemma
+   {:name "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient degree is not the negative normalized production coordinate",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate-of-ne-neg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff",
+    :type
+    "sign exclusion iff compared generator is not the negative normalized class"},
+   :lemma
+   {:name
+    "t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sign exclusion iff compared generator is not the negative normalized class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate-iff,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-eq-normalizedclasscoordinate-of-ne-neg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass",
+    :type "compared generator is not the negative normalized class"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "compared generator is not the negative normalized class",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate-iff],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
+    :type "time-one factors through CP n zero-last inclusion"},
+   :lemma
+   {:name "cpSuccessorLowerPatchHomotopy_one_eq_inclusion",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "time-one factors through CP n zero-last inclusion",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "c1ebea9b0"},
+   :id :lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-quotienthomotopy],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg",
+    :type
+    "nonnegative automorphism branch excludes negative generator comparison"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "nonnegative automorphism branch excludes negative generator comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-ne-neg-normalizedclasscoordinate-iff],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg",
+    :type
+    "sphere-shift/local-normalization automorphism is not negative identity"},
+   :lemma
+   {:name "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "sphere-shift/local-normalization automorphism is not negative identity",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one",
+    :type
+    "endpoint not -1 excludes negative normalization automorphism"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "endpoint not -1 excludes negative normalization automorphism",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg-of-iterated-endpoint-ne-,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-ne-neg-normalizedclass-of-automorphism-ne],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one",
+    :type "explicit two-suspension localized endpoint is not -1"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "explicit two-suspension localized endpoint is not -1",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg-of-iterated-endpoint-ne-],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg",
+    :type "endpoint nonnegativity excludes -1"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint nonnegativity excludes -1",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one-of-nonneg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationautomorphism-ne-neg-of-iterated-endpoint-ne-],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg",
+    :type "explicit two-suspension localized endpoint is nonnegative"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "explicit two-suspension localized endpoint is nonnegative",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationiteratedendpoint-nonneg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one-of-nonneg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg",
+    :type
+    "endpoint nonnegativity gives positive integral generator comparison"},
+   :lemma
+   {:name
+    "t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "endpoint nonnegativity gives positive integral generator comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-of-endpoint-nonneg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalization-iterated-endpoint-ne-neg-one-of-nonneg],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "cpSuccessorLowerRetraction_inclusion",
+    :type "truncation is a left inverse to zero-last inclusion"},
+   :lemma
+   {:name "cpSuccessorLowerRetraction_inclusion",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "truncation is a left inverse to zero-last inclusion",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "70fe46d76"},
+   :id :lemma-cpsuccessorlowerretraction-inclusion,
+   :kind :lemma,
+   :depends-on [:lemma-cpsuccessorlowerpatchhomotopy-one-eq-inclusion],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg",
+    :type "coordinate nonnegativity implies endpoint nonnegativity"},
+   :lemma
+   {:name
+    "t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coordinate nonnegativity implies endpoint nonnegativity",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-sphereshiftlocalnormalizationiteratedendpoint-nonneg-of-coordinate-nonneg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-integraliteratedspheregenerator-mapsto-normalizedclass-of-endpoint-nonneg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_orientationCoordinates_nonneg",
+    :type
+    "coefficient and normalized-class coordinates are nonnegative"},
+   :lemma
+   {:name "t96A06_orientationCoordinates_nonneg",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient and normalized-class coordinates are nonnegative",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-orientationcoordinates-nonneg,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationiteratedendpoint-nonneg-of-coordinate-nonneg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientDegree_two_nonneg_of_circle_and_steps",
+    :type "circle and suspension signs imply coefficient sign"},
+   :lemma
+   {:name "t96A06_coefficientDegree_two_nonneg_of_circle_and_steps",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "circle and suspension signs imply coefficient sign",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-coefficientdegree-two-nonneg-of-circle-and-steps,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-sphereshiftlocalnormalizationiteratedendpoint-nonneg-of-coordinate-nonneg],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_circleOrientationEndpoint_nonneg_and_suspensionSteps",
+    :type
+    "positive circle endpoint and degree-preserving suspensions"},
+   :lemma
+   {:name
+    "t96A06_circleOrientationEndpoint_nonneg_and_suspensionSteps",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "positive circle endpoint and degree-preserving suspensions",
+    :area "rp-rational-homology"},
+   :id
+   :lemma-t96a06-circleorientationendpoint-nonneg-and-suspensionsteps,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-two-nonneg-of-circle-and-steps],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison",
+    :type "exact circle comparison implies positive endpoint"},
+   :lemma
+   {:name
+    "t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "exact circle comparison implies positive endpoint",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-coefficientcircleorientationendpoint-nonneg-of-comparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientdegree-two-nonneg-of-circle-and-steps],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleComparison_eq_native",
+    :type
+    "coefficient circle inverse followed by integral comparison equals native S1 inverse"},
+   :lemma
+   {:name "t96A06_coefficientCircleComparison_eq_native",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient circle inverse followed by integral comparison equals native S1 inverse",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-coefficientcirclecomparison-eq-native,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcircleorientationendpoint-nonneg-of-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleComparison_eq_native_of_apply_one",
+    :type "coordinate at one determines exact circle comparison"},
+   :lemma
+   {:name "t96A06_coefficientCircleComparison_eq_native_of_apply_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coordinate at one determines exact circle comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-coefficientcirclecomparison-eq-native-of-apply-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcircleorientationendpoint-nonneg-of-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleComparison_apply_one",
+    :type "coefficient circle comparison has native coordinate one"},
+   :lemma
+   {:name "t96A06_coefficientCircleComparison_apply_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coefficient circle comparison has native coordinate one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-coefficientcirclecomparison-apply-one,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcirclecomparison-eq-native-of-apply-one
+    :lemma-t96a06-coefficientcircleboundary-integralcomparison
+    :lemma-t96a06-coefficientcircleboundary-comparison-generator
+    :lemma-integralpairconnectingcomparison
+    :lemma-t96a06-coefficientcirclerelativegenerator-boundary
+    :lemma-t96a06-coefficientcirclerelativegenerator-eq-intervalgenerator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_step",
+    :type "CP successor rational homology via MV"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_step",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "CP successor rational homology via MV",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-step,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-deformationretract],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientCircleBoundary_integralComparison_of_bool",
+    :type
+    "Bool H0 comparison transports to signed circle boundary coordinates"},
+   :lemma
+   {:name
+    "t96A06_coefficientCircleBoundary_integralComparison_of_bool",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Bool H0 comparison transports to signed circle boundary coordinates",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-coefficientcircleboundary-integralcomparison-of-bool,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison",
+    :type
+    "forgotten module and native additive discrete H0 coordinates agree on Bool"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten module and native additive discrete H0 coordinates agree on Bool",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-integralcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison
+    :lemma-t96a06-boolh0-comparison-pointinclusion-naturality
+    :lemma-t96a06-unith0-integralcomparison-apply
+    :lemma-t96a06-boolh0-preserved-pointinclusion
+    :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-concrete
+    :lemma-t96a06-unith0-integralcomparison-inverse
+    :lemma-t96a06-unith0-preserved-pointinclusion],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_of_points",
+    :type "two point coordinates determine the Bool H0 comparison"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_of_points",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "two point coordinates determine the Bool H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-integralcomparison-of-points,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_points",
+    :type
+    "forgotten and native H0 comparisons agree on both Bool point inclusions"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_points",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten and native H0 comparisons agree on both Bool point inclusions",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-integralcomparison-points,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-points],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_points_of_false_true",
+    :type
+    "false and true coordinates give every Bool point coordinate"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_points_of_false_true",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "false and true coordinates give every Bool point coordinate",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-integralcomparison-points-of-false-true,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-points],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_false",
+    :type
+    "forgotten and native discrete H0 comparisons agree at false"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_false",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten and native discrete H0 comparisons agree at false",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-integralcomparison-false,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-integralcomparison-points-of-false-true],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_of_false_true",
+    :type "endpoint coordinates imply the full Bool H0 comparison"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_of_false_true",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint coordinates imply the full Bool H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-integralcomparison-of-false-true,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-integralcomparison-points-of-false-true],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_subcomplexMayerVietoris_shortExact",
+    :type "rational subcomplex MV exactness for CP patches"},
+   :lemma
+   {:name "t99J05_cp_successor_subcomplexMayerVietoris_shortExact",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "rational subcomplex MV exactness for CP patches",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "0e6877ab20"},
+   :id :lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-lowerpatch-deformationretract],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_transport",
+    :type "transport MV exactness to patch homology"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transport MV exactness to patch homology",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact
+    :lemma-t99j05-cp-successor-mayervietoris-exact-pieces
+    :lemma-t99j05-cp-successor-mayervietoris-exact-ambient],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_of_endpoint_pair",
+    :type "endpoint conjunction implies full Bool H0 comparison"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_of_endpoint_pair",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint conjunction implies full Bool H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-integralcomparison-of-endpoint-pair,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-integralcomparison-of-false-true],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_integralComparison_endpoint_pair",
+    :type
+    "false and true point coordinates for forgotten/native discrete H0"},
+   :lemma
+   {:name "t96A06_boolH0_integralComparison_endpoint_pair",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "false and true point coordinates for forgotten/native discrete H0",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-integralcomparison-endpoint-pair,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-integralcomparison-of-endpoint-pair],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_endpoint_pair_iff_all_points",
+    :type "endpoint pair iff every Bool point comparison"},
+   :lemma
+   {:name "t96A06_boolH0_endpoint_pair_iff_all_points",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint pair iff every Bool point comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-endpoint-pair-iff-all-points,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-integralcomparison-of-endpoint-pair],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0PointComparison_of_unit_naturality",
+    :type
+    "unit comparison naturality gives each Bool point coordinate"},
+   :lemma
+   {:name "t96A06_boolH0PointComparison_of_unit_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "unit comparison naturality gives each Bool point coordinate",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0pointcomparison-of-unit-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-endpoint-pair-iff-all-points
+    :lemma-t96a06-boolh0-endpoint-pair-iff-comparison
+    :lemma-t96a06-boolh0-all-points-iff-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_endpoint_pair_iff_comparison",
+    :type "endpoint pair iff full Bool H0 comparison"},
+   :lemma
+   {:name "t96A06_boolH0_endpoint_pair_iff_comparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "endpoint pair iff full Bool H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-endpoint-pair-iff-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-endpoint-pair-iff-all-points],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_all_points_iff_comparison",
+    :type "all Bool point comparisons iff full comparison"},
+   :lemma
+   {:name "t96A06_boolH0_all_points_iff_comparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "all Bool point comparisons iff full comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-all-points-iff-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-endpoint-pair-iff-comparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_pieces",
+    :type "exactness at specialized two-patch homology sum"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_pieces",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at specialized two-patch homology sum",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "cbdbb58fb8"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-subcomplexmayervietoris-shortexact],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_module_pointInclusion_coordinates",
+    :type
+    "module H0 Unit-to-Bool map is the selected coproduct injection"},
+   :lemma
+   {:name "t96A06_boolH0_module_pointInclusion_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "module H0 Unit-to-Bool map is the selected coproduct injection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-module-pointinclusion-coordinates,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-all-points-iff-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_additive_pointInclusion_coordinates",
+    :type
+    "additive H0 Unit-to-Bool map is the selected coproduct injection"},
+   :lemma
+   {:name "t96A06_boolH0_additive_pointInclusion_coordinates",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "additive H0 Unit-to-Bool map is the selected coproduct injection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-additive-pointinclusion-coordinates,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-module-pointinclusion-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0PointComparison_of_comparison_naturality",
+    :type
+    "coefficient comparison naturality plus both coordinate edges gives each Bool point comparison"},
+   :lemma
+   {:name "t96A06_boolH0PointComparison_of_comparison_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "coefficient comparison naturality plus both coordinate edges gives each Bool point comparison",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0pointcomparison-of-comparison-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-additive-pointinclusion-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_comparison_pointInclusion_naturality",
+    :type
+    "integral comparison naturality for each Unit-to-Bool point inclusion"},
+   :lemma
+   {:name "t96A06_boolH0_comparison_pointInclusion_naturality",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "integral comparison naturality for each Unit-to-Bool point inclusion",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-comparison-pointinclusion-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-additive-pointinclusion-coordinates],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison",
+    :type
+    "forgotten module and additive direct H0 coordinates agree on Unit"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten module and additive direct H0 coordinates agree on Unit",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-integralcomparison,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality
+    :lemma-t96a06-unith0-comparison-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_of_generator",
+    :type
+    "the Unit generator coordinate determines the full H0 comparison"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_of_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "the Unit generator coordinate determines the full H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-integralcomparison-of-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_generator",
+    :type
+    "forgotten module and additive Unit H0 generator coordinates agree"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten module and additive Unit H0 generator coordinates agree",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-integralcomparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-of-generator
+    :lemma-t96a06-unith0-generator-iff-comparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_overlap",
+    :type "exactness at overlap homology"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_overlap",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at overlap homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "4a9541db6d"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-overlap,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_ambient",
+    :type "exactness at ambient homology"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_ambient",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "exactness at ambient homology",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-ambient,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-overlap],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_generator_iff_comparison",
+    :type "Unit generator equality iff full H0 comparison"},
+   :lemma
+   {:name "t96A06_unitH0_generator_iff_comparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Unit generator equality iff full H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-generator-iff-comparison,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison-of-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_generator_eq_of_apply_one",
+    :type "equality at one determines Unit generator-probe equality"},
+   :lemma
+   {:name "t96A06_unitH0_generator_eq_of_apply_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "equality at one determines Unit generator-probe equality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-generator-eq-of-apply-one,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-generator-iff-comparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_apply_one",
+    :type
+    "chain comparison preserves the unique Unit H0 generator at one"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_apply_one",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "chain comparison preserves the unique Unit H0 generator at one",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-integralcomparison-apply-one,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-generator-eq-of-apply-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
+    :type "coordinate normalization implies Unit comparison at one"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_apply_one_of_coordinate",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "coordinate normalization implies Unit comparison at one",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-generator-eq-of-apply-one],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_coordinate_normalization",
+    :type
+    "chain comparison preserves the selected Unit H0 coordinate"},
+   :lemma
+   {:name "t96A06_unitH0_coordinate_normalization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain comparison preserves the selected Unit H0 coordinate",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-coordinate-normalization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_unitH0_coordinate_normalization_of_comparison_generator",
+    :type "generator comparison implies normalization"},
+   :lemma
+   {:name
+    "t96A06_unitH0_coordinate_normalization_of_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "generator comparison implies normalization",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-apply-one-of-coordinate],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_comparison_generator",
+    :type "comparison preserves explicit Unit generator"},
+   :lemma
+   {:name "t96A06_unitH0_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "comparison preserves explicit Unit generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator
+    :lemma-t96a06-unith0-integralcomparison-of-comparison-generator
+    :lemma-t96a06-unith0-preservation-generator
+    :lemma-t96a06-unith0-preservation-coordinate-generator
+    :lemma-t96a06-unith0-chaincomparison-homology-generators
+    :lemma-t96a06-unith0-homologycomparison-factorization],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.largeInteriorMap_isEmbedding",
+    :type "restricted large-collar interior map is an embedding"},
+   :lemma
+   {:name "BallCollar.largeInteriorMap_isEmbedding",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "restricted large-collar interior map is an embedding",
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "4ac235ef5"},
+   :id :lemma-ballcollar-largeinteriormap-isembedding,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.range_largeInteriorMap",
+    :type "restricted map range equals radialTwo"},
+   :lemma
+   {:name "BallCollar.range_largeInteriorMap",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "restricted map range equals radialTwo",
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "4ac235ef5"},
+   :id :lemma-ballcollar-range-largeinteriormap,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-largeinteriormap-isembedding],
+   :other-consumers [:t00A01]}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_of_comparison_generator",
+    :type
+    "explicit Unit generator comparison implies full H0 comparison"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_of_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "explicit Unit generator comparison implies full H0 comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-integralcomparison-of-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_comparison_generator_of_chain_compatibility",
+    :type "chain compatibility implies Unit generator comparison"},
+   :lemma
+   {:name "t96A06_unitH0_comparison_generator_of_chain_compatibility",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain compatibility implies Unit generator comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-unith0-comparison-generator-of-chain-compatibility,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-of-comparison-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0ChainGeneratorCompatibility",
+    :type "chain comparison preserves selected Unit H0 class"},
+   :lemma
+   {:name "t96A06_unitH0ChainGeneratorCompatibility",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain comparison preserves selected Unit H0 class",
+    :area "rp-rational-homology",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0chaingeneratorcompatibility,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-comparison-generator-of-chain-compatibility
+    :lemma-t96a06-unith0-chaincomparison-degreezero-generator
+    :lemma-t96a06-unith0-chaincomparison-degreezero-generator-inv],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainComparison_degreeZero_generator",
+    :type
+    "chain comparison preserves the unique Unit simplex generator"},
+   :lemma
+   {:name "t96A06_unitH0_chainComparison_degreeZero_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "chain comparison preserves the unique Unit simplex generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-chaincomparison-degreezero-generator,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainComparison_degreeZero_generator_inv",
+    :type
+    "inverse chain comparison preserves the Unit simplex generator"},
+   :lemma
+   {:name "t96A06_unitH0_chainComparison_degreeZero_generator_inv",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "inverse chain comparison preserves the Unit simplex generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-chaincomparison-degreezero-generator-inv,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-chaincomparison-degreezero-generator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
+    :type
+    "range overlap/lower/top homology isomorphic to literal patches"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_rangeHomologyIsos",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "range overlap/lower/top homology isomorphic to literal patches",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "d69b5953f"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-ambient],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_transport_naturality",
+    :type "range isomorphisms commute with MV maps"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_transport_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "range isomorphisms commute with MV maps",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-transport-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_homologyComparison_factorization",
+    :type
+    "Unit comparison factors through preserved homology and induced chain map"},
+   :lemma
+   {:name "t96A06_unitH0_homologyComparison_factorization",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Unit comparison factors through preserved homology and induced chain map",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-homologycomparison-factorization,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-chaincomparison-degreezero-generator-inv],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_induced_generator",
+    :type
+    "induced homology map carries the selected Unit degree-zero class"},
+   :lemma
+   {:name "t96A06_unitH0_induced_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "induced homology map carries the selected Unit degree-zero class",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-induced-generator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-homologycomparison-factorization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0CoordinateGenerator_eq_moduleGenerator",
+    :type
+    "forgotten Unit H0 coordinate equals underlying module generator"},
+   :lemma
+   {:name "t96A06_unitH0CoordinateGenerator_eq_moduleGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "forgotten Unit H0 coordinate equals underlying module generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0coordinategenerator-eq-modulegenerator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-homologycomparison-factorization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_induced_module_generator",
+    :type
+    "induced chain-comparison homology map carries the module Unit generator"},
+   :lemma
+   {:name "t96A06_unitH0_induced_module_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "induced chain-comparison homology map carries the module Unit generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-induced-module-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0coordinategenerator-eq-modulegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0ModuleGenerator_eq_opcycleGenerator",
+    :type
+    "module Unit H0 generator is the canonical class of its explicit opcycle"},
+   :lemma
+   {:name "t96A06_unitH0ModuleGenerator_eq_opcycleGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "module Unit H0 generator is the canonical class of its explicit opcycle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0modulegenerator-eq-opcyclegenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0coordinategenerator-eq-modulegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_induced_opcycle_generator",
+    :type
+    "chain-comparison homology map carries the explicit Unit opcycle class"},
+   :lemma
+   {:name "t96A06_unitH0_induced_opcycle_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "chain-comparison homology map carries the explicit Unit opcycle class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-induced-opcycle-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0modulegenerator-eq-opcyclegenerator
+    :lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator
+    :lemma-t96a06-unith0-opcyclesmap-generator
+    :lemma-t96a06-unith0-homologycomparison-factorization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0ModuleChainGenerator",
+    :type "explicit module-valued Unit degree-zero simplex generator"},
+   :lemma
+   {:name "t96A06_unitH0ModuleChainGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "explicit module-valued Unit degree-zero simplex generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0modulechaingenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0modulegenerator-eq-opcyclegenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_opcycle_eq_projected_chainGenerator",
+    :type
+    "Unit opcycle generator equals projection of the explicit chain generator"},
+   :lemma
+   {:name "t96A06_unitH0_opcycle_eq_projected_chainGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Unit opcycle generator equals projection of the explicit chain generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0modulechaingenerator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap",
+    :type "literal transport commutes with ambient inclusion"},
+   :lemma
+   {:name
+    "t99J05_ambientSubspaceRangeHomologyIso_hom_comp_subspaceMap",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "literal transport commutes with ambient inclusion",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b9f1d3a49"},
+   :id
+   :lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-rangehomologyisos],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
+    :type "overlap-to-pieces MV map commutes with transport"},
+   :lemma
+   {:name
+    "t99J05_cp_successor_mayerVietoris_overlap_pieces_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "overlap-to-pieces MV map commutes with transport",
+    :area "rational-homology-lefschetz"},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-overlap-pieces-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap
+    :lemma-t99j05-ambientsubspacerangehomologyiso-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_opcyclesMap_generator",
+    :type
+    "chain comparison carries the projected Unit generator to the native projection"},
+   :lemma
+   {:name "t96A06_unitH0_opcyclesMap_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "chain comparison carries the projected Unit generator to the native projection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-opcyclesmap-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preservation_generator",
+    :type
+    "homology-preservation isomorphism carries the Unit coordinate to its projected opcycle class"},
+   :lemma
+   {:name "t96A06_unitH0_preservation_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "homology-preservation isomorphism carries the Unit coordinate to its projected opcycle class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-preservation-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-induced-opcycle-generator
+    :lemma-t96a06-unith0-homologycomparison-factorization],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_comparison_square",
+    :type
+    "integral comparison commutes on the two Bool H0 generators"},
+   :lemma
+   {:name "t96A06_boolH0_comparison_square",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "integral comparison commutes on the two Bool H0 generators",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0-comparison-square,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-comparison-generator],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_ambientSubspaceRangeHomologyIso_naturality",
+    :type
+    "range-to-literal homology transport is natural for subspace inclusions"},
+   :lemma
+   {:name "t99J05_ambientSubspaceRangeHomologyIso_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type
+    "range-to-literal homology transport is natural for subspace inclusions",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ddbe3be23"},
+   :id :lemma-t99j05-ambientsubspacerangehomologyiso-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-hom-comp-subspacemap],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
+    :type
+    "inverse-discrete Unit chain generator equals the explicit singular simplex"},
+   :lemma
+   {:name "t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "inverse-discrete Unit chain generator equals the explicit singular simplex",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-opcycle-eq-projected-chaingenerator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainGeneratorCompatibility",
+    :type "chain comparison induces selected Unit H0 generator"},
+   :lemma
+   {:name "t96A06_unitH0_chainGeneratorCompatibility",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "chain comparison induces selected Unit H0 generator",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-chaingeneratorcompatibility,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex",
+    :type "additive generator equals literal simplex"},
+   :lemma
+   {:name "t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "additive generator equals literal simplex",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0additivechaingenerator-eq-explicitsimplex,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0modulechaingenerator-eq-explicitsimplex],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainComparison_projected_generators",
+    :type "comparison carries module opcycle to additive opcycle"},
+   :lemma
+   {:name "t96A06_unitH0_chainComparison_projected_generators",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "comparison carries module opcycle to additive opcycle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-chaincomparison-projected-generators,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0additivechaingenerator-eq-explicitsimplex
+    :lemma-t96a06-unith0-chaincomparison-degreezero-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chainComparison_homology_generators",
+    :type
+    "homology map carries mapped generator class to additive class"},
+   :lemma
+   {:name "t96A06_unitH0_chainComparison_homology_generators",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "homology map carries mapped generator class to additive class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-chaincomparison-homology-generators,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-chaincomparison-projected-generators],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_cp_successor_mayerVietoris_overlap_lower_naturality",
+    :type "lower-leg naturality"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_overlap_lower_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "lower-leg naturality",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9bea96bc2"},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-overlap-lower-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
+    :type "top-leg naturality"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_overlap_top_naturality",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "top-leg naturality",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "9bea96bc2"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-overlap-top-naturality,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-ambientsubspacerangehomologyiso-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preservation_coordinate_generator",
+    :type
+    "preservation carries the Unit coordinate to its mapped class"},
+   :lemma
+   {:name "t96A06_unitH0_preservation_coordinate_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "preservation carries the Unit coordinate to its mapped class",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-preservation-coordinate-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-chaincomparison-homology-generators
+    :lemma-t96a06-unith0-homologycomparison-factorization
+    :lemma-t96a06-unith0-preservation-right-eq-left
+    :lemma-t96a06-unith0-righthomology-opcycle-transport
+    :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata
+    :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator
+    :lemma-t96a06-unith0-maphomologyiso-eq-rightdata
+    :lemma-t96a06-unith0-mappedrighthomology-triangle
+    :lemma-t96a06-unith0-forgottenrighthomology-opcycle-triangle
+    :lemma-t96a06-unith0-maphomologyiso-inv-eq-rightdata
+    :lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata
+    :lemma-t96a06-unith0-preservation-canonical-triangle
+    :lemma-t96a06-unith0-preservation-canonical-triangle-generator
+    :lemma-t96a06-unith0-mapopcyclesiso-inv-projected],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preservation_right_eq_left",
+    :type "right and left Unit preservation agree"},
+   :lemma
+   {:name "t96A06_unitH0_preservation_right_eq_left",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "right and left Unit preservation agree",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-preservation-right-eq-left,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-chaincomparison-homology-generators],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_rightHomology_opcycle_transport",
+    :type
+    "canonical opcycle transport commutes with right homology data"},
+   :lemma
+   {:name "t96A06_unitH0_rightHomology_opcycle_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "canonical opcycle transport commutes with right homology data",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-righthomology-opcycle-transport,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-preservation-right-eq-left],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapOpcyclesIso_eq_rightData",
+    :type "Unit opcycle preservation equals right-data transport"},
+   :lemma
+   {:name "t96A06_unitH0_mapOpcyclesIso_eq_rightData",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Unit opcycle preservation equals right-data transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-righthomology-opcycle-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_literalOverlapToPieces_components",
+    :type "signed map component formulas"},
+   :lemma
+   {:name "t99J05_cp_successor_literalOverlapToPieces_components",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "signed map component formulas",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "2c9276d49"},
+   :id :lemma-t99j05-cp-successor-literaloverlaptopieces-components,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-overlap-lower-naturality
+    :lemma-t99j05-cp-successor-mayervietoris-overlap-top-naturality],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_f_transport",
+    :type "MV first-arrow transport"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_f_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "MV first-arrow transport",
+    :area "rational-homology-lefschetz",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
+   :id :lemma-t99j05-cp-successor-mayervietoris-f-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-literaloverlaptopieces-components
+    :lemma-t99j05-rationalhomologybiprodiso
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-map],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapOpcyclesIso_explicit_generator",
+    :type "preservation on Unit generator"},
+   :lemma
+   {:name "t96A06_unitH0_mapOpcyclesIso_explicit_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "preservation on Unit generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-mapopcyclesiso-explicit-generator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-mapopcyclesiso-eq-rightdata],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapHomologyIso'_eq_rightData",
+    :type "homology preservation equals right-data transport"},
+   :lemma
+   {:name "t96A06_unitH0_mapHomologyIso'_eq_rightData",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "homology preservation equals right-data transport",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-maphomologyiso-eq-rightdata,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-mapopcyclesiso-explicit-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mappedRightHomology_triangle",
+    :type "mapped right homology-to-opcycles triangle"},
+   :lemma
+   {:name "t96A06_unitH0_mappedRightHomology_triangle",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "mapped right homology-to-opcycles triangle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-mappedrighthomology-triangle,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-maphomologyiso-eq-rightdata],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_forgottenRightHomology_opcycle_triangle",
+    :type "forgotten original right-data triangle"},
+   :lemma
+   {:name "t96A06_unitH0_forgottenRightHomology_opcycle_triangle",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "forgotten original right-data triangle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-forgottenrighthomology-opcycle-triangle,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-righthomology-opcycle-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_rationalHomologyBiprodIso",
+    :type "ModuleCat rational homology preserves binary biproduct"},
+   :lemma
+   {:name "t99J05_rationalHomologyBiprodIso",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "ModuleCat rational homology preserves binary biproduct",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "ab85a510c"},
+   :id :lemma-t99j05-rationalhomologybiprodiso,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-literaloverlaptopieces-components],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapHomologyIso_inv_eq_rightData",
+    :type "homology inverse normal form"},
+   :lemma
+   {:name "t96A06_unitH0_mapHomologyIso_inv_eq_rightData",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "homology inverse normal form",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-maphomologyiso-inv-eq-rightdata,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-mappedrighthomology-triangle],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData",
+    :type "opcycle inverse normal form"},
+   :lemma
+   {:name "t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "opcycle inverse normal form",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-forgottenrighthomology-opcycle-triangle],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preservation_canonical_triangle",
+    :type "canonical homology/opcycle preservation triangle"},
+   :lemma
+   {:name "t96A06_unitH0_preservation_canonical_triangle",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "canonical homology/opcycle preservation triangle",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-preservation-canonical-triangle,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-maphomologyiso-inv-eq-rightdata
+    :lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preservation_canonical_triangle_generator",
+    :type "canonical preservation triangle on Unit generator"},
+   :lemma
+   {:name "t96A06_unitH0_preservation_canonical_triangle_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "canonical preservation triangle on Unit generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-preservation-canonical-triangle-generator,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-preservation-canonical-triangle],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_mapOpcyclesIso_inv_projected",
+    :type
+    "inverse preservation carries forgotten projection to mapped projection"},
+   :lemma
+   {:name "t96A06_unitH0_mapOpcyclesIso_inv_projected",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "inverse preservation carries forgotten projection to mapped projection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-mapopcyclesiso-inv-projected,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_f_transport_map",
+    :type "transported MV first-arrow definition"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_f_transport_map",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transported MV first-arrow definition",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "8323662f3"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-map,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-rationalhomologybiprodiso],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleBoundary_integralComparison",
+    :type "signed interval-boundary comparison"},
+   :lemma
+   {:name "t96A06_coefficientCircleBoundary_integralComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "signed interval-boundary comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-coefficientcircleboundary-integralcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-integralcomparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
+    :type "literal-patch MV exactness"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "literal-patch MV exactness",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b5b25ca20"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-f-transport
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-map],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.largeInteriorHomeomorphBall",
+    :type "large collar interior homeomorphic to Euclidean open ball"},
+   :lemma
+   {:name "BallCollar.largeInteriorHomeomorphBall",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "large collar interior homeomorphic to Euclidean open ball",
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "1616b7810"},
+   :id :lemma-ballcollar-largeinteriorhomeomorphball,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-range-largeinteriormap],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "manifoldEmbedding_isOpenMap",
+    :type "same-dimensional boundaryless manifold embedding is open"},
+   :lemma
+   {:name "manifoldEmbedding_isOpenMap",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "same-dimensional boundaryless manifold embedding is open",
+    :area "ball-complement-collar"},
+   :id :lemma-manifoldembedding-isopenmap,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-largeinteriorhomeomorphball],
+   :other-consumers [:t00A01]}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleBoundary_comparison_generator",
+    :type "boundary comparison maps generator to signed endpoints"},
+   :lemma
+   {:name "t96A06_coefficientCircleBoundary_comparison_generator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "boundary comparison maps generator to signed endpoints",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-coefficientcircleboundary-comparison-generator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcircleboundary-integralcomparison],
+   :other-consumers []}
+  {:consumer :portfolio,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance {:lemma "integralPairConnectingComparison"},
+   :lemma
+   {:name "integralPairConnectingComparison",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
+   :id :lemma-integralpairconnectingcomparison,
+   :kind :lemma,
+   :depends-on [],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleRelativeGenerator_boundary",
+    :type "relative generator has signed endpoint boundary"},
+   :lemma
+   {:name "t96A06_coefficientCircleRelativeGenerator_boundary",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "relative generator has signed endpoint boundary",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-coefficientcirclerelativegenerator-boundary,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcircleboundary-comparison-generator],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_coefficientCircleRelativeGenerator_eq_intervalGenerator",
+    :type "relative class maps to interval generator"},
+   :lemma
+   {:name
+    "t96A06_coefficientCircleRelativeGenerator_eq_intervalGenerator",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "relative class maps to interval generator",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-coefficientcirclerelativegenerator-eq-intervalgenerator,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-coefficientcirclerelativegenerator-boundary
+    :lemma-integralpairconnectingcomparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_union_transport",
+    :type "transport MV union term to literal CP successor"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_union_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transport MV union term to literal CP successor",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-union-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
+    :type "transported arrow equals signed literal arrow"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transported arrow equals signed literal arrow",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-literal,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-f-transport-map
+    :lemma-t99j05-cp-successor-literaloverlaptopieces-components
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-piecestransport-f],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_apply",
+    :type "pointwise Unit integral comparison"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_apply",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "pointwise Unit integral comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-integralcomparison-apply,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0_preserved_pointInclusion",
+    :type
+    "forgetful coproduct comparison carries each Bool injection"},
+   :lemma
+   {:name "t96A06_boolH0_preserved_pointInclusion",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "forgetful coproduct comparison carries each Bool injection",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-boolh0-preserved-pointinclusion,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison-apply],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_boolH0_comparison_pointInclusion_naturality_concrete",
+    :type "concrete-chain-map Bool comparison naturality"},
+   :lemma
+   {:name
+    "t96A06_boolH0_comparison_pointInclusion_naturality_concrete",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "concrete-chain-map Bool comparison naturality",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id
+   :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-concrete,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_inverse",
+    :type "inverse Unit comparison"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_inverse",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "inverse Unit comparison",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-integralcomparison-inverse,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_preserved_pointInclusion",
+    :type "Unit injection preservation"},
+   :lemma
+   {:name "t96A06_unitH0_preserved_pointInclusion",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Unit injection preservation",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
+   :id :lemma-t96a06-unith0-preserved-pointinclusion,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison-inverse],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :banked,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f",
+    :type "transported arrow is exact-complex f"},
+   :lemma
+   {:name
+    "t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transported arrow is exact-complex f",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "7edd97c7b7"},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-piecestransport-f,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_integralComparison_inverse_pointInclusion",
+    :type "Unit inverse comparison after Unit-to-Bool inclusion"},
+   :lemma
+   {:name "t96A06_unitH0_integralComparison_inverse_pointInclusion",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Unit inverse comparison after Unit-to-Bool inclusion",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id :lemma-t96a06-unith0-integralcomparison-inverse-pointinclusion,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-unith0-integralcomparison-inverse],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_boolH0PointComparison_of_unit",
+    :type "each Bool coordinate follows from Unit comparison"},
+   :lemma
+   {:name "t96A06_boolH0PointComparison_of_unit",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "each Bool coordinate follows from Unit comparison",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-boolh0pointcomparison-of-unit,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-inverse-pointinclusion
+    :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-concrete],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t96A06_boolH0_comparison_pointInclusion_naturality_with_tail",
+    :type "Bool point naturality with coordinate tail"},
+   :lemma
+   {:name
+    "t96A06_boolH0_comparison_pointInclusion_naturality_with_tail",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "Bool point naturality with coordinate tail",
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
+   :id
+   :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-with-tail,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-boolh0-comparison-pointinclusion-naturality-concrete],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_unitH0_chosenCoproduct_coordinate_transport",
+    :type
+    "Unit injection identifies the two chosen coproduct composites"},
+   :lemma
+   {:name "t96A06_unitH0_chosenCoproduct_coordinate_transport",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type
+    "Unit injection identifies the two chosen coproduct composites",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-unith0-chosencoproduct-coordinate-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t96a06-unith0-integralcomparison-inverse-pointinclusion
+    :lemma-t96a06-boolh0-comparison-pointinclusion-naturality-with-tail],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses

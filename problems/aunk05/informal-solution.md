@@ -18,7 +18,7 @@ In complex analysis, **differentiation is secretly integration**:
 $$
 f'(z)=\frac{1}{2\pi i}\oint_{|\zeta-z|=r}\frac{f(\zeta)}{(\zeta-z)^2}\,d\zeta,
 $$
-and uniform convergence **commutes with contour integration** over a compact curve (the error is bounded by length × sup-norm). So *both* parts reduce to the single move "pass the uniform limit through a contour integral":
+and uniform convergence **commutes with contour integration** over a compact curve (the error is bounded by length $\times$ sup-norm). So *both* parts reduce to the single move "pass the uniform limit through a contour integral":
 
 - For (a), the integral of $f_n$ around every triangle is $0$ (Cauchy–Goursat); passing the limit, the same holds for $f$, and **Morera** upgrades this to holomorphy.
 - For (b), apply the Cauchy derivative formula to the holomorphic difference $f_n-f$ on circles of radius $r$ sitting inside $\Omega$: the kernel $(\zeta-z)^{-2}$ turns $\sup|f_n-f|$ into a bound on $\sup|f_n'-f'|$, losing only a harmless factor $1/r$.

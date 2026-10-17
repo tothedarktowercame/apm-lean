@@ -1,50 +1,48 @@
-
-
 # APM a93A03: Weak convergence + norm convergence ⟹ strong convergence, and weak lower semicontinuity of the norm
 
 ## 1. Informal proof
 
-**Why it's hard.** Weak convergence means ⟨hₙ, k⟩ → ⟨h, k⟩ for every k, but this controls only one "direction" at a time and says nothing directly about ||hₙ - h||. The norm involves all directions simultaneously. Part (b) says the norm can only drop under weak limits (it's lower semicontinuous), which is the opposite of what one might naively expect.
+**Why it's hard.** Weak convergence means $\langle h_{n}, k \rangle \to \langle h, k \rangle$ for every $k$, but this controls only one "direction" at a time and says nothing directly about $\|h_{n} - h\|$. The norm involves all directions simultaneously. Part (b) says the norm can only drop under weak limits (it's lower semicontinuous), which is the opposite of what one might naively expect.
 
-**The key insight.** Expand ||hₙ - h||² = ||hₙ||² - 2 Re⟨hₙ, h⟩ + ||h||². Weak convergence gives ⟨hₙ, h⟩ → ⟨h, h⟩ = ||h||² (take k = h). So ||hₙ - h||² = ||hₙ||² - 2Re⟨hₙ, h⟩ + ||h||² → ||h||² - 2||h||² + ||h||² = 0 if ||hₙ|| → ||h||.
+**The key insight.** Expand $\|h_{n} - h\|^{2} = \|h_{n}\|^{2} - 2 \operatorname{Re}\langle h_{n}, h \rangle + \|h\|^{2}$. Weak convergence gives $\langle h_{n}, h \rangle \to \langle h, h \rangle = \|h\|^{2}$ (take $k = h$). So $\|h_{n} - h\|^{2} = \|h_{n}\|^{2} - 2\operatorname{Re}\langle h_{n}, h \rangle + \|h\|^{2} \to \|h\|^{2} - 2\|h\|^{2} + \|h\|^{2} = 0$ if $\|h_{n}\| \to \|h\|$.
 
 **Proof.**
 
 **(a)** Expand the norm squared:
 
-||hₙ - h||² = ⟨hₙ - h, hₙ - h⟩ = ||hₙ||² - 2 Re⟨hₙ, h⟩ + ||h||².
+$\|h_{n} - h\|^{2} = \langle h_{n} - h, h_{n} - h \rangle = \|h_{n}\|^{2} - 2 \operatorname{Re}\langle h_{n}, h \rangle + \|h\|^{2}$.
 
-Since hₙ ⇀ h (weak convergence), taking k = h:
+Since $h_{n} \rightharpoonup h$ (weak convergence), taking $k = h$:
 
-⟨hₙ, h⟩ → ⟨h, h⟩ = ||h||².
+$\langle h_{n}, h \rangle \to \langle h, h \rangle = \|h\|^{2}$.
 
-So Re⟨hₙ, h⟩ → ||h||² (in the real case, ⟨hₙ, h⟩ is real; in the complex case, Re⟨hₙ, h⟩ → Re(||h||²) = ||h||²).
+So $\operatorname{Re}\langle h_{n}, h \rangle \to \|h\|^{2}$ (in the real case, $\langle h_{n}, h \rangle$ is real; in the complex case, $\operatorname{Re}\langle h_{n}, h \rangle \to \operatorname{Re}(\|h\|^{2}) = \|h\|^{2}$).
 
-By hypothesis, ||hₙ|| → ||h||, so ||hₙ||² → ||h||².
+By hypothesis, $\|h_{n}\| \to \|h\|$, so $\|h_{n}\|^{2} \to \|h\|^{2}$.
 
 Therefore:
 
-||hₙ - h||² → ||h||² - 2||h||² + ||h||² = 0.
+$\|h_{n} - h\|^{2} \to \|h\|^{2} - 2\|h\|^{2} + \|h\|^{2} = 0$.
 
-Hence ||hₙ - h|| → 0. ✓
+Hence $\|h_{n} - h\| \to 0$. ✓
 
 **(b)** From the expansion above (without the norm convergence hypothesis):
 
-0 ≤ ||hₙ - h||² = ||hₙ||² - 2 Re⟨hₙ, h⟩ + ||h||².
+$0 \leq \|h_{n} - h\|^{2} = \|h_{n}\|^{2} - 2 \operatorname{Re}\langle h_{n}, h \rangle + \|h\|^{2}$.
 
-So 2 Re⟨hₙ, h⟩ ≤ ||hₙ||² + ||h||².
+So $2 \operatorname{Re}\langle h_{n}, h \rangle \leq \|h_{n}\|^{2} + \|h\|^{2}$.
 
-Taking lim inf (and using Re⟨hₙ, h⟩ → ||h||²):
+Taking $\liminf$ (and using $\operatorname{Re}\langle h_{n}, h \rangle \to \|h\|^{2}$):
 
-2||h||² ≤ lim inf(||hₙ||² + ||h||²) = lim inf ||hₙ||² + ||h||².
+$2\|h\|^{2} \leq \liminf(\|h_{n}\|^{2} + \|h\|^{2}) = \liminf \|h_{n}\|^{2} + \|h\|^{2}$.
 
-So ||h||² ≤ lim inf ||hₙ||².
+So $\|h\|^{2} \leq \liminf \|h_{n}\|^{2}$.
 
-Taking square roots (using monotonicity of sqrt and the fact that lim inf of nonneg terms behaves well):
+Taking square roots (using monotonicity of sqrt and the fact that $\liminf$ of nonneg terms behaves well):
 
-||h|| ≤ lim inf ||hₙ||.
+$\|h\| \leq \liminf \|h_{n}\|$.
 
-More directly: 0 ≤ lim inf ||hₙ - h||² = lim inf ||hₙ||² - 2||h||² + ||h||² = lim inf ||hₙ||² - ||h||². So ||h||² ≤ lim inf ||hₙ||², hence ||h|| ≤ lim inf ||hₙ||. ✓ ∎
+More directly: $0 \leq \liminf \|h_{n} - h\|^{2} = \liminf \|h_{n}\|^{2} - 2\|h\|^{2} + \|h\|^{2} = \liminf \|h_{n}\|^{2} - \|h\|^{2}$. So $\|h\|^{2} \leq \liminf \|h_{n}\|^{2}$, hence $\|h\| \leq \liminf \|h_{n}\|$. ✓ ∎
 
 **What connects.** Part (a) is the Kadec-Klee property (or Radon-Riesz property) for Hilbert spaces: weak convergence + norm convergence ⟹ strong convergence. This holds in all uniformly convex spaces (Milman-Pettis), and Hilbert spaces are uniformly convex. Part (b) is the weak lower semicontinuity of the norm, which holds in every normed space (not just Hilbert). Together they characterise the relationship between weak and strong topologies in Hilbert space. Part (a) is crucial for proving strong convergence from variational methods (minimising sequences in PDE theory often converge weakly by compactness, and the norm convergence is established separately). Part (b) is used in the direct method of the calculus of variations (the energy can only decrease under weak limits).
 
@@ -127,28 +125,28 @@ end
 - `InnerProductSpace ℝ H` — real inner product (Hilbert) space
 - `CompleteSpace H` — completeness (making it a Hilbert space)
 - `inner` / `⟪·, ·⟫_ℝ` — the real inner product
-- `Filter.liminf` — lim inf along a filter
-- `Filter.atTop` — cofinite filter on ℕ
+- `Filter.liminf` — $\liminf$ along a filter
+- `Filter.atTop` — cofinite filter on $\mathbb{N}$
 - `Filter.Tendsto` — convergence along a filter
 
 **Key lemmas:**
-- `inner_self_eq_norm_sq` — ⟨x, x⟩ = ‖x‖² (connects inner product to norm)
-- `norm_sub_sq_real` / `@inner_sub_left` / `@inner_sub_right` — expansion ‖a-b‖² = ‖a‖² - 2⟨a,b⟩ + ‖b‖². Mathlib likely has this as `norm_sub_sq_real`
-- `real_inner_comm` — ⟨a,b⟩ = ⟨b,a⟩ (symmetry of real inner product)
+- `inner_self_eq_norm_sq` — $\langle x, x \rangle = \|x\|^{2}$ (connects inner product to norm)
+- `norm_sub_sq_real` / `@inner_sub_left` / `@inner_sub_right` — expansion $\|a-b\|^{2} = \|a\|^{2} - 2\langle a,b \rangle + \|b\|^{2}$. Mathlib likely has this as `norm_sub_sq_real`
+- `real_inner_comm` — $\langle a,b \rangle = \langle b,a \rangle$ (symmetry of real inner product)
 - `Tendsto.sub` / `Tendsto.add` / `Tendsto.mul_const` — algebra of limits
-- `tendsto_nhds_of_tendsto_nhds_nonneg_sq` — if ‖xₙ‖² → 0 then ‖xₙ‖ → 0
-- `sq_nonneg` — ‖hₙ - h‖² ≥ 0 (for part (b))
+- `tendsto_nhds_of_tendsto_nhds_nonneg_sq` — if $\|x_{n}\|^{2} \to 0$ then $\|x_{n}\| \to 0$
+- `sq_nonneg` — $\|h_{n} - h\|^{2} \geq 0$ (for part (b))
 - `Filter.liminf_le_liminf` — monotonicity of liminf
 - `Filter.le_liminf_of_le` — lower bounds on liminf
-- `tendsto_iff_norm_sub_tendsto_zero` — ‖hₙ - h‖ → 0 ↔ hₙ → h in norm
-- `Real.sqrt_le_sqrt` — for passing from ‖h‖² ≤ lim inf ‖hₙ‖² to ‖h‖ ≤ lim inf ‖hₙ‖
+- `tendsto_iff_norm_sub_tendsto_zero` — $\|h_{n} - h\| \to 0 \leftrightarrow h_{n} \to h$ in norm
+- `Real.sqrt_le_sqrt` — for passing from $\|h\|^{2} \leq \liminf \|h_{n}\|^{2}$ to $\|h\| \leq \liminf \|h_{n}\|$
 
 **Tactic hints:**
-- `simp only [norm_sub_sq_real]` — expanding ‖hₙ - h‖²
-- `have h1 := hweak x` — specialising weak convergence to k = h
-- `rw [inner_self_eq_norm_sq] at h1` — converting ⟨x,x⟩ to ‖x‖²
+- `simp only [norm_sub_sq_real]` — expanding $\|h_{n} - h\|^{2}$
+- `have h1 := hweak x` — specialising weak convergence to $k = h$
+- `rw [inner_self_eq_norm_sq] at h1` — converting $\langle x,x \rangle$ to $\|x\|^{2}$
 - `calc ‖h n - x‖^2 = ...` — for the expansion chain
-- `linarith [sq_nonneg (‖h n - x‖)]` — for part (b), 0 ≤ ‖hₙ-h‖²
+- `linarith [sq_nonneg (‖h n - x‖)]` — for part (b), $0 \leq \|h_{n}-h\|^{2}$
 - `exact tendsto_iff_norm_sub_tendsto_zero.mpr ...` — converting norm convergence
 - `nlinarith` — combining the algebraic identity with the limits
 - `exact?` — finding the norm expansion lemma

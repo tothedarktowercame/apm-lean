@@ -37,4 +37,4 @@ Remaining Lean gap: Mathlib currently lacks ready-made declarations that `A4` is
 
 **Stage 4 — FORMAL-TO-INFORMAL REVISION**
 
-The Lean witnesses exactly match the narrative invariants: non-cyclicity of `S₃` mirrors the semidirect-product obstruction in (e), and the exponent-2 argument for `(Z/2)^3` formalizes the “missing” order-eight groups in (b). What still sits outside Lean (A₄’s lattice of normal subgroups and the non-finitely-generated abelian examples) is explicitly called out in Stage 3 so a future pass knows precisely which theorems must be added.
+The Lean witnesses exactly match the narrative invariants: non-cyclicity of $S_{3}$ mirrors the semidirect-product obstruction in (e), and the exponent-2 argument for $(Z/2)^3$ formalizes the “missing” order-eight groups in (b). What still sits outside Lean ($A_{4}$’s lattice of normal subgroups and the non-finitely-generated abelian examples) is explicitly called out in Stage 3 so a future pass knows precisely which theorems must be added.

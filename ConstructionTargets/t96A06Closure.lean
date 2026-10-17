@@ -1607,6 +1607,2055 @@ noncomputable def t96A06_sphere3_rational_H3Iso :
   CoefficientSphereShift.sphereShift ℚ 3 2 (by decide) ≪≫
     CoefficientSphereEndpoints.sphereH2 ℚ
 
+/-- Integral coordinate on the same concrete three-sphere, using exactly the
+same iterated sphere-shift normalization as the rational coordinate. -/
+noncomputable def t96A06_sphere3_integral_H3Iso :
+    CoefficientH0.SingularHomology ℤ 3 (TopCat.of (Sphere 3)) ≅
+      ModuleCat.of ℤ ℤ :=
+  CoefficientSphereShift.sphereShift ℤ 3 2 (by decide) ≪≫
+    CoefficientSphereEndpoints.sphereH2 ℤ
+
+noncomputable def t96A06_sphere3_integral_normalizedClass :
+    CoefficientH0.SingularHomology ℤ 3 (TopCat.of (Sphere 3)) :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of (Sphere 3)) 3).inv.hom
+      (ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint)
+
+/-- The stereographically selected integral normalized class has a unit
+coordinate in the canonical integral sphere-shift normalization.  Thus its
+coefficient extension can differ from rational coordinate one only by the
+remaining orientation sign, not by an arbitrary nonzero scalar. -/
+theorem t96A06_integralNormalizedClass_coordinate_isUnit :
+    IsUnit (t96A06_sphere3_integral_H3Iso.hom.hom
+      t96A06_sphere3_integral_normalizedClass) := by
+  let e :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3
+  obtain ⟨m, hm⟩ :=
+    ConstructionTargets.HigherSphereLocalization.normalizedClass_generates
+      polynomialSphereRegularPoint
+      (e.hom.hom (t96A06_sphere3_integral_H3Iso.inv.hom 1))
+  have hm'' : m • t96A06_sphere3_integral_normalizedClass =
+      t96A06_sphere3_integral_H3Iso.inv.hom 1 := by
+    calc
+      _ = e.inv.hom (m •
+          ConstructionTargets.HigherSphereLocalization.normalizedClass
+            polynomialSphereRegularPoint) := by
+        exact (e.inv.hom.map_zsmul _ _).symm
+      _ = e.inv.hom (e.hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) := congrArg e.inv.hom hm
+      _ = _ := e.hom_inv_id_apply _
+  have h := congrArg t96A06_sphere3_integral_H3Iso.hom.hom hm''
+  simp only [map_zsmul, Iso.hom_inv_id_apply] at h
+  apply IsUnit.of_mul_eq_one m
+  simpa [smul_eq_mul, mul_comm] using h
+
+/-- Consequently the only possible integral normalization coordinates are
+the two orientation signs. -/
+theorem t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one :
+    t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = 1 ∨
+      t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = -1 := by
+  exact Int.isUnit_iff.mp t96A06_integralNormalizedClass_coordinate_isUnit
+
+/-- For the normalized integral class, selecting the positive orientation is
+equivalent to excluding the negative coordinate.  The unit calculation above
+shows that there is no third case. -/
+theorem t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one :
+    t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = 1 ↔
+      t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass ≠ -1 := by
+  constructor
+  · intro hone hneg
+    rw [hone] at hneg
+    norm_num at hneg
+  · intro hne
+    rcases t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one with
+      hone | hneg
+    · exact hone
+    · exact (hne hneg).elim
+
+/-- The unwanted negative global coordinate is exactly the assertion that the
+canonical sphere-shift generator localizes to the negative stereographic
+local generator.  Thus the remaining orientation choice is a concrete
+compatibility calculation between the two constructions. -/
+theorem t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization :
+    t96A06_sphere3_integral_H3Iso.hom.hom
+        t96A06_sphere3_integral_normalizedClass = -1 ↔
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+        -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint := by
+  let e := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of (Sphere 3)) 3
+  let c := t96A06_sphere3_integral_H3Iso.inv.hom 1
+  constructor
+  · intro hcoord
+    have hclass : t96A06_sphere3_integral_normalizedClass = -c := by
+      apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+        t96A06_sphere3_integral_H3Iso.hom).1
+      simpa [c] using hcoord
+    have hmap := congrArg (fun z =>
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3 (e.hom.hom z)) hclass
+    have hcancel : e.hom.hom t96A06_sphere3_integral_normalizedClass =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+      simp [t96A06_sphere3_integral_normalizedClass, e]
+    change
+      ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3
+          (e.hom.hom t96A06_sphere3_integral_normalizedClass) =
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3 (e.hom.hom (-c)) at hmap
+    rw [hcancel,
+      t96A06_sphere3_integral_normalizedClass_localizes] at hmap
+    simp only [map_neg] at hmap
+    change _ = (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      polynomialSphereRegularPoint 3).hom (-(e.hom.hom c)) at hmap
+    have hloc_neg := (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+      polynomialSphereRegularPoint 3).hom.map_neg (e.hom.hom c)
+    have hmap' :
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint =
+          -(ConstructionTargets.ManifoldFundamentalClass.localizationMap
+            polynomialSphereRegularPoint 3).hom (e.hom.hom c) :=
+      hmap.trans hloc_neg
+    simpa [e, c] using (congrArg Neg.neg hmap').symm
+  · intro hlocal
+    have hcancel : e.hom.hom t96A06_sphere3_integral_normalizedClass =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+      simp [t96A06_sphere3_integral_normalizedClass, e]
+    have hneg_local :
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap
+            polynomialSphereRegularPoint 3 (e.hom.hom (-c)) =
+          ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint := by
+      rw [map_neg]
+      change (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3).hom (-(e.hom.hom c)) = _
+      have hloc_neg := (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3).hom.map_neg (e.hom.hom c)
+      exact hloc_neg.trans (by rw [hlocal, neg_neg])
+    have hnative :
+        e.hom.hom t96A06_sphere3_integral_normalizedClass = e.hom.hom (-c) := by
+      letI : IsIso
+          (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+            polynomialSphereRegularPoint 3) :=
+        ConstructionTargets.HigherSphereLocalization.localization_isIso
+          polynomialSphereRegularPoint
+      apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3)).1
+      rw [hneg_local]
+      rw [hcancel]
+      exact t96A06_sphere3_integral_normalizedClass_localizes
+        polynomialSphereRegularPoint
+    have hclass : t96A06_sphere3_integral_normalizedClass = -c :=
+      (CategoryTheory.ConcreteCategory.bijective_of_isIso e.hom).1 hnative
+    have hcoord := congrArg t96A06_sphere3_integral_H3Iso.hom.hom hclass
+    simpa [c] using hcoord
+
+/-- Compare the canonical sphere-shift coordinate directly with the
+stereographic local coordinate.  This automorphism records precisely the
+remaining orientation sign. -/
+noncomputable def t96A06_sphereShiftLocalNormalizationAutomorphism :
+    AddCommGrpCat.of ℤ ≅ AddCommGrpCat.of ℤ :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      t96A06_sphere3_integral_H3Iso).symm ≪≫
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3 ≪≫
+    ConstructionTargets.HigherSphereLocalization.localizationIso
+      polynomialSphereRegularPoint ≪≫
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint
+
+/-- The local coordinate of the canonical sphere-shift generator is the
+value at one of the comparison automorphism. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 =
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+          polynomialSphereRegularPoint 3
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            (t96A06_sphere3_integral_H3Iso.inv.hom 1))) := by
+  rfl
+
+/-- Consequently the localized canonical sphere-shift generator has local
+coordinate `+1` or `-1`; no other scalar ambiguity remains. -/
+theorem t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = 1 ∨
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = -1 := by
+  let em : ModuleCat.of ℤ ℤ ≅ ModuleCat.of ℤ ℤ :=
+    ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso
+      t96A06_sphereShiftLocalNormalizationAutomorphism
+  let u : ℤˣ := ConstructionTargets.CoefficientChartTransitionUnit.isoUnit ℤ em
+  have hmap :
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map em.hom =
+        t96A06_sphereShiftLocalNormalizationAutomorphism.hom := by
+    dsimp [em,
+      ConstructionTargets.IntegralSingularHomologyComparison.moduleIsoOfUnderlyingIso]
+    exact ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map_preimage
+      (X := ModuleCat.of ℤ ℤ) (Y := ModuleCat.of ℤ ℤ)
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom
+  have happ := CategoryTheory.ConcreteCategory.congr_hom hmap (1 : ℤ)
+  have hunit : t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 =
+      (u : ℤ) := by
+    rw [← happ]
+    exact (ConstructionTargets.CoefficientChartTransitionUnit.isoUnit_action ℤ em 1).trans
+      (mul_one _)
+  rw [hunit]
+  exact Int.isUnit_eq_one_or u.isUnit
+
+/-- Elementwise form of the sign dichotomy: the canonical sphere-shift
+generator localizes to one of the two oriented ambient generators. -/
+theorem t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint ∨
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+      -ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint := by
+  rcases t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one with h | h
+  · left
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator,
+      ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one]
+    exact h
+  · right
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom).1
+    rw [map_neg,
+      ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator,
+      ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one]
+    exact h
+
+/-- Positive localization of the canonical sphere-shift generator is exactly
+identity of the normalization-comparison automorphism. -/
+theorem t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id :
+    ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          (t96A06_sphere3_integral_H3Iso.inv.hom 1)) =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint ↔
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom = 𝟙 _ := by
+  constructor
+  · intro hlocal
+    apply AddCommGrpCat.hom_ext
+    apply AddMonoidHom.ext_int
+    change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = 1
+    rw [t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one, hlocal]
+    exact ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
+      1 polynomialSphereRegularPoint
+  · intro hid
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator,
+      ← t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one, hid]
+    rfl
+
+/-- The remaining endpoint calculation implies identity of the full
+sphere-shift/local normalization automorphism. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
+    (hendpoint :
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.HigherSphereLocalization.localizationIso
+          polynomialSphereRegularPoint).hom.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            ((CoefficientSphereShift.sphereShift ℤ 3 2 (by decide)).inv.hom
+              ((CoefficientSphereEndpoints.sphereH2 ℤ).inv.hom 1)))) = 1) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom = 𝟙 _ := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = 1
+  simpa [t96A06_sphereShiftLocalNormalizationAutomorphism,
+    t96A06_sphere3_integral_H3Iso] using hendpoint
+
+/-- Expand the `S²` endpoint into its suspension shift and the normalized
+circle generator.  This is the two-step suspension form of the remaining
+orientation calculation. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint
+    (hendpoint :
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.HigherSphereLocalization.localizationIso
+          polynomialSphereRegularPoint).hom.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            ((CoefficientSphereShift.sphereShift ℤ 3 2 (by decide)).inv.hom
+              ((CoefficientSphereShift.sphereShift ℤ 2 1 (by decide)).inv.hom
+                ((CoefficientSphereEndpoints.circleH1 ℤ).inv.hom 1))))) = 1) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom = 𝟙 _ := by
+  apply t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
+  simpa [CoefficientSphereEndpoints.sphereH2] using hendpoint
+
+/-- The coefficient generator obtained by two inverse suspension shifts from
+the normalized circle generator. -/
+noncomputable def t96A06_integralIteratedSphereGenerator :=
+  (CoefficientSphereShift.sphereShift ℤ 3 2 (by decide)).inv.hom
+    ((CoefficientSphereShift.sphereShift ℤ 2 1 (by decide)).inv.hom
+      ((CoefficientSphereEndpoints.circleH1 ℤ).inv.hom 1))
+
+/-- The iterated generator is exactly the inverse image of `1` under the
+integral three-sphere coordinate used by this closure. -/
+theorem t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one :
+    t96A06_integralIteratedSphereGenerator =
+      t96A06_sphere3_integral_H3Iso.inv.hom 1 := by
+  rfl
+
+/-- Exact comparison with the positively normalized production class closes
+the remaining iterated endpoint calculation. -/
+theorem t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
+    (hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint) :
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) = 1 := by
+  rw [hcomparison]
+  change (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+    1 polynomialSphereRegularPoint).hom.hom
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint)) = 1
+  rw [t96A06_sphere3_integral_normalizedClass_localizes,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
+
+/-- The production top-homology coordinate of the class normalized by the
+chosen stereographic local chart. -/
+noncomputable def t96A06_normalizedClassSphereTopCoordinate : ℤ :=
+  (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3 (by omega)).hom.hom
+    (ConstructionTargets.HigherSphereLocalization.normalizedClass
+      (k := 1) polynomialSphereRegularPoint)
+
+set_option maxHeartbeats 800000 in
+/-- In the production sphere coordinate, the image of the iterated
+coefficient generator is precisely the library's normalization-comparison
+degree in dimension three. -/
+theorem t96A06_integralIteratedSphereGenerator_comparison_coordinate :
+    (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3 (by omega)).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator) =
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 := by
+  rfl
+
+/-- The required generator comparison is equivalent to equality of its two
+integer orientation coordinates. -/
+theorem t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator =
+      ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint ↔
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+      t96A06_normalizedClassSphereTopCoordinate := by
+  constructor
+  · intro h
+    rw [← t96A06_integralIteratedSphereGenerator_comparison_coordinate]
+    exact congrArg
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom.hom h
+  · intro h
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom).1
+    rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate]
+    exact h
+
+/-- The sphere-top coordinate of the locally normalized production class is
+an integer unit, because that class generates top homology. -/
+theorem t96A06_normalizedClassSphereTopCoordinate_isUnit :
+    IsUnit t96A06_normalizedClassSphereTopCoordinate := by
+  let e := ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3 (by omega)
+  let c := ConstructionTargets.HigherSphereLocalization.normalizedClass
+    (k := 1) polynomialSphereRegularPoint
+  obtain ⟨m, hm⟩ :=
+    ConstructionTargets.HigherSphereLocalization.normalizedClass_generates
+      polynomialSphereRegularPoint (e.inv.hom 1)
+  have h := congrArg e.hom.hom hm
+  change IsUnit (e.hom.hom c)
+  change e.hom.hom (m • c) = e.hom.hom (e.inv.hom 1) at h
+  have hz := map_zsmul e.hom.hom m c
+  have h' : m • e.hom.hom c = 1 :=
+    hz.symm.trans (h.trans (e.inv_hom_id_apply 1))
+  apply IsUnit.of_mul_eq_one m
+  simpa [smul_eq_mul, mul_comm] using h'
+
+/-- The coefficient normalization-comparison degree is also an integer unit. -/
+theorem t96A06_coefficientSphereNormalizationComparisonDegree_isUnit :
+    IsUnit (ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2) := by
+  rw [← ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit_eq_degree]
+  exact (ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonUnit 2).isUnit
+
+/-- Since both coordinates are signs, excluding the opposite-sign branch
+forces the desired coordinate equality. -/
+theorem t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
+    (hne : ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 ≠
+      -t96A06_normalizedClassSphereTopCoordinate) :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+      t96A06_normalizedClassSphereTopCoordinate := by
+  rcases Int.isUnit_iff.mp
+      t96A06_coefficientSphereNormalizationComparisonDegree_isUnit with h₁ | h₁ <;>
+    rcases Int.isUnit_iff.mp
+      t96A06_normalizedClassSphereTopCoordinate_isUnit with h₂ | h₂
+  · exact h₁.trans h₂.symm
+  · exfalso
+    apply hne
+    omega
+  · exfalso
+    apply hne
+    omega
+  · exact h₁.trans h₂.symm
+
+/-- Opposite integer coordinates are exactly the forbidden equality between
+the compared coefficient generator and the negative normalized production
+class. -/
+theorem t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+        -t96A06_normalizedClassSphereTopCoordinate ↔
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        -ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+  constructor
+  · intro h
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom).1
+    rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate]
+    have hneg :
+        (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+          (by omega)).hom.hom
+            (-ConstructionTargets.HigherSphereLocalization.normalizedClass
+              (k := 1) polynomialSphereRegularPoint) =
+          -(ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+            (by omega)).hom.hom
+              (ConstructionTargets.HigherSphereLocalization.normalizedClass
+                (k := 1) polynomialSphereRegularPoint) :=
+      map_neg _ _
+    rw [hneg]
+    exact h
+  · intro h
+    have hc := congrArg
+      (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+        (by omega)).hom.hom h
+    rw [t96A06_integralIteratedSphereGenerator_comparison_coordinate] at hc
+    have hneg :
+        (ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+          (by omega)).hom.hom
+            (-ConstructionTargets.HigherSphereLocalization.normalizedClass
+              (k := 1) polynomialSphereRegularPoint) =
+          -(ConstructionTargets.SphereHomology.sphereTopHomologyIsoInt 3
+            (by omega)).hom.hom
+              (ConstructionTargets.HigherSphereLocalization.normalizedClass
+                (k := 1) polynomialSphereRegularPoint) :=
+      map_neg _ _
+    rw [hneg] at hc
+    exact hc
+
+/-- Thus excluding the negative class comparison is exactly the remaining
+orientation inequality. -/
+theorem t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 ≠
+        -t96A06_normalizedClassSphereTopCoordinate ↔
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator ≠
+        -ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+  exact not_congr t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff
+
+/-- The forbidden negative generator comparison would make the complete
+sphere-shift/local-normalization comparison the negative identity on `ℤ`. -/
+theorem t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
+    (hneg :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        -ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom = -𝟙 _ := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = -1
+  rw [t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one,
+    ← t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one, hneg]
+  change (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+    1 polynomialSphereRegularPoint).hom.hom
+      (ConstructionTargets.ManifoldFundamentalClass.localizationMap
+        polynomialSphereRegularPoint 3
+        (-ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint)) = -1
+  rw [map_neg, t96A06_sphere3_integral_normalizedClass_localizes, map_neg,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator]
+
+/-- It therefore suffices to exclude the negative normalization automorphism
+in order to exclude the negative generator comparison itself. -/
+theorem t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
+    (hauto : t96A06_sphereShiftLocalNormalizationAutomorphism.hom ≠ -𝟙 _) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator ≠
+      -ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint := by
+  intro hneg
+  exact hauto
+    (t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
+      hneg)
+
+/-- A negative comparison automorphism forces the explicit two-suspension
+endpoint, measured in the stereographic local coordinate, to be `-1`. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
+    (hauto : t96A06_sphereShiftLocalNormalizationAutomorphism.hom = -𝟙 _) :
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) = -1 := by
+  have h := CategoryTheory.ConcreteCategory.congr_hom hauto (1 : ℤ)
+  change t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 = -1 at h
+  simpa [t96A06_sphereShiftLocalNormalizationAutomorphism,
+    t96A06_sphere3_integral_H3Iso,
+    t96A06_integralIteratedSphereGenerator] using h
+
+/-- Excluding `-1` at the explicit endpoint excludes the negative comparison
+automorphism. -/
+theorem t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
+    (hendpoint :
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.HigherSphereLocalization.localizationIso
+          polynomialSphereRegularPoint).hom.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+            (TopCat.of (Sphere 3)) 3).hom.hom
+            t96A06_integralIteratedSphereGenerator)) ≠ -1) :
+    t96A06_sphereShiftLocalNormalizationAutomorphism.hom ≠ -𝟙 _ := by
+  intro hauto
+  exact hendpoint
+    (t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
+      hauto)
+
+/-- The integer detected by the explicit two inverse sphere shifts followed
+by coefficient comparison, localization, and stereographic normalization. -/
+noncomputable def t96A06_sphereShiftLocalNormalizationIteratedEndpoint : ℤ :=
+  (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+    1 polynomialSphereRegularPoint).hom.hom
+    ((ConstructionTargets.HigherSphereLocalization.localizationIso
+      polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator))
+
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_automorphism_apply_one :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint =
+      t96A06_sphereShiftLocalNormalizationAutomorphism.hom.hom 1 := by
+  rfl
+
+/-- The explicit endpoint is an orientation sign, so it is `1` or `-1`. -/
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_or_neg_one :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint = 1 ∨
+      t96A06_sphereShiftLocalNormalizationIteratedEndpoint = -1 := by
+  rw [t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_automorphism_apply_one]
+  exact t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one
+
+/-- Nonnegativity of the explicit orientation endpoint rules out its negative
+branch. -/
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg
+    (h : 0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint) :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint ≠ -1 := by
+  intro hneg
+  rw [hneg] at h
+  omega
+
+/-- Named-endpoint nonnegativity supplies the explicit endpoint inequality
+consumed by the negative-automorphism adapter above. -/
+theorem t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg
+    (h : 0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint) :
+    (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) ≠ -1 := by
+  change t96A06_sphereShiftLocalNormalizationIteratedEndpoint ≠ -1
+  exact t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg h
+
+/-- Once the explicit endpoint is known nonnegative, all sign reductions
+assemble to the positive integral generator comparison needed downstream. -/
+theorem t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg
+    (h : 0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (Sphere 3)) 3).hom.hom
+        t96A06_integralIteratedSphereGenerator =
+      ConstructionTargets.HigherSphereLocalization.normalizedClass
+        (k := 1) polynomialSphereRegularPoint := by
+  have hendpoint :=
+    t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg h
+  have hauto :=
+    t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
+      hendpoint
+  have hgenerator :=
+    t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
+      hauto
+  have hcoordinate_ne :=
+    t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff.mpr hgenerator
+  have hcoordinate :=
+    t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg hcoordinate_ne
+  exact t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff.mpr
+    hcoordinate
+
+/-- A nonnegative unit coordinate for the locally normalized production
+class is necessarily the positive coordinate. -/
+theorem t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg
+    (h : 0 ≤ t96A06_normalizedClassSphereTopCoordinate) :
+    t96A06_normalizedClassSphereTopCoordinate = 1 := by
+  rcases Int.isUnit_iff.mp t96A06_normalizedClassSphereTopCoordinate_isUnit with
+    hone | hneg
+  · exact hone
+  · omega
+
+/-- A nonnegative coefficient-suspension comparison degree is necessarily
+the positive orientation. -/
+theorem t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg
+    (h : 0 ≤
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2) :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 = 1 := by
+  rcases Int.isUnit_iff.mp
+      t96A06_coefficientSphereNormalizationComparisonDegree_isUnit with hone | hneg
+  · exact hone
+  · omega
+
+/-- The concrete integer endpoint of the coefficient circle normalization.
+This is the remaining discrete-`H₀` boundary orientation before suspension. -/
+noncomputable def t96A06_coefficientCircleOrientationEndpoint : ℤ :=
+  (ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt).hom.hom
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.circleH1 ℤ)).inv.hom
+        (by change ℤ; exact 1)))
+
+theorem t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 0 =
+      t96A06_coefficientCircleOrientationEndpoint := by
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree_zero_eq_circle_endpoint
+
+/-- The two successor comparisons transport the circle orientation endpoint
+to the dimension-two coefficient comparison used by the three-sphere. -/
+theorem t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps
+    (hstep0 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 0)
+    (hstep1 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1) :
+    ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+      t96A06_coefficientCircleOrientationEndpoint := by
+  exact hstep1.trans (hstep0.trans
+    t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint)
+
+theorem t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
+    (hcircle : 0 ≤ t96A06_coefficientCircleOrientationEndpoint)
+    (hstep0 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 0)
+    (hstep1 :
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 =
+        ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 1) :
+    0 ≤ ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2 := by
+  rw [t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps hstep0 hstep1]
+  exact hcircle
+
+/-- Compatibility of the coefficient circle isomorphism with the native
+integer circle computation fixes the named circle endpoint to `+1`. -/
+theorem t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison
+    (hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom =
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.inv) :
+    t96A06_coefficientCircleOrientationEndpoint = 1 := by
+  apply ConstructionTargets.ManifoldFundamentalClass.coefficientCircleEndpoint_eq_one_of_generator_comparison
+  change (((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom).hom (1 : ℤ)) = _
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientCircleGeneratorComparison_of_iso_hom
+    hcomparison
+
+theorem t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
+    (hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom =
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.inv) :
+    0 ≤ t96A06_coefficientCircleOrientationEndpoint := by
+  rw [t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison hcomparison]
+  norm_num
+
+/-- Since every endomorphism of the additive group `ℤ` is determined by
+`1`, the exact circle comparison follows from its single oriented coordinate. -/
+theorem t96A06_coefficientCircleComparison_eq_native_of_apply_one
+    (hone :
+      (((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom ≫
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.hom).hom (1 : ℤ)) = 1) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom =
+      ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.inv := by
+  apply ConstructionTargets.ManifoldFundamentalClass.coefficientCircleComparisonIso_hom_eq_of_coordinates
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientCircleCoordinates_eq_id_of_apply_one
+    hone
+
+theorem t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
+    (hone :
+      (((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (CoefficientSphereEndpoints.circleH1 ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) 1).hom ≫
+        ConstructionTargets.T02A06SphereOne.sphereOneH1IsoInt.hom).hom (1 : ℤ)) = 1) :
+    0 ≤ t96A06_coefficientCircleOrientationEndpoint := by
+  exact t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
+    (t96A06_coefficientCircleComparison_eq_native_of_apply_one hone)
+
+/-- Naturality transports the discrete two-point comparison to the actual
+boundary of the one-disk, with the signed-coordinate convention fixed. -/
+theorem t96A06_coefficientCircleBoundary_integralComparison_of_bool
+    (hbool :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of Bool) 0).hom ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).hom) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.isoOfHomeo
+            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
+      ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (CoefficientSphereEndpoints.boundaryIso ℤ).hom := by
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientClosedBoundary_coordinate_comparison_of_bool
+    hbool
+
+noncomputable def t96A06_boolH0ComparisonLhs :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Bool) 0).hom ≫
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv
+
+noncomputable def t96A06_boolH0ComparisonRhs :=
+  ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).hom
+
+/-- The discrete comparison is determined by its two point-inclusion
+coordinates.  This isolates the remaining calculation to `false` and `true`. -/
+theorem t96A06_boolH0_integralComparison_of_points
+    (hpoint : ∀ b : Bool,
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+          t96A06_boolH0ComparisonLhs =
+        Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+          t96A06_boolH0ComparisonRhs) :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  apply (cancel_epi
+    ((PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv)).mp
+  apply Limits.Sigma.hom_ext
+  exact hpoint
+
+/-- The individual point-coordinate equation used by the discrete comparison
+extensionality theorem. -/
+def t96A06_boolH0PointComparison (b : Bool) : Prop :=
+  Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+            (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+        t96A06_boolH0ComparisonLhs =
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+            (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool)).inv ≫
+        t96A06_boolH0ComparisonRhs
+
+/-- The two explicit endpoint calculations supply every `Bool` point
+coordinate required by coproduct extensionality. -/
+theorem t96A06_boolH0_integralComparison_points_of_false_true
+    (hfalse : t96A06_boolH0PointComparison false)
+    (htrue : t96A06_boolH0PointComparison true) :
+    ∀ b : Bool, t96A06_boolH0PointComparison b := by
+  intro b
+  cases b
+  · exact hfalse
+  · exact htrue
+
+/-- The two endpoint coordinate calculations assemble to the complete
+comparison between forgotten module-valued and native additive `H₀`. -/
+theorem t96A06_boolH0_integralComparison_of_false_true
+    (hfalse : t96A06_boolH0PointComparison false)
+    (htrue : t96A06_boolH0PointComparison true) :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  apply t96A06_boolH0_integralComparison_of_points
+  intro b
+  exact t96A06_boolH0_integralComparison_points_of_false_true hfalse htrue b
+
+/-- A single endpoint packet supplies the complete discrete comparison. -/
+theorem t96A06_boolH0_integralComparison_of_endpoint_pair
+    (h : t96A06_boolH0PointComparison false ∧
+      t96A06_boolH0PointComparison true) :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs :=
+  t96A06_boolH0_integralComparison_of_false_true h.1 h.2
+
+/-- For `Bool`, the endpoint packet is exactly the pointwise comparison.
+This lets the remaining naturality calculation be stated without choosing
+between an endpoint-pair and a universally quantified interface. -/
+theorem t96A06_boolH0_endpoint_pair_iff_all_points :
+    (t96A06_boolH0PointComparison false ∧
+        t96A06_boolH0PointComparison true) ↔
+      ∀ b : Bool, t96A06_boolH0PointComparison b := by
+  constructor
+  · rintro ⟨hfalse, htrue⟩
+    exact t96A06_boolH0_integralComparison_points_of_false_true hfalse htrue
+  · intro h
+    exact ⟨h false, h true⟩
+
+/-- The two endpoint equations are an exact criterion for the full discrete
+comparison, not merely sufficient conditions. -/
+theorem t96A06_boolH0_endpoint_pair_iff_comparison :
+    (t96A06_boolH0PointComparison false ∧
+        t96A06_boolH0PointComparison true) ↔
+      t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  constructor
+  · exact t96A06_boolH0_integralComparison_of_endpoint_pair
+  · intro h
+    constructor <;> unfold t96A06_boolH0PointComparison <;> rw [h]
+
+/-- Point-inclusion naturality in both Bool components is equivalent to the
+full comparison.  This is the form used by the forthcoming `Unit → Bool`
+naturality calculation. -/
+theorem t96A06_boolH0_all_points_iff_comparison :
+    (∀ b : Bool, t96A06_boolH0PointComparison b) ↔
+      t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  rw [← t96A06_boolH0_endpoint_pair_iff_all_points,
+    t96A06_boolH0_endpoint_pair_iff_comparison]
+
+/-- The module-valued edge of the `Unit → Bool` naturality square is the
+chosen coproduct injection in direct discrete degree-zero coordinates. -/
+theorem t96A06_boolH0_module_pointInclusion_coordinates (b : Bool) :
+    Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) () ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv ≫
+        HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0 =
+      Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) b ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Bool).inv := by
+  exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) b
+
+/-- The native additive edge of the same `Unit → Bool` square has the
+identical selected-summand coordinate. -/
+theorem t96A06_boolH0_additive_pointInclusion_coordinates (b : Bool) :
+    Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv ≫
+        HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+            (AddCommGrpCat.of ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0 =
+      Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).inv := by
+  exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
+    AddCommGrpCat (AddCommGrpCat.of ℤ) b
+
+/-- The coproduct comparison for forgetting integer-module structure sends
+each native additive `Bool` injection to the corresponding forgotten module
+injection. -/
+theorem t96A06_boolH0_preserved_pointInclusion (b : Bool) :
+    Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) b) := by
+  simp [PreservesCoproduct.inv_hom, sigmaComparison, Limits.Sigma.ι_desc]
+
+#print axioms t96A06_boolH0_preserved_pointInclusion
+
+/-- Naturality of the integral coefficient comparison for the selected
+`Unit → Bool` point inclusion, in the direction joining the two coordinate
+edges above. -/
+theorem t96A06_boolH0_comparison_pointInclusion_naturality (b : Bool) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 0).obj
+          (ModuleCat.of ℤ ℤ)).map
+            (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) := by
+  exact ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+    (ConstructionTargets.SingularHomologyConcrete.pointInclusion b) 0
+
+/-- The same naturality square with the module-side homology map unfolded to
+the concrete chain-map expression used by the Bool coordinate calculation. -/
+theorem t96A06_boolH0_comparison_pointInclusion_naturality_concrete (b : Bool) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) := by
+  have h :=
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+      (ConstructionTargets.SingularHomologyConcrete.pointInclusion b) 0
+  change
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom = _ at h
+  exact h
+
+#print axioms t96A06_boolH0_comparison_pointInclusion_naturality_concrete
+
+noncomputable def t96A06_unitH0ComparisonLhs :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom ≫
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv
+
+noncomputable def t96A06_unitH0ComparisonRhs :=
+  ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom
+
+/-- The Unit comparison is determined by its single coproduct-generator
+coordinate. -/
+theorem t96A06_unitH0_integralComparison_of_generator
+    (h : Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+          t96A06_unitH0ComparisonLhs =
+        Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+          (PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+          (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+              (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+          t96A06_unitH0ComparisonRhs) :
+    t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  apply (cancel_epi
+    ((PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv)).mp
+  apply Limits.Sigma.hom_ext
+  intro u
+  cases u
+  exact h
+
+noncomputable def t96A06_unitH0GeneratorProbe :=
+  Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv
+
+/-- The remaining generator calculation is exactly equivalent to the full
+Unit comparison. -/
+theorem t96A06_unitH0_generator_iff_comparison :
+    t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs =
+        t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs ↔
+      t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  constructor
+  · exact t96A06_unitH0_integralComparison_of_generator
+  · intro h
+    rw [h]
+
+/-- Equality on the unique integral generator determines the remaining Unit
+comparison probe. -/
+theorem t96A06_unitH0_generator_eq_of_apply_one
+    (hone :
+      (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs).hom (1 : ℤ) =
+        (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs).hom (1 : ℤ)) :
+    t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs =
+      t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs := by
+  apply AddCommGrpCat.hom_ext
+  apply AddMonoidHom.ext_int
+  exact hone
+
+/-- The literal forgotten-module coordinate selected by the unique Unit
+coproduct generator. -/
+noncomputable def t96A06_unitH0CoordinateGenerator :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv.hom
+    ((PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+        ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ)))
+
+/-- The same selected class before forgetting the integral module structure. -/
+noncomputable def t96A06_unitH0ModuleGenerator :=
+  (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.hom
+    ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ))
+
+/-- The forgotten-module coordinate used by the comparison is literally the
+underlying module-valued Unit generator. -/
+theorem t96A06_unitH0CoordinateGenerator_eq_moduleGenerator :
+    t96A06_unitH0CoordinateGenerator = t96A06_unitH0ModuleGenerator := by
+  dsimp [t96A06_unitH0CoordinateGenerator, t96A06_unitH0ModuleGenerator]
+  congr 1
+  have h := congrArg (fun f => f.hom (1 : ℤ))
+    (Limits.ι_comp_sigmaComparison
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ())
+  simpa only [AddCommGrpCat.comp_apply] using h
+
+#print axioms t96A06_unitH0CoordinateGenerator_eq_moduleGenerator
+
+/-- The explicit degree-zero opcycle representing the selected module-valued
+Unit homology generator. -/
+noncomputable def t96A06_unitH0ModuleOpcycleGenerator :=
+  (ConstructionTargets.SingularHomologyConcrete.directDiscreteOpcyclesIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.hom
+    ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ))
+
+/-- The selected module-valued Unit class is the canonical homology image of
+its explicit opcycle representative. -/
+theorem t96A06_unitH0ModuleGenerator_eq_opcycleGenerator :
+    t96A06_unitH0ModuleGenerator =
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv.hom
+          t96A06_unitH0ModuleOpcycleGenerator := by
+  rfl
+
+#print axioms t96A06_unitH0ModuleGenerator_eq_opcycleGenerator
+
+/-- The unique module-valued degree-zero singular chain of `Unit`, with
+coefficient one. -/
+noncomputable def t96A06_unitH0ModuleChainGenerator :=
+  (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0 |>.hom
+      ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ))
+
+#print axioms t96A06_unitH0ModuleChainGenerator
+
+/-- The inverse discrete-chain coordinate is the literal unique degree-zero
+singular simplex of `Unit`, with coefficient one. -/
+theorem t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex :
+    t96A06_unitH0ModuleChainGenerator =
+      (Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ) := by
+  change
+    ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0).hom
+        ((Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ)) = _
+  have hforward :
+    ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.f 0).hom
+        ((Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ)) =
+      (Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()).hom (1 : ℤ) := by
+    change ((Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+      Limits.Sigma.map'
+        ((TopCat.toSSetIsoConst (TopCat.of Unit)).hom.app
+          (Opposite.op (SimplexCategory.mk 0))) (fun _ ↦ 𝟙 _) ≫
+      (AlgebraicTopology.alternatingFaceMapComplexConst.hom.app
+        (∐ fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).f 0).hom (1 : ℤ) = _)
+    rw [← CategoryTheory.Category.assoc, Limits.Sigma.ι_comp_map']
+    have halt :
+        (AlgebraicTopology.alternatingFaceMapComplexConst.hom.app
+          (∐ fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).f 0 = 𝟙 _ := rfl
+    rw [halt]
+    simp [ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso,
+      AlgebraicTopology.singularChainComplexFunctorIsoOfTotallyDisconnectedSpace,
+      AlgebraicTopology.singularChainComplexFunctor,
+      AlgebraicTopology.SSet.singularChainComplexFunctor]
+    rfl
+  rw [← hforward]
+  have hcomp :
+      (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.f 0 ≫
+        (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0 = 𝟙 _ := by
+    change ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom ≫
+      (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv).f 0 = _
+    rw [(ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom_inv_id]
+    rfl
+  change (((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.f 0 ≫
+    (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.f 0).hom _) = _
+  rw [hcomp]
+  rfl
+
+#print axioms t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex
+
+/-- The additive degree-zero discrete coordinate of `Unit`, with coefficient
+one. -/
+noncomputable def t96A06_unitH0AdditiveChainGenerator :=
+  (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+    AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv.f 0 |>.hom
+      ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ))
+
+/-- The additive inverse discrete-chain coordinate is the literal unique
+degree-zero singular simplex of `Unit`. -/
+theorem t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex :
+    t96A06_unitH0AdditiveChainGenerator =
+      (Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ) := by
+  change
+    ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv.f 0).hom
+        ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ)) = _
+  have hforward :
+    ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom.f 0).hom
+        ((Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ())).hom (1 : ℤ)) =
+      (Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ) := by
+    change ((Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+      Limits.Sigma.map'
+        ((TopCat.toSSetIsoConst (TopCat.of Unit)).hom.app
+          (Opposite.op (SimplexCategory.mk 0))) (fun _ ↦ 𝟙 _) ≫
+      (AlgebraicTopology.alternatingFaceMapComplexConst.hom.app
+        (∐ fun _ : Unit ↦ AddCommGrpCat.of ℤ)).f 0).hom (1 : ℤ) = _)
+    rw [← CategoryTheory.Category.assoc, Limits.Sigma.ι_comp_map']
+    have halt :
+        (AlgebraicTopology.alternatingFaceMapComplexConst.hom.app
+          (∐ fun _ : Unit ↦ AddCommGrpCat.of ℤ)).f 0 = 𝟙 _ := rfl
+    rw [halt]
+    simp [ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso,
+      AlgebraicTopology.singularChainComplexFunctorIsoOfTotallyDisconnectedSpace,
+      AlgebraicTopology.singularChainComplexFunctor,
+      AlgebraicTopology.SSet.singularChainComplexFunctor]
+    rfl
+  rw [← hforward]
+  have hcomp :
+      (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom.f 0 ≫
+        (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv.f 0 = 𝟙 _ := by
+    change ((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom ≫
+      (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv).f 0 = _
+    rw [(ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom_inv_id]
+    rfl
+  change (((ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom.f 0 ≫
+    (ConstructionTargets.SingularHomologyConcrete.discreteSingularChainIso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv.f 0).hom _) = _
+  rw [hcomp]
+  rfl
+
+#print axioms t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex
+
+/-- The explicit Unit opcycle is obtained by projecting the corresponding
+degree-zero singular chain to opcycles. -/
+theorem t96A06_unitH0_opcycle_eq_projected_chainGenerator :
+    t96A06_unitH0ModuleOpcycleGenerator =
+      ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+          t96A06_unitH0ModuleChainGenerator := by
+  dsimp [t96A06_unitH0ModuleOpcycleGenerator,
+    ConstructionTargets.SingularHomologyConcrete.directDiscreteOpcyclesIso,
+    t96A06_unitH0ModuleChainGenerator]
+  rfl
+
+#print axioms t96A06_unitH0_opcycle_eq_projected_chainGenerator
+
+/-- The concrete normalization of the chain comparison on the selected Unit
+coordinate supplies the remaining equality at one. -/
+theorem t96A06_unitH0_integralComparison_apply_one_of_coordinate
+    (h :
+      (t96A06_unitH0ComparisonLhs).hom t96A06_unitH0CoordinateGenerator =
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.hom
+            t96A06_unitH0CoordinateGenerator) :
+      (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonLhs).hom (1 : ℤ) =
+        (t96A06_unitH0GeneratorProbe ≫ t96A06_unitH0ComparisonRhs).hom (1 : ℤ) := by
+  dsimp [t96A06_unitH0GeneratorProbe, t96A06_unitH0ComparisonLhs,
+    t96A06_unitH0ComparisonRhs, t96A06_unitH0CoordinateGenerator] at h ⊢
+  simpa only [Iso.inv_hom_id_apply] using h
+
+/-- Native additive `H₀(Unit)` generator corresponding to the same forgotten
+module coproduct coordinate. -/
+noncomputable def t96A06_unitH0NativeGenerator :=
+  ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit) ≪≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).symm).inv.hom
+        ((PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+            ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom (1 : ℤ)))
+
+/-- It now suffices to show that the homology comparison itself carries the
+explicit module generator to the explicit additive generator. -/
+theorem t96A06_unitH0_coordinate_normalization_of_comparison_generator
+    (h :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+          t96A06_unitH0NativeGenerator) :
+      (t96A06_unitH0ComparisonLhs).hom t96A06_unitH0CoordinateGenerator =
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.hom
+            t96A06_unitH0CoordinateGenerator := by
+  rw [t96A06_unitH0ComparisonLhs, AddCommGrpCat.comp_apply, AddCommGrpCat.comp_apply, h]
+  dsimp [t96A06_unitH0NativeGenerator, t96A06_unitH0CoordinateGenerator]
+  rw [← PreservesCoproduct.inv_hom]
+  rw [(PreservesCoproduct.iso
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+    (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv_hom_id_apply]
+  change
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+        ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom.hom
+          ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+            AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv.hom
+            ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom 1))) =
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).hom.hom
+        ((ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv.hom
+          ((PreservesCoproduct.iso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+            (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv.hom
+            ((Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) ()).hom 1)))
+  rw [(ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+    AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv_hom_id_apply]
+  rw [(ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit).inv_hom_id_apply]
+
+/-- The explicit generator comparison discharges the complete Unit `H₀`
+comparison after the preceding coordinate reductions. -/
+theorem t96A06_unitH0_integralComparison_of_comparison_generator
+    (h :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+          t96A06_unitH0NativeGenerator) :
+    t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  apply t96A06_unitH0_generator_iff_comparison.mp
+  apply t96A06_unitH0_generator_eq_of_apply_one
+  apply t96A06_unitH0_integralComparison_apply_one_of_coordinate
+  apply t96A06_unitH0_coordinate_normalization_of_comparison_generator
+  exact h
+
+#print axioms t96A06_unitH0_integralComparison_of_comparison_generator
+
+/-- The exact chain-to-homology compatibility left after unfolding the
+integral comparison on the selected Unit generator. -/
+def t96A06_unitH0ChainGeneratorCompatibility : Prop :=
+  (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).symm ≪≫
+      (HomologicalComplex.homologyFunctor AddCommGrpCat
+        (ComplexShape.down ℕ) 0).mapIso
+          (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+            (TopCat.of Unit))).hom).hom t96A06_unitH0CoordinateGenerator =
+    t96A06_unitH0NativeGenerator
+
+/-- The concrete chain-to-homology generator compatibility is precisely the
+remaining input required by the public integral homology comparison. -/
+theorem t96A06_unitH0_comparison_generator_of_chain_compatibility
+    (h : t96A06_unitH0ChainGeneratorCompatibility) :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+        t96A06_unitH0NativeGenerator := by
+  simpa [t96A06_unitH0ChainGeneratorCompatibility,
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison]
+    using h
+
+#print axioms t96A06_unitH0_comparison_generator_of_chain_compatibility
+
+/-- In degree zero, the chain comparison sends the forgotten module-valued
+Unit simplex generator to the native additive Unit simplex generator. -/
+theorem t96A06_unitH0_chainComparison_degreeZero_generator :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ())) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+        (TopCat.of Unit) 0).hom =
+    Limits.Sigma.ι
+      (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+        (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+      (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+        (Opposite.op (SimplexCategory.mk 0))) ()) := by
+  dsimp only [ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso]
+  have hhom :
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)).hom =
+        inv (sigmaComparison
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)) := by
+    symm
+    apply IsIso.inv_eq_of_hom_inv_id
+    simpa only [PreservesCoproduct.inv_hom] using
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)).inv_hom_id
+  rw [hhom]
+  exact Limits.map_ι_comp_inv_sigmaComparison _ _ _
+
+#print axioms t96A06_unitH0_chainComparison_degreeZero_generator
+
+/-- The inverse chain comparison carries the native Unit simplex generator
+back to the forgotten module-valued generator. -/
+theorem t96A06_unitH0_chainComparison_degreeZero_generator_inv :
+    Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+        (TopCat.of Unit) 0).inv =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (Limits.Sigma.ι
+        (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+          (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+        (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+          (Opposite.op (SimplexCategory.mk 0))) ())) := by
+  exact (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+    (TopCat.of Unit) 0).comp_inv_eq.mpr
+      t96A06_unitH0_chainComparison_degreeZero_generator.symm
+
+#print axioms t96A06_unitH0_chainComparison_degreeZero_generator_inv
+
+/-- The Unit homology comparison factors as preservation of module homology
+followed by the homology map induced by the explicit chain comparison. -/
+theorem t96A06_unitH0_homologyComparison_factorization :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom =
+      ((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+            (TopCat.of Unit)).hom 0) := by
+  rfl
+
+#print axioms t96A06_unitH0_homologyComparison_factorization
+
+/-- The module singular chains after forgetting their scalar structure. -/
+noncomputable abbrev t96A06_unitMappedModuleChains : ChainComplex AddCommGrpCat ℕ :=
+  (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+    (ComplexShape.down ℕ)).obj
+      (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit))
+
+/-- The chain comparison carries the projected mapped module generator to
+the projected additive generator in the actual homological complexes. -/
+theorem t96A06_unitH0_chainComparison_projected_generators :
+    (HomologicalComplex.opcyclesMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+        t96A06_unitH0ModuleChainGenerator) =
+      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+            t96A06_unitH0AdditiveChainGenerator) := by
+  rw [← ConcreteCategory.comp_apply,
+    HomologicalComplex.p_opcyclesMap,
+    ConcreteCategory.comp_apply]
+  rw [t96A06_unitH0ModuleChainGenerator_eq_explicitSimplex,
+    t96A06_unitH0AdditiveChainGenerator_eq_explicitSimplex]
+  change (ConcreteCategory.hom
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          (Limits.Sigma.ι
+            (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+              (TopCat.of Unit) 0 => ModuleCat.of ℤ ℤ)
+            (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+              (Opposite.op (SimplexCategory.mk 0))) ())) ≫
+        (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparisonXIso
+          (TopCat.of Unit) 0).hom ≫
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0) (1 : ℤ) =
+    ConcreteCategory.hom
+      (Limits.Sigma.ι
+          (fun _ : ConstructionTargets.SingularSubdivision.SingularSimplex
+            (TopCat.of Unit) 0 => AddCommGrpCat.of ℤ)
+          (((TopCat.toSSetIsoConst (TopCat.of Unit)).inv.app
+            (Opposite.op (SimplexCategory.mk 0))) ()) ≫
+        (((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0) (1 : ℤ))
+  rw [← CategoryTheory.Category.assoc,
+    t96A06_unitH0_chainComparison_degreeZero_generator]
+  rfl
+
+#print axioms t96A06_unitH0_chainComparison_projected_generators
+
+/-- The induced homology map carries the mapped module generator class to
+the additive generator class. -/
+theorem t96A06_unitH0_chainComparison_homology_generators :
+    (HomologicalComplex.homologyMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      ((t96A06_unitMappedModuleChains.isoHomologyι₀.inv).hom
+        ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+          t96A06_unitH0ModuleChainGenerator)) =
+      (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv).hom
+        (((((AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+          (AddCommGrpCat.of ℤ)).obj (TopCat.of Unit)).pOpcycles 0).hom
+          t96A06_unitH0AdditiveChainGenerator)) := by
+  rw [← ConcreteCategory.comp_apply,
+    ChainComplex.isoHomologyι₀_inv_naturality,
+    ConcreteCategory.comp_apply,
+    t96A06_unitH0_chainComparison_projected_generators]
+  rfl
+
+#print axioms t96A06_unitH0_chainComparison_homology_generators
+
+/-- For the Unit degree-zero short complex, the right-derived preservation
+isomorphism agrees with the left-derived preservation used by comparison. -/
+theorem t96A06_unitH0_preservation_right_eq_left :
+    (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso'
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules) =
+      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules) := by
+  exact ShortComplex.mapHomologyIso'_eq_mapHomologyIso _ _
+
+#print axioms t96A06_unitH0_preservation_right_eq_left
+
+/-- The degree-zero short complex underlying the module-valued Unit chains. -/
+noncomputable abbrev t96A06_unitH0ModuleShortComplex :=
+  (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0
+
+/-- Transport from canonical degree-zero opcycles into the right-derived
+homology model factors through its chosen opcycle presentation. -/
+theorem t96A06_unitH0_rightHomology_opcycle_transport :
+    ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv ≫
+        t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom) ≫
+      t96A06_unitH0ModuleShortComplex.homologyData.right.ι =
+        t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom := by
+  change ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom ≫
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι) = _
+  erw [t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso_hom_comp_ι]
+  exact (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+      (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv_hom_id_assoc _
+
+#print axioms t96A06_unitH0_rightHomology_opcycle_transport
+
+/-- On the Unit degree-zero short complex, the canonical opcycle preservation
+isomorphism is the transport between the mapped and original right-homology data. -/
+theorem t96A06_unitH0_mapOpcyclesIso_eq_rightData :
+    t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules =
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso ≪≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.symm := by
+  exact t96A06_unitH0ModuleShortComplex.homologyData.right.mapOpcyclesIso_eq
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_eq_rightData
+
+/-- The canonical opcycle-preservation isomorphism, evaluated on the explicit
+mapped Unit generator, agrees with its right-homology-data presentation. -/
+theorem t96A06_unitH0_mapOpcyclesIso_explicit_generator :
+    (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+        t96A06_unitH0ModuleChainGenerator) =
+    ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso ≪≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.symm).hom.hom
+      ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+        t96A06_unitH0ModuleChainGenerator) := by
+  exact congrArg
+    (fun e => e.hom.hom ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+      t96A06_unitH0ModuleChainGenerator))
+    t96A06_unitH0_mapOpcyclesIso_eq_rightData
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_explicit_generator
+
+/-- On the Unit degree-zero short complex, homology preservation is the
+transport between the mapped and original right-homology presentations. -/
+theorem t96A06_unitH0_mapHomologyIso'_eq_rightData :
+    t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules =
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso ≪≫
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.symm := by
+  exact t96A06_unitH0ModuleShortComplex.homologyData.right.mapHomologyIso'_eq
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+
+#print axioms t96A06_unitH0_mapHomologyIso'_eq_rightData
+
+/-- The mapped right-homology presentation reaches canonical opcycles through
+its chosen inclusion and inverse opcycle comparison. -/
+theorem t96A06_unitH0_mappedRightHomology_triangle :
+    (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso.inv ≫
+      (t96A06_unitH0ModuleShortComplex.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι =
+    (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).ι ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv := by
+  exact (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso_inv_comp_homologyι
+
+#print axioms t96A06_unitH0_mappedRightHomology_triangle
+
+/-- After forgetting module structure, the original right-homology triangle
+still carries the canonical degree-zero opcycle presentation to the chosen
+right-data opcycles. -/
+@[reassoc]
+theorem t96A06_unitH0_forgottenRightHomology_opcycle_triangle :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom ≫
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom := by
+  simpa only [Functor.map_comp, Category.assoc] using congrArg
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+    t96A06_unitH0_rightHomology_opcycle_transport
+
+#print axioms t96A06_unitH0_forgottenRightHomology_opcycle_triangle
+
+/-- The inverse homology-preservation map is the two successive inverse
+right-data transports.  This is the normal form used to cancel the mapped
+and forgotten right-homology triangles. -/
+theorem t96A06_unitH0_mapHomologyIso'_inv_eq_rightData :
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.symm).inv ≫
+        (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso.inv := by
+  rw [t96A06_unitH0_mapHomologyIso'_eq_rightData]
+  rfl
+
+#print axioms t96A06_unitH0_mapHomologyIso'_inv_eq_rightData
+
+/-- The inverse opcycle-preservation map is the corresponding two successive
+inverse right-data transports. -/
+theorem t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData :
+    (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.symm).inv ≫
+        (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv := by
+  rw [t96A06_unitH0_mapOpcyclesIso_eq_rightData]
+  rfl
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData
+
+/-- On degree-zero Unit chains, preservation carries the canonical homology
+comparison to the canonical opcycle comparison. -/
+theorem t96A06_unitH0_preservation_canonical_triangle :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv) ≫
+      (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+    (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+      t96A06_unitMappedModuleChains.isoHomologyι₀.inv := by
+  rw [t96A06_unitH0_mapHomologyIso'_inv_eq_rightData,
+    t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData]
+  simp only [Functor.mapIso_inv, Iso.symm_inv]
+  rw [← cancel_mono
+    (t96A06_unitH0ModuleShortComplex.map
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι]
+  ext x
+  change
+    ((t96A06_unitH0ModuleShortComplex.map
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι).hom
+      ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyIso.inv.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom).hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+              (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom x))) =
+      ((t96A06_unitH0ModuleShortComplex.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι).hom
+        (t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+          ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv.hom
+            ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+              t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom).hom x)))
+  have hm := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_mappedRightHomology_triangle
+  simp only [AddCommGrpCat.comp_apply] at hm
+  rw [hm]
+  simp only [ShortComplex.RightHomologyData.map_ι]
+  change
+    (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι).hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom).hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+              (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom x))) =
+      ((t96A06_unitH0ModuleShortComplex.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).homologyι).hom
+        (t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+          ((t96A06_unitH0ModuleShortComplex.homologyData.right.map
+            ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv.hom
+            ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+              t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom).hom x)))
+  have hf := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_forgottenRightHomology_opcycle_triangle
+  simp only [AddCommGrpCat.comp_apply] at hf
+  have hf' :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        t96A06_unitH0ModuleShortComplex.homologyData.right.ι).hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            t96A06_unitH0ModuleShortComplex.homologyData.right.homologyIso.hom).hom
+            ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+              ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+                (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom x)) =
+        (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom).hom x := by
+    simpa only [AddCommGrpCat.comp_apply] using hf x
+  rw [hf']
+  exact (t96A06_unitMappedModuleChains.isoHomologyι₀.inv_hom_id_apply _).symm
+
+#print axioms t96A06_unitH0_preservation_canonical_triangle
+
+/-- The canonical preservation triangle evaluated on the explicit projected
+Unit chain generator. -/
+theorem t96A06_unitH0_preservation_canonical_triangle_generator :
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+          t96A06_unitH0ModuleChainGenerator)) =
+      t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+        ((t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+            ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+              (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+            t96A06_unitH0ModuleChainGenerator)) := by
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_preservation_canonical_triangle
+  exact h
+    ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+      t96A06_unitH0ModuleChainGenerator)
+
+#print axioms t96A06_unitH0_preservation_canonical_triangle_generator
+
+/-- Inverse opcycle preservation sends the forgotten projected Unit chains
+to the literal projected chains of the mapped complex. -/
+theorem t96A06_unitH0_mapOpcyclesIso_inv_projected :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0) ≫
+      (t96A06_unitH0ModuleShortComplex.mapOpcyclesIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv =
+    t96A06_unitMappedModuleChains.pOpcycles 0 := by
+  rw [t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData]
+  change
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0) ≫
+        t96A06_unitH0ModuleShortComplex.homologyData.right.opcyclesIso.hom)) ≫
+      (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).opcyclesIso.inv = _
+  erw [t96A06_unitH0ModuleShortComplex.homologyData.right.pOpcycles_comp_opcyclesIso_hom]
+  exact (t96A06_unitH0ModuleShortComplex.homologyData.right.map
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).p_comp_opcyclesIso_inv
+
+#print axioms t96A06_unitH0_mapOpcyclesIso_inv_projected
+
+/-- Homology preservation carries the selected forgotten Unit coordinate to
+the canonical mapped homology class of its explicit chain generator. -/
+theorem t96A06_unitH0_preservation_coordinate_generator :
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+        t96A06_unitH0CoordinateGenerator =
+      t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+        ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+          t96A06_unitH0ModuleChainGenerator) := by
+  rw [t96A06_unitH0CoordinateGenerator_eq_moduleGenerator,
+    t96A06_unitH0ModuleGenerator_eq_opcycleGenerator,
+    t96A06_unitH0_opcycle_eq_projected_chainGenerator]
+  change
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+          t96A06_unitH0ModuleChainGenerator)) = _
+  rw [t96A06_unitH0_preservation_canonical_triangle_generator]
+  congr 1
+  exact (CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_unitH0_mapOpcyclesIso_inv_projected) t96A06_unitH0ModuleChainGenerator
+
+#print axioms t96A06_unitH0_preservation_coordinate_generator
+
+/-- The integral Unit homology comparison carries the selected coordinate to
+the corresponding native additive generator. -/
+theorem t96A06_unitH0_comparison_generator :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of Unit) 0).hom.hom t96A06_unitH0CoordinateGenerator =
+        t96A06_unitH0NativeGenerator := by
+  rw [t96A06_unitH0_homologyComparison_factorization]
+  change
+    (HomologicalComplex.homologyMap
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularChainsComparison
+        (TopCat.of Unit)).hom 0).hom
+      (((((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+        (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).sc 0).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv).hom
+            t96A06_unitH0CoordinateGenerator) = _
+  rw [← t96A06_unitH0_preservation_right_eq_left]
+  rw [t96A06_unitH0_preservation_coordinate_generator,
+    t96A06_unitH0_chainComparison_homology_generators]
+  dsimp [t96A06_unitH0NativeGenerator,
+    ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso,
+    ConstructionTargets.SingularHomologyConcrete.directDiscreteOpcyclesIso,
+    t96A06_unitH0AdditiveChainGenerator]
+  rw [← PreservesCoproduct.inv_hom]
+  rw [(PreservesCoproduct.iso
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+    (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv_hom_id_apply]
+  rfl
+
+#print axioms t96A06_unitH0_comparison_generator
+
+/-- The integral singular-homology comparison commutes with the concrete
+degree-zero coordinate isomorphisms for `Unit`. -/
+theorem t96A06_unitH0_integralComparison :
+    t96A06_unitH0ComparisonLhs = t96A06_unitH0ComparisonRhs := by
+  exact t96A06_unitH0_integralComparison_of_comparison_generator
+    t96A06_unitH0_comparison_generator
+
+#print axioms t96A06_unitH0_integralComparison
+
+/-- Inverse-coordinate form of the Unit comparison.  This is the orientation
+needed after transporting a Bool point inclusion through the naturality
+square. -/
+@[reassoc]
+theorem t96A06_unitH0_integralComparison_inverse :
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom =
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv := by
+  apply (cancel_mono
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom).mp
+  apply (cancel_mono
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv).mp
+  have hu := t96A06_unitH0_integralComparison
+  simp only [t96A06_unitH0ComparisonLhs, t96A06_unitH0ComparisonRhs] at hu
+  simpa only [Category.assoc, Functor.mapIso_inv, ← Functor.map_comp,
+      Iso.inv_hom_id, Functor.map_id, Category.comp_id] using
+    congrArg (fun f =>
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫ f) hu
+
+#print axioms t96A06_unitH0_integralComparison_inverse
+
+/-- Forgetting integer-module structure carries the unique Unit coproduct
+injection to its native additive counterpart. -/
+@[reassoc]
+theorem t96A06_unitH0_preserved_pointInclusion :
+    Limits.Sigma.ι (fun _ : Unit ↦ AddCommGrpCat.of ℤ) () ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv =
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (Limits.Sigma.ι (fun _ : Unit ↦ ModuleCat.of ℤ ℤ) ()) := by
+  simp [PreservesCoproduct.inv_hom, sigmaComparison, Limits.Sigma.ι_desc]
+
+#print axioms t96A06_unitH0_preserved_pointInclusion
+
+/-- The inverse Unit comparison remains valid after the selected point
+inclusion into `Bool`; this is the parenthesization produced by naturality. -/
+theorem t96A06_unitH0_integralComparison_inverse_pointInclusion (b : Bool) :
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+          (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) Unit)).inv ≫
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+          (AddCommGrpCat.of ℤ)).map
+            (ConstructionTargets.SingularHomologyConcrete.pointInclusion b))) =
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).inv ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) := by
+  simpa only [Category.assoc] using
+    t96A06_unitH0_integralComparison_inverse_assoc
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b))
+
+#print axioms t96A06_unitH0_integralComparison_inverse_pointInclusion
+
+/-- Point-inclusion naturality remains valid after adjoining the Bool
+coordinate isomorphism and coproduct-preservation tail. -/
+theorem t96A06_boolH0_comparison_pointInclusion_naturality_with_tail (b : Bool) :
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (HomologicalComplex.homologyMap
+          (((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).map
+              (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) 0) ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Bool) 0).hom ≫
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of Unit) 0).hom ≫
+      (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.SingularHomologyConcrete.pointInclusion b)) ≫
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv := by
+  simpa only [Category.assoc] using congrArg (fun f => f ≫
+    (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+      AddCommGrpCat (AddCommGrpCat.of ℤ) Bool).hom ≫
+    (PreservesCoproduct.iso
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+      (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv)
+    (t96A06_boolH0_comparison_pointInclusion_naturality_concrete b)
+
+#print axioms t96A06_boolH0_comparison_pointInclusion_naturality_with_tail
+
+/-- Pointwise form of the `Unit` comparison, ready for transport along either
+point inclusion `Unit → Bool`. -/
+theorem t96A06_unitH0_integralComparison_apply
+    (x : ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+      (CoefficientH0.SingularHomology ℤ 0 (TopCat.of Unit))) :
+    t96A06_unitH0ComparisonLhs.hom x = t96A06_unitH0ComparisonRhs.hom x :=
+  ConcreteCategory.congr_hom t96A06_unitH0_integralComparison x
+
+#print axioms t96A06_unitH0_integralComparison_apply
+
+/-- Positivity of the coefficient suspension orientation and of the
+stereographic production normalization determines the full iterated endpoint.
+Keeping both hypotheses explicit prevents the two independent orientation
+choices from being identified without proof. -/
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
+    (hcoefficient : 0 ≤
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2)
+    (hnormalized : 0 ≤ t96A06_normalizedClassSphereTopCoordinate) :
+    t96A06_sphereShiftLocalNormalizationIteratedEndpoint = 1 := by
+  have hdegree :=
+    t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg hcoefficient
+  have hnormal :=
+    t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg hnormalized
+  have hcomparison :
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator =
+        ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint := by
+    apply t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff.mpr
+    rw [hdegree, hnormal]
+  change (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+      1 polynomialSphereRegularPoint).hom.hom
+      ((ConstructionTargets.HigherSphereLocalization.localizationIso
+        polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of (Sphere 3)) 3).hom.hom
+          t96A06_integralIteratedSphereGenerator)) = 1
+  exact t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison hcomparison
+
+theorem t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
+    (hcoefficient : 0 ≤
+      ConstructionTargets.ManifoldFundamentalClass.coefficientSphereNormalizationComparisonDegree 2)
+    (hnormalized : 0 ≤ t96A06_normalizedClassSphereTopCoordinate) :
+    0 ≤ t96A06_sphereShiftLocalNormalizationIteratedEndpoint := by
+  rw [t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
+    hcoefficient hnormalized]
+  norm_num
+
 /-- The rational `H₃(S³)` coordinate used by this closure is definitionally
 the canonical iterated coefficient-sphere normalization. -/
 theorem t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization :
@@ -2130,6 +4179,36 @@ noncomputable def t96A06_mappedRationalExtensionClass :
     (t96A06_integralToRational_singularChainMap
       (TopCat.of (Sphere 3))) 3 t96A06_mappedIntegralNormalizedClass
 
+/-- Forward homology preservation is natural for the rational
+absolute-to-relative projection used at the selected puncture. -/
+theorem t96A06_rationalProjection_preservation_naturality :
+    HomologicalComplex.homologyMap
+        ((t96A06_forgetRatModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3 ≫
+      (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            t96A06_forgetRatModules).hom =
+    (((CoefficientH0.SingularChains ℚ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        t96A06_forgetRatModules).hom ≫
+      t96A06_forgetRatModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint))) 3) := by
+  let φ := cokernel.π
+    (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint))
+  let ψ := (HomologicalComplex.shortComplexFunctor (ModuleCat ℚ)
+    (ComplexShape.down ℕ) 3).map φ
+  exact ShortComplex.mapHomologyIso_hom_naturality ψ t96A06_forgetRatModules
+
 /-- The transported normalized class satisfies the coefficient-change
 localization square at every subset of the three-sphere. -/
 theorem t96A06_mappedIntegralNormalizedClass_localization_naturality
@@ -2185,6 +4264,305 @@ theorem t96A06_mappedIntegralLocalGenerator_mapsTo_ambient :
       (k := 1) polynomialSphereRegularPoint := by
   simp [t96A06_mappedIntegralLocalGenerator]
 
+/-- Removing the forgotten-chain presentation from the selected integral
+local class recovers the inverse comparison of the positive ambient class. -/
+theorem t96A06_mappedIntegralLocalGenerator_unmap :
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      t96A06_mappedIntegralLocalGenerator) =
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).inv.hom
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint) := by
+  simp [t96A06_mappedIntegralLocalGenerator]
+
+/-- The integral coordinate-one obligation is exactly the native comparison
+inverse evaluated in the selected coefficient chart. -/
+theorem t96A06_mappedIntegralLocalGenerator_coordinate_iff :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+          t96A06_mappedIntegralLocalGenerator) = 1 ↔
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint)) = 1 := by
+  rw [t96A06_mappedIntegralLocalGenerator_unmap]
+
+set_option maxRecDepth 2000 in
+/-- Coefficient one for the corrected comparison gives coordinate one for
+the native positive integral local class. -/
+theorem t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1) :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint)) = 1 := by
+  have hgen :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+            polynomialSphereRegularPoint) =
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint := by
+    simpa only [Nat.reduceAdd] using
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
+        1 polynomialSphereRegularPoint hcoeff
+  rw [← hgen]
+  have hcancel := CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom_inv_id
+    (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+      polynomialSphereRegularPoint)
+  have hcancel' :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).hom.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+            polynomialSphereRegularPoint)) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint := by
+    simpa only [CategoryTheory.ConcreteCategory.comp_apply] using hcancel
+  rw [hcancel']
+  exact ConstructionTargets.CoefficientChartLocal.generator_normalization
+    (R := ℤ) 1 polynomialSphereRegularPoint
+
+/-- Coefficient one identifies the native inverse image of the positive
+ambient class with the selected integral chart generator itself. -/
+theorem t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1) :
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint := by
+  have hgen :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+            polynomialSphereRegularPoint) =
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint := by
+    simpa only [Nat.reduceAdd] using
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_of_coefficient_one
+        1 polynomialSphereRegularPoint hcoeff
+  rw [← hgen]
+  exact CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom_inv_id
+    (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+      polynomialSphereRegularPoint)
+
+/-- The native inverse image has positive chart coordinate exactly when the
+corrected comparison has positive generator coefficient. -/
+theorem t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+      polynomialSphereRegularPoint).hom.hom
+        ((ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint)) = 1 ↔
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 := by
+  constructor
+  · intro hcoordinate
+    have hinv :
+        (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).inv.hom
+          (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint) =
+        ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+          polynomialSphereRegularPoint := by
+      apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+        (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+          polynomialSphereRegularPoint).hom).1
+      rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
+      exact hcoordinate
+    have hforward := congrArg
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).hom.hom hinv
+    have hcancel := CategoryTheory.ConcreteCategory.congr_hom
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv_hom_id
+      (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+        (k := 1) polynomialSphereRegularPoint)
+    simp only [CategoryTheory.ConcreteCategory.comp_apply,
+      CategoryTheory.ConcreteCategory.id_apply] at hcancel
+    have hforward' :
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint =
+          (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint) 3).hom.hom
+            (ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+              polynomialSphereRegularPoint) :=
+      hcancel.symm.trans hforward
+    have hgen :=
+      ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_generator_eq_zsmul
+        1 polynomialSphereRegularPoint
+    have hforward'' :
+        ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+            (k := 1) polynomialSphereRegularPoint =
+          ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+              1 polynomialSphereRegularPoint •
+            ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+              (k := 1) polynomialSphereRegularPoint :=
+      hforward'.trans (by simpa only [Nat.reduceAdd] using hgen)
+    have hnormalized := congrArg
+      (ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization
+        1 polynomialSphereRegularPoint).hom.hom hforward''
+    rw [map_zsmul] at hnormalized
+    have hnormalizes :=
+      ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_generator
+        1 polynomialSphereRegularPoint
+    rw [hnormalizes] at hnormalized
+    simpa using hnormalized.symm
+  · exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+
+/-- Positive corrected coefficient is equivalent to exact equality between
+the native inverse comparison class and the coefficient-chart generator. -/
+theorem t96A06_correctedCoefficient_eq_one_iff_nativeGenerator :
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 ↔
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+        (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint := by
+  rw [← t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one]
+  constructor
+  · intro hcoordinate
+    apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+      (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom).1
+    rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
+    exact hcoordinate
+  · intro hgenerator
+    rw [hgenerator]
+    exact ConstructionTargets.CoefficientChartLocal.generator_normalization
+      (R := ℤ) 1 polynomialSphereRegularPoint
+
+/-- At the selected point, positivity of the corrected coefficient is exactly
+the exclusion of the negation automorphism between the two normalizations. -/
+theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation :
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 ↔
+      (ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism
+        1 polynomialSphereRegularPoint).hom ≠ -𝟙 _ := by
+  constructor
+  · intro hone hneg
+    have hm :=
+      (ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
+        1 polynomialSphereRegularPoint).mp hneg
+    omega
+  · intro hne
+    apply ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_one_of_ne_neg_one
+    intro hm
+    exact hne
+      ((ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom_eq_neg_iff
+        1 polynomialSphereRegularPoint).mpr hm)
+
+/-- Expand the sign criterion to the coefficient normalization, corrected
+relative comparison, ambient chart pullback, and model normalization maps. -/
+theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite :
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 ↔
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+          (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+            polynomialSphereRegularPoint)).inv ≫
+        (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint) 3).hom ≫
+        (ConstructionTargets.ManifoldFundamentalClass.ambientChartHomologyIso
+          1 polynomialSphereRegularPoint).inv ≫
+        (ConstructionTargets.HigherModelLocalHomology.localIsoInt 1).hom) ≠ -𝟙 _ := by
+  rw [t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation,
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom]
+  rfl
+
+/-- The concrete normalization composite is determined by its value on the
+integer generator, so positivity reduces to excluding the value `-1`. -/
+theorem t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one :
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1 ↔
+      CategoryTheory.ConcreteCategory.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+              polynomialSphereRegularPoint)).inv ≫
+          (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint) 3).hom ≫
+          (ConstructionTargets.ManifoldFundamentalClass.ambientChartHomologyIso
+            1 polynomialSphereRegularPoint).inv ≫
+          (ConstructionTargets.HigherModelLocalHomology.localIsoInt 1).hom)
+        (show ↑(ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (ModuleCat.of ℤ ℤ)) from (1 : ℤ)) ≠ -1 := by
+  rw [t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite]
+  constructor
+  · intro hne hone
+    apply hne
+    apply AddCommGrpCat.hom_ext
+    apply AddMonoidHom.ext_int
+    exact hone
+  · intro hone hneg
+    apply hone
+    have h := CategoryTheory.ConcreteCategory.congr_hom hneg (1 : ℤ)
+    exact h
+
+/-- Evaluating the four normalization factors on the integer generator
+recovers the corrected local-generator coefficient exactly. -/
+theorem t96A06_concreteNormalizationComposite_one_eq_correctedCoefficient :
+    CategoryTheory.ConcreteCategory.hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+            (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+              polynomialSphereRegularPoint)).inv ≫
+          (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint) 3).hom ≫
+          (ConstructionTargets.ManifoldFundamentalClass.ambientChartHomologyIso
+            1 polynomialSphereRegularPoint).inv ≫
+          (ConstructionTargets.HigherModelLocalHomology.localIsoInt 1).hom)
+        (show ↑(ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+          (ModuleCat.of ℤ ℤ)) from (1 : ℤ)) =
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint := by
+  rw [ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient_eq_automorphism_one,
+    ConstructionTargets.ManifoldFundamentalClass.correctedLocalNormalizationAutomorphism_hom,
+    ConstructionTargets.ManifoldFundamentalClass.ambientLocalNormalization_hom]
+  rfl
+
 /-- The preservation isomorphisms commute with the exact deleted-point
 projection used for the normalized class. -/
 theorem t96A06_normalizedClass_projection_preservation_naturality :
@@ -2211,6 +4589,96 @@ theorem t96A06_normalizedClass_projection_preservation_naturality :
     (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
       polynomialSphereRegularPoint) 3
 
+/-- Applying the forward relative preservation isomorphism cancels the
+inverse in the specialized projection square. -/
+theorem t96A06_normalizedClass_projection_preservation_cancel
+    (z : ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 3).obj
+        (ModuleCat.of ℤ ℤ) |>.obj (TopCat.of (Sphere 3)))) :
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+      (((((CoefficientH0.SingularChains ℤ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv ≫
+        HomologicalComplex.homologyMap
+          ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+            (ComplexShape.down ℕ)).map
+              (cokernel.π
+                (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+                  (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                    polynomialSphereRegularPoint)))) 3).hom z) =
+    (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3)).hom z := by
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_normalizedClass_projection_preservation_naturality z
+  have hc := CategoryTheory.ConcreteCategory.congr_hom
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv_hom_id)
+    ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3)).hom z)
+  simp only [CategoryTheory.ConcreteCategory.comp_apply,
+    CategoryTheory.ConcreteCategory.id_apply] at hc
+  exact (congrArg
+    (fun w => (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom w)
+    h.symm).trans hc
+
+/-- The transported normalized global class localizes to the transported
+positive integral local generator. -/
+theorem t96A06_mappedIntegralNormalizedClass_localizes :
+    HomologicalComplex.homologyMap
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapHomologicalComplex
+          (ComplexShape.down ℕ)).map
+            (cokernel.π
+              (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)))) 3
+          t96A06_mappedIntegralNormalizedClass =
+      t96A06_mappedIntegralLocalGenerator := by
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom).1
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom).1
+  rw [t96A06_mappedIntegralLocalGenerator_mapsTo_ambient]
+  rw [t96A06_mappedIntegralNormalizedClass_eq_comparisonInv]
+  let z :=
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv.hom
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint)
+  have hc := t96A06_normalizedClass_projection_preservation_cancel z
+  have h := CategoryTheory.ConcreteCategory.congr_hom
+    (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport_projection
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3)
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+      (TopCat.of (Sphere 3)) 3).inv.hom
+        (ConstructionTargets.HigherSphereLocalization.normalizedClass
+          (k := 1) polynomialSphereRegularPoint))
+  exact (congrArg
+    (fun w => (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint) 3).hom.hom w) hc).trans
+    (h.trans t96A06_absoluteComparison_localization_normalizedClass)
+
 /-- Extend the positive integral local class to native rational relative
 homology. -/
 noncomputable def t96A06_mappedRationalLocalExtension :=
@@ -2223,6 +4691,36 @@ noncomputable def t96A06_mappedRationalLocalExtension :=
         (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
           polynomialSphereRegularPoint)) 3
       t96A06_mappedIntegralLocalGenerator))
+
+/-- Removing the final preservation isomorphism reduces rational generator
+transport to the underlying coefficient-extension homology map. -/
+theorem t96A06_mappedRationalLocalExtension_eq_generator_iff_raw :
+    t96A06_mappedRationalLocalExtension =
+        ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint ↔
+      HomologicalComplex.homologyMap
+          (t96A06_integralToRational_relativeChains
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)) 3
+          t96A06_mappedIntegralLocalGenerator =
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              t96A06_forgetRatModules).inv.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+            polynomialSphereRegularPoint)) := by
+  constructor
+  · intro h
+    have hh := congrArg
+      (fun z => ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            t96A06_forgetRatModules).inv.hom z)) h
+    simpa [t96A06_mappedRationalLocalExtension] using hh
+  · intro h
+    unfold t96A06_mappedRationalLocalExtension
+    rw [h]
+    simp
 
 /-- Exact local-generator transport is equivalent to normalization coordinate
 one in the rational chart-local isomorphism. -/
@@ -2244,6 +4742,278 @@ theorem t96A06_integralToRational_localGenerator_iff :
         polynomialSphereRegularPoint).hom).1
     rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
     exact h
+
+/-- The raw coefficient-extension generator equation is exactly coordinate
+one after restoring the rational preservation isomorphism and applying the
+selected chart normalization. -/
+theorem t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one :
+    HomologicalComplex.homologyMap
+          (t96A06_integralToRational_relativeChains
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)) 3
+          t96A06_mappedIntegralLocalGenerator =
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              t96A06_forgetRatModules).inv.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+            polynomialSphereRegularPoint)) ↔
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension = 1 := by
+  rw [← t96A06_mappedRationalLocalExtension_eq_generator_iff_raw,
+    t96A06_integralToRational_localGenerator_iff]
+
+/-- Once coefficient extension is natural for the selected local chart, the
+integral coordinate-one equation transports to the rational chart. -/
+theorem t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
+    (hintegral :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator) = 1)
+    (hnatural :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension =
+        algebraMap ℤ ℚ
+          ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+            polynomialSphereRegularPoint).hom.hom
+              ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+                t96A06_mappedIntegralLocalGenerator))) :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom
+        t96A06_mappedRationalLocalExtension = 1 := by
+  rw [hnatural, hintegral]
+  norm_num
+
+/-- Integral coordinate one and coefficient-change naturality imply the raw
+rational generator transport equation. -/
+theorem t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality
+    (hintegral :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator) = 1)
+    (hnatural :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension =
+        algebraMap ℤ ℚ
+          ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+            polynomialSphereRegularPoint).hom.hom
+              ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+                t96A06_mappedIntegralLocalGenerator))) :
+    HomologicalComplex.homologyMap
+          (t96A06_integralToRational_relativeChains
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)) 3
+          t96A06_mappedIntegralLocalGenerator =
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              t96A06_forgetRatModules).inv.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+            polynomialSphereRegularPoint)) := by
+  apply t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one.mpr
+  exact t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
+    hintegral hnatural
+
+/-- With the integral coordinate fixed to one, chart naturality and raw
+coefficient-extension transport are equivalent. -/
+theorem t96A06_integralToRational_localChart_naturality_iff_rawTransport
+    (hintegral :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator) = 1) :
+    ((ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension =
+        algebraMap ℤ ℚ
+          ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+            polynomialSphereRegularPoint).hom.hom
+              ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+                t96A06_mappedIntegralLocalGenerator))) ↔
+      HomologicalComplex.homologyMap
+          (t96A06_integralToRational_relativeChains
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)) 3
+          t96A06_mappedIntegralLocalGenerator =
+        ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+              t96A06_forgetRatModules).inv.hom
+          (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+            polynomialSphereRegularPoint)) := by
+  constructor
+  · exact t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality
+      hintegral
+  · intro hraw
+    have hcoordinate :=
+      t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one.mp hraw
+    rw [hcoordinate, hintegral]
+    norm_num
+
+/-- Positive integral normalization and chart naturality identify the mapped
+rational extension with the selected positive rational generator. -/
+theorem t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1)
+    (hnatural :
+      (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+        polynomialSphereRegularPoint).hom.hom
+          t96A06_mappedRationalLocalExtension =
+        algebraMap ℤ ℚ
+          ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+            polynomialSphereRegularPoint).hom.hom
+              ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+                (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                  polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+                t96A06_mappedIntegralLocalGenerator))) :
+    t96A06_mappedRationalLocalExtension =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint := by
+  apply t96A06_integralToRational_localGenerator_iff.mpr
+  apply t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
+  · apply t96A06_mappedIntegralLocalGenerator_coordinate_iff.mpr
+    exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one hcoeff
+  · exact hnatural
+
+/-- The remaining chart-coordinate compatibility equation for coefficient
+extension, named independently of its later consumers. -/
+def t96A06_integralToRationalLocalChartNaturality : Prop :=
+  (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom
+        t96A06_mappedRationalLocalExtension =
+    algebraMap ℤ ℚ
+      ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+        polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator))
+
+/-- The exact raw generator equation before restoring the rational
+preservation isomorphism. -/
+def t96A06_integralToRationalRawLocalGeneratorTransport : Prop :=
+  HomologicalComplex.homologyMap
+        (t96A06_integralToRational_relativeChains
+          (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+            polynomialSphereRegularPoint)) 3
+        t96A06_mappedIntegralLocalGenerator =
+      ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+            t96A06_forgetRatModules).inv.hom
+        (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint))
+
+/-- The remaining rational-side projection equation after the global
+coefficient-extension localization square has been applied. -/
+def t96A06_rationalNormalizedClassLocalizesToRawGenerator : Prop :=
+  HomologicalComplex.homologyMap
+      ((t96A06_forgetRatModules.mapHomologicalComplex
+        (ComplexShape.down ℕ)).map
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint)))) 3
+      t96A06_mappedRationalExtensionClass =
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).inv.hom
+      (ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint))
+
+/-- The global localization square and integral localization reduce exact raw
+generator transport to the rational normalized-class projection equation. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
+    (h : t96A06_rationalNormalizedClassLocalizesToRawGenerator) :
+    t96A06_integralToRationalRawLocalGeneratorTransport := by
+  unfold t96A06_integralToRationalRawLocalGeneratorTransport
+  unfold t96A06_rationalNormalizedClassLocalizesToRawGenerator at h
+  rw [← t96A06_mappedIntegralNormalizedClass_localization_naturality,
+    t96A06_mappedIntegralNormalizedClass_localizes] at h
+  exact h
+
+/-- Corrected coefficient one and the named chart equation imply the named
+raw coefficient-extension transport equation. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1)
+    (hnatural : t96A06_integralToRationalLocalChartNaturality) :
+    t96A06_integralToRationalRawLocalGeneratorTransport := by
+  apply t96A06_mappedRationalLocalExtension_eq_generator_iff_raw.mp
+  apply t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one hcoeff
+  exact hnatural
+
+/-- Once the corrected coefficient is one, the two named remaining
+coefficient-change equations are equivalent. -/
+theorem t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one
+    (hcoeff :
+      ConstructionTargets.ManifoldFundamentalClass.correctedLocalGeneratorCoefficient
+        1 polynomialSphereRegularPoint = 1) :
+    t96A06_integralToRationalLocalChartNaturality ↔
+      t96A06_integralToRationalRawLocalGeneratorTransport := by
+  apply t96A06_integralToRational_localChart_naturality_iff_rawTransport
+  apply t96A06_mappedIntegralLocalGenerator_coordinate_iff.mpr
+  exact t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one hcoeff
+
+/-- Exact transport of the integral and rational chart generators supplies
+the coefficient-extension chart-coordinate naturality equation. -/
+theorem t96A06_integralToRational_chart_naturality_of_generator_transport
+    (hintegral :
+      (ConstructionTargets.ManifoldFundamentalClass.integralRelativeHomologyComparisonWithTransport
+        (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+          polynomialSphereRegularPoint) 3).inv.hom
+        (ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+          (k := 1) polynomialSphereRegularPoint) =
+      ConstructionTargets.CoefficientChartLocal.generator ℤ 1
+        polynomialSphereRegularPoint)
+    (hrational :
+      t96A06_mappedRationalLocalExtension =
+        ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+          polynomialSphereRegularPoint) :
+    (ConstructionTargets.CoefficientChartLocal.localIso ℚ 1
+      polynomialSphereRegularPoint).hom.hom
+        t96A06_mappedRationalLocalExtension =
+      algebraMap ℤ ℚ
+        ((ConstructionTargets.CoefficientChartLocal.localIso ℤ 1
+          polynomialSphereRegularPoint).hom.hom
+          ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+                ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).hom.hom
+            t96A06_mappedIntegralLocalGenerator)) := by
+  rw [hrational,
+    ConstructionTargets.CoefficientChartLocal.generator_normalization,
+    t96A06_mappedIntegralLocalGenerator_unmap, hintegral,
+    ConstructionTargets.CoefficientChartLocal.generator_normalization]
+  norm_num
 
 /-- Integral localization together with the single rational local coordinate
 equation makes the rational extension localize to the positive generator. -/
@@ -2465,6 +5235,133 @@ theorem polynomialSphereLift_base_localFundamentalClass_positive_iff :
         polynomialSphereRegularPoint).hom).1
     rw [ConstructionTargets.CoefficientChartLocal.generator_normalization]
     exact h
+
+/-- Agreement of the global rational class and of the base normalization
+scalar forces the rational coefficient extension to project to the selected
+local generator. -/
+theorem t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
+    (hglobal :
+      t96A06_integralNormalizedClass_rationalExtension =
+        t96A06_sphere3_rational_fundamentalClass)
+    (hscalar : polynomialSphereLift_baseLocalizationScalar = 1) :
+    t96A06_rationalNormalizedClassLocalizesToRawGenerator := by
+  unfold t96A06_rationalNormalizedClassLocalizesToRawGenerator
+  apply (CategoryTheory.ConcreteCategory.bijective_of_isIso
+    (((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).hom).1
+  have hnat := CategoryTheory.ConcreteCategory.congr_hom
+    t96A06_rationalProjection_preservation_naturality
+    t96A06_mappedRationalExtensionClass
+  have hmid :
+      (t96A06_forgetRatModules.map
+        (HomologicalComplex.homologyMap
+          (cokernel.π
+            (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+              (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+                polynomialSphereRegularPoint))) 3)).hom
+        ((((CoefficientH0.SingularChains ℚ (TopCat.of (Sphere 3))).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).hom.hom
+            t96A06_mappedRationalExtensionClass) =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint := by
+    change HomologicalComplex.homologyMap
+        (cokernel.π
+          (ConstructionTargets.CoefficientRelativeSmall.subspaceMap ℚ
+            (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+              polynomialSphereRegularPoint))) 3
+        t96A06_integralNormalizedClass_rationalExtension =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint
+    rw [hglobal]
+    exact polynomialSphereLift_base_localFundamentalClass_positive_iff.mpr hscalar
+  exact hnat.trans (hmid.trans
+    ((((ConstructionTargets.CoefficientRelativeSmall.relativeChains ℚ
+      (ConstructionTargets.CoefficientNeighborhoodLocal.deleted
+        polynomialSphereRegularPoint)).sc 3).mapHomologyIso
+          t96A06_forgetRatModules).inv_hom_id_apply _).symm)
+
+/-- The two global normalization equalities still owed by coefficient
+extension, bundled as the exact input to the local transport assembler. -/
+def t96A06_globalRationalComparison_and_baseScalar_one : Prop :=
+  t96A06_integralNormalizedClass_rationalExtension =
+      t96A06_sphere3_rational_fundamentalClass ∧
+    polynomialSphereLift_baseLocalizationScalar = 1
+
+/-- The bundled global normalization packet supplies the rational local
+generator equation. -/
+theorem t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket
+    (h : t96A06_globalRationalComparison_and_baseScalar_one) :
+    t96A06_rationalNormalizedClassLocalizesToRawGenerator :=
+  t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
+    h.1 h.2
+
+/-- Consequently the same global packet supplies the raw coefficient-change
+generator transport required by the local calculation. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
+    (h : t96A06_globalRationalComparison_and_baseScalar_one) :
+    t96A06_integralToRationalRawLocalGeneratorTransport :=
+  t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
+    (t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket h)
+
+/-- The remaining global packet is equivalent to two concrete endomorphism
+normalizations: coefficient extension has sphere coordinate one, and the
+global-to-local comparison automorphism is the identity.  This removes all
+class-valued equalities from the final coefficient-change obligation. -/
+theorem t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates :
+    t96A06_globalRationalComparison_and_baseScalar_one ↔
+      t96A06_sphere3_rational_H3Iso.hom.hom
+          t96A06_integralNormalizedClass_rationalExtension = 1 ∧
+        polynomialSphereLift_baseNormalizationComparisonIso.hom = 𝟙 _ := by
+  unfold t96A06_globalRationalComparison_and_baseScalar_one
+  rw [t96A06_integralNormalizedClass_mapsTo_rational_iff,
+    polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff]
+
+/-- The global coefficient-extension normalization, isolated from the
+independent global-to-local comparison normalization. -/
+def t96A06_rationalExtensionCoordinateOne : Prop :=
+  t96A06_sphere3_rational_H3Iso.hom.hom
+    t96A06_integralNormalizedClass_rationalExtension = 1
+
+/-- The global-to-local normalization isomorphism has the chosen positive
+orientation. -/
+def t96A06_baseNormalizationComparisonIdentity : Prop :=
+  polynomialSphereLift_baseNormalizationComparisonIso.hom = 𝟙 _
+
+/-- The exact global packet splits into the two independently provable
+normalization statements. -/
+theorem t96A06_globalRationalComparison_and_baseScalar_one_iff_split :
+    t96A06_globalRationalComparison_and_baseScalar_one ↔
+      t96A06_rationalExtensionCoordinateOne ∧
+        t96A06_baseNormalizationComparisonIdentity := by
+  rw [t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates]
+  rfl
+
+/-- The two scalar normalization statements feed the raw local generator
+transport directly, without retaining the intermediate class-valued packet. -/
+theorem t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
+    (hextension : t96A06_rationalExtensionCoordinateOne)
+    (hcomparison : t96A06_baseNormalizationComparisonIdentity) :
+    t96A06_integralToRationalRawLocalGeneratorTransport := by
+  apply t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
+  apply t96A06_globalRationalComparison_and_baseScalar_one_iff_split.mpr
+  exact ⟨hextension, hcomparison⟩
+
+/-- The two remaining scalar normalizations already discharge the complete
+rational local-generator comparison, including projection of the extended
+global class and restoration of the native relative-homology object.  Thus no
+additional coefficient-change obligation lies between these two coordinates
+and the four local degree classes. -/
+theorem t96A06_mappedRationalLocalExtension_eq_generator_of_coordinates
+    (hextension : t96A06_rationalExtensionCoordinateOne)
+    (hcomparison : t96A06_baseNormalizationComparisonIdentity) :
+    t96A06_mappedRationalLocalExtension =
+      ConstructionTargets.CoefficientChartLocal.generator ℚ 1
+        polynomialSphereRegularPoint := by
+  apply t96A06_mappedRationalLocalExtension_eq_generator_iff_raw.mpr
+  exact t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
+    hextension hcomparison
 
 /-- An endomorphism of rational `H₃(S³)` is scalar multiplication precisely
 when it has that value on the selected fundamental class. -/
@@ -3575,6 +6472,61 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_rp3_rational_H1_isZero
 #print axioms t96A06_rp3_rational_H2_isZero
 #print axioms t96A06_sphere3_integral_normalizedClass_localizes
+#print axioms t96A06_integralNormalizedClass_coordinate_isUnit
+#print axioms t96A06_integralNormalizedClass_coordinate_eq_one_or_neg_one
+#print axioms t96A06_integralNormalizedClass_coordinate_eq_one_iff_ne_neg_one
+#print axioms t96A06_integralNormalizedClass_coordinate_eq_neg_one_iff_localization
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_apply_one
+#print axioms t96A06_sphereShiftGenerator_localCoordinate_eq_one_or_neg_one
+#print axioms t96A06_sphereShiftGenerator_localizes_eq_or_eq_neg
+#print axioms t96A06_sphereShiftGenerator_localizes_iff_automorphism_eq_id
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_endpoint
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_id_of_iterated_endpoint
+#print axioms t96A06_integralIteratedSphereGenerator_eq_H3Iso_inv_one
+#print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_of_comparison
+#print axioms t96A06_integralIteratedSphereGenerator_comparison_coordinate
+#print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_iff
+#print axioms t96A06_normalizedClassSphereTopCoordinate_isUnit
+#print axioms t96A06_coefficientSphereNormalizationComparisonDegree_isUnit
+#print axioms t96A06_coefficientDegree_eq_normalizedClassCoordinate_of_ne_neg
+#print axioms t96A06_coefficientDegree_eq_neg_normalizedClassCoordinate_iff
+#print axioms t96A06_coefficientDegree_ne_neg_normalizedClassCoordinate_iff
+#print axioms t96A06_integralIteratedSphereGenerator_eq_neg_normalizedClass_implies_automorphism_eq_neg
+#print axioms t96A06_integralIteratedSphereGenerator_ne_neg_normalizedClass_of_automorphism_ne_neg
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_eq_neg_implies_iterated_endpoint_eq_neg_one
+#print axioms t96A06_sphereShiftLocalNormalizationAutomorphism_ne_neg_of_iterated_endpoint_ne_neg_one
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_automorphism_apply_one
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_or_neg_one
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_ne_neg_one_of_nonneg
+#print axioms t96A06_sphereShiftLocalNormalization_iterated_endpoint_ne_neg_one_of_nonneg
+#print axioms t96A06_integralIteratedSphereGenerator_mapsTo_normalizedClass_of_endpoint_nonneg
+#print axioms t96A06_normalizedClassSphereTopCoordinate_eq_one_of_nonneg
+#print axioms t96A06_coefficientSphereNormalizationComparisonDegree_eq_one_of_nonneg
+#print axioms t96A06_coefficientDegree_zero_eq_circleOrientationEndpoint
+#print axioms t96A06_coefficientDegree_two_eq_circleOrientationEndpoint_of_steps
+#print axioms t96A06_coefficientDegree_two_nonneg_of_circle_and_steps
+#print axioms t96A06_coefficientCircleOrientationEndpoint_eq_one_of_comparison
+#print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_comparison
+#print axioms t96A06_coefficientCircleComparison_eq_native_of_apply_one
+#print axioms t96A06_coefficientCircleOrientationEndpoint_nonneg_of_apply_one
+#print axioms t96A06_coefficientCircleBoundary_integralComparison_of_bool
+#print axioms t96A06_boolH0_integralComparison_of_points
+#print axioms t96A06_boolH0_integralComparison_points_of_false_true
+#print axioms t96A06_boolH0_integralComparison_of_false_true
+#print axioms t96A06_boolH0_integralComparison_of_endpoint_pair
+#print axioms t96A06_boolH0_endpoint_pair_iff_all_points
+#print axioms t96A06_boolH0_endpoint_pair_iff_comparison
+#print axioms t96A06_boolH0_all_points_iff_comparison
+#print axioms t96A06_boolH0_module_pointInclusion_coordinates
+#print axioms t96A06_boolH0_additive_pointInclusion_coordinates
+#print axioms t96A06_boolH0_comparison_pointInclusion_naturality
+#print axioms t96A06_unitH0_integralComparison_of_generator
+#print axioms t96A06_unitH0_generator_iff_comparison
+#print axioms t96A06_unitH0_generator_eq_of_apply_one
+#print axioms t96A06_unitH0_integralComparison_apply_one_of_coordinate
+#print axioms t96A06_unitH0_coordinate_normalization_of_comparison_generator
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_eq_one_of_coordinate_nonneg
+#print axioms t96A06_sphereShiftLocalNormalizationIteratedEndpoint_nonneg_of_coordinate_nonneg
 #print axioms t96A06_sphere3_rational_H3Iso_eq_coefficientNormalization
 #print axioms t96A06_intToRatCoefficient_signedIncidence
 #print axioms t96A06_integralToRational_singularChainsDegree
@@ -3600,16 +6552,47 @@ theorem t96A06_rp3_rational_homology :
 #print axioms t96A06_forget_nativeProjection_normalizedClass
 #print axioms t96A06_mappedRationalExtensionClass
 #print axioms t96A06_mappedIntegralNormalizedClass_localization_naturality
+#print axioms t96A06_rationalProjection_preservation_naturality
 #print axioms t96A06_mappedIntegralLocalGenerator
 #print axioms t96A06_mappedIntegralLocalGenerator_mapsTo_ambient
+#print axioms t96A06_mappedIntegralLocalGenerator_unmap
+#print axioms t96A06_mappedIntegralLocalGenerator_coordinate_iff
+#print axioms t96A06_nativeIntegralLocalGenerator_coordinate_of_coefficient_one
+#print axioms t96A06_nativeIntegralLocalGenerator_eq_generator_of_coefficient_one
+#print axioms t96A06_nativeIntegralLocalGenerator_coordinate_iff_coefficient_one
+#print axioms t96A06_correctedCoefficient_eq_one_iff_nativeGenerator
+#print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_not_negation
+#print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_concrete_composite
+#print axioms t96A06_correctedLocalGeneratorCoefficient_eq_one_iff_composite_one_ne_neg_one
+#print axioms t96A06_concreteNormalizationComposite_one_eq_correctedCoefficient
 #print axioms t96A06_normalizedClass_projection_preservation_naturality
+#print axioms t96A06_normalizedClass_projection_preservation_cancel
+#print axioms t96A06_mappedIntegralNormalizedClass_localizes
+#print axioms t96A06_integralToRational_localGenerator_coordinate_of_chart_naturality
+#print axioms t96A06_integralToRational_rawLocalGenerator_transport_of_chart_naturality
+#print axioms t96A06_integralToRational_localChart_naturality_iff_rawTransport
+#print axioms t96A06_mappedRationalLocalExtension_eq_generator_of_coefficient_one
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_coefficient_one
+#print axioms t96A06_integralToRationalLocalChartNaturality_iff_rawTransport_of_coefficient_one
+#print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_rationalLocalization
+#print axioms t96A06_integralToRational_chart_naturality_of_generator_transport
 #print axioms t96A06_mappedRationalLocalExtension
+#print axioms t96A06_mappedRationalLocalExtension_eq_generator_iff_raw
 #print axioms t96A06_integralToRational_localGenerator_iff
+#print axioms t96A06_integralToRational_rawLocalGenerator_iff_coordinate_one
 #print axioms t96A06_rationalExtension_localizes_of_coordinate_one
 #print axioms t96A06_integralNormalizedClass_rationalExtension
 #print axioms t96A06_integralNormalizedClass_mapsTo_rational_iff
 #print axioms polynomialSphereLift_base_integralFundamentalClass_positive
 #print axioms polynomialSphereLift_base_localFundamentalClass_positive_iff
+#print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalComparison
+#print axioms t96A06_globalRationalComparison_and_baseScalar_one
+#print axioms t96A06_rationalNormalizedClassLocalizesToRawGenerator_of_globalPacket
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_globalPacket
+#print axioms t96A06_globalRationalComparison_and_baseScalar_one_iff_coordinates
+#print axioms t96A06_globalRationalComparison_and_baseScalar_one_iff_split
+#print axioms t96A06_integralToRationalRawLocalGeneratorTransport_of_coordinates
 #print axioms polynomialSphereLift_baseLocalizationScalar_ne_zero
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_apply
 #print axioms polynomialSphereLift_baseNormalizationComparisonIso_hom_eq_id_iff

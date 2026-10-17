@@ -13,7 +13,7 @@ Complete proof.  Fix $y\in\mathbb R$ and write $\tau_y(x)=x+y$.  (a) We have $A+
 (b) Lebesgue measure $m$ is translation invariant: for every Borel $B$, $m(\tau_y^{-1}(B))=m(B)$.  Using $B=A+y$ and $\tau_y^{-1}(A+y)=A$ we get $m(A+y)=m(A)$ whether or not $m(A)$ is finite.
 
 (c) Let $f\in L^1(\mathbb R)$.  Since $\tau_y$ is measure preserving, the Lebesgue change-of-variables formula gives
-\[\int_{\mathbb R} f(x+y)\,dm(x)=\int_{\mathbb R} f(\tau_y x)\,dm(x)=\int_{\mathbb R} f(x)\,dm(x).\]
+$$\int_{\mathbb R} f(x+y)\,dm(x)=\int_{\mathbb R} f(\tau_y x)\,dm(x)=\int_{\mathbb R} f(x)\,dm(x).$$
 That is exactly the desired equality.
 
 **Stage 2 — LEMMA DEPENDENCY GRAPH**
