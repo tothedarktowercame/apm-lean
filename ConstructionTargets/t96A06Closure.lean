@@ -3451,6 +3451,29 @@ theorem t96A06_unitH0_integralComparison :
 
 #print axioms t96A06_unitH0_integralComparison
 
+/-- The integral comparison on `Bool` follows pointwise from the `Unit`
+comparison and naturality along the two point inclusions. -/
+theorem t96A06_boolH0_integralComparison :
+    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
+  apply t96A06_boolH0_integralComparison_of_points
+  intro b
+  simp only [t96A06_boolH0ComparisonLhs, t96A06_boolH0ComparisonRhs,
+    Category.assoc]
+  rw [← t96A06_boolH0_additive_pointInclusion_coordinates b]
+  rw [← t96A06_boolH0_module_pointInclusion_coordinates b]
+  rw [Functor.map_comp]
+  rw [t96A06_boolH0_comparison_pointInclusion_naturality b]
+  simpa only [Category.assoc] using
+    congrArg (fun f => f ≫
+      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
+        AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv)
+      t96A06_unitH0_integralComparison
+
+#print axioms t96A06_boolH0_integralComparison
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
