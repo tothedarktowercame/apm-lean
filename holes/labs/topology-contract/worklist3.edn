@@ -37293,35 +37293,35 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 3,
+   :stop-count 4,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Transport Unit comparison along both point inclusions to close Bool square; then sign normalization.",
+    "Apply Bool comparison to boundary transport; then close circle sign normalization.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_integralComparison",
-      :type "Unit integral homology comparison square",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_comparison_generator"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_boolH0_integralComparison",
+    [{:name "t96A06_boolH0_integralComparison",
       :type "Bool integral homology comparison square",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_unitH0_integralComparison"
        "t96A06_boolH0_comparison_pointInclusion_naturality"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_coefficientCircleBoundary_integralComparison",
+      :type "signed interval-boundary comparison",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on ["t96A06_boolH0_integralComparison"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed Unit H0 integral comparison.",
+    :reason "Committed Bool H0 integral comparison.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37329,14 +37329,12 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline 164066caa", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792199606404-16004-99251467",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "164066caa",
+     {:cmd "git show --check --stat --oneline b6bf0bf90", :exit 0}],
+    :diagnostic-history
+    [{:cmd "closure compile attempt",
+      :exit 1,
+      :note "Removed redundant unfold; rerun passed."}],
+    :commit "b6bf0bf90",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37344,7 +37342,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -46505,7 +46503,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "forgotten module and native additive discrete H0 coordinates agree on Bool",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-boolh0-integralcomparison,
    :kind :lemma,
    :depends-on
@@ -48084,6 +48083,22 @@
    :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-map,
    :kind :lemma,
    :depends-on [:lemma-t99j05-rationalhomologybiprodiso],
+   :other-consumers []}
+  {:consumer :t96A06,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t96A06_coefficientCircleBoundary_integralComparison",
+    :type "signed interval-boundary comparison"},
+   :lemma
+   {:name "t96A06_coefficientCircleBoundary_integralComparison",
+    :reported-by [:program-2026-10-13-close-t96a06],
+    :type "signed interval-boundary comparison",
+    :area "rp-rational-homology"},
+   :id :lemma-t96a06-coefficientcircleboundary-integralcomparison,
+   :kind :lemma,
+   :depends-on [:lemma-t96a06-boolh0-integralcomparison],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
