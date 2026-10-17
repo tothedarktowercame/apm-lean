@@ -3451,134 +3451,15 @@ theorem t96A06_unitH0_integralComparison :
 
 #print axioms t96A06_unitH0_integralComparison
 
-/-- The integral comparison on `Bool` follows pointwise from the `Unit`
-comparison and naturality along the two point inclusions. -/
-theorem t96A06_boolH0_integralComparison :
-    t96A06_boolH0ComparisonLhs = t96A06_boolH0ComparisonRhs := by
-  apply t96A06_boolH0_integralComparison_of_points
-  intro b
-  simp only [t96A06_boolH0ComparisonLhs, t96A06_boolH0ComparisonRhs,
-    Category.assoc]
-  rw [← t96A06_boolH0_additive_pointInclusion_coordinates b]
-  rw [← t96A06_boolH0_module_pointInclusion_coordinates b]
-  rw [Functor.map_comp]
-  rw [t96A06_boolH0_comparison_pointInclusion_naturality b]
-  simpa only [Category.assoc] using
-    congrArg (fun f => f ≫
-      (ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso
-        AddCommGrpCat (AddCommGrpCat.of ℤ) Unit).hom ≫
-      (PreservesCoproduct.iso
-        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
-        (fun _ : Unit ↦ ModuleCat.of ℤ ℤ)).inv)
-      t96A06_unitH0_integralComparison
+/-- Pointwise form of the `Unit` comparison, ready for transport along either
+point inclusion `Unit → Bool`. -/
+theorem t96A06_unitH0_integralComparison_apply
+    (x : ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+      (CoefficientH0.SingularHomology ℤ 0 (TopCat.of Unit))) :
+    t96A06_unitH0ComparisonLhs.hom x = t96A06_unitH0ComparisonRhs.hom x :=
+  ConcreteCategory.congr_hom t96A06_unitH0_integralComparison x
 
-#print axioms t96A06_boolH0_integralComparison
-
-/-- The coefficient comparison on the literal circle boundary inherits the
-signed two-endpoint coordinates from the discrete `Bool` model. -/
-theorem t96A06_coefficientCircleBoundary_integralComparison :
-    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
-        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
-      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
-        (AddCommGrpCat.of ℤ)).map
-          (TopCat.isoOfHomeo
-            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
-      ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
-      (PreservesCoproduct.iso
-        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
-        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
-      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
-        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom =
-    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
-      (CoefficientSphereEndpoints.boundaryIso ℤ).hom := by
-  exact t96A06_coefficientCircleBoundary_integralComparison_of_bool
-    t96A06_boolH0_integralComparison
-
-#print axioms t96A06_coefficientCircleBoundary_integralComparison
-
-/-- Evaluating the transported boundary comparison on its canonical kernel
-generator gives the signed endpoint function `(1, -1)`. -/
-theorem t96A06_coefficientCircleBoundary_comparison_generator :
-    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
-        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
-      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
-        (AddCommGrpCat.of ℤ)).map
-          (TopCat.isoOfHomeo
-            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
-      ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
-      (PreservesCoproduct.iso
-        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
-        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
-      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
-        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom).hom
-        ((kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
-          ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))) =
-      (fun b : Bool ↦ if b then (-1 : ℤ) else 1) := by
-  rw [t96A06_coefficientCircleBoundary_integralComparison]
-  exact ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction
-
-#print axioms t96A06_coefficientCircleBoundary_comparison_generator
-
-/-- The coefficient relative class whose connecting boundary is the selected
-signed generator of the two endpoint kernel. -/
-noncomputable def t96A06_coefficientCircleRelativeGenerator :
-    (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
-      CoefficientSphereEndpoints.boundary).homology 1 :=
-  (ConstructionTargets.CoefficientContractiblePair.contractibleH1KernelIso ℤ
-      CoefficientSphereEndpoints.boundary).inv.hom
-    ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))
-
-/-- The actual coefficient pair connecting map sends the selected relative
-class to the signed endpoint generator. -/
-theorem t96A06_coefficientCircleRelativeGenerator_boundary :
-    (ConstructionTargets.CoefficientPairSequence.connecting ℤ
-      CoefficientSphereEndpoints.boundary 0).hom
-        t96A06_coefficientCircleRelativeGenerator =
-      (kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
-        ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ)) := by
-  rw [← ConcreteCategory.comp_apply]
-  rw [← ConstructionTargets.CoefficientContractiblePair.contractibleH1Kernel_projection]
-  simp [t96A06_coefficientCircleRelativeGenerator]
-
-#print axioms t96A06_coefficientCircleRelativeGenerator_boundary
-
-/-- The selected coefficient relative class becomes the standard oriented
-interval class under the integral singular comparison. -/
-theorem t96A06_coefficientCircleRelativeGenerator_eq_intervalGenerator :
-    (ConstructionTargets.ManifoldFundamentalClass.closedDiskOneRelativeIsoInterval 1).hom.hom
-      ((ConstructionTargets.IntegralSingularHomologyComparison
-        .integralRelativeHomologyComparisonWithTransport
-          CoefficientSphereEndpoints.boundary 1).hom.hom
-        t96A06_coefficientCircleRelativeGenerator) =
-      ConstructionTargets.ManifoldFundamentalClass.intervalBoundaryRelativeH1Generator := by
-  apply ConstructionTargets.ManifoldFundamentalClass
-    .coefficientClosedRelativeClass_eq_intervalGenerator_of_boundary_coordinates
-  · exact ConstructionTargets.ManifoldFundamentalClass
-      .integralPairConnectingComparison CoefficientSphereEndpoints.boundary 0
-  · rw [t96A06_coefficientCircleRelativeGenerator_boundary]
-    let u :=
-      (PreservesCoproduct.iso
-        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
-        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
-      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
-        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom
-    apply (AddCommGrpCat.mono_iff_injective u).mp inferInstance
-    change
-      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
-          (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
-        ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
-          (AddCommGrpCat.of ℤ)).map
-            (TopCat.isoOfHomeo
-              T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
-        ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
-        u).hom
-          ((kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
-            ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))) =
-        (ConstructionTargets.ManifoldFundamentalClass.boolIntDifference ≫ u).hom (1 : ℤ)
-    rw [t96A06_coefficientCircleBoundary_comparison_generator]
-    exact ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction.symm
-
-#print axioms t96A06_coefficientCircleRelativeGenerator_eq_intervalGenerator
+#print axioms t96A06_unitH0_integralComparison_apply
 
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
