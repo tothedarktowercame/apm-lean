@@ -3474,6 +3474,28 @@ theorem t96A06_boolH0_integralComparison :
 
 #print axioms t96A06_boolH0_integralComparison
 
+/-- The coefficient comparison on the literal circle boundary inherits the
+signed two-endpoint coordinates from the discrete `Bool` model. -/
+theorem t96A06_coefficientCircleBoundary_integralComparison :
+    (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.isoOfHomeo
+            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
+      ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom =
+    ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+      (CoefficientSphereEndpoints.boundaryIso ℤ).hom := by
+  exact t96A06_coefficientCircleBoundary_integralComparison_of_bool
+    t96A06_boolH0_integralComparison
+
+#print axioms t96A06_coefficientCircleBoundary_integralComparison
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
