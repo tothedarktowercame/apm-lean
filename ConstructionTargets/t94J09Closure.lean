@@ -1414,6 +1414,36 @@ noncomputable instance : TopologicalSpace FrozenGeneratorQuotient :=
   TopologicalSpace.coinduced
     (fun x : Surfaces.Disk => Quotient.mk _ x) inferInstance
 
+/-- The literal generator quotient is path connected as the continuous
+surjective image of the closed disk. -/
+noncomputable instance frozenGeneratorQuotientPathConnectedSpace :
+    PathConnectedSpace FrozenGeneratorQuotient := by
+  letI : PathConnectedSpace Surfaces.Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))
+  exact
+    (Quotient.mk'_surjective
+      (s := Relation.EqvGen.setoid frozenGeneratorRel)).pathConnectedSpace
+        continuous_quotient_mk'
+
+/-- Zeroth integral homology of the literal generator quotient. -/
+noncomputable def frozenGeneratorH0IsoInt :
+    SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ := by
+  let p : FrozenGeneratorQuotient :=
+    Quotient.mk _ (0 : Surfaces.Disk)
+  letI : Epi (ConstructionTargets.T02A06SphereH0.singularVertexH0Class p) :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_epi p
+  letI : Mono (ConstructionTargets.T02A06SphereH0.singularVertexH0Class p) :=
+    ConstructionTargets.T02A06SphereH0.singularVertexH0Class_mono p
+  letI : IsIso
+      (ConstructionTargets.T02A06SphereH0.singularVertexH0Class p) :=
+    isIso_of_mono_of_epi _
+  exact
+    ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso
+      (TopCat.of FrozenGeneratorQuotient) 0 (ModuleCat.of ℤ ℤ)
+        (asIso
+          (ConstructionTargets.T02A06SphereH0.singularVertexH0Class p)).symm
+
 /-- The explicit topology used for the frozen generator quotient is the
 standard quotient topology on the same generated setoid. -/
 theorem frozenGeneratorRadialTopologyComparison :
@@ -3491,6 +3521,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedQuotientHomologyIsoGenerator
 #print axioms frozenSignedHomology_of_generator_comparisons
 #print axioms frozenGeneratorRadialTopologyComparison
+#print axioms frozenGeneratorQuotientPathConnectedSpace
+#print axioms frozenGeneratorH0IsoInt
 #print axioms frozenGeneratorRadialTopCatIso
 #print axioms frozenGeneratorRadialHomologyIso
 #print axioms frozenGeneratorRadialGroupHomologyIso
