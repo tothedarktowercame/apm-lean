@@ -36752,6 +36752,19 @@
       :exit 1,
       :note
       "Fixed glyph, precedence, and missing intersection-range leg."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792195405716-15946-213311fa",
+     :commands
+     ["git show/check 8323662f3"
+      "sha256sum fixture"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "statement-registry.py check"],
+     :finding
+     "PASS: repair commit compiles the transported MV first arrow. Its direction is literal overlap→range overlap→range intersection→MV patch biproduct→literal patch biproduct, including the required intersection-range comparison. Fixture hash matches; supporting file has 0 placeholders; standard axioms only; registry 168/168; Main retains one declared placeholder."},
     :commit "8323662f3",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36760,7 +36773,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36791,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed rational ModuleCat homology-biproduct comparison.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired and compiled transported MV arrow.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36907,7 +36920,10 @@
     {:job 7,
      :commit "ab85a510c",
      :reason
-     "Committed rational ModuleCat homology-biproduct comparison."}]}
+     "Committed rational ModuleCat homology-biproduct comparison."}
+    {:job 9,
+     :commit "8323662f3",
+     :reason "Repaired and compiled transported MV arrow."}]}
   {:consumer :t98A02,
    :stop-count 3,
    :evidence
@@ -37277,7 +37293,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37329,7 +37345,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37351,7 +37367,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -47829,7 +47845,7 @@
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_f_transport",
@@ -47838,7 +47854,9 @@
    {:name "t99J05_cp_successor_mayerVietoris_f_transport",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "MV first-arrow transport",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t99J05Closure.lean"]},
    :id :lemma-t99j05-cp-successor-mayervietoris-f-transport,
    :kind :lemma,
    :depends-on
@@ -47962,7 +47980,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData",
@@ -47972,7 +47990,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "opcycle inverse normal form",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata,
    :kind :lemma,
    :depends-on
@@ -47980,7 +48000,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_preservation_canonical_triangle",
@@ -47990,7 +48010,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "canonical homology/opcycle preservation triangle",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-preservation-canonical-triangle,
    :kind :lemma,
    :depends-on
@@ -47999,7 +48021,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_preservation_canonical_triangle_generator",
@@ -48009,14 +48031,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "canonical preservation triangle on Unit generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-preservation-canonical-triangle-generator,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-preservation-canonical-triangle],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_mapOpcyclesIso_inv_projected",
@@ -48028,14 +48052,16 @@
     :type
     "inverse preservation carries forgotten projection to mapped projection",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-mapopcyclesiso-inv-projected,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-mapopcyclesiso-inv-eq-rightdata],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_f_transport_map",
@@ -48045,7 +48071,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "transported MV first-arrow definition",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "8323662f3"},
    :id :lemma-t99j05-cp-successor-mayervietoris-f-transport-map,
    :kind :lemma,
    :depends-on [:lemma-t99j05-rationalhomologybiprodiso],
