@@ -3154,6 +3154,22 @@ theorem homologyHigher_isZero_of_homeomorph_frozenSigned
   (frozenSignedHigherHomology_isZero_of_generatorComparison k hk hgraph).of_iso
     (homologyIsoFrozenSignedOfHomeomorph h k)
 
+/-- The degree-two kernel comparison and boundary-graph high-degree
+vanishing assemble the full positive-dimensional tail required by the
+consumer's homology table. -/
+theorem homologyAboveOne_isZero_of_homeomorph_frozenSigned
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenSignedQuotient)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hgraph : ∀ k : ℕ, 3 ≤ k →
+      IsZero (SpaceH FrozenBoundaryGraphQuotient k)) :
+    ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH X k) := by
+  intro k hk
+  rcases eq_or_lt_of_le hk with rfl | hk
+  · exact homologyH2_isZero_of_homeomorph_frozenSigned h h2
+  · exact homologyHigher_isZero_of_homeomorph_frozenSigned h k (by omega)
+      (hgraph k (by omega))
+
 /-- Transport the complete frozen signed homology calculation to a named
 homeomorphic polygon model. -/
 theorem homology_of_homeomorph_frozenSigned {X : Type} [TopologicalSpace X]
@@ -3380,6 +3396,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
 #print axioms homologyHigher_isZero_of_homeomorph_frozenSigned
+#print axioms homologyAboveOne_isZero_of_homeomorph_frozenSigned
 #print axioms homology_of_homeomorph_frozenSigned
 #print axioms homologyIsoFrozenGeneratorOfHomeomorph
 #print axioms homology_of_homeomorph_frozenGenerator
