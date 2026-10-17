@@ -2940,6 +2940,15 @@ theorem frozenGeneratorH2_isZero
     ext x
   exact hz.of_iso e2
 
+/-- Degree-two vanishing transported from the generator presentation to the
+frozen signed polygon quotient. -/
+theorem frozenSignedH2_isZero_of_generatorComparison
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates))) :
+    IsZero (SpaceH FrozenSignedQuotient 2) :=
+  (frozenGeneratorH2_isZero h2).of_iso
+    (frozenSignedQuotientHomologyIsoGenerator 2)
+
 /-- A canonical graph-H1 reassembly section supplies the surjectivity needed
 by the literal generator quotient's homology assembly. -/
 theorem frozenGeneratorHomology_of_section
@@ -3269,6 +3278,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozenGeneratorHomology_of_comparisons
 #print axioms frozenGeneratorH2_isZero
+#print axioms frozenSignedH2_isZero_of_generatorComparison
 #print axioms frozenGeneratorHomology_of_section
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
