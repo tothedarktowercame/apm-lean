@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88682,11 +88682,11 @@
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "frozenGeneratorOuterHigherGroup_isZero",
-      :type "high-group",
+    [{:name "frozenGeneratorHigherPiecesGroup_isZero",
+      :type "high-pieces",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["frozenGeneratorOuterHigherHomology_isZero"],
+      :depends-on ["frozenGeneratorOuterHigherGroup_isZero"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88716,35 +88716,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked outer-piece group homology transfer.",
+    :reason "Banked frozen higher cover-piece vanishing.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
-     {:cmd "git show --check ba869cc4c", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792205347902-16078-2fd1f58c",
-     :commands
-     ["hash/scope/comment-stripped placeholders"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
-     :finding
-     "PASS: reviewed ba869cc4c (author topo-6), new after 3551df129. Fixture 7b28a130... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest 8c2ed646... match. Vanishing is first established for canonical SpaceH of the actual outer piece, then the existing comparison transfers it to concrete additive-group singular homology for the same TopCat space and degree. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual generator-homeomorphism, H0, graph-high, H1, homology, and normalization milestones are listed."},
-    :commit "ba869cc4c",
+     {:cmd "git show --check 6e26c3226", :exit 0}],
+    :commit "6e26c3226",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "7b28a130626235eaa87310c736090eaef9417e79071e1a8a0a0b2a2eb1ae3c34"},
+     "80ecdee15549c5485a0f044eb9e3a2d7039e413cc185b73e47d0eabbe0cc4b8d"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -99428,4 +99416,21 @@
    :id :lemma-frozengeneratorouterhighergroup-iszero,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorouterhigherhomology-iszero],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "frozenGeneratorHigherPiecesGroup_isZero",
+    :type "high-pieces"},
+   :lemma
+   {:name "frozenGeneratorHigherPiecesGroup_isZero",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "high-pieces",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-frozengeneratorhigherpiecesgroup-iszero,
+   :kind :lemma,
+   :depends-on [:lemma-frozengeneratorouterhighergroup-iszero],
    :other-consumers []}]}
