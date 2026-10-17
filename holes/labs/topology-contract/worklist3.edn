@@ -36708,34 +36708,35 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 9,
+   :stop-count 10,
    :review-finding
    "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Prove biproduct components via overlap naturality; transport exactness.",
+    "Transport exactness at literal patch biproduct, then derive CP successor homology data.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_f_transport_map",
-      :type "transported MV first-arrow definition",
+    [{:name "t99J05_cp_successor_mayerVietoris_f_transport",
+      :type "transport equals signed literal arrow",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on ["t99J05_rationalHomologyBiprodIso"],
+      :depends-on
+      ["t99J05_cp_successor_mayerVietoris_f_transport_map"
+       "t99J05_cp_successor_literalOverlapToPieces_components"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_f_transport",
-      :type "transport equals signed literal arrow",
+     {:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
+      :type "literal-patch MV exactness",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_map"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_f_transport"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Repaired and compiled transported MV arrow.",
+    :reason "Committed transported MV arrow identification.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36746,26 +36747,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 8323662f3", :exit 0}],
-    :diagnostic-history
-    [{:cmd "closure compile (3 attempts)",
-      :exit 1,
-      :note
-      "Fixed glyph, precedence, and missing intersection-range leg."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792195405716-15946-213311fa",
-     :commands
-     ["git show/check 8323662f3"
-      "sha256sum fixture"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "statement-registry.py check"],
-     :finding
-     "PASS: repair commit compiles the transported MV first arrow. Its direction is literal overlap→range overlap→range intersection→MV patch biproduct→literal patch biproduct, including the required intersection-range comparison. Fixture hash matches; supporting file has 0 placeholders; standard axioms only; registry 168/168; Main retains one declared placeholder."},
-    :commit "8323662f3",
+     {:cmd "git show --check --stat --oneline 3091d45a2", :exit 0}],
+    :commit "3091d45a2",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36773,7 +36756,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :needs-owner,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48105,6 +48088,22 @@
    :id :lemma-t96a06-coefficientcircleboundary-integralcomparison,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-integralcomparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
+    :type "literal-patch MV exactness"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "literal-patch MV exactness",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport,
+   :kind :lemma,
+   :depends-on [:lemma-t99j05-cp-successor-mayervietoris-f-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
