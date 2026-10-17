@@ -36708,35 +36708,34 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Transport exactness at literal patch biproduct, then derive CP successor homology data.",
+    "Transport the union term to CP(n+1), then derive successor homology data.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_f_transport",
-      :type "transport equals signed literal arrow",
+    [{:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
+      :type "literal-patch MV exactness",
       :status :proved,
       :consumers [:t99J05],
-      :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_map"
-       "t99J05_cp_successor_literalOverlapToPieces_components"],
+      :depends-on ["t99J05_cp_successor_mayerVietoris_f_transport"],
       :area "rational-homology-lefschetz"}
-     {:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
-      :type "literal-patch MV exactness",
+     {:name "t99J05_cp_successor_mayerVietoris_union_transport",
+      :type "transport MV union term to literal CP successor",
       :status :not-started,
       :consumers [:t99J05],
-      :depends-on ["t99J05_cp_successor_mayerVietoris_f_transport"],
+      :depends-on
+      ["t99J05_cp_successor_mayerVietoris_exact_pieces_transport"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed transported MV arrow identification.",
+    :reason "Committed literal-patch MV exactness.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36747,8 +36746,8 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline 3091d45a2", :exit 0}],
-    :commit "3091d45a2",
+     {:cmd "git show --check --stat --oneline 627186991", :exit 0}],
+    :commit "627186991",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36756,7 +36755,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48121,7 +48120,8 @@
    {:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "literal-patch MV exactness",
-    :area "rational-homology-lefschetz"},
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-mayervietoris-f-transport],
@@ -48228,6 +48228,23 @@
    :depends-on
    [:lemma-t96a06-coefficientcirclerelativegenerator-boundary
     :lemma-integralpairconnectingcomparison],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "t99J05_cp_successor_mayerVietoris_union_transport",
+    :type "transport MV union term to literal CP successor"},
+   :lemma
+   {:name "t99J05_cp_successor_mayerVietoris_union_transport",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transport MV union term to literal CP successor",
+    :area "rational-homology-lefschetz"},
+   :id :lemma-t99j05-cp-successor-mayervietoris-union-transport,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
