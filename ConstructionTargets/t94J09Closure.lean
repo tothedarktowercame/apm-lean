@@ -2949,6 +2949,18 @@ theorem frozenSignedH2_isZero_of_generatorComparison
   (frozenGeneratorH2_isZero h2).of_iso
     (frozenSignedQuotientHomologyIsoGenerator 2)
 
+/-- A named polygon model homeomorphic to the frozen signed quotient has
+vanishing second homology once the generator comparison identifies H2 with
+the frozen face-boundary kernel. -/
+theorem homologyH2_isZero_of_homeomorph_frozenSigned
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenSignedQuotient)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates))) :
+    IsZero (SpaceH X 2) :=
+  (frozenSignedH2_isZero_of_generatorComparison h2).of_iso
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+      (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo h))
+
 /-- A canonical graph-H1 reassembly section supplies the surjectivity needed
 by the literal generator quotient's homology assembly. -/
 theorem frozenGeneratorHomology_of_section
@@ -3279,6 +3291,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorHomology_of_comparisons
 #print axioms frozenGeneratorH2_isZero
 #print axioms frozenSignedH2_isZero_of_generatorComparison
+#print axioms homologyH2_isZero_of_homeomorph_frozenSigned
 #print axioms frozenGeneratorHomology_of_section
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
