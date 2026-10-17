@@ -3144,6 +3144,16 @@ def homologyIsoFrozenSignedOfHomeomorph {X : Type} [TopologicalSpace X]
   (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
       (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo h))
 
+/-- A named polygon model homeomorphic to the frozen signed quotient inherits
+high-degree vanishing from the boundary graph calculation. -/
+theorem homologyHigher_isZero_of_homeomorph_frozenSigned
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenSignedQuotient)
+    (k : ℕ) (hk : 3 ≤ k)
+    (hgraph : IsZero (SpaceH FrozenBoundaryGraphQuotient k)) :
+    IsZero (SpaceH X k) :=
+  (frozenSignedHigherHomology_isZero_of_generatorComparison k hk hgraph).of_iso
+    (homologyIsoFrozenSignedOfHomeomorph h k)
+
 /-- Transport the complete frozen signed homology calculation to a named
 homeomorphic polygon model. -/
 theorem homology_of_homeomorph_frozenSigned {X : Type} [TopologicalSpace X]
@@ -3369,6 +3379,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorHomology_of_section
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
+#print axioms homologyHigher_isZero_of_homeomorph_frozenSigned
 #print axioms homology_of_homeomorph_frozenSigned
 #print axioms homologyIsoFrozenGeneratorOfHomeomorph
 #print axioms homology_of_homeomorph_frozenGenerator
