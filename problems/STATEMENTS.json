@@ -1121,6 +1121,25 @@
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:37Z"
   },
+  "t03J04": {
+   "decls": [
+    "apm_t03j04"
+   ],
+   "sha256": "6a65d703d6f4d67037828c6bdcb605a0fc98ad1b32fb674ce2894a71898e87da",
+   "defs": [
+    "apm_t03J04_HModel",
+    "apm_t03J04_Model",
+    "apm_t03J04_Torus",
+    "apm_t03J04_constantVectorField",
+    "apm_t03J04_e1"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (claude-14 outside grade, 2026-10-17)",
+   "evidence": "holes/labs/statement-registry/t03J04-repair-grade.md",
+   "prelim_defect": null,
+   "rev": "c1b3bc0f5",
+   "approved_at": "2026-10-17T05:51:01Z"
+  },
   "t03J05": {
    "decls": [
     "apm_t03j05"
