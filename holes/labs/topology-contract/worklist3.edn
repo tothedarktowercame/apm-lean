@@ -37293,36 +37293,38 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 0,
+   :stop-count 1,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
    {:placeholder-delta {:t96A06 [1 1]},
     :residual
-    "Substitute projection and coordinate generators; then Bool square.",
+    "Combine preservation with chain comparison to native generator; then Bool/sign square.",
     :outcome :stop,
     :warnings ["Existing lints; Main one placeholder."],
     :missing-theorems
-    [{:name "t96A06_unitH0_mapOpcyclesIso_inv_projected",
-      :type
-      "inverse preservation carries forgotten projection to mapped projection",
-      :status :proved,
-      :consumers [:t96A06],
-      :depends-on ["t96A06_unitH0_mapOpcyclesIso_inv_eq_rightData"],
-      :area "rp-rational-homology"}
-     {:name "t96A06_unitH0_preservation_coordinate_generator",
+    [{:name "t96A06_unitH0_preservation_coordinate_generator",
       :type "preservation of Unit coordinate",
-      :status :not-started,
+      :status :proved,
       :consumers [:t96A06],
       :depends-on
       ["t96A06_unitH0_mapOpcyclesIso_inv_projected"
        "t96A06_unitH0_preservation_canonical_triangle_generator"],
+      :area "rp-rational-homology"}
+     {:name "t96A06_unitH0_comparison_generator",
+      :type "integral Unit comparison carries selected generator",
+      :status :not-started,
+      :consumers [:t96A06],
+      :depends-on
+      ["t96A06_unitH0_preservation_coordinate_generator"
+       "t96A06_unitH0_chainComparison_homology_generators"
+       "t96A06_unitH0_homologyComparison_factorization"],
       :area "rp-rational-homology"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason "Committed mapped Unit opcycle projection.",
+    :reason "Committed Unit H0 coordinate preservation.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t96A06Closure.lean",
       :exit 0}
@@ -37330,14 +37332,8 @@
      {:cmd "lake env lean /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t96a06_sphere3_h3_check.lean", :exit 0}
-     {:cmd "git show --check --stat --oneline c51faa3b3", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1792194520109-15923-2e19bc59",
-     :finding
-     "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation."},
-    :commit "c51faa3b3",
+     {:cmd "git show --check --stat --oneline 08bafc948", :exit 0}],
+    :commit "08bafc948",
     :changed-paths ["ConstructionTargets/t96A06Closure.lean"],
     :fixture
     {:path "/tmp/t96a06_sphere3_h3_check.lean",
@@ -37345,7 +37341,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -47104,7 +47100,10 @@
    :depends-on
    [:lemma-t96a06-unith0-coordinate-normalization-of-comparison-generator
     :lemma-t96a06-unith0-integralcomparison-of-comparison-generator
-    :lemma-t96a06-unith0-preservation-generator],
+    :lemma-t96a06-unith0-preservation-generator
+    :lemma-t96a06-unith0-preservation-coordinate-generator
+    :lemma-t96a06-unith0-chaincomparison-homology-generators
+    :lemma-t96a06-unith0-homologycomparison-factorization],
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
@@ -47743,7 +47742,8 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type
     "preservation carries the Unit coordinate to its mapped class",
-    :area "rp-rational-homology"},
+    :area "rp-rational-homology",
+    :proved-in :program-2026-10-13-close-t96a06},
    :id :lemma-t96a06-unith0-preservation-coordinate-generator,
    :kind :lemma,
    :depends-on
