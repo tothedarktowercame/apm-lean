@@ -88724,6 +88724,18 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
      {:cmd "git show --check 0917c4ec7", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1792201851287-16052-80eb9d29",
+     :commands
+     ["hash/scope/comment-stripped placeholders"
+      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
+      "lake env lean problems/t94J09/lean/Main.lean"
+      "python3 scripts/statement-registry.py check"
+      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
+     :finding
+     "PASS: reviewed 0917c4ec7 (author topo-6), new after 78d250315. Fixture 4b1f6c05... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest 8c2ed646... match. The homology iso is signed H2 to generator H2, so IsZero.of_iso correctly transports established generator vanishing back to the signed source without representation conversion. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual generator-homeomorphism, H0/high, H1 geometry, homology, and normalization milestones are listed."},
     :commit "0917c4ec7",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
@@ -88732,7 +88744,7 @@
      "4b1f6c05bf04e518652922c22a930f5e4a1468b912cb2d195e11dd2cca9a987a"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -88750,7 +88762,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t94J09Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked frozen generator H2 vanishing.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Banked frozen signed H2 vanishing.",
    :id :program-2026-10-13-close-t94j09,
    :kind :final-adapter,
    :campaign-priority 33,
@@ -89021,7 +89033,10 @@
      :reason "Banked named generator section assembly."}
     {:job 5,
      :commit "78d250315",
-     :reason "Banked frozen generator H2 vanishing."}]}
+     :reason "Banked frozen generator H2 vanishing."}
+    {:job 6,
+     :commit "0917c4ec7",
+     :reason "Banked frozen signed H2 vanishing."}]}
   {:consumer :t92J06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
@@ -99334,7 +99349,7 @@
    :other-consumers []}
   {:consumer :t94J09,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "frozenSignedH2_isZero_of_generatorComparison", :type "H2"},
@@ -99343,7 +99358,9 @@
     :reported-by [:program-2026-10-13-close-t94j09],
     :type "H2",
     :area "polygon-surface-homology",
-    :proved-in :program-2026-10-13-close-t94j09},
+    :proved-in :program-2026-10-13-close-t94j09,
+    :banked-by :program-2026-10-13-close-t94j09,
+    :banked-commit "0917c4ec7"},
    :id :lemma-frozensignedh2-iszero-of-generatorcomparison,
    :kind :lemma,
    :depends-on [:lemma-frozengeneratorh2-iszero],
