@@ -1579,6 +1579,13 @@ noncomputable def frozenGeneratorOuterHomologyIsoGraph (k : ℕ) :
   frozenGeneratorOuterHomologyIsoBoundary k ≪≫
     frozenGeneratorOuterBoundaryHomologyIsoGraph k
 
+/-- Higher-homology vanishing for the boundary graph transfers to the outer
+member of the literal frozen radial cover. -/
+theorem frozenGeneratorOuterHigherHomology_isZero (k : ℕ)
+    (hgraph : IsZero (SpaceH FrozenBoundaryGraphQuotient k)) :
+    IsZero (SpaceH FrozenGeneratorOuterPiece k) :=
+  hgraph.of_iso (frozenGeneratorOuterHomologyIsoGraph k)
+
 /-- The literal outer member in the additive-group presentation used by the
 production Mayer--Vietoris sequence, transported to the graph quotient. -/
 noncomputable def frozenGeneratorOuterGroupHomologyIsoGraph (k : ℕ) :
@@ -3360,6 +3367,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenBoundaryQuotientHomeomorphOuterSkeleton
 #print axioms frozenGeneratorOuterBoundaryHomologyIsoGraph
 #print axioms frozenGeneratorOuterHomologyIsoGraph
+#print axioms frozenGeneratorOuterHigherHomology_isZero
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
