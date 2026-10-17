@@ -3519,6 +3519,29 @@ theorem t96A06_coefficientCircleBoundary_comparison_generator :
 
 #print axioms t96A06_coefficientCircleBoundary_comparison_generator
 
+/-- The coefficient relative class whose connecting boundary is the selected
+signed generator of the two endpoint kernel. -/
+noncomputable def t96A06_coefficientCircleRelativeGenerator :
+    (ConstructionTargets.CoefficientRelativeSmall.relativeChains ℤ
+      CoefficientSphereEndpoints.boundary).homology 1 :=
+  (ConstructionTargets.CoefficientContractiblePair.contractibleH1KernelIso ℤ
+      CoefficientSphereEndpoints.boundary).inv.hom
+    ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))
+
+/-- The actual coefficient pair connecting map sends the selected relative
+class to the signed endpoint generator. -/
+theorem t96A06_coefficientCircleRelativeGenerator_boundary :
+    (ConstructionTargets.CoefficientPairSequence.connecting ℤ
+      CoefficientSphereEndpoints.boundary 0).hom
+        t96A06_coefficientCircleRelativeGenerator =
+      (kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
+        ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ)) := by
+  rw [← ConcreteCategory.comp_apply]
+  rw [← ConstructionTargets.CoefficientContractiblePair.contractibleH1Kernel_projection]
+  simp [t96A06_coefficientCircleRelativeGenerator]
+
+#print axioms t96A06_coefficientCircleRelativeGenerator_boundary
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
