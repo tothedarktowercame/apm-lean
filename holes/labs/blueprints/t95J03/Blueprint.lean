@@ -145,7 +145,7 @@ lemma t95J03_id_isKSheeted (X : Type*) [TopologicalSpace X] :
 
 /-! ## Surfaces: models, covers, groups -/
 
-/-- **Leaf S1.**  The standard orientable pairing data of genus `g` has `2g`
+/-- **S1 (proved; ported from the t98A01 blueprint 2026-10-17).**  The standard orientable pairing data of genus `g` has `2g`
 edge orbits (same leaf as `t98A01_orientable_data_card`).
 
 Route.  Mirror of `SurfaceGroupBetti.standard_nonorientable_data` (card part)
@@ -153,7 +153,9 @@ with `orientableOrbitLabel g : Fin (4g) → Fin g × Bool`
 (`orientableOrbitLabel_pair`).  About 40–100 lines. -/
 lemma t95J03_orientable_data_card (g : ℕ) (hg : 0 < g) :
     Nat.card (PairingOrbit (standardPairingData true g hg).pair) = 2 * g := by
-  sorry
+  change Nat.card (PairingOrbit (orientablePair g)) = 2 * g
+  rw [Nat.card_congr (orientableOrbitEquiv g)]
+  simp [Nat.card_eq_fintype_card, mul_comm]
 
 /-- **Leaf S2 (LIBRARY-sized).**  The polygon torus is the product torus.
 

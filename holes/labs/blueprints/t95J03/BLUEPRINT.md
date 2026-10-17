@@ -50,7 +50,7 @@ as `ConstructionTargets/KleinBottlePiOne.lean`.
 The whole case analysis and both directions of the set equality are sorry-free
 assemblies (`t95J03_classify`, `t95J03_realize`, `apm_t95j03`).
 
-## Leaves (14)
+## Leaves (13)
 
 | leaf | content | est. lines |
 |---|---|---|
@@ -62,7 +62,7 @@ assemblies (`t95J03_classify`, `t95J03_realize`, `apm_t95j03`).
 | C6 `t95J03_homeomorph_comp_isKSheeted` | postcomposition | 20–50 |
 | C7 `t95J03_isKSheeted_prod_fin` | m copies: d·m sheets | 40–90 |
 | C8 `t95J03_id_isKSheeted` | identity | 10–30 |
-| S1 `t95J03_orientable_data_card` | 2g orbits (same as t98A01's) | 40–100 |
+| S1 `t95J03_orientable_data_card` | **proved** (ported from the t98A01 blueprint, 2026-10-17) | — |
 | S2 `t95J03_torus_bridge` | **LIBRARY-sized**: `Surface true 1 ≃ₜ (ℝ/ℤ)²` via `klein_cut_chart` | 250–500 |
 | S3 `t95J03_torus_pi1_comm` | **layer 2** (uses S2): π₁(T) commutative | 60–200 |
 | S4 `t95J03_klein_index_even` | abelian finite-index subgroup of ℤ⋊ℤ has even index | 100–180 |
@@ -84,12 +84,12 @@ Truth checks done by hand:
 ## Checks
 
 - `Blueprint.lean` compiles: 0 errors, and `declaration uses sorry` appears on
-  exactly the 14 leaves.
+  exactly the 13 leaves (S1 proved 2026-10-17).
 - The statement block is identical to Main (checked with `diff`).
 
 ## Shared with t98A01 (prove once, copy)
 
-S1 = `t98A01_orientable_data_card`; S5 ≈ `t98A01_torusFive_isNfoldCover`.
+S1 = `t98A01_orientable_data_card` (now proved in both). S5 ≈ `t98A01_torusFive_isNfoldCover`: whichever closes first, the other is a `5 → n` edit.
 
 ## Risks
 
@@ -98,3 +98,16 @@ S1 = `t98A01_orientable_data_card`; S5 ≈ `t98A01_torusFive_isNfoldCover`.
 - S6 needs the quotient of the torus by a free involution to be a covering, and
   identified with `KleinPlaneQuotient`. Mathlib's
   `isCoveringMap_quotientMk_of_properlyDiscontinuousSMul` covers the first part.
+
+## Bank recheck (2026-10-17, after merging master)
+
+I re-searched the material banked by the topology loops. Already used:
+`CoveringMonodromyCosets`, `T99J01ComponentSheetBounds`,
+`CoveringPathComponentSurjective`. Considered and rejected:
+
+- C1 via `RestrictPathComponent.IsCoveringMap.restrictPathComponent` plus
+  `coveringFiberCard_eq_index`. It needs `LocPathConnectedSpace` on the base,
+  which is not banked for `Surface`, so it adds a leaf rather than removing one.
+- No banked polygon-torus ≅ `AddCircle²` bridge (S2) or torus → Klein double
+  cover (S6). `TorusPiOneWindingCoordinates` works on `AddCircle²` directly and
+  can help S3 once S2 exists.
