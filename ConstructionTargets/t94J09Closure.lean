@@ -1613,6 +1613,20 @@ theorem frozenGeneratorHigherPiecesGroup_isZero (k : ℕ) (hk : k ≠ 0)
         frozenGeneratorInnerHomotopyEquivPoint k),
     frozenGeneratorOuterHigherGroup_isZero k hgraph⟩
 
+/-- The shifted intersection term in the high-degree production sequence
+vanishes because the literal overlap has the homotopy type of a circle. -/
+theorem frozenGeneratorHigherIntersectionGroup_isZero (k : ℕ)
+    (hk : 3 ≤ k) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology (k - 1)
+        (TopCat.of FrozenGeneratorIntersectionPiece)) := by
+  exact
+    (ConstructionTargets.PolygonSurfaceHomology.singularHomologyGroupIsZeroOfModuleIsZero
+      (TopCat.of FrozenGeneratorOverlapPiece) (k - 1)
+      (frozenGeneratorOverlapHigherHomology_isZero (k - 1) (by omega))).of_iso
+        (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+          frozenGeneratorIntersectionHomeomorphOverlap.toHomotopyEquiv (k - 1))
+
 /-- The literal outer member in the additive-group presentation used by the
 production Mayer--Vietoris sequence, transported to the graph quotient. -/
 noncomputable def frozenGeneratorOuterGroupHomologyIsoGraph (k : ℕ) :
@@ -3397,6 +3411,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterHigherHomology_isZero
 #print axioms frozenGeneratorOuterHigherGroup_isZero
 #print axioms frozenGeneratorHigherPiecesGroup_isZero
+#print axioms frozenGeneratorHigherIntersectionGroup_isZero
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
