@@ -42,7 +42,9 @@ Candidate Lean lemmas
 Which candidate proves this step: its hypotheses correspond to the premises (or a
 subset of them) and its conclusion to the step's conclusion? Answer 0 if none of
 them does. A lemma that only mentions the same objects is not a match.
-Give the number and a one-sentence reason in plain words."""
+
+Answer with JSON only, in exactly this form:
+{{"choice": <a number from 0 to {k}>, "reason": "<one sentence in plain words>"}}"""
 
 
 def decl_text(decls: dict, name: str) -> str:
@@ -65,8 +67,10 @@ def ask(endpoint: str, model: str, prompt: str, k: int) -> dict:
     req = urllib.request.Request(f"{endpoint.rstrip('/')}/chat/completions", json.dumps(body).encode(),
                                  {"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=600) as r:
-        content = json.loads(r.read())["choices"][0]["message"]["content"]
-    return json.loads(content)
+        choice = json.loads(r.read())["choices"][0]
+    if choice.get("finish_reason") == "length":
+        raise ValueError(f"answer cut off at max_tokens: {choice['message']['content'][:60]!r}")
+    return json.loads(choice["message"]["content"])
 
 
 def main() -> int:
@@ -103,9 +107,13 @@ def main() -> int:
                     step["judged"] = None
                     continue
                 listing = "\n".join(f"  {i}. {decl_text(decls, c['decl'])}" for i, c in enumerate(cands, 1))
+                # Without the JSON form spelled out, the model wrote "{" and then
+                # only whitespace until max_tokens (2,201 of 2,226 calls on the
+                # first try); S3 and S4 prompts describe their JSON, this did not.
                 prompt = PROMPT.format(premises="; ".join(step.get("premise_text") or []) or "(none)",
                                        conclusion=step.get("conclusion_text") or step["step"],
-                                       warrant=step.get("warrant") or "(none)", candidates=listing)
+                                       warrant=step.get("warrant") or "(none)", candidates=listing,
+                                       k=len(cands))
                 jobs.append((pid, step, prompt, len(cands)))
 
     def run(job):
