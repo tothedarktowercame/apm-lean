@@ -2056,6 +2056,15 @@ def frozenSignedQuotientHomologyIsoGenerator (k : ℕ) :
       (ModuleCat.of ℤ ℤ)).mapIso
     (TopCat.isoOfHomeo frozenSignedQuotientHomeomorphGenerator))
 
+/-- High-degree vanishing transported from the generator presentation to the
+frozen signed polygon quotient. -/
+theorem frozenSignedHigherHomology_isZero_of_generatorComparison
+    (k : ℕ) (hk : 3 ≤ k)
+    (hgraph : IsZero (SpaceH FrozenBoundaryGraphQuotient k)) :
+    IsZero (SpaceH FrozenSignedQuotient k) :=
+  (frozenGeneratorHigherHomology_isZero k hk hgraph).of_iso
+    (frozenSignedQuotientHomologyIsoGenerator k)
+
 theorem frozenPair_pair (i : Fin 14) : frozenPair (frozenPair i) = i :=
   frozenPairIndex_involutive i
 
@@ -3430,6 +3439,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorHigherPiecesGroup_isZero
 #print axioms frozenGeneratorHigherIntersectionGroup_isZero
 #print axioms frozenGeneratorHigherHomology_isZero
+#print axioms frozenSignedHigherHomology_isZero_of_generatorComparison
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
