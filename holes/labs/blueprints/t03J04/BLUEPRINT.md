@@ -231,3 +231,7 @@ Sorry-free here:
 - **Lost fixture.** codex-13 compiled an `actual_finite_cover` (covering,
   surjective, finite fibres) in `/tmp/T03J04EulerDiagnostic.lean`. That file
   is gone, so C1 must be redone.
+
+## Grade
+
+Outside grade 2026-10-17: **faithful**, no changes required (`statement-registry/t03J04-repair-grade.md`). Installed as Main (c1b3bc0f5) and admitted (13c28cdc6). The statement block of `Blueprint.lean` is now identical to Main.
