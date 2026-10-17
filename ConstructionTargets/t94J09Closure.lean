@@ -3052,6 +3052,31 @@ theorem homology_of_homeomorph_frozenSigned {X : Type} [TopologicalSpace X]
   intro k hk
   exact (hhigh k hk).of_iso (homologyIsoFrozenSignedOfHomeomorph h k)
 
+/-- Homology transport from a named polygon model directly to the frozen
+generator presentation. -/
+def homologyIsoFrozenGeneratorOfHomeomorph {X : Type} [TopologicalSpace X]
+    (h : X ≃ₜ FrozenGeneratorQuotient) (k : ℕ) :
+    SpaceH X k ≅ SpaceH FrozenGeneratorQuotient k :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo h))
+
+/-- Transport a complete generator-presentation calculation to a named
+homeomorphic polygon model. -/
+theorem homology_of_homeomorph_frozenGenerator
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenGeneratorQuotient)
+    (hs :
+      Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH FrozenGeneratorQuotient 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH X 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH X 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH X k) := by
+  rcases hs with ⟨⟨h0⟩, ⟨h1⟩, hhigh⟩
+  refine ⟨⟨homologyIsoFrozenGeneratorOfHomeomorph h 0 ≪≫ h0⟩,
+    ⟨homologyIsoFrozenGeneratorOfHomeomorph h 1 ≪≫ h1⟩, ?_⟩
+  intro k hk
+  exact (hhigh k hk).of_iso (homologyIsoFrozenGeneratorOfHomeomorph h k)
+
 /-- The consumer-shaped homology tuple from a named-model homeomorphism and
 the direct degree-one comparison map for the frozen generator quotient. -/
 theorem homology_of_homeomorph_frozenSigned_comparisons
@@ -3177,6 +3202,8 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
 #print axioms homology_of_homeomorph_frozenSigned
+#print axioms homologyIsoFrozenGeneratorOfHomeomorph
+#print axioms homology_of_homeomorph_frozenGenerator
 #print axioms homology_of_homeomorph_frozenSigned_comparisons
 #print axioms homology_of_homeomorph_frozenSigned_section
 #print axioms frozen_pairedParameter
