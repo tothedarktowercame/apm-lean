@@ -36708,7 +36708,7 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 10,
+   :stop-count 0,
    :review-finding
    "Recorded commit 29f66a99f does not compile: lake env lean ConstructionTargets/t99J05Closure.lean reports line 1427:85 expected token at `⨞`; the resulting declaration depends on sorryAx. Replace the mistyped product symbol with the categorical biproduct `⊞`, rerun all Lean gates, and only then bank the transported-arrow milestone.",
    :evidence
@@ -36756,7 +36756,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36778,7 +36778,7 @@
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 2,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -36951,12 +36951,23 @@
       :exit 1,
       :note
       "Expanded nested subtype membership; final build passes."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792200587498-16026-a4cf129c",
+     :commands
+     ["git show/diff-tree/hash-object 1616b7810"
+      "lake build ConstructionTargets.CollaredConnectedSumHomology"
+      "python3 scripts/statement-registry.py check"
+      "rg placeholder/fixture checks on recorded blob"],
+     :finding
+     "PASS: commit 1616b7810 adds new compiled progress after 4ac235ef5: the scoped, correctly oriented LargeInterior-to-open-ball homeomorphism supporting blueprint B2. Recorded blob equals compiled blob; 0 placeholders; standard axioms only; registry 168/168; no fixture applies; milestone and remaining theorems are listed."},
     :commit "1616b7810",
     :changed-paths
     ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -36976,7 +36987,7 @@
     :blueprint
     "ConstructionTargets/CollaredConnectedSumHomology.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed Euclidean model for large collar interior.",
    :id :program-2026-10-13-collared-connected-sum-homology,
    :kind :reusable-theorem,
    :campaign-priority 32,
@@ -36996,7 +37007,10 @@
     {:job 3,
      :commit "4ac235ef5",
      :reason
-     "Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains."}]}
+     "Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains."}
+    {:job 4,
+     :commit "1616b7810",
+     :reason "Committed Euclidean model for large collar interior."}]}
   {:consumer :t98A02,
    :stop-count 0,
    :phase :implementation,
@@ -37268,7 +37282,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37323,7 +37337,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37345,7 +37359,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -46475,7 +46489,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_boolH0_integralComparison",
@@ -46487,7 +46501,9 @@
     :type
     "forgotten module and native additive discrete H0 coordinates agree on Bool",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-boolh0-integralcomparison,
    :kind :lemma,
    :depends-on
@@ -46853,7 +46869,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_integralComparison",
@@ -46865,7 +46881,9 @@
     :type
     "forgotten module and additive direct H0 coordinates agree on Unit",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-integralcomparison,
    :kind :lemma,
    :depends-on
@@ -47720,7 +47738,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_unitH0_preservation_coordinate_generator",
@@ -47732,7 +47750,9 @@
     :type
     "preservation carries the Unit coordinate to its mapped class",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-unith0-preservation-coordinate-generator,
    :kind :lemma,
    :depends-on
@@ -48101,7 +48121,7 @@
    :other-consumers []}
   {:consumer :t98A02,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "BallCollar.largeInteriorHomeomorphBall",
@@ -48111,7 +48131,9 @@
     :reported-by [:program-2026-10-13-collared-connected-sum-homology],
     :type "large collar interior homeomorphic to Euclidean open ball",
     :area "ball-complement-collar",
-    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+    :proved-in :program-2026-10-13-collared-connected-sum-homology,
+    :banked-by :program-2026-10-13-collared-connected-sum-homology,
+    :banked-commit "1616b7810"},
    :id :lemma-ballcollar-largeinteriorhomeomorphball,
    :kind :lemma,
    :depends-on [:lemma-ballcollar-range-largeinteriormap],
