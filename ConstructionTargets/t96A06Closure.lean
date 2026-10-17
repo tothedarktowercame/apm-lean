@@ -3496,6 +3496,29 @@ theorem t96A06_coefficientCircleBoundary_integralComparison :
 
 #print axioms t96A06_coefficientCircleBoundary_integralComparison
 
+/-- Evaluating the transported boundary comparison on its canonical kernel
+generator gives the signed endpoint function `(1, -1)`. -/
+theorem t96A06_coefficientCircleBoundary_comparison_generator :
+    ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+      ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+        (AddCommGrpCat.of ℤ)).map
+          (TopCat.isoOfHomeo
+            T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
+      ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom).hom
+        ((kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
+          ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))) =
+      (fun b : Bool ↦ if b then (-1 : ℤ) else 1) := by
+  rw [t96A06_coefficientCircleBoundary_integralComparison]
+  exact ConstructionTargets.ManifoldFundamentalClass.coefficientCircleBoundaryGenerator_eq_signedFunction
+
+#print axioms t96A06_coefficientCircleBoundary_comparison_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
