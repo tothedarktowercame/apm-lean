@@ -8,7 +8,9 @@ import ConstructionTargets.CoefficientFirstReflection
 import ConstructionTargets.CoefficientSubcomplexMayerVietoris
 import ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility
 import ConstructionTargets.CoefficientIntersectionRangeComparison
+import ConstructionTargets.CoefficientIntersectionRangeNaturality
 import ConstructionTargets.HomologyBiprodIso
+import ConstructionTargets.ProductionOpenCoverMayerVietoris
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-! # Rational homology interface for the t99J05 closure
@@ -1254,9 +1256,7 @@ noncomputable def t99J05_ambientSubspaceRangeHomologyIso
     ((ConstructionTargets.CoefficientSubcomplexMayerVietoris.chains ℚ).obj
         (ConstructionTargets.SingularExcision.ambientSubspaceRange A : SSet)).homology k ≅
       Homology A k :=
-  (HomologicalComplex.homologyFunctor (ModuleCat ℚ)
-    (ComplexShape.down ℕ) k).mapIso
-      (t99J05_ambientSubspaceRangeChainsIso A)
+  ConstructionTargets.CoefficientAmbientSubspaceRangeComparison.rangeHomologyIso ℚ A k
 
 /-- The range-to-literal homology isomorphism commutes with inclusion into
 ambient singular homology. -/
@@ -1452,34 +1452,12 @@ noncomputable def t99J05_cp_successor_mayerVietoris_f_transport
 
 #print axioms t99J05_cp_successor_mayerVietoris_f_transport
 
-/-- After range-to-literal transport, the first Mayer--Vietoris arrow is
-exactly the signed pair of the two literal overlap inclusions. -/
-theorem t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
-    (n k : ℕ) :
-    t99J05_cp_successor_mayerVietoris_f_transport n k =
-      t99J05_cp_successor_literalOverlapToPieces n k := by
-  apply biprod.hom_ext
-  · rw [t99J05_cp_successor_literalOverlapToPieces_fst]
-    simp [t99J05_cp_successor_mayerVietoris_f_transport,
-      t99J05_rationalHomologyBiprodIso_hom,
-      t99J05_cp_successor_mayerVietorisShortComplex,
-      ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex,
-      t99J05_cp_successor_mayerVietoris_overlap_lower_naturality]
-  · rw [t99J05_cp_successor_literalOverlapToPieces_snd]
-    simp [t99J05_cp_successor_mayerVietoris_f_transport,
-      t99J05_rationalHomologyBiprodIso_hom,
-      t99J05_cp_successor_mayerVietorisShortComplex,
-      ConstructionTargets.CoefficientSubcomplexMayerVietoris.shortComplex,
-      t99J05_cp_successor_mayerVietoris_overlap_top_naturality]
-
-#print axioms t99J05_cp_successor_mayerVietoris_f_transport_eq_literal
-
-/-- The homology Mayer--Vietoris segment at the two pieces, rewritten on the
+/-- The homology Mayer--Vietoris segment at the two pieces, transported to the
 literal overlap and literal patch homology groups.  The ambient union term is
 left in its original presentation because exactness is asserted at the middle
 object. -/
 noncomputable def t99J05_cp_successor_mayerVietoris_piecesTransport
-    (n k : ℕ) : ShortComplex (ModuleCat ℚ) :=
+    (n k : ℕ) : CategoryTheory.ShortComplex (ModuleCat ℚ) :=
   ConstructionTargets.ProductionOpenCoverMayerVietoris.transportShortComplex
     (CategoryTheory.ShortComplex.mk
       (HomologicalComplex.homologyMap
@@ -1504,15 +1482,7 @@ noncomputable def t99J05_cp_successor_mayerVietoris_piecesTransport
       (biprod.mapIso
         (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorLowerPatch n) k)
         (t99J05_ambientSubspaceRangeHomologyIso (cpSuccessorTopPatch n) k)))
-    (Iso.refl _)
-
-/-- The first arrow of the transported exact segment is the literal signed
-overlap-to-patches map. -/
-theorem t99J05_cp_successor_mayerVietoris_piecesTransport_f (n k : ℕ) :
-    (t99J05_cp_successor_mayerVietoris_piecesTransport n k).f =
-      t99J05_cp_successor_literalOverlapToPieces n k := by
-  change t99J05_cp_successor_mayerVietoris_f_transport n k = _
-  exact t99J05_cp_successor_mayerVietoris_f_transport_eq_literal n k
+    (CategoryTheory.Iso.refl _)
 
 /-- Exactness at the literal biproduct of the two successor patches. -/
 theorem t99J05_cp_successor_mayerVietoris_exact_pieces_transport (n k : ℕ) :
