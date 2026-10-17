@@ -8,6 +8,7 @@ import ConstructionTargets.SurfaceGroupBetti
 import ConstructionTargets.CoveringMonodromyCosets
 import ConstructionTargets.PolygonSurfaceHomology
 import ConstructionTargets.ProductEvenlyCoveredTrivialization
+import ConstructionTargets.UnitAddCircleFiveTorsionCardinality
 
 /-!
 # APM t98A01 — a five-fold surface cover and a connected sum
@@ -92,16 +93,163 @@ def t98A01SumWord : List (PolygonMoves.Signed T98A01Edge) :=
 
 abbrev T98A01SumSurface := PolygonMoves.PolygonSurface t98A01SumWord
 
+/-! # Blueprint (claude-14, 2026-10-17)
 
-/-! # Blueprint (claude-14, 2026-10-16)
+Everything above is the registered statement block of `Main.lean`, verbatim.
+Route: see `BLUEPRINT.md`.  Leaves are the theorems ending in `sorry`.  Every
+other declaration below is proved. -/
 
-Everything above `apm_t98a01` is the proposed statement (`RevisedMain.lean`).
-Route: see `BLUEPRINT.md`.  Leaves are the `lemma … := by sorry` below; every
-other declaration is a sorry-free assembly. -/
-
+open CategoryTheory
 open ConstructionTargets ConstructionTargets.SurfaceGroupBetti
 open ConstructionTargets.PolygonSurfacePiOne ConstructionTargets.PolygonSurfaceHomology
-open ConstructionTargets.RationalLefschetz PolygonMoves
+open ConstructionTargets.RationalLefschetz
+
+/-! ## Shared polygon normal-form material (`polygonNF_*`)
+
+This section is copied verbatim into the t98A01 and t94J09 blueprints.  The
+helpers are proved here.  The one leaf, `polygonNF_crosscap_eqvGen_iff`, ends
+in `sorry`.  It states only the relation-level comparison; the homeomorphism
+`polygonNF_crosscapBridge` is assembled from it. -/
+
+section PolygonNF
+
+open ConstructionTargets.Surfaces PolygonMoves
+
+/-- Two quotient maps out of the same space with the same fibres have
+homeomorphic targets. -/
+theorem polygonNF_homeomorph_of_fibres {Z X Y : Type*} [TopologicalSpace Z]
+    [TopologicalSpace X] [TopologicalSpace Y] {p : Z → X} {q : Z → Y}
+    (hp : Topology.IsQuotientMap p) (hq : Topology.IsQuotientMap q)
+    (h : ∀ x y, p x = p y ↔ q x = q y) : Nonempty (X ≃ₜ Y) := by
+  let p' : C(Z, X) := ⟨p, hp.continuous⟩
+  let q' : C(Z, Y) := ⟨q, hq.continuous⟩
+  have hker : Setoid.ker p' = Setoid.ker q' := Setoid.ext fun x y => h x y
+  have e₁ := Topology.IsQuotientMap.homeomorph (f := p') hp
+  have e₂ := Topology.IsQuotientMap.homeomorph (f := q') hq
+  rw [hker] at e₁
+  exact ⟨e₁.symm.trans e₂⟩
+
+/-- The disk quotients of two relations with the same equivalence closure are
+homeomorphic.  Every polygon surface in the repository is such a quotient. -/
+theorem polygonNF_quotient_homeomorph {r s : Disk → Disk → Prop}
+    (h : ∀ x y, Relation.EqvGen r x y ↔ Relation.EqvGen s x y) :
+    Nonempty (@Homeomorph (Quotient (Relation.EqvGen.setoid r))
+      (Quotient (Relation.EqvGen.setoid s))
+      (TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance)
+      (TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance)) := by
+  letI : TopologicalSpace (Quotient (Relation.EqvGen.setoid r)) :=
+    TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance
+  letI : TopologicalSpace (Quotient (Relation.EqvGen.setoid s)) :=
+    TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance
+  refine polygonNF_homeomorph_of_fibres (p := fun x : Disk => Quotient.mk _ x)
+    (q := fun x : Disk => Quotient.mk _ x) ⟨Quotient.mk_surjective, rfl⟩
+    ⟨Quotient.mk_surjective, rfl⟩ ?_
+  intro x y
+  rw [Quotient.eq, Quotient.eq]
+  exact h x y
+
+/-- One forward `cutAndPaste` step between two explicitly written words. -/
+theorem polygonNF_cutStep {L : Type*} [DecidableEq L] (w w' : List (Signed L))
+    (u v t : List (Signed L)) (x : Signed L)
+    (hw₀ : w = u ++ [x] ++ v ++ [x] ++ t)
+    (hw₁ : w' = u ++ [x, x] ++ inverseWord v ++ t)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) (hw : IsPolygonWord w) :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface w') := by
+  subst hw₀ hw₁
+  exact cutAndPaste u v t x hx hw
+
+/-- One `cutAndPaste` step used from right to left. -/
+theorem polygonNF_uncutStep {L : Type*} [DecidableEq L] (w w' : List (Signed L))
+    (u v t : List (Signed L)) (x : Signed L)
+    (hw₀ : w = u ++ [x, x] ++ inverseWord v ++ t)
+    (hw₁ : w' = u ++ [x] ++ v ++ [x] ++ t)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) (hw : IsPolygonWord w') :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface w') := by
+  subst hw₀ hw₁
+  obtain ⟨e⟩ := cutAndPaste u v t x hx hw
+  exact ⟨e.symm⟩
+
+/-- One `inversePairCancellation` step between explicitly written words. -/
+theorem polygonNF_cancelStep {L : Type*} [DecidableEq L] (w w' : List (Signed L))
+    (u v : List (Signed L)) (x : Signed L)
+    (hw₀ : w = u ++ [x, inv x] ++ v) (hw₁ : w' = u ++ v)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst) (hrest : IsPolygonWord w') :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface w') := by
+  subst hw₀ hw₁
+  exact inversePairCancellation u v x hx hrest
+
+/-- The crosscap word `c₀ c₀ c₁ c₁ ⋯ c_{g-1} c_{g-1}`. -/
+def polygonNF_crosscapWord {L : Type*} (g : ℕ) (c : Fin g → Signed L) :
+    List (Signed L) :=
+  (List.finRange g).flatMap fun i => [c i, c i]
+
+/-- The handle word `a₀ b₀ a₀⁻¹ b₀⁻¹ ⋯ a_{g-1} b_{g-1} a_{g-1}⁻¹ b_{g-1}⁻¹`. -/
+def polygonNF_handleWord {L : Type*} (g : ℕ) (a b : Fin g → Signed L) :
+    List (Signed L) :=
+  (List.finRange g).flatMap fun i => [a i, b i, inv (a i), inv (b i)]
+
+/-- **Shared leaf `polygonNF_crosscap_eqvGen_iff`.**  With distinct labels,
+the crosscap word generates the same equivalence relation on the disk as the
+standard model `SurfaceRel false g`.
+
+Route.  As `PolygonMoves.crosscapTwo_bridge_aux_eqv`, for general `g`.  The
+word has length `2g`; position `i` carries `c (i / 2)`
+(`List.getElem_flatMap`-style lemma, or induction on `g` with
+`List.finRange_succ`).  By injectivity, two distinct positions carry the same
+label iff they are `2j, 2j+1` (either order).  Both carry the same sign, so
+`WordRel` glues `t ↦ t`.  That is literally
+`edgePoint (2g) (2j) t ~ edgePoint (2g) (2j+1) t`.  The reversed order is the
+symmetric generator.  Degenerate case `g = 0`: both relations are empty.
+About 80–160 lines. -/
+theorem polygonNF_crosscap_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
+    (c : Fin g → Signed L) (hc : Function.Injective fun i => (c i).1)
+    (x y : Disk) :
+    Relation.EqvGen (WordRel (polygonNF_crosscapWord g c)) x y ↔
+      Relation.EqvGen (SurfaceRel false g) x y := by
+  sorry
+
+/-- Crosscap bridge: the crosscap word with distinct labels presents
+`Surface false g`. -/
+theorem polygonNF_crosscapBridge {L : Type*} [DecidableEq L] (g : ℕ)
+    (c : Fin g → Signed L) (hc : Function.Injective fun i => (c i).1) :
+    Nonempty (PolygonSurface (polygonNF_crosscapWord g c) ≃ₜ Surface false g) :=
+  polygonNF_quotient_homeomorph (polygonNF_crosscap_eqvGen_iff g c hc)
+
+end PolygonNF
+
+section PolygonNFHandle
+
+open ConstructionTargets.Surfaces PolygonMoves
+
+/-- **Family leaf `polygonNF_handle_eqvGen_iff`** (t98A01 here;
+later t94J04, t00A02).  With `2g` distinct labels, the handle word generates
+the same equivalence relation on the disk as the standard model
+`SurfaceRel true g`.
+
+Route.  Same pattern as the crosscap leaf.  Position `4j + r` carries
+`a j, b j, inv (a j), inv (b j)` for `r = 0, 1, 2, 3`.  The only same-label
+pairs are `{4j, 4j+2}` and `{4j+1, 4j+3}`, with opposite signs, so `WordRel`
+glues `t ↦ 1 - t` (`reverseParameter`).  That is the `tr` of `SurfaceRel true g`.
+Degenerate case `g = 0`: both relations are empty.  About 100–200 lines. -/
+theorem polygonNF_handle_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    (hab : Function.Injective fun p : Fin g × Bool =>
+      if p.2 then (b p.1).1 else (a p.1).1)
+    (x y : Disk) :
+    Relation.EqvGen (WordRel (polygonNF_handleWord g a b)) x y ↔
+      Relation.EqvGen (SurfaceRel true g) x y := by
+  sorry
+
+/-- Handle bridge: the handle word with distinct labels presents
+`Surface true g`. -/
+theorem polygonNF_handleBridge {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    (hab : Function.Injective fun p : Fin g × Bool =>
+      if p.2 then (b p.1).1 else (a p.1).1) :
+    Nonempty (PolygonSurface (polygonNF_handleWord g a b) ≃ₜ Surface true g) :=
+  polygonNF_quotient_homeomorph (polygonNF_handle_eqvGen_iff g a b hab)
+
+end PolygonNFHandle
 
 /-! ## (a) The five-fold torus cover -/
 
@@ -114,17 +262,20 @@ lemma t98A01_circleFive_isCoveringMap :
     IsCoveringMap (5 • · : UnitAddCircle → UnitAddCircle) :=
   t98A01_circleFive_isAddQuotientCoveringMap.isCoveringMap
 
-/-- **Leaf (a1).**  `(x, y) ↦ (5x, y)` is a covering with fibres of size 5.
+/-- **Leaf `t98A01_torusFive_isNfoldCover`.**  `(x, y) ↦ (5x, y)` is a covering
+with fibres of size 5.
 
-Route.  Covering: `ProductEvenlyCoveredTrivialization.isCoveringMap_productMap`
-with `t98A01_circleFive_isCoveringMap` and the identity (a homeomorphism is a
-covering, e.g. `Homeomorph.isCoveringMap` / `IsHomeomorph.isCoveringMap`).
-Fibre: `{e // (5 e.1, e.2) = (x, y)} ≃ {x' // 5 x' = x}` (second coordinate
-forced), and the latter is a coset of the kernel of `nsmul 5` on
-`UnitAddCircle` (`t98A01_circleFive_isAddQuotientCoveringMap`, or
-`AddCircle` torsion: the kernel is `{j/5 | j < 5}`), of cardinality 5.
-About 60–150 lines. -/
-lemma t98A01_torusFive_isNfoldCover :
+Route.  Covering: banked
+`ProductEvenlyCoveredTrivialization.isCoveringMap_productMap` with
+`t98A01_circleFive_isCoveringMap` and the identity covering
+(`IsCoveringMap.id` or `Homeomorph.refl _ |>.isCoveringMap`); the map is
+`productMap (5 • ·) id` by `rfl`.  Fibre over `(x, y)`: the second coordinate
+is forced, so the fibre is `{a // 5 • a = x}`.  Pick `a₀` with `5 • a₀ = x`
+(`nsmul` is surjective on `AddCircle`, e.g. from the covering map, or
+`AddCircle.nsmul_surjective`-style).  Then `a ↦ a - a₀` is a bijection onto
+the kernel `UnitAddCircleFiveTorsionCardinality.fiveKernel`, whose card is
+banked as `fiveKernel_natCard = 5`.  About 40–100 lines. -/
+theorem t98A01_torusFive_isNfoldCover :
     t98A01IsNfoldCover 5 t98A01TorusFiveCover := by
   sorry
 
@@ -144,28 +295,25 @@ theorem t98A01_torusFive_deck (x y : T98A01Torus)
 
 /-! ## (a) Only the torus: b₁ of surface groups -/
 
-/-- **Leaf (a3).**  The standard orientable pairing data of genus `g` has `2g`
-edge orbits.
-
-Route.  Mirror of `SurfaceGroupBetti.standard_nonorientable_data` (`card`
-part): `orientableOrbitLabel g : Fin (4g) → Fin g × Bool` is constant exactly
-on pairing orbits (`orientableOrbitLabel_pair` in `PolygonSurfacePiOne`), and
-is surjective; build `PairingOrbit (standardPairingData true g hg).pair ≃
-Fin g × Bool` as for `nonorientableOrbitEquiv`.  About 40–100 lines. -/
-lemma t98A01_orientable_data_card (g : ℕ) (hg : 0 < g) :
+/-- The standard orientable pairing data of genus `g` has `2g` edge orbits
+(re-indexed by the banked `PolygonSurfacePiOne.orientableOrbitEquiv`). -/
+theorem t98A01_orientable_data_card (g : ℕ) (hg : 0 < g) :
     Nat.card (PairingOrbit (standardPairingData true g hg).pair) = 2 * g := by
-  sorry
+  change Nat.card (PairingOrbit (orientablePair g)) = 2 * g
+  rw [Nat.card_congr (orientableOrbitEquiv g)]
+  simp [Nat.card_eq_fintype_card, mul_comm]
 
-/-- **Leaf (a4).**  `Surface true 0` (no edge identifications: the closed disk)
-has trivial fundamental group.
+/-- **Leaf `t98A01_surfaceTrueZero_pi1_subsingleton`.**  `Surface true 0` (no
+edge identifications: the closed disk) has trivial fundamental group.
 
-Route.  `SurfaceRel true 0` is empty (`j < 0`), so `surfaceQuotient true 0` is
-a continuous bijection from the compact disk onto a quotient whose topology is
-coinduced: a homeomorphism `Disk ≃ₜ Surface true 0`.  The disk is convex, hence
-contractible (`Convex.contractibleSpace` or a straight-line homotopy), hence
-`SimplyConnectedSpace`; transport (`SimplyConnectedSpace.ofHomotopyEquiv` /
-`Homeomorph`).  About 40–100 lines. -/
-lemma t98A01_surfaceTrueZero_pi1_subsingleton (x : Surface true 0) :
+Route.  `SurfaceRel true 0` is empty (`j < 0`), so `EqvGen` is equality and
+`surfaceQuotient true 0` is a continuous bijection from the compact disk onto
+a quotient whose topology is coinduced: a homeomorphism `Disk ≃ₜ Surface true 0`
+(`polygonNF_homeomorph_of_fibres` with the identity quotient map on `Disk`
+gives it directly).  The disk is convex, hence contractible
+(`Convex.contractibleSpace`), hence `SimplyConnectedSpace`; transport along the
+homeomorphism.  About 40–100 lines. -/
+theorem t98A01_surfaceTrueZero_pi1_subsingleton (x : Surface true 0) :
     Subsingleton (FundamentalGroup (Surface true 0) x) := by
   sorry
 
@@ -260,155 +408,762 @@ theorem t98A01_orientable_cover_genus (g h : ℕ) (p : Surface true g → Surfac
   · obtain ⟨hlo_g, -⟩ := hgb hg
     exact ⟨by omega, rfl⟩
 
-/-! ## (b) Word moves -/
 
-/-- **Leaf (b1).**  Torus bridge: `x y x⁻¹ y⁻¹` is the standard torus.
+/-! ## (b) Rational homology from integral homology (universal coefficients)
 
-Route.  As `PolygonMoves.crosscapTwo_bridge`: the two relations agree as
-relations on `Disk` up to `EqvGen` (`WordRel` pairs positions 0,2 and 1,3 with
-opposite signs, so with reversed parameter; `SurfaceRel true 1` pairs
-`edgePoint 4 0 t ~ edgePoint 4 2 (1-t)` and `edgePoint 4 1 t ~ edgePoint 4 3 (1-t)`);
-then `Quotient.congrRight` and continuity both ways.  About 60–120 lines. -/
-lemma t98A01_torus_bridge {L : Type*} [DecidableEq L] (x y : Signed L) (hxy : x.1 ≠ y.1) :
-    Nonempty (PolygonSurface [x, y, inv x, inv y] ≃ₜ Surface true 1) := by
+`HasEulerCharacteristic` uses rational singular homology.  The banked polygon
+homology (`PolygonSurfaceHomology.polygonQuotient_homology`) is integral.  The
+three leaves below pass from `ℤ` to `ℚ` by extension of scalars.  They are
+general homological algebra, not polygon-specific, and serve every rational
+Euler-characteristic consumer. -/
+
+/-- Extension of scalars `ℤ → ℚ` on module categories. -/
+abbrev ratUC_F : ModuleCat.{0} ℤ ⥤ ModuleCat.{0} ℚ :=
+  ModuleCat.extendScalars (algebraMap ℤ ℚ)
+
+abbrev ratUC_chainsZ (X : TopCat.{0}) : ChainComplex (ModuleCat ℤ) ℕ :=
+  ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+    (ModuleCat.of ℤ ℤ)).obj X
+
+abbrev ratUC_chainsQ (X : TopCat.{0}) : ChainComplex (ModuleCat ℚ) ℕ :=
+  ((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℚ)).obj
+    (ModuleCat.of ℚ ℚ)).obj X
+
+/-- **Leaf `ratUC_chainIso` (UC i).**  Rational singular chains are the
+extension of scalars of integral singular chains.
+
+Route.  Both complexes are `alternatingFaceMapComplex` of the simplicial
+object `n ↦ ∐_{σ : SingularSimplex X n} R`
+(`SSet.singularChainComplexFunctor`).  `AlgebraicTopology.map_alternatingFaceMapComplex`
+commutes `F.mapHomologicalComplex` past `alternatingFaceMapComplex`, so it
+suffices to give an iso of simplicial objects
+`F ∘ (∐ ℤ) ≅ ∐ ℚ`.  `ratUC_F` is a left adjoint
+(`ModuleCat.extendRestrictScalarsAdj`), so it preserves coproducts
+(`PreservesCoproduct.iso`), and `F.obj (ModuleCat.of ℤ ℤ) ≅ ModuleCat.of ℚ ℚ`
+(`TensorProduct.lid`-style).  Naturality in the simplicial index: face maps
+are `Sigma.map'` along reindexing, which commute with the coproduct
+comparison (`Sigma.hom_ext`).  If `ratUC_F.Additive` is needed it follows from
+the adjunction (`Adjunction.left_adjoint_additive`-style, or
+`Functor.additive_of_preservesBinaryBiproducts`).  About 100–220 lines. -/
+theorem ratUC_chainIso (X : TopCat.{0}) :
+    Nonempty ((ratUC_F.mapHomologicalComplex (ComplexShape.down ℕ)).obj
+      (ratUC_chainsZ X) ≅ ratUC_chainsQ X) := by
   sorry
 
-/-- The word of `g` doubled letters `c₀ c₀ c₁ c₁ ⋯`. -/
-def t98A01CrosscapWord {L : Type*} (g : ℕ) (c : Fin g → Signed L) : List (Signed L) :=
-  (List.finRange g).flatMap fun i => [c i, c i]
+/-- **Leaf `ratUC_homologyIso` (UC ii).**  Extension of scalars to `ℚ`
+commutes with homology of any chain complex of abelian groups.
 
-/-- **Leaf (b2).**  Crosscap bridge: `c₀ c₀ c₁ c₁ ⋯ c_{g-1} c_{g-1}` with distinct
-labels is `Surface false g`.
-
-Route.  As `PolygonMoves.crosscapTwo_bridge`, for general `g`: position `i` of
-the word is `c (i / 2)`; two distinct positions carry the same label iff they
-are `2j, 2j + 1`, and then the signs agree, so `WordRel` glues `t ↔ t`, which
-is exactly `SurfaceRel false g` (`edgePoint (2g) (2j) t ~ edgePoint (2g) (2j+1) t`).
-Length `2g`.  About 80–160 lines. -/
-lemma t98A01_crosscap_bridge {L : Type*} [DecidableEq L] (g : ℕ) (hg : 0 < g)
-    (c : Fin g → Signed L) (hc : Function.Injective fun i => (c i).1) :
-    Nonempty (PolygonSurface (t98A01CrosscapWord g c) ≃ₜ Surface false g) := by
+Route.  `ℚ` is a flat `ℤ`-module (`Module.Flat` of a localization, or
+torsion-free over a PID), so `ratUC_F` is exact.  An exact functor between
+abelian categories preserves homology
+(`Functor.preservesHomology_of_map_exact` in
+`Mathlib/CategoryTheory/Abelian/Exact.lean`).  Then
+`ShortComplex.mapHomologyIso` applied to `K.sc k` gives the iso, since
+`((F.mapHomologicalComplex _).obj K).sc k = (K.sc k).map F` up to `Iso.refl`.
+About 60–150 lines. -/
+theorem ratUC_homologyIso (K : ChainComplex (ModuleCat.{0} ℤ) ℕ) (k : ℕ) :
+    Nonempty (((ratUC_F.mapHomologicalComplex _).obj K).homology k ≅
+      ratUC_F.obj (K.homology k)) := by
   sorry
 
-/-- **Leaf (b3).**  A Klein block becomes two crosscaps:
-`u a b a⁻¹ b t ≅ u a a b⁻¹ b⁻¹ t`.
+/-- **Leaf `ratUC_finrank` (UC iii).**  For a finitely generated abelian group
+`M`, `ℚ ⊗ M` is finite dimensional of dimension `finrank ℤ M`.
 
-Route.  Two `PolygonMoves.cutAndPaste` steps (`u x v x t ≅ u x x v⁻¹ t`):
-the pair `b` with `u ++ [a]`, `v = [a⁻¹]` gives `u a b b a t`; then the pair `a`
-with `v = [b, b]` gives `u a a b⁻¹ b⁻¹ t`.  Side conditions: label freshness
-from the hypotheses, `IsPolygonWord` of the middle word (same label counts).
-About 80–180 lines. -/
-lemma t98A01_kleinBlock {L : Type*} [DecidableEq L] (u t : List (Signed L))
-    (a b : Signed L) (hab : a.1 ≠ b.1)
-    (ha : a.1 ∉ (u ++ t).map Prod.fst) (hb : b.1 ∉ (u ++ t).map Prod.fst)
-    (hw : IsPolygonWord (u ++ [a, b, inv a, b] ++ t)) :
-    Nonempty (PolygonSurface (u ++ [a, b, inv a, b] ++ t) ≃ₜ
-      PolygonSurface (u ++ [a, a, inv b, inv b] ++ t)) := by
+Route.  `ratUC_F.obj M` is `ℚ ⊗[ℤ] M` (`ModuleCat.ExtendScalars.obj'`).
+Finite: `Module.Finite.base_change`.  Rank: write `M ≃ ℤ^r × T` with `T`
+finite (`Module.equiv_free_prod_directSum`, structure theorem over a PID);
+`ℚ ⊗ T = 0` because `T` is torsion; `ℚ ⊗ ℤ^r ≅ ℚ^r`
+(`Module.finrank_baseChange`).  `Module.finrank ℤ M = r` because torsion has
+rank zero over a domain.  Alternatively `IsLocalizedModule` with
+`Module.finrank_of_isLocalizedModule_of_free`-style lemmas.  Degenerate case
+`M = 0`: both sides are `0`.  About 60–150 lines. -/
+theorem ratUC_finrank (M : Type) [AddCommGroup M] [Module.Finite ℤ M] :
+    FiniteDimensional ℚ (ratUC_F.obj (ModuleCat.of ℤ M)) ∧
+      Module.finrank ℚ (ratUC_F.obj (ModuleCat.of ℤ M)) = Module.finrank ℤ M := by
   sorry
 
-/-- **Leaf (b4).**  A handle next to a crosscap becomes two crosscaps:
-`u x x a b a⁻¹ b⁻¹ t ≅ u x x b b a a t`.
-
-Route.  Four `cutAndPaste` steps (the first used right-to-left):
-`u x x a b a⁻¹ b⁻¹ t ≅ u x a⁻¹ x b a⁻¹ b⁻¹ t` (pair `x`, `v = [a⁻¹]`);
-`≅ u x a⁻¹ a⁻¹ b⁻¹ x⁻¹ b⁻¹ t` (pair `a⁻¹`, `u ++ [x]`, `v = [x, b]`);
-`≅ u x a⁻¹ a⁻¹ b⁻¹ b⁻¹ x t` (pair `b⁻¹`, `v = [x⁻¹]`);
-`≅ u x x b b a a t` (pair `x`, `v = [a⁻¹, a⁻¹, b⁻¹, b⁻¹]`).
-Checked by hand: each step is literally `u x v x t ≅ u x x (inverseWord v) t`.
-About 120–220 lines. -/
-lemma t98A01_handleAbsorb {L : Type*} [DecidableEq L] (u t : List (Signed L))
-    (x a b : Signed L) (hxa : x.1 ≠ a.1) (hxb : x.1 ≠ b.1) (hab : a.1 ≠ b.1)
-    (hx : x.1 ∉ (u ++ t).map Prod.fst) (ha : a.1 ∉ (u ++ t).map Prod.fst)
-    (hb : b.1 ∉ (u ++ t).map Prod.fst)
-    (hw : IsPolygonWord (u ++ [x, x, a, b, inv a, inv b] ++ t)) :
-    Nonempty (PolygonSurface (u ++ [x, x, a, b, inv a, inv b] ++ t) ≃ₜ
-      PolygonSurface (u ++ [x, x, b, b, a, a] ++ t)) := by
-  sorry
-
-/-- The eleven crosscap letters of the normal form, in order. -/
-def t98A01CrosscapLetters : Fin 11 → Signed T98A01Edge :=
-  ![((.K₁, false), true), ((.K₁, true), false), ((.T₁, true), true), ((.T₁, false), true),
-    ((.T₂, true), true), ((.T₂, false), true), ((.P, false), true),
-    ((.K₂, false), true), ((.K₂, true), false), ((.T₃, true), true), ((.T₃, false), true)]
-
-/-- **Leaf (b5, layer 2: uses b3, b4).**  The normal form of the sum word.
-
-Route.  `K₁` by `t98A01_kleinBlock` (`u = []`); then `T₁`, `T₂` by
-`t98A01_handleAbsorb`, each after the crosscap pair just produced
-(`x = (K₁,b)⁻¹`, then `x = (T₁,a)`); `P` is already a crosscap; `K₂` by
-`t98A01_kleinBlock`; `T₃` by `t98A01_handleAbsorb` with `x = (K₂,b)⁻¹`.
-Each step's `u`, `t` are explicit lists; freshness, distinctness and
-`IsPolygonWord` are `decide`; list equalities `rfl`/`simp`.  Compose with
-`PolygonMoves.homeomorph_trans`.  The result is
-`t98A01CrosscapWord 11 t98A01CrosscapLetters` (checked by hand).
-About 80–200 lines. -/
-lemma t98A01_sum_normalForm :
-    Nonempty (T98A01SumSurface ≃ₜ
-      PolygonSurface (t98A01CrosscapWord 11 t98A01CrosscapLetters)) := by
-  sorry
-
-/-! ## (b) Euler characteristic -/
-
-/-- **Leaf (b6, LIBRARY).**  Rational singular homology has rank equal to the
-`ℤ`-rank of integral singular homology (universal coefficients over the flat
-`ℤ`-algebra `ℚ`).
-
-Route (split before dispatch, see BLUEPRINT.md): (i) natural chain iso
-`C_•(X; ℚ) ≅ (extendScalars ℤ → ℚ)(C_•(X; ℤ))` (chains are coproducts of the
-coefficient object, `SSet.singularChainComplexFunctor`; `extendScalars`
-preserves coproducts and sends `ℤ` to `ℚ`); (ii) `extendScalars` along
-`ℤ → ℚ` is exact (`ℚ` flat / localization) so it preserves homology
-(`Functor.PreservesHomology`, `HomologicalComplex.homologyFunctorIso`-style);
-(iii) `finrank_ℚ (ℚ ⊗ M) = finrank_ℤ M` for finite `M`
-(`Module.finrank_baseChange` / rank of torsion is zero).  400–900 lines. -/
-lemma t98A01_rationalHomology_finrank (X : Type) [TopologicalSpace X] (k : ℕ)
+/-- Layer 2 (uses UC i–iii): rational homology rank from an integral
+computation. -/
+theorem ratUC_rationalHomology_finrank (X : Type) [TopologicalSpace X] (k : ℕ)
     (M : Type) [AddCommGroup M] [Module.Finite ℤ M]
-    (e : ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
-        (ModuleCat.of ℤ ℤ)).obj (TopCat.of X) ≅ ModuleCat.of ℤ M) :
+    (e : SpaceH X k ≅ ModuleCat.of ℤ M) :
     FiniteDimensional ℚ (Homology X k) ∧
       Module.finrank ℚ (Homology X k) = Module.finrank ℤ M := by
-  sorry
+  obtain ⟨c⟩ := ratUC_chainIso (TopCat.of X)
+  obtain ⟨h⟩ := ratUC_homologyIso (ratUC_chainsZ (TopCat.of X)) k
+  have i : Homology X k ≅ ratUC_F.obj (ModuleCat.of ℤ M) :=
+    (HomologicalComplex.homologyFunctor _ _ k).mapIso c.symm ≪≫ h ≪≫ ratUC_F.mapIso e
+  let l := i.toLinearEquiv
+  obtain ⟨hfd, hr⟩ := ratUC_finrank M
+  exact ⟨LinearEquiv.finiteDimensional l.symm, l.finrank_eq.trans hr⟩
 
-/-- **Leaf (b7).**  Integral homology ranks of the standard crosscap data:
-`attachingBoundary : ℤ → ℤ^g` is `n ↦ n • attachingDegree`, and
-`attachingDegree ≠ 0` (`SurfaceGroupBetti.standard_nonorientable_data`), so the
+/-! ## (b) Euler characteristic of the standard surfaces (`polygonNF_*` family) -/
+
+/-- The identity acts on rational homology with trace equal to its rank. -/
+theorem polygonNF_trace_induced_id (X : Type) [TopologicalSpace X] (k : ℕ)
+    [FiniteDimensional ℚ (Homology X k)] :
+    LinearMap.trace ℚ (Homology X k) (induced (ContinuousMap.id X) k).hom =
+      Module.finrank ℚ (Homology X k) := by
+  have h : induced (ContinuousMap.id X) k = 𝟙 _ := by
+    simp only [induced]
+    exact CategoryTheory.Functor.map_id _ _
+  rw [h, ModuleCat.hom_id, LinearMap.trace_id]
+
+/-- `HasEulerCharacteristic` from finite ranks: the trace of the identity is
+the rank. -/
+theorem polygonNF_hasEulerCharacteristic_of_finrank (X : Type) [TopologicalSpace X]
+    (hfd : ∀ k, FiniteDimensional ℚ (Homology X k)) (bound : ℕ)
+    (hz : ∀ k, bound < k → Module.finrank ℚ (Homology X k) = 0) (v : ℚ)
+    (hv : ∑ k ∈ Finset.range (bound + 1),
+      (-1 : ℚ) ^ k * (Module.finrank ℚ (Homology X k) : ℚ) = v) :
+    HasEulerCharacteristic X v := by
+  refine ⟨hfd, bound, fun k hk => ?_, ?_⟩
+  · haveI := hfd k
+    exact Module.finrank_zero_iff.mp (hz k hk)
+  · rw [← hv]
+    refine Finset.sum_congr rfl fun k _ => ?_
+    haveI := hfd k
+    rw [polygonNF_trace_induced_id]
+
+/-- `HasEulerCharacteristic` is a homeomorphism invariant. -/
+theorem polygonNF_hasEulerCharacteristic_of_homeomorph {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y) {v : ℚ}
+    (h : HasEulerCharacteristic Y v) : HasEulerCharacteristic X v := by
+  obtain ⟨hfd, bound, hsub, hv⟩ := h
+  let l : ∀ k, Homology X k ≃ₗ[ℚ] Homology Y k := fun k =>
+    (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+      (ModuleCat.of ℚ ℚ)).mapIso (TopCat.isoOfHomeo e)).toLinearEquiv
+  have hfdX : ∀ k, FiniteDimensional ℚ (Homology X k) := fun k => by
+    haveI := hfd k
+    exact LinearEquiv.finiteDimensional (l k).symm
+  refine polygonNF_hasEulerCharacteristic_of_finrank X hfdX bound (fun k hk => ?_) v ?_
+  · haveI := hsub k hk
+    rw [(l k).finrank_eq]
+    exact Module.finrank_zero_of_subsingleton
+  · rw [← hv]
+    refine Finset.sum_congr rfl fun k _ => ?_
+    haveI := hfd k
+    rw [polygonNF_trace_induced_id, (l k).finrank_eq]
+
+/-- **Family leaf `polygonNF_standard_boundary_ranks`** (t98A01 here; later
+any χ consumer).  Integral ranks of the cellular boundary `ℤ → ℤ^{edges}` of
+the standard pairing data.  Orientable: the degree is `0` (each handle orbit
+has one `true` and one `false` edge, `handleSign`), so the kernel is `ℤ` and
+the cokernel is `ℤ^{2g}`.  Nonorientable: the degree is `-2` on every orbit
+(banked `SurfaceGroupBetti.standard_nonorientable_data_aux_degree`), so the
 kernel is `0` and the cokernel has rank `g - 1`.
 
-Route.  Kernel: injective since a nonzero vector `d` has `n • d = 0 → n = 0`.
-Cokernel: finite (quotient of `Fin`-indexed functions, `Module.Finite`);
-rank via `ℚ`-rank–nullity (`Module.finrank` of a quotient by the span of one
-nonzero vector), or `rank_quotient_add_rank`.  About 80–200 lines. -/
-lemma t98A01_crosscap_homology_ranks (g : ℕ) (hg : 0 < g) :
-    Module.Finite ℤ (BoundaryCokernel (standardPairingData false g hg)) ∧
-      Module.finrank ℤ (BoundaryCokernel (standardPairingData false g hg)) = g - 1 ∧
-      Module.Finite ℤ (BoundaryKernel (standardPairingData false g hg)) ∧
-      Module.finrank ℤ (BoundaryKernel (standardPairingData false g hg)) = 0 := by
+Route.  Orbit counts: `orientableOrbitEquiv`, `nonorientableOrbitEquiv`
+(both banked).  Orientable: show `attachingDegree = 0` as in
+`standard_nonorientable_data_aux_degree` (sum over `orientableCoord`), then
+`attachingBoundary = 0`, `ker = ⊤ ≅ ℤ`, cokernel `≅ (Fin g × Bool → ℤ)`.
+Nonorientable: `n • d = 0 → n = 0` for `d ≠ 0` gives `ker = ⊥`; the cokernel
+of the span of one nonzero vector in `ℤ^g` has rank `g - 1`
+(`Submodule.finrank_quotient_add_finrank` over `ℤ`, or pass to `ℚ`).
+`Module.Finite` of a quotient of `Fin`-indexed functions is
+`Module.Finite.quotient`.  About 80–200 lines. -/
+theorem polygonNF_standard_boundary_ranks (o : Bool) (g : ℕ) (hg : 0 < g) :
+    Module.Finite ℤ (BoundaryCokernel (standardPairingData o g hg)) ∧
+      Module.finrank ℤ (BoundaryCokernel (standardPairingData o g hg)) =
+        (if o then 2 * g else g - 1) ∧
+      Module.finrank ℤ (BoundaryKernel (standardPairingData o g hg)) =
+        (if o then 1 else 0) := by
   sorry
 
-/-- **Leaf (b8, layer 2: uses b6, b7).**  `χ(N_g) = 2 - g`.
+/-- Layer 2 (uses the ranks leaf and UC i–iii): `χ` of the standard pairing
+space. -/
+theorem polygonNF_hasEulerCharacteristic_pairingSpace (o : Bool) (g : ℕ) (hg : 0 < g) :
+    HasEulerCharacteristic (standardPairingData o g hg).Space
+      (Surfaces.eulerCharacteristic o g : ℚ) := by
+  set P := standardPairingData o g hg
+  obtain ⟨⟨h0⟩, ⟨h1⟩, ⟨h2⟩, h3⟩ := polygonQuotient_homology P
+  obtain ⟨hfin1, hr1, hr2⟩ := polygonNF_standard_boundary_ranks o g hg
+  have r0 := ratUC_rationalHomology_finrank P.Space 0 ℤ h0
+  have r1 := ratUC_rationalHomology_finrank P.Space 1 _ h1
+  have r2 := ratUC_rationalHomology_finrank P.Space 2 _ h2
+  have r3 : ∀ k, 3 ≤ k → FiniteDimensional ℚ (Homology P.Space k) ∧
+      Module.finrank ℚ (Homology P.Space k) = 0 := fun k hk => by
+    have z := ratUC_rationalHomology_finrank P.Space k PUnit
+      ((h3 k hk).iso (ModuleCat.isZero_of_subsingleton (ModuleCat.of ℤ PUnit)))
+    simpa using z
+  have hfd : ∀ k, FiniteDimensional ℚ (Homology P.Space k) := by
+    intro k
+    rcases k with _ | _ | _ | k
+    · exact r0.1
+    · exact r1.1
+    · exact r2.1
+    · exact (r3 (k + 3) (by omega)).1
+  refine polygonNF_hasEulerCharacteristic_of_finrank _ hfd 2
+    (fun k hk => (r3 k hk).2) _ ?_
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero]
+  rw [r0.2, r1.2, r2.2, hr1, hr2]
+  cases o
+  · simp only [Bool.false_eq_true, ↓reduceIte, Surfaces.eulerCharacteristic_nonorientable]
+    rw [Module.finrank_self]
+    push_cast [Nat.cast_sub hg]
+    ring
+  · simp only [↓reduceIte, Surfaces.eulerCharacteristic_orientable]
+    rw [Module.finrank_self]
+    push_cast
+    ring
 
-Route.  `PolygonSurfaceHomology.polygonQuotient_homology` gives
-`H₀ ≅ ℤ`, `H₁ ≅ BoundaryCokernel`, `H₂ ≅ BoundaryKernel`, `H_k = 0` (`k ≥ 3`);
-`t98A01_rationalHomology_finrank` (with `M = ℤ`, the cokernel, the kernel, and
-`M = PUnit`-style zero for `k ≥ 3`) gives finite dimensions `1, g - 1, 0, 0`;
-take `bound = 2`; the trace of the identity is `finrank` (`LinearMap.trace_id`;
-`induced (ContinuousMap.id X) k` is the identity by functoriality).
-`1 - (g - 1) + 0 = 2 - g` in `ℚ` (`g ≥ 1`).  About 80–160 lines. -/
-lemma t98A01_hasEulerCharacteristic_crosscap (g : ℕ) (hg : 0 < g) :
-    HasEulerCharacteristic (standardPairingData false g hg).Space (2 - (g : ℚ)) := by
-  sorry
+/-- `χ(Surface o g) = eulerCharacteristic o g` in rational singular homology. -/
+theorem polygonNF_hasEulerCharacteristic_surface (o : Bool) (g : ℕ) (hg : 0 < g) :
+    HasEulerCharacteristic (Surfaces.Surface o g) (Surfaces.eulerCharacteristic o g : ℚ) :=
+  polygonNF_hasEulerCharacteristic_of_homeomorph
+    (standardPairingData_space_homeomorph o g hg).symm
+    (polygonNF_hasEulerCharacteristic_pairingSpace o g hg)
 
-/-- **Leaf (b9).**  `HasEulerCharacteristic` is a homeomorphism invariant.
+/-! ## (b) The summand words against the standard models -/
 
-Route.  The homology functor sends the homeomorphism to isomorphisms
-`Homology X k ≅ Homology Y k` (`TopCat.isoOfHomeo`, `Functor.mapIso`), giving
-linear equivalences: finite dimensionality and subsingletons transfer; the
-trace of the identity is `finrank`, preserved (`LinearEquiv.finrank_eq`).
-About 60–120 lines. -/
-lemma t98A01_hasEulerCharacteristic_of_homeomorph {X Y : Type} [TopologicalSpace X]
-    [TopologicalSpace Y] (e : X ≃ₜ Y) {v : ℚ} (h : HasEulerCharacteristic Y v) :
-    HasEulerCharacteristic X v := by
-  sorry
+theorem t98A01_torusWord_eq :
+    t98A01TorusWord .T₁ =
+      polygonNF_handleWord 1 ![((.T₁, false), true)] ![((.T₁, true), true)] := by
+  decide
+
+theorem t98A01_torus_bridge :
+    Nonempty (PolygonMoves.PolygonSurface (t98A01TorusWord .T₁) ≃ₜ Surface true 1) := by
+  rw [t98A01_torusWord_eq]
+  exact polygonNF_handleBridge 1 _ _ (by decide)
+
+theorem t98A01_projectiveWord_eq :
+    t98A01ProjectiveWord .P = polygonNF_crosscapWord 1 ![((.P, false), true)] := by
+  decide
+
+theorem t98A01_projective_bridge :
+    Nonempty (PolygonMoves.PolygonSurface (t98A01ProjectiveWord .P) ≃ₜ
+      Surface false 1) := by
+  rw [t98A01_projectiveWord_eq]
+  exact polygonNF_crosscapBridge 1 _ (by decide)
+
+/-! ### The Klein word: two cut-and-paste steps -/
+
+/-- `aK₁ bK₁ bK₁ aK₁` -/
+def t98A01Klein_nf1 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, true), true), ((.K₁, true), true),
+    ((.K₁, false), true)]
+
+/-- Step 1: cut-and-paste on the pair bK₁. -/
+theorem t98A01Klein_move1 :
+    Nonempty (PolygonMoves.PolygonSurface (t98A01KleinWord .K₁) ≃ₜ
+      PolygonMoves.PolygonSurface t98A01Klein_nf1) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true)]
+    [((.K₁, false), false)]
+    []
+    ((.K₁, true), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹` -/
+def t98A01Klein_nf2 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false)]
+
+/-- Step 2: cut-and-paste on the pair aK₁. -/
+theorem t98A01Klein_move2 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01Klein_nf1 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01Klein_nf2) :=
+  polygonNF_cutStep _ _
+    []
+    [((.K₁, true), true), ((.K₁, true), true)]
+    []
+    ((.K₁, false), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+
+theorem t98A01_klein_bridge :
+    Nonempty (PolygonMoves.PolygonSurface (t98A01KleinWord .K₁) ≃ₜ
+      Surface false 2) := by
+  have h := PolygonMoves.homeomorph_trans t98A01Klein_move1 t98A01Klein_move2
+  have hw : t98A01Klein_nf2 = polygonNF_crosscapWord 2
+      ![((.K₁, false), true), ((.K₁, true), false)] := by decide
+  rw [hw] at h
+  exact PolygonMoves.homeomorph_trans h (polygonNF_crosscapBridge 2 _ (by decide))
+
+/-! ### The sum word: sixteen cut-and-paste steps
+
+`K₁` by two steps (`a b a⁻¹ b ↦ a b b a ↦ a a b⁻¹ b⁻¹`).  Each handle after a
+crosscap pair `x x` by four steps (`x x a b a⁻¹ b⁻¹ ↦ x a⁻¹ x b a⁻¹ b⁻¹ ↦
+x a⁻¹ a⁻¹ b⁻¹ x⁻¹ b⁻¹ ↦ x a⁻¹ a⁻¹ b⁻¹ b⁻¹ x ↦ x x b b a a`, the first step
+right to left): `T₁` after `(bK₁)⁻¹`, `T₂` after `aT₁`.  `P` is already a
+crosscap.  `K₂` by two steps, then `T₃` after `(bK₂)⁻¹`.  Every step is the
+banked `PolygonMoves.cutAndPaste` between explicitly written words; side
+conditions are `decide`.  In the comments `aS`, `bS` are the labels
+`(S, false)`, `(S, true)`. -/
+
+/-- `aK₁ bK₁ bK₁ aK₁ aT₁ bT₁ aT₁⁻¹ bT₁⁻¹ aT₂ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf1 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, true), true), ((.K₁, true), true),
+    ((.K₁, false), true), ((.T₁, false), true), ((.T₁, true), true),
+    ((.T₁, false), false), ((.T₁, true), false), ((.T₂, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 1: cut-and-paste on the pair bK₁. -/
+theorem t98A01_move1 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01SumWord ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf1) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true)]
+    [((.K₁, false), false)]
+    [((.T₁, false), true), ((.T₁, true), true), ((.T₁, false), false),
+      ((.T₁, true), false), ((.T₂, false), true), ((.T₂, true), true),
+      ((.T₂, false), false), ((.T₂, true), false), ((.P, false), true),
+      ((.P, false), true), ((.K₂, false), true), ((.K₂, true), true),
+      ((.K₂, false), false), ((.K₂, true), true), ((.T₃, false), true),
+      ((.T₃, true), true), ((.T₃, false), false), ((.T₃, true), false)]
+    ((.K₁, true), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ aT₁ bT₁ aT₁⁻¹ bT₁⁻¹ aT₂ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf2 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, false), true), ((.T₁, true), true),
+    ((.T₁, false), false), ((.T₁, true), false), ((.T₂, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 2: cut-and-paste on the pair aK₁. -/
+theorem t98A01_move2 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf1 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf2) :=
+  polygonNF_cutStep _ _
+    []
+    [((.K₁, true), true), ((.K₁, true), true)]
+    [((.T₁, false), true), ((.T₁, true), true), ((.T₁, false), false),
+      ((.T₁, true), false), ((.T₂, false), true), ((.T₂, true), true),
+      ((.T₂, false), false), ((.T₂, true), false), ((.P, false), true),
+      ((.P, false), true), ((.K₂, false), true), ((.K₂, true), true),
+      ((.K₂, false), false), ((.K₂, true), true), ((.T₃, false), true),
+      ((.T₃, true), true), ((.T₃, false), false), ((.T₃, true), false)]
+    ((.K₁, false), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ aT₁⁻¹ bK₁⁻¹ bT₁ aT₁⁻¹ bT₁⁻¹ aT₂ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf3 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.T₁, false), false), ((.K₁, true), false), ((.T₁, true), true),
+    ((.T₁, false), false), ((.T₁, true), false), ((.T₂, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 3: cut-and-paste on bK₁⁻¹, right to left. -/
+theorem t98A01_move3 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf2 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf3) :=
+  polygonNF_uncutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true)]
+    [((.T₁, false), false)]
+    [((.T₁, true), true), ((.T₁, false), false), ((.T₁, true), false),
+      ((.T₂, false), true), ((.T₂, true), true), ((.T₂, false), false),
+      ((.T₂, true), false), ((.P, false), true), ((.P, false), true),
+      ((.K₂, false), true), ((.K₂, true), true), ((.K₂, false), false),
+      ((.K₂, true), true), ((.T₃, false), true), ((.T₃, true), true),
+      ((.T₃, false), false), ((.T₃, true), false)]
+    ((.K₁, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ aT₁⁻¹ aT₁⁻¹ bT₁⁻¹ bK₁ bT₁⁻¹ aT₂ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf4 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.T₁, false), false), ((.T₁, false), false), ((.T₁, true), false),
+    ((.K₁, true), true), ((.T₁, true), false), ((.T₂, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 4: cut-and-paste on the pair aT₁⁻¹. -/
+theorem t98A01_move4 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf3 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf4) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false)]
+    [((.K₁, true), false), ((.T₁, true), true)]
+    [((.T₁, true), false), ((.T₂, false), true), ((.T₂, true), true),
+      ((.T₂, false), false), ((.T₂, true), false), ((.P, false), true),
+      ((.P, false), true), ((.K₂, false), true), ((.K₂, true), true),
+      ((.K₂, false), false), ((.K₂, true), true), ((.T₃, false), true),
+      ((.T₃, true), true), ((.T₃, false), false), ((.T₃, true), false)]
+    ((.T₁, false), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ aT₁⁻¹ aT₁⁻¹ bT₁⁻¹ bT₁⁻¹ bK₁⁻¹ aT₂ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf5 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.T₁, false), false), ((.T₁, false), false), ((.T₁, true), false),
+    ((.T₁, true), false), ((.K₁, true), false), ((.T₂, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 5: cut-and-paste on the pair bT₁⁻¹. -/
+theorem t98A01_move5 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf4 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf5) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.T₁, false), false), ((.T₁, false), false)]
+    [((.K₁, true), true)]
+    [((.T₂, false), true), ((.T₂, true), true), ((.T₂, false), false),
+      ((.T₂, true), false), ((.P, false), true), ((.P, false), true),
+      ((.K₂, false), true), ((.K₂, true), true), ((.K₂, false), false),
+      ((.K₂, true), true), ((.T₃, false), true), ((.T₃, true), true),
+      ((.T₃, false), false), ((.T₃, true), false)]
+    ((.T₁, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ aT₂ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf6 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 6: cut-and-paste on the pair bK₁⁻¹. -/
+theorem t98A01_move6 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf5 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf6) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true)]
+    [((.T₁, false), false), ((.T₁, false), false), ((.T₁, true), false),
+      ((.T₁, true), false)]
+    [((.T₂, false), true), ((.T₂, true), true), ((.T₂, false), false),
+      ((.T₂, true), false), ((.P, false), true), ((.P, false), true),
+      ((.K₂, false), true), ((.K₂, true), true), ((.K₂, false), false),
+      ((.K₂, true), true), ((.T₃, false), true), ((.T₃, true), true),
+      ((.T₃, false), false), ((.T₃, true), false)]
+    ((.K₁, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₂⁻¹ aT₁ bT₂ aT₂⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf7 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₂, false), false), ((.T₁, false), true),
+    ((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 7: cut-and-paste on aT₁, right to left. -/
+theorem t98A01_move7 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf6 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf7) :=
+  polygonNF_uncutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true)]
+    [((.T₂, false), false)]
+    [((.T₂, true), true), ((.T₂, false), false), ((.T₂, true), false),
+      ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+      ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+      ((.T₃, true), false)]
+    ((.T₁, false), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₂⁻¹ aT₂⁻¹ bT₂⁻¹ aT₁⁻¹ bT₂⁻¹ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf8 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₂, false), false), ((.T₂, false), false),
+    ((.T₂, true), false), ((.T₁, false), false), ((.T₂, true), false),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 8: cut-and-paste on the pair aT₂⁻¹. -/
+theorem t98A01_move8 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf7 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf8) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true)]
+    [((.T₁, false), true), ((.T₂, true), true)]
+    [((.T₂, true), false), ((.P, false), true), ((.P, false), true),
+      ((.K₂, false), true), ((.K₂, true), true), ((.K₂, false), false),
+      ((.K₂, true), true), ((.T₃, false), true), ((.T₃, true), true),
+      ((.T₃, false), false), ((.T₃, true), false)]
+    ((.T₂, false), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₂⁻¹ aT₂⁻¹ bT₂⁻¹ bT₂⁻¹ aT₁ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf9 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₂, false), false), ((.T₂, false), false),
+    ((.T₂, true), false), ((.T₂, true), false), ((.T₁, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 9: cut-and-paste on the pair bT₂⁻¹. -/
+theorem t98A01_move9 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf8 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf9) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₂, false), false), ((.T₂, false), false)]
+    [((.T₁, false), false)]
+    [((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+      ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+      ((.T₃, true), false)]
+    ((.T₂, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ bK₂ aK₂⁻¹ bK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf10 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 10: cut-and-paste on the pair aT₁. -/
+theorem t98A01_move10 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf9 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf10) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true)]
+    [((.T₂, false), false), ((.T₂, false), false), ((.T₂, true), false),
+      ((.T₂, true), false)]
+    [((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, true), true), ((.K₂, false), false), ((.K₂, true), true),
+      ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+      ((.T₃, true), false)]
+    ((.T₁, false), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ bK₂ bK₂ aK₂ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf11 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, true), true), ((.K₂, true), true), ((.K₂, false), true),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 11: cut-and-paste on the pair bK₂. -/
+theorem t98A01_move11 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf10 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf11) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+      ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+      ((.P, false), true), ((.P, false), true), ((.K₂, false), true)]
+    [((.K₂, false), false)]
+    [((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+      ((.T₃, true), false)]
+    ((.K₂, true), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ aK₂ bK₂⁻¹ bK₂⁻¹ aT₃ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf12 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, false), true), ((.K₂, true), false), ((.K₂, true), false),
+    ((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 12: cut-and-paste on the pair aK₂. -/
+theorem t98A01_move12 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf11 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf12) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+      ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+      ((.P, false), true), ((.P, false), true)]
+    [((.K₂, true), true), ((.K₂, true), true)]
+    [((.T₃, false), true), ((.T₃, true), true), ((.T₃, false), false),
+      ((.T₃, true), false)]
+    ((.K₂, false), true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ aK₂ bK₂⁻¹ aT₃⁻¹ bK₂⁻¹ bT₃ aT₃⁻¹ bT₃⁻¹` -/
+def t98A01_nf13 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, false), true), ((.K₂, true), false), ((.T₃, false), false),
+    ((.K₂, true), false), ((.T₃, true), true), ((.T₃, false), false),
+    ((.T₃, true), false)]
+
+/-- Step 13: cut-and-paste on bK₂⁻¹, right to left. -/
+theorem t98A01_move13 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf12 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf13) :=
+  polygonNF_uncutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+      ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+      ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, false), true)]
+    [((.T₃, false), false)]
+    [((.T₃, true), true), ((.T₃, false), false), ((.T₃, true), false)]
+    ((.K₂, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ aK₂ bK₂⁻¹ aT₃⁻¹ aT₃⁻¹ bT₃⁻¹ bK₂ bT₃⁻¹` -/
+def t98A01_nf14 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, false), true), ((.K₂, true), false), ((.T₃, false), false),
+    ((.T₃, false), false), ((.T₃, true), false), ((.K₂, true), true),
+    ((.T₃, true), false)]
+
+/-- Step 14: cut-and-paste on the pair aT₃⁻¹. -/
+theorem t98A01_move14 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf13 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf14) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+      ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+      ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, false), true), ((.K₂, true), false)]
+    [((.K₂, true), false), ((.T₃, true), true)]
+    [((.T₃, true), false)]
+    ((.T₃, false), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ aK₂ bK₂⁻¹ aT₃⁻¹ aT₃⁻¹ bT₃⁻¹ bT₃⁻¹ bK₂⁻¹` -/
+def t98A01_nf15 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, false), true), ((.K₂, true), false), ((.T₃, false), false),
+    ((.T₃, false), false), ((.T₃, true), false), ((.T₃, true), false),
+    ((.K₂, true), false)]
+
+/-- Step 15: cut-and-paste on the pair bT₃⁻¹. -/
+theorem t98A01_move15 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf14 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf15) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+      ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+      ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, false), true), ((.K₂, true), false), ((.T₃, false), false),
+      ((.T₃, false), false)]
+    [((.K₂, true), true)]
+    []
+    ((.T₃, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `aK₁ aK₁ bK₁⁻¹ bK₁⁻¹ bT₁ bT₁ aT₁ aT₁ bT₂ bT₂ aT₂ aT₂ aP aP aK₂ aK₂ bK₂⁻¹ bK₂⁻¹ bT₃ bT₃ aT₃ aT₃` -/
+def t98A01_nf16 : List (PolygonMoves.Signed T98A01Edge) :=
+  [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+    ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+    ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+    ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+    ((.K₂, false), true), ((.K₂, true), false), ((.K₂, true), false),
+    ((.T₃, true), true), ((.T₃, true), true), ((.T₃, false), true),
+    ((.T₃, false), true)]
+
+/-- Step 16: cut-and-paste on the pair bK₂⁻¹. -/
+theorem t98A01_move16 :
+    Nonempty (PolygonMoves.PolygonSurface t98A01_nf15 ≃ₜ
+      PolygonMoves.PolygonSurface t98A01_nf16) :=
+  polygonNF_cutStep _ _
+    [((.K₁, false), true), ((.K₁, false), true), ((.K₁, true), false),
+      ((.K₁, true), false), ((.T₁, true), true), ((.T₁, true), true),
+      ((.T₁, false), true), ((.T₁, false), true), ((.T₂, true), true),
+      ((.T₂, true), true), ((.T₂, false), true), ((.T₂, false), true),
+      ((.P, false), true), ((.P, false), true), ((.K₂, false), true),
+      ((.K₂, false), true)]
+    [((.T₃, false), false), ((.T₃, false), false), ((.T₃, true), false),
+      ((.T₃, true), false)]
+    []
+    ((.K₂, true), false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+
+/-- The eleven crosscap letters of the normal form, in order. -/
+def t98A01CrosscapLetters : Fin 11 → PolygonMoves.Signed T98A01Edge :=
+  ![((.K₁, false), true), ((.K₁, true), false), ((.T₁, true), true),
+    ((.T₁, false), true), ((.T₂, true), true), ((.T₂, false), true),
+    ((.P, false), true), ((.K₂, false), true), ((.K₂, true), false),
+    ((.T₃, true), true), ((.T₃, false), true)]
+
+theorem t98A01_nf16_eq :
+    t98A01_nf16 = polygonNF_crosscapWord 11 t98A01CrosscapLetters := by
+  decide
+
+theorem t98A01_sum_normalForm :
+    Nonempty (T98A01SumSurface ≃ₜ Surface false 11) := by
+  have h := PolygonMoves.homeomorph_trans t98A01_move1 <|
+    PolygonMoves.homeomorph_trans t98A01_move2 <|
+    PolygonMoves.homeomorph_trans t98A01_move3 <|
+    PolygonMoves.homeomorph_trans t98A01_move4 <|
+    PolygonMoves.homeomorph_trans t98A01_move5 <|
+    PolygonMoves.homeomorph_trans t98A01_move6 <|
+    PolygonMoves.homeomorph_trans t98A01_move7 <|
+    PolygonMoves.homeomorph_trans t98A01_move8 <|
+    PolygonMoves.homeomorph_trans t98A01_move9 <|
+    PolygonMoves.homeomorph_trans t98A01_move10 <|
+    PolygonMoves.homeomorph_trans t98A01_move11 <|
+    PolygonMoves.homeomorph_trans t98A01_move12 <|
+    PolygonMoves.homeomorph_trans t98A01_move13 <|
+    PolygonMoves.homeomorph_trans t98A01_move14 <|
+    PolygonMoves.homeomorph_trans t98A01_move15 t98A01_move16
+  rw [t98A01_nf16_eq] at h
+  exact PolygonMoves.homeomorph_trans h
+    (polygonNF_crosscapBridge 11 t98A01CrosscapLetters (by decide))
+
+theorem t98A01_sum_hasEulerCharacteristic :
+    HasEulerCharacteristic T98A01SumSurface (-9) := by
+  obtain ⟨e⟩ := t98A01_sum_normalForm
+  have h := polygonNF_hasEulerCharacteristic_of_homeomorph e
+    (polygonNF_hasEulerCharacteristic_surface false 11 (by norm_num))
+  norm_num at h
+  exact h
 
 /-! ## Assembly -/
 
@@ -425,23 +1180,11 @@ theorem apm_t98a01 :
     Nonempty (PolygonMoves.PolygonSurface (t98A01KleinWord .K₁) ≃ₜ Surface false 2) ∧
     Nonempty (T98A01SumSurface ≃ₜ Surface false 11) ∧
     ConstructionTargets.RationalLefschetz.HasEulerCharacteristic T98A01SumSurface (-9) := by
-  have hsum : Nonempty (T98A01SumSurface ≃ₜ Surface false 11) :=
-    homeomorph_trans t98A01_sum_normalForm
-      (t98A01_crosscap_bridge 11 (by norm_num) t98A01CrosscapLetters (by decide))
-  refine ⟨⟨t98A01_torusFive_isNfoldCover, t98A01_torusFive_deck⟩, ?_, ?_, ?_, ?_, hsum, ?_⟩
-  · intro g h p hp he
-    obtain ⟨rfl, rfl⟩ := t98A01_orientable_cover_genus g h p hp.1 he
-    exact ⟨by norm_num [eulerCharacteristic], rfl, rfl⟩
-  · exact t98A01_torus_bridge ((T98A01Summand.T₁, false), true) ((T98A01Summand.T₁, true), true) (by decide)
-  · exact t98A01_crosscap_bridge 1 (by norm_num) ![((T98A01Summand.P, false), true)] (by decide)
-  · obtain ⟨e₁⟩ := t98A01_kleinBlock [] [] ((T98A01Summand.K₁, false), true) ((T98A01Summand.K₁, true), true)
-      (by decide) (by decide) (by decide) (by unfold IsPolygonWord; decide)
-    obtain ⟨e₂⟩ := t98A01_crosscap_bridge 2 (by norm_num)
-      ![((T98A01Summand.K₁, false), true), ((T98A01Summand.K₁, true), false)] (by decide)
-    exact ⟨e₁.trans e₂⟩
-  · obtain ⟨e⟩ := hsum
-    have hχ := t98A01_hasEulerCharacteristic_crosscap 11 (by norm_num)
-    have h' := t98A01_hasEulerCharacteristic_of_homeomorph
-      (e.trans (standardPairingData_space_homeomorph false 11 (by norm_num)).symm) hχ
-    norm_num at h'
-    exact h'
+  refine ⟨⟨t98A01_torusFive_isNfoldCover, t98A01_torusFive_deck⟩, ?_,
+    t98A01_torus_bridge, t98A01_projective_bridge, t98A01_klein_bridge,
+    t98A01_sum_normalForm, t98A01_sum_hasEulerCharacteristic⟩
+  intro g h p hp he
+  obtain ⟨rfl, rfl⟩ := t98A01_orientable_cover_genus g h p hp.1 he
+  exact ⟨by norm_num [eulerCharacteristic], rfl, rfl⟩
+
+end

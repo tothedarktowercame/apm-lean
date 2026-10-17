@@ -1,124 +1,196 @@
-# Blueprint for t98A01 (claude-14, 2026-10-16)
+# Blueprint for t98A01 (claude-14, 2026-10-17)
 
-## Statement
+The previous blueprint (2026-10-16, 12 leaves) and its `RevisedMain.lean`
+proposal are in `old-2026-10-16/`. That proposal is now the registered
+`Main.lean`.
 
-The current `Main.lean` is unregistered and was graded **narrower**
-(`statement-registry/open-grades-3.md`, `triage-3.md`). Part (a) is sound. Part
-(b) is vacuous as topology for three reasons:
+## Verdict
 
-- `connectedSum : Bool → ℕ → Bool → ℕ → Bool × ℕ` writes the rule T#P ≅ P#P#P
-  (the substance of "identify the canonical form") into a definition.
-- The homeomorphism is `Homeomorph.refl` after `decide`.
-- χ is the formula `2 - g`.
+The statement is unchanged. `Blueprint.lean` copies the registered
+`Main.lean` block byte for byte. The statement is true.
 
-`RevisedMain.lean` keeps part (a) verbatim and replaces part (b):
-
-- **Connected sum = word concatenation.** A polygon word `w` presents the
-  surface `PolygonMoves.PolygonSurface w`: the disk with its boundary arcs paired,
-  equal signs glued `t ↔ t` and opposite signs `t ↔ 1 - t`. For disjoint labels,
-  the connected sum of the surfaces of `w₁` and `w₂` is the surface of `w₁ ++ w₂`.
-  This is the standard model (Massey Ch. 1 §7). It does not presuppose the
-  answer: normalizing the 22-letter word to eleven crosscaps is real
-  cut-and-paste work.
-- **Words.** T = aba⁻¹b⁻¹, P = aa, K = aba⁻¹b, on labels
-  `T98A01Summand × Bool`. The statement checks each word against
-  `Surface true 1`, `Surface false 1` and `Surface false 2`.
-- **Conclusions.** `T98A01SumSurface ≃ₜ Surface false 11` and
-  `HasEulerCharacteristic T98A01SumSurface (-9)`, where `HasEulerCharacteristic`
-  is the alternating rank sum of rational singular homology with finiteness
-  certificates. It was already graded faithful for t99J05.
-
-The arithmetic checks out. Each K contributes two crosscaps, and a handle next to
-a crosscap contributes two, so 2 + 2·3 + 1 + 2 = 11 crosscaps and
-χ = 2 − 11 = −9. Equivalently χ = 0 + 0 + 0 + 1 + 0 + 0 − 2·5 = −9.
-
-Outside grade: requested from a read-only Claude grader on 2026-10-16. The result
-goes in `statement-registry/t98A01-repair-grade.md`. Install and admit only
-after a `faithful` grade: commit Main first, then `admit`, then commit
-STATEMENTS.json.
+- (a) `(x, y) ↦ (5x, y)` is a regular 5-sheeted cover of the torus. Among
+  closed orientable surfaces only the torus covers itself 5 times.
+- (b) T, P and K are the torus, the projective plane and the Klein bottle.
+  K#T#T#P#K#T has 2 + 2·3 + 1 + 2 = 11 crosscaps, so χ = 2 − 11 = −9.
 
 ## Route
 
-**(a) Example.** `(x, y) ↦ (5x, y)`:
+**(a) Example.** The covering is the product of the `AddCircle` 5-fold cover
+with the identity. The fibres are cosets of the 5-torsion, whose card is
+banked. The deck maps are translations (proved, `t98A01_torusFive_deck`).
 
-- covering via Mathlib's `AddCircle` quotient covering ×
-  `isCoveringMap_productMap`;
-- deck maps are translations by 5-torsion (proved here, `t98A01_torusFive_deck`).
+**(a) Only the torus.** This is the π₁/b₁ route of the old blueprint, kept
+unchanged and proved (`t98A01_orientable_cover_genus`). It uses
+`SurfaceGroupBetti` (Schreier bounds on b₁) and the covering index. Its one
+former leaf `t98A01_orientable_data_card` is now proved from the banked
+`orientableOrbitEquiv`. The remaining leaf is that `Surface true 0` (the disk)
+is simply connected.
 
-**(a) Only the torus.** This uses the t91A02 route (π₁ and b₁; no χ), now banked
-as `ConstructionTargets/SurfaceGroupBetti.lean`. Given a 5-sheeted cover
-Σ_g → Σ_h with Σ_g ≅ Σ_h:
+**(b) Words: proved, except the two bridges.**
 
-- π₁Σ_g is an index-5 subgroup of π₁Σ_h ≅ F_{2h}/⟪r⟫.
-- Schreier gives 5(2h−1)+1 ≤ b₁+5.
-- Σ_g ≅ Σ_h gives b₁ ≤ 2h. So h = 1.
-- Then 2g ≤ b₁+1 ≤ 3 gives g = 1.
-- The disk case (h = 0 or g = 0) is excluded because π₁ is trivial.
-- Regularity is not used.
-- The assembly `t98A01_orientable_cover_genus` is sorry-free.
+- T₁ = `polygonNF_handleWord 1`, and P = `polygonNF_crosscapWord 1` (by `decide`).
+- K₁ takes two banked `cutAndPaste` steps to `a a b⁻¹ b⁻¹`, then the
+  crosscap bridge for g = 2.
+- The sum word takes 16 banked `cutAndPaste` steps, written out between
+  explicit words with `decide` side conditions:
+  - K₁ and K₂ take 2 steps each.
+  - Each handle after a crosscap pair takes 4 steps (T₁ after (bK₁)⁻¹, T₂
+    after aT₁, T₃ after (bK₂)⁻¹).
 
-**(b) Moves.** All moves are by `PolygonMoves.cutAndPaste`
-(`u x v x t ≅ u x x v⁻¹ t`, which also works right to left). I checked each step
-by hand.
+  The result is `polygonNF_crosscapWord 11 t98A01CrosscapLetters`, and then the
+  crosscap bridge gives `Surface false 11`.
+- This replaces the old generic `kleinBlock` and `handleAbsorb` leaves. The
+  same moves are applied concretely, so no generic list lemmas are needed.
 
-- Klein block, `u a b a⁻¹ b t`:
-  - → `u a b b a t` (pair b)
-  - → `u a a b⁻¹ b⁻¹ t` (pair a)
-- Handle after a crosscap, `u x x a b a⁻¹ b⁻¹ t`:
-  - → `u x a⁻¹ x b a⁻¹ b⁻¹ t`
-  - → `u x a⁻¹ a⁻¹ b⁻¹ x⁻¹ b⁻¹ t`
-  - → `u x a⁻¹ a⁻¹ b⁻¹ b⁻¹ x t`
-  - → `u x x b b a a t`
-- The sum word applies these in order: K₁, T₁ (x = K₁b⁻¹), T₂ (x = T₁a), K₂,
-  T₃ (x = K₂b⁻¹). P is already a crosscap.
-- Result: `t98A01CrosscapWord 11 t98A01CrosscapLetters`, then a bridge to
-  `SurfaceRel false 11`.
+**(b) χ.** Integral homology of any one-vertex pairing space is banked
+(`PolygonSurfaceHomology.polygonQuotient_homology`: H₀ ≅ ℤ, H₁ ≅ coker,
+H₂ ≅ ker, H_{≥3} = 0). The route has four parts:
 
-**(b) χ.** The polygon homology already gives integral homology:
-`PolygonSurfaceHomology.polygonQuotient_homology` (H₀ ≅ ℤ, H₁ ≅ coker,
-H₂ ≅ ker, H_{≥3} = 0). New library work passes this to ℚ by universal
-coefficients. Ranks 1, g−1, 0 give χ = 2 − g. Transport along the homeomorphism.
+- Three universal-coefficient leaves pass to ℚ by extension of scalars.
+- One leaf gives the integral ranks for the standard data: 2g and 1 when
+  orientable, g − 1 and 0 when not.
+- The rest is proved: trace of the identity = rank, χ from ranks, homeomorphism
+  invariance, and χ(Surface o g) = `eulerCharacteristic o g`.
+- The sum surface gets χ = −9 along the normal-form homeomorphism.
 
-## Leaves (12)
+## Leaves (8)
 
-| leaf | content | est. lines |
+| leaf | content | est. lines | banked lemmas used | shared? |
+|---|---|---|---|---|
+| `t98A01_torusFive_isNfoldCover` | `(5x, y)` is a covering; every fibre has 5 points | 40–100 | `ProductEvenlyCoveredTrivialization.isCoveringMap_productMap`, `AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero`, `UnitAddCircleFiveTorsionCardinality.fiveKernel_natCard` | no |
+| `t98A01_surfaceTrueZero_pi1_subsingleton` | `Surface true 0` is the disk, so π₁ is trivial | 40–100 | `polygonNF_homeomorph_of_fibres` (proved helper) | no |
+| `polygonNF_crosscap_eqvGen_iff` | `WordRel` of `c₀c₀⋯c_{g−1}c_{g−1}` (distinct labels) and `SurfaceRel false g` generate the same equivalence relation | 80–160 | template `PolygonMoves.crosscapTwo_bridge_aux_eqv` | **shared** (t94J09) |
+| `polygonNF_handle_eqvGen_iff` | the same for `a₀b₀a₀⁻¹b₀⁻¹⋯` and `SurfaceRel true g` | 100–200 | same template | family (later t94J04, t00A02) |
+| `ratUC_chainIso` | UC (i): `F(C(X;ℤ)) ≅ C(X;ℚ)` for `F = extendScalars ℤ → ℚ` | 100–220 | Mathlib `map_alternatingFaceMapComplex`, `PreservesCoproduct.iso` | library (any rational-χ consumer) |
+| `ratUC_homologyIso` | UC (ii): `F` commutes with homology of any ℤ-chain complex (ℚ is flat) | 60–150 | Mathlib `Functor.preservesHomology_of_map_exact`, `ShortComplex.mapHomologyIso` | library |
+| `ratUC_finrank` | UC (iii): `ℚ ⊗ M` is finite dimensional of dimension `finrank ℤ M` for finitely generated `M` | 60–150 | Mathlib base change and PID structure theorem | library |
+| `polygonNF_standard_boundary_ranks` | the standard data's cokernel is finite of rank 2g (orientable) or g − 1, and the kernel has rank 1 or 0 | 80–200 | `orientableOrbitEquiv`, `nonorientableOrbitEquiv`, `SurfaceGroupBetti.standard_nonorientable_data(_aux_degree)` | family |
+
+Layer-2 declarations (they depend on leaves) are all proved:
+
+- `ratUC_rationalHomology_finrank` (uses UC i–iii).
+- `polygonNF_hasEulerCharacteristic_pairingSpace` and
+  `polygonNF_hasEulerCharacteristic_surface` (use the ranks leaf and UC).
+- `polygonNF_crosscapBridge`, `polygonNF_handleBridge` (use the bridge leaves).
+- `t98A01_orientable_cover_genus` (uses the disk leaf).
+- `t98A01_sum_normalForm`, `t98A01_klein_bridge`, `t98A01_torus_bridge`,
+  `t98A01_projective_bridge`, `t98A01_sum_hasEulerCharacteristic`, and
+  `apm_t98a01`.
+
+All leaves are layer 1: no leaf depends on another leaf. Seats can work on all
+eight in parallel.
+
+Other banked declarations used (all checked with `#print axioms`: only
+`propext`, `Classical.choice`, `Quot.sound`): `PolygonMoves.cutAndPaste`,
+`PolygonMoves.homeomorph_trans`,
+`PolygonSurfaceHomology.polygonQuotient_homology`,
+`PolygonSurfacePiOne.standardPairingData_space_homeomorph`,
+`PolygonSurfacePiOne.orientableOrbitEquiv`, `polygon_presentation`,
+`SurfaceGroupBetti.b1_finiteIndex_bounds` (and the other b₁ lemmas of part
+(a)), `coveringFiberCard_eq_index`.
+
+### Compared with the old blueprint (12 leaves → 8)
+
+- Now proved (6): `t98A01_orientable_data_card`, `t98A01_kleinBlock`,
+  `t98A01_handleAbsorb` and `t98A01_sum_normalForm` (as concrete banked move
+  chains), `t98A01_hasEulerCharacteristic_crosscap` (now
+  `polygonNF_hasEulerCharacteristic_surface`, both orientations), and
+  `t98A01_hasEulerCharacteristic_of_homeomorph`.
+- Generalized (3):
+  - `t98A01_torus_bridge` → `polygonNF_handle_eqvGen_iff` (all g).
+  - `t98A01_crosscap_bridge` → `polygonNF_crosscap_eqvGen_iff` (all g, no `0 < g`).
+  - `t98A01_crosscap_homology_ranks` → `polygonNF_standard_boundary_ranks`
+    (both orientations).
+- Split (1): `t98A01_rationalHomology_finrank` (est. 400–900) → three UC
+  leaves. Their assembly is proved.
+- Kept (2): `t98A01_torusFive_isNfoldCover` (smaller now: the 5-torsion card
+  is banked) and `t98A01_surfaceTrueZero_pi1_subsingleton`.
+
+## Shared polygon normal-form leaves
+
+The section `Shared polygon normal-form material (polygonNF_*)` is byte-identical
+in this file and in `t94J09/Blueprint.lean` (checked by script).
+
+| declaration | kind | consumers |
 |---|---|---|
-| `t98A01_torusFive_isNfoldCover` | covering + fibres of size 5 | 60–150 |
-| `t98A01_orientable_data_card` | standard orientable data has 2g orbits (same as t95J03 S1) | 40–100 |
-| `t98A01_surfaceTrueZero_pi1_subsingleton` | `Surface true 0` ≅ disk, simply connected | 40–100 |
-| `t98A01_torus_bridge` | `[x,y,x⁻¹,y⁻¹]` ≅ `Surface true 1` (as `crosscapTwo_bridge`) | 60–120 |
-| `t98A01_crosscap_bridge` | `c₀c₀…c_{g−1}c_{g−1}` ≅ `Surface false g` | 80–160 |
-| `t98A01_kleinBlock` | 2 cut-and-paste steps | 80–180 |
-| `t98A01_handleAbsorb` | 4 cut-and-paste steps | 120–220 |
-| `t98A01_sum_normalForm` | **layer 2** (uses the two above): concrete chain, side conditions by `decide` | 80–200 |
-| `t98A01_rationalHomology_finrank` | **LIBRARY**: universal coefficients ℤ → ℚ | 400–900 |
-| `t98A01_crosscap_homology_ranks` | ker 0, coker rank g−1 for the crosscap data | 80–200 |
-| `t98A01_hasEulerCharacteristic_crosscap` | **layer 2**: χ(N_g) = 2 − g | 80–160 |
-| `t98A01_hasEulerCharacteristic_of_homeomorph` | invariance | 60–120 |
+| `polygonNF_homeomorph_of_fibres`, `polygonNF_quotient_homeomorph` | proved helpers | t98A01, t94J09; any disk-quotient bridge |
+| `polygonNF_cutStep`, `polygonNF_uncutStep`, `polygonNF_cancelStep` | proved helpers (banked moves between explicit words) | t98A01, t94J09 |
+| `polygonNF_crosscapWord`, `polygonNF_crosscapBridge` | definition, proved from the leaf | t98A01, t94J09 |
+| `polygonNF_crosscap_eqvGen_iff` | **leaf** | t98A01 (g = 1, 2, 11), t94J09 (g = 6) |
 
-Split `t98A01_rationalHomology_finrank` before dispatch into three pieces:
+The family declarations below are in this file only, because t94J09 does not
+need them:
 
-- (i) a natural chain iso `C(X;ℚ) ≅ extendScalars(C(X;ℤ))`. Chains are
-  coproducts of the coefficient object (`SSet.singularChainComplexFunctor`), and
-  `extendScalars` preserves coproducts and sends ℤ to ℚ;
-- (ii) `extendScalars ℤ → ℚ` is exact (flat), so it preserves homology;
-- (iii) `finrank_ℚ (ℚ ⊗ M) = finrank_ℤ M` for finite M.
+| declaration | kind | consumers |
+|---|---|---|
+| `polygonNF_handleWord`, `polygonNF_handle_eqvGen_iff`, `polygonNF_handleBridge` | definition, **leaf**, proved | t98A01 (g = 1); t94J04 (`Surface true 2`), t00A02 (`Surface true 5`) |
+| `polygonNF_standard_boundary_ranks` | **leaf** | t98A01; any χ of a standard surface |
+| `polygonNF_trace_induced_id`, `polygonNF_hasEulerCharacteristic_of_finrank`, `polygonNF_hasEulerCharacteristic_of_homeomorph`, `polygonNF_hasEulerCharacteristic_pairingSpace`, `polygonNF_hasEulerCharacteristic_surface` | proved | t98A01; t94J04 and t00A02 if their covering arguments use rational χ |
+| `ratUC_*` | three leaves plus a proved assembly | any rational-χ consumer (t99J05, t91J05, t96A01, …) |
 
-It is reusable beyond this problem: it is the bridge every rational-χ
-statement needs (t91J05, t94J04, t96A01, stage 2).
+For t94J04 and t00A02 the missing piece is an orientable normal form for the
+words of their covering surfaces. That needs a cut along an untwisted pair,
+which no banked move provides (see Risks).
+
+## Truth checks
+
+- **Fibres.** The fibre over (x, y) is {a | 5a = x} × {y}. That is a coset of
+  the 5-torsion {j/5}, so it has 5 points. The covering is a product of
+  coverings.
+- **Disk.** `SurfaceRel true 0` requires j < 0, so it is empty. The quotient
+  is the disk, which is contractible.
+- **Crosscap leaf.** Distinct positions with the same label are exactly
+  2j, 2j+1. They have equal signs, so the gluing is t ↦ t, as in
+  `SurfaceRel false g`. In the case g = 0 both relations are empty.
+- **Handle leaf.** Distinct positions with the same label are exactly
+  {4j, 4j+2} and {4j+1, 4j+3}. They have opposite signs, so the gluing is
+  t ↦ 1 − t, as in `SurfaceRel true g`. In the case g = 0 both relations are
+  empty. The g = 1 instance with T₁'s labels discharges the injectivity
+  hypothesis by `decide`.
+- **Ranks leaf.** `handleSign` is false, false, true, true, and `handlePair`
+  is (0 2)(1 3). Each orientable orbit has one +1 and one −1, so the degree
+  is 0. The kernel is all of ℤ (rank 1) and the cokernel is ℤ^{2g}. In the
+  nonorientable case every sign is false, so the degree is −2 on each of the
+  g orbits. Then the kernel is 0 and the cokernel has rank g − 1. Both need
+  g > 0, which is a hypothesis. Then χ = 1 − 2g + 1 or 1 − (g − 1).
+- **UC leaves.** These are standard facts: chains of free modules, flatness
+  of ℚ over ℤ, and torsion vanishing under ℚ ⊗. In the case M = 0 both sides
+  are 0. `ratUC_homologyIso` is stated for every ℤ-chain complex, which is
+  true because ℚ is flat.
+- **Normal form.** The 16-step result is the old blueprint's hand-checked
+  `t98A01CrosscapLetters`. Lean now checks every step.
 
 ## Checks
 
-- `Blueprint.lean` compiles: 0 errors, and `declaration uses sorry` appears on
-  exactly the 12 leaves.
-- The statement block is byte-identical to `RevisedMain.lean`, which also
-  compiles.
-- The sum word has 22 letters and 11 labels, each used exactly twice
-  (`IsPolygonWord`). The anchors' side conditions are proved by `decide`.
+- `flock /tmp/apm-lean-compile.lock systemd-run --user --scope -q -p MemoryMax=16G nice lake env lean holes/labs/blueprints/t98A01/Blueprint.lean`:
+  0 errors. `declaration uses sorry` appears exactly 8 times, on the 8 leaves.
+  `#print axioms` shows that every `t98A01_move*`, `t98A01Klein_move*`,
+  `t98A01_orientable_data_card` and the χ invariance lemmas are sorry-free.
+- The statement block (82 lines) and the theorem signature (13 lines) are
+  identical to `problems/t98A01/lean/Main.lean` (script diff).
+- `decide` over the 22-letter words is fast. The whole file elaborates in
+  about 5 s, including the 16 steps.
 
 ## Risks
 
-- The universal-coefficients leaf is the one large piece. With Mathlib it may
-  need its own small blueprint (three leaves above).
-- `sum_normalForm` relies on `decide` over 22-letter lists. If kernel reduction
-  is slow, the seat should prove `IsPolygonWord` by `simp` plus a count lemma.
+- `ratUC_chainIso` is the largest leaf. `ModuleCat.extendScalars` has no
+  `Functor.Additive` instance in this Mathlib (instance search fails), but
+  `PreservesZeroMorphisms` is found, which is all that `mapHomologicalComplex`
+  needs. If the seat needs additivity, it follows from the adjunction.
+- `ratUC_homologyIso` needs exactness of extension of scalars along ℤ → ℚ.
+  If no flatness-to-`PreservesHomology` bridge exists, the seat proves
+  preservation of kernels directly (localization is exact,
+  `IsLocalizedModule`).
+- In both bridge leaves, `WordRel` uses `edgePoint w.length`. The word length
+  is `2g` or `4g` only propositionally.
+- I checked the coefficient library (`Coefficient*.lean`) as an alternative.
+  `CoefficientH0.SingularHomology R` is Mathlib's
+  `singularHomologyFunctor (ModuleCat R)`, the same object as
+  `RationalLefschetz.Homology` when R = ℚ. But no module relates ℤ and ℚ
+  coefficients (no `extendScalars`, tensor or flatness comparison).
+  `PolygonSurfaceHomology` is ℤ-specific (`IntegralSingularHomologyComparison`,
+  circle Hurewicz), and redoing it over ℚ is not seat-sized. The
+  covering-transfer pattern of `RP3RationalHomology.lean` would need the
+  rational homology of the orientable double cover Σ_{g−1}, plus a −1 deck
+  action on H₂. That costs more than the three UC leaves.
