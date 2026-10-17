@@ -2551,6 +2551,20 @@ theorem t96A06_boolH0_additive_pointInclusion_coordinates (b : Bool) :
   exact ConstructionTargets.SingularHomologyConcrete.directDiscreteH0Iso_pointInclusion
     AddCommGrpCat (AddCommGrpCat.of ℤ) b
 
+/-- The coproduct comparison for forgetting integer-module structure sends
+each native additive `Bool` injection to the corresponding forgotten module
+injection. -/
+theorem t96A06_boolH0_preserved_pointInclusion (b : Bool) :
+    Limits.Sigma.ι (fun _ : Bool ↦ AddCommGrpCat.of ℤ) b ≫
+        (PreservesCoproduct.iso
+          ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+          (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv =
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        (Limits.Sigma.ι (fun _ : Bool ↦ ModuleCat.of ℤ ℤ) b) := by
+  simp [PreservesCoproduct.inv_hom, sigmaComparison, Limits.Sigma.ι_desc]
+
+#print axioms t96A06_boolH0_preserved_pointInclusion
+
 /-- Naturality of the integral coefficient comparison for the selected
 `Unit → Bool` point inclusion, in the direction joining the two coordinate
 edges above. -/
