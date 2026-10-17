@@ -36908,63 +36908,55 @@
      :commit "8323662f3",
      :reason "Repaired and compiled transported MV arrow."}]}
   {:consumer :t98A02,
-   :stop-count 3,
+   :stop-count 4,
    :evidence
    {:placeholder-delta {:t98A02 [1 1], :t00A01 [1 1]},
     :residual
-    "Apply manifold invariance of domain to the restricted embedding; then puncture connectivity and homology.",
+    "Prove bounded manifold invariance of domain for the Euclidean-ball source, then derive radialTwo openness and puncture connectivity.",
     :outcome :stop,
     :warnings ["Three existing-style simp lints."],
     :missing-theorems
-    [{:name "BallCollar.largeInteriorMap_isEmbedding",
-      :type "restricted large-collar interior map is an embedding",
+    [{:name "BallCollar.largeInteriorHomeomorphBall",
+      :type
+      "large collar interior homeomorphic to Euclidean open ball",
       :status :proved,
-      :consumers [:t98A02 :t00A01],
-      :depends-on ["BallCollar"],
-      :area "ball-complement-collar"}
-     {:name "BallCollar.range_largeInteriorMap",
-      :type "restricted map range equals radialTwo",
-      :status :proved,
-      :consumers [:t98A02 :t00A01],
-      :depends-on ["BallCollar.largeInteriorMap_isEmbedding"],
-      :area "ball-complement-collar"}
-     {:name "BallCollar.largeInterior_isOpen",
-      :type "radius-two interior image is open in the manifold",
-      :status :not-started,
       :consumers [:t98A02 :t00A01],
       :depends-on ["BallCollar.range_largeInteriorMap"],
+      :area "ball-complement-collar"}
+     {:name "manifoldEmbedding_isOpenMap",
+      :type "same-dimensional boundaryless manifold embedding is open",
+      :status :not-started,
+      :consumers [:t98A02 :t00A01],
+      :depends-on ["BallCollar.largeInteriorHomeomorphBall"],
+      :area "ball-complement-collar"}
+     {:name "BallCollar.largeInterior_isOpen",
+      :type "radius-two interior image open in manifold",
+      :status :not-started,
+      :consumers [:t98A02 :t00A01],
+      :depends-on ["manifoldEmbedding_isOpenMap"],
       :area "ball-complement-collar"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed B2 open domain, restricted embedding, range, and open-map adapter; invariance of domain remains.",
+    :reason "Committed Euclidean model for large collar interior.",
     :commands
     [{:cmd
       "lake build ConstructionTargets.CollaredConnectedSumHomology",
       :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-     {:cmd
-      "git diff --check && git show --check --stat --oneline 4ac235ef5",
-      :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792162731467-15579-c7c20459",
-     :commands
-     ["git show/check 4ac235ef5"
-      "lake build ConstructionTargets.CollaredConnectedSumHomology"
-      "statement-registry.py check"
-      "placeholder recount"],
-     :finding
-     "PASS: recorded commit is new since program history and adds the open radius-two domain, correctly oriented restricted embedding/range equality, and open-map adapter in scope. Build passes; 0 placeholders; standard axioms only; registry 168/168. No fixture is recorded for this row."},
-    :commit "4ac235ef5",
+     {:cmd "git show --check --stat --oneline 1616b7810", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake build (2 attempts)",
+      :exit 1,
+      :note
+      "Expanded nested subtype membership; final build passes."}],
+    :commit "1616b7810",
     :changed-paths
     ["ConstructionTargets/CollaredConnectedSumHomology.lean"],
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CollaredConnectedSumHomology.lean"
     "ConstructionTargets/CollaredConnectedSumHomology.md"
@@ -45383,7 +45375,9 @@
    :id :lemma-ballcollar-largeinterior-isopen,
    :kind :lemma,
    :depends-on
-   [:lemma-ballcollar :lemma-ballcollar-range-largeinteriormap],
+   [:lemma-ballcollar
+    :lemma-ballcollar-range-largeinteriormap
+    :lemma-manifoldembedding-isopenmap],
    :other-consumers [:t00A01]}
   {:consumer :t98A02,
    :phase :lemma,
@@ -48104,7 +48098,40 @@
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport,
    :kind :lemma,
    :depends-on [:lemma-t99j05-cp-successor-mayervietoris-f-transport],
-   :other-consumers []}],
+   :other-consumers []}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "BallCollar.largeInteriorHomeomorphBall",
+    :type "large collar interior homeomorphic to Euclidean open ball"},
+   :lemma
+   {:name "BallCollar.largeInteriorHomeomorphBall",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "large collar interior homeomorphic to Euclidean open ball",
+    :area "ball-complement-collar",
+    :proved-in :program-2026-10-13-collared-connected-sum-homology},
+   :id :lemma-ballcollar-largeinteriorhomeomorphball,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-range-largeinteriormap],
+   :other-consumers [:t00A01]}
+  {:consumer :t98A02,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "manifoldEmbedding_isOpenMap",
+    :type "same-dimensional boundaryless manifold embedding is open"},
+   :lemma
+   {:name "manifoldEmbedding_isOpenMap",
+    :reported-by [:program-2026-10-13-collared-connected-sum-homology],
+    :type "same-dimensional boundaryless manifold embedding is open",
+    :area "ball-complement-collar"},
+   :id :lemma-manifoldembedding-isopenmap,
+   :kind :lemma,
+   :depends-on [:lemma-ballcollar-largeinteriorhomeomorphball],
+   :other-consumers [:t00A01]}],
  :consumer-baselines {},
  :statuses
  #{:open
