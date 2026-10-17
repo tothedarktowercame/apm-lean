@@ -1597,6 +1597,22 @@ theorem frozenGeneratorOuterHigherGroup_isZero (k : ℕ)
     (TopCat.of FrozenGeneratorOuterPiece) k
       (frozenGeneratorOuterHigherHomology_isZero k hgraph)
 
+/-- Vanishing of the two-piece term in the production sequence, once the
+boundary graph vanishes in the same positive degree. -/
+theorem frozenGeneratorHigherPiecesGroup_isZero (k : ℕ) (hk : k ≠ 0)
+    (hgraph : IsZero (SpaceH FrozenBoundaryGraphQuotient k)) :
+    IsZero
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+          (TopCat.of FrozenGeneratorInnerPiece) ⊞
+        ConstructionTargets.SingularHomologyConcrete.SingularHomology k
+          (TopCat.of FrozenGeneratorOuterPiece)) := by
+  rw [biprod_isZero_iff]
+  exact ⟨
+    (ConstructionTargets.SingularHomologyConcrete.pointHigherHomology_isZero k hk).of_iso
+      (ConstructionTargets.SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv
+        frozenGeneratorInnerHomotopyEquivPoint k),
+    frozenGeneratorOuterHigherGroup_isZero k hgraph⟩
+
 /-- The literal outer member in the additive-group presentation used by the
 production Mayer--Vietoris sequence, transported to the graph quotient. -/
 noncomputable def frozenGeneratorOuterGroupHomologyIsoGraph (k : ℕ) :
@@ -3380,6 +3396,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorOuterHomologyIsoGraph
 #print axioms frozenGeneratorOuterHigherHomology_isZero
 #print axioms frozenGeneratorOuterHigherGroup_isZero
+#print axioms frozenGeneratorHigherPiecesGroup_isZero
 #print axioms frozenGeneratorOuterGroupHomologyIsoGraph
 #print axioms frozenGeneratorMVPiecesH1GroupIsoGraph
 #print axioms frozenGeneratorMVIntersectionH1ArrowToGraph
