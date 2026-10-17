@@ -36708,37 +36708,37 @@
   {:consumer :t99J05,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "Recorded commit 627186991 does not compile: lake env lean ConstructionTargets/t99J05Closure.lean leaves goals unsolved at lines 1462 and 1468, reports unknown ShortComplex at 1482 and unknown Iso.refl at 1507. Repair these declarations, eliminate the resulting sorryAx path, and rerun all recorded gates before banking the exactness milestone.",
    :evidence
    {:placeholder-delta {:t99J05 [1 1]},
     :residual
-    "Compare range-chain isomorphisms; identify the arrow; transport the union.",
+    "Compare chosen and literal biproduct projections; transport union.",
     :outcome :stop,
-    :warnings ["Existing lints; Main one placeholder."],
+    :warnings ["Existing lints; Main sorry."],
     :missing-theorems
-    [{:name "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
-      :type "transported patch MV exactness",
+    [{:name
+      "t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f",
+      :type "transported arrow is exact-complex f",
       :status :proved,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_map"],
+      ["t99J05_cp_successor_mayerVietoris_exact_pieces_transport"],
       :area "rational-homology-lefschetz"}
      {:name "t99J05_cp_successor_mayerVietoris_f_transport_eq_literal",
-      :type "transported arrow equals signed literal arrow",
+      :type "transported arrow is literal signed arrow",
       :status :not-started,
       :consumers [:t99J05],
       :depends-on
-      ["t99J05_cp_successor_mayerVietoris_f_transport_map"
+      ["t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f"
        "t99J05_cp_successor_literalOverlapToPieces_components"],
       :area "rational-homology-lefschetz"}],
     :statement-hashes {:registry "168/168"},
     :disposition :stop,
     :axioms [propext Classical.choice Quot.sound],
     :author :topo-10,
-    :reason
-    "Committed clean transported exactness; invalid arrow equality removed.",
+    :reason "Committed exact-arrow identity.",
     :commands
     [{:cmd "lake env lean ConstructionTargets/t99J05Closure.lean",
       :exit 0}
@@ -36749,24 +36749,12 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "sha256sum /tmp/t99j05_cp_homology_interface_check.lean",
       :exit 0}
-     {:cmd "git show --check --stat --oneline b5b25ca20", :exit 0}],
+     {:cmd "git show --check --stat --oneline 7edd97c7b7", :exit 0}],
     :diagnostic-history
-    [{:cmd "lake build before repair",
+    [{:cmd "closure compile attempts",
       :exit 1,
-      :note "Found invalid equality/imports; removed sorryAx path."}],
-    :review
-    {:outcome :pass,
-     :seat "codex-11",
-     :job "invoke-1792205414298-16080-50478a19",
-     :commands
-     ["git show/diff-tree/blob checks b5b25ca20"
-      "lake env lean ConstructionTargets/t99J05Closure.lean"
-      "lake env lean problems/t99J05/lean/Main.lean"
-      "lake env lean fixture"
-      "python3 scripts/statement-registry.py check"],
-     :finding
-     "PASS: b5b25ca20 is scoped new progress, removes the invalid literal-arrow claim, and proves exactness of the correctly oriented transported short complex. Recorded blob compiled; fixture SHA-256 matched; 0 placeholders in changed file; standard axioms only; registry 168/168; remaining arrow comparison and union transport are listed."},
-    :commit "b5b25ca20",
+      :note "Invalid equality left projection goals."}],
+    :commit "7edd97c7b7",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
     {:path "/tmp/t99j05_cp_homology_interface_check.lean",
@@ -36774,7 +36762,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -48311,7 +48299,8 @@
    :kind :lemma,
    :depends-on
    [:lemma-t99j05-cp-successor-mayervietoris-f-transport-map
-    :lemma-t99j05-cp-successor-literaloverlaptopieces-components],
+    :lemma-t99j05-cp-successor-literaloverlaptopieces-components
+    :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-piecestransport-f],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
@@ -48402,6 +48391,27 @@
    :id :lemma-t96a06-unith0-preserved-pointinclusion,
    :kind :lemma,
    :depends-on [:lemma-t96a06-unith0-integralcomparison-inverse],
+   :other-consumers []}
+  {:consumer :t99J05,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma
+    "t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f",
+    :type "transported arrow is exact-complex f"},
+   :lemma
+   {:name
+    "t99J05_cp_successor_mayerVietoris_f_transport_eq_piecesTransport_f",
+    :reported-by [:program-2026-10-13-close-t99j05],
+    :type "transported arrow is exact-complex f",
+    :area "rational-homology-lefschetz",
+    :proved-in :program-2026-10-13-close-t99j05},
+   :id
+   :lemma-t99j05-cp-successor-mayervietoris-f-transport-eq-piecestransport-f,
+   :kind :lemma,
+   :depends-on
+   [:lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport],
    :other-consumers []}],
  :consumer-baselines {},
  :statuses
