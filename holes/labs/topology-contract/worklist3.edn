@@ -36754,6 +36754,18 @@
     [{:cmd "lake build before repair",
       :exit 1,
       :note "Found invalid equality/imports; removed sorryAx path."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1792205414298-16080-50478a19",
+     :commands
+     ["git show/diff-tree/blob checks b5b25ca20"
+      "lake env lean ConstructionTargets/t99J05Closure.lean"
+      "lake env lean problems/t99J05/lean/Main.lean"
+      "lake env lean fixture"
+      "python3 scripts/statement-registry.py check"],
+     :finding
+     "PASS: b5b25ca20 is scoped new progress, removes the invalid literal-arrow claim, and proves exactness of the correctly oriented transported short complex. Recorded blob compiled; fixture SHA-256 matched; 0 placeholders in changed file; standard axioms only; registry 168/168; remaining arrow comparison and union transport are listed."},
     :commit "b5b25ca20",
     :changed-paths ["ConstructionTargets/t99J05Closure.lean"],
     :fixture
@@ -36762,7 +36774,7 @@
      "4aeb8b6a37db46c068902548d7063d256d1729f1cf9ef9d9d0c92bf70dbeea8d"},
     :seat :topo-10},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :open,
    :scope
    ["problems/t99J05/lean/Main.lean"
     "problems/t99J05/status.json"
@@ -36780,7 +36792,7 @@
      "python3 scripts/statement-registry.py check"],
     :blueprint "ConstructionTargets/t99J05Closure.blueprint.md"},
    :continue-from
-   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Repaired and compiled transported MV arrow.",
+   "Continue this program from its last commit; earlier jobs: :program-history. Last stop: Committed clean transported exactness; invalid arrow equality removed.",
    :id :program-2026-10-13-close-t99j05,
    :kind :final-adapter,
    :campaign-priority 31,
@@ -36912,7 +36924,11 @@
      "Committed rational ModuleCat homology-biproduct comparison."}
     {:job 9,
      :commit "8323662f3",
-     :reason "Repaired and compiled transported MV arrow."}]}
+     :reason "Repaired and compiled transported MV arrow."}
+    {:job 2,
+     :commit "b5b25ca20",
+     :reason
+     "Committed clean transported exactness; invalid arrow equality removed."}]}
   {:consumer :t98A02,
    :stop-count 4,
    :evidence
@@ -37288,7 +37304,7 @@
   {:consumer :t96A06,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 4,
+   :stop-count 0,
    :review-finding
    "Program STOP commits nothing new since the last :program-history entry (completion records :commit nil and :changed-paths []); commit compiled, sorry-free standard-axiom progress or a compiled refutation.",
    :evidence
@@ -37344,7 +37360,7 @@
      "5cf1651451c0a87909c5d3725219722e4d7ead421cc395dad09f1b6c4fe2e2ae"},
     :seat :topo-10},
    :phase :implementation,
-   :state :needs-owner,
+   :state :open,
    :scope
    ["problems/t96A06/lean/Main.lean"
     "problems/t96A06/status.json"
@@ -37366,7 +37382,7 @@
    :id :program-2026-10-13-close-t96a06,
    :kind :final-adapter,
    :campaign-priority 31,
-   :fail-count 4,
+   :fail-count 0,
    :depends-on [],
    :program true,
    :other-consumers [],
@@ -48101,7 +48117,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_coefficientCircleBoundary_integralComparison",
@@ -48111,14 +48127,16 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "signed interval-boundary comparison",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-coefficientcircleboundary-integralcomparison,
    :kind :lemma,
    :depends-on [:lemma-t96a06-boolh0-integralcomparison],
    :other-consumers []}
   {:consumer :t99J05,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t99J05_cp_successor_mayerVietoris_exact_pieces_transport",
@@ -48128,7 +48146,9 @@
     :reported-by [:program-2026-10-13-close-t99j05],
     :type "literal-patch MV exactness",
     :area "rational-homology-lefschetz",
-    :proved-in :program-2026-10-13-close-t99j05},
+    :proved-in :program-2026-10-13-close-t99j05,
+    :banked-by :program-2026-10-13-close-t99j05,
+    :banked-commit "b5b25ca20"},
    :id :lemma-t99j05-cp-successor-mayervietoris-exact-pieces-transport,
    :kind :lemma,
    :depends-on
@@ -48172,7 +48192,7 @@
    :other-consumers [:t00A01]}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_coefficientCircleBoundary_comparison_generator",
@@ -48182,7 +48202,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "boundary comparison maps generator to signed endpoints",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-coefficientcircleboundary-comparison-generator,
    :kind :lemma,
    :depends-on
@@ -48190,17 +48212,21 @@
    :other-consumers []}
   {:consumer :portfolio,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance {:lemma "integralPairConnectingComparison"},
-   :lemma {:name "integralPairConnectingComparison", :reported-by []},
+   :lemma
+   {:name "integralPairConnectingComparison",
+    :reported-by [],
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/ManifoldFundamentalClass.lean"]},
    :id :lemma-integralpairconnectingcomparison,
    :kind :lemma,
    :depends-on [],
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma "t96A06_coefficientCircleRelativeGenerator_boundary",
@@ -48210,7 +48236,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "relative generator has signed endpoint boundary",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id :lemma-t96a06-coefficientcirclerelativegenerator-boundary,
    :kind :lemma,
    :depends-on
@@ -48218,7 +48246,7 @@
    :other-consumers []}
   {:consumer :t96A06,
    :phase :lemma,
-   :state :backlog,
+   :state :banked,
    :scope [],
    :acceptance
    {:lemma
@@ -48230,7 +48258,9 @@
     :reported-by [:program-2026-10-13-close-t96a06],
     :type "relative class maps to interval generator",
     :area "rp-rational-homology",
-    :proved-in :program-2026-10-13-close-t96a06},
+    :proved-in :program-2026-10-13-close-t96a06,
+    :banked-by :declaration-found,
+    :found-in ["ConstructionTargets/t96A06Closure.lean"]},
    :id
    :lemma-t96a06-coefficientcirclerelativegenerator-eq-intervalgenerator,
    :kind :lemma,
