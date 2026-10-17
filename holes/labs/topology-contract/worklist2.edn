@@ -88672,7 +88672,7 @@
   {:consumer :t94J09,
    :owner-reopen
    "reopened: a lemma this row reported missing is now banked",
-   :stop-count 2,
+   :stop-count 3,
    :review-finding
    "STOP omits required remaining theorem apm_t94J09_polygon_normalization from :missing-theorems; restore it as :not-started. The residual says normalize, the frozen acceptance requires it, and its lemma row remains backlog.",
    :evidence
@@ -88682,11 +88682,11 @@
     :outcome :stop,
     :warnings ["Main:1 sorry" "lint/dirt"],
     :missing-theorems
-    [{:name "homology_of_homeomorph_frozenGenerator",
+    [{:name "homology_of_homeomorph_frozenGenerator_comparisons",
       :type "H",
       :status :proved,
       :consumers [:t94J09],
-      :depends-on ["homologyIsoFrozenGeneratorOfHomeomorph"],
+      :depends-on ["homology_of_homeomorph_frozenGenerator"],
       :area "polygon-surface-homology"}
      {:name "frozenBoundaryGraphH1CycleComparison",
       :type "H1",
@@ -88716,35 +88716,23 @@
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-6",
-    :reason "Banked generator-homeomorphism homology transport.",
+    :reason "Banked named generator comparison assembly.",
     :commands
     [{:cmd "lake -Kjobs=1 build ConstructionTargets.t94J09Closure",
       :exit 0}
      {:cmd "lake env lean problems/t94J09/lean/Main.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "closure placeholder scan", :exit 1, :expected-exit 1}
-     {:cmd "git show --check f8e032f9d", :exit 0}],
-    :review
-    {:outcome :pass,
-     :seat "codex-7",
-     :job "invoke-1792196136217-15966-8cef01de",
-     :commands
-     ["hash/scope/comment-stripped placeholders"
-      "lake -Kjobs=1 build ConstructionTargets.t94J09Closure"
-      "lake env lean problems/t94J09/lean/Main.lean"
-      "python3 scripts/statement-registry.py check"
-      "lake env lean ConstructionTargets/t94J09Closure.lean (axioms)"],
-     :finding
-     "PASS: reviewed f8e032f9d (author topo-6), new after cff0552f1. Fixture b9346c1e... and frozen Main a8ded4e4... match; only closure changed; placeholders 0/1; registry 168/0 and pinned digest 8c2ed646... match. The X-to-generator homeomorphism induces SpaceH X-to-generator; composition is correctly oriented for H0/H1 and IsZero transport is correct in higher degrees. It compiles sorry-free with only propext, Classical.choice, Quot.sound; all residual generator-homeomorphism, H0/H2/high, H1, homology, and normalization milestones are listed."},
-    :commit "f8e032f9d",
+     {:cmd "git show --check 8f2236c96", :exit 0}],
+    :commit "8f2236c96",
     :changed-paths ["ConstructionTargets/t94J09Closure.lean"],
     :fixture
     {:path "ConstructionTargets/t94J09Closure.lean",
      :sha256
-     "b9346c1e438d35d73688d9cb9170b49e3c7defd30ad2306185f08f70b81c1ba0"},
+     "cbbe8f43b30a156ad395557d862514bd2b7d690f39b96f41745448902d62bc68"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["problems/t94J09/lean/Main.lean"
     "problems/t94J09/status.json"
@@ -99265,4 +99253,21 @@
    :id :lemma-homologyisofrozengeneratorofhomeomorph,
    :kind :lemma,
    :depends-on [],
+   :other-consumers []}
+  {:consumer :t94J09,
+   :phase :lemma,
+   :state :backlog,
+   :scope [],
+   :acceptance
+   {:lemma "homology_of_homeomorph_frozenGenerator_comparisons",
+    :type "H"},
+   :lemma
+   {:name "homology_of_homeomorph_frozenGenerator_comparisons",
+    :reported-by [:program-2026-10-13-close-t94j09],
+    :type "H",
+    :area "polygon-surface-homology",
+    :proved-in :program-2026-10-13-close-t94j09},
+   :id :lemma-homology-of-homeomorph-frozengenerator-comparisons,
+   :kind :lemma,
+   :depends-on [:lemma-homology-of-homeomorph-frozengenerator],
    :other-consumers []}]}
