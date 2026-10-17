@@ -2926,6 +2926,20 @@ theorem frozenGeneratorHomology_of_comparisons
     exact hz.of_iso e2
   · exact hhigh k (by omega)
 
+/-- The degree-two comparison with the frozen face-boundary kernel already
+forces the generator quotient's second homology to vanish. -/
+theorem frozenGeneratorH2_isZero
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates))) :
+    IsZero (SpaceH FrozenGeneratorQuotient 2) := by
+  rcases h2 with ⟨e2⟩
+  have hz : IsZero (ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)) := by
+    rw [frozenFaceBoundaryCoordinates_ker_eq_bot]
+    rw [IsZero.iff_id_eq_zero]
+    ext x
+  exact hz.of_iso e2
+
 /-- A canonical graph-H1 reassembly section supplies the surjectivity needed
 by the literal generator quotient's homology assembly. -/
 theorem frozenGeneratorHomology_of_section
@@ -3254,6 +3268,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms frozenGeneratorMVBoundaryLinear_map_range_of_coordinates
 #print axioms frozenPolygonHomology_of_comparisons
 #print axioms frozenGeneratorHomology_of_comparisons
+#print axioms frozenGeneratorH2_isZero
 #print axioms frozenGeneratorHomology_of_section
 #print axioms frozenSignedHomology_of_generator_section
 #print axioms homologyIsoFrozenSignedOfHomeomorph
