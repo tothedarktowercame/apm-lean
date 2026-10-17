@@ -3098,6 +3098,41 @@ theorem homology_of_homeomorph_frozenGenerator_comparisons
       (fun k => SpaceH FrozenGeneratorQuotient k)
       h0 g hg hker h2 hhigh)
 
+/-- The explicit Mayer--Vietoris section supplies the H1 surjectivity in the
+named generator-presentation homology calculation. -/
+theorem homology_of_homeomorph_frozenGenerator_section
+    {X : Type} [TopologicalSpace X] (h : X ≃ₜ FrozenGeneratorQuotient)
+    (h0 : Nonempty (SpaceH FrozenGeneratorQuotient 0 ≅ ModuleCat.of ℤ ℤ))
+    (e :
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type) ≃ₗ[ℤ] (Fin 6 → ℤ))
+    (hboundary : e.toLinearMap.comp frozenGeneratorMVBoundaryLinear =
+      frozenFaceBoundaryCoordinates)
+    (hzero :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp
+        frozenGeneratorMVBoundaryLinear = 0)
+    (hreverse : LinearMap.ker (frozenGeneratorMVReassemblyLinear e) ≤
+      LinearMap.range frozenFaceBoundaryCoordinates)
+    (s :
+      (ConstructionTargets.SingularHomologyConcrete.SingularHomology 1
+        (@TopCat.of FrozenGeneratorQuotient
+          (@instTopologicalSpaceQuotient Surfaces.Disk
+            (Relation.EqvGen.setoid frozenGeneratorRel) inferInstance)) : Type) →ₗ[ℤ]
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.obj
+        (SpaceH FrozenBoundaryGraphQuotient 1) : Type))
+    (hsection :
+      frozenGeneratorCanonicalMVGraphH1ReassemblyArrow.hom.toIntLinearMap.comp s =
+        LinearMap.id)
+    (h2 : Nonempty (SpaceH FrozenGeneratorQuotient 2 ≅ ModuleCat.of ℤ
+      (LinearMap.ker frozenFaceBoundaryCoordinates)))
+    (hhigh : ∀ k : ℕ, 3 ≤ k → IsZero (SpaceH FrozenGeneratorQuotient k)) :
+    Nonempty (SpaceH X 0 ≅ ModuleCat.of ℤ ℤ) ∧
+      Nonempty (SpaceH X 1 ≅ ModuleCat.of ℤ N6Smith) ∧
+      ∀ k : ℕ, 2 ≤ k → IsZero (SpaceH X k) :=
+  homology_of_homeomorph_frozenGenerator h
+    (frozenGeneratorHomology_of_section h0 e hboundary hzero hreverse
+      s hsection h2 hhigh)
+
 /-- The consumer-shaped homology tuple from a named-model homeomorphism and
 the direct degree-one comparison map for the frozen generator quotient. -/
 theorem homology_of_homeomorph_frozenSigned_comparisons
@@ -3226,6 +3261,7 @@ theorem n6PolygonHomologyExplicit :
 #print axioms homologyIsoFrozenGeneratorOfHomeomorph
 #print axioms homology_of_homeomorph_frozenGenerator
 #print axioms homology_of_homeomorph_frozenGenerator_comparisons
+#print axioms homology_of_homeomorph_frozenGenerator_section
 #print axioms homology_of_homeomorph_frozenSigned_comparisons
 #print axioms homology_of_homeomorph_frozenSigned_section
 #print axioms frozen_pairedParameter
