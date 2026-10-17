@@ -3333,6 +3333,35 @@ theorem t96A06_unitH0_mapOpcyclesIso_inv_projected :
 
 #print axioms t96A06_unitH0_mapOpcyclesIso_inv_projected
 
+/-- Homology preservation carries the selected forgotten Unit coordinate to
+the canonical mapped homology class of its explicit chain generator. -/
+theorem t96A06_unitH0_preservation_coordinate_generator :
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+        t96A06_unitH0CoordinateGenerator =
+      t96A06_unitMappedModuleChains.isoHomologyι₀.inv.hom
+        ((t96A06_unitMappedModuleChains.pOpcycles 0).hom
+          t96A06_unitH0ModuleChainGenerator) := by
+  rw [t96A06_unitH0CoordinateGenerator_eq_moduleGenerator,
+    t96A06_unitH0ModuleGenerator_eq_opcycleGenerator,
+    t96A06_unitH0_opcycle_eq_projected_chainGenerator]
+  change
+    (t96A06_unitH0ModuleShortComplex.mapHomologyIso'
+      ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules).inv.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+        ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).isoHomologyι₀.inv)).hom
+        ((ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.map
+          ((((AlgebraicTopology.singularChainComplexFunctor (ModuleCat ℤ)).obj
+            (ModuleCat.of ℤ ℤ)).obj (TopCat.of Unit)).pOpcycles 0)).hom
+          t96A06_unitH0ModuleChainGenerator)) = _
+  rw [t96A06_unitH0_preservation_canonical_triangle_generator]
+  rw [← ConcreteCategory.comp_apply,
+    t96A06_unitH0_mapOpcyclesIso_inv_projected,
+    ConcreteCategory.comp_apply]
+
+#print axioms t96A06_unitH0_preservation_coordinate_generator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
