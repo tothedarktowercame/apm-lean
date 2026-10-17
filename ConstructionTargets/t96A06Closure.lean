@@ -3542,6 +3542,44 @@ theorem t96A06_coefficientCircleRelativeGenerator_boundary :
 
 #print axioms t96A06_coefficientCircleRelativeGenerator_boundary
 
+/-- The selected coefficient relative class becomes the standard oriented
+interval class under the integral singular comparison. -/
+theorem t96A06_coefficientCircleRelativeGenerator_eq_intervalGenerator :
+    (ConstructionTargets.ManifoldFundamentalClass.closedDiskOneRelativeIsoInterval 1).hom.hom
+      ((ConstructionTargets.IntegralSingularHomologyComparison
+        .integralRelativeHomologyComparisonWithTransport
+          CoefficientSphereEndpoints.boundary 1).hom.hom
+        t96A06_coefficientCircleRelativeGenerator) =
+      ConstructionTargets.ManifoldFundamentalClass.intervalBoundaryRelativeH1Generator := by
+  apply ConstructionTargets.ManifoldFundamentalClass
+    .coefficientClosedRelativeClass_eq_intervalGenerator_of_boundary_coordinates
+  · exact ConstructionTargets.ManifoldFundamentalClass
+      .integralPairConnectingComparison CoefficientSphereEndpoints.boundary 0
+  · rw [t96A06_coefficientCircleRelativeGenerator_boundary]
+    let u :=
+      (PreservesCoproduct.iso
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules
+        (fun _ : Bool ↦ ModuleCat.of ℤ ℤ)).inv ≫
+      (ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules.mapIso
+        (CoefficientSphereEndpoints.boolModuleIso ℤ)).hom
+    apply (AddCommGrpCat.mono_iff_injective u).mp inferInstance
+    change
+      ((ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+          (TopCat.of CoefficientSphereEndpoints.boundary) 0).hom ≫
+        ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 0).obj
+          (AddCommGrpCat.of ℤ)).map
+            (TopCat.isoOfHomeo
+              T02A06SphereOne.closedDiskOneBoundaryHomeomorphIntervalBoundary).hom ≫
+        ConstructionTargets.SingularHomologyConcrete.intervalBoundaryH0Iso.hom ≫
+        u).hom
+          ((kernel.ι (CoefficientSphereEndpoints.inclusion ℤ)).hom
+            ((CoefficientSphereEndpoints.boundaryKernelIso ℤ).inv.hom (1 : ℤ))) =
+        (ConstructionTargets.ManifoldFundamentalClass.boolIntDifference ≫ u).hom (1 : ℤ)
+    rw [t96A06_coefficientCircleBoundary_comparison_generator]
+    exact ConstructionTargets.ManifoldFundamentalClass.boolIntDifference_to_signedFunction.symm
+
+#print axioms t96A06_coefficientCircleRelativeGenerator_eq_intervalGenerator
+
 /-- Positivity of the coefficient suspension orientation and of the
 stereographic production normalization determines the full iterated endpoint.
 Keeping both hypotheses explicit prevents the two independent orientation
