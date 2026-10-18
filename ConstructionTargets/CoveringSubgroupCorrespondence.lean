@@ -1026,11 +1026,77 @@ theorem exists_connected_subgroup_cover
     exists_connected_subgroup_cover_aux_mulEquiv_range hp _ H hrange,
     exists_connected_subgroup_cover_aux_fiber H⟩
 
+/-- (banked from lemma-1, 2026-10-18) A homeomorphism induces a bijection on
+fundamental groups. -/
+lemma exists_connected_subgroup_cover_of_small_aux_map_homeomorph_bijective
+    {A : Type*} {B : Type*} [TopologicalSpace A] [TopologicalSpace B]
+    (e : A ≃ₜ B) (a : A) :
+    Function.Bijective (FundamentalGroup.mapOfEq (x := a) (y := e a)
+      ⟨e, e.continuous⟩ rfl) := by
+  let f := FundamentalGroup.mapOfEq (x := a) (y := e a) ⟨e, e.continuous⟩ rfl
+  let g := FundamentalGroup.mapOfEq (x := e a) (y := a)
+    ⟨e.symm, e.symm.continuous⟩ (e.symm_apply_apply a)
+  have hgf : Function.LeftInverse g f := by
+    intro z
+    induction z using Path.Homotopic.Quotient.ind with
+    | mk z =>
+      rw [show f _ = _ from FundamentalGroup.mapOfEq_apply _ _ z,
+        show g _ = _ from FundamentalGroup.mapOfEq_apply _ _ _]
+      apply congrArg Path.Homotopic.Quotient.mk
+      ext t
+      change e.symm (e (z t)) = z t
+      simp
+  have hfg : Function.RightInverse g f := by
+    intro z
+    induction z using Path.Homotopic.Quotient.ind with
+    | mk z =>
+      rw [show g _ = _ from FundamentalGroup.mapOfEq_apply _ _ z,
+        show f _ = _ from FundamentalGroup.mapOfEq_apply _ _ _]
+      apply congrArg Path.Homotopic.Quotient.mk
+      ext t
+      change e (e.symm (z t)) = z t
+      simp
+  exact ⟨hgf.injective, hfg.surjective⟩
+
+/-- Leaf (split 2026-10-18 from lemma-1's PARTIAL): the explicit based-path cover
+is `v`-small when `X` is.  `BasedCover H` is a quotient of
+`Σ y, Path.Homotopic.Quotient x y`; a path injects into `unitInterval → X`, and
+`unitInterval : Type` is `v`-small, so `small_Pi`, sigma, quotient and
+`small_of_injective` give it. -/
+theorem exists_connected_subgroup_cover_of_small_aux_small
+    {X : Type u} [TopologicalSpace X] [Small.{v} X]
+    {x : X} (H : Subgroup (FundamentalGroup X x)) :
+    Small.{v} (BasedCover H) := by
+  sorry
+
+/-- Leaf (split 2026-10-18 from lemma-1's PARTIAL): the conclusion of the
+correspondence moves along a change of total space to `Shrink.{v} E`.  Sketch: put
+on `E' := Shrink.{v} E` the topology induced by `(equivShrink E).symm`, so that
+`equivShrink E` is a homeomorphism `φ`; take `p' := p ∘ φ.symm` and `e' := φ e`.
+Covering: composition with a homeomorphism.  Path-connected: image under `φ`.
+Range: `mapOfEq p'` is `mapOfEq p` after the map induced by `φ.symm`, which is
+bijective by `exists_connected_subgroup_cover_of_small_aux_map_homeomorph_bijective`,
+so the ranges agree.  `π₁ E' ≃* π₁ E ≃* H`, and the fibre of `p'` is the image
+under `φ` of the fibre of `p`. -/
+theorem exists_connected_subgroup_cover_of_small_aux_transport
+    {X : Type u} [TopologicalSpace X] {x : X} (H : Subgroup (FundamentalGroup X x))
+    {E : Type*} [TopologicalSpace E] [Small.{v} E] (p : E → X) (e : E)
+    (hp : IsCoveringMap p) (hE : PathConnectedSpace E) (hpe : p e = x)
+    (hrange : (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ hpe).range = H)
+    (hmul : Nonempty (FundamentalGroup E e ≃* H))
+    (hfib : Nonempty ((p ⁻¹' ({x} : Set X)) ≃ Quotient (subgroupCosetSetoid H))) :
+    ∃ (E' : Type v) (_ : TopologicalSpace E') (p' : E' → X) (e' : E'),
+      ∃ hp' : IsCoveringMap p', ∃ _ : PathConnectedSpace E', ∃ hpe' : p' e' = x,
+      (FundamentalGroup.mapOfEq ⟨p', hp'.continuous⟩ hpe').range = H ∧
+      Nonempty (FundamentalGroup E' e' ≃* H) ∧
+      Nonempty ((p' ⁻¹' ({x} : Set X)) ≃ Quotient (subgroupCosetSetoid H)) := by
+  sorry
+
 /-- Universe transport of the construction: when `X` is `v`-small, the same
-covering can be realised with total space in `Type v` (apply
-`exists_connected_subgroup_cover` to `Shrink X` with the transported topology
-and compose with the homeomorphism).  Without `Small.{v} X` this fails: a
-covering of a connected base by a nonempty space is surjective. -/
+covering can be realised with total space in `Type v`: the explicit based-path
+cover is `v`-small, and the conclusion moves to its `Shrink`.  Without
+`Small.{v} X` this fails: a covering of a connected base by a nonempty space is
+surjective.  (Assembly from leaves, split 2026-10-18 from lemma-1's PARTIAL.) -/
 theorem exists_connected_subgroup_cover_of_small
     {X : Type u} [TopologicalSpace X] [PathConnectedSpace X]
     [LocPathConnectedSpace X] [Small.{v} X] (hsl : SemilocallySimplyConnected X)
@@ -1040,7 +1106,18 @@ theorem exists_connected_subgroup_cover_of_small
       (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ hpe).range = H ∧
       Nonempty (FundamentalGroup E e ≃* H) ∧
       Nonempty ((p ⁻¹' ({x} : Set X)) ≃ Quotient (subgroupCosetSetoid H)) := by
-  sorry
+  have hp := exists_connected_subgroup_cover_aux_isCoveringMap hsl H
+  have hlift : ∀ (y : X) (γ : Path x y), ∃ Γ : Path (BasedCover.basepoint H)
+      (BasedCover.mk H ⟨y, Path.Homotopic.Quotient.mk γ⟩),
+      ∀ t, BasedCover.proj H (Γ t) = γ t :=
+    fun _ γ ↦ exists_connected_subgroup_cover_aux_path_lift H γ
+  have hrange := exists_connected_subgroup_cover_aux_range H hp hlift
+  have : Small.{v} (BasedCover H) := exists_connected_subgroup_cover_of_small_aux_small H
+  exact exists_connected_subgroup_cover_of_small_aux_transport H
+    (BasedCover.proj H) (BasedCover.basepoint H) hp
+    (exists_connected_subgroup_cover_aux_pathConnected H hlift) rfl hrange
+    (exists_connected_subgroup_cover_aux_mulEquiv_range hp _ H hrange)
+    (exists_connected_subgroup_cover_aux_fiber H)
 
 /-- The custom quotient has cardinality equal to Mathlib's subgroup index.
 This includes infinite index, for which both `Nat.card` and `index` are zero. -/

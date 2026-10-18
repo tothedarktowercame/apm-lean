@@ -286,3 +286,15 @@ Truth checks: `.1` is continuous (preimage of open `U` is the union of
 `basedPathNbhd U b` over `b.1 ∈ U`); continuity of the truncation at `t₀` only
 needs `γ` near `t₀` inside `U`, and membership in a generating set
 `basedPathNbhd U a` is preserved by extending inside `U`.
+
+### Split of `exists_connected_subgroup_cover_of_small` (2026-10-18, lemma-1 PARTIAL)
+
+Banked: `exists_connected_subgroup_cover_of_small_aux_map_homeomorph_bijective`
+(a homeomorphism `e : A ≃ₜ B` induces a bijection `π₁(A, a) → π₁(B, e a)`).
+The theorem is now assembled from the existing based-path leaves plus two new leaves:
+
+- `exists_connected_subgroup_cover_of_small_aux_small`: `Small.{v} X → Small.{v} (BasedCover H)`
+  (quotient of `Σ y, Path.Homotopic.Quotient x y`; paths inject into `unitInterval → X`).
+- `exists_connected_subgroup_cover_of_small_aux_transport`: the full conclusion for a
+  `v`-small `E : Type*` moves to `Shrink.{v} E` with the induced topology; the range clause
+  uses the banked bijection lemma.
