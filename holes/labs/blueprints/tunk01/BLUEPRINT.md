@@ -69,3 +69,12 @@ The final output of `#print axioms apm_tunk01` is:
 
 The sole `sorry` warning is for the Layer 1 library lemma; the main theorem has
 no direct `sorry`.
+
+## Closed (2026-10-18, claude-14)
+
+tunk01's word, vertex classes, pairing relation and `N6` relation are the
+t94J09 definitions under a different prefix (checked by diff after renaming).
+`apm_tunk01_polygon_normalization` is now the closed t94J09 route, renamed:
+the shared `polygonNF_*` section, the literal-relation bridge, the six banked
+moves and the crosscap bridge. No new mathematics; `#print axioms apm_tunk01`
+shows only `propext`, `Classical.choice`, `Quot.sound`.
