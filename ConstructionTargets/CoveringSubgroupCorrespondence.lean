@@ -305,10 +305,57 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet
   rfl
 
 /-- The quotient map of the `H`-action on based paths is open. -/
+lemma exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap_aux_preimage
+    {x : X} (g : FundamentalGroup X x) (U : Set X) (a : BasedPaths x) :
+    (g • ·) ⁻¹' basedPathNbhd U a = basedPathNbhd U (g⁻¹ • a) := by
+  rcases a with ⟨y, a⟩
+  ext b
+  rcases b with ⟨z, b⟩
+  constructor
+  · rintro ⟨γ, hγ, heq⟩
+    refine ⟨γ, hγ, ?_⟩
+    have hgb : (fun c : BasedPaths x ↦ g • c) (Sigma.mk z b) =
+        (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ)) : BasedPaths x) := by
+      exact Sigma.ext rfl (heq_of_eq heq)
+    have hi := congrArg (fun c : BasedPaths x ↦ g⁻¹ • c) hgb
+    have hi' : (Sigma.mk z b : BasedPaths x) =
+        (fun c : BasedPaths x ↦ g⁻¹ • c)
+          (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ))) := by
+      simpa using hi
+    injection hi' with _ hs
+    change b = ((FundamentalGroup.toPath (g⁻¹)⁻¹).trans a).trans
+      (Path.Homotopic.Quotient.mk γ)
+    rw [inv_inv, Path.Homotopic.Quotient.trans_assoc]
+    simpa using hs
+  · rintro ⟨γ, hγ, heq⟩
+    refine ⟨γ, hγ, ?_⟩
+    have hb : (Sigma.mk z b : BasedPaths x) =
+        (fun c : BasedPaths x ↦ g⁻¹ • c)
+          (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ))) := by
+      refine Sigma.ext rfl (heq_of_eq ?_)
+      change b = (FundamentalGroup.toPath (g⁻¹)⁻¹).trans
+        (a.trans (Path.Homotopic.Quotient.mk γ))
+      change b = ((FundamentalGroup.toPath (g⁻¹)⁻¹).trans a).trans
+        (Path.Homotopic.Quotient.mk γ) at heq
+      simpa [Path.Homotopic.Quotient.trans_assoc] using heq
+    have hg := congrArg (fun c : BasedPaths x ↦ g • c) hb
+    have hg' : (fun c : BasedPaths x ↦ g • c) (Sigma.mk z b) =
+        (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ)) : BasedPaths x) := by
+      simpa using hg
+    injection hg' with _ hs
+
 theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap
     {x : X} (H : Subgroup (FundamentalGroup X x)) :
     IsOpenMap (BasedCover.mk H) := by
-  sorry
+  letI : ContinuousConstSMul H (BasedPaths x) := ⟨fun g ↦ by
+    rw [continuous_generateFrom_iff]
+    rintro S ⟨U, a, hU, rfl⟩
+    change IsOpen ((fun b : BasedPaths x ↦ (g : FundamentalGroup X x) • b) ⁻¹'
+      basedPathNbhd U a)
+    rw [exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap_aux_preimage
+      (g : FundamentalGroup X x) U a]
+    exact TopologicalSpace.GenerateOpen.basic _ ⟨U, g⁻¹ • a, hU, rfl⟩⟩
+  exact isOpenMap_quotient_mk'_mul
 
 /-- **LIBRARY-borderline.** The endpoint map is a covering map.  Charts: for a
 good `U` (`exists_connected_subgroup_cover_aux_good_nhds`) and `y ∈ U`, the
