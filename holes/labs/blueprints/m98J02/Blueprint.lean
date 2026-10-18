@@ -2601,6 +2601,68 @@ lemma apm_m98J02_pullback_spec_aux_equation_aux_chain
         congrArg (fun L : apm_m98J02_E →L[ℝ] ℝ => L (EuclideanSpace.single i 1)) hc
     _ = _ := by rw [hAapp]
 
+lemma apm_m98J02_pullback_spec_aux_equation_aux_calc_first
+    (V : apm_m98J02_E → ℝ) (hV : ContDiff ℝ 1 V)
+    (i : Fin 2) (p : apm_m98J02_E) :
+    apm_m98J02_partial i
+        (fun q ↦ Real.exp ((3 * q 0 - 2 * q 1) / 9 - 2 * q 1 / 9) *
+          V (WithLp.toLp 2 ![3 * q 0 - 2 * q 1, q 1])) p =
+      Real.exp ((3 * p 0 - 2 * p 1) / 9 - 2 * p 1 / 9) *
+        (((3 * (EuclideanSpace.single i 1) 0 -
+              2 * (EuclideanSpace.single i 1) 1) / 9 -
+            2 * (EuclideanSpace.single i 1) 1 / 9) *
+            V (WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1]) +
+          fderiv ℝ V (WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1])
+            (WithLp.toLp 2 ![3 * (EuclideanSpace.single i 1) 0 -
+              2 * (EuclideanSpace.single i 1) 1,
+              (EuclideanSpace.single i 1) 1])) := by
+  unfold apm_m98J02_partial
+  rw [fderiv_fun_mul]
+  · have hphiDiff : DifferentiableAt ℝ
+        (fun q : apm_m98J02_E ↦
+          (3 * q 0 - 2 * q 1) / 9 - 2 * q 1 / 9) p := by
+      let phiL : apm_m98J02_E →L[ℝ] ℝ :=
+        (1 / 3 : ℝ) • EuclideanSpace.proj (0 : Fin 2) +
+          (-4 / 9 : ℝ) • EuclideanSpace.proj (1 : Fin 2)
+      have hphi : (fun q : apm_m98J02_E ↦
+          (3 * q 0 - 2 * q 1) / 9 - 2 * q 1 / 9) = phiL := by
+        funext q; simp [phiL]; ring
+      rw [hphi]
+      exact phiL.differentiableAt
+    rw [fderiv_exp hphiDiff]
+    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+      smul_eq_mul]
+    have hchain :=
+      apm_m98J02_pullback_spec_aux_equation_aux_chain V hV i p
+    unfold apm_m98J02_partial at hchain
+    rw [hchain]
+    let phiL : apm_m98J02_E →L[ℝ] ℝ :=
+      (1 / 3 : ℝ) • EuclideanSpace.proj (0 : Fin 2) +
+        (-4 / 9 : ℝ) • EuclideanSpace.proj (1 : Fin 2)
+    have hphi : (fun q : apm_m98J02_E ↦
+        (3 * q 0 - 2 * q 1) / 9 - 2 * q 1 / 9) = phiL := by
+      funext q
+      simp [phiL]
+      ring
+    rw [hphi, ContinuousLinearMap.fderiv]
+    simp [phiL]
+    fin_cases i <;> simp <;> ring
+  · apply DifferentiableAt.exp
+    let phiL : apm_m98J02_E →L[ℝ] ℝ :=
+      (1 / 3 : ℝ) • EuclideanSpace.proj (0 : Fin 2) +
+        (-4 / 9 : ℝ) • EuclideanSpace.proj (1 : Fin 2)
+    have hphi : (fun q : apm_m98J02_E ↦
+        (3 * q 0 - 2 * q 1) / 9 - 2 * q 1 / 9) = phiL := by
+      funext q; simp [phiL]; ring
+    rw [hphi]
+    exact phiL.differentiableAt
+  · apply (hV.differentiable one_ne_zero _).comp p
+    exact PiLp.contDiff_toLp.differentiable one_ne_zero _ |>.comp p (by
+      rw [differentiableAt_pi]
+      intro j
+      fin_cases j <;> simp <;> fun_prop)
+
+set_option maxHeartbeats 800000 in
 lemma apm_m98J02_pullback_spec_aux_equation_aux_calc
     (v : ℝ → ℝ → ℝ)
     (hv : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦ v (p 0) (p 1)))
@@ -2611,15 +2673,73 @@ lemma apm_m98J02_pullback_spec_aux_equation_aux_calc
           (fun q : apm_m98J02_E ↦ v (q 0) (q 1)))
             (WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1]) +
           (2 / 81 : ℝ) * v (3 * p 0 - 2 * p 1) (p 1)) := by
-  simp only [apm_m98J02_classicalT, apm_m98J02_partial]
-  have hV : ContDiff ℝ 2 (fun q : apm_m98J02_E ↦ v (q 0) (q 1)) := hv
-  have hV1 : ContDiff ℝ 1 (fun q : apm_m98J02_E ↦ v (q 0) (q 1)) :=
-    hV.of_le (by norm_num)
-  have hdV : Differentiable ℝ (fun q : apm_m98J02_E ↦ v (q 0) (q 1)) :=
-    hV.differentiable (by norm_num)
-  have hdDV : Differentiable ℝ (fderiv ℝ (fun q : apm_m98J02_E ↦ v (q 0) (q 1))) :=
+  let V : apm_m98J02_E → ℝ := fun q ↦ v (q 0) (q 1)
+  have hV : ContDiff ℝ 2 V := hv
+  have hV1 : ContDiff ℝ 1 V := hV.of_le (by norm_num)
+  let c : Fin 2 → ℝ := fun i ↦
+    (3 * (EuclideanSpace.single i 1) 0 -
+      2 * (EuclideanSpace.single i 1) 1) / 9 -
+        2 * (EuclideanSpace.single i 1) 1 / 9
+  let ell : Fin 2 → apm_m98J02_E := fun i ↦
+    WithLp.toLp 2 ![3 * (EuclideanSpace.single i 1) 0 -
+      2 * (EuclideanSpace.single i 1) 1, (EuclideanSpace.single i 1) 1]
+  let W : Fin 2 → apm_m98J02_E → ℝ := fun i q ↦
+    c i * V q + fderiv ℝ V q (ell i)
+  have hW (i : Fin 2) : ContDiff ℝ 1 (W i) := by
+    apply ContDiff.add
+    · exact contDiff_const.mul hV1
+    · exact (hV.fderiv_right (by norm_num)).clm_apply contDiff_const
+  have hfirst (i : Fin 2) : apm_m98J02_partial i (apm_m98J02_pullback v) =
+      fun q ↦ Real.exp ((3 * q 0 - 2 * q 1) / 9 - 2 * q 1 / 9) *
+        W i (WithLp.toLp 2 ![3 * q 0 - 2 * q 1, q 1]) := by
+    funext q
+    simpa [apm_m98J02_pullback, V, W, c, ell] using
+      apm_m98J02_pullback_spec_aux_equation_aux_calc_first V hV1 i q
+  have hsecond (i j : Fin 2) :
+      apm_m98J02_partial j (apm_m98J02_partial i (apm_m98J02_pullback v)) p =
+        Real.exp ((3 * p 0 - 2 * p 1) / 9 - 2 * p 1 / 9) *
+          (c j * W i (WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1]) +
+            fderiv ℝ (W i) (WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1]) (ell j)) := by
+    rw [hfirst i]
+    simpa [c, ell] using
+      apm_m98J02_pullback_spec_aux_equation_aux_calc_first (W i) (hW i) j p
+  unfold apm_m98J02_classicalT
+  rw [hsecond 0 0, hsecond 1 0, hfirst 1]
+  simp only [W]
+  have hdV : Differentiable ℝ V := hV.differentiable (by norm_num)
+  have hdDV : Differentiable ℝ (fderiv ℝ V) :=
     (hV.fderiv_right (by norm_num)).differentiable one_ne_zero
-  sorry
+  have hd1 (i : Fin 2) (q : apm_m98J02_E) :
+      DifferentiableAt ℝ (fun x ↦ c i * V x) q :=
+    (hdV q).const_smul (c i)
+  have hd2 (i : Fin 2) (q : apm_m98J02_E) :
+      DifferentiableAt ℝ (fun x ↦ fderiv ℝ V x (ell i)) q :=
+    (hdDV q).clm_apply (differentiableAt_const (ell i))
+  have hfdW (i : Fin 2) (q d : apm_m98J02_E) :
+      fderiv ℝ (W i) q d = c i * fderiv ℝ V q d +
+        fderiv ℝ (fderiv ℝ V) q d (ell i) := by
+    unfold W
+    rw [fderiv_fun_add (hd1 i q) (hd2 i q)]
+    rw [((hdV q).hasFDerivAt.const_mul (c i)).fderiv]
+    rw [fderiv_clm_apply (hdDV q) (differentiableAt_const (ell i))]
+    simp
+  rw [hfdW 0, hfdW 1]
+  let qP : apm_m98J02_E := WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1]
+  let e0 : apm_m98J02_E := EuclideanSpace.single 0 1
+  let e1 : apm_m98J02_E := EuclideanSpace.single 1 1
+  have hell0 : ell 0 = 3 • e0 := by
+    ext k; fin_cases k <;> simp [ell, e0]
+  have hell1 : ell 1 = (-2 : ℝ) • e0 + e1 := by
+    ext k; fin_cases k <;> simp [ell, e0, e1]
+  have hmixed : apm_m98J02_partial 0 (apm_m98J02_partial 1 V) qP =
+      fderiv ℝ (fderiv ℝ V) qP e0 e1 := by
+    unfold apm_m98J02_partial
+    rw [fderiv_clm_apply (hdDV qP) (differentiableAt_const e1)]
+    simp [e0, e1]
+  rw [show WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1] = qP from rfl]
+  rw [hell0, hell1, hmixed]
+  simp [c, V, qP, e0, e1]
+  ring
 
 lemma apm_m98J02_pullback_spec_aux_equation
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
