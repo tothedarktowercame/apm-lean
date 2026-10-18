@@ -276,9 +276,60 @@ is forced, so the fibre is `{a // 5 • a = x}`.  Pick `a₀` with `5 • a₀ =
 the kernel `UnitAddCircleFiveTorsionCardinality.fiveKernel`, whose card is
 banked as `fiveKernel_natCard = 5`.  About 40–100 lines. -/
 -- BEGIN SEAT AREA
+lemma t98A01_torusFive_isNfoldCover_aux_id :
+    IsCoveringMap (id : UnitAddCircle → UnitAddCircle) := by
+  intro x
+  letI : Subsingleton ((id : UnitAddCircle → UnitAddCircle) ⁻¹' {x}) :=
+    ⟨fun a b ↦ Subtype.ext (a.2.trans b.2.symm)⟩
+  refine ⟨inferInstance, Set.univ, Set.mem_univ x, isOpen_univ, isOpen_univ, ?_, ?_⟩
+  · exact
+      { toFun := fun z ↦ (⟨z.1, Set.mem_univ _⟩, ⟨x, rfl⟩)
+        invFun := fun z ↦ ⟨z.1.1, Set.mem_univ _⟩
+        left_inv := fun _ ↦ rfl
+        right_inv := by
+          intro z
+          apply Prod.ext
+          · rfl
+          · exact Subsingleton.elim _ _
+        continuous_toFun := by fun_prop
+        continuous_invFun := by fun_prop }
+  · intro z
+    rfl
+
 theorem t98A01_torusFive_isNfoldCover :
     t98A01IsNfoldCover 5 t98A01TorusFiveCover := by
-  sorry
+  constructor
+  · simpa [t98A01TorusFiveCover,
+      ConstructionTargets.ProductEvenlyCoveredTrivialization.productMap] using
+      ConstructionTargets.ProductEvenlyCoveredTrivialization.isCoveringMap_productMap
+        t98A01_circleFive_isCoveringMap t98A01_torusFive_isNfoldCover_aux_id
+  · intro b
+    obtain ⟨a₀, ha₀⟩ := t98A01_circleFive_isAddQuotientCoveringMap.surjective b.1
+    change 5 • a₀ = b.1 at ha₀
+    let e : {x : T98A01Torus // t98A01TorusFiveCover x = b} ≃
+        UnitAddCircleFiveTorsionCardinality.fiveKernel :=
+      { toFun := fun x ↦ ⟨x.1.1 - a₀, by
+          change 5 • (x.1.1 - a₀) = 0
+          rw [nsmul_sub, ha₀]
+          have hx := congrArg Prod.fst x.2
+          change 5 • x.1.1 = b.1 at hx
+          rw [hx, sub_self]⟩
+        invFun := fun k ↦ ⟨(k.1 + a₀, b.2), by
+          have hk : 5 • k.1 = 0 := k.2
+          apply Prod.ext
+          · change 5 • (k.1 + a₀) = b.1
+            rw [nsmul_add, hk, ha₀, zero_add]
+          · rfl⟩
+        left_inv := by
+          intro x
+          apply Subtype.ext
+          exact Prod.ext (sub_add_cancel x.1.1 a₀) (congrArg Prod.snd x.2).symm
+        right_inv := by
+          intro k
+          apply Subtype.ext
+          exact add_sub_cancel_right k.1 a₀ }
+    rw [Nat.card_congr e]
+    exact UnitAddCircleFiveTorsionCardinality.fiveKernel_natCard
 -- END SEAT AREA
 
 /-- Deck transformations: translate the first coordinate. -/
