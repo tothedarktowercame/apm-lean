@@ -1,38 +1,27 @@
 # Proof Outline: m02J02
 
-The canonical Lean attempt compiles with one remaining `sorry`.
+`lean/Main.lean` proves `apm_m02j02` with no `sorry` (closed by the solve
+loop in df7cf59b9; axioms `propext`, `Classical.choice`, `Quot.sound`).
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-m02J02.md`
 
-## Compiled progress
+## What is proved
 
-- Proved the pointwise derivative formula for every sine basis function.
-- Proved that every sine function vanishes at both endpoints `0` and `1`.
-- Proved global smoothness of every sine function and its displayed
-  derivative.
-- Proved global smoothness of every Hermite–Gaussian function and certified
-  its frozen `deriv` as a pointwise derivative.
-- Proved an explicit rewrite from `deriv (hermiteFunction n)` to the frozen
-  derivative family.
-- Proved every selected odd Hermite–Gaussian vanishes at zero using
-  `Polynomial.coeff_hermite_of_odd_add`.
+`apm_m02j02_IsH10Basis s e de`: every `e n` lies in `H¹₀(s)` (with weak
+derivative `de n`), the pairs `(e n, de n)` are linearly independent, and their
+finite linear combinations are dense in `H¹₀(s)` in the `H¹` graph norm.
 
-## Remaining bridge
+- (a) `Ω = (0,1)`: the sines `sin((n+1)πx)`.
+- (b) `Ω = (0,∞)`: the odd Hermite functions `h_{2n+1}`.
+- (c) `Ω = ℝ`: all Hermite functions `h_n`.
 
-Establish `H¹₀` membership, linear independence, and graph-norm density for the
-sine family and the odd/full Hermite families. This requires Fourier-sine and
-Hermite spectral completeness plus compactly supported smooth approximation in
-the exact `eLpNorm` encoding. Ordinary smoothness, derivative identification,
-and the half-line zero trace are now compiled prerequisites. Mathlib's Gaussian
-integrability and polynomial-exponential decay primitives do not package the
-weak-derivative/compact-support closure or spectral completeness required here.
+## How "basis" is read
 
-## Hop 4 bridge statements
-
-`apm_m02J02_bridge_1`, `apm_m02J02_bridge_2`, and
-`apm_m02J02_bridge_3` state the exact `IsH10Basis` result for the interval,
-half-line, and whole line respectively. Expanding that predicate exposes the
-missing weak-derivative membership, compactly-supported graph-norm
-approximation, linear independence, and density claims without introducing a
-different Sobolev-space model.
+The Lean statement reads "basis" as a linearly independent family with dense
+span. The revised informal solution (7de364a86) reads it as an orthonormal basis
+of the Hilbert space `H¹₀(Ω)`. In (a) the two agree up to normalisation,
+because the sines are `H¹`-orthogonal. In (b) and (c) they differ: the Hermite
+functions are not `H¹`-orthogonal and, in their natural order, not a Schauder
+basis of `H¹(ℝ)`. The informal solution applies Gram–Schmidt to them, and the
+Lean statement does not state that step. See the header of `lean/Main.lean`.

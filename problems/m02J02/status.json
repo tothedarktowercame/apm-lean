@@ -12,10 +12,12 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
-    "sorry_count_main": 4,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 0,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 4
+    "sorry_count_total": 0
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,8 +29,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
-  "closer_hop": 4,
-  "classification_detail": "The three missing domain-specific spectral completeness results are now stated precisely as apm_m02J02_bridge_1 through apm_m02J02_bridge_3 in the exact custom H10 predicate.",
-  "imported_at": "2026-07-13T17:26:54.494725Z"
+  "classification": "complete",
+  "classification_detail": "apm_m02j02 is proved (closed by the solve loop, df7cf59b9). It reads \"basis\" as a linearly independent family with dense span in the H^1 graph norm; for (b) and (c) this is weaker than the orthonormal basis that informal-solution.md (revised 7de364a86) gives. See the Main.lean header.",
+  "imported_at": "2026-07-13T17:26:54.494725Z",
+  "sorry_audit": {
+    "method": "lake env lean elaboration + #print axioms",
+    "at": "2026-10-18",
+    "elaborated_exit": 0,
+    "sorry_declarations": 0,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "previous_classification": "partial"
+  }
 }

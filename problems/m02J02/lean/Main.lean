@@ -7,10 +7,15 @@ set_option maxHeartbeats 200000
 
 ## Statement repairs
 
-None.  "Basis" is made precise as a linearly independent family whose finite
-linear span is dense in the `H¹` graph norm.  No orthogonality is asserted:
-the Hermite functions are a natural complete family on the unbounded domains,
-but are not orthogonal for the ordinary `H¹` inner product.
+None.  "Basis" is read as a linearly independent family whose finite linear
+span is dense in the `H¹` graph norm.  This is a reading, and a weak one: no
+orthogonality is asserted, and no unique convergent expansion (Schauder basis).
+In (a) the sines are in fact `H¹`-orthogonal, so they are an orthogonal basis.
+In (b) and (c) the Hermite functions are not `H¹`-orthogonal and, in their
+natural order, not a Schauder basis of `H¹(ℝ)`.  The revised informal solution
+(7de364a86) reads "basis" as an orthonormal basis and obtains one by applying
+Gram–Schmidt in `H¹` to these families.  That step, which needs only the linear
+independence and density proved here, is not stated in this file.
 
 ## Encoding notes
 
