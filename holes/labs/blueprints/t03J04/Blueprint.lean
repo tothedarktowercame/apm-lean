@@ -1284,7 +1284,82 @@ theorem t03J04_C3_coordChange {n : ℕ} {X : Type} [TopologicalSpace X]
     IsOpen (t03J04_coordDomain n α β) ∧
       ContDiffOn ℝ ∞ (t03J04_coordChange n α β) (t03J04_coordDomain n α β) ∧
       ∀ y ∈ t03J04_coordDomain n α β, Function.Injective (fderiv ℝ (t03J04_coordChange n α β) y) := by
-  sorry
+  let I := apm_t03J04_Model n
+  let e := t03J04_modelEquiv n
+  let cα := chartAt (apm_t03J04_HModel n) α
+  let cβ := chartAt (apm_t03J04_HModel n) β
+  have hrange : Set.range I = Set.univ := by
+    apply Set.range_eq_univ.mpr
+    intro x
+    exact ⟨x, rfl⟩
+  have hI (x : apm_t03J04_E n) : I x = x := by
+    rfl
+  have hIsymm (x : apm_t03J04_E n) : I.symm x = x := by
+    rfl
+  have hopen : IsOpen (t03J04_coordDomain n α β) := by
+    exact (cα.symm.trans cβ).open_source.preimage e.symm.continuous
+  have hsmooth (a b : X) :
+      ContDiffOn ℝ ∞ (t03J04_coordChange n a b) (t03J04_coordDomain n a b) := by
+    let ca := chartAt (apm_t03J04_HModel n) a
+    let cb := chartAt (apm_t03J04_HModel n) b
+    have h := contDiffOn_ext_coord_change (I := I) (n := ∞) b a
+    have hextb : (extChartAt I b : X → apm_t03J04_E n) = cb := by
+      funext x
+      simp only [extChartAt_coe, Function.comp_apply]
+      exact hI _
+    have hextasymm : ((extChartAt I a).symm : apm_t03J04_E n → X) = ca.symm := by
+      funext x
+      simp only [extChartAt_coe_symm, Function.comp_apply]
+      rw [hIsymm]
+    have hsource : ((extChartAt I a).symm ≫ extChartAt I b).source =
+        ca.target ∩ ca.symm ⁻¹' cb.source := by
+      ext x
+      simp only [PartialEquiv.trans_source, PartialEquiv.symm_source, extChartAt_target,
+        hrange, extChartAt_source, hextasymm, Set.mem_inter_iff, Set.mem_preimage,
+        Set.mem_univ, and_true]
+      rw [hIsymm]
+      rfl
+    rw [hextb, hextasymm, hsource] at h
+    have hc := e.contDiff.comp_contDiffOn
+      (h.comp e.symm.contDiff.contDiffOn (by intro x hx; exact hx))
+    simpa only [t03J04_coordChange, t03J04_coord, t03J04_coordDomain,
+      Function.comp_apply] using hc
+  refine ⟨hopen, hsmooth α β, ?_⟩
+  · intro y hy
+    have hopen_at : t03J04_coordDomain n α β ∈ 𝓝 y := hopen.mem_nhds hy
+    let g := t03J04_coordChange n α β
+    let h := t03J04_coordChange n β α
+    have hgy : g y ∈ t03J04_coordDomain n β α := by
+      rcases hy with ⟨hyα, hyβ⟩
+      change e.symm (g y) ∈ cβ.target ∧ cβ.symm (e.symm (g y)) ∈ cα.source
+      dsimp [g, t03J04_coordChange, t03J04_coord, e, cα, cβ]
+      simp only [ContinuousLinearEquiv.symm_apply_apply]
+      exact ⟨cβ.map_source hyβ, by rw [cβ.left_inv hyβ]; exact cα.symm.map_source hyα⟩
+    have hcomp : h ∘ g =ᶠ[𝓝 y] id := by
+      filter_upwards [hopen_at] with z hz
+      rcases hz with ⟨hzα, hzβ⟩
+      dsimp [h, g, t03J04_coordChange, t03J04_coord, e, cα, cβ]
+      simp only [Function.comp_apply, ContinuousLinearEquiv.symm_apply_apply,
+        ContinuousLinearEquiv.apply_symm_apply]
+      rw [cβ.left_inv hzβ, cα.right_inv hzα]
+      exact e.apply_symm_apply z
+    have hgdiff : DifferentiableAt ℝ g y := by
+      exact ((hsmooth α β).differentiableOn (by simp)).differentiableAt
+        (by simpa only [g] using hopen_at)
+    have hhdiff : DifferentiableAt ℝ h (g y) := by
+      exact ((hsmooth β α).differentiableOn (by simp)).differentiableAt
+        ((cβ.symm.trans cα).open_source.preimage e.symm.continuous |>.mem_nhds hgy)
+    have hd := hhdiff.hasFDerivAt.comp y hgdiff.hasFDerivAt
+    have hid : HasFDerivAt (h ∘ g) (ContinuousLinearMap.id ℝ _) y :=
+      (hasFDerivAt_id y).congr_of_eventuallyEq hcomp
+    have heq := hd.unique hid
+    rw [ContinuousLinearMap.ext_iff] at heq
+    intro u v huv
+    have hu := heq u
+    have hv := heq v
+    simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply] at hu hv
+    rw [huv] at hu
+    exact hu.symm.trans hv
 
 /-- LEAF M2 (layer 3: K4, M1; 150–250 lines).  Small `β`-balls centred near `x`
 are convex in the chart at `α`.  Route: K4 at `y₀ = t03J04_coord n α x` for the
