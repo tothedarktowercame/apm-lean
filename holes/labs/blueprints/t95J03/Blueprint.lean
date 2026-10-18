@@ -2656,10 +2656,191 @@ product of `AddCircle` quotient maps, open).  Surjective: `[(x, y)] = f (x, y/2)
 `f z = f w` means `(ũ', 2ṽ') = (m + (-1)ⁿ ũ, n + 2ṽ)`; `n` even gives `w = z`,
 `n` odd gives `w = τ z`.  Use `KleinPresentedGroupCoordinateModel` for the
 action formula.  About 100–200 lines. -/
+-- exploratory helpers
+noncomputable def t95J03_klein_doubleCover_aux_planeMap_aux_raw (p : ℝ × ℝ) :
+    ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient :=
+  Quotient.mk'' (p.1, 2 * p.2)
+
+lemma t95J03_klein_doubleCover_aux_planeMap_aux_action_even (k : ℤ) :
+    KleinPresentedGroupCoordinateModel.action (Multiplicative.ofAdd (2 * k))
+      (Multiplicative.ofAdd 1) = Multiplicative.ofAdd 1 := by
+  change (KleinPresentedGroupCoordinateModel.inversion ^ (2 * k))
+    (Multiplicative.ofAdd 1) = Multiplicative.ofAdd 1
+  rw [zpow_mul]
+  have hi : KleinPresentedGroupCoordinateModel.inversion ^ (2 : ℤ) = 1 := by
+    ext z
+    change z⁻¹⁻¹ = z
+    simp
+  rw [hi, one_zpow]
+  rfl
+
+lemma t95J03_klein_doubleCover_aux_planeMap_aux_action_odd (k : ℤ) :
+    KleinPresentedGroupCoordinateModel.action (Multiplicative.ofAdd (2 * k + 1))
+      (Multiplicative.ofAdd 1) = Multiplicative.ofAdd (-1) := by
+  rw [show Multiplicative.ofAdd (2 * k + 1) =
+      Multiplicative.ofAdd (2 * k) * Multiplicative.ofAdd 1 by simp]
+  rw [map_mul]
+  change KleinPresentedGroupCoordinateModel.action (Multiplicative.ofAdd (2 * k))
+    (KleinPresentedGroupCoordinateModel.action (Multiplicative.ofAdd 1)
+      (Multiplicative.ofAdd 1)) = _
+  rw [KleinPresentedGroupCoordinateModel.action_one, map_inv,
+    t95J03_klein_doubleCover_aux_planeMap_aux_action_even]
+  rfl
+
+lemma t95J03_klein_doubleCover_aux_planeMap_aux_raw_eq (p q : ℝ × ℝ) :
+    t95J03_klein_doubleCover_aux_planeMap_aux_raw p =
+        t95J03_klein_doubleCover_aux_planeMap_aux_raw q ↔
+      ∃ m n : ℤ, 2 * p.2 = (n : ℝ) + 2 * q.2 ∧
+        p.1 = (m : ℝ) +
+          ((Multiplicative.toAdd (KleinPresentedGroupCoordinateModel.action
+            (Multiplicative.ofAdd n) (Multiplicative.ofAdd 1)) : ℤ) : ℝ) * q.1 := by
+  rw [t95J03_klein_doubleCover_aux_planeMap_aux_raw,
+    t95J03_klein_doubleCover_aux_planeMap_aux_raw, Quotient.eq'',
+    MulAction.orbitRel_apply, MulAction.mem_orbit_iff]
+  constructor
+  · rintro ⟨g, hg⟩
+    let c := KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g
+    change KleinPlaneAffineAction.coordinateAct c (q.1, 2 * q.2) =
+      (p.1, 2 * p.2) at hg
+    refine ⟨Multiplicative.toAdd c.1, Multiplicative.toAdd c.2, ?_, ?_⟩
+    · simpa [KleinPlaneAffineAction.coordinateAct] using (congrArg Prod.snd hg).symm
+    · simpa [KleinPlaneAffineAction.coordinateAct] using (congrArg Prod.fst hg).symm
+  · rintro ⟨m, n, hy, hx⟩
+    refine ⟨KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+      ⟨Multiplicative.ofAdd m, Multiplicative.ofAdd n⟩, ?_⟩
+    change KleinPlaneAffineAction.coordinateAct
+      (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv
+        (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm _))
+      (q.1, 2 * q.2) = (p.1, 2 * p.2)
+    rw [KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.apply_symm_apply]
+    ext <;> simp [KleinPlaneAffineAction.coordinateAct]
+    · exact hx.symm
+    · exact hy.symm
+
+noncomputable def t95J03_klein_doubleCover_aux_planeMap_aux_y (x : ℝ) :
+    UnitAddCircle → ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient :=
+  Quotient.lift (fun y : ℝ => t95J03_klein_doubleCover_aux_planeMap_aux_raw (x, y)) (by
+    intro y y' h
+    have hc : (y : UnitAddCircle) = (y' : UnitAddCircle) := Quotient.sound h
+    obtain ⟨k, hk⟩ := t95J03_torus_bridge_aux_int_of_coe_eq hc
+    apply (t95J03_klein_doubleCover_aux_planeMap_aux_raw_eq (x, y) (x, y')).2
+    refine ⟨0, 2 * k, ?_, ?_⟩
+    · push_cast; linarith
+    · rw [t95J03_klein_doubleCover_aux_planeMap_aux_action_even]
+      simp)
+
+lemma t95J03_klein_doubleCover_aux_planeMap_aux_y_coe (x y : ℝ) :
+    t95J03_klein_doubleCover_aux_planeMap_aux_y x (y : UnitAddCircle) =
+      t95J03_klein_doubleCover_aux_planeMap_aux_raw (x, y) := rfl
+
+noncomputable def t95J03_klein_doubleCover_aux_planeMap_aux_f :
+    T95J03Torus → ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient :=
+  fun z => (Quotient.lift (fun x : ℝ => t95J03_klein_doubleCover_aux_planeMap_aux_y x) (by
+    intro x x' h
+    funext y
+    induction y using QuotientAddGroup.induction_on with
+    | _ y =>
+      have hc : (x : UnitAddCircle) = (x' : UnitAddCircle) := Quotient.sound h
+      obtain ⟨k, hk⟩ := t95J03_torus_bridge_aux_int_of_coe_eq hc
+      change t95J03_klein_doubleCover_aux_planeMap_aux_y x (y : UnitAddCircle) =
+        t95J03_klein_doubleCover_aux_planeMap_aux_y x' (y : UnitAddCircle)
+      rw [t95J03_klein_doubleCover_aux_planeMap_aux_y_coe,
+        t95J03_klein_doubleCover_aux_planeMap_aux_y_coe]
+      apply (t95J03_klein_doubleCover_aux_planeMap_aux_raw_eq (x, y) (x', y)).2
+      refine ⟨k, 0, by norm_num, ?_⟩
+      simp [KleinPresentedGroupCoordinateModel.action,
+        KleinPresentedGroupCoordinateModel.inversion]
+      linarith)) z.1 z.2
+
+lemma t95J03_klein_doubleCover_aux_planeMap_aux_f_coe (x y : ℝ) :
+    t95J03_klein_doubleCover_aux_planeMap_aux_f
+      ((x : UnitAddCircle), (y : UnitAddCircle)) =
+      t95J03_klein_doubleCover_aux_planeMap_aux_raw (x, y) := rfl
+
 lemma t95J03_klein_doubleCover_aux_planeMap :
     ∃ f : T95J03Torus → ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient, Continuous f ∧ Function.Surjective f ∧
       ∀ z w, f z = f w ↔ (w = z ∨ w = t95J03_klein_doubleCover_aux_tau z) := by
-  sorry
+  refine ⟨t95J03_klein_doubleCover_aux_planeMap_aux_f, ?_, ?_, ?_⟩
+  · let π : ℝ → UnitAddCircle := fun x => (x : UnitAddCircle)
+    have hq : Topology.IsQuotientMap (Prod.map π π) :=
+      (QuotientAddGroup.isOpenQuotientMap_mk.prodMap
+        QuotientAddGroup.isOpenQuotientMap_mk).isQuotientMap
+    rw [hq.continuous_iff]
+    have hr : Continuous t95J03_klein_doubleCover_aux_planeMap_aux_raw :=
+      continuous_quotient_mk'.comp
+        (continuous_fst.prodMk (continuous_const.mul continuous_snd))
+    convert hr using 1
+  · intro a
+    induction a using Quotient.inductionOn' with
+    | _ p =>
+      refine ⟨((p.1 : UnitAddCircle), ((p.2 / 2 : ℝ) : UnitAddCircle)), ?_⟩
+      rw [t95J03_klein_doubleCover_aux_planeMap_aux_f_coe]
+      unfold t95J03_klein_doubleCover_aux_planeMap_aux_raw
+      congr 1
+      apply Prod.ext
+      · simp
+      · dsimp; ring
+  · rintro ⟨zx, zy⟩ ⟨wx, wy⟩
+    induction zx using QuotientAddGroup.induction_on with
+    | _ x =>
+      induction zy using QuotientAddGroup.induction_on with
+      | _ y =>
+        induction wx using QuotientAddGroup.induction_on with
+        | _ u =>
+          induction wy using QuotientAddGroup.induction_on with
+          | _ v =>
+            rw [t95J03_klein_doubleCover_aux_planeMap_aux_f_coe,
+              t95J03_klein_doubleCover_aux_planeMap_aux_f_coe]
+            constructor
+            · intro h
+              obtain ⟨m, n, hy, hx⟩ :=
+                (t95J03_klein_doubleCover_aux_planeMap_aux_raw_eq (x, y) (u, v)).1 h
+              obtain ⟨k, rfl | rfl⟩ := n.even_or_odd'
+              · left
+                apply Prod.ext
+                · apply t95J03_torus_bridge_aux_coe_eq_of_int (n := -m)
+                  rw [t95J03_klein_doubleCover_aux_planeMap_aux_action_even] at hx
+                  simp at hx
+                  push_cast
+                  linarith
+                · apply t95J03_torus_bridge_aux_coe_eq_of_int (n := -k)
+                  push_cast at hy
+                  push_cast
+                  linarith
+              · right
+                apply Prod.ext
+                · change (u : UnitAddCircle) = (-x : UnitAddCircle)
+                  apply t95J03_torus_bridge_aux_coe_eq_of_int (n := m)
+                  rw [t95J03_klein_doubleCover_aux_planeMap_aux_action_odd] at hx
+                  simp at hx
+                  linarith
+                · change (v : UnitAddCircle) =
+                    (y : UnitAddCircle) + ((1 / 2 : ℝ) : UnitAddCircle)
+                  rw [← AddCircle.coe_add]
+                  apply t95J03_torus_bridge_aux_coe_eq_of_int (n := -k - 1)
+                  push_cast at hy
+                  push_cast
+                  linarith
+            · rintro (h | h)
+              · rw [← t95J03_klein_doubleCover_aux_planeMap_aux_f_coe,
+                  ← t95J03_klein_doubleCover_aux_planeMap_aux_f_coe]
+                exact congrArg t95J03_klein_doubleCover_aux_planeMap_aux_f h.symm
+              · have h1 := congrArg Prod.fst h
+                have h2 := congrArg Prod.snd h
+                change (u : UnitAddCircle) = (-x : UnitAddCircle) at h1
+                change (v : UnitAddCircle) =
+                  (y : UnitAddCircle) + ((1 / 2 : ℝ) : UnitAddCircle) at h2
+                obtain ⟨m, hm⟩ := t95J03_torus_bridge_aux_int_of_coe_eq h1
+                rw [← AddCircle.coe_add] at h2
+                obtain ⟨k, hk⟩ := t95J03_torus_bridge_aux_int_of_coe_eq h2
+                apply (t95J03_klein_doubleCover_aux_planeMap_aux_raw_eq
+                  (x, y) (u, v)).2
+                refine ⟨m, -2 * k - 1, ?_, ?_⟩
+                · push_cast; linarith
+                · have ha : -2 * k - 1 = 2 * (-k - 1) + 1 := by ring
+                  rw [ha, t95J03_klein_doubleCover_aux_planeMap_aux_action_odd]
+                  simp
+                  linarith
 
 /-- **Leaf S6c (split 2026-10-18).**  A continuous surjection from a compact
 space onto a Hausdorff space, whose fibres are the `τ`-orbits, induces a
