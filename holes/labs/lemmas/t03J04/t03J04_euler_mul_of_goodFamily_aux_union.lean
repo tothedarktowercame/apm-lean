@@ -1146,7 +1146,55 @@ theorem t03J04_euler_mul_of_goodFamily_aux_union {X : Type} [TopologicalSpace X]
     (ha : HasEulerCharacteristic V a) (hb : HasEulerCharacteristic S b)
     (hc : HasEulerCharacteristic ↥(V ∩ S) c) :
     HasEulerCharacteristic ↥(V ∪ S) (a + b - c) := by
-  sorry
+  let Y := ↥(V ∪ S)
+  let A : Set Y := Subtype.val ⁻¹' V
+  let B : Set Y := Subtype.val ⁻¹' S
+  have hA : IsOpen A := hV.preimage continuous_subtype_val
+  have hB : IsOpen B := hS.preimage continuous_subtype_val
+  have hcov : A ∪ B = Set.univ := by
+    ext x
+    simp only [A, B, Set.mem_union, Set.mem_preimage, Set.mem_univ, iff_true]
+    exact x.2
+  let eA : A ≃ₜ V :=
+    { toFun := fun x => ⟨x.1.1, x.2⟩
+      invFun := fun x => ⟨⟨x.1, Or.inl x.2⟩, x.2⟩
+      left_inv := fun x => by rfl
+      right_inv := fun x => by rfl
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.comp continuous_subtype_val
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val }
+  let eB : B ≃ₜ S :=
+    { toFun := fun x => ⟨x.1.1, x.2⟩
+      invFun := fun x => ⟨⟨x.1, Or.inr x.2⟩, x.2⟩
+      left_inv := fun x => by rfl
+      right_inv := fun x => by rfl
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.comp continuous_subtype_val
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val }
+  let eI : ↥(A ∩ B) ≃ₜ ↥(V ∩ S) :=
+    { toFun := fun x => ⟨x.1.1, x.2.1, x.2.2⟩
+      invFun := fun x => ⟨⟨x.1, Or.inl x.2.1⟩, x.2.1, x.2.2⟩
+      left_inv := fun x => by rfl
+      right_inv := fun x => by rfl
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val.comp continuous_subtype_val
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        apply Continuous.subtype_mk
+        exact continuous_subtype_val }
+  exact t03J04_hasEuler_mayerVietoris A B hA hB hcov
+    (t03J04_hasEuler_of_homotopyEquiv eA.toHomotopyEquiv ha)
+    (t03J04_hasEuler_of_homotopyEquiv eB.toHomotopyEquiv hb)
+    (t03J04_hasEuler_of_homotopyEquiv eI.toHomotopyEquiv hc)
 -- END SEAT AREA
 
 /-- LEAF C2d-ind (split 2026-10-18).  Induction principle over a finite good
