@@ -2559,6 +2559,68 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b
 derivative `h(a,b) + ∫∫ (K' + z K'') h` at `a`.  First term: FTC in `s`.  Second:
 the boundary term at `s = a` vanishes by the factor `(a - s)`, and Leibniz under
 the integrals gives `K' + z K''`.  Oriented intervals: `a`, `b` of any sign. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_ftc
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f) (a b : ℝ) :
+    HasDerivAt
+      (fun x : ℝ ↦ ∫ s in (0 : ℝ)..x,
+        apm_m98J02_characteristicSource f s b)
+      (apm_m98J02_characteristicSource f a b) a := by
+  have hc :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_source_continuous f hf
+  have hs : Continuous (fun s : ℝ ↦ apm_m98J02_characteristicSource f s b) := by
+    simpa [Function.uncurry] using hc.comp
+      (continuous_id.prodMk (continuous_const : Continuous (fun _ : ℝ ↦ b)))
+  exact intervalIntegral.integral_hasDerivAt_right (hs.intervalIntegrable _ _)
+    hs.aestronglyMeasurable.stronglyMeasurableAtFilter hs.continuousAt
+
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_pointwise
+    (f : apm_m98J02_E → ℝ)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (a b s t : ℝ) :
+    HasDerivAt
+      (fun x : ℝ ↦
+        (x - s) * deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) *
+          apm_m98J02_characteristicSource f s t)
+      ((deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) +
+          ((a - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+            ((a - s) * (b - t))) *
+        apm_m98J02_characteristicSource f s t) a := by
+  have h1 :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_kernel_deriv2
+      hK ((a - s) * (b - t))
+  have hz : HasDerivAt (fun x : ℝ ↦ (x - s) * (b - t)) (b - t) a := by
+    convert ((hasDerivAt_id a).sub_const s).mul_const (b - t) using 1 <;> ring
+  have hc := ((hasDerivAt_id a).sub_const s).mul
+    (h1.comp a hz) |>.mul_const (apm_m98J02_characteristicSource f s t)
+  convert hc using 1 <;>
+    simp only [Function.comp_apply, id_eq, one_mul] <;> ring_nf
+
+/-- Leibniz rule with a variable upper limit and an `x`-dependent integrand:
+`d/dx ∫_l^x g(x,s) ds = g(a,a) + ∫_l^a ∂_x g(a,s) ds` at `a`.  Oriented intervals. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_varlimit
+    (g d : ℝ → ℝ → ℝ) (l a : ℝ)
+    (hg : Continuous (Function.uncurry g))
+    (hd : Continuous (Function.uncurry d))
+    (hder : ∀ x s, HasDerivAt (fun z ↦ g z s) (d x s) x) :
+    HasDerivAt (fun x ↦ ∫ s in l..x, g x s) (g a a + ∫ s in l..a, d a s) a := by
+  sorry
+
+/-- Differentiation in `x` under the inner `t`-integral (fixed interval `[0, b]`),
+with the pointwise derivative from `_aux_pointwise`. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_inner
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) (b x s : ℝ) :
+    HasDerivAt
+      (fun z : ℝ ↦ ∫ t in (0 : ℝ)..b,
+        (z - s) * deriv apm_m98J02_riemannKernel ((z - s) * (b - t)) *
+          apm_m98J02_characteristicSource f s t)
+      (∫ t in (0 : ℝ)..b,
+        (deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) +
+            ((x - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+              ((x - s) * (b - t))) *
+          apm_m98J02_characteristicSource f s t) x := by
+  sorry
+
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) :
@@ -2576,6 +2638,7 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_sli
                 deriv (deriv apm_m98J02_riemannKernel)
                   ((a - s) * (b - t))) *
               apm_m98J02_characteristicSource f s t) a := by
+  intro a b
   sorry
 
 /-- `∂_a` of `∂_b G`: the function is `∂_b G` (by `_aux_partial_b`), which is `C¹`
