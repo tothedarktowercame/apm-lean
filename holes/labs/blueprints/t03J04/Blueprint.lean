@@ -740,7 +740,42 @@ theorem t03J04_hasEuler_prod_fin (U : Type) [TopologicalSpace U] (k : ℕ) {c : 
 theorem t03J04_isKSheeted_restrictPreimage {E B : Type} [TopologicalSpace E]
     [TopologicalSpace B] {p : E → B} {k : ℕ} (hp : IsKSheetedCover p k) (W : Set B) :
     IsKSheetedCover (W.restrictPreimage p) k := by
-  sorry
+  refine ⟨(hp.isCoveringMap.isCoveringMapOn.mono (Set.subset_univ W)).isCoveringMap_restrictPreimage,
+    ?_, ?_⟩
+  · intro b
+    let e : {x : p ⁻¹' W // W.restrictPreimage p x = b} ≃
+        {x : E // p x = b.1} :=
+      { toFun := fun x => ⟨x.1.1, congrArg Subtype.val x.2⟩
+        invFun := fun x => ⟨⟨x.1, by
+          show p x.1 ∈ W
+          rw [x.2]
+          exact b.2⟩, Subtype.ext x.2⟩
+        left_inv := fun x => by
+          apply Subtype.ext
+          apply Subtype.ext
+          rfl
+        right_inv := fun x => by
+          apply Subtype.ext
+          rfl }
+    letI := hp.finite_fiber b.1
+    exact Finite.of_injective e e.injective
+  · intro b
+    let e : {x : p ⁻¹' W // W.restrictPreimage p x = b} ≃
+        {x : E // p x = b.1} :=
+      { toFun := fun x => ⟨x.1.1, congrArg Subtype.val x.2⟩
+        invFun := fun x => ⟨⟨x.1, by
+          show p x.1 ∈ W
+          rw [x.2]
+          exact b.2⟩, Subtype.ext x.2⟩
+        left_inv := fun x => by
+          apply Subtype.ext
+          apply Subtype.ext
+          rfl
+        right_inv := fun x => by
+          apply Subtype.ext
+          rfl }
+    rw [Nat.card_congr e]
+    exact hp.card_fiber b.1
 
 /-- LEAF C2d (layer 3: B1, B2, B4, C2a, C2b, C2c).  Euler characteristic is
 multiplicative for a `k`-sheeted cover of a base with a finite good cover.
