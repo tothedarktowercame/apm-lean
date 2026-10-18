@@ -121,7 +121,28 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_good_loops
       Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl y))
     {z : X} (hz : z ∈ U) (γ : Path z z) (hγ : range γ ⊆ U) :
     Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl z) := by
-  sorry
+  obtain ⟨δ, hδ⟩ := hU.joinedIn y hyU z hz
+  have hrange : range ((δ.trans γ).trans δ.symm) ⊆ U := by
+    rw [Path.trans_range, Path.trans_range, Path.symm_range]
+    have hδ' : range δ ⊆ U := by
+      rintro w ⟨t, rfl⟩
+      exact hδ t
+    exact union_subset (union_subset hδ' hγ) hδ'
+  have hloop := htriv ((δ.trans γ).trans δ.symm) hrange
+  have hcancel := congrArg
+    (fun q : Path.Homotopic.Quotient y y ↦
+      (Path.Homotopic.Quotient.mk δ).symm.trans q |>.trans
+      (Path.Homotopic.Quotient.mk δ)) hloop
+  simp only [Path.Homotopic.Quotient.mk_trans,
+    Path.Homotopic.Quotient.mk_symm,
+    Path.Homotopic.Quotient.mk_refl] at hcancel
+  simp only [Path.Homotopic.Quotient.trans_assoc,
+    Path.Homotopic.Quotient.symm_trans,
+    Path.Homotopic.Quotient.trans_refl] at hcancel
+  rw [← Path.Homotopic.Quotient.trans_assoc,
+    Path.Homotopic.Quotient.symm_trans,
+    Path.Homotopic.Quotient.refl_trans] at hcancel
+  simpa only [Path.Homotopic.Quotient.mk_refl] using hcancel
 
 /-- A sheet over a good `U`: the endpoint map is a homeomorphism from the
 path-neighbourhood `basedPathNbhd U a` onto `U`. -/
