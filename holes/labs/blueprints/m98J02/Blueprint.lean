@@ -2131,6 +2131,49 @@ theorem apm_m98J02_riemannKernel_spec :
 
 /-- Differentiating the oriented Goursat integral twice gives the transformed
 equation.  The fixed-square reparametrization supplies its `C²` regularity. -/
+lemma apm_m98J02_goursat_spec_aux_source_contDiff
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f) :
+    ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+      apm_m98J02_characteristicSource f (p 0) (p 1)) := by
+  unfold apm_m98J02_characteristicSource apm_m98J02_characteristicPoint
+  have hvec : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+      ![(p 0 + 2 * p 1) / 3, p 1]) := by
+    rw [contDiff_pi]
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  have hpoint : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+      WithLp.toLp 2 ![(p 0 + 2 * p 1) / 3, p 1]) :=
+    PiLp.contDiff_toLp.comp hvec
+  exact ((((by fun_prop : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+    -p 0 / 9 + 2 * p 1 / 9))).exp.mul (hf.comp hpoint)).div_const 9)
+
+lemma apm_m98J02_goursat_spec_aux_regular
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) :
+    ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+      apm_m98J02_goursat apm_m98J02_riemannKernel
+        (apm_m98J02_characteristicSource f) (p 0) (p 1)) := by
+  sorry
+
+lemma apm_m98J02_goursat_spec_aux_pde
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1)
+    (hKode : ∀ z : ℝ,
+      z * deriv (deriv apm_m98J02_riemannKernel) z +
+        deriv apm_m98J02_riemannKernel z +
+        (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0) :
+    ∀ a b : ℝ,
+      apm_m98J02_partial 0 (apm_m98J02_partial 1
+          (fun p : apm_m98J02_E ↦
+            apm_m98J02_goursat apm_m98J02_riemannKernel
+              (apm_m98J02_characteristicSource f) (p 0) (p 1)))
+          (WithLp.toLp 2 ![a, b]) +
+        (2 / 81 : ℝ) * apm_m98J02_goursat apm_m98J02_riemannKernel
+          (apm_m98J02_characteristicSource f) a b =
+        apm_m98J02_characteristicSource f a b := by
+  sorry
+
 theorem apm_m98J02_goursat_spec
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
@@ -2147,7 +2190,10 @@ theorem apm_m98J02_goursat_spec
         apm_m98J02_partial 0 (apm_m98J02_partial 1
             (fun p : apm_m98J02_E ↦ v (p 0) (p 1))) (WithLp.toLp 2 ![a, b]) +
           (2 / 81 : ℝ) * v a b = apm_m98J02_characteristicSource f a b := by
-  sorry
+  refine ⟨apm_m98J02_goursat apm_m98J02_riemannKernel
+    (apm_m98J02_characteristicSource f), rfl, ?_, ?_⟩
+  · exact apm_m98J02_goursat_spec_aux_regular f hf hK
+  · exact apm_m98J02_goursat_spec_aux_pde f hf hK hK0 hKode
 
 lemma apm_m98J02_pullback_spec_aux_contDiff
     (v : ℝ → ℝ → ℝ)
