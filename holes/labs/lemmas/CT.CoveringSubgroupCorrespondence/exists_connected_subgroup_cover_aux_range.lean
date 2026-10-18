@@ -431,6 +431,50 @@ theorem exists_connected_subgroup_cover_aux_pathConnected
 covering property) to the truncation path, which ends at `[⟨x, [γ]⟩]`; this is
 the basepoint exactly when `[γ] ∈ H`. -/
 -- BEGIN SEAT AREA
+theorem exists_connected_subgroup_cover_aux_range_aux_mem_range_iff_monodromy
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    (p : E → B) (hp : IsCoveringMap p) (e : E) (b : B) (h : p e = b)
+    (g : FundamentalGroup B b) :
+    g ∈ (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ h).range ↔
+      hp.monodromy (FundamentalGroup.toPath g) ⟨e, h⟩ = ⟨e, h⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    obtain ⟨δ, rfl⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath a)
+    rw [FundamentalGroup.mapOfEq_apply]
+    apply Subtype.ext
+    change hp.liftPath ((δ.map hp.continuous).cast h.symm h.symm) e
+      (by simpa using h.symm) 1 = e
+    have hlift : (fun t ↦ δ t) =
+        hp.liftPath ((δ.map hp.continuous).cast h.symm h.symm) e
+          (by simpa using h.symm) := by
+      apply (hp.eq_liftPath_iff _).mpr
+      refine ⟨δ.continuous, ?_, δ.source⟩
+      funext t
+      rfl
+    rw [← hlift]
+    exact δ.target
+  · intro hg
+    obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath g)
+    let Δ := hp.liftPath γ e (by simpa using h.symm)
+    have hΔ0 : Δ 0 = e := hp.liftPath_zero _ _ _
+    have hΔ1 : Δ 1 = e := by
+      have hm : hp.monodromy (Path.Homotopic.Quotient.mk γ) ⟨e, h⟩ = ⟨e, h⟩ := by
+        rw [hγ]
+        exact hg
+      exact congrArg Subtype.val hm
+    let δ : Path e e := ⟨Δ, hΔ0, hΔ1⟩
+    refine ⟨FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk δ), ?_⟩
+    rw [FundamentalGroup.mapOfEq_apply]
+    calc
+      _ = FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk γ) := by
+        apply Path.Homotopic.Quotient.eq.mpr
+        convert Path.Homotopic.refl γ using 1
+        ext t
+        exact congr_fun (hp.liftPath_lifts γ e (by simpa using h.symm)) t
+      _ = g := hγ
+
 theorem exists_connected_subgroup_cover_aux_range
     {x : X} (H : Subgroup (FundamentalGroup X x))
     (hp : IsCoveringMap (BasedCover.proj H))
@@ -440,7 +484,56 @@ theorem exists_connected_subgroup_cover_aux_range
     (FundamentalGroup.mapOfEq ⟨BasedCover.proj H, hp.continuous⟩
       (show (⟨BasedCover.proj H, hp.continuous⟩ : C(BasedCover H, X))
         (BasedCover.basepoint H) = x from rfl)).range = H := by
-  sorry
+  ext g
+  rw [exists_connected_subgroup_cover_aux_range_aux_mem_range_iff_monodromy
+    (BasedCover.proj H) hp (BasedCover.basepoint H) x rfl g]
+  obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+    (FundamentalGroup.toPath g)
+  obtain ⟨Γ, hΓ⟩ := hlift x γ
+  have hcanonical : (fun t ↦ Γ t) =
+      hp.liftPath γ (BasedCover.basepoint H) (by exact γ.source.trans rfl) := by
+    apply (hp.eq_liftPath_iff _).mpr
+    refine ⟨Γ.continuous, ?_, Γ.source⟩
+    funext t
+    exact hΓ t
+  have hend :
+      (hp.monodromy (FundamentalGroup.toPath g) ⟨BasedCover.basepoint H, rfl⟩ :
+        BasedCover H) = BasedCover.mk H
+          ⟨x, Path.Homotopic.Quotient.mk γ⟩ := by
+    rw [← hγ]
+    change hp.liftPath γ (BasedCover.basepoint H) _ 1 = _
+    rw [← hcanonical]
+    exact Γ.target
+  rw [Subtype.ext_iff, hend]
+  change Quotient.mk'' (⟨x, Path.Homotopic.Quotient.mk γ⟩ : BasedPaths x) =
+      Quotient.mk'' (⟨x, Path.Homotopic.Quotient.refl x⟩ : BasedPaths x) ↔ _
+  rw [Quotient.eq'']
+  change (∃ a : H,
+      (⟨x, (FundamentalGroup.toPath
+        ((a : FundamentalGroup X x)⁻¹)).trans
+          (Path.Homotopic.Quotient.refl x)⟩ : BasedPaths x) =
+      (⟨x, Path.Homotopic.Quotient.mk γ⟩ : BasedPaths x)) ↔ _
+  constructor
+  · rintro ⟨a, ha⟩
+    have hpq : (FundamentalGroup.toPath ((a : FundamentalGroup X x)⁻¹)).trans
+        (Path.Homotopic.Quotient.refl x) = Path.Homotopic.Quotient.mk γ :=
+      eq_of_heq (Sigma.ext_iff.mp ha).2
+    have hga : (a : FundamentalGroup X x)⁻¹ = g := by
+      calc
+        (a : FundamentalGroup X x)⁻¹ =
+            FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk γ) := by
+          simpa using congrArg FundamentalGroup.fromPath hpq
+        _ = g := hγ
+    rw [← hga]
+    exact H.inv_mem a.property
+  · intro hg
+    refine ⟨⟨g⁻¹, H.inv_mem hg⟩, ?_⟩
+    apply Sigma.ext
+    · rfl
+    rw [heq_iff_eq]
+    change (FundamentalGroup.toPath ((g⁻¹)⁻¹)).trans
+      (Path.Homotopic.Quotient.refl x) = Path.Homotopic.Quotient.mk γ
+    simpa using hγ.symm
 -- END SEAT AREA
 
 /-- Generic: a covering map is injective on `π₁`
