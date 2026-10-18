@@ -657,7 +657,30 @@ About 20–50 lines. -/
 lemma t95J03_homeomorph_comp_isKSheeted {E X Y : Type*} [TopologicalSpace E]
     [TopologicalSpace X] [TopologicalSpace Y] {p : E → X} {k : ℕ}
     (hp : IsKSheetedCover p k) (ψ : X ≃ₜ Y) : IsKSheetedCover (ψ ∘ p) k := by
-  sorry
+  constructor
+  · exact hp.isCoveringMap.homeomorph_comp ψ
+  · intro y
+    have hfin : Finite {e : E // p e = ψ.symm y} := hp.finite_fiber _
+    have hequiv : {e : E // (ψ ∘ p) e = y} ≃ {e : E // p e = ψ.symm y} :=
+      { toFun := fun e => ⟨e.1, by
+          simpa using congrArg (⇑ψ.symm) e.property⟩
+        invFun := fun e => ⟨e.1, by
+          show ψ (p e) = y
+          rw [e.property, ψ.apply_symm_apply]⟩
+        left_inv := by intro e; simp
+        right_inv := by intro e; simp }
+    exact @Finite.of_equiv _ _ hfin hequiv.symm
+  intro y
+  have hfin : Finite {e : E // p e = ψ.symm y} := hp.finite_fiber _
+  have hequiv : {e : E // (ψ ∘ p) e = y} ≃ {e : E // p e = ψ.symm y} :=
+    { toFun := fun e => ⟨e.1, by
+        simpa using congrArg (⇑ψ.symm) e.property⟩
+      invFun := fun e => ⟨e.1, by
+        show ψ (p e) = y
+        rw [e.property, ψ.apply_symm_apply]⟩
+      left_inv := by intro e; simp
+      right_inv := by intro e; simp }
+  rw [Nat.card_congr hequiv, hp.card_fiber]
 
 /-- **Leaf C7.**  `m` disjoint copies of a `d`-sheeted cover form a
 `(d * m)`-sheeted cover.  Route: covering by
