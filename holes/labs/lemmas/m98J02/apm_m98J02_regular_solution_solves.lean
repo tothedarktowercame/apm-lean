@@ -2174,13 +2174,175 @@ theorem apm_m98J02_regularDistribution_of_continuous
 /-- Twice integrating by parts identifies the regular distribution of a
 classical `C²` solution with the encoded distributional solution. -/
 -- BEGIN SEAT AREA
+lemma apm_m98J02_regular_solution_solves_aux_ibp
+    (q : apm_m98J02_E → ℝ) (hq : ContDiff ℝ 1 q)
+    (i : Fin 2) (φ : apm_m98J02_Test) :
+    ∫ x, q x * apm_m98J02_partial i φ x =
+      - ∫ x, apm_m98J02_partial i q x * φ x := by
+  let v : apm_m98J02_E := EuclideanSpace.single i 1
+  have hφ : ContDiff ℝ 1 (φ : apm_m98J02_E → ℝ) := φ.contDiff.of_le (by simp)
+  have hq' : Continuous (fun x ↦ fderiv ℝ q x v) :=
+    (hq.continuous_fderiv one_ne_zero).clm_apply continuous_const
+  have hφ' : Continuous (fun x ↦ fderiv ℝ (φ : apm_m98J02_E → ℝ) x v) :=
+    (hφ.continuous_fderiv one_ne_zero).clm_apply continuous_const
+  have h1 : Integrable (fun x ↦ fderiv ℝ q x v * φ x) :=
+    (hq'.mul φ.contDiff.continuous).integrable_of_hasCompactSupport
+      φ.hasCompactSupport.mul_left
+  have h2 : Integrable (fun x ↦ q x * fderiv ℝ (φ : apm_m98J02_E → ℝ) x v) :=
+    (hq.continuous.mul hφ').integrable_of_hasCompactSupport
+      (φ.hasCompactSupport.fderiv_apply ℝ v).mul_left
+  have h3 : Integrable (fun x ↦ q x * φ x) :=
+    (hq.continuous.mul φ.contDiff.continuous).integrable_of_hasCompactSupport
+      φ.hasCompactSupport.mul_left
+  have h := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+    (f := q) (g := (φ : apm_m98J02_E → ℝ)) (v := v)
+    h1 h2 h3
+    (fun x _ ↦ hq.differentiable one_ne_zero x)
+    (fun x _ ↦ hφ.differentiable one_ne_zero x)
+  simpa [apm_m98J02_partial, v] using h
+
+lemma apm_m98J02_regular_solution_solves_aux_partial_contDiff
+    (g : apm_m98J02_E → ℝ) (hg : ContDiff ℝ 2 g) (i : Fin 2) :
+    ContDiff ℝ 1 (apm_m98J02_partial i g) := by
+  exact (hg.fderiv_right (by norm_num)).clm_apply contDiff_const
+
+lemma apm_m98J02_regular_solution_solves_aux_mixed_comm
+    (g : apm_m98J02_E → ℝ) (hg : ContDiff ℝ 2 g) (x : apm_m98J02_E) :
+    apm_m98J02_partial 1 (apm_m98J02_partial 0 g) x =
+      apm_m98J02_partial 0 (apm_m98J02_partial 1 g) x := by
+  have hfd : ContDiff ℝ 1 (fderiv ℝ g) := hg.fderiv_right (by norm_num)
+  have hd : DifferentiableAt ℝ (fderiv ℝ g) x :=
+    hfd.differentiable one_ne_zero x
+  unfold apm_m98J02_partial
+  rw [fderiv_clm_apply hd (differentiableAt_const _),
+    fderiv_clm_apply hd (differentiableAt_const _)]
+  simp [fderiv_const]
+  exact hg.contDiffAt.isSymmSndFDerivAt (by norm_num)
+    (EuclideanSpace.single 1 1) (EuclideanSpace.single 0 1)
+
 theorem apm_m98J02_regular_solution_solves
     (f g : apm_m98J02_E → ℝ) (w : apm_m98J02_Dist)
     (hg : ContDiff ℝ 2 g)
     (hT : ∀ p, apm_m98J02_classicalT g p = f p)
     (hw : apm_m98J02_representsFunction w g) :
     apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) := by
-  sorry
+  intro φ
+  refine ⟨apm_m98J02_formalAdjointTest φ, fun x ↦ by simp, ?_⟩
+  rw [hw]
+  have h00a :
+      (∫ x, g x * apm_m98J02_partial 0
+        (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x) =
+      - ∫ x, apm_m98J02_partial 0 g x *
+        apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ) x := by
+    simpa [apm_m98J02_partialTest_coe] using
+      (apm_m98J02_regular_solution_solves_aux_ibp g
+        (hg.of_le (by norm_num)) 0 (apm_m98J02_partialTest 0 φ))
+  have h00b := apm_m98J02_regular_solution_solves_aux_ibp
+    (apm_m98J02_partial 0 g)
+    (apm_m98J02_regular_solution_solves_aux_partial_contDiff g hg 0) 0 φ
+  have h1 := apm_m98J02_regular_solution_solves_aux_ibp g
+    (hg.of_le (by norm_num)) 1 φ
+  have h01a :
+      (∫ x, g x * apm_m98J02_partial 0
+        (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x) =
+      - ∫ x, apm_m98J02_partial 0 g x *
+        apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x := by
+    simpa [apm_m98J02_partialTest_coe] using
+      (apm_m98J02_regular_solution_solves_aux_ibp g
+        (hg.of_le (by norm_num)) 0 (apm_m98J02_partialTest 1 φ))
+  have h01b := apm_m98J02_regular_solution_solves_aux_ibp
+    (apm_m98J02_partial 0 g)
+    (apm_m98J02_regular_solution_solves_aux_partial_contDiff g hg 0) 1 φ
+  simp only [apm_m98J02_formalAdjointTest_apply,
+    apm_m98J02_formalAdjoint, apm_m98J02_classicalT]
+  have hexpand :
+      (∫ x, g x *
+        (2 * apm_m98J02_partial 0 (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x +
+          apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x +
+          3 * apm_m98J02_partial 0 (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x)) =
+      ∫ x, (2 * (g x * apm_m98J02_partial 0
+          (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x) +
+        g x * apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x) +
+        3 * (g x * apm_m98J02_partial 0
+          (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x) := by
+    apply integral_congr_ae
+    filter_upwards with x
+    ring
+  have j00 : Integrable (fun x ↦ g x * apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x) :=
+    (hg.continuous.mul
+      (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 0 φ)).contDiff.continuous)
+      |>.integrable_of_hasCompactSupport
+        (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 0 φ)).hasCompactSupport.mul_left
+  have j1 : Integrable (fun x ↦ g x * apm_m98J02_partial 1
+      (φ : apm_m98J02_E → ℝ) x) :=
+    (hg.continuous.mul (apm_m98J02_partialTest 1 φ).contDiff.continuous)
+      |>.integrable_of_hasCompactSupport
+        (apm_m98J02_partialTest 1 φ).hasCompactSupport.mul_left
+  have j01 : Integrable (fun x ↦ g x * apm_m98J02_partial 0
+      (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x) :=
+    (hg.continuous.mul
+      (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 1 φ)).contDiff.continuous)
+      |>.integrable_of_hasCompactSupport
+        (apm_m98J02_partialTest 0 (apm_m98J02_partialTest 1 φ)).hasCompactSupport.mul_left
+  rw [hexpand]
+  have hout : (∫ x, 2 * (g x * apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x) +
+      g x * apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x +
+      3 * (g x * apm_m98J02_partial 0
+        (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x)) =
+      (∫ x, 2 * (g x * apm_m98J02_partial 0
+        (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x) +
+        g x * apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x) +
+      ∫ x, 3 * (g x * apm_m98J02_partial 0
+        (apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ)) x) := by
+    exact integral_add ((j00.const_mul 2).add j1) (j01.const_mul 3)
+  have hin : (∫ x, 2 * (g x * apm_m98J02_partial 0
+      (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x) +
+      g x * apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x) =
+      (∫ x, 2 * (g x * apm_m98J02_partial 0
+        (apm_m98J02_partial 0 (φ : apm_m98J02_E → ℝ)) x)) +
+      ∫ x, g x * apm_m98J02_partial 1 (φ : apm_m98J02_E → ℝ) x := by
+    exact integral_add (j00.const_mul 2) j1
+  rw [hout, hin, integral_const_mul, integral_const_mul,
+    h00a, h00b, h1, h01a, h01b]
+  · simp only [neg_neg]
+    have hI00 : Integrable (fun x ↦
+        apm_m98J02_partial 0 (apm_m98J02_partial 0 g) x * φ x) :=
+      (((apm_m98J02_regular_solution_solves_aux_partial_contDiff g hg 0).continuous_fderiv
+          one_ne_zero).clm_apply continuous_const).mul φ.contDiff.continuous |>
+        fun h ↦ h.integrable_of_hasCompactSupport φ.hasCompactSupport.mul_left
+    have hI1 : Integrable (fun x ↦ apm_m98J02_partial 1 g x * φ x) :=
+      ((((hg.of_le (by norm_num)).continuous_fderiv one_ne_zero).clm_apply
+          continuous_const).mul φ.contDiff.continuous).integrable_of_hasCompactSupport
+        φ.hasCompactSupport.mul_left
+    have hI01 : Integrable (fun x ↦
+        apm_m98J02_partial 1 (apm_m98J02_partial 0 g) x * φ x) :=
+      (((apm_m98J02_regular_solution_solves_aux_partial_contDiff g hg 0).continuous_fderiv
+          one_ne_zero).clm_apply continuous_const).mul φ.contDiff.continuous |>
+        fun h ↦ h.integrable_of_hasCompactSupport φ.hasCompactSupport.mul_left
+    calc
+      _ = ∫ x, (2 * apm_m98J02_partial 0 (apm_m98J02_partial 0 g) x -
+            apm_m98J02_partial 1 g x +
+            3 * apm_m98J02_partial 1 (apm_m98J02_partial 0 g) x) * φ x := by
+          symm
+          rw [show (fun x ↦
+              (2 * apm_m98J02_partial 0 (apm_m98J02_partial 0 g) x -
+                apm_m98J02_partial 1 g x +
+                3 * apm_m98J02_partial 1 (apm_m98J02_partial 0 g) x) * φ x) =
+              (fun x ↦ 2 * (apm_m98J02_partial 0 (apm_m98J02_partial 0 g) x * φ x) +
+                -(apm_m98J02_partial 1 g x * φ x) +
+                3 * (apm_m98J02_partial 1 (apm_m98J02_partial 0 g) x * φ x)) by
+                funext x; ring]
+          have ho := integral_add ((hI00.const_mul 2).add hI1.neg) (hI01.const_mul 3)
+          have hi := integral_add (hI00.const_mul 2) hI1.neg
+          simp only [Pi.add_apply, Pi.neg_apply] at ho hi
+          rw [ho, hi, integral_const_mul, integral_neg, integral_const_mul]
+      _ = ∫ x, f x * φ x := by
+          apply integral_congr_ae
+          filter_upwards with x
+          rw [← hT x, apm_m98J02_classicalT,
+            apm_m98J02_regular_solution_solves_aux_mixed_comm g hg x]
 -- END SEAT AREA
 
 /-- Part (d) for every `f ∈ C²(ℝ²)`: a `C²` regular distributional solution
