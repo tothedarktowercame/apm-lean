@@ -66,10 +66,91 @@ the orbit of `e` is `ComponentFiber p e` (a path in `E` from `e` to `e'`
 projects to a loop whose monodromy sends `e` to `e'` by uniqueness of lifts;
 conversely a monodromy image is the endpoint of a lift, so it is joined to
 `e`).  Orbit–stabilizer, `Subgroup.index_eq_card`.  About 60–120 lines. -/
+/- Monodromy action of `π₁(X, p e)` on the fibre over `p e` (no
+connectedness of `E` needed). -/
+@[reducible]
+noncomputable def t95J03_componentFiberCard_eq_index_auxAction {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    (e : E) :
+    MulAction (FundamentalGroup X (p e)) (p ⁻¹' {p e}) where
+  smul γ e' := cov.monodromy γ e'
+  one_smul e' := by simpa using congrFun cov.monodromy_refl e'
+  mul_smul γ γ' e' := cov.monodromy_trans_apply γ' γ e'
+
+/-- The stabilizer of `e` under monodromy is the image of `π₁(E, e)`. -/
+theorem t95J03_componentFiberCard_eq_index_aux_stab {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p) (e : E) :
+    {γ : FundamentalGroup X (p e) | cov.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩} =
+      (coveringInducedFundamentalGroupMap cov e).range := by
+  ext γ
+  constructor
+  · intro hγ
+    change cov.monodromy γ ⟨e, rfl⟩ = ⟨e, rfl⟩ at hγ
+    obtain ⟨γ, rfl⟩ := Path.Homotopic.Quotient.mk_surjective γ
+    let lift := cov.liftPath γ e (by simp)
+    have hend : lift 1 = e := by
+      simpa [IsCoveringMap.monodromy, lift] using congrArg Subtype.val hγ
+    let δ : Path e e := ⟨lift, cov.liftPath_zero _ _ _, hend⟩
+    refine ⟨FundamentalGroup.fromPath (.mk δ), ?_⟩
+    change FundamentalGroup.map ⟨p, cov.continuous⟩ e
+      (FundamentalGroup.fromPath (.mk δ)) = _
+    rw [FundamentalGroup.map_apply, ← Path.Homotopic.Quotient.mk_map]
+    congr 1
+    ext t
+    exact congrFun (cov.liftPath_lifts γ e (by simp)) t
+  · rintro ⟨δ, rfl⟩
+    change cov.monodromy (FundamentalGroup.map ⟨p, cov.continuous⟩ e δ) ⟨e, rfl⟩ = ⟨e, rfl⟩
+    exact cov.monodromy_map δ
+
+/-- The monodromy orbit of `e` is exactly the fibre of the path component
+of `e`. -/
+theorem t95J03_componentFiberCard_eq_index_aux_orbit {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p) (e : E) :
+    {x : p ⁻¹' {p e} | ∃ γ : FundamentalGroup X (p e), cov.monodromy γ ⟨e, rfl⟩ = x} =
+      {x : p ⁻¹' {p e} | Joined e (x : E)} := by
+  ext x
+  simp only [Set.mem_setOf_eq]
+  constructor
+  · rintro ⟨γ, rfl⟩
+    induction γ using Path.Homotopic.Quotient.ind with
+    | mk γ =>
+      exact ⟨⟨cov.liftPath γ e (by simp), cov.liftPath_zero γ e (by simp), rfl⟩⟩
+  · intro hj
+    have he' : p ↑(x : E) = p e := x.2
+    let δ : Path e ↑(x : E) := hj.somePath
+    let δp : Path.Homotopic.Quotient (p e) (p e) :=
+      ((Path.Homotopic.Quotient.mk δ).map ⟨p, cov.continuous⟩).cast
+        rfl he'.symm
+    exact ⟨FundamentalGroup.fromPath δp, by
+      change cov.monodromy δp ⟨e, rfl⟩ = x
+      apply Subtype.ext
+      simpa [δp, IsCoveringMap.monodromy, Path.Homotopic.Quotient.cast] using
+        congrArg Subtype.val (cov.monodromy_map (.mk δ))⟩
+
 lemma t95J03_componentFiberCard_eq_index {E X : Type*} [TopologicalSpace E]
     [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p) (e : E) :
     Nat.card (ComponentFiber p e) = (coveringInducedFundamentalGroupMap cov e).range.index := by
-  sorry
+  letI := t95J03_componentFiberCard_eq_index_auxAction cov e
+  have hstab : MulAction.stabilizer (FundamentalGroup X (p e))
+      (⟨e, rfl⟩ : p ⁻¹' {p e}) = (coveringInducedFundamentalGroupMap cov e).range := by
+    ext γ
+    simp only [MulAction.mem_stabilizer_iff]
+    exact (Set.ext_iff.mp (t95J03_componentFiberCard_eq_index_aux_stab cov e)) γ
+  have horbit : MulAction.orbit (FundamentalGroup X (p e))
+      (⟨e, rfl⟩ : p ⁻¹' {p e}) = {x : p ⁻¹' {p e} | Joined e (x : E)} := by
+    ext x
+    simp only [Set.mem_setOf_eq]
+    exact (Set.ext_iff.mp (t95J03_componentFiberCard_eq_index_aux_orbit cov e)) x
+  have orbitEquiv :
+      MulAction.orbit (FundamentalGroup X (p e)) (⟨e, rfl⟩ : p ⁻¹' {p e}) ≃
+        FundamentalGroup X (p e) ⧸ (coveringInducedFundamentalGroupMap cov e).range :=
+    (MulAction.orbitEquivQuotientStabilizer _ _).trans (Subgroup.quotientEquivOfEq hstab)
+  have e2 : {x : p ⁻¹' {p e} // Joined e (x : E)} ≃
+      {x : E // x ∈ p ⁻¹' {p e} ∧ Joined e x} :=
+    Equiv.subtypeSubtypeEquivSubtypeInter _ _
+  rw [Subgroup.index_eq_card]
+  exact Nat.card_congr
+    (orbitEquiv.symm.trans ((Equiv.setCongr horbit).trans e2)).symm
 
 /-- **Leaf C2.**  The number of sheets of a path component does not depend on
 the chosen point of the component.
