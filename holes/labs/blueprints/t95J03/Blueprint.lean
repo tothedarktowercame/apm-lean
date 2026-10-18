@@ -544,10 +544,94 @@ Route.  Partition the fibre over a point `y` by `Joined` (an equivalence
 relation); the class of `b` is `ComponentFiber q b` (same base point `q b = y`).
 `Finset.card_eq_sum_card_fiberwise` / `Setoid.IsPartition`; a sum of evens is
 even.  About 50–100 lines. -/
+-- Setoid on the fibre over y by `Joined`.  The relation argument is reversed
+-- (`r a b := Joined b a`) so that `Quotient.eq` unfolds `mk x = mk b` into
+-- `Joined b x`, exactly the second component of `ComponentFiber q b`.
+def t95J03_even_sheets_aux_setoid {E Y : Type*} [TopologicalSpace E]
+    [TopologicalSpace Y] (q : E → Y) (y : Y) : Setoid {e : E // q e = y} where
+  r a b := Joined b.val a.val
+  iseqv := ⟨fun a => Joined.refl a.val, fun h => Joined.symm h,
+    fun h1 h2 => Joined.trans h2 h1⟩
+
+-- mk x = mk b unfolds to `Joined b x` (the reversed relation pays off here).
+lemma t95J03_even_sheets_aux_mk_eq {E Y : Type*} [TopologicalSpace E]
+    [TopologicalSpace Y] (q : E → Y) (y : Y) (a b : {e : E // q e = y}) :
+    Quotient.mk (t95J03_even_sheets_aux_setoid q y) a
+        = Quotient.mk (t95J03_even_sheets_aux_setoid q y) b ↔
+      Joined (b : E) (a : E) := by
+  constructor
+  · intro h; exact Quotient.eq.1 h
+  · intro h; exact Quotient.sound h
+
+-- A fibre-class of the setoid is a component fibre (as an equiv, for cards).
+def t95J03_even_sheets_aux_equiv {E Y : Type*} [TopologicalSpace E]
+    [TopologicalSpace Y] (q : E → Y) (y : Y) (b : {e : E // q e = y}) :
+    {x : {e : E // q e = y} // Quotient.mk (t95J03_even_sheets_aux_setoid q y) x
+        = Quotient.mk (t95J03_even_sheets_aux_setoid q y) b} ≃
+      ComponentFiber q (b : E) where
+  toFun x := by
+    refine ⟨x.1.1, ?_, ?_⟩
+    · rw [x.1.2]; exact b.2.symm
+    · exact (t95J03_even_sheets_aux_mk_eq q y x.1 b).1 x.2
+  invFun w := by
+    refine ⟨⟨w.1, ?_⟩, ?_⟩
+    · rw [w.2.1]; exact b.2
+    · exact (t95J03_even_sheets_aux_mk_eq q y _ b).2 w.2.2
+  left_inv x := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+  right_inv w := by
+    apply Subtype.ext
+    rfl
+
+-- Filter card equals the subtype card (instance-chained via `card_coe`).
+lemma t95J03_even_sheets_aux_filter_card {α : Type*} [Fintype α] (p : α → Prop)
+    [DecidablePred p] :
+    Finset.card (Finset.filter p (Finset.univ : Finset α))
+      = Nat.card {a : α // p a} := by
+  classical
+  have e : {a : α // p a} ≃
+      {x : α // x ∈ (Finset.univ.filter p : Finset α)} :=
+    Equiv.subtypeEquiv (Equiv.refl _) (fun x => by simp [Finset.mem_filter])
+  rw [Nat.card_congr e, Nat.card_eq_fintype_card, Fintype.card_coe]
+
+-- Each class of the partition has an even number of elements.
+lemma t95J03_even_sheets_aux_class_even {E Y : Type*} [TopologicalSpace E]
+    [TopologicalSpace Y] {q : E → Y} {y : Y} [Fintype {e : E // q e = y}]
+    (heven : ∀ e, Even (Nat.card (ComponentFiber q e))) (b : {e : E // q e = y}) :
+    Even (Nat.card {a : {e : E // q e = y} // Quotient.mk
+      (t95J03_even_sheets_aux_setoid q y) a
+        = Quotient.mk (t95J03_even_sheets_aux_setoid q y) b}) := by
+  rw [Nat.card_congr (t95J03_even_sheets_aux_equiv q y b)]
+  exact heven _
+
 lemma t95J03_even_sheets {E Y : Type*} [TopologicalSpace E] [TopologicalSpace Y]
     [Nonempty Y] {q : E → Y} {k : ℕ} (hq : IsKSheetedCover q k)
     (heven : ∀ e, Even (Nat.card (ComponentFiber q e))) : Even k := by
-  sorry
+  classical
+  obtain ⟨y⟩ := ‹Nonempty Y›
+  haveI : Finite {e : E // q e = y} := hq.finite_fiber y
+  haveI : Fintype {e : E // q e = y} := Fintype.ofFinite _
+  haveI := Classical.decEq (Quotient (t95J03_even_sheets_aux_setoid q y))
+  set f : {e : E // q e = y} → Quotient (t95J03_even_sheets_aux_setoid q y) :=
+    fun a => Quotient.mk (t95J03_even_sheets_aux_setoid q y) a with hf
+  have hsplit : (Finset.univ : Finset {e : E // q e = y}).card
+      = ∑ c ∈ Finset.image f Finset.univ,
+        Finset.card (Finset.filter (fun a => f a = c) Finset.univ) :=
+    Finset.card_eq_sum_card_image f Finset.univ
+  have heach : ∀ c ∈ Finset.image f Finset.univ,
+      Even (Finset.card (Finset.filter (fun a => f a = c) Finset.univ)) := by
+    intro c hc
+    obtain ⟨b, rfl⟩ := Quotient.exists_rep c
+    simp only [hf]
+    rw [t95J03_even_sheets_aux_filter_card]
+    exact t95J03_even_sheets_aux_class_even heven b
+  rw [← hq.card_fiber y, Nat.card_eq_fintype_card]
+  show Even (Finset.univ.card)
+  rw [hsplit]
+  exact even_iff_two_dvd.2
+    (Finset.dvd_sum fun c hc => even_iff_two_dvd.1 (heach c hc))
 
 /-- **Leaf C5.**  Precomposing with a homeomorphism keeps a `k`-sheeted cover.
 Route: `IsCoveringMap.comp_homeomorph`-style (or local trivializations
