@@ -807,7 +807,92 @@ theorem t03J04_trivial_over_contractible {E B : Type} [TopologicalSpace E]
     [TopologicalSpace B] [LocPathConnectedSpace B] {p : E → B} {k : ℕ}
     (hp : IsKSheetedCover p k) (U : Set B) (hU : IsOpen U) [ContractibleSpace U] :
     Nonempty (↥(p ⁻¹' U) ≃ₜ U × Fin k) := by
-  sorry
+  classical
+  let s : C(U, B) := ⟨Subtype.val, continuous_subtype_val⟩
+  let L := CoveringLiftRestriction.Lifts p s
+  letI : SimplyConnectedSpace U := SimplyConnectedSpace.ofContractible U
+  letI : LocPathConnectedSpace U := hU.locPathConnectedSpace
+  letI : Finite L := by
+    let u : U := Classical.arbitrary U
+    letI : Finite {e : E // p e = s u} := hp.finite_fiber (s u)
+    exact Finite.of_injective (CoveringLiftRestriction.evaluate s u)
+      (CoveringLiftRestriction.evaluate_bijective hp.isCoveringMap s u).1
+  letI : TopologicalSpace L := ⊥
+  letI : DiscreteTopology L := ⟨rfl⟩
+  let F : U × L → ↥(p ⁻¹' U) := fun z =>
+    ⟨z.2.1 z.1, by
+      change p (z.2.1 z.1) ∈ U
+      change (p ∘ z.2.1) z.1 ∈ U
+      rw [congrFun z.2.2 z.1]
+      exact z.1.property⟩
+  have hFcont : Continuous F := by
+    rw [continuous_prod_of_discrete_right]
+    intro l
+    exact l.1.continuous.subtype_mk _
+  have hFbij : Function.Bijective F := by
+    constructor
+    · rintro ⟨u, l⟩ ⟨v, m⟩ h
+      have huv : u = v := by
+        apply Subtype.ext
+        have hp_eq := congrArg (fun e : ↥(p ⁻¹' U) => p e.1) h
+        change p (l.1 u) = p (m.1 v) at hp_eq
+        change (p ∘ l.1) u = (p ∘ m.1) v at hp_eq
+        rw [congrFun l.2 u, congrFun m.2 v] at hp_eq
+        exact hp_eq
+      subst v
+      have hlm : l = m := by
+        apply (CoveringLiftRestriction.evaluate_bijective hp.isCoveringMap s u).1
+        apply Subtype.ext
+        change l.1 u = m.1 u
+        exact congrArg Subtype.val h
+      simp [hlm]
+    · intro e
+      let u : U := ⟨p e.1, e.2⟩
+      let ee : {x : E // p x = s u} := ⟨e.1, rfl⟩
+      obtain ⟨l, hl⟩ :=
+        (CoveringLiftRestriction.evaluate_bijective hp.isCoveringMap s u).2 ee
+      refine ⟨(u, l), ?_⟩
+      apply Subtype.ext
+      change l.1 u = e.1
+      exact congrArg Subtype.val hl
+  have hFopen : IsOpenMap F := by
+    intro O hO
+    rw [isOpen_iff_forall_mem_open]
+    rintro y ⟨x, hx, rfl⟩
+    let l : L := x.2
+    let i : U → U × L := fun u => (u, l)
+    let V : Set U := i ⁻¹' O
+    have hV : IsOpen V := hO.preimage (continuous_id.prodMk continuous_const)
+    have hlift : p ∘ l.1 = (fun u : U => (u : B)) := l.2
+    have hopen : IsOpenEmbedding l.1 :=
+      IsLocalHomeomorph.isOpenEmbedding_of_comp hp.isCoveringMap.isLocalHomeomorph
+        (by simpa [hlift] using hU.isOpenEmbedding_subtypeVal) l.1.continuous
+    let g : U → ↥(p ⁻¹' U) := fun u => F (u, l)
+    have hsub : IsOpenEmbedding (Subtype.val : ↥(p ⁻¹' U) → E) :=
+      (hU.preimage hp.isCoveringMap.continuous).isOpenEmbedding_subtypeVal
+    have hg : IsOpenEmbedding g := by
+      apply (IsOpenEmbedding.of_comp_iff g hsub).1
+      simpa [g, F] using hopen
+    refine ⟨g '' V, ?_, hg.isOpenMap V hV, ?_⟩
+    · rintro _ ⟨u, hu, rfl⟩
+      exact ⟨(u, l), hu, rfl⟩
+    · refine ⟨x.1, ?_, ?_⟩
+      · simpa [V, i, l] using hx
+      · simp [g, l]
+  let H : U × L ≃ₜ ↥(p ⁻¹' U) :=
+    (Equiv.ofBijective F hFbij).toHomeomorphOfContinuousOpen hFcont hFopen
+  have hcardL : Nat.card L = k := by
+    let u : U := Classical.arbitrary U
+    calc
+      Nat.card L = Nat.card {e : E // p e = s u} :=
+        CoveringLiftRestriction.card_lifts hp.isCoveringMap s u
+      _ = k := hp.card_fiber (s u)
+  letI : Fintype L := Fintype.ofFinite L
+  let q : L ≃ Fin k := Fintype.equivFinOfCardEq (by
+    simpa [Nat.card_eq_fintype_card] using hcardL)
+  exact ⟨H.symm.trans ((Homeomorph.refl U).prodCongr
+    { q with continuous_toFun := continuous_of_discreteTopology
+             continuous_invFun := continuous_of_discreteTopology })⟩
 
 /-- LEAF C2b (layer 2: B1, B4).  χ(U × Fin k) = k · χ(U): induct on `k`,
 splitting off `U × {last}` as a clopen piece (MV with empty overlap). -/
