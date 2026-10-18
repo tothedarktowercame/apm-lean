@@ -464,6 +464,29 @@ theorem apm_m95A03_homogenization
 global `C²` solution (solve on `[a, b]`, extend past the endpoints by second-order Taylor
 polynomials). -/
 -- BEGIN SEAT AREA
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_pos
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ∀ t ∈ Set.Icc a b, 0 < p t := by
+  intro t ht
+  exact lt_of_lt_of_le hp₀ (hp_lower t ht)
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_ne
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ∀ t ∈ Set.Icc a b, p t ≠ 0 := by
+  intro t ht
+  exact (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_pos
+    a b p₀ hp₀ p hp_lower t ht).ne'
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_inv_continuousOn
+    (a b p₀ : ℝ) (hp₀ : 0 < p₀) (p : ℝ → ℝ) (hp : Continuous p)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t) :
+    ContinuousOn (fun t => (p t)⁻¹) (Set.Icc a b) := by
+  exact hp.continuousOn.inv₀
+    (apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_p_ne
+      a b p₀ hp₀ p hp_lower)
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q : ℝ → ℝ) (hp : ContDiff ℝ 1 p) (hq : Continuous q)

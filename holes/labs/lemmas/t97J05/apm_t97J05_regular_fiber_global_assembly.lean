@@ -226,7 +226,57 @@ lemma apm_t97J05_regular_aux_flattens_fiber
 remaining missing Mathlib foundation: compatible subtype charts and the
 smooth embedded inclusion are constructed from flat local fiber models. -/
 -- BEGIN SEAT AREA
-lemma apm_t97J05_regular_fiber_global_assembly
+def apm_t97J05_regular_fiber_global_assembly_aux_line
+    (t : apm_t97J05_R1) : apm_t97J05_R3 :=
+  WithLp.toLp 2 ![(0 : ℝ), (1 : ℝ), t 0]
+
+lemma apm_t97J05_regular_fiber_global_assembly_aux_line_smooth :
+    ContDiff ℝ ∞ apm_t97J05_regular_fiber_global_assembly_aux_line := by
+  unfold apm_t97J05_regular_fiber_global_assembly_aux_line
+  rw [contDiff_piLp]
+  intro i
+  fin_cases i <;> simp <;> fun_prop
+
+lemma apm_t97J05_regular_fiber_global_assembly_aux_line_fderiv
+    (t h : apm_t97J05_R1) :
+    fderiv ℝ apm_t97J05_regular_fiber_global_assembly_aux_line t h =
+      WithLp.toLp 2 ![(0 : ℝ), (0 : ℝ), h 0] := by
+  let g : apm_t97J05_R1 → (Fin 3 → ℝ) := fun u => ![(0 : ℝ), (1 : ℝ), u 0]
+  have hg : DifferentiableAt ℝ g t := by
+    apply differentiableAt_pi.mpr
+    intro i
+    fin_cases i <;> dsimp [g] <;> fun_prop
+  have hc := (PiLp.hasFDerivAt_toLp (𝕜 := ℝ) 2 (g t)).comp t hg.hasFDerivAt
+  change fderiv ℝ (WithLp.toLp 2 ∘ g) t h = _
+  rw [hc.fderiv]
+  change WithLp.toLp 2 (fderiv ℝ g t h) = _
+  rw [fderiv_pi]
+  · ext i
+    fin_cases i
+    · simp [g]
+    · simp [g]
+    · dsimp [g]
+      let P : apm_t97J05_R1 →L[ℝ] ℝ := PiLp.proj 2 (fun _ : Fin 1 => ℝ) 0
+      have hd := P.hasFDerivAt (x := t)
+      exact congrArg (fun L : apm_t97J05_R1 →L[ℝ] ℝ => L h) hd.fderiv
+  · intro i
+    fin_cases i <;> dsimp [g] <;> fun_prop
+
+lemma apm_t97J05_regular_fiber_global_assembly_aux_line_fderiv_injective
+    (t : apm_t97J05_R1) :
+    Function.Injective
+      (fderiv ℝ apm_t97J05_regular_fiber_global_assembly_aux_line t) := by
+  intro h k heq
+  have h0 := congrArg (fun u : apm_t97J05_R3 => u 2) heq
+  rw [apm_t97J05_regular_fiber_global_assembly_aux_line_fderiv,
+    apm_t97J05_regular_fiber_global_assembly_aux_line_fderiv] at h0
+  ext i
+  fin_cases i
+  simpa using h0
+
+/-- Remaining atlas-construction step: restrict each flat ambient chart to the
+fiber, project to its third coordinate, and verify smooth compatibility. -/
+lemma apm_t97J05_regular_fiber_global_assembly_aux_atlas
     (hlocal : ∀ q ∈ apm_t97J05_W,
       ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
         q ∈ e.source ∧ ContDiffOn ℝ ∞ e e.source ∧
@@ -235,6 +285,16 @@ lemma apm_t97J05_regular_fiber_global_assembly
           z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1) :
     apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
   sorry
+
+lemma apm_t97J05_regular_fiber_global_assembly
+    (hlocal : ∀ q ∈ apm_t97J05_W,
+      ∃ e : OpenPartialHomeomorph apm_t97J05_R3 apm_t97J05_R3,
+        q ∈ e.source ∧ ContDiffOn ℝ ∞ e e.source ∧
+        ContDiffOn ℝ ∞ e.symm e.target ∧
+        ∀ z ∈ e.source,
+          z ∈ apm_t97J05_W ↔ e z 0 = 0 ∧ e z 1 = 1) :
+    apm_t97J05_IsSmoothSubmanifold apm_t97J05_W := by
+  exact apm_t97J05_regular_fiber_global_assembly_aux_atlas hlocal
 -- END SEAT AREA
 
 theorem apm_t97J05_regular_fiber_embedded :

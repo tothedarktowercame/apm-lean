@@ -693,13 +693,21 @@ theorem apm_t02a01_inner_conj_outer
 /-- The outer square, read side by side: bottom `A`, right `B`, top `A` reversed, left `B`
 reversed (opposite sides are identified in the torus). -/
 -- BEGIN SEAT AREA
+theorem apm_t02a01_outer_word_aux_balanced
+    (hr : Continuous apm_t02a01_radialPt)
+    (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
+    apm_t02a01_outerLoop hr =
+      ((apm_t02a01_loopA hA).trans (apm_t02a01_loopB hB)).trans
+        ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm) := by
+  sorry
 theorem apm_t02a01_outer_word
     (hr : Continuous apm_t02a01_radialPt)
     (hA : Continuous apm_t02a01_edgeA) (hB : Continuous apm_t02a01_edgeB) :
     (apm_t02a01_outerLoop hr).Homotopic
       ((apm_t02a01_loopA hA).trans ((apm_t02a01_loopB hB).trans
         ((apm_t02a01_loopA hA).symm.trans (apm_t02a01_loopB hB).symm))) := by
-  sorry
+  rw [apm_t02a01_outer_word_aux_balanced hr hA hB]
+  exact Path.Homotopic.trans_assoc _ _ _
 -- END SEAT AREA
 
 /-- Algebra: conjugate `A` and `B` by `δ` to get the commutator in `π₁(T, innerBase)`. -/

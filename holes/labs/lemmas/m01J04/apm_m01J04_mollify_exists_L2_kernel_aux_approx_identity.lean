@@ -2397,6 +2397,38 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_kernel
 kernels supported in small balls: `‖κ ⋆ f - f‖₂ ≤ sup_{|y| ≤ ρ} ‖τ_y f - f‖₂`
 (Minkowski's integral inequality) and translation is continuous in `L²`. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_integrable
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ : ∀ x, 0 ≤ κ x) (hint : (∫ x, κ x ∂volume) = 1) :
+    Integrable κ volume := by
+  exact integrable_of_integral_eq_one hint
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_L1
+    {d : ℕ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκ : ∀ x, 0 ≤ κ x) (hint : (∫ x, κ x ∂volume) = 1) :
+    eLpNorm κ 1 volume = 1 := by
+  have hi : Integrable κ volume :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_integrable κ hκ hint
+  rw [eLpNorm_one_eq_lintegral_enorm,
+    ← ofReal_integral_norm_eq_lintegral_enorm hi]
+  simp_rw [Real.norm_eq_abs, abs_of_nonneg (hκ _), hint, ENNReal.ofReal_one]
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_smooth_dense
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {a : ℝ} (ha : 0 < a) :
+    ∃ g : EuclideanSpace ℝ (Fin d) → E,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) g ∧
+      (eLpNorm (f - g) 2 volume).toReal ≤ a := by
+  obtain ⟨g, hgK, hgS, hg⟩ := hf.exist_eLpNorm_sub_le
+    (by norm_num : (2 : ℝ≥0∞) ≠ ⊤) (by norm_num : (1 : ℝ≥0∞) ≤ 2) ha
+  refine ⟨g, hgK, hgS, ?_⟩
+  calc
+    (eLpNorm (f - g) 2 volume).toReal
+        ≤ (ENNReal.ofReal a).toReal :=
+          ENNReal.toReal_mono ENNReal.ofReal_ne_top hg
+    _ = a := ENNReal.toReal_ofReal ha.le
+
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity
     {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
     (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)

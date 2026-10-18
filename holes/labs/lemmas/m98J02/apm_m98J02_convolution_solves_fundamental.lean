@@ -887,6 +887,14 @@ theorem apm_m98J02_regular_convolution_is_C2
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m98J02_convolution_solves_fundamental_aux_pairing
+    (w₀ : apm_m98J02_Dist)
+    (hw₀ : apm_m98J02_solvesT w₀ (fun φ ↦ φ 0))
+    (φ : apm_m98J02_Test) (x : apm_m98J02_E) :
+    apm_m98J02_formalAdjoint
+      (fun z ↦ w₀ (apm_m98J02_translateTest z φ)) x = φ x := by
+  sorry
+
 theorem apm_m98J02_convolution_solves_fundamental
     (f : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
     (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))

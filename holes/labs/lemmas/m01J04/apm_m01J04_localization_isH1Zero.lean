@@ -1913,14 +1913,40 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
 compact localization by `φ` is what must produce the zero-boundary
 approximation. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_localization_isH1Zero_aux_zero_fields
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (h : apm_m01J04_H1 d Ω) (hv : h.val = 0) (hg : h.grad = 0) :
+    apm_m01J04_isH1Zero h := by
+  refine ⟨fun _ ↦ h, ?_, ?_⟩
+  · intro n
+    rw [hv]
+    exact ⟨contDiff_const, HasCompactSupport.zero, by simp⟩
+  · simp [apm_m01J04_H1dist, hv, hg]
+
+lemma apm_m01J04_localization_isH1Zero_aux_zero_multiplier
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ)
+    (f : apm_m01J04_H1 d Ω) (hzero : φ = 0) :
+    apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
+  apply apm_m01J04_localization_isH1Zero_aux_zero_fields
+  · rw [apm_m01J04_H1mul_val, hzero]
+    funext x
+    simp
+  · rw [apm_m01J04_H1mul_grad, hzero]
+    funext x
+    ext i
+    simp
+
 lemma apm_m01J04_localization_isH1Zero
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)
     (hφ : apm_m01J04_isTestFunction Ω φ)
     (f : apm_m01J04_H1 d Ω) :
     apm_m01J04_isH1Zero (apm_m01J04_H1mul φ hφ f) := by
-  -- REOPENED 2026-10-13: proof relied on analytic (ω) test functions being 0; statement now at ∞, recheck.
-  sorry
+  by_cases hzero : φ = 0
+  · exact apm_m01J04_localization_isH1Zero_aux_zero_multiplier φ hφ f hzero
+  · sorry
 -- END SEAT AREA
 
 /-- Why this unblocks `apm_m01j04`: this is the missing bounded multiplier

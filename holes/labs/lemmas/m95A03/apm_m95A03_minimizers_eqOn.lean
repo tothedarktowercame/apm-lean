@@ -707,6 +707,30 @@ theorem apm_m95A03_exists_homogeneous_minimizer
     hp hq hf hp_lower hq_nonneg hu
 
 -- BEGIN SEAT AREA
+lemma apm_m95A03_minimizers_eqOn_aux_midpoint_mem
+    (a b : ℝ) (u v : ℝ → ℝ)
+    (hu : u ∈ apm_m95A03_admissible a b 0 0)
+    (hv : v ∈ apm_m95A03_admissible a b 0 0) :
+    (fun x => (u x + v x) / 2) ∈ apm_m95A03_admissible a b 0 0 := by
+  rcases hu with ⟨hu, hua, hub⟩
+  rcases hv with ⟨hv, hva, hvb⟩
+  refine ⟨hu.add hv |>.div_const 2, ?_, ?_⟩
+  · simp [hua, hva]
+  · simp [hub, hvb]
+
+lemma apm_m95A03_minimizers_eqOn_aux_deriv_sub
+    (u v : ℝ → ℝ) (hu : ContDiff ℝ 1 u) (hv : ContDiff ℝ 1 v) (x : ℝ) :
+    deriv (u - v) x = deriv u x - deriv v x := by
+  exact deriv_sub (hu.differentiable (by norm_num) x)
+    (hv.differentiable (by norm_num) x)
+
+lemma apm_m95A03_minimizers_eqOn_aux_deriv_midpoint
+    (u v : ℝ → ℝ) (hu : ContDiff ℝ 1 u) (hv : ContDiff ℝ 1 v) (x : ℝ) :
+    deriv (fun t => (u t + v t) / 2) x = (deriv u x + deriv v x) / 2 := by
+  simpa only [Pi.add_apply] using
+    (((hu.differentiable (by norm_num) x).hasDerivAt.add
+      (hv.differentiable (by norm_num) x).hasDerivAt).div_const 2).deriv
+
 theorem apm_m95A03_minimizers_eqOn
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f u v : ℝ → ℝ) (hp : ContDiff ℝ 1 p)

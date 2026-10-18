@@ -564,6 +564,43 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_exte
   exact (hpos t ht).ne'
 
 -- BEGIN SEAT AREA
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_ratio_deriv
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt (fun x => z x / p x)
+        (((q t * y t + g t) * p t - z t * deriv p t) / p t ^ 2)
+        (Set.Icc a b) t := by
+  intro t ht
+  have hpder : HasDerivWithinAt p (deriv p t) (Set.Icc a b) t :=
+    ((hp.differentiable (by norm_num)).differentiableAt.hasDerivAt).hasDerivWithinAt
+  convert (hsys t ht).2.div hpder (hpos t ht).ne' using 1 <;> ring
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core_aux_second_continuous
+    (a b : ℝ) (p q g y z : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hg : Continuous g)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (hsys : ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t) :
+    ContinuousOn (fun t =>
+      ((q t * y t + g t) * p t - z t * deriv p t) / p t ^ 2)
+      (Set.Icc a b) := by
+  have hy : ContinuousOn y (Set.Icc a b) :=
+    fun t ht => (hsys t ht).1.continuousWithinAt
+  have hz : ContinuousOn z (Set.Icc a b) :=
+    fun t ht => (hsys t ht).2.continuousWithinAt
+  have hpcon : ContinuousOn p (Set.Icc a b) := hp.continuous.continuousOn
+  have hdp : ContinuousOn (deriv p) (Set.Icc a b) :=
+    hp.continuous_deriv_one.continuousOn
+  have hn : ∀ t ∈ Set.Icc a b, p t ^ 2 ≠ 0 :=
+    fun t ht => pow_ne_zero 2 (hpos t ht).ne'
+  exact (((hq.continuousOn.mul hy).add hg.continuousOn).mul hpcon).sub
+    (hz.mul hdp) |>.div (hpcon.pow 2) hn
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_extend_aux_core
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
     (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)

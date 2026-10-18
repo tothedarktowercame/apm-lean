@@ -232,6 +232,206 @@ pairs are `{4j, 4j+2}` and `{4j+1, 4j+3}`, with opposite signs, so `WordRel`
 glues `t ↦ 1 - t` (`reverseParameter`).  That is the `tr` of `SurfaceRel true g`.
 Degenerate case `g = 0`: both relations are empty.  About 100–200 lines. -/
 -- BEGIN SEAT AREA
+lemma polygonNF_handle_eqvGen_iff_aux_length {L : Type*} (g : ℕ)
+    (a b : Fin g → Signed L) : (polygonNF_handleWord g a b).length = 4 * g := by
+  simp [polygonNF_handleWord, List.length_flatMap]
+  omega
+
+lemma polygonNF_handle_eqvGen_iff_aux_flat_get {A B : Type*}
+    (f : A → Fin 4 → B) (xs : List A) (i : ℕ) :
+    (xs.flatMap fun x => [f x 0, f x 1, f x 2, f x 3])[i]? =
+      Option.map (fun x => f x ⟨i % 4, by omega⟩) xs[i / 4]? := by
+  induction xs generalizing i with
+  | nil => simp
+  | cons x xs ih =>
+      rcases i with _ | i
+      · simp
+      rcases i with _ | i
+      · simp
+      rcases i with _ | i
+      · simp
+      rcases i with _ | k
+      · simp
+      have hd : (k + 4) / 4 = k / 4 + 1 := by omega
+      have hm : (k + 4) % 4 = k % 4 := by omega
+      simpa [hd, hm] using ih k
+
+lemma polygonNF_handle_eqvGen_iff_aux_get {L : Type*} (g : ℕ)
+    (a b : Fin g → Signed L) (i : Fin (polygonNF_handleWord g a b).length) :
+    (polygonNF_handleWord g a b).get i =
+      ![a ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩,
+        b ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩,
+        inv (a ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩),
+        inv (b ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩)] ⟨i.1 % 4, by omega⟩ := by
+  rw [List.get_eq_getElem]
+  let f : Fin g → Fin 4 → Signed L := fun j =>
+    ![a j, b j, inv (a j), inv (b j)]
+  have h := polygonNF_handle_eqvGen_iff_aux_flat_get f (List.finRange g) i.1
+  have hiword : i.1 <
+      ((List.finRange g).flatMap fun j => [f j 0, f j 1, f j 2, f j 3]).length := by
+    simpa [f, polygonNF_handleWord] using i.2
+  rw [List.getElem?_eq_getElem hiword] at h
+  have hi : i.1 / 4 < (List.finRange g).length := by
+    simp
+    have := i.2
+    have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+    have : i.1 < 4 * g := by simpa [hlen] using this
+    omega
+  rw [List.getElem?_eq_getElem hi] at h
+  simpa [polygonNF_handleWord, f] using Option.some.inj h
+
+/-
+lemma polygonNF_handle_eqvGen_iff_aux_labels {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    (hab : Function.Injective fun p : Fin g × Bool =>
+      if p.2 then (b p.1).1 else (a p.1).1)
+    (j k : Fin g) (r s : Fin 4)
+    (h : (![a j, b j, inv (a j), inv (b j)] r).1 =
+      (![a k, b k, inv (a k), inv (b k)] s).1) :
+    j = k ∧ ((r = 0 ∨ r = 2) ∧ (s = 0 ∨ s = 2) ∨
+      (r = 1 ∨ r = 3) ∧ (s = 1 ∨ s = 3)) := by
+  fin_cases r <;> fin_cases s <;> simp [PolygonMoves.inv] at h ⊢
+  all_goals first
+    | exact congrArg Prod.fst (hab (p := (j, false)) (q := (k, false)) (by simpa using h))
+    | exact congrArg Prod.fst (hab (p := (j, true)) (q := (k, true)) (by simpa using h))
+    | have hh := hab (p := (j, false)) (q := (k, true)) (by simpa using h); simp at hh
+    | have hh := hab (p := (j, true)) (q := (k, false)) (by simpa using h); simp at hh
+
+theorem polygonNF_handle_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    (hab : Function.Injective fun p : Fin g × Bool =>
+      if p.2 then (b p.1).1 else (a p.1).1)
+    (x y : Disk) :
+    Relation.EqvGen (WordRel (polygonNF_handleWord g a b)) x y ↔
+      Relation.EqvGen (SurfaceRel true g) x y := by
+  have word_to_surface {p q : Disk}
+      (h : WordRel (polygonNF_handleWord g a b) p q) :
+      Relation.EqvGen (SurfaceRel true g) p q := by
+    rcases h with ⟨i, k, hik, t, hlabel, hp, hq⟩
+    let ji : Fin g := ⟨i.1 / 4, by
+      have hi := i.2
+      have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+      have : i.1 < 4 * g := by simpa [hlen] using hi
+      omega⟩
+    let jk : Fin g := ⟨k.1 / 4, by
+      have hk := k.2
+      have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+      have : k.1 < 4 * g := by simpa [hlen] using hk
+      omega⟩
+    let ri : Fin 4 := ⟨i.1 % 4, by omega⟩
+    let rk : Fin 4 := ⟨k.1 % 4, by omega⟩
+    have hgi := polygonNF_handle_eqvGen_iff_aux_get g a b i
+    have hgk := polygonNF_handle_eqvGen_iff_aux_get g a b k
+    have hc : ji = jk ∧ ((ri = 0 ∨ ri = 2) ∧ (rk = 0 ∨ rk = 2) ∨
+        (ri = 1 ∨ ri = 3) ∧ (rk = 1 ∨ rk = 3)) := by
+      apply polygonNF_handle_eqvGen_iff_aux_labels g a b hab
+      rw [hgi, hgk] at hlabel
+      simpa [ji, jk, ri, rk] using hlabel
+    rcases hc with ⟨hjk, hc⟩
+    have hjkv : ji.1 = jk.1 := congrArg Fin.val hjk
+    have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+    rcases hc with ⟨hri, hrk⟩ | ⟨hri, hrk⟩
+    · rcases hri with hri | hri <;> rcases hrk with hrk | hrk
+      · exfalso; apply hik; apply Fin.ext; simp [ri, rk] at hri hrk ⊢; omega
+      · apply Relation.EqvGen.rel _ _
+        simp only [SurfaceRel, if_true]
+        refine ⟨ji, ji.isLt, t, Or.inl ?_⟩
+        constructor
+        · rw [hp]; congr 2 <;> simp [ri] at hri ⊢ <;> omega
+        · rw [hq]
+          simp [hgi, hgk, ri, rk, hri, hrk, PolygonMoves.inv, reverseParameter]
+      · apply Relation.EqvGen.symm _ _
+        apply Relation.EqvGen.rel _ _
+        simp only [SurfaceRel, if_true]
+        refine ⟨ji, ji.isLt, reverseParameter t, Or.inl ?_⟩
+        constructor
+        · rw [hq]
+          simp [hgi, hgk, ri, rk, hri, hrk, PolygonMoves.inv, reverseParameter]
+        · rw [hp]
+          simp [hgi, hgk, ri, rk, hri, hrk, PolygonMoves.inv, reverseParameter]
+      · exfalso; apply hik; apply Fin.ext; simp [ri, rk] at hri hrk ⊢; omega
+    · rcases hri with hri | hri <;> rcases hrk with hrk | hrk
+      · exfalso; apply hik; apply Fin.ext; simp [ri, rk] at hri hrk ⊢; omega
+      · apply Relation.EqvGen.rel _ _
+        simp only [SurfaceRel, if_true]
+        refine ⟨ji, ji.isLt, t, Or.inr ?_⟩
+        constructor
+        · rw [hp]; congr 2 <;> simp [ri] at hri ⊢ <;> omega
+        · rw [hq]
+          simp [hgi, hgk, ri, rk, hri, hrk, PolygonMoves.inv, reverseParameter]
+      · apply Relation.EqvGen.symm _ _
+        apply Relation.EqvGen.rel _ _
+        simp only [SurfaceRel, if_true]
+        refine ⟨ji, ji.isLt, reverseParameter t, Or.inr ?_⟩
+        constructor
+        · rw [hq]
+          simp [hgi, hgk, ri, rk, hri, hrk, PolygonMoves.inv, reverseParameter]
+        · rw [hp]
+          simp [hgi, hgk, ri, rk, hri, hrk, PolygonMoves.inv, reverseParameter]
+      · exfalso; apply hik; apply Fin.ext; simp [ri, rk] at hri hrk ⊢; omega
+  have surface_to_word {p q : Disk} (h : SurfaceRel true g p q) :
+      Relation.EqvGen (WordRel (polygonNF_handleWord g a b)) p q := by
+    simp only [SurfaceRel, if_true] at h
+    rcases h with ⟨j, hj, t, h | h⟩
+    · rcases h with ⟨rfl, rfl⟩
+      apply Relation.EqvGen.rel _ _
+      let i : Fin (polygonNF_handleWord g a b).length :=
+        ⟨4 * j, by rw [polygonNF_handle_eqvGen_iff_aux_length]; omega⟩
+      let k : Fin (polygonNF_handleWord g a b).length :=
+        ⟨4 * j + 2, by rw [polygonNF_handle_eqvGen_iff_aux_length]; omega⟩
+      refine ⟨i, k, by intro e; have := congrArg Fin.val e; simp [i, k] at this,
+        t, ?_, ?_, ?_⟩
+      · rw [polygonNF_handle_eqvGen_iff_aux_get, polygonNF_handle_eqvGen_iff_aux_get]
+        simp [i, k, PolygonMoves.inv]
+      · simp [i, polygonNF_handle_eqvGen_iff_aux_length]
+      · rw [polygonNF_handle_eqvGen_iff_aux_get, polygonNF_handle_eqvGen_iff_aux_get]
+        simp [i, k, polygonNF_handle_eqvGen_iff_aux_length,
+          PolygonMoves.inv, reverseParameter]
+    · rcases h with ⟨rfl, rfl⟩
+      apply Relation.EqvGen.rel _ _
+      let i : Fin (polygonNF_handleWord g a b).length :=
+        ⟨4 * j + 1, by rw [polygonNF_handle_eqvGen_iff_aux_length]; omega⟩
+      let k : Fin (polygonNF_handleWord g a b).length :=
+        ⟨4 * j + 3, by rw [polygonNF_handle_eqvGen_iff_aux_length]; omega⟩
+      refine ⟨i, k, by intro e; have := congrArg Fin.val e; simp [i, k] at this,
+        t, ?_, ?_, ?_⟩
+      · rw [polygonNF_handle_eqvGen_iff_aux_get, polygonNF_handle_eqvGen_iff_aux_get]
+        simp [i, k, PolygonMoves.inv]
+      · simp [i, polygonNF_handle_eqvGen_iff_aux_length]
+      · rw [polygonNF_handle_eqvGen_iff_aux_get, polygonNF_handle_eqvGen_iff_aux_get]
+        simp [i, k, polygonNF_handle_eqvGen_iff_aux_length,
+          PolygonMoves.inv, reverseParameter]
+  constructor
+  · intro h
+    induction h with
+    | rel p q h => exact word_to_surface h
+    | refl p => exact .refl p
+    | symm p q _ ih => exact .symm p q ih
+    | trans p q r _ _ ih₁ ih₂ => exact .trans p q r ih₁ ih₂
+  · intro h
+    induction h with
+    | rel p q h => exact surface_to_word h
+    | refl p => exact .refl p
+    | symm p q _ ih => exact .symm p q ih
+    | trans p q r _ _ ih₁ ih₂ => exact .trans p q r ih₁ ih₂
+-/
+
 theorem polygonNF_handle_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
     (a b : Fin g → Signed L)
     (hab : Function.Injective fun p : Fin g × Bool =>

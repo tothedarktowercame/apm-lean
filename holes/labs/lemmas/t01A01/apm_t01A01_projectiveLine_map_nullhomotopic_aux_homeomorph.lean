@@ -120,6 +120,21 @@ theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
 This is the `Z/2 → Z` lifting step, separated from the geometry of the
 punctured target. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph_aux_onePointCircle :
+    OnePoint ℝ ≃ₜ Circle := by
+  let e₁ : OnePoint ℝ ≃ₜ
+      Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 :=
+    onePointEquivSphereOfFinrankEq (by simp)
+  let L : EuclideanSpace ℝ (Fin 2) ≃ₗᵢ[ℝ] ℂ :=
+    Complex.orthonormalBasisOneI.repr.symm
+  let e₂ : Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ≃ₜ Circle :=
+    Homeomorph.subtype L.toHomeomorph (by
+      intro x
+      change x ∈ Metric.sphere (0 : EuclideanSpace ℝ (Fin 2)) 1 ↔
+        L x ∈ Metric.sphere (0 : ℂ) 1
+      simp only [Metric.mem_sphere, dist_zero_right, L.norm_map])
+  exact e₁.trans e₂
+
 lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph :
     Nonempty (apm_t01A01_RP1 ≃ₜ Circle) := by
   sorry

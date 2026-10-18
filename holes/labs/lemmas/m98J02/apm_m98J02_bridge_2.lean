@@ -868,6 +868,12 @@ iterated pairing
 the LF space of test functions.  The conclusion records all cutoff and
 translation identities needed by the concrete convolution definition. -/
 -- BEGIN SEAT AREA
+lemma apm_m98J02_bridge_2_aux_cutoff
+    (K : Set apm_m98J02_E) (hK : IsCompact K) :
+    ∃ χ : apm_m98J02_Test, ∃ U : Set apm_m98J02_E,
+      IsOpen U ∧ K ⊆ U ∧ ∀ x ∈ U, χ x = 1 := by
+  exact apm_m98J02_bridge_1 K hK
+
 theorem apm_m98J02_bridge_2
     (u v : apm_m98J02_Dist) (K : Set apm_m98J02_E)
     (hK : IsCompact K)

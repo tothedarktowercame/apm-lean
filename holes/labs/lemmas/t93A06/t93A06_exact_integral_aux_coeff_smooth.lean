@@ -250,6 +250,13 @@ theorem t93A06_exact_integral_aux_pullback_d (atlas : SmoothAtlas)
 /-- Smoothness of a torus one-form gives smooth coefficient functions after
 pullback to the plane. -/
 -- BEGIN SEAT AREA
+lemma t93A06_exact_integral_aux_coeff_smooth_aux_global
+    (atlas : SmoothAtlas)
+    (η : let _ := atlas.charts; Form Plane Torus 1)
+    (hη : letI := atlas.charts; IsSmooth η) (i : Fin 2) :
+    ContDiff ℝ 1 (t93A06_pulledCoeff atlas η i) := by
+  sorry
+
 theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
     (η : let _ := atlas.charts; Form Plane Torus 1)
     (hη : letI := atlas.charts; IsSmooth η) :
@@ -257,7 +264,19 @@ theorem t93A06_exact_integral_aux_coeff_smooth (atlas : SmoothAtlas)
       (fun x ↦ t93A06_pulledCoeff atlas η 1 ![x, y])) ∧
     (∀ x : ℝ, ContDiff ℝ 1
       (fun y ↦ t93A06_pulledCoeff atlas η 0 ![x, y])) := by
-  sorry
+  have h0 := t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη 0
+  have h1 := t93A06_exact_integral_aux_coeff_smooth_aux_global atlas η hη 1
+  constructor
+  · intro y
+    apply h1.comp
+    apply contDiff_pi.mpr
+    intro i
+    fin_cases i <;> simp <;> fun_prop
+  · intro x
+    apply h0.comp
+    apply contDiff_pi.mpr
+    intro i
+    fin_cases i <;> simp <;> fun_prop
 -- END SEAT AREA
 
 /-- Coordinate formula for the integral of an exterior derivative.  The

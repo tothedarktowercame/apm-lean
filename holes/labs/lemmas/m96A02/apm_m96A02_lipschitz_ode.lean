@@ -62,6 +62,15 @@ theorem apm_m96A02_iterate_contraction_fixed_point
     exact hK.fixedPoint_unique (Function.IsFixedPt.iterate hy N)
 
 -- BEGIN SEAT AREA
+lemma apm_m96A02_lipschitz_ode_aux_lipschitzWith
+    (f : ℝ → ℝ)
+    (hf : ∃ L ≥ 0, ∀ x y, |f x - f y| ≤ L * |x - y|) :
+    ∃ K : NNReal, LipschitzWith K f := by
+  obtain ⟨L, hL, hf⟩ := hf
+  refine ⟨⟨L, hL⟩, LipschitzWith.of_dist_le_mul ?_⟩
+  intro x y
+  simpa [Real.dist_eq] using hf x y
+
 theorem apm_m96A02_lipschitz_ode
     (f : ℝ → ℝ) (u₀ : ℝ)
     (hf : ∃ L ≥ 0, ∀ x y, |f x - f y| ≤ L * |x - y|) :

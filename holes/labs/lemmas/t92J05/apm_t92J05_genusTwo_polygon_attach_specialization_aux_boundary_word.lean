@@ -1745,7 +1745,7 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_free :
 -- BEGIN SEAT AREA
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_boundary_word :
     True := by
-  sorry
+  trivial
 -- END SEAT AREA
 
 lemma apm_t92J05_genusTwo_polygon_attach_specialization

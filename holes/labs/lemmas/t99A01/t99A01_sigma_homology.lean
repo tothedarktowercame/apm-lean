@@ -598,6 +598,11 @@ finite disjoint union is the biproduct, via the summand inclusions.  Check
 `ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean` first (simplices
 of a sigma type land in one summand: `IsPreconnected` of the simplex). -/
 -- BEGIN SEAT AREA
+lemma t99A01_sigma_homology_aux_isIso_of_isZero
+    {A B : ModuleCat ℤ} (f : A ⟶ B) (hA : Limits.IsZero A)
+    (hB : Limits.IsZero B) : IsIso f := by
+  exact Limits.IsZero.isIso hA hB f
+
 theorem t99A01_sigma_homology {r : ℕ} (Y : Fin r → Type) [∀ i, TopologicalSpace (Y i)]
     (k : ℕ) :
     IsIso (Limits.biproduct.desc fun i : Fin r ↦

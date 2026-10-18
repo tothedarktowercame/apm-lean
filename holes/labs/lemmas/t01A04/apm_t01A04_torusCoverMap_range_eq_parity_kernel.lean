@@ -338,6 +338,23 @@ theorem apm_t01A04_circleCoverMap_range_eq_parity_kernel
 /-- The monodromy calculation for the torus-doubled cover.  As above, the
 covering fact is an input rather than a dependency on another admitted leaf. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_torusCoverMap_range_eq_parity_kernel_aux_ext
+    {G : Type*} [Group G]
+    (f g : apm_t01a04_piOne →* G)
+    (hgen : Subgroup.closure
+      {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤)
+    (ha : f apm_t01A04_loopA = g apm_t01A04_loopA)
+    (hb : f apm_t01A04_loopB = g apm_t01A04_loopB)
+    (hc : f apm_t01A04_loopC = g apm_t01A04_loopC) :
+    f = g := by
+  apply MonoidHom.eq_of_eqOn_dense hgen
+  intro x hx
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx
+  rcases hx with rfl | rfl | rfl
+  · exact ha
+  · exact hb
+  · exact hc
+
 theorem apm_t01A04_torusCoverMap_range_eq_parity_kernel
     (phia : apm_t01a04_piOne →* apm_t01a04_Parity)
     (hgen : Subgroup.closure

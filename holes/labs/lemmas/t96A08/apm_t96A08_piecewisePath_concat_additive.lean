@@ -60,6 +60,16 @@ def apm_t96A08_HasLocalRadialPrimitives
 /-- Closed-piecewise-smooth paths can be concatenated, and the integral is
 additive under the standard affine reparameterizations. -/
 -- BEGIN SEAT AREA
+private lemma apm_t96A08_piecewisePath_concat_additive_aux_zero
+    {M : Type*} (gamma delta : ℝ → M) :
+    (if (0 : ℝ) ≤ 1 / 2 then gamma (2 * 0) else delta (2 * 0 - 1)) = gamma 0 := by
+  norm_num
+
+private lemma apm_t96A08_piecewisePath_concat_additive_aux_one
+    {M : Type*} (gamma delta : ℝ → M) :
+    (if (1 : ℝ) ≤ 1 / 2 then gamma (2 * 1) else delta (2 * 1 - 1)) = delta 1 := by
+  norm_num
+
 theorem apm_t96A08_piecewisePath_concat_additive
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -69,7 +79,14 @@ theorem apm_t96A08_piecewisePath_concat_additive
     (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
       (fun v : TangentBundle I M => omega v.1 v.2)) :
     apm_t96A08_HasAdditiveConcatenation I omega := by
-  sorry
+  unfold apm_t96A08_HasAdditiveConcatenation
+  intro gamma delta hgamma hdelta hend
+  let eta : ℝ → M := fun t => if t ≤ (1 / 2 : ℝ) then gamma (2 * t) else delta (2 * t - 1)
+  refine ⟨eta, ?_, ?_, ?_, ?_⟩
+  · sorry
+  · exact apm_t96A08_piecewisePath_concat_additive_aux_zero gamma delta
+  · exact apm_t96A08_piecewisePath_concat_additive_aux_one gamma delta
+  · sorry
 -- END SEAT AREA
 
 /-- In a sufficiently small convex chart, integration along the straight

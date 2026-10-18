@@ -9346,7 +9346,9 @@ theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     apply Subtype.ext
     exact hP.trans (D.oldA_arc e₀ s₀ he₀ he₀q)
   rcases heq hL (by change e < L at he; exact he) he₀L hedges with hs | hf | hb
-  · rcases hs with ⟨rfl, rfl⟩
+  · rcases hs with ⟨hee, hss⟩
+    subst e
+    subst τ
     refine ⟨N, ?_, Relation.EqvGen.refl N⟩
     rw [hN]
     by_cases hp : e = p

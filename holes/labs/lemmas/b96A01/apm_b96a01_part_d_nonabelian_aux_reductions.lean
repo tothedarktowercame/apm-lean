@@ -327,6 +327,16 @@ lemma apm_b96a01_part_d_nonabelian_aux_injective_or_trivial
 /-- Integral conjugation (part (b)) gives reductions modulo every `p ^ m`, compatible
 under `apmReduction`, jointly faithful, and the first one realised over `ZMod p`. -/
 -- BEGIN SEAT AREA
+lemma apm_b96a01_part_d_nonabelian_aux_reductions_aux_integral_inverse
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) :
+    ∃ P : Matrix n n ℚ, IsUnit P ∧
+      ∀ g : G,
+        apmIntegralMatrix (P * (g.1 : Matrix n n ℚ) * P⁻¹) ∧
+        apmIntegralMatrix (P * ((g⁻¹).1 : Matrix n n ℚ) * P⁻¹) := by
+  obtain ⟨P, hPunit, hP⟩ := apm_b96a01_part_b n G hG
+  exact ⟨P, hPunit, fun g => ⟨hP g, hP g⁻¹⟩⟩
+
 lemma apm_b96a01_part_d_nonabelian_aux_reductions
     (n : Type*) [Fintype n] [DecidableEq n]
     (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)) (hG : Finite G) (p : ℕ) (hp : p.Prime) :

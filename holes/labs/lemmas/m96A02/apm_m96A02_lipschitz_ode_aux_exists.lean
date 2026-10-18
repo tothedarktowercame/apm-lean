@@ -73,6 +73,17 @@ lemma apm_m96A02_lipschitz_ode_aux_lipschitzWith
 /-- Existence on `[0, 1]` for a globally Lipschitz right-hand side (Picard iteration on
 `C([0,1])`, e.g. via `apm_m96A02_iterate_contraction_fixed_point`'s factorial estimate). -/
 -- BEGIN SEAT AREA
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_linear_growth
+    (f : ℝ → ℝ) (K : NNReal) (hK : LipschitzWith K f) (x : ℝ) :
+    |f x| ≤ K * |x| + |f 0| := by
+  calc
+    |f x| = |(f x - f 0) + f 0| := by ring_nf
+    _ ≤ |f x - f 0| + |f 0| := abs_add_le _ _
+    _ ≤ K * |x - 0| + |f 0| := by
+      gcongr
+      simpa [Real.dist_eq] using hK.dist_le_mul x 0
+    _ = K * |x| + |f 0| := by simp
+
 lemma apm_m96A02_lipschitz_ode_aux_exists
     (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
     ∃ u : ℝ → ℝ, apm_m96a02_Solves f u₀ u := by

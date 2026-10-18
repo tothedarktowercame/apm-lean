@@ -2343,6 +2343,39 @@ torus by the free involution `τ (u, v) = (-u, v + 1/2)` (image of `b`), hence a
 `T95J03Torus ⧸ τ → KleinPlaneQuotient` is a continuous bijection compact → T2.
 Fibre `{(u, v), τ(u, v)}`, distinct.  150–350 lines. -/
 -- BEGIN SEAT AREA
+noncomputable def t95J03_klein_doubleCover_aux_tau :
+    T95J03Torus → T95J03Torus :=
+  fun x => (-x.1, x.2 + (1 / 2 : ℝ))
+
+lemma t95J03_klein_doubleCover_aux_tau_sq (x : T95J03Torus) :
+    t95J03_klein_doubleCover_aux_tau
+      (t95J03_klein_doubleCover_aux_tau x) = x := by
+  apply Prod.ext
+  · simp [t95J03_klein_doubleCover_aux_tau]
+  · change x.2 + (1 / 2 : ℝ) + (1 / 2 : ℝ) = x.2
+    rw [add_assoc]
+    have hper : ((1 : ℝ) : UnitAddCircle) = 0 := by
+      exact AddCircle.coe_period (1 : ℝ)
+    have hh : ((1 / 2 : ℝ) : UnitAddCircle) + (1 / 2 : ℝ) = 0 := by
+      calc
+        ((1 / 2 : ℝ) : UnitAddCircle) + (1 / 2 : ℝ) = ((1 : ℝ) : UnitAddCircle) := by
+          norm_num
+        _ = 0 := hper
+    simp [hh]
+
+lemma t95J03_klein_doubleCover_aux_tau_ne (x : T95J03Torus) :
+    t95J03_klein_doubleCover_aux_tau x ≠ x := by
+  intro h
+  have h2 := congrArg Prod.snd h
+  change x.2 + (1 / 2 : ℝ) = x.2 at h2
+  have hz : ((1 / 2 : ℝ) : UnitAddCircle) = 0 := by
+    simpa using congrArg (fun y => -x.2 + y) h2
+  rw [QuotientAddGroup.eq_zero_iff] at hz
+  obtain ⟨z, hz⟩ := hz
+  have : (1 / 2 : ℝ) = (z : ℝ) := by simpa using hz.symm
+  have : (2 : ℤ) * z = 1 := by exact_mod_cast (show (2 : ℝ) * (z : ℝ) = 1 by linarith)
+  omega
+
 lemma t95J03_klein_doubleCover :
     ∃ π : T95J03Torus → Surface false 2, IsKSheetedCover π 2 := by
   sorry

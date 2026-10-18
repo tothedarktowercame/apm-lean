@@ -82,6 +82,56 @@ theorem relabelInvert {Label Label' : Type*}
 /-- Affinely collapse the two triangles incident to the cancelled vertex and
 map the complementary polygon to the smaller disk. -/
 -- BEGIN SEAT AREA
+lemma inversePairCancellation_aux_rest_ne_nil {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    u ++ v ≠ [] := by
+  exact hrest.1
+
+lemma inversePairCancellation_aux_rest_length_pos {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    0 < (u ++ v).length := by
+  exact List.length_pos_iff.mpr hrest.1
+
+lemma inversePairCancellation_aux_rest_length_even {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    Even (u ++ v).length := by
+  exact hrest.2.1
+
+lemma inversePairCancellation_aux_rest_length_two_le {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    2 ≤ (u ++ v).length := by
+  obtain ⟨k, hk⟩ := hrest.2.1
+  have hp : 0 < (u ++ v).length := List.length_pos_iff.mpr hrest.1
+  omega
+
+@[simp] lemma inversePairCancellation_aux_inv_fst {Label : Type*}
+    (x : Signed Label) : (inv x).1 = x.1 := by
+  rfl
+
+@[simp] lemma inversePairCancellation_aux_inv_snd_ne {Label : Type*}
+    (x : Signed Label) : (inv x).2 ≠ x.2 := by
+  rcases x with ⟨a, b⟩
+  cases b <;> simp [inv]
+
+lemma inversePairCancellation_aux_full_length {Label : Type*}
+    (u v : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x, inv x] ++ v).length = (u ++ v).length + 2 := by
+  simp [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc]
+
+lemma inversePairCancellation_aux_fresh_count {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst) :
+    ((u ++ [x, inv x] ++ v).map Prod.fst).count x.1 = 2 := by
+  have hu : x.1 ∉ u.map Prod.fst := by
+    intro h
+    exact hx (by simpa using List.mem_append_left (v.map Prod.fst) h)
+  have hv : x.1 ∉ v.map Prod.fst := by
+    intro h
+    exact hx (by simpa using List.mem_append_right (u.map Prod.fst) h)
+  rw [List.map_append, List.count_append, List.map_append, List.count_append,
+    List.count_eq_zero_of_not_mem hu, List.count_eq_zero_of_not_mem hv]
+  simp
+
 theorem inversePairCancellation {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v).map Prod.fst)

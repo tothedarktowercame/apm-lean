@@ -1120,6 +1120,41 @@ lemma apm_m03J01_weakHessian_unique_ae {n : ℕ}
 /-- Qualitative `H²` regularity upgrades to a uniform estimate by applying
 the closed graph theorem to the solution/weak-Hessian graph. -/
 -- BEGIN SEAT AREA
+lemma apm_m03J01_uniform_H2_bound_aux_weakSolution_congr {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)} {F G : apm_m03J01_E n → ℝ}
+    (hFG : F =ᵐ[volume] G) (u : apm_m03J01_H01 n Ω) :
+    apm_m03J01_weakSolution F u ↔ apm_m03J01_weakSolution G u := by
+  constructor <;> intro hu v
+  · calc
+      _ = ∫ x, F x * v.val x ∂volume := hu v
+      _ = ∫ x, G x * v.val x ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [hFG] with x hx
+        rw [hx]
+  · calc
+      _ = ∫ x, G x * v.val x ∂volume := hu v
+      _ = ∫ x, F x * v.val x ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [hFG] with x hx
+        rw [hx]
+
+lemma apm_m03J01_uniform_H2_bound_aux_weakHessian_congr {n : ℕ}
+    {g k : apm_m03J01_E n → apm_m03J01_E n}
+    {H : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hgk : g =ᵐ[volume] k) :
+    apm_m03J01_weakHessian g H ↔ apm_m03J01_weakHessian k H := by
+  constructor <;> intro h
+  · refine ⟨h.1, fun i j φ hφ hφc => ?_⟩
+    rw [← h.2 i j φ hφ hφc]
+    apply integral_congr_ae
+    filter_upwards [hgk] with x hx
+    rw [hx]
+  · refine ⟨h.1, fun i j φ hφ hφc => ?_⟩
+    rw [← h.2 i j φ hφ hφc]
+    apply integral_congr_ae
+    filter_upwards [hgk] with x hx
+    rw [hx]
+
 lemma apm_m03J01_uniform_H2_bound
     (n : ℕ) (Ω : Set (apm_m03J01_E n))
     (hΩopen : IsOpen Ω) (hΩbounded : Bornology.IsBounded Ω)

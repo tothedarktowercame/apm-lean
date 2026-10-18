@@ -60,6 +60,13 @@ projective-line core.  A proof may choose coordinates sending `q` to a
 coordinate line and descend the radial deformation through the projective
 quotient. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A01_punctured_homotopyEquiv_projectiveLine_aux_rep
+    (q : apm_t01A01_RP2) :
+    ∃ (v : Fin 3 → ℝ) (hv : v ≠ 0),
+      q = Projectivization.mk ℝ v hv := by
+  induction q using Projectivization.ind with
+  | h v hv => exact ⟨v, hv, rfl⟩
+
 theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
     (q : apm_t01A01_RP2) :
     Nonempty (ContinuousMap.HomotopyEquiv

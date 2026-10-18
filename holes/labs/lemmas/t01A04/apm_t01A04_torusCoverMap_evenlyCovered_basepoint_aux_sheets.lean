@@ -832,6 +832,39 @@ lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheetPoint_injective 
 
 /-- The two sheets over the basepoint (see the plan above). -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets_aux_fiber_points
+    (e : apm_t01a04_TorusCover)
+    (he : apm_t01a04_torusCoverMap e = apm_t01a04_basepoint) :
+    ∃ i : Fin 2,
+      e = Quotient.mk _
+        (.inl (apm_t01a04_sheetPoint i, (1 : Circle))) := by
+  refine Quotient.inductionOn e ?_ he
+  rintro (q | q) he
+  · have hq := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction he
+    have hq' : (q.1 ^ 2, q.2) = ((1 : Circle), (1 : Circle)) := by
+      simpa [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
+        apm_t01a04_basepoint] using hq
+    obtain ⟨i, hi⟩ :=
+      apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_square_root
+        q.1 (congrArg Prod.fst hq')
+    have hq2 : q.2 = (1 : Circle) :=
+      congrArg (fun p : apm_t01a04_Torus => p.2) hq'
+    refine ⟨i, ?_⟩
+    apply congrArg (fun t : apm_t01a04_Torus =>
+      Quotient.mk _ (Sum.inl t))
+    exact Prod.ext hi hq2
+  · have hq := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction he
+    have hz : q.2 = 1 := by
+      simpa [apm_t01a04_torusCoverMap, apm_t01a04_torusCoverRaw,
+        apm_t01a04_basepoint] using hq
+    refine ⟨q.1, ?_⟩
+    rw [apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_glue]
+    apply congrArg (fun t : Fin 2 × Circle =>
+      Quotient.mk _ (Sum.inr t))
+    exact Prod.ext rfl hz
+
 lemma apm_t01A04_torusCoverMap_evenlyCovered_basepoint_aux_sheets :
     ∃ (U : Set apm_t01a04_X) (V : Fin 2 → Set apm_t01a04_TorusCover),
       apm_t01a04_basepoint ∈ U ∧ IsOpen U ∧ (∀ i, IsOpen (V i)) ∧

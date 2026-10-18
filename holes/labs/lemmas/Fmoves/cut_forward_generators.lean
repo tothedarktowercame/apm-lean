@@ -4736,8 +4736,7 @@ lemma zip_forward_aux_fresh_index {Label : Type*} [DecidableEq Label]
       have he : (u ++ [x, inv x] ++ v)[i.1] = v[i.1 - (u.length + 2)] := by
         rw [List.getElem_append_right (as := u ++ [x, inv x]) (bs := v) (by
           simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
-        congr 1
-        simp only [List.length_append, List.length_cons, List.length_nil]
+        congr 1 <;> simp only [List.length_append, List.length_cons, List.length_nil] <;> omega
       rw [List.get_eq_getElem, he]
       exact hm'
     exact False.elim (hx (hi ▸ hm))
@@ -6786,6 +6785,75 @@ theorem cutBoundaryData_concrete {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
 /-- Old generators between boundary points of the pieces give new `EqvGen`s
 between the corresponding new points (`false` = piece `A`, `true` = `B`). -/
 -- BEGIN SEAT AREA
+lemma cut_forward_generators_aux_length {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t).length =
+      (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  simp [inverseWord]
+  omega
+
+lemma cut_forward_generators_aux_reverseParameter_involutive
+    (s : Icc (0 : ℝ) 1) : reverseParameter (reverseParameter s) = s := by
+  apply Subtype.ext
+  simp [reverseParameter]
+
+lemma cut_forward_generators_aux_x_indices {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i : Fin (u ++ [x] ++ v ++ [x] ++ t).length)
+    (hi : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 = x.1) :
+    i.1 = u.length ∨ i.1 = u.length + 1 + v.length := by
+  sorry
+/-
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil] at hib
+  by_cases hlow : i.1 < u.length
+  · have hu : u[i.1] ∈ u := List.getElem_mem hlow
+    have hm : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hm' : u[i.1].1 ∈ (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_left t (List.mem_append_left v hu))
+      simpa [List.get_eq_getElem, hlow] using hm'
+    exact False.elim (hx (hi ▸ hm))
+  by_cases hfirst : i.1 = u.length
+  · exact Or.inl hfirst
+  by_cases hsecond : i.1 = u.length + 1 + v.length
+  · exact Or.inr hsecond
+  by_cases hmid : i.1 < u.length + 1 + v.length
+  · have hv : i.1 - (u.length + 1) < v.length := by omega
+    have hvm : v[i.1 - (u.length + 1)] ∈ v := List.getElem_mem hv
+    have hm : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hm' : v[i.1 - (u.length + 1)].1 ∈ (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_left t (List.mem_append_right u hvm))
+      have he : (u ++ [x] ++ v ++ [x] ++ t)[i.1] =
+          v[i.1 - (u.length + 1)] := by
+        rw [List.getElem_append_right (as := u ++ [x]) (bs := v ++ [x] ++ t) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+        rw [List.getElem_append_left (as := v) (bs := [x] ++ t) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+        congr 1 <;> simp only [List.length_append, List.length_cons, List.length_nil] <;> omega
+      rw [List.get_eq_getElem, he]
+      exact hm'
+    exact False.elim (hx (hi ▸ hm))
+  · have ht : i.1 - (u.length + 1 + v.length + 1) < t.length := by omega
+    have htm : t[i.1 - (u.length + 1 + v.length + 1)] ∈ t := List.getElem_mem ht
+    have hm : ((u ++ [x] ++ v ++ [x] ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hm' : t[i.1 - (u.length + 1 + v.length + 1)].1 ∈
+          (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_right (u ++ v) htm)
+      have he : (u ++ [x] ++ v ++ [x] ++ t)[i.1] =
+          t[i.1 - (u.length + 1 + v.length + 1)] := by
+        rw [List.getElem_append_right (as := u ++ [x] ++ v ++ [x]) (bs := t) (by
+          simp only [List.length_append, List.length_cons, List.length_nil]; omega)]
+        congr 1
+        simp only [List.length_append, List.length_cons, List.length_nil]
+      rw [List.get_eq_getElem, he]
+      exact hm'
+    exact False.elim (hx (hi ▸ hm))
+-/
+
 theorem cut_forward_generators {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)

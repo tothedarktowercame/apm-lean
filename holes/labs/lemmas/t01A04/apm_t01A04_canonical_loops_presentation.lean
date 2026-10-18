@@ -288,6 +288,43 @@ theorem apm_t01A04_bridge_quotient_maps_are_coverings :
 This is the naturality calculation connecting the imported abstract wedge
 equivalence to the concrete quotient and its explicit paths. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_canonical_loops_presentation_aux_rel_iff
+    (x y : Sum apm_t01a04_Torus Circle) :
+    apm_t01a04_wedgeRel x y ↔
+      ConstructionTargets.PointWedgeQuotient.Rel
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle) x y := by
+  constructor
+  · intro h
+    cases h
+    exact ConstructionTargets.PointWedgeQuotient.Rel.base
+  · intro h
+    cases h
+    exact apm_t01a04_wedgeRel.base
+
+/-- The concrete quotient used in the problem is literally the library's
+point-wedge quotient on representatives. -/
+def apm_t01A04_canonical_loops_presentation_aux_homeomorph :
+    apm_t01a04_X ≃ₜ
+      ConstructionTargets.PointWedgeQuotient.Wedge
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle) :=
+  ConstructionTargets.PointWedgeQuotient.quotientHomeomorphOfRelIff
+    apm_t01a04_wedgeRel
+    (ConstructionTargets.PointWedgeQuotient.Rel
+      ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+    apm_t01A04_canonical_loops_presentation_aux_rel_iff
+
+@[simp] lemma apm_t01A04_canonical_loops_presentation_aux_homeomorph_mk
+    (z : Sum apm_t01a04_Torus Circle) :
+    apm_t01A04_canonical_loops_presentation_aux_homeomorph
+        (Quotient.mk _ z) =
+      ConstructionTargets.PointWedgeQuotient.quotientMap
+        ((1, 1) : apm_t01a04_Torus) (1 : Circle) z := rfl
+
+@[simp] lemma apm_t01A04_canonical_loops_presentation_aux_homeomorph_base :
+    apm_t01A04_canonical_loops_presentation_aux_homeomorph
+        apm_t01a04_basepoint =
+      ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase := rfl
+
 theorem apm_t01A04_canonical_loops_presentation :
     apm_t01A04_loopA * apm_t01A04_loopB =
         apm_t01A04_loopB * apm_t01A04_loopA ∧

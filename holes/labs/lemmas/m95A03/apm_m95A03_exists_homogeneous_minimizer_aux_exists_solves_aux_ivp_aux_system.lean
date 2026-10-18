@@ -489,6 +489,21 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_inv_
 /-- The first-order system `y' = z / p, z' = q y + g` has a solution on `[a, b]` with any
 initial data (linear system with continuous coefficients: Picard iteration / Grönwall). -/
 -- BEGIN SEAT AREA
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_inv
+    (a b : ℝ) (p : ℝ → ℝ) (hp : Continuous p)
+    (hpos : ∀ t ∈ Set.Icc a b, 0 < p t) :
+    ContinuousOn (fun t => (p t)⁻¹) (Set.Icc a b) := by
+  exact hp.continuousOn.inv₀ (fun t ht => (hpos t ht).ne')
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
+    (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : Continuous p)
+    (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
+    (c₀ d₀ : ℝ) :
+    ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
+      HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
+      HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
+  sorry
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system
     (a b : ℝ) (hab : a < b) (p q g : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
     (hq : Continuous q) (hg : Continuous g) (hpos : ∀ t ∈ Set.Icc a b, 0 < p t)
@@ -496,7 +511,8 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
     ∃ y z : ℝ → ℝ, y a = c₀ ∧ z a = d₀ ∧ ∀ t ∈ Set.Icc a b,
       HasDerivWithinAt y (z t / p t) (Set.Icc a b) t ∧
       HasDerivWithinAt z (q t * y t + g t) (Set.Icc a b) t := by
-  sorry
+  exact apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode
+    a b hab p q g hp.continuous hq hg hpos c₀ d₀
 -- END SEAT AREA
 
 /-- A solution of the system on `[a, b]` is the restriction of a global `C²` function `Y`

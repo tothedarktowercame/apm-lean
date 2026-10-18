@@ -6588,6 +6588,28 @@ theorem cutOldB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
   exact (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).injective (Subtype.ext h)
 
 -- BEGIN SEAT AREA
+lemma cutNewA_injective_aux_seam_norm {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (h : ‖cutSeam L p q s‖ = 1) :
+    s = 0 ∨ s = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0' : 0 < s := lt_of_le_of_ne hs0 hn.1.symm
+  have hs1' : 0 < 1 - s := sub_pos.mpr (lt_of_le_of_ne hs1 hn.2)
+  have hne : cutPoint L (p + 1) ≠ cutPoint L (q + 1) :=
+    cutPoint_ne (by omega) (by omega)
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L (p + 1)) (y := cutPoint L (q + 1))
+    (r := (1 : ℝ)) (a := 1 - s) (b := s)
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1' hs0' (by ring)
+  have heq : (1 - s) • cutPoint L (p + 1) + s • cutPoint L (q + 1) =
+      cutSeam L p q s := by
+    apply Complex.ext <;> simp [cutSeam, Complex.real_smul] <;> ring
+  have hlt' : ‖cutSeam L p q s‖ < 1 := by
+    rw [← heq]
+    exact hlt
+  rw [h] at hlt'
+  exact (lt_irrefl 1 hlt')
+
 theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutNewA L p q) := by
   sorry

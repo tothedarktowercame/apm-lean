@@ -2941,6 +2941,30 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_tran
 /-- Minkowski's integral inequality for a probability kernel supported in the
 `ρ`-ball: the mollification error is at most the worst translation error. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_support
+    {d : ℕ} {ρ : ℝ} (κ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hκs : Function.support κ ⊆ Metric.closedBall 0 ρ) :
+    ∀ y, κ y ≠ 0 → ‖y‖ ≤ ρ := by
+  intro y hy
+  simpa [Metric.mem_closedBall, dist_zero_right] using hκs hy
+
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_bound
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)
+    {ρ ε : ℝ} (hε : 0 ≤ ε)
+    (htr : ∀ y : EuclideanSpace ℝ (Fin d), ‖y‖ ≤ ρ →
+      (eLpNorm (fun x ↦ f (x - y) - f x) 2 volume).toReal ≤ ε) :
+    ∀ y, ‖y‖ ≤ ρ →
+      eLpNorm (fun x ↦ f (x - y) - f x) 2 volume ≤ ENNReal.ofReal ε := by
+  intro y hy
+  have htrans :=
+    apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_translate
+      f hf y
+  have hmem : MemLp (fun x ↦ f (x - y) - f x) 2 volume := htrans.1.sub hf
+  rw [← ENNReal.toReal_le_toReal hmem.eLpNorm_ne_top ENNReal.ofReal_ne_top,
+    ENNReal.toReal_ofReal hε]
+  exact htr y hy
+
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski
     {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
     (f : EuclideanSpace ℝ (Fin d) → E) (hf : MemLp f 2 volume)

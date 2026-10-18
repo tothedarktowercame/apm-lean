@@ -499,7 +499,20 @@ Its proof is coefficient-generic: copy it with `ℚ ↦ ℤ` (the `Coefficient*`
 work over any commutative ring; `ProductionOpenCoverMayerVietoris` is already over ℤ).
 Bank the pieces as `_aux` lemmas, as there. -/
 -- BEGIN SEAT AREA
-theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
+noncomputable def t99A01_integralMayerVietoris_aux_negIso
+    (A : AddCommGrpCat) : A ≅ A where
+  hom := -𝟙 A
+  inv := -𝟙 A
+  hom_inv_id := by ext x; simp
+  inv_hom_id := by ext x; simp
+
+noncomputable def t99A01_integralMayerVietoris_aux_comparison
+    (X : Type) [TopologicalSpace X] (n : ℕ) :=
+  ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of X) n
+
+lemma t99A01_integralMayerVietoris_aux_transport
+    {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
     ∃ δ : ∀ n, APMT99A01.H (n + 1) X ⟶ APMT99A01.H n ↥(U ∩ V),
       (∀ n, LinearMap.range (APMT99A01.zI U V n).hom =
@@ -507,6 +520,15 @@ theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set 
       (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
       (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (APMT99A01.zI U V n).hom) := by
   sorry
+
+theorem t99A01_integralMayerVietoris {X : Type} [TopologicalSpace X] (U V : Set X)
+    (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
+    ∃ δ : ∀ n, APMT99A01.H (n + 1) X ⟶ APMT99A01.H n ↥(U ∩ V),
+      (∀ n, LinearMap.range (APMT99A01.zI U V n).hom =
+        LinearMap.ker (APMT99A01.zJ U V n).hom) ∧
+      (∀ n, LinearMap.range (APMT99A01.zJ U V (n + 1)).hom = LinearMap.ker (δ n).hom) ∧
+      (∀ n, LinearMap.range (δ n).hom = LinearMap.ker (APMT99A01.zI U V n).hom) := by
+  exact t99A01_integralMayerVietoris_aux_transport U V hU hV hcov
 -- END SEAT AREA
 
 /-- **Leaf (transport, LIBRARY-sized: expect PARTIAL and bank pieces).** Assemble

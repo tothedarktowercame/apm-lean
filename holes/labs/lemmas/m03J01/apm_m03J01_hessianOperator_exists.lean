@@ -1178,6 +1178,47 @@ lemma apm_m03J01_weakSolution_H1size_le {n : ℕ}
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m03J01_hessianOperator_exists_aux_add {n : ℕ}
+    {g k : apm_m03J01_E n → apm_m03J01_E n}
+    {H K : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hg : MemLp g 2 volume) (hk : MemLp k 2 volume)
+    (hH : apm_m03J01_weakHessian g H) (hK : apm_m03J01_weakHessian k K) :
+    apm_m03J01_weakHessian (g + k) (H + K) := by
+  refine ⟨hH.1.add hK.1, ?_⟩
+  intro i j φ hφ hc
+  have ht : apm_m03J01_testFunction n univ φ := ⟨hφ, hc, by simp⟩
+  have hd := apm_m03J01_testFunction_grad_memLp ht
+  have hv := apm_m03J01_testFunction_val_memLp ht
+  have hderiv : (fun x => fderiv ℝ φ x (apm_m03J01_basis n j)) =
+      (fun x => apm_m03J01_gradient n φ x j) := by
+    sorry
+  have igH : Integrable (fun x => g x i * fderiv ℝ φ x (apm_m03J01_basis n j)) volume := by
+    sorry
+  have igK : Integrable (fun x => k x i * fderiv ℝ φ x (apm_m03J01_basis n j)) volume := by
+    sorry
+  have iH : Integrable (fun x => H x i j * φ x) volume :=
+    ((hH.1.eval i).eval j).integrable_mul hv
+  have iK : Integrable (fun x => K x i j * φ x) volume :=
+    ((hK.1.eval i).eval j).integrable_mul hv
+  change (∫ x, (g x i + k x i) * fderiv ℝ φ x (apm_m03J01_basis n j) ∂volume) =
+    -∫ x, (H x i j + K x i j) * φ x ∂volume
+  simp only [add_mul]
+  rw [integral_add igH igK, hH.2 i j φ hφ hc, hK.2 i j φ hφ hc,
+    integral_add iH iK]
+  ring
+
+lemma apm_m03J01_hessianOperator_exists_aux_smul {n : ℕ} (c : ℝ)
+    {g : apm_m03J01_E n → apm_m03J01_E n}
+    {H : apm_m03J01_E n → Fin n → Fin n → ℝ}
+    (hH : apm_m03J01_weakHessian g H) :
+    apm_m03J01_weakHessian (c • g) (c • H) := by
+  refine ⟨hH.1.const_smul c, ?_⟩
+  intro i j φ hφ hc
+  change (∫ x, (c * g x i) * fderiv ℝ φ x (apm_m03J01_basis n j) ∂volume) =
+    -∫ x, (c * H x i j) * φ x ∂volume
+  simp only [mul_assoc]
+  sorry
+
 lemma apm_m03J01_hessianOperator_exists {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
     (hregular : ∀ (F : apm_m03J01_E n → ℝ) (hF : MemLp F 2 volume)
@@ -1185,7 +1226,56 @@ lemma apm_m03J01_hessianOperator_exists {n : ℕ}
         ∃ H, apm_m03J01_weakHessian u.grad H) :
     ∃ T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n,
       apm_m03J01_hessianOperatorRealizes (Ω := Ω) T := by
-  sorry
+  classical
+  let sol : apm_m03J01_forcingLp n → apm_m03J01_H01 n Ω := fun f =>
+    Classical.choose (apm_m03J01_weakSolution_exists (fun x => f x) (Lp.memLp f))
+  have hsol (f : apm_m03J01_forcingLp n) :
+      apm_m03J01_weakSolution (fun x => f x) (sol f) :=
+    Classical.choose_spec (apm_m03J01_weakSolution_exists (fun x => f x) (Lp.memLp f))
+  let hes : (f : apm_m03J01_forcingLp n) →
+      apm_m03J01_E n → Fin n → Fin n → ℝ := fun f =>
+    Classical.choose (hregular (fun x => f x) (Lp.memLp f) (sol f) (hsol f))
+  have hhes (f : apm_m03J01_forcingLp n) :
+      apm_m03J01_weakHessian (sol f).grad (hes f) :=
+    Classical.choose_spec (hregular (fun x => f x) (Lp.memLp f) (sol f) (hsol f))
+  let out : apm_m03J01_forcingLp n → apm_m03J01_hessianLp n := fun f =>
+    (hhes f).1.toLp (hes f)
+  have hsol_add (f g : apm_m03J01_forcingLp n) :
+      (sol (f + g)).val =ᵐ[volume] (sol f).val + (sol g).val := by
+    obtain ⟨w, hwv, hwg⟩ := apm_m03J01_H01_add_exists (sol f) (sol g)
+    have hw : apm_m03J01_weakSolution (fun x => (f + g) x) w := by
+      intro v
+      rw [hwv, hwg]
+      have hiF : Integrable (fun x => inner ℝ ((sol f).grad x) (v.grad x)) volume := by
+        refine (L2.integrable_inner ((sol f).grad_memLp.toLp _) (v.grad_memLp.toLp _)).congr ?_
+        filter_upwards [(sol f).grad_memLp.coeFn_toLp, v.grad_memLp.coeFn_toLp] with x hx hy
+        simp [hx, hy]
+      have hiG : Integrable (fun x => inner ℝ ((sol g).grad x) (v.grad x)) volume := by
+        refine (L2.integrable_inner ((sol g).grad_memLp.toLp _) (v.grad_memLp.toLp _)).congr ?_
+        filter_upwards [(sol g).grad_memLp.coeFn_toLp, v.grad_memLp.coeFn_toLp] with x hx hy
+        simp [hx, hy]
+      have hvF : Integrable (fun x => (sol f).val x * v.val x) volume :=
+        (sol f).val_memLp.integrable_mul v.val_memLp
+      have hvG : Integrable (fun x => (sol g).val x * v.val x) volume :=
+        (sol g).val_memLp.integrable_mul v.val_memLp
+      have hfF : Integrable (fun x => f x * v.val x) volume := (Lp.memLp f).integrable_mul v.val_memLp
+      have hfG : Integrable (fun x => g x * v.val x) volume := (Lp.memLp g).integrable_mul v.val_memLp
+      rw [show (fun x => inner ℝ (((sol f).grad + (sol g).grad) x) (v.grad x) +
+          ((sol f).val + (sol g).val) x * v.val x) =
+          (fun x => (inner ℝ ((sol f).grad x) (v.grad x) + (sol f).val x * v.val x) +
+            (inner ℝ ((sol g).grad x) (v.grad x) + (sol g).val x * v.val x)) by
+            funext x; simp [inner_add_left]; ring]
+      change (∫ x, (inner ℝ ((sol f).grad x) (v.grad x) + (sol f).val x * v.val x) +
+        (inner ℝ ((sol g).grad x) (v.grad x) + (sol g).val x * v.val x) ∂volume) = _
+      sorry
+    exact apm_m03J01_weakSolution_unique_ae _ _ _ (hsol (f + g)) hw |>.trans (by simp [hwv])
+  have out_add (f g : apm_m03J01_forcingLp n) : out (f + g) = out f + out g := by
+    have hg := apm_m03J01_gradient_unique_of_val_ae (sol (f + g))
+      (Classical.choose (apm_m03J01_H01_add_exists (sol f) (sol g)))
+    sorry
+  refine ⟨{ toFun := out, map_add' := out_add, map_smul' := ?_ }, ?_⟩
+  · sorry
+  · sorry
 -- END SEAT AREA
 
 lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}

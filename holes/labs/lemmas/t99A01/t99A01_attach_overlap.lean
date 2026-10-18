@@ -231,11 +231,95 @@ theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
 of the punctured open disks, which deformation retracts onto the radius-`1/2`
 circles; the inverse of the equivalence is literally `halfLoop`. -/
 -- BEGIN SEAT AREA
+lemma t99A01_attach_overlap_aux_rel_boundary
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : APMT99A01.AttachRel degree (Sum.inr (i, z)) x) : False := by
+  cases h
+
+lemma t99A01_attach_overlap_aux_rel_boundary_rev
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : APMT99A01.AttachRel degree x (Sum.inr (i, z))) : False := by
+  cases h with
+  | boundary j w =>
+      exact (not_lt_of_ge (by
+        simpa [APMT99A01.circleInDisk] using Circle.norm_coe w)) hz
+
+lemma t99A01_attach_overlap_aux_eqv_interior_iff
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x y : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) x y) :
+    (x = Sum.inr (i, z) ↔ y = Sum.inr (i, z)) := by
+  induction h with
+  | rel x y hxy =>
+      constructor
+      · intro hx
+        subst x
+        exact (t99A01_attach_overlap_aux_rel_boundary hz hxy).elim
+      · intro hy
+        subst y
+        exact (t99A01_attach_overlap_aux_rel_boundary_rev hz hxy).elim
+  | refl => exact Iff.rfl
+  | symm x y h ih => exact ih.symm
+  | trans x y z hxy hyz ihxy ihyz => exact ihxy.trans ihyz
+
+lemma t99A01_attach_overlap_aux_eqv_interior
+    {r : ℕ} {degree : Fin r → ℕ} {i : Fin r} {z : APMT99A01.Disk}
+    (hz : ‖(z : ℂ)‖ < 1) {x : Sum Circle (Fin r × APMT99A01.Disk)}
+    (h : Relation.EqvGen (APMT99A01.AttachRel degree) (Sum.inr (i, z)) x) :
+    x = Sum.inr (i, z) :=
+  (t99A01_attach_overlap_aux_eqv_interior_iff hz h).mp rfl
+
+/-- The open punctured unit disk. -/
+def t99A01_pball : Set ℂ := {z | 0 < ‖z‖ ∧ ‖z‖ < 1}
+
+/-- **Leaf (quotient chart).** The overlap is the disjoint union of punctured open
+disks, by the identity chart on each disk (interior points are singleton classes:
+`t99A01_attach_overlap_aux_eqv_interior`; continuity of the inverse as in
+`t99A01_attach_diskSide`). -/
+theorem t99A01_attach_overlap_aux_chart {r : ℕ} (degree : Fin r → ℕ) :
+    ∃ c : ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) ≃ₜ
+        (Σ _ : Fin r, ↥t99A01_pball),
+      ∀ (i : Fin r) (z : APMT99A01.Disk) (h0 : 0 < ‖(z : ℂ)‖) (h1 : ‖(z : ℂ)‖ < 1),
+        (c.symm ⟨i, ⟨(z : ℂ), h0, h1⟩⟩).1 = APMT99A01.attachMk degree (Sum.inr (i, z)) := by
+  sorry
+
+/-- **Leaf (pure, no quotient).** Punctured disks retract radially onto the
+radius-`1/2` circles: `z ↦ z/‖z‖` one way, `w ↦ w/2` back, homotopy
+`(t, z) ↦ ((1-t)‖z‖ + t/2) · z/‖z‖`. -/
+theorem t99A01_attach_overlap_aux_pball (r : ℕ) :
+    ∃ e : ContinuousMap.HomotopyEquiv (Σ _ : Fin r, ↥t99A01_pball) (Σ _ : Fin r, Circle),
+      ∀ (i : Fin r) (w : Circle),
+        (e.invFun ⟨i, w⟩).1 = i ∧ ((e.invFun ⟨i, w⟩).2 : ℂ) = (w : ℂ) / 2 := by
+  sorry
+
 theorem t99A01_attach_overlap {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : ContinuousMap.HomotopyEquiv
         ↥(APMT99A01.sideA degree ∩ APMT99A01.sideB degree) (Σ _ : Fin r, Circle),
       ∀ (i : Fin r) (w : Circle), (e.invFun ⟨i, w⟩).1 = APMT99A01.halfLoop degree i w := by
-  sorry
+  obtain ⟨c, hc⟩ := t99A01_attach_overlap_aux_chart degree
+  obtain ⟨e2, he2⟩ := t99A01_attach_overlap_aux_pball r
+  refine ⟨c.toHomotopyEquiv.trans e2, fun i w => ?_⟩
+  obtain ⟨h1, h2⟩ := he2 i w
+  have hw : ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ = 1 / 2 := by
+    change ‖(w : ℂ) / 2‖ = 1 / 2
+    rw [norm_div, Circle.norm_coe]; norm_num
+  have hpos : 0 < ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ := by
+    rw [hw]; norm_num
+  have hlt : ‖((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ)‖ < 1 := by
+    rw [hw]; norm_num
+  have hp : e2.invFun ⟨i, w⟩ =
+      ⟨i, ⟨((APMT99A01.halfPoint w : APMT99A01.Disk) : ℂ), hpos, hlt⟩⟩ := by
+    rcases hq : e2.invFun ⟨i, w⟩ with ⟨j, q⟩
+    rw [hq] at h1 h2
+    simp only at h1 h2
+    subst h1
+    congr 1
+    exact Subtype.ext h2
+  change (c.symm (e2.invFun ⟨i, w⟩)).1 = _
+  rw [hp, hc _ _ hpos hlt]
+  rfl
 -- END SEAT AREA
 
 /-- **Leaf (finite additivity, 40--100 lines).** Integral singular homology of a

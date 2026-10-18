@@ -88,6 +88,11 @@ lemma t93A06_periodic_form_descent_aux_pullback_injective
 The fibre characterization is supplied as a hypothesis to keep this seat
 independent of the atlas and fibre seats. -/
 -- BEGIN SEAT AREA
+lemma t93A06_periodic_form_descent_aux_source_smooth :
+    ContDiff ℝ ∞ sourceForm := by
+  unfold sourceForm areaForm
+  fun_prop
+
 theorem t93A06_periodic_form_descent (atlas : SmoothAtlas)
     (hfib : ∀ x y : Plane, projection x = projection y ↔
       ∃ k : Fin 2 → ℤ, ∀ i, y i = x i + (k i : ℝ)) :

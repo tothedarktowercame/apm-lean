@@ -7546,6 +7546,54 @@ theorem cutNewB_range_subset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
 
 /-- Explicit preimages for frontier points (model: `cutOldB_range`). -/
 -- BEGIN SEAT AREA
+lemma cutNewB_range_supset_aux_segment {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
+    segment ℝ (cutPoint L (q + 1)) (cutPoint L (p + 1)) ⊆
+      Set.range (cutNewB L p q) := by
+  have hL : 0 < (L : ℝ) := by exact_mod_cast Nat.zero_lt_of_lt hqL
+  have hstep : 0 < 2 * Real.pi / (L : ℝ) := div_pos (by positivity) hL
+  rw [segment]
+  rintro z ⟨a, s, ha, hs, has, rfl⟩
+  have ha' : a = 1 - s := by linarith
+  subst a
+  let φ := cutAlpha L q + (1 - s) * (2 * Real.pi / L)
+  have hφlo : cutAlpha L q ≤ φ := by
+    dsimp [φ]
+    exact le_add_of_nonneg_right (mul_nonneg ha hstep.le)
+  have hφhi : φ < cutAlpha L q + 2 * Real.pi := by
+    dsimp [φ]
+    have hLone : (1 : ℝ) < L := by exact_mod_cast (show 1 < L by omega)
+    have hstep_lt : 2 * Real.pi / (L : ℝ) < 2 * Real.pi :=
+      (div_lt_iff₀ hL).2 (by nlinarith [Real.pi_pos])
+    have hm : (1 - s) * (2 * Real.pi / L) < 2 * Real.pi :=
+      calc
+        _ ≤ 1 * (2 * Real.pi / L) := mul_le_mul_of_nonneg_right (by linarith) hstep.le
+        _ < 2 * Real.pi := by simpa using hstep_lt
+    nlinarith
+  let aa : AddCircle (2 * Real.pi) := (φ : ℝ)
+  let b : Circle := AddCircle.homeomorphCircle' aa
+  refine ⟨b, ?_⟩
+  rw [cutNewB]
+  simp only [b, Homeomorph.symm_apply_apply]
+  change cutProfileNewB L p q
+    (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q) aa) = _
+  rw [AddCircle.equivIco_coe_eq (p := 2 * Real.pi) (a := cutAlpha L q)
+    (x := φ) ⟨hφlo, hφhi⟩]
+  have hφq1 : φ ≤ cutAlpha L (q + 1) := by
+    dsimp [φ]
+    unfold cutAlpha
+    push_cast
+    field_simp
+    nlinarith [Real.pi_pos]
+  simp only [cutProfileNewB, if_pos hφq1]
+  have hsparam : (φ - cutAlpha L q) * L / (2 * Real.pi) = 1 - s := by
+    dsimp [φ]
+    field_simp [ne_of_gt Real.pi_pos, ne_of_gt hL]
+    ring
+  rw [hsparam]
+  simp [cutSeam, smul_eq_mul]
+  push_cast
+  ring
+
 theorem cutNewB_range_supset {L p q : ℕ} (hpq : p < q) (hqL : q < L)
     (hfront : frontier (cutPiece (cutPoint L (q + 1)) (cutPoint L (p + 1))) =
       {z | ‖z‖ = 1 ∧

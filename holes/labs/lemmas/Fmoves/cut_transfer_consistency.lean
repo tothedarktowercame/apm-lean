@@ -7565,6 +7565,69 @@ theorem cutEdgePoint_eq {L e e' : ℕ} (hL : 2 ≤ L) (he : e < L) (he' : e' < L
   sorry
 
 -- BEGIN SEAT AREA
+lemma cut_transfer_consistency_aux_x {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1) s)
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length u.length s) := by
+  rw [cutAndPaste_aux_length u v t x]
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length + 1, by simp [inverseWord]⟩
+  let j : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length, by simp [inverseWord]⟩
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp [i, j] at this
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+
+lemma cut_transfer_consistency_aux_chordA_end {L p q : ℕ}
+    (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordA L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L q ≠ cutPoint L p :=
+    (cutPoint_ne hpq (by omega : q < p + L)).symm
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L q) (y := cutPoint L p) (r := (1 : ℝ))
+    (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have heq : (1 - (s : ℝ)) • cutPoint L q + (s : ℝ) • cutPoint L p =
+      cutChordA L p q s := by
+    apply Complex.ext <;> simp [cutChordA, Complex.real_smul] <;> ring
+  have hh : ‖cutChordA L p q s‖ < 1 := by
+    rw [← heq]
+    exact hlt
+  rw [h] at hh
+  exact (lt_irrefl 1 hh)
+
+lemma cut_transfer_consistency_aux_chordB_end {L p q : ℕ}
+    (hpq : p < q) (hqL : q < L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordB L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L p ≠ cutPoint L q :=
+    cutPoint_ne hpq (by omega : q < p + L)
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L p) (y := cutPoint L q) (r := (1 : ℝ))
+    (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have heq : (1 - (s : ℝ)) • cutPoint L p + (s : ℝ) • cutPoint L q =
+      cutChordB L p q s := by
+    apply Complex.ext <;> simp [cutChordB, Complex.real_smul] <;> ring
+  have hh : ‖cutChordB L p q s‖ < 1 := by
+    rw [← heq]
+    exact hlt
+  rw [h] at hh
+  exact (lt_irrefl 1 hh)
+
 theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)

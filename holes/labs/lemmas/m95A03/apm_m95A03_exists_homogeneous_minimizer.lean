@@ -363,6 +363,15 @@ theorem apm_m95A03_homogenization
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
+    (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
+    (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f)
+    (hp_lower : ∀ t ∈ Set.Icc a b, p₀ ≤ p t)
+    (hq_nonneg : ∀ t ∈ Set.Icc a b, 0 ≤ q t) :
+    ∃ u : ℝ → ℝ, apm_m95A03_solves a b 0 0 p q f u := by
+  sorry
+
 theorem apm_m95A03_exists_homogeneous_minimizer
     (a b p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
@@ -373,7 +382,12 @@ theorem apm_m95A03_exists_homogeneous_minimizer
       u ∈ apm_m95A03_admissible a b 0 0 ∧
       IsMinOn (apm_m95A03_energy a b p q f)
         (apm_m95A03_admissible a b 0 0) u := by
-  sorry
+  obtain ⟨u, hu⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves
+      a b p₀ hab hp₀ p q f hp hq hf hp_lower hq_nonneg
+  refine ⟨u, hu.1, ⟨hu.1.of_le (by norm_num), hu.2.1, hu.2.2.1⟩, ?_⟩
+  exact apm_m95A03_isMinOn_of_solves a b 0 0 p₀ hab hp₀ p q f u
+    hp hq hf hp_lower hq_nonneg hu
 -- END SEAT AREA
 
 theorem apm_m95A03_minimizers_eqOn

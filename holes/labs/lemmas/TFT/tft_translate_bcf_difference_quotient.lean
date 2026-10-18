@@ -180,6 +180,20 @@ lemma tft_fderiv_translate_hasCompactSupport
 
 /-- U2: the directional difference quotient converges in sup norm. -/
 -- BEGIN SEAT AREA
+lemma tft_translate_bcf_difference_quotient_aux_uniform
+    (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
+    Tendsto (fun h : ℝ =>
+        ‖tftBCFOfCompactSupport
+            (fun y => h⁻¹ • (f (x + h • v + y) - f (x + y)))
+            (tft_difference_quotient_continuous f hf x v h)
+            (tft_difference_quotient_hasCompactSupport f hfc x v h) -
+          tftBCFOfCompactSupport
+            (fun y => fderiv ℝ f (x + y) v)
+            (tft_fderiv_translate_continuous f hf x v)
+            (tft_fderiv_translate_hasCompactSupport f hf hfc x v)‖)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds 0) := by
+  sorry
+
 lemma tft_translate_bcf_difference_quotient
     (f : E → F) (hf : ContDiff ℝ 1 f) (hfc : HasCompactSupport f) (x v : E) :
     Tendsto (fun h : ℝ =>
@@ -192,7 +206,8 @@ lemma tft_translate_bcf_difference_quotient
         (fun y => fderiv ℝ f (x + y) v)
         (tft_fderiv_translate_continuous f hf x v)
         (tft_fderiv_translate_hasCompactSupport f hf hfc x v))) := by
-  sorry
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  exact tft_translate_bcf_difference_quotient_aux_uniform f hf hfc x v
 -- END SEAT AREA
 
 /-- S1: continuity into the fixed stage.  The hypothesis is precisely U1 for

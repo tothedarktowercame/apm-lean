@@ -74,6 +74,28 @@ theorem apm_t96A08_piecewisePath_concat_additive
 coordinate segment gives a smooth local function whose derivative at the
 centre is the prescribed one-form. -/
 -- BEGIN SEAT AREA
+lemma apm_t96A08_chart_radial_primitive_aux_path_of_contMDiff
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (gamma : ℝ → M)
+    (hgamma : ContMDiff 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) gamma) :
+    apm_t96a08_IsPiecewiseSmoothPath I gamma := by
+  refine ⟨hgamma.continuous, 1, fun i ↦ (i.val : ℝ), ?_, ?_, ?_, ?_⟩
+  · intro i j hij
+    exact Nat.cast_lt.mpr hij
+  · norm_num
+  · norm_num
+  · intro i
+    exact hgamma.contMDiffOn
+
+lemma apm_t96A08_chart_radial_primitive_aux_const_path
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [TopologicalSpace M] (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    (x : M) :
+    apm_t96a08_IsPiecewiseSmoothPath I (fun _ : ℝ ↦ x) := by
+  apply apm_t96A08_chart_radial_primitive_aux_path_of_contMDiff
+  exact contMDiff_const
+
 theorem apm_t96A08_chart_radial_primitive
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]

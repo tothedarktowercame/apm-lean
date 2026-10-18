@@ -63,6 +63,47 @@ def apm_t02a01_restrictedCover {Stilde : Type*} [TopologicalSpace Stilde]
 /-- LIBRARY (square-annulus quotient): the inner metric circle survives the
 outer-edge quotient and gives the boundary subtype. -/
 -- BEGIN SEAT AREA
+private def apm_t02a01_boundary_homeomorph_circle_aux_interior
+    (x : apm_t02a01_squareAnnulus) : Prop :=
+  x.1.1 ∈ Set.Ioo (0 : ℝ) 1 ∧ x.1.2 ∈ Set.Ioo (0 : ℝ) 1
+
+private theorem apm_t02a01_boundary_homeomorph_circle_aux_rel_not_interior
+    {x y : apm_t02a01_squareAnnulus} (h : apm_t02a01_edgeRel x y) :
+    ¬ apm_t02a01_boundary_homeomorph_circle_aux_interior x ∧
+      ¬ apm_t02a01_boundary_homeomorph_circle_aux_interior y := by
+  cases h with
+  | horizontal y hy h₀ h₁ =>
+      constructor
+      · intro h; exact (lt_irrefl (0 : ℝ)) h.1.1
+      · intro h; exact (lt_irrefl (1 : ℝ)) h.1.2
+  | vertical x hx h₀ h₁ =>
+      constructor
+      · intro h; exact (lt_irrefl (0 : ℝ)) h.2.1
+      · intro h; exact (lt_irrefl (1 : ℝ)) h.2.2
+
+private theorem apm_t02a01_boundary_homeomorph_circle_aux_eq_of_eqvGen
+    {x y : apm_t02a01_squareAnnulus}
+    (h : Relation.EqvGen apm_t02a01_edgeRel x y) :
+    (apm_t02a01_boundary_homeomorph_circle_aux_interior x → x = y) ∧
+      (apm_t02a01_boundary_homeomorph_circle_aux_interior y → x = y) := by
+  induction h with
+  | rel x y h =>
+      obtain ⟨hx, hy⟩ :=
+        apm_t02a01_boundary_homeomorph_circle_aux_rel_not_interior h
+      exact ⟨fun hi ↦ (hx hi).elim, fun hi ↦ (hy hi).elim⟩
+  | refl x => exact ⟨fun _ ↦ rfl, fun _ ↦ rfl⟩
+  | symm x y h ih => exact ⟨fun hi ↦ (ih.2 hi).symm, fun hi ↦ (ih.1 hi).symm⟩
+  | trans x y z hxy hyz ihxy ihyz =>
+      constructor
+      · intro hx
+        have hxy' := ihxy.1 hx
+        subst y
+        exact ihyz.1 hx
+      · intro hz
+        have hyz' := ihyz.2 hz
+        subst z
+        exact ihxy.2 hz
+
 theorem apm_t02a01_boundary_homeomorph_circle :
     Nonempty (apm_t02a01_boundarySpace ≃ₜ Circle) := by
   sorry

@@ -8913,6 +8913,30 @@ lemma cut_transfer_consistency_aux_chordB_end {L p q : ℕ}
 
 /-- Shared vertex: the point is the start of side `e₀` (`s₀ = 0`) written as the end of side `e` (`τ = 1`), `e₀ = (e+1) % L`. -/
 -- BEGIN SEAT AREA
+lemma cut_transfer_consistency_A_arc_aux_next_aux_edge (L k : ℕ) :
+    edgePoint L k ⟨1, by constructor <;> norm_num⟩ =
+      edgePoint L (k + 1) ⟨0, by constructor <;> norm_num⟩ := by
+  apply Subtype.ext
+  simp only [edgePoint, Subtype.coe_mk]
+  congr 2
+  push_cast
+  ring
+
+lemma cut_transfer_consistency_A_arc_aux_next_aux_seam_zero (L p q : ℕ) :
+    cutSeam L p q 0 =
+      (edgePoint L (p + 1) ⟨0, by constructor <;> norm_num⟩ : Disk) := by
+  simp [cutSeam, edgePoint, cutPoint, cutAlpha]
+  congr 1
+  ring
+
+lemma cut_transfer_consistency_A_arc_aux_next_aux_seam_one (L p q : ℕ) :
+    cutSeam L p q 1 =
+      (edgePoint L (q + 1) ⟨0, by constructor <;> norm_num⟩ : Disk) := by
+  simp only [cutSeam, one_mul, add_sub_cancel_left]
+  simp [edgePoint, cutPoint, cutAlpha]
+  congr 1
+  ring
+
 theorem cut_transfer_consistency_A_arc_aux_next {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)

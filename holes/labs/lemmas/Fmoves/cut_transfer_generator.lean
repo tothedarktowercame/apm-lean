@@ -7848,6 +7848,23 @@ theorem cut_transfer_consistency {Label : Type*} [DecidableEq Label]
   sorry
 
 -- BEGIN SEAT AREA
+lemma cut_transfer_generator_aux_get_u {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) (e : ℕ)
+    (he : e < u.length) :
+    (u ++ [x] ++ v ++ [x] ++ t)[e]'(by simp; omega) = u[e] := by
+  simp [List.getElem_append, he]
+
+lemma cut_transfer_generator_aux_get_x₁ {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t)[u.length]'(by simp) = x := by
+  simp [List.getElem_append]
+
+lemma cut_transfer_generator_aux_get_x₂ {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t)[u.length + 1 + v.length]'(by simp) = x := by
+  rw [show u ++ [x] ++ v ++ [x] ++ t = u ++ (x :: (v ++ (x :: t))) by simp]
+  simp [List.getElem_append]
+
 theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)

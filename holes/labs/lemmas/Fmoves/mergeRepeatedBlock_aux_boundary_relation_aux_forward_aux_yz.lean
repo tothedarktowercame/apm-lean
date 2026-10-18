@@ -2049,6 +2049,72 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_common
 
 /-- Forward generators for the `y` / `y⁻¹` and `z` / `z⁻¹` pairs: they land on the halves of `a` / `a⁻¹` (`hg.on_y/on_z/on_inv_z/on_inv_y`). -/
 -- BEGIN SEAT AREA
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz_aux_class
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z : Signed Label)
+    (hy : ((u ++ v ++ t).map Prod.fst).count y.1 = 0)
+    (hz : ((u ++ v ++ t).map Prod.fst).count z.1 = 0)
+    (k : Fin (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length)
+    (hk : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k).1 = y.1 ∨
+      ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k).1 = z.1) :
+    k.1 = u.length ∨ k.1 = u.length + 1 ∨
+      k.1 = u.length + 2 + v.length ∨
+      k.1 = u.length + 3 + v.length := by
+  have hnm := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_not_mem u v t y.1 hy
+  have hznm := mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_not_mem u v t z.1 hz
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_partition u v t y z k with
+    h | h | h | h | h | h | h
+  · have he : (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k = u.get ⟨k.1, h⟩ := by
+      simp [List.get_eq_getElem, h]
+    have hm : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k).1 ∈ u.map Prod.fst := by
+      rw [he, List.mem_map]
+      exact ⟨_, List.get_mem _ _, rfl⟩
+    rcases hk with hk | hk
+    · exact (hnm.1 (hk ▸ hm)).elim
+    · exact (hznm.1 (hk ▸ hm)).elim
+  · exact Or.inl h
+  · exact Or.inr (Or.inl h)
+  · rcases h with ⟨q, hq, heq⟩
+    have he : (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k = v.get ⟨q, hq⟩ := by
+      simp only [List.get_eq_getElem]
+      simp only [heq]
+      simp only [List.append_assoc]
+      rw [List.getElem_append_right (show u.length ≤ u.length + 2 + q by omega)]
+      simp only [show u.length + 2 + q - u.length = 2 + q by omega]
+      rw [List.getElem_append_right (show [y, z].length ≤ 2 + q by simp)]
+      simp only [show 2 + q - [y, z].length = q by simp]
+      exact List.getElem_append_left hq
+    have hm : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k).1 ∈ v.map Prod.fst := by
+      rw [he, List.mem_map]
+      exact ⟨_, List.get_mem _ _, rfl⟩
+    rcases hk with hk | hk
+    · exact (hnm.2.1 (hk ▸ hm)).elim
+    · exact (hznm.2.1 (hk ▸ hm)).elim
+  · exact Or.inr (Or.inr (Or.inl h))
+  · exact Or.inr (Or.inr (Or.inr h))
+  · rcases h with ⟨q, hq, heq⟩
+    have he : (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k = t.get ⟨q, hq⟩ := by
+      simp only [List.get_eq_getElem]
+      simp only [heq]
+      simp only [List.append_assoc]
+      rw [List.getElem_append_right (show u.length ≤ u.length + 4 + v.length + q by omega)]
+      simp only [show u.length + 4 + v.length + q - u.length = 4 + v.length + q by omega]
+      rw [List.getElem_append_right
+        (show [y, z].length ≤ 4 + v.length + q by norm_num; omega)]
+      simp only [show 4 + v.length + q - [y, z].length = v.length + 2 + q by
+        norm_num; omega]
+      rw [List.getElem_append_right (show v.length ≤ v.length + 2 + q by omega)]
+      simp only [show v.length + 2 + q - v.length = 2 + q by omega]
+      rw [List.getElem_append_right
+        (show [inv z, inv y].length ≤ 2 + q by norm_num)]
+      simp only [show 2 + q - [inv z, inv y].length = q by norm_num]
+    have hm : ((u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).get k).1 ∈ t.map Prod.fst := by
+      rw [he, List.mem_map]
+      exact ⟨_, List.get_mem _ _, rfl⟩
+    rcases hk with hk | hk
+    · exact (hnm.2.2 (hk ▸ hm)).elim
+    · exact (hznm.2.2 (hk ▸ hm)).elim
+
 lemma mergeRepeatedBlock_aux_boundary_relation_aux_forward_aux_yz
     {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (y z a : Signed Label)

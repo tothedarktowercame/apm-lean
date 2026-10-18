@@ -2136,7 +2136,24 @@ lemma apm_m01J04_mollify_exists_compact_core
 /-- Simultaneous `L²` approximate-identity estimate for the value and weak
 gradient fields.  This leaf contains no differentiation or `H¹` packaging. -/
 -- BEGIN SEAT AREA
-lemma apm_m01J04_mollify_exists_L2_kernel
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_kernel
+    {d : ℕ} {delta : ℝ} (hdelta : 0 < delta) :
+    ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ ∧
+      HasCompactSupport κ ∧
+      Function.support κ ⊆ Metric.closedBall 0 delta ∧
+      (∀ x, 0 ≤ κ x) ∧ (∫ x, κ x ∂volume) = 1 := by
+  let φ : ContDiffBump (0 : EuclideanSpace ℝ (Fin d)) :=
+    ⟨delta / 2, delta, half_pos hdelta, half_lt_self hdelta⟩
+  refine ⟨φ.normed volume, φ.contDiff_normed, φ.hasCompactSupport_normed,
+    ?_, φ.nonneg_normed, φ.integral_normed⟩
+  rw [φ.support_normed_eq]
+  exact Metric.ball_subset_closedBall
+
+/-- The analytic core of the approximate-identity argument.  It is Young's
+inequality followed by density of continuous compactly supported functions in
+`L²`, applied simultaneously to the scalar and finite-dimensional fields. -/
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_error
     {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
     {delta eta : ℝ} (hdelta : 0 < delta) (heta : 0 < eta) :
     ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
@@ -2148,6 +2165,19 @@ lemma apm_m01J04_mollify_exists_L2_kernel
         (eLpNorm (MeasureTheory.convolution κ w.grad
           (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta := by
   sorry
+
+lemma apm_m01J04_mollify_exists_L2_kernel
+    {d : ℕ} (w : apm_m01J04_H1 d Set.univ)
+    {delta eta : ℝ} (hdelta : 0 < delta) (heta : 0 < eta) :
+    ∃ κ : EuclideanSpace ℝ (Fin d) → ℝ,
+      ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) κ ∧
+      HasCompactSupport κ ∧
+      Function.support κ ⊆ Metric.closedBall 0 delta ∧
+      (eLpNorm (MeasureTheory.convolution κ w.val
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.val) 2 volume).toReal +
+      (eLpNorm (MeasureTheory.convolution κ w.grad
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume - w.grad) 2 volume).toReal < eta := by
+  exact apm_m01J04_mollify_exists_L2_kernel_aux_error w hdelta heta
 -- END SEAT AREA
 
 /-- Convolution commutes with the encoded weak gradient.  This is the

@@ -6724,9 +6724,163 @@ theorem cutNewA_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
   sorry
 
 -- BEGIN SEAT AREA
+lemma cutNewB_injective_aux_exp {x y : ℝ}
+    (hxy : Complex.exp ((x : ℂ) * Complex.I) =
+      Complex.exp ((y : ℂ) * Complex.I))
+    (hlo : -(2 * Real.pi) < x - y) (hhi : x - y < 2 * Real.pi) : x = y := by
+  obtain ⟨k, hk⟩ := Complex.exp_eq_exp_iff_exists_int.mp hxy
+  have hi := congrArg Complex.im hk
+  simp at hi
+  have hk0 : k = 0 := by
+    by_contra hn
+    have hkpos : (1 : ℝ) ≤ k ∨ (k : ℝ) ≤ -1 := by
+      have : k ≤ -1 ∨ 1 ≤ k := by omega
+      exact this.symm.imp (fun h => by exact_mod_cast h) (fun h => by exact_mod_cast h)
+    rcases hkpos with hkpos | hkneg
+    · nlinarith [Real.pi_pos]
+    · nlinarith [Real.pi_pos]
+  subst k
+  simpa using hi
+
+lemma cutNewB_injective_aux_seam_norm {L p q : ℕ} (hpq : p < q) (hqL : q < L)
+    {s : ℝ} (hs0 : 0 ≤ s) (hs1 : s ≤ 1) (h : ‖cutSeam L p q s‖ = 1) :
+    s = 0 ∨ s = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0' : 0 < s := lt_of_le_of_ne hs0 hn.1.symm
+  have hs1' : 0 < 1 - s := sub_pos.mpr (lt_of_le_of_ne hs1 hn.2)
+  have hne : cutPoint L (p + 1) ≠ cutPoint L (q + 1) :=
+    cutPoint_ne (by omega) (by omega)
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L (p + 1)) (y := cutPoint L (q + 1))
+    (r := (1 : ℝ)) (a := 1 - s) (b := s)
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1' hs0' (by ring)
+  have heq : (1 - s) • cutPoint L (p + 1) + s • cutPoint L (q + 1) =
+      cutSeam L p q s := by
+    apply Complex.ext <;> simp [cutSeam, Complex.real_smul] <;> ring
+  have hlt' : ‖cutSeam L p q s‖ < 1 := by rw [← heq]; exact hlt
+  rw [h] at hlt'
+  exact (lt_irrefl 1 hlt')
+
 theorem cutNewB_injective {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     Function.Injective (cutNewB L p q) := by
   sorry
+/-
+  intro b₁ b₂ h
+  let x := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+    (AddCircle.homeomorphCircle'.symm b₁)
+  let y := AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)
+    (AddCircle.homeomorphCircle'.symm b₂)
+  have hx := x.2
+  have hy := y.2
+  have hxy : cutProfileNewB L p q x.1 = cutProfileNewB L p q y.1 := by
+    simpa only [cutNewB, AddCircle.liftIco, Function.comp_apply,
+      Set.restrict_apply] using h
+  have hL : (0 : ℝ) < L := by exact_mod_cast (lt_trans (Nat.zero_lt_of_lt hpq) hqL)
+  have hpi : 0 < Real.pi := Real.pi_pos
+  have ha (m n : ℕ) : cutAlpha L m - cutAlpha L n =
+      2 * Real.pi * ((m : ℝ) - n) / L := by simp [cutAlpha]; ring
+  have hval : x.1 = y.1 := by
+    unfold cutProfileNewB at hxy
+    split_ifs at hxy with hx1 hx2 hy1 hy2
+    · have hPQ : cutPoint L (q + 1) - cutPoint L (p + 1) ≠ 0 := sub_ne_zero.mpr
+        ((cutPoint_ne (by omega) (by omega)).symm)
+      unfold cutSeam at hxy
+      apply_fun fun z => z - cutPoint L (p + 1) at hxy
+      simp only [add_sub_cancel_left] at hxy
+      have hs := (mul_left_cancel₀ hPQ (by
+        simpa [mul_comm, mul_left_comm, mul_assoc] using hxy))
+      exact (mul_right_cancel₀ (show (L : ℂ) ≠ 0 by exact_mod_cast ne_of_gt hL) (by
+        apply Complex.ofReal_injective
+        field_simp [ne_of_gt hpi]
+        exact_mod_cast hs))
+    · have hs0 : 0 ≤ (x.1 - cutAlpha L q) * L / (2 * Real.pi) := by positivity
+      have hs1 : (x.1 - cutAlpha L q) * L / (2 * Real.pi) ≤ 1 := by
+        rw [div_le_one (by positivity)]
+        rw [show cutAlpha L (q + 1) - cutAlpha L q = 2 * Real.pi / L by
+          rw [ha]; push_cast; ring] at hx1
+        nlinarith
+      have hn : ‖cutSeam L p q ((x.1-cutAlpha L q)*L/(2*Real.pi))‖=1 := by
+        rw [hxy, Complex.norm_exp_ofReal_mul_I]
+      rcases cutNewB_injective_aux_seam_norm hpq hqL hs0 hs1 hn with hs|hs
+      · have xx : x.1 = cutAlpha L q := by field_simp at hs ⊢; nlinarith [hL,hpi]
+        subst x
+        exfalso
+        have he := hxy
+        simp [cutSeam, cutPoint] at he
+        apply cutNewB_injective_aux_exp he
+        all_goals rw [ha] <;> nlinarith [hy2, hy.2, hL, hpi]
+      · have xx : x.1 = cutAlpha L (q + 1) := by
+          unfold cutAlpha at hs ⊢; field_simp at *; nlinarith [hL,hpi]
+        subst x
+        exfalso
+        have he := hxy
+        simp [cutSeam, cutPoint] at he
+        apply cutNewB_injective_aux_exp he
+        all_goals rw [ha] <;> nlinarith [hy2, hy.2, hqL, hL, hpi]
+    · have hs0 : 0 ≤ (x.1 - cutAlpha L q) * L / (2 * Real.pi) := by positivity
+      have hs1 : (x.1 - cutAlpha L q) * L / (2 * Real.pi) ≤ 1 := by
+        rw [div_le_one (by positivity)]
+        rw [show cutAlpha L (q + 1) - cutAlpha L q = 2 * Real.pi / L by rw [ha]; push_cast; ring] at hx1
+        nlinarith
+      have hn : ‖cutSeam L p q ((x.1-cutAlpha L q)*L/(2*Real.pi))‖=1 := by
+        rw [hxy, Complex.norm_exp_ofReal_mul_I]
+      rcases cutNewB_injective_aux_seam_norm hpq hqL hs0 hs1 hn with hs|hs
+      · have xx : x.1 = cutAlpha L q := by field_simp at hs ⊢; nlinarith [hL,hpi]
+        subst x
+        exfalso
+        have he := hxy
+        simp [cutSeam, cutPoint] at he
+        apply cutNewB_injective_aux_exp he
+        all_goals unfold cutSB cutAlpha at *; field_simp at * <;> nlinarith [hL,hpi]
+      · have xx : x.1 = cutAlpha L (q + 1) := by
+          unfold cutAlpha at hs ⊢; field_simp at *; nlinarith [hL,hpi]
+        subst x
+        exfalso
+        have he := hxy
+        simp [cutSeam, cutPoint] at he
+        apply cutNewB_injective_aux_exp he
+        all_goals unfold cutSB cutAlpha at *; field_simp at * <;> nlinarith [hqL,hL,hpi]
+    · have hr := hxy.symm
+      exfalso
+      have hs0 : 0 ≤ (y.1 - cutAlpha L q) * L / (2 * Real.pi) := by positivity
+      have hs1 : (y.1 - cutAlpha L q) * L / (2 * Real.pi) ≤ 1 := by
+        rw [div_le_one (by positivity)]
+        rw [show cutAlpha L (q + 1) - cutAlpha L q = 2 * Real.pi / L by rw [ha]; push_cast; ring] at hy1
+        nlinarith
+      have hn : ‖cutSeam L p q ((y.1-cutAlpha L q)*L/(2*Real.pi))‖=1 := by
+        rw [hr, Complex.norm_exp_ofReal_mul_I]
+      rcases cutNewB_injective_aux_seam_norm hpq hqL hs0 hs1 hn with hs|hs <;>
+        unfold cutSeam cutPoint at hr <;> simp at hr <;>
+        apply cutNewB_injective_aux_exp hr <;> rw [ha] <;> nlinarith [hx2, hx.2, hqL, hL, hpi]
+    · apply cutNewB_injective_aux_exp hxy
+      · nlinarith [hx.2, hy.2, hpi]
+      · nlinarith [hx.2, hy.2, hpi]
+    · apply cutNewB_injective_aux_exp hxy
+      all_goals unfold cutSB cutAlpha at *; field_simp at * <;> nlinarith [hL,hpi]
+    · have hr := hxy.symm
+      exfalso
+      have hs0 : 0 ≤ (y.1 - cutAlpha L q) * L / (2 * Real.pi) := by positivity
+      have hs1 : (y.1 - cutAlpha L q) * L / (2 * Real.pi) ≤ 1 := by
+        rw [div_le_one (by positivity)]
+        rw [show cutAlpha L (q + 1) - cutAlpha L q = 2 * Real.pi / L by rw [ha]; push_cast; ring] at hy1
+        nlinarith
+      have hn : ‖cutSeam L p q ((y.1-cutAlpha L q)*L/(2*Real.pi))‖=1 := by
+        rw [hr, Complex.norm_exp_ofReal_mul_I]
+      rcases cutNewB_injective_aux_seam_norm hpq hqL hs0 hs1 hn with hs|hs <;>
+        unfold cutSeam cutPoint at hr <;> simp at hr <;>
+        apply cutNewB_injective_aux_exp hr <;>
+        unfold cutSB cutAlpha at * <;> field_simp at * <;> nlinarith [hqL,hL,hpi]
+    · have hr := hxy.symm
+      apply cutNewB_injective_aux_exp hr
+      all_goals unfold cutSB cutAlpha at *; field_simp at * <;> nlinarith [hL,hpi]
+    · apply cutNewB_injective_aux_exp hxy
+      all_goals unfold cutSB cutAlpha at *; field_simp at * <;> nlinarith [hL,hpi]
+  have hc : AddCircle.homeomorphCircle'.symm b₁ = AddCircle.homeomorphCircle'.symm b₂ := by
+    apply (AddCircle.equivIco (2 * Real.pi) (cutAlpha L q)).injective
+    exact Subtype.ext hval
+  exact AddCircle.homeomorphCircle'.symm.injective hc
+-/
 -- END SEAT AREA
 
 theorem cutOldA_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)

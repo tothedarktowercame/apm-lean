@@ -106,6 +106,27 @@ theorem mergeRepeatedBlock {Label : Type*} [DecidableEq Label]
 /-- Standard normal-form slide.  Cut from the first `x` to the second, and
 send the two triangles on either side affinely across the new diagonal. -/
 -- BEGIN SEAT AREA
+lemma cutAndPaste_aux_length
+    {Label : Type*} (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t).length =
+      (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  simp [inverseWord, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
+
+lemma cutAndPaste_aux_target_nonempty
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    u ++ [x, x] ++ inverseWord v ++ t ≠ [] := by
+  simp
+
+lemma cutAndPaste_aux_target_even_length
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    Even (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  rw [← cutAndPaste_aux_length u v t x]
+  exact hw.2.1
+
 theorem cutAndPaste {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)

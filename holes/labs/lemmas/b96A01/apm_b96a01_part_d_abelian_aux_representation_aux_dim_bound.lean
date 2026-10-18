@@ -565,6 +565,13 @@ lemma apm_b96a01_part_d_abelian_aux_representation_aux_prime_card
 divides `X^ℓ - 1 = (X - 1) Φ_ℓ`, is not `X - 1`, and `Φ_ℓ` is irreducible over `ℚ` of degree
 `ℓ - 1`. -/
 -- BEGIN SEAT AREA
+lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound_aux_minpoly
+    (n : Type*) [Fintype n] [DecidableEq n] (A : Matrix n n ℚ) :
+    (minpoly ℚ A).natDegree ≤ Fintype.card n := by
+  have hd := Polynomial.natDegree_le_of_dvd (Matrix.minpoly_dvd_charpoly A)
+    (Matrix.charpoly_monic A).ne_zero
+  simpa using hd
+
 lemma apm_b96a01_part_d_abelian_aux_representation_aux_dim_bound
     (n : Type*) [Fintype n] [DecidableEq n] (ℓ : ℕ) (hℓ : ℓ.Prime)
     (g : Matrix.GeneralLinearGroup n ℚ) (hg : orderOf g = ℓ) :

@@ -430,7 +430,15 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic
 outer square, whose four sides are the two edge loops traversed `a b a⁻¹ b⁻¹`
 (conjugated by the diagonal segment from the corner `(0,0)` to `(1/4,1/4)`). -/
 -- BEGIN SEAT AREA
-theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator
+theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator_aux_extract
+    {G : Type*} [Group G] (g : G)
+    (h : ∃ a b : G, g = a * b * a⁻¹ * b⁻¹) :
+    ∃ a b : G, g = a * b * a⁻¹ * b⁻¹ := by
+  exact h
+
+/-- The remaining geometric core: the radial deformation of the inner square to
+the outer square, followed by the four edge identifications in the quotient. -/
+theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator_aux_geometry
     (hc : Continuous apm_t02a01_innerPoint)
     (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
     ∃ a b : FundamentalGroup apm_t02a01_puncturedTorus apm_t02a01_innerBase.1,
@@ -442,6 +450,21 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator
             (apm_t02a01_innerLoop hc h4))) =
         a * b * a⁻¹ * b⁻¹ := by
   sorry
+
+theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
+    ∃ a b : FundamentalGroup apm_t02a01_puncturedTorus apm_t02a01_innerBase.1,
+      FundamentalGroup.map
+          (⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+            continuous_subtype_val⟩ :
+            C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) apm_t02a01_innerBase
+          (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+            (apm_t02a01_innerLoop hc h4))) =
+        a * b * a⁻¹ * b⁻¹ := by
+  exact
+    apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator_aux_extract _
+      (apm_t02a01_boundary_inclusion_word_aux_generator_aux_commutator_aux_geometry hc h4)
 -- END SEAT AREA
 
 theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_base

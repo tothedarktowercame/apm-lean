@@ -322,6 +322,49 @@ hypothesis is explicit, so this leaf can be proved before the local covering
 construction lands.  The presentation hypotheses identify the supplied
 character uniquely from its values on the three generators. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff
+    (hcov : IsCoveringMap apm_t01a04_circleCoverMap)
+    (g : apm_t01a04_piOne) :
+    g ∈ MonoidHom.range
+        (apm_t01a04_circleCoverMap_base ▸
+          FundamentalGroup.map apm_t01a04_circleCoverMap
+            apm_t01a04_circleCoverBase) ↔
+      hcov.monodromy (FundamentalGroup.toPath g)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ =
+        ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact hcov.monodromy_map (FundamentalGroup.toPath a)
+  · intro hg
+    obtain ⟨γ⟩ := g
+    let lift := hcov.liftPath γ apm_t01a04_circleCoverBase (by simp)
+    have hend : lift 1 = apm_t01a04_circleCoverBase := by
+      simpa [IsCoveringMap.monodromy, lift] using congrArg Subtype.val hg
+    let δ : Path apm_t01a04_circleCoverBase apm_t01a04_circleCoverBase :=
+      ⟨lift, hcov.liftPath_zero _ _ _, hend⟩
+    refine ⟨Path.Homotopic.Quotient.mk δ, ?_⟩
+    change (Path.Homotopic.Quotient.mk δ).map apm_t01a04_circleCoverMap =
+      Path.Homotopic.Quotient.mk γ
+    rw [← Path.Homotopic.Quotient.mk_map]
+    congr 1
+    ext t
+    exact congrFun (hcov.liftPath_lifts γ apm_t01a04_circleCoverBase (by simp)) t
+
+lemma apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_monodromy_iff
+    (phic : apm_t01a04_piOne →* apm_t01a04_Parity)
+    (hgen : Subgroup.closure
+      {apm_t01A04_loopA, apm_t01A04_loopB, apm_t01A04_loopC} = ⊤)
+    (hca : phic apm_t01A04_loopA = Multiplicative.ofAdd 0)
+    (hcb : phic apm_t01A04_loopB = Multiplicative.ofAdd 0)
+    (hcc : phic apm_t01A04_loopC = Multiplicative.ofAdd 1)
+    (hcov : IsCoveringMap apm_t01a04_circleCoverMap)
+    (g : apm_t01a04_piOne) :
+    hcov.monodromy (FundamentalGroup.toPath g)
+          ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ =
+        ⟨apm_t01a04_circleCoverBase, apm_t01a04_circleCoverMap_base⟩ ↔
+      phic g = 1 := by
+  sorry
+
 theorem apm_t01A04_circleCoverMap_range_eq_parity_kernel
     (phic : apm_t01a04_piOne →* apm_t01a04_Parity)
     (hgen : Subgroup.closure
@@ -334,7 +377,11 @@ theorem apm_t01A04_circleCoverMap_range_eq_parity_kernel
       (apm_t01a04_circleCoverMap_base ▸
         FundamentalGroup.map apm_t01a04_circleCoverMap
           apm_t01a04_circleCoverBase) = phic.ker := by
-  sorry
+  ext g
+  rw [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_range_iff hcov]
+  rw [apm_t01A04_circleCoverMap_range_eq_parity_kernel_aux_monodromy_iff
+    phic hgen hca hcb hcc hcov]
+  exact MonoidHom.mem_ker
 -- END SEAT AREA
 
 /-- The monodromy calculation for the torus-doubled cover.  As above, the

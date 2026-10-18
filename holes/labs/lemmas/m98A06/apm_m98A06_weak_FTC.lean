@@ -308,8 +308,27 @@ theorem apm_m98A06_wirtinger : apm_m98A06_WirtingerFact := by
   sorry
 
 -- BEGIN SEAT AREA
-theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
+lemma apm_m98A06_weak_FTC_aux_integrable
+    (f : ℝ → ℝ) (hf : MemLp f 2 (volume.restrict (Ioo (0 : ℝ) Real.pi))) :
+    Integrable f (volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  exact hf.integrable (by norm_num)
+
+/-- The remaining one-dimensional Sobolev representation step: a continuous
+representative with an integrable distributional derivative is its indefinite
+integral, after fixing its value at the left endpoint. -/
+lemma apm_m98A06_weak_FTC_aux_representation
+    (u du : ℝ → ℝ)
+    (hu : ContinuousOn u (Icc (0 : ℝ) Real.pi))
+    (hu0 : u 0 = 0)
+    (hdu : Integrable du (volume.restrict (Ioo (0 : ℝ) Real.pi)))
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) u du) :
+    ∀ x ∈ Icc (0 : ℝ) Real.pi, u x = ∫ t in (0 : ℝ)..x, du t := by
   sorry
+
+theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
+  intro u du h
+  exact apm_m98A06_weak_FTC_aux_representation u du h.1 h.2.1
+    (apm_m98A06_weak_FTC_aux_integrable du h.2.2.2.2.1) h.2.2.2.2.2
 -- END SEAT AREA
 
 theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by

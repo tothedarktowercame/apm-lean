@@ -122,12 +122,27 @@ theorem apm_t03J03_connected_double_cover_classification :
 
 /-- **LIBRARY: classification of disconnected two-sheeted covers.** -/
 -- BEGIN SEAT AREA
+lemma apm_t03J03_disconnected_double_cover_trivial_aux_base_pathConnected :
+    IsPathConnected (Set.univ : Set apm_t03J03_N3) := by
+  letI : PathConnectedSpace Disk :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (Metric.isPathConnected_closedBall (E := ℂ) zero_le_one)
+  rw [← Set.range_eq_univ.mpr (surjective_surfaceQuotient false 3)]
+  simpa only [Set.image_univ] using
+    (pathConnectedSpace_iff_univ.mp (inferInstance : PathConnectedSpace Disk)).image
+      (continuous_surfaceQuotient false 3)
+
 theorem apm_t03J03_disconnected_double_cover_trivial :
     ∀ (E : Type) (tE : TopologicalSpace E) (p : E → apm_t03J03_N3),
       apm_t03J03_isTwoFoldCover tE inferInstance p →
       ¬ @IsConnected E tE (Set.univ : Set E) →
       apm_t03J03_generalCoverEquivalent tE inferInstance
         p apm_t03J03_trivialCoverMap := by
+  intro E tE p hp hnc
+  letI : TopologicalSpace E := tE
+  haveI : PathConnectedSpace apm_t03J03_N3 := by
+    exact pathConnectedSpace_iff_univ.mpr
+      apm_t03J03_disconnected_double_cover_trivial_aux_base_pathConnected
   sorry
 -- END SEAT AREA
 

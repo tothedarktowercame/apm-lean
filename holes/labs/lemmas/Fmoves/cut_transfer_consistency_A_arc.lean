@@ -8252,7 +8252,36 @@ theorem cut_transfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (hN : (N : ℂ) = newA (cutEdgeCircle (u ++ [x] ++ v ++ [x] ++ t).length e₀ s₀)) :
     ∃ T : Disk, (T : ℂ) = cutTransfer (u ++ [x] ++ v ++ [x] ++ t).length u.length (u.length + 1 + v.length) e τ ∧
       Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N T := by
-  sorry
+  let L := (u ++ [x] ++ v ++ [x] ++ t).length
+  let p := u.length
+  let q := u.length + 1 + v.length
+  have hL : 2 ≤ L := by
+    dsimp [L]
+    simp only [List.length_append, List.length_cons, List.length_nil]
+    omega
+  have he₀L : e₀ < L := by
+    dsimp [L, q] at he₀q ⊢
+    simp at he₀q ⊢
+    omega
+  have hedges : edgePoint L e τ = edgePoint L e₀ s₀ := by
+    apply Subtype.ext
+    exact hP.trans (D.oldA_arc e₀ s₀ he₀ he₀q)
+  rcases heq hL (by change e < L at he; exact he) he₀L hedges with hs | hf | hb
+  · rcases hs with ⟨rfl, rfl⟩
+    refine ⟨N, ?_, Relation.EqvGen.refl N⟩
+    rw [hN]
+    by_cases hp : e = p
+    · subst e
+      rw [D.newA_x]
+      simp [cutTransfer, p, q, L]
+    · have hp' : p < e := by omega
+      have hq' : e ≠ q := by omega
+      rw [D.newA_v e τ (by omega) he₀q]
+      simp [cutTransfer, hp, hq', p, q, L, hp', he₀q]
+  · rcases hf with ⟨hτ, hs₀, hadj⟩
+    sorry
+  · rcases hb with ⟨hs₀, hτ, hadj⟩
+    sorry
 -- END SEAT AREA
 
 /-- Piece `A`, chord position `s₀` (a unit point only at the ends `Q`, `P`). -/

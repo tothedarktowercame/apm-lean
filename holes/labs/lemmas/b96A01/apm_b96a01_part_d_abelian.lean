@@ -324,6 +324,17 @@ theorem apm_b96a01_part_d_nonabelian :
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_b96a01_part_d_abelian_aux_representation
+    (n : Type*) [Fintype n] [DecidableEq n]
+    (G : Subgroup (Matrix.GeneralLinearGroup n ℚ))
+    (hG : Finite G) (hs : IsSimpleGroup G)
+    (hcomm : ∀ a b : G, a * b = b * a)
+    (p : ℕ) (hp : p.Prime)
+    (hex : ¬(Fintype.card n = 1 ∧ p = 2)) :
+    ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
+      Function.Injective ρ := by
+  sorry
+
 theorem apm_b96a01_part_d_abelian :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),
@@ -331,7 +342,8 @@ theorem apm_b96a01_part_d_abelian :
       ∀ p : ℕ, p.Prime → ¬(Fintype.card n = 1 ∧ p = 2) →
         ∃ ρ : G →* Matrix.GeneralLinearGroup n (ZMod p),
           Function.Injective ρ := by
-  sorry
+  intro n _ _ G hG hs hcomm p hp hex
+  exact apm_b96a01_part_d_abelian_aux_representation n G hG hs hcomm p hp hex
 -- END SEAT AREA
 
 theorem apm_b96a01_part_d :

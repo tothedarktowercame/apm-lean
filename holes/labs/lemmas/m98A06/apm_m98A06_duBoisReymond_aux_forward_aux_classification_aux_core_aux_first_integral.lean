@@ -347,12 +347,42 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_deriv_eq
 
 -- du Bois-Reymond first integral: y' + ∫₀ˣ y is constant on [0, a].
 -- BEGIN SEAT AREA
-lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_primitive_continuous
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ContinuousOn (fun x ↦ ∫ t in (0 : ℝ)..x, y t) (Icc 0 a) := by
+  have hi : IntegrableOn y (uIcc (0 : ℝ) a) := by
+    rw [uIcc_of_le ha.le]
+    exact hy.1.1.continuousOn.integrableOn_Icc
+  simpa [uIcc_of_le ha.le] using
+    (intervalIntegral.continuousOn_primitive_interval hi)
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_g_continuous
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ContinuousOn
+      (fun x ↦ derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t)
+      (Icc 0 a) := by
+  exact (apm_m98A06_duBoisReymond_aux_forward_aux_derivWithin_continuous
+    a y₀ ya ha y hy.1).add
+      (apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_primitive_continuous
+        a y₀ ya ha y hy)
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_core
     (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
     (hy : apm_m98a06_IsStationary a y₀ ya y) :
     ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
       derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m := by
   sorry
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∃ m : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      derivWithin y (Icc 0 a) x + ∫ t in (0 : ℝ)..x, y t = m := by
+  exact
+    apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core_aux_first_integral_aux_core
+      a y₀ ya ha y hy
 -- END SEAT AREA
 
 -- The first integral makes y'' = −y, so y is a trigonometric combination (ODE uniqueness).

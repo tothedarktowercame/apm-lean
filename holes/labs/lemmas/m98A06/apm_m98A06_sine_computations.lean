@@ -311,6 +311,29 @@ theorem apm_m98A06_weak_FTC : apm_m98A06_WeakFTCFact := by
   sorry
 
 -- BEGIN SEAT AREA
+private lemma apm_m98A06_sine_computations_aux_deriv
+    (L : ℝ) (k : ℕ) (x : ℝ) :
+    deriv (fun t : ℝ ↦ Real.sin ((k : ℝ) * Real.pi * t / L)) x =
+      ((k : ℝ) * Real.pi / L) *
+        Real.cos ((k : ℝ) * Real.pi * x / L) := by
+  by_cases hL : L = 0
+  · subst L
+    simp
+  · convert ((Real.hasDerivAt_sin ((k : ℝ) * Real.pi * x / L)).comp x
+      (((hasDerivAt_id x).const_mul ((k : ℝ) * Real.pi)).div_const L)).deriv using 1 <;>
+      field_simp <;> ring
+
+private lemma apm_m98A06_sine_computations_aux_admissible
+    (L : ℝ) (hL : 0 < L) (k : ℕ) :
+    apm_m98a06_Admissible L 0 0
+      (fun x ↦ Real.sin ((k : ℝ) * Real.pi * x / L)) := by
+  refine ⟨by fun_prop, by simp, ?_⟩
+  have heq : (k : ℝ) * Real.pi * L / L = (k : ℝ) * Real.pi := by
+    field_simp [ne_of_gt hL]
+  change Real.sin ((k : ℝ) * Real.pi * L / L) = 0
+  rw [heq]
+  exact Real.sin_nat_mul_pi k
+
 theorem apm_m98A06_sine_computations : apm_m98A06_SineComputationsFact := by
   sorry
 -- END SEAT AREA

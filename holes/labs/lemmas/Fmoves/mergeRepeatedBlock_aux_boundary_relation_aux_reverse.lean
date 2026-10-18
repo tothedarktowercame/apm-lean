@@ -1612,7 +1612,16 @@ lemma mergeRepeatedBlock_aux_boundary_relation_aux_reverse
     ∀ d₁ d₂ : Circle, WordRel (u ++ [a] ++ v ++ [inv a] ++ t) (circleToDisk d₁) (circleToDisk d₂) →
       Relation.EqvGen (fun p q : Circle => WordRel (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t) (circleToDisk p) (circleToDisk q))
         (g.symm d₁) (g.symm d₂) := by
-  sorry
+  intro d₁ d₂ hrel
+  rcases hrel with ⟨i, j, hij, s, hlabel, hd₁, hd₂⟩
+  have hi := mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition u v t a i
+  have hj := mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_partition u v t a j
+  rcases mergeRepeatedBlock_aux_boundary_relation_aux_reverse_aux_a_fresh u v t y z a ha with
+    ⟨hau, hay, haz, hav, hat⟩
+  clear hg
+  rcases hi with hi | hi | hi | hi | hi <;>
+    rcases hj with hj | hj | hj | hj | hj
+  all_goals sorry
 -- END SEAT AREA
 
 /-- Combinatorial leaf: the seven edge formulas carry generators to

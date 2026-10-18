@@ -86,12 +86,22 @@ theorem apm_t02A04_rational_homology :
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_t02A04_lefschetz_number_aux_trace_H0_aux_induced_eq_id
+    (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)
+    (f : C(apm_t02a04_X, apm_t02a04_X)) :
+    (induced f 0).hom = LinearMap.id := by
+  sorry
+
 lemma apm_t02A04_lefschetz_number_aux_trace_H0
     [FiniteDimensional ℚ (apm_t02A04_HQ 0)]
     (e : apm_t02A04_HQ 0 ≅ ModuleCat.of ℚ ℚ)
     (f : C(apm_t02a04_X, apm_t02a04_X)) :
     LinearMap.trace ℚ (apm_t02A04_HQ 0) (induced f 0).hom = 1 := by
-  sorry
+  rw [apm_t02A04_lefschetz_number_aux_trace_H0_aux_induced_eq_id e f,
+    LinearMap.trace_id]
+  have hfinrank : Module.finrank ℚ (apm_t02A04_HQ 0) = 1 := by
+    simpa using e.toLinearEquiv.finrank_eq
+  simp [hfinrank]
 -- END SEAT AREA
 
 theorem apm_t02A04_lefschetz_number

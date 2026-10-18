@@ -9064,7 +9064,70 @@ theorem cut_word_side {Label : Type*} [DecidableEq Label]
       e' ≠ u.length + 1 + v.length →
       cutSideMap u.length (u.length + 1 + v.length) e =
         cutSideMap u.length (u.length + 1 + v.length) e' → e = e') := by
-  sorry
+  constructor
+  · intro e hep heq
+    by_cases hu : (e : ℕ) < u.length
+    · have hmap : cutSideMap u.length (u.length + 1 + v.length) e = e := by
+        simp [cutSideMap]
+        omega
+      have hnew : (e : ℕ) < (u ++ [x, x] ++ inverseWord v ++ t).length := by
+        simp
+        omega
+      refine ⟨?_, ?_⟩
+      · rw [hmap]
+        exact hnew
+      · rw [if_neg (by omega)]
+        simp [hmap, List.getElem_append, hu]
+    · by_cases hv : (e : ℕ) < u.length + 1 + v.length
+      · have hp : u.length < (e : ℕ) := by omega
+        have hk : (e : ℕ) - (u.length + 1) < v.length := by omega
+        have hmap : cutSideMap u.length (u.length + 1 + v.length) e =
+            u.length + 2 + (v.length - 1 - ((e : ℕ) - (u.length + 1))) := by
+          simp [cutSideMap, hp, hv]
+          omega
+        have hnew : cutSideMap u.length (u.length + 1 + v.length) e <
+            (u ++ [x, x] ++ inverseWord v ++ t).length := by
+          rw [hmap]
+          simp [inverseWord]
+          omega
+        refine ⟨hnew, ?_⟩
+        have hcond : u.length < (e : ℕ) ∧
+            (e : ℕ) < u.length + 1 + v.length := ⟨hp, hv⟩
+        rw [if_pos hcond]
+        have hidx : u.length + 2 + (v.length - 1 - ((e : ℕ) - (u.length + 1))) <
+            (u ++ [x, x] ++ inverseWord v ++ t).length := by
+          rw [← hmap]
+          exact hnew
+        have hfin : (⟨cutSideMap u.length (u.length + 1 + v.length) e, hnew⟩ :
+            Fin (u ++ [x, x] ++ inverseWord v ++ t).length) = ⟨_, hidx⟩ :=
+          Fin.ext hmap
+        rw [hfin]
+        simp only [List.get_eq_getElem, Fin.val_mk]
+        change (u ++ [x, x] ++ inverseWord v ++ t)[u.length + 2 +
+            (v.length - 1 - ((e : ℕ) - (u.length + 1)))]'hidx =
+          inv ((u ++ [x] ++ v ++ [x] ++ t)[(e : ℕ)]'e.isLt)
+        simp [inverseWord, List.getElem_append, hp, hu, hk, Nat.add_assoc] <;>
+          (simp [inverseWord, cutSideMap] at * <;> omega)
+      · have hq : u.length + 1 + v.length < (e : ℕ) := by omega
+        have hmap : cutSideMap u.length (u.length + 1 + v.length) e = e := by
+          simp [cutSideMap]
+          omega
+        have hnew : (e : ℕ) < (u ++ [x, x] ++ inverseWord v ++ t).length := by
+          simpa [inverseWord, List.length_append] using e.2
+        refine ⟨by rw [hmap]; exact hnew, ?_⟩
+        rw [if_neg (by omega)]
+        have hfin : (⟨cutSideMap u.length (u.length + 1 + v.length) e,
+            by rw [hmap]; exact hnew⟩ : Fin (u ++ [x, x] ++ inverseWord v ++ t).length) =
+            ⟨e, hnew⟩ := Fin.ext hmap
+        rw [hfin]
+        simp only [List.get_eq_getElem, Fin.val_mk]
+        change (u ++ [x, x] ++ inverseWord v ++ t)[(e : ℕ)]'hnew =
+          (u ++ [x] ++ v ++ [x] ++ t)[(e : ℕ)]'e.isLt
+        simp [inverseWord, List.getElem_append, Nat.add_assoc] <;>
+          (simp [inverseWord, cutSideMap] at * <;> omega)
+  · intro e e' hep heq hep' heq' h
+    simp only [cutSideMap] at h
+    split at h <;> split at h <;> omega
 -- END SEAT AREA
 
 /-- The non-`x` case of `cut_transfer_generator`, from the side facts. -/

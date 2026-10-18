@@ -1997,6 +1997,15 @@ and the collar term `f φ · smoothTransition'(φ²/r² − 1) · 2φ∇φ / r²
 bounded by `4 M |f| |∇φ|` (since `φ² ≤ 2r²` on the collar) and tends to `0`
 pointwise, so dominated convergence applies. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_localization_core_approx_aux_grad_tendsto_aux_zeroSet
+    {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
+    (φ : EuclideanSpace ℝ (Fin d) → ℝ)
+    (hφ : apm_m01J04_isTestFunction Ω φ) :
+    ∀ᵐ x ∂volume, φ x = 0 →
+      WithLp.toLp 2 (fun i ↦
+        fderiv ℝ φ x (EuclideanSpace.single i 1)) = 0 := by
+  exact apm_m01J04_contDiff_aeDerivativeZeroOnZeroSet hφ.1
+
 lemma apm_m01J04_localization_core_approx_aux_grad_tendsto
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)

@@ -171,6 +171,25 @@ theorem apm_m95A03_isMinOn_of_solves
   exact le_add_of_nonneg_right hRint
 
 -- BEGIN SEAT AREA
+lemma apm_m95A03_solves_of_isMinOn_aux_residual_continuous
+    (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)
+    (hq : Continuous q) (hf : Continuous f) (hu2 : ContDiff ℝ 2 u) :
+    Continuous (fun t =>
+      deriv (fun x => p x * deriv u x) t - q t * u t - f t) := by
+  have hdu : ContDiff ℝ 1 (deriv u) := hu2.deriv'
+  have hg : ContDiff ℝ 1 (fun x => p x * deriv u x) := hp.mul hdu
+  have hgd : ContDiff ℝ 0 (deriv (fun x => p x * deriv u x)) := hg.deriv'
+  exact (hgd.continuous.sub (hq.mul hu2.continuous)).sub hf
+
+lemma apm_m95A03_solves_of_isMinOn_aux_perturb_admissible
+    (a b α β s : ℝ) (u η : ℝ → ℝ)
+    (hu : ContDiff ℝ 1 u) (hua : u a = α) (hub : u b = β)
+    (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (fun x => u x + s * η x) ∈ apm_m95A03_admissible a b α β := by
+  refine ⟨hu.add (contDiff_const.mul hη), ?_, ?_⟩
+  · simp [hua, hηa]
+  · simp [hub, hηb]
+
 theorem apm_m95A03_solves_of_isMinOn
     (a b α β p₀ : ℝ) (hab : a < b) (hp₀ : 0 < p₀)
     (p q f u : ℝ → ℝ) (hp : ContDiff ℝ 1 p)

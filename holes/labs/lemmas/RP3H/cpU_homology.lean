@@ -214,9 +214,75 @@ theorem cpV_homology : Nonempty (HQ 0 cpV ≅ ModuleCat.of ℚ ℚ) ∧
 
 /-- `U ≃ ℂP¹ ≅ S²` (radial deformation `[z₀:z₁:z₂] ↦ [z₀:z₁:t z₂]`). -/
 -- BEGIN SEAT AREA
+abbrev cpU_homology_aux_CP1 := ConstructionTargets.ProjectiveSpaceTopology.Space ℂ 1
+
+abbrev cpU_homology_aux_S2 := T02A06.euclideanUnitSphere 3
+
+/-- The radial deformation which deletes the last homogeneous coordinate. -/
+theorem cpU_homology_aux_cpU_hequiv_CP1 :
+    Nonempty (ContinuousMap.HomotopyEquiv cpU cpU_homology_aux_CP1) := by
+  sorry
+
+/-- The Hopf-coordinate identification of the complex projective line with the two-sphere. -/
+theorem cpU_homology_aux_CP1_hequiv_S2 :
+    Nonempty (ContinuousMap.HomotopyEquiv cpU_homology_aux_CP1 cpU_homology_aux_S2) := by
+  sorry
+
+theorem cpU_homology_aux_S2_H1_zero : IsZero (HQ 1 cpU_homology_aux_S2) := by
+  letI : ContractibleSpace (T02A06.euclideanClosedDisk 2) :=
+    Metric.contractibleSpace_closedBall (by norm_num)
+  letI : PathConnectedSpace (T02A06.euclideanUnitSphere 2) :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by rw [← Module.finrank_eq_rank']; norm_num) 0 (by norm_num))
+  letI : PathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundarySet 2) :=
+    (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 2).symm.surjective.pathConnectedSpace
+      (ConstructionTargets.T02A06DiskRadialComparison.closedDiskBoundaryHomeomorph 2).symm.continuous
+  apply (ConstructionTargets.CoefficientSphereShift.sphereH1KernelIso ℚ 2).isZero_iff.mpr
+  exact ConstructionTargets.CoefficientConnectedH0Map.inclusion_kernel_zero ℚ _
+
+theorem cpU_homology_aux_S2_isZero (k : ℕ) (hk0 : k ≠ 0) (hk2 : k ≠ 2) :
+    IsZero (HQ k cpU_homology_aux_S2) := by
+  rcases Nat.lt_trichotomy k 2 with hk | hk | hk
+  · interval_cases k
+    · exact (hk0 rfl).elim
+    · exact cpU_homology_aux_S2_H1_zero
+  · exact (hk2 hk).elim
+  · let e₂ : HQ k cpU_homology_aux_S2 ≅
+        CoefficientContractiblePair.H ℚ (k - 1)
+          (TopCat.of (T02A06.euclideanUnitSphere 2)) := by
+      simpa [Nat.sub_add_cancel (by omega : 1 ≤ k)] using
+        ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 2 (k - 1) (by omega)
+    let e₁ : CoefficientContractiblePair.H ℚ (k - 1)
+        (TopCat.of (T02A06.euclideanUnitSphere 2)) ≅
+        CoefficientContractiblePair.H ℚ (k - 2)
+          (TopCat.of (T02A06.euclideanUnitSphere 1)) := by
+      simpa only [show k - 2 + 1 = k - 1 by omega] using
+        ConstructionTargets.CoefficientSphereShift.sphereShift ℚ 1 (k - 2) (by omega)
+    have hzero := ConstructionTargets.SphereZeroCoefficients.positive_vanishing ℚ (k - 2) (by omega)
+    exact (hzero.of_iso e₁).of_iso e₂
+
+theorem cpU_homology_aux_of_hequiv
+    (e : ContinuousMap.HomotopyEquiv cpU cpU_homology_aux_S2) :
+    Nonempty (HQ 0 cpU ≅ ModuleCat.of ℚ ℚ) ∧
+      Nonempty (HQ 2 cpU ≅ ModuleCat.of ℚ ℚ) ∧
+      ∀ k, k ≠ 0 → k ≠ 2 → IsZero (HQ k cpU) := by
+  letI : PathConnectedSpace cpU_homology_aux_S2 :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (by rw [← Module.finrank_eq_rank']; norm_num) 0 (by norm_num))
+  refine ⟨⟨CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ e 0 ≪≫
+    CoefficientH0.h0Iso ℚ (Classical.choice inferInstance)⟩,
+    ⟨CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ e 2 ≪≫
+      CoefficientFirstReflection.topIso ℚ 1⟩, ?_⟩
+  intro k hk0 hk2
+  exact (cpU_homology_aux_S2_isZero k hk0 hk2).of_iso
+    (CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ e k)
+
 theorem cpU_homology : Nonempty (HQ 0 cpU ≅ ModuleCat.of ℚ ℚ) ∧
     Nonempty (HQ 2 cpU ≅ ModuleCat.of ℚ ℚ) ∧ ∀ k, k ≠ 0 → k ≠ 2 → IsZero (HQ k cpU) := by
-  sorry
+  obtain ⟨eU⟩ := cpU_homology_aux_cpU_hequiv_CP1
+  obtain ⟨eS⟩ := cpU_homology_aux_CP1_hequiv_S2
+  exact cpU_homology_aux_of_hequiv (eU.trans eS)
 -- END SEAT AREA
 
 /-- `U ∩ V ≅ ℂ² ∖ 0 ≃ S³`; uses the S³ facts as hypotheses. -/

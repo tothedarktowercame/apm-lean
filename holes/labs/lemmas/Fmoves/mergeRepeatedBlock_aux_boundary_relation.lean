@@ -1205,6 +1205,26 @@ lemma mergeRepeatedBlock_aux_boundary_edge_formulas
 /-- Combinatorial leaf: the seven edge formulas carry generators to
 generators in both directions; `EqvGen` also handles all shared vertices. -/
 -- BEGIN SEAT AREA
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_circleToDisk_injective :
+    Function.Injective circleToDisk := by
+  intro c d h
+  apply Subtype.ext
+  change (c : ℂ) = (d : ℂ)
+  have hh := congrArg (fun x : Disk => (x : ℂ)) h
+  exact hh
+
+lemma mergeRepeatedBlock_aux_boundary_relation_aux_eqvGen_map
+    {α β : Type*} {r : α → α → Prop} {s : β → β → Prop}
+    (f : α → β) (hgen : ∀ {x y}, r x y → Relation.EqvGen s (f x) (f y)) :
+    ∀ {x y}, Relation.EqvGen r x y → Relation.EqvGen s (f x) (f y) := by
+  intro x y h
+  induction h with
+  | refl x => exact Relation.EqvGen.refl _
+  | rel x y hxy => exact hgen hxy
+  | symm x y hxy ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ih₁ ih₂ =>
+      exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
 lemma mergeRepeatedBlock_aux_boundary_relation
     {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (y z a : Signed Label)

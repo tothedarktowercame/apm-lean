@@ -1913,6 +1913,45 @@ lemma apm_m01J04_localization_isH1Zero_of_forall_exists_smooth
 compact localization by `φ` is what must produce the zero-boundary
 approximation. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_m01J04_localization_core_approx_aux_cutoff
+    {d : ℕ} (phi : EuclideanSpace ℝ (Fin d) → ℝ) (r : ℝ) :
+    EuclideanSpace ℝ (Fin d) → ℝ :=
+  fun x ↦ Real.smoothTransition (phi x ^ 2 - r ^ 2)
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_contDiff
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) phi) (r : ℝ) :
+    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞)
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) := by
+  exact Real.smoothTransition.contDiff.comp
+    (hphi.pow 2 |>.sub contDiff_const)
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_support
+    {d : ℕ} {phi : EuclideanSpace ℝ (Fin d) → ℝ} {r : ℝ}
+    (hr : 0 < r) :
+    Function.support (apm_m01J04_localization_core_approx_aux_cutoff phi r) ⊆
+      {x | r ≤ |phi x|} := by
+  intro x hx
+  have harg : 0 < phi x ^ 2 - r ^ 2 := by
+    exact lt_of_not_ge (Real.smoothTransition.zero_iff_nonpos.not.mp hx)
+  have hsquares : r ^ 2 < |phi x| ^ 2 := by
+    simpa [sq_abs] using (sub_pos.mp harg)
+  change r ≤ |phi x|
+  nlinarith [abs_nonneg (phi x), sq_nonneg (r - |phi x|)]
+
+lemma apm_m01J04_localization_core_approx_aux_cutoff_compact
+    {d : ℕ} {Omega : Set (EuclideanSpace ℝ (Fin d))}
+    {phi : EuclideanSpace ℝ (Fin d) → ℝ}
+    (hphi : apm_m01J04_isTestFunction Omega phi) (r : ℝ) :
+    HasCompactSupport
+      (apm_m01J04_localization_core_approx_aux_cutoff phi r) := by
+  apply hphi.2.1.mono
+  intro x hx
+  contrapose! hx
+  have hz : phi x = 0 := Function.notMem_support.mp hx
+  simp [apm_m01J04_localization_core_approx_aux_cutoff, hz,
+    sq_nonneg r]
+
 lemma apm_m01J04_localization_core_approx
     {d : ℕ} {Ω : Set (EuclideanSpace ℝ (Fin d))}
     (φ : EuclideanSpace ℝ (Fin d) → ℝ)

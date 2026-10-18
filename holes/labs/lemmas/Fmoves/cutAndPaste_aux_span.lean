@@ -975,6 +975,30 @@ on either side of the new edge, the old `x` sides now glued along the new
 diagonal.  The relations agree on `Y` because the diagonal is identified on
 both sides in each picture. -/
 -- BEGIN SEAT AREA
+lemma cutAndPaste_aux_span_aux_label_counts {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label) (a : Label) :
+    ((u ++ [x] ++ v ++ [x] ++ t).map Prod.fst).count a =
+      ((u ++ [x, x] ++ inverseWord v ++ t).map Prod.fst).count a := by
+  have hv : (inverseWord v).map Prod.fst = (v.map Prod.fst).reverse := by
+    simp [inverseWord, Function.comp_def, inv]
+  simp only [List.map_append, List.count_append, List.map_cons, List.map_nil]
+  rw [hv, List.count_reverse]
+  simp [List.count_cons]
+  omega
+
+lemma cutAndPaste_aux_span_aux_target_polygon {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hw : IsPolygonWord (u ++ [x] ++ v ++ [x] ++ t)) :
+    IsPolygonWord (u ++ [x, x] ++ inverseWord v ++ t) := by
+  refine ⟨cutAndPaste_aux_target_nonempty u v t x hw,
+    cutAndPaste_aux_target_even_length u v t x hw, ?_⟩
+  intro a ha
+  rw [← cutAndPaste_aux_span_aux_label_counts u v t x a]
+  apply hw.2.2
+  apply List.count_pos_iff.mp
+  rw [cutAndPaste_aux_span_aux_label_counts u v t x a]
+  exact List.count_pos_iff.mpr ha
+
 lemma cutAndPaste_aux_span {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)

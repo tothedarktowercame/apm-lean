@@ -314,6 +314,23 @@ theorem apm_m02J05_lux_definite
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m02J05_lux_homogeneous_aux_abs_div
+    (c x d : ℝ) (hc : c ≠ 0) :
+    |c * x| / (|c| * d) = |x| / d := by
+  rw [abs_mul]
+  field_simp [abs_ne_zero.mpr hc]
+
+lemma apm_m02J05_lux_homogeneous_aux_core
+    (alpha : ℝ → ℝ)
+    (hc : ContinuousOn alpha (Ici 0))
+    (hmono : StrictMonoOn alpha (Ici 0))
+    (hzero : alpha 0 = 0)
+    (hinfty : Tendsto alpha atTop atTop)
+    (hnonneg : ∀ t, 0 ≤ t → 0 ≤ alpha t) :
+    ∀ u ∈ apm_m02J05_L alpha, ∀ c : ℝ,
+      apm_m02J05_lux alpha (c • u) = |c| * apm_m02J05_lux alpha u := by
+  sorry
+
 theorem apm_m02J05_lux_homogeneous
     (α : ℝ → ℝ)
     (hc : ContinuousOn α (Ici 0))
@@ -323,7 +340,7 @@ theorem apm_m02J05_lux_homogeneous
     (hnonneg : ∀ t, 0 ≤ t → 0 ≤ α t) :
     ∀ u ∈ apm_m02J05_L α, ∀ c : ℝ,
       apm_m02J05_lux α (c • u) = |c| * apm_m02J05_lux α u := by
-  sorry
+  exact apm_m02J05_lux_homogeneous_aux_core α hc hmono hzero hinfty hnonneg
 -- END SEAT AREA
 
 theorem apm_m02J05_lux_triangle_of_facts

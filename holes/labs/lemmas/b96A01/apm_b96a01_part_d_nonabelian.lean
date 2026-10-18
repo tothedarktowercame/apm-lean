@@ -315,6 +315,16 @@ theorem apm_b96a01_part_c :
   exact congrFun (congrFun hmat i) j
 
 -- BEGIN SEAT AREA
+lemma apm_b96a01_part_d_nonabelian_aux_injective_or_trivial
+    {G K : Type*} [Group G] [Group K] [IsSimpleGroup G] (f : G →* K) :
+    Function.Injective f ∨ f = 1 := by
+  rcases (inferInstance : f.ker.Normal).eq_bot_or_eq_top with hker | hker
+  · exact Or.inl ((MonoidHom.ker_eq_bot_iff f).mp hker)
+  · right
+    ext x
+    have hx : x ∈ f.ker := by rw [hker]; trivial
+    simpa using hx
+
 theorem apm_b96a01_part_d_nonabelian :
     ∀ (n : Type*) [Fintype n] [DecidableEq n]
       (G : Subgroup (Matrix.GeneralLinearGroup n ℚ)),

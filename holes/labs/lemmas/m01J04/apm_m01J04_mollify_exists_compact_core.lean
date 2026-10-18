@@ -2053,6 +2053,32 @@ lemma apm_m01J04_localization_core_approx
 compactly supported global Sobolev pair.  The compact carrier lies in
 `closure K`; closed thickening is unchanged on replacing a set by its closure. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_m01J04_mollify_exists_compact_core_aux_bump
+    {d : ℕ} (n : ℕ) : ContDiffBump (0 : EuclideanSpace ℝ (Fin d)) :=
+  ⟨n + 1, 2 * (n + 1), by positivity, by
+    have h : (0 : ℝ) < n + 1 := by positivity
+    linarith⟩
+
+noncomputable def apm_m01J04_mollify_exists_compact_core_aux_cutoff
+    {d : ℕ} (n : ℕ) : EuclideanSpace ℝ (Fin d) → ℝ :=
+  fun x ↦ (apm_m01J04_mollify_exists_compact_core_aux_bump n).toFun x
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_test
+    {d : ℕ} (n : ℕ) :
+    apm_m01J04_isTestFunction (Set.univ : Set (EuclideanSpace ℝ (Fin d)))
+      (apm_m01J04_mollify_exists_compact_core_aux_cutoff n) := by
+  unfold apm_m01J04_mollify_exists_compact_core_aux_cutoff
+  exact ⟨ContDiffBump.contDiff _, ContDiffBump.hasCompactSupport _, Set.subset_univ _⟩
+
+lemma apm_m01J04_mollify_exists_compact_core_aux_tendsto
+    {d : ℕ} (u : apm_m01J04_H1 d Set.univ) :
+    Tendsto (fun n ↦ apm_m01J04_H1dist
+      (apm_m01J04_H1mul
+        (apm_m01J04_mollify_exists_compact_core_aux_cutoff n)
+        (apm_m01J04_mollify_exists_compact_core_aux_test n) u) u)
+      atTop (nhds 0) := by
+  sorry
+
 lemma apm_m01J04_mollify_exists_compact_core
     {d : ℕ} (u : apm_m01J04_H1 d Set.univ)
     {K : Set (EuclideanSpace ℝ (Fin d))}
@@ -2064,7 +2090,37 @@ lemma apm_m01J04_mollify_exists_compact_core
       IsCompact C ∧ C ⊆ closure K ∧
       Function.support w.val ⊆ C ∧ Function.support w.grad ⊆ C ∧
       apm_m01J04_H1dist w u < eta := by
-  sorry
+  have hlim := apm_m01J04_mollify_exists_compact_core_aux_tendsto u
+  obtain ⟨n, hn⟩ := (hlim.eventually (gt_mem_nhds heta)).exists
+  let b := apm_m01J04_mollify_exists_compact_core_aux_cutoff (d := d) n
+  let hb := apm_m01J04_mollify_exists_compact_core_aux_test (d := d) n
+  let w := apm_m01J04_H1mul b hb u
+  let C := tsupport b ∩ closure K
+  refine ⟨w, C, ?_, inter_subset_right, ?_, ?_, ?_⟩
+  · exact hb.2.1.inter_right isClosed_closure
+  · rw [apm_m01J04_H1mul_val]
+    intro x hx
+    refine ⟨subset_tsupport _ (Function.support_mul_subset_right _ _ hx), ?_⟩
+    exact subset_closure (huval (Function.support_mul_subset_left _ _ hx))
+  · rw [apm_m01J04_H1mul_grad]
+    intro x hx
+    by_contra hxc
+    rcases not_and_or.mp hxc with hxb | hxK
+    · have hb0 : b x = 0 := Function.notMem_support.mp fun h ↦
+        hxb (subset_tsupport b h)
+      have hdb0 : fderiv ℝ b x = 0 := Function.notMem_support.mp fun h ↦
+        hxb (support_fderiv_subset ℝ h)
+      have hvec : WithLp.toLp 2
+          (fun i ↦ fderiv ℝ b x (EuclideanSpace.single i 1)) = 0 := by
+        rw [hdb0]
+        rfl
+      exact hx (by simp [hb0, hvec])
+    · have huv0 : u.val x = 0 := Function.notMem_support.mp fun h ↦
+        hxK (subset_closure (huval h))
+      have hug0 : u.grad x = 0 := Function.notMem_support.mp fun h ↦
+        hxK (subset_closure (hugrad h))
+      exact hx (by simp [huv0, hug0])
+  · simpa [w, b, hb] using hn
 -- END SEAT AREA
 
 /-- Simultaneous `L²` approximate-identity estimate for the value and weak

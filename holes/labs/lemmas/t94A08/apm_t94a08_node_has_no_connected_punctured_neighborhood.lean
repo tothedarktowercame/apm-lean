@@ -540,6 +540,32 @@ lemma apm_t94a08_complexCross_punctured_not_preconnected
 cross obstruction to `sigma2`.  The obstruction is supplied explicitly so
 this proof is independent of the preceding lemma. -/
 -- BEGIN SEAT AREA
+private def apm_t94a08_node_has_no_connected_punctured_neighborhood_aux_linear :
+    ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates (0 : Fin 3) ≃ₜ
+      (ℂ × ℂ) := by
+  let j : {j : Fin 3 // j ≠ (0 : Fin 3)} := ⟨1, by decide⟩
+  let k : {j : Fin 3 // j ≠ (0 : Fin 3)} := ⟨2, by decide⟩
+  let f : ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates
+      (0 : Fin 3) → (ℂ × ℂ) :=
+    fun z ↦ (z j + Complex.I * z k, z j - Complex.I * z k)
+  let g : (ℂ × ℂ) →
+      ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates (0 : Fin 3) :=
+    fun z q ↦ if q.1 = 1 then (z.1 + z.2) / 2
+      else (z.1 - z.2) / (2 * Complex.I)
+  refine Homeomorph.mk (Equiv.mk f g ?_ ?_) ?_ ?_
+  · intro z
+    funext q
+    fin_cases q <;> simp [f, g, j, k] <;>
+      field_simp [Complex.I_ne_zero] <;> ring
+  · intro z
+    apply Prod.ext <;> simp [f, g, j, k] <;>
+      field_simp [Complex.I_ne_zero] <;> ring
+  · dsimp [f]
+    fun_prop
+  · apply continuous_pi
+    intro q
+    fin_cases q <;> simp [g] <;> fun_prop
+
 lemma apm_t94a08_node_has_no_connected_punctured_neighborhood
     (hcross : ∀ V : Set (ℂ × ℂ), IsOpen V → (0, 0) ∈ V →
       ¬ IsPreconnected ((V ∩ apm_t94a08_complexCross) \ {(0, 0)})) :

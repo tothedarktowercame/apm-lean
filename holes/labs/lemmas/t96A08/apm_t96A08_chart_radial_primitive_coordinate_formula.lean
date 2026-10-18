@@ -312,6 +312,50 @@ lemma apm_t96A08_chart_radial_primitive_radial_paths
 /-- Pulling the one-form and the radial path into the extended chart gives
 the ordinary coordinate interval integral. -/
 -- BEGIN SEAT AREA
+def apm_t96A08_chart_radial_primitive_coordinate_formula_aux_fromTangent
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] (y : E) :
+    E →L[ℝ] TangentSpace 𝓘(ℝ, E) y :=
+  (NormedSpace.fromTangentSpace (𝕜 := ℝ) y).symm
+
+lemma apm_t96A08_chart_radial_primitive_coordinate_formula_aux_smooth
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (homega_smooth : ContMDiff I.tangent 𝓘(ℝ, ℝ) (⊤ : WithTop ℕ∞)
+      (fun v : TangentBundle I M => omega v.1 v.2))
+    (x : M) (W : Set E)
+    (hWtarget : W ∩ Set.range (I : E → E) ⊆ (extChartAt I x).target) :
+    ContDiffOn ℝ (⊤ : WithTop ℕ∞)
+      (fun y => (omega ((extChartAt I x).symm y)).comp
+        ((mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I) y).comp
+          (apm_t96A08_chart_radial_primitive_coordinate_formula_aux_fromTangent y)))
+      (W ∩ Set.range (I : E → E)) := by
+  sorry
+
+lemma apm_t96A08_chart_radial_primitive_coordinate_formula_aux_integral
+    {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] [TopologicalSpace M]
+    (I : ModelWithCorners ℝ E E) [ChartedSpace E M]
+    [IsManifold I (⊤ : WithTop ℕ∞) M]
+    (omega : ∀ p : M, TangentSpace I p →L[ℝ] ℝ)
+    (x z : M) (delta : ℝ → M)
+    (hsource : ∀ t ∈ Set.Icc (0 : ℝ) 1, delta t ∈ (extChartAt I x).source)
+    (hsmooth : ContMDiffOn 𝓘(ℝ, ℝ) I (⊤ : WithTop ℕ∞) delta (Set.Icc (0 : ℝ) 1))
+    (hcoord : ∀ t ∈ Set.Icc (0 : ℝ) 1,
+      extChartAt I x (delta t) = extChartAt I x x +
+        t • (extChartAt I x z - extChartAt I x x)) :
+    apm_t96a08_LineIntegral I omega delta =
+      ∫ t : ℝ in (0 : ℝ)..1,
+        ((omega ((extChartAt I x).symm
+          (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x)))).comp
+          ((mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I)
+            (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))).comp
+              (apm_t96A08_chart_radial_primitive_coordinate_formula_aux_fromTangent _)))
+          (extChartAt I x z - extChartAt I x x) := by
+  sorry
+
 lemma apm_t96A08_chart_radial_primitive_coordinate_formula
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]
@@ -335,7 +379,16 @@ lemma apm_t96A08_chart_radial_primitive_coordinate_formula
           ∫ t : ℝ in (0 : ℝ)..1, omegaCoord
             (extChartAt I x x + t • (extChartAt I x z - extChartAt I x x))
             (extChartAt I x z - extChartAt I x x) := by
-  sorry
+  let omegaCoord : E → (E →L[ℝ] ℝ) := fun y =>
+    (omega ((extChartAt I x).symm y)).comp
+      ((mfderivWithin 𝓘(ℝ, E) I (extChartAt I x).symm (Set.range I) y).comp
+        (apm_t96A08_chart_radial_primitive_coordinate_formula_aux_fromTangent y))
+  refine ⟨omegaCoord, ?_, ?_⟩
+  · exact apm_t96A08_chart_radial_primitive_coordinate_formula_aux_smooth
+      I omega homega_smooth x W hWtarget
+  · intro z delta hsource hsmooth hcoord
+    exact apm_t96A08_chart_radial_primitive_coordinate_formula_aux_integral
+      I omega x z delta hsource hsmooth hcoord
 -- END SEAT AREA
 
 /-- The parameter-integral calculation in a normed vector space.  Smoothness

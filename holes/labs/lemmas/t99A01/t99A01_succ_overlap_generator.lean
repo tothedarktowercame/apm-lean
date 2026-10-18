@@ -2134,6 +2134,84 @@ lemma t99A01_succ_overlap_generator_aux_chart_half {r : ℕ}
 -/
 
 -- BEGIN SEAT AREA
+noncomputable def t99A01_succ_overlap_generator_aux_chart {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) :
+    ↥(APMT99A01.succCircleSide degree ∩ APMT99A01.succDiskSide degree) ≃ₜ
+      ↥t99A01_succ_overlap_generator_aux_pball := by
+  obtain ⟨hc, hb⟩ :=
+    t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_cont_bij degree
+  let E : Metric.ball (0 : ℂ) 1 ≃ₜ APMT99A01.succDiskSide degree :=
+    (Equiv.ofBijective
+      (t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g degree) hb).toHomeomorphOfContinuousOpen hc
+      (t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_open degree)
+  have hp : ∀ q : APMT99A01.succDiskSide degree,
+      q.1 ∈ APMT99A01.succCircleSide degree ↔
+        0 < ‖((E.symm q : Metric.ball (0 : ℂ) 1) : ℂ)‖ := by
+    intro q
+    rw [norm_pos_iff]
+    have hE0 : (E 0).1 = APMT99A01.lastDiskCentre degree := by
+      rfl
+    constructor
+    · intro h hz
+      apply h
+      have hz' : E.symm q = 0 := Subtype.ext hz
+      have hq : q = E 0 := by rw [← E.symm_apply_eq]; exact hz'
+      rw [hq]
+      exact hE0
+    · intro hz hcentre
+      apply hz
+      have he : E.symm q = (0 : Metric.ball (0 : ℂ) 1) := by
+        apply E.injective
+        rw [E.apply_symm_apply]
+        apply Subtype.ext
+        exact hcentre.trans hE0.symm
+      exact congrArg Subtype.val he
+  let F : ↥(APMT99A01.succCircleSide degree ∩ APMT99A01.succDiskSide degree) ≃ₜ
+      {q : APMT99A01.succDiskSide degree //
+        q.1 ∈ APMT99A01.succCircleSide degree} :=
+    { toFun := fun q => ⟨⟨q.1, q.2.2⟩, q.2.1⟩
+      invFun := fun q => ⟨q.1.1, q.2, q.1.2⟩
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl
+      continuous_toFun := Continuous.subtype_mk
+        (Continuous.subtype_mk continuous_subtype_val _) _
+      continuous_invFun := Continuous.subtype_mk
+        (continuous_subtype_val.comp continuous_subtype_val) _ }
+  let R : {q : APMT99A01.succDiskSide degree //
+      q.1 ∈ APMT99A01.succCircleSide degree} ≃ₜ
+      {z : Metric.ball (0 : ℂ) 1 // 0 < ‖(z.val : ℂ)‖} := E.symm.subtype hp
+  let B : {z : Metric.ball (0 : ℂ) 1 // 0 < ‖(z.val : ℂ)‖} ≃ₜ
+      ↥t99A01_succ_overlap_generator_aux_pball :=
+    { toFun := fun z => ⟨(z.val.val : ℂ), z.2, by
+          simpa only [Metric.mem_ball, dist_zero_right] using z.1.2⟩
+      invFun := fun z => by
+        have hz : 0 < ‖(z : ℂ)‖ ∧ ‖(z : ℂ)‖ < 1 := z.2
+        exact ⟨(⟨(z : ℂ), by
+          simpa only [Metric.mem_ball, dist_zero_right] using hz.2⟩ :
+            Metric.ball (0 : ℂ) 1), hz.1⟩
+      left_inv := fun _ => rfl
+      right_inv := fun _ => rfl
+      continuous_toFun := Continuous.subtype_mk
+        (continuous_subtype_val.comp continuous_subtype_val) _
+      continuous_invFun := Continuous.subtype_mk
+        (Continuous.subtype_mk continuous_subtype_val _) _ }
+  exact F.trans (R.trans B)
+
+lemma t99A01_succ_overlap_generator_aux_chart_half {r : ℕ}
+    (degree : Fin (r + 1) → ℕ) (w : Circle) :
+    t99A01_succ_overlap_generator_aux_chart degree
+        (t99A01_succ_overlap_generator_aux_half degree w) =
+      ⟨(w : ℂ) / 2, by rw [norm_div, Circle.norm_coe]; norm_num,
+        by rw [norm_div, Circle.norm_coe]; norm_num⟩ := by
+  apply (t99A01_succ_overlap_generator_aux_chart degree).symm.injective
+  rw [(t99A01_succ_overlap_generator_aux_chart degree).symm_apply_apply]
+  apply Subtype.ext
+  unfold t99A01_succ_overlap_generator_aux_chart
+  rcases hgb : t99A01_piOne_attach_succ_cover_aux_connectivity_aux_g_cont_bij degree with
+    ⟨hc, hb⟩
+  simp only [hgb]
+  rfl
+
 lemma t99A01_succ_overlap_generator {r : ℕ} (degree : Fin (r + 1) → ℕ) :
     ∃ (γ : FundamentalGroup ↥((APMT99A01.succCircleSide degree) ∩ (APMT99A01.succDiskSide degree)) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree))
       (h : ((t99A01_succRho degree).comp (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree))) (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree) =
@@ -2141,7 +2219,94 @@ lemma t99A01_succ_overlap_generator {r : ℕ} (degree : Fin (r + 1) → ℕ) :
       (∀ y, ∃ n : ℤ, γ ^ n = y) ∧
       FundamentalGroup.mapOfEq ((t99A01_succRho degree).comp (apm_t92J05_twoOpen_overlapToLeft (APMT99A01.succCircleSide degree) (APMT99A01.succDiskSide degree))) h γ =
         APMT99A01.baseCircleClass (degree ∘ Fin.castSucc) ^ (degree (Fin.last r) : ℤ) := by
-  sorry
+  obtain ⟨rad, hrad⟩ := t99A01_succ_overlap_generator_aux_pball_circle
+  let c₀ := rad.symm.trans
+    (t99A01_succ_overlap_generator_aux_chart degree).symm.toHomotopyEquiv
+  have hc₀ : c₀.toFun = t99A01_succ_overlap_generator_aux_half degree := by
+    apply ContinuousMap.ext
+    intro w
+    apply (t99A01_succ_overlap_generator_aux_chart degree).injective
+    dsimp [c₀]
+    change (t99A01_succ_overlap_generator_aux_chart degree)
+      ((t99A01_succ_overlap_generator_aux_chart degree).symm (rad.invFun w)) = _
+    rw [(t99A01_succ_overlap_generator_aux_chart degree).apply_symm_apply]
+    rw [t99A01_succ_overlap_generator_aux_chart_half]
+    apply Subtype.ext
+    exact hrad w
+  let c : ContinuousMap.HomotopyEquiv Circle
+      ↥(APMT99A01.succCircleSide degree ∩ APMT99A01.succDiskSide degree) :=
+    { toFun := t99A01_succ_overlap_generator_aux_half degree
+      invFun := c₀.invFun
+      left_inv := by rw [← hc₀]; exact c₀.left_inv
+      right_inv := by rw [← hc₀]; exact c₀.right_inv }
+  have hc : ∀ w : Circle, c w = t99A01_succ_overlap_generator_aux_half degree w :=
+    fun _ => rfl
+  let loop : Path (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree)
+      (t99A01_piOne_attach_succ_aux_vankampen_aux_point degree) :=
+    (ConstructionTargets.CircleUniversalCover.integerLoop 1).map
+      (t99A01_succ_overlap_generator_aux_half degree).continuous
+  let γ : FundamentalGroup _ _ := Path.Homotopic.Quotient.mk loop
+  refine ⟨γ, ?_, ?_, ?_⟩
+  · change _ = APMT99A01.basepoint _
+    rw [← t99A01_succ_overlap_generator_aux_half_basepoint degree]
+    simpa [APMT99A01.basepoint] using
+      t99A01_succ_overlap_generator_aux_half_rho degree 1
+  · intro y
+    let Efg := FundamentalGroupoidFunctor.equivOfHomotopyEquiv c
+    let ff := Efg.fullyFaithfulFunctor
+    let m := FundamentalGroup.map c.toFun 1
+    let Φ : FundamentalGroup Circle 1 ≃*
+        FundamentalGroup _ (c 1) :=
+      { toFun := m
+        invFun := fun g ↦ ff.preimage g
+        left_inv := fun g ↦ ff.preimage_map g
+        right_inv := fun g ↦ ff.map_preimage g
+        map_mul' := m.map_mul }
+    let n : ℤ :=
+      (ConstructionTargets.CircleUniversalCover.circleWindingHom (Φ.symm y)).toAdd
+    refine ⟨n, ?_⟩
+    apply Φ.symm.injective
+    change Φ.symm.toMonoidHom (γ ^ n) = _
+    calc
+      Φ.symm.toMonoidHom (γ ^ n) = (Φ.symm.toMonoidHom γ) ^ n :=
+        map_zpow Φ.symm.toMonoidHom γ n
+      _ = Φ.symm y := by
+        have hΦγ : Φ (Path.Homotopic.Quotient.mk
+            (ConstructionTargets.CircleUniversalCover.integerLoop 1)) = γ := by
+          change (FundamentalGroup.map c.toFun 1)
+            (Path.Homotopic.Quotient.mk
+              (ConstructionTargets.CircleUniversalCover.integerLoop 1)) = γ
+          rw [FundamentalGroup.map_apply]
+          apply Path.Homotopic.Quotient.eq.mpr
+          convert Path.Homotopic.refl _ using 1
+        rw [← hΦγ]
+        change (Φ.symm (Φ (Path.Homotopic.Quotient.mk
+          (ConstructionTargets.CircleUniversalCover.integerLoop 1)))) ^ n = Φ.symm y
+        rw [Φ.symm_apply_apply]
+        apply ConstructionTargets.CircleUniversalCover.circleWindingHom_injective
+        rw [map_zpow]
+        simp [n, ConstructionTargets.CircleUniversalCover.circleWindingHom_mk,
+          ← ofAdd_zsmul]
+  · change FundamentalGroup.mapOfEq _ _ (Path.Homotopic.Quotient.mk loop) = _
+    rw [FundamentalGroup.mapOfEq_apply]
+    let j : C(Circle, APMT99A01.AttachSpace (degree ∘ Fin.castSucc)) :=
+      ⟨fun z => Quotient.mk _ (Sum.inl z), continuous_coinduced_rng.comp continuous_inl⟩
+    let p : FundamentalGroup Circle 1 := Path.Homotopic.Quotient.mk
+      (ConstructionTargets.CircleUniversalCover.integerLoop 1)
+    change _ = (FundamentalGroup.map j 1 p) ^ (degree (Fin.last r) : ℤ)
+    rw [← map_zpow]
+    rw [← ConstructionTargets.T97A04Closure.circleZPowPi1Map_eq_zpow
+      (degree (Fin.last r) : ℤ) p]
+    rw [ConstructionTargets.T97A04Closure.circleZPowPi1Map_mk,
+      FundamentalGroup.map_apply]
+    apply Path.Homotopic.Quotient.eq.mpr
+    convert Path.Homotopic.refl ((loop.map _).cast _ _) using 1
+    ext t
+    change Quotient.mk _ (Sum.inl
+      ((ConstructionTargets.CircleUniversalCover.integerLoop 1 t) ^
+        degree (Fin.last r))) = _
+    rw [← t99A01_succ_overlap_generator_aux_half_rho degree]
+    rfl
 -- END SEAT AREA
 /-
   obtain ⟨rad, hrad⟩ := t99A01_succ_overlap_generator_aux_pball_circle

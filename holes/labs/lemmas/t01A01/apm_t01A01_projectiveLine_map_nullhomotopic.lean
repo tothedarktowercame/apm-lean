@@ -69,12 +69,34 @@ theorem apm_t01A01_punctured_homotopyEquiv_projectiveLine
 This is the `Z/2 → Z` lifting step, separated from the geometry of the
 punctured target. -/
 -- BEGIN SEAT AREA
+lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph :
+    Nonempty (apm_t01A01_RP1 ≃ₜ Circle) := by
+  sorry
+
+lemma apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
+    (f : C(apm_t01A01_RP2, Circle)) :
+    ContinuousMap.Homotopic f
+      (ContinuousMap.const apm_t01A01_RP2 (1 : Circle)) := by
+  sorry
+
 theorem apm_t01A01_projectiveLine_map_nullhomotopic
     (h : C(apm_t01A01_RP2, apm_t01A01_RP1)) :
     ∃ p : apm_t01A01_RP1,
       ContinuousMap.Homotopic h
         (ContinuousMap.const apm_t01A01_RP2 p) := by
-  sorry
+  obtain ⟨e⟩ := apm_t01A01_projectiveLine_map_nullhomotopic_aux_homeomorph
+  let ef : C(apm_t01A01_RP1, Circle) := ⟨e, e.continuous⟩
+  let ei : C(Circle, apm_t01A01_RP1) := ⟨e.symm, e.symm.continuous⟩
+  have hh := apm_t01A01_projectiveLine_map_nullhomotopic_aux_circle
+    (ef.comp h)
+  refine ⟨e.symm 1, ?_⟩
+  have hc := ContinuousMap.Homotopic.comp
+    (ContinuousMap.Homotopic.refl ei) hh
+  have heq : ei.comp (ef.comp h) = h := by
+    ext x
+    exact e.symm_apply_apply (h x)
+  rw [heq] at hc
+  simpa [ei] using hc
 -- END SEAT AREA
 
 /-- LIBRARY: transport a null-homotopy across a target homotopy equivalence.

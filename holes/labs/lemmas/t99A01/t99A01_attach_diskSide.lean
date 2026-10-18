@@ -712,12 +712,83 @@ lemma t99A01_attach_diskSide_aux_eqv {r : ℕ} (degree : Fin r → ℕ)
   exact ⟨hd.1, Subtype.ext hd.2⟩
 
 -- BEGIN SEAT AREA
+noncomputable def t99A01_attach_diskSide_aux_diskOfBall
+    (z : Metric.ball (0 : ℂ) 1) : APMT99A01.Disk :=
+  ⟨z, by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    have hz : ‖(z : ℂ)‖ < 1 := by
+      simpa only [Metric.mem_ball, dist_zero_right] using z.2
+    exact hz.le⟩
+
+lemma t99A01_attach_diskSide_aux_diskOfBall_coe
+    (z : Metric.ball (0 : ℂ) 1) :
+    ((t99A01_attach_diskSide_aux_diskOfBall z : APMT99A01.Disk) : ℂ) = z := rfl
+
+/-- The canonical chart inverse: a point of disk `i`'s interior. -/
+noncomputable def t99A01_attach_diskSide_aux_g {r : ℕ} (degree : Fin r → ℕ)
+    (p : Σ _ : Fin r, Metric.ball (0 : ℂ) 1) : APMT99A01.sideB degree :=
+  ⟨APMT99A01.attachMk degree (Sum.inr (p.1, t99A01_attach_diskSide_aux_diskOfBall p.2)),
+    ⟨p.1, t99A01_attach_diskSide_aux_diskOfBall p.2,
+      by simpa only [t99A01_attach_diskSide_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using p.2.2, rfl⟩⟩
+
+lemma t99A01_attach_diskSide_aux_continuous_bijection {r : ℕ}
+    (degree : Fin r → ℕ) :
+    Continuous (t99A01_attach_diskSide_aux_g degree) ∧
+      Function.Bijective (t99A01_attach_diskSide_aux_g degree) := by
+  let d := t99A01_attach_diskSide_aux_diskOfBall
+  let g := t99A01_attach_diskSide_aux_g degree
+  refine ⟨?_, ?_, ?_⟩
+  · apply continuous_sigma
+    intro i
+    apply Continuous.subtype_mk
+    exact (APMT99A01.continuous_attachMk degree).comp
+      (continuous_inr.comp (continuous_const.prodMk
+        (Continuous.subtype_mk continuous_subtype_val _)))
+  · rintro ⟨i, z⟩ ⟨j, w⟩ h
+    have he : Relation.EqvGen (APMT99A01.AttachRel degree)
+        (Sum.inr (i, d z)) (Sum.inr (j, d w)) :=
+      Quotient.exact (congrArg Subtype.val h)
+    have hij := t99A01_attach_diskSide_aux_eqv degree
+      (by simpa only [d, t99A01_attach_diskSide_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using z.2)
+      (by simpa only [d, t99A01_attach_diskSide_aux_diskOfBall,
+        Metric.mem_ball, dist_zero_right] using w.2) he
+    cases hij.1
+    congr 1
+    apply Subtype.ext
+    simpa only [d, t99A01_attach_diskSide_aux_diskOfBall_coe] using
+      congrArg (fun x : APMT99A01.Disk => (x : ℂ)) hij.2
+  · rintro ⟨q, i, z, hz, rfl⟩
+    let zb : Metric.ball (0 : ℂ) 1 :=
+      ⟨z, by simpa only [Metric.mem_ball, dist_zero_right] using hz⟩
+    refine ⟨⟨i, zb⟩, ?_⟩
+    apply Subtype.ext
+    change APMT99A01.attachMk degree (Sum.inr (i, d zb)) =
+      APMT99A01.attachMk degree (Sum.inr (i, z))
+    congr 3
+
+/-- **Leaf.** The chart inverse is an open map: an open set of disk interiors has
+open, saturated preimage under the quotient map (interior points are singleton classes,
+banked above), so its image is open in the quotient, hence in `sideB`
+(`isOpen_coinduced`, `IsOpen.isOpenMap_subtype_val`/`Topology.IsInducing.isOpen_iff`). -/
+lemma t99A01_attach_diskSide_aux_open {r : ℕ} (degree : Fin r → ℕ) :
+    IsOpenMap (t99A01_attach_diskSide_aux_g degree) := by
+  sorry
+
 theorem t99A01_attach_diskSide {r : ℕ} (degree : Fin r → ℕ) :
     ∃ e : APMT99A01.sideB degree ≃ₜ (Σ _ : Fin r, Metric.ball (0 : ℂ) 1),
       ∀ (i : Fin r) (z : APMT99A01.Disk) (hz : ‖(z : ℂ)‖ < 1)
         (h : APMT99A01.attachMk degree (Sum.inr (i, z)) ∈ APMT99A01.sideB degree),
         e ⟨_, h⟩ = ⟨i, ⟨z, by simpa [Metric.mem_ball, dist_zero_right] using hz⟩⟩ := by
-  sorry
+  obtain ⟨hc, hb⟩ := t99A01_attach_diskSide_aux_continuous_bijection degree
+  let E := (Equiv.ofBijective _ hb).toHomeomorphOfContinuousOpen hc
+    (t99A01_attach_diskSide_aux_open degree)
+  refine ⟨E.symm, fun i z hz h => ?_⟩
+  apply E.injective
+  rw [Homeomorph.apply_symm_apply]
+  apply Subtype.ext
+  rfl
 -- END SEAT AREA
 /-- **Leaf (punctured disks, 80--140 lines).** The overlap is the disjoint union
 of the punctured open disks, which deformation retracts onto the radius-`1/2`

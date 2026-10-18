@@ -6904,6 +6904,76 @@ theorem cut_forward_generators {Label : Type*} [DecidableEq Label]
   sorry
 
 -- BEGIN SEAT AREA
+lemma cut_reverse_generators_aux_length {Label : Type*}
+    (u v t : List (Signed Label)) (x : Signed Label) :
+    (u ++ [x] ++ v ++ [x] ++ t).length =
+      (u ++ [x, x] ++ inverseWord v ++ t).length := by
+  simp [inverseWord]
+  omega
+
+lemma cut_reverse_generators_aux_reverseParameter_involutive
+    (s : Icc (0 : ℝ) 1) : reverseParameter (reverseParameter s) = s := by
+  apply Subtype.ext
+  simp [reverseParameter]
+
+lemma cut_reverse_generators_aux_x_indices {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)
+    (i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length)
+    (hi : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 = x.1) :
+    i.1 = u.length ∨ i.1 = u.length + 1 := by
+  have hib := i.2
+  simp only [List.length_append, List.length_cons, List.length_nil,
+    inverseWord, List.length_map, List.length_reverse] at hib
+  by_cases hlow : i.1 < u.length
+  · have hu : u[i.1] ∈ u := List.getElem_mem hlow
+    have hm : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hm' : u[i.1].1 ∈ (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_left t (List.mem_append_left v hu))
+      simpa [List.get_eq_getElem, hlow] using hm'
+    exact False.elim (hx (hi ▸ hm))
+  by_cases hfirst : i.1 = u.length
+  · exact Or.inl hfirst
+  by_cases hsecond : i.1 = u.length + 1
+  · exact Or.inr hsecond
+  have hafter : u.length + 2 ≤ i.1 := by omega
+  by_cases hmid : i.1 < u.length + 2 + v.length
+  · have hv : i.1 - (u.length + 2) < (inverseWord v).length := by
+      simp [inverseWord]
+      omega
+    have hvm : (inverseWord v)[i.1 - (u.length + 2)] ∈ inverseWord v :=
+      List.getElem_mem hv
+    have hvm' : ((inverseWord v)[i.1 - (u.length + 2)]).1 ∈ v.map Prod.fst := by
+      simpa [inverseWord, inv, Function.comp_def] using
+        List.mem_map_of_mem (f := Prod.fst) hvm
+    have hm : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hall : ((inverseWord v)[i.1 - (u.length + 2)]).1 ∈
+          (u ++ v ++ t).map Prod.fst :=
+        by simpa only [List.map_append] using
+          List.mem_append_left (t.map Prod.fst)
+            (List.mem_append_right (u.map Prod.fst) hvm')
+      rw [List.get_eq_getElem]
+      rw [List.getElem_append_left (as := u ++ [x, x] ++ inverseWord v)
+        (bs := t) (by simp [inverseWord]; omega)]
+      rw [List.getElem_append_right (as := u ++ [x, x])
+        (bs := inverseWord v) (by simp; omega)]
+      simpa using hall
+    exact False.elim (hx (hi ▸ hm))
+  · have ht : i.1 - (u.length + 2 + v.length) < t.length := by omega
+    have htm : t[i.1 - (u.length + 2 + v.length)] ∈ t := List.getElem_mem ht
+    have hm : ((u ++ [x, x] ++ inverseWord v ++ t).get i).1 ∈
+        (u ++ v ++ t).map Prod.fst := by
+      have hall : t[i.1 - (u.length + 2 + v.length)].1 ∈
+          (u ++ v ++ t).map Prod.fst :=
+        List.mem_map_of_mem (List.mem_append_right (u ++ v) htm)
+      rw [List.get_eq_getElem]
+      rw [List.getElem_append_right (as := u ++ [x, x] ++ inverseWord v)
+        (bs := t) (by simp [inverseWord]; omega)]
+      simpa [inverseWord, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hall
+    exact False.elim (hx (hi ▸ hm))
+
 theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst)

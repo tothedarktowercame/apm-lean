@@ -207,6 +207,25 @@ theorem cpUV_homology (hS0 : ∀ k, k ≠ 0 → k ≠ 3 → IsZero (HQ k S3))
 /-- `H₀(U ∩ V) → H₀(U) ⊕ H₀(V)` is injective (`U ∩ V` is path connected and nonempty, so
 `H₀(U ∩ V) → H₀(U)` is an isomorphism). -/
 -- BEGIN SEAT AREA
+theorem cp_mvI_zero_injective_aux_h0_map
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [PathConnectedSpace X] (f : C(X, Y)) :
+    Function.Injective
+      (HomologicalComplex.homologyMap
+        (CoefficientH0.singularPostcomposition ℚ f) 0).hom := by
+  intro a b hab
+  apply (ConcreteCategory.bijective_of_isIso
+    (ConstructionTargets.CoefficientH0.h0Iso ℚ
+      (Classical.choice (inferInstance : Nonempty X))).hom).1
+  change (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom a =
+    (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom b
+  apply_fun (ConstructionTargets.CoefficientH0.h0Augmentation ℚ).hom at hab
+  have hn := ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℚ f
+  have hna := congrArg (fun g => g.hom a) hn
+  have hnb := congrArg (fun g => g.hom b) hn
+  simp only [CategoryTheory.comp_apply] at hna hnb
+  exact hna.symm.trans (hab.trans hnb)
+
 theorem cp_mvI_zero_injective : Function.Injective (mvI cpU cpV 0).hom := by
   sorry
 -- END SEAT AREA

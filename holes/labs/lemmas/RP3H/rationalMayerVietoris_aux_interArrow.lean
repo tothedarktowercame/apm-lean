@@ -162,12 +162,30 @@ lemma rationalMayerVietoris_aux_lift_snd
     ← HomologicalComplex.homologyMap_comp, biprod.lift_snd]
 
 -- BEGIN SEAT AREA
+lemma rationalMayerVietoris_aux_interArrow_aux_fst
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.fst =
+      mvIncl Set.inter_subset_left n := by
+  sorry
+
+lemma rationalMayerVietoris_aux_interArrow_aux_snd
+    {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
+    (rationalMayerVietoris_aux_interIso U V n).inv ≫
+        HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
+        (rationalMayerVietoris_aux_pieceIso U V n).hom ≫ biprod.snd =
+      mvIncl Set.inter_subset_right n := by
+  sorry
+
 lemma rationalMayerVietoris_aux_interArrow
     {X : Type} [TopologicalSpace X] (U V : Set X) (n : ℕ) :
     (rationalMayerVietoris_aux_interIso U V n).inv ≫
         HomologicalComplex.homologyMap (rationalMayerVietoris_aux_SC U V).f n ≫
         (rationalMayerVietoris_aux_pieceIso U V n).hom = mvI U V n := by
-  sorry
+  apply biprod.hom_ext
+  · simpa [mvI] using rationalMayerVietoris_aux_interArrow_aux_fst U V n
+  · simpa [mvI] using rationalMayerVietoris_aux_interArrow_aux_snd U V n
 -- END SEAT AREA
 
 lemma rationalMayerVietoris_aux_unionArrow

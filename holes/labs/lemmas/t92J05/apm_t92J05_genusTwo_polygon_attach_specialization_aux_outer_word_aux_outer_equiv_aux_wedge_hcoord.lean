@@ -2548,12 +2548,41 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer
     ConstructionTargets.CircleUniversalCover.circleWindingHom_mk]
 
 -- BEGIN SEAT AREA
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_transport
+    (l : ConstructionTargets.PolygonSurfacePiOne.PairingOrbit
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.pair) :
+    let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+    let b := ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase P
+    let oe := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv
+    let wh := Classical.choose (finiteWedge_reindex_homeomorph 3 oe)
+    let q : Path (wh b) (wedgeCircle (0 : Fin 4) 1) := by
+      have hb : wh b = wedgeCircle (oe (P.orbit ⟨0, P.edgeCount_pos⟩)) 1 :=
+        Classical.choose_spec (finiteWedge_reindex_homeomorph 3 oe) _ _
+      exact Path.cast (Path.refl (wedgeCircle (0 : Fin 4) 1))
+        (hb.trans (wedgeCircle_base_eq _ 0)) rfl
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath q)
+      ((ConstructionTargets.BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph
+        wh b)
+        (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase P l)) =
+      apm_t92J05_finiteWedgeLegMap 3 (oe l) apm_t92J05_circlePositiveClass := by
+  sorry
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord :
     ∀ l, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedgeCoordinates
         (ConstructionTargets.PolygonSurfaceHomology.finiteWedgeExplicitLegClassAtBase
           apm_t92J05_genusTwo_polygon_attach_specialization_aux_P l) =
       FreeGroup.of (apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv l) := by
-  sorry
+  intro l
+  let P := apm_t92J05_genusTwo_polygon_attach_specialization_aux_P
+  let b := ConstructionTargets.PolygonSurfaceHomology.orbitWedgeBase P
+  let oe := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_orbitEquiv
+  let e4 := Classical.choose (finiteWedge_finSucc_fundamentalGroup_free 3)
+  have he4 : FiniteWedgeFreeCoordinates 3 e4 :=
+    Classical.choose_spec (finiteWedge_finSucc_fundamentalGroup_free 3)
+  change e4 _ = FreeGroup.of (oe l)
+  rw [← he4 (oe l)]
+  congr 1
+  exact apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_wedge_hcoord_aux_transport l
 -- END SEAT AREA
 noncomputable def apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv_aux_coordinates
     (x : apm_t92J05_genusTwo_polygon_attach_specialization_aux_Outer) :

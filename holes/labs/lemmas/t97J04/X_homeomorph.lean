@@ -369,6 +369,34 @@ runs `c` backwards; `edgePoint 1 0 t = circleToDisk (circleArc t)`); inverse on 
 and `edgePoint 1 0 t = circleToDisk (circleArc t)` (meridian). Both directions
 are continuous as lifts through quotient maps (no Hausdorffness needed). -/
 -- BEGIN SEAT AREA
+lemma X_homeomorph_aux_edgeCount : P.edgeCount = 8 := by
+  rfl
+
+lemma X_homeomorph_aux_cEdge_sign : P.sign cEdge = false := by
+  decide
+
+lemma X_homeomorph_aux_word_cEdge (t : Set.Icc (0 : ℝ) 1) :
+    word (PolygonSurfacePiOne.edgePointCircle P.edgeCount cEdge t) =
+      wedgeCircle cOrbit
+        (PolygonSurfacePiOne.circleArc (PolygonSurfacePiOne.reverseIcc t)) := by
+  change PolygonSurfaceHomology.polygonBoundaryWedgeLoop P
+      (PolygonSurfacePiOne.edgePointCircle P.edgeCount cEdge t) = _
+  rw [PolygonSurfaceHomology.polygonBoundaryWedgeLoop_edgePoint]
+  exact P.signedWedgeArc_of_not_sign cEdge t X_homeomorph_aux_cEdge_sign
+
+lemma X_homeomorph_aux_oneDisk_boundary (t : Set.Icc (0 : ℝ) 1) :
+    apm_t97J04_edgePoint 1 0 t =
+      circleToDisk (PolygonSurfacePiOne.circleArc t) := by
+  apply Subtype.ext
+  simp only [apm_t97J04_edgePoint, circleToDisk,
+    PolygonSurfacePiOne.circleArc,
+    PolygonSurfaceHomology.circleToPolygonDisk,
+    ConstructionTargets.Surfaces.edgePoint]
+  rw [AddCircle.toCircle_apply_mk, Circle.coe_exp]
+  congr 1
+  norm_num
+  ring
+
 lemma X_homeomorph :
     ∃ h : apm_t97J04_X ≃ₜ Xc,
       h apm_t97J04_basepoint = cellIncl cLoop (cellDisk word 0) := by

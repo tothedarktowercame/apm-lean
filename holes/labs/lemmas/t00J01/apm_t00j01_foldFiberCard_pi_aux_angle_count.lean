@@ -291,6 +291,41 @@ lemma apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles :
   exact Nat.card_congr apm_t00j01_foldFiberCard_pi_aux_angleEquiv
 
 -- BEGIN SEAT AREA
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave :
+    StrictConcaveOn ℝ (Set.Icc 0 Real.pi) apm_t00j01_foldLift := by
+  refine ⟨strictConcaveOn_sin_Icc.1, ?_⟩
+  intro x hx y hy hxy a b ha hb hab
+  have hs := strictConcaveOn_sin_Icc.2 hx hy hxy ha hb hab
+  dsimp [apm_t00j01_foldLift] at hs ⊢
+  nlinarith
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd (x : ℝ) :
+    apm_t00j01_foldLift (-x) = -apm_t00j01_foldLift x := by
+  simp [apm_t00j01_foldLift]
+  ring
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root :
+    ∃ x ∈ Set.Ioo 0 (Real.pi / 2), apm_t00j01_foldLift x = Real.pi := by
+  have hcont : ContinuousOn apm_t00j01_foldLift (Set.Icc 0 (Real.pi / 2)) := by
+    exact (continuous_id.add (Real.continuous_sin.const_mul 2)).continuousOn
+  have h0 : apm_t00j01_foldLift 0 < Real.pi := by
+    simp [apm_t00j01_foldLift, Real.pi_pos]
+  have hmid : Real.pi < apm_t00j01_foldLift (Real.pi / 2) := by
+    rw [apm_t00j01_foldLift, Real.sin_pi_div_two]
+    linarith [Real.pi_lt_four]
+  have himage : Real.pi ∈ apm_t00j01_foldLift '' Set.Icc 0 (Real.pi / 2) :=
+    (intermediate_value_Icc (by positivity) hcont) ⟨h0.le, hmid.le⟩
+  rcases himage with ⟨x, hx, hfx⟩
+  refine ⟨x, ⟨?_, ?_⟩, hfx⟩
+  · exact lt_of_not_ge fun h => by
+      have : x = 0 := le_antisymm h hx.1
+      subst x
+      simp [apm_t00j01_foldLift] at hfx
+      exact Real.pi_ne_zero hfx.symm
+  · exact lt_of_le_of_ne hx.2 fun h => by
+      subst x
+      exact hmid.ne' hfx
+
 lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
     Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
       Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by

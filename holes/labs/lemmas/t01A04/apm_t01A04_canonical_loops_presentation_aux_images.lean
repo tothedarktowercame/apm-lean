@@ -540,12 +540,65 @@ standard generators.  `wedgeFundamentalGroupMulEquiv` (transported along
 the import computes no generator images; composing with a free-product
 automorphism is allowed. -/
 -- BEGIN SEAT AREA
+noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom :
+    apm_t01a04_piOne →*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase :=
+  FundamentalGroup.map
+    ⟨apm_t01A04_canonical_loops_presentation_aux_homeomorph,
+      apm_t01A04_canonical_loops_presentation_aux_homeomorph.continuous⟩
+    apm_t01a04_basepoint
+
+lemma apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective :
+    Function.Bijective
+      apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom := by
+  constructor
+  · intro x y hxy
+    obtain ⟨x⟩ := x
+    obtain ⟨y⟩ := y
+    apply Quotient.sound
+    convert (Path.Homotopic.Quotient.exact hxy).map
+      ⟨apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm,
+        apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm.continuous⟩ using 1 <;>
+      ext t <;>
+      exact (apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm_apply_apply _).symm
+  · intro y
+    obtain ⟨y⟩ := y
+    refine ⟨Path.Homotopic.Quotient.mk
+      (y.map apm_t01A04_canonical_loops_presentation_aux_homeomorph.symm.continuous), ?_⟩
+    apply Quotient.sound
+    convert Path.Homotopic.refl y using 1 <;> ext t <;>
+      exact apm_t01A04_canonical_loops_presentation_aux_homeomorph.apply_symm_apply _
+
+noncomputable def apm_t01A04_canonical_loops_presentation_aux_images_aux_transport :
+    apm_t01a04_piOne ≃*
+      FundamentalGroup
+        (ConstructionTargets.PointWedgeQuotient.Wedge
+          ((1, 1) : apm_t01a04_Torus) (1 : Circle))
+        ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeBase :=
+  MulEquiv.ofBijective
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transportHom
+    apm_t01A04_canonical_loops_presentation_aux_images_aux_transport_bijective
+
+lemma apm_t01A04_canonical_loops_presentation_aux_images_aux_generator_images :
+    let Φ := apm_t01A04_canonical_loops_presentation_aux_images_aux_transport.trans
+      ConstructionTargets.GenericTargetNaturalSourceReconstruction.wedgeFundamentalGroupMulEquiv
+    Φ apm_t01A04_loopA =
+        Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ)) ∧
+      Φ apm_t01A04_loopB =
+        Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ)) ∧
+      Φ apm_t01A04_loopC =
+        Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ)) := by
+  sorry
+
 theorem apm_t01A04_canonical_loops_presentation_aux_images :
     ∃ Φ : apm_t01a04_piOne ≃* ConstructionTargets.GenericTargetNaturalSourceReconstruction.FP,
       Φ apm_t01A04_loopA = Monoid.Coprod.inl (Multiplicative.ofAdd ((1, 0) : ℤ × ℤ)) ∧
       Φ apm_t01A04_loopB = Monoid.Coprod.inl (Multiplicative.ofAdd ((0, 1) : ℤ × ℤ)) ∧
       Φ apm_t01A04_loopC = Monoid.Coprod.inr (Multiplicative.ofAdd (1 : ℤ)) := by
-  sorry
+  exact ⟨_, apm_t01A04_canonical_loops_presentation_aux_images_aux_generator_images⟩
 -- END SEAT AREA
 
 /-- Pure group theory: a group isomorphic to `ℤ² * ℤ` with the three loops on

@@ -8060,6 +8060,12 @@ theorem cut_transfer_generator {Label : Type*} [DecidableEq Label]
   sorry
 
 -- BEGIN SEAT AREA
+lemma cut_retransfer_consistency_aux_chords {L p q : ℕ}
+    (s : Icc (0 : ℝ) 1) :
+    cutChordA L p q s = cutChordB L p q (reverseParameter s) := by
+  apply Complex.ext <;>
+    simp [cutChordA, cutChordB, reverseParameter] <;> ring
+
 theorem cut_retransfer_consistency {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)

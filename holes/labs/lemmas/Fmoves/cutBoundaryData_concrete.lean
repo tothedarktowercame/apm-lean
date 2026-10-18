@@ -6616,6 +6616,65 @@ theorem cutNewB_range {L p q : ℕ} (hpq : p < q) (hqL : q < L)
 
 /-- The edge formulas of the concrete maps. -/
 -- BEGIN SEAT AREA
+lemma cutBoundaryData_concrete_aux_edge_circle {L e : ℕ} (s : Icc (0 : ℝ) 1) :
+    cutEdgeCircle L e s = AddCircle.homeomorphCircle'
+      (((cutAlpha L e + s * (2 * Real.pi / L) : ℝ) : AddCircle (2 * Real.pi))) := by
+  apply Subtype.ext
+  simp only [cutEdgeCircle, edgePoint, AddCircle.homeomorphCircle'_apply_mk]
+  congr 1
+  unfold cutAlpha
+  push_cast
+  ring
+
+lemma cutBoundaryData_concrete_aux_eval {L b : ℕ} (f : ℝ → ℂ) (φ : ℝ)
+    (hφ : φ ∈ Ico (cutAlpha L b) (cutAlpha L b + 2 * Real.pi)) :
+    AddCircle.liftIco (2 * Real.pi) (cutAlpha L b) f
+        (AddCircle.homeomorphCircle'.symm
+          (AddCircle.homeomorphCircle' (φ : AddCircle (2 * Real.pi)))) = f φ := by
+  rw [Homeomorph.symm_apply_apply]
+  exact AddCircle.liftIco_coe_apply hφ
+
+lemma cutBoundaryData_concrete_aux_oldA_arc {L p q e : ℕ} (s : Icc (0 : ℝ) 1)
+    (hpq : p < q) (hqL : q < L) (hpe : p ≤ e) (heq : e < q) :
+    cutOldA L p q (cutEdgeCircle L e s) = (edgePoint L e s : ℂ) := by
+  have hL : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
+  let φ : ℝ := cutAlpha L e + s * (2 * Real.pi / L)
+  have hφeq : φ = 2 * Real.pi * ((e : ℝ) + s) / L := by
+    dsimp [φ, cutAlpha]
+    ring
+  have hφlo : cutAlpha L p ≤ φ := by
+    rw [hφeq]
+    unfold cutAlpha
+    have hs0 : (0 : ℝ) ≤ s := s.2.1
+    have hpe' : (p : ℝ) ≤ e := by exact_mod_cast hpe
+    apply (div_le_div_iff_of_pos_right hL).2
+    nlinarith [Real.pi_pos]
+  have hφq : φ ≤ cutAlpha L q := by
+    rw [hφeq]
+    unfold cutAlpha
+    have hs1 : (s : ℝ) ≤ 1 := s.2.2
+    have heq' : (e : ℝ) + 1 ≤ q := by exact_mod_cast (show e + 1 ≤ q by omega)
+    apply (div_le_div_iff_of_pos_right hL).2
+    nlinarith [Real.pi_pos]
+  have hφtop : φ < cutAlpha L p + 2 * Real.pi := by
+    have hqtop : cutAlpha L q < cutAlpha L p + 2 * Real.pi := by
+      unfold cutAlpha
+      have hq' : (q : ℝ) < p + L := by exact_mod_cast (show q < p + L by omega)
+      rw [show 2 * Real.pi * (p : ℝ) / L + 2 * Real.pi =
+        2 * Real.pi * ((p : ℝ) + L) / L by field_simp]
+      apply (div_lt_div_iff_of_pos_right hL).2
+      nlinarith [Real.pi_pos]
+    exact lt_of_le_of_lt hφq hqtop
+  rw [cutOldA, cutBoundaryData_concrete_aux_edge_circle]
+  rw [cutBoundaryData_concrete_aux_eval _ φ ⟨hφlo, hφtop⟩]
+  rw [cutProfileOldA, if_pos hφq]
+  change Complex.exp ((φ : ℂ) * Complex.I) =
+    Complex.exp (Complex.I * (2 * Real.pi * ((e : ℝ) + s.1) / L))
+  congr 1
+  dsimp [φ, cutAlpha]
+  push_cast
+  ring
+
 theorem cutBoundaryData_concrete {L p q : ℕ} (hpq : p < q) (hqL : q < L) :
     CutBoundaryData L p q (cutOldA L p q) (cutOldB L p q) (cutNewA L p q)
       (cutNewB L p q) := by

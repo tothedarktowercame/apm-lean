@@ -173,6 +173,59 @@ theorem apm_t02a02_cancel_c_homeomorph :
 
 /-- Cutting from the redundant vertex and regluing removes the `b` pair. -/
 -- BEGIN SEAT AREA
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_perm6_involution
+    (i : Fin 6) : apm_t02a02_perm6 (apm_t02a02_perm6 i) = i := by
+  fin_cases i <;> rfl
+
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_perm4_involution
+    (i : Fin 4) : apm_t02a02_perm4 (apm_t02a02_perm4 i) = i := by
+  fin_cases i <;> rfl
+
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_sign6_pair
+    (i : Fin 6) :
+    apm_t02a02_sign6 i = apm_t02a02_sign6 (apm_t02a02_perm6 i) := by
+  fin_cases i <;> rfl
+
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_sign4_pair
+    (i : Fin 4) :
+    apm_t02a02_sign4 i = apm_t02a02_sign4 (apm_t02a02_perm4 i) := by
+  fin_cases i <;> rfl
+
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_parameter6
+    (i : Fin 6) (t : Set.Icc (0 : ℝ) 1) :
+    pairedParameter apm_t02a02_perm6 apm_t02a02_sign6 i t = t := by
+  rw [pairedParameter, if_pos]
+  exact apm_t02a02_remove_redundant_vertex_homeomorph_aux_sign6_pair i
+
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_parameter4
+    (i : Fin 4) (t : Set.Icc (0 : ℝ) 1) :
+    pairedParameter apm_t02a02_perm4 apm_t02a02_sign4 i t = t := by
+  rw [pairedParameter, if_pos]
+  exact apm_t02a02_remove_redundant_vertex_homeomorph_aux_sign4_pair i
+
+/-- Every generating hexagon identification can hence be used in either
+direction without changing its interval parameter. -/
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_hex_symm
+    {x y : Disk}
+    (h : boundaryRel 6 apm_t02a02_perm6 apm_t02a02_sign6 x y) :
+    boundaryRel 6 apm_t02a02_perm6 apm_t02a02_sign6 y x := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  refine ⟨apm_t02a02_perm6 i, t, ?_, ?_⟩
+  · simp [apm_t02a02_remove_redundant_vertex_homeomorph_aux_parameter6]
+  · simp [apm_t02a02_remove_redundant_vertex_homeomorph_aux_parameter6,
+      apm_t02a02_remove_redundant_vertex_homeomorph_aux_perm6_involution]
+
+/-- The analogous parameter-preserving symmetry for the target square. -/
+lemma apm_t02a02_remove_redundant_vertex_homeomorph_aux_square_symm
+    {x y : Disk}
+    (h : boundaryRel 4 apm_t02a02_perm4 apm_t02a02_sign4 x y) :
+    boundaryRel 4 apm_t02a02_perm4 apm_t02a02_sign4 y x := by
+  rcases h with ⟨i, t, rfl, rfl⟩
+  refine ⟨apm_t02a02_perm4 i, t, ?_, ?_⟩
+  · simp [apm_t02a02_remove_redundant_vertex_homeomorph_aux_parameter4]
+  · simp [apm_t02a02_remove_redundant_vertex_homeomorph_aux_parameter4,
+      apm_t02a02_remove_redundant_vertex_homeomorph_aux_perm4_involution]
+
 theorem apm_t02a02_remove_redundant_vertex_homeomorph :
     Nonempty (apm_t02a02_hexagon ≃ₜ apm_t02a02_square) := by
   sorry

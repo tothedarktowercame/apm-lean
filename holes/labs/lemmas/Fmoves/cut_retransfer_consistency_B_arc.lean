@@ -8816,6 +8816,24 @@ theorem cut_retransfer_consistency_A_chord {Label : Type*} [DecidableEq Label]
 
 /-- Piece `B`, side position `(e₀, s₀)`, `q ≤ e₀ < L` or `e₀ < p`. -/
 -- BEGIN SEAT AREA
+lemma cut_retransfer_consistency_B_arc_aux_chord_end {L p q : ℕ}
+    (hpq : p < q) (hq : q < p + L) (s : Icc (0 : ℝ) 1)
+    (h : ‖cutChordB L p q s‖ = 1) : s.1 = 0 ∨ s.1 = 1 := by
+  by_contra hn
+  push_neg at hn
+  have hs0 : 0 < (s : ℝ) := lt_of_le_of_ne s.2.1 hn.1.symm
+  have hs1 : 0 < 1 - (s : ℝ) := sub_pos.mpr (lt_of_le_of_ne s.2.2 hn.2)
+  have hne : cutPoint L p ≠ cutPoint L q := cutPoint_ne hpq hq
+  have hlt := norm_combo_lt_of_ne
+    (x := cutPoint L p) (y := cutPoint L q) (r := (1 : ℝ))
+    (a := 1 - (s : ℝ)) (b := (s : ℝ))
+    (by simp [cutPoint_norm]) (by simp [cutPoint_norm]) hne hs1 hs0 (by ring)
+  have he : (1 - (s : ℝ)) • cutPoint L p + (s : ℝ) • cutPoint L q =
+      cutChordB L p q s := by
+    apply Complex.ext <;> simp [cutChordB, Complex.real_smul] <;> ring
+  rw [← he] at h
+  exact (not_lt_of_ge (le_of_eq h.symm)) hlt
+
 theorem cut_retransfer_consistency_B_arc {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)

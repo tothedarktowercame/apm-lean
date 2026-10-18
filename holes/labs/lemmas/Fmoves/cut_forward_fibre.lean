@@ -7058,7 +7058,25 @@ theorem cut_reverse_generators {Label : Type*} [DecidableEq Label]
 
 /-- A point on both old pieces (the chord, or `P`, `Q`) has related new images. -/
 -- BEGIN SEAT AREA
-theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
+lemma cut_forward_fibre_aux_x {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t))
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length (u.length + 1) s)
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length u.length s) := by
+  rw [cutAndPaste_aux_length u v t x]
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length + 1, by simp [inverseWord]⟩
+  let j : Fin (u ++ [x, x] ++ inverseWord v ++ t).length :=
+    ⟨u.length, by simp [inverseWord]⟩
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp [i, j] at this
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+  · simp [i, j, List.get_eq_getElem, List.getElem_append]
+lemma cut_forward_fibre_aux_boundary_cases {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)
     (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
@@ -7067,6 +7085,16 @@ theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
     (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
     Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
   sorry
+
+theorem cut_forward_fibre {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (oldA oldB newA newB : Circle → ℂ)
+    (D : CutBoundaryData (u ++ [x] ++ v ++ [x] ++ t).length u.length
+      (u.length + 1 + v.length) oldA oldB newA newB)
+    (y y' : Circle) (N N' : Disk) (h : oldA y = oldB y')
+    (hN : (N : ℂ) = newA y) (hN' : (N' : ℂ) = newB y') :
+    Relation.EqvGen (WordRel (u ++ [x, x] ++ inverseWord v ++ t)) N N' := by
+  exact cut_forward_fibre_aux_boundary_cases u v t x oldA oldB newA newB D y y' N N' h hN hN'
 -- END SEAT AREA
 
 /-- A point on both new pieces (the seam, or `P'`, `Q'`) has related old images. -/

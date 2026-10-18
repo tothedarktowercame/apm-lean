@@ -1838,6 +1838,38 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_energy_sub_one
     hnorm]
 
 -- BEGIN SEAT AREA
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) :
+    ∀ y dy : ℝ → ℝ, apm_m98a06_InH10Pi y dy →
+      ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1 →
+      0 ≤ ∫ x, (dy x) ^ 2 - (y x) ^ 2
+        ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (henergy : ∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0) :
+    ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x := by
+  sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
+    (hSine : apm_m98A06_SineComputationsFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy)
+    (hnorm : ∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 1)
+    (hs : ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
+      y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
+        fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x) :
+    ∫ x, (dy x) ^ 2 - (y x) ^ 2
+      ∂(volume.restrict (Ioo (0 : ℝ) Real.pi)) = 0 := by
+  sorry
+
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact)
@@ -1853,7 +1885,15 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core
         ∃ s : ℝ, (s = 1 ∨ s = -1) ∧
           y =ᵐ[volume.restrict (Ioo (0 : ℝ) Real.pi)]
             fun x ↦ s * Real.sqrt (2 / Real.pi) * Real.sin x)) := by
-  sorry
+  constructor
+  · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality
+      hWirtinger hFTC
+  · intro y dy h hnorm
+    constructor
+    · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_forward
+        hWirtinger hFTC y dy h hnorm
+    · exact apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_eq_reverse
+        hSine y dy h hnorm
 -- END SEAT AREA
 
 theorem apm_m98A06_weak_poincare_and_equality_of_facts

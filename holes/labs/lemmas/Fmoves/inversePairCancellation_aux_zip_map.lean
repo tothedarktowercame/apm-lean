@@ -699,7 +699,20 @@ centre, the endpoints of the two cancelled arcs, and all remaining vertices;
 fold just the two incident triangles onto the slit sector and map the
 complementary fan affinely to the target fan. -/
 -- BEGIN SEAT AREA
-lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
+lemma inversePairCancellation_aux_zip_map_aux_target_pos
+    {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (hrest : IsPolygonWord (u ++ v)) :
+    0 < (u ++ v).length := by
+  exact List.length_pos.mpr hrest.1
+
+lemma inversePairCancellation_aux_zip_map_aux_source_pos
+    {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) :
+    0 < (u ++ v).length + 2 := by
+  omega
+
+lemma inversePairCancellation_aux_zip_map_aux_pl_construction
+    {Label : Type*} [DecidableEq Label]
     (u v : List (Signed Label)) (x : Signed Label)
     (hx : x.1 ∉ (u ++ v).map Prod.fst)
     (hrest : IsPolygonWord (u ++ v)) :
@@ -709,6 +722,17 @@ lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
         (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
          Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) := by
   sorry
+
+lemma inversePairCancellation_aux_zip_map {Label : Type*} [DecidableEq Label]
+    (u v : List (Signed Label)) (x : Signed Label)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst)
+    (hrest : IsPolygonWord (u ++ v)) :
+    ∃ c : Disk → Disk,
+      CancellationZipSpec (u ++ v).length u.length c ∧
+      (∀ p q : Disk, ‖(p : ℂ)‖ = 1 → ‖(q : ℂ)‖ = 1 →
+        (Relation.EqvGen (WordRel (u ++ [x, inv x] ++ v)) p q ↔
+         Relation.EqvGen (WordRel (u ++ v)) (c p) (c q))) := by
+  exact inversePairCancellation_aux_zip_map_aux_pl_construction u v x hx hrest
 -- END SEAT AREA
 
 /-- Leaf (interior/mixed fibres, 45--70 lines): use

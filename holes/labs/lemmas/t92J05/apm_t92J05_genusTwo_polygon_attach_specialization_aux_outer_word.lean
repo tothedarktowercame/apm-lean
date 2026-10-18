@@ -2262,6 +2262,60 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_norma
     simpa using h
 
 -- BEGIN SEAT AREA
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range
+    (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
+      (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel))) :
+    ∃ g : FundamentalGroup
+        ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+        (apm_t92J05_twoOpen_overlapToLeft
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x),
+      (FundamentalGroup.map
+        (apm_t92J05_twoOpen_overlapToLeft
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range =
+        Subgroup.zpowers g := by
+  sorry
+
+lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv
+    (x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen
+      apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩
+      (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)))
+    (g : FundamentalGroup
+      ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen
+        apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+      (apm_t92J05_twoOpen_overlapToLeft
+        (ConstructionTargets.PolygonRadialOpenCover.outerOpen
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+        (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x))
+    (hg : (FundamentalGroup.map
+      (apm_t92J05_twoOpen_overlapToLeft
+        (ConstructionTargets.PolygonRadialOpenCover.outerOpen
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+        (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range =
+      Subgroup.zpowers g) :
+    ∃ e : FundamentalGroup
+        ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen
+          apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+        (apm_t92J05_twoOpen_overlapToLeft
+          (ConstructionTargets.PolygonRadialOpenCover.outerOpen
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
+          (ConstructionTargets.PolygonRadialOpenCover.innerOpen
+            apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x) ≃* FreeGroup (Fin 4),
+      IsConj (e g) apm_t92J05_genusTwoRelator ∨
+        IsConj (e g) apm_t92J05_genusTwoRelator⁻¹ := by
+  sorry
+
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
     ∀ x : ↥((ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) ∩ (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)),
       ∃ e : FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)
@@ -2271,7 +2325,16 @@ lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word :
               ((FundamentalGroup.map (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel)) x).range :
                 Set (FundamentalGroup ↥(ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (apm_t92J05_twoOpen_overlapToLeft (ConstructionTargets.PolygonRadialOpenCover.outerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) (ConstructionTargets.PolygonRadialOpenCover.innerOpen apm_t92J05_genusTwo_polygon_attach_specialization_aux_P.Rel) x)))) =
           Subgroup.normalClosure ({apm_t92J05_genusTwoRelator} : Set (FreeGroup (Fin 4))) := by
-  sorry
+  intro x
+  obtain ⟨g, hg⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_overlap_range x
+  obtain ⟨e, he⟩ := apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_outer_equiv x g hg
+  refine ⟨e, ?_⟩
+  rw [hg, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_zpowers, Subgroup.map_normalClosure _ _ e.surjective,
+    Set.image_singleton]
+  change Subgroup.normalClosure ({e g} : Set (FreeGroup (Fin 4))) = _
+  rcases he with h | h
+  · exact apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_isConj h
+  · rw [apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_isConj h, apm_t92J05_genusTwo_polygon_attach_specialization_aux_outer_word_aux_normalClosure_inverse]
 -- END SEAT AREA
 lemma apm_t92J05_genusTwo_polygon_attach_specialization_aux_pathConnected_of_homotopyEquiv
     {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]

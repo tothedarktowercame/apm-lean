@@ -87,11 +87,61 @@ lemma apm_m96A02_lipschitz_ode_aux_exists_aux_linear_growth
 (fixed point of `T u t = u₀ + ∫₀ᵗ f (u s) ds` on `C([0,1])`; some iterate is a contraction
 by the `Kⁿ / n!` estimate, so `apm_m96A02_iterate_contraction_fixed_point` applies). -/
 -- BEGIN SEAT AREA
+noncomputable def apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+    (f : ℝ → ℝ) (u₀ : ℝ) (hfc : Continuous f)
+    (u : C(Set.Icc (0 : ℝ) 1, ℝ)) : C(Set.Icc (0 : ℝ) 1, ℝ) where
+  toFun t := u₀ + ∫ s in (0 : ℝ)..t.1,
+    f (u (Set.projIcc 0 1 zero_le_one s))
+  continuous_toFun := by
+    have hg : Continuous (fun s : ℝ =>
+        f (u (Set.projIcc 0 1 zero_le_one s))) :=
+      hfc.comp (u.continuous.comp continuous_projIcc)
+    exact (continuous_const.add
+      (intervalIntegral.continuous_primitive hg.intervalIntegrable 0)).comp
+        continuous_subtype_val
+
+@[simp] lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard_apply
+    (f : ℝ → ℝ) (u₀ : ℝ) (hfc : Continuous f)
+    (u : C(Set.Icc (0 : ℝ) 1, ℝ)) (t : Set.Icc (0 : ℝ) 1) :
+    apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+      f u₀ hfc u t =
+      u₀ + ∫ s in (0 : ℝ)..t.1,
+        f (u (Set.projIcc 0 1 zero_le_one s)) := rfl
+
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint
+    (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
+    ∃ U : C(Set.Icc (0 : ℝ) 1, ℝ),
+      apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+        f u₀ hK.continuous U = U := by
+  sorry
+
+lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_extend
+    (f : ℝ → ℝ) (u₀ : ℝ) (hfc : Continuous f)
+    (U : C(Set.Icc (0 : ℝ) 1, ℝ))
+    (hU : apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard
+      f u₀ hfc U = U) :
+    ∃ u : ℝ → ℝ, Continuous u ∧
+      ∀ t ∈ Set.Icc (0 : ℝ) 1,
+        u t = u₀ + ∫ s in (0 : ℝ)..t, f (u s) := by
+  let u : ℝ → ℝ := fun t => U (Set.projIcc 0 1 zero_le_one t)
+  refine ⟨u, U.continuous.comp continuous_projIcc, ?_⟩
+  intro t ht
+  have hproj : Set.projIcc 0 1 zero_le_one t =
+      (⟨t, ht⟩ : Set.Icc (0 : ℝ) 1) := by
+    exact Set.projIcc_of_mem zero_le_one ht
+  have he := congrArg (fun W : C(Set.Icc (0 : ℝ) 1, ℝ) => W ⟨t, ht⟩) hU
+  simpa [u, hproj,
+    apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_picard] using he.symm
+
 lemma apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution
     (f : ℝ → ℝ) (u₀ : ℝ) (K : NNReal) (hK : LipschitzWith K f) :
     ∃ u : ℝ → ℝ, Continuous u ∧
       ∀ t ∈ Set.Icc (0 : ℝ) 1, u t = u₀ + ∫ s in (0 : ℝ)..t, f (u s) := by
-  sorry
+  obtain ⟨U, hU⟩ :=
+    apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_fixedPoint
+      f u₀ K hK
+  exact apm_m96A02_lipschitz_ode_aux_exists_aux_integral_solution_aux_extend
+    f u₀ hK.continuous U hU
 -- END SEAT AREA
 
 /-- A continuous solution of the integral equation solves the ODE. -/

@@ -2819,9 +2819,204 @@ discrete), with `spherePush_continuousOn`.  `hresp`: vertex points are fixed;
 for `pair` use `spherePush_spec` (`spherePush south (s, -x) =
 -spherePush north (s, x)`) and `TreeRel.pair`.  About 130 lines. -/
 -- BEGIN SEAT AREA
+lemma treeStar_isSimplyConnected_aux_open_saturated (g : G) :
+    IsOpen (treeStar g) ∧ Saturated TreeRel (treeStar g) := by
+  have hset : treeStar g =
+      Sum.inl '' (({g} ×ˢ {t : unitInterval | (t : ℝ) < 1}) ∪
+        ({g * a⁻¹} ×ˢ {t : unitInterval | 0 < (t : ℝ)})) ∪
+      Sum.inr '' (({g} ×ˢ ({south}ᶜ : Set S2)) ∪
+        ({g * b} ×ˢ ({north}ᶜ : Set S2))) := by
+    ext z
+    rcases z with z | z <;> simp [treeStar, treeStarPred]
+  constructor
+  · rw [hset]
+    apply IsOpen.union
+    · apply isOpenMap_inl _
+      exact ((isOpen_discrete {g}).prod (isOpen_lt continuous_subtype_val continuous_const)).union
+        ((isOpen_discrete {g * a⁻¹}).prod (isOpen_lt continuous_const continuous_subtype_val))
+    · apply isOpenMap_inr _
+      exact ((isOpen_discrete {g}).prod isOpen_compl_singleton).union
+        ((isOpen_discrete {g * b}).prod isOpen_compl_singleton)
+  · intro z w hzw
+    have ha : a ≠ 1 := G_facts.1
+    have hb : b ≠ 1 := G_facts.2.1
+    have hbb : b * b = 1 := G_facts.2.2.1
+    cases hzw with
+    | edge h =>
+        change (((h = g ∧ (1 : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (1 : ℝ))) ↔
+          ((h * a = g ∧ (0 : ℝ) < 1) ∨ (h * a = g * a⁻¹ ∧ 0 < (0 : ℝ))))
+        simp only [lt_self_iff_false, and_false, false_or, zero_lt_one, and_true]
+        constructor
+        · rintro rfl
+          simp
+        · intro hh
+          apply mul_right_cancel (b := a)
+          simpa [mul_assoc] using hh
+    | vertex h =>
+        change (((h = g ∧ (0 : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (0 : ℝ))) ↔
+          ((h = g ∧ north ≠ south) ∨ (h = g * b ∧ north ≠ north)))
+        simp [north_ne_south]
+    | pair h x =>
+        change (((h = g ∧ x ≠ south) ∨ (h = g * b ∧ x ≠ north)) ↔
+          ((h * b = g ∧ -x ≠ south) ∨ (h * b = g * b ∧ -x ≠ north)))
+        constructor
+        · rintro (⟨rfl, hx⟩ | ⟨rfl, hx⟩)
+          · right
+            refine ⟨rfl, ?_⟩
+            intro he; apply hx
+            simpa [neg_north] using congrArg Neg.neg he
+          · left
+            refine ⟨by simp [mul_assoc, hbb], ?_⟩
+            intro he; apply hx
+            simpa [neg_south] using congrArg Neg.neg he
+        · rintro (⟨hh, hx⟩ | ⟨hh, hx⟩)
+          · right
+            refine ⟨?_, ?_⟩
+            · simpa [← hh, mul_assoc, hbb]
+            · intro he; apply hx
+              simpa [he, neg_north]
+          · left
+            refine ⟨?_, ?_⟩
+            exact mul_right_cancel hh
+            intro he; apply hx
+            simpa [he, neg_south]
+
 lemma treeStar_isSimplyConnected (g : G) :
     IsSimplyConnected (qmk TreeRel '' treeStar g) := by
   sorry
+/-
+  refine isSimplyConnected_image_of_contraction (R := TreeRel) (treeStar g)
+    (treeStar_isSimplyConnected_aux_open_saturated g).1
+    (treeStar_isSimplyConnected_aux_open_saturated g).2 (treeContraction g)
+    ?_ ?_ ?_ (.inl (g, 0)) ?_ ?_ ?_
+  · intro q hq
+    rcases q.2 with z | z
+    · rcases z with ⟨h, t⟩
+      by_cases hh : h = g
+      · subst h
+        let F : unitInterval × TreeZ → TreeZ := fun y =>
+          .inl (g, towardZero y.1 (y.2.elim (fun z : G × unitInterval => z.2)
+            (fun _ => t)))
+        have hF : Continuous F := by
+          apply continuous_inl.comp
+          apply Continuous.prodMk continuous_const
+          apply Continuous.subtype_mk
+          change Continuous (fun y => (1 - (y.1 : ℝ)) *
+            ((y.2.elim (fun z : G × unitInterval => z.2) (fun _ => t)) : ℝ))
+          fun_prop
+        apply hF.continuousAt.continuousWithinAt.congr_of_eventuallyEq
+        · filter_upwards [isOpenMap_inl (isOpen_discrete ({g} : Set G)).prod
+              isOpen_univ |>.mem_nhds ⟨rfl, Set.mem_univ _⟩ |> continuous_snd.isOpen_preimage.mem_nhds] with y hy
+          rcases y.2 with z | z
+          · rcases hy with ⟨-, k, hk, -, rfl⟩
+            simpa [F, treeContraction] using hk
+          · exact (hy.1.elim)
+        · simp [F, treeContraction]
+      · let F : unitInterval × TreeZ → TreeZ := fun y =>
+          .inl (h, towardOne y.1 (y.2.elim (fun z : G × unitInterval => z.2)
+            (fun _ => t)))
+        have hF : Continuous F := by
+          apply continuous_inl.comp
+          apply Continuous.prodMk continuous_const
+          apply Continuous.subtype_mk
+          change Continuous (fun y => (1 - (y.1 : ℝ)) *
+            ((y.2.elim (fun z : G × unitInterval => z.2) (fun _ => t)) : ℝ) + y.1)
+          fun_prop
+        apply hF.continuousAt.continuousWithinAt.congr_of_eventuallyEq
+        · filter_upwards [isOpenMap_inl ((isOpen_discrete ({h} : Set G)).prod
+              isOpen_univ) |>.mem_nhds ⟨rfl, Set.mem_univ _⟩ |> continuous_snd.isOpen_preimage.mem_nhds] with y hy
+          rcases y.2 with z | z
+          · rcases hy with ⟨-, k, hk, -, rfl⟩
+            simpa [F, treeContraction, hh] using hk
+          · exact hy.1.elim
+        · simp [F, treeContraction, hh]
+    · rcases z with ⟨h, x⟩
+      by_cases hh : h = g
+      · subst h
+        sorry
+      · sorry
+  · intro s z hz
+    rcases z with ⟨h, t⟩ | ⟨h, x⟩
+    · change (h = g ∧ ((towardZero s t : unitInterval) : ℝ) < 1) ∨
+          (h = g * a⁻¹ ∧ 0 < ((towardOne s t : unitInterval) : ℝ))
+      change (h = g ∧ (t : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (t : ℝ)) at hz
+      rcases hz with ⟨rfl, ht⟩ | ⟨hh, ht⟩
+      · left; exact ⟨rfl, by simp [towardZero]; nlinarith [unitInterval.nonneg t,
+          unitInterval.nonneg s, unitInterval.le_one s]⟩
+      · right; refine ⟨hh, ?_⟩
+        have hne : h ≠ g := by rintro rfl; exact G_facts.1 (by simpa using hh)
+        simp [treeContraction, hne, towardOne]
+        nlinarith [unitInterval.nonneg s, unitInterval.le_one s]
+    · change (h = g ∧ (treeContraction g (s, .inr (h, x))).getRight ≠ south) ∨
+          (h = g * b ∧ (treeContraction g (s, .inr (h, x))).getRight ≠ north)
+      change (h = g ∧ x ≠ south) ∨ (h = g * b ∧ x ≠ north) at hz
+      rcases hz with ⟨rfl, hx⟩ | ⟨hh, hx⟩
+      · left; refine ⟨rfl, ?_⟩
+        simpa [treeContraction, neg_north] using
+          (spherePush_spec north).2.2.2.1 s x (by simpa [neg_north] using hx)
+      · right; refine ⟨hh, ?_⟩
+        have hne : h ≠ g := by rintro rfl; exact G_facts.2.1 (by simpa using hh)
+        simpa [treeContraction, hne, neg_south] using
+          (spherePush_spec south).2.2.2.1 s x (by simpa [neg_south] using hx)
+  · intro z hz
+    rcases z with ⟨h, t⟩ | ⟨h, x⟩ <;>
+      simp [treeContraction, (spherePush_spec north).1, (spherePush_spec south).1,
+        towardZero, towardOne]
+  · change treeStarPred g (.inl (g, 0))
+    simp [treeStarPred]
+  · intro z hz
+    rcases z with ⟨h, t⟩ | ⟨h, x⟩
+    · change (h = g ∧ (t : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (t : ℝ)) at hz
+      rcases hz with ⟨rfl, ht⟩ | ⟨hh, ht⟩
+      · simp [treeContraction, towardZero]
+      · have hne : h ≠ g := by rintro rfl; exact G_facts.1 (by simpa using hh)
+        simp [treeContraction, hne, towardOne]
+        apply Quotient.sound
+        rw [hh]
+        exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.edge (g * a⁻¹)))
+    · change (h = g ∧ x ≠ south) ∨ (h = g * b ∧ x ≠ north) at hz
+      rcases hz with ⟨rfl, hx⟩ | ⟨hh, hx⟩
+      · simp [treeContraction, (spherePush_spec north).2.1 _ (by simpa [neg_north] using hx)]
+        exact Quotient.sound (Relation.EqvGen.symm _ _
+          (Relation.EqvGen.rel _ _ (TreeRel.vertex g)))
+      · have hne : h ≠ g := by rintro rfl; exact G_facts.2.1 (by simpa using hh)
+        simp [treeContraction, hne, (spherePush_spec south).2.1 _
+          (by simpa [neg_south] using hx)]
+        rw [hh]
+        exact Quotient.sound (Relation.EqvGen.trans _ _ _
+          (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.pair g north)))
+          (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ (TreeRel.vertex g))))
+  · intro s z w hz hzw
+    cases hzw with
+    | edge h =>
+        have hh : h = g := by
+          change (h = g ∧ (1 : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (1 : ℝ)) at hz
+          rcases hz with hz | hz
+          · norm_num at hz
+          · exact mul_right_cancel hz.1
+        subst h
+        simp [treeContraction, towardZero, towardOne]
+        exact Quotient.sound (Relation.EqvGen.rel _ _ (TreeRel.edge g))
+    | vertex h =>
+        have hh : h = g := by
+          change (h = g ∧ (0 : ℝ) < 1) ∨ (h = g * a⁻¹ ∧ 0 < (0 : ℝ)) at hz
+          simpa using hz
+        subst h
+        simp [treeContraction, towardZero, (spherePush_spec north).2.2.1]
+        exact Quotient.sound (Relation.EqvGen.rel _ _ (TreeRel.vertex g))
+    | pair h x =>
+        change (h = g ∧ x ≠ south) ∨ (h = g * b ∧ x ≠ north) at hz
+        rcases hz with ⟨rfl, hx⟩ | ⟨hh, hx⟩
+        · have hbg : g * b ≠ g := by intro e; exact G_facts.2.1 (mul_left_cancel e)
+          simp [treeContraction, hbg, (spherePush_spec north).2.2.2.2]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (TreeRel.pair g (spherePush north (s, x))))
+        · have hne : h ≠ g := by rintro rfl; exact G_facts.2.1 (by simpa using hh)
+          have hhb : h * b = g := by rw [hh, mul_assoc, G_facts.2.2.1, mul_one]
+          simp [treeContraction, hne, hhb, (spherePush_spec south).2.2.2.2]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (TreeRel.pair h (spherePush south (s, x))))
+-/
 -- END SEAT AREA
 
 /-- **Leaf.**  Stars meet only along Cayley edges, and adjacent stars meet in

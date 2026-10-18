@@ -313,6 +313,12 @@ lemma cell_inner_contractible (γ : C(Circle, Y)) :
 /-- A3. The overlap annulus `1/3 < |z| < 2/3` deformation retracts to the
 radius-`1/2` circle. -/
 -- BEGIN SEAT AREA
+lemma cell_overlap_hequiv_aux_eq_of_eqvGen
+    (γ : C(Circle, Y)) {z w : apm_t97J04_Disk}
+    (h : Relation.EqvGen (CellRel γ) (.inr z) (.inr w))
+    (hz : ‖(z : ℂ)‖ < 1) : z = w := by
+  sorry
+
 lemma cell_overlap_hequiv (γ : C(Circle, Y)) :
     ∃ e : (cellOuter γ ∩ cellInner γ : Set (Cell γ)) ≃ₕ Circle,
       e.invFun = cellOverlapCircle γ := by

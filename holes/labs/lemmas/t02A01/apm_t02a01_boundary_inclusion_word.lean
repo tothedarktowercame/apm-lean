@@ -380,6 +380,19 @@ torus, every based loop on the inner boundary is a power of a commutator.  The
 integer is its winding number.  This is the purely geometric half of the
 boundary-monodromy calculation. -/
 -- BEGIN SEAT AREA
+theorem apm_t02a01_boundary_inclusion_word_aux_generator
+    (x : apm_t02a01_boundarySpace) :
+    ∃ (delta : FundamentalGroup apm_t02a01_boundarySpace x)
+      (a b : FundamentalGroup apm_t02a01_puncturedTorus x.1),
+      (∀ gamma : FundamentalGroup apm_t02a01_boundarySpace x,
+        ∃ k : ℤ, gamma = delta ^ k) ∧
+      FundamentalGroup.map
+          (⟨((↑) : apm_t02a01_boundarySpace → apm_t02a01_puncturedTorus),
+            continuous_subtype_val⟩ :
+            C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) x delta =
+        a * b * a⁻¹ * b⁻¹ := by
+  sorry
+
 theorem apm_t02a01_boundary_inclusion_word
     (x : apm_t02a01_boundarySpace)
     (γ : FundamentalGroup apm_t02a01_boundarySpace x) :
@@ -389,7 +402,11 @@ theorem apm_t02a01_boundary_inclusion_word
             continuous_subtype_val⟩ :
             C(apm_t02a01_boundarySpace, apm_t02a01_puncturedTorus)) x γ =
         (a * b * a⁻¹ * b⁻¹) ^ k := by
-  sorry
+  obtain ⟨delta, a, b, hcyclic, hdelta⟩ :=
+    apm_t02a01_boundary_inclusion_word_aux_generator x
+  obtain ⟨k, rfl⟩ := hcyclic γ
+  refine ⟨a, b, k, ?_⟩
+  rw [map_zpow, hdelta]
 -- END SEAT AREA
 
 /-- LIBRARY (covering/deck algebra): if the image of a boundary loop is a power

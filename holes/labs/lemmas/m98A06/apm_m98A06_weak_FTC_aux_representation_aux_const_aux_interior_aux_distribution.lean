@@ -929,13 +929,40 @@ lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_local
   exact (hw.mono Ioo_subset_Icc_self).locallyIntegrableOn measurableSet_Ioo
 
 -- BEGIN SEAT AREA
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_bump :
+    ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1 := by
+  let f : ContDiffBump (Real.pi / 2 : ℝ) :=
+    ⟨Real.pi / 8, Real.pi / 4, by nlinarith [Real.pi_pos],
+      by nlinarith [Real.pi_pos]⟩
+  refine ⟨f.normed volume, f.contDiff_normed, f.hasCompactSupport_normed, ?_,
+    f.integral_normed⟩
+  rw [f.tsupport_normed_eq]
+  intro x hx
+  rw [Metric.mem_closedBall, Real.dist_eq, abs_le] at hx
+  change -(Real.pi / 4) ≤ x - Real.pi / 2 ∧
+    x - Real.pi / 2 ≤ Real.pi / 4 at hx
+  constructor <;> linarith [Real.pi_pos]
+
+lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
+    (w : ℝ → ℝ)
+    (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
+    (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
+    (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0)
+    (hbump : ∃ ψ : ℝ → ℝ, ContDiff ℝ ∞ ψ ∧ HasCompactSupport ψ ∧
+      tsupport ψ ⊆ Ioo (0 : ℝ) Real.pi ∧ ∫ x, ψ x = 1) :
+    ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
+  sorry
+
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution
     (w : ℝ → ℝ)
     (hw : ContinuousOn w (Icc (0 : ℝ) Real.pi))
     (hwloc : MeasureTheory.LocallyIntegrableOn w (Ioo (0 : ℝ) Real.pi) volume)
     (hweak : apm_m98a06_IsWeakDerivativeOn (Ioo 0 Real.pi) w 0) :
     ∃ c : ℝ, ∀ x ∈ Ioo (0 : ℝ) Real.pi, w x = c := by
-  sorry
+  exact apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_core
+    w hw hwloc hweak
+      apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior_aux_distribution_aux_bump
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_FTC_aux_representation_aux_const_aux_interior

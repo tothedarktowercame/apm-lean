@@ -383,6 +383,23 @@ lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_parameter
   simpa [Fin.sum_univ_succ, hp] using h.symm
 
 -- BEGIN SEAT AREA
+lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good_aux_algebra
+    {a b y₀ y₁ y₂ : ℝ}
+    (ha : a ^ 2 + b ^ 2 = 1)
+    (hy : y₀ ^ 2 + y₁ ^ 2 + y₂ ^ 2 = 1)
+    (hlevel : a ^ 2 * y₁ * y₂ = (1 : ℝ) / 4)
+    (hcrit : y₁ ^ 2 + y₂ ^ 2 - 4 * (y₁ * y₂) ^ 2 = 0) :
+    a ^ 2 = (1 : ℝ) / 2 := by
+  have ha2 : 0 ≤ a ^ 2 := sq_nonneg a
+  have hb2 : 0 ≤ b ^ 2 := sq_nonneg b
+  have hy0 : 0 ≤ y₀ ^ 2 := sq_nonneg y₀
+  have hdiff : 0 ≤ (y₁ - y₂) ^ 2 := sq_nonneg (y₁ - y₂)
+  have hprod : 0 < y₁ * y₂ := by
+    by_contra h
+    have : y₁ * y₂ ≤ 0 := le_of_not_gt h
+    nlinarith
+  nlinarith
+
 lemma apm_t02A07_transverse_iff_parameter_sq_ne_half_aux_submodule_aux_good
     (parameter : apm_t02a07_parameterCircle)
     (hderiv : ∀ (y v : apm_t02a07_E3),

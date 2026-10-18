@@ -3115,6 +3115,20 @@ lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_join
 /-- Minkowski's integral inequality for a probability kernel: the `L²` norm of
 a kernel average is at most the worst `L²` norm on the kernel's support. -/
 -- BEGIN SEAT AREA
+lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound_aux_weighted
+    {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x)
+    (G : EuclideanSpace ℝ (Fin d) → EuclideanSpace ℝ (Fin d) → E)
+    {C : ℝ≥0∞} (hC : ∀ y, κ y ≠ 0 → eLpNorm (G y) 2 volume ≤ C) :
+    ∀ y, eLpNorm (fun x ↦ κ y • G y x) 2 volume ≤ ENNReal.ofReal (κ y) * C := by
+  intro y
+  by_cases hy : κ y = 0
+  · simp [hy]
+  · rw [show (fun x ↦ κ y • G y x) = κ y • G y by rfl,
+      eLpNorm_const_smul]
+    simpa [← ofReal_norm_eq_enorm, Real.norm_eq_abs, abs_of_nonneg (hκ0 y)] using
+      mul_le_mul_left' (hC y hy) (ENNReal.ofReal (κ y))
+
 lemma apm_m01J04_mollify_exists_L2_kernel_aux_approx_identity_minkowski_aux_avg_bound
     {d : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
     (κ : EuclideanSpace ℝ (Fin d) → ℝ) (hκ0 : ∀ x, 0 ≤ κ x) (hκint : Integrable κ volume)

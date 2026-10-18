@@ -505,7 +505,35 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_of_equiv
     exact (Multiplicative.ofAdd.apply_symm_apply (e x)).symm
 
 -- BEGIN SEAT AREA
-theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding
+noncomputable def apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_pi1Homeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : X ≃ₜ Y) (x : X) :
+    FundamentalGroup X x ≃* FundamentalGroup Y (e x) where
+  toFun := FundamentalGroup.map ⟨e, e.continuous⟩ x
+  invFun := FundamentalGroup.mapOfEq ⟨e.symm, e.symm.continuous⟩
+    (e.symm_apply_apply x)
+  left_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.map_apply]
+      change (FundamentalGroup.mapOfEq _ _)
+        (Path.Homotopic.Quotient.mk (p.map e.continuous)) = _
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.symm_apply_apply (p t)
+  right_inv p := by
+    induction p using Path.Homotopic.Quotient.ind with
+    | mk p =>
+      rw [FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl p using 1
+      ext t
+      exact e.apply_symm_apply (p t)
+  map_mul' := map_mul _
+
+theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_circleWinding
     (hc : Continuous apm_t02a01_innerPoint)
     (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
     ∃ e : FundamentalGroup apm_t02a01_boundarySpace apm_t02a01_innerBase ≃*
@@ -515,6 +543,19 @@ theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding
       e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
           (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (-1 : ℤ) := by
   sorry
+
+theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding
+    (hc : Continuous apm_t02a01_innerPoint)
+    (h4 : apm_t02a01_innerPoint 4 = apm_t02a01_innerBase) :
+    ∃ e : FundamentalGroup apm_t02a01_boundarySpace apm_t02a01_innerBase ≃*
+        Multiplicative ℤ,
+      e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+          (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (1 : ℤ) ∨
+      e (FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk
+          (apm_t02a01_innerLoop hc h4))) = Multiplicative.ofAdd (-1 : ℤ) := by
+  exact
+    apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic_aux_winding_aux_circleWinding
+      hc h4
 -- END SEAT AREA
 
 theorem apm_t02a01_boundary_inclusion_word_aux_generator_aux_cyclic

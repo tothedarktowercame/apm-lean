@@ -593,6 +593,32 @@ theorem apm_m98J02_translateTest_difference_quotient (ψ : apm_m98J02_Test) (i :
 /-- (c) Calculus of `x ↦ v (τₓ φ)` from (a), (b): partials by continuity of `v`, then continuous
 partials in `ℝ²` give `C¹`, and once more give `C²`. -/
 -- BEGIN SEAT AREA
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_slope
+    (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),
+      Filter.Tendsto (fun h : ℝ ↦ h⁻¹ • (apm_m98J02_translateTest
+        (x + h • EuclideanSpace.single i 1) ψ - apm_m98J02_translateTest x ψ))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ))))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) (i : Fin 2)
+    (x : apm_m98J02_E) :
+    Filter.Tendsto (fun h : ℝ ↦ h⁻¹ *
+        (v (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ) -
+          v (apm_m98J02_translateTest x ψ)))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (v (apm_m98J02_translateTest x (apm_m98J02_partialTest i ψ)))) := by
+  have hv := v.continuous.continuousAt.tendsto.comp (hdq ψ i x)
+  change Filter.Tendsto (fun h : ℝ => v (h⁻¹ •
+      (apm_m98J02_translateTest (x + h • EuclideanSpace.single i 1) ψ -
+        apm_m98J02_translateTest x ψ))) _ _ at hv
+  simpa only [map_sub, map_smul, smul_eq_mul] using hv
+
+lemma apm_m98J02_translated_pairing_calculus_of_facts_aux_continuous
+    (hcont : ∀ ψ : apm_m98J02_Test,
+      Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
+    (v : apm_m98J02_Dist) (ψ : apm_m98J02_Test) :
+    Continuous (fun x : apm_m98J02_E => v (apm_m98J02_translateTest x ψ)) := by
+  exact v.continuous.comp (hcont ψ)
+
 theorem apm_m98J02_translated_pairing_calculus_of_facts
     (hcont : ∀ ψ : apm_m98J02_Test, Continuous (fun x : apm_m98J02_E ↦ apm_m98J02_translateTest x ψ))
     (hdq : ∀ (ψ : apm_m98J02_Test) (i : Fin 2) (x : apm_m98J02_E),

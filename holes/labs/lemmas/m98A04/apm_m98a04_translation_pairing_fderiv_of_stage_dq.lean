@@ -529,7 +529,7 @@ lemma apm_m98a04_ofSupportedIn_translateReflectStage {n : ℕ}
         apm_m98a04_translateReflect φ x.1 := by
   apply TestFunction.toTestFunctionClass.coe_injective'
   funext y
-  rfl
+  simp [map_smul, map_sub, smul_eq_mul]
 
 /-- On the unit neighborhood of `x₀`, evaluation by a distribution factors
 through the continuous restriction of that distribution to the fixed compact
@@ -749,6 +749,44 @@ theorem apm_m98a04_translateReflectStageLocal_difference_quotient {n : ℕ}
 /-- Scalar derivative extraction from an explicitly supplied fixed-stage
 difference-quotient theorem. -/
 -- BEGIN SEAT AREA
+lemma apm_m98a04_translation_pairing_fderiv_of_stage_dq_aux_slope {n : ℕ}
+    (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
+    (φ : apm_m98a04_TF n)
+    (hdq : ∀ (x v : EuclideanSpace ℝ (Fin n)),
+      Tendsto (fun h : ℝ => apm_m98a04_translationStageToTest φ x
+          (h⁻¹ • (apm_m98a04_translateReflectStageLocal φ x (x + h • v) -
+            apm_m98a04_translateReflectStageLocal φ x x)))
+        (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+        (nhds (apm_m98a04_translateReflect (apm_m98a04_directionalTF v φ) x)))
+    (i : Fin n) (x : EuclideanSpace ℝ (Fin n)) :
+    Tendsto (fun h : ℝ => h⁻¹ *
+        (T (apm_m98a04_translateReflect φ (x + h • EuclideanSpace.single i 1)) -
+          T (apm_m98a04_translateReflect φ x)))
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ)
+      (nhds (T (apm_m98a04_translateReflect
+        (apm_m98a04_partialListTF [i] φ) x))) := by
+  have ht := T.continuous.continuousAt.tendsto.comp
+    (hdq x (EuclideanSpace.single i 1))
+  change Tendsto (fun h : ℝ => T (apm_m98a04_translationStageToTest φ x
+      (h⁻¹ • (apm_m98a04_translateReflectStageLocal φ x
+        (x + h • EuclideanSpace.single i 1) -
+          apm_m98a04_translateReflectStageLocal φ x x)))) _ _ at ht
+  have hdir : apm_m98a04_directionalTF (EuclideanSpace.single i 1) φ =
+      apm_m98a04_partialListTF [i] φ := by
+    simp [apm_m98a04_directionalTF]
+  rw [hdir] at ht
+  refine ht.congr' ?_
+  have hc : Tendsto (fun h : ℝ => x + h • EuclideanSpace.single i 1)
+      (nhdsWithin (0 : ℝ) ({0} : Set ℝ)ᶜ) (nhds x) := by
+    have : ContinuousAt (fun h : ℝ => x + h • EuclideanSpace.single i 1) 0 := by fun_prop
+    simpa using this.tendsto.mono_left nhdsWithin_le_nhds
+  filter_upwards [hc.eventually (Metric.closedBall_mem_nhds x zero_lt_one)] with h hh
+  rw [map_smul, map_sub,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x _ hh,
+    apm_m98a04_translateReflectStageLocal_difference_quotient_aux_local_to_test φ x x
+      (Metric.mem_closedBall_self zero_le_one)]
+  simp [map_smul, map_sub, smul_eq_mul]
+
 theorem apm_m98a04_translation_pairing_fderiv_of_stage_dq {n : ℕ}
     (T : Distribution (⊤ : Opens (EuclideanSpace ℝ (Fin n))) ℝ ⊤)
     (φ : apm_m98a04_TF n)

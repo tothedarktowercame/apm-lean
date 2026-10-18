@@ -168,6 +168,24 @@ theorem apm_t02a02_source_octagon_homeomorph :
 
 /-- Cancelling the adjacent `cc⁻¹` pair gives the indicated hexagon. -/
 -- BEGIN SEAT AREA
+lemma apm_t02a02_cancel_c_homeomorph_aux_octagon_pair :
+    (apm_t02a02_perm8 0 = 1) ∧ (apm_t02a02_perm8 1 = 0) ∧
+    (apm_t02a02_perm8 2 = 6) ∧ (apm_t02a02_perm8 3 = 4) ∧
+    (apm_t02a02_perm8 4 = 3) ∧ (apm_t02a02_perm8 5 = 7) ∧
+    (apm_t02a02_perm8 6 = 2) ∧ (apm_t02a02_perm8 7 = 5) := by
+  decide
+
+lemma apm_t02a02_cancel_c_homeomorph_aux_hexagon_pair :
+    (apm_t02a02_perm6 0 = 1) ∧ (apm_t02a02_perm6 1 = 0) ∧
+    (apm_t02a02_perm6 2 = 4) ∧ (apm_t02a02_perm6 3 = 5) ∧
+    (apm_t02a02_perm6 4 = 2) ∧ (apm_t02a02_perm6 5 = 3) := by
+  decide
+
+lemma apm_t02a02_cancel_c_homeomorph_aux_cancelled_pair :
+    apm_t02a02_perm8 3 = 4 ∧ apm_t02a02_perm8 4 = 3 ∧
+    apm_t02a02_sign8 3 = true ∧ apm_t02a02_sign8 4 = false := by
+  decide
+
 theorem apm_t02a02_cancel_c_homeomorph :
     Nonempty (apm_t02a02_octagon ≃ₜ apm_t02a02_hexagon) := by
   sorry

@@ -457,6 +457,37 @@ theorem t93J03_cyclicCover_aux_free (n : Multiplicative ℤ) (z : T93J03Puncture
 /-- The image of `π₁(C)` is exactly the preimage of `⟨a⟩` under the deck-group
 monodromy of the plane over the orbit quotient. -/
 -- BEGIN SEAT AREA
+theorem t93J03_cyclicCover_aux_range_aux_mem_range_iff_monodromy
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    (p : E → B) (hp : IsCoveringMap p) (e : E)
+    (g : FundamentalGroup B (p e)) :
+    g ∈ (FundamentalGroup.map ⟨p, hp.continuous⟩ e).range ↔
+      hp.monodromy (FundamentalGroup.toPath g) ⟨e, rfl⟩ = ⟨e, rfl⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    exact hp.monodromy_map (FundamentalGroup.toPath a)
+  · intro hg
+    obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath g)
+    let Γ := hp.liftPath γ e (by simp)
+    have hΓ0 : Γ 0 = e := hp.liftPath_zero _ _ _
+    have hΓ1 : Γ 1 = e := by
+      have hm : hp.monodromy (Path.Homotopic.Quotient.mk γ) ⟨e, rfl⟩ = ⟨e, rfl⟩ := by
+        rw [hγ]
+        exact hg
+      exact congrArg Subtype.val hm
+    let δ : Path e e := ⟨Γ, hΓ0, hΓ1⟩
+    refine ⟨FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk δ), ?_⟩
+    rw [FundamentalGroup.map_apply]
+    change (Path.Homotopic.Quotient.mk δ).map ⟨p, hp.continuous⟩ = _
+    calc
+      _ = Path.Homotopic.Quotient.mk γ := by
+        rw [← Path.Homotopic.Quotient.mk_map]
+        congr 1
+        ext t
+        exact congr_fun (hp.liftPath_lifts γ e (by simp)) t
+      _ = g := hγ
+
 theorem t93J03_cyclicCover_aux_range
     (hpc : Continuous t93J03_cyc_pQ)
     (hpE : ∀ v, t93J03_cyc_pQ (t93J03_cyc_E v) = Quotient.mk _ v)

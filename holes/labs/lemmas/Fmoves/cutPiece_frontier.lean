@@ -4937,6 +4937,30 @@ theorem cutPiece_interior_nonempty {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ 
   sorry
 
 -- BEGIN SEAT AREA
+lemma cutPiece_frontier_aux_line {P Q z : ℂ} (hPQ : P ≠ Q)
+    (hz : cutCross (Q - P) (z - P) = 0) :
+    ∃ t : ℝ, z = (1 - t) • P + t • Q := by
+  sorry
+
+lemma cutPiece_frontier_aux_chord {P Q z : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1)
+    (hPQ : P ≠ Q) :
+    (‖z‖ ≤ 1 ∧ cutCross (Q - P) (z - P) = 0) ↔ z ∈ segment ℝ P Q := by
+  sorry
+
+lemma cutPiece_frontier_aux_closed (P Q : ℂ) : IsClosed (cutPiece P Q) := by
+  rw [cutPiece]
+  apply (isClosed_le continuous_norm continuous_const).inter
+  change IsClosed {z : ℂ | cutCross (Q - P) (z - P) ≤ 0}
+  apply isClosed_le _ continuous_const
+  unfold cutCross
+  exact Complex.continuous_im.comp
+    (continuous_const.mul (continuous_id.sub continuous_const))
+
+lemma cutPiece_frontier_aux_interior {P Q : ℂ} (hPQ : P ≠ Q) :
+    interior (cutPiece P Q) =
+      {z | ‖z‖ < 1 ∧ cutCross (Q - P) (z - P) < 0} := by
+  sorry
+
 theorem cutPiece_frontier {P Q : ℂ} (hP : ‖P‖ = 1) (hQ : ‖Q‖ = 1) (hPQ : P ≠ Q) :
     frontier (cutPiece P Q) =
       {z | ‖z‖ = 1 ∧ cutCross (Q - P) (z - P) ≤ 0} ∪ segment ℝ P Q := by

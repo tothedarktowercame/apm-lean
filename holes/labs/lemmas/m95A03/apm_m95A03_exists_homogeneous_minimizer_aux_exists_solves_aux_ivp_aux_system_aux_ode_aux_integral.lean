@@ -497,13 +497,62 @@ lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_syst
 /-- Picard iteration for the linear integral system with continuous coefficients on `ℝ`
 (time-dependent analogue of m96A02's scalar argument). -/
 -- BEGIN SEAT AREA
+noncomputable def apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ)
+    (u : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ)) :
+    C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) :=
+  ({ toFun := fun t => c₀ + ∫ s in a..t.1,
+        u.2 (Set.projIcc a b hab.le s) * r s
+     continuous_toFun := by
+       have hc : Continuous (fun s =>
+           u.2 (Set.projIcc a b hab.le s) * r s) :=
+         (u.2.continuous.comp continuous_projIcc).mul hr
+       exact (continuous_const.add
+         (intervalIntegral.continuous_primitive hc.intervalIntegrable a)).comp
+           continuous_subtype_val },
+   { toFun := fun t => d₀ + ∫ s in a..t.1,
+        (q s * u.1 (Set.projIcc a b hab.le s) + g s)
+     continuous_toFun := by
+       have hc : Continuous (fun s =>
+           q s * u.1 (Set.projIcc a b hab.le s) + g s) :=
+         (hq.mul (u.1.continuous.comp continuous_projIcc)).add hg
+       exact (continuous_const.add
+         (intervalIntegral.continuous_primitive hc.intervalIntegrable a)).comp
+           continuous_subtype_val })
+
+lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
+    (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
+    (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
+    ∃ u : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ),
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard
+        a b hab r q g hr hq hg c₀ d₀ u = u := by
+  sorry
+
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral
     (a b : ℝ) (hab : a < b) (r q g : ℝ → ℝ) (hr : Continuous r)
     (hq : Continuous q) (hg : Continuous g) (c₀ d₀ : ℝ) :
     ∃ y z : ℝ → ℝ, Continuous y ∧ Continuous z ∧ ∀ t ∈ Set.Icc a b,
       y t = c₀ + (∫ s in a..t, z s * r s) ∧
       z t = d₀ + ∫ s in a..t, (q s * y s + g s) := by
-  sorry
+  obtain ⟨u, hu⟩ :=
+    apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_fixed
+      a b hab r q g hr hq hg c₀ d₀
+  let y : ℝ → ℝ := fun t => u.1 (Set.projIcc a b hab.le t)
+  let z : ℝ → ℝ := fun t => u.2 (Set.projIcc a b hab.le t)
+  refine ⟨y, z, u.1.continuous.comp continuous_projIcc,
+    u.2.continuous.comp continuous_projIcc, fun t ht => ?_⟩
+  have hproj : Set.projIcc a b hab.le t = (⟨t, ht⟩ : Set.Icc a b) :=
+    Set.projIcc_of_mem hab.le ht
+  have hy := congrArg (fun v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) => v.1 ⟨t, ht⟩) hu
+  have hz := congrArg (fun v : C(Set.Icc a b, ℝ) × C(Set.Icc a b, ℝ) => v.2 ⟨t, ht⟩) hu
+  constructor
+  · simpa [y, z, hproj,
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard]
+      using hy.symm
+  · simpa [y, z, hproj,
+      apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode_aux_integral_aux_picard]
+      using hz.symm
 -- END SEAT AREA
 
 lemma apm_m95A03_exists_homogeneous_minimizer_aux_exists_solves_aux_ivp_aux_system_aux_ode

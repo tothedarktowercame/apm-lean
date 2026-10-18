@@ -151,6 +151,11 @@ theorem t02A02_bridge
 
 /-- Shared bridge for each literal fourteen-gon quotient. -/
 -- BEGIN SEAT AREA
+lemma fourteenGon_bridge_aux_target_nonempty
+    (Label : Type*) [DecidableEq Label] (w : List (Signed Label)) :
+    Nonempty (PolygonSurface w) := by
+  exact ⟨polygonQuotient w ⟨0, by simp [Disk]⟩⟩
+
 theorem fourteenGon_bridge
     (F : Type*) [TopologicalSpace F]
     (Label : Type*) [DecidableEq Label] (w : List (Signed Label)) :

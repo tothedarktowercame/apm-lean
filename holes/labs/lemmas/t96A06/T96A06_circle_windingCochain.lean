@@ -761,6 +761,20 @@ lifts `σ` then `2L` lifts `squaring ∘ σ` (on `S¹` the cone map is
 `t ↦ angleMap t` read on the 1-simplex is a cycle (equal endpoints) with
 `W = 1`. -/
 -- BEGIN SEAT AREA
+lemma T96A06_circle_windingCochain_aux_lift (hcov : IsCoveringMap angleMap)
+    (n : ℕ) (s : C(stdSimplex ℝ (Fin (n + 1)), euclideanUnitSphere 2))
+    (e : ℝ) (he : angleMap e =
+      s ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n + 1))⟩) :
+    ∃ L : C(stdSimplex ℝ (Fin (n + 1)), ℝ), angleMap ∘ L = s := by
+  letI : ContractibleSpace (stdSimplex ℝ (Fin (n + 1))) :=
+    (convex_stdSimplex ℝ _).contractibleSpace
+      ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n + 1))⟩
+  letI : LocPathConnectedSpace (stdSimplex ℝ (Fin (n + 1))) :=
+    (convex_stdSimplex ℝ _).locPathConnectedSpace
+  obtain ⟨L, ⟨_, hL⟩, _⟩ := hcov.existsUnique_continuousMap_lifts s
+    ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n + 1))⟩ e he
+  exact ⟨L, hL⟩
+
 theorem T96A06_circle_windingCochain (hcov : IsCoveringMap angleMap) :
     ∃ W : (circleChains.X 1) →ₗ[ℚ] ℝ,
       W ∘ₗ (circleChains.d 2 1).hom = 0 ∧

@@ -1226,6 +1226,72 @@ lemma apm_m03J01_hessianOperator_exists {n : ℕ}
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m03J01_hessianOperator_seq_closed_aux_weakSolution_add {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    {F G : apm_m03J01_E n → ℝ} {u v w : apm_m03J01_H01 n Ω}
+    (hF : MemLp F 2 volume) (hG : MemLp G 2 volume)
+    (hu : apm_m03J01_weakSolution F u)
+    (hv : apm_m03J01_weakSolution G v)
+    (hwval : w.val = u.val + v.val) (hwgrad : w.grad = u.grad + v.grad) :
+    apm_m03J01_weakSolution (F + G) w := by
+  intro z
+  have hiu := L2.integrable_inner (𝕜 := ℝ) (u.grad_memLp.toLp u.grad) (z.grad_memLp.toLp z.grad)
+  have hiv := L2.integrable_inner (𝕜 := ℝ) (v.grad_memLp.toLp v.grad) (z.grad_memLp.toLp z.grad)
+  have hpu := L2.integrable_inner (𝕜 := ℝ) (u.val_memLp.toLp u.val) (z.val_memLp.toLp z.val)
+  have hpv := L2.integrable_inner (𝕜 := ℝ) (v.val_memLp.toLp v.val) (z.val_memLp.toLp z.val)
+  have hreal (a b : ℝ) : inner ℝ a b = a * b := by
+    calc
+      inner ℝ a b = inner ℝ (a • (1 : ℝ)) (b • (1 : ℝ)) := by simp
+      _ = a * b * inner ℝ (1 : ℝ) 1 := by
+        rw [real_inner_smul_left, real_inner_smul_right]
+        ring
+      _ = a * b := by rw [real_inner_self_eq_norm_sq]; norm_num
+  have hiu' : Integrable (fun x => inner ℝ (u.grad x) (z.grad x)) volume := by
+    apply hiu.congr
+    filter_upwards [u.grad_memLp.coeFn_toLp, z.grad_memLp.coeFn_toLp] with x hx hy
+    simp [hx, hy]
+  have hiv' : Integrable (fun x => inner ℝ (v.grad x) (z.grad x)) volume := by
+    apply hiv.congr
+    filter_upwards [v.grad_memLp.coeFn_toLp, z.grad_memLp.coeFn_toLp] with x hx hy
+    simp [hx, hy]
+  have hpu' : Integrable (fun x => u.val x * z.val x) volume := by
+    apply hpu.congr
+    filter_upwards [u.val_memLp.coeFn_toLp, z.val_memLp.coeFn_toLp] with x hx hy
+    simp [hx, hy, hreal]
+  have hpv' : Integrable (fun x => v.val x * z.val x) volume := by
+    apply hpv.congr
+    filter_upwards [v.val_memLp.coeFn_toLp, z.val_memLp.coeFn_toLp] with x hx hy
+    simp [hx, hy, hreal]
+  change ∫ x, (inner ℝ (w.grad x) (z.grad x) + w.val x * z.val x) ∂volume = _
+  simp_rw [hwval, hwgrad]
+  simp only [Pi.add_apply, inner_add_left, add_mul]
+  rw [show (fun x => inner ℝ (u.grad x) (z.grad x) + inner ℝ (v.grad x) (z.grad x) +
+      (u.val x * z.val x + v.val x * z.val x)) =
+      (fun x => (inner ℝ (u.grad x) (z.grad x) + u.val x * z.val x) +
+        (inner ℝ (v.grad x) (z.grad x) + v.val x * z.val x)) by
+        funext x; ring]
+  calc
+    _ = (∫ x, inner ℝ (u.grad x) (z.grad x) + u.val x * z.val x ∂volume) +
+        ∫ x, inner ℝ (v.grad x) (z.grad x) + v.val x * z.val x ∂volume :=
+      integral_add (hiu'.add hpu') (hiv'.add hpv')
+    _ = (∫ x, F x * z.val x ∂volume) + ∫ x, G x * z.val x ∂volume := by
+      rw [hu z, hv z]
+    _ = ∫ x, F x * z.val x + G x * z.val x ∂volume := by
+      exact (integral_add (hF.integrable_mul z.val_memLp)
+        (hG.integrable_mul z.val_memLp)).symm
+
+lemma apm_m03J01_hessianOperator_seq_closed_aux_weakSolution_neg {n : ℕ}
+    {Ω : Set (apm_m03J01_E n)}
+    {F : apm_m03J01_E n → ℝ} {u v : apm_m03J01_H01 n Ω}
+    (hu : apm_m03J01_weakSolution F u)
+    (hvval : v.val = -u.val) (hvgrad : v.grad = -u.grad) :
+    apm_m03J01_weakSolution (-F) v := by
+  intro z
+  rw [hvval, hvgrad]
+  simp only [Pi.neg_apply, inner_neg_left, neg_mul, integral_neg]
+  simp_rw [← neg_add]
+  rw [integral_neg, hu z]
+
 lemma apm_m03J01_hessianOperator_seq_closed {n : ℕ}
     {Ω : Set (apm_m03J01_E n)}
     (T : apm_m03J01_forcingLp n →ₗ[ℝ] apm_m03J01_hessianLp n)

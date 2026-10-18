@@ -355,6 +355,20 @@ lemma tft_stage_difference_quotient_of_structure_maps
 
 /-- S2 with U2 discharged for every iterated derivative of `ψ`. -/
 -- BEGIN SEAT AREA
+lemma tft_stage_difference_quotient_aux_eventually (x₀ v : E) :
+    ∀ᶠ h : ℝ in nhdsWithin 0 ({0} : Set ℝ)ᶜ,
+      x₀ + h • v ∈ Metric.closedBall x₀ 1 := by
+  have hc0 : ContinuousAt (fun h : ℝ => x₀ + h • v) 0 := by fun_prop
+  have hc : Tendsto (fun h : ℝ => x₀ + h • v)
+      (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds x₀) := by
+    simpa using hc0.mono_left inf_le_left
+  exact hc.eventually (Metric.closedBall_mem_nhds x₀ zero_lt_one)
+
+lemma tft_stage_difference_quotient_aux_contDiff (ψ : TFT E F) (i : ℕ) :
+    ContDiff ℝ 1 (iteratedFDeriv ℝ i (ψ : E → F)) := by
+  exact ψ.contDiff.iteratedFDeriv_right
+    (by exact_mod_cast (show 1 + i ≤ (⊤ : ℕ∞) from le_top))
+
 lemma tft_stage_difference_quotient (ψ : TFT E F) (x₀ v : E) :
     Tendsto (fun h : ℝ => h⁻¹ •
         (tftTranslateStageLocal ψ x₀ (x₀ + h • v) -
@@ -362,6 +376,39 @@ lemma tft_stage_difference_quotient (ψ : TFT E F) (x₀ v : E) :
       (nhdsWithin 0 ({0} : Set ℝ)ᶜ)
       (nhds (tftDirectionalTranslateStage ψ x₀ x₀ v)) := by
   sorry
+/-
+  apply tft_stage_difference_quotient_of_structure_maps
+  intro i
+  have hdiff : ContDiff ℝ 1 (iteratedFDeriv ℝ i (ψ : E → F)) :=
+    ψ.contDiff.iteratedFDeriv_right
+      (show (1 : ℕ∞) + i ≤ ⊤ from le_top)
+  have h := tft_translate_bcf_difference_quotient
+    (iteratedFDeriv ℝ i (ψ : E → F)) hdiff
+    (ψ.hasCompactSupport.iteratedFDeriv i) x₀ v
+  have hev : ∀ᶠ h : ℝ in nhdsWithin 0 ({0} : Set ℝ)ᶜ,
+      x₀ + h • v ∈ Metric.closedBall x₀ 1 := by
+    have hc : Tendsto (fun h : ℝ => x₀ + h • v)
+        (nhdsWithin 0 ({0} : Set ℝ)ᶜ) (nhds x₀) := by
+      convert ((continuous_const.add
+        (continuous_id.smul continuous_const)).continuousAt.mono_left inf_le_left) using 1 <;> simp
+    exact hc.eventually (Metric.closedBall_mem_nhds x₀ zero_lt_one)
+  rw [show ContDiffMapSupportedIn.structureMapCLM ℝ ⊤ i
+      (tftDirectionalTranslateStage ψ x₀ x₀ v) =
+      tftBCFOfCompactSupport
+        (fun y => fderiv ℝ (iteratedFDeriv ℝ i (ψ : E → F)) (x₀ + y) v)
+        (tft_fderiv_translate_continuous _ hdiff x₀ v)
+        (tft_fderiv_translate_hasCompactSupport _ hdiff
+          (ψ.hasCompactSupport.iteratedFDeriv i) x₀ v) by
+    ext y
+    simp [ContDiffMapSupportedIn.structureMapCLM_top_apply,
+      tftDirectionalTranslateStage, iteratedFDeriv_comp_add_left,
+      fderiv_iteratedFDeriv]]
+  refine h.congr' ?_
+  filter_upwards [hev] with h hh
+  ext y
+  simp [ContDiffMapSupportedIn.structureMapCLM_top_apply,
+    tftTranslateStageLocal_apply, hh, iteratedFDeriv_comp_add_left]
+-/
 -- END SEAT AREA
 
 lemma tft_ofSupportedIn_stage_eq (ψ : TFT E F) (x₀ x : E)

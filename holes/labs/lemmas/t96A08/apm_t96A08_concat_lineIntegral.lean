@@ -82,6 +82,24 @@ smooth piece comes from `homega_smooth` (continuous integrand, bounded on compac
 pieces); then substitute `s = 2 t` and `s = 2 t - 1`
 (`intervalIntegral.integral_comp_mul_left`, `integral_add_adjacent_intervals`). -/
 -- BEGIN SEAT AREA
+lemma apm_t96A08_concat_lineIntegral_aux_left_substitution (f : ℝ → ℝ) :
+    (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), (2 : ℝ) * f (2 * t)) =
+      ∫ s : ℝ in (0 : ℝ)..1, f s := by
+  rw [intervalIntegral.integral_const_mul]
+  change (2 : ℝ) • (∫ t : ℝ in (0 : ℝ)..(1 / 2 : ℝ), f (2 * t)) = _
+  rw [intervalIntegral.smul_integral_comp_mul_left]
+  norm_num
+
+lemma apm_t96A08_concat_lineIntegral_aux_right_substitution (f : ℝ → ℝ) :
+    (∫ t : ℝ in (1 / 2 : ℝ)..1, (2 : ℝ) * f (2 * t - 1)) =
+      ∫ s : ℝ in (0 : ℝ)..1, f s := by
+  rw [intervalIntegral.integral_const_mul]
+  change (2 : ℝ) • (∫ t : ℝ in (1 / 2 : ℝ)..1, f (2 * t - 1)) = _
+  rw [intervalIntegral.smul_integral_comp_mul_left
+    (f := fun s : ℝ ↦ f (s - 1))]
+  rw [intervalIntegral.integral_comp_sub_right]
+  norm_num
+
 theorem apm_t96A08_concat_lineIntegral
     {E M : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [CompleteSpace E] [TopologicalSpace M]

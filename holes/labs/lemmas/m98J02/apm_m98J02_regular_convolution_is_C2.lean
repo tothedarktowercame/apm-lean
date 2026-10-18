@@ -887,6 +887,18 @@ theorem apm_m98J02_bridge_2
   sorry
 
 -- BEGIN SEAT AREA
+lemma apm_m98J02_regular_convolution_is_C2_aux_represents
+    (f k : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
+    (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))
+    (hk : LocallyIntegrable k)
+    (hw₀rep : apm_m98J02_representsFunction w₀ k)
+    (hconv : apm_m98J02_isConvolution
+      (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
+    apm_m98J02_representsFunction w
+      (MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ)
+        MeasureTheory.volume) := by
+  sorry
+
 theorem apm_m98J02_regular_convolution_is_C2
     (f k : apm_m98J02_E → ℝ) (w₀ w : apm_m98J02_Dist)
     (hf : ContDiff ℝ 2 f) (hfc : IsCompact (tsupport f))
@@ -896,7 +908,12 @@ theorem apm_m98J02_regular_convolution_is_C2
       (apm_m98J02_regularDistribution f hf.continuous hfc) w₀ w) :
     ∃ g : apm_m98J02_E → ℝ,
       apm_m98J02_representsFunction w g ∧ ContDiff ℝ 2 g := by
-  sorry
+  let g : apm_m98J02_E → ℝ :=
+    MeasureTheory.convolution k f (ContinuousLinearMap.mul ℝ ℝ) MeasureTheory.volume
+  refine ⟨g, apm_m98J02_regular_convolution_is_C2_aux_represents
+    f k w₀ w hf hfc hk hw₀rep hconv, ?_⟩
+  have hfcs : HasCompactSupport f := hfc
+  exact hfcs.contDiff_convolution_right (ContinuousLinearMap.mul ℝ ℝ) hk hf
 -- END SEAT AREA
 
 theorem apm_m98J02_convolution_solves_fundamental

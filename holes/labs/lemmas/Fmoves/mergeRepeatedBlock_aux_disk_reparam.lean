@@ -735,6 +735,25 @@ the two halves of arc `a` (`y(t) ↦ a(t/2)`, `z(t) ↦ a(1/2 + t/2)`), likewise
 counterpart.  Checked: `y(t) ~ y⁻¹(1-t)` goes to `a(t/2) ~ a⁻¹(1-t/2)`, and the
 `yz` vertex class `{yz, z⁻¹y⁻¹}` goes to the midpoint class of `a, a⁻¹`. -/
 -- BEGIN SEAT AREA
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_length {Label : Type*}
+    (u v t : List (Signed Label)) (y z a : Signed Label) :
+    (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length =
+      (u ++ [a] ++ v ++ [inv a] ++ t).length + 2 := by
+  simp
+  omega
+
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_source_pos
+    {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (y z : Signed Label)
+    (hw : IsPolygonWord (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t)) :
+    0 < (u ++ [y, z] ++ v ++ [inv z, inv y] ++ t).length := by
+  simp
+
+lemma mergeRepeatedBlock_aux_disk_reparam_aux_target_pos
+    {Label : Type*} (u v t : List (Signed Label)) (a : Signed Label) :
+    0 < (u ++ [a] ++ v ++ [inv a] ++ t).length := by
+  simp
+
 lemma mergeRepeatedBlock_aux_disk_reparam {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (y z a : Signed Label)
     (hyz : y.1 ≠ z.1)

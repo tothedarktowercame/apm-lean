@@ -2778,7 +2778,12 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
       hWirtinger g hg hmean
 
 -- BEGIN SEAT AREA
-lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_delta
+    {ε : ℝ} (hε : 0 < ε) (C : ℝ) :
+    ∃ δ : ℝ, 0 < δ ∧ C * δ < ε := by
+  exact exists_pos_mul_lt hε C
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer
     (hWirtinger : apm_m98A06_WirtingerFact)
     (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
     (h : apm_m98a06_InH10Pi y dy) :
@@ -2786,6 +2791,17 @@ lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux
       (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
         (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
   sorry
+
+lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate
+    (hWirtinger : apm_m98A06_WirtingerFact)
+    (hFTC : apm_m98A06_WeakFTCFact) (y dy : ℝ → ℝ)
+    (h : apm_m98a06_InH10Pi y dy) :
+    ∀ ε : ℝ, 0 < ε →
+      (∫ x, (y x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) ≤
+        (∫ x, (dy x) ^ 2 ∂(volume.restrict (Ioo (0 : ℝ) Real.pi))) + ε := by
+  exact
+    apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error_aux_norm_estimate_aux_transfer
+      hWirtinger hFTC y dy h
 -- END SEAT AREA
 
 lemma apm_m98A06_weak_poincare_and_equality_of_facts_aux_core_aux_inequality_aux_approximation_aux_limit_aux_error

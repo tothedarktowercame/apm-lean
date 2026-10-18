@@ -1962,6 +1962,212 @@ lemma t99A01_lowData_of_coordinates {r : ℕ} (degree : Fin r → ℕ)
     (hid : cO₀.inv ≫ I₀ ≫ Limits.biprod.snd ≫ cB₀.hom = 𝟙 _) :
     Nonempty (APMT99A01.AttachMVLowData degree) := by
   sorry
+/-
+  let j₁ : (ModuleCat.of ℤ ℤ) →ₗ[ℤ]
+      (APMT99A01.H 1 (APMT99A01.AttachSpace degree)) :=
+    (cA₁.inv ≫ Limits.biprod.inl ≫ J₁).hom
+  let d₁ : (APMT99A01.H 1 (APMT99A01.AttachSpace degree)) →ₗ[ℤ]
+      (Fin r → ℤ) := (δ₀ ≫ cO₀.hom).hom
+  let pairHom : ModuleCat.of ℤ (ℤ × (Fin r → ℤ)) ⟶ A₀ ⊞ B₀ :=
+    Limits.biprod.lift
+      (ModuleCat.ofHom (LinearMap.fst ℤ ℤ (Fin r → ℤ)) ≫ cA₀.inv)
+      (ModuleCat.ofHom (LinearMap.snd ℤ ℤ (Fin r → ℤ)) ≫ cB₀.inv)
+  let pairMap := pairHom.hom
+  let j₀ : (ℤ × (Fin r → ℤ)) →ₗ[ℤ]
+      (APMT99A01.H 0 (APMT99A01.AttachSpace degree)) :=
+    J₀.hom.comp pairMap
+  let δ₂ : (APMT99A01.H 2 (APMT99A01.AttachSpace degree)) →ₗ[ℤ]
+      (Fin r → ℤ) := (δ₁ ≫ cO₁.hom).hom
+  let inl₁ : A₁ ⟶ A₁ ⊞ B₁ := Limits.biprod.inl
+  let fst₁ : A₁ ⊞ B₁ ⟶ A₁ := Limits.biprod.fst
+  let fst₀ : A₀ ⊞ B₀ ⟶ A₀ := Limits.biprod.fst
+  let snd₀ : A₀ ⊞ B₀ ⟶ B₀ := Limits.biprod.snd
+  have hI₁_apply : ∀ x : Fin r → ℤ,
+      I₁.hom (cO₁.inv.hom x) =
+        inl₁.hom (cA₁.inv.hom (APMT99A01.degreeMap degree x)) := by
+    intro x
+    apply (ModuleCat.biprodIsoProd A₁ B₁).toLinearEquiv.injective
+    apply Prod.ext
+    · change Limits.biprod.fst.hom _ = Limits.biprod.fst.hom _
+      have h := congrArg (fun f => f x) (congrArg CategoryTheory.ConcreteCategory.hom hdegree)
+      simpa using congrArg cA₁.inv.hom h
+    · change Limits.biprod.snd.hom _ = Limits.biprod.snd.hom _
+      exact hB₁.eq_of_src _ _
+  have hI₀_apply : ∀ x : Fin r → ℤ,
+      I₀.hom (cO₀.inv.hom x) =
+        pairMap (t99A01_coordinateSum x, x) := by
+    intro x
+    apply (ModuleCat.biprodIsoProd A₀ B₀).toLinearEquiv.injective
+    apply Prod.ext
+    · change Limits.biprod.fst.hom _ = Limits.biprod.fst.hom _
+      have h := congrArg (fun f => f x) (congrArg CategoryTheory.ConcreteCategory.hom hsum)
+      simpa using congrArg cA₀.inv.hom h
+    · change Limits.biprod.snd.hom _ = Limits.biprod.snd.hom _
+      have h := congrArg (fun f => f x) (congrArg CategoryTheory.ConcreteCategory.hom hid)
+      simpa using congrArg cB₀.inv.hom h
+  have hI₀_inj : Function.Injective
+      (fun x : Fin r → ℤ => (t99A01_coordinateSum x, x)) :=
+    t99A01_lowData_of_coordinates_aux_i0_injective
+  have hpair_inj : Function.Injective pairMap := by
+    intro x y h
+    apply Prod.ext
+    · apply cA₀.toLinearEquiv.injective
+      have hh := congrArg (fun q => fst₀.hom q) h
+      simpa [pairMap, pairHom] using hh
+    · apply cB₀.toLinearEquiv.injective
+      have hh := congrArg (fun q => snd₀.hom q) h
+      simpa [pairMap, pairHom] using hh
+  refine ⟨{
+    i₁ := APMT99A01.degreeMap degree
+    j₁ := j₁
+    δ₁ := d₁
+    i₀ := {
+      toFun := fun x => (t99A01_coordinateSum x, x)
+      map_add' := by intro x y; ext <;> simp [t99A01_coordinateSum, Finset.sum_add_distrib]
+      map_smul' := by intro c x; ext <;> simp [t99A01_coordinateSum, Finset.mul_sum] }
+    j₀ := j₀
+    δ₂ := δ₂
+    i₁_eq_degreeMap := rfl
+    i₀_injective := hI₀_inj
+    i₀_eq := by intro x; rfl
+    exact_i₁_j₁ := by
+      ext y
+      constructor
+      · rintro ⟨x, rfl⟩
+        rw [LinearMap.mem_ker]
+        change J₁.hom (inl₁.hom (cA₁.inv.hom
+          (APMT99A01.degreeMap degree x))) = 0
+        rw [← hI₁_apply]
+        exact LinearMap.mem_ker.mp (hI₁J₁ ▸ LinearMap.mem_range_self (I₁.hom) (cO₁.inv.hom x))
+      · intro hy
+        have hy' : inl₁.hom (cA₁.inv.hom y) ∈ LinearMap.ker J₁.hom := by
+          exact hy
+        rw [← hI₁J₁] at hy'
+        rcases hy' with ⟨z, hz⟩
+        refine ⟨cO₁.hom.hom z, ?_⟩
+        have hz' := congrArg (fun w => fst₁.hom w) hz
+        rw [← hI₁_apply (cO₁.hom.hom z)]
+        simpa using hz'
+    exact_j₁_δ₁ := by
+      ext y
+      constructor
+      · rintro ⟨x, rfl⟩
+        rw [LinearMap.mem_ker]
+        have hh := LinearMap.mem_ker.mp
+          (hJ₁δ₀ ▸ LinearMap.mem_range_self J₁.hom
+            (inl₁.hom (cA₁.inv.hom x)))
+        simpa [d₁] using congrArg cO₀.hom.hom hh
+      · intro hy
+        have hy' : y ∈ LinearMap.ker δ₀.hom := by
+          rw [LinearMap.mem_ker] at hy ⊢
+          have hh := congrArg cO₀.inv.hom hy
+          simpa [d₁] using hh
+        rw [← hJ₁δ₀] at hy'
+        rcases hy' with ⟨z, hz⟩
+        refine ⟨cA₁.hom.hom (fst₁.hom z), ?_⟩
+        have hz0 : z = inl₁.hom (cA₁.inv.hom
+            (cA₁.hom.hom (fst₁.hom z))) := by
+          apply (ModuleCat.biprodIsoProd A₁ B₁).toLinearEquiv.injective
+          apply Prod.ext
+          · change fst₁.hom _ = fst₁.hom _
+            simp [fst₁, inl₁]
+          · change Limits.biprod.snd.hom _ = Limits.biprod.snd.hom _
+            exact hB₁.eq_of_src _ _
+        simpa [j₁, hz0] using hz.symm
+    exact_δ₁_i₀ := by
+      ext x
+      constructor
+      · rintro ⟨y, rfl⟩
+        rw [LinearMap.mem_ker]
+        have hy := LinearMap.mem_ker.mp
+          (hδ₀I₀ ▸ LinearMap.mem_range_self δ₀.hom y)
+        change (fun x => (t99A01_coordinateSum x, x))
+          (cO₀.hom.hom (δ₀.hom y)) = 0
+        have := congrArg cO₀.hom.hom hy
+        simp_all
+      · intro hx
+        have hx0 : I₀.hom (cO₀.inv.hom x) = 0 := by
+          rw [hI₀_apply]
+          apply hpair_inj
+          simpa [LinearMap.mem_ker] using hx
+        have : cO₀.inv.hom x ∈ LinearMap.range δ₀.hom := by
+          rw [hδ₀I₀]
+          exact hx0
+        rcases this with ⟨y, hy⟩
+        refine ⟨y, ?_⟩
+        simpa [d₁] using congrArg cO₀.hom.hom hy
+    exact_i₀_j₀ := by
+      ext p
+      constructor
+      · rintro ⟨x, rfl⟩
+        rw [LinearMap.mem_ker]
+        change J₀.hom (pairMap (t99A01_coordinateSum x, x)) = 0
+        rw [← hI₀_apply]
+        exact LinearMap.mem_ker.mp
+          (hI₀J₀ ▸ LinearMap.mem_range_self I₀.hom (cO₀.inv.hom x))
+      · intro hp
+        have hp' : pairMap p ∈ LinearMap.ker J₀.hom := hp
+        rw [← hI₀J₀] at hp'
+        rcases hp' with ⟨z, hz⟩
+        refine ⟨cO₀.hom.hom z, ?_⟩
+        apply hpair_inj
+        change pairMap ((t99A01_coordinateSum (cO₀.hom.hom z)), cO₀.hom.hom z) = pairMap p
+        rw [← hI₀_apply]
+        simpa using hz.symm
+    j₀_surjective := by
+      intro y
+      rcases hJ₀ y with ⟨z, rfl⟩
+      refine ⟨(cA₀.hom.hom (fst₀.hom z), cB₀.hom.hom (snd₀.hom z)), ?_⟩
+      change J₀.hom (pairMap _) = J₀.hom z
+      congr 1
+      apply (ModuleCat.biprodIsoProd A₀ B₀).toLinearEquiv.injective
+      apply Prod.ext
+      · change fst₀.hom _ = fst₀.hom _
+        simp [pairMap, pairHom, fst₀]
+      · change snd₀.hom _ = snd₀.hom _
+        simp [pairMap, pairHom, snd₀]
+    δ₂_injective := by
+      intro x y hxy
+      have hinj : Function.Injective δ₁.hom := by
+        intro a b hab
+        have hk : a - b ∈ LinearMap.ker δ₁.hom := by
+          rw [LinearMap.mem_ker, map_sub, hab, sub_self]
+        rw [← hJ₂δ₁] at hk
+        rcases hk with ⟨z, hz⟩
+        have hz0 : z = 0 := by
+          apply Prod.ext <;> first | exact hA₂.eq_of_src _ _ | exact hB₂.eq_of_src _ _
+        rw [hz0, map_zero] at hz
+        exact sub_eq_zero.mp hz.symm
+      have hh := congrArg cO₁.inv.hom hxy
+      apply hinj
+      simpa [δ₂] using hh
+    exact_δ₂_i₁ := by
+      ext x
+      constructor
+      · rintro ⟨y, rfl⟩
+        rw [LinearMap.mem_ker]
+        have hy := LinearMap.mem_ker.mp
+          (hδ₁I₁ ▸ LinearMap.mem_range_self δ₁.hom y)
+        change APMT99A01.degreeMap degree (cO₁.hom.hom (δ₁.hom y)) = 0
+        have hh := congrArg cO₁.hom.hom hy
+        rw [← hI₁_apply (cO₁.hom.hom (δ₁.hom y))]
+        simpa using congrArg (fun z => fst₁.hom z) hh
+      · intro hx
+        have hx0 : I₁.hom (cO₁.inv.hom x) = 0 := by
+          rw [hI₁_apply]
+          apply (ModuleCat.biprodIsoProd A₁ B₁).toLinearEquiv.injective
+          apply Prod.ext
+          · change fst₁.hom _ = fst₁.hom _
+            simpa [LinearMap.mem_ker, fst₁, inl₁] using hx
+          · change Limits.biprod.snd.hom _ = Limits.biprod.snd.hom _
+            exact hB₁.eq_of_src _ _
+        have : cO₁.inv.hom x ∈ LinearMap.range δ₁.hom := by
+          rw [hδ₁I₁]
+          exact hx0
+        rcases this with ⟨y, hy⟩
+        refine ⟨y, ?_⟩
+        simpa [δ₂] using congrArg cO₁.hom.hom hy }⟩
+-/
 -- END SEAT AREA
 /-
   let j₁ : (ModuleCat.of ℤ ℤ) →ₗ[ℤ]

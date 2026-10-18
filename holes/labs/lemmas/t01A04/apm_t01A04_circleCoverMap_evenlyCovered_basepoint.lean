@@ -573,10 +573,45 @@ of `mk '' (inl '' ({i} × T) ∪ inr '' Aᵢ)` with `Aᵢ` the arc about
 `sheetPoint i = ±1` on which squaring is a homeomorphism onto `{z | 0 < z.re}`;
 the glue `aux_glue` attaches `Aᵢ` to torus sheet `i`. -/
 -- BEGIN SEAT AREA
-theorem apm_t01A04_circleCoverMap_evenlyCovered_basepoint :
+lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_fiber_points
+    (e : apm_t01a04_CircleCover)
+    (he : apm_t01a04_circleCoverMap e = apm_t01a04_basepoint) :
+    ∃ i : Fin 2,
+      e = Quotient.mk _ (.inl (i, ((1 : Circle), (1 : Circle)))) := by
+  refine Quotient.inductionOn e ?_ he
+  rintro (q | z) he
+  · have hq := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_torusRetraction he
+    have hq' : q.2 = ((1 : Circle), (1 : Circle)) := by
+      simpa [apm_t01a04_circleCoverMap, apm_t01a04_circleCoverRaw,
+        apm_t01a04_basepoint] using hq
+    refine ⟨q.1, ?_⟩
+    congr
+    exact Prod.ext rfl hq'
+  · have hz := congrArg
+      apm_t01A04_circleCoverMap_evenlyCovered_away_aux_circleRetraction he
+    change z ^ 2 = 1 at hz
+    rcases sq_eq_one_iff.mp (congrArg Subtype.val hz) with hz | hz
+    · refine ⟨0, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      exact Subtype.ext hz
+    · refine ⟨1, ?_⟩
+      rw [apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_glue]
+      apply congrArg (fun w : Circle => Quotient.mk _ (Sum.inr w))
+      apply Subtype.ext
+      simpa [Circle.exp, Complex.exp_mul_I] using hz
+
+lemma apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_topological_trivialization :
     IsEvenlyCovered apm_t01a04_circleCoverMap apm_t01a04_basepoint
       (apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
   sorry
+
+theorem apm_t01A04_circleCoverMap_evenlyCovered_basepoint :
+    IsEvenlyCovered apm_t01a04_circleCoverMap apm_t01a04_basepoint
+      (apm_t01a04_circleCoverMap ⁻¹' {apm_t01a04_basepoint}) := by
+  exact
+    apm_t01A04_circleCoverMap_evenlyCovered_basepoint_aux_topological_trivialization
 -- END SEAT AREA
 
 lemma apm_t01A04_torusCoverMap_evenlyCovered_away_aux_inl_ne

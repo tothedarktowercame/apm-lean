@@ -8669,6 +8669,34 @@ lemma cut_retransfer_consistency_aux_chords {L p q : ℕ}
 
 /-- Piece `A`, side position `(e₀, s₀)`, `p ≤ e₀ < q` (side `p` gives the seam: a unit point only at `P'`, `Q'`). -/
 -- BEGIN SEAT AREA
+lemma cut_retransfer_consistency_A_arc_aux_x {Label : Type*} [DecidableEq Label]
+    (u v t : List (Signed Label)) (x : Signed Label)
+    (s : Icc (0 : ℝ) 1) :
+    Relation.EqvGen (WordRel (u ++ [x] ++ v ++ [x] ++ t))
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length
+        (u.length + 1 + v.length) s)
+      (edgePoint (u ++ [x] ++ v ++ [x] ++ t).length u.length s) := by
+  apply Relation.EqvGen.rel
+  let i : Fin (u ++ [x] ++ v ++ [x] ++ t).length :=
+    ⟨u.length + 1 + v.length, by simp; omega⟩
+  let j : Fin (u ++ [x] ++ v ++ [x] ++ t).length :=
+    ⟨u.length, by simp⟩
+  refine ⟨i, j, ?_, s, ?_, rfl, ?_⟩
+  · intro hij
+    have := congrArg Fin.val hij
+    simp only [i, j, Fin.val_mk] at this
+    omega
+  · rw [show (u ++ [x] ++ v ++ [x] ++ t).get i = x by
+        simpa [i] using cut_transfer_generator_aux_get_x₂ u v t x]
+    rw [show (u ++ [x] ++ v ++ [x] ++ t).get j = x by
+        simpa [j] using cut_transfer_generator_aux_get_x₁ u v t x]
+  · rw [show (u ++ [x] ++ v ++ [x] ++ t).get i = x by
+        simpa [i] using cut_transfer_generator_aux_get_x₂ u v t x]
+    rw [show (u ++ [x] ++ v ++ [x] ++ t).get j = x by
+        simpa [j] using cut_transfer_generator_aux_get_x₁ u v t x]
+    simp
+    rfl
+
 theorem cut_retransfer_consistency_A_arc {Label : Type*} [DecidableEq Label]
     (u v t : List (Signed Label)) (x : Signed Label)
     (oldA oldB newA newB : Circle → ℂ)

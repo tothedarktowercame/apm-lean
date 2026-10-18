@@ -335,12 +335,30 @@ lemma apm_m98A06_duBoisReymond_aux_forward_aux_unscaled_variation
   exact h
 
 -- BEGIN SEAT AREA
-lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_deriv_eq
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∀ x ∈ Ioo (0 : ℝ) a,
+      deriv y x = derivWithin y (Icc 0 a) x := by
+  intro x hx
+  have hdiff : DifferentiableAt ℝ y x :=
+    (hy.1.1.differentiableOn_one x (mem_Icc_of_Ioo hx)).differentiableAt
+      (Icc_mem_nhds hx.1 hx.2)
+  exact (derivWithin_of_mem_nhds (Icc_mem_nhds hx.1 hx.2)).symm
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core
     (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
     (hy : apm_m98a06_IsStationary a y₀ ya y) :
     ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
       y x = A * Real.cos x + B * Real.sin x := by
   sorry
+
+lemma apm_m98A06_duBoisReymond_aux_forward_aux_classification
+    (a y₀ ya : ℝ) (ha : 0 < a) (y : ℝ → ℝ)
+    (hy : apm_m98a06_IsStationary a y₀ ya y) :
+    ∃ A B : ℝ, ∀ x ∈ Icc (0 : ℝ) a,
+      y x = A * Real.cos x + B * Real.sin x := by
+  exact apm_m98A06_duBoisReymond_aux_forward_aux_classification_aux_core a y₀ ya ha y hy
 -- END SEAT AREA
 
 lemma apm_m98A06_duBoisReymond_aux_forward :
