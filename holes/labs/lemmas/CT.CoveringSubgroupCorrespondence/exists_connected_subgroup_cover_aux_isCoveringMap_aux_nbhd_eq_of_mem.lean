@@ -390,7 +390,42 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion
 theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem
     {x : X} {U : Set X} {a c : BasedPaths x} (hc : c ∈ basedPathNbhd U a) :
     basedPathNbhd U c = basedPathNbhd U a := by
-  sorry
+  rcases hc with ⟨δ, hδ, hc⟩
+  ext b
+  constructor
+  · rintro ⟨γ, hγ, hb⟩
+    refine ⟨δ.trans γ, ?_, ?_⟩
+    · rw [Path.trans_range]
+      exact union_subset hδ hγ
+    · rw [hb, hc, Path.Homotopic.Quotient.mk_trans,
+        Path.Homotopic.Quotient.trans_assoc]
+  · rintro ⟨ε, hε, hb⟩
+    refine ⟨δ.symm.trans ε, ?_, ?_⟩
+    · rw [Path.trans_range, Path.symm_range]
+      exact union_subset hδ hε
+    · rw [hb, hc, Path.Homotopic.Quotient.mk_trans,
+        Path.Homotopic.Quotient.mk_symm]
+      symm
+      calc
+        (a.2.trans (Path.Homotopic.Quotient.mk δ)).trans
+              ((Path.Homotopic.Quotient.mk δ).symm.trans
+                (Path.Homotopic.Quotient.mk ε)) =
+            ((a.2.trans (Path.Homotopic.Quotient.mk δ)).trans
+              (Path.Homotopic.Quotient.mk δ).symm).trans
+                (Path.Homotopic.Quotient.mk ε) := by
+                  exact (Path.Homotopic.Quotient.trans_assoc _ _ _).symm
+        _ = (a.2.trans ((Path.Homotopic.Quotient.mk δ).trans
+              (Path.Homotopic.Quotient.mk δ).symm)).trans
+                (Path.Homotopic.Quotient.mk ε) := by
+                  exact congrArg
+                    (fun q : Path.Homotopic.Quotient x a.1 ↦
+                      q.trans (Path.Homotopic.Quotient.mk ε))
+                    (Path.Homotopic.Quotient.trans_assoc a.2
+                      (Path.Homotopic.Quotient.mk δ)
+                      (Path.Homotopic.Quotient.mk δ).symm)
+        _ = a.2.trans (Path.Homotopic.Quotient.mk ε) := by
+          rw [Path.Homotopic.Quotient.trans_symm,
+            Path.Homotopic.Quotient.trans_refl]
 -- END SEAT AREA
 
 /-- Over a good `U`, two sheet images in the cover are equal or disjoint
