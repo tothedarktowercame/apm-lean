@@ -130,29 +130,94 @@ Combines the compactness and connectedness leaves and applies the local product
 chart leaf to `apm_t00j01_klein_local_chart apm_t00j01_kleinRel_normal_form`
 and `apm_t00j01_circle_local_chart`.
 
-### `apm_t00j01_klein_product_H3_zero` — LIBRARY
+### Klein-product integral `H₃` split (all leaves are parallel)
 
-**Statement.** Assuming the preceding concrete manifold conclusion, the third
-integral singular homology object of the Klein-bottle product is zero.
+The final `apm_t00j01_klein_product_H3_zero` is now sorry-free assembly.  It
+uses the explicit cover obtained by deleting `-1` and `1` from the circle.
 
-**Why true.** Compute `H₂(K;ℤ)=0` from the Klein polygon/Mayer–Vietoris model;
-the orientation-reversing edge acts by `-1` on circle `H₁`.  Then Künneth (or a
-product-cover Mayer–Vietoris calculation) gives `H₃(K×S¹;ℤ)=0`.  No current
-sorry-free `ConstructionTargets` module provides this concrete computation;
-the topology audit estimates it at 350–700 lines.  The chart conclusion is an
-explicit hypothesis, following the blueprint rule that a dependent seat may
-assume the producer's conclusion and therefore work in parallel.
+#### `apm_t00j01_circleCover_open_cover` (15–30 lines)
 
-**Expected size.** 350–700 lines; LIBRARY.
+Prove the two product sets open and covering.  Use `isOpen_compl_singleton`,
+continuity of `Prod.snd`, `IsOpen.preimage`, and `Set.eq_univ_iff_forall`.
+The cover argument is just `z ≠ -1 ∨ z ≠ 1`, using `(1 : Circle) ≠ -1`.
 
-**Dependencies.** The conclusion of `apm_t00j01_klein_quotient_charts`, passed
-as `_hM` rather than referenced as a theorem.
+#### `apm_t00j01_circleCover_piece_equivs` (60–120 lines)
 
-**Truth check.** A closed connected nonorientable three-manifold has zero top
-integral homology.  Concretely, the Klein bottle has `H₂=0`, while the only
-possible degree-three Künneth term is `H₂(K) ⊗ H₁(S¹)`, hence zero.  The result
-would be false for an orientable replacement such as `T²×S¹`, confirming that
-the twisted relation is essential.
+Each punctured circle is contractible, so projection gives a homotopy
+equivalence from its product with `K` to `K`.  Use stereographic/argument
+coordinates (`Circle.expHomeomorph` and a rotation for the puncture),
+`HomotopyEquiv.prod`, and the standard contraction of `ℝ`.
+
+Truth check: the deleted point is not in the subtype; the contraction must be
+performed in the punctured circle, not merely in the ambient plane.
+
+#### `apm_t00j01_circleCover_intersection_equiv` (80–150 lines)
+
+The circle with `±1` deleted is the disjoint union of its upper and lower open
+semicircles, each contractible.  Build an equivalence with `Sum K K`, using
+the sign of the imaginary coordinate for the component and argument charts
+within each component.  Useful tools are `Homeomorph.sumCongr`,
+`HomotopyEquiv.sum`, `Circle.coe_ne_zero`, and `Complex.ext_iff`.
+
+Truth check: after deleting `±1`, imaginary part cannot vanish, so the component
+test is exhaustive and disjoint; neither component is empty.
+
+#### `apm_t00j01_klein_H2_zero` (80–150 lines)
+
+Show the concrete twisted affine quotient has zero integral `H₂`.  The intended
+route is a homeomorphism to the genus-two nonorientable polygon surface, then
+`ConstructionTargets.PolygonSurfaceHomology.radialH2BoundaryKernelModuleIso`.
+Compute its attaching vector as `(2,2)` (up to the library's sign/basis
+convention), so `attachingBoundary` has trivial kernel over `ℤ`.  Relevant
+definitions are `attachingDegree`, `attachingBoundary`, `BoundaryKernel`, and
+`radialH2BoundaryKernelModuleIso`.
+
+This is the only leaf where the twist is essential.  For the torus word the
+attaching vector is zero and the conclusion is false.  The construction
+library does not currently expose the homeomorphism from this exact affine
+quotient to `PairingData.Space`; if that bridge cannot be completed within
+150 lines, split it out as the single remaining LIBRARY foundation rather
+than hiding it in this proof.
+
+#### `apm_t00j01_klein_H3_zero` (30–70 lines)
+
+Transport to the polygon model and use its radial open cover: both pieces and
+their overlap have no homology above degrees one/two.  Useful compiled results
+are `PolygonSurfaceHomology.innerHigherHomology_isZero`,
+`overlapHigherHomology_isZero`, and integral Mayer–Vietoris.  Alternatively,
+derive it from the two-dimensional polygon chain model once the same concrete
+homeomorphism used by the `H₂` leaf is available.
+
+#### `apm_t00j01_circleCover_pieces_H3_zero` (25–50 lines)
+
+Given the two homotopy equivalences and `H₃(K)=0`, transfer vanishing to both
+cover pieces.  Use `SingularHomologyConcrete.singularHomologyIsoOfHomotopyEquiv`
+and `IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero`
+(or the corresponding direct module isomorphism).  All producer conclusions
+are explicit hypotheses, so this leaf is independent.
+
+#### `apm_t00j01_circleCover_intersection_H2_zero` (35–70 lines)
+
+Given the intersection equivalence and `H₂(K)=0`, use homotopy invariance and
+homology of a sum.  Follow `EmptyAndSumSingularHomology`; the relevant
+additivity mechanism is the singular-chain coproduct/biproduct comparison.
+Both summands vanish, hence their biproduct does too.
+
+#### `apm_t00j01_openCover_H3_zero` (50–100 lines)
+
+This is a generic exactness leaf.  Apply
+`ConstructionTargets.IntegralOpenCoverMayerVietoris.integralMayerVietoris` in
+degrees three and two.  Exactness plus zero source `H₃(U) ⊞ H₃(V)` and zero
+target `H₂(U∩V)` makes `H₃(X)` zero.  The categorical closing pattern is
+`ConstructionTargets.MayerVietorisExactnessIsZero.isZero_middle_of_two_exact_of_isZero_left_of_mono_right`;
+the integral theorem states exactness as range/kernel equalities, so either
+convert those to `ShortComplex.Exact` or prove elementwise that every class is
+zero.
+
+Truth check for the whole split: the intersection degree-two term is two
+copies of `H₂(K)`, and this is visibly the sole step using nonorientability.
+Replacing `K` by `T²` makes that term nonzero and correctly prevents the proof
+of `H₃(T²×S¹)=0`.
 
 ### `apm_t00j01_foldRegular_pi`
 

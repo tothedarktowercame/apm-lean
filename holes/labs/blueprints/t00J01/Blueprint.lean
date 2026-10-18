@@ -1,6 +1,7 @@
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CircleWindingUniqueness
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
+import ConstructionTargets.IntegralOpenCoverMayerVietoris
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -27,6 +28,7 @@ detached from the self-map under study.
 -/
 
 open CategoryTheory Set
+open scoped ContinuousMap
 
 noncomputable section
 
@@ -558,13 +560,93 @@ theorem apm_t00j01_klein_quotient_charts :
       apm_t00j01_kleinRel_normal_form h)
     apm_t00j01_circle_local_chart
 
-/-- LIBRARY: the integral top singular homology of the concrete Klein-bottle
-product vanishes.  The manifold conclusion is passed in explicitly so this
-contract can be developed independently of the chart contract. -/
+/-- The member of the product cover obtained by deleting `-1` from the circle. -/
+def apm_t00j01_circleCoverLeft : Set apm_t00j01_nonorientable3 :=
+  {p | p.2 ≠ Circle.exp Real.pi}
+
+/-- The member of the product cover obtained by deleting `1` from the circle. -/
+def apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3 :=
+  {p | p.2 ≠ (1 : Circle)}
+
+/-- The two punctured-circle product sets are an open cover. -/
+lemma apm_t00j01_circleCover_open_cover :
+    IsOpen apm_t00j01_circleCoverLeft ∧
+      IsOpen apm_t00j01_circleCoverRight ∧
+      apm_t00j01_circleCoverLeft ∪ apm_t00j01_circleCoverRight = Set.univ := by
+  sorry
+
+/-- Each member of the punctured-circle cover retracts to the Klein factor. -/
+lemma apm_t00j01_circleCover_piece_equivs :
+    Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
+      Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein) := by
+  sorry
+
+/-- Their intersection is the product with the two components of the twice
+punctured circle, hence is homotopy equivalent to two copies of the Klein
+bottle. -/
+lemma apm_t00j01_circleCover_intersection_equiv :
+    Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₕ
+        Sum apm_t00j01_Klein apm_t00j01_Klein) := by
+  sorry
+
+/-- The orientation-reversing gluing in the concrete affine quotient kills
+its integral degree-two fundamental class. -/
+lemma apm_t00j01_klein_H2_zero :
+    Limits.IsZero (apm_t00j01_H 2 apm_t00j01_Klein) := by
+  sorry
+
+/-- The concrete Klein quotient has no integral homology in degree three. -/
+lemma apm_t00j01_klein_H3_zero :
+    Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein) := by
+  sorry
+
+/-- Homotopy invariance transfers `H₃(K)=0` to both cover members. -/
+lemma apm_t00j01_circleCover_pieces_H3_zero
+    (_he : Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
+      Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein))
+    (_hK3 : Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein)) :
+    Limits.IsZero (apm_t00j01_H 3 (apm_t00j01_circleCoverLeft : Type)) ∧
+      Limits.IsZero (apm_t00j01_H 3 (apm_t00j01_circleCoverRight : Type)) := by
+  sorry
+
+/-- Additivity for a disjoint sum and homotopy invariance transfer
+`H₂(K)=0` to the intersection of the cover. -/
+lemma apm_t00j01_circleCover_intersection_H2_zero
+    (_he : Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₕ
+        Sum apm_t00j01_Klein apm_t00j01_Klein))
+    (_hK2 : Limits.IsZero (apm_t00j01_H 2 apm_t00j01_Klein)) :
+    Limits.IsZero (apm_t00j01_H 2
+      ((apm_t00j01_circleCoverLeft ∩
+        apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type)) := by
+  sorry
+
+/-- The exactness consequence of integral open-cover Mayer--Vietoris used by
+the final assembly. -/
+lemma apm_t00j01_openCover_H3_zero
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (_hU : IsOpen U) (_hV : IsOpen V) (_hcov : U ∪ V = Set.univ)
+    (_hU3 : Limits.IsZero (apm_t00j01_H 3 (U : Type)))
+    (_hV3 : Limits.IsZero (apm_t00j01_H 3 (V : Type)))
+    (_hI2 : Limits.IsZero (apm_t00j01_H 2 ((U ∩ V : Set X) : Type))) :
+    Limits.IsZero (apm_t00j01_H 3 X) := by
+  sorry
+
+/-- The integral top singular homology of the concrete Klein-bottle product
+vanishes.  The manifold conclusion remains an explicit input required by the
+registered statement, but the homology calculation itself uses the concrete
+twisted quotient and the punctured-circle cover. -/
 theorem apm_t00j01_klein_product_H3_zero
     (_hM : apm_t00j01_isThreeManifold apm_t00j01_nonorientable3) :
     Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3) := by
-  sorry
+  obtain ⟨hU, hV, hcov⟩ := apm_t00j01_circleCover_open_cover
+  obtain ⟨hU3, hV3⟩ := apm_t00j01_circleCover_pieces_H3_zero
+    apm_t00j01_circleCover_piece_equivs apm_t00j01_klein_H3_zero
+  exact apm_t00j01_openCover_H3_zero
+    apm_t00j01_circleCoverLeft apm_t00j01_circleCoverRight hU hV hcov hU3 hV3
+      (apm_t00j01_circleCover_intersection_H2_zero
+        apm_t00j01_circleCover_intersection_equiv apm_t00j01_klein_H2_zero)
 
 /-- Every lift of the fiber over `exp π` has nonzero derivative. -/
 lemma apm_t00j01_foldRegular_pi_aux_cos :
