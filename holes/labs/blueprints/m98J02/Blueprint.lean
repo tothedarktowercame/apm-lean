@@ -2684,13 +2684,105 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_sli
 
 /-- Leibniz rule with a variable upper limit and an `x`-dependent integrand:
 `d/dx ∫_l^x g(x,s) ds = g(a,a) + ∫_l^a ∂_x g(a,s) ds` at `a`.  Oriented intervals. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_varlimit_aux_fixed
+    (g d : ℝ → ℝ → ℝ) (l a : ℝ)
+    (hg : Continuous (Function.uncurry g))
+    (hd : Continuous (Function.uncurry d))
+    (hder : ∀ x s, HasDerivAt (fun z ↦ g z s) (d x s) x) :
+    HasDerivAt (fun x ↦ ∫ s in l..a, g x s) (∫ s in l..a, d a s) a := by
+  let K : Set (ℝ × ℝ) := Set.Icc (a - 1) (a + 1) ×ˢ Set.uIcc l a
+  have hK : IsCompact K := isCompact_Icc.prod isCompact_uIcc
+  obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn hd.continuousOn
+  have hCa : 0 ≤ C := by
+    have hp : (a, a) ∈ K := by
+      refine ⟨⟨by linarith, by linarith⟩, right_mem_uIcc⟩
+    exact (norm_nonneg (d a a)).trans (hC (a, a) hp)
+  have hn : Set.Icc (a - 1) (a + 1) ∈ nhds a :=
+    Filter.mem_of_superset (Metric.ball_mem_nhds a zero_lt_one) (by
+      intro x hx
+      change dist x a < 1 at hx
+      rw [Real.dist_eq] at hx
+      constructor <;> linarith [abs_lt.mp hx])
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := g) (F' := d) (bound := fun _ ↦ C) hn ?_ ?_ ?_ ?_ ?_ ?_).2
+  · filter_upwards with x
+    exact (hg.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · exact (hg.comp (continuous_const.prodMk continuous_id)).intervalIntegrable _ _
+  · exact (hd.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · filter_upwards with s
+    intro hs x hx
+    exact hC (x, s) ⟨hx, Set.uIoc_subset_uIcc hs⟩
+  · exact intervalIntegrable_const
+  · filter_upwards with s
+    intro _ x _
+    exact hder x s
+
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_varlimit
     (g d : ℝ → ℝ → ℝ) (l a : ℝ)
     (hg : Continuous (Function.uncurry g))
     (hd : Continuous (Function.uncurry d))
     (hder : ∀ x s, HasDerivAt (fun z ↦ g z s) (d x s) x) :
     HasDerivAt (fun x ↦ ∫ s in l..x, g x s) (g a a + ∫ s in l..a, d a s) a := by
-  sorry
+  have hga : Continuous (fun s : ℝ ↦ g a s) :=
+    hg.comp (continuous_const.prodMk continuous_id)
+  have hmove0 : HasDerivAt (fun x ↦ ∫ s in a..x, g a s) (g a a) a :=
+    intervalIntegral.integral_hasDerivAt_right (hga.intervalIntegrable _ _)
+      hga.aestronglyMeasurable.stronglyMeasurableAtFilter hga.continuousAt
+  have hq : Continuous (fun p : ℝ × ℝ ↦ g p.1 p.2 - g a p.2) :=
+    hg.sub (hg.comp (continuous_const.prodMk continuous_snd))
+  have herr : HasDerivAt (fun x ↦ ∫ s in a..x, (g x s - g a s)) 0 a := by
+    apply HasDerivAt.of_isLittleO
+    simp only [intervalIntegral.integral_same, sub_zero, smul_zero]
+    rw [Asymptotics.isLittleO_iff]
+    intro c hc
+    have hqc : ContinuousAt (fun p : ℝ × ℝ ↦ g p.1 p.2 - g a p.2) (a, a) :=
+      hq.continuousAt
+    rw [Metric.continuousAt_iff] at hqc
+    obtain ⟨δ, hδ, hclose⟩ := hqc c hc
+    filter_upwards [Metric.eventually_nhds_iff.mpr ⟨δ, hδ, fun _ h ↦ h⟩] with x hx
+    have hb : ∀ s ∈ Set.uIcc a x, ‖g x s - g a s‖ ≤ c := by
+      intro s hs
+      have hsx : dist s a ≤ dist x a := by
+        simp only [Real.dist_eq]
+        rcases mem_uIcc.mp hs with hs | hs
+        · have hax : a ≤ x := hs.1.trans hs.2
+          rw [abs_of_nonneg (sub_nonneg.mpr hs.1), abs_of_nonneg (sub_nonneg.mpr hax)]
+          linarith
+        · have hxa : x ≤ a := hs.1.trans hs.2
+          rw [abs_of_nonpos (sub_nonpos.mpr hs.2), abs_of_nonpos (sub_nonpos.mpr hxa)]
+          linarith
+      have hp : dist (x, s) (a, a) < δ := by
+        rw [Prod.dist_eq]
+        exact max_lt hx (hsx.trans_lt hx)
+      have hh := hclose hp
+      simpa [Real.dist_eq] using hh.le
+    exact (intervalIntegral.norm_integral_le_of_norm_le_const
+      (fun s hs ↦ hb s (Set.uIoc_subset_uIcc hs))).trans (by
+      simp only [Real.norm_eq_abs]
+      rw [abs_sub_comm])
+  have hmove : HasDerivAt (fun x ↦ ∫ s in a..x, g x s) (g a a) a := by
+    convert hmove0.add herr using 1
+    · funext x
+      simp only [Pi.add_apply]
+      have h1 : IntervalIntegrable (fun s ↦ g a s) volume a x :=
+        hga.intervalIntegrable _ _
+      have h2 : IntervalIntegrable (fun s ↦ g x s - g a s) volume a x :=
+        ((hg.comp (continuous_const.prodMk continuous_id)).sub hga).intervalIntegrable _ _
+      rw [← intervalIntegral.integral_add h1 h2]
+      apply intervalIntegral.integral_congr
+      intro s _
+      ring
+    · ring
+  have hfixed :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_varlimit_aux_fixed
+      g d l a hg hd hder
+  convert hfixed.add hmove using 1
+  · funext x
+    have hxg : Continuous (fun s ↦ g x s) :=
+      hg.comp (continuous_const.prodMk continuous_id)
+    simpa using (intervalIntegral.integral_add_adjacent_intervals
+      (hxg.intervalIntegrable l a) (hxg.intervalIntegrable a x)).symm
+  · ring
 
 /-- Differentiation in `x` under the inner `t`-integral (fixed interval `[0, b]`),
 with the pointwise derivative from `_aux_pointwise`. -/
