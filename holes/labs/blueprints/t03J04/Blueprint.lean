@@ -437,12 +437,135 @@ theorem t03J04_hasEuler_of_isEmpty (X : Type) [TopologicalSpace X] [IsEmpty X] :
 `P = {Im > 0}`, `Q = {Im < 0}` are open arcs, hence contractible
 (`Circle.exp` is a homeomorphism from an open interval of length `≤ 2π` onto
 each arc). -/
+lemma t03J04_circle_cover_aux_injective (a b : ℝ) (hab : b - a ≤ 2 * Real.pi) :
+    Function.Injective (fun x : Set.Ioo a b ↦ Circle.exp (x : ℝ)) := by
+  intro x y hxy
+  obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp hxy
+  apply Subtype.ext
+  by_contra hne
+  have hm0 : m ≠ 0 := by
+    intro hz
+    subst m
+    simp at hm
+    exact hne hm
+  rcases lt_or_gt_of_ne hm0 with hmneg | hmpos
+  · have hmle : (m : ℝ) ≤ -1 := by exact_mod_cast (Int.le_sub_one_of_lt hmneg)
+    have hmul : (m : ℝ) * (2 * Real.pi) ≤ -1 * (2 * Real.pi) :=
+      mul_le_mul_of_nonneg_right hmle (by positivity)
+    have hx := x.2
+    have hy := y.2
+    have hdiff : (y : ℝ) - x < b - a := by linarith [hx.1, hx.2, hy.1, hy.2]
+    exact hne (by nlinarith [Real.pi_pos])
+  · have hmge : (1 : ℝ) ≤ m := by exact_mod_cast hmpos
+    have hmul : (1 : ℝ) * (2 * Real.pi) ≤ m * (2 * Real.pi) :=
+      mul_le_mul_of_nonneg_right hmge (by positivity)
+    have hx := x.2
+    have hy := y.2
+    have hdiff : (x : ℝ) - y < b - a := by linarith [hx.1, hx.2, hy.1, hy.2]
+    exact hne (by nlinarith [Real.pi_pos])
+
+lemma t03J04_circle_cover_aux_exp_ne_one {x : ℝ} (hx : x ∈ Set.Ioo 0 (2 * Real.pi)) :
+    Circle.exp x ≠ 1 := by
+  intro h
+  rcases hx with ⟨hx0, hx2⟩
+  obtain ⟨m, hm⟩ := Circle.exp_eq_one.mp h
+  have hmpos : 0 < m := by
+    by_contra hn
+    have hmle : (m : ℝ) ≤ 0 := by exact_mod_cast (le_of_not_gt hn)
+    have hmul : (m : ℝ) * (2 * Real.pi) ≤ 0 :=
+      mul_nonpos_of_nonpos_of_nonneg hmle (by positivity)
+    nlinarith
+  have hmge : (1 : ℝ) ≤ m := by exact_mod_cast hmpos
+  have hmul : (2 * Real.pi) ≤ (m : ℝ) * (2 * Real.pi) := by
+    nlinarith [mul_le_mul_of_nonneg_right hmge (show 0 ≤ 2 * Real.pi by positivity)]
+  rw [hm] at hx0 hx2
+  nlinarith [Real.pi_pos]
+
+lemma t03J04_circle_cover_aux_contractible (a b : ℝ) (hab : b - a ≤ 2 * Real.pi)
+    (hne : a < b) : ContractibleSpace (Circle.exp '' Set.Ioo a b) := by
+  let f : Set.Ioo a b → Circle := fun x ↦ Circle.exp (x : ℝ)
+  have hf_local : IsLocalHomeomorph f :=
+    isLocalHomeomorph_circleExp.comp
+      isOpen_Ioo.isOpenEmbedding_subtypeVal.isLocalHomeomorph
+  have hf : IsOpenEmbedding f :=
+    hf_local.isOpenEmbedding_of_injective
+      (t03J04_circle_cover_aux_injective a b hab)
+  letI : ContractibleSpace (Set.Ioo a b) :=
+    (convex_Ioo a b).contractibleSpace (Set.nonempty_Ioo.mpr hne)
+  letI : ContractibleSpace (Set.range f) :=
+    hf.toIsEmbedding.toHomeomorph.symm.contractibleSpace
+  have heq : Set.range f = Circle.exp '' Set.Ioo a b := by
+    ext z
+    simp [f]
+  rw [← heq]
+  infer_instance
+
 theorem t03J04_circle_cover :
     ∃ U V P Q : Set Circle, IsOpen U ∧ IsOpen V ∧ U ∪ V = Set.univ ∧
       IsOpen P ∧ IsOpen Q ∧ U ∩ V = P ∪ Q ∧ Disjoint P Q ∧
       ContractibleSpace U ∧ ContractibleSpace V ∧
       ContractibleSpace P ∧ ContractibleSpace Q := by
-  sorry
+  let U : Set Circle := Circle.exp '' Set.Ioo (-Real.pi) Real.pi
+  let V : Set Circle := Circle.exp '' Set.Ioo 0 (2 * Real.pi)
+  let P : Set Circle := Circle.exp '' Set.Ioo 0 Real.pi
+  let Q : Set Circle := Circle.exp '' Set.Ioo (-Real.pi) 0
+  refine ⟨U, V, P, Q, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact Circle.isCoveringMap_exp.isOpenMap _ isOpen_Ioo
+  · exact Circle.isCoveringMap_exp.isOpenMap _ isOpen_Ioo
+  · ext z
+    constructor
+    · simp
+    · intro _
+      by_cases hz : Complex.arg (z : ℂ) = Real.pi
+      · right
+        refine ⟨Real.pi, ?_, ?_⟩
+        constructor
+        · exact Real.pi_pos
+        · linarith [Real.pi_pos]
+        · simpa [hz] using Circle.exp_arg z
+      · left
+        refine ⟨Complex.arg (z : ℂ), ?_, Circle.exp_arg z⟩
+        exact ⟨Complex.neg_pi_lt_arg _, (Complex.arg_le_pi _).lt_of_ne hz⟩
+  · exact Circle.isCoveringMap_exp.isOpenMap _ isOpen_Ioo
+  · exact Circle.isCoveringMap_exp.isOpenMap _ isOpen_Ioo
+  · ext z
+    constructor
+    · rintro ⟨⟨x, hx, rfl⟩, y, hy, heq⟩
+      by_cases hx0 : x < 0
+      · right
+        exact ⟨x, ⟨hx.1, hx0⟩, rfl⟩
+      · left
+        have hxpos : 0 < x := lt_of_le_of_ne (le_of_not_gt hx0) (by
+          intro hzero
+          subst x
+          exact t03J04_circle_cover_aux_exp_ne_one hy (by simpa using heq))
+        exact ⟨x, ⟨hxpos, hx.2⟩, rfl⟩
+    · rintro (⟨x, hx, rfl⟩ | ⟨x, hx, rfl⟩)
+      · rcases hx with ⟨hx0, hxpi⟩
+        refine ⟨⟨x, ⟨by nlinarith [Real.pi_pos], hxpi⟩, rfl⟩, x, ⟨hx0, by nlinarith [Real.pi_pos]⟩, rfl⟩
+      · rcases hx with ⟨hxpi, hx0⟩
+        refine ⟨⟨x, ⟨hxpi, by nlinarith [Real.pi_pos]⟩, rfl⟩, x + 2 * Real.pi, ?_, ?_⟩
+        · constructor <;> nlinarith [Real.pi_pos]
+        · exact Circle.exp_add_two_pi x
+  · rw [Set.disjoint_left]
+    intro z hzP hzQ
+    rcases hzP with ⟨x, hx, rfl⟩
+    rcases hzQ with ⟨y, hy, heq⟩
+    rcases hx with ⟨hx0, hxpi⟩
+    rcases hy with ⟨hypi, hy0⟩
+    have hinj := t03J04_circle_cover_aux_injective (-Real.pi) Real.pi
+      (by linarith [Real.pi_pos])
+    let xx : Set.Ioo (-Real.pi) Real.pi :=
+      ⟨x, by constructor <;> nlinarith [Real.pi_pos]⟩
+    let yy : Set.Ioo (-Real.pi) Real.pi := ⟨y, ⟨hypi, by nlinarith [Real.pi_pos]⟩⟩
+    have hsub : xx = yy := hinj (by simpa [xx, yy] using heq.symm)
+    have := hsub
+    have : x = y := congrArg Subtype.val this
+    linarith
+  · exact t03J04_circle_cover_aux_contractible _ _ (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos])
+  · exact t03J04_circle_cover_aux_contractible _ _ (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos])
+  · exact t03J04_circle_cover_aux_contractible _ _ (by linarith [Real.pi_pos]) Real.pi_pos
+  · exact t03J04_circle_cover_aux_contractible _ _ (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos])
 
 /-- A contractible factor can be dropped up to homotopy (sorry-free). -/
 noncomputable def t03J04_prodContractible (A Y : Type) [TopologicalSpace A]
