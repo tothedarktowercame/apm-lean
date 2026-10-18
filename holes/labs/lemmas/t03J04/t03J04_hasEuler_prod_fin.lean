@@ -339,7 +339,87 @@ theorem t03J04_hasEuler_mayerVietoris {X : Type} [TopologicalSpace X]
     {a b c : ℚ} (ha : HasEulerCharacteristic U a) (hb : HasEulerCharacteristic V b)
     (hc : HasEulerCharacteristic ↥(U ∩ V) c) :
     HasEulerCharacteristic X (a + b - c) := by
-  sorry
+  rcases ha with ⟨hfinU, NU, hvanU, hsumU⟩
+  rcases hb with ⟨hfinV, NV, hvanV, hsumV⟩
+  rcases hc with ⟨hfinI, NI, hvanI, hsumI⟩
+  have hsum_finrank {Y : Type} [TopologicalSpace Y] {v : ℚ} (N : ℕ)
+      (hfin : ∀ k, FiniteDimensional ℚ (Homology Y k))
+      (hsum : ∑ k ∈ Finset.range (N + 1), (-1 : ℚ) ^ k *
+        LinearMap.trace ℚ (Homology Y k)
+          (induced (ContinuousMap.id Y) k).hom = v) :
+      ∑ k ∈ Finset.range (N + 1), (-1 : ℚ) ^ k *
+        (Module.finrank ℚ (Homology Y k) : ℚ) = v := by
+    rw [← hsum]
+    apply Finset.sum_congr rfl
+    intro k hk
+    letI := hfin k
+    have hid : TopCat.ofHom (ContinuousMap.id Y) = 𝟙 (TopCat.of Y) := rfl
+    simp only [induced, hid, CategoryTheory.Functor.map_id, ModuleCat.hom_id,
+      LinearMap.trace_id]
+  have extend_sum {Y : Type} [TopologicalSpace Y] {v : ℚ} (K M : ℕ)
+      (hfin : ∀ k, FiniteDimensional ℚ (Homology Y k))
+      (hvan : ∀ k, K < k → Subsingleton (Homology Y k)) (hKM : K ≤ M)
+      (hsum : ∑ k ∈ Finset.range (K + 1), (-1 : ℚ) ^ k *
+        (Module.finrank ℚ (Homology Y k) : ℚ) = v) :
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ) ^ k *
+        (Module.finrank ℚ (Homology Y k) : ℚ) = v := by
+    induction M, hKM using Nat.le_induction with
+    | base => exact hsum
+    | succ M hKM ih =>
+        rw [Finset.sum_range_succ, ih]
+        haveI := hfin (M + 1)
+        haveI := hvan (M + 1) (by omega)
+        simp
+  let N := max NI (max NU NV)
+  have hfinB : ∀ k, FiniteDimensional ℚ
+      (↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V)) := by
+    intro k
+    letI := hfinU k
+    letI := hfinV k
+    let e := ModuleCat.biprodIsoProd (RP3Homology.HQ k U) (RP3Homology.HQ k V)
+    exact FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  have hvanB : ∀ k, N < k → Subsingleton
+      (↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V)) := by
+    intro k hk
+    letI := hvanU k (by dsimp [N] at hk; omega)
+    letI := hvanV k (by dsimp [N] at hk; omega)
+    let e := ModuleCat.biprodIsoProd (RP3Homology.HQ k U) (RP3Homology.HQ k V)
+    constructor
+    intro x y
+    apply e.toLinearEquiv.injective
+    exact Subsingleton.elim _ _
+  obtain ⟨d, hfg, hgd, hdf⟩ :=
+    RP3Homology.rationalMayerVietoris U V hU hV hcov
+  obtain ⟨hfinX, hvanX, hles⟩ := t03J04_euler_les
+    (fun k => Homology ↥(U ∩ V) k)
+    (fun k => ↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V))
+    (fun k => Homology X k)
+    (fun k => (RP3Homology.mvI U V k).hom)
+    (fun k => (RP3Homology.mvJ U V k).hom)
+    (fun k => (d k).hom) hfg hgd hdf
+    (t03J04_mv_surjective_zero U V hU hV hcov) N
+    (fun k hk => hvanI k (by dsimp [N] at hk; omega)) hvanB
+  apply t03J04_hasEuler_of_finrank hfinX (N + 1) hvanX
+  have hI := extend_sum NI (N + 1) hfinI hvanI (by dsimp [N]; omega)
+    (hsum_finrank NI hfinI hsumI)
+  have hU' := extend_sum NU (N + 1) hfinU hvanU (by dsimp [N]; omega)
+    (hsum_finrank NU hfinU hsumU)
+  have hV' := extend_sum NV (N + 1) hfinV hvanV (by dsimp [N]; omega)
+    (hsum_finrank NV hfinV hsumV)
+  have hBfinrank (k : ℕ) :
+      Module.finrank ℚ (↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V)) =
+        Module.finrank ℚ (Homology U k) + Module.finrank ℚ (Homology V k) := by
+    letI := hfinU k
+    letI := hfinV k
+    let e := ModuleCat.biprodIsoProd (RP3Homology.HQ k U) (RP3Homology.HQ k V)
+    rw [e.toLinearEquiv.finrank_eq, Module.finrank_prod]
+  rw [Finset.sum_congr rfl (fun k _ => by rw [hBfinrank k])] at hles
+  simp only [Nat.cast_add, mul_add, mul_sub, mul_neg, neg_add_rev,
+    Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_neg_distrib,
+    sub_eq_add_neg] at hles
+  have hrange : N + 1 + 1 = N + 2 := by omega
+  rw [hrange] at hI hU' hV'
+  linear_combination hles + hU' + hV' - hI
 
 /-- LEAF B2.  Homotopy invariance: transport finiteness, vanishing and
 `finrank` along `CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv`. -/
@@ -727,7 +807,92 @@ theorem t03J04_trivial_over_contractible {E B : Type} [TopologicalSpace E]
     [TopologicalSpace B] [LocPathConnectedSpace B] {p : E → B} {k : ℕ}
     (hp : IsKSheetedCover p k) (U : Set B) (hU : IsOpen U) [ContractibleSpace U] :
     Nonempty (↥(p ⁻¹' U) ≃ₜ U × Fin k) := by
-  sorry
+  classical
+  let s : C(U, B) := ⟨Subtype.val, continuous_subtype_val⟩
+  let L := CoveringLiftRestriction.Lifts p s
+  letI : SimplyConnectedSpace U := SimplyConnectedSpace.ofContractible U
+  letI : LocPathConnectedSpace U := hU.locPathConnectedSpace
+  letI : Finite L := by
+    let u : U := Classical.arbitrary U
+    letI : Finite {e : E // p e = s u} := hp.finite_fiber (s u)
+    exact Finite.of_injective (CoveringLiftRestriction.evaluate s u)
+      (CoveringLiftRestriction.evaluate_bijective hp.isCoveringMap s u).1
+  letI : TopologicalSpace L := ⊥
+  letI : DiscreteTopology L := ⟨rfl⟩
+  let F : U × L → ↥(p ⁻¹' U) := fun z =>
+    ⟨z.2.1 z.1, by
+      change p (z.2.1 z.1) ∈ U
+      change (p ∘ z.2.1) z.1 ∈ U
+      rw [congrFun z.2.2 z.1]
+      exact z.1.property⟩
+  have hFcont : Continuous F := by
+    rw [continuous_prod_of_discrete_right]
+    intro l
+    exact l.1.continuous.subtype_mk _
+  have hFbij : Function.Bijective F := by
+    constructor
+    · rintro ⟨u, l⟩ ⟨v, m⟩ h
+      have huv : u = v := by
+        apply Subtype.ext
+        have hp_eq := congrArg (fun e : ↥(p ⁻¹' U) => p e.1) h
+        change p (l.1 u) = p (m.1 v) at hp_eq
+        change (p ∘ l.1) u = (p ∘ m.1) v at hp_eq
+        rw [congrFun l.2 u, congrFun m.2 v] at hp_eq
+        exact hp_eq
+      subst v
+      have hlm : l = m := by
+        apply (CoveringLiftRestriction.evaluate_bijective hp.isCoveringMap s u).1
+        apply Subtype.ext
+        change l.1 u = m.1 u
+        exact congrArg Subtype.val h
+      simp [hlm]
+    · intro e
+      let u : U := ⟨p e.1, e.2⟩
+      let ee : {x : E // p x = s u} := ⟨e.1, rfl⟩
+      obtain ⟨l, hl⟩ :=
+        (CoveringLiftRestriction.evaluate_bijective hp.isCoveringMap s u).2 ee
+      refine ⟨(u, l), ?_⟩
+      apply Subtype.ext
+      change l.1 u = e.1
+      exact congrArg Subtype.val hl
+  have hFopen : IsOpenMap F := by
+    intro O hO
+    rw [isOpen_iff_forall_mem_open]
+    rintro y ⟨x, hx, rfl⟩
+    let l : L := x.2
+    let i : U → U × L := fun u => (u, l)
+    let V : Set U := i ⁻¹' O
+    have hV : IsOpen V := hO.preimage (continuous_id.prodMk continuous_const)
+    have hlift : p ∘ l.1 = (fun u : U => (u : B)) := l.2
+    have hopen : IsOpenEmbedding l.1 :=
+      IsLocalHomeomorph.isOpenEmbedding_of_comp hp.isCoveringMap.isLocalHomeomorph
+        (by simpa [hlift] using hU.isOpenEmbedding_subtypeVal) l.1.continuous
+    let g : U → ↥(p ⁻¹' U) := fun u => F (u, l)
+    have hsub : IsOpenEmbedding (Subtype.val : ↥(p ⁻¹' U) → E) :=
+      (hU.preimage hp.isCoveringMap.continuous).isOpenEmbedding_subtypeVal
+    have hg : IsOpenEmbedding g := by
+      apply (IsOpenEmbedding.of_comp_iff g hsub).1
+      simpa [g, F] using hopen
+    refine ⟨g '' V, ?_, hg.isOpenMap V hV, ?_⟩
+    · rintro _ ⟨u, hu, rfl⟩
+      exact ⟨(u, l), hu, rfl⟩
+    · refine ⟨x.1, ?_, ?_⟩
+      · simpa [V, i, l] using hx
+      · simp [g, l]
+  let H : U × L ≃ₜ ↥(p ⁻¹' U) :=
+    (Equiv.ofBijective F hFbij).toHomeomorphOfContinuousOpen hFcont hFopen
+  have hcardL : Nat.card L = k := by
+    let u : U := Classical.arbitrary U
+    calc
+      Nat.card L = Nat.card {e : E // p e = s u} :=
+        CoveringLiftRestriction.card_lifts hp.isCoveringMap s u
+      _ = k := hp.card_fiber (s u)
+  letI : Fintype L := Fintype.ofFinite L
+  let q : L ≃ Fin k := Fintype.equivFinOfCardEq (by
+    simpa [Nat.card_eq_fintype_card] using hcardL)
+  exact ⟨H.symm.trans ((Homeomorph.refl U).prodCongr
+    { q with continuous_toFun := continuous_of_discreteTopology
+             continuous_invFun := continuous_of_discreteTopology })⟩
 
 /-- LEAF C2b (layer 2: B1, B4).  χ(U × Fin k) = k · χ(U): induct on `k`,
 splitting off `U × {last}` as a clopen piece (MV with empty overlap). -/
