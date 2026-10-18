@@ -2869,7 +2869,70 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_sli
                   ((a - s) * (b - t))) *
               apm_m98J02_characteristicSource f s t) a := by
   intro a b
-  sorry
+  let g : ℝ → ℝ → ℝ := fun x s ↦ ∫ t in (0 : ℝ)..b,
+    (x - s) * deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) *
+      apm_m98J02_characteristicSource f s t
+  let d : ℝ → ℝ → ℝ := fun x s ↦ ∫ t in (0 : ℝ)..b,
+    (deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) +
+        ((x - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+          ((x - s) * (b - t))) *
+      apm_m98J02_characteristicSource f s t
+  have hs :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_source_continuous f hf
+  have h1 : ContDiff ℝ ∞ (deriv apm_m98J02_riemannKernel) := by
+    have hh : ContDiff ℝ ∞ (fderiv ℝ apm_m98J02_riemannKernel) :=
+      hK.fderiv_right (by simp)
+    simpa [fderiv_eq_smul_deriv] using hh.clm_apply
+      (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+  have h2 : ContDiff ℝ ∞ (deriv (deriv apm_m98J02_riemannKernel)) := by
+    have hh : ContDiff ℝ ∞ (fderiv ℝ (deriv apm_m98J02_riemannKernel)) :=
+      h1.fderiv_right (by simp)
+    simpa [fderiv_eq_smul_deriv] using hh.clm_apply
+      (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+  have hKd : Continuous (deriv apm_m98J02_riemannKernel) := h1.continuous
+  have hKdd : Continuous (deriv (deriv apm_m98J02_riemannKernel)) := h2.continuous
+  have hg0 : Continuous (Function.uncurry (fun (p : ℝ × ℝ) t ↦
+      (p.1 - p.2) * deriv apm_m98J02_riemannKernel ((p.1 - p.2) * (b - t)) *
+        apm_m98J02_characteristicSource f p.2 t)) := by
+    dsimp [Function.uncurry]
+    fun_prop
+  have hd0 : Continuous (Function.uncurry (fun (p : ℝ × ℝ) t ↦
+      (deriv apm_m98J02_riemannKernel ((p.1 - p.2) * (b - t)) +
+          ((p.1 - p.2) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+            ((p.1 - p.2) * (b - t))) *
+        apm_m98J02_characteristicSource f p.2 t)) := by
+    dsimp [Function.uncurry]
+    fun_prop
+  have hg : Continuous (Function.uncurry g) := by
+    change Continuous (fun p : ℝ × ℝ ↦ ∫ t in (0 : ℝ)..b,
+      (p.1 - p.2) * deriv apm_m98J02_riemannKernel ((p.1 - p.2) * (b - t)) *
+        apm_m98J02_characteristicSource f p.2 t)
+    exact intervalIntegral.continuous_parametric_intervalIntegral_of_continuous'
+      hg0 0 b
+  have hd : Continuous (Function.uncurry d) := by
+    change Continuous (fun p : ℝ × ℝ ↦ ∫ t in (0 : ℝ)..b,
+      (deriv apm_m98J02_riemannKernel ((p.1 - p.2) * (b - t)) +
+          ((p.1 - p.2) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+            ((p.1 - p.2) * (b - t))) *
+        apm_m98J02_characteristicSource f p.2 t)
+    exact intervalIntegral.continuous_parametric_intervalIntegral_of_continuous'
+      hd0 0 b
+  have hder : ∀ x s, HasDerivAt (fun z ↦ g z s) (d x s) x := by
+    intro x s
+    exact apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_inner
+      f hf hK b x s
+  have hv :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_varlimit
+      g d 0 a hg hd hder
+  have hgaa : g a a = 0 := by
+    simp [g]
+  have hv' : HasDerivAt (fun x ↦ ∫ s in (0 : ℝ)..x, g x s)
+      (∫ s in (0 : ℝ)..a, d a s) a := by
+    simpa [hgaa] using hv
+  have hftc :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_ftc
+      f hf a b
+  convert hftc.add hv' using 1 <;> simp [g, d]
 -- END SEAT AREA
 
 /-- `∂_a` of `∂_b G`: the function is `∂_b G` (by `_aux_partial_b`), which is `C¹`
