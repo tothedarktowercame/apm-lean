@@ -88,7 +88,35 @@ theorem t96A01_surface_small
     (S : Type*) [TopologicalSpace S]
     [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S] [CompactSpace S] :
     Small.{0} S := by
-  sorry
+  classical
+  let U : S → Set S := fun x ↦ (chartAt (EuclideanSpace ℝ (Fin 2)) x).source
+  obtain ⟨t, ht⟩ := isCompact_univ.elim_finite_subcover U
+    (fun x ↦ (chartAt (EuclideanSpace ℝ (Fin 2)) x).open_source) (by
+      intro x _
+      exact Set.mem_iUnion.mpr ⟨x, mem_chart_source _ x⟩)
+  have hchoose : ∀ x : S, ∃ i : S, i ∈ t ∧ x ∈ U i := by
+    intro x
+    obtain ⟨i, hi⟩ := Set.mem_iUnion.mp (ht (Set.mem_univ x))
+    obtain ⟨hit, hx⟩ := Set.mem_iUnion.mp hi
+    exact ⟨i, hit, hx⟩
+  let idx : S → S := fun x ↦ (hchoose x).choose
+  have hidx_mem (x : S) : idx x ∈ t := (hchoose x).choose_spec.1
+  have hxsource (x : S) : x ∈ U (idx x) := (hchoose x).choose_spec.2
+  let f : S → (Shrink.{0} ↥t × EuclideanSpace ℝ (Fin 2)) := fun x ↦
+    ((equivShrink.{0} ↥t) ⟨idx x, hidx_mem x⟩,
+      chartAt (EuclideanSpace ℝ (Fin 2)) (idx x) x)
+  apply small_of_injective (f := f)
+  intro x y hxy
+  have hidx_sub : (⟨idx x, hidx_mem x⟩ : ↥t) = ⟨idx y, hidx_mem y⟩ := by
+    apply (equivShrink.{0} ↥t).injective
+    exact congr_arg Prod.fst hxy
+  have hidx : idx x = idx y := congr_arg Subtype.val hidx_sub
+  have hchart : chartAt (EuclideanSpace ℝ (Fin 2)) (idx x) x =
+      chartAt (EuclideanSpace ℝ (Fin 2)) (idx x) y := by
+    have := congr_arg Prod.snd hxy
+    simpa [f, hidx] using this
+  exact (chartAt (EuclideanSpace ℝ (Fin 2)) (idx x)).injOn
+    (hxsource x) (hidx ▸ hxsource y) hchart
 
 theorem t96A01_finiteIndexSubgroup_connectedCover
     {S : Type*} [TopologicalSpace S]
