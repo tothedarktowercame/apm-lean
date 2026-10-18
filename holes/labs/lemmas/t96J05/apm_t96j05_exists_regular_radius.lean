@@ -146,7 +146,90 @@ theorem apm_t96j05_exists_regular_radius
         Function.Surjective
           (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ)
             (fun y : X => ‖y.1‖ ^ 2) x) := by
-  sorry
+  let f : X → ℝ := fun x => ‖x.1‖ ^ 2
+  have hnonconstant : ¬ ∃ c : ℝ, ∀ x : X, f x = c := by
+    simpa [f] using apm_t96j05_exists_regular_radius_aux_nonconstant hm hnconst
+  have hxy : ∃ x y : X, f x ≠ f y := by
+    by_contra h
+    push_neg at h
+    apply hnonconstant
+    refine ⟨f (Classical.choice (inferInstance : Nonempty X)), ?_⟩
+    intro x
+    exact h x _
+  obtain ⟨x, y, hxy⟩ := hxy
+  obtain hlt | hlt := lt_or_gt_of_ne hxy
+  · let a := f x
+    let b := f y
+    have hab : a < b := hlt
+    have hrange : Set.Ioo a b ⊆ Set.range f := by
+      intro c hc
+      have hi : c ∈ Set.Icc (f x) (f y) := ⟨hc.1.le, hc.2.le⟩
+      obtain ⟨z, -, hz⟩ := hconn.isPreconnected.intermediate_value
+        (Set.mem_univ x) (Set.mem_univ y) hsm.continuous.continuousOn hi
+      exact ⟨z, hz⟩
+    let C : Set ℝ := f '' {z | ¬ Function.Surjective
+      (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ) f z)}
+    have hC : MeasureTheory.volume C = 0 :=
+      T93A04ManifoldWork.null_critical MeasureTheory.volume f hsm
+    have hnot : ¬ Set.Ioo a b ⊆ C := by
+      intro hsub
+      have hz : MeasureTheory.volume (Set.Ioo a b) = 0 :=
+        MeasureTheory.measure_mono_null hsub hC
+      have hp : MeasureTheory.volume (Set.Ioo a b) ≠ 0 := by
+        simpa [Real.volume_Ioo] using hab
+      exact hp hz
+    obtain ⟨c, hc, hcreg⟩ := Set.not_subset.mp hnot
+    obtain ⟨z, hz⟩ := hrange hc
+    have ha0 : 0 ≤ a := sq_nonneg ‖x.1‖
+    have hc0 : 0 < c := ha0.trans_lt hc.1
+    have hsqrt : (Real.sqrt c) ^ 2 = c := Real.sq_sqrt hc0.le
+    refine ⟨Real.sqrt c, Real.sqrt_pos.2 hc0, ?_, ?_⟩
+    · refine ⟨⟨z, ?_⟩⟩
+      apply (sq_eq_sq₀ (norm_nonneg z.1) (Real.sqrt_nonneg c)).mp
+      rw [hsqrt]
+      exact hz
+    · intro w hw
+      by_contra hwcrit
+      apply hcreg
+      refine ⟨w, hwcrit, ?_⟩
+      change f w = c
+      exact hw.trans hsqrt
+  · let a := f y
+    let b := f x
+    have hab : a < b := hlt
+    have hrange : Set.Ioo a b ⊆ Set.range f := by
+      intro c hc
+      have hi : c ∈ Set.Icc (f y) (f x) := ⟨hc.1.le, hc.2.le⟩
+      obtain ⟨z, -, hz⟩ := hconn.isPreconnected.intermediate_value
+        (Set.mem_univ y) (Set.mem_univ x) hsm.continuous.continuousOn hi
+      exact ⟨z, hz⟩
+    let C : Set ℝ := f '' {z | ¬ Function.Surjective
+      (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ) f z)}
+    have hC : MeasureTheory.volume C = 0 :=
+      T93A04ManifoldWork.null_critical MeasureTheory.volume f hsm
+    have hnot : ¬ Set.Ioo a b ⊆ C := by
+      intro hsub
+      have hz : MeasureTheory.volume (Set.Ioo a b) = 0 :=
+        MeasureTheory.measure_mono_null hsub hC
+      have hp : MeasureTheory.volume (Set.Ioo a b) ≠ 0 := by
+        simpa [Real.volume_Ioo] using hab
+      exact hp hz
+    obtain ⟨c, hc, hcreg⟩ := Set.not_subset.mp hnot
+    obtain ⟨z, hz⟩ := hrange hc
+    have ha0 : 0 ≤ a := sq_nonneg ‖y.1‖
+    have hc0 : 0 < c := ha0.trans_lt hc.1
+    have hsqrt : (Real.sqrt c) ^ 2 = c := Real.sq_sqrt hc0.le
+    refine ⟨Real.sqrt c, Real.sqrt_pos.2 hc0, ?_, ?_⟩
+    · refine ⟨⟨z, ?_⟩⟩
+      apply (sq_eq_sq₀ (norm_nonneg z.1) (Real.sqrt_nonneg c)).mp
+      rw [hsqrt]
+      exact hz
+    · intro w hw
+      by_contra hwcrit
+      apply hcreg
+      refine ⟨w, hwcrit, ?_⟩
+      change f w = c
+      exact hw.trans hsqrt
 -- END SEAT AREA
 
 /-- A positive attained regular squared-radius fiber has the required global
