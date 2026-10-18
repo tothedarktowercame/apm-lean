@@ -174,7 +174,31 @@ theorem t03J04_euler_les
 theorem t03J04_mv_surjective_zero {X : Type} [TopologicalSpace X] (U V : Set X)
     (hU : IsOpen U) (hV : IsOpen V) (hcov : U ∪ V = Set.univ) :
     Function.Surjective (RP3Homology.mvJ U V 0).hom := by
-  sorry
+  let P := RP3Homology.rationalMayerVietoris_aux_P U
+  let Q := RP3Homology.rationalMayerVietoris_aux_P V
+  let S := RP3Homology.rationalMayerVietoris_aux_SC U V
+  letI : Epi S.g :=
+    (CoefficientSubcomplexMayerVietoris.shortExact ℚ P Q).epi_g
+  letI : Epi (S.g.f 0) := inferInstance
+  letI : Epi (HomologicalComplex.homologyMap S.g 0) := by
+    apply HomologicalComplex.epi_homologyMap_of_epi_of_not_rel
+    intro j hj
+    dsimp at hj
+    omega
+  have hmid : Epi (HomologicalComplex.homologyMap
+      (RP3Homology.rationalMayerVietoris_aux_SC U V).g 0) := by
+    change Epi (HomologicalComplex.homologyMap S.g 0)
+    infer_instance
+  have heq := RP3Homology.rationalMayerVietoris_aux_unionArrow
+    U V hU hV hcov 0
+  have htail : Epi (HomologicalComplex.homologyMap
+      (RP3Homology.rationalMayerVietoris_aux_SC U V).g 0 ≫
+      (RP3Homology.rationalMayerVietoris_aux_unionIso U V hU hV hcov 0).hom) :=
+    epi_comp' hmid inferInstance
+  haveI : Epi (RP3Homology.mvJ U V 0) := by
+    rw [← heq]
+    exact epi_comp' inferInstance htail
+  exact (ModuleCat.epi_iff_surjective _).mp inferInstance
 
 /-- LEAF B1 (layer 2: B1a, B1b, `RP3Homology.rationalMayerVietoris`).
 χ(U ∪ V) = χ(U) + χ(V) − χ(U ∩ V) for an open cover, with finiteness of
