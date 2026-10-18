@@ -68,6 +68,13 @@ def apm_t01J04_bp_ball (m : ℕ) {Y : Type*} [TopologicalSpace Y]
 their closures lie in `U`, and the closure is exactly the closed chart ball
 `{ρ ≤ r}` inside the chart source. -/
 -- BEGIN SEAT AREA
+lemma apm_t01J04_leaf_chart_ball_aux_closure
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (x : E) {r : ℝ} (hr : r ≠ 0) :
+    closure (Metric.ball x r) = Metric.closedBall x r :=
+  closure_ball x hr
+
+set_option maxHeartbeats 2000000
 theorem apm_t01J04_leaf_chart_ball
     (m : ℕ) (Y : Type*) [TopologicalSpace Y] [T2Space Y]
     [ChartedSpace (apm_t01J04_Euclidean m) Y]
@@ -78,7 +85,101 @@ theorem apm_t01J04_leaf_chart_ball
       closure (apm_t01J04_bp_ball m y r) =
         {z | z ∈ (chartAt (apm_t01J04_Euclidean m) y).source ∧
           apm_t01J04_bp_rho m y z ≤ r} := by
-  sorry
+  let e := chartAt (apm_t01J04_Euclidean m) y
+  let p := e y
+  have hyp : p ∈ e.target := mem_chart_target _ y
+  have hpre : e.symm ⁻¹' U ∈ 𝓝 p := by
+    have hinv : e.symm p = y := e.left_inv (mem_chart_source _ y)
+    have hm := e.symm.map_nhds_eq hyp
+    rw [hinv] at hm
+    rw [← hm] at hU
+    exact hU
+  have hO : e.target ∩ e.symm ⁻¹' U ∈ 𝓝 p :=
+    Filter.inter_mem (e.open_target.mem_nhds hyp) hpre
+  rcases Metric.mem_nhds_iff.1 hO with ⟨d, hd, hdO⟩
+  let s := d / 2
+  have hs : 0 < s := half_pos hd
+  have hclosed : Metric.closedBall p s ⊆ e.target ∩ e.symm ⁻¹' U :=
+    (Metric.closedBall_subset_ball (half_lt_self hd)).trans hdO
+  refine ⟨s ^ 2, sq_pos_of_pos hs, ?_⟩
+  intro r hr hra
+  have hsr : 0 < Real.sqrt r := Real.sqrt_pos.2 hr
+  have hsra : Real.sqrt r < s := by
+    exact (Real.sqrt_lt' hs).2 hra
+  let B := Metric.ball p (Real.sqrt r)
+  let K := Metric.closedBall p (Real.sqrt r)
+  have hKtarget : K ⊆ e.target :=
+    (Metric.closedBall_subset_closedBall hsra.le).trans (hclosed.trans inter_subset_left)
+  have hKU : K ⊆ e.symm ⁻¹' U :=
+    (Metric.closedBall_subset_closedBall hsra.le).trans (hclosed.trans inter_subset_right)
+  have hBeq : apm_t01J04_bp_ball m y r = e.symm '' B := by
+    set_option maxHeartbeats 800000 in
+      ext z
+      constructor
+      · rintro ⟨hzs, hzρ⟩
+        refine ⟨e z, ?_, e.left_inv hzs⟩
+        rw [Metric.mem_ball, dist_eq_norm]
+        dsimp [apm_t01J04_bp_rho, e, p] at hzρ
+        exact Real.lt_sqrt_of_sq_lt hzρ
+      · rintro ⟨v, hv, rfl⟩
+        have hvt : v ∈ e.target := hKtarget (Metric.ball_subset_closedBall hv)
+        refine ⟨e.map_target hvt, ?_⟩
+        rw [apm_t01J04_bp_rho, e.right_inv hvt]
+        have hv' : ‖v - p‖ < Real.sqrt r := by simpa [Metric.mem_ball, dist_eq_norm] using hv
+        exact (Real.lt_sqrt (norm_nonneg _)).1 hv'
+  have hKeq : {z | z ∈ e.source ∧ apm_t01J04_bp_rho m y z ≤ r} = e.symm '' K := by
+    set_option maxHeartbeats 800000 in
+      ext z
+      constructor
+      · rintro ⟨hzs, hzρ⟩
+        refine ⟨e z, ?_, e.left_inv hzs⟩
+        rw [Metric.mem_closedBall, dist_eq_norm]
+        dsimp [apm_t01J04_bp_rho, e, p] at hzρ
+        exact Real.le_sqrt_of_sq_le hzρ
+      · rintro ⟨v, hv, rfl⟩
+        have hvt : v ∈ e.target := hKtarget hv
+        refine ⟨e.map_target hvt, ?_⟩
+        rw [apm_t01J04_bp_rho, e.right_inv hvt]
+        have hv' : ‖v - p‖ ≤ Real.sqrt r := by simpa [Metric.mem_closedBall, dist_eq_norm] using hv
+        exact (Real.le_sqrt (norm_nonneg _) (le_of_lt hr)).1 hv'
+  have hKcompact : IsCompact (e.symm '' K) :=
+    ((isCompact_closedBall p (Real.sqrt r)).image_of_continuousOn
+      (e.continuousOn_symm.mono hKtarget))
+  have hKclosed : IsClosed (e.symm '' K) := hKcompact.isClosed
+  have hcl : closure (e.symm '' B) = e.symm '' K := by
+    apply Subset.antisymm
+    · apply closure_minimal
+      · exact image_mono Metric.ball_subset_closedBall
+      · exact hKclosed
+    · change e.symm '' Metric.closedBall p (Real.sqrt r) ⊆
+        closure (e.symm '' Metric.ball p (Real.sqrt r))
+      rw [← apm_t01J04_leaf_chart_ball_aux_closure
+        (E := apm_t01J04_Euclidean m) p hsr.ne']
+      have hc : ContinuousOn e.symm
+          (closure (Metric.ball p (Real.sqrt r))) := by
+        rw [apm_t01J04_leaf_chart_ball_aux_closure
+          (E := apm_t01J04_Euclidean m) p hsr.ne']
+        exact e.continuousOn_symm.mono hKtarget
+      exact hc.image_closure
+  have hnh : apm_t01J04_bp_ball m y r ∈ 𝓝 y := by
+    rw [hBeq]
+    have hBn : B ∈ 𝓝 p := Metric.ball_mem_nhds p hsr
+    have hm := e.symm.map_nhds_eq hyp
+    rw [e.left_inv (mem_chart_source _ y)] at hm
+    rw [← hm]
+    change e.symm ⁻¹' (e.symm '' B) ∈ 𝓝 p
+    filter_upwards [hBn] with v hv
+    exact ⟨v, hv, rfl⟩
+  refine ⟨hnh, ?_, ?_⟩
+  · rw [hBeq, hcl]
+    rintro z ⟨v, hv, rfl⟩
+    exact hKU hv
+  · calc
+      closure (apm_t01J04_bp_ball m y r) = closure (e.symm '' B) :=
+        congrArg closure hBeq
+      _ = e.symm '' K := hcl
+      _ = {z | z ∈ e.source ∧ apm_t01J04_bp_rho m y z ≤ r} := hKeq.symm
+set_option maxHeartbeats 200000
 -- END SEAT AREA
 
 /-- The function `ρ ∘ f` is smooth on the open set `f⁻¹(chart source)`. -/
