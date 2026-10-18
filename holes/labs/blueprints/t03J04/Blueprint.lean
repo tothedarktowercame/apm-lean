@@ -1236,7 +1236,17 @@ theorem t03J04_C3_line_deriv2_normSq {F : Type} [NormedAddCommGroup F]
     (h1 : ∀ᶠ s in 𝓝 t, HasDerivAt γ (γ' s) s) (h2 : HasDerivAt γ' (γ'' t) t) :
     HasDerivAt (deriv (fun s ↦ ‖γ s - a‖ ^ 2))
       (2 * ‖γ' t‖ ^ 2 + 2 * inner ℝ (γ t - a) (γ'' t)) t := by
-  sorry
+  have h1t : HasDerivAt γ (γ' t) t := h1.self_of_nhds
+  have hderiv :
+      HasDerivAt (fun s ↦ 2 * inner ℝ (γ s - a) (γ' s))
+        (2 * ‖γ' t‖ ^ 2 + 2 * inner ℝ (γ t - a) (γ'' t)) t := by
+    have hi := (h1t.sub_const a).inner ℝ h2
+    have h2hi := hi.const_mul 2
+    convert h2hi using 1 <;>
+      rw [real_inner_self_eq_norm_sq] <;> ring
+  apply hderiv.congr_of_eventuallyEq
+  filter_upwards [h1] with s hs
+  exact (hs.sub_const a).norm_sq.deriv
 
 /-- LEAF K3 (120–200 lines).  Uniform first- and second-derivative bounds near a
 point where the derivative is injective.  Route: finite dimension gives
