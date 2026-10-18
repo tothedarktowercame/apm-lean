@@ -357,21 +357,14 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap
     exact TopologicalSpace.GenerateOpen.basic _ ⟨U, g⁻¹ • a, hU, rfl⟩⟩
   exact isOpenMap_quotient_mk'_mul
 
-/-- **LIBRARY-borderline.** The endpoint map is a covering map.  Charts: for a
-good `U` (`exists_connected_subgroup_cover_aux_good_nhds`) and `y ∈ U`, the
-preimage of `U` is the disjoint union over the fibre of the images of the
-path-neighbourhoods `basedPathNbhd U a`, each mapped homeomorphically onto `U`
-(injective because loops in `U` are trivial; open because the generating sets
-are open and the quotient map of a group action is open). -/
--- BEGIN SEAT AREA
-lemma exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_open
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_open
     {x : X} (H : Subgroup (FundamentalGroup X x)) {U : Set X}
     (hU : IsOpen U) (a : BasedPaths x) :
     IsOpen (BasedCover.mk H '' basedPathNbhd U a) := by
   apply exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap H
   exact TopologicalSpace.GenerateOpen.basic _ ⟨U, a, hU, rfl⟩
 
-lemma exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion
     {x : X} (H : Subgroup (FundamentalGroup X x)) (U : Set X) :
     BasedCover.proj H ⁻¹' U =
       ⋃ (a : BasedPaths x) (_ : a.1 ∈ U),
@@ -391,6 +384,263 @@ lemma exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion
     change b.1 ∈ U
     exact hγ ⟨1, by simp⟩
 
+/-- A path-neighbourhood is the path-neighbourhood of each of its points
+(extend by the path, or go back along it first). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem
+    {x : X} {U : Set X} {a c : BasedPaths x} (hc : c ∈ basedPathNbhd U a) :
+    basedPathNbhd U c = basedPathNbhd U a := by
+  rcases hc with ⟨δ, hδ, hc⟩
+  ext b
+  constructor
+  · rintro ⟨γ, hγ, hb⟩
+    refine ⟨δ.trans γ, ?_, ?_⟩
+    · rw [Path.trans_range]
+      exact union_subset hδ hγ
+    · rw [hb, hc, Path.Homotopic.Quotient.mk_trans,
+        Path.Homotopic.Quotient.trans_assoc]
+  · rintro ⟨ε, hε, hb⟩
+    refine ⟨δ.symm.trans ε, ?_, ?_⟩
+    · rw [Path.trans_range, Path.symm_range]
+      exact union_subset hδ hε
+    · rw [hb, hc, Path.Homotopic.Quotient.mk_trans,
+        Path.Homotopic.Quotient.mk_symm]
+      symm
+      calc
+        (a.2.trans (Path.Homotopic.Quotient.mk δ)).trans
+              ((Path.Homotopic.Quotient.mk δ).symm.trans
+                (Path.Homotopic.Quotient.mk ε)) =
+            ((a.2.trans (Path.Homotopic.Quotient.mk δ)).trans
+              (Path.Homotopic.Quotient.mk δ).symm).trans
+                (Path.Homotopic.Quotient.mk ε) := by
+                  exact (Path.Homotopic.Quotient.trans_assoc _ _ _).symm
+        _ = (a.2.trans ((Path.Homotopic.Quotient.mk δ).trans
+              (Path.Homotopic.Quotient.mk δ).symm)).trans
+                (Path.Homotopic.Quotient.mk ε) := by
+                  exact congrArg
+                    (fun q : Path.Homotopic.Quotient x a.1 ↦
+                      q.trans (Path.Homotopic.Quotient.mk ε))
+                    (Path.Homotopic.Quotient.trans_assoc a.2
+                      (Path.Homotopic.Quotient.mk δ)
+                      (Path.Homotopic.Quotient.mk δ).symm)
+        _ = a.2.trans (Path.Homotopic.Quotient.mk ε) := by
+          rw [Path.Homotopic.Quotient.trans_symm,
+            Path.Homotopic.Quotient.trans_refl]
+
+/-- Over a good `U`, two sheet images in the cover are equal or disjoint
+(a common point gives `c' = h • c`; use `_aux_smul_nbhd` and `_aux_nbhd_eq_of_mem`). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_disjoint_or_eq
+    {x : X} (H : Subgroup (FundamentalGroup X x)) {U : Set X}
+    (a b : BasedPaths x) :
+    BasedCover.mk H '' basedPathNbhd U a = BasedCover.mk H '' basedPathNbhd U b ∨
+      Disjoint (BasedCover.mk H '' basedPathNbhd U a)
+        (BasedCover.mk H '' basedPathNbhd U b) := by
+  classical
+  by_cases hd : Disjoint (BasedCover.mk H '' basedPathNbhd U a)
+      (BasedCover.mk H '' basedPathNbhd U b)
+  · exact Or.inr hd
+  · left
+    rw [Set.not_disjoint_iff] at hd
+    obtain ⟨q, ⟨c, hc, hcq⟩, d, hd, hdq⟩ := hd
+    have hcd : BasedCover.mk H c = BasedCover.mk H d := hcq.trans hdq.symm
+    obtain ⟨g, hg⟩ := Quotient.exact hcd
+    let k : FundamentalGroup X x := g
+    have hgk : k • d = c := hg
+    have hca : basedPathNbhd U c = basedPathNbhd U a :=
+      exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem hc
+    have hdb : basedPathNbhd U d = basedPathNbhd U b :=
+      exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem hd
+    rw [← hca, ← hdb]
+    ext r
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      have hgz : k⁻¹ • z ∈ basedPathNbhd U d := by
+        have hz' : z ∈ basedPathNbhd U (k • d) := by
+          simpa only [hgk] using hz
+        have hs := Set.ext_iff.mp
+          (exists_connected_subgroup_cover_aux_isCoveringMap_aux_smul_nbhd
+            k U (k • d)) (k⁻¹ • z)
+        have hleft : k⁻¹ • z ∈
+            (fun w : BasedPaths x ↦ k • w) ⁻¹' basedPathNbhd U (k • d) := by
+          change k • (k⁻¹ • z) ∈ basedPathNbhd U (k • d)
+          simpa using hz'
+        have := hs.mp hleft
+        simpa using this
+      refine ⟨k⁻¹ • z, hgz, ?_⟩
+      apply Quotient.sound
+      exact ⟨g⁻¹, rfl⟩
+    · rintro ⟨z, hz, rfl⟩
+      have hgz : k • z ∈ basedPathNbhd U c := by
+        have hgzd : k • z ∈ basedPathNbhd U (k • d) := by
+          have hs := Set.ext_iff.mp
+            (exists_connected_subgroup_cover_aux_isCoveringMap_aux_smul_nbhd
+              k U (k • d)) z
+          apply hs.mpr
+          simpa using hz
+        simpa only [hgk] using hgzd
+      refine ⟨k • z, hgz, ?_⟩
+      apply Quotient.sound
+      exact ⟨g, rfl⟩
+
+/-- Over a good `U`, each sheet image is mapped homeomorphically onto `U` by the
+projection (`_aux_sheet`; `mk` is injective on a sheet because `h • b` has the
+endpoint of `b`, and `mk` is continuous and open). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_homeomorph
+    [LocPathConnectedSpace X] {x : X} (H : Subgroup (FundamentalGroup X x))
+    {U : Set X} (hUo : IsOpen U) (hU : IsPathConnected U)
+    (htriv : ∀ z ∈ U, ∀ γ : Path z z, range γ ⊆ U →
+      Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl z))
+    (a : BasedPaths x) (ha : a.1 ∈ U) :
+    ∃ e : (BasedCover.mk H '' basedPathNbhd U a) ≃ₜ U,
+      ∀ q, (e q : X) = BasedCover.proj H q := by
+  obtain ⟨e, he⟩ :=
+    exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet hUo hU htriv a ha
+  let f : basedPathNbhd U a → (BasedCover.mk H '' basedPathNbhd U a) :=
+    fun b ↦ ⟨BasedCover.mk H b, ⟨b, b.2, rfl⟩⟩
+  have hf_inj : Function.Injective f := by
+    intro b c hbc
+    apply exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_aux_injective htriv a
+    have hmk : BasedCover.mk H (b : BasedPaths x) = BasedCover.mk H (c : BasedPaths x) :=
+      congrArg Subtype.val hbc
+    exact congrArg (BasedCover.proj H) hmk
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨q, b, hb, rfl⟩
+    exact ⟨⟨b, hb⟩, rfl⟩
+  let e' : basedPathNbhd U a ≃ (BasedCover.mk H '' basedPathNbhd U a) :=
+    Equiv.ofBijective f ⟨hf_inj, hf_surj⟩
+  have hnbhd : IsOpen (basedPathNbhd U a) :=
+    TopologicalSpace.GenerateOpen.basic _ ⟨U, a, hUo, rfl⟩
+  have hf_cont : Continuous f := by
+    exact (continuous_quotient_mk'.comp continuous_subtype_val).subtype_mk _
+  have hf_open : IsOpenMap f := by
+    exact ((exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap H).restrict
+      hnbhd).subtype_mk _
+  let e'h : basedPathNbhd U a ≃ₜ (BasedCover.mk H '' basedPathNbhd U a) :=
+    e'.toHomeomorphOfContinuousOpen hf_cont hf_open
+  refine ⟨e'h.symm.trans e, ?_⟩
+  intro q
+  have hq : f (e'.symm q) = q := e'.apply_symm_apply q
+  change (e (e'h.symm q) : X) = BasedCover.proj H q
+  rw [he]
+  change ((e'.symm q : basedPathNbhd U a) : BasedPaths x).1 = BasedCover.proj H q
+  symm
+  calc
+    BasedCover.proj H q = BasedCover.proj H (f (e'.symm q)) :=
+      congrArg (fun r : (BasedCover.mk H '' basedPathNbhd U a) ↦
+        BasedCover.proj H (r : BasedCover H)) hq.symm
+    _ = ((e'.symm q : basedPathNbhd U a) : BasedPaths x).1 := rfl
+
+/-- Generic topology: a preimage that is a disjoint union of open sheets, each
+mapped homeomorphically onto the open set `U`, is evenly covered with the
+(discrete) index type as fibre. -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_evenlyCovered_of_sheets
+    {E Y : Type*} [TopologicalSpace E] [TopologicalSpace Y] (f : E → Y)
+    {U : Set Y} (hU : IsOpen U) {y : Y} (hy : y ∈ U)
+    (ι : Type*) [TopologicalSpace ι] [DiscreteTopology ι] (V : ι → Set E)
+    (hVo : ∀ i, IsOpen (V i)) (hVd : Pairwise (Function.onFun Disjoint V))
+    (hVU : f ⁻¹' U = ⋃ i, V i)
+    (hVe : ∀ i, ∃ e : V i ≃ₜ U, ∀ q, (e q : Y) = f q) :
+    IsEvenlyCovered f y ι := by
+  classical
+  let e : ∀ i, V i ≃ₜ U := fun i => (hVe i).choose
+  have he : ∀ i (q : V i), ((e i q : U) : Y) = f q :=
+    fun i => (hVe i).choose_spec
+  let g : U × ι → f ⁻¹' U := fun p =>
+    ⟨(e p.2).symm p.1,
+      show f ((e p.2).symm p.1 : E) ∈ U by
+        rw [← he p.2 ((e p.2).symm p.1)]
+        simpa using p.1.2⟩
+  have hg_inj : Function.Injective g := by
+    rintro ⟨u, i⟩ ⟨v, j⟩ hij
+    have hmemi : (g (u, i) : E) ∈ V i := (e i).symm (u : U) |>.2
+    have hmemj : (g (v, j) : E) ∈ V j := (e j).symm (v : U) |>.2
+    have hij' : i = j := by
+      by_contra hn
+      have hd := hVd hn
+      exact Set.disjoint_left.1 hd hmemi (hij ▸ hmemj)
+    subst j
+    apply Prod.ext
+    · apply Subtype.ext
+      have hh := congrArg (fun q : f ⁻¹' U => f q) hij
+      simpa [g, ← he i] using hh
+    · rfl
+  have hg_surj : Function.Surjective g := by
+    intro q
+    have hq : (q : E) ∈ ⋃ i, V i := by
+      rw [← hVU]
+      exact q.2
+    rcases Set.mem_iUnion.1 hq with ⟨i, hi⟩
+    refine ⟨(e i ⟨q, hi⟩, i), ?_⟩
+    apply Subtype.ext
+    change ((e i).symm (e i ⟨q, hi⟩) : E) = q
+    exact congrArg Subtype.val ((e i).left_inv ⟨q, hi⟩)
+  let eg : U × ι ≃ f ⁻¹' U := Equiv.ofBijective g ⟨hg_inj, hg_surj⟩
+  have hg_cont : Continuous g := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+        (s := fun i => {p : U × ι | p.2 = i})
+    · intro i
+      have hc : Continuous (fun p : U × ι =>
+          (⟨(e i).symm p.1,
+            show f ((e i).symm p.1 : E) ∈ U by
+              rw [← he i ((e i).symm p.1)]
+              simpa using p.1.2⟩ : f ⁻¹' U)) := by fun_prop
+      apply hc.continuousOn.congr
+      intro p hp
+      simp only [Set.mem_setOf_eq] at hp
+      rcases p with ⟨p, j⟩
+      have hj : j = i := hp
+      subst j
+      rfl
+    · intro i
+      exact (isOpen_discrete {i}).preimage continuous_snd
+    · ext p
+      simp
+  have heginv_cont : Continuous eg.symm := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+        (s := fun i => {q : f ⁻¹' U | (q : E) ∈ V i})
+    · intro i
+      rw [continuousOn_iff_continuous_restrict]
+      let k : {q : f ⁻¹' U | (q : E) ∈ V i} → U × ι := fun q =>
+        (e i ⟨q.1, q.2⟩, i)
+      have hk : Continuous k := by
+        apply Continuous.prodMk
+        · have hv : Continuous (fun q : {q : f ⁻¹' U | (q : E) ∈ V i} =>
+              (⟨q.1, q.2⟩ : V i)) := by
+              exact (continuous_subtype_val.comp continuous_subtype_val).subtype_mk _
+          exact (e i).continuous.comp hv
+        · fun_prop
+      apply hk.congr
+      intro q
+      apply hg_inj
+      change g (k q) = g (eg.symm q.1)
+      rw [show g = eg from rfl, eg.apply_symm_apply]
+      apply Subtype.ext
+      change ((e i).symm (e i ⟨q.1, q.2⟩) : E) = q.1
+      exact congrArg Subtype.val ((e i).left_inv ⟨q.1, q.2⟩)
+    · intro i
+      exact (hVo i).preimage continuous_subtype_val
+    · ext q
+      simp only [Set.mem_iUnion, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+      have hq : (q : E) ∈ ⋃ i, V i := by rw [← hVU]; exact q.2
+      exact Set.mem_iUnion.1 hq
+  refine ⟨inferInstance, U, hy, hU, ?_, ?_, ?_⟩
+  · rw [hVU]
+    exact isOpen_iUnion hVo
+  · exact ⟨eg.symm, heginv_cont, hg_cont⟩
+  · intro q
+    have hh := congrArg Subtype.val (eg.apply_symm_apply q)
+    calc
+      ((eg.symm q).1 : Y) = f (g (eg.symm q) : E) := by
+        simpa [g] using
+          (he (eg.symm q).2 ((e (eg.symm q).2).symm (eg.symm q).1))
+      _ = f q := congrArg f hh
+
+/-- **LIBRARY-borderline.** The endpoint map is a covering map.  Charts: for a
+good `U` (`exists_connected_subgroup_cover_aux_good_nhds`) and `y ∈ U`, the
+preimage of `U` is the disjoint union over the fibre of the images of the
+path-neighbourhoods `basedPathNbhd U a`, each mapped homeomorphically onto `U`
+(injective because loops in `U` are trivial; open because the generating sets
+are open and the quotient map of a group action is open). -/
+-- BEGIN SEAT AREA
 theorem exists_connected_subgroup_cover_aux_isCoveringMap
     [LocPathConnectedSpace X] (hsl : SemilocallySimplyConnected X)
     {x : X} (H : Subgroup (FundamentalGroup X x)) :
@@ -516,6 +766,50 @@ theorem exists_connected_subgroup_cover_aux_pathConnected
 /-- The induced image is `H`: a loop `γ` at `x` lifts (uniquely, by the
 covering property) to the truncation path, which ends at `[⟨x, [γ]⟩]`; this is
 the basepoint exactly when `[γ] ∈ H`. -/
+theorem exists_connected_subgroup_cover_aux_range_aux_mem_range_iff_monodromy
+    {E B : Type*} [TopologicalSpace E] [TopologicalSpace B]
+    (p : E → B) (hp : IsCoveringMap p) (e : E) (b : B) (h : p e = b)
+    (g : FundamentalGroup B b) :
+    g ∈ (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ h).range ↔
+      hp.monodromy (FundamentalGroup.toPath g) ⟨e, h⟩ = ⟨e, h⟩ := by
+  constructor
+  · rintro ⟨a, rfl⟩
+    obtain ⟨δ, rfl⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath a)
+    rw [FundamentalGroup.mapOfEq_apply]
+    apply Subtype.ext
+    change hp.liftPath ((δ.map hp.continuous).cast h.symm h.symm) e
+      (by simpa using h.symm) 1 = e
+    have hlift : (fun t ↦ δ t) =
+        hp.liftPath ((δ.map hp.continuous).cast h.symm h.symm) e
+          (by simpa using h.symm) := by
+      apply (hp.eq_liftPath_iff _).mpr
+      refine ⟨δ.continuous, ?_, δ.source⟩
+      funext t
+      rfl
+    rw [← hlift]
+    exact δ.target
+  · intro hg
+    obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+      (FundamentalGroup.toPath g)
+    let Δ := hp.liftPath γ e (by simpa using h.symm)
+    have hΔ0 : Δ 0 = e := hp.liftPath_zero _ _ _
+    have hΔ1 : Δ 1 = e := by
+      have hm : hp.monodromy (Path.Homotopic.Quotient.mk γ) ⟨e, h⟩ = ⟨e, h⟩ := by
+        rw [hγ]
+        exact hg
+      exact congrArg Subtype.val hm
+    let δ : Path e e := ⟨Δ, hΔ0, hΔ1⟩
+    refine ⟨FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk δ), ?_⟩
+    rw [FundamentalGroup.mapOfEq_apply]
+    calc
+      _ = FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk γ) := by
+        apply Path.Homotopic.Quotient.eq.mpr
+        convert Path.Homotopic.refl γ using 1
+        ext t
+        exact congr_fun (hp.liftPath_lifts γ e (by simpa using h.symm)) t
+      _ = g := hγ
+
 theorem exists_connected_subgroup_cover_aux_range
     {x : X} (H : Subgroup (FundamentalGroup X x))
     (hp : IsCoveringMap (BasedCover.proj H))
@@ -525,7 +819,56 @@ theorem exists_connected_subgroup_cover_aux_range
     (FundamentalGroup.mapOfEq ⟨BasedCover.proj H, hp.continuous⟩
       (show (⟨BasedCover.proj H, hp.continuous⟩ : C(BasedCover H, X))
         (BasedCover.basepoint H) = x from rfl)).range = H := by
-  sorry
+  ext g
+  rw [exists_connected_subgroup_cover_aux_range_aux_mem_range_iff_monodromy
+    (BasedCover.proj H) hp (BasedCover.basepoint H) x rfl g]
+  obtain ⟨γ, hγ⟩ := Path.Homotopic.Quotient.mk_surjective
+    (FundamentalGroup.toPath g)
+  obtain ⟨Γ, hΓ⟩ := hlift x γ
+  have hcanonical : (fun t ↦ Γ t) =
+      hp.liftPath γ (BasedCover.basepoint H) (by exact γ.source.trans rfl) := by
+    apply (hp.eq_liftPath_iff _).mpr
+    refine ⟨Γ.continuous, ?_, Γ.source⟩
+    funext t
+    exact hΓ t
+  have hend :
+      (hp.monodromy (FundamentalGroup.toPath g) ⟨BasedCover.basepoint H, rfl⟩ :
+        BasedCover H) = BasedCover.mk H
+          ⟨x, Path.Homotopic.Quotient.mk γ⟩ := by
+    rw [← hγ]
+    change hp.liftPath γ (BasedCover.basepoint H) _ 1 = _
+    rw [← hcanonical]
+    exact Γ.target
+  rw [Subtype.ext_iff, hend]
+  change Quotient.mk'' (⟨x, Path.Homotopic.Quotient.mk γ⟩ : BasedPaths x) =
+      Quotient.mk'' (⟨x, Path.Homotopic.Quotient.refl x⟩ : BasedPaths x) ↔ _
+  rw [Quotient.eq'']
+  change (∃ a : H,
+      (⟨x, (FundamentalGroup.toPath
+        ((a : FundamentalGroup X x)⁻¹)).trans
+          (Path.Homotopic.Quotient.refl x)⟩ : BasedPaths x) =
+      (⟨x, Path.Homotopic.Quotient.mk γ⟩ : BasedPaths x)) ↔ _
+  constructor
+  · rintro ⟨a, ha⟩
+    have hpq : (FundamentalGroup.toPath ((a : FundamentalGroup X x)⁻¹)).trans
+        (Path.Homotopic.Quotient.refl x) = Path.Homotopic.Quotient.mk γ :=
+      eq_of_heq (Sigma.ext_iff.mp ha).2
+    have hga : (a : FundamentalGroup X x)⁻¹ = g := by
+      calc
+        (a : FundamentalGroup X x)⁻¹ =
+            FundamentalGroup.fromPath (Path.Homotopic.Quotient.mk γ) := by
+          simpa using congrArg FundamentalGroup.fromPath hpq
+        _ = g := hγ
+    rw [← hga]
+    exact H.inv_mem a.property
+  · intro hg
+    refine ⟨⟨g⁻¹, H.inv_mem hg⟩, ?_⟩
+    apply Sigma.ext
+    · rfl
+    rw [heq_iff_eq]
+    change (FundamentalGroup.toPath ((g⁻¹)⁻¹)).trans
+      (Path.Homotopic.Quotient.refl x) = Path.Homotopic.Quotient.mk γ
+    simpa using hγ.symm
 
 /-- Generic: a covering map is injective on `π₁`
 (`IsCoveringMap.injective_path_homotopic_map`), so `π₁` of the total space is
@@ -712,7 +1055,32 @@ theorem every_fiber_infinite_of_coset_equiv
     (hcoset : Nonempty ((p ⁻¹' ({x} : Set X)) ≃
       Quotient (subgroupCosetSetoid H))) :
     ∀ y : X, (p ⁻¹' ({y} : Set X)).Infinite := by
-  sorry
+  have hsetoid : subgroupCosetSetoid H = QuotientGroup.rightRel H := by
+    ext g h
+    rw [QuotientGroup.rightRel_apply]
+    constructor
+    · intro hgh
+      simpa [mul_inv_rev] using H.inv_mem hgh
+    · intro hhg
+      simpa [mul_inv_rev] using H.inv_mem hhg
+  have hcard : Nat.card (Quotient (subgroupCosetSetoid H)) = 0 := by
+    rw [hsetoid]
+    exact (Nat.card_congr
+      (QuotientGroup.quotientRightRelEquivQuotientLeftRel H)).trans
+        (H.index_eq_card.symm.trans hindex)
+  have hquotient : Infinite (Quotient (subgroupCosetSetoid H)) := by
+    rcases Nat.card_eq_zero.mp hcard with hempty | hinfinite
+    · exact (@IsEmpty.false _ hempty (Quotient.mk'' (1 : G))).elim
+    · exact hinfinite
+  have hfiber_x : Infinite (p ⁻¹' ({x} : Set X)) :=
+    hcoset.some.infinite_iff.mpr hquotient
+  intro y
+  obtain ⟨γ⟩ := PathConnectedSpace.joined x y
+  let γq : Path.Homotopic.Quotient x y := Quotient.mk'' γ
+  let e : (p ⁻¹' ({x} : Set X)) ≃ (p ⁻¹' ({y} : Set X)) :=
+    Equiv.ofBijective (hp.monodromy γq) (hp.monodromy_bijective γq)
+  haveI : Infinite (p ⁻¹' ({y} : Set X)) := e.infinite_iff.mp hfiber_x
+  exact Set.infinite_coe_iff.mp inferInstance
 
 /-- The standard based lifting criterion, packaged without uniqueness. -/
 theorem exists_continuousMap_lift_of_range_le
