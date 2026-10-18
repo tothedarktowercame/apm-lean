@@ -701,8 +701,43 @@ def angleMap (t : ℝ) : euclideanUnitSphere 2 :=
 `CircleUniversalCover.circleCover_isCoveringMap` for `Circle.exp`) along the
 homeomorphism `Circle ≃ₜ S¹ ⊂ ℝ²`, `z ↦ (re z, im z)`. -/
 -- BEGIN SEAT AREA
+noncomputable def T96A06_angleMap_isCoveringMap_aux_homeomorph :
+    Circle ≃ₜ euclideanUnitSphere 2 where
+  toFun z := ⟨Complex.orthonormalBasisOneI.repr z, by
+    rw [Metric.mem_sphere, dist_zero_right,
+      Complex.orthonormalBasisOneI.repr.norm_map]
+    exact Circle.norm_coe z⟩
+  invFun x := ⟨Complex.orthonormalBasisOneI.repr.symm x, by
+    change Complex.orthonormalBasisOneI.repr.symm x ∈ Metric.sphere (0 : ℂ) 1
+    rw [mem_sphere_zero_iff_norm,
+      Complex.orthonormalBasisOneI.repr.symm.norm_map,
+      ← mem_sphere_zero_iff_norm]
+    exact x.property⟩
+  left_inv z := by
+    apply Subtype.ext
+    exact Complex.orthonormalBasisOneI.repr.symm_apply_apply z
+  right_inv x := by
+    apply Subtype.ext
+    exact Complex.orthonormalBasisOneI.repr.apply_symm_apply x
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
 theorem T96A06_angleMap_isCoveringMap : IsCoveringMap angleMap := by
-  sorry
+  have h :=
+    (Circle.isCoveringMap_exp.comp_homeomorph
+      (Homeomorph.mulLeft₀ (2 * Real.pi : ℝ) (by positivity))).homeomorph_comp
+        T96A06_angleMap_isCoveringMap_aux_homeomorph
+  convert h using 1
+  funext t
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · change Real.cos (2 * Real.pi * t) =
+      (Complex.exp (((2 * Real.pi * t : ℝ) : ℂ) * Complex.I)).re
+    exact (Complex.exp_ofReal_mul_I_re (2 * Real.pi * t)).symm
+  · change Real.sin (2 * Real.pi * t) =
+      (Complex.exp (((2 * Real.pi * t : ℝ) : ℂ) * Complex.I)).im
+    exact (Complex.exp_ofReal_mul_I_im (2 * Real.pi * t)).symm
 -- END SEAT AREA
 
 /-- **Leaf C1b.** The angle-displacement cochain.  For a singular 1-simplex
