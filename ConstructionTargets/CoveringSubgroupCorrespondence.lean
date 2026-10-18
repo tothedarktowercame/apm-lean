@@ -644,7 +644,53 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap
     [LocPathConnectedSpace X] (hsl : SemilocallySimplyConnected X)
     {x : X} (H : Subgroup (FundamentalGroup X x)) :
     IsCoveringMap (BasedCover.proj H) := by
-  sorry
+  intro y
+  obtain ⟨U, hUo, hyU, hUp, htriv_y⟩ :=
+    exists_connected_subgroup_cover_aux_good_nhds hsl y
+  have htriv : ∀ z ∈ U, ∀ γ : Path z z, range γ ⊆ U →
+      Path.Homotopic.Quotient.mk γ =
+        Path.Homotopic.Quotient.mk (Path.refl z) := by
+    intro z hz γ hγ
+    exact exists_connected_subgroup_cover_aux_isCoveringMap_aux_good_loops
+      hUp hyU htriv_y hz γ hγ
+  let ι := {V : Set (BasedCover H) // ∃ a : BasedPaths x, a.1 ∈ U ∧
+    V = BasedCover.mk H '' basedPathNbhd U a}
+  letI : TopologicalSpace ι := ⊥
+  letI : DiscreteTopology ι := ⟨rfl⟩
+  let V : ι → Set (BasedCover H) := fun i ↦ i.1
+  have hVo : ∀ i, IsOpen (V i) := by
+    rintro ⟨W, a, ha, rfl⟩
+    exact exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_open H hUo a
+  have hVd : Pairwise (Function.onFun Disjoint V) := by
+    rintro ⟨W, a, ha, hWa⟩ ⟨Z, b, hb, hZb⟩ hne
+    dsimp [V]
+    rcases exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_disjoint_or_eq
+      H a b with heq | hd
+    · exfalso
+      apply hne
+      apply Subtype.ext
+      simpa [hWa, hZb] using heq
+    · simpa [hWa, hZb] using hd
+  have hVU : BasedCover.proj H ⁻¹' U = ⋃ i, V i := by
+    rw [exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion H U]
+    ext q
+    constructor
+    · intro hq
+      rcases Set.mem_iUnion.1 hq with ⟨a, hq⟩
+      rcases Set.mem_iUnion.1 hq with ⟨ha, hq⟩
+      exact Set.mem_iUnion.2
+        ⟨⟨BasedCover.mk H '' basedPathNbhd U a, ⟨a, ha, rfl⟩⟩, hq⟩
+    · intro hq
+      rcases Set.mem_iUnion.1 hq with ⟨⟨W, a, ha, hWa⟩, hq⟩
+      exact Set.mem_iUnion.2 ⟨a, Set.mem_iUnion.2 ⟨ha, hWa ▸ hq⟩⟩
+  have hVe : ∀ i, ∃ e : V i ≃ₜ U,
+      ∀ q, (e q : X) = BasedCover.proj H q := by
+    rintro ⟨W, a, ha, hWa⟩
+    subst W
+    exact exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_homeomorph
+      H hUo hUp htriv a ha
+  exact (exists_connected_subgroup_cover_aux_isCoveringMap_aux_evenlyCovered_of_sheets
+    (BasedCover.proj H) hUo hyU ι V hVo hVd hVU hVe).to_isEvenlyCovered_preimage
 
 /-- Path lifting by truncation: `t ↦ [γ restricted to [0, t]]` is a path in the
 cover from the basepoint to the class of `γ`, lying over `γ`.  Continuity:
