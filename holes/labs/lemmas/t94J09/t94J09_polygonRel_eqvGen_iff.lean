@@ -556,10 +556,66 @@ closure `ConstructionTargets.t94J09Closure.frozen_boundaryRel_iff_generator`
 does the same case split for a sibling relation and is a template.
 About 100–200 lines. -/
 -- BEGIN SEAT AREA
+lemma t94J09_polygonRel_eqvGen_iff_aux_forward {x y : apm_t94J09_Disk}
+    (h : apm_t94J09_PolygonRel x y) :
+    PolygonMoves.WordRel t94J09_signedWord x y := by
+  dsimp [t94J09_signedWord, apm_t94J09_word, t94J09_toSigned]
+  cases h with
+  | a t => exact ⟨0, 12, by decide, t, by decide, rfl, rfl⟩
+  | b t => exact ⟨6, 13, by decide, t, by decide, rfl, rfl⟩
+  | c t => exact ⟨1, 7, by decide, t, by decide, rfl, rfl⟩
+  | d t => exact ⟨2, 8, by decide, t, by decide, rfl, rfl⟩
+  | e t => exact ⟨5, 10, by decide, t, by decide, rfl, rfl⟩
+  | f t => exact ⟨4, 11, by decide, t, by decide, rfl, rfl⟩
+  | g t => exact ⟨3, 9, by decide, t, by decide, rfl, rfl⟩
+
+lemma t94J09_polygonRel_eqvGen_iff_aux_reverse_c (t : Set.Icc (0 : ℝ) 1) :
+    Relation.EqvGen apm_t94J09_PolygonRel
+      (Surfaces.edgePoint 14 1 (PolygonMoves.reverseParameter t))
+      (Surfaces.edgePoint 14 7 t) := by
+  apply Relation.EqvGen.rel
+  convert apm_t94J09_PolygonRel.c (apm_t94J09_reverse t) using 1 <;>
+    ext <;> simp [apm_t94J09_edgePoint, Surfaces.edgePoint,
+      apm_t94J09_reverse, PolygonMoves.reverseParameter]
+
+set_option maxHeartbeats 1000000
+
 theorem t94J09_polygonRel_eqvGen_iff (x y : apm_t94J09_Disk) :
     Relation.EqvGen apm_t94J09_PolygonRel x y ↔
       Relation.EqvGen (PolygonMoves.WordRel t94J09_signedWord) x y := by
-  sorry
+  constructor
+  · intro h
+    induction h with
+    | rel _ _ hab => exact .rel _ _ (t94J09_polygonRel_eqvGen_iff_aux_forward hab)
+    | refl => exact .refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | refl => exact .refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+    | rel _ _ hab =>
+      rcases hab with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      fin_cases i <;> fin_cases j <;>
+        simp [t94J09_signedWord, apm_t94J09_word, t94J09_toSigned] at hij hlab ⊢
+      all_goals (solve
+        | simpa only using (t94J09_polygonRel_eqvGen_iff_aux_reverse_c t).symm
+        | apply Relation.EqvGen.rel; exact .a t
+        | apply Relation.EqvGen.rel; exact .b t
+        | apply Relation.EqvGen.rel; exact .c t
+        | apply Relation.EqvGen.rel; exact .d t
+        | apply Relation.EqvGen.rel; exact .e t
+        | apply Relation.EqvGen.rel; exact .f t
+        | apply Relation.EqvGen.rel; exact .g t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .a t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .b t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .d t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .e t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .f t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .g t)
+
+set_option maxHeartbeats 200000
 -- END SEAT AREA
 
 theorem t94J09_bridge :
