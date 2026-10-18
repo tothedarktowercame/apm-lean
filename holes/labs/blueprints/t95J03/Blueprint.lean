@@ -2674,7 +2674,39 @@ lemma t95J03_klein_doubleCover_aux_quotient_homeomorph {X Y : Type*}
     (τ : X → X) (f : X → Y) (hf : Continuous f) (hs : Function.Surjective f)
     (hfib : ∀ z w, f z = f w ↔ (w = z ∨ w = τ z)) :
     Nonempty (Quotient (Relation.EqvGen.setoid fun x y : X => y = τ x) ≃ₜ Y) := by
-  sorry
+  let r : X → X → Prop := fun x y => y = τ x
+  have hrespect : ∀ x y, Relation.EqvGen r x y → f x = f y := by
+    intro x y hxy
+    induction hxy with
+    | rel x y h => exact (hfib x y).2 (Or.inr h)
+    | refl x => rfl
+    | symm x y _ ih => exact ih.symm
+    | trans x y z _ _ ihxy ihyz => exact ihxy.trans ihyz
+  let g : Quotient (Relation.EqvGen.setoid r) → Y :=
+    Quotient.lift f hrespect
+  have hg_cont : Continuous g := continuous_quot_lift hrespect hf
+  have hg_surj : Function.Surjective g := by
+    intro y
+    obtain ⟨x, rfl⟩ := hs y
+    exact ⟨Quotient.mk _ x, rfl⟩
+  have hg_inj : Function.Injective g := by
+    intro q q' hqq'
+    obtain ⟨x, rfl⟩ := Quotient.mk_surjective q
+    obtain ⟨y, rfl⟩ := Quotient.mk_surjective q'
+    change f x = f y at hqq'
+    rcases (hfib x y).1 hqq' with h | h
+    · simpa [h]
+    · exact Quotient.sound (Relation.EqvGen.rel x y h)
+  have hg_bij : Function.Bijective g := ⟨hg_inj, hg_surj⟩
+  letI : CompactSpace (Quotient (Relation.EqvGen.setoid r)) := by
+    apply isCompact_univ_iff.mp
+    rw [← Set.range_eq_univ.2 Quotient.mk_surjective]
+    simpa only [Set.image_univ] using
+      (isCompact_univ.image
+        (continuous_quotient_mk' (s := Relation.EqvGen.setoid r)))
+  exact ⟨Continuous.homeoOfEquivCompactToT2
+    (f := Equiv.ofBijective g hg_bij)
+    (show Continuous (Equiv.ofBijective g hg_bij) from hg_cont)⟩
 
 /-- **Leaf S6.**  The torus double-covers the Klein bottle.
 
