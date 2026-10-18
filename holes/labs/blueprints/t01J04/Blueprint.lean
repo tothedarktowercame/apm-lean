@@ -854,7 +854,59 @@ theorem apm_t01J04_leaf_injective_mfderiv
     letI := apm_t01J04_bp_charted n X S d hd
     ∀ z, Function.Injective (mfderiv (modelWithCornersEuclideanHalfSpace n)
       𝓘(ℝ, apm_t01J04_Euclidean n) (Subtype.val : {x // x ∈ S} → X) z) := by
-  sorry
+  letI := apm_t01J04_bp_charted n X S d hd
+  intro z
+  let e := d z
+  have hz : z ∈ e.chart.source := hd z
+  have hmd := hsm.mdifferentiable (by simp) z
+  have hamb : MDifferentiableAt 𝓘(ℝ, apm_t01J04_Euclidean n)
+      𝓘(ℝ, apm_t01J04_Euclidean n) e.amb z.val :=
+    (contMDiffAt_of_mem_maximalAtlas e.amb_mem
+      (by simpa [e, e.source_eq] using hz)).mdifferentiableAt (by simp)
+  have hc := mfderiv_comp z hamb hmd
+  have he : (e.amb ∘ (Subtype.val : {x // x ∈ S} → X)) =ᶠ[𝓝 z]
+      extChartAt (modelWithCornersEuclideanHalfSpace n) z := by
+    filter_upwards [e.chart.open_source.mem_nhds hz] with u hu
+    simp only [Function.comp_apply, extChartAt]
+    simpa [e] using (e.chart_eq u hu).symm
+  have hq : MDifferentiableAt (modelWithCornersEuclideanHalfSpace n)
+      𝓘(ℝ, apm_t01J04_Euclidean n)
+      (extChartAt (modelWithCornersEuclideanHalfSpace n) z) z :=
+    (hamb.comp z hmd).congr_of_eventuallyEq he.symm
+  have hleft : mfderiv (modelWithCornersEuclideanHalfSpace n)
+      𝓘(ℝ, apm_t01J04_Euclidean n)
+      (extChartAt (modelWithCornersEuclideanHalfSpace n) z) z =
+      ContinuousLinearMap.id ℝ (apm_t01J04_Euclidean n) := by
+    rw [mfderiv, if_pos hq]
+    have heq : writtenInExtChartAt (modelWithCornersEuclideanHalfSpace n)
+        𝓘(ℝ, apm_t01J04_Euclidean n) z
+        (extChartAt (modelWithCornersEuclideanHalfSpace n) z) =ᶠ[
+          𝓝[range (modelWithCornersEuclideanHalfSpace n)]
+            (extChartAt (modelWithCornersEuclideanHalfSpace n) z z)] id :=
+      Filter.eventuallyEq_of_mem (extChartAt_target_mem_nhdsWithin z)
+        (fun _ hy => writtenInExtChartAt_extChartAt hy)
+    rw [heq.fderivWithin_eq (by simp)]
+    exact fderivWithin_id
+      ((modelWithCornersEuclideanHalfSpace n).uniqueDiffOn.uniqueDiffWithinAt
+        (mem_range_self _))
+  rw [he.mfderiv_eq, hleft] at hc
+  intro a b hab
+  have ha := congrArg (fun L : apm_t01J04_Euclidean n →L[ℝ]
+      apm_t01J04_Euclidean n => L a) hc
+  have hb := congrArg (fun L : apm_t01J04_Euclidean n →L[ℝ]
+      apm_t01J04_Euclidean n => L b) hc
+  change a = (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n)
+    𝓘(ℝ, apm_t01J04_Euclidean n) e.amb z.val)
+      ((mfderiv (modelWithCornersEuclideanHalfSpace n)
+        𝓘(ℝ, apm_t01J04_Euclidean n)
+        (Subtype.val : {x // x ∈ S} → X) z) a) at ha
+  change b = (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n)
+    𝓘(ℝ, apm_t01J04_Euclidean n) e.amb z.val)
+      ((mfderiv (modelWithCornersEuclideanHalfSpace n)
+        𝓘(ℝ, apm_t01J04_Euclidean n)
+        (Subtype.val : {x // x ∈ S} → X) z) b) at hb
+  rw [hab] at ha
+  exact ha.trans hb.symm
 
 /-- A set covered by ambient half-space slice charts is an embedded smooth
 manifold with boundary, in the sense of the registered predicate. -/
