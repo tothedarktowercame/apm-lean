@@ -413,7 +413,42 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_homeom
     (a : BasedPaths x) (ha : a.1 ∈ U) :
     ∃ e : (BasedCover.mk H '' basedPathNbhd U a) ≃ₜ U,
       ∀ q, (e q : X) = BasedCover.proj H q := by
-  sorry
+  obtain ⟨e, he⟩ :=
+    exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet hUo hU htriv a ha
+  let f : basedPathNbhd U a → (BasedCover.mk H '' basedPathNbhd U a) :=
+    fun b ↦ ⟨BasedCover.mk H b, ⟨b, b.2, rfl⟩⟩
+  have hf_inj : Function.Injective f := by
+    intro b c hbc
+    apply exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_aux_injective htriv a
+    have hmk : BasedCover.mk H (b : BasedPaths x) = BasedCover.mk H (c : BasedPaths x) :=
+      congrArg Subtype.val hbc
+    exact congrArg (BasedCover.proj H) hmk
+  have hf_surj : Function.Surjective f := by
+    rintro ⟨q, b, hb, rfl⟩
+    exact ⟨⟨b, hb⟩, rfl⟩
+  let e' : basedPathNbhd U a ≃ (BasedCover.mk H '' basedPathNbhd U a) :=
+    Equiv.ofBijective f ⟨hf_inj, hf_surj⟩
+  have hnbhd : IsOpen (basedPathNbhd U a) :=
+    TopologicalSpace.GenerateOpen.basic _ ⟨U, a, hUo, rfl⟩
+  have hf_cont : Continuous f := by
+    exact (continuous_quotient_mk'.comp continuous_subtype_val).subtype_mk _
+  have hf_open : IsOpenMap f := by
+    exact ((exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap H).restrict
+      hnbhd).subtype_mk _
+  let e'h : basedPathNbhd U a ≃ₜ (BasedCover.mk H '' basedPathNbhd U a) :=
+    e'.toHomeomorphOfContinuousOpen hf_cont hf_open
+  refine ⟨e'h.symm.trans e, ?_⟩
+  intro q
+  have hq : f (e'.symm q) = q := e'.apply_symm_apply q
+  change (e (e'h.symm q) : X) = BasedCover.proj H q
+  rw [he]
+  change ((e'.symm q : basedPathNbhd U a) : BasedPaths x).1 = BasedCover.proj H q
+  symm
+  calc
+    BasedCover.proj H q = BasedCover.proj H (f (e'.symm q)) :=
+      congrArg (fun r : (BasedCover.mk H '' basedPathNbhd U a) ↦
+        BasedCover.proj H (r : BasedCover H)) hq.symm
+    _ = ((e'.symm q : basedPathNbhd U a) : BasedPaths x).1 := rfl
 -- END SEAT AREA
 
 /-- Generic topology: a preimage that is a disjoint union of open sheets, each
