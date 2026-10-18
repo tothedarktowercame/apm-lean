@@ -161,7 +161,36 @@ theorem apm_t01J04_leaf_euclidean_interior
       p ∈ Φ.source ∧ Φ.source ⊆ O ∧
       ContDiffOn ℝ (⊤ : ℕ∞) Φ Φ.source ∧ ContDiffOn ℝ (⊤ : ℕ∞) Φ.symm Φ.target ∧
       ∀ v ∈ Φ.source, 0 < Φ v 0 := by
-  sorry
+  let e : apm_t01J04_Euclidean n ≃ₜ apm_t01J04_Euclidean n :=
+    Homeomorph.addLeft (EuclideanSpace.single (0 : Fin n) (1 : ℝ) - p)
+  let S : Set (apm_t01J04_Euclidean n) := O ∩ {v | 0 < e v 0}
+  have hcoord : Continuous (fun v : apm_t01J04_Euclidean n => v (0 : Fin n)) :=
+    PiLp.continuous_apply 2 (fun _ : Fin n => ℝ) (0 : Fin n)
+  have hS : IsOpen S := hO.inter (isOpen_lt continuous_const
+    (hcoord.comp e.continuous))
+  let Φ : OpenPartialHomeomorph (apm_t01J04_Euclidean n)
+      (apm_t01J04_Euclidean n) := e.toOpenPartialHomeomorph.restrOpen S hS
+  refine ⟨Φ, ?_, ?_, ?_, ?_, ?_⟩
+  · change p ∈ Set.univ ∩ S
+    simp [S, e, hp]
+  · intro v hv
+    exact hv.2.1
+  · have he : ContDiff ℝ (⊤ : ℕ∞) (e : apm_t01J04_Euclidean n →
+        apm_t01J04_Euclidean n) := by
+      simpa [e] using
+        (contDiff_const.add contDiff_id : ContDiff ℝ (⊤ : ℕ∞)
+          (fun v : apm_t01J04_Euclidean n =>
+            (EuclideanSpace.single (0 : Fin n) (1 : ℝ) - p) + v))
+    simpa [Φ] using he.contDiffOn
+  · have hes : ContDiff ℝ (⊤ : ℕ∞) (e.symm : apm_t01J04_Euclidean n →
+        apm_t01J04_Euclidean n) := by
+      have h := (contDiff_const.add contDiff_id : ContDiff ℝ (⊤ : ℕ∞)
+        (fun v : apm_t01J04_Euclidean n =>
+          -(EuclideanSpace.single (0 : Fin n) (1 : ℝ) - p) + v))
+      convert h using 1
+    simpa [Φ] using hes.contDiffOn
+  · intro v hv
+    exact hv.2.2
 -- END SEAT AREA
 
 /-- LEAF B2 (linear algebra).  A nonzero functional on `ℝⁿ` is, up to sign, the
