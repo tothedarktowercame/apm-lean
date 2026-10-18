@@ -2110,12 +2110,165 @@ lemma apm_m98J02_riemannKernel_spec_aux_zero :
     simp [hn]
 
 -- BEGIN SEAT AREA
+lemma apm_m98J02_riemannKernel_spec_aux_ode_aux_fps :
+    HasFPowerSeriesOnBall apm_m98J02_riemannKernel
+      (FormalMultilinearSeries.ofScalars ℝ
+        (fun n : ℕ => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2))) 0 ⊤ := by
+  let c : ℕ → ℝ := fun n => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2)
+  let p : FormalMultilinearSeries ℝ ℝ ℝ := FormalMultilinearSeries.ofScalars ℝ c
+  have hbound (r : NNReal) (n : ℕ) :
+      ‖p n‖ * (r : ℝ) ^ n ≤ (((2 / 81 : ℝ) * r) ^ n / (n.factorial : ℝ)) := by
+    rw [FormalMultilinearSeries.ofScalars_norm]
+    simp only [c, Real.norm_eq_abs, abs_div, abs_pow, abs_neg]
+    norm_num
+    have hp : (1 : ℝ) ≤ n.factorial := by
+      exact_mod_cast Nat.one_le_iff_ne_zero.mpr (Nat.factorial_ne_zero n)
+    have hd : (0 : ℝ) < n.factorial := by positivity
+    rw [mul_pow]
+    field_simp
+    nlinarith [pow_nonneg (by norm_num : (0 : ℝ) ≤ 2 / 81) n,
+      pow_nonneg (by positivity : (0 : ℝ) ≤ r) n,
+      mul_le_mul_of_nonneg_left hp (show 0 ≤ (n.factorial : ℝ) by positivity)]
+  have hr : p.radius = ⊤ :=
+    FormalMultilinearSeries.radius_eq_top_of_summable_norm p fun r =>
+      Summable.of_nonneg_of_le (fun n => by positivity) (hbound r)
+        (Real.summable_pow_div_factorial _)
+  have hb := p.hasFPowerSeriesOnBall (by simp [hr])
+  have hb' : HasFPowerSeriesOnBall p.sum p 0 ⊤ := by simpa [hr] using hb
+  convert hb' using 1
+  ext z
+  simp only [apm_m98J02_riemannKernel, p, FormalMultilinearSeries.sum,
+    FormalMultilinearSeries.ofScalars_apply_eq]
+  apply tsum_congr
+  intro n
+  simp [c, div_eq_mul_inv, mul_assoc]
+  ring
+
 lemma apm_m98J02_riemannKernel_spec_aux_ode :
     ∀ z : ℝ,
       z * deriv (deriv apm_m98J02_riemannKernel) z +
         deriv apm_m98J02_riemannKernel z +
         (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0 := by
-  sorry
+  intro z
+  let p : FormalMultilinearSeries ℝ ℝ ℝ := FormalMultilinearSeries.ofScalars ℝ
+    (fun n : ℕ => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2))
+  have h := apm_m98J02_riemannKernel_spec_aux_ode_aux_fps
+  have h1 := h.fderiv
+  have h2 := h1.fderiv
+  have hs1 := h1.hasSum (by simp : z ∈ Metric.eball (0 : ℝ) ⊤)
+  have hs1' : HasSum (fun n : ℕ => (n + 1 : ℝ) *
+      (((-(2 / 81 : ℝ)) ^ (n + 1)) / (((n + 1).factorial : ℝ) ^ 2)) * z ^ n)
+      (deriv apm_m98J02_riemannKernel z) := by
+    convert hs1.map (ContinuousLinearMap.apply ℝ ℝ (1 : ℝ))
+      (ContinuousLinearMap.continuous _) using 1
+    · funext n
+      simp only [Function.comp_apply, zero_add]
+      rw [FormalMultilinearSeries.apply_eq_pow_smul_coeff]
+      simp only [map_smul, ContinuousLinearMap.apply_apply, smul_eq_mul]
+      change _ = z ^ n *
+        (((FormalMultilinearSeries.ofScalars ℝ
+          (fun n : ℕ => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2))).derivSeries n)
+          (fun _ => (1 : ℝ))) 1
+      rw [FormalMultilinearSeries.derivSeries_apply_diag]
+      simp [FormalMultilinearSeries.ofScalars_apply_eq]
+      ring
+    · simp only [deriv, zero_add, ContinuousLinearMap.apply_apply]
+  have hs2 := h2.hasSum (by simp : z ∈ Metric.eball (0 : ℝ) ⊤)
+  have hs2' : HasSum (fun n : ℕ => (n + 1 : ℝ) * (n + 2 : ℝ) *
+      (((-(2 / 81 : ℝ)) ^ (n + 2)) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ n)
+      (deriv (deriv apm_m98J02_riemannKernel) z) := by
+    convert hs2.map ((ContinuousLinearMap.apply ℝ ℝ (1 : ℝ)).comp
+        (ContinuousLinearMap.apply ℝ (ℝ →L[ℝ] ℝ) (1 : ℝ)))
+      (ContinuousLinearMap.continuous _) using 1
+    · funext n
+      simp only [Function.comp_apply, zero_add]
+      rw [FormalMultilinearSeries.apply_eq_pow_smul_coeff]
+      simp only [ContinuousLinearMap.comp_apply, map_smul,
+        ContinuousLinearMap.apply_apply, smul_eq_mul]
+      change _ = z ^ n *
+        (((FormalMultilinearSeries.ofScalars ℝ
+          (fun n : ℕ => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2))).derivSeries.derivSeries n)
+          (fun _ => (1 : ℝ))) 1 1
+      rw [FormalMultilinearSeries.derivSeries_apply_diag]
+      change _ = z ^ n * ((n + 1) •
+        ((((FormalMultilinearSeries.ofScalars ℝ
+          (fun n : ℕ => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2))).derivSeries
+            (n + 1)) (fun _ => (1 : ℝ))) 1))
+      rw [FormalMultilinearSeries.derivSeries_apply_diag]
+      simp [FormalMultilinearSeries.ofScalars_apply_eq, nsmul_eq_mul]
+      ring
+    · unfold deriv
+      rw [fderiv_clm_apply
+        ((h1.analyticOnNhd z (by simp)).differentiableAt)
+        (differentiableAt_const (c := (1 : ℝ)))]
+      simp
+  have hs0 : Summable (fun n : ℕ =>
+      ((-(2 / 81 : ℝ)) ^ n * z ^ n) / ((n.factorial : ℝ) ^ 2)) := by
+    convert (h.hasSum (by simp : z ∈ Metric.eball (0 : ℝ) ⊤)).summable using 1
+    funext n
+    simp [FormalMultilinearSeries.ofScalars_apply_eq]
+    ring
+  rw [← hs2'.tsum_eq, ← hs1'.tsum_eq, apm_m98J02_riemannKernel]
+  rw [show (∑' n : ℕ, (n + 1 : ℝ) *
+        ((-(2 / 81 : ℝ)) ^ (n + 1) / (((n + 1).factorial : ℝ) ^ 2)) * z ^ n) =
+      (1 : ℝ) * ((-(2 / 81 : ℝ)) ^ 1 / ((Nat.factorial 1 : ℝ) ^ 2)) * z ^ 0 +
+        ∑' n : ℕ, (n + 2 : ℝ) *
+          ((-(2 / 81 : ℝ)) ^ (n + 2) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ (n + 1) by
+      calc
+        _ = _ := hs1'.summable.tsum_eq_zero_add
+        _ = _ := by
+          congr 1
+          · norm_num
+          · apply tsum_congr (fun n => ?_)
+            norm_num [Nat.cast_add, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+            left
+            left
+            norm_num
+            ring]
+  rw [show (∑' n : ℕ, ((-(2 / 81 : ℝ)) ^ n * z ^ n) /
+        ((n.factorial : ℝ) ^ 2)) = 1 +
+      ∑' n : ℕ, ((-(2 / 81 : ℝ)) ^ (n + 1) * z ^ (n + 1)) /
+        (((n + 1).factorial : ℝ) ^ 2) by
+      calc
+        _ = _ := hs0.tsum_eq_zero_add
+        _ = _ := by norm_num]
+  rw [← tsum_mul_left]
+  norm_num only [pow_zero, mul_one, Nat.factorial_one, Nat.cast_one, one_pow,
+    one_div, neg_mul, neg_add_cancel]
+  change (∑' n : ℕ, z * ((n + 1 : ℝ) * (n + 2 : ℝ) *
+      ((-(2 / 81 : ℝ)) ^ (n + 2) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ n)) +
+    (-(2 / 81 : ℝ) + ∑' n : ℕ, (n + 2 : ℝ) *
+      ((-(2 / 81 : ℝ)) ^ (n + 2) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ (n + 1)) +
+    (2 / 81 : ℝ) * (1 + ∑' n : ℕ,
+      ((-(2 / 81 : ℝ)) ^ (n + 1) * z ^ (n + 1)) /
+        (((n + 1).factorial : ℝ) ^ 2)) = 0
+  have hs1s : Summable (fun n : ℕ => (n + 2 : ℝ) *
+      ((-(2 / 81 : ℝ)) ^ (n + 2) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ (n + 1)) := by
+    convert hs1'.summable.comp_injective Nat.succ_injective using 1
+    funext n
+    norm_num [Nat.cast_add, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+    left; left; norm_num; ring
+  have hs0s : Summable (fun n : ℕ =>
+      ((-(2 / 81 : ℝ)) ^ (n + 1) * z ^ (n + 1)) /
+        (((n + 1).factorial : ℝ) ^ 2)) := by
+    exact hs0.comp_injective Nat.succ_injective
+  have H : (∑' n : ℕ, z * ((n + 1 : ℝ) * (n + 2 : ℝ) *
+        ((-(2 / 81 : ℝ)) ^ (n + 2) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ n)) +
+      (∑' n : ℕ, (n + 2 : ℝ) *
+        ((-(2 / 81 : ℝ)) ^ (n + 2) / (((n + 2).factorial : ℝ) ^ 2)) * z ^ (n + 1)) +
+      (2 / 81 : ℝ) * (∑' n : ℕ,
+        ((-(2 / 81 : ℝ)) ^ (n + 1) * z ^ (n + 1)) /
+          (((n + 1).factorial : ℝ) ^ 2)) = 0 := by
+    rw [← (hs2'.summable.mul_left z).tsum_add hs1s]
+    rw [← tsum_mul_left]
+    rw [← ((hs2'.summable.mul_left z).add hs1s).tsum_add
+      (hs0s.mul_left (2 / 81 : ℝ))]
+    convert tsum_zero
+    rw [Nat.factorial_succ, Nat.factorial_succ]
+    push_cast
+    field_simp
+    ring
+  linarith
 -- END SEAT AREA
 
 /-- The power-series kernel is smooth, normalized at zero, and satisfies the
