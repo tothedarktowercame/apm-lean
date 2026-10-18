@@ -202,12 +202,137 @@ label iff they are `2j, 2j+1` (either order).  Both carry the same sign, so
 symmetric generator.  Degenerate case `g = 0`: both relations are empty.
 About 80–160 lines. -/
 -- BEGIN SEAT AREA
+lemma polygonNF_crosscap_eqvGen_iff_aux_length {L : Type*} (g : ℕ)
+    (c : Fin g → Signed L) : (polygonNF_crosscapWord g c).length = 2 * g := by
+  simp [polygonNF_crosscapWord, List.length_flatMap]
+  omega
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_flat_get {A B : Type*}
+    (f : A → B) (xs : List A) (i : ℕ) :
+    (xs.flatMap fun a => [f a, f a])[i]? = Option.map f xs[i / 2]? := by
+  induction xs generalizing i with
+  | nil => simp
+  | cons a xs ih =>
+      cases i with
+      | zero => simp
+      | succ i =>
+          cases i with
+          | zero => simp
+          | succ k =>
+              have hd : (k + 2) / 2 = k / 2 + 1 := by omega
+              simpa [hd] using ih k
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_get {L : Type*} (g : ℕ)
+    (c : Fin g → Signed L) (i : Fin (polygonNF_crosscapWord g c).length) :
+    (polygonNF_crosscapWord g c).get i =
+      c ⟨i.1 / 2, by
+        have hi := i.2
+        have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+        omega⟩ := by
+  rw [List.get_eq_getElem]
+  have h := polygonNF_crosscap_eqvGen_iff_aux_flat_get c (List.finRange g) i
+  have hf : i.1 < ((List.finRange g).flatMap (fun a => [c a, c a])).length := by
+    simpa [polygonNF_crosscapWord] using i.2
+  rw [List.getElem?_eq_getElem hf] at h
+  have hi : i.1 / 2 < (List.finRange g).length := by
+    simp only [List.length_finRange]
+    have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+    omega
+  rw [List.getElem?_eq_getElem hi] at h
+  simpa [polygonNF_crosscapWord] using Option.some.inj h
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_surface_to_word {L : Type*}
+    [DecidableEq L] (g : ℕ) (c : Fin g → Signed L) {x y : Disk}
+    (h : SurfaceRel false g x y) : WordRel (polygonNF_crosscapWord g c) x y := by
+  simp only [SurfaceRel, Bool.false_eq_true, if_false] at h
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+  let i₀ : Fin (polygonNF_crosscapWord g c).length := ⟨2 * j, by omega⟩
+  let i₁ : Fin (polygonNF_crosscapWord g c).length := ⟨2 * j + 1, by omega⟩
+  have hget₀ : (polygonNF_crosscapWord g c).get i₀ = c ⟨j, hj⟩ := by
+    rw [polygonNF_crosscap_eqvGen_iff_aux_get]
+    congr 1
+    apply Fin.ext
+    simp [i₀]
+  have hget₁ : (polygonNF_crosscapWord g c).get i₁ = c ⟨j, hj⟩ := by
+    rw [polygonNF_crosscap_eqvGen_iff_aux_get]
+    congr 1
+    apply Fin.ext
+    simp [i₁]
+    omega
+  refine ⟨i₀, i₁, ?_, t, ?_, ?_, ?_⟩
+  · intro he
+    have := congrArg Fin.val he
+    simp [i₀, i₁] at this
+  · rw [hget₀, hget₁]
+  · simp [i₀, hlen]
+  · rw [hget₀, hget₁]
+    simp [i₁, hlen]
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_word_to_surface {L : Type*}
+    [DecidableEq L] (g : ℕ) (c : Fin g → Signed L)
+    (hc : Function.Injective fun i => (c i).1) {x y : Disk}
+    (h : WordRel (polygonNF_crosscapWord g c) x y) :
+    Relation.EqvGen (SurfaceRel false g) x y := by
+  rcases h with ⟨i, j, hij, t, hlabel, rfl, rfl⟩
+  rw [polygonNF_crosscap_eqvGen_iff_aux_get,
+    polygonNF_crosscap_eqvGen_iff_aux_get] at hlabel ⊢
+  have hidx := hc hlabel
+  have hq : i.1 / 2 = j.1 / 2 := by
+    exact Fin.val_eq_of_eq hidx
+  have hsign : (c ⟨i.1 / 2, by
+      have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+      omega⟩).2 = (c ⟨j.1 / 2, by
+      have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+      omega⟩).2 := congrArg (fun k => (c k).2) hidx
+  have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+  have hne : i.1 ≠ j.1 := fun h => hij (Fin.ext h)
+  have hjg : j.1 / 2 < g := by omega
+  have hig : i.1 / 2 < g := by omega
+  have hpairs :
+      (i.1 = 2 * (i.1 / 2) ∧ j.1 = 2 * (i.1 / 2) + 1) ∨
+      (j.1 = 2 * (i.1 / 2) ∧ i.1 = 2 * (i.1 / 2) + 1) := by
+    omega
+  rcases hpairs with hp | hp
+  · have hr : SurfaceRel false g
+        (edgePoint (polygonNF_crosscapWord g c).length i t)
+        (edgePoint (polygonNF_crosscapWord g c).length j t) := by
+      simp only [SurfaceRel, Bool.false_eq_true, if_false]
+      refine ⟨i.1 / 2, hig, t, ?_, ?_⟩
+      · congr 1 <;> omega
+      · congr 1 <;> omega
+    simp only [hsign, if_true]
+    exact Relation.EqvGen.rel _ _ hr
+  · have hr : SurfaceRel false g
+        (edgePoint (polygonNF_crosscapWord g c).length j t)
+        (edgePoint (polygonNF_crosscapWord g c).length i t) := by
+      simp only [SurfaceRel, Bool.false_eq_true, if_false]
+      refine ⟨i.1 / 2, hig, t, ?_, ?_⟩
+      · congr 1 <;> omega
+      · congr 1 <;> omega
+    simp only [hsign, if_true]
+    exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ hr)
+
 theorem polygonNF_crosscap_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
     (c : Fin g → Signed L) (hc : Function.Injective fun i => (c i).1)
     (x y : Disk) :
     Relation.EqvGen (WordRel (polygonNF_crosscapWord g c)) x y ↔
       Relation.EqvGen (SurfaceRel false g) x y := by
-  sorry
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact polygonNF_crosscap_eqvGen_iff_aux_word_to_surface g c hc h
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h =>
+        exact Relation.EqvGen.rel _ _
+          (polygonNF_crosscap_eqvGen_iff_aux_surface_to_word g c h)
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
 -- END SEAT AREA
 
 /-- Crosscap bridge: the crosscap word with distinct labels presents
