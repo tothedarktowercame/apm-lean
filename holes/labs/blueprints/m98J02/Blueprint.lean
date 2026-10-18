@@ -7,14 +7,21 @@ import ConstructionTargets.TestFunctionTranslation
 
 ## Statement repairs
 
-Part (d) assumes only `f ∈ C²(ℝ²)`, but the convolution construction in
-parts (b)--(c) requires one factor to have compact support. Following the
-informal solution, `f` is minimally assumed compactly supported. This is also
-the hypothesis under which the convolution is defined here.  The printed
-regularity conclusion is false for an arbitrary fundamental distribution of
-this non-hypoelliptic operator.  Following the informal solution's explicit
-function-level convolution argument, `w₀` is additionally required to be the
-regular distribution represented by a locally integrable function.
+Part (d) is stated for every `f ∈ C²(ℝ²)`, as printed. Until 2026-10-18 this
+file assumed `f` compactly supported and `w₀` regular, and closed under those
+hypotheses; that proof is kept as an out-of-competition finding in
+`../out-of-competition/Main.lean` (`apm_m98j02_compactF`). See
+`../problem.md`, "Interpretation note", for the two readings.
+
+The printed regularity claim `f * w₀ ∈ C²` is false for an arbitrary
+fundamental solution `w₀` of this non-hypoelliptic operator (two fundamental
+solutions differ by an element of `ker T`, which may contain `∂ₓ³`-type
+terms), and for non-compactly supported `f` the product `f * w₀` need not be
+defined. So part (d) is encoded as the problem's actual question: find a
+distributional solution of `T w = f` that is a `C²` function, and show it is
+not unique. The given `w₀` is not referred to; the solution in
+`../informal-solution.md` uses the forward and backward fundamental solutions
+`E₊`, `E₋`, which are supported in opposite cones.
 
 The garbled operator typography is read, as in the supplied solution, as
 `T = 2 ∂²/∂x² - ∂/∂y + 3 ∂²/(∂x∂y)`.
@@ -103,6 +110,40 @@ def apm_m98J02_solvesT
 def apm_m98J02_representsFunction
     (u : apm_m98J02_Dist) (f : apm_m98J02_E → ℝ) : Prop :=
   ∀ φ : apm_m98J02_Test, u φ = ∫ x, f x * φ x
+
+/-! ## Definitions used by the part (d) blueprint -/
+
+/-- The classical differential expression whose distributional encoding is
+`apm_m98J02_solvesT`. -/
+def apm_m98J02_classicalT (g : apm_m98J02_E → ℝ)
+    (x : apm_m98J02_E) : ℝ :=
+  2 * apm_m98J02_partial 0 (apm_m98J02_partial 0 g) x -
+    apm_m98J02_partial 1 g x +
+    3 * apm_m98J02_partial 0 (apm_m98J02_partial 1 g) x
+
+/-- The inverse characteristic-coordinate map for `a = 3x - 2y`, `b = y`. -/
+def apm_m98J02_characteristicPoint (a b : ℝ) : apm_m98J02_E :=
+  WithLp.toLp 2 ![(a + 2 * b) / 3, b]
+
+/-- The entire Riemann kernel for `∂ₐ∂_b + 2/81`. -/
+def apm_m98J02_riemannKernel (z : ℝ) : ℝ :=
+  ∑' k : ℕ, ((-(2 / 81 : ℝ)) ^ k * z ^ k) / ((k.factorial : ℝ) ^ 2)
+
+/-- The transformed right-hand side after characteristic coordinates and the
+exponential conjugation. -/
+def apm_m98J02_characteristicSource (f : apm_m98J02_E → ℝ)
+    (a b : ℝ) : ℝ :=
+  Real.exp (-a / 9 + 2 * b / 9) * f (apm_m98J02_characteristicPoint a b) / 9
+
+/-- The oriented-rectangle Goursat integral, valid for all signs of `a,b`. -/
+def apm_m98J02_goursat (K : ℝ → ℝ) (h : ℝ → ℝ → ℝ)
+    (a b : ℝ) : ℝ :=
+  ∫ s in (0 : ℝ)..a, ∫ t in (0 : ℝ)..b, K ((a - s) * (b - t)) * h s t
+
+/-- Pull a characteristic-coordinate solution back to the original plane. -/
+def apm_m98J02_pullback (v : ℝ → ℝ → ℝ) (p : apm_m98J02_E) : ℝ :=
+  Real.exp ((3 * p 0 - 2 * p 1) / 9 - 2 * p 1 / 9) *
+    v (3 * p 0 - 2 * p 1) (p 1)
 
 /-- Compactly supported distributions are closed under addition directly from
 the support definition. -/
@@ -2022,6 +2063,99 @@ theorem apm_m98J02_constantDistribution_homogeneous :
     apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
   exact apm_m98J02_constantDistribution_homogeneous_aux_of_integral_partial_zero apm_m98J02_constantDistribution_homogeneous_aux_integral_partial
 
+/-! The following five leaves isolate the new printed-reading argument. -/
+
+/-- The power-series kernel is smooth, normalized at zero, and satisfies the
+Riemann-function ODE. -/
+theorem apm_m98J02_riemannKernel_spec :
+    ContDiff ℝ ∞ apm_m98J02_riemannKernel ∧
+    apm_m98J02_riemannKernel 0 = 1 ∧
+    ∀ z : ℝ,
+      z * deriv (deriv apm_m98J02_riemannKernel) z +
+        deriv apm_m98J02_riemannKernel z +
+        (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0 := by
+  sorry
+
+/-- Differentiating the oriented Goursat integral twice gives the transformed
+equation.  The fixed-square reparametrization supplies its `C²` regularity. -/
+theorem apm_m98J02_goursat_spec
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1)
+    (hKode : ∀ z : ℝ,
+      z * deriv (deriv apm_m98J02_riemannKernel) z +
+        deriv apm_m98J02_riemannKernel z +
+        (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0) :
+    ∃ v : ℝ → ℝ → ℝ,
+      v = apm_m98J02_goursat apm_m98J02_riemannKernel
+        (apm_m98J02_characteristicSource f) ∧
+      ContDiff ℝ 2 (fun p : apm_m98J02_E ↦ v (p 0) (p 1)) ∧
+      ∀ a b : ℝ,
+        apm_m98J02_partial 0 (apm_m98J02_partial 1
+            (fun p : apm_m98J02_E ↦ v (p 0) (p 1))) (WithLp.toLp 2 ![a, b]) +
+          (2 / 81 : ℝ) * v a b = apm_m98J02_characteristicSource f a b := by
+  sorry
+
+/-- The explicit linear change of variables and exponential conjugation turn
+the transformed Goursat equation back into `Tg=f`. -/
+theorem apm_m98J02_pullback_spec
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (v : ℝ → ℝ → ℝ)
+    (hv : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦ v (p 0) (p 1)))
+    (hvPDE : ∀ a b : ℝ,
+      apm_m98J02_partial 0 (apm_m98J02_partial 1
+          (fun p : apm_m98J02_E ↦ v (p 0) (p 1))) (WithLp.toLp 2 ![a, b]) +
+        (2 / 81 : ℝ) * v a b = apm_m98J02_characteristicSource f a b) :
+    ContDiff ℝ 2 (apm_m98J02_pullback v) ∧
+      ∀ p, apm_m98J02_classicalT (apm_m98J02_pullback v) p = f p := by
+  sorry
+
+/-- Every continuous function, without a support restriction, defines a
+distribution because test functions are compactly supported. -/
+theorem apm_m98J02_regularDistribution_of_continuous
+    (g : apm_m98J02_E → ℝ) (hg : Continuous g) :
+    ∃ w : apm_m98J02_Dist, apm_m98J02_representsFunction w g := by
+  sorry
+
+/-- Twice integrating by parts identifies the regular distribution of a
+classical `C²` solution with the encoded distributional solution. -/
+theorem apm_m98J02_regular_solution_solves
+    (f g : apm_m98J02_E → ℝ) (w : apm_m98J02_Dist)
+    (hg : ContDiff ℝ 2 g)
+    (hT : ∀ p, apm_m98J02_classicalT g p = f p)
+    (hw : apm_m98J02_representsFunction w g) :
+    apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) := by
+  sorry
+
+/-- Part (d) for every `f ∈ C²(ℝ²)`: a `C²` regular distributional solution
+of `T w = f`, and a second, different distributional solution. Open: the
+informal route is `w = E₊ * (χ f) + E₋ * ((1 - χ) f)`; see
+`../proof-outline.md`. -/
+theorem apm_m98J02_partD (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f) :
+    ∃ (w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
+      apm_m98J02_representsFunction w g ∧
+      ContDiff ℝ 2 g ∧
+      apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) ∧
+      w' ≠ w ∧
+      apm_m98J02_solvesT w' (fun φ ↦ ∫ x, f x * φ x) := by
+  obtain ⟨hKs, hK0, hKode⟩ := apm_m98J02_riemannKernel_spec
+  obtain ⟨v, -, hv, hvPDE⟩ :=
+    apm_m98J02_goursat_spec f hf hKs hK0 hKode
+  obtain ⟨hg, hT⟩ := apm_m98J02_pullback_spec f hf v hv hvPDE
+  obtain ⟨w, hw⟩ :=
+    apm_m98J02_regularDistribution_of_continuous (apm_m98J02_pullback v) hg.continuous
+  have hwT := apm_m98J02_regular_solution_solves f (apm_m98J02_pullback v) w hg hT hw
+  let w' := w + apm_m98J02_constantDistribution
+  refine ⟨w, w', apm_m98J02_pullback v, hw, hg, hwT, ?_, ?_⟩
+  · intro heq
+    have hc : apm_m98J02_constantDistribution = 0 := by
+      have := congrArg (fun z : apm_m98J02_Dist ↦ z - w) heq
+      simpa [w'] using this
+    exact apm_m98J02_constantDistribution_ne_zero hc
+  · exact apm_m98J02_solvesT_add_homogeneous w
+      apm_m98J02_constantDistribution _ hwT
+      apm_m98J02_constantDistribution_homogeneous
+
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
@@ -2030,53 +2164,20 @@ theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
         ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w) ∧
-    ∀ (f k : apm_m98J02_E → ℝ) (w₀ : apm_m98J02_Dist),
-      ContDiff ℝ 2 f → IsCompact (tsupport f) →
-      LocallyIntegrable k → apm_m98J02_representsFunction w₀ k →
-      apm_m98J02_solvesT w₀ (fun φ ↦ φ 0) →
-      ∃ (u w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
-        apm_m98J02_representsFunction u f ∧
-        apm_m98J02_hasCompactSupport u ∧
-        apm_m98J02_isConvolution u w₀ w ∧
+    ∀ f : apm_m98J02_E → ℝ, ContDiff ℝ 2 f →
+      ∃ (w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
         apm_m98J02_representsFunction w g ∧
         ContDiff ℝ 2 g ∧
         apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) ∧
         w' ≠ w ∧
         apm_m98J02_solvesT w' (fun φ ↦ ∫ x, f x * φ x) := by
-  refine ⟨?_, ?_⟩
+  refine ⟨?_, ?_, ?_⟩
   · intro u v hu hv
     exact apm_m98J02_hasCompactSupport_add u v hu hv
-  · constructor
-    · intro u v hu
-      obtain ⟨K, hK, huK⟩ := hu
-      exact apm_m98J02_bridge_2 u v K hK huK
-    · intro f k w₀ hf hfc hk hw₀rep hw₀
-      let u := apm_m98J02_regularDistribution f hf.continuous hfc
-      have huRep : apm_m98J02_representsFunction u f :=
-        apm_m98J02_regularDistribution_represents f hf.continuous hfc
-      have huComp : apm_m98J02_hasCompactSupport u :=
-        apm_m98J02_regularDistribution_hasCompactSupport f hf.continuous hfc
-      obtain ⟨K, hK, huK⟩ := huComp
-      obtain ⟨w, hconv⟩ := apm_m98J02_bridge_2 u w₀ K hK huK
-      obtain ⟨g, hwRep, hg⟩ :=
-        apm_m98J02_regular_convolution_is_C2 f k w₀ w hf hfc hk hw₀rep hconv
-      have hwSolve :=
-        apm_m98J02_convolution_solves_fundamental f w₀ w hf hfc hw₀ hconv
-      let w' := w + apm_m98J02_constantDistribution
-      have hw'ne : w' ≠ w := by
-        intro heq
-        have hc : apm_m98J02_constantDistribution = 0 := by
-          apply add_left_cancel (a := w)
-          simpa [w'] using heq
-        exact apm_m98J02_constantDistribution_ne_zero hc
-      have hw'Solve : apm_m98J02_solvesT w'
-          (fun φ ↦ ∫ x, f x * φ x) :=
-        apm_m98J02_solvesT_add_homogeneous w
-          apm_m98J02_constantDistribution _ hwSolve
-          apm_m98J02_constantDistribution_homogeneous
-      exact ⟨u, w, w', g, huRep,
-        apm_m98J02_regularDistribution_hasCompactSupport f hf.continuous hfc,
-        hconv, hwRep, hg,
-        hwSolve, hw'ne, hw'Solve⟩
+  · intro u v hu
+    obtain ⟨K, hK, huK⟩ := hu
+    exact apm_m98J02_bridge_2 u v K hK huK
+  · intro f hf
+    exact apm_m98J02_partD f hf
 
 #print axioms apm_m98j02
