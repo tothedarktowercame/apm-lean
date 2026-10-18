@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.WedgePermutationCover
 
 /-!
 # Blueprint for APM t92J06
@@ -118,14 +119,25 @@ theorem apm_t92J06_exists_simplyConnected_cover :
       IsCoveringMap p ∧ SimplyConnectedSpace E := by
   sorry
 
-/-- LIBRARY: realize four explicit three-sheeted labeled graph covers and
-separate the homeomorphism types of their total spaces. -/
+/-- Transport a family of shared circle-wedge covers to this file's wedge. -/
+theorem apm_t92J06_shared_cover_adapter
+    (C : Fin 4 → ConstructionTargets.WedgePermutationCover.ThreeCover)
+    (hC : Pairwise fun i j ↦ ¬ Nonempty
+      (@Homeomorph (C i).E (C j).E (C i).topology (C j).topology)) :
+    ∃ D : Fin 4 → apm_t92J06_Covering 3,
+      Pairwise fun i j ↦ ¬ Nonempty
+        (@Homeomorph (D i).E (D j).E (D i).topology (D j).topology) := by
+  sorry
+
+/-- Assembly: the shared four pairwise nonhomeomorphic covers, transported. -/
 theorem apm_t92J06_exists_four_threeSheeted_covers :
     ∃ C : Fin 4 → apm_t92J06_Covering 3,
       Pairwise fun i j ↦
         ¬ Nonempty
           (@Homeomorph (C i).E (C j).E (C i).topology (C j).topology) := by
-  sorry
+  obtain ⟨C, hC⟩ :=
+    ConstructionTargets.WedgePermutationCover.circleWedge_four_pairwise_nonhomeomorphic
+  exact apm_t92J06_shared_cover_adapter C hC
 
 theorem apm_t92j06 :
     (∃ (E : Type*) (_ : TopologicalSpace E) (p : E → apm_t92J06_X),

@@ -57,7 +57,17 @@ proof is an equally short route.
 than half `dist x (-x)` separate the two orbit points.  The proved equivalence
 `q x = q y ↔ y = x ∨ y = -x` rules out hidden extra quotient points.
 
-### `apm_t00A02_regular_wedge_cover` — LIBRARY
+### `apm_t00A02_shared_cover_adapter`
+
+**Statement.** Transport either shared four-sheeted RP2-wedge witness to the
+consumer's literal quotient, for an arbitrary chosen wedge point.
+
+**Expected size.** 60--100 lines.  Independent adapter leaf.  Construct the
+antipodal quotient homeomorphism by `Quotient.map`, move the basepoint using an
+orthogonal homeomorphism of the sphere, induce the wedge homeomorphism, then
+use `coverWitness_homeomorph_base` and copy the structure fields.
+
+### `apm_t00A02_regular_wedge_cover` — assembly
 
 **Statement.** Assuming the antipodal projection is a covering map, the wedge
 has a connected regular four-sheeted cover.
@@ -73,8 +83,8 @@ module, but no sorry-free module constructs a cover of a quotient wedge from
 finite monodromy or proves the necessary gluing theorem.  Thus the concrete
 wedge gluing is the missing library-sized content.
 
-**Expected size.** 150–250 lines (or a short adapter after a monodromy-cover
-construction is supplied).
+**Implementation.** Sorry-free application of `rp2Wedge_regular_four_cover`
+and `apm_t00A02_shared_cover_adapter`.
 
 **Dependencies.** Takes the exact conclusion of
 `apm_t00A02_antipodalCover_isCoveringMap` as `hanti`, so a separate seat can
@@ -84,7 +94,7 @@ work with that interface immediately.
 orbit from `1` is all four points.  They commute, and the four generated
 permutations act freely and transitively, giving regularity.
 
-### `apm_t00A02_irregular_wedge_cover` — LIBRARY
+### `apm_t00A02_irregular_wedge_cover` — assembly
 
 **Statement.** Assuming the antipodal projection is a covering map, the wedge
 has a connected nonregular four-sheeted cover.
@@ -102,7 +112,8 @@ wedge-cover gluing API.  Keeping the two constructions separate prevents two
 seats from sharing hidden proof obligations beyond the explicit `hanti`
 interface.
 
-**Expected size.** 150–250 lines.
+**Implementation.** Sorry-free application of `rp2Wedge_irregular_four_cover`
+and the same adapter.
 
 **Dependencies.** Takes the antipodal covering conclusion explicitly.
 

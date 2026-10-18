@@ -4,6 +4,7 @@ import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.Surfaces
 import ConstructionTargets.DeckGroupQuotientFundamentalGroup
+import ConstructionTargets.WedgePermutationCover
 
 /-!
 # APM t00A02: finite coverings of surfaces and a projective-plane wedge
@@ -262,13 +263,25 @@ theorem apm_t00A02_antipodalCover_isCoveringMap :
     isCancelVAdd_iff_eq_zero_of_vadd_eq.mpr hfree
   exact (hq.isAddQuotientCoveringMap_of_properlyDiscontinuousVAdd horbit).isCoveringMap _ _
 
-/-- LIBRARY: construct the regular four-sheeted cover from the two commuting
-fixed-point-free involutions `(12)(34)` and `(13)(24)`. -/
+/-- Transport a shared RP2-wedge witness to this file's wedge at any basepoint. -/
+theorem apm_t00A02_shared_cover_adapter
+    (r : Bool) (r₀ : apm_t00A02_RP2) :
+    Nonempty (ConstructionTargets.WedgePermutationCover.CoverWitness
+      (ConstructionTargets.WedgePermutationCover.Wedge
+        ConstructionTargets.WedgePermutationCover.RP2
+        ConstructionTargets.WedgePermutationCover.RP2
+        ConstructionTargets.WedgePermutationCover.rpBase
+        ConstructionTargets.WedgePermutationCover.rpBase) 4 r) →
+    Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 r) := by
+  sorry
+
+/-- Assembly: the shared regular RP2-wedge cover, moved to this file's wedge. -/
 theorem apm_t00A02_regular_wedge_cover
     (hanti : IsCoveringMap apm_t00A02_antipodalCover)
     (r₀ : apm_t00A02_RP2) :
     Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 true) := by
-  sorry
+  exact apm_t00A02_shared_cover_adapter true r₀
+    ConstructionTargets.WedgePermutationCover.rp2Wedge_regular_four_cover
 
 /-- LIBRARY: construct the irregular four-sheeted cover from involutions
 `(12)` and `(14)(23)`. -/
@@ -276,7 +289,8 @@ theorem apm_t00A02_irregular_wedge_cover
     (hanti : IsCoveringMap apm_t00A02_antipodalCover)
     (r₀ : apm_t00A02_RP2) :
     Nonempty (apm_t00A02_coverWitness (apm_t00A02_wedge r₀) 4 false) := by
-  sorry
+  exact apm_t00A02_shared_cover_adapter false r₀
+    ConstructionTargets.WedgePermutationCover.rp2Wedge_irregular_four_cover
 
 /-- LIBRARY: finite-cover Euler characteristic plus classification of closed
 orientable surfaces, specialized to degree ten over genus five. -/
