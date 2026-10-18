@@ -2258,7 +2258,28 @@ Eckmann–Hilton for the topological group `T95J03Torus`.  About 60–200 lines.
 -- BEGIN SEAT AREA
 lemma t95J03_torus_pi1_comm (x : Surface true 1)
     (a b : FundamentalGroup (Surface true 1) x) : a * b = b * a := by
-  sorry
+  obtain ⟨h⟩ := t95J03_torus_bridge
+  let τ : T95J03Torus ≃ₜ T95J03Torus := Homeomorph.addRight (-(h x))
+  have hτ : τ (h x) = (0 : T95J03Torus) := by
+    simp [τ]
+  let e₁ := SurfaceGroupBetti.fundamentalGroupEquivOfHomeomorph h x
+  let e₂ : FundamentalGroup T95J03Torus (h x) ≃*
+      FundamentalGroup T95J03Torus (0 : T95J03Torus) := by
+    rw [← hτ]
+    exact SurfaceGroupBetti.fundamentalGroupEquivOfHomeomorph τ (h x)
+  let e₃ := ConstructionTargets.FundamentalGroupProduct.fundamentalGroupProdMulEquiv
+    (0 : UnitAddCircle) (0 : UnitAddCircle)
+  let c : UnitAddCircle ≃ₜ Circle := AddCircle.homeomorphCircle one_ne_zero
+  have hc : c 0 = (1 : Circle) := by
+    simp [c, AddCircle.homeomorphCircle_apply]
+  let e₄ : FundamentalGroup UnitAddCircle 0 ≃* Multiplicative ℤ :=
+    (SurfaceGroupBetti.fundamentalGroupEquivOfHomeomorph c 0).trans (by
+      rw [hc]
+      exact ConstructionTargets.CircleUniversalCover.circleFundamentalGroupMulEquivInt)
+  let e := ((e₁.trans e₂).trans e₃).trans (e₄.prodCongr e₄)
+  apply e.injective
+  simp only [map_mul]
+  exact mul_comm _ _
 -- END SEAT AREA
 
 /-- **Leaf S4.**  An abelian finite-index subgroup of the Klein group has even
