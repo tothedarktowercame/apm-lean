@@ -2480,6 +2480,115 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_kernel_deriv2
 /-- The one-variable content of `∂_b G`: the slice `y ↦ G(a, y)` has the Leibniz
 derivative at `b` (FTC in `t` with `K 0 = 1`, then differentiation under the
 `s`-integral).  Oriented intervals: `a`, `b` of any sign. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice_aux_fixed
+    (g d : ℝ → ℝ → ℝ) (l r x : ℝ)
+    (hg : Continuous (Function.uncurry g))
+    (hd : Continuous (Function.uncurry d))
+    (hder : ∀ y t, HasDerivAt (fun z ↦ g z t) (d y t) y) :
+    HasDerivAt (fun y ↦ ∫ t in l..r, g y t) (∫ t in l..r, d x t) x := by
+  let s : Set ℝ := Metric.closedBall x 1
+  let K : Set (ℝ × ℝ) := s ×ˢ Set.uIcc l r
+  have hK : IsCompact K := (isCompact_closedBall x 1).prod isCompact_uIcc
+  obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn hd.continuousOn
+  have hs : s ∈ nhds x := by
+    exact Filter.mem_of_superset (Metric.ball_mem_nhds x zero_lt_one)
+      Metric.ball_subset_closedBall
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := g) (F' := d) (bound := fun _ ↦ C) (s := s) hs ?_ ?_ ?_ ?_ ?_ ?_).2
+  · filter_upwards with y
+    exact (hg.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · exact (hg.comp (continuous_const.prodMk continuous_id)).intervalIntegrable l r
+  · exact (hd.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · filter_upwards with t
+    intro ht y hy
+    exact hC (y, t) ⟨hy, uIoc_subset_uIcc ht⟩
+  · exact intervalIntegrable_const
+  · filter_upwards with t
+    intro _ y _
+    exact hder y t
+
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice_aux_inner
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1) (a s y : ℝ) :
+    HasDerivAt
+      (fun z ↦ ∫ t in (0 : ℝ)..z,
+        apm_m98J02_riemannKernel ((a - s) * (z - t)) *
+          apm_m98J02_characteristicSource f s t)
+      (apm_m98J02_characteristicSource f s y +
+        ∫ t in (0 : ℝ)..y,
+          (a - s) * deriv apm_m98J02_riemannKernel ((a - s) * (y - t)) *
+            apm_m98J02_characteristicSource f s t) y := by
+  let g : ℝ → ℝ → ℝ := fun z t ↦
+    apm_m98J02_riemannKernel ((a - s) * (z - t)) *
+      apm_m98J02_characteristicSource f s t
+  let d : ℝ → ℝ → ℝ := fun z t ↦
+    (a - s) * deriv apm_m98J02_riemannKernel ((a - s) * (z - t)) *
+      apm_m98J02_characteristicSource f s t
+  have hh := apm_m98J02_goursat_spec_aux_source_contDiff f hf
+  have hsrc : Continuous (Function.uncurry
+      (apm_m98J02_characteristicSource f)) :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_source_continuous f hf
+  have hg : Continuous (Function.uncurry g) := by
+    apply (hK.continuous.comp ?_).mul
+      (hsrc.comp (continuous_const.prodMk continuous_snd))
+    fun_prop
+  have hd : Continuous (Function.uncurry d) := by
+    have hKd : Continuous (deriv apm_m98J02_riemannKernel) := by
+      have hcd : ContDiff ℝ ∞ (deriv apm_m98J02_riemannKernel) := by
+        have hfd : ContDiff ℝ ∞ (fderiv ℝ apm_m98J02_riemannKernel) :=
+          hK.fderiv_right (by simp)
+        simpa [fderiv_eq_smul_deriv] using hfd.clm_apply
+          (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+      exact hcd.continuous
+    exact (continuous_const.mul (hKd.comp (by fun_prop))).mul
+      (hsrc.comp (continuous_const.prodMk continuous_snd))
+  have hder : ∀ z t, HasDerivAt (fun u ↦ g u t) (d z t) z := by
+    intro z t
+    dsimp [g, d]
+    convert (((apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_kernel_deriv
+      hK ((a - s) * (z - t))).comp z
+        ((hasDerivAt_id z).sub_const t |>.const_mul (a - s))).mul_const
+          (apm_m98J02_characteristicSource f s t)) using 1 <;> ring
+  have hfixed :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice_aux_fixed
+      g d 0 y y hg hd hder
+  let q : ℝ → ℝ := fun z ↦ ∫ τ : ℝ in 0..1, g z (y + (z - y) * τ)
+  have hgp : ContDiff ℝ 2 ↿fun p : ℝ × ℝ ↦ g p.1 (y + (p.1 - y) * p.2) := by
+    dsimp [g]
+    have hz : ContDiff ℝ 2 (fun p : ℝ × ℝ ↦
+        (a - s) * (p.1 - (y + (p.1 - y) * p.2))) := by fun_prop
+    have hm : ContDiff ℝ 2 (fun p : ℝ × ℝ ↦
+        WithLp.toLp 2 ![s, y + (p.1 - y) * p.2]) := by
+      apply PiLp.contDiff_toLp.comp
+      rw [contDiff_pi]
+      intro i
+      fin_cases i <;> simp <;> fun_prop
+    exact ((hK.of_le (WithTop.coe_le_coe.mpr le_top)).comp hz).mul (hh.comp hm)
+  have hq : ContDiff ℝ 2 q := by
+    exact apm_m98J02_goursat_spec_aux_regular_aux_param_integral
+      (fun z τ ↦ g z (y + (z - y) * τ)) hgp
+  have htail : HasDerivAt (fun z ↦ ∫ t in y..z, g z t) (g y y) y := by
+    have hp := ((hasDerivAt_id y).sub_const y).mul (hq.differentiable (by simp) y).hasDerivAt
+    have hreparam : ∀ z : ℝ, (∫ t in y..z, g z t) = (z - y) * q z := by
+      intro z
+      dsimp [q]
+      simpa [smul_eq_mul, add_comm, mul_comm, sub_eq_add_neg] using
+        (intervalIntegral.smul_integral_comp_mul_right
+          (a := (0 : ℝ)) (b := 1) (fun t ↦ g z (y + t)) (z - y)).symm
+    convert hp.congr_of_eventuallyEq (Filter.Eventually.of_forall hreparam) using 1 <;>
+      simp [q, g, hK0]
+  have hsum := hfixed.add htail
+  have hsplit : ∀ z : ℝ, (∫ t in (0 : ℝ)..z, g z t) =
+      (∫ t in (0 : ℝ)..y, g z t) + ∫ t in y..z, g z t := by
+    intro z
+    have hc : Continuous (fun t ↦ g z t) :=
+      hg.comp ((continuous_const (y := z)).prodMk continuous_id)
+    exact (intervalIntegral.integral_add_adjacent_intervals (μ := volume)
+      (hc.intervalIntegrable 0 y) (hc.intervalIntegrable y z)).symm
+  convert hsum.congr_of_eventuallyEq (Filter.Eventually.of_forall hsplit) using 1 <;>
+    simp [g, d, hK0, mul_assoc] <;> ring
+
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
@@ -2537,6 +2646,118 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b
 derivative `h(a,b) + ∫∫ (K' + z K'') h` at `a`.  First term: FTC in `s`.  Second:
 the boundary term at `s = a` vanishes by the factor `(a - s)`, and Leibniz under
 the integrals gives `K' + z K''`.  Oriented intervals: `a`, `b` of any sign. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_ftc
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f) (a b : ℝ) :
+    HasDerivAt
+      (fun x : ℝ ↦ ∫ s in (0 : ℝ)..x,
+        apm_m98J02_characteristicSource f s b)
+      (apm_m98J02_characteristicSource f a b) a := by
+  have hc :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_source_continuous f hf
+  have hs : Continuous (fun s : ℝ ↦ apm_m98J02_characteristicSource f s b) := by
+    simpa [Function.uncurry] using hc.comp
+      (continuous_id.prodMk (continuous_const : Continuous (fun _ : ℝ ↦ b)))
+  exact intervalIntegral.integral_hasDerivAt_right (hs.intervalIntegrable _ _)
+    hs.aestronglyMeasurable.stronglyMeasurableAtFilter hs.continuousAt
+
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_pointwise
+    (f : apm_m98J02_E → ℝ)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (a b s t : ℝ) :
+    HasDerivAt
+      (fun x : ℝ ↦
+        (x - s) * deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) *
+          apm_m98J02_characteristicSource f s t)
+      ((deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) +
+          ((a - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+            ((a - s) * (b - t))) *
+        apm_m98J02_characteristicSource f s t) a := by
+  have h1 :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_kernel_deriv2
+      hK ((a - s) * (b - t))
+  have hz : HasDerivAt (fun x : ℝ ↦ (x - s) * (b - t)) (b - t) a := by
+    convert ((hasDerivAt_id a).sub_const s).mul_const (b - t) using 1 <;> ring
+  have hc := ((hasDerivAt_id a).sub_const s).mul
+    (h1.comp a hz) |>.mul_const (apm_m98J02_characteristicSource f s t)
+  convert hc using 1 <;>
+    simp only [Function.comp_apply, id_eq, one_mul] <;> ring_nf
+
+/-- Leibniz rule with a variable upper limit and an `x`-dependent integrand:
+`d/dx ∫_l^x g(x,s) ds = g(a,a) + ∫_l^a ∂_x g(a,s) ds` at `a`.  Oriented intervals. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_varlimit
+    (g d : ℝ → ℝ → ℝ) (l a : ℝ)
+    (hg : Continuous (Function.uncurry g))
+    (hd : Continuous (Function.uncurry d))
+    (hder : ∀ x s, HasDerivAt (fun z ↦ g z s) (d x s) x) :
+    HasDerivAt (fun x ↦ ∫ s in l..x, g x s) (g a a + ∫ s in l..a, d a s) a := by
+  sorry
+
+/-- Differentiation in `x` under the inner `t`-integral (fixed interval `[0, b]`),
+with the pointwise derivative from `_aux_pointwise`. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_inner
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) (b x s : ℝ) :
+    HasDerivAt
+      (fun z : ℝ ↦ ∫ t in (0 : ℝ)..b,
+        (z - s) * deriv apm_m98J02_riemannKernel ((z - s) * (b - t)) *
+          apm_m98J02_characteristicSource f s t)
+      (∫ t in (0 : ℝ)..b,
+        (deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) +
+            ((x - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+              ((x - s) * (b - t))) *
+          apm_m98J02_characteristicSource f s t) x := by
+  let g : ℝ → ℝ → ℝ := fun z t ↦
+    (z - s) * deriv apm_m98J02_riemannKernel ((z - s) * (b - t)) *
+      apm_m98J02_characteristicSource f s t
+  let d : ℝ → ℝ → ℝ := fun z t ↦
+    (deriv apm_m98J02_riemannKernel ((z - s) * (b - t)) +
+        ((z - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+          ((z - s) * (b - t))) *
+      apm_m98J02_characteristicSource f s t
+  have hs :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_source_continuous f hf
+  have h1 : ContDiff ℝ ∞ (deriv apm_m98J02_riemannKernel) := by
+    have hh : ContDiff ℝ ∞ (fderiv ℝ apm_m98J02_riemannKernel) :=
+      hK.fderiv_right (by simp)
+    simpa [fderiv_eq_smul_deriv] using hh.clm_apply
+      (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+  have h2 : ContDiff ℝ ∞ (deriv (deriv apm_m98J02_riemannKernel)) := by
+    have hh : ContDiff ℝ ∞ (fderiv ℝ (deriv apm_m98J02_riemannKernel)) :=
+      h1.fderiv_right (by simp)
+    simpa [fderiv_eq_smul_deriv] using hh.clm_apply
+      (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+  have hKd : Continuous (deriv apm_m98J02_riemannKernel) := h1.continuous
+  have hKdd : Continuous (deriv (deriv apm_m98J02_riemannKernel)) := h2.continuous
+  have hg : Continuous (Function.uncurry g) := by
+    dsimp [g, Function.uncurry]
+    fun_prop
+  have hd : Continuous (Function.uncurry d) := by
+    dsimp [d, Function.uncurry]
+    fun_prop
+  let S : Set ℝ := Metric.closedBall x 1
+  let Cpt : Set (ℝ × ℝ) := S ×ˢ Set.uIcc 0 b
+  have hCpt : IsCompact Cpt := (isCompact_closedBall x 1).prod isCompact_uIcc
+  obtain ⟨C, hC⟩ := hCpt.exists_bound_of_continuousOn hd.continuousOn
+  have hS : S ∈ nhds x :=
+    Filter.mem_of_superset (Metric.ball_mem_nhds x zero_lt_one)
+      Metric.ball_subset_closedBall
+  change HasDerivAt (fun z ↦ ∫ t in (0 : ℝ)..b, g z t)
+    (∫ t in (0 : ℝ)..b, d x t) x
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := g) (F' := d) (bound := fun _ ↦ C) (s := S) hS ?_ ?_ ?_ ?_ ?_ ?_).2
+  · filter_upwards with z
+    exact (hg.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · exact (hg.comp (continuous_const.prodMk continuous_id)).intervalIntegrable _ _
+  · exact (hd.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · filter_upwards with t
+    intro ht z hz
+    exact hC (z, t) ⟨hz, Set.uIoc_subset_uIcc ht⟩
+  · exact intervalIntegrable_const
+  · filter_upwards with t
+    intro _ z _
+    exact apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_pointwise
+      f hK z b s t
+
 -- BEGIN SEAT AREA
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
@@ -2555,6 +2776,7 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_sli
                 deriv (deriv apm_m98J02_riemannKernel)
                   ((a - s) * (b - t))) *
               apm_m98J02_characteristicSource f s t) a := by
+  intro a b
   sorry
 -- END SEAT AREA
 
