@@ -2486,7 +2486,26 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_sli
     (hd : Continuous (Function.uncurry d))
     (hder : ∀ y t, HasDerivAt (fun z ↦ g z t) (d y t) y) :
     HasDerivAt (fun y ↦ ∫ t in l..r, g y t) (∫ t in l..r, d x t) x := by
-  sorry
+  let s : Set ℝ := Metric.closedBall x 1
+  let K : Set (ℝ × ℝ) := s ×ˢ Set.uIcc l r
+  have hK : IsCompact K := (isCompact_closedBall x 1).prod isCompact_uIcc
+  obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn hd.continuousOn
+  have hs : s ∈ nhds x := by
+    exact Filter.mem_of_superset (Metric.ball_mem_nhds x zero_lt_one)
+      Metric.ball_subset_closedBall
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := g) (F' := d) (bound := fun _ ↦ C) (s := s) hs ?_ ?_ ?_ ?_ ?_ ?_).2
+  · filter_upwards with y
+    exact (hg.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · exact (hg.comp (continuous_const.prodMk continuous_id)).intervalIntegrable l r
+  · exact (hd.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · filter_upwards with t
+    intro ht y hy
+    exact hC (y, t) ⟨hy, uIoc_subset_uIcc ht⟩
+  · exact intervalIntegrable_const
+  · filter_upwards with t
+    intro _ y _
+    exact hder y t
 
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice_aux_inner
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
