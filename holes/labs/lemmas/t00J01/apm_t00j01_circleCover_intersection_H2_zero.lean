@@ -639,7 +639,26 @@ lemma apm_t00j01_circleCover_intersection_H2_zero
     Limits.IsZero (apm_t00j01_H 2
       ((apm_t00j01_circleCoverLeft ∩
         apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type)) := by
-  sorry
+  obtain ⟨e⟩ := _he
+  apply Limits.IsZero.of_iso ?_
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e 2)
+  apply ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+  apply Limits.IsZero.of_iso ?_
+    (ConstructionTargets.TopologicalSumSingularHomology.sumHomologyIsoBiprod
+      apm_t00j01_Klein apm_t00j01_Klein 2)
+  apply (CategoryTheory.Limits.biprod_isZero_iff _ _).2
+  constructor
+  · exact Limits.IsZero.of_iso
+      (Functor.map_isZero
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules _hK2)
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of apm_t00j01_Klein) 2).symm
+  · exact Limits.IsZero.of_iso
+      (Functor.map_isZero
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules _hK2)
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of apm_t00j01_Klein) 2).symm
 -- END SEAT AREA
 
 /-- The exactness consequence of integral open-cover Mayer--Vietoris used by
