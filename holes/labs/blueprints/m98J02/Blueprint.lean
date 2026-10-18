@@ -2345,6 +2345,60 @@ lemma apm_m98J02_goursat_spec_aux_regular
   funext p
   exact apm_m98J02_goursat_spec_aux_regular_aux_reparam _ _ _ _
 
+lemma apm_m98J02_goursat_spec_aux_pde_aux_integral_ode
+    (f : apm_m98J02_E → ℝ)
+    (hKode : ∀ z : ℝ,
+      z * deriv (deriv apm_m98J02_riemannKernel) z +
+        deriv apm_m98J02_riemannKernel z +
+        (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0)
+    (a b : ℝ) :
+    (∫ s in (0 : ℝ)..a, ∫ t in (0 : ℝ)..b,
+      (deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) +
+        ((a - s) * (b - t)) *
+          deriv (deriv apm_m98J02_riemannKernel) ((a - s) * (b - t))) *
+        apm_m98J02_characteristicSource f s t) =
+      -(2 / 81 : ℝ) *
+        apm_m98J02_goursat apm_m98J02_riemannKernel
+          (apm_m98J02_characteristicSource f) a b := by
+  unfold apm_m98J02_goursat
+  rw [← intervalIntegral.integral_const_mul]
+  apply intervalIntegral.integral_congr
+  intro s hs
+  change (∫ t in (0 : ℝ)..b,
+      (deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) +
+        (a - s) * (b - t) *
+          deriv (deriv apm_m98J02_riemannKernel) ((a - s) * (b - t))) *
+        apm_m98J02_characteristicSource f s t) =
+    -(2 / 81 : ℝ) * (∫ t in (0 : ℝ)..b,
+      apm_m98J02_riemannKernel ((a - s) * (b - t)) *
+        apm_m98J02_characteristicSource f s t)
+  rw [← intervalIntegral.integral_const_mul]
+  apply intervalIntegral.integral_congr
+  intro t ht
+  have ho := hKode ((a - s) * (b - t))
+  linear_combination ho * apm_m98J02_characteristicSource f s t
+
+/-- The analytic Leibniz-rule step: FTC in `b`, differentiation under the
+outer integral, then FTC in `a`.  All intervals are oriented. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1) :
+    ∀ a b : ℝ,
+      apm_m98J02_partial 0 (apm_m98J02_partial 1
+          (fun p : apm_m98J02_E ↦
+            apm_m98J02_goursat apm_m98J02_riemannKernel
+              (apm_m98J02_characteristicSource f) (p 0) (p 1)))
+          (WithLp.toLp 2 ![a, b]) =
+        apm_m98J02_characteristicSource f a b +
+          ∫ s in (0 : ℝ)..a, ∫ t in (0 : ℝ)..b,
+            (deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) +
+              ((a - s) * (b - t)) *
+                deriv (deriv apm_m98J02_riemannKernel)
+                  ((a - s) * (b - t))) *
+              apm_m98J02_characteristicSource f s t := by
+  sorry
+
 lemma apm_m98J02_goursat_spec_aux_pde
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
@@ -2362,7 +2416,10 @@ lemma apm_m98J02_goursat_spec_aux_pde
         (2 / 81 : ℝ) * apm_m98J02_goursat apm_m98J02_riemannKernel
           (apm_m98J02_characteristicSource f) a b =
         apm_m98J02_characteristicSource f a b := by
-  sorry
+  intro a b
+  rw [apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative f hf hK hK0 a b,
+    apm_m98J02_goursat_spec_aux_pde_aux_integral_ode f hKode a b]
+  ring
 
 theorem apm_m98J02_goursat_spec
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
