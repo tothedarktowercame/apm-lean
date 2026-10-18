@@ -169,10 +169,61 @@ theorem exists_connected_subgroup_cover_aux_mulEquiv_range
 equinumerous with the right-coset classes of `subgroupCosetSetoid` via
 inversion.  Pure algebra, no topology. -/
 -- BEGIN SEAT AREA
+def exists_connected_subgroup_cover_aux_fiber_loopEquiv {x : X} :
+    {a : BasedPaths x // a.1 = x} ≃ FundamentalGroup X x where
+  toFun a := (FundamentalGroup.fromPath
+    (Eq.mp (congrArg (fun y ↦ Path.Homotopic.Quotient x y) a.property) a.val.2))⁻¹
+  invFun g := ⟨⟨x, FundamentalGroup.toPath g⁻¹⟩, rfl⟩
+  left_inv a := by
+    rcases a with ⟨⟨y, a⟩, h⟩
+    change y = x at h
+    rcases h with rfl
+    simp
+  right_inv g := by simp
+
 theorem exists_connected_subgroup_cover_aux_fiber
     {x : X} (H : Subgroup (FundamentalGroup X x)) :
     Nonempty ((BasedCover.proj H ⁻¹' ({x} : Set X)) ≃ Quotient (subgroupCosetSetoid H)) := by
-  sorry
+  let R : Setoid {a : BasedPaths x // a.1 = x} :=
+    (MulAction.orbitRel H (BasedPaths x)).comap Subtype.val
+  let e₁ : (BasedCover.proj H ⁻¹' ({x} : Set X)) ≃ Quotient R :=
+    Equiv.subtypeQuotientEquivQuotientSubtype
+      (fun a : BasedPaths x ↦ a.1 = x)
+      (fun q : BasedCover H ↦ q ∈ BasedCover.proj H ⁻¹' ({x} : Set X))
+      (fun a ↦ by simp [BasedCover.proj, BasedCover.mk])
+      (fun _ _ ↦ Iff.rfl)
+  let e₂ : Quotient R ≃ Quotient (subgroupCosetSetoid H) :=
+    Quotient.congr exists_connected_subgroup_cover_aux_fiber_loopEquiv (by
+      rintro ⟨⟨y, a⟩, ha⟩ ⟨⟨z, b⟩, hb⟩
+      change y = x at ha
+      change z = x at hb
+      subst y
+      subst z
+      change MulAction.orbitRel H (BasedPaths x) ⟨x, a⟩ ⟨x, b⟩ ↔ _
+      rw [MulAction.orbitRel_apply, MulAction.mem_orbit_iff]
+      dsimp [exists_connected_subgroup_cover_aux_fiber_loopEquiv, subgroupCosetSetoid]
+      change (∃ g : H, (⟨x, (FundamentalGroup.toPath
+          ((g : FundamentalGroup X x)⁻¹)).trans b⟩ : BasedPaths x) = ⟨x, a⟩) ↔
+        (FundamentalGroup.fromPath a)⁻¹ * ((FundamentalGroup.fromPath b)⁻¹)⁻¹ ∈ H
+      constructor
+      · rintro ⟨g, hg⟩
+        have hp : (FundamentalGroup.toPath ((g : FundamentalGroup X x)⁻¹)).trans b = a :=
+          eq_of_heq (Sigma.ext_iff.mp hg).2
+        have hg' : (FundamentalGroup.fromPath b) * (g : FundamentalGroup X x)⁻¹ =
+            FundamentalGroup.fromPath a := hp
+        rw [← hg']
+        simpa using g.property
+      · intro hab
+        refine ⟨⟨(FundamentalGroup.fromPath a)⁻¹ * FundamentalGroup.fromPath b,
+          by simpa using hab⟩, ?_⟩
+        apply Sigma.ext
+        · rfl
+        rw [heq_iff_eq]
+        change (FundamentalGroup.fromPath b) *
+          ((FundamentalGroup.fromPath a)⁻¹ * FundamentalGroup.fromPath b)⁻¹ =
+            FundamentalGroup.fromPath a
+        group)
+  exact ⟨e₁.trans e₂⟩
 -- END SEAT AREA
 
 end BasedPathConstruction
