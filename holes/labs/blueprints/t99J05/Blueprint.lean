@@ -827,7 +827,102 @@ theorem t99J05_lefschetz_euler_step_aux_mid (n : ℕ)
     FiniteDimensional ℚ (Homology (CP (n + 1)) k) ∧
       Module.finrank ℚ (Homology (CP (n + 1)) k) =
         if Even k ∧ k ≤ 2 * (n + 1) then 1 else 0 := by
-  sorry
+  obtain ⟨δ, e1, e2, e3⟩ :=
+    RP3Homology.rationalMayerVietoris (t99J05U n) (t99J05V n)
+      hcover.1 hcover.2.1 hcover.2.2
+  have hkpos : 0 < k := Nat.pos_of_ne_zero hk0
+  have hVrank : Module.finrank ℚ (Homology (↑(t99J05V n)) k) = 0 := by
+    rw [hV.2]
+    simp [hk0]
+  have hVzero : CategoryTheory.Limits.IsZero
+      (Homology (↑(t99J05V n)) k) := by
+    letI := hV.1 k
+    letI : Subsingleton (Homology (↑(t99J05V n)) k) :=
+      Module.finrank_zero_iff.mp hVrank
+    exact ModuleCat.isZero_of_subsingleton _
+  have hJinj : Function.Injective
+      (RP3Homology.mvJ (t99J05U n) (t99J05V n) k).hom := by
+    rw [← LinearMap.ker_eq_bot, ← e1 k, LinearMap.range_eq_bot]
+    by_cases hki : k = 2 * n + 1
+    · have hodd : ¬ Even k := by
+        rw [hki]
+        rintro ⟨a, ha⟩
+        omega
+      have hUrank : Module.finrank ℚ
+          (Homology (↑(t99J05U n)) k) = 0 := by
+        rw [hU.2]
+        simp [hodd]
+      have hUzero : CategoryTheory.Limits.IsZero
+          (Homology (↑(t99J05U n)) k) := by
+        letI := hU.1 k
+        letI : Subsingleton (Homology (↑(t99J05U n)) k) :=
+          Module.finrank_zero_iff.mp hUrank
+        exact ModuleCat.isZero_of_subsingleton _
+      have hz := RP3Homology.cp2_homology_of_mv_aux_biprod_zero hUzero hVzero
+      exact congrArg ModuleCat.Hom.hom (hz.eq_of_tgt _ 0)
+    · have hirank : Module.finrank ℚ
+          (Homology (↑(t99J05U n ∩ t99J05V n)) k) = 0 := by
+        rw [hinter.2.1]
+        simp [hk0, hki]
+      have hizero : CategoryTheory.Limits.IsZero
+          (Homology (↑(t99J05U n ∩ t99J05V n)) k) := by
+        letI := hinter.1 k
+        letI : Subsingleton
+            (Homology (↑(t99J05U n ∩ t99J05V n)) k) :=
+          Module.finrank_zero_iff.mp hirank
+        exact ModuleCat.isZero_of_subsingleton _
+      exact congrArg ModuleCat.Hom.hom (hizero.eq_of_src _ 0)
+  have hkpred : k - 1 + 1 = k := Nat.sub_add_cancel hkpos
+  have hJsurj : Function.Surjective
+      (RP3Homology.mvJ (t99J05U n) (t99J05V n) k).hom := by
+    rw [← LinearMap.range_eq_top]
+    rw [← hkpred, e2 (k - 1), LinearMap.ker_eq_top]
+    by_cases hk1 : k = 1
+    · subst k
+      have hrange : LinearMap.range (δ 0).hom = ⊥ := by
+        rw [e3 0, LinearMap.ker_eq_bot]
+        exact hinter.2.2
+      exact LinearMap.range_eq_bot.mp hrange
+    · have hp0 : k - 1 ≠ 0 := by omega
+      have hptop : k - 1 ≠ 2 * n + 1 := by omega
+      have hprank : Module.finrank ℚ
+          (Homology (↑(t99J05U n ∩ t99J05V n)) (k - 1)) = 0 := by
+        rw [hinter.2.1]
+        simp [hp0, hptop]
+      have hpzero : CategoryTheory.Limits.IsZero
+          (Homology (↑(t99J05U n ∩ t99J05V n)) (k - 1)) := by
+        letI := hinter.1 (k - 1)
+        letI : Subsingleton
+            (Homology (↑(t99J05U n ∩ t99J05V n)) (k - 1)) :=
+          Module.finrank_zero_iff.mp hprank
+        exact ModuleCat.isZero_of_subsingleton _
+      exact congrArg ModuleCat.Hom.hom (hpzero.eq_of_tgt _ 0)
+  let EJ := LinearEquiv.ofBijective
+    (RP3Homology.mvJ (t99J05U n) (t99J05V n) k).hom ⟨hJinj, hJsurj⟩
+  let EF := LinearEquiv.ofBijective
+    (CategoryTheory.Limits.biprod.fst :
+      (Homology (↑(t99J05U n)) k ⊞ Homology (↑(t99J05V n)) k ⟶
+        Homology (↑(t99J05U n)) k)).hom
+    (RP3Homology.cp2_homology_of_mv_aux_fst_bijective hVzero)
+  let E : Homology (CP (n + 1)) k ≃ₗ[ℚ]
+      Homology (↑(t99J05U n)) k := EJ.symm.trans EF
+  letI := hU.1 k
+  have hfd : FiniteDimensional ℚ (Homology (CP (n + 1)) k) :=
+    E.symm.finiteDimensional
+  refine ⟨hfd, ?_⟩
+  rw [E.finrank_eq, hU.2]
+  congr 1
+  apply propext
+  constructor
+  · rintro ⟨he, hle⟩
+    exact ⟨he, by omega⟩
+  · rintro ⟨he, hle⟩
+    refine ⟨he, ?_⟩
+    by_contra hnle
+    have : k = 2 * n + 2 := by
+      obtain ⟨a, ha⟩ := he
+      omega
+    exact hktop this
 
 /-- The dimension-counting step in the rational Mayer–Vietoris sequence. -/
 theorem t99J05_lefschetz_euler_step (n : ℕ)
