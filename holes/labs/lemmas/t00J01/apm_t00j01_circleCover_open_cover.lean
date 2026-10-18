@@ -574,7 +574,24 @@ lemma apm_t00j01_circleCover_open_cover :
     IsOpen apm_t00j01_circleCoverLeft ∧
       IsOpen apm_t00j01_circleCoverRight ∧
       apm_t00j01_circleCoverLeft ∪ apm_t00j01_circleCoverRight = Set.univ := by
-  sorry
+  constructor
+  · exact (isOpen_compl_singleton.preimage continuous_snd)
+  constructor
+  · exact (isOpen_compl_singleton.preimage continuous_snd)
+  · apply Set.eq_univ_iff_forall.mpr
+    intro p
+    by_cases h : p.2 = Circle.exp Real.pi
+    · right
+      change p.2 ≠ (1 : Circle)
+      rw [h]
+      intro heq
+      have heq' := congrArg (fun z : Circle => (z : ℂ)) heq
+      dsimp only at heq'
+      rw [Circle.coe_exp] at heq'
+      rw [Complex.exp_pi_mul_I] at heq'
+      norm_num at heq'
+    · left
+      exact h
 -- END SEAT AREA
 
 /-- Each member of the punctured-circle cover retracts to the Klein factor. -/
