@@ -670,7 +670,19 @@ About 60–150 lines. -/
 theorem ratUC_homologyIso (K : ChainComplex (ModuleCat.{0} ℤ) ℕ) (k : ℕ) :
     Nonempty (((ratUC_F.mapHomologicalComplex _).obj K).homology k ≅
       ratUC_F.obj (K.homology k)) := by
-  sorry
+  let adj := ModuleCat.extendRestrictScalarsAdj (algebraMap ℤ ℚ)
+  letI : ratUC_F.Additive := adj.left_adjoint_additive
+  have hflat : (algebraMap ℤ ℚ).Flat := by
+    rw [RingHom.flat_algebraMap_iff]
+    infer_instance
+  letI : Limits.PreservesFiniteLimits ratUC_F :=
+    ModuleCat.preservesFiniteLimits_extendScalars_of_flat hflat
+  letI : Limits.PreservesFiniteColimits ratUC_F :=
+    (Adjunction.leftAdjoint_preservesColimits.{0, 0} adj).preservesFiniteColimits
+  letI : ratUC_F.PreservesHomology := by
+    apply ((Functor.exact_tfae ratUC_F).out 3 2).mp
+    exact And.intro (by infer_instance) (by infer_instance)
+  exact ⟨(K.sc k).mapHomologyIso ratUC_F⟩
 -- END SEAT AREA
 
 /-- **Leaf `ratUC_finrank` (UC iii).**  For a finitely generated abelian group
