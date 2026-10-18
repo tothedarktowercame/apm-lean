@@ -285,10 +285,191 @@ theorem t03J04_euler_mul_of_goodFamily {E B : Type} [TopologicalSpace E]
     ∃ c : ℚ, HasEulerCharacteristic B c ∧ HasEulerCharacteristic E (k * c) := by
   sorry
 
-/-- LEAF C3 (GAP, own blueprint needed).  Good-cover theorem: a compact
-Hausdorff smooth manifold has a finite good open cover (Bott–Tu, Thm 5.1:
-geodesically convex balls of a Riemannian metric).  Not in Mathlib; far above
-one seat.  See BLUEPRINT.md, "Risks". -/
+/-! ### C3 breakdown (2026-10-18): a good cover from small chart balls
+
+No Riemannian metric.  A small ball of one chart, read in a nearby chart, is a
+sublevel set of `y ↦ ‖g y - a‖²` for the coordinate change `g`, and that function
+is convex near the centre (second derivative `2‖Dg w‖² + 2⟪g - a, D²g(w,w)⟫ ≥ 0`
+once `‖g - a‖ ≤ c²/C`).  Compactness and a Lebesgue number then put every finite
+intersection of members inside one chart, convex there.  Leaves K1–K4, M1–M7a;
+C3 itself is the assembly (M7b).  See `BLUEPRINT.md`, "C3 breakdown". -/
+
+/-- Fixed linear identification of the model space with `ℝⁿ` (sorry-free). -/
+def t03J04_modelEquiv (n : ℕ) : apm_t03J04_E n ≃L[ℝ] EuclideanSpace ℝ (Fin n) :=
+  (LinearEquiv.ofFinrankEq _ _ (by simp [apm_t03J04_E, Module.finrank_pi_fintype])).toContinuousLinearEquiv
+
+section C3
+
+variable {X : Type}
+
+/-- The chart at `β`, read in `ℝⁿ` (sorry-free). -/
+def t03J04_coord (n : ℕ) [TopologicalSpace X] [ChartedSpace (apm_t03J04_HModel n) X] (β : X) :
+    X → EuclideanSpace ℝ (Fin n) :=
+  fun x ↦ t03J04_modelEquiv n (chartAt (apm_t03J04_HModel n) β x)
+
+/-- Chart ball: the points of the source of the chart at `β` whose `ℝⁿ`
+coordinates lie within `r` of those of `z` (sorry-free). -/
+def t03J04_chartBall (n : ℕ) [TopologicalSpace X] [ChartedSpace (apm_t03J04_HModel n) X]
+    (β z : X) (r : ℝ) : Set X :=
+  (chartAt (apm_t03J04_HModel n) β).source ∩
+    t03J04_coord n β ⁻¹' Metric.ball (t03J04_coord n β z) r
+
+/-- The coordinate change from the chart at `α` to the chart at `β`, in `ℝⁿ`
+(sorry-free). -/
+def t03J04_coordChange (n : ℕ) [TopologicalSpace X] [ChartedSpace (apm_t03J04_HModel n) X]
+    (α β : X) : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) :=
+  fun y ↦ t03J04_coord n β ((chartAt (apm_t03J04_HModel n) α).symm ((t03J04_modelEquiv n).symm y))
+
+/-- Its natural domain, in `ℝⁿ` (sorry-free). -/
+def t03J04_coordDomain (n : ℕ) [TopologicalSpace X] [ChartedSpace (apm_t03J04_HModel n) X]
+    (α β : X) : Set (EuclideanSpace ℝ (Fin n)) :=
+  (t03J04_modelEquiv n).symm ⁻¹'
+    ((chartAt (apm_t03J04_HModel n) α).target ∩
+      (chartAt (apm_t03J04_HModel n) α).symm ⁻¹' (chartAt (apm_t03J04_HModel n) β).source)
+
+end C3
+
+/-- LEAF K1 (100–180 lines).  Convexity from nonnegative second derivatives along
+lines.  Route: reduce to segments with `AffineMap.lineMap` /
+`ConvexOn.comp_affineMap`, then `convexOn_of_deriv2_nonneg`. -/
+theorem t03J04_C3_convexOn_of_line_deriv2 {F : Type} [NormedAddCommGroup F]
+    [NormedSpace ℝ F] {N : Set F} (hN : IsOpen N) (hNc : Convex ℝ N) {f : F → ℝ}
+    (hf : ContDiffOn ℝ 2 f N)
+    (h2 : ∀ y ∈ N, ∀ w : F, 0 ≤ deriv (deriv (fun t : ℝ ↦ f (y + t • w))) 0) :
+    ConvexOn ℝ N f := by
+  sorry
+
+/-- LEAF K2 (80–150 lines).  Second derivative of `t ↦ ‖γ t - a‖²`.  Route:
+`HasDerivAt.norm_sq` gives `deriv = 2⟪γ - a, γ'⟫` near `t`; differentiate that
+with `HasDerivAt.inner`. -/
+theorem t03J04_C3_line_deriv2_normSq {F : Type} [NormedAddCommGroup F]
+    [InnerProductSpace ℝ F] {γ γ' γ'' : ℝ → F} (a : F) {t : ℝ}
+    (h1 : ∀ᶠ s in 𝓝 t, HasDerivAt γ (γ' s) s) (h2 : HasDerivAt γ' (γ'' t) t) :
+    HasDerivAt (deriv (fun s ↦ ‖γ s - a‖ ^ 2))
+      (2 * ‖γ' t‖ ^ 2 + 2 * inner ℝ (γ t - a) (γ'' t)) t := by
+  sorry
+
+/-- LEAF K3 (120–200 lines).  Uniform first- and second-derivative bounds near a
+point where the derivative is injective.  Route: finite dimension gives
+`c‖w‖ ≤ ‖Dg y₀ w‖`; continuity of `fderiv` keeps half of it on a ball; the
+second derivative is bounded on a closed ball by compactness. -/
+theorem t03J04_C3_deriv_bounds {F : Type} [NormedAddCommGroup F] [NormedSpace ℝ F]
+    [FiniteDimensional ℝ F] {g : F → F} {O : Set F} (hO : IsOpen O)
+    (hg : ContDiffOn ℝ 2 g O) {y₀ : F} (hy₀ : y₀ ∈ O)
+    (hinj : Function.Injective (fderiv ℝ g y₀)) :
+    ∃ ρ > 0, ∃ c > 0, ∃ C > 0, Metric.ball y₀ ρ ⊆ O ∧
+      ∀ y ∈ Metric.ball y₀ ρ, ∀ w : F,
+        c * ‖w‖ ≤ ‖fderiv ℝ g y w‖ ∧ ‖fderiv ℝ (fderiv ℝ g) y w w‖ ≤ C * ‖w‖ ^ 2 := by
+  sorry
+
+/-- LEAF K4 (layer 2: K1, K2, K3; 100–160 lines).  `‖g y - a‖²` is convex near
+`y₀` for every `a` near `g y₀`.  Route: K3, shrink `ρ` so `‖g y - g y₀‖ < c²/(2C)`,
+take `ε = c²/(2C)`; along a line the second derivative (K2, chain rule) is
+`≥ 2c²‖w‖² - 2‖g y - a‖ C ‖w‖² ≥ 0`; conclude by K1. -/
+theorem t03J04_C3_normSq_convex_near {F : Type} [NormedAddCommGroup F]
+    [InnerProductSpace ℝ F] [FiniteDimensional ℝ F] {g : F → F} {O : Set F}
+    (hO : IsOpen O) (hg : ContDiffOn ℝ 2 g O) {y₀ : F} (hy₀ : y₀ ∈ O)
+    (hinj : Function.Injective (fderiv ℝ g y₀)) :
+    ∃ ε > 0, ∃ ρ > 0, Metric.ball y₀ ρ ⊆ O ∧
+      ∀ a : F, ‖a - g y₀‖ < ε → ConvexOn ℝ (Metric.ball y₀ ρ) (fun y ↦ ‖g y - a‖ ^ 2) := by
+  sorry
+
+/-- LEAF M1 (120–200 lines).  The coordinate change is smooth on an open domain
+with injective derivative.  Route: `contDiffOn_ext_coord_change`; the model is
+`ModelWithCorners.pi` of selves, so `extChartAt = chartAt` and `range = univ`
+(state that as a small lemma first if `simp` does not see it); injectivity from
+the inverse change and the chain rule. -/
+theorem t03J04_C3_coordChange {n : ℕ} {X : Type} [TopologicalSpace X]
+    [ChartedSpace (apm_t03J04_HModel n) X]
+    [IsManifold (apm_t03J04_Model n) ∞ X] (α β : X) :
+    IsOpen (t03J04_coordDomain n α β) ∧
+      ContDiffOn ℝ ∞ (t03J04_coordChange n α β) (t03J04_coordDomain n α β) ∧
+      ∀ y ∈ t03J04_coordDomain n α β, Function.Injective (fderiv ℝ (t03J04_coordChange n α β) y) := by
+  sorry
+
+/-- LEAF M2 (layer 3: K4, M1; 150–250 lines).  Small `β`-balls centred near `x`
+are convex in the chart at `α`.  Route: K4 at `y₀ = t03J04_coord n α x` for the
+change of M1 (order 2 by `ContDiffOn.of_le`); for `z` near `x` and small `r` the
+ball lies in `source α` and in `coord α ⁻¹' ball y₀ ρ`, and its image is
+`{y ∈ ball y₀ ρ | ‖g y - coord β z‖² < r²}`; `ConvexOn.convex_lt`. -/
+theorem t03J04_C3_chartBall_convex_local {n : ℕ} {X : Type} [TopologicalSpace X]
+    [ChartedSpace (apm_t03J04_HModel n) X] [IsManifold (apm_t03J04_Model n) ∞ X]
+    {α β x : X} (hα : x ∈ (chartAt (apm_t03J04_HModel n) α).source)
+    (hβ : x ∈ (chartAt (apm_t03J04_HModel n) β).source) :
+    ∃ W ∈ 𝓝 x, ∃ r₀ > 0, ∀ z ∈ W, ∀ r ∈ Set.Ioo 0 r₀,
+      t03J04_chartBall n β z r ⊆ (chartAt (apm_t03J04_HModel n) α).source ∧
+        Convex ℝ (t03J04_coord n α '' t03J04_chartBall n β z r) := by
+  sorry
+
+/-- LEAF M3 (layer 4: M2; 80–150 lines).  One neighbourhood and radius for all
+charts of a finite shrunk atlas, read in the chart at `x`.  Route: M2 with
+`α = x` for each `β ∈ I` with `x ∈ K β`; `W` avoids the closed `K β` with
+`x ∉ K β`; finite intersection of the `W`, minimum of the `r₀`. -/
+theorem t03J04_C3_uniform_at_point {n : ℕ} {X : Type} [TopologicalSpace X]
+    [ChartedSpace (apm_t03J04_HModel n) X] [IsManifold (apm_t03J04_Model n) ∞ X]
+    (I : Finset X) (K : X → Set X)
+    (hK : ∀ β ∈ I, IsClosed (K β) ∧ K β ⊆ (chartAt (apm_t03J04_HModel n) β).source)
+    (x : X) :
+    ∃ W ∈ 𝓝 x, ∃ r₀ > 0, ∀ β ∈ I, ∀ z ∈ W ∩ K β, ∀ r ∈ Set.Ioo 0 r₀,
+      t03J04_chartBall n β z r ⊆ (chartAt (apm_t03J04_HModel n) x).source ∧
+        Convex ℝ (t03J04_coord n x '' t03J04_chartBall n β z r) := by
+  sorry
+
+/-- LEAF M4 (100–150 lines).  Chart balls with centres in a compact set are
+uniformly small in a metric for the topology.  Stated for `[MetricSpace X]`; the
+assembly uses `TopologicalSpace.metrizableSpaceMetric`, whose topology is the
+given one by `replaceTopology`.  Route: a thickening of `coord β '' K` inside the
+target, and uniform continuity of the inverse chart on it. -/
+theorem t03J04_C3_chartBall_small {n : ℕ} {X : Type} [MetricSpace X] [ChartedSpace (apm_t03J04_HModel n) X]
+    (β : X) {K : Set X} (hK : IsCompact K)
+    (hKs : K ⊆ (chartAt (apm_t03J04_HModel n) β).source) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ r > 0, ∀ z ∈ K, t03J04_chartBall n β z r ⊆ Metric.ball z δ := by
+  sorry
+
+/-- LEAF M5 (60–100 lines).  A finite atlas with compact shrinkings whose
+interiors cover.  Route: `ChartedSpace.locallyCompactSpace`,
+`exists_compact_subset` at each point inside its chart source, finite subcover
+of `univ`. -/
+theorem t03J04_C3_finite_shrunk_atlas {n : ℕ} {X : Type} [TopologicalSpace X] [T2Space X] [CompactSpace X]
+    [ChartedSpace (apm_t03J04_HModel n) X] :
+    ∃ I : Finset X, ∃ K : X → Set X,
+      (∀ β ∈ I, IsCompact (K β) ∧ K β ⊆ (chartAt (apm_t03J04_HModel n) β).source) ∧
+        ⋃ β ∈ I, interior (K β) = Set.univ := by
+  sorry
+
+/-- LEAF M6 (60–100 lines).  A nonempty subset of a chart source with convex
+image is contractible.  Route: the chart restricts to a homeomorphism onto the
+image (`OpenPartialHomeomorph.homeomorphOfImageSubsetSource`), then
+`Convex.contractibleSpace`, `Homeomorph.contractibleSpace`. -/
+theorem t03J04_C3_contractible_of_convex_image {n : ℕ} {X : Type} [TopologicalSpace X]
+    [ChartedSpace (apm_t03J04_HModel n) X] (α : X) {S : Set X}
+    (hS : S ⊆ (chartAt (apm_t03J04_HModel n) α).source) (hne : S.Nonempty)
+    (hconv : Convex ℝ (t03J04_coord n α '' S)) : ContractibleSpace S := by
+  sorry
+
+/-- LEAF M7a (layer 2: M6; 100–160 lines).  A finite open family is good when
+every subfamily with a common point lies in one chart, convex there.  Route: the
+chart is injective on its source, so the image of the intersection is the
+intersection of the convex images; M6. -/
+theorem t03J04_C3_good_of_commonChart {n : ℕ} {X : Type} [TopologicalSpace X]
+    [ChartedSpace (apm_t03J04_HModel n) X] (𝒰 : Finset (Set X))
+    (hopen : ∀ U ∈ 𝒰, IsOpen U)
+    (hcommon : ∀ s ⊆ 𝒰, ∀ x : X, (∀ U ∈ s, x ∈ U) → ∃ α : X,
+      ∀ U ∈ s, U ⊆ (chartAt (apm_t03J04_HModel n) α).source ∧
+        Convex ℝ (t03J04_coord n α '' U)) :
+    t03J04_IsGoodFamily 𝒰 := by
+  sorry
+
+/-- LEAF C3 = M7b (layer 5: M3, M4, M5, M7a; 180–280 lines).  Good-cover theorem
+for compact manifolds on this model.  Route: metric from
+`Manifold.metrizableSpace` and `TopologicalSpace.metrizableSpaceMetric`; `I, K`
+from M5 (`K β` closed, being compact in a T2 space); `W_x, r₀ x` from M3; finite
+subcover by the `W_{x_j}`, Lebesgue number `δ` (`lebesgue_number_lemma_of_metric`);
+`r < min_j r₀ x_j` with balls of diameter `< δ` (M4 at `δ/2`); centres from
+finite subcovers of each `K β` by `t03J04_chartBall n β z r` (`z ∈` its own ball).
+Members are chart balls (open: `source ∩ continuousOn.preimage`).  Members with a
+common point `x` have centres within `δ/2` of `x`, so lie in one `W_{x_j}`:
+M7a with `α = x_j`. -/
 theorem t03J04_compact_manifold_goodCover (n : ℕ) (X : Type) [TopologicalSpace X]
     [T2Space X] [CompactSpace X] [ChartedSpace (apm_t03J04_HModel n) X]
     [IsManifold (apm_t03J04_Model n) ∞ X] :
