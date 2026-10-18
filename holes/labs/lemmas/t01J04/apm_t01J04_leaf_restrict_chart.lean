@@ -567,7 +567,88 @@ theorem apm_t01J04_leaf_restrict_chart
     (hψ : ψ ∈ IsManifold.maximalAtlas 𝓘(ℝ, apm_t01J04_Euclidean n) (⊤ : ℕ∞) X)
     (hslice : ∀ z ∈ ψ.source, z ∈ S ↔ 0 ≤ ψ z 0) :
     ∃ d : apm_t01J04_bp_HalfSliceChart n X S, d.amb = ψ := by
-  sorry
+  classical
+  let f : {x // x ∈ S} → EuclideanHalfSpace n := fun u =>
+    if hu : u.1 ∈ ψ.source then
+      ⟨ψ u.1, (hslice u.1 hu).mp u.2⟩
+    else 0
+  let g : EuclideanHalfSpace n → {x // x ∈ S} := fun v =>
+    if hv : v.1 ∈ ψ.target then
+      ⟨ψ.symm v.1, (hslice ( ψ.symm v.1) (ψ.map_target hv)).mpr (by
+        rw [ψ.right_inv hv]
+        exact v.2)⟩
+    else ⟨x₀, hx₀⟩
+  let c : OpenPartialHomeomorph {x // x ∈ S} (EuclideanHalfSpace n) := {
+    source := Subtype.val ⁻¹' ψ.source
+    target := Subtype.val ⁻¹' ψ.target
+    toFun := f
+    invFun := g
+    map_source' := by
+      intro u hu
+      change u.1 ∈ ψ.source at hu
+      dsimp [f]
+      rw [dif_pos hu]
+      exact ψ.map_source hu
+    map_target' := by
+      intro v hv
+      change v.1 ∈ ψ.target at hv
+      dsimp [g]
+      rw [dif_pos hv]
+      exact ψ.map_target hv
+    left_inv' := by
+      intro u hu
+      change u.1 ∈ ψ.source at hu
+      apply Subtype.ext
+      dsimp [g, f]
+      simp only [dif_pos hu]
+      simp only [dif_pos (ψ.map_source hu)]
+      exact ψ.left_inv hu
+    right_inv' := by
+      intro v hv
+      change v.1 ∈ ψ.target at hv
+      apply EuclideanHalfSpace.ext
+      dsimp [g, f]
+      simp only [dif_pos hv]
+      simp only [dif_pos (ψ.map_target hv)]
+      exact ψ.right_inv hv
+    open_source := ψ.open_source.preimage continuous_subtype_val
+    open_target := ψ.open_target.preimage continuous_subtype_val
+    continuousOn_toFun := by
+      rw [continuousOn_iff_continuous_restrict]
+      have h : ContinuousOn (fun u : {x // x ∈ S} => ψ u.1)
+          (Subtype.val ⁻¹' ψ.source) :=
+        ψ.continuousOn.comp continuous_subtype_val.continuousOn (fun _ h => h)
+      rw [continuousOn_iff_continuous_restrict] at h
+      convert Continuous.subtype_mk (p := fun x : apm_t01J04_Euclidean n => 0 ≤ x 0) h
+        (fun u => (hslice u.1.1 u.2).mp u.1.2) using 1
+      ext u
+      have hu : u.1.1 ∈ ψ.source := u.2
+      dsimp [f]
+      simp only [dif_pos hu]
+    continuousOn_invFun := by
+      rw [continuousOn_iff_continuous_restrict]
+      have h : ContinuousOn (fun v : EuclideanHalfSpace n => ψ.symm v.1)
+          (Subtype.val ⁻¹' ψ.target) :=
+        ψ.continuousOn_symm.comp continuous_subtype_val.continuousOn (fun _ h => h)
+      rw [continuousOn_iff_continuous_restrict] at h
+      convert Continuous.subtype_mk (p := fun x : X => x ∈ S) h
+        (fun v => (hslice (ψ.symm v.1.1) (ψ.map_target v.2)).mpr (by
+          rw [ψ.right_inv v.2]
+          exact v.1.2)) using 1
+      ext v
+      have hv : v.1.1 ∈ ψ.target := v.2
+      dsimp [g]
+      simp only [dif_pos hv]
+  }
+  refine ⟨⟨ψ, hψ, c, rfl, rfl, ?_, ?_⟩, rfl⟩
+  · intro u hu
+    change u.1 ∈ ψ.source at hu
+    dsimp [c, f]
+    rw [dif_pos hu]
+  · intro v hv
+    change v.1 ∈ ψ.target at hv
+    dsimp [c, g]
+    rw [dif_pos hv]
 -- END SEAT AREA
 
 /-- LEAF C2 (overlaps).  Transition maps between restricted charts are smooth in
