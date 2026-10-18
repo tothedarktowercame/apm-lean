@@ -395,6 +395,36 @@ the boundary curve still has two distinct interior preimages.  Analytic open
 mapping supplies the two overlapping image neighborhoods; the `C¹` boundary
 curve has empty interior, even when `g'` vanishes at circle points. -/
 -- BEGIN SEAT AREA
+lemma apm_a96A07_perturb_double_value_off_boundary_aux_dense (g : ℂ → ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
+    Dense (apm_a96A07_boundaryImage g)ᶜ := by
+  obtain ⟨ε, hε, hg⟩ := hg
+  let U : Set ℂ := ball 0 (1 + ε)
+  have hgcontC : ContDiffOn ℂ 1 g U :=
+    (hg.mono ball_subset_closedBall).contDiffOn isOpen_ball
+  have hloc : ∀ z ∈ apm_a96A07_circle, ∃ K : NNReal,
+      ∃ t ∈ 𝓝[apm_a96A07_circle] z, LipschitzOnWith K g t := by
+    intro z hz
+    have hzU : z ∈ U := by
+      change z ∈ ball 0 (1 + ε)
+      rw [mem_ball]
+      have hz1 : dist z 0 = 1 := by simpa [apm_a96A07_circle] using hz
+      linarith
+    obtain ⟨K, t, ht, hKt⟩ :=
+      (hgcontC.contDiffAt (isOpen_ball.mem_nhds hzU)).exists_lipschitzOnWith
+    exact ⟨K, t, mem_nhdsWithin_of_mem_nhds ht, hKt⟩
+  have hsphere : dimH apm_a96A07_circle ≤ 1 := by
+    have h := (contDiff_circleMap 0 1 : ContDiff ℝ 1 (circleMap 0 1)).dimH_range_le
+    simpa [apm_a96A07_circle, Complex.finrank_real_complex] using h
+  have hdim : dimH (apm_a96A07_boundaryImage g) < Module.finrank ℝ ℂ := by
+    calc
+      dimH (apm_a96A07_boundaryImage g) ≤ dimH apm_a96A07_circle := by
+        exact dimH_image_le_of_locally_lipschitzOn hloc
+      _ ≤ 1 := hsphere
+      _ < Module.finrank ℝ ℂ := by rw [Complex.finrank_real_complex]; norm_num
+  exact dense_compl_of_dimH_lt_finrank hdim
+
 lemma apm_a96A07_perturb_double_value_off_boundary (g : ℂ → ℂ)
     (hg : ∃ ε > 0,
       DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
@@ -405,7 +435,64 @@ lemma apm_a96A07_perturb_double_value_off_boundary (g : ℂ → ℂ)
       w ∉ apm_a96A07_boundaryImage g ∧
       x' ∈ apm_a96A07_disk ∧ y' ∈ apm_a96A07_disk ∧
       x' ≠ y' ∧ g x' = w ∧ g y' = w := by
-  sorry
+  obtain ⟨ε, hε, hdiff⟩ := hg
+  let U : Set ℂ := ball 0 (1 + ε)
+  have hgU : DifferentiableOn ℂ g U := hdiff.mono ball_subset_closedBall
+  have hopenG : ∀ s : Set ℂ, s ⊆ U → IsOpen s → IsOpen (g '' s) := by
+    have han := hgU.analyticOnNhd isOpen_ball
+    rcases han.is_constant_or_isOpen (convex_ball (0 : ℂ) (1 + ε)).isPreconnected with
+      hconst | hopen
+    · obtain ⟨c, hc⟩ := hconst
+      have h1U : (1 : ℂ) ∈ U := by
+        change (1 : ℂ) ∈ ball 0 (1 + ε)
+        rw [mem_ball]
+        simpa using (show (1 : ℝ) < 1 + ε by linarith)
+      have hm1U : (-1 : ℂ) ∈ U := by
+        change (-1 : ℂ) ∈ ball 0 (1 + ε)
+        rw [mem_ball]
+        simpa using (show (1 : ℝ) < 1 + ε by linarith)
+      have heq : (1 : ℂ) = -1 := hg_inj_circle (by simp [apm_a96A07_circle])
+        (by simp [apm_a96A07_circle]) ((hc 1 h1U).trans (hc (-1) hm1U).symm)
+      norm_num at heq
+    · exact hopen
+  let A : Set ℂ := apm_a96A07_disk ∩ {z | dist z x < dist z y}
+  let B : Set ℂ := apm_a96A07_disk ∩ {z | dist z y < dist z x}
+  have hAopen : IsOpen A := isOpen_ball.inter
+    (isOpen_lt (continuous_id.dist continuous_const) (continuous_id.dist continuous_const))
+  have hBopen : IsOpen B := isOpen_ball.inter
+    (isOpen_lt (continuous_id.dist continuous_const) (continuous_id.dist continuous_const))
+  have hAU : A ⊆ U := by
+    intro z hz
+    change z ∈ ball 0 (1 + ε)
+    rw [mem_ball]
+    have hz' : dist z 0 < 1 := by simpa [apm_a96A07_disk] using hz.1
+    exact hz'.trans (by linarith)
+  have hBU : B ⊆ U := by
+    intro z hz
+    change z ∈ ball 0 (1 + ε)
+    rw [mem_ball]
+    have hz' : dist z 0 < 1 := by simpa [apm_a96A07_disk] using hz.1
+    exact hz'.trans (by linarith)
+  have hxA : x ∈ A := by simp [A, hx, hxy]
+  have hyB : y ∈ B := by simp [B, hy, hxy.symm]
+  have hAB : Disjoint A B := by
+    rw [Set.disjoint_left]
+    intro z hzA hzB
+    exact (lt_asymm (show dist z x < dist z y from hzA.2)
+      (show dist z y < dist z x from hzB.2))
+  have hcommon : g x ∈ g '' A ∩ g '' B :=
+    ⟨⟨x, hxA, rfl⟩, ⟨y, hyB, hval.symm⟩⟩
+  have hopen : IsOpen (g '' A ∩ g '' B) :=
+    (hopenG A hAU hAopen).inter (hopenG B hBU hBopen)
+  have hdense := apm_a96A07_perturb_double_value_off_boundary_aux_dense g
+    ⟨ε, hε, hdiff⟩
+  obtain ⟨w, hw, hwopen⟩ := hdense.exists_mem_open hopen ⟨g x, hcommon⟩
+  obtain ⟨x', hx'A, hx'w⟩ := hwopen.1
+  obtain ⟨y', hy'B, hy'w⟩ := hwopen.2
+  refine ⟨w, x', y', hw, hx'A.1, hy'B.1, ?_, hx'w, hy'w⟩
+  intro h
+  subst y'
+  exact Set.disjoint_left.1 hAB hx'A hy'B
 -- END SEAT AREA
 
 /-- An off-boundary fiber has total multiplicity at most one.  This is the
