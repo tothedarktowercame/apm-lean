@@ -399,7 +399,17 @@ retracts onto `CP n`, embedded as the hyperplane `z_{n+1} = 0`: the homotopy
 `zᵢ ≠ 0`.  Construct the homotopy equivalence (inclusion and the `t = 0` map). -/
 theorem t99J05_lefschetz_euler_U_aux_hequiv (n : ℕ) :
     Nonempty (ContinuousMap.HomotopyEquiv (t99J05U n) (CP n)) := by
-  sorry
+  have hU : t99J05U n =
+      ConstructionTargets.t99J05Closure.cpSuccessorLowerPatch n := by
+    ext p
+    constructor
+    · rintro ⟨i, hi⟩
+      exact ⟨i.castSucc, Fin.castSucc_ne_last i, hi⟩
+    · rintro ⟨i, hi, hrep⟩
+      obtain ⟨j, hj⟩ := Fin.eq_castSucc_of_ne_last hi
+      exact ⟨j, hj ▸ hrep⟩
+  exact ⟨(Homeomorph.setCongr hU).toHomotopyEquiv.trans
+    (ConstructionTargets.t99J05Closure.t99J05_cp_successor_lowerPatch_deformationRetract n).symm⟩
 
 theorem t99J05_lefschetz_euler_U_aux_transport (n : ℕ)
     (e : ContinuousMap.HomotopyEquiv (t99J05U n) (CP n))
