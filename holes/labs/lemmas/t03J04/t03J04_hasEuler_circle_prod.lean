@@ -667,9 +667,106 @@ open union of `P ×ˢ univ` and `Q ×ˢ univ` (MV with empty overlap, B4), with
 χ = 2c.  So χ = c + c − 2c = 0.  Transport along homeomorphisms by
 `Homeomorph.toHomotopyEquiv` and B2. -/
 -- BEGIN SEAT AREA
+def t03J04_hasEuler_circle_prod_aux_restrict {Z : Type} [TopologicalSpace Z]
+    (S T : Set Z) (hTS : T ⊆ S) :
+    (Subtype.val ⁻¹' T : Set S) ≃ₜ T where
+  toFun x := ⟨x.1.1, x.2⟩
+  invFun x := ⟨⟨x.1, hTS x.2⟩, x.2⟩
+  left_inv x := rfl
+  right_inv x := rfl
+  continuous_toFun :=
+    (continuous_subtype_val.comp continuous_subtype_val).subtype_mk _
+  continuous_invFun :=
+    (continuous_subtype_val.subtype_mk _).subtype_mk _
+
+lemma t03J04_hasEuler_circle_prod_aux_disjoint
+    (Y : Type) [TopologicalSpace Y] {c : ℚ} (hY : HasEulerCharacteristic Y c)
+    (P Q : Set Circle) (hP : IsOpen P) (hQ : IsOpen Q) (hd : Disjoint P Q)
+    [ContractibleSpace P] [ContractibleSpace Q] :
+    HasEulerCharacteristic ((P ∪ Q) ×ˢ (Set.univ : Set Y)) (c + c) := by
+  let W : Set (Circle × Y) := (P ∪ Q) ×ˢ Set.univ
+  let WP : Set W := Subtype.val ⁻¹' (P ×ˢ (Set.univ : Set Y))
+  let WQ : Set W := Subtype.val ⁻¹' (Q ×ˢ (Set.univ : Set Y))
+  have hPW : P ×ˢ (Set.univ : Set Y) ⊆ W := by
+    intro z hz
+    exact ⟨Or.inl hz.1, hz.2⟩
+  have hQW : Q ×ˢ (Set.univ : Set Y) ⊆ W := by
+    intro z hz
+    exact ⟨Or.inr hz.1, hz.2⟩
+  have hopenP : IsOpen WP := by
+    exact (hP.prod isOpen_univ).preimage continuous_subtype_val
+  have hopenQ : IsOpen WQ := by
+    exact (hQ.prod isOpen_univ).preimage continuous_subtype_val
+  have hcov : WP ∪ WQ = Set.univ := by
+    ext z
+    rcases z.2.1 with hz | hz
+    · simp [WP, hz]
+    · simp [WQ, hz]
+  have hpieceP : HasEulerCharacteristic WP c := by
+    apply t03J04_hasEuler_of_homotopyEquiv
+      (t03J04_hasEuler_circle_prod_aux_restrict W
+        (P ×ˢ (Set.univ : Set Y)) hPW).toHomotopyEquiv
+    apply t03J04_hasEuler_of_homotopyEquiv
+      ((Homeomorph.Set.prod P Set.univ).trans
+        (Homeomorph.prodCongr (Homeomorph.refl P) (Homeomorph.Set.univ Y))).toHomotopyEquiv
+    exact t03J04_hasEuler_prod_contractible P Y hY
+  have hpieceQ : HasEulerCharacteristic WQ c := by
+    apply t03J04_hasEuler_of_homotopyEquiv
+      (t03J04_hasEuler_circle_prod_aux_restrict W
+        (Q ×ˢ (Set.univ : Set Y)) hQW).toHomotopyEquiv
+    apply t03J04_hasEuler_of_homotopyEquiv
+      ((Homeomorph.Set.prod Q Set.univ).trans
+        (Homeomorph.prodCongr (Homeomorph.refl Q) (Homeomorph.Set.univ Y))).toHomotopyEquiv
+    exact t03J04_hasEuler_prod_contractible Q Y hY
+  have hempty : IsEmpty ↑(WP ∩ WQ) := by
+    constructor
+    intro z
+    have hzP : z.1.1.1 ∈ P := z.2.1.1
+    have hzQ : z.1.1.1 ∈ Q := z.2.2.1
+    exact Set.disjoint_left.1 hd hzP hzQ
+  letI : IsEmpty ↑(WP ∩ WQ) := hempty
+  have hinter : HasEulerCharacteristic ↑(WP ∩ WQ) 0 :=
+    t03J04_hasEuler_of_isEmpty _
+  change HasEulerCharacteristic W (c + c)
+  simpa using t03J04_hasEuler_mayerVietoris WP WQ hopenP hopenQ hcov
+    hpieceP hpieceQ hinter
+
 theorem t03J04_hasEuler_circle_prod (Y : Type) [TopologicalSpace Y] {c : ℚ}
     (hY : HasEulerCharacteristic Y c) : HasEulerCharacteristic (Circle × Y) 0 := by
-  sorry
+  obtain ⟨U, V, P, Q, hU, hV, hUV, hP, hQ, hI, hd, hUc, hVc, hPc, hQc⟩ :=
+    t03J04_circle_cover
+  letI : ContractibleSpace U := hUc
+  letI : ContractibleSpace V := hVc
+  letI : ContractibleSpace P := hPc
+  letI : ContractibleSpace Q := hQc
+  let UY : Set (Circle × Y) := U ×ˢ Set.univ
+  let VY : Set (Circle × Y) := V ×ˢ Set.univ
+  have hopenU : IsOpen UY := hU.prod isOpen_univ
+  have hopenV : IsOpen VY := hV.prod isOpen_univ
+  have hcov : UY ∪ VY = Set.univ := by
+    ext z
+    simp only [UY, VY, Set.mem_union, Set.mem_prod, Set.mem_univ, and_true,
+      Set.mem_univ, iff_true]
+    have hz : z.1 ∈ U ∪ V := by rw [hUV]; trivial
+    exact hz
+  have heulerU : HasEulerCharacteristic UY c := by
+    apply t03J04_hasEuler_of_homotopyEquiv
+      ((Homeomorph.Set.prod U Set.univ).trans
+        (Homeomorph.prodCongr (Homeomorph.refl U) (Homeomorph.Set.univ Y))).toHomotopyEquiv
+    exact t03J04_hasEuler_prod_contractible U Y hY
+  have heulerV : HasEulerCharacteristic VY c := by
+    apply t03J04_hasEuler_of_homotopyEquiv
+      ((Homeomorph.Set.prod V Set.univ).trans
+        (Homeomorph.prodCongr (Homeomorph.refl V) (Homeomorph.Set.univ Y))).toHomotopyEquiv
+    exact t03J04_hasEuler_prod_contractible V Y hY
+  have hinterEq : UY ∩ VY = (P ∪ Q) ×ˢ (Set.univ : Set Y) := by
+    change (U ×ˢ (Set.univ : Set Y)) ∩ (V ×ˢ Set.univ) = _
+    rw [Set.prod_inter_prod, Set.inter_self, hI]
+  have heulerI : HasEulerCharacteristic ↑(UY ∩ VY) (c + c) := by
+    rw [hinterEq]
+    exact t03J04_hasEuler_circle_prod_aux_disjoint Y hY P Q hP hQ hd
+  convert t03J04_hasEuler_mayerVietoris UY VY hopenU hopenV hcov
+    heulerU heulerV heulerI using 1 <;> ring
 -- END SEAT AREA
 
 /-- `T^{m+1} ≃ₜ S¹ × T^m` (sorry-free). -/
