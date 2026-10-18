@@ -348,7 +348,48 @@ theorem t99J05_lefschetz_euler_cover (n : ℕ) :
 theorem t99J05_lefschetz_euler_V (n : ℕ) :
     Nonempty (t99J05V n ≃ₜ ({j : Fin (n + 2) // j ≠ Fin.last (n + 1)} → ℂ)) ∧
       T99J05CPHomologyProfile 0 (t99J05V n) := by
-  sorry
+  let i : Fin (n + 2) := Fin.last (n + 1)
+  obtain ⟨e, hs, ht, _⟩ := T99J05_affineChartConstruction (n + 1) i
+  have hV : t99J05V n = e.source := by
+    rw [hs]
+    rfl
+  let h : t99J05V n ≃ₜ AffineCoordinates i :=
+    (Homeomorph.setCongr hV).trans
+      (e.toHomeomorphSourceTarget.trans
+        ((Homeomorph.setCongr ht).trans (Homeomorph.Set.univ _)))
+  have hi : AffineCoordinates i =
+      ({j : Fin (n + 2) // j ≠ Fin.last (n + 1)} → ℂ) := by
+    rfl
+  have h' : t99J05V n ≃ₜ
+      ({j : Fin (n + 2) // j ≠ Fin.last (n + 1)} → ℂ) := by
+    simpa [hi] using h
+  refine ⟨⟨h'⟩, ?_⟩
+  letI : ContractibleSpace (t99J05V n) := h.contractibleSpace
+  constructor
+  · intro k
+    by_cases hk : k = 0
+    · subst k
+      exact (ConstructionTargets.CoefficientH0.h0Iso ℚ
+        (Classical.choice inferInstance)).toLinearEquiv.symm.finiteDimensional
+    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
+          ℚ (t99J05V n) k hk
+      letI : Subsingleton (Homology (t99J05V n) k) :=
+        ModuleCat.isZero_iff_subsingleton.mp hz
+      exact FiniteDimensional.of_injective
+        (0 : Homology (t99J05V n) k →ₗ[ℚ] ℚ)
+        (Function.injective_of_subsingleton _)
+  · intro k
+    by_cases hk : k = 0
+    · subst k
+      simpa [Even] using LinearEquiv.finrank_eq
+        (ConstructionTargets.CoefficientH0.h0Iso ℚ
+          (Classical.choice inferInstance)).toLinearEquiv
+    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
+          ℚ (t99J05V n) k hk
+      letI : Subsingleton (Homology (t99J05V n) k) :=
+        ModuleCat.isZero_iff_subsingleton.mp hz
+      rw [Module.finrank_zero_of_subsingleton]
+      simp [hk]
 
 /-- Deleting the last coordinate point deformation retracts onto `CP n`. -/
 theorem t99J05_lefschetz_euler_U (n : ℕ) :
