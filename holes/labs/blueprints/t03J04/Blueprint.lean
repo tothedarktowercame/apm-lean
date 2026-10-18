@@ -1519,7 +1519,24 @@ theorem t03J04_C3_finite_shrunk_atlas {n : ℕ} {X : Type} [TopologicalSpace X] 
     ∃ I : Finset X, ∃ K : X → Set X,
       (∀ β ∈ I, IsCompact (K β) ∧ K β ⊆ (chartAt (apm_t03J04_HModel n) β).source) ∧
         ⋃ β ∈ I, interior (K β) = Set.univ := by
-  sorry
+  classical
+  have hlocal : ∀ β : X, ∃ K : Set X,
+      IsCompact K ∧ β ∈ interior K ∧
+        K ⊆ (chartAt (apm_t03J04_HModel n) β).source := by
+    intro β
+    exact exists_compact_subset
+      (chartAt (apm_t03J04_HModel n) β).open_source
+      (mem_chart_source (apm_t03J04_HModel n) β)
+  choose K hKcompact hKmem hKsource using hlocal
+  obtain ⟨I, hI⟩ := isCompact_univ.elim_finite_subcover
+    (fun β : X ↦ interior (K β))
+    (fun β ↦ isOpen_interior)
+    (by
+      intro x hx
+      exact Set.mem_iUnion.mpr ⟨x, hKmem x⟩)
+  refine ⟨I, K, ?_, Set.Subset.antisymm (Set.subset_univ _) hI⟩
+  intro β hβ
+  exact ⟨hKcompact β, hKsource β⟩
 
 /-- LEAF M6 (60–100 lines).  A nonempty subset of a chart source with convex
 image is contractible.  Route: the chart restricts to a homeomorphism onto the
