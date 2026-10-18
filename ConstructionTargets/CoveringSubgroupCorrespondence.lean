@@ -776,7 +776,32 @@ theorem every_fiber_infinite_of_coset_equiv
     (hcoset : Nonempty ((p ⁻¹' ({x} : Set X)) ≃
       Quotient (subgroupCosetSetoid H))) :
     ∀ y : X, (p ⁻¹' ({y} : Set X)).Infinite := by
-  sorry
+  have hsetoid : subgroupCosetSetoid H = QuotientGroup.rightRel H := by
+    ext g h
+    rw [QuotientGroup.rightRel_apply]
+    constructor
+    · intro hgh
+      simpa [mul_inv_rev] using H.inv_mem hgh
+    · intro hhg
+      simpa [mul_inv_rev] using H.inv_mem hhg
+  have hcard : Nat.card (Quotient (subgroupCosetSetoid H)) = 0 := by
+    rw [hsetoid]
+    exact (Nat.card_congr
+      (QuotientGroup.quotientRightRelEquivQuotientLeftRel H)).trans
+        (H.index_eq_card.symm.trans hindex)
+  have hquotient : Infinite (Quotient (subgroupCosetSetoid H)) := by
+    rcases Nat.card_eq_zero.mp hcard with hempty | hinfinite
+    · exact (@IsEmpty.false _ hempty (Quotient.mk'' (1 : G))).elim
+    · exact hinfinite
+  have hfiber_x : Infinite (p ⁻¹' ({x} : Set X)) :=
+    hcoset.some.infinite_iff.mpr hquotient
+  intro y
+  obtain ⟨γ⟩ := PathConnectedSpace.joined x y
+  let γq : Path.Homotopic.Quotient x y := Quotient.mk'' γ
+  let e : (p ⁻¹' ({x} : Set X)) ≃ (p ⁻¹' ({y} : Set X)) :=
+    Equiv.ofBijective (hp.monodromy γq) (hp.monodromy_bijective γq)
+  haveI : Infinite (p ⁻¹' ({y} : Set X)) := e.infinite_iff.mp hfiber_x
+  exact Set.infinite_coe_iff.mp inferInstance
 
 /-- The standard based lifting criterion, packaged without uniqueness. -/
 theorem exists_continuousMap_lift_of_range_le
