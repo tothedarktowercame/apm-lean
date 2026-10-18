@@ -2,6 +2,10 @@ import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
+import ConstructionTargets.Surfaces
+import ConstructionTargets.PolygonMoves
+import ConstructionTargets.PolygonSurfaceHomology
+import ConstructionTargets.t94J09Closure
 
 /-!
 # APM t94J09
@@ -276,6 +280,519 @@ lemma apm_t94J09_nonorientableGenus_eq :
         apm_t94J09_vertexClass) = 6 := by
   decide
 
+/-! # Blueprint (claude-14, 2026-10-17)
+
+Everything above is the registered statement block of `Main.lean`, verbatim.
+Route: see `BLUEPRINT.md`.  Leaves are the theorems ending in `sorry`.  Every
+other declaration below is proved. -/
+
+open ConstructionTargets ConstructionTargets.PolygonSurfacePiOne
+open ConstructionTargets.PolygonSurfaceHomology
+
+/-! ## Shared polygon normal-form material (`polygonNF_*`)
+
+This section is copied verbatim into the t98A01 and t94J09 blueprints.  The
+helpers are proved here.  The one leaf, `polygonNF_crosscap_eqvGen_iff`, ends
+in `sorry`.  It states only the relation-level comparison; the homeomorphism
+`polygonNF_crosscapBridge` is assembled from it. -/
+
+section PolygonNF
+
+open ConstructionTargets.Surfaces PolygonMoves
+
+/-- Two quotient maps out of the same space with the same fibres have
+homeomorphic targets. -/
+theorem polygonNF_homeomorph_of_fibres {Z X Y : Type*} [TopologicalSpace Z]
+    [TopologicalSpace X] [TopologicalSpace Y] {p : Z → X} {q : Z → Y}
+    (hp : Topology.IsQuotientMap p) (hq : Topology.IsQuotientMap q)
+    (h : ∀ x y, p x = p y ↔ q x = q y) : Nonempty (X ≃ₜ Y) := by
+  let p' : C(Z, X) := ⟨p, hp.continuous⟩
+  let q' : C(Z, Y) := ⟨q, hq.continuous⟩
+  have hker : Setoid.ker p' = Setoid.ker q' := Setoid.ext fun x y => h x y
+  have e₁ := Topology.IsQuotientMap.homeomorph (f := p') hp
+  have e₂ := Topology.IsQuotientMap.homeomorph (f := q') hq
+  rw [hker] at e₁
+  exact ⟨e₁.symm.trans e₂⟩
+
+/-- The disk quotients of two relations with the same equivalence closure are
+homeomorphic.  Every polygon surface in the repository is such a quotient. -/
+theorem polygonNF_quotient_homeomorph {r s : Disk → Disk → Prop}
+    (h : ∀ x y, Relation.EqvGen r x y ↔ Relation.EqvGen s x y) :
+    Nonempty (@Homeomorph (Quotient (Relation.EqvGen.setoid r))
+      (Quotient (Relation.EqvGen.setoid s))
+      (TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance)
+      (TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance)) := by
+  letI : TopologicalSpace (Quotient (Relation.EqvGen.setoid r)) :=
+    TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance
+  letI : TopologicalSpace (Quotient (Relation.EqvGen.setoid s)) :=
+    TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance
+  refine polygonNF_homeomorph_of_fibres (p := fun x : Disk => Quotient.mk _ x)
+    (q := fun x : Disk => Quotient.mk _ x) ⟨Quotient.mk_surjective, rfl⟩
+    ⟨Quotient.mk_surjective, rfl⟩ ?_
+  intro x y
+  rw [Quotient.eq, Quotient.eq]
+  exact h x y
+
+/-- One forward `cutAndPaste` step between two explicitly written words. -/
+theorem polygonNF_cutStep {L : Type*} [DecidableEq L] (w w' : List (Signed L))
+    (u v t : List (Signed L)) (x : Signed L)
+    (hw₀ : w = u ++ [x] ++ v ++ [x] ++ t)
+    (hw₁ : w' = u ++ [x, x] ++ inverseWord v ++ t)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) (hw : IsPolygonWord w) :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface w') := by
+  subst hw₀ hw₁
+  exact cutAndPaste u v t x hx hw
+
+/-- One `cutAndPaste` step used from right to left. -/
+theorem polygonNF_uncutStep {L : Type*} [DecidableEq L] (w w' : List (Signed L))
+    (u v t : List (Signed L)) (x : Signed L)
+    (hw₀ : w = u ++ [x, x] ++ inverseWord v ++ t)
+    (hw₁ : w' = u ++ [x] ++ v ++ [x] ++ t)
+    (hx : x.1 ∉ (u ++ v ++ t).map Prod.fst) (hw : IsPolygonWord w') :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface w') := by
+  subst hw₀ hw₁
+  obtain ⟨e⟩ := cutAndPaste u v t x hx hw
+  exact ⟨e.symm⟩
+
+/-- One `inversePairCancellation` step between explicitly written words. -/
+theorem polygonNF_cancelStep {L : Type*} [DecidableEq L] (w w' : List (Signed L))
+    (u v : List (Signed L)) (x : Signed L)
+    (hw₀ : w = u ++ [x, inv x] ++ v) (hw₁ : w' = u ++ v)
+    (hx : x.1 ∉ (u ++ v).map Prod.fst) (hrest : IsPolygonWord w') :
+    Nonempty (PolygonSurface w ≃ₜ PolygonSurface w') := by
+  subst hw₀ hw₁
+  exact inversePairCancellation u v x hx hrest
+
+/-- The crosscap word `c₀ c₀ c₁ c₁ ⋯ c_{g-1} c_{g-1}`. -/
+def polygonNF_crosscapWord {L : Type*} (g : ℕ) (c : Fin g → Signed L) :
+    List (Signed L) :=
+  (List.finRange g).flatMap fun i => [c i, c i]
+
+/-- The handle word `a₀ b₀ a₀⁻¹ b₀⁻¹ ⋯ a_{g-1} b_{g-1} a_{g-1}⁻¹ b_{g-1}⁻¹`. -/
+def polygonNF_handleWord {L : Type*} (g : ℕ) (a b : Fin g → Signed L) :
+    List (Signed L) :=
+  (List.finRange g).flatMap fun i => [a i, b i, inv (a i), inv (b i)]
+
+/-- **Shared leaf `polygonNF_crosscap_eqvGen_iff`.**  With distinct labels,
+the crosscap word generates the same equivalence relation on the disk as the
+standard model `SurfaceRel false g`.
+
+Route.  As `PolygonMoves.crosscapTwo_bridge_aux_eqv`, for general `g`.  The
+word has length `2g`; position `i` carries `c (i / 2)`
+(`List.getElem_flatMap`-style lemma, or induction on `g` with
+`List.finRange_succ`).  By injectivity, two distinct positions carry the same
+label iff they are `2j, 2j+1` (either order).  Both carry the same sign, so
+`WordRel` glues `t ↦ t`.  That is literally
+`edgePoint (2g) (2j) t ~ edgePoint (2g) (2j+1) t`.  The reversed order is the
+symmetric generator.  Degenerate case `g = 0`: both relations are empty.
+About 80–160 lines. -/
+lemma polygonNF_crosscap_eqvGen_iff_aux_length {L : Type*} (g : ℕ)
+    (c : Fin g → Signed L) : (polygonNF_crosscapWord g c).length = 2 * g := by
+  simp [polygonNF_crosscapWord, List.length_flatMap]
+  omega
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_flat_get {A B : Type*}
+    (f : A → B) (xs : List A) (i : ℕ) :
+    (xs.flatMap fun a => [f a, f a])[i]? = Option.map f xs[i / 2]? := by
+  induction xs generalizing i with
+  | nil => simp
+  | cons a xs ih =>
+      cases i with
+      | zero => simp
+      | succ i =>
+          cases i with
+          | zero => simp
+          | succ k =>
+              have hd : (k + 2) / 2 = k / 2 + 1 := by omega
+              simpa [hd] using ih k
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_get {L : Type*} (g : ℕ)
+    (c : Fin g → Signed L) (i : Fin (polygonNF_crosscapWord g c).length) :
+    (polygonNF_crosscapWord g c).get i =
+      c ⟨i.1 / 2, by
+        have hi := i.2
+        have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+        omega⟩ := by
+  rw [List.get_eq_getElem]
+  have h := polygonNF_crosscap_eqvGen_iff_aux_flat_get c (List.finRange g) i
+  have hf : i.1 < ((List.finRange g).flatMap (fun a => [c a, c a])).length := by
+    simpa [polygonNF_crosscapWord] using i.2
+  rw [List.getElem?_eq_getElem hf] at h
+  have hi : i.1 / 2 < (List.finRange g).length := by
+    simp only [List.length_finRange]
+    have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+    omega
+  rw [List.getElem?_eq_getElem hi] at h
+  simpa [polygonNF_crosscapWord] using Option.some.inj h
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_surface_to_word {L : Type*}
+    [DecidableEq L] (g : ℕ) (c : Fin g → Signed L) {x y : Disk}
+    (h : SurfaceRel false g x y) : WordRel (polygonNF_crosscapWord g c) x y := by
+  simp only [SurfaceRel, Bool.false_eq_true, if_false] at h
+  rcases h with ⟨j, hj, t, rfl, rfl⟩
+  have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+  let i₀ : Fin (polygonNF_crosscapWord g c).length := ⟨2 * j, by omega⟩
+  let i₁ : Fin (polygonNF_crosscapWord g c).length := ⟨2 * j + 1, by omega⟩
+  have hget₀ : (polygonNF_crosscapWord g c).get i₀ = c ⟨j, hj⟩ := by
+    rw [polygonNF_crosscap_eqvGen_iff_aux_get]
+    congr 1
+    apply Fin.ext
+    simp [i₀]
+  have hget₁ : (polygonNF_crosscapWord g c).get i₁ = c ⟨j, hj⟩ := by
+    rw [polygonNF_crosscap_eqvGen_iff_aux_get]
+    congr 1
+    apply Fin.ext
+    simp [i₁]
+    omega
+  refine ⟨i₀, i₁, ?_, t, ?_, ?_, ?_⟩
+  · intro he
+    have := congrArg Fin.val he
+    simp [i₀, i₁] at this
+  · rw [hget₀, hget₁]
+  · simp [i₀, hlen]
+  · rw [hget₀, hget₁]
+    simp [i₁, hlen]
+
+lemma polygonNF_crosscap_eqvGen_iff_aux_word_to_surface {L : Type*}
+    [DecidableEq L] (g : ℕ) (c : Fin g → Signed L)
+    (hc : Function.Injective fun i => (c i).1) {x y : Disk}
+    (h : WordRel (polygonNF_crosscapWord g c) x y) :
+    Relation.EqvGen (SurfaceRel false g) x y := by
+  rcases h with ⟨i, j, hij, t, hlabel, rfl, rfl⟩
+  rw [polygonNF_crosscap_eqvGen_iff_aux_get,
+    polygonNF_crosscap_eqvGen_iff_aux_get] at hlabel ⊢
+  have hidx := hc hlabel
+  have hq : i.1 / 2 = j.1 / 2 := by
+    exact Fin.val_eq_of_eq hidx
+  have hsign : (c ⟨i.1 / 2, by
+      have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+      omega⟩).2 = (c ⟨j.1 / 2, by
+      have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+      omega⟩).2 := congrArg (fun k => (c k).2) hidx
+  have hlen := polygonNF_crosscap_eqvGen_iff_aux_length g c
+  have hne : i.1 ≠ j.1 := fun h => hij (Fin.ext h)
+  have hjg : j.1 / 2 < g := by omega
+  have hig : i.1 / 2 < g := by omega
+  have hpairs :
+      (i.1 = 2 * (i.1 / 2) ∧ j.1 = 2 * (i.1 / 2) + 1) ∨
+      (j.1 = 2 * (i.1 / 2) ∧ i.1 = 2 * (i.1 / 2) + 1) := by
+    omega
+  rcases hpairs with hp | hp
+  · have hr : SurfaceRel false g
+        (edgePoint (polygonNF_crosscapWord g c).length i t)
+        (edgePoint (polygonNF_crosscapWord g c).length j t) := by
+      simp only [SurfaceRel, Bool.false_eq_true, if_false]
+      refine ⟨i.1 / 2, hig, t, ?_, ?_⟩
+      · congr 1 <;> omega
+      · congr 1 <;> omega
+    simp only [hsign, if_true]
+    exact Relation.EqvGen.rel _ _ hr
+  · have hr : SurfaceRel false g
+        (edgePoint (polygonNF_crosscapWord g c).length j t)
+        (edgePoint (polygonNF_crosscapWord g c).length i t) := by
+      simp only [SurfaceRel, Bool.false_eq_true, if_false]
+      refine ⟨i.1 / 2, hig, t, ?_, ?_⟩
+      · congr 1 <;> omega
+      · congr 1 <;> omega
+    simp only [hsign, if_true]
+    exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ hr)
+
+theorem polygonNF_crosscap_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
+    (c : Fin g → Signed L) (hc : Function.Injective fun i => (c i).1)
+    (x y : Disk) :
+    Relation.EqvGen (WordRel (polygonNF_crosscapWord g c)) x y ↔
+      Relation.EqvGen (SurfaceRel false g) x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact polygonNF_crosscap_eqvGen_iff_aux_word_to_surface g c hc h
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h =>
+        exact Relation.EqvGen.rel _ _
+          (polygonNF_crosscap_eqvGen_iff_aux_surface_to_word g c h)
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+
+/-- Crosscap bridge: the crosscap word with distinct labels presents
+`Surface false g`. -/
+theorem polygonNF_crosscapBridge {L : Type*} [DecidableEq L] (g : ℕ)
+    (c : Fin g → Signed L) (hc : Function.Injective fun i => (c i).1) :
+    Nonempty (PolygonSurface (polygonNF_crosscapWord g c) ≃ₜ Surface false g) :=
+  polygonNF_quotient_homeomorph (polygonNF_crosscap_eqvGen_iff g c hc)
+
+end PolygonNF
+
+/-! ## The fourteen-edge word as a `PolygonMoves` word -/
+
+/-- Read an oriented occurrence as a `PolygonMoves` signed letter. -/
+def t94J09_toSigned : apm_t94J09_SignedLabel → PolygonMoves.Signed apm_t94J09_Label
+  | .pos x => (x, true)
+  | .neg x => (x, false)
+
+/-- The frozen word `a c d⁻¹ g⁻¹ f e⁻¹ b c⁻¹ d⁻¹ g⁻¹ e⁻¹ f a b`, letter by letter. -/
+def t94J09_signedWord : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  apm_t94J09_word.map t94J09_toSigned
+
+/-- **Leaf `t94J09_polygonRel_eqvGen_iff`.**  The seven literal generators of
+`apm_t94J09_PolygonRel` and the `PolygonMoves.WordRel` of the signed word
+generate the same equivalence relation on the disk.
+
+Route.  Both directions by induction on `EqvGen`.  (→) Each of the seven
+constructors is one `WordRel` instance: positions `(0,12)`, `(6,13)`,
+`(1,7)`, `(2,8)`, `(5,10)`, `(4,11)`, `(3,9)`; only `c` has opposite signs, and
+then `WordRel` uses `reverseParameter t`, which equals `apm_t94J09_reverse t`.
+`apm_t94J09_edgePoint` and `Surfaces.edgePoint` have the same body (`rfl`).
+(←) `WordRel` gives `i ≠ j : Fin 14` with equal labels: `fin_cases i <;>
+fin_cases j` and `simp [t94J09_signedWord, apm_t94J09_word]` leaves exactly the
+14 ordered pairs above.  The pair `(i, j)` with `i` the larger index is the
+symmetric generator.  For `(7,1)` the parameter is reversed twice:
+`apm_t94J09_reverse (reverseParameter t) = t` by `Subtype.ext; simp`.  The
+closure `ConstructionTargets.t94J09Closure.frozen_boundaryRel_iff_generator`
+does the same case split for a sibling relation and is a template.
+About 100–200 lines. -/
+lemma t94J09_polygonRel_eqvGen_iff_aux_forward {x y : apm_t94J09_Disk}
+    (h : apm_t94J09_PolygonRel x y) :
+    PolygonMoves.WordRel t94J09_signedWord x y := by
+  dsimp [t94J09_signedWord, apm_t94J09_word, t94J09_toSigned]
+  cases h with
+  | a t => exact ⟨0, 12, by decide, t, by decide, rfl, rfl⟩
+  | b t => exact ⟨6, 13, by decide, t, by decide, rfl, rfl⟩
+  | c t => exact ⟨1, 7, by decide, t, by decide, rfl, rfl⟩
+  | d t => exact ⟨2, 8, by decide, t, by decide, rfl, rfl⟩
+  | e t => exact ⟨5, 10, by decide, t, by decide, rfl, rfl⟩
+  | f t => exact ⟨4, 11, by decide, t, by decide, rfl, rfl⟩
+  | g t => exact ⟨3, 9, by decide, t, by decide, rfl, rfl⟩
+
+lemma t94J09_polygonRel_eqvGen_iff_aux_reverse_c (t : Set.Icc (0 : ℝ) 1) :
+    Relation.EqvGen apm_t94J09_PolygonRel
+      (Surfaces.edgePoint 14 1 (PolygonMoves.reverseParameter t))
+      (Surfaces.edgePoint 14 7 t) := by
+  apply Relation.EqvGen.rel
+  convert apm_t94J09_PolygonRel.c (apm_t94J09_reverse t) using 1 <;>
+    ext <;> simp [apm_t94J09_edgePoint, Surfaces.edgePoint,
+      apm_t94J09_reverse, PolygonMoves.reverseParameter]
+
+set_option maxHeartbeats 1000000
+
+theorem t94J09_polygonRel_eqvGen_iff (x y : apm_t94J09_Disk) :
+    Relation.EqvGen apm_t94J09_PolygonRel x y ↔
+      Relation.EqvGen (PolygonMoves.WordRel t94J09_signedWord) x y := by
+  constructor
+  · intro h
+    induction h with
+    | rel _ _ hab => exact .rel _ _ (t94J09_polygonRel_eqvGen_iff_aux_forward hab)
+    | refl => exact .refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | refl => exact .refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+    | rel _ _ hab =>
+      rcases hab with ⟨i, j, hij, t, hlab, rfl, rfl⟩
+      fin_cases i <;> fin_cases j <;>
+        simp [t94J09_signedWord, apm_t94J09_word, t94J09_toSigned] at hij hlab ⊢
+      all_goals (solve
+        | simpa only using (t94J09_polygonRel_eqvGen_iff_aux_reverse_c t).symm
+        | apply Relation.EqvGen.rel; exact .a t
+        | apply Relation.EqvGen.rel; exact .b t
+        | apply Relation.EqvGen.rel; exact .c t
+        | apply Relation.EqvGen.rel; exact .d t
+        | apply Relation.EqvGen.rel; exact .e t
+        | apply Relation.EqvGen.rel; exact .f t
+        | apply Relation.EqvGen.rel; exact .g t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .a t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .b t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .d t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .e t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .f t
+        | apply Relation.EqvGen.symm; apply Relation.EqvGen.rel; exact .g t)
+
+set_option maxHeartbeats 200000
+
+theorem t94J09_bridge :
+    Nonempty (apm_t94J09_PolygonSurface ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_signedWord) :=
+  polygonNF_quotient_homeomorph t94J09_polygonRel_eqvGen_iff
+
+/-! ## Normalization: five cut-and-paste steps and one cancellation
+
+Each step is a banked `PolygonMoves` move (`cutAndPaste` or
+`inversePairCancellation`) between explicitly written words.  Side conditions
+are closed by `decide`.  The chain was found by a breadth-first search over
+the banked moves and is checked here by Lean.  The two vertex classes become
+one at the cancellation, which also removes the seventh label. -/
+
+/-- `a a f⁻¹ e g d c b⁻¹ e f⁻¹ g d c⁻¹ b` -/
+def t94J09_nf1 : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  [(.a, true), (.a, true), (.f, false), (.e, true), (.g, true),
+    (.d, true), (.c, true), (.b, false), (.e, true), (.f, false),
+    (.g, true), (.d, true), (.c, false), (.b, true)]
+
+/-- Step 1: cut-and-paste on the pair a. -/
+theorem t94J09_move1 :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_signedWord ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_nf1) :=
+  polygonNF_cutStep _ _
+    []
+    [(.c, true), (.d, false), (.g, false), (.f, true), (.e, false),
+      (.b, true), (.c, false), (.d, false), (.g, false), (.e, false),
+      (.f, true)]
+    [(.b, true)]
+    (.a, true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `a a f⁻¹ f⁻¹ e⁻¹ b c⁻¹ d⁻¹ g⁻¹ e⁻¹ g d c⁻¹ b` -/
+def t94J09_nf2 : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+    (.b, true), (.c, false), (.d, false), (.g, false), (.e, false),
+    (.g, true), (.d, true), (.c, false), (.b, true)]
+
+/-- Step 2: cut-and-paste on the pair f⁻¹. -/
+theorem t94J09_move2 :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_nf1 ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_nf2) :=
+  polygonNF_cutStep _ _
+    [(.a, true), (.a, true)]
+    [(.e, true), (.g, true), (.d, true), (.c, true), (.b, false), (.e, true)]
+    [(.g, true), (.d, true), (.c, false), (.b, true)]
+    (.f, false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `a a f⁻¹ f⁻¹ e⁻¹ e⁻¹ g d c b⁻¹ g d c⁻¹ b` -/
+def t94J09_nf3 : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+    (.e, false), (.g, true), (.d, true), (.c, true), (.b, false),
+    (.g, true), (.d, true), (.c, false), (.b, true)]
+
+/-- Step 3: cut-and-paste on the pair e⁻¹. -/
+theorem t94J09_move3 :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_nf2 ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_nf3) :=
+  polygonNF_cutStep _ _
+    [(.a, true), (.a, true), (.f, false), (.f, false)]
+    [(.b, true), (.c, false), (.d, false), (.g, false)]
+    [(.g, true), (.d, true), (.c, false), (.b, true)]
+    (.e, false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `a a f⁻¹ f⁻¹ e⁻¹ e⁻¹ g g b c⁻¹ d⁻¹ d c⁻¹ b` -/
+def t94J09_nf4 : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+    (.e, false), (.g, true), (.g, true), (.b, true), (.c, false),
+    (.d, false), (.d, true), (.c, false), (.b, true)]
+
+/-- Step 4: cut-and-paste on the pair g. -/
+theorem t94J09_move4 :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_nf3 ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_nf4) :=
+  polygonNF_cutStep _ _
+    [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+      (.e, false)]
+    [(.d, true), (.c, true), (.b, false)]
+    [(.d, true), (.c, false), (.b, true)]
+    (.g, true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `a a f⁻¹ f⁻¹ e⁻¹ e⁻¹ g g b b c d⁻¹ d c` -/
+def t94J09_nf5 : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+    (.e, false), (.g, true), (.g, true), (.b, true), (.b, true),
+    (.c, true), (.d, false), (.d, true), (.c, true)]
+
+/-- Step 5: cut-and-paste on the pair b. -/
+theorem t94J09_move5 :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_nf4 ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_nf5) :=
+  polygonNF_cutStep _ _
+    [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+      (.e, false), (.g, true), (.g, true)]
+    [(.c, false), (.d, false), (.d, true), (.c, false)]
+    []
+    (.b, true) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- `a a f⁻¹ f⁻¹ e⁻¹ e⁻¹ g g b b c c` -/
+def t94J09_nf6 : List (PolygonMoves.Signed apm_t94J09_Label) :=
+  [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+    (.e, false), (.g, true), (.g, true), (.b, true), (.b, true),
+    (.c, true), (.c, true)]
+
+/-- Step 6: cancel d⁻¹ d. -/
+theorem t94J09_move6 :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_nf5 ≃ₜ
+      PolygonMoves.PolygonSurface t94J09_nf6) :=
+  polygonNF_cancelStep _ _
+    [(.a, true), (.a, true), (.f, false), (.f, false), (.e, false),
+      (.e, false), (.g, true), (.g, true), (.b, true), (.b, true), (.c, true)]
+    [(.c, true)]
+    (.d, false) (by decide) (by decide) (by decide)
+    (by unfold PolygonMoves.IsPolygonWord; decide)
+
+/-- The six crosscap letters of the normal form. -/
+def t94J09_crosscapLetters : Fin 6 → PolygonMoves.Signed apm_t94J09_Label :=
+  ![(.a, true), (.f, false), (.e, false), (.g, true), (.b, true), (.c, true)]
+
+theorem t94J09_nf6_eq :
+    t94J09_nf6 = polygonNF_crosscapWord 6 t94J09_crosscapLetters := by
+  decide
+
+theorem t94J09_word_normalForm :
+    Nonempty (PolygonMoves.PolygonSurface t94J09_signedWord ≃ₜ
+      Surfaces.Surface false 6) := by
+  have h := PolygonMoves.homeomorph_trans t94J09_move1 <|
+    PolygonMoves.homeomorph_trans t94J09_move2 <|
+    PolygonMoves.homeomorph_trans t94J09_move3 <|
+    PolygonMoves.homeomorph_trans t94J09_move4 <|
+    PolygonMoves.homeomorph_trans t94J09_move5 t94J09_move6
+  rw [t94J09_nf6_eq] at h
+  exact PolygonMoves.homeomorph_trans h
+    (polygonNF_crosscapBridge 6 t94J09_crosscapLetters (by decide))
+
+/-! ## The standard twelve-gon `apm_t94J09_N6` is `Surface false 6` -/
+
+theorem t94J09_surfaceRel_eq_N6Rel :
+    Surfaces.SurfaceRel false 6 = apm_t94J09_N6Rel := by
+  funext x y
+  exact propext Iff.rfl
+
+theorem t94J09_surface_homeomorph_N6 :
+    Nonempty (Surfaces.Surface false 6 ≃ₜ apm_t94J09_N6) :=
+  polygonNF_quotient_homeomorph fun x y => by rw [t94J09_surfaceRel_eq_N6Rel]
+
+theorem t94J09_normalization :
+    Nonempty (apm_t94J09_PolygonSurface ≃ₜ apm_t94J09_N6) :=
+  PolygonMoves.homeomorph_trans t94J09_bridge <|
+    PolygonMoves.homeomorph_trans t94J09_word_normalForm
+      t94J09_surface_homeomorph_N6
+
+/-! ## Integral homology, transported from the banked `N₆` computation -/
+
+/-- The standard genus-six pairing data present the frozen polygon surface. -/
+theorem t94J09_n6Space_homeomorph :
+    Nonempty (t94J09Closure.n6PairingData.Space ≃ₜ apm_t94J09_PolygonSurface) := by
+  obtain ⟨e⟩ := PolygonMoves.homeomorph_trans t94J09_bridge t94J09_word_normalForm
+  exact ⟨(standardPairingData_space_homeomorph false 6 (by omega)).trans e.symm⟩
+
+theorem t94J09_polygon_homology :
+    Nonempty (apm_t94J09_H 0 ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty (apm_t94J09_H 1 ≅ ModuleCat.of ℤ ((Fin 5 → ℤ) × ZMod 2)) ∧
+    (∀ k : ℕ, 2 ≤ k → Limits.IsZero (apm_t94J09_H k)) := by
+  obtain ⟨e⟩ := t94J09_n6Space_homeomorph
+  let iso : ∀ k : ℕ, apm_t94J09_H k ≅ H t94J09Closure.n6PairingData k := fun k =>
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+      (ModuleCat.of ℤ ℤ)).mapIso (TopCat.isoOfHomeo e.symm)
+  obtain ⟨⟨h0⟩, ⟨h1⟩, h2⟩ := t94J09Closure.n6PolygonHomologyExplicit
+  exact ⟨⟨iso 0 ≪≫ h0⟩, ⟨iso 1 ≪≫ h1⟩, fun k hk => (h2 k hk).of_iso (iso k)⟩
+
+/-! ## Assembly -/
+
 theorem apm_t94j09 :
     apm_t94J09_vertexCount apm_t94J09_vertexClass = 2 ∧
     apm_t94J09_edgeCount apm_t94J09_word = 7 ∧
@@ -290,66 +807,11 @@ theorem apm_t94j09 :
     Nonempty (apm_t94J09_H 1 ≅
       ModuleCat.of ℤ ((Fin 5 → ℤ) × ZMod 2)) ∧
     (∀ k : ℕ, 2 ≤ k → Limits.IsZero (apm_t94J09_H k)) := by
-  refine ⟨apm_t94J09_vertexCount_eq, apm_t94J09_edgeCount_eq,
+  exact ⟨apm_t94J09_vertexCount_eq, apm_t94J09_edgeCount_eq,
     apm_t94J09_eulerCharacteristic_eq,
     apm_t94J09_not_oppositeOrientationPairing,
-    apm_t94J09_nonorientableGenus_eq, ?_⟩
-  /-
-  CLOSER HOP 1: all five finite classification certificates are now closed by
-  the compiled lemmas above.  Kernel reduction computes the two vertex classes,
-  seven edge labels, Euler characteristic `-4`, and genus `6`; specializing
-  the orientation predicate to label `a` proves directly that the word fails
-  the opposite-orientation test.
+    apm_t94J09_nonorientableGenus_eq, t94J09_normalization,
+    t94J09_polygon_homology.1, t94J09_polygon_homology.2.1,
+    t94J09_polygon_homology.2.2⟩
 
-  Desk research covered `LEMMA-INDEX.md`, all `ConstructionTargets/`, every
-  topology sibling mentioning polygon quotients or surface classification,
-  Mathlib's singular-homology, quotient, CW-complex, and Mayer--Vietoris
-  sources, and git history.  `ConstructionTargets.Surfaces` provides the
-  standard nonorientable polygon quotient and Euler arithmetic, but no
-  polygon-move theorem or homeomorphism normalizing this fourteen-edge
-  `EqvGen` relation to its genus-six relation.  The closest siblings
-  (`t97A01`, `t97J02`, `t98A01`, `t99J03`) likewise stop at quotient cocones
-  or classification arithmetic.
-
-  The remaining frozen goal is precisely the homeomorphism of the two actual
-  quotient spaces followed by singular homology of that quotient.  Mathlib
-  has no classification theorem for polygon surfaces, no cellular chain
-  complex attached to these quotients, no cellular-to-singular comparison,
-  and no singular Mayer--Vietoris sequence (the available named development
-  is sheaf cohomology).  Consequently the expected cellular boundary
-  calculation `ℤ → ℤ⁷` cannot yet be transported to `apm_t94J09_H`.  The
-  frozen statement is unchanged; no axiom or opaque placeholder was added.
-
-  CLOSER HOP 2: both presentations now have compiled canonical quotient maps,
-  with continuity and surjectivity proofs.  The new continuous eliminators
-  `apm_t94J09_polygonDesc` and `apm_t94J09_n6Desc` descend any continuous disk
-  map respecting the corresponding generating edge relation; their
-  computation and uniqueness lemmas prove the full point-set universal
-  properties.  These use Mathlib's `Continuous.quotient_lift` and the cocone
-  pattern from sibling `t97J04`, extending the arithmetic-only first hop.
-
-  Further searches of `LEMMA-INDEX.md`, `ConstructionTargets.Surfaces`, the
-  polygon siblings `t97A01` and `t97J02`, Mathlib's quotient-homeomorphism and
-  singular-homology sources, and bundle git history found no explicit disk map
-  implementing the required polygon moves and no invariant computation.  The
-  next bridge is therefore concrete: construct mutually inverse relation-
-  respecting disk maps and feed them to the two eliminators.  Even after that
-  homeomorphism, the displayed singular homology still requires a cellular-to-
-  singular comparison or equivalent surface computation absent from the
-  searched corpus.  The frozen statement remains unchanged.
-
-  CLOSER HOP 3 (2026-08-08): the homeomorphism assembly after constructing
-  disk maps is now completely compiled as
-  `apm_t94J09_homeomorphOfDiskMaps`. It accepts continuous self-maps `p,q` of
-  the disk, compatibility with the two generating relations, and quotient-
-  level identities for `q ∘ p` and `p ∘ q`; the two hop-2 eliminators descend
-  them, quotient surjectivity proves the inverse laws, and the result is an
-  actual `Homeomorph`. Thus the point-set bridge no longer includes any
-  quotient lifting, continuity, or inverse bookkeeping. Searches of explicit
-  polygon-word rewrite artifacts, PL disk maps, and Alexander-trick APIs
-  found no maps implementing this seven-pair word normalization. The live
-  topology input is precisely those concrete `p,q` witnesses. Independently,
-  the singular-homology conclusions still require the absent surface/cellular
-  computation. The frozen statement remains unchanged.
-  -/
-  sorry
+end

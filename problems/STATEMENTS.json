@@ -1121,6 +1121,25 @@
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:37Z"
   },
+  "t03J04": {
+   "decls": [
+    "apm_t03j04"
+   ],
+   "sha256": "6a65d703d6f4d67037828c6bdcb605a0fc98ad1b32fb674ce2894a71898e87da",
+   "defs": [
+    "apm_t03J04_HModel",
+    "apm_t03J04_Model",
+    "apm_t03J04_Torus",
+    "apm_t03J04_constantVectorField",
+    "apm_t03J04_e1"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (claude-14 outside grade, 2026-10-17)",
+   "evidence": "holes/labs/statement-registry/t03J04-repair-grade.md",
+   "prelim_defect": null,
+   "rev": "c1b3bc0f5",
+   "approved_at": "2026-10-17T05:51:01Z"
+  },
   "t03J05": {
    "decls": [
     "apm_t03j05"
@@ -2805,6 +2824,31 @@
    "prelim_defect": null,
    "rev": "cab9d787",
    "approved_at": "2026-09-28T00:32:56Z"
+  },
+  "t98A01": {
+   "decls": [
+    "apm_t98a01"
+   ],
+   "sha256": "1fddf34dd9a61e12cefcc1d96a04d01acf9c84641740e3467678c83c74dbff34",
+   "defs": [
+    "T98A01Edge",
+    "T98A01SumSurface",
+    "T98A01Summand",
+    "T98A01Torus",
+    "t98A01IsNfoldCover",
+    "t98A01IsRegularNfoldCover",
+    "t98A01KleinWord",
+    "t98A01ProjectiveWord",
+    "t98A01SumWord",
+    "t98A01TorusFiveCover",
+    "t98A01TorusWord"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-16)",
+   "evidence": "holes/labs/statement-registry/t98A01-repair-grade.md",
+   "prelim_defect": null,
+   "rev": "e8b7e7f69",
+   "approved_at": "2026-10-16T16:56:35Z"
   },
   "t98A02": {
    "decls": [
