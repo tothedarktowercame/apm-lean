@@ -1,4 +1,4 @@
-<!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16 -->
+<!-- source: agent-generated; stage: nl-proof-harvest; date: 2026-06-16; revised 2026-10-18 (Hermite functions are not H^1-orthogonal; bases in (b),(c) now come from Gram–Schmidt) -->
 
 
 # APM m02J02: Bases for $H_0^1(\Omega)$ — discrete vs. continuous spectrum
@@ -12,101 +12,160 @@ $L^2$ eigenfunctions — the sines — which double as an explicit orthogonal ba
 $H^1_0$. On the unbounded domains $(0,\infty)$ and $\mathbb R$ the spectrum is continuous,
 so **no $L^2$ eigenfunctions exist** and there is no "eigenbasis"; the trap is to conclude
 there is no basis at all. In fact each $H^1_0(\Omega)$ is a *separable* Hilbert space, so
-it always has a countable orthonormal basis — one just has to exhibit one from a different
-complete family (Hermite functions), and to remember that on all of $\mathbb R$,
-$H^1_0(\mathbb R)=H^1(\mathbb R)$.
+it always has a countable orthonormal basis — one just has to produce one from a different
+complete family, and to remember that on all of $\mathbb R$, $H^1_0(\mathbb R)=H^1(\mathbb R)$.
+
+A second trap is to take the Hermite functions themselves as that basis. They are complete
+in $H^1(\mathbb R)$ but **not orthogonal** in the $H^1$ inner product, and in their natural
+order they are not even a Schauder basis of $H^1(\mathbb R)$ (see the Remark at the end). An
+orthonormal basis is obtained by applying Gram–Schmidt to them in the $H^1$ inner product.
 
 ## The Key Insight
 
-A separable Hilbert space has a countable orthonormal basis; all three $H^1_0(\Omega)$ are
-separable. The *natural* basis depends on the spectrum of the Dirichlet Laplacian:
-- **(a)** bounded $\Rightarrow$ discrete spectrum $\Rightarrow$ eigenfunctions
-  $\{\sin(n\pi x)\}_{n\ge1}$ (a basis of both $L^2$ and $H^1_0$).
-- **(b),(c)** unbounded $\Rightarrow$ continuous spectrum $\Rightarrow$ no eigenbasis, but
-  a countable basis still exists: take Hermite functions (eigenfunctions of $-d^2/dx^2+x^2$,
-  which *does* have compact resolvent on $\mathbb R$) — all of them on $\mathbb R$, and the
-  *odd* ones (which vanish at $0$) on $(0,\infty)$.
+A separable Hilbert space has a countable orthonormal basis, obtained by Gram–Schmidt from
+any countable linearly independent set whose span is dense. All three $H^1_0(\Omega)$ are
+separable. The task is to name such a set:
+- **(a)** bounded $\Rightarrow$ discrete spectrum $\Rightarrow$ the eigenfunctions
+  $\{\sin(n\pi x)\}_{n\ge1}$ are already orthogonal in $H^1_0$, and complete.
+- **(b),(c)** unbounded $\Rightarrow$ continuous spectrum $\Rightarrow$ no eigenbasis. Use the
+  Hermite functions (eigenfunctions of $-d^2/dx^2+x^2$, which *does* have compact resolvent
+  on $\mathbb R$): all of them on $\mathbb R$, the *odd* ones (which vanish at $0$) on
+  $(0,\infty)$. Their span is dense because Schwartz functions are dense in $H^1$ and the
+  Hermite expansion of a Schwartz function converges in $H^1$. Gram–Schmidt in the $H^1$
+  inner product then gives the orthonormal basis.
 
 ## Complete Proof
 
-Throughout, $\mathcal D(\Omega)=C_c^\infty(\Omega)$ and $H^1_0(\Omega)=\overline{\mathcal
-D(\Omega)}^{\,\|\cdot\|_{H^1}}$. Each $H^1_0(\Omega)$ is a closed subspace of the separable
-space $H^1(\Omega)$, hence is itself a **separable** Hilbert space, and therefore possesses
-a countable orthonormal basis (Gram–Schmidt applied to any countable total subset). The
-task is to identify a concrete one in each case.
+Throughout, $\mathcal D(\Omega)=C_c^\infty(\Omega)$, $H^1(\Omega)$ carries the usual inner
+product $(u,v)_{H^1}=\int_\Omega (u^{\prime}v^{\prime}+uv)\,dx$, and
+$H^1_0(\Omega)=\overline{\mathcal D(\Omega)}^{\,\|\cdot\|_{H^1}}$. Each $H^1_0(\Omega)$ is a
+closed subspace of the separable space $H^1(\Omega)$, hence is itself a **separable**
+Hilbert space. "Basis" below means an orthonormal (or orthogonal) basis of this Hilbert
+space: every element is the norm-convergent sum of its expansion.
 
 ### (a) $\Omega=(0,1)$: the sine basis (discrete spectrum)
 
-The Dirichlet eigenvalue problem $-u''=\lambda u$, $u(0)=u(1)=0$ has eigenpairs
+The Dirichlet eigenvalue problem $-u^{\prime\prime}=\lambda u$, $u(0)=u(1)=0$ has eigenpairs
 $$
 e_n(x)=\sin(n\pi x),\qquad \lambda_n=(n\pi)^2,\qquad n=1,2,3,\dots
 $$
 These are the eigenfunctions of a self-adjoint operator with **compact resolvent** (the
-interval is bounded), so $\{e_n\}$ is a complete orthogonal system in $L^2(0,1)$. They are
-orthogonal *also in the $H^1_0$ inner product* $(u,v)_{H^1_0}=\int_0^1 u'v'\,dx$ (an inner
-product on $H^1_0(0,1)$ by the Poincaré inequality), since
+interval is bounded), so $\{e_n\}$ is a complete orthogonal system in $L^2(0,1)$. For
+$u\in H^1_0(0,1)$, integration by parts (first for $u\in\mathcal D(0,1)$, then by density)
+gives $\int_0^1 u^{\prime}e_n^{\prime}\,dx=\lambda_n\int_0^1 ue_n\,dx$, hence
 $$
-\int_0^1 e_n'e_m'\,dx=\lambda_n\!\int_0^1 e_ne_m\,dx=0\quad(n\neq m).
+(u,e_n)_{H^1}=(1+\lambda_n)\int_0^1 ue_n\,dx .
 $$
-Completeness in $H^1_0$ follows from completeness in $L^2$: if $u\in H^1_0(0,1)$ is
-$H^1_0$-orthogonal to all $e_n$, then $\int u'e_n'=\lambda_n\int ue_n=0$ forces $\int
-ue_n=0$ for all $n$, so $u=0$ in $L^2$, hence $u=0$. Therefore
+Taking $u=e_m$ shows the $e_n$ are orthogonal in $H^1$. If $u\in H^1_0(0,1)$ is
+$H^1$-orthogonal to all $e_n$, then $\int_0^1 ue_n=0$ for all $n$, so $u=0$ in $L^2$, hence
+$u=0$. Therefore
 $$
 \boxed{\{\sin(n\pi x)\}_{n\ge1}}
 $$
-is an orthogonal basis of $H^1_0(0,1)$; normalized, $\Big\{\dfrac{\sqrt2}{n\pi}\sin(n\pi
-x)\Big\}_{n\ge1}$ is orthonormal in $H^1_0$ (since $\|\sin(n\pi
-x)\|_{H^1_0}^2=\int_0^1(n\pi\cos n\pi x)^2=\tfrac{(n\pi)^2}{2}$).
+is an orthogonal basis of $H^1_0(0,1)$; normalized, $\Big\{\big(\tfrac{1+(n\pi)^2}{2}\big)^{-1/2}
+\sin(n\pi x)\Big\}_{n\ge1}$ is orthonormal. (The same family is orthogonal for the equivalent
+inner product $\int_0^1u^{\prime}v^{\prime}$ given by the Poincaré inequality, with normalization
+$\tfrac{\sqrt2}{n\pi}\sin(n\pi x)$.)
 
-### (b) $\Omega=(0,\infty)$: no eigenbasis, but an explicit Hermite-odd basis
+### Hermite functions in $H^1(\mathbb R)$
+
+Let $h_m(x)=(2^m m!\sqrt\pi)^{-1/2}H_m(x)e^{-x^2/2}$, $m\ge0$, be the Hermite functions. They
+are the eigenfunctions of $\mathcal H=-d^2/dx^2+x^2$, $\mathcal Hh_m=(2m+1)h_m$, they form an
+orthonormal basis of $L^2(\mathbb R)$, they lie in the Schwartz class $\mathcal S(\mathbb R)$,
+and $h_m$ has the parity of $m$. They satisfy
+$$
+h_m^{\prime}=\sqrt{\tfrac m2}\,h_{m-1}-\sqrt{\tfrac{m+1}2}\,h_{m+1}. \tag{1}
+$$
+
+**They are not $H^1$-orthogonal.** By (1),
+$$
+(h_m,h_k)_{H^1}=\delta_{mk}+(h_m^{\prime},h_k^{\prime})_{L^2},\qquad
+\|h_m\|_{H^1}^2=m+\tfrac32,\qquad
+(h_m,h_{m+2})_{H^1}=-\tfrac12\sqrt{(m+1)(m+2)}\neq0 .
+$$
+(Functions of opposite parity are $H^1$-orthogonal, and so are $h_m,h_k$ with $|m-k|\ge3$.)
+
+**Lemma.** For $\varphi\in\mathcal S(\mathbb R)$ with $c_m=(\varphi,h_m)_{L^2}$, the series
+$\sum_m c_mh_m$ converges absolutely in $H^1(\mathbb R)$, and its sum is $\varphi$.
+
+*Proof.* $\mathcal H$ is symmetric on $\mathcal S$ and maps $\mathcal S$ to itself, so
+$c_m=(2m+1)^{-2}(\mathcal H^2\varphi,h_m)_{L^2}$ and $|c_m|\le(2m+1)^{-2}\|\mathcal H^2\varphi\|_{L^2}$.
+Hence $\sum_m|c_m|\,\|h_m\|_{H^1}\le\|\mathcal H^2\varphi\|_{L^2}\sum_m\sqrt{m+3/2}\,(2m+1)^{-2}<\infty$,
+so the series converges in $H^1$. Its $H^1$-limit is also its $L^2$-limit, which is $\varphi$
+because $\{h_m\}$ is an orthonormal basis of $L^2$. $\square$
+
+### (b) $\Omega=(0,\infty)$: no eigenbasis; Gram–Schmidt on the odd Hermite functions
 
 Here $-d^2/dx^2$ with $u(0)=0$ has **continuous spectrum** $[0,\infty)$: the "eigen"
 solutions $\sin(kx)$ are not in $L^2(0,\infty)$, so there is no orthonormal basis of
 eigenfunctions. Nonetheless $H^1_0(0,\infty)$ is separable, so a countable basis exists.
-An explicit one comes from the **Hermite functions** $h_m(x)=c_m H_m(x)e^{-x^2/2}$
-(eigenfunctions of $-d^2/dx^2+x^2$ on $\mathbb R$, an operator with compact resolvent),
-which form an orthonormal basis of $L^2(\mathbb R)$ and lie in $H^1(\mathbb R)$. The
-**odd** Hermite functions $h_{2n+1}$ ($n\ge0$) are odd, hence
-$$
-h_{2n+1}(0)=0\quad\text{and}\quad h_{2n+1}\in H^1_0(0,\infty)\ \text{(after restriction)},
-$$
-they decay rapidly (compact-support density gives $h_{2n+1}\in\overline{\mathcal
-D(0,\infty)}$), and by the even/odd decomposition $L^2(\mathbb R)=L^2_{\rm even}\oplus
-L^2_{\rm odd}$ the restrictions $\{h_{2n+1}|_{(0,\infty)}\}_{n\ge0}$ are a complete
-orthogonal system in $L^2(0,\infty)$. By the same eigenfunction/Gram–Schmidt reasoning as
-in (a) they yield a countable orthogonal basis of $H^1_0(0,\infty)$:
-$$
-\boxed{\{\,h_{2n+1}|_{(0,\infty)}\,\}_{n\ge0}}
-$$
-(Equivalently one may take Gram–Schmidt in $H^1_0$ of the total, independent set
-$\{x^k e^{-x}\}_{k\ge1}$, all of which vanish at $0$, decay, and lie in $H^1_0(0,\infty)$;
-relatives of the associated Laguerre functions.)
+Let $g_n=h_{2n+1}|_{(0,\infty)}$, $n\ge0$.
 
-### (c) $\Omega=\mathbb R$: $H^1_0=H^1$ with the Hermite basis
+*Membership.* $h_{2n+1}$ is odd, smooth and rapidly decaying, so $g_n\in H^1(0,\infty)$,
+$g_n$ is continuous on $[0,\infty)$ and $g_n(0)=0$. A function in $H^1(0,\infty)$ that is
+continuous up to $0$ and vanishes there lies in $H^1_0(0,\infty)$ (e.g. Brezis, *Functional
+Analysis*, Thm. 8.12), so $g_n\in H^1_0(0,\infty)$.
+
+*Independence.* For odd $u,v$ the integrands $uv$ and $u^{\prime}v^{\prime}$ are even, so
+$(g_n,g_k)_{L^2(0,\infty)}=\tfrac12\delta_{nk}$. The $g_n$ are $L^2$-orthogonal and nonzero,
+hence linearly independent. (Their $H^1(0,\infty)$ Gram matrix is half that of the odd
+$h_m$ in $H^1(\mathbb R)$, so it is not diagonal.)
+
+*Density of the span.* Let $\varphi\in\mathcal D(0,\infty)$ and let $\tilde\varphi$ be its odd
+extension; since $\operatorname{supp}\varphi$ stays away from $0$, $\tilde\varphi\in\mathcal
+D(\mathbb R)\subset\mathcal S(\mathbb R)$. By parity $(\tilde\varphi,h_{2n})_{L^2}=0$, so the
+Lemma gives $\tilde\varphi=\sum_n c_{2n+1}h_{2n+1}$ in $H^1(\mathbb R)$. Restriction to
+$(0,\infty)$ is bounded $H^1(\mathbb R)\to H^1(0,\infty)$, so $\varphi=\sum_n c_{2n+1}g_n$ in
+$H^1(0,\infty)$. Thus $\mathcal D(0,\infty)$, and hence $H^1_0(0,\infty)$, lies in the closed
+span of $\{g_n\}$.
+
+Applying Gram–Schmidt to $g_0,g_1,g_2,\dots$ in the $H^1(0,\infty)$ inner product therefore
+produces an orthonormal basis:
+$$
+\boxed{\ \text{the }H^1\text{-Gram–Schmidt orthonormalization of }\{\,h_{2n+1}|_{(0,\infty)}\,\}_{n\ge0}\ }
+$$
+Each basis element is $p(x)e^{-x^2/2}$ for an odd polynomial $p$.
+
+### (c) $\Omega=\mathbb R$: $H^1_0=H^1$; Gram–Schmidt on the Hermite functions
 
 On the whole line there is no boundary, and $C_c^\infty(\mathbb R)$ is dense in
 $H^1(\mathbb R)$, so
 $$
 H^1_0(\mathbb R)=H^1(\mathbb R).
 $$
-Again $-d^2/dx^2$ has continuous spectrum $[0,\infty)$ (no $L^2$ eigenfunctions), so no
-eigenbasis of the Laplacian; but the **Hermite functions** $\{h_m\}_{m\ge0}$ (eigenfunctions
-of the harmonic oscillator $-d^2/dx^2+x^2$, eigenvalues $2m+1$) form an orthonormal basis
-of $L^2(\mathbb R)$ and, being a complete system inside the Schwartz class, are total in
-$H^1(\mathbb R)$. They are mutually orthogonal in the $H^1$ inner product as well
-($\int(h_m'h_k'+h_mh_k)$ is diagonalized along with $-d^2/dx^2+x^2$). Hence
+Again $-d^2/dx^2$ has continuous spectrum $[0,\infty)$ (no $L^2$ eigenfunctions), so there is
+no eigenbasis of the Laplacian. The Hermite functions $\{h_m\}_{m\ge0}$ are linearly
+independent (they are $L^2$-orthonormal), and their span is dense in $H^1(\mathbb R)$: it
+contains in its closure every $\varphi\in\mathcal D(\mathbb R)\subset\mathcal S(\mathbb R)$ by
+the Lemma, and $\mathcal D(\mathbb R)$ is dense. Gram–Schmidt in the $H^1(\mathbb R)$ inner
+product therefore produces an orthonormal basis:
 $$
-\boxed{\{h_m\}_{m\ge0}=\{c_m H_m(x)e^{-x^2/2}\}_{m\ge0}}
+\boxed{\ \text{the }H^1\text{-Gram–Schmidt orthonormalization of }\{h_m\}_{m\ge0}\ }
 $$
-is an (orthogonal, after normalization orthonormal) basis of $H^1_0(\mathbb R)=H^1(\mathbb R)$.
+Since even and odd functions are $H^1$-orthogonal, the process runs separately on
+$h_0,h_2,h_4,\dots$ and on $h_1,h_3,h_5,\dots$; each basis element is $p(x)e^{-x^2/2}$ for a
+polynomial $p$ of the same degree and parity as the $h_m$ it replaces.
 
-### Remark
+### Remark: why not the Hermite functions themselves
 
-The organizing principle is **compactness of the resolvent**: it holds for $-d^2/dx^2$ on
-a *bounded* domain (giving the sine eigenbasis in (a)), fails for $-d^2/dx^2$ on unbounded
-domains (continuous spectrum, no eigenbasis in (b),(c)), but is *restored* by adding the
-confining potential $x^2$, whose eigenfunctions (Hermite) supply explicit bases for the
-unbounded cases. The one structural difference between (b) and (c) is the boundary: on
-$\mathbb R$ there is none, so $H^1_0=H^1$; on $(0,\infty)$, $H^1_0$ is the proper
-(trace-zero) subspace, which is exactly why only the *odd* Hermite functions — those
-vanishing at the origin — appear.
+In their natural order the $h_m$ are not a Schauder basis of $H^1(\mathbb R)$, so the
+orthonormalization above is needed and not cosmetic. Write $u=\sum c_mh_m\in H^1(\mathbb R)$,
+$S_Nu=\sum_{m\le N}c_mh_m$, and $d_k=(u^{\prime},h_k)_{L^2}$. Using (1),
+$$
+\|(u-S_Nu)^{\prime}\|_{L^2}^2=\sum_{k\ge N+2}|d_k|^2+\tfrac{N+1}2|c_{N+1}|^2+\tfrac{N+2}2|c_{N+2}|^2 ,
+$$
+so $S_Nu\to u$ in $H^1$ exactly when $\sqrt N\,c_N\to0$. Choosing $c_m=s_m/\sqrt m$ with
+$0\le s_m\le1$ equal to $1$ at very sparse indices $N_j$ and ramping linearly to $0$ over
+$j^2$ steps on each side keeps $(c_m)$ and $(d_k)$ in $\ell^2$, so $u\in H^1$, while
+$\sqrt{N_j}\,c_{N_j}=1$ for all $j$. (Such $u$ has $\int x^2u^2=\infty$, which $H^1$ permits.)
+
+The organizing principle is still **compactness of the resolvent**: it holds for
+$-d^2/dx^2$ on a *bounded* domain (giving the sine eigenbasis in (a), orthogonal in $H^1_0$
+because the $H^1_0$ form is diagonal on Dirichlet eigenfunctions), fails for $-d^2/dx^2$ on
+unbounded domains (continuous spectrum, no eigenbasis in (b),(c)), and is *restored* by the
+confining potential $x^2$. The Hermite eigenfunctions of $-d^2/dx^2+x^2$ supply a complete
+family, but they diagonalize $\int(u^{\prime 2}+x^2u^2)$, not the $H^1$ form
+$\int(u^{\prime 2}+u^2)$, which is why Gram–Schmidt is needed. The one structural difference
+between (b) and (c) is the boundary: on $\mathbb R$ there is none, so $H^1_0=H^1$; on
+$(0,\infty)$, $H^1_0$ is the proper (trace-zero) subspace, which is why only the *odd*
+Hermite functions — those vanishing at the origin — appear.
