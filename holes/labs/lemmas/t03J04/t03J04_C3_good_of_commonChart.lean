@@ -1574,7 +1574,50 @@ theorem t03J04_C3_good_of_commonChart {n : ℕ} {X : Type} [TopologicalSpace X]
       ∀ U ∈ s, U ⊆ (chartAt (apm_t03J04_HModel n) α).source ∧
         Convex ℝ (t03J04_coord n α '' U)) :
     t03J04_IsGoodFamily 𝒰 := by
-  sorry
+  classical
+  refine ⟨hopen, ?_⟩
+  intro s hs hsn
+  by_cases hI : ⋂₀ (s : Set (Set X)) = ∅
+  · exact Or.inl hI
+  right
+  have hIn : (⋂₀ (s : Set (Set X))).Nonempty := Set.nonempty_iff_ne_empty.mpr hI
+  obtain ⟨x, hx⟩ := hIn
+  have hxU : ∀ U ∈ s, x ∈ U := by
+    intro U hU
+    exact (Set.mem_sInter.mp hx) U hU
+  obtain ⟨α, hα⟩ := hcommon s hs x hxU
+  let c := t03J04_coord n α
+  have hsource : ⋂₀ (s : Set (Set X)) ⊆
+      (chartAt (apm_t03J04_HModel n) α).source := by
+    intro y hy
+    obtain ⟨U, hU⟩ := hsn
+    exact (hα U hU).1 ((Set.mem_sInter.mp hy) U hU)
+  have hinj : Set.InjOn c (chartAt (apm_t03J04_HModel n) α).source := by
+    intro y hy z hz hyz
+    apply (chartAt (apm_t03J04_HModel n) α).injOn hy hz
+    apply (t03J04_modelEquiv n).injective
+    exact hyz
+  have himage : c '' ⋂₀ (s : Set (Set X)) = ⋂ U ∈ (s : Set (Set X)), c '' U := by
+    apply Set.Subset.antisymm
+    · intro y hy
+      obtain ⟨z, hz, rfl⟩ := hy
+      simp only [Set.mem_iInter]
+      intro U hU
+      exact ⟨z, (Set.mem_sInter.mp hz) U hU, rfl⟩
+    · intro y hy
+      simp only [Set.mem_iInter] at hy
+      obtain ⟨U₀, hU₀⟩ := hsn
+      obtain ⟨z, hzU₀, hzy⟩ := hy U₀ hU₀
+      refine ⟨z, ?_, hzy⟩
+      refine Set.mem_sInter.mpr fun U hU => ?_
+      obtain ⟨zU, hzUU, hzUy⟩ := hy U hU
+      have hzsource := (hα U₀ hU₀).1 hzU₀
+      have hzUsource := (hα U hU).1 hzUU
+      have hzzU : z = zU := hinj hzsource hzUsource (hzy.trans hzUy.symm)
+      simpa [hzzU] using hzUU
+  apply t03J04_C3_contractible_of_convex_image α hsource ⟨x, hx⟩
+  rw [himage]
+  exact convex_iInter fun U => convex_iInter fun hU => (hα U hU).2
 -- END SEAT AREA
 
 /-- LEAF C3 = M7b (layer 5: M3, M4, M5, M7a; 180–280 lines).  Good-cover theorem
