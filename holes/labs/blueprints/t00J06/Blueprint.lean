@@ -71,7 +71,29 @@ theorem apm_t00J06_surface_semilocallySimplyConnected
 theorem apm_t00J06_torus_path_and_locallyPathConnected :
     PathConnectedSpace apm_t00J06_Torus ∧
       LocPathConnectedSpace apm_t00J06_Torus := by
-  sorry
+  letI : PathConnectedSpace Circle :=
+    isPathConnected_iff_pathConnectedSpace.mp
+      (isPathConnected_sphere (E := ℂ) (by simp) 0 (by norm_num : (0 : ℝ) ≤ 1))
+  letI : LocPathConnectedSpace Circle :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 1)) Circle
+  letI : PathConnectedSpace (Circle × Circle) :=
+    ⟨⟨(1, 1)⟩, fun x y =>
+      ⟨Path.prod (PathConnectedSpace.somePath x.1 y.1)
+        (PathConnectedSpace.somePath x.2 y.2)⟩⟩
+  letI : LocPathConnectedSpace (Circle × Circle) :=
+    LocPathConnectedSpace.of_bases
+      (fun x => (path_connected_basis x.1).prod_nhds (path_connected_basis x.2))
+      (by
+        intro x i hi
+        rcases hi with ⟨⟨_, hU⟩, ⟨_, hV⟩⟩
+        rw [isPathConnected_iff]
+        refine ⟨hU.nonempty.prod hV.nonempty, ?_⟩
+        intro a ha b hb
+        let p := hU.joinedIn a.1 ha.1 b.1 hb.1
+        let q := hV.joinedIn a.2 ha.2 b.2 hb.2
+        exact ⟨Path.prod p.somePath q.somePath,
+          fun t => ⟨p.somePath_mem t, q.somePath_mem t⟩⟩)
+  exact ⟨inferInstance, inferInstance⟩
 
 theorem apm_t00J06_connected_infinite_cover_of_image_index_zero
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
