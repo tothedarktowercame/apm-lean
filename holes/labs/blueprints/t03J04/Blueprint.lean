@@ -1259,7 +1259,73 @@ theorem t03J04_C3_deriv_bounds {F : Type} [NormedAddCommGroup F] [NormedSpace �
     ∃ ρ > 0, ∃ c > 0, ∃ C > 0, Metric.ball y₀ ρ ⊆ O ∧
       ∀ y ∈ Metric.ball y₀ ρ, ∀ w : F,
         c * ‖w‖ ≤ ‖fderiv ℝ g y w‖ ∧ ‖fderiv ℝ (fderiv ℝ g) y w w‖ ≤ C * ‖w‖ ^ 2 := by
-  sorry
+  obtain ⟨K, hK, hanti⟩ :=
+    (LinearMap.injective_iff_antilipschitz
+      (fderiv ℝ g y₀).toLinearMap).mp hinj
+  let c₀ : ℝ := ((K : ℝ))⁻¹
+  have hc₀ : 0 < c₀ := inv_pos.mpr (by exact_mod_cast hK)
+  have hD : ContinuousOn (fderiv ℝ g) O :=
+    hg.continuousOn_fderiv_of_isOpen hO (by norm_num)
+  have hD2 : ContinuousOn (fderiv ℝ (fderiv ℝ g)) O := by
+    have hD' : ContDiffOn ℝ 1 (fderiv ℝ g) O :=
+      hg.fderiv_of_isOpen hO (by norm_num)
+    exact hD'.continuousOn_fderiv_of_isOpen hO (by norm_num)
+  have hnearD : ∀ᶠ y in 𝓝 y₀,
+      ‖fderiv ℝ g y - fderiv ℝ g y₀‖ < c₀ / 2 := by
+    have hc : ContinuousAt
+        (fun y : F => ‖fderiv ℝ g y - fderiv ℝ g y₀‖) y₀ :=
+      (((hD y₀ hy₀).continuousAt (hO.mem_nhds hy₀)).sub
+        (continuousAt_const : ContinuousAt (fun _ : F => fderiv ℝ g y₀) y₀)).norm
+    simpa only [sub_self, norm_zero] using
+      (hc.eventually_lt_const (by simpa using half_pos hc₀))
+  have hnearD2 : ∀ᶠ y in 𝓝 y₀,
+      ‖fderiv ℝ (fderiv ℝ g) y‖ < ‖fderiv ℝ (fderiv ℝ g) y₀‖ + 1 := by
+    have hc0 : ContinuousAt (fderiv ℝ (fderiv ℝ g)) y₀ :=
+      (hD2 y₀ hy₀).continuousAt (hO.mem_nhds hy₀)
+    have hc : ContinuousAt
+        (fun y : F => ‖fderiv ℝ (fderiv ℝ g) y‖) y₀ :=
+      @ContinuousAt.norm F (F →L[ℝ] (F →L[ℝ] F)) _ _ _ _ hc0
+    exact hc.eventually_lt_const (lt_add_one _)
+  have hnearO : O ∈ 𝓝 y₀ := hO.mem_nhds hy₀
+  obtain ⟨ρ, hρ, hball⟩ :=
+    Metric.nhds_basis_ball.mem_iff.mp (inter_mem (inter_mem hnearD hnearD2) hnearO)
+  refine ⟨ρ, hρ, c₀ / 2, half_pos hc₀,
+    ‖fderiv ℝ (fderiv ℝ g) y₀‖ + 1, by positivity, ?_, ?_⟩
+  · intro y hy
+    exact (hball hy).2
+  · intro y hy w
+    have hyall := hball hy
+    have hyD := hyall.1.1
+    have hyD2 := hyall.1.2
+    constructor
+    · have ha := hanti.le_mul_dist (0 : F) w
+      simp only [dist_zero_right, map_zero] at ha
+      have ha' : c₀ * ‖w‖ ≤ ‖fderiv ℝ g y₀ w‖ := by
+        dsimp [c₀]
+        rw [inv_mul_le_iff₀ (by exact_mod_cast hK)]
+        simpa [mul_comm] using ha
+      have herr : ‖(fderiv ℝ g y - fderiv ℝ g y₀) w‖ ≤
+          ‖fderiv ℝ g y - fderiv ℝ g y₀‖ * ‖w‖ :=
+        ContinuousLinearMap.le_opNorm _ _
+      have herr' : ‖(fderiv ℝ g y - fderiv ℝ g y₀) w‖ ≤
+          (c₀ / 2) * ‖w‖ :=
+        herr.trans (mul_le_mul_of_nonneg_right hyD.le (norm_nonneg w))
+      have htri : ‖fderiv ℝ g y₀ w‖ ≤
+          ‖fderiv ℝ g y w‖ + ‖(fderiv ℝ g y - fderiv ℝ g y₀) w‖ := by
+        calc
+          _ = ‖fderiv ℝ g y w -
+              (fderiv ℝ g y - fderiv ℝ g y₀) w‖ := by congr 2 <;> simp
+          _ ≤ _ := norm_sub_le _ _
+      linarith
+    · calc
+        ‖fderiv ℝ (fderiv ℝ g) y w w‖
+            ≤ ‖fderiv ℝ (fderiv ℝ g) y‖ * ‖w‖ * ‖w‖ := by
+              exact (ContinuousLinearMap.le_opNorm _ _).trans
+                (mul_le_mul_of_nonneg_right (ContinuousLinearMap.le_opNorm _ _) (norm_nonneg w))
+        _ ≤ (‖fderiv ℝ (fderiv ℝ g) y₀‖ + 1) * ‖w‖ ^ 2 := by
+              rw [pow_two, mul_assoc]
+              exact mul_le_mul_of_nonneg_right hyD2.le
+                (mul_nonneg (norm_nonneg w) (norm_nonneg w))
 
 /-- LEAF K4 (layer 2: K1, K2, K3; 100–160 lines).  `‖g y - a‖²` is convex near
 `y₀` for every `a` near `g y₀`.  Route: K3, shrink `ρ` so `‖g y - g y₀‖ < c²/(2C)`,
