@@ -115,7 +115,39 @@ theorem apm_t01J04_leaf_sard_regular_value
     (a : ℝ) (ha : 0 < a) :
     ∃ r : ℝ, 0 < r ∧ r < a ∧ ∀ x ∈ W, h x = r →
       Function.Surjective (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h x) := by
-  sorry
+  let Wo : TopologicalSpace.Opens X := ⟨W, hW⟩
+  let h' : Wo → ℝ := fun x => h x
+  have hh' : ContMDiff 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ)
+      (⊤ : ℕ∞) h' := by
+    intro x
+    apply contMDiffAt_subtype_iff.mpr
+    exact (hh x x.2).contMDiffAt (hW.mem_nhds x.2)
+  let C : Set ℝ := h' '' {x | ¬ Function.Surjective
+    (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h' x)}
+  have hC : MeasureTheory.volume C = 0 :=
+    T93A04ManifoldWork.null_critical MeasureTheory.volume h' hh'
+  have hnot : ¬ Ioo (0 : ℝ) a ⊆ C := by
+    intro hsub
+    have hz : MeasureTheory.volume (Ioo (0 : ℝ) a) = 0 :=
+      MeasureTheory.measure_mono_null hsub hC
+    have hp : MeasureTheory.volume (Ioo (0 : ℝ) a) ≠ 0 := by
+      simpa [Real.volume_Ioo] using ha
+    exact hp hz
+  obtain ⟨r, ⟨hr0, hra⟩, hrreg⟩ := Set.not_subset.mp hnot
+  refine ⟨r, hr0, hra, ?_⟩
+  intro x hx hxr
+  by_contra hcrit
+  apply hrreg
+  refine ⟨⟨x, hx⟩, ?_, hxr⟩
+  intro hs
+  apply hcrit
+  have hd := mfderiv_comp (⟨x, hx⟩ : Wo)
+    (((hh x hx).contMDiffAt (hW.mem_nhds hx)).mdifferentiableAt (by simp))
+    ((contMDiff_subtype_val
+      (I := 𝓘(ℝ, apm_t01J04_Euclidean n))
+      (n := (1 : WithTop ℕ∞))).mdifferentiableAt (by simp))
+  rw [show h' = h ∘ (Subtype.val : Wo → X) from rfl, hd] at hs
+  exact Function.Surjective.of_comp hs
 
 /-! ## Part B: ambient charts of `X` adapted to the sublevel set -/
 
