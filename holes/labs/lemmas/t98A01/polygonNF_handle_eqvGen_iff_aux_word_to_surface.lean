@@ -460,7 +460,109 @@ lemma polygonNF_handle_eqvGen_iff_aux_word_to_surface {L : Type*} [DecidableEq L
       if p.2 then (b p.1).1 else (a p.1).1)
     {x y : Disk} (h : WordRel (polygonNF_handleWord g a b) x y) :
     Relation.EqvGen (SurfaceRel true g) x y := by
-  sorry
+  rcases h with ⟨i, k, hik, t, hlabel, rfl, rfl⟩
+  let ji : Fin g := ⟨i.1 / 4, by
+    have hi : i.1 < 4 * g := by
+      simpa only [polygonNF_handle_eqvGen_iff_aux_length] using i.2
+    omega⟩
+  let jk : Fin g := ⟨k.1 / 4, by
+    have hk : k.1 < 4 * g := by
+      simpa only [polygonNF_handle_eqvGen_iff_aux_length] using k.2
+    omega⟩
+  let ri : Fin 4 := ⟨i.1 % 4, by omega⟩
+  let rk : Fin 4 := ⟨k.1 % 4, by omega⟩
+  have hgi := polygonNF_handle_eqvGen_iff_aux_get g a b i
+  have hgk := polygonNF_handle_eqvGen_iff_aux_get g a b k
+  change (polygonNF_handleWord g a b).get i =
+      ![a ji, b ji, inv (a ji), inv (b ji)] ri at hgi
+  change (polygonNF_handleWord g a b).get k =
+      ![a jk, b jk, inv (a jk), inv (b jk)] rk at hgk
+  have hl : ji = jk ∧
+      ((ri = 0 ∨ ri = 2) ∧ (rk = 0 ∨ rk = 2) ∨
+       (ri = 1 ∨ ri = 3) ∧ (rk = 1 ∨ rk = 3)) := by
+    apply polygonNF_handle_eqvGen_iff_aux_labels g a b hab ji jk ri rk
+    rw [hgi, hgk] at hlabel
+    exact hlabel
+  have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+  rcases hl with ⟨hjk, hp⟩
+  have hjkn : ji.1 = jk.1 := congrArg Fin.val hjk
+  have hjkn' : ji.1 = k.1 / 4 := by simpa [jk] using hjkn
+  have hkdiv : k.1 / 4 < g := jk.2
+  rw [← hjk] at hgk
+  subst jk
+  rcases hp with ⟨⟨hri, hrk⟩⟩ | ⟨⟨hri, hrk⟩⟩ <;>
+    rcases hri with hri | hri <;> rcases hrk with hrk | hrk <;>
+    subst ri <;> subst rk
+  all_goals
+    have hrin := congrArg Fin.val hri
+    have hrkn := congrArg Fin.val hrk
+    simp only [Fin.val_mk] at hrin hrkn
+    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
+      PolygonMoves.inv] at hgi hgk
+  · exfalso
+    apply hik
+    apply Fin.ext
+    dsimp [ji] at *
+    omega
+  · apply Relation.EqvGen.rel
+    simp only [SurfaceRel, ↓reduceIte]
+    refine ⟨k.1 / 4, hkdiv, t, Or.inl ⟨?_, ?_⟩⟩
+    · congr 1 <;> (dsimp [ji] at * <;> omega)
+    · simp only [polygonNF_handle_eqvGen_iff_aux_length, hgi, hgk,
+        Bool.not_eq, decide_not, Bool.false_eq_true,
+        ↓reduceIte, hrin, hrkn]
+      congr 1 <;> (dsimp [ji] at * <;> simp_all [Fin.ext_iff] <;> first | rfl | omega)
+  · apply Relation.EqvGen.symm
+    apply Relation.EqvGen.rel
+    simp only [SurfaceRel, ↓reduceIte]
+    refine ⟨k.1 / 4, hkdiv,
+      PolygonMoves.reverseParameter t, Or.inl ⟨?_, ?_⟩⟩
+    · simp only [polygonNF_handle_eqvGen_iff_aux_length, hgi, hgk,
+        Bool.not_eq, decide_not, Bool.false_eq_true,
+        ↓reduceIte, PolygonMoves.reverseParameter, hrin, hrkn]
+      congr 1 <;> (dsimp [ji] at * <;> simp_all [Fin.ext_iff] <;> first | rfl | omega)
+    · congr 1
+      · dsimp [ji] at *; omega
+      · apply Subtype.ext
+        dsimp [PolygonMoves.reverseParameter]
+        linarith
+  · exfalso
+    apply hik
+    apply Fin.ext
+    dsimp [ji] at *
+    omega
+  · exfalso
+    apply hik
+    apply Fin.ext
+    dsimp [ji] at *
+    omega
+  · apply Relation.EqvGen.rel
+    simp only [SurfaceRel, ↓reduceIte]
+    refine ⟨k.1 / 4, hkdiv, t, Or.inr ⟨?_, ?_⟩⟩
+    · congr 1 <;> (dsimp [ji] at * <;> omega)
+    · simp only [polygonNF_handle_eqvGen_iff_aux_length, hgi, hgk,
+        Bool.not_eq, decide_not, Bool.false_eq_true,
+        ↓reduceIte, hrin, hrkn]
+      congr 1 <;> (dsimp [ji] at * <;> simp_all [Fin.ext_iff] <;> first | rfl | omega)
+  · apply Relation.EqvGen.symm
+    apply Relation.EqvGen.rel
+    simp only [SurfaceRel, ↓reduceIte]
+    refine ⟨k.1 / 4, hkdiv,
+      PolygonMoves.reverseParameter t, Or.inr ⟨?_, ?_⟩⟩
+    · simp only [polygonNF_handle_eqvGen_iff_aux_length, hgi, hgk,
+        Bool.not_eq, decide_not, Bool.false_eq_true,
+        ↓reduceIte, PolygonMoves.reverseParameter, hrin, hrkn]
+      congr 1 <;> (dsimp [ji] at * <;> simp_all [Fin.ext_iff] <;> first | rfl | omega)
+    · congr 1
+      · dsimp [ji] at *; omega
+      · apply Subtype.ext
+        dsimp [PolygonMoves.reverseParameter]
+        linarith
+  · exfalso
+    apply hik
+    apply Fin.ext
+    dsimp [ji] at *
+    omega
 -- END SEAT AREA
 
 /-- **Family leaf `polygonNF_handle_eqvGen_iff`** (t98A01 here;
