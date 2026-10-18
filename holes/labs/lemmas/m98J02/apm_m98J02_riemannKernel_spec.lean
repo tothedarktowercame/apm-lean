@@ -2068,6 +2068,56 @@ theorem apm_m98J02_constantDistribution_homogeneous :
 /-- The power-series kernel is smooth, normalized at zero, and satisfies the
 Riemann-function ODE. -/
 -- BEGIN SEAT AREA
+lemma apm_m98J02_riemannKernel_spec_aux_smooth :
+    ContDiff ℝ ∞ apm_m98J02_riemannKernel := by
+  let c : ℕ → ℝ := fun n => ((-(2 / 81 : ℝ)) ^ n) / ((n.factorial : ℝ) ^ 2)
+  let p : FormalMultilinearSeries ℝ ℝ ℝ :=
+    FormalMultilinearSeries.ofScalars ℝ c
+  have hbound (r : NNReal) (n : ℕ) :
+      ‖p n‖ * (r : ℝ) ^ n ≤
+        (((2 / 81 : ℝ) * r) ^ n / (n.factorial : ℝ)) := by
+    rw [FormalMultilinearSeries.ofScalars_norm]
+    simp only [c, Real.norm_eq_abs, abs_div, abs_pow, abs_neg]
+    norm_num
+    have hp : (1 : ℝ) ≤ n.factorial := by
+      exact_mod_cast Nat.one_le_iff_ne_zero.mpr (Nat.factorial_ne_zero n)
+    have hd : (0 : ℝ) < n.factorial := by positivity
+    rw [mul_pow]
+    field_simp
+    nlinarith [pow_nonneg (by norm_num : (0 : ℝ) ≤ 2 / 81) n,
+      pow_nonneg (by positivity : (0 : ℝ) ≤ r) n,
+      mul_le_mul_of_nonneg_left hp
+        (show 0 ≤ (n.factorial : ℝ) by positivity)]
+  have hr : p.radius = ⊤ :=
+    FormalMultilinearSeries.radius_eq_top_of_summable_norm p fun r =>
+      Summable.of_nonneg_of_le (fun n => by positivity) (hbound r)
+        (Real.summable_pow_div_factorial _)
+  have hb := p.hasFPowerSeriesOnBall (by simp [hr])
+  have ha : AnalyticOnNhd ℝ p.sum Set.univ := by
+    simpa [hr] using hb.analyticOnNhd
+  have hs : ContDiff ℝ ∞ p.sum := ha.contDiff
+  convert hs using 1
+  ext z
+  simp only [apm_m98J02_riemannKernel, p, FormalMultilinearSeries.sum,
+    FormalMultilinearSeries.ofScalars_apply_eq]
+  apply tsum_congr
+  intro n
+  simp [c, div_eq_mul_inv, mul_assoc]
+  ring
+
+lemma apm_m98J02_riemannKernel_spec_aux_zero :
+    apm_m98J02_riemannKernel 0 = 1 := by
+  rw [apm_m98J02_riemannKernel, tsum_eq_single 0]
+  · norm_num
+  · intro n hn
+    simp [hn]
+
+lemma apm_m98J02_riemannKernel_spec_aux_ode :
+    ∀ z : ℝ,
+      z * deriv (deriv apm_m98J02_riemannKernel) z +
+        deriv apm_m98J02_riemannKernel z +
+        (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0 := by
+  sorry
 theorem apm_m98J02_riemannKernel_spec :
     ContDiff ℝ ∞ apm_m98J02_riemannKernel ∧
     apm_m98J02_riemannKernel 0 = 1 ∧
@@ -2075,7 +2125,9 @@ theorem apm_m98J02_riemannKernel_spec :
       z * deriv (deriv apm_m98J02_riemannKernel) z +
         deriv apm_m98J02_riemannKernel z +
         (2 / 81 : ℝ) * apm_m98J02_riemannKernel z = 0 := by
-  sorry
+  exact ⟨apm_m98J02_riemannKernel_spec_aux_smooth,
+    apm_m98J02_riemannKernel_spec_aux_zero,
+    apm_m98J02_riemannKernel_spec_aux_ode⟩
 -- END SEAT AREA
 
 /-- Differentiating the oriented Goursat integral twice gives the transformed
