@@ -2147,13 +2147,50 @@ lemma apm_m98J02_goursat_spec_aux_source_contDiff
   exact ((((by fun_prop : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
     -p 0 / 9 + 2 * p 1 / 9))).exp.mul (hf.comp hpoint)).div_const 9)
 
+lemma apm_m98J02_goursat_spec_aux_regular_aux_reparam
+    (K : ℝ → ℝ) (h : ℝ → ℝ → ℝ) (a b : ℝ) :
+    apm_m98J02_goursat K h a b =
+      a * b * (∫ σ : ℝ in 0..1, ∫ τ : ℝ in 0..1,
+        K ((a - a * σ) * (b - b * τ)) * h (a * σ) (b * τ)) := by
+  unfold apm_m98J02_goursat
+  calc
+    _ = a * (∫ σ : ℝ in 0..1,
+        ∫ t : ℝ in 0..b, K ((a - σ * a) * (b - t)) * h (σ * a) t) := by
+      simpa [smul_eq_mul] using
+        (intervalIntegral.smul_integral_comp_mul_right
+          (a := (0 : ℝ)) (b := 1)
+          (fun s => ∫ t : ℝ in 0..b, K ((a - s) * (b - t)) * h s t) a).symm
+    _ = a * b * (∫ σ : ℝ in 0..1, ∫ τ : ℝ in 0..1,
+        K ((a - a * σ) * (b - b * τ)) * h (a * σ) (b * τ)) := by
+      rw [mul_assoc]
+      congr 1
+      rw [← intervalIntegral.integral_const_mul]
+      apply intervalIntegral.integral_congr
+      intro σ _
+      simpa [smul_eq_mul, mul_comm] using
+        (intervalIntegral.smul_integral_comp_mul_right
+          (a := (0 : ℝ)) (b := 1)
+          (fun t => K ((a - a * σ) * (b - t)) * h (a * σ) t) b).symm
+
+lemma apm_m98J02_goursat_spec_aux_regular_aux_fixed_square
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) :
+    ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+      p 0 * p 1 * (∫ σ : ℝ in 0..1, ∫ τ : ℝ in 0..1,
+        apm_m98J02_riemannKernel
+            ((p 0 - p 0 * σ) * (p 1 - p 1 * τ)) *
+          apm_m98J02_characteristicSource f (p 0 * σ) (p 1 * τ))) := by
+  sorry
+
 lemma apm_m98J02_goursat_spec_aux_regular
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) :
     ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
       apm_m98J02_goursat apm_m98J02_riemannKernel
         (apm_m98J02_characteristicSource f) (p 0) (p 1)) := by
-  sorry
+  convert apm_m98J02_goursat_spec_aux_regular_aux_fixed_square f hf hK using 1
+  funext p
+  exact apm_m98J02_goursat_spec_aux_regular_aux_reparam _ _ _ _
 
 lemma apm_m98J02_goursat_spec_aux_pde
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
