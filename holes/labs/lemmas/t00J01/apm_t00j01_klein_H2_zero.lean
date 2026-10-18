@@ -1,4 +1,5 @@
 import ConstructionTargets.t93J03Closure
+import ConstructionTargets.KleinSquareDiskCutAndPaste
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CircleWindingUniqueness
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
@@ -594,19 +595,141 @@ lemma apm_t00j01_circleCover_open_cover :
       exact h
 
 /-- Each member of the punctured-circle cover retracts to the Klein factor. -/
+def apm_t00j01_circleCover_piece_equivs_aux_punctured_hequiv :
+    ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle ≃ₕ Unit where
+  toFun := ContinuousMap.const _ ()
+  invFun := ContinuousMap.const _
+    ConstructionTargets.PointedPuncturedCircleContraction.puncturedCircleBase
+  left_inv :=
+    ⟨ConstructionTargets.PointedPuncturedCircleContraction.puncturedCirclePointedContraction.homotopy.symm⟩
+  right_inv := by
+    convert ContinuousMap.Homotopic.refl (ContinuousMap.id Unit)
+
+def apm_t00j01_circleCover_piece_equivs_aux_left_homeomorph :
+    (apm_t00j01_circleCoverLeft : Type) ≃ₜ
+      apm_t00j01_Klein ×
+        ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle where
+  toFun p := ⟨p.1.1, ⟨p.1.2, by
+    intro h
+    apply p.2
+    apply Subtype.ext
+    simpa [Circle.coe_exp] using h⟩⟩
+  invFun p := ⟨(p.1, p.2.1), by
+    intro h
+    apply p.2.2
+    have h' := congrArg (fun z : Circle => (z : ℂ)) h
+    simpa [Circle.coe_exp] using h'⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def apm_t00j01_circleCover_piece_equivs_aux_negCircle (z : Circle) : Circle :=
+  ⟨-(z : ℂ), by
+    simpa [Submonoid.unitSphere] using z.2⟩
+
+@[simp] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_coe (z : Circle) :
+    (apm_t00j01_circleCover_piece_equivs_aux_negCircle z : ℂ) = -(z : ℂ) := rfl
+
+@[simp] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_negCircle
+    (z : Circle) :
+    apm_t00j01_circleCover_piece_equivs_aux_negCircle
+      (apm_t00j01_circleCover_piece_equivs_aux_negCircle z) = z := by
+  ext
+  simp
+
+@[continuity, fun_prop] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_continuous :
+    Continuous apm_t00j01_circleCover_piece_equivs_aux_negCircle := by
+  exact Continuous.subtype_mk continuous_subtype_val.neg _
+
+def apm_t00j01_circleCover_piece_equivs_aux_right_homeomorph :
+    (apm_t00j01_circleCoverRight : Type) ≃ₜ
+      apm_t00j01_Klein ×
+        ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle where
+  toFun p := ⟨p.1.1, ⟨apm_t00j01_circleCover_piece_equivs_aux_negCircle p.1.2, by
+    intro h
+    apply p.2
+    apply Subtype.ext
+    have h' := congrArg Neg.neg h
+    simpa using h'⟩⟩
+  invFun p := ⟨(p.1, apm_t00j01_circleCover_piece_equivs_aux_negCircle p.2.1), by
+    intro h
+    apply p.2.2
+    have h' := congrArg Neg.neg (congrArg (fun z : Circle => (z : ℂ)) h)
+    simpa using h'⟩
+  left_inv p := by
+    apply Subtype.ext
+    simp
+  right_inv p := by
+    ext <;> simp
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def apm_t00j01_circleCover_piece_equivs_aux_product :
+    (apm_t00j01_Klein ×
+      ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle) ≃ₕ
+        apm_t00j01_Klein :=
+  ((ContinuousMap.HomotopyEquiv.refl apm_t00j01_Klein).prodCongr
+      apm_t00j01_circleCover_piece_equivs_aux_punctured_hequiv).trans
+    (Homeomorph.prodUnique apm_t00j01_Klein Unit).toHomotopyEquiv
+
 lemma apm_t00j01_circleCover_piece_equivs :
     Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
       Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein) := by
-  sorry
+  exact ⟨⟨apm_t00j01_circleCover_piece_equivs_aux_left_homeomorph.toHomotopyEquiv.trans
+      apm_t00j01_circleCover_piece_equivs_aux_product⟩,
+    ⟨apm_t00j01_circleCover_piece_equivs_aux_right_homeomorph.toHomotopyEquiv.trans
+      apm_t00j01_circleCover_piece_equivs_aux_product⟩⟩
 
 /-- Their intersection is the product with the two components of the twice
 punctured circle, hence is homotopy equivalent to two copies of the Klein
 bottle. -/
+lemma apm_t00j01_circleCover_intersection_equiv_aux_exp_pi :
+    ((Circle.exp Real.pi : Circle) : ℂ) = -1 := by
+  rw [Circle.coe_exp, Complex.exp_pi_mul_I]
+
+abbrev apm_t00j01_circleCover_intersection_equiv_aux_E :=
+  (ℝ ∙ (-1 : ℂ))ᗮ
+
+abbrev apm_t00j01_circleCover_intersection_equiv_aux_E0 :=
+  {w : apm_t00j01_circleCover_intersection_equiv_aux_E // w ≠ 0}
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero
+    (w : apm_t00j01_circleCover_intersection_equiv_aux_E0) :
+    ((w.1.1 : ℂ).im) ≠ 0 := by
+  intro him
+  apply w.2
+  apply Subtype.ext
+  apply Complex.ext
+  · have horth := w.1.2
+    rw [Submodule.mem_orthogonal'] at horth
+    have h := horth (-1 : ℂ) (Submodule.mem_span_singleton_self (-1 : ℂ))
+    simp at h
+    exact h
+  · exact him
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_product_model :
+    Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₜ
+        (apm_t00j01_Klein × apm_t00j01_circleCover_intersection_equiv_aux_E0)) := by
+  sorry
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays :
+    Nonempty (apm_t00j01_circleCover_intersection_equiv_aux_E0 ≃ₕ
+      Sum PUnit.{1} PUnit.{1}) := by
+  sorry
+
 lemma apm_t00j01_circleCover_intersection_equiv :
     Nonempty (((apm_t00j01_circleCoverLeft ∩
       apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₕ
         Sum apm_t00j01_Klein apm_t00j01_Klein) := by
-  sorry
+  obtain ⟨hprod⟩ := apm_t00j01_circleCover_intersection_equiv_aux_product_model
+  obtain ⟨hrays⟩ := apm_t00j01_circleCover_intersection_equiv_aux_two_rays
+  exact ⟨hprod.toHomotopyEquiv |>.trans
+    ((ContinuousMap.HomotopyEquiv.refl apm_t00j01_Klein).prodCongr hrays) |>.trans
+    (Homeomorph.prodSumDistrib.toHomotopyEquiv) |>.trans
+    ((Homeomorph.sumCongr (Homeomorph.prodPUnit apm_t00j01_Klein)
+      (Homeomorph.prodPUnit apm_t00j01_Klein)).toHomotopyEquiv)⟩
 
 /-- The orientation-reversing gluing in the concrete affine quotient kills
 its integral degree-two fundamental class. -/
@@ -617,9 +740,60 @@ lemma apm_t00j01_klein_H2_zero :
 -- END SEAT AREA
 
 /-- The concrete Klein quotient has no integral homology in degree three. -/
+lemma apm_t00j01_klein_H3_zero_aux_rel_iff (p q : ℝ × ℝ) :
+    Relation.EqvGen apm_t00j01_kleinRel p q ↔
+      ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv.orbitSetoid.r p q := by
+  constructor
+  · intro h
+    change KleinSquareEqvGenToCases.SameOrbit p q
+    induction h with
+    | rel p q h =>
+        cases h with
+        | horizontal x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorA, by
+              simp [KleinPlaneAffineAction.generatorA_smul]⟩
+        | twisted x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorB, by
+              simp [KleinPlaneAffineAction.generatorB_smul]⟩
+    | refl p => exact KleinSquareEqvGenToCases.sameOrbit_refl p
+    | symm p q _ ih => exact KleinSquareEqvGenToCases.sameOrbit_symm ih
+    | trans p q r _ _ ih₁ ih₂ =>
+        exact KleinSquareEqvGenToCases.sameOrbit_trans ih₁ ih₂
+  · rintro ⟨g, rfl⟩
+    exact apm_t00j01_klein_compact_aux_orbit p g
+
+noncomputable def apm_t00j01_klein_H3_zero_aux_plane_homeomorph :
+    apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H3_zero_aux_rel_iff p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H3_zero_aux_rel_iff p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+lemma apm_t00j01_klein_H3_zero_aux_homeomorph :
+    Nonempty (apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.t93J03Closure.kleinPairingData.Space) := by
+  obtain ⟨e⟩ :=
+    KleinSquareDiskCutAndPaste.planeOrbitQuotient_homeomorph_kleinBottle
+      ConstructionTargets.t93J03Closure.kleinPlaneOrbitT2Space
+  exact ⟨apm_t00j01_klein_H3_zero_aux_plane_homeomorph.trans
+    (e.trans ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph.symm)⟩
+
 lemma apm_t00j01_klein_H3_zero :
     Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein) := by
-  sorry
+  obtain ⟨e⟩ := apm_t00j01_klein_H3_zero_aux_homeomorph
+  exact (ConstructionTargets.PolygonSurfaceHomology.highDegreeHomology
+      ConstructionTargets.t93J03Closure.kleinPairingData 3 (by omega)).of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e.toHomotopyEquiv 3)
 
 /-- Homotopy invariance transfers `H₃(K)=0` to both cover members. -/
 lemma apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
