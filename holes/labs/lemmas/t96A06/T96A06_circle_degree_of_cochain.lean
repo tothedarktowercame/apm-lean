@@ -816,7 +816,119 @@ theorem T96A06_circle_degree_of_cochain
     (c : circleChains.X 1) (hc : (circleChains.d 1 0).hom c = 0) (hW : W c ≠ 0) :
     (CoefficientRadialPair.F ℚ 1).map (TopCat.ofHom (boundaryAction (sqCone 0))) =
       (2 : ℚ) • 𝟙 _ := by
-  sorry
+  let K := circleChains
+  let φ := CoefficientH0.singularPostcomposition ℚ (boundaryAction (sqCone 0))
+  have hd' : K.d 2 1 ≫ ModuleCat.ofHom W = 0 := by
+    apply ModuleCat.hom_ext
+    exact LinearMap.ext_iff.mpr fun x => by
+      have h := LinearMap.congr_fun hd x
+      simpa [K, ModuleCat.hom_comp] using h
+  let w : K.homology 1 ⟶ ModuleCat.of ℚ ℝ :=
+    K.homologyι 1 ≫ K.descOpcycles (ModuleCat.ofHom W) 2 (by simp) hd'
+  let ec : ModuleCat.of ℚ ℚ ⟶ K.X 1 :=
+    ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ (K.X 1) c)
+  have hec : ec 1 = c := by
+    change (1 : ℚ) • c = c
+    simp
+  have hcycle : ec ≫ K.d 1 0 = 0 := by
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext
+    intro q
+    change K.d 1 0 (q • c) = 0
+    rw [map_smul, hc, smul_zero]
+  let z := K.liftCycles ec 0 (by simp) hcycle
+  let x : K.homology 1 := K.homologyπ 1 (z 1)
+  have hwx : w x = W c := by
+    have hz := ConcreteCategory.congr_hom (K.liftCycles_i ec 0 (by simp) hcycle) 1
+    have hp := ConcreteCategory.congr_hom (K.homology_π_ι 1) (z 1)
+    have hdsc := ConcreteCategory.congr_hom
+      (K.p_descOpcycles (ModuleCat.ofHom W) 2 (by simp) hd') (K.iCycles 1 (z 1))
+    simp only [CategoryTheory.comp_apply] at hz hp hdsc
+    change (K.descOpcycles (ModuleCat.ofHom W) 2 (by simp) hd')
+      (K.homologyι 1 (K.homologyπ 1 (z 1))) = W c
+    rw [hp, hdsc, hz, hec]
+    rfl
+  have hx : x ≠ 0 := by
+    intro hx0
+    apply hW
+    rw [← hwx, hx0, map_zero]
+  have hdim : Module.finrank ℚ (K.homology 1) = 1 := by
+    let u := CoefficientFirstReflection.topIso ℚ 0
+    exact u.toLinearEquiv.finrank_eq.trans (by simp)
+  have winj : Function.Injective w := by
+    intro y₁ y₂ hy
+    have hy0 : w (y₁ - y₂) = 0 := by rw [map_sub, hy, sub_self]
+    obtain ⟨a, ha⟩ := exists_smul_eq_of_finrank_eq_one hdim hx (y₁ - y₂)
+    rw [← ha, map_smul] at hy0
+    have haw : a = 0 := by
+      apply (smul_eq_zero.mp hy0).resolve_right
+      simpa [hwx] using hW
+    exact sub_eq_zero.mp (by rw [← ha, haw, zero_smul])
+  have hmap :
+      (CoefficientRadialPair.F ℚ 1).map
+          (TopCat.ofHom (boundaryAction (sqCone 0))) =
+        HomologicalComplex.homologyMap φ 1 := by
+    rfl
+  have hnatH : HomologicalComplex.homologyMap φ 1 ≫ w = (2 : ℚ) • w := by
+    dsimp only [w]
+    rw [HomologicalComplex.homologyι_naturality_assoc]
+    rw [HomologicalComplex.opcyclesMap_comp_descOpcycles]
+    have hop : K.descOpcycles (φ.f 1 ≫ ModuleCat.ofHom W) 2 (by simp) (by
+        rw [← φ.comm_assoc, hd', comp_zero]) =
+        K.descOpcycles (ModuleCat.ofHom ((2 : ℚ) • W)) 2 (by simp) (by
+          apply ModuleCat.hom_ext
+          apply LinearMap.ext
+          intro q
+          change (2 : ℚ) • W (K.d 2 1 q) = 0
+          rw [show W (K.d 2 1 q) = 0 from LinearMap.congr_fun hd q, smul_zero]) := by
+      apply (cancel_epi (K.pOpcycles 1)).mp
+      rw [HomologicalComplex.p_descOpcycles, HomologicalComplex.p_descOpcycles]
+      apply ModuleCat.hom_ext
+      simpa [φ, K, ModuleCat.hom_comp] using hnat
+    rw [hop]
+    have hdesc : K.descOpcycles (ModuleCat.ofHom ((2 : ℚ) • W)) 2 (by simp) (by
+        apply ModuleCat.hom_ext
+        apply LinearMap.ext
+        intro q
+        change (2 : ℚ) • W (K.d 2 1 q) = 0
+        rw [show W (K.d 2 1 q) = 0 from LinearMap.congr_fun hd q, smul_zero]) =
+        (2 : ℚ) • K.descOpcycles (ModuleCat.ofHom W) 2 (by simp) hd' := by
+      apply (cancel_epi (K.pOpcycles 1)).mp
+      apply ModuleCat.hom_ext
+      apply LinearMap.ext
+      intro q
+      have hp := ConcreteCategory.congr_hom
+        (K.p_descOpcycles (ModuleCat.ofHom W) 2 (by simp) hd') q
+      have hp2 := ConcreteCategory.congr_hom
+        (K.p_descOpcycles (ModuleCat.ofHom ((2 : ℚ) • W)) 2 (by simp) (by
+          apply ModuleCat.hom_ext
+          apply LinearMap.ext
+          intro r
+          change (2 : ℚ) • W (K.d 2 1 r) = 0
+          rw [show W (K.d 2 1 r) = 0 from LinearMap.congr_fun hd r, smul_zero])) q
+      simp only [CategoryTheory.comp_apply, ModuleCat.hom_smul,
+        LinearMap.smul_apply] at hp hp2 ⊢
+      rw [hp, hp2]
+      rfl
+    rw [hdesc]
+    apply ModuleCat.hom_ext
+    apply LinearMap.ext
+    intro y
+    simp only [CategoryTheory.comp_apply, ModuleCat.hom_smul, LinearMap.smul_apply]
+    rfl
+  apply ModuleCat.hom_ext
+  apply LinearMap.ext
+  intro y
+  apply winj
+  have hy := ConcreteCategory.congr_hom hnatH y
+  simp only [CategoryTheory.comp_apply, ModuleCat.hom_smul,
+    LinearMap.smul_apply] at hy
+  rw [hmap]
+  change w (HomologicalComplex.homologyMap φ 1 y) = w ((2 : ℚ) • y)
+  have hwy : w ((2 : ℚ) • y) = (2 : ℚ) • w y :=
+    (ModuleCat.Hom.hom w).map_smul 2 y
+  rw [hwy]
+  exact hy
 -- END SEAT AREA
 
 /-- Squaring has degree two on every sphere `S^{n+1} ⊂ ℝ^{n+2}` (sorry-free
