@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.RadialSquaredFiber
 import ConstructionTargets.ManifoldRegularFiberGlobalAtlas
 import ConstructionTargets.TransverseIncidenceChosenAtlas
+import ConstructionTargets.SardGenuineSmoothManifoldVector
 
 /-! # Blueprint for APM t96J05 -/
 
@@ -73,6 +74,63 @@ theorem apm_t96j05_constant_radius_level
 /-- LIBRARY (manifold Sard plus connected-image selection).  For a smooth
 squared-radius map which is not constant on a positive sphere, choose an
 attained positive radius at which its manifold derivative is surjective. -/
+lemma apm_t96j05_exists_regular_radius_aux_nontrivial
+    {m n : ℕ} (hm : 0 < m) {X : Set (apm_t96j05_E n)}
+    [Nonempty X] [ChartedSpace (apm_t96j05_E m) X]
+    [IsManifold (apm_t96j05_I m) ∞ X] : Nontrivial X := by
+  let x : X := Classical.choice inferInstance
+  have hdim : 0 < Module.finrank ℝ (apm_t96j05_E m) := by simpa using hm
+  letI : Nontrivial (apm_t96j05_E m) :=
+    Module.nontrivial_of_finrank_pos hdim
+  by_contra h
+  haveI : Subsingleton X := not_nontrivial_iff_subsingleton.mp h
+  have ht : (chartAt (apm_t96j05_E m) x).target =
+      ({chartAt (apm_t96j05_E m) x x} : Set (apm_t96j05_E m)) := by
+    ext y
+    constructor
+    · intro hy
+      have hs : (chartAt (apm_t96j05_E m) x).symm y = x := Subsingleton.elim _ _
+      rw [Set.mem_singleton_iff]
+      calc
+        y = chartAt (apm_t96j05_E m) x
+            ((chartAt (apm_t96j05_E m) x).symm y) :=
+          ((chartAt (apm_t96j05_E m) x).right_inv hy).symm
+        _ = chartAt (apm_t96j05_E m) x x := congrArg _ hs
+    · intro hy
+      rw [Set.mem_singleton_iff.mp hy]
+      exact (chartAt (apm_t96j05_E m) x).map_source
+        (mem_chart_source (apm_t96j05_E m) x)
+  have hopen : IsOpen ({chartAt (apm_t96j05_E m) x x} :
+      Set (apm_t96j05_E m)) := ht ▸ (chartAt (apm_t96j05_E m) x).open_target
+  exact not_isOpen_singleton _ hopen
+
+lemma apm_t96j05_exists_regular_radius_aux_nonconstant
+    {m n : ℕ} (hm : 0 < m) {X : Set (apm_t96j05_E n)}
+    [Nonempty X] [ChartedSpace (apm_t96j05_E m) X]
+    [IsManifold (apm_t96j05_I m) ∞ X]
+    (hnconst : ¬ ∃ r : ℝ, 0 < r ∧ ∀ x : X, ‖x.1‖ = r) :
+    ¬ ∃ c : ℝ, ∀ x : X, ‖x.1‖ ^ 2 = c := by
+  letI : Nontrivial X := apm_t96j05_exists_regular_radius_aux_nontrivial hm
+  rintro ⟨c, hc⟩
+  have hc0 : 0 ≤ c := by
+    rw [← hc (Classical.choice (inferInstance : Nonempty X))]
+    exact sq_nonneg _
+  rcases hc0.eq_or_lt with hcz | hcpos
+  · have hall0 : ∀ x : X, x.1 = 0 := by
+      intro x
+      have hs : ‖x.1‖ ^ 2 = 0 := (hc x).trans hcz.symm
+      exact norm_eq_zero.mp (sq_eq_zero_iff.mp hs)
+    obtain ⟨x, y, hxy⟩ := exists_pair_ne X
+    apply hxy
+    apply Subtype.ext
+    rw [hall0 x, hall0 y]
+  · apply hnconst
+    refine ⟨Real.sqrt c, Real.sqrt_pos.2 hcpos, ?_⟩
+    intro x
+    apply (sq_eq_sq₀ (norm_nonneg x.1) (Real.sqrt_nonneg c)).mp
+    rw [Real.sq_sqrt hc0]
+    exact hc x
+
 theorem apm_t96j05_exists_regular_radius
     {m n : ℕ} (hm : 0 < m) {X : Set (apm_t96j05_E n)}
     [Nonempty X] [ChartedSpace (apm_t96j05_E m) X]
@@ -87,7 +145,90 @@ theorem apm_t96j05_exists_regular_radius
         Function.Surjective
           (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ)
             (fun y : X => ‖y.1‖ ^ 2) x) := by
-  sorry
+  let f : X → ℝ := fun x => ‖x.1‖ ^ 2
+  have hnonconstant : ¬ ∃ c : ℝ, ∀ x : X, f x = c := by
+    simpa [f] using apm_t96j05_exists_regular_radius_aux_nonconstant hm hnconst
+  have hxy : ∃ x y : X, f x ≠ f y := by
+    by_contra h
+    push_neg at h
+    apply hnonconstant
+    refine ⟨f (Classical.choice (inferInstance : Nonempty X)), ?_⟩
+    intro x
+    exact h x _
+  obtain ⟨x, y, hxy⟩ := hxy
+  obtain hlt | hlt := lt_or_gt_of_ne hxy
+  · let a := f x
+    let b := f y
+    have hab : a < b := hlt
+    have hrange : Set.Ioo a b ⊆ Set.range f := by
+      intro c hc
+      have hi : c ∈ Set.Icc (f x) (f y) := ⟨hc.1.le, hc.2.le⟩
+      obtain ⟨z, -, hz⟩ := hconn.isPreconnected.intermediate_value
+        (Set.mem_univ x) (Set.mem_univ y) hsm.continuous.continuousOn hi
+      exact ⟨z, hz⟩
+    let C : Set ℝ := f '' {z | ¬ Function.Surjective
+      (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ) f z)}
+    have hC : MeasureTheory.volume C = 0 :=
+      T93A04ManifoldWork.null_critical MeasureTheory.volume f hsm
+    have hnot : ¬ Set.Ioo a b ⊆ C := by
+      intro hsub
+      have hz : MeasureTheory.volume (Set.Ioo a b) = 0 :=
+        MeasureTheory.measure_mono_null hsub hC
+      have hp : MeasureTheory.volume (Set.Ioo a b) ≠ 0 := by
+        simpa [Real.volume_Ioo] using hab
+      exact hp hz
+    obtain ⟨c, hc, hcreg⟩ := Set.not_subset.mp hnot
+    obtain ⟨z, hz⟩ := hrange hc
+    have ha0 : 0 ≤ a := sq_nonneg ‖x.1‖
+    have hc0 : 0 < c := ha0.trans_lt hc.1
+    have hsqrt : (Real.sqrt c) ^ 2 = c := Real.sq_sqrt hc0.le
+    refine ⟨Real.sqrt c, Real.sqrt_pos.2 hc0, ?_, ?_⟩
+    · refine ⟨⟨z, ?_⟩⟩
+      apply (sq_eq_sq₀ (norm_nonneg z.1) (Real.sqrt_nonneg c)).mp
+      rw [hsqrt]
+      exact hz
+    · intro w hw
+      by_contra hwcrit
+      apply hcreg
+      refine ⟨w, hwcrit, ?_⟩
+      change f w = c
+      exact hw.trans hsqrt
+  · let a := f y
+    let b := f x
+    have hab : a < b := hlt
+    have hrange : Set.Ioo a b ⊆ Set.range f := by
+      intro c hc
+      have hi : c ∈ Set.Icc (f y) (f x) := ⟨hc.1.le, hc.2.le⟩
+      obtain ⟨z, -, hz⟩ := hconn.isPreconnected.intermediate_value
+        (Set.mem_univ y) (Set.mem_univ x) hsm.continuous.continuousOn hi
+      exact ⟨z, hz⟩
+    let C : Set ℝ := f '' {z | ¬ Function.Surjective
+      (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ) f z)}
+    have hC : MeasureTheory.volume C = 0 :=
+      T93A04ManifoldWork.null_critical MeasureTheory.volume f hsm
+    have hnot : ¬ Set.Ioo a b ⊆ C := by
+      intro hsub
+      have hz : MeasureTheory.volume (Set.Ioo a b) = 0 :=
+        MeasureTheory.measure_mono_null hsub hC
+      have hp : MeasureTheory.volume (Set.Ioo a b) ≠ 0 := by
+        simpa [Real.volume_Ioo] using hab
+      exact hp hz
+    obtain ⟨c, hc, hcreg⟩ := Set.not_subset.mp hnot
+    obtain ⟨z, hz⟩ := hrange hc
+    have ha0 : 0 ≤ a := sq_nonneg ‖y.1‖
+    have hc0 : 0 < c := ha0.trans_lt hc.1
+    have hsqrt : (Real.sqrt c) ^ 2 = c := Real.sq_sqrt hc0.le
+    refine ⟨Real.sqrt c, Real.sqrt_pos.2 hc0, ?_, ?_⟩
+    · refine ⟨⟨z, ?_⟩⟩
+      apply (sq_eq_sq₀ (norm_nonneg z.1) (Real.sqrt_nonneg c)).mp
+      rw [hsqrt]
+      exact hz
+    · intro w hw
+      by_contra hwcrit
+      apply hcreg
+      refine ⟨w, hwcrit, ?_⟩
+      change f w = c
+      exact hw.trans hsqrt
 
 /-- A positive attained regular squared-radius fiber has the required global
 atlas and smooth inclusion after fixed-model and predicate transport. -/

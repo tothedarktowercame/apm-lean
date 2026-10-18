@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Rouche
 
 /-!
 # APM a96A07 — boundary injectivity and the bounded image domain
@@ -326,14 +327,286 @@ lemma apm_a96A07_of_injOn_disk (g : ℂ → ℂ)
       Set.disjoint_left.1 hdisj ⟨z, hzcircle, rfl⟩ hzimage⟩
   exact apm_a96A07_of_injOn_disk_of_boundaryImage_subset_frontier
     g ⟨ε, hε, hdiff⟩ hg_inj_circle hg_inj_disk hboundary
-/-- The sole missing Jordan/argument-principle construction: injectivity of an
-analytic map on the unit circle propagates to the open unit disk. -/
+/-- The argument-principle zero count for the translated function `g - w`. -/
+def apm_a96A07_diskZeroCount (g : ℂ → ℂ) (w : ℂ) : ℤ :=
+  ConstructionTargets.Rouche.zeroCountInClosedBall (fun z => g z - w) 0 1
+
+/-- Centering an analytic map at a target value preserves analyticity on the
+closed unit disk.  The larger ball in the hypothesis is used only to obtain a
+neighborhood of that closed disk. -/
+lemma apm_a96A07_analyticOnNhd_sub_value (g : ℂ → ℂ) (w : ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
+    AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1) := by
+  obtain ⟨ε, hε, hg⟩ := hg
+  have hg' : DifferentiableOn ℂ g (ball (0 : ℂ) (1 + ε)) :=
+    hg.mono ball_subset_closedBall
+  have han : AnalyticOnNhd ℂ g (ball (0 : ℂ) (1 + ε)) :=
+    hg'.analyticOnNhd isOpen_ball
+  intro z hz
+  exact (han z (closedBall_subset_ball (by linarith) hz)).fun_sub
+    analyticAt_const
+
+/-- Argument principle on the unit circle, in the exact normalization used by
+`ConstructionTargets.Rouche`: the logarithmic-derivative integral is the
+closed-disk divisor count times `2πi`. -/
+lemma apm_a96A07_argumentPrinciple_disk (g : ℂ → ℂ) (w : ℂ)
+    (han : AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1))
+    (hw : w ∉ apm_a96A07_boundaryImage g) :
+    (∮ z in C(0, 1), logDeriv (fun z => g z - w) z) =
+      (apm_a96A07_diskZeroCount g w : ℂ) * (2 * Real.pi * I) := by
+  have hne : ∀ z ∈ sphere (0 : ℂ) 1, g z - w ≠ 0 := by
+    intro z hz hzero
+    apply hw
+    refine ⟨z, ?_, ?_⟩
+    · exact hz
+    · exact sub_eq_zero.mp hzero
+  rw [ConstructionTargets.Rouche.circleIntegral_logDeriv_eq_divisor_sum
+    zero_lt_one han hne]
+  rw [← ConstructionTargets.Rouche.intCast_zeroCountInClosedBall]
+  rfl
+
+/-- **LIBRARY (Jordan index theorem).**  An injectively parametrized analytic
+circle has index of absolute value at most one about every point off its
+image.  This formulation deliberately does not assume `g'` is nonzero on the
+circle: stationary points of the parametrization are allowed. -/
+lemma apm_a96A07_jordan_one_turn_logDeriv (g : ℂ → ℂ) (w : ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    (hw : w ∉ apm_a96A07_boundaryImage g) (n : ℤ)
+    (hn : (∮ z in C(0, 1), logDeriv (fun z => g z - w) z) =
+      (n : ℂ) * (2 * Real.pi * I)) :
+    |n| ≤ 1 := by
+  sorry
+
+/-- Two distinct interior zeros contribute at least two to the divisor count.
+This includes multiplicity, but needs only the order-at-a-zero lower bound. -/
+lemma apm_a96A07_two_preimages_force_two_le_zeroCount (g : ℂ → ℂ) (w x y : ℂ)
+    (han : AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1))
+    (hw : w ∉ apm_a96A07_boundaryImage g)
+    (hx : x ∈ apm_a96A07_disk) (hy : y ∈ apm_a96A07_disk)
+    (hxy : x ≠ y) (hxw : g x = w) (hyw : g y = w) :
+    (2 : ℤ) ≤ apm_a96A07_diskZeroCount g w := by
+  classical
+  let f : ℂ → ℂ := fun z => g z - w
+  let D := MeromorphicOn.divisor f (closedBall (0 : ℂ) 1)
+  have hfm : MeromorphicOn f (closedBall (0 : ℂ) 1) := han.meromorphicOn
+  have hne : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ 0 := by
+    intro z hz hzero
+    apply hw
+    refine ⟨z, hz, ?_⟩
+    simpa [f] using sub_eq_zero.mp hzero
+  have h1s : (1 : ℂ) ∈ sphere (0 : ℂ) 1 := by simp
+  have h1c : (1 : ℂ) ∈ closedBall (0 : ℂ) 1 :=
+    sphere_subset_closedBall h1s
+  have h1order : meromorphicOrderAt f 1 ≠ ⊤ := by
+    have hzero : meromorphicOrderAt f 1 = 0 :=
+      (han 1 h1c).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.mpr
+        (hne 1 h1s)
+    simp [hzero]
+  have hord : ∀ z : closedBall (0 : ℂ) 1,
+      meromorphicOrderAt f z ≠ ⊤ :=
+    (hfm.exists_meromorphicOrderAt_ne_top_iff_forall
+      (isConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))).1
+      ⟨⟨1, h1c⟩, h1order⟩
+  have hDfin : D.support.Finite :=
+    (MeromorphicOn.divisor f (closedBall (0 : ℂ) 1)).finiteSupport
+      (isCompact_closedBall (0 : ℂ) 1)
+  have hnonneg : ∀ z, 0 ≤ D z := by
+    intro z
+    by_cases hz : z ∈ closedBall (0 : ℂ) 1
+    · rw [MeromorphicOn.divisor_apply hfm hz]
+      rw [WithTop.untop₀_nonneg]
+      exact (han z hz).meromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt.mpr
+        (han z hz)
+    · have hz0 : D z = 0 := by
+        apply not_ne_iff.mp
+        intro hzD
+        exact hz (D.supportWithinDomain (Function.mem_support.mpr hzD))
+      simp [hz0]
+  have hxclosed : x ∈ closedBall (0 : ℂ) 1 := ball_subset_closedBall hx
+  have hyclosed : y ∈ closedBall (0 : ℂ) 1 := ball_subset_closedBall hy
+  have hxpos : 1 ≤ D x := by
+    rw [MeromorphicOn.divisor_apply hfm hxclosed]
+    have hxne : meromorphicOrderAt f x ≠ 0 := by
+      exact (han x hxclosed).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.not.mpr
+        (by simp [f, hxw])
+    have hxnt := hord ⟨x, hxclosed⟩
+    have hxnn : 0 ≤ (meromorphicOrderAt f x).untop₀ := by
+      rw [WithTop.untop₀_nonneg]
+      exact (han x hxclosed).meromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt.mpr
+        (han x hxclosed)
+    have hxnz : (meromorphicOrderAt f x).untop₀ ≠ 0 := by
+      intro h
+      rcases WithTop.untop₀_eq_zero.mp h with h | h
+      · exact hxne h
+      · exact hxnt h
+    omega
+  have hypos : 1 ≤ D y := by
+    rw [MeromorphicOn.divisor_apply hfm hyclosed]
+    have hyne : meromorphicOrderAt f y ≠ 0 := by
+      exact (han y hyclosed).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.not.mpr
+        (by simp [f, hyw])
+    have hynt := hord ⟨y, hyclosed⟩
+    have hynn : 0 ≤ (meromorphicOrderAt f y).untop₀ := by
+      rw [WithTop.untop₀_nonneg]
+      exact (han y hyclosed).meromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt.mpr
+        (han y hyclosed)
+    have hynz : (meromorphicOrderAt f y).untop₀ ≠ 0 := by
+      intro h
+      rcases WithTop.untop₀_eq_zero.mp h with h | h
+      · exact hyne h
+      · exact hynt h
+    omega
+  change (2 : ℤ) ≤ ∑ᶠ z, D z
+  rw [finsum_eq_sum D hDfin]
+  calc
+    (2 : ℤ) ≤ D x + D y := by omega
+    _ = ∑ z ∈ ({x, y} : Finset ℂ), D z := by simp [hxy]
+    _ ≤ ∑ z ∈ hDfin.toFinset, D z := by
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+      · intro z hz
+        apply (Set.Finite.mem_toFinset hDfin).2
+        simp only [Finset.mem_insert, Finset.mem_singleton] at hz
+        rcases hz with rfl | rfl
+        · exact Function.mem_support.mpr (ne_of_gt (lt_of_lt_of_le Int.zero_lt_one hxpos))
+        · exact Function.mem_support.mpr (ne_of_gt (lt_of_lt_of_le Int.zero_lt_one hypos))
+      · exact fun z _ _ => hnonneg z
+
+/-- If one value has two distinct interior preimages, a nearby value outside
+the boundary curve still has two distinct interior preimages.  Analytic open
+mapping supplies the two overlapping image neighborhoods; the `C¹` boundary
+curve has empty interior, even when `g'` vanishes at circle points. -/
+lemma apm_a96A07_perturb_double_value_off_boundary_aux_dense (g : ℂ → ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
+    Dense (apm_a96A07_boundaryImage g)ᶜ := by
+  obtain ⟨ε, hε, hg⟩ := hg
+  let U : Set ℂ := ball 0 (1 + ε)
+  have hgcontC : ContDiffOn ℂ 1 g U :=
+    (hg.mono ball_subset_closedBall).contDiffOn isOpen_ball
+  have hloc : ∀ z ∈ apm_a96A07_circle, ∃ K : NNReal,
+      ∃ t ∈ 𝓝[apm_a96A07_circle] z, LipschitzOnWith K g t := by
+    intro z hz
+    have hzU : z ∈ U := by
+      change z ∈ ball 0 (1 + ε)
+      rw [mem_ball]
+      have hz1 : dist z 0 = 1 := by simpa [apm_a96A07_circle] using hz
+      linarith
+    obtain ⟨K, t, ht, hKt⟩ :=
+      (hgcontC.contDiffAt (isOpen_ball.mem_nhds hzU)).exists_lipschitzOnWith
+    exact ⟨K, t, mem_nhdsWithin_of_mem_nhds ht, hKt⟩
+  have hsphere : dimH apm_a96A07_circle ≤ 1 := by
+    have h := (contDiff_circleMap 0 1 : ContDiff ℝ 1 (circleMap 0 1)).dimH_range_le
+    simpa [apm_a96A07_circle, Complex.finrank_real_complex] using h
+  have hdim : dimH (apm_a96A07_boundaryImage g) < Module.finrank ℝ ℂ := by
+    calc
+      dimH (apm_a96A07_boundaryImage g) ≤ dimH apm_a96A07_circle := by
+        exact dimH_image_le_of_locally_lipschitzOn hloc
+      _ ≤ 1 := hsphere
+      _ < Module.finrank ℝ ℂ := by rw [Complex.finrank_real_complex]; norm_num
+  exact dense_compl_of_dimH_lt_finrank hdim
+
+lemma apm_a96A07_perturb_double_value_off_boundary (g : ℂ → ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    {x y : ℂ} (hx : x ∈ apm_a96A07_disk) (hy : y ∈ apm_a96A07_disk)
+    (hxy : x ≠ y) (hval : g x = g y) :
+    ∃ w x' y',
+      w ∉ apm_a96A07_boundaryImage g ∧
+      x' ∈ apm_a96A07_disk ∧ y' ∈ apm_a96A07_disk ∧
+      x' ≠ y' ∧ g x' = w ∧ g y' = w := by
+  obtain ⟨ε, hε, hdiff⟩ := hg
+  let U : Set ℂ := ball 0 (1 + ε)
+  have hgU : DifferentiableOn ℂ g U := hdiff.mono ball_subset_closedBall
+  have hopenG : ∀ s : Set ℂ, s ⊆ U → IsOpen s → IsOpen (g '' s) := by
+    have han := hgU.analyticOnNhd isOpen_ball
+    rcases han.is_constant_or_isOpen (convex_ball (0 : ℂ) (1 + ε)).isPreconnected with
+      hconst | hopen
+    · obtain ⟨c, hc⟩ := hconst
+      have h1U : (1 : ℂ) ∈ U := by
+        change (1 : ℂ) ∈ ball 0 (1 + ε)
+        rw [mem_ball]
+        simpa using (show (1 : ℝ) < 1 + ε by linarith)
+      have hm1U : (-1 : ℂ) ∈ U := by
+        change (-1 : ℂ) ∈ ball 0 (1 + ε)
+        rw [mem_ball]
+        simpa using (show (1 : ℝ) < 1 + ε by linarith)
+      have heq : (1 : ℂ) = -1 := hg_inj_circle (by simp [apm_a96A07_circle])
+        (by simp [apm_a96A07_circle]) ((hc 1 h1U).trans (hc (-1) hm1U).symm)
+      norm_num at heq
+    · exact hopen
+  let A : Set ℂ := apm_a96A07_disk ∩ {z | dist z x < dist z y}
+  let B : Set ℂ := apm_a96A07_disk ∩ {z | dist z y < dist z x}
+  have hAopen : IsOpen A := isOpen_ball.inter
+    (isOpen_lt (continuous_id.dist continuous_const) (continuous_id.dist continuous_const))
+  have hBopen : IsOpen B := isOpen_ball.inter
+    (isOpen_lt (continuous_id.dist continuous_const) (continuous_id.dist continuous_const))
+  have hAU : A ⊆ U := by
+    intro z hz
+    change z ∈ ball 0 (1 + ε)
+    rw [mem_ball]
+    have hz' : dist z 0 < 1 := by simpa [apm_a96A07_disk] using hz.1
+    exact hz'.trans (by linarith)
+  have hBU : B ⊆ U := by
+    intro z hz
+    change z ∈ ball 0 (1 + ε)
+    rw [mem_ball]
+    have hz' : dist z 0 < 1 := by simpa [apm_a96A07_disk] using hz.1
+    exact hz'.trans (by linarith)
+  have hxA : x ∈ A := by simp [A, hx, hxy]
+  have hyB : y ∈ B := by simp [B, hy, hxy.symm]
+  have hAB : Disjoint A B := by
+    rw [Set.disjoint_left]
+    intro z hzA hzB
+    exact (lt_asymm (show dist z x < dist z y from hzA.2)
+      (show dist z y < dist z x from hzB.2))
+  have hcommon : g x ∈ g '' A ∩ g '' B :=
+    ⟨⟨x, hxA, rfl⟩, ⟨y, hyB, hval.symm⟩⟩
+  have hopen : IsOpen (g '' A ∩ g '' B) :=
+    (hopenG A hAU hAopen).inter (hopenG B hBU hBopen)
+  have hdense := apm_a96A07_perturb_double_value_off_boundary_aux_dense g
+    ⟨ε, hε, hdiff⟩
+  obtain ⟨w, hw, hwopen⟩ := hdense.exists_mem_open hopen ⟨g x, hcommon⟩
+  obtain ⟨x', hx'A, hx'w⟩ := hwopen.1
+  obtain ⟨y', hy'B, hy'w⟩ := hwopen.2
+  refine ⟨w, x', y', hw, hx'A.1, hy'B.1, ?_, hx'w, hy'w⟩
+  intro h
+  subst y'
+  exact Set.disjoint_left.1 hAB hx'A hy'B
+
+/-- An off-boundary fiber has total multiplicity at most one.  This is the
+sorry-free seam between the argument principle and the one-turn theorem. -/
+lemma apm_a96A07_diskZeroCount_le_one (g : ℂ → ℂ) (w : ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    (hw : w ∉ apm_a96A07_boundaryImage g) :
+    apm_a96A07_diskZeroCount g w ≤ 1 := by
+  have han := apm_a96A07_analyticOnNhd_sub_value g w hg
+  have hap := apm_a96A07_argumentPrinciple_disk g w han hw
+  have hj := apm_a96A07_jordan_one_turn_logDeriv g w hg hg_inj_circle hw
+    (apm_a96A07_diskZeroCount g w) hap
+  exact le_trans (le_abs_self _) hj
+
+/-- Injectivity on the unit circle propagates to the open unit disk. -/
 theorem apm_a96A07_injOn_disk_of_injOn_circle (g : ℂ → ℂ)
     (hg : ∃ ε > 0,
       DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
     (hg_inj_circle : Set.InjOn g apm_a96A07_circle) :
     Set.InjOn g apm_a96A07_disk := by
-  sorry
+  intro x hx y hy hval
+  by_contra hxy
+  obtain ⟨w, x', y', hw, hx', hy', hxy', hxw, hyw⟩ :=
+    apm_a96A07_perturb_double_value_off_boundary g hg hg_inj_circle
+      hx hy hxy hval
+  have han := apm_a96A07_analyticOnNhd_sub_value g w hg
+  have htwo := apm_a96A07_two_preimages_force_two_le_zeroCount
+    g w x' y' han hw hx' hy' hxy' hxw hyw
+  have hone := apm_a96A07_diskZeroCount_le_one g w hg hg_inj_circle hw
+  omega
 
 theorem apm_a96a07 (g : ℂ → ℂ)
     (hg : ∃ ε > 0,
