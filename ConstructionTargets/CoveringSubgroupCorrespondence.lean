@@ -107,6 +107,39 @@ theorem exists_connected_subgroup_cover_aux_good_nhds
     (isOpen_isPathConnected_basis y).mem_iff.mp hV
   exact ⟨U, hUopen, hyU, hUpath, fun γ hγ ↦ htriv γ (hγ.trans hUV)⟩
 
+/-- `π₁` acts on path-neighbourhoods: translating moves the anchor class. -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_smul_nbhd
+    {x : X} (g : FundamentalGroup X x) (U : Set X) (a : BasedPaths x) :
+    (g • ·) ⁻¹' basedPathNbhd U a = basedPathNbhd U (g⁻¹ • a) := by
+  sorry
+
+/-- A good neighbourhood of `y` has trivial loops at every one of its points
+(conjugate by a path inside `U` back to `y`). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_good_loops
+    {y : X} {U : Set X} (hU : IsPathConnected U) (hyU : y ∈ U)
+    (htriv : ∀ γ : Path y y, range γ ⊆ U →
+      Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl y))
+    {z : X} (hz : z ∈ U) (γ : Path z z) (hγ : range γ ⊆ U) :
+    Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl z) := by
+  sorry
+
+/-- A sheet over a good `U`: the endpoint map is a homeomorphism from the
+path-neighbourhood `basedPathNbhd U a` onto `U`. -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet
+    [LocPathConnectedSpace X] {x : X} {U : Set X} (hUo : IsOpen U)
+    (hU : IsPathConnected U)
+    (htriv : ∀ z ∈ U, ∀ γ : Path z z, range γ ⊆ U →
+      Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl z))
+    (a : BasedPaths x) (ha : a.1 ∈ U) :
+    ∃ e : basedPathNbhd U a ≃ₜ U, ∀ b, (e b : X) = (b : BasedPaths x).1 := by
+  sorry
+
+/-- The quotient map of the `H`-action on based paths is open. -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap
+    {x : X} (H : Subgroup (FundamentalGroup X x)) :
+    IsOpenMap (BasedCover.mk H) := by
+  sorry
+
 /-- **LIBRARY-borderline.** The endpoint map is a covering map.  Charts: for a
 good `U` (`exists_connected_subgroup_cover_aux_good_nhds`) and `y ∈ U`, the
 preimage of `U` is the disjoint union over the fibre of the images of the
