@@ -873,12 +873,80 @@ theorem T96A06_circle_windingCochain_aux_surjective : Function.Surjective angleM
 /-- **Leaf C1b-disp.** The displacement does not depend on the lift: two lifts
 of `s` differ by a continuous function into `ℤ` (`cos`/`sin` periodicity),
 constant on the connected simplex. -/
+lemma T96A06_circle_windingCochain_aux_disp_eq_angle_shift
+    (a b t : ℝ) (h : angleMap a = angleMap b) :
+    angleMap (t + (a - b)) = angleMap t := by
+  have hc : Real.cos (2 * Real.pi * a) = Real.cos (2 * Real.pi * b) := by
+    have := congrArg (fun x : euclideanUnitSphere 2 => x.1 (0 : Fin 2)) h
+    simpa [angleMap] using this
+  have hs : Real.sin (2 * Real.pi * a) = Real.sin (2 * Real.pi * b) := by
+    have := congrArg (fun x : euclideanUnitSphere 2 => x.1 (1 : Fin 2)) h
+    simpa [angleMap] using this
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · change Real.cos (2 * Real.pi * (t + (a - b))) = Real.cos (2 * Real.pi * t)
+    rw [show 2 * Real.pi * (t + (a - b)) =
+      2 * Real.pi * t + (2 * Real.pi * a - 2 * Real.pi * b) by ring]
+    rw [Real.cos_add, Real.cos_sub, Real.sin_sub, hc, hs]
+    ring_nf
+    calc
+      _ = Real.cos (Real.pi * t * 2) *
+          (Real.cos (Real.pi * b * 2) ^ 2 + Real.sin (Real.pi * b * 2) ^ 2) := by ring
+      _ = _ := by rw [Real.cos_sq_add_sin_sq, mul_one]
+  · change Real.sin (2 * Real.pi * (t + (a - b))) = Real.sin (2 * Real.pi * t)
+    rw [show 2 * Real.pi * (t + (a - b)) =
+      2 * Real.pi * t + (2 * Real.pi * a - 2 * Real.pi * b) by ring]
+    rw [Real.sin_add, Real.cos_sub, Real.sin_sub, hc, hs]
+    ring_nf
+    calc
+      _ = Real.sin (Real.pi * t * 2) *
+          (Real.cos (Real.pi * b * 2) ^ 2 + Real.sin (Real.pi * b * 2) ^ 2) := by ring
+      _ = _ := by rw [Real.cos_sq_add_sin_sq, mul_one]
+
 theorem T96A06_circle_windingCochain_aux_disp_eq
     (s : C(stdSimplex ℝ (Fin 2), euclideanUnitSphere 2))
     (L : C(stdSimplex ℝ (Fin 2), ℝ)) (hL : angleMap ∘ L = s) :
     windingDisp s = L ⟨_, single_mem_stdSimplex ℝ (1 : Fin 2)⟩ -
       L ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩ := by
-  sorry
+  classical
+  unfold windingDisp
+  split_ifs with hex
+  · let M := hex.choose
+    let v0 : stdSimplex ℝ (Fin 2) :=
+      ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩
+    let v1 : stdSimplex ℝ (Fin 2) :=
+      ⟨_, single_mem_stdSimplex ℝ (1 : Fin 2)⟩
+    have hM : angleMap ∘ M = s := hex.choose_spec
+    have hbase : angleMap (M v0) = angleMap (L v0) := by
+      rw [show angleMap (M v0) = s v0 from congrFun hM v0,
+        show angleMap (L v0) = s v0 from congrFun hL v0]
+    let L' : C(stdSimplex ℝ (Fin 2), ℝ) :=
+      ⟨fun x => L x + (M v0 - L v0), by fun_prop⟩
+    have hL' : angleMap ∘ L' = s := by
+      funext x
+      change angleMap (L x + (M v0 - L v0)) = s x
+      rw [T96A06_circle_windingCochain_aux_disp_eq_angle_shift
+        (M v0) (L v0) (L x) hbase]
+      exact congrFun hL x
+    have hL'0 : L' v0 = M v0 := by
+      change L v0 + (M v0 - L v0) = M v0
+      ring
+    letI : ContractibleSpace (stdSimplex ℝ (Fin 2)) :=
+      (convex_stdSimplex ℝ _).contractibleSpace
+        ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩
+    letI : LocPathConnectedSpace (stdSimplex ℝ (Fin 2)) :=
+      (convex_stdSimplex ℝ _).locPathConnectedSpace
+    have heq : L' = M :=
+      (T96A06_angleMap_isCoveringMap.existsUnique_continuousMap_lifts
+        s v0 (M v0) (by simpa using congrFun hM v0)).unique
+          ⟨hL'0, hL'⟩ ⟨rfl, hM⟩
+    have hv1 := congrArg (fun F : C(stdSimplex ℝ (Fin 2), ℝ) => F v1) heq
+    change M v1 - M v0 = L v1 - L v0
+    change L' v1 = M v1 at hv1
+    dsimp [L'] at hv1
+    linarith
+  · exact (hex ⟨L, hL⟩).elim
 
 /-- **Leaf C1b-cocycle.** `W ∘ d₂ = 0`.  Ext over generators
 (`Limits.Sigma.hom_ext`, `toSSetObjEquiv`); lift the whole 2-simplex
