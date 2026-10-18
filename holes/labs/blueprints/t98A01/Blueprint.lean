@@ -346,6 +346,121 @@ section PolygonNFHandle
 
 open ConstructionTargets.Surfaces PolygonMoves
 
+/-! Banked from lemma-2's partial (2026-10-18). -/
+lemma polygonNF_handle_eqvGen_iff_aux_length {L : Type*} (g : ℕ)
+    (a b : Fin g → Signed L) : (polygonNF_handleWord g a b).length = 4 * g := by
+  simp [polygonNF_handleWord, List.length_flatMap]
+  omega
+
+lemma polygonNF_handle_eqvGen_iff_aux_flat_get {A B : Type*}
+    (f : A → Fin 4 → B) (xs : List A) (i : ℕ) :
+    (xs.flatMap fun x => [f x 0, f x 1, f x 2, f x 3])[i]? =
+      Option.map (fun x => f x ⟨i % 4, by omega⟩) xs[i / 4]? := by
+  induction xs generalizing i with
+  | nil => simp
+  | cons x xs ih =>
+      rcases i with _ | i
+      · simp
+      rcases i with _ | i
+      · simp
+      rcases i with _ | i
+      · simp
+      rcases i with _ | k
+      · simp
+      have hd : (k + 4) / 4 = k / 4 + 1 := by omega
+      have hm : (k + 4) % 4 = k % 4 := by omega
+      simpa [hd, hm] using ih k
+
+lemma polygonNF_handle_eqvGen_iff_aux_get {L : Type*} (g : ℕ)
+    (a b : Fin g → Signed L) (i : Fin (polygonNF_handleWord g a b).length) :
+    (polygonNF_handleWord g a b).get i =
+      ![a ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩,
+        b ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩,
+        inv (a ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩),
+        inv (b ⟨i.1 / 4, by
+          have hi := i.2
+          have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+          have : i.1 < 4 * g := by simpa [hlen] using hi
+          omega⟩)] ⟨i.1 % 4, by omega⟩ := by
+  rw [List.get_eq_getElem]
+  let f : Fin g → Fin 4 → Signed L := fun j =>
+    ![a j, b j, inv (a j), inv (b j)]
+  have h := polygonNF_handle_eqvGen_iff_aux_flat_get f (List.finRange g) i.1
+  have hiword : i.1 <
+      ((List.finRange g).flatMap fun j => [f j 0, f j 1, f j 2, f j 3]).length := by
+    simpa [f, polygonNF_handleWord] using i.2
+  rw [List.getElem?_eq_getElem hiword] at h
+  have hi : i.1 / 4 < (List.finRange g).length := by
+    simp
+    have := i.2
+    have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+    have : i.1 < 4 * g := by simpa [hlen] using this
+    omega
+  rw [List.getElem?_eq_getElem hi] at h
+  simpa [polygonNF_handleWord, f] using Option.some.inj h
+
+
+lemma polygonNF_handle_eqvGen_iff_aux_labels {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    (hab : Function.Injective fun p : Fin g × Bool =>
+      if p.2 then (b p.1).1 else (a p.1).1)
+    (j k : Fin g) (r s : Fin 4)
+    (h : (![a j, b j, inv (a j), inv (b j)] r).1 =
+      (![a k, b k, inv (a k), inv (b k)] s).1) :
+    j = k ∧ ((r = 0 ∨ r = 2) ∧ (s = 0 ∨ s = 2) ∨
+      (r = 1 ∨ r = 3) ∧ (s = 1 ∨ s = 3)) := by
+  fin_cases r <;> fin_cases s <;> simp [PolygonMoves.inv] at h ⊢
+  all_goals first
+    | exact congrArg Prod.fst (@hab (j, false) (k, false) (by simpa using h))
+    | exact congrArg Prod.fst (@hab (j, true) (k, true) (by simpa using h))
+    | have hh := @hab (j, false) (k, true) (by simpa using h); simp at hh
+    | have hh := @hab (j, true) (k, false) (by simpa using h); simp at hh
+
+/-- **Leaf (split 2026-10-18 from `polygonNF_handle_eqvGen_iff`, lemma-2 partial).**
+Each standard orientable gluing is one `WordRel` step of the handle word.
+
+Route.  For `x = edgePoint (4g) (4j) t`, `y = edgePoint (4g) (4j+2) tr`, take
+positions `i = 4j`, `k = 4j+2` (labels `a j`, `inv (a j)`: equal labels,
+opposite signs, so `WordRel` reverses `t`, and `reverseParameter t = tr`).
+Likewise `4j+1`, `4j+3` with `b j`.  Use `_aux_length` and `_aux_get`.
+No injectivity needed.  About 40–80 lines. -/
+lemma polygonNF_handle_eqvGen_iff_aux_surface_to_word {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    {x y : Disk} (h : SurfaceRel true g x y) :
+    WordRel (polygonNF_handleWord g a b) x y := by
+  sorry
+
+/-- **Leaf (split 2026-10-18 from `polygonNF_handle_eqvGen_iff`, lemma-2 partial).**
+With distinct labels, each `WordRel` step of the handle word is a standard
+orientable gluing, in one direction or the other.
+
+Route.  Write `i = 4 * (i/4) + i % 4` and the same for `k`; `_aux_get` gives the
+letters, `_aux_labels` (with `hab`) gives `i/4 = k/4` and that the residues are
+both in `{0,2}` or both in `{1,3}`.  `i ≠ k` leaves the two orders of each
+pair; one is `SurfaceRel` forward, the other its symmetric.  Pitfall (lemma-2's
+attempt): work with the naturals `i.1 / 4`, `i.1 % 4` and `omega`, not with
+`Fin` wrappers `⟨i.1 / 4, _⟩`, which `omega` cannot see through.  About
+80–150 lines. -/
+lemma polygonNF_handle_eqvGen_iff_aux_word_to_surface {L : Type*} [DecidableEq L] (g : ℕ)
+    (a b : Fin g → Signed L)
+    (hab : Function.Injective fun p : Fin g × Bool =>
+      if p.2 then (b p.1).1 else (a p.1).1)
+    {x y : Disk} (h : WordRel (polygonNF_handleWord g a b) x y) :
+    Relation.EqvGen (SurfaceRel true g) x y := by
+  sorry
+
 /-- **Family leaf `polygonNF_handle_eqvGen_iff`** (t98A01 here;
 later t94J04, t00A02).  With `2g` distinct labels, the handle word generates
 the same equivalence relation on the disk as the standard model
@@ -363,7 +478,21 @@ theorem polygonNF_handle_eqvGen_iff {L : Type*} [DecidableEq L] (g : ℕ)
     (x y : Disk) :
     Relation.EqvGen (WordRel (polygonNF_handleWord g a b)) x y ↔
       Relation.EqvGen (SurfaceRel true g) x y := by
-  sorry
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact polygonNF_handle_eqvGen_iff_aux_word_to_surface g a b hab h
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  · intro h
+    induction h with
+    | rel x y h =>
+        exact Relation.EqvGen.rel _ _
+          (polygonNF_handle_eqvGen_iff_aux_surface_to_word g a b h)
+    | refl x => exact Relation.EqvGen.refl x
+    | symm x y _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans x y z _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
 
 /-- Handle bridge: the handle word with distinct labels presents
 `Surface true g`. -/
