@@ -266,12 +266,276 @@ component of `a` meets `B` (`CoveringPathComponentSurjective`) in
 `ComponentFiber q b` for some `b`, whose card equals that of
 `ComponentFiber q a` (`t95J03_componentFiberCard_joined`).  Summing over the
 classes of `A`: `k = Σ |A ∩ C| < Σ |B ∩ C| ≤ |B| = k`.  About 100–200 lines. -/
+-- Joined-invariance of the component-fibre cardinality (C2 route)
+
+noncomputable def t95J03_sheets_lt_absurd_aux_end {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') (x : E) (hx : p x = p e) : E :=
+  cov.liftPath (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source]) 1
+
+lemma t95J03_sheets_lt_absurd_aux_end_mem {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') {x : E} (hx : p x = p e) :
+    p (t95J03_sheets_lt_absurd_aux_end cov γ x hx) = p e' := by
+  have h := cov.liftPath_lifts (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source])
+  have h1 := congrFun h 1
+  simpa using h1
+
+/-- The lift of `γ.map p` starting at `x`, as a path. -/
+noncomputable def t95J03_sheets_lt_absurd_aux_joinPath {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') {x : E} (hx : p x = p e) :
+    Path x (t95J03_sheets_lt_absurd_aux_end cov γ x hx) where
+  toFun t := cov.liftPath (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source]) t
+  continuous_toFun := (cov.liftPath (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source])).continuous
+  source' := cov.liftPath_zero (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source])
+  target' := rfl
+
+/-- Lifting there and back along a path returns the starting point. -/
+lemma t95J03_sheets_lt_absurd_aux_cancel {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') {x : E} (hx : p x = p e) :
+    t95J03_sheets_lt_absurd_aux_end cov γ.symm
+      (t95J03_sheets_lt_absurd_aux_end cov γ x hx)
+      (t95J03_sheets_lt_absurd_aux_end_mem cov γ hx) = x := by
+  have hc : Continuous p := cov.continuous
+  have hL0 : cov.liftPath (γ.map hc).toContinuousMap x (by simp [hx, Path.source]) 0 = x :=
+    cov.liftPath_zero (γ.map hc).toContinuousMap x (by simp [hx, Path.source])
+  have hlifts : ∀ t, p (cov.liftPath (γ.map hc).toContinuousMap x
+      (by simp [hx, Path.source]) t) = p (γ t) := by
+    intro t
+    have h := cov.liftPath_lifts (γ.map hc).toContinuousMap x (by simp [hx, Path.source])
+    exact congrFun h t
+  set ρ : Path x (t95J03_sheets_lt_absurd_aux_end cov γ x hx) :=
+    t95J03_sheets_lt_absurd_aux_joinPath cov γ hx with hρ
+  have hsymm : ∀ t : unitInterval,
+      p (t95J03_sheets_lt_absurd_aux_joinPath cov γ hx (unitInterval.symm t))
+        = p (γ.symm t) := by
+    intro t
+    have h := hlifts (unitInterval.symm t)
+    rw [Path.symm_apply]
+    exact h
+  have hcomp : p ∘ ρ.symm.toContinuousMap = (γ.symm.map hc).toContinuousMap := by
+    funext t
+    exact hsymm t
+  have hstart : ρ.symm.toContinuousMap 0 =
+      t95J03_sheets_lt_absurd_aux_end cov γ x hx := by
+    simp
+  have hEq : ρ.symm.toContinuousMap = cov.liftPath (γ.symm.map hc).toContinuousMap
+      (t95J03_sheets_lt_absurd_aux_end cov γ x hx)
+      (by simp [t95J03_sheets_lt_absurd_aux_end_mem cov γ hx, Path.source]) :=
+    (cov.eq_liftPath_iff' _).mpr ⟨hcomp, hstart⟩
+  have h1 := DFunLike.congr_fun hEq 1
+  have h2 : ρ.symm 1 = x := by
+    show ρ (unitInterval.symm 1) = x
+    rw [unitInterval.symm_one]
+    exact hL0
+  simp only [t95J03_sheets_lt_absurd_aux_end]
+  exact h1.symm.trans h2
+
+/-- The bijection of component fibres along a path, by path lifting. -/
+noncomputable def t95J03_sheets_lt_absurd_aux_liftEquiv {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') : ComponentFiber p e ≃ ComponentFiber p e' where
+  toFun x := ⟨t95J03_sheets_lt_absurd_aux_end cov γ x.1 x.2.1,
+    t95J03_sheets_lt_absurd_aux_end_mem cov γ x.2.1,
+    ⟨(γ.symm.trans x.2.2.some).trans
+      (t95J03_sheets_lt_absurd_aux_joinPath cov γ x.2.1)⟩⟩
+  invFun y := ⟨t95J03_sheets_lt_absurd_aux_end cov γ.symm y.1 y.2.1,
+    t95J03_sheets_lt_absurd_aux_end_mem cov γ.symm y.2.1,
+    ⟨(γ.trans y.2.2.some).trans
+      (t95J03_sheets_lt_absurd_aux_joinPath cov γ.symm y.2.1)⟩⟩
+  left_inv x := Subtype.ext
+    (t95J03_sheets_lt_absurd_aux_cancel cov γ x.2.1)
+  right_inv y := Subtype.ext (by
+    simpa [Path.symm_symm] using
+      t95J03_sheets_lt_absurd_aux_cancel cov γ.symm y.2.1)
+
+lemma t95J03_sheets_lt_absurd_aux_card {E X : Type*} [TopologicalSpace E]
+    [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p) {e e' : E}
+    (h : Joined e e') :
+    Nat.card (ComponentFiber p e) = Nat.card (ComponentFiber p e') :=
+  Nat.card_congr (t95J03_sheets_lt_absurd_aux_liftEquiv cov h.some)
+
+-- Fibre setoids by `Joined` (C4 route)
+
+def t95J03_sheets_lt_absurd_aux_setoid {E Z : Type*} [TopologicalSpace E]
+    [TopologicalSpace Z] (r : E → Z) (z : Z) : Setoid {e : E // r e = z} where
+  r a b := Joined b.val a.val
+  iseqv := ⟨fun a => Joined.refl a.val, fun h => Joined.symm h,
+    fun h1 h2 => Joined.trans h2 h1⟩
+
+lemma t95J03_sheets_lt_absurd_aux_mk_eq {E Z : Type*} [TopologicalSpace E]
+    [TopologicalSpace Z] (r : E → Z) (z : Z) (a b : {e : E // r e = z}) :
+    Quotient.mk (t95J03_sheets_lt_absurd_aux_setoid r z) a
+        = Quotient.mk (t95J03_sheets_lt_absurd_aux_setoid r z) b ↔
+      Joined (b : E) (a : E) := by
+  constructor
+  · intro h; exact Quotient.eq.1 h
+  · intro h; exact Quotient.sound h
+
+/-- A fibre-class of the setoid is a component fibre (as an equiv, for cards). -/
+def t95J03_sheets_lt_absurd_aux_classEquiv {E Z : Type*} [TopologicalSpace E]
+    [TopologicalSpace Z] (r : E → Z) (z : Z) (b : {e : E // r e = z}) :
+    {x : {e : E // r e = z} // Quotient.mk (t95J03_sheets_lt_absurd_aux_setoid r z) x
+        = Quotient.mk (t95J03_sheets_lt_absurd_aux_setoid r z) b} ≃
+      ComponentFiber r (b : E) where
+  toFun x := by
+    refine ⟨x.1.1, ?_, ?_⟩
+    · rw [x.1.2]; exact b.2.symm
+    · exact (t95J03_sheets_lt_absurd_aux_mk_eq r z x.1 b).1 x.2
+  invFun w := by
+    refine ⟨⟨w.1, ?_⟩, ?_⟩
+    · rw [w.2.1]; exact b.2
+    · exact (t95J03_sheets_lt_absurd_aux_mk_eq r z _ b).2 w.2.2
+  left_inv x := by
+    apply Subtype.ext
+    apply Subtype.ext
+    rfl
+  right_inv w := by
+    apply Subtype.ext
+    rfl
+
+lemma t95J03_sheets_lt_absurd_aux_filter_card {α : Type*} [Fintype α] (pr : α → Prop)
+    [DecidablePred pr] :
+    Finset.card (Finset.filter pr (Finset.univ : Finset α))
+      = Nat.card {a : α // pr a} := by
+  classical
+  have e : {a : α // pr a} ≃
+      {x : α // x ∈ (Finset.univ.filter pr : Finset α)} :=
+    Equiv.subtypeEquiv (Equiv.refl _) (fun x => by simp [Finset.mem_filter])
+  rw [Nat.card_congr e, Nat.card_eq_fintype_card, Fintype.card_coe]
+
+-- The main counting argument
+
 lemma t95J03_sheets_lt_absurd {E X Y : Type*} [TopologicalSpace E] [TopologicalSpace X]
     [TopologicalSpace Y] [PathConnectedSpace X] [PathConnectedSpace Y]
     {p : E → X} {q : E → Y} {k : ℕ} (hp : IsKSheetedCover p k) (hq : IsKSheetedCover q k)
     (hk : 0 < k)
     (hlt : ∀ e, Nat.card (ComponentFiber p e) < Nat.card (ComponentFiber q e)) : False := by
-  sorry
+  classical
+  obtain ⟨x₀⟩ := (inferInstance : Nonempty X)
+  haveI : Finite {e : E // p e = x₀} := hp.finite_fiber x₀
+  haveI : Fintype {e : E // p e = x₀} := Fintype.ofFinite _
+  have hAcard : Fintype.card {e : E // p e = x₀} = k := by
+    have h := hp.card_fiber x₀
+    rw [Nat.card_eq_fintype_card] at h
+    exact h
+  have hcard0 : 0 < (Finset.univ : Finset {e : E // p e = x₀}).card := by
+    rw [Finset.card_univ]
+    omega
+  obtain ⟨e₀, he₀⟩ : Nonempty {e : E // p e = x₀} :=
+    Fintype.card_pos_iff.mp (by rw [← Finset.card_univ]; omega)
+  set y₀ := q e₀ with hy₀
+  haveI : Finite {e : E // q e = y₀} := hq.finite_fiber y₀
+  haveI : Fintype {e : E // q e = y₀} := Fintype.ofFinite _
+  have hBcard : Fintype.card {e : E // q e = y₀} = k := by
+    have h := hq.card_fiber y₀
+    rw [Nat.card_eq_fintype_card] at h
+    exact h
+  let SA := t95J03_sheets_lt_absurd_aux_setoid p x₀
+  let SB := t95J03_sheets_lt_absurd_aux_setoid q y₀
+  haveI := Classical.decEq (Quotient SA)
+  haveI := Classical.decEq (Quotient SB)
+  set f : {e : E // p e = x₀} → Quotient SA := fun a => Quotient.mk SA a with hf
+  set g : {e : E // q e = y₀} → Quotient SB := fun b => Quotient.mk SB b with hg
+  have bex : ∀ a : {e : E // p e = x₀}, ∃ b : {e : E // q e = y₀},
+      Joined (a : E) (b : E) := by
+    intro a
+    obtain ⟨w, hw⟩ := CoveringPathComponentSurjective.componentProjection_surjective
+      hq.isCoveringMap (a : E) y₀
+    exact ⟨⟨(w : E), hw⟩, w.2⟩
+  choose ψ hψ using bex
+  set ψc : {e : E // p e = x₀} → Quotient SB := fun a => Quotient.mk SB (ψ a) with hψc
+  have hψconst : ∀ a a' : {e : E // p e = x₀}, f a = f a' → ψc a = ψc a' := by
+    intro a a' h
+    have hA : Joined (a' : E) (a : E) := (t95J03_sheets_lt_absurd_aux_mk_eq p x₀ a a').1 h
+    have hchain : Joined (↑(ψ a') : E) (↑(ψ a) : E) :=
+      ((Joined.symm (hψ a')).trans hA).trans (hψ a)
+    exact (t95J03_sheets_lt_absurd_aux_mk_eq q y₀ (ψ a) (ψ a')).2 hchain
+  set ι : Quotient SA → Quotient SB := fun c => ψc c.out with hι
+  have hιinj : ∀ c₁ c₂ : Quotient SA, ι c₁ = ι c₂ → c₁ = c₂ := by
+    intro c₁ c₂ h
+    have hqj : Joined (ψ c₂.out : E) (ψ c₁.out : E) :=
+      (t95J03_sheets_lt_absurd_aux_mk_eq q y₀ (ψ c₁.out) (ψ c₂.out)).1 h
+    have hchain : Joined (c₁.out : E) (c₂.out : E) :=
+      ((hψ c₁.out).trans (Joined.symm hqj)).trans (Joined.symm (hψ c₂.out))
+    have hmk : (Quotient.mk SA c₁.out : Quotient SA) = Quotient.mk SA c₂.out :=
+      Quotient.sound (Joined.symm hchain)
+    rw [Quotient.out_eq, Quotient.out_eq] at hmk
+    exact hmk
+  set univA := (Finset.univ : Finset {e : E // p e = x₀}) with hunivA
+  set univB := (Finset.univ : Finset {e : E // q e = y₀}) with hunivB
+  have htermA : ∀ a : {e : E // p e = x₀},
+      (univA.filter (fun x => f x = f a)).card
+        = Nat.card (ComponentFiber p (a : E)) := by
+    intro a
+    rw [t95J03_sheets_lt_absurd_aux_filter_card]
+    exact Nat.card_congr (t95J03_sheets_lt_absurd_aux_classEquiv p x₀ a)
+  have htermB : ∀ a : {e : E // p e = x₀},
+      (univB.filter (fun b => g b = ι (f a))).card
+        = Nat.card (ComponentFiber q (a : E)) := by
+    intro a
+    have hic : ι (f a) = ψc a :=
+      (show ι (f a) = ψc (Quotient.out (f a)) from rfl).trans
+        (hψconst _ _ (Quotient.out_eq (f a)))
+    have hfilter : (univB.filter (fun b => g b = ι (f a))).card
+        = (univB.filter (fun b => g b = ψc a)).card := by
+      simp only [hic]
+    rw [hfilter, t95J03_sheets_lt_absurd_aux_filter_card]
+    have hcard := Nat.card_congr (t95J03_sheets_lt_absurd_aux_classEquiv q y₀ (ψ a))
+    rw [← t95J03_sheets_lt_absurd_aux_card hq.isCoveringMap (hψ a)] at hcard
+    exact hcard
+  have hstrict : ∀ c ∈ univA.image f,
+      (univA.filter (fun a => f a = c)).card
+        < (univB.filter (fun b => g b = ι c)).card := by
+    intro c hc
+    obtain ⟨a, _, rfl⟩ := Finset.mem_image.1 hc
+    rw [htermA a, htermB a]
+    exact hlt _
+  have hsplitA : univA.card
+      = ∑ c ∈ univA.image f, (univA.filter (fun a => f a = c)).card :=
+    Finset.card_eq_sum_card_image f univA
+  have hsumA : ∑ c ∈ univA.image f, (univA.filter (fun a => f a = c)).card = k := by
+    rw [← hsplitA, Finset.card_univ]
+    exact hAcard
+  have hne : ∃ c ∈ univA.image f,
+      (univA.filter (fun a => f a = c)).card
+        < (univB.filter (fun b => g b = ι c)).card := by
+    refine ⟨f ⟨e₀, he₀⟩, Finset.mem_image_of_mem _ (Finset.mem_univ _), ?_⟩
+    obtain ⟨a, _, hfa⟩ := Finset.mem_image.1
+      (Finset.mem_image_of_mem f (Finset.mem_univ ⟨e₀, he₀⟩))
+    rw [← hfa, htermA a, htermB a]
+    exact hlt _
+  have h1 : k < ∑ c ∈ univA.image f, (univB.filter (fun b => g b = ι c)).card := by
+    rw [← hsumA]
+    exact Finset.sum_lt_sum (fun c hc => (hstrict c hc).le) hne
+  have hinj : ∀ c ∈ univA.image f, ∀ c' ∈ univA.image f, ι c = ι c' → c = c' :=
+    fun c _ c' _ h => hιinj c c' h
+  have hreindex : ∑ c ∈ univA.image f, (univB.filter (fun b => g b = ι c)).card
+      = ∑ d ∈ (univA.image f).image ι, (univB.filter (fun b => g b = d)).card := by
+    rw [Finset.sum_image hinj]
+  have hsub : (univA.image f).image ι ⊆ univB.image g := by
+    intro d hd
+    obtain ⟨c, _, rfl⟩ := Finset.mem_image.1 hd
+    refine Finset.mem_image.2 ⟨ψ c.out, Finset.mem_univ _, ?_⟩
+    rfl
+  have h2 : ∑ d ∈ (univA.image f).image ι, (univB.filter (fun b => g b = d)).card
+      ≤ ∑ d ∈ univB.image g, (univB.filter (fun b => g b = d)).card :=
+    Finset.sum_le_sum_of_subset hsub
+  have hsplitB : univB.card
+      = ∑ d ∈ univB.image g, (univB.filter (fun b => g b = d)).card :=
+    Finset.card_eq_sum_card_image g univB
+  have h3 : ∑ d ∈ univB.image g, (univB.filter (fun b => g b = d)).card = k := by
+    rw [← hsplitB, Finset.card_univ]
+    exact hBcard
+  have h4 := hreindex.trans_le h2
+  omega
 
 /-- **Leaf C4.**  If every component has an even number of sheets, so does the
 cover.
