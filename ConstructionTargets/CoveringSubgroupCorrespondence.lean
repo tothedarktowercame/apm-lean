@@ -497,7 +497,22 @@ theorem exists_connected_subgroup_cover_aux_mulEquiv_range
     (K : Subgroup (FundamentalGroup Y y))
     (hK : (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ hpe).range = K) :
     Nonempty (FundamentalGroup E e ≃* K) := by
-  sorry
+  let f := FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ hpe
+  have hfrange : f.range = K := hK
+  subst y
+  have hf : Function.Injective f := by
+    intro a b
+    induction a using Path.Homotopic.Quotient.ind with
+    | mk a =>
+      induction b using Path.Homotopic.Quotient.ind with
+      | mk b =>
+        intro hab
+        apply hp.injective_path_homotopic_map e e
+        simpa [f, FundamentalGroup.mapOfEq_apply] using hab
+  rw [← hfrange]
+  exact ⟨MulEquiv.ofBijective f.rangeRestrict
+    ⟨MonoidHom.rangeRestrict_injective_iff.mpr hf,
+      f.rangeRestrict_surjective⟩⟩
 
 /-- The fibre over `x` is the orbit set of `H` acting on loops by
 `g • a = g⁻¹ * a` read as paths, i.e. the left cosets `a H`; these are
