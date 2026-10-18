@@ -837,7 +837,83 @@ lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_homotopic :
       ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
         apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩).Homotopic
       (ContinuousMap.id _) := by
-  sorry
+  let H : ContinuousMap.Homotopy
+      ((⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩ :
+            C(Sum PUnit.{1} PUnit.{1},
+              apm_t00j01_circleCover_intersection_equiv_aux_E0)).comp
+        ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩)
+      (ContinuousMap.id _) := {
+    toFun := fun p => ⟨(1 - (p.1 : ℝ)) •
+        (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point
+          (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2)).1 +
+        (p.1 : ℝ) • p.2.1, by
+      intro hzero
+      have him : (((((1 - (p.1 : ℝ)) •
+          (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point
+            (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2)).1 +
+          (p.1 : ℝ) • p.2.1 :
+            apm_t00j01_circleCover_intersection_equiv_aux_E) : ℂ)).im) = 0 := by
+        simpa using congrArg (fun z : apm_t00j01_circleCover_intersection_equiv_aux_E =>
+          ((z.1 : ℂ).im)) hzero
+      have ht0 : 0 ≤ (p.1 : ℝ) := p.1.2.1
+      have ht1 : (p.1 : ℝ) ≤ 1 := p.1.2.2
+      unfold apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign at him
+      split at him
+      · have hw : 0 < (p.2.1.1 : ℂ).im := by assumption
+        simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+          ] at him
+        change ((((1 - (p.1 : ℝ) : ℝ) : ℂ) * Complex.I).im +
+          (((p.1 : ℝ) : ℂ) * (p.2.1.1 : ℂ)).im = 0) at him
+        simp [Complex.mul_im] at him
+        by_cases ht : (p.1 : ℝ) = 0
+        · rw [ht] at him
+          norm_num at him
+        have htpos : 0 < (p.1 : ℝ) := lt_of_le_of_ne ht0 (Ne.symm ht)
+        have hprod : 0 < (p.1 : ℝ) * (p.2.1.1 : ℂ).im := mul_pos htpos hw
+        nlinarith
+      · have hw : (p.2.1.1 : ℂ).im < 0 :=
+          lt_of_le_of_ne (le_of_not_gt ‹¬ 0 < (p.2.1.1 : ℂ).im›)
+            (apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero p.2)
+        simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+          ] at him
+        change (-((((1 - (p.1 : ℝ) : ℝ) : ℂ) * Complex.I).im) +
+          (((p.1 : ℝ) : ℂ) * (p.2.1.1 : ℂ)).im = 0) at him
+        simp [Complex.mul_im] at him
+        by_cases ht : (p.1 : ℝ) = 0
+        · rw [ht] at him
+          norm_num at him
+        have htpos : 0 < (p.1 : ℝ) := lt_of_le_of_ne ht0 (Ne.symm ht)
+        have hprod : (p.1 : ℝ) * (p.2.1.1 : ℂ).im < 0 :=
+          mul_neg_of_pos_of_neg htpos hw
+        nlinarith⟩
+    continuous_toFun := by
+      apply Continuous.subtype_mk
+      have hs : Continuous (fun p : unitInterval ×
+          apm_t00j01_circleCover_intersection_equiv_aux_E0 =>
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2) :=
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous.comp
+          continuous_snd
+      have hp : Continuous (fun p : unitInterval ×
+          apm_t00j01_circleCover_intersection_equiv_aux_E0 =>
+          (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point
+            (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2)).1) :=
+        (continuous_subtype_val.comp
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous).comp hs
+      exact ((continuous_const.sub
+        (continuous_subtype_val.comp continuous_fst)).smul hp).add
+          ((continuous_subtype_val.comp continuous_fst).smul
+            (continuous_subtype_val.comp continuous_snd))
+    map_zero_left := by
+      intro w
+      apply Subtype.ext
+      simp
+    map_one_left := by
+      intro w
+      apply Subtype.ext
+      simp }
+  exact ⟨H⟩
 -- END SEAT AREA
 
 lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays :
