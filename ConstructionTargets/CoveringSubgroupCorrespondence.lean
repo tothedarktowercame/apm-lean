@@ -255,25 +255,6 @@ theorem cosetQuotient_infinite_of_index_zero
     · exact hinfinite
   exact Set.infinite_univ
 
-/-- Monodromy along a path bijects any two fibres of a covering. -/
-theorem covering_fiber_equiv
-    {E X : Type*} [TopologicalSpace E] [TopologicalSpace X]
-    [PathConnectedSpace X] {p : E → X} (hp : IsCoveringMap p) (x y : X) :
-    Nonempty ((p ⁻¹' ({x} : Set X)) ≃ (p ⁻¹' ({y} : Set X))) := by
-  obtain ⟨γ⟩ := PathConnectedSpace.joined x y
-  let γq : Path.Homotopic.Quotient x y := Quotient.mk'' γ
-  exact ⟨Equiv.ofBijective (hp.monodromy γq) (hp.monodromy_bijective γq)⟩
-
-/-- A convenient consequence of the preceding monodromy and coset leaves. -/
-theorem every_fiber_infinite_of_coset_equiv
-    {E X G : Type*} [TopologicalSpace E] [TopologicalSpace X]
-    [PathConnectedSpace X] [Group G] {p : E → X} (hp : IsCoveringMap p)
-    (x : X) (H : Subgroup G) (hindex : H.index = 0)
-    (hcoset : Nonempty ((p ⁻¹' ({x} : Set X)) ≃
-      Quotient (subgroupCosetSetoid H))) :
-    ∀ y : X, (p ⁻¹' ({y} : Set X)).Infinite := by
-  sorry
-
 /-- The standard based lifting criterion, packaged without uniqueness. -/
 theorem exists_continuousMap_lift_of_range_le
     {A E X : Type*} [TopologicalSpace A] [TopologicalSpace E] [TopologicalSpace X]
