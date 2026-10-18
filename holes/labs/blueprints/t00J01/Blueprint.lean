@@ -1,3 +1,4 @@
+import ConstructionTargets.t93J03Closure
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CircleWindingUniqueness
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
