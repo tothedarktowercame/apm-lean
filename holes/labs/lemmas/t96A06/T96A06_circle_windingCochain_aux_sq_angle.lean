@@ -964,7 +964,23 @@ angle: `(cos x, sin x) ↦ (cos²x - sin²x, 2 sin x cos x) = (cos 2x, sin 2x)`.
 -- BEGIN SEAT AREA
 theorem T96A06_circle_windingCochain_aux_sq_angle (t : ℝ) :
     boundaryAction (sqCone 0) (angleMap t) = angleMap (2 * t) := by
-  sorry
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · change (Real.cos (2 * Real.pi * t) ^ 2 - Real.sin (2 * Real.pi * t) ^ 2) /
+      Real.sqrt (Real.cos (2 * Real.pi * t) ^ 2 +
+        Real.sin (2 * Real.pi * t) ^ 2) = Real.cos (2 * Real.pi * (2 * t))
+    rw [Real.cos_sq_add_sin_sq, Real.sqrt_one, div_one]
+    rw [show 2 * Real.pi * (2 * t) = 2 * (2 * Real.pi * t) by ring,
+      Real.cos_two_mul]
+    nlinarith [Real.cos_sq_add_sin_sq (2 * Real.pi * t)]
+  · change 2 * Real.cos (2 * Real.pi * t) * Real.sin (2 * Real.pi * t) /
+      Real.sqrt (Real.cos (2 * Real.pi * t) ^ 2 +
+        Real.sin (2 * Real.pi * t) ^ 2) = Real.sin (2 * Real.pi * (2 * t))
+    rw [Real.cos_sq_add_sin_sq, Real.sqrt_one, div_one]
+    rw [show 2 * Real.pi * (2 * t) = 2 * (2 * Real.pi * t) by ring,
+      Real.sin_two_mul]
+    ring
 -- END SEAT AREA
 
 /-- **Leaf C1b-sq.** `W` scales by `2` under squaring.  Ext over generators;
