@@ -2128,9 +2128,10 @@ theorem apm_m98J02_regular_solution_solves
   sorry
 
 /-- Part (d) for every `f ∈ C²(ℝ²)`: a `C²` regular distributional solution
-of `T w = f`, and a second, different distributional solution. Open: the
-informal route is `w = E₊ * (χ f) + E₋ * ((1 - χ) f)`; see
-`../proof-outline.md`. -/
+of `T w = f`, and a second, different distributional solution. The
+assembly follows `BLUEPRINT.md` (characteristic coordinates, Goursat integral
+with the Riemann kernel, pullback, one integration by parts), not the
+`E₊`/`E₋` route of `../informal-solution.md`. -/
 theorem apm_m98J02_partD (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f) :
     ∃ (w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
       apm_m98J02_representsFunction w g ∧
