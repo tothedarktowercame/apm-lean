@@ -469,7 +469,33 @@ theorem apm_t01J04_leaf_in_chart
       (Function.Surjective (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h x) →
         fderiv ℝ (h ∘ (chartAt (apm_t01J04_Euclidean n) x).symm)
           (chartAt (apm_t01J04_Euclidean n) x x) ≠ 0) := by
-  sorry
+  have hs : ContMDiffOn 𝓘(ℝ, apm_t01J04_Euclidean n)
+      𝓘(ℝ, apm_t01J04_Euclidean n) (⊤ : ℕ∞)
+      (chartAt (apm_t01J04_Euclidean n) x).symm
+      ((chartAt (apm_t01J04_Euclidean n) x).target ∩
+        (chartAt (apm_t01J04_Euclidean n) x).symm ⁻¹' W) :=
+    contMDiffOn_chart_symm.mono inter_subset_left
+  have hc : ContMDiffOn 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) (⊤ : ℕ∞)
+      (h ∘ (chartAt (apm_t01J04_Euclidean n) x).symm)
+      ((chartAt (apm_t01J04_Euclidean n) x).target ∩
+        (chartAt (apm_t01J04_Euclidean n) x).symm ⁻¹' W) :=
+    hh.comp hs (fun _ hz => hz.2)
+  refine ⟨hc.contDiffOn, ?_⟩
+  intro hsurj heq
+  have hha : ContMDiffAt 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ)
+      (⊤ : ℕ∞) h x :=
+    (hh x hx).contMDiffAt (hW.mem_nhds hx)
+  have hm := (hha.mdifferentiableAt (by simp)).mfderiv
+  have hderiv :
+      fderiv ℝ (h ∘ (chartAt (apm_t01J04_Euclidean n) x).symm)
+          (chartAt (apm_t01J04_Euclidean n) x x) =
+        mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h x := by
+    simpa [writtenInExtChartAt] using hm.symm
+  rw [hderiv] at heq
+  have hzero : Function.Surjective
+      (0 : apm_t01J04_Euclidean n →L[ℝ] ℝ) := heq ▸ hsurj
+  obtain ⟨v, hv⟩ := hzero (1 : ℝ)
+  simpa using hv
 
 /-- Bookkeeping: preferred chart followed by a Euclidean local diffeomorphism. -/
 theorem apm_t01J04_bp_ambient_chart
