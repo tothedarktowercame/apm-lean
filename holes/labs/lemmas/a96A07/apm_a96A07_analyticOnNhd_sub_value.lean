@@ -339,7 +339,14 @@ lemma apm_a96A07_analyticOnNhd_sub_value (g : ℂ → ℂ) (w : ℂ)
     (hg : ∃ ε > 0,
       DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
     AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1) := by
-  sorry
+  obtain ⟨ε, hε, hg⟩ := hg
+  have hg' : DifferentiableOn ℂ g (ball (0 : ℂ) (1 + ε)) :=
+    hg.mono ball_subset_closedBall
+  have han : AnalyticOnNhd ℂ g (ball (0 : ℂ) (1 + ε)) :=
+    hg'.analyticOnNhd isOpen_ball
+  intro z hz
+  exact (han z (closedBall_subset_ball (by linarith) hz)).fun_sub
+    analyticAt_const
 -- END SEAT AREA
 
 /-- Argument principle on the unit circle, in the exact normalization used by
