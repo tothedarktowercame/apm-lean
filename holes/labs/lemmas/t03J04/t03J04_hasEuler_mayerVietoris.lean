@@ -340,7 +340,87 @@ theorem t03J04_hasEuler_mayerVietoris {X : Type} [TopologicalSpace X]
     {a b c : ℚ} (ha : HasEulerCharacteristic U a) (hb : HasEulerCharacteristic V b)
     (hc : HasEulerCharacteristic ↥(U ∩ V) c) :
     HasEulerCharacteristic X (a + b - c) := by
-  sorry
+  rcases ha with ⟨hfinU, NU, hvanU, hsumU⟩
+  rcases hb with ⟨hfinV, NV, hvanV, hsumV⟩
+  rcases hc with ⟨hfinI, NI, hvanI, hsumI⟩
+  have hsum_finrank {Y : Type} [TopologicalSpace Y] {v : ℚ} (N : ℕ)
+      (hfin : ∀ k, FiniteDimensional ℚ (Homology Y k))
+      (hsum : ∑ k ∈ Finset.range (N + 1), (-1 : ℚ) ^ k *
+        LinearMap.trace ℚ (Homology Y k)
+          (induced (ContinuousMap.id Y) k).hom = v) :
+      ∑ k ∈ Finset.range (N + 1), (-1 : ℚ) ^ k *
+        (Module.finrank ℚ (Homology Y k) : ℚ) = v := by
+    rw [← hsum]
+    apply Finset.sum_congr rfl
+    intro k hk
+    letI := hfin k
+    have hid : TopCat.ofHom (ContinuousMap.id Y) = 𝟙 (TopCat.of Y) := rfl
+    simp only [induced, hid, CategoryTheory.Functor.map_id, ModuleCat.hom_id,
+      LinearMap.trace_id]
+  have extend_sum {Y : Type} [TopologicalSpace Y] {v : ℚ} (K M : ℕ)
+      (hfin : ∀ k, FiniteDimensional ℚ (Homology Y k))
+      (hvan : ∀ k, K < k → Subsingleton (Homology Y k)) (hKM : K ≤ M)
+      (hsum : ∑ k ∈ Finset.range (K + 1), (-1 : ℚ) ^ k *
+        (Module.finrank ℚ (Homology Y k) : ℚ) = v) :
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ) ^ k *
+        (Module.finrank ℚ (Homology Y k) : ℚ) = v := by
+    induction M, hKM using Nat.le_induction with
+    | base => exact hsum
+    | succ M hKM ih =>
+        rw [Finset.sum_range_succ, ih]
+        haveI := hfin (M + 1)
+        haveI := hvan (M + 1) (by omega)
+        simp
+  let N := max NI (max NU NV)
+  have hfinB : ∀ k, FiniteDimensional ℚ
+      (↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V)) := by
+    intro k
+    letI := hfinU k
+    letI := hfinV k
+    let e := ModuleCat.biprodIsoProd (RP3Homology.HQ k U) (RP3Homology.HQ k V)
+    exact FiniteDimensional.of_injective e.hom.hom e.toLinearEquiv.injective
+  have hvanB : ∀ k, N < k → Subsingleton
+      (↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V)) := by
+    intro k hk
+    letI := hvanU k (by dsimp [N] at hk; omega)
+    letI := hvanV k (by dsimp [N] at hk; omega)
+    let e := ModuleCat.biprodIsoProd (RP3Homology.HQ k U) (RP3Homology.HQ k V)
+    constructor
+    intro x y
+    apply e.toLinearEquiv.injective
+    exact Subsingleton.elim _ _
+  obtain ⟨d, hfg, hgd, hdf⟩ :=
+    RP3Homology.rationalMayerVietoris U V hU hV hcov
+  obtain ⟨hfinX, hvanX, hles⟩ := t03J04_euler_les
+    (fun k => Homology ↥(U ∩ V) k)
+    (fun k => ↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V))
+    (fun k => Homology X k)
+    (fun k => (RP3Homology.mvI U V k).hom)
+    (fun k => (RP3Homology.mvJ U V k).hom)
+    (fun k => (d k).hom) hfg hgd hdf
+    (t03J04_mv_surjective_zero U V hU hV hcov) N
+    (fun k hk => hvanI k (by dsimp [N] at hk; omega)) hvanB
+  apply t03J04_hasEuler_of_finrank hfinX (N + 1) hvanX
+  have hI := extend_sum NI (N + 1) hfinI hvanI (by dsimp [N]; omega)
+    (hsum_finrank NI hfinI hsumI)
+  have hU' := extend_sum NU (N + 1) hfinU hvanU (by dsimp [N]; omega)
+    (hsum_finrank NU hfinU hsumU)
+  have hV' := extend_sum NV (N + 1) hfinV hvanV (by dsimp [N]; omega)
+    (hsum_finrank NV hfinV hsumV)
+  have hBfinrank (k : ℕ) :
+      Module.finrank ℚ (↑(RP3Homology.HQ k U ⊞ RP3Homology.HQ k V)) =
+        Module.finrank ℚ (Homology U k) + Module.finrank ℚ (Homology V k) := by
+    letI := hfinU k
+    letI := hfinV k
+    let e := ModuleCat.biprodIsoProd (RP3Homology.HQ k U) (RP3Homology.HQ k V)
+    rw [e.toLinearEquiv.finrank_eq, Module.finrank_prod]
+  rw [Finset.sum_congr rfl (fun k _ => by rw [hBfinrank k])] at hles
+  simp only [Nat.cast_add, mul_add, mul_sub, mul_neg, neg_add_rev,
+    Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.sum_neg_distrib,
+    sub_eq_add_neg] at hles
+  have hrange : N + 1 + 1 = N + 2 := by omega
+  rw [hrange] at hI hU' hV'
+  linear_combination hles + hU' + hV' - hI
 -- END SEAT AREA
 
 /-- LEAF B2.  Homotopy invariance: transport finiteness, vanishing and
