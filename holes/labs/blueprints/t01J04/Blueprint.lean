@@ -371,7 +371,57 @@ theorem apm_t01J04_leaf_euclidean_normal_form
       p ∈ Φ.source ∧ Φ.source ⊆ O ∧
       ContDiffOn ℝ (⊤ : ℕ∞) Φ Φ.source ∧ ContDiffOn ℝ (⊤ : ℕ∞) Φ.symm Φ.target ∧
       ∀ v ∈ Φ.source, Φ v 0 = g p - g v := by
-  sorry
+  let e0 : apm_t01J04_Euclidean n := EuclideanSpace.single (0 : Fin n) (1 : ℝ)
+  let L : apm_t01J04_Euclidean n →L[ℝ] ℝ := fderiv ℝ g p
+  let q : apm_t01J04_Euclidean n → ℝ := fun v => g p - g v + L v
+  let F : apm_t01J04_Euclidean n → apm_t01J04_Euclidean n :=
+    fun v => D v + q v • e0
+  have hgp : HasFDerivAt g L p := by
+    exact ((hg p hp).contDiffAt (hO.mem_nhds hp)).differentiableAt (by simp) |>.hasFDerivAt
+  have hq : HasFDerivAt q
+      (0 : apm_t01J04_Euclidean n →L[ℝ] ℝ) p := by
+    have hlin : HasFDerivAt (fun v : apm_t01J04_Euclidean n => L v) L p :=
+      L.hasFDerivAt
+    convert ((hasFDerivAt_const (g p) p).sub hgp).add hlin using 1 <;>
+      simp [q, L]
+  have hFderiv : HasFDerivAt F (D : apm_t01J04_Euclidean n →L[ℝ]
+      apm_t01J04_Euclidean n) p := by
+    have hD' : HasFDerivAt (fun v : apm_t01J04_Euclidean n => D v)
+        (D : apm_t01J04_Euclidean n →L[ℝ] apm_t01J04_Euclidean n) p :=
+      D.toContinuousLinearMap.hasFDerivAt
+    convert hD'.add (hq.smul_const e0) using 1 <;> simp [F]
+  have hq_smooth : ContDiffOn ℝ (⊤ : ℕ∞) q O := by
+    exact ((contDiffOn_const.sub hg).add L.contDiff.contDiffOn)
+  have hF_smooth : ContDiffOn ℝ (⊤ : ℕ∞) F O := by
+    exact D.contDiff.contDiffOn.add (hq_smooth.smul contDiffOn_const)
+  have hF_at : ContDiffAt ℝ (⊤ : ℕ∞) F p :=
+    (hF_smooth p hp).contDiffAt (hO.mem_nhds hp)
+  let chart := hF_at.toOpenPartialHomeomorph F hFderiv (by simp)
+  let U := O ∩ chart.source
+  have hU : IsOpen U := hO.inter chart.open_source
+  have hpchart : p ∈ chart.source := by
+    exact ContDiffAt.mem_toOpenPartialHomeomorph_source hF_at hFderiv (by simp)
+  have hpU : p ∈ U := ⟨hp, hpchart⟩
+  have hUs : U ⊆ chart.source := inter_subset_right
+  have hchart_coe : (chart : apm_t01J04_Euclidean n → apm_t01J04_Euclidean n) = F := by
+    exact ContDiffAt.toOpenPartialHomeomorph_coe hF_at hFderiv (by simp)
+  have hchart_smooth : ContDiffOn ℝ (⊤ : ℕ∞) chart U := by
+    rw [hchart_coe]
+    exact hF_smooth.mono inter_subset_left
+  have hchart_deriv : HasFDerivAt chart
+      (D : apm_t01J04_Euclidean n →L[ℝ] apm_t01J04_Euclidean n) p := by
+    rw [hchart_coe]
+    exact hFderiv
+  obtain ⟨Φ, hpΦ, hΦU, -, hΦeq, -, hΦ, hΦs⟩ :=
+    SardSmoothNeighborhoodImplicitChartProbe.exists_smooth_neighborhood_restriction
+      chart U hU p hpU hUs hchart_smooth D hchart_deriv
+  refine ⟨Φ, hpΦ, hΦU.trans inter_subset_left, hΦ, hΦs, ?_⟩
+  intro v hv
+  rw [show Φ v = chart v by rw [hΦeq]]
+  rw [hchart_coe]
+  simp [F, q, e0, hD]
+  dsimp [L]
+  ring
 
 /-- LEAF B4 (maximal atlas).  Composing an ambient chart of the maximal atlas
 with a smooth local diffeomorphism of the model gives a chart of the maximal
