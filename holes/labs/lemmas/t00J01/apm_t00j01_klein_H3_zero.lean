@@ -739,9 +739,60 @@ lemma apm_t00j01_klein_H2_zero :
 
 /-- The concrete Klein quotient has no integral homology in degree three. -/
 -- BEGIN SEAT AREA
+lemma apm_t00j01_klein_H3_zero_aux_rel_iff (p q : ℝ × ℝ) :
+    Relation.EqvGen apm_t00j01_kleinRel p q ↔
+      ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv.orbitSetoid.r p q := by
+  constructor
+  · intro h
+    change KleinSquareEqvGenToCases.SameOrbit p q
+    induction h with
+    | rel p q h =>
+        cases h with
+        | horizontal x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorA, by
+              simp [KleinPlaneAffineAction.generatorA_smul]⟩
+        | twisted x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorB, by
+              simp [KleinPlaneAffineAction.generatorB_smul]⟩
+    | refl p => exact KleinSquareEqvGenToCases.sameOrbit_refl p
+    | symm p q _ ih => exact KleinSquareEqvGenToCases.sameOrbit_symm ih
+    | trans p q r _ _ ih₁ ih₂ =>
+        exact KleinSquareEqvGenToCases.sameOrbit_trans ih₁ ih₂
+  · rintro ⟨g, rfl⟩
+    exact apm_t00j01_klein_compact_aux_orbit p g
+
+noncomputable def apm_t00j01_klein_H3_zero_aux_plane_homeomorph :
+    apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H3_zero_aux_rel_iff p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H3_zero_aux_rel_iff p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+lemma apm_t00j01_klein_H3_zero_aux_homeomorph :
+    Nonempty (apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.t93J03Closure.kleinPairingData.Space) := by
+  obtain ⟨e⟩ :=
+    KleinSquareDiskCutAndPaste.planeOrbitQuotient_homeomorph_kleinBottle
+      ConstructionTargets.t93J03Closure.kleinPlaneOrbitT2Space
+  exact ⟨apm_t00j01_klein_H3_zero_aux_plane_homeomorph.trans
+    (e.trans ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph.symm)⟩
+
 lemma apm_t00j01_klein_H3_zero :
     Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein) := by
-  sorry
+  obtain ⟨e⟩ := apm_t00j01_klein_H3_zero_aux_homeomorph
+  exact (ConstructionTargets.PolygonSurfaceHomology.highDegreeHomology
+      ConstructionTargets.t93J03Closure.kleinPairingData 3 (by omega)).of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e.toHomotopyEquiv 3)
 -- END SEAT AREA
 
 /-- Homotopy invariance transfers `H₃(K)=0` to both cover members. -/
