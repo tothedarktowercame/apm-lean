@@ -737,7 +737,72 @@ theorem t99J05_lefschetz_euler_step_aux_top (n : ℕ)
       Function.Injective (RP3Homology.mvI (t99J05U n) (t99J05V n) 0).hom) :
     FiniteDimensional ℚ (Homology (CP (n + 1)) (2 * n + 2)) ∧
       Module.finrank ℚ (Homology (CP (n + 1)) (2 * n + 2)) = 1 := by
-  sorry
+  obtain ⟨δ, e1, e2, e3⟩ := RP3Homology.rationalMayerVietoris
+    (t99J05U n) (t99J05V n) hcover.1 hcover.2.1 hcover.2.2
+  have hUtop_fd := hU.1 (2 * n + 2)
+  have hVtop_fd := hV.1 (2 * n + 2)
+  have hUodd_fd := hU.1 (2 * n + 1)
+  have hVodd_fd := hV.1 (2 * n + 1)
+  letI := hUtop_fd
+  letI := hVtop_fd
+  letI := hUodd_fd
+  letI := hVodd_fd
+  have hUtop_rank : Module.finrank ℚ (Homology (↑(t99J05U n)) (2 * n + 2)) = 0 := by
+    rw [hU.2]
+    simp
+  have hVtop_rank : Module.finrank ℚ (Homology (↑(t99J05V n)) (2 * n + 2)) = 0 := by
+    rw [hV.2]
+    simp
+  have hUodd_rank : Module.finrank ℚ (Homology (↑(t99J05U n)) (2 * n + 1)) = 0 := by
+    have hnodd : ¬ Even (2 * n + 1) := by
+      rintro ⟨k, hk⟩
+      omega
+    rw [hU.2]
+    simp [hnodd]
+  have hVodd_rank : Module.finrank ℚ (Homology (↑(t99J05V n)) (2 * n + 1)) = 0 := by
+    have hnodd : ¬ Even (2 * n + 1) := by
+      rintro ⟨k, hk⟩
+      omega
+    rw [hV.2]
+    simp [hnodd]
+  have hUtop_zero : CategoryTheory.Limits.IsZero
+      (Homology (↑(t99J05U n)) (2 * n + 2)) := by
+    letI : Subsingleton (Homology (↑(t99J05U n)) (2 * n + 2)) :=
+      Module.finrank_zero_iff.mp hUtop_rank
+    exact ModuleCat.isZero_of_subsingleton _
+  have hVtop_zero : CategoryTheory.Limits.IsZero
+      (Homology (↑(t99J05V n)) (2 * n + 2)) := by
+    letI : Subsingleton (Homology (↑(t99J05V n)) (2 * n + 2)) :=
+      Module.finrank_zero_iff.mp hVtop_rank
+    exact ModuleCat.isZero_of_subsingleton _
+  have hUodd_zero : CategoryTheory.Limits.IsZero
+      (Homology (↑(t99J05U n)) (2 * n + 1)) := by
+    letI : Subsingleton (Homology (↑(t99J05U n)) (2 * n + 1)) :=
+      Module.finrank_zero_iff.mp hUodd_rank
+    exact ModuleCat.isZero_of_subsingleton _
+  have hVodd_zero : CategoryTheory.Limits.IsZero
+      (Homology (↑(t99J05V n)) (2 * n + 1)) := by
+    letI : Subsingleton (Homology (↑(t99J05V n)) (2 * n + 1)) :=
+      Module.finrank_zero_iff.mp hVodd_rank
+    exact ModuleCat.isZero_of_subsingleton _
+  have hJtop_src := RP3Homology.cp2_homology_of_mv_aux_biprod_zero
+    hUtop_zero hVtop_zero
+  have hIodd_tgt := RP3Homology.cp2_homology_of_mv_aux_biprod_zero
+    hUodd_zero hVodd_zero
+  have hδinj : Function.Injective (δ (2 * n + 1)).hom := by
+    rw [← LinearMap.ker_eq_bot, ← e2 (2 * n + 1), LinearMap.range_eq_bot]
+    exact congrArg ModuleCat.Hom.hom (hJtop_src.eq_of_src _ 0)
+  have hδsurj : Function.Surjective (δ (2 * n + 1)).hom := by
+    rw [← LinearMap.range_eq_top, e3 (2 * n + 1), LinearMap.ker_eq_top]
+    exact congrArg ModuleCat.Hom.hom (hIodd_tgt.eq_of_tgt _ 0)
+  let E := LinearEquiv.ofBijective (δ (2 * n + 1)).hom ⟨hδinj, hδsurj⟩
+  have hinter_fd := hinter.1 (2 * n + 1)
+  letI := hinter_fd
+  have htop_fd : FiniteDimensional ℚ (Homology (CP (n + 1)) (2 * n + 2)) :=
+    E.symm.finiteDimensional
+  refine ⟨htop_fd, ?_⟩
+  rw [E.finrank_eq, hinter.2.1]
+  simp
 
 /-- LEAF step-mid (split 2026-10-18).  Degrees `1 ≤ k`, `k ≠ 2n+2` of
 Mayer–Vietoris.  `mvI k = 0` (for `k ≠ 2n+1` its source is zero, for `k = 2n+1`
