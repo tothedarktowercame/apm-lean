@@ -2115,7 +2115,61 @@ distribution because test functions are compactly supported. -/
 theorem apm_m98J02_regularDistribution_of_continuous
     (g : apm_m98J02_E → ℝ) (hg : Continuous g) :
     ∃ w : apm_m98J02_Dist, apm_m98J02_representsFunction w g := by
-  sorry
+  let w : apm_m98J02_Dist :=
+    TestFunction.mkCLM ℝ (fun φ => ∫ x, g x * φ x)
+      (by
+        intro φ ψ
+        change (∫ x, g x * (φ x + ψ x)) =
+          (∫ x, g x * φ x) + ∫ x, g x * ψ x
+        rw [← integral_add]
+        · congr 1
+          funext x
+          exact mul_add _ _ _
+        · have hi : Integrable (fun x : apm_m98J02_E => φ x * g x) :=
+            (φ.contDiff.continuous.mul hg).integrable_of_hasCompactSupport
+              φ.hasCompactSupport.mul_right
+          simpa [mul_comm] using hi
+        · have hi : Integrable (fun x : apm_m98J02_E => ψ x * g x) :=
+            (ψ.contDiff.continuous.mul hg).integrable_of_hasCompactSupport
+              ψ.hasCompactSupport.mul_right
+          simpa [mul_comm] using hi)
+      (by
+        intro c φ
+        change (∫ x, g x * (c * φ x)) = c * ∫ x, g x * φ x
+        rw [← integral_const_mul]
+        congr 1
+        funext x
+        ac_rfl)
+      (by
+        intro K hK
+        obtain ⟨χ, U, hU, hKU, hχ⟩ := apm_m98J02_bridge_1 K K.isCompact
+        let q : apm_m98J02_E → ℝ := fun x => g x * χ x
+        have hq : Continuous q := hg.mul χ.contDiff.continuous
+        have hqc : HasCompactSupport q := χ.hasCompactSupport.mul_left
+        have heq :
+            (fun φ : 𝓓_{K}(apm_m98J02_E, ℝ) =>
+              ∫ x, g x * TestFunction.ofSupportedIn hK φ x) =
+            fun φ => apm_m98J02_regularDistribution q hq hqc
+              (TestFunction.ofSupportedIn hK φ) := by
+          funext φ
+          rw [apm_m98J02_regularDistribution_apply]
+          apply integral_congr_ae
+          filter_upwards with x
+          by_cases hx : x ∈ (K : Set apm_m98J02_E)
+          · simp only [q]
+            rw [hχ x (hKU hx)]
+            ring
+          · change g x * φ x = q x * φ x
+            rw [φ.zero_on_compl hx]
+            simp
+        change Continuous (fun φ : 𝓓_{K}(apm_m98J02_E, ℝ) =>
+          ∫ x, g x * TestFunction.ofSupportedIn hK φ x)
+        rw [heq]
+        exact (apm_m98J02_regularDistribution q hq hqc).continuous.comp
+          (TestFunction.ofSupportedInCLM ℝ hK).continuous)
+  refine ⟨w, ?_⟩
+  intro φ
+  apply TestFunction.mkCLM_apply
 
 /-- Twice integrating by parts identifies the regular distribution of a
 classical `C²` solution with the encoded distributional solution. -/
