@@ -4,6 +4,7 @@ import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
 import ConstructionTargets.CP2RationalHomology
+import ConstructionTargets.t99J05Closure
 
 /-! # t99J05 blueprint
 
