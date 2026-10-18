@@ -842,7 +842,58 @@ theorem t03J04_C3_convexOn_of_line_deriv2 {F : Type} [NormedAddCommGroup F]
     (hf : ContDiffOn ℝ 2 f N)
     (h2 : ∀ y ∈ N, ∀ w : F, 0 ≤ deriv (deriv (fun t : ℝ ↦ f (y + t • w))) 0) :
     ConvexOn ℝ N f := by
-  sorry
+  rw [convexOn_iff_forall_pos]
+  refine ⟨hNc, ?_⟩
+  intro x hx y hy a b ha hb hab
+  let φ : ℝ → F := fun t ↦ x + t • (y - x)
+  let D : Set ℝ := φ ⁻¹' N
+  have hφ : ContDiff ℝ 2 φ := by
+    dsimp [φ]
+    fun_prop
+  have hDopen : IsOpen D := hN.preimage hφ.continuous
+  have hDconv : Convex ℝ D := by
+    intro u hu v hv c d hc hd hcd
+    change φ (c • u + d • v) ∈ N
+    have hm := hNc hu hv hc hd hcd
+    change c • φ u + d • φ v ∈ N at hm
+    convert hm using 1
+    dsimp [φ]
+    nth_rewrite 1 [← one_smul ℝ x]
+    rw [← hcd, add_smul]
+    module
+  have hmap : Set.MapsTo φ D N := fun _ ht ↦ ht
+  have hg : ContDiffOn ℝ 2 (f ∘ φ) D := hf.comp hφ.contDiffOn hmap
+  have hg' : DifferentiableOn ℝ (f ∘ φ) (interior D) :=
+    (hg.mono interior_subset).differentiableOn (by norm_num)
+  have hgd : ContDiffOn ℝ 1 (deriv (f ∘ φ)) D :=
+    hg.deriv_of_isOpen hDopen (by norm_num)
+  have hg'' : DifferentiableOn ℝ (deriv (f ∘ φ)) (interior D) :=
+    (hgd.mono interior_subset).differentiableOn (by norm_num)
+  have hnonneg : ∀ t ∈ interior D, 0 ≤ deriv^[2] (f ∘ φ) t := by
+    intro t ht
+    have htD : t ∈ D := interior_subset ht
+    have hh := h2 (φ t) htD (y - x)
+    have heq : (fun s : ℝ ↦ f (φ t + s • (y - x))) =
+        (fun s : ℝ ↦ (f ∘ φ) (t + s)) := by
+      funext s
+      simp [φ, Function.comp_apply, add_smul, add_assoc]
+    rw [heq] at hh
+    have hinner : deriv (fun s : ℝ ↦ (f ∘ φ) (t + s)) =
+        (fun s : ℝ ↦ deriv (f ∘ φ) (t + s)) := by
+      funext s
+      exact deriv_comp_const_add _ _ _
+    rw [hinner, deriv_comp_const_add] at hh
+    simpa only [Function.iterate_succ_apply, Function.iterate_zero_apply, add_zero] using hh
+  have hgconv : ConvexOn ℝ D (f ∘ φ) :=
+    convexOn_of_deriv2_nonneg hDconv hg.continuousOn hg' hg'' hnonneg
+  have hzero : (0 : ℝ) ∈ D := by simpa [D, φ] using hx
+  have hone : (1 : ℝ) ∈ D := by simpa [D, φ] using hy
+  have hi := hgconv.2 hzero hone ha.le hb.le hab
+  have harg : x + b • (y - x) = a • x + b • y := by
+    nth_rewrite 1 [← one_smul ℝ x]
+    rw [← hab, add_smul]
+    module
+  simpa [Function.comp_apply, φ, harg] using hi
 -- END SEAT AREA
 
 /-- LEAF K2 (80–150 lines).  Second derivative of `t ↦ ‖γ t - a‖²`.  Route:
