@@ -31,6 +31,19 @@ the first-lobe two-cycle sheets cannot be exchanged with its fixed sheets), so
 the cover is not regular.  Use the same quotient/gluing lemmas as the regular
 leaf plus `Equiv.Perm` finite extensionality and `fin_cases`.
 
+**Split (claude-14, 2026-10-18, after lemma-3 PARTIAL).** Assembled from the
+general `rp2Wedge_regular_four_cover_aux_*` leaves with
+`σ = rp2Wedge_irregular_four_cover_aux_sigma = swap 0 1` and
+`τ = rp2Wedge_irregular_four_cover_aux_tau = swap 0 3 ∘ swap 1 2`; the banked
+`_aux_centralizer` (no centralizing `g` has `g 0 = 2`) supplies the
+non-transitivity.  One new leaf:
+
+- `rp2Wedge_irregular_four_cover_aux_not_regular` (σ, τ involutions; some
+  `i`, `j` not related by the centralizer) → `¬ IsRegularCover`.  A deck map
+  `h` gives `g` on the wedge-point fibre `{[(e₀, i)]}`; lifting the image of a
+  path `e₀ → -e₀` in sheet `i` of each copy and using uniqueness of lifts
+  (`IsCoveringMap.eq_of_comp_eq`) shows `g ∘ σ = σ ∘ g`, `g ∘ τ = τ ∘ g`.
+
 ### `circleWedge_three_cover_three_components` (20--40 lines)
 
 The trivial cover `CircleWedge × Fin 3` (pair `(1,1)`).  Covering map by

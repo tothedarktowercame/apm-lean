@@ -270,11 +270,95 @@ theorem rp2Wedge_regular_four_cover :
            connected := rp2Wedge_regular_four_cover_aux_connected _ _ hT
            regularity := rp2Wedge_regular_four_cover_aux_regular _ _ hC }⟩
 
+/-! ### Split of `rp2Wedge_irregular_four_cover`
+
+The same glued cover with `σ = (12)` and `τ = (14)(23)`.  Covering, fibre
+count and connectedness come from the general leaves above; non-regularity
+comes from `_aux_not_regular` and the centralizer computation. -/
+
+def rp2Wedge_irregular_four_cover_aux_sigma : Equiv.Perm (Fin 4) :=
+  Equiv.swap 0 1
+
+def rp2Wedge_irregular_four_cover_aux_tau : Equiv.Perm (Fin 4) :=
+  (Equiv.swap 0 3).trans (Equiv.swap 1 2)
+
+/-- The centralizer of the two monodromies is not transitive: no permutation
+commuting with both can carry sheet `0` to sheet `2`. -/
+lemma rp2Wedge_irregular_four_cover_aux_centralizer
+    (f : Equiv.Perm (Fin 4))
+    (hs : f * rp2Wedge_irregular_four_cover_aux_sigma =
+      rp2Wedge_irregular_four_cover_aux_sigma * f)
+    (ht : f * rp2Wedge_irregular_four_cover_aux_tau =
+      rp2Wedge_irregular_four_cover_aux_tau * f) :
+    f 0 ≠ 2 := by
+  intro h02
+  have hs0 := DFunLike.congr_fun hs (0 : Fin 4)
+  have h12 : f 1 = 2 := by
+    simpa [rp2Wedge_irregular_four_cover_aux_sigma, h02] using hs0
+  exact (by decide : (0 : Fin 4) ≠ 1) (f.injective (h02.trans h12.symm))
+
+/-- **LIBRARY.** A deck homeomorphism `h` permutes the fibre
+`{[(e₀, i)] | i}` over the wedge point by some `g`, and `g` commutes with `σ`
+and `τ`: the path `t ↦ [(γ t, i)]` in the left copy, with `γ` a path from `e₀`
+to `-e₀` in `Sphere2`, lifts a loop at the wedge point from `[(e₀, i)]` to
+`[(e₀, σ i)]`; `h` carries it to a lift of the same loop starting at
+`[(e₀, g i)]`, which by uniqueness of lifts (`IsCoveringMap.eq_of_comp_eq`,
+using `_aux_isCoveringMap`) ends at `[(e₀, σ (g i))]`.  Likewise for `τ` in the
+right copy.  So if some sheet `i` cannot be moved to `j` by the centralizer, no
+deck map sends `[(e₀, i)]` to `[(e₀, j)]`. -/
+theorem rp2Wedge_irregular_four_cover_aux_not_regular (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (hN : ∃ i j : Fin 4, ∀ g : Equiv.Perm (Fin 4),
+      g * σ = σ * g → g * τ = τ * g → g i ≠ j) :
+    ¬ IsRegularCover (rp2Wedge_regular_four_cover_aux_p σ τ) := by
+  sorry
+
 /-- The involutions `(12)` and `(14)(23)` realize a connected nonregular
 four-sheeted cover of the projective-plane wedge. -/
 theorem rp2Wedge_irregular_four_cover :
     Nonempty (CoverWitness (Wedge RP2 RP2 rpBase rpBase) 4 false) := by
-  sorry
+  have hσ : Function.Involutive rp2Wedge_irregular_four_cover_aux_sigma := by
+    intro i; fin_cases i <;> decide
+  have hτ : Function.Involutive rp2Wedge_irregular_four_cover_aux_tau := by
+    intro i; fin_cases i <;> decide
+  have hT : ∀ i j : Fin 4, Relation.ReflTransGen
+      (fun a b ↦ b = rp2Wedge_irregular_four_cover_aux_sigma a ∨
+        b = rp2Wedge_irregular_four_cover_aux_tau a) i j := by
+    have step : ∀ a b : Fin 4, (b = rp2Wedge_irregular_four_cover_aux_sigma a ∨
+        b = rp2Wedge_irregular_four_cover_aux_tau a) →
+        Relation.ReflTransGen (fun a b ↦ b = rp2Wedge_irregular_four_cover_aux_sigma a ∨
+          b = rp2Wedge_irregular_four_cover_aux_tau a) a b :=
+      fun _ _ h ↦ Relation.ReflTransGen.single h
+    have from0 : ∀ j : Fin 4, Relation.ReflTransGen
+        (fun a b ↦ b = rp2Wedge_irregular_four_cover_aux_sigma a ∨
+          b = rp2Wedge_irregular_four_cover_aux_tau a) 0 j := by
+      intro j; fin_cases j
+      · exact Relation.ReflTransGen.refl
+      · exact step _ _ (by decide)
+      · exact (step 0 1 (by decide)).trans (step 1 2 (by decide))
+      · exact step _ _ (by decide)
+    have to0 : ∀ i : Fin 4, Relation.ReflTransGen
+        (fun a b ↦ b = rp2Wedge_irregular_four_cover_aux_sigma a ∨
+          b = rp2Wedge_irregular_four_cover_aux_tau a) i 0 := by
+      intro i; fin_cases i
+      · exact Relation.ReflTransGen.refl
+      · exact step _ _ (by decide)
+      · exact (step 2 1 (by decide)).trans (step 1 0 (by decide))
+      · exact step _ _ (by decide)
+    exact fun i j ↦ (to0 i).trans (from0 j)
+  have hN : ∃ i j : Fin 4, ∀ g : Equiv.Perm (Fin 4),
+      g * rp2Wedge_irregular_four_cover_aux_sigma =
+        rp2Wedge_irregular_four_cover_aux_sigma * g →
+      g * rp2Wedge_irregular_four_cover_aux_tau =
+        rp2Wedge_irregular_four_cover_aux_tau * g → g i ≠ j :=
+    ⟨0, 2, fun g hs ht ↦ rp2Wedge_irregular_four_cover_aux_centralizer g hs ht⟩
+  exact ⟨{ E := rp2Wedge_regular_four_cover_aux_E _ _
+           topology := inferInstance
+           p := rp2Wedge_regular_four_cover_aux_p _ _
+           covering := ⟨rp2Wedge_regular_four_cover_aux_isCoveringMap _ _ hσ hτ,
+             rp2Wedge_regular_four_cover_aux_card _ _ hσ hτ⟩
+           connected := rp2Wedge_regular_four_cover_aux_connected _ _ hT
+           regularity := rp2Wedge_irregular_four_cover_aux_not_regular _ _ hσ hτ hN }⟩
 
 abbrev Circle := Metric.sphere (0 : ℂ) 1
 def circleBase : Circle := ⟨1, by simp⟩
