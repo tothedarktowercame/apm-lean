@@ -690,7 +690,32 @@ About 40–90 lines. -/
 lemma t95J03_isKSheeted_prod_fin {E X : Type*} [TopologicalSpace E] [TopologicalSpace X]
     {p : E → X} {d : ℕ} (hp : IsKSheetedCover p d) (m : ℕ) :
     IsKSheetedCover (fun x : E × Fin m => p x.1) (d * m) := by
-  sorry
+  have equiv : ∀ b : X, {e : E × Fin m // p e.1 = b} ≃ {e : E // p e = b} × Fin m :=
+    fun b =>
+      { toFun e := ⟨⟨e.1.1, e.2⟩, e.1.2⟩
+        invFun z := ⟨(z.1, z.2), z.1.2⟩
+        left_inv := by intro e; simp
+        right_inv := by intro z; simp }
+  constructor
+  · intro x
+    obtain ⟨hfib, U, hxU, hU, hfU, H, hH⟩ := hp.isCoveringMap x
+    haveI := hfib
+    refine IsEvenlyCovered.to_isEvenlyCovered_preimage (I := ↥(p ⁻¹' {x}) × Fin m)
+      ⟨inferInstance, U, hxU, hU, hfU.preimage continuous_fst, ?_, ?_⟩
+    · let H' : ((fun x : E × Fin m => p x.1) ⁻¹' U) ≃ₜ U × (↥(p ⁻¹' {x}) × Fin m) :=
+        { toFun y := ⟨(H ⟨y.1.1, y.2⟩).1, ((H ⟨y.1.1, y.2⟩).2, y.1.2)⟩
+          invFun z := ⟨(H.symm ⟨z.1, z.2.1⟩, z.2.2), (H.symm ⟨z.1, z.2.1⟩).2⟩
+          left_inv := by intro z; ext <;> simp
+          right_inv := by intro z; ext <;> simp
+          continuous_toFun := by fun_prop
+          continuous_invFun := by fun_prop }
+      exact H'
+    · intro y; simp [hH]
+  · intro b
+    haveI : Finite {e : E // p e = b} := hp.finite_fiber b
+    exact Finite.of_equiv _ (equiv b).symm
+  · intro b
+    rw [Nat.card_congr (equiv b), Nat.card_prod, Nat.card_fin, hp.card_fiber b]
 
 /-- **Leaf C8.**  The identity is a one-sheeted cover.  About 10–30 lines. -/
 lemma t95J03_id_isKSheeted (X : Type*) [TopologicalSpace X] :
