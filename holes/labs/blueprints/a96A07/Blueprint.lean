@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Rouche
 
 /-!
 # APM a96A07 — boundary injectivity and the bounded image domain
@@ -326,14 +327,99 @@ lemma apm_a96A07_of_injOn_disk (g : ℂ → ℂ)
       Set.disjoint_left.1 hdisj ⟨z, hzcircle, rfl⟩ hzimage⟩
   exact apm_a96A07_of_injOn_disk_of_boundaryImage_subset_frontier
     g ⟨ε, hε, hdiff⟩ hg_inj_circle hg_inj_disk hboundary
-/-- The sole missing Jordan/argument-principle construction: injectivity of an
-analytic map on the unit circle propagates to the open unit disk. -/
+/-- The argument-principle zero count for the translated function `g - w`. -/
+def apm_a96A07_diskZeroCount (g : ℂ → ℂ) (w : ℂ) : ℤ :=
+  ConstructionTargets.Rouche.zeroCountInClosedBall (fun z => g z - w) 0 1
+
+/-- Centering an analytic map at a target value preserves analyticity on the
+closed unit disk.  The larger ball in the hypothesis is used only to obtain a
+neighborhood of that closed disk. -/
+lemma apm_a96A07_analyticOnNhd_sub_value (g : ℂ → ℂ) (w : ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε))) :
+    AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1) := by
+  sorry
+
+/-- Argument principle on the unit circle, in the exact normalization used by
+`ConstructionTargets.Rouche`: the logarithmic-derivative integral is the
+closed-disk divisor count times `2πi`. -/
+lemma apm_a96A07_argumentPrinciple_disk (g : ℂ → ℂ) (w : ℂ)
+    (han : AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1))
+    (hw : w ∉ apm_a96A07_boundaryImage g) :
+    (∮ z in C(0, 1), logDeriv (fun z => g z - w) z) =
+      (apm_a96A07_diskZeroCount g w : ℂ) * (2 * Real.pi * I) := by
+  sorry
+
+/-- **LIBRARY (Jordan index theorem).**  An injectively parametrized analytic
+circle has index of absolute value at most one about every point off its
+image.  This formulation deliberately does not assume `g'` is nonzero on the
+circle: stationary points of the parametrization are allowed. -/
+lemma apm_a96A07_jordan_one_turn_logDeriv (g : ℂ → ℂ) (w : ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    (hw : w ∉ apm_a96A07_boundaryImage g) (n : ℤ)
+    (hn : (∮ z in C(0, 1), logDeriv (fun z => g z - w) z) =
+      (n : ℂ) * (2 * Real.pi * I)) :
+    |n| ≤ 1 := by
+  sorry
+
+/-- Two distinct interior zeros contribute at least two to the divisor count.
+This includes multiplicity, but needs only the order-at-a-zero lower bound. -/
+lemma apm_a96A07_two_preimages_force_two_le_zeroCount (g : ℂ → ℂ) (w x y : ℂ)
+    (han : AnalyticOnNhd ℂ (fun z => g z - w) (closedBall 0 1))
+    (hw : w ∉ apm_a96A07_boundaryImage g)
+    (hx : x ∈ apm_a96A07_disk) (hy : y ∈ apm_a96A07_disk)
+    (hxy : x ≠ y) (hxw : g x = w) (hyw : g y = w) :
+    (2 : ℤ) ≤ apm_a96A07_diskZeroCount g w := by
+  sorry
+
+/-- If one value has two distinct interior preimages, a nearby value outside
+the boundary curve still has two distinct interior preimages.  Analytic open
+mapping supplies the two overlapping image neighborhoods; the `C¹` boundary
+curve has empty interior, even when `g'` vanishes at circle points. -/
+lemma apm_a96A07_perturb_double_value_off_boundary (g : ℂ → ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    {x y : ℂ} (hx : x ∈ apm_a96A07_disk) (hy : y ∈ apm_a96A07_disk)
+    (hxy : x ≠ y) (hval : g x = g y) :
+    ∃ w x' y',
+      w ∉ apm_a96A07_boundaryImage g ∧
+      x' ∈ apm_a96A07_disk ∧ y' ∈ apm_a96A07_disk ∧
+      x' ≠ y' ∧ g x' = w ∧ g y' = w := by
+  sorry
+
+/-- An off-boundary fiber has total multiplicity at most one.  This is the
+sorry-free seam between the argument principle and the one-turn theorem. -/
+lemma apm_a96A07_diskZeroCount_le_one (g : ℂ → ℂ) (w : ℂ)
+    (hg : ∃ ε > 0,
+      DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
+    (hg_inj_circle : Set.InjOn g apm_a96A07_circle)
+    (hw : w ∉ apm_a96A07_boundaryImage g) :
+    apm_a96A07_diskZeroCount g w ≤ 1 := by
+  have han := apm_a96A07_analyticOnNhd_sub_value g w hg
+  have hap := apm_a96A07_argumentPrinciple_disk g w han hw
+  have hj := apm_a96A07_jordan_one_turn_logDeriv g w hg hg_inj_circle hw
+    (apm_a96A07_diskZeroCount g w) hap
+  exact le_trans (le_abs_self _) hj
+
+/-- Injectivity on the unit circle propagates to the open unit disk. -/
 theorem apm_a96A07_injOn_disk_of_injOn_circle (g : ℂ → ℂ)
     (hg : ∃ ε > 0,
       DifferentiableOn ℂ g (closedBall 0 (1 + ε)))
     (hg_inj_circle : Set.InjOn g apm_a96A07_circle) :
     Set.InjOn g apm_a96A07_disk := by
-  sorry
+  intro x hx y hy hval
+  by_contra hxy
+  obtain ⟨w, x', y', hw, hx', hy', hxy', hxw, hyw⟩ :=
+    apm_a96A07_perturb_double_value_off_boundary g hg hg_inj_circle
+      hx hy hxy hval
+  have han := apm_a96A07_analyticOnNhd_sub_value g w hg
+  have htwo := apm_a96A07_two_preimages_force_two_le_zeroCount
+    g w x' y' han hw hx' hy' hxy' hxw hyw
+  have hone := apm_a96A07_diskZeroCount_le_one g w hg hg_inj_circle hw
+  omega
 
 theorem apm_a96a07 (g : ℂ → ℂ)
     (hg : ∃ ε > 0,
