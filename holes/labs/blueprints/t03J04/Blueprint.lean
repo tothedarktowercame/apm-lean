@@ -276,7 +276,32 @@ theorem t03J04_hasEuler_unit : HasEulerCharacteristic Unit 1 := by
 index is zero). -/
 theorem t03J04_hasEuler_of_isEmpty (X : Type) [TopologicalSpace X] [IsEmpty X] :
     HasEulerCharacteristic X 0 := by
-  sorry
+  have hzero : ∀ k, Limits.IsZero (Homology X k) := by
+    intro k
+    by_cases hk : k = 0
+    · subst k
+      have hcoprod : Limits.IsZero (∐ fun _ : X ↦ ModuleCat.of ℚ ℚ) := by
+        rw [Limits.IsZero.iff_id_eq_zero]
+        apply Limits.Sigma.hom_ext
+        intro x
+        exact isEmptyElim x
+      exact hcoprod.of_iso
+        (AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+          (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of X))
+    · exact AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+        (ModuleCat ℚ) k (ModuleCat.of ℚ ℚ) (TopCat.of X) hk
+  have hfin : ∀ k, FiniteDimensional ℚ (Homology X k) := by
+    intro k
+    letI := ModuleCat.subsingleton_of_isZero (hzero k)
+    infer_instance
+  apply t03J04_hasEuler_of_finrank hfin 0
+  · intro k hk
+    exact ModuleCat.subsingleton_of_isZero (hzero k)
+  · simp only [zero_add, Finset.range_one, Finset.sum_singleton, pow_zero, one_mul]
+    letI := hfin 0
+    letI := ModuleCat.subsingleton_of_isZero (hzero 0)
+    rw [Module.finrank_zero_of_subsingleton]
+    norm_num
 
 /-- LEAF B5 (geometry of the circle).  `U = S¹ ∖ {1}`, `V = S¹ ∖ {-1}`,
 `P = {Im > 0}`, `Q = {Im < 0}` are open arcs, hence contractible
