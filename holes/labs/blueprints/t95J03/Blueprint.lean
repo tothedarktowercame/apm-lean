@@ -720,7 +720,33 @@ lemma t95J03_isKSheeted_prod_fin {E X : Type*} [TopologicalSpace E] [Topological
 /-- **Leaf C8.**  The identity is a one-sheeted cover.  About 10–30 lines. -/
 lemma t95J03_id_isKSheeted (X : Type*) [TopologicalSpace X] :
     IsKSheetedCover (id : X → X) 1 := by
-  sorry
+  constructor
+  · intro x
+    letI : Subsingleton ((id : X → X) ⁻¹' {x}) :=
+      ⟨fun a b ↦ Subtype.ext (a.2.trans b.2.symm)⟩
+    refine ⟨inferInstance, Set.univ, Set.mem_univ x, isOpen_univ, isOpen_univ, ?_, ?_⟩
+    · exact
+        { toFun := fun z ↦ (⟨z.1, Set.mem_univ _⟩, ⟨x, rfl⟩)
+          invFun := fun z ↦ ⟨z.1.1, Set.mem_univ _⟩
+          left_inv := fun _ ↦ rfl
+          right_inv := by
+            intro z
+            apply Prod.ext
+            · rfl
+            · exact Subsingleton.elim _ _
+          continuous_toFun := by fun_prop
+          continuous_invFun := by fun_prop }
+    · intro z
+      rfl
+  · intro x
+    letI : Subsingleton {e : X // id e = x} :=
+      ⟨fun a b ↦ Subtype.ext (a.2.trans b.2.symm)⟩
+    exact Finite.of_subsingleton
+  · intro x
+    letI : Subsingleton {e : X // id e = x} :=
+      ⟨fun a b ↦ Subtype.ext (a.2.trans b.2.symm)⟩
+    letI : Nonempty {e : X // id e = x} := ⟨⟨x, rfl⟩⟩
+    exact Nat.card_unique
 
 /-! ## Surfaces: models, covers, groups -/
 
