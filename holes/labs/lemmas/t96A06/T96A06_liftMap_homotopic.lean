@@ -987,8 +987,101 @@ and `Q4 (Q4' x) = (u²/|u|, w²/|w|)`.  Both are positive multiples of
 `(a·u², b·w²)` with `a, b > 0`, so `g x ≠ -(Q4 (Q4' x))` (else `u² = w² = 0`).
 The normalised straight-line homotopy therefore never passes through `0`. -/
 -- BEGIN SEAT AREA
+lemma T96A06_liftMap_homotopic_aux_swap :
+    swapE 0 = 2 ∧ swapE 1 = 3 ∧ swapE 2 = 0 ∧ swapE 3 = 1 ∧
+    swapE.symm 0 = 2 ∧ swapE.symm 1 = 3 ∧ swapE.symm 2 = 0 ∧ swapE.symm 3 = 1 := by
+  decide
+
+lemma T96A06_liftMap_homotopic_aux_Q (x : S3) (i : Fin 4) :
+    (Q4.comp Q4' x).1 i =
+      if i = 0 then (x.1 0 ^ 2 - x.1 1 ^ 2) / Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2)
+      else if i = 1 then 2 * x.1 0 * x.1 1 / Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2)
+      else if i = 2 then (x.1 2 ^ 2 - x.1 3 ^ 2) / Real.sqrt (x.1 2 ^ 2 + x.1 3 ^ 2)
+      else 2 * x.1 2 * x.1 3 / Real.sqrt (x.1 2 ^ 2 + x.1 3 ^ 2) := by
+  rcases T96A06_liftMap_homotopic_aux_swap with ⟨h0,h1,h2,h3,hs0,hs1,hs2,hs3⟩
+  fin_cases i <;> simp [Q4, Q4', boundaryAction, sqCone, sqFun,
+    permutationMap, sphereHomeo, permutation_apply, h0,h1,h2,h3,hs0,hs1,hs2,hs3]
+
+lemma T96A06_liftMap_homotopic_aux_lift (x : S3) (i : Fin 4) :
+    (liftMap x).1 i =
+      ‖WithLp.toLp 2 (T96A06.polynomialMap (WithLp.equiv 2 (Fin 4 → ℝ) x.1))‖⁻¹ *
+      T96A06.polynomialMap (WithLp.equiv 2 (Fin 4 → ℝ) x.1) i := by
+  simp [liftMap, proj_cover_aux_radial, sphereVec, T96A06.polyNZ, PiLp.smul_apply]
+
+lemma T96A06_liftMap_homotopic_aux_inner (x : S3) :
+    0 ≤ @inner ℝ _ _ (liftMap x).1 (Q4.comp Q4' x).1 := by
+  simp only [PiLp.inner_apply, RCLike.inner_apply, conj_trivial]
+  simp_rw [T96A06_liftMap_homotopic_aux_lift,
+    T96A06_liftMap_homotopic_aux_Q]
+  simp only [Fin.sum_univ_succ]
+  norm_num
+  simp [T96A06.polynomialMap]
+  have hn : 0 ≤ ‖WithLp.toLp 2
+      (T96A06.polynomialMap (WithLp.equiv 2 (Fin 4 → ℝ) x.1))‖⁻¹ := by positivity
+  have hr : 0 ≤ Real.sqrt (x.1 0 ^ 2 + x.1 1 ^ 2) := Real.sqrt_nonneg _
+  have hs : 0 ≤ Real.sqrt (x.1 2 ^ 2 + x.1 3 ^ 2) := Real.sqrt_nonneg _
+  simp only [real_inner_eq_re_inner, RCLike.inner_apply', conj_trivial,
+    RCLike.re_to_real, mul_comm]
+  ring_nf
+  positivity
+
+lemma T96A06_liftMap_homotopic_aux_nezero (p : Set.Icc (0 : ℝ) 1 × S3) :
+    (1 - (p.1 : ℝ)) • (liftMap p.2).1 + (p.1 : ℝ) • (Q4.comp Q4' p.2).1 ≠ 0 := by
+  intro hz
+  by_cases ht : (p.1 : ℝ) = 1
+  · have : (Q4.comp Q4' p.2).1 = 0 := by simpa [ht] using hz
+    have hu : ‖(Q4.comp Q4' p.2).1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using (Q4.comp Q4' p.2).2
+    rw [this, norm_zero] at hu
+    norm_num at hu
+  · have htlt : (p.1 : ℝ) < 1 := lt_of_le_of_ne (p.1.property).2 ht
+    have hnorm : @inner ℝ _ _ (liftMap p.2).1 (liftMap p.2).1 = 1 := by
+      rw [real_inner_self_eq_norm_sq]
+      have := (liftMap p.2).2
+      simpa [Metric.mem_sphere, dist_zero_right] using congrArg (fun z : ℝ => z ^ 2) this
+    have hi := T96A06_liftMap_homotopic_aux_inner p.2
+    have hpos : 0 < @inner ℝ _ _ (liftMap p.2).1
+        ((1 - (p.1 : ℝ)) • (liftMap p.2).1 + (p.1 : ℝ) • (Q4.comp Q4' p.2).1) := by
+      rw [inner_add_right, real_inner_smul_right, real_inner_smul_right, hnorm]
+      have ht0 : 0 ≤ (p.1 : ℝ) := (p.1.property).1
+      nlinarith
+    rw [hz, inner_zero_right] at hpos
+    exact lt_irrefl 0 hpos
+
 theorem T96A06_liftMap_homotopic : ContinuousMap.Homotopic liftMap (Q4.comp Q4') := by
-  sorry
+  let v : Set.Icc (0 : ℝ) 1 × S3 → EuclideanSpace ℝ (Fin 4) := fun p =>
+    (1 - (p.1 : ℝ)) • (liftMap p.2).1 + (p.1 : ℝ) • (Q4.comp Q4' p.2).1
+  refine ⟨{
+    toFun := fun p => ⟨‖v p‖⁻¹ • v p, ?_⟩
+    continuous_toFun := ?_
+    map_zero_left := ?_
+    map_one_left := ?_ }⟩
+  · rw [Metric.mem_sphere, dist_zero_right, norm_smul, Real.norm_eq_abs,
+      abs_inv, abs_norm, inv_mul_cancel₀]
+    exact norm_ne_zero_iff.mpr (T96A06_liftMap_homotopic_aux_nezero p)
+  · apply Continuous.subtype_mk
+    have hv : Continuous v := by
+      have ht : Continuous (fun p : Set.Icc (0 : ℝ) 1 × S3 => (p.1 : ℝ)) :=
+        continuous_subtype_val.comp continuous_fst
+      have hf : Continuous (fun p : Set.Icc (0 : ℝ) 1 × S3 => (liftMap p.2).1) :=
+        continuous_subtype_val.comp (liftMap.continuous.comp continuous_snd)
+      have hg : Continuous (fun p : Set.Icc (0 : ℝ) 1 × S3 => (Q4.comp Q4' p.2).1) :=
+        continuous_subtype_val.comp ((Q4.comp Q4').continuous.comp continuous_snd)
+      exact ((continuous_const.sub ht).smul hf).add (ht.smul hg)
+    exact ((continuous_norm.comp hv).inv₀
+      (fun p => norm_ne_zero_iff.mpr (T96A06_liftMap_homotopic_aux_nezero p))).smul hv
+  · intro x
+    apply Subtype.ext
+    change ‖v (0, x)‖⁻¹ • v (0, x) = (liftMap x).1
+    have hn : ‖(liftMap x).1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using (liftMap x).2
+    simp [v, hn]
+  · intro x
+    apply Subtype.ext
+    change ‖v (1, x)‖⁻¹ • v (1, x) = (Q4.comp Q4' x).1
+    have hn : ‖(Q4.comp Q4' x).1‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using (Q4.comp Q4' x).2
+    simp [v, hn]
 -- END SEAT AREA
 
 /-! ### Sorry-free assembly of the degree -/
