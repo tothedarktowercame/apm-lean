@@ -224,7 +224,30 @@ theorem t03J04_hasEuler_of_homotopyEquiv {X Y : Type} [TopologicalSpace X]
 `isZero_singularHomologyFunctor_of_totallyDisconnectedSpace`). -/
 -- BEGIN SEAT AREA
 theorem t03J04_hasEuler_unit : HasEulerCharacteristic Unit 1 := by
-  sorry
+  let e₀ :=
+    AlgebraicTopology.singularHomologyFunctorZeroOfTotallyDisconnectedSpace
+      (ModuleCat ℚ) (ModuleCat.of ℚ ℚ) (TopCat.of Unit) ≪≫
+    Limits.coproductUniqueIso (fun _ : Unit ↦ ModuleCat.of ℚ ℚ)
+  have hzero (k : ℕ) (hk : k ≠ 0) : Limits.IsZero (Homology Unit k) :=
+    AlgebraicTopology.isZero_singularHomologyFunctor_of_totallyDisconnectedSpace
+      (ModuleCat ℚ) k (ModuleCat.of ℚ ℚ) (TopCat.of Unit) hk
+  have hfin : ∀ k, FiniteDimensional ℚ (Homology Unit k) := by
+    intro k
+    by_cases hk : k = 0
+    · subst k
+      exact FiniteDimensional.of_injective e₀.hom.hom e₀.toLinearEquiv.injective
+    · letI : Subsingleton (Homology Unit k) :=
+        ModuleCat.subsingleton_of_isZero (hzero k hk)
+      exact FiniteDimensional.of_injective
+        (0 : Homology Unit k →ₗ[ℚ] ℚ)
+        (Function.injective_of_subsingleton (0 : Homology Unit k → ℚ))
+  apply t03J04_hasEuler_of_finrank hfin 0
+  · intro k hk
+    exact ModuleCat.subsingleton_of_isZero (hzero k (Nat.ne_of_gt hk))
+  · letI := hfin 0
+    have hdim : Module.finrank ℚ (Homology Unit 0) = Module.finrank ℚ ℚ :=
+      LinearEquiv.finrank_eq e₀.toLinearEquiv
+    simp [hdim]
 -- END SEAT AREA
 
 /-- LEAF B4.  χ(∅) = 0, same Mathlib lemmas (the coproduct over an empty
