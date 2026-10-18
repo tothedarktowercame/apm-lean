@@ -5,10 +5,12 @@ import ConstructionTargets.SurfaceClassification
 import ConstructionTargets.CoveringDegree
 import ConstructionTargets.CoveringMonodromyCosets
 import ConstructionTargets.SuppliedCoverAlgebra
+import ConstructionTargets.CoveringSubgroupCorrespondence
 
 /-! # Blueprint for t96A01: finite-index subgroups of a genus-four surface group -/
 
 open ConstructionTargets.StatementSurfaceModels ConstructionTargets.Surfaces
+open ConstructionTargets.CoveringSubgroupCorrespondence
 
 noncomputable section
 
@@ -36,9 +38,26 @@ theorem t96A01_index_pos
   rw [← hindex]
   exact Nat.pos_of_ne_zero Subgroup.FiniteIndex.index_ne_zero
 
-/-- **LIBRARY (covering-subgroup correspondence).**  A finite-index subgroup
+/- **LIBRARY (covering-subgroup correspondence).**  A finite-index subgroup
 is realized as the fundamental group of a connected cover whose fibre has the
 prescribed cardinality. -/
+/-- Surface charts give semilocally simply connected neighbourhoods.  No
+`IsManifold` regularity is needed: this is a purely topological chart fact. -/
+theorem t96A01_surface_semilocallySimplyConnected
+    (S : Type*) [TopologicalSpace S]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S] :
+    SemilocallySimplyConnected S := by
+  sorry
+
+/-- A compact surface is covered by finitely many chart sources, so it is the
+image of a type in `Type`; this lets the cover be built in `Type` although `S`
+lives in an arbitrary universe. -/
+theorem t96A01_surface_small
+    (S : Type*) [TopologicalSpace S]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S] [CompactSpace S] :
+    Small.{0} S := by
+  sorry
+
 theorem t96A01_finiteIndexSubgroup_connectedCover
     {S : Type*} [TopologicalSpace S]
     [ChartedSpace (EuclideanSpace ℝ (Fin 2)) S]
@@ -50,7 +69,13 @@ theorem t96A01_finiteIndexSubgroup_connectedCover
       IsCoveringMap p ∧ PathConnectedSpace E ∧ p e = s ∧
       Nat.card (p ⁻¹' {s}) = n ∧
       Nonempty (FundamentalGroup E e ≃* H) := by
-  sorry
+  letI : LocPathConnectedSpace S :=
+    ChartedSpace.locPathConnectedSpace (EuclideanSpace ℝ (Fin 2)) S
+  letI : PathConnectedSpace S := PathConnectedSpace.of_locPathConnectedSpace
+  haveI : Small.{0} S := t96A01_surface_small S
+  obtain ⟨E, topE, p, e, hp, hE, hpe, hcard, hpi⟩ :=
+    connectedCover (t96A01_surface_semilocallySimplyConnected S) s H
+  exact ⟨E, topE, p, e, hp, hE, hpe, hcard.trans hindex, hpi⟩
 
 /-- **LIBRARY (finite-cover Euler characteristic and surface recognition).**
 A connected `n`-sheeted cover of a genus-four surface has genus `3*n+1`.

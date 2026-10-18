@@ -157,3 +157,15 @@ output is:
 ```text
 'apm_t96a01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
 ```
+# Covering-subgroup split (2026-10-18)
+
+`t96A01_finiteIndexSubgroup_connectedCover` is now a sorry-free adapter to
+`ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover`.
+The only new local leaf is
+`t96A01_surface_semilocallySimplyConnected` (30--60 lines): use chart sources,
+small convex Euclidean balls, `Convex.isPathConnected`, and contract straight
+line loops inside the ball.  `ChartedSpace.locPathConnectedSpace` supplies
+local path-connectedness, and
+`PathConnectedSpace.of_locPathConnectedSpace` combines it with the existing
+`ConnectedSpace S`.  A bare `ChartedSpace` is sufficient here; differentiable
+manifold regularity is not used.

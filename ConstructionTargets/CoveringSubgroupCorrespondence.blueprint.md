@@ -31,6 +31,55 @@ uses: Mathlib `Path.Homotopic.Quotient`
 
 status: planned
 
+## Implemented leaf boundary (2026-10-18)
+
+The Lean interface is in `CoveringSubgroupCorrespondence.lean`.  The earlier
+B1--B13 discussion remains the proof plan for the construction leaf; the
+actual parallel seat boundary is:
+
+- `exists_connected_subgroup_cover` (**LIBRARY**, 120--150 lines): B2--B10,
+  the based-path construction, covering charts, connectedness, induced range,
+  fundamental-group equivalence, and the distinguished-fibre coset
+  equivalence.  Use `IsCoveringMapOn.of_openPartialHomeomorph`, path lifting,
+  `injective_path_homotopic_map`, and `MulEquiv.ofBijective`.
+- `exists_connected_subgroup_cover_of_small` (40--80 lines, uses the
+  construction leaf as a black box): with `[Small.{v} X]`, realise the cover
+  with total space in `Type v` by applying the construction to `Shrink X`
+  (transported topology) and composing with the homeomorphism.  Added in
+  review (claude-14, 2026-10-18): the first draft stated the construction with
+  `∃ E : Type*`, an independent universe, which is false for `E : Type 0` over
+  a base in `Type 1` too large for `Type 0` (a covering of a connected base by
+  a nonempty space is surjective).  The construction leaf now produces
+  `E : Type u` for `X : Type u`; t96A01 (`S : Type*`, `E : Type`) gets the
+  smallness from `t96A01_surface_small`, t00J06 (`S : Type`, `X : Type*`)
+  from `Small.{0} S`.
+- `natCard_cosetQuotient` (40--70 lines, independent): compare the explicit
+  relation with `QuotientGroup.rightRel`, use inversion and
+  `Subgroup.index_eq_card`.
+- `cosetQuotient_infinite_of_index_zero` (20--40 lines, independent): use the
+  preceding index/card comparison argument directly with `Nat.card_eq_zero`;
+  it deliberately takes no sibling theorem as an axiom.
+- `covering_fiber_equiv` (20--40 lines, independent): choose a path and use
+  `IsCoveringMap.monodromy_bijective`.
+- `every_fiber_infinite_of_coset_equiv` (30--50 lines, parallel): the coset
+  equivalence and index-zero fact are explicit hypotheses/data; combine them
+  with monodromy.  It does not invoke either sibling sorry theorem.
+- `exists_continuousMap_lift_of_range_le` (10--25 lines, independent): apply
+  `IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le` and unpack
+  `p ∘ lift = f`.
+
+`connectedCover` is a sorry-free assembly from the construction witness and
+`natCard_cosetQuotient`.  Consumer lifting is a sorry-free assembly using the
+range equality stored in the same witness.
+
+Truth checks: for `H = ⊤` the relation has one class and the construction is
+the one-sheet/identity cover up to based covering equivalence.  For `H = ⊥`
+it is the universal based cover.  Mathlib's `H.index = 0` is the infinite
+index convention, so the explicit coset quotient and hence every fibre are
+infinite.  No normality is assumed: the relation is literally
+`g * h⁻¹ ∈ H`.  Path-connectedness of the base is used both to represent all
+points by based paths and to transport fibres by monodromy.
+
 The formulation is basepoint-local and does not mention simple connectivity
 of `U`; this is exactly what the chart proof uses.
 
