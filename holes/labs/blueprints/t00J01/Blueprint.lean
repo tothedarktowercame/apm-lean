@@ -712,7 +712,64 @@ lemma apm_t00j01_circleCover_intersection_equiv_aux_product_model :
     Nonempty (((apm_t00j01_circleCoverLeft ∩
       apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₜ
         (apm_t00j01_Klein × apm_t00j01_circleCover_intersection_equiv_aux_E0)) := by
-  sorry
+  have hv : ‖(-1 : ℂ)‖ = 1 := by norm_num
+  let e := stereographic hv
+  let s : Set Circle := {z | (z : ℂ) ≠ -1 ∧ z ≠ (1 : Circle)}
+  have hs : s ⊆ e.source := by
+    intro z hz
+    intro h
+    exact hz.1 (congrArg Subtype.val h)
+  have hone : (1 : Circle) ∈ e.source := by
+    intro h
+    have h' := congrArg Subtype.val h
+    norm_num at h'
+  have heone : e (1 : Circle) = 0 := by
+    simpa only [e] using stereographic_neg_apply (1 : Circle)
+  have himage : e '' s = {w | w ≠ 0} := by
+    ext w
+    constructor
+    · rintro ⟨z, hz, rfl⟩ hez
+      have := e.injOn (hs hz) hone (hez.trans heone.symm)
+      exact hz.2 this
+    · intro hw
+      have htarget : w ∈ e.target := by simp [e]
+      refine ⟨e.symm w, ?_, e.right_inv htarget⟩
+      constructor
+      · intro h
+        exact (e.map_target htarget) (Subtype.ext h)
+      · intro hEq
+        apply hw
+        calc
+          w = e (e.symm w) := (e.right_inv htarget).symm
+          _ = e (1 : Circle) := congrArg e hEq
+          _ = 0 := heone
+  let hc : s ≃ₜ apm_t00j01_circleCover_intersection_equiv_aux_E0 :=
+    e.homeomorphOfImageSubsetSource hs himage
+  refine ⟨?_⟩
+  exact
+    { toFun := fun p => (p.1.1, hc ⟨p.1.2, by
+          constructor
+          · intro h
+            apply p.2.1
+            apply Subtype.ext
+            simpa [apm_t00j01_circleCover_intersection_equiv_aux_exp_pi] using h
+          · exact p.2.2⟩)
+      invFun := fun p => ⟨(p.1, (hc.symm p.2).1), by
+        constructor
+        · intro h
+          apply (hc.symm p.2).2.1
+          have h' := congrArg (fun z : Circle => (z : ℂ)) h
+          simpa [apm_t00j01_circleCover_intersection_equiv_aux_exp_pi] using h'
+        · exact (hc.symm p.2).2.2⟩
+      left_inv := by
+        intro p
+        apply Subtype.ext
+        simp
+      right_inv := by
+        intro p
+        simp
+      continuous_toFun := by fun_prop
+      continuous_invFun := by fun_prop }
 
 lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays :
     Nonempty (apm_t00j01_circleCover_intersection_equiv_aux_E0 ≃ₕ
