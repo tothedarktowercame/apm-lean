@@ -1324,7 +1324,51 @@ theorem t03J04_C3_chartBall_small {n : ℕ} {X : Type} [MetricSpace X] [ChartedS
     (β : X) {K : Set X} (hK : IsCompact K)
     (hKs : K ⊆ (chartAt (apm_t03J04_HModel n) β).source) {δ : ℝ} (hδ : 0 < δ) :
     ∃ r > 0, ∀ z ∈ K, t03J04_chartBall n β z r ⊆ Metric.ball z δ := by
-  sorry
+  let φ := chartAt (apm_t03J04_HModel n) β
+  let e := t03J04_modelEquiv n
+  let A : Set (EuclideanSpace ℝ (Fin n)) := e '' (φ '' K)
+  let T : Set (EuclideanSpace ℝ (Fin n)) := e '' φ.target
+  let f : EuclideanSpace ℝ (Fin n) → X := fun y => φ.symm (e.symm y)
+  have hA : IsCompact A := by
+    exact (hK.image_of_continuousOn (φ.continuousOn.mono hKs)).image e.continuous
+  have hT : IsOpen T := e.toHomeomorph.isOpenMap φ.target φ.open_target
+  have hAT : A ⊆ T := by
+    rintro _ ⟨_, ⟨x, hxK, rfl⟩, rfl⟩
+    exact ⟨φ x, φ.map_source (hKs hxK), rfl⟩
+  obtain ⟨η, hη, hthick⟩ := hA.exists_cthickening_subset_open hT hAT
+  have hthick_compact : IsCompact (Metric.cthickening η A) := hA.cthickening
+  have hf : ContinuousOn f (Metric.cthickening η A) := by
+    apply (φ.continuousOn_symm.comp e.symm.continuous.continuousOn)
+    intro y hy
+    obtain ⟨v, hv, rfl⟩ := hthick hy
+    simpa using hv
+  have huc := hthick_compact.uniformContinuousOn_of_continuous hf
+  rw [Metric.uniformContinuousOn_iff] at huc
+  obtain ⟨s, hs, hus⟩ := huc δ hδ
+  have hmin : 0 < min η s := lt_min hη hs
+  refine ⟨min η s / 2, by positivity, ?_⟩
+  intro z hz x hx
+  have hzsrc : z ∈ φ.source := hKs hz
+  have hxsrc : x ∈ φ.source := hx.1
+  have hcoordzA : t03J04_coord n β z ∈ A := by
+    exact ⟨φ z, ⟨z, hz, rfl⟩, rfl⟩
+  have hxball : dist (t03J04_coord n β x) (t03J04_coord n β z) < min η s / 2 := hx.2
+  have hcoordxA : t03J04_coord n β x ∈ Metric.cthickening η A := by
+    apply Metric.closedBall_subset_cthickening hcoordzA η
+    apply Metric.mem_closedBall'.2
+    rw [dist_comm]
+    exact le_of_lt (lt_of_lt_of_le hxball (by nlinarith [min_le_left η s]))
+  have hcoordzThick : t03J04_coord n β z ∈ Metric.cthickening η A :=
+    Metric.self_subset_cthickening A hcoordzA
+  have hd : dist (t03J04_coord n β x) (t03J04_coord n β z) < s :=
+    lt_of_lt_of_le hxball (by nlinarith [min_le_right η s])
+  have := hus _ hcoordxA _ hcoordzThick hd
+  have hfx : f (t03J04_coord n β x) = x := by
+    simp [f, t03J04_coord, e, φ, hxsrc]
+  have hfz : f (t03J04_coord n β z) = z := by
+    simp [f, t03J04_coord, e, φ, hzsrc]
+  change dist x z < δ
+  simpa [hfx, hfz] using this
 -- END SEAT AREA
 
 /-- LEAF M5 (60–100 lines).  A finite atlas with compact shrinkings whose
