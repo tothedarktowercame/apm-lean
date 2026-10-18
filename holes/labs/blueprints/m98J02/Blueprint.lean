@@ -2706,7 +2706,57 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_sli
             ((x - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
               ((x - s) * (b - t))) *
           apm_m98J02_characteristicSource f s t) x := by
-  sorry
+  let g : ℝ → ℝ → ℝ := fun z t ↦
+    (z - s) * deriv apm_m98J02_riemannKernel ((z - s) * (b - t)) *
+      apm_m98J02_characteristicSource f s t
+  let d : ℝ → ℝ → ℝ := fun z t ↦
+    (deriv apm_m98J02_riemannKernel ((z - s) * (b - t)) +
+        ((z - s) * (b - t)) * deriv (deriv apm_m98J02_riemannKernel)
+          ((z - s) * (b - t))) *
+      apm_m98J02_characteristicSource f s t
+  have hs :=
+    apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_source_continuous f hf
+  have h1 : ContDiff ℝ ∞ (deriv apm_m98J02_riemannKernel) := by
+    have hh : ContDiff ℝ ∞ (fderiv ℝ apm_m98J02_riemannKernel) :=
+      hK.fderiv_right (by simp)
+    simpa [fderiv_eq_smul_deriv] using hh.clm_apply
+      (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+  have h2 : ContDiff ℝ ∞ (deriv (deriv apm_m98J02_riemannKernel)) := by
+    have hh : ContDiff ℝ ∞ (fderiv ℝ (deriv apm_m98J02_riemannKernel)) :=
+      h1.fderiv_right (by simp)
+    simpa [fderiv_eq_smul_deriv] using hh.clm_apply
+      (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
+  have hKd : Continuous (deriv apm_m98J02_riemannKernel) := h1.continuous
+  have hKdd : Continuous (deriv (deriv apm_m98J02_riemannKernel)) := h2.continuous
+  have hg : Continuous (Function.uncurry g) := by
+    dsimp [g, Function.uncurry]
+    fun_prop
+  have hd : Continuous (Function.uncurry d) := by
+    dsimp [d, Function.uncurry]
+    fun_prop
+  let S : Set ℝ := Metric.closedBall x 1
+  let Cpt : Set (ℝ × ℝ) := S ×ˢ Set.uIcc 0 b
+  have hCpt : IsCompact Cpt := (isCompact_closedBall x 1).prod isCompact_uIcc
+  obtain ⟨C, hC⟩ := hCpt.exists_bound_of_continuousOn hd.continuousOn
+  have hS : S ∈ nhds x :=
+    Filter.mem_of_superset (Metric.ball_mem_nhds x zero_lt_one)
+      Metric.ball_subset_closedBall
+  change HasDerivAt (fun z ↦ ∫ t in (0 : ℝ)..b, g z t)
+    (∫ t in (0 : ℝ)..b, d x t) x
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := g) (F' := d) (bound := fun _ ↦ C) (s := S) hS ?_ ?_ ?_ ?_ ?_ ?_).2
+  · filter_upwards with z
+    exact (hg.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · exact (hg.comp (continuous_const.prodMk continuous_id)).intervalIntegrable _ _
+  · exact (hd.comp (continuous_const.prodMk continuous_id)).aestronglyMeasurable
+  · filter_upwards with t
+    intro ht z hz
+    exact hC (z, t) ⟨hz, Set.uIoc_subset_uIcc ht⟩
+  · exact intervalIntegrable_const
+  · filter_upwards with t
+    intro _ z _
+    exact apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice_aux_pointwise
+      f hK z b s t
 
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
