@@ -1486,7 +1486,21 @@ theorem t03J04_C3_contractible_of_convex_image {n : ℕ} {X : Type} [Topological
     [ChartedSpace (apm_t03J04_HModel n) X] (α : X) {S : Set X}
     (hS : S ⊆ (chartAt (apm_t03J04_HModel n) α).source) (hne : S.Nonempty)
     (hconv : Convex ℝ (t03J04_coord n α '' S)) : ContractibleSpace S := by
-  sorry
+  let c := chartAt (apm_t03J04_HModel n) α
+  let e₁ : S ≃ₜ c '' S :=
+    c.homeomorphOfImageSubsetSource hS rfl
+  let e₂ : (c '' S) ≃ₜ (t03J04_modelEquiv n).toHomeomorph '' (c '' S) :=
+    (t03J04_modelEquiv n).toHomeomorph.image (c '' S)
+  have himage :
+      (t03J04_modelEquiv n).toHomeomorph '' (c '' S) =
+        t03J04_coord n α '' S := by
+    simp only [c, t03J04_coord]
+    exact Set.image_image _ _ S
+  let e₃ : S ≃ₜ (t03J04_coord n α '' S) :=
+    (e₁.trans e₂).trans (Homeomorph.setCongr himage)
+  letI : ContractibleSpace (t03J04_coord n α '' S) :=
+    hconv.contractibleSpace (hne.image _)
+  exact e₃.contractibleSpace
 -- END SEAT AREA
 
 /-- LEAF M7a (layer 2: M6; 100–160 lines).  A finite open family is good when
