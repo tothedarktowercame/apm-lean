@@ -2068,11 +2068,139 @@ Members are chart balls (open: `source ∩ continuousOn.preimage`).  Members wit
 common point `x` have centres within `δ/2` of `x`, so lie in one `W_{x_j}`:
 M7a with `α = x_j`. -/
 -- BEGIN SEAT AREA
+theorem t03J04_compact_manifold_goodCover_aux_pos
+    {A : Type} (S : Finset A) (f : A → ℝ) (hf : ∀ a ∈ S, 0 < f a) :
+    ∃ r > 0, ∀ a ∈ S, r < f a := by
+  classical
+  induction S using Finset.induction_on with
+  | empty => exact ⟨1, zero_lt_one, by simp⟩
+  | @insert a S ha ih =>
+      obtain ⟨r, hr, hrf⟩ := ih (fun b hb ↦ hf b (Finset.mem_insert_of_mem hb))
+      have hfa : 0 < f a := hf a (Finset.mem_insert_self _ _)
+      have hm : 0 < min r (f a) := lt_min hr hfa
+      refine ⟨min r (f a) / 2, half_pos hm, ?_⟩
+      intro b hb
+      rw [Finset.mem_insert] at hb
+      rcases hb with rfl | hb
+      · exact lt_of_lt_of_le (half_lt_self hm) (min_le_right _ _)
+      · exact lt_trans
+          (lt_of_lt_of_le (half_lt_self (lt_min hr (hf a (Finset.mem_insert_self _ _))))
+            (min_le_left r (f a)))
+          (hrf b hb)
+
 theorem t03J04_compact_manifold_goodCover (n : ℕ) (X : Type) [TopologicalSpace X]
     [T2Space X] [CompactSpace X] [ChartedSpace (apm_t03J04_HModel n) X]
     [IsManifold (apm_t03J04_Model n) ∞ X] :
     ∃ 𝒰 : Finset (Set X), t03J04_IsGoodFamily 𝒰 ∧ ⋃₀ (𝒰 : Set (Set X)) = Set.univ := by
-  sorry
+  classical
+  letI : TopologicalSpace.MetrizableSpace X :=
+    Manifold.metrizableSpace (apm_t03J04_Model n) X
+  letI : MetricSpace X := TopologicalSpace.metrizableSpaceMetric X
+  obtain ⟨I, K, hK, hKcover⟩ :=
+    t03J04_C3_finite_shrunk_atlas (n := n) (X := X)
+  have hK' : ∀ β ∈ I, IsClosed (K β) ∧
+      K β ⊆ (chartAt (apm_t03J04_HModel n) β).source := by
+    intro β hβ
+    exact ⟨(hK β hβ).1.isClosed, (hK β hβ).2⟩
+  choose W hW r₀ hr₀ hlocal using
+    fun x : X ↦ t03J04_C3_uniform_at_point (n := n) (X := X) I K hK' x
+  let V : X → Set X := fun x ↦ interior (W x)
+  have hxV (x : X) : x ∈ V x := mem_interior_iff_mem_nhds.mpr (hW x)
+  obtain ⟨J, hJcover⟩ := isCompact_univ.elim_finite_subcover
+    V (fun x ↦ isOpen_interior) (by
+      intro x hx
+      exact Set.mem_iUnion.mpr ⟨x, hxV x⟩)
+  have hJV : Set.univ ⊆ ⋃ j : J, V j := by
+    simpa only [Finset.set_biUnion_finset_image, Set.iUnion_subtype] using hJcover
+  obtain ⟨δ, hδ, hLeb⟩ := lebesgue_number_lemma_of_metric isCompact_univ
+    (fun j : J ↦ isOpen_interior) hJV
+  choose s hs hsmall using fun β : I ↦
+    t03J04_C3_chartBall_small (n := n) (X := X) (β : X)
+      (hK β β.property).1 (hK β β.property).2 (half_pos hδ)
+  obtain ⟨rJ, hrJ, hrJ₀⟩ :=
+    t03J04_compact_manifold_goodCover_aux_pos J.attach (fun j : J ↦ r₀ j) (by
+      intro x hx
+      exact hr₀ x)
+  obtain ⟨rI, hrI, hrI₀⟩ :=
+    t03J04_compact_manifold_goodCover_aux_pos I.attach s (by
+      intro β hβ
+      exact hs β)
+  let r := min rJ rI / 2
+  have hr : 0 < r := by positivity
+  have hr_r₀ (j : J) : r < r₀ j := by
+    exact lt_trans (lt_of_lt_of_le (half_lt_self (lt_min hrJ hrI)) (min_le_left _ _))
+      (hrJ₀ j (Finset.mem_attach _ _))
+  have hr_s (β : I) : r < s β := by
+    exact lt_trans (lt_of_lt_of_le (half_lt_self (lt_min hrJ hrI)) (min_le_right _ _))
+      (hrI₀ β (Finset.mem_attach _ _))
+  have hopenBall (β z : X) : IsOpen (t03J04_chartBall n β z r) := by
+    let c := chartAt (apm_t03J04_HModel n) β
+    have hc : ContinuousOn (t03J04_coord n β) c.source :=
+      (t03J04_modelEquiv n).continuous.comp_continuousOn c.continuousOn
+    exact hc.isOpen_inter_preimage c.open_source Metric.isOpen_ball
+  have hcoverK (β : I) : K β ⊆ ⋃ z : (K β), t03J04_chartBall n β z r := by
+    intro x hx
+    exact Set.mem_iUnion.mpr ⟨⟨x, hx⟩, ⟨(hK β β.property).2 hx, Metric.mem_ball_self hr⟩⟩
+  choose Z hZcover using fun β : I ↦
+    (hK β β.property).1.elim_finite_subcover
+      (fun z : K β ↦ t03J04_chartBall n β z r)
+      (fun z ↦ hopenBall β z) (hcoverK β)
+  let balls (β : I) : Finset (Set X) :=
+    (Z β).image (fun z : K (β : X) ↦
+      t03J04_chartBall n (β : X) (z : X) r)
+  let 𝒰 : Finset (Set X) := I.attach.biUnion balls
+  have hopen : ∀ U ∈ 𝒰, IsOpen U := by
+    intro U hU
+    rw [show 𝒰 = I.attach.biUnion balls from rfl, Finset.mem_biUnion] at hU
+    obtain ⟨β, -, hU⟩ := hU
+    rw [show balls β = (Z β).image (fun z : K (β : X) ↦
+      t03J04_chartBall n (β : X) (z : X) r) from rfl,
+      Finset.mem_image] at hU
+    obtain ⟨z, -, rfl⟩ := hU
+    exact hopenBall (β : X) (z : X)
+  have hcommon : ∀ q ⊆ 𝒰, ∀ x : X, (∀ U ∈ q, x ∈ U) → ∃ α : X,
+      ∀ U ∈ q, U ⊆ (chartAt (apm_t03J04_HModel n) α).source ∧
+        Convex ℝ (t03J04_coord n α '' U) := by
+    intro q hq x hx
+    obtain ⟨j, hjball⟩ := hLeb x (Set.mem_univ x)
+    refine ⟨(j : X), ?_⟩
+    intro U hU
+    have hU𝒰 := hq hU
+    rw [show 𝒰 = I.attach.biUnion balls from rfl, Finset.mem_biUnion] at hU𝒰
+    obtain ⟨β, -, hU𝒰⟩ := hU𝒰
+    rw [show balls β = (Z β).image (fun z : K (β : X) ↦
+      t03J04_chartBall n (β : X) (z : X) r) from rfl,
+      Finset.mem_image] at hU𝒰
+    obtain ⟨z, hzZ, rfl⟩ := hU𝒰
+    have hxball := hx _ hU
+    have hxballS : x ∈ t03J04_chartBall n (β : X) (z : X) (s β) :=
+      ⟨hxball.1, lt_trans hxball.2 (hr_s β)⟩
+    have hzx : dist x (z : X) < δ / 2 := by
+      have hzsmall := hsmall β (z : X) z.property hxballS
+      exact hzsmall
+    have hzV : (z : X) ∈ V j := hjball (Metric.mem_ball.mpr (by
+      rw [dist_comm]
+      exact lt_trans hzx (half_lt_self hδ)))
+    exact hlocal j β β.property z ⟨interior_subset hzV, z.property⟩ r ⟨hr, hr_r₀ j⟩
+  refine ⟨𝒰, t03J04_C3_good_of_commonChart 𝒰 hopen hcommon, ?_⟩
+  apply Set.Subset.antisymm (Set.subset_univ _)
+  rw [← hKcover]
+  intro x hx
+  obtain ⟨β, hxβ⟩ := Set.mem_iUnion.mp hx
+  obtain ⟨hβI, hxβ⟩ := Set.mem_iUnion.mp hxβ
+  have hxK : x ∈ K β := interior_subset hxβ
+  obtain ⟨z, hxz⟩ := Set.mem_iUnion.mp (hZcover ⟨β, hβI⟩ hxK)
+  obtain ⟨hzZ, hxz⟩ := Set.mem_iUnion.mp hxz
+  apply Set.mem_sUnion.mpr
+  refine ⟨t03J04_chartBall n β z r, ?_, hxz⟩
+  change t03J04_chartBall n β z r ∈ 𝒰
+  rw [show 𝒰 = I.attach.biUnion balls from rfl, Finset.mem_biUnion]
+  refine ⟨⟨β, hβI⟩, Finset.mem_attach _ _, ?_⟩
+  rw [show balls ⟨β, hβI⟩ =
+    (Z ⟨β, hβI⟩).image (fun z : K β ↦
+      t03J04_chartBall n (β : X) (z : X) r) from rfl,
+    Finset.mem_image]
+  exact ⟨z, hzZ, rfl⟩
 -- END SEAT AREA
 
 /-- The model space is locally path-connected, so every manifold on it is
