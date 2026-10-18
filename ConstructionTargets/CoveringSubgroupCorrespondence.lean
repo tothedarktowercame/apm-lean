@@ -91,7 +91,9 @@ theorem covering_fiber_equiv
     {E X : Type*} [TopologicalSpace E] [TopologicalSpace X]
     [PathConnectedSpace X] {p : E → X} (hp : IsCoveringMap p) (x y : X) :
     Nonempty ((p ⁻¹' ({x} : Set X)) ≃ (p ⁻¹' ({y} : Set X))) := by
-  sorry
+  obtain ⟨γ⟩ := PathConnectedSpace.joined x y
+  let γq : Path.Homotopic.Quotient x y := Quotient.mk'' γ
+  exact ⟨Equiv.ofBijective (hp.monodromy γq) (hp.monodromy_bijective γq)⟩
 
 /-- A convenient consequence of the preceding monodromy and coset leaves. -/
 theorem every_fiber_infinite_of_coset_equiv
