@@ -925,10 +925,109 @@ are `Sigma.map'` along reindexing, which commute with the coproduct
 comparison (`Sigma.hom_ext`).  If `ratUC_F.Additive` is needed it follows from
 the adjunction (`Adjunction.left_adjoint_additive`-style, or
 `Functor.additive_of_preservesBinaryBiproducts`).  About 100–220 lines. -/
+noncomputable def ratUC_chainIso_aux_coeff :
+    ratUC_F.obj (ModuleCat.of ℤ ℤ) ≅ ModuleCat.of ℚ ℚ :=
+  (TensorProduct.AlgebraTensorModule.rid ℤ ℚ ℚ).toModuleIso
+
+theorem ratUC_chainIso_aux_pres_hom (A : Type) :
+    (Limits.PreservesCoproduct.iso ratUC_F
+      (fun _ : A => ModuleCat.of ℤ ℤ)).hom =
+      inv (Limits.sigmaComparison ratUC_F
+        (fun _ : A => ModuleCat.of ℤ ℤ)) := by
+  let e := Limits.PreservesCoproduct.iso ratUC_F
+    (fun _ : A => ModuleCat.of ℤ ℤ)
+  let s := Limits.sigmaComparison ratUC_F
+    (fun _ : A => ModuleCat.of ℤ ℤ)
+  have h : e.symm = asIso s := Iso.ext (by
+    exact Limits.PreservesCoproduct.inv_hom ratUC_F
+      (fun _ : A => ModuleCat.of ℤ ℤ))
+  exact congrArg Iso.inv h
+
+noncomputable def ratUC_chainIso_aux_sigma :
+    (Limits.sigmaConst.obj (ModuleCat.of ℤ ℤ)) ⋙ ratUC_F ≅
+      Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ) :=
+  NatIso.ofComponents (fun A =>
+    Limits.PreservesCoproduct.iso ratUC_F (fun _ : A => ModuleCat.of ℤ ℤ) ≪≫
+      Limits.Sigma.mapIso (fun _ : A => ratUC_chainIso_aux_coeff)) (by
+        intro A B f
+        apply (cancel_epi ((Limits.PreservesCoproduct.iso ratUC_F
+          (fun _ : A => ModuleCat.of ℤ ℤ) ≪≫
+            Limits.Sigma.mapIso (fun _ : A => ratUC_chainIso_aux_coeff)).inv)).mp
+        simp only [Category.assoc, Iso.inv_hom_id_assoc]
+        apply Limits.Sigma.hom_ext
+        intro a
+        simp only [Iso.trans_inv, Iso.trans_hom, Functor.mapIso_inv,
+          Functor.mapIso_hom, Category.assoc]
+        erw [Limits.colimit.ι_map_assoc]
+        erw [Limits.colimit.ι_map_assoc]
+        simp only [Limits.PreservesCoproduct.inv_hom]
+        erw [Limits.ι_comp_sigmaComparison_assoc]
+        erw [Limits.ι_comp_sigmaComparison_assoc]
+        simp only [Functor.comp_map]
+        have hm :
+            ratUC_F.map (Limits.Sigma.ι (fun _ : A => ModuleCat.of ℤ ℤ) a) ≫
+                ratUC_F.map ((Limits.sigmaConst.obj (ModuleCat.of ℤ ℤ)).map f) ≫
+                (Limits.PreservesCoproduct.iso ratUC_F
+                  (fun _ : B => ModuleCat.of ℤ ℤ)).hom ≫
+                (Limits.Sigma.mapIso
+                  (fun _ : B => ratUC_chainIso_aux_coeff)).hom =
+              ratUC_F.map (Limits.Sigma.ι (fun _ : A => ModuleCat.of ℤ ℤ) a ≫
+                (Limits.sigmaConst.obj (ModuleCat.of ℤ ℤ)).map f) ≫
+                (Limits.PreservesCoproduct.iso ratUC_F
+                  (fun _ : B => ModuleCat.of ℤ ℤ)).hom ≫
+                (Limits.Sigma.mapIso
+                  (fun _ : B => ratUC_chainIso_aux_coeff)).hom := by
+          rw [ratUC_F.map_comp]
+          simp only [Category.assoc]
+        have hmfull := congrArg (fun k : ratUC_F.obj (ModuleCat.of ℤ ℤ) ⟶
+            (Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ)).obj B =>
+          ratUC_chainIso_aux_coeff.inv ≫ k) hm
+        simp only [Category.assoc, Functor.mapIso_hom] at hmfull
+        change ratUC_chainIso_aux_coeff.inv ≫ _ =
+          ratUC_chainIso_aux_coeff.inv ≫ _
+        refine hmfull.trans ?_
+        dsimp only [Limits.sigmaConst]
+        rw [Limits.Sigma.ι_comp_map']
+        simp only [Category.id_comp]
+        rw [ratUC_chainIso_aux_pres_hom, ratUC_chainIso_aux_pres_hom]
+        erw [Limits.map_ι_comp_inv_sigmaComparison_assoc]
+        erw [Limits.map_ι_comp_inv_sigmaComparison_assoc]
+        erw [Limits.ι_colimMap_assoc]
+        let α : Discrete.functor (fun _ : B => ratUC_F.obj (ModuleCat.of ℤ ℤ)) ≅
+            Discrete.functor (fun _ : B => ModuleCat.of ℚ ℚ) :=
+          Discrete.natIso (fun _ => ratUC_chainIso_aux_coeff)
+        have hc := Limits.colimit.ι_map α.hom ⟨f a⟩
+        have hcfull := congrArg (fun k : ratUC_F.obj (ModuleCat.of ℤ ℤ) ⟶
+            (Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ)).obj B =>
+          ratUC_chainIso_aux_coeff.inv ≫ k) hc
+        refine hcfull.trans ?_
+        dsimp [α]
+        simp [Category.assoc, ratUC_chainIso_aux_coeff])
+
 theorem ratUC_chainIso (X : TopCat.{0}) :
     Nonempty ((ratUC_F.mapHomologicalComplex (ComplexShape.down ℕ)).obj
       (ratUC_chainsZ X) ≅ ratUC_chainsQ X) := by
-  sorry
+  letI : ratUC_F.Additive :=
+    (ModuleCat.extendRestrictScalarsAdj (algebraMap ℤ ℚ)).left_adjoint_additive
+  let S := (TopCat.toSSet.obj X)
+  let SZ : SimplicialObject (ModuleCat ℤ) :=
+    ((SimplicialObject.whiskering (Type 0) (ModuleCat ℤ)).obj
+      (Limits.sigmaConst.obj (ModuleCat.of ℤ ℤ))).obj S
+  let e :
+      ((SimplicialObject.whiskering (ModuleCat ℤ) (ModuleCat ℚ)).obj ratUC_F).obj
+          (((SimplicialObject.whiskering (Type 0) (ModuleCat ℤ)).obj
+            (Limits.sigmaConst.obj (ModuleCat.of ℤ ℤ))).obj S) ≅
+        (((SimplicialObject.whiskering (Type 0) (ModuleCat ℚ)).obj
+            (Limits.sigmaConst.obj (ModuleCat.of ℚ ℚ))).obj S) :=
+    ((SimplicialObject.whiskering (Type 0) (ModuleCat ℚ)).mapIso
+      ratUC_chainIso_aux_sigma).app S
+  refine ⟨?_⟩
+  dsimp [ratUC_chainsZ, ratUC_chainsQ,
+    AlgebraicTopology.singularChainComplexFunctor,
+    AlgebraicTopology.SSet.singularChainComplexFunctor]
+  exact (eqToIso (Functor.congr_obj
+      (AlgebraicTopology.map_alternatingFaceMapComplex ratUC_F) SZ)) ≪≫
+    (AlgebraicTopology.alternatingFaceMapComplex (ModuleCat ℚ)).mapIso e
 
 /-- **Leaf `ratUC_homologyIso` (UC ii).**  Extension of scalars to `ℚ`
 commutes with homology of any chain complex of abelian groups.
