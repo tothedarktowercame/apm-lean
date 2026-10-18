@@ -160,11 +160,102 @@ from every point of the fibre over `p e` (`IsCoveringMap.liftPath`) gives a
 bijection of fibres (inverse: lift `δ.symm`), and the lift from `x` joins `x`
 to its image, so it restricts to `ComponentFiber p e ≃ ComponentFiber p e'`.
 About 60–120 lines. -/
+-- Endpoint of the lift of `γ.map p` starting at `x` (with `p x = p e`).
+noncomputable def t95J03_componentFiberCard_joined_aux_end {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') (x : E) (hx : p x = p e) : E :=
+  cov.liftPath (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source]) 1
+
+lemma t95J03_componentFiberCard_joined_aux_end_mem {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') {x : E} (hx : p x = p e) :
+    p (t95J03_componentFiberCard_joined_aux_end cov γ x hx) = p e' := by
+  have h := cov.liftPath_lifts (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source])
+  have h1 := congrFun h 1
+  simpa using h1
+
+/-- The lift of `γ.map p` starting at `x`, as a path. -/
+noncomputable def t95J03_componentFiberCard_joined_aux_joinPath {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') {x : E} (hx : p x = p e) :
+    Path x (t95J03_componentFiberCard_joined_aux_end cov γ x hx) where
+  toFun t := cov.liftPath (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source]) t
+  continuous_toFun := (cov.liftPath (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source])).continuous
+  source' := cov.liftPath_zero (γ.map cov.continuous).toContinuousMap x
+    (by simp [hx, Path.source])
+  target' := rfl
+
+/-- Lifting there and back along a path returns the starting point. -/
+lemma t95J03_componentFiberCard_joined_aux_cancel {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') {x : E} (hx : p x = p e) :
+    t95J03_componentFiberCard_joined_aux_end cov γ.symm
+      (t95J03_componentFiberCard_joined_aux_end cov γ x hx)
+      (t95J03_componentFiberCard_joined_aux_end_mem cov γ hx) = x := by
+  have hc : Continuous p := cov.continuous
+  have hL0 : cov.liftPath (γ.map hc).toContinuousMap x (by simp [hx, Path.source]) 0 = x :=
+    cov.liftPath_zero (γ.map hc).toContinuousMap x (by simp [hx, Path.source])
+  have hlifts : ∀ t, p (cov.liftPath (γ.map hc).toContinuousMap x
+      (by simp [hx, Path.source]) t) = p (γ t) := by
+    intro t
+    have h := cov.liftPath_lifts (γ.map hc).toContinuousMap x (by simp [hx, Path.source])
+    exact congrFun h t
+  set ρ : Path x (t95J03_componentFiberCard_joined_aux_end cov γ x hx) :=
+    t95J03_componentFiberCard_joined_aux_joinPath cov γ hx with hρ
+  -- the reversed lift lifts the reversed base path, pointwise
+  have hsymm : ∀ t : unitInterval,
+      p (t95J03_componentFiberCard_joined_aux_joinPath cov γ hx (unitInterval.symm t))
+        = p (γ.symm t) := by
+    intro t
+    have h := hlifts (unitInterval.symm t)
+    rw [Path.symm_apply]
+    exact h
+  have hcomp : p ∘ ρ.symm.toContinuousMap = (γ.symm.map hc).toContinuousMap := by
+    funext t
+    exact hsymm t
+  have hstart : ρ.symm.toContinuousMap 0 =
+      t95J03_componentFiberCard_joined_aux_end cov γ x hx := by
+    simp
+  -- uniqueness of path lifts
+  have hEq : ρ.symm.toContinuousMap = cov.liftPath (γ.symm.map hc).toContinuousMap
+      (t95J03_componentFiberCard_joined_aux_end cov γ x hx)
+      (by simp [t95J03_componentFiberCard_joined_aux_end_mem cov γ hx, Path.source]) :=
+    (cov.eq_liftPath_iff' _).mpr ⟨hcomp, hstart⟩
+  have h1 := DFunLike.congr_fun hEq 1
+  have h2 : ρ.symm 1 = x := by
+    show ρ (unitInterval.symm 1) = x
+    rw [unitInterval.symm_one]
+    exact hL0
+  simp only [t95J03_componentFiberCard_joined_aux_end]
+  exact h1.symm.trans h2
+
+/-- The bijection of component fibres along a path, by path lifting. -/
+noncomputable def t95J03_componentFiberCard_joined_aux_equiv {E X : Type*}
+    [TopologicalSpace E] [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p)
+    {e e' : E} (γ : Path e e') : ComponentFiber p e ≃ ComponentFiber p e' where
+  toFun x := ⟨t95J03_componentFiberCard_joined_aux_end cov γ x.1 x.2.1,
+    t95J03_componentFiberCard_joined_aux_end_mem cov γ x.2.1,
+    ⟨(γ.symm.trans x.2.2.some).trans
+      (t95J03_componentFiberCard_joined_aux_joinPath cov γ x.2.1)⟩⟩
+  invFun y := ⟨t95J03_componentFiberCard_joined_aux_end cov γ.symm y.1 y.2.1,
+    t95J03_componentFiberCard_joined_aux_end_mem cov γ.symm y.2.1,
+    ⟨(γ.trans y.2.2.some).trans
+      (t95J03_componentFiberCard_joined_aux_joinPath cov γ.symm y.2.1)⟩⟩
+  left_inv x := Subtype.ext
+    (t95J03_componentFiberCard_joined_aux_cancel cov γ x.2.1)
+  right_inv y := Subtype.ext (by
+    simpa [Path.symm_symm] using
+      t95J03_componentFiberCard_joined_aux_cancel cov γ.symm y.2.1)
+
 lemma t95J03_componentFiberCard_joined {E X : Type*} [TopologicalSpace E]
     [TopologicalSpace X] {p : E → X} (cov : IsCoveringMap p) {e e' : E}
     (h : Joined e e') :
     Nat.card (ComponentFiber p e) = Nat.card (ComponentFiber p e') := by
-  sorry
+  exact Nat.card_congr (t95J03_componentFiberCard_joined_aux_equiv cov h.some)
 
 /-- **Leaf C3.**  Two `k`-sheeted covers on one total space cannot have strictly
 more sheets for the second on every component.
