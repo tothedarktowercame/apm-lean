@@ -89,7 +89,25 @@ is injective (`inverse_mfderiv_mul_left`, or `mfderiv` of `g⁻¹ * ·` after
 -- BEGIN SEAT AREA
 theorem t03J04_mulInvariant_ne_zero [LieGroup I ∞ G] {v : GroupLieAlgebra I G}
     (hv : v ≠ 0) (g : G) : mulInvariantVectorField v g ≠ 0 := by
-  sorry
+  intro hzero
+  have hcomp :
+      mfderiv% ((fun x : G ↦ g⁻¹ * x) ∘ (fun x : G ↦ g * x)) (1 : G) =
+        ContinuousLinearMap.id ℝ (TangentSpace I (1 : G)) := by
+    have hfun : ((fun x : G ↦ g⁻¹ * x) ∘ (fun x : G ↦ g * x)) = id := by
+      funext x
+      simp
+    rw [hfun, id_eq, mfderiv_id]
+  have hsmooth : (∞) ≠ 0 := by simp
+  rw [mfderiv_comp (I' := I) _
+      (contMDiff_mul_left.contMDiffAt.mdifferentiableAt hsmooth)
+      (contMDiff_mul_left.contMDiffAt.mdifferentiableAt hsmooth)] at hcomp
+  have happ := congrArg (fun L => L v) hcomp
+  change ((mfderiv% (fun x : G ↦ g⁻¹ * x) (g * 1))
+    ((mfderiv% (fun x : G ↦ g * x) 1) v)) = v at happ
+  simp only [mulInvariantVectorField] at hzero
+  rw [hzero] at happ
+  have hbzero := map_zero (mfderiv I I (fun x : G ↦ g⁻¹ * x) (g * 1))
+  exact hv (happ.symm.trans hbzero)
 -- END SEAT AREA
 
 end Invariant
