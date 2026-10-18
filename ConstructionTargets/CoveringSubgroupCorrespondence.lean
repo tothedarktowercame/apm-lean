@@ -111,7 +111,41 @@ theorem exists_connected_subgroup_cover_aux_good_nhds
 theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_smul_nbhd
     {x : X} (g : FundamentalGroup X x) (U : Set X) (a : BasedPaths x) :
     (g • ·) ⁻¹' basedPathNbhd U a = basedPathNbhd U (g⁻¹ • a) := by
-  sorry
+  rcases a with ⟨y, a⟩
+  ext b
+  rcases b with ⟨z, b⟩
+  constructor
+  · rintro ⟨γ, hγ, heq⟩
+    refine ⟨γ, hγ, ?_⟩
+    have hgb : (fun c : BasedPaths x ↦ g • c) (Sigma.mk z b) =
+        (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ)) : BasedPaths x) := by
+      exact Sigma.ext rfl (heq_of_eq heq)
+    have hi := congrArg (fun c : BasedPaths x ↦ g⁻¹ • c) hgb
+    have hi' : (Sigma.mk z b : BasedPaths x) =
+        (fun c : BasedPaths x ↦ g⁻¹ • c)
+          (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ))) := by
+      simpa using hi
+    injection hi' with _ hs
+    change b = ((FundamentalGroup.toPath (g⁻¹)⁻¹).trans a).trans
+      (Path.Homotopic.Quotient.mk γ)
+    rw [inv_inv, Path.Homotopic.Quotient.trans_assoc]
+    simpa using hs
+  · rintro ⟨γ, hγ, heq⟩
+    refine ⟨γ, hγ, ?_⟩
+    have hb : (Sigma.mk z b : BasedPaths x) =
+        (fun c : BasedPaths x ↦ g⁻¹ • c)
+          (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ))) := by
+      refine Sigma.ext rfl (heq_of_eq ?_)
+      change b = (FundamentalGroup.toPath (g⁻¹)⁻¹).trans
+        (a.trans (Path.Homotopic.Quotient.mk γ))
+      change b = ((FundamentalGroup.toPath (g⁻¹)⁻¹).trans a).trans
+        (Path.Homotopic.Quotient.mk γ) at heq
+      simpa [Path.Homotopic.Quotient.trans_assoc] using heq
+    have hg := congrArg (fun c : BasedPaths x ↦ g • c) hb
+    have hg' : (fun c : BasedPaths x ↦ g • c) (Sigma.mk z b) =
+        (Sigma.mk z (a.trans (Path.Homotopic.Quotient.mk γ)) : BasedPaths x) := by
+      simpa using hg
+    injection hg' with _ hs
 
 /-- A good neighbourhood of `y` has trivial loops at every one of its points
 (conjugate by a path inside `U` back to `y`). -/
