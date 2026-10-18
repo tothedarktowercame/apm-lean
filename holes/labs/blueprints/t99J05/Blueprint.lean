@@ -655,6 +655,86 @@ theorem t99J05_lefschetz_euler_inter (n : ℕ) :
       CategoryTheory.Limits.biprod.lift_fst] at h
     exact RP3Homology.cp_mvI_zero_injective_aux_h0_map _ h
 
+/-- Banked from lemma-1's round-2 partial (2026-10-18): in an exact sequence
+`B → C → A` of rational vector spaces, `C` is finite-dimensional when `B` and `A` are. -/
+lemma t99J05_lefschetz_euler_step_aux_finite
+    {A B C : Type} [AddCommGroup A] [Module ℚ A]
+    [AddCommGroup B] [Module ℚ B] [AddCommGroup C] [Module ℚ C]
+    [FiniteDimensional ℚ A] [FiniteDimensional ℚ B]
+    (g : B →ₗ[ℚ] C) (h : C →ₗ[ℚ] A)
+    (hex : LinearMap.range g = LinearMap.ker h) :
+    FiniteDimensional ℚ C := by
+  let hr : C →ₗ[ℚ] LinearMap.range h := h.rangeRestrict
+  obtain ⟨s, hs⟩ := hr.exists_rightInverse_of_surjective h.range_rangeRestrict
+  let F : B × LinearMap.range h →ₗ[ℚ] C := g.coprod s
+  apply FiniteDimensional.of_surjective F
+  intro x
+  let y : LinearMap.range h := ⟨h x, ⟨x, rfl⟩⟩
+  have hy : h (x - s y) = 0 := by
+    have hs' := LinearMap.congr_fun hs y
+    have hs'' : h (s y) = y.1 := congrArg Subtype.val hs'
+    simp [y, hs'']
+  have hm : x - s y ∈ LinearMap.range g := by
+    rw [hex]
+    exact hy
+  obtain ⟨b, hb⟩ := hm
+  refine ⟨(b, y), ?_⟩
+  change g b + s y = x
+  rw [hb]
+  abel
+
+/-- LEAF step-h0 (split 2026-10-18).  `CP (n+1)` is path connected (quotient of
+the nonzero vectors, `isPathConnected_compl_singleton_of_one_lt_rank`), so
+`H₀ ≅ ℚ` by `CoefficientH0.h0Iso`.  Template: `RP3Homology.cp2_h0`. -/
+theorem t99J05_lefschetz_euler_step_aux_h0 (n : ℕ) :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) 0) ∧
+      Module.finrank ℚ (Homology (CP (n + 1)) 0) = 1 := by
+  sorry
+
+/-- LEAF step-top (split 2026-10-18).  Degree `2n+2` of Mayer–Vietoris
+(`RP3Homology.rationalMayerVietoris`): `H_{2n+2}(U) ⊕ H_{2n+2}(V) = 0` makes the
+connecting map `δ (2n+1)` injective, and `H_{2n+1}(U) ⊕ H_{2n+1}(V) = 0` (odd
+degree) makes it surjective onto `H_{2n+1}(U ∩ V)`, which has rank one.
+Template: the `h4` step of `RP3Homology.cp2_homology_of_mv`. -/
+theorem t99J05_lefschetz_euler_step_aux_top (n : ℕ)
+    (hcover : IsOpen (t99J05U n) ∧ IsOpen (t99J05V n) ∧
+      t99J05U n ∪ t99J05V n = Set.univ)
+    (hU : T99J05CPHomologyProfile n (t99J05U n))
+    (hV : T99J05CPHomologyProfile 0 (t99J05V n))
+    (hinter : (∀ k, FiniteDimensional ℚ
+        (Homology (↑(t99J05U n ∩ t99J05V n)) k)) ∧
+      (∀ k, Module.finrank ℚ (Homology (↑(t99J05U n ∩ t99J05V n)) k) =
+        if k = 0 ∨ k = 2 * n + 1 then 1 else 0) ∧
+      Function.Injective (RP3Homology.mvI (t99J05U n) (t99J05V n) 0).hom) :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) (2 * n + 2)) ∧
+      Module.finrank ℚ (Homology (CP (n + 1)) (2 * n + 2)) = 1 := by
+  sorry
+
+/-- LEAF step-mid (split 2026-10-18).  Degrees `1 ≤ k`, `k ≠ 2n+2` of
+Mayer–Vietoris.  `mvI k = 0` (for `k ≠ 2n+1` its source is zero, for `k = 2n+1`
+its target `H_{2n+1}(U) ⊕ H_{2n+1}(V)` is zero), so `mvJ k` is injective;
+`δ (k-1) = 0` (for `k = 1` by injectivity of `mvI 0`, otherwise its target is zero
+because `k - 1 ≠ 2n+1`), so `mvJ k` is surjective.  Hence
+`H_k(CP (n+1)) ≅ H_k(U) ⊕ H_k(V) ≅ H_k(U)` (`H_k(V) = 0` for `k ≥ 1`), and the
+`U` profile gives the rank: for `k ≠ 2n+2`, `Even k ∧ k ≤ 2n ↔ Even k ∧ k ≤ 2(n+1)`.
+Template: the `h2` step of `RP3Homology.cp2_homology_of_mv`;
+`t99J05_lefschetz_euler_step_aux_finite` gives finite-dimensionality. -/
+theorem t99J05_lefschetz_euler_step_aux_mid (n : ℕ)
+    (hcover : IsOpen (t99J05U n) ∧ IsOpen (t99J05V n) ∧
+      t99J05U n ∪ t99J05V n = Set.univ)
+    (hU : T99J05CPHomologyProfile n (t99J05U n))
+    (hV : T99J05CPHomologyProfile 0 (t99J05V n))
+    (hinter : (∀ k, FiniteDimensional ℚ
+        (Homology (↑(t99J05U n ∩ t99J05V n)) k)) ∧
+      (∀ k, Module.finrank ℚ (Homology (↑(t99J05U n ∩ t99J05V n)) k) =
+        if k = 0 ∨ k = 2 * n + 1 then 1 else 0) ∧
+      Function.Injective (RP3Homology.mvI (t99J05U n) (t99J05V n) 0).hom)
+    (k : ℕ) (hk0 : k ≠ 0) (hktop : k ≠ 2 * n + 2) :
+    FiniteDimensional ℚ (Homology (CP (n + 1)) k) ∧
+      Module.finrank ℚ (Homology (CP (n + 1)) k) =
+        if Even k ∧ k ≤ 2 * (n + 1) then 1 else 0 := by
+  sorry
+
 /-- The dimension-counting step in the rational Mayer–Vietoris sequence. -/
 theorem t99J05_lefschetz_euler_step (n : ℕ)
     (hCP : T99J05CPHomologyProfile n (CP n))
@@ -668,7 +748,22 @@ theorem t99J05_lefschetz_euler_step (n : ℕ)
         if k = 0 ∨ k = 2 * n + 1 then 1 else 0) ∧
       Function.Injective (RP3Homology.mvI (t99J05U n) (t99J05V n) 0).hom) :
     T99J05CPHomologyProfile (n + 1) (CP (n + 1)) := by
-  sorry
+  have hk : ∀ k, FiniteDimensional ℚ (Homology (CP (n + 1)) k) ∧
+      Module.finrank ℚ (Homology (CP (n + 1)) k) =
+        if Even k ∧ k ≤ 2 * (n + 1) then 1 else 0 := by
+    intro k
+    by_cases hk0 : k = 0
+    · subst hk0
+      obtain ⟨hf, hr⟩ := t99J05_lefschetz_euler_step_aux_h0 n
+      exact ⟨hf, by rw [hr]; simp⟩
+    by_cases hktop : k = 2 * n + 2
+    · subst hktop
+      obtain ⟨hf, hr⟩ := t99J05_lefschetz_euler_step_aux_top n hcover hU hV hinter
+      refine ⟨hf, ?_⟩
+      rw [hr, if_pos]
+      exact ⟨⟨n + 1, by ring⟩, by omega⟩
+    exact t99J05_lefschetz_euler_step_aux_mid n hcover hU hV hinter k hk0 hktop
+  exact ⟨fun k => (hk k).1, fun k => (hk k).2⟩
 
 /-- `CP 0` is a point. -/
 private lemma t99J05_lefschetz_euler_base_aux_subsingleton :
