@@ -969,10 +969,98 @@ theorem T96A06_circle_windingCochain_aux_sq_angle (t : ℝ) :
 `CoefficientH0.singularGenerator_singularPostcomposition`; if `L` lifts `s`
 then `2L` lifts `squaring ∘ s` (`aux_sq_angle`), so by `aux_disp_eq` the
 displacement doubles. -/
+lemma T96A06_circle_windingCochain_aux_sq_angle_aux (t : ℝ) :
+    boundaryAction (sqCone 0) (angleMap t) = angleMap (2 * t) := by
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · change (Real.cos (2 * Real.pi * t) ^ 2 - Real.sin (2 * Real.pi * t) ^ 2) /
+      Real.sqrt (Real.cos (2 * Real.pi * t) ^ 2 +
+        Real.sin (2 * Real.pi * t) ^ 2) = Real.cos (2 * Real.pi * (2 * t))
+    rw [Real.cos_sq_add_sin_sq, Real.sqrt_one, div_one]
+    rw [show 2 * Real.pi * (2 * t) = 2 * (2 * Real.pi * t) by ring,
+      Real.cos_two_mul]
+    nlinarith [Real.cos_sq_add_sin_sq (2 * Real.pi * t)]
+  · change 2 * Real.cos (2 * Real.pi * t) * Real.sin (2 * Real.pi * t) /
+      Real.sqrt (Real.cos (2 * Real.pi * t) ^ 2 +
+        Real.sin (2 * Real.pi * t) ^ 2) = Real.sin (2 * Real.pi * (2 * t))
+    rw [Real.cos_sq_add_sin_sq, Real.sqrt_one, div_one]
+    rw [show 2 * Real.pi * (2 * t) = 2 * (2 * Real.pi * t) by ring,
+      Real.sin_two_mul]
+    ring
+
+lemma T96A06_circle_windingCochain_aux_sq_surjective_aux :
+    Function.Surjective angleMap := by
+  intro x
+  let z : Circle := T96A06_angleMap_isCoveringMap_aux_homeomorph.symm x
+  refine ⟨Complex.arg z / (2 * Real.pi), ?_⟩
+  have hang (t : ℝ) : angleMap t =
+      T96A06_angleMap_isCoveringMap_aux_homeomorph (Circle.exp (2 * Real.pi * t)) := by
+    apply Subtype.ext
+    ext i
+    fin_cases i
+    · change Real.cos (2 * Real.pi * t) =
+        (Complex.exp (((2 * Real.pi * t : ℝ) : ℂ) * Complex.I)).re
+      exact (Complex.exp_ofReal_mul_I_re (2 * Real.pi * t)).symm
+    · change Real.sin (2 * Real.pi * t) =
+        (Complex.exp (((2 * Real.pi * t : ℝ) : ℂ) * Complex.I)).im
+      exact (Complex.exp_ofReal_mul_I_im (2 * Real.pi * t)).symm
+  rw [hang]
+  convert T96A06_angleMap_isCoveringMap_aux_homeomorph.apply_symm_apply x using 1
+  rw [show 2 * Real.pi * (Complex.arg z / (2 * Real.pi)) = Complex.arg z by
+    field_simp]
+  rw [Circle.exp_arg]
+
 theorem T96A06_circle_windingCochain_aux_sq (hcov : IsCoveringMap angleMap) :
     windingCochain.hom ∘ₗ ((CoefficientH0.singularPostcomposition ℚ
         (boundaryAction (sqCone 0))).f 1).hom = (2 : ℚ) • windingCochain.hom := by
-  sorry
+  apply LinearMap.ext
+  intro x
+  change (((CoefficientH0.singularPostcomposition ℚ
+      (boundaryAction (sqCone 0))).f 1 ≫ windingCochain).hom) x =
+    ((2 : ℚ) • windingCochain.hom) x
+  have hmorph :
+      (CoefficientH0.singularPostcomposition ℚ
+          (boundaryAction (sqCone 0))).f 1 ≫ windingCochain =
+        (2 : ℚ) • windingCochain := by
+    apply Limits.Sigma.hom_ext
+    intro σ
+    let s := (TopCat.toSSetObjEquiv (TopCat.of (euclideanUnitSphere 2))
+      (Opposite.op (SimplexCategory.mk 1))) σ
+    have hs : SingularSubdivision.singularSimplexOfContinuousMap
+        (TopCat.of (euclideanUnitSphere 2)) 1 s = σ :=
+      (TopCat.toSSetObjEquiv (TopCat.of (euclideanUnitSphere 2))
+        (Opposite.op (SimplexCategory.mk 1))).symm_apply_apply σ
+    change CoefficientH0.singularGenerator ℚ
+        (TopCat.of (euclideanUnitSphere 2)) 1 σ ≫ _ =
+      CoefficientH0.singularGenerator ℚ
+        (TopCat.of (euclideanUnitSphere 2)) 1 σ ≫ _
+    rw [← hs, ← Category.assoc,
+      CoefficientH0.singularGenerator_singularPostcomposition,
+      T96A06_circle_windingCochain_aux_generator]
+    obtain ⟨e, he⟩ := T96A06_circle_windingCochain_aux_sq_surjective_aux
+      (s ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩)
+    obtain ⟨L, hL⟩ := T96A06_circle_windingCochain_aux_lift hcov 1 s e he
+    let L2 : C(stdSimplex ℝ (Fin 2), ℝ) := ⟨fun z => 2 * L z, by fun_prop⟩
+    have hL2 : angleMap ∘ L2 = (boundaryAction (sqCone 0)).comp s := by
+      funext z
+      calc
+        angleMap (2 * L z) = boundaryAction (sqCone 0) (angleMap (L z)) :=
+          (T96A06_circle_windingCochain_aux_sq_angle_aux (L z)).symm
+        _ = boundaryAction (sqCone 0) (s z) :=
+          congrArg (boundaryAction (sqCone 0)) (congrFun hL z)
+    rw [T96A06_circle_windingCochain_aux_disp_eq
+      ((boundaryAction (sqCone 0)).comp s) L2 hL2]
+    rw [show (2 : ℚ) • windingCochain = windingCochain + windingCochain by
+      ext y
+      simp [two_smul]]
+    rw [Preadditive.comp_add, T96A06_circle_windingCochain_aux_generator]
+    rw [T96A06_circle_windingCochain_aux_disp_eq s L hL]
+    ext q
+    simp [L2]
+    ring
+  rw [hmorph]
+  rfl
 
 /-- **Leaf C1b-cycle.** A cycle with nonzero winding: the generator of the
 simplex `x ↦ angleMap (x 1)` (equal endpoints `angleMap 0 = angleMap 1`, so its
