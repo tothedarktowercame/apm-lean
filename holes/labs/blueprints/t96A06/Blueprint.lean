@@ -970,7 +970,105 @@ displacement is read off the restricted lift (`aux_disp_eq`), and the three
 terms telescope. -/
 theorem T96A06_circle_windingCochain_aux_cocycle (hcov : IsCoveringMap angleMap) :
     windingCochain.hom ∘ₗ (circleChains.d 2 1).hom = 0 := by
-  sorry
+  change ((circleChains.d 2 1) ≫ windingCochain).hom = 0
+  congr 1
+  apply Limits.Sigma.hom_ext
+  intro σ
+  let s := (TopCat.toSSetObjEquiv (TopCat.of (euclideanUnitSphere 2))
+    (Opposite.op (SimplexCategory.mk 2))) σ
+  have hs : SingularSubdivision.singularSimplexOfContinuousMap
+      (TopCat.of (euclideanUnitSphere 2)) 2 s = σ :=
+    (TopCat.toSSetObjEquiv (TopCat.of (euclideanUnitSphere 2))
+      (Opposite.op (SimplexCategory.mk 2))).symm_apply_apply σ
+  have hangle (t : ℝ) : angleMap t =
+      T96A06_angleMap_isCoveringMap_aux_homeomorph (Circle.exp (2 * Real.pi * t)) := by
+    apply Subtype.ext
+    ext i
+    fin_cases i
+    · change Real.cos (2 * Real.pi * t) =
+        (Complex.exp (((2 * Real.pi * t : ℝ) : ℂ) * Complex.I)).re
+      exact (Complex.exp_ofReal_mul_I_re (2 * Real.pi * t)).symm
+    · change Real.sin (2 * Real.pi * t) =
+        (Complex.exp (((2 * Real.pi * t : ℝ) : ℂ) * Complex.I)).im
+      exact (Complex.exp_ofReal_mul_I_im (2 * Real.pi * t)).symm
+  let z := T96A06_angleMap_isCoveringMap_aux_homeomorph.symm
+    (s ⟨_, single_mem_stdSimplex ℝ (0 : Fin 3)⟩)
+  let e := Complex.arg z / (2 * Real.pi)
+  have he : angleMap e = s ⟨_, single_mem_stdSimplex ℝ (0 : Fin 3)⟩ := by
+    rw [hangle]
+    have hmul : 2 * Real.pi * e = Complex.arg z := by
+      dsimp [e]
+      field_simp
+    rw [hmul, Circle.exp_arg]
+    exact T96A06_angleMap_isCoveringMap_aux_homeomorph.apply_symm_apply _
+  obtain ⟨L, hL⟩ := T96A06_circle_windingCochain_aux_lift hcov 2 s e he
+  rw [← hs]
+  change (CoefficientH0.singularGenerator ℚ _ 2
+      (SingularSubdivision.singularSimplexOfContinuousMap _ 2 s) ≫
+        circleChains.d 2 1) ≫ windingCochain = 0
+  rw [CoefficientH0.singularGenerator_boundary]
+  simp only [Preadditive.sum_comp, Preadditive.zsmul_comp]
+  simp_rw [SingularSubdivision.singularSimplexOfContinuousMap_face]
+  have hdisp (i : Fin 3) :
+      windingDisp (s.comp (SingularSubdivision.affineSimplex (fun j : Fin 2 =>
+        ⟨Pi.single (i.succAbove j) 1,
+          single_mem_stdSimplex ℝ (i.succAbove j)⟩))) =
+      (L.comp (SingularSubdivision.affineSimplex (fun j : Fin 2 =>
+        ⟨Pi.single (i.succAbove j) 1,
+          single_mem_stdSimplex ℝ (i.succAbove j)⟩)))
+          ⟨_, single_mem_stdSimplex ℝ (1 : Fin 2)⟩ -
+      (L.comp (SingularSubdivision.affineSimplex (fun j : Fin 2 =>
+        ⟨Pi.single (i.succAbove j) 1,
+          single_mem_stdSimplex ℝ (i.succAbove j)⟩)))
+          ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩ := by
+    apply T96A06_circle_windingCochain_aux_disp_eq
+    funext x
+    exact congrFun hL _
+  have hface (i : Fin 3) :
+      CoefficientH0.singularGenerator ℚ (TopCat.of (euclideanUnitSphere 2)) 1
+          (SingularSubdivision.singularSimplexOfContinuousMap _ 1
+            (s.comp (SingularSubdivision.affineSimplex (fun j : Fin 2 =>
+              ⟨Pi.single (i.succAbove j) 1,
+                single_mem_stdSimplex ℝ (i.succAbove j)⟩)))) ≫ windingCochain =
+        ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ ℝ
+          ((L.comp (SingularSubdivision.affineSimplex (fun j : Fin 2 =>
+            ⟨Pi.single (i.succAbove j) 1,
+              single_mem_stdSimplex ℝ (i.succAbove j)⟩)))
+              ⟨_, single_mem_stdSimplex ℝ (1 : Fin 2)⟩ -
+           (L.comp (SingularSubdivision.affineSimplex (fun j : Fin 2 =>
+            ⟨Pi.single (i.succAbove j) 1,
+              single_mem_stdSimplex ℝ (i.succAbove j)⟩)))
+              ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩)) := by
+    rw [T96A06_circle_windingCochain_aux_generator, hdisp]
+  simp only [Fin.sum_univ_succ]
+  norm_num
+  have hf0 := hface (0 : Fin 3)
+  have hf1 := hface (1 : Fin 3)
+  have hf2 := hface (2 : Fin 3)
+  norm_num at hf0 hf1 hf2
+  erw [hf0, hf1, hf2]
+  ext
+  have h10 : (1 : Fin 3).succAbove (0 : Fin 2) = 0 := by decide
+  have h11 : (1 : Fin 3).succAbove (1 : Fin 2) = 2 := by decide
+  have h20 : (2 : Fin 3).succAbove (0 : Fin 2) = 0 := by decide
+  have h21 : (2 : Fin 3).succAbove (1 : Fin 2) = 1 := by decide
+  have heval (i : Fin 3) (j : Fin 2) :
+      (SingularSubdivision.affineSimplex (fun k : Fin 2 =>
+        ⟨Pi.single (i.succAbove k) 1,
+          single_mem_stdSimplex ℝ (i.succAbove k)⟩))
+          ⟨_, single_mem_stdSimplex ℝ j⟩ =
+        ⟨_, single_mem_stdSimplex ℝ (i.succAbove j)⟩ := by
+    apply Subtype.ext
+    ext k
+    fin_cases j <;> simp [SingularSubdivision.affineSimplex, Fin.sum_univ_two]
+  simp_rw [heval]
+  have hv (a b : Fin 3) (hab : a = b) :
+      (⟨Pi.single a 1, single_mem_stdSimplex ℝ a⟩ : stdSimplex ℝ (Fin 3)) =
+        ⟨Pi.single b 1, single_mem_stdSimplex ℝ b⟩ := by
+    subst b
+    rfl
+  rw [hv _ _ h10, hv _ _ h11, hv _ _ h20, hv _ _ h21]
+  simp [SingularSubdivision.affineSimplex, Fin.sum_univ_two]
 
 /-- **Leaf C1b-sq-angle.** On the circle the squaring cone map doubles the
 angle: `(cos x, sin x) ↦ (cos²x - sin²x, 2 sin x cos x) = (cos 2x, sin 2x)`. -/
