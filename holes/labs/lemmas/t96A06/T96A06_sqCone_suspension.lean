@@ -604,7 +604,41 @@ def sqCone (n : ℕ) : ConeMap (n + 2) where
 -- BEGIN SEAT AREA
 theorem T96A06_sqCone_suspension (n : ℕ) :
     sphereAction (sqCone n) = boundaryAction (sqCone (n + 1)) := by
-  sorry
+  ext x i
+  change euclideanSnoc (sqFun n (euclideanInit x.1)) (sphereHeight (n + 2) x) i =
+    sqFun (n + 1) x.1 i
+  refine Fin.lastCases ?_ (fun j => ?_) i
+  · have hlast : Fin.last (n + 2) ≠ (1 : Fin (n + 3)) := by
+      intro h
+      have hv := congrArg Fin.val h
+      simp at hv
+    simp [sqFun, euclideanSnoc,
+      euclideanInit, sphereHeight, hlast]
+  · have hinit (k : Fin (n + 2)) : euclideanInit x.1 k = x.1 k.castSucc := by
+      rfl
+    by_cases h0 : j = 0
+    · subst j
+      simp [sqFun, euclideanSnoc,
+        sphereHeight, hinit]
+    · by_cases h1 : j = 1
+      · subst j
+        simp [sqFun, euclideanSnoc,
+          sphereHeight, hinit]
+        rw [show (1 : Fin (n + 3)) = (1 : Fin (n + 2)).castSucc by rfl,
+          Fin.snoc_castSucc]
+        simp
+      · have hc0 : j.castSucc ≠ (0 : Fin (n + 3)) := by
+          intro h
+          apply h0
+          apply Fin.ext
+          exact congrArg (fun z : Fin (n + 3) => z.val) h
+        have hc1 : j.castSucc ≠ (1 : Fin (n + 3)) := by
+          intro h
+          apply h1
+          apply Fin.ext
+          exact congrArg (fun z : Fin (n + 3) => z.val) h
+        simp [sqFun, euclideanSnoc,
+          sphereHeight, hinit, h0, h1, hc0, hc1]
 -- END SEAT AREA
 
 /-! ## Part D: degree two on the circle -/
