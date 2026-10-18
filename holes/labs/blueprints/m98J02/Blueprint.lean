@@ -2149,6 +2149,23 @@ theorem apm_m98J02_goursat_spec
           (2 / 81 : ℝ) * v a b = apm_m98J02_characteristicSource f a b := by
   sorry
 
+lemma apm_m98J02_pullback_spec_aux_contDiff
+    (v : ℝ → ℝ → ℝ)
+    (hv : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦ v (p 0) (p 1))) :
+    ContDiff ℝ 2 (apm_m98J02_pullback v) := by
+  sorry
+
+lemma apm_m98J02_pullback_spec_aux_equation
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (v : ℝ → ℝ → ℝ)
+    (hv : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦ v (p 0) (p 1)))
+    (hvPDE : ∀ a b : ℝ,
+      apm_m98J02_partial 0 (apm_m98J02_partial 1
+          (fun p : apm_m98J02_E ↦ v (p 0) (p 1))) (WithLp.toLp 2 ![a, b]) +
+        (2 / 81 : ℝ) * v a b = apm_m98J02_characteristicSource f a b) :
+    ∀ p, apm_m98J02_classicalT (apm_m98J02_pullback v) p = f p := by
+  sorry
+
 /-- The explicit linear change of variables and exponential conjugation turn
 the transformed Goursat equation back into `Tg=f`. -/
 theorem apm_m98J02_pullback_spec
@@ -2161,7 +2178,8 @@ theorem apm_m98J02_pullback_spec
         (2 / 81 : ℝ) * v a b = apm_m98J02_characteristicSource f a b) :
     ContDiff ℝ 2 (apm_m98J02_pullback v) ∧
       ∀ p, apm_m98J02_classicalT (apm_m98J02_pullback v) p = f p := by
-  sorry
+  exact ⟨apm_m98J02_pullback_spec_aux_contDiff v hv,
+    apm_m98J02_pullback_spec_aux_equation f hf v hv hvPDE⟩
 
 /-- Every continuous function, without a support restriction, defines a
 distribution because test functions are compactly supported. -/
