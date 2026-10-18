@@ -781,26 +781,113 @@ homeomorphism `Circle ≃ₜ S¹ ⊂ ℝ²`, `z ↦ (re z, im z)`. -/
 theorem T96A06_angleMap_isCoveringMap : IsCoveringMap angleMap := by
   sorry
 
-/-- **Leaf C1b.** The angle-displacement cochain.  For a singular 1-simplex
-`σ` choose a lift `L` of `σ` through `angleMap` (Mathlib's
-`IsCoveringMap.existsUnique_continuousMap_lifts`; simplices are convex, hence
-simply and locally path connected) and put `W σ = L(v₁) - L(v₀)`, which does
-not depend on the lift.  Extend `ℚ`-linearly over the coproduct of
-generators, exactly as `CoefficientCoveringTransfer.transferDegree` is built
-(`Sigma.desc`, `generator_transfer`).  `W ∘ d₂ = 0`: lift a whole 2-simplex;
-by `CoefficientH0.singularGenerator_boundary` and
-`singularSimplexOfContinuousMap_face` the three face terms telescope.  If `L`
-lifts `σ` then `2L` lifts `squaring ∘ σ` (on `S¹` the cone map is
-`(a,b) ↦ (a²-b², 2ab)`), so `W` scales by `2`.  The loop
-`t ↦ angleMap t` read on the 1-simplex is a cycle (equal endpoints) with
-`W = 1`. -/
+/-- Banked from lemma-1's round-2 partial: every singular simplex of the circle
+lifts through `angleMap` once one lifted vertex is chosen. -/
+lemma T96A06_circle_windingCochain_aux_lift (hcov : IsCoveringMap angleMap)
+    (n : ℕ) (s : C(stdSimplex ℝ (Fin (n + 1)), euclideanUnitSphere 2))
+    (e : ℝ) (he : angleMap e =
+      s ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n + 1))⟩) :
+    ∃ L : C(stdSimplex ℝ (Fin (n + 1)), ℝ), angleMap ∘ L = s := by
+  letI : ContractibleSpace (stdSimplex ℝ (Fin (n + 1))) :=
+    (convex_stdSimplex ℝ _).contractibleSpace
+      ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n + 1))⟩
+  letI : LocPathConnectedSpace (stdSimplex ℝ (Fin (n + 1))) :=
+    (convex_stdSimplex ℝ _).locPathConnectedSpace
+  obtain ⟨L, ⟨_, hL⟩, _⟩ := hcov.existsUnique_continuousMap_lifts s
+    ⟨_, single_mem_stdSimplex ℝ (0 : Fin (n + 1))⟩ e he
+  exact ⟨L, hL⟩
+
+open Classical in
+/-- Endpoint displacement `L(v₁) - L(v₀)` of a singular 1-simplex of the
+circle, read along a chosen lift through `angleMap` (`0` if there is none;
+with `hcov` every simplex has one, `T96A06_circle_windingCochain_aux_lift`). -/
+def windingDisp (s : C(stdSimplex ℝ (Fin 2), euclideanUnitSphere 2)) : ℝ :=
+  if h : ∃ L : C(stdSimplex ℝ (Fin 2), ℝ), angleMap ∘ L = s then
+    h.choose ⟨_, single_mem_stdSimplex ℝ (1 : Fin 2)⟩ -
+      h.choose ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩
+  else 0
+
+/-- The winding cochain: `windingDisp` extended `ℚ`-linearly over the
+generators, built like `CoefficientCoveringTransfer.transferDegree`. -/
+def windingCochain : circleChains.X 1 ⟶ ModuleCat.of ℚ ℝ :=
+  Limits.Sigma.desc (fun σ : SingularSubdivision.SingularSimplex (TopCat.of (euclideanUnitSphere 2)) 1 =>
+    ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ ℝ
+      (windingDisp ((TopCat.toSSetObjEquiv (TopCat.of (euclideanUnitSphere 2))
+        (Opposite.op (SimplexCategory.mk 1))) σ))))
+
+/-- **Leaf C1b-gen.** `windingCochain` on a generator.  Copy the proof of
+`CoefficientCoveringTransfer.generator_transfer` (`Sigma.ι_desc`, then
+`apply_symm_apply`). -/
+theorem T96A06_circle_windingCochain_aux_generator
+    (s : C(stdSimplex ℝ (Fin 2), euclideanUnitSphere 2)) :
+    CoefficientH0.singularGenerator ℚ (TopCat.of (euclideanUnitSphere 2)) 1
+        (SingularSubdivision.singularSimplexOfContinuousMap _ 1 s) ≫ windingCochain =
+      ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ ℝ (windingDisp s)) := by
+  unfold windingCochain CoefficientH0.singularGenerator
+  simp only [id_eq]
+  erw [Limits.Sigma.ι_desc]
+  exact congrArg (fun x => ModuleCat.ofHom (LinearMap.toSpanSingleton ℚ ℝ (windingDisp x)))
+    ((TopCat.toSSetObjEquiv (TopCat.of (euclideanUnitSphere 2))
+      (Opposite.op (SimplexCategory.mk 1))).apply_symm_apply s)
+
+/-- **Leaf C1b-surj.** `angleMap` is onto the circle: a unit vector `(a, b)` is
+`(cos θ, sin θ)` for `θ = Complex.arg (a + b i)`; take `t = θ / 2π`. -/
+theorem T96A06_circle_windingCochain_aux_surjective : Function.Surjective angleMap := by
+  sorry
+
+/-- **Leaf C1b-disp.** The displacement does not depend on the lift: two lifts
+of `s` differ by a continuous function into `ℤ` (`cos`/`sin` periodicity),
+constant on the connected simplex. -/
+theorem T96A06_circle_windingCochain_aux_disp_eq
+    (s : C(stdSimplex ℝ (Fin 2), euclideanUnitSphere 2))
+    (L : C(stdSimplex ℝ (Fin 2), ℝ)) (hL : angleMap ∘ L = s) :
+    windingDisp s = L ⟨_, single_mem_stdSimplex ℝ (1 : Fin 2)⟩ -
+      L ⟨_, single_mem_stdSimplex ℝ (0 : Fin 2)⟩ := by
+  sorry
+
+/-- **Leaf C1b-cocycle.** `W ∘ d₂ = 0`.  Ext over generators
+(`Limits.Sigma.hom_ext`, `toSSetObjEquiv`); lift the whole 2-simplex
+(`aux_lift`, vertex preimage from `aux_surjective`); by
+`CoefficientH0.singularGenerator_boundary`,
+`singularSimplexOfContinuousMap_face` and `aux_generator`, each face's
+displacement is read off the restricted lift (`aux_disp_eq`), and the three
+terms telescope. -/
+theorem T96A06_circle_windingCochain_aux_cocycle (hcov : IsCoveringMap angleMap) :
+    windingCochain.hom ∘ₗ (circleChains.d 2 1).hom = 0 := by
+  sorry
+
+/-- **Leaf C1b-sq-angle.** On the circle the squaring cone map doubles the
+angle: `(cos x, sin x) ↦ (cos²x - sin²x, 2 sin x cos x) = (cos 2x, sin 2x)`. -/
+theorem T96A06_circle_windingCochain_aux_sq_angle (t : ℝ) :
+    boundaryAction (sqCone 0) (angleMap t) = angleMap (2 * t) := by
+  sorry
+
+/-- **Leaf C1b-sq.** `W` scales by `2` under squaring.  Ext over generators;
+`CoefficientH0.singularGenerator_singularPostcomposition`; if `L` lifts `s`
+then `2L` lifts `squaring ∘ s` (`aux_sq_angle`), so by `aux_disp_eq` the
+displacement doubles. -/
+theorem T96A06_circle_windingCochain_aux_sq (hcov : IsCoveringMap angleMap) :
+    windingCochain.hom ∘ₗ ((CoefficientH0.singularPostcomposition ℚ
+        (boundaryAction (sqCone 0))).f 1).hom = (2 : ℚ) • windingCochain.hom := by
+  sorry
+
+/-- **Leaf C1b-cycle.** A cycle with nonzero winding: the generator of the
+simplex `x ↦ angleMap (x 1)` (equal endpoints `angleMap 0 = angleMap 1`, so its
+boundary `v₁ - v₀` vanishes by `singularGenerator_boundary`); it lifts by
+`x ↦ x 1`, so `aux_generator` and `aux_disp_eq` give `W = 1`. -/
+theorem T96A06_circle_windingCochain_aux_cycle :
+    ∃ c : circleChains.X 1, (circleChains.d 1 0).hom c = 0 ∧ windingCochain.hom c ≠ 0 := by
+  sorry
+
+/-- **Leaf C1b.** The angle-displacement cochain (assembly of the C1b leaves). -/
 theorem T96A06_circle_windingCochain (hcov : IsCoveringMap angleMap) :
     ∃ W : (circleChains.X 1) →ₗ[ℚ] ℝ,
       W ∘ₗ (circleChains.d 2 1).hom = 0 ∧
       W ∘ₗ ((CoefficientH0.singularPostcomposition ℚ
         (boundaryAction (sqCone 0))).f 1).hom = (2 : ℚ) • W ∧
-      ∃ c : circleChains.X 1, (circleChains.d 1 0).hom c = 0 ∧ W c ≠ 0 := by
-  sorry
+      ∃ c : circleChains.X 1, (circleChains.d 1 0).hom c = 0 ∧ W c ≠ 0 :=
+  ⟨windingCochain.hom, T96A06_circle_windingCochain_aux_cocycle hcov,
+    T96A06_circle_windingCochain_aux_sq hcov, T96A06_circle_windingCochain_aux_cycle⟩
 
 /-- **Leaf C2.** From such a cochain, squaring acts by `2` on `H₁(S¹; ℚ)`.
 `W` descends through `homologyι`/opcycles to `w : H₁ → ℝ`; the class `[c]`
