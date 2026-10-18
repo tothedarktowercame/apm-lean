@@ -1162,7 +1162,88 @@ theorem t03J04_euler_mul_of_goodFamily_aux_induction {B : Type} [TopologicalSpac
     (hunion : ∀ V S : Set B, IsOpen V → IsOpen S → P V → P S → P (V ∩ S) → P (V ∪ S))
     (𝒱 : Finset (Set B)) (hgood : t03J04_IsGoodFamily 𝒱) :
     P (⋃₀ (𝒱 : Set (Set B))) := by
-  sorry
+  classical
+  have main : ∀ n : ℕ, ∀ 𝒱 : Finset (Set B), 𝒱.card = n →
+      t03J04_IsGoodFamily 𝒱 → P (⋃₀ (𝒱 : Set (Set B))) := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+      intro 𝒱 hn hgood
+      by_cases hempty : 𝒱 = ∅
+      · simpa [hempty] using h0
+      · obtain ⟨V, hV⟩ := Finset.nonempty_iff_ne_empty.mpr hempty
+        let 𝒲 := 𝒱.erase V
+        have hcard : 𝒲.card < n := by
+          rw [← hn]
+          exact Finset.card_erase_lt_of_mem hV
+        have hsub : 𝒲 ⊆ 𝒱 := Finset.erase_subset _ _
+        have hgoodW : t03J04_IsGoodFamily 𝒲 := by
+          refine ⟨fun U hU => hgood.1 U (hsub hU), ?_⟩
+          intro s hs hsn
+          exact hgood.2 s (hs.trans hsub) hsn
+        have hPW : P (⋃₀ (𝒲 : Set (Set B))) := ih 𝒲.card hcard 𝒲 rfl hgoodW
+        have hopenV : IsOpen V := hgood.1 V hV
+        have hopenW : IsOpen (⋃₀ (𝒲 : Set (Set B))) := by
+          exact isOpen_sUnion (fun U hU => hgood.1 U (hsub hU))
+        let 𝒲I : Finset (Set B) := 𝒲.image (fun U => V ∩ U)
+        have hgoodI : t03J04_IsGoodFamily 𝒲I := by
+          constructor
+          · intro U hU
+            simp only [𝒲I, Finset.mem_image] at hU
+            obtain ⟨W, hW, rfl⟩ := hU
+            exact hopenV.inter (hgood.1 W (hsub hW))
+          · intro s hs hsn
+            let r : Finset (Set B) := 𝒲.filter (fun U => V ∩ U ∈ s)
+            have hrsub : insert V r ⊆ 𝒱 := by
+              intro U hU
+              simp only [Finset.mem_insert, r, Finset.mem_filter] at hU
+              rcases hU with rfl | ⟨hU, -⟩
+              · exact hV
+              · exact hsub hU
+            have hrnon : (insert V r).Nonempty := ⟨V, Finset.mem_insert_self _ _⟩
+            have heq : ⋂₀ (s : Set (Set B)) = ⋂₀ ((insert V r : Finset (Set B)) : Set (Set B)) := by
+              ext x
+              simp only [Set.mem_sInter, Set.mem_setOf_eq]
+              constructor
+              · intro hx U hU
+                simp only [Finset.mem_coe, Finset.mem_insert] at hU
+                rcases hU with hU | hU
+                · rw [hU]
+                  obtain ⟨T, hTs⟩ := hsn
+                  obtain ⟨W, hW, hVW⟩ := (Finset.mem_image.mp (hs hTs))
+                  have := hx (V ∩ W) (by simpa [hVW] using hTs)
+                  exact this.1
+                · have hUs : V ∩ U ∈ s := (Finset.mem_filter.mp hU).2
+                  exact (hx (V ∩ U) hUs).2
+              · intro hx U hU
+                obtain ⟨W, hW, hVW⟩ := Finset.mem_image.mp (hs hU)
+                rw [← hVW]
+                exact ⟨hx V (by simp), hx W (by
+                  simp only [Finset.mem_coe, Finset.mem_insert]
+                  apply Or.inr
+                  exact Finset.mem_filter.mpr ⟨hW, by rw [hVW]; exact hU⟩)⟩
+            rw [heq]
+            exact hgood.2 (insert V r) hrsub hrnon
+        have hcardI : 𝒲I.card < n :=
+          lt_of_le_of_lt (Finset.card_image_le) hcard
+        have hPI : P (⋃₀ (𝒲I : Set (Set B))) := ih 𝒲I.card hcardI 𝒲I rfl hgoodI
+        have hunionI : ⋃₀ (𝒲I : Set (Set B)) = V ∩ ⋃₀ (𝒲 : Set (Set B)) := by
+          ext x
+          simp [𝒲I]
+        have hPV : P V := by
+          rcases hgood.2 {V} (by simpa using hV) (by simp) with hVe | hVc
+          · have hsV : ⋂₀ (({V} : Finset (Set B)) : Set (Set B)) = V := by ext; simp
+            rw [hsV] at hVe
+            simpa [hVe] using (show P ∅ from h0)
+          · have hsV : ⋂₀ (({V} : Finset (Set B)) : Set (Set B)) = V := by ext; simp
+            rw [hsV] at hVc
+            letI : ContractibleSpace V := hVc
+            exact hpiece V hopenV inferInstance
+        have hresult := hunion V (⋃₀ (𝒲 : Set (Set B))) hopenV hopenW
+          hPV hPW (by rw [← hunionI]; exact hPI)
+        have hfamily : 𝒱 = insert V 𝒲 := (Finset.insert_erase hV).symm
+        simpa [hfamily, Set.sUnion_insert] using hresult
+  exact main 𝒱.card 𝒱 rfl hgood
 -- END SEAT AREA
 
 theorem t03J04_euler_mul_of_goodFamily {E B : Type} [TopologicalSpace E]
