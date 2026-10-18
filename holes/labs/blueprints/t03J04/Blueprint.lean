@@ -995,7 +995,79 @@ theorem t03J04_trivial_over_contractible {E B : Type} [TopologicalSpace E]
 splitting off `U × {last}` as a clopen piece (MV with empty overlap). -/
 theorem t03J04_hasEuler_prod_fin (U : Type) [TopologicalSpace U] (k : ℕ) {c : ℚ}
     (hU : HasEulerCharacteristic U c) : HasEulerCharacteristic (U × Fin k) (k * c) := by
-  sorry
+  induction k with
+  | zero =>
+      haveI : IsEmpty (U × Fin 0) := inferInstance
+      simpa using t03J04_hasEuler_of_isEmpty (U × Fin 0)
+  | succ k ih =>
+      let X := U × Fin (k + 1)
+      let A : Set X := {x | x.2.1 < k}
+      let B : Set X := {x | x.2.1 = k}
+      have hAopen : IsOpen A := by
+        change IsOpen ((Prod.snd : X → Fin (k + 1)) ⁻¹' {i | i.1 < k})
+        exact (isOpen_discrete _).preimage continuous_snd
+      have hBopen : IsOpen B := by
+        change IsOpen ((Prod.snd : X → Fin (k + 1)) ⁻¹' {i | i.1 = k})
+        exact (isOpen_discrete _).preimage continuous_snd
+      have hcover : A ∪ B = Set.univ := by
+        ext x
+        simp only [A, B, Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+        omega
+      let eA : A ≃ₜ U × Fin k :=
+        { toFun := fun x => (x.1.1, ⟨x.1.2.1, x.2⟩)
+          invFun := fun x => ⟨(x.1, ⟨x.2.1, by omega⟩), by simp [A]⟩
+          left_inv := fun x => by apply Subtype.ext; rfl
+          right_inv := fun x => rfl
+          continuous_toFun := by
+            apply Continuous.prodMk
+            · exact continuous_fst.comp continuous_subtype_val
+            · rw [continuous_def]
+              intro s hs
+              let t : Set (Fin (k + 1)) :=
+                {i | ∃ hi : i.1 < k, (⟨i.1, hi⟩ : Fin k) ∈ s}
+              have ht : IsOpen t := isOpen_discrete _
+              convert ht.preimage (continuous_snd.comp continuous_subtype_val) using 1
+              ext x
+              simp only [Set.mem_preimage, t, Set.mem_setOf_eq]
+              constructor
+              · intro hx
+                exact ⟨x.2, hx⟩
+              · rintro ⟨hx, hsx⟩
+                simpa only [Subsingleton.elim hx x.2] using hsx
+          continuous_invFun := by
+            apply Continuous.subtype_mk
+            apply Continuous.prodMk
+            · exact continuous_fst
+            · exact (continuous_of_discreteTopology : Continuous
+                (fun i : Fin k => (⟨i.1, by omega⟩ : Fin (k + 1)))).comp continuous_snd }
+      let eB : B ≃ₜ U :=
+        { toFun := fun x => x.1.1
+          invFun := fun u => ⟨(u, ⟨k, by omega⟩), by simp [B]⟩
+          left_inv := fun x => by
+            apply Subtype.ext
+            apply Prod.ext
+            · rfl
+            apply Fin.ext
+            exact x.2.symm
+          right_inv := fun _ => rfl
+          continuous_toFun := continuous_fst.comp continuous_subtype_val
+          continuous_invFun := by
+            apply Continuous.subtype_mk
+            exact continuous_id.prodMk continuous_const }
+      have hEA : HasEulerCharacteristic A (k * c) :=
+        t03J04_hasEuler_of_homotopyEquiv eA.toHomotopyEquiv ih
+      have hEB : HasEulerCharacteristic B c :=
+        t03J04_hasEuler_of_homotopyEquiv eB.toHomotopyEquiv hU
+      haveI : IsEmpty ↥(A ∩ B) := by
+        constructor
+        rintro ⟨x, hxA, hxB⟩
+        simp only [A, Set.mem_setOf_eq] at hxA
+        simp only [B, Set.mem_setOf_eq] at hxB
+        omega
+      have hEI : HasEulerCharacteristic ↥(A ∩ B) 0 :=
+        t03J04_hasEuler_of_isEmpty ↥(A ∩ B)
+      have h := t03J04_hasEuler_mayerVietoris A B hAopen hBopen hcover hEA hEB hEI
+      convert h using 1 <;> push_cast <;> ring
 
 /-- LEAF C2c.  Restricting a `k`-sheeted cover over a subset
 (`IsCoveringMap.restrictPreimage`; fibres are unchanged). -/
