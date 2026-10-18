@@ -364,6 +364,33 @@ path-neighbourhoods `basedPathNbhd U a`, each mapped homeomorphically onto `U`
 (injective because loops in `U` are trivial; open because the generating sets
 are open and the quotient map of a group action is open). -/
 -- BEGIN SEAT AREA
+lemma exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_open
+    {x : X} (H : Subgroup (FundamentalGroup X x)) {U : Set X}
+    (hU : IsOpen U) (a : BasedPaths x) :
+    IsOpen (BasedCover.mk H '' basedPathNbhd U a) := by
+  apply exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap H
+  exact TopologicalSpace.GenerateOpen.basic _ ⟨U, a, hU, rfl⟩
+
+lemma exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion
+    {x : X} (H : Subgroup (FundamentalGroup X x)) (U : Set X) :
+    BasedCover.proj H ⁻¹' U =
+      ⋃ (a : BasedPaths x) (_ : a.1 ∈ U),
+        BasedCover.mk H '' basedPathNbhd U a := by
+  ext q
+  constructor
+  · intro hq
+    induction q using Quotient.inductionOn with
+    | _ a =>
+      have ha : a.1 ∈ U := hq
+      refine Set.mem_iUnion.2 ⟨a, Set.mem_iUnion.2 ⟨ha, ⟨a, ?_, rfl⟩⟩⟩
+      exact ⟨Path.refl a.1, by simpa using ha, by simp⟩
+  · intro hq
+    rcases Set.mem_iUnion.mp hq with ⟨a, hq⟩
+    rcases Set.mem_iUnion.mp hq with ⟨ha, b, hb, rfl⟩
+    rcases hb with ⟨γ, hγ, -⟩
+    change b.1 ∈ U
+    exact hγ ⟨1, by simp⟩
+
 theorem exists_connected_subgroup_cover_aux_isCoveringMap
     [LocPathConnectedSpace X] (hsl : SemilocallySimplyConnected X)
     {x : X} (H : Subgroup (FundamentalGroup X x)) :

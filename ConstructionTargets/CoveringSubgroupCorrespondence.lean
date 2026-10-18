@@ -357,6 +357,76 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap
     exact TopologicalSpace.GenerateOpen.basic _ ⟨U, g⁻¹ • a, hU, rfl⟩⟩
   exact isOpenMap_quotient_mk'_mul
 
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_open
+    {x : X} (H : Subgroup (FundamentalGroup X x)) {U : Set X}
+    (hU : IsOpen U) (a : BasedPaths x) :
+    IsOpen (BasedCover.mk H '' basedPathNbhd U a) := by
+  apply exists_connected_subgroup_cover_aux_isCoveringMap_aux_mk_isOpenMap H
+  exact TopologicalSpace.GenerateOpen.basic _ ⟨U, a, hU, rfl⟩
+
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_preimage_eq_iUnion
+    {x : X} (H : Subgroup (FundamentalGroup X x)) (U : Set X) :
+    BasedCover.proj H ⁻¹' U =
+      ⋃ (a : BasedPaths x) (_ : a.1 ∈ U),
+        BasedCover.mk H '' basedPathNbhd U a := by
+  ext q
+  constructor
+  · intro hq
+    induction q using Quotient.inductionOn with
+    | _ a =>
+      have ha : a.1 ∈ U := hq
+      refine Set.mem_iUnion.2 ⟨a, Set.mem_iUnion.2 ⟨ha, ⟨a, ?_, rfl⟩⟩⟩
+      exact ⟨Path.refl a.1, by simpa using ha, by simp⟩
+  · intro hq
+    rcases Set.mem_iUnion.mp hq with ⟨a, hq⟩
+    rcases Set.mem_iUnion.mp hq with ⟨ha, b, hb, rfl⟩
+    rcases hb with ⟨γ, hγ, -⟩
+    change b.1 ∈ U
+    exact hγ ⟨1, by simp⟩
+
+/-- A path-neighbourhood is the path-neighbourhood of each of its points
+(extend by the path, or go back along it first). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem
+    {x : X} {U : Set X} {a c : BasedPaths x} (hc : c ∈ basedPathNbhd U a) :
+    basedPathNbhd U c = basedPathNbhd U a := by
+  sorry
+
+/-- Over a good `U`, two sheet images in the cover are equal or disjoint
+(a common point gives `c' = h • c`; use `_aux_smul_nbhd` and `_aux_nbhd_eq_of_mem`). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_disjoint_or_eq
+    {x : X} (H : Subgroup (FundamentalGroup X x)) {U : Set X}
+    (a b : BasedPaths x) :
+    BasedCover.mk H '' basedPathNbhd U a = BasedCover.mk H '' basedPathNbhd U b ∨
+      Disjoint (BasedCover.mk H '' basedPathNbhd U a)
+        (BasedCover.mk H '' basedPathNbhd U b) := by
+  sorry
+
+/-- Over a good `U`, each sheet image is mapped homeomorphically onto `U` by the
+projection (`_aux_sheet`; `mk` is injective on a sheet because `h • b` has the
+endpoint of `b`, and `mk` is continuous and open). -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_homeomorph
+    [LocPathConnectedSpace X] {x : X} (H : Subgroup (FundamentalGroup X x))
+    {U : Set X} (hUo : IsOpen U) (hU : IsPathConnected U)
+    (htriv : ∀ z ∈ U, ∀ γ : Path z z, range γ ⊆ U →
+      Path.Homotopic.Quotient.mk γ = Path.Homotopic.Quotient.mk (Path.refl z))
+    (a : BasedPaths x) (ha : a.1 ∈ U) :
+    ∃ e : (BasedCover.mk H '' basedPathNbhd U a) ≃ₜ U,
+      ∀ q, (e q : X) = BasedCover.proj H q := by
+  sorry
+
+/-- Generic topology: a preimage that is a disjoint union of open sheets, each
+mapped homeomorphically onto the open set `U`, is evenly covered with the
+(discrete) index type as fibre. -/
+theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_evenlyCovered_of_sheets
+    {E Y : Type*} [TopologicalSpace E] [TopologicalSpace Y] (f : E → Y)
+    {U : Set Y} (hU : IsOpen U) {y : Y} (hy : y ∈ U)
+    (ι : Type*) [TopologicalSpace ι] [DiscreteTopology ι] (V : ι → Set E)
+    (hVo : ∀ i, IsOpen (V i)) (hVd : Pairwise (Function.onFun Disjoint V))
+    (hVU : f ⁻¹' U = ⋃ i, V i)
+    (hVe : ∀ i, ∃ e : V i ≃ₜ U, ∀ q, (e q : Y) = f q) :
+    IsEvenlyCovered f y ι := by
+  sorry
+
 /-- **LIBRARY-borderline.** The endpoint map is a covering map.  Charts: for a
 good `U` (`exists_connected_subgroup_cover_aux_good_nhds`) and `y ∈ U`, the
 preimage of `U` is the disjoint union over the fibre of the images of the
