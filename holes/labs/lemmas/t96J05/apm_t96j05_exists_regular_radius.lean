@@ -2,6 +2,7 @@ import Mathlib
 import ConstructionTargets.RadialSquaredFiber
 import ConstructionTargets.ManifoldRegularFiberGlobalAtlas
 import ConstructionTargets.TransverseIncidenceChosenAtlas
+import ConstructionTargets.SardGenuineSmoothManifoldVector
 
 /-! # Blueprint for APM t96J05 -/
 
@@ -73,6 +74,63 @@ theorem apm_t96j05_constant_radius_level
 /-- LIBRARY (manifold Sard plus connected-image selection).  For a smooth
 squared-radius map which is not constant on a positive sphere, choose an
 attained positive radius at which its manifold derivative is surjective. -/
+lemma apm_t96j05_exists_regular_radius_aux_nontrivial
+    {m n : ℕ} (hm : 0 < m) {X : Set (apm_t96j05_E n)}
+    [Nonempty X] [ChartedSpace (apm_t96j05_E m) X]
+    [IsManifold (apm_t96j05_I m) ∞ X] : Nontrivial X := by
+  let x : X := Classical.choice inferInstance
+  have hdim : 0 < Module.finrank ℝ (apm_t96j05_E m) := by simpa using hm
+  letI : Nontrivial (apm_t96j05_E m) :=
+    Module.nontrivial_of_finrank_pos hdim
+  by_contra h
+  haveI : Subsingleton X := not_nontrivial_iff_subsingleton.mp h
+  have ht : (chartAt (apm_t96j05_E m) x).target =
+      ({chartAt (apm_t96j05_E m) x x} : Set (apm_t96j05_E m)) := by
+    ext y
+    constructor
+    · intro hy
+      have hs : (chartAt (apm_t96j05_E m) x).symm y = x := Subsingleton.elim _ _
+      rw [Set.mem_singleton_iff]
+      calc
+        y = chartAt (apm_t96j05_E m) x
+            ((chartAt (apm_t96j05_E m) x).symm y) :=
+          ((chartAt (apm_t96j05_E m) x).right_inv hy).symm
+        _ = chartAt (apm_t96j05_E m) x x := congrArg _ hs
+    · intro hy
+      rw [Set.mem_singleton_iff.mp hy]
+      exact (chartAt (apm_t96j05_E m) x).map_source
+        (mem_chart_source (apm_t96j05_E m) x)
+  have hopen : IsOpen ({chartAt (apm_t96j05_E m) x x} :
+      Set (apm_t96j05_E m)) := ht ▸ (chartAt (apm_t96j05_E m) x).open_target
+  exact not_isOpen_singleton _ hopen
+
+lemma apm_t96j05_exists_regular_radius_aux_nonconstant
+    {m n : ℕ} (hm : 0 < m) {X : Set (apm_t96j05_E n)}
+    [Nonempty X] [ChartedSpace (apm_t96j05_E m) X]
+    [IsManifold (apm_t96j05_I m) ∞ X]
+    (hnconst : ¬ ∃ r : ℝ, 0 < r ∧ ∀ x : X, ‖x.1‖ = r) :
+    ¬ ∃ c : ℝ, ∀ x : X, ‖x.1‖ ^ 2 = c := by
+  letI : Nontrivial X := apm_t96j05_exists_regular_radius_aux_nontrivial hm
+  rintro ⟨c, hc⟩
+  have hc0 : 0 ≤ c := by
+    rw [← hc (Classical.choice (inferInstance : Nonempty X))]
+    exact sq_nonneg _
+  rcases hc0.eq_or_lt with hcz | hcpos
+  · have hall0 : ∀ x : X, x.1 = 0 := by
+      intro x
+      have hs : ‖x.1‖ ^ 2 = 0 := (hc x).trans hcz.symm
+      exact norm_eq_zero.mp (sq_eq_zero_iff.mp hs)
+    obtain ⟨x, y, hxy⟩ := exists_pair_ne X
+    apply hxy
+    apply Subtype.ext
+    rw [hall0 x, hall0 y]
+  · apply hnconst
+    refine ⟨Real.sqrt c, Real.sqrt_pos.2 hcpos, ?_⟩
+    intro x
+    apply (sq_eq_sq₀ (norm_nonneg x.1) (Real.sqrt_nonneg c)).mp
+    rw [Real.sq_sqrt hc0]
+    exact hc x
+
 -- BEGIN SEAT AREA
 theorem apm_t96j05_exists_regular_radius
     {m n : ℕ} (hm : 0 < m) {X : Set (apm_t96j05_E n)}
