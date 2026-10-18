@@ -472,7 +472,17 @@ theorem exists_connected_subgroup_cover_aux_pathConnected
       (BasedCover.mk H ⟨y, Path.Homotopic.Quotient.mk γ⟩),
       ∀ t, BasedCover.proj H (Γ t) = γ t) :
     PathConnectedSpace (BasedCover H) := by
-  sorry
+  have hbase : ∀ z : BasedCover H, Joined (BasedCover.basepoint H) z := by
+    intro z
+    refine Quotient.inductionOn z ?_
+    rintro ⟨y, q⟩
+    refine Quotient.inductionOn q ?_
+    intro γ
+    exact ⟨(hlift y γ).choose⟩
+  constructor
+  · exact ⟨BasedCover.basepoint H⟩
+  · intro a b
+    exact (hbase a).symm.trans (hbase b)
 
 /-- The induced image is `H`: a loop `γ` at `x` lifts (uniquely, by the
 covering property) to the truncation path, which ends at `[⟨x, [γ]⟩]`; this is
