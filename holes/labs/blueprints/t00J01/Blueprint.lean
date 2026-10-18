@@ -1,4 +1,5 @@
 import ConstructionTargets.t93J03Closure
+import ConstructionTargets.KleinSquareDiskCutAndPaste
 import ConstructionTargets.CoefficientSphereEndpoints
 import ConstructionTargets.CircleWindingUniqueness
 import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
