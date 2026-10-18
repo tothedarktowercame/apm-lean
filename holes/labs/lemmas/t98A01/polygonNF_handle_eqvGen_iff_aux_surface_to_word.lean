@@ -441,7 +441,51 @@ lemma polygonNF_handle_eqvGen_iff_aux_surface_to_word {L : Type*} [DecidableEq L
     (a b : Fin g → Signed L)
     {x y : Disk} (h : SurfaceRel true g x y) :
     WordRel (polygonNF_handleWord g a b) x y := by
-  sorry
+  simp only [SurfaceRel] at h
+  rcases h with ⟨j, hj, t, h⟩
+  rcases h with h | h
+  · rcases h with ⟨rfl, rfl⟩
+    have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+    let i : Fin (polygonNF_handleWord g a b).length :=
+      ⟨4 * j, by omega⟩
+    let k : Fin (polygonNF_handleWord g a b).length :=
+      ⟨4 * j + 2, by omega⟩
+    have hd0 : (4 * j) / 4 = j := by omega
+    have hd2 : (4 * j + 2) / 4 = j := by omega
+    refine ⟨i, k, ?_, t, ?_, ?_, ?_⟩
+    · intro hik
+      have := congrArg Fin.val hik
+      simp [i, k] at this
+    · rw [polygonNF_handle_eqvGen_iff_aux_get,
+        polygonNF_handle_eqvGen_iff_aux_get]
+      simp [i, k, hd0, hd2, PolygonMoves.inv]
+    · simp [i, hlen]
+    · rw [polygonNF_handle_eqvGen_iff_aux_get,
+        polygonNF_handle_eqvGen_iff_aux_get]
+      cases ha : (a ⟨j, hj⟩).2 <;>
+        simp [i, k, hlen, hd0, hd2, PolygonMoves.inv,
+          PolygonMoves.reverseParameter, ha]
+  · rcases h with ⟨rfl, rfl⟩
+    have hlen := polygonNF_handle_eqvGen_iff_aux_length g a b
+    let i : Fin (polygonNF_handleWord g a b).length :=
+      ⟨4 * j + 1, by omega⟩
+    let k : Fin (polygonNF_handleWord g a b).length :=
+      ⟨4 * j + 3, by omega⟩
+    have hd1 : (4 * j + 1) / 4 = j := by omega
+    have hd3 : (4 * j + 3) / 4 = j := by omega
+    refine ⟨i, k, ?_, t, ?_, ?_, ?_⟩
+    · intro hik
+      have := congrArg Fin.val hik
+      simp [i, k] at this
+    · rw [polygonNF_handle_eqvGen_iff_aux_get,
+        polygonNF_handle_eqvGen_iff_aux_get]
+      simp [i, k, hd1, hd3, PolygonMoves.inv]
+    · simp [i, hlen]
+    · rw [polygonNF_handle_eqvGen_iff_aux_get,
+        polygonNF_handle_eqvGen_iff_aux_get]
+      cases hb : (b ⟨j, hj⟩).2 <;>
+        simp [i, k, hlen, hd1, hd3, PolygonMoves.inv,
+          PolygonMoves.reverseParameter, hb]
 -- END SEAT AREA
 
 /-- **Leaf (split 2026-10-18 from `polygonNF_handle_eqvGen_iff`, lemma-2 partial).**
