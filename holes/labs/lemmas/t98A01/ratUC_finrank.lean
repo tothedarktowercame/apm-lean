@@ -871,7 +871,11 @@ rank zero over a domain.  Alternatively `IsLocalizedModule` with
 theorem ratUC_finrank (M : Type) [AddCommGroup M] [Module.Finite ℤ M] :
     FiniteDimensional ℚ (ratUC_F.obj (ModuleCat.of ℤ M)) ∧
       Module.finrank ℚ (ratUC_F.obj (ModuleCat.of ℤ M)) = Module.finrank ℤ M := by
-  sorry
+  change Module.Finite ℚ (TensorProduct ℤ ℚ M) ∧
+    Module.finrank ℚ (TensorProduct ℤ ℚ M) = Module.finrank ℤ M
+  constructor
+  · infer_instance
+  · exact (TensorProduct.isBaseChange (R := ℤ) (M := M) (S := ℚ)).finrank_eq
 -- END SEAT AREA
 
 /-- Layer 2 (uses UC i–iii): rational homology rank from an integral
