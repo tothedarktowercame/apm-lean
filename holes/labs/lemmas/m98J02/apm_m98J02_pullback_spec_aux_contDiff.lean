@@ -2200,7 +2200,25 @@ lemma apm_m98J02_pullback_spec_aux_contDiff
     (v : ℝ → ℝ → ℝ)
     (hv : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦ v (p 0) (p 1))) :
     ContDiff ℝ 2 (apm_m98J02_pullback v) := by
-  sorry
+  unfold apm_m98J02_pullback
+  apply ContDiff.mul
+  · apply Real.contDiff_exp.comp
+    fun_prop
+  · let Llin : apm_m98J02_E →ₗ[ℝ] apm_m98J02_E :=
+      { toFun := fun p ↦ WithLp.toLp 2 ![3 * p 0 - 2 * p 1, p 1]
+        map_add' := by
+          intro x y
+          ext i
+          fin_cases i <;> simp <;> ring
+        map_smul' := by
+          intro c x
+          ext i
+          fin_cases i <;> simp <;> ring }
+    let L : apm_m98J02_E →L[ℝ] apm_m98J02_E := Llin.toContinuousLinearMap
+    have hL : ContDiff ℝ 2 L := L.contDiff
+    have hcomp := ContDiff.comp
+      (f := L) (g := fun p : apm_m98J02_E ↦ v (p 0) (p 1)) hv hL
+    simpa [L, Llin] using hcomp
 -- END SEAT AREA
 
 lemma apm_m98J02_pullback_spec_aux_equation
