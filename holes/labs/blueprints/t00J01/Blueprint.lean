@@ -683,11 +683,52 @@ lemma apm_t00j01_circleCover_piece_equivs :
 /-- Their intersection is the product with the two components of the twice
 punctured circle, hence is homotopy equivalent to two copies of the Klein
 bottle. -/
+lemma apm_t00j01_circleCover_intersection_equiv_aux_exp_pi :
+    ((Circle.exp Real.pi : Circle) : ℂ) = -1 := by
+  rw [Circle.coe_exp, Complex.exp_pi_mul_I]
+
+abbrev apm_t00j01_circleCover_intersection_equiv_aux_E :=
+  (ℝ ∙ (-1 : ℂ))ᗮ
+
+abbrev apm_t00j01_circleCover_intersection_equiv_aux_E0 :=
+  {w : apm_t00j01_circleCover_intersection_equiv_aux_E // w ≠ 0}
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero
+    (w : apm_t00j01_circleCover_intersection_equiv_aux_E0) :
+    ((w.1.1 : ℂ).im) ≠ 0 := by
+  intro him
+  apply w.2
+  apply Subtype.ext
+  apply Complex.ext
+  · have horth := w.1.2
+    rw [Submodule.mem_orthogonal'] at horth
+    have h := horth (-1 : ℂ) (Submodule.mem_span_singleton_self (-1 : ℂ))
+    simp at h
+    exact h
+  · exact him
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_product_model :
+    Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₜ
+        (apm_t00j01_Klein × apm_t00j01_circleCover_intersection_equiv_aux_E0)) := by
+  sorry
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays :
+    Nonempty (apm_t00j01_circleCover_intersection_equiv_aux_E0 ≃ₕ
+      Sum PUnit.{1} PUnit.{1}) := by
+  sorry
+
 lemma apm_t00j01_circleCover_intersection_equiv :
     Nonempty (((apm_t00j01_circleCoverLeft ∩
       apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₕ
         Sum apm_t00j01_Klein apm_t00j01_Klein) := by
-  sorry
+  obtain ⟨hprod⟩ := apm_t00j01_circleCover_intersection_equiv_aux_product_model
+  obtain ⟨hrays⟩ := apm_t00j01_circleCover_intersection_equiv_aux_two_rays
+  exact ⟨hprod.toHomotopyEquiv |>.trans
+    ((ContinuousMap.HomotopyEquiv.refl apm_t00j01_Klein).prodCongr hrays) |>.trans
+    (Homeomorph.prodSumDistrib.toHomotopyEquiv) |>.trans
+    ((Homeomorph.sumCongr (Homeomorph.prodPUnit apm_t00j01_Klein)
+      (Homeomorph.prodPUnit apm_t00j01_Klein)).toHomotopyEquiv)⟩
 
 /-- The orientation-reversing gluing in the concrete affine quotient kills
 its integral degree-two fundamental class. -/
