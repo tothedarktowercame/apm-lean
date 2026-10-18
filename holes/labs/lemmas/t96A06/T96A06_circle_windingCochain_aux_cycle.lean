@@ -981,7 +981,41 @@ boundary `v₁ - v₀` vanishes by `singularGenerator_boundary`); it lifts by
 -- BEGIN SEAT AREA
 theorem T96A06_circle_windingCochain_aux_cycle :
     ∃ c : circleChains.X 1, (circleChains.d 1 0).hom c = 0 ∧ windingCochain.hom c ≠ 0 := by
-  sorry
+  let L : C(stdSimplex ℝ (Fin 2), ℝ) :=
+    ⟨fun x => x.1 (1 : Fin 2),
+      (continuous_apply (1 : Fin 2)).comp continuous_subtype_val⟩
+  let s : C(stdSimplex ℝ (Fin 2), euclideanUnitSphere 2) :=
+    ⟨fun x => angleMap (L x),
+      T96A06_angleMap_isCoveringMap.continuous.comp L.continuous⟩
+  let σ := SingularSubdivision.singularSimplexOfContinuousMap
+    (TopCat.of (euclideanUnitSphere 2)) 1 s
+  let c : circleChains.X 1 :=
+    (CoefficientH0.singularGenerator ℚ
+      (TopCat.of (euclideanUnitSphere 2)) 1 σ).hom 1
+  refine ⟨c, ?_, ?_⟩
+  · have hfaces :
+        (TopCat.toSSet.obj (TopCat.of (euclideanUnitSphere 2))).δ (0 : Fin 2) σ =
+          (TopCat.toSSet.obj (TopCat.of (euclideanUnitSphere 2))).δ (1 : Fin 2) σ := by
+      rw [SingularSubdivision.singularSimplexOfContinuousMap_face,
+        SingularSubdivision.singularSimplexOfContinuousMap_face]
+      congr 1
+      ext x
+      simp [s, L, SingularSubdivision.affineSimplex, angleMap,
+        Real.cos_two_pi, Real.sin_two_pi]
+    have hboundary := CoefficientH0.singularGenerator_boundary ℚ
+      (TopCat.of (euclideanUnitSphere 2)) 0 σ
+    rw [Fin.sum_univ_two, hfaces] at hboundary
+    simp at hboundary
+    exact congrArg (fun f => f.hom 1) hboundary
+  · have hcomp : angleMap ∘ L = s := by rfl
+    have hdisp := T96A06_circle_windingCochain_aux_disp_eq s L hcomp
+    have hgen := T96A06_circle_windingCochain_aux_generator s
+    have heval := congrArg (fun f => f.hom 1) hgen
+    change windingCochain.hom c ≠ 0
+    have hone : windingCochain.hom c = 1 := by
+      simpa [c, σ, hdisp, L] using heval
+    rw [hone]
+    norm_num
 -- END SEAT AREA
 
 /-- **Leaf C1b.** The angle-displacement cochain (assembly of the C1b leaves). -/
