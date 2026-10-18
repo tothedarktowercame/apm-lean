@@ -77,40 +77,49 @@ the three determinants are respectively `|1-2|²|1-3|² = 4`,
 `|1-1/3|²|1-2/3|² = 4/81`; all are positive.  This also checks that weights
 smaller than the center weight cause no sign error after realification.
 
-### `t99J05_lefschetz_euler` — LIBRARY
+### Split of `t99J05_lefschetz_euler`
 
-**Statement in words.** A self-map of `CP n` homotopic to the identity has
-rational Lefschetz number `n+1`, and `CP n` has rational Euler characteristic
-`n+1`, using the concrete predicates in `RationalLefschetz`.
+`T99J05CPHomologyProfile n X` says exactly that rational homology is finite
+dimensional and has finrank one in even degrees at most `2*n`, zero otherwise.
+The banked `RP3Homology.rationalMayerVietoris` is generic in the ambient space,
+so the CP² file supplies the previously missing rational MV foundation.  Its
+`CP2` abbreviation is definitionally the same `Space ℂ 2` as `CP 2` here.
 
-**Why true.** Compute rational singular homology of `CP n`: it is one
-dimensional in degrees `0,2,…,2n` and zero otherwise, with explicit
-finite-dimensional and vanishing-above-bound certificates.  Homotopy
-invariance identifies the induced maps of `f` and the identity.  Every
-surviving trace is `1`, all signs are positive because the degrees are even,
-and the finite sum is `n+1`.  Applying the same computation directly to the
-identity gives the Euler assertion.
+* `t99J05_lefschetz_euler_cover` (40–70 lines, independent): proves openness
+  and coverage.  Generalize `cp_open_cover_aux_coord`/`cp_open_cover`; use
+  `affineSource_isOpen`, `Projectivization.rep_nonzero`, and `Fin.lastCases`.
+* `t99J05_lefschetz_euler_V` (80–120 lines, independent): constructs the
+  affine-chart homeomorphism and derives the point homology profile.  Generalize
+  `cpV_homology_aux_homeomorph`; then use `Homeomorph.contractibleSpace`,
+  `CoefficientH0.h0Iso`, and `CoefficientContractiblePair.higher_zero`.
+* `t99J05_lefschetz_euler_U` (120–150 lines, independent): constructs the
+  deformation retraction which linearly kills the last coordinate.  Generalize
+  `cpU_homology_aux_cpU_hequiv_CP1_*`, then transport homology with
+  `CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv`.
+* `t99J05_lefschetz_euler_inter` (100–150 lines, independent): identifies the
+  overlap with punctured `ℂ^(n+1)`, applies
+  `PuncturedNormedSpaceRadialEquivalence.unitSphereHomotopyEquivPuncturedSpace`,
+  and transports banked sphere homology.  Its last conjunct is the honest H₀
+  inclusion injectivity required by MV; generalize `cpUV_pathConnected` and
+  `cp_mvI_zero_injective_aux_h0_map`.
+* `t99J05_lefschetz_euler_step` (120–150 lines, independent given its explicit
+  hypotheses): applies `RP3Homology.rationalMayerVietoris`,
+  `LinearMap.ker_eq_bot`, `LinearMap.range_eq_top`, and
+  `LinearEquiv.ofBijective`.  The top class comes from the connecting
+  isomorphism in degree `2*n+1`; middle even classes pass through `mvJ`.
+* `t99J05_lefschetz_euler_base` (30–50 lines, independent): `CP 0` is a
+  singleton/projective point; use path-connected H₀ and contractibility.
+* `t99J05_lefschetz_euler_trace` (100–150 lines, independent given the profile
+  and homotopy): unfold `HasLefschetzNumber` and `HasEulerCharacteristic`, use
+  singular-homology functor homotopy invariance, trace of the identity, and
+  `Finset.sum_ite` over even degrees.
 
-**Expected size.** 1500–3500 lines for the missing rational `CPⁿ` homology
-library, followed by roughly 250–500 lines of trace bookkeeping.  This is
-intentionally one clean LIBRARY obligation, rather than fake small lemmas.
-
-**Dependencies.** Independent of the fixed-point and local-index calculations;
-it takes their eventual map only through the honest homotopy hypothesis.
-The closest sorry-free banked infrastructure is
-`ConstructionTargets.CoefficientSubcomplexMayerVietoris` together with
-`ConstructionTargets.CoefficientSubspaceUnionRangeHomologyEquivalence` and
-`ConstructionTargets.RationalLefschetz`.  The topology-loop STOP records that
-the missing bridge is the arbitrary-coefficient range-to-literal-production
-comparison and its Mayer–Vietoris naturality; there is currently no
-`CoefficientProductionOpenCoverMayerVietoris` module.  The analogous integral
-production module is insufficient for `ModuleCat ℚ`.
-
-**Truth check.** The hand computation gives one rational generator in every
-even degree from `0` through `2n`, hence exactly `n+1` positive summands.  It
-agrees with `CP⁰` (one point), `CP¹ ≃ S²` (Euler characteristic `2`), and the
-printed `CP²` case (Euler characteristic `3`).  I am confident in the lemma's
-mathematical truth; the doubt is purely the large missing library bridge.
+All seven leaves state claims consumed by the assembly; none is a scope marker.
+For `n=0`, the step computes `CP¹`: the overlap is `S¹`, its degree-one class
+connects isomorphically to H₂(CP¹), and H₁(CP¹)=0.  Thus the displayed
+odd-sphere degree `2*n+1` and top CP degree `2*n+2` have the correct low-degree
+behavior.  Empty exceptional-degree cases are handled by the `if` profiles;
+the degree-zero injectivity prevents a spurious H₁ class.
 
 ## Assembly
 

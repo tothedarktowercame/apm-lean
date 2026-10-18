@@ -3,11 +3,12 @@ import ConstructionTargets.ComplexProjectiveChartTargets
 import ConstructionTargets.RationalLefschetz
 import ConstructionTargets.ProjectiveConsumerLiftDemonstrations
 import ConstructionTargets.T99J05ArbitraryAffineChartContinuity
+import ConstructionTargets.CP2RationalHomology
 
 /-! # t99J05 blueprint
 
 The quotient descent and arbitrary-dimensional affine charts are already in the
-sorry-free construction bank.  The three admitted declarations isolate the
+sorry-free construction bank.  The seven admitted `t99J05_lefschetz_euler_*` leaves isolate the
 fixed-point calculation, the local calculation, and the global rational
 homology/Lefschetz calculation.
 -/
@@ -307,13 +308,91 @@ theorem t99J05_localIndices_one (n : ℕ) (f : ContinuousMap (CP n) (CP n))
     exact (t99J05_localIndices_one_aux_L i).contDiff.contDiffAt
   · simp [localIndex, hd]
 
-/-- **LIBRARY:** rational homology of `CP n`, homotopy invariance of induced
-maps, and the resulting finite alternating-trace calculation. -/
-theorem t99J05_lefschetz_euler (n : ℕ) (f : ContinuousMap (CP n) (CP n))
+/-- Rational homology has one generator in each even degree through `2 * n`. -/
+def T99J05CPHomologyProfile (n : ℕ) (X : Type) [TopologicalSpace X] : Prop :=
+  (∀ k, FiniteDimensional ℚ (Homology X k)) ∧
+    ∀ k, Module.finrank ℚ (Homology X k) =
+      if Even k ∧ k ≤ 2 * n then 1 else 0
+
+/-- `CP (n+1)` minus its last coordinate point and its last affine chart. -/
+def t99J05U (n : ℕ) : Set (CP (n + 1)) :=
+  {x | ∃ i : Fin (n + 1), x.rep i.castSucc ≠ 0}
+
+def t99J05V (n : ℕ) : Set (CP (n + 1)) :=
+  {x | x.rep (Fin.last (n + 1)) ≠ 0}
+
+/-- The two standard subsets are an open cover. -/
+theorem t99J05_lefschetz_euler_cover (n : ℕ) :
+    IsOpen (t99J05U n) ∧ IsOpen (t99J05V n) ∧
+      t99J05U n ∪ t99J05V n = Set.univ := by
+  sorry
+
+/-- The last affine chart is contractible and has the rational homology of a point. -/
+theorem t99J05_lefschetz_euler_V (n : ℕ) :
+    Nonempty (t99J05V n ≃ₜ ({j : Fin (n + 2) // j ≠ Fin.last (n + 1)} → ℂ)) ∧
+      T99J05CPHomologyProfile 0 (t99J05V n) := by
+  sorry
+
+/-- Deleting the last coordinate point deformation retracts onto `CP n`. -/
+theorem t99J05_lefschetz_euler_U (n : ℕ) :
+    Nonempty (ContinuousMap.HomotopyEquiv (t99J05U n) (CP n)) ∧
+      (T99J05CPHomologyProfile n (CP n) →
+        T99J05CPHomologyProfile n (t99J05U n)) := by
+  sorry
+
+/-- The overlap is a punctured complex affine space and hence an odd sphere.
+The final conjunct is the degree-zero input needed by Mayer–Vietoris. -/
+theorem t99J05_lefschetz_euler_inter (n : ℕ) :
+    (∀ k, FiniteDimensional ℚ (Homology (↑(t99J05U n ∩ t99J05V n)) k)) ∧
+    (∀ k, Module.finrank ℚ (Homology (↑(t99J05U n ∩ t99J05V n)) k) =
+      if k = 0 ∨ k = 2 * n + 1 then 1 else 0) ∧
+    Function.Injective (RP3Homology.mvI (t99J05U n) (t99J05V n) 0).hom := by
+  sorry
+
+/-- The dimension-counting step in the rational Mayer–Vietoris sequence. -/
+theorem t99J05_lefschetz_euler_step (n : ℕ)
+    (hCP : T99J05CPHomologyProfile n (CP n))
+    (hcover : IsOpen (t99J05U n) ∧ IsOpen (t99J05V n) ∧
+      t99J05U n ∪ t99J05V n = Set.univ)
+    (hU : T99J05CPHomologyProfile n (t99J05U n))
+    (hV : T99J05CPHomologyProfile 0 (t99J05V n))
+    (hinter : (∀ k, FiniteDimensional ℚ
+        (Homology (↑(t99J05U n ∩ t99J05V n)) k)) ∧
+      (∀ k, Module.finrank ℚ (Homology (↑(t99J05U n ∩ t99J05V n)) k) =
+        if k = 0 ∨ k = 2 * n + 1 then 1 else 0) ∧
+      Function.Injective (RP3Homology.mvI (t99J05U n) (t99J05V n) 0).hom) :
+    T99J05CPHomologyProfile (n + 1) (CP (n + 1)) := by
+  sorry
+
+/-- `CP 0` is a point. -/
+theorem t99J05_lefschetz_euler_base : T99J05CPHomologyProfile 0 (CP 0) := by
+  sorry
+
+/-- Homotopy invariance turns the homology profile into the required trace sums. -/
+theorem t99J05_lefschetz_euler_trace (n : ℕ)
+    (f : ContinuousMap (CP n) (CP n))
+    (hprofile : T99J05CPHomologyProfile n (CP n))
     (hhom : ContinuousMap.Homotopic f (ContinuousMap.id (CP n))) :
     HasLefschetzNumber f ((n : ℚ) + 1) ∧
       HasEulerCharacteristic (CP n) ((n : ℚ) + 1) := by
   sorry
+
+/-- Assembly of the induction and trace calculation. -/
+theorem t99J05_lefschetz_euler (n : ℕ) (f : ContinuousMap (CP n) (CP n))
+    (hhom : ContinuousMap.Homotopic f (ContinuousMap.id (CP n))) :
+    HasLefschetzNumber f ((n : ℚ) + 1) ∧
+      HasEulerCharacteristic (CP n) ((n : ℚ) + 1) := by
+  have allProfiles : ∀ m, T99J05CPHomologyProfile m (CP m) := by
+    intro m
+    induction m with
+    | zero => exact t99J05_lefschetz_euler_base
+    | succ m ih =>
+      exact t99J05_lefschetz_euler_step m ih
+        (t99J05_lefschetz_euler_cover m)
+        ((t99J05_lefschetz_euler_U m).2 ih)
+        (t99J05_lefschetz_euler_V m).2
+        (t99J05_lefschetz_euler_inter m)
+  exact t99J05_lefschetz_euler_trace n f (allProfiles n) hhom
 
 theorem apm_t99j05 :
     ∀ n : ℕ, AffineChartConstruction n ∧
