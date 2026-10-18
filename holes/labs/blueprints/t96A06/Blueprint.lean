@@ -670,7 +670,51 @@ theorem T96A06_sqFun_continuous (n : ℕ) : Continuous (sqFun n) := by
 theorem T96A06_sqFun_norm_half (n : ℕ) :
     (∀ x, ‖sqFun n x‖ = ‖x‖) ∧
       ∀ x, sqFun n ((1 / 2 : ℝ) • x) = (1 / 2 : ℝ) • sqFun n x := by
-  sorry
+  constructor
+  · intro x
+    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+    congr 1
+    rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+      Fin.sum_univ_succ]
+    simp only [sqFun]
+    simp only [Fin.succ_zero_eq_one, if_pos, one_ne_zero, if_false]
+    have hss0 (i : Fin n) : i.succ.succ ≠ (0 : Fin (n + 2)) := by
+      intro h; have := congrArg Fin.val h; simp at this
+    have hss1 (i : Fin n) : i.succ.succ ≠ (1 : Fin (n + 2)) := by
+      intro h; have := congrArg Fin.val h; simp at this
+    simp_rw [if_neg (hss0 _), if_neg (hss1 _)]
+    simp only [Real.norm_eq_abs, sq_abs]
+    have hs : 0 ≤ x 0 ^ 2 + x 1 ^ 2 := by positivity
+    by_cases h : x 0 ^ 2 + x 1 ^ 2 = 0
+    · have h0 : x 0 = 0 := by nlinarith [sq_nonneg (x 0), sq_nonneg (x 1)]
+      have h1 : x 1 = 0 := by nlinarith [sq_nonneg (x 0), sq_nonneg (x 1)]
+      simp [h0, h1]
+    · rw [div_pow, div_pow, Real.sq_sqrt hs]
+      field_simp
+      ring
+  · intro x
+    ext i
+    simp only [sqFun]
+    simp only [PiLp.smul_apply, smul_eq_mul]
+    by_cases hi0 : i = 0
+    · subst i
+      simp only [if_pos]
+      have hs : 0 ≤ x 0 ^ 2 + x 1 ^ 2 := by positivity
+      rw [show ((1 / 2 : ℝ) * x 0) ^ 2 + ((1 / 2 : ℝ) * x 1) ^ 2 =
+          (1 / 4 : ℝ) * (x 0 ^ 2 + x 1 ^ 2) by ring]
+      rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 1 / 4)]
+      norm_num
+      ring
+    · by_cases hi1 : i = 1
+      · subst i
+        simp only [hi0, if_false, if_pos]
+        have hs : 0 ≤ x 0 ^ 2 + x 1 ^ 2 := by positivity
+        rw [show ((1 / 2 : ℝ) * x 0) ^ 2 + ((1 / 2 : ℝ) * x 1) ^ 2 =
+            (1 / 4 : ℝ) * (x 0 ^ 2 + x 1 ^ 2) by ring]
+        rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 1 / 4)]
+        norm_num
+        ring
+      · simp [hi0, hi1]
 
 /-- Renormalised squaring as a cone map. -/
 def sqCone (n : ℕ) : ConeMap (n + 2) where
