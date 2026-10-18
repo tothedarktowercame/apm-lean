@@ -668,7 +668,26 @@ lemma apm_t00j01_openCover_H3_zero
     (_hV3 : Limits.IsZero (apm_t00j01_H 3 (V : Type)))
     (_hI2 : Limits.IsZero (apm_t00j01_H 2 ((U ∩ V : Set X) : Type))) :
     Limits.IsZero (apm_t00j01_H 3 X) := by
-  sorry
+  obtain ⟨δ, _, hex, _⟩ :=
+    IntegralMV.integralMayerVietoris U V _hU _hV _hcov
+  have hpieces : Limits.IsZero
+      (apm_t00j01_H 3 (U : Type) ⊞ apm_t00j01_H 3 (V : Type)) :=
+    (Limits.biprod_isZero_iff _ _).2 ⟨_hU3, _hV3⟩
+  rw [ModuleCat.isZero_iff_subsingleton]
+  constructor
+  intro x y
+  have vanish (z : apm_t00j01_H 3 X) : z = 0 := by
+    have hzker : z ∈ LinearMap.ker (δ 2).hom := by
+      change (δ 2).hom z = 0
+      exact (ModuleCat.subsingleton_of_isZero _hI2).elim _ _
+    have hzrange : z ∈ LinearMap.range (IntegralMV.mvJ U V 3).hom := by
+      rw [hex 2]
+      exact hzker
+    obtain ⟨w, hw⟩ := hzrange
+    have hw0 : w = 0 := (ModuleCat.subsingleton_of_isZero hpieces).elim _ _
+    rw [hw0, map_zero] at hw
+    exact hw.symm
+  exact (vanish x).trans (vanish y).symm
 
 /-- The integral top singular homology of the concrete Klein-bottle product
 vanishes.  The manifold conclusion remains an explicit input required by the
