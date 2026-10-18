@@ -2325,6 +2325,51 @@ lemma apm_m98J02_goursat_spec_aux_regular_aux_reparam
           (a := (0 : ℝ)) (b := 1)
           (fun t => K ((a - a * σ) * (b - t)) * h (a * σ) t) b).symm
 
+/-- A `C²` integrand in `(p, t)` gives a `C²` parameter integral over `[0,1]`
+(convolution with the indicator of `(0,1]`, via `contDiffOn_convolution_right_with_param`). -/
+lemma apm_m98J02_goursat_spec_aux_regular_aux_param_integral
+    {P : Type*} [NormedAddCommGroup P] [NormedSpace ℝ P]
+    (g : P → ℝ → ℝ) (hg : ContDiff ℝ 2 ↿g) :
+    ContDiff ℝ 2 (fun p : P ↦ ∫ t : ℝ in 0..1, g p t) := by
+  let b : ContDiffBump (0 : ℝ) := ⟨2, 3, by norm_num, by norm_num⟩
+  let u : ℝ → ℝ := Set.indicator (Set.Ioc 0 1) (fun _ ↦ 1)
+  let v : P → ℝ → ℝ := fun p x ↦ b x * g p (-x)
+  have hu : LocallyIntegrable u := by
+    exact (locallyIntegrable_const (1 : ℝ)).indicator measurableSet_Ioc
+  have hv : ContDiff ℝ 2 ↿v := by
+    apply b.contDiff.comp contDiff_snd |>.mul
+    exact hg.comp ((contDiff_fst.prodMk contDiff_snd.neg))
+  have hv_support : ∀ p x, p ∈ (Set.univ : Set P) →
+      x ∉ Metric.closedBall 0 3 → v p x = 0 := by
+    intro p x _ hx
+    have hxb : b x = 0 := by
+      by_contra hn
+      have : x ∈ Function.support b := hn
+      rw [b.support_eq] at this
+      exact hx (Metric.ball_subset_closedBall this)
+    simp [v, hxb]
+  have hc := contDiffOn_convolution_right_with_param
+    (ContinuousLinearMap.mul ℝ ℝ) (n := (2 : ℕ∞))
+    (s := (Set.univ : Set P)) (k := Metric.closedBall (0 : ℝ) 3)
+    isOpen_univ (isCompact_closedBall 0 3) hv_support hu hv.contDiffOn
+  have hc0 : ContDiff ℝ 2 (fun p : P ↦
+      convolution u (v p) (ContinuousLinearMap.mul ℝ ℝ) volume 0) := by
+    rw [← contDiffOn_univ]
+    exact hc.comp (contDiff_id.prodMk contDiff_const).contDiffOn (by simp)
+  convert hc0 using 1
+  funext p
+  rw [convolution_def, intervalIntegral.integral_of_le (by norm_num)]
+  rw [← MeasureTheory.integral_indicator measurableSet_Ioc]
+  apply MeasureTheory.integral_congr_ae
+  filter_upwards with x
+  by_cases hx : x ∈ Set.Ioc (0 : ℝ) 1
+  · have hball : -x ∈ Metric.closedBall (0 : ℝ) 2 := by
+      rw [Metric.mem_closedBall, Real.dist_eq]
+      simp only [sub_zero, abs_neg]
+      exact (abs_of_nonneg hx.1.le).symm ▸ hx.2.trans (by norm_num)
+    simp [u, v, hx, b.one_of_mem_closedBall hball]
+  · simp [u, hx]
+
 lemma apm_m98J02_goursat_spec_aux_regular_aux_fixed_square
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) :
@@ -2333,7 +2378,30 @@ lemma apm_m98J02_goursat_spec_aux_regular_aux_fixed_square
         apm_m98J02_riemannKernel
             ((p 0 - p 0 * σ) * (p 1 - p 1 * τ)) *
           apm_m98J02_characteristicSource f (p 0 * σ) (p 1 * τ))) := by
-  sorry
+  have hh := apm_m98J02_goursat_spec_aux_source_contDiff f hf
+  have hi : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+      ∫ σ : ℝ in 0..1, ∫ τ : ℝ in 0..1,
+        apm_m98J02_riemannKernel
+            ((p 0 - p 0 * σ) * (p 1 - p 1 * τ)) *
+          apm_m98J02_characteristicSource f (p 0 * σ) (p 1 * τ)) := by
+    apply apm_m98J02_goursat_spec_aux_regular_aux_param_integral
+    apply apm_m98J02_goursat_spec_aux_regular_aux_param_integral
+    have hz : ContDiff ℝ 2 (fun q : (apm_m98J02_E × ℝ) × ℝ ↦
+        (q.1.1 0 - q.1.1 0 * q.1.2) * (q.1.1 1 - q.1.1 1 * q.2)) := by
+      fun_prop
+    have hs : ContDiff ℝ 2 (fun q : (apm_m98J02_E × ℝ) × ℝ ↦
+        apm_m98J02_characteristicSource f
+          (q.1.1 0 * q.1.2) (q.1.1 1 * q.2)) := by
+      have hm : ContDiff ℝ 2 (fun q : (apm_m98J02_E × ℝ) × ℝ ↦
+          WithLp.toLp 2 ![q.1.1 0 * q.1.2, q.1.1 1 * q.2]) := by
+        apply PiLp.contDiff_toLp.comp
+        rw [contDiff_pi]
+        intro i
+        fin_cases i <;> simp <;> fun_prop
+      convert hh.comp hm using 1 <;> simp
+    exact ((hK.of_le (WithTop.coe_le_coe.mpr le_top)).comp hz).mul hs
+  exact ((by fun_prop : ContDiff ℝ 2 (fun p : apm_m98J02_E ↦
+    p 0 * p 1))).mul hi
 
 lemma apm_m98J02_goursat_spec_aux_regular
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
@@ -2409,6 +2477,23 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_kernel_deriv2
       (show ContDiff ℝ ∞ (fun _ : ℝ ↦ (1 : ℝ)) from contDiff_const)
   exact (h1.differentiable (by simp) z).hasDerivAt
 
+/-- The one-variable content of `∂_b G`: the slice `y ↦ G(a, y)` has the Leibniz
+derivative at `b` (FTC in `t` with `K 0 = 1`, then differentiation under the
+`s`-integral).  Oriented intervals: `a`, `b` of any sign. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1) :
+    ∀ a b : ℝ,
+      HasDerivAt
+        (fun y : ℝ ↦ apm_m98J02_goursat apm_m98J02_riemannKernel
+          (apm_m98J02_characteristicSource f) a y)
+        ((∫ s in (0 : ℝ)..a, apm_m98J02_characteristicSource f s b) +
+          ∫ s in (0 : ℝ)..a, ∫ t in (0 : ℝ)..b,
+            (a - s) * deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) *
+              apm_m98J02_characteristicSource f s t) b := by
+  sorry
+
 /-- `∂_b` of the Goursat integral: FTC in `t` (with `K 0 = 1`) plus Leibniz in `b`
 under the `s`-integral. -/
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b
@@ -2425,7 +2510,28 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b
               ∫ s in (0 : ℝ)..(p 0), ∫ t in (0 : ℝ)..(p 1),
                 (p 0 - s) * deriv apm_m98J02_riemannKernel ((p 0 - s) * (p 1 - t)) *
                   apm_m98J02_characteristicSource f s t) p := by
-  sorry
+  intro p
+  have hG : DifferentiableAt ℝ (fun p : apm_m98J02_E ↦
+      apm_m98J02_goursat apm_m98J02_riemannKernel
+        (apm_m98J02_characteristicSource f) (p 0) (p 1)) p :=
+    (apm_m98J02_goursat_spec_aux_regular f hf hK).differentiable (by norm_num) p
+  have hℓ : HasDerivAt (fun y : ℝ ↦ (WithLp.toLp 2 ![p 0, y] : apm_m98J02_E))
+      (EuclideanSpace.single 1 1) (p 1) := by
+    have h := ((hasDerivAt_id (p 1)).smul_const
+      (EuclideanSpace.single (1 : Fin 2) (1 : ℝ))).const_add
+        (WithLp.toLp 2 ![p 0, 0] : apm_m98J02_E)
+    rw [one_smul] at h
+    convert h using 1
+    funext y
+    ext i
+    fin_cases i <;> simp
+  have hp : (WithLp.toLp 2 ![p 0, p 1] : apm_m98J02_E) = p := by
+    ext i
+    fin_cases i <;> simp
+  have hc := hG.hasFDerivAt.comp_hasDerivAt_of_eq (p 1) hℓ hp.symm
+  have hs := apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice
+    f hf hK hK0 (p 0) (p 1)
+  exact hc.unique (by simpa [Function.comp_def] using hs)
 
 /-- `∂_a` of `∂_b G`: FTC in `s` for the first term; for the second, the boundary
 term at `s = a` vanishes by the factor `(a - s)`, and Leibniz gives `K' + z K''`. -/
