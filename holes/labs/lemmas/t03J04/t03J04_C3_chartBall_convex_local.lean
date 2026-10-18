@@ -1116,13 +1116,76 @@ multiplicative for a `k`-sheeted cover of a base with a finite good cover.
 Induct on the size of the family, for all good families covering an open
 `W ⊆ B` at once: `W = W' ∪ U` with `W' ∩ U` covered by the good family
 `{U' ∩ U}`; apply B1 to `W` and to `p⁻¹ W`; the base case uses C2a, C2b. -/
+theorem t03J04_euler_mul_of_goodFamily_aux_contractible
+    (U : Type) [TopologicalSpace U] [ContractibleSpace U] :
+    HasEulerCharacteristic U 1 := by
+  exact t03J04_hasEuler_of_homotopyEquiv
+    (Classical.choice (ContractibleSpace.hequiv_unit U)) t03J04_hasEuler_unit
+
+theorem t03J04_euler_mul_of_goodFamily_aux_piece
+    {E B : Type} [TopologicalSpace E] [TopologicalSpace B]
+    [LocPathConnectedSpace B] {p : E → B} {k : ℕ}
+    (hp : IsKSheetedCover p k) (U : Set B) (hU : IsOpen U)
+    [ContractibleSpace U] :
+    HasEulerCharacteristic U 1 ∧
+      HasEulerCharacteristic ↥(p ⁻¹' U) (k * (1 : ℚ)) := by
+  refine ⟨t03J04_euler_mul_of_goodFamily_aux_contractible U, ?_⟩
+  obtain ⟨e⟩ := t03J04_trivial_over_contractible hp U hU
+  exact t03J04_hasEuler_of_homotopyEquiv e.toHomotopyEquiv
+    (t03J04_hasEuler_prod_fin U k
+      (t03J04_euler_mul_of_goodFamily_aux_contractible U))
+
+/-- LEAF C2d-MV (split 2026-10-18).  Mayer–Vietoris for two open subsets of
+`X`, read on subspaces: apply B1 in the space `↥(V ∪ S)` to the open sets
+`Subtype.val ⁻¹' V` and `Subtype.val ⁻¹' S`, transporting each Euler
+characteristic along the evident homeomorphisms with `↥V`, `↥S`, `↥(V ∩ S)`
+(B2 via `Homeomorph.toHomotopyEquiv`). -/
+theorem t03J04_euler_mul_of_goodFamily_aux_union {X : Type} [TopologicalSpace X]
+    (V S : Set X) (hV : IsOpen V) (hS : IsOpen S) {a b c : ℚ}
+    (ha : HasEulerCharacteristic V a) (hb : HasEulerCharacteristic S b)
+    (hc : HasEulerCharacteristic ↥(V ∩ S) c) :
+    HasEulerCharacteristic ↥(V ∪ S) (a + b - c) := by
+  sorry
+
+/-- LEAF C2d-ind (split 2026-10-18).  Induction principle over a finite good
+family: a property of open sets that holds for `∅` and for open contractible
+sets, and is closed under `V, S, V ∩ S ↦ V ∪ S`, holds for the union of every
+finite good family.  Strong induction on `𝒱.card`, for all good families at
+once: `⋃₀ insert V 𝒱 = V ∪ ⋃₀ 𝒱`, and `V ∩ ⋃₀ 𝒱 = ⋃₀ (𝒱.image (V ∩ ·))`,
+where `𝒱.image (V ∩ ·)` is again good (its finite intersections are finite
+intersections of members of `insert V 𝒱`) and has at most `𝒱.card` members.
+Pure set theory: no homology. -/
+theorem t03J04_euler_mul_of_goodFamily_aux_induction {B : Type} [TopologicalSpace B]
+    (P : Set B → Prop) (h0 : P ∅)
+    (hpiece : ∀ U : Set B, IsOpen U → ContractibleSpace U → P U)
+    (hunion : ∀ V S : Set B, IsOpen V → IsOpen S → P V → P S → P (V ∩ S) → P (V ∪ S))
+    (𝒱 : Finset (Set B)) (hgood : t03J04_IsGoodFamily 𝒱) :
+    P (⋃₀ (𝒱 : Set (Set B))) := by
+  sorry
+
 theorem t03J04_euler_mul_of_goodFamily {E B : Type} [TopologicalSpace E]
     [TopologicalSpace B] [LocPathConnectedSpace B] {p : E → B} {k : ℕ}
     (hp : IsKSheetedCover p k) (𝒰 : Finset (Set B)) (hgood : t03J04_IsGoodFamily 𝒰)
     (hcov : ⋃₀ (𝒰 : Set (Set B)) = Set.univ) :
     ∃ c : ℚ, HasEulerCharacteristic B c ∧ HasEulerCharacteristic E (k * c) := by
-  sorry
-
+  have hcont : Continuous p := hp.isCoveringMap.continuous
+  obtain ⟨c, hB, hE⟩ := t03J04_euler_mul_of_goodFamily_aux_induction
+    (fun S : Set B => ∃ c : ℚ, HasEulerCharacteristic S c ∧
+      HasEulerCharacteristic ↥(p ⁻¹' S) (k * c))
+    ⟨0, t03J04_hasEuler_of_isEmpty _, by
+      rw [mul_zero]; exact @t03J04_hasEuler_of_isEmpty _ _ ⟨fun x => x.2⟩⟩
+    (fun U hU _ => ⟨1, t03J04_euler_mul_of_goodFamily_aux_piece hp U hU⟩)
+    (fun V S hV hS ⟨a, haB, haE⟩ ⟨b, hbB, hbE⟩ ⟨c, hcB, hcE⟩ =>
+      ⟨a + b - c, t03J04_euler_mul_of_goodFamily_aux_union V S hV hS haB hbB hcB, by
+        have h := t03J04_euler_mul_of_goodFamily_aux_union (p ⁻¹' V) (p ⁻¹' S)
+          (hV.preimage hcont) (hS.preimage hcont) haE hbE hcE
+        rw [show (k : ℚ) * (a + b - c) = k * a + k * b - k * c by ring]
+        exact h⟩)
+    𝒰 hgood
+  rw [hcov] at hB hE
+  exact ⟨c, t03J04_hasEuler_of_homotopyEquiv (Homeomorph.Set.univ B).symm.toHomotopyEquiv hB,
+    t03J04_hasEuler_of_homotopyEquiv
+      (Homeomorph.Set.univ E).symm.toHomotopyEquiv (by simpa using hE)⟩
 /-! ### C3 breakdown (2026-10-18): a good cover from small chart balls
 
 No Riemannian metric.  A small ball of one chart, read in a nearby chart, is a
@@ -1337,7 +1400,97 @@ theorem t03J04_C3_normSq_convex_near {F : Type} [NormedAddCommGroup F]
     (hinj : Function.Injective (fderiv ℝ g y₀)) :
     ∃ ε > 0, ∃ ρ > 0, Metric.ball y₀ ρ ⊆ O ∧
       ∀ a : F, ‖a - g y₀‖ < ε → ConvexOn ℝ (Metric.ball y₀ ρ) (fun y ↦ ‖g y - a‖ ^ 2) := by
-  sorry
+  obtain ⟨ρ₀, hρ₀, c, hc, C, hC, hball₀, hbnd⟩ :=
+    t03J04_C3_deriv_bounds hO hg hy₀ hinj
+  let q : ℝ := c ^ 2 / (4 * C)
+  have hq : 0 < q := by positivity
+  have hcont : ContinuousAt g y₀ :=
+    (hg.continuousOn y₀ hy₀).continuousAt (hO.mem_nhds hy₀)
+  have hev : ∀ᶠ y in 𝓝 y₀, ‖g y - g y₀‖ < q := by
+    have ht := hcont.tendsto.eventually (Metric.ball_mem_nhds (g y₀) hq)
+    simpa only [Metric.mem_ball, dist_eq_norm] using ht
+  obtain ⟨r, hr, hrball⟩ := Metric.nhds_basis_ball.mem_iff.mp hev
+  let ρ := min ρ₀ r
+  have hρ : 0 < ρ := lt_min hρ₀ hr
+  have hρρ₀ : ρ ≤ ρ₀ := min_le_left _ _
+  have hρr : ρ ≤ r := min_le_right _ _
+  refine ⟨q, hq, ρ, hρ, ?_, ?_⟩
+  · exact fun y hy ↦ hball₀ (Metric.mem_ball'.mpr
+      (lt_of_lt_of_le (Metric.mem_ball'.mp hy) hρρ₀))
+  · intro a ha
+    apply t03J04_C3_convexOn_of_line_deriv2 (Metric.isOpen_ball) (convex_ball y₀ ρ)
+    · have hg' : ContDiffOn ℝ 2 g (Metric.ball y₀ ρ) :=
+        hg.mono (fun y hy ↦ hball₀ (Metric.mem_ball'.mpr
+          (lt_of_lt_of_le (Metric.mem_ball'.mp hy) hρρ₀)))
+      exact (hg'.sub contDiffOn_const).norm_sq ℝ
+    · intro y hy w
+      have hyO : y ∈ O := hball₀ (Metric.mem_ball'.mpr
+        (lt_of_lt_of_le (Metric.mem_ball'.mp hy) hρρ₀))
+      let γ : ℝ → F := fun t ↦ g (y + t • w)
+      let γ' : ℝ → F := fun t ↦ fderiv ℝ g (y + t • w) w
+      let γ'' : ℝ → F := fun t ↦ fderiv ℝ (fderiv ℝ g) (y + t • w) w w
+      have hline : Continuous (fun t : ℝ ↦ y + t • w) := by fun_prop
+      have heventO : ∀ᶠ t in 𝓝 (0 : ℝ), y + t • w ∈ O :=
+        (hline.continuousAt.eventually (hO.mem_nhds (by simpa using hyO)))
+      have hγ1 : ∀ᶠ t in 𝓝 (0 : ℝ), HasDerivAt γ (γ' t) t := by
+        filter_upwards [heventO] with t ht
+        have hlineDeriv : HasDerivAt (fun s : ℝ ↦ y + s • w) w t := by
+          simpa only [zero_add, one_smul] using
+            (hasDerivAt_const t y).add ((hasDerivAt_id t).smul_const w)
+        exact ((hg _ ht).contDiffAt (hO.mem_nhds ht)).differentiableAt (by norm_num) |>.hasFDerivAt
+          |>.comp_hasDerivAt t hlineDeriv
+      have hgD : ContDiffOn ℝ 1 (fderiv ℝ g) O :=
+        hg.fderiv_of_isOpen hO (by norm_num)
+      set_option maxHeartbeats 1000000 in
+       have hγ2 : HasDerivAt γ' (γ'' 0) 0 := by
+        have hlineDeriv : HasDerivAt (fun s : ℝ ↦ y + s • w) w 0 := by
+          simpa only [zero_add, one_smul] using
+            (hasDerivAt_const (0 : ℝ) y).add ((hasDerivAt_id (0 : ℝ)).smul_const w)
+        have hD := ((hgD y hyO).contDiffAt (hO.mem_nhds hyO)).differentiableAt
+          (by norm_num) |>.hasFDerivAt
+        have hD0 : HasFDerivAt (fderiv ℝ g) (fderiv ℝ (fderiv ℝ g) y)
+            (y + (0 : ℝ) • w) := by simpa using hD
+        have hcomp : HasDerivAt (fun t : ℝ ↦ fderiv ℝ g (y + t • w))
+            (fderiv ℝ (fderiv ℝ g) y w) 0 := by
+          convert hD0.comp_hasDerivAt 0 hlineDeriv using 1 <;> simp
+        have happ := hcomp.clm_apply (hasDerivAt_const (0 : ℝ) w)
+        simpa only [γ', γ'', zero_smul, add_zero, map_zero] using happ
+      have hsecond := t03J04_C3_line_deriv2_normSq a hγ1 hγ2
+      have heq := hsecond.deriv
+      set_option maxHeartbeats 1000000 in
+        dsimp [γ, γ', γ''] at heq
+      simp only [zero_smul, add_zero] at heq
+      rw [heq]
+      have hyρ₀ : y ∈ Metric.ball y₀ ρ₀ := Metric.mem_ball'.mpr
+        (lt_of_lt_of_le (Metric.mem_ball'.mp hy) hρρ₀)
+      obtain ⟨hfirst, hsecondB⟩ := hbnd y hyρ₀ w
+      have hyg : ‖g y - g y₀‖ < q := hrball (Metric.mem_ball'.mpr
+        (lt_of_lt_of_le (Metric.mem_ball'.mp hy) hρr))
+      have hga : ‖g y - a‖ < 2 * q := by
+        calc
+          ‖g y - a‖ ≤ ‖g y - g y₀‖ + ‖a - g y₀‖ := by
+            rw [norm_sub_rev a (g y₀)]
+            convert norm_add_le (g y - g y₀) (g y₀ - a) using 1 <;> abel
+          _ < q + q := add_lt_add hyg ha
+          _ = 2 * q := by ring
+      have hinner : inner ℝ (g y - a) (fderiv ℝ (fderiv ℝ g) y w w) ≥
+          -(2 * q * C * ‖w‖ ^ 2) := by
+        calc
+          inner ℝ (g y - a) (fderiv ℝ (fderiv ℝ g) y w w)
+              ≥ -(‖g y - a‖ * ‖fderiv ℝ (fderiv ℝ g) y w w‖) :=
+                neg_le_of_abs_le (abs_real_inner_le_norm _ _)
+          _ ≥ -(2 * q * (C * ‖w‖ ^ 2)) := by
+                gcongr
+          _ = -(2 * q * C * ‖w‖ ^ 2) := by ring
+      have hsq : c ^ 2 * ‖w‖ ^ 2 ≤ ‖fderiv ℝ g y w‖ ^ 2 := by
+        simpa only [mul_pow] using
+          (sq_le_sq₀ (mul_nonneg hc.le (norm_nonneg w)) (norm_nonneg _)).mpr hfirst
+      have hqC : 2 * q * C = c ^ 2 / 2 := by
+        dsimp [q]
+        field_simp
+        ring
+      rw [hqC] at hinner
+      nlinarith
 
 /-- LEAF M1 (120–200 lines).  The coordinate change is smooth on an open domain
 with injective derivative.  Route: `contDiffOn_ext_coord_change`; the model is
@@ -1575,7 +1728,50 @@ theorem t03J04_C3_good_of_commonChart {n : ℕ} {X : Type} [TopologicalSpace X]
       ∀ U ∈ s, U ⊆ (chartAt (apm_t03J04_HModel n) α).source ∧
         Convex ℝ (t03J04_coord n α '' U)) :
     t03J04_IsGoodFamily 𝒰 := by
-  sorry
+  classical
+  refine ⟨hopen, ?_⟩
+  intro s hs hsn
+  by_cases hI : ⋂₀ (s : Set (Set X)) = ∅
+  · exact Or.inl hI
+  right
+  have hIn : (⋂₀ (s : Set (Set X))).Nonempty := Set.nonempty_iff_ne_empty.mpr hI
+  obtain ⟨x, hx⟩ := hIn
+  have hxU : ∀ U ∈ s, x ∈ U := by
+    intro U hU
+    exact (Set.mem_sInter.mp hx) U hU
+  obtain ⟨α, hα⟩ := hcommon s hs x hxU
+  let c := t03J04_coord n α
+  have hsource : ⋂₀ (s : Set (Set X)) ⊆
+      (chartAt (apm_t03J04_HModel n) α).source := by
+    intro y hy
+    obtain ⟨U, hU⟩ := hsn
+    exact (hα U hU).1 ((Set.mem_sInter.mp hy) U hU)
+  have hinj : Set.InjOn c (chartAt (apm_t03J04_HModel n) α).source := by
+    intro y hy z hz hyz
+    apply (chartAt (apm_t03J04_HModel n) α).injOn hy hz
+    apply (t03J04_modelEquiv n).injective
+    exact hyz
+  have himage : c '' ⋂₀ (s : Set (Set X)) = ⋂ U ∈ (s : Set (Set X)), c '' U := by
+    apply Set.Subset.antisymm
+    · intro y hy
+      obtain ⟨z, hz, rfl⟩ := hy
+      simp only [Set.mem_iInter]
+      intro U hU
+      exact ⟨z, (Set.mem_sInter.mp hz) U hU, rfl⟩
+    · intro y hy
+      simp only [Set.mem_iInter] at hy
+      obtain ⟨U₀, hU₀⟩ := hsn
+      obtain ⟨z, hzU₀, hzy⟩ := hy U₀ hU₀
+      refine ⟨z, ?_, hzy⟩
+      refine Set.mem_sInter.mpr fun U hU => ?_
+      obtain ⟨zU, hzUU, hzUy⟩ := hy U hU
+      have hzsource := (hα U₀ hU₀).1 hzU₀
+      have hzUsource := (hα U hU).1 hzUU
+      have hzzU : z = zU := hinj hzsource hzUsource (hzy.trans hzUy.symm)
+      simpa [hzzU] using hzUU
+  apply t03J04_C3_contractible_of_convex_image α hsource ⟨x, hx⟩
+  rw [himage]
+  exact convex_iInter fun U => convex_iInter fun hU => (hα U hU).2
 
 /-- LEAF C3 = M7b (layer 5: M3, M4, M5, M7a; 180–280 lines).  Good-cover theorem
 for compact manifolds on this model.  Route: metric from
