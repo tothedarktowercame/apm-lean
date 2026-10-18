@@ -165,11 +165,64 @@ theorem apm_t01J04_leaf_euclidean_interior
 /-- LEAF B2 (linear algebra).  A nonzero functional on `ℝⁿ` is, up to sign, the
 first coordinate of some linear automorphism. -/
 -- BEGIN SEAT AREA
+def apm_t01J04_leaf_linear_first_coordinate_aux_split
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    (f : V →ₗ[ℝ] ℝ) (u : V) (hu : f u = 1) :
+    V ≃ₗ[ℝ] LinearMap.ker f × ℝ where
+  toFun v := (⟨v - (f v) • u, by simp [hu]⟩, f v)
+  invFun z := z.1.1 + z.2 • u
+  left_inv v := by simp [hu]
+  right_inv z := by
+    ext
+    · simp [hu]
+    · simp [hu]
+  map_add' x y := by
+    ext <;> simp [add_smul] <;> module
+  map_smul' c x := by
+    ext <;> simp [mul_smul] <;> module
+
 theorem apm_t01J04_leaf_linear_first_coordinate
     (n : ℕ) [NeZero n] (ℓ : apm_t01J04_Euclidean n →L[ℝ] ℝ) (hℓ : ℓ ≠ 0) :
     ∃ D : apm_t01J04_Euclidean n ≃L[ℝ] apm_t01J04_Euclidean n,
       ∀ v, D v 0 = -ℓ v := by
-  sorry
+  let c : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ := EuclideanSpace.projₗ 0
+  have hc : c ≠ 0 := by
+    intro h
+    have := LinearMap.congr_fun h (PiLp.single 2 (0 : Fin n) (1 : ℝ))
+    simpa [c] using this
+  have hℓs : Function.Surjective (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) :=
+    by
+      obtain ⟨w, hw⟩ : ∃ w, ℓ w ≠ 0 := by
+        simpa [DFunLike.ne_iff] using hℓ
+      intro r
+      refine ⟨(r / ℓ w) • w, ?_⟩
+      simp [hw]
+  obtain ⟨u, hu⟩ := hℓs 1
+  have hℓ0 : (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) ≠ 0 := by
+    intro hz
+    have hz' := LinearMap.congr_fun hz u
+    simp [hu] at hz'
+  have hcs : Function.Surjective c := by
+    intro r
+    refine ⟨PiLp.single 2 (0 : Fin n) r, ?_⟩
+    simp [c]
+  obtain ⟨e, he⟩ := hcs 1
+  let A := apm_t01J04_leaf_linear_first_coordinate_aux_split
+    (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) u hu
+  let B := apm_t01J04_leaf_linear_first_coordinate_aux_split c e he
+  let N : LinearMap.ker (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) ≃ₗ[ℝ]
+      LinearMap.ker c := LinearEquiv.ofFinrankEq _ _ (by
+    have h1 := Module.Dual.finrank_ker_add_one_of_ne_zero
+      (f := (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ)) hℓ0
+    have h2 := Module.Dual.finrank_ker_add_one_of_ne_zero (f := c) hc
+    omega)
+  let E : apm_t01J04_Euclidean n ≃ₗ[ℝ] apm_t01J04_Euclidean n :=
+    A.trans ((N.prodCongr (LinearEquiv.neg ℝ)).trans B.symm)
+  refine ⟨E.toContinuousLinearEquiv, ?_⟩
+  intro v
+  change c (E v) = -ℓ v
+  simp [E, A, B, N, he,
+    apm_t01J04_leaf_linear_first_coordinate_aux_split]
 -- END SEAT AREA
 
 /-- LEAF B3 (scalar submersion normal form in `ℝⁿ`).  If `g` is smooth on an
