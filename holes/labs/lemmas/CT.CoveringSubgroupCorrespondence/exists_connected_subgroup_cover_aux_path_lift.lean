@@ -124,11 +124,96 @@ cover from the basepoint to the class of `γ`, lying over `γ`.  Continuity:
 near `t₀`, `γ` stays in any open `U ∋ γ t₀`, and the class at `t` is the class
 at `t₀` extended by `γ` on `[t₀, t]`.  No hypotheses on `X` beyond topology. -/
 -- BEGIN SEAT AREA
+def exists_connected_subgroup_cover_aux_path_lift_aux_initial
+    {x y : X} (γ : Path x y) (t : unitInterval) : Path x (γ t) :=
+  (γ.subpath 0 t).cast γ.source.symm rfl
+
+lemma exists_connected_subgroup_cover_aux_path_lift_aux_initial_trans
+    {x y : X} (γ : Path x y) (t s : unitInterval) :
+    Path.Homotopic.Quotient.mk
+        (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ s) =
+      (Path.Homotopic.Quotient.mk
+          (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ t)).trans
+        (Path.Homotopic.Quotient.mk (γ.subpath t s)) := by
+  rw [← Path.Homotopic.Quotient.mk_trans]
+  apply (Path.Homotopic.Quotient.eq).2
+  simpa [exists_connected_subgroup_cover_aux_path_lift_aux_initial] using
+    (show (γ.subpath 0 s).Homotopic
+        ((γ.subpath 0 t).trans (γ.subpath t s)) from
+      ⟨(Path.Homotopy.subpathTransSubpath γ 0 t s).symm⟩)
+
 theorem exists_connected_subgroup_cover_aux_path_lift
     {x : X} (H : Subgroup (FundamentalGroup X x)) {y : X} (γ : Path x y) :
     ∃ Γ : Path (BasedCover.basepoint H) (BasedCover.mk H ⟨y, Path.Homotopic.Quotient.mk γ⟩),
       ∀ t, BasedCover.proj H (Γ t) = γ t := by
-  sorry
+  let a : unitInterval → BasedPaths x := fun t ↦
+    ⟨γ t, Path.Homotopic.Quotient.mk
+      (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ t)⟩
+  have ha : Continuous a := by
+    rw [continuous_generateFrom_iff]
+    rintro S ⟨U, b, hU, rfl⟩
+    apply isOpen_iff_mem_nhds.2
+    intro t ht
+    rcases ht with ⟨δ, hδU, hδ⟩
+    have hγtU : γ t ∈ U := by
+      apply hδU
+      refine ⟨1, ?_⟩
+      simpa [a] using δ.target
+    obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.1
+      (hU.preimage γ.continuous) t hγtU
+    refine mem_nhds_iff.2 ⟨Metric.ball t ε, ?_, Metric.isOpen_ball, Metric.mem_ball_self hε⟩
+    intro s hs
+    refine ⟨δ.trans (γ.subpath t s), ?_, ?_⟩
+    · rw [Path.trans_range]
+      refine union_subset hδU ?_
+      rw [Path.range_subpath]
+      rintro z ⟨r, hr, rfl⟩
+      apply hball
+      change dist r t < ε
+      have hrs : dist (r : ℝ) (t : ℝ) ≤ dist (s : ℝ) (t : ℝ) := by
+        simpa [dist_comm] using Real.dist_left_le_of_mem_uIcc hr
+      have hst : dist (s : ℝ) (t : ℝ) < ε := by simpa [dist_comm] using hs
+      exact hrs.trans_lt hst
+    · change Path.Homotopic.Quotient.mk
+          (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ s) = _
+      rw [exists_connected_subgroup_cover_aux_path_lift_aux_initial_trans γ t s]
+      change Path.Homotopic.Quotient.mk
+          (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ t) = _ at hδ
+      rw [hδ, Path.Homotopic.Quotient.mk_trans]
+      exact Path.Homotopic.Quotient.trans_assoc _ _ _
+  let A : C(unitInterval, BasedPaths x) := ⟨a, ha⟩
+  let q : BasedPaths x → BasedCover H := Quotient.mk (MulAction.orbitRel H (BasedPaths x))
+  have hq : Continuous q := continuous_quot_mk
+  refine ⟨?_, ?_⟩
+  · exact {
+      toFun := q ∘ A
+      continuous_toFun := hq.comp A.continuous
+      source' := by
+        apply congrArg (BasedCover.mk H)
+        have hx : γ 0 = x := γ.source
+        apply Sigma.ext hx
+        dsimp [A, a]
+        change HEq (Path.Homotopic.Quotient.mk
+            (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ 0))
+          (Path.Homotopic.Quotient.mk (Path.refl x))
+        apply Path.Homotopic.hpath_hext
+        intro r
+        simp [exists_connected_subgroup_cover_aux_path_lift_aux_initial, Path.subpath]
+      target' := by
+        apply congrArg (BasedCover.mk H)
+        have hy : γ 1 = y := γ.target
+        apply Sigma.ext hy
+        dsimp [A, a]
+        change HEq
+          (Path.Homotopic.Quotient.mk
+            (exists_connected_subgroup_cover_aux_path_lift_aux_initial γ 1))
+          (Path.Homotopic.Quotient.mk γ)
+        apply Path.Homotopic.hpath_hext
+        intro r
+        simp [exists_connected_subgroup_cover_aux_path_lift_aux_initial, Path.subpath]
+    }
+  · intro t
+    rfl
 -- END SEAT AREA
 
 /-- The cover is path-connected: every class `[⟨y, [γ]⟩]` is joined to the
