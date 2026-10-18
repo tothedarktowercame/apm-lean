@@ -2480,6 +2480,28 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_kernel_deriv2
 /-- The one-variable content of `∂_b G`: the slice `y ↦ G(a, y)` has the Leibniz
 derivative at `b` (FTC in `t` with `K 0 = 1`, then differentiation under the
 `s`-integral).  Oriented intervals: `a`, `b` of any sign. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice_aux_fixed
+    (g d : ℝ → ℝ → ℝ) (l r x : ℝ)
+    (hg : Continuous (Function.uncurry g))
+    (hd : Continuous (Function.uncurry d))
+    (hder : ∀ y t, HasDerivAt (fun z ↦ g z t) (d y t) y) :
+    HasDerivAt (fun y ↦ ∫ t in l..r, g y t) (∫ t in l..r, d x t) x := by
+  sorry
+
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice_aux_inner
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1) (a s y : ℝ) :
+    HasDerivAt
+      (fun z ↦ ∫ t in (0 : ℝ)..z,
+        apm_m98J02_riemannKernel ((a - s) * (z - t)) *
+          apm_m98J02_characteristicSource f s t)
+      (apm_m98J02_characteristicSource f s y +
+        ∫ t in (0 : ℝ)..y,
+          (a - s) * deriv apm_m98J02_riemannKernel ((a - s) * (y - t)) *
+            apm_m98J02_characteristicSource f s t) y := by
+  sorry
+
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b_aux_slice
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
