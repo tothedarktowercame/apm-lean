@@ -436,7 +436,22 @@ theorem apm_t01J04_leaf_trans_mem_maximalAtlas
     (hΦ : ContDiffOn ℝ (⊤ : ℕ∞) Φ Φ.source)
     (hΦs : ContDiffOn ℝ (⊤ : ℕ∞) Φ.symm Φ.target) :
     ψ₀.trans Φ ∈ IsManifold.maximalAtlas 𝓘(ℝ, apm_t01J04_Euclidean n) (⊤ : ℕ∞) X := by
-  sorry
+  let G := contDiffGroupoid (⊤ : ℕ∞)
+    (modelWithCornersSelf ℝ (apm_t01J04_Euclidean n))
+  have hΦG : Φ ∈ G := by
+    rw [show G = contDiffGroupoid (⊤ : ℕ∞)
+      (modelWithCornersSelf ℝ (apm_t01J04_Euclidean n)) from rfl,
+      contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid]
+    simpa using And.intro hΦ hΦs
+  rw [IsManifold.mem_maximalAtlas_iff] at hψ₀ ⊢
+  intro e he
+  obtain ⟨hl, hr⟩ := hψ₀ e he
+  constructor
+  · rw [OpenPartialHomeomorph.trans_symm_eq_symm_trans_symm,
+      OpenPartialHomeomorph.trans_assoc]
+    exact G.trans (G.symm hΦG) hl
+  · rw [← OpenPartialHomeomorph.trans_assoc]
+    exact G.trans hr hΦG
 
 /-- LEAF B5 (chart glue).  A function smooth on an open set `W` of `X` is smooth
 in the preferred chart at `x ∈ W`, and a surjective manifold derivative gives a
