@@ -167,7 +167,137 @@ theorem t03J04_euler_les
       ∑ k ∈ Finset.range (N + 2), (-1 : ℚ) ^ k *
         ((Module.finrank ℚ (A k) : ℚ) - Module.finrank ℚ (B k) +
           Module.finrank ℚ (C k)) = 0 := by
-  sorry
+  have finC : ∀ k, FiniteDimensional ℚ (C k) := by
+    intro k
+    cases k with
+    | zero =>
+        exact FiniteDimensional.of_surjective (g 0) hg0
+    | succ k =>
+        let q : C (k + 1) →ₗ[ℚ] LinearMap.range (d k) := (d k).rangeRestrict
+        have hq : q.range = ⊤ := LinearMap.range_eq_top.mpr fun y => by
+          obtain ⟨x, hx⟩ := y.property
+          exact ⟨x, Subtype.ext hx⟩
+        obtain ⟨s, hs⟩ := q.exists_rightInverse_of_surjective hq
+        let F : (B (k + 1) × LinearMap.range (d k)) →ₗ[ℚ] C (k + 1) :=
+          { toFun := fun z => g (k + 1) z.1 + s z.2
+            map_add' := by
+              intro x y
+              simp only [Prod.fst_add, Prod.snd_add, map_add]
+              abel
+            map_smul' := by intro r x; simp }
+        have hF : Function.Surjective F := by
+          intro x
+          have hx : x - s (q x) ∈ LinearMap.ker (d k) := by
+            rw [LinearMap.mem_ker]
+            have hsx : q (s (q x)) = q x := by
+              have := LinearMap.congr_fun hs (q x)
+              simpa only [LinearMap.comp_apply, LinearMap.id_apply] using this
+            rw [map_sub]
+            exact sub_eq_zero.mpr (Subtype.ext_iff.mp hsx).symm
+          rw [← hgd k] at hx
+          obtain ⟨b, hb⟩ := hx
+          refine ⟨(b, q x), ?_⟩
+          change g (k + 1) b + s (q x) = x
+          rw [hb]
+          abel
+        exact FiniteDimensional.of_surjective F hF
+  letI (k : ℕ) := finC k
+  have hvan : ∀ k, N + 1 < k → Subsingleton (C k) := by
+    intro k hk
+    cases k with
+    | zero => omega
+    | succ j =>
+      apply subsingleton_iff.mpr
+      intro x y
+      have hd_inj : Function.Injective (d j) := by
+        rw [← LinearMap.ker_eq_bot]
+        rw [← hgd j]
+        apply LinearMap.range_eq_bot.mpr
+        ext b
+        haveI := hB (j + 1) (by omega)
+        rw [show b = 0 from Subsingleton.elim _ _]
+        simp
+      apply hd_inj
+      haveI := hA j (by omega)
+      exact Subsingleton.elim _ _
+  refine ⟨finC, hvan, ?_⟩
+  have hrank (k : ℕ) :
+      Module.finrank ℚ (A k) = Module.finrank ℚ (LinearMap.range (d k)) +
+        Module.finrank ℚ (LinearMap.range (f k)) := by
+    calc
+      _ = Module.finrank ℚ (LinearMap.range (f k)) +
+          Module.finrank ℚ (LinearMap.ker (f k)) :=
+        (f k).finrank_range_add_finrank_ker.symm
+      _ = _ := by rw [← hdf k, add_comm]
+  have hrankB (k : ℕ) :
+      Module.finrank ℚ (B k) = Module.finrank ℚ (LinearMap.range (f k)) +
+        Module.finrank ℚ (LinearMap.range (g k)) := by
+    calc
+      _ = Module.finrank ℚ (LinearMap.range (g k)) +
+          Module.finrank ℚ (LinearMap.ker (g k)) :=
+        (g k).finrank_range_add_finrank_ker.symm
+      _ = _ := by rw [← hfg k, add_comm]
+  have hrankC0 : Module.finrank ℚ (C 0) = Module.finrank ℚ (LinearMap.range (g 0)) := by
+    rw [show LinearMap.range (g 0) = ⊤ from LinearMap.range_eq_top.mpr hg0]
+    simp
+  have hrankC (k : ℕ) :
+      Module.finrank ℚ (C (k + 1)) = Module.finrank ℚ (LinearMap.range (g (k + 1))) +
+        Module.finrank ℚ (LinearMap.range (d k)) := by
+    calc
+      _ = Module.finrank ℚ (LinearMap.range (d k)) +
+          Module.finrank ℚ (LinearMap.ker (d k)) :=
+        (d k).finrank_range_add_finrank_ker.symm
+      _ = _ := by rw [← hgd k, add_comm]
+  -- Exactness turns the summand in degree zero into `rank d₀`, and in
+  -- positive degree into two consecutive ranks of the connecting maps.
+  have hzero :
+      (Module.finrank ℚ (A 0) : ℚ) - Module.finrank ℚ (B 0) +
+        Module.finrank ℚ (C 0) = Module.finrank ℚ (LinearMap.range (d 0)) := by
+    rw [hrank 0, hrankB 0, hrankC0]
+    push_cast
+    ring
+  have hsucc (k : ℕ) :
+      (Module.finrank ℚ (A (k + 1)) : ℚ) - Module.finrank ℚ (B (k + 1)) +
+          Module.finrank ℚ (C (k + 1)) =
+        Module.finrank ℚ (LinearMap.range (d (k + 1))) +
+          Module.finrank ℚ (LinearMap.range (d k)) := by
+    rw [hrank (k + 1), hrankB (k + 1), hrankC k]
+    push_cast
+    ring
+  have hterm (k : ℕ) :
+      (Module.finrank ℚ (A k) : ℚ) - Module.finrank ℚ (B k) +
+          Module.finrank ℚ (C k) =
+        if k = 0 then (Module.finrank ℚ (LinearMap.range (d 0)) : ℚ)
+        else (Module.finrank ℚ (LinearMap.range (d k)) : ℚ) +
+          Module.finrank ℚ (LinearMap.range (d (k - 1))) := by
+    cases k with
+    | zero => simpa using hzero
+    | succ k => simpa using hsucc k
+  simp_rw [hterm]
+  have htel : ∀ M : ℕ,
+      ∑ k ∈ Finset.range (M + 1), (-1 : ℚ) ^ k *
+          (if k = 0 then (Module.finrank ℚ (LinearMap.range (d 0)) : ℚ)
+           else (Module.finrank ℚ (LinearMap.range (d k)) : ℚ) +
+             Module.finrank ℚ (LinearMap.range (d (k - 1)))) =
+        (-1 : ℚ) ^ M * Module.finrank ℚ (LinearMap.range (d M)) := by
+    intro M
+    induction M with
+    | zero => simp
+    | succ M ih =>
+        rw [Finset.sum_range_succ, ih]
+        simp only [Nat.add_eq_zero, one_ne_zero, and_false, ↓reduceIte,
+          Nat.succ_sub_one]
+        simp [pow_succ, mul_add, add_mul]
+        let a : ℚ := (-1 : ℚ) ^ M * Module.finrank ℚ (LinearMap.range (d M))
+        let b : ℚ := (-1 : ℚ) ^ M * Module.finrank ℚ (LinearMap.range (d (M + 1)))
+        change a + (-b + -a) = -b
+        abel
+  rw [show N + 2 = (N + 1) + 1 by omega, htel (N + 1)]
+  have hdtop : Module.finrank ℚ (LinearMap.range (d (N + 1))) = 0 := by
+    haveI := hA (N + 1) (by omega)
+    simp
+  rw [hdtop]
+  simp
 
 /-- LEAF B1b.  The Mayer–Vietoris map `H₀(U) ⊕ H₀(V) → H₀(X)` is onto
 (`rationalMayerVietoris` gives exactness at the other spots only). -/
