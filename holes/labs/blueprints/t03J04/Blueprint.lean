@@ -192,7 +192,33 @@ theorem t03J04_hasEuler_mayerVietoris {X : Type} [TopologicalSpace X]
 theorem t03J04_hasEuler_of_homotopyEquiv {X Y : Type} [TopologicalSpace X]
     [TopologicalSpace Y] (e : ContinuousMap.HomotopyEquiv X Y) {v : ℚ}
     (h : HasEulerCharacteristic Y v) : HasEulerCharacteristic X v := by
-  sorry
+  rcases h with ⟨hfinY, N, hvanY, hsumY⟩
+  let i (k : ℕ) :=
+    CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv ℚ e k
+  have hfinX : ∀ k, FiniteDimensional ℚ (Homology X k) := by
+    intro k
+    letI := hfinY k
+    exact FiniteDimensional.of_injective (i k).hom.hom (i k).toLinearEquiv.injective
+  apply t03J04_hasEuler_of_finrank hfinX N
+  · intro k hk
+    letI := hvanY k hk
+    constructor
+    intro a b
+    apply (i k).toLinearEquiv.injective
+    exact Subsingleton.elim _ _
+  · rw [← hsumY]
+    apply Finset.sum_congr rfl
+    intro k hk
+    letI := hfinY k
+    letI := hfinX k
+    have hdim : Module.finrank ℚ (Homology X k) =
+        Module.finrank ℚ (Homology Y k) :=
+      LinearEquiv.finrank_eq (i k).toLinearEquiv
+    rw [hdim]
+    congr 1
+    have hid : TopCat.ofHom (ContinuousMap.id Y) = 𝟙 (TopCat.of Y) := rfl
+    simp only [induced, hid, CategoryTheory.Functor.map_id, ModuleCat.hom_id,
+      LinearMap.trace_id]
 
 /-- LEAF B3.  χ(point) = 1 (`singularHomologyFunctorZeroOfTotallyDisconnectedSpace`,
 `isZero_singularHomologyFunctor_of_totallyDisconnectedSpace`). -/
