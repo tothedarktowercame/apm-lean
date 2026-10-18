@@ -596,7 +596,61 @@ theorem apm_t01J04_leaf_overlap
         (modelWithCornersEuclideanHalfSpace n).symm)
       ((modelWithCornersEuclideanHalfSpace n).symm ⁻¹' (d.chart.symm ≫ₕ d'.chart).source ∩
         range (modelWithCornersEuclideanHalfSpace n)) := by
-  sorry
+  have hamb := IsManifold.compatible_of_mem_maximalAtlas d.amb_mem d'.amb_mem
+  rw [contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid] at hamb
+  have hsmooth := hamb.1
+  simp only [modelWithCornersSelf_coe, PartialEquiv.refl_coe, Function.id_comp,
+    Function.comp_id, preimage_id, range_id] at hsmooth
+  apply hsmooth.congr_mono
+  · intro x hx
+    rcases hx.2 with ⟨z, rfl⟩
+    have hzsrc : z ∈ (d.chart.symm ≫ₕ d'.chart).source := by
+      have h := hx.1
+      change (modelWithCornersEuclideanHalfSpace n).symm
+        (modelWithCornersEuclideanHalfSpace n z) ∈
+          (d.chart.symm ≫ₕ d'.chart).source at h
+      rw [ModelWithCorners.left_inv] at h
+      exact h
+    have hzt : z ∈ d.chart.target := hzsrc.1
+    have hz' : d.chart.symm z ∈ d'.chart.source := hzsrc.2
+    have hamb_t : z.val ∈ d.amb.target := by
+      have := hzt
+      rw [d.target_eq] at this
+      exact this
+    have hamb_s : (d.chart.symm z).val ∈ d'.amb.source := by
+      have := hz'
+      rw [d'.source_eq] at this
+      exact this
+    simp only [Function.comp_apply, ModelWithCorners.left_inv,
+      modelWithCornersSelf_coe_symm, Function.id_def]
+    change (d'.chart (d.chart.symm z)).val = d'.amb (d.amb.symm z.val)
+    rw [d'.chart_eq _ hz', d.symm_eq _ hzt]
+  · rintro x hx
+    rcases hx.2 with ⟨z, rfl⟩
+    have hzsrc : z ∈ (d.chart.symm ≫ₕ d'.chart).source := by
+      have h := hx.1
+      change (modelWithCornersEuclideanHalfSpace n).symm
+        (modelWithCornersEuclideanHalfSpace n z) ∈
+          (d.chart.symm ≫ₕ d'.chart).source at h
+      rw [ModelWithCorners.left_inv] at h
+      exact h
+    have hzt : z ∈ d.chart.target := hzsrc.1
+    have hz' : d.chart.symm z ∈ d'.chart.source := hzsrc.2
+    have hamb_t : z.val ∈ d.amb.target := by
+      have := hzt
+      rw [d.target_eq] at this
+      exact this
+    have hamb_s : (d.chart.symm z).val ∈ d'.amb.source := by
+      have := hz'
+      rw [d'.source_eq] at this
+      exact this
+    constructor
+    · change z.val ∈ (d.amb.symm ≫ₕ d'.amb).source
+      refine ⟨hamb_t, ?_⟩
+      change d.amb.symm z.val ∈ d'.amb.source
+      rw [← d.symm_eq _ hzt]
+      exact hamb_s
+    · exact mem_univ _
 -- END SEAT AREA
 
 /-- The charted space on `S` given by a choice of restricted chart at each point. -/
