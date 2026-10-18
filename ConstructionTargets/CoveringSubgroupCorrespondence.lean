@@ -495,7 +495,99 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_evenlyCovered_of_s
     (hVU : f ⁻¹' U = ⋃ i, V i)
     (hVe : ∀ i, ∃ e : V i ≃ₜ U, ∀ q, (e q : Y) = f q) :
     IsEvenlyCovered f y ι := by
-  sorry
+  classical
+  let e : ∀ i, V i ≃ₜ U := fun i => (hVe i).choose
+  have he : ∀ i (q : V i), ((e i q : U) : Y) = f q :=
+    fun i => (hVe i).choose_spec
+  let g : U × ι → f ⁻¹' U := fun p =>
+    ⟨(e p.2).symm p.1,
+      show f ((e p.2).symm p.1 : E) ∈ U by
+        rw [← he p.2 ((e p.2).symm p.1)]
+        simpa using p.1.2⟩
+  have hg_inj : Function.Injective g := by
+    rintro ⟨u, i⟩ ⟨v, j⟩ hij
+    have hmemi : (g (u, i) : E) ∈ V i := (e i).symm (u : U) |>.2
+    have hmemj : (g (v, j) : E) ∈ V j := (e j).symm (v : U) |>.2
+    have hij' : i = j := by
+      by_contra hn
+      have hd := hVd hn
+      exact Set.disjoint_left.1 hd hmemi (hij ▸ hmemj)
+    subst j
+    apply Prod.ext
+    · apply Subtype.ext
+      have hh := congrArg (fun q : f ⁻¹' U => f q) hij
+      simpa [g, ← he i] using hh
+    · rfl
+  have hg_surj : Function.Surjective g := by
+    intro q
+    have hq : (q : E) ∈ ⋃ i, V i := by
+      rw [← hVU]
+      exact q.2
+    rcases Set.mem_iUnion.1 hq with ⟨i, hi⟩
+    refine ⟨(e i ⟨q, hi⟩, i), ?_⟩
+    apply Subtype.ext
+    change ((e i).symm (e i ⟨q, hi⟩) : E) = q
+    exact congrArg Subtype.val ((e i).left_inv ⟨q, hi⟩)
+  let eg : U × ι ≃ f ⁻¹' U := Equiv.ofBijective g ⟨hg_inj, hg_surj⟩
+  have hg_cont : Continuous g := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+        (s := fun i => {p : U × ι | p.2 = i})
+    · intro i
+      have hc : Continuous (fun p : U × ι =>
+          (⟨(e i).symm p.1,
+            show f ((e i).symm p.1 : E) ∈ U by
+              rw [← he i ((e i).symm p.1)]
+              simpa using p.1.2⟩ : f ⁻¹' U)) := by fun_prop
+      apply hc.continuousOn.congr
+      intro p hp
+      simp only [Set.mem_setOf_eq] at hp
+      rcases p with ⟨p, j⟩
+      have hj : j = i := hp
+      subst j
+      rfl
+    · intro i
+      exact (isOpen_discrete {i}).preimage continuous_snd
+    · ext p
+      simp
+  have heginv_cont : Continuous eg.symm := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+        (s := fun i => {q : f ⁻¹' U | (q : E) ∈ V i})
+    · intro i
+      rw [continuousOn_iff_continuous_restrict]
+      let k : {q : f ⁻¹' U | (q : E) ∈ V i} → U × ι := fun q =>
+        (e i ⟨q.1, q.2⟩, i)
+      have hk : Continuous k := by
+        apply Continuous.prodMk
+        · have hv : Continuous (fun q : {q : f ⁻¹' U | (q : E) ∈ V i} =>
+              (⟨q.1, q.2⟩ : V i)) := by
+              exact (continuous_subtype_val.comp continuous_subtype_val).subtype_mk _
+          exact (e i).continuous.comp hv
+        · fun_prop
+      apply hk.congr
+      intro q
+      apply hg_inj
+      change g (k q) = g (eg.symm q.1)
+      rw [show g = eg from rfl, eg.apply_symm_apply]
+      apply Subtype.ext
+      change ((e i).symm (e i ⟨q.1, q.2⟩) : E) = q.1
+      exact congrArg Subtype.val ((e i).left_inv ⟨q.1, q.2⟩)
+    · intro i
+      exact (hVo i).preimage continuous_subtype_val
+    · ext q
+      simp only [Set.mem_iUnion, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+      have hq : (q : E) ∈ ⋃ i, V i := by rw [← hVU]; exact q.2
+      exact Set.mem_iUnion.1 hq
+  refine ⟨inferInstance, U, hy, hU, ?_, ?_, ?_⟩
+  · rw [hVU]
+    exact isOpen_iUnion hVo
+  · exact ⟨eg.symm, heginv_cont, hg_cont⟩
+  · intro q
+    have hh := congrArg Subtype.val (eg.apply_symm_apply q)
+    calc
+      ((eg.symm q).1 : Y) = f (g (eg.symm q) : E) := by
+        simpa [g] using
+          (he (eg.symm q).2 ((e (eg.symm q).2).symm (eg.symm q).1))
+      _ = f q := congrArg f hh
 
 /-- **LIBRARY-borderline.** The endpoint map is a covering map.  Charts: for a
 good `U` (`exists_connected_subgroup_cover_aux_good_nhds`) and `y ∈ U`, the
