@@ -316,7 +316,36 @@ homeomorphism.  About 40–100 lines. -/
 -- BEGIN SEAT AREA
 theorem t98A01_surfaceTrueZero_pi1_subsingleton (x : Surface true 0) :
     Subsingleton (FundamentalGroup (Surface true 0) x) := by
-  sorry
+  have hrel (a b : Disk) :
+      Relation.EqvGen (SurfaceRel true 0) a b ↔ a = b := by
+    constructor
+    · intro h
+      induction h with
+      | rel a b hab => simp [SurfaceRel] at hab
+      | refl a => rfl
+      | symm a b _ ih => exact ih.symm
+      | trans a b c _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+    · rintro rfl
+      exact Relation.EqvGen.refl _
+  have he : Nonempty (Disk ≃ₜ Surface true 0) :=
+    polygonNF_homeomorph_of_fibres
+      (p := id) (q := surfaceQuotient true 0)
+      Topology.IsQuotientMap.id
+      ⟨surjective_surfaceQuotient true 0, rfl⟩
+      (fun a b => by
+        change a = b ↔ Quotient.mk _ a = Quotient.mk _ b
+        rw [Quotient.eq]
+        change a = b ↔ Relation.EqvGen (SurfaceRel true 0) a b
+        exact (hrel a b).symm)
+  letI : ContractibleSpace Disk :=
+    Convex.contractibleSpace (convex_closedBall (0 : ℂ) 1)
+      ⟨0, Metric.mem_closedBall_self zero_le_one⟩
+  let e := Classical.choice he
+  letI : ContractibleSpace (Surface true 0) := e.symm.contractibleSpace
+  letI : SimplyConnectedSpace (Surface true 0) :=
+    SimplyConnectedSpace.ofContractible _
+  change Subsingleton (Path.Homotopic.Quotient x x)
+  infer_instance
 -- END SEAT AREA
 
 theorem t98A01_b1_oneRelator_bounds (n : ℕ) (r : FreeGroup (Fin n)) :
