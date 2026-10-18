@@ -355,7 +355,16 @@ lemma apm_a96A07_argumentPrinciple_disk (g : ℂ → ℂ) (w : ℂ)
     (hw : w ∉ apm_a96A07_boundaryImage g) :
     (∮ z in C(0, 1), logDeriv (fun z => g z - w) z) =
       (apm_a96A07_diskZeroCount g w : ℂ) * (2 * Real.pi * I) := by
-  sorry
+  have hne : ∀ z ∈ sphere (0 : ℂ) 1, g z - w ≠ 0 := by
+    intro z hz hzero
+    apply hw
+    refine ⟨z, ?_, ?_⟩
+    · exact hz
+    · exact sub_eq_zero.mp hzero
+  rw [ConstructionTargets.Rouche.circleIntegral_logDeriv_eq_divisor_sum
+    zero_lt_one han hne]
+  rw [← ConstructionTargets.Rouche.intCast_zeroCountInClosedBall]
+  rfl
 
 /-- **LIBRARY (Jordan index theorem).**  An injectively parametrized analytic
 circle has index of absolute value at most one about every point off its
