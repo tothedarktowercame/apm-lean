@@ -36,3 +36,13 @@ Grader: read-only Claude subagent, 2026-10-13.
 | b96A01 | RevisedMain | faithful | apm_b96a01 | (d) excludes exactly n = 1 ∧ p = 2; true elsewhere: nonabelian by reduction mod p (Γ(p) layers abelian by (c)); C_q has n ≥ q−1 and embeds via 𝔽_{p^d}^×, d = ord_q p, or a unipotent matrix when q = p ≥ 3 or (q = p = 2, n ≥ 2) | yes: printed (d) false for n = 1, p = 2, G = {±1} |
 
 Grader: read-only Claude subagent, 2026-10-13.
+
+## Re-grade: m98J02 (printed reading, b69f81f3c)
+
+| id | candidate | grade | decl | reason | prelim-defect |
+|---|---|---|---|---|---|
+| m98J02 | Main (printed reading) | faithful | apm_m98j02 | (d) now ∀ f ∈ C²(ℝ²), no compact support; asks for a regular solution with a C² density plus a distinct second solution; w₀ dropped (only a hint; f*w₀ need not be defined or C²); adjoint 2∂ₓ²+∂ᵧ+3∂ₓ∂ᵧ checked; `ContDiff ℝ 2` is finite order; integrands integrable (continuous × compactly supported) | none under this reading |
+
+Replaces the 2026-10-13 grade "narrower, acceptable" (f compactly supported, w₀ regular). That proof is kept as `problems/m98J02/out-of-competition/` (`apm_m98j02_compactF`).
+
+Grader: read-only Claude subagent, 2026-10-18.

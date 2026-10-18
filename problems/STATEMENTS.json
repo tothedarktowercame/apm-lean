@@ -226,6 +226,29 @@
    "rev": "a68f67e45",
    "approved_at": "2026-10-13T09:42:56Z"
   },
+  "m98J02": {
+   "decls": [
+    "apm_m98j02"
+   ],
+   "sha256": "b6ff76bdda104c960d996c169ee46967b7683f81bbc60d298d936a3765094f7a",
+   "defs": [
+    "apm_m98J02_Dist",
+    "apm_m98J02_E",
+    "apm_m98J02_Test",
+    "apm_m98J02_formalAdjoint",
+    "apm_m98J02_hasCompactSupport",
+    "apm_m98J02_isConvolution",
+    "apm_m98J02_partial",
+    "apm_m98J02_representsFunction",
+    "apm_m98J02_solvesT"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-18)",
+   "evidence": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+   "prelim_defect": null,
+   "rev": "b69f81f3c",
+   "approved_at": "2026-10-18T21:18:11Z"
+  },
   "m98J05": {
    "decls": [
     "apm_m98j05"
