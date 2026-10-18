@@ -380,7 +380,91 @@ lemma apm_a96A07_two_preimages_force_two_le_zeroCount (g : ℂ → ℂ) (w x y :
     (hx : x ∈ apm_a96A07_disk) (hy : y ∈ apm_a96A07_disk)
     (hxy : x ≠ y) (hxw : g x = w) (hyw : g y = w) :
     (2 : ℤ) ≤ apm_a96A07_diskZeroCount g w := by
-  sorry
+  classical
+  let f : ℂ → ℂ := fun z => g z - w
+  let D := MeromorphicOn.divisor f (closedBall (0 : ℂ) 1)
+  have hfm : MeromorphicOn f (closedBall (0 : ℂ) 1) := han.meromorphicOn
+  have hne : ∀ z ∈ sphere (0 : ℂ) 1, f z ≠ 0 := by
+    intro z hz hzero
+    apply hw
+    refine ⟨z, hz, ?_⟩
+    simpa [f] using sub_eq_zero.mp hzero
+  have h1s : (1 : ℂ) ∈ sphere (0 : ℂ) 1 := by simp
+  have h1c : (1 : ℂ) ∈ closedBall (0 : ℂ) 1 :=
+    sphere_subset_closedBall h1s
+  have h1order : meromorphicOrderAt f 1 ≠ ⊤ := by
+    have hzero : meromorphicOrderAt f 1 = 0 :=
+      (han 1 h1c).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.mpr
+        (hne 1 h1s)
+    simp [hzero]
+  have hord : ∀ z : closedBall (0 : ℂ) 1,
+      meromorphicOrderAt f z ≠ ⊤ :=
+    (hfm.exists_meromorphicOrderAt_ne_top_iff_forall
+      (isConnected_closedBall (by norm_num : (0 : ℝ) ≤ 1))).1
+      ⟨⟨1, h1c⟩, h1order⟩
+  have hDfin : D.support.Finite :=
+    (MeromorphicOn.divisor f (closedBall (0 : ℂ) 1)).finiteSupport
+      (isCompact_closedBall (0 : ℂ) 1)
+  have hnonneg : ∀ z, 0 ≤ D z := by
+    intro z
+    by_cases hz : z ∈ closedBall (0 : ℂ) 1
+    · rw [MeromorphicOn.divisor_apply hfm hz]
+      rw [WithTop.untop₀_nonneg]
+      exact (han z hz).meromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt.mpr
+        (han z hz)
+    · have hz0 : D z = 0 := by
+        apply not_ne_iff.mp
+        intro hzD
+        exact hz (D.supportWithinDomain (Function.mem_support.mpr hzD))
+      simp [hz0]
+  have hxclosed : x ∈ closedBall (0 : ℂ) 1 := ball_subset_closedBall hx
+  have hyclosed : y ∈ closedBall (0 : ℂ) 1 := ball_subset_closedBall hy
+  have hxpos : 1 ≤ D x := by
+    rw [MeromorphicOn.divisor_apply hfm hxclosed]
+    have hxne : meromorphicOrderAt f x ≠ 0 := by
+      exact (han x hxclosed).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.not.mpr
+        (by simp [f, hxw])
+    have hxnt := hord ⟨x, hxclosed⟩
+    have hxnn : 0 ≤ (meromorphicOrderAt f x).untop₀ := by
+      rw [WithTop.untop₀_nonneg]
+      exact (han x hxclosed).meromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt.mpr
+        (han x hxclosed)
+    have hxnz : (meromorphicOrderAt f x).untop₀ ≠ 0 := by
+      intro h
+      rcases WithTop.untop₀_eq_zero.mp h with h | h
+      · exact hxne h
+      · exact hxnt h
+    omega
+  have hypos : 1 ≤ D y := by
+    rw [MeromorphicOn.divisor_apply hfm hyclosed]
+    have hyne : meromorphicOrderAt f y ≠ 0 := by
+      exact (han y hyclosed).meromorphicNFAt.meromorphicOrderAt_eq_zero_iff.not.mpr
+        (by simp [f, hyw])
+    have hynt := hord ⟨y, hyclosed⟩
+    have hynn : 0 ≤ (meromorphicOrderAt f y).untop₀ := by
+      rw [WithTop.untop₀_nonneg]
+      exact (han y hyclosed).meromorphicNFAt.meromorphicOrderAt_nonneg_iff_analyticAt.mpr
+        (han y hyclosed)
+    have hynz : (meromorphicOrderAt f y).untop₀ ≠ 0 := by
+      intro h
+      rcases WithTop.untop₀_eq_zero.mp h with h | h
+      · exact hyne h
+      · exact hynt h
+    omega
+  change (2 : ℤ) ≤ ∑ᶠ z, D z
+  rw [finsum_eq_sum D hDfin]
+  calc
+    (2 : ℤ) ≤ D x + D y := by omega
+    _ = ∑ z ∈ ({x, y} : Finset ℂ), D z := by simp [hxy]
+    _ ≤ ∑ z ∈ hDfin.toFinset, D z := by
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+      · intro z hz
+        apply (Set.Finite.mem_toFinset hDfin).2
+        simp only [Finset.mem_insert, Finset.mem_singleton] at hz
+        rcases hz with rfl | rfl
+        · exact Function.mem_support.mpr (ne_of_gt (lt_of_lt_of_le Int.zero_lt_one hxpos))
+        · exact Function.mem_support.mpr (ne_of_gt (lt_of_lt_of_le Int.zero_lt_one hypos))
+      · exact fun z _ _ => hnonneg z
 -- END SEAT AREA
 
 /-- If one value has two distinct interior preimages, a nearby value outside
