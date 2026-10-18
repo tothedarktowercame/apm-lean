@@ -771,10 +771,90 @@ lemma apm_t00j01_circleCover_intersection_equiv_aux_product_model :
       continuous_toFun := by fun_prop
       continuous_invFun := by fun_prop }
 
+def apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign
+    (w : apm_t00j01_circleCover_intersection_equiv_aux_E0) :
+    Sum PUnit.{1} PUnit.{1} :=
+  if 0 < (w.1.1 : ℂ).im then Sum.inl PUnit.unit else Sum.inr PUnit.unit
+
+def apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point :
+    Sum PUnit.{1} PUnit.{1} → apm_t00j01_circleCover_intersection_equiv_aux_E0
+  | Sum.inl _ => ⟨⟨Complex.I, by
+      rw [Submodule.mem_orthogonal']
+      intro y hy
+      rw [Submodule.mem_span_singleton] at hy
+      obtain ⟨r, rfl⟩ := hy
+      simp [RCLike.inner_apply]
+      change (r * Complex.I).re = 0
+      simp⟩, by simp⟩
+  | Sum.inr _ => ⟨⟨-Complex.I, by
+      rw [Submodule.mem_orthogonal']
+      intro y hy
+      rw [Submodule.mem_span_singleton] at hy
+      obtain ⟨r, rfl⟩ := hy
+      simp [RCLike.inner_apply]
+      change (r * Complex.I).re = 0
+      simp⟩, by simp⟩
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous :
+    Continuous apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign := by
+  rw [continuous_discrete_rng]
+  rintro (u | u)
+  · have heq :
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign ⁻¹' {Sum.inl u} =
+          {w | 0 < (w.1.1 : ℂ).im} := by
+      ext w
+      simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign]
+    rw [heq]
+    exact isOpen_lt continuous_const
+      (Complex.continuous_im.comp
+        (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_id)))
+  · have heq :
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign ⁻¹' {Sum.inr u} =
+          {w | (w.1.1 : ℂ).im < 0} := by
+      ext w
+      simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign]
+      have hn := apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero w
+      constructor <;> intro h
+      · exact lt_of_le_of_ne h hn
+      · exact h.le
+    rw [heq]
+    exact isOpen_lt
+      (Complex.continuous_im.comp
+        (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_id)))
+      continuous_const
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous :
+    Continuous apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point := by
+  continuity
+
+/-- Straight-line homotopy from each nonzero point of the imaginary axis to `±i`
+on its own side; the segment never crosses `0`. -/
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_homotopic :
+    ((⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩ :
+          C(Sum PUnit.{1} PUnit.{1}, apm_t00j01_circleCover_intersection_equiv_aux_E0)).comp
+      ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩).Homotopic
+      (ContinuousMap.id _) := by
+  sorry
+
 lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays :
     Nonempty (apm_t00j01_circleCover_intersection_equiv_aux_E0 ≃ₕ
       Sum PUnit.{1} PUnit.{1}) := by
-  sorry
+  refine ⟨{ toFun := ⟨_, apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩
+            invFun := ⟨_, apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩
+            left_inv := apm_t00j01_circleCover_intersection_equiv_aux_two_rays_homotopic
+            right_inv := ?_ }⟩
+  have h : (⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩ :
+          C(apm_t00j01_circleCover_intersection_equiv_aux_E0, Sum PUnit.{1} PUnit.{1})).comp
+      ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩ =
+      ContinuousMap.id _ := by
+    ext (u | u) <;>
+      simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point]
+  rw [h]
 
 lemma apm_t00j01_circleCover_intersection_equiv :
     Nonempty (((apm_t00j01_circleCoverLeft ∩
