@@ -604,13 +604,84 @@ lemma apm_t00j01_klein_H3_zero :
 
 /-- Homotopy invariance transfers `H₃(K)=0` to both cover members. -/
 -- BEGIN SEAT AREA
+lemma apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (n : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) =
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom g) := by
+  let h : MonoidalCategoryStruct.tensorObj (TopCat.of X) TopCat.I ⟶ TopCat.of Y :=
+    TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+      H.continuous.comp
+        ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+  have h₀ : TopCat.ι₀ ≫ h = TopCat.ofHom f := by
+    ext x
+    change H (0, x) = f x
+    simp
+  have h₁ : TopCat.ι₁ ≫ h = TopCat.ofHom g := by
+    ext x
+    change H (1, x) = g x
+    simp
+  let hs : SSet.Homotopy (TopCat.toSSet.map (TopCat.ofHom f))
+      (TopCat.toSSet.map (TopCat.ofHom g)) := {
+    h := CategoryTheory.MonoidalCategory.whiskerLeft (TopCat.toSSet.obj (TopCat.of X))
+        SSet.stdSimplex.toSSetObjI ≫
+      Functor.LaxMonoidal.μ TopCat.toSSet (TopCat.of X) TopCat.I ≫
+        TopCat.toSSet.map h
+    h₀ := by
+      change _ = TopCat.toSSet.map (TopCat.ofHom f)
+      simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+        ← TopCat.toSSet.map_comp, h₀]
+    h₁ := by
+      change _ = TopCat.toSSet.map (TopCat.ofHom g)
+      simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+        ← TopCat.toSSet.map_comp, h₁]
+    rel := by
+      ext k x
+      exact x.1.property.elim }
+  simpa [AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℤ) (R := ModuleCat.of ℤ ℤ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (H := hs.toSimplicialObjectHomotopy) n
+
+noncomputable def apm_t00j01_circleCover_pieces_H3_zero_aux_iso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) (n : ℕ) :
+    apm_t00j01_H n X ≅ apm_t00j01_H n Y := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)
+  letI : IsIso (F.map (TopCat.ofHom e.toFun)) := IsIso.mk
+    ⟨F.map (TopCat.ofHom e.invFun), by
+      rw [← F.map_comp]
+      change F.map (TopCat.ofHom (e.invFun.comp e.toFun)) = _
+      rw [apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
+        (Classical.choice e.left_inv)]
+      change F.map (𝟙 (TopCat.of X)) = _
+      rw [F.map_id], by
+      rw [← F.map_comp]
+      change F.map (TopCat.ofHom (e.toFun.comp e.invFun)) = _
+      rw [apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
+        (Classical.choice e.right_inv)]
+      change F.map (𝟙 (TopCat.of Y)) = _
+      rw [F.map_id]⟩
+  exact asIso (F.map (TopCat.ofHom e.toFun))
+
 lemma apm_t00j01_circleCover_pieces_H3_zero
     (_he : Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
       Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein))
     (_hK3 : Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein)) :
     Limits.IsZero (apm_t00j01_H 3 (apm_t00j01_circleCoverLeft : Type)) ∧
       Limits.IsZero (apm_t00j01_H 3 (apm_t00j01_circleCoverRight : Type)) := by
-  sorry
+  obtain ⟨⟨eLeft⟩, ⟨eRight⟩⟩ := _he
+  constructor
+  · exact _hK3.of_iso
+      (apm_t00j01_circleCover_pieces_H3_zero_aux_iso eLeft 3)
+  · exact _hK3.of_iso
+      (apm_t00j01_circleCover_pieces_H3_zero_aux_iso eRight 3)
 -- END SEAT AREA
 
 /-- Additivity for a disjoint sum and homotopy invariance transfer
