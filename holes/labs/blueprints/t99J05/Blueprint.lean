@@ -325,7 +325,24 @@ def t99J05V (n : ℕ) : Set (CP (n + 1)) :=
 theorem t99J05_lefschetz_euler_cover (n : ℕ) :
     IsOpen (t99J05U n) ∧ IsOpen (t99J05V n) ∧
       t99J05U n ∪ t99J05V n = Set.univ := by
-  sorry
+  have hopen (i : Fin (n + 2)) :
+      IsOpen {x : CP (n + 1) | x.rep i ≠ 0} :=
+    affineSource_isOpen i
+  refine ⟨?_, hopen (Fin.last (n + 1)), ?_⟩
+  · rw [show t99J05U n =
+        ⋃ i : Fin (n + 1), {x : CP (n + 1) | x.rep i.castSucc ≠ 0} by
+      ext x
+      simp [t99J05U]]
+    exact isOpen_iUnion fun i => hopen i.castSucc
+  · ext x
+    simp only [t99J05U, t99J05V, Set.mem_union, Set.mem_setOf_eq,
+      Set.mem_univ, iff_true]
+    by_contra h
+    push_neg at h
+    apply Projectivization.rep_nonzero x
+    funext i
+    refine Fin.lastCases h.2 (fun j => ?_) i
+    exact h.1 j
 
 /-- The last affine chart is contractible and has the rational homology of a point. -/
 theorem t99J05_lefschetz_euler_V (n : ℕ) :
