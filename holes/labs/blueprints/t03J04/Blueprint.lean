@@ -81,7 +81,32 @@ variable {E H G : Type} [NormedAddCommGroup E] [NormedSpace ℝ E]
 theorem t03J04_mulInvariant_contMDiff [LieGroup I ∞ G] (v : GroupLieAlgebra I G) :
     ContMDiff I I.tangent ∞
       (fun g : G ↦ (⟨g, mulInvariantVectorField v g⟩ : TangentBundle I G)) := by
-  sorry
+  open Bundle Function Set in
+   set_option backward.isDefEq.respectTransparency false in
+    have hne : (∞ : WithTop ℕ∞) ≠ 0 := by simp
+    have hadd : (∞ : WithTop ℕ∞) + 1 = ∞ := by simp
+    let fg : G → TangentBundle I G := fun g ↦ TotalSpace.mk' E g 0
+    have hfg : ContMDiff I I.tangent ∞ fg := contMDiff_zeroSection _ _
+    let fv : G → TangentBundle I G := fun _ ↦ TotalSpace.mk' E 1 v
+    have hfv : ContMDiff I I.tangent ∞ fv := contMDiff_const
+    let F₁ : G → TangentBundle I G × TangentBundle I G := fun g ↦ (fg g, fv g)
+    have hF₁ : ContMDiff I (I.tangent.prod I.tangent) ∞ F₁ := hfg.prodMk hfv
+    let F₂ : TangentBundle I G × TangentBundle I G → TangentBundle (I.prod I) (G × G) :=
+      (equivTangentBundleProd I G I G).symm
+    have hF₂ : ContMDiff (I.tangent.prod I.tangent) (I.prod I).tangent ∞ F₂ :=
+      contMDiff_equivTangentBundleProd_symm
+    let F₃ : TangentBundle (I.prod I) (G × G) → TangentBundle I G :=
+      tangentMap (I.prod I) I (fun p : G × G ↦ p.1 * p.2)
+    have hF₃ : ContMDiff (I.prod I).tangent I.tangent ∞ F₃ := by
+      apply ContMDiff.contMDiff_tangentMap _ (m := ∞) le_rfl
+      rw [hadd]
+      exact contMDiff_mul I ∞
+    let S := (hF₃.comp hF₂).comp hF₁
+    convert S with g
+    · simp [F₁, F₂, F₃, fg, fv]
+    · dsimp [F₃, F₂, F₁, fg, fv, tangentMap]
+      rw [mfderiv_prod_eq_add_apply ((contMDiff_mul I ∞).mdifferentiableAt hne)]
+      simp +instances [mulInvariantVectorField]
 
 /-- LEAF A2.  Left translation is a diffeomorphism, so its derivative at `1`
 is injective (`inverse_mfderiv_mul_left`, or `mfderiv` of `g⁻¹ * ·` after
