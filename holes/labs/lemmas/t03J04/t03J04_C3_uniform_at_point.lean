@@ -1861,7 +1861,39 @@ theorem t03J04_C3_uniform_at_point {n : ℕ} {X : Type} [TopologicalSpace X]
     ∃ W ∈ 𝓝 x, ∃ r₀ > 0, ∀ β ∈ I, ∀ z ∈ W ∩ K β, ∀ r ∈ Set.Ioo 0 r₀,
       t03J04_chartBall n β z r ⊆ (chartAt (apm_t03J04_HModel n) x).source ∧
         Convex ℝ (t03J04_coord n x '' t03J04_chartBall n β z r) := by
-  sorry
+  classical
+  induction I using Finset.induction_on with
+  | empty =>
+      refine ⟨Set.univ, Filter.univ_mem, 1, zero_lt_one, ?_⟩
+      simp
+  | @insert β I hβ ih =>
+      have hKI : ∀ γ ∈ I,
+          IsClosed (K γ) ∧
+            K γ ⊆ (chartAt (apm_t03J04_HModel n) γ).source := by
+        intro γ hγ
+        exact hK γ (Finset.mem_insert_of_mem hγ)
+      obtain ⟨W, hW, r₀, hr₀, hgood⟩ := ih hKI
+      by_cases hx : x ∈ K β
+      · have hβs : x ∈ (chartAt (apm_t03J04_HModel n) β).source :=
+          (hK β (Finset.mem_insert_self β I)).2 hx
+        obtain ⟨V, hV, s, hs, hlocal⟩ :=
+          t03J04_C3_chartBall_convex_local (n := n) (X := X)
+            (α := x) (β := β) (x := x) (mem_chart_source _ _) hβs
+        refine ⟨W ∩ V, inter_mem hW hV, min r₀ s, lt_min hr₀ hs, ?_⟩
+        intro γ hγ z hz r hr
+        rw [Finset.mem_insert] at hγ
+        rcases hγ with rfl | hγ
+        · exact hlocal z hz.1.2 r ⟨hr.1, lt_of_lt_of_le hr.2 (min_le_right _ _)⟩
+        · exact hgood γ hγ z ⟨hz.1.1, hz.2⟩ r
+            ⟨hr.1, lt_of_lt_of_le hr.2 (min_le_left _ _)⟩
+      · have hcompl : (K β)ᶜ ∈ 𝓝 x :=
+          (hK β (Finset.mem_insert_self β I)).1.isOpen_compl.mem_nhds hx
+        refine ⟨W ∩ (K β)ᶜ, inter_mem hW hcompl, r₀, hr₀, ?_⟩
+        intro γ hγ z hz r hr
+        rw [Finset.mem_insert] at hγ
+        rcases hγ with rfl | hγ
+        · exact False.elim (hz.1.2 hz.2)
+        · exact hgood γ hγ z ⟨hz.1.1, hz.2⟩ r hr
 -- END SEAT AREA
 
 /-- LEAF M4 (100–150 lines).  Chart balls with centres in a compact set are
