@@ -2494,6 +2494,85 @@ lemma t95J03_torusNsmul_isKSheeted (n : ℕ) (hn : 0 < n) :
     rw [Nat.card_congr e]
     exact t95J03_torusNsmul_isKSheeted_aux_kernel_card n hn
 
+/-! Banked from lemma-1's S6 partial (2026-10-18). -/
+noncomputable def t95J03_klein_doubleCover_aux_tau :
+    T95J03Torus → T95J03Torus :=
+  fun x => (-x.1, x.2 + (1 / 2 : ℝ))
+
+lemma t95J03_klein_doubleCover_aux_tau_sq (x : T95J03Torus) :
+    t95J03_klein_doubleCover_aux_tau
+      (t95J03_klein_doubleCover_aux_tau x) = x := by
+  apply Prod.ext
+  · simp [t95J03_klein_doubleCover_aux_tau]
+  · change x.2 + (1 / 2 : ℝ) + (1 / 2 : ℝ) = x.2
+    have hh : ((1 / 2 : ℝ) : UnitAddCircle) + ((1 / 2 : ℝ) : UnitAddCircle) = 0 := by
+      rw [← AddCircle.coe_add]; norm_num
+    rw [add_assoc, hh, add_zero]
+
+lemma t95J03_klein_doubleCover_aux_tau_ne (x : T95J03Torus) :
+    t95J03_klein_doubleCover_aux_tau x ≠ x := by
+  intro h
+  have h2 := congrArg Prod.snd h
+  change x.2 + (1 / 2 : ℝ) = x.2 at h2
+  have hz : ((1 / 2 : ℝ) : UnitAddCircle) = 0 := by
+    simpa using congrArg (fun y => -x.2 + y) h2
+  rw [QuotientAddGroup.eq_zero_iff] at hz
+  obtain ⟨z, hz⟩ := hz
+  have : (1 / 2 : ℝ) = (z : ℝ) := by simpa using hz.symm
+  have : (2 : ℤ) * z = 1 := by exact_mod_cast (show (2 : ℝ) * (z : ℝ) = 1 by linarith)
+  omega
+
+lemma t95J03_klein_doubleCover_aux_tau_continuous :
+    Continuous t95J03_klein_doubleCover_aux_tau := by
+  unfold t95J03_klein_doubleCover_aux_tau
+  fun_prop
+
+/-- **Leaf S6a (split 2026-10-18).**  A continuous fixed-point-free involution of
+a Hausdorff space gives a 2-sheeted covering onto its orbit quotient.
+
+Route.  Separate `x` and `τ x` by disjoint opens `U ∋ x`, `V ∋ τ x`; then
+`W = U ∩ τ⁻¹ V` satisfies `W ∩ τ W = ∅`.  The quotient map is open (the
+saturation of an open `O` is `O ∪ τ⁻¹ O`, `τ` being a homeomorphism, its own
+inverse), so `W` is evenly covered by `W ⊔ τ W`.  The fibre over `[x]` is
+`{x, τ x}`, two distinct points; `EqvGen` of `y = τ x` relates exactly
+`y = x ∨ y = τ x` because `τ` is an involution.  About 80–160 lines. -/
+lemma t95J03_klein_doubleCover_aux_involution_cover {X : Type*} [TopologicalSpace X]
+    [T2Space X] (τ : X → X) (hτ : Continuous τ) (hinv : ∀ x, τ (τ x) = x)
+    (hfree : ∀ x, τ x ≠ x) :
+    IsKSheetedCover (Quotient.mk (Relation.EqvGen.setoid fun x y : X => y = τ x)) 2 := by
+  sorry
+
+/-- **Leaf S6b (split 2026-10-18).**  The torus maps onto the Klein plane
+quotient with fibres exactly the `τ`-orbits.
+
+Route.  `f (u, v) = [(ũ, 2 ṽ)]` for lifts `ũ, ṽ ∈ ℝ`: well defined because
+`(ũ + 1, 2ṽ)` and `(ũ, 2ṽ + 2)` lie in the same orbit (the generators `a`
+and `b²`).  Continuity: lift through `ℝ × ℝ → T95J03Torus` (a quotient map,
+product of `AddCircle` quotient maps, open).  Surjective: `[(x, y)] = f (x, y/2)`.
+`f (τ z) = f z` since `(-ũ, 2ṽ + 1)` is the image under `b`.  Conversely
+`f z = f w` means `(ũ', 2ṽ') = (m + (-1)ⁿ ũ, n + 2ṽ)`; `n` even gives `w = z`,
+`n` odd gives `w = τ z`.  Use `KleinPresentedGroupCoordinateModel` for the
+action formula.  About 100–200 lines. -/
+lemma t95J03_klein_doubleCover_aux_planeMap :
+    ∃ f : T95J03Torus → ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient, Continuous f ∧ Function.Surjective f ∧
+      ∀ z w, f z = f w ↔ (w = z ∨ w = t95J03_klein_doubleCover_aux_tau z) := by
+  sorry
+
+/-- **Leaf S6c (split 2026-10-18).**  A continuous surjection from a compact
+space onto a Hausdorff space, whose fibres are the `τ`-orbits, induces a
+homeomorphism from the orbit quotient.
+
+Route.  `f` is constant on `EqvGen`-classes (each generator step is in a
+fibre), so it descends to `Quotient.lift`; injective by `hfib`; continuous by
+`continuous_quot_lift`; the quotient of a compact space is compact; use
+`Continuous.homeoOfEquivCompactToT2`.  About 30–70 lines. -/
+lemma t95J03_klein_doubleCover_aux_quotient_homeomorph {X Y : Type*}
+    [TopologicalSpace X] [CompactSpace X] [TopologicalSpace Y] [T2Space Y]
+    (τ : X → X) (f : X → Y) (hf : Continuous f) (hs : Function.Surjective f)
+    (hfib : ∀ z w, f z = f w ↔ (w = z ∨ w = τ z)) :
+    Nonempty (Quotient (Relation.EqvGen.setoid fun x y : X => y = τ x) ≃ₜ Y) := by
+  sorry
+
 /-- **Leaf S6.**  The torus double-covers the Klein bottle.
 
 Route.  Use `KleinBottlePiOne.kleinPlaneQuotient_homeomorph :
@@ -2508,7 +2587,23 @@ torus by the free involution `τ (u, v) = (-u, v + 1/2)` (image of `b`), hence a
 Fibre `{(u, v), τ(u, v)}`, distinct.  150–350 lines. -/
 lemma t95J03_klein_doubleCover :
     ∃ π : T95J03Torus → Surface false 2, IsKSheetedCover π 2 := by
-  sorry
+  obtain ⟨f, hfc, hfs, hfib⟩ := t95J03_klein_doubleCover_aux_planeMap
+  letI : ContinuousConstSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup (ℝ × ℝ) :=
+    ⟨ConstructionTargets.KleinBottlePiOne.kleinPlaneQuotient_pi1_origin_aux_continuous⟩
+  letI : ProperlyDiscontinuousSMul KleinPresentedGroupCoordinateModel.PresentedKleinGroup
+      (ℝ × ℝ) :=
+    ⟨fun hK hL =>
+      ConstructionTargets.KleinBottlePiOne.kleinPlaneQuotient_pi1_origin_aux_finite_actors hK hL⟩
+  letI : T2Space ConstructionTargets.KleinBottlePiOne.KleinPlaneQuotient :=
+    t2Space_of_properlyDiscontinuousSMul_of_t2Space
+      (Γ := KleinPresentedGroupCoordinateModel.PresentedKleinGroup) (T := ℝ × ℝ)
+  obtain ⟨e⟩ := t95J03_klein_doubleCover_aux_quotient_homeomorph
+    t95J03_klein_doubleCover_aux_tau f hfc hfs hfib
+  obtain ⟨k⟩ := ConstructionTargets.KleinBottlePiOne.kleinPlaneQuotient_homeomorph
+  have hc := t95J03_klein_doubleCover_aux_involution_cover t95J03_klein_doubleCover_aux_tau
+    t95J03_klein_doubleCover_aux_tau_continuous t95J03_klein_doubleCover_aux_tau_sq
+    t95J03_klein_doubleCover_aux_tau_ne
+  exact ⟨_, t95J03_homeomorph_comp_isKSheeted hc (e.trans k)⟩
 
 /-! ## Assemblies -/
 
