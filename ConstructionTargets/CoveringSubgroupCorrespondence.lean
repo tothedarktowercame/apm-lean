@@ -236,7 +236,24 @@ theorem natCard_cosetQuotient
 theorem cosetQuotient_infinite_of_index_zero
     {G : Type*} [Group G] (H : Subgroup G) (hindex : H.index = 0) :
     (Set.univ : Set (Quotient (subgroupCosetSetoid H))).Infinite := by
-  sorry
+  have hsetoid : subgroupCosetSetoid H = QuotientGroup.rightRel H := by
+    ext g h
+    rw [QuotientGroup.rightRel_apply]
+    constructor
+    · intro hgh
+      simpa [mul_inv_rev] using H.inv_mem hgh
+    · intro hhg
+      simpa [mul_inv_rev] using H.inv_mem hhg
+  have hcard : Nat.card (Quotient (subgroupCosetSetoid H)) = 0 := by
+    rw [hsetoid]
+    exact (Nat.card_congr
+      (QuotientGroup.quotientRightRelEquivQuotientLeftRel H)).trans
+        (H.index_eq_card.symm.trans hindex)
+  have hinfinite : Infinite (Quotient (subgroupCosetSetoid H)) := by
+    rcases Nat.card_eq_zero.mp hcard with hempty | hinfinite
+    · exact (@IsEmpty.false _ hempty (Quotient.mk'' (1 : G))).elim
+    · exact hinfinite
+  exact Set.infinite_univ
 
 /-- Monodromy along a path bijects any two fibres of a covering. -/
 theorem covering_fiber_equiv
