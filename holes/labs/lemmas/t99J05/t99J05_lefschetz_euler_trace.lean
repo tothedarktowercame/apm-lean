@@ -472,13 +472,131 @@ theorem t99J05_lefschetz_euler_base : T99J05CPHomologyProfile 0 (CP 0) := by
 
 /-- Homotopy invariance turns the homology profile into the required trace sums. -/
 -- BEGIN SEAT AREA
+private lemma t99J05_lefschetz_euler_trace_aux_sum (n : ℕ) :
+    (∑ k ∈ Finset.range (2 * n + 1),
+      (-1 : ℚ)^k * (if Even k ∧ k ≤ 2 * n then 1 else 0)) =
+        (n : ℚ) + 1 := by
+  induction n with
+  | zero => norm_num [Even]
+  | succ n ih =>
+    rw [show 2 * (n + 1) + 1 = (2 * n + 1) + 2 by omega]
+    rw [Finset.sum_range_succ, Finset.sum_range_succ]
+    have he : Even (2 * n + 2) := by exact ⟨n + 1, by omega⟩
+    have ho : ¬ Even (2 * n + 1) := by
+      rw [Nat.not_even_iff_odd]
+      exact ⟨n, by omega⟩
+    simp only [ho, false_and, if_false, mul_zero, add_zero, he, true_and]
+    rw [show (∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * (if Even k ∧ k ≤ 2 * (n + 1) then 1 else 0)) =
+      ∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * (if Even k ∧ k ≤ 2 * n then 1 else 0) by
+      apply Finset.sum_congr rfl
+      intro k hk
+      have hklt : k < 2 * n + 1 := Finset.mem_range.mp hk
+      have hkbound : k ≤ 2 * n := by omega
+      have hkbound' : k ≤ 2 * (n + 1) := by omega
+      by_cases hke : Even k <;> simp [hke, hkbound, hkbound']
+      ]
+    rw [ih]
+    rw [if_pos (by omega)]
+    rw [Even.neg_one_pow he]
+    norm_num
+
+open CategoryTheory CategoryTheory.MonoidalCategory CategoryTheory.Limits
+
+private noncomputable def t99J05_lefschetz_euler_trace_aux_sset
+    {X Y : TopCat} {f g : X ⟶ Y} (h : X ⊗ TopCat.I ⟶ Y)
+    (h₀ : TopCat.ι₀ ≫ h = f) (h₁ : TopCat.ι₁ ≫ h = g) :
+    SSet.Homotopy (TopCat.toSSet.map f) (TopCat.toSSet.map g) where
+  h := (TopCat.toSSet.obj X ◁ SSet.stdSimplex.toSSetObjI) ≫
+    Functor.LaxMonoidal.μ TopCat.toSSet X TopCat.I ≫ TopCat.toSSet.map h
+  h₀ := by
+    change _ = TopCat.toSSet.map f
+    simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, h₀]
+  h₁ := by
+    change _ = TopCat.toSSet.map g
+    simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+      ← TopCat.toSSet.map_comp, h₁]
+  rel := by
+    ext m x
+    exact x.1.property.elim
+
+private lemma t99J05_lefschetz_euler_trace_aux_homotopy
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopic f g) (k : ℕ) :
+    induced f k = induced g k := by
+  rcases H with ⟨H⟩
+  let h : TopCat.of X ⊗ TopCat.I ⟶ TopCat.of Y :=
+    TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+      H.continuous.comp
+        ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+  have h₀ : TopCat.ι₀ ≫ h = TopCat.ofHom f := by
+    ext x
+    change H (0, x) = f x
+    simp
+  have h₁ : TopCat.ι₁ ≫ h = TopCat.ofHom g := by
+    ext x
+    change H (1, x) = g x
+    simp
+  simpa [AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℚ) (R := ModuleCat.of ℚ ℚ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (t99J05_lefschetz_euler_trace_aux_sset h h₀ h₁).toSimplicialObjectHomotopy k
+
 theorem t99J05_lefschetz_euler_trace (n : ℕ)
     (f : ContinuousMap (CP n) (CP n))
     (hprofile : T99J05CPHomologyProfile n (CP n))
     (hhom : ContinuousMap.Homotopic f (ContinuousMap.id (CP n))) :
     HasLefschetzNumber f ((n : ℚ) + 1) ∧
       HasEulerCharacteristic (CP n) ((n : ℚ) + 1) := by
-  sorry
+  rcases hprofile with ⟨hfinite, hrank⟩
+  have hid (k : ℕ) :
+      (induced f k).hom = LinearMap.id := by
+    have h := t99J05_lefschetz_euler_trace_aux_homotopy hhom k
+    unfold induced at h
+    rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id] at h
+    exact congrArg ModuleCat.Hom.hom h
+  have hvalue :
+      (∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ)^k * LinearMap.trace ℚ (Homology (CP n) k)
+          (induced (ContinuousMap.id (CP n)) k).hom) = (n : ℚ) + 1 := by
+    rw [← t99J05_lefschetz_euler_trace_aux_sum n]
+    apply Finset.sum_congr rfl
+    intro k hk
+    unfold induced
+    rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id]
+    change (-1 : ℚ) ^ k *
+      (LinearMap.trace ℚ (Homology (CP n) k) LinearMap.id) = _
+    rw [LinearMap.trace_id, hrank]
+    norm_num
+  have hvanish : ∀ k, 2 * n < k → Subsingleton (Homology (CP n) k) := by
+    intro k hk
+    have hz : Module.finrank ℚ (Homology (CP n) k) = 0 := by
+      rw [hrank]
+      simp [show ¬k ≤ 2 * n by omega]
+    exact Module.finrank_zero_iff.mp hz
+  constructor
+  · refine ⟨hfinite, 2 * n, hvanish, ?_⟩
+    rw [show (∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * LinearMap.trace ℚ (Homology (CP n) k)
+          (induced f k).hom) =
+      ∑ k ∈ Finset.range (2 * n + 1),
+        (-1 : ℚ) ^ k * LinearMap.trace ℚ (Homology (CP n) k)
+          (induced (ContinuousMap.id (CP n)) k).hom by
+      apply Finset.sum_congr rfl
+      intro k hk
+      rw [hid]
+      have hi : (induced (ContinuousMap.id (CP n)) k).hom = LinearMap.id := by
+        unfold induced
+        rw [TopCat.ofHom_id, CategoryTheory.Functor.map_id]
+        rfl
+      rw [hi]]
+    exact hvalue
+  · exact ⟨hfinite, 2 * n, hvanish, hvalue⟩
 -- END SEAT AREA
 
 /-- Assembly of the induction and trace calculation. -/
