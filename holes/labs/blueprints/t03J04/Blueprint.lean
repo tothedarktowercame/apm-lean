@@ -1721,7 +1721,132 @@ theorem t03J04_C3_chartBall_convex_local {n : ℕ} {X : Type} [TopologicalSpace 
     ∃ W ∈ 𝓝 x, ∃ r₀ > 0, ∀ z ∈ W, ∀ r ∈ Set.Ioo 0 r₀,
       t03J04_chartBall n β z r ⊆ (chartAt (apm_t03J04_HModel n) α).source ∧
         Convex ℝ (t03J04_coord n α '' t03J04_chartBall n β z r) := by
-  sorry
+  let e := t03J04_modelEquiv n
+  let cα := chartAt (apm_t03J04_HModel n) α
+  let cβ := chartAt (apm_t03J04_HModel n) β
+  let g := t03J04_coordChange n α β
+  let O := t03J04_coordDomain n α β
+  let y₀ := t03J04_coord n α x
+  have hy₀ : y₀ ∈ O := by
+    change e.symm y₀ ∈ cα.target ∧ cα.symm (e.symm y₀) ∈ cβ.source
+    dsimp [y₀, t03J04_coord, e, cα, cβ]
+    simp only [ContinuousLinearEquiv.symm_apply_apply]
+    exact ⟨cα.map_source hα, by rw [cα.left_inv hα]; exact hβ⟩
+  obtain ⟨hO, hgInf, hinj⟩ := t03J04_C3_coordChange (n := n) (X := X) α β
+  have hg2 : ContDiffOn ℝ 2 g O := hgInf.of_le
+    (by norm_cast)
+  obtain ⟨ε, hε, ρ, hρ, hballO, hconv⟩ :=
+    t03J04_C3_normSq_convex_near hO hg2 hy₀ (hinj y₀ hy₀)
+  have hgy₀ : g y₀ = t03J04_coord n β x := by
+    dsimp [g, y₀, t03J04_coordChange, t03J04_coord, e, cα, cβ]
+    simp only [ContinuousLinearEquiv.symm_apply_apply]
+    rw [cα.left_inv hα]
+  let q : EuclideanSpace ℝ (Fin n) → X := fun y ↦ cβ.symm (e.symm y)
+  have ha₀ : t03J04_coord n β x ∈ e '' cβ.target := by
+    refine ⟨cβ x, cβ.map_source hβ, ?_⟩
+    simp [t03J04_coord, e, cβ]
+  have hqcont : ContinuousAt q (t03J04_coord n β x) := by
+    have ht : e.symm (t03J04_coord n β x) ∈ cβ.target := by
+      dsimp [t03J04_coord, e, cβ]
+      simp only [ContinuousLinearEquiv.symm_apply_apply]
+      exact cβ.map_source hβ
+    exact ((cβ.continuousOn_symm _ ht).continuousAt (cβ.open_target.mem_nhds ht)).comp
+      e.symm.continuous.continuousAt
+  let U : Set X := cα.source ∩ t03J04_coord n α ⁻¹' Metric.ball y₀ ρ
+  have hUx : U ∈ 𝓝 x := by
+    apply inter_mem (cα.open_source.mem_nhds hα)
+    have hcα : ContinuousAt (t03J04_coord n α) x :=
+      e.continuous.continuousAt.comp (cα.continuousAt hα)
+    exact hcα (Metric.ball_mem_nhds _ hρ)
+  have hqx : q (t03J04_coord n β x) = x := by
+    dsimp [q, t03J04_coord, e, cβ]
+    simp only [ContinuousLinearEquiv.symm_apply_apply]
+    exact cβ.left_inv hβ
+  have hqU : q ⁻¹' U ∈ 𝓝 (t03J04_coord n β x) := by
+    apply hqcont
+    rwa [hqx]
+  have htgt : e '' cβ.target ∈ 𝓝 (t03J04_coord n β x) := by
+    have hopen : IsOpen (e '' cβ.target) :=
+      e.toHomeomorph.isOpenMap _ cβ.open_target
+    exact hopen.mem_nhds ha₀
+  obtain ⟨δ, hδ, hδsub⟩ := Metric.nhds_basis_ball.mem_iff.mp (inter_mem hqU htgt)
+  let r₀ := min (ε / 2) (δ / 2)
+  have hr₀ : 0 < r₀ := lt_min (half_pos hε) (half_pos hδ)
+  let W : Set X := cβ.source ∩
+    t03J04_coord n β ⁻¹' Metric.ball (t03J04_coord n β x) r₀
+  have hW : W ∈ 𝓝 x := by
+    apply inter_mem (cβ.open_source.mem_nhds hβ)
+    have hcβ : ContinuousAt (t03J04_coord n β) x :=
+      e.continuous.continuousAt.comp (cβ.continuousAt hβ)
+    exact hcβ (Metric.ball_mem_nhds _ hr₀)
+  refine ⟨W, hW, r₀, hr₀, ?_⟩
+  intro z hz r hr
+  have hzβ : z ∈ cβ.source := hz.1
+  have hza : ‖t03J04_coord n β z - t03J04_coord n β x‖ < ε := by
+    have := Metric.mem_ball'.mp hz.2
+    rw [← dist_eq_norm, dist_comm]
+    exact lt_trans this (lt_of_le_of_lt (min_le_left _ _) (half_lt_self hε))
+  have hconvex := hconv (t03J04_coord n β z) (by
+    rw [hgy₀]
+    exact hza)
+  have hballsub : t03J04_chartBall n β z r ⊆ U := by
+    intro p hp
+    have hpβ : p ∈ cβ.source := hp.1
+    have hpz : dist (t03J04_coord n β p) (t03J04_coord n β z) < r := hp.2
+    have hpx : dist (t03J04_coord n β p) (t03J04_coord n β x) < δ := by
+      calc
+        _ ≤ dist (t03J04_coord n β p) (t03J04_coord n β z) +
+            dist (t03J04_coord n β z) (t03J04_coord n β x) := dist_triangle _ _ _
+        _ < r + δ / 2 := by
+          have hzdist := Metric.mem_ball'.mp hz.2
+          rw [dist_comm] at hzdist
+          exact add_lt_add hpz (hzdist.trans_le (min_le_right _ _))
+        _ < δ / 2 + δ / 2 := by
+          simpa [add_comm] using
+            (add_lt_add_right (lt_of_lt_of_le hr.2 (min_le_right _ _)) (δ / 2))
+        _ = δ := by ring
+    set_option maxHeartbeats 1000000 in
+     have hmem : t03J04_coord n β p ∈ q ⁻¹' U ∩ e '' cβ.target :=
+      hδsub (Metric.mem_ball'.mpr (by simpa [dist_comm] using hpx))
+    have hqmem : q (t03J04_coord n β p) ∈ U := hmem.1
+    have hqp : q (t03J04_coord n β p) = p := by
+      dsimp [q, t03J04_coord, e, cβ]
+      simp only [ContinuousLinearEquiv.symm_apply_apply]
+      exact cβ.left_inv hpβ
+    rwa [hqp] at hqmem
+  refine ⟨fun p hp ↦ (hballsub hp).1, ?_⟩
+  have himage : t03J04_coord n α '' t03J04_chartBall n β z r =
+      {y ∈ Metric.ball y₀ ρ | ‖g y - t03J04_coord n β z‖ ^ 2 < r ^ 2} := by
+    ext y
+    constructor
+    · rintro ⟨p, hp, rfl⟩
+      have hpU := hballsub hp
+      refine ⟨hpU.2, ?_⟩
+      have hgp : g (t03J04_coord n α p) = t03J04_coord n β p := by
+        dsimp [g, t03J04_coordChange, t03J04_coord, e, cα, cβ]
+        simp only [ContinuousLinearEquiv.symm_apply_apply]
+        rw [cα.left_inv hpU.1]
+      rw [hgp]
+      exact (sq_lt_sq₀ (norm_nonneg _) hr.1.le).mpr (by simpa [dist_eq_norm] using hp.2)
+    · rintro ⟨hyball, hyr⟩
+      have hyO := hballO hyball
+      let p : X := cα.symm (e.symm y)
+      have hpα : p ∈ cα.source := by
+        exact cα.symm.map_source hyO.1
+      have hcoordp : t03J04_coord n α p = y := by
+        dsimp [p, t03J04_coord, e, cα]
+        rw [cα.right_inv hyO.1]
+        exact e.apply_symm_apply y
+      have hpβ : p ∈ cβ.source := hyO.2
+      have hgp : g y = t03J04_coord n β p := by
+        dsimp [g, p, t03J04_coordChange, t03J04_coord, e, cα, cβ]
+      refine ⟨p, ⟨hpβ, ?_⟩, hcoordp⟩
+      change dist (t03J04_coord n β p) (t03J04_coord n β z) < r
+      rw [← hgp]
+      have hn := (sq_lt_sq₀ (norm_nonneg _) hr.1.le).mp hyr
+      simpa [dist_eq_norm] using hn
+  rw [himage]
+  exact hconvex.convex_lt (r ^ 2)
 
 /-- LEAF M3 (layer 4: M2; 80–150 lines).  One neighbourhood and radius for all
 charts of a finite shrunk atlas, read in the chart at `x`.  Route: M2 with
