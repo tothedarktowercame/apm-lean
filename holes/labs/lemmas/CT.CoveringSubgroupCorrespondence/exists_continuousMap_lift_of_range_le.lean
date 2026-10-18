@@ -115,7 +115,10 @@ theorem exists_continuousMap_lift_of_range_le
     (hle : (FundamentalGroup.map f a).range ≤
       (FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ he).range) :
     ∃ lift : C(A, E), ∀ z, p (lift z) = f z := by
-  sorry
+  obtain ⟨lift, ⟨_, hlift⟩, _⟩ :=
+    hp.existsUnique_continuousMap_lifts_of_range_le he hle
+  refine ⟨lift, fun z ↦ ?_⟩
+  exact congrFun hlift z
 -- END SEAT AREA
 
 /-- Assembly theorem used by finite-index consumers. -/
