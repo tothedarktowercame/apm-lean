@@ -434,7 +434,52 @@ theorem exists_connected_subgroup_cover_aux_isCoveringMap_aux_sheet_image_disjoi
     BasedCover.mk H '' basedPathNbhd U a = BasedCover.mk H '' basedPathNbhd U b ∨
       Disjoint (BasedCover.mk H '' basedPathNbhd U a)
         (BasedCover.mk H '' basedPathNbhd U b) := by
-  sorry
+  classical
+  by_cases hd : Disjoint (BasedCover.mk H '' basedPathNbhd U a)
+      (BasedCover.mk H '' basedPathNbhd U b)
+  · exact Or.inr hd
+  · left
+    rw [Set.not_disjoint_iff] at hd
+    obtain ⟨q, ⟨c, hc, hcq⟩, d, hd, hdq⟩ := hd
+    have hcd : BasedCover.mk H c = BasedCover.mk H d := hcq.trans hdq.symm
+    obtain ⟨g, hg⟩ := Quotient.exact hcd
+    let k : FundamentalGroup X x := g
+    have hgk : k • d = c := hg
+    have hca : basedPathNbhd U c = basedPathNbhd U a :=
+      exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem hc
+    have hdb : basedPathNbhd U d = basedPathNbhd U b :=
+      exists_connected_subgroup_cover_aux_isCoveringMap_aux_nbhd_eq_of_mem hd
+    rw [← hca, ← hdb]
+    ext r
+    constructor
+    · rintro ⟨z, hz, rfl⟩
+      have hgz : k⁻¹ • z ∈ basedPathNbhd U d := by
+        have hz' : z ∈ basedPathNbhd U (k • d) := by
+          simpa only [hgk] using hz
+        have hs := Set.ext_iff.mp
+          (exists_connected_subgroup_cover_aux_isCoveringMap_aux_smul_nbhd
+            k U (k • d)) (k⁻¹ • z)
+        have hleft : k⁻¹ • z ∈
+            (fun w : BasedPaths x ↦ k • w) ⁻¹' basedPathNbhd U (k • d) := by
+          change k • (k⁻¹ • z) ∈ basedPathNbhd U (k • d)
+          simpa using hz'
+        have := hs.mp hleft
+        simpa using this
+      refine ⟨k⁻¹ • z, hgz, ?_⟩
+      apply Quotient.sound
+      exact ⟨g⁻¹, rfl⟩
+    · rintro ⟨z, hz, rfl⟩
+      have hgz : k • z ∈ basedPathNbhd U c := by
+        have hgzd : k • z ∈ basedPathNbhd U (k • d) := by
+          have hs := Set.ext_iff.mp
+            (exists_connected_subgroup_cover_aux_isCoveringMap_aux_smul_nbhd
+              k U (k • d)) z
+          apply hs.mpr
+          simpa using hz
+        simpa only [hgk] using hgzd
+      refine ⟨k • z, hgz, ?_⟩
+      apply Quotient.sound
+      exact ⟨g, rfl⟩
 
 /-- Over a good `U`, each sheet image is mapped homeomorphically onto `U` by the
 projection (`_aux_sheet`; `mk` is injective on a sheet because `h • b` has the
