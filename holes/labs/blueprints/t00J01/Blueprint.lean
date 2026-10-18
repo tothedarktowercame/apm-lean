@@ -733,9 +733,124 @@ lemma apm_t00j01_circleCover_intersection_equiv :
 
 /-- The orientation-reversing gluing in the concrete affine quotient kills
 its integral degree-two fundamental class. -/
+lemma apm_t00j01_klein_H2_zero_aux_rel_iff (p q : ℝ × ℝ) :
+    Relation.EqvGen apm_t00j01_kleinRel p q ↔
+      ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv.orbitSetoid.r p q := by
+  constructor
+  · intro h
+    change KleinSquareEqvGenToCases.SameOrbit p q
+    induction h with
+    | rel p q h =>
+        cases h with
+        | horizontal x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorA, by
+              simp [KleinPlaneAffineAction.generatorA_smul]⟩
+        | twisted x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorB, by
+              simp [KleinPlaneAffineAction.generatorB_smul]⟩
+    | refl p => exact KleinSquareEqvGenToCases.sameOrbit_refl p
+    | symm p q _ ih => exact KleinSquareEqvGenToCases.sameOrbit_symm ih
+    | trans p q r _ _ ih₁ ih₂ =>
+        exact KleinSquareEqvGenToCases.sameOrbit_trans ih₁ ih₂
+  · rintro ⟨g, rfl⟩
+    exact apm_t00j01_klein_compact_aux_orbit p g
+
+noncomputable def apm_t00j01_klein_H2_zero_aux_plane_homeomorph :
+    apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H2_zero_aux_rel_iff p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H2_zero_aux_rel_iff p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+lemma apm_t00j01_klein_H2_zero_aux_homeomorph :
+    Nonempty (apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.t93J03Closure.kleinPairingData.Space) := by
+  obtain ⟨e⟩ :=
+    KleinSquareDiskCutAndPaste.planeOrbitQuotient_homeomorph_kleinBottle
+      ConstructionTargets.t93J03Closure.kleinPlaneOrbitT2Space
+  exact ⟨apm_t00j01_klein_H2_zero_aux_plane_homeomorph.trans
+    (e.trans ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph.symm)⟩
+
+lemma apm_t00j01_klein_H2_zero_aux_orbit
+    (i : Fin 4) (j : Fin 2) :
+    ConstructionTargets.t93J03Closure.kleinPairingData.orbit i =
+        (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j ↔
+      ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitLabel 2 i = j := by
+  change Quotient.mk _ i = _ ↔ _
+  constructor
+  · intro h
+    have := congrArg
+      (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2) h
+    simpa using this
+  · intro h
+    apply (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).injective
+    simpa using h
+
+lemma apm_t00j01_klein_H2_zero_aux_degree (j : Fin 2) :
+    ConstructionTargets.PolygonSurfaceHomology.attachingDegree
+        ConstructionTargets.t93J03Closure.kleinPairingData
+        ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j) = -2 := by
+  rw [ConstructionTargets.PolygonSurfaceHomology.attachingDegree_apply]
+  calc
+    _ = ∑ p : Fin 2 × Fin 2,
+        ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution
+          ConstructionTargets.t93J03Closure.kleinPairingData
+          ((ConstructionTargets.PolygonSurfacePiOne.nonorientableCoord 2).symm p)
+          ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j) :=
+      ((ConstructionTargets.PolygonSurfacePiOne.nonorientableCoord 2).symm.sum_comp
+        fun i => ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution
+          ConstructionTargets.t93J03Closure.kleinPairingData i
+          ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j)).symm
+    _ = -2 := by
+      simp only [ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution]
+      simp_rw [apm_t00j01_klein_H2_zero_aux_orbit]
+      simp [ConstructionTargets.t93J03Closure.kleinPairingData,
+        ConstructionTargets.PolygonSurfacePiOne.nonorientableStandardPairingData,
+        ConstructionTargets.PolygonSurfacePiOne.standardPairingDataOfOneVertex,
+        ConstructionTargets.PolygonSurfacePiOne.standardPair,
+        ConstructionTargets.PolygonSurfacePiOne.standardSign,
+        ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitLabel,
+        ConstructionTargets.PolygonSurfaceHomology.edgeAttachingDegree,
+        Fintype.sum_prod_type]
+      fin_cases j <;> norm_num
+
+lemma apm_t00j01_klein_H2_zero_aux_boundary_injective :
+    Function.Injective
+      (ConstructionTargets.PolygonSurfaceHomology.attachingBoundary
+        ConstructionTargets.t93J03Closure.kleinPairingData) := by
+  intro m n h
+  have h' := congrFun h
+    ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm 0)
+  rw [ConstructionTargets.PolygonSurfaceHomology.attachingBoundary_apply_apply,
+    ConstructionTargets.PolygonSurfaceHomology.attachingBoundary_apply_apply,
+    apm_t00j01_klein_H2_zero_aux_degree] at h'
+  omega
+
 lemma apm_t00j01_klein_H2_zero :
     Limits.IsZero (apm_t00j01_H 2 apm_t00j01_Klein) := by
-  sorry
+  obtain ⟨e⟩ := apm_t00j01_klein_H2_zero_aux_homeomorph
+  let P := ConstructionTargets.t93J03Closure.kleinPairingData
+  have hker : ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel P = ⊥ :=
+    LinearMap.ker_eq_bot.mpr apm_t00j01_klein_H2_zero_aux_boundary_injective
+  have hz : Limits.IsZero (ModuleCat.of ℤ
+      (ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel P)) := by
+    rw [hker]
+    exact ModuleCat.isZero_of_subsingleton _
+  have hp : Limits.IsZero
+      (ConstructionTargets.PolygonSurfaceHomology.H P 2) :=
+    hz.of_iso (ConstructionTargets.PolygonSurfaceHomology.radialH2BoundaryKernelModuleIso P)
+  exact hp.of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e.toHomotopyEquiv 2)
 
 /-- The concrete Klein quotient has no integral homology in degree three. -/
 lemma apm_t00j01_klein_H3_zero_aux_rel_iff (p q : ℝ × ℝ) :
