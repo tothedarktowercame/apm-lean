@@ -1,4 +1,9 @@
+import ConstructionTargets.t93J03Closure
+import ConstructionTargets.KleinSquareDiskCutAndPaste
 import ConstructionTargets.CoefficientSphereEndpoints
+import ConstructionTargets.CircleWindingUniqueness
+import ConstructionTargets.KleinClosedSquareOrbitInverseContinuity
+import ConstructionTargets.IntegralOpenCoverMayerVietoris
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -25,6 +30,7 @@ detached from the self-map under study.
 -/
 
 open CategoryTheory Set
+open scoped ContinuousMap
 
 noncomputable section
 
@@ -164,6 +170,1581 @@ theorem apm_t00j01_sphere_identity_bridge :
     have := t00J01Identity_lefschetz_value 1 h
     norm_num at this
 
+/-- Every equivalence in the presented Klein quotient has the expected affine
+normal form.  This is kept separate from topology so the group calculation and
+the local-chart construction can be proved in parallel. -/
+lemma apm_t00j01_kleinRel_normal_form_aux_sign (n : ℤ) :
+    ∃ s : ℤ, (s : ℝ) = (-1 : ℝ) ^ n := by
+  refine ⟨if Even n then 1 else -1, ?_⟩
+  simp [neg_one_zpow_eq_ite]
+
+theorem apm_t00j01_kleinRel_normal_form {p q : ℝ × ℝ}
+    (h : Relation.EqvGen apm_t00j01_kleinRel p q) :
+    ∃ m n : ℤ,
+      q.1 = (m : ℝ) + (-1 : ℝ) ^ n * p.1 ∧
+      q.2 = (n : ℝ) + p.2 := by
+  induction h with
+  | rel p q hpq =>
+      cases hpq with
+      | horizontal x y =>
+          exact ⟨1, 0, by norm_num [add_comm], by norm_num⟩
+      | twisted x y =>
+          exact ⟨0, 1, by norm_num, by norm_num [add_comm]⟩
+  | refl p =>
+      exact ⟨0, 0, by norm_num, by norm_num⟩
+  | symm p q hpq ih =>
+      obtain ⟨m, n, h1, h2⟩ := ih
+      obtain ⟨s, hs⟩ := apm_t00j01_kleinRel_normal_form_aux_sign n
+      refine ⟨-(s * m), -n, ?_, ?_⟩
+      · rw [h1]
+        have hn : (-1 : ℝ) ^ (-n) = (-1 : ℝ) ^ n := by
+          rw [neg_one_zpow_eq_ite, neg_one_zpow_eq_ite]
+          have : Even (-n) ↔ Even n := by simp
+          simp [this]
+        push_cast
+        rw [hs]
+        rw [hn]
+        have hsquare : ((-1 : ℝ) ^ n) * ((-1 : ℝ) ^ n) = 1 := by
+          rw [neg_one_zpow_eq_ite]
+          split_ifs <;> norm_num
+        rw [mul_add, ← mul_assoc, hsquare]
+        ring
+      · rw [h2]
+        push_cast
+        ring
+  | trans p q r hpq hqr ihpq ihqr =>
+      obtain ⟨m, n, h1, h2⟩ := ihpq
+      obtain ⟨m', n', h1', h2'⟩ := ihqr
+      obtain ⟨s, hs⟩ := apm_t00j01_kleinRel_normal_form_aux_sign n'
+      refine ⟨m' + s * m, n' + n, ?_, ?_⟩
+      · rw [h1', h1]
+        push_cast
+        rw [hs]
+        rw [zpow_add₀ (by norm_num : (-1 : ℝ) ≠ 0)]
+        ring
+      · rw [h2', h2]
+        push_cast
+        ring
+
+/-- The explicit Klein quotient is compact.  The closed fundamental square
+and its orbit classification are supplied by the imported construction chain. -/
+lemma apm_t00j01_klein_compact_aux_horizontal (p : ℝ × ℝ) (m : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p ((m : ℝ) + p.1, p.2) := by
+  induction m using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ m ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.horizontal ((m : ℝ) + p.1) p.2)
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((((m : ℕ) : ℤ) : ℝ) + p.1), p.2)
+          ((((((m : ℕ) : ℤ) + 1 : ℤ) : ℝ) + p.1), p.2) := by
+        convert hs using 1 <;> norm_num <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+  | pred m ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.horizontal (-(m : ℝ) - 1 + p.1) p.2)).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          ((((-((m : ℕ) : ℤ) : ℤ) : ℝ) + p.1), p.2)
+          ((((-((m : ℕ) : ℤ) - 1 : ℤ) : ℝ) + p.1), p.2) := by
+        convert hs using 1 <;> norm_num <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+
+lemma apm_t00j01_klein_compact_aux_twisted (p : ℝ × ℝ) (n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      (((-1 : ℝ) ^ n) * p.1, (n : ℝ) + p.2) := by
+  induction n using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ n ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted (((-1 : ℝ) ^ (n : ℤ)) * p.1)
+          ((n : ℝ) + p.2))
+      convert Relation.EqvGen.trans _ _ _ ih hs using 1 <;> simp [zpow_add₀] <;> ring
+  | pred n ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted
+          (-(((-1 : ℝ) ^ (-(n : ℤ))) * p.1))
+          ((-(n : ℝ) - 1) + p.2))).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ))) * p.1,
+            (((-((n : ℕ) : ℤ) : ℤ) : ℝ)) + p.2)
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ) - 1)) * p.1,
+            (((-((n : ℕ) : ℤ) - 1 : ℤ) : ℝ)) + p.2) := by
+        convert hs using 1 <;> simp [zpow_sub₀] <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+
+lemma apm_t00j01_klein_compact_aux_orbit (p : ℝ × ℝ)
+    (g : KleinPresentedGroupCoordinateModel.PresentedKleinGroup) :
+    Relation.EqvGen apm_t00j01_kleinRel p (g • p) := by
+  let c := KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g
+  let m : ℤ := Multiplicative.toAdd c.1
+  let n : ℤ := Multiplicative.toAdd c.2
+  have hv := apm_t00j01_klein_compact_aux_twisted p n
+  have hh := apm_t00j01_klein_compact_aux_horizontal
+    (((-1 : ℝ) ^ n * p.1), ((n : ℝ) + p.2)) m
+  have h := Relation.EqvGen.trans _ _ _ hv hh
+  convert h using 1
+  change KleinPlaneAffineAction.coordinateAct c p = _
+  simp only [KleinPlaneAffineAction.coordinateAct]
+  rw [show (((Multiplicative.toAdd
+      (KleinPresentedGroupCoordinateModel.action c.2 (Multiplicative.ofAdd 1)) : ℤ) : ℝ)) =
+      (-1 : ℝ) ^ n by
+    change (((Multiplicative.toAdd
+      ((KleinPresentedGroupCoordinateModel.inversion ^ n)
+        (Multiplicative.ofAdd 1)) : ℤ) : ℝ)) = _
+    induction n using Int.induction_on with
+    | zero => norm_num
+    | succ n ih =>
+        rw [zpow_add_one]
+        simp only [MulAut.mul_apply]
+        rw [show KleinPresentedGroupCoordinateModel.inversion
+              (Multiplicative.ofAdd (1 : ℤ)) =
+              (Multiplicative.ofAdd (1 : ℤ))⁻¹ by rfl, map_inv]
+        rw [show Multiplicative.toAdd
+          (((KleinPresentedGroupCoordinateModel.inversion ^ (n : ℤ))
+            (Multiplicative.ofAdd 1))⁻¹) =
+          - Multiplicative.toAdd
+            ((KleinPresentedGroupCoordinateModel.inversion ^ (n : ℤ))
+              (Multiplicative.ofAdd 1)) by simp]
+        push_cast
+        rw [show (((Multiplicative.toAdd
+          ((KleinPresentedGroupCoordinateModel.inversion ^ (n : ℤ))
+            (Multiplicative.ofAdd 1)) : ℤ) : ℝ)) = (-1 : ℝ) ^ (n : ℤ) from ih]
+        simpa using (zpow_add_one₀ (a := (-1 : ℝ)) (by norm_num) (n : ℤ)).symm
+    | pred n ih =>
+        rw [zpow_sub_one]
+        simp only [MulAut.mul_apply]
+        change (((Multiplicative.toAdd
+          ((KleinPresentedGroupCoordinateModel.inversion ^ (-(n : ℤ)))
+            ((Multiplicative.ofAdd (1 : ℤ))⁻¹)) : ℤ) : ℝ)) = _
+        rw [map_inv]
+        rw [show Multiplicative.toAdd
+          (((KleinPresentedGroupCoordinateModel.inversion ^ (-(n : ℤ)))
+            (Multiplicative.ofAdd 1))⁻¹) =
+          - Multiplicative.toAdd
+            ((KleinPresentedGroupCoordinateModel.inversion ^ (-(n : ℤ)))
+              (Multiplicative.ofAdd 1)) by simp]
+        push_cast
+        rw [ih]
+        simpa using (zpow_sub_one₀ (a := (-1 : ℝ)) (by norm_num) (-(n : ℤ))).symm]
+
+theorem apm_t00j01_klein_compact :
+    IsCompact (Set.univ : Set apm_t00j01_Klein) := by
+  let f : ℝ × ℝ → apm_t00j01_Klein :=
+    fun p => Quotient.mk (Relation.EqvGen.setoid apm_t00j01_kleinRel) p
+  have hf : Continuous f := continuous_coinduced_rng
+  have hc :=
+    ConstructionTargets.KleinClosedSquareOrbitInverseContinuity.isCompact_closedSquare_set.image hf
+  have hrange : f '' {p : ℝ × ℝ |
+      KleinPlaneActionSquareOrbitClassification.InSquare p} = Set.univ := by
+    apply Set.eq_univ_of_forall
+    intro y
+    induction y using Quotient.inductionOn with
+    | _ p =>
+        obtain ⟨g, hx0, hx1, hy0, hy1⟩ :=
+          KleinSquareRepresentative.exists_closedSquare_smul p
+        refine ⟨g • p, ⟨hx0, hx1, hy0, hy1⟩, ?_⟩
+        exact Quotient.sound (apm_t00j01_klein_compact_aux_orbit p g).symm
+  rw [hrange] at hc
+  exact hc
+
+/-- The explicit Klein quotient is connected, as a quotient of the connected
+plane (equivalently, as the image of the connected fundamental square). -/
+theorem apm_t00j01_klein_connected :
+    IsConnected (Set.univ : Set apm_t00j01_Klein) := by
+  let q : ℝ × ℝ → apm_t00j01_Klein :=
+    fun p => Quotient.mk (Relation.EqvGen.setoid apm_t00j01_kleinRel) p
+  have hq : Continuous q := continuous_coinduced_rng
+  have hsurj : Function.Surjective q := Quotient.mk_surjective
+  rw [← hsurj.range_eq]
+  exact isConnected_range hq
+
+/-- Seat: induction on `n` (twisted generator, and its inverse). -/
+lemma apm_t00j01_klein_local_chart_aux_vertical (p : ℝ × ℝ) (n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      ((-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
+  induction n using Int.induction_on with
+  | zero => simpa using Relation.EqvGen.refl (r := apm_t00j01_kleinRel) p
+  | succ n ih =>
+      have hs := Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted (((-1 : ℝ) ^ (n : ℤ)) * p.1)
+          ((n : ℝ) + p.2))
+      convert Relation.EqvGen.trans _ _ _ ih hs using 1 <;> simp [zpow_add₀] <;> ring
+  | pred n ih =>
+      have hs := (Relation.EqvGen.rel _ _
+        (apm_t00j01_kleinRel.twisted
+          (-(((-1 : ℝ) ^ (-(n : ℤ))) * p.1))
+          ((-(n : ℝ) - 1) + p.2))).symm
+      have hs' : Relation.EqvGen apm_t00j01_kleinRel
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ))) * p.1,
+            (((-((n : ℕ) : ℤ) : ℤ) : ℝ)) + p.2)
+          (((-1 : ℝ) ^ (-((n : ℕ) : ℤ) - 1)) * p.1,
+            (((-((n : ℕ) : ℤ) - 1 : ℤ) : ℝ)) + p.2) := by
+        convert hs using 1 <;> simp [zpow_sub₀] <;> ring
+      exact Relation.EqvGen.trans _ _ _ ih hs'
+
+/-- Seat: compose `aux_vertical` with `m` horizontal steps (induction on `m`). -/
+lemma apm_t00j01_klein_local_chart_aux_affine (p : ℝ × ℝ) (m n : ℤ) :
+    Relation.EqvGen apm_t00j01_kleinRel p
+      ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2) := by
+  have hv := apm_t00j01_klein_local_chart_aux_vertical p n
+  have hh := apm_t00j01_klein_compact_aux_horizontal
+    (((-1 : ℝ) ^ n * p.1), ((n : ℝ) + p.2)) m
+  exact Relation.EqvGen.trans _ _ _ hv hh
+
+/-- The normal form gives a small evenly-covered rectangle at every point of
+the plane quotient, hence a two-dimensional Euclidean chart.  Its algebraic
+input is an explicit hypothesis so this seat is independent of the normal-form
+seat. -/
+theorem apm_t00j01_klein_local_chart
+    (_haff : ∀ (p : ℝ × ℝ) (m n : ℤ), Relation.EqvGen apm_t00j01_kleinRel p
+      ((m : ℝ) + (-1 : ℝ) ^ n * p.1, (n : ℝ) + p.2))
+    (_hnf : ∀ {p q : ℝ × ℝ},
+      Relation.EqvGen apm_t00j01_kleinRel p q →
+        ∃ m n : ℤ,
+          q.1 = (m : ℝ) + (-1 : ℝ) ^ n * p.1 ∧
+          q.2 = (n : ℝ) + p.2) :
+    ∀ x : apm_t00j01_Klein,
+      ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
+        x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
+  intro x
+  obtain ⟨p, rfl⟩ := Quotient.exists_rep x
+  let q : ℝ × ℝ → apm_t00j01_Klein := fun z => Quotient.mk _ z
+  let B : Set (ℝ × ℝ) :=
+    Set.Ioo (p.1 - (1 / 4 : ℝ)) (p.1 + 1 / 4) ×ˢ
+      Set.Ioo (p.2 - (1 / 4 : ℝ)) (p.2 + 1 / 4)
+  have hpB : p ∈ B := by simp [B]
+  have hBopen : IsOpen B := isOpen_Ioo.prod isOpen_Ioo
+  have hinj : Set.InjOn q B := by
+    intro a ha b hb hab
+    have he : Relation.EqvGen apm_t00j01_kleinRel a b := Quotient.exact hab
+    obtain ⟨m, n, hx, hy⟩ := _hnf he
+    have hn0 : n = 0 := by
+      have ha2 := ha.2
+      have hb2 := hb.2
+      change p.2 - 1 / 4 < a.2 ∧ a.2 < p.2 + 1 / 4 at ha2
+      change p.2 - 1 / 4 < b.2 ∧ b.2 < p.2 + 1 / 4 at hb2
+      have hnlt : ((n : ℤ) : ℝ) < 1 := by linarith
+      have hngt : (-1 : ℝ) < ((n : ℤ) : ℝ) := by linarith
+      have hnlo : (-1 : ℤ) < n := by exact_mod_cast hngt
+      have hnhi : n < 1 := by exact_mod_cast hnlt
+      have hn : (-1 : ℤ) < n ∧ n < 1 := ⟨hnlo, hnhi⟩
+      omega
+    subst n
+    simp at hx hy
+    have hm0 : m = 0 := by
+      have ha1 := ha.1
+      have hb1 := hb.1
+      change p.1 - 1 / 4 < a.1 ∧ a.1 < p.1 + 1 / 4 at ha1
+      change p.1 - 1 / 4 < b.1 ∧ b.1 < p.1 + 1 / 4 at hb1
+      have hmlt : ((m : ℤ) : ℝ) < 1 := by linarith
+      have hmgt : (-1 : ℝ) < ((m : ℤ) : ℝ) := by linarith
+      have : (-1 : ℤ) < m ∧ m < 1 := by
+        constructor
+        · exact_mod_cast hmgt
+        · exact_mod_cast hmlt
+      omega
+    subst m
+    ext <;> simp_all
+  have hqopen : IsOpenMap q := by
+    intro A hA
+    rw [isOpen_coinduced]
+    apply isOpen_iff_forall_mem_open.mpr
+    intro z hz
+    obtain ⟨b, hb, hqb⟩ := hz
+    have he : Relation.EqvGen apm_t00j01_kleinRel b z := Quotient.exact hqb
+    obtain ⟨m, n, hx, hy⟩ := _hnf he
+    let e : (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
+      (Homeomorph.prodCongr (Homeomorph.mulLeft₀ ((-1 : ℝ) ^ n) (by positivity)) (Homeomorph.refl ℝ)).trans
+        (Homeomorph.prodCongr (Homeomorph.addRight (m : ℝ)) (Homeomorph.addRight (n : ℝ)))
+    refine ⟨e '' A, ?_, e.isOpenMap A hA, ⟨b, hb, ?_⟩⟩
+    · rintro w ⟨v, hv, rfl⟩
+      refine ⟨v, hv, Quotient.sound ?_⟩
+      convert _haff v m n using 1
+      ext <;> simp [e, add_comm]
+    · ext <;> simp [e, hx, hy, mul_comm, add_comm]
+  let U := q '' B
+  have hUopen : IsOpen U := hqopen B hBopen
+  let eqv : B ≃ U := Equiv.Set.imageOfInjOn q B hinj
+  have heqcont : Continuous eqv := by
+    apply Continuous.subtype_mk
+    exact continuous_coinduced_rng.comp continuous_subtype_val
+  have heqopen : IsOpenMap eqv := by
+    exact (hqopen.restrict hBopen).subtype_mk (fun x => ⟨x, x.property, rfl⟩)
+  let hBU : B ≃ₜ U := eqv.toHomeomorphOfContinuousOpen heqcont heqopen
+  let plane : (ℝ × ℝ) ≃ₜ EuclideanSpace ℝ (Fin 2) :=
+    (ContinuousLinearEquiv.finTwoArrow ℝ ℝ).symm.toHomeomorph.trans
+      (EuclideanSpace.equiv (Fin 2) ℝ).symm.toHomeomorph
+  refine ⟨U, plane '' B, ⟨p, hpB, rfl⟩, hUopen, plane.isOpenMap B hBopen, ?_⟩
+  exact ⟨hBU.symm.trans (plane.image B)⟩
+
+/-- The circle has its usual one-dimensional punctured-circle charts. -/
+theorem apm_t00j01_circle_local_chart :
+    ∀ z : Circle, ∃ (U : Set Circle) (V : Set ℝ),
+      z ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
+  intro z
+  obtain ⟨e, he, hexp⟩ := isLocalHomeomorph_circleExp (Complex.arg z)
+  refine ⟨e.target, e.source, ?_, e.open_target, e.open_source, ?_⟩
+  · rw [← Circle.exp_arg z, hexp]
+    exact e.map_source he
+  · exact ⟨e.symm.toHomeomorphSourceTarget⟩
+
+/-- Compactness of the two factors assembles to compactness of their product.
+The factor facts are hypotheses so all three seats are independent. -/
+theorem apm_t00j01_klein_circle_compact
+    (_hK : IsCompact (Set.univ : Set apm_t00j01_Klein)) :
+    IsCompact (Set.univ : Set apm_t00j01_nonorientable3) := by
+  letI : CompactSpace apm_t00j01_Klein :=
+    isCompact_univ_iff.mp _hK
+  exact isCompact_univ
+
+/-- Connectedness of the two nonempty factors assembles to connectedness of
+their product. -/
+theorem apm_t00j01_klein_circle_connected
+    (_hK : IsConnected (Set.univ : Set apm_t00j01_Klein)) :
+    IsConnected (Set.univ : Set apm_t00j01_nonorientable3) := by
+  have hC : IsConnected (Set.univ : Set Circle) := by
+    have hrange : Set.range (Circle.exp : ℝ → Circle) = Set.univ := by
+      apply Set.eq_univ_of_forall
+      intro z
+      exact ⟨Complex.arg z, Circle.exp_arg z⟩
+    rw [← hrange]
+    exact isConnected_range Circle.exp.continuous
+  simpa only [Set.univ_prod_univ] using
+    _hK.prod hC
+
+/-- A two-dimensional Klein chart and a one-dimensional circle chart combine,
+after the standard coordinate reassociation, to an open chart in `ℝ³`. -/
+def apm_t00j01_klein_circle_local_chart_aux_realLine :
+    ℝ ≃L[ℝ] EuclideanSpace ℝ (Fin 1) :=
+  ((EuclideanSpace.equiv (Fin 1) ℝ).trans
+    (ContinuousLinearEquiv.funUnique (Fin 1) ℝ ℝ)).symm
+
+def apm_t00j01_klein_circle_local_chart_aux_coordinates :
+    EuclideanSpace ℝ (Fin 2) × ℝ ≃ₜ EuclideanSpace ℝ (Fin 3) :=
+  ((ContinuousLinearEquiv.prodCongr (ContinuousLinearEquiv.refl ℝ _)
+      apm_t00j01_klein_circle_local_chart_aux_realLine).trans
+    (EuclideanSpace.finAddEquivProd (n := 2) (m := 1)).symm).toHomeomorph
+
+theorem apm_t00j01_klein_circle_local_chart
+    (_hK : ∀ x : apm_t00j01_Klein,
+      ∃ (U : Set apm_t00j01_Klein) (V : Set (EuclideanSpace ℝ (Fin 2))),
+        x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V))
+    (_hC : ∀ z : Circle, ∃ (U : Set Circle) (V : Set ℝ),
+      z ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V)) :
+    ∀ x : apm_t00j01_nonorientable3,
+      ∃ (U : Set apm_t00j01_nonorientable3) (V : Set apm_t00j01_E3),
+        x ∈ U ∧ IsOpen U ∧ IsOpen V ∧ Nonempty (U ≃ₜ V) := by
+  intro x
+  obtain ⟨UK, VK, hxK, hUK, hVK, eK⟩ := _hK x.1
+  obtain ⟨UC, VC, hxC, hUC, hVC, eC⟩ := _hC x.2
+  let W : Set apm_t00j01_E3 :=
+    apm_t00j01_klein_circle_local_chart_aux_coordinates '' (VK ×ˢ VC)
+  refine ⟨UK ×ˢ UC, W, ⟨hxK, hxC⟩, hUK.prod hUC, ?_, ?_⟩
+  · exact apm_t00j01_klein_circle_local_chart_aux_coordinates.isOpenMap _
+      (hVK.prod hVC)
+  · rcases eK with ⟨eK⟩
+    rcases eC with ⟨eC⟩
+    dsimp [W]
+    exact ⟨(Homeomorph.Set.prod UK UC).trans
+      ((Homeomorph.prodCongr eK eC).trans
+        ((Homeomorph.Set.prod VK VC).symm.trans
+          (apm_t00j01_klein_circle_local_chart_aux_coordinates.image (VK ×ˢ VC))))⟩
+
+/-- The explicit coinduced plane quotient, times the circle, is a compact
+connected topological three-manifold in the concrete sense used by the
+registered statement. -/
+theorem apm_t00j01_klein_quotient_charts :
+    apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 := by
+  refine ⟨apm_t00j01_klein_circle_compact apm_t00j01_klein_compact,
+    apm_t00j01_klein_circle_connected apm_t00j01_klein_connected, ?_⟩
+  exact apm_t00j01_klein_circle_local_chart
+    (apm_t00j01_klein_local_chart apm_t00j01_klein_local_chart_aux_affine fun {_ _} h =>
+      apm_t00j01_kleinRel_normal_form h)
+    apm_t00j01_circle_local_chart
+
+/-- The member of the product cover obtained by deleting `-1` from the circle. -/
+def apm_t00j01_circleCoverLeft : Set apm_t00j01_nonorientable3 :=
+  {p | p.2 ≠ Circle.exp Real.pi}
+
+/-- The member of the product cover obtained by deleting `1` from the circle. -/
+def apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3 :=
+  {p | p.2 ≠ (1 : Circle)}
+
+/-- The two punctured-circle product sets are an open cover. -/
+lemma apm_t00j01_circleCover_open_cover :
+    IsOpen apm_t00j01_circleCoverLeft ∧
+      IsOpen apm_t00j01_circleCoverRight ∧
+      apm_t00j01_circleCoverLeft ∪ apm_t00j01_circleCoverRight = Set.univ := by
+  constructor
+  · exact (isOpen_compl_singleton.preimage continuous_snd)
+  constructor
+  · exact (isOpen_compl_singleton.preimage continuous_snd)
+  · apply Set.eq_univ_iff_forall.mpr
+    intro p
+    by_cases h : p.2 = Circle.exp Real.pi
+    · right
+      change p.2 ≠ (1 : Circle)
+      rw [h]
+      intro heq
+      have heq' := congrArg (fun z : Circle => (z : ℂ)) heq
+      dsimp only at heq'
+      rw [Circle.coe_exp] at heq'
+      rw [Complex.exp_pi_mul_I] at heq'
+      norm_num at heq'
+    · left
+      exact h
+
+/-- Each member of the punctured-circle cover retracts to the Klein factor. -/
+def apm_t00j01_circleCover_piece_equivs_aux_punctured_hequiv :
+    ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle ≃ₕ Unit where
+  toFun := ContinuousMap.const _ ()
+  invFun := ContinuousMap.const _
+    ConstructionTargets.PointedPuncturedCircleContraction.puncturedCircleBase
+  left_inv :=
+    ⟨ConstructionTargets.PointedPuncturedCircleContraction.puncturedCirclePointedContraction.homotopy.symm⟩
+  right_inv := by
+    convert ContinuousMap.Homotopic.refl (ContinuousMap.id Unit)
+
+def apm_t00j01_circleCover_piece_equivs_aux_left_homeomorph :
+    (apm_t00j01_circleCoverLeft : Type) ≃ₜ
+      apm_t00j01_Klein ×
+        ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle where
+  toFun p := ⟨p.1.1, ⟨p.1.2, by
+    intro h
+    apply p.2
+    apply Subtype.ext
+    simpa [Circle.coe_exp] using h⟩⟩
+  invFun p := ⟨(p.1, p.2.1), by
+    intro h
+    apply p.2.2
+    have h' := congrArg (fun z : Circle => (z : ℂ)) h
+    simpa [Circle.coe_exp] using h'⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def apm_t00j01_circleCover_piece_equivs_aux_negCircle (z : Circle) : Circle :=
+  ⟨-(z : ℂ), by
+    simpa [Submonoid.unitSphere] using z.2⟩
+
+@[simp] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_coe (z : Circle) :
+    (apm_t00j01_circleCover_piece_equivs_aux_negCircle z : ℂ) = -(z : ℂ) := rfl
+
+@[simp] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_negCircle
+    (z : Circle) :
+    apm_t00j01_circleCover_piece_equivs_aux_negCircle
+      (apm_t00j01_circleCover_piece_equivs_aux_negCircle z) = z := by
+  ext
+  simp
+
+@[continuity, fun_prop] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_continuous :
+    Continuous apm_t00j01_circleCover_piece_equivs_aux_negCircle := by
+  exact Continuous.subtype_mk continuous_subtype_val.neg _
+
+def apm_t00j01_circleCover_piece_equivs_aux_right_homeomorph :
+    (apm_t00j01_circleCoverRight : Type) ≃ₜ
+      apm_t00j01_Klein ×
+        ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle where
+  toFun p := ⟨p.1.1, ⟨apm_t00j01_circleCover_piece_equivs_aux_negCircle p.1.2, by
+    intro h
+    apply p.2
+    apply Subtype.ext
+    have h' := congrArg Neg.neg h
+    simpa using h'⟩⟩
+  invFun p := ⟨(p.1, apm_t00j01_circleCover_piece_equivs_aux_negCircle p.2.1), by
+    intro h
+    apply p.2.2
+    have h' := congrArg Neg.neg (congrArg (fun z : Circle => (z : ℂ)) h)
+    simpa using h'⟩
+  left_inv p := by
+    apply Subtype.ext
+    simp
+  right_inv p := by
+    ext <;> simp
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def apm_t00j01_circleCover_piece_equivs_aux_product :
+    (apm_t00j01_Klein ×
+      ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle) ≃ₕ
+        apm_t00j01_Klein :=
+  ((ContinuousMap.HomotopyEquiv.refl apm_t00j01_Klein).prodCongr
+      apm_t00j01_circleCover_piece_equivs_aux_punctured_hequiv).trans
+    (Homeomorph.prodUnique apm_t00j01_Klein Unit).toHomotopyEquiv
+
+lemma apm_t00j01_circleCover_piece_equivs :
+    Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
+      Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein) := by
+  exact ⟨⟨apm_t00j01_circleCover_piece_equivs_aux_left_homeomorph.toHomotopyEquiv.trans
+      apm_t00j01_circleCover_piece_equivs_aux_product⟩,
+    ⟨apm_t00j01_circleCover_piece_equivs_aux_right_homeomorph.toHomotopyEquiv.trans
+      apm_t00j01_circleCover_piece_equivs_aux_product⟩⟩
+
+/-- Their intersection is the product with the two components of the twice
+punctured circle, hence is homotopy equivalent to two copies of the Klein
+bottle. -/
+lemma apm_t00j01_circleCover_intersection_equiv_aux_exp_pi :
+    ((Circle.exp Real.pi : Circle) : ℂ) = -1 := by
+  rw [Circle.coe_exp, Complex.exp_pi_mul_I]
+
+abbrev apm_t00j01_circleCover_intersection_equiv_aux_E :=
+  (ℝ ∙ (-1 : ℂ))ᗮ
+
+abbrev apm_t00j01_circleCover_intersection_equiv_aux_E0 :=
+  {w : apm_t00j01_circleCover_intersection_equiv_aux_E // w ≠ 0}
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero
+    (w : apm_t00j01_circleCover_intersection_equiv_aux_E0) :
+    ((w.1.1 : ℂ).im) ≠ 0 := by
+  intro him
+  apply w.2
+  apply Subtype.ext
+  apply Complex.ext
+  · have horth := w.1.2
+    rw [Submodule.mem_orthogonal'] at horth
+    have h := horth (-1 : ℂ) (Submodule.mem_span_singleton_self (-1 : ℂ))
+    simp at h
+    exact h
+  · exact him
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_product_model :
+    Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₜ
+        (apm_t00j01_Klein × apm_t00j01_circleCover_intersection_equiv_aux_E0)) := by
+  have hv : ‖(-1 : ℂ)‖ = 1 := by norm_num
+  let e := stereographic hv
+  let s : Set Circle := {z | (z : ℂ) ≠ -1 ∧ z ≠ (1 : Circle)}
+  have hs : s ⊆ e.source := by
+    intro z hz
+    intro h
+    exact hz.1 (congrArg Subtype.val h)
+  have hone : (1 : Circle) ∈ e.source := by
+    intro h
+    have h' := congrArg Subtype.val h
+    norm_num at h'
+  have heone : e (1 : Circle) = 0 := by
+    simpa only [e] using stereographic_neg_apply (1 : Circle)
+  have himage : e '' s = {w | w ≠ 0} := by
+    ext w
+    constructor
+    · rintro ⟨z, hz, rfl⟩ hez
+      have := e.injOn (hs hz) hone (hez.trans heone.symm)
+      exact hz.2 this
+    · intro hw
+      have htarget : w ∈ e.target := by simp [e]
+      refine ⟨e.symm w, ?_, e.right_inv htarget⟩
+      constructor
+      · intro h
+        exact (e.map_target htarget) (Subtype.ext h)
+      · intro hEq
+        apply hw
+        calc
+          w = e (e.symm w) := (e.right_inv htarget).symm
+          _ = e (1 : Circle) := congrArg e hEq
+          _ = 0 := heone
+  let hc : s ≃ₜ apm_t00j01_circleCover_intersection_equiv_aux_E0 :=
+    e.homeomorphOfImageSubsetSource hs himage
+  refine ⟨?_⟩
+  exact
+    { toFun := fun p => (p.1.1, hc ⟨p.1.2, by
+          constructor
+          · intro h
+            apply p.2.1
+            apply Subtype.ext
+            simpa [apm_t00j01_circleCover_intersection_equiv_aux_exp_pi] using h
+          · exact p.2.2⟩)
+      invFun := fun p => ⟨(p.1, (hc.symm p.2).1), by
+        constructor
+        · intro h
+          apply (hc.symm p.2).2.1
+          have h' := congrArg (fun z : Circle => (z : ℂ)) h
+          simpa [apm_t00j01_circleCover_intersection_equiv_aux_exp_pi] using h'
+        · exact (hc.symm p.2).2.2⟩
+      left_inv := by
+        intro p
+        apply Subtype.ext
+        simp
+      right_inv := by
+        intro p
+        simp
+      continuous_toFun := by fun_prop
+      continuous_invFun := by fun_prop }
+
+def apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign
+    (w : apm_t00j01_circleCover_intersection_equiv_aux_E0) :
+    Sum PUnit.{1} PUnit.{1} :=
+  if 0 < (w.1.1 : ℂ).im then Sum.inl PUnit.unit else Sum.inr PUnit.unit
+
+def apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point :
+    Sum PUnit.{1} PUnit.{1} → apm_t00j01_circleCover_intersection_equiv_aux_E0
+  | Sum.inl _ => ⟨⟨Complex.I, by
+      rw [Submodule.mem_orthogonal']
+      intro y hy
+      rw [Submodule.mem_span_singleton] at hy
+      obtain ⟨r, rfl⟩ := hy
+      simp [RCLike.inner_apply]
+      change (r * Complex.I).re = 0
+      simp⟩, by simp⟩
+  | Sum.inr _ => ⟨⟨-Complex.I, by
+      rw [Submodule.mem_orthogonal']
+      intro y hy
+      rw [Submodule.mem_span_singleton] at hy
+      obtain ⟨r, rfl⟩ := hy
+      simp [RCLike.inner_apply]
+      change (r * Complex.I).re = 0
+      simp⟩, by simp⟩
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous :
+    Continuous apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign := by
+  rw [continuous_discrete_rng]
+  rintro (u | u)
+  · have heq :
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign ⁻¹' {Sum.inl u} =
+          {w | 0 < (w.1.1 : ℂ).im} := by
+      ext w
+      simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign]
+    rw [heq]
+    exact isOpen_lt continuous_const
+      (Complex.continuous_im.comp
+        (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_id)))
+  · have heq :
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign ⁻¹' {Sum.inr u} =
+          {w | (w.1.1 : ℂ).im < 0} := by
+      ext w
+      simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign]
+      have hn := apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero w
+      constructor <;> intro h
+      · exact lt_of_le_of_ne h hn
+      · exact h.le
+    rw [heq]
+    exact isOpen_lt
+      (Complex.continuous_im.comp
+        (continuous_subtype_val.comp (continuous_subtype_val.comp continuous_id)))
+      continuous_const
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous :
+    Continuous apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point := by
+  continuity
+
+/-- Straight-line homotopy from each nonzero point of the imaginary axis to `±i`
+on its own side; the segment never crosses `0`. -/
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays_homotopic :
+    ((⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩ :
+          C(Sum PUnit.{1} PUnit.{1}, apm_t00j01_circleCover_intersection_equiv_aux_E0)).comp
+      ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩).Homotopic
+      (ContinuousMap.id _) := by
+  let H : ContinuousMap.Homotopy
+      ((⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩ :
+            C(Sum PUnit.{1} PUnit.{1},
+              apm_t00j01_circleCover_intersection_equiv_aux_E0)).comp
+        ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩)
+      (ContinuousMap.id _) := {
+    toFun := fun p => ⟨(1 - (p.1 : ℝ)) •
+        (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point
+          (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2)).1 +
+        (p.1 : ℝ) • p.2.1, by
+      intro hzero
+      have him : (((((1 - (p.1 : ℝ)) •
+          (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point
+            (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2)).1 +
+          (p.1 : ℝ) • p.2.1 :
+            apm_t00j01_circleCover_intersection_equiv_aux_E) : ℂ)).im) = 0 := by
+        simpa using congrArg (fun z : apm_t00j01_circleCover_intersection_equiv_aux_E =>
+          ((z.1 : ℂ).im)) hzero
+      have ht0 : 0 ≤ (p.1 : ℝ) := p.1.2.1
+      have ht1 : (p.1 : ℝ) ≤ 1 := p.1.2.2
+      unfold apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign at him
+      split at him
+      · have hw : 0 < (p.2.1.1 : ℂ).im := by assumption
+        simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+          ] at him
+        change ((((1 - (p.1 : ℝ) : ℝ) : ℂ) * Complex.I).im +
+          (((p.1 : ℝ) : ℂ) * (p.2.1.1 : ℂ)).im = 0) at him
+        simp [Complex.mul_im] at him
+        by_cases ht : (p.1 : ℝ) = 0
+        · rw [ht] at him
+          norm_num at him
+        have htpos : 0 < (p.1 : ℝ) := lt_of_le_of_ne ht0 (Ne.symm ht)
+        have hprod : 0 < (p.1 : ℝ) * (p.2.1.1 : ℂ).im := mul_pos htpos hw
+        nlinarith
+      · have hw : (p.2.1.1 : ℂ).im < 0 :=
+          lt_of_le_of_ne (le_of_not_gt ‹¬ 0 < (p.2.1.1 : ℂ).im›)
+            (apm_t00j01_circleCover_intersection_equiv_aux_im_ne_zero p.2)
+        simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+          ] at him
+        change (-((((1 - (p.1 : ℝ) : ℝ) : ℂ) * Complex.I).im) +
+          (((p.1 : ℝ) : ℂ) * (p.2.1.1 : ℂ)).im = 0) at him
+        simp [Complex.mul_im] at him
+        by_cases ht : (p.1 : ℝ) = 0
+        · rw [ht] at him
+          norm_num at him
+        have htpos : 0 < (p.1 : ℝ) := lt_of_le_of_ne ht0 (Ne.symm ht)
+        have hprod : (p.1 : ℝ) * (p.2.1.1 : ℂ).im < 0 :=
+          mul_neg_of_pos_of_neg htpos hw
+        nlinarith⟩
+    continuous_toFun := by
+      apply Continuous.subtype_mk
+      have hs : Continuous (fun p : unitInterval ×
+          apm_t00j01_circleCover_intersection_equiv_aux_E0 =>
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2) :=
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous.comp
+          continuous_snd
+      have hp : Continuous (fun p : unitInterval ×
+          apm_t00j01_circleCover_intersection_equiv_aux_E0 =>
+          (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point
+            (apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign p.2)).1) :=
+        (continuous_subtype_val.comp
+          apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous).comp hs
+      exact ((continuous_const.sub
+        (continuous_subtype_val.comp continuous_fst)).smul hp).add
+          ((continuous_subtype_val.comp continuous_fst).smul
+            (continuous_subtype_val.comp continuous_snd))
+    map_zero_left := by
+      intro w
+      apply Subtype.ext
+      simp
+    map_one_left := by
+      intro w
+      apply Subtype.ext
+      simp }
+  exact ⟨H⟩
+
+lemma apm_t00j01_circleCover_intersection_equiv_aux_two_rays :
+    Nonempty (apm_t00j01_circleCover_intersection_equiv_aux_E0 ≃ₕ
+      Sum PUnit.{1} PUnit.{1}) := by
+  refine ⟨{ toFun := ⟨_, apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩
+            invFun := ⟨_, apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩
+            left_inv := apm_t00j01_circleCover_intersection_equiv_aux_two_rays_homotopic
+            right_inv := ?_ }⟩
+  have h : (⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign_continuous⟩ :
+          C(apm_t00j01_circleCover_intersection_equiv_aux_E0, Sum PUnit.{1} PUnit.{1})).comp
+      ⟨apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point_continuous⟩ =
+      ContinuousMap.id _ := by
+    ext (u | u) <;>
+      simp [apm_t00j01_circleCover_intersection_equiv_aux_two_rays_sign,
+        apm_t00j01_circleCover_intersection_equiv_aux_two_rays_point]
+  rw [h]
+
+lemma apm_t00j01_circleCover_intersection_equiv :
+    Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₕ
+        Sum apm_t00j01_Klein apm_t00j01_Klein) := by
+  obtain ⟨hprod⟩ := apm_t00j01_circleCover_intersection_equiv_aux_product_model
+  obtain ⟨hrays⟩ := apm_t00j01_circleCover_intersection_equiv_aux_two_rays
+  exact ⟨hprod.toHomotopyEquiv |>.trans
+    ((ContinuousMap.HomotopyEquiv.refl apm_t00j01_Klein).prodCongr hrays) |>.trans
+    (Homeomorph.prodSumDistrib.toHomotopyEquiv) |>.trans
+    ((Homeomorph.sumCongr (Homeomorph.prodPUnit apm_t00j01_Klein)
+      (Homeomorph.prodPUnit apm_t00j01_Klein)).toHomotopyEquiv)⟩
+
+/-- The orientation-reversing gluing in the concrete affine quotient kills
+its integral degree-two fundamental class. -/
+lemma apm_t00j01_klein_H2_zero_aux_rel_iff (p q : ℝ × ℝ) :
+    Relation.EqvGen apm_t00j01_kleinRel p q ↔
+      ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv.orbitSetoid.r p q := by
+  constructor
+  · intro h
+    change KleinSquareEqvGenToCases.SameOrbit p q
+    induction h with
+    | rel p q h =>
+        cases h with
+        | horizontal x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorA, by
+              simp [KleinPlaneAffineAction.generatorA_smul]⟩
+        | twisted x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorB, by
+              simp [KleinPlaneAffineAction.generatorB_smul]⟩
+    | refl p => exact KleinSquareEqvGenToCases.sameOrbit_refl p
+    | symm p q _ ih => exact KleinSquareEqvGenToCases.sameOrbit_symm ih
+    | trans p q r _ _ ih₁ ih₂ =>
+        exact KleinSquareEqvGenToCases.sameOrbit_trans ih₁ ih₂
+  · rintro ⟨g, rfl⟩
+    exact apm_t00j01_klein_compact_aux_orbit p g
+
+noncomputable def apm_t00j01_klein_H2_zero_aux_plane_homeomorph :
+    apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H2_zero_aux_rel_iff p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H2_zero_aux_rel_iff p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+lemma apm_t00j01_klein_H2_zero_aux_homeomorph :
+    Nonempty (apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.t93J03Closure.kleinPairingData.Space) := by
+  obtain ⟨e⟩ :=
+    KleinSquareDiskCutAndPaste.planeOrbitQuotient_homeomorph_kleinBottle
+      ConstructionTargets.t93J03Closure.kleinPlaneOrbitT2Space
+  exact ⟨apm_t00j01_klein_H2_zero_aux_plane_homeomorph.trans
+    (e.trans ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph.symm)⟩
+
+lemma apm_t00j01_klein_H2_zero_aux_orbit
+    (i : Fin 4) (j : Fin 2) :
+    ConstructionTargets.t93J03Closure.kleinPairingData.orbit i =
+        (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j ↔
+      ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitLabel 2 i = j := by
+  change Quotient.mk _ i = _ ↔ _
+  constructor
+  · intro h
+    have := congrArg
+      (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2) h
+    simpa using this
+  · intro h
+    apply (ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).injective
+    simpa using h
+
+lemma apm_t00j01_klein_H2_zero_aux_degree (j : Fin 2) :
+    ConstructionTargets.PolygonSurfaceHomology.attachingDegree
+        ConstructionTargets.t93J03Closure.kleinPairingData
+        ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j) = -2 := by
+  rw [ConstructionTargets.PolygonSurfaceHomology.attachingDegree_apply]
+  calc
+    _ = ∑ p : Fin 2 × Fin 2,
+        ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution
+          ConstructionTargets.t93J03Closure.kleinPairingData
+          ((ConstructionTargets.PolygonSurfacePiOne.nonorientableCoord 2).symm p)
+          ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j) :=
+      ((ConstructionTargets.PolygonSurfacePiOne.nonorientableCoord 2).symm.sum_comp
+        fun i => ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution
+          ConstructionTargets.t93J03Closure.kleinPairingData i
+          ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm j)).symm
+    _ = -2 := by
+      simp only [ConstructionTargets.PolygonSurfaceHomology.edgeOrbitContribution]
+      simp_rw [apm_t00j01_klein_H2_zero_aux_orbit]
+      simp [ConstructionTargets.t93J03Closure.kleinPairingData,
+        ConstructionTargets.PolygonSurfacePiOne.nonorientableStandardPairingData,
+        ConstructionTargets.PolygonSurfacePiOne.standardPairingDataOfOneVertex,
+        ConstructionTargets.PolygonSurfacePiOne.standardPair,
+        ConstructionTargets.PolygonSurfacePiOne.standardSign,
+        ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitLabel,
+        ConstructionTargets.PolygonSurfaceHomology.edgeAttachingDegree,
+        Fintype.sum_prod_type]
+      fin_cases j <;> norm_num
+
+lemma apm_t00j01_klein_H2_zero_aux_boundary_injective :
+    Function.Injective
+      (ConstructionTargets.PolygonSurfaceHomology.attachingBoundary
+        ConstructionTargets.t93J03Closure.kleinPairingData) := by
+  intro m n h
+  have h' := congrFun h
+    ((ConstructionTargets.PolygonSurfacePiOne.nonorientableOrbitEquiv 2).symm 0)
+  rw [ConstructionTargets.PolygonSurfaceHomology.attachingBoundary_apply_apply,
+    ConstructionTargets.PolygonSurfaceHomology.attachingBoundary_apply_apply,
+    apm_t00j01_klein_H2_zero_aux_degree] at h'
+  omega
+
+lemma apm_t00j01_klein_H2_zero :
+    Limits.IsZero (apm_t00j01_H 2 apm_t00j01_Klein) := by
+  obtain ⟨e⟩ := apm_t00j01_klein_H2_zero_aux_homeomorph
+  let P := ConstructionTargets.t93J03Closure.kleinPairingData
+  have hker : ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel P = ⊥ :=
+    LinearMap.ker_eq_bot.mpr apm_t00j01_klein_H2_zero_aux_boundary_injective
+  have hz : Limits.IsZero (ModuleCat.of ℤ
+      (ConstructionTargets.PolygonSurfaceHomology.BoundaryKernel P)) := by
+    rw [hker]
+    exact ModuleCat.isZero_of_subsingleton _
+  have hp : Limits.IsZero
+      (ConstructionTargets.PolygonSurfaceHomology.H P 2) :=
+    hz.of_iso (ConstructionTargets.PolygonSurfaceHomology.radialH2BoundaryKernelModuleIso P)
+  exact hp.of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e.toHomotopyEquiv 2)
+
+/-- The concrete Klein quotient has no integral homology in degree three. -/
+lemma apm_t00j01_klein_H3_zero_aux_rel_iff (p q : ℝ × ℝ) :
+    Relation.EqvGen apm_t00j01_kleinRel p q ↔
+      ConstructionTargets.KleinClosedSquareOrbitQuotientEquiv.orbitSetoid.r p q := by
+  constructor
+  · intro h
+    change KleinSquareEqvGenToCases.SameOrbit p q
+    induction h with
+    | rel p q h =>
+        cases h with
+        | horizontal x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorA, by
+              simp [KleinPlaneAffineAction.generatorA_smul]⟩
+        | twisted x y =>
+            exact ⟨KleinPresentedGroupCoordinateModel.generatorB, by
+              simp [KleinPlaneAffineAction.generatorB_smul]⟩
+    | refl p => exact KleinSquareEqvGenToCases.sameOrbit_refl p
+    | symm p q _ ih => exact KleinSquareEqvGenToCases.sameOrbit_symm ih
+    | trans p q r _ _ ih₁ ih₂ =>
+        exact KleinSquareEqvGenToCases.sameOrbit_trans ih₁ ih₂
+  · rintro ⟨g, rfl⟩
+    exact apm_t00j01_klein_compact_aux_orbit p g
+
+noncomputable def apm_t00j01_klein_H3_zero_aux_plane_homeomorph :
+    apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.KleinOrbitQuotientHomeomorph.PlaneOrbitQuotient where
+  toFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H3_zero_aux_rel_iff p q).mp h)
+  invFun := Quotient.lift (fun p => Quotient.mk _ p) fun p q h =>
+    Quotient.sound ((apm_t00j01_klein_H3_zero_aux_rel_iff p q).mpr h)
+  left_inv := by rintro ⟨p⟩; rfl
+  right_inv := by rintro ⟨p⟩; rfl
+  continuous_toFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+  continuous_invFun := by
+    apply Continuous.quotient_lift
+    exact continuous_coinduced_rng
+
+lemma apm_t00j01_klein_H3_zero_aux_homeomorph :
+    Nonempty (apm_t00j01_Klein ≃ₜ
+      ConstructionTargets.t93J03Closure.kleinPairingData.Space) := by
+  obtain ⟨e⟩ :=
+    KleinSquareDiskCutAndPaste.planeOrbitQuotient_homeomorph_kleinBottle
+      ConstructionTargets.t93J03Closure.kleinPlaneOrbitT2Space
+  exact ⟨apm_t00j01_klein_H3_zero_aux_plane_homeomorph.trans
+    (e.trans ConstructionTargets.t93J03Closure.kleinPairingSpaceHomeomorph.symm)⟩
+
+lemma apm_t00j01_klein_H3_zero :
+    Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein) := by
+  obtain ⟨e⟩ := apm_t00j01_klein_H3_zero_aux_homeomorph
+  exact (ConstructionTargets.PolygonSurfaceHomology.highDegreeHomology
+      ConstructionTargets.t93J03Closure.kleinPairingData 3 (by omega)).of_iso
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e.toHomotopyEquiv 3)
+
+/-- Homotopy invariance transfers `H₃(K)=0` to both cover members. -/
+lemma apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (n : ℕ) :
+    ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f) =
+      ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+        (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom g) := by
+  let h : MonoidalCategoryStruct.tensorObj (TopCat.of X) TopCat.I ⟶ TopCat.of Y :=
+    TopCat.ofHom ⟨fun p ↦ H (TopCat.I.homeomorph p.2, p.1),
+      H.continuous.comp
+        ((TopCat.I.homeomorph.continuous.comp continuous_snd).prodMk continuous_fst)⟩
+  have h₀ : TopCat.ι₀ ≫ h = TopCat.ofHom f := by
+    ext x
+    change H (0, x) = f x
+    simp
+  have h₁ : TopCat.ι₁ ≫ h = TopCat.ofHom g := by
+    ext x
+    change H (1, x) = g x
+    simp
+  let hs : SSet.Homotopy (TopCat.toSSet.map (TopCat.ofHom f))
+      (TopCat.toSSet.map (TopCat.ofHom g)) := {
+    h := CategoryTheory.MonoidalCategory.whiskerLeft (TopCat.toSSet.obj (TopCat.of X))
+        SSet.stdSimplex.toSSetObjI ≫
+      Functor.LaxMonoidal.μ TopCat.toSSet (TopCat.of X) TopCat.I ≫
+        TopCat.toSSet.map h
+    h₀ := by
+      change _ = TopCat.toSSet.map (TopCat.ofHom f)
+      simp only [SSet.stdSimplex.ι₀_whiskerLeft_toSSetObjI_μ_assoc,
+        ← TopCat.toSSet.map_comp, h₀]
+    h₁ := by
+      change _ = TopCat.toSSet.map (TopCat.ofHom g)
+      simp only [SSet.stdSimplex.ι₁_whiskerLeft_toSSetObjI_μ_assoc,
+        ← TopCat.toSSet.map_comp, h₁]
+    rel := by
+      ext k x
+      exact x.1.property.elim }
+  simpa [AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using
+    singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy
+      (C := ModuleCat ℤ) (R := ModuleCat.of ℤ ℤ)
+      (f := TopCat.toSSet.map (TopCat.ofHom f))
+      (g := TopCat.toSSet.map (TopCat.ofHom g))
+      (H := hs.toSimplicialObjectHomotopy) n
+
+noncomputable def apm_t00j01_circleCover_pieces_H3_zero_aux_iso
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) (n : ℕ) :
+    apm_t00j01_H n X ≅ apm_t00j01_H n Y := by
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+    (ModuleCat.of ℤ ℤ)
+  letI : IsIso (F.map (TopCat.ofHom e.toFun)) := IsIso.mk
+    ⟨F.map (TopCat.ofHom e.invFun), by
+      rw [← F.map_comp]
+      change F.map (TopCat.ofHom (e.invFun.comp e.toFun)) = _
+      rw [apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
+        (Classical.choice e.left_inv)]
+      change F.map (𝟙 (TopCat.of X)) = _
+      rw [F.map_id], by
+      rw [← F.map_comp]
+      change F.map (TopCat.ofHom (e.toFun.comp e.invFun)) = _
+      rw [apm_t00j01_circleCover_pieces_H3_zero_aux_map_eq
+        (Classical.choice e.right_inv)]
+      change F.map (𝟙 (TopCat.of Y)) = _
+      rw [F.map_id]⟩
+  exact asIso (F.map (TopCat.ofHom e.toFun))
+
+lemma apm_t00j01_circleCover_pieces_H3_zero
+    (_he : Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
+      Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein))
+    (_hK3 : Limits.IsZero (apm_t00j01_H 3 apm_t00j01_Klein)) :
+    Limits.IsZero (apm_t00j01_H 3 (apm_t00j01_circleCoverLeft : Type)) ∧
+      Limits.IsZero (apm_t00j01_H 3 (apm_t00j01_circleCoverRight : Type)) := by
+  obtain ⟨⟨eLeft⟩, ⟨eRight⟩⟩ := _he
+  constructor
+  · exact _hK3.of_iso
+      (apm_t00j01_circleCover_pieces_H3_zero_aux_iso eLeft 3)
+  · exact _hK3.of_iso
+      (apm_t00j01_circleCover_pieces_H3_zero_aux_iso eRight 3)
+
+/-- Additivity for a disjoint sum and homotopy invariance transfer
+`H₂(K)=0` to the intersection of the cover. -/
+lemma apm_t00j01_circleCover_intersection_H2_zero
+    (_he : Nonempty (((apm_t00j01_circleCoverLeft ∩
+      apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type) ≃ₕ
+        Sum apm_t00j01_Klein apm_t00j01_Klein))
+    (_hK2 : Limits.IsZero (apm_t00j01_H 2 apm_t00j01_Klein)) :
+    Limits.IsZero (apm_t00j01_H 2
+      ((apm_t00j01_circleCoverLeft ∩
+        apm_t00j01_circleCoverRight : Set apm_t00j01_nonorientable3) : Type)) := by
+  obtain ⟨e⟩ := _he
+  apply Limits.IsZero.of_iso ?_
+    (ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℤ e 2)
+  apply ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsZeroOfGroupIsZero
+  apply Limits.IsZero.of_iso ?_
+    (ConstructionTargets.TopologicalSumSingularHomology.sumHomologyIsoBiprod
+      apm_t00j01_Klein apm_t00j01_Klein 2)
+  apply (CategoryTheory.Limits.biprod_isZero_iff _ _).2
+  constructor
+  · exact Limits.IsZero.of_iso
+      (Functor.map_isZero
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules _hK2)
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of apm_t00j01_Klein) 2).symm
+  · exact Limits.IsZero.of_iso
+      (Functor.map_isZero
+        ConstructionTargets.IntegralSingularHomologyComparison.forgetIntModules _hK2)
+      (ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+        (TopCat.of apm_t00j01_Klein) 2).symm
+
+/-- The exactness consequence of integral open-cover Mayer--Vietoris used by
+the final assembly. -/
+lemma apm_t00j01_openCover_H3_zero
+    {X : Type} [TopologicalSpace X] (U V : Set X)
+    (_hU : IsOpen U) (_hV : IsOpen V) (_hcov : U ∪ V = Set.univ)
+    (_hU3 : Limits.IsZero (apm_t00j01_H 3 (U : Type)))
+    (_hV3 : Limits.IsZero (apm_t00j01_H 3 (V : Type)))
+    (_hI2 : Limits.IsZero (apm_t00j01_H 2 ((U ∩ V : Set X) : Type))) :
+    Limits.IsZero (apm_t00j01_H 3 X) := by
+  obtain ⟨δ, _, hex, _⟩ :=
+    IntegralMV.integralMayerVietoris U V _hU _hV _hcov
+  have hpieces : Limits.IsZero
+      (apm_t00j01_H 3 (U : Type) ⊞ apm_t00j01_H 3 (V : Type)) :=
+    (Limits.biprod_isZero_iff _ _).2 ⟨_hU3, _hV3⟩
+  rw [ModuleCat.isZero_iff_subsingleton]
+  constructor
+  intro x y
+  have vanish (z : apm_t00j01_H 3 X) : z = 0 := by
+    have hzker : z ∈ LinearMap.ker (δ 2).hom := by
+      change (δ 2).hom z = 0
+      exact (ModuleCat.subsingleton_of_isZero _hI2).elim _ _
+    have hzrange : z ∈ LinearMap.range (IntegralMV.mvJ U V 3).hom := by
+      rw [hex 2]
+      exact hzker
+    obtain ⟨w, hw⟩ := hzrange
+    have hw0 : w = 0 := (ModuleCat.subsingleton_of_isZero hpieces).elim _ _
+    rw [hw0, map_zero] at hw
+    exact hw.symm
+  exact (vanish x).trans (vanish y).symm
+
+/-- The integral top singular homology of the concrete Klein-bottle product
+vanishes.  The manifold conclusion remains an explicit input required by the
+registered statement, but the homology calculation itself uses the concrete
+twisted quotient and the punctured-circle cover. -/
+theorem apm_t00j01_klein_product_H3_zero
+    (_hM : apm_t00j01_isThreeManifold apm_t00j01_nonorientable3) :
+    Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3) := by
+  obtain ⟨hU, hV, hcov⟩ := apm_t00j01_circleCover_open_cover
+  obtain ⟨hU3, hV3⟩ := apm_t00j01_circleCover_pieces_H3_zero
+    apm_t00j01_circleCover_piece_equivs apm_t00j01_klein_H3_zero
+  exact apm_t00j01_openCover_H3_zero
+    apm_t00j01_circleCoverLeft apm_t00j01_circleCoverRight hU hV hcov hU3 hV3
+      (apm_t00j01_circleCover_intersection_H2_zero
+        apm_t00j01_circleCover_intersection_equiv apm_t00j01_klein_H2_zero)
+
+/-- Every lift of the fiber over `exp π` has nonzero derivative. -/
+lemma apm_t00j01_foldRegular_pi_aux_cos :
+    Real.cos (2 * Real.pi / 3) = -(1 / 2 : ℝ) := by
+  rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+    Real.cos_pi_sub, Real.cos_pi_div_three]
+
+lemma apm_t00j01_foldRegular_pi_aux_delta_pos :
+    0 < Real.sqrt 3 - Real.pi / 3 := by
+  have hs0 : 0 ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hs : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hs4 : (4 / 3 : ℝ) < Real.sqrt 3 := by nlinarith
+  have hp4 : Real.pi / 3 < (4 / 3 : ℝ) := by
+    nlinarith [Real.pi_lt_four]
+  linarith
+
+lemma apm_t00j01_foldRegular_pi_aux_delta_lt :
+    Real.sqrt 3 - Real.pi / 3 < 2 * Real.pi := by
+  have hs0 : 0 ≤ Real.sqrt 3 := Real.sqrt_nonneg 3
+  have hs : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hs2 : Real.sqrt 3 < 2 := by nlinarith
+  nlinarith [Real.pi_gt_three]
+
+lemma apm_t00j01_foldRegular_pi_aux_not_multiple (m : ℤ) :
+    Real.sqrt 3 - Real.pi / 3 ≠ (m : ℝ) * (2 * Real.pi) := by
+  intro h
+  have hm0 : (0 : ℝ) < m := by
+    have hd := apm_t00j01_foldRegular_pi_aux_delta_pos
+    rw [h] at hd
+    rcases (mul_pos_iff.mp hd) with hm | hm
+    · exact hm.1
+    · exfalso
+      exact (not_lt_of_ge (by positivity : (0 : ℝ) ≤ 2 * Real.pi)) hm.2
+  have hm1 : (m : ℝ) < 1 := by
+    have hp : 0 < 2 * Real.pi := by positivity
+    have hd := apm_t00j01_foldRegular_pi_aux_delta_lt
+    rw [h] at hd
+    by_contra hm
+    have hm' : (1 : ℝ) ≤ m := le_of_not_gt hm
+    have := mul_le_mul_of_nonneg_right hm' hp.le
+    linarith
+  have hm0z : 0 < m := by exact_mod_cast hm0
+  have hm1z : m < 1 := by exact_mod_cast hm1
+  omega
+
+theorem apm_t00j01_foldRegular_pi :
+    apm_t00j01_foldRegular (Circle.exp Real.pi) := by
+  intro θ hfiber hzero
+  have hcos : Real.cos θ = -(1 / 2 : ℝ) := by linarith
+  have hclass := (Real.cos_eq_cos_iff.mp
+    (apm_t00j01_foldRegular_pi_aux_cos.trans hcos.symm))
+  obtain ⟨k, hk | hk⟩ := hclass
+  · have hspecial : Real.sin (2 * Real.pi / 3) = Real.sqrt 3 / 2 := by
+      rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+        Real.sin_pi_sub, Real.sin_pi_div_three]
+    have hsin : Real.sin θ = Real.sqrt 3 / 2 := calc
+      Real.sin θ = Real.sin (2 * Real.pi / 3 + (k : ℝ) * (2 * Real.pi)) := by
+        rw [hk]
+        congr 1 <;> ring
+      _ = Real.sin (2 * Real.pi / 3) := Real.sin_add_int_mul_two_pi _ _
+      _ = Real.sqrt 3 / 2 := hspecial
+    rw [apm_t00j01_fold_exp] at hfiber
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hfiber
+    apply apm_t00j01_foldRegular_pi_aux_not_multiple (n - k)
+    dsimp [apm_t00j01_foldLift] at hn
+    rw [hsin, hk] at hn
+    norm_num [Int.cast_sub] at hn ⊢
+    linarith
+  · have hspecial : Real.sin (2 * Real.pi / 3) = Real.sqrt 3 / 2 := by
+      rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring,
+        Real.sin_pi_sub, Real.sin_pi_div_three]
+    have hsin : Real.sin θ = -(Real.sqrt 3 / 2) := calc
+      Real.sin θ = Real.sin ((k : ℝ) * (2 * Real.pi) - 2 * Real.pi / 3) := by
+        rw [hk]
+        congr 1 <;> ring
+      _ = -Real.sin (2 * Real.pi / 3) := Real.sin_int_mul_two_pi_sub _ _
+      _ = -(Real.sqrt 3 / 2) := by rw [hspecial]
+    rw [apm_t00j01_fold_exp] at hfiber
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hfiber
+    apply apm_t00j01_foldRegular_pi_aux_not_multiple (k - n - 1)
+    dsimp [apm_t00j01_foldLift] at hn
+    rw [hsin, hk] at hn
+    norm_num [Int.cast_sub] at hn ⊢
+    linarith
+
+/-- Every lift of the fiber over `1` has nonzero derivative. -/
+lemma apm_t00j01_foldRegular_one_aux_int_gap (j : ℤ) :
+    (1 / 3 : ℝ) ≤ |(j : ℝ) - 1 / 3| := by
+  by_cases hj : j ≤ 0
+  · have hj' : (j : ℝ) ≤ 0 := by exact_mod_cast hj
+    rw [abs_of_nonpos (by linarith)]
+    linarith
+  · have hj : 1 ≤ j := by omega
+    have hj' : (1 : ℝ) ≤ (j : ℝ) := by exact_mod_cast hj
+    rw [abs_of_nonneg (by linarith)]
+    linarith
+
+lemma apm_t00j01_foldRegular_one_aux_cos_two_pi_div_three :
+    Real.cos (2 * Real.pi / 3) = (-1 / 2 : ℝ) := by
+  rw [show 2 * Real.pi / 3 = Real.pi - Real.pi / 3 by ring]
+  rw [Real.cos_sub, Real.cos_pi, Real.sin_pi, Real.cos_pi_div_three]
+  ring
+
+theorem apm_t00j01_foldRegular_one :
+    apm_t00j01_foldRegular 1 := by
+  intro θ hfold hderiv
+  have hexp : Circle.exp (apm_t00j01_foldLift θ) = Circle.exp 0 := by
+    rw [← apm_t00j01_fold_exp]
+    simpa using hfold
+  obtain ⟨n, hn, -⟩ :=
+    (ConstructionTargets.CircleWindingUniqueness.exp_eq_iff_existsUnique_endpointWinding
+      (apm_t00j01_foldLift θ) 0).mp hexp
+  have hcos : Real.cos θ = (-1 / 2 : ℝ) := by linarith
+  have hclass := (Real.cos_eq_cos_iff).mp
+    (hcos.trans apm_t00j01_foldRegular_one_aux_cos_two_pi_div_three.symm)
+  rcases hclass with ⟨k, hk | hk⟩
+  · let j : ℤ := n + k
+    have heq : Real.sin θ = Real.pi * ((j : ℝ) - 1 / 3) := by
+      unfold ConstructionTargets.CircleWindingUniqueness.IsEndpointWinding at hn
+      simp only [apm_t00j01_foldLift, zero_add] at hn
+      dsimp [j]
+      push_cast
+      nlinarith [hk]
+    have hgap := apm_t00j01_foldRegular_one_aux_int_gap j
+    have hpi : 3 < Real.pi := Real.pi_gt_three
+    have habs : 1 < |Real.sin θ| := by
+      rw [heq, abs_mul]
+      rw [abs_of_pos (by positivity : 0 < Real.pi)]
+      nlinarith
+    exact (not_lt_of_ge (Real.abs_sin_le_one θ)) habs
+  · let j : ℤ := k - n
+    have heq : Real.sin θ = -Real.pi * ((j : ℝ) - 1 / 3) := by
+      unfold ConstructionTargets.CircleWindingUniqueness.IsEndpointWinding at hn
+      simp only [apm_t00j01_foldLift, zero_add] at hn
+      dsimp [j]
+      push_cast
+      nlinarith [hk]
+    have hgap := apm_t00j01_foldRegular_one_aux_int_gap j
+    have hpi : 3 < Real.pi := Real.pi_gt_three
+    have habs : 1 < |Real.sin θ| := by
+      rw [heq, abs_mul]
+      rw [abs_neg, abs_of_pos (by positivity : 0 < Real.pi)]
+      nlinarith
+    exact (not_lt_of_ge (Real.abs_sin_le_one θ)) habs
+
+def apm_t00j01_foldFiberCard_pi_aux_angleEquiv :
+    {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} ≃
+      {θ : Set.Ioc (-Real.pi) Real.pi //
+        Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} where
+  toFun z := ⟨⟨Complex.arg z.1, Complex.arg_mem_Ioc z.1⟩, by
+    rw [← apm_t00j01_fold_exp, Circle.exp_arg]
+    exact z.2⟩
+  invFun θ := ⟨Circle.exp θ.1.1, by
+    rw [apm_t00j01_fold_exp]
+    exact θ.2⟩
+  left_inv z := by
+    apply Subtype.ext
+    exact Circle.exp_arg z.1
+  right_inv θ := by
+    apply Subtype.ext
+    apply Subtype.ext
+    exact Circle.arg_exp θ.1.2.1 θ.1.2.2
+
+lemma apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles :
+    Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} =
+      Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+        Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} := by
+  exact Nat.card_congr apm_t00j01_foldFiberCard_pi_aux_angleEquiv
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave :
+    StrictConcaveOn ℝ (Set.Icc 0 Real.pi) apm_t00j01_foldLift := by
+  refine ⟨strictConcaveOn_sin_Icc.1, ?_⟩
+  intro x hx y hy hxy a b ha hb hab
+  have hs := strictConcaveOn_sin_Icc.2 hx hy hxy ha hb hab
+  dsimp [apm_t00j01_foldLift] at hs ⊢
+  nlinarith
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd (x : ℝ) :
+    apm_t00j01_foldLift (-x) = -apm_t00j01_foldLift x := by
+  simp [apm_t00j01_foldLift]
+  ring
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root :
+    ∃ x ∈ Set.Ioo 0 (Real.pi / 2), apm_t00j01_foldLift x = Real.pi := by
+  have hcont : ContinuousOn apm_t00j01_foldLift (Set.Icc 0 (Real.pi / 2)) := by
+    exact (continuous_id.add (Real.continuous_sin.const_mul 2)).continuousOn
+  have h0 : apm_t00j01_foldLift 0 < Real.pi := by
+    simp [apm_t00j01_foldLift, Real.pi_pos]
+  have hmid : Real.pi < apm_t00j01_foldLift (Real.pi / 2) := by
+    rw [apm_t00j01_foldLift, Real.sin_pi_div_two]
+    linarith [Real.pi_lt_four]
+  have himage : Real.pi ∈ apm_t00j01_foldLift '' Set.Icc 0 (Real.pi / 2) :=
+    (intermediate_value_Icc (by positivity) hcont) ⟨h0.le, hmid.le⟩
+  rcases himage with ⟨x, hx, hfx⟩
+  refine ⟨x, ⟨?_, ?_⟩, hfx⟩
+  · exact lt_of_not_ge fun h => by
+      have : x = 0 := le_antisymm h hx.1
+      subst x
+      simp [apm_t00j01_foldLift] at hfx
+      exact Real.pi_ne_zero hfx.symm
+  · exact lt_of_le_of_ne hx.2 fun h => by
+      subst x
+      exact hmid.ne' hfx
+
+/-- Seat: on `(-π, π]`, `exp (g θ) = exp π` iff `g θ = π` or `g θ = -π`
+(`|g θ| ≤ π + 2 < 3π`; `Circle.exp_eq_exp` up to `2π ℤ`). -/
+theorem apm_t00j01_angle_classify (θ : ℝ) (hθ : θ ∈ Set.Ioc (-Real.pi) Real.pi) :
+    Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+      apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi := by
+  constructor
+  · intro hexp
+    obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+    have hbound : |apm_t00j01_foldLift θ| < 2 * Real.pi := by
+      rw [apm_t00j01_foldLift]
+      calc
+        |θ + 2 * Real.sin θ| ≤ |θ| + 2 * |Real.sin θ| := by
+          simpa only [abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] using
+            abs_add_le θ (2 * Real.sin θ)
+        _ ≤ Real.pi + 2 := by
+          have ha : |θ| ≤ Real.pi :=
+            (abs_le).2 ⟨by linarith [hθ.1], hθ.2⟩
+          have hs : |Real.sin θ| ≤ 1 :=
+            (abs_le).2 ⟨Real.neg_one_le_sin θ, Real.sin_le_one θ⟩
+          linarith
+        _ < 2 * Real.pi := by linarith [Real.pi_gt_three]
+    have hnlt : n < 1 := by
+      have hu : apm_t00j01_foldLift θ < 2 * Real.pi := (abs_lt.mp hbound).2
+      have hpi : 0 < Real.pi := Real.pi_pos
+      have : (n : ℝ) < 1 := by
+        rw [hn] at hu
+        nlinarith
+      exact_mod_cast this
+    have hnneg : -2 < n := by
+      have hl : -(2 * Real.pi) < apm_t00j01_foldLift θ := (abs_lt.mp hbound).1
+      have hpi : 0 < Real.pi := Real.pi_pos
+      have : (-2 : ℝ) < n := by
+        rw [hn] at hl
+        nlinarith
+      exact_mod_cast this
+    have hn_cases : n = 0 ∨ n = -1 := by omega
+    rcases hn_cases with rfl | rfl
+    · left
+      simpa using hn
+    · right
+      rw [hn]
+      ring
+  · rintro (h | h)
+    · rw [h]
+    · rw [h]
+      exact Circle.exp_eq_exp.mpr ⟨-1, by ring⟩
+
+/-- Seat: on `[0, π]` the equation `g θ = π` has exactly the interior root and
+`θ = π` (strict concavity: a strictly concave function takes a value at most
+twice; `g 0 = 0`; use the banked concavity and root lemmas above). -/
+theorem apm_t00j01_angle_positive_roots :
+    ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
+      apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi := by
+  obtain ⟨x₀, hx₀, hroot⟩ :=
+    apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_inner_root
+  refine ⟨x₀, hx₀, ?_⟩
+  intro θ hθ
+  constructor
+  · intro hrootθ
+    by_cases hθx : θ = x₀
+    · exact Or.inl hθx
+    by_cases hθπ : θ = Real.pi
+    · exact Or.inr hθπ
+    exfalso
+    have hxπ : x₀ < Real.pi := by
+      exact lt_trans hx₀.2 (by linarith [Real.pi_pos])
+    have hθπlt : θ < Real.pi := lt_of_le_of_ne hθ.2 hθπ
+    have hconc :=
+      apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_strictConcave
+    have hrootπ : apm_t00j01_foldLift Real.pi = Real.pi := by
+      simp [apm_t00j01_foldLift]
+    rcases lt_or_gt_of_ne hθx with hθxlt | hxθlt
+    · have hxseg : x₀ ∈ openSegment ℝ θ Real.pi := by
+        rw [openSegment_eq_Ioo hθπlt, Set.mem_Ioo]
+        exact ⟨hθxlt, hxπ⟩
+      have hne : θ ≠ Real.pi := hθπ
+      have hlt := hconc.lt_on_openSegment hθ (by
+        exact ⟨Real.pi_pos.le, le_rfl⟩) hne hxseg
+      rw [hrootθ, hrootπ, hroot, min_self] at hlt
+      exact (lt_irrefl Real.pi hlt)
+    · have hθseg : θ ∈ openSegment ℝ x₀ Real.pi := by
+        rw [openSegment_eq_Ioo hxπ, Set.mem_Ioo]
+        exact ⟨hxθlt, hθπlt⟩
+      have hxne : x₀ ≠ Real.pi := ne_of_lt hxπ
+      have hlt := hconc.lt_on_openSegment
+        ⟨hx₀.1.le, hxπ.le⟩ (by exact ⟨Real.pi_pos.le, le_rfl⟩)
+        hxne hθseg
+      rw [hroot, hrootπ, hrootθ, min_self] at hlt
+      exact (lt_irrefl Real.pi hlt)
+  · rintro (rfl | rfl)
+    · exact hroot
+    · simp [apm_t00j01_foldLift]
+
+/-- Seat (assembly from hypotheses): with oddness (banked) and `g ≥ 0` on `[0, π]`
+(`sin ≥ 0` there), the solutions in `(-π, π]` are exactly `x₀, π, -x₀`. -/
+theorem apm_t00j01_angle_count_of_parts
+    (hclass : ∀ θ ∈ Set.Ioc (-Real.pi) Real.pi,
+      Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+        apm_t00j01_foldLift θ = Real.pi ∨ apm_t00j01_foldLift θ = -Real.pi)
+    (hpos : ∃ x₀ ∈ Set.Ioo 0 (Real.pi / 2), ∀ θ ∈ Set.Icc 0 Real.pi,
+      apm_t00j01_foldLift θ = Real.pi ↔ θ = x₀ ∨ θ = Real.pi) :
+    Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
+  obtain ⟨x₀, hx₀, hpos⟩ := hpos
+  have hsolutions : ∀ θ ∈ Set.Ioc (-Real.pi) Real.pi,
+      Circle.exp (apm_t00j01_foldLift θ) = Circle.exp Real.pi ↔
+        θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀ := by
+    intro θ hθ
+    rw [hclass θ hθ]
+    constructor
+    · intro hg
+      by_cases hnonneg : 0 ≤ θ
+      · have hsin : 0 ≤ Real.sin θ :=
+          Real.sin_nonneg_of_nonneg_of_le_pi hnonneg hθ.2
+        rcases hg with hg | hg
+        · rcases (hpos θ ⟨hnonneg, hθ.2⟩).mp hg with h | h
+          · exact Or.inl h
+          · exact Or.inr (Or.inl h)
+        · exfalso
+          dsimp [apm_t00j01_foldLift] at hg
+          nlinarith [Real.pi_pos]
+      · have hneg : θ < 0 := lt_of_not_ge hnonneg
+        have hmθ : -θ ∈ Set.Icc (0 : ℝ) Real.pi := by
+          constructor <;> linarith [hθ.1]
+        rcases hg with hg | hg
+        · have hsin : Real.sin θ ≤ 0 := by
+            have := Real.sin_nonneg_of_nonneg_of_le_pi hmθ.1 hmθ.2
+            simpa using this
+          exfalso
+          dsimp [apm_t00j01_foldLift] at hg
+          nlinarith [Real.pi_pos]
+        · have hm : apm_t00j01_foldLift (-θ) = Real.pi := by
+            rw [apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd, hg]
+            ring
+          rcases (hpos (-θ) hmθ).mp hm with hm | hm
+          · exact Or.inr (Or.inr (by linarith))
+          · exfalso
+            linarith [hθ.1]
+    · intro h
+      rcases h with h | h | h
+      · subst θ
+        exact Or.inl ((hpos x₀ ⟨hx₀.1.le, le_trans hx₀.2.le
+          (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi)⟩).2 (Or.inl rfl))
+      · subst θ
+        exact Or.inl ((hpos Real.pi ⟨Real.pi_pos.le, le_rfl⟩).2 (Or.inr rfl))
+      · subst θ
+        exact Or.inr (by
+          rw [apm_t00j01_foldFiberCard_pi_aux_angle_count_aux_odd]
+          have := (hpos x₀ ⟨hx₀.1.le, le_trans hx₀.2.le
+            (by linarith [Real.pi_pos] : Real.pi / 2 ≤ Real.pi)⟩).2 (Or.inl rfl)
+          rw [this])
+  have hmem : ∀ θ : ℝ, θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀ →
+      θ ∈ Set.Ioc (-Real.pi) Real.pi := by
+    intro θ h
+    rcases h with h | h | h
+    · rw [h]
+      constructor <;> linarith [hx₀.1, hx₀.2, Real.pi_pos]
+    · rw [h]
+      exact ⟨by linarith [Real.pi_pos], le_rfl⟩
+    · rw [h]
+      constructor <;> linarith [hx₀.1, hx₀.2, Real.pi_pos]
+  let e : {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} ≃
+      {θ : ℝ // θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀} :=
+    { toFun := fun θ => ⟨θ.1, (hsolutions θ.1 θ.1.2).mp θ.2⟩
+      invFun := fun θ => ⟨⟨θ.1, hmem θ.1 θ.2⟩,
+        (hsolutions θ.1 (hmem θ.1 θ.2)).2 θ.2⟩
+      left_inv := fun θ => by apply Subtype.ext; rfl
+      right_inv := fun θ => by apply Subtype.ext; rfl }
+  rw [Nat.card_congr e]
+  have hne₁ : x₀ ≠ Real.pi := by linarith [hx₀.2, Real.pi_pos]
+  have hne₂ : x₀ ≠ -x₀ := by linarith [hx₀.1]
+  have hne₃ : Real.pi ≠ -x₀ := by linarith [hx₀.1, Real.pi_pos]
+  let e' : {θ : ℝ // θ = x₀ ∨ θ = Real.pi ∨ θ = -x₀} ≃ Fin 3 :=
+    { toFun := fun θ => if θ.1 = x₀ then 0 else if θ.1 = Real.pi then 1 else 2
+      invFun := fun i => ⟨![x₀, Real.pi, -x₀] i, by fin_cases i <;> simp⟩
+      left_inv := fun θ => by
+        rcases θ.2 with h | h | h
+        · apply Subtype.ext
+          simp [h]
+        · apply Subtype.ext
+          simp [h, hne₁.symm]
+        · apply Subtype.ext
+          simp [h, hne₂.symm, hne₃.symm]
+      right_inv := fun i => by
+        fin_cases i
+        · simp
+        · simp [hne₁.symm]
+        · simp [hne₂.symm, hne₃.symm] }
+  rw [Nat.card_congr e']
+  simp
+
+lemma apm_t00j01_foldFiberCard_pi_aux_angle_count :
+    Nat.card {θ : Set.Ioc (-Real.pi) Real.pi //
+      Circle.exp (apm_t00j01_foldLift θ.1) = Circle.exp Real.pi} = 3 := by
+  exact apm_t00j01_angle_count_of_parts apm_t00j01_angle_classify
+    apm_t00j01_angle_positive_roots
+
+theorem apm_t00j01_foldFiberCard_pi :
+    Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 := by
+  rw [apm_t00j01_foldFiberCard_pi_aux_reduce_to_angles]
+  exact apm_t00j01_foldFiberCard_pi_aux_angle_count
+
+/-- The other selected regular fiber has exactly one circle point. -/
+lemma apm_t00j01_foldFiberCard_one_aux_angle (z : Circle) :
+    ∃ θ : ℝ, θ ∈ Set.Ioc (-Real.pi) Real.pi ∧ Circle.exp θ = z := by
+  simpa only [Set.mem_univ, and_true] using Circle.surjOn_exp_neg_pi_pi (Set.mem_univ z)
+
+lemma apm_t00j01_foldFiberCard_one_aux_unique (z : Circle)
+    (hz : apm_t00j01_fold z = 1) : z = 1 := by
+  obtain ⟨θ, hθ, rfl⟩ := apm_t00j01_foldFiberCard_one_aux_angle z
+  rw [apm_t00j01_fold_exp] at hz
+  have hexp : Circle.exp (apm_t00j01_foldLift θ) = Circle.exp 0 := by simpa using hz
+  obtain ⟨n, hn⟩ := Circle.exp_eq_exp.mp hexp
+  have hsin_nonneg : 0 ≤ θ → 0 ≤ Real.sin θ := by
+    intro h0
+    exact Real.sin_nonneg_of_nonneg_of_le_pi h0 hθ.2
+  have hsin_nonpos : θ ≤ 0 → Real.sin θ ≤ 0 := by
+    intro h0
+    have hneg : 0 ≤ -θ := neg_nonneg.mpr h0
+    have hle : -θ ≤ Real.pi := by linarith [hθ.1]
+    simpa only [Real.sin_neg, neg_nonneg] using
+      (Real.sin_nonneg_of_nonneg_of_le_pi hneg hle)
+  have hbound : |apm_t00j01_foldLift θ| < 2 * Real.pi := by
+    rw [apm_t00j01_foldLift]
+    calc
+      |θ + 2 * Real.sin θ| ≤ |θ| + 2 * |Real.sin θ| := by
+        simpa only [abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] using
+          abs_add_le θ (2 * Real.sin θ)
+      _ ≤ Real.pi + 2 := by
+        have ha : |θ| ≤ Real.pi := (abs_le).2 ⟨by linarith [hθ.1], hθ.2⟩
+        have hs : |Real.sin θ| ≤ 1 :=
+          (abs_le).2 ⟨Real.neg_one_le_sin θ, Real.sin_le_one θ⟩
+        linarith
+      _ < 2 * Real.pi := by linarith [Real.pi_gt_three]
+  have hn0 : n = 0 := by
+    have hnabs : |(n : ℝ)| < 1 := by
+      rw [apm_t00j01_foldLift] at hn hbound
+      have hpi : 0 < 2 * Real.pi := by positivity
+      rw [hn, zero_add, abs_mul, abs_of_pos hpi] at hbound
+      nlinarith
+    have hnlt : (n : ℝ) < 1 := lt_of_le_of_lt (le_abs_self _) hnabs
+    have hnneglt : (-(n : ℝ)) < 1 := lt_of_le_of_lt (neg_le_abs _) hnabs
+    have hn_lt : n < 1 := by exact_mod_cast hnlt
+    have hn_gt : -1 < n := by exact_mod_cast (show (-1 : ℝ) < n by linarith)
+    omega
+  have hphi : θ + 2 * Real.sin θ = 0 := by
+    simpa [apm_t00j01_foldLift, hn0] using hn
+  have hθ0 : θ = 0 := by
+    rcases le_total θ 0 with hneg | hpos
+    · have hs := hsin_nonpos hneg
+      linarith
+    · have hs := hsin_nonneg hpos
+      linarith
+  simp [hθ0]
+
+theorem apm_t00j01_foldFiberCard_one :
+    Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1 := by
+  let x : {z : Circle // apm_t00j01_fold z = 1} :=
+    ⟨1, by simpa using apm_t00j01_fold_zero⟩
+  letI : Unique {z : Circle // apm_t00j01_fold z = 1} := {
+    default := x
+    uniq := fun y => Subtype.ext (apm_t00j01_foldFiberCard_one_aux_unique y y.property) }
+  exact Nat.card_unique
+
 theorem apm_t00j01 :
     (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
       Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)) ∧
@@ -174,63 +1755,14 @@ theorem apm_t00j01 :
       apm_t00j01_foldRegular 1 ∧
       Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 ∧
       Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1) := by
-  /-
-  CLOSER HOP 3 boundary. The frozen repair at commit `da7d3d2` replaced the
-  detached Lefschetz arithmetic by `t00J01HasSphereLefschetzNumber`, but also
-  removed the compatible circle helpers described by the earlier hop record.
-  This hop ports those facts to the repaired statement:
-  `apm_t00j01_fold_exp` identifies the circle fold with its real lift,
-  `apm_t00j01_hasDerivAt_foldLift` and `apm_t00j01_deriv_foldLift` compute the
-  derivative, and `apm_t00j01_fold_continuous` closes continuity. Going beyond
-  restoration, `apm_t00j01_fold_zero` and `apm_t00j01_fold_pi` exhibit the
-  evident points of the two target fibers, while the corresponding `_deriv_ne`
-  lemmas prove both are regular preimages.
+  have hM := apm_t00j01_klein_quotient_charts
+  exact
+    ⟨⟨hM, apm_t00j01_klein_product_H3_zero hM⟩,
+      apm_t00j01_sphere_identity_bridge,
+      apm_t00j01_fold_continuous,
+      apm_t00j01_foldRegular_pi,
+      apm_t00j01_foldRegular_one,
+      apm_t00j01_foldFiberCard_pi,
+      apm_t00j01_foldFiberCard_one⟩
 
-  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, related Klein,
-  Lefschetz, circle-covering, and sphere artifacts, Mathlib's circle
-  exponential/root APIs, singular homology, quotient/manifold sources, and git
-  history found no packaged exact root count for `θ + 2 sin θ` modulo `2π`,
-  no singular-homology computation for this metric `S²`, and no theorem making
-  the concrete coinduced Klein quotient a compact 2-manifold. The remaining
-  circle proof needs a fundamental-interval root classification with
-  monotonicity split at `cos θ = -1/2`; the topology conjuncts require the
-  independent missing quotient-manifold and homology infrastructure. The
-  theorem statement is unchanged.
-
-  HOP 4 (2026-08-09): further searches did not expose a bridge below these
-  three independent exact contracts:
-
-    theorem apm_t00j01_klein_product_bridge :
-      apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
-        Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)
-
-    theorem apm_t00j01_sphere_identity_bridge :
-      t00J01HasSphereLefschetzNumber t00J01SphereIdentity 2 ∧
-        ¬t00J01HasSphereLefschetzNumber t00J01SphereIdentity 1
-
-    theorem apm_t00j01_fold_fibers_bridge :
-      apm_t00j01_foldRegular (Circle.exp Real.pi) ∧
-        apm_t00j01_foldRegular 1 ∧
-        Nat.card {z : Circle //
-          apm_t00j01_fold z = Circle.exp Real.pi} = 3 ∧
-        Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1
-
-  The first needs quotient charts plus the nonorientable top-homology
-  calculation. The second needs the rational singular homology of the metric
-  two-sphere and functoriality for the identity. The third is the exact
-  fundamental-interval classification for `θ + 2 sin θ` modulo `2π`, including
-  exclusion of critical roots. Together with `apm_t00j01_fold_continuous`,
-  these contracts are exactly the frozen conjunction.
-  -/
-  /- The sphere-identity branch is proved above. Only the Klein-product and
-     exact fold-fiber obligations remain. -/
-  suffices h :
-      (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
-        Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)) ∧
-      (Continuous apm_t00j01_fold ∧
-        apm_t00j01_foldRegular (Circle.exp Real.pi) ∧
-        apm_t00j01_foldRegular 1 ∧
-        Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 ∧
-        Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1) by
-    exact ⟨h.1, apm_t00j01_sphere_identity_bridge, h.2⟩
-  sorry
+#print axioms apm_t00j01
