@@ -957,13 +957,131 @@ of the span of one nonzero vector in `ℤ^g` has rank `g - 1`
 `Module.Finite` of a quotient of `Fin`-indexed functions is
 `Module.Finite.quotient`.  About 80–200 lines. -/
 -- BEGIN SEAT AREA
+lemma polygonNF_standard_boundary_ranks_aux_orientable_orbit (g : ℕ) (hg : 0 < g)
+    (i : Fin (4 * g)) (j : Fin g × Bool) :
+    (standardPairingData true g hg).orbit i =
+        (orientableOrbitEquiv g).symm j ↔
+      orientableOrbitLabel g i = j := by
+  change Quotient.mk _ i = (orientableOrbitEquiv g).symm j ↔ _
+  constructor
+  · intro h
+    have h' := congrArg (orientableOrbitEquiv g) h
+    simpa using h'
+  · intro h
+    apply (orientableOrbitEquiv g).injective
+    simpa using h
+
+lemma polygonNF_standard_boundary_ranks_aux_orientable_degree (g : ℕ) (hg : 0 < g) :
+    attachingDegree (standardPairingData true g hg) = 0 := by
+  funext j
+  rw [attachingDegree_apply]
+  calc
+    _ = ∑ p : Fin g × Fin 4,
+        edgeOrbitContribution (standardPairingData true g hg)
+          ((orientableCoord g).symm p) j :=
+      ((orientableCoord g).symm.sum_comp fun i ↦
+        edgeOrbitContribution (standardPairingData true g hg) i j).symm
+    _ = 0 := by
+      simp only [edgeOrbitContribution]
+      generalize hj : (orientableOrbitEquiv g) j = q
+      have ej : j = (orientableOrbitEquiv g).symm q := by
+        rw [← hj]
+        exact (orientableOrbitEquiv g).symm_apply_apply j |>.symm
+      subst j
+      rcases q with ⟨a, b⟩
+      cases b
+      · simp_rw [polygonNF_standard_boundary_ranks_aux_orientable_orbit]
+        simp [standardPairingData, orientableStandardPairingData,
+          standardPairingDataOfOneVertex, standardPair, standardSign,
+          orientableOrbitLabel, handleOrbitLabel, edgeAttachingDegree,
+          Fintype.sum_prod_type]
+        rw [Fintype.sum_eq_single a]
+        · simp [Fin.sum_univ_four, handleOrbitLabel, handleSign]
+        · intro b hb
+          simp [hb]
+      · simp_rw [polygonNF_standard_boundary_ranks_aux_orientable_orbit]
+        simp [standardPairingData, orientableStandardPairingData,
+          standardPairingDataOfOneVertex, standardPair, standardSign,
+          orientableOrbitLabel, handleOrbitLabel, edgeAttachingDegree,
+          Fintype.sum_prod_type]
+        rw [Fintype.sum_eq_single a]
+        · simp [Fin.sum_univ_four, handleOrbitLabel, handleSign]
+        · intro b hb
+          simp [hb]
+
 theorem polygonNF_standard_boundary_ranks (o : Bool) (g : ℕ) (hg : 0 < g) :
     Module.Finite ℤ (BoundaryCokernel (standardPairingData o g hg)) ∧
       Module.finrank ℤ (BoundaryCokernel (standardPairingData o g hg)) =
         (if o then 2 * g else g - 1) ∧
       Module.finrank ℤ (BoundaryKernel (standardPairingData o g hg)) =
         (if o then 1 else 0) := by
-  sorry
+  cases o with
+  | false =>
+      let P := standardPairingData false g hg
+      have hfin : Module.Finite ℤ (BoundaryCokernel P) :=
+        Module.Finite.quotient ℤ (LinearMap.range (attachingBoundary P))
+      have hinj : Function.Injective (attachingBoundary P) := by
+        intro n m hnm
+        have hcoord := congrFun hnm ((nonorientableOrbitEquiv g).symm ⟨0, hg⟩)
+        change n * attachingDegree P ((nonorientableOrbitEquiv g).symm ⟨0, hg⟩) =
+          m * attachingDegree P ((nonorientableOrbitEquiv g).symm ⟨0, hg⟩) at hcoord
+        rw [standard_nonorientable_data_aux_degree] at hcoord
+        exact mul_right_cancel₀ (by norm_num : (-2 : ℤ) ≠ 0) hcoord
+      have hker : LinearMap.ker (attachingBoundary P) = ⊥ :=
+        LinearMap.ker_eq_bot.mpr hinj
+      have hrange : Module.finrank ℤ (LinearMap.range (attachingBoundary P)) = 1 := by
+        rw [LinearMap.finrank_range_of_inj hinj, Module.finrank_self]
+      have hamb : Module.finrank ℤ (PairingOrbit P.pair → ℤ) = g := by
+        letI := Fintype.ofFinite (PairingOrbit P.pair)
+        rw [Module.finrank_fintype_fun_eq_card]
+        rw [Fintype.card_eq_nat_card]
+        change Nat.card (PairingOrbit (nonorientablePair g)) = g
+        simpa using Nat.card_congr (nonorientableOrbitEquiv g)
+      have hquot : Module.finrank ℤ (BoundaryCokernel P) +
+          Module.finrank ℤ (LinearMap.range (attachingBoundary P)) =
+          Module.finrank ℤ (PairingOrbit P.pair → ℤ) :=
+        Submodule.finrank_quotient_add_finrank _
+      refine ⟨hfin, ?_, ?_⟩
+      · change Module.finrank ℤ (BoundaryCokernel P) = g - 1
+        rw [hrange, hamb] at hquot
+        omega
+      · change Module.finrank ℤ (LinearMap.ker (attachingBoundary P)) = 0
+        rw [hker, finrank_bot]
+  | true =>
+      let P := standardPairingData true g hg
+      have hdeg : attachingDegree P = 0 :=
+        polygonNF_standard_boundary_ranks_aux_orientable_degree g hg
+      have hboundary : attachingBoundary P = 0 := by
+        apply LinearMap.ext
+        intro n
+        simp [attachingBoundary_apply, hdeg]
+      have hfin : Module.Finite ℤ (BoundaryCokernel P) :=
+        Module.Finite.quotient ℤ (LinearMap.range (attachingBoundary P))
+      have hamb : Module.finrank ℤ (PairingOrbit P.pair → ℤ) = 2 * g := by
+        letI := Fintype.ofFinite (PairingOrbit P.pair)
+        rw [Module.finrank_fintype_fun_eq_card]
+        rw [Fintype.card_eq_nat_card]
+        change Nat.card (PairingOrbit (orientablePair g)) = 2 * g
+        rw [Nat.card_congr (orientableOrbitEquiv g), Nat.card_prod,
+          Nat.card_fin]
+        have hb : Nat.card Bool = 2 := by
+          rw [Nat.card_eq_fintype_card, Fintype.card_bool]
+        rw [hb]
+        omega
+      have hquot : Module.finrank ℤ (BoundaryCokernel P) +
+          Module.finrank ℤ (LinearMap.range (attachingBoundary P)) =
+          Module.finrank ℤ (PairingOrbit P.pair → ℤ) :=
+        Submodule.finrank_quotient_add_finrank _
+      refine ⟨hfin, ?_, ?_⟩
+      · change Module.finrank ℤ (BoundaryCokernel P) = 2 * g
+        have hr : LinearMap.range (attachingBoundary P) = ⊥ := by
+          rw [hboundary, LinearMap.range_zero]
+        have hrank : Module.finrank ℤ (LinearMap.range (attachingBoundary P)) = 0 := by
+          rw [hr, finrank_bot]
+        rw [hrank, hamb] at hquot
+        omega
+      · change Module.finrank ℤ (LinearMap.ker (attachingBoundary P)) = 1
+        rw [hboundary, LinearMap.ker_zero, finrank_top, Module.finrank_self]
 -- END SEAT AREA
 
 /-- Layer 2 (uses the ranks leaf and UC i–iii): `χ` of the standard pairing
