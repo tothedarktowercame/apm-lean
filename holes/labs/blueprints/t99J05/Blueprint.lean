@@ -391,12 +391,38 @@ theorem t99J05_lefschetz_euler_V (n : ℕ) :
       rw [Module.finrank_zero_of_subsingleton]
       simp [hk]
 
+/-- LEAF U-hequiv (split 2026-10-18).  `t99J05U n` is `CP (n+1)` minus the
+point `[0:…:0:1]` (some coordinate `i < n+1` is nonzero).  It deformation
+retracts onto `CP n`, embedded as the hyperplane `z_{n+1} = 0`: the homotopy
+`[z₀:…:zₙ:w] ↦ [z₀:…:zₙ:t·w]`, `t ∈ [0,1]`, is well defined because some
+`zᵢ ≠ 0`.  Construct the homotopy equivalence (inclusion and the `t = 0` map). -/
+theorem t99J05_lefschetz_euler_U_aux_hequiv (n : ℕ) :
+    Nonempty (ContinuousMap.HomotopyEquiv (t99J05U n) (CP n)) := by
+  sorry
+
+theorem t99J05_lefschetz_euler_U_aux_transport (n : ℕ)
+    (e : ContinuousMap.HomotopyEquiv (t99J05U n) (CP n))
+    (h : T99J05CPHomologyProfile n (CP n)) :
+    T99J05CPHomologyProfile n (t99J05U n) := by
+  constructor
+  · intro k
+    letI := h.1 k
+    let E := ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℚ e k
+    exact FiniteDimensional.of_injective E.toLinearEquiv.toLinearMap E.toLinearEquiv.injective
+  · intro k
+    let E := ConstructionTargets.CoefficientContractiblePair.singularHomologyIsoOfHomotopyEquiv
+      ℚ e k
+    rw [LinearEquiv.finrank_eq E.toLinearEquiv]
+    exact h.2 k
+
 /-- Deleting the last coordinate point deformation retracts onto `CP n`. -/
 theorem t99J05_lefschetz_euler_U (n : ℕ) :
     Nonempty (ContinuousMap.HomotopyEquiv (t99J05U n) (CP n)) ∧
       (T99J05CPHomologyProfile n (CP n) →
         T99J05CPHomologyProfile n (t99J05U n)) := by
-  sorry
+  obtain ⟨e⟩ := t99J05_lefschetz_euler_U_aux_hequiv n
+  exact ⟨⟨e⟩, t99J05_lefschetz_euler_U_aux_transport n e⟩
 
 /-- The overlap is a punctured complex affine space and hence an odd sphere.
 The final conjunct is the degree-zero input needed by Mayer–Vietoris. -/
