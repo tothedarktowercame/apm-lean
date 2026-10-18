@@ -18,6 +18,7 @@ kept. A status.json with uncommitted edits in the working tree is skipped.
 
   refresh-topology-status.py            rewrite changed files, print their paths
   refresh-topology-status.py --check    print what would change, exit 1 if any
+  refresh-topology-status.py --prefix ""  every problem, not only t*
 
 A placeholder-free problem is "complete" only if its statement matches an
 approved entry in problems/STATEMENTS.json (scripts/statement-registry.py);
@@ -107,12 +108,15 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--rev", default="HEAD")
     ap.add_argument("--check", action="store_true")
+    # The m*/b* bundles had the same gap: 56 closed in September still said
+    # open on 2026-10-18.  "" covers every problem.
+    ap.add_argument("--prefix", default="t", help='problem-id prefix to refresh ("" = all)')
     a = ap.parse_args()
     names = git("ls-tree", "-r", "--name-only", a.rev, "problems/").splitlines()
     by_problem: dict[str, list[str]] = {}
     for n in names:
         parts = n.split("/")
-        if len(parts) >= 3 and parts[1].startswith("t"):
+        if len(parts) >= 3 and parts[1].startswith(a.prefix):
             by_problem.setdefault(parts[1], []).append(n)
     dirty = set(git("status", "--porcelain", "--", "problems/").splitlines())
     changed = []

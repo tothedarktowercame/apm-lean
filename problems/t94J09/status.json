@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "partial",
+  "classification": "complete",
   "closer_hop": 3,
   "closer_note": "The full quotient homeomorphism assembly from mutually inverse relation-respecting disk maps is compiled. Constructing those explicit polygon-move maps and computing singular homology remain open.",
   "imported_at": "2026-07-13T17:26:58.150687Z",
