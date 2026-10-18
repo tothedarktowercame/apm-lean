@@ -664,7 +664,44 @@ theorem apm_t01J04_leaf_smooth_inclusion
     letI := apm_t01J04_bp_charted n X S d hd
     ContMDiff (modelWithCornersEuclideanHalfSpace n) 𝓘(ℝ, apm_t01J04_Euclidean n)
       (⊤ : ℕ∞) (Subtype.val : {x // x ∈ S} → X) := by
-  sorry
+  letI := apm_t01J04_bp_charted n X S d hd
+  letI := hS
+  intro u
+  have hu_chart : u ∈ (d u).chart.source := hd u
+  have hu_amb : u.val ∈ (d u).amb.source := by
+    change u ∈ Subtype.val ⁻¹' (d u).amb.source
+    rw [← (d u).source_eq]
+    exact hu_chart
+  rw [ContMDiffAt, contMDiffWithinAt_iff_of_mem_maximalAtlas
+    (IsManifold.chart_mem_maximalAtlas u) (d u).amb_mem hu_chart hu_amb]
+  refine ⟨continuous_subtype_val.continuousAt.continuousWithinAt, ?_⟩
+  simp only [show chartAt (EuclideanHalfSpace n) u = (d u).chart from rfl]
+  simp only [preimage_univ, univ_inter]
+  refine contDiffWithinAt_id.congr_of_eventuallyEq ?_ ?_
+  · filter_upwards [(d u).chart.extend_target_mem_nhdsWithin
+      (I := modelWithCornersEuclideanHalfSpace n) hu_chart] with v hv
+    have hv' := hv
+    rw [(d u).chart.extend_target] at hv'
+    have hv_target : (modelWithCornersEuclideanHalfSpace n).symm v ∈
+        (d u).chart.target := hv'.1
+    have hv_ambtarget : v ∈ (d u).amb.target := by
+      rw [← (modelWithCornersEuclideanHalfSpace n).right_inv hv'.2]
+      change (modelWithCornersEuclideanHalfSpace n).symm v ∈
+        Subtype.val ⁻¹' (d u).amb.target
+      rw [← (d u).target_eq]
+      exact hv_target
+    have hamb_target : (d u).amb.symm v ∈ (d u).amb.source := by
+      exact (d u).amb.map_target hv_ambtarget
+    simp only [Function.comp_apply, (d u).chart.extend_coe_symm,
+      (d u).amb.extend_coe]
+    rw [(d u).symm_eq _ hv_target]
+    have heq : ((modelWithCornersEuclideanHalfSpace n).symm v).val = v :=
+      (modelWithCornersEuclideanHalfSpace n).right_inv hv'.2
+    rw [heq, (d u).amb.right_inv hv_ambtarget]
+    rfl
+  · simp only [Function.comp_apply, (d u).chart.extend_left_inv hu_chart,
+      (d u).amb.extend_coe]
+    simpa using ((d u).chart_eq u hu_chart).symm
 -- END SEAT AREA
 
 /-- LEAF C4 (immersion).  For the restricted atlas, the manifold derivative of
