@@ -639,7 +639,18 @@ pulled back); fibres `φ⁻¹` biject.  About 20–50 lines. -/
 lemma t95J03_isKSheeted_comp_homeomorph {E E' X : Type*} [TopologicalSpace E]
     [TopologicalSpace E'] [TopologicalSpace X] {q : E' → X} {k : ℕ}
     (hq : IsKSheetedCover q k) (φ : E ≃ₜ E') : IsKSheetedCover (q ∘ φ) k := by
-  sorry
+  refine ⟨hq.isCoveringMap.comp_homeomorph φ, fun x => ?_, fun x => ?_⟩
+  · have h : {e : E' // q e = x} ≃ {e : E // (q ∘ φ) e = x} :=
+      ⟨fun e => ⟨φ.symm e, by simpa [Function.comp] using e.2⟩,
+       fun e => ⟨φ e, by simpa [Function.comp] using e.2⟩,
+       fun e => by simp, fun e => by simp⟩
+    exact @Finite.of_equiv _ _ (hq.finite_fiber x) h
+  · have h : {e : E' // q e = x} ≃ {e : E // (q ∘ φ) e = x} :=
+      ⟨fun e => ⟨φ.symm e, by simpa [Function.comp] using e.2⟩,
+       fun e => ⟨φ e, by simpa [Function.comp] using e.2⟩,
+       fun e => by simp, fun e => by simp⟩
+    rw [← Nat.card_congr h]
+    exact hq.card_fiber x
 
 /-- **Leaf C6.**  Postcomposing with a homeomorphism keeps a `k`-sheeted cover.
 About 20–50 lines. -/
