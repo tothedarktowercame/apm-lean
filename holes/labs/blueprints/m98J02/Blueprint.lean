@@ -2533,11 +2533,35 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b
     f hf hK hK0 (p 0) (p 1)
   exact hc.unique (by simpa [Function.comp_def] using hs)
 
-/-- `∂_a` of `∂_b G`: FTC in `s` for the first term; for the second, the boundary
-term at `s = a` vanishes by the factor `(a - s)`, and Leibniz gives `K' + z K''`. -/
-lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a
+/-- The one-variable content of `∂_a ∂_b G`: the slice `x ↦ (∂_b G)(x, b)` has
+derivative `h(a,b) + ∫∫ (K' + z K'') h` at `a`.  First term: FTC in `s`.  Second:
+the boundary term at `s = a` vanishes by the factor `(a - s)`, and Leibniz under
+the integrals gives `K' + z K''`.  Oriented intervals: `a`, `b` of any sign. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
     (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel) :
+    ∀ a b : ℝ,
+      HasDerivAt
+        (fun x : ℝ ↦
+          (∫ s in (0 : ℝ)..x, apm_m98J02_characteristicSource f s b) +
+            ∫ s in (0 : ℝ)..x, ∫ t in (0 : ℝ)..b,
+              (x - s) * deriv apm_m98J02_riemannKernel ((x - s) * (b - t)) *
+                apm_m98J02_characteristicSource f s t)
+        (apm_m98J02_characteristicSource f a b +
+          ∫ s in (0 : ℝ)..a, ∫ t in (0 : ℝ)..b,
+            (deriv apm_m98J02_riemannKernel ((a - s) * (b - t)) +
+              ((a - s) * (b - t)) *
+                deriv (deriv apm_m98J02_riemannKernel)
+                  ((a - s) * (b - t))) *
+              apm_m98J02_characteristicSource f s t) a := by
+  sorry
+
+/-- `∂_a` of `∂_b G`: the function is `∂_b G` (by `_aux_partial_b`), which is `C¹`
+because `G` is `C²`; compose its derivative with the line `x ↦ (x, b)`. -/
+lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a
+    (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
+    (hK : ContDiff ℝ ∞ apm_m98J02_riemannKernel)
+    (hK0 : apm_m98J02_riemannKernel 0 = 1) :
     ∀ a b : ℝ,
       apm_m98J02_partial 0
           (fun p : apm_m98J02_E ↦
@@ -2553,7 +2577,41 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a
                 deriv (deriv apm_m98J02_riemannKernel)
                   ((a - s) * (b - t))) *
               apm_m98J02_characteristicSource f s t := by
-  sorry
+  intro a b
+  set G : apm_m98J02_E → ℝ := fun p ↦ apm_m98J02_goursat apm_m98J02_riemannKernel
+    (apm_m98J02_characteristicSource f) (p 0) (p 1) with hGdef
+  have hG2 : ContDiff ℝ 2 G := apm_m98J02_goursat_spec_aux_regular f hf hK
+  have hH : (fun p : apm_m98J02_E ↦
+      (∫ s in (0 : ℝ)..(p 0), apm_m98J02_characteristicSource f s (p 1)) +
+        ∫ s in (0 : ℝ)..(p 0), ∫ t in (0 : ℝ)..(p 1),
+          (p 0 - s) * deriv apm_m98J02_riemannKernel ((p 0 - s) * (p 1 - t)) *
+            apm_m98J02_characteristicSource f s t) = apm_m98J02_partial 1 G :=
+    (funext (apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b
+      f hf hK hK0)).symm
+  have hd1 : ContDiff ℝ 1 (apm_m98J02_partial 1 G) := by
+    unfold apm_m98J02_partial
+    exact (hG2.fderiv_right (by norm_num)).clm_apply contDiff_const
+  have hD : DifferentiableAt ℝ (apm_m98J02_partial 1 G) (WithLp.toLp 2 ![a, b]) :=
+    hd1.differentiable (by norm_num) _
+  have hℓ : HasDerivAt (fun x : ℝ ↦ (WithLp.toLp 2 ![x, b] : apm_m98J02_E))
+      (EuclideanSpace.single 0 1) a := by
+    have h := ((hasDerivAt_id a).smul_const
+      (EuclideanSpace.single (0 : Fin 2) (1 : ℝ))).const_add
+        (WithLp.toLp 2 ![0, b] : apm_m98J02_E)
+    rw [one_smul] at h
+    convert h using 1
+    funext x
+    ext i
+    fin_cases i <;> simp
+  have hc := hD.hasFDerivAt.comp_hasDerivAt a hℓ
+  have hs := apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a_aux_slice
+    f hf hK a b
+  rw [hH]
+  show fderiv ℝ (apm_m98J02_partial 1 G) (WithLp.toLp 2 ![a, b])
+    (EuclideanSpace.single 0 1) = _
+  refine hc.unique ?_
+  rw [← hH]
+  simpa [Function.comp_def] using hs
 
 lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
@@ -2584,7 +2642,7 @@ lemma apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative
                   apm_m98J02_characteristicSource f s t) :=
     funext (apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_b f hf hK hK0)
   rw [h1]
-  exact apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a f hf hK a b
+  exact apm_m98J02_goursat_spec_aux_pde_aux_mixed_derivative_aux_partial_a f hf hK hK0 a b
 
 lemma apm_m98J02_goursat_spec_aux_pde
     (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f)
