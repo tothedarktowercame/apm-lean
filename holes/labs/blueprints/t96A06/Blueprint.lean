@@ -582,8 +582,88 @@ def sqFun (n : ℕ) (x : EuclideanSpace ℝ (Fin (n + 2))) : EuclideanSpace ℝ 
 /-- **Leaf S1.** `sqFun` is continuous.  Away from the plane's origin this is
 algebra; at `x 0 = x 1 = 0` both new coordinates are bounded by
 `√(x 0² + x 1²)`, which tends to `0`. -/
+lemma T96A06_sqFun_continuous_aux_re :
+    Continuous (fun p : ℝ × ℝ ↦
+      (p.1 ^ 2 - p.2 ^ 2) / Real.sqrt (p.1 ^ 2 + p.2 ^ 2)) := by
+  rw [continuous_iff_continuousAt]
+  intro p
+  by_cases hp : p.1 ^ 2 + p.2 ^ 2 = 0
+  · have hp1 : p.1 = 0 := by nlinarith [sq_nonneg p.1, sq_nonneg p.2]
+    have hp2 : p.2 = 0 := by nlinarith [sq_nonneg p.1, sq_nonneg p.2]
+    rw [ContinuousAt, show (p.1 ^ 2 - p.2 ^ 2) /
+      Real.sqrt (p.1 ^ 2 + p.2 ^ 2) = 0 by simp [hp1, hp2]]
+    rw [tendsto_zero_iff_abs_tendsto_zero]
+    refine squeeze_zero (g := fun q ↦ Real.sqrt (q.1 ^ 2 + q.2 ^ 2))
+      (fun q ↦ abs_nonneg _) ?_ ?_
+    · intro q
+      by_cases hq : q.1 ^ 2 + q.2 ^ 2 = 0
+      · simp [hq]
+      · have hs : 0 < Real.sqrt (q.1 ^ 2 + q.2 ^ 2) :=
+          Real.sqrt_pos.2 (by positivity)
+        simp only [Function.comp_apply]
+        rw [abs_div, abs_of_pos hs]
+        apply (div_le_iff₀ hs).2
+        have ha : abs (q.1 ^ 2 - q.2 ^ 2) ≤ q.1 ^ 2 + q.2 ^ 2 := by
+          rw [abs_le]
+          constructor <;> nlinarith [sq_nonneg q.1, sq_nonneg q.2]
+        calc
+          _ ≤ q.1 ^ 2 + q.2 ^ 2 := ha
+          _ = _ := (Real.mul_self_sqrt (by positivity)).symm
+    · convert ((continuous_fst.pow 2).add (continuous_snd.pow 2)).sqrt.tendsto p using 1
+      simp [hp]
+  · apply ContinuousAt.div
+    · fun_prop
+    · fun_prop
+    · exact Real.sqrt_ne_zero'.2 (lt_of_le_of_ne (by positivity) (Ne.symm hp))
+
+lemma T96A06_sqFun_continuous_aux_im :
+    Continuous (fun p : ℝ × ℝ ↦
+      (2 * p.1 * p.2) / Real.sqrt (p.1 ^ 2 + p.2 ^ 2)) := by
+  rw [continuous_iff_continuousAt]
+  intro p
+  by_cases hp : p.1 ^ 2 + p.2 ^ 2 = 0
+  · have hp1 : p.1 = 0 := by nlinarith [sq_nonneg p.1, sq_nonneg p.2]
+    have hp2 : p.2 = 0 := by nlinarith [sq_nonneg p.1, sq_nonneg p.2]
+    rw [ContinuousAt, show (2 * p.1 * p.2) /
+      Real.sqrt (p.1 ^ 2 + p.2 ^ 2) = 0 by simp [hp1, hp2]]
+    rw [tendsto_zero_iff_abs_tendsto_zero]
+    refine squeeze_zero (g := fun q ↦ Real.sqrt (q.1 ^ 2 + q.2 ^ 2))
+      (fun q ↦ abs_nonneg _) ?_ ?_
+    · intro q
+      by_cases hq : q.1 ^ 2 + q.2 ^ 2 = 0
+      · simp [hq]
+      · have hs : 0 < Real.sqrt (q.1 ^ 2 + q.2 ^ 2) :=
+          Real.sqrt_pos.2 (by positivity)
+        simp only [Function.comp_apply]
+        rw [abs_div, abs_of_pos hs]
+        apply (div_le_iff₀ hs).2
+        have ha : abs (2 * q.1 * q.2) ≤ q.1 ^ 2 + q.2 ^ 2 := by
+          rw [abs_le]
+          constructor <;> nlinarith [sq_nonneg (q.1 - q.2), sq_nonneg (q.1 + q.2)]
+        calc
+          _ ≤ q.1 ^ 2 + q.2 ^ 2 := ha
+          _ = _ := (Real.mul_self_sqrt (by positivity)).symm
+    · convert ((continuous_fst.pow 2).add (continuous_snd.pow 2)).sqrt.tendsto p using 1
+      simp [hp]
+  · apply ContinuousAt.div
+    · fun_prop
+    · fun_prop
+    · exact Real.sqrt_ne_zero'.2 (lt_of_le_of_ne (by positivity) (Ne.symm hp))
+
 theorem T96A06_sqFun_continuous (n : ℕ) : Continuous (sqFun n) := by
-  sorry
+  have hc (i : Fin (n + 2)) :
+      Continuous (fun x : EuclideanSpace ℝ (Fin (n + 2)) ↦ x i) :=
+    (continuous_apply i).comp (PiLp.continuous_ofLp 2 _)
+  unfold sqFun
+  apply (PiLp.continuous_toLp 2 _).comp
+  apply continuous_pi
+  intro i
+  split_ifs with hi0 hi1
+  · simpa using T96A06_sqFun_continuous_aux_re.comp
+      ((hc 0).prodMk (hc 1))
+  · simpa using T96A06_sqFun_continuous_aux_im.comp
+      ((hc 0).prodMk (hc 1))
+  · exact hc i
 
 /-- **Leaf S2.** `sqFun` preserves the norm and commutes with halving.
 `(a²-b²)² + (2ab)² = (a²+b²)²`; if `a = b = 0` both sides vanish. -/
