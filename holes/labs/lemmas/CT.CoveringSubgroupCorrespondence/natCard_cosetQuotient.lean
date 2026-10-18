@@ -69,7 +69,17 @@ This includes infinite index, for which both `Nat.card` and `index` are zero. -/
 theorem natCard_cosetQuotient
     {G : Type*} [Group G] (H : Subgroup G) :
     Nat.card (Quotient (subgroupCosetSetoid H)) = H.index := by
-  sorry
+  have hsetoid : subgroupCosetSetoid H = QuotientGroup.rightRel H := by
+    ext g h
+    rw [QuotientGroup.rightRel_apply]
+    constructor
+    · intro hgh
+      simpa [mul_inv_rev] using H.inv_mem hgh
+    · intro hhg
+      simpa [mul_inv_rev] using H.inv_mem hhg
+  rw [hsetoid]
+  exact (Nat.card_congr
+    (QuotientGroup.quotientRightRelEquivQuotientLeftRel H)).trans H.index_eq_card.symm
 -- END SEAT AREA
 
 /-- Index zero is precisely infinitude of the explicit coset quotient. -/
