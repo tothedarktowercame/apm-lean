@@ -2326,9 +2326,173 @@ lemma t95J03_klein_index_even (H : Subgroup PresentedKleinGroup) (hfin : H.index
 Route.  `AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero`,
 `ProductEvenlyCoveredTrivialization.isCoveringMap_productMap` with the identity;
 fibres are cosets of the `n`-torsion `{j/n}`.  About 60–150 lines. -/
+lemma t95J03_torusNsmul_isKSheeted_aux_id :
+    IsCoveringMap (id : UnitAddCircle → UnitAddCircle) := by
+  intro x
+  letI : Subsingleton ((id : UnitAddCircle → UnitAddCircle) ⁻¹' {x}) :=
+    ⟨fun a b ↦ Subtype.ext (a.2.trans b.2.symm)⟩
+  refine ⟨inferInstance, Set.univ, Set.mem_univ x, isOpen_univ, isOpen_univ, ?_, ?_⟩
+  · exact
+      { toFun := fun z ↦ (⟨z.1, Set.mem_univ _⟩, ⟨x, rfl⟩)
+        invFun := fun z ↦ ⟨z.1.1, Set.mem_univ _⟩
+        left_inv := fun _ ↦ rfl
+        right_inv := by
+          intro z
+          apply Prod.ext
+          · rfl
+          · exact Subsingleton.elim _ _
+        continuous_toFun := by fun_prop
+        continuous_invFun := by fun_prop }
+  · intro z
+    rfl
+
+noncomputable def t95J03_torusNsmul_isKSheeted_aux_kernel_equiv (n : ℕ) (hn : 0 < n) :
+    Fin n ≃ (nsmulAddMonoidHom (α := UnitAddCircle) n).ker := by
+  let f : Fin n → (nsmulAddMonoidHom (α := UnitAddCircle) n).ker := fun j ↦
+    ⟨((j : ℝ) / (n : ℝ) : UnitAddCircle), (AddCircle.nsmul_eq_zero_iff hn).2
+      ⟨j, j.isLt, by simp⟩⟩
+  have hf : Function.Bijective f := by
+    constructor
+    · intro i j hij
+      apply Fin.ext
+      have hc : ((i : ℝ) / (n : ℝ) : UnitAddCircle) =
+          ((j : ℝ) / (n : ℝ) : UnitAddCircle) :=
+        congrArg Subtype.val hij
+      have hi : (i : ℝ) / n ∈ Set.Ico (0 : ℝ) (0 + 1) := by
+        constructor
+        · positivity
+        · simpa using (div_lt_one (by positivity : (0 : ℝ) < n)).2 (by exact_mod_cast i.isLt)
+      have hj : (j : ℝ) / n ∈ Set.Ico (0 : ℝ) (0 + 1) := by
+        constructor
+        · positivity
+        · simpa using (div_lt_one (by positivity : (0 : ℝ) < n)).2 (by exact_mod_cast j.isLt)
+      have hr := (AddCircle.coe_eq_coe_iff_of_mem_Ico hi hj).1 hc
+      exact_mod_cast ((div_left_inj' (by positivity : (n : ℝ) ≠ 0)).mp hr)
+    · intro k
+      obtain ⟨m, hm, hmk⟩ := (AddCircle.nsmul_eq_zero_iff hn).1 k.2
+      refine ⟨⟨m, hm⟩, ?_⟩
+      apply Subtype.ext
+      simpa [f] using hmk
+  exact Equiv.ofBijective f hf
+
+lemma t95J03_torusNsmul_isKSheeted_aux_kernel_card (n : ℕ) (hn : 0 < n) :
+    Nat.card ((nsmulAddMonoidHom (α := UnitAddCircle) n).ker) = n := by
+  rw [← Nat.card_congr (t95J03_torusNsmul_isKSheeted_aux_kernel_equiv n hn), Nat.card_fin]
+
+lemma t95J03_torusNsmul_isKSheeted_aux_product {f : UnitAddCircle → UnitAddCircle}
+    (hf : IsCoveringMap f) : IsCoveringMap (fun x : T95J03Torus ↦ (f x.1, x.2)) := by
+  rintro ⟨x, y⟩
+  rcases hf x with ⟨hdiscI, U, hxU, hU, hfU, Hf, hHf⟩
+  rcases t95J03_torusNsmul_isKSheeted_aux_id y with
+    ⟨hdiscJ, V, hyV, hV, hgV, Hg, hHg⟩
+  letI : DiscreteTopology (f ⁻¹' {x}) := hdiscI
+  letI : DiscreteTopology ((id : UnitAddCircle → UnitAddCircle) ⁻¹' {y}) := hdiscJ
+  have h : IsEvenlyCovered (fun z : T95J03Torus ↦ (f z.1, z.2)) (x, y)
+      ((f ⁻¹' {x}) × ((id : UnitAddCircle → UnitAddCircle) ⁻¹' {y})) := by
+    refine ⟨inferInstance, U ×ˢ V, ⟨hxU, hyV⟩, hU.prod hV, ?_, ?_, ?_⟩
+    · simpa using hfU.prod hgV
+    · exact
+        { toFun := fun p ↦
+            (⟨((Hf ⟨p.1.1, p.2.1⟩).1.1, (Hg ⟨p.1.2, p.2.2⟩).1.1),
+               (Hf ⟨p.1.1, p.2.1⟩).1.2, (Hg ⟨p.1.2, p.2.2⟩).1.2⟩,
+             ((Hf ⟨p.1.1, p.2.1⟩).2, (Hg ⟨p.1.2, p.2.2⟩).2))
+          invFun := fun q ↦
+            ⟨((Hf.symm (⟨q.1.1.1, q.1.2.1⟩, q.2.1)).1,
+               (Hg.symm (⟨q.1.1.2, q.1.2.2⟩, q.2.2)).1), by
+              exact ⟨(Hf.symm (⟨q.1.1.1, q.1.2.1⟩, q.2.1)).2,
+                (Hg.symm (⟨q.1.1.2, q.1.2.2⟩, q.2.2)).2⟩⟩
+          left_inv := by
+            intro p
+            apply Subtype.ext
+            exact Prod.ext
+              (congrArg Subtype.val (Hf.symm_apply_apply ⟨p.1.1, p.2.1⟩))
+              (congrArg Subtype.val (Hg.symm_apply_apply ⟨p.1.2, p.2.2⟩))
+          right_inv := by
+            intro q
+            apply Prod.ext
+            · apply Subtype.ext
+              exact Prod.ext
+                (congrArg (fun z ↦ z.1.1) (Hf.apply_symm_apply _))
+                (congrArg (fun z ↦ z.1.1) (Hg.apply_symm_apply _))
+            · exact Prod.ext
+                (congrArg (fun z ↦ z.2) (Hf.apply_symm_apply _))
+                (congrArg (fun z ↦ z.2) (Hg.apply_symm_apply _))
+          continuous_toFun := by fun_prop
+          continuous_invFun := by fun_prop }
+    · intro p
+      exact Prod.ext (hHf ⟨p.1.1, p.2.1⟩) (hHg ⟨p.1.2, p.2.2⟩)
+  let H : (f ⁻¹' {x}) × ((id : UnitAddCircle → UnitAddCircle) ⁻¹' {y}) ≃ₜ
+      (fun z : T95J03Torus ↦ (f z.1, z.2)) ⁻¹' {(x, y)} :=
+    { toFun := fun p ↦ ⟨(p.1.1, p.2.1), Prod.ext p.1.2 p.2.2⟩
+      invFun := fun p ↦
+        (⟨p.1.1, congrArg Prod.fst p.2⟩, ⟨p.1.2, congrArg Prod.snd p.2⟩)
+      left_inv := fun _ ↦ rfl
+      right_inv := fun _ ↦ rfl
+      continuous_toFun := by fun_prop
+      continuous_invFun := by fun_prop }
+  exact h.of_fiber_homeomorph H
+
 lemma t95J03_torusNsmul_isKSheeted (n : ℕ) (hn : 0 < n) :
     IsKSheetedCover (fun x : T95J03Torus => (n • x.1, x.2)) n := by
-  sorry
+  letI : NeZero n := ⟨hn.ne'⟩
+  let hc := AddCircle.isAddQuotientCoveringMap_nsmul_of_ne_zero (1 : ℝ) n
+  constructor
+  · exact t95J03_torusNsmul_isKSheeted_aux_product hc.isCoveringMap
+  · intro b
+    let ek : (nsmulAddMonoidHom (α := UnitAddCircle) n).ker ≃
+        {e : T95J03Torus // (n • e.1, e.2) = b} := by
+      let a₀ := (hc.surjective b.1).choose
+      have ha₀ := (hc.surjective b.1).choose_spec
+      change n • a₀ = b.1 at ha₀
+      exact
+        { toFun := fun k ↦ ⟨(k.1 + a₀, b.2), by
+            apply Prod.ext
+            · change n • (k.1 + a₀) = b.1
+              have hk : n • k.1 = 0 := k.2
+              rw [nsmul_add, hk, ha₀, zero_add]
+            · rfl⟩
+          invFun := fun x ↦ ⟨x.1.1 - a₀, by
+            change n • (x.1.1 - a₀) = 0
+            rw [nsmul_sub, ha₀]
+            have hx := congrArg Prod.fst x.2
+            change n • x.1.1 = b.1 at hx
+            rw [hx, sub_self]⟩
+          left_inv := by intro k; apply Subtype.ext; exact add_sub_cancel_right k.1 a₀
+          right_inv := by
+            intro x
+            apply Subtype.ext
+            exact Prod.ext (sub_add_cancel x.1.1 a₀) (congrArg Prod.snd x.2).symm }
+    have hkfin : Finite ((nsmulAddMonoidHom (α := UnitAddCircle) n).ker) :=
+      Finite.of_equiv (Fin n) (t95J03_torusNsmul_isKSheeted_aux_kernel_equiv n hn)
+    letI := hkfin
+    exact Finite.of_equiv _ ek
+  · intro b
+    obtain ⟨a₀, ha₀⟩ := hc.surjective b.1
+    change n • a₀ = b.1 at ha₀
+    let e : {x : T95J03Torus // (n • x.1, x.2) = b} ≃
+        (nsmulAddMonoidHom (α := UnitAddCircle) n).ker :=
+      { toFun := fun x ↦ ⟨x.1.1 - a₀, by
+          change n • (x.1.1 - a₀) = 0
+          rw [nsmul_sub, ha₀]
+          have hx := congrArg Prod.fst x.2
+          change n • x.1.1 = b.1 at hx
+          rw [hx, sub_self]⟩
+        invFun := fun k ↦ ⟨(k.1 + a₀, b.2), by
+          have hk : n • k.1 = 0 := k.2
+          apply Prod.ext
+          · change n • (k.1 + a₀) = b.1
+            rw [nsmul_add, hk, ha₀, zero_add]
+          · rfl⟩
+        left_inv := by
+          intro x
+          apply Subtype.ext
+          exact Prod.ext (sub_add_cancel x.1.1 a₀) (congrArg Prod.snd x.2).symm
+        right_inv := by
+          intro k
+          apply Subtype.ext
+          exact add_sub_cancel_right k.1 a₀ }
+    rw [Nat.card_congr e]
+    exact t95J03_torusNsmul_isKSheeted_aux_kernel_card n hn
 
 /-- **Leaf S6.**  The torus double-covers the Klein bottle.
 
