@@ -700,7 +700,25 @@ the nonzero vectors, `isPathConnected_compl_singleton_of_one_lt_rank`), so
 theorem t99J05_lefschetz_euler_step_aux_h0 (n : ℕ) :
     FiniteDimensional ℚ (Homology (CP (n + 1)) 0) ∧
       Module.finrank ℚ (Homology (CP (n + 1)) 0) = 1 := by
-  sorry
+  letI : PathConnectedSpace (NonzeroVectors ℂ (n + 1)) := by
+    apply isPathConnected_iff_pathConnectedSpace.mp
+    change IsPathConnected ({0}ᶜ : Set (Fin (n + 2) → ℂ))
+    apply isPathConnected_compl_singleton_of_one_lt_rank
+    apply Module.one_lt_rank_of_one_lt_finrank
+    rw [Module.finrank_pi_fintype]
+    simp only [Complex.finrank_real_complex, Finset.sum_const,
+      Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+    change 1 < (n + 2) * 2
+    omega
+  letI : PathConnectedSpace (CP (n + 1)) :=
+    (surjective_quotientMap ℂ (n + 1)).pathConnectedSpace
+      (continuous_quotientMap ℂ (n + 1))
+  let e := ConstructionTargets.CoefficientH0.h0Iso ℚ
+    (coordinateLine ℂ (n + 1) 0)
+  constructor
+  · exact FiniteDimensional.of_injective e.toLinearEquiv.toLinearMap
+      e.toLinearEquiv.injective
+  · simpa using e.toLinearEquiv.finrank_eq
 
 /-- LEAF step-top (split 2026-10-18).  Degree `2n+2` of Mayer–Vietoris
 (`RP3Homology.rationalMayerVietoris`): `H_{2n+2}(U) ⊕ H_{2n+2}(V) = 0` makes the
