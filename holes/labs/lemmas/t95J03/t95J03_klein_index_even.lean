@@ -2296,9 +2296,112 @@ commutativity.  So `H ≤ ker (second coordinate mod 2)`, a subgroup of index 2,
 and `index H = 2 * relindex` (`Subgroup.relindex_mul_index`).
 About 100–180 lines. -/
 -- BEGIN SEAT AREA
+def t95J03_klein_index_even_aux_orientation : PresentedKleinGroup →*
+    MulAut ZMul :=
+  (action.comp SemidirectProduct.rightHom).comp
+    KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.toMonoidHom
+
+lemma t95J03_klein_index_even_aux_inv_sq : inversion ^ 2 = 1 := by
+  ext x
+  change (x⁻¹)⁻¹ = x
+  simp
+
+lemma t95J03_klein_index_even_aux_A_pow_left (n : ℕ) :
+    (A ^ n).left = Multiplicative.ofAdd (n : ℤ) := by
+  calc
+    (A ^ n).left = (SemidirectProduct.inl
+        (Multiplicative.ofAdd 1 ^ n) : Coordinates).left := by
+      simpa [A] using congrArg SemidirectProduct.left
+        (map_pow (SemidirectProduct.inl : ZMul →* Coordinates)
+          (Multiplicative.ofAdd 1) n).symm
+    _ = Multiplicative.ofAdd (n : ℤ) := by
+      apply Multiplicative.toAdd.injective
+      rw [SemidirectProduct.left_inl, toAdd_pow, toAdd_ofAdd, toAdd_ofAdd]
+      simp
+
+lemma t95J03_klein_index_even_aux_fix (z : ZMul) (n : ℕ) (hn : 0 < n)
+    (hfix : action z (Multiplicative.ofAdd (n : ℤ)) = Multiplicative.ofAdd (n : ℤ)) :
+    action z = 1 := by
+  rcases Int.even_or_odd' (Multiplicative.toAdd z) with ⟨k, hk | hk⟩
+  · rw [show action z = inversion ^ Multiplicative.toAdd z by simp [action], hk,
+      zpow_mul]
+    have h2 : inversion ^ (2 : ℤ) = 1 := by
+      rw [zpow_ofNat]; exact t95J03_klein_index_even_aux_inv_sq
+    rw [h2, one_zpow]
+  · exfalso
+    have hip : (inversion ^ 2) ^ k = 1 := by
+      calc
+        (inversion ^ 2) ^ k = (1 : MulAut ZMul) ^ k := congrArg
+          (fun u : MulAut ZMul => u ^ k) t95J03_klein_index_even_aux_inv_sq
+        _ = 1 := one_zpow k
+    have ha : action z = inversion := by
+      calc
+        action z = (inversion ^ 2) ^ k * inversion := by
+          simp only [show action z = inversion ^ Multiplicative.toAdd z by simp [action], hk,
+            zpow_add_one, zpow_mul]
+          rfl
+        _ = inversion := by simpa [hip]
+    rw [ha] at hfix
+    have hf := congrArg Multiplicative.toAdd hfix
+    simp [inversion] at hf
+    omega
+
+lemma t95J03_klein_index_even_aux_le (H : Subgroup PresentedKleinGroup)
+    (hfin : H.index ≠ 0) (hcomm : ∀ a ∈ H, ∀ b ∈ H, a * b = b * a) :
+    H ≤ t95J03_klein_index_even_aux_orientation.ker := by
+  intro h hh
+  obtain ⟨n, hn, -, han⟩ := H.exists_pow_mem_of_index_ne_zero hfin generatorA
+  have hc := hcomm h hh (generatorA ^ n) han
+  have hc' := congrArg KleinPresentedGroupCoordinateNormalForm.coordinateEquiv hc
+  have hfix : action (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv h).2
+      (Multiplicative.ofAdd (n : ℤ)) = Multiplicative.ofAdd (n : ℤ) := by
+    have := congrArg SemidirectProduct.left hc'
+    have hapow := t95J03_klein_index_even_aux_A_pow_left n
+    have hbpow : (A ^ n).right = 1 := by simp [A, ← map_pow]
+    have heq : (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv h).left *
+        action (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv h).right
+          (Multiplicative.ofAdd (n : ℤ)) =
+        Multiplicative.ofAdd (n : ℤ) *
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv h).left := by
+      simpa [hapow, hbpow] using this
+    rw [mul_comm (Multiplicative.ofAdd (n : ℤ))] at heq
+    exact mul_left_cancel heq
+  exact t95J03_klein_index_even_aux_fix _ n hn hfix
+
 lemma t95J03_klein_index_even (H : Subgroup PresentedKleinGroup) (hfin : H.index ≠ 0)
     (hcomm : ∀ a ∈ H, ∀ b ∈ H, a * b = b * a) : Even H.index := by
-  sorry
+  let K := t95J03_klein_index_even_aux_orientation.ker
+  have hHK : H ≤ K := t95J03_klein_index_even_aux_le H hfin hcomm
+  have hindex : K.index = 2 := by
+    rw [Subgroup.index_ker]
+    have hrange : t95J03_klein_index_even_aux_orientation.range =
+        Subgroup.zpowers inversion := by
+      rw [← Subgroup.range_zpowersHom]
+      apply le_antisymm
+      · rintro x ⟨g, rfl⟩
+        refine ⟨(KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).2, ?_⟩
+        change action (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).right =
+          t95J03_klein_index_even_aux_orientation g
+        rw [show t95J03_klein_index_even_aux_orientation g =
+          action (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv g).right by rfl]
+      · rintro x ⟨z, rfl⟩
+        refine ⟨KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+          (SemidirectProduct.inr z), ?_⟩
+        rw [show t95J03_klein_index_even_aux_orientation
+          (KleinPresentedGroupCoordinateNormalForm.coordinateEquiv.symm
+            (SemidirectProduct.inr z)) = action z by simp [t95J03_klein_index_even_aux_orientation]]
+        simp [action]
+    rw [hrange, Nat.card_zpowers]
+    apply orderOf_eq_prime
+    · ext z
+      change (z⁻¹)⁻¹ = z
+      simp
+    · intro heq
+      have := DFunLike.congr_fun heq (Multiplicative.ofAdd (1 : ℤ))
+      have := congrArg Multiplicative.toAdd this
+      norm_num [inversion] at this
+  rw [← H.relIndex_mul_index hHK, hindex]
+  exact ⟨H.relIndex K, by omega⟩
 -- END SEAT AREA
 
 /-- **Leaf S5.**  `(x, y) ↦ (n x, y)` is an `n`-sheeted cover of the torus
