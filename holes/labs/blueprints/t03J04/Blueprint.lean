@@ -1116,13 +1116,76 @@ multiplicative for a `k`-sheeted cover of a base with a finite good cover.
 Induct on the size of the family, for all good families covering an open
 `W ⊆ B` at once: `W = W' ∪ U` with `W' ∩ U` covered by the good family
 `{U' ∩ U}`; apply B1 to `W` and to `p⁻¹ W`; the base case uses C2a, C2b. -/
+theorem t03J04_euler_mul_of_goodFamily_aux_contractible
+    (U : Type) [TopologicalSpace U] [ContractibleSpace U] :
+    HasEulerCharacteristic U 1 := by
+  exact t03J04_hasEuler_of_homotopyEquiv
+    (Classical.choice (ContractibleSpace.hequiv_unit U)) t03J04_hasEuler_unit
+
+theorem t03J04_euler_mul_of_goodFamily_aux_piece
+    {E B : Type} [TopologicalSpace E] [TopologicalSpace B]
+    [LocPathConnectedSpace B] {p : E → B} {k : ℕ}
+    (hp : IsKSheetedCover p k) (U : Set B) (hU : IsOpen U)
+    [ContractibleSpace U] :
+    HasEulerCharacteristic U 1 ∧
+      HasEulerCharacteristic ↥(p ⁻¹' U) (k * (1 : ℚ)) := by
+  refine ⟨t03J04_euler_mul_of_goodFamily_aux_contractible U, ?_⟩
+  obtain ⟨e⟩ := t03J04_trivial_over_contractible hp U hU
+  exact t03J04_hasEuler_of_homotopyEquiv e.toHomotopyEquiv
+    (t03J04_hasEuler_prod_fin U k
+      (t03J04_euler_mul_of_goodFamily_aux_contractible U))
+
+/-- LEAF C2d-MV (split 2026-10-18).  Mayer–Vietoris for two open subsets of
+`X`, read on subspaces: apply B1 in the space `↥(V ∪ S)` to the open sets
+`Subtype.val ⁻¹' V` and `Subtype.val ⁻¹' S`, transporting each Euler
+characteristic along the evident homeomorphisms with `↥V`, `↥S`, `↥(V ∩ S)`
+(B2 via `Homeomorph.toHomotopyEquiv`). -/
+theorem t03J04_euler_mul_of_goodFamily_aux_union {X : Type} [TopologicalSpace X]
+    (V S : Set X) (hV : IsOpen V) (hS : IsOpen S) {a b c : ℚ}
+    (ha : HasEulerCharacteristic V a) (hb : HasEulerCharacteristic S b)
+    (hc : HasEulerCharacteristic ↥(V ∩ S) c) :
+    HasEulerCharacteristic ↥(V ∪ S) (a + b - c) := by
+  sorry
+
+/-- LEAF C2d-ind (split 2026-10-18).  Induction principle over a finite good
+family: a property of open sets that holds for `∅` and for open contractible
+sets, and is closed under `V, S, V ∩ S ↦ V ∪ S`, holds for the union of every
+finite good family.  Strong induction on `𝒱.card`, for all good families at
+once: `⋃₀ insert V 𝒱 = V ∪ ⋃₀ 𝒱`, and `V ∩ ⋃₀ 𝒱 = ⋃₀ (𝒱.image (V ∩ ·))`,
+where `𝒱.image (V ∩ ·)` is again good (its finite intersections are finite
+intersections of members of `insert V 𝒱`) and has at most `𝒱.card` members.
+Pure set theory: no homology. -/
+theorem t03J04_euler_mul_of_goodFamily_aux_induction {B : Type} [TopologicalSpace B]
+    (P : Set B → Prop) (h0 : P ∅)
+    (hpiece : ∀ U : Set B, IsOpen U → ContractibleSpace U → P U)
+    (hunion : ∀ V S : Set B, IsOpen V → IsOpen S → P V → P S → P (V ∩ S) → P (V ∪ S))
+    (𝒱 : Finset (Set B)) (hgood : t03J04_IsGoodFamily 𝒱) :
+    P (⋃₀ (𝒱 : Set (Set B))) := by
+  sorry
+
 theorem t03J04_euler_mul_of_goodFamily {E B : Type} [TopologicalSpace E]
     [TopologicalSpace B] [LocPathConnectedSpace B] {p : E → B} {k : ℕ}
     (hp : IsKSheetedCover p k) (𝒰 : Finset (Set B)) (hgood : t03J04_IsGoodFamily 𝒰)
     (hcov : ⋃₀ (𝒰 : Set (Set B)) = Set.univ) :
     ∃ c : ℚ, HasEulerCharacteristic B c ∧ HasEulerCharacteristic E (k * c) := by
-  sorry
-
+  have hcont : Continuous p := hp.isCoveringMap.continuous
+  obtain ⟨c, hB, hE⟩ := t03J04_euler_mul_of_goodFamily_aux_induction
+    (fun S : Set B => ∃ c : ℚ, HasEulerCharacteristic S c ∧
+      HasEulerCharacteristic ↥(p ⁻¹' S) (k * c))
+    ⟨0, t03J04_hasEuler_of_isEmpty _, by
+      rw [mul_zero]; exact @t03J04_hasEuler_of_isEmpty _ _ ⟨fun x => x.2⟩⟩
+    (fun U hU _ => ⟨1, t03J04_euler_mul_of_goodFamily_aux_piece hp U hU⟩)
+    (fun V S hV hS ⟨a, haB, haE⟩ ⟨b, hbB, hbE⟩ ⟨c, hcB, hcE⟩ =>
+      ⟨a + b - c, t03J04_euler_mul_of_goodFamily_aux_union V S hV hS haB hbB hcB, by
+        have h := t03J04_euler_mul_of_goodFamily_aux_union (p ⁻¹' V) (p ⁻¹' S)
+          (hV.preimage hcont) (hS.preimage hcont) haE hbE hcE
+        rw [show (k : ℚ) * (a + b - c) = k * a + k * b - k * c by ring]
+        exact h⟩)
+    𝒰 hgood
+  rw [hcov] at hB hE
+  exact ⟨c, t03J04_hasEuler_of_homotopyEquiv (Homeomorph.Set.univ B).symm.toHomotopyEquiv hB,
+    t03J04_hasEuler_of_homotopyEquiv
+      (Homeomorph.Set.univ E).symm.toHomotopyEquiv (by simpa using hE)⟩
 /-! ### C3 breakdown (2026-10-18): a good cover from small chart balls
 
 No Riemannian metric.  A small ball of one chart, read in a nearby chart, is a
