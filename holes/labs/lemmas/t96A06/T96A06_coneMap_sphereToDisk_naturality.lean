@@ -295,12 +295,247 @@ def closedPair := CoefficientRadialPair.pairMap R _ _ (closedAction ψ) (closed_
 `CoefficientOrthogonalRadial`) uses only `norm_map`, `map_half`, continuity and
 the induced subspace maps, so it transfers line by line. -/
 -- BEGIN SEAT AREA
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_open_mapsTo :
+    Set.MapsTo (openAction ψ) (puncturedOpenDiskSet n) (puncturedOpenDiskSet n) := by
+  intro x hx
+  change ψ.toFun x.1 ≠ 0
+  intro h
+  have hn : ‖x.1‖ = 0 := by rw [← ψ.norm_map x.1, h, norm_zero]
+  exact hx (norm_eq_zero.mp hn)
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_radial_square :
+    (halfDiskMap n).comp (closedAction ψ) = (openAction ψ).comp (halfDiskMap n) := by
+  ext x : 1
+  apply Subtype.ext
+  exact (ψ.map_half x.1).symm
+
+def T96A06_coneMap_sphereToDisk_naturality_aux_openPair :=
+  CoefficientRadialPair.pairMap R _ _ (openAction ψ)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_open_mapsTo ψ)
+
+def T96A06_coneMap_sphereToDisk_naturality_aux_radialPair :=
+  CoefficientRadialPair.pairMap R _ _ (halfDiskMap n) (halfDiskMap_mapsTo n)
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_relative_square :
+    closedPair ψ R ≫ T96A06_coneMap_sphereToDisk_naturality_aux_radialPair R (n := n) =
+    T96A06_coneMap_sphereToDisk_naturality_aux_radialPair R (n := n) ≫
+      T96A06_coneMap_sphereToDisk_naturality_aux_openPair ψ R := by
+  change CoefficientRadialPair.pairMap R _ _ _ _ ≫
+      CoefficientRadialPair.pairMap R _ _ _ _ =
+    CoefficientRadialPair.pairMap R _ _ _ _ ≫
+      CoefficientRadialPair.pairMap R _ _ _ _
+  rw [← CoefficientPairNaturality.pair_comp, ← CoefficientPairNaturality.pair_comp]
+  congr 1
+  exact T96A06_coneMap_sphereToDisk_naturality_aux_radial_square ψ
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_radial_naturality (j : ℕ) :
+    HomologicalComplex.homologyMap (closedPair ψ R) j ≫
+      (CoefficientRadialPair.radialIso R n j).hom =
+    (CoefficientRadialPair.radialIso R n j).hom ≫
+      HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_openPair ψ R) j := by
+  exact (HomologicalComplex.homologyMap_comp _ _ j).symm.trans
+    ((congrArg (fun f => HomologicalComplex.homologyMap f j)
+      (T96A06_coneMap_sphereToDisk_naturality_aux_relative_square ψ R)).trans
+      (HomologicalComplex.homologyMap_comp _ _ j))
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_radial_inverse (j : ℕ) :
+    HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_openPair ψ R) j ≫
+      (CoefficientRadialPair.radialIso R n j).inv =
+    (CoefficientRadialPair.radialIso R n j).inv ≫
+      HomologicalComplex.homologyMap (closedPair ψ R) j := by
+  apply (cancel_epi (CoefficientRadialPair.radialIso R n j).hom).mp
+  have h := congrArg (fun f => f ≫ (CoefficientRadialPair.radialIso R n j).inv)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_radial_naturality ψ R j)
+  simpa only [Category.assoc, Iso.hom_inv_id, Category.comp_id,
+    Iso.hom_inv_id_assoc] using h.symm
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_height :
+    sphereHeight n ∘ sphereAction ψ = sphereHeight n := by
+  funext x
+  exact euclideanSnoc_last _ _
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_north_mapsTo :
+    Set.MapsTo (sphereAction ψ) (northPoleComplement n) (northPoleComplement n) := by
+  intro x hx
+  change sphereHeight n (sphereAction ψ x) < 1
+  rw [show sphereHeight n (sphereAction ψ x) = sphereHeight n x from
+    congrFun (T96A06_coneMap_sphereToDisk_naturality_aux_height ψ) x]
+  exact hx
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_upper_mapsTo :
+    Set.MapsTo (sphereAction ψ) (openUpperHemisphere n) (openUpperHemisphere n) := by
+  intro x hx
+  change ¬ sphereHeight n (sphereAction ψ x) ≤ 0
+  rw [show sphereHeight n (sphereAction ψ x) = sphereHeight n x from
+    congrFun (T96A06_coneMap_sphereToDisk_naturality_aux_height ψ) x]
+  exact hx
+
+def T96A06_coneMap_sphereToDisk_naturality_aux_upperAction :
+    C(openUpperHemisphere n, openUpperHemisphere n) :=
+  ⟨fun x => ⟨sphereAction ψ x.1,
+      T96A06_coneMap_sphereToDisk_naturality_aux_upper_mapsTo ψ x.2⟩, by fun_prop⟩
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_punctured_mapsTo :
+    Set.MapsTo (T96A06_coneMap_sphereToDisk_naturality_aux_upperAction ψ)
+      (puncturedUpperHemisphere n) (puncturedUpperHemisphere n) := by
+  intro x hx
+  exact T96A06_coneMap_sphereToDisk_naturality_aux_north_mapsTo ψ hx
+
+def T96A06_coneMap_sphereToDisk_naturality_aux_upperPair :=
+  CoefficientRadialPair.pairMap R _ _
+    (T96A06_coneMap_sphereToDisk_naturality_aux_upperAction ψ)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_punctured_mapsTo ψ)
+
+def T96A06_coneMap_sphereToDisk_naturality_aux_spherePair :=
+  CoefficientRadialPair.pairMap R _ _ (sphereAction ψ)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_north_mapsTo ψ)
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_coordinate_square :
+    (T96A06_coneMap_sphereToDisk_naturality_aux_upperAction ψ).comp
+        (openDiskToOpenUpperMap n) =
+      (openDiskToOpenUpperMap n).comp (openAction ψ) := by
+  ext x : 1
+  apply Subtype.ext
+  apply Subtype.ext
+  change euclideanSnoc (ψ.toFun (euclideanInit (euclideanSnoc x.1 _)))
+    ((euclideanSnoc x.1 _) (Fin.last n)) = euclideanSnoc (ψ.toFun x.1) _
+  rw [euclideanInit_snoc, euclideanSnoc_last]
+  change euclideanSnoc (ψ.toFun x.1) (Real.sqrt (1 - ‖x.1‖ ^ 2)) =
+    euclideanSnoc (ψ.toFun x.1) (Real.sqrt (1 - ‖ψ.toFun x.1‖ ^ 2))
+  rw [ψ.norm_map]
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_relative_coordinate :
+    T96A06_coneMap_sphereToDisk_naturality_aux_openPair ψ R ≫
+      CoefficientSphereShift.coordinateMap R n =
+    CoefficientSphereShift.coordinateMap R n ≫
+      T96A06_coneMap_sphereToDisk_naturality_aux_upperPair ψ R := by
+  change CoefficientRadialPair.pairMap R _ _ _ _ ≫
+      CoefficientRadialPair.pairMap R _ _ _ _ =
+    CoefficientRadialPair.pairMap R _ _ _ _ ≫
+      CoefficientRadialPair.pairMap R _ _ _ _
+  rw [← CoefficientPairNaturality.pair_comp, ← CoefficientPairNaturality.pair_comp]
+  congr 1
+  exact (T96A06_coneMap_sphereToDisk_naturality_aux_coordinate_square ψ).symm
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_coordinate_naturality (j : ℕ) :
+    HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_openPair ψ R) j ≫
+      (CoefficientSphereShift.coordinateIso R n j).hom =
+    (CoefficientSphereShift.coordinateIso R n j).hom ≫
+      HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_upperPair ψ R) j := by
+  exact (HomologicalComplex.homologyMap_comp _ _ j).symm.trans
+    ((congrArg (fun f => HomologicalComplex.homologyMap f j)
+      (T96A06_coneMap_sphereToDisk_naturality_aux_relative_coordinate ψ R)).trans
+      (HomologicalComplex.homologyMap_comp _ _ j))
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_coordinate_inverse (j : ℕ) :
+    HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_upperPair ψ R) j ≫
+      (CoefficientSphereShift.coordinateIso R n j).inv =
+    (CoefficientSphereShift.coordinateIso R n j).inv ≫
+      HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_openPair ψ R) j := by
+  apply (cancel_epi (CoefficientSphereShift.coordinateIso R n j).hom).mp
+  have h := congrArg (fun f => f ≫ (CoefficientSphereShift.coordinateIso R n j).inv)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_coordinate_naturality ψ R j)
+  simpa only [Category.assoc, Iso.hom_inv_id, Category.comp_id,
+    Iso.hom_inv_id_assoc] using h.symm
+
+def T96A06_coneMap_sphereToDisk_naturality_aux_upperInclusion :
+    C(openUpperHemisphere n, ambientSphere n) := ⟨Subtype.val, continuous_subtype_val⟩
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_upperInclusion_mapsTo :
+    Set.MapsTo (T96A06_coneMap_sphereToDisk_naturality_aux_upperInclusion (n := n))
+      (puncturedUpperHemisphere n) (northPoleComplement n) := fun _ h => h
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_excision_actual :
+    CoefficientExcision.excisionMap R (northPoleComplement n) (closedLowerHemisphere n) =
+      CoefficientRadialPair.pairMap R _ _
+        (T96A06_coneMap_sphereToDisk_naturality_aux_upperInclusion (n := n))
+        T96A06_coneMap_sphereToDisk_naturality_aux_upperInclusion_mapsTo := rfl
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_relative_excision :
+    T96A06_coneMap_sphereToDisk_naturality_aux_upperPair ψ R ≫
+      CoefficientExcision.excisionMap R (northPoleComplement n) (closedLowerHemisphere n) =
+    CoefficientExcision.excisionMap R (northPoleComplement n) (closedLowerHemisphere n) ≫
+      T96A06_coneMap_sphereToDisk_naturality_aux_spherePair ψ R := by
+  rw [T96A06_coneMap_sphereToDisk_naturality_aux_excision_actual]
+  change CoefficientRadialPair.pairMap R _ _ _ _ ≫
+      CoefficientRadialPair.pairMap R _ _ _ _ =
+    CoefficientRadialPair.pairMap R _ _ _ _ ≫
+      CoefficientRadialPair.pairMap R _ _ _ _
+  rw [← CoefficientPairNaturality.pair_comp, ← CoefficientPairNaturality.pair_comp]
+  congr 1
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_excision_naturality (j : ℕ) :
+    HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_upperPair ψ R) j ≫
+      (CoefficientSphereShift.hemisphereIso R n j).hom =
+    (CoefficientSphereShift.hemisphereIso R n j).hom ≫
+      HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_spherePair ψ R) j := by
+  rw [CoefficientSphereShift.hemisphereIso_hom]
+  exact (HomologicalComplex.homologyMap_comp _ _ j).symm.trans
+    ((congrArg (fun f => HomologicalComplex.homologyMap f j)
+      (T96A06_coneMap_sphereToDisk_naturality_aux_relative_excision ψ R)).trans
+      (HomologicalComplex.homologyMap_comp _ _ j))
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_excision_inverse (j : ℕ) :
+    HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_spherePair ψ R) j ≫
+      (CoefficientSphereShift.hemisphereIso R n j).inv =
+    (CoefficientSphereShift.hemisphereIso R n j).inv ≫
+      HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_upperPair ψ R) j := by
+  apply (cancel_epi (CoefficientSphereShift.hemisphereIso R n j).hom).mp
+  have h := congrArg (fun f => f ≫ (CoefficientSphereShift.hemisphereIso R n j).inv)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_excision_naturality ψ R j)
+  simpa only [Category.assoc, Iso.hom_inv_id, Category.comp_id,
+    Iso.hom_inv_id_assoc] using h.symm
+
+theorem T96A06_coneMap_sphereToDisk_naturality_aux_projection (j : ℕ) :
+    HomologicalComplex.homologyMap
+        (CoefficientRadialPair.absoluteMap R (sphereAction ψ)) j ≫
+      HomologicalComplex.homologyMap
+        (CoefficientPairSequence.projection R (northPoleComplement n)) j =
+    HomologicalComplex.homologyMap
+        (CoefficientPairSequence.projection R (northPoleComplement n)) j ≫
+      HomologicalComplex.homologyMap
+        (T96A06_coneMap_sphereToDisk_naturality_aux_spherePair ψ R) j := by
+  exact (HomologicalComplex.homologyMap_comp _ _ j).symm.trans
+    ((congrArg (fun f => HomologicalComplex.homologyMap f j)
+      (CoefficientRadialPair.projection R _ _ (sphereAction ψ)
+        (T96A06_coneMap_sphereToDisk_naturality_aux_north_mapsTo ψ)).symm).trans
+      (HomologicalComplex.homologyMap_comp _ _ j))
+
+private theorem T96A06_coneMap_sphereToDisk_naturality_aux_comp
+    {C : Type*} [Category C] {A B D : C} {a : A ⟶ A} {b : B ⟶ B}
+    {c : D ⟶ D} {f : A ⟶ B} {g : B ⟶ D}
+    (h : a ≫ f = f ≫ b) (h' : b ≫ g = g ≫ c) :
+    a ≫ (f ≫ g) = (f ≫ g) ≫ c := by
+  calc
+    _ = (a ≫ f) ≫ g := (Category.assoc _ _ _).symm
+    _ = (f ≫ b) ≫ g := congrArg (fun t => t ≫ g) h
+    _ = f ≫ (b ≫ g) := Category.assoc _ _ _
+    _ = f ≫ (g ≫ c) := congrArg (fun t => f ≫ t) h'
+    _ = _ := (Category.assoc _ _ _).symm
+
 theorem T96A06_coneMap_sphereToDisk_naturality (j : ℕ) (hj : j ≠ 0) :
     HomologicalComplex.homologyMap (CoefficientRadialPair.absoluteMap R (sphereAction ψ)) j ≫
       (CoefficientSphereShift.sphereToDiskIso R n j hj).hom =
     (CoefficientSphereShift.sphereToDiskIso R n j hj).hom ≫
       HomologicalComplex.homologyMap (closedPair ψ R) j := by
-  sorry
+  rw [CoefficientSphereShift.sphereToDiskIso_hom]
+  exact T96A06_coneMap_sphereToDisk_naturality_aux_comp
+    (T96A06_coneMap_sphereToDisk_naturality_aux_projection ψ R j)
+    (T96A06_coneMap_sphereToDisk_naturality_aux_comp
+      (T96A06_coneMap_sphereToDisk_naturality_aux_excision_inverse ψ R j)
+      (T96A06_coneMap_sphereToDisk_naturality_aux_comp
+        (T96A06_coneMap_sphereToDisk_naturality_aux_coordinate_inverse ψ R j)
+        (T96A06_coneMap_sphereToDisk_naturality_aux_radial_inverse ψ R j)))
 -- END SEAT AREA
 
 private theorem commute_comp' {C : Type*} [Category C] {A B D : C}
