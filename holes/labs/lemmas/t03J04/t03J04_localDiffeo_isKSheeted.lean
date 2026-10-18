@@ -390,7 +390,82 @@ theorem t03J04_localDiffeo_isKSheeted (n : ℕ)
     [ConnectedSpace X] (phi : apm_t03J04_Torus n → X)
     (hphi : IsLocalDiffeomorph (apm_t03J04_Model n) (apm_t03J04_Model n) ∞ phi) :
     ∃ k, 0 < k ∧ IsKSheetedCover phi k := by
-  sorry
+  have hsurj : Function.Surjective phi := by
+    rw [← Set.range_eq_univ]
+    apply (show IsClopen (Set.range phi) from
+      ⟨by simpa only [Set.image_univ] using
+          (isCompact_univ.image hphi.isLocalHomeomorph.continuous).isClosed,
+        hphi.isOpen_range⟩).eq_univ
+    exact Set.range_nonempty phi
+  have hcov : IsCoveringMap phi := by
+    rw [isCoveringMap_iff_isCoveringMapOn_univ]
+    exact IsCoveringMapOn.of_openPartialHomeomorph
+      hphi.isLocalHomeomorph.continuous (fun e _ => by
+        obtain ⟨ψ, he, hψ⟩ := hphi.isLocalHomeomorph e
+        exact ⟨ψ, he, hψ.symm⟩)
+  let x₀ : X := phi (Classical.arbitrary (apm_t03J04_Torus n))
+  let k := Nat.card {e : apm_t03J04_Torus n // phi e = x₀}
+  have hfinite : ∀ x : X, Finite {e : apm_t03J04_Torus n // phi e = x} := by
+    intro x
+    exact (isClosed_singleton.preimage hphi.isLocalHomeomorph.continuous).isCompact.finite
+      (.of_openPartialHomeomorph phi (fun _ h => h) fun e _ => by
+        obtain ⟨ψ, he, hψ⟩ := hphi.isLocalHomeomorph e
+        exact ⟨ψ, he, hψ.symm⟩)
+  have hcard : ∀ x : X, Nat.card {e : apm_t03J04_Torus n // phi e = x} = k := by
+    let S : Set X := {x | Nat.card {e : apm_t03J04_Torus n // phi e = x} = k}
+    have hopen : IsOpen S := by
+      rw [isOpen_iff_mem_nhds]
+      intro x hx
+      haveI : Nonempty (phi ⁻¹' {x}) := by
+        obtain ⟨e, he⟩ := hsurj x
+        exact ⟨e, he⟩
+      letI : DiscreteTopology (phi ⁻¹' {x}) := (hcov x).discreteTopology_fiber
+      let t := (hcov x).toTrivialization
+      refine Filter.mem_of_superset
+        (t.open_baseSet.mem_nhds (hcov x).mem_toTrivialization_baseSet) ?_
+      intro y hy
+      have heq : Nat.card {e : apm_t03J04_Torus n // phi e = y} =
+          Nat.card {e : apm_t03J04_Torus n // phi e = x} := by
+        let ey : {e : apm_t03J04_Torus n // phi e = y} ≃ (phi ⁻¹' {y}) :=
+          Equiv.setCongr (by rfl)
+        let ex : {e : apm_t03J04_Torus n // phi e = x} ≃ (phi ⁻¹' {x}) :=
+          Equiv.setCongr (by rfl)
+        exact Nat.card_congr (ey.trans
+          (((IsEvenlyCovered.of_trivialization hy).fiberHomeomorph).toEquiv.symm.trans ex.symm))
+      exact heq.trans hx
+    have hclosed : IsClosed S := by
+      rw [← isOpen_compl_iff]
+      rw [isOpen_iff_mem_nhds]
+      intro x hx
+      haveI : Nonempty (phi ⁻¹' {x}) := by
+        obtain ⟨e, he⟩ := hsurj x
+        exact ⟨e, he⟩
+      letI : DiscreteTopology (phi ⁻¹' {x}) := (hcov x).discreteTopology_fiber
+      let t := (hcov x).toTrivialization
+      refine Filter.mem_of_superset
+        (t.open_baseSet.mem_nhds (hcov x).mem_toTrivialization_baseSet) ?_
+      intro y hy hyS
+      apply hx
+      have heq : Nat.card {e : apm_t03J04_Torus n // phi e = y} =
+          Nat.card {e : apm_t03J04_Torus n // phi e = x} := by
+        let ey : {e : apm_t03J04_Torus n // phi e = y} ≃ (phi ⁻¹' {y}) :=
+          Equiv.setCongr (by rfl)
+        let ex : {e : apm_t03J04_Torus n // phi e = x} ≃ (phi ⁻¹' {x}) :=
+          Equiv.setCongr (by rfl)
+        exact Nat.card_congr (ey.trans
+          (((IsEvenlyCovered.of_trivialization hy).fiberHomeomorph).toEquiv.symm.trans ex.symm))
+      exact heq.symm.trans hyS
+    have hx₀ : x₀ ∈ S := rfl
+    have hS : S = Set.univ := by
+      apply (show IsClopen S from ⟨hclosed, hopen⟩).eq_univ
+      exact ⟨x₀, hx₀⟩
+    intro x
+    have : x ∈ S := hS.symm.subset (Set.mem_univ x)
+    exact this
+  refine ⟨k, ?_, ⟨hcov, hfinite, hcard⟩⟩
+  haveI : Finite {e : apm_t03J04_Torus n // phi e = x₀} := hfinite x₀
+  exact Nat.card_pos_iff.mpr
+    ⟨⟨⟨Classical.arbitrary (apm_t03J04_Torus n), rfl⟩⟩, inferInstance⟩
 -- END SEAT AREA
 
 /-- LEAF C2a.  A covering is trivial over a contractible, locally path-connected
