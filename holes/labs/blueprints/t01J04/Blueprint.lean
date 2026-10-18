@@ -67,6 +67,13 @@ def apm_t01J04_bp_ball (m : ℕ) {Y : Type*} [TopologicalSpace Y]
 /-- LEAF A1 (chart ball).  Small chart balls at `y` are neighbourhoods of `y`,
 their closures lie in `U`, and the closure is exactly the closed chart ball
 `{ρ ≤ r}` inside the chart source. -/
+lemma apm_t01J04_leaf_chart_ball_aux_closure
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    (x : E) {r : ℝ} (hr : r ≠ 0) :
+    closure (Metric.ball x r) = Metric.closedBall x r :=
+  closure_ball x hr
+
+set_option maxHeartbeats 2000000
 theorem apm_t01J04_leaf_chart_ball
     (m : ℕ) (Y : Type*) [TopologicalSpace Y] [T2Space Y]
     [ChartedSpace (apm_t01J04_Euclidean m) Y]
@@ -77,7 +84,101 @@ theorem apm_t01J04_leaf_chart_ball
       closure (apm_t01J04_bp_ball m y r) =
         {z | z ∈ (chartAt (apm_t01J04_Euclidean m) y).source ∧
           apm_t01J04_bp_rho m y z ≤ r} := by
-  sorry
+  let e := chartAt (apm_t01J04_Euclidean m) y
+  let p := e y
+  have hyp : p ∈ e.target := mem_chart_target _ y
+  have hpre : e.symm ⁻¹' U ∈ 𝓝 p := by
+    have hinv : e.symm p = y := e.left_inv (mem_chart_source _ y)
+    have hm := e.symm.map_nhds_eq hyp
+    rw [hinv] at hm
+    rw [← hm] at hU
+    exact hU
+  have hO : e.target ∩ e.symm ⁻¹' U ∈ 𝓝 p :=
+    Filter.inter_mem (e.open_target.mem_nhds hyp) hpre
+  rcases Metric.mem_nhds_iff.1 hO with ⟨d, hd, hdO⟩
+  let s := d / 2
+  have hs : 0 < s := half_pos hd
+  have hclosed : Metric.closedBall p s ⊆ e.target ∩ e.symm ⁻¹' U :=
+    (Metric.closedBall_subset_ball (half_lt_self hd)).trans hdO
+  refine ⟨s ^ 2, sq_pos_of_pos hs, ?_⟩
+  intro r hr hra
+  have hsr : 0 < Real.sqrt r := Real.sqrt_pos.2 hr
+  have hsra : Real.sqrt r < s := by
+    exact (Real.sqrt_lt' hs).2 hra
+  let B := Metric.ball p (Real.sqrt r)
+  let K := Metric.closedBall p (Real.sqrt r)
+  have hKtarget : K ⊆ e.target :=
+    (Metric.closedBall_subset_closedBall hsra.le).trans (hclosed.trans inter_subset_left)
+  have hKU : K ⊆ e.symm ⁻¹' U :=
+    (Metric.closedBall_subset_closedBall hsra.le).trans (hclosed.trans inter_subset_right)
+  have hBeq : apm_t01J04_bp_ball m y r = e.symm '' B := by
+    set_option maxHeartbeats 800000 in
+      ext z
+      constructor
+      · rintro ⟨hzs, hzρ⟩
+        refine ⟨e z, ?_, e.left_inv hzs⟩
+        rw [Metric.mem_ball, dist_eq_norm]
+        dsimp [apm_t01J04_bp_rho, e, p] at hzρ
+        exact Real.lt_sqrt_of_sq_lt hzρ
+      · rintro ⟨v, hv, rfl⟩
+        have hvt : v ∈ e.target := hKtarget (Metric.ball_subset_closedBall hv)
+        refine ⟨e.map_target hvt, ?_⟩
+        rw [apm_t01J04_bp_rho, e.right_inv hvt]
+        have hv' : ‖v - p‖ < Real.sqrt r := by simpa [Metric.mem_ball, dist_eq_norm] using hv
+        exact (Real.lt_sqrt (norm_nonneg _)).1 hv'
+  have hKeq : {z | z ∈ e.source ∧ apm_t01J04_bp_rho m y z ≤ r} = e.symm '' K := by
+    set_option maxHeartbeats 800000 in
+      ext z
+      constructor
+      · rintro ⟨hzs, hzρ⟩
+        refine ⟨e z, ?_, e.left_inv hzs⟩
+        rw [Metric.mem_closedBall, dist_eq_norm]
+        dsimp [apm_t01J04_bp_rho, e, p] at hzρ
+        exact Real.le_sqrt_of_sq_le hzρ
+      · rintro ⟨v, hv, rfl⟩
+        have hvt : v ∈ e.target := hKtarget hv
+        refine ⟨e.map_target hvt, ?_⟩
+        rw [apm_t01J04_bp_rho, e.right_inv hvt]
+        have hv' : ‖v - p‖ ≤ Real.sqrt r := by simpa [Metric.mem_closedBall, dist_eq_norm] using hv
+        exact (Real.le_sqrt (norm_nonneg _) (le_of_lt hr)).1 hv'
+  have hKcompact : IsCompact (e.symm '' K) :=
+    ((isCompact_closedBall p (Real.sqrt r)).image_of_continuousOn
+      (e.continuousOn_symm.mono hKtarget))
+  have hKclosed : IsClosed (e.symm '' K) := hKcompact.isClosed
+  have hcl : closure (e.symm '' B) = e.symm '' K := by
+    apply Subset.antisymm
+    · apply closure_minimal
+      · exact image_mono Metric.ball_subset_closedBall
+      · exact hKclosed
+    · change e.symm '' Metric.closedBall p (Real.sqrt r) ⊆
+        closure (e.symm '' Metric.ball p (Real.sqrt r))
+      rw [← apm_t01J04_leaf_chart_ball_aux_closure
+        (E := apm_t01J04_Euclidean m) p hsr.ne']
+      have hc : ContinuousOn e.symm
+          (closure (Metric.ball p (Real.sqrt r))) := by
+        rw [apm_t01J04_leaf_chart_ball_aux_closure
+          (E := apm_t01J04_Euclidean m) p hsr.ne']
+        exact e.continuousOn_symm.mono hKtarget
+      exact hc.image_closure
+  have hnh : apm_t01J04_bp_ball m y r ∈ 𝓝 y := by
+    rw [hBeq]
+    have hBn : B ∈ 𝓝 p := Metric.ball_mem_nhds p hsr
+    have hm := e.symm.map_nhds_eq hyp
+    rw [e.left_inv (mem_chart_source _ y)] at hm
+    rw [← hm]
+    change e.symm ⁻¹' (e.symm '' B) ∈ 𝓝 p
+    filter_upwards [hBn] with v hv
+    exact ⟨v, hv, rfl⟩
+  refine ⟨hnh, ?_, ?_⟩
+  · rw [hBeq, hcl]
+    rintro z ⟨v, hv, rfl⟩
+    exact hKU hv
+  · calc
+      closure (apm_t01J04_bp_ball m y r) = closure (e.symm '' B) :=
+        congrArg closure hBeq
+      _ = e.symm '' K := hcl
+      _ = {z | z ∈ e.source ∧ apm_t01J04_bp_rho m y z ≤ r} := hKeq.symm
+set_option maxHeartbeats 200000
 
 /-- The function `ρ ∘ f` is smooth on the open set `f⁻¹(chart source)`. -/
 theorem apm_t01J04_bp_rho_comp_smooth
@@ -115,7 +216,39 @@ theorem apm_t01J04_leaf_sard_regular_value
     (a : ℝ) (ha : 0 < a) :
     ∃ r : ℝ, 0 < r ∧ r < a ∧ ∀ x ∈ W, h x = r →
       Function.Surjective (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h x) := by
-  sorry
+  let Wo : TopologicalSpace.Opens X := ⟨W, hW⟩
+  let h' : Wo → ℝ := fun x => h x
+  have hh' : ContMDiff 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ)
+      (⊤ : ℕ∞) h' := by
+    intro x
+    apply contMDiffAt_subtype_iff.mpr
+    exact (hh x x.2).contMDiffAt (hW.mem_nhds x.2)
+  let C : Set ℝ := h' '' {x | ¬ Function.Surjective
+    (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h' x)}
+  have hC : MeasureTheory.volume C = 0 :=
+    T93A04ManifoldWork.null_critical MeasureTheory.volume h' hh'
+  have hnot : ¬ Ioo (0 : ℝ) a ⊆ C := by
+    intro hsub
+    have hz : MeasureTheory.volume (Ioo (0 : ℝ) a) = 0 :=
+      MeasureTheory.measure_mono_null hsub hC
+    have hp : MeasureTheory.volume (Ioo (0 : ℝ) a) ≠ 0 := by
+      simpa [Real.volume_Ioo] using ha
+    exact hp hz
+  obtain ⟨r, ⟨hr0, hra⟩, hrreg⟩ := Set.not_subset.mp hnot
+  refine ⟨r, hr0, hra, ?_⟩
+  intro x hx hxr
+  by_contra hcrit
+  apply hrreg
+  refine ⟨⟨x, hx⟩, ?_, hxr⟩
+  intro hs
+  apply hcrit
+  have hd := mfderiv_comp (⟨x, hx⟩ : Wo)
+    (((hh x hx).contMDiffAt (hW.mem_nhds hx)).mdifferentiableAt (by simp))
+    ((contMDiff_subtype_val
+      (I := 𝓘(ℝ, apm_t01J04_Euclidean n))
+      (n := (1 : WithTop ℕ∞))).mdifferentiableAt (by simp))
+  rw [show h' = h ∘ (Subtype.val : Wo → X) from rfl, hd] at hs
+  exact Function.Surjective.of_comp hs
 
 /-! ## Part B: ambient charts of `X` adapted to the sublevel set -/
 
@@ -128,15 +261,97 @@ theorem apm_t01J04_leaf_euclidean_interior
       p ∈ Φ.source ∧ Φ.source ⊆ O ∧
       ContDiffOn ℝ (⊤ : ℕ∞) Φ Φ.source ∧ ContDiffOn ℝ (⊤ : ℕ∞) Φ.symm Φ.target ∧
       ∀ v ∈ Φ.source, 0 < Φ v 0 := by
-  sorry
+  let e : apm_t01J04_Euclidean n ≃ₜ apm_t01J04_Euclidean n :=
+    Homeomorph.addLeft (EuclideanSpace.single (0 : Fin n) (1 : ℝ) - p)
+  let S : Set (apm_t01J04_Euclidean n) := O ∩ {v | 0 < e v 0}
+  have hcoord : Continuous (fun v : apm_t01J04_Euclidean n => v (0 : Fin n)) :=
+    PiLp.continuous_apply 2 (fun _ : Fin n => ℝ) (0 : Fin n)
+  have hS : IsOpen S := hO.inter (isOpen_lt continuous_const
+    (hcoord.comp e.continuous))
+  let Φ : OpenPartialHomeomorph (apm_t01J04_Euclidean n)
+      (apm_t01J04_Euclidean n) := e.toOpenPartialHomeomorph.restrOpen S hS
+  refine ⟨Φ, ?_, ?_, ?_, ?_, ?_⟩
+  · change p ∈ Set.univ ∩ S
+    simp [S, e, hp]
+  · intro v hv
+    exact hv.2.1
+  · have he : ContDiff ℝ (⊤ : ℕ∞) (e : apm_t01J04_Euclidean n →
+        apm_t01J04_Euclidean n) := by
+      simpa [e] using
+        (contDiff_const.add contDiff_id : ContDiff ℝ (⊤ : ℕ∞)
+          (fun v : apm_t01J04_Euclidean n =>
+            (EuclideanSpace.single (0 : Fin n) (1 : ℝ) - p) + v))
+    simpa [Φ] using he.contDiffOn
+  · have hes : ContDiff ℝ (⊤ : ℕ∞) (e.symm : apm_t01J04_Euclidean n →
+        apm_t01J04_Euclidean n) := by
+      have h := (contDiff_const.add contDiff_id : ContDiff ℝ (⊤ : ℕ∞)
+        (fun v : apm_t01J04_Euclidean n =>
+          -(EuclideanSpace.single (0 : Fin n) (1 : ℝ) - p) + v))
+      convert h using 1
+    simpa [Φ] using hes.contDiffOn
+  · intro v hv
+    exact hv.2.2
 
 /-- LEAF B2 (linear algebra).  A nonzero functional on `ℝⁿ` is, up to sign, the
 first coordinate of some linear automorphism. -/
+def apm_t01J04_leaf_linear_first_coordinate_aux_split
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    (f : V →ₗ[ℝ] ℝ) (u : V) (hu : f u = 1) :
+    V ≃ₗ[ℝ] LinearMap.ker f × ℝ where
+  toFun v := (⟨v - (f v) • u, by simp [hu]⟩, f v)
+  invFun z := z.1.1 + z.2 • u
+  left_inv v := by simp [hu]
+  right_inv z := by
+    ext
+    · simp [hu]
+    · simp [hu]
+  map_add' x y := by
+    ext <;> simp [add_smul] <;> module
+  map_smul' c x := by
+    ext <;> simp [mul_smul] <;> module
+
 theorem apm_t01J04_leaf_linear_first_coordinate
     (n : ℕ) [NeZero n] (ℓ : apm_t01J04_Euclidean n →L[ℝ] ℝ) (hℓ : ℓ ≠ 0) :
     ∃ D : apm_t01J04_Euclidean n ≃L[ℝ] apm_t01J04_Euclidean n,
       ∀ v, D v 0 = -ℓ v := by
-  sorry
+  let c : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ := EuclideanSpace.projₗ 0
+  have hc : c ≠ 0 := by
+    intro h
+    have := LinearMap.congr_fun h (PiLp.single 2 (0 : Fin n) (1 : ℝ))
+    simpa [c] using this
+  have hℓs : Function.Surjective (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) :=
+    by
+      obtain ⟨w, hw⟩ : ∃ w, ℓ w ≠ 0 := by
+        simpa [DFunLike.ne_iff] using hℓ
+      intro r
+      refine ⟨(r / ℓ w) • w, ?_⟩
+      simp [hw]
+  obtain ⟨u, hu⟩ := hℓs 1
+  have hℓ0 : (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) ≠ 0 := by
+    intro hz
+    have hz' := LinearMap.congr_fun hz u
+    simp [hu] at hz'
+  have hcs : Function.Surjective c := by
+    intro r
+    refine ⟨PiLp.single 2 (0 : Fin n) r, ?_⟩
+    simp [c]
+  obtain ⟨e, he⟩ := hcs 1
+  let A := apm_t01J04_leaf_linear_first_coordinate_aux_split
+    (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) u hu
+  let B := apm_t01J04_leaf_linear_first_coordinate_aux_split c e he
+  let N : LinearMap.ker (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ) ≃ₗ[ℝ]
+      LinearMap.ker c := LinearEquiv.ofFinrankEq _ _ (by
+    have h1 := Module.Dual.finrank_ker_add_one_of_ne_zero
+      (f := (ℓ : apm_t01J04_Euclidean n →ₗ[ℝ] ℝ)) hℓ0
+    have h2 := Module.Dual.finrank_ker_add_one_of_ne_zero (f := c) hc
+    omega)
+  let E : apm_t01J04_Euclidean n ≃ₗ[ℝ] apm_t01J04_Euclidean n :=
+    A.trans ((N.prodCongr (LinearEquiv.neg ℝ)).trans B.symm)
+  refine ⟨E.toContinuousLinearEquiv, ?_⟩
+  intro v
+  change c (E v) = -ℓ v
+  simp [E, A, B, N, he,
+    apm_t01J04_leaf_linear_first_coordinate_aux_split]
 
 /-- LEAF B3 (scalar submersion normal form in `ℝⁿ`).  If `g` is smooth on an
 open set and `D` is an automorphism whose first coordinate is `-dg(p)`, then
@@ -156,7 +371,57 @@ theorem apm_t01J04_leaf_euclidean_normal_form
       p ∈ Φ.source ∧ Φ.source ⊆ O ∧
       ContDiffOn ℝ (⊤ : ℕ∞) Φ Φ.source ∧ ContDiffOn ℝ (⊤ : ℕ∞) Φ.symm Φ.target ∧
       ∀ v ∈ Φ.source, Φ v 0 = g p - g v := by
-  sorry
+  let e0 : apm_t01J04_Euclidean n := EuclideanSpace.single (0 : Fin n) (1 : ℝ)
+  let L : apm_t01J04_Euclidean n →L[ℝ] ℝ := fderiv ℝ g p
+  let q : apm_t01J04_Euclidean n → ℝ := fun v => g p - g v + L v
+  let F : apm_t01J04_Euclidean n → apm_t01J04_Euclidean n :=
+    fun v => D v + q v • e0
+  have hgp : HasFDerivAt g L p := by
+    exact ((hg p hp).contDiffAt (hO.mem_nhds hp)).differentiableAt (by simp) |>.hasFDerivAt
+  have hq : HasFDerivAt q
+      (0 : apm_t01J04_Euclidean n →L[ℝ] ℝ) p := by
+    have hlin : HasFDerivAt (fun v : apm_t01J04_Euclidean n => L v) L p :=
+      L.hasFDerivAt
+    convert ((hasFDerivAt_const (g p) p).sub hgp).add hlin using 1 <;>
+      simp [q, L]
+  have hFderiv : HasFDerivAt F (D : apm_t01J04_Euclidean n →L[ℝ]
+      apm_t01J04_Euclidean n) p := by
+    have hD' : HasFDerivAt (fun v : apm_t01J04_Euclidean n => D v)
+        (D : apm_t01J04_Euclidean n →L[ℝ] apm_t01J04_Euclidean n) p :=
+      D.toContinuousLinearMap.hasFDerivAt
+    convert hD'.add (hq.smul_const e0) using 1 <;> simp [F]
+  have hq_smooth : ContDiffOn ℝ (⊤ : ℕ∞) q O := by
+    exact ((contDiffOn_const.sub hg).add L.contDiff.contDiffOn)
+  have hF_smooth : ContDiffOn ℝ (⊤ : ℕ∞) F O := by
+    exact D.contDiff.contDiffOn.add (hq_smooth.smul contDiffOn_const)
+  have hF_at : ContDiffAt ℝ (⊤ : ℕ∞) F p :=
+    (hF_smooth p hp).contDiffAt (hO.mem_nhds hp)
+  let chart := hF_at.toOpenPartialHomeomorph F hFderiv (by simp)
+  let U := O ∩ chart.source
+  have hU : IsOpen U := hO.inter chart.open_source
+  have hpchart : p ∈ chart.source := by
+    exact ContDiffAt.mem_toOpenPartialHomeomorph_source hF_at hFderiv (by simp)
+  have hpU : p ∈ U := ⟨hp, hpchart⟩
+  have hUs : U ⊆ chart.source := inter_subset_right
+  have hchart_coe : (chart : apm_t01J04_Euclidean n → apm_t01J04_Euclidean n) = F := by
+    exact ContDiffAt.toOpenPartialHomeomorph_coe hF_at hFderiv (by simp)
+  have hchart_smooth : ContDiffOn ℝ (⊤ : ℕ∞) chart U := by
+    rw [hchart_coe]
+    exact hF_smooth.mono inter_subset_left
+  have hchart_deriv : HasFDerivAt chart
+      (D : apm_t01J04_Euclidean n →L[ℝ] apm_t01J04_Euclidean n) p := by
+    rw [hchart_coe]
+    exact hFderiv
+  obtain ⟨Φ, hpΦ, hΦU, -, hΦeq, -, hΦ, hΦs⟩ :=
+    SardSmoothNeighborhoodImplicitChartProbe.exists_smooth_neighborhood_restriction
+      chart U hU p hpU hUs hchart_smooth D hchart_deriv
+  refine ⟨Φ, hpΦ, hΦU.trans inter_subset_left, hΦ, hΦs, ?_⟩
+  intro v hv
+  rw [show Φ v = chart v by rw [hΦeq]]
+  rw [hchart_coe]
+  simp [F, q, e0, hD]
+  dsimp [L]
+  ring
 
 /-- LEAF B4 (maximal atlas).  Composing an ambient chart of the maximal atlas
 with a smooth local diffeomorphism of the model gives a chart of the maximal
@@ -171,7 +436,22 @@ theorem apm_t01J04_leaf_trans_mem_maximalAtlas
     (hΦ : ContDiffOn ℝ (⊤ : ℕ∞) Φ Φ.source)
     (hΦs : ContDiffOn ℝ (⊤ : ℕ∞) Φ.symm Φ.target) :
     ψ₀.trans Φ ∈ IsManifold.maximalAtlas 𝓘(ℝ, apm_t01J04_Euclidean n) (⊤ : ℕ∞) X := by
-  sorry
+  let G := contDiffGroupoid (⊤ : ℕ∞)
+    (modelWithCornersSelf ℝ (apm_t01J04_Euclidean n))
+  have hΦG : Φ ∈ G := by
+    rw [show G = contDiffGroupoid (⊤ : ℕ∞)
+      (modelWithCornersSelf ℝ (apm_t01J04_Euclidean n)) from rfl,
+      contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid]
+    simpa using And.intro hΦ hΦs
+  rw [IsManifold.mem_maximalAtlas_iff] at hψ₀ ⊢
+  intro e he
+  obtain ⟨hl, hr⟩ := hψ₀ e he
+  constructor
+  · rw [OpenPartialHomeomorph.trans_symm_eq_symm_trans_symm,
+      OpenPartialHomeomorph.trans_assoc]
+    exact G.trans (G.symm hΦG) hl
+  · rw [← OpenPartialHomeomorph.trans_assoc]
+    exact G.trans hr hΦG
 
 /-- LEAF B5 (chart glue).  A function smooth on an open set `W` of `X` is smooth
 in the preferred chart at `x ∈ W`, and a surjective manifold derivative gives a
@@ -189,7 +469,33 @@ theorem apm_t01J04_leaf_in_chart
       (Function.Surjective (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h x) →
         fderiv ℝ (h ∘ (chartAt (apm_t01J04_Euclidean n) x).symm)
           (chartAt (apm_t01J04_Euclidean n) x x) ≠ 0) := by
-  sorry
+  have hs : ContMDiffOn 𝓘(ℝ, apm_t01J04_Euclidean n)
+      𝓘(ℝ, apm_t01J04_Euclidean n) (⊤ : ℕ∞)
+      (chartAt (apm_t01J04_Euclidean n) x).symm
+      ((chartAt (apm_t01J04_Euclidean n) x).target ∩
+        (chartAt (apm_t01J04_Euclidean n) x).symm ⁻¹' W) :=
+    contMDiffOn_chart_symm.mono inter_subset_left
+  have hc : ContMDiffOn 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) (⊤ : ℕ∞)
+      (h ∘ (chartAt (apm_t01J04_Euclidean n) x).symm)
+      ((chartAt (apm_t01J04_Euclidean n) x).target ∩
+        (chartAt (apm_t01J04_Euclidean n) x).symm ⁻¹' W) :=
+    hh.comp hs (fun _ hz => hz.2)
+  refine ⟨hc.contDiffOn, ?_⟩
+  intro hsurj heq
+  have hha : ContMDiffAt 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ)
+      (⊤ : ℕ∞) h x :=
+    (hh x hx).contMDiffAt (hW.mem_nhds hx)
+  have hm := (hha.mdifferentiableAt (by simp)).mfderiv
+  have hderiv :
+      fderiv ℝ (h ∘ (chartAt (apm_t01J04_Euclidean n) x).symm)
+          (chartAt (apm_t01J04_Euclidean n) x x) =
+        mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n) 𝓘(ℝ, ℝ) h x := by
+    simpa [writtenInExtChartAt] using hm.symm
+  rw [hderiv] at heq
+  have hzero : Function.Surjective
+      (0 : apm_t01J04_Euclidean n →L[ℝ] ℝ) := heq ▸ hsurj
+  obtain ⟨v, hv⟩ := hzero (1 : ℝ)
+  simpa using hv
 
 /-- Bookkeeping: preferred chart followed by a Euclidean local diffeomorphism. -/
 theorem apm_t01J04_bp_ambient_chart
@@ -301,7 +607,88 @@ theorem apm_t01J04_leaf_restrict_chart
     (hψ : ψ ∈ IsManifold.maximalAtlas 𝓘(ℝ, apm_t01J04_Euclidean n) (⊤ : ℕ∞) X)
     (hslice : ∀ z ∈ ψ.source, z ∈ S ↔ 0 ≤ ψ z 0) :
     ∃ d : apm_t01J04_bp_HalfSliceChart n X S, d.amb = ψ := by
-  sorry
+  classical
+  let f : {x // x ∈ S} → EuclideanHalfSpace n := fun u =>
+    if hu : u.1 ∈ ψ.source then
+      ⟨ψ u.1, (hslice u.1 hu).mp u.2⟩
+    else 0
+  let g : EuclideanHalfSpace n → {x // x ∈ S} := fun v =>
+    if hv : v.1 ∈ ψ.target then
+      ⟨ψ.symm v.1, (hslice ( ψ.symm v.1) (ψ.map_target hv)).mpr (by
+        rw [ψ.right_inv hv]
+        exact v.2)⟩
+    else ⟨x₀, hx₀⟩
+  let c : OpenPartialHomeomorph {x // x ∈ S} (EuclideanHalfSpace n) := {
+    source := Subtype.val ⁻¹' ψ.source
+    target := Subtype.val ⁻¹' ψ.target
+    toFun := f
+    invFun := g
+    map_source' := by
+      intro u hu
+      change u.1 ∈ ψ.source at hu
+      dsimp [f]
+      rw [dif_pos hu]
+      exact ψ.map_source hu
+    map_target' := by
+      intro v hv
+      change v.1 ∈ ψ.target at hv
+      dsimp [g]
+      rw [dif_pos hv]
+      exact ψ.map_target hv
+    left_inv' := by
+      intro u hu
+      change u.1 ∈ ψ.source at hu
+      apply Subtype.ext
+      dsimp [g, f]
+      simp only [dif_pos hu]
+      simp only [dif_pos (ψ.map_source hu)]
+      exact ψ.left_inv hu
+    right_inv' := by
+      intro v hv
+      change v.1 ∈ ψ.target at hv
+      apply EuclideanHalfSpace.ext
+      dsimp [g, f]
+      simp only [dif_pos hv]
+      simp only [dif_pos (ψ.map_target hv)]
+      exact ψ.right_inv hv
+    open_source := ψ.open_source.preimage continuous_subtype_val
+    open_target := ψ.open_target.preimage continuous_subtype_val
+    continuousOn_toFun := by
+      rw [continuousOn_iff_continuous_restrict]
+      have h : ContinuousOn (fun u : {x // x ∈ S} => ψ u.1)
+          (Subtype.val ⁻¹' ψ.source) :=
+        ψ.continuousOn.comp continuous_subtype_val.continuousOn (fun _ h => h)
+      rw [continuousOn_iff_continuous_restrict] at h
+      convert Continuous.subtype_mk (p := fun x : apm_t01J04_Euclidean n => 0 ≤ x 0) h
+        (fun u => (hslice u.1.1 u.2).mp u.1.2) using 1
+      ext u
+      have hu : u.1.1 ∈ ψ.source := u.2
+      dsimp [f]
+      simp only [dif_pos hu]
+    continuousOn_invFun := by
+      rw [continuousOn_iff_continuous_restrict]
+      have h : ContinuousOn (fun v : EuclideanHalfSpace n => ψ.symm v.1)
+          (Subtype.val ⁻¹' ψ.target) :=
+        ψ.continuousOn_symm.comp continuous_subtype_val.continuousOn (fun _ h => h)
+      rw [continuousOn_iff_continuous_restrict] at h
+      convert Continuous.subtype_mk (p := fun x : X => x ∈ S) h
+        (fun v => (hslice (ψ.symm v.1.1) (ψ.map_target v.2)).mpr (by
+          rw [ψ.right_inv v.2]
+          exact v.1.2)) using 1
+      ext v
+      have hv : v.1.1 ∈ ψ.target := v.2
+      dsimp [g]
+      simp only [dif_pos hv]
+  }
+  refine ⟨⟨ψ, hψ, c, rfl, rfl, ?_, ?_⟩, rfl⟩
+  · intro u hu
+    change u.1 ∈ ψ.source at hu
+    dsimp [c, f]
+    rw [dif_pos hu]
+  · intro v hv
+    change v.1 ∈ ψ.target at hv
+    dsimp [c, g]
+    rw [dif_pos hv]
 
 /-- LEAF C2 (overlaps).  Transition maps between restricted charts are smooth in
 the sense of the half-space model. -/
@@ -315,7 +702,61 @@ theorem apm_t01J04_leaf_overlap
         (modelWithCornersEuclideanHalfSpace n).symm)
       ((modelWithCornersEuclideanHalfSpace n).symm ⁻¹' (d.chart.symm ≫ₕ d'.chart).source ∩
         range (modelWithCornersEuclideanHalfSpace n)) := by
-  sorry
+  have hamb := IsManifold.compatible_of_mem_maximalAtlas d.amb_mem d'.amb_mem
+  rw [contDiffGroupoid, mem_groupoid_of_pregroupoid, contDiffPregroupoid] at hamb
+  have hsmooth := hamb.1
+  simp only [modelWithCornersSelf_coe, PartialEquiv.refl_coe, Function.id_comp,
+    Function.comp_id, preimage_id, range_id] at hsmooth
+  apply hsmooth.congr_mono
+  · intro x hx
+    rcases hx.2 with ⟨z, rfl⟩
+    have hzsrc : z ∈ (d.chart.symm ≫ₕ d'.chart).source := by
+      have h := hx.1
+      change (modelWithCornersEuclideanHalfSpace n).symm
+        (modelWithCornersEuclideanHalfSpace n z) ∈
+          (d.chart.symm ≫ₕ d'.chart).source at h
+      rw [ModelWithCorners.left_inv] at h
+      exact h
+    have hzt : z ∈ d.chart.target := hzsrc.1
+    have hz' : d.chart.symm z ∈ d'.chart.source := hzsrc.2
+    have hamb_t : z.val ∈ d.amb.target := by
+      have := hzt
+      rw [d.target_eq] at this
+      exact this
+    have hamb_s : (d.chart.symm z).val ∈ d'.amb.source := by
+      have := hz'
+      rw [d'.source_eq] at this
+      exact this
+    simp only [Function.comp_apply, ModelWithCorners.left_inv,
+      modelWithCornersSelf_coe_symm, Function.id_def]
+    change (d'.chart (d.chart.symm z)).val = d'.amb (d.amb.symm z.val)
+    rw [d'.chart_eq _ hz', d.symm_eq _ hzt]
+  · rintro x hx
+    rcases hx.2 with ⟨z, rfl⟩
+    have hzsrc : z ∈ (d.chart.symm ≫ₕ d'.chart).source := by
+      have h := hx.1
+      change (modelWithCornersEuclideanHalfSpace n).symm
+        (modelWithCornersEuclideanHalfSpace n z) ∈
+          (d.chart.symm ≫ₕ d'.chart).source at h
+      rw [ModelWithCorners.left_inv] at h
+      exact h
+    have hzt : z ∈ d.chart.target := hzsrc.1
+    have hz' : d.chart.symm z ∈ d'.chart.source := hzsrc.2
+    have hamb_t : z.val ∈ d.amb.target := by
+      have := hzt
+      rw [d.target_eq] at this
+      exact this
+    have hamb_s : (d.chart.symm z).val ∈ d'.amb.source := by
+      have := hz'
+      rw [d'.source_eq] at this
+      exact this
+    constructor
+    · change z.val ∈ (d.amb.symm ≫ₕ d'.amb).source
+      refine ⟨hamb_t, ?_⟩
+      change d.amb.symm z.val ∈ d'.amb.source
+      rw [← d.symm_eq _ hzt]
+      exact hamb_s
+    · exact mem_univ _
 
 /-- The charted space on `S` given by a choice of restricted chart at each point. -/
 @[reducible] def apm_t01J04_bp_charted
@@ -357,7 +798,44 @@ theorem apm_t01J04_leaf_smooth_inclusion
     letI := apm_t01J04_bp_charted n X S d hd
     ContMDiff (modelWithCornersEuclideanHalfSpace n) 𝓘(ℝ, apm_t01J04_Euclidean n)
       (⊤ : ℕ∞) (Subtype.val : {x // x ∈ S} → X) := by
-  sorry
+  letI := apm_t01J04_bp_charted n X S d hd
+  letI := hS
+  intro u
+  have hu_chart : u ∈ (d u).chart.source := hd u
+  have hu_amb : u.val ∈ (d u).amb.source := by
+    change u ∈ Subtype.val ⁻¹' (d u).amb.source
+    rw [← (d u).source_eq]
+    exact hu_chart
+  rw [ContMDiffAt, contMDiffWithinAt_iff_of_mem_maximalAtlas
+    (IsManifold.chart_mem_maximalAtlas u) (d u).amb_mem hu_chart hu_amb]
+  refine ⟨continuous_subtype_val.continuousAt.continuousWithinAt, ?_⟩
+  simp only [show chartAt (EuclideanHalfSpace n) u = (d u).chart from rfl]
+  simp only [preimage_univ, univ_inter]
+  refine contDiffWithinAt_id.congr_of_eventuallyEq ?_ ?_
+  · filter_upwards [(d u).chart.extend_target_mem_nhdsWithin
+      (I := modelWithCornersEuclideanHalfSpace n) hu_chart] with v hv
+    have hv' := hv
+    rw [(d u).chart.extend_target] at hv'
+    have hv_target : (modelWithCornersEuclideanHalfSpace n).symm v ∈
+        (d u).chart.target := hv'.1
+    have hv_ambtarget : v ∈ (d u).amb.target := by
+      rw [← (modelWithCornersEuclideanHalfSpace n).right_inv hv'.2]
+      change (modelWithCornersEuclideanHalfSpace n).symm v ∈
+        Subtype.val ⁻¹' (d u).amb.target
+      rw [← (d u).target_eq]
+      exact hv_target
+    have hamb_target : (d u).amb.symm v ∈ (d u).amb.source := by
+      exact (d u).amb.map_target hv_ambtarget
+    simp only [Function.comp_apply, (d u).chart.extend_coe_symm,
+      (d u).amb.extend_coe]
+    rw [(d u).symm_eq _ hv_target]
+    have heq : ((modelWithCornersEuclideanHalfSpace n).symm v).val = v :=
+      (modelWithCornersEuclideanHalfSpace n).right_inv hv'.2
+    rw [heq, (d u).amb.right_inv hv_ambtarget]
+    rfl
+  · simp only [Function.comp_apply, (d u).chart.extend_left_inv hu_chart,
+      (d u).amb.extend_coe]
+    simpa using ((d u).chart_eq u hu_chart).symm
 
 /-- LEAF C4 (immersion).  For the restricted atlas, the manifold derivative of
 `Subtype.val` is injective at every point: in charts it is the derivative of an
@@ -376,7 +854,59 @@ theorem apm_t01J04_leaf_injective_mfderiv
     letI := apm_t01J04_bp_charted n X S d hd
     ∀ z, Function.Injective (mfderiv (modelWithCornersEuclideanHalfSpace n)
       𝓘(ℝ, apm_t01J04_Euclidean n) (Subtype.val : {x // x ∈ S} → X) z) := by
-  sorry
+  letI := apm_t01J04_bp_charted n X S d hd
+  intro z
+  let e := d z
+  have hz : z ∈ e.chart.source := hd z
+  have hmd := hsm.mdifferentiable (by simp) z
+  have hamb : MDifferentiableAt 𝓘(ℝ, apm_t01J04_Euclidean n)
+      𝓘(ℝ, apm_t01J04_Euclidean n) e.amb z.val :=
+    (contMDiffAt_of_mem_maximalAtlas e.amb_mem
+      (by simpa [e, e.source_eq] using hz)).mdifferentiableAt (by simp)
+  have hc := mfderiv_comp z hamb hmd
+  have he : (e.amb ∘ (Subtype.val : {x // x ∈ S} → X)) =ᶠ[𝓝 z]
+      extChartAt (modelWithCornersEuclideanHalfSpace n) z := by
+    filter_upwards [e.chart.open_source.mem_nhds hz] with u hu
+    simp only [Function.comp_apply, extChartAt]
+    simpa [e] using (e.chart_eq u hu).symm
+  have hq : MDifferentiableAt (modelWithCornersEuclideanHalfSpace n)
+      𝓘(ℝ, apm_t01J04_Euclidean n)
+      (extChartAt (modelWithCornersEuclideanHalfSpace n) z) z :=
+    (hamb.comp z hmd).congr_of_eventuallyEq he.symm
+  have hleft : mfderiv (modelWithCornersEuclideanHalfSpace n)
+      𝓘(ℝ, apm_t01J04_Euclidean n)
+      (extChartAt (modelWithCornersEuclideanHalfSpace n) z) z =
+      ContinuousLinearMap.id ℝ (apm_t01J04_Euclidean n) := by
+    rw [mfderiv, if_pos hq]
+    have heq : writtenInExtChartAt (modelWithCornersEuclideanHalfSpace n)
+        𝓘(ℝ, apm_t01J04_Euclidean n) z
+        (extChartAt (modelWithCornersEuclideanHalfSpace n) z) =ᶠ[
+          𝓝[range (modelWithCornersEuclideanHalfSpace n)]
+            (extChartAt (modelWithCornersEuclideanHalfSpace n) z z)] id :=
+      Filter.eventuallyEq_of_mem (extChartAt_target_mem_nhdsWithin z)
+        (fun _ hy => writtenInExtChartAt_extChartAt hy)
+    rw [heq.fderivWithin_eq (by simp)]
+    exact fderivWithin_id
+      ((modelWithCornersEuclideanHalfSpace n).uniqueDiffOn.uniqueDiffWithinAt
+        (mem_range_self _))
+  rw [he.mfderiv_eq, hleft] at hc
+  intro a b hab
+  have ha := congrArg (fun L : apm_t01J04_Euclidean n →L[ℝ]
+      apm_t01J04_Euclidean n => L a) hc
+  have hb := congrArg (fun L : apm_t01J04_Euclidean n →L[ℝ]
+      apm_t01J04_Euclidean n => L b) hc
+  change a = (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n)
+    𝓘(ℝ, apm_t01J04_Euclidean n) e.amb z.val)
+      ((mfderiv (modelWithCornersEuclideanHalfSpace n)
+        𝓘(ℝ, apm_t01J04_Euclidean n)
+        (Subtype.val : {x // x ∈ S} → X) z) a) at ha
+  change b = (mfderiv 𝓘(ℝ, apm_t01J04_Euclidean n)
+    𝓘(ℝ, apm_t01J04_Euclidean n) e.amb z.val)
+      ((mfderiv (modelWithCornersEuclideanHalfSpace n)
+        𝓘(ℝ, apm_t01J04_Euclidean n)
+        (Subtype.val : {x // x ∈ S} → X) z) b) at hb
+  rw [hab] at ha
+  exact ha.trans hb.symm
 
 /-- A set covered by ambient half-space slice charts is an embedded smooth
 manifold with boundary, in the sense of the registered predicate. -/
