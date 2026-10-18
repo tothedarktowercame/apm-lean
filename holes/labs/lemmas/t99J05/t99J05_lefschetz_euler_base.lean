@@ -366,8 +366,52 @@ theorem t99J05_lefschetz_euler_step (n : ℕ)
 
 /-- `CP 0` is a point. -/
 -- BEGIN SEAT AREA
+private lemma t99J05_lefschetz_euler_base_aux_subsingleton :
+    Subsingleton (CP 0) := by
+  constructor
+  intro x y
+  let i : Fin 1 := 0
+  have hrep (p : CP 0) : Projectivization.rep p i ≠ 0 := by
+    intro hi
+    apply Projectivization.rep_nonzero p
+    funext j
+    have hj : j = i := Fin.ext (by omega)
+    simpa [hj] using hi
+  rw [← chartInverse_coordinates i x (hrep x)]
+  rw [← chartInverse_coordinates i y (hrep y)]
+  apply congrArg (chartInverse i)
+  funext j
+  exact (j.2 (Fin.ext (by omega))).elim
+
 theorem t99J05_lefschetz_euler_base : T99J05CPHomologyProfile 0 (CP 0) := by
-  sorry
+  let p : CP 0 := chartInverse (0 : Fin 1)
+    (0 : AffineCoordinates (0 : Fin 1))
+  letI : Nonempty (CP 0) := ⟨p⟩
+  letI : Subsingleton (CP 0) :=
+    t99J05_lefschetz_euler_base_aux_subsingleton
+  constructor
+  · intro k
+    by_cases hk : k = 0
+    · subst k
+      exact (ConstructionTargets.CoefficientH0.h0Iso ℚ p).toLinearEquiv.symm.finiteDimensional
+    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
+          ℚ (CP 0) k hk
+      letI : Subsingleton (Homology (CP 0) k) :=
+        ModuleCat.isZero_iff_subsingleton.mp hz
+      exact FiniteDimensional.of_injective
+        (0 : Homology (CP 0) k →ₗ[ℚ] ℚ)
+        (Function.injective_of_subsingleton _)
+  · intro k
+    by_cases hk : k = 0
+    · subst k
+      simpa [Even] using LinearEquiv.finrank_eq
+        (ConstructionTargets.CoefficientH0.h0Iso ℚ p).toLinearEquiv
+    · have hz := ConstructionTargets.CoefficientContractiblePair.higher_zero
+          ℚ (CP 0) k hk
+      letI : Subsingleton (Homology (CP 0) k) :=
+        ModuleCat.isZero_iff_subsingleton.mp hz
+      rw [Module.finrank_zero_of_subsingleton]
+      simp [hk]
 -- END SEAT AREA
 
 /-- Homotopy invariance turns the homology profile into the required trace sums. -/
