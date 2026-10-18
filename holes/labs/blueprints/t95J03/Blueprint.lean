@@ -2639,11 +2639,159 @@ saturation of an open `O` is `O ∪ τ⁻¹ O`, `τ` being a homeomorphism, its 
 inverse), so `W` is evenly covered by `W ⊔ τ W`.  The fibre over `[x]` is
 `{x, τ x}`, two distinct points; `EqvGen` of `y = τ x` relates exactly
 `y = x ∨ y = τ x` because `τ` is an involution.  About 80–160 lines. -/
+lemma t95J03_klein_doubleCover_aux_involution_cover_aux_eqv {X : Type*}
+    (τ : X → X) (hinv : ∀ x, τ (τ x) = x) {x y : X} :
+    Relation.EqvGen (fun x y : X => y = τ x) x y ↔ y = x ∨ y = τ x := by
+  constructor
+  · intro h
+    induction h with
+    | rel x y h => exact Or.inr h
+    | refl x => exact Or.inl rfl
+    | symm x y h ih =>
+        rcases ih with rfl | h
+        · exact Or.inl rfl
+        · exact Or.inr (by rw [h, hinv])
+    | trans x y z hxy hyz ihxy ihyz =>
+        rcases ihxy with rfl | hxy <;> rcases ihyz with rfl | hyz
+        · exact Or.inl rfl
+        · exact Or.inr hyz
+        · exact Or.inr hxy
+        · exact Or.inl (by rw [hyz, hxy, hinv])
+  · rintro (rfl | rfl)
+    · exact Relation.EqvGen.refl _
+    · exact Relation.EqvGen.rel _ _ rfl
+
 lemma t95J03_klein_doubleCover_aux_involution_cover {X : Type*} [TopologicalSpace X]
     [T2Space X] (τ : X → X) (hτ : Continuous τ) (hinv : ∀ x, τ (τ x) = x)
     (hfree : ∀ x, τ x ≠ x) :
     IsKSheetedCover (Quotient.mk (Relation.EqvGen.setoid fun x y : X => y = τ x)) 2 := by
-  sorry
+  let v : VAdd (ZMod 2) X := ⟨fun g x => if g = 0 then x else τ x⟩
+  letI : VAdd (ZMod 2) X := v
+  letI : AddAction (ZMod 2) X :=
+    { toVAdd := v
+      zero_vadd := fun x => by change (if (0 : ZMod 2) = 0 then x else τ x) = x; simp
+      add_vadd := fun g h x => by
+        by_cases hg : g = 0
+        · subst g
+          rw [zero_add]
+          show v.vadd h x = v.vadd 0 (v.vadd h x)
+          rfl
+        by_cases hh : h = 0
+        · subst h
+          rw [add_zero]
+          show v.vadd g x = v.vadd g (v.vadd 0 x)
+          rfl
+        have hg1 : g = 1 := by
+          fin_cases g
+          · exact (hg rfl).elim
+          · rfl
+        have hh1 : h = 1 := by
+          fin_cases h
+          · exact (hh rfl).elim
+          · rfl
+        subst g; subst h
+        change (if (1 + 1 : ZMod 2) = 0 then x else τ x) = τ (τ x)
+        rw [if_pos (by decide), hinv] }
+  letI : ContinuousConstVAdd (ZMod 2) X :=
+    ⟨fun g => by
+      fin_cases g
+      · change Continuous (fun x => if (0 : ZMod 2) = 0 then x else τ x)
+        simpa using (continuous_id : Continuous (id : X → X))
+      · change Continuous (fun x => if (1 : ZMod 2) = 0 then x else τ x); simpa using hτ⟩
+  let q : X → Quotient (Relation.EqvGen.setoid fun x y : X => y = τ x) := Quotient.mk _
+  have hqeq : ∀ {x y : X}, q x = q y ↔ x ∈ AddAction.orbit (ZMod 2) y := by
+    intro x y
+    rw [show q x = q y ↔ Relation.EqvGen (fun x y : X => y = τ x) x y from Quotient.eq]
+    rw [t95J03_klein_doubleCover_aux_involution_cover_aux_eqv τ hinv]
+    constructor
+    · rintro (rfl | h)
+      · exact ⟨0, by simp⟩
+      · refine ⟨1, ?_⟩
+        change (if (1 : ZMod 2) = 0 then y else τ y) = x
+        norm_num
+        rw [h, hinv]
+    · rintro ⟨g, hg⟩
+      fin_cases g
+      · left
+        change (if (0 : ZMod 2) = 0 then y else τ y) = x at hg
+        simpa using hg
+      · right
+        change (if (1 : ZMod 2) = 0 then y else τ y) = x at hg
+        norm_num at hg
+        rw [← hg, hinv]
+  have hqc : IsAddQuotientCoveringMap q (ZMod 2) := by
+    constructor
+    · exact isQuotientMap_quotient_mk'
+    · exact inferInstance
+    · exact hqeq
+    · intro x
+      obtain ⟨U, V, hU, hV, hxU, htxV, hUV⟩ := t2_separation (hfree x).symm
+      refine ⟨U ∩ τ ⁻¹' V, Filter.inter_mem (hU.mem_nhds hxU)
+        (hτ.continuousAt.preimage_mem_nhds (hV.mem_nhds htxV)), fun g hg => ?_⟩
+      fin_cases g
+      · rfl
+      · exfalso
+        rcases hg with ⟨z, ⟨w, ⟨hwU, hwV⟩, hw⟩, hzU, hzV⟩
+        have hw' : τ w = z := by
+          change (if (1 : ZMod 2) = 0 then w else τ w) = z at hw
+          simpa using hw
+        have : z ∈ U ∩ V := ⟨hzU, by simpa [hw'] using hwV⟩
+        exact Set.disjoint_left.1 hUV this.1 this.2
+  refine ⟨hqc.isCoveringMap, ?_, ?_⟩
+  · intro b
+    obtain ⟨x, rfl⟩ := Quotient.exists_rep b
+    classical
+    have htqx : q (τ x) = q x := by
+      apply Quotient.sound
+      show Relation.EqvGen (fun x y : X => y = τ x) (τ x) x
+      apply Relation.EqvGen.symm
+      exact @Relation.EqvGen.rel X (fun x y : X => y = τ x) x (τ x) rfl
+    let e : Fin 2 ≃ {y : X // q y = q x} :=
+      { toFun := fun i => if i = 0 then ⟨x, rfl⟩ else ⟨τ x, htqx⟩
+        invFun := fun y => if y.1 = x then 0 else 1
+        left_inv := by
+          intro i
+          fin_cases i <;> simp [hfree]
+        right_inv := by
+          intro y
+          apply Subtype.ext
+          have hyprop := y.property
+          rw [show q y.1 = q x ↔ Relation.EqvGen (fun x y : X => y = τ x) y.1 x from Quotient.eq,
+            t95J03_klein_doubleCover_aux_involution_cover_aux_eqv τ hinv] at hyprop
+          rcases hyprop with h | h
+          · simp [h]
+          · have hy : y.1 ≠ x := by
+              intro he
+              exact hfree x (h.trans (congrArg τ he)).symm
+            have htx : τ x = y.1 := (congrArg τ h).trans (hinv y.1)
+            simp [hy, htx] }
+    exact Finite.of_equiv _ e
+  · intro b
+    obtain ⟨x, rfl⟩ := Quotient.exists_rep b
+    classical
+    have htqx : q (τ x) = q x := by
+      apply Quotient.sound
+      show Relation.EqvGen (fun x y : X => y = τ x) (τ x) x
+      apply Relation.EqvGen.symm
+      exact @Relation.EqvGen.rel X (fun x y : X => y = τ x) x (τ x) rfl
+    let e : Fin 2 ≃ {y : X // q y = q x} :=
+      { toFun := fun i => if i = 0 then ⟨x, rfl⟩ else ⟨τ x, htqx⟩
+        invFun := fun y => if y.1 = x then 0 else 1
+        left_inv := by intro i; fin_cases i <;> simp [hfree]
+        right_inv := by
+          intro y
+          apply Subtype.ext
+          have hyprop := y.property
+          rw [show q y.1 = q x ↔ Relation.EqvGen (fun x y : X => y = τ x) y.1 x from Quotient.eq,
+            t95J03_klein_doubleCover_aux_involution_cover_aux_eqv τ hinv] at hyprop
+          rcases hyprop with h | h
+          · simp [h]
+          · have hy : y.1 ≠ x := by
+              intro he
+              exact hfree x (h.trans (congrArg τ he)).symm
+            have htx : τ x = y.1 := (congrArg τ h).trans (hinv y.1)
+            simp [hy, htx] }
+    rw [← Nat.card_congr e, Nat.card_fin]
 
 /-- **Leaf S6b (split 2026-10-18).**  The torus maps onto the Klein plane
 quotient with fibres exactly the `τ`-orbits.
