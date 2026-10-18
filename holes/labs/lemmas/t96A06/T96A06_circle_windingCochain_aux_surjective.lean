@@ -869,7 +869,20 @@ theorem T96A06_circle_windingCochain_aux_generator
 `(cos θ, sin θ)` for `θ = Complex.arg (a + b i)`; take `t = θ / 2π`. -/
 -- BEGIN SEAT AREA
 theorem T96A06_circle_windingCochain_aux_surjective : Function.Surjective angleMap := by
-  sorry
+  intro x
+  let z : Circle := T96A06_angleMap_isCoveringMap_aux_homeomorph.symm x
+  refine ⟨Complex.arg z / (2 * Real.pi), ?_⟩
+  apply Subtype.ext
+  ext i
+  fin_cases i
+  · change Real.cos (2 * Real.pi * (Complex.arg z / (2 * Real.pi))) = x.1 0
+    rw [mul_div_cancel₀ _ (by positivity : 2 * Real.pi ≠ 0)]
+    have hz := congrArg (fun w : Circle ↦ (w : ℂ).re) (Circle.exp_arg z)
+    simpa [z, T96A06_angleMap_isCoveringMap_aux_homeomorph] using hz
+  · change Real.sin (2 * Real.pi * (Complex.arg z / (2 * Real.pi))) = x.1 1
+    rw [mul_div_cancel₀ _ (by positivity : 2 * Real.pi ≠ 0)]
+    have hz := congrArg (fun w : Circle ↦ (w : ℂ).im) (Circle.exp_arg z)
+    simpa [z, T96A06_angleMap_isCoveringMap_aux_homeomorph] using hz
 -- END SEAT AREA
 
 /-- **Leaf C1b-disp.** The displacement does not depend on the lift: two lifts
