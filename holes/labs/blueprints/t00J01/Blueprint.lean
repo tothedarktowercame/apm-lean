@@ -594,10 +594,91 @@ lemma apm_t00j01_circleCover_open_cover :
       exact h
 
 /-- Each member of the punctured-circle cover retracts to the Klein factor. -/
+def apm_t00j01_circleCover_piece_equivs_aux_punctured_hequiv :
+    ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle ≃ₕ Unit where
+  toFun := ContinuousMap.const _ ()
+  invFun := ContinuousMap.const _
+    ConstructionTargets.PointedPuncturedCircleContraction.puncturedCircleBase
+  left_inv :=
+    ⟨ConstructionTargets.PointedPuncturedCircleContraction.puncturedCirclePointedContraction.homotopy.symm⟩
+  right_inv := by
+    convert ContinuousMap.Homotopic.refl (ContinuousMap.id Unit)
+
+def apm_t00j01_circleCover_piece_equivs_aux_left_homeomorph :
+    (apm_t00j01_circleCoverLeft : Type) ≃ₜ
+      apm_t00j01_Klein ×
+        ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle where
+  toFun p := ⟨p.1.1, ⟨p.1.2, by
+    intro h
+    apply p.2
+    apply Subtype.ext
+    simpa [Circle.coe_exp] using h⟩⟩
+  invFun p := ⟨(p.1, p.2.1), by
+    intro h
+    apply p.2.2
+    have h' := congrArg (fun z : Circle => (z : ℂ)) h
+    simpa [Circle.coe_exp] using h'⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def apm_t00j01_circleCover_piece_equivs_aux_negCircle (z : Circle) : Circle :=
+  ⟨-(z : ℂ), by
+    simpa [Submonoid.unitSphere] using z.2⟩
+
+@[simp] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_coe (z : Circle) :
+    (apm_t00j01_circleCover_piece_equivs_aux_negCircle z : ℂ) = -(z : ℂ) := rfl
+
+@[simp] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_negCircle
+    (z : Circle) :
+    apm_t00j01_circleCover_piece_equivs_aux_negCircle
+      (apm_t00j01_circleCover_piece_equivs_aux_negCircle z) = z := by
+  ext
+  simp
+
+@[continuity, fun_prop] lemma apm_t00j01_circleCover_piece_equivs_aux_negCircle_continuous :
+    Continuous apm_t00j01_circleCover_piece_equivs_aux_negCircle := by
+  exact Continuous.subtype_mk continuous_subtype_val.neg _
+
+def apm_t00j01_circleCover_piece_equivs_aux_right_homeomorph :
+    (apm_t00j01_circleCoverRight : Type) ≃ₜ
+      apm_t00j01_Klein ×
+        ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle where
+  toFun p := ⟨p.1.1, ⟨apm_t00j01_circleCover_piece_equivs_aux_negCircle p.1.2, by
+    intro h
+    apply p.2
+    apply Subtype.ext
+    have h' := congrArg Neg.neg h
+    simpa using h'⟩⟩
+  invFun p := ⟨(p.1, apm_t00j01_circleCover_piece_equivs_aux_negCircle p.2.1), by
+    intro h
+    apply p.2.2
+    have h' := congrArg Neg.neg (congrArg (fun z : Circle => (z : ℂ)) h)
+    simpa using h'⟩
+  left_inv p := by
+    apply Subtype.ext
+    simp
+  right_inv p := by
+    ext <;> simp
+  continuous_toFun := by fun_prop
+  continuous_invFun := by fun_prop
+
+def apm_t00j01_circleCover_piece_equivs_aux_product :
+    (apm_t00j01_Klein ×
+      ConstructionTargets.PointedPuncturedCircleContraction.PuncturedCircle) ≃ₕ
+        apm_t00j01_Klein :=
+  ((ContinuousMap.HomotopyEquiv.refl apm_t00j01_Klein).prodCongr
+      apm_t00j01_circleCover_piece_equivs_aux_punctured_hequiv).trans
+    (Homeomorph.prodUnique apm_t00j01_Klein Unit).toHomotopyEquiv
+
 lemma apm_t00j01_circleCover_piece_equivs :
     Nonempty ((apm_t00j01_circleCoverLeft : Type) ≃ₕ apm_t00j01_Klein) ∧
       Nonempty ((apm_t00j01_circleCoverRight : Type) ≃ₕ apm_t00j01_Klein) := by
-  sorry
+  exact ⟨⟨apm_t00j01_circleCover_piece_equivs_aux_left_homeomorph.toHomotopyEquiv.trans
+      apm_t00j01_circleCover_piece_equivs_aux_product⟩,
+    ⟨apm_t00j01_circleCover_piece_equivs_aux_right_homeomorph.toHomotopyEquiv.trans
+      apm_t00j01_circleCover_piece_equivs_aux_product⟩⟩
 
 /-- Their intersection is the product with the two components of the twice
 punctured circle, hence is homotopy equivalent to two copies of the Klein
