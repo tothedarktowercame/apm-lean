@@ -7,14 +7,21 @@ import ConstructionTargets.TestFunctionTranslation
 
 ## Statement repairs
 
-Part (d) assumes only `f ∈ C²(ℝ²)`, but the convolution construction in
-parts (b)--(c) requires one factor to have compact support. Following the
-informal solution, `f` is minimally assumed compactly supported. This is also
-the hypothesis under which the convolution is defined here.  The printed
-regularity conclusion is false for an arbitrary fundamental distribution of
-this non-hypoelliptic operator.  Following the informal solution's explicit
-function-level convolution argument, `w₀` is additionally required to be the
-regular distribution represented by a locally integrable function.
+Part (d) is stated for every `f ∈ C²(ℝ²)`, as printed. Until 2026-10-18 this
+file assumed `f` compactly supported and `w₀` regular, and closed under those
+hypotheses; that proof is kept as an out-of-competition finding in
+`../out-of-competition/Main.lean` (`apm_m98j02_compactF`). See
+`../problem.md`, "Interpretation note", for the two readings.
+
+The printed regularity claim `f * w₀ ∈ C²` is false for an arbitrary
+fundamental solution `w₀` of this non-hypoelliptic operator (two fundamental
+solutions differ by an element of `ker T`, which may contain `∂ₓ³`-type
+terms), and for non-compactly supported `f` the product `f * w₀` need not be
+defined. So part (d) is encoded as the problem's actual question: find a
+distributional solution of `T w = f` that is a `C²` function, and show it is
+not unique. The given `w₀` is not referred to; the solution in
+`../informal-solution.md` uses the forward and backward fundamental solutions
+`E₊`, `E₋`, which are supported in opposite cones.
 
 The garbled operator typography is read, as in the supplied solution, as
 `T = 2 ∂²/∂x² - ∂/∂y + 3 ∂²/(∂x∂y)`.
@@ -2022,6 +2029,19 @@ theorem apm_m98J02_constantDistribution_homogeneous :
     apm_m98J02_solvesT apm_m98J02_constantDistribution (fun _ ↦ 0) := by
   exact apm_m98J02_constantDistribution_homogeneous_aux_of_integral_partial_zero apm_m98J02_constantDistribution_homogeneous_aux_integral_partial
 
+/-- Part (d) for every `f ∈ C²(ℝ²)`: a `C²` regular distributional solution
+of `T w = f`, and a second, different distributional solution. Open: the
+informal route is `w = E₊ * (χ f) + E₋ * ((1 - χ) f)`; see
+`../proof-outline.md`. -/
+theorem apm_m98J02_partD (f : apm_m98J02_E → ℝ) (hf : ContDiff ℝ 2 f) :
+    ∃ (w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
+      apm_m98J02_representsFunction w g ∧
+      ContDiff ℝ 2 g ∧
+      apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) ∧
+      w' ≠ w ∧
+      apm_m98J02_solvesT w' (fun φ ↦ ∫ x, f x * φ x) := by
+  sorry
+
 theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
@@ -2030,53 +2050,20 @@ theorem apm_m98j02 :
     (∀ u v : apm_m98J02_Dist,
       apm_m98J02_hasCompactSupport u →
         ∃ w : apm_m98J02_Dist, apm_m98J02_isConvolution u v w) ∧
-    ∀ (f k : apm_m98J02_E → ℝ) (w₀ : apm_m98J02_Dist),
-      ContDiff ℝ 2 f → IsCompact (tsupport f) →
-      LocallyIntegrable k → apm_m98J02_representsFunction w₀ k →
-      apm_m98J02_solvesT w₀ (fun φ ↦ φ 0) →
-      ∃ (u w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
-        apm_m98J02_representsFunction u f ∧
-        apm_m98J02_hasCompactSupport u ∧
-        apm_m98J02_isConvolution u w₀ w ∧
+    ∀ f : apm_m98J02_E → ℝ, ContDiff ℝ 2 f →
+      ∃ (w w' : apm_m98J02_Dist) (g : apm_m98J02_E → ℝ),
         apm_m98J02_representsFunction w g ∧
         ContDiff ℝ 2 g ∧
         apm_m98J02_solvesT w (fun φ ↦ ∫ x, f x * φ x) ∧
         w' ≠ w ∧
         apm_m98J02_solvesT w' (fun φ ↦ ∫ x, f x * φ x) := by
-  refine ⟨?_, ?_⟩
+  refine ⟨?_, ?_, ?_⟩
   · intro u v hu hv
     exact apm_m98J02_hasCompactSupport_add u v hu hv
-  · constructor
-    · intro u v hu
-      obtain ⟨K, hK, huK⟩ := hu
-      exact apm_m98J02_bridge_2 u v K hK huK
-    · intro f k w₀ hf hfc hk hw₀rep hw₀
-      let u := apm_m98J02_regularDistribution f hf.continuous hfc
-      have huRep : apm_m98J02_representsFunction u f :=
-        apm_m98J02_regularDistribution_represents f hf.continuous hfc
-      have huComp : apm_m98J02_hasCompactSupport u :=
-        apm_m98J02_regularDistribution_hasCompactSupport f hf.continuous hfc
-      obtain ⟨K, hK, huK⟩ := huComp
-      obtain ⟨w, hconv⟩ := apm_m98J02_bridge_2 u w₀ K hK huK
-      obtain ⟨g, hwRep, hg⟩ :=
-        apm_m98J02_regular_convolution_is_C2 f k w₀ w hf hfc hk hw₀rep hconv
-      have hwSolve :=
-        apm_m98J02_convolution_solves_fundamental f w₀ w hf hfc hw₀ hconv
-      let w' := w + apm_m98J02_constantDistribution
-      have hw'ne : w' ≠ w := by
-        intro heq
-        have hc : apm_m98J02_constantDistribution = 0 := by
-          apply add_left_cancel (a := w)
-          simpa [w'] using heq
-        exact apm_m98J02_constantDistribution_ne_zero hc
-      have hw'Solve : apm_m98J02_solvesT w'
-          (fun φ ↦ ∫ x, f x * φ x) :=
-        apm_m98J02_solvesT_add_homogeneous w
-          apm_m98J02_constantDistribution _ hwSolve
-          apm_m98J02_constantDistribution_homogeneous
-      exact ⟨u, w, w', g, huRep,
-        apm_m98J02_regularDistribution_hasCompactSupport f hf.continuous hfc,
-        hconv, hwRep, hg,
-        hwSolve, hw'ne, hw'Solve⟩
+  · intro u v hu
+    obtain ⟨K, hK, huK⟩ := hu
+    exact apm_m98J02_bridge_2 u v K hK huK
+  · intro f hf
+    exact apm_m98J02_partD f hf
 
 #print axioms apm_m98j02

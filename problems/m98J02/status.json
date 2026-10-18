@@ -15,9 +15,9 @@
     "files": [
       "lean/Main.lean"
     ],
-    "sorry_count_main": 0,
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,17 +27,17 @@
     "has_proof_plan": false,
     "has_changelog": false,
     "has_workspace_metadata": false,
-    "has_receipt": false
+    "has_receipt": false,
+    "has_out_of_competition": true
   },
   "classification": "partial",
-  "closer_hop": 3,
-  "boundary": "Compact-support closure under addition, zero, negation, subtraction, and scalar multiplication is proved, as is preservation of solvesT under addition of a homogeneous solution. Translated test functions y ↦ φ (x+y) are now constructed with smoothness and compact support. Remaining work requires a regular Distribution constructor, a cutoff test function, continuity of the iterated convolution pairing, differentiation through convolution, and a nonzero homogeneous witness.",
+  "boundary": "Parts (a)-(c) are proved. Part (d) is open for every f ∈ C²(ℝ²) (apm_m98J02_partD, one sorry). The narrow reading (f compactly supported, w₀ regular) is proved in out-of-competition/Main.lean and does not count. Missing: the forward/backward fundamental solutions E± (Bessel J₀ as a power series), T E± = δ, convolution with a cone-supported kernel for non-compactly supported f, and C² regularity of the result.",
   "imported_at": "2026-07-13T17:26:55.971140Z",
   "sorry_audit": {
-    "method": "lake env lean elaboration + comment-aware token count",
-    "at": "2026-08-18",
+    "method": "lake env lean elaboration + #print axioms",
+    "at": "2026-10-18",
     "elaborated_exit": 0,
-    "sorry_declarations": 3,
+    "sorry_declarations": 1,
     "previous_classification": "partial"
   },
   "obstructions": [
@@ -49,7 +49,37 @@
       "frame": "phase-2d-adversarial-migration",
       "at_commit": "a00ea1f",
       "date": "2026-08-19",
+      "resolved": {
+        "date": "2026-10-18",
+        "note": "listed constructions were all proved; superseded by the reopened printed-reading statement"
+      }
+    },
+    {
+      "areas": [
+        "distribution theory",
+        "hyperbolic PDE",
+        "special functions"
+      ],
+      "areas_are": "necessary",
+      "missing": "Fundamental solutions E± of T supported in opposite cones (needs J₀; absent from Mathlib), T E± = δ, convolution of a cone-supported L¹_loc kernel with a non-compactly supported C² function, C² regularity.",
+      "recorded_by": "claude-14",
+      "frame": "reopen-printed-reading",
+      "at_commit": null,
+      "date": "2026-10-18",
       "resolved": null
     }
-  ]
+  ],
+  "out_of_competition": {
+    "file": "out-of-competition/Main.lean",
+    "theorem": "apm_m98j02_compactF",
+    "reading": "f compactly supported, w₀ regular (L¹_loc); see problem.md Interpretation note",
+    "sorry_count": 0,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "saved_from_commit": "7de364a86",
+    "date": "2026-10-18"
+  }
 }

@@ -226,29 +226,6 @@
    "rev": "a68f67e45",
    "approved_at": "2026-10-13T09:42:56Z"
   },
-  "m98J02": {
-   "decls": [
-    "apm_m98j02"
-   ],
-   "sha256": "980ae7d661c3082a68350f237e0a3f6811be7d6dca24c0b7d82932e72cd7cf65",
-   "defs": [
-    "apm_m98J02_Dist",
-    "apm_m98J02_E",
-    "apm_m98J02_Test",
-    "apm_m98J02_formalAdjoint",
-    "apm_m98J02_hasCompactSupport",
-    "apm_m98J02_isConvolution",
-    "apm_m98J02_partial",
-    "apm_m98J02_representsFunction",
-    "apm_m98J02_solvesT"
-   ],
-   "grade": "narrower",
-   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, re-grade)",
-   "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
-   "prelim_defect": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
-   "rev": "f4fdb7d3b",
-   "approved_at": "2026-10-13T05:32:51Z"
-  },
   "m98J05": {
    "decls": [
     "apm_m98j05"
@@ -3556,6 +3533,35 @@
    "reason": "registered part (c) was backwards (false); corrected cee82c175; re-admit after (e) strengthened and re-graded",
    "evidence": "holes/labs/statement-registry/grading-batch-2.md",
    "revoked_at": "2026-10-13T06:09:29Z"
+  },
+  {
+   "id": "m98J02",
+   "entry": {
+    "decls": [
+     "apm_m98j02"
+    ],
+    "sha256": "980ae7d661c3082a68350f237e0a3f6811be7d6dca24c0b7d82932e72cd7cf65",
+    "defs": [
+     "apm_m98J02_Dist",
+     "apm_m98J02_E",
+     "apm_m98J02_Test",
+     "apm_m98J02_formalAdjoint",
+     "apm_m98J02_hasCompactSupport",
+     "apm_m98J02_isConvolution",
+     "apm_m98J02_partial",
+     "apm_m98J02_representsFunction",
+     "apm_m98J02_solvesT"
+    ],
+    "grade": "narrower",
+    "grader": "claude-14 outside grader (read-only Claude subagent, 2026-10-13, re-grade)",
+    "evidence": "holes/labs/statement-registry/lemma-round-1-grades.md",
+    "prelim_defect": "holes/labs/statement-registry/blueprint-batch-1-grades.md",
+    "rev": "f4fdb7d3b",
+    "approved_at": "2026-10-13T05:32:51Z"
+   },
+   "reason": "statement narrower than the printed problem: f assumed compactly supported; corrected informal solution proves part (d) for every f ∈ C²(ℝ²); reopened with the printed reading",
+   "evidence": "problems/m98J02/problem.md",
+   "revoked_at": "2026-10-18T21:17:07Z"
   }
  ]
 }

@@ -36,3 +36,28 @@ to $Tw=f$ and show that $w\in C^2(\Rtw)$. Is the solution unique?
 \end{alist}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
+
+## Interpretation note (2026-10-18)
+
+Part (d) can be read in two ways, and they differ in difficulty.
+
+1. **Narrow reading.** The hint `T w_0 = \delta_0` suggests the answer
+   `w = f * w_0`. Part (b) defines convolution only when one factor has
+   compact support, so on this reading `f` is implicitly compactly supported.
+   One must also take `w_0` to be a regular distribution given by a locally
+   integrable function: `T` is not hypoelliptic, so for some fundamental
+   solutions `f * w_0` involves third derivatives of `f` and is not `C^2`.
+   On this reading `w = f * w_0` is `C^2` because derivatives fall on `f`.
+2. **Printed reading.** `f` is an arbitrary `C^2(\mathbb R^2)` function, as
+   written. Then neither `f` nor `w_0` need have compact support, `f * w_0`
+   need not be defined, and the solution has to be built from the forward and
+   backward fundamental solutions `E_\pm`, which are supported in opposite cones:
+   `w = E_+ * (\chi f) + E_- * ((1-\chi) f)` (see `informal-solution.md`).
+
+Under both readings the solution is not unique: adding a constant gives a second
+solution.
+
+The competition statement (`lean/Main.lean`, `apm_m98j02`) uses the printed
+reading and is open. The narrow reading is proved, with no sorries, in
+`out-of-competition/Main.lean` (`apm_m98j02_compactF`). That proof is recorded
+as an out-of-competition finding and does not count as a closure of m98J02.
