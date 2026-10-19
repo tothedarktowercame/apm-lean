@@ -185,7 +185,91 @@ lemma apm_t01a03_wedge_homeomorph_finiteWedge_two :
       h apm_t01a03_wedgeBase =
         ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.wedgeCircle
           (0 : Fin 2) 1 := by
-  sorry
+  let f : Sum Circle Circle → Fin 2 × Circle
+    | .inl z => (0, z)
+    | .inr z => (1, z)
+  let g : Fin 2 × Circle → Sum Circle Circle := fun p =>
+    if p.1 = (0 : Fin 2) then .inl p.2 else .inr p.2
+  have hfg : ∀ x, g (f x) = x := by
+    rintro (z | z)
+    · rfl
+    · simp [f, g]
+  have hgf : ∀ x, f (g x) = x := by
+    rintro ⟨i, z⟩
+    fin_cases i <;> simp [f, g]
+  have hf_rel {x y : Sum Circle Circle}
+      (h : Relation.EqvGen apm_t01a03_wedgeRel x y) :
+      Relation.EqvGen
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel
+          (Fin 2)) (f x) (f y) := by
+    induction h with
+    | rel x y h =>
+        cases h
+        exact Relation.EqvGen.rel _ _ (Or.inr ⟨rfl, rfl⟩)
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  have hg_rel {x y : Fin 2 × Circle}
+      (h : Relation.EqvGen
+        (ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedgeRel
+          (Fin 2)) x y) :
+      Relation.EqvGen apm_t01a03_wedgeRel (g x) (g y) := by
+    induction h with
+    | rel x y h =>
+        rcases h with rfl | ⟨hx, hy⟩
+        · exact Relation.EqvGen.refl _
+        · rcases x with ⟨i, x⟩
+          rcases y with ⟨j, y⟩
+          have hx' : x = (1 : Circle) := Subtype.ext hx
+          have hy' : y = (1 : Circle) := Subtype.ext hy
+          subst x
+          subst y
+          fin_cases i <;> fin_cases j
+          · exact Relation.EqvGen.refl _
+          · exact Relation.EqvGen.rel _ _ apm_t01a03_wedgeRel.base
+          · exact (Relation.EqvGen.rel _ _ apm_t01a03_wedgeRel.base).symm
+          · exact Relation.EqvGen.refl _
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ =>
+        exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  let F : apm_t01a03_Wedge →
+      ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 2) :=
+    Quotient.lift (fun x => Quotient.mk _ (f x))
+      (fun _ _ h => Quotient.sound (hf_rel h))
+  let G : ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 2) →
+      apm_t01a03_Wedge :=
+    Quotient.lift (fun x => Quotient.mk _ (g x))
+      (fun _ _ h => Quotient.sound (hg_rel h))
+  have hF_cont : Continuous F := by
+    apply Continuous.quotient_lift
+    apply continuous_coinduced_rng.comp
+    apply continuous_sum_dom.mpr
+    exact ⟨continuous_const.prodMk continuous_id,
+      continuous_const.prodMk continuous_id⟩
+  have hG_cont : Continuous G := by
+    apply Continuous.quotient_lift
+    apply continuous_coinduced_rng.comp
+    change Continuous g
+    apply Continuous.if
+    · intro x hx
+      have hc : IsClopen {p : Fin 2 × Circle | p.1 = 0} :=
+        (isClopen_discrete {0}).preimage continuous_fst
+      rw [hc.frontier_eq] at hx
+      simp at hx
+    · exact continuous_inl.comp continuous_snd
+    · exact continuous_inr.comp continuous_snd
+  let h : apm_t01a03_Wedge ≃ₜ
+      ConstructionTargets.PolygonSurfacePiOne.PointWedgeQuotient.FiniteWedge (Fin 2) :=
+    { toFun := F
+      invFun := G
+      left_inv := by rintro ⟨x⟩; exact congrArg (Quotient.mk _) (hfg x)
+      right_inv := by rintro ⟨x⟩; exact congrArg (Quotient.mk _) (hgf x)
+      continuous_toFun := hF_cont
+      continuous_invFun := hG_cont }
+  refine ⟨h, ?_⟩
+  rfl
 -- END SEAT AREA
 
 /-- The two canonical generators of the free group on two letters do not
