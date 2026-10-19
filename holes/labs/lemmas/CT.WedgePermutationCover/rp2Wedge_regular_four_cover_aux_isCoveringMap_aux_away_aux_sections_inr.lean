@@ -585,15 +585,370 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S
 
 /-- `U` is open: its preimage in `RP2 ⊕ RP2` is the hemisphere image in each lobe
 (the wedge point `rpBase` lies in it on both sides); use `_aux_hemi`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+    {A B : Type*} (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open : IsOpen (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U) := by
-  sorry
+  let H : Type := {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  let f : H → RP2 := fun y ↦ antipodalCover y.1
+  let V : Set RP2 := Set.range f
+  have hV : IsOpen V := by
+    exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_hemi.isOpen_range
+  have hb : rpBase ∈ V := by
+    refine ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+      simp [rp2Wedge_regular_four_cover_aux_e0]⟩, ?_⟩
+    rfl
+  rw [isOpen_coinduced, isOpen_sum_iff]
+  constructor
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inl b) (.inl (antipodalCover y))).mp he with he | he
+        · cases he
+          exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · cases he
+            exact hb
+          · contradiction
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inl b) (.inr (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · cases he
+            exact hb
+          · contradiction
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inl rfl⟩
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inr b) (.inl (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he
+            exact hb
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U_open_aux_eqv
+          rpBase rpBase (.inr b) (.inr (antipodalCover y))).mp he with he | he
+        · cases he
+          exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he
+            exact hb
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inr rfl⟩
 
 /-- Each sheet is continuous on `U`: check on the two lobes by `_aux_lobes`; on
 each lobe it is `b ↦ [(lift b, i)]`, and on the hemisphere image `lift` is the
 inverse of the open embedding `_aux_hemi`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+    {A B : Type*} (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_hemi :
+    Topology.IsOpenEmbedding
+      (fun y : {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0} ↦
+        antipodalCover y.1) := by
+  let H : Set Sphere2 := {y | 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  have hH : IsOpen H := by
+    exact isOpen_lt continuous_const
+      ((continuous_apply 0).comp
+        ((PiLp.continuous_ofLp 2 _).comp continuous_subtype_val))
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨continuous_quot_mk.comp continuous_subtype_val, ?_, ?_⟩
+  · intro x y hxy
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x.1 y.1).mp hxy with h | h
+    · exact Subtype.ext h.symm
+    · exfalso
+      have hx : 0 < (x.1 : EuclideanSpace ℝ (Fin 3)) 0 := x.2
+      have hy : 0 < (y.1 : EuclideanSpace ℝ (Fin 3)) 0 := y.2
+      rw [h] at hy
+      change 0 < -((x.1 : EuclideanSpace ℝ (Fin 3)) 0) at hy
+      linarith
+  · intro V hV
+    let W : Set Sphere2 := Subtype.val '' V
+    have hW : IsOpen W := hH.isOpenMap_subtype_val V hV
+    let n : Sphere2 → Sphere2 := fun x ↦ -x
+    have hn : Continuous n := continuous_neg
+    have himage : antipodalCover ⁻¹' (antipodalCover '' W) = W ∪ n ⁻¹' W := by
+      ext x
+      constructor
+      · rintro ⟨y, hyW, heq⟩
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y x).mp heq with h | h
+        · exact Or.inl (h ▸ hyW)
+        · right
+          change -x ∈ W
+          simpa [h] using hyW
+      · rintro (hx | hx)
+        · exact ⟨x, hx, rfl⟩
+        · refine ⟨-x, hx, ?_⟩
+          exact rp2Wedge_regular_four_cover_aux_neg x
+    have hopen_image : IsOpen (antipodalCover '' W) := by
+      apply (isQuotientMap_quot_mk : Topology.IsQuotientMap antipodalCover).isOpen_preimage.mp
+      change IsOpen (antipodalCover ⁻¹' (antipodalCover '' W))
+      rw [himage]
+      exact hW.union (hW.preimage hn)
+    simpa [W, Set.image_image] using hopen_image
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_open :
+    IsOpen rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U := by
+  let H : Type := {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  let f : H → RP2 := fun y ↦ antipodalCover y.1
+  let V : Set RP2 := Set.range f
+  have hV : IsOpen V :=
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_hemi.isOpen_range
+  have hb : rpBase ∈ V := by
+    refine ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+      simp [rp2Wedge_regular_four_cover_aux_e0]⟩, rfl⟩
+  rw [isOpen_coinduced, isOpen_sum_iff]
+  constructor
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inl b) (.inl (antipodalCover y))).mp he with he | he
+        · cases he; exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · cases he; exact hb
+          · contradiction
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inl b) (.inr (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · cases he; exact hb
+          · contradiction
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inl rfl⟩
+  · convert hV using 1
+    ext b
+    constructor
+    · intro hbU
+      obtain ⟨y, hy, h | h⟩ := hbU
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inr b) (.inl (antipodalCover y))).mp he with he | he
+        · contradiction
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he; exact hb
+      · have he := Quotient.exact h
+        rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+          rpBase rpBase (.inr b) (.inr (antipodalCover y))).mp he with he | he
+        · cases he; exact ⟨⟨y, hy⟩, rfl⟩
+        · rcases he.1 with he | he
+          · contradiction
+          · cases he; exact hb
+    · rintro ⟨⟨y, hy⟩, rfl⟩
+      exact ⟨y, hy, Or.inr rfl⟩
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_lobes
+    {A B Y : Type*} [TopologicalSpace A] [TopologicalSpace B] [TopologicalSpace Y]
+    (a : A) (b : B) (U : Set (Wedge A B a b)) (hU : IsOpen U) (g : U → Y)
+    (hl : Continuous (fun z : {z : A // (Quotient.mk _ (.inl z) : Wedge A B a b) ∈ U} ↦
+      g ⟨_, z.2⟩))
+    (hr : Continuous (fun z : {z : B // (Quotient.mk _ (.inr z) : Wedge A B a b) ∈ U} ↦
+      g ⟨_, z.2⟩)) : Continuous g := by
+  let q : A ⊕ B → Wedge A B a b := fun z ↦ Quotient.mk _ z
+  have hq : Topology.IsQuotientMap q := isQuotientMap_quotient_mk'
+  apply (hq.restrictPreimage_isOpen hU).continuous_iff.mpr
+  let qU : {z : A ⊕ B // q z ∈ U} → U := U.restrictPreimage q
+  let eL : {z : A // q (.inl z) ∈ U} → {z : A ⊕ B // q z ∈ U} :=
+    (q ⁻¹' U).restrictPreimage Sum.inl
+  let eR : {z : B // q (.inr z) ∈ U} → {z : A ⊕ B // q z ∈ U} :=
+    (q ⁻¹' U).restrictPreimage Sum.inr
+  have heL : Topology.IsOpenEmbedding eL :=
+    Topology.IsOpenEmbedding.inl.restrictPreimage (q ⁻¹' U)
+  have heR : Topology.IsOpenEmbedding eR :=
+    Topology.IsOpenEmbedding.inr.restrictPreimage (q ⁻¹' U)
+  have hL : ContinuousOn (g ∘ qU) (Set.range eL) := by
+    rw [← Set.image_univ]
+    apply heL.isInducing.continuousOn_image_iff.mpr
+    simpa [q, qU, eL, Function.comp_def] using hl
+  have hR : ContinuousOn (g ∘ qU) (Set.range eR) := by
+    rw [← Set.image_univ]
+    apply heR.isInducing.continuousOn_image_iff.mpr
+    simpa [q, qU, eR, Function.comp_def] using hr
+  rw [← continuousOn_univ]
+  have hc := hL.union_of_isOpen hR heL.isOpen_range heR.isOpen_range
+  apply hc.mono
+  rintro ⟨z, hz⟩ -
+  cases z with
+  | inl x => exact Set.mem_union_left _ ⟨⟨x, hz⟩, rfl⟩
+  | inr x => exact Set.mem_union_right _ ⟨⟨x, hz⟩, rfl⟩
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous (σ τ : Equiv.Perm (Fin 4)) (i : Fin 4) :
     Continuous (fun u : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S σ τ i u.1) := by
-  sorry
+  let H : Type := {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  let f : H → RP2 := fun y ↦ antipodalCover y.1
+  let V : Set RP2 := Set.range f
+  have he : Topology.IsEmbedding f :=
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_hemi.isEmbedding
+  let e : H ≃ₜ V := he.toHomeomorph
+  have hmemL (z : {z : RP2 //
+      (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) : z.1 ∈ V := by
+    obtain ⟨y, hy, h | h⟩ := z.2
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inl z.1) (.inl (antipodalCover y))).mp hq with hq | hq
+      · exact ⟨⟨y, hy⟩, (Sum.inl.inj hq).symm⟩
+      · rcases hq.1 with hq | hq
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inl.inj hq).symm⟩
+        · contradiction
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inl z.1) (.inr (antipodalCover y))).mp hq with hq | hq
+      · contradiction
+      · rcases hq.1 with hq | hq
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inl.inj hq).symm⟩
+        · contradiction
+  have hmemR (z : {z : RP2 //
+      (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) : z.1 ∈ V := by
+    obtain ⟨y, hy, h | h⟩ := z.2
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inr z.1) (.inl (antipodalCover y))).mp hq with hq | hq
+      · contradiction
+      · rcases hq.1 with hq | hq
+        · contradiction
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inr.inj hq).symm⟩
+    · have hq := Quotient.exact h
+      rcases (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_eqv
+        rpBase rpBase (.inr z.1) (.inr (antipodalCover y))).mp hq with hq | hq
+      · exact ⟨⟨y, hy⟩, (Sum.inr.inj hq).symm⟩
+      · rcases hq.1 with hq | hq
+        · contradiction
+        · exact ⟨⟨rp2Wedge_regular_four_cover_aux_e0, by
+            simp [rp2Wedge_regular_four_cover_aux_e0]⟩, (Sum.inr.inj hq).symm⟩
+  have hLiftL (z : {z : RP2 //
+      (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) :
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1 =
+        (e.symm ⟨z.1, hmemL z⟩).1 := by
+    have hz : antipodalCover (e.symm ⟨z.1, hmemL z⟩).1 = z.1 := by
+      exact congrArg Subtype.val (e.apply_symm_apply ⟨z.1, hmemL z⟩)
+    calc
+      _ = rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift
+          (antipodalCover (e.symm ⟨z.1, hmemL z⟩).1) := congrArg _ hz.symm
+      _ = _ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos
+        _ (e.symm ⟨z.1, hmemL z⟩).2
+  have hLiftR (z : {z : RP2 //
+      (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+        rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U}) :
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1 =
+        (e.symm ⟨z.1, hmemR z⟩).1 := by
+    have hz : antipodalCover (e.symm ⟨z.1, hmemR z⟩).1 = z.1 := by
+      exact congrArg Subtype.val (e.apply_symm_apply ⟨z.1, hmemR z⟩)
+    calc
+      _ = rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift
+          (antipodalCover (e.symm ⟨z.1, hmemR z⟩).1) := congrArg _ hz.symm
+      _ = _ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift_pos
+        _ (e.symm ⟨z.1, hmemR z⟩).2
+  apply rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_lobes
+    rpBase rpBase _
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_continuous_aux_open
+  · have hy : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        (e.symm ⟨z.1, hmemL z⟩).1) :=
+      continuous_subtype_val.comp (e.symm.continuous.comp
+        (Continuous.subtype_mk continuous_subtype_val _))
+    have hc : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inl z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (Sum.inl (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1, i))) := by
+      apply continuous_coinduced_rng.comp
+      apply continuous_inl.comp
+      simpa only [hLiftL] using hy.prodMk continuous_const
+    simpa only [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S,
+      Quotient.lift_mk] using hc
+  · have hy : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        (e.symm ⟨z.1, hmemR z⟩).1) :=
+      continuous_subtype_val.comp (e.symm.continuous.comp
+        (Continuous.subtype_mk continuous_subtype_val _))
+    have hc : Continuous (fun z : {z : RP2 //
+        (Quotient.mk _ (.inr z) : Wedge RP2 RP2 rpBase rpBase) ∈
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_U} ↦
+        Quotient.mk (Relation.EqvGen.setoid (rp2Wedge_regular_four_cover_aux_Rel σ τ))
+        (Sum.inr (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_lift z.1, i))) := by
+      apply continuous_coinduced_rng.comp
+      apply continuous_inr.comp
+      simpa only [hLiftR] using hy.prodMk continuous_const
+    simpa only [rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_sections_aux_S,
+      Quotient.lift_mk] using hc
 
 /-- The range of sheet `i` is open: its preimage in the raw sum is
 `{inl (y, i), inl (-y, σ i), inr (y, i), inr (-y, τ i) | 0 < y₀}` (classify the
@@ -827,11 +1182,133 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl
     simpa [W, Set.image_image] using hopen
 
 /-- The same for the right lobe. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+    {A B : Type*} (a : A) (b x : B) (hx : x ≠ b)
+    {z : Sum A B}
+    (h : Relation.EqvGen (WedgeRel a b) (.inr x) z) :
+    z = .inr x := by
+  have hinv : ∀ {u v : Sum A B},
+      Relation.EqvGen (WedgeRel a b) u v →
+        (u = .inr x ↔ v = .inr x) := by
+    intro u v huv
+    induction huv with
+    | rel u v huv =>
+        cases huv
+        simp [hx, Ne.symm hx]
+    | refl => exact Iff.rfl
+    | symm u v _ ih => exact ih.symm
+    | trans u v w _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  exact (hinv h).mp rfl
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr
     {A B : Type*} [TopologicalSpace A] [TopologicalSpace B] (a : A) (b : B)
     (V : Set B) (hV : IsOpen V) (hb : b ∉ V) :
     Topology.IsOpenEmbedding
       (fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) := by
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨continuous_quot_mk.comp (continuous_inr.comp continuous_subtype_val), ?_, ?_⟩
+  · intro x y hxy
+    have hrel : Relation.EqvGen (WedgeRel a b) (.inr x.1) (.inr y.1) :=
+      Quotient.exact hxy
+    have hx : x.1 ≠ b := fun hxb ↦ hb (hxb ▸ x.2)
+    have heq :=
+      rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+        a b x.1 hx hrel
+    exact Subtype.ext (Sum.inr.inj heq.symm)
+  · intro U hU
+    let W : Set B := Subtype.val '' U
+    have hW : IsOpen W := hV.isOpenMap_subtype_val U hU
+    have hpre :
+        (fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) ⁻¹'
+            ((fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) '' U) =
+          Sum.inr '' W := by
+      ext z
+      constructor
+      · rintro ⟨u, hu, heq⟩
+        have hrel : Relation.EqvGen (WedgeRel a b) (.inr u.1) z :=
+          Quotient.exact heq
+        have hu_ne : u.1 ≠ b := fun hub ↦ hb (hub ▸ u.2)
+        have hz :=
+          rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inr_aux_eq
+            a b u.1 hu_ne hrel
+        exact ⟨u.1, ⟨u, hu, rfl⟩, hz.symm⟩
+      · rintro ⟨w, ⟨u, hu, rfl⟩, rfl⟩
+        exact ⟨u, hu, rfl⟩
+    apply isQuotientMap_quotient_mk'.isOpen_preimage.mp
+    change IsOpen
+      ((fun z : Sum A B ↦ (Quotient.mk _ z : Wedge A B a b)) ⁻¹'
+        ((fun z : V ↦ (Quotient.mk _ (.inr z.1) : Wedge A B a b)) '' U))
+    rw [hpre]
+    exact isOpenMap_inr W hW
+
+/-! #### Split of `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl` (lemma-3 PARTIAL, 2026-10-19) -/
+
+/-- The cap point `u` itself lies in the cap.  (Banked by lemma-3.) -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_mem_cap
+    (u : Sphere2) (hu : antipodalCover u ≠ rpBase) :
+    0 < inner ℝ (u : EuclideanSpace ℝ (Fin 3)) u ∧
+      antipodalCover u ≠ rpBase := by
+  refine ⟨?_, hu⟩
+  rw [real_inner_self_eq_norm_sq]
+  norm_num [u.property]
+
+/-- The cap of `_aux_cap`: `{y | 0 < ⟪y, u⟫}` with `±e₀` removed. -/
+def rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C (u : Sphere2) : Set Sphere2 :=
+  {y | 0 < inner ℝ (y : EuclideanSpace ℝ (Fin 3)) u ∧ antipodalCover y ≠ rpBase}
+
+/-- The cap mapped into the left lobe of the wedge. -/
+def rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb (u : Sphere2) :
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C u → Wedge RP2 RP2 rpBase rpBase :=
+  fun y ↦ Quotient.mk _ (.inl (antipodalCover y.1))
+
+/-- `_aux_cap` followed by `_aux_lobe_inl`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb_isOpenEmbedding (u : Sphere2) :
+    Topology.IsOpenEmbedding (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb u) := by
+  have hg := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_cap u
+  have hV : IsOpen (Set.range (fun y : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C u ↦ antipodalCover y.1)) :=
+    hg.isOpen_range
+  have hb : rpBase ∉ Set.range (fun y : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C u ↦ antipodalCover y.1) := by
+    rintro ⟨y, hy⟩
+    exact y.2.2 hy
+  have hh := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl
+    rpBase rpBase _ hV hb
+  exact hh.comp hg.toIsEmbedding.toHomeomorph.isOpenEmbedding
+
+/-- Sheet `i` over the cap: `y ↦ [inl (y, i)]`. -/
+def rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet (σ τ : Equiv.Perm (Fin 4)) (u : Sphere2) (i : Fin 4) :
+    rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C u → rp2Wedge_regular_four_cover_aux_E σ τ :=
+  fun y ↦ Quotient.mk _ (.inl (y.1, i))
+
+/-- **Leaf.** The range of a sheet is open: its preimage in the raw sum is
+`{inl (y, i), inl (-y, σ i) | y in the cap}` (saturated: `σ` is involutive and
+the cap misses `±e₀`, so no glue applies), open in `inl`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_range_open
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (u : Sphere2) (i : Fin 4) :
+    IsOpen (Set.range (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i)) := by
+  sorry
+
+/-- **Leaf.** Every point over the image of the cap is on some sheet: a lift of
+`[inl [y]]` with `y` in the cap is `[inl (y', j)]` with `y' = ±y`; if `y' = -y`
+it equals `[inl (y, σ j)]`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_cover
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (u : Sphere2) (e : rp2Wedge_regular_four_cover_aux_E σ τ)
+    (he : rp2Wedge_regular_four_cover_aux_p σ τ e ∈ Set.range (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb u)) :
+    ∃ i y, rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i y = e := by
+  sorry
+
+/-- **Leaf.** Distinct sheets do not meet: `(y, i) ∼ (y', j)` in the left lobe
+off `±e₀` forces `y' = y, j = i` or `y' = -y, j = σ i`, and the cap is disjoint
+from its antipode. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_disjoint
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (u : Sphere2) (i j : Fin 4) (y y' : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_C u)
+    (h : rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i y = rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u j y') :
+    i = j := by
   sorry
 
 /-- The four sheets over a left-lobe point `[inl (antipodalCover u)] ≠` wedge
@@ -855,7 +1332,27 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl
         (∀ i, IsOpen (Set.range (s i))) ∧
         (∀ e, rp2Wedge_regular_four_cover_aux_p σ τ e ∈ U → ∃ i u, s i u = e) ∧
         (∀ i j u v, s i u = s j v → i = j) := by
-  sorry
+  have hemb := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb_isOpenEmbedding u
+  let Φ := hemb.toIsEmbedding.toHomeomorph
+  refine ⟨Set.range (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb u),
+    ⟨⟨u, rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_mem_cap u hu⟩, rfl⟩, hemb.isOpen_range,
+    fun i w ↦ rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i (Φ.symm w), ?_, ?_, ?_, ?_, ?_⟩
+  · intro i
+    exact continuous_coinduced_rng.comp (continuous_inl.comp
+      ((continuous_subtype_val.comp Φ.symm.continuous).prodMk continuous_const))
+  · intro i w
+    change rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_emb u (Φ.symm w) = w
+    exact congrArg Subtype.val (Φ.apply_symm_apply w)
+  · intro i
+    change IsOpen (Set.range (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i ∘ Φ.symm))
+    rw [Φ.symm.surjective.range_comp (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_sheet σ τ u i)]
+    exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_range_open σ τ hσ hτ u i
+  · intro e he
+    obtain ⟨i, y, hy⟩ := rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_cover σ τ hσ hτ u e
+      (by simpa using he)
+    exact ⟨i, Φ y, by simpa using hy⟩
+  · intro i j w v h
+    exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_disjoint σ τ hσ hτ u i j _ _ h
 
 /-- The same over a right-lobe point, with `τ` and `_aux_lobe_inr`. -/
 -- BEGIN SEAT AREA
@@ -2465,18 +2962,149 @@ def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux
 
 /-- The principal square root on the circle minus `-1`: continuous, lands in
 `{Re > 0}`, and every square root of `w` is `±` it. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm
+    (w : Circle) : ‖(w : ℂ)‖ = 1 := by
+  simpa [Metric.mem_sphere, dist_zero_right] using w.property
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+    (w : ℂ) : Complex.sqrt w ^ 2 = w := by
+  exact Complex.cpow_nat_inv_pow w (by norm_num)
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_mem
+    (w : Circle) : Complex.sqrt (w : ℂ) ∈ Metric.sphere (0 : ℂ) 1 := by
+  rw [Metric.mem_sphere, dist_zero_right]
+  have hs := congrArg norm
+    (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+      (w : ℂ))
+  rw [norm_pow,
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w]
+    at hs
+  nlinarith [norm_nonneg (Complex.sqrt (w : ℂ))]
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt :
     ∃ r : {w : Circle // w ≠ -circleBase} → Circle, Continuous r ∧
       (∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1) ∧
       (∀ w, 0 < (r w : ℂ).re) ∧
       (∀ w z, circleWedge_three_cover_two_components_aux_sq z = w.1 → z = r w ∨ z = -r w) := by
-  sorry
+  let r : {w : Circle // w ≠ -circleBase} → Circle := fun w ↦
+    ⟨Complex.sqrt (w.1 : ℂ),
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_mem w.1⟩
+  refine ⟨r, ?_, ?_, ?_, ?_⟩
+  · apply Continuous.subtype_mk
+    apply continuous_iff_continuousAt.2
+    intro w
+    have hc : 0 ≤ (w.1 : ℂ).re ∨ (w.1 : ℂ).im ≠ 0 := by
+      by_cases hi : (w.1 : ℂ).im = 0
+      · left
+        by_contra hn
+        have hr : (w.1 : ℂ).re < 0 := lt_of_not_ge hn
+        have hw : w.1 = -circleBase := by
+          apply Subtype.ext
+          apply Complex.ext
+          · have hnrm := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w.1
+            rw [Complex.norm_def, Complex.normSq_apply, hi, mul_zero, add_zero,
+              show (w.1 : ℂ).re * (w.1 : ℂ).re = (w.1 : ℂ).re ^ 2 by ring,
+              Real.sqrt_sq_eq_abs, abs_of_neg hr] at hnrm
+            simp [circleBase]
+            linarith
+          · simpa [circleBase, hi]
+        exact w.2 hw
+      · exact Or.inr hi
+    let g : {w : Circle // w ≠ -circleBase} → ℂ := fun x ↦ x.1.1
+    have hg : Continuous g := continuous_subtype_val.comp continuous_subtype_val
+    change ContinuousAt (Complex.sqrt ∘ g) w
+    have hs : ContinuousAt Complex.sqrt (g w) :=
+      Complex.continuousAt_sqrt (by simpa [g] using hc)
+    exact hs.comp hg.continuousAt
+  · intro w
+    apply Subtype.ext
+    simpa [circleWedge_three_cover_two_components_aux_sq, r, pow_two] using
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+        (w.1 : ℂ)
+  · intro w
+    change 0 < (Complex.sqrt (w.1 : ℂ)).re
+    rw [Complex.sqrt, Complex.cpow_def]
+    have hw0 : (w.1 : ℂ) ≠ 0 := by
+      intro h
+      have hn := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w.1
+      simp [h] at hn
+    rw [if_neg hw0, Complex.exp_re]
+    norm_num [Complex.mul_im, Complex.log_im, Complex.inv_re, Complex.inv_im,
+      Complex.normSq_apply]
+    apply mul_pos (Real.exp_pos _)
+    apply Real.cos_pos_of_mem_Ioo
+    constructor
+    · have h := Complex.neg_pi_lt_arg (w.1 : ℂ)
+      norm_num at h ⊢
+      linarith [Real.pi_pos]
+    · have hle := Complex.arg_le_pi (w.1 : ℂ)
+      have hne : (w.1 : ℂ).arg ≠ Real.pi := by
+        intro he
+        have hp := Complex.arg_eq_pi_iff.1 he
+        have hw : w.1 = -circleBase := by
+          apply Subtype.ext
+          apply Complex.ext
+          · have hnrm := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_norm w.1
+            rw [Complex.norm_def, Complex.normSq_apply, hp.2, mul_zero, add_zero,
+              ← pow_two, Real.sqrt_sq_eq_abs, abs_of_neg hp.1] at hnrm
+            simp [circleBase]
+            linarith
+          · simpa [circleBase, hp.2]
+        exact w.2 hw
+      have hlt : (w.1 : ℂ).arg < Real.pi := lt_of_le_of_ne hle hne
+      norm_num at hlt ⊢
+      linarith [Real.pi_pos]
+  · intro w z hz
+    have hv : (z : ℂ) = (r w : ℂ) ∨ (z : ℂ) = -(r w : ℂ) :=
+      (sq_eq_sq_iff_eq_or_eq_neg).mp (by
+        have hr := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt_aux_sq
+          (w.1 : ℂ)
+        have hz' : (z : ℂ) ^ 2 = (w.1 : ℂ) := by
+          simpa [circleWedge_three_cover_two_components_aux_sq, pow_two] using
+            congrArg Subtype.val hz
+        exact hz'.trans hr.symm)
+    rcases hv with hv | hv
+    · exact Or.inl (Subtype.ext hv)
+    · exact Or.inr (Subtype.ext hv)
 
 /-- Points of the wedge are closed (each has a closed preimage in `Circle ⊕ Circle`),
 so `U` is open. -/
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open :
     IsOpen circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U := by
-  sorry
+  let V : Set Circle := ({-circleBase} : Set Circle)ᶜ
+  let W : Set (Sum Circle Circle) := Sum.inl '' V ∪ Sum.inr '' V
+  have hV : IsOpen V := by
+    have h : IsOpen ((Subtype.val : Circle → ℂ) ⁻¹' ({(-1 : ℂ)} : Set ℂ)ᶜ) :=
+      isClosed_singleton.isOpen_compl.preimage continuous_subtype_val
+    simpa [V, circleBase] using h
+  have hW : IsOpen W := (isOpenMap_inl V hV).union (isOpenMap_inr V hV)
+  have key : ∀ u v : Sum Circle Circle, (Quotient.mk _ u : CircleWedge) = Quotient.mk _ v ↔
+      u = v ∨ ((u = .inl circleBase ∨ u = .inr circleBase) ∧
+        (v = .inl circleBase ∨ v = .inr circleBase)) := fun u v ↦
+    Quotient.eq.trans
+      (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv _ _ u v)
+  have hne : -circleBase ≠ circleBase := by
+    intro h
+    have h1 := congrArg (fun x : Circle ↦ (x : ℂ)) h
+    norm_num [circleBase] at h1
+  have hpre :
+      (fun z : Sum Circle Circle ↦ (Quotient.mk _ z : CircleWedge)) ⁻¹'
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U = W := by
+    ext z
+    rcases z with z | z
+    · show ((Quotient.mk _ (Sum.inl z) : CircleWedge) ≠ Quotient.mk _ (Sum.inl (-circleBase)) ∧
+          (Quotient.mk _ (Sum.inl z) : CircleWedge) ≠ Quotient.mk _ (Sum.inr (-circleBase))) ↔
+          Sum.inl z ∈ W
+      simp [W, V, key, hne]
+    · show ((Quotient.mk _ (Sum.inr z) : CircleWedge) ≠ Quotient.mk _ (Sum.inl (-circleBase)) ∧
+          (Quotient.mk _ (Sum.inr z) : CircleWedge) ≠ Quotient.mk _ (Sum.inr (-circleBase))) ↔
+          Sum.inr z ∈ W
+      simp [W, V, key, hne]
+  apply isQuotientMap_quotient_mk'.isOpen_preimage.mp
+  change IsOpen ((fun z : Sum Circle Circle ↦ (Quotient.mk _ z : CircleWedge)) ⁻¹'
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U)
+  rw [hpre]
+  exact hW
 
 /-- A cross is open: its preimage in `Circle ⊕ Circle` is the half-circle
 `{Re (±z) > 0}` in both summands (it is saturated, since the glued points `±1`
@@ -2484,7 +3112,48 @@ lie in the same cross). -/
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross_open
     (b : Bool) :
     IsOpen (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) := by
-  sorry
+  let H : Set Circle :=
+    {z | 0 < ((if b then (1 : ℂ) else -1) * (z : ℂ)).re}
+  have hH : IsOpen H := by
+    exact isOpen_lt continuous_const
+      (Complex.continuous_re.comp
+        (continuous_const.mul continuous_subtype_val))
+  let P : Circle ⊕ Circle → Prop := Sum.elim (· ∈ H) (· ∈ H)
+  have hP {x y : Circle ⊕ Circle}
+      (hxy : Relation.EqvGen circleWedge_three_cover_two_components_aux_Rel x y) :
+      P x ↔ P y := by
+    rcases (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_rel_iff
+      x y).mp hxy with rfl | ⟨z, hz, h⟩
+    · rfl
+    · rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> rfl
+  have hpre :
+      (fun z : Circle ⊕ Circle ↦
+        (Quotient.mk _ z :
+          circleWedge_three_cover_two_components_aux_Double)) ⁻¹'
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b =
+        Sum.inl '' H ∪ Sum.inr '' H := by
+    ext x
+    constructor
+    · intro hx
+      rcases hx with ⟨z, hz, heq | heq⟩
+      · have hxP : P x := (hP (Quotient.exact heq)).mpr hz
+        rcases x with x | x
+        · exact Or.inl ⟨x, hxP, rfl⟩
+        · exact Or.inr ⟨x, hxP, rfl⟩
+      · have hxP : P x := (hP (Quotient.exact heq)).mpr hz
+        rcases x with x | x
+        · exact Or.inl ⟨x, hxP, rfl⟩
+        · exact Or.inr ⟨x, hxP, rfl⟩
+    · rintro (⟨z, hz, rfl⟩ | ⟨z, hz, rfl⟩)
+      · exact ⟨z, hz, Or.inl rfl⟩
+      · exact ⟨z, hz, Or.inr rfl⟩
+  have hq : Topology.IsQuotientMap
+      (fun z : Circle ⊕ Circle ↦
+        (Quotient.mk _ z : circleWedge_three_cover_two_components_aux_Double)) :=
+    ⟨Quotient.mk_surjective, rfl⟩
+  apply hq.isOpen_preimage.mp
+  rw [hpre]
+  exact (isOpenMap_inl H hH).union (isOpenMap_inr H hH)
 
 /-- Combinatorics: the base point lies in `U`; the crosses cover `doubleMap ⁻¹' U`;
 they are disjoint. -/
@@ -2496,6 +3165,173 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_a
         ∃ b, e ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) ∧
       Disjoint (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross true)
         (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross false) := by
+  have hbase : circleBase ≠ -circleBase := by
+    intro h
+    have h' := congrArg Subtype.val h
+    norm_num [circleBase] at h'
+  have hsquare_neg (z : Circle) (hz : (z : ℂ).re = 0) :
+      circleWedge_three_cover_two_components_aux_sq z = -circleBase := by
+    have hn : ‖(z : ℂ)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using z.property
+    have him : (z : ℂ).im * (z : ℂ).im = 1 := by
+      calc
+        (z : ℂ).im * (z : ℂ).im = Complex.normSq z := by
+          simp [Complex.normSq_apply, hz]
+        _ = ‖(z : ℂ)‖ ^ 2 := Complex.normSq_eq_norm_sq _
+        _ = 1 := by simp [hn]
+    apply Subtype.ext
+    apply Complex.ext
+    · simp [circleWedge_three_cover_two_components_aux_sq, circleBase,
+        Complex.mul_re, hz, him]
+    · simp [circleWedge_three_cover_two_components_aux_sq, circleBase,
+        Complex.mul_im, hz]
+  have hwedgeL : (Quotient.mk _ (.inl circleBase) : CircleWedge) ≠
+      Quotient.mk _ (.inl (-circleBase)) := by
+    intro h
+    rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+      circleBase circleBase (.inl circleBase) (.inl (-circleBase))).mp
+        (Quotient.exact h) with h | h
+    · exact hbase (Sum.inl.inj h)
+    · rcases h.2 with h | h
+      · exact hbase (Sum.inl.inj h).symm
+      · contradiction
+  have hwedgeR : (Quotient.mk _ (.inl circleBase) : CircleWedge) ≠
+      Quotient.mk _ (.inr (-circleBase)) := by
+    intro h
+    rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+      circleBase circleBase (.inl circleBase) (.inr (-circleBase))).mp
+        (Quotient.exact h) with h | h
+    · contradiction
+    · rcases h.2 with h | h
+      · contradiction
+      · exact hbase (Sum.inr.inj h).symm
+  refine ⟨⟨hwedgeL, hwedgeR⟩, ?_, ?_⟩
+  · intro e he
+    induction e using Quotient.inductionOn with
+    | _ e =>
+      rcases e with z | z
+      · have hz : (z : ℂ).re ≠ 0 := by
+          intro hz
+          have hz' := hsquare_neg z hz
+          exact he.1 (by simpa [circleWedge_three_cover_two_components_aux_doubleMap,
+            circleWedge_three_cover_two_components_aux_raw, hz'])
+        rcases lt_or_gt_of_ne hz with hz | hz
+        · exact ⟨false, z, by simpa, Or.inl rfl⟩
+        · exact ⟨true, z, by simpa, Or.inl rfl⟩
+      · have hz : (z : ℂ).re ≠ 0 := by
+          intro hz
+          have hz' := hsquare_neg z hz
+          exact he.2 (by simpa [circleWedge_three_cover_two_components_aux_doubleMap,
+            circleWedge_three_cover_two_components_aux_raw, hz'])
+        rcases lt_or_gt_of_ne hz with hz | hz
+        · exact ⟨false, z, by simpa, Or.inr rfl⟩
+        · exact ⟨true, z, by simpa, Or.inr rfl⟩
+  · rw [Set.disjoint_left]
+    intro e ht hf
+    rcases ht with ⟨z, hz, hez⟩
+    rcases hf with ⟨w, hw, hew⟩
+    have hzw : z = w := by
+      rcases hez with hez | hez <;> rcases hew with hew | hew
+      all_goals
+        rcases (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_rel_iff
+          _ _).mp (Quotient.exact (hez.symm.trans hew)) with h | ⟨u, hu, h⟩
+        · simpa using h
+        · rcases h with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;> simp_all
+    subst w
+    simp at hz hw
+    linarith
+
+/-! Split of `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections` (lemma-1 PARTIAL, 2026-10-19): `_aux_lift`, `_aux_base`, `_aux_S`
+banked from the seat; `_aux_cont`, `_aux_right`, `_aux_range` queued. -/
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+    (r : {w : Circle // w ≠ -circleBase} → Circle) (w : Circle) : Circle :=
+  if h : w ≠ -circleBase then r ⟨w, h⟩ else circleBase
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_base
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (hre : ∀ w, 0 < (r w : ℂ).re) :
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase := by
+  have hn : circleBase ≠ -circleBase := by
+    intro h
+    have hh := congrArg Subtype.val h
+    norm_num [circleBase] at hh
+  rw [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+    dif_pos hn]
+  let w : {w : Circle // w ≠ -circleBase} := ⟨circleBase, hn⟩
+  have hm : ((r w : Circle) : ℂ) * r w = 1 := by
+    have h := congrArg Subtype.val (hsq w)
+    simpa [circleWedge_three_cover_two_components_aux_sq, circleBase] using h
+  rcases (mul_self_eq_one_iff.mp hm) with h | h
+  · exact Subtype.ext h
+  · have hp := hre w
+    rw [h] at hp
+    norm_num at hp
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase) (b : Bool) :
+    CircleWedge → circleWedge_three_cover_two_components_aux_Double :=
+  Quotient.lift
+    (Sum.elim
+      (fun w ↦ Quotient.mk _ (.inl (if b then
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w
+        else -circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w)))
+      (fun w ↦ Quotient.mk _ (.inr (if b then
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w
+        else -circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w))))
+    (by
+      intro x y h
+      induction h with
+      | rel x y h =>
+          cases h
+          change Quotient.mk _ (Sum.inl (if b then _ else _)) =
+            Quotient.mk _ (Sum.inr (if b then _ else _))
+          cases b <;> simp [hrbase]
+          · exact Quotient.sound (Relation.EqvGen.rel _ _
+              circleWedge_three_cover_two_components_aux_Rel.neg)
+          · exact Quotient.sound (Relation.EqvGen.rel _ _
+              circleWedge_three_cover_two_components_aux_Rel.pos)
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+/-- Each section is continuous on `U` (`U` avoids both `-1`s, where `_aux_lift`
+jumps; its preimage in `Circle ⊕ Circle` is open and saturated). -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_cont
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase) (hr : Continuous r) (b : Bool) :
+    Continuous (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) := by
+  sorry
+
+/-- Each section is a right inverse of `doubleMap` on `U`. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_right
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (b : Bool) (u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U) :
+    circleWedge_three_cover_two_components_aux_doubleMap
+      (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) = u := by
+  sorry
+
+/-- The `b`-section over `U` has range exactly the `b`-cross. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_range
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (hre : ∀ w, 0 < (r w : ℂ).re)
+    (hroots : ∀ w z, circleWedge_three_cover_two_components_aux_sq z = w.1 → z = r w ∨ z = -r w)
+    (b : Bool) :
+    Set.range (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1) =
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b := by
   sorry
 
 /-- The two local sections over `U`, built from a square-root branch `r`:
@@ -2514,7 +3350,11 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_a
       (∀ b u, circleWedge_three_cover_two_components_aux_doubleMap (s b u) = u) ∧
       (∀ b, Set.range (s b) =
         circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) := by
-  sorry
+  have hrbase := circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_base r hsq hre
+  exact ⟨fun b u ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S r hrbase b u.1,
+    fun b ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_cont r hrbase hr b,
+    fun b u ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_right r hrbase hsq b u,
+    fun b ↦ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_range r hrbase hsq hre hroots b⟩
 
 /-- At the wedge point: `V` = the image of the open arcs `{Re z > 0}` in both
 lobes. Its preimage is two disjoint open "crosses", one through `[inl 1] = [inr 1]`
@@ -2588,7 +3428,51 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_shrink
     {f : E → X} {U V : Set X} (H : f ⁻¹' U ≃ₜ U × I) (hH : ∀ e, (H e).1.1 = f e)
     (hVU : V ⊆ U) :
     ∃ H' : f ⁻¹' V ≃ₜ V × I, ∀ e, (H' e).1.1 = f e := by
-  sorry
+  let inc : f ⁻¹' V → f ⁻¹' U := fun e ↦ ⟨e.1, hVU e.2⟩
+  let lift : V × I → U × I := fun y ↦ (⟨y.1.1, hVU y.1.2⟩, y.2)
+  let toFun : f ⁻¹' V → V × I := fun e ↦
+    (⟨(H (inc e)).1.1, hH (inc e) ▸ e.2⟩, (H (inc e)).2)
+  let invFun : V × I → f ⁻¹' V := fun y ↦
+    ⟨(H.symm (lift y)).1, by
+      have heq : H (H.symm (lift y)) = lift y := H.apply_symm_apply (lift y)
+      have := hH (H.symm (lift y))
+      rw [heq] at this
+      change f (H.symm (lift y)).1 ∈ V
+      exact this ▸ y.1.2⟩
+  let H' : f ⁻¹' V ≃ₜ V × I :=
+    { toFun := toFun
+      invFun := invFun
+      left_inv := fun e ↦ by
+        apply Subtype.ext
+        change (invFun (toFun e)).1 = e.1
+        have hz : H (H.symm (lift (toFun e))) = H (inc e) := by
+          rw [H.apply_symm_apply]
+        exact congrArg (fun z : f ⁻¹' U ↦ z.1) (H.injective hz)
+      right_inv := fun y ↦ by
+        have hi : inc (invFun y) = H.symm (lift y) := Subtype.ext rfl
+        have hz : H (inc (invFun y)) = lift y :=
+          (congrArg H hi).trans (H.apply_symm_apply (lift y))
+        apply Prod.ext
+        · apply Subtype.ext
+          change (H (inc (invFun y))).1.1 = y.1.1
+          exact congrArg (fun z ↦ z.1.1) hz
+        · change (H (inc (invFun y))).2 = y.2
+          exact congrArg Prod.snd hz
+      continuous_toFun := by
+        apply Continuous.prodMk
+        · apply Continuous.subtype_mk
+          simpa [inc, toFun] using
+            (continuous_subtype_val.comp
+              (H.continuous.comp (continuous_subtype_val.subtype_mk _)).fst)
+        · simpa [inc, toFun] using
+            (H.continuous.comp (continuous_subtype_val.subtype_mk _)).snd
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        have hlift : Continuous lift :=
+          ((continuous_subtype_val.comp continuous_fst).subtype_mk _).prodMk continuous_snd
+        simpa only [invFun] using
+          continuous_subtype_val.comp (H.symm.continuous.comp hlift) }
+  exact ⟨H', fun e ↦ hH (inc e)⟩
 
 /-- Two local trivialisations over the same `W` glue to one for `Sum.elim f g`,
 with fibre the disjoint union of the fibres. -/
@@ -2598,7 +3482,40 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_glue
     (H₁ : f ⁻¹' W ≃ₜ W × I) (hH₁ : ∀ e, (H₁ e).1.1 = f e)
     (H₂ : g ⁻¹' W ≃ₜ W × J) (hH₂ : ∀ e, (H₂ e).1.1 = g e) :
     ∃ H : Sum.elim f g ⁻¹' W ≃ₜ W × (I ⊕ J), ∀ e, (H e).1.1 = Sum.elim f g e := by
-  sorry
+  let e : Sum.elim f g ⁻¹' W ≃ (f ⁻¹' W) ⊕ (g ⁻¹' W) :=
+    { toFun := fun z ↦ match z with
+        | ⟨.inl x, h⟩ => .inl ⟨x, h⟩
+        | ⟨.inr y, h⟩ => .inr ⟨y, h⟩
+      invFun := Sum.elim (fun x ↦ ⟨.inl x.1, x.2⟩) (fun y ↦ ⟨.inr y.1, y.2⟩)
+      left_inv := by rintro ⟨x | y, h⟩ <;> rfl
+      right_inv := by rintro (x | y) <;> rfl }
+  have hec : Continuous e := by
+    rw [continuous_def]
+    intro s hs
+    rw [isOpen_sum_iff] at hs
+    obtain ⟨u, hu, eu⟩ := hs.1
+    obtain ⟨v, hv, ev⟩ := hs.2
+    refine ⟨(Sum.inl '' u) ∪ (Sum.inr '' v),
+      (isOpenMap_inl u hu).union (isOpenMap_inr v hv), ?_⟩
+    ext z
+    rcases z with ⟨x | y, hx⟩
+    · change Sum.inl x ∈ (Sum.inl '' u) ∪ (Sum.inr '' v) ↔
+        (⟨x, hx⟩ : f ⁻¹' W) ∈ Sum.inl ⁻¹' s
+      rw [← eu]; simp
+    · change Sum.inr y ∈ (Sum.inl '' u) ∪ (Sum.inr '' v) ↔
+        (⟨y, hx⟩ : g ⁻¹' W) ∈ Sum.inr ⁻¹' s
+      rw [← ev]; simp
+  have hes : Continuous e.symm :=
+    continuous_sum_dom.2 ⟨(continuous_inl.comp continuous_subtype_val).subtype_mk _,
+      (continuous_inr.comp continuous_subtype_val).subtype_mk _⟩
+  let K : Sum.elim f g ⁻¹' W ≃ₜ (f ⁻¹' W) ⊕ (g ⁻¹' W) :=
+    { e with continuous_toFun := hec, continuous_invFun := hes }
+  let L := Homeomorph.sumCongr H₁ H₂
+  let D : (W × I) ⊕ (W × J) ≃ₜ W × (I ⊕ J) := Homeomorph.prodSumDistrib.symm
+  refine ⟨K.trans (L.trans D), ?_⟩
+  rintro ⟨x | y, h⟩
+  · exact hH₁ ⟨x, h⟩
+  · exact hH₂ ⟨y, h⟩
 
 lemma circleWedge_three_cover_two_components_aux_covering_aux_sum
     {E₁ E₂ X : Type*} [TopologicalSpace E₁] [TopologicalSpace E₂] [TopologicalSpace X]
@@ -3034,6 +3951,57 @@ lemma circleWedge_connected_pair_aux_covering_aux_cube_continuous :
     Continuous circleWedge_connected_pair_aux_cube := by
   exact Continuous.subtype_mk (continuous_subtype_val.pow 3) _
 
+/-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap` (lemma-2 PARTIAL, 2026-10-19) -/
+
+/-- `pC` is continuous.  (Banked by lemma-2.) -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_continuous :
+    Continuous circleWedge_connected_pair_aux_pC := by
+  apply (show Topology.IsQuotientMap
+      (fun z : circleWedge_connected_pair_aux_RawC ↦
+        (Quotient.mk _ z : circleWedge_connected_pair_aux_EC)) from
+      isQuotientMap_quot_mk).continuous_iff.mpr
+  change Continuous circleWedge_connected_pair_aux_projC
+  rw [continuous_sum_dom]
+  constructor
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projC] using
+      continuous_coinduced_rng.comp (continuous_inl.comp
+        circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projC] using
+      continuous_coinduced_rng.comp (continuous_inr.comp continuous_fst)
+
+/-- Left lobe away from the wedge point: take an open arc `V` around `z` missing
+`circleBase`.  Its preimage under `cube` is three disjoint arcs containing no cube
+root of `circleBase`, so no glue applies there and `cube` maps each arc
+homeomorphically onto `V` (`Circle.isQuotientCoveringMap_npow 3`, as in
+`circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away_aux_left`
+for squaring).  Use `circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_continuous`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_left
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pC (Quotient.mk _ (.inl z))
+      (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inl z)}) := by
+  sorry
+
+/-- Right lobe away from the wedge point: take an open arc `V` around `z` missing
+`circleBase`.  Its preimage is the three copies `V × {r}` in the right summand
+(one per root `r`), none glued, each mapped by `fst` homeomorphically onto `V`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_right
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pC (Quotient.mk _ (.inr z))
+      (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inr z)}) := by
+  sorry
+
+/-- At the wedge point: `V` = image of a small open arc around `circleBase` in
+each lobe.  Sheet `r` is the arc around `r.1` on the left (a local section of
+`cube`) glued at `inl r.1 ~ inr (circleBase, r)` to the arc around `circleBase`
+in copy `r` on the right.  The three sheets are disjoint and open; the
+section-gluing pattern is
+`rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections`, as used
+in `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pC (Quotient.mk _ (.inl circleBase))
+      (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
+  sorry
+
 /-- `pC` is a covering map.  Away from the wedge point: over a left-lobe point
 `[inl w]`, `w ≠ circleBase`, take an open arc around `w` missing `circleBase`;
 its preimage under `cube` is three disjoint arcs, none containing a root, so no
@@ -3045,6 +4013,98 @@ left glued to the arc around `circleBase` in copy `r` on the right.  Continuity
 uses `_aux_cube_continuous` and the quotient topology on both raw sums. -/
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap :
     IsCoveringMap circleWedge_connected_pair_aux_pC := by
+  intro x
+  classical
+  by_cases hx : x = Quotient.mk _ (.inl circleBase)
+  · subst x
+    exact circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge
+  · induction x using Quotient.inductionOn with
+    | _ x =>
+      rcases x with z | z
+      · apply circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_left
+        intro hz
+        subst z
+        exact hx rfl
+      · apply circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_right
+        intro hz
+        subst z
+        apply hx
+        exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
+
+/-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pC_fiber` (lemma-3 PARTIAL, 2026-10-19) -/
+
+/-- The quotient relation for `EC`, classified exactly.  (Banked by lemma-3.) -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_rel_iff (a b) :
+    Relation.EqvGen circleWedge_connected_pair_aux_RelC a b ↔
+      a = b ∨ ∃ r : circleWedge_connected_pair_aux_Root,
+        (a = .inl r.1 ∧ b = .inr (circleBase, r)) ∨
+        (b = .inl r.1 ∧ a = .inr (circleBase, r)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | glue r => exact Or.inr ⟨r, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with rfl | ⟨r, h | h⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨r, Or.inr ⟨h.1, h.2⟩⟩
+        · exact Or.inr ⟨r, Or.inl ⟨h.1, h.2⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨r, h | h⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inl h⟩
+          · simp_all
+          · simp_all
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inr h⟩
+          · simp_all <;> exact Subtype.ext h.1.symm
+          · simp_all
+  · rintro (rfl | ⟨r, h | h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact h.1 ▸ h.2 ▸ Relation.EqvGen.rel _ _
+        (circleWedge_connected_pair_aux_RelC.glue r)
+    · exact h.2 ▸ h.1 ▸ Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelC.glue r))
+
+/-- Every point of the circle has exactly three cube roots: the fibre of
+`powMonoidHom 3` over `y` is a coset of its kernel, which is `{1, ω, ω²}`.
+Copy `circleWedge_three_cover_two_components_aux_fiber_sq_card` (the squaring
+case, kernel `{1, -1}`) with `Fin 3` in place of `Bool`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_cube_card (y : Circle) :
+    Nat.card {z : Circle // circleWedge_connected_pair_aux_cube z = y} = 3 := by
+  sorry
+
+/-- Fibre over a left-lobe point `[inl w]`, `w ≠ circleBase`: by
+`_aux_rel_iff`, a class mapping there is `[inl z]` with `cube z = w` (a class
+`[inr (u, r)]` maps to the right lobe, which meets the left only at the wedge
+point).  So `z ↦ [inl z]` is a bijection from the cube roots of `w`; conclude
+with `_aux_cube_card`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_left
+    (w : Circle) (hw : w ≠ circleBase) :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl w)} = 3 := by
+  sorry
+
+/-- Fibre over a right-lobe point `[inr w]`, `w ≠ circleBase`: the classes
+`[inr (w, r)]`, one per root `r`, none glued since `w ≠ circleBase`.  So
+`r ↦ [inr (w, r)]` is a bijection from `circleWedge_connected_pair_aux_Root`,
+which is `{z // cube z = circleBase}` and has card 3 by `_aux_cube_card`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_right
+    (w : Circle) (hw : w ≠ circleBase) :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inr w)} = 3 := by
+  sorry
+
+/-- Fibre over the wedge point: the classes `{inl r.1, inr (circleBase, r)}`,
+one per root `r` (`_aux_rel_iff` says these are the only identifications).
+So `r ↦ [inl r.1]` is a bijection from `circleWedge_connected_pair_aux_Root`,
+card 3 by `_aux_cube_card`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_wedge :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl circleBase)} = 3 := by
   sorry
 
 /-- Fibres of `pC` have three points: over `[inl w]` the three cube roots of `w`
@@ -3056,6 +4116,74 @@ bijection with `circleWedge_connected_pair_aux_Root` (or with the cube roots of
 lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
     Nat.card {e : circleWedge_connected_pair_aux_EC //
       circleWedge_connected_pair_aux_pC e = b} = 3 := by
+  classical
+  by_cases hb : b = Quotient.mk _ (.inl circleBase)
+  · subst b
+    exact circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_wedge
+  · induction b using Quotient.inductionOn with
+    | _ b =>
+      rcases b with w | w
+      · apply circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_left
+        intro hw
+        subst w
+        exact hb rfl
+      · apply circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_right
+        intro hw
+        subst w
+        apply hb
+        exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
+
+/-! #### Split of `circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap` (lemma-1 PARTIAL, 2026-10-19) -/
+
+/-- `pD` is continuous.  (Banked by lemma-1.) -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_continuous :
+    Continuous circleWedge_connected_pair_aux_pD := by
+  apply (show Topology.IsQuotientMap
+      (fun z : circleWedge_connected_pair_aux_RawD ↦
+        (Quotient.mk _ z : circleWedge_connected_pair_aux_ED)) from
+      isQuotientMap_quot_mk).continuous_iff.mpr
+  change Continuous circleWedge_connected_pair_aux_projD
+  rw [continuous_sum_dom]
+  constructor
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projD] using
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projD] using
+      continuous_coinduced_rng.comp
+        (continuous_inr.comp
+          circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+
+/-- Left lobe away from the wedge point: take an open arc `V` around `z` missing
+`circleBase`.  Its preimage under `cube` in the left summand is three disjoint
+arcs containing no cube root of `circleBase`, so no glue applies there and
+`cube` maps each arc homeomorphically onto `V` (`Circle.isQuotientCoveringMap_npow 3`).
+The proof is the same as
+`circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_left`; use
+`circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_continuous`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_left
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inl z))
+      (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inl z)}) := by
+  sorry
+
+/-- Right lobe away from the wedge point: the mirror image of `_aux_left`, with
+the right summand of `RawD` (also covered by `cube`) in place of the left. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_right
+    (z : Circle) (hz : z ≠ circleBase) :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inr z))
+      (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inr z)}) := by
+  sorry
+
+/-- At the wedge point: `V` = image of a small open arc around `circleBase` in
+each lobe.  Sheet `r` is the arc around `r.1` on the left glued at
+`inl r.1 ~ inr r.1` to the arc around `r.1` on the right, each a local section
+of `cube`.  The three sheets are disjoint and open; the section-gluing pattern is
+`rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections`, as for
+`circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge :
+    IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inl circleBase))
+      (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
   sorry
 
 /-- `pD` is a covering map: as for `pC`, but the right lobe is also covered by
@@ -3063,14 +4191,178 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
 to the arc around `r.1` on the right. -/
 lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap :
     IsCoveringMap circleWedge_connected_pair_aux_pD := by
-  sorry
+  intro x
+  classical
+  by_cases hx : x = Quotient.mk _ (.inl circleBase)
+  · subst x
+    exact circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge
+  · induction x using Quotient.inductionOn with
+    | _ x =>
+      rcases x with z | z
+      · apply circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_left
+        intro hz
+        subst z
+        exact hx rfl
+      · apply circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_right
+        intro hz
+        subst z
+        apply hx
+        exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base) |>.symm
 
 /-- Fibres of `pD` have three points: the cube roots of `w` in the relevant lobe,
 and over the wedge point the three classes `{inl r.1, inr r.1}`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_cube_card
+    (y : Circle) :
+    Nat.card {z : Circle // circleWedge_connected_pair_aux_cube z = y} = 3 := by
+  let f : Circle →* Circle := powMonoidHom 3
+  have hs : Function.Surjective f :=
+    (Circle.isQuotientCoveringMap_npow 3).surjective
+  let a : Circle := Function.surjInv hs y
+  have ha : f a = y := Function.surjInv_eq hs y
+  let e : f.ker ≃ rootsOfUnity 3 ℂ :=
+    { toFun := fun z ↦
+        ⟨Units.mk0 (z.1 : ℂ) (by
+            intro hz
+            have hz' := z.1.property
+            simp [Metric.mem_sphere, hz] at hz'), by
+          apply Units.ext
+          exact congrArg Subtype.val z.2⟩
+      invFun := fun z ↦
+        ⟨⟨(z.1 : ℂ), by
+            simpa [Metric.mem_sphere] using
+              Complex.norm_eq_one_of_mem_rootsOfUnity z.2⟩, by
+          apply Subtype.ext
+          exact congrArg Units.val z.2⟩
+      left_inv := fun z ↦ by apply Subtype.ext; rfl
+      right_inv := fun z ↦ by apply Subtype.ext; apply Units.ext; rfl }
+  have hk : Nat.card f.ker = 3 := by
+    rw [Nat.card_congr e, Nat.card_eq_fintype_card]
+    exact Complex.card_rootsOfUnity 3
+  have hc : Nat.card {z : Circle // f z = y} = 3 := by
+    rw [← ha]
+    exact (Nat.card_congr (MonoidHom.fiberEquivKer f a)).trans hk
+  simpa [f, circleWedge_connected_pair_aux_cube] using hc
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_rel
+    (z : Circle) (h : circleWedge_connected_pair_aux_cube z = circleBase) :
+    (Quotient.mk _ (.inr z) : circleWedge_connected_pair_aux_ED) =
+      Quotient.mk _ (.inl z) := by
+  let r : circleWedge_connected_pair_aux_Root := ⟨z, h⟩
+  exact Quotient.sound (Relation.EqvGen.symm _ _
+    (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelD.glue r)))
+
+def circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value :
+    circleWedge_connected_pair_aux_ED → Circle :=
+  Quotient.lift (Sum.elim id id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+def circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_baseValue :
+    CircleWedge → Circle :=
+  Quotient.lift (Sum.elim id id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
 lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber (b : CircleWedge) :
     Nat.card {e : circleWedge_connected_pair_aux_ED //
       circleWedge_connected_pair_aux_pD e = b} = 3 := by
-  sorry
+  obtain ⟨u, rfl⟩ := Quotient.exists_rep b
+  rcases u with x | x
+  · let F := {e : circleWedge_connected_pair_aux_ED //
+        circleWedge_connected_pair_aux_pD e = Quotient.mk _ (.inl x)}
+    let S := {z : Circle // circleWedge_connected_pair_aux_cube z = x}
+    let E : F ≃ S :=
+      { toFun := fun e ↦
+          ⟨circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1, by
+            obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+            rw [← hv]
+            have he := e.2
+            rw [← hv] at he
+            rcases v with z | z <;>
+              simpa [circleWedge_connected_pair_aux_pD,
+                circleWedge_connected_pair_aux_projD,
+                circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value] using
+                congrArg circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_baseValue he⟩
+        invFun := fun z ↦ ⟨Quotient.mk _ (.inl z.1), by
+          simp [circleWedge_connected_pair_aux_pD,
+            circleWedge_connected_pair_aux_projD, z.2]⟩
+        right_inv := fun z ↦ by apply Subtype.ext; rfl
+        left_inv := fun e ↦ by
+          apply Subtype.ext
+          obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+          change Quotient.mk _ (Sum.inl
+            (circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1)) = e.1
+          rw [← hv]
+          rcases v with z | z
+          · rfl
+          · change (Quotient.mk _ (Sum.inl z) :
+                circleWedge_connected_pair_aux_ED) = Quotient.mk _ (Sum.inr z)
+            symm
+            exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_rel z (by
+              have he := (congrArg circleWedge_connected_pair_aux_pD hv).trans e.2
+              change Quotient.mk _ (Sum.inr (circleWedge_connected_pair_aux_cube z)) =
+                Quotient.mk _ (Sum.inl x) at he
+              rw [Quotient.eq_iff_equiv] at he
+              change Relation.EqvGen (WedgeRel circleBase circleBase) _ _ at he
+              rw [
+                rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+                  circleBase circleBase] at he
+              rcases he with he | ⟨hz, hx⟩
+              · cases he
+              · rcases hz with hz | hz <;> simp_all) }
+    rw [Nat.card_congr E]
+    exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_cube_card x
+  · let F := {e : circleWedge_connected_pair_aux_ED //
+        circleWedge_connected_pair_aux_pD e = Quotient.mk _ (.inr x)}
+    let S := {z : Circle // circleWedge_connected_pair_aux_cube z = x}
+    let E : F ≃ S :=
+      { toFun := fun e ↦
+          ⟨circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1, by
+            obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+            rw [← hv]
+            have he := e.2
+            rw [← hv] at he
+            rcases v with z | z <;>
+              simpa [circleWedge_connected_pair_aux_pD,
+                circleWedge_connected_pair_aux_projD,
+                circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value] using
+                congrArg circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_baseValue he⟩
+        invFun := fun z ↦ ⟨Quotient.mk _ (.inr z.1), by
+          simp [circleWedge_connected_pair_aux_pD,
+            circleWedge_connected_pair_aux_projD, z.2]⟩
+        right_inv := fun z ↦ by apply Subtype.ext; rfl
+        left_inv := fun e ↦ by
+          apply Subtype.ext
+          obtain ⟨v, hv⟩ := Quotient.exists_rep e.1
+          change Quotient.mk _ (Sum.inr
+            (circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_value e.1)) = e.1
+          rw [← hv]
+          rcases v with z | z
+          · change (Quotient.mk _ (Sum.inr z) :
+                circleWedge_connected_pair_aux_ED) = Quotient.mk _ (Sum.inl z)
+            exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_rel z (by
+              have he := (congrArg circleWedge_connected_pair_aux_pD hv).trans e.2
+              change Quotient.mk _ (Sum.inl (circleWedge_connected_pair_aux_cube z)) =
+                Quotient.mk _ (Sum.inr x) at he
+              rw [Quotient.eq_iff_equiv] at he
+              change Relation.EqvGen (WedgeRel circleBase circleBase) _ _ at he
+              rw [
+                rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+                  circleBase circleBase] at he
+              rcases he with he | ⟨hz, hx⟩
+              · cases he
+              · rcases hz with hz | hz <;> simp_all)
+          · rfl }
+    rw [Nat.card_congr E]
+    exact circleWedge_connected_pair_aux_covering_aux_pD_fiber_aux_cube_card x
 
 /-- Local evenly-covered charts for the two quotient graphs. -/
 lemma circleWedge_connected_pair_aux_covering :
@@ -3493,7 +4785,34 @@ lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_inr_inj
 /-- There are at least two cube roots of unity on the circle. -/
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD_aux_two_roots :
     ∃ r s : circleWedge_connected_pair_aux_Root, r ≠ s := by
-  sorry
+  let ζ : ℂ := (-1 / 2 : ℂ) + (Real.sqrt 3 / 2 : ℂ) * Complex.I
+  have hsqrt : (Real.sqrt 3) ^ 2 = 3 := by norm_num
+  have hζnorm : ‖ζ‖ = 1 := by
+    rw [Complex.norm_def]
+    have hnormSq : Complex.normSq ζ = 1 := by
+      simp [ζ, Complex.normSq_apply]
+      nlinarith [hsqrt]
+    rw [hnormSq]
+    norm_num
+  let z : Circle := ⟨ζ, by simpa [Metric.mem_sphere, dist_zero_right] using hζnorm⟩
+  have hsqrt3 : (Real.sqrt 3) ^ 3 = 3 * Real.sqrt 3 := by
+    rw [pow_succ, hsqrt]
+  have hζcube : ζ ^ 3 = 1 := by
+    apply Complex.ext <;> simp [ζ, pow_succ] <;>
+      ring_nf <;> nlinarith [hsqrt, hsqrt3]
+  let r : circleWedge_connected_pair_aux_Root := ⟨circleBase, by
+    apply Subtype.ext
+    simp [circleBase]⟩
+  let s : circleWedge_connected_pair_aux_Root := ⟨z, by
+    apply Subtype.ext
+    exact hζcube⟩
+  refine ⟨r, s, ?_⟩
+  intro hrs
+  have hval := congrArg (fun x : circleWedge_connected_pair_aux_Root ↦
+    ((x.1 : Circle) : ℂ)) hrs
+  change (1 : ℂ) = ζ at hval
+  have hre := congrArg Complex.re hval
+  norm_num [ζ] at hre
 
 lemma circleWedge_connected_pair_aux_not_homeomorphic_aux_noCutD
     (x : circleWedge_connected_pair_aux_ED) :
