@@ -1957,12 +1957,58 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     · exact max_le (by linarith) (min_le_left _ _)
   exact htop.mono_exponent le_top
 
-/-- Leaf (step approximation; no `f₀`). A bounded a.e.-strongly-measurable `g` is the a.e. limit
-on `[0,1]` of uniformly bounded rational-interval step functions. Route: approximate `g` in `L¹`
-by continuous functions (`MemLp.exists_hasCompactSupport_eLpNorm_sub_le` or
-`Integrable.exists_continuous...`), clip them to `[-C, C]`, approximate each uniformly on `[0,1]`
-by step functions on the grid `k / N` (uniform continuity), giving `L¹` convergence with bound
-`C + 1`; extract an a.e. convergent subsequence (`TendstoInMeasure.exists_seq_tendsto_ae`). -/
+/-- Banked (lemma-2, round 2): the bound `C` of a bounded function is nonnegative. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_C_nonneg
+    (g : ℝ → ℝ) (C : ℝ) (hC : ∀ x, |g x| ≤ C) : 0 ≤ C := by
+  exact (abs_nonneg (g 0)).trans (hC 0)
+
+/-- Banked (lemma-2, round 2): a bounded a.e.-strongly-measurable function is integrable on
+`[0,1]`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_integrable
+    (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (C : ℝ) (hC : ∀ x, |g x| ≤ C) :
+    Integrable g (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+  refine Integrable.mono' (integrable_const C) hg ?_
+  filter_upwards [] with x
+  simpa [Real.norm_eq_abs] using hC x
+
+/-- Leaf (`L¹` step approximation). For each `n`, a bounded `g` is within `1/(n+1)` in `L¹([0,1])`
+of a rational-interval step function bounded by `C + 1` everywhere. Route: approximate `g` in
+`L¹` by a continuous function (`MemLp.exists_hasCompactSupport_eLpNorm_sub_le` /
+`Integrable.exists_hasCompactSupport_integral_sub_le`, integrability from `_aux_integrable`),
+clip it to `[-C, C]` (clipping does not increase `|h - g|` since `|g| ≤ C`), then take the
+step function `∑ₖ h(k/N) 1_((k-1)/N, k/N]` on a fine rational grid (uniform continuity on
+`[0,1]`; the intervals are disjoint, so the step function is bounded by `C`). -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps
+    (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (C : ℝ) (hC : ∀ x, |g x| ≤ C) :
+    ∀ n : ℕ, ∃ (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ),
+      (∀ x, |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ C + 1) ∧
+      ∫ x in Set.Icc (0 : ℝ) 1,
+        |∑ i ∈ F, c i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x - g x| ≤
+          1 / ((n : ℝ) + 1) := by
+  sorry
+
+/-- Leaf (a.e. subsequence). Uniformly bounded step functions converging to a bounded `g` in
+`L¹([0,1])` at rate `1/(n+1)` have an a.e. convergent subsequence. Route: `L¹` convergence gives
+convergence in measure (`tendstoInMeasure_of_tendsto_eLpNorm` with `p = 1`, the step functions
+are measurable as finite sums of indicators of measurable sets); then
+`MeasureTheory.TendstoInMeasure.exists_seq_tendsto_ae`. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_ae_subseq
+    (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (C : ℝ) (hC : ∀ x, |g x| ≤ C)
+    (F : ℕ → Finset (ℚ × ℚ)) (c : ℕ → ℚ × ℚ → ℝ) (D : ℝ)
+    (hD : ∀ n x, |∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ D)
+    (hL : ∀ n : ℕ, ∫ x in Set.Icc (0 : ℝ) 1, |∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x - g x| ≤ 1 / ((n : ℝ) + 1)) :
+    ∃ φ : ℕ → ℕ, StrictMono φ ∧
+      ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)),
+        Tendsto (fun n ↦ ∑ i ∈ F (φ n), c (φ n) i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
+          atTop (nhds (g x)) := by
+  sorry
+
+/-- Assembly (split 2026-10-19 after lemma-2's partial). A bounded a.e.-strongly-measurable `g`
+is the a.e. limit on `[0,1]` of uniformly bounded rational-interval step functions: `L¹`
+approximants from `_aux_l1_steps`, an a.e. subsequence from `_aux_ae_subseq`. -/
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx
     (g : ℝ → ℝ) (hg : AEStronglyMeasurable g (volume.restrict (Set.Icc (0 : ℝ) 1)))
     (C : ℝ) (hC : ∀ x, |g x| ≤ C) :
@@ -1970,7 +2016,9 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
       (∀ n x, |∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x| ≤ D) ∧
       ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)),
         Tendsto (fun n ↦ ∑ i ∈ F n, c n i * (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) atTop (nhds (g x)) := by
-  sorry
+  choose F c hFb hFL using apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps g hg C hC
+  obtain ⟨φ, -, hφ⟩ := apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_ae_subseq g hg C hC F c (C + 1) hFb hFL
+  exact ⟨fun n ↦ F (φ n), fun n ↦ c (φ n), C + 1, fun n x ↦ hFb (φ n) x, hφ⟩
 
 /-- Leaf (passing to the limit). If uniformly bounded step functions `s n` converge a.e. on
 `[0,1]` to a bounded `g`, the step bound passes to `g`: `|∫ f₀ g| ≤ R ‖g‖_q`. Route: rewrite
