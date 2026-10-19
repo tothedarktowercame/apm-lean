@@ -5028,6 +5028,26 @@ def circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_l
 (`arg ∈ (-π/3, π/3)`), fixes `1`, and every cube root of `w` is a cube root of
 unity times it. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt_aux_slit
+    (w : {w : Circle // w ≠ -circleBase}) : (w.1 : ℂ) ∈ Complex.slitPlane := by
+  rw [Complex.mem_slitPlane_iff_arg]
+  refine ⟨?_, by
+    intro h
+    have := w.1.property
+    simp [h] at this⟩
+  intro ha
+  apply w.2
+  apply Subtype.ext
+  have hi : (w.1 : ℂ).im = 0 := (Complex.arg_eq_pi_iff.mp ha).2
+  have hre : (w.1 : ℂ).re = -1 := by
+    have hn : ‖(w.1 : ℂ)‖ = 1 := by simpa using w.1.property
+    rw [Complex.norm_def, Complex.normSq_apply, hi, mul_zero, add_zero,
+      ← pow_two, Real.sqrt_sq_eq_abs] at hn
+    have hneg : (w.1 : ℂ).re < 0 := (Complex.arg_eq_pi_iff.mp ha).1
+    rw [abs_of_neg hneg] at hn
+    linarith
+  apply Complex.ext <;> simp [circleBase, hre, hi]
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt :
     ∃ r : {w : Circle // w ≠ -circleBase} → Circle, Continuous r ∧
       (∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1) ∧
@@ -5035,7 +5055,78 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
       circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase ∧
       (∀ w z, circleWedge_connected_pair_aux_cube z = w.1 →
         ∃ ρ : circleWedge_connected_pair_aux_Root, z = ρ.1 * r w) := by
-  sorry
+  let r : {w : Circle // w ≠ -circleBase} → Circle := fun w =>
+    ⟨(w.1 : ℂ) ^ ((1 / 3 : ℝ) : ℂ), by
+      have hn : ‖(w.1 : ℂ)‖ = 1 := by simpa using w.1.property
+      simpa [hn] using Complex.norm_cpow_real (w.1 : ℂ) (1 / 3 : ℝ)⟩
+  refine ⟨r, ?_, ?_, ?_, ?_, ?_⟩
+  · apply Continuous.subtype_mk
+    have hc : Continuous fun w : {w : Circle // w ≠ -circleBase} => (w.1 : ℂ) := by
+      fun_prop
+    exact continuous_iff_continuousAt.2 fun w =>
+      (continuousAt_cpow_const (b := ((1 / 3 : ℝ) : ℂ))
+        (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt_aux_slit w)).comp
+          (f := fun w : {w : Circle // w ≠ -circleBase} => (w.1 : ℂ)) hc.continuousAt
+  · intro w
+    apply Subtype.ext
+    change ((w.1 : ℂ) ^ ((1 / 3 : ℝ) : ℂ)) ^ 3 = (w.1 : ℂ)
+    simpa using Complex.cpow_nat_inv_pow (w.1 : ℂ) (by norm_num : (3 : ℕ) ≠ 0)
+  · intro w
+    change (1 / 2 : ℝ) < ((w.1 : ℂ) ^ ((1 / 3 : ℝ) : ℂ)).re
+    rw [Complex.cpow_ofReal_re]
+    have hn : ‖(w.1 : ℂ)‖ = 1 := by simpa using w.1.property
+    rw [hn]
+    simp only [Real.one_rpow, one_mul]
+    rw [← Real.cos_pi_div_three]
+    have haU : (w.1 : ℂ).arg < Real.pi :=
+      (Complex.arg_le_pi _).lt_of_ne
+        (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt_aux_slit w |>
+          Complex.slitPlane_arg_ne_pi)
+    have haL : -Real.pi < (w.1 : ℂ).arg := Complex.neg_pi_lt_arg _
+    by_cases ha : 0 ≤ (w.1 : ℂ).arg
+    · apply Real.cos_lt_cos_of_nonneg_of_le_pi
+      · positivity
+      · linarith [Real.pi_pos]
+      · norm_num [div_eq_mul_inv] at ⊢
+        linarith
+    · have heq : Real.cos ((w.1 : ℂ).arg * (1 / 3 : ℝ)) =
+          Real.cos (-((w.1 : ℂ).arg * (1 / 3 : ℝ))) := by
+          rw [Real.cos_neg]
+      have ha' : (w.1 : ℂ).arg < 0 := lt_of_not_ge ha
+      rw [heq]
+      apply Real.cos_lt_cos_of_nonneg_of_le_pi
+      · norm_num [div_eq_mul_inv]
+        linarith
+      · linarith [Real.pi_pos]
+      · norm_num [div_eq_mul_inv] at ⊢
+        linarith
+  · simp [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift,
+      r, circleBase]
+  · intro w z hz
+    let ρ0 : Circle := z / r w
+    have hρ0 : circleWedge_connected_pair_aux_cube ρ0 = circleBase := by
+      apply Subtype.ext
+      have hc := congrArg Subtype.val hz
+      change ((z : ℂ) / (r w : ℂ)) ^ 3 = 1
+      rw [div_pow]
+      have hc' : (z : ℂ) ^ 3 = (w.1 : ℂ) := by
+        simpa [circleWedge_connected_pair_aux_cube] using hc
+      rw [hc']
+      have hr : ((w.1 : ℂ) ^ ((1 / 3 : ℝ) : ℂ)) ^ 3 = (w.1 : ℂ) := by
+        simpa using Complex.cpow_nat_inv_pow (w.1 : ℂ) (by norm_num : (3 : ℕ) ≠ 0)
+      change (w.1 : ℂ) / (((w.1 : ℂ) ^ ((1 / 3 : ℝ) : ℂ)) ^ 3) = 1
+      rw [hr]
+      exact div_self (by
+        intro h
+        have hn : ‖(w.1 : ℂ)‖ = 1 := by simpa using w.1.property
+        simp [h] at hn)
+    refine ⟨⟨ρ0, hρ0⟩, ?_⟩
+    apply Subtype.ext
+    change (z : ℂ) = ((z : ℂ) / (r w : ℂ)) * (r w : ℂ)
+    exact (div_mul_cancel₀ _ (by
+      intro h
+      have hr := (r w).property
+      simp [h] at hr)).symm
 -- END SEAT AREA
 
 /-- Sheet `ρ` over `U`: the open arc `{Re (z ρ̄) > 1/2}` around `ρ` in the left
