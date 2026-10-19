@@ -655,10 +655,50 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
 /-- LIBRARY: `F_t` fixes `torus ∪ loop` in the right piece.  Loop points have
 `s = 23/20`, `z = 0`.  Torus points have `x ≤ 1/20`, so `cos θ ≥ (23/20)/s ≥
 23/25` and `φ = 0`. -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_loop
+    (t : ℝ) (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p = p := by
+  rcases hp with ⟨u, rfl⟩
+  have htrig : Real.cos u ^ 2 + Real.sin u ^ 2 = 1 := by
+    nlinarith [Real.sin_sq_add_cos_sq u]
+  have hrad :
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad
+        (WithLp.toLp 2 ![6 / 5 - 23 / 20 * Real.cos u,
+          23 / 20 * Real.sin u, 0] : apm_t02a03_E3) = 23 / 20 := by
+    rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad]
+    simp
+    rw [show (23 / 20 * Real.cos u) ^ 2 +
+        (23 / 20 * Real.sin u) ^ 2 = (23 / 20 : ℝ) ^ 2 by
+      nlinarith]
+    rw [Real.sqrt_sq_eq_abs]
+    norm_num
+  ext i
+  fin_cases i <;>
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+      hrad] <;> ring
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus
+    (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hT : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p = 0 := by
+  sorry
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix (t : ℝ) (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
     (hZ : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) :
     apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p = p := by
-  sorry
+  rcases hZ with hT | hL
+  · have hphi :=
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_torus
+        p hp hT
+    ext i
+    fin_cases i <;>
+      simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move,
+        hphi]
+  · exact
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix_aux_loop
+        t p hL
 
 /-- LIBRARY: the end of the collapse.  If `φ = 1` the point goes to `s = 23/20`,
 `z = 0`, the angle `θ` with `cos θ = (6/5 - x)/s`, `sin θ = y/s`: a loop point.
