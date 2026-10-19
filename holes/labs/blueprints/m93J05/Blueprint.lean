@@ -2606,7 +2606,68 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
     (hbd : ∀ M : ℝ, 0 ≤ M →
       ∫ x in Set.Icc (0 : ℝ) 1, |max (-M) (min M (f₀ x))| ^ p ≤ K) :
     MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  let t : ℕ → ℝ → ℝ := fun n x ↦ max (-(n : ℝ)) (min n (f₀ x))
+  have hp0 : 0 < p := lt_trans zero_lt_one hp
+  have hp_ne : ENNReal.ofReal p ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr hp0
+  have hp_top : ENNReal.ofReal p ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hK : 0 ≤ K := by
+    exact (integral_nonneg (fun x ↦ Real.rpow_nonneg
+      (abs_nonneg (max (-1) (min 1 (f₀ x)))) p)).trans
+      (hbd 1 zero_le_one)
+  have ht_meas : ∀ n, AEStronglyMeasurable (t n) μ := by
+    intro n
+    exact (apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_trunc_memLp
+      p n hp (Nat.cast_nonneg n) f₀ hf₀).1
+  have hpow_int : ∀ n, Integrable (fun x ↦ |t n x| ^ p) μ := by
+    intro n
+    have hm := (Real.continuous_rpow_const hp0.le).comp_aestronglyMeasurable
+      ((continuous_abs.comp_aestronglyMeasurable (ht_meas n)))
+    apply Integrable.of_bound hm ((n : ℝ) ^ p)
+    filter_upwards [] with x
+    rw [Real.norm_eq_abs,
+      abs_of_nonneg (Real.rpow_nonneg (abs_nonneg (t n x)) p)]
+    apply Real.rpow_le_rpow (abs_nonneg _) ?_ (le_of_lt hp0)
+    dsimp [t]
+    rw [abs_le]
+    constructor
+    · exact le_max_left _ _
+    · exact max_le (by linarith) (min_le_left _ _)
+  have ht_norm : ∀ n, eLpNorm (t n) (ENNReal.ofReal p) μ ≤
+      (ENNReal.ofReal K) ^ (1 / p) := by
+    intro n
+    rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne hp_top]
+    rw [ENNReal.toReal_ofReal hp0.le]
+    apply ENNReal.rpow_le_rpow
+    · calc
+      (∫⁻ x, ‖t n x‖ₑ ^ p ∂μ) = ENNReal.ofReal (∫ x, |t n x| ^ p ∂μ) := by
+        rw [ofReal_integral_eq_lintegral_ofReal (hpow_int n)
+          (Eventually.of_forall fun x ↦ Real.rpow_nonneg (abs_nonneg _) p)]
+        congr 1
+        funext x
+        rw [Real.enorm_eq_ofReal_abs,
+          ENNReal.ofReal_rpow_of_nonneg (abs_nonneg _) hp0.le]
+      _ ≤ ENNReal.ofReal K := ENNReal.ofReal_le_ofReal
+        (by simpa [μ, t] using hbd n (Nat.cast_nonneg n))
+    · exact one_div_nonneg.mpr hp0.le
+  have ht_lim : ∀ᵐ x ∂μ, Tendsto (fun n ↦ t n x) atTop (nhds (f₀ x)) := by
+    filter_upwards [] with x
+    obtain ⟨N, hN⟩ := exists_nat_gt |f₀ x|
+    apply tendsto_const_nhds.congr'
+    filter_upwards [eventually_ge_atTop N] with n hn
+    have hn' : (N : ℝ) ≤ n := by exact_mod_cast hn
+    have hx : |f₀ x| < (n : ℝ) := hN.trans_le hn'
+    dsimp [t]
+    rw [min_eq_right (le_of_lt ((le_abs_self _).trans_lt hx))]
+    symm
+    apply max_eq_right
+    linarith [neg_le_abs (f₀ x)]
+  have hnorm := MeasureTheory.Lp.eLpNorm_le_of_ae_tendsto
+    (p := ENNReal.ofReal p) (u := atTop) (f := t) (g := f₀)
+    (C := (ENNReal.ofReal K) ^ (1 / p))
+    (Eventually.of_forall ht_norm) ht_meas ht_lim
+  refine ⟨hf₀.aestronglyMeasurable, hnorm.trans_lt ?_⟩
+  exact ENNReal.rpow_lt_top_of_nonneg (by positivity) ENNReal.ofReal_ne_top
 
 /-- Assembly (split 2026-10-19 after lemma-2's partial). An integrable `f₀` whose pairings with rational step functions are
 bounded by `R ‖·‖_q` lies in `Lᵖ([0,1])`. Route: for the truncation `f_M := max (-M) (min M f₀)`
