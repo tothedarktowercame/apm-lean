@@ -2137,7 +2137,112 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_sum_span
           C(apm_t01a03_PuncturedTorus, apm_t01a03_TwoPuncturedTori)) a +
         apm_t01a03_H1map (⟨Sum.inr, continuous_inr⟩ :
           C(apm_t01a03_PuncturedTorus, apm_t01a03_TwoPuncturedTori)) b := by
-  sorry
+  let eP := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of apm_t01a03_PuncturedTorus) 1
+  let eS := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison
+    (TopCat.of apm_t01a03_TwoPuncturedTori) 1
+  let eSum := ConstructionTargets.TopologicalSumSingularHomology.sumHomologyIsoBiprod
+    apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus 1
+  let z := eSum.hom (eS.hom w)
+  let a : apm_t01a03_H1 apm_t01a03_PuncturedTorus :=
+    eP.inv ((Limits.biprod.fst :
+      ConstructionTargets.TopologicalSumSingularHomology.H 1
+          apm_t01a03_PuncturedTorus ⊞
+        ConstructionTargets.TopologicalSumSingularHomology.H 1
+          apm_t01a03_PuncturedTorus ⟶ _).hom z)
+  let b : apm_t01a03_H1 apm_t01a03_PuncturedTorus :=
+    eP.inv ((Limits.biprod.snd :
+      ConstructionTargets.TopologicalSumSingularHomology.H 1
+          apm_t01a03_PuncturedTorus ⊞
+        ConstructionTargets.TopologicalSumSingularHomology.H 1
+          apm_t01a03_PuncturedTorus ⟶ _).hom z)
+  refine ⟨a, b, ?_⟩
+  have hL := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+    (ConstructionTargets.TopologicalSumSingularHomology.sumInl
+      apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus) 1
+  have hR := ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyComparison_naturality
+    (ConstructionTargets.TopologicalSumSingularHomology.sumInr
+      apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus) 1
+  have hLi := ConstructionTargets.TopologicalSumSingularHomology.sumInl_homologyMap_comp_iso_hom
+    apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus 1
+  have hRi := ConstructionTargets.TopologicalSumSingularHomology.sumInr_homologyMap_comp_iso_hom
+    apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus 1
+  have hz : eSum.hom (eS.hom w) =
+      eSum.hom (eS.hom (apm_t01a03_H1map
+      (⟨Sum.inl, continuous_inl⟩ : C(_, _)) a +
+      apm_t01a03_H1map
+      (⟨Sum.inr, continuous_inr⟩ : C(_, _)) b)) := by
+    change eSum.hom.hom (eS.hom.hom w) =
+      eSum.hom.hom (eS.hom.hom (apm_t01a03_H1map
+        (⟨Sum.inl, continuous_inl⟩ : C(_, _)) a +
+        apm_t01a03_H1map
+        (⟨Sum.inr, continuous_inr⟩ : C(_, _)) b))
+    simp only [map_add]
+    change z = _
+    have hLa := congrArg (fun q ↦ q.hom a) hL
+    have hRb := congrArg (fun q ↦ q.hom b) hR
+    have hLia := congrArg (fun q ↦ q.hom (eP.hom a)) hLi
+    have hRib := congrArg (fun q ↦ q.hom (eP.hom b)) hRi
+    have hLa' : eS.hom.hom (apm_t01a03_H1map
+        (⟨Sum.inl, continuous_inl⟩ : C(_, _)) a) =
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+          (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.TopologicalSumSingularHomology.sumInl
+            apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus)).hom
+          (eP.hom a) := by
+      simpa [CategoryTheory.comp_apply] using hLa
+    have hRb' : eS.hom.hom (apm_t01a03_H1map
+        (⟨Sum.inr, continuous_inr⟩ : C(_, _)) b) =
+        (((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+          (AddCommGrpCat.of ℤ)).map
+          (ConstructionTargets.TopologicalSumSingularHomology.sumInr
+            apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus)).hom
+          (eP.hom b) := by
+      simpa [CategoryTheory.comp_apply] using hRb
+    rw [hLa', hRb']
+    let gL := ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+      (ConstructionTargets.TopologicalSumSingularHomology.sumInl
+        apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus)
+    let gR := ((AlgebraicTopology.singularHomologyFunctor AddCommGrpCat 1).obj
+      (AddCommGrpCat.of ℤ)).map
+      (ConstructionTargets.TopologicalSumSingularHomology.sumInr
+        apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus)
+    let H := ConstructionTargets.TopologicalSumSingularHomology.H 1
+      apm_t01a03_PuncturedTorus
+    let jL : H ⟶ H ⊞ H := Limits.biprod.inl
+    let jR : H ⟶ H ⊞ H := Limits.biprod.inr
+    have hadd := eSum.hom.hom.map_add (gL.hom (eP.hom a)) (gR.hom (eP.hom b))
+    have hLia' : eSum.hom.hom (gL.hom (eP.hom a)) =
+        jL.hom (eP.hom a) := by
+      simpa [gL, CategoryTheory.comp_apply] using hLia
+    have hRib' : eSum.hom.hom (gR.hom (eP.hom b)) =
+        jR.hom (eP.hom b) := by
+      simpa [gR, CategoryTheory.comp_apply] using hRib
+    have himages :
+        eSum.hom.hom (gL.hom (eP.hom a)) +
+          eSum.hom.hom (gR.hom (eP.hom b)) =
+        jL.hom (eP.hom a) + jR.hom (eP.hom b) := by
+      rw [hLia', hRib']
+    have hcoord : z =
+        jL.hom (eP.hom a) + jR.hom (eP.hom b) := by
+      have ht := congrArg (fun q : H ⊞ H ⟶ H ⊞ H ↦ q.hom z)
+        (Limits.biprod.total (X := H) (Y := H))
+      change (Limits.biprod.inl : H ⟶ H ⊞ H).hom
+          ((Limits.biprod.fst : H ⊞ H ⟶ H).hom z) +
+        (Limits.biprod.inr : H ⟶ H ⊞ H).hom
+          ((Limits.biprod.snd : H ⊞ H ⟶ H).hom z) = z at ht
+      dsimp [a, b]
+      simpa [H, jL, jR] using ht.symm
+    exact hcoord.trans (himages.symm.trans hadd.symm)
+  have hs := congrArg eSum.inv hz
+  have hs' : eS.hom w = eS.hom (apm_t01a03_H1map
+      (⟨Sum.inl, continuous_inl⟩ : C(_, _)) a +
+      apm_t01a03_H1map
+      (⟨Sum.inr, continuous_inr⟩ : C(_, _)) b) := by
+    simpa using hs
+  have hw := congrArg eS.inv hs'
+  simpa using hw
 -- END SEAT AREA
 
 lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_comp_apply
