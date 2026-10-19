@@ -433,7 +433,49 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_U_bridge
     Function.Surjective (apm_t01a03_H1map
       (⟨(↑), OnePoint.continuous_coe⟩ :
         C(apm_t01a03_TwoPuncturedTori, OnePoint apm_t01a03_TwoPuncturedTori))) := by
-  sorry
+  let e : apm_t01a03_TwoPuncturedTori ≃ₜ
+      apm_t01a03_separating_circle_H1_zero_aux_U :=
+    OnePoint.isOpenEmbedding_coe.toHomeomorph
+  let ec : C(apm_t01a03_TwoPuncturedTori,
+      apm_t01a03_separating_circle_H1_zero_aux_U) := ⟨e, e.continuous⟩
+  let F := (AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)
+  letI : IsIso (TopCat.ofHom ec) := by
+    change IsIso (TopCat.isoOfHomeo
+      (X := TopCat.of apm_t01a03_TwoPuncturedTori)
+      (Y := TopCat.of apm_t01a03_separating_circle_H1_zero_aux_U) e).hom
+    infer_instance
+  have hepi : Epi (F.map (TopCat.ofHom ec)) := by infer_instance
+  have he : Function.Surjective (F.map (TopCat.ofHom ec)) :=
+    (ModuleCat.epi_iff_surjective _).mp hepi
+  intro y
+  obtain ⟨u, hu⟩ := h y
+  obtain ⟨x, hx⟩ := he u
+  refine ⟨x, ?_⟩
+  have hcomp :
+      (⟨(↑), OnePoint.continuous_coe⟩ :
+        C(apm_t01a03_TwoPuncturedTori,
+          OnePoint apm_t01a03_TwoPuncturedTori)) =
+        (⟨Subtype.val, continuous_subtype_val⟩ :
+          C(apm_t01a03_separating_circle_H1_zero_aux_U,
+            OnePoint apm_t01a03_TwoPuncturedTori)).comp ec := by
+    ext z
+    rfl
+  change F.map (TopCat.ofHom ⟨(↑), OnePoint.continuous_coe⟩) x = y
+  rw [hcomp]
+  rw [show F.map (TopCat.ofHom ((⟨Subtype.val, continuous_subtype_val⟩ :
+      C(apm_t01a03_separating_circle_H1_zero_aux_U,
+        OnePoint apm_t01a03_TwoPuncturedTori)).comp ec)) =
+      F.map (TopCat.ofHom ec) ≫
+        IntegralMV.mvToX apm_t01a03_separating_circle_H1_zero_aux_U 1 by
+      change _ = F.map (TopCat.ofHom ec) ≫
+        F.map (TopCat.ofHom
+          (⟨Subtype.val, continuous_subtype_val⟩ :
+            C(apm_t01a03_separating_circle_H1_zero_aux_U,
+              OnePoint apm_t01a03_TwoPuncturedTori)))
+      rw [← F.map_comp]
+      rfl]
+  simpa only [CategoryTheory.comp_apply, hx] using hu
 -- END SEAT AREA
 
 /-- The model: `H₁` of the one-point compactification is reached from the
