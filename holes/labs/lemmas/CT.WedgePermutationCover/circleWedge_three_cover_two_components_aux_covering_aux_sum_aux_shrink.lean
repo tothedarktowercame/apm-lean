@@ -2787,7 +2787,51 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_sum_aux_shrink
     {f : E → X} {U V : Set X} (H : f ⁻¹' U ≃ₜ U × I) (hH : ∀ e, (H e).1.1 = f e)
     (hVU : V ⊆ U) :
     ∃ H' : f ⁻¹' V ≃ₜ V × I, ∀ e, (H' e).1.1 = f e := by
-  sorry
+  let inc : f ⁻¹' V → f ⁻¹' U := fun e ↦ ⟨e.1, hVU e.2⟩
+  let lift : V × I → U × I := fun y ↦ (⟨y.1.1, hVU y.1.2⟩, y.2)
+  let toFun : f ⁻¹' V → V × I := fun e ↦
+    (⟨(H (inc e)).1.1, hH (inc e) ▸ e.2⟩, (H (inc e)).2)
+  let invFun : V × I → f ⁻¹' V := fun y ↦
+    ⟨(H.symm (lift y)).1, by
+      have heq : H (H.symm (lift y)) = lift y := H.apply_symm_apply (lift y)
+      have := hH (H.symm (lift y))
+      rw [heq] at this
+      change f (H.symm (lift y)).1 ∈ V
+      exact this ▸ y.1.2⟩
+  let H' : f ⁻¹' V ≃ₜ V × I :=
+    { toFun := toFun
+      invFun := invFun
+      left_inv := fun e ↦ by
+        apply Subtype.ext
+        change (invFun (toFun e)).1 = e.1
+        have hz : H (H.symm (lift (toFun e))) = H (inc e) := by
+          rw [H.apply_symm_apply]
+        exact congrArg (fun z : f ⁻¹' U ↦ z.1) (H.injective hz)
+      right_inv := fun y ↦ by
+        have hi : inc (invFun y) = H.symm (lift y) := Subtype.ext rfl
+        have hz : H (inc (invFun y)) = lift y :=
+          (congrArg H hi).trans (H.apply_symm_apply (lift y))
+        apply Prod.ext
+        · apply Subtype.ext
+          change (H (inc (invFun y))).1.1 = y.1.1
+          exact congrArg (fun z ↦ z.1.1) hz
+        · change (H (inc (invFun y))).2 = y.2
+          exact congrArg Prod.snd hz
+      continuous_toFun := by
+        apply Continuous.prodMk
+        · apply Continuous.subtype_mk
+          simpa [inc, toFun] using
+            (continuous_subtype_val.comp
+              (H.continuous.comp (continuous_subtype_val.subtype_mk _)).fst)
+        · simpa [inc, toFun] using
+            (H.continuous.comp (continuous_subtype_val.subtype_mk _)).snd
+      continuous_invFun := by
+        apply Continuous.subtype_mk
+        have hlift : Continuous lift :=
+          ((continuous_subtype_val.comp continuous_fst).subtype_mk _).prodMk continuous_snd
+        simpa only [invFun] using
+          continuous_subtype_val.comp (H.symm.continuous.comp hlift) }
+  exact ⟨H', fun e ↦ hH (inc e)⟩
 -- END SEAT AREA
 
 /-- Two local trivialisations over the same `W` glue to one for `Sum.elim f g`,
