@@ -240,7 +240,67 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
     (hcover : ∀ e, f e ∈ U → ∃ i u, s i u = e)
     (hdisj : ∀ i j u v, s i u = s j v → i = j) :
     IsEvenlyCovered f x ι := by
-  sorry
+  classical
+  let idx : f ⁻¹' U → ι := fun e ↦ (hcover e.1 e.2).choose
+  let arg : (e : f ⁻¹' U) → U := fun e ↦ (hcover e.1 e.2).choose_spec.choose
+  have hsarg (e : f ⁻¹' U) : s (idx e) (arg e) = e.1 :=
+    (hcover e.1 e.2).choose_spec.choose_spec
+  have hsection (e : f ⁻¹' U) :
+      s (idx e) ⟨f e.1, e.2⟩ = e.1 := by
+    have ha : arg e = ⟨f e.1, e.2⟩ := by
+      apply Subtype.ext
+      exact (hfs (idx e) (arg e)).symm.trans (congrArg f (hsarg e))
+    rw [← ha]
+    exact hsarg e
+  have hidx (i : ι) (u : U) : idx ⟨s i u, by simpa [hfs] using u.2⟩ = i := by
+    apply hdisj _ _ _ u
+    exact hsarg _
+  have hidx_cont : Continuous idx := by
+    apply IsLocallyConstant.continuous
+    rw [IsLocallyConstant.iff_exists_open]
+    intro e
+    refine ⟨Subtype.val ⁻¹' Set.range (s (idx e)),
+      (hopen _).preimage continuous_subtype_val, ?_, ?_⟩
+    · exact ⟨arg e, hsarg e⟩
+    · intro e' he'
+      obtain ⟨u, hu⟩ := he'
+      apply hdisj _ _ (arg e') u
+      exact (hsarg e').trans hu.symm
+  have hinv_cont : Continuous (fun z : U × ι ↦
+      (⟨s z.2 z.1, by simpa [hfs] using z.1.2⟩ : f ⁻¹' U)) := by
+    apply continuous_of_continuousOn_iUnion_of_isOpen
+        (s := fun i : ι ↦ {z : U × ι | z.2 = i})
+    · intro i
+      have hi : Continuous (fun z : U × ι ↦
+          (⟨s i z.1, by simpa [hfs] using z.1.2⟩ : f ⁻¹' U)) := by
+        apply Continuous.subtype_mk
+        exact (hs i).comp continuous_fst
+      exact hi.continuousOn.congr (by
+        intro z hz
+        simp only [Set.mem_setOf_eq] at hz
+        rcases z with ⟨u, j⟩
+        dsimp at hz ⊢
+        subst j
+        rfl)
+    · intro i
+      exact (isOpen_discrete {i}).preimage continuous_snd
+    · ext z
+      simp
+  refine ⟨inferInstance, U, hxU, hU, hU.preimage hf, ?_, ?_⟩
+  · exact
+      { toFun := fun e ↦ (⟨f e.1, e.2⟩, idx e)
+        invFun := fun z ↦ ⟨s z.2 z.1, by simpa [hfs] using z.1.2⟩
+        left_inv := fun e ↦ Subtype.ext (hsection e)
+        right_inv := fun z ↦ by
+          apply Prod.ext
+          · apply Subtype.ext
+            exact hfs z.2 z.1
+          · exact hidx z.2 z.1
+        continuous_toFun :=
+          (Continuous.subtype_mk (hf.comp continuous_subtype_val) _).prodMk hidx_cont
+        continuous_invFun := hinv_cont }
+  · intro e
+    rfl
 
 /-- The open hemisphere `{y | 0 < y₀}` around `e₀` embeds openly in `RP2`
 (it is disjoint from its antipode, and `antipodalCover` is an open map). -/
