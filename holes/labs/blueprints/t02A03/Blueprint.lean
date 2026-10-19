@@ -712,7 +712,134 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_wedge_homeomorph
     (heB : ∀ h : x ∈ B, eB ⟨x, h⟩ = 1) :
     Nonempty ((A ∪ B : Set X) ≃ₜ
       ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
-  sorry
+  let f : Sum ConstructionTargets.TorusCircleWedgeOpenCover.Torus Circle →
+      (A ∪ B : Set X) := fun z ↦ match z with
+    | .inl a => ⟨eA.symm a, Or.inl (eA.symm a).property⟩
+    | .inr b => ⟨eB.symm b, Or.inr (eB.symm b).property⟩
+  have hxA : x ∈ A := by
+    have : x ∈ A ∩ B := by simpa [hAB]
+    exact this.1
+  have hxB : x ∈ B := by
+    have : x ∈ A ∩ B := by simpa [hAB]
+    exact this.2
+  have hfbase : f (.inl ((1 : Circle), (1 : Circle))) = f (.inr (1 : Circle)) := by
+    apply Subtype.ext
+    simp only [f]
+    have hA : eA.symm ((1 : Circle), (1 : Circle)) = ⟨x, hxA⟩ := by
+      apply eA.injective
+      simp [heA hxA]
+    have hB : eB.symm (1 : Circle) = ⟨x, hxB⟩ := by
+      apply eB.injective
+      simp [heB hxB]
+    exact (congrArg Subtype.val hA).trans (congrArg Subtype.val hB).symm
+  have hfrespect {u v}
+      (huv : Relation.EqvGen
+        (ConstructionTargets.PointWedgeQuotient.Rel
+          ((1 : Circle), (1 : Circle)) (1 : Circle)) u v) : f u = f v := by
+    induction huv with
+    | rel u v huv => cases huv; exact hfbase
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let g : ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge →
+      (A ∪ B : Set X) := Quotient.lift f (fun _ _ h ↦ hfrespect h)
+  have hfcont : Continuous f := by
+    apply continuous_sum_dom.2
+    constructor
+    · exact (eA.symm.continuous.subtype_val).subtype_mk _
+    · exact (eB.symm.continuous.subtype_val).subtype_mk _
+  have hgcont : Continuous g := hfcont.quotient_lift _
+  have hgsurj : Function.Surjective g := by
+    rintro ⟨y, hy⟩
+    rcases hy with hyA | hyB
+    · refine ⟨Quotient.mk _ (.inl (eA ⟨y, hyA⟩)), ?_⟩
+      apply Subtype.ext
+      simp [g, f]
+    · refine ⟨Quotient.mk _ (.inr (eB ⟨y, hyB⟩)), ?_⟩
+      apply Subtype.ext
+      simp [g, f]
+  have hginj : Function.Injective g := by
+    rintro ⟨u⟩ ⟨v⟩ huv
+    apply Quotient.sound
+    cases u with
+    | inl a =>
+      cases v with
+      | inl a' =>
+        change f (.inl a) = f (.inl a') at huv
+        simp only [f] at huv
+        have hval : (eA.symm a : X) = eA.symm a' :=
+          congrArg (fun z : (A ∪ B : Set X) ↦ (z : X)) huv
+        have hsub : eA.symm a = eA.symm a' := Subtype.ext hval
+        have haa : a = a' := eA.symm.injective hsub
+        subst a'
+        exact Relation.EqvGen.refl _
+      | inr b =>
+        change f (.inl a) = f (.inr b) at huv
+        simp only [f] at huv
+        have hmem : (eA.symm a : X) ∈ A ∩ B :=
+          ⟨(eA.symm a).property, by
+            rw [show (eA.symm a : X) = eB.symm b from congrArg Subtype.val huv]
+            exact (eB.symm b).property⟩
+        have hx : (eA.symm a : X) = x := by
+          have : (eA.symm a : X) ∈ ({x} : Set X) := by simpa [hAB] using hmem
+          simpa using this
+        have ha : a = ((1 : Circle), (1 : Circle)) := by
+          calc
+            a = eA (eA.symm a) := (eA.apply_symm_apply a).symm
+            _ = eA ⟨x, hxA⟩ := congrArg eA (Subtype.ext hx)
+            _ = _ := heA hxA
+        have hb : b = (1 : Circle) := by
+          calc
+            b = eB (eB.symm b) := (eB.apply_symm_apply b).symm
+            _ = eB ⟨x, hxB⟩ := congrArg eB (Subtype.ext
+              ((congrArg Subtype.val huv).symm.trans hx))
+            _ = _ := heB hxB
+        subst a
+        subst b
+        exact Relation.EqvGen.rel _ _
+          (ConstructionTargets.PointWedgeQuotient.Rel.base)
+    | inr b =>
+      cases v with
+      | inl a =>
+        change f (.inr b) = f (.inl a) at huv
+        simp only [f] at huv
+        have hmem : (eB.symm b : X) ∈ A ∩ B :=
+          ⟨by
+            rw [show (eB.symm b : X) = eA.symm a from congrArg Subtype.val huv]
+            exact (eA.symm a).property,
+           (eB.symm b).property⟩
+        have hx : (eB.symm b : X) = x := by
+          have : (eB.symm b : X) ∈ ({x} : Set X) := by simpa [hAB] using hmem
+          simpa using this
+        have hb : b = (1 : Circle) := by
+          calc
+            b = eB (eB.symm b) := (eB.apply_symm_apply b).symm
+            _ = eB ⟨x, hxB⟩ := congrArg eB (Subtype.ext hx)
+            _ = _ := heB hxB
+        have ha : a = ((1 : Circle), (1 : Circle)) := by
+          calc
+            a = eA (eA.symm a) := (eA.apply_symm_apply a).symm
+            _ = eA ⟨x, hxA⟩ := congrArg eA (Subtype.ext
+              ((congrArg Subtype.val huv).symm.trans hx))
+            _ = _ := heA hxA
+        subst a
+        subst b
+        exact (Relation.EqvGen.rel _ _
+          (ConstructionTargets.PointWedgeQuotient.Rel.base)).symm
+      | inr b' =>
+        change f (.inr b) = f (.inr b') at huv
+        simp only [f] at huv
+        have hval : (eB.symm b : X) = eB.symm b' :=
+          congrArg (fun z : (A ∪ B : Set X) ↦ (z : X)) huv
+        have hsub : eB.symm b = eB.symm b' := Subtype.ext hval
+        have hbb : b = b' := eB.symm.injective hsub
+        subst b'
+        exact Relation.EqvGen.refl _
+  let eg : ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge ≃
+      (A ∪ B : Set X) := Equiv.ofBijective g ⟨hginj, hgsurj⟩
+  letI : CompactSpace ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge :=
+    Quotient.compactSpace
+  exact ⟨(Continuous.homeoOfEquivCompactToT2 (f := eg) hgcont).symm⟩
 
 /-- The right tube minus the open left tube: the part of `shellY` outside the
 left boundary torus, together with the patch of that torus inside the right
