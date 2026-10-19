@@ -1620,11 +1620,60 @@ def circleWedge_connected_pair_aux_pD :
   Quotient.lift circleWedge_connected_pair_aux_projD
     (fun _ _ h ↦ circleWedge_connected_pair_aux_projD_respects h)
 
+/-! #### Split of `circleWedge_connected_pair_aux_covering` (lemma-1 PARTIAL, 2026-10-19) -/
+
+/-- Cubing is continuous.  (Banked by lemma-1.) -/
+lemma circleWedge_connected_pair_aux_covering_aux_cube_continuous :
+    Continuous circleWedge_connected_pair_aux_cube := by
+  exact Continuous.subtype_mk (continuous_subtype_val.pow 3) _
+
+/-- `pC` is a covering map.  Away from the wedge point: over a left-lobe point
+`[inl w]`, `w ≠ circleBase`, take an open arc around `w` missing `circleBase`;
+its preimage under `cube` is three disjoint arcs, none containing a root, so no
+glue applies and `cube` restricts to a homeomorphism on each (cubing is a
+covering map of the circle).  Over a right-lobe point `[inr w]` the sheets are
+the three copies `{(z, r)}`.  At the wedge point: a neighbourhood that is a small
+arc around `circleBase` in each lobe; sheet `r` is the arc around `r.1` on the
+left glued to the arc around `circleBase` in copy `r` on the right.  Continuity
+uses `_aux_cube_continuous` and the quotient topology on both raw sums. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap :
+    IsCoveringMap circleWedge_connected_pair_aux_pC := by
+  sorry
+
+/-- Fibres of `pC` have three points: over `[inl w]` the three cube roots of `w`
+on the left (the right contributes nothing unless `w = circleBase`); over
+`[inr w]`, `w ≠ circleBase`, the three points `(w, r)`; over the wedge point the
+three classes `{inl r.1, inr (circleBase, r)}`, one per root `r`.  Count via a
+bijection with `circleWedge_connected_pair_aux_Root` (or with the cube roots of
+`w`), which has card 3. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = b} = 3 := by
+  sorry
+
+/-- `pD` is a covering map: as for `pC`, but the right lobe is also covered by
+`cube`; at the wedge point sheet `r` is the arc around `r.1` on the left glued
+to the arc around `r.1` on the right. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap :
+    IsCoveringMap circleWedge_connected_pair_aux_pD := by
+  sorry
+
+/-- Fibres of `pD` have three points: the cube roots of `w` in the relevant lobe,
+and over the wedge point the three classes `{inl r.1, inr r.1}`. -/
+lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber (b : CircleWedge) :
+    Nat.card {e : circleWedge_connected_pair_aux_ED //
+      circleWedge_connected_pair_aux_pD e = b} = 3 := by
+  sorry
+
 /-- Local evenly-covered charts for the two quotient graphs. -/
 lemma circleWedge_connected_pair_aux_covering :
     IsNfoldCover 3 circleWedge_connected_pair_aux_pC ∧
       IsNfoldCover 3 circleWedge_connected_pair_aux_pD := by
-  sorry
+  exact
+    ⟨⟨circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap,
+        circleWedge_connected_pair_aux_covering_aux_pC_fiber⟩,
+      ⟨circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap,
+        circleWedge_connected_pair_aux_covering_aux_pD_fiber⟩⟩
 
 /-- Both quotient graphs are connected. -/
 lemma circleWedge_connected_pair_aux_connected :

@@ -1443,10 +1443,36 @@ def circleWedge_connected_pair_aux_pD :
 
 /-- Local evenly-covered charts for the two quotient graphs. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_cube_continuous :
+    Continuous circleWedge_connected_pair_aux_cube := by
+  exact Continuous.subtype_mk (continuous_subtype_val.pow 3) _
+
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap :
+    IsCoveringMap circleWedge_connected_pair_aux_pC := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
+    Nat.card {e : circleWedge_connected_pair_aux_EC //
+      circleWedge_connected_pair_aux_pC e = b} = 3 := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap :
+    IsCoveringMap circleWedge_connected_pair_aux_pD := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_fiber (b : CircleWedge) :
+    Nat.card {e : circleWedge_connected_pair_aux_ED //
+      circleWedge_connected_pair_aux_pD e = b} = 3 := by
+  sorry
+
 lemma circleWedge_connected_pair_aux_covering :
     IsNfoldCover 3 circleWedge_connected_pair_aux_pC ∧
       IsNfoldCover 3 circleWedge_connected_pair_aux_pD := by
-  sorry
+  exact
+    ⟨⟨circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap,
+        circleWedge_connected_pair_aux_covering_aux_pC_fiber⟩,
+      ⟨circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap,
+        circleWedge_connected_pair_aux_covering_aux_pD_fiber⟩⟩
 -- END SEAT AREA
 
 /-- Both quotient graphs are connected. -/
