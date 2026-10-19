@@ -1,5 +1,33 @@
 # Blueprint for t00A02
 
+## Status (2026-10-19)
+
+One lemma is still `sorry`: `apm_t00A02_connected_ten_cover_homeomorph`
+(part (a), surface classification).  Parts (b) and (c) are sorry-free:
+
+- `apm_t00A02_antipodalCover_isCoveringMap` — proved (lemma round).
+- `apm_t00A02_shared_cover_adapter` — proved (b95ee75cb).
+- `apm_t00A02_regular_wedge_cover`, `apm_t00A02_irregular_wedge_cover` —
+  assemblies over `ConstructionTargets.WedgePermutationCover`, which closed
+  with 0 sorry at 8244d7499.  The LIBRARY notes on these two lemmas below
+  are kept as written at blueprint time; they no longer describe a gap.
+
+`ConstructionTargets.SurfaceClassification` is now sorry-free, but it still
+stops at `compactSmoothSurfaceFiniteClosedDiskCover`; it has neither
+Euler-characteristic multiplicativity for finite covers nor the
+classification theorem, so it does not discharge the remaining lemma.
+
+Checked 2026-10-19 on branch `lemmas` (32509c4ee):
+
+```text
+'apm_t00a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'apm_t00A02_regular_wedge_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
+'apm_t00A02_irregular_wedge_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
+'apm_t00A02_antipodalCover_isCoveringMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The one `sorry` warning is at `apm_t00A02_connected_ten_cover_homeomorph`.
+
 ## Triage
 
 Verdict: **true and faithful**.

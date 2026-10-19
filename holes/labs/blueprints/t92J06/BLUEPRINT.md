@@ -1,5 +1,33 @@
 # Blueprint for t92J06
 
+## Status (2026-10-19)
+
+One lemma is still `sorry`: `apm_t92J06_exists_simplyConnected_cover`
+(the universal cover).  The finite-cover half is sorry-free:
+`apm_t92J06_shared_cover_adapter` is proved (dbcdf7fec) and
+`apm_t92J06_exists_four_threeSheeted_covers` is an assembly over
+`ConstructionTargets.WedgePermutationCover.circleWedge_four_pairwise_nonhomeomorphic`
+(module closed with 0 sorry at 8244d7499).
+
+A shorter route for the remaining lemma now exists, replacing the Cayley-tree
+construction described below.  `ConstructionTargets.CoveringSubgroupCorrespondence.connectedCover`
+(sorry-free) applied to the trivial subgroup `⊥` gives a path-connected cover
+`E` with `FundamentalGroup E e ≃* ⊥`, hence a simply connected cover.  Its
+hypotheses on `apm_t92J06_X` are `PathConnectedSpace`, `LocPathConnectedSpace`,
+`Small.{v}` and `SemilocallySimplyConnected`.  The last is the only one with no
+existing sorry-free proof for this wedge; `LocPathConnectedOpenCover` and
+`ClassicalLocalPathConnectivity` cover local path-connectedness.  Not yet
+re-blueprinted or dispatched.
+
+Checked 2026-10-19 on branch `lemmas` (32509c4ee):
+
+```text
+'apm_t92j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'apm_t92J06_exists_four_threeSheeted_covers' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The one `sorry` warning is at `apm_t92J06_exists_simplyConnected_cover`.
+
 ## Triage
 
 Verdict: **true and faithful**.
