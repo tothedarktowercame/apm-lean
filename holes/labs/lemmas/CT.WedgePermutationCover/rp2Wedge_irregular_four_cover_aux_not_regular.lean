@@ -198,10 +198,404 @@ wedge point, over the image `V` of an open set of `Sphere2` disjoint from its
 antipode, the preimage is four copies of `V` in one lobe; at the wedge point,
 take `V` = images of small caps around `±e₀` in both lobes, whose preimage is
 four wedges of two caps, one per fibre point `[(e₀, i)]`. -/
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (x : Wedge RP2 RP2 rpBase rpBase)
+    (hx : x ≠ Quotient.mk _ (.inl rpBase)) :
+    IsEvenlyCovered (rp2Wedge_regular_four_cover_aux_p σ τ) x
+      ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹' {x}) := by
+  sorry
+
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
+    IsEvenlyCovered (rp2Wedge_regular_four_cover_aux_p σ τ)
+      (Quotient.mk _ (.inl rpBase))
+      ((rp2Wedge_regular_four_cover_aux_p σ τ) ⁻¹'
+        {Quotient.mk _ (.inl rpBase)}) := by
+  sorry
+
 theorem rp2Wedge_regular_four_cover_aux_isCoveringMap (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
     IsCoveringMap (rp2Wedge_regular_four_cover_aux_p σ τ) := by
-  sorry
+  intro x
+  classical
+  by_cases hx : x = Quotient.mk _ (.inl rpBase)
+  · subst x
+    exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge σ τ hσ hτ
+  · exact rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away σ τ hσ hτ x hx
+
+/-! #### Split of `rp2Wedge_regular_four_cover_aux_card` (lemma-2 PARTIAL, 2026-10-18) -/
+
+/-- An invariant of the sheets that respects the gluing descends through the
+equivalence relation (banked from lemma-2).  Used for injectivity of the
+fibre parametrisations: choose `fL`, `fR` recording the sheet index. -/
+lemma rp2Wedge_regular_four_cover_aux_card_aux_invariant
+    {α : Type*} (σ τ : Equiv.Perm (Fin 4))
+    (fL fR : Sphere2 × Fin 4 → α)
+    (hL : ∀ x i, fL (-x, σ i) = fL (x, i))
+    (hR : ∀ x i, fR (-x, τ i) = fR (x, i))
+    (hG : ∀ i, fL (rp2Wedge_regular_four_cover_aux_e0, i) =
+      fR (rp2Wedge_regular_four_cover_aux_e0, i))
+    {a b : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)}
+    (h : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+    Sum.elim fL fR a = Sum.elim fL fR b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | left x i => exact (hL x i).symm
+      | right x i => exact (hR x i).symm
+      | glue i => exact hG i
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- The wedge relation identifies only the two base points. -/
+lemma rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff {A B : Type*}
+    (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
+/-- Fibre over a non-base point of the left lobe: `i ↦ [inl (x, i)]` is a
+bijection from `Fin 4`.  Surjective: a preimage is `[inl (y, j)]` with
+`y = ±x` (by `_aux_card_aux_wedge_eqvGen_iff`, the point is not the wedge
+point, and `_aux_cover_eq_iff`), and `[inl (-x, j)] = [inl (x, σ j)]` since
+`σ` is an involution.  Injective: `_aux_card_aux_invariant` with
+`fL (y, k) = if y = x then k else if y = -x then σ k else 0`, `fR = 0`
+(`hG` holds because `e₀ ≠ ±x`). -/
+theorem rp2Wedge_regular_four_cover_aux_card_aux_left (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (x : Sphere2) (hx : antipodalCover x ≠ rpBase) :
+    Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl (antipodalCover x))} = 4 := by
+  have hx0 : (x : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+    intro h
+    have := x.property
+    simp [h] at this
+  have hxx : (-x : Sphere2) ≠ x := by
+    intro h
+    apply hx0
+    have h' : -(x : EuclideanSpace ℝ (Fin 3)) = x := congrArg Subtype.val h
+    have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      rw [two_smul]
+      simpa using
+        (congrArg (fun z ↦ z + (x : EuclideanSpace ℝ (Fin 3))) h').symm
+    exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+  let fL : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = x then z.2 else if z.1 = -x then σ z.2 else 0
+  let fR : Sphere2 × Fin 4 → Fin 4 := fun _ ↦ 0
+  have hL : ∀ y i, fL (-y, σ i) = fL (y, i) := by
+    intro y i
+    simp only [fL]
+    by_cases hy : y = x
+    · subst y
+      simp [hxx, hσ i]
+    by_cases hyn : y = -x
+    · subst y
+      simp [hxx, hσ i]
+    have hny : -y ≠ x := by
+      intro h
+      apply hyn
+      rw [← h]
+      simp
+    have hnyn : -y ≠ -x := by
+      intro h
+      apply hy
+      exact neg_injective h
+    simp [hy, hyn, hny, hnyn]
+  have he0x : rp2Wedge_regular_four_cover_aux_e0 ≠ x := by
+    intro h
+    apply hx
+    rw [← h, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  have he0nx : rp2Wedge_regular_four_cover_aux_e0 ≠ -x := by
+    intro h
+    apply hx
+    exact (calc
+      antipodalCover x = antipodalCover (-x) :=
+        (rp2Wedge_regular_four_cover_aux_neg x).symm
+      _ = antipodalCover rp2Wedge_regular_four_cover_aux_e0 := congrArg _ h.symm
+      _ = rpBase := rp2Wedge_regular_four_cover_aux_rpBase.symm)
+  have hG : ∀ i, fL (rp2Wedge_regular_four_cover_aux_e0, i) =
+      fR (rp2Wedge_regular_four_cover_aux_e0, i) := by
+    intro i
+    simp [fL, fR, he0x, he0nx]
+  let e : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl (antipodalCover x))} := fun i ↦
+    ⟨Quotient.mk _ (.inl (x, i)), rfl⟩
+  have einj : Function.Injective e := by
+    intro i j hij
+    have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+        (.inl (x, i)) (.inl (x, j)) := Quotient.exact (congrArg Subtype.val hij)
+    have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ fL fR
+      hL (by simp [fR]) hG hq
+    simpa [fL] using hi
+  have esurj : Function.Surjective e := by
+    rintro ⟨z, hz⟩
+    obtain ⟨a, ha⟩ := Quotient.exists_rep z
+    subst z
+    rcases a with ⟨y, i⟩ | ⟨y, i⟩
+    · have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inl (antipodalCover y)) (.inl (antipodalCover x)) :=
+        Quotient.exact hz
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+          rpBase rpBase _ _).mp hw with h | h
+      · have hc : antipodalCover y = antipodalCover x := Sum.inl.inj h
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x y).mp hc.symm with rfl | rfl
+        · exact ⟨i, rfl⟩
+        · refine ⟨σ i, ?_⟩
+          apply Subtype.ext
+          apply Quotient.sound
+          simpa using (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.left (-x) i :
+              rp2Wedge_regular_four_cover_aux_Rel σ τ _ _)))
+      · rcases h with ⟨_, hv⟩
+        rcases hv with hv | hv
+        · exact (hx (Sum.inl.inj hv)).elim
+        · contradiction
+    · have hw : Relation.EqvGen (WedgeRel rpBase rpBase)
+          (.inr (antipodalCover y)) (.inl (antipodalCover x)) :=
+        Quotient.exact hz
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+          rpBase rpBase _ _).mp hw with h | h
+      · contradiction
+      · rcases h with ⟨_, hv⟩
+        rcases hv with hv | hv
+        · exact (hx (Sum.inl.inj hv)).elim
+        · contradiction
+  rw [Nat.card_congr (Equiv.ofBijective e ⟨einj, esurj⟩).symm]
+  simp
+
+/-- Fibre over a non-base point of the right lobe; the mirror image of
+`_aux_card_aux_left` with `τ` in place of `σ`. -/
+theorem rp2Wedge_regular_four_cover_aux_card_aux_right (σ τ : Equiv.Perm (Fin 4))
+    (hτ : Function.Involutive τ) (x : Sphere2) (hx : antipodalCover x ≠ rpBase) :
+    Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inr (antipodalCover x))} = 4 := by
+  have hxneg : (-x : Sphere2) ≠ x := by
+    intro h
+    have hx0 : (x : EuclideanSpace ℝ (Fin 3)) ≠ 0 := by
+      intro hx0
+      have hs := x.property
+      simp [hx0] at hs
+    apply hx0
+    have h' : -(x : EuclideanSpace ℝ (Fin 3)) = x := congrArg Subtype.val h
+    have htwo : (2 : ℝ) • (x : EuclideanSpace ℝ (Fin 3)) = 0 := by
+      rw [two_smul]
+      simpa using
+        (congrArg (fun z ↦ z + (x : EuclideanSpace ℝ (Fin 3))) h').symm
+    exact (smul_eq_zero.mp htwo).resolve_left (by norm_num)
+  have he0x : rp2Wedge_regular_four_cover_aux_e0 ≠ x := by
+    intro h
+    apply hx
+    rw [← h, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  have he0negx : rp2Wedge_regular_four_cover_aux_e0 ≠ -x := by
+    intro h
+    apply hx
+    rw [← rp2Wedge_regular_four_cover_aux_neg x,
+      ← h, ← rp2Wedge_regular_four_cover_aux_rpBase]
+  let F : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = x then z.2 else if z.1 = -x then τ z.2 else 0
+  have hF : ∀ y i, F (-y, τ i) = F (y, i) := by
+    intro y i
+    by_cases hyx : y = x
+    · subst y
+      simp [F, hxneg, hτ i]
+    · by_cases hynx : y = -x
+      · subst y
+        simp [F, hxneg, hτ i]
+      · have hnyx : -y ≠ x := by
+          intro h
+          apply hynx
+          simpa using congrArg Neg.neg h
+        have hnynx : -y ≠ -x := by
+          intro h
+          apply hyx
+          simpa using congrArg Neg.neg h
+        simp [F, hyx, hynx, hnyx, hnynx]
+  let f : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inr (antipodalCover x))} := fun i ↦
+    ⟨Quotient.mk _ (.inr (x, i)), rfl⟩
+  have hf_inj : Function.Injective f := by
+    intro i j hij
+    have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+        (.inr (x, i)) (.inr (x, j)) :=
+      Quotient.exact (congrArg Subtype.val hij)
+    have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ
+      (fun _ ↦ (0 : Fin 4)) F
+      (by simp) hF (by intro k; simp [F, he0x, he0negx]) hq
+    simpa [F] using hi
+  have hf_surj : Function.Surjective f := by
+    intro e
+    obtain ⟨z, hz⟩ := Quotient.exists_rep e.1
+    rcases z with ⟨y, i⟩ | ⟨y, i⟩
+    · exfalso
+      have hp := e.2
+      rw [← hz] at hp
+      change (Quotient.mk _ (.inl (antipodalCover y)) :
+        Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inr (antipodalCover x)) at hp
+      have hw := (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover y)) (.inr (antipodalCover x))).mp
+        (Quotient.exact hp)
+      rcases hw with h | ⟨_, hr⟩
+      · cases h
+      · rcases hr with h | h
+        · cases h
+        · exact hx (Sum.inr.inj h)
+    · have hp := e.2
+      rw [← hz] at hp
+      change (Quotient.mk _ (.inr (antipodalCover y)) :
+        Wedge RP2 RP2 rpBase rpBase) = Quotient.mk _ (.inr (antipodalCover x)) at hp
+      have hw := (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inr (antipodalCover y)) (.inr (antipodalCover x))).mp
+        (Quotient.exact hp)
+      have hc : antipodalCover y = antipodalCover x := by
+        rcases hw with h | ⟨_, hr⟩
+        · exact Sum.inr.inj h
+        · rcases hr with h | h
+          · cases h
+          · exact (hx (Sum.inr.inj h)).elim
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x y).mp hc.symm with rfl | rfl
+      · exact ⟨i, Subtype.ext hz⟩
+      · refine ⟨τ i, ?_⟩
+        apply Subtype.ext
+        apply (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right x (τ i)))).trans
+        simpa [hτ i] using hz
+  rw [Nat.card_congr (Equiv.ofBijective f ⟨hf_inj, hf_surj⟩).symm]
+  simp
+
+/-- Fibre over the wedge point: `i ↦ [inl (e₀, i)]` is a bijection from
+`Fin 4`.  Surjective: a preimage is `[inl (±e₀, j)]` or `[inr (±e₀, j)]`;
+these equal `[inl (e₀, j)]`, `[inl (e₀, σ j)]`, `[inl (e₀, j)]`,
+`[inl (e₀, τ j)]` (involutions, then `glue`).  Injective:
+`_aux_card_aux_invariant` with `fL (y, k) = if y = e₀ then k else if y = -e₀
+then σ k else 0` and `fR` the same with `τ`. -/
+theorem rp2Wedge_regular_four_cover_aux_card_aux_base (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
+    Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} = 4 := by
+  let e0 := rp2Wedge_regular_four_cover_aux_e0
+  have hne : (-e0 : Sphere2) ≠ e0 := by
+    intro h
+    have hval := congrArg (fun z : Sphere2 ↦ (z : EuclideanSpace ℝ (Fin 3))) h
+    have := congrArg (fun z : EuclideanSpace ℝ (Fin 3) ↦ z 0) hval
+    norm_num [e0, rp2Wedge_regular_four_cover_aux_e0] at this
+  let fL : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = e0 then z.2 else if z.1 = -e0 then σ z.2 else 0
+  let fR : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = e0 then z.2 else if z.1 = -e0 then τ z.2 else 0
+  have hL : ∀ x i, fL (-x, σ i) = fL (x, i) := by
+    intro x i
+    by_cases hx : x = e0
+    · subst x
+      simp [fL, hne, hσ i]
+    · by_cases hx' : x = -e0
+      · subst x
+        simp [fL, hne, hσ i]
+      · have hn₁ : -x ≠ e0 := by
+          intro h
+          apply hx'
+          simpa using congrArg Neg.neg h
+        have hn₂ : -x ≠ -e0 := by
+          intro h
+          apply hx
+          simpa only [neg_inj] using h
+        simp [fL, hx, hx', hn₁, hn₂]
+  have hR : ∀ x i, fR (-x, τ i) = fR (x, i) := by
+    intro x i
+    by_cases hx : x = e0
+    · subst x
+      simp [fR, hne, hτ i]
+    · by_cases hx' : x = -e0
+      · subst x
+        simp [fR, hne, hτ i]
+      · have hn₁ : -x ≠ e0 := by
+          intro h
+          apply hx'
+          simpa using congrArg Neg.neg h
+        have hn₂ : -x ≠ -e0 := by
+          intro h
+          apply hx
+          simpa only [neg_inj] using h
+        simp [fR, hx, hx', hn₁, hn₂]
+  let F : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} := fun i ↦
+    ⟨Quotient.mk _ (.inl (e0, i)), rfl⟩
+  have hinj : Function.Injective F := by
+    intro i j hij
+    have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+        (.inl (e0, i)) (.inl (e0, j)) := Quotient.exact (congrArg Subtype.val hij)
+    have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ fL fR
+      hL hR (by intro k; simp [e0, fL, fR]) hq
+    simpa [fL] using hi
+  have hsurj : Function.Surjective F := by
+    rintro ⟨q, hq⟩
+    induction q using Quotient.inductionOn with
+    | _ z =>
+      rcases z with z | z <;> rcases z with ⟨x, i⟩
+      · have hw := Quotient.exact hq
+        have hc : antipodalCover x = rpBase := by
+          rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+              rpBase rpBase (.inl (antipodalCover x)) (.inl rpBase)).mp hw with h | h
+          · exact Sum.inl.inj h
+          · rcases h.1 with h | h
+            · exact Sum.inl.inj h
+            · contradiction
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff e0 x).mp hc.symm with rfl | rfl
+        · exact ⟨i, rfl⟩
+        · refine ⟨σ i, ?_⟩
+          apply Subtype.ext
+          apply Quotient.sound
+          simpa [hσ i] using Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ) e0 (σ i))
+      · have hw := Quotient.exact hq
+        have hc : antipodalCover x = rpBase := by
+          rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+              rpBase rpBase (.inr (antipodalCover x)) (.inl rpBase)).mp hw with h | h
+          · contradiction
+          · rcases h.1 with h | h
+            · contradiction
+            · exact Sum.inr.inj h
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff e0 x).mp hc.symm with rfl | rfl
+        · refine ⟨i, ?_⟩
+          apply Subtype.ext
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) i))
+        · refine ⟨τ i, ?_⟩
+          apply Subtype.ext
+          apply Quotient.sound
+          have hg := Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (τ i))
+          have hr := Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ) e0 (τ i))
+          exact Relation.EqvGen.trans _ _ _ hg (by simpa [hτ i] using hr)
+  let E : Fin 4 ≃ {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} := Equiv.ofBijective F ⟨hinj, hsurj⟩
+  simpa using Nat.card_congr E.symm
 
 /-- Every fibre has four points: over a point of the left lobe the fibre is
 `{[(x, i)] | i}` (the class of `(x, i)` is `{(x, i), (-x, σ i)}`, using that
@@ -211,7 +605,21 @@ theorem rp2Wedge_regular_four_cover_aux_card (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
     (b : Wedge RP2 RP2 rpBase rpBase) :
     Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e = b} = 4 := by
-  sorry
+  obtain ⟨z, rfl⟩ := Quotient.exists_rep b
+  rcases z with q | q <;>
+    obtain ⟨x, rfl⟩ := rp2Wedge_regular_four_cover_aux_surjective q
+  · by_cases hx : antipodalCover x = rpBase
+    · rw [hx]
+      exact rp2Wedge_regular_four_cover_aux_card_aux_base σ τ hσ hτ
+    · exact rp2Wedge_regular_four_cover_aux_card_aux_left σ τ hσ x hx
+  · by_cases hx : antipodalCover x = rpBase
+    · have hw : (⟦.inr (antipodalCover x)⟧ : Wedge RP2 RP2 rpBase rpBase) =
+          ⟦.inl rpBase⟧ := by
+        rw [hx]
+        exact (Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base)).symm
+      rw [hw]
+      exact rp2Wedge_regular_four_cover_aux_card_aux_base σ τ hσ hτ
+    · exact rp2Wedge_regular_four_cover_aux_card_aux_right σ τ hτ x hx
 
 /-- If `σ`, `τ` generate a transitive action on `Fin 4`, the glued space is
 connected: the image of `Sphere2 × {i}` in either copy is connected, the left
@@ -220,7 +628,354 @@ meet at `[(e₀, i)]`. -/
 theorem rp2Wedge_regular_four_cover_aux_connected (σ τ : Equiv.Perm (Fin 4))
     (hT : ∀ i j : Fin 4, Relation.ReflTransGen (fun a b ↦ b = σ a ∨ b = τ a) i j) :
     IsConnected (Set.univ : Set (rp2Wedge_regular_four_cover_aux_E σ τ)) := by
-  sorry
+  let q : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4) →
+      rp2Wedge_regular_four_cover_aux_E σ τ := Quotient.mk _
+  let l : Fin 4 → Sphere2 → rp2Wedge_regular_four_cover_aux_E σ τ :=
+    fun i x ↦ q (.inl (x, i))
+  let r : Fin 4 → Sphere2 → rp2Wedge_regular_four_cover_aux_E σ τ :=
+    fun i x ↦ q (.inr (x, i))
+  let U : Fin 4 → Set (rp2Wedge_regular_four_cover_aux_E σ τ) :=
+    fun i ↦ Set.range (l i) ∪ Set.range (r i)
+  letI : ConnectedSpace Sphere2 := isConnected_iff_connectedSpace.mp
+    (isConnected_sphere (E := EuclideanSpace ℝ (Fin 3))
+      (by rw [← Module.finrank_eq_rank']; norm_num [finrank_euclideanSpace_fin]) 0
+      (by norm_num : (0 : ℝ) ≤ 1))
+  have hl (i : Fin 4) : IsConnected (Set.range (l i)) := by
+    apply isConnected_range
+    exact continuous_coinduced_rng.comp
+      (continuous_inl.comp (continuous_id.prodMk continuous_const))
+  have hr (i : Fin 4) : IsConnected (Set.range (r i)) := by
+    apply isConnected_range
+    exact continuous_coinduced_rng.comp
+      (continuous_inr.comp (continuous_id.prodMk continuous_const))
+  have hU (i : Fin 4) : IsConnected (U i) := by
+    apply IsConnected.union
+    · refine ⟨q (.inl (rp2Wedge_regular_four_cover_aux_e0, i)), ?_⟩
+      constructor
+      · exact ⟨_, rfl⟩
+      · refine ⟨rp2Wedge_regular_four_cover_aux_e0, ?_⟩
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) i))).symm
+    · exact hl i
+    · exact hr i
+  have hstep (i j : Fin 4) (h : j = σ i ∨ j = τ i) :
+      (U i ∩ U j).Nonempty := by
+    rcases h with rfl | rfl
+    · refine ⟨l i rp2Wedge_regular_four_cover_aux_e0, ?_, ?_⟩
+      · exact Or.inl ⟨_, rfl⟩
+      · apply Or.inl
+        refine ⟨-rp2Wedge_regular_four_cover_aux_e0, ?_⟩
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+            rp2Wedge_regular_four_cover_aux_e0 i))).symm
+    · refine ⟨r i rp2Wedge_regular_four_cover_aux_e0, ?_, ?_⟩
+      · exact Or.inr ⟨_, rfl⟩
+      · apply Or.inr
+        refine ⟨-rp2Wedge_regular_four_cover_aux_e0, ?_⟩
+        exact (Quotient.sound (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+            rp2Wedge_regular_four_cover_aux_e0 i))).symm
+  have hall : IsConnected (⋃ i, U i) :=
+    IsConnected.iUnion_of_reflTransGen hU (fun i j ↦ (hT i j).mono hstep)
+  rw [show (⋃ i, U i) = (Set.univ : Set (rp2Wedge_regular_four_cover_aux_E σ τ)) by
+    apply Set.eq_univ_of_forall
+    intro z
+    induction z using Quotient.inductionOn with
+    | _ z =>
+      rcases z with ⟨x, i⟩ | ⟨x, i⟩
+      · exact Set.mem_iUnion.2 ⟨i, Or.inl ⟨x, rfl⟩⟩
+      · exact Set.mem_iUnion.2 ⟨i, Or.inr ⟨x, rfl⟩⟩] at hall
+  exact hall
+
+/-! #### Split of `rp2Wedge_regular_four_cover_aux_regular` (lemma-3 PARTIAL, 2026-10-19) -/
+
+/-- The sheet relabelling `(x, i) ↦ (x, g i)` on both copies. -/
+def rp2Wedge_regular_four_cover_aux_raw (g : Equiv.Perm (Fin 4)) :
+    (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4) → (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)
+  | .inl z => .inl (z.1, g z.2)
+  | .inr z => .inr (z.1, g z.2)
+
+/-- A permutation commuting with `σ` and `τ` induces a homeomorphism of the
+glued space acting on representatives by `raw g` (banked from lemma-3). -/
+theorem rp2Wedge_regular_four_cover_aux_regular_aux_deck (σ τ : Equiv.Perm (Fin 4))
+    (g : Equiv.Perm (Fin 4)) (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g) :
+    ∃ h : rp2Wedge_regular_four_cover_aux_E σ τ ≃ₜ rp2Wedge_regular_four_cover_aux_E σ τ,
+      ∀ z, h (Quotient.mk _ z) = Quotient.mk _ (rp2Wedge_regular_four_cover_aux_raw g z) := by
+  have raw_cont (g : Equiv.Perm (Fin 4)) :
+      Continuous (rp2Wedge_regular_four_cover_aux_raw g) := by
+    apply continuous_sum_dom.mpr
+    constructor
+    · exact continuous_inl.comp (Continuous.prodMk continuous_fst
+        (continuous_of_discreteTopology.comp continuous_snd))
+    · exact continuous_inr.comp (Continuous.prodMk continuous_fst
+        (continuous_of_discreteTopology.comp continuous_snd))
+  have respects (g : Equiv.Perm (Fin 4))
+      (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g)
+      {a b} (hab : Relation.EqvGen
+        (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+      Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) (rp2Wedge_regular_four_cover_aux_raw g a) (rp2Wedge_regular_four_cover_aux_raw g b) := by
+    induction hab with
+    | rel a b hab =>
+        cases hab with
+        | left z i =>
+            apply Relation.EqvGen.rel
+            have hi := DFunLike.congr_fun hgσ i
+            change g (σ i) = σ (g i) at hi
+            simpa [rp2Wedge_regular_four_cover_aux_raw] using
+              (show rp2Wedge_regular_four_cover_aux_Rel σ τ
+                (.inl (z, g i)) (.inl (-z, g (σ i))) by
+                  simpa [hi] using
+                    (rp2Wedge_regular_four_cover_aux_Rel.left
+                      (σ := σ) (τ := τ) z (g i)))
+        | right z i =>
+            apply Relation.EqvGen.rel
+            have hi := DFunLike.congr_fun hgτ i
+            change g (τ i) = τ (g i) at hi
+            simpa [rp2Wedge_regular_four_cover_aux_raw] using
+              (show rp2Wedge_regular_four_cover_aux_Rel σ τ
+                (.inr (z, g i)) (.inr (-z, g (τ i))) by
+                  simpa [hi] using
+                    (rp2Wedge_regular_four_cover_aux_Rel.right
+                      (σ := σ) (τ := τ) z (g i)))
+        | glue i =>
+            exact Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (g i))
+    | refl => exact Relation.EqvGen.refl _
+    | symm _ _ _ ih => exact Relation.EqvGen.symm _ _ ih
+    | trans _ _ _ _ _ ih₁ ih₂ => exact Relation.EqvGen.trans _ _ _ ih₁ ih₂
+  let deck (g : Equiv.Perm (Fin 4))
+      (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g) :
+      rp2Wedge_regular_four_cover_aux_E σ τ →
+        rp2Wedge_regular_four_cover_aux_E σ τ :=
+    Quotient.lift (fun z => Quotient.mk _ (rp2Wedge_regular_four_cover_aux_raw g z))
+      (fun _ _ h => Quotient.sound (respects g hgσ hgτ h))
+  have deck_mk (g) (hgσ) (hgτ) (z) :
+      deck g hgσ hgτ (Quotient.mk _ z) = Quotient.mk _ (rp2Wedge_regular_four_cover_aux_raw g z) := rfl
+  have inv_comm (g : Equiv.Perm (Fin 4)) (hgσ : g * σ = σ * g)
+      (hgτ : g * τ = τ * g) :
+      g⁻¹ * σ = σ * g⁻¹ ∧ g⁻¹ * τ = τ * g⁻¹ := by
+    constructor <;> apply Equiv.ext <;> intro i
+    · have hi := DFunLike.congr_fun hgσ (g⁻¹ i)
+      apply g.injective
+      simpa using hi.symm
+    · have hi := DFunLike.congr_fun hgτ (g⁻¹ i)
+      apply g.injective
+      simpa using hi.symm
+  have deck_cont (g) (hgσ) (hgτ) : Continuous (deck g hgσ hgτ) := by
+    apply continuous_coinduced_dom.mpr
+    exact continuous_coinduced_rng.comp (raw_cont g)
+  let make_homeomorph (g : Equiv.Perm (Fin 4))
+      (hgσ : g * σ = σ * g) (hgτ : g * τ = τ * g) :
+      rp2Wedge_regular_four_cover_aux_E σ τ ≃ₜ
+        rp2Wedge_regular_four_cover_aux_E σ τ := by
+    let hi := inv_comm g hgσ hgτ
+    refine
+      { toFun := deck g hgσ hgτ
+        invFun := deck g⁻¹ hi.1 hi.2
+        left_inv := ?_
+        right_inv := ?_
+        continuous_toFun := deck_cont g hgσ hgτ
+        continuous_invFun := deck_cont g⁻¹ hi.1 hi.2 }
+    · intro q
+      induction q using Quotient.inductionOn with
+      | _ z => rcases z with z | z <;> rcases z with ⟨u, i⟩ <;> simp [deck, rp2Wedge_regular_four_cover_aux_raw]
+    · intro q
+      induction q using Quotient.inductionOn with
+      | _ z => rcases z with z | z <;> rcases z with ⟨u, i⟩ <;> simp [deck, rp2Wedge_regular_four_cover_aux_raw]
+  exact ⟨make_homeomorph g hgσ hgτ, fun _ => rfl⟩
+
+/-- Two points of one fibre are related by a sheet relabelling from the
+centralizer: normalize both representatives (using `(x, i) ∼ (-x, σ i)`,
+`(x, i) ∼ (-x, τ i)` and, over the wedge point, the glue `(e₀, i)`) to the same
+sphere point and lobe, then pick `g` with `hC`. -/
+theorem rp2Wedge_regular_four_cover_aux_regular_aux_fibre (σ τ : Equiv.Perm (Fin 4))
+    (hC : ∀ i j : Fin 4, ∃ g : Equiv.Perm (Fin 4),
+      g * σ = σ * g ∧ g * τ = τ * g ∧ g i = j)
+    (a b : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4))
+    (hab : rp2Wedge_regular_four_cover_aux_proj a = rp2Wedge_regular_four_cover_aux_proj b) :
+    ∃ g : Equiv.Perm (Fin 4), g * σ = σ * g ∧ g * τ = τ * g ∧
+      (Quotient.mk _ (rp2Wedge_regular_four_cover_aux_raw g a) :
+        rp2Wedge_regular_four_cover_aux_E σ τ) = Quotient.mk _ b := by
+  rcases a with ⟨u, i⟩ | ⟨u, i⟩ <;>
+    rcases b with ⟨v, j⟩ | ⟨v, j⟩
+  · have hw := Quotient.exact hab
+    have hc : antipodalCover u = antipodalCover v := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover u)) (.inl (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · exact Sum.inl.inj h
+      · rcases hu with hu | hu <;> rcases hv with hv | hv <;>
+          simp_all
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff u v).mp hc with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      simp [rp2Wedge_regular_four_cover_aux_raw, hgi]
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : σ (g i) = j := by simp [hgi]
+      simpa [rp2Wedge_regular_four_cover_aux_raw, hj] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ) u (g i)))
+  · have hw := Quotient.exact hab
+    have hu : antipodalCover u = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover u)) (.inr (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · cases h
+      · rcases hu with hu | hu
+        · exact Sum.inl.inj hu
+        · cases hu
+    have hv : antipodalCover v = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover u)) (.inr (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · cases h
+      · rcases hv with hv | hv
+        · cases hv
+        · exact Sum.inr.inj hv
+    rw [rp2Wedge_regular_four_cover_aux_rpBase] at hu hv
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+      rp2Wedge_regular_four_cover_aux_e0 u).mp hu.symm with rfl | rfl <;>
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+        rp2Wedge_regular_four_cover_aux_e0 v).mp hv.symm with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : τ (g i) = j := by simp [hgi]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (g i)))
+        (by simpa [rp2Wedge_regular_four_cover_aux_raw, hj] using
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 (g i))))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by
+          simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+            (Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 j))))
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ (τ⁻¹ j))
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hk : σ⁻¹ (g i) = τ⁻¹ j := by simp [hgi]
+      have hj : τ (σ⁻¹ (g i)) = j := by simp [hk]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by
+          simpa [rp2Wedge_regular_four_cover_aux_raw] using
+            (Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 (σ⁻¹ (g i))))))
+        (Relation.EqvGen.trans _ _ _
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (σ⁻¹ (g i))))
+          (by
+            have hh := Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 (σ⁻¹ (g i)))
+            rw [hj] at hh
+            exact hh))
+  · have hab' := hab.symm
+    have hw := Quotient.exact hab'
+    have hu : antipodalCover u = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover v)) (.inr (antipodalCover u))).mp hw with
+        h | ⟨hv, hu⟩
+      · cases h
+      · rcases hu with hu | hu
+        · cases hu
+        · exact Sum.inr.inj hu
+    have hv : antipodalCover v = rpBase := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inl (antipodalCover v)) (.inr (antipodalCover u))).mp hw with
+        h | ⟨hv, hu⟩
+      · cases h
+      · rcases hv with hv | hv
+        · exact Sum.inl.inj hv
+        · cases hv
+    rw [rp2Wedge_regular_four_cover_aux_rpBase] at hu hv
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+      rp2Wedge_regular_four_cover_aux_e0 u).mp hu.symm with rfl | rfl <;>
+      rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+        rp2Wedge_regular_four_cover_aux_e0 v).mp hv.symm with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      exact Relation.EqvGen.symm _ _ (by simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j)))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (σ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : σ (g i) = j := by simp [hgi]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by
+          simpa [rp2Wedge_regular_four_cover_aux_raw] using
+            (Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (g i)))))
+        (by
+          have hh := Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 (g i))
+          rw [hj] at hh
+          exact hh)
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by simpa [rp2Wedge_regular_four_cover_aux_raw, hgi] using
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 j))))
+        (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) j)))
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ (σ⁻¹ j))
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hk : τ⁻¹ (g i) = σ⁻¹ j := by simp [hgi]
+      exact Relation.EqvGen.trans _ _ _
+        (Relation.EqvGen.symm _ _ (by simpa [rp2Wedge_regular_four_cover_aux_raw] using
+          (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ)
+              rp2Wedge_regular_four_cover_aux_e0 (τ⁻¹ (g i))))))
+        (Relation.EqvGen.trans _ _ _
+          (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+            (rp2Wedge_regular_four_cover_aux_Rel.glue (σ := σ) (τ := τ) (τ⁻¹ (g i)))))
+          (by
+            have hh := Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ)
+                rp2Wedge_regular_four_cover_aux_e0 (σ⁻¹ j))
+            rw [hk]
+            simpa using hh))
+  · have hw := Quotient.exact hab
+    have hc : antipodalCover u = antipodalCover v := by
+      rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+        rpBase rpBase (.inr (antipodalCover u)) (.inr (antipodalCover v))).mp hw with
+        h | ⟨hu, hv⟩
+      · exact Sum.inr.inj h
+      · rcases hu with hu | hu <;> rcases hv with hv | hv <;> simp_all
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff u v).mp hc with rfl | rfl
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i j
+      exact ⟨g, hgσ, hgτ, by simp [rp2Wedge_regular_four_cover_aux_raw, hgi]⟩
+    · obtain ⟨g, hgσ, hgτ, hgi⟩ := hC i (τ⁻¹ j)
+      refine ⟨g, hgσ, hgτ, ?_⟩
+      apply Quotient.sound
+      have hj : τ (g i) = j := by simp [hgi]
+      simpa [rp2Wedge_regular_four_cover_aux_raw, hj] using
+        (Relation.EqvGen.rel _ _
+          (rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ) u (g i)))
 
 /-- If the centralizer of `σ`, `τ` acts transitively on `Fin 4`, the cover is
 regular: `g` commuting with `σ`, `τ` gives the deck homeomorphism
@@ -230,7 +985,18 @@ theorem rp2Wedge_regular_four_cover_aux_regular (σ τ : Equiv.Perm (Fin 4))
     (hC : ∀ i j : Fin 4, ∃ g : Equiv.Perm (Fin 4),
       g * σ = σ * g ∧ g * τ = τ * g ∧ g i = j) :
     IsRegularCover (rp2Wedge_regular_four_cover_aux_p σ τ) := by
-  sorry
+  intro x y hxy
+  obtain ⟨a, rfl⟩ := Quotient.exists_rep x
+  obtain ⟨b, rfl⟩ := Quotient.exists_rep y
+  obtain ⟨g, hgσ, hgτ, hg⟩ :=
+    rp2Wedge_regular_four_cover_aux_regular_aux_fibre σ τ hC a b hxy
+  obtain ⟨h, hh⟩ := rp2Wedge_regular_four_cover_aux_regular_aux_deck σ τ g hgσ hgτ
+  refine ⟨h, ?_, by rw [hh]; exact hg⟩
+  intro z
+  induction z using Quotient.inductionOn with
+  | _ z =>
+    rw [hh]
+    rcases z with z | z <;> rfl
 
 /-- The two fixed-point-free involutions `(12)(34)` and `(13)(24)` realize
 the connected regular Klein-four cover of the projective-plane wedge. -/
@@ -380,25 +1146,262 @@ theorem circleWedge_three_cover_three_components : ∃ C : ThreeCover,
 
 /-- The permutation pair `((12),(12))`: a three-sheeted cover with two
 components. -/
+def circleWedge_three_cover_two_components_aux_sq (z : Circle) : Circle :=
+  ⟨(z : ℂ) * z, by
+    simpa [Metric.mem_sphere, dist_zero_right, norm_mul] using
+      congrArg (fun r : ℝ ↦ r * r) z.property⟩
+
+inductive circleWedge_three_cover_two_components_aux_Rel :
+    Circle ⊕ Circle → Circle ⊕ Circle → Prop
+  | pos : circleWedge_three_cover_two_components_aux_Rel
+      (.inl circleBase) (.inr circleBase)
+  | neg : circleWedge_three_cover_two_components_aux_Rel
+      (.inl (-circleBase)) (.inr (-circleBase))
+
+def circleWedge_three_cover_two_components_aux_Double : Type :=
+  Quotient (Relation.EqvGen.setoid
+    circleWedge_three_cover_two_components_aux_Rel)
+
+noncomputable instance circleWedge_three_cover_two_components_aux_Double_topology :
+    TopologicalSpace circleWedge_three_cover_two_components_aux_Double :=
+  TopologicalSpace.coinduced (fun z : Circle ⊕ Circle ↦ Quotient.mk _ z)
+    inferInstance
+
+def circleWedge_three_cover_two_components_aux_raw :
+    Circle ⊕ Circle → CircleWedge
+  | .inl z => Quotient.mk _ (.inl
+      (circleWedge_three_cover_two_components_aux_sq z))
+  | .inr z => Quotient.mk _ (.inr
+      (circleWedge_three_cover_two_components_aux_sq z))
+
+lemma circleWedge_three_cover_two_components_aux_raw_respects
+    {x y : Circle ⊕ Circle}
+    (h : Relation.EqvGen circleWedge_three_cover_two_components_aux_Rel x y) :
+    circleWedge_three_cover_two_components_aux_raw x =
+      circleWedge_three_cover_two_components_aux_raw y := by
+  induction h with
+  | rel x y h =>
+      cases h with
+      | pos =>
+          have hs : circleWedge_three_cover_two_components_aux_sq circleBase =
+              circleBase := by
+            apply Subtype.ext
+            simp [circleWedge_three_cover_two_components_aux_sq, circleBase]
+          change Quotient.mk _ (Sum.inl _) = Quotient.mk _ (Sum.inr _)
+          rw [hs]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base)
+      | neg =>
+          change Quotient.mk _ (Sum.inl _) = Quotient.mk _ (Sum.inr _)
+          have hs : circleWedge_three_cover_two_components_aux_sq (-circleBase) =
+              circleBase := by
+            apply Subtype.ext
+            simp [circleWedge_three_cover_two_components_aux_sq, circleBase]
+          rw [hs]
+          exact Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base)
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def circleWedge_three_cover_two_components_aux_doubleMap :
+    circleWedge_three_cover_two_components_aux_Double → CircleWedge :=
+  Quotient.lift circleWedge_three_cover_two_components_aux_raw
+    (fun _ _ h ↦ circleWedge_three_cover_two_components_aux_raw_respects h)
+
+def circleWedge_three_cover_two_components_aux_Total : Type :=
+  CircleWedge ⊕ circleWedge_three_cover_two_components_aux_Double
+
+noncomputable instance circleWedge_three_cover_two_components_aux_Total_topology :
+    TopologicalSpace circleWedge_three_cover_two_components_aux_Total := by
+  change TopologicalSpace
+    (CircleWedge ⊕ circleWedge_three_cover_two_components_aux_Double)
+  infer_instance
+
+def circleWedge_three_cover_two_components_aux_map :
+    circleWedge_three_cover_two_components_aux_Total → CircleWedge
+  | .inl x => x
+  | .inr x => circleWedge_three_cover_two_components_aux_doubleMap x
+
+lemma circleWedge_three_cover_two_components_aux_covering :
+    IsCoveringMap circleWedge_three_cover_two_components_aux_map := by
+  sorry
+
+lemma circleWedge_three_cover_two_components_aux_fiber (b : CircleWedge) :
+    Nat.card {e : circleWedge_three_cover_two_components_aux_Total //
+      circleWedge_three_cover_two_components_aux_map e = b} = 3 := by
+  sorry
+
+lemma circleWedge_three_cover_two_components_aux_components :
+    Nat.card (ConnectedComponents
+      circleWedge_three_cover_two_components_aux_Total) = 2 := by
+  sorry
+
 theorem circleWedge_three_cover_two_components : ∃ C : ThreeCover,
     Nat.card (@ConnectedComponents C.E C.topology) = 2 := by
-  sorry
+  let C : ThreeCover :=
+    { E := circleWedge_three_cover_two_components_aux_Total
+      topology := inferInstance
+      p := circleWedge_three_cover_two_components_aux_map
+      covering := ⟨circleWedge_three_cover_two_components_aux_covering,
+        circleWedge_three_cover_two_components_aux_fiber⟩ }
+  exact ⟨C, circleWedge_three_cover_two_components_aux_components⟩
 
 /-- The pairs `((123),1)` and `((123),(123))` realize two connected
 three-sheeted covers whose total spaces are not homeomorphic: deleting the
 topologically intrinsic valence-four locus leaves three loop edges in the
 first graph and none in the second. -/
+lemma circleWedge_connected_pair_aux_circleBase_cube :
+    (circleBase : ℂ) ^ 3 = circleBase := by
+  simp [circleBase]
+
+/-- The three cube roots of the base point, used as the common fibre at which
+the two lifted circles are glued.  Keeping the fibre as a subtype avoids making
+an arbitrary choice of an enumeration of the roots. -/
+abbrev circleWedge_connected_pair_aux_Root :=
+  {z : Circle // (⟨(z : ℂ) ^ 3, by simpa using pow_mem_sphere z.property 3⟩ : Circle) =
+    circleBase}
+
+/-- Cubing on the unit circle. -/
+def circleWedge_connected_pair_aux_cube (z : Circle) : Circle :=
+  ⟨(z : ℂ) ^ 3, by simpa using pow_mem_sphere z.property 3⟩
+
+/-- Raw space for `((123),1)`: one connected threefold lift on the left and
+three identity lifts on the right. -/
+abbrev circleWedge_connected_pair_aux_RawC :=
+  Circle ⊕ (Circle × circleWedge_connected_pair_aux_Root)
+
+inductive circleWedge_connected_pair_aux_RelC :
+    circleWedge_connected_pair_aux_RawC →
+      circleWedge_connected_pair_aux_RawC → Prop
+  | glue (r : circleWedge_connected_pair_aux_Root) :
+      circleWedge_connected_pair_aux_RelC (.inl r.1) (.inr (circleBase, r))
+
+/-- Raw space for `((123),(123))`: connected threefold lifts on both sides. -/
+abbrev circleWedge_connected_pair_aux_RawD := Circle ⊕ Circle
+
+inductive circleWedge_connected_pair_aux_RelD :
+    circleWedge_connected_pair_aux_RawD →
+      circleWedge_connected_pair_aux_RawD → Prop
+  | glue (r : circleWedge_connected_pair_aux_Root) :
+      circleWedge_connected_pair_aux_RelD (.inl r.1) (.inr r.1)
+
+def circleWedge_connected_pair_aux_EC :=
+  Quotient (Relation.EqvGen.setoid circleWedge_connected_pair_aux_RelC)
+
+def circleWedge_connected_pair_aux_ED :=
+  Quotient (Relation.EqvGen.setoid circleWedge_connected_pair_aux_RelD)
+
+noncomputable instance : TopologicalSpace circleWedge_connected_pair_aux_EC :=
+  TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
+
+noncomputable instance : TopologicalSpace circleWedge_connected_pair_aux_ED :=
+  TopologicalSpace.coinduced (fun z ↦ Quotient.mk _ z) inferInstance
+
+def circleWedge_connected_pair_aux_projC :
+    circleWedge_connected_pair_aux_RawC → CircleWedge
+  | .inl z => Quotient.mk _ (.inl (circleWedge_connected_pair_aux_cube z))
+  | .inr z => Quotient.mk _ (.inr z.1)
+
+def circleWedge_connected_pair_aux_projD :
+    circleWedge_connected_pair_aux_RawD → CircleWedge
+  | .inl z => Quotient.mk _ (.inl (circleWedge_connected_pair_aux_cube z))
+  | .inr z => Quotient.mk _ (.inr (circleWedge_connected_pair_aux_cube z))
+
+lemma circleWedge_connected_pair_aux_projC_respects {a b}
+    (h : Relation.EqvGen circleWedge_connected_pair_aux_RelC a b) :
+    circleWedge_connected_pair_aux_projC a =
+      circleWedge_connected_pair_aux_projC b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | glue r =>
+          have hr : circleWedge_connected_pair_aux_cube r.1 = circleBase := r.2
+          apply Quotient.sound
+          rw [hr]
+          apply Relation.EqvGen.rel
+          exact WedgeRel.base
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+lemma circleWedge_connected_pair_aux_projD_respects {a b}
+    (h : Relation.EqvGen circleWedge_connected_pair_aux_RelD a b) :
+    circleWedge_connected_pair_aux_projD a =
+      circleWedge_connected_pair_aux_projD b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | glue r =>
+          have hr : circleWedge_connected_pair_aux_cube r.1 = circleBase := r.2
+          apply Quotient.sound
+          rw [hr]
+          exact Relation.EqvGen.rel _ _ WedgeRel.base
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+def circleWedge_connected_pair_aux_pC :
+    circleWedge_connected_pair_aux_EC → CircleWedge :=
+  Quotient.lift circleWedge_connected_pair_aux_projC
+    (fun _ _ h ↦ circleWedge_connected_pair_aux_projC_respects h)
+
+def circleWedge_connected_pair_aux_pD :
+    circleWedge_connected_pair_aux_ED → CircleWedge :=
+  Quotient.lift circleWedge_connected_pair_aux_projD
+    (fun _ _ h ↦ circleWedge_connected_pair_aux_projD_respects h)
+
+/-- Local evenly-covered charts for the two quotient graphs. -/
+lemma circleWedge_connected_pair_aux_covering :
+    IsNfoldCover 3 circleWedge_connected_pair_aux_pC ∧
+      IsNfoldCover 3 circleWedge_connected_pair_aux_pD := by
+  sorry
+
+/-- Both quotient graphs are connected. -/
+lemma circleWedge_connected_pair_aux_connected :
+    Nat.card (ConnectedComponents circleWedge_connected_pair_aux_EC) = 1 ∧
+      Nat.card (ConnectedComponents circleWedge_connected_pair_aux_ED) = 1 := by
+  sorry
+
+/-- The first graph has three loop edges after deleting its intrinsic
+valence-four locus, while the second has none. -/
+lemma circleWedge_connected_pair_aux_not_homeomorphic :
+    ¬ Nonempty (circleWedge_connected_pair_aux_EC ≃ₜ
+      circleWedge_connected_pair_aux_ED) := by
+  sorry
+
 theorem circleWedge_connected_pair : ∃ C D : ThreeCover,
     Nat.card (@ConnectedComponents C.E C.topology) = 1 ∧
     Nat.card (@ConnectedComponents D.E D.topology) = 1 ∧
     ¬ Nonempty (@Homeomorph C.E D.E C.topology D.topology) := by
-  sorry
+  rcases circleWedge_connected_pair_aux_covering with ⟨hC, hD⟩
+  rcases circleWedge_connected_pair_aux_connected with ⟨hcC, hcD⟩
+  exact ⟨{ E := circleWedge_connected_pair_aux_EC
+           topology := inferInstance
+           p := circleWedge_connected_pair_aux_pC
+           covering := hC },
+    { E := circleWedge_connected_pair_aux_ED
+      topology := inferInstance
+      p := circleWedge_connected_pair_aux_pD
+      covering := hD }, hcC, hcD,
+    circleWedge_connected_pair_aux_not_homeomorphic⟩
 
 /-- Homeomorphic spaces have the same number of connected components. -/
 theorem natCard_connectedComponents_eq_of_homeomorph {X Y : Type*}
     [TopologicalSpace X] [TopologicalSpace Y] (h : X ≃ₜ Y) :
     Nat.card (ConnectedComponents X) = Nat.card (ConnectedComponents Y) := by
-  sorry
+  apply Nat.card_congr
+  exact
+    { toFun := h.continuous.connectedComponentsMap
+      invFun := h.symm.continuous.connectedComponentsMap
+      left_inv := by
+        rintro ⟨x⟩
+        change ((h.symm (h x) : X) : ConnectedComponents X) =
+          (x : ConnectedComponents X)
+        simp
+      right_inv := by
+        rintro ⟨y⟩
+        change ((h (h.symm y) : Y) : ConnectedComponents Y) =
+          (y : ConnectedComponents Y)
+        simp }
 
 /-- Assembly of the component-count and loop-edge invariants. -/
 theorem circleWedge_four_pairwise_nonhomeomorphic :
