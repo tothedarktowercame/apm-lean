@@ -5709,7 +5709,54 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_left
     (w : Circle) (hw : w ≠ circleBase) :
     Nat.card {e : circleWedge_connected_pair_aux_EC //
       circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl w)} = 3 := by
-  sorry
+  let f : {z : Circle // circleWedge_connected_pair_aux_cube z = w} →
+      {e : circleWedge_connected_pair_aux_EC //
+        circleWedge_connected_pair_aux_pC e = Quotient.mk _ (.inl w)} :=
+    fun z ↦ ⟨Quotient.mk _ (.inl z.1), by
+      change Quotient.mk _ (Sum.inl (circleWedge_connected_pair_aux_cube z.1) :
+          Sum Circle Circle) =
+        Quotient.mk _ (Sum.inl w : Sum Circle Circle)
+      rw [z.2]⟩
+  have hf : Function.Bijective f := by
+    constructor
+    · intro z t hzt
+      apply Subtype.ext
+      have hq : (Quotient.mk _ (.inl z.1) : circleWedge_connected_pair_aux_EC) =
+          Quotient.mk _ (.inl t.1) := congrArg Subtype.val hzt
+      have hr := (circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_rel_iff
+        (.inl z.1) (.inl t.1)).mp (Quotient.exact hq)
+      rcases hr with h | ⟨r, h | h⟩
+      · exact Sum.inl.inj h
+      · cases h.2
+      · cases h.2
+    · rintro ⟨e, he⟩
+      induction e using Quotient.inductionOn with
+      | _ q =>
+        cases q with
+        | inl z =>
+          have hr := (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+            circleBase circleBase
+            (.inl (circleWedge_connected_pair_aux_cube z)) (.inl w)).mp
+              (Quotient.exact he)
+          have hz : circleWedge_connected_pair_aux_cube z = w := by
+            rcases hr with h | ⟨_, hwbase⟩
+            · exact Sum.inl.inj h
+            · rcases hwbase with h | h
+              · exact False.elim (hw (Sum.inl.inj h))
+              · cases h
+          refine ⟨⟨z, hz⟩, ?_⟩
+          apply Subtype.ext
+          rfl
+        | inr z =>
+          have hr := (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_lobe_inl_aux_eqv
+            circleBase circleBase (.inr z.1) (.inl w)).mp (Quotient.exact he)
+          rcases hr with h | ⟨_, hwbase⟩
+          · cases h
+          · rcases hwbase with h | h
+            · exact False.elim (hw (Sum.inl.inj h))
+            · cases h
+  rw [← circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_cube_card w]
+  exact Nat.card_congr (Equiv.ofBijective f hf).symm
 -- END SEAT AREA
 
 /-- Fibre over a right-lobe point `[inr w]`, `w ≠ circleBase`: the classes
