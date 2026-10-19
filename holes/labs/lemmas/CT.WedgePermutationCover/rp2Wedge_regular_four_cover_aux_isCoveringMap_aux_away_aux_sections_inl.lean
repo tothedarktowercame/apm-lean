@@ -1251,6 +1251,14 @@ and the cap misses `e₀`, so no glue applies), open in the raw sum; the four
 ranges are disjoint because `(y, i) ∼ (y', j)` with `y, y'` in the cap forces
 `y = y'`, `i = j` (the cap is disjoint from its antipode). -/
 -- BEGIN SEAT AREA
+lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl_aux_mem_cap
+    (u : Sphere2) (hu : antipodalCover u ≠ rpBase) :
+    0 < inner ℝ (u : EuclideanSpace ℝ (Fin 3)) u ∧
+      antipodalCover u ≠ rpBase := by
+  refine ⟨?_, hu⟩
+  rw [real_inner_self_eq_norm_sq]
+  norm_num [u.property]
+
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inl
     (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)

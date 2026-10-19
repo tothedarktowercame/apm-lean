@@ -4170,10 +4170,26 @@ section-gluing pattern is
 `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections`, as used
 in `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge`. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_chart :
+    ∃ U : Set CircleWedge,
+      Quotient.mk _ (.inl circleBase) ∈ U ∧ IsOpen U ∧
+      ∃ s : Fin 3 → U → circleWedge_connected_pair_aux_EC,
+        (∀ i, Continuous (s i)) ∧
+        (∀ i u, circleWedge_connected_pair_aux_pC (s i u) = u) ∧
+        (∀ i, IsOpen (Set.range (s i))) ∧
+        (∀ e, circleWedge_connected_pair_aux_pC e ∈ U → ∃ i u, s i u = e) ∧
+        (∀ i j u v, s i u = s j v → i = j) := by
+  sorry
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge :
     IsEvenlyCovered circleWedge_connected_pair_aux_pC (Quotient.mk _ (.inl circleBase))
       (circleWedge_connected_pair_aux_pC ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
-  sorry
+  obtain ⟨U, hxU, hU, s, hs, hfs, hopen, hcover, hdisj⟩ :=
+    circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_chart
+  exact (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+    circleWedge_connected_pair_aux_pC
+    circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_continuous
+    _ U hxU hU s hs hfs hopen hcover hdisj).to_isEvenlyCovered_preimage
 -- END SEAT AREA
 
 /-- `pC` is a covering map.  Away from the wedge point: over a left-lobe point

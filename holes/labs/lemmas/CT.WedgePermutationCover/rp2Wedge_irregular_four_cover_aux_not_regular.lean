@@ -2628,12 +2628,166 @@ using `_aux_isCoveringMap`) ends at `[(e₀, σ (g i))]`.  Likewise for `τ` in 
 right copy.  So if some sheet `i` cannot be moved to `j` by the centralizer, no
 deck map sends `[(e₀, i)]` to `[(e₀, j)]`. -/
 -- BEGIN SEAT AREA
+lemma rp2Wedge_irregular_four_cover_aux_not_regular_aux_fibre_injective
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
+    Function.Injective (fun i : Fin 4 =>
+      (Quotient.mk _ (.inl (rp2Wedge_regular_four_cover_aux_e0, i)) :
+        rp2Wedge_regular_four_cover_aux_E σ τ)) := by
+  let e0 := rp2Wedge_regular_four_cover_aux_e0
+  have hne : (-e0 : Sphere2) ≠ e0 := by
+    intro h
+    have hval := congrArg (fun z : Sphere2 ↦ (z : EuclideanSpace ℝ (Fin 3))) h
+    have hh := congrArg (fun z : EuclideanSpace ℝ (Fin 3) ↦ z 0) hval
+    norm_num [e0, rp2Wedge_regular_four_cover_aux_e0] at hh
+  let fL : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = e0 then z.2 else if z.1 = -e0 then σ z.2 else 0
+  let fR : Sphere2 × Fin 4 → Fin 4 := fun z ↦
+    if z.1 = e0 then z.2 else if z.1 = -e0 then τ z.2 else 0
+  have hL : ∀ x i, fL (-x, σ i) = fL (x, i) := by
+    intro x i
+    by_cases hx : x = e0
+    · subst x
+      simp [fL, hne, hσ i]
+    · by_cases hx' : x = -e0
+      · subst x
+        simp [fL, hne, hσ i]
+      · have hn₁ : -x ≠ e0 := by
+          intro h
+          apply hx'
+          simpa using congrArg Neg.neg h
+        have hn₂ : -x ≠ -e0 := by
+          intro h
+          apply hx
+          simpa only [neg_inj] using h
+        simp [fL, hx, hx', hn₁, hn₂]
+  have hR : ∀ x i, fR (-x, τ i) = fR (x, i) := by
+    intro x i
+    by_cases hx : x = e0
+    · subst x
+      simp [fR, hne, hτ i]
+    · by_cases hx' : x = -e0
+      · subst x
+        simp [fR, hne, hτ i]
+      · have hn₁ : -x ≠ e0 := by
+          intro h
+          apply hx'
+          simpa using congrArg Neg.neg h
+        have hn₂ : -x ≠ -e0 := by
+          intro h
+          apply hx
+          simpa only [neg_inj] using h
+        simp [fR, hx, hx', hn₁, hn₂]
+  intro i j hij
+  have hq : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ)
+      (.inl (e0, i)) (.inl (e0, j)) := Quotient.exact hij
+  have hi := rp2Wedge_regular_four_cover_aux_card_aux_invariant σ τ fL fR
+    hL hR (by intro k; simp [e0, fL, fR]) hq
+  simpa [fL] using hi
+
+/-- Every point of the fibre over the wedge point is `[(e₀, k)]` for some `k`:
+the parametrisation is injective and the fibre has four points. -/
+lemma rp2Wedge_irregular_four_cover_aux_not_regular_aux_fibre_surjective
+    (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
+    (e : rp2Wedge_regular_four_cover_aux_E σ τ)
+    (he : rp2Wedge_regular_four_cover_aux_p σ τ e = Quotient.mk _ (.inl rpBase)) :
+    ∃ k : Fin 4, e = Quotient.mk _ (.inl (rp2Wedge_regular_four_cover_aux_e0, k)) := by
+  let f : Fin 4 → {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} := fun k ↦
+    ⟨Quotient.mk _ (.inl (rp2Wedge_regular_four_cover_aux_e0, k)), rfl⟩
+  have hf : Function.Injective f := by
+    intro a b hab
+    exact rp2Wedge_irregular_four_cover_aux_not_regular_aux_fibre_injective σ τ hσ hτ (congrArg Subtype.val hab)
+  have hc := rp2Wedge_regular_four_cover_aux_card_aux_base σ τ hσ hτ
+  haveI : Finite {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} := Nat.finite_of_card_ne_zero (by omega)
+  obtain ⟨k, hk⟩ := (hf.bijective_of_nat_card_le (by simp [hc])).2 ⟨e, he⟩
+  exact ⟨k, (congrArg Subtype.val hk).symm⟩
+
+/-- Path lifting in the left copy: a deck map sending `[(e₀, k)]` to `[(e₀, m)]`
+sends `[(-e₀, k)]` to `[(-e₀, m)]` (lift a path `e₀ → -e₀` in sheet `k` and use
+`IsCoveringMap.eq_of_comp_eq`). -/
+lemma rp2Wedge_irregular_four_cover_aux_not_regular_aux_lift_inl
+    (σ τ : Equiv.Perm (Fin 4))
+    (hp : IsCoveringMap (rp2Wedge_regular_four_cover_aux_p σ τ))
+    (h : rp2Wedge_regular_four_cover_aux_E σ τ ≃ₜ rp2Wedge_regular_four_cover_aux_E σ τ)
+    (hh : ∀ z, rp2Wedge_regular_four_cover_aux_p σ τ (h z) =
+      rp2Wedge_regular_four_cover_aux_p σ τ z)
+    (k m : Fin 4)
+    (hkm : h (Quotient.mk _ (.inl (rp2Wedge_regular_four_cover_aux_e0, k))) =
+      Quotient.mk _ (.inl (rp2Wedge_regular_four_cover_aux_e0, m))) :
+    h (Quotient.mk _ (.inl (-rp2Wedge_regular_four_cover_aux_e0, k))) =
+      Quotient.mk _ (.inl (-rp2Wedge_regular_four_cover_aux_e0, m)) := by
+  sorry
+
+/-- Path lifting in the right copy: as `_aux_lift_inl`, for the `.inr` sheets. -/
+lemma rp2Wedge_irregular_four_cover_aux_not_regular_aux_lift_inr
+    (σ τ : Equiv.Perm (Fin 4))
+    (hp : IsCoveringMap (rp2Wedge_regular_four_cover_aux_p σ τ))
+    (h : rp2Wedge_regular_four_cover_aux_E σ τ ≃ₜ rp2Wedge_regular_four_cover_aux_E σ τ)
+    (hh : ∀ z, rp2Wedge_regular_four_cover_aux_p σ τ (h z) =
+      rp2Wedge_regular_four_cover_aux_p σ τ z)
+    (k m : Fin 4)
+    (hkm : h (Quotient.mk _ (.inr (rp2Wedge_regular_four_cover_aux_e0, k))) =
+      Quotient.mk _ (.inr (rp2Wedge_regular_four_cover_aux_e0, m))) :
+    h (Quotient.mk _ (.inr (-rp2Wedge_regular_four_cover_aux_e0, k))) =
+      Quotient.mk _ (.inr (-rp2Wedge_regular_four_cover_aux_e0, m)) := by
+  sorry
+
 theorem rp2Wedge_irregular_four_cover_aux_not_regular (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
     (hN : ∃ i j : Fin 4, ∀ g : Equiv.Perm (Fin 4),
       g * σ = σ * g → g * τ = τ * g → g i ≠ j) :
     ¬ IsRegularCover (rp2Wedge_regular_four_cover_aux_p σ τ) := by
-  sorry
+  intro hreg
+  obtain ⟨i, j, hij⟩ := hN
+  let e0 := rp2Wedge_regular_four_cover_aux_e0
+  let x0 : Fin 4 → rp2Wedge_regular_four_cover_aux_E σ τ :=
+    fun k ↦ Quotient.mk _ (.inl (e0, k))
+  let y0 : Fin 4 → rp2Wedge_regular_four_cover_aux_E σ τ :=
+    fun k ↦ Quotient.mk _ (.inr (e0, k))
+  have hinj : Function.Injective x0 := rp2Wedge_irregular_four_cover_aux_not_regular_aux_fibre_injective σ τ hσ hτ
+  have hglue : ∀ k, x0 k = y0 k := fun k ↦
+    Quotient.sound (Relation.EqvGen.rel _ _ (rp2Wedge_regular_four_cover_aux_Rel.glue k))
+  have hl : ∀ k, x0 (σ k) =
+      (Quotient.mk _ (.inl (-e0, k)) : rp2Wedge_regular_four_cover_aux_E σ τ) := by
+    intro k
+    have hr := rp2Wedge_regular_four_cover_aux_Rel.left (σ := σ) (τ := τ) (-e0) k
+    rw [neg_neg] at hr
+    exact Quotient.sound (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ hr))
+  have hr : ∀ k, y0 (τ k) =
+      (Quotient.mk _ (.inr (-e0, k)) : rp2Wedge_regular_four_cover_aux_E σ τ) := by
+    intro k
+    have hr := rp2Wedge_regular_four_cover_aux_Rel.right (σ := σ) (τ := τ) (-e0) k
+    rw [neg_neg] at hr
+    exact Quotient.sound (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _ hr))
+  obtain ⟨h, hh, hxy⟩ := hreg (x0 i) (x0 j) rfl
+  have hfib : ∀ k, ∃ m, h (x0 k) = x0 m := fun k ↦
+    rp2Wedge_irregular_four_cover_aux_not_regular_aux_fibre_surjective σ τ hσ hτ (h (x0 k)) (by rw [hh]; rfl)
+  choose g hg using hfib
+  have ginj : Function.Injective g := by
+    intro a b hab
+    apply hinj
+    apply h.injective
+    rw [hg a, hg b, hab]
+  let G : Equiv.Perm (Fin 4) := Equiv.ofBijective g (Finite.injective_iff_bijective.mp ginj)
+  have hp := rp2Wedge_regular_four_cover_aux_isCoveringMap σ τ hσ hτ
+  have hgσ : ∀ k, g (σ k) = σ (g k) := by
+    intro k
+    apply hinj
+    rw [← hg, hl, rp2Wedge_irregular_four_cover_aux_not_regular_aux_lift_inl σ τ hp h hh k (g k) (hg k), ← hl]
+  have hgτ : ∀ k, g (τ k) = τ (g k) := by
+    intro k
+    have hk : h (y0 k) = y0 (g k) := by rw [← hglue, ← hglue]; exact hg k
+    apply hinj
+    rw [← hg, hglue, hglue, hr, rp2Wedge_irregular_four_cover_aux_not_regular_aux_lift_inr σ τ hp h hh k (g k) hk, ← hr]
+  refine hij G (Equiv.ext fun k ↦ ?_) (Equiv.ext fun k ↦ ?_) ?_
+  · simpa [G] using hgσ k
+  · simpa [G] using hgτ k
+  · apply hinj
+    show x0 (g i) = x0 j
+    rw [← hg, hxy]
 -- END SEAT AREA
 
 /-- The involutions `(12)` and `(14)(23)` realize a connected nonregular

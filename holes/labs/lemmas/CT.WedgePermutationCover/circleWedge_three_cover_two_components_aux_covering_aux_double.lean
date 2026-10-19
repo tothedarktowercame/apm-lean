@@ -1502,9 +1502,89 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_sq :
   simpa [circleWedge_three_cover_two_components_aux_sq, pow_two] using h
 
 -- BEGIN SEAT AREA
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_rel_iff
+    (a b : Circle ⊕ Circle) :
+    Relation.EqvGen circleWedge_three_cover_two_components_aux_Rel a b ↔
+      a = b ∨ ∃ z : Circle, (z = circleBase ∨ z = -circleBase) ∧
+        ((a = .inl z ∧ b = .inr z) ∨ (a = .inr z ∧ b = .inl z)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | pos => exact Or.inr ⟨circleBase, Or.inl rfl, Or.inl ⟨rfl, rfl⟩⟩
+        | neg => exact Or.inr ⟨-circleBase, Or.inr rfl, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with h | ⟨z, hz, h⟩
+        · exact Or.inl h.symm
+        · exact Or.inr ⟨z, hz, h.elim (fun h ↦ Or.inr ⟨h.2, h.1⟩)
+            (fun h ↦ Or.inl ⟨h.2, h.1⟩)⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨z, hz, hab⟩
+        · exact ih₂
+        rcases ih₂ with rfl | ⟨w, hw, hbc⟩
+        · exact Or.inr ⟨z, hz, hab⟩
+        · rcases hab with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
+            rcases hbc with ⟨h, _⟩ | ⟨h, _⟩ <;>
+            simp_all
+  · rintro (rfl | ⟨z, hz, h⟩)
+    · exact Relation.EqvGen.refl _
+    rcases hz with rfl | rfl <;> rcases h with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+    · exact Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.pos
+    · exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.pos)
+    · exact Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.neg
+    · exact Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.neg)
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_continuous :
+    Continuous circleWedge_three_cover_two_components_aux_doubleMap := by
+  apply (show Topology.IsQuotientMap
+      (fun z : Circle ⊕ Circle ↦ (Quotient.mk _ z :
+        circleWedge_three_cover_two_components_aux_Double)) from
+      isQuotientMap_quot_mk).continuous_iff.mpr
+  change Continuous circleWedge_three_cover_two_components_aux_raw
+  rw [continuous_sum_dom]
+  constructor
+  · simpa [Function.comp_def, circleWedge_three_cover_two_components_aux_raw] using
+      continuous_coinduced_rng.comp (continuous_inl.comp
+        circleWedge_three_cover_two_components_aux_covering_aux_sq.continuous)
+  · simpa [Function.comp_def, circleWedge_three_cover_two_components_aux_raw] using
+      continuous_coinduced_rng.comp (continuous_inr.comp
+        circleWedge_three_cover_two_components_aux_covering_aux_sq.continuous)
+
+/-- Away from the wedge point: `x = [inl w]` or `[inr w]` with `w ≠ 1`; take a
+small arc `V ∋ w` avoiding `1` in that lobe. Its preimage is the two arcs
+`±√V` in the matching lobe of the double cover, each mapped homeomorphically by
+squaring (`circleWedge_three_cover_two_components_aux_covering_aux_sq`). -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away
+    (x : CircleWedge) (hx : x ≠ Quotient.mk _ (.inl circleBase)) :
+    IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap x
+      (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' {x}) := by
+  sorry
+
+/-- At the wedge point: `V` = the image of the open arcs `{Re z > 0}` in both
+lobes. Its preimage is two disjoint open "crosses", one through `[inl 1] = [inr 1]`
+and one through `[inl (-1)] = [inr (-1)]`; each is the wedge of two half-arcs
+mapped homeomorphically onto `V` by squaring on each lobe. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge :
+    IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap
+      (Quotient.mk _ (.inl circleBase))
+      (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹'
+        {Quotient.mk _ (.inl circleBase)}) := by
+  sorry
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double :
     IsCoveringMap circleWedge_three_cover_two_components_aux_doubleMap := by
-  sorry
+  intro x
+  classical
+  by_cases hx : x = Quotient.mk _ (.inl circleBase)
+  · subst x
+    exact circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge
+  · exact circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away x hx
 -- END SEAT AREA
 
 lemma circleWedge_three_cover_two_components_aux_covering_aux_id :

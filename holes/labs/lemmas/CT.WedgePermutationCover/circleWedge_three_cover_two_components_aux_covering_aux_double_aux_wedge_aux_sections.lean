@@ -2628,6 +2628,61 @@ since `r 1 = 1`). Continuity: `U`'s preimage in `Circle ⊕ Circle` is open and
 saturated, so the quotient map restricts to a quotient map there
 (`IsQuotientMap.restrictPreimage_isOpen`). -/
 -- BEGIN SEAT AREA
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+    (r : {w : Circle // w ≠ -circleBase} → Circle) (w : Circle) : Circle :=
+  if h : w ≠ -circleBase then r ⟨w, h⟩ else circleBase
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_base
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (hre : ∀ w, 0 < (r w : ℂ).re) :
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase := by
+  have hn : circleBase ≠ -circleBase := by
+    intro h
+    have hh := congrArg Subtype.val h
+    norm_num [circleBase] at hh
+  rw [circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift,
+    dif_pos hn]
+  let w : {w : Circle // w ≠ -circleBase} := ⟨circleBase, hn⟩
+  have hm : ((r w : Circle) : ℂ) * r w = 1 := by
+    have h := congrArg Subtype.val (hsq w)
+    simpa [circleWedge_three_cover_two_components_aux_sq, circleBase] using h
+  rcases (mul_self_eq_one_iff.mp hm) with h | h
+  · exact Subtype.ext h
+  · have hp := hre w
+    rw [h] at hp
+    norm_num at hp
+
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_S
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift
+      r circleBase = circleBase) (b : Bool) :
+    CircleWedge → circleWedge_three_cover_two_components_aux_Double :=
+  Quotient.lift
+    (Sum.elim
+      (fun w ↦ Quotient.mk _ (.inl (if b then
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w
+        else -circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w)))
+      (fun w ↦ Quotient.mk _ (.inr (if b then
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w
+        else -circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_lift r w))))
+    (by
+      intro x y h
+      induction h with
+      | rel x y h =>
+          cases h
+          change Quotient.mk _ (Sum.inl (if b then _ else _)) =
+            Quotient.mk _ (Sum.inr (if b then _ else _))
+          cases b <;> simp [hrbase]
+          · exact Quotient.sound (Relation.EqvGen.rel _ _
+              circleWedge_three_cover_two_components_aux_Rel.neg)
+          · exact Quotient.sound (Relation.EqvGen.rel _ _
+              circleWedge_three_cover_two_components_aux_Rel.pos)
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections
     (r : {w : Circle // w ≠ -circleBase} → Circle) (hr : Continuous r)
     (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)

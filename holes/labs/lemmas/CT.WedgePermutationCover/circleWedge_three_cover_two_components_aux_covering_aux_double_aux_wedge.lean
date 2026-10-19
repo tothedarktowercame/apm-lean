@@ -1572,6 +1572,27 @@ lobes. Its preimage is two disjoint open "crosses", one through `[inl 1] = [inr 
 and one through `[inl (-1)] = [inr (-1)]`; each is the wedge of two half-arcs
 mapped homeomorphically onto `V` by squaring on each lobe. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_rel
+    (z : Circle) (h : circleWedge_three_cover_two_components_aux_sq z = circleBase) :
+    Quotient.mk (Relation.EqvGen.setoid circleWedge_three_cover_two_components_aux_Rel)
+        (Sum.inr z) = Quotient.mk _ (Sum.inl z) := by
+  have hz : (z : ℂ) * z = 1 := by
+    have hz' := congrArg Subtype.val h
+    simpa [circleWedge_three_cover_two_components_aux_sq, circleBase] using hz'
+  rcases (mul_self_eq_one_iff.mp hz) with hz | hz
+  · have hz' : z = circleBase := Subtype.ext hz
+    subst z
+    exact Quotient.sound
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.pos))
+  · have hz' : z = -circleBase := by
+      apply Subtype.ext
+      simpa [circleBase] using hz
+    subst z
+    exact Quotient.sound
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.neg))
+
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge :
     IsEvenlyCovered circleWedge_three_cover_two_components_aux_doubleMap
       (Quotient.mk _ (.inl circleBase))

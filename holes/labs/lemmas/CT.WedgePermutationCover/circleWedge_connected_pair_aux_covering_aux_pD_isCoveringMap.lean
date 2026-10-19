@@ -3112,6 +3112,24 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
 `cube`; at the wedge point sheet `r` is the arc around `r.1` on the left glued
 to the arc around `r.1` on the right. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_continuous :
+    Continuous circleWedge_connected_pair_aux_pD := by
+  apply (show Topology.IsQuotientMap
+      (fun z : circleWedge_connected_pair_aux_RawD ↦
+        (Quotient.mk _ z : circleWedge_connected_pair_aux_ED)) from
+      isQuotientMap_quot_mk).continuous_iff.mpr
+  change Continuous circleWedge_connected_pair_aux_projD
+  rw [continuous_sum_dom]
+  constructor
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projD] using
+      continuous_coinduced_rng.comp
+        (continuous_inl.comp
+          circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projD] using
+      continuous_coinduced_rng.comp
+        (continuous_inr.comp
+          circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+
 lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap :
     IsCoveringMap circleWedge_connected_pair_aux_pD := by
   sorry

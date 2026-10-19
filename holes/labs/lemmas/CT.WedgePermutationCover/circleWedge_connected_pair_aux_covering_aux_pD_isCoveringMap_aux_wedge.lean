@@ -3973,6 +3973,13 @@ def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux
       induction h with
       | rel x y h =>
           cases h
+          simp only [Sum.elim_inl, Sum.elim_inr]
+          change (Quotient.mk _ (Sum.inl (ρ.1 *
+              circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+                r circleBase)) : circleWedge_connected_pair_aux_ED) =
+            Quotient.mk _ (Sum.inr (ρ.1 *
+              circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+                r circleBase))
           change Quotient.mk _ (Sum.inl (if b then _ else _)) =
             Quotient.mk _ (Sum.inr (if b then _ else _))
           cases b <;> simp [hrbase]
@@ -6258,10 +6265,253 @@ of `cube`.  The three sheets are disjoint and open; the section-gluing pattern i
 `rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections`, as for
 `circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge`. -/
 -- BEGIN SEAT AREA
+def circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    Set circleWedge_connected_pair_aux_ED :=
+  {e | (∃ z : Circle, (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re ∧
+          e = Quotient.mk _ (.inl z)) ∨
+       (∃ z : Circle, (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re ∧
+          e = Quotient.mk _ (.inr z))}
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet_open
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    IsOpen
+      (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ) := by
+  let P : circleWedge_connected_pair_aux_RawD → Prop
+    | .inl z => (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re
+    | .inr z => (1 / 2 : ℝ) < ((z : ℂ) * star (ρ.1 : ℂ)).re
+  have hinv {a b : circleWedge_connected_pair_aux_RawD}
+      (h : Relation.EqvGen circleWedge_connected_pair_aux_RelD a b) : P a ↔ P b := by
+    induction h with
+    | rel a b h => cases h; rfl
+    | refl => exact Iff.rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  rw [isOpen_coinduced]
+  have heq : (fun z : circleWedge_connected_pair_aux_RawD ↦
+      (Quotient.mk _ z : circleWedge_connected_pair_aux_ED)) ⁻¹'
+        circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ =
+      {a | P a} := by
+    ext a
+    constructor
+    · rintro (⟨z, hz, he⟩ | ⟨z, hz, he⟩)
+      · exact (hinv (Quotient.exact he)).mpr hz
+      · exact (hinv (Quotient.exact he)).mpr hz
+    · intro ha
+      cases a with
+      | inl z => exact Or.inl ⟨z, ha, rfl⟩
+      | inr z => exact Or.inr ⟨z, ha, rfl⟩
+  have hopen : IsOpen {a | P a} := by
+    rw [isOpen_sum_iff]
+    constructor <;>
+      exact isOpen_lt continuous_const
+        (Complex.continuous_re.comp (continuous_subtype_val.mul continuous_const))
+  exact heq.symm ▸ hopen
+
+def circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+      r circleBase = circleBase)
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    CircleWedge → circleWedge_connected_pair_aux_ED :=
+  Quotient.lift
+    (Sum.elim
+      (fun w ↦ Quotient.mk _ (.inl (ρ.1 *
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w)))
+      (fun w ↦ Quotient.mk _ (.inr (ρ.1 *
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w))))
+    (by
+      intro x y h
+      induction h with
+      | rel x y h =>
+          cases h
+          change (Quotient.mk _ (Sum.inl (ρ.1 *
+              circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+                r circleBase)) : circleWedge_connected_pair_aux_ED) =
+            Quotient.mk _ (Sum.inr (ρ.1 *
+              circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+                r circleBase))
+          have h1 : ρ.1 * circleBase = ρ.1 := by
+            apply Subtype.ext
+            simp [circleBase]
+          rw [hrbase, h1]
+          exact Quotient.sound (Relation.EqvGen.rel _ _
+            (circleWedge_connected_pair_aux_RelD.glue ρ))
+      | refl => rfl
+      | symm _ _ _ ih => exact ih.symm
+      | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cont
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+      r circleBase = circleBase) (hr : Continuous r)
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    Continuous (fun u :
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+        r hrbase ρ u.1) := by
+  apply circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections_aux_cont_aux_lobes
+    circleBase circleBase _
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open
+  · have hn (z : {z : Circle // (Quotient.mk _ (.inl z) : CircleWedge) ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U}) :
+        z.1 ≠ -circleBase := fun h ↦ z.2.1
+          (congrArg (fun x : Circle ↦ (Quotient.mk _ (.inl x) : CircleWedge)) h)
+    have hc : Continuous (fun z : {z : Circle // (Quotient.mk _ (.inl z) : CircleWedge) ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        r ⟨z.1, hn z⟩) := hr.comp (Continuous.subtype_mk continuous_subtype_val _)
+    have hlift : Continuous (fun z : {z : Circle //
+        (Quotient.mk _ (.inl z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r z.1) := by
+      simpa [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift,
+        hn] using hc
+    exact (continuous_coinduced_rng : Continuous
+      (fun u : circleWedge_connected_pair_aux_RawD ↦
+        (Quotient.mk _ u : circleWedge_connected_pair_aux_ED))).comp
+          (continuous_inl.comp (continuous_const.mul hlift))
+  · have hn (z : {z : Circle // (Quotient.mk _ (.inr z) : CircleWedge) ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U}) :
+        z.1 ≠ -circleBase := fun h ↦ z.2.2
+          (congrArg (fun x : Circle ↦ (Quotient.mk _ (.inr x) : CircleWedge)) h)
+    have hc : Continuous (fun z : {z : Circle // (Quotient.mk _ (.inr z) : CircleWedge) ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        r ⟨z.1, hn z⟩) := hr.comp (Continuous.subtype_mk continuous_subtype_val _)
+    have hlift : Continuous (fun z : {z : Circle //
+        (Quotient.mk _ (.inr z) : CircleWedge) ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U} ↦
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r z.1) := by
+      simpa [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift,
+        hn] using hc
+    exact (continuous_coinduced_rng : Continuous
+      (fun u : circleWedge_connected_pair_aux_RawD ↦
+        (Quotient.mk _ u : circleWedge_connected_pair_aux_ED))).comp
+          (continuous_inr.comp (continuous_const.mul hlift))
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_right
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+      r circleBase = circleBase)
+    (hcube : ∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1)
+    (ρ : circleWedge_connected_pair_aux_Root)
+    (u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U) :
+    circleWedge_connected_pair_aux_pD
+      (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+        r hrbase ρ u.1) = u := by
+  rcases u with ⟨u, hu⟩
+  induction u using Quotient.inductionOn with
+  | _ x =>
+    cases x with
+    | inl w =>
+      have hn : w ≠ -circleBase := fun h ↦ hu.1
+        (congrArg (fun z : Circle ↦ (Quotient.mk _ (.inl z) : CircleWedge)) h)
+      change Quotient.mk _ (Sum.inl (circleWedge_connected_pair_aux_cube
+        (ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w))) = _
+      congr 2
+      apply Subtype.ext
+      change ((ρ.1 : ℂ) *
+        (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w : ℂ)) ^ 3 =
+          (w : ℂ)
+      have hroot : (ρ.1 : ℂ) ^ 3 = (circleBase : ℂ) := congrArg Subtype.val ρ.2
+      rw [show circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w =
+          r ⟨w, hn⟩ by simp [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift, hn],
+        mul_pow, hroot]
+      simpa [circleBase] using congrArg Subtype.val (hcube ⟨w, hn⟩)
+    | inr w =>
+      have hn : w ≠ -circleBase := fun h ↦ hu.2
+        (congrArg (fun z : Circle ↦ (Quotient.mk _ (.inr z) : CircleWedge)) h)
+      change Quotient.mk _ (Sum.inr (circleWedge_connected_pair_aux_cube
+        (ρ.1 * circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w))) = _
+      congr 2
+      apply Subtype.ext
+      change ((ρ.1 : ℂ) *
+        (circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w : ℂ)) ^ 3 =
+          (w : ℂ)
+      have hroot : (ρ.1 : ℂ) ^ 3 = (circleBase : ℂ) := congrArg Subtype.val ρ.2
+      rw [show circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r w =
+          r ⟨w, hn⟩ by simp [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift, hn],
+        mul_pow, hroot]
+      simpa [circleBase] using congrArg Subtype.val (hcube ⟨w, hn⟩)
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_range
+    (r : {w : Circle // w ≠ -circleBase} → Circle)
+    (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift
+      r circleBase = circleBase)
+    (hcube : ∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1)
+    (hre : ∀ w, (1 / 2 : ℝ) < (r w : ℂ).re)
+    (hroots : ∀ w z, circleWedge_connected_pair_aux_cube z = w.1 →
+      ∃ ρ : circleWedge_connected_pair_aux_Root, z = ρ.1 * r w)
+    (ρ : circleWedge_connected_pair_aux_Root) :
+    Set.range (fun u :
+      circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
+      circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+        r hrbase ρ u.1) =
+      circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_mem :
+    ∀ e, circleWedge_connected_pair_aux_pD e ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
+      ∃ ρ, e ∈ circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint :
+    ∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
+      Disjoint
+        (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ)
+        (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet σ) := by
+  sorry
+
+lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover :
+    (∀ e, circleWedge_connected_pair_aux_pD e ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
+      ∃ ρ, e ∈ circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ) ∧
+    (∀ ρ σ : circleWedge_connected_pair_aux_Root, ρ ≠ σ →
+      Disjoint
+        (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ)
+        (circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet σ)) :=
+  ⟨circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_mem, circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover_aux_disjoint⟩
+
 lemma circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge :
     IsEvenlyCovered circleWedge_connected_pair_aux_pD (Quotient.mk _ (.inl circleBase))
       (circleWedge_connected_pair_aux_pD ⁻¹' {Quotient.mk _ (.inl circleBase)}) := by
-  sorry
+  obtain ⟨r, hr, hcube, hre, hrbase, hroots⟩ :=
+    circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_cbrt
+  obtain ⟨hcov, hdisj⟩ :=
+    circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cover
+  have hrange :=
+    circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_range
+      r hrbase hcube hre hroots
+  refine (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+    circleWedge_connected_pair_aux_pD
+    circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_continuous
+    _ _ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cover.1
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open
+    (fun ρ u ↦ circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+      r hrbase ρ u.1)
+    (fun ρ ↦ circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_cont
+      r hrbase hr ρ)
+    (fun ρ u ↦ circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_right
+      r hrbase hcube ρ u)
+    (fun ρ ↦ by rw [hrange ρ]; exact
+      circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet_open ρ)
+    (fun e he ↦ by
+      obtain ⟨ρ, hρ⟩ := hcov e he
+      rw [← hrange ρ] at hρ
+      obtain ⟨u, hu⟩ := hρ
+      exact ⟨ρ, u, hu⟩)
+    (fun ρ σ u v h ↦ by
+      by_contra hne
+      have hi : circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+          r hrbase ρ u.1 ∈
+          circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet ρ := by
+        rw [← hrange ρ]; exact ⟨u, rfl⟩
+      have hj : circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_S
+          r hrbase ρ u.1 ∈
+          circleWedge_connected_pair_aux_covering_aux_pD_isCoveringMap_aux_wedge_aux_sheet σ := by
+        rw [← hrange σ]
+        exact ⟨v, h.symm⟩
+      exact Set.disjoint_left.mp (hdisj ρ σ hne) hi hj)).to_isEvenlyCovered_preimage
 -- END SEAT AREA
 
 /-- `pD` is a covering map: as for `pC`, but the right lobe is also covered by

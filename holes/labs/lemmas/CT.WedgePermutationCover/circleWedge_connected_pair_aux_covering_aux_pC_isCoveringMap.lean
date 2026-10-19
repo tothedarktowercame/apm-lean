@@ -3042,6 +3042,21 @@ arc around `circleBase` in each lobe; sheet `r` is the arc around `r.1` on the
 left glued to the arc around `circleBase` in copy `r` on the right.  Continuity
 uses `_aux_cube_continuous` and the quotient topology on both raw sums. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_continuous :
+    Continuous circleWedge_connected_pair_aux_pC := by
+  apply (show Topology.IsQuotientMap
+      (fun z : circleWedge_connected_pair_aux_RawC ↦
+        (Quotient.mk _ z : circleWedge_connected_pair_aux_EC)) from
+      isQuotientMap_quot_mk).continuous_iff.mpr
+  change Continuous circleWedge_connected_pair_aux_projC
+  rw [continuous_sum_dom]
+  constructor
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projC] using
+      continuous_coinduced_rng.comp (continuous_inl.comp
+        circleWedge_connected_pair_aux_covering_aux_cube_continuous)
+  · simpa [Function.comp_def, circleWedge_connected_pair_aux_projC] using
+      continuous_coinduced_rng.comp (continuous_inr.comp continuous_fst)
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap :
     IsCoveringMap circleWedge_connected_pair_aux_pC := by
   sorry

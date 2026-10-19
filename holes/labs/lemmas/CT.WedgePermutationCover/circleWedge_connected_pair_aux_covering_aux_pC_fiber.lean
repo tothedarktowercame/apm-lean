@@ -3052,6 +3052,41 @@ three classes `{inl r.1, inr (circleBase, r)}`, one per root `r`.  Count via a
 bijection with `circleWedge_connected_pair_aux_Root` (or with the cube roots of
 `w`), which has card 3. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_rel_iff (a b) :
+    Relation.EqvGen circleWedge_connected_pair_aux_RelC a b ↔
+      a = b ∨ ∃ r : circleWedge_connected_pair_aux_Root,
+        (a = .inl r.1 ∧ b = .inr (circleBase, r)) ∨
+        (b = .inl r.1 ∧ a = .inr (circleBase, r)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel a b h =>
+        cases h with
+        | glue r => exact Or.inr ⟨r, Or.inl ⟨rfl, rfl⟩⟩
+    | refl => exact Or.inl rfl
+    | symm a b _ ih =>
+        rcases ih with rfl | ⟨r, h | h⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨r, Or.inr ⟨h.1, h.2⟩⟩
+        · exact Or.inr ⟨r, Or.inl ⟨h.1, h.2⟩⟩
+    | trans a b c _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨r, h | h⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inl h⟩
+          · simp_all
+          · simp_all
+        · rcases ih₂ with rfl | ⟨s, hs | hs⟩
+          · exact Or.inr ⟨r, Or.inr h⟩
+          · simp_all <;> exact Subtype.ext h.1.symm
+          · simp_all
+  · rintro (rfl | ⟨r, h | h⟩)
+    · exact Relation.EqvGen.refl _
+    · exact h.1 ▸ h.2 ▸ Relation.EqvGen.rel _ _
+        (circleWedge_connected_pair_aux_RelC.glue r)
+    · exact h.2 ▸ h.1 ▸ Relation.EqvGen.symm _ _
+        (Relation.EqvGen.rel _ _ (circleWedge_connected_pair_aux_RelC.glue r))
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber (b : CircleWedge) :
     Nat.card {e : circleWedge_connected_pair_aux_EC //
       circleWedge_connected_pair_aux_pC e = b} = 3 := by
