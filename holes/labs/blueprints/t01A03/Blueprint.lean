@@ -405,9 +405,69 @@ def apm_t01a03_separating_circle_H1_zero_aux_V :
 
 /-- `V` is open: the complement of the two squares is closed in two compact
 tori, so compact (`OnePoint.isOpen_compl_image_coe`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_V_open_aux_N_compl_compact :
+    IsCompact apm_t01a03_separating_circle_H1_zero_aux_Nᶜ := by
+  rw [Subtype.isCompact_iff]
+  let K : Set apm_t01a03_Torus :=
+    {x | 1 ≤ dist ((x.1 : Circle) : ℂ) 1 ∨
+      1 ≤ dist ((x.2 : Circle) : ℂ) 1}
+  have hKclosed : IsClosed K := by
+    apply IsClosed.union
+    · exact isClosed_le continuous_const
+        (continuous_dist.comp₂
+          (continuous_subtype_val.comp continuous_fst) continuous_const)
+    · exact isClosed_le continuous_const
+        (continuous_dist.comp₂
+          (continuous_subtype_val.comp continuous_snd) continuous_const)
+  have hKcompact : IsCompact K := hKclosed.isCompact
+  have himage :
+      ((↑) : apm_t01a03_PuncturedTorus → apm_t01a03_Torus) ''
+          apm_t01a03_separating_circle_H1_zero_aux_Nᶜ = K := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      change ¬ (dist (((y : apm_t01a03_Torus).1 : Circle) : ℂ) 1 < 1 ∧
+        dist (((y : apm_t01a03_Torus).2 : Circle) : ℂ) 1 < 1) at hy
+      change 1 ≤ dist (((y : apm_t01a03_Torus).1 : Circle) : ℂ) 1 ∨
+        1 ≤ dist (((y : apm_t01a03_Torus).2 : Circle) : ℂ) 1
+      by_cases h : dist (((y : apm_t01a03_Torus).1 : Circle) : ℂ) 1 < 1
+      · exact Or.inr (le_of_not_gt (fun h' ↦ hy ⟨h, h'⟩))
+      · exact Or.inl (le_of_not_gt h)
+    · intro hx
+      have hne : x ≠ ((1 : Circle), (1 : Circle)) := by
+        intro heq
+        subst x
+        norm_num [K] at hx
+      refine ⟨⟨x, hne⟩, ?_, rfl⟩
+      change ¬ (dist ((x.1 : Circle) : ℂ) 1 < 1 ∧
+        dist ((x.2 : Circle) : ℂ) 1 < 1)
+      rintro ⟨h1, h2⟩
+      rcases hx with hx | hx
+      · exact (not_lt_of_ge hx) h1
+      · exact (not_lt_of_ge hx) h2
+  rw [himage]
+  exact hKcompact
+
 lemma apm_t01a03_separating_circle_H1_zero_aux_V_open :
     IsOpen apm_t01a03_separating_circle_H1_zero_aux_V := by
-  sorry
+  apply OnePoint.isOpen_compl_image_coe.mpr
+  have hNc : IsCompact apm_t01a03_separating_circle_H1_zero_aux_Nᶜ :=
+    apm_t01a03_separating_circle_H1_zero_aux_V_open_aux_N_compl_compact
+  have hinl : IsCompact
+      (Sum.inl '' apm_t01a03_separating_circle_H1_zero_aux_Nᶜ :
+        Set apm_t01a03_TwoPuncturedTori) :=
+    hNc.image continuous_inl
+  have hinr : IsCompact
+      (Sum.inr '' apm_t01a03_separating_circle_H1_zero_aux_Nᶜ :
+        Set apm_t01a03_TwoPuncturedTori) :=
+    hNc.image continuous_inr
+  have heq : apm_t01a03_separating_circle_H1_zero_aux_Nsumᶜ =
+      Sum.inl '' apm_t01a03_separating_circle_H1_zero_aux_Nᶜ ∪
+        Sum.inr '' apm_t01a03_separating_circle_H1_zero_aux_Nᶜ := by
+    ext x
+    cases x <;> simp [apm_t01a03_separating_circle_H1_zero_aux_Nsum]
+  rw [heq]
+  exact ⟨(hinl.union hinr).isClosed, hinl.union hinr⟩
 
 /-! #### `_aux_V_H1_zero` by a homeomorphism onto a star-shaped wedge
 
