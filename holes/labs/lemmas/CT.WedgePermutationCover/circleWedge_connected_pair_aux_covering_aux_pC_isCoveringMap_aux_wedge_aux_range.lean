@@ -5345,6 +5345,61 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
 
 /-- The `ρ`-section over `U` has range exactly sheet `ρ`. -/
 -- BEGIN SEAT AREA
+lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_range_aux_inj
+    (a z : Circle) (hc : circleWedge_connected_pair_aux_cube a = circleWedge_connected_pair_aux_cube z)
+    (ha : (1 / 2 : ℝ) < (a : ℂ).re) (hz : (1 / 2 : ℝ) < (z : ℂ).re) : a = z := by
+  apply Subtype.ext
+  have hpow : (a : ℂ) ^ 3 = (z : ℂ) ^ 3 := congrArg Subtype.val hc
+  by_contra hne
+  have hfac : (a : ℂ) ^ 2 + (a : ℂ) * (z : ℂ) + (z : ℂ) ^ 2 = 0 := by
+    have hm : ((a : ℂ) - (z : ℂ)) *
+        ((a : ℂ) ^ 2 + (a : ℂ) * (z : ℂ) + (z : ℂ) ^ 2) = 0 := by
+      rw [show ((a : ℂ) - (z : ℂ)) *
+        ((a : ℂ) ^ 2 + (a : ℂ) * (z : ℂ) + (z : ℂ) ^ 2) =
+          (a : ℂ) ^ 3 - (z : ℂ) ^ 3 by ring, hpow, sub_self]
+    exact (mul_eq_zero.mp hm).resolve_left (sub_ne_zero.mpr hne)
+  have ha_norm : (a : ℂ).re ^ 2 + (a : ℂ).im ^ 2 = 1 := by
+    have hn : ‖(a : ℂ)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using a.property
+    have hn' : Complex.normSq (a : ℂ) = 1 := by
+      rw [Complex.normSq_eq_norm_sq, hn]
+      norm_num
+    simpa [Complex.normSq_apply, pow_two] using hn'
+  have hz_norm : (z : ℂ).re ^ 2 + (z : ℂ).im ^ 2 = 1 := by
+    have hn : ‖(z : ℂ)‖ = 1 := by
+      simpa [Metric.mem_sphere, dist_zero_right] using z.property
+    have hn' : Complex.normSq (z : ℂ) = 1 := by
+      rw [Complex.normSq_eq_norm_sq, hn]
+      norm_num
+    simpa [Complex.normSq_apply, pow_two] using hn'
+  have ha_unit : (a : ℂ) * star (a : ℂ) = 1 := by
+    apply Complex.ext
+    · change (a : ℂ).re * (a : ℂ).re - (a : ℂ).im * (-(a : ℂ).im) = 1
+      nlinarith [ha_norm]
+    · change (a : ℂ).re * (-(a : ℂ).im) + (a : ℂ).im * (a : ℂ).re = 0
+      ring
+  have hz_unit : (z : ℂ) * star (z : ℂ) = 1 := by
+    apply Complex.ext
+    · change (z : ℂ).re * (z : ℂ).re - (z : ℂ).im * (-(z : ℂ).im) = 1
+      nlinarith [hz_norm]
+    · change (z : ℂ).re * (-(z : ℂ).im) + (z : ℂ).im * (z : ℂ).re = 0
+      ring
+  have hunit : (a : ℂ) * star (z : ℂ) + 1 + (z : ℂ) * star (a : ℂ) = 0 := by
+    calc
+      (a : ℂ) * star (z : ℂ) + 1 + (z : ℂ) * star (a : ℂ) =
+          (a : ℂ) * star (z : ℂ) * ((a : ℂ) * star (a : ℂ)) +
+          ((a : ℂ) * star (a : ℂ)) * ((z : ℂ) * star (z : ℂ)) +
+          (z : ℂ) * star (a : ℂ) * ((z : ℂ) * star (z : ℂ)) := by
+            rw [ha_unit, hz_unit]; ring
+      _ =
+          ((a : ℂ) ^ 2 + (a : ℂ) * (z : ℂ) + (z : ℂ) ^ 2) *
+            star (a : ℂ) * star (z : ℂ) := by ring
+      _ = 0 := by rw [hfac]; simp
+  have hr := congrArg Complex.re hunit
+  simp [Complex.mul_re] at hr
+  nlinarith [sq_nonneg ((a : ℂ).im + (z : ℂ).im),
+    sq_nonneg ((a : ℂ).re + (z : ℂ).re)]
+
 lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_range (r : {w : Circle // w ≠ -circleBase} → Circle)
     (hrbase : circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift r circleBase = circleBase)
     (hcube : ∀ w, circleWedge_connected_pair_aux_cube (r w) = w.1)
@@ -5354,7 +5409,167 @@ lemma circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux
     (ρ : circleWedge_connected_pair_aux_Root) :
     Set.range (fun u : circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ↦
       circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S r hrbase ρ u.1) = circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_sheet ρ := by
-  sorry
+  have hρunit : (ρ.1 : ℂ) * star (ρ.1 : ℂ) = 1 := by
+    apply Complex.ext
+    · change (ρ.1 : ℂ).re * (ρ.1 : ℂ).re -
+          (ρ.1 : ℂ).im * (-(ρ.1 : ℂ).im) = 1
+      have hn : (ρ.1 : ℂ).re ^ 2 + (ρ.1 : ℂ).im ^ 2 = 1 := by
+        have hn' : Complex.normSq (ρ.1 : ℂ) = 1 := by
+          rw [Complex.normSq_eq_norm_sq, show ‖(ρ.1 : ℂ)‖ = 1 by
+            simpa [Metric.mem_sphere, dist_zero_right] using ρ.1.property]
+          norm_num
+        simpa [Complex.normSq_apply, pow_two] using hn'
+      nlinarith
+    · change (ρ.1 : ℂ).re * (-(ρ.1 : ℂ).im) +
+          (ρ.1 : ℂ).im * (ρ.1 : ℂ).re = 0
+      ring
+  let ρc : Circle := ⟨star (ρ.1 : ℂ), by
+    simpa [Metric.mem_sphere, dist_zero_right, norm_star] using ρ.1.property⟩
+  have hbase : -circleBase ≠ circleBase := by
+    intro h
+    have := congrArg Subtype.val h
+    norm_num [circleBase] at this
+  have hquot (side target : Bool) (w : Circle) (hw : w ≠ -circleBase) :
+      (Quotient.mk _ (if side then Sum.inl w else Sum.inr w) : CircleWedge) ≠
+        Quotient.mk _ (if target then Sum.inl (-circleBase) else Sum.inr (-circleBase)) := by
+    intro h
+    rcases (rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff
+      circleBase circleBase _ _).mp (Quotient.exact h) with heq | hglue
+    · cases side <;> cases target <;> simp at heq
+      all_goals exact hw heq
+    · rcases hglue with ⟨hs, ht⟩
+      rcases hs with hs | hs <;> rcases ht with ht | ht <;>
+        cases side <;> cases target <;> simp [hbase] at hs ht
+  ext e
+  constructor
+  · rintro ⟨⟨q, hq⟩, rfl⟩
+    induction q using Quotient.inductionOn with
+    | _ q =>
+      rcases q with w | w
+      · have hw : w ≠ -circleBase := by
+          intro h; subst w; exact hq.1 rfl
+        left
+        refine ⟨ρ.1 * r ⟨w, hw⟩, ?_, ?_⟩
+        · have heq : ((ρ.1 : ℂ) * (r ⟨w, hw⟩ : ℂ)) * star (ρ.1 : ℂ) =
+              (r ⟨w, hw⟩ : ℂ) := by
+            calc
+              _ = ((ρ.1 : ℂ) * star (ρ.1 : ℂ)) * (r ⟨w, hw⟩ : ℂ) := by ring
+              _ = _ := by rw [hρunit, one_mul]
+          change (1 / 2 : ℝ) <
+            (((ρ.1 : ℂ) * (r ⟨w, hw⟩ : ℂ)) * star (ρ.1 : ℂ)).re
+          rw [heq]
+          exact hre ⟨w, hw⟩
+        · simp [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S,
+            circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift, hw]
+      · have hw : w ≠ -circleBase := by
+          intro h; subst w; exact hq.2 rfl
+        right
+        exact ⟨w, hw, by simp [circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S]⟩
+  · rintro (⟨z, hz, rfl⟩ | ⟨w, hw, rfl⟩)
+    · have hcube_neg : circleWedge_connected_pair_aux_cube z ≠ -circleBase := by
+        intro hc
+        have hpow := congrArg Subtype.val hc
+        have hρpow := congrArg Subtype.val ρ.2
+        change (z : ℂ) ^ 3 = (-1 : ℂ) at hpow
+        change (ρ.1 : ℂ) ^ 3 = (1 : ℂ) at hρpow
+        have hρstar : star (ρ.1 : ℂ) ^ 3 = 1 := by
+          calc
+            star (ρ.1 : ℂ) ^ 3 = star ((ρ.1 : ℂ) ^ 3) :=
+              (map_pow (starRingEnd ℂ) (ρ.1 : ℂ) 3).symm
+            _ = 1 := by
+              rw [hρpow]
+              apply Complex.ext <;> norm_num
+        have hp : ((z : ℂ) * star (ρ.1 : ℂ)) ^ 3 = -1 := by
+          rw [mul_pow, hpow, hρstar, mul_one]
+        have hfac : ((z : ℂ) * star (ρ.1 : ℂ)) ^ 2 -
+            ((z : ℂ) * star (ρ.1 : ℂ)) + 1 = 0 := by
+          have hm : (((z : ℂ) * star (ρ.1 : ℂ)) + 1) *
+              (((z : ℂ) * star (ρ.1 : ℂ)) ^ 2 -
+                ((z : ℂ) * star (ρ.1 : ℂ)) + 1) = 0 := by
+            rw [show (((z : ℂ) * star (ρ.1 : ℂ)) + 1) *
+              (((z : ℂ) * star (ρ.1 : ℂ)) ^ 2 -
+                ((z : ℂ) * star (ρ.1 : ℂ)) + 1) =
+                ((z : ℂ) * star (ρ.1 : ℂ)) ^ 3 + 1 by ring, hp]
+            norm_num
+          exact (mul_eq_zero.mp hm).resolve_left (by
+            intro he
+            have := congrArg Complex.re he
+            simp only [map_add, map_one, Complex.add_re, Complex.one_re,
+              Complex.zero_re] at this
+            linarith)
+        have hr := congrArg Complex.re hfac
+        have hn : Complex.normSq ((z : ℂ) * star (ρ.1 : ℂ)) = 1 := by
+          rw [Complex.normSq_mul]
+          have hz' : Complex.normSq (z : ℂ) = 1 := by
+            rw [Complex.normSq_eq_norm_sq, show ‖(z : ℂ)‖ = 1 by
+              simpa [Metric.mem_sphere, dist_zero_right] using z.property]
+            norm_num
+          have hρ' : Complex.normSq (ρ.1 : ℂ) = 1 := by
+            rw [Complex.normSq_eq_norm_sq, show ‖(ρ.1 : ℂ)‖ = 1 by
+              simpa [Metric.mem_sphere, dist_zero_right] using ρ.1.property]
+            norm_num
+          rw [hz']
+          have hs : Complex.normSq (star (ρ.1 : ℂ)) = 1 := by
+            rw [Complex.normSq_eq_norm_sq, norm_star,
+              show ‖(ρ.1 : ℂ)‖ = 1 by
+                simpa [Metric.mem_sphere, dist_zero_right] using ρ.1.property]
+            norm_num
+          rw [hs]; norm_num
+        simp [Complex.mul_re, pow_two, Complex.normSq_apply] at hr hn
+        let x : ℝ := ((z : ℂ) * star (ρ.1 : ℂ)).re
+        let y : ℝ := ((z : ℂ) * star (ρ.1 : ℂ)).im
+        have hr' : x ^ 2 - y ^ 2 - x + 1 = 0 := by simpa [x, y, pow_two] using hr
+        have hn' : x ^ 2 + y ^ 2 = 1 := by simpa [x, y, pow_two] using hn
+        have hx : 2 * x ^ 2 - x = 0 := by nlinarith [hr', hn']
+        have hxhalf : (1 / 2 : ℝ) < x := by exact hz
+        have hxpos : 0 < x := by linarith
+        have htwopos : 0 < 2 * x - 1 := by linarith
+        have := mul_pos hxpos htwopos
+        nlinarith [this, hx]
+      let w : {w : Circle // w ≠ -circleBase} :=
+        ⟨circleWedge_connected_pair_aux_cube z, hcube_neg⟩
+      have hrotcube : circleWedge_connected_pair_aux_cube (z * ρc) =
+          circleWedge_connected_pair_aux_cube (r w) := by
+        apply Subtype.ext
+        have hρpow := congrArg Subtype.val ρ.2
+        change (ρ.1 : ℂ) ^ 3 = 1 at hρpow
+        have hρstar : star (ρ.1 : ℂ) ^ 3 = 1 := by
+          calc
+            star (ρ.1 : ℂ) ^ 3 = star ((ρ.1 : ℂ) ^ 3) :=
+              (map_pow (starRingEnd ℂ) (ρ.1 : ℂ) 3).symm
+            _ = 1 := by
+              rw [hρpow]
+              apply Complex.ext <;> norm_num
+        change ((z : ℂ) * star (ρ.1 : ℂ)) ^ 3 = (r w : ℂ) ^ 3
+        rw [mul_pow, hρstar, mul_one]
+        exact congrArg Subtype.val (hcube w) |>.symm.trans rfl
+      have hrot := circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_range_aux_inj
+        (z * ρc) (r w) hrotcube (by simpa [ρc] using hz) (hre w)
+      have hzform : z = ρ.1 * r w := by
+        have hc := congrArg Subtype.val hrot
+        change (z : ℂ) * star (ρ.1 : ℂ) = (r w : ℂ) at hc
+        apply Subtype.ext
+        change (z : ℂ) = (ρ.1 : ℂ) * (r w : ℂ)
+        calc
+          (z : ℂ) = (ρ.1 : ℂ) * ((z : ℂ) * star (ρ.1 : ℂ)) := by
+            calc
+              (z : ℂ) = ((ρ.1 : ℂ) * star (ρ.1 : ℂ)) * (z : ℂ) := by rw [hρunit, one_mul]
+              _ = (ρ.1 : ℂ) * ((z : ℂ) * star (ρ.1 : ℂ)) := by ring
+          _ = (ρ.1 : ℂ) * (r w : ℂ) := by rw [hc]
+      let q : CircleWedge := Quotient.mk _ (.inl w.1)
+      have hq : q ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U :=
+        ⟨by simpa [q] using hquot true true w.1 w.2,
+          by simpa [q] using hquot true false w.1 w.2⟩
+      refine ⟨⟨q, hq⟩, ?_⟩
+      simp [q, circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S,
+        circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_lift,
+        w.2, hzform]
+    · let q : CircleWedge := Quotient.mk _ (.inr w)
+      have hq : q ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U :=
+        ⟨by simpa [q] using hquot false true w hw,
+          by simpa [q] using hquot false false w hw⟩
+      exact ⟨⟨q, hq⟩, by
+        simp [q, circleWedge_connected_pair_aux_covering_aux_pC_isCoveringMap_aux_wedge_aux_S]⟩
 -- END SEAT AREA
 
 /-- Combinatorics: the sheets cover `pC ⁻¹' U` and are pairwise disjoint (on the
