@@ -92,3 +92,18 @@ generates a transitive dihedral action of order eight, so its action on four
 points is not regular.  The two connected three-sheeted total spaces really
 are distinguished as *unlabelled spaces*: one has loop edges at branch points
 and the other does not.
+
+### Split of `rp2Wedge_regular_four_cover_aux_card` (2026-10-18, lemma-2 PARTIAL)
+
+Banked: `rp2Wedge_regular_four_cover_aux_card_aux_invariant` (a sheet invariant
+`Sum.elim fL fR` that respects the three generators of the relation is constant on
+classes). Proved at split time: `_aux_card_aux_wedge_eqvGen_iff` (the wedge relation
+identifies only the two base points). The theorem is assembled by cases on the
+point of the wedge, from three leaves:
+
+- `_aux_card_aux_left`: over `[inl [x]]` with `[x] ≠ rpBase`, `i ↦ [inl (x, i)]` is a
+  bijection from `Fin 4`; injectivity via the invariant with
+  `fL (y, k) = if y = x then k else if y = -x then σ k else 0`, `fR = 0`.
+- `_aux_card_aux_right`: the mirror, with `τ`.
+- `_aux_card_aux_base`: over the wedge point, `i ↦ [inl (e₀, i)]`; invariant with
+  `fL`, `fR` recording `k` at `e₀` and `σ k` / `τ k` at `-e₀`.

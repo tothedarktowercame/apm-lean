@@ -203,6 +203,94 @@ theorem rp2Wedge_regular_four_cover_aux_isCoveringMap (σ τ : Equiv.Perm (Fin 4
     IsCoveringMap (rp2Wedge_regular_four_cover_aux_p σ τ) := by
   sorry
 
+/-! #### Split of `rp2Wedge_regular_four_cover_aux_card` (lemma-2 PARTIAL, 2026-10-18) -/
+
+/-- An invariant of the sheets that respects the gluing descends through the
+equivalence relation (banked from lemma-2).  Used for injectivity of the
+fibre parametrisations: choose `fL`, `fR` recording the sheet index. -/
+lemma rp2Wedge_regular_four_cover_aux_card_aux_invariant
+    {α : Type*} (σ τ : Equiv.Perm (Fin 4))
+    (fL fR : Sphere2 × Fin 4 → α)
+    (hL : ∀ x i, fL (-x, σ i) = fL (x, i))
+    (hR : ∀ x i, fR (-x, τ i) = fR (x, i))
+    (hG : ∀ i, fL (rp2Wedge_regular_four_cover_aux_e0, i) =
+      fR (rp2Wedge_regular_four_cover_aux_e0, i))
+    {a b : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)}
+    (h : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+    Sum.elim fL fR a = Sum.elim fL fR b := by
+  induction h with
+  | rel a b h =>
+      cases h with
+      | left x i => exact (hL x i).symm
+      | right x i => exact (hR x i).symm
+      | glue i => exact hG i
+  | refl => rfl
+  | symm _ _ _ ih => exact ih.symm
+  | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- The wedge relation identifies only the two base points. -/
+lemma rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff {A B : Type*}
+    (a : A) (b : B) (u v : Sum A B) :
+    Relation.EqvGen (WedgeRel a b) u v ↔
+      u = v ∨ ((u = .inl a ∨ u = .inr b) ∧ (v = .inl a ∨ v = .inr b)) := by
+  constructor
+  · intro h
+    induction h with
+    | rel u v h => cases h; exact Or.inr ⟨Or.inl rfl, Or.inr rfl⟩
+    | refl => exact Or.inl rfl
+    | symm u v _ ih =>
+        rcases ih with rfl | ⟨h₁, h₂⟩
+        · exact Or.inl rfl
+        · exact Or.inr ⟨h₂, h₁⟩
+    | trans u v w _ _ ih₁ ih₂ =>
+        rcases ih₁ with rfl | ⟨h₁, h₂⟩
+        · exact ih₂
+        · rcases ih₂ with rfl | ⟨_, h₃⟩
+          · exact Or.inr ⟨h₁, h₂⟩
+          · exact Or.inr ⟨h₁, h₃⟩
+  · rintro (rfl | ⟨h₁, h₂⟩)
+    · exact Relation.EqvGen.refl _
+    · have hab : Relation.EqvGen (WedgeRel a b) (.inl a) (.inr b) :=
+        Relation.EqvGen.rel _ _ WedgeRel.base
+      rcases h₁ with rfl | rfl <;> rcases h₂ with rfl | rfl
+      · exact Relation.EqvGen.refl _
+      · exact hab
+      · exact Relation.EqvGen.symm _ _ hab
+      · exact Relation.EqvGen.refl _
+
+/-- Fibre over a non-base point of the left lobe: `i ↦ [inl (x, i)]` is a
+bijection from `Fin 4`.  Surjective: a preimage is `[inl (y, j)]` with
+`y = ±x` (by `_aux_card_aux_wedge_eqvGen_iff`, the point is not the wedge
+point, and `_aux_cover_eq_iff`), and `[inl (-x, j)] = [inl (x, σ j)]` since
+`σ` is an involution.  Injective: `_aux_card_aux_invariant` with
+`fL (y, k) = if y = x then k else if y = -x then σ k else 0`, `fR = 0`
+(`hG` holds because `e₀ ≠ ±x`). -/
+theorem rp2Wedge_regular_four_cover_aux_card_aux_left (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (x : Sphere2) (hx : antipodalCover x ≠ rpBase) :
+    Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl (antipodalCover x))} = 4 := by
+  sorry
+
+/-- Fibre over a non-base point of the right lobe; the mirror image of
+`_aux_card_aux_left` with `τ` in place of `σ`. -/
+theorem rp2Wedge_regular_four_cover_aux_card_aux_right (σ τ : Equiv.Perm (Fin 4))
+    (hτ : Function.Involutive τ) (x : Sphere2) (hx : antipodalCover x ≠ rpBase) :
+    Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inr (antipodalCover x))} = 4 := by
+  sorry
+
+/-- Fibre over the wedge point: `i ↦ [inl (e₀, i)]` is a bijection from
+`Fin 4`.  Surjective: a preimage is `[inl (±e₀, j)]` or `[inr (±e₀, j)]`;
+these equal `[inl (e₀, j)]`, `[inl (e₀, σ j)]`, `[inl (e₀, j)]`,
+`[inl (e₀, τ j)]` (involutions, then `glue`).  Injective:
+`_aux_card_aux_invariant` with `fL (y, k) = if y = e₀ then k else if y = -e₀
+then σ k else 0` and `fR` the same with `τ`. -/
+theorem rp2Wedge_regular_four_cover_aux_card_aux_base (σ τ : Equiv.Perm (Fin 4))
+    (hσ : Function.Involutive σ) (hτ : Function.Involutive τ) :
+    Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e =
+      Quotient.mk _ (.inl rpBase)} = 4 := by
+  sorry
+
 /-- Every fibre has four points: over a point of the left lobe the fibre is
 `{[(x, i)] | i}` (the class of `(x, i)` is `{(x, i), (-x, σ i)}`, using that
 `σ` is an involution); likewise on the right; over the wedge point it is
@@ -211,7 +299,21 @@ theorem rp2Wedge_regular_four_cover_aux_card (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
     (b : Wedge RP2 RP2 rpBase rpBase) :
     Nat.card {e // rp2Wedge_regular_four_cover_aux_p σ τ e = b} = 4 := by
-  sorry
+  obtain ⟨z, rfl⟩ := Quotient.exists_rep b
+  rcases z with q | q <;>
+    obtain ⟨x, rfl⟩ := rp2Wedge_regular_four_cover_aux_surjective q
+  · by_cases hx : antipodalCover x = rpBase
+    · rw [hx]
+      exact rp2Wedge_regular_four_cover_aux_card_aux_base σ τ hσ hτ
+    · exact rp2Wedge_regular_four_cover_aux_card_aux_left σ τ hσ x hx
+  · by_cases hx : antipodalCover x = rpBase
+    · have hw : (⟦.inr (antipodalCover x)⟧ : Wedge RP2 RP2 rpBase rpBase) =
+          ⟦.inl rpBase⟧ := by
+        rw [hx]
+        exact (Quotient.sound (Relation.EqvGen.rel _ _ WedgeRel.base)).symm
+      rw [hw]
+      exact rp2Wedge_regular_four_cover_aux_card_aux_base σ τ hσ hτ
+    · exact rp2Wedge_regular_four_cover_aux_card_aux_right σ τ hτ x hx
 
 /-- If `σ`, `τ` generate a transitive action on `Fin 4`, the glued space is
 connected: the image of `Sphere2 × {i}` in either copy is connected, the left
