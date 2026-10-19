@@ -1338,6 +1338,118 @@ from quotient `Lp` back to representatives.  The fourth is the order-theoretic/l
 closure.  Every dependency is an explicit hypothesis, so the four seats are independent. -/
 
 /-- Coercivity of `J`: every finite sublevel is bounded in `Lᵖ`, uniformly in its elements. -/
+lemma apm_m93j05_exists_minimizer_coercive_aux_trunc_pointwise
+    (N : ℕ) (f : ℝ → ℝ) (x : ℝ) :
+    |apm_m93j05_trunc N f x| ≤
+      (1 + 4 * N) *
+        (eLpNorm (apm_m93j05_trunc N f) 2
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  let y := (eLpNorm (apm_m93j05_trunc N f) 2
+    (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal
+  have hy : 0 ≤ y := ENNReal.toReal_nonneg
+  have hparse := apm_m93j05_trunc_parseval N f
+  have hm : |∫ z in Set.Icc (0 : ℝ) 1, f z| ≤ y := by
+    have hs : 0 ≤ ∑ j ∈ Finset.Icc 1 N,
+        (apm_m93j05_cosCoeff f j ^ 2 + apm_m93j05_sinCoeff f j ^ 2) / 2 := by
+      positivity
+    rw [show (eLpNorm (apm_m93j05_trunc N f) 2
+      (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal = y by rfl] at hparse
+    nlinarith [sq_abs (∫ z in Set.Icc (0 : ℝ) 1, f z)]
+  have hc (j : ℕ) (hj : j ∈ Finset.Icc 1 N) :
+      |apm_m93j05_cosCoeff f j| ≤ 2 * y := by
+    have hterm : (apm_m93j05_cosCoeff f j ^ 2 +
+        apm_m93j05_sinCoeff f j ^ 2) / 2 ≤ y ^ 2 := by
+      rw [show y ^ 2 = (∫ z in Set.Icc (0 : ℝ) 1, f z) ^ 2 +
+          ∑ k ∈ Finset.Icc 1 N,
+            (apm_m93j05_cosCoeff f k ^ 2 + apm_m93j05_sinCoeff f k ^ 2) / 2 by
+        simpa [y] using hparse]
+      have hsingle : (apm_m93j05_cosCoeff f j ^ 2 +
+          apm_m93j05_sinCoeff f j ^ 2) / 2 ≤
+          ∑ k ∈ Finset.Icc 1 N,
+            (apm_m93j05_cosCoeff f k ^ 2 + apm_m93j05_sinCoeff f k ^ 2) / 2 :=
+        Finset.single_le_sum (s := Finset.Icc 1 N)
+          (f := fun k => (apm_m93j05_cosCoeff f k ^ 2 +
+            apm_m93j05_sinCoeff f k ^ 2) / 2)
+          (fun k (_ : k ∈ Finset.Icc 1 N) => by positivity) hj
+      nlinarith
+    nlinarith [sq_abs (apm_m93j05_cosCoeff f j),
+      sq_nonneg (apm_m93j05_sinCoeff f j)]
+  have hs (j : ℕ) (hj : j ∈ Finset.Icc 1 N) :
+      |apm_m93j05_sinCoeff f j| ≤ 2 * y := by
+    have hterm : (apm_m93j05_cosCoeff f j ^ 2 +
+        apm_m93j05_sinCoeff f j ^ 2) / 2 ≤ y ^ 2 := by
+      rw [show y ^ 2 = (∫ z in Set.Icc (0 : ℝ) 1, f z) ^ 2 +
+          ∑ k ∈ Finset.Icc 1 N,
+            (apm_m93j05_cosCoeff f k ^ 2 + apm_m93j05_sinCoeff f k ^ 2) / 2 by
+        simpa [y] using hparse]
+      have hsingle : (apm_m93j05_cosCoeff f j ^ 2 +
+          apm_m93j05_sinCoeff f j ^ 2) / 2 ≤
+          ∑ k ∈ Finset.Icc 1 N,
+            (apm_m93j05_cosCoeff f k ^ 2 + apm_m93j05_sinCoeff f k ^ 2) / 2 :=
+        Finset.single_le_sum (s := Finset.Icc 1 N)
+          (f := fun k => (apm_m93j05_cosCoeff f k ^ 2 +
+            apm_m93j05_sinCoeff f k ^ 2) / 2)
+          (fun k (_ : k ∈ Finset.Icc 1 N) => by positivity) hj
+      nlinarith
+    nlinarith [sq_abs (apm_m93j05_sinCoeff f j),
+      sq_nonneg (apm_m93j05_cosCoeff f j)]
+  rw [apm_m93j05_trunc]
+  calc
+    |(∫ z in Set.Icc (0 : ℝ) 1, f z) + ∑ j ∈ Finset.Icc 1 N,
+        (apm_m93j05_cosCoeff f j * Real.cos (j * 2 * Real.pi * x) +
+         apm_m93j05_sinCoeff f j * Real.sin (j * 2 * Real.pi * x))| ≤
+        |∫ z in Set.Icc (0 : ℝ) 1, f z| + ∑ j ∈ Finset.Icc 1 N,
+          (|apm_m93j05_cosCoeff f j| + |apm_m93j05_sinCoeff f j|) := by
+      refine (abs_add_le _ _).trans (add_le_add_right (Finset.abs_sum_le_sum_abs _ _) _ |>.trans ?_)
+      gcongr with j hj
+      exact (abs_add_le _ _).trans (add_le_add
+        (by rw [abs_mul]; exact mul_le_of_le_one_right (abs_nonneg _) (Real.abs_cos_le_one _))
+        (by rw [abs_mul]; exact mul_le_of_le_one_right (abs_nonneg _) (Real.abs_sin_le_one _)))
+    _ ≤ y + ∑ j ∈ Finset.Icc 1 N, (2 * y + 2 * y) := by
+      exact add_le_add hm (Finset.sum_le_sum fun j hj =>
+        add_le_add (hc j hj) (hs j hj))
+    _ = (1 + 4 * N) * y := by
+      simp [Finset.sum_const, Nat.card_Icc]
+      ring
+
+lemma apm_m93j05_exists_minimizer_coercive_aux_trunc_Lp
+    (N : ℕ) (p : ℝ) (hp : 1 < p) (f : ℝ → ℝ) :
+    (eLpNorm (apm_m93j05_trunc N f) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤
+      (1 + 4 * N) *
+        (eLpNorm (apm_m93j05_trunc N f) 2
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  sorry
+
+lemma apm_m93j05_exists_minimizer_coercive_aux_triangle
+    (N : ℕ) (p : ℝ) (hp : 1 < p) (f : ℝ → ℝ)
+    (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    (eLpNorm f (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤
+      (eLpNorm (fun x => f x - apm_m93j05_trunc N f x) (ENNReal.ofReal p)
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal +
+        (eLpNorm (apm_m93j05_trunc N f) (ENNReal.ofReal p)
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  sorry
+
+lemma apm_m93j05_exists_minimizer_coercive_aux_holder
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
+    (hpq : 1 / p + 1 / q = 1) (f g : ℝ → ℝ)
+    (hf : MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hg : MemLp g (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1))) :
+    |∫ x in Set.Icc (0 : ℝ) 1, f x * g x| ≤
+      (eLpNorm f (ENNReal.ofReal p)
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal *
+        (eLpNorm g (ENNReal.ofReal q)
+          (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
+  sorry
+
+lemma apm_m93j05_exists_minimizer_coercive_aux_scalar
+    (p : ℝ) (hp : 1 < p) (G C A : ℝ) (hG : 0 ≤ G) (hC : 0 ≤ C) :
+    ∃ R : ℝ, 0 ≤ R ∧ ∀ a y : ℝ, 0 ≤ a → 0 ≤ y →
+      a ^ p + y ^ 2 - G * (a + C * y) ≤ A → a + C * y ≤ R := by
+  sorry
+
 lemma apm_m93j05_exists_minimizer_coercive
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) (g : ℝ → ℝ)
@@ -1347,7 +1459,33 @@ lemma apm_m93j05_exists_minimizer_coercive
       apm_m93j05_J N p g f ≤ A →
       (eLpNorm f (ENNReal.ofReal p)
         (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R := by
-  sorry
+  intro A
+  set G := (eLpNorm g (ENNReal.ofReal q)
+    (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal with hGdef
+  have hG : 0 ≤ G := ENNReal.toReal_nonneg
+  have hC : (0 : ℝ) ≤ 1 + 4 * N := by positivity
+  obtain ⟨R, hR0, hR⟩ :=
+    apm_m93j05_exists_minimizer_coercive_aux_scalar p hp G (1 + 4 * N) A hG hC
+  refine ⟨R, hR0, fun f hf hJ => ?_⟩
+  set a := (eLpNorm (fun x => f x - apm_m93j05_trunc N f x) (ENNReal.ofReal p)
+    (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal with hadef
+  set y := (eLpNorm (apm_m93j05_trunc N f) 2
+    (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal with hydef
+  have ha : 0 ≤ a := ENNReal.toReal_nonneg
+  have hy : 0 ≤ y := ENNReal.toReal_nonneg
+  have hh := apm_m93j05_exists_minimizer_coercive_aux_holder p q hp hq hpq f g hf hg
+  have ht := apm_m93j05_exists_minimizer_coercive_aux_triangle N p hp f hf
+  have hu := apm_m93j05_exists_minimizer_coercive_aux_trunc_Lp N p hp f
+  have hfle : (eLpNorm f (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ a + (1 + 4 * N) * y := by
+    linarith
+  have hfg : -(G * (a + (1 + 4 * N) * y)) ≤ ∫ x in Set.Icc (0 : ℝ) 1, f x * g x := by
+    have h1 := neg_abs_le (∫ x in Set.Icc (0 : ℝ) 1, f x * g x)
+    have h2 := mul_le_mul_of_nonneg_left hfle hG
+    nlinarith
+  have hJ' : a ^ p + y ^ 2 + ∫ x in Set.Icc (0 : ℝ) 1, f x * g x ≤ A := by
+    simpa [apm_m93j05_J, Real.rpow_eq_pow] using hJ
+  exact hfle.trans (hR a y ha hy (by linarith))
 
 /-- An `Lᵖ` minimizing sequence, expressed without an infimum: at precision `1/(k+1)`, its tail
 beats every admissible competitor up to that error. -/
