@@ -1469,7 +1469,35 @@ lemma apm_m93j05_exists_minimizer_coercive_aux_holder
           (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal *
         (eLpNorm g (ENNReal.ofReal q)
           (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hpqR : p.HolderConjugate q :=
+    Real.holderConjugate_iff.mpr ⟨hp, by simpa [div_eq_mul_inv] using hpq⟩
+  have hpqE : (ENNReal.ofReal p).HolderConjugate (ENNReal.ofReal q) := by
+    apply ENNReal.HolderConjugate.of_toReal
+    simpa [ENNReal.toReal_ofReal hpqR.nonneg,
+      ENNReal.toReal_ofReal hpqR.symm.nonneg] using hpqR
+  letI : (ENNReal.ofReal p).HolderTriple (ENNReal.ofReal q) 1 := hpqE
+  calc
+    |∫ x, f x * g x ∂μ| ≤ ∫ x, |f x| * |g x| ∂μ := by
+      simpa [abs_mul] using
+        (abs_integral_le_integral_abs (f := fun x ↦ f x * g x) (μ := μ))
+    _ ≤ (∫ x, ‖f x‖ ^ p ∂μ) ^ (1 / p) *
+        (∫ x, ‖g x‖ ^ q ∂μ) ^ (1 / q) :=
+      integral_mul_norm_le_Lp_mul_Lq hpqR hf hg
+    _ = (eLpNorm f (ENNReal.ofReal p) μ).toReal *
+        (eLpNorm g (ENNReal.ofReal q) μ).toReal := by
+      rw [hf.eLpNorm_eq_integral_rpow_norm
+          (ENNReal.ofReal_ne_zero_iff.mpr hpqR.pos) ENNReal.ofReal_ne_top,
+        hg.eLpNorm_eq_integral_rpow_norm
+          (ENNReal.ofReal_ne_zero_iff.mpr hpqR.symm.pos) ENNReal.ofReal_ne_top]
+      simp only [ENNReal.toReal_ofReal hpqR.nonneg,
+        ENNReal.toReal_ofReal hpqR.symm.nonneg]
+      rw [ENNReal.toReal_ofReal (Real.rpow_nonneg
+            (integral_nonneg (fun x ↦ Real.rpow_nonneg (norm_nonneg _) _)) _),
+          ENNReal.toReal_ofReal (Real.rpow_nonneg
+            (integral_nonneg (fun x ↦ Real.rpow_nonneg (norm_nonneg _) _)) _)]
+      simp only [one_div]
+      rfl
 -- END SEAT AREA
 
 lemma apm_m93j05_exists_minimizer_coercive_aux_scalar
