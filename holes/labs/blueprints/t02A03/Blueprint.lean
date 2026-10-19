@@ -603,12 +603,86 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph :
   exact Subtype.ext apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus_homeomorph_aux_param_one.symm
 
 /-- LIBRARY: the loop is a circle, with `q0` (parameter `t = 0`) at `1`. -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param
+    (z : Circle) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![6 / 5 - 23 / 20 * (z : ℂ).re,
+    23 / 20 * (z : ℂ).im, 0]
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_continuous :
+    Continuous apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param := by
+  unfold apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param
+  refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i ↦ ?_)
+  fin_cases i <;> simp <;> fun_prop
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_mem
+    (z : Circle) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param z ∈
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop := by
+  have hz : (z : ℂ) ≠ 0 := by
+    intro h
+    have := Circle.norm_coe z
+    simp [h] at this
+  refine ⟨Complex.arg (z : ℂ), ?_⟩
+  ext i
+  fin_cases i
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param,
+      Complex.cos_arg hz, Circle.norm_coe]
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param,
+      Complex.sin_arg, Circle.norm_coe]
+  · simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param]
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_injective :
+    Function.Injective
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param := by
+  intro z w h
+  apply Subtype.ext
+  apply Complex.ext
+  · have h0 := congrArg (fun x : apm_t02a03_E3 ↦ x 0) h
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param] at h0
+    linarith
+  · have h1 := congrArg (fun x : apm_t02a03_E3 ↦ x 1) h
+    simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param] at h1
+    linarith
+
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_surjective :
+    Function.Surjective (fun z : Circle ↦
+      (⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param z,
+        apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_mem z⟩ :
+          apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop)) := by
+  rintro ⟨p, hp⟩
+  rcases hp with ⟨t, rfl⟩
+  let z : Circle := Circle.exp t
+  refine ⟨z, Subtype.ext ?_⟩
+  ext i
+  fin_cases i <;>
+    simp [z, Circle.coe_exp, Complex.exp_mul_I,
+      Complex.cos_ofReal_re, Complex.sin_ofReal_re,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param]
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph :
     ∃ e : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop ≃ₜ Circle,
       ∀ h : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0 ∈
           apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop,
         e ⟨_, h⟩ = 1 := by
-  sorry
+  let f : Circle → apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop :=
+    fun z ↦ ⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param z,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_mem z⟩
+  have hf : Continuous f :=
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_continuous.subtype_mk _
+  have hbij : Function.Bijective f := ⟨fun _ _ h ↦
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_injective
+      (congrArg Subtype.val h),
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_surjective⟩
+  let e0 : Circle ≃ₜ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop :=
+    (show Continuous (Equiv.ofBijective f hbij) from hf).homeoOfEquivCompactToT2
+  refine ⟨e0.symm, fun h ↦ ?_⟩
+  rw [Homeomorph.symm_apply_eq]
+  change ⟨_, h⟩ = f 1
+  apply Subtype.ext
+  ext i
+  fin_cases i <;>
+    simp [e0, f, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop_homeomorph_aux_param,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_q0] <;> norm_num
 
 /-- LIBRARY: the loop lies in `W`, at distance at least `1/4` from the left
 core, and meets the left boundary torus exactly at `q0`. -/
