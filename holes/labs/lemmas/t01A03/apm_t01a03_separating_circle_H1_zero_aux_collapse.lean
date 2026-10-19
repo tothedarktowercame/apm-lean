@@ -354,7 +354,67 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_collapse
     (e : {x : S // x ∉ Set.range middle} ≃ₜ Y) :
     ∃ ρ : C(S, OnePoint Y), (∀ z, ρ (middle z) = OnePoint.infty) ∧
       ∀ x : {x : S // x ∉ Set.range middle}, ρ x = ((e x : Y) : OnePoint Y) := by
-  sorry
+  classical
+  let A : Set S := Set.range middle
+  have hAcompact : IsCompact A := by
+    exact isCompact_range middle.continuous
+  have hAclosed : IsClosed A := hAcompact.isClosed
+  let f : S → OnePoint Y := fun x ↦
+    if hx : x ∈ A then OnePoint.infty else ((e ⟨x, hx⟩ : Y) : OnePoint Y)
+  have hf : Continuous f := by
+    rw [continuous_def]
+    intro V hV
+    by_cases hinf : OnePoint.infty ∈ V
+    · let K : Set Y := (((↑) : Y → OnePoint Y) ⁻¹' V)ᶜ
+      have hKcompact : IsCompact K :=
+        (OnePoint.isOpen_iff_of_mem hinf).mp hV |>.2
+      let g : Y → S := fun y ↦ (e.symm y).1
+      have hg : Continuous g := continuous_subtype_val.comp e.symm.continuous
+      have hclosed : IsClosed (g '' K) :=
+        (hKcompact.image hg).isClosed
+      rw [← isClosed_compl_iff]
+      convert hclosed using 1
+      ext x
+      simp only [Set.mem_compl_iff, Set.mem_preimage, Set.mem_image]
+      constructor
+      · intro hx
+        have hxA : x ∉ A := by
+          intro hxA
+          apply hx
+          simp [f, hxA, hinf]
+        refine ⟨e ⟨x, hxA⟩, ?_, ?_⟩
+        · simpa [K, f, hxA] using hx
+        · simp [g]
+      · rintro ⟨y, hy, rfl⟩
+        have hnotA : g y ∉ A := (e.symm y).2
+        simpa [f, g, hnotA, K] using hy
+    · have hpreopen : IsOpen (((↑) : Y → OnePoint Y) ⁻¹' V) :=
+        (OnePoint.isOpen_iff_of_notMem hinf).mp hV
+      have hsubopen : IsOpen (e ⁻¹' (((↑) : Y → OnePoint Y) ⁻¹' V)) :=
+        hpreopen.preimage e.continuous
+      have hopen_image : IsOpen
+          (((↑) : {x : S // x ∉ A} → S) ''
+            (e ⁻¹' (((↑) : Y → OnePoint Y) ⁻¹' V))) := by
+        exact hAclosed.isOpen_compl.isOpenEmbedding_subtypeVal.isOpenMap _ hsubopen
+      convert hopen_image using 1
+      ext x
+      simp only [Set.mem_preimage, Set.mem_image]
+      constructor
+      · intro hx
+        have hxA : x ∉ A := by
+          intro hxA
+          have : f x = OnePoint.infty := by simp [f, hxA]
+          exact hinf (this ▸ hx)
+        refine ⟨⟨x, hxA⟩, ?_, rfl⟩
+        simpa [f, hxA] using hx
+      · rintro ⟨x, hx, rfl⟩
+        simpa [f, x.2] using hx
+  refine ⟨⟨f, hf⟩, ?_, ?_⟩
+  · intro z
+    simp [f, A]
+  · intro x
+    have hxA : x.1 ∉ A := by simpa [A] using x.2
+    simp [f, hxA]
 -- END SEAT AREA
 
 /-- A constant map induces zero on `H₁`. -/
