@@ -3005,6 +3005,17 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_l
 `Lᵠ([0,1])` for `1 < q < ∞`. Route: continuous functions are dense
 (`MemLp.exists_hasCompactSupport_eLpNorm_sub_le` or `Lp.boundedContinuousFunction_dense`), and a
 uniformly continuous function on `[0,1]` is uniformly close to a rational step function. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_step_dense_aux_meas
+    (F : Finset (ℚ × ℚ)) (c : ℚ × ℚ → ℝ) (m : Measure ℝ) :
+    AEStronglyMeasurable (fun x ↦ ∑ i ∈ F, c i *
+      (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x) m := by
+  induction F using Finset.induction_on with
+  | empty => exact aestronglyMeasurable_const
+  | @insert i F hi hF =>
+      simp only [Finset.sum_insert hi]
+      exact (aestronglyMeasurable_const.mul
+        (aestronglyMeasurable_const.indicator measurableSet_Ioc)).add hF
+
 lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_step_dense
     (q : ℝ) (hq : 1 < q)
     (h : ℝ → ℝ) (hh : MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)))
@@ -3013,7 +3024,52 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_s
       eLpNorm (fun x ↦ h x - ∑ i ∈ F, c i *
           (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x)
         (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) < ENNReal.ofReal ε := by
-  sorry
+  let μ := volume.restrict (Set.Icc (0 : ℝ) 1)
+  have hqtop : ENNReal.ofReal q ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hthird : 0 < ε / 3 := by linarith
+  obtain ⟨g, hg, hgmem⟩ :=
+    hh.exists_boundedContinuous_eLpNorm_sub_le hqtop
+      (show ENNReal.ofReal (ε / 3) ≠ 0 by positivity)
+  obtain ⟨F, c, -, hgrid⟩ :=
+    apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_limit_rep_aux_memLp_aux_step_approx_aux_l1_steps_aux_grid
+      (g : ℝ → ℝ) g.continuous ‖g‖ (ε / 3) (fun x ↦ g.norm_coe_le_norm x) hthird
+  refine ⟨F, c, ?_⟩
+  let s : ℝ → ℝ := fun x ↦ ∑ i ∈ F, c i *
+    (Set.Ioc (i.1 : ℝ) i.2).indicator (fun _ ↦ (1 : ℝ)) x
+  have hs_meas : AEStronglyMeasurable s μ := by
+    exact apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness_aux_step_dense_aux_meas F c μ
+  have hgs : eLpNorm (fun x ↦ (g : ℝ → ℝ) x - s x)
+      (ENNReal.ofReal q) μ ≤ ENNReal.ofReal (ε / 3) := by
+    have hzero : ∀ᵐ x ∂μ, x ≠ 0 := by
+      rw [ae_iff]
+      simpa [μ, Measure.restrict_apply measurableSet_Icc, measurableSet_singleton]
+    have hae : ∀ᵐ x ∂μ, ‖(g : ℝ → ℝ) x - s x‖ ≤ ε / 3 := by
+      filter_upwards [ae_restrict_mem measurableSet_Icc, hzero] with x hx hx0
+      simpa [Real.norm_eq_abs, abs_sub_comm, s] using
+        hgrid x ⟨lt_of_le_of_ne hx.1 (Ne.symm hx0), hx.2⟩
+    have hb := eLpNorm_le_of_ae_bound (p := ENNReal.ofReal q) hae
+    simpa [μ] using hb
+  have htri := eLpNorm_add_le
+    (hh.aestronglyMeasurable.sub g.continuous.aestronglyMeasurable)
+    (g.continuous.aestronglyMeasurable.sub hs_meas) (show 1 ≤ ENNReal.ofReal q by
+      rw [ENNReal.one_le_ofReal]; linarith)
+  have hid : (fun x ↦ h x - s x) =
+      (fun x ↦ h x - (g : ℝ → ℝ) x) + fun x ↦ (g : ℝ → ℝ) x - s x := by
+    funext x
+    simp only [Pi.add_apply]
+    ring
+  rw [hid]
+  calc
+    eLpNorm ((fun x ↦ h x - (g : ℝ → ℝ) x) +
+        fun x ↦ (g : ℝ → ℝ) x - s x) (ENNReal.ofReal q) μ
+        ≤ eLpNorm (h - (g : ℝ → ℝ)) (ENNReal.ofReal q) μ +
+          eLpNorm (fun x ↦ (g : ℝ → ℝ) x - s x) (ENNReal.ofReal q) μ := htri
+    _ ≤ ENNReal.ofReal (ε / 3) + ENNReal.ofReal (ε / 3) := add_le_add hg hgs
+    _ = ENNReal.ofReal (2 * ε / 3) := by
+      rw [← ENNReal.ofReal_add hthird.le hthird.le]
+      congr 1
+      ring
+    _ < ENNReal.ofReal ε := (ENNReal.ofReal_lt_ofReal_iff hε).mpr (by linarith)
 
 /-- Leaf (ε/3 argument). Weak convergence against rational interval indicators, plus a uniform
 `Lᵖ` bound and density of rational step functions in `Lᵠ`, gives convergence against every
