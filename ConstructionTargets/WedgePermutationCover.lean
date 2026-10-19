@@ -1821,10 +1821,147 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_au
     (σ τ : Equiv.Perm (Fin 4))
     (hσ : Function.Involutive σ) (hτ : Function.Involutive τ)
     (u : Sphere2) (i : Fin 4) :
-    IsOpen (Set.range
-      (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_sheet
-        σ τ u i)) := by
-  sorry
+    IsOpen (Set.range (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_sheet σ τ u i)) := by
+  let V : Set ((Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)) :=
+    {z | Sum.elim
+      (fun _ ↦ False)
+      (fun z ↦
+        ((0 < inner ℝ (z.1 : EuclideanSpace ℝ (Fin 3)) u ∧
+            antipodalCover z.1 ≠ rpBase) ∧ z.2 = i) ∨
+        ((inner ℝ (z.1 : EuclideanSpace ℝ (Fin 3)) u < 0 ∧
+            antipodalCover z.1 ≠ rpBase) ∧ z.2 = τ i)) z}
+  have hVopen : IsOpen V := by
+    rw [isOpen_sum_iff]
+    constructor
+    · simp [V]
+    · simp only [V, Set.preimage_setOf_eq]
+      have hc : Continuous (fun z : Sphere2 × Fin 4 ↦
+          inner ℝ (z.1 : EuclideanSpace ℝ (Fin 3)) u) :=
+        continuous_inner.comp
+          ((continuous_subtype_val.comp continuous_fst).prodMk continuous_const)
+      have hb : IsOpen {x : Sphere2 × Fin 4 | antipodalCover x.1 ≠ rpBase} := by
+        have he : {y : Sphere2 | antipodalCover y ≠ rpBase} =
+            ({rp2Wedge_regular_four_cover_aux_e0,
+              -rp2Wedge_regular_four_cover_aux_e0} : Set Sphere2)ᶜ := by
+          ext y
+          simp only [Set.mem_setOf_eq, Set.mem_compl_iff, Set.mem_insert_iff,
+            Set.mem_singleton_iff]
+          constructor
+          · intro hn hcases
+            apply hn
+            rcases hcases with rfl | rfl
+            · exact rp2Wedge_regular_four_cover_aux_rpBase.symm
+            · exact (rp2Wedge_regular_four_cover_aux_neg
+                rp2Wedge_regular_four_cover_aux_e0).trans
+                rp2Wedge_regular_four_cover_aux_rpBase.symm
+          · intro hn heq
+            apply hn
+            rw [rp2Wedge_regular_four_cover_aux_rpBase] at heq
+            rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff
+              rp2Wedge_regular_four_cover_aux_e0 y).mp heq.symm with h | h
+            · exact Or.inl h
+            · exact Or.inr h
+        rw [show {x : Sphere2 × Fin 4 | antipodalCover x.1 ≠ rpBase} =
+            Prod.fst ⁻¹' {y : Sphere2 | antipodalCover y ≠ rpBase} by rfl, he]
+        exact (Set.toFinite _).isClosed.isOpen_compl.preimage continuous_fst
+      exact (((isOpen_lt continuous_const hc).and hb).and
+          ((isOpen_discrete ({i} : Set (Fin 4))).preimage continuous_snd)).union
+        (((isOpen_lt hc continuous_const).and hb).and
+          ((isOpen_discrete ({τ i} : Set (Fin 4))).preimage continuous_snd))
+  have hVinvar {a b : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4)}
+      (h : Relation.EqvGen (rp2Wedge_regular_four_cover_aux_Rel σ τ) a b) :
+      a ∈ V ↔ b ∈ V := by
+    induction h with
+    | rel a b h =>
+        cases h with
+        | right x k =>
+            change ((((0 < inner ℝ (x : EuclideanSpace ℝ (Fin 3)) u ∧
+                antipodalCover x ≠ rpBase) ∧ k = i) ∨
+              ((inner ℝ (x : EuclideanSpace ℝ (Fin 3)) u < 0 ∧
+                antipodalCover x ≠ rpBase) ∧ k = τ i))) ↔ _
+            constructor <;> rintro (h | h)
+            · right
+              refine ⟨⟨?_, by simpa using h.1.2⟩, congrArg τ h.2⟩
+              rw [show ((-x : Sphere2) : EuclideanSpace ℝ (Fin 3)) = -x by rfl,
+                inner_neg_left]
+              linarith [h.1.1]
+            · left
+              refine ⟨⟨?_, by simpa using h.1.2⟩,
+                by simpa [hτ k, hτ i] using congrArg τ h.2⟩
+              rw [show ((-x : Sphere2) : EuclideanSpace ℝ (Fin 3)) = -x by rfl,
+                inner_neg_left]
+              linarith [h.1.1]
+            · right
+              refine ⟨⟨?_, by simpa using h.1.2⟩,
+                by simpa [hτ k, hτ i] using congrArg τ h.2⟩
+              have hx := h.1.1
+              rw [show ((-x : Sphere2) : EuclideanSpace ℝ (Fin 3)) = -x by rfl,
+                inner_neg_left] at hx
+              linarith
+            · left
+              refine ⟨⟨?_, by simpa using h.1.2⟩, τ.injective h.2⟩
+              have hx := h.1.1
+              rw [show ((-x : Sphere2) : EuclideanSpace ℝ (Fin 3)) = -x by rfl,
+                inner_neg_left] at hx
+              linarith
+        | left x k => simp [V]
+        | glue k =>
+            change False ↔ (_ ∨ _)
+            constructor
+            · exact False.elim
+            · rintro (h | h)
+              · exact h.1.2 rfl
+              · exact h.1.2 rfl
+    | refl => exact Iff.rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+  let q : (Sphere2 × Fin 4) ⊕ (Sphere2 × Fin 4) →
+      rp2Wedge_regular_four_cover_aux_E σ τ := fun z ↦ Quotient.mk _ z
+  have hsat : q ⁻¹' (q '' V) = V := by
+    ext z
+    constructor
+    · rintro ⟨w, hw, he⟩
+      exact (hVinvar (Quotient.exact he)).mp hw
+    · intro hz
+      exact ⟨z, hz, rfl⟩
+  have hrange :
+      Set.range
+          (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_sheet
+            σ τ u i) = q '' V := by
+    ext e
+    constructor
+    · rintro ⟨y, rfl⟩
+      exact ⟨.inr (y.1, i), Or.inl ⟨y.2, rfl⟩, rfl⟩
+    · rintro ⟨z, hz, rfl⟩
+      cases z with
+      | inr z =>
+          rcases z with ⟨x, k⟩
+          change (((0 < inner ℝ (x : EuclideanSpace ℝ (Fin 3)) u ∧
+              antipodalCover x ≠ rpBase) ∧ k = i) ∨
+            ((inner ℝ (x : EuclideanSpace ℝ (Fin 3)) u < 0 ∧
+              antipodalCover x ≠ rpBase) ∧ k = τ i)) at hz
+          rcases hz with h | h
+          · have hk : k = i := h.2
+            subst k
+            exact ⟨⟨x, h.1⟩, rfl⟩
+          · let y : Sphere2 := -x
+            have hy : 0 < inner ℝ (y : EuclideanSpace ℝ (Fin 3)) u := by
+              rw [show (y : EuclideanSpace ℝ (Fin 3)) = -x by rfl, inner_neg_left]
+              linarith [h.1.1]
+            have hyb : antipodalCover y ≠ rpBase := by
+              simpa [y] using h.1.2
+            refine ⟨⟨y, hy, hyb⟩, ?_⟩
+            apply Quotient.sound
+            have hk : k = τ i := h.2
+            subst k
+            simpa [y] using Relation.EqvGen.rel _ _
+              (rp2Wedge_regular_four_cover_aux_Rel.right y i)
+      | inl z => simp [V] at hz
+  rw [hrange]
+  apply (isQuotientMap_quotient_mk' : Topology.IsQuotientMap q).isOpen_preimage.mp
+  change IsOpen (q ⁻¹' (q '' V))
+  rw [hsat]
+  exact hVopen
 
 lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_away_aux_sections_inr_aux_cover
     (σ τ : Equiv.Perm (Fin 4))
