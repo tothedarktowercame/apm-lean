@@ -1567,6 +1567,94 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_away
       (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹' {x}) := by
   sorry
 
+/-! #### Split of `circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge` (lemma-1 PARTIAL, 2026-10-19) -/
+
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_rel
+    (z : Circle) (h : circleWedge_three_cover_two_components_aux_sq z = circleBase) :
+    Quotient.mk (Relation.EqvGen.setoid circleWedge_three_cover_two_components_aux_Rel)
+        (Sum.inr z) = Quotient.mk _ (Sum.inl z) := by
+  have hz : (z : ℂ) * z = 1 := by
+    have hz' := congrArg Subtype.val h
+    simpa [circleWedge_three_cover_two_components_aux_sq, circleBase] using hz'
+  rcases (mul_self_eq_one_iff.mp hz) with hz | hz
+  · have hz' : z = circleBase := Subtype.ext hz
+    subst z
+    exact Quotient.sound
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.pos))
+  · have hz' : z = -circleBase := by
+      apply Subtype.ext
+      simpa [circleBase] using hz
+    subst z
+    exact Quotient.sound
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.neg))
+
+/-- The neighbourhood of the wedge point: the wedge minus the two points `-1`. -/
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U :
+    Set CircleWedge :=
+  {q | q ≠ Quotient.mk _ (.inl (-circleBase)) ∧ q ≠ Quotient.mk _ (.inr (-circleBase))}
+
+/-- The cross through `[±1]` in the double cover: the points of either lobe in the
+open half-circle `{Re (±z) > 0}` (`b = true` is `+`). -/
+def circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross
+    (b : Bool) : Set circleWedge_three_cover_two_components_aux_Double :=
+  {e | ∃ z : Circle, 0 < ((if b then (1 : ℂ) else -1) * (z : ℂ)).re ∧
+    (e = Quotient.mk _ (.inl z) ∨ e = Quotient.mk _ (.inr z))}
+
+/-- The principal square root on the circle minus `-1`: continuous, lands in
+`{Re > 0}`, and every square root of `w` is `±` it. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt :
+    ∃ r : {w : Circle // w ≠ -circleBase} → Circle, Continuous r ∧
+      (∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1) ∧
+      (∀ w, 0 < (r w : ℂ).re) ∧
+      (∀ w z, circleWedge_three_cover_two_components_aux_sq z = w.1 → z = r w ∨ z = -r w) := by
+  sorry
+
+/-- Points of the wedge are closed (each has a closed preimage in `Circle ⊕ Circle`),
+so `U` is open. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open :
+    IsOpen circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U := by
+  sorry
+
+/-- A cross is open: its preimage in `Circle ⊕ Circle` is the half-circle
+`{Re (±z) > 0}` in both summands (it is saturated, since the glued points `±1`
+lie in the same cross). -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross_open
+    (b : Bool) :
+    IsOpen (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) := by
+  sorry
+
+/-- Combinatorics: the base point lies in `U`; the crosses cover `doubleMap ⁻¹' U`;
+they are disjoint. -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cover :
+    Quotient.mk _ (.inl circleBase) ∈
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U ∧
+      (∀ e, circleWedge_three_cover_two_components_aux_doubleMap e ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
+        ∃ b, e ∈ circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) ∧
+      Disjoint (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross true)
+        (circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross false) := by
+  sorry
+
+/-- The two local sections over `U`, built from a square-root branch `r`:
+`[inl w] ↦ [inl (±r w)]`, `[inr w] ↦ [inr (±r w)]` (well defined at the wedge point
+since `r 1 = 1`). Continuity: `U`'s preimage in `Circle ⊕ Circle` is open and
+saturated, so the quotient map restricts to a quotient map there
+(`IsQuotientMap.restrictPreimage_isOpen`). -/
+lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections
+    (r : {w : Circle // w ≠ -circleBase} → Circle) (hr : Continuous r)
+    (hsq : ∀ w, circleWedge_three_cover_two_components_aux_sq (r w) = w.1)
+    (hre : ∀ w, 0 < (r w : ℂ).re)
+    (hroots : ∀ w z, circleWedge_three_cover_two_components_aux_sq z = w.1 → z = r w ∨ z = -r w) :
+    ∃ s : Bool → circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U →
+        circleWedge_three_cover_two_components_aux_Double,
+      (∀ b, Continuous (s b)) ∧
+      (∀ b u, circleWedge_three_cover_two_components_aux_doubleMap (s b u) = u) ∧
+      (∀ b, Set.range (s b) =
+        circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross b) := by
+  sorry
+
 /-- At the wedge point: `V` = the image of the open arcs `{Re z > 0}` in both
 lobes. Its preimage is two disjoint open "crosses", one through `[inl 1] = [inr 1]`
 and one through `[inl (-1)] = [inr (-1)]`; each is the wedge of two half-arcs
@@ -1576,7 +1664,38 @@ lemma circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge :
       (Quotient.mk _ (.inl circleBase))
       (circleWedge_three_cover_two_components_aux_doubleMap ⁻¹'
         {Quotient.mk _ (.inl circleBase)}) := by
-  sorry
+  obtain ⟨r, hr, hsq, hre, hroots⟩ :=
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sqrt
+  obtain ⟨s, hs, hfs, hrange⟩ :=
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_sections
+      r hr hsq hre hroots
+  obtain ⟨hmem, hcov, hdisj⟩ :=
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cover
+  refine (rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_of_sections
+    circleWedge_three_cover_two_components_aux_doubleMap
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_continuous
+    _ _ hmem
+    circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_U_open
+    s hs hfs (fun b ↦ by
+      rw [hrange b]
+      exact circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross_open b)
+    (fun e he ↦ by
+      obtain ⟨b, hb⟩ := hcov e he
+      rw [← hrange b] at hb
+      obtain ⟨u, hu⟩ := hb
+      exact ⟨b, u, hu⟩)
+    (fun i j u v h ↦ by
+      have hi : s i u ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross i :=
+        hrange i ▸ ⟨u, rfl⟩
+      have hj : s i u ∈
+          circleWedge_three_cover_two_components_aux_covering_aux_double_aux_wedge_aux_cross j :=
+        h ▸ hrange j ▸ ⟨v, rfl⟩
+      cases i <;> cases j
+      · rfl
+      · exact absurd hi (Set.disjoint_left.mp hdisj hj)
+      · exact absurd hj (Set.disjoint_left.mp hdisj hi)
+      · rfl)).to_isEvenlyCovered_preimage
 
 lemma circleWedge_three_cover_two_components_aux_covering_aux_double :
     IsCoveringMap circleWedge_three_cover_two_components_aux_doubleMap := by
