@@ -1101,7 +1101,65 @@ theorem exists_connected_subgroup_cover_of_small_aux_transport
       (FundamentalGroup.mapOfEq ⟨p', hp'.continuous⟩ hpe').range = H ∧
       Nonempty (FundamentalGroup E' e' ≃* H) ∧
       Nonempty ((p' ⁻¹' ({x} : Set X)) ≃ Quotient (subgroupCosetSetoid H)) := by
-  sorry
+  let φ : E ≃ₜ Shrink.{v} E := Shrink.homeomorph E
+  let p' : Shrink.{v} E → X := p ∘ φ.symm
+  let e' : Shrink.{v} E := φ e
+  have hp' : IsCoveringMap p' := hp.comp_homeomorph φ.symm
+  have hpe' : p' e' = x := by simp [p', e', φ, hpe]
+  let k := FundamentalGroup.mapOfEq (x := e) (y := e')
+    ⟨φ, φ.continuous⟩ rfl
+  let f := FundamentalGroup.mapOfEq ⟨p, hp.continuous⟩ hpe
+  let f' := FundamentalGroup.mapOfEq ⟨p', hp'.continuous⟩ hpe'
+  have hk : Function.Bijective k :=
+    exists_connected_subgroup_cover_of_small_aux_map_homeomorph_bijective φ e
+  have hfcomp : ∀ g, f' (k g) = f g := by
+    intro g
+    induction g using Path.Homotopic.Quotient.ind with
+    | mk γ =>
+      simp only [k, f, f', FundamentalGroup.mapOfEq_apply]
+      apply Path.Homotopic.Quotient.eq.mpr
+      convert Path.Homotopic.refl ((γ.map hp.continuous).cast hpe.symm hpe.symm) using 1
+      ext t
+      change p (φ.symm (φ (γ t))) = p (γ t)
+      simp
+  have hrange' : f'.range = H := by
+    rw [← hrange]
+    ext g
+    constructor
+    · rintro ⟨a, rfl⟩
+      obtain ⟨b, rfl⟩ := hk.2 a
+      exact ⟨b, (hfcomp b).symm⟩
+    · rintro ⟨a, rfl⟩
+      exact ⟨k a, hfcomp a⟩
+  have hmul' : Nonempty (FundamentalGroup (Shrink.{v} E) e' ≃* H) := by
+    let ke : FundamentalGroup E e ≃* FundamentalGroup (Shrink.{v} E) e' :=
+      MulEquiv.ofBijective k hk
+    exact hmul.map (fun m ↦ ke.symm.trans m)
+  have hfib' : Nonempty ((p' ⁻¹' ({x} : Set X)) ≃
+      Quotient (subgroupCosetSetoid H)) := by
+    let qfun : {z : Shrink.{v} E // p' z ∈ ({x} : Set X)} →
+        {z : E // p z ∈ ({x} : Set X)} := fun z ↦
+      ⟨φ.symm (z : Shrink.{v} E), by
+        change p (φ.symm (z : Shrink.{v} E)) = x
+        exact z.property⟩
+    have hq : Function.Bijective qfun := by
+      constructor
+      · intro a b hab
+        apply Subtype.ext
+        exact φ.symm.injective (congrArg Subtype.val hab)
+      · intro z
+        refine ⟨⟨φ (z : E), ?_⟩, ?_⟩
+        · change p' (φ (z : E)) = x
+          simpa [p'] using z.property
+        · apply Subtype.ext
+          simp [qfun]
+    let q := Equiv.ofBijective qfun hq
+    exact hfib.map (fun h ↦ q.trans h)
+  letI : PathConnectedSpace E := hE
+  let hE' : PathConnectedSpace (Shrink.{v} E) :=
+    φ.surjective.pathConnectedSpace φ.continuous
+  refine ⟨Shrink.{v} E, inferInstance, p', e', hp', hE', hpe', ?_⟩
+  exact ⟨hrange', hmul', hfib'⟩
 -- END SEAT AREA
 
 /-- Universe transport of the construction: when `X` is `v`-small, the same
