@@ -1068,7 +1068,17 @@ theorem exists_connected_subgroup_cover_of_small_aux_small
     {X : Type u} [TopologicalSpace X] [Small.{v} X]
     {x : X} (H : Subgroup (FundamentalGroup X x)) :
     Small.{v} (BasedCover H) := by
-  sorry
+  let f := fun a : BasedPaths x ↦
+    (a.1, fun t ↦ (Quotient.out a.2 : Path x a.1) t)
+  have hf : Function.Injective f := by
+    rintro ⟨y, a⟩ ⟨z, b⟩ hab
+    have hyz : y = z := congrArg Prod.fst hab
+    subst z
+    apply Sigma.ext
+    · rfl
+    · exact heq_of_eq (Quotient.out_injective (Path.ext (congrArg Prod.snd hab)))
+  letI : Small.{v} (BasedPaths x) := small_of_injective hf
+  exact small_of_surjective Quotient.mk''_surjective
 -- END SEAT AREA
 
 /-- Leaf (split 2026-10-18 from lemma-1's PARTIAL): the conclusion of the
