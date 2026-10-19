@@ -1420,7 +1420,33 @@ lemma apm_m93j05_exists_minimizer_coercive_aux_trunc_Lp
       (1 + 4 * N) *
         (eLpNorm (apm_m93j05_trunc N f) 2
           (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal := by
-  sorry
+  let C : ℝ := (1 + 4 * N) *
+    (eLpNorm (apm_m93j05_trunc N f) 2
+      (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal
+  have hC : 0 ≤ C := by
+    dsimp [C]
+    positivity
+  have hae : ∀ᵐ x ∂(volume.restrict (Set.Icc (0 : ℝ) 1)),
+      ‖apm_m93j05_trunc N f x‖ ≤ C := by
+    filter_upwards [] with x
+    simpa [Real.norm_eq_abs, C] using
+      apm_m93j05_exists_minimizer_coercive_aux_trunc_pointwise N f x
+  have h := eLpNorm_le_of_ae_bound
+    (p := ENNReal.ofReal p) hae
+  have hmass : (volume.restrict (Set.Icc (0 : ℝ) 1)) Set.univ = 1 := by
+    simp [Measure.restrict_apply_univ, Real.volume_Icc]
+  rw [hmass] at h
+  have hsimpl :
+      eLpNorm (apm_m93j05_trunc N f) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1)) ≤ ENNReal.ofReal C := by
+    simpa using h
+  have hfinite : ENNReal.ofReal C ≠ ⊤ := ENNReal.ofReal_ne_top
+  have hnormfinite :
+      eLpNorm (apm_m93j05_trunc N f) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1)) ≠ ⊤ :=
+    ne_top_of_le_ne_top hfinite hsimpl
+  have hreal := (ENNReal.toReal_le_toReal hnormfinite hfinite).2 hsimpl
+  simpa [C, ENNReal.toReal_ofReal hC] using hreal
 -- END SEAT AREA
 
 lemma apm_m93j05_exists_minimizer_coercive_aux_triangle
