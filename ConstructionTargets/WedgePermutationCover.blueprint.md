@@ -229,3 +229,19 @@ a covering map, one chart over `univ` with fibre `Unit`) and the assembly:
 - `_aux_covering_aux_sum`: a disjoint sum of two covering maps over one base is a
   covering map (generic; Mathlib has no such lemma). Intersect the two evenly
   covered neighbourhoods; the sheet type is the sum of the fibres.
+
+### Split of `circleWedge_three_cover_two_components_aux_fiber` (2026-10-19, lemma-3 PARTIAL)
+
+lemma-3 banked `_aux_fiber_sq_card` (every fibre of squaring on `Circle` has two
+points, via `MonoidHom.fiberEquivKer` and a kernel `≃ Bool`; claude-14 repaired
+its `-1` element, since `Circle` has no `Neg`). claude-14 proved the assembly:
+the fibre of `_aux_map` over a point is `Unit ⊕` the `_aux_doubleMap` fibre over it,
+so its cardinality is `1 + 2`. Leaf:
+
+- `_aux_fiber_aux_double`: over `mk (inl x)` or `mk (inr x)` the `_aux_doubleMap`
+  fibre has two points. Show it is equivalent to the `_aux_sq` fibre over `x` and
+  use `_aux_fiber_sq_card`. Send `mk (inl z)`/`mk (inr z)` to `z` (well defined:
+  the gluing relation only identifies `±circleBase` on the two circles); the
+  inverse puts `z` on the circle named by `left`. The glued points have `z ^ 2 = 1`,
+  so `x = circleBase`. lemma-3's attempt is commented out in
+  `three_cover_fiber.partial.lean.bak` (notes dir).

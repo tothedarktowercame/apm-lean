@@ -1497,10 +1497,213 @@ lemma circleWedge_three_cover_two_components_aux_covering :
   sorry
 
 -- BEGIN SEAT AREA
+lemma circleWedge_three_cover_two_components_aux_fiber_sq_card (y : Circle) :
+    Nat.card {z : Circle // circleWedge_three_cover_two_components_aux_sq z = y} = 2 := by
+  let f : Circle →* Circle := powMonoidHom 2
+  have hs : Function.Surjective f :=
+    (Circle.isQuotientCoveringMap_npow 2).surjective
+  let a : Circle := Function.surjInv hs y
+  have ha : f a = y := Function.surjInv_eq hs y
+  have hk : Nat.card f.ker = 2 := by
+    let e : f.ker ≃ Bool :=
+      { toFun := fun z ↦ if z.1 = 1 then false else true
+        invFun := fun i ↦ if i then ⟨-1, by
+          change (-1 : Circle) ^ 2 = 1
+          simp⟩ else ⟨1, by simp [f]⟩
+        left_inv := fun z ↦ by
+          have hz : (z.1 : ℂ) * z.1 = 1 := by
+            have := z.2
+            change z.1 ^ 2 = 1 at this
+            simpa [pow_two] using congrArg Subtype.val this
+          rcases (mul_self_eq_one_iff.mp hz) with hz | hz
+          · have hz' : z.1 = 1 := Subtype.ext hz
+            apply Subtype.ext
+            simp [hz']
+          · have hz' : z.1 = -1 := Subtype.ext hz
+            apply Subtype.ext
+            simp [hz', show (-1 : Circle) ≠ 1 by intro h; have := congrArg Subtype.val h; norm_num at this]
+        right_inv := fun i ↦ by
+          cases i <;> simp [show (-1 : Circle) ≠ 1 by intro h; have := congrArg Subtype.val h; norm_num at this] }
+    simpa using Nat.card_congr e
+  have hc : Nat.card {z : Circle // f z = y} = 2 := by
+    rw [← ha]
+    exact (Nat.card_congr (MonoidHom.fiberEquivKer f a)).trans hk
+  simpa [f, circleWedge_three_cover_two_components_aux_sq, pow_two] using hc
+
+/- lemma circleWedge_three_cover_two_components_aux_fiber_double_rel
+    (z : Circle) (left : Bool) (h : circleWedge_three_cover_two_components_aux_sq z = circleBase) :
+    Quotient.mk (Relation.EqvGen.setoid circleWedge_three_cover_two_components_aux_Rel)
+        (if left then Sum.inl z else Sum.inr z) =
+      Quotient.mk _ (Sum.inl z) := by
+  have hz : (z : ℂ) * z = 1 := by
+    have := congrArg Subtype.val h
+    simpa [circleWedge_three_cover_two_components_aux_sq, circleBase] using this
+  rcases (mul_self_eq_one_iff.mp hz) with hz | hz
+  · have hz' : z = circleBase := Subtype.ext hz
+    subst z
+    cases left <;> simp
+    exact Quotient.sound
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.pos))
+  · have hz' : z = -circleBase := by
+      apply Subtype.ext
+      simpa [circleBase] using hz
+    subst z
+    cases left <;> simp
+    exact Quotient.sound
+      (Relation.EqvGen.symm _ _ (Relation.EqvGen.rel _ _
+        circleWedge_three_cover_two_components_aux_Rel.neg))
+
+def circleWedge_three_cover_two_components_aux_fiber_value :
+    circleWedge_three_cover_two_components_aux_Double → Circle :=
+  Quotient.lift (Sum.elim id id) (by
+    intro a b h
+    induction h with
+    | rel a b h => cases h <;> rfl
+    | refl => rfl
+    | symm _ _ _ ih => exact ih.symm
+    | trans _ _ _ _ _ ih₁ ih₂ => exact ih₁.trans ih₂)
+
+lemma circleWedge_three_cover_two_components_aux_fiber_double_card
+    (x : Circle) (left : Bool) :
+    Nat.card {e : circleWedge_three_cover_two_components_aux_Double //
+      circleWedge_three_cover_two_components_aux_doubleMap e =
+        Quotient.mk _ (if left then Sum.inl x else Sum.inr x)} = 2 := by
+  let F := {e : circleWedge_three_cover_two_components_aux_Double //
+      circleWedge_three_cover_two_components_aux_doubleMap e =
+        Quotient.mk _ (if left then Sum.inl x else Sum.inr x)}
+  let S := {z : Circle // circleWedge_three_cover_two_components_aux_sq z = x}
+  let toS : F → S := fun e ↦ ⟨circleWedge_three_cover_two_components_aux_fiber_value e.1, by
+    obtain ⟨u, hu⟩ := Quotient.exists_rep e.1
+    rw [← hu]
+    have he := e.2
+    rw [← hu] at he
+    rcases u with z | z
+    · change circleWedge_three_cover_two_components_aux_sq z = x
+      change Quotient.mk _ (Sum.inl (circleWedge_three_cover_two_components_aux_sq z)) =
+        Quotient.mk _ (if left then Sum.inl x else Sum.inr x) at he
+      rw [Quotient.eq_iff_equiv,
+        rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff] at he
+      rcases he with he | ⟨hz, hx⟩
+      · simpa using congrArg Sum.getLeft he
+      · rcases hz with hz | hz <;> rcases hx with hx | hx
+        all_goals simp_all
+    · change circleWedge_three_cover_two_components_aux_sq z = x
+      change Quotient.mk _ (Sum.inr (circleWedge_three_cover_two_components_aux_sq z)) =
+        Quotient.mk _ (if left then Sum.inl x else Sum.inr x) at he
+      rw [Quotient.eq_iff_equiv,
+        rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff] at he
+      rcases he with he | ⟨hz, hx⟩
+      · simpa using congrArg Sum.getRight he
+      · rcases hz with hz | hz <;> rcases hx with hx | hx
+        all_goals simp_all⟩
+  let fromS : S → F := fun z ↦
+    ⟨Quotient.mk _ (if left then Sum.inl z.1 else Sum.inr z.1), by
+      cases left <;> simp [circleWedge_three_cover_two_components_aux_doubleMap,
+        circleWedge_three_cover_two_components_aux_raw, z.2]⟩
+  let E : F ≃ S :=
+    { toFun := toS
+      invFun := fromS
+      right_inv := fun z ↦ by apply Subtype.ext; cases left <;> rfl
+      left_inv := fun e ↦ by
+        apply Subtype.ext
+        obtain ⟨u, hu⟩ := Quotient.exists_rep e.1
+        change Quotient.mk _ (if left then Sum.inl
+          (circleWedge_three_cover_two_components_aux_fiber_value e.1) else Sum.inr
+          (circleWedge_three_cover_two_components_aux_fiber_value e.1)) = e.1
+        rw [← hu]
+        rcases u with z | z
+        · cases left
+          · exact circleWedge_three_cover_two_components_aux_fiber_double_rel z false
+            (by
+              have he := e.2
+              change Quotient.mk _ (Sum.inl (circleWedge_three_cover_two_components_aux_sq z)) =
+                Quotient.mk _ (Sum.inr x) at he
+              rw [Quotient.eq_iff_equiv,
+                rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff] at he
+              rcases he with he | ⟨hz, hx⟩
+              · cases he
+              · rcases hz with hz | hz <;> simp_all)
+          · rfl
+        · cases left
+          · rfl
+          · symm
+            exact circleWedge_three_cover_two_components_aux_fiber_double_rel z false
+              (by
+                have he := e.2
+                change Quotient.mk _ (Sum.inr (circleWedge_three_cover_two_components_aux_sq z)) =
+                  Quotient.mk _ (Sum.inl x) at he
+                rw [Quotient.eq_iff_equiv,
+                  rp2Wedge_regular_four_cover_aux_card_aux_wedge_eqvGen_iff] at he
+                rcases he with he | ⟨hz, hx⟩
+                · cases he
+                · rcases hz with hz | hz <;> simp_all) }
+  rw [Nat.card_congr E]
+  exact circleWedge_three_cover_two_components_aux_fiber_sq_card x
+
+-/
 lemma circleWedge_three_cover_two_components_aux_fiber (b : CircleWedge) :
     Nat.card {e : circleWedge_three_cover_two_components_aux_Total //
       circleWedge_three_cover_two_components_aux_map e = b} = 3 := by
   sorry
+/-
+  obtain ⟨u, rfl⟩ := Quotient.exists_rep b
+  rcases u with x | x
+  · let E : {e : circleWedge_three_cover_two_components_aux_Total //
+          circleWedge_three_cover_two_components_aux_map e = Quotient.mk _ (Sum.inl x)} ≃
+          Unit ⊕ {e : circleWedge_three_cover_two_components_aux_Double //
+            circleWedge_three_cover_two_components_aux_doubleMap e =
+              Quotient.mk _ (Sum.inl x)} :=
+        { toFun := fun e ↦ by
+            rcases e with ⟨y, hy⟩
+            rcases y with y | z
+            · exact .inl ()
+            · exact .inr ⟨z, hy⟩
+          invFun := fun e ↦ match e with
+            | .inl _ => ⟨.inl (Quotient.mk _ (.inl x)), rfl⟩
+            | .inr z => ⟨.inr z.1, z.2⟩
+          left_inv := fun e ↦ by
+            rcases e with ⟨y, hy⟩
+            rcases y with y | y
+            · exact Subtype.ext hy
+            · rfl
+          right_inv := fun e ↦ by rcases e with ⟨⟩ | e <;> rfl }
+    have hd : Nat.card {e : circleWedge_three_cover_two_components_aux_Double //
+        circleWedge_three_cover_two_components_aux_doubleMap e =
+          Quotient.mk _ (Sum.inl x)} = 2 := by
+      simpa using circleWedge_three_cover_two_components_aux_fiber_double_card x true
+    letI : Finite {e : circleWedge_three_cover_two_components_aux_Double //
+        circleWedge_three_cover_two_components_aux_doubleMap e =
+          Quotient.mk _ (Sum.inl x)} := Nat.finite_of_card_ne_zero (by rw [hd]; norm_num)
+    rw [Nat.card_congr E, Nat.card_sum, Nat.card_unique, hd]
+  · let E : {e : circleWedge_three_cover_two_components_aux_Total //
+          circleWedge_three_cover_two_components_aux_map e = Quotient.mk _ (Sum.inr x)} ≃
+          Unit ⊕ {e : circleWedge_three_cover_two_components_aux_Double //
+            circleWedge_three_cover_two_components_aux_doubleMap e =
+              Quotient.mk _ (Sum.inr x)} :=
+        { toFun := fun e ↦ by
+            rcases e with ⟨y, hy⟩
+            rcases y with y | z
+            · exact .inl ()
+            · exact .inr ⟨z, hy⟩
+          invFun := fun e ↦ match e with
+            | .inl _ => ⟨.inl (Quotient.mk _ (.inr x)), rfl⟩
+            | .inr z => ⟨.inr z.1, z.2⟩
+          left_inv := fun e ↦ by
+            rcases e with ⟨y, hy⟩
+            rcases y with y | y
+            · exact Subtype.ext hy
+            · rfl
+          right_inv := fun e ↦ by rcases e with ⟨⟩ | e <;> rfl }
+    have hd : Nat.card {e : circleWedge_three_cover_two_components_aux_Double //
+        circleWedge_three_cover_two_components_aux_doubleMap e =
+          Quotient.mk _ (Sum.inr x)} = 2 := by
+      simpa using circleWedge_three_cover_two_components_aux_fiber_double_card x false
+    letI : Finite {e : circleWedge_three_cover_two_components_aux_Double //
+        circleWedge_three_cover_two_components_aux_doubleMap e =
+          Quotient.mk _ (Sum.inr x)} := Nat.finite_of_card_ne_zero (by rw [hd]; norm_num)
+    rw [Nat.card_congr E, Nat.card_sum, Nat.card_unique, hd]
+-/
 -- END SEAT AREA
 
 lemma circleWedge_three_cover_two_components_aux_components :
