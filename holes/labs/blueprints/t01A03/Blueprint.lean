@@ -452,13 +452,6 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_hopf
     _eB.hom (f (_eA.inv (_eA.hom y)))
   simpa using congrArg (fun z ↦ _eB.hom z) hxy
 
-/-- The model: the one-point compactification of two punctured tori (a wedge
-of two tori) has `H₁ ≅ ℤ⁴`. -/
-lemma apm_t01a03_separating_circle_H1_zero_aux_model_free :
-    Nonempty (apm_t01a03_H1 (OnePoint apm_t01a03_TwoPuncturedTori) ≅
-      ModuleCat.of ℤ (Fin 4 → ℤ)) := by
-  sorry
-
 /-! #### `_aux_model_surj` by Mayer–Vietoris
 
 Cover `X = OnePoint (PT ⊔ PT)` by `U = range coe` (a copy of `PT ⊔ PT`) and
@@ -1867,6 +1860,138 @@ lemma apm_t01a03_separating_circle_H1_zero_aux_model_surj :
   obtain ⟨z, rfl⟩ := hJ y
   exact ⟨(Limits.biprod.fst : IntegralMV.HZ 1 U ⊞ IntegralMV.HZ 1 V ⟶ _).hom z, by
     rw [hJ']; rfl⟩
+
+/-! #### `_aux_model_free` by two side retractions
+
+`X = OnePoint (PT ⊔ PT)` is two tori `OnePoint PT` wedged at `∞`. Each side
+includes (`OnePoint.map Sum.inl`) and retracts (collapse the other side to `∞`).
+The retractions split the inclusions on `H₁`, so `H₁ T × H₁ T → H₁ X` is
+injective; it is onto because `H₁ (PT ⊔ PT)` is spanned by the two summands
+and reaches all of `H₁ X` (`_aux_model_surj`). No homotopy is needed. -/
+
+/-- Collapse the right-hand torus to `∞`. -/
+def apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rL :
+    OnePoint apm_t01a03_TwoPuncturedTori → OnePoint apm_t01a03_PuncturedTorus :=
+  fun p => p.elim OnePoint.infty (Sum.elim (↑) (fun _ => OnePoint.infty))
+
+/-- Collapse the left-hand torus to `∞`. -/
+def apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rR :
+    OnePoint apm_t01a03_TwoPuncturedTori → OnePoint apm_t01a03_PuncturedTorus :=
+  fun p => p.elim OnePoint.infty (Sum.elim (fun _ => OnePoint.infty) (↑))
+
+/-- The two side inclusions are continuous: `Sum.inl`, `Sum.inr` are closed
+embeddings, so they tend to the cocompact filter (`OnePoint.continuous_map_iff`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_incl_continuous :
+    Continuous (OnePoint.map (Sum.inl : apm_t01a03_PuncturedTorus →
+        apm_t01a03_TwoPuncturedTori)) ∧
+      Continuous (OnePoint.map (Sum.inr : apm_t01a03_PuncturedTorus →
+        apm_t01a03_TwoPuncturedTori)) := by
+  sorry
+
+/-- The two collapses are continuous: the preimage of a neighbourhood of `∞`
+contains `∞`, the whole collapsed side, and a cocompact part of the kept side. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_retr_continuous :
+    Continuous apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rL ∧
+      Continuous apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_rR := by
+  sorry
+
+/-- `OnePoint PT` is the torus (`OnePoint.equivOfIsEmbeddingOfRangeEq`), whose
+`H₁` is `ℤ²` (`BoundaryTorusH0Cokernel.boundaryTorus_complete_module_homology`,
+after `Circle ≃ₜ BoundaryCircle`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_torus :
+    Nonempty (apm_t01a03_H1 (OnePoint apm_t01a03_PuncturedTorus) ≅
+      ModuleCat.of ℤ (Fin 2 → ℤ)) := by
+  sorry
+
+/-- `H₁` of a topological sum is spanned by the two summands
+(`TopologicalSumSingularHomology.sumHomologyIsoBiprod`). -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_sum_span
+    (w : apm_t01a03_H1 apm_t01a03_TwoPuncturedTori) :
+    ∃ a b : apm_t01a03_H1 apm_t01a03_PuncturedTorus,
+      w = apm_t01a03_H1map (⟨Sum.inl, continuous_inl⟩ :
+          C(apm_t01a03_PuncturedTorus, apm_t01a03_TwoPuncturedTori)) a +
+        apm_t01a03_H1map (⟨Sum.inr, continuous_inr⟩ :
+          C(apm_t01a03_PuncturedTorus, apm_t01a03_TwoPuncturedTori)) b := by
+  sorry
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_comp_apply
+    {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
+    (f : C(X, Y)) (g : C(Y, Z)) (x : apm_t01a03_H1 X) :
+    apm_t01a03_H1map g (apm_t01a03_H1map f x) = apm_t01a03_H1map (g.comp f) x := by
+  change (apm_t01a03_H1map f ≫ apm_t01a03_H1map g) x = _
+  rw [apm_t01a03_H1map, apm_t01a03_H1map, apm_t01a03_H1map, ← Functor.map_comp]
+  rfl
+
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_id_apply
+    {X : Type} [TopologicalSpace X] (f : C(X, X)) (hf : ∀ x, f x = x)
+    (x : apm_t01a03_H1 X) : apm_t01a03_H1map f x = x := by
+  have : f = ContinuousMap.id X := by ext y; exact hf y
+  subst this
+  change ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+    (ModuleCat.of ℤ ℤ)).map (𝟙 (TopCat.of X)) x = x
+  rw [CategoryTheory.Functor.map_id]
+  rfl
+
+/-- The model: the one-point compactification of two punctured tori (a wedge
+of two tori) has `H₁ ≅ ℤ⁴`. -/
+lemma apm_t01a03_separating_circle_H1_zero_aux_model_free :
+    Nonempty (apm_t01a03_H1 (OnePoint apm_t01a03_TwoPuncturedTori) ≅
+      ModuleCat.of ℤ (Fin 4 → ℤ)) := by
+  obtain ⟨hiL, hiR⟩ :=
+    apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_incl_continuous
+  obtain ⟨hrL, hrR⟩ :=
+    apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_retr_continuous
+  obtain ⟨eT⟩ := apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_torus
+  let iL : C(OnePoint apm_t01a03_PuncturedTorus,
+      OnePoint apm_t01a03_TwoPuncturedTori) := ⟨_, hiL⟩
+  let iR : C(OnePoint apm_t01a03_PuncturedTorus,
+      OnePoint apm_t01a03_TwoPuncturedTori) := ⟨_, hiR⟩
+  let rL : C(OnePoint apm_t01a03_TwoPuncturedTori,
+      OnePoint apm_t01a03_PuncturedTorus) := ⟨_, hrL⟩
+  let rR : C(OnePoint apm_t01a03_TwoPuncturedTori,
+      OnePoint apm_t01a03_PuncturedTorus) := ⟨_, hrR⟩
+  let Φ := (apm_t01a03_H1map iL).hom.coprod (apm_t01a03_H1map iR).hom
+  have hcomp := @apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_comp_apply
+  have hid := @apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_id_apply
+  have hconst := @apm_t01a03_separating_circle_H1_zero_aux_const
+  -- the retractions split the inclusions
+  have hLL : ∀ x, apm_t01a03_H1map rL (apm_t01a03_H1map iL x) = x := fun x => by
+    rw [hcomp]; exact hid _ (fun p => by induction p using OnePoint.rec <;> rfl) x
+  have hRR : ∀ x, apm_t01a03_H1map rR (apm_t01a03_H1map iR x) = x := fun x => by
+    rw [hcomp]; exact hid _ (fun p => by induction p using OnePoint.rec <;> rfl) x
+  have hLR : ∀ x, apm_t01a03_H1map rL (apm_t01a03_H1map iR x) = 0 := fun x => by
+    rw [hcomp, hconst (rL.comp iR) OnePoint.infty
+      (fun p => by induction p using OnePoint.rec <;> rfl)]
+    rfl
+  have hRL : ∀ x, apm_t01a03_H1map rR (apm_t01a03_H1map iL x) = 0 := fun x => by
+    rw [hcomp, hconst (rR.comp iL) OnePoint.infty
+      (fun p => by induction p using OnePoint.rec <;> rfl)]
+    rfl
+  have hinj : Function.Injective Φ := by
+    rintro ⟨a, b⟩ ⟨c, d⟩ h
+    simp only [Φ, LinearMap.coprod_apply] at h
+    have h1 := congrArg (apm_t01a03_H1map rL) h
+    have h2 := congrArg (apm_t01a03_H1map rR) h
+    simp only [map_add, hLL, hRR, hLR, hRL, add_zero, zero_add] at h1 h2
+    exact Prod.ext h1 h2
+  have hsurj : Function.Surjective Φ := by
+    intro y
+    obtain ⟨w, rfl⟩ := apm_t01a03_separating_circle_H1_zero_aux_model_surj y
+    obtain ⟨a, b, rfl⟩ :=
+      apm_t01a03_separating_circle_H1_zero_aux_model_free_aux_sum_span w
+    refine ⟨(apm_t01a03_H1map (⟨(↑), OnePoint.continuous_coe⟩ :
+        C(apm_t01a03_PuncturedTorus, OnePoint apm_t01a03_PuncturedTorus)) a,
+      apm_t01a03_H1map (⟨(↑), OnePoint.continuous_coe⟩ :
+        C(apm_t01a03_PuncturedTorus, OnePoint apm_t01a03_PuncturedTorus)) b), ?_⟩
+    simp only [Φ, LinearMap.coprod_apply, map_add]
+    rw [hcomp, hcomp, hcomp, hcomp]
+    rfl
+  let eΦ := LinearEquiv.ofBijective Φ ⟨hinj, hsurj⟩
+  let e2 := eT.toLinearEquiv
+  let e4 : ((Fin 2 → ℤ) × (Fin 2 → ℤ)) ≃ₗ[ℤ] (Fin 4 → ℤ) :=
+    (LinearEquiv.sumArrowLequivProdArrow (Fin 2) (Fin 2) ℤ ℤ).symm ≪≫ₗ
+      LinearEquiv.funCongrLeft ℤ ℤ (finSumFinEquiv (m := 2) (n := 2)).symm
+  exact ⟨(eΦ.symm ≪≫ₗ e2.prodCongr e2 ≪≫ₗ e4).toModuleIso⟩
 
 lemma apm_t01a03_separating_circle_H1_zero_aux_homeo_surj
     {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y] (e : X ≃ₜ Y) :
