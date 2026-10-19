@@ -4659,7 +4659,35 @@ Copy `circleWedge_three_cover_two_components_aux_fiber_sq_card` (the squaring
 case, kernel `{1, -1}`) with `Fin 3` in place of `Bool`. -/
 lemma circleWedge_connected_pair_aux_covering_aux_pC_fiber_aux_cube_card (y : Circle) :
     Nat.card {z : Circle // circleWedge_connected_pair_aux_cube z = y} = 3 := by
-  sorry
+  let f : Circle →* Circle := powMonoidHom 3
+  have hs : Function.Surjective f :=
+    (Circle.isQuotientCoveringMap_npow 3).surjective
+  let a : Circle := Function.surjInv hs y
+  have ha : f a = y := Function.surjInv_eq hs y
+  have hk : Nat.card f.ker = 3 := by
+    let e : f.ker ≃ rootsOfUnity 3 ℂ :=
+      { toFun := fun z ↦ rootsOfUnity.mkOfPowEq (z.1 : ℂ) (by
+          have h := congrArg Subtype.val z.2
+          simpa [f] using h)
+        invFun := fun z ↦ ⟨⟨(z.1 : ℂ), by
+            exact mem_sphere_zero_iff_norm.2
+              (Complex.norm_eq_one_of_mem_rootsOfUnity z.2)⟩, by
+            apply Subtype.ext
+            exact (mem_rootsOfUnity' 3 z.1).mp z.2⟩
+        left_inv := fun z ↦ by
+          apply Subtype.ext
+          apply Subtype.ext
+          rfl
+        right_inv := fun z ↦ by
+          apply Subtype.ext
+          apply Units.ext
+          rfl }
+    rw [Nat.card_congr e, Nat.card_eq_fintype_card]
+    exact Complex.card_rootsOfUnity 3
+  have hc : Nat.card {z : Circle // f z = y} = 3 := by
+    rw [← ha]
+    exact (Nat.card_congr (MonoidHom.fiberEquivKer f a)).trans hk
+  simpa [f, circleWedge_connected_pair_aux_cube] using hc
 
 /-- Fibre over a left-lobe point `[inl w]`, `w ≠ circleBase`: by
 `_aux_rel_iff`, a class mapping there is `[inl z]` with `cube z = w` (a class
