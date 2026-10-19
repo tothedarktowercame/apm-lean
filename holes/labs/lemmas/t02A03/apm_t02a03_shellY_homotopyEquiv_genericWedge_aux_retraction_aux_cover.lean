@@ -1407,11 +1407,35 @@ right tube.  `W` is the union of the two closed tubes (`infDist` to a union
 of two sets is the minimum); a point of the left tube at distance at least
 `1/4` from `C` is at distance exactly `1/4`. -/
 -- BEGIN SEAT AREA
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover_aux_infDist_union
+    (p : apm_t02a03_E3) :
+    Metric.infDist p apm_t02a03_genusTwoSpine =
+      min (Metric.infDist p apm_t02a03_C)
+        (Metric.infDist p (Set.range apm_t02a03_rightCore)) := by
+  have hleft : (Set.range apm_t02a03_leftCore).Nonempty :=
+    ⟨apm_t02a03_leftCore 0, ⟨0, rfl⟩⟩
+  have hright : (Set.range apm_t02a03_rightCore).Nonempty :=
+    ⟨apm_t02a03_rightCore 0, ⟨0, rfl⟩⟩
+  simp only [apm_t02a03_genusTwoSpine, apm_t02a03_C, Metric.infDist,
+    Metric.infEDist_union]
+  exact ENNReal.toReal_inf (Metric.infEDist_ne_top hleft)
+    (Metric.infEDist_ne_top hright)
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover :
     ∀ p : apm_t02a03_shellY,
       p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∨
         p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := by
-  sorry
+  intro p
+  have hpW := p.2.1
+  change Metric.infDist p.1 apm_t02a03_genusTwoSpine ≤ (1 / 4 : ℝ) at hpW
+  rw [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_cover_aux_infDist_union]
+    at hpW
+  rw [min_le_iff] at hpW
+  rcases hpW with hleft | hright
+  · left
+    exact le_antisymm hleft p.2.2
+  · right
+    exact ⟨hright, p.2.2⟩
 -- END SEAT AREA
 
 /-- LIBRARY: the geometric core.  The right tube minus the open left tube
