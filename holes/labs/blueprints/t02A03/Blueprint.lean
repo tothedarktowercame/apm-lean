@@ -485,6 +485,64 @@ abbrev apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_
     (p : apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) : Prop :=
   apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p ∨ (p.1 : apm_t02a03_E3) 0 ≤ (4 / 5 : ℝ)
 
+/-- Planar distance `s` from the right centre `(6/5, 0)`; on the right tube
+`3/4 ≤ s ≤ 5/4` (split by claude-14 from lemma-2's partial, 2026-10-19). -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad (p : apm_t02a03_E3) : ℝ :=
+  Real.sqrt ((p 0 - 6 / 5) ^ 2 + p 1 ^ 2)
+
+/-- The cutoff `φ` as a clamp of `cos θ = (6/5 - x)/s`: `φ = 0` when
+`cos θ ≥ 23/25`, `φ = 1` when `cos θ ≤ 17/25`. -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi (p : apm_t02a03_E3) : ℝ :=
+  min 1 (max 0 ((23 - 25 * ((6 / 5 - p 0) / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p)) / 6))
+
+/-- `F_t`: keep the angle about the right centre and move the meridian offset
+`(s - 1, z)` toward the loop's offset `(3/20, 0)` by the fraction `a = t φ`:
+`s ↦ s + a (23/20 - s)`, `z ↦ (1 - a) z`. -/
+noncomputable def apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move (t : ℝ) (p : apm_t02a03_E3) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![6 / 5 + (1 + t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p * (23 / 20 / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1)) * (p 0 - 6 / 5),
+    (1 + t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p * (23 / 20 / apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_rad p - 1)) * p 1,
+    (1 - t * apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_phi p) * p 2]
+
+/-- LIBRARY: `F` is continuous on `[0,1] × right` (there `s ≥ 3/4 > 0`, so the
+divisions by `s` are continuous). -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous :
+    ContinuousOn (fun q : ℝ × apm_t02a03_E3 => apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move q.1 q.2)
+      (Set.Icc (0 : ℝ) 1 ×ˢ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) := by
+  sorry
+
+/-- LIBRARY: `F_t` stays in the closed right tube.  The distance to the right
+core is `√((s - 1)² + z²)`; the new `(s - 1, z)` is a convex combination of the
+old one and `(3/20, 0)`, both in the disk of radius `1/4`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
+    Metric.infDist (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) (Set.range apm_t02a03_rightCore) ≤ (1 / 4 : ℝ) := by
+  sorry
+
+/-- LIBRARY: `F_t` stays at least `1/4` from the left core.  If `t φ = 0` the
+point is fixed.  Otherwise `cos θ < 23/25` and the new `s' ≤ 5/4`, so
+`x' = 6/5 - s' cos θ > 1/20`; a point with `x > 1/20` is at planar distance
+`> 5/4` from `(-6/5, 0)`, hence more than `1/4` from `C`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1) (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
+    (1 / 4 : ℝ) ≤ Metric.infDist (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p) apm_t02a03_C := by
+  sorry
+
+/-- LIBRARY: `F_t` fixes `torus ∪ loop` in the right piece.  Loop points have
+`s = 23/20`, `z = 0`.  Torus points have `x ≤ 1/20`, so `cos θ ≥ (23/20)/s ≥
+23/25` and `φ = 0`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix (t : ℝ) (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right)
+    (hZ : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move t p = p := by
+  sorry
+
+/-- LIBRARY: the end of the collapse.  If `φ = 1` the point goes to `s = 23/20`,
+`z = 0`, the angle `θ` with `cos θ = (6/5 - x)/s`, `sin θ = y/s`: a loop point.
+If `φ < 1` then `cos θ > 17/25` and `s' ≥ 3/4`, so
+`x' ≤ 6/5 - (3/4)(17/25) < 4/5`. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_end (p : apm_t02a03_E3) (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
+    apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop ∨ (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 1 p) 0 ≤ (4 / 5 : ℝ) := by
+  sorry
+
 /-- Stage 1, the cutoff collapse.  With `w = (u, z)` the meridian offset and
 `ℓ = (3/20, 0)` the loop's offset, `F_t(θ, w) = (θ, w + t φ(θ) (ℓ - w))`
 where `φ = 1` for `|θ| ≥ 0.82` and `φ = 0` for `|θ| ≤ 0.41`.  The bite lies in
@@ -497,7 +555,32 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux
       ∃ F : ContinuousMap.Homotopy (ContinuousMap.id _) m,
         (∀ t p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Z p → F (t, p) = p) ∧
         (∀ p, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_Y (m p)) := by
-  sorry
+  have hmaps : ∀ q : Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move q.1 q.2.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right := fun q =>
+    ⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_tube q.1.1 q.1.2 q.2.1 q.2.2, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_far q.1.1 q.1.2 q.2.1 q.2.2⟩
+  let G : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) :=
+    { toFun := fun q => ⟨apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move q.1 q.2.1, hmaps q⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        exact apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_continuous.comp_continuous
+          ((continuous_subtype_val.comp continuous_fst).prodMk
+            (continuous_subtype_val.comp continuous_snd))
+          (fun q => ⟨q.1.2, q.2.2⟩) }
+  let m : C(apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_X) :=
+    G.comp (ContinuousMap.prodMk (ContinuousMap.const _ ⟨1, by norm_num⟩) (ContinuousMap.id _))
+  have h0 : ∀ p : apm_t02a03_E3, apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move 0 p = p := fun p => by
+    ext i; fin_cases i <;> simp [apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_move]
+  let F : ContinuousMap.Homotopy (ContinuousMap.id _) m :=
+    { toContinuousMap := G,
+      map_zero_left := fun p => Subtype.ext (h0 p.1),
+      map_one_left := fun p => rfl }
+  refine ⟨m, F, ?_, ?_⟩
+  · intro t p hp
+    exact Subtype.ext (apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_fix t p.1 p.2 hp)
+  · intro p
+    rcases apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_core_aux_cutoff_aux_end p.1 p.2 with h | h
+    · exact Or.inl (Or.inr h)
+    · exact Or.inr h
 
 /-- Stage 2, the sector-ball collapse.  The subspace `Y` is the sector piece
 `Σ = right ∩ {x ≤ 4/5}` (a 3-ball: a fibrewise-convex slab of the tube over
