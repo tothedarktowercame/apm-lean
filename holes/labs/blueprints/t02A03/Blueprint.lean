@@ -338,15 +338,38 @@ spine. -/
 abbrev apm_t02a03_geometricY :=
   {p : apm_t02a03_E3 // p ∈ apm_t02a03_W ∧ p ∉ apm_t02a03_C}
 
-/-- LIBRARY: the explicit complement of the left core in the fixed genus-two
+/-- The part of `W` at distance at least `1/4` from the left core: the
+boundary torus of the left tube together with the right tube minus the open
+left tube.  It lies inside `geometricY` and is compact. -/
+abbrev apm_t02a03_shellY :=
+  {p : apm_t02a03_E3 // p ∈ apm_t02a03_W ∧ (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C}
+
+/-- LIBRARY: radial push off the deleted core.  Inside the left tube, move
+each point along its normal ray from the nearest core point out to distance
+`1/4`; outside the left tube, fix it.  This is a strong deformation
+retraction of `geometricY` onto `shellY`. -/
+theorem apm_t02a03_geometricY_homotopyEquiv_shellY :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_shellY) := by
+  sorry
+
+/-- LIBRARY: the compact shell is the boundary torus of the left tube glued,
+along a disk, to the right tube minus the open left tube, which retracts to
+the right core; so it has the homotopy type of the production torus-circle
+wedge. -/
+theorem apm_t02a03_shellY_homotopyEquiv_genericWedge :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_shellY
+      ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
+  sorry
+
+/-- The explicit complement of the left core in the fixed genus-two
 regular-neighborhood model has the homotopy type of the production
-torus-circle wedge.  This is the point-set geometric construction; keeping
-the production quotient as target separates it from the quotient-model
-transport below. -/
+torus-circle wedge: compose the radial push with the shell equivalence. -/
 theorem apm_t02a03_geometricY_homotopyEquiv_genericWedge :
     Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY
       ConstructionTargets.TorusCircleWedgeOpenCover.GenericWedge) := by
-  sorry
+  rcases apm_t02a03_geometricY_homotopyEquiv_shellY with ⟨e⟩
+  rcases apm_t02a03_shellY_homotopyEquiv_genericWedge with ⟨f⟩
+  exact ⟨e.trans f⟩
 
 /-- Transport a geometric equivalence to the production wedge across the
 already compiled homeomorphism with the registered quotient model.  The

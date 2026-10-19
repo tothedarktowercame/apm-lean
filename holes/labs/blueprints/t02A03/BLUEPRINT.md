@@ -51,58 +51,60 @@ deformation/gluing step.
 
 ## Remaining lemmas
 
-### `apm_t02a03_geometricY_homotopyEquiv_genericWedge` — LIBRARY
+### Split of `apm_t02a03_geometricY_homotopyEquiv_genericWedge` (2026-10-19)
 
-**Statement in words.** The explicit complement of the left core in the
-closed quarter-neighborhood of the two-circle spine is homotopy equivalent to
-the production quotient `TorusCircleWedgeOpenCover.GenericWedge`.
+Two lemma-1 runs: the first failed on a Codex 429; the second returned PARTIAL
+after one minute with only `spine_nonempty` and `W = leftTube ∪ rightTube`
+(not banked: neither leaf below needs them). The lemma is now proved by
+`HomotopyEquiv.trans` through the intermediate space
 
-**Why true.** Split the complement into its left- and right-tube pieces.  The
-left piece minus its core radially retracts to `T²`; the right piece is
-disjoint from the deleted core and retracts to its core circle.  Their
-lens-shaped overlap is contractible.  Choose these equivalences compatibly on
-the overlap and glue their homotopies, yielding the wedge.  Finally transport
-the production `GenericWedge` model across
-`apm_t02a03_productionHomeomorph`.
+`apm_t02a03_shellY = {p ∈ W | 1/4 ≤ infDist p C}`,
 
-This is the genuinely geometric boundary.  A useful implementation should
-avoid a closed-cover gluing theorem (Mathlib has no suitable API) and instead
-construct one explicit strong deformation retraction onto an embedded
-`T² ∨ S¹`: use radial normalization in the punctured left normal disk,
-core contraction on the right tube, and a single-coordinate piecewise formula
-through the lens.  The continuity tools to use are `Continuous.if_le` or
-`ContinuousOn.piecewise`; package the resulting two continuous maps and
-homotopies directly as `ContinuousMap.HomotopyEquiv`.  For the final compact
-embedded spine comparison, use `Continuous.quotient_lift` (or
-`IsQuotientMap`) out of the sum quotient and
-`Continuous.homeoOfEquivCompactToT2` for the inverse.
+which lies in `geometricY` (distance > 0 from the closed core) and is compact.
 
-This leaf cannot honestly be subdivided further in the present file because
-the named banked geometry is not geometry for the registered statement.
-`T02A03GeometricTubeCover` defines centers `(-1,0,0)` and `(1,0,0)`, so both
-cores contain the origin.  The registered theorem and this blueprint define
-centers `(-6/5,0,0)` and `(6/5,0,0)`, whose cores are disjoint and separated
-by `2/5`.  Consequently its `GeometricY`, tube subtypes, radial maps, and
-collision lemmas have different types and cannot supply leaves here.  Porting
-that development or writing the explicit deformation is a genuine 300–600
-line foundation, not a 30–150 line proof boundary that can be exposed merely
-by theorem shells.
+### `apm_t02a03_geometricY_homotopyEquiv_shellY` — LIBRARY
 
-**Expected size.** 300–600 lines for an explicit global deformation and
-embedded-spine comparison.  A closed-cover gluing API would be a larger
-foundation and is not recommended.
+**Statement in words.** Pushing points of the left tube radially off the
+deleted core is a strong deformation retraction of `geometricY` onto `shellY`.
 
-**Dependencies.** Only the definitions and the imported, sorry-free
-construction-target modules.  There are no other admitted blueprint lemmas.
+**Proof sketch.** Write `q = (x + 6/5, y)` and `s = ‖q‖`. Inside the left tube
+`s ≥ 3/4 > 0`, the nearest core point is `c(p) = (-6/5,0,0) + (q/s, 0)` and
+`infDist p C = ‖p - c(p)‖ = sqrt((s-1)² + z²)` (the circle has reach 1 > 1/4).
+Set `ρ(p) = c(p) + (1/4)(p - c(p))/‖p - c(p)‖` when `infDist p C ≤ 1/4`, and
+`ρ(p) = p` otherwise; both branches agree at distance `1/4`, so glue with
+`Continuous.if_le`. The homotopy moves along the same normal segment, with
+distance from the core going from `‖p - c(p)‖` to `1/4`, so it stays in `W`
+and never meets `C`. Package as a `HomotopyEquiv` with the inclusion
+`shellY → geometricY`.
 
-**Truth check.** Besides the distance and nonemptiness checks in triage, the
-model was checked by hand in the two extreme local regions: over the left
-core, puncturing a normal disk gives `(D² \ {0}) × S¹ ≃ T²`; over the
-right core, the deleted set is absent because `2/5 > 1/4), leaving a solid
-torus `≃ S¹`.  At the connecting lens the origin is present and is outside
-both cores, so contraction of the overlap does not cross the deleted curve.
-The remaining difficulty is formal compatibility/continuity, not a doubtful
-mathematical assertion.
+**Expected size.** 150–250 lines; most of it is the closed-form `infDist` to
+the planar circle.
+
+### `apm_t02a03_shellY_homotopyEquiv_genericWedge` — LIBRARY
+
+**Statement in words.** `shellY` has the homotopy type of the production
+`TorusCircleWedgeOpenCover.GenericWedge`.
+
+**Why true.** `shellY` is the boundary torus `{infDist p C = 1/4}` together with
+`R \ L°` (right tube minus the open left tube). The right core stays at
+distance at least 2/5 from `C`, so it lies in `R \ L°`, which retracts onto it.
+The two pieces meet in the patch of the torus inside `R`, a disk. A torus and
+a circle-homotopic piece glued along a disk give `T² ∨ S¹`.
+
+**Suggested route.** Avoid closed-cover gluing (Mathlib has no API for it).
+Build an explicit deformation of `shellY` onto an embedded `T² ∪ arc ∪ S¹`
+spine, then compare that compact spine with `GenericWedge` via
+`Continuous.quotient_lift` and `Continuous.homeoOfEquivCompactToT2`. This is
+still the larger piece; `ConstructionTargets.T02A03ClosedPuncturedDiskTorus`
+is imported and may supply the torus model.
+
+**Banked geometry caveat (still applies).** `T02A03GeometricTubeCover` uses
+centers `(±1,0,0)`, not the registered `(±6/5,0,0)`; its tube subtypes have
+different types and cannot supply leaves here.
+
+### `apm_t02a03_geometricY_homotopyEquiv_genericWedge` — proved assembly
+
+`e.trans f` of the two leaves above.
 
 ### `apm_t02a03_transport_genericWedge_homotopyEquiv` — proved, independent
 
@@ -128,7 +130,9 @@ The main theorem uses the already proved first geometric equivalence, the
 single LIBRARY lemma above, and the already proved bridge computations.  It
 contains no `sorry`.
 
-* **Layer 1:** `apm_t02a03_geometricY_homotopyEquiv_genericWedge` (LIBRARY),
+* **Layer 0:** `apm_t02a03_geometricY_homotopyEquiv_shellY` and
+  `apm_t02a03_shellY_homotopyEquiv_genericWedge` (LIBRARY, independent).
+* **Layer 1:** the proved assembly `apm_t02a03_geometricY_homotopyEquiv_genericWedge`,
   and independently the proved generic transport lemma.
 * **Layer 2:** the sorry-free `apm_t02a03_geometricY_homotopyEquiv_wedge`
   assembly.
