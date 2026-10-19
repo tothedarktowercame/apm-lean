@@ -1363,9 +1363,50 @@ lemma apm_m93j05_exists_minimizer_minimizing_sequence
           apm_m93j05_J N p g (s n) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ) := by
   sorry
 
-/-- **LIBRARY-sized leaf.** A coercive minimizing sequence has a weakly convergent subsequence.
-This is the `1 < p < ∞` reflexivity/weak sequential compactness theorem for `Lp`; current Mathlib
-has weak-star compact polar results but no usable `Lp` reflexivity instance. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_eventually_bounded
+    (N : ℕ) (p q : ℝ) (hp : 1 < p) (g : ℝ → ℝ)
+    (hcoercive : ∀ A : ℝ, ∃ R : ℝ, 0 ≤ R ∧ ∀ f,
+      MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      apm_m93j05_J N p g f ≤ A →
+      (eLpNorm f (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hmin : ∀ f, MemLp f (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+      ∀ k : ℕ, ∀ᶠ n in atTop,
+        apm_m93j05_J N p g (s n) ≤ apm_m93j05_J N p g f + 1 / (k + 1 : ℝ)) :
+    ∃ R : ℝ, 0 ≤ R ∧ ∀ᶠ n in atTop,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R := by
+  obtain ⟨R, hR, hbound⟩ := hcoercive 1
+  refine ⟨R, hR, ?_⟩
+  filter_upwards [hmin (0 : ℝ → ℝ) MemLp.zero 0] with n hn
+  apply hbound (s n) (hs n)
+  rw [apm_m93j05_exists_minimizer_aux_J_zero N p g (by linarith)] at hn
+  norm_num at hn ⊢
+  exact hn
+
+/-- **LIBRARY-sized leaf.** A bounded sequence in real `Lp([0,1])`, `1 < p < ∞`, has a weakly
+convergent subsequence, with the limit represented by an `Lp` function. Current Mathlib has
+weak-star compact polar results but no usable `Lp` reflexivity instance. -/
+lemma apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness
+    (p q : ℝ) (hp : 1 < p) (hq : 1 < q) (hpq : 1 / p + 1 / q = 1)
+    (s : ℕ → ℝ → ℝ)
+    (hs : ∀ n, MemLp (s n) (ENNReal.ofReal p)
+      (volume.restrict (Set.Icc (0 : ℝ) 1)))
+    (hbounded : ∃ R : ℝ, 0 ≤ R ∧ ∀ᶠ n in atTop,
+      (eLpNorm (s n) (ENNReal.ofReal p)
+        (volume.restrict (Set.Icc (0 : ℝ) 1))).toReal ≤ R) :
+    ∃ f₀, MemLp f₀ (ENNReal.ofReal p) (volume.restrict (Set.Icc (0 : ℝ) 1)) ∧
+      ∃ φ : ℕ → ℕ, StrictMono φ ∧
+        ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
+          Tendsto (fun n => ∫ x in Set.Icc (0 : ℝ) 1, s (φ n) x * h x) atTop
+            (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
+  sorry
+
+/-- A coercive minimizing sequence has a weakly convergent subsequence
+(eventual boundedness, then `Lp` weak compactness). -/
 lemma apm_m93j05_exists_minimizer_weak_subsequence
     (N : ℕ) (p q : ℝ) (hp : 1 < p) (hq : 1 < q)
     (hpq : 1 / p + 1 / q = 1) (g : ℝ → ℝ)
@@ -1386,7 +1427,10 @@ lemma apm_m93j05_exists_minimizer_weak_subsequence
         ∀ h, MemLp h (ENNReal.ofReal q) (volume.restrict (Set.Icc (0 : ℝ) 1)) →
           Tendsto (fun n => ∫ x in Set.Icc (0 : ℝ) 1, s (φ n) x * h x) atTop
             (nhds (∫ x in Set.Icc (0 : ℝ) 1, f₀ x * h x)) := by
-  sorry
+  apply apm_m93j05_exists_minimizer_weak_subsequence_aux_lp_weak_compactness
+    p q hp hq hpq s hs
+  exact apm_m93j05_exists_minimizer_weak_subsequence_aux_eventually_bounded
+    N p q hp g hcoercive s hs hmin
 
 /-- Weak lower semicontinuity turns an approximately minimizing weakly convergent subsequence into
 an actual minimizer.  The analytic inputs are hypotheses, keeping this leaf independent. -/
