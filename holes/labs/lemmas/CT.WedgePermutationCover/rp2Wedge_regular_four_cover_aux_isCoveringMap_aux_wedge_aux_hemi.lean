@@ -249,7 +249,47 @@ lemma rp2Wedge_regular_four_cover_aux_isCoveringMap_aux_wedge_aux_hemi :
     Topology.IsOpenEmbedding
       (fun y : {y : Sphere2 // 0 < (y : EuclideanSpace ℝ (Fin 3)) 0} ↦
         antipodalCover y.1) := by
-  sorry
+  let H : Set Sphere2 := {y | 0 < (y : EuclideanSpace ℝ (Fin 3)) 0}
+  have hH : IsOpen H := by
+    exact isOpen_lt continuous_const
+      ((continuous_apply 0).comp
+        ((PiLp.continuous_ofLp 2 _).comp continuous_subtype_val))
+  rw [Topology.isOpenEmbedding_iff_continuous_injective_isOpenMap]
+  refine ⟨continuous_quot_mk.comp continuous_subtype_val, ?_, ?_⟩
+  · intro x y hxy
+    rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff x.1 y.1).mp hxy with h | h
+    · exact Subtype.ext h.symm
+    · exfalso
+      have hx : 0 < (x.1 : EuclideanSpace ℝ (Fin 3)) 0 := x.2
+      have hy : 0 < (y.1 : EuclideanSpace ℝ (Fin 3)) 0 := y.2
+      rw [h] at hy
+      change 0 < -((x.1 : EuclideanSpace ℝ (Fin 3)) 0) at hy
+      linarith
+  · intro V hV
+    let W : Set Sphere2 := Subtype.val '' V
+    have hW : IsOpen W := hH.isOpenMap_subtype_val V hV
+    let n : Sphere2 → Sphere2 := fun x ↦ -x
+    have hn : Continuous n := by
+      exact continuous_neg
+    have himage : antipodalCover ⁻¹' (antipodalCover '' W) = W ∪ n ⁻¹' W := by
+      ext x
+      constructor
+      · rintro ⟨y, hyW, heq⟩
+        rcases (rp2Wedge_regular_four_cover_aux_cover_eq_iff y x).mp heq with h | h
+        · exact Or.inl (h ▸ hyW)
+        · right
+          change -x ∈ W
+          simpa [h] using hyW
+      · rintro (hx | hx)
+        · exact ⟨x, hx, rfl⟩
+        · refine ⟨-x, hx, ?_⟩
+          exact rp2Wedge_regular_four_cover_aux_neg x
+    have hopen_image : IsOpen (antipodalCover '' W) := by
+      apply (isQuotientMap_quot_mk : Topology.IsQuotientMap antipodalCover).isOpen_preimage.mp
+      change IsOpen (antipodalCover ⁻¹' (antipodalCover '' W))
+      rw [himage]
+      exact hW.union (hW.preimage hn)
+    simpa [W, Set.image_image] using hopen_image
 -- END SEAT AREA
 
 /-- The glued projection is continuous. -/
