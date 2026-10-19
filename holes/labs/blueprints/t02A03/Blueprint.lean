@@ -618,6 +618,17 @@ fixes the torus patch by the identity on the left boundary torus.  Both pieces
 are closed in `shellY` (`infDist` is continuous), they cover it by `hcover`,
 and on their overlap (which lies in the torus) both formulas give `p`; glue
 with `ContinuousMap.liftCover` or `Continuous.piecewise`. -/
+lemma apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_glue_aux_right_shell
+    (p : apm_t02a03_E3)
+    (hp : p ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right) :
+    p ∈ apm_t02a03_W ∧ (1 / 4 : ℝ) ≤ Metric.infDist p apm_t02a03_C := by
+  refine ⟨?_, hp.2⟩
+  have hne : (Set.range apm_t02a03_rightCore).Nonempty :=
+    ⟨apm_t02a03_rightCore 0, Set.mem_range_self 0⟩
+  have hsub : Set.range apm_t02a03_rightCore ⊆ apm_t02a03_genusTwoSpine :=
+    Set.subset_union_right
+  exact (Metric.infDist_le_infDist_of_subset hsub hne).trans hp.1
+
 theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_glue
     (hcover : ∀ p : apm_t02a03_shellY,
       p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∨
@@ -640,7 +651,90 @@ theorem apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_glue
       (∀ t p, p.1 ∈ apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus ∪
           apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_loop →
         H (t, p) = p) := by
-  sorry
+  classical
+  let right := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_right
+  let torus := apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_torus
+  let g : Set.Icc (0 : ℝ) 1 × right → apm_t02a03_shellY := fun z =>
+    ⟨(G z).1,
+      apm_t02a03_shellY_homotopyEquiv_genericWedge_aux_retraction_aux_glue_aux_right_shell
+        (G z).1 (G z).2⟩
+  have hg : Continuous g := by
+    exact (continuous_subtype_val.comp G.continuous).subtype_mk _
+  let f : Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY → apm_t02a03_shellY := fun z =>
+    if hz : z.2.1 ∈ right then g ⟨z.1, ⟨z.2.1, hz⟩⟩ else z.2
+  let R : Set (Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY) :=
+    {z | z.2.1 ∈ right}
+  let T : Set (Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY) :=
+    {z | z.2.1 ∈ torus}
+  have hRclosed : IsClosed R := by
+    exact (isClosed_le
+      ((Metric.continuous_infDist_pt _).comp
+        (continuous_subtype_val.comp continuous_snd)) continuous_const).inter
+      (isClosed_le continuous_const
+        ((Metric.continuous_infDist_pt _).comp
+          (continuous_subtype_val.comp continuous_snd)))
+  have hTclosed : IsClosed T := by
+    exact isClosed_eq
+      ((Metric.continuous_infDist_pt _).comp
+        (continuous_subtype_val.comp continuous_snd)) continuous_const
+  have hfR : ContinuousOn f R := by
+    rw [continuousOn_iff_continuous_restrict]
+    let q : C(R, Set.Icc (0 : ℝ) 1 × right) :=
+      ⟨fun z => ⟨z.1.1, ⟨z.1.2.1, z.2⟩⟩,
+        (continuous_fst.comp continuous_subtype_val).prodMk
+          ((continuous_subtype_val.comp
+            (continuous_snd.comp continuous_subtype_val)).subtype_mk _)⟩
+    have heq : R.restrict f = g ∘ q := by
+      funext z
+      simp only [Set.restrict_apply, f, q, Function.comp_apply]
+      have hz : z.1.2.1 ∈ right := z.2
+      rw [dif_pos hz]
+      congr 1
+    rw [heq]
+    exact hg.comp q.continuous
+  have hfT : ContinuousOn f T := by
+    rw [continuousOn_iff_continuous_restrict]
+    have heq : T.restrict f = fun z => z.1.2 := by
+      funext z
+      simp only [Set.restrict_apply, f]
+      split_ifs with hz
+      · apply Subtype.ext
+        change (G (z.1.1, ⟨z.1.2.1, hz⟩)).1 = z.1.2.1
+        exact congrArg Subtype.val (hfix z.1.1 ⟨z.1.2.1, hz⟩ (Or.inl z.2))
+      · rfl
+    rw [heq]
+    exact continuous_snd.comp continuous_subtype_val
+  have hcover' : R ∪ T = Set.univ := by
+    ext z
+    simp only [Set.mem_union, Set.mem_setOf_eq, Set.mem_univ, iff_true, R, T, right, torus]
+    exact (hcover z.2).symm
+  have hf : Continuous f := by
+    rw [← continuousOn_univ, ← hcover']
+    exact hfR.union_of_isClosed hfT hRclosed hTclosed
+  let H : C(Set.Icc (0 : ℝ) 1 × apm_t02a03_shellY, apm_t02a03_shellY) := ⟨f, hf⟩
+  refine ⟨H, ?_, ?_, ?_⟩
+  · intro p
+    change f (⟨0, by norm_num⟩, p) = p
+    simp only [f]
+    split_ifs with hp
+    · apply Subtype.ext
+      change (G (⟨0, by norm_num⟩, ⟨p.1, hp⟩)).1 = p.1
+      exact congrArg Subtype.val (hzero ⟨p.1, hp⟩)
+    · rfl
+  · intro p
+    change (f (⟨1, by norm_num⟩, p)).1 ∈ _
+    simp only [f]
+    split_ifs with hp
+    · exact hone ⟨p.1, hp⟩
+    · exact Or.inl ((hcover p).resolve_right hp)
+  · intro t p hp
+    change f (t, p) = p
+    simp only [f]
+    split_ifs with hr
+    · apply Subtype.ext
+      change (G (t, ⟨p.1, hr⟩)).1 = p.1
+      exact congrArg Subtype.val (hfix t ⟨p.1, hr⟩ hp)
+    · rfl
 
 /-- `shellY` deformation retracts onto the spine `torus ∪ loop`: glue the
 core deformation of the right part to the identity on the torus (split
